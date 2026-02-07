@@ -1,0 +1,68 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment files (SENSITIVE)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+.vscode/settings.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+
+# Firebase (keep firebase.json but ignore caches)
+.firebase/
+firebase-debug.log
+
+# Supabase local
+.supabase/
+
+# Large binary files (keep references, not files)
+*.mp4
+*.mov
+*.avi
+*.zip
+*.tar.gz
+*.rar
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# NESTED GIT REPOS (have their own repos)
+escape-velocity Lovable Site/
+
+# Don't ignore these important folders
+!CONTEXT_MANAGEMENT/
+!letters/
+!PAWN_DROPZONE/
+!ROOK_DROPZONE/
+!BISHOP_DROPZONE/
+!KNIGHT_DROPZONE/
+!PAWN_PLATFORM_REVIEW/
