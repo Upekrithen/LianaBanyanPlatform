@@ -1,0 +1,58 @@
+project_id = "ivopsblevxcujagykobj"
+
+[functions.kickstarter-webhook]
+verify_jwt = false
+
+[functions.sync-kickstarter-pledges]
+verify_jwt = true
+
+[functions.sync-kickstarter-data]
+verify_jwt = false
+schedule = "*/30 * * * *"
+
+[functions.convert-eoi-daily]
+schedule = "0 0 * * *"
+
+[functions.check-expired-votes]
+schedule = "0 */6 * * *"
+
+[functions.process-expired-votes]
+verify_jwt = false
+schedule = "0 1 * * *"
+
+[functions.revert-expired-votes]
+schedule = "0 2 * * *"
+
+[functions.sync-industry-pricing]
+verify_jwt = true
+schedule = "0 3 * * *"
+
+[functions.process-credit-match]
+verify_jwt = false
+
+[functions.serve-xml-module]
+verify_jwt = false
+
+[functions.serve-xml]
+verify_jwt = false
+
+[functions.serve-lockbox-xml]
+verify_jwt = false
+
+[functions.api-get-project]
+verify_jwt = false
+
+[functions.api-list-projects]
+verify_jwt = false
+
+[functions.api-submit-vote]
+verify_jwt = false
+
+[functions.api-generate-client-key]
+verify_jwt = true
+
+[functions.process-failure-queue]
+schedule = "*/15 * * * *"
+
+[functions.generate-business-plan]
+verify_jwt = true

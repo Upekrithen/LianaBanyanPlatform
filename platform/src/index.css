@@ -1,0 +1,398 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer components {
+  .badge {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors;
+    @apply border-border bg-secondary text-secondary-foreground;
+  }
+}
+
+@layer base {
+  :root {
+    /* Default Theme - Professional Blue */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Raw Materials Theme - Warm & Vibrant */
+  [data-theme="raw-materials"] {
+    --background: 35 20% 92%;
+    --foreground: 0 0% 0%;
+    --card: 35 20% 95%;
+    --card-foreground: 0 0% 0%;
+    --popover: 35 20% 95%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 12 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 65% 45%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 35 15% 85%;
+    --muted-foreground: 0 0% 25%;
+    --accent: 230 90% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 340 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 15% 80%;
+    --input: 35 15% 80%;
+    --ring: 12 100% 60%;
+  }
+
+  /* Christopher Ireland Theme - Elegant Minimal */
+  [data-theme="christopher-ireland"] {
+    --background: 30 15% 96%;
+    --foreground: 0 0% 10%;
+    --card: 30 15% 98%;
+    --card-foreground: 0 0% 10%;
+    --popover: 30 15% 98%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 0% 10%;
+    --primary-foreground: 30 15% 96%;
+    --secondary: 30 10% 88%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 30 10% 92%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 30 10% 85%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 10% 85%;
+    --input: 30 10% 85%;
+    --ring: 0 0% 10%;
+  }
+
+  /* Duna Theme - Artistic Pastels */
+  [data-theme="duna"] {
+    --background: 30 40% 92%;
+    --foreground: 0 0% 10%;
+    --card: 30 40% 95%;
+    --card-foreground: 0 0% 10%;
+    --popover: 30 40% 95%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 25 90% 65%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 280 50% 75%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 140 30% 80%;
+    --muted-foreground: 0 0% 30%;
+    --accent: 340 60% 75%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 30% 85%;
+    --input: 30 30% 85%;
+    --ring: 25 90% 65%;
+  }
+
+  /* Reducto Theme - Clean Purple */
+  [data-theme="reducto"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 290 70% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 290 20% 95%;
+    --secondary-foreground: 290 70% 50%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 290 60% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 290 70% 50%;
+  }
+
+  /* Brainfish Theme - Playful Cyan */
+  [data-theme="brainfish"] {
+    --background: 185 75% 85%;
+    --foreground: 0 0% 10%;
+    --card: 185 75% 90%;
+    --card-foreground: 0 0% 10%;
+    --popover: 185 75% 90%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 185 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 75 70% 60%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 185 40% 75%;
+    --muted-foreground: 0 0% 30%;
+    --accent: 75 70% 60%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 25 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 185 40% 70%;
+    --input: 185 40% 70%;
+    --ring: 185 70% 55%;
+  }
+
+  /* DynamiX Theme - Professional Dark */
+  [data-theme="dynamix"] {
+    --background: 215 30% 15%;
+    --foreground: 0 0% 95%;
+    --card: 215 30% 18%;
+    --card-foreground: 0 0% 95%;
+    --popover: 215 30% 18%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 18 100% 60%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 215 25% 25%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 215 20% 30%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 18 100% 60%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 20% 25%;
+    --input: 215 20% 25%;
+    --ring: 18 100% 60%;
+  }
+
+  /* Zerorez Theme - Bright Cyan Service */
+  [data-theme="zerorez"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 188 100% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 122 40% 50%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 220 90% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 188 100% 42%;
+  }
+
+  /* Phamily Theme - Rich Forest Green (Mobile-First) */
+  [data-theme="phamily"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 165 60% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 165 60% 20%;
+    --primary: 165 60% 25%;
+    --primary-foreground: 35 15% 90%;
+    --secondary: 35 20% 85%;
+    --secondary-foreground: 165 60% 20%;
+    --muted: 35 15% 92%;
+    --muted-foreground: 165 30% 40%;
+    --accent: 165 50% 30%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 15% 85%;
+    --input: 35 15% 85%;
+    --ring: 165 60% 25%;
+  }
+
+  /* David Langarica Theme - Creative Portfolio Purple */
+  [data-theme="langarica"] {
+    --background: 265 75% 8%;
+    --foreground: 280 20% 85%;
+    --card: 265 70% 12%;
+    --card-foreground: 280 20% 85%;
+    --popover: 265 70% 12%;
+    --popover-foreground: 280 20% 85%;
+    --primary: 280 70% 65%;
+    --primary-foreground: 265 75% 8%;
+    --secondary: 265 50% 20%;
+    --secondary-foreground: 280 20% 85%;
+    --muted: 265 40% 18%;
+    --muted-foreground: 280 15% 60%;
+    --accent: 280 70% 65%;
+    --accent-foreground: 265 75% 8%;
+    --destructive: 0 80% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 265 40% 18%;
+    --input: 265 40% 18%;
+    --ring: 280 70% 65%;
+  }
+
+  /* Grab&Go Theme - Playful Marketplace Orange */
+  [data-theme="grabandgo"] {
+    --background: 35 30% 88%;
+    --foreground: 25 60% 25%;
+    --card: 0 0% 100%;
+    --card-foreground: 25 60% 25%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 60% 25%;
+    --primary: 18 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 35 35% 70%;
+    --secondary-foreground: 25 60% 25%;
+    --muted: 35 25% 82%;
+    --muted-foreground: 25 30% 45%;
+    --accent: 45 90% 55%;
+    --accent-foreground: 25 60% 25%;
+    --destructive: 0 80% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 25% 75%;
+    --input: 35 25% 75%;
+    --ring: 18 100% 50%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Larger touch targets for mobile */
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Better spacing for touch interfaces */
+  .touch-friendly {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+  }
+
+  /* Prevent text selection on touch */
+  button,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Smooth scrolling on mobile */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better mobile padding */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Stack navigation on mobile */
+  nav {
+    flex-direction: column;
+  }
+
+  /* Full-width cards on mobile */
+  .card {
+    width: 100%;
+  }
+
+  /* Larger font sizes for better readability */
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Touch manipulation for better tap response */
+.touch-manipulation {
+  touch-action: manipulation;
+}

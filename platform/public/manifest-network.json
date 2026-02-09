@@ -1,0 +1,54 @@
+{
+  "name": "Liana Banyan Business Network",
+  "short_name": "LB Network",
+  "description": "B2B production, contracts, and API access",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#F59E0B",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Industry Pricing",
+      "short_name": "Pricing",
+      "description": "View production pricing",
+      "url": "/industry-pricing",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "XML Lockbox",
+      "short_name": "Lockbox",
+      "description": "Access project data API",
+      "url": "/xml-lockbox",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Client API",
+      "short_name": "API",
+      "description": "Manage API credentials",
+      "url": "/client-api-manager",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["business", "productivity", "developer tools"]
+}
