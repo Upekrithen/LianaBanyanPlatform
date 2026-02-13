@@ -59,8 +59,25 @@ BEGIN
   END IF;
 END $$;
 
--- Verify columns
+-- ============================================================================
+-- FIX: Ensure current_metrics table exists with proper structure
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.current_metrics (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  metric_key text NOT NULL UNIQUE,
+  metric_value numeric NOT NULL,
+  metric_label text,
+  updated_at timestamptz DEFAULT now()
+);
+
+-- Verify innovation_log columns
 SELECT column_name, data_type 
 FROM information_schema.columns 
 WHERE table_schema = 'public' AND table_name = 'innovation_log'
+ORDER BY ordinal_position;
+
+-- Verify current_metrics exists
+SELECT column_name, data_type 
+FROM information_schema.columns 
+WHERE table_schema = 'public' AND table_name = 'current_metrics'
 ORDER BY ordinal_position;
