@@ -1552,10 +1552,21 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 -- ============================================================================
--- UPDATE METRICS (skipped - table structure varies)
--- Run this manually after verifying current_metrics schema:
--- UPDATE public.current_metrics SET metric_value = (SELECT COUNT(*) FROM public.innovation_log) WHERE metric_key = 'innovation_count';
+-- CREATE AND UPDATE METRICS
 -- ============================================================================
+CREATE TABLE IF NOT EXISTS public.current_metrics (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  metric_key text NOT NULL UNIQUE,
+  metric_value numeric NOT NULL,
+  metric_label text,
+  updated_at timestamptz DEFAULT now()
+);
+
+INSERT INTO public.current_metrics (metric_key, metric_value, metric_label)
+VALUES ('innovation_count', (SELECT COUNT(*) FROM public.innovation_log), 'Total Innovations')
+ON CONFLICT (metric_key) DO UPDATE SET 
+  metric_value = EXCLUDED.metric_value,
+  updated_at = now();
 
 -- ============================================================================
 -- COMMENT
