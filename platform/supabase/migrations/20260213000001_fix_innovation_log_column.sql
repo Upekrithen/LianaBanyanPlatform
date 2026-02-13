@@ -1,5 +1,5 @@
 -- ============================================================================
--- FIX: Add missing 'description' column to innovation_log
+-- FIX: Add ALL missing columns to innovation_log
 -- Run this BEFORE the complete innovation registry migration
 -- ============================================================================
 
@@ -13,9 +13,49 @@ BEGIN
     AND column_name = 'description'
   ) THEN
     ALTER TABLE public.innovation_log ADD COLUMN description text;
-    RAISE NOTICE 'Added description column to innovation_log';
-  ELSE
-    RAISE NOTICE 'description column already exists';
+    RAISE NOTICE 'Added description column';
+  END IF;
+END $$;
+
+-- Add category column if it doesn't exist
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'innovation_log' 
+    AND column_name = 'category'
+  ) THEN
+    ALTER TABLE public.innovation_log ADD COLUMN category text;
+    RAISE NOTICE 'Added category column';
+  END IF;
+END $$;
+
+-- Add patent_bag column if it doesn't exist
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'innovation_log' 
+    AND column_name = 'patent_bag'
+  ) THEN
+    ALTER TABLE public.innovation_log ADD COLUMN patent_bag text;
+    RAISE NOTICE 'Added patent_bag column';
+  END IF;
+END $$;
+
+-- Add status column if it doesn't exist
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'innovation_log' 
+    AND column_name = 'status'
+  ) THEN
+    ALTER TABLE public.innovation_log ADD COLUMN status text DEFAULT 'documented';
+    RAISE NOTICE 'Added status column';
   END IF;
 END $$;
 
