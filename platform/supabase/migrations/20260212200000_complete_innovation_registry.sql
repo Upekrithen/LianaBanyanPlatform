@@ -1552,12 +1552,10 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 -- ============================================================================
--- UPDATE METRICS (actual schema: metric_name, metric_value, metric_unit, context, recorded_at)
+-- METRICS NOTE: current_metrics is a VIEW (not a table), so we cannot insert.
+-- The view already derives innovation_count from: SELECT COUNT(*) FROM innovation_log
+-- No action needed - the view auto-updates when innovations are added.
 -- ============================================================================
-DELETE FROM public.current_metrics WHERE metric_name = 'innovation_count';
-
-INSERT INTO public.current_metrics (metric_name, metric_value, metric_unit, recorded_at)
-VALUES ('innovation_count', (SELECT COUNT(*) FROM public.innovation_log), 'count', now());
 
 -- ============================================================================
 -- COMMENT
