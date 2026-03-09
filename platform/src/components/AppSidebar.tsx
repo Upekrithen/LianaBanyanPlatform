@@ -27,7 +27,7 @@ const marketplaceMainItems = [
   { title: "Guilds", url: "/guilds", icon: Swords },
   { title: "Clans", url: "/clans", icon: Shield },
   { title: "Peer Contracts", url: "/peer-contracts", icon: HandshakeIcon },
-  { title: "Sponsorship Guide", url: "/investment-guide", icon: BookOpen },
+  { title: "Sponsorship Guide", url: "/sponsorship-guide", icon: BookOpen },
   { title: "Register IP", url: "/ip/register", icon: ShieldCheck },
 ];
 

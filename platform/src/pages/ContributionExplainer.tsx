@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ServiceValueCalculator } from "@/components/ROICalculator";
+import { ServiceValueCalculator } from "@/components/ServiceValueCalculator";
 import { SponsorshipFlowDiagram } from "@/components/ConversionFlowDiagram";
 import { ArrowRight, TrendingUp, Clock, DollarSign, Award, ShieldCheck } from "lucide-react";
 
@@ -322,5 +322,3 @@ const ContributionExplainer = () => {
 };
 
 export default ContributionExplainer;
-// Backward-compatible alias
-export { ContributionExplainer as InvestmentExplainer };

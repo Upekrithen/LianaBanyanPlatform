@@ -40,7 +40,7 @@ export const PeerContractDialog = ({
     contract_description: "",
     compensation_type: "equity" as "equity" | "cash" | "hybrid",
     cash_amount: "",
-    equity_percentage: "",
+    participation_percentage: "",
     time_commitment_days: "30",
     deliverables: "",
   });
@@ -64,8 +64,8 @@ export const PeerContractDialog = ({
         contract_description: formData.contract_description,
         compensation_type: formData.compensation_type,
         cash_amount: formData.cash_amount ? parseFloat(formData.cash_amount) : 0,
-        equity_percentage: formData.equity_percentage
-          ? parseFloat(formData.equity_percentage)
+        participation_percentage: formData.participation_percentage
+          ? parseFloat(formData.participation_percentage)
           : null,
         time_commitment_days: parseInt(formData.time_commitment_days),
         deliverables,
@@ -82,7 +82,7 @@ export const PeerContractDialog = ({
         contract_description: "",
         compensation_type: "equity",
         cash_amount: "",
-        equity_percentage: "",
+        participation_percentage: "",
         time_commitment_days: "30",
         deliverables: "",
       });
@@ -181,9 +181,9 @@ export const PeerContractDialog = ({
                 id="equity"
                 type="number"
                 step="0.01"
-                value={formData.equity_percentage}
+                value={formData.participation_percentage}
                 onChange={(e) =>
-                  setFormData({ ...formData, equity_percentage: e.target.value })
+                  setFormData({ ...formData, participation_percentage: e.target.value })
                 }
                 placeholder="0.00"
               />

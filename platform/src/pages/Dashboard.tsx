@@ -31,9 +31,9 @@ import { EOIDashboard } from '@/components/EOIDashboard';
 import { MembershipStakePayment } from '@/components/MembershipStakePayment';
 import { GuildStakeProgression } from '@/components/GuildStakeProgression';
 import { ProjectPreferenceRanking } from '@/components/ProjectPreferenceRanking';
-import { ContributionTimeline } from '@/components/InvestmentTimeline';
-import { EquityBreakdownCard } from '@/components/EquityBreakdownCard';
-import { InvestmentReportExporter } from '@/components/InvestmentReportExporter';
+import { ContributionTimeline } from '@/components/ContributionTimeline';
+import { ParticipationBreakdownCard } from '@/components/ParticipationBreakdownCard';
+import { ContributionReportExporter } from '@/components/ContributionReportExporter';
 import { MilestoneNotifications } from '@/components/MilestoneNotifications';
 import { RealTimeUserStats } from '@/components/RealTimeUserStats';
 import { DashboardPortalSwitcher } from '@/components/DashboardPortalSwitcher';
@@ -459,12 +459,12 @@ export default function Dashboard() {
                     <RealTimeUserStats />
                   </div>
                   <div className="lg:col-span-1">
-                    <InvestmentReportExporter />
+                    <ContributionReportExporter />
                   </div>
                 </div>
 
                 <div className="grid gap-4 md:gap-6 lg:grid-cols-2 mt-4">
-                  <EquityBreakdownCard />
+                  <ParticipationBreakdownCard />
                   <MilestoneNotifications />
                 </div>
 

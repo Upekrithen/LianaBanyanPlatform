@@ -71,18 +71,18 @@ export function ContributionTimeline() {
       // Load EOI vesting schedules
       const { data: vesting } = await supabase
         .from('eoi_vesting_schedules')
-        .select('id, vesting_start_date, eoi_amount, total_vesting_days, projects(name)')
+        .select('id, milestone_start_date, eoi_amount, total_milestone_days, projects(name)')
         .eq('user_id', user.id)
-        .order('vesting_start_date', { ascending: false });
+        .order('milestone_start_date', { ascending: false });
 
       vesting?.forEach(schedule => {
         timelineEvents.push({
           id: `vesting-${schedule.id}`,
           type: 'conversion',
-          date: schedule.vesting_start_date,
+          date: schedule.milestone_start_date,
           projectName: schedule.projects?.name || 'Unknown',
           amount: schedule.eoi_amount,
-          description: `Started EOI vesting (${schedule.total_vesting_days} days)`
+          description: `Started EOI vesting (${schedule.total_milestone_days} days)`
         });
       });
 
@@ -164,6 +164,3 @@ export function ContributionTimeline() {
     </Card>
   );
 }
-
-// Backward-compatible alias
-export const InvestmentTimeline = ContributionTimeline;

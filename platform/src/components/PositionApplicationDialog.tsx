@@ -23,7 +23,7 @@ interface Position {
   position_title: string;
   position_description: string;
   compensation_type: string;
-  equity_percentage: number;
+  participation_percentage: number;
   cash_amount: number;
   credits_reserved: number;
   category: string;
@@ -154,10 +154,10 @@ export function PositionApplicationDialog({
                 <p className="text-xs text-muted-foreground">Compensation Type</p>
                 <p className="font-medium capitalize">{position.compensation_type}</p>
               </div>
-              {position.equity_percentage > 0 && (
+              {position.participation_percentage > 0 && (
                 <div>
                   <p className="text-xs text-muted-foreground">Participation</p>
-                  <p className="font-medium">{position.equity_percentage}%</p>
+                  <p className="font-medium">{position.participation_percentage}%</p>
                 </div>
               )}
               {position.cash_amount > 0 && (

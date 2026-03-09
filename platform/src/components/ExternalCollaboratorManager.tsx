@@ -42,11 +42,11 @@ export function ExternalCollaboratorManager() {
     collaborator_contact_email: "",
     collaborator_website: "",
     compensation_type: "equity",
-    equity_percentage: 1.0,
-    profit_share_percentage: 0,
+    participation_percentage: 1.0,
+    service_credit_percentage: 0,
     metric_basis: "hybrid",
     minimum_monthly_referrals: 10,
-    equity_vesting_months: 12,
+    participation_milestone_months: 12,
     status: "pending",
     notes: "",
   });
@@ -123,11 +123,11 @@ export function ExternalCollaboratorManager() {
       collaborator_contact_email: "",
       collaborator_website: "",
       compensation_type: "equity",
-      equity_percentage: 1.0,
-      profit_share_percentage: 0,
+      participation_percentage: 1.0,
+      service_credit_percentage: 0,
       metric_basis: "hybrid",
       minimum_monthly_referrals: 10,
-      equity_vesting_months: 12,
+      participation_milestone_months: 12,
       status: "pending",
       notes: "",
     });
@@ -259,30 +259,30 @@ export function ExternalCollaboratorManager() {
                   <div className="grid grid-cols-2 gap-4">
                     {(formData.compensation_type === 'equity' || formData.compensation_type === 'hybrid') && (
                       <div className="space-y-2">
-                        <Label htmlFor="equity_percentage">Participation % (max 5%)</Label>
+                        <Label htmlFor="participation_percentage">Participation % (max 5%)</Label>
                         <Input
-                          id="equity_percentage"
+                          id="participation_percentage"
                           type="number"
                           step="0.1"
                           min="0"
                           max="5"
-                          value={formData.equity_percentage}
-                          onChange={(e) => setFormData({ ...formData, equity_percentage: parseFloat(e.target.value) })}
+                          value={formData.participation_percentage}
+                          onChange={(e) => setFormData({ ...formData, participation_percentage: parseFloat(e.target.value) })}
                           required
                         />
                       </div>
                     )}
                     {(formData.compensation_type === 'profit_share' || formData.compensation_type === 'hybrid') && (
                       <div className="space-y-2">
-                        <Label htmlFor="profit_share_percentage">Revenue Share %</Label>
+                        <Label htmlFor="service_credit_percentage">Revenue Share %</Label>
                         <Input
-                          id="profit_share_percentage"
+                          id="service_credit_percentage"
                           type="number"
                           step="0.5"
                           min="0"
                           max="10"
-                          value={formData.profit_share_percentage}
-                          onChange={(e) => setFormData({ ...formData, profit_share_percentage: parseFloat(e.target.value) })}
+                          value={formData.service_credit_percentage}
+                          onChange={(e) => setFormData({ ...formData, service_credit_percentage: parseFloat(e.target.value) })}
                           required
                         />
                       </div>
@@ -320,14 +320,14 @@ export function ExternalCollaboratorManager() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="equity_vesting_months">Vesting Period (months)</Label>
+                      <Label htmlFor="participation_milestone_months">Vesting Period (months)</Label>
                       <Input
-                        id="equity_vesting_months"
+                        id="participation_milestone_months"
                         type="number"
                         min="1"
                         max="48"
-                        value={formData.equity_vesting_months}
-                        onChange={(e) => setFormData({ ...formData, equity_vesting_months: parseInt(e.target.value) })}
+                        value={formData.participation_milestone_months}
+                        onChange={(e) => setFormData({ ...formData, participation_milestone_months: parseInt(e.target.value) })}
                       />
                     </div>
                   </div>
@@ -406,14 +406,14 @@ export function ExternalCollaboratorManager() {
                       </div>
 
                       <div className="flex gap-2">
-                        {collab.equity_percentage > 0 && (
+                        {collab.participation_percentage > 0 && (
                           <Badge variant="secondary">
-                            {collab.equity_percentage}% Participation ({collab.equity_vested}% vested)
+                            {collab.participation_percentage}% Participation ({collab.participation_vested}% vested)
                           </Badge>
                         )}
-                        {collab.profit_share_percentage > 0 && (
+                        {collab.service_credit_percentage > 0 && (
                           <Badge variant="secondary">
-                            {collab.profit_share_percentage}% Revenue Share
+                            {collab.service_credit_percentage}% Revenue Share
                           </Badge>
                         )}
                         <Badge variant="outline" className="capitalize">

@@ -12,7 +12,7 @@ import { Clock, TrendingUp } from 'lucide-react';
 import { MedallionFundingExplainer } from "@/components/MedallionFundingExplainer";
 import { RealTimeProductStats } from "@/components/RealTimeProductStats";
 import { PreorderVotingExplainer } from "@/components/PreorderVotingExplainer";
-import { BackerTrackPrompt } from "@/components/InvestorTrackPrompt";
+import { BackerTrackPrompt } from "@/components/BackerTrackPrompt";
 
 interface Product {
   id: string;
@@ -75,12 +75,12 @@ export default function ProductDetail() {
     
     const { data } = await supabase
       .from('user_preferences')
-      .select('marketplace_investor_track')
+      .select('marketplace_backer_track')
       .eq('user_id', user.id)
       .maybeSingle();
-    
-    if (data?.marketplace_investor_track) {
-      setBackerTrack(data.marketplace_investor_track as 'product_only' | 'backer');
+
+    if (data?.marketplace_backer_track) {
+      setBackerTrack(data.marketplace_backer_track as 'product_only' | 'backer');
     }
     
     // Check if user has seen explainer
@@ -101,7 +101,7 @@ export default function ProductDetail() {
       .from('user_preferences')
       .upsert({
         user_id: user.id,
-        marketplace_investor_track: track
+        marketplace_backer_track: track
       });
     
     setBackerTrack(track);
@@ -113,8 +113,8 @@ export default function ProductDetail() {
 
     Object.entries(timeCommitments).forEach(([levelId, days]) => {
       const ratioFactor = Math.min(1.0, Math.max(0.0, days / votingConfig.product_lead_time_days));
-      const minParticipation = Number(votingConfig.min_equity_ratio);
-      const maxParticipation = Number(votingConfig.max_equity_ratio);
+      const minParticipation = Number(votingConfig.min_participation_ratio);
+      const maxParticipation = Number(votingConfig.max_participation_ratio);
       const participation = minParticipation + (ratioFactor * (maxParticipation - minParticipation));
       const cash = 1 - participation;
 
@@ -182,8 +182,8 @@ export default function ProductDetail() {
       // Use defaults if no config exists
       setVotingConfig({
         product_lead_time_days: 180,
-        min_equity_ratio: 0.1,
-        max_equity_ratio: 0.9,
+        min_participation_ratio: 0.1,
+        max_participation_ratio: 0.9,
         time_commitment_options: [
           { days: 7, label: '1 Week' },
           { days: 14, label: '2 Weeks' },
@@ -274,7 +274,7 @@ export default function ProductDetail() {
         source: 'initial_credit',
         time_commitment_days: timeCommitmentDays,
         commitment_deadline: commitmentDeadline.toISOString(),
-        equity_ratio: ratios.participation,
+        participation_ratio: ratios.participation,
         cash_ratio: ratios.cash,
         status: 'active'
       });

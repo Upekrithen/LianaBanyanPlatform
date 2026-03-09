@@ -118,7 +118,7 @@ export function ContributionReportExporter() {
           yPos += 5;
           doc.text(`   Vested: ${schedule.amount_vested}`, 20, yPos);
           yPos += 5;
-          doc.text(`   Days: ${schedule.days_elapsed}/${schedule.total_vesting_days}`, 20, yPos);
+          doc.text(`   Days: ${schedule.days_elapsed}/${schedule.total_milestone_days}`, 20, yPos);
           yPos += 7;
         });
       }
@@ -172,6 +172,3 @@ export function ContributionReportExporter() {
     </Card>
   );
 }
-
-/** @deprecated Use ContributionReportExporter instead */
-export const InvestmentReportExporter = ContributionReportExporter;

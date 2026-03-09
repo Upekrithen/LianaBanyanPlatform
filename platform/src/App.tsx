@@ -25,7 +25,7 @@ import ProjectView from "./pages/ProjectView";
 import ProductDetail from "./pages/ProductDetail";
 import IndustryPricing from "./pages/IndustryPricing";
 import TemplateSetup from "./pages/TemplateSetup";
-import InvestmentExplainer from "./pages/InvestmentExplainer";
+import ContributionExplainer from "./pages/ContributionExplainer";
 const BlockchainExplorer = lazy(() => import("./pages/BlockchainExplorer"));
 const MedallionViewer = lazy(() => import("./pages/MedallionViewer"));
 import Withdraw from "./pages/Withdraw";
@@ -407,7 +407,7 @@ const App = () => (
                         <Route path="/projects" element={<ExplorerRoute><Projects /></ExplorerRoute>} />
                         <Route path="/project/:projectSlug" element={<ProtectedRoute><ProjectView /></ProtectedRoute>} />
                         <Route path="/project/:projectSlug/product/:productId" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
-                        <Route path="/investment-guide" element={<ProtectedRoute><InvestmentExplainer /></ProtectedRoute>} />
+                        <Route path="/sponsorship-guide" element={<ProtectedRoute><ContributionExplainer /></ProtectedRoute>} />
                         
                         {/* Protected Sponsor Routes */}
                         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

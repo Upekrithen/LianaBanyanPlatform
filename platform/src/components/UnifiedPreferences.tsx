@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdvancedThemeSwitcher } from './AdvancedThemeSwitcher';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { BackerTrackPrompt } from './InvestorTrackPrompt';
+import { BackerTrackPrompt } from './BackerTrackPrompt';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -30,12 +30,12 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
       // Fetch contributor track preference
       const { data: prefs } = await supabase
         .from('user_preferences')
-        .select('marketplace_investor_track')
+        .select('marketplace_backer_track')
         .eq('user_id', user.id)
         .single();
-      
-      if (prefs?.marketplace_investor_track) {
-        setBackerTrack(prefs.marketplace_investor_track as 'product_only' | 'backer');
+
+      if (prefs?.marketplace_backer_track) {
+        setBackerTrack(prefs.marketplace_backer_track as 'product_only' | 'backer');
       }
 
       // Check tribe membership
@@ -69,7 +69,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
       .from('user_preferences')
       .upsert({
         user_id: user.id,
-        marketplace_investor_track: track,
+        marketplace_backer_track: track,
       });
 
     if (!error) {

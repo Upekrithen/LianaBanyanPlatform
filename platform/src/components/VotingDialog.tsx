@@ -79,8 +79,8 @@ export function VotingDialog({
           // Use defaults if no config exists
           setVotingConfig({
             product_lead_time_days: 180,
-            min_equity_ratio: 0.1,
-            max_equity_ratio: 0.9,
+            min_participation_ratio: 0.1,
+            max_participation_ratio: 0.9,
             time_commitment_options: [
               { days: 7, label: '1 Week' },
               { days: 14, label: '2 Weeks' },
@@ -106,8 +106,8 @@ export function VotingDialog({
 
     Object.entries(timeCommitments).forEach(([levelId, days]) => {
       const ratioFactor = Math.min(1.0, Math.max(0.0, days / votingConfig.product_lead_time_days));
-      const minParticipation = Number(votingConfig.min_equity_ratio);
-      const maxParticipation = Number(votingConfig.max_equity_ratio);
+      const minParticipation = Number(votingConfig.min_participation_ratio);
+      const maxParticipation = Number(votingConfig.max_participation_ratio);
       const participation = minParticipation + (ratioFactor * (maxParticipation - minParticipation));
       const cash = 1 - participation;
 
@@ -168,7 +168,7 @@ export function VotingDialog({
         source: 'initial_credit',
         time_commitment_days: timeCommitmentDays,
         commitment_deadline: commitmentDeadline.toISOString(),
-        equity_ratio: ratios.participation,
+        participation_ratio: ratios.participation,
         cash_ratio: ratios.cash,
         status: 'active'
       });

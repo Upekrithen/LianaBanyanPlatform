@@ -190,7 +190,7 @@ export async function getShadowMarksSummary(): Promise<ShadowMarksSummary | null
   }
   
   return {
-    vestingCount: data.vesting_count || 0,
+    vestingCount: data.milestone_completion_count || 0,
     totalShadow: data.total_shadow || 0,
     totalCrystallized: data.total_crystallized || 0,
     totalExpired: data.total_expired || 0,

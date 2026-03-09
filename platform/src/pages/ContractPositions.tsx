@@ -25,7 +25,7 @@ interface Position {
   position_title: string;
   position_description: string;
   compensation_type: string;
-  equity_percentage: number;
+  participation_percentage: number;
   cash_amount: number;
   credits_reserved: number;
   category: string;
@@ -214,13 +214,13 @@ export default function ContractPositions() {
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          {position.equity_percentage > 0 && (
-                            <div>{position.equity_percentage}% participation</div>
+                          {position.participation_percentage > 0 && (
+                            <div>{position.participation_percentage}% participation</div>
                           )}
                           {position.cash_amount > 0 && (
                             <div>${position.cash_amount}</div>
                           )}
-                          {!position.equity_percentage && !position.cash_amount && (
+                          {!position.participation_percentage && !position.cash_amount && (
                             <div className="text-muted-foreground">TBD</div>
                           )}
                         </div>
@@ -281,7 +281,7 @@ export default function ContractPositions() {
               positionTitle={simulatorPosition.position_title}
               baseCompensation={
                 simulatorPosition.compensation_type === 'equity'
-                  ? (simulatorPosition.equity_percentage || 0) * 100
+                  ? (simulatorPosition.participation_percentage || 0) * 100
                   : simulatorPosition.cash_amount || 5000
               }
             />

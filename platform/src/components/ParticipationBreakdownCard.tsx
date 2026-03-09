@@ -16,7 +16,7 @@ interface ProjectParticipation {
   yourRank: number;
 }
 
-export function EquityBreakdownCard() {
+export function ParticipationBreakdownCard() {
   const { user } = useAuth();
   const [projects, setProjects] = useState<ProjectParticipation[]>([]);
   const [loading, setLoading] = useState(true);

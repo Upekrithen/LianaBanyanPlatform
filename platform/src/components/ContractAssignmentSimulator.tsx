@@ -29,8 +29,8 @@ export const ContractAssignmentSimulator = ({
   
   const [config, setConfig] = useState<{
     assignment_lead_time_days: number;
-    min_equity_ratio: number;
-    max_equity_ratio: number;
+    min_participation_ratio: number;
+    max_participation_ratio: number;
     time_commitment_options: TimeCommitmentOption[];
     prerequisites: string[];
     requirements: string[];
@@ -62,8 +62,8 @@ export const ContractAssignmentSimulator = ({
       if (data) {
         setConfig({
           assignment_lead_time_days: data.assignment_lead_time_days,
-          min_equity_ratio: data.min_equity_ratio,
-          max_equity_ratio: data.max_equity_ratio,
+          min_participation_ratio: data.min_participation_ratio,
+          max_participation_ratio: data.max_participation_ratio,
           time_commitment_options: (data.time_commitment_options as unknown as TimeCommitmentOption[]) || [],
           prerequisites: (data.prerequisites as unknown as string[]) || [],
           requirements: (data.requirements as unknown as string[]) || []
@@ -88,8 +88,8 @@ export const ContractAssignmentSimulator = ({
       selectedTimeCommitment / config.assignment_lead_time_days
     ));
 
-    const calculatedEquityRatio = config.min_equity_ratio + 
-      (ratioFactor * (config.max_equity_ratio - config.min_equity_ratio));
+    const calculatedEquityRatio = config.min_participation_ratio + 
+      (ratioFactor * (config.max_participation_ratio - config.min_participation_ratio));
     
     setEquityRatio(calculatedEquityRatio);
     setCashRatio(1 - calculatedEquityRatio);

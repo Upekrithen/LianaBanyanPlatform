@@ -11,11 +11,11 @@ interface VestingSchedule {
   id: string;
   project_id: string;
   eoi_amount: number;
-  vesting_start_date: string;
-  total_vesting_days: number;
+  milestone_start_date: string;
+  total_milestone_days: number;
   days_elapsed: number;
   amount_vested: number;
-  equity_ratio: number;
+  participation_ratio: number;
   cash_ratio: number;
   ranking_score: number;
   status: string;
@@ -25,7 +25,7 @@ interface VestingSchedule {
   };
 }
 
-export function EOIVestingDashboard() {
+export function EOIMilestoneDashboard() {
   const { user } = useAuth();
   const [schedules, setSchedules] = useState<VestingSchedule[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ export function EOIVestingDashboard() {
         project:projects(name, project_sku)
       `)
       .eq("user_id", user.id)
-      .order("vesting_start_date", { ascending: false });
+      .order("milestone_start_date", { ascending: false });
 
     if (error) {
       console.error("Error loading vesting schedules:", error);
@@ -106,9 +106,9 @@ export function EOIVestingDashboard() {
           </div>
         ) : (
           schedules.map((schedule) => {
-            const progress = (schedule.days_elapsed / schedule.total_vesting_days) * 100;
-            const dailyAmount = schedule.eoi_amount / schedule.total_vesting_days;
-            const remainingDays = schedule.total_vesting_days - schedule.days_elapsed;
+            const progress = (schedule.days_elapsed / schedule.total_milestone_days) * 100;
+            const dailyAmount = schedule.eoi_amount / schedule.total_milestone_days;
+            const remainingDays = schedule.total_milestone_days - schedule.days_elapsed;
 
             return (
               <Card key={schedule.id} className="border-2">
@@ -134,7 +134,7 @@ export function EOIVestingDashboard() {
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Vesting Progress</span>
                       <span className="font-medium">
-                        {schedule.days_elapsed} / {schedule.total_vesting_days} days
+                        {schedule.days_elapsed} / {schedule.total_milestone_days} days
                       </span>
                     </div>
                     <Progress value={progress} className="h-2" />
@@ -167,7 +167,7 @@ export function EOIVestingDashboard() {
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Participation Ratio</p>
                       <p className="text-sm font-medium">
-                        {(schedule.equity_ratio * 100).toFixed(1)}%
+                        {(schedule.participation_ratio * 100).toFixed(1)}%
                       </p>
                     </div>
                     <div className="space-y-1">
@@ -183,7 +183,7 @@ export function EOIVestingDashboard() {
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Started</p>
                       <p className="text-sm font-medium">
-                        {format(new Date(schedule.vesting_start_date), "MMM d, yyyy")}
+                        {format(new Date(schedule.milestone_start_date), "MMM d, yyyy")}
                       </p>
                     </div>
                   </div>

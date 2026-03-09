@@ -145,11 +145,11 @@ export const PeerContractList = () => {
                   <span>${contract.cash_amount}</span>
                 )}
                 {contract.compensation_type === "equity" && (
-                  <span>{contract.equity_percentage}% Participation</span>
+                  <span>{contract.participation_percentage}% Participation</span>
                 )}
                 {contract.compensation_type === "hybrid" && (
                   <span>
-                    ${contract.cash_amount} + {contract.equity_percentage}% Participation
+                    ${contract.cash_amount} + {contract.participation_percentage}% Participation
                   </span>
                 )}
               </div>

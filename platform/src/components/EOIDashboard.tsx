@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, TrendingUp, Calendar, Bell } from "lucide-react";
 import { format } from "date-fns";
-import { EOIVestingDashboard } from "./EOIVestingDashboard";
+import { EOIMilestoneDashboard } from "./EOIMilestoneDashboard";
 import { LBFundingPoolDisplay } from "./LBFundingPoolDisplay";
 
 interface EOIData {
@@ -178,8 +178,8 @@ export function EOIDashboard() {
         </CardContent>
       </Card>
 
-      {/* Vesting Schedules */}
-      <EOIVestingDashboard />
+      {/* Milestone Schedules */}
+      <EOIMilestoneDashboard />
     </div>
   );
 }

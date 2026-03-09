@@ -127,10 +127,10 @@ export default function AllPositionsBrowse() {
                     </p>
 
                     <div className="space-y-2">
-                      {position.compensation_type === "equity" && position.equity_percentage && (
+                      {position.compensation_type === "participation" && position.participation_percentage && (
                         <div className="flex items-center gap-2 text-sm">
                           <TrendingUp className="w-4 h-4" />
-                          <span>{position.equity_percentage}% participation</span>
+                          <span>{position.participation_percentage}% participation</span>
                         </div>
                       )}
                       {position.compensation_type === "cash" && position.cash_amount && (
@@ -143,7 +143,7 @@ export default function AllPositionsBrowse() {
                         <div className="flex items-center gap-2 text-sm">
                           <TrendingUp className="w-4 h-4" />
                           <span>
-                            {position.equity_percentage}% participation + ${position.cash_amount}
+                            {position.participation_percentage}% participation + ${position.cash_amount}
                           </span>
                         </div>
                       )}

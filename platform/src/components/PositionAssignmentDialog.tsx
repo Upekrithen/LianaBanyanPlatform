@@ -79,10 +79,10 @@ export const PositionAssignmentDialog = ({
 
       if (error) throw error;
 
-      setOriginalEquity(data.equity_percentage || 0);
+      setOriginalEquity(data.participation_percentage || 0);
       setOriginalCash(data.cash_amount || 0);
       setOriginalCredits(data.credits_reserved || 0);
-      setAdjustedEquity(data.equity_percentage || 0);
+      setAdjustedEquity(data.participation_percentage || 0);
       setAdjustedCash(data.cash_amount || 0);
       setAdjustedCredits(data.credits_reserved || 0);
     } catch (error) {
@@ -106,8 +106,8 @@ export const PositionAssignmentDialog = ({
           project_id: projectId,
           assignment_type: assignmentType,
           assignment_status: 'pending',
-          original_equity_percentage: originalEquity,
-          adjusted_equity_percentage: adjustedEquity,
+          original_participation_percentage: originalEquity,
+          adjusted_participation_percentage: adjustedEquity,
           original_cash_amount: originalCash,
           adjusted_cash_amount: adjustedCash,
           original_credits: originalCredits,

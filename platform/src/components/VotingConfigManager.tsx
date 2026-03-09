@@ -48,8 +48,8 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
       toast.error('Failed to load voting configuration');
     } else if (data) {
       setProductLeadTimeDays(data.product_lead_time_days);
-      setMinParticipationRatio(Number(data.min_equity_ratio));
-      setMaxParticipationRatio(Number(data.max_equity_ratio));
+      setMinParticipationRatio(Number(data.min_participation_ratio));
+      setMaxParticipationRatio(Number(data.max_participation_ratio));
       
       // Parse time_commitment_options from JSONB
       const parsedOptions = Array.isArray(data.time_commitment_options) 
@@ -73,8 +73,8 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
         project_id: projectId,
         product_lead_time_days: productLeadTimeDays,
         time_commitment_options: JSON.stringify(timeOptions),
-        min_equity_ratio: minParticipationRatio,
-        max_equity_ratio: maxParticipationRatio,
+        min_participation_ratio: minParticipationRatio,
+        max_participation_ratio: maxParticipationRatio,
         updated_at: new Date().toISOString()
       }, {
         onConflict: 'project_id'

@@ -60,7 +60,7 @@ export default function ManagePositions() {
     position_title: '',
     position_description: '',
     compensation_type: 'equity',
-    equity_percentage: 0,
+    participation_percentage: 0,
     cash_amount: 0,
     credits_reserved: 100,
     required_stage: '',
@@ -132,7 +132,7 @@ export default function ManagePositions() {
             position_title: formData.position_title,
             position_description: formData.position_description,
             compensation_type: formData.compensation_type,
-            equity_percentage: formData.equity_percentage,
+            participation_percentage: formData.participation_percentage,
             cash_amount: formData.cash_amount,
             credits_reserved: formData.credits_reserved,
             required_stage: formData.required_stage as any || null,
@@ -149,7 +149,7 @@ export default function ManagePositions() {
           position_title: formData.position_title,
           position_description: formData.position_description,
           compensation_type: formData.compensation_type,
-          equity_percentage: formData.equity_percentage,
+          participation_percentage: formData.participation_percentage,
           cash_amount: formData.cash_amount,
           credits_reserved: formData.credits_reserved,
           required_stage: formData.required_stage || null,
@@ -182,7 +182,7 @@ export default function ManagePositions() {
       position_title: position.position_title,
       position_description: position.position_description || '',
       compensation_type: position.compensation_type,
-      equity_percentage: position.equity_percentage || 0,
+      participation_percentage: position.participation_percentage || 0,
       cash_amount: position.cash_amount || 0,
       credits_reserved: position.credits_reserved || 100,
       required_stage: position.required_stage || '',
@@ -216,7 +216,7 @@ export default function ManagePositions() {
       position_title: '',
       position_description: '',
       compensation_type: 'equity',
-      equity_percentage: 0,
+      participation_percentage: 0,
       cash_amount: 0,
       credits_reserved: 100,
       required_stage: '',
@@ -356,10 +356,10 @@ export default function ManagePositions() {
 
                 {(formData.compensation_type === 'equity' || formData.compensation_type === 'mixed') && (
                   <div className="space-y-2">
-                    <Label>Participation Percentage: {formData.equity_percentage}%</Label>
+                    <Label>Participation Percentage: {formData.participation_percentage}%</Label>
                     <Slider
-                      value={[formData.equity_percentage]}
-                      onValueChange={([value]) => setFormData({ ...formData, equity_percentage: value })}
+                      value={[formData.participation_percentage]}
+                      onValueChange={([value]) => setFormData({ ...formData, participation_percentage: value })}
                       max={100}
                       step={0.1}
                     />
@@ -455,8 +455,8 @@ export default function ManagePositions() {
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          {position.equity_percentage > 0 && (
-                            <div>{position.equity_percentage}% participation</div>
+                          {position.participation_percentage > 0 && (
+                            <div>{position.participation_percentage}% participation</div>
                           )}
                           {position.cash_amount > 0 && (
                             <div>${position.cash_amount}</div>

@@ -542,7 +542,7 @@ export async function getUserWispStats(): Promise<UserWispStats | null> {
     quits: data.quits,
     totalAntePaid: data.total_ante_paid,
     totalPayout: data.total_payout,
-    netProfit: data.net_profit,
+    netProfit: data.net_service_value,
     bestFinish: data.best_finish,
     bestTimeMs: data.best_time_ms,
     currentWinStreak: data.current_win_streak,

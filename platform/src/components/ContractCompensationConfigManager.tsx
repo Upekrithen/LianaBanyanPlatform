@@ -53,8 +53,8 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
 
       if (data) {
         setAssignmentLeadTimeDays(data.assignment_lead_time_days);
-        setMinEquityRatio(data.min_equity_ratio);
-        setMaxEquityRatio(data.max_equity_ratio);
+        setMinEquityRatio(data.min_participation_ratio);
+        setMaxEquityRatio(data.max_participation_ratio);
         setTimeOptions((data.time_commitment_options as unknown as TimeCommitmentOption[]) || []);
         setPrerequisites((data.prerequisites as unknown as string[]) || []);
         setRequirements((data.requirements as unknown as string[]) || []);
@@ -97,8 +97,8 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
         .upsert({
           project_id: projectId,
           assignment_lead_time_days: assignmentLeadTimeDays,
-          min_equity_ratio: minEquityRatio,
-          max_equity_ratio: maxEquityRatio,
+          min_participation_ratio: minEquityRatio,
+          max_participation_ratio: maxEquityRatio,
           time_commitment_options: timeOptions as any,
           prerequisites: prerequisites as any,
           requirements: requirements as any

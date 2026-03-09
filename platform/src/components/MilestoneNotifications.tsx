@@ -58,7 +58,7 @@ export function MilestoneNotifications() {
         .eq('status', 'active');
 
       vesting?.forEach(schedule => {
-        const daysRemaining = schedule.total_vesting_days - schedule.days_elapsed;
+        const daysRemaining = schedule.total_milestone_days - schedule.days_elapsed;
         if (daysRemaining <= 7 && daysRemaining > 0) {
           notifications.push({
             id: `vesting-${schedule.id}`,

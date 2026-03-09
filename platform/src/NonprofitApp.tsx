@@ -18,7 +18,7 @@ import Auth from "./pages/Auth";
 // Non-Profit Portal Pages
 import Dashboard from "./pages/Dashboard";
 import { LBFundingPoolDisplay } from "@/components/LBFundingPoolDisplay";
-import { EOIVestingDashboard } from "@/components/EOIVestingDashboard";
+import { EOIMilestoneDashboard } from "@/components/EOIMilestoneDashboard";
 import { BlockchainGasDashboard } from "@/components/BlockchainGasDashboard";
 import MemberResources from "./pages/MemberResources";
 import NotFound from "./pages/NotFound";
@@ -84,8 +84,8 @@ const NonprofitApp = () => {
                             element={
                               <ProtectedRoute>
                                 <div className="container mx-auto p-6">
-                                  <h1 className="text-3xl font-bold mb-6">EOI Vesting Schedules</h1>
-                                  <EOIVestingDashboard />
+                                  <h1 className="text-3xl font-bold mb-6">EOI Milestone Schedules</h1>
+                                  <EOIMilestoneDashboard />
                                 </div>
                               </ProtectedRoute>
                             } 

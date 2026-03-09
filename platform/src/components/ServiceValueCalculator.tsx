@@ -187,7 +187,3 @@ export const ServiceValueCalculator = () => {
     </div>
   );
 };
-
-// Keep backward-compatible export (legacy name)
-export const ROICalculator = ServiceValueCalculator;
-export const ContributionCalculator = ServiceValueCalculator;
