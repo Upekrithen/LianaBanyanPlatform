@@ -5,6 +5,7 @@ import { TrendingUp, ShoppingBag, Info } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { PreferenceSwitchConfirmDialog, type SwitchType } from './PreferenceSwitchConfirmDialog';
 
 interface BackerTrackPromptProps {
   onSelectTrack: (track: 'product_only' | 'backer') => void;
@@ -13,42 +14,70 @@ interface BackerTrackPromptProps {
 
 export function BackerTrackPrompt({ onSelectTrack, currentTrack }: BackerTrackPromptProps) {
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingSwitch, setPendingSwitch] = useState<SwitchType | null>(null);
+
+  const handleSwitchClick = () => {
+    if (!currentTrack) return;
+    const switchType: SwitchType = currentTrack === 'backer' ? 'track-to-product' : 'track-to-backer';
+    setPendingSwitch(switchType);
+    setConfirmOpen(true);
+  };
+
+  const handleConfirm = () => {
+    if (!currentTrack) return;
+    const newTrack = currentTrack === 'backer' ? 'product_only' : 'backer';
+    onSelectTrack(newTrack);
+    setConfirmOpen(false);
+    setPendingSwitch(null);
+  };
 
   if (currentTrack) {
     return (
-      <Card className="border-primary/20">
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-3">
-            {currentTrack === 'backer' ? (
-              <TrendingUp className="w-5 h-5 text-primary" />
-            ) : (
-              <ShoppingBag className="w-5 h-5 text-primary" />
-            )}
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <span className="font-medium">
-                  {currentTrack === 'backer' ? 'Backer Track Active' : 'Product-Only Track'}
-                </span>
-                <Badge variant="secondary" className="text-xs">
-                  {currentTrack === 'backer' ? 'Participation Potential' : 'Simple Purchases'}
-                </Badge>
+      <>
+        <Card className="border-primary/20">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              {currentTrack === 'backer' ? (
+                <TrendingUp className="w-5 h-5 text-primary" />
+              ) : (
+                <ShoppingBag className="w-5 h-5 text-primary" />
+              )}
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">
+                    {currentTrack === 'backer' ? 'Backer Track Active' : 'Product-Only Track'}
+                  </span>
+                  <Badge variant="secondary" className="text-xs">
+                    {currentTrack === 'backer' ? 'Participation Potential' : 'Simple Purchases'}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {currentTrack === 'backer'
+                    ? 'You can earn participation in projects you back'
+                    : 'You\'ll only see product purchase options'}
+                </p>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {currentTrack === 'backer'
-                  ? 'You can earn participation in projects you back'
-                  : 'You\'ll only see product purchase options'}
-              </p>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSwitchClick}
+              >
+                Switch
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onSelectTrack(currentTrack === 'backer' ? 'product_only' : 'backer')}
-            >
-              Switch
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        {pendingSwitch && (
+          <PreferenceSwitchConfirmDialog
+            open={confirmOpen}
+            onOpenChange={setConfirmOpen}
+            switchType={pendingSwitch}
+            onConfirm={handleConfirm}
+          />
+        )}
+      </>
     );
   }
 
