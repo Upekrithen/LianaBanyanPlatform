@@ -26,8 +26,8 @@ INSERT INTO public.projects (
   'Coaster Medallion',
   'Every project on the platform gets a physical medallion. When you back a project, support an initiative, or join a guild — you earn a Coaster Medallion for that connection. A hexagonal proof that you showed up and put skin in the game. QR code. Compliant mechanism counter. DaisyChainLinked to every project on the platform.',
   'active',
-  '330eafae-4dfe-4e01-941f-47d7df55b7b5',  -- Founder (upekrithen@gmail.com)
-  '330eafae-4dfe-4e01-941f-47d7df55b7b5',
+  NULL,  -- Owner claimed when Founder signs up
+  NULL,
   5000,     -- 5,000 Credits goal (seed round for first SLA prototypes)
   'The physical proof of everything you back',
   'manufacturing',
@@ -70,8 +70,8 @@ INSERT INTO public.projects (
   'Let''s Make Dinner',
   'A neighborhood meal network where home cooks, local chefs, and community kitchens feed families at fair prices. Dynamic pricing rewards planning: $5 preorder (48+ hours), $10 day-before, $15 rush. Chefs keep 83.3% of every transaction — locked forever in constitutional bylaws. DIY Grocery Boxes, Group Cook sessions, and chef-prepared meals delivered hot.',
   'active',
-  '330eafae-4dfe-4e01-941f-47d7df55b7b5',  -- Founder
-  '330eafae-4dfe-4e01-941f-47d7df55b7b5',
+  NULL,  -- Owner claimed when Founder signs up
+  NULL,
   10000,    -- 10,000 Credits goal (pilot funding for first neighborhood)
   'Neighbors feeding neighbors',
   'food',
