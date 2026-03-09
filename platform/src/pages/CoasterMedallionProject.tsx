@@ -172,11 +172,11 @@ export default function CoasterMedallionProject() {
               <p className="text-muted-foreground">
                 Every project on the Liana Banyan platform gets a physical medallion. When you back a
                 project, support an initiative, or join a guild — you earn a Coaster Medallion for that
-                connection. It&apos;s not a trophy. It&apos;s not a toy. It&apos;s a physical, hexagonal proof
+                connection. It{"\u0027"}s not a trophy. It{"\u0027"}s not a toy. It{"\u0027"}s a physical, hexagonal proof
                 that you showed up and put skin in the game.
               </p>
               <p className="text-muted-foreground">
-                Your QR code. Your compliant mechanism counter. Your &ldquo;Just So Story&rdquo; made real.
+                Your QR code. Your compliant mechanism counter. Your {"\u201C"}Just So Story{"\u201D"} made real.
               </p>
             </CardContent>
           </Card>
@@ -290,9 +290,9 @@ export default function CoasterMedallionProject() {
                 <div>
                   <h4 className="font-bold text-amber-800 dark:text-amber-400">Literary DNA</h4>
                   <p className="text-sm text-amber-900/70 dark:text-amber-200/70 mt-1">
-                    <strong>Just So Stories</strong> by Rudyard Kipling — &ldquo;How the Leopard Got His Spots,&rdquo;
-                    &ldquo;How the Camel Got His Hump.&rdquo; Every origin story in the platform is a
-                    Just So Story. The medallion&apos;s origin — from QR card to coaster to counter to
+                    <strong>Just So Stories</strong> by Rudyard Kipling — {"\u201C"}How the Leopard Got His Spots,{"\u201D"}
+                    {"\u201C"}How the Camel Got His Hump.{"\u201D"} Every origin story in the platform is a
+                    Just So Story. The medallion{"\u0027"}s origin — from QR card to coaster to counter to
                     universal token — is ours.
                   </p>
                   <p className="text-sm text-amber-900/70 dark:text-amber-200/70 mt-2">
@@ -373,7 +373,7 @@ export default function CoasterMedallionProject() {
                 Manufacturing Volume Discount
               </CardTitle>
               <CardDescription>
-                We don&apos;t guess demand. We prove it. Back early at a higher price, and if we reach
+                We don{"\u0027"}t guess demand. We prove it. Back early at a higher price, and if we reach
                 a lower tier — you get the difference back as Joules.
               </CardDescription>
             </CardHeader>
@@ -564,9 +564,9 @@ export default function CoasterMedallionProject() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground italic">
-                  This is not a &ldquo;return.&rdquo; It&apos;s a &ldquo;thank you for believing first.&rdquo;
+                  This is not a {"\u201C"}return.{"\u201D"} It{"\u0027"}s a {"\u201C"}thank you for believing first.{"\u201D"}
                   The Joules are yours to spend anywhere on the platform, and their value
-                  is frozen at the rate when they were issued — the &ldquo;Forever Stamp&rdquo; mechanic.
+                  is frozen at the rate when they were issued — the {"\u201C"}Forever Stamp{"\u201D"} mechanic.
                 </p>
               </CardContent>
             </Card>
@@ -577,9 +577,9 @@ export default function CoasterMedallionProject() {
             <CardContent className="p-6">
               <blockquote className="text-center">
                 <p className="text-lg font-medium italic">
-                  &ldquo;At C20 per pool, a member in 4 pools pays C80/month but gets 4x what
-                  they&apos;d have individually. With strangers, even. The pool doesn&apos;t care WHO
-                  is in it, just that the economics work.&rdquo;
+                  {"\u201C"}At C20 per pool, a member in 4 pools pays C80/month but gets 4x what
+                  they{"\u0027"}d have individually. With strangers, even. The pool doesn{"\u0027"}t care WHO
+                  is in it, just that the economics work.{"\u201D"}
                 </p>
               </blockquote>
             </CardContent>

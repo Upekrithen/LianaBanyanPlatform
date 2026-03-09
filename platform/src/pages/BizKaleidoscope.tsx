@@ -38,7 +38,7 @@ export default function BizKaleidoscope() {
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">
             The only form of advertising we allow. A utilitarian, reference-based directory of local businesses, entirely under your control. 
-            <a href="/garage-sales" className="text-blue-600 hover:underline ml-2">View on Local Map &rarr;</a>
+            <a href="/garage-sales" className="text-blue-600 hover:underline ml-2">View on Local Map →</a>
           </p>
         </div>
         

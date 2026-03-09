@@ -404,6 +404,7 @@ const App = () => (
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/auth/tiktok/callback" element={<TikTokCallback />} />
                         <Route path="/ghost" element={<GhostWorld />} />
+                        <Route path="/ghost-world" element={<GhostWorld />} />
                         <Route path="/explore" element={<GhostWorld />} />
                         <Route path="/free-explore" element={<GhostWorld />} />
 
@@ -413,6 +414,7 @@ const App = () => (
                         <Route path="/sign-in" element={<Navigate to="/auth" replace />} />
                         <Route path="/signup" element={<Navigate to="/auth" replace />} />
                         <Route path="/sign-up" element={<Navigate to="/auth" replace />} />
+                        <Route path="/join" element={<Navigate to="/auth" replace />} />
                         <Route path="/home" element={<Navigate to="/" replace />} />
                         <Route path="/browse" element={<Navigate to="/browse/marketplace" replace />} />
                         <Route path="/all-positions" element={<Navigate to="/positions/browse" replace />} />
@@ -420,6 +422,22 @@ const App = () => (
                         <Route path="/my-reputation" element={<Navigate to="/dashboard" replace />} />
                         <Route path="/start-a-project" element={<Navigate to="/start" replace />} />
                         <Route path="/52-card-hunt" element={<Navigate to="/treasure-map-game" replace />} />
+                        <Route path="/red-carpet" element={<Navigate to="/redcarpet" replace />} />
+                        <Route path="/contract-positions" element={<Navigate to="/positions/browse" replace />} />
+                        <Route path="/business-builder" element={<Navigate to="/build-a-business" replace />} />
+                        <Route path="/create-project" element={<Navigate to="/admin/project/create" replace />} />
+                        <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/admin/project" element={<Navigate to="/admin-project" replace />} />
+                        <Route path="/public-ledger" element={<Navigate to="/transparent-ledger" replace />} />
+                        <Route path="/opportunities" element={<Navigate to="/positions/browse" replace />} />
+
+                        {/* HexIsle route aliases — old paths without /hexisle/ prefix */}
+                        <Route path="/harvest-island" element={<Navigate to="/hexisle/harvest" replace />} />
+                        <Route path="/island-assignments" element={<Navigate to="/hexisle/assignments" replace />} />
+                        <Route path="/island-portfolio" element={<Navigate to="/hexisle/portfolio" replace />} />
+                        <Route path="/island-world-map" element={<Navigate to="/hexisle/world-map" replace />} />
+                        <Route path="/world-map" element={<Navigate to="/hexisle/world-map" replace />} />
+                        <Route path="/keeps" element={<Navigate to="/hexisle/keeps" replace />} />
 
                         {/* Root-level aliases for initiatives — prevent 404s from external links */}
                         <Route path="/rally-group" element={<Navigate to="/initiatives/rally-group" replace />} />
@@ -539,6 +557,7 @@ const App = () => (
                         <Route path="/learn/brewster-bonus" element={<ExplorerRoute><BrewsterBonusPage /></ExplorerRoute>} />
                         <Route path="/learn" element={<ExplorerRoute><div className="container mx-auto p-6 max-w-4xl"><AlcoveHallway /></div></ExplorerRoute>} />
                         <Route path="/heroes/:slug" element={<ExplorerRoute><HeroProjectPage /></ExplorerRoute>} />
+                        <Route path="/heroes" element={<Navigate to="/browse/marketplace" replace />} />
                         <Route path="/do-the-swoop" element={<ExplorerRoute><SwoopPage /></ExplorerRoute>} />
                         <Route path="/finances" element={<ExplorerRoute><FinancialTransparencyPage /></ExplorerRoute>} />
                         <Route path="/financial-transparency" element={<ExplorerRoute><FinancialTransparencyPage /></ExplorerRoute>} />
@@ -716,6 +735,11 @@ const App = () => (
                         <Route path="/initiatives/the-pantry" element={<ExplorerRoute><PantryPage /></ExplorerRoute>} />
                         <Route path="/initiatives/family-table" element={<ExplorerRoute><FamilyTablePage /></ExplorerRoute>} />
                         <Route path="/initiatives/family-table/sessions" element={<ExplorerRoute><GroupCookPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/family-table/host-session" element={<Navigate to="/initiatives/family-table/sessions" replace />} />
+                        <Route path="/initiatives/family-table/start-pod" element={<Navigate to="/initiatives/family-table" replace />} />
+                        <Route path="/initiatives/lets-make-dinner/become-chef" element={<Navigate to="/initiatives/lets-make-dinner/chefs" replace />} />
+                        <Route path="/initiatives/lets-make-dinner/register-business" element={<Navigate to="/initiatives/lets-make-dinner/start-node" replace />} />
+                        <Route path="/initiatives/lets-make-dinner/register-kitchen" element={<Navigate to="/initiatives/lets-make-dinner/start-node" replace />} />
                         
                         {/* Family Table — Family Management System */}
                         <Route path="/family" element={<ExplorerRoute><FamilyPage /></ExplorerRoute>} />

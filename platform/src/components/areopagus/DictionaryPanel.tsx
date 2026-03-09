@@ -127,7 +127,7 @@ export default function DictionaryPanel({ termId, onClose }: DictionaryPanelProp
                 <CardHeader className="pb-2 bg-muted/30">
                   <div className="flex items-start justify-between gap-2">
                     <CardTitle className="text-sm font-semibold">
-                      &ldquo;{def.definition}&rdquo;
+                      {"\u201C"}{def.definition}{"\u201D"}
                     </CardTitle>
                     <Badge
                       variant="outline"
@@ -226,7 +226,7 @@ export default function DictionaryPanel({ termId, onClose }: DictionaryPanelProp
                     </Badge>
                   </div>
                   <p className="text-sm italic text-muted-foreground">
-                    &ldquo;{occ.contextQuote}&rdquo;
+                    {"\u201C"}{occ.contextQuote}{"\u201D"}
                   </p>
                   {/* Translation comparison */}
                   {occ.translationComparison && occ.translationComparison.length > 0 && (
@@ -243,7 +243,7 @@ export default function DictionaryPanel({ termId, onClose }: DictionaryPanelProp
                             {tv.translation}
                           </Badge>
                           <span className="text-muted-foreground">
-                            &ldquo;{tv.rendering}&rdquo;
+                            {"\u201C"}{tv.rendering}{"\u201D"}
                           </span>
                         </div>
                       ))}

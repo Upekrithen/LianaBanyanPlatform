@@ -95,7 +95,7 @@ export const ServiceValueCalculator = () => {
                 <span className="font-medium text-primary">{(participationRatio * 100).toFixed(1)}%</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">&rarr; Membership Participation</span>
+                <span className="text-sm">→ Membership Participation</span>
                 <span className="font-medium">${participationAmount.toFixed(2)}</span>
               </div>
             </div>
@@ -105,7 +105,7 @@ export const ServiceValueCalculator = () => {
                 <span className="font-medium text-secondary">{(creditRatio * 100).toFixed(1)}%</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">&rarr; Product Credits</span>
+                <span className="text-sm">→ Product Credits</span>
                 <span className="font-medium">${creditAmount.toFixed(2)}</span>
               </div>
             </div>
@@ -163,17 +163,17 @@ export const ServiceValueCalculator = () => {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <p>
-            &#8226; With a <strong>{timeCommitment}-day</strong> commitment, you allocate{' '}
+            • With a <strong>{timeCommitment}-day</strong> commitment, you allocate{' '}
             <strong>{(participationRatio * 100).toFixed(1)}%</strong> to cooperative participation and keep{' '}
             <strong>{(creditRatio * 100).toFixed(1)}%</strong> as product credits
           </p>
           <p>
-            &#8226; Your <strong>${participationAmount.toFixed(2)}</strong> membership participation gives you
+            • Your <strong>${participationAmount.toFixed(2)}</strong> membership participation gives you
             governance voice and access to cooperative services
           </p>
           <p>
-            &#8226; Your <strong>${creditAmount.toFixed(2)}</strong> in product credits can be used
-            across the entire cooperative marketplace &mdash; they never expire
+            • Your <strong>${creditAmount.toFixed(2)}</strong> in product credits can be used
+            across the entire cooperative marketplace — they never expire
           </p>
           <div className="mt-4 p-3 bg-background rounded border flex items-start gap-2">
             <ShieldCheck className="h-4 w-4 text-amber-600 flex-shrink-0 mt-0.5" />

@@ -726,7 +726,7 @@ export default function SaltMines() {
             <h4 className="font-semibold text-white mb-2">5K SPONSOR Project</h4>
             <ul className="space-y-2 text-white/80">
               <li>• $5,000 sponsors 1,000 new members</li>
-              <li>&#8226; Receive 0.25% usage rights in patent portfolio</li>
+              <li>• Receive 0.25% usage rights in patent portfolio</li>
               <li>• Recorded NOW on immutable ledger</li>
             </ul>
             <p className="mt-4 text-primary font-medium">
@@ -828,8 +828,8 @@ export default function SaltMines() {
             <ul className="space-y-2 text-white/70">
               <li>• These are MY patents (personal property)</li>
               <li>• I can sell, license, or give away my property</li>
-              <li>&#8226; Joules are service credits, not financial instruments</li>
-              <li>&#8226; External crowdfunding handles product sponsorship</li>
+              <li>• Joules are service credits, not financial instruments</li>
+              <li>• External crowdfunding handles product sponsorship</li>
             </ul>
           </div>
         </ProgressiveSection>

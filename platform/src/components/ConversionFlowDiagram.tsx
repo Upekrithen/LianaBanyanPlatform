@@ -180,7 +180,7 @@ export const SponsorshipFlowDiagram = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Award className="h-6 w-6" />
-            Hexagonal Medallion &mdash; Your Membership Token
+            Hexagonal Medallion — Your Membership Token
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
@@ -189,19 +189,19 @@ export const SponsorshipFlowDiagram = () => {
           </p>
           <ul className="space-y-2 ml-4">
             <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">&#8226;</span>
+              <span className="text-primary mt-1">•</span>
               <span><strong>Membership Verification:</strong> Your cooperative membership is recorded on-chain</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">&#8226;</span>
+              <span className="text-primary mt-1">•</span>
               <span><strong>Service Access Key:</strong> Unlocks access to cooperative services and platforms</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">&#8226;</span>
+              <span className="text-primary mt-1">•</span>
               <span><strong>Membership Certificate:</strong> QR code links to your participation record on the Transparent Ledger</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-primary mt-1">&#8226;</span>
+              <span className="text-primary mt-1">•</span>
               <span><strong>Governance Token:</strong> Your medallion grants voting rights in cooperative decisions</span>
             </li>
           </ul>

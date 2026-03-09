@@ -102,9 +102,9 @@ const ContributionExplainer = () => {
               <div className="bg-muted p-6 rounded-lg text-sm">
                 <div className="space-y-2">
                   <div className="font-semibold">Liana Banyan's economic DNA is locked by constitutional rule:</div>
-                  <div className="ml-4">&#8226; Creators keep <strong>83.3%</strong> of every transaction</div>
-                  <div className="ml-4">&#8226; Platform takes exactly <strong>Cost+20%</strong> &mdash; no more, ever</div>
-                  <div className="ml-4">&#8226; Three-Gear Currency: Credits (1:1 USD), Marks (backed by Joules), Joules (forever stamps)</div>
+                  <div className="ml-4">• Creators keep <strong>83.3%</strong> of every transaction</div>
+                  <div className="ml-4">• Platform takes exactly <strong>Cost+20%</strong> — no more, ever</div>
+                  <div className="ml-4">• Three-Gear Currency: Credits (1:1 USD), Marks (backed by Joules), Joules (forever stamps)</div>
                 </div>
               </div>
 
@@ -149,19 +149,19 @@ const ContributionExplainer = () => {
                   <div className="space-y-2">
                     <h4 className="font-semibold">Initial Pledge</h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>&#8226; Kickstarter pledge: $500</li>
-                      <li>&#8226; Time commitment: 180 days</li>
-                      <li>&#8226; Participation ratio: 90%</li>
-                      <li>&#8226; Credit ratio: 10%</li>
+                      <li>• Kickstarter pledge: $500</li>
+                      <li>• Time commitment: 180 days</li>
+                      <li>• Participation ratio: 90%</li>
+                      <li>• Credit ratio: 10%</li>
                     </ul>
                   </div>
                   <div className="space-y-2">
                     <h4 className="font-semibold">What You Receive</h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>&#8226; $450 &rarr; Cooperative membership participation</li>
-                      <li>&#8226; $50 &rarr; Product credits (use across platform)</li>
-                      <li>&#8226; Governance voice in project decisions</li>
-                      <li>&#8226; Access to all cooperative services</li>
+                      <li>• $450 → Cooperative membership participation</li>
+                      <li>• $50 → Product credits (use across platform)</li>
+                      <li>• Governance voice in project decisions</li>
+                      <li>• Access to all cooperative services</li>
                     </ul>
                   </div>
                 </div>
@@ -171,9 +171,9 @@ const ContributionExplainer = () => {
                     What This Means
                   </h4>
                   <div className="space-y-1 text-sm">
-                    <p>&#8226; Full voting participation in cooperative governance</p>
-                    <p>&#8226; Priority access to new projects and services</p>
-                    <p>&#8226; Founding member recognition on the Transparent Ledger</p>
+                    <p>• Full voting participation in cooperative governance</p>
+                    <p>• Priority access to new projects and services</p>
+                    <p>• Founding member recognition on the Transparent Ledger</p>
                     <p className="font-medium text-green-600 mt-2">You helped build the cooperative from the ground up.</p>
                   </div>
                 </div>
@@ -193,19 +193,19 @@ const ContributionExplainer = () => {
                   <div className="space-y-2">
                     <h4 className="font-semibold">Initial Pledge</h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>&#8226; Kickstarter pledge: $500</li>
-                      <li>&#8226; Time commitment: 90 days</li>
-                      <li>&#8226; Participation ratio: 50%</li>
-                      <li>&#8226; Credit ratio: 50%</li>
+                      <li>• Kickstarter pledge: $500</li>
+                      <li>• Time commitment: 90 days</li>
+                      <li>• Participation ratio: 50%</li>
+                      <li>• Credit ratio: 50%</li>
                     </ul>
                   </div>
                   <div className="space-y-2">
                     <h4 className="font-semibold">What You Receive</h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>&#8226; $250 &rarr; Cooperative membership participation</li>
-                      <li>&#8226; $250 &rarr; Product credits</li>
-                      <li>&#8226; Standard voting participation</li>
-                      <li>&#8226; Access to cooperative services</li>
+                      <li>• $250 → Cooperative membership participation</li>
+                      <li>• $250 → Product credits</li>
+                      <li>• Standard voting participation</li>
+                      <li>• Access to cooperative services</li>
                     </ul>
                   </div>
                 </div>
@@ -215,9 +215,9 @@ const ContributionExplainer = () => {
                     What This Means
                   </h4>
                   <div className="space-y-1 text-sm">
-                    <p>&#8226; Balanced mix of platform access and product credits</p>
-                    <p>&#8226; Use credits to purchase from cooperative marketplace</p>
-                    <p>&#8226; Participate in governance decisions affecting your projects</p>
+                    <p>• Balanced mix of platform access and product credits</p>
+                    <p>• Use credits to purchase from cooperative marketplace</p>
+                    <p>• Participate in governance decisions affecting your projects</p>
                   </div>
                 </div>
               </CardContent>
@@ -236,19 +236,19 @@ const ContributionExplainer = () => {
                   <div className="space-y-2">
                     <h4 className="font-semibold">Initial Pledge</h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>&#8226; Kickstarter pledge: $500</li>
-                      <li>&#8226; Time commitment: 30 days</li>
-                      <li>&#8226; Participation ratio: 10%</li>
-                      <li>&#8226; Credit ratio: 90%</li>
+                      <li>• Kickstarter pledge: $500</li>
+                      <li>• Time commitment: 30 days</li>
+                      <li>• Participation ratio: 10%</li>
+                      <li>• Credit ratio: 90%</li>
                     </ul>
                   </div>
                   <div className="space-y-2">
                     <h4 className="font-semibold">What You Receive</h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>&#8226; $50 &rarr; Cooperative membership participation</li>
-                      <li>&#8226; $450 &rarr; Product credits</li>
-                      <li>&#8226; Basic voting participation</li>
-                      <li>&#8226; Immediate product access</li>
+                      <li>• $50 → Cooperative membership participation</li>
+                      <li>• $450 → Product credits</li>
+                      <li>• Basic voting participation</li>
+                      <li>• Immediate product access</li>
                     </ul>
                   </div>
                 </div>
@@ -258,9 +258,9 @@ const ContributionExplainer = () => {
                     What This Means
                   </h4>
                   <div className="space-y-1 text-sm">
-                    <p>&#8226; Primarily focused on getting products and services</p>
-                    <p>&#8226; $450 in credits to spend across the cooperative marketplace</p>
-                    <p>&#8226; Minimal governance participation, maximum product value</p>
+                    <p>• Primarily focused on getting products and services</p>
+                    <p>• $450 in credits to spend across the cooperative marketplace</p>
+                    <p>• Minimal governance participation, maximum product value</p>
                   </div>
                 </div>
               </CardContent>

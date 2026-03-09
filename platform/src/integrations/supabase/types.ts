@@ -510,6 +510,51 @@ export type Database = {
           },
         ]
       }
+      archaeological_evidence: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          discovery_date: string | null
+          id: string
+          image_url: string | null
+          loc_reference: string | null
+          location: string | null
+          museum_location: string | null
+          name: string
+          related_branches: string[] | null
+          scholar_consensus: string | null
+          significance: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          discovery_date?: string | null
+          id?: string
+          image_url?: string | null
+          loc_reference?: string | null
+          location?: string | null
+          museum_location?: string | null
+          name: string
+          related_branches?: string[] | null
+          scholar_consensus?: string | null
+          significance: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          discovery_date?: string | null
+          id?: string
+          image_url?: string | null
+          loc_reference?: string | null
+          location?: string | null
+          museum_location?: string | null
+          name?: string
+          related_branches?: string[] | null
+          scholar_consensus?: string | null
+          significance?: string
+        }
+        Relationships: []
+      }
       architect_audit_log: {
         Row: {
           action: string
@@ -852,6 +897,101 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      areopagus_dictionary: {
+        Row: {
+          cognates: string[] | null
+          created_at: string | null
+          created_by: string | null
+          definitions: Json
+          historical_evolution: string | null
+          id: string
+          lexicon_entries: Json | null
+          loc_classification: string | null
+          original_language: string
+          original_script: string
+          pronunciation: string | null
+          quality_score: number | null
+          root_word: string | null
+          scripture_occurrences: Json | null
+          term: string
+          transliteration: string
+          updated_at: string | null
+        }
+        Insert: {
+          cognates?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          definitions?: Json
+          historical_evolution?: string | null
+          id?: string
+          lexicon_entries?: Json | null
+          loc_classification?: string | null
+          original_language: string
+          original_script: string
+          pronunciation?: string | null
+          quality_score?: number | null
+          root_word?: string | null
+          scripture_occurrences?: Json | null
+          term: string
+          transliteration: string
+          updated_at?: string | null
+        }
+        Update: {
+          cognates?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          definitions?: Json
+          historical_evolution?: string | null
+          id?: string
+          lexicon_entries?: Json | null
+          loc_classification?: string | null
+          original_language?: string
+          original_script?: string
+          pronunciation?: string | null
+          quality_score?: number | null
+          root_word?: string | null
+          scripture_occurrences?: Json | null
+          term?: string
+          transliteration?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      areopagus_stamps: {
+        Row: {
+          branch_id: string | null
+          earned_at: string | null
+          id: string
+          stamp_type: string
+          user_id: string
+          value: number | null
+        }
+        Insert: {
+          branch_id?: string | null
+          earned_at?: string | null
+          id?: string
+          stamp_type: string
+          user_id: string
+          value?: number | null
+        }
+        Update: {
+          branch_id?: string | null
+          earned_at?: string | null
+          id?: string
+          stamp_type?: string
+          user_id?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "areopagus_stamps_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "doctrine_branches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       article_submissions: {
         Row: {
@@ -2648,6 +2788,66 @@ export type Database = {
         }
         Relationships: []
       }
+      connection_handshakes: {
+        Row: {
+          completed_at: string | null
+          current_step: string
+          duration_ms: number | null
+          id: string
+          initiated_at: string
+          ledger_entry_id: string
+          member_id: string
+          package_id: string
+          result: string
+          retry_count: number
+          step_results: Json
+          trunk_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          current_step?: string
+          duration_ms?: number | null
+          id?: string
+          initiated_at?: string
+          ledger_entry_id: string
+          member_id: string
+          package_id: string
+          result?: string
+          retry_count?: number
+          step_results?: Json
+          trunk_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          current_step?: string
+          duration_ms?: number | null
+          id?: string
+          initiated_at?: string
+          ledger_entry_id?: string
+          member_id?: string
+          package_id?: string
+          result?: string
+          retry_count?: number
+          step_results?: Json
+          trunk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connection_handshakes_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "source_distribution_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "connection_handshakes_trunk_id_fkey"
+            columns: ["trunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_classifications: {
         Row: {
           content_tag: string
@@ -2685,100 +2885,100 @@ export type Database = {
       }
       content_pipeline: {
         Row: {
-          id: string
-          slug: string
-          title: string
-          subtitle: string | null
-          category: string
-          tags: string[] | null
+          article_content: string | null
           author_id: string | null
           author_name: string
-          current_stage: string
-          stages: Json | null
-          seed_content: string | null
-          tldr_content: string | null
-          blog_content: string | null
-          article_content: string | null
-          paper_content: string | null
-          status: string
-          published_at: string | null
-          word_count: number | null
-          reading_time_minutes: number | null
-          coverage_minutes_value: number | null
-          related_content_ids: string[] | null
-          innovation_numbers: number[] | null
-          patent_series: string | null
-          treasure_key_ids: string[] | null
-          cue_card_id: string | null
           battery_campaign_id: string | null
+          blog_content: string | null
+          category: string
           cephas_path: string | null
           cephas_sync_status: string | null
+          coverage_minutes_value: number | null
           created_at: string | null
+          cue_card_id: string | null
+          current_stage: string
+          id: string
+          innovation_numbers: number[] | null
+          paper_content: string | null
+          patent_series: string | null
+          published_at: string | null
+          reading_time_minutes: number | null
+          related_content_ids: string[] | null
+          seed_content: string | null
+          slug: string
+          stages: Json | null
+          status: string
+          subtitle: string | null
+          tags: string[] | null
+          title: string
+          tldr_content: string | null
+          treasure_key_ids: string[] | null
           updated_at: string | null
+          word_count: number | null
         }
         Insert: {
-          id?: string
-          slug: string
-          title: string
-          subtitle?: string | null
-          category?: string
-          tags?: string[] | null
+          article_content?: string | null
           author_id?: string | null
           author_name?: string
-          current_stage?: string
-          stages?: Json | null
-          seed_content?: string | null
-          tldr_content?: string | null
-          blog_content?: string | null
-          article_content?: string | null
-          paper_content?: string | null
-          status?: string
-          published_at?: string | null
-          word_count?: number | null
-          reading_time_minutes?: number | null
-          coverage_minutes_value?: number | null
-          related_content_ids?: string[] | null
-          innovation_numbers?: number[] | null
-          patent_series?: string | null
-          treasure_key_ids?: string[] | null
-          cue_card_id?: string | null
           battery_campaign_id?: string | null
+          blog_content?: string | null
+          category?: string
           cephas_path?: string | null
           cephas_sync_status?: string | null
+          coverage_minutes_value?: number | null
           created_at?: string | null
+          cue_card_id?: string | null
+          current_stage?: string
+          id?: string
+          innovation_numbers?: number[] | null
+          paper_content?: string | null
+          patent_series?: string | null
+          published_at?: string | null
+          reading_time_minutes?: number | null
+          related_content_ids?: string[] | null
+          seed_content?: string | null
+          slug: string
+          stages?: Json | null
+          status?: string
+          subtitle?: string | null
+          tags?: string[] | null
+          title: string
+          tldr_content?: string | null
+          treasure_key_ids?: string[] | null
           updated_at?: string | null
+          word_count?: number | null
         }
         Update: {
-          id?: string
-          slug?: string
-          title?: string
-          subtitle?: string | null
-          category?: string
-          tags?: string[] | null
+          article_content?: string | null
           author_id?: string | null
           author_name?: string
-          current_stage?: string
-          stages?: Json | null
-          seed_content?: string | null
-          tldr_content?: string | null
-          blog_content?: string | null
-          article_content?: string | null
-          paper_content?: string | null
-          status?: string
-          published_at?: string | null
-          word_count?: number | null
-          reading_time_minutes?: number | null
-          coverage_minutes_value?: number | null
-          related_content_ids?: string[] | null
-          innovation_numbers?: number[] | null
-          patent_series?: string | null
-          treasure_key_ids?: string[] | null
-          cue_card_id?: string | null
           battery_campaign_id?: string | null
+          blog_content?: string | null
+          category?: string
           cephas_path?: string | null
           cephas_sync_status?: string | null
+          coverage_minutes_value?: number | null
           created_at?: string | null
+          cue_card_id?: string | null
+          current_stage?: string
+          id?: string
+          innovation_numbers?: number[] | null
+          paper_content?: string | null
+          patent_series?: string | null
+          published_at?: string | null
+          reading_time_minutes?: number | null
+          related_content_ids?: string[] | null
+          seed_content?: string | null
+          slug?: string
+          stages?: Json | null
+          status?: string
+          subtitle?: string | null
+          tags?: string[] | null
+          title?: string
+          tldr_content?: string | null
+          treasure_key_ids?: string[] | null
           updated_at?: string | null
+          word_count?: number | null
         }
         Relationships: []
       }
@@ -3460,6 +3660,164 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
           weekly_limit?: number | null
+        }
+        Relationships: []
+      }
+      coverage_debit_events: {
+        Row: {
+          auto_muted: boolean
+          created_at: string
+          id: string
+          ledger_entry_id: string
+          minutes_debited: number
+          remaining_balance: number
+          speaker_id: string
+          table_id: string
+        }
+        Insert: {
+          auto_muted?: boolean
+          created_at?: string
+          id?: string
+          ledger_entry_id: string
+          minutes_debited: number
+          remaining_balance: number
+          speaker_id: string
+          table_id: string
+        }
+        Update: {
+          auto_muted?: boolean
+          created_at?: string
+          id?: string
+          ledger_entry_id?: string
+          minutes_debited?: number
+          remaining_balance?: number
+          speaker_id?: string
+          table_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coverage_debit_events_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: false
+            referencedRelation: "round_tables"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coverage_minute_accounts: {
+        Row: {
+          accumulation_increment: number
+          accumulation_level: number
+          created_at: string
+          current_balance: number
+          donated_minutes: number
+          earned_minutes: number
+          id: string
+          max_session_broadcast: number
+          member_id: string
+          reading_speed_tier: string
+          received_donations: number
+          spent_minutes: number
+          updated_at: string
+        }
+        Insert: {
+          accumulation_increment?: number
+          accumulation_level?: number
+          created_at?: string
+          current_balance?: number
+          donated_minutes?: number
+          earned_minutes?: number
+          id?: string
+          max_session_broadcast?: number
+          member_id: string
+          reading_speed_tier?: string
+          received_donations?: number
+          spent_minutes?: number
+          updated_at?: string
+        }
+        Update: {
+          accumulation_increment?: number
+          accumulation_level?: number
+          created_at?: string
+          current_balance?: number
+          donated_minutes?: number
+          earned_minutes?: number
+          id?: string
+          max_session_broadcast?: number
+          member_id?: string
+          reading_speed_tier?: string
+          received_donations?: number
+          spent_minutes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      coverage_minute_donations: {
+        Row: {
+          created_at: string
+          from_member_id: string
+          id: string
+          ledger_entry_id: string
+          minutes: number
+          to_member_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_member_id: string
+          id?: string
+          ledger_entry_id: string
+          minutes: number
+          to_member_id: string
+        }
+        Update: {
+          created_at?: string
+          from_member_id?: string
+          id?: string
+          ledger_entry_id?: string
+          minutes?: number
+          to_member_id?: string
+        }
+        Relationships: []
+      }
+      coverage_minute_transactions: {
+        Row: {
+          balance_after: number
+          content_id: string | null
+          created_at: string
+          donation_id: string | null
+          id: string
+          ledger_entry_id: string
+          member_id: string
+          minutes: number
+          round_table_id: string | null
+          source: string
+          transaction_type: string
+        }
+        Insert: {
+          balance_after: number
+          content_id?: string | null
+          created_at?: string
+          donation_id?: string | null
+          id?: string
+          ledger_entry_id: string
+          member_id: string
+          minutes: number
+          round_table_id?: string | null
+          source: string
+          transaction_type: string
+        }
+        Update: {
+          balance_after?: number
+          content_id?: string | null
+          created_at?: string
+          donation_id?: string | null
+          id?: string
+          ledger_entry_id?: string
+          member_id?: string
+          minutes?: number
+          round_table_id?: string | null
+          source?: string
+          transaction_type?: string
         }
         Relationships: []
       }
@@ -5399,6 +5757,190 @@ export type Database = {
         }
         Relationships: []
       }
+      doctrinal_positions: {
+        Row: {
+          adherent_groups: Json | null
+          believed: string
+          branch_id: string
+          call_to_action: Json | null
+          created_at: string | null
+          created_by: string | null
+          dispute_status: string | null
+          estimated_adherents: number | null
+          evidence_basis: Json | null
+          historical_sources: Json | null
+          id: string
+          key_term_links: Json | null
+          loc_references: string[] | null
+          popular_notes: string | null
+          position_label: string
+          practiced: string | null
+          quality_score: number | null
+          scholar_notes: string | null
+          scholar_support: string
+          scripture_references: Json | null
+          taught: string
+          updated_at: string | null
+        }
+        Insert: {
+          adherent_groups?: Json | null
+          believed: string
+          branch_id: string
+          call_to_action?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          dispute_status?: string | null
+          estimated_adherents?: number | null
+          evidence_basis?: Json | null
+          historical_sources?: Json | null
+          id?: string
+          key_term_links?: Json | null
+          loc_references?: string[] | null
+          popular_notes?: string | null
+          position_label: string
+          practiced?: string | null
+          quality_score?: number | null
+          scholar_notes?: string | null
+          scholar_support?: string
+          scripture_references?: Json | null
+          taught: string
+          updated_at?: string | null
+        }
+        Update: {
+          adherent_groups?: Json | null
+          believed?: string
+          branch_id?: string
+          call_to_action?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          dispute_status?: string | null
+          estimated_adherents?: number | null
+          evidence_basis?: Json | null
+          historical_sources?: Json | null
+          id?: string
+          key_term_links?: Json | null
+          loc_references?: string[] | null
+          popular_notes?: string | null
+          position_label?: string
+          practiced?: string | null
+          quality_score?: number | null
+          scholar_notes?: string | null
+          scholar_support?: string
+          scripture_references?: Json | null
+          taught?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctrinal_positions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "doctrine_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctrine_branches: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          depth_level: number
+          description: string
+          divergence_date: string | null
+          divergence_event: string | null
+          divergence_point: string
+          domain: string
+          id: string
+          loc_reference: string | null
+          parent_branch_id: string | null
+          scholar_consensus: string | null
+          scope: string
+          slug: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          depth_level?: number
+          description: string
+          divergence_date?: string | null
+          divergence_event?: string | null
+          divergence_point: string
+          domain?: string
+          id?: string
+          loc_reference?: string | null
+          parent_branch_id?: string | null
+          scholar_consensus?: string | null
+          scope?: string
+          slug: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          depth_level?: number
+          description?: string
+          divergence_date?: string | null
+          divergence_event?: string | null
+          divergence_point?: string
+          domain?: string
+          id?: string
+          loc_reference?: string | null
+          parent_branch_id?: string | null
+          scholar_consensus?: string | null
+          scope?: string
+          slug?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctrine_branches_parent_branch_id_fkey"
+            columns: ["parent_branch_id"]
+            isOneToOne: false
+            referencedRelation: "doctrine_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctrine_edits: {
+        Row: {
+          created_at: string | null
+          edit_summary: string | null
+          edit_type: string
+          editor_id: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          new_value: Json | null
+          previous_value: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          edit_summary?: string | null
+          edit_type: string
+          editor_id?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          new_value?: Json | null
+          previous_value?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          edit_summary?: string | null
+          edit_type?: string
+          editor_id?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          new_value?: Json | null
+          previous_value?: Json | null
+        }
+        Relationships: []
+      }
       documentation_contributor_stats: {
         Row: {
           average_rating: number | null
@@ -5728,6 +6270,41 @@ export type Database = {
         }
         Relationships: []
       }
+      donation_record_views: {
+        Row: {
+          created_at: string
+          donation_id: string
+          fee_paid: number
+          id: string
+          ledger_entry_id: string
+          viewer_member_id: string
+        }
+        Insert: {
+          created_at?: string
+          donation_id: string
+          fee_paid?: number
+          id?: string
+          ledger_entry_id: string
+          viewer_member_id: string
+        }
+        Update: {
+          created_at?: string
+          donation_id?: string
+          fee_paid?: number
+          id?: string
+          ledger_entry_id?: string
+          viewer_member_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "donation_record_views_donation_id_fkey"
+            columns: ["donation_id"]
+            isOneToOne: false
+            referencedRelation: "coverage_minute_donations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       donations: {
         Row: {
           amount: number
@@ -5932,6 +6509,44 @@ export type Database = {
             columns: ["ghost_id"]
             isOneToOne: false
             referencedRelation: "ghost_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equal_time_tracking: {
+        Row: {
+          branch_id: string
+          call_for_voices: Json | null
+          id: string
+          is_balanced: boolean | null
+          position_counts: Json | null
+          underrepresented: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          branch_id: string
+          call_for_voices?: Json | null
+          id?: string
+          is_balanced?: boolean | null
+          position_counts?: Json | null
+          underrepresented?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          branch_id?: string
+          call_for_voices?: Json | null
+          id?: string
+          is_balanced?: boolean | null
+          position_counts?: Json | null
+          underrepresented?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equal_time_tracking_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "doctrine_branches"
             referencedColumns: ["id"]
           },
         ]
@@ -7908,6 +8523,110 @@ export type Database = {
           },
         ]
       }
+      ghost_deployment_configs: {
+        Row: {
+          cors_origins: string[]
+          created_at: string
+          database_type: string
+          deployment_mode: string
+          docker_image: string
+          ghost_url: string
+          golden_key_script_id: string
+          id: string
+          is_healthy: boolean
+          jwt_bridge_enabled: boolean
+          last_health_check_at: string | null
+          monthly_cost_estimate: number
+          pedestal_ids: string[]
+          region: string
+          supabase_jwt_secret_ref: string
+          updated_at: string
+        }
+        Insert: {
+          cors_origins?: string[]
+          created_at?: string
+          database_type?: string
+          deployment_mode?: string
+          docker_image?: string
+          ghost_url: string
+          golden_key_script_id: string
+          id?: string
+          is_healthy?: boolean
+          jwt_bridge_enabled?: boolean
+          last_health_check_at?: string | null
+          monthly_cost_estimate?: number
+          pedestal_ids?: string[]
+          region?: string
+          supabase_jwt_secret_ref?: string
+          updated_at?: string
+        }
+        Update: {
+          cors_origins?: string[]
+          created_at?: string
+          database_type?: string
+          deployment_mode?: string
+          docker_image?: string
+          ghost_url?: string
+          golden_key_script_id?: string
+          id?: string
+          is_healthy?: boolean
+          jwt_bridge_enabled?: boolean
+          last_health_check_at?: string | null
+          monthly_cost_estimate?: number
+          pedestal_ids?: string[]
+          region?: string
+          supabase_jwt_secret_ref?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ghost_jwt_bridges: {
+        Row: {
+          auto_create_members: boolean
+          created_at: string
+          deployment_config_id: string
+          id: string
+          is_active: boolean
+          jwt_audience: string
+          last_sync_at: string | null
+          members_synced: number
+          supabase_url: string
+          sync_interval_ms: number
+        }
+        Insert: {
+          auto_create_members?: boolean
+          created_at?: string
+          deployment_config_id: string
+          id?: string
+          is_active?: boolean
+          jwt_audience?: string
+          last_sync_at?: string | null
+          members_synced?: number
+          supabase_url: string
+          sync_interval_ms?: number
+        }
+        Update: {
+          auto_create_members?: boolean
+          created_at?: string
+          deployment_config_id?: string
+          id?: string
+          is_active?: boolean
+          jwt_audience?: string
+          last_sync_at?: string | null
+          members_synced?: number
+          supabase_url?: string
+          sync_interval_ms?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ghost_jwt_bridges_deployment_config_id_fkey"
+            columns: ["deployment_config_id"]
+            isOneToOne: false
+            referencedRelation: "ghost_deployment_configs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ghost_leaderboard: {
         Row: {
           achieved_at: string | null
@@ -9220,6 +9939,42 @@ export type Database = {
           },
         ]
       }
+      governance_events: {
+        Row: {
+          action: string
+          actor_member_id: string
+          created_at: string
+          details: string
+          entity_id: string
+          entity_type: string
+          id: string
+          ledger_entry_id: string
+          target_member_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_member_id: string
+          created_at?: string
+          details?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          ledger_entry_id: string
+          target_member_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_member_id?: string
+          created_at?: string
+          details?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          ledger_entry_id?: string
+          target_member_id?: string | null
+        }
+        Relationships: []
+      }
       grocery_delivery_jobs: {
         Row: {
           aggregated_order_id: string | null
@@ -9465,19 +10220,60 @@ export type Database = {
           },
         ]
       }
+      guild_memberships: {
+        Row: {
+          guild_id: string
+          id: string
+          is_active: boolean
+          joined_at: string
+          member_id: string
+          promoted_at: string | null
+          role: string
+          tribe_id: string | null
+        }
+        Insert: {
+          guild_id: string
+          id?: string
+          is_active?: boolean
+          joined_at?: string
+          member_id: string
+          promoted_at?: string | null
+          role?: string
+          tribe_id?: string | null
+        }
+        Update: {
+          guild_id?: string
+          id?: string
+          is_active?: boolean
+          joined_at?: string
+          member_id?: string
+          promoted_at?: string | null
+          role?: string
+          tribe_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guild_memberships_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guild_stakes: {
         Row: {
           contributions_total: number | null
           created_at: string | null
           guild_id: string
           id: string
+          milestone_end: string | null
+          milestone_start: string | null
           stake_amount: number
           stake_percentage: number | null
           updated_at: string | null
           user_id: string
           vested_amount: number | null
-          vesting_end: string | null
-          vesting_start: string | null
           withdrawals_total: number | null
         }
         Insert: {
@@ -9485,13 +10281,13 @@ export type Database = {
           created_at?: string | null
           guild_id: string
           id?: string
+          milestone_end?: string | null
+          milestone_start?: string | null
           stake_amount?: number
           stake_percentage?: number | null
           updated_at?: string | null
           user_id: string
           vested_amount?: number | null
-          vesting_end?: string | null
-          vesting_start?: string | null
           withdrawals_total?: number | null
         }
         Update: {
@@ -9499,13 +10295,13 @@ export type Database = {
           created_at?: string | null
           guild_id?: string
           id?: string
+          milestone_end?: string | null
+          milestone_start?: string | null
           stake_amount?: number
           stake_percentage?: number | null
           updated_at?: string | null
           user_id?: string
           vested_amount?: number | null
-          vesting_end?: string | null
-          vesting_start?: string | null
           withdrawals_total?: number | null
         }
         Relationships: [
@@ -9520,6 +10316,7 @@ export type Database = {
       }
       guilds: {
         Row: {
+          banner_image_url: string | null
           code_of_conduct: string | null
           council_size: number | null
           created_at: string | null
@@ -9530,20 +10327,31 @@ export type Database = {
           guild_master_id: string | null
           guild_type: string
           id: string
+          keep_ids: string[]
+          leader_id: string | null
+          ledger_section_id: string
           max_members: number | null
           member_count: number | null
+          member_ids: string[]
           membership_type: string | null
+          monthly_phase_fee: number
+          motto: string | null
           name: string
+          officer_ids: string[]
+          phase_mimictrunk_id: string | null
           quality_standards: string | null
+          rules_document: string | null
           slug: string
           specialty: string | null
           status: string | null
           tagline: string | null
           treasury_balance: number | null
+          tribe_ids: string[]
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          banner_image_url?: string | null
           code_of_conduct?: string | null
           council_size?: number | null
           created_at?: string | null
@@ -9554,20 +10362,31 @@ export type Database = {
           guild_master_id?: string | null
           guild_type: string
           id?: string
+          keep_ids?: string[]
+          leader_id?: string | null
+          ledger_section_id?: string
           max_members?: number | null
           member_count?: number | null
+          member_ids?: string[]
           membership_type?: string | null
+          monthly_phase_fee?: number
+          motto?: string | null
           name: string
+          officer_ids?: string[]
+          phase_mimictrunk_id?: string | null
           quality_standards?: string | null
+          rules_document?: string | null
           slug: string
           specialty?: string | null
           status?: string | null
           tagline?: string | null
           treasury_balance?: number | null
+          tribe_ids?: string[]
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          banner_image_url?: string | null
           code_of_conduct?: string | null
           council_size?: number | null
           created_at?: string | null
@@ -9578,16 +10397,26 @@ export type Database = {
           guild_master_id?: string | null
           guild_type?: string
           id?: string
+          keep_ids?: string[]
+          leader_id?: string | null
+          ledger_section_id?: string
           max_members?: number | null
           member_count?: number | null
+          member_ids?: string[]
           membership_type?: string | null
+          monthly_phase_fee?: number
+          motto?: string | null
           name?: string
+          officer_ids?: string[]
+          phase_mimictrunk_id?: string | null
           quality_standards?: string | null
+          rules_document?: string | null
           slug?: string
           specialty?: string | null
           status?: string | null
           tagline?: string | null
           treasury_balance?: number | null
+          tribe_ids?: string[]
           updated_at?: string | null
           user_id?: string | null
         }
@@ -11229,6 +12058,7 @@ export type Database = {
       innovation_log: {
         Row: {
           category: string | null
+          created_at: string | null
           description: string | null
           id: string
           innovation_number: number
@@ -11236,12 +12066,14 @@ export type Database = {
           logged_by: string | null
           patent_bag: string | null
           session_id: string | null
+          session_tag: string | null
           status: string | null
           title: string
           user_id: string | null
         }
         Insert: {
           category?: string | null
+          created_at?: string | null
           description?: string | null
           id?: string
           innovation_number: number
@@ -11249,12 +12081,14 @@ export type Database = {
           logged_by?: string | null
           patent_bag?: string | null
           session_id?: string | null
+          session_tag?: string | null
           status?: string | null
           title: string
           user_id?: string | null
         }
         Update: {
           category?: string | null
+          created_at?: string | null
           description?: string | null
           id?: string
           innovation_number?: number
@@ -11262,6 +12096,7 @@ export type Database = {
           logged_by?: string | null
           patent_bag?: string | null
           session_id?: string | null
+          session_tag?: string | null
           status?: string | null
           title?: string
           user_id?: string | null
@@ -11528,6 +12363,118 @@ export type Database = {
             columns: ["anchor_id"]
             isOneToOne: false
             referencedRelation: "v_certified_anchors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      keep_leases: {
+        Row: {
+          auto_renew: boolean
+          capacity_tier: string
+          created_at: string
+          current_period_ends_at: string
+          id: string
+          keep_id: string
+          lease_started_at: string
+          ledger_entry_id: string
+          lessee_id: string
+          lessee_type: string
+          monthly_lease_cost: number
+          period_traffic_count: number
+          status: string
+          sub_lease_count: number
+          trunk_id: string
+          updated_at: string
+        }
+        Insert: {
+          auto_renew?: boolean
+          capacity_tier: string
+          created_at?: string
+          current_period_ends_at: string
+          id?: string
+          keep_id: string
+          lease_started_at?: string
+          ledger_entry_id: string
+          lessee_id: string
+          lessee_type: string
+          monthly_lease_cost: number
+          period_traffic_count?: number
+          status?: string
+          sub_lease_count?: number
+          trunk_id: string
+          updated_at?: string
+        }
+        Update: {
+          auto_renew?: boolean
+          capacity_tier?: string
+          created_at?: string
+          current_period_ends_at?: string
+          id?: string
+          keep_id?: string
+          lease_started_at?: string
+          ledger_entry_id?: string
+          lessee_id?: string
+          lessee_type?: string
+          monthly_lease_cost?: number
+          period_traffic_count?: number
+          status?: string
+          sub_lease_count?: number
+          trunk_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "keep_leases_trunk_id_fkey"
+            columns: ["trunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      keep_sub_leases: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          keep_id: string
+          ledger_entry_id: string
+          monthly_rent: number
+          parent_lease_id: string
+          space_name: string
+          sub_lessee_id: string
+          sub_lessee_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          keep_id: string
+          ledger_entry_id: string
+          monthly_rent: number
+          parent_lease_id: string
+          space_name: string
+          sub_lessee_id: string
+          sub_lessee_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          keep_id?: string
+          ledger_entry_id?: string
+          monthly_rent?: number
+          parent_lease_id?: string
+          space_name?: string
+          sub_lessee_id?: string
+          sub_lessee_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "keep_sub_leases_parent_lease_id_fkey"
+            columns: ["parent_lease_id"]
+            isOneToOne: false
+            referencedRelation: "keep_leases"
             referencedColumns: ["id"]
           },
         ]
@@ -12121,6 +13068,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      livekit_room_configs: {
+        Row: {
+          api_key_ref: string
+          api_secret_ref: string
+          audio_codec: string
+          created_at: string
+          id: string
+          is_active: boolean
+          recording_enabled: boolean
+          region: string
+          room_name: string
+          server_url: string
+          table_id: string
+          table_size: string
+        }
+        Insert: {
+          api_key_ref?: string
+          api_secret_ref?: string
+          audio_codec?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          recording_enabled?: boolean
+          region?: string
+          room_name: string
+          server_url: string
+          table_id: string
+          table_size?: string
+        }
+        Update: {
+          api_key_ref?: string
+          api_secret_ref?: string
+          audio_codec?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          recording_enabled?: boolean
+          region?: string
+          room_name?: string
+          server_url?: string
+          table_id?: string
+          table_size?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "livekit_room_configs_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: false
+            referencedRelation: "round_tables"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lmd_charity_accounts: {
         Row: {
@@ -13831,7 +14831,7 @@ export type Database = {
           description: string | null
           display_name: string
           invitation_codes: number | null
-          profit_share_percentage: number | null
+          service_credit_percentage: number | null
           type_code: string
           user_id: string | null
           voting_power_multiplier: number | null
@@ -13843,7 +14843,7 @@ export type Database = {
           description?: string | null
           display_name: string
           invitation_codes?: number | null
-          profit_share_percentage?: number | null
+          service_credit_percentage?: number | null
           type_code: string
           user_id?: string | null
           voting_power_multiplier?: number | null
@@ -13855,7 +14855,7 @@ export type Database = {
           description?: string | null
           display_name?: string
           invitation_codes?: number | null
-          profit_share_percentage?: number | null
+          service_credit_percentage?: number | null
           type_code?: string
           user_id?: string | null
           voting_power_multiplier?: number | null
@@ -14373,6 +15373,94 @@ export type Database = {
           vault_owner?: string
         }
         Relationships: []
+      }
+      mic_permission_states: {
+        Row: {
+          active_publisher_id: string | null
+          created_at: string
+          debit_interval_ms: number
+          edge_function_url: string
+          id: string
+          last_debit_at: string | null
+          publish_granted_at: string | null
+          publisher_balance_at_grant: number
+          table_id: string
+        }
+        Insert: {
+          active_publisher_id?: string | null
+          created_at?: string
+          debit_interval_ms?: number
+          edge_function_url: string
+          id?: string
+          last_debit_at?: string | null
+          publish_granted_at?: string | null
+          publisher_balance_at_grant?: number
+          table_id: string
+        }
+        Update: {
+          active_publisher_id?: string | null
+          created_at?: string
+          debit_interval_ms?: number
+          edge_function_url?: string
+          id?: string
+          last_debit_at?: string | null
+          publish_granted_at?: string | null
+          publisher_balance_at_grant?: number
+          table_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mic_permission_states_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: true
+            referencedRelation: "round_tables"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mic_requests: {
+        Row: {
+          estimated_duration: number | null
+          granted_at: string | null
+          id: string
+          member_id: string
+          member_name: string
+          released_at: string | null
+          requested_at: string
+          status: string
+          table_id: string
+        }
+        Insert: {
+          estimated_duration?: number | null
+          granted_at?: string | null
+          id?: string
+          member_id: string
+          member_name: string
+          released_at?: string | null
+          requested_at?: string
+          status?: string
+          table_id: string
+        }
+        Update: {
+          estimated_duration?: number | null
+          granted_at?: string | null
+          id?: string
+          member_id?: string
+          member_name?: string
+          released_at?: string | null
+          requested_at?: string
+          status?: string
+          table_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mic_requests_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: false
+            referencedRelation: "round_tables"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       micro_local_areas: {
         Row: {
@@ -14965,6 +16053,56 @@ export type Database = {
             columns: ["poster_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      npc_shopkeepers: {
+        Row: {
+          active_listing_count: number
+          created_at: string
+          display_name: string
+          id: string
+          inventory_type: string
+          is_active: boolean
+          keep_id: string
+          owner_member_id: string
+          sub_lease_id: string
+          total_credits_earned: number
+          total_transactions: number
+        }
+        Insert: {
+          active_listing_count?: number
+          created_at?: string
+          display_name: string
+          id?: string
+          inventory_type: string
+          is_active?: boolean
+          keep_id: string
+          owner_member_id: string
+          sub_lease_id: string
+          total_credits_earned?: number
+          total_transactions?: number
+        }
+        Update: {
+          active_listing_count?: number
+          created_at?: string
+          display_name?: string
+          id?: string
+          inventory_type?: string
+          is_active?: boolean
+          keep_id?: string
+          owner_member_id?: string
+          sub_lease_id?: string
+          total_credits_earned?: number
+          total_transactions?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "npc_shopkeepers_sub_lease_id_fkey"
+            columns: ["sub_lease_id"]
+            isOneToOne: false
+            referencedRelation: "keep_sub_leases"
             referencedColumns: ["id"]
           },
         ]
@@ -15894,6 +17032,92 @@ export type Database = {
         }
         Relationships: []
       }
+      pedestal_contributions: {
+        Row: {
+          amount: number
+          contribution_type: string
+          created_at: string
+          id: string
+          ledger_entry_id: string
+          member_id: string
+          member_total_after: number
+          pedestal_id: string
+        }
+        Insert: {
+          amount: number
+          contribution_type?: string
+          created_at?: string
+          id?: string
+          ledger_entry_id: string
+          member_id: string
+          member_total_after: number
+          pedestal_id: string
+        }
+        Update: {
+          amount?: number
+          contribution_type?: string
+          created_at?: string
+          id?: string
+          ledger_entry_id?: string
+          member_id?: string
+          member_total_after?: number
+          pedestal_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedestal_contributions_pedestal_id_fkey"
+            columns: ["pedestal_id"]
+            isOneToOne: false
+            referencedRelation: "pedestals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pedestals: {
+        Row: {
+          created_at: string
+          curator_member_id: string
+          description: string
+          funder_count: number
+          id: string
+          is_public: boolean
+          ledger_section_id: string
+          name: string
+          public_since: string | null
+          status: string
+          total_funding: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          curator_member_id: string
+          description?: string
+          funder_count?: number
+          id?: string
+          is_public?: boolean
+          ledger_section_id: string
+          name: string
+          public_since?: string | null
+          status?: string
+          total_funding?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          curator_member_id?: string
+          description?: string
+          funder_count?: number
+          id?: string
+          is_public?: boolean
+          ledger_section_id?: string
+          name?: string
+          public_since?: string | null
+          status?: string
+          total_funding?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       peer_contracts: {
         Row: {
           acceptor_id: string | null
@@ -16052,6 +17276,165 @@ export type Database = {
             columns: ["arena_id"]
             isOneToOne: false
             referencedRelation: "arenas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      phase_access_records: {
+        Row: {
+          access_method: string
+          accessed_at: string
+          exited_at: string | null
+          id: string
+          ledger_entry_id: string
+          member_id: string
+          session_duration_minutes: number | null
+          special_deck_card_id: string | null
+          trunk_id: string
+        }
+        Insert: {
+          access_method: string
+          accessed_at?: string
+          exited_at?: string | null
+          id?: string
+          ledger_entry_id: string
+          member_id: string
+          session_duration_minutes?: number | null
+          special_deck_card_id?: string | null
+          trunk_id: string
+        }
+        Update: {
+          access_method?: string
+          accessed_at?: string
+          exited_at?: string | null
+          id?: string
+          ledger_entry_id?: string
+          member_id?: string
+          session_duration_minutes?: number | null
+          special_deck_card_id?: string | null
+          trunk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phase_access_records_trunk_id_fkey"
+            columns: ["trunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      phase_mimictrunks: {
+        Row: {
+          connection_status: string
+          created_at: string
+          description: string
+          dna_chain: Json
+          golden_key_plane_id: string | null
+          id: string
+          last_validated_at: string | null
+          ledger_snapshot_id: string
+          ledger_snapshot_timestamp: string
+          monthly_fee: number
+          name: string
+          owner_id: string
+          owner_type: string
+          parent_trunk_id: string | null
+          source_code_checksum: string
+          special_deck_card_id: string
+          suspended_at: string | null
+          updated_at: string
+          validation_failure_count: number
+        }
+        Insert: {
+          connection_status?: string
+          created_at?: string
+          description?: string
+          dna_chain?: Json
+          golden_key_plane_id?: string | null
+          id?: string
+          last_validated_at?: string | null
+          ledger_snapshot_id: string
+          ledger_snapshot_timestamp?: string
+          monthly_fee?: number
+          name: string
+          owner_id: string
+          owner_type: string
+          parent_trunk_id?: string | null
+          source_code_checksum?: string
+          special_deck_card_id: string
+          suspended_at?: string | null
+          updated_at?: string
+          validation_failure_count?: number
+        }
+        Update: {
+          connection_status?: string
+          created_at?: string
+          description?: string
+          dna_chain?: Json
+          golden_key_plane_id?: string | null
+          id?: string
+          last_validated_at?: string | null
+          ledger_snapshot_id?: string
+          ledger_snapshot_timestamp?: string
+          monthly_fee?: number
+          name?: string
+          owner_id?: string
+          owner_type?: string
+          parent_trunk_id?: string | null
+          source_code_checksum?: string
+          special_deck_card_id?: string
+          suspended_at?: string | null
+          updated_at?: string
+          validation_failure_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phase_mimictrunks_parent_trunk_id_fkey"
+            columns: ["parent_trunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      phase_validation_attempts: {
+        Row: {
+          attempted_at: string
+          duration_ms: number
+          failed_components: string[]
+          id: string
+          ledger_entry_id: string
+          overall_result: string
+          results: Json
+          trunk_id: string
+        }
+        Insert: {
+          attempted_at?: string
+          duration_ms?: number
+          failed_components?: string[]
+          id?: string
+          ledger_entry_id: string
+          overall_result?: string
+          results?: Json
+          trunk_id: string
+        }
+        Update: {
+          attempted_at?: string
+          duration_ms?: number
+          failed_components?: string[]
+          id?: string
+          ledger_entry_id?: string
+          overall_result?: string
+          results?: Json
+          trunk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phase_validation_attempts_trunk_id_fkey"
+            columns: ["trunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
             referencedColumns: ["id"]
           },
         ]
@@ -16255,6 +17638,39 @@ export type Database = {
           subsidy_claimed?: boolean | null
           user_id?: string
           verified?: boolean | null
+        }
+        Relationships: []
+      }
+      plane_entries: {
+        Row: {
+          can_reenter: boolean
+          engagement_seconds: number
+          entered_at: string
+          exited_at: string | null
+          id: string
+          key_found: boolean
+          member_id: string
+          plane_id: string
+        }
+        Insert: {
+          can_reenter?: boolean
+          engagement_seconds?: number
+          entered_at?: string
+          exited_at?: string | null
+          id?: string
+          key_found?: boolean
+          member_id: string
+          plane_id: string
+        }
+        Update: {
+          can_reenter?: boolean
+          engagement_seconds?: number
+          entered_at?: string
+          exited_at?: string | null
+          id?: string
+          key_found?: boolean
+          member_id?: string
+          plane_id?: string
         }
         Relationships: []
       }
@@ -16839,6 +18255,104 @@ export type Database = {
           },
         ]
       }
+      practical_positions: {
+        Row: {
+          believed: string
+          created_at: string | null
+          created_by: string | null
+          evidence_basis: Json | null
+          id: string
+          notable_figures: string[] | null
+          position_label: string
+          practiced: string | null
+          question_id: string
+          scholar_level: string | null
+          scripture_refs: Json | null
+          steelman_opposing: string
+          summary: string
+          taught: string
+          traditions: string[] | null
+        }
+        Insert: {
+          believed: string
+          created_at?: string | null
+          created_by?: string | null
+          evidence_basis?: Json | null
+          id?: string
+          notable_figures?: string[] | null
+          position_label: string
+          practiced?: string | null
+          question_id: string
+          scholar_level?: string | null
+          scripture_refs?: Json | null
+          steelman_opposing: string
+          summary: string
+          taught: string
+          traditions?: string[] | null
+        }
+        Update: {
+          believed?: string
+          created_at?: string | null
+          created_by?: string | null
+          evidence_basis?: Json | null
+          id?: string
+          notable_figures?: string[] | null
+          position_label?: string
+          practiced?: string | null
+          question_id?: string
+          scholar_level?: string | null
+          scripture_refs?: Json | null
+          steelman_opposing?: string
+          summary?: string
+          taught?: string
+          traditions?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "practical_positions_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "practical_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      practical_questions: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          domain: string
+          equal_time_status: string | null
+          id: string
+          question: string
+          related_branches: string[] | null
+          scope: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          domain?: string
+          equal_time_status?: string | null
+          id?: string
+          question: string
+          related_branches?: string[] | null
+          scope?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          domain?: string
+          equal_time_status?: string | null
+          id?: string
+          question?: string
+          related_branches?: string[] | null
+          scope?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       pre_beta_recruits: {
         Row: {
           created_at: string | null
@@ -16978,6 +18492,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      private_portfolio_subscriptions: {
+        Row: {
+          coverage_minutes_earned: number
+          id: string
+          is_active: boolean
+          member_id: string
+          source: string
+          source_name: string
+          source_url: string | null
+          subscribed_at: string
+        }
+        Insert: {
+          coverage_minutes_earned?: number
+          id?: string
+          is_active?: boolean
+          member_id: string
+          source: string
+          source_name: string
+          source_url?: string | null
+          subscribed_at?: string
+        }
+        Update: {
+          coverage_minutes_earned?: number
+          id?: string
+          is_active?: boolean
+          member_id?: string
+          source?: string
+          source_name?: string
+          source_url?: string | null
+          subscribed_at?: string
+        }
+        Relationships: []
       }
       product_images: {
         Row: {
@@ -17976,6 +19523,50 @@ export type Database = {
         }
         Relationships: []
       }
+      puzzle_attempts: {
+        Row: {
+          completed_at: string | null
+          coverage_minutes_earned: number
+          id: string
+          is_active: boolean
+          keys_found: string[]
+          member_id: string
+          progress_percent: number
+          puzzle_id: string
+          started_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          coverage_minutes_earned?: number
+          id?: string
+          is_active?: boolean
+          keys_found?: string[]
+          member_id: string
+          progress_percent?: number
+          puzzle_id: string
+          started_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          coverage_minutes_earned?: number
+          id?: string
+          is_active?: boolean
+          keys_found?: string[]
+          member_id?: string
+          progress_percent?: number
+          puzzle_id?: string
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "puzzle_attempts_puzzle_id_fkey"
+            columns: ["puzzle_id"]
+            isOneToOne: false
+            referencedRelation: "real_world_puzzles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       qr_cue_cards: {
         Row: {
           card_type: string
@@ -18101,6 +19692,48 @@ export type Database = {
         }
         Relationships: []
       }
+      reading_progress: {
+        Row: {
+          completed_at: string | null
+          content_id: string
+          content_type: string
+          coverage_minutes_earned: number
+          golden_keys_found: number
+          id: string
+          member_id: string
+          percent_complete: number
+          plane_id: string | null
+          started_at: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          content_id: string
+          content_type: string
+          coverage_minutes_earned?: number
+          golden_keys_found?: number
+          id?: string
+          member_id: string
+          percent_complete?: number
+          plane_id?: string | null
+          started_at?: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          content_id?: string
+          content_type?: string
+          coverage_minutes_earned?: number
+          golden_keys_found?: number
+          id?: string
+          member_id?: string
+          percent_complete?: number
+          plane_id?: string | null
+          started_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ready_made_bounty_templates: {
         Row: {
           category: string
@@ -18187,6 +19820,69 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      real_world_puzzles: {
+        Row: {
+          attempt_count: number
+          completion_count: number
+          content_reference: Json
+          coverage_minutes_reward: number
+          created_at: string
+          creator_member_id: string
+          description: string
+          difficulty: string
+          expires_at: string | null
+          golden_key_chain: Json
+          id: string
+          island_placement: Json | null
+          key_count: number
+          ledger_entry_id: string
+          location: string
+          name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          completion_count?: number
+          content_reference?: Json
+          coverage_minutes_reward?: number
+          created_at?: string
+          creator_member_id: string
+          description?: string
+          difficulty?: string
+          expires_at?: string | null
+          golden_key_chain?: Json
+          id?: string
+          island_placement?: Json | null
+          key_count?: number
+          ledger_entry_id: string
+          location: string
+          name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          completion_count?: number
+          content_reference?: Json
+          coverage_minutes_reward?: number
+          created_at?: string
+          creator_member_id?: string
+          description?: string
+          difficulty?: string
+          expires_at?: string | null
+          golden_key_chain?: Json
+          id?: string
+          island_placement?: Json | null
+          key_count?: number
+          ledger_entry_id?: string
+          location?: string
+          name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       reality_snapshots: {
         Row: {
@@ -18948,6 +20644,110 @@ export type Database = {
           },
         ]
       }
+      round_table_sessions: {
+        Row: {
+          ended_at: string | null
+          id: string
+          ledger_entry_id: string
+          speaker_history: Json
+          started_at: string
+          table_id: string
+          topic_id: string
+          total_minutes_listened: number
+          total_minutes_spoken: number
+          total_participants: number
+        }
+        Insert: {
+          ended_at?: string | null
+          id?: string
+          ledger_entry_id: string
+          speaker_history?: Json
+          started_at?: string
+          table_id: string
+          topic_id: string
+          total_minutes_listened?: number
+          total_minutes_spoken?: number
+          total_participants?: number
+        }
+        Update: {
+          ended_at?: string | null
+          id?: string
+          ledger_entry_id?: string
+          speaker_history?: Json
+          started_at?: string
+          table_id?: string
+          topic_id?: string
+          total_minutes_listened?: number
+          total_minutes_spoken?: number
+          total_participants?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "round_table_sessions_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: false
+            referencedRelation: "round_tables"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      round_tables: {
+        Row: {
+          active_speaker_id: string | null
+          active_speaker_started_at: string | null
+          coverage_consumed: Json
+          coverage_earned: Json
+          created_at: string
+          id: string
+          ledger_session_id: string
+          max_participants: number
+          moderator_id: string
+          participant_ids: string[]
+          session_ended_at: string | null
+          session_started_at: string
+          status: string
+          topic_description: string
+          topic_id: string
+          topic_name: string
+        }
+        Insert: {
+          active_speaker_id?: string | null
+          active_speaker_started_at?: string | null
+          coverage_consumed?: Json
+          coverage_earned?: Json
+          created_at?: string
+          id?: string
+          ledger_session_id: string
+          max_participants?: number
+          moderator_id: string
+          participant_ids?: string[]
+          session_ended_at?: string | null
+          session_started_at?: string
+          status?: string
+          topic_description?: string
+          topic_id: string
+          topic_name: string
+        }
+        Update: {
+          active_speaker_id?: string | null
+          active_speaker_started_at?: string | null
+          coverage_consumed?: Json
+          coverage_earned?: Json
+          created_at?: string
+          id?: string
+          ledger_session_id?: string
+          max_participants?: number
+          moderator_id?: string
+          participant_ids?: string[]
+          session_ended_at?: string | null
+          session_started_at?: string
+          status?: string
+          topic_description?: string
+          topic_id?: string
+          topic_name?: string
+        }
+        Relationships: []
+      }
       ruprecht_domains: {
         Row: {
           can_be_overridden_by: string[]
@@ -19441,6 +21241,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      scholar_credentials: {
+        Row: {
+          created_at: string | null
+          degree: string
+          field: string
+          id: string
+          institution: string
+          user_id: string
+          verification_stamp: string | null
+          verified_by_lb: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          degree: string
+          field: string
+          id?: string
+          institution: string
+          user_id: string
+          verification_stamp?: string | null
+          verified_by_lb?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          degree?: string
+          field?: string
+          id?: string
+          institution?: string
+          user_id?: string
+          verification_stamp?: string | null
+          verified_by_lb?: boolean | null
+        }
+        Relationships: []
       }
       seedling_board_settings: {
         Row: {
@@ -20401,6 +22234,97 @@ export type Database = {
           verified_at?: string | null
         }
         Relationships: []
+      }
+      source_distribution_packages: {
+        Row: {
+          dna_chain: Json
+          downloaded_at: string | null
+          expires_at: string
+          generated_at: string
+          id: string
+          ledger_entry_id: string
+          manifest: Json
+          member_id: string
+          size_bytes: number
+          status: string
+          trunk_id: string
+        }
+        Insert: {
+          dna_chain?: Json
+          downloaded_at?: string | null
+          expires_at: string
+          generated_at?: string
+          id?: string
+          ledger_entry_id: string
+          manifest?: Json
+          member_id: string
+          size_bytes?: number
+          status?: string
+          trunk_id: string
+        }
+        Update: {
+          dna_chain?: Json
+          downloaded_at?: string | null
+          expires_at?: string
+          generated_at?: string
+          id?: string
+          ledger_entry_id?: string
+          manifest?: Json
+          member_id?: string
+          size_bytes?: number
+          status?: string
+          trunk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "source_distribution_packages_trunk_id_fkey"
+            columns: ["trunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      special_deck_card_links: {
+        Row: {
+          card_id: string
+          id: string
+          is_active: boolean
+          issued_at: string
+          member_id: string
+          revoke_reason: string | null
+          revoked_at: string | null
+          trunk_id: string
+        }
+        Insert: {
+          card_id: string
+          id?: string
+          is_active?: boolean
+          issued_at?: string
+          member_id: string
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          trunk_id: string
+        }
+        Update: {
+          card_id?: string
+          id?: string
+          is_active?: boolean
+          issued_at?: string
+          member_id?: string
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          trunk_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "special_deck_card_links_trunk_id_fkey"
+            columns: ["trunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sponsor_allocations: {
         Row: {
@@ -21540,6 +23464,53 @@ export type Database = {
             columns: ["domain_mapping_id"]
             isOneToOne: false
             referencedRelation: "project_domain_mappings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_feeds: {
+        Row: {
+          added_at: string
+          added_by_member_id: string
+          content_count: number
+          id: string
+          is_active: boolean
+          last_content_at: string | null
+          pedestal_id: string
+          source: string
+          source_name: string
+          source_url: string | null
+        }
+        Insert: {
+          added_at?: string
+          added_by_member_id: string
+          content_count?: number
+          id?: string
+          is_active?: boolean
+          last_content_at?: string | null
+          pedestal_id: string
+          source: string
+          source_name: string
+          source_url?: string | null
+        }
+        Update: {
+          added_at?: string
+          added_by_member_id?: string
+          content_count?: number
+          id?: string
+          is_active?: boolean
+          last_content_at?: string | null
+          pedestal_id?: string
+          source?: string
+          source_name?: string
+          source_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_feeds_pedestal_id_fkey"
+            columns: ["pedestal_id"]
+            isOneToOne: false
+            referencedRelation: "pedestals"
             referencedColumns: ["id"]
           },
         ]
@@ -23360,6 +25331,139 @@ export type Database = {
           },
         ]
       }
+      tribe_memberships: {
+        Row: {
+          guild_id: string
+          id: string
+          is_active: boolean
+          joined_at: string
+          member_id: string
+          role: string
+          tribe_id: string
+        }
+        Insert: {
+          guild_id: string
+          id?: string
+          is_active?: boolean
+          joined_at?: string
+          member_id: string
+          role?: string
+          tribe_id: string
+        }
+        Update: {
+          guild_id?: string
+          id?: string
+          is_active?: boolean
+          joined_at?: string
+          member_id?: string
+          role?: string
+          tribe_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tribe_memberships_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tribe_memberships_tribe_id_fkey"
+            columns: ["tribe_id"]
+            isOneToOne: false
+            referencedRelation: "tribes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tribes: {
+        Row: {
+          child_tribe_ids: string[]
+          created_at: string
+          description: string
+          guild_id: string
+          id: string
+          is_chapter: boolean
+          keep_ids: string[]
+          leader_id: string
+          ledger_section_id: string
+          member_count: number
+          member_ids: string[]
+          monthly_phase_fee: number | null
+          name: string
+          nesting_depth: number
+          parent_tribe_id: string | null
+          phase_mimictrunk_id: string | null
+          rules_document: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          child_tribe_ids?: string[]
+          created_at?: string
+          description?: string
+          guild_id: string
+          id?: string
+          is_chapter?: boolean
+          keep_ids?: string[]
+          leader_id: string
+          ledger_section_id: string
+          member_count?: number
+          member_ids?: string[]
+          monthly_phase_fee?: number | null
+          name: string
+          nesting_depth?: number
+          parent_tribe_id?: string | null
+          phase_mimictrunk_id?: string | null
+          rules_document?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          child_tribe_ids?: string[]
+          created_at?: string
+          description?: string
+          guild_id?: string
+          id?: string
+          is_chapter?: boolean
+          keep_ids?: string[]
+          leader_id?: string
+          ledger_section_id?: string
+          member_count?: number
+          member_ids?: string[]
+          monthly_phase_fee?: number | null
+          name?: string
+          nesting_depth?: number
+          parent_tribe_id?: string | null
+          phase_mimictrunk_id?: string | null
+          rules_document?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tribes_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tribes_parent_tribe_id_fkey"
+            columns: ["parent_tribe_id"]
+            isOneToOne: false
+            referencedRelation: "tribes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tribes_phase_mimictrunk_id_fkey"
+            columns: ["phase_mimictrunk_id"]
+            isOneToOne: false
+            referencedRelation: "phase_mimictrunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_achievement_badges: {
         Row: {
           badge_category: string | null
@@ -24941,7 +27045,7 @@ export type Database = {
           current_win_streak: number
           first_candle_earned_at: string | null
           losses: number
-          net_profit: number
+          net_service_value: number
           quits: number
           stats_by_difficulty: Json | null
           total_ante_paid: number
@@ -24962,7 +27066,7 @@ export type Database = {
           current_win_streak?: number
           first_candle_earned_at?: string | null
           losses?: number
-          net_profit?: number
+          net_service_value?: number
           quits?: number
           stats_by_difficulty?: Json | null
           total_ante_paid?: number
@@ -24983,7 +27087,7 @@ export type Database = {
           current_win_streak?: number
           first_candle_earned_at?: string | null
           losses?: number
-          net_profit?: number
+          net_service_value?: number
           quits?: number
           stats_by_difficulty?: Json | null
           total_ante_paid?: number
@@ -25735,9 +27839,9 @@ export type Database = {
           id: string
           is_active: boolean | null
           max_amount: number | null
+          milestone_days: number | null
           min_amount: number | null
           user_id: string | null
-          vesting_days: number | null
           withdrawal_type: string
         }
         Insert: {
@@ -25747,9 +27851,9 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           max_amount?: number | null
+          milestone_days?: number | null
           min_amount?: number | null
           user_id?: string | null
-          vesting_days?: number | null
           withdrawal_type: string
         }
         Update: {
@@ -25759,9 +27863,9 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           max_amount?: number | null
+          milestone_days?: number | null
           min_amount?: number | null
           user_id?: string | null
-          vesting_days?: number | null
           withdrawal_type?: string
         }
         Relationships: []
@@ -26376,11 +28480,11 @@ export type Database = {
       }
       user_shadow_marks_summary: {
         Row: {
+          milestone_completion_count: number | null
           total_crystallized: number | null
           total_expired: number | null
           total_shadow: number | null
           user_id: string | null
-          vesting_count: number | null
         }
         Relationships: []
       }

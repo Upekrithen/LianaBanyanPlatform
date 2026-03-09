@@ -932,7 +932,7 @@ export default function ContentPipelinePage() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-white">Content Pipeline</h1>
-                <p className="text-white/50">SEED &#8594; TL;DR &#8594; BLOG &#8594; ARTICLE &#8594; PAPER</p>
+                <p className="text-white/50">SEED → TL;DR → BLOG → ARTICLE → PAPER</p>
               </div>
             </div>
             <button
