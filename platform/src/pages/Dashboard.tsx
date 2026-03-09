@@ -497,6 +497,52 @@ export default function Dashboard() {
             </section>
 
             {/* ════════════════════════════════════════════════════════════════
+                FEATURED PROJECTS — Backable with Credits
+               ════════════════════════════════════════════════════════════════ */}
+            <section className="space-y-4">
+              <h2 className="text-lg font-semibold text-muted-foreground flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                Featured Projects
+              </h2>
+              <div className="grid gap-4 md:grid-cols-2">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/coaster-medallion')}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm">Coaster Medallion</CardTitle>
+                      <Flame className="h-4 w-4 text-amber-500" />
+                    </div>
+                    <CardDescription className="text-xs">
+                      The physical proof of everything you back. Hexagonal token with QR code and compliant mechanism counter.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button size="sm" variant="outline" className="w-full gap-1" onClick={(e) => { e.stopPropagation(); navigate('/projects'); }}>
+                      <Rocket className="h-3.5 w-3.5" />
+                      Back This Project
+                    </Button>
+                  </CardContent>
+                </Card>
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/lets-make-dinner')}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm">Let's Make Dinner</CardTitle>
+                      <ChefHat className="h-4 w-4 text-green-600" />
+                    </div>
+                    <CardDescription className="text-xs">
+                      Neighbors feeding neighbors. Home-cooked meals from verified local chefs. Chefs keep 83.3%.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button size="sm" variant="outline" className="w-full gap-1" onClick={(e) => { e.stopPropagation(); navigate('/projects'); }}>
+                      <Rocket className="h-3.5 w-3.5" />
+                      Back This Project
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </section>
+
+            {/* ════════════════════════════════════════════════════════════════
                 TOOLS - Utilities and Admin
                ════════════════════════════════════════════════════════════════ */}
             <section className="space-y-4">
