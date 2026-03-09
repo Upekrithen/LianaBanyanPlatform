@@ -1,3 +1,4 @@
+Initialising login role...
 export type Json =
   | string
   | number
@@ -11,6 +12,31 @@ export type Database = {
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
+  }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -378,6 +404,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          page_path: string | null
+          properties: Json | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          page_path?: string | null
+          properties?: Json | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          page_path?: string | null
+          properties?: Json | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       anchors: {
         Row: {
@@ -4484,6 +4540,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "cue_card_templates_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
           {
             foreignKeyName: "cue_card_templates_project_id_fkey"
             columns: ["project_id"]
@@ -11400,6 +11463,13 @@ export type Database = {
             foreignKeyName: "hofund_channels_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "hofund_channels_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -15042,6 +15112,13 @@ export type Database = {
             foreignKeyName: "member_medallion_collection_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "member_medallion_collection_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -18678,6 +18755,13 @@ export type Database = {
             foreignKeyName: "products_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "products_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -18824,6 +18908,13 @@ export type Database = {
             foreignKeyName: "project_backings_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_backings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -18867,6 +18958,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "project_domain_mappings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
           {
             foreignKeyName: "project_domain_mappings_project_id_fkey"
             columns: ["project_id"]
@@ -19026,6 +19124,13 @@ export type Database = {
             foreignKeyName: "project_landing_pages_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_landing_pages_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -19098,6 +19203,79 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "project_member_contracts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_member_contracts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_pledges: {
+        Row: {
+          amount_credits: number
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          created_at: string
+          fulfilled_at: string | null
+          id: string
+          metadata: Json | null
+          project_id: string
+          refunded_at: string | null
+          status: string
+          transaction_id: string | null
+          updated_at: string
+          user_id: string
+          wave_id: string | null
+        }
+        Insert: {
+          amount_credits: number
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          fulfilled_at?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id: string
+          refunded_at?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id: string
+          wave_id?: string | null
+        }
+        Update: {
+          amount_credits?: number
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          fulfilled_at?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id?: string
+          refunded_at?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string
+          wave_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_pledges_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_pledges_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
@@ -19255,6 +19433,13 @@ export type Database = {
             foreignKeyName: "project_tasks_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -19296,6 +19481,13 @@ export type Database = {
             foreignKeyName: "project_themes_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "project_themes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -19303,32 +19495,56 @@ export type Database = {
       }
       projects: {
         Row: {
+          backer_count: number | null
+          category: string | null
+          cover_image_url: string | null
           created_at: string | null
+          current_funding: number | null
           description: string | null
+          funding_deadline: string | null
+          funding_goal: number | null
           id: string
+          medallion_eligible: boolean | null
           name: string
           owner_id: string | null
           status: string | null
+          tagline: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          backer_count?: number | null
+          category?: string | null
+          cover_image_url?: string | null
           created_at?: string | null
+          current_funding?: number | null
           description?: string | null
+          funding_deadline?: string | null
+          funding_goal?: number | null
           id?: string
+          medallion_eligible?: boolean | null
           name: string
           owner_id?: string | null
           status?: string | null
+          tagline?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          backer_count?: number | null
+          category?: string | null
+          cover_image_url?: string | null
           created_at?: string | null
+          current_funding?: number | null
           description?: string | null
+          funding_deadline?: string | null
+          funding_goal?: number | null
           id?: string
+          medallion_eligible?: boolean | null
           name?: string
           owner_id?: string | null
           status?: string | null
+          tagline?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -21776,6 +21992,278 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      side_quest_benefits: {
+        Row: {
+          amount: number
+          benefit_type: string
+          claim_id: string
+          description: string | null
+          granted_at: string
+          granted_by: string | null
+          id: string
+          quest_id: string
+          transaction_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          benefit_type: string
+          claim_id: string
+          description?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          quest_id: string
+          transaction_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          benefit_type?: string
+          claim_id?: string
+          description?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          quest_id?: string
+          transaction_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "side_quest_benefits_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "side_quest_claims"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "side_quest_benefits_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "side_quest_stats"
+            referencedColumns: ["quest_id"]
+          },
+          {
+            foreignKeyName: "side_quest_benefits_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "side_quests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "side_quest_benefits_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "credit_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      side_quest_claims: {
+        Row: {
+          claimed_at: string
+          completed_at: string | null
+          created_at: string
+          credits_awarded: number | null
+          expires_at: string | null
+          id: string
+          joules_awarded: number | null
+          marks_cleared: number | null
+          progress_percentage: number | null
+          proof_description: string | null
+          proof_metadata: Json | null
+          proof_url: string | null
+          quest_id: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          reward_granted: boolean | null
+          started_at: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string
+          user_id: string
+          xp_awarded: number | null
+        }
+        Insert: {
+          claimed_at?: string
+          completed_at?: string | null
+          created_at?: string
+          credits_awarded?: number | null
+          expires_at?: string | null
+          id?: string
+          joules_awarded?: number | null
+          marks_cleared?: number | null
+          progress_percentage?: number | null
+          proof_description?: string | null
+          proof_metadata?: Json | null
+          proof_url?: string | null
+          quest_id: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reward_granted?: boolean | null
+          started_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+          user_id: string
+          xp_awarded?: number | null
+        }
+        Update: {
+          claimed_at?: string
+          completed_at?: string | null
+          created_at?: string
+          credits_awarded?: number | null
+          expires_at?: string | null
+          id?: string
+          joules_awarded?: number | null
+          marks_cleared?: number | null
+          progress_percentage?: number | null
+          proof_description?: string | null
+          proof_metadata?: Json | null
+          proof_url?: string | null
+          quest_id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reward_granted?: boolean | null
+          started_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+          user_id?: string
+          xp_awarded?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "side_quest_claims_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "side_quest_stats"
+            referencedColumns: ["quest_id"]
+          },
+          {
+            foreignKeyName: "side_quest_claims_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "side_quests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      side_quests: {
+        Row: {
+          approved_by: string | null
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string
+          detailed_instructions: string | null
+          difficulty: string
+          expires_at: string | null
+          featured: boolean | null
+          hexisle_xp: number | null
+          id: string
+          initiative_slug: string | null
+          max_claims: number | null
+          max_completions_per_user: number | null
+          min_membership_days: number | null
+          min_reputation_level: number | null
+          position_category: string | null
+          project_id: string | null
+          quest_type: string
+          required_guild: string | null
+          required_skills: Json | null
+          requires_approval: boolean | null
+          reward_credits: number | null
+          reward_joules: number | null
+          reward_marks: number | null
+          status: string
+          time_limit_hours: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          approved_by?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          detailed_instructions?: string | null
+          difficulty?: string
+          expires_at?: string | null
+          featured?: boolean | null
+          hexisle_xp?: number | null
+          id?: string
+          initiative_slug?: string | null
+          max_claims?: number | null
+          max_completions_per_user?: number | null
+          min_membership_days?: number | null
+          min_reputation_level?: number | null
+          position_category?: string | null
+          project_id?: string | null
+          quest_type?: string
+          required_guild?: string | null
+          required_skills?: Json | null
+          requires_approval?: boolean | null
+          reward_credits?: number | null
+          reward_joules?: number | null
+          reward_marks?: number | null
+          status?: string
+          time_limit_hours?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          approved_by?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          detailed_instructions?: string | null
+          difficulty?: string
+          expires_at?: string | null
+          featured?: boolean | null
+          hexisle_xp?: number | null
+          id?: string
+          initiative_slug?: string | null
+          max_claims?: number | null
+          max_completions_per_user?: number | null
+          min_membership_days?: number | null
+          min_reputation_level?: number | null
+          position_category?: string | null
+          project_id?: string | null
+          quest_type?: string
+          required_guild?: string | null
+          required_skills?: Json | null
+          requires_approval?: boolean | null
+          reward_credits?: number | null
+          reward_joules?: number | null
+          reward_marks?: number | null
+          status?: string
+          time_limit_hours?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "side_quests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "side_quests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       slingshot_pass_throughs: {
         Row: {
@@ -27951,6 +28439,13 @@ export type Database = {
             foreignKeyName: "workstations_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
+            referencedRelation: "project_funding_summary"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "workstations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -27991,6 +28486,26 @@ export type Database = {
       }
     }
     Views: {
+      analytics_daily_summary: {
+        Row: {
+          event_count: number | null
+          event_date: string | null
+          event_type: string | null
+          unique_sessions: number | null
+          unique_users: number | null
+        }
+        Relationships: []
+      }
+      analytics_page_views: {
+        Row: {
+          page_path: string | null
+          unique_sessions: number | null
+          unique_viewers: number | null
+          view_count: number | null
+          view_date: string | null
+        }
+        Relationships: []
+      }
       critical_implementations: {
         Row: {
           category: string | null
@@ -28416,6 +28931,19 @@ export type Database = {
         }
         Relationships: []
       }
+      project_funding_summary: {
+        Row: {
+          funding_deadline: string | null
+          funding_goal: number | null
+          funding_percentage: number | null
+          project_id: string | null
+          project_name: string | null
+          project_status: string | null
+          total_pledged: number | null
+          unique_backers: number | null
+        }
+        Relationships: []
+      }
       prow_stats: {
         Row: {
           active_bounties: number | null
@@ -28440,6 +28968,24 @@ export type Database = {
           total_views: number | null
           verified_emails: string[] | null
           verified_views: number | null
+        }
+        Relationships: []
+      }
+      side_quest_stats: {
+        Row: {
+          active_claims: number | null
+          category: string | null
+          completions: number | null
+          difficulty: string | null
+          hexisle_xp: number | null
+          max_claims: number | null
+          quest_id: string | null
+          quest_status: string | null
+          reward_credits: number | null
+          reward_joules: number | null
+          reward_marks: number | null
+          title: string | null
+          total_credits_distributed: number | null
         }
         Relationships: []
       }
@@ -29124,6 +29670,7 @@ export type Database = {
         Args: { p_item_id: string; p_member_id: string }
         Returns: Json
       }
+      cleanup_old_analytics: { Args: never; Returns: undefined }
       cleanup_old_research_reports: {
         Args: { p_subscription_id: string }
         Returns: number
@@ -29867,6 +30414,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
