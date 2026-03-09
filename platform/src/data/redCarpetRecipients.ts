@@ -1029,8 +1029,8 @@ export function getRecipientsByCategory(
  * Get the platform stats for display.
  */
 export const PLATFORM_STATS = {
-  innovations: "1,243",
-  formalClaims: 210,
+  innovations: "1,551",
+  formalClaims: 218,
   filedApplications: 7,
   crownJewels: 8,
   possibleMore: 9,
