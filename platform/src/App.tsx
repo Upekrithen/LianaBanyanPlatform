@@ -379,6 +379,16 @@ const App = () => (
                         <Route path="/auth/tiktok/callback" element={<TikTokCallback />} />
                         <Route path="/ghost" element={<GhostWorld />} />
                         <Route path="/explore" element={<GhostWorld />} />
+                        <Route path="/free-explore" element={<GhostWorld />} />
+
+                        {/* Convenience redirects — prevent 404s for common URL guesses */}
+                        <Route path="/home" element={<Navigate to="/" replace />} />
+                        <Route path="/browse" element={<Navigate to="/browse/marketplace" replace />} />
+                        <Route path="/all-positions" element={<Navigate to="/positions/browse" replace />} />
+                        <Route path="/my-portfolio" element={<Navigate to="/portfolio" replace />} />
+                        <Route path="/my-reputation" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/start-a-project" element={<Navigate to="/start" replace />} />
+                        <Route path="/52-card-hunt" element={<Navigate to="/treasure-map-game" replace />} />
                         <Route path="/portal" element={<PortalGateway />} />
                         <Route path="/enter" element={<PortalGateway />} />
                         <Route path="/start" element={<OnboardingStart />} />
@@ -432,6 +442,9 @@ const App = () => (
                         <Route path="/crowdfunding" element={<ProtectedRoute><CrowdfundingIntegration /></ProtectedRoute>} />
                         <Route path="/deck-card-studio" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
                         <Route path="/cue-cards" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
+                        <Route path="/deck-cards" element={<Navigate to="/deck" replace />} />
+                        <Route path="/hofund" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
+                        <Route path="/hofund-studio" element={<Navigate to="/hofund" replace />} />
                         <Route path="/the-2nd-second" element={<ExplorerRoute><The2ndSecondPortal /></ExplorerRoute>} />
                         <Route path="/makers" element={<ExplorerRoute><The2ndSecondPortal /></ExplorerRoute>} />
                         <Route path="/ledger" element={<ExplorerRoute><TransparentLedger /></ExplorerRoute>} />
@@ -514,6 +527,9 @@ const App = () => (
                         <Route path="/guild-phases" element={<GuildPhaseManager />} />
                         <Route path="/fly-on-the-wall" element={<FlyOnTheWall />} />
                         <Route path="/transparency" element={<FlyOnTheWall />} />
+                        <Route path="/feathers" element={<ExplorerRoute><DeckCollection /></ExplorerRoute>} />
+                        <Route path="/the-bridge" element={<Navigate to="/durins-door" replace />} />
+                        <Route path="/bridge" element={<Navigate to="/durins-door" replace />} />
                         <Route path="/deck" element={<ExplorerRoute><DeckCollection /></ExplorerRoute>} />
                         <Route path="/cards" element={<ExplorerRoute><DeckCollection /></ExplorerRoute>} />
                         <Route path="/forge" element={<ExplorerRoute><ScrollForgePage /></ExplorerRoute>} />

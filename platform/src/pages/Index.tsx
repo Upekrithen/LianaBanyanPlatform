@@ -1122,22 +1122,22 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
             onMouseLeave={() => !isMobile && setHelmDropdownOpen(false)}
             onClick={() => isMobile && setHelmDropdownOpen(!helmDropdownOpen)}
           >
-            <a 
-              href="#"
-              onClick={(e) => e.preventDefault()}
+            <span
+              role="button"
+              tabIndex={0}
               style={{
                 color: helmDropdownOpen ? '#faf5eb' : '#a0aec0',
-                textDecoration: 'none',
                 fontSize: isMobile ? '1.5rem' : '0.9rem',
                 fontWeight: 500,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
                 transition: 'color 0.2s ease',
+                cursor: 'pointer',
               }}
               title="The Helm"
             >
               {isMobile ? '🪖' : 'The Helm'}
-            </a>
+            </span>
             {helmDropdownOpen && (
               <div style={{
                 position: 'absolute',
@@ -1275,22 +1275,24 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
             onMouseLeave={() => !isMobile && setMirrorDropdownOpen(false)}
             onClick={() => isMobile && setMirrorDropdownOpen(!mirrorDropdownOpen)}
           >
-            <a 
-              href="#"
-              onClick={(e) => { e.preventDefault(); if (!isMobile) setDurinsDoorOpen(true); }}
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={() => { if (!isMobile) setDurinsDoorOpen(true); }}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!isMobile) setDurinsDoorOpen(true); } }}
               style={{
                 color: mirrorDropdownOpen ? '#faf5eb' : '#a0aec0',
-                textDecoration: 'none',
                 fontSize: isMobile ? '1.5rem' : '0.9rem',
                 fontWeight: 500,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
                 transition: 'color 0.2s ease',
+                cursor: 'pointer',
               }}
               title="Mirror/Mirror (Durin's Door)"
             >
               {isMobile ? '🪞' : 'Mirror/Mirror'}
-            </a>
+            </span>
             {mirrorDropdownOpen && (
               <div style={{
                 position: 'absolute',
@@ -3538,20 +3540,24 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
           <p style={{ margin: 0 }}>
             © 2026 Liana Banyan Corporation
             <span style={{ margin: '0 0.75rem', opacity: 0.5 }}>|</span>
-            <a
-              href="#"
-              onClick={(e) => { e.preventDefault(); setWispActive(true); }}
+            <button
+              onClick={() => setWispActive(true)}
               style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
                 color: '#38a169',
                 textDecoration: 'none',
                 cursor: 'pointer',
-                transition: 'opacity 0.2s'
+                transition: 'opacity 0.2s',
+                font: 'inherit',
+                fontSize: 'inherit',
               }}
               onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
               onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
             >
               Walkthrough
-            </a>
+            </button>
             <span style={{ margin: '0 0.75rem', opacity: 0.5 }}>|</span>
             <a href="/terms" style={{ color: '#a0aec0', textDecoration: 'none', transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.7'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>Terms</a>
             <span style={{ margin: '0 0.5rem', opacity: 0.3 }}>·</span>

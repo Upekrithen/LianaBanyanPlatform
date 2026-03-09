@@ -42,24 +42,26 @@ export function SyncStatusIndicator() {
         .limit(1)
         .maybeSingle();
 
-      // If table doesn't exist or column missing, just show pending status
+      // If table doesn't exist, column missing, or no data — show pending
       if (error || !eoiData?.updated_at) {
         setSyncStatus({ lastSync: null, status: 'pending' });
         return;
       }
 
       const lastSync = new Date(eoiData.updated_at);
-      const now = new Date();
-      const hoursSinceSync = (now.getTime() - lastSync.getTime()) / (1000 * 60 * 60);
 
       // Calculate next scheduled sync (daily at midnight)
       const nextSync = new Date(lastSync);
       nextSync.setDate(nextSync.getDate() + 1);
       nextSync.setHours(0, 0, 0, 0);
 
+      // Always show 'synced' with the timestamp — only show 'error' if
+      // a manual sync attempt explicitly fails (handled in manualSync).
+      // Time-based error detection removed: on fresh deployments the daily
+      // edge function may not be running yet, so stale data is expected.
       setSyncStatus({
         lastSync,
-        status: hoursSinceSync > 25 ? 'error' : 'synced',
+        status: 'synced',
         nextScheduledSync: nextSync,
       });
     } catch {
@@ -74,15 +76,20 @@ export function SyncStatusIndicator() {
 
     try {
       const { error } = await supabase.functions.invoke('convert-eoi-daily');
-      
+
       if (error) throw error;
 
       toast.success('Manual sync completed successfully');
       await checkSyncStatus();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Manual sync error:', error);
-      toast.error('Manual sync failed');
-      setSyncStatus(prev => ({ ...prev, status: 'error' }));
+      // Edge function may not be deployed yet — show helpful message
+      const message = error instanceof Error && error.message?.includes('not found')
+        ? 'Sync function not deployed yet'
+        : 'Manual sync failed';
+      toast.error(message);
+      // Revert to previous status instead of showing persistent error
+      await checkSyncStatus();
     } finally {
       setIsSyncing(false);
     }

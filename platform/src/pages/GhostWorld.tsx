@@ -94,32 +94,54 @@ export default function GhostWorld() {
   }, [user]);
 
   const loadOrCreateGhostProfile = async () => {
-    // Check for existing ghost profile in localStorage
-    const ghostId = localStorage.getItem("lb_ghost_id");
+    try {
+      // Check for existing ghost profile in localStorage
+      const ghostId = localStorage.getItem("lb_ghost_id");
 
-    if (ghostId) {
-      const { data } = await supabase
+      if (ghostId) {
+        const { data } = await supabase
+          .from("ghost_profiles")
+          .select("*")
+          .eq("id", ghostId)
+          .single();
+
+        if (data) {
+          setGhostProfile(data as GhostProfile);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // Create new ghost profile
+      const fingerprint = await generateFingerprint();
+      const alias = generateGhostAlias();
+
+      const { data: newProfile, error } = await supabase
         .from("ghost_profiles")
-        .select("*")
-        .eq("id", ghostId)
+        .insert({
+          ghost_alias: alias,
+          fingerprint_hash: fingerprint,
+          total_session_time_minutes: 0,
+          pages_visited: 0,
+          documents_read: 0,
+          golden_keys_found: 0,
+          detected_skills: [],
+          detected_interests: [],
+          draft_pool_opted_in: false,
+        })
+        .select()
         .single();
 
-      if (data) {
-        setGhostProfile(data as GhostProfile);
-        setIsLoading(false);
-        return;
+      if (newProfile) {
+        localStorage.setItem("lb_ghost_id", newProfile.id);
+        setGhostProfile(newProfile as GhostProfile);
       }
-    }
-
-    // Create new ghost profile
-    const fingerprint = await generateFingerprint();
-    const alias = generateGhostAlias();
-
-    const { data: newProfile, error } = await supabase
-      .from("ghost_profiles")
-      .insert({
-        ghost_alias: alias,
-        fingerprint_hash: fingerprint,
+    } catch (err) {
+      console.error("Ghost profile error (table may not exist yet):", err);
+      // Create a local-only ghost profile so the page still renders
+      setGhostProfile({
+        id: "local_ghost",
+        ghost_alias: generateGhostAlias(),
         total_session_time_minutes: 0,
         pages_visited: 0,
         documents_read: 0,
@@ -127,13 +149,7 @@ export default function GhostWorld() {
         detected_skills: [],
         detected_interests: [],
         draft_pool_opted_in: false,
-      })
-      .select()
-      .single();
-
-    if (newProfile) {
-      localStorage.setItem("lb_ghost_id", newProfile.id);
-      setGhostProfile(newProfile as GhostProfile);
+      });
     }
     setIsLoading(false);
   };
