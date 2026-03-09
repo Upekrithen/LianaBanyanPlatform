@@ -239,6 +239,8 @@ const RealWorldPuzzles = lazy(() => import("./pages/RealWorldPuzzles"));
 const GuildPhaseManager = lazy(() => import("./pages/GuildPhaseManager"));
 // Pledge System (Session 8A)
 const MyPledges = lazy(() => import("./pages/MyPledges"));
+// Admin Analytics Dashboard (Session 8A)
+const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -708,6 +710,7 @@ const App = () => (
               <Route path="/projects/:projectId/scale-rates" element={<ProtectedRoute><ContractScaleManager /></ProtectedRoute>} />
               <Route path="/external-services" element={<ProtectedRoute><ExternalServices /></ProtectedRoute>} />
               <Route path="/admin/service-review" element={<ProtectedRoute><AdminServiceReview /></ProtectedRoute>} />
+              <Route path="/admin/analytics" element={<ProtectedRoute><AdminAnalytics /></ProtectedRoute>} />
               <Route path="/docs/video-scripts" element={<VideoScripts />} />
               <Route path="/pre-beta-recruits" element={<ProtectedRoute><PreBetaRecruits /></ProtectedRoute>} />
               <Route path="/asset-library" element={<ProtectedRoute><LBAssetLibrary /></ProtectedRoute>} />

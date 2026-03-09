@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Loader2, CreditCard, Sparkles, TrendingUp, Users, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { trackCreditPurchase } from "@/lib/analytics";
 
 interface CreditPurchaseModalProps {
   open: boolean;
@@ -91,6 +92,8 @@ export const CreditPurchaseModal = ({ open, onOpenChange, onPurchaseComplete }: 
       }
 
       if (data.url) {
+        const pkg = CREDIT_PACKAGES.find((p) => p.id === packageSize);
+        trackCreditPurchase(pkg?.credits || 0, pkg?.priceValue || 0);
         window.open(data.url, "_blank");
         toast.info("Complete payment in the new tab to receive your credits");
         onOpenChange(false);

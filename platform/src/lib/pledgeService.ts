@@ -9,6 +9,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { trackEvent } from "@/lib/analytics";
 
 // ─── Types ──────────────────────────────────────────────────────
 
@@ -156,6 +157,7 @@ export async function createPledge(
       // Table may not exist yet — that's OK, the credit_transaction itself
       // serves as the pledge record via reference_type = 'project_pledge'
       console.warn("project_pledges table not available:", pledgeError.message);
+      trackEvent("project_backed", { project_id: projectId, amount });
       return {
         success: true,
         pledge: {
@@ -177,6 +179,7 @@ export async function createPledge(
       };
     }
 
+    trackEvent("project_backed", { project_id: projectId, amount });
     return { success: true, pledge: pledge as unknown as ProjectPledge };
   } catch (err) {
     console.error("Pledge creation failed:", err);
@@ -253,6 +256,7 @@ export async function cancelPledge(
           .eq("user_id", user.id);
       }
 
+      trackEvent("pledge_cancelled", { pledge_id: pledgeId, refunded: refundAmount });
       return { success: true, refunded_amount: refundAmount };
     }
 
@@ -299,6 +303,7 @@ export async function cancelPledge(
         .eq("user_id", user.id);
     }
 
+    trackEvent("pledge_cancelled", { pledge_id: pledgeId, refunded: refundAmount });
     return { success: true, refunded_amount: refundAmount };
   } catch (err) {
     console.error("Pledge cancellation failed:", err);

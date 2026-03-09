@@ -544,6 +544,13 @@ export default function Dashboard() {
                     <CardDescription className="text-xs">{t('dashboard.viewBadges')}</CardDescription>
                   </CardHeader>
                 </Card>
+
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/my-pledges')}>
+                  <CardHeader>
+                    <CardTitle className="text-sm">My Pledges</CardTitle>
+                    <CardDescription className="text-xs">Projects you have sponsored</CardDescription>
+                  </CardHeader>
+                </Card>
               </div>
               
               {/* Admin buttons */}
@@ -574,6 +581,14 @@ export default function Dashboard() {
                 >
                   <Wrench className="h-4 w-4 mr-2" />
                   Workshop
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/admin/analytics")}
+                >
+                  <Wrench className="h-4 w-4 mr-2" />
+                  Analytics
                 </Button>
               </div>
             </section>
