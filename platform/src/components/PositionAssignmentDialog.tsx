@@ -231,12 +231,12 @@ export const PositionAssignmentDialog = ({
                 <div>
                   <Label className="flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
-                    Original Equity
+                    Original Participation
                   </Label>
                   <p className="text-2xl font-bold">{originalEquity}%</p>
                 </div>
                 <div>
-                  <Label>Adjusted Equity</Label>
+                  <Label>Adjusted Participation</Label>
                   <Input
                     type="number"
                     value={adjustedEquity}

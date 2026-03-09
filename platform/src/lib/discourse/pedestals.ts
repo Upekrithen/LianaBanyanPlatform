@@ -429,7 +429,7 @@ export interface CoopMediaPartner {
   name: string;
   /** Country/region */
   region: CoopMediaRegion;
-  /** Ownership model */
+  /** Governance model */
   model: CoopMediaModel;
   /** Short description */
   description: string;
@@ -448,7 +448,7 @@ export interface CoopMediaPartner {
 /**
  * Known co-op media partners for Pedestal integration.
  * Curated from Pawn P-001 research. Each is a real organization
- * with cooperative ownership and reader/community governance.
+ * with cooperative governance and reader/community participation.
  */
 export const COOP_MEDIA_CATALOG: CoopMediaPartner[] = [
   {
@@ -456,7 +456,7 @@ export const COOP_MEDIA_CATALOG: CoopMediaPartner[] = [
     name: "The Bristol Cable",
     region: "uk",
     model: "reader_owned",
-    description: "Member-owned local news co-op in Bristol; investigative and community reporting",
+    description: "Member-governed local news co-op in Bristol; investigative and community reporting",
     url: "https://thebristolcable.org",
     isIntegrated: false,
     memberCount: 2700,
@@ -487,7 +487,7 @@ export const COOP_MEDIA_CATALOG: CoopMediaPartner[] = [
     name: "The Devil Strip",
     region: "us",
     model: "reader_owned",
-    description: "First US community news site to convert to reader cooperative ownership; Akron, Ohio",
+    description: "First US community news site to convert to reader cooperative governance; Akron, Ohio",
     url: "https://thedevilstrip.com",
     isIntegrated: false,
     memberCount: 1000,
@@ -508,7 +508,7 @@ export const COOP_MEDIA_CATALOG: CoopMediaPartner[] = [
     name: "The Mendocino Voice",
     region: "us",
     model: "reader_owned",
-    description: "California local online news converting to co-op ownership; member revenue core",
+    description: "California local online news converting to co-op governance; member revenue core",
     url: "https://mendovoice.com",
     isIntegrated: false,
     democraticGovernance: true,
@@ -558,7 +558,7 @@ export const COOP_MEDIA_CATALOG: CoopMediaPartner[] = [
     name: "il manifesto",
     region: "eu",
     model: "worker_owned",
-    description: "Italian daily with cooperative ownership and strong reader-funding tradition",
+    description: "Italian daily with cooperative governance and strong reader-funding tradition",
     url: "https://ilmanifesto.it",
     isIntegrated: false,
     democraticGovernance: true,
@@ -568,7 +568,7 @@ export const COOP_MEDIA_CATALOG: CoopMediaPartner[] = [
     name: "La Jornada",
     region: "global",
     model: "reader_owned",
-    description: "Mexican national newspaper with reader-ownership and cooperative characteristics",
+    description: "Mexican national newspaper with reader-governance and cooperative characteristics",
     url: "https://jornada.com.mx",
     isIntegrated: false,
     democraticGovernance: true,

@@ -156,7 +156,7 @@ export function PositionApplicationDialog({
               </div>
               {position.equity_percentage > 0 && (
                 <div>
-                  <p className="text-xs text-muted-foreground">Equity</p>
+                  <p className="text-xs text-muted-foreground">Participation</p>
                   <p className="font-medium">{position.equity_percentage}%</p>
                 </div>
               )}

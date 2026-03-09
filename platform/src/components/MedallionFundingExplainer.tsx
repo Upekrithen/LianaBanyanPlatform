@@ -24,9 +24,9 @@ export function MedallionFundingExplainer() {
               <Shield className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-2xl">The Medallion: Your Foundation of Ownership</CardTitle>
+              <CardTitle className="text-2xl">The Medallion: Your Foundation of Participation</CardTitle>
               <CardDescription className="text-base mt-1">
-                The hexagonal medallion token is your proof of membership, stake, and commitment to this project
+                The hexagonal medallion token is your proof of membership, contribution, and commitment to this project
               </CardDescription>
             </div>
           </div>
@@ -61,7 +61,7 @@ export function MedallionFundingExplainer() {
                     <h4 className="font-semibold mb-1">Foundation First</h4>
                     <p className="text-sm text-muted-foreground">
                       The Medallion must be funded before any other products in the project. This demonstrates 
-                      community interest and provides the initial capital pool for project operations.
+                      community interest and provides the initial resource pool for project operations.
                     </p>
                   </div>
                 </div>
@@ -101,10 +101,10 @@ export function MedallionFundingExplainer() {
                     4
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Equity Assignment</h4>
+                    <h4 className="font-semibold mb-1">Participation Assignment</h4>
                     <p className="text-sm text-muted-foreground">
-                      Your Medallion pledge converts to project equity based on your time commitment. 
-                      Longer commitments = higher equity ratio, shorter = more cash value. This aligns 
+                      Your Medallion pledge converts to project participation based on your time commitment.
+                      Longer commitments = higher participation ratio, shorter = more cash value. This aligns
                       incentives with long-term project success.
                     </p>
                   </div>
@@ -158,7 +158,7 @@ export function MedallionFundingExplainer() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  First 100 supporters who believe in the project vision. Highest per-unit cost 
+                  First 100 supporters who believe in the project vision. Highest per-unit cost
                   but earliest entry and maximum recognition as a founding member.
                 </p>
               </div>
@@ -215,7 +215,7 @@ export function MedallionFundingExplainer() {
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Solid community of 500 members. 20% discount from Level 1, showing the value 
-                  of collective participation and shared ownership.
+                  of collective participation and shared membership.
                 </p>
               </div>
 
@@ -275,7 +275,7 @@ export function MedallionFundingExplainer() {
                     <h4 className="font-semibold mb-2">Your Unique Identity</h4>
                     <p className="text-sm text-muted-foreground">
                       Each Medallion is tied to your authenticated account. It serves as your digital identity 
-                      within the project ecosystem, tracking your equity, voting power, and participation history.
+                      within the project ecosystem, tracking your participation, voting power, and contribution history.
                     </p>
                   </div>
                 </div>
@@ -286,7 +286,7 @@ export function MedallionFundingExplainer() {
                     <h4 className="font-semibold mb-2">Blockchain Verification</h4>
                     <p className="text-sm text-muted-foreground">
                       Your Medallion is minted as an ERC-1155 NFT on Base L2, creating an immutable record of your 
-                      membership and stake. The blockchain ledger ensures transparency and prevents tampering.
+                      membership and contribution. The blockchain ledger ensures transparency and prevents tampering.
                     </p>
                   </div>
                 </div>
@@ -294,10 +294,10 @@ export function MedallionFundingExplainer() {
                 <div className="flex gap-4">
                   <TrendingUp className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-semibold mb-2">Collective Ownership</h4>
+                    <h4 className="font-semibold mb-2">Collective Participation</h4>
                     <p className="text-sm text-muted-foreground">
-                      Your Medallion represents fractional ownership in the project. All Medallion holders collectively 
-                      own and govern the project through ranked-choice voting on production priorities.
+                      Your Medallion represents fractional participation in the project. All Medallion holders collectively
+                      participate in and govern the project through ranked-choice voting on production priorities.
                     </p>
                   </div>
                 </div>
@@ -318,7 +318,7 @@ export function MedallionFundingExplainer() {
                 <p className="text-sm font-semibold mb-1">Live Member Stats</p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-muted-foreground">Your Equity Share</p>
+                    <p className="text-muted-foreground">Your Participation Share</p>
                     <p className="font-bold">Updates in real-time with each vote</p>
                   </div>
                   <div>
@@ -373,7 +373,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-1">Requires Your Credentials</h4>
                     <p className="text-sm text-muted-foreground">
-                      To see YOUR specific value, equity, and voting power, you must log in with your account 
+                      To see YOUR specific value, participation, and voting power, you must log in with your account
                       credentials. The QR code alone grants no access to your personal data.
                     </p>
                   </div>
@@ -386,7 +386,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-1">Share With Anyone</h4>
                     <p className="text-sm text-muted-foreground">
-                      You can share the QR code (or page link) with friends, family, or potential investors. 
+                      You can share the QR code (or page link) with friends, family, or potential backers.
                       They'll see the project details and can create their own account to participate.
                     </p>
                   </div>

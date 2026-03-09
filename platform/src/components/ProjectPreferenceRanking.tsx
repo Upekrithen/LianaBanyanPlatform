@@ -113,11 +113,11 @@ export function ProjectPreferenceRanking() {
   };
 
   const getConversionBenefit = (ranking: number, days: number) => {
-    const baseEquity = 0.5;
+    const baseParticipation = 0.5;
     const timePenalty = Math.max(0, (days - 100) * 0.0005);
     const rankingBonus = (ranking / 10.0) * 0.5;
-    const equityRatio = Math.min(0.9, Math.max(0.1, baseEquity + rankingBonus - timePenalty));
-    return (equityRatio * 100).toFixed(1);
+    const participationRatio = Math.min(0.9, Math.max(0.1, baseParticipation + rankingBonus - timePenalty));
+    return (participationRatio * 100).toFixed(1);
   };
 
   return (
@@ -128,7 +128,7 @@ export function ProjectPreferenceRanking() {
           Project Preference Rankings
         </CardTitle>
         <CardDescription>
-          Rank your preferred project types. Higher rankings vest EOI credits faster with better equity ratios.
+          Rank your preferred project types. Higher rankings vest EOI credits faster with better participation ratios.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -189,7 +189,7 @@ export function ProjectPreferenceRanking() {
                   <div className="flex items-center justify-between text-sm">
                     <Label>EOI Conversion Period: {pref.default_eoi_conversion_days} days</Label>
                     <Badge variant="secondary">
-                      {getConversionBenefit(pref.ranking, pref.default_eoi_conversion_days)}% Equity
+                      {getConversionBenefit(pref.ranking, pref.default_eoi_conversion_days)}% Participation
                     </Badge>
                   </div>
                   <Slider
@@ -200,7 +200,7 @@ export function ProjectPreferenceRanking() {
                     onValueChange={([value]) => updateConversionDays(pref.id, value)}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Shorter periods = faster conversion, longer periods = lower equity ratio
+                    Shorter periods = faster conversion, longer periods = lower participation ratio
                   </p>
                 </div>
               </CardContent>
@@ -217,10 +217,10 @@ export function ProjectPreferenceRanking() {
         <div className="p-4 bg-muted/50 rounded-lg text-sm space-y-2">
           <p className="font-medium">How Rankings Work:</p>
           <ul className="space-y-1 text-muted-foreground">
-            <li>• Rank 10: Up to 90% equity conversion (best)</li>
-            <li>• Rank 5: ~50% equity conversion (balanced)</li>
-            <li>• Rank 1: ~10% equity conversion (minimal)</li>
-            <li>• Longer conversion periods reduce equity percentage</li>
+            <li>• Rank 10: Up to 90% participation conversion (best)</li>
+            <li>• Rank 5: ~50% participation conversion (balanced)</li>
+            <li>• Rank 1: ~10% participation conversion (minimal)</li>
+            <li>• Longer conversion periods reduce participation percentage</li>
             <li>• Each day, a portion of your EOI converts based on these settings</li>
           </ul>
         </div>

@@ -69,7 +69,7 @@ export const LEVEL_1_PATHWAYS: PathwayNode[] = [
     route: '/plant-seeds',
     name: 'Plant Seeds',
     level: 1,
-    description: 'Invest in the future, sponsor innovation',
+    description: 'Back the future, sponsor innovation',
     icon: '🌱',
     childPaths: ['sponsorship', 'patent-buckets'],
   },
@@ -229,11 +229,11 @@ export const THREE_PACKS: PathwayThreePack[] = [
   },
   {
     id: 'starter-pack-investor',
-    name: 'Investor Starter Pack',
+    name: 'Sponsor Starter Pack',
     level: 1,
     pathwayIds: ['plant-seeds', 'real-world', 'help-each-other'],
     unlocksLevel: 2,
-    description: 'Learn to sponsor and invest',
+    description: 'Learn to sponsor and back projects',
   },
   // Level 2 Three-Packs (unlocks Level 3)
   {

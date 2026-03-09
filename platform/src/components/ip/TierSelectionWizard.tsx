@@ -40,7 +40,7 @@ export function TierSelectionWizard({ onTierSelect }: TierSelectionWizardProps) 
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <div className="text-sm font-medium text-muted-foreground mb-1">Equity Split</div>
+                <div className="text-sm font-medium text-muted-foreground mb-1">Participation Split</div>
                 <div className="text-2xl font-bold">49% Creator / 51% LB</div>
               </div>
               <div>
@@ -103,7 +103,7 @@ export function TierSelectionWizard({ onTierSelect }: TierSelectionWizardProps) 
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <div className="text-sm font-medium text-muted-foreground mb-1">Equity Split</div>
+                <div className="text-sm font-medium text-muted-foreground mb-1">Participation Split</div>
                 <div className="text-2xl font-bold">60% Creator / 40% LB</div>
               </div>
               <div>
@@ -169,7 +169,7 @@ export function TierSelectionWizard({ onTierSelect }: TierSelectionWizardProps) 
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <div className="text-sm font-medium text-muted-foreground mb-1">Equity Split</div>
+                <div className="text-sm font-medium text-muted-foreground mb-1">Participation Split</div>
                 <div className="text-2xl font-bold">75% Creator / 25% LB</div>
               </div>
               <div>

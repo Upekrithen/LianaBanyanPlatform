@@ -192,7 +192,7 @@ export default function Simulator() {
     y += 15;
     doc.text("Funding Split:", 20, y);
     y += 10;
-    doc.text(`Equity: ${data.equityPercentage}%`, 25, y);
+    doc.text(`Participation: ${data.equityPercentage}%`, 25, y);
     y += 7;
     doc.text(`Cash: ${data.cashPercentage}%`, 25, y);
     
@@ -205,7 +205,7 @@ export default function Simulator() {
     y += 7;
     doc.text(`Price Per Unit (after discount): $${results.pricePerUnit.toFixed(2)}`, 25, y);
     y += 7;
-    doc.text(`Equity Value: $${results.equityValue.toFixed(2)}`, 25, y);
+    doc.text(`Participation Value: $${results.equityValue.toFixed(2)}`, 25, y);
     y += 7;
     doc.text(`Cash Value: $${results.cashValue.toFixed(2)}`, 25, y);
     
@@ -329,7 +329,7 @@ export default function Simulator() {
             </div>
 
             <div>
-              <Label>Equity Split: {data.equityPercentage}%</Label>
+              <Label>Participation Split: {data.equityPercentage}%</Label>
               <Slider
                 value={[data.equityPercentage]}
                 onValueChange={([value]) => {
@@ -383,7 +383,7 @@ export default function Simulator() {
               <h3 className="font-semibold mb-3">Funding Breakdown</h3>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Equity ({data.equityPercentage}%)</span>
+                  <span className="text-muted-foreground">Participation ({data.equityPercentage}%)</span>
                   <span className="font-bold">${results.equityValue.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center">

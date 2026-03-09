@@ -98,7 +98,7 @@ export function LegalFormationStatus() {
                 </div>
                 <Progress value={paymentProgress} className="h-2" />
                 <div className="text-xs text-muted-foreground">
-                  Paying {formation.payment_percentage}% of profits
+                  Paying {formation.payment_percentage}% of earnings
                 </div>
               </div>
             )}

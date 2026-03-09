@@ -266,7 +266,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
               </div>
               <div className="professional-path-back">
                 <h3>Plant Seeds</h3>
-                <p>Be a Johnny Appleseed — sponsor memberships for people who need a start. Fund initiatives you believe in. Own fractional patent equity. Watch your forest grow.</p>
+                <p>Be a Johnny Appleseed — sponsor memberships for people who need a start. Fund initiatives you believe in. Own fractional patent participation. Watch your forest grow.</p>
                 <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/sponsor'); }}>
                   Start Planting
                 </button>

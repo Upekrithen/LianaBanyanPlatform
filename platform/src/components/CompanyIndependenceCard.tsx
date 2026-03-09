@@ -87,7 +87,7 @@ export function CompanyIndependenceCard({ projectId }: CompanyIndependenceCardPr
               <div className="flex items-center gap-2 text-sm">
                 <TrendingUp className="h-4 w-4 text-green-500" />
                 <span>
-                  Equity Bonus: <strong>+{project.independence_equity_bonus}%</strong>
+                  Participation Bonus: <strong>+{project.independence_equity_bonus}%</strong>
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm">

@@ -78,7 +78,7 @@ export const GuildReentryCalculator = ({ targetTier, targetClass, onProceed }: G
               <div className="space-y-2">
                 <p className="font-medium">Good news! You've already paid the required stake.</p>
                 <p className="text-sm text-muted-foreground">
-                  However, you lost guild benefits during your absence (profit sharing, reputation bonuses, etc.)
+                  However, you lost guild benefits during your absence (benefit sharing, reputation bonuses, etc.)
                 </p>
               </div>
             </AlertDescription>
@@ -114,7 +114,7 @@ export const GuildReentryCalculator = ({ targetTier, targetClass, onProceed }: G
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">From Future Profits (67%):</span>
+                  <span className="text-sm">From Future Earnings (67%):</span>
                   <span className="font-medium text-muted-foreground">
                     ${reentryCost?.deferred_payment.toFixed(2)}
                   </span>

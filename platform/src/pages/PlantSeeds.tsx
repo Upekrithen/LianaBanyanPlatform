@@ -102,7 +102,7 @@ export default function PlantSeeds() {
                   "Help others succeed, own a piece of that success."
                 </h3>
                 <p className="text-sm text-slate-300 leading-relaxed mb-4">
-                  What does this actually mean? When you plant seeds (sponsor a project), you aren't just donating. You are acquiring <strong>Joules</strong> (Platform Service Vouchers) and fractional IP ownership in the Liana Banyan ecosystem. 
+                  What does this actually mean? When you plant seeds (sponsor a project), you aren't just donating. You are acquiring <strong>Joules</strong> (Platform Service Vouchers) and fractional IP participation in the Liana Banyan ecosystem.
                 </p>
                 <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-700/50">
                   <p className="text-xs text-slate-400 mb-3">
@@ -204,8 +204,8 @@ export default function PlantSeeds() {
                     <Key className="w-6 h-6 text-violet-300" />
                   </div>
                   <div>
-                    <div className="font-medium text-white">Fractional IP</div>
-                    <div className="text-sm text-white/60">Own part of what you help build</div>
+                    <div className="font-medium text-white">Fractional IP Participation</div>
+                    <div className="text-sm text-white/60">Participate in what you help build</div>
                   </div>
                 </div>
               </div>
@@ -220,7 +220,7 @@ export default function PlantSeeds() {
           subtitle="The 1/3, 1/3, 1/3 Rule"
           sectionNumber={2}
           totalSections={totalSections}
-          benefit={{ id: 'own-part', text: 'Own part of what you help build', category: 'seeds' }}
+          benefit={{ id: 'own-part', text: 'Participate in what you help build', category: 'seeds' }}
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
@@ -231,7 +231,7 @@ export default function PlantSeeds() {
             {[
               { fraction: '1/3', label: 'Funds the project directly', icon: <Gift className="w-6 h-6" />, color: 'from-emerald-500/20' },
               { fraction: '1/3', label: 'Platform operations', icon: <Layers className="w-6 h-6" />, color: 'from-blue-500/20' },
-              { fraction: '1/3', label: 'Your IP ownership', icon: <Key className="w-6 h-6" />, color: 'from-violet-500/20' },
+              { fraction: '1/3', label: 'Your IP participation', icon: <Key className="w-6 h-6" />, color: 'from-violet-500/20' },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -252,11 +252,11 @@ export default function PlantSeeds() {
           <div className="p-6 rounded-xl bg-slate-800/50 border border-white/10">
             <h4 className="font-semibold text-white mb-3">Key Message</h4>
             <p className="text-lg text-white/80 italic">
-              "When you help someone else succeed, you own a piece of that success."
+              "When you help someone else succeed, you participate in that success."
             </p>
             <p className="mt-4 text-white/60">
               Your contribution is recorded on the immutable IP ledger. As the project grows, 
-              your fractional ownership grows with it.
+              your fractional participation grows with it.
             </p>
           </div>
         </ProgressiveSection>
@@ -312,10 +312,10 @@ export default function PlantSeeds() {
         <ProgressiveSection
           id="multiplier-system"
           title="Multiplier System"
-          subtitle="Stack them for massive returns"
+          subtitle="Stack them for massive service value"
           sectionNumber={4}
           totalSections={totalSections}
-          benefit={{ id: 'multipliers-stack', text: 'Multipliers stack for massive returns', category: 'seeds' }}
+          benefit={{ id: 'multipliers-stack', text: 'Multipliers stack for massive service value', category: 'seeds' }}
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
         >
@@ -409,7 +409,7 @@ export default function PlantSeeds() {
                 </div>
                 <div className="text-center p-4 rounded-xl bg-white/5">
                   <div className="text-2xl font-bold text-primary">1/3</div>
-                  <div className="text-xs text-white/50">IP ownership</div>
+                  <div className="text-xs text-white/50">IP participation</div>
                 </div>
               </div>
               
@@ -417,7 +417,7 @@ export default function PlantSeeds() {
                 <p className="text-white text-center">
                   <strong>PLUS:</strong> I'm personally offering you part of MY patents.<br />
                   <span className="text-primary text-xl font-bold">60%</span> of my entire portfolio goes to the Platform.<br />
-                  You become a member. You own part of that 60%.
+                  You become a member. You participate in that 60%.
                 </p>
               </div>
               

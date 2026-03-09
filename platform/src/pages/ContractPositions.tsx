@@ -215,7 +215,7 @@ export default function ContractPositions() {
                       <TableCell>
                         <div className="text-sm">
                           {position.equity_percentage > 0 && (
-                            <div>{position.equity_percentage}% equity</div>
+                            <div>{position.equity_percentage}% participation</div>
                           )}
                           {position.cash_amount > 0 && (
                             <div>${position.cash_amount}</div>

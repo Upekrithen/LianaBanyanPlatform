@@ -20,8 +20,8 @@ const categories = [
     trending: false
   },
   {
-    title: "Investment Opportunities",
-    description: "Back projects with equity potential",
+    title: "Sponsorship Opportunities",
+    description: "Back projects with participation potential",
     icon: <TrendingUp className="h-8 w-8" />,
     count: 18,
     trending: true
@@ -43,7 +43,7 @@ export default function BrowseMarketplace() {
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold">Marketplace Discovery</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Browse community projects and products. Sign in to invest and participate.
+          Browse community projects and products. Sign in to sponsor and participate.
         </p>
       </div>
 
@@ -82,7 +82,7 @@ export default function BrowseMarketplace() {
         <CardContent className="p-8 text-center space-y-4">
           <h3 className="text-2xl font-semibold">Ready to participate?</h3>
           <p className="text-muted-foreground">
-            Create an account to back projects, earn equity, and join the community
+            Create an account to back projects, earn participation, and join the community
           </p>
           <div className="flex gap-4 justify-center">
             <Button size="lg" onClick={() => navigate('/auth')}>

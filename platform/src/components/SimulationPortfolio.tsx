@@ -123,7 +123,7 @@ export function SimulationPortfolio({
             <div className="text-2xl font-bold">
               ${Math.max(...simulations.map(s => s.projections.monthlyProfit)).toFixed(0)}
             </div>
-            <div className="text-xs text-muted-foreground">Best Monthly Profit</div>
+            <div className="text-xs text-muted-foreground">Best Monthly Margin</div>
           </CardContent>
         </Card>
         <Card>
@@ -197,7 +197,7 @@ export function SimulationPortfolio({
                           ) : (
                             <TrendingDown className="w-3 h-3 text-red-600" />
                           )}
-                          Profit
+                          Margin
                         </div>
                         <div className={`font-bold ${sim.projections.monthlyProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                           ${sim.projections.monthlyProfit.toFixed(0)}

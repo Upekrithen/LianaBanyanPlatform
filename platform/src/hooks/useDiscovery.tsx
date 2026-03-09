@@ -30,8 +30,8 @@ export const DASHBOARD_DISCOVERY_MAP = {
   // Economy (discovered via navigation)
   'eoi-dashboard': 'economy',
   'project-preferences': 'economy',
-  'equity-breakdown': 'economy',
-  'investment-timeline': 'economy',
+  'participation-breakdown': 'economy',
+  'contribution-timeline': 'economy',
   
   // Governance (discovered via navigation)
   'legal-formation': 'governance',

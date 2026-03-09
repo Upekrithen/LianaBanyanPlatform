@@ -155,7 +155,7 @@ export const ContractAssignmentSimulator = ({
               <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4" />
-                  Equity Portion
+                  Participation Portion
                 </Label>
                 <span className="text-sm font-medium">
                   {(equityRatio * 100).toFixed(1)}%
@@ -163,7 +163,7 @@ export const ContractAssignmentSimulator = ({
               </div>
               <Progress value={equityRatio * 100} className="h-2" />
               <p className="text-sm text-muted-foreground">
-                ${equityAmount.toFixed(2)} in project equity
+                ${equityAmount.toFixed(2)} in project participation
               </p>
             </div>
 

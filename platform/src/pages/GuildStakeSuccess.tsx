@@ -115,10 +115,10 @@ export default function GuildStakeSuccess() {
               <div className="space-y-2">
                 <p className="font-semibold">Benefits Unlocked:</p>
                 <ul className="ml-6 list-disc space-y-1 text-sm text-muted-foreground">
-                  <li>Higher profit percentage on all contracts</li>
+                  <li>Higher margin percentage on all contracts</li>
                   <li>Access to {paymentInfo.tier === "journeyman" ? "individual bonuses (+5%)" : "enhanced bonuses (+10%)"}</li>
                   <li>Shared pool bonus participation</li>
-                  <li>Voting rights in Guild Investment Fund</li>
+                  <li>Voting rights in Guild Sponsorship Fund</li>
                   {paymentInfo.tier === "master" && (
                     <li>Project ownership eligibility (10,000+ credits)</li>
                   )}

@@ -774,7 +774,7 @@ export default function PatentPortfolio() {
               <ChevronRight className="w-4 h-4" />
             </Link>
             <p className="text-xs text-white/40 mt-2">
-              Vote with Credits to fund patent prosecution and earn fractional ownership
+              Vote with Credits to fund patent prosecution and earn fractional participation
             </p>
           </div>
         </motion.section>

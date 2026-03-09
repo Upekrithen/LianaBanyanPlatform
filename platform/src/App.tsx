@@ -1,3 +1,4 @@
+import { useEffect, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -70,7 +71,6 @@ import IPRegistration from "./pages/IPRegistration";
 import AgentOnboarding from "./pages/AgentOnboarding";
 import CrowdfundingIntegration from "./pages/CrowdfundingIntegration";
 import MedallionManagement from "./pages/MedallionManagement";
-import { useEffect, lazy, Suspense } from "react";
 import { GlobalBreadcrumbs } from "@/components/GlobalBreadcrumbs";
 import { useAuth } from "@/contexts/AuthContext";
 // Business portal pages reused here
@@ -409,7 +409,7 @@ const App = () => (
                         <Route path="/project/:projectSlug/product/:productId" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                         <Route path="/investment-guide" element={<ProtectedRoute><InvestmentExplainer /></ProtectedRoute>} />
                         
-                        {/* Protected Investor Routes */}
+                        {/* Protected Sponsor Routes */}
                         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                         <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
                         <Route path="/blockchain/:projectId" element={<ProtectedRoute><BlockchainExplorer /></ProtectedRoute>} />

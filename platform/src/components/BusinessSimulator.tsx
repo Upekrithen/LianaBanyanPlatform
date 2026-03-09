@@ -472,7 +472,7 @@ export function BusinessSimulator({
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
                     <TrendingUp className="h-4 w-4" />
-                    Monthly Profit
+                    Monthly Net Benefit
                   </div>
                   <p className={`text-2xl font-bold ${projections.monthlyProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     ${projections.monthlyProfit.toFixed(0)}
@@ -520,11 +520,11 @@ export function BusinessSimulator({
                     <span className="font-medium">${projections.annualRevenue.toFixed(0)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Annual Profit</span>
+                    <span className="text-muted-foreground">Annual Net Benefit</span>
                     <span className="font-medium">${projections.annualProfit.toFixed(0)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Profit Margin</span>
+                    <span className="text-muted-foreground">Net Margin</span>
                     <span className="font-medium">{(projections.profitMargin * 100).toFixed(1)}%</span>
                   </div>
                 </div>
@@ -558,7 +558,7 @@ export function BusinessSimulator({
                   className="h-3"
                 />
                 <p className="text-xs text-muted-foreground mt-2">
-                  Based on profitability (40%), sustainability (35%), and utilization (25%)
+                  Based on viability (40%), sustainability (35%), and utilization (25%)
                 </p>
               </div>
             </div>

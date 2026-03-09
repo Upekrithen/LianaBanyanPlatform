@@ -27,7 +27,7 @@ const lbInternalPositions: LBPosition[] = [
     description: 'Primary accountant for LB operations, managing books, tax filings, and financial compliance',
     icon: Calculator,
     priority: 'critical',
-    typicalCompensation: '$75-150/hr or 0.5-2% equity',
+    typicalCompensation: '$75-150/hr or 0.5-2% participation',
     keyResponsibilities: [
       'Maintain accurate books and records for LB operations',
       'Prepare and file all tax returns (corporate, sales, payroll)',
@@ -39,7 +39,7 @@ const lbInternalPositions: LBPosition[] = [
     requiredSkills: [
       'Active CPA license',
       'Experience with multi-entity structures',
-      'Knowledge of crowdfunding/equity accounting',
+      'Knowledge of crowdfunding/participation accounting',
       'Tax strategy expertise',
       'GAAP/IFRS proficiency'
     ],
@@ -56,13 +56,13 @@ const lbInternalPositions: LBPosition[] = [
     description: 'Strategic financial leadership for LB, overseeing all financial operations and planning',
     icon: Calculator,
     priority: 'high',
-    typicalCompensation: '$100-200/hr or 2-5% equity',
+    typicalCompensation: '$100-200/hr or 2-5% participation',
     keyResponsibilities: [
       'Develop and execute financial strategy',
       'Oversee all financial operations and reporting',
       'Manage banking relationships and capital structure',
       'Financial forecasting and budgeting',
-      'Investment and treasury management',
+      'Resource and treasury management',
       'Work with CPA on compliance and tax strategy',
       'Financial due diligence for partnerships/acquisitions',
       'Funding pool management and allocation'
@@ -87,11 +87,11 @@ const lbInternalPositions: LBPosition[] = [
     description: 'Lead HR strategy and operations for LB member contracts and hiring',
     icon: Users,
     priority: 'high',
-    typicalCompensation: '$75-125/hr or 1-3% equity',
+    typicalCompensation: '$75-125/hr or 1-3% participation',
     keyResponsibilities: [
       'Design and implement contract position system',
       'Oversee hiring and onboarding for all LB positions',
-      'Manage member contracts and equity allocations',
+      'Manage member contracts and participation allocations',
       'Develop compensation frameworks',
       'Handle member relations and dispute resolution',
       'Build reputation system integration with hiring'
@@ -99,7 +99,7 @@ const lbInternalPositions: LBPosition[] = [
     requiredSkills: [
       'HR leadership experience',
       'Contract management',
-      'Equity compensation expertise',
+      'Participation compensation expertise',
       'Employee relations',
       'Compliance (labor law, benefits)'
     ],
@@ -116,12 +116,12 @@ const lbInternalPositions: LBPosition[] = [
     description: 'Primary legal advisor for LB operations, contracts, IP, and compliance',
     icon: Scale,
     priority: 'critical',
-    typicalCompensation: '$150-300/hr or 1-4% equity',
+    typicalCompensation: '$150-300/hr or 1-4% participation',
     keyResponsibilities: [
       'Review and draft all major contracts',
       'Advise on entity structure and governance',
       'Intellectual property protection',
-      'Securities compliance for equity offerings',
+      'Securities compliance for participation offerings',
       'Member agreement templates and enforcement',
       'Regulatory compliance (crowdfunding, financial)',
       'Dispute resolution and litigation management'
@@ -146,7 +146,7 @@ const lbInternalPositions: LBPosition[] = [
     description: 'Governance and strategic oversight for LB as an organization',
     icon: Shield,
     priority: 'medium',
-    typicalCompensation: 'Board stipend + 0.5-2% equity',
+    typicalCompensation: 'Board stipend + 0.5-2% participation',
     keyResponsibilities: [
       'Strategic direction and planning',
       'Oversight of executive team',

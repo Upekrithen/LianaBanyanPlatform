@@ -2193,7 +2193,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               </p>
                               <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
                                 From academic subjects to practical skills to professional development — 
-                                learning that serves learners, not shareholders.
+                                learning that serves learners, not extraction.
                               </p>
                             </div>
                           )}
@@ -2219,7 +2219,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               </p>
                               <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
                                 Developers earn by building and maintaining the platform. Technical decisions made transparently. 
-                                Infrastructure that serves the mission, not investor returns.
+                                Infrastructure that serves the mission, not extraction.
                               </p>
                             </div>
                           )}
@@ -2277,7 +2277,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         <>
                           <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🌿 16 Charitable Initiatives</h4>
                           <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                            Our 20% margin doesn't go to shareholders — it funds <strong>infrastructure for everyone</strong>:
+                            Our 20% margin doesn't go to extraction — it funds <strong>infrastructure for everyone</strong>:
                           </p>
                           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                             {initiativesList.map((init) => (
@@ -2669,7 +2669,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>💳 VSL (Value Storage Layer)</h4>
                       <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
                         Member-owned financial services. Savings, loans, and payments 
-                        at Cost + 20% — not bank profit margins.
+                        at Cost + 20% — not bank extraction margins.
                       </p>
                       <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
                         Crown: Cathie Mahon. Three-gear currency: Joules, Marks, Credits.

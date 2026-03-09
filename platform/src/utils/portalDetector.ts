@@ -47,7 +47,7 @@ export const detectPortal = (): PortalType => {
     return 'hexisle';
   }
   
-  // Default to marketplace (.com) - Public discovery & investment
+  // Default to marketplace (.com) - Public discovery & contributions
   return 'marketplace';
 };
 
@@ -175,7 +175,7 @@ export const isMarketplaceRoute = (path: string): boolean => {
     '/product',
     '/portfolio',
     '/blockchain-explorer',
-    '/investment-explainer',
+    '/contribution-explainer',
     '/medallion-viewer',
     '/industry-pricing'
   ];

@@ -20,8 +20,8 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [productLeadTimeDays, setProductLeadTimeDays] = useState(180);
-  const [minEquityRatio, setMinEquityRatio] = useState(0.1);
-  const [maxEquityRatio, setMaxEquityRatio] = useState(0.9);
+  const [minParticipationRatio, setMinParticipationRatio] = useState(0.1);
+  const [maxParticipationRatio, setMaxParticipationRatio] = useState(0.9);
   const [timeOptions, setTimeOptions] = useState<TimeCommitmentOption[]>([
     { days: 7, label: '1 Week' },
     { days: 14, label: '2 Weeks' },
@@ -48,8 +48,8 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
       toast.error('Failed to load voting configuration');
     } else if (data) {
       setProductLeadTimeDays(data.product_lead_time_days);
-      setMinEquityRatio(Number(data.min_equity_ratio));
-      setMaxEquityRatio(Number(data.max_equity_ratio));
+      setMinParticipationRatio(Number(data.min_equity_ratio));
+      setMaxParticipationRatio(Number(data.max_equity_ratio));
       
       // Parse time_commitment_options from JSONB
       const parsedOptions = Array.isArray(data.time_commitment_options) 
@@ -61,8 +61,8 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
   };
 
   const handleSave = async () => {
-    if (minEquityRatio >= maxEquityRatio) {
-      toast.error('Minimum equity ratio must be less than maximum');
+    if (minParticipationRatio >= maxParticipationRatio) {
+      toast.error('Minimum participation ratio must be less than maximum');
       return;
     }
 
@@ -73,8 +73,8 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
         project_id: projectId,
         product_lead_time_days: productLeadTimeDays,
         time_commitment_options: JSON.stringify(timeOptions),
-        min_equity_ratio: minEquityRatio,
-        max_equity_ratio: maxEquityRatio,
+        min_equity_ratio: minParticipationRatio,
+        max_equity_ratio: maxParticipationRatio,
         updated_at: new Date().toISOString()
       }, {
         onConflict: 'project_id'
@@ -111,9 +111,9 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Equity/Cash Ratio Configuration</CardTitle>
+          <CardTitle>Participation/Cash Ratio Configuration</CardTitle>
           <CardDescription>
-            Configure how time commitments translate to equity vs cash ratios for member voting
+            Configure how time commitments translate to participation vs cash ratios for member voting
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -132,36 +132,36 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
             </p>
           </div>
 
-          {/* Equity Ratio Bounds */}
+          {/* Participation Ratio Bounds */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="minEquity">Minimum Equity Ratio</Label>
+              <Label htmlFor="minEquity">Minimum Participation Ratio</Label>
               <Input
                 id="minEquity"
                 type="number"
                 step="0.01"
                 min="0"
                 max="1"
-                value={minEquityRatio}
-                onChange={(e) => setMinEquityRatio(parseFloat(e.target.value))}
+                value={minParticipationRatio}
+                onChange={(e) => setMinParticipationRatio(parseFloat(e.target.value))}
               />
               <p className="text-sm text-muted-foreground">
-                Shortest commitment: {(minEquityRatio * 100).toFixed(0)}% equity, {((1 - minEquityRatio) * 100).toFixed(0)}% cash
+                Shortest commitment: {(minParticipationRatio * 100).toFixed(0)}% participation, {((1 - minParticipationRatio) * 100).toFixed(0)}% cash
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="maxEquity">Maximum Equity Ratio</Label>
+              <Label htmlFor="maxEquity">Maximum Participation Ratio</Label>
               <Input
                 id="maxEquity"
                 type="number"
                 step="0.01"
                 min="0"
                 max="1"
-                value={maxEquityRatio}
-                onChange={(e) => setMaxEquityRatio(parseFloat(e.target.value))}
+                value={maxParticipationRatio}
+                onChange={(e) => setMaxParticipationRatio(parseFloat(e.target.value))}
               />
               <p className="text-sm text-muted-foreground">
-                Longest commitment: {(maxEquityRatio * 100).toFixed(0)}% equity, {((1 - maxEquityRatio) * 100).toFixed(0)}% cash
+                Longest commitment: {(maxParticipationRatio * 100).toFixed(0)}% participation, {((1 - maxParticipationRatio) * 100).toFixed(0)}% cash
               </p>
             </div>
           </div>
@@ -179,8 +179,8 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
         <CardContent className="space-y-4">
           {timeOptions.map((option, index) => {
             const ratioFactor = Math.min(1.0, Math.max(0.0, option.days / productLeadTimeDays));
-            const equity = minEquityRatio + (ratioFactor * (maxEquityRatio - minEquityRatio));
-            const cash = 1 - equity;
+            const participation = minParticipationRatio + (ratioFactor * (maxParticipationRatio - minParticipationRatio));
+            const cash = 1 - participation;
 
             return (
               <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
@@ -203,7 +203,7 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
                   </div>
                 </div>
                 <div className="text-sm text-muted-foreground min-w-[120px]">
-                  {(equity * 100).toFixed(0)}% equity<br />
+                  {(participation * 100).toFixed(0)}% participation<br />
                   {(cash * 100).toFixed(0)}% cash
                 </div>
                 <Button

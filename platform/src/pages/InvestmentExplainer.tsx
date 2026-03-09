@@ -4,7 +4,7 @@ import { ServiceValueCalculator } from "@/components/ROICalculator";
 import { SponsorshipFlowDiagram } from "@/components/ConversionFlowDiagram";
 import { ArrowRight, TrendingUp, Clock, DollarSign, Award, ShieldCheck } from "lucide-react";
 
-const InvestmentExplainer = () => {
+const ContributionExplainer = () => {
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Hero Section */}
@@ -321,4 +321,6 @@ const InvestmentExplainer = () => {
   );
 };
 
-export default InvestmentExplainer;
+export default ContributionExplainer;
+// Backward-compatible alias
+export { ContributionExplainer as InvestmentExplainer };

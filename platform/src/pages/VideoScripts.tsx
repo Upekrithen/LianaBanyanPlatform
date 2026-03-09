@@ -199,7 +199,7 @@ export default function VideoScripts() {
               <h3>Concept</h3>
               <p>
                 Fast-paced motion graphics explainer showing how the three-credit system works: 
-                Contribution Credits (purchased), Earned Credits (work), and EOI Credits (equity of interest). 
+                Contribution Credits (purchased), Earned Credits (work), and EOI Credits (participation of interest).
                 Emphasizes simplicity and fairness.
               </p>
 
@@ -207,11 +207,11 @@ export default function VideoScripts() {
               <ul>
                 <li><strong>Scene 1 (0:00-0:15):</strong> The Problem - Traditional payment friction</li>
                 <li><strong>Scene 2 (0:15-0:35):</strong> The Solution - LB Credits introduction</li>
-                <li><strong>Scene 3 (0:35-0:55):</strong> Three Ways to Earn - Purchase, work, equity</li>
+                <li><strong>Scene 3 (0:35-0:55):</strong> Three Ways to Earn - Purchase, work, participation</li>
                 <li><strong>Scene 4 (0:55-1:15):</strong> Value & Fairness - 1 credit = $1 USD</li>
                 <li><strong>Scene 5 (1:15-1:35):</strong> Using Credits - Ecosystem marketplace</li>
-                <li><strong>Scene 6 (1:35-1:50):</strong> EOI Conversion - Equity conversion explanation</li>
-                <li><strong>Scene 7 (1:50-2:10):</strong> Your Stake - Ownership message</li>
+                <li><strong>Scene 6 (1:35-1:50):</strong> EOI Conversion - Participation conversion explanation</li>
+                <li><strong>Scene 7 (1:50-2:10):</strong> Your Stake - Membership message</li>
                 <li><strong>Scene 8 (2:10-2:20):</strong> Call to Action - Sign up bonus</li>
               </ul>
 
@@ -232,7 +232,7 @@ export default function VideoScripts() {
 
               <h3>Core Message</h3>
               <blockquote>
-                "With Liana Banyan Credits, you're not just buying currency—you're buying ownership. 
+                "With Liana Banyan Credits, you're not just buying currency—you're earning membership.
                 You're joining a collaborative economy where your participation has real value."
               </blockquote>
             </CardContent>
@@ -269,7 +269,7 @@ export default function VideoScripts() {
               <h3>Concept</h3>
               <p>
                 Follow a character's journey from Apprentice to Master through the 18-tier guild system. 
-                Shows increasing investment, responsibility, and influence. Emphasizes community support 
+                Shows increasing contribution, responsibility, and influence. Emphasizes community support
                 and mentorship at every level.
               </p>
 
@@ -278,7 +278,7 @@ export default function VideoScripts() {
                 <li><strong>Scene 1 (0:00-0:20):</strong> The Journey Begins - Introduction to guild path</li>
                 <li><strong>Scene 2 (0:20-0:45):</strong> Apprentice Tier - $50 stake, learning phase</li>
                 <li><strong>Scene 3 (0:45-1:15):</strong> Journeyman Advancement - Up to $500, leadership emerges</li>
-                <li><strong>Scene 4 (1:15-1:50):</strong> Master Level - $5,000 investment, mentoring others</li>
+                <li><strong>Scene 4 (1:15-1:50):</strong> Master Level - $5,000 contribution, mentoring others</li>
                 <li><strong>Scene 5 (1:50-2:15):</strong> The Full System - 18 tiers visualization</li>
                 <li><strong>Scene 6 (2:15-2:35):</strong> Exclusive Benefits - Higher tier perks</li>
                 <li><strong>Scene 7 (2:35-2:50):</strong> Community Focus - Rising together message</li>
@@ -308,9 +308,9 @@ export default function VideoScripts() {
 
               <h3>Tier Progression</h3>
               <ul>
-                <li><strong>Apprentice (Tiers 1-6):</strong> $50-500 investment range</li>
-                <li><strong>Journeyman (Tiers 7-12):</strong> $500-2,500 investment range</li>
-                <li><strong>Master (Tiers 13-18):</strong> $2,500-5,000+ investment range</li>
+                <li><strong>Apprentice (Tiers 1-6):</strong> $50-500 contribution range</li>
+                <li><strong>Journeyman (Tiers 7-12):</strong> $500-2,500 contribution range</li>
+                <li><strong>Master (Tiers 13-18):</strong> $2,500-5,000+ contribution range</li>
               </ul>
             </CardContent>
           </Card>
@@ -621,7 +621,7 @@ export default function VideoScripts() {
               <h3>The Message</h3>
               <blockquote>
                 "When everyone brings a little, everyone gains a lot. Stone Soup isn't magic—it's the power 
-                of collective contribution. That's the Liana Banyan way: small investments from many create 
+                of collective contribution. That's the Liana Banyan way: small contributions from many create
                 abundance for all."
               </blockquote>
             </CardContent>

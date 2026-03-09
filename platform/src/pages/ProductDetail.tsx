@@ -12,7 +12,7 @@ import { Clock, TrendingUp } from 'lucide-react';
 import { MedallionFundingExplainer } from "@/components/MedallionFundingExplainer";
 import { RealTimeProductStats } from "@/components/RealTimeProductStats";
 import { PreorderVotingExplainer } from "@/components/PreorderVotingExplainer";
-import { InvestorTrackPrompt } from "@/components/InvestorTrackPrompt";
+import { BackerTrackPrompt } from "@/components/InvestorTrackPrompt";
 
 interface Product {
   id: string;
@@ -48,12 +48,12 @@ export default function ProductDetail() {
   const [credits, setCredits] = useState<any>(null);
   const [votes, setVotes] = useState<{ [key: string]: string }>({});
   const [timeCommitments, setTimeCommitments] = useState<{ [key: string]: number }>({});
-  const [equityRatios, setEquityRatios] = useState<{ [key: string]: { equity: number; cash: number } }>({});
+  const [participationRatios, setParticipationRatios] = useState<{ [key: string]: { participation: number; cash: number } }>({});
   const [votingConfig, setVotingConfig] = useState<any>(null);
   const [projectSlug, setProjectSlug] = useState<string>('');
   const [showExplainer, setShowExplainer] = useState(false);
   const [explainerUnderstood, setExplainerUnderstood] = useState(false);
-  const [investorTrack, setInvestorTrack] = useState<'product_only' | 'investor' | null>(null);
+  const [backerTrack, setBackerTrack] = useState<'product_only' | 'backer' | null>(null);
 
   const commitmentOptions = votingConfig?.time_commitment_options || [
     { days: 7, label: '1 Week' },
@@ -80,7 +80,7 @@ export default function ProductDetail() {
       .maybeSingle();
     
     if (data?.marketplace_investor_track) {
-      setInvestorTrack(data.marketplace_investor_track as 'product_only' | 'investor');
+      setBackerTrack(data.marketplace_investor_track as 'product_only' | 'backer');
     }
     
     // Check if user has seen explainer
@@ -94,7 +94,7 @@ export default function ProductDetail() {
     setExplainerUnderstood(!!hasVoted.data);
   };
 
-  const handleTrackSelection = async (track: 'product_only' | 'investor') => {
+  const handleTrackSelection = async (track: 'product_only' | 'backer') => {
     if (!user) return;
     
     await supabase
@@ -104,8 +104,8 @@ export default function ProductDetail() {
         marketplace_investor_track: track
       });
     
-    setInvestorTrack(track);
-    toast.success(`Switched to ${track === 'investor' ? 'Investor' : 'Product-Only'} Track`);
+    setBackerTrack(track);
+    toast.success(`Switched to ${track === 'backer' ? 'Backer' : 'Product-Only'} Track`);
   };
 
   useEffect(() => {
@@ -113,14 +113,14 @@ export default function ProductDetail() {
 
     Object.entries(timeCommitments).forEach(([levelId, days]) => {
       const ratioFactor = Math.min(1.0, Math.max(0.0, days / votingConfig.product_lead_time_days));
-      const minEquity = Number(votingConfig.min_equity_ratio);
-      const maxEquity = Number(votingConfig.max_equity_ratio);
-      const equity = minEquity + (ratioFactor * (maxEquity - minEquity));
-      const cash = 1 - equity;
-      
-      setEquityRatios(prev => ({
+      const minParticipation = Number(votingConfig.min_equity_ratio);
+      const maxParticipation = Number(votingConfig.max_equity_ratio);
+      const participation = minParticipation + (ratioFactor * (maxParticipation - minParticipation));
+      const cash = 1 - participation;
+
+      setParticipationRatios(prev => ({
         ...prev,
-        [levelId]: { equity, cash }
+        [levelId]: { participation, cash }
       }));
     });
   }, [timeCommitments, votingConfig]);
@@ -233,7 +233,7 @@ export default function ProductDetail() {
     }
 
     // Prompt for track selection if not set
-    if (!investorTrack) {
+    if (!backerTrack) {
       toast.error('Please select your marketplace track first');
       return;
     }
@@ -256,7 +256,7 @@ export default function ProductDetail() {
       return;
     }
 
-    const ratios = equityRatios[levelId];
+    const ratios = participationRatios[levelId];
     if (!ratios) {
       toast.error('Unable to calculate ratios');
       return;
@@ -274,7 +274,7 @@ export default function ProductDetail() {
         source: 'initial_credit',
         time_commitment_days: timeCommitmentDays,
         commitment_deadline: commitmentDeadline.toISOString(),
-        equity_ratio: ratios.equity,
+        equity_ratio: ratios.participation,
         cash_ratio: ratios.cash,
         status: 'active'
       });
@@ -283,7 +283,7 @@ export default function ProductDetail() {
       console.error('Error submitting vote:', error);
       toast.error('Failed to submit vote');
     } else {
-      toast.success(`Vote submitted! ${(ratios.equity * 100).toFixed(0)}% equity, ${(ratios.cash * 100).toFixed(0)}% cash`);
+      toast.success(`Vote submitted! ${(ratios.participation * 100).toFixed(0)}% participation, ${(ratios.cash * 100).toFixed(0)}% cash`);
       setVotes(prev => ({ ...prev, [levelId]: '' }));
       setTimeCommitments(prev => ({ ...prev, [levelId]: undefined as any }));
       loadProductData();
@@ -321,8 +321,8 @@ export default function ProductDetail() {
       </header>
 
       <main className="container mx-auto px-4 py-8 space-y-8">
-        {/* Investor Track Selection */}
-        {user && <InvestorTrackPrompt onSelectTrack={handleTrackSelection} currentTrack={investorTrack || undefined} />}
+        {/* Backer Track Selection */}
+        {user && <BackerTrackPrompt onSelectTrack={handleTrackSelection} currentTrack={backerTrack || undefined} />}
         
         {/* Product Details */}
         <div className="grid gap-8 md:grid-cols-2">
@@ -382,7 +382,7 @@ export default function ProductDetail() {
             {product.productionLevels.map((level) => {
               const displayUnits = level.level_number === 1 ? 5 : level.units_count;
               const displayPrice = level.level_number === 1 ? 1000.00 : Number(level.unit_price);
-              const currentRatios = equityRatios[level.id];
+              const currentRatios = participationRatios[level.id];
               const selectedCommitment = timeCommitments[level.id];
               
               return (
@@ -429,7 +429,7 @@ export default function ProductDetail() {
                     </Select>
                   </div>
 
-                  {/* Equity/Cash Ratio Display */}
+                  {/* Participation/Cash Ratio Display */}
                   {currentRatios && (
                     <div className="p-3 bg-muted/50 rounded-lg space-y-2">
                       <div className="flex items-center gap-2 text-sm font-medium">
@@ -438,9 +438,9 @@ export default function ProductDetail() {
                       </div>
                       <div className="grid grid-cols-2 gap-3 text-sm">
                         <div className="space-y-1">
-                          <div className="text-muted-foreground">Equity</div>
+                          <div className="text-muted-foreground">Participation</div>
                           <div className="text-lg font-bold text-primary">
-                            {(currentRatios.equity * 100).toFixed(0)}%
+                            {(currentRatios.participation * 100).toFixed(0)}%
                           </div>
                         </div>
                         <div className="space-y-1">
@@ -451,7 +451,7 @@ export default function ProductDetail() {
                         </div>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Longer commitment = more equity. If goal isn't met by deadline, votes revert to your account.
+                        Longer commitment = more participation. If goal isn't met by deadline, votes revert to your account.
                       </p>
                     </div>
                   )}

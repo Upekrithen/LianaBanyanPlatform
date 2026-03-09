@@ -422,7 +422,7 @@ function calculateEstimatedValue(progress: GhostProgress): string {
   if (value < 50) return 'Just getting started';
   if (value < 100) return 'Building momentum';
   if (value < 250) return 'Significant progress';
-  if (value < 500) return 'Substantial investment';
+  if (value < 500) return 'Substantial commitment';
   return 'Major commitment';
 }
 

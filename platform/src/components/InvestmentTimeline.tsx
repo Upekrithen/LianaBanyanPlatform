@@ -16,7 +16,7 @@ interface TimelineEvent {
   description: string;
 }
 
-export function InvestmentTimeline() {
+export function ContributionTimeline() {
   const { user } = useAuth();
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,7 +119,7 @@ export function InvestmentTimeline() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Investment Timeline</CardTitle>
+          <CardTitle>Contribution Timeline</CardTitle>
           <CardDescription>Loading your activity history...</CardDescription>
         </CardHeader>
       </Card>
@@ -129,7 +129,7 @@ export function InvestmentTimeline() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Investment Timeline</CardTitle>
+        <CardTitle>Contribution Timeline</CardTitle>
         <CardDescription>Your recent activity across all projects</CardDescription>
       </CardHeader>
       <CardContent>
@@ -164,3 +164,6 @@ export function InvestmentTimeline() {
     </Card>
   );
 }
+
+// Backward-compatible alias
+export const InvestmentTimeline = ContributionTimeline;

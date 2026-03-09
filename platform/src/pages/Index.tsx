@@ -689,7 +689,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     '/ghost': {
       icon: '👻',
       title: 'Free Explore',
-      description: 'Explore the platform as a Guest (Ghost) without logging in. Browse initiatives, see how things work, and discover what member-ownership looks like — no commitment required.',
+      description: 'Explore the platform as a Guest (Ghost) without logging in. Browse initiatives, see how things work, and discover what membership participation looks like — no commitment required.',
     },
     '/durins-door': {
       icon: '🪞',
@@ -2779,7 +2779,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     <>
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🤝 Member-Owned Cooperative</h4>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        For <strong>$5/year</strong>, you become a member-owner with real ownership rights:
+                        For <strong>$5/year</strong>, you become a member-participant with real membership rights:
                       </p>
                       <ul style={{ fontSize: '1rem', lineHeight: 1.8, margin: 0, paddingLeft: '1.5rem' }}>
                         <li><strong>Vote</strong> on platform decisions and elect representatives</li>
@@ -2788,7 +2788,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         <li><strong>Access</strong> wholesale pricing on everything</li>
                       </ul>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, marginTop: 'auto' }}>
-                        This isn't a subscription — it's ownership. The people most affected by decisions help make them.
+                        This isn't a subscription — it's membership participation. The people most affected by decisions help make them.
                       </p>
                     </>
                   )}
@@ -2819,7 +2819,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     >
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🌿 16 Charitable Initiatives</h4>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        Our 20% margin doesn't go to shareholders — it funds <strong>infrastructure for everyone</strong>:
+                        Our 20% margin doesn't go to extraction — it funds <strong>infrastructure for everyone</strong>:
                       </p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                         {initiativesList.map((init) => {
@@ -3213,7 +3213,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       </div>
                       <div className="path-back">
                         <h3>Plant Seeds</h3>
-                        <p>Back projects early and receive <strong>5× the Joules</strong>. Multipliers stack up to 15x. Fractional IP ownership when you sponsor. Help others = own something real.</p>
+                        <p>Back projects early and receive <strong>5× the Joules</strong>. Multipliers stack up to 15x. Fractional IP participation when you sponsor. Help others = participate in something real.</p>
                         <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/plant-seeds'); }}>
                           Start Planting
                         </button>

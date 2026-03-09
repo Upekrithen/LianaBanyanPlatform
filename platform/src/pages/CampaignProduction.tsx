@@ -138,7 +138,7 @@ export default function CampaignProduction() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle>LB System Analysis: Wave Pricing, HexIsle & IP Equity</CardTitle>
+                      <CardTitle>LB System Analysis: Wave Pricing, HexIsle & IP Participation</CardTitle>
                       <CardDescription>Comprehensive analysis of the integrated platform architecture</CardDescription>
                     </div>
                     <div className="flex gap-2">
@@ -196,7 +196,7 @@ export default function CampaignProduction() {
                     <div className="space-y-2">
                       <p><strong>Pros:</strong></p>
                       <ul className="list-disc list-inside space-y-1 ml-4">
-                        <li><strong>Non-Dilutive Funding:</strong> "Impatience tax" funds growth without selling equity</li>
+                        <li><strong>Non-Dilutive Funding:</strong> "Impatience tax" funds growth without selling participation</li>
                         <li><strong>Market Efficiency:</strong> Prices signal and manage demand automatically</li>
                         <li><strong>Network Effects:</strong> More nodes → more capacity → faster delivery → more demand</li>
                         <li><strong>Risk Management:</strong> Graduated pricing tests market before full commitment</li>
@@ -252,20 +252,20 @@ export default function CampaignProduction() {
                   </div>
 
                   <div className="space-y-4 border-t pt-6">
-                    <h2 className="text-2xl font-bold">IP Equity + Common Currency (Grade: B+)</h2>
+                    <h2 className="text-2xl font-bold">IP Participation + Common Currency (Grade: B+)</h2>
                     
                     <h3 className="text-xl font-semibold">Brilliant Aspects</h3>
                     <div className="space-y-2">
                       <p><strong>Universal Unit:</strong></p>
                       <ul className="list-disc list-inside space-y-1 ml-4">
-                        <li>Credits work for purchases, contracts, wages, and equity</li>
+                        <li>Credits work for purchases, contracts, wages, and participation</li>
                         <li>Reduces friction in multi-party transactions</li>
                         <li>Creates internal economy with real value backing</li>
                       </ul>
-                      <p><strong>Contribution-Based Equity:</strong></p>
+                      <p><strong>Contribution-Based Participation:</strong></p>
                       <ul className="list-disc list-inside space-y-1 ml-4">
-                        <li>IP shares distributed via credits earned on projects</li>
-                        <li>Aligns incentives - work quality = equity ownership</li>
+                        <li>IP service units distributed via credits earned on projects</li>
+                        <li>Aligns incentives - work quality = participation allocation</li>
                         <li>Transparent, auditable contribution tracking</li>
                       </ul>
                     </div>
@@ -285,7 +285,7 @@ export default function CampaignProduction() {
                       <p><strong>Tax Complexity:</strong></p>
                       <ul className="list-disc list-inside space-y-1 ml-4">
                         <li>Are credits income when earned? When converted? When withdrawn?</li>
-                        <li>IP equity creates phantom income on paper gains</li>
+                        <li>IP participation creates phantom income on paper gains</li>
                         <li><strong>CRITICAL:</strong> Needs legal review before launch</li>
                       </ul>
                     </div>
@@ -300,7 +300,7 @@ export default function CampaignProduction() {
                         <li><strong>Node Expansion:</strong> More capacity = more work opportunities for members</li>
                         <li><strong>HexIsle Skills:</strong> Workers gain verified skills through real project work</li>
                         <li><strong>Guild Formation:</strong> Skilled teams form to take on bigger projects</li>
-                        <li><strong>Project Success:</strong> Quality work earns credits + IP equity</li>
+                        <li><strong>Project Success:</strong> Quality work earns credits + IP participation</li>
                         <li><strong>Credit Economy:</strong> Members reinvest credits in platform, creating demand</li>
                         <li><strong>More Production:</strong> Higher demand → more waves → more nodes → repeat</li>
                       </ol>
@@ -315,7 +315,7 @@ export default function CampaignProduction() {
                       <ul className="list-disc list-inside space-y-1 ml-4">
                         <li><strong>Simplicity in Onboarding:</strong> Start users with ONE clear path</li>
                         <li><strong>Transparent Accounting:</strong> Members must see exactly where value flows</li>
-                        <li><strong>Legal Soundness:</strong> Credits + equity structure must survive regulatory scrutiny</li>
+                        <li><strong>Legal Soundness:</strong> Credits + participation structure must survive regulatory scrutiny</li>
                         <li><strong>Community Trust:</strong> Early adopters become evangelists if treated fairly</li>
                       </ul>
                       <p><strong>Phase Implementation:</strong></p>
@@ -323,7 +323,7 @@ export default function CampaignProduction() {
                         <li><strong>Phase 1:</strong> Launch wave system only - prove pricing model</li>
                         <li><strong>Phase 2:</strong> Add HexIsle casual mode - build engagement</li>
                         <li><strong>Phase 3:</strong> Connect HexIsle to projects - verify real stakes</li>
-                        <li><strong>Phase 4:</strong> Full IP equity integration - mature economy</li>
+                        <li><strong>Phase 4:</strong> Full IP participation integration - mature economy</li>
                       </ol>
                     </div>
                   </div>
@@ -333,7 +333,7 @@ export default function CampaignProduction() {
                     <p className="text-lg">
                       This is an <strong>ambitious, potentially revolutionary system</strong> that could genuinely create 
                       a fairer alternative to traditional venture-backed startups. The integration of pricing mechanism, 
-                      skill development, and equity distribution is theoretically sound.
+                      skill development, and participation distribution is theoretically sound.
                     </p>
                     <p className="text-lg">
                       <strong>However</strong>, the complexity is the biggest enemy. Success requires ruthless simplification, 
@@ -377,13 +377,13 @@ export default function CampaignProduction() {
                     <h2 className="text-2xl font-bold border-b pb-2">Part I: Foundational Strategic Wins</h2>
                     
                     <div className="space-y-4">
-                      <h3 className="text-xl font-semibold">1. Self-Funding Guild Investment Model</h3>
+                      <h3 className="text-xl font-semibold">1. Self-Funding Guild Contribution Model</h3>
                       <p className="text-sm font-medium text-primary">Economic Principle: Reverse Risk Pool</p>
                       <ul className="list-disc list-inside space-y-1 ml-4">
                         <li>Guild stake payments ($500 → $67,500 progressive) create perpetually solvent fund</li>
-                        <li>Stakes are non-refundable but grant voting equity in LB governance</li>
+                        <li>Stakes are non-refundable but grant voting participation in LB governance</li>
                         <li><strong>Zero external debt required</strong> - no VC dilution, no interest payments</li>
-                        <li>Members literally invested (skin in the game) creating accountability</li>
+                        <li>Members literally committed (skin in the game) creating accountability</li>
                       </ul>
                       <p className="text-sm italic text-muted-foreground mt-2">Competitive Moat: Traditional platforms extract 20% fees forever. LB members pay once, own forever.</p>
                     </div>
@@ -394,7 +394,7 @@ export default function CampaignProduction() {
                       <ul className="list-disc list-inside space-y-1 ml-4">
                         <li>"Impatience tax" from Wave 1 buyers funds Wave 2-7 production capacity</li>
                         <li>No all-or-nothing cliff risk (unlike Kickstarter)</li>
-                        <li>Each wave self-funds the next without diluting equity</li>
+                        <li>Each wave self-funds the next without diluting participation</li>
                         <li>Surge pricing optimizes capacity utilization</li>
                         <li>Buyers self-select into willingness-to-pay tiers</li>
                       </ul>
@@ -449,8 +449,8 @@ export default function CampaignProduction() {
                       <h3 className="text-xl font-semibold">7. Credit Economy as Universal Currency</h3>
                       <p className="text-sm font-medium text-primary">Economic Principle: Medium of Exchange + Unit of Account + Store of Value</p>
                       <ul className="list-disc list-inside space-y-1 ml-4">
-                        <li>Credits serve as wages, equity, and marketplace tender simultaneously</li>
-                        <li>EOI (Equity of Interest) vesting converts future equity into immediate liquidity</li>
+                        <li>Credits serve as wages, participation, and marketplace tender simultaneously</li>
+                        <li>EOI (Expression of Interest) vesting converts future participation into immediate liquidity</li>
                         <li>Withdrawal fees (5-15%) encourage reinvestment</li>
                         <li>Volume discount integration ties credits to production pricing</li>
                       </ul>
@@ -503,7 +503,7 @@ export default function CampaignProduction() {
                           <li><strong>Member maintains</strong> Etsy storefront for existing audience</li>
                           <li><strong>LB handles</strong> production runs, IP tracking, medallion creation</li>
                           <li><strong>Badge implementation:</strong> "Powered by Liana Banyan" with QR code</li>
-                          <li><strong>Referral tracking:</strong> Scans tracked for equity sharing</li>
+                          <li><strong>Referral tracking:</strong> Scans tracked for participation sharing</li>
                         </ul>
 
                         <h4 className="font-semibold mt-4">Model 2: Manufacturing Service Integration</h4>
@@ -518,7 +518,7 @@ export default function CampaignProduction() {
                         <ul className="list-disc list-inside space-y-1 ml-4 text-sm">
                           <li><strong>CNC Kitchen, TeachingTech:</strong> Educational content creators</li>
                           <li><strong>Lead generation:</strong> Tutorial viewers → LB project creators</li>
-                          <li><strong>Affiliate structure:</strong> Equity-based vs. discount codes</li>
+                          <li><strong>Affiliate structure:</strong> Participation-based vs. discount codes</li>
                           <li><strong>Metric tracking:</strong> Click-throughs, signups, project launches</li>
                         </ul>
                       </div>
@@ -530,7 +530,7 @@ export default function CampaignProduction() {
                         <li><strong>Network expansion:</strong> External platforms become acquisition channels</li>
                         <li><strong>Risk distribution:</strong> Members not locked into single platform</li>
                         <li><strong>IP protection:</strong> LB medallions provide provenance regardless of sales channel</li>
-                        <li><strong>Equity alignment:</strong> Partners earn based on actual conversions</li>
+                        <li><strong>Participation alignment:</strong> Partners earn based on actual conversions</li>
                       </ul>
                     </div>
 
@@ -539,7 +539,7 @@ export default function CampaignProduction() {
                       <p className="text-lg">
                         Liana Banyan is designed to <strong>coexist with</strong> rather than compete against existing platforms. 
                         External services become complementary channels that expand our reach while maintaining our core value 
-                        propositions: IP tracking, production coordination, and member equity.
+                        propositions: IP tracking, production coordination, and member participation.
                       </p>
                       <p className="text-lg mt-2">
                         <strong>Key insight:</strong> We don't need to own the entire value chain. We own the IP ledger, 
@@ -627,7 +627,7 @@ export default function CampaignProduction() {
                               <p><strong>Node Structure:</strong></p>
                               <ul className="list-disc list-inside space-y-1 ml-4">
                                 <li>Nodes owned and operated by LB (equipment, IP, processes)</li>
-                                <li>Project Owners receive shares in Nodes</li>
+                                <li>Project Owners receive service units in Nodes</li>
                                 <li>Value retained in equipment, process, IP, and contracts</li>
                               </ul>
                               <p><strong>Position Framework:</strong></p>
@@ -650,7 +650,7 @@ export default function CampaignProduction() {
                               <ul className="list-disc list-inside space-y-1 ml-4">
                                 <li><strong>Skill Progression:</strong> The tide metaphor perfectly maps to skill development stages - resistance, adaptation, participation, creation</li>
                                 <li><strong>Real Stakes, Safe Environment:</strong> Players gain genuine leadership experience without the catastrophic risk of real-world failure</li>
-                                <li><strong>Asset-Based Value:</strong> Anchoring investment in tangible IP/equipment rather than abstract equity creates more stable value</li>
+                                <li><strong>Asset-Based Value:</strong> Anchoring contribution in tangible IP/equipment rather than abstract participation creates more stable value</li>
                                 <li><strong>Scalable Training:</strong> 7 positions per role creates natural cohorts for peer learning and healthy competition</li>
                                 <li><strong>Team Necessity:</strong> The "Island to Somewhere Else" premise inherently requires collaboration - you can't build a boat alone</li>
                               </ul>
@@ -660,7 +660,7 @@ export default function CampaignProduction() {
                               <p className="font-medium mb-2">Key Design Considerations:</p>
                               <ul className="list-disc list-inside space-y-1 ml-4">
                                 <li><strong>Success Criteria:</strong> What specific metrics determine when someone graduates from "equivalent" to actual C-suite? (Projects completed? Revenue generated? Team satisfaction scores?)</li>
-                                <li><strong>Node Allocation:</strong> How do Project Owners earn/purchase Node shares? Is it merit-based, investment-based, or hybrid?</li>
+                                <li><strong>Node Allocation:</strong> How do Project Owners earn/purchase Node service units? Is it merit-based, contribution-based, or hybrid?</li>
                                 <li><strong>Failure Modes:</strong> What happens when someone "fights the tide" too long? Is there a graceful off-ramp or support system?</li>
                                 <li><strong>Cross-Node Learning:</strong> Can CFO-equivalents across different Nodes share insights? This could accelerate the collective learning curve</li>
                                 <li><strong>Progression Pacing:</strong> How long should each "tide stage" typically last? Too fast = shallow learning, too slow = frustration</li>

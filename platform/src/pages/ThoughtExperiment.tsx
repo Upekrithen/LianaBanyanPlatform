@@ -255,7 +255,7 @@ export default function ThoughtExperiment() {
                 // Could open a modal with full details
                 toast({
                   title: sim.scenario.name || sim.scenario.initiativeName,
-                  description: `Net score: ${(sim.projections.netScore * 100).toFixed(0)}% | Monthly profit: $${sim.projections.monthlyProfit.toFixed(0)}`,
+                  description: `Net score: ${(sim.projections.netScore * 100).toFixed(0)}% | Monthly revenue: $${sim.projections.monthlyProfit.toFixed(0)}`,
                 });
               }}
               onAdopt={(sim) => handleAdopt(sim.scenario)}

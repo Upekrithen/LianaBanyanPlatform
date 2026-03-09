@@ -19,9 +19,9 @@ const benefitCategories = [
   },
   {
     title: "EOI Vesting",
-    description: "Expression of Interest conversion to equity",
+    description: "Expression of Interest conversion to participation",
     icon: <TrendingUp className="h-8 w-8" />,
-    details: ["1% daily conversion", "Customizable schedules", "Project-based equity"]
+    details: ["1% daily conversion", "Customizable schedules", "Project-based participation"]
   },
   {
     title: "Medallion Rewards",

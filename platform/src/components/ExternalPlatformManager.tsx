@@ -301,7 +301,7 @@ export function ExternalPlatformManager({ projectId }: ExternalPlatformManagerPr
         </CardHeader>
         <CardContent className="text-sm space-y-2">
           <p><strong>Etsy =</strong> Retail channel (individual sales at retail pricing)</p>
-          <p><strong>LB =</strong> Production engine (wave-based runs, IP tracking, equity participation)</p>
+          <p><strong>LB =</strong> Production engine (wave-based runs, IP tracking, service participation)</p>
           <p className="text-xs text-muted-foreground mt-3">
             Add "Powered by Liana Banyan" badge to your Etsy listings with QR code linking back here for bulk orders.
             LB handles manufacturing, Etsy handles retail. Best of both worlds!

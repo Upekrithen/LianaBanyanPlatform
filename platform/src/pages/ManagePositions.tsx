@@ -356,7 +356,7 @@ export default function ManagePositions() {
 
                 {(formData.compensation_type === 'equity' || formData.compensation_type === 'mixed') && (
                   <div className="space-y-2">
-                    <Label>Equity Percentage: {formData.equity_percentage}%</Label>
+                    <Label>Participation Percentage: {formData.equity_percentage}%</Label>
                     <Slider
                       value={[formData.equity_percentage]}
                       onValueChange={([value]) => setFormData({ ...formData, equity_percentage: value })}
@@ -456,7 +456,7 @@ export default function ManagePositions() {
                       <TableCell>
                         <div className="text-sm">
                           {position.equity_percentage > 0 && (
-                            <div>{position.equity_percentage}% equity</div>
+                            <div>{position.equity_percentage}% participation</div>
                           )}
                           {position.cash_amount > 0 && (
                             <div>${position.cash_amount}</div>

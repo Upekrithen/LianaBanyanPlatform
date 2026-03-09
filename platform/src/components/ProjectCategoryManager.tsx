@@ -158,7 +158,7 @@ export const ProjectCategoryManager = ({ projectId }: ProjectCategoryManagerProp
               placeholder="e.g., Software Development, Manufacturing, Marketing"
             />
             <p className="text-xs text-muted-foreground mt-1">
-              Similar projects in this category will share aggregate cost/profit data
+              Similar projects in this category will share aggregate cost/margin data
             </p>
           </div>
 
@@ -210,7 +210,7 @@ export const ProjectCategoryManager = ({ projectId }: ProjectCategoryManagerProp
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Avg Position Profit</p>
+                <p className="text-sm text-muted-foreground">Avg Position Margin</p>
                 <p className="text-2xl font-bold">
                   ${aggregateData.avg_position_profit?.toFixed(2) || '0.00'}
                 </p>
@@ -230,7 +230,7 @@ export const ProjectCategoryManager = ({ projectId }: ProjectCategoryManagerProp
             </div>
 
             <div className="mt-4 p-4 bg-muted rounded-lg">
-              <h4 className="font-medium mb-2">Cost/Profit Ranges</h4>
+              <h4 className="font-medium mb-2">Cost/Margin Ranges</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-muted-foreground">Cost Range:</span>
@@ -239,7 +239,7 @@ export const ProjectCategoryManager = ({ projectId }: ProjectCategoryManagerProp
                   </p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Profit Range:</span>
+                  <span className="text-muted-foreground">Margin Range:</span>
                   <p className="font-medium">
                     ${aggregateData.min_profit?.toFixed(2)} - ${aggregateData.max_profit?.toFixed(2)}
                   </p>

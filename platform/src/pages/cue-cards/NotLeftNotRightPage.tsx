@@ -64,16 +64,16 @@ const NotLeftNotRightPage = () => {
             <p>That's it. That's the core.</p>
             <p>On a $500 sale, the creator receives $416.67. The platform takes Cost + 20%. The margin is fixed in the operating agreement — it literally cannot increase.</p>
             <p>Our commercial portals (<code>lianabanyan.com</code>, <code>.biz</code>, <code>.net</code>, and <code>the2ndsecond.com</code>) generate revenue. That revenue permanently funds charitable initiatives focused on food security, healthcare access, education, financial inclusion, crisis response, and intergenerational connection.</p>
-            <p>Ownership is distributed through verified participation and contribution. Everyone who contributes earns a position and share in the system proportional to their work.</p>
+            <p>Participation is distributed through verified contribution. Everyone who contributes earns a position and allocation in the system proportional to their work.</p>
             <p>Is that liberal? Is that conservative?</p>
             <p>It's neither. It's just... sensible.</p>
 
             <h3 className="text-2xl font-bold text-white mt-12 mb-6">Why People Keep Missing It</h3>
             <ul className="space-y-4 list-none pl-0">
-              <li className="flex gap-3"><Shield className="w-6 h-6 text-emerald-500 shrink-0" /> <span>When I explain the cooperative ownership model, some people hear "socialism" and tune out.</span></li>
+              <li className="flex gap-3"><Shield className="w-6 h-6 text-emerald-500 shrink-0" /> <span>When I explain the cooperative participation model, some people hear "socialism" and tune out.</span></li>
               <li className="flex gap-3"><Shield className="w-6 h-6 text-emerald-500 shrink-0" /> <span>When I explain the fixed margins and business incubator, some people hear "capitalism" and tune out.</span></li>
               <li className="flex gap-3"><Shield className="w-6 h-6 text-emerald-500 shrink-0" /> <span>When I explain the charitable initiatives, some people hear "welfare" and tune out.</span></li>
-              <li className="flex gap-3"><Shield className="w-6 h-6 text-emerald-500 shrink-0" /> <span>When I explain the individual ownership and earned share, some people hear "libertarian fantasy" and tune out.</span></li>
+              <li className="flex gap-3"><Shield className="w-6 h-6 text-emerald-500 shrink-0" /> <span>When I explain the individual participation and earned allocation, some people hear "libertarian fantasy" and tune out.</span></li>
             </ul>
             <p className="mt-6 font-medium text-emerald-300">Everyone's so ready to reject ideas from the "other side" that they can't see something that doesn't have a side.</p>
 
@@ -82,7 +82,7 @@ const NotLeftNotRightPage = () => {
             <ul className="space-y-2">
               <li><strong>People should keep most of what they earn.</strong> On this platform, they keep 83.3%.</li>
               <li><strong>Charity should be sustainable.</strong> Our charitable initiatives are permanently funded through commerce, not donations.</li>
-              <li><strong>Ownership should be distributed.</strong> Everyone who contributes earns a stake.</li>
+              <li><strong>Participation should be distributed.</strong> Everyone who contributes earns a stake.</li>
               <li><strong>Rules should be clear and fixed.</strong> The margin is locked. No bait‑and‑switch.</li>
               <li><strong>Opportunity should be accessible.</strong> $5/year gets you in as a member; everything else is earned through participation.</li>
               <li><strong>Competition is healthy.</strong> We compete on quality, not margin manipulation.</li>

@@ -35,7 +35,7 @@ const PeerContracts = () => {
             <ul className="text-sm space-y-1 ml-4 list-disc text-muted-foreground">
               <li>Propose contracts directly to other members</li>
               <li>No administrator approval required</li>
-              <li>Choose equity, cash, or hybrid compensation</li>
+              <li>Choose participation, cash, or hybrid compensation</li>
               <li>Set deliverables and time commitments</li>
               <li>Accept, reject, or negotiate terms</li>
               <li>Scale your collaborations independently</li>

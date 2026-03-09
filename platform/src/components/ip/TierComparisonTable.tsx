@@ -21,13 +21,13 @@ export function TierComparisonTable() {
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="font-medium">Creator Equity</TableCell>
+                <TableCell className="font-medium">Creator Participation</TableCell>
                 <TableCell>49%</TableCell>
                 <TableCell>60%</TableCell>
                 <TableCell>75%</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className="font-medium">LB Equity</TableCell>
+                <TableCell className="font-medium">LB Participation</TableCell>
                 <TableCell>51%</TableCell>
                 <TableCell>40%</TableCell>
                 <TableCell>25%</TableCell>
@@ -168,7 +168,7 @@ export function TierComparisonTable() {
             </div>
           </div>
           <p className="text-xs text-muted-foreground mt-3">
-            Note: Higher utilization often means more absolute dollars despite lower equity percentage
+            Note: Higher utilization often means more absolute dollars despite lower participation percentage
           </p>
         </div>
       </CardContent>

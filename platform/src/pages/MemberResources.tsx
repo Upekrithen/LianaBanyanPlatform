@@ -182,7 +182,7 @@ export default function MemberResources() {
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold">Open Service Positions</h2>
             <p className="text-muted-foreground">
-              Join Liana Banyan as a service provider or agent. All positions offer equity, credits, or hybrid compensation.
+              Join Liana Banyan as a service provider or agent. All positions offer participation, credits, or hybrid compensation.
             </p>
           </div>
 

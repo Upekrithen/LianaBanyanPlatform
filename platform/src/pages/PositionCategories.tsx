@@ -89,7 +89,7 @@ const positionCategories: PositionCategory[] = [
   },
   {
     id: 'steward_owner',
-    name: 'Stewardship & Ownership',
+    name: 'Stewardship & Governance',
     description: 'Project governance and oversight',
     icon: Shield,
     typicalRoles: ['Project Steward', 'Product Owner', 'Executive'],
@@ -193,14 +193,14 @@ export default function PositionCategories() {
           <CardTitle>LB Internal Hiring</CardTitle>
           <CardDescription>
             Liana Banyan uses this same system to hire agents for our internal operations. When you create a position in any category,
-            qualified members can apply and be assigned contracts based on equity/cash/time commitment preferences.
+            qualified members can apply and be assigned contracts based on participation/cash/time commitment preferences.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2 text-sm">
             <div><strong>For LB Operations:</strong> We need positions like CPA, CFO, Legal Counsel, etc.</div>
             <div><strong>For Projects:</strong> Project owners create positions specific to their product needs</div>
-            <div><strong>Compensation:</strong> All positions use the configurable equity/cash/time model with reputation-based vetting</div>
+            <div><strong>Compensation:</strong> All positions use the configurable participation/cash/time model with reputation-based vetting</div>
             <div className="pt-2">
               <Button variant="outline" size="sm" onClick={() => navigate('/lb-positions')}>
                 View LB Internal Positions
@@ -279,9 +279,9 @@ export default function PositionCategories() {
         <CardContent>
           <ul className="space-y-2 text-sm">
             <li>✅ <strong>Category:</strong> One of the 15 categories above</li>
-            <li>✅ <strong>Compensation Type:</strong> Equity-based, cash-based, or hybrid</li>
+            <li>✅ <strong>Compensation Type:</strong> Participation-based, cash-based, or hybrid</li>
             <li>✅ <strong>Requirements:</strong> Skills, reputation score, guild membership</li>
-            <li>✅ <strong>Time Commitment:</strong> Options with equity/cash ratios</li>
+            <li>✅ <strong>Time Commitment:</strong> Options with participation/cash ratios</li>
             <li>✅ <strong>Lifecycle Stage:</strong> Required project stage (optional)</li>
           </ul>
           <Button className="mt-4" onClick={() => navigate('/manage-positions')}>

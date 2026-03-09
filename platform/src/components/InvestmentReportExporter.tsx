@@ -7,7 +7,7 @@ import { Download, FileText, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import jsPDF from 'jspdf';
 
-export function InvestmentReportExporter() {
+export function ContributionReportExporter() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [exporting, setExporting] = useState(false);
@@ -17,7 +17,7 @@ export function InvestmentReportExporter() {
     
     setExporting(true);
     try {
-      // Fetch all investment data
+      // Fetch all contribution data
       const [votesRes, creditsRes, vestingRes] = await Promise.all([
         supabase
           .from('user_votes')
@@ -49,7 +49,7 @@ export function InvestmentReportExporter() {
 
       // Title
       doc.setFontSize(20);
-      doc.text('Investment Report', 20, yPos);
+      doc.text('Contribution Report', 20, yPos);
       yPos += 10;
 
       doc.setFontSize(10);
@@ -124,11 +124,11 @@ export function InvestmentReportExporter() {
       }
 
       // Save PDF
-      doc.save(`investment-report-${new Date().toISOString().split('T')[0]}.pdf`);
+      doc.save(`contribution-report-${new Date().toISOString().split('T')[0]}.pdf`);
 
       toast({
         title: "Report exported",
-        description: "Your investment report has been downloaded",
+        description: "Your contribution report has been downloaded",
       });
     } catch (error) {
       console.error('Export error:', error);
@@ -147,9 +147,9 @@ export function InvestmentReportExporter() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5" />
-          <CardTitle>Investment Reports</CardTitle>
+          <CardTitle>Contribution Reports</CardTitle>
         </div>
-        <CardDescription>Export your complete investment history</CardDescription>
+        <CardDescription>Export your complete contribution history</CardDescription>
       </CardHeader>
       <CardContent>
         <Button onClick={exportToPDF} disabled={exporting} className="w-full">
@@ -172,3 +172,6 @@ export function InvestmentReportExporter() {
     </Card>
   );
 }
+
+/** @deprecated Use ContributionReportExporter instead */
+export const InvestmentReportExporter = ContributionReportExporter;

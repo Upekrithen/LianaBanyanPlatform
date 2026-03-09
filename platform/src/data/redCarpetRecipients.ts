@@ -98,7 +98,7 @@ const INITIATIVES: Record<string, RecipientInitiative> = {
   },
   JUKEBOX: {
     name: "JukeBox",
-    tagline: "Music ownership returned to artists",
+    tagline: "Music rights returned to artists",
     description:
       "A music platform where artists keep 83.3% of every stream, sale, and license. No opaque algorithms. No payola. Just musicians earning what they create.",
   },
@@ -226,7 +226,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "CEO of Inclusiv, national credit union network leader",
     purpose: "Crown: Lender Mentor of VSL",
     whyYou:
-      "You lead a network of credit unions serving 50 million people. VSL is peer-to-peer lending powered by cooperative economics — the credit union model taken to its logical conclusion. Community members invest in each other with transparent, non-extractive terms. Your expertise makes this real.",
+      "You lead a network of credit unions serving 50 million people. VSL is peer-to-peer lending powered by cooperative economics — the credit union model taken to its logical conclusion. Community members back each other with transparent, non-extractive terms. Your expertise makes this real.",
     category: "crown",
     categoryLabel: "Crown Leadership",
     crownTitle: "Lender Mentor",
@@ -253,10 +253,10 @@ export const RECIPIENTS: Recipient[] = [
   {
     id: "taylor-swift",
     name: "Taylor Swift",
-    bio: "Artist who fought for creator ownership, masters battle icon",
+    bio: "Artist who fought for creator rights, masters battle icon",
     purpose: "Crown: Maestro Mentor of JukeBox",
     whyYou:
-      "You fought for your masters when the industry said artists don't own their work. You re-recorded entire albums to prove a point. JukeBox is a music platform where artists keep 83.3% of every stream, sale, and license — and that number is constitutionally locked. No one can ever change it. You fought for ownership. We built it into the DNA.",
+      "You fought for your masters when the industry said artists don't control their work. You re-recorded entire albums to prove a point. JukeBox is a music platform where artists keep 83.3% of every stream, sale, and license — and that number is constitutionally locked. No one can ever change it. You fought for creator rights. We built it into the DNA.",
     category: "crown",
     categoryLabel: "Crown Leadership",
     crownTitle: "Maestro Mentor",
@@ -435,10 +435,10 @@ export const RECIPIENTS: Recipient[] = [
   {
     id: "warren-buffett",
     name: "Warren Buffett",
-    bio: "Oracle of Omaha, value investor, cooperative economics thinker",
-    purpose: "Investment philosophy alignment, credibility anchor",
+    bio: "Oracle of Omaha, value-focused contributor, cooperative economics thinker",
+    purpose: "Contribution philosophy alignment, credibility anchor",
     whyYou:
-      "You've spent sixty years proving that value investing beats speculation. This platform's economics are designed the same way — predictable returns, transparent margins, constitutional guardrails against extraction. Cost+20% isn't a policy; it's a DNA Lock. The economics can't degrade because they're structurally locked.",
+      "You've spent sixty years proving that value-focused backing beats speculation. This platform's economics are designed the same way — predictable service value, transparent margins, constitutional guardrails against extraction. Cost+20% isn't a policy; it's a DNA Lock. The economics can't degrade because they're structurally locked.",
     category: "high-value",
     categoryLabel: "Strategic Partnership",
     emailDomains: ["berkshirehathaway.com"],
@@ -560,7 +560,7 @@ export const RECIPIENTS: Recipient[] = [
   {
     id: "nathan-schneider",
     name: "Nathan Schneider",
-    bio: "CU Boulder — writes about cooperative ownership models",
+    bio: "CU Boulder — writes about cooperative governance models",
     purpose: "Academic ally — cooperative governance scholar",
     whyYou:
       "You study how cooperatives govern themselves. We built The 300 Framework — hard-coded organization size limits with defined overflow mechanics, a Steward/Red Queen dual governance model, and a DNA Lock that makes constitutional economics immutable. Your research, our infrastructure.",
@@ -714,7 +714,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Creator economy advocate, built creator-first platforms",
     purpose: "Ally — creator economics pioneer",
     whyYou:
-      "You've built platforms that put creators first. We took it further: 83.3% to creators, constitutionally locked. No future board, no future CEO, no future investor can ever change that number. You advocate for creators. We engineered the guarantee.",
+      "You've built platforms that put creators first. We took it further: 83.3% to creators, constitutionally locked. No future board, no future CEO, no future backer can ever change that number. You advocate for creators. We engineered the guarantee.",
     category: "outreach",
     categoryLabel: "Strategic Outreach",
     emailDomains: ["complexly.com", "dftba.com"],
@@ -724,10 +724,10 @@ export const RECIPIENTS: Recipient[] = [
   {
     id: "li-jin",
     name: "Li Jin",
-    bio: "Atelier Ventures, passion economy & creator ownership",
-    purpose: "Investor/ally — creator-owned platform thesis",
+    bio: "Atelier Ventures, passion economy & creator participation",
+    purpose: "Sponsor/ally — creator-driven platform thesis",
     whyYou:
-      "You invest in the passion economy and creator ownership. This is a platform where creators genuinely own their economics — 83.3% constitutionally locked, three-gear currency, Joules ownership shares with dividend rights. Your investment thesis, our infrastructure.",
+      "You back the passion economy and creator participation. This is a platform where creators genuinely control their economics — 83.3% constitutionally locked, three-gear currency, Joules with platform benefit rights. Your sponsorship thesis, our infrastructure.",
     category: "outreach",
     categoryLabel: "Strategic Outreach",
     emailDomains: ["atelierventures.co", "atelier.com"],
@@ -789,10 +789,10 @@ export const RECIPIENTS: Recipient[] = [
   {
     id: "howard-marks",
     name: "Howard Marks",
-    bio: "Oaktree Capital, writes investment memos on value",
-    purpose: "Investor framing — value investing alignment",
+    bio: "Oaktree Capital, writes contribution memos on value",
+    purpose: "Backer framing — value contribution alignment",
     whyYou:
-      "Your memos are legendary because you think about risk differently. This platform's economics are designed to eliminate the biggest risk in tech: extraction creep. Cost+20% is constitutionally locked. The margin can't grow. The extraction can't start. Predictable returns, by design.",
+      "Your memos are legendary because you think about risk differently. This platform's economics are designed to eliminate the biggest risk in tech: extraction creep. Cost+20% is constitutionally locked. The margin can't grow. The extraction can't start. Predictable service value, by design.",
     category: "outreach",
     categoryLabel: "Strategic Outreach",
     emailDomains: ["oaktreecapital.com"],
@@ -946,8 +946,8 @@ export const PRESS_OUTLETS: PressOutlet[] = [
   { id: "statnews", name: "STAT News", tagline: "Tatiana Schlossburg Health Accords: Medicine at Cost+20%, cooperatively", angle: "Healthcare vertical — medication access through cooperative buying power", launchFlag: "BC" },
   { id: "kaiserhealthnews", name: "Kaiser Health News", tagline: "Cooperative platform tackles medication affordability with transparent pricing", angle: "Healthcare policy — Cost+20% applied to pharmaceuticals", launchFlag: "BC" },
   { id: "nerdwallet", name: "NerdWallet", tagline: "How a $5/year membership saves families money through cooperative commerce", angle: "Consumer savings — real numbers, real families, real impact", launchFlag: "T" },
-  { id: "investopedia", name: "Investopedia", tagline: "Understanding cooperative economics: the Cost+20% model explained", angle: "Financial literacy — how constitutional margins create predictable returns", launchFlag: "T" },
-  { id: "wsj", name: "Wall Street Journal", tagline: "From 1,200 innovations to 8 patents: inside a cooperative commerce portfolio", angle: "Business feature — patent portfolio, cooperative economics, value investing alignment", launchFlag: "T" },
+  { id: "investopedia", name: "Investopedia", tagline: "Understanding cooperative economics: the Cost+20% model explained", angle: "Financial literacy — how constitutional margins create predictable service value", launchFlag: "T" },
+  { id: "wsj", name: "Wall Street Journal", tagline: "From 1,200 innovations to 8 patents: inside a cooperative commerce portfolio", angle: "Business feature — patent portfolio, cooperative economics, value contribution alignment", launchFlag: "T" },
 ];
 
 /**

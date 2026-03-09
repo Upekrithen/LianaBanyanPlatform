@@ -100,7 +100,7 @@ export default function SampleDataXML() {
     xml += `  <ProjectName>${escapeXml(projectData.name)}</ProjectName>\n`;
     xml += `  <ProjectSKU>${projectData.project_sku || 'PENDING'}</ProjectSKU>\n`;
     
-    // Member Credit & Equity Tracking
+    // Member Credit & Participation Tracking
     xml += '  <MemberTracking>\n';
     xml += '    <InvitationDetails>\n';
     xml += '      <InvitationAccepted>true</InvitationAccepted>\n';
@@ -124,7 +124,7 @@ export default function SampleDataXML() {
     xml += '    <MemberChoices>\n';
     xml += '      <Choice id="1">\n';
     xml += '        <Type>ConvertToEquity</Type>\n';
-    xml += '        <Description>Preorder any product to convert credits to equity</Description>\n';
+    xml += '        <Description>Preorder any product to convert credits to participation</Description>\n';
     xml += '        <MinimumAmount>0.01</MinimumAmount>\n';
     xml += '        <MaximumAmount>100.00</MaximumAmount>\n';
     xml += '        <AutoSubscribesPortfolio>true</AutoSubscribesPortfolio>\n';
@@ -143,7 +143,7 @@ export default function SampleDataXML() {
     xml += '        <Description>Wait 100 days and cash out full amount</Description>\n';
     xml += '        <EligibilityStartDay>90</EligibilityStartDay>\n';
     xml += '        <FullCashConversionDay>100</FullCashConversionDay>\n';
-    xml += '        <Day90Conversion>90% cash, 10% equity</Day90Conversion>\n';
+    xml += '        <Day90Conversion>90% cash, 10% participation</Day90Conversion>\n';
     xml += '        <Day100Conversion>100% cash ($100.00)</Day100Conversion>\n';
     xml += '      </Choice>\n';
     xml += '    </MemberChoices>\n';

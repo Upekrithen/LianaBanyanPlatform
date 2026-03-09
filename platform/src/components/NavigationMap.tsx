@@ -45,7 +45,7 @@ export function NavigationMap() {
     { id: 'project-view', title: 'Project Detail', path: '/project/:slug', icon: FileText, category: 'marketplace', description: 'View project details and products', connections: ['product-detail'] },
     { id: 'product-detail', title: 'Product Detail', path: '/project/:slug/product/:id', icon: ShoppingCart, category: 'marketplace', description: 'Product details and voting' },
     { id: 'marketplace', title: 'Marketplace', path: '/marketplace', icon: ShoppingCart, category: 'marketplace', description: 'Browse marketplace catalog' },
-    { id: 'portfolio', title: 'Portfolio', path: '/portfolio', icon: Briefcase, category: 'marketplace', description: 'User investment portfolio' },
+    { id: 'portfolio', title: 'Portfolio', path: '/portfolio', icon: Briefcase, category: 'marketplace', description: 'User contribution portfolio' },
     { id: 'medallions', title: 'Medallions', path: '/medallions', icon: Award, category: 'marketplace', description: 'View minted medallions' },
     // Withdraw page removed for SEC compliance - credits are not redeemable for cash
     { id: 'guilds', title: 'Guilds', path: '/guilds', icon: Users, category: 'marketplace', description: 'Browse and join guilds' },

@@ -259,7 +259,7 @@ const resources = {
         title: 'Guild Progression',
         currentTier: 'Current Tier',
         currentClass: 'Current Class',
-        profitShare: 'Profit Percentage',
+        profitShare: 'Revenue Percentage',
         experience: 'Experience',
         hours: 'hours',
         contracts: 'Contracts Completed',
@@ -1185,8 +1185,8 @@ const resources = {
           status: "Estado",
           return: "Valor"
         },
-        empty: "Aún no hay inversiones",
-        emptyDescription: "Comienza a invertir en proyectos para verlos aquí"
+        empty: "Aún no hay contribuciones",
+        emptyDescription: "Comienza a respaldar proyectos para verlos aquí"
       },
       profileSettings: {
         title: "Configuración de Perfil",
@@ -1460,7 +1460,7 @@ const resources = {
       },
       browseMarketplace: {
         title: "Explorar Mercado",
-        subtitle: "Descubre productos y oportunidades de inversión",
+        subtitle: "Descubre productos y oportunidades de patrocinio",
         sustainable: {
           title: "Productos Sostenibles",
           description: "Bienes y servicios ecológicos"
@@ -1470,8 +1470,8 @@ const resources = {
           description: "Iniciativas y desarrollos locales"
         },
         investment: {
-          title: "Oportunidades de Inversión",
-          description: "Respalda proyectos con potencial de equidad"
+          title: "Oportunidades de Patrocinio",
+          description: "Respalda proyectos y participa en la cooperativa"
         },
         featured: {
           title: "Productos Destacados",
@@ -1524,7 +1524,7 @@ const resources = {
         },
         eoi: {
           title: "Vesting EOI",
-          description: "Conversión de Expresión de Interés a equidad"
+          description: "Conversión de Expresión de Interés a participación"
         },
         rewards: {
           title: "Recompensas de Medallones",
@@ -1658,13 +1658,13 @@ const resources = {
         },
         step3: {
           title: "Vesting Diario",
-          description: "1% se convierte en equidad diariamente"
+          description: "1% se convierte en participación diariamente"
         },
         step4: {
-          title: "Propiedad de Equidad",
-          description: "Equidad completa después de 100 días"
+          title: "Membresía Completa",
+          description: "Participación completa después de 100 días"
         },
-        benefits: "Beneficios de Inversión",
+        benefits: "Beneficios de Membresía",
         earlyAccess: "Acceso anticipado a productos",
         equityGrowth: "Crecimiento de participación cooperativa",
         communityVoting: "Derechos de votación comunitaria",
@@ -2313,7 +2313,7 @@ const resources = {
         },
         investment: {
           title: "Opportunités de Parrainage",
-          description: "Soutenez des projets avec potentiel d'équité"
+          description: "Soutenez des projets et rejoignez la coopérative"
         },
         featured: {
           title: "Produits en Vedette",
@@ -2366,7 +2366,7 @@ const resources = {
         },
         eoi: {
           title: "Acquisition EOI",
-          description: "Conversion d'Expression d'Intérêt en équité"
+          description: "Conversion d'Expression d'Intérêt en participation"
         },
         rewards: {
           title: "Récompenses Médaillons",
@@ -2482,7 +2482,7 @@ const resources = {
       },
       investmentExplainer: {
         title: "Guide de Parrainage",
-        subtitle: "Comment les promesses deviennent des parts d'équité",
+        subtitle: "Comment les promesses deviennent participation coopérative",
         tabs: {
           overview: "Aperçu",
           conversion: "Flux de Conversion",
@@ -2500,11 +2500,11 @@ const resources = {
         },
         step3: {
           title: "Acquisition Quotidienne",
-          description: "1% se convertit en équité quotidiennement"
+          description: "1% se convertit en participation quotidiennement"
         },
         step4: {
-          title: "Propriété d'Équité",
-          description: "Équité complète après 100 jours"
+          title: "Adhésion Complète",
+          description: "Participation complète après 100 jours"
         },
         benefits: "Avantages de Parrainage",
         earlyAccess: "Accès anticipé aux produits",

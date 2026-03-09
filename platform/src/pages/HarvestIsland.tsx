@@ -58,7 +58,7 @@ function PracticeMirror({ isVisible, onClose, onEnterPractice, onStartGuidedPath
     },
     seed: {
       title: "Practice Planting Seeds",
-      description: "Start a practice project in the Ghost World. Watch how ideas evolve from Ember to Lightning without real investment.",
+      description: "Start a practice project in the Ghost World. Watch how ideas evolve from Ember to Lightning without real commitment.",
       features: ["Submit practice ideas", "See the voting system", "Watch idea evolution", "Learn team formation"],
       pathTitle: "The Cultivator's Path",
       pathSteps: 6,

@@ -53,7 +53,7 @@ interface BabylonCandleProps {
 
 const PLATFORM_DESTINATIONS: Destination[] = [
   { id: 'member-portfolio', name: 'Member Portfolio', description: 'Your personal dashboard — projects, achievements, reputation, and earnings', url: '/portfolio', icon: '👤', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', category: 'Platform' },
-  { id: 'dotcom', name: 'Marketplace (.com)', description: 'Public discovery, projects, and investment opportunities', url: '/', icon: '🏪', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', category: 'Platform' },
+  { id: 'dotcom', name: 'Marketplace (.com)', description: 'Public discovery, projects, and sponsorship opportunities', url: '/', icon: '🏪', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', category: 'Platform' },
   { id: 'dotbiz', name: 'Business (.biz)', description: 'HR, positions, project management, business formation', url: '/biz', icon: '💼', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', category: 'Platform' },
   { id: 'dotorg', name: 'Nonprofit (.org)', description: 'Fund administration, loans, member benefits', url: '/org', icon: '🤲', background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', category: 'Platform' },
   { id: 'dotnet', name: 'Network (.net)', description: 'B2B production, contracts, XML lockbox', url: '/net', icon: '🌐', background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', category: 'Platform' },
@@ -83,7 +83,7 @@ const INITIATIVE_DESTINATIONS: Destination[] = [
 
 const HEXAGON_DESTINATIONS: Destination[] = [
   { id: 'hall-pnyx', name: 'Hall of Records (The Pnyx)', description: 'Academic papers, letters, articles, founder documents. Voting on documents.', url: '/senate/pnyx', icon: '📜', background: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)', category: 'The Hexagon', subcategory: 'First Floor' },
-  { id: 'hall-innovations', name: 'Hall of Innovations', description: 'Patents awaiting protection. Voting = micro-investment in IP.', url: '/senate/innovations', icon: '💡', background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)', category: 'The Hexagon', subcategory: 'First Floor' },
+  { id: 'hall-innovations', name: 'Hall of Innovations', description: 'Patents awaiting protection. Voting = micro-sponsorship of IP.', url: '/senate/innovations', icon: '💡', background: 'linear-gradient(135deg, #a855f7 0%, #6366f1 100%)', category: 'The Hexagon', subcategory: 'First Floor' },
   { id: 'hall-projects', name: 'Hall of Projects', description: 'Member-submitted projects. Voting to prioritize and fund.', url: '/senate/projects', icon: '🚀', background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)', category: 'The Hexagon', subcategory: 'First Floor' },
   { id: 'hall-initiatives', name: 'Hall of Initiatives', description: 'Charitable programs (Sweet Sixteen). Voting to direct contributions.', url: '/senate/initiatives', icon: '💙', background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', category: 'The Hexagon', subcategory: 'First Floor' },
   { id: 'salt-mines', name: 'Salt Mines', description: 'Get a Job — bounties, work offerings, Help Wanted. Keep 83.3%.', url: '/get-a-job', icon: '⛏️', background: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)', category: 'The Hexagon', subcategory: 'First Floor' },

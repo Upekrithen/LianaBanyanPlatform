@@ -164,7 +164,7 @@ export const PLANT_SEEDS_RUN: WildfireRun = {
   id: "plant-seeds",
   slug: "plant-seeds",
   name: "Plant Seeds",
-  description: "Invest in the future, sponsor innovation",
+  description: "Back the future, sponsor innovation",
   category: "level-1",
   difficulty: "beginner",
   estimatedMinutes: 6,

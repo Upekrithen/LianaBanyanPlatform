@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdvancedThemeSwitcher } from './AdvancedThemeSwitcher';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { InvestorTrackPrompt } from './InvestorTrackPrompt';
+import { BackerTrackPrompt } from './InvestorTrackPrompt';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -19,7 +19,7 @@ interface UnifiedPreferencesProps {
 export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [investorTrack, setInvestorTrack] = useState<'product_only' | 'investor' | undefined>();
+  const [backerTrack, setBackerTrack] = useState<'product_only' | 'backer' | undefined>();
   const [isTribeMember, setIsTribeMember] = useState(false);
   const [hasGuildMemberships, setHasGuildMemberships] = useState(false);
 
@@ -27,7 +27,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
     if (!user) return;
 
     const fetchPreferences = async () => {
-      // Fetch investor track preference
+      // Fetch contributor track preference
       const { data: prefs } = await supabase
         .from('user_preferences')
         .select('marketplace_investor_track')
@@ -35,7 +35,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
         .single();
       
       if (prefs?.marketplace_investor_track) {
-        setInvestorTrack(prefs.marketplace_investor_track as 'product_only' | 'investor');
+        setBackerTrack(prefs.marketplace_investor_track as 'product_only' | 'backer');
       }
 
       // Check tribe membership
@@ -62,7 +62,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
     fetchPreferences();
   }, [user]);
 
-  const handleTrackChange = async (track: 'product_only' | 'investor') => {
+  const handleTrackChange = async (track: 'product_only' | 'backer') => {
     if (!user) return;
 
     const { error } = await supabase
@@ -73,7 +73,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
       });
 
     if (!error) {
-      setInvestorTrack(track);
+      setBackerTrack(track);
     }
   };
 
@@ -89,9 +89,9 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
         {/* Marketplace Preferences */}
         <div className="space-y-3">
           <label className="text-sm font-medium">Marketplace Participation</label>
-          <InvestorTrackPrompt 
+          <BackerTrackPrompt
             onSelectTrack={handleTrackChange}
-            currentTrack={investorTrack}
+            currentTrack={backerTrack}
           />
         </div>
 

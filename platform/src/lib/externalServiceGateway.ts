@@ -24,7 +24,7 @@ export type CampaignType =
   | 'product'      // Physical products, manufacturing (Kickstarter, Indiegogo)
   | 'medical'      // Medical/crisis support (GoFundMe, GiveSendGo)
   | 'donation'     // General charitable (GiveButter)
-  | 'equity'       // Investment rounds (Wefunder)
+  | 'equity'       // Regulation crowdfunding rounds (Wefunder)
   | 'recurring';   // Ongoing support (Patreon, GiveButter)
 
 export type CampaignStatus = 
@@ -152,7 +152,7 @@ export const PLATFORM_CONFIG: Record<FundingPlatform, {
     canCreateCampaign: false, // Requires approval process
     canSyncProgress: true,
     fees: '7.5% of funds raised',
-    bestFor: 'Equity crowdfunding, investment rounds, startup funding'
+    bestFor: 'Regulation crowdfunding, contribution rounds, startup backing'
   },
   givesendgo: {
     displayName: 'GiveSendGo',

@@ -117,7 +117,7 @@ export const ALCOVES: Alcove[] = [
         isYesNo: true,
         correctAnswer: 'no',
         reward: 2,
-        explanation: 'Liana Banyan is a cooperative — owned and governed by its members, not shareholders.',
+        explanation: 'Liana Banyan is a cooperative — owned and governed by its members, not outside parties.',
       },
     ],
   },

@@ -8,7 +8,7 @@
  * - essentials: Always visible (membership, guild stake)
  * - initiatives: Let's Make Dinner, Defense Klaus, etc.
  * - exploration: Crowdfunding, Medallions, Studios
- * - economy: EOI Dashboard, Investments, Equity
+ * - economy: EOI Dashboard, Contributions, Participation
  * - governance: Legal, Charitable Loans
  * - tools: Referrals, Badge Reminders
  */
@@ -31,7 +31,7 @@ import { EOIDashboard } from '@/components/EOIDashboard';
 import { MembershipStakePayment } from '@/components/MembershipStakePayment';
 import { GuildStakeProgression } from '@/components/GuildStakeProgression';
 import { ProjectPreferenceRanking } from '@/components/ProjectPreferenceRanking';
-import { InvestmentTimeline } from '@/components/InvestmentTimeline';
+import { ContributionTimeline } from '@/components/InvestmentTimeline';
 import { EquityBreakdownCard } from '@/components/EquityBreakdownCard';
 import { InvestmentReportExporter } from '@/components/InvestmentReportExporter';
 import { MilestoneNotifications } from '@/components/MilestoneNotifications';
@@ -425,7 +425,7 @@ export default function Dashboard() {
             </section>
 
             {/* ════════════════════════════════════════════════════════════════
-                ECONOMY - EOI, Credits, Investments
+                ECONOMY - EOI, Credits, Contributions
                ════════════════════════════════════════════════════════════════ */}
             <section className="space-y-4">
               <h2 className="text-lg font-semibold text-muted-foreground flex items-center gap-2">
@@ -436,7 +436,7 @@ export default function Dashboard() {
               <DiscoverySlot
                 slug="eoi-dashboard"
                 title="Expression of Interest"
-                hint="Toggle your EOI to discover project investment preferences"
+                hint="Toggle your EOI to discover project contribution preferences"
                 discoveryRoute="/eoi"
                 icon={<Rocket className="h-5 w-5" />}
               >
@@ -448,9 +448,9 @@ export default function Dashboard() {
               </DiscoverySlot>
               
               <DiscoverySlot
-                slug="investment-timeline"
-                title="Investment Analytics"
-                hint="View your investment history and projections"
+                slug="contribution-timeline"
+                title="Contribution Analytics"
+                hint="View your contribution history and projections"
                 discoveryRoute="/portfolio"
                 icon={<Briefcase className="h-5 w-5" />}
               >
@@ -470,7 +470,7 @@ export default function Dashboard() {
 
                 <div className="grid gap-4 md:gap-6 lg:grid-cols-3 mt-4">
                   <div className="lg:col-span-2">
-                    <InvestmentTimeline />
+                    <ContributionTimeline />
                   </div>
                   <div className="lg:col-span-1">
                     <ReferralManager />
@@ -534,7 +534,7 @@ export default function Dashboard() {
                 <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/portfolio')}>
                   <CardHeader>
                     <CardTitle className="text-sm">{t('dashboard.myPortfolio')}</CardTitle>
-                    <CardDescription className="text-xs">{t('dashboard.trackInvestments')}</CardDescription>
+                    <CardDescription className="text-xs">{t('dashboard.trackContributions')}</CardDescription>
                   </CardHeader>
                 </Card>
                 

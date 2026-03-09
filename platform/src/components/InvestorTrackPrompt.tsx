@@ -6,12 +6,12 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-interface InvestorTrackPromptProps {
-  onSelectTrack: (track: 'product_only' | 'investor') => void;
-  currentTrack?: 'product_only' | 'investor';
+interface BackerTrackPromptProps {
+  onSelectTrack: (track: 'product_only' | 'backer') => void;
+  currentTrack?: 'product_only' | 'backer';
 }
 
-export function InvestorTrackPrompt({ onSelectTrack, currentTrack }: InvestorTrackPromptProps) {
+export function BackerTrackPrompt({ onSelectTrack, currentTrack }: BackerTrackPromptProps) {
   const [detailsOpen, setDetailsOpen] = useState(false);
 
   if (currentTrack) {
@@ -19,7 +19,7 @@ export function InvestorTrackPrompt({ onSelectTrack, currentTrack }: InvestorTra
       <Card className="border-primary/20">
         <CardContent className="pt-6">
           <div className="flex items-center gap-3">
-            {currentTrack === 'investor' ? (
+            {currentTrack === 'backer' ? (
               <TrendingUp className="w-5 h-5 text-primary" />
             ) : (
               <ShoppingBag className="w-5 h-5 text-primary" />
@@ -27,22 +27,22 @@ export function InvestorTrackPrompt({ onSelectTrack, currentTrack }: InvestorTra
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="font-medium">
-                  {currentTrack === 'investor' ? 'Investor Track Active' : 'Product-Only Track'}
+                  {currentTrack === 'backer' ? 'Backer Track Active' : 'Product-Only Track'}
                 </span>
                 <Badge variant="secondary" className="text-xs">
-                  {currentTrack === 'investor' ? 'Equity Potential' : 'Simple Purchases'}
+                  {currentTrack === 'backer' ? 'Participation Potential' : 'Simple Purchases'}
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                {currentTrack === 'investor' 
-                  ? 'You can earn equity in projects you back'
+                {currentTrack === 'backer'
+                  ? 'You can earn participation in projects you back'
                   : 'You\'ll only see product purchase options'}
               </p>
             </div>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
-              onClick={() => onSelectTrack(currentTrack === 'investor' ? 'product_only' : 'investor')}
+              onClick={() => onSelectTrack(currentTrack === 'backer' ? 'product_only' : 'backer')}
             >
               Switch
             </Button>
@@ -73,13 +73,13 @@ export function InvestorTrackPrompt({ onSelectTrack, currentTrack }: InvestorTra
             <div className="flex-1">
               <h3 className="font-semibold mb-1">Just Want Products</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Simple preorders. Vote for production, get your product when it's ready. No equity, no complexity.
+                Simple preorders. Vote for production, get your product when it's ready. No participation allocation, no complexity.
               </p>
               <ul className="space-y-1 text-xs text-muted-foreground mb-3">
                 <li>✓ Straightforward purchases</li>
                 <li>✓ Volume pricing benefits</li>
                 <li>✓ Support projects you love</li>
-                <li>✗ No equity ownership</li>
+                <li>✗ No participation allocation</li>
               </ul>
             </div>
           </div>
@@ -92,31 +92,31 @@ export function InvestorTrackPrompt({ onSelectTrack, currentTrack }: InvestorTra
           </Button>
         </div>
 
-        {/* Investor Track */}
+        {/* Backer Track */}
         <div className="border-2 border-primary rounded-lg p-4 bg-background">
           <div className="flex items-start gap-3 mb-3">
             <TrendingUp className="w-6 h-6 text-primary mt-0.5" />
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-semibold">Investor Track</h3>
-                <Badge variant="secondary" className="text-xs">Equity Potential</Badge>
+                <h3 className="font-semibold">Backer Track</h3>
+                <Badge variant="secondary" className="text-xs">Participation Potential</Badge>
               </div>
               <p className="text-sm text-muted-foreground mb-3">
-                Back projects with longer commitments to earn equity ownership. Benefit from project success beyond just getting the product.
+                Back projects with longer commitments to earn participation allocation. Benefit from project success beyond just getting the product.
               </p>
               <ul className="space-y-1 text-xs text-muted-foreground mb-3">
-                <li>✓ Earn equity in projects</li>
+                <li>✓ Earn participation in projects</li>
                 <li>✓ All product-only benefits</li>
-                <li>✓ Share in project profits</li>
-                <li>✓ Build investment portfolio</li>
+                <li>✓ Share in project service credits</li>
+                <li>✓ Build contribution portfolio</li>
               </ul>
             </div>
           </div>
-          <Button 
+          <Button
             className="w-full"
-            onClick={() => onSelectTrack('investor')}
+            onClick={() => onSelectTrack('backer')}
           >
-            Choose Investor Track
+            Choose Backer Track
           </Button>
         </div>
 
@@ -132,7 +132,7 @@ export function InvestorTrackPrompt({ onSelectTrack, currentTrack }: InvestorTra
               and options we show you in the marketplace.
             </p>
             <p>
-              Product-Only users see simplified purchase flows. Investor Track users see equity splits, 
+              Product-Only users see simplified purchase flows. Backer Track users see participation splits,
               time commitments, and portfolio management tools.
             </p>
             <p>

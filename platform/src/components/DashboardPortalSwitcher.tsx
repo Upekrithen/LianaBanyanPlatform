@@ -112,11 +112,11 @@ export const DashboardPortalSwitcher = () => {
   const portals = [
     {
       title: "Marketplace Portal",
-      description: "Discover and invest in community projects",
+      description: "Discover and back community projects",
       domain: "lianabanyan.com",
       icon: <ShoppingBag className="h-6 w-6 text-primary" />,
       accessLevel: access.marketplace,
-      categories: ["Sustainable Products", "Community Projects", "Investment Opportunities"]
+      categories: ["Sustainable Products", "Community Projects", "Sponsorship Opportunities"]
     },
     {
       title: "Business Portal",

@@ -159,7 +159,7 @@ export function FreshStartDialog() {
             <ul className="text-sm text-green-600 space-y-1">
               <li>✓ All portfolio items & purchases</li>
               <li>✓ Collected deck cards</li>
-              <li>✓ IP stakes & patent equity</li>
+              <li>✓ IP stakes & patent participation</li>
               <li>✓ Credits balance (minus 1 Mark cost)</li>
               <li>✓ Joules balance (collateral)</li>
               <li>✓ Medallions earned</li>

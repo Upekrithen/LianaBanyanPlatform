@@ -165,7 +165,7 @@ export function EOIVestingDashboard() {
 
                   <div className="grid grid-cols-2 gap-4 pt-2 border-t">
                     <div className="space-y-1">
-                      <p className="text-xs text-muted-foreground">Equity Ratio</p>
+                      <p className="text-xs text-muted-foreground">Participation Ratio</p>
                       <p className="text-sm font-medium">
                         {(schedule.equity_ratio * 100).toFixed(1)}%
                       </p>

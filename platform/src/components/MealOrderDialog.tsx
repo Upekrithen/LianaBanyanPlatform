@@ -409,7 +409,7 @@ export function MealOrderDialog({
                     Charitable Tab
                   </Label>
                   <p className="text-sm text-muted-foreground">
-                    Add to your charitable loan account, repay from future profits
+                    Add to your charitable loan account, repay from future earnings
                   </p>
                   {paymentMethod === "tab" && (
                     <div className="mt-3 space-y-2">
@@ -426,7 +426,7 @@ export function MealOrderDialog({
                         <span className="text-sm font-medium w-12">{profitPercentage}%</span>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        This percentage of your future profits will go toward repaying this meal
+                        This percentage of your future earnings will go toward repaying this meal
                       </p>
                     </div>
                   )}

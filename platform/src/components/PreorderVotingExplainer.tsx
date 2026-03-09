@@ -98,26 +98,26 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
               <AccordionTrigger>
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5" />
-                  Time Commitment & Equity/Cash Split
+                  Time Commitment & Participation/Cash Split
                 </div>
               </AccordionTrigger>
               <AccordionContent className="space-y-3">
                 <p>
                   When you vote, you choose how long you're willing to wait for production. 
-                  <strong> Longer commitment = more equity ownership in the project.</strong>
+                  <strong> Longer commitment = more participation in the project.</strong>
                 </p>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm">1 Week Wait</span>
-                    <span className="text-sm font-medium">10% Equity / 90% Cash Value</span>
+                    <span className="text-sm font-medium">10% Participation / 90% Cash Value</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">1 Month Wait</span>
-                    <span className="text-sm font-medium">30% Equity / 70% Cash Value</span>
+                    <span className="text-sm font-medium">30% Participation / 70% Cash Value</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">6 Months Wait</span>
-                    <span className="text-sm font-medium">90% Equity / 10% Cash Value</span>
+                    <span className="text-sm font-medium">90% Participation / 10% Cash Value</span>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground">

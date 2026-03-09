@@ -158,7 +158,7 @@ export default function CompanyIndependenceManager() {
                     <Badge className="mt-1">{selectedProject.company_status}</Badge>
                   </div>
                   <div>
-                    <Label className="text-sm text-muted-foreground">Equity Bonus</Label>
+                    <Label className="text-sm text-muted-foreground">Participation Bonus</Label>
                     <div className="font-medium">+{selectedProject.independence_equity_bonus}%</div>
                   </div>
                   <div>
@@ -200,7 +200,7 @@ export default function CompanyIndependenceManager() {
                 </div>
 
                 <div>
-                  <Label>Independence Equity Bonus (%)</Label>
+                  <Label>Independence Participation Bonus (%)</Label>
                   <Input
                     type="number"
                     value={equityBonus}

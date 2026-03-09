@@ -189,7 +189,7 @@ export const GuildStakeProgression = () => {
             <p className="text-2xl font-bold">${progression.total_stake_paid.toLocaleString()}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Profit Percentage</p>
+            <p className="text-sm text-muted-foreground">Platform Benefit Percentage</p>
             <p className="text-2xl font-bold text-green-600">{currentInfo?.profitPercent}%</p>
           </div>
           <div className="space-y-1">
@@ -217,7 +217,7 @@ export const GuildStakeProgression = () => {
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Stake: ${nextPayment.amount.toLocaleString()} • 
-                  Profit: {nextPayment.profitPercent}% •
+                  Platform Benefit: {nextPayment.profitPercent}% •
                   Total: ${nextPayment.cumulative.toLocaleString()}
                 </p>
               </div>
@@ -253,19 +253,19 @@ export const GuildStakeProgression = () => {
             <div className="flex items-center gap-2">
               {currentTier === "apprentice" ? <CheckCircle className="h-4 w-4 text-green-500" /> : <div className="h-4 w-4" />}
               <span className={currentTier === "apprentice" ? "font-semibold" : "text-muted-foreground"}>
-                Apprentice (6 classes) - No stake required • 40-50% profit
+                Apprentice (6 classes) - No stake required • 40-50% platform benefit
               </span>
             </div>
             <div className="flex items-center gap-2">
               {currentTier === "journeyman" ? <CheckCircle className="h-4 w-4 text-green-500" /> : <Lock className="h-4 w-4" />}
               <span className={currentTier === "journeyman" ? "font-semibold" : "text-muted-foreground"}>
-                Journeyman (6 classes) - $7k total stake • 53-68% profit + bonuses
+                Journeyman (6 classes) - $7k total stake • 53-68% platform benefit + bonuses
               </span>
             </div>
             <div className="flex items-center gap-2">
               {currentTier === "master" ? <CheckCircle className="h-4 w-4 text-green-500" /> : <Lock className="h-4 w-4" />}
               <span className={currentTier === "master" ? "font-semibold" : "text-muted-foreground"}>
-                Master (6 classes) - $67.5k total stake • 71-86% profit + bonuses
+                Master (6 classes) - $67.5k total stake • 71-86% platform benefit + bonuses
               </span>
             </div>
           </div>
