@@ -382,6 +382,11 @@ const App = () => (
                         <Route path="/free-explore" element={<GhostWorld />} />
 
                         {/* Convenience redirects — prevent 404s for common URL guesses */}
+                        <Route path="/login" element={<Navigate to="/auth" replace />} />
+                        <Route path="/signin" element={<Navigate to="/auth" replace />} />
+                        <Route path="/sign-in" element={<Navigate to="/auth" replace />} />
+                        <Route path="/signup" element={<Navigate to="/auth" replace />} />
+                        <Route path="/sign-up" element={<Navigate to="/auth" replace />} />
                         <Route path="/home" element={<Navigate to="/" replace />} />
                         <Route path="/browse" element={<Navigate to="/browse/marketplace" replace />} />
                         <Route path="/all-positions" element={<Navigate to="/positions/browse" replace />} />
