@@ -1,52 +1,79 @@
 /**
  * Portal Detection Utility
- * Determines which portal (Marketplace or Business) to load based on hostname
+ * Determines which portal to load based on hostname, including subdomains.
+ *
+ * Architecture:
+ * - Each root domain maps to a portal app (HexIsleApp, DSSApp, etc.)
+ * - Subdomains (e.g., encyclopedia.hexisle.com) route to the SAME portal app,
+ *   which handles subdomain detection internally for the right view.
+ * - Wildcard subdomains: with Cloudflare DNS, *.hexisle.com and *.the2ndsecond.com
+ *   resolve to the same hosting site. The SPA detects the subdomain and routes accordingly.
+ *   New subdomains = one line of code. Zero DNS changes.
+ *
+ * Domain → Portal mapping:
+ * - lianabanyan.com / localhost:5173 → Marketplace Portal (public discovery)
+ * - lianabanyan.biz / localhost:5174 → Business Portal (HR, operations)
+ * - lianabanyan.org / localhost:5175 → Non-Profit Portal (financial services)
+ * - lianabanyan.net / localhost:5176 → Business Network Portal (B2B)
+ * - the2ndsecond.com / localhost:5177 → DSS Portal (Maker, Prototyper Guild)
+ * - hexisle.com / localhost:5178 → HexIsle Portal (7-island simulator)
+ * - *.hexisle.com → HexIsle Portal (subdomain-routed views)
+ * - *.the2ndsecond.com → DSS Portal (subdomain-routed views)
  */
 
 export type PortalType = 'marketplace' | 'business' | 'nonprofit' | 'network' | 'dss' | 'hexisle';
 
 /**
- * Detects the current portal based on the hostname
- * - lianabanyan.com / localhost:5173 → Marketplace Portal (public)
- * - lianabanyan.biz / localhost:5174 → Business Portal (operations)
- * - lianabanyan.org / localhost:5175 → Non-Profit Portal (financial services)
- * - lianabanyan.net / localhost:5176 → Business Network Portal (B2B)
+ * Extracts the root domain from a hostname
+ * e.g., "encyclopedia.hexisle.com" → "hexisle.com"
+ *       "hexisle.com" → "hexisle.com"
+ *       "localhost" → "localhost"
+ */
+const getRootDomain = (hostname: string): string => {
+  const parts = hostname.split('.');
+  if (parts.length <= 2) return hostname;
+  return parts.slice(-2).join('.');
+};
+
+/**
+ * Detects the current portal based on hostname (subdomain-aware)
  */
 export const detectPortal = (): PortalType => {
   const hostname = window.location.hostname;
   const port = window.location.port;
   const path = window.location.pathname;
-  
+  const rootDomain = getRootDomain(hostname);
+
   // Route-based detection (works in dev/preview without separate domains)
   if (isBusinessRoute(path)) return 'business';
   if (isNonprofitRoute(path)) return 'nonprofit';
   if (isNetworkRoute(path)) return 'network';
-  
-  // Non-profit portal (.org) - Fund admin, loans, member benefits
-  if (hostname.includes('lianabanyan.org') || port === '5175') {
-    return 'nonprofit';
-  }
-  
-  // Business network portal (.net) - B2B production, contracts, XML lockbox
-  if (hostname.includes('lianabanyan.net') || port === '5176') {
-    return 'network';
-  }
-  
-  // Business portal (.biz) - HR, positions, project management
-  if (hostname.includes('lianabanyan.biz') || port === '5174') {
-    return 'business';
-  }
-  
-  // DSS portal (the2ndsecond.com)
-  if (hostname.includes('the2ndsecond.com') || port === '5177') {
-    return 'dss';
-  }
-  
-  // HexIsle portal (hexisle.com)
-  if (hostname.includes('hexisle.com') || port === '5178') {
+
+  // HexIsle portal — hexisle.com AND all subdomains (*.hexisle.com)
+  if (rootDomain === 'hexisle.com' || hostname === 'hexislo.com' || port === '5178') {
     return 'hexisle';
   }
-  
+
+  // DSS portal — the2ndsecond.com AND all subdomains (*.the2ndsecond.com)
+  if (rootDomain === 'the2ndsecond.com' || port === '5177') {
+    return 'dss';
+  }
+
+  // Non-profit portal (.org) - Fund admin, loans, member benefits
+  if (rootDomain === 'lianabanyan.org' || port === '5175') {
+    return 'nonprofit';
+  }
+
+  // Business network portal (.net) - B2B production, contracts, XML lockbox
+  if (rootDomain === 'lianabanyan.net' || port === '5176') {
+    return 'network';
+  }
+
+  // Business portal (.biz) - HR, positions, project management
+  if (rootDomain === 'lianabanyan.biz' || port === '5174') {
+    return 'business';
+  }
+
   // Default to marketplace (.com) - Public discovery & contributions
   return 'marketplace';
 };
