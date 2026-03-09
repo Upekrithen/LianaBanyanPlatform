@@ -356,6 +356,31 @@ function AppShell({ children }: { children: React.ReactNode }) {
 
 import { BuilderModeToggle } from "@/components/builder/BuilderModeToggle";
 
+/**
+ * HomepageGateway — Route switcher for "/"
+ * Unauthenticated: 4-door PortalGateway (Dell-Style)
+ * Authenticated: Original Index (discovery view with choice dialog)
+ */
+function HomepageGateway() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse text-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  // Authenticated users get the full discovery experience
+  if (user) {
+    return <Index />;
+  }
+
+  // Unauthenticated visitors get the 4-door gateway
+  return <PortalGateway />;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BuilderModeProvider>
@@ -374,7 +399,8 @@ const App = () => (
                   <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}>
                       <Routes>
                         {/* Public Routes */}
-                        <Route path="/" element={<Index />} />
+                        <Route path="/" element={<HomepageGateway />} />
+                        <Route path="/classic-landing" element={<Index />} />
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/auth/tiktok/callback" element={<TikTokCallback />} />
                         <Route path="/ghost" element={<GhostWorld />} />
