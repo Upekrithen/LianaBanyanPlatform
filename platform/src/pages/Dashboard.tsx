@@ -597,6 +597,13 @@ export default function Dashboard() {
                     <CardDescription className="text-xs">Projects you have sponsored</CardDescription>
                   </CardHeader>
                 </Card>
+
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/side-quests')}>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Side Quests</CardTitle>
+                    <CardDescription className="text-xs">Earn Credits and XP by completing tasks</CardDescription>
+                  </CardHeader>
+                </Card>
               </div>
               
               {/* Admin buttons */}

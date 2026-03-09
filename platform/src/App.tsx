@@ -241,6 +241,8 @@ const GuildPhaseManager = lazy(() => import("./pages/GuildPhaseManager"));
 const MyPledges = lazy(() => import("./pages/MyPledges"));
 // Admin Analytics Dashboard (Session 8A)
 const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
+// Side Quests — Flexible Work System (Session 8B)
+const SideQuests = lazy(() => import("./pages/SideQuests"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -711,6 +713,7 @@ const App = () => (
               <Route path="/external-services" element={<ProtectedRoute><ExternalServices /></ProtectedRoute>} />
               <Route path="/admin/service-review" element={<ProtectedRoute><AdminServiceReview /></ProtectedRoute>} />
               <Route path="/admin/analytics" element={<ProtectedRoute><AdminAnalytics /></ProtectedRoute>} />
+              <Route path="/side-quests" element={<ProtectedRoute><SideQuests /></ProtectedRoute>} />
               <Route path="/docs/video-scripts" element={<VideoScripts />} />
               <Route path="/pre-beta-recruits" element={<ProtectedRoute><PreBetaRecruits /></ProtectedRoute>} />
               <Route path="/asset-library" element={<ProtectedRoute><LBAssetLibrary /></ProtectedRoute>} />
