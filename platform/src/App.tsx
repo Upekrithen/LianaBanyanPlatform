@@ -394,6 +394,29 @@ const App = () => (
                         <Route path="/my-reputation" element={<Navigate to="/dashboard" replace />} />
                         <Route path="/start-a-project" element={<Navigate to="/start" replace />} />
                         <Route path="/52-card-hunt" element={<Navigate to="/treasure-map-game" replace />} />
+
+                        {/* Root-level aliases for initiatives — prevent 404s from external links */}
+                        <Route path="/rally-group" element={<Navigate to="/initiatives/rally-group" replace />} />
+                        <Route path="/jukebox" element={<Navigate to="/initiatives/jukebox" replace />} />
+                        <Route path="/household-concierge" element={<Navigate to="/initiatives/household-concierge" replace />} />
+                        <Route path="/defense-klaus" element={<Navigate to="/initiatives/defense-klaus" replace />} />
+                        <Route path="/defense-claws" element={<Navigate to="/initiatives/defense-claws" replace />} />
+                        <Route path="/harper-guild" element={<Navigate to="/initiatives/harper-guild" replace />} />
+                        <Route path="/vsl" element={<Navigate to="/initiatives/vsl" replace />} />
+                        <Route path="/bread" element={<Navigate to="/initiatives/bread" replace />} />
+                        <Route path="/lets-make-bread" element={<Navigate to="/initiatives/bread" replace />} />
+                        <Route path="/didasko" element={<Navigate to="/initiatives/didasko" replace />} />
+                        <Route path="/power-to-the-people" element={<Navigate to="/initiatives/power-to-the-people" replace />} />
+                        <Route path="/brass-tacks" element={<Navigate to="/initiatives/brass-tacks" replace />} />
+                        <Route path="/health-accords" element={<Navigate to="/initiatives/health-accords" replace />} />
+                        <Route path="/msa" element={<Navigate to="/initiatives/msa" replace />} />
+                        <Route path="/family-table" element={<Navigate to="/initiatives/family-table" replace />} />
+                        <Route path="/lets-make-dinner" element={<Navigate to="/initiatives/lets-make-dinner" replace />} />
+                        <Route path="/the-pantry" element={<Navigate to="/initiatives/the-pantry" replace />} />
+                        <Route path="/lets-go-shopping" element={<Navigate to="/initiatives/lets-go-shopping" replace />} />
+                        <Route path="/lets-get-groceries" element={<Navigate to="/initiatives/lets-get-groceries" replace />} />
+                        <Route path="/lifeline-medications" element={<Navigate to="/initiatives/lifeline-medications" replace />} />
+
                         <Route path="/portal" element={<PortalGateway />} />
                         <Route path="/enter" element={<PortalGateway />} />
                         <Route path="/start" element={<OnboardingStart />} />
