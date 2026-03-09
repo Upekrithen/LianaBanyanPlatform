@@ -59,7 +59,7 @@ export default function ManagePositions() {
     category: '',
     position_title: '',
     position_description: '',
-    compensation_type: 'equity',
+    compensation_type: 'participation',
     participation_percentage: 0,
     cash_amount: 0,
     credits_reserved: 100,
@@ -215,7 +215,7 @@ export default function ManagePositions() {
       category: '',
       position_title: '',
       position_description: '',
-      compensation_type: 'equity',
+      compensation_type: 'participation',
       participation_percentage: 0,
       cash_amount: 0,
       credits_reserved: 100,
@@ -354,7 +354,7 @@ export default function ManagePositions() {
                   </div>
                 </div>
 
-                {(formData.compensation_type === 'equity' || formData.compensation_type === 'mixed') && (
+                {(formData.compensation_type === 'participation' || formData.compensation_type === 'mixed') && (
                   <div className="space-y-2">
                     <Label>Participation Percentage: {formData.participation_percentage}%</Label>
                     <Slider

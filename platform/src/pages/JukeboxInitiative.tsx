@@ -96,7 +96,7 @@ export default function JukeboxInitiative() {
             </div>
             <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
               <div className="text-2xl font-bold text-purple-600 mb-1">Medallion</div>
-              <div className="text-sm text-slate-600">Founder's Circle ownership stake</div>
+              <div className="text-sm text-slate-600">Founder's Circle membership participation</div>
             </div>
           </div>
           

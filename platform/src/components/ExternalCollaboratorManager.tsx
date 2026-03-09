@@ -20,7 +20,7 @@ const COLLABORATOR_TYPES = [
 ];
 
 const COMPENSATION_TYPES = [
-  { value: "equity", label: "Participation Only", description: "Long-term cooperative membership" },
+  { value: "participation", label: "Participation Only", description: "Long-term cooperative membership" },
   { value: "profit_share", label: "Revenue Share Only", description: "% of revenue generated" },
   { value: "hybrid", label: "Hybrid", description: "Participation + Revenue share" },
 ];
@@ -41,7 +41,7 @@ export function ExternalCollaboratorManager() {
     collaborator_type: "manufacturer",
     collaborator_contact_email: "",
     collaborator_website: "",
-    compensation_type: "equity",
+    compensation_type: "participation",
     participation_percentage: 1.0,
     service_credit_percentage: 0,
     metric_basis: "hybrid",
@@ -122,7 +122,7 @@ export function ExternalCollaboratorManager() {
       collaborator_type: "manufacturer",
       collaborator_contact_email: "",
       collaborator_website: "",
-      compensation_type: "equity",
+      compensation_type: "participation",
       participation_percentage: 1.0,
       service_credit_percentage: 0,
       metric_basis: "hybrid",

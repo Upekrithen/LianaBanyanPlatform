@@ -38,7 +38,7 @@ export const PeerContractDialog = ({
   const [formData, setFormData] = useState({
     contract_title: "",
     contract_description: "",
-    compensation_type: "equity" as "equity" | "cash" | "hybrid",
+    compensation_type: "participation" as "participation" | "cash" | "hybrid",
     cash_amount: "",
     participation_percentage: "",
     time_commitment_days: "30",
@@ -80,7 +80,7 @@ export const PeerContractDialog = ({
       setFormData({
         contract_title: "",
         contract_description: "",
-        compensation_type: "equity",
+        compensation_type: "participation",
         cash_amount: "",
         participation_percentage: "",
         time_commitment_days: "30",
@@ -149,7 +149,7 @@ export const PeerContractDialog = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="equity">Participation Only</SelectItem>
+                <SelectItem value="participation">Participation Only</SelectItem>
                 <SelectItem value="cash">Cash Only</SelectItem>
                 <SelectItem value="hybrid">Participation + Cash</SelectItem>
               </SelectContent>
@@ -173,12 +173,12 @@ export const PeerContractDialog = ({
             </div>
           )}
 
-          {(formData.compensation_type === "equity" ||
+          {(formData.compensation_type === "participation" ||
             formData.compensation_type === "hybrid") && (
             <div>
-              <Label htmlFor="equity">Participation Percentage (%)</Label>
+              <Label htmlFor="participation">Participation Percentage (%)</Label>
               <Input
-                id="equity"
+                id="participation"
                 type="number"
                 step="0.01"
                 value={formData.participation_percentage}

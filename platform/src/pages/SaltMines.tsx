@@ -870,7 +870,7 @@ export default function SaltMines() {
                 <p className="text-white text-center">
                   <strong>PLUS:</strong> I'm personally offering you part of MY patents.<br />
                   <span className="text-primary text-xl font-bold">60%</span> of my entire portfolio goes to the Platform.<br />
-                  You become a member. You own part of that 60%.
+                  You become a member. You get usage rights to that 60%.
                 </p>
               </div>
               

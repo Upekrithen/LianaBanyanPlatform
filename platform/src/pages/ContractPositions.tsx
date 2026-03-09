@@ -280,7 +280,7 @@ export default function ContractPositions() {
               projectId={project.id}
               positionTitle={simulatorPosition.position_title}
               baseCompensation={
-                simulatorPosition.compensation_type === 'equity'
+                simulatorPosition.compensation_type === 'participation'
                   ? (simulatorPosition.participation_percentage || 0) * 100
                   : simulatorPosition.cash_amount || 5000
               }
