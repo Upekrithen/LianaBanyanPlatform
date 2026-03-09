@@ -69,7 +69,20 @@ export default function Auth() {
       toast.error(t('auth.error.signUp'));
     } else {
       toast.success(t('auth.success.signUp'));
-      setTimeout(() => navigate('/dashboard'), 1000);
+      
+      // Domain-specific routing logic
+      const domain = email.split('@')[1]?.toLowerCase();
+      setTimeout(() => {
+        if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {
+          navigate('/tower-of-peace');
+        } else if (domain === 'craigslist.org') {
+          navigate('/redcarpet/craig-newmark');
+        } else if (domain === 'ycombinator.com') {
+          navigate('/redcarpet/michael-seibel');
+        } else {
+          navigate('/dashboard');
+        }
+      }, 1000);
     }
   };
 
@@ -99,7 +112,18 @@ export default function Auth() {
       toast.error(t('auth.error.signIn'));
     } else {
       toast.success(t('auth.success.signIn'));
-      navigate('/dashboard');
+      
+      // Domain-specific routing logic
+      const domain = email.split('@')[1]?.toLowerCase();
+      if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {
+        navigate('/tower-of-peace');
+      } else if (domain === 'craigslist.org') {
+        navigate('/redcarpet/craig-newmark');
+      } else if (domain === 'ycombinator.com') {
+        navigate('/redcarpet/michael-seibel');
+      } else {
+        navigate('/dashboard');
+      }
     }
   };
 

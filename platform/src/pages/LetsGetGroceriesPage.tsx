@@ -4,6 +4,7 @@ import { ShoppingBag, Calendar, TrendingDown } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { GroceryOrderForm } from "@/components/GroceryOrderForm";
 
 export default function LetsGetGroceriesPage() {
@@ -16,30 +17,22 @@ export default function LetsGetGroceriesPage() {
     queryKey: ["my-grocery-orders", user?.id],
     queryFn: async () => {
       if (!user) return [];
+      // Real table: orders (order_type='grocery')
       const { data, error } = await supabase
-        .from("grocery_orders")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("delivery_date", { ascending: false });
+        .from("orders")
+        .select("*, order_items(*)")
+        .eq("buyer_id", user.id)
+        .eq("order_type", "grocery")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data || [];
     },
     enabled: !!user,
   });
 
-  const { data: schedules } = useQuery({
-    queryKey: ["grocery-schedules"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("grocery_schedules")
-        .select("*")
-        .eq("is_active", true);
-
-      if (error) throw error;
-      return data;
-    },
-  });
+  // No separate grocery_schedules table - use static content for now
+  const schedules: any[] = [];
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -53,48 +46,65 @@ export default function LetsGetGroceriesPage() {
         </div>
       </div>
 
-      <Card className="border-green-500/20 bg-gradient-to-br from-green-500/5 to-emerald-500/10">
-        <CardHeader>
-          <CardTitle>How It Works</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3 text-sm">
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <h3 className="font-semibold text-base flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Scheduled Delivery
-              </h3>
-              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+      {/* Progressive Disclosure for How It Works */}
+      <div className="space-y-3">
+        <ExpandableBlock
+          title="📅 Scheduled Delivery"
+          subtitle="Daily, weekly, or custom schedules"
+          preview="Integrated with HEB, Instacart, and more..."
+          accentColor="#22c55e"
+          defaultExpanded={true}
+        >
+          <div className="flex items-start gap-3">
+            <Calendar className="h-6 w-6 text-green-500 flex-shrink-0 mt-1" />
+            <div>
+              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                 <li>Daily, weekly, or custom schedules</li>
                 <li>Integrated with HEB, Instacart, etc.</li>
                 <li>Bulk delivery to Nodes</li>
                 <li>Curbside or home delivery options</li>
               </ul>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <Badge variant="outline" className="border-green-500/40">HEB Curbside</Badge>
+                <Badge variant="outline" className="border-green-500/40">HEB Favor</Badge>
+                <Badge variant="outline" className="border-green-500/40">Instacart</Badge>
+                <Badge variant="outline" className="border-green-500/40">Amazon Fresh</Badge>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="font-semibold text-base flex items-center gap-2">
-                <TrendingDown className="h-4 w-4" />
-                Volume Pricing
-              </h3>
-              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+          </div>
+        </ExpandableBlock>
+
+        <ExpandableBlock
+          title="📉 Volume Pricing"
+          subtitle="Save more when neighbors order together"
+          preview="Orders aggregated for bulk discounts..."
+          accentColor="#f59e0b"
+          defaultExpanded={false}
+        >
+          <div className="flex items-start gap-3">
+            <TrendingDown className="h-6 w-6 text-amber-500 flex-shrink-0 mt-1" />
+            <div>
+              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground mb-3">
                 <li>Orders aggregated for savings</li>
                 <li>Bulk purchasing discounts</li>
                 <li>Shared delivery costs</li>
                 <li>Member-only pricing tiers</li>
               </ul>
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-semibold text-base">Service Integration</h3>
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline">HEB Curbside</Badge>
-                <Badge variant="outline">HEB Favor</Badge>
-                <Badge variant="outline">Instacart</Badge>
-                <Badge variant="outline">Amazon Fresh</Badge>
-              </div>
+              <DataVizBar
+                title="Typical Savings"
+                subtitle="Based on order aggregation"
+                data={[
+                  { label: 'Bulk discount', value: 15, color: '#22c55e', icon: '💰' },
+                  { label: 'Shared delivery', value: 10, color: '#f59e0b', icon: '🚚' },
+                ]}
+                maxValue={30}
+                showPercentages={true}
+                height={20}
+              />
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </ExpandableBlock>
+      </div>
 
       <Tabs defaultValue="order" className="w-full">
         <TabsList className="grid w-full grid-cols-3">

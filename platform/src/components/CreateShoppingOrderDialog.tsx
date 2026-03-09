@@ -34,14 +34,14 @@ export function CreateShoppingOrderDialog({ onCreated }: { onCreated?: () => voi
       if (!user) throw new Error("Not authenticated");
 
       const { data: initiative } = await supabase
-        .from("initiative_projects")
+        .from("initiatives")
         .select("id")
         .eq("initiative_slug", "lets_go_shopping")
         .single();
 
       if (!initiative) throw new Error("Initiative not found");
 
-      const { error } = await supabase.from("shopping_orders").insert({
+      const { error } = await supabase.from("orders").insert({
         initiative_project_id: initiative.id,
         event_name: formData.event_name,
         category: formData.category,

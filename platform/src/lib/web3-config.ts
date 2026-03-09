@@ -1,17 +1,78 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { base, baseSepolia } from 'wagmi/chains';
+import { baseSepolia } from 'wagmi/chains';
 
 // WalletConnect Project ID for Liana Banyan Medallion System
 const projectId = '1ae6035e83fa3f97168a19706fa49f4a';
 
+/**
+ * NETWORK ARCHITECTURE: Test-Net By Design
+ * =========================================
+ * 
+ * PERMANENT TESTNET ARCHITECTURE (per "Blockchain Without Coin or Speculation" paper):
+ * 
+ * ALL blockchain operations use baseSepolia (TESTNET ONLY):
+ *    - IP ownership history, contribution attribution, narrative data
+ *    - Lives PERMANENTLY on testnet — this is deliberate, not staging
+ *    - Cannot be traded, monetized, or bridged to mainnet
+ *    - "Test-Net By Design" = architectural prevention of speculation
+ * 
+ * WHY NO MAINNET - EVER:
+ *    - Mainnet enables trading = enables speculation = violates SEC compliance
+ *    - Platform credits are "future service coupons" not securities
+ *    - No trading, no cashing in, ever — by design
+ *    - This is a FEATURE, not a limitation
+ * 
+ * The metaphor: Provenance is the STORY (priceless, non-monetizable).
+ * There is no "receipt" layer because there's nothing to trade.
+ */
 export const config = getDefaultConfig({
   appName: 'Liana Banyan IP Blockchain',
   projectId,
-  chains: [base, baseSepolia],
+  chains: [baseSepolia], // TESTNET ONLY - by design
   ssr: false,
 });
 
-// Contract addresses (will be deployed per project)
+/**
+ * NETWORK SELECTION GUIDE
+ * - baseSepolia: Use for ALL blockchain operations (permanent, by design)
+ * - NO MAINNET OPTION - Test-Net By Design prevents speculation
+ */
+export const NETWORK_PURPOSES = {
+  PROVENANCE: 'baseSepolia',      // Testnet by design - NEVER mainnet
+} as const;
+
+/**
+ * MEDALLION CONTRACT ABI
+ * ======================
+ * ERC-1155 with NON-TRANSFERABLE enforcement.
+ * 
+ * CRITICAL: When deploying the contract, include this in Solidity:
+ * 
+ * ```solidity
+ * function _beforeTokenTransfer(
+ *     address operator,
+ *     address from,
+ *     address to,
+ *     uint256[] memory ids,
+ *     uint256[] memory amounts,
+ *     bytes memory data
+ * ) internal virtual override {
+ *     // Allow minting (from == address(0)) and burning (to == address(0))
+ *     // Block all transfers between users
+ *     require(
+ *         from == address(0) || to == address(0),
+ *         "LianaBanyan: Medallions are non-transferable"
+ *     );
+ *     super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+ * }
+ * ```
+ * 
+ * This enforces "Test-Net By Design" at the contract level:
+ * - Medallions can be MINTED (provenance created)
+ * - Medallions can be BURNED (if needed for correction)
+ * - Medallions CANNOT be transferred between wallets
+ * - No secondary market possible = no speculation
+ */
 export const MEDALLION_CONTRACT_ABI = [
   // ERC-1155 standard functions
   {
@@ -53,6 +114,14 @@ export const MEDALLION_CONTRACT_ABI = [
     name: 'uri',
     outputs: [{ name: '', type: 'string' }],
     stateMutability: 'view',
+    type: 'function',
+  },
+  // Non-transferable check (view function to verify contract has restriction)
+  {
+    inputs: [],
+    name: 'isNonTransferable',
+    outputs: [{ name: '', type: 'bool' }],
+    stateMutability: 'pure',
     type: 'function',
   },
 ] as const;

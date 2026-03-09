@@ -54,6 +54,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip non-GET requests (HEAD, POST, etc.) - Cache API only supports GET
+  if (request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     fetch(request)
       .then((response) => {

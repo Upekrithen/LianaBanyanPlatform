@@ -3,7 +3,7 @@
  * Determines which portal (Marketplace or Business) to load based on hostname
  */
 
-export type PortalType = 'marketplace' | 'business' | 'nonprofit' | 'network';
+export type PortalType = 'marketplace' | 'business' | 'nonprofit' | 'network' | 'dss' | 'hexisle';
 
 /**
  * Detects the current portal based on the hostname
@@ -37,6 +37,16 @@ export const detectPortal = (): PortalType => {
     return 'business';
   }
   
+  // DSS portal (the2ndsecond.com)
+  if (hostname.includes('the2ndsecond.com') || port === '5177') {
+    return 'dss';
+  }
+  
+  // HexIsle portal (hexisle.com)
+  if (hostname.includes('hexisle.com') || port === '5178') {
+    return 'hexisle';
+  }
+  
   // Default to marketplace (.com) - Public discovery & investment
   return 'marketplace';
 };
@@ -52,7 +62,9 @@ export const getPortalBaseUrl = (): string => {
       marketplace: 'http://localhost:5173',
       business: 'http://localhost:5174',
       nonprofit: 'http://localhost:5175',
-      network: 'http://localhost:5176'
+      network: 'http://localhost:5176',
+      dss: 'http://localhost:5177',
+      hexisle: 'http://localhost:5178'
     };
     return portMap[portal];
   }
@@ -61,7 +73,9 @@ export const getPortalBaseUrl = (): string => {
     marketplace: 'https://lianabanyan.com',
     business: 'https://lianabanyan.biz',
     nonprofit: 'https://lianabanyan.org',
-    network: 'https://lianabanyan.net'
+    network: 'https://lianabanyan.net',
+    dss: 'https://the2ndsecond.com',
+    hexisle: 'https://hexisle.com'
   };
   return domainMap[portal];
 };
@@ -75,7 +89,9 @@ export const getPortalUrl = (portal: PortalType, path: string = '/'): string => 
       marketplace: '5173',
       business: '5174',
       nonprofit: '5175',
-      network: '5176'
+      network: '5176',
+      dss: '5177',
+      hexisle: '5178'
     };
     return `http://localhost:${portMap[portal]}${path}`;
   }
@@ -84,7 +100,9 @@ export const getPortalUrl = (portal: PortalType, path: string = '/'): string => 
     marketplace: 'lianabanyan.com',
     business: 'lianabanyan.biz',
     nonprofit: 'lianabanyan.org',
-    network: 'lianabanyan.net'
+    network: 'lianabanyan.net',
+    dss: 'the2ndsecond.com',
+    hexisle: 'hexisle.com'
   };
   return `https://${domainMap[portal]}${path}`;
 };

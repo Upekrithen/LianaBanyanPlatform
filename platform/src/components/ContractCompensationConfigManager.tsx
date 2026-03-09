@@ -75,7 +75,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
     if (minEquityRatio < 0 || minEquityRatio > 1 || maxEquityRatio < 0 || maxEquityRatio > 1) {
       toast({
         title: "Validation Error",
-        description: "Equity ratios must be between 0 and 1",
+        description: "Participation ratios must be between 0 and 1",
         variant: "destructive"
       });
       return;
@@ -84,7 +84,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
     if (minEquityRatio > maxEquityRatio) {
       toast({
         title: "Validation Error",
-        description: "Minimum equity ratio cannot exceed maximum equity ratio",
+        description: "Minimum participation ratio cannot exceed maximum participation ratio",
         variant: "destructive"
       });
       return;
@@ -170,9 +170,9 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Equity/Cash Ratio Configuration</CardTitle>
+          <CardTitle>Participation/Credit Ratio Configuration</CardTitle>
           <CardDescription>
-            Set minimum and maximum equity/cash ratios for contract assignments
+            Set minimum and maximum participation/credit ratios for contract assignments
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -188,7 +188,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
               />
             </div>
             <div>
-              <Label htmlFor="minEquity">Minimum Equity Ratio</Label>
+              <Label htmlFor="minEquity">Minimum Participation Ratio</Label>
               <Input
                 id="minEquity"
                 type="number"
@@ -199,11 +199,11 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
                 max={1}
               />
               <p className="text-xs text-muted-foreground mt-1">
-                {(minEquityRatio * 100).toFixed(0)}% equity / {((1 - minEquityRatio) * 100).toFixed(0)}% cash
+                {(minEquityRatio * 100).toFixed(0)}% participation / {((1 - minEquityRatio) * 100).toFixed(0)}% credits
               </p>
             </div>
             <div>
-              <Label htmlFor="maxEquity">Maximum Equity Ratio</Label>
+              <Label htmlFor="maxEquity">Maximum Participation Ratio</Label>
               <Input
                 id="maxEquity"
                 type="number"
@@ -214,7 +214,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
                 max={1}
               />
               <p className="text-xs text-muted-foreground mt-1">
-                {(maxEquityRatio * 100).toFixed(0)}% equity / {((1 - maxEquityRatio) * 100).toFixed(0)}% cash
+                {(maxEquityRatio * 100).toFixed(0)}% participation / {((1 - maxEquityRatio) * 100).toFixed(0)}% credits
               </p>
             </div>
           </div>

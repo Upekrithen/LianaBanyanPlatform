@@ -1,177 +1,510 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Heart, Shield, Pill, DollarSign, Utensils, ArrowRight, ShoppingCart, ShoppingBag } from "lucide-react";
+import { Heart, ArrowLeft, Coins } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+/**
+ * The Sweet Sixteen Initiatives — Deck Card Edition
+ * 
+ * Each initiative is a swivel Deck Card with 4 corner locks.
+ * Priority initiatives (the ones we're doing first) are FREE to unlock.
+ * Other initiatives cost 1 Mark per lock to unlock.
+ * 
+ * Users get 30 Marks (non-persistent, session only) to experiment.
+ * 
+ * Currency: MARKS (not Candles - Candles are for navigation)
+ * Real Marks are earned by completing tasks. These are test Marks.
+ */
+
+// The CORRECT Sweet Sixteen — in priority order, then category order
+const SWEET_SIXTEEN = [
+  // PRIORITY TIER — Free to unlock (doing these first)
+  { 
+    id: "lets-make-dinner", 
+    name: "Let's Make Dinner", 
+    emoji: "🍽️",
+    tagline: "Neighbors Paid to Feed Neighbors",
+    description: "Home cooks earn 83.3% preparing meals for busy neighbors. Volume purchasing, shared kitchens, community connection.",
+    route: "/initiatives/lets-make-dinner",
+    priority: true,
+    category: "food"
+  },
+  { 
+    id: "lets-get-groceries", 
+    name: "Let's Get Groceries", 
+    emoji: "🛒",
+    tagline: "Volume Discount Grocery Runs",
+    description: "Aggregate neighborhood grocery orders for wholesale pricing. Delivery by members, savings for everyone.",
+    route: "/initiatives/lets-get-groceries",
+    priority: true,
+    category: "food"
+  },
+  { 
+    id: "lets-make-bread", 
+    name: "Let's Make Bread", 
+    emoji: "🍞",
+    tagline: "$5 Business Simulator → Real Business",
+    description: "Start with a $5 simulation. Learn business fundamentals. Graduate to real operations when ready.",
+    route: "/initiatives/bread",
+    priority: true,
+    category: "business"
+  },
+  { 
+    id: "defense-klaus", 
+    name: "Defense Klaus", 
+    emoji: "🛡️",
+    tagline: "For Someone You Love",
+    description: "$6 safety bracelet with pull-up palm claws + GPS broadcast monitoring. 100% of proceeds fund pooled legal defense for all members. Physical protection AND legal protection in one.",
+    route: "/initiatives/defense-klaus",
+    priority: true,
+    category: "safety"
+  },
+  { 
+    id: "didasko", 
+    name: "Didasko (Academic)", 
+    emoji: "🎓",
+    tagline: "College of Hard Knocks",
+    description: "K-12 curriculum. Skills training. Tutoring. Mentoring. Education as cooperative enterprise.",
+    route: "/initiatives/didasko",
+    priority: true,
+    category: "education"
+  },
+  
+  // STANDARD TIER — 1 Mark per lock (4 total)
+  { 
+    id: "lets-go-shopping", 
+    name: "Let's Go Shopping", 
+    emoji: "🛍️",
+    tagline: "Volume Discount Product Purchases",
+    description: "Holiday specials, bulk buying, member discounts. Shopping together saves everyone money.",
+    route: "/initiatives/lets-go-shopping",
+    priority: false,
+    category: "commerce"
+  },
+  { 
+    id: "household-concierge", 
+    name: "Household Concierge", 
+    emoji: "🏠",
+    tagline: "Home Services by Vetted Members",
+    description: "Maintenance, repairs, scheduling — all by trusted community members at Cost+20%.",
+    route: "/initiatives/household-concierge",
+    priority: false,
+    category: "services"
+  },
+  { 
+    id: "family-table", 
+    name: "Family Table", 
+    emoji: "👨‍👩‍👧‍👦",
+    tagline: "Meal Planning & Connected Portfolios",
+    description: "Shared schedules, gift lists, family portfolios. Keep your tribe connected.",
+    route: "/initiatives/family-table",
+    priority: false,
+    category: "family"
+  },
+  { 
+    id: "tatiana-schlossburg-health-accords", 
+    name: "Tatiana Schlossburg Health Accords", 
+    emoji: "💊",
+    tagline: "Cost+20% Prescriptions & Supplies",
+    description: "Medications at cost plus 20%. No insurance games. No surprise bills.",
+    route: "/initiatives/tatiana-schlossburg-health-accords",
+    priority: false,
+    category: "health"
+  },
+  { 
+    id: "msa", 
+    name: "MSA", 
+    emoji: "🏥",
+    tagline: "Member Savings Accounts for Healthcare",
+    description: "Pre-tax healthcare savings. Community-pooled for emergencies. Your health, your money.",
+    route: "/initiatives/msa",
+    priority: false,
+    category: "health"
+  },
+  { 
+    id: "rally-group", 
+    name: "Rally Group", 
+    emoji: "📢",
+    tagline: "Crisis Response & Community Mobilization",
+    description: "When disaster strikes, Rally Group coordinates response. Neighbors helping neighbors, fast.",
+    route: "/initiatives/rally-group",
+    priority: false,
+    category: "community"
+  },
+  { 
+    id: "vsl", 
+    name: "VSL", 
+    emoji: "💳",
+    tagline: "Voucher Short Loans 0-5%",
+    description: "No-collateral member-to-member loans. 0-5% interest. Because banks shouldn't own your future.",
+    route: "/initiatives/vsl",
+    priority: false,
+    category: "finance"
+  },
+  { 
+    id: "harper-guild", 
+    name: "Harper Guild", 
+    emoji: "⚖️",
+    tagline: "HR & Ethics for Small Businesses",
+    description: "Fair employment practices. Skills training. Career development. Ethics support.",
+    route: "/initiatives/harper-guild",
+    priority: false,
+    category: "business"
+  },
+  { 
+    id: "jukebox", 
+    name: "JukeBox", 
+    emoji: "🎵",
+    tagline: "Artist-Controlled Royalties",
+    description: "Cooperative music licensing. Artists keep 83.3%. Transparent royalty distribution.",
+    route: "/initiatives/jukebox",
+    priority: false,
+    category: "creative"
+  },
+  { 
+    id: "brass-tacks", 
+    name: "Brass Tacks", 
+    emoji: "🔩",
+    tagline: "Manufacturing & Makers",
+    description: "Tooling, mechanics, physical products. The maker economy at Cost+20%.",
+    route: "/initiatives/brass-tacks",
+    priority: false,
+    category: "manufacturing"
+  },
+  { 
+    id: "power-to-the-people", 
+    name: "Power to the People", 
+    emoji: "⚡",
+    tagline: "Citizen Advocacy & Cooperative Energy",
+    description: "Congressional tracking. Cooperative energy purchasing. Per the Switzerland Protocol.",
+    route: "/initiatives/power-to-the-people",
+    priority: false,
+    category: "advocacy"
+  },
+];
+
+interface LockState {
+  top: boolean;
+  right: boolean;
+  bottom: boolean;
+  left: boolean;
+}
+
+interface InitiativeCardState {
+  locks: LockState;
+  isFlipped: boolean;
+  isCollected: boolean;
+}
 
 export default function InitiativeProjectsPage() {
   const navigate = useNavigate();
-
-  const { data: initiatives, isLoading } = useQuery({
-    queryKey: ["initiative-projects"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("initiative_projects")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
+  const { toast } = useToast();
+  
+  // Session-only Marks (non-persistent) for testing
+  const [sessionMarks, setSessionMarks] = useState(30);
+  
+  // Card states for all initiatives
+  const [cardStates, setCardStates] = useState<Record<string, InitiativeCardState>>(() => {
+    const initial: Record<string, InitiativeCardState> = {};
+    SWEET_SIXTEEN.forEach(init => {
+      initial[init.id] = {
+        locks: { top: true, right: true, bottom: true, left: true },
+        isFlipped: false,
+        isCollected: false,
+      };
+    });
+    return initial;
   });
 
-  const initiativeIcons: Record<string, any> = {
-    "lets_make_dinner": Utensils,
-    "defense_claws": Shield,
-    "lifeline_medications": Pill,
-    "msa": DollarSign,
-    "lets_go_shopping": ShoppingCart,
-    "lets_get_groceries": ShoppingBag,
+  // Welcome toast on first load
+  useEffect(() => {
+    toast({
+      title: "🪙 30 Marks for This Session",
+      description: "Unlock initiative cards by clicking their side locks. Priority initiatives are FREE!",
+    });
+  }, []);
+
+  const handleLockClick = (initId: string, position: keyof LockState) => {
+    const initiative = SWEET_SIXTEEN.find(i => i.id === initId);
+    const state = cardStates[initId];
+    
+    if (!initiative || !state || state.isCollected || !state.locks[position]) return;
+
+    // Priority initiatives are free, others cost 1 Mark per lock
+    const costPerLock = initiative.priority ? 0 : 1;
+    
+    if (costPerLock > 0 && sessionMarks < costPerLock) {
+      toast({
+        title: "Not Enough Marks",
+        description: `You need ${costPerLock} Mark to unlock this lock. You have ${sessionMarks}.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Deduct marks if not free
+    if (costPerLock > 0) {
+      setSessionMarks(prev => prev - costPerLock);
+    }
+
+    // Unlock the lock
+    const newLocks = { ...state.locks, [position]: false };
+    const allUnlocked = Object.values(newLocks).every(l => !l);
+
+    setCardStates(prev => ({
+      ...prev,
+      [initId]: {
+        ...prev[initId],
+        locks: newLocks,
+        isCollected: allUnlocked,
+      }
+    }));
+
+    if (allUnlocked) {
+      toast({
+        title: `🎴 ${initiative.name} Unlocked!`,
+        description: "Click to flip and explore this initiative.",
+      });
+    }
   };
 
-  const initiativeColors: Record<string, string> = {
-    "lets_make_dinner": "from-blue-500/10 to-cyan-500/20 border-blue-500/20",
-    "defense_claws": "from-purple-500/10 to-pink-500/20 border-purple-500/20",
-    "lifeline_medications": "from-green-500/10 to-emerald-500/20 border-green-500/20",
-    "msa": "from-amber-500/10 to-yellow-500/20 border-amber-500/20",
-    "lets_go_shopping": "from-indigo-500/10 to-violet-500/20 border-indigo-500/20",
-    "lets_get_groceries": "from-lime-500/10 to-green-500/20 border-lime-500/20",
+  const handleCardClick = (initId: string) => {
+    const state = cardStates[initId];
+    if (!state?.isCollected) return;
+    
+    setCardStates(prev => ({
+      ...prev,
+      [initId]: {
+        ...prev[initId],
+        isFlipped: !prev[initId].isFlipped,
+      }
+    }));
   };
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto p-6">
-        <p>Loading initiatives...</p>
-      </div>
-    );
-  }
+  const handleExplore = (route: string) => {
+    navigate(route);
+  };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center gap-3">
-        <Heart className="h-8 w-8 text-red-500" />
-        <div>
-          <h1 className="text-3xl font-bold">Initiative Projects</h1>
-          <p className="text-muted-foreground">
-            Organization-wide programs with charitable and community impact
-          </p>
-        </div>
-      </div>
-
-      <Card className="border-primary/20 bg-gradient-to-br from-red-500/5 to-pink-500/10">
-        <CardHeader>
-          <CardTitle>What Are Initiative Projects?</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3 text-sm">
-          <p>
-            Initiative Projects are organization-wide programs run primarily through the <strong>.org</strong> division.
-            They serve the member community and external beneficiaries with a focus on charitable impact.
-          </p>
-          <div className="grid md:grid-cols-2 gap-4 mt-4">
-            <div className="space-y-2">
-              <h3 className="font-semibold text-base">Key Differences</h3>
-              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                <li><strong>Scope:</strong> Organization-wide, not project-specific</li>
-                <li><strong>Location:</strong> Primarily .org portal</li>
-                <li><strong>Funding:</strong> Member credits, donations, surplus allocation</li>
-                <li><strong>Purpose:</strong> Community benefit and charitable impact</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-semibold text-base">Governance</h3>
-              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                <li>Banyan Council oversight</li>
-                <li>Specialized committees per initiative</li>
-                <li>Financial firewall from standard projects</li>
-                <li>Transparent metrics and impact reporting</li>
-              </ul>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <button
+            onClick={() => navigate('/?view=initiatives')}
+            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Back to Main</span>
+          </button>
+          
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-amber-500/20 px-3 py-1.5 rounded-full border border-amber-500/30">
+              <Coins className="h-4 w-4 text-amber-400" />
+              <span className="font-mono font-bold text-amber-300">{sessionMarks}</span>
+              <span className="text-amber-400/70 text-sm">Marks</span>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </header>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        {initiatives?.map((initiative) => {
-          const Icon = initiativeIcons[initiative.initiative_slug] || Heart;
-          const colorClass = initiativeColors[initiative.initiative_slug] || "from-gray-500/10 to-gray-500/20 border-gray-500/20";
-          const fundingProgress = initiative.total_funding_received && initiative.funding_goal
-            ? (initiative.total_funding_received / initiative.funding_goal) * 100
-            : 0;
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        {/* Title */}
+        <div className="text-center space-y-2">
+          <div className="flex items-center justify-center gap-3">
+            <Heart className="h-8 w-8 text-red-500" />
+            <h1 className="text-4xl font-bold">The Sweet Sixteen</h1>
+          </div>
+          <p className="text-white/60 max-w-2xl mx-auto">
+            16 charitable initiatives funded by the Cost+20% margin. 
+            Click the side locks to unlock each card. Priority initiatives are <span className="text-green-400 font-semibold">FREE</span>!
+          </p>
+        </div>
 
-          return (
-            <Card
-              key={initiative.id}
-              className={`cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-br ${colorClass}`}
-              onClick={() => {
-                if (initiative.initiative_slug === "lets_make_dinner") {
-                  navigate("/initiatives/lets-make-dinner");
-                } else if (initiative.initiative_slug === "defense_claws") {
-                  navigate("/initiatives/defense-claws");
-                } else if (initiative.initiative_slug === "msa") {
-                  navigate("/initiatives/msa");
-                } else if (initiative.initiative_slug === "lifeline_medications") {
-                  navigate("/initiatives/lifeline-medications");
-                } else if (initiative.initiative_slug === "lets_go_shopping") {
-                  navigate("/initiatives/lets-go-shopping");
-                } else if (initiative.initiative_slug === "lets_get_groceries") {
-                  navigate("/initiatives/lets-get-groceries");
-                }
-              }}
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <Icon className="h-6 w-6" />
-                    <div>
-                      <CardTitle>{initiative.initiative_name}</CardTitle>
-                      <Badge variant="outline" className="mt-1">
-                        {initiative.status}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-                <CardDescription className="mt-2">
-                  {initiative.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {initiative.funding_goal && (
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Funding Progress</span>
-                      <span className="font-medium">
-                        ${initiative.total_funding_received?.toFixed(0) || 0} / ${initiative.funding_goal.toFixed(0)}
-                      </span>
-                    </div>
-                    <Progress value={fundingProgress} className="h-2" />
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-sm text-muted-foreground">
-                    {initiative.participants_count || 0} participants
-                  </span>
-                  <Button variant="ghost" size="sm">
-                    Learn More
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      {(!initiatives || initiatives.length === 0) && (
-        <Card>
-          <CardContent className="py-8 text-center text-muted-foreground">
-            <p>No initiatives available yet. Check back soon!</p>
+        {/* How It Works */}
+        <Card className="bg-white/5 border-white/10">
+          <CardHeader>
+            <CardTitle className="text-white">How Initiatives Work</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-white/70">
+            <p>
+              Three commercial websites (LianaBanyan.com, .biz, .net) sustainably fund 
+              sixteen charitable initiatives through a baked-in 20% "Cost of Doing Good" margin.
+              No donations required. Commerce funds community.
+            </p>
+            <p>
+              <strong className="text-white">Creators and Workers keep 83.3%</strong> of every transaction. The remaining margin 
+              funds these initiatives — constitutionally locked by DNA Lock.
+            </p>
           </CardContent>
         </Card>
-      )}
+
+        {/* Initiative Cards Grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {SWEET_SIXTEEN.map((initiative) => {
+            const state = cardStates[initiative.id];
+            const lockedCount = Object.values(state.locks).filter(Boolean).length;
+            const costPerLock = initiative.priority ? 0 : 1;
+
+            return (
+              <div
+                key={initiative.id}
+                className="perspective-1000"
+                style={{ perspective: '1000px' }}
+              >
+                <div
+                  className={`relative transition-transform duration-500 transform-style-3d ${
+                    state.isFlipped ? 'rotate-y-180' : ''
+                  }`}
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: state.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  }}
+                >
+                  {/* FRONT of card */}
+                  <div
+                    className={`relative bg-gradient-to-br ${
+                      initiative.priority 
+                        ? 'from-green-500/20 to-emerald-500/30 border-green-500/30' 
+                        : 'from-white/10 to-white/5 border-white/20'
+                    } backdrop-blur-sm rounded-xl p-6 border-2 min-h-[220px] cursor-pointer transition-all hover:shadow-lg ${
+                      state.isCollected ? 'hover:scale-[1.02]' : ''
+                    }`}
+                    style={{ backfaceVisibility: 'hidden' }}
+                    onClick={() => handleCardClick(initiative.id)}
+                  >
+                    {/* Priority Badge */}
+                    {initiative.priority && (
+                      <div className="absolute top-2 left-2 bg-green-500/30 text-green-300 text-xs px-2 py-0.5 rounded-full border border-green-500/40">
+                        FREE
+                      </div>
+                    )}
+
+                    {/* 4 Corner Locks */}
+                    <button
+                      className={`absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
+                        state.locks.top 
+                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          : 'bg-green-600/50 cursor-default'
+                      }`}
+                      onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'top'); }}
+                      disabled={!state.locks.top}
+                      title={state.locks.top ? (costPerLock === 0 ? 'Click to unlock (FREE)' : `Click to unlock (${costPerLock} Mark)`) : 'Unlocked'}
+                    >
+                      {state.locks.top ? '🔒' : '🔓'}
+                    </button>
+                    <button
+                      className={`absolute top-1/2 -right-2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
+                        state.locks.right 
+                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          : 'bg-green-600/50 cursor-default'
+                      }`}
+                      onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'right'); }}
+                      disabled={!state.locks.right}
+                    >
+                      {state.locks.right ? '🔒' : '🔓'}
+                    </button>
+                    <button
+                      className={`absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
+                        state.locks.bottom 
+                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          : 'bg-green-600/50 cursor-default'
+                      }`}
+                      onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'bottom'); }}
+                      disabled={!state.locks.bottom}
+                    >
+                      {state.locks.bottom ? '🔒' : '🔓'}
+                    </button>
+                    <button
+                      className={`absolute top-1/2 -left-2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
+                        state.locks.left 
+                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          : 'bg-green-600/50 cursor-default'
+                      }`}
+                      onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'left'); }}
+                      disabled={!state.locks.left}
+                    >
+                      {state.locks.left ? '🔒' : '🔓'}
+                    </button>
+
+                    {/* Card Content */}
+                    <div className="text-center space-y-2 mt-4">
+                      <div className="text-4xl">{initiative.emoji}</div>
+                      <h3 className="text-lg font-bold text-white">{initiative.name}</h3>
+                      <p className="text-sm text-white/60">{initiative.tagline}</p>
+                    </div>
+
+                    {/* Lock Status */}
+                    {lockedCount > 0 && (
+                      <div className="absolute bottom-2 right-2 text-xs text-white/40 bg-black/30 px-2 py-0.5 rounded">
+                        {lockedCount}/4 locked
+                      </div>
+                    )}
+
+                    {/* Collected Badge */}
+                    {state.isCollected && (
+                      <div className="absolute top-2 right-2 bg-green-500/30 text-green-300 text-xs px-2 py-0.5 rounded-full border border-green-500/40">
+                        ✓ Unlocked
+                      </div>
+                    )}
+
+                    {/* Flip hint when collected */}
+                    {state.isCollected && !state.isFlipped && (
+                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-white/40">
+                        Click to flip →
+                      </div>
+                    )}
+                  </div>
+
+                  {/* BACK of card */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-indigo-500/30 backdrop-blur-sm rounded-xl p-6 border-2 border-purple-500/30 min-h-[220px]"
+                    style={{ 
+                      backfaceVisibility: 'hidden',
+                      transform: 'rotateY(180deg)',
+                    }}
+                    onClick={() => handleCardClick(initiative.id)}
+                  >
+                    <div className="flex flex-col h-full">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-2xl">{initiative.emoji}</span>
+                        <h3 className="text-lg font-bold text-white">{initiative.name}</h3>
+                      </div>
+                      
+                      <p className="text-sm text-white/70 flex-1">
+                        {initiative.description}
+                      </p>
+
+                      <Button
+                        onClick={(e) => { e.stopPropagation(); handleExplore(initiative.route); }}
+                        className="w-full mt-4 bg-purple-600 hover:bg-purple-700"
+                      >
+                        Explore as Ghost →
+                      </Button>
+
+                      <p className="text-xs text-white/40 text-center mt-2">
+                        Click to flip back
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer Info */}
+        <Card className="bg-amber-500/10 border-amber-500/20">
+          <CardContent className="py-4 text-center text-sm text-amber-200/80">
+            <Coins className="h-5 w-5 inline-block mr-2 text-amber-400" />
+            You have <strong>{sessionMarks} Marks</strong> for this session. 
+            Priority initiatives are FREE. Others cost 1 Mark per lock (4 total to unlock).
+            Real Marks are earned by completing tasks — these are test Marks.
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

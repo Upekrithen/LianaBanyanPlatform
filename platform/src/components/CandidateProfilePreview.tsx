@@ -41,7 +41,7 @@ export function CandidateProfilePreview({}: CandidateProfilePreviewProps) {
     skills: ["GAAP Accounting", "Tax Strategy", "Financial Modeling", "Multi-Entity Structures", "Audit Management"],
     credentials: ["Active CPA License (CA, NY)", "MBA - Finance", "15+ years experience"],
     availability: "Available starting next month",
-    preferredCompensation: "Mix of equity (40%) and cash (60%)"
+    preferredCompensation: "Mix of service credits (40%) and cash (60%)"
   };
 
   return (

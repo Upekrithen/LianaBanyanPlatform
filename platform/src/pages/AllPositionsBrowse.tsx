@@ -130,7 +130,7 @@ export default function AllPositionsBrowse() {
                       {position.compensation_type === "equity" && position.equity_percentage && (
                         <div className="flex items-center gap-2 text-sm">
                           <TrendingUp className="w-4 h-4" />
-                          <span>{position.equity_percentage}% equity</span>
+                          <span>{position.equity_percentage}% participation</span>
                         </div>
                       )}
                       {position.compensation_type === "cash" && position.cash_amount && (

@@ -52,7 +52,7 @@ export const ClanCreationDialog = () => {
 
       // Create clan
       const { data: clan, error: clanError } = await supabase
-        .from('clans')
+        .from('guilds')
         .insert({
           name: formData.nameType,
           custom_name: formData.customName || null,
@@ -69,7 +69,7 @@ export const ClanCreationDialog = () => {
 
       // Add creator as first member
       const { error: memberError } = await supabase
-        .from('clan_members')
+        .from('guild_members')
         .insert({
           clan_id: clan.id,
           user_id: user.id,

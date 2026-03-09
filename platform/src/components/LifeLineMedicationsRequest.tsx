@@ -19,7 +19,7 @@ export default function LifeLineMedicationsRequest() {
     queryKey: ["lifeline-initiative"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("initiative_projects")
+        .from("initiatives")
         .select("*")
         .eq("initiative_slug", "lifeline_medications")
         .maybeSingle();
@@ -59,7 +59,7 @@ export default function LifeLineMedicationsRequest() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Pill className="h-5 w-5 text-emerald-500" />
-          <CardTitle>LifeLine Medications Request</CardTitle>
+          <CardTitle>Health Accords Medication Request</CardTitle>
         </div>
         <CardDescription>
           Request assistance with medication costs. We research and manufacture at cost + 20%.
@@ -99,7 +99,7 @@ export default function LifeLineMedicationsRequest() {
         </Button>
 
         <div className="pt-4 border-t text-xs text-muted-foreground space-y-2">
-          <p className="font-semibold">How LifeLine Works:</p>
+          <p className="font-semibold">How the Health Accords Work:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>We research and start production businesses for needed medications</li>
             <li>Medications sold at cost + 20% (e.g., insulin)</li>

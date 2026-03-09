@@ -7,6 +7,8 @@ import MarketplaceApp from "./App.tsx";
 import BusinessApp from "./BusinessApp.tsx";
 import NonprofitApp from "./NonprofitApp.tsx";
 import NetworkApp from "./NetworkApp.tsx";
+import DSSApp from "./DSSApp.tsx";
+import HexIsleApp from "./HexIsleApp.tsx";
 import "./i18n/config";
 import "./index.css";
 
@@ -20,10 +22,10 @@ const AppMap = {
   business: BusinessApp,
   nonprofit: NonprofitApp,
   network: NetworkApp,
+  dss: DSSApp,
+  hexisle: HexIsleApp,
 };
 const AppComponent = AppMap[portal];
-
-console.log(`🚀 Loading ${portal} portal...`);
 
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider>

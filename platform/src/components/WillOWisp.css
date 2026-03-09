@@ -1,0 +1,299 @@
+/* ═══════════════════════════════════════════════════════════════════
+   WILL-O'-THE-WISP BEACON JOURNEY
+   A guided tour through the platform with a dancing light
+═══════════════════════════════════════════════════════════════════ */
+
+.wisp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+/* SVG mask for spotlight effect */
+.wisp-mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wisp-mask ellipse {
+  transition: all 0.5s ease-out;
+}
+
+.wisp-mask ellipse.transitioning {
+  opacity: 0.5;
+}
+
+/* The floating wisp light */
+.wisp-light {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  z-index: 10001;
+  pointer-events: none;
+  animation: wisp-float 3s ease-in-out infinite;
+}
+
+.wisp-emoji {
+  font-size: 2.5rem;
+  filter: brightness(1.3);
+  display: block;
+  animation: wisp-flicker 2s ease-in-out infinite;
+}
+
+.wisp-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(136, 200, 255, 0.6) 0%, rgba(136, 200, 255, 0) 70%);
+  border-radius: 50%;
+  animation: wisp-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes wisp-float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-10px); }
+}
+
+@keyframes wisp-flicker {
+  0%, 100% { opacity: 1; }
+  25% { opacity: 0.9; }
+  50% { opacity: 1; }
+  75% { opacity: 0.85; }
+}
+
+@keyframes wisp-pulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* Tooltip card */
+.wisp-tooltip {
+  position: fixed;
+  width: 320px;
+  max-width: calc(100vw - 40px);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid rgba(136, 200, 255, 0.4);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 
+    0 4px 30px rgba(136, 200, 255, 0.2),
+    0 0 60px rgba(136, 200, 255, 0.1);
+  z-index: 10002;
+  cursor: default;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.wisp-tooltip.transitioning {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.wisp-tooltip h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.wisp-tooltip p {
+  margin: 0 0 1.25rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Progress bar */
+.wisp-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.wisp-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #88c8ff, #34d399);
+  border-radius: 2px;
+  transition: width 0.4s ease-out;
+}
+
+/* Control buttons */
+.wisp-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wisp-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.wisp-exit {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wisp-exit:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.wisp-next {
+  flex: 2;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wisp-next:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+}
+
+/* Keyboard hint */
+.wisp-hint {
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.5rem;
+}
+
+/* Mode badges */
+.wisp-mode-badge {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.wisp-mode-badge.training {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Future: Chase mode styling
+.wisp-mode-badge.chase {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  color: white;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  animation: chase-pulse 1s ease-in-out infinite;
+}
+
+@keyframes chase-pulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3); }
+  50% { box-shadow: 0 2px 16px rgba(239, 68, 68, 0.6); }
+}
+
+.wisp-ante-display,
+.wisp-participants,
+.wisp-timer {
+  position: fixed;
+  top: 20px;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 10003;
+}
+
+.wisp-ante-display { left: 20px; }
+.wisp-participants { left: 50%; transform: translateX(-50%); }
+.wisp-timer { right: 20px; }
+*/
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .wisp-tooltip {
+    width: calc(100vw - 32px);
+    left: 16px !important;
+    right: 16px;
+    padding: 1rem;
+    /* Force tooltip to be visible and reachable on mobile */
+    top: auto !important;
+    bottom: 20px !important;
+    transform: none !important;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  .wisp-emoji {
+    font-size: 2rem;
+  }
+  
+  .wisp-tooltip h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .wisp-tooltip p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+  
+  .wisp-buttons {
+    flex-direction: row;
+  }
+  
+  .wisp-exit,
+  .wisp-next {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .wisp-hint {
+    font-size: 0.65rem;
+    margin-top: 0.75rem;
+  }
+  
+  .wisp-mode-badge {
+    top: -10px;
+    right: -4px;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .wisp-progress {
+    margin-bottom: 0.75rem;
+  }
+}

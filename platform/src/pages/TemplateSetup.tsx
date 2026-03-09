@@ -306,9 +306,9 @@ import ProjectDetail from './pages/ProjectDetail';
 
   const setupInstructions = `# Template Setup Instructions
 
-## Step 1: Create New Lovable Project
-1. Go to lovable.com and create a new project
-2. Choose "Blank Template" or remix this project
+## Step 1: Create New Frontend Project
+1. Fork the platform codebase or create a new Vite + React project
+2. Choose "Blank Template" or fork this project
 
 ## Step 2: Copy Template Files
 Copy these files into your new project:
@@ -531,7 +531,7 @@ Add the new routes to your App.tsx routing configuration
         </CardHeader>
         <CardContent className="space-y-2">
           <p className="text-sm">
-            1. Copy all the code above into a new Lovable project
+            1. Copy all the code above into a new frontend project
           </p>
           <p className="text-sm">
             2. Generate an API key from the{" "}

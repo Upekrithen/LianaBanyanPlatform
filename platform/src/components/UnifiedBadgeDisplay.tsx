@@ -12,9 +12,15 @@ import {
   Star,
   Crown,
   Target,
-  Zap
+  Zap,
+  ChefHat,
+  Flame,
+  Heart,
+  ShoppingCart,
+  Utensils
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FOOD_BADGES, getLevelDescription } from '@/lib/badgeAwards';
 
 interface UnifiedBadgeDisplayProps {
   userId: string;
@@ -57,7 +63,7 @@ export function UnifiedBadgeDisplay({ userId, size = 'md', compact = false }: Un
     queryKey: ['user-clans', userId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('clan_members')
+        .from('guild_members')
         .select(`
           *,
           clans (display_name, name)
@@ -100,7 +106,23 @@ export function UnifiedBadgeDisplay({ userId, size = 'md', compact = false }: Un
     lone_wolf: Sword,
     skill: Target,
     clan: Users,
+    food: Utensils,
+    delivery: ShoppingCart,
   };
+
+  // Food badge icons mapping
+  const foodBadgeIcons: Record<string, any> = {
+    cooking_spoon: Utensils,
+    hot_pepper: Flame,
+    chef_hat: ChefHat,
+    meal_saver: Heart,
+    grocery_runner: ShoppingCart,
+  };
+
+  // Filter food-related achievements
+  const foodAchievements = achievements?.filter(
+    a => a.achievement_category === 'food' || a.achievement_category === 'delivery'
+  ) || [];
 
   const achievementsByCategory = achievements?.reduce((acc, achievement) => {
     const category = achievement.achievement_category;
@@ -243,6 +265,47 @@ export function UnifiedBadgeDisplay({ userId, size = 'md', compact = false }: Un
                     {membership.clans?.display_name || membership.clans?.name}
                   </Badge>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Food Ecosystem Badges */}
+          {foodAchievements.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Utensils className="w-4 h-4 text-amber-500" />
+                <span className="text-sm font-semibold">Food Ecosystem</span>
+              </div>
+              <div className="flex flex-wrap gap-2 ml-6">
+                {foodAchievements.map((achievement) => {
+                  // Find matching badge definition
+                  const badgeId = achievement.achievement_name.toLowerCase().replace(/ /g, '_');
+                  const Icon = foodBadgeIcons[badgeId] || Utensils;
+                  const level = achievement.achievement_level;
+                  
+                  // Determine badge color based on type
+                  let badgeColor = 'bg-amber-500/20 text-amber-500';
+                  if (badgeId === 'hot_pepper') badgeColor = 'bg-rose-500/20 text-rose-500';
+                  if (badgeId === 'meal_saver') badgeColor = 'bg-red-500/20 text-red-500';
+                  if (badgeId === 'grocery_runner') badgeColor = 'bg-emerald-500/20 text-emerald-500';
+                  if (badgeId === 'chef_hat') badgeColor = 'bg-white/20 text-white';
+                  
+                  return (
+                    <Badge 
+                      key={achievement.id} 
+                      className={cn("gap-1 border-0", badgeColor)}
+                      title={level ? getLevelDescription(badgeId, level) : ''}
+                    >
+                      <Icon className="w-3 h-3" />
+                      {achievement.achievement_name}
+                      {level && level > 0 && (
+                        <span className="font-bold ml-1">
+                          {'🥄'.repeat(Math.min(level, 5))}
+                        </span>
+                      )}
+                    </Badge>
+                  );
+                })}
               </div>
             </div>
           )}

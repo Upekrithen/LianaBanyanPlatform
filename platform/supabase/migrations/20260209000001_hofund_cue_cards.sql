@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS public.hofund_channels (
 -- Channel 4: Platform Home
 -- Channels 5-10: Custom (user-defined)
 
-CREATE INDEX idx_hofund_user ON public.hofund_channels(user_id);
-CREATE INDEX idx_hofund_medallion ON public.hofund_channels(medallion_id);
+CREATE INDEX IF NOT EXISTS idx_hofund_user ON public.hofund_channels(user_id);
+CREATE INDEX IF NOT EXISTS idx_hofund_medallion ON public.hofund_channels(medallion_id);
 
 -- ─── CURRENT DIAL POSITION ───
 -- Tracks which channel the member's dial is currently set to.
@@ -207,9 +207,9 @@ INSERT INTO public.cue_card_templates (template_type, initiative_slug, title, su
   '🗝️ "Help each other help ourselves." A platform where creators keep 83.3%. Not a policy — a constitutional lock. $5/year. lianabanyan.com/RedCarpet #LianaBanyan',
   'I just discovered a cooperative commerce platform where creators keep 83.3% of every transaction — constitutionally locked, not just promised. The platform margin is Cost+20%, permanently. $5/year membership. No VC. No extraction. Just community commerce.'),
 
-('general', NULL, 'Cannot Enshittify', 'The economics are locked', 'What if a platform literally could not enshittify? Cost+20% margin locked by DNA Lock. 83.3% to creators, forever. 1,200+ innovations. 8 patents with no prior art. This exists.', ARRAY['LianaBanyan', 'AntiEnshittification', 'CreatorEconomy'], 'bold',
-  '🔒 What if a platform literally COULD NOT enshittify? Cost+20% locked by DNA Lock. 83.3% to creators. Forever. It exists. lianabanyan.com/RedCarpet #LianaBanyan',
-  'The word "enshittification" describes what happens when platforms extract from users to please investors. What if a platform made that structurally impossible? Cost+20% constitutional margin. 83.3% to creators. DNA Lock prevents changes. This is real.'),
+('general', NULL, 'Constitutionally Locked', 'The economics are locked', 'What if a platform had its economics locked by constitution? Cost+20% margin locked by DNA Lock. 83.3% to creators, forever. 1,200+ innovations. 8 patents with no prior art. This exists.', ARRAY['LianaBanyan', 'ConstitutionallyLocked', 'CreatorEconomy'], 'bold',
+  '🔒 What if a platform had its economics CONSTITUTIONALLY LOCKED? Cost+20% by DNA Lock. 83.3% to creators. Forever. It exists. lianabanyan.com/RedCarpet #LianaBanyan',
+  'Platforms often change their terms to extract from users and please investors. What if a platform made that structurally impossible? Cost+20% constitutional margin. 83.3% to creators. DNA Lock prevents changes. This is real.'),
 
 ('general', NULL, '8 Crown Jewels', '1,200+ innovations, 8 with no prior art', '130 innovations deep-dived against the U.S. Patent Office. Eight survived with zero prior art. A cooperative commerce platform backed by real IP, not promises.', ARRAY['LianaBanyan', 'Innovation', 'PatentPortfolio'], 'standard',
   '💎 1,200+ innovations. 130 deep-dived against USPTO. 8 survived with ZERO prior art. A cooperative platform backed by real IP. lianabanyan.com/RedCarpet #LianaBanyan',

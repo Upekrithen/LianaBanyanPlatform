@@ -20,9 +20,9 @@ const COLLABORATOR_TYPES = [
 ];
 
 const COMPENSATION_TYPES = [
-  { value: "equity", label: "Equity Only", description: "Long-term ownership stake" },
-  { value: "profit_share", label: "Profit Share Only", description: "% of revenue generated" },
-  { value: "hybrid", label: "Hybrid", description: "Equity + Profit share" },
+  { value: "equity", label: "Participation Only", description: "Long-term cooperative membership" },
+  { value: "profit_share", label: "Revenue Share Only", description: "% of revenue generated" },
+  { value: "hybrid", label: "Hybrid", description: "Participation + Revenue share" },
 ];
 
 const METRIC_BASIS = [
@@ -168,7 +168,7 @@ export function ExternalCollaboratorManager() {
                 External Collaborator Agreements
               </CardTitle>
               <CardDescription>
-                Manage equity and profit-sharing with manufacturers, content creators, and platform partners
+                Manage participation and revenue-sharing with manufacturers, content creators, and platform partners
               </CardDescription>
             </div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -182,7 +182,7 @@ export function ExternalCollaboratorManager() {
                 <DialogHeader>
                   <DialogTitle>{editingCollaborator ? "Edit" : "Create"} Collaborator Agreement</DialogTitle>
                   <DialogDescription>
-                    Set up equity or profit-sharing terms with external partners
+                    Set up participation or revenue-sharing terms with external partners
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -259,7 +259,7 @@ export function ExternalCollaboratorManager() {
                   <div className="grid grid-cols-2 gap-4">
                     {(formData.compensation_type === 'equity' || formData.compensation_type === 'hybrid') && (
                       <div className="space-y-2">
-                        <Label htmlFor="equity_percentage">Equity % (max 5%)</Label>
+                        <Label htmlFor="equity_percentage">Participation % (max 5%)</Label>
                         <Input
                           id="equity_percentage"
                           type="number"
@@ -274,7 +274,7 @@ export function ExternalCollaboratorManager() {
                     )}
                     {(formData.compensation_type === 'profit_share' || formData.compensation_type === 'hybrid') && (
                       <div className="space-y-2">
-                        <Label htmlFor="profit_share_percentage">Profit Share %</Label>
+                        <Label htmlFor="profit_share_percentage">Revenue Share %</Label>
                         <Input
                           id="profit_share_percentage"
                           type="number"
@@ -320,7 +320,7 @@ export function ExternalCollaboratorManager() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="equity_vesting_months">Equity Vesting (months)</Label>
+                      <Label htmlFor="equity_vesting_months">Vesting Period (months)</Label>
                       <Input
                         id="equity_vesting_months"
                         type="number"
@@ -408,12 +408,12 @@ export function ExternalCollaboratorManager() {
                       <div className="flex gap-2">
                         {collab.equity_percentage > 0 && (
                           <Badge variant="secondary">
-                            {collab.equity_percentage}% Equity ({collab.equity_vested}% vested)
+                            {collab.equity_percentage}% Participation ({collab.equity_vested}% vested)
                           </Badge>
                         )}
                         {collab.profit_share_percentage > 0 && (
                           <Badge variant="secondary">
-                            {collab.profit_share_percentage}% Profit Share
+                            {collab.profit_share_percentage}% Revenue Share
                           </Badge>
                         )}
                         <Badge variant="outline" className="capitalize">
@@ -506,18 +506,18 @@ export function ExternalCollaboratorManager() {
         <CardContent className="text-sm space-y-3">
           <div>
             <p className="font-medium">Manufacturers (Slant3D, FormLabs, TeleportPod)</p>
-            <p className="text-xs text-muted-foreground">Equity: 0.5-2% vested over 12-24 months | Metric: Clickthrough → Project pledges</p>
+            <p className="text-xs text-muted-foreground">Participation: 0.5-2% vested over 12-24 months | Metric: Clickthrough → Project pledges</p>
           </div>
           <div>
             <p className="font-medium">Content Creators (CNC Kitchen, MakersMuse, TeachingTech)</p>
-            <p className="text-xs text-muted-foreground">Equity: 0.25-0.75% + sponsorship fees | Metric: Viewers → Signups → Projects</p>
+            <p className="text-xs text-muted-foreground">Participation: 0.25-0.75% + sponsorship fees | Metric: Viewers → Signups → Projects</p>
           </div>
           <div>
             <p className="font-medium">Platform Partners (Etsy, Shopify)</p>
-            <p className="text-xs text-muted-foreground">Profit share: 3-5% of cross-platform revenue | Metric: Referral conversions</p>
+            <p className="text-xs text-muted-foreground">Revenue share: 3-5% of cross-platform revenue | Metric: Referral conversions</p>
           </div>
           <p className="text-xs text-muted-foreground mt-3 pt-3 border-t">
-            <strong>Why Equity &gt; Discount Codes:</strong> Equity aligns long-term incentives, prevents value leakage, 
+            <strong>Why Participation &gt; Discount Codes:</strong> Cooperative participation aligns long-term incentives, prevents value leakage,
             and rewards actual conversions instead of just link sharing.
           </p>
         </CardContent>

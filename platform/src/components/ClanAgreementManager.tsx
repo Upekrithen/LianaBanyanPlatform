@@ -51,7 +51,7 @@ export function ClanAgreementManager({ clanId }: ClanAgreementManagerProps) {
     queryKey: ['clan-members', clanId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('clan_members')
+        .from('guild_members')
         .select(`
           *,
           profiles:user_id (id, full_name, email)

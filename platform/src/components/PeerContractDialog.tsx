@@ -149,9 +149,9 @@ export const PeerContractDialog = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="equity">Equity Only</SelectItem>
+                <SelectItem value="equity">Participation Only</SelectItem>
                 <SelectItem value="cash">Cash Only</SelectItem>
-                <SelectItem value="hybrid">Equity + Cash</SelectItem>
+                <SelectItem value="hybrid">Participation + Cash</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -176,7 +176,7 @@ export const PeerContractDialog = ({
           {(formData.compensation_type === "equity" ||
             formData.compensation_type === "hybrid") && (
             <div>
-              <Label htmlFor="equity">Equity Percentage (%)</Label>
+              <Label htmlFor="equity">Participation Percentage (%)</Label>
               <Input
                 id="equity"
                 type="number"

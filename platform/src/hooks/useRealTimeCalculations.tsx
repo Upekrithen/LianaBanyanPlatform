@@ -119,7 +119,6 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
             table: 'user_votes',
           },
           () => {
-            console.log('Real-time vote update received');
             loadProductCalculations();
           }
         )
@@ -131,7 +130,6 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
             table: 'pledges',
           },
           () => {
-            console.log('Real-time pledge update received');
             loadProductCalculations();
           }
         )
@@ -144,7 +142,6 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
             filter: `product_id=eq.${productId}`,
           },
           () => {
-            console.log('Real-time production level update received');
             loadProductCalculations();
           }
         )
@@ -157,19 +154,16 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
             filter: `product_id=eq.${productId}`,
           },
           () => {
-            console.log('Real-time pricing data update received');
             loadProductCalculations();
           }
         )
         .subscribe((status) => {
-          console.log('Product realtime status:', status);
           setRealtimeConnected(status === 'SUBSCRIBED');
         });
 
       // Polling fallback for secondary data (stats, aggregates)
       const pollingInterval = setInterval(() => {
         if (!realtimeConnected || productStaleness.level === 'critical') {
-          console.log('Polling product data (fallback)');
           loadProductCalculations();
         }
       }, STALENESS_CONFIG.product.pollingInterval);
@@ -197,7 +191,6 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
             filter: `user_id=eq.${userId}`,
           },
           () => {
-            console.log('Real-time credit update received');
             loadUserCalculations();
           }
         )
@@ -210,7 +203,6 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
             filter: `user_id=eq.${userId}`,
           },
           () => {
-            console.log('Real-time user vote update received');
             loadUserCalculations();
           }
         )
@@ -223,19 +215,16 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
             filter: `user_id=eq.${userId}`,
           },
           () => {
-            console.log('Real-time user pledge update received');
             loadUserCalculations();
           }
         )
         .subscribe((status) => {
-          console.log('User realtime status:', status);
           setRealtimeConnected(status === 'SUBSCRIBED');
         });
 
       // Polling fallback
       const pollingInterval = setInterval(() => {
         if (!realtimeConnected || userStaleness.level === 'critical') {
-          console.log('Polling user data (fallback)');
           loadUserCalculations();
         }
       }, STALENESS_CONFIG.user.pollingInterval);
@@ -433,7 +422,6 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
     userStaleness,
     realtimeConnected,
     refetch: () => {
-      console.log('Manual refetch triggered');
       if (productId) loadProductCalculations();
       if (userId) loadUserCalculations();
     },

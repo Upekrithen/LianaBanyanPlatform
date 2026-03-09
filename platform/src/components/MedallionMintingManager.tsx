@@ -25,7 +25,7 @@ export function MedallionMintingManager({ projectId }: MedallionMintingManagerPr
     queryKey: ["medallion-eligibility", projectId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("medallion_eligibility")
+        .from("member_medallion_collection")
         .select("*")
         .eq("project_id", projectId)
         .eq("is_eligible", true)
@@ -147,10 +147,12 @@ export function MedallionMintingManager({ projectId }: MedallionMintingManagerPr
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="base-sepolia">Base Sepolia (Testnet)</SelectItem>
-                  <SelectItem value="base">Base Mainnet</SelectItem>
+                  <SelectItem value="base-sepolia">Base Sepolia (Test-Net By Design)</SelectItem>
                 </SelectContent>
               </Select>
+              <p className="text-xs text-muted-foreground">
+                Test-Net By Design: No mainnet option — prevents speculation and maintains SEC compliance.
+              </p>
             </div>
 
             <Button

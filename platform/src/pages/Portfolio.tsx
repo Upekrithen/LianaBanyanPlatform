@@ -10,42 +10,28 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { BlockchainVerificationBadge } from '@/components/BlockchainVerificationBadge';
+import { SpeckleGarden } from '@/components/gamification/SpeckleGarden';
 
 export default function Portfolio() {
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const { toast } = useToast();
 
-  // Fetch user's subscribed projects
+  // Fetch user's project backings
   const { data: subscriptions, isLoading } = useQuery({
-    queryKey: ['user-subscriptions'],
+    queryKey: ['user-backings'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
       const { data, error } = await supabase
-        .from('user_project_subscriptions')
+        .from('project_backings')
         .select(`
           *,
           projects:project_id (
             id,
             name,
-            project_sku,
-            description,
-            products (
-              id,
-              name,
-              product_sku,
-              production_levels (
-                id,
-                level_name,
-                level_number,
-                current_votes,
-                votes_needed,
-                unit_price,
-                units_count
-              )
-            )
+            description
           )
         `)
         .eq('user_id', user.id)
@@ -122,7 +108,13 @@ export default function Portfolio() {
         </div>
       </header>
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 space-y-8">
+        {/* Category 2: Speckle Garden Gamification */}
+        <SpeckleGarden 
+          availableCredits={profile?.credits_balance || 0} 
+          lifetimePlanted={1250} // In a real app, this would be fetched from a 'lifetime_spent' or 'speckles_planted' column
+        />
+
         <div className="grid gap-6">
           <Card>
             <CardHeader>

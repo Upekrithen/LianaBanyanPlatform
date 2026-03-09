@@ -6,31 +6,31 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { PieChart, TrendingUp, Users } from 'lucide-react';
 
-interface ProjectEquity {
+interface ProjectParticipation {
   projectId: string;
   projectName: string;
   totalVotes: number;
   projectTotalVotes: number;
-  equityPercentage: number;
+  participationPercentage: number;
   memberCount: number;
   yourRank: number;
 }
 
 export function EquityBreakdownCard() {
   const { user } = useAuth();
-  const [projects, setProjects] = useState<ProjectEquity[]>([]);
+  const [projects, setProjects] = useState<ProjectParticipation[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
-      loadEquityBreakdown();
-      
+      loadParticipationBreakdown();
+
       // Subscribe to real-time updates
       const channel = supabase
-        .channel('equity-updates')
-        .on('postgres_changes', 
+        .channel('participation-updates')
+        .on('postgres_changes',
           { event: '*', schema: 'public', table: 'user_votes' },
-          () => loadEquityBreakdown()
+          () => loadParticipationBreakdown()
         )
         .subscribe();
 
@@ -40,7 +40,7 @@ export function EquityBreakdownCard() {
     }
   }, [user]);
 
-  const loadEquityBreakdown = async () => {
+  const loadParticipationBreakdown = async () => {
     if (!user) return;
 
     try {
@@ -79,8 +79,8 @@ export function EquityBreakdownCard() {
 
       if (!userVotes || !allVotes) return;
 
-      // Calculate equity per project
-      const projectMap = new Map<string, ProjectEquity>();
+      // Calculate participation per project
+      const projectMap = new Map<string, ProjectParticipation>();
       const projectVoters = new Map<string, Set<string>>();
       const projectUserVotes = new Map<string, Map<string, number>>();
 
@@ -88,7 +88,7 @@ export function EquityBreakdownCard() {
       userVotes.forEach((vote: any) => {
         const projectId = vote.production_levels?.products?.project_id;
         const projectName = vote.production_levels?.products?.projects?.name;
-        
+
         if (!projectId) return;
 
         if (!projectMap.has(projectId)) {
@@ -97,7 +97,7 @@ export function EquityBreakdownCard() {
             projectName: projectName || 'Unknown Project',
             totalVotes: 0,
             projectTotalVotes: 0,
-            equityPercentage: 0,
+            participationPercentage: 0,
             memberCount: 0,
             yourRank: 0
           });
@@ -110,7 +110,7 @@ export function EquityBreakdownCard() {
       // Process all votes to calculate totals and member counts
       allVotes.forEach((vote: any) => {
         const projectId = vote.production_levels?.products?.project_id;
-        
+
         if (!projectId) return;
 
         const project = projectMap.get(projectId);
@@ -131,10 +131,10 @@ export function EquityBreakdownCard() {
         userVoteMap.set(vote.user_id, (userVoteMap.get(vote.user_id) || 0) + (vote.vote_amount || 0));
       });
 
-      // Calculate equity percentages and ranks
+      // Calculate participation percentages and ranks
       projectMap.forEach((project, projectId) => {
         if (project.projectTotalVotes > 0) {
-          project.equityPercentage = (project.totalVotes / project.projectTotalVotes) * 100;
+          project.participationPercentage = (project.totalVotes / project.projectTotalVotes) * 100;
         }
         project.memberCount = projectVoters.get(projectId)?.size || 0;
 
@@ -146,9 +146,9 @@ export function EquityBreakdownCard() {
         }
       });
 
-      setProjects(Array.from(projectMap.values()).sort((a, b) => b.equityPercentage - a.equityPercentage));
+      setProjects(Array.from(projectMap.values()).sort((a, b) => b.participationPercentage - a.participationPercentage));
     } catch (error) {
-      console.error('Error loading equity breakdown:', error);
+      console.error('Error loading participation breakdown:', error);
     } finally {
       setLoading(false);
     }
@@ -158,8 +158,8 @@ export function EquityBreakdownCard() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Equity Breakdown</CardTitle>
-          <CardDescription>Loading your equity positions...</CardDescription>
+          <CardTitle>Participation Breakdown</CardTitle>
+          <CardDescription>Loading your project participation...</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -170,15 +170,15 @@ export function EquityBreakdownCard() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <PieChart className="h-5 w-5" />
-          <CardTitle>Equity Breakdown</CardTitle>
+          <CardTitle>Participation Breakdown</CardTitle>
         </div>
-        <CardDescription>Your ownership stake in each project</CardDescription>
+        <CardDescription>Your service allocation in each project</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {projects.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No equity positions yet. Vote on projects to earn equity!
+              No project participation yet. Vote on projects to contribute!
             </p>
           ) : (
             projects.map((project) => (
@@ -197,11 +197,11 @@ export function EquityBreakdownCard() {
                       </span>
                     </div>
                   </div>
-                  <Badge variant={project.equityPercentage >= 5 ? "default" : "secondary"}>
-                    {project.equityPercentage.toFixed(2)}%
+                  <Badge variant={project.participationPercentage >= 5 ? "default" : "secondary"}>
+                    {project.participationPercentage.toFixed(2)}%
                   </Badge>
                 </div>
-                <Progress value={Math.min(project.equityPercentage, 100)} className="h-2" />
+                <Progress value={Math.min(project.participationPercentage, 100)} className="h-2" />
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>{project.totalVotes.toFixed(2)} votes</span>
                   <span>{project.projectTotalVotes.toFixed(2)} total votes</span>

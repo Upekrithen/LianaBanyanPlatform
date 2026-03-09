@@ -46,7 +46,7 @@ export function ReferralManager() {
 
     // Load medallion eligibility
     const { data: eligibility } = await supabase
-      .from('medallion_eligibility')
+      .from('member_medallion_collection')
       .select('*')
       .eq('user_id', user.id)
       .maybeSingle();

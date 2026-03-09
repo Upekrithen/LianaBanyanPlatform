@@ -326,7 +326,7 @@ Tasks:
 
 □ 6.1 Personalized Dashboard
   - Display subscribed projects
-  - Show investment summary
+  - Show contribution summary
   - Track voting history
   - Display earned rewards/tokens
 
@@ -337,10 +337,10 @@ Tasks:
   - Personalized recommendations
 
 □ 6.3 Analytics & Insights
-  - Investment performance charts
+  - Contribution performance charts
   - Project growth metrics
   - Comparative analysis
-  - ROI projections
+  - Service value projections
 
 □ 6.4 Social Features
   - Follow other members
@@ -407,7 +407,7 @@ ESTIMATED TIMELINE:
         "Gas fee volatility could make minting expensive during network congestion",
         "Smart contract bugs are immutable - thorough auditing required",
         "Wallet adoption barrier for non-crypto users",
-        "Regulatory compliance for equity-backed tokens varies by jurisdiction"
+        "Regulatory compliance for participation-backed tokens varies by jurisdiction"
       ]
     },
     "3. AUTOMATIC DAILY SYNC": {
@@ -509,7 +509,7 @@ ESTIMATED TIMELINE:
       suggestions: [
         "Use React Query for dashboard data with staleTime: 60000 (1 min)",
         "Implement infinite scroll for activity feed using cursor pagination",
-        "Add export functionality for investment history (CSV/PDF)",
+        "Add export functionality for contribution history (CSV/PDF)",
         "Create achievement unlock animations with confetti library",
         "Build recommendation engine based on user voting patterns"
       ],
@@ -528,7 +528,7 @@ ESTIMATED TIMELINE:
       ],
       technicalSpecs: [
         "✅ Database: project_subdomains table with unique constraint on subdomain",
-        "✅ DNS: Wildcard CNAME (*.hexisle.com) pointing to Lovable hosting",
+        "✅ DNS: Wildcard CNAME (*.hexisle.com) pointing to Firebase hosting",
         "✅ Routing: SubdomainRouter component checking window.location.hostname",
         "✅ SSL: Automatic certificate generation via Cloudflare",
         "✅ Portal: Dedicated ProjectPortal component without auth requirements"
@@ -635,7 +635,7 @@ ESTIMATED TIMELINE:
                           <strong className="text-green-700 dark:text-green-400">RESOLVED: Option B - Deferred Recovery</strong>
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Equipment costs tracked and converted to equity/credits upon project completion.
+                          Equipment costs tracked and converted to participation credits upon project completion.
                         </p>
                       </div>
                     </div>
@@ -1016,7 +1016,7 @@ ESTIMATED TIMELINE:
                   </div>
                   <div className="flex-1">
                     <h4 className="font-semibold mb-1">3. Create Template Project</h4>
-                    <p className="text-sm text-muted-foreground">Remix this project on Lovable.com to create a blank frontend template, remove backend logic, add API connection code</p>
+                    <p className="text-sm text-muted-foreground">Fork the platform codebase to create a blank frontend template, remove backend logic, add API connection code</p>
                   </div>
                 </div>
 
@@ -1117,7 +1117,7 @@ ESTIMATED TIMELINE:
                           <li>• Production level tracking (units, pricing tiers)</li>
                           <li>• Funding progress calculations and visualization</li>
                           <li>• Project lifecycle stages with milestone tracking</li>
-                          <li>• Project ownership and permissions</li>
+                          <li>• Project administration and permissions</li>
                         </ul>
                       </div>
                       <div>
@@ -1235,7 +1235,7 @@ ESTIMATED TIMELINE:
                       <div>
                         <h4 className="font-medium text-sm mb-1">Authentication & Security</h4>
                         <ul className="text-sm text-muted-foreground space-y-1 ml-4">
-                          <li>• User authentication with Lovable Cloud/Supabase</li>
+                          <li>• User authentication with Supabase</li>
                           <li>• Row-level security policies</li>
                           <li>• Protected routes</li>
                           <li>• Credential encryption</li>

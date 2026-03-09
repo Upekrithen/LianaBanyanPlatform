@@ -48,13 +48,13 @@ export function GroceryOrderForm() {
       if (!user) throw new Error("Not authenticated");
 
       const { data: schedule } = await supabase
-        .from("grocery_schedules")
+        .from("orders")
         .select("id")
         .eq("integration_service", integrationService)
         .eq("is_active", true)
         .single();
 
-      const { error } = await supabase.from("grocery_orders").insert({
+      const { error } = await supabase.from("orders").insert({
         schedule_id: schedule?.id,
         user_id: user.id,
         items: items,

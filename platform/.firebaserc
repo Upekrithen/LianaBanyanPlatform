@@ -1,0 +1,71 @@
+{
+  "projects": {
+    "default": "lianabanyan-403dc",
+    "staging": "mroz-74540"
+  },
+  "targets": {
+    "lianabanyan-403dc": {
+      "hosting": {
+        "main": [
+          "lianabanyan-main"
+        ],
+        "dotcom": [
+          "lianabanyan-403dc"
+        ],
+        "biz": [
+          "lianabanyan-biz-trunk"
+        ],
+        "org": [
+          "lianabanyan-org-trunk"
+        ],
+        "net": [
+          "lianabanyan-net-trunk"
+        ],
+        "the2ndsecond": [
+          "the2ndsecond-trunk"
+        ],
+        "hexisle": [
+          "hexisle"
+        ],
+        "rally": [
+          "therallygroup"
+        ],
+        "upekrithen": [
+          "upekrithen"
+        ],
+        "default": [
+          "lianabanyan-403dc"
+        ]
+      }
+    },
+    "mroz-74540": {
+      "hosting": {
+        "default": [
+          "lianabanyan"
+        ],
+        "main": [
+          "lianabanyan"
+        ],
+        "dotcom": [
+          "lianabanyan"
+        ],
+        "biz": [
+          "lianabanyan-biz"
+        ],
+        "org": [
+          "lianabanyan-org"
+        ],
+        "net": [
+          "lianabanyan-net"
+        ],
+        "the2ndsecond": [
+          "the2ndsecond"
+        ],
+        "mroz": [
+          "mroz-74540"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -18,7 +18,7 @@ export default function DefenseClawsPreorder() {
     queryKey: ["defense-claws-initiative"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("initiative_projects")
+        .from("initiatives")
         .select("*")
         .eq("initiative_slug", "defense_claws")
         .maybeSingle();
@@ -60,7 +60,7 @@ export default function DefenseClawsPreorder() {
     } else {
       toast({ 
         title: "Preorder Complete", 
-        description: "Defense Claws coverage activated. No confirmation email sent to recipient." 
+        description: "Defense Klaus coverage activated. No confirmation email sent to recipient." 
       });
       setEmail("");
       setRecipientName("");
@@ -72,7 +72,7 @@ export default function DefenseClawsPreorder() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-purple-500" />
-          <CardTitle>Defense Claws™ Preorder</CardTitle>
+          <CardTitle>Defense Klaus™ Preorder</CardTitle>
         </div>
         <CardDescription>
           $6 bracelet with legal defense coverage. 100% of proceeds fund Legal Defense for Members.
@@ -118,7 +118,7 @@ export default function DefenseClawsPreorder() {
         </div>
 
         <Button onClick={handlePreorder} className="w-full" disabled={!email}>
-          Preorder Defense Claws™ - $6
+          Preorder Defense Klaus™ - $6
         </Button>
 
         <div className="pt-4 border-t text-xs text-muted-foreground space-y-2">

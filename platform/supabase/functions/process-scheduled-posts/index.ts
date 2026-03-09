@@ -1,15 +1,9 @@
-/**
- * PROCESS SCHEDULED SOCIAL MEDIA POSTS
- * =====================================
- * Cron-based function that runs every 5 minutes.
- * Picks up posts from scheduled_posts where scheduled_for <= NOW.
- * Posts to the connected social platform using stored OAuth tokens.
- *
- * Schedule: */5 * * * * (every 5 minutes)
- * Set in supabase/config.toml:
- *   [functions.process-scheduled-posts]
- *   schedule = "*/5 * * * *"
- */
+// PROCESS SCHEDULED SOCIAL MEDIA POSTS
+// =====================================
+// Cron-based function that runs every 5 minutes.
+// Picks up posts from scheduled_posts where scheduled_for <= NOW.
+// Posts to the connected social platform using stored OAuth tokens.
+// Schedule: every 5 minutes (set in Supabase Dashboard)
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 

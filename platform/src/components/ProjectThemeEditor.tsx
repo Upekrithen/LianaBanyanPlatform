@@ -34,26 +34,25 @@ export function ProjectThemeEditor({ projectId }: ProjectThemeEditorProps) {
     queryKey: ["project-theme", projectId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("project_themes" as any)
+        .from("project_themes")
         .select("*")
         .eq("project_id", projectId)
         .maybeSingle();
       
       if (error && error.code !== "PGRST116") throw error;
       if (data) {
-        const themeData = data as any;
         setFormData({
-          primary_color: themeData.primary_color || formData.primary_color,
-          secondary_color: themeData.secondary_color || formData.secondary_color,
-          background_color: themeData.background_color || formData.background_color,
-          text_color: themeData.text_color || formData.text_color,
-          font_heading: themeData.font_heading || formData.font_heading,
-          font_body: themeData.font_body || formData.font_body,
-          logo_url: themeData.logo_url || "",
-          banner_url: themeData.banner_url || "",
-          layout_style: themeData.layout_style || formData.layout_style,
-          card_style: themeData.card_style || formData.card_style,
-          custom_css: themeData.custom_css || "",
+          primary_color: data.primary_color || formData.primary_color,
+          secondary_color: data.secondary_color || formData.secondary_color,
+          background_color: data.background_color || formData.background_color,
+          text_color: data.text_color || formData.text_color,
+          font_heading: data.font_heading || formData.font_heading,
+          font_body: data.font_body || formData.font_body,
+          logo_url: data.logo_url || "",
+          banner_url: data.banner_url || "",
+          layout_style: data.layout_style || formData.layout_style,
+          card_style: data.card_style || formData.card_style,
+          custom_css: data.custom_css || "",
         });
       }
       return data;
@@ -64,11 +63,11 @@ export function ProjectThemeEditor({ projectId }: ProjectThemeEditorProps) {
     mutationFn: async (data: typeof formData) => {
       const { error } = theme
         ? await supabase
-            .from("project_themes" as any)
+            .from("project_themes")
             .update(data)
             .eq("project_id", projectId)
         : await supabase
-            .from("project_themes" as any)
+            .from("project_themes")
             .insert({ ...data, project_id: projectId });
       
       if (error) throw error;

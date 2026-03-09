@@ -82,7 +82,7 @@ const resources = {
         browseProjects: 'Browse new, trending, and funded projects',
         viewAllProjects: 'View all crowdfunding projects',
         myPortfolio: 'My Portfolio',
-        trackInvestments: 'Track your investments and votes',
+        trackInvestments: 'Track your contributions and votes',
         myMedallions: 'My Medallions',
         viewBadges: 'View your project badges and tokens',
         adminTools: 'Admin & Member Tools',
@@ -115,7 +115,7 @@ const resources = {
         master: 'Master',
         payStake: 'Pay Stake',
         unlockNext: 'Unlock Next Class',
-        profitPercentage: 'Profit Percentage',
+        profitPercentage: 'Revenue Percentage',
         contracts: 'Contracts Completed',
         reputation: 'Reputation'
       },
@@ -301,8 +301,8 @@ const resources = {
         viewDetails: 'View Details',
         simulateAssignment: 'Simulate Assignment',
         compensation: 'Compensation',
-        equity: 'Equity',
-        cash: 'Cash',
+        equity: 'Participation',
+        cash: 'Credits',
         creditsReserved: 'Credits Reserved',
         requiredStage: 'Required Stage',
         negotiatedRate: 'Negotiated Rate',
@@ -337,29 +337,29 @@ const resources = {
         }
       },
       portfolio: {
-        title: "Portfolio",
-        subtitle: "View and manage your investments",
+        title: "My Projects",
+        subtitle: "View and manage your contributions",
         tabs: {
           overview: "Overview",
-          investments: "Investments",
-          returns: "Returns",
+          investments: "Contributions",
+          returns: "Activity",
           history: "History"
         },
         stats: {
-          totalInvested: "Total Invested",
+          totalInvested: "Total Contributed",
           currentValue: "Current Value",
-          totalReturn: "Total Return",
-          activeInvestments: "Active Investments"
+          totalReturn: "Service Value",
+          activeInvestments: "Active Projects"
         },
         table: {
           project: "Project",
           amount: "Amount",
           date: "Date",
           status: "Status",
-          return: "Return"
+          return: "Value"
         },
-        empty: "No investments yet",
-        emptyDescription: "Start investing in projects to see them here"
+        empty: "No contributions yet",
+        emptyDescription: "Start backing projects to see them here"
       },
       profileSettings: {
         title: "Profile Settings",
@@ -609,12 +609,12 @@ const resources = {
           description: "Talent acquisition and people operations"
         },
         openings: "openings",
-        avgEquity: "Avg Equity",
+        avgEquity: "Avg Participation",
         viewPositions: "View Positions"
       },
       browseMarketplace: {
         title: "Browse Marketplace",
-        subtitle: "Discover products and investment opportunities",
+        subtitle: "Discover products and sponsorship opportunities",
         sustainable: {
           title: "Sustainable Products",
           description: "Eco-friendly goods and services"
@@ -624,8 +624,8 @@ const resources = {
           description: "Local initiatives and developments"
         },
         investment: {
-          title: "Investment Opportunities",
-          description: "Back projects with equity potential"
+          title: "Sponsorship Opportunities",
+          description: "Back projects and join the cooperative"
         },
         featured: {
           title: "Featured Products",
@@ -678,7 +678,7 @@ const resources = {
         },
         eoi: {
           title: "EOI Vesting",
-          description: "Expression of Interest conversion to equity"
+          description: "Expression of Interest conversion to membership"
         },
         rewards: {
           title: "Medallion Rewards",
@@ -756,14 +756,14 @@ const resources = {
         unitsCount: "Units Count",
         unitPrice: "Unit Price",
         volumeDiscount: "Volume Discount",
-        equityPercentage: "Equity %",
-        cashPercentage: "Cash %",
+        equityPercentage: "Participation %",
+        cashPercentage: "Credit %",
         votesNeeded: "Votes Needed",
         calculate: "Calculate",
         results: "Results",
         totalRevenue: "Total Revenue",
         discountedRevenue: "Discounted Revenue",
-        equityValue: "Equity Value",
+        equityValue: "Participation Value",
         cashValue: "Cash Value",
         pricePerUnit: "Price Per Unit",
         downloadReport: "Download Report",
@@ -781,8 +781,8 @@ const resources = {
         description: "Description",
         requirements: "Requirements",
         compensation: "Compensation",
-        equity: "Equity",
-        cash: "Cash",
+        equity: "Participation",
+        cash: "Credits",
         credits: "Credits",
         duration: "Duration",
         active: "Active",
@@ -793,12 +793,12 @@ const resources = {
         createFirst: "Create your first position"
       },
       investmentExplainer: {
-        title: "Investment Guide",
-        subtitle: "Understanding how pledges become equity shares",
+        title: "Sponsorship Guide",
+        subtitle: "How pledges become cooperative membership and service credits",
         tabs: {
           overview: "Overview",
-          conversion: "Conversion Flow",
-          calculator: "ROI Calculator",
+          conversion: "How It Works",
+          calculator: "Service Calculator",
           scenarios: "Scenarios"
         },
         howItWorks: "How It Works",
@@ -812,19 +812,19 @@ const resources = {
         },
         step3: {
           title: "Daily Vesting",
-          description: "1% converts to equity daily"
+          description: "1% converts to membership participation daily"
         },
         step4: {
-          title: "Equity Ownership",
-          description: "Full equity after 100 days"
+          title: "Full Membership",
+          description: "Full cooperative membership after 100 days"
         },
-        benefits: "Investment Benefits",
+        benefits: "Membership Benefits",
         earlyAccess: "Early access to products",
-        equityGrowth: "Potential equity growth",
+        equityGrowth: "Cooperative participation growth",
         communityVoting: "Community voting rights",
         exclusivePerks: "Exclusive member perks",
-        calculateReturn: "Calculate Your Return",
-        investmentAmount: "Investment Amount",
+        calculateReturn: "Calculate Your Allocation",
+        investmentAmount: "Pledge Amount",
         projectedGrowth: "Projected Growth",
         timeframe: "Timeframe",
         estimatedValue: "Estimated Value"
@@ -909,7 +909,7 @@ const resources = {
         browseProjects: 'Explorar proyectos nuevos, tendencias y financiados',
         viewAllProjects: 'Ver todos los proyectos de crowdfunding',
         myPortfolio: 'Mi Portafolio',
-        trackInvestments: 'Seguir tus inversiones y votos',
+        trackInvestments: 'Seguir tus contribuciones y votos',
         myMedallions: 'Mis Medallones',
         viewBadges: 'Ver tus insignias y tokens de proyecto',
         adminTools: 'Herramientas de Admin y Miembros',
@@ -942,7 +942,7 @@ const resources = {
         master: 'Maestro',
         payStake: 'Pagar Apuesta',
         unlockNext: 'Desbloquear Siguiente Clase',
-        profitPercentage: 'Porcentaje de Ganancia',
+        profitPercentage: 'Porcentaje de Ingresos',
         contracts: 'Contratos Completados',
         reputation: 'Reputación'
       },
@@ -1086,7 +1086,7 @@ const resources = {
         title: 'Progresión del Gremio',
         currentTier: 'Nivel Actual',
         currentClass: 'Clase Actual',
-        profitShare: 'Porcentaje de Ganancia',
+        profitShare: 'Porcentaje de Ingresos',
         experience: 'Experiencia',
         hours: 'horas',
         contracts: 'Contratos Completados',
@@ -1128,7 +1128,7 @@ const resources = {
         viewDetails: 'Ver Detalles',
         simulateAssignment: 'Simular Asignación',
         compensation: 'Compensación',
-        equity: 'Equidad',
+        equity: 'Participación',
         cash: 'Efectivo',
         creditsReserved: 'Créditos Reservados',
         requiredStage: 'Etapa Requerida',
@@ -1165,25 +1165,25 @@ const resources = {
       },
       portfolio: {
         title: "Portafolio",
-        subtitle: "Ver y gestionar tus inversiones",
+        subtitle: "Ver y gestionar tus contribuciones",
         tabs: {
           overview: "Resumen",
-          investments: "Inversiones",
-          returns: "Retornos",
+          investments: "Contribuciones",
+          returns: "Actividad",
           history: "Historial"
         },
         stats: {
-          totalInvested: "Total Invertido",
+          totalInvested: "Total Contribuido",
           currentValue: "Valor Actual",
-          totalReturn: "Retorno Total",
-          activeInvestments: "Inversiones Activas"
+          totalReturn: "Valor de Servicio",
+          activeInvestments: "Proyectos Activos"
         },
         table: {
           project: "Proyecto",
           amount: "Monto",
           date: "Fecha",
           status: "Estado",
-          return: "Retorno"
+          return: "Valor"
         },
         empty: "Aún no hay inversiones",
         emptyDescription: "Comienza a invertir en proyectos para verlos aquí"
@@ -1455,7 +1455,7 @@ const resources = {
           description: "Adquisición de talento y operaciones de personal"
         },
         openings: "vacantes",
-        avgEquity: "Equidad Promedio",
+        avgEquity: "Participación Promedio",
         viewPositions: "Ver Posiciones"
       },
       browseMarketplace: {
@@ -1602,14 +1602,14 @@ const resources = {
         unitsCount: "Cantidad de Unidades",
         unitPrice: "Precio Unitario",
         volumeDiscount: "Descuento por Volumen",
-        equityPercentage: "% Equidad",
+        equityPercentage: "% Participación",
         cashPercentage: "% Efectivo",
         votesNeeded: "Votos Necesarios",
         calculate: "Calcular",
         results: "Resultados",
         totalRevenue: "Ingresos Totales",
         discountedRevenue: "Ingresos con Descuento",
-        equityValue: "Valor de Equidad",
+        equityValue: "Valor de Participación",
         cashValue: "Valor en Efectivo",
         pricePerUnit: "Precio por Unidad",
         downloadReport: "Descargar Reporte",
@@ -1627,7 +1627,7 @@ const resources = {
         description: "Descripción",
         requirements: "Requisitos",
         compensation: "Compensación",
-        equity: "Equidad",
+        equity: "Participación",
         cash: "Efectivo",
         credits: "Créditos",
         duration: "Duración",
@@ -1639,12 +1639,12 @@ const resources = {
         createFirst: "Crea tu primera posición"
       },
       investmentExplainer: {
-        title: "Guía de Inversión",
-        subtitle: "Cómo los respaldos se convierten en acciones de equidad",
+        title: "Guía de Patrocinio",
+        subtitle: "Cómo los respaldos se convierten en participación cooperativa",
         tabs: {
           overview: "Resumen",
           conversion: "Flujo de Conversión",
-          calculator: "Calculadora ROI",
+          calculator: "Calculadora de Servicio",
           scenarios: "Escenarios"
         },
         howItWorks: "Cómo Funciona",
@@ -1666,11 +1666,11 @@ const resources = {
         },
         benefits: "Beneficios de Inversión",
         earlyAccess: "Acceso anticipado a productos",
-        equityGrowth: "Crecimiento potencial de equidad",
+        equityGrowth: "Crecimiento de participación cooperativa",
         communityVoting: "Derechos de votación comunitaria",
         exclusivePerks: "Beneficios exclusivos de miembros",
-        calculateReturn: "Calcula Tu Retorno",
-        investmentAmount: "Cantidad de Inversión",
+        calculateReturn: "Calcula Tu Asignación",
+        investmentAmount: "Cantidad de Patrocinio",
         projectedGrowth: "Crecimiento Proyectado",
         timeframe: "Marco de Tiempo",
         estimatedValue: "Valor Estimado"
@@ -1751,7 +1751,7 @@ const resources = {
         browseProjects: 'Parcourir les projets nouveaux, tendances et financés',
         viewAllProjects: 'Voir tous les projets de crowdfunding',
         myPortfolio: 'Mon Portefeuille',
-        trackInvestments: 'Suivre vos investissements et votes',
+        trackInvestments: 'Suivre vos contributions et votes',
         myMedallions: 'Mes Médaillons',
         viewBadges: 'Voir vos badges et jetons de projet',
         adminTools: 'Outils Admin et Membres',
@@ -1784,7 +1784,7 @@ const resources = {
         master: 'Maître',
         payStake: 'Payer la Mise',
         unlockNext: 'Débloquer la Prochaine Classe',
-        profitPercentage: 'Pourcentage de Profit',
+        profitPercentage: 'Pourcentage de Revenus',
         contracts: 'Contrats Complétés',
         reputation: 'Réputation'
       },
@@ -1928,7 +1928,7 @@ const resources = {
         title: 'Progression de Guilde',
         currentTier: 'Niveau Actuel',
         currentClass: 'Classe Actuelle',
-        profitShare: 'Pourcentage de Profit',
+        profitShare: 'Pourcentage de Revenus',
         experience: 'Expérience',
         hours: 'heures',
         contracts: 'Contrats Complétés',
@@ -1970,7 +1970,7 @@ const resources = {
         viewDetails: 'Voir les Détails',
         simulateAssignment: 'Simuler l\'Attribution',
         compensation: 'Rémunération',
-        equity: 'Actions',
+        equity: 'Participation',
         cash: 'Argent',
         creditsReserved: 'Crédits Réservés',
         requiredStage: 'Étape Requise',
@@ -2007,28 +2007,28 @@ const resources = {
       },
       portfolio: {
         title: "Portefeuille",
-        subtitle: "Voir et gérer vos investissements",
+        subtitle: "Voir et gérer vos contributions",
         tabs: {
           overview: "Aperçu",
-          investments: "Investissements",
-          returns: "Retours",
+          investments: "Contributions",
+          returns: "Activité",
           history: "Historique"
         },
         stats: {
-          totalInvested: "Total Investi",
+          totalInvested: "Total Contribué",
           currentValue: "Valeur Actuelle",
-          totalReturn: "Retour Total",
-          activeInvestments: "Investissements Actifs"
+          totalReturn: "Valeur de Service",
+          activeInvestments: "Projets Actifs"
         },
         table: {
           project: "Projet",
           amount: "Montant",
           date: "Date",
           status: "Statut",
-          return: "Retour"
+          return: "Valeur"
         },
-        empty: "Aucun investissement pour le moment",
-        emptyDescription: "Commencez à investir dans des projets pour les voir ici"
+        empty: "Aucune contribution pour le moment",
+        emptyDescription: "Commencez à contribuer dans des projets pour les voir ici"
       },
       profileSettings: {
         title: "Paramètres du Profil",
@@ -2297,12 +2297,12 @@ const resources = {
           description: "Acquisition de talents et opérations du personnel"
         },
         openings: "postes",
-        avgEquity: "Équité Moyenne",
+        avgEquity: "Participation Moyenne",
         viewPositions: "Voir les Postes"
       },
       browseMarketplace: {
         title: "Parcourir le Marché",
-        subtitle: "Découvrez des produits et opportunités d'investissement",
+        subtitle: "Découvrez des produits et opportunités de parrainage",
         sustainable: {
           title: "Produits Durables",
           description: "Biens et services écologiques"
@@ -2312,7 +2312,7 @@ const resources = {
           description: "Initiatives et développements locaux"
         },
         investment: {
-          title: "Opportunités d'Investissement",
+          title: "Opportunités de Parrainage",
           description: "Soutenez des projets avec potentiel d'équité"
         },
         featured: {
@@ -2444,14 +2444,14 @@ const resources = {
         unitsCount: "Nombre d'Unités",
         unitPrice: "Prix Unitaire",
         volumeDiscount: "Remise Volume",
-        equityPercentage: "% Équité",
+        equityPercentage: "% Participation",
         cashPercentage: "% Argent",
         votesNeeded: "Votes Nécessaires",
         calculate: "Calculer",
         results: "Résultats",
         totalRevenue: "Revenu Total",
         discountedRevenue: "Revenu avec Remise",
-        equityValue: "Valeur d'Équité",
+        equityValue: "Valeur de Participation",
         cashValue: "Valeur en Argent",
         pricePerUnit: "Prix par Unité",
         downloadReport: "Télécharger Rapport",
@@ -2469,7 +2469,7 @@ const resources = {
         description: "Description",
         requirements: "Exigences",
         compensation: "Compensation",
-        equity: "Équité",
+        equity: "Participation",
         cash: "Argent",
         credits: "Crédits",
         duration: "Durée",
@@ -2481,12 +2481,12 @@ const resources = {
         createFirst: "Créez votre premier poste"
       },
       investmentExplainer: {
-        title: "Guide d'Investissement",
+        title: "Guide de Parrainage",
         subtitle: "Comment les promesses deviennent des parts d'équité",
         tabs: {
           overview: "Aperçu",
           conversion: "Flux de Conversion",
-          calculator: "Calculateur ROI",
+          calculator: "Calculateur de Service",
           scenarios: "Scénarios"
         },
         howItWorks: "Comment Ça Marche",
@@ -2506,13 +2506,13 @@ const resources = {
           title: "Propriété d'Équité",
           description: "Équité complète après 100 jours"
         },
-        benefits: "Avantages d'Investissement",
+        benefits: "Avantages de Parrainage",
         earlyAccess: "Accès anticipé aux produits",
-        equityGrowth: "Croissance potentielle de l'équité",
+        equityGrowth: "Croissance de la participation coopérative",
         communityVoting: "Droits de vote communautaire",
         exclusivePerks: "Avantages exclusifs membres",
-        calculateReturn: "Calculez Votre Retour",
-        investmentAmount: "Montant d'Investissement",
+        calculateReturn: "Calculez Votre Allocation",
+        investmentAmount: "Montant de Parrainage",
         projectedGrowth: "Croissance Projetée",
         timeframe: "Période",
         estimatedValue: "Valeur Estimée"

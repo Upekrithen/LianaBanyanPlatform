@@ -16,13 +16,10 @@ export default function Guilds() {
   const { data: guilds, isLoading } = useQuery({
     queryKey: ['guilds', searchQuery],
     queryFn: async () => {
+      // Real: guilds (id, name, slug, description, tagline, guild_type, specialty, member_count, max_members, membership_type, guild_master_id, ...)
       let query = supabase
         .from('guilds')
-        .select(`
-          *,
-          member_count:guild_members(count),
-          creator:profiles!guilds_created_by_fkey(full_name, email)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (searchQuery) {
@@ -41,6 +38,7 @@ export default function Guilds() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return [];
 
+      // Real: guild_members (id, guild_id, user_id, role, rank, experience_points, status, joined_at, ...)
       const { data, error } = await supabase
         .from('guild_members')
         .select(`
@@ -48,7 +46,7 @@ export default function Guilds() {
           guild:guilds(*)
         `)
         .eq('user_id', user.id)
-        .eq('is_active', true);
+        .eq('status', 'active');
 
       if (error) throw error;
       return data;

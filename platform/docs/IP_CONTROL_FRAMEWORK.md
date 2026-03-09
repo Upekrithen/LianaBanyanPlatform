@@ -439,6 +439,70 @@ CREATE TABLE public.ip_arbitration_cases (
 
 ---
 
+## Derivatives & Collaboration: IP Rules for Collaborative Work
+
+### Background IP Retention
+
+Each party retains all right, title, and interest in and to its pre-existing intellectual property and any intellectual property developed independently of this Agreement ("Background IP"). 
+
+**Key Principles:**
+
+1. **No Forced Assignment**: Nothing in this Agreement shall be construed as transferring ownership of either party's Background IP.
+
+2. **Platform IP License**: To the extent a member's products or services use or interact with Liana Banyan's Background IP, such use is governed solely by the license granted herein and the Liana Banyan IP Control Framework, and does not grant the member any ownership interest in Liana Banyan's Background IP.
+
+3. **Member IP Retained**: To the extent a member develops new intellectual property that is **not derivative** of Liana Banyan's Background IP, the member retains ownership of such intellectual property, subject only to the licenses granted to Liana Banyan under this Agreement for on-platform use.
+
+### Derivative Works Based on Liana Banyan IP
+
+To the extent a member develops any modifications, enhancements, or derivative works based upon or incorporating Liana Banyan's Background IP for use on the Liana Banyan platform ("LB-Derivative IP"):
+
+1. **Platform License Grant**: Member hereby grants to Liana Banyan a perpetual, irrevocable, worldwide, royalty-free license to use, reproduce, display, perform, modify, and sublicense such LB-Derivative IP within the Liana Banyan ecosystem.
+
+2. **Subject to Framework**: This license is subject to the Liana Banyan IP Control Framework and IP Load Balancing mechanisms.
+
+3. **Ownership Per Tier**: Ownership of LB-Derivative IP as between the parties shall be as set forth in the applicable Tier (A/B/C) selection.
+
+4. **External Licensing**: Derivative IP can still be licensed outside the platform under separate contracts with different terms, as long as the boundaries are clear and LB's internal usage respects its cooperative structure.
+
+### What Counts as "Derivative"?
+
+| Category | Examples | Status |
+|----------|----------|--------|
+| **Derivative** | Improvements to Patent Bucket algorithm, Three-Gear variants, Ghost-to-Physical modifications | Must follow LB rules if used on platform |
+| **Not Derivative** | Original recipes, independent business processes, prior patents, original content | Member keeps 100% |
+| **Uses LB IP** | Building a business using platform tools | Licensed to member, no sharing required |
+
+### Collaboration IP Rules
+
+When multiple members collaborate on IP within Liana Banyan:
+
+1. **Define Upfront**: Collaborators should define ownership and licensing rights before beginning work.
+
+2. **Options**:
+   - **Joint ownership** with clear exploitation rules
+   - **Assignment to one party** with granted-back licenses
+   - **Registration under IP Control Framework** with tier selection
+
+3. **Default (if not specified)**: Joint creators are treated as joint authors, each with exploitation rights subject to accounting to the other(s).
+
+4. **Approval Process**: Derivatives that modify key LB IP require approval through the tier system.
+
+### Legal Risks in Collaborative Derivatives
+
+| Risk | Description | Mitigation |
+|------|-------------|------------|
+| **Ambiguous Ownership** | Multiple contributors, unclear rights | Written agreement before collaboration |
+| **Unauthorized Derivatives** | Creating derivatives beyond license scope | Clear tier documentation |
+| **Moral Rights** | Creator objections to derivative uses | Respect tier-selected restrictions |
+| **Platform Liability** | LB hosting disputed collaborative IP | Clear terms of service, approval workflows |
+
+### Summary Statement
+
+> "Inside Liana Banyan, you can use the platform's entire patent portfolio freely for your own businesses, without being forced to give up your own separate IP. If you create IP that directly builds on Liana Banyan's internal IP and use it on the platform, that derivative IP just needs to follow the same cooperative rules as everyone else's."
+
+---
+
 ## Future Research Questions
 
 ### For Ph.D. Dissertation

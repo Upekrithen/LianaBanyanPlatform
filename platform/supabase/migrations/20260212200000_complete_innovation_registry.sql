@@ -1552,6 +1552,25 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 -- ============================================================================
+-- SHADOW MARKS & RECIPE BOUNTIES SYSTEM #1218-#1227 (10 innovations)
+-- Date: February 15, 2026 (Valentine's Day +1)
+-- Source: Shadow Marks system for The Pantry recipe repository
+-- ============================================================================
+INSERT INTO public.innovation_log (innovation_number, title, description, category, patent_bag, status)
+VALUES
+(1218, 'Shadow Marks — Speculative Reputation Tokens', 'Reputation tokens that crystallize into real MARKS through community validation. Seeds that need sunlight to grow.', 'Reputation', 'Shadow Marks', 'documented'),
+(1219, 'Category-Based Recipe Bounties', 'Graduated Shadow Mark rewards for filling empty pantry category shelves: Empty=50, Sparse=30, Growing=15, Established=5', 'Incentives', 'Shadow Marks', 'documented'),
+(1220, 'Vesting Through Community Validation', 'Shadow Marks crystallize proportionally as votes accumulate: 1 vote=10%, 10 votes=100% crystallized', 'Economics', 'Shadow Marks', 'documented'),
+(1221, 'Shadow Mark Decay Schedule', 'Unvalidated Shadow Marks decay at 20% every 4 days after 3-day grace period. Crystallized marks never decay.', 'Gamification', 'Shadow Marks', 'documented'),
+(1222, 'Escape Velocity IP Protection', 'Recipes reaching 100 votes trigger permanent IP Ledger SHA-256 stamp, Hot Pepper badge, portfolio protection, and 50 MARKS bonus', 'IP', 'Shadow Marks', 'documented'),
+(1223, 'Recipe Fork Attribution & Royalty Split', 'Fork derivatives preserve original attribution with 80/20 royalty split (fork creator 80%, original 20%)', 'IP', 'Shadow Marks', 'documented'),
+(1224, 'Makers vs Tasters Incentive Ratio', '1:10 ratio (100 Makers : 1000 Tasters) early adopter structure to ensure validation liquidity', 'Economics', 'Shadow Marks', 'documented'),
+(1225, 'Early Taster Reward Tiers', 'First 1000 recipe orders earn graduated MARKS: Orders 1-100=5M, 101-500=3M, 501-1000=1M', 'Incentives', 'Shadow Marks', 'documented'),
+(1226, 'Recipe IP Ledger Hash', 'SHA-256 hash of recipe content recorded to acknowledgment_stamps for permanent, immutable creator attribution', 'Security', 'Shadow Marks', 'documented'),
+(1227, 'Equal Opportunity Bounty', 'Same category tier = same Shadow Mark reward regardless of submission order. Bounty drops only when category crosses threshold.', 'Fairness', 'Shadow Marks', 'documented')
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
 -- METRICS NOTE: current_metrics is a VIEW (not a table), so we cannot insert.
 -- The view already derives innovation_count from: SELECT COUNT(*) FROM innovation_log
 -- No action needed - the view auto-updates when innovations are added.
@@ -1560,4 +1579,4 @@ ON CONFLICT DO NOTHING;
 -- ============================================================================
 -- COMMENT
 -- ============================================================================
-COMMENT ON TABLE public.innovation_log IS 'Complete verified innovation registry. Contains 1,217 innovations extracted Feb 11-13, 2026. Sources: Original Behemoth (1-53), Bags 5-10, BATCH files 1-9, COMPREHENSIVE_PROVISIONAL_JAN24, HEXISLE_TERENO, Founder journals, Feb 1-5 ROOK/PAWN extractions, Bag 19-24 extractions, and Jan 24/28 Filings. RANGE: #1-#1217, ZERO gaps.';
+COMMENT ON TABLE public.innovation_log IS 'Complete verified innovation registry. Contains 1,227 innovations extracted Feb 11-15, 2026. Sources: Original Behemoth (1-53), Bags 5-10, BATCH files 1-9, COMPREHENSIVE_PROVISIONAL_JAN24, HEXISLE_TERENO, Founder journals, Feb 1-5 ROOK/PAWN extractions, Bag 19-24 extractions, Jan 24/28 Filings, and Shadow Marks system. RANGE: #1-#1227, ZERO gaps.';

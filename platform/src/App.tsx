@@ -2,14 +2,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UnifiedNavigation } from "@/components/UnifiedNavigation";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import TikTokCallback from "./pages/TikTokCallback";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Portfolio from "./pages/Portfolio";
@@ -24,8 +25,8 @@ import ProductDetail from "./pages/ProductDetail";
 import IndustryPricing from "./pages/IndustryPricing";
 import TemplateSetup from "./pages/TemplateSetup";
 import InvestmentExplainer from "./pages/InvestmentExplainer";
-import BlockchainExplorer from "./pages/BlockchainExplorer";
-import MedallionViewer from "./pages/MedallionViewer";
+const BlockchainExplorer = lazy(() => import("./pages/BlockchainExplorer"));
+const MedallionViewer = lazy(() => import("./pages/MedallionViewer"));
 import Withdraw from "./pages/Withdraw";
 import ReputationProfile from "./pages/ReputationProfile";
 import ProfileSettings from "./pages/ProfileSettings";
@@ -47,6 +48,14 @@ import CompanyIndependenceManager from "./pages/CompanyIndependenceManager";
 import ContractScaleManager from "./pages/ContractScaleManager";
 import ExternalServices from "./pages/ExternalServices";
 import AdminServiceReview from "./pages/AdminServiceReview";
+import The2ndSecondPortal from "./pages/The2ndSecondPortal";
+import TransparentLedger from "./pages/TransparentLedger";
+import MedallionSwap from "./pages/MedallionSwap";
+import DMKeepSystem from "./pages/DMKeepSystem";
+import DefenseKlausPage from "./pages/DefenseKlausPage";
+import HouseholdConciergePage from "./pages/HouseholdConciergePage";
+import HealthAccordsPage from "./pages/HealthAccordsPage";
+import DurinsDoor from "./pages/DurinsDoor";
 import VideoScripts from "./pages/VideoScripts";
 import PreBetaRecruits from "./pages/PreBetaRecruits";
 import LBAssetLibrary from "./pages/LBAssetLibrary";
@@ -61,8 +70,9 @@ import IPRegistration from "./pages/IPRegistration";
 import AgentOnboarding from "./pages/AgentOnboarding";
 import CrowdfundingIntegration from "./pages/CrowdfundingIntegration";
 import MedallionManagement from "./pages/MedallionManagement";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { GlobalBreadcrumbs } from "@/components/GlobalBreadcrumbs";
+import { useAuth } from "@/contexts/AuthContext";
 // Business portal pages reused here
 import ContractPositions from "./pages/ContractPositions";
 import ManagePositions from "./pages/ManagePositions";
@@ -76,19 +86,157 @@ import CampaignProduction from "./pages/CampaignProduction";
 import ProjectLanding from "./pages/ProjectLanding";
 import LandingPageManager from "./pages/LandingPageManager";
 import Briefcase from "./pages/Briefcase";
-import HexisleDashboard from "./pages/HexisleDashboard";
-import LetsMakeDinnerPage from "./pages/LetsMakeDinnerPage";
-import InitiativeProjectsPage from "./pages/InitiativeProjectsPage";
-import StewardLegalDashboard from "./pages/StewardLegalDashboard";
-import ThemeManagement from "./pages/ThemeManagement";
-import DefenseClawsPage from "./pages/DefenseClawsPage";
-import MSAPage from "./pages/MSAPage";
-import LifeLineMedicationsPage from "./pages/LifeLineMedicationsPage";
-import LetsGoShoppingPage from "./pages/LetsGoShoppingPage";
-import LetsGetGroceriesPage from "./pages/LetsGetGroceriesPage";
-import RedCarpet from "./pages/RedCarpet";
-import HofundStudio from "./pages/HofundStudio";
-import HeraldSubscription from "./pages/HeraldSubscription";
+const HexisleDashboard = lazy(() => import("./pages/HexisleDashboard"));
+const LetsMakeDinnerPage = lazy(() => import("./pages/LetsMakeDinnerPage"));
+const LetsMakeDinnerLanding = lazy(() => import("./pages/LetsMakeDinnerLanding"));
+const GroceryBoxPage = lazy(() => import("./pages/GroceryBoxPage"));
+const GroupCookPage = lazy(() => import("./pages/GroupCookPage"));
+const ChefMarketplacePage = lazy(() => import("./pages/ChefMarketplacePage"));
+const PantryPage = lazy(() => import("./pages/PantryPage"));
+const FamilyTablePage = lazy(() => import("./pages/FamilyTablePage"));
+const RallyGroupPage = lazy(() => import("./pages/RallyGroupPage"));
+const JukeboxInitiative = lazy(() => import("./pages/JukeboxInitiative"));
+const HarperGuildPage = lazy(() => import("./pages/HarperGuildPage"));
+const VSLPage = lazy(() => import("./pages/VSLPage"));
+const LetsMakeBreadPage = lazy(() => import("./pages/LetsMakeBreadPage"));
+const DidaskoPage = lazy(() => import("./pages/DidaskoPage"));
+const PowerToThePeoplePage = lazy(() => import("./pages/PowerToThePeoplePage"));
+const BrassTacksPage = lazy(() => import("./pages/BrassTacksPage"));
+const FamilyPage = lazy(() => import("./pages/FamilyPage"));
+const FamilyDetailPage = lazy(() => import("./pages/FamilyDetailPage"));
+const ProprietaryRecipesPage = lazy(() => import("./pages/ProprietaryRecipesPage"));
+const TasteTesterDashboard = lazy(() => import("./pages/TasteTesterDashboard"));
+const CottageLawPage = lazy(() => import("./pages/CottageLawPage"));
+const DocumentationMarketplacePage = lazy(() => import("./pages/DocumentationMarketplacePage"));
+const InitiativeProjectsPage = lazy(() => import("./pages/InitiativeProjectsPage"));
+const StewardLegalDashboard = lazy(() => import("./pages/StewardLegalDashboard"));
+const ThemeManagement = lazy(() => import("./pages/ThemeManagement"));
+const DefenseClawsPage = lazy(() => import("./pages/DefenseClawsPage"));
+const DefenseKlausSubmarineDoor = lazy(() => import("./pages/DefenseKlausSubmarineDoor"));
+const HelpEachOtherPage = lazy(() => import("./pages/HelpEachOtherPage"));
+const TheFurnace = lazy(() => import("./pages/TheFurnace"));
+const StoreFrontAggregation = lazy(() => import("./pages/StoreFrontAggregation"));
+const GarageSalesPage = lazy(() => import("./pages/GarageSalesPage"));
+const BizKaleidoscope = lazy(() => import("./pages/BizKaleidoscope"));
+const MSAPage = lazy(() => import("./pages/MSAPage"));
+const LifeLineMedicationsPage = lazy(() => import("./pages/LifeLineMedicationsPage"));
+const LetsGoShoppingPage = lazy(() => import("./pages/LetsGoShoppingPage"));
+const LetsGetGroceriesPage = lazy(() => import("./pages/LetsGetGroceriesPage"));
+const ContingencyOperatorsPage = lazy(() => import("./pages/ContingencyOperatorsPage"));
+const CrankIt = lazy(() => import("./pages/CrankIt"));
+const ThoughtExperiment = lazy(() => import("./pages/ThoughtExperiment"));
+const RedCarpet = lazy(() => import("./pages/RedCarpet"));
+const DeckCardStudio = lazy(() => import("./pages/DeckCardStudio"));
+const HeraldSubscription = lazy(() => import("./pages/HeraldSubscription"));
+const GhostWorld = lazy(() => import("./pages/GhostWorld"));
+const GoldenKeyQuest = lazy(() => import("./pages/GoldenKeyQuest"));
+const SponsorPortal = lazy(() => import("./pages/SponsorPortal"));
+const SponsorshipPage = lazy(() => import("./pages/SponsorshipPage"));
+const HelpWanted = lazy(() => import("./pages/HelpWanted"));
+const HexIsle = lazy(() => import("./pages/HexIsle"));
+const HexIsleProjects = lazy(() => import("./pages/HexIsleProjects"));
+const CompanyIsland = lazy(() => import("./pages/CompanyIsland"));
+const HarvestIsland = lazy(() => import("./pages/HarvestIsland"));
+const IslandAssignmentBoard = lazy(() => import("./pages/IslandAssignmentBoard"));
+const IslandBuilderPage = lazy(() => import("./pages/IslandBuilderPage"));
+const IslandCreator = lazy(() => import("./pages/IslandCreator"));
+const IslandDesignPortfolio = lazy(() => import("./pages/IslandDesignPortfolio"));
+const IslandDetail = lazy(() => import("./pages/IslandDetail"));
+const IslandWorldMap = lazy(() => import("./pages/IslandWorldMap"));
+const TreasureIsland = lazy(() => import("./pages/TreasureIsland"));
+const FlyOnTheWall = lazy(() => import("./pages/FlyOnTheWall"));
+const DeckCollection = lazy(() => import("./pages/DeckCollection"));
+const ScrollForgePage = lazy(() => import("./pages/ScrollForgePage"));
+const TheHelm = lazy(() => import("./pages/TheHelm"));
+const InitiativePage = lazy(() => import("./pages/InitiativePage"));
+const Governance = lazy(() => import("./pages/Governance"));
+import { LanguageSwitcher } from "./components/LanguageSwitcher";
+const MatchTrade = lazy(() => import("./pages/MatchTrade"));
+const DesignBattleArena = lazy(() => import("./pages/DesignBattleArena"));
+import { DiscoveryBookshelf } from "./components/DiscoveryBookshelf";
+import { DiscoveryGateProvider } from "./components/DiscoveryGate";
+import { DiscoveryProvider } from "./hooks/useDiscovery";
+import { HelmCompact } from "./components/HelmCompact";
+import { useDiscoveryTracker } from "./hooks/useDiscoveryTracker";
+import HeraldSuccess from "./pages/HeraldSuccess";
+import SponsorSuccess from "./pages/SponsorSuccess";
+const ManufacturingStore = lazy(() => import("./pages/ManufacturingStore"));
+const FactoryHub = lazy(() => import("./pages/FactoryHub"));
+const NodeRegistration = lazy(() => import("./pages/NodeRegistration"));
+const ServiceNodeRegistration = lazy(() => import("./pages/ServiceNodeRegistration"));
+const LookingGlass = lazy(() => import("./pages/LookingGlass"));
+const ProposalDetail = lazy(() => import("./pages/ProposalDetail"));
+const TreasureMapGame = lazy(() => import("./pages/TreasureMapGame"));
+const TreasureMapCreator = lazy(() => import("./pages/TreasureMapCreator"));
+const BeaconRunCreator = lazy(() => import("./pages/BeaconRunCreator"));
+const Discover = lazy(() => import("./pages/Discover"));
+const PortalGateway = lazy(() => import("./pages/PortalGateway"));
+const Arenas = lazy(() => import("./pages/Arenas"));
+const Petitions = lazy(() => import("./pages/Petitions"));
+const BrowseMarketplace = lazy(() => import("./pages/BrowseMarketplace"));
+const BrowseBusiness = lazy(() => import("./pages/BrowseBusiness"));
+const BrowseNonprofit = lazy(() => import("./pages/BrowseNonprofit"));
+const BrowseNetwork = lazy(() => import("./pages/BrowseNetwork"));
+const Senate = lazy(() => import("./pages/Senate"));
+const HallOfInnovations = lazy(() => import("./pages/HallOfInnovations"));
+const OnboardingStart = lazy(() => import("./pages/OnboardingStart"));
+const BusinessPathway = lazy(() => import("./pages/BusinessPathway"));
+const PuddingDemo = lazy(() => import("./pages/PuddingDemo"));
+const SaltMines = lazy(() => import("./pages/SaltMines"));
+const BuildBusiness = lazy(() => import("./pages/BuildBusiness"));
+const PlantSeeds = lazy(() => import("./pages/PlantSeeds"));
+const CueCardLanding = lazy(() => import("./pages/CueCardLanding"));
+const NotLeftNotRightPage = lazy(() => import('./pages/cue-cards/NotLeftNotRightPage'));
+const AcademicPapersDirectory = lazy(() => import('./pages/AcademicPapersDirectory'));
+const CollegeOfHardKnocks = lazy(() => import('./pages/CollegeOfHardKnocks'));
+const PatentPortfolio = lazy(() => import("./pages/PatentPortfolio"));
+const EconomicLaws = lazy(() => import("./pages/EconomicLaws"));
+const SwoopPage = lazy(() => import("./pages/SwoopPage"));
+const SwoopProjectPage = lazy(() => import("./pages/SwoopProjectPage"));
+const SwoopAdminPage = lazy(() => import("./pages/SwoopAdminPage"));
+import SocialMediaAdmin from "./components/SocialMediaAdmin";
+import TheBattery from "./components/TheBattery";
+const HeroProjectPage = lazy(() => import("./pages/HeroProjectPage"));
+import UniversalDispatch from "./components/UniversalDispatch";
+import PaperPage from "./pages/PaperPage";
+const FinancialTransparencyPage = lazy(() => import("./pages/FinancialTransparencyPage"));
+const HelmPage = lazy(() => import("./pages/HelmPage"));
+const C20PilotDashboard = lazy(() => import("./pages/C20PilotDashboard"));
+const C20Leaderboard = lazy(() => import("./pages/C20Leaderboard"));
+const BeaconExplainer = lazy(() => import("./pages/BeaconExplainer"));
+const WildfireRunsPage = lazy(() => import("./pages/WildfireRunsPage"));
+import { WildfireRunProvider } from "./contexts/WildfireRunContext";
+import { PathwayProgressProvider } from "./contexts/PathwayProgressContext";
+import { FeatureTipProvider } from "./components/FeatureTip";
+import { GlobalWildfireRun } from "./components/GlobalWildfireRun";
+import { DevelopmentBadge } from "./components/DevelopmentBadge";
+import { PatentPortfolioTicker } from "./components/PatentPortfolioTicker";
+const BrewsterBonusPage = lazy(() => import("./pages/BrewsterBonusPage"));
+import { AlcoveHallway } from "./components/AlcoveHallway";
+const CoasterMedallionProject = lazy(() => import("./pages/CoasterMedallionProject"));
+const FarmerSupplyChainPage = lazy(() => import("./pages/FarmerSupplyChainPage"));
+const HexIsleEncyclopedia = lazy(() => import("./pages/HexIsleEncyclopedia"));
+const HexIsleIslandPage = lazy(() => import("./pages/HexIsleIslandPage"));
+
+// Content Controls & Progressive Disclosure (Session 6L)
+const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
+// Community Support via Stack Overflow (Session 6L)
+const CommunitySupport = lazy(() => import("./pages/CommunitySupport"));
+// HexIsle 3D World (Session 6L — React Three Fiber)
+const HexIsleWorld3D = lazy(() => import("./pages/HexIsleWorld3D"));
+// HexIsle 2D Overworld (Session 6M — Mario World-style overworld)
+const HexIsleOverworld = lazy(() => import("./pages/HexIsleOverworld"));
+const ContentPipelinePage = lazy(() => import("./pages/ContentPipelinePage"));
+// Legal pages (TikTok Developer Portal compliance — Session 7D)
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+// Muffled Rule / Coverage Minutes / Phase MimicTrunks (Session 6M)
+const RoundTableHall = lazy(() => import("./pages/RoundTableHall"));
+const CoverageMinutesDashboard = lazy(() => import("./pages/CoverageMinutesDashboard"));
+const PedestalBrowser = lazy(() => import("./pages/PedestalBrowser"));
+const PhaseMimicTrunkManager = lazy(() => import("./pages/PhaseMimicTrunkManager"));
+const RealWorldPuzzles = lazy(() => import("./pages/RealWorldPuzzles"));
+const GuildPhaseManager = lazy(() => import("./pages/GuildPhaseManager"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -97,49 +245,166 @@ const ExternalRedirect = ({ to }: { to: string }) => {
   return null;
 };
 
-const HardReload = () => {
-  useEffect(() => {
-    // Force a full reload so main.tsx re-detects portal by path (e.g., /task-list)
-    window.location.reload();
-  }, []);
-  return null;
-};
+// HardReload component REMOVED — unconditional reload = infinite loop risk
+
+import TowerOfPeace from "./pages/cue-cards/TowerOfPeace";
+import CueCardSponsorPortal from "./pages/cue-cards/SponsorPortal";
+import CueCardDurinsDoor from "./pages/cue-cards/DurinsDoor";
+import Canada40K from "./pages/cue-cards/Canada40K";
+import WildfireBeaconRun from "./pages/cue-cards/WildfireBeaconRun";
+import HallOfRecords from "./pages/cue-cards/HallOfRecords";
+import MainlandHub from "./pages/cue-cards/MainlandHub";
+import CodeBreakersHub from "./pages/cue-cards/CodeBreakersHub";
+import BusinessCardPortal from "./pages/cue-cards/BusinessCardPortal";
+import KeepsLobby from "./pages/cue-cards/KeepsLobby";
+import HexIsleWorldCard from "./pages/cue-cards/HexIsleWorldCard";
+// Using the main RedCarpet page instead of the cue-card specific one
+// import RedCarpet from "./pages/cue-cards/RedCarpet";
+
+import { BuilderModeProvider } from "@/components/builder/BuilderModeContext";
+import { LarkSidePanel } from "@/components/builder/LarkSidePanel";
+
+// Cold Start & Stewardship System (Milestone 2)
+import ColdStartDashboard from "./pages/ColdStartDashboard";
+import BecomeCaptain from "./pages/BecomeCaptain";
+import TreasureMapBuilder from "./pages/TreasureMapBuilder";
+import IncumbentAdvantage from "./pages/IncumbentAdvantage";
 
 const queryClient = new QueryClient();
 
+// Routes where sidebar/header should ALWAYS be hidden (immersive/public pages)
+// These show clean full-page layouts regardless of auth status
+const ALWAYS_CLEAN_ROUTES = [
+  '/', // Homepage should ALWAYS be clean - even for logged-in users seeing the welcome modal
+  '/portal', '/enter', '/RedCarpet', '/redcarpet', '/ghost', '/explore',
+  '/treasure-map-game', '/52-cards', '/card-hunt', '/golden-key', '/treasure-hunt',
+  '/durins-door', '/door', '/arenas', '/political-expedition', '/areopagus', '/crucible',
+  '/discover', '/auth', '/hofund', '/reputation', '/start', '/begin', '/pudding', '/components',
+  '/initiatives', // ALL initiative pages should be clean for guests
+  '/get-a-job', '/salt-mines', '/build-a-business', '/plant-seeds', '/cue',
+  '/patent-portfolio', '/economics', '/c20/leaderboard', '/reciprocity-leaderboard', '/pathway', '/business-pathway', '/beacon-explainer', '/wildfire-runs', '/magic-carpet', '/hall-of-records',
+  '/coaster-medallion', '/farmer-supply-chain', '/meal-kits', '/freeze-dried',
+  '/hexisle/encyclopedia',
+  '/sponsor', '/forward',
+];
+
+// Routes where sidebar is hidden ONLY for unauthenticated users (now empty since / moved to ALWAYS_CLEAN)
+const GUEST_CLEAN_ROUTES: string[] = [];
+
+function AppShell({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const location = useLocation();
+  useDiscoveryTracker(); // Auto-discover cards as user navigates
+  
+  // Always clean for immersive pages (regardless of auth)
+  const isAlwaysClean = ALWAYS_CLEAN_ROUTES.some(r =>
+    r === '/' ? location.pathname === '/' : location.pathname.startsWith(r)
+  );
+  // Clean for guests on landing page
+  const isGuestClean = !user && (location.pathname === '/' || GUEST_CLEAN_ROUTES.some(r => location.pathname === r));
+  const isCleanRoute = isAlwaysClean || isGuestClean;
+
+  if (isCleanRoute) {
+    return (
+      <div className="min-h-screen">
+        <main className="min-h-screen">{children}</main>
+        <HelmCompact />
+        <PWAInstallPrompt />
+        <LanguageSwitcher />
+        <DevelopmentBadge />
+        <PatentPortfolioTicker mode="compact" />
+      </div>
+    );
+  }
+
+  return (
+    <DiscoveryProvider>
+      <DiscoveryGateProvider>
+        <SidebarProvider>
+        <div className="min-h-screen flex w-full overflow-x-hidden">
+          <UnifiedNavigation />
+          <div className="flex-1 flex flex-col min-w-0">
+            <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+              <div className="flex items-center gap-4 min-w-0">
+                <SidebarTrigger />
+                <GlobalBreadcrumbs />
+              </div>
+              <SyncStatusIndicator />
+            </header>
+            <div className="flex flex-1 overflow-x-hidden">
+              <main className="flex-1 overflow-x-hidden">{children}</main>
+              {/* Discovery Bookshelf — right panel for logged-in users */}
+              {user && (
+                <aside className="hidden xl:block w-64 border-l bg-card/30 overflow-y-auto shrink-0">
+                  <DiscoveryBookshelf />
+                </aside>
+              )}
+            </div>
+          </div>
+        </div>
+        <GlobalRecorderOverlay />
+        <HelmCompact />
+        <PWAInstallPrompt />
+        <LanguageSwitcher />
+        <DevelopmentBadge />
+        <PatentPortfolioTicker mode="compact" />
+        </SidebarProvider>
+      </DiscoveryGateProvider>
+    </DiscoveryProvider>
+  );
+}
+
+import { BuilderModeToggle } from "@/components/builder/BuilderModeToggle";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <RecordingProvider>
-            <SubdomainRouter>
-              <SidebarProvider>
-                <div className="min-h-screen flex w-full overflow-x-hidden">
-                  <UnifiedNavigation />
-                  <div className="flex-1 flex flex-col min-w-0">
-                    <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-                      <div className="flex items-center gap-4 min-w-0">
-                        <SidebarTrigger />
-                        <GlobalBreadcrumbs />
-                      </div>
-                      <SyncStatusIndicator />
-                    </header>
-                    <main className="flex-1 overflow-x-hidden">
+    <BuilderModeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+          <FeatureTipProvider>
+          <WildfireRunProvider>
+          <PathwayProgressProvider>
+            <RecordingProvider>
+              <SubdomainRouter>
+                <AppShell>
+                  <GlobalWildfireRun />
+                  <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}>
                       <Routes>
                         {/* Public Routes */}
                         <Route path="/" element={<Index />} />
                         <Route path="/auth" element={<Auth />} />
+                        <Route path="/auth/tiktok/callback" element={<TikTokCallback />} />
+                        <Route path="/ghost" element={<GhostWorld />} />
+                        <Route path="/explore" element={<GhostWorld />} />
+                        <Route path="/portal" element={<PortalGateway />} />
+                        <Route path="/enter" element={<PortalGateway />} />
+                        <Route path="/start" element={<OnboardingStart />} />
+                        <Route path="/begin" element={<OnboardingStart />} />
+                        <Route path="/pathway" element={<BusinessPathway />} />
+                        <Route path="/business-pathway" element={<BusinessPathway />} />
+                        <Route path="/pudding" element={<PuddingDemo />} />
+                        <Route path="/components" element={<PuddingDemo />} />
+                        
+                        {/* Progressive Disclosure Paths */}
+                        <Route path="/get-a-job" element={<SaltMines />} />
+                        <Route path="/salt-mines" element={<SaltMines />} />
+                        <Route path="/build-a-business" element={<BuildBusiness />} />
+                        <Route path="/plant-seeds" element={<PlantSeeds />} />
+                        <Route path="/cue/:cardId" element={<CueCardLanding />} />
+                        <Route path="/forward" element={<NotLeftNotRightPage />} />
+                        <Route path="/papers" element={<AcademicPapersDirectory />} />
+              <Route path="/hard-knocks" element={<CollegeOfHardKnocks />} />
                         <Route path="/RedCarpet" element={<RedCarpet />} />
                         <Route path="/RedCarpet/:slug" element={<RedCarpet />} />
                         <Route path="/redcarpet" element={<RedCarpet />} />
                         <Route path="/redcarpet/:slug" element={<RedCarpet />} />
                         
                         {/* Protected Marketplace Routes */}
-                        <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
-                        <Route path="/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
+                        <Route path="/marketplace" element={<ExplorerRoute><Marketplace /></ExplorerRoute>} />
+                        <Route path="/projects" element={<ExplorerRoute><Projects /></ExplorerRoute>} />
                         <Route path="/project/:projectSlug" element={<ProtectedRoute><ProjectView /></ProtectedRoute>} />
                         <Route path="/project/:projectSlug/product/:productId" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                         <Route path="/investment-guide" element={<ProtectedRoute><InvestmentExplainer /></ProtectedRoute>} />
@@ -152,20 +417,181 @@ const App = () => (
                         <Route path="/withdraw" element={<ProtectedRoute><Withdraw /></ProtectedRoute>} />
                         <Route path="/reputation/:userId" element={<ReputationProfile />} />
                         <Route path="/profile-settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
+                        <Route path="/content-controls" element={<ProtectedRoute><ContentControlsPage /></ProtectedRoute>} />
+                        <Route path="/support" element={<ExplorerRoute><CommunitySupport /></ExplorerRoute>} />
+                        <Route path="/community-support" element={<ExplorerRoute><CommunitySupport /></ExplorerRoute>} />
+                        <Route path="/help" element={<ExplorerRoute><CommunitySupport /></ExplorerRoute>} />
                         <Route path="/peer-contracts" element={<ProtectedRoute><PeerContracts /></ProtectedRoute>} />
-                        <Route path="/guilds" element={<ProtectedRoute><Guilds /></ProtectedRoute>} />
-                        <Route path="/tribes" element={<ProtectedRoute><Tribes /></ProtectedRoute>} />
+                        <Route path="/guilds" element={<ExplorerRoute><Guilds /></ExplorerRoute>} />
+                        <Route path="/tribes" element={<ExplorerRoute><Tribes /></ExplorerRoute>} />
                         <Route path="/position-categories" element={<ProtectedRoute><PositionCategories /></ProtectedRoute>} />
                         <Route path="/lb-positions" element={<ProtectedRoute><LBInternalPositions /></ProtectedRoute>} />
                         <Route path="/production-queue" element={<ProtectedRoute><ProductionQueue /></ProtectedRoute>} />
                         <Route path="/ip/register" element={<ProtectedRoute><IPRegistration /></ProtectedRoute>} />
                         <Route path="/agent-onboarding" element={<ProtectedRoute><AgentOnboarding /></ProtectedRoute>} />
                         <Route path="/crowdfunding" element={<ProtectedRoute><CrowdfundingIntegration /></ProtectedRoute>} />
-                        <Route path="/hofund" element={<ProtectedRoute><HofundStudio /></ProtectedRoute>} />
-                        <Route path="/cue-cards" element={<ProtectedRoute><HofundStudio /></ProtectedRoute>} />
+                        <Route path="/deck-card-studio" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
+                        <Route path="/cue-cards" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
+                        <Route path="/the-2nd-second" element={<ExplorerRoute><The2ndSecondPortal /></ExplorerRoute>} />
+                        <Route path="/makers" element={<ExplorerRoute><The2ndSecondPortal /></ExplorerRoute>} />
+                        <Route path="/ledger" element={<ExplorerRoute><TransparentLedger /></ExplorerRoute>} />
+                        <Route path="/transparent-ledger" element={<ExplorerRoute><TransparentLedger /></ExplorerRoute>} />
+                        <Route path="/medallion-swap" element={<ExplorerRoute><MedallionSwap /></ExplorerRoute>} />
+                        <Route path="/senior-pics" element={<ExplorerRoute><MedallionSwap /></ExplorerRoute>} />
+                        <Route path="/dm-keep" element={<ExplorerRoute><DMKeepSystem /></ExplorerRoute>} />
+                        <Route path="/treasure-maps" element={<ExplorerRoute><DMKeepSystem /></ExplorerRoute>} />
+                        <Route path="/initiatives/defense-klaus" element={<ExplorerRoute><DefenseKlausPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/household-concierge" element={<ExplorerRoute><HouseholdConciergePage /></ExplorerRoute>} />
+                        <Route path="/initiatives/rally-group" element={<ExplorerRoute><RallyGroupPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/jukebox" element={<ExplorerRoute><JukeboxInitiative /></ExplorerRoute>} />
+                        <Route path="/initiatives/harper-guild" element={<ExplorerRoute><HarperGuildPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/vsl" element={<ExplorerRoute><VSLPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/bread" element={<ExplorerRoute><LetsMakeBreadPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/didasko" element={<ExplorerRoute><DidaskoPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/power-to-the-people" element={<ExplorerRoute><PowerToThePeoplePage /></ExplorerRoute>} />
+                        <Route path="/initiatives/brass-tacks" element={<ExplorerRoute><BrassTacksPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/health-accords" element={<ExplorerRoute><HealthAccordsPage /></ExplorerRoute>} />
+                        <Route path="/durins-door" element={<ExplorerRoute><DurinsDoor /></ExplorerRoute>} />
+                        <Route path="/international" element={<ExplorerRoute><DurinsDoor /></ExplorerRoute>} />
+                        <Route path="/the-helm" element={<ExplorerRoute><TheHelm /></ExplorerRoute>} />
+                        <Route path="/helm" element={<ExplorerRoute><TheHelm /></ExplorerRoute>} />
                         <Route path="/herald" element={<ProtectedRoute><HeraldSubscription /></ProtectedRoute>} />
                         <Route path="/herald-subscription" element={<ProtectedRoute><HeraldSubscription /></ProtectedRoute>} />
+                        <Route path="/golden-key" element={<GoldenKeyQuest />} />
+                        <Route path="/treasure-hunt" element={<GoldenKeyQuest />} />
+                        <Route path="/sponsor" element={<SponsorPortal />} />
+                        <Route path="/sponsorship" element={<ProtectedRoute><SponsorshipPage /></ProtectedRoute>} />
+                        <Route path="/cascade" element={<ProtectedRoute><SponsorshipPage /></ProtectedRoute>} />
+                        <Route path="/johnny-appleseed" element={<SponsorPortal />} />
+                        <Route path="/swoop" element={<ExplorerRoute><SwoopPage /></ExplorerRoute>} />
+                        <Route path="/swoop/:slug" element={<ExplorerRoute><SwoopProjectPage /></ExplorerRoute>} />
+                        <Route path="/swoop/admin" element={<ProtectedRoute><SwoopAdminPage /></ProtectedRoute>} />
+                        <Route path="/social-admin" element={<ProtectedRoute><div className="container mx-auto p-6 max-w-4xl"><SocialMediaAdmin /></div></ProtectedRoute>} />
+                        <Route path="/the-battery" element={<ProtectedRoute><div className="container mx-auto p-6 max-w-4xl"><TheBattery /></div></ProtectedRoute>} />
+                        <Route path="/dispatch" element={<ProtectedRoute><div className="container mx-auto p-6 max-w-4xl"><UniversalDispatch /></div></ProtectedRoute>} />
+                        <Route path="/learn/brewster-bonus" element={<ExplorerRoute><BrewsterBonusPage /></ExplorerRoute>} />
+                        <Route path="/learn" element={<ExplorerRoute><div className="container mx-auto p-6 max-w-4xl"><AlcoveHallway /></div></ExplorerRoute>} />
+                        <Route path="/heroes/:slug" element={<ExplorerRoute><HeroProjectPage /></ExplorerRoute>} />
+                        <Route path="/do-the-swoop" element={<ExplorerRoute><SwoopPage /></ExplorerRoute>} />
+                        <Route path="/finances" element={<ExplorerRoute><FinancialTransparencyPage /></ExplorerRoute>} />
+                        <Route path="/financial-transparency" element={<ExplorerRoute><FinancialTransparencyPage /></ExplorerRoute>} />
+                        <Route path="/ledgers" element={<ExplorerRoute><FinancialTransparencyPage /></ExplorerRoute>} />
+                        <Route path="/help-wanted" element={<HelpWanted />} />
+                        <Route path="/marketplace/services" element={<HelpWanted />} />
+                        <Route path="/the-furnace" element={<TheFurnace />} />
+                        <Route path="/furnace" element={<TheFurnace />} />
+                        <Route path="/storefront-aggregation" element={<StoreFrontAggregation />} />
+                        <Route path="/biz-aggregation" element={<StoreFrontAggregation />} />
+                        <Route path="/kaleidoscope" element={<BizKaleidoscope />} />
+                        <Route path="/biz-directory" element={<BizKaleidoscope />} />
+                        <Route path="/family-table/garage-sales" element={<GarageSalesPage />} />
+                        <Route path="/garage-sales" element={<GarageSalesPage />} />
+                        <Route path="/door" element={<DurinsDoor />} />
+                        <Route path="/hexisle" element={<HexIsle />} />
+                        <Route path="/hexisle-game" element={<HexIsle />} />
+                        <Route path="/hexisle/projects" element={<HexIsleProjects />} />
+                        <Route path="/projects/hexisle" element={<HexIsleProjects />} />
+                        <Route path="/hexisle/company" element={<CompanyIsland />} />
+                        <Route path="/hexisle/harvest" element={<HarvestIsland />} />
+                        <Route path="/hexisle/treasure" element={<TreasureIsland />} />
+                        <Route path="/hexisle/assignments" element={<IslandAssignmentBoard />} />
+                        <Route path="/hexisle/builder" element={<IslandBuilderPage />} />
+                        <Route path="/hexisle/creator" element={<IslandCreator />} />
+                        <Route path="/hexisle/portfolio" element={<IslandDesignPortfolio />} />
+                        <Route path="/hexisle/island/:id" element={<IslandDetail />} />
+                        <Route path="/hexisle/world-map" element={<IslandWorldMap />} />
+                        <Route path="/hexisle/world-3d" element={<HexIsleWorld3D />} />
+                        <Route path="/hexisle/overworld" element={<HexIsleOverworld />} />
+                        <Route path="/content-pipeline" element={<ContentPipelinePage />} />
+                        {/* Legal pages — public, no auth required (TikTok compliance) */}
+                        <Route path="/terms" element={<TermsOfService />} />
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/round-tables" element={<RoundTableHall />} />
+                        <Route path="/coverage-minutes" element={<CoverageMinutesDashboard />} />
+                        <Route path="/pedestals" element={<PedestalBrowser />} />
+                        <Route path="/phase-mimictrunks" element={<PhaseMimicTrunkManager />} />
+                        <Route path="/real-world-puzzles" element={<RealWorldPuzzles />} />
+                        <Route path="/guild-phases" element={<GuildPhaseManager />} />
+                        <Route path="/fly-on-the-wall" element={<FlyOnTheWall />} />
+                        <Route path="/transparency" element={<FlyOnTheWall />} />
+                        <Route path="/deck" element={<ExplorerRoute><DeckCollection /></ExplorerRoute>} />
+                        <Route path="/cards" element={<ExplorerRoute><DeckCollection /></ExplorerRoute>} />
+                        <Route path="/forge" element={<ExplorerRoute><ScrollForgePage /></ExplorerRoute>} />
+                        <Route path="/scroll-forge" element={<ExplorerRoute><ScrollForgePage /></ExplorerRoute>} />
+                        <Route path="/beacons" element={<TheHelm />} />
+                        <Route path="/beacon-explainer" element={<BeaconExplainer />} />
+                        <Route path="/treasure-map" element={<TheHelm />} />
+                        <Route path="/journey-map" element={<ExplorerRoute><HelmPage /></ExplorerRoute>} />
+                        <Route path="/beacon-runs" element={<ExplorerRoute><HelmPage /></ExplorerRoute>} />
+                        <Route path="/beacon-run/:slug" element={<ExplorerRoute><HelmPage /></ExplorerRoute>} />
+                        <Route path="/wildfire-runs" element={<ExplorerRoute><WildfireRunsPage /></ExplorerRoute>} />
+                        <Route path="/wildfire-run/:slug" element={<ExplorerRoute><WildfireRunsPage /></ExplorerRoute>} />
+                        <Route path="/magic-carpet" element={<ExplorerRoute><WildfireRunsPage /></ExplorerRoute>} />
+                        <Route path="/governance" element={<Governance />} />
+                        <Route path="/the-300" element={<Governance />} />
+                        <Route path="/patent-portfolio" element={<PatentPortfolio />} />
+                        <Route path="/economics" element={<EconomicLaws />} />
+                        <Route path="/economics/:paperId" element={<PaperPage />} />
+                        <Route path="/the300" element={<Governance />} />
+                        <Route path="/star-chamber" element={<Governance />} />
+                        <Route path="/initiatives/:slug" element={<ExplorerRoute><InitiativePage /></ExplorerRoute>} />
+                        <Route path="/matchtrade" element={<MatchTrade />} />
+                        <Route path="/marks-for-marks" element={<MatchTrade />} />
+                        <Route path="/arena" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
+                        <Route path="/design-battle" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
+                        <Route path="/battles" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
                         <Route path="/medallion-management" element={<ProtectedRoute><MedallionManagement /></ProtectedRoute>} />
+                        
+                        {/* C+20 Pilot Program Routes */}
+                        <Route path="/c20" element={<ProtectedRoute><C20PilotDashboard /></ProtectedRoute>} />
+                        <Route path="/c20-pilot" element={<ProtectedRoute><C20PilotDashboard /></ProtectedRoute>} />
+                        <Route path="/toe-dipping" element={<ProtectedRoute><C20PilotDashboard /></ProtectedRoute>} />
+                        <Route path="/c20/leaderboard" element={<C20Leaderboard />} />
+                        <Route path="/reciprocity-leaderboard" element={<C20Leaderboard />} />
+                        
+                        {/* New Routes — Feb 9 Session 2 */}
+                        <Route path="/herald-success" element={<ProtectedRoute><HeraldSuccess /></ProtectedRoute>} />
+                        <Route path="/sponsor-success" element={<ProtectedRoute><SponsorSuccess /></ProtectedRoute>} />
+                        <Route path="/manufacturing" element={<ProtectedRoute><ManufacturingStore /></ProtectedRoute>} />
+                        <Route path="/store" element={<ProtectedRoute><ManufacturingStore /></ProtectedRoute>} />
+                        <Route path="/lets-make-bread" element={<ProtectedRoute><ManufacturingStore /></ProtectedRoute>} />
+                        
+                        {/* Factory System — Decentralized Manufacturing */}
+                        <Route path="/factory" element={<ExplorerRoute><FactoryHub /></ExplorerRoute>} />
+                        <Route path="/factory/hub" element={<ExplorerRoute><FactoryHub /></ExplorerRoute>} />
+                        <Route path="/factory/nodes" element={<ProtectedRoute><NodeRegistration /></ProtectedRoute>} />
+                        <Route path="/factory/register" element={<ProtectedRoute><NodeRegistration /></ProtectedRoute>} />
+                        <Route path="/factory/bounties" element={<ProtectedRoute><ManufacturingStore /></ProtectedRoute>} />
+                        <Route path="/brass-tacks" element={<ExplorerRoute><FactoryHub /></ExplorerRoute>} />
+                        <Route path="/looking-glass" element={<LookingGlass />} />
+                        <Route path="/glass" element={<LookingGlass />} />
+                        <Route path="/governance/proposals/:id" element={<ProposalDetail />} />
+                        <Route path="/treasure-map-game" element={<TreasureMapGame />} />
+                        <Route path="/52-cards" element={<TreasureMapGame />} />
+                        <Route path="/card-hunt" element={<TreasureMapGame />} />
+                        <Route path="/treasure-map/create" element={<TreasureMapCreator />} />
+                        {/* /create-map moved to Cold Start section below; TreasureMapCreator still at /treasure-map/create */}
+                        <Route path="/beacon-run/create" element={<ProtectedRoute><BeaconRunCreator /></ProtectedRoute>} />
+                        <Route path="/create-beacon-run" element={<ProtectedRoute><BeaconRunCreator /></ProtectedRoute>} />
+                        
+                        {/* Senate — Governance Navigation Hub */}
+                        <Route path="/senate" element={<ExplorerRoute><Senate /></ExplorerRoute>} />
+                        <Route path="/senate/tower" element={<ExplorerRoute><Senate /></ExplorerRoute>} />
+                        <Route path="/senate/tower/:level" element={<ExplorerRoute><Senate /></ExplorerRoute>} />
+                        <Route path="/senate/records" element={<ExplorerRoute><Senate /></ExplorerRoute>} />
+                        <Route path="/senate/innovations" element={<ExplorerRoute><HallOfInnovations /></ExplorerRoute>} />
+                        <Route path="/hall-of-innovations" element={<ExplorerRoute><HallOfInnovations /></ExplorerRoute>} />
+                        <Route path="/innovations" element={<ExplorerRoute><HallOfInnovations /></ExplorerRoute>} />
+                        <Route path="/senate/projects" element={<ExplorerRoute><Senate /></ExplorerRoute>} />
+                        <Route path="/senate/saltmines" element={<ExplorerRoute><Senate /></ExplorerRoute>} />
+                        
+                        {/* Switzerland Rule Arenas — OUTSIDE LB proper */}
+                        <Route path="/arenas" element={<Arenas />} />
+                        <Route path="/political-expedition" element={<Arenas />} />
+                        <Route path="/areopagus" element={<Arenas />} />
+                        <Route path="/crucible" element={<Arenas />} />
+                        <Route path="/petitions" element={<Petitions />} />
+                        <Route path="/discover/:area" element={<Discover />} />
                         
                         {/* Admin/Dev Routes (still accessible in marketplace) */}
                         <Route path="/admin/project/create" element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
@@ -211,31 +637,116 @@ const App = () => (
                         <Route path="/hexisle-dashboard" element={<ProtectedRoute><HexisleDashboard /></ProtectedRoute>} />
                         
                         {/* Initiative Project Routes */}
-                        <Route path="/initiatives" element={<ProtectedRoute><InitiativeProjectsPage /></ProtectedRoute>} />
-                        <Route path="/initiatives/lets-make-dinner" element={<ProtectedRoute><LetsMakeDinnerPage /></ProtectedRoute>} />
-                        <Route path="/initiatives/defense-claws" element={<ProtectedRoute><DefenseClawsPage /></ProtectedRoute>} />
-                        <Route path="/initiatives/msa" element={<ProtectedRoute><MSAPage /></ProtectedRoute>} />
-                        <Route path="/initiatives/lifeline-medications" element={<ProtectedRoute><LifeLineMedicationsPage /></ProtectedRoute>} />
-                        <Route path="/initiatives/lets-go-shopping" element={<ProtectedRoute><LetsGoShoppingPage /></ProtectedRoute>} />
-                        <Route path="/initiatives/lets-get-groceries" element={<ProtectedRoute><LetsGetGroceriesPage /></ProtectedRoute>} />
+                        <Route path="/initiatives" element={<ExplorerRoute><InitiativeProjectsPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-make-dinner" element={<ExplorerRoute><LetsMakeDinnerPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-make-dinner/about" element={<ExplorerRoute><LetsMakeDinnerLanding /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-make-dinner/start-node" element={<ProtectedRoute><ServiceNodeRegistration /></ProtectedRoute>} />
+                        <Route path="/initiatives/lets-make-dinner/chefs" element={<ExplorerRoute><ChefMarketplacePage /></ExplorerRoute>} />
+                        <Route path="/service-node/register" element={<ProtectedRoute><ServiceNodeRegistration /></ProtectedRoute>} />
+                        <Route path="/initiatives/the-pantry" element={<ExplorerRoute><PantryPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/family-table" element={<ExplorerRoute><FamilyTablePage /></ExplorerRoute>} />
+                        <Route path="/initiatives/family-table/sessions" element={<ExplorerRoute><GroupCookPage /></ExplorerRoute>} />
+                        
+                        {/* Family Table — Family Management System */}
+                        <Route path="/family" element={<ExplorerRoute><FamilyPage /></ExplorerRoute>} />
+                        <Route path="/family/:familyId" element={<ProtectedRoute><FamilyDetailPage /></ProtectedRoute>} />
+                        <Route path="/family/:familyId/gifts" element={<ProtectedRoute><FamilyDetailPage /></ProtectedRoute>} />
+                        <Route path="/family/:familyId/calendar" element={<ProtectedRoute><FamilyDetailPage /></ProtectedRoute>} />
+                        <Route path="/initiatives/defense-claws" element={<ExplorerRoute><DefenseClawsPage /></ExplorerRoute>} />
+                        {/* /initiatives/defense-klaus already defined above with DefenseKlausPage */}
+                        
+                        {/* Defense Klaus Submarine Door System */}
+                        <Route path="/defense-klaus" element={<DefenseKlausSubmarineDoor />} />
+                        <Route path="/defense-klaus/gift/:referralCode" element={<DefenseKlausSubmarineDoor />} />
+                        
+                        {/* Help Each Other Help Ourselves - Philosophy Page */}
+                        <Route path="/help-each-other" element={<ExplorerRoute><HelpEachOtherPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/msa" element={<ExplorerRoute><MSAPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/lifeline-medications" element={<ExplorerRoute><LifeLineMedicationsPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/tatiana-schlossburg-health-accords" element={<ExplorerRoute><LifeLineMedicationsPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-go-shopping" element={<ExplorerRoute><LetsGoShoppingPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-get-groceries" element={<ExplorerRoute><LetsGetGroceriesPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-get-groceries/box" element={<ExplorerRoute><GroceryBoxPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/proprietary-recipes" element={<ExplorerRoute><ProprietaryRecipesPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/taste-tester" element={<ExplorerRoute><TasteTesterDashboard /></ExplorerRoute>} />
+                        <Route path="/initiatives/cottage-law" element={<ExplorerRoute><CottageLawPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/documentation" element={<ExplorerRoute><DocumentationMarketplacePage /></ExplorerRoute>} />
+                        {/* Generic InitiativePage routes removed — these slugs have dedicated page components defined above */}
                         
                         {/* Steward & Admin Tools */}
                         <Route path="/steward/legal-formations" element={<ProtectedRoute><StewardLegalDashboard /></ProtectedRoute>} />
                         <Route path="/themes" element={<ProtectedRoute><ThemeManagement /></ProtectedRoute>} />
                         
-                        <Route path="*" element={<NotFound />} />
+                        {/* Contingency Operators — Innovation #1188 */}
+                        <Route path="/contingency-operators" element={<ProtectedRoute><ContingencyOperatorsPage /></ProtectedRoute>} />
+                        <Route path="/thought-experiments" element={<ProtectedRoute><ContingencyOperatorsPage /></ProtectedRoute>} />
+                        <Route path="/co" element={<ProtectedRoute><ContingencyOperatorsPage /></ProtectedRoute>} />
+                        
+                        {/* Thought Experiment — "What If" Business Simulator */}
+                        <Route path="/crank-it" element={<CrankIt />} />
+                        <Route path="/cold-start" element={<CrankIt />} />
+                        <Route path="/thought-experiment" element={<ThoughtExperiment />} />
+                        <Route path="/what-if" element={<ThoughtExperiment />} />
+
+                        {/* Missing routes — wired Feb 9 Session 3 */}
+                        <Route path="/clans" element={<ProtectedRoute><Tribes /></ProtectedRoute>} />
+                        <Route path="/funding-pool" element={<ProtectedRoute><BrowseNonprofit /></ProtectedRoute>} />
+                        <Route path="/eoi-vesting" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
+                        <Route path="/gas-tracking" element={<ProtectedRoute><LookingGlass /></ProtectedRoute>} />
+                        <Route path="/project-costs" element={<ProtectedRoute><BrowseNetwork /></ProtectedRoute>} />
+                        <Route path="/blockchain/overview" element={<ProtectedRoute><BlockchainExplorer /></ProtectedRoute>} />
+                        
+                        {/* Browse portals */}
+                        <Route path="/browse/marketplace" element={<BrowseMarketplace />} />
+                        <Route path="/browse/business" element={<ProtectedRoute><BrowseBusiness /></ProtectedRoute>} />
+                        <Route path="/browse/nonprofit" element={<ProtectedRoute><BrowseNonprofit /></ProtectedRoute>} />
+                        <Route path="/browse/network" element={<ProtectedRoute><BrowseNetwork /></ProtectedRoute>} />
+                        
+                        {/* Cue Card Landing Pages */}
+          <Route path="/tower-of-peace" element={<TowerOfPeace />} />
+          <Route path="/cue/sponsor" element={<CueCardSponsorPortal />} />
+          <Route path="/cue/durins-door" element={<CueCardDurinsDoor />} />
+          <Route path="/canada40k" element={<Canada40K />} />
+          <Route path="/beacon" element={<WildfireBeaconRun />} />
+          <Route path="/hall-of-records" element={<HallOfRecords />} />
+          <Route path="/mainland" element={<MainlandHub />} />
+          <Route path="/bounties" element={<CodeBreakersHub />} />
+          <Route path="/business-cards" element={<BusinessCardPortal />} />
+          <Route path="/hexisle/keeps" element={<KeepsLobby />} />
+          <Route path="/cue/hexisle-world" element={<HexIsleWorldCard />} />
+          
+          {/* Cold Start & Stewardship System (Milestone 2) */}
+          <Route path="/cold-start-dashboard" element={<ColdStartDashboard />} />
+          <Route path="/become-captain/:initiativeId" element={<BecomeCaptain />} />
+          <Route path="/cold-start/:initiativeId" element={<ColdStartDashboard />} />
+          <Route path="/create-map" element={<TreasureMapBuilder />} />
+          <Route path="/incumbent-advantage" element={<IncumbentAdvantage />} />
+
+          {/* HexIsle Encyclopedia + Island Sub-Pages (Session 6H) */}
+          <Route path="/hexisle/encyclopedia" element={<ExplorerRoute><HexIsleEncyclopedia /></ExplorerRoute>} />
+          <Route path="/hexisle/:islandName" element={<ExplorerRoute><HexIsleIslandPage /></ExplorerRoute>} />
+
+          {/* Coaster Medallion & Farmer Supply Chain (Session 6F/6G) */}
+          <Route path="/coaster-medallion" element={<ExplorerRoute><CoasterMedallionProject /></ExplorerRoute>} />
+          <Route path="/farmer-supply-chain" element={<ExplorerRoute><FarmerSupplyChainPage /></ExplorerRoute>} />
+          <Route path="/meal-kits" element={<ExplorerRoute><FarmerSupplyChainPage /></ExplorerRoute>} />
+          <Route path="/freeze-dried" element={<ExplorerRoute><FarmerSupplyChainPage /></ExplorerRoute>} />
+
+          <Route path="*" element={<NotFound />} />
                       </Routes>
-                  </main>
-                </div>
-              </div>
-              <GlobalRecorderOverlay />
-              <PWAInstallPrompt />
-            </SidebarProvider>
-          </SubdomainRouter>
-          </RecordingProvider>
+                  </Suspense>
+                </AppShell>
+              </SubdomainRouter>
+            </RecordingProvider>
+          </PathwayProgressProvider>
+          </WildfireRunProvider>
+          </FeatureTipProvider>
         </AuthProvider>
       </BrowserRouter>
+      <LarkSidePanel />
+      <BuilderModeToggle />
     </TooltipProvider>
+    </BuilderModeProvider>
   </QueryClientProvider>
 );
 

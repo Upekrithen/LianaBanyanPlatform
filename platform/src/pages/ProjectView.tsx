@@ -142,12 +142,12 @@ export default function ProjectView() {
       setIsProjectOwner(true);
     }
 
+    // Real table: products (id, project_id, name, description, product_sku, base_price, status)
     const { data: productsData, error: productsError } = await supabase
       .from('products')
       .select(`
         *,
-        production_levels (*),
-        product_images (*)
+        production_levels (*)
       `)
       .eq('project_id', projectData.id);
 

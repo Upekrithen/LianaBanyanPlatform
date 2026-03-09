@@ -8,53 +8,57 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, ChefHat, Clock, MapPin, Users } from "lucide-react";
+import { Calendar as CalendarIcon, ChefHat, Clock, MapPin, Users, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MealOrderDialog } from "@/components/MealOrderDialog";
 
-interface MealOffering {
+interface LmdMeal {
   id: string;
+  chef_id: string;
   meal_name: string;
-  description: string;
-  photo_url: string | null;
-  ingredients: any;
+  description: string | null;
+  cuisine: string | null;
+  allergens: string[] | null;
   portions_available: number;
-  ready_at: string;
-  pickup_location: string;
-  preorder_price_credits: number;
-  provider_id: string;
-  profiles: {
-    full_name: string;
-  };
+  portions_claimed: number;
+  price_per_portion: number;
+  pickup_date: string;
+  pickup_time: string | null;
+  pickup_location: string | null;
+  pickup_instructions: string | null;
+  is_charity: boolean;
+  status: string;
+  lmd_chefs: {
+    display_name: string;
+    rating: number | null;
+    is_verified: boolean;
+  } | null;
 }
 
 export function LetsMakeDinnerTable() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const { data: meals, isLoading } = useQuery({
-    queryKey: ['meal-offerings', format(selectedDate, 'yyyy-MM-dd')],
+    queryKey: ['lmd-meals', format(selectedDate, 'yyyy-MM-dd')],
     queryFn: async () => {
-      const startOfDay = new Date(selectedDate);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(selectedDate);
-      endOfDay.setHours(23, 59, 59, 999);
+      const dateStr = format(selectedDate, 'yyyy-MM-dd');
 
       const { data, error } = await supabase
-        .from('meal_offerings')
+        .from('lmd_meals')
         .select(`
           *,
-          profiles:provider_id (full_name)
+          lmd_chefs:chef_id (display_name, rating, is_verified)
         `)
         .eq('status', 'available')
-        .gte('ready_at', startOfDay.toISOString())
-        .lte('ready_at', endOfDay.toISOString())
-        .order('ready_at', { ascending: true });
+        .eq('pickup_date', dateStr)
+        .order('pickup_time', { ascending: true });
       
       if (error) throw error;
-      return data as MealOffering[];
+      return data as LmdMeal[];
     }
   });
 
+  const remaining = (meal: LmdMeal) => meal.portions_available - meal.portions_claimed;
 
   return (
     <Card className="w-full">
@@ -102,25 +106,24 @@ export function LetsMakeDinnerTable() {
                   key={meal.id} 
                   className={cn(
                     "flex-shrink-0 w-[280px] overflow-hidden transition-all hover:shadow-lg",
-                    "border-2 hover:border-primary/50"
+                    "border-2 hover:border-primary/50",
+                    meal.is_charity && "border-red-500/20 bg-red-500/5"
                   )}
                 >
                   <div className="relative h-48 bg-muted">
-                    {meal.photo_url ? (
-                      <img 
-                        src={meal.photo_url} 
-                        alt={meal.meal_name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <ChefHat className="h-12 w-12 text-muted-foreground/30" />
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ChefHat className="h-12 w-12 text-muted-foreground/30" />
+                    </div>
+                    <div className="absolute top-2 right-2 flex gap-1">
+                      {meal.is_charity && (
+                        <Badge className="bg-red-500/90">
+                          <Heart className="h-3 w-3 mr-1" />
+                          Charity
+                        </Badge>
+                      )}
                       <Badge className="bg-background/90 backdrop-blur">
                         <Users className="h-3 w-3 mr-1" />
-                        {meal.portions_available} left
+                        {remaining(meal)} left
                       </Badge>
                     </div>
                   </div>
@@ -130,19 +133,24 @@ export function LetsMakeDinnerTable() {
                         {meal.meal_name}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">
-                        {meal.description}
+                        {meal.description || meal.cuisine || "Homemade meal"}
                       </p>
                     </div>
                     
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <ChefHat className="h-4 w-4" />
-                        <span className="truncate">{meal.profiles?.full_name || 'Unknown'}</span>
+                        <span className="truncate">
+                          {meal.lmd_chefs?.display_name || 'Community Chef'}
+                          {meal.lmd_chefs?.is_verified && ' ✓'}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Clock className="h-4 w-4" />
-                        <span>{format(new Date(meal.ready_at), 'h:mm a')}</span>
-                      </div>
+                      {meal.pickup_time && (
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Clock className="h-4 w-4" />
+                          <span>{meal.pickup_time}</span>
+                        </div>
+                      )}
                       {meal.pickup_location && (
                         <div className="flex items-center gap-2 text-muted-foreground">
                           <MapPin className="h-4 w-4" />
@@ -151,15 +159,34 @@ export function LetsMakeDinnerTable() {
                       )}
                     </div>
 
+                    {meal.allergens && meal.allergens.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {meal.allergens.map((a) => (
+                          <Badge key={a} variant="outline" className="text-xs">
+                            {a}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="pt-2 flex items-center justify-between">
                       <div className="text-2xl font-bold">
-                        ${meal.preorder_price_credits} <span className="text-sm text-muted-foreground font-normal">per portion</span>
+                        {meal.is_charity ? (
+                          <span className="text-red-500">Free</span>
+                        ) : (
+                          <>
+                            ${meal.price_per_portion}{" "}
+                            <span className="text-sm text-muted-foreground font-normal">
+                              per portion
+                            </span>
+                          </>
+                        )}
                       </div>
                       <MealOrderDialog
                         mealId={meal.id}
                         mealName={meal.meal_name}
-                        mealPrice={meal.preorder_price_credits}
-                        providerId={meal.provider_id}
+                        mealPrice={meal.price_per_portion}
+                        providerId={meal.chef_id}
                       />
                     </div>
                   </div>

@@ -1,0 +1,301 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ROSETTA KEYBOARD — Language Stones & Ghost Keyboard
+   "These stones were found in the labyrinth beneath the Main Guild Tower"
+═══════════════════════════════════════════════════════════════════ */
+
+.rosetta-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+}
+
+.rosetta-panel {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid rgba(255, 193, 68, 0.4);
+  border-radius: 20px;
+  padding: 1.5rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 
+    0 0 40px rgba(255, 193, 68, 0.15),
+    inset 0 0 60px rgba(0, 0, 0, 0.3);
+}
+
+.rosetta-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rosetta-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.rosetta-panel h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.rosetta-hint {
+  text-align: center;
+  opacity: 0.6;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ═══ THE STONES ═══ */
+.rosetta-stones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.rosetta-stone {
+  background: linear-gradient(145deg, #3d3522 0%, #2a2518 50%, #1f1a10 100%);
+  border: 2px solid rgba(255, 193, 68, 0.3);
+  border-radius: 12px;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.rosetta-stone:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 193, 68, 0.6);
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(255, 193, 68, 0.2);
+}
+
+.rosetta-stone.selected {
+  border-color: #ffc144;
+  background: linear-gradient(145deg, #4a4028 0%, #3a3020 50%, #2a2518 100%);
+  box-shadow: 
+    0 0 20px rgba(255, 193, 68, 0.4),
+    inset 0 0 10px rgba(255, 193, 68, 0.1);
+}
+
+.stone-symbol {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffc144;
+  text-shadow: 0 0 8px rgba(255, 193, 68, 0.5);
+}
+
+.stone-name {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ═══ LANGUAGE SELECTOR ═══ */
+.rosetta-languages {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rosetta-languages h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.language-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.language-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+}
+
+.language-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(52, 211, 153, 0.5);
+}
+
+.language-btn.selected {
+  background: rgba(52, 211, 153, 0.2);
+  border-color: #34d399;
+}
+
+.lang-native {
+  font-weight: 600;
+}
+
+.lang-word {
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
+.quick-insert {
+  background: rgba(52, 211, 153, 0.3);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.quick-insert:hover {
+  background: rgba(52, 211, 153, 0.5);
+}
+
+/* ═══ GHOST KEYBOARD ═══ */
+.ghost-keyboard {
+  background: rgba(136, 200, 255, 0.05);
+  border: 1px solid rgba(136, 200, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  animation: ghost-fade-in 0.3s ease-out;
+}
+
+@keyframes ghost-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ghost-keyboard h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: #88c8ff;
+}
+
+.keyboard-hint {
+  opacity: 0.5;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.keyboard-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.key-btn {
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.key-btn:hover {
+  background: rgba(136, 200, 255, 0.3);
+  border-color: #88c8ff;
+  transform: scale(1.1);
+}
+
+.key-btn:active {
+  transform: scale(0.95);
+  background: rgba(136, 200, 255, 0.5);
+}
+
+.insert-word-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.insert-word-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+}
+
+/* ═══ LORE TEXT ═══ */
+.rosetta-lore {
+  text-align: center;
+  opacity: 0.5;
+  font-size: 0.85rem;
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+}
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 480px) {
+  .rosetta-panel {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+  
+  .rosetta-stones {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .key-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+  
+  .language-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+}

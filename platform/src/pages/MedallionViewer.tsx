@@ -16,22 +16,21 @@ export default function MedallionViewer() {
     queryFn: async () => {
       if (!user?.id) return [];
 
-      // Get all projects user has eligibility for
-      const { data: eligibility, error } = await supabase
-        .from('medallion_eligibility')
+      // Get all medallions in user's collection
+      const { data: collection, error } = await supabase
+        .from('member_medallion_collection')
         .select(`
           *,
           projects:project_id (
             id,
             name,
-            description,
-            project_sku
+            description
           )
         `)
         .eq('user_id', user.id);
 
       if (error) throw error;
-      return eligibility || [];
+      return collection || [];
     },
     enabled: !!user?.id,
   });

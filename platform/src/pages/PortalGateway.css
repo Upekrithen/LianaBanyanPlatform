@@ -1,0 +1,408 @@
+/**
+ * PORTAL GATEWAY STYLES
+ * =====================
+ * Clean two-portal system with flipcards
+ * Uses chalk-outline aesthetic for consistency
+ */
+
+.portal-gateway {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chalk outline animation */
+@keyframes chalk-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(255,255,255,0.1); }
+  50% { box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+}
+
+@keyframes chalk-draw {
+  0% { 
+    stroke-dashoffset: 1000;
+    opacity: 0.3;
+  }
+  100% { 
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* Background pattern */
+.portal-bg-pattern {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.02);
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+.portal-bg-pattern span {
+  white-space: nowrap;
+}
+
+.portal-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Back button */
+.portal-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+}
+
+.portal-back-btn:hover {
+  color: white;
+}
+
+/* Header */
+.portal-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.portal-header h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.portal-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Portal Cards Container */
+.portal-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Individual Portal Card */
+.portal-card {
+  perspective: 1000px;
+  cursor: pointer;
+  height: 480px;
+}
+
+.portal-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.portal-card.flipped .portal-card-inner {
+  transform: rotateY(180deg);
+}
+
+.portal-card-front,
+.portal-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Front of card — Chalk outline style */
+.portal-card-front {
+  justify-content: center;
+}
+
+/* Ghost portal — dashed chalk outline with purple glow */
+.ghost-portal .portal-card-front {
+  background: transparent;
+  border: 2px dashed rgba(139, 92, 246, 0.5);
+  box-shadow: 
+    0 0 20px rgba(139, 92, 246, 0.15),
+    inset 0 0 40px rgba(139, 92, 246, 0.03);
+  animation: chalk-glow 3s ease-in-out infinite;
+}
+
+.ghost-portal:hover .portal-card-front {
+  border-style: solid;
+  border-color: rgba(139, 92, 246, 0.7);
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.15), rgba(79, 70, 229, 0.08));
+}
+
+/* Real portal — dashed chalk outline with green glow */
+.real-portal .portal-card-front {
+  background: transparent;
+  border: 2px dashed rgba(52, 211, 153, 0.5);
+  box-shadow: 
+    0 0 20px rgba(52, 211, 153, 0.15),
+    inset 0 0 40px rgba(52, 211, 153, 0.03);
+  animation: chalk-glow 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.real-portal:hover .portal-card-front {
+  border-style: solid;
+  border-color: rgba(52, 211, 153, 0.7);
+  background: linear-gradient(145deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.08));
+}
+
+.portal-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.ghost-icon {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(79, 70, 229, 0.2));
+  color: #a78bfa;
+}
+
+.real-icon {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.3), rgba(16, 185, 129, 0.2));
+  color: #34d399;
+}
+
+.portal-card-front h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.portal-card-front p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+.portal-hint {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Back of card */
+.portal-card-back {
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  text-align: left;
+  align-items: stretch;
+  overflow-y: auto;
+}
+
+.ghost-portal .portal-card-back {
+  background: linear-gradient(145deg, #2e1065, #1e1b4b);
+  border: 2px solid rgba(139, 92, 246, 0.4);
+}
+
+.real-portal .portal-card-back {
+  background: linear-gradient(145deg, #064e3b, #022c22);
+  border: 2px solid rgba(52, 211, 153, 0.4);
+}
+
+.portal-card-back h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.portal-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.portal-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.portal-features li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ghost-portal .portal-features li svg {
+  color: #a78bfa;
+}
+
+.real-portal .portal-features li svg {
+  color: #34d399;
+}
+
+.portal-transition {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.transition-hint {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  text-align: center;
+  font-style: italic;
+}
+
+.portal-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.price-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #34d399;
+}
+
+.price-period {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.portal-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.portal-buttons > * {
+  flex: 1;
+}
+
+.portal-cta {
+  width: 100%;
+  height: 3rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: auto;
+}
+
+.ghost-cta {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  border: none;
+}
+
+.ghost-cta:hover {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+}
+
+.real-cta {
+  background: linear-gradient(135deg, #34d399, #10b981);
+  color: #022c22;
+  border: none;
+}
+
+.real-cta:hover {
+  background: linear-gradient(135deg, #2dd4bf, #059669);
+}
+
+.portal-secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.portal-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.portal-tap-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* Tagline */
+.portal-tagline {
+  text-align: center;
+  padding: 2rem 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.portal-tagline p {
+  margin: 0;
+}
+
+.portal-subtagline {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.5rem !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .portal-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .portal-card {
+    height: auto;
+    min-height: 420px;
+  }
+  
+  .portal-card-front,
+  .portal-card-back {
+    position: relative;
+    height: auto;
+    min-height: 420px;
+  }
+  
+  .portal-card.flipped .portal-card-front {
+    display: none;
+  }
+  
+  .portal-card.flipped .portal-card-back {
+    position: relative;
+    transform: none;
+  }
+}

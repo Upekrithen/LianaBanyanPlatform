@@ -33,7 +33,7 @@ export function MedallionQRVerification() {
 
       // Verify medallion eligibility
       const { data: eligibility, error } = await supabase
-        .from('medallion_eligibility')
+        .from('member_medallion_collection')
         .select(`
           *,
           projects:project_id (

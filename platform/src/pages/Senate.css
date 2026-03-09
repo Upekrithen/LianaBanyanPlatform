@@ -1,0 +1,240 @@
+/**
+ * SENATE PAGE STYLES
+ * ==================
+ * MYST-style hexagon navigation hub
+ */
+
+.senate-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   HEXAGON HUB
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.senate-hexagon-hub {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center piece */
+.senate-center {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.05));
+  border: 2px solid hsl(var(--primary) / 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 
+    0 0 20px hsl(var(--primary) / 0.1),
+    inset 0 0 20px hsl(var(--primary) / 0.05);
+}
+
+.senate-center-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hall buttons */
+.senate-hall-button {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.senate-hall-button:hover {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) scale(1.1);
+}
+
+.senate-hall-button.selected .senate-hall-icon {
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  border-color: hsl(var(--primary));
+}
+
+.senate-hall-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid hsl(var(--border));
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.senate-hall-button:hover .senate-hall-icon {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-color: hsl(var(--primary) / 0.5);
+}
+
+.senate-hall-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  text-align: center;
+  max-width: 80px;
+  line-height: 1.2;
+}
+
+/* Connecting lines (decorative) */
+.senate-hexagon-hub::before {
+  content: '';
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border: 1px dashed hsl(var(--border) / 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.senate-hexagon-hub::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 1px dashed hsl(var(--border) / 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TOWER OF PEACE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.tower-of-peace {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tower-structure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Tower rooms stacked vertically */
+.tower-room {
+  transition: all 0.3s ease;
+}
+
+.tower-room:hover {
+  transform: translateX(4px);
+}
+
+/* Level-specific styling */
+.tower-room-observatory {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.tower-room-brainstorm {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.05));
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.tower-room-balcony {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(249, 115, 22, 0.05));
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+.tower-room-staircase {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.05));
+  border-color: rgba(107, 114, 128, 0.3);
+}
+
+.tower-room-base {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .senate-hexagon-hub {
+    width: 320px;
+    height: 320px;
+  }
+  
+  .senate-center {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .senate-hall-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .senate-hall-name {
+    font-size: 0.65rem;
+    max-width: 60px;
+  }
+  
+  .senate-hexagon-hub::before {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .senate-hexagon-hub::after {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.2);
+  }
+}
+
+.senate-center {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.tower-room-observatory {
+  animation: float 4s ease-in-out infinite;
+}
+
+.tower-room-brainstorm {
+  animation: float 4s ease-in-out infinite;
+  animation-delay: 0.5s;
+}

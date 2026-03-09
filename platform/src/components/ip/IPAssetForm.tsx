@@ -99,8 +99,8 @@ export function IPAssetForm({ selectedTier }: IPAssetFormProps) {
         return;
       }
 
-      const ipAssetData = {
-        creator_id: user.id,
+      // Store IP registration in the ip_ledger (blockchain-style record)
+      const recordData = {
         asset_name: data.asset_name,
         asset_description: data.asset_description,
         asset_type: data.asset_type,
@@ -115,9 +115,26 @@ export function IPAssetForm({ selectedTier }: IPAssetFormProps) {
         prohibited_categories: selectedTier === "tier_b" ? selectedCategories : null,
       };
 
+      // Get next sequence number
+      const { data: lastRecord } = await supabase
+        .from("ip_ledger")
+        .select("sequence_number")
+        .order("sequence_number", { ascending: false })
+        .limit(1)
+        .single();
+
+      const nextSeq = (lastRecord?.sequence_number ?? 0) + 1;
+      const recordHash = btoa(JSON.stringify({ ...recordData, seq: nextSeq, ts: Date.now() }));
+
       const { error } = await supabase
-        .from("ip_assets")
-        .insert([ipAssetData]);
+        .from("ip_ledger")
+        .insert({
+          user_id: user.id,
+          record_type: "ip_asset_registration",
+          record_data: recordData,
+          record_hash: recordHash,
+          sequence_number: nextSeq,
+        });
 
       if (error) throw error;
 
@@ -145,7 +162,7 @@ export function IPAssetForm({ selectedTier }: IPAssetFormProps) {
           <div>
             <CardTitle>Register IP Asset - {selectedTier.toUpperCase()}</CardTitle>
             <CardDescription>
-              Equity Split: {equitySplits[selectedTier].creator}% Creator / {equitySplits[selectedTier].lb}% LB
+              Participation Split: {equitySplits[selectedTier].creator}% Creator / {equitySplits[selectedTier].lb}% LB
             </CardDescription>
           </div>
           <Badge variant="secondary">{selectedTier.replace("_", " ").toUpperCase()}</Badge>

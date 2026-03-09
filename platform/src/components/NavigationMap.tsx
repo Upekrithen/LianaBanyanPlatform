@@ -40,14 +40,14 @@ export function NavigationMap() {
   const locations: NavLocation[] = [
     // Marketplace Portal
     { id: 'home', title: 'Home', path: '/', icon: Home, category: 'marketplace', description: 'Landing page with membership, guilds, credits', connections: ['dashboard', 'projects', 'marketplace'] },
-    { id: 'dashboard', title: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, category: 'marketplace', description: 'User dashboard with portal access cards', connections: ['portfolio', 'medallions', 'withdraw'] },
+    { id: 'dashboard', title: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, category: 'marketplace', description: 'User dashboard with portal access cards', connections: ['portfolio', 'medallions'] },
     { id: 'projects', title: 'Projects', path: '/projects', icon: FolderKanban, category: 'marketplace', description: 'Browse all projects', connections: ['project-view'] },
     { id: 'project-view', title: 'Project Detail', path: '/project/:slug', icon: FileText, category: 'marketplace', description: 'View project details and products', connections: ['product-detail'] },
     { id: 'product-detail', title: 'Product Detail', path: '/project/:slug/product/:id', icon: ShoppingCart, category: 'marketplace', description: 'Product details and voting' },
     { id: 'marketplace', title: 'Marketplace', path: '/marketplace', icon: ShoppingCart, category: 'marketplace', description: 'Browse marketplace catalog' },
     { id: 'portfolio', title: 'Portfolio', path: '/portfolio', icon: Briefcase, category: 'marketplace', description: 'User investment portfolio' },
     { id: 'medallions', title: 'Medallions', path: '/medallions', icon: Award, category: 'marketplace', description: 'View minted medallions' },
-    { id: 'withdraw', title: 'Withdraw', path: '/withdraw', icon: Database, category: 'marketplace', description: 'Withdrawal management' },
+    // Withdraw page removed for SEC compliance - credits are not redeemable for cash
     { id: 'guilds', title: 'Guilds', path: '/guilds', icon: Users, category: 'marketplace', description: 'Browse and join guilds' },
     { id: 'production-queue', title: 'Production Queue', path: '/production-queue', icon: Workflow, category: 'marketplace', description: 'View production queue and voting' },
     { id: 'reputation', title: 'Reputation Profile', path: '/reputation/:userId', icon: Award, category: 'marketplace', description: 'User reputation and ratings' },

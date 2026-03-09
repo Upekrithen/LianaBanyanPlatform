@@ -1,0 +1,10 @@
+{
+  "autodeskProduct": "Fusion360",
+  "type": "script",
+  "author": "Liana Banyan Platform — Bishop",
+  "description": {
+    "": "Hexel Geometry Extractor: Walks the Fusion 360 component tree, extracts interface geometry (bounding boxes, cylindrical faces, planar interfaces, joints, parameters), cross-references against the Hexel Piece Grammar (Innovation #1537), and outputs a validation-ready JSON. Innovation #1538."
+  },
+  "supportedOS": "windows|mac",
+  "editEnabled": true
+}

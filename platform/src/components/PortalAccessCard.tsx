@@ -52,11 +52,9 @@ export const PortalAccessCard = ({
 
   const handleClick = () => {
     if (accessLevel === 'full') {
-      window.location.href = `https://${domain}`;
-    } else if (accessLevel === 'browse') {
-      window.location.href = `https://${domain}/browse`;
+      window.open(`https://${domain}`, '_blank', 'noopener,noreferrer');
     } else {
-      window.location.href = `https://${domain}/browse`;
+      window.open(`https://${domain}/browse`, '_blank', 'noopener,noreferrer');
     }
   };
 

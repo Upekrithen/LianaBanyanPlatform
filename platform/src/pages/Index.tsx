@@ -1,4 +1,4 @@
-/**
+﻿/**
  * INDEX PAGE — BLINDERS VIEW
  * ===========================
  * Unauthenticated: Full-page landing matching original landing.html
@@ -9,13 +9,17 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDiscovery } from '@/hooks/useDiscovery';
 import { DeckCardFrame } from '@/components/DeckCardFrame';
 import { WillOWisp } from '@/components/WillOWisp';
 import { RosettaKeyboard } from '@/components/RosettaKeyboard';
 import { ProfessionalLanding } from '@/components/ProfessionalLanding';
+import { RotatingQuotes } from '@/components/RotatingQuotes';
+import { useLevelGatedNavigate, getRouteLevel } from '@/components/LevelGatedLink';
+import { usePathwayProgress } from '@/contexts/PathwayProgressContext';
+import { Lock } from 'lucide-react';
 import '@/styles/landing.css';
 
 // Durin's Door Dialog Component
@@ -26,6 +30,53 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const [lintel, setLintel] = useState<string[]>([]);
   const [collectedWords, setCollectedWords] = useState<Set<string>>(new Set());
   const [showRosetta, setShowRosetta] = useState(false);
+  
+  // Draggable state
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartPos = React.useRef({ x: 0, y: 0 });
+  const elementStartPos = React.useRef({ x: 0, y: 0 });
+  
+  // Reset position when dialog opens
+  React.useEffect(() => {
+    if (isOpen) {
+      setPosition({ x: 0, y: 0 });
+    }
+  }, [isOpen]);
+  
+  const handleDragStart = (e: React.MouseEvent) => {
+    // Only start drag from the header area
+    if ((e.target as HTMLElement).closest('.durins-drag-handle')) {
+      setIsDragging(true);
+      dragStartPos.current = { x: e.clientX, y: e.clientY };
+      elementStartPos.current = { x: position.x, y: position.y };
+      e.preventDefault();
+    }
+  };
+  
+  React.useEffect(() => {
+    if (!isDragging) return;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      const deltaX = e.clientX - dragStartPos.current.x;
+      const deltaY = e.clientY - dragStartPos.current.y;
+      setPosition({
+        x: elementStartPos.current.x + deltaX,
+        y: elementStartPos.current.y + deltaY,
+      });
+    };
+    
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]);
   
   // Load lintel and collected words from localStorage on mount
   React.useEffect(() => {
@@ -172,9 +223,39 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   
   return (
     <div className="durins-dialog-overlay" onClick={onClose}>
-      <div className="durins-dialog" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className="durins-dialog" 
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={handleDragStart}
+        style={{
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          cursor: isDragging ? 'grabbing' : undefined,
+          userSelect: isDragging ? 'none' : undefined,
+        }}
+      >
+        {/* Drag handle */}
+        <div 
+          className="durins-drag-handle"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '40px',
+            cursor: 'grab',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span style={{ 
+            color: 'rgba(255,255,255,0.3)', 
+            fontSize: '1.2rem',
+            letterSpacing: '2px',
+          }}>⋮⋮</span>
+        </div>
         <button className="durins-close" onClick={onClose}>×</button>
-        <h2>🪞 Mirror Mirror 🪞</h2>
+        <h2 className="durins-drag-handle" style={{ cursor: 'grab', marginTop: '0.5rem' }}>🪞 Mirror Mirror 🪞</h2>
         
         {/* THE LINTEL — shows last 3 friend words */}
         <div style={{
@@ -307,10 +388,106 @@ const Index = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { discoveries, discoveryLevel } = useDiscovery();
+  const [showWelcomeChoice, setShowWelcomeChoice] = useState<boolean | null>(null);
+  const [userChoice, setUserChoice] = useState<'keep' | 'explore' | null>(null);
 
-  // ─── AUTHENTICATED: Minimal Discovery View ───
+  // Check if user has made a session choice already
+  useEffect(() => {
+    if (user) {
+      const sessionChoice = sessionStorage.getItem('lb_landing_choice');
+      if (sessionChoice === 'keep') {
+        setUserChoice('keep');
+        setShowWelcomeChoice(false);
+      } else if (sessionChoice === 'explore') {
+        setUserChoice('explore');
+        setShowWelcomeChoice(false);
+      } else {
+        // No choice yet — show the dialog
+        setShowWelcomeChoice(true);
+      }
+    }
+  }, [user]);
+
+  const handleChoice = (choice: 'keep' | 'explore') => {
+    sessionStorage.setItem('lb_landing_choice', choice);
+    setUserChoice(choice);
+    setShowWelcomeChoice(false);
+  };
+
+  // ─── AUTHENTICATED: Show choice dialog or chosen view ───
   if (user) {
-    return <AuthenticatedDiscoveryView navigate={navigate} discoveries={discoveries} discoveryLevel={discoveryLevel} />;
+    // Show welcome choice dialog
+    if (showWelcomeChoice) {
+      return (
+        <div className="landing-page">
+          <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+            <div style={{
+              background: 'rgba(26, 32, 44, 0.95)',
+              borderRadius: '1rem',
+              padding: '2rem',
+              maxWidth: '400px',
+              textAlign: 'center',
+              border: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
+            }}>
+              <h2 style={{ color: '#faf5eb', marginBottom: '0.5rem', fontSize: '1.5rem' }}>
+                Welcome back!
+              </h2>
+              <p style={{ color: '#a0aec0', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+                Where would you like to go?
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <button
+                  onClick={() => handleChoice('keep')}
+                  style={{
+                    padding: '0.75rem 1.5rem',
+                    background: 'linear-gradient(135deg, #38a169, #2f855a)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    fontWeight: 600
+                  }}
+                >
+                  🏰 Go to My Keep
+                </button>
+                <button
+                  onClick={() => handleChoice('explore')}
+                  style={{
+                    padding: '0.75rem 1.5rem',
+                    background: 'rgba(255,255,255,0.1)',
+                    color: '#faf5eb',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer',
+                    fontSize: '1rem'
+                  }}
+                >
+                  👻 Explore as Ghost
+                </button>
+              </div>
+              <p style={{ color: '#718096', fontSize: '0.75rem', marginTop: '1rem' }}>
+                This choice lasts for your session only.
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // User chose to go to Keep
+    if (userChoice === 'keep') {
+      return <AuthenticatedDiscoveryView navigate={navigate} discoveries={discoveries} discoveryLevel={discoveryLevel} />;
+    }
+
+    // User chose to explore — show public landing
+    if (userChoice === 'explore') {
+      return <PublicLandingView navigate={navigate} />;
+    }
+
+    // Still loading choice
+    return null;
   }
 
   // ─── NOT AUTHENTICATED: Landing Page (matches landing.html) ───
@@ -321,6 +498,7 @@ const Index = () => {
 // PUBLIC LANDING VIEW — Matches landing.html exactly
 // ═══════════════════════════════════════════════════════════════════════════
 function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [heroFlipped, setHeroFlipped] = useState(false);      // HEOHO card flip
   const [mainCardFlipped, setMainCardFlipped] = useState(false); // Main card (logo + G&G) flip
   const [heroBackExpanded, setHeroBackExpanded] = useState<string | null>(null);  // Expanded topic on Hero Card back
@@ -335,18 +513,143 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
   });
   const [explainerFlipped, setExplainerFlipped] = useState(false);  // Start unflipped showing white front (simple message), click to flip to dark back (16 initiatives)
   const [pathsSectionFlipped, setPathsSectionFlipped] = useState(false);  // Choose Your Path section flip (trunk-info)
+  const [expandedWorldPortal, setExpandedWorldPortal] = useState<'ghost' | 'real' | null>(null);  // Which world portal is expanded on Choose Card back
+  
+  // Level-gated navigation
+  const levelGatedNavigate = useLevelGatedNavigate();
+  const { progress, isLevelGatingEnabled } = usePathwayProgress();
+  
+  // Helper to check if a route is locked
+  const isRouteLocked = (route: string) => {
+    const requiredLevel = getRouteLevel(route);
+    return isLevelGatingEnabled() && requiredLevel > progress.currentLevel;
+  };
+  
+  // HOFUND Secret Entry System - Easter egg access via hand icon
+  const [hofundCodeEntry, setHofundCodeEntry] = useState(false);  // Show code entry popup
+  const [hofundCode, setHofundCode] = useState('');  // Code being entered
+  const [hofundAccessGranted, setHofundAccessGranted] = useState(false);  // Valid code entered, show ship's wheel
+  const [hofundCoordinates, setHofundCoordinates] = useState('');  // Coordinates being entered
+  const [hofundWrongCodeMessage, setHofundWrongCodeMessage] = useState(false);  // Show explanation when wrong code entered
+  const [foundationQuizIndex, setFoundationQuizIndex] = useState(() => Math.floor(Math.random() * 5));  // Random quiz question
+  
+  // Foundation Document Quiz Questions - cycle through these on wrong code page
+  const foundationQuizzes = [
+    {
+      passage: "\"The platform margin is fixed at Cost + 20%. This cannot be changed by future leadership, investors, or market pressure. Ever.\"",
+      question: "What percentage does a creator keep on every transaction?",
+      options: [
+        { text: "70%", correct: false, route: null },
+        { text: "83.3%", correct: true, route: "/discover" },
+        { text: "80%", correct: false, route: null },
+        { text: "50%", correct: false, route: null }
+      ],
+      source: "Operating Agreement, Section 4.2"
+    },
+    {
+      passage: "\"Ghost World lets you explore everything without commitment. Browse initiatives, test ideas, hunt Golden Keys, play and make Beacon Run games for Crow Feathers.\"",
+      question: "What do you earn by playing Beacon Run games?",
+      options: [
+        { text: "Marks", correct: false, route: null },
+        { text: "Crow Feathers", correct: true, route: "/feathers?ghost=true" },
+        { text: "Joules", correct: false, route: null },
+        { text: "Credits", correct: false, route: null }
+      ],
+      source: "Ghost World Documentation"
+    },
+    {
+      passage: "\"Harper Guild provides independent HR and business ethics support. Every Guild and business MUST have a Care Coordinator from the Harper Guild. Non-negotiable.\"",
+      question: "What role does Harper Guild serve?",
+      options: [
+        { text: "Music licensing", correct: false, route: null },
+        { text: "Manufacturing coordination", correct: false, route: null },
+        { text: "HR & ethics support for businesses", correct: true, route: "/initiatives/harper-guild" },
+        { text: "Crisis response", correct: false, route: null }
+      ],
+      source: "Crown System Documentation"
+    },
+    {
+      passage: "\"VSL — Voucher Short Loans. No-collateral, 0-5% interest, member-to-member microfinancing. Emergency support when you need it most.\"",
+      question: "What is the interest rate range for VSL loans?",
+      options: [
+        { text: "5-10%", correct: false, route: null },
+        { text: "0-5%", correct: true, route: "/initiatives/vsl" },
+        { text: "10-15%", correct: false, route: null },
+        { text: "No interest ever", correct: false, route: null }
+      ],
+      source: "VSL Initiative Charter"
+    },
+    {
+      passage: "\"Let's Make Bread isn't about baking. It's a $5 business simulator that graduates to a real-life business incubator. Practice running a business before you risk real money.\"",
+      question: "What does Let's Make Bread actually do?",
+      options: [
+        { text: "Baking collective", correct: false, route: null },
+        { text: "Business simulator & incubator", correct: true, route: "/initiatives/bread" },
+        { text: "Loan service", correct: false, route: null },
+        { text: "Grocery delivery", correct: false, route: null }
+      ],
+      source: "Let's Make Bread Initiative"
+    }
+  ];
+  
+  // Valid Hofund access codes - can be expanded later
+  const validHofundCodes = ['CAPTAIN', 'HOFUND', 'BIFROST', 'KEEPER'];  // Placeholder codes - user will assign
+  
+  // Special codes with unique behaviors
+  const specialCodes: Record<string, { action: () => void }> = {
+    'SCE-TO-AUX': {
+      action: () => {
+        // Navigate to Portfolio as Ghost with 5 Marks bonus and Wisp walkthrough
+        // Store the bonus in sessionStorage so Portfolio page can read it
+        sessionStorage.setItem('hofund_sce_bonus', JSON.stringify({ marks: 5, wisp: true }));
+        navigate('/portfolio?ghost=true&wisp=true');
+      }
+    },
+    'SCETOAUX': {
+      action: () => {
+        sessionStorage.setItem('hofund_sce_bonus', JSON.stringify({ marks: 5, wisp: true }));
+        navigate('/portfolio?ghost=true&wisp=true');
+      }
+    },
+    'CROW-FEATHERS': {
+      action: () => {
+        // Navigate to Crow Feathers / Beacon Games page as Ghost with Wisp walkthrough
+        sessionStorage.setItem('hofund_crow_feathers', JSON.stringify({ ghost: true, wisp: true }));
+        navigate('/feathers?ghost=true&wisp=true');
+      }
+    },
+    'CROWFEATHERS': {
+      action: () => {
+        sessionStorage.setItem('hofund_crow_feathers', JSON.stringify({ ghost: true, wisp: true }));
+        navigate('/feathers?ghost=true&wisp=true');
+      }
+    }
+  };
+  
+  // Mobile detection for UI adjustments
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+  
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  // Handle URL parameter to open initiatives view directly (for back navigation from initiative pages)
+  useEffect(() => {
+    const viewParam = searchParams.get('view');
+    if (viewParam === 'initiatives') {
+      // Flip the main card and expand the initiatives section
+      setMainCardFlipped(true);
+      setMainBackExpanded('initiatives');
+      // Clear the URL parameter using window.history to avoid React re-render
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [searchParams]);
   
   // Auto-trigger Spotlight Ranger (Will-o'-Wisp) on first session visit
-  useEffect(() => {
-    const seenThisSession = sessionStorage.getItem('spotlight_session_landing');
-    const neverShow = localStorage.getItem('spotlight_never_landing');
-    
-    if (!seenThisSession && !neverShow && !candleEarned) {
-      // Delay to let page render first
-      const timer = setTimeout(() => setWispActive(true), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [candleEarned]);
+  // Will-o'-Wisp now only starts on explicit user request (click "Walkthrough" link)
+  // Auto-start disabled per user feedback — let users explore freely first
   const [flippedPaths, setFlippedPaths] = useState<Set<number>>(new Set());
   const [durinsDoorOpen, setDurinsDoorOpen] = useState(false);
   
@@ -382,6 +685,16 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
       icon: '🎡',
       title: 'The Bridge',
       description: 'Your command center. Place deck cards to connect to earned locations, view all your connections, scheduled dispatches, and incoming opportunities. The Bifrost to everywhere.',
+    },
+    '/ghost': {
+      icon: '👻',
+      title: 'Free Explore',
+      description: 'Explore the platform as a Guest (Ghost) without logging in. Browse initiatives, see how things work, and discover what member-ownership looks like — no commitment required.',
+    },
+    '/durins-door': {
+      icon: '🪞',
+      title: 'Mirror/Mirror',
+      description: 'The reflection portal. See yourself as others see you, manage your public profile, and control what you share. Your identity, your rules.',
     },
   };
   
@@ -788,23 +1101,26 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
           PROFESSIONAL MODE NAVIGATION — Top Right (like static site)
           Shows: The Helm | Free Explore | Mirror/Mirror
       ═══════════════════════════════════════════════════════════════════ */}
-      {isProfessionalTheme ? (
+      {/* Professional Nav — Hidden on mobile unless showPageTools is true */}
+      {isProfessionalTheme && (!isMobile || showPageTools) ? (
         <nav className="professional-nav" style={{
           position: 'fixed',
           top: '1.5rem',
           right: '2rem',
           display: 'flex',
           alignItems: 'center',
-          gap: '2rem',
+          gap: isMobile ? '1rem' : '2rem',
           zIndex: 1001,
           fontFamily: "'Source Sans 3', system-ui, sans-serif",
         }}>
+        {/* Note: Mobile styles in landing.css move this nav to bottom of screen */}
           {/* The Helm Dropdown — FIRST */}
           {/* Note: hoveredHelmItem is NOT cleared on dropdown leave - it persists to show in Hero Card */}
           <div 
             style={{ position: 'relative' }}
-            onMouseEnter={() => setHelmDropdownOpen(true)}
-            onMouseLeave={() => setHelmDropdownOpen(false)}
+            onMouseEnter={() => !isMobile && setHelmDropdownOpen(true)}
+            onMouseLeave={() => !isMobile && setHelmDropdownOpen(false)}
+            onClick={() => isMobile && setHelmDropdownOpen(!helmDropdownOpen)}
           >
             <a 
               href="#"
@@ -812,14 +1128,15 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               style={{
                 color: helmDropdownOpen ? '#faf5eb' : '#a0aec0',
                 textDecoration: 'none',
-                fontSize: '0.9rem',
+                fontSize: isMobile ? '1.5rem' : '0.9rem',
                 fontWeight: 500,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
                 transition: 'color 0.2s ease',
               }}
+              title="The Helm"
             >
-              The Helm
+              {isMobile ? '🪖' : 'The Helm'}
             </a>
             {helmDropdownOpen && (
               <div style={{
@@ -871,23 +1188,25 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
           {/* Free Explore Dropdown — SECOND */}
           <div 
             style={{ position: 'relative' }}
-            onMouseEnter={() => setFreeExploreDropdownOpen(true)}
-            onMouseLeave={() => setFreeExploreDropdownOpen(false)}
+            onMouseEnter={() => !isMobile && setFreeExploreDropdownOpen(true)}
+            onMouseLeave={() => !isMobile && setFreeExploreDropdownOpen(false)}
+            onClick={() => isMobile && setFreeExploreDropdownOpen(!freeExploreDropdownOpen)}
           >
             <a 
               href="/ghost"
-              onClick={(e) => { e.preventDefault(); navigate('/ghost'); }}
+              onClick={(e) => { e.preventDefault(); if (!isMobile) navigate('/ghost'); }}
               style={{
                 color: freeExploreDropdownOpen ? '#faf5eb' : '#a0aec0',
                 textDecoration: 'none',
-                fontSize: '0.9rem',
+                fontSize: isMobile ? '1.5rem' : '0.9rem',
                 fontWeight: 500,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
                 transition: 'color 0.2s ease',
               }}
+              title="Free Explore (Ghost World)"
             >
-              Free Explore
+              {isMobile ? '👻' : 'Free Explore'}
             </a>
             {freeExploreDropdownOpen && (
               <div style={{
@@ -952,23 +1271,25 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
           {/* Mirror/Mirror Dropdown — THIRD */}
           <div 
             style={{ position: 'relative' }}
-            onMouseEnter={() => setMirrorDropdownOpen(true)}
-            onMouseLeave={() => setMirrorDropdownOpen(false)}
+            onMouseEnter={() => !isMobile && setMirrorDropdownOpen(true)}
+            onMouseLeave={() => !isMobile && setMirrorDropdownOpen(false)}
+            onClick={() => isMobile && setMirrorDropdownOpen(!mirrorDropdownOpen)}
           >
             <a 
               href="#"
-              onClick={(e) => { e.preventDefault(); setDurinsDoorOpen(true); }}
+              onClick={(e) => { e.preventDefault(); if (!isMobile) setDurinsDoorOpen(true); }}
               style={{
                 color: mirrorDropdownOpen ? '#faf5eb' : '#a0aec0',
                 textDecoration: 'none',
-                fontSize: '0.9rem',
+                fontSize: isMobile ? '1.5rem' : '0.9rem',
                 fontWeight: 500,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
                 transition: 'color 0.2s ease',
               }}
+              title="Mirror/Mirror (Durin's Door)"
             >
-              Mirror/Mirror
+              {isMobile ? '🪞' : 'Mirror/Mirror'}
             </a>
             {mirrorDropdownOpen && (
               <div style={{
@@ -1029,7 +1350,116 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
             )}
           </div>
         </nav>
+      ) : isProfessionalTheme && isMobile ? (
+        /* Mobile Professional Mode - "Explore" dropdown button */
+        <>
+          {/* Mobile Explore Dropdown - replaces "Operational" badge */}
+          <div style={{
+            position: 'fixed',
+            top: '1rem',
+            right: '1rem',
+            zIndex: 1001,
+          }}>
+            <button
+              onClick={() => setHelmDropdownOpen(!helmDropdownOpen)}
+              style={{
+                background: helmDropdownOpen ? 'rgba(56, 161, 105, 0.3)' : 'rgba(10, 22, 40, 0.95)',
+                border: '1px solid rgba(250, 245, 235, 0.3)',
+                borderRadius: '0.5rem',
+                padding: '0.5rem 1rem',
+                color: '#faf5eb',
+                fontSize: '0.9rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
+              Explore <span style={{ fontSize: '0.7rem' }}>{helmDropdownOpen ? '▲' : '▼'}</span>
+            </button>
+            {helmDropdownOpen && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                marginTop: '0.5rem',
+                background: 'rgba(10, 22, 40, 0.98)',
+                border: '1px solid rgba(250, 245, 235, 0.2)',
+                borderRadius: '0.5rem',
+                padding: '0.5rem 0',
+                minWidth: '160px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+              }}>
+                <button
+                  onClick={() => { setHelmDropdownOpen(false); levelGatedNavigate('/the-helm'); }}
+                  onMouseEnter={() => setHoveredHelmItem('/the-helm')}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '0.6rem 1rem',
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#faf5eb',
+                    fontSize: '0.9rem',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                  }}
+                >
+                  🪖 The Helm
+                </button>
+                <button
+                  onClick={() => { setHelmDropdownOpen(false); navigate('/ghost'); }}
+                  onMouseEnter={() => setHoveredHelmItem('/ghost')}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '0.6rem 1rem',
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#faf5eb',
+                    fontSize: '0.9rem',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                  }}
+                >
+                  👻 Free Explore
+                </button>
+                <button
+                  onClick={() => { setHelmDropdownOpen(false); setDurinsDoorOpen(true); }}
+                  onMouseEnter={() => setHoveredHelmItem('/durins-door')}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '0.6rem 1rem',
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#faf5eb',
+                    fontSize: '0.9rem',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                  }}
+                >
+                  🪞 Mirror/Mirror
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Ghost and Mirror toggles - ONLY show when showPageTools is true */}
+          {showPageTools && (
+            <>
+              <button className="ghost-toggle" onClick={() => navigate('/ghost')}>
+                👻
+              </button>
+              <button className="mirror-toggle" onClick={() => setDurinsDoorOpen(true)} title="The Mirror">
+                🪞
+              </button>
+            </>
+          )}
+        </>
       ) : (
+        /* Non-Professional Mode (original behavior) */
         <>
           {/* Status Badge — Top Right (non-professional only) */}
           <div className="submarine-door-status">
@@ -1049,9 +1479,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         </>
       )}
       
-      {/* Refactor Theme Toggle — HIDDEN when page tools off in Professional mode */}
-      {/* TODO: Implement unlock system with 007 and 001 as starter themes */}
-      {(!isProfessionalTheme || showPageTools) && (
+        {/* Refactor Theme Toggle — HIDDEN when page tools off in Professional mode */}
+        {(!isProfessionalTheme || showPageTools) && (
         <button 
           className="refactor-toggle" 
           onClick={() => setRefactorPanelOpen(!refactorPanelOpen)} 
@@ -1286,14 +1715,24 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 <img src="/logo.png" alt="Liana Banyan" className="logo" style={{ marginBottom: '1.5rem' }} />
               )}
               
+              {/* Rotating Quotes - shows above hero card in professional mode */}
+              {isProfessionalTheme && (
+                <div style={{ marginBottom: '1.5rem', width: '100%', maxWidth: '600px' }}>
+                  <RotatingQuotes intervalMs={8000} />
+                </div>
+              )}
+              
               {/* ═══════════════════════════════════════════════════════════
                   HERO CARD (smaller) — HEOHO text, flips independently
                   Sits visually "on top" of the main card
                   Professional mode: chalk outline + cream/green colors
+                  NOTE: Flip disabled in professional mode for V2 (preserved for Secret Access Door)
               ═══════════════════════════════════════════════════════════ */}
               <div 
-                className={`hero-flip ${heroFlipped ? 'flipped' : ''}`}
-                onClick={(e) => { e.stopPropagation(); setHeroFlipped(!heroFlipped); }}
+                className={`hero-flip ${(!isProfessionalTheme && heroFlipped) || hofundAccessGranted ? 'flipped' : ''} ${isProfessionalTheme ? 'no-chalk-outline' : ''}`}
+                /* V2: Click-to-flip disabled in professional mode UNLESS Hofund access granted (Secret Access Door) */
+                onClick={isProfessionalTheme && !hofundAccessGranted ? undefined : (e) => { e.stopPropagation(); if (!hofundAccessGranted) setHeroFlipped(!heroFlipped); }}
+                style={isProfessionalTheme && !hofundAccessGranted ? { cursor: 'default' } : undefined}
               >
                 <div className="hero-flip-inner">
                   {/* FRONT: Professional mode matches "Ideas are Free" layout exactly */}
@@ -1391,30 +1830,41 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       /* DEFAULT PROFESSIONAL CONTENT */
                       <>
                         {/* COOPERATIVE COMMERCE eyebrow - now inside Hero Card */}
-                        <span style={{ 
+                        <span className="cooperative-header" style={{ 
                           fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: '0.8rem',
+                          fontSize: 'clamp(0.6rem, 2.5vw, 0.8rem)',
                           color: '#d69e2e',
                           letterSpacing: '0.25em',
                           textTransform: 'uppercase',
                           marginBottom: '1.25rem',
-                          display: 'block'
-                        }}>
-                          COOPERATIVE COMMERCE
-                        </span>
-                        {/* "Ideas are Free" style - large serif text */}
-                        <h2 style={{ 
-                          fontFamily: "'Crimson Pro', Georgia, serif",
-                          fontSize: '5.5rem',  /* BIGGER - wider than tagline below */
-                          fontWeight: 700,
-                          lineHeight: 1.1,
-                          marginBottom: '1.5rem',
+                          display: 'block',
                           textAlign: 'center'
                         }}>
+                          <span style={{ display: 'inline' }} className="coop-line">COOPERATIVE</span>
+                          <br className="mobile-break" style={{ display: 'none' }} />
+                          <span style={{ display: 'inline' }} className="coop-line"> COMMERCE</span>
+                        </span>
+                        {/* "Ideas are Free" style - large serif text - CLICKABLE to philosophy page */}
+                        <h2 
+                          onClick={(e) => { e.stopPropagation(); navigate('/help-each-other'); }}
+                          style={{ 
+                            fontFamily: "'Crimson Pro', Georgia, serif",
+                            fontSize: 'clamp(1.5rem, 6.4vw, 4.4rem)',  /* Responsive: 20% smaller - scales 1.5rem on tiny screens up to 4.4rem on large */
+                            fontWeight: 700,
+                            lineHeight: 1.1,
+                            marginBottom: '1.5rem',
+                            textAlign: 'center',
+                            cursor: 'pointer',
+                            transition: 'opacity 0.2s ease'
+                          }}
+                          onMouseOver={(e) => e.currentTarget.style.opacity = '0.85'}
+                          onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+                          title="Click to learn more about our philosophy"
+                        >
                           {/* Line 1: "Help Each Other" - white like "Ideas are Free" */}
-                          <span style={{ color: '#faf5eb', display: 'block', whiteSpace: 'nowrap' }}>Help Each Other</span>
+                          <span style={{ color: '#faf5eb', display: 'block' }}>Help Each Other</span>
                           {/* Line 2: "Help Ourselves" - green like "Infrastructure" */}
-                          <span style={{ color: '#38a169', display: 'block', whiteSpace: 'nowrap' }}>Help Ourselves.</span>
+                          <span style={{ color: '#38a169', display: 'block' }}>Help Ourselves.</span>
                         </h2>
                         {/* Subtitle - white text */}
                         <p style={{ 
@@ -1452,8 +1902,12 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         </p>
                       </>
                     ) : (
-                      /* NON-PROFESSIONAL MODE */
-                      <h2>
+                      /* NON-PROFESSIONAL MODE - also clickable */
+                      <h2 
+                        onClick={(e) => { e.stopPropagation(); navigate('/help-each-other'); }}
+                        style={{ cursor: 'pointer' }}
+                        title="Click to learn more"
+                      >
                         <span style={{ color: '#ffffff' }}>Help Each Other</span>
                         <br />
                         <span style={{ color: '#34d399' }}>Help Ourselves</span>
@@ -1461,19 +1915,387 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         <span style={{ color: '#ffffff', opacity: 0.6 }}>Help Each Other</span>
                       </h2>
                     )}
-                    {/* Only show hand icon when not showing Helm item */}
-                    {!(isProfessionalTheme && hoveredHelmItem) && <span className="hand">👉</span>}
+                    {/* Only show hand icon when not showing Helm item - HOFUND Secret Entry */}
+                    {!(isProfessionalTheme && hoveredHelmItem) && (
+                      <span 
+                        className="hand hofund-hand"
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          setHofundCodeEntry(true); 
+                        }}
+                        style={{ cursor: 'pointer', zIndex: 10 }}
+                        title=""
+                      >
+                        👉
+                      </span>
+                    )}
+                    
+                    {/* HOFUND Code Entry Popup - appears when hand is clicked */}
+                    {hofundCodeEntry && !hofundAccessGranted && (
+                      <div 
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          position: 'absolute',
+                          bottom: '60px',
+                          right: '20px',
+                          background: 'rgba(20, 18, 30, 0.98)',
+                          border: '1px solid rgba(139, 92, 246, 0.5)',
+                          borderRadius: '0.75rem',
+                          padding: '1rem',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '0.5rem',
+                          zIndex: 100,
+                          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                          minWidth: hofundWrongCodeMessage ? '320px' : '180px',
+                          maxWidth: '360px',
+                          transition: 'all 0.3s ease'
+                        }}
+                      >
+                        {hofundWrongCodeMessage ? (
+                          /* Wrong Code Explanation + Foundation Quiz */
+                          <>
+                            <p style={{ fontSize: '0.85rem', lineHeight: 1.5, margin: 0, color: '#faf5eb' }}>
+                              <strong style={{ color: '#f59e0b' }}>Keys are assigned for special purposes.</strong>
+                            </p>
+                            <p style={{ fontSize: '0.8rem', lineHeight: 1.5, margin: '0.5rem 0', color: 'rgba(250,245,235,0.8)' }}>
+                              Many time-specific Codes can be found within Cephas documents. Like the story of John Aaron — 
+                              the engineer who saved Apollo 12 because he was always curious about things outside his immediate concerns.
+                            </p>
+                            <a 
+                              href="https://cephas.lianabanyan.com/articles/sce-to-aux-apollo-12/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                fontSize: '0.8rem',
+                                color: '#8b5cf6',
+                                textDecoration: 'underline',
+                                marginBottom: '0.75rem',
+                                display: 'block'
+                              }}
+                            >
+                              Read: SCE-to-AUX — The Call That Saved Apollo 12 →
+                            </a>
+                            
+                            {/* Foundation Document Quiz */}
+                            <div style={{
+                              background: 'rgba(56, 161, 105, 0.15)',
+                              border: '1px solid rgba(56, 161, 105, 0.3)',
+                              borderRadius: '0.5rem',
+                              padding: '0.75rem',
+                              marginBottom: '0.75rem'
+                            }}>
+                              <p style={{ 
+                                fontSize: '0.75rem', 
+                                fontStyle: 'italic', 
+                                color: 'rgba(250,245,235,0.9)', 
+                                margin: '0 0 0.5rem 0',
+                                lineHeight: 1.5
+                              }}>
+                                {foundationQuizzes[foundationQuizIndex].passage}
+                              </p>
+                              <p style={{ 
+                                fontSize: '0.65rem', 
+                                color: 'rgba(250,245,235,0.5)', 
+                                margin: '0 0 0.5rem 0'
+                              }}>
+                                — {foundationQuizzes[foundationQuizIndex].source}
+                              </p>
+                              <p style={{ 
+                                fontSize: '0.8rem', 
+                                fontWeight: 600, 
+                                color: '#38a169', 
+                                margin: '0.5rem 0'
+                              }}>
+                                {foundationQuizzes[foundationQuizIndex].question}
+                              </p>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                                {foundationQuizzes[foundationQuizIndex].options.map((opt, i) => (
+                                  <button
+                                    key={i}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (opt.correct && opt.route) {
+                                        setHofundCodeEntry(false);
+                                        setHofundWrongCodeMessage(false);
+                                        setHofundCode('');
+                                        navigate(opt.route);
+                                      } else if (!opt.correct) {
+                                        // Wrong answer - just cycle to next question
+                                        setFoundationQuizIndex((prev) => (prev + 1) % foundationQuizzes.length);
+                                      }
+                                    }}
+                                    style={{
+                                      background: 'rgba(255,255,255,0.08)',
+                                      border: '1px solid rgba(255,255,255,0.15)',
+                                      borderRadius: '0.35rem',
+                                      padding: '0.4rem 0.6rem',
+                                      color: '#faf5eb',
+                                      fontSize: '0.75rem',
+                                      cursor: 'pointer',
+                                      textAlign: 'left',
+                                      transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.3)'; }}
+                                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+                                  >
+                                    {opt.text}
+                                  </button>
+                                ))}
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setFoundationQuizIndex((prev) => (prev + 1) % foundationQuizzes.length);
+                                }}
+                                style={{
+                                  background: 'transparent',
+                                  border: 'none',
+                                  color: 'rgba(250,245,235,0.5)',
+                                  fontSize: '0.7rem',
+                                  cursor: 'pointer',
+                                  marginTop: '0.5rem',
+                                  textDecoration: 'underline'
+                                }}
+                              >
+                                🔄 Different question
+                              </button>
+                            </div>
+                            
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                              <input
+                                type="text"
+                                value={hofundCode}
+                                onChange={(e) => setHofundCode(e.target.value.toUpperCase())}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    const code = hofundCode.trim();
+                                    if (validHofundCodes.includes(code)) {
+                                      setHofundAccessGranted(true);
+                                      setHofundCodeEntry(false);
+                                      setHofundWrongCodeMessage(false);
+                                      setHeroFlipped(true);
+                                    } else if (specialCodes[code]) {
+                                      specialCodes[code].action();
+                                      setHofundCodeEntry(false);
+                                      setHofundWrongCodeMessage(false);
+                                      setHofundCode('');
+                                    } else {
+                                      setHofundCode('');
+                                    }
+                                  } else if (e.key === 'Escape') {
+                                    setHofundCodeEntry(false);
+                                    setHofundWrongCodeMessage(false);
+                                    setHofundCode('');
+                                  }
+                                }}
+                                style={{
+                                  flex: 1,
+                                  background: 'rgba(255,255,255,0.1)',
+                                  border: '1px solid rgba(139, 92, 246, 0.3)',
+                                  borderRadius: '0.5rem',
+                                  padding: '0.5rem 0.75rem',
+                                  color: '#faf5eb',
+                                  fontSize: '0.9rem',
+                                  fontFamily: 'monospace',
+                                  letterSpacing: '0.1em',
+                                  outline: 'none',
+                                }}
+                                placeholder="TRY AGAIN"
+                              />
+                              <button
+                                onClick={() => { setHofundCodeEntry(false); setHofundWrongCodeMessage(false); setHofundCode(''); }}
+                                style={{
+                                  background: 'rgba(255,255,255,0.1)',
+                                  border: '1px solid rgba(255,255,255,0.2)',
+                                  borderRadius: '0.5rem',
+                                  padding: '0.5rem 0.75rem',
+                                  color: 'rgba(255,255,255,0.6)',
+                                  fontSize: '0.8rem',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          /* Initial Code Entry */
+                          <>
+                            <label style={{ fontSize: '0.75rem', opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                              Enter Code
+                            </label>
+                            <input
+                              type="text"
+                              value={hofundCode}
+                              onChange={(e) => setHofundCode(e.target.value.toUpperCase())}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  const code = hofundCode.trim();
+                                  if (validHofundCodes.includes(code)) {
+                                    setHofundAccessGranted(true);
+                                    setHofundCodeEntry(false);
+                                    setHeroFlipped(true);
+                                  } else if (specialCodes[code]) {
+                                    specialCodes[code].action();
+                                    setHofundCodeEntry(false);
+                                    setHofundCode('');
+                                  } else {
+                                    setHofundWrongCodeMessage(true);
+                                    setHofundCode('');
+                                  }
+                                } else if (e.key === 'Escape') {
+                                  setHofundCodeEntry(false);
+                                  setHofundCode('');
+                                }
+                              }}
+                              autoFocus
+                              style={{
+                                background: 'rgba(255,255,255,0.1)',
+                                border: '1px solid rgba(139, 92, 246, 0.3)',
+                                borderRadius: '0.5rem',
+                                padding: '0.5rem 0.75rem',
+                                color: '#faf5eb',
+                                fontSize: '1rem',
+                                fontFamily: 'monospace',
+                                letterSpacing: '0.15em',
+                                outline: 'none',
+                              }}
+                              placeholder="• • • • • •"
+                            />
+                            <button
+                              onClick={() => { setHofundCodeEntry(false); setHofundCode(''); }}
+                              style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'rgba(255,255,255,0.4)',
+                                fontSize: '0.7rem',
+                                cursor: 'pointer',
+                                textAlign: 'right',
+                                padding: '0.25rem 0 0 0'
+                              }}
+                            >
+                              [ESC to close]
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* BACK: Two columns - GET & GIVE - with expandable topics */}
+                  {/* OR: HOFUND SubSystem when access granted via secret code */}
                   <div className="hero-back" style={isProfessionalTheme ? { 
                     padding: '1.5rem',
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100%'
                   } : undefined}>
-                    {/* Expanded Topic View */}
-                    {heroBackExpanded ? (
+                    {/* HOFUND SubSystem - Secret Access Granted */}
+                    {hofundAccessGranted ? (
+                      <div 
+                        style={{ 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          alignItems: 'center', 
+                          justifyContent: 'center',
+                          height: '100%', 
+                          gap: '1.5rem',
+                          padding: '1rem',
+                          textAlign: 'center'
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <p style={{ 
+                          fontSize: '1rem', 
+                          color: '#38a169', 
+                          margin: 0, 
+                          fontStyle: 'italic',
+                          textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+                        }}>
+                          Welcome Captain, to the SubSystem.
+                        </p>
+                        <p style={{ 
+                          fontSize: '1.1rem', 
+                          color: '#faf5eb', 
+                          margin: 0,
+                          textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+                        }}>
+                          Your Ship Awaits, please enter your Coordinates.
+                        </p>
+                        
+                        {/* Ship's Wheel */}
+                        <div style={{ 
+                          fontSize: '4rem', 
+                          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))',
+                          animation: 'slowSpin 20s linear infinite'
+                        }}>
+                          ⎈
+                        </div>
+                        
+                        {/* Coordinates Entry */}
+                        <input
+                          type="text"
+                          value={hofundCoordinates}
+                          onChange={(e) => setHofundCoordinates(e.target.value.toUpperCase())}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && hofundCoordinates.trim()) {
+                              // Route based on coordinates - to be configured
+                              // For now, navigate to a secret route or show a message
+                              const coords = hofundCoordinates.trim();
+                              // Placeholder routing - user will define coordinate mappings
+                              if (coords === 'HELM') levelGatedNavigate('/the-helm');
+                              else if (coords === 'BRIDGE') levelGatedNavigate('/the-bridge');
+                              else if (coords === 'HOFUND') levelGatedNavigate('/hofund');
+                              else if (coords === 'KEEP') levelGatedNavigate('/dashboard');
+                              else if (coords === 'GHOST') navigate('/ghost');
+                              // Reset state after navigation attempt
+                              setHofundAccessGranted(false);
+                              setHofundCoordinates('');
+                              setHeroFlipped(false);
+                            } else if (e.key === 'Escape') {
+                              setHofundAccessGranted(false);
+                              setHofundCoordinates('');
+                              setHeroFlipped(false);
+                            }
+                          }}
+                          autoFocus
+                          style={{
+                            background: 'rgba(56, 161, 105, 0.15)',
+                            border: '2px solid rgba(56, 161, 105, 0.5)',
+                            borderRadius: '0.75rem',
+                            padding: '0.75rem 1.25rem',
+                            color: '#faf5eb',
+                            fontSize: '1.1rem',
+                            fontFamily: 'monospace',
+                            letterSpacing: '0.2em',
+                            textAlign: 'center',
+                            outline: 'none',
+                            width: '200px',
+                            textTransform: 'uppercase'
+                          }}
+                          placeholder="COORDINATES"
+                        />
+                        
+                        <button
+                          onClick={() => { 
+                            setHofundAccessGranted(false); 
+                            setHofundCoordinates(''); 
+                            setHeroFlipped(false); 
+                          }}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'rgba(255,255,255,0.4)',
+                            fontSize: '0.75rem',
+                            cursor: 'pointer',
+                            marginTop: '0.5rem'
+                          }}
+                        >
+                          [ESC to exit SubSystem]
+                        </button>
+                      </div>
+                    ) : heroBackExpanded ? (
                       <div 
                         style={{ display: 'flex', flexDirection: 'column', height: '100%', cursor: 'pointer' }}
                         onClick={(e) => { e.stopPropagation(); setHeroBackExpanded(null); }}
@@ -1511,18 +2333,26 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               and the difference in what you preorder paid is returned as platform credits to purchase more. 
                               You either get a good deal, or a better one.
                             </p>
-                            <button 
+                            <a 
+                              href="https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/"
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="gk-option"
                               style={{ 
                                 background: 'linear-gradient(135deg, #38a169, #10b981)', 
                                 fontSize: '0.9rem', 
                                 padding: '0.6rem',
-                                marginTop: 'auto'
+                                marginTop: 'auto',
+                                textDecoration: 'none',
+                                color: '#faf5eb',
+                                display: 'block',
+                                textAlign: 'center',
+                                borderRadius: '0.5rem'
                               }}
-                              onClick={(e) => { e.stopPropagation(); setMainCardFlipped(true); }}
+                              onClick={(e) => e.stopPropagation()}
                             >
-                              📊 See the Full Explanation
-                            </button>
+                              📊 See the Full Explanation →
+                            </a>
                           </div>
                         )}
                         {heroBackExpanded === 'volume' && (
@@ -1533,7 +2363,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               When members buy together, everyone saves.
                             </p>
                             <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Let's Get Groceries aggregates orders for bulk discounts. LifeLine Medications negotiates 
+                              Let's Get Groceries aggregates orders for bulk discounts. The Tatiana Schlossburg Health Accords negotiate 
                               manufacturer pricing. Let's Go Shopping pools demand for better deals.
                             </p>
                           </div>
@@ -1806,7 +2636,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     e.currentTarget.style.borderColor = '#38a169';
                   }}
                 >
-                  How Cost + 20% Works
+                  How Liana Banyan Works
                 </button>
               ) : (
                 <button 
@@ -1822,100 +2652,123 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               <span className="hand" style={{ position: 'absolute', bottom: '12px', right: '16px' }}>👉</span>
             </div>
 
-            {/* BACK: How Cost + 20% Works - with expandable topics */}
+            {/* BACK: How Liana Banyan Works - with expandable topics in SINGLE COLUMN */}
             <div className="main-card-back" onClick={() => { if (!mainBackExpanded) setMainCardFlipped(false); }} style={{ 
               padding: '2rem', 
               display: 'flex', 
               flexDirection: 'column',
-              height: '100%'
+              height: '100%',
+              overflow: 'auto'
             }}>
-              {/* Expanded Topic View with Root Return Navigation */}
-              {mainBackExpanded ? (() => {
-                // Define the topic order for Root Return navigation
-                const mainTopics = ['transaction', 'wholesale', 'permanent', 'memberowned', 'initiatives'];
-                const currentTopicIndex = mainTopics.indexOf(mainBackExpanded);
-                const nextTopic = currentTopicIndex < mainTopics.length - 1 ? mainTopics[currentTopicIndex + 1] : null;
-                
-                return (
+              {/* Expanded Topic View - NO CHEVRONS, click anywhere to go back */}
+              {mainBackExpanded ? (
                 <div 
-                  style={{ display: 'flex', height: '100%', flex: 1, gap: '0.5rem' }}
+                  style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}
                   onClick={(e) => { e.stopPropagation(); setMainBackExpanded(null); setMainInitiativeExpanded(null); }}
                 >
-                  {/* Left Chevron - Root Return (always goes back to Overview) */}
-                  <div
+                  {/* Back button at top - styled like "How Liana Banyan Works" buttons */}
+                  <button
                     onClick={(e) => { e.stopPropagation(); setMainBackExpanded(null); setMainInitiativeExpanded(null); }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.35)'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.15)'; }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(88, 60, 180, 0.6)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
                     style={{
-                      width: '2.5rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: 'rgba(56, 161, 105, 0.15)',
-                      borderRadius: '0.5rem',
+                      alignSelf: 'flex-start',
+                      background: 'rgba(88, 60, 180, 0.4)',
+                      border: 'none',
+                      borderRadius: '0.75rem',
+                      padding: '0.75rem 1.25rem',
+                      color: '#faf5eb',
+                      fontSize: '1rem',
+                      fontWeight: 600,
                       cursor: 'pointer',
+                      marginBottom: '0.5rem',
                       transition: 'all 0.2s ease',
-                      flexShrink: 0
+                      textShadow: '0 1px 3px rgba(0,0,0,0.5)',
                     }}
                   >
-                    <span style={{ fontSize: '2.5rem', color: '#38a169', fontWeight: 300 }}>‹</span>
-                  </div>
+                    ← Back
+                  </button>
                   
-                  {/* Content Area */}
+                  {/* Content Area - scrollable */}
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem', overflow: 'auto' }}>
-                  {mainBackExpanded === 'transaction' && (
+                  {mainBackExpanded === 'costplus' && (
                     <>
-                      <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0, textAlign: 'center' }}>💰 On $500 of Transactions</h4>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                        When someone pays <strong>$500</strong> for your work on Liana Banyan, here's exactly where that money goes:
+                      <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0, textAlign: 'center' }}>🛒 Cost + 20%</h4>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
+                        Every product and service on our platform is priced at <strong>Cost + 20%</strong>. We buy, From You & For You, 
+                        in advance at wholesale prices from your preorders, and add exactly 20% — no hidden markups, no middlemen fees.
                       </p>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', flex: 1 }}>
-                        <div style={{ background: 'rgba(56, 161, 105, 0.15)', padding: '1.5rem', borderRadius: '1rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-                          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>$416.67</div>
-                          <div style={{ fontSize: '1rem', marginTop: '0.5rem' }}>Goes directly to <strong>YOU</strong></div>
-                          <div style={{ fontSize: '0.85rem', opacity: 0.8, marginTop: '0.25rem' }}>That's 83.3% of every dollar</div>
-                        </div>
-                        <div style={{ background: 'rgba(139, 92, 246, 0.15)', padding: '1.5rem', borderRadius: '1rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-                          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#8b5cf6' }}>$83.33</div>
-                          <div style={{ fontSize: '1rem', marginTop: '0.5rem' }}>Platform margin</div>
-                          <div style={{ fontSize: '0.85rem', opacity: 0.8, marginTop: '0.25rem' }}>Funds operations + 16 initiatives</div>
-                        </div>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
+                        The 20% margin funds platform operations and charitable initiatives.
+                      </p>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
+                        <strong>Volume makes it work</strong> — 20% of 10,000 (= 2,000) is a lot more than 80% of 1,000 (= 800). 
+                        Especially when your costs are now 50% lower.
+                      </p>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
+                        <strong>For everything except Payroll.</strong> We prepay PER JOB / ORDER CONTRACT 50% down, 50% upon completion; 
+                        funded by 100% prefunded preorders. In Public.
+                      </p>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
+                        When larger preorder volume tiers are reached resulting in lower prices — the savings are automatically passed to you, 
+                        and the difference in what you preorder paid is returned as platform credits to purchase more.
+                      </p>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0, fontStyle: 'italic', color: '#38a169' }}>
+                        You either get a good deal, or a better one.
+                      </p>
+                      <div style={{ marginTop: 'auto', textAlign: 'center' }}>
+                        <a 
+                          href="https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            padding: '0.75rem 1.5rem',
+                            background: 'rgba(56, 161, 105, 0.2)',
+                            border: '1px solid rgba(56, 161, 105, 0.4)',
+                            borderRadius: '0.5rem',
+                            color: '#38a169',
+                            fontSize: '0.9rem',
+                            cursor: 'pointer',
+                            textDecoration: 'none',
+                            display: 'inline-block'
+                          }}
+                        >
+                          📊 See the Full Explanation →
+                        </a>
                       </div>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, textAlign: 'center' }}>
-                        Compare: Uber takes 25-30%. Etsy takes 20%+ plus fees. Fiverr takes 20% + payment fees.
-                      </p>
                     </>
                   )}
                   {mainBackExpanded === 'wholesale' && (
                     <>
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>📦 Wholesale Everything</h4>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         We negotiate <strong>manufacturer and distributor pricing</strong> on everything from groceries to medications to consumer goods.
                       </p>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         Then we add exactly 20%. That's it. No additional markups, no hidden fees, no "convenience charges."
                       </p>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         Our accounting is <strong>Transparent</strong> with Bank Account and Ledger Tickers for Every Transaction. 
                         What it was for, where it came from, where it went, when, and by whom — but only for Corporate. 
-                        <em>Your Business is YOUR Business.</em>
+                        <em> Your Business is YOUR Business.</em>
                       </p>
                     </>
                   )}
                   {mainBackExpanded === 'permanent' && (
                     <>
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🔒 Permanent 20% Cap</h4>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         The 20% margin is <strong>hardcoded into our bylaws</strong>. It cannot be increased by management, 
                         investors, or even a majority vote.
                       </p>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         Why? Because we've seen what happens when platforms grow: fees creep up, terms change, 
-                        and creators get squeezed. We've built protection against that into our foundation.
+                        and creators, workers, and users get squeezed. We've built protection against that into our foundation.
                       </p>
                       <div style={{ background: 'rgba(251, 191, 36, 0.15)', padding: '1.25rem', borderRadius: '1rem', marginTop: 'auto' }}>
-                        <strong style={{ fontSize: '1.1rem' }}>⚠️ The Lock:</strong>
-                        <p style={{ margin: '0.5rem 0 0 0', fontSize: '1.1rem' }}>
+                        <strong style={{ fontSize: '1rem' }}>⚠️ The Lock:</strong>
+                        <p style={{ margin: '0.5rem 0 0 0', fontSize: '1rem' }}>
                           Changing this would require unanimous board approval + 75% member vote + 
                           a 2-year waiting period. Designed to be nearly impossible.
                         </p>
@@ -1925,481 +2778,239 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   {mainBackExpanded === 'memberowned' && (
                     <>
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🤝 Member-Owned Cooperative</h4>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         For <strong>$5/year</strong>, you become a member-owner with real ownership rights:
                       </p>
-                      <ul style={{ fontSize: '1.1rem', lineHeight: 1.8, margin: 0, paddingLeft: '1.5rem' }}>
+                      <ul style={{ fontSize: '1rem', lineHeight: 1.8, margin: 0, paddingLeft: '1.5rem' }}>
                         <li><strong>Vote</strong> on platform decisions and elect representatives</li>
                         <li><strong>Propose</strong> new features, initiatives, and policy changes</li>
                         <li><strong>Share</strong> in platform success through earning platform credits</li>
                         <li><strong>Access</strong> wholesale pricing on everything</li>
                       </ul>
-                      <p style={{ fontSize: '1.1rem', lineHeight: 1.7, marginTop: 'auto' }}>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, marginTop: 'auto' }}>
                         This isn't a subscription — it's ownership. The people most affected by decisions help make them.
                       </p>
                     </>
                   )}
                   {mainBackExpanded === 'initiatives' && (() => {
                     const initiativesList = [
-                      { key: 'dinner', emoji: '🍽️', name: "Let's Make Dinner" },
-                      { key: 'groceries', emoji: '🛒', name: "Let's Get Groceries" },
-                      { key: 'shopping', emoji: '🛍️', name: "Let's Go Shopping" },
-                      { key: 'concierge', emoji: '🏠', name: 'Household Concierge' },
-                      { key: 'family', emoji: '👨‍👩‍👧‍👦', name: 'Family Table' },
-                      { key: 'medications', emoji: '💊', name: 'LifeLine Medications' },
-                      { key: 'msa', emoji: '🏥', name: 'MSA' },
-                      { key: 'defense', emoji: '🛡️', name: 'Defense Klaus' },
-                      { key: 'rally', emoji: '📢', name: 'Rally Group' },
-                      { key: 'vsl', emoji: '💳', name: 'VSL' },
-                      { key: 'bread', emoji: '🍞', name: "Let's Make Bread" },
-                      { key: 'harper', emoji: '📖', name: 'Harper Guild' },
-                      { key: 'jukebox', emoji: '🎵', name: 'JukeBox' },
-                      { key: 'didasko', emoji: '🎓', name: 'Didasko' },
-                      { key: 'international', emoji: '🌍', name: 'International' },
-                      { key: 'brasstacks', emoji: '🔩', name: 'Brass Tacks' }
+                      { key: 'lets-make-dinner', emoji: '🍽️', name: "Let's Make Dinner", desc: "Neighbors Paid to Feed Neighbors" },
+                      { key: 'lets-get-groceries', emoji: '🛒', name: "Let's Get Groceries", desc: "Volume Discount Grocery Runs & Delivery" },
+                      { key: 'lets-go-shopping', emoji: '🛍️', name: "Let's Go Shopping", desc: "Volume Discount Product Purchases & Holiday Specials" },
+                      { key: 'household-concierge', emoji: '🏠', name: 'Household Concierge', desc: "Home Services by Vetted Members" },
+                      { key: 'family-table', emoji: '👨‍👩‍👧‍👦', name: 'Family Table', desc: "Meal Planning, Shared Schedules, Connected Portfolios" },
+                      { key: 'tatiana-schlossburg-health-accords', emoji: '💊', name: 'Tatiana Schlossburg Health Accords', desc: "Cost+20% Prescriptions & Supplies" },
+                      { key: 'msa', emoji: '🏥', name: 'MSA', desc: "Member Savings Accounts for Healthcare" },
+                      { key: 'defense-klaus', emoji: '🛡️', name: 'Defense Klaus', desc: "Personal Protection & Pooled Legal Defense Fund" },
+                      { key: 'rally-group', emoji: '📢', name: 'Rally Group', desc: "Crisis Response & Community Mobilization" },
+                      { key: 'vsl', emoji: '💳', name: 'VSL', desc: "Voucher No-Collateral 0-5% Short Loans Member to Member" },
+                      { key: 'bread', emoji: '🍞', name: "Let's Make Bread", desc: "$5 Business Simulator to Real Life Business Incubator" },
+                      { key: 'harper-guild', emoji: '⚖️', name: 'Harper Guild', desc: "HR & Ethics Support for Small Businesses" },
+                      { key: 'jukebox', emoji: '🎵', name: 'JukeBox', desc: "Cooperative Music Licensing for Artist-Controlled Royalties" },
+                      { key: 'didasko', emoji: '🎓', name: 'Didasko', desc: "College of Hard Knocks: Skills, Tutoring, Mentoring" },
+                      { key: 'brass-tacks', emoji: '🔩', name: 'Brass Tacks', desc: "Manufacturing, Tooling, Makers, Mechanics, Physical Products" },
+                      { key: 'power-to-the-people', emoji: '⚡', name: 'Power to the People', desc: "Citizen Advocacy, Congressional Tracking, Cooperative Energy", hasSwitzerlandLink: true }
                     ];
-                    const currentIndex = initiativesList.findIndex(i => i.key === mainInitiativeExpanded);
-                    const nextInitiative = currentIndex < initiativesList.length - 1 ? initiativesList[currentIndex + 1].key : null;
                     
                     return (
                     <div 
                       style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}
-                      onClick={(e) => { if (mainInitiativeExpanded) { e.stopPropagation(); setMainInitiativeExpanded(null); } }}
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      {mainInitiativeExpanded ? (
-                        // Expanded initiative detail view with chevron navigation
-                        <div style={{ display: 'flex', flex: 1, gap: '0.5rem' }}>
-                          {/* Left Chevron - Go Back */}
-                          <div
-                            onClick={(e) => { e.stopPropagation(); setMainInitiativeExpanded(null); }}
-                            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.35)'; }}
-                            onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.15)'; }}
+                      <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🌿 16 Charitable Initiatives</h4>
+                      <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
+                        Our 20% margin doesn't go to shareholders — it funds <strong>infrastructure for everyone</strong>:
+                      </p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {initiativesList.map((init) => {
+                          const route = '/initiatives/' + init.key;
+                          const locked = isRouteLocked(route);
+                          return (
+                          <button
+                            key={init.key}
+                            onClick={(e) => { e.stopPropagation(); levelGatedNavigate(route); }}
+                            onMouseOver={(e) => { if (!locked) e.currentTarget.style.background = '#38a169'; }}
+                            onMouseOut={(e) => { e.currentTarget.style.background = locked ? 'rgba(60, 60, 80, 0.4)' : 'rgba(88, 60, 180, 0.4)'; }}
                             style={{
-                              width: '2.5rem',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              background: 'rgba(56, 161, 105, 0.15)',
+                              background: locked ? 'rgba(60, 60, 80, 0.4)' : 'rgba(88, 60, 180, 0.4)',
+                              border: 'none',
                               borderRadius: '0.5rem',
-                              cursor: 'pointer',
+                              padding: '0.75rem 1rem',
+                              color: locked ? '#888' : '#faf5eb',
+                              fontSize: '1rem',
+                              cursor: locked ? 'not-allowed' : 'pointer',
+                              textAlign: 'left',
                               transition: 'all 0.2s ease',
-                              flexShrink: 0
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '0.15rem',
+                              opacity: locked ? 0.6 : 1,
                             }}
                           >
-                            <span style={{ fontSize: '2rem', color: '#38a169' }}>‹</span>
-                          </div>
-                          
-                          {/* Content Area */}
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                          {mainInitiativeExpanded === 'dinner' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🍽️ Let's Make Dinner</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Community meal coordination that brings people together. Members share recipes, coordinate group meals, 
-                                and build neighborhood food networks.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Professional chefs earn by teaching cooking classes. Home cooks earn by preparing meals for busy families. 
-                                Everyone saves through bulk ingredient purchasing.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'groceries' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🛒 Let's Get Groceries</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Group grocery buying at wholesale prices. Members pool orders to access bulk discounts 
-                                that are normally only available to restaurants and institutions.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Local coordinators earn by managing pickup points. Delivery drivers earn by bringing groceries to members. 
-                                The more members participate, the lower everyone's costs.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'shopping' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🛍️ Let's Go Shopping</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Collective purchasing power for consumer goods. From electronics to furniture to clothing — 
-                                members aggregate demand to negotiate manufacturer pricing.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Product researchers earn by finding the best deals. Personal shoppers earn by helping members make choices. 
-                                Group buys mean individual savings.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'concierge' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🏠 Household Concierge</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Trusted help for home and life tasks. Vetted members provide services from house cleaning to pet sitting 
-                                to errand running — all at fair rates with portable reputation.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Service providers keep 83.3% of what they earn. Clients get reliable help without platform gouging. 
-                                Quality builds reputation across all initiatives.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'family' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>👨‍👩‍👧‍👦 The Family Table</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Supporting families through every stage. Childcare coordination, tutoring networks, 
-                                eldercare resources, and family emergency support systems.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Caregivers earn fair wages. Families access affordable care. The community provides a safety net 
-                                that catches people before they fall.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'medications' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>💊 LifeLine Medications</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Prescription medications at actual cost plus 20%. We negotiate directly with manufacturers and distributors 
-                                to eliminate the markup that makes medications unaffordable.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                No middlemen taking their cut. No PBM games. Just the real cost of medicine plus a transparent margin 
-                                that funds the platform serving you.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'msa' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🏥 MSA</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Member Services Account — healthcare cost sharing and coordination. Members contribute to shared pools 
-                                that cover medical expenses, with transparent accounting.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Not insurance — a cooperative approach to healthcare costs. Members help members. 
-                                Every dollar is tracked. The community decides together.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'defense' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🛡️ Defense Klaus</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                "For Someone You Love" — legal defense and protection services. Access to attorneys, 
-                                legal document preparation, and collective bargaining for legal services.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                When members face legal challenges, they don't face them alone. The cooperative provides resources, 
-                                connections, and support.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'rally' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>📢 Rally Group</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Collective voice and advocacy. When members face systemic issues — from predatory practices 
-                                to policy problems — Rally Group organizes collective response.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                One voice is easy to ignore. Thousands of voices organized together create change. 
-                                Members support each other's causes.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'vsl' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>💳 VSL</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Virtual Savings & Lending — community-based financial services. Members save together and lend to each other 
-                                at fair rates, building alternatives to predatory financial products.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                No payday loan traps. No credit card gouging. Members helping members with transparent terms 
-                                and community accountability.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'bread' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🍞 Let's Make Bread</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Micro-enterprise support and business incubation. Members with business ideas get funded through preorders, 
-                                supported by the community, and mentored by experienced entrepreneurs.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Start a business without taking on crushing debt. Get customers before you make products. 
-                                Build something real with community backing.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'harper' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>📖 Harper Guild</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Publishing and content creation cooperative. Writers, artists, and creators publish their work 
-                                with fair terms — keeping their rights and earning real royalties.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                No exploitative publishing contracts. No algorithms hiding your work. 
-                                Creators own what they create and get paid fairly when people enjoy it.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'jukebox' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🎵 JukeBox</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Music and performance cooperative. Musicians earn fairly from their work. 
-                                Venues connect with performers. Fans support artists directly.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                No streaming services paying fractions of pennies. Real support for real artists. 
-                                The music industry rebuilt to serve musicians and listeners.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'didasko' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🎓 Didasko</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Education and skill-sharing cooperative. Teachers earn by sharing knowledge. 
-                                Learners access quality education at fair prices. Credentials that mean something.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                From academic subjects to practical skills to professional development — 
-                                learning that serves learners, not shareholders.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'international' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🌍 International</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Global coordination and cross-border support. Connecting members worldwide, 
-                                facilitating international trade, and building cooperative infrastructure globally.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Fair remittances. International collaboration. A cooperative network that spans borders 
-                                while respecting local needs and cultures.
-                              </p>
-                            </div>
-                          )}
-                          {mainInitiativeExpanded === 'brasstacks' && (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                              <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🔩 Brass Tacks</h4>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Platform infrastructure and technical operations. The nuts and bolts that make everything work — 
-                                servers, software, security, and systems.
-                              </p>
-                              <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                                Developers earn by building and maintaining the platform. Technical decisions made transparently. 
-                                Infrastructure that serves the mission, not investor returns.
-                              </p>
-                            </div>
-                          )}
-                          {/* Go to Initiative button */}
-                            <button 
-                              onClick={(e) => { 
-                                e.stopPropagation(); 
-                                navigate('/initiatives/' + mainInitiativeExpanded);
-                              }}
-                              style={{ 
-                                padding: '0.75rem', 
-                                background: 'linear-gradient(135deg, #38a169, #10b981)', 
-                                border: 'none', 
-                                borderRadius: '0.5rem', 
-                                color: '#fff', 
-                                fontSize: '1rem', 
-                                cursor: 'pointer',
-                                fontWeight: 600,
-                                marginTop: 'auto'
-                              }}
-                            >
-                              Go to {initiativesList.find(i => i.key === mainInitiativeExpanded)?.name || 'Initiative'} →
-                            </button>
-                          </div>
-                          
-                          {/* Right Chevron - Next Initiative */}
-                          <div
-                            onClick={(e) => { 
-                              e.stopPropagation(); 
-                              if (nextInitiative) {
-                                setMainInitiativeExpanded(nextInitiative);
-                              } else {
-                                setMainInitiativeExpanded(null); // Loop back to grid if at end
-                              }
-                            }}
-                            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.35)'; }}
-                            onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.15)'; }}
-                            style={{
-                              width: '2.5rem',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              background: 'rgba(56, 161, 105, 0.15)',
-                              borderRadius: '0.5rem',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s ease',
-                              flexShrink: 0
-                            }}
-                          >
-                            <span style={{ fontSize: '2rem', color: '#38a169' }}>{nextInitiative ? '›' : '⟲'}</span>
-                          </div>
-                        </div>
-                      ) : (
-                        // Initiative grid with clickable buttons
-                        <>
-                          <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🌿 16 Charitable Initiatives</h4>
-                          <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
-                            Our 20% margin doesn't go to shareholders — it funds <strong>infrastructure for everyone</strong>:
-                          </p>
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-                            {initiativesList.map((init) => (
-                              <button
-                                key={init.key}
-                                onClick={(e) => { e.stopPropagation(); setMainInitiativeExpanded(init.key); }}
-                                onMouseOver={(e) => { e.currentTarget.style.background = '#38a169'; e.currentTarget.style.transform = 'scale(1.02)'; }}
-                                onMouseOut={(e) => { e.currentTarget.style.background = '#2d3748'; e.currentTarget.style.transform = 'scale(1)'; }}
-                                style={{
-                                  background: '#2d3748',
-                                  border: 'none',
-                                  borderRadius: '0.5rem',
-                                  padding: '0.6rem 0.75rem',
-                                  color: '#faf5eb',
-                                  fontSize: '0.9rem',
-                                  cursor: 'pointer',
-                                  textAlign: 'left',
-                                  transition: 'all 0.2s ease'
-                                }}
-                              >
-                                {init.emoji} {init.name}
-                              </button>
-                            ))}
-                          </div>
-                        </>
-                      )}
+                            <span style={{ fontWeight: 600, textShadow: '0 1px 3px rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              {locked && <Lock size={14} />}
+                              {init.emoji} {init.name}
+                              {locked && <span style={{ fontSize: '0.7rem', opacity: 0.7, marginLeft: 'auto' }}>Lvl 2</span>}
+                            </span>
+                            <span style={{ fontSize: '0.8rem', opacity: 0.85, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
+                              {(init as any).hasSwitzerlandLink ? (
+                                <>
+                                  <a 
+                                    href="https://cephas.lianabanyan.com/under-the-hood/switzerland-protocol/" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    style={{ color: '#38a169', textDecoration: 'underline' }}
+                                  >
+                                    Per the Switzerland Protocol
+                                  </a>
+                                  {': ' + init.desc}
+                                </>
+                              ) : init.desc}
+                            </span>
+                          </button>
+                        );})}
+                      </div>
                     </div>
                   );
                   })()}
                   </div>
                   
-                  {/* Right Chevron - Navigate to Next Topic */}
-                  <div
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      if (nextTopic) {
-                        setMainBackExpanded(nextTopic);
-                        setMainInitiativeExpanded(null);
-                      } else {
-                        setMainBackExpanded(null);
-                        setMainInitiativeExpanded(null);
-                      }
-                    }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.35)'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.15)'; }}
-                    style={{
-                      width: '2.5rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: 'rgba(56, 161, 105, 0.15)',
-                      borderRadius: '0.5rem',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      flexShrink: 0
-                    }}
-                  >
-                    <span style={{ fontSize: '2.5rem', color: '#38a169', fontWeight: 300 }}>{nextTopic ? '›' : '⟲'}</span>
-                  </div>
+                  <p style={{ opacity: 0.5, fontSize: '0.7rem', marginTop: '1rem', textAlign: 'center' }}>
+                    tap anywhere to go back
+                  </p>
                 </div>
-              );
-              })() : (
-                /* Default Overview - stretched to fill */
+              ) : (
+                /* Default Overview - SINGLE COLUMN of styled buttons */
                 <>
-                  <h3 style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '1.5rem' }}>How Cost + 20% Works</h3>
+                  <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.5rem' }}>How Liana Banyan Works</h3>
                   
-                  {/* Visual example - clickable */}
-                  <div 
-                    onClick={(e) => { e.stopPropagation(); setMainBackExpanded('transaction'); }}
-                    style={{ 
-                      background: 'rgba(56, 161, 105, 0.15)', 
-                      borderRadius: '1rem', 
-                      padding: '1.5rem',
-                      marginBottom: '1rem',
-                      cursor: 'pointer',
-                      transition: 'transform 0.2s'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.01)'}
-                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                  >
-                    <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                      <span style={{ fontSize: '1.75rem' }}>💰</span>
-                      <strong style={{ fontSize: '1.25rem', marginLeft: '0.5rem' }}>On $500 of Transactions →</strong>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', textAlign: 'center' }}>
-                      <div style={{ background: 'rgba(255,255,255,0.15)', padding: '1rem', borderRadius: '0.5rem' }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#38a169' }}>$416.67</div>
-                        <div style={{ fontSize: '0.85rem', opacity: 0.85 }}>Creator/Worker keeps<br/><strong>83.3%</strong></div>
-                      </div>
-                      <div style={{ background: 'rgba(255,255,255,0.15)', padding: '1rem', borderRadius: '0.5rem' }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#8b5cf6' }}>$83.33</div>
-                        <div style={{ fontSize: '0.85rem', opacity: 0.85 }}>Platform margin<br/><strong>16.7%</strong></div>
-                      </div>
-                      <div style={{ background: 'rgba(255,255,255,0.15)', padding: '1rem', borderRadius: '0.5rem' }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fbbf24' }}>$0</div>
-                        <div style={{ fontSize: '0.85rem', opacity: 0.85 }}>Hidden fees<br/><strong>None</strong></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Key points - clickable - stretched to fill */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', flex: 1 }}>
-                    <div 
-                      onClick={(e) => { e.stopPropagation(); setMainBackExpanded('wholesale'); }}
-                      style={{ background: 'rgba(139, 92, 246, 0.1)', padding: '1rem', borderRadius: '0.75rem', cursor: 'pointer', transition: 'transform 0.2s', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-                      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                  {/* Single column of expandable buttons - styled like current back buttons */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1 }}>
+                    {/* Cost + 20% - FIRST and OPEN by default style - DARKER BACKGROUND */}
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setMainBackExpanded('costplus'); }}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(16, 80, 52, 0.7)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(22, 101, 65, 0.45)'; }}
+                      style={{ 
+                        background: 'rgba(22, 101, 65, 0.45)', 
+                        border: 'none',
+                        borderRadius: '0.75rem', 
+                        padding: '1rem 1.25rem',
+                        cursor: 'pointer', 
+                        transition: 'all 0.2s', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start',
+                        textAlign: 'left',
+                        color: '#faf5eb'
+                      }}
                     >
-                      <strong style={{ fontSize: '1rem' }}>📦 Wholesale Everything →</strong>
-                      <p style={{ margin: '0.35rem 0 0 0', opacity: 0.85, fontSize: '0.85rem' }}>
+                      <strong style={{ fontSize: '1.1rem', textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)' }}>🛒 Cost + 20%</strong>
+                      <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.9rem', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
+                        Every product and service priced transparently. No hidden fees.
+                      </p>
+                    </button>
+
+                    {/* Wholesale Everything - DARKER BACKGROUND */}
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setMainBackExpanded('wholesale'); }}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
+                      style={{ 
+                        background: 'rgba(88, 60, 180, 0.4)', 
+                        border: 'none',
+                        borderRadius: '0.75rem', 
+                        padding: '1rem 1.25rem',
+                        cursor: 'pointer', 
+                        transition: 'all 0.2s', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start',
+                        textAlign: 'left',
+                        color: '#faf5eb'
+                      }}
+                    >
+                      <strong style={{ fontSize: '1.1rem', textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)' }}>📦 Wholesale Everything</strong>
+                      <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.9rem', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
                         We buy at cost, add exactly 20%. No markups.
                       </p>
-                    </div>
-                    <div 
+                    </button>
+
+                    {/* Permanent Cap - DARKER BACKGROUND */}
+                    <button 
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('permanent'); }}
-                      style={{ background: 'rgba(139, 92, 246, 0.1)', padding: '1rem', borderRadius: '0.75rem', cursor: 'pointer', transition: 'transform 0.2s', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-                      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
+                      style={{ 
+                        background: 'rgba(88, 60, 180, 0.4)', 
+                        border: 'none',
+                        borderRadius: '0.75rem', 
+                        padding: '1rem 1.25rem',
+                        cursor: 'pointer', 
+                        transition: 'all 0.2s', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start',
+                        textAlign: 'left',
+                        color: '#faf5eb'
+                      }}
                     >
-                      <strong style={{ fontSize: '1rem' }}>🔒 Permanent Cap →</strong>
-                      <p style={{ margin: '0.35rem 0 0 0', opacity: 0.85, fontSize: '0.85rem' }}>
+                      <strong style={{ fontSize: '1.1rem', textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)' }}>🔒 Permanent Cap</strong>
+                      <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.9rem', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
                         20% margin is hardcoded. Can never increase.
                       </p>
-                    </div>
-                    <div 
+                    </button>
+
+                    {/* Member-Owned - DARKER BACKGROUND */}
+                    <button 
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('memberowned'); }}
-                      style={{ background: 'rgba(139, 92, 246, 0.1)', padding: '1rem', borderRadius: '0.75rem', cursor: 'pointer', transition: 'transform 0.2s', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-                      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
+                      style={{ 
+                        background: 'rgba(88, 60, 180, 0.4)', 
+                        border: 'none',
+                        borderRadius: '0.75rem', 
+                        padding: '1rem 1.25rem',
+                        cursor: 'pointer', 
+                        transition: 'all 0.2s', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start',
+                        textAlign: 'left',
+                        color: '#faf5eb'
+                      }}
                     >
-                      <strong style={{ fontSize: '1rem' }}>🤝 Member-Owned →</strong>
-                      <p style={{ margin: '0.35rem 0 0 0', opacity: 0.85, fontSize: '0.85rem' }}>
+                      <strong style={{ fontSize: '1.1rem', textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)' }}>🤝 Member-Owned</strong>
+                      <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.9rem', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
                         You're not a customer. You're an owner.
                       </p>
-                    </div>
-                    <div 
+                    </button>
+
+                    {/* Funds 16 Initiatives - DARKER BACKGROUND */}
+                    <button 
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('initiatives'); }}
-                      style={{ background: 'rgba(139, 92, 246, 0.1)', padding: '1rem', borderRadius: '0.75rem', cursor: 'pointer', transition: 'transform 0.2s', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-                      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
+                      style={{ 
+                        background: 'rgba(88, 60, 180, 0.4)', 
+                        border: 'none',
+                        borderRadius: '0.75rem', 
+                        padding: '1rem 1.25rem',
+                        cursor: 'pointer', 
+                        transition: 'all 0.2s', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start',
+                        textAlign: 'left',
+                        color: '#faf5eb'
+                      }}
                     >
-                      <strong style={{ fontSize: '1rem' }}>🌿 Funds 16 Initiatives →</strong>
-                      <p style={{ margin: '0.35rem 0 0 0', opacity: 0.85, fontSize: '0.85rem' }}>
+                      <strong style={{ fontSize: '1.1rem', textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)' }}>🌿 Funds 16 Initiatives</strong>
+                      <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.9rem', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
                         20% funds charitable infrastructure.
                       </p>
-                    </div>
+                    </button>
                   </div>
 
                   <p style={{ opacity: 0.5, fontSize: '0.7rem', marginTop: '1rem', textAlign: 'center' }}>
@@ -2412,524 +3023,12 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         </div>
         {/* END MAIN CARD */}
 
-        {/* EXPLAINER FLIPCARD — Worker-Owned explanation on front, Not Charity initiatives on back */}
-        <div 
-          className={`explainer-flip ${explainerFlipped ? 'flipped' : ''}`}
-          onClick={() => { if (!expandedInitiative) setExplainerFlipped(!explainerFlipped); }}
-        >
-          <div className="explainer-inner">
-            {/* FRONT - DARK background with white text - Worker-Owned explanation ONLY */}
-            <div className="explainer-front" style={isProfessionalTheme ? { 
-              background: '#0a1628', 
-              color: '#faf5eb',
-              padding: '2rem',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            } : undefined}>
-              <h3 style={{ fontSize: '1.6rem', marginBottom: '1.25rem', textAlign: 'center', color: '#faf5eb' }}>
-                Worker-Owned. Member-Governed.
-              </h3>
-              <p style={{ fontSize: '1.05rem', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9, marginBottom: '0.4rem' }}>
-                You're an Owner.
-              </p>
-              <p style={{ fontSize: '1.05rem', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9, marginBottom: '0.4rem' }}>
-                Your ideas/services/products Preorder-Funded and Made by Members.
-              </p>
-              <p style={{ fontSize: '1.05rem', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9, marginBottom: '0.4rem' }}>
-                The 20% margin funds 16 charitable initiatives for Everyone.
-              </p>
-              <p style={{ fontSize: '1.05rem', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9 }}>
-                The People doing the Work make the Decisions and get the Benefits.
-              </p>
-              <span className="hand" style={{ color: '#faf5eb' }}>👉</span>
-            </div>
-            {/* BACK - WHITE background with black text header and 16 initiatives */}
-            <div className="explainer-back" style={isProfessionalTheme ? { 
-              background: '#faf5eb', 
-              color: '#0a1628',
-              padding: '1.5rem', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'center' 
-            } : { padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              {expandedInitiative ? (() => {
-                const notCharityInitiatives = [
-                  'lets-make-dinner', 'lets-get-groceries', 'lets-go-shopping', 'household-concierge',
-                  'family-table', 'lifeline-medications', 'msa', 'defense-claws', 'rally-group', 'vsl',
-                  'lets-make-bread', 'harper-guild', 'jukebox', 'didasko', 'international', 'brass-tacks'
-                ];
-                const currentIndex = notCharityInitiatives.indexOf(expandedInitiative);
-                const nextInitiative = currentIndex < notCharityInitiatives.length - 1 
-                  ? notCharityInitiatives[currentIndex + 1] 
-                  : null;
-                
-                return (
-                /* Expanded Initiative Detail View with Chevron Navigation */
-                <div 
-                  style={{ display: 'flex', height: '100%', cursor: 'pointer' }}
-                  onClick={(e) => { e.stopPropagation(); setExpandedInitiative(null); }}
-                >
-                  {/* Left Chevron - Back to Overview */}
-                  <div 
-                    onClick={(e) => { e.stopPropagation(); setExpandedInitiative(null); }}
-                    style={{
-                      width: '40px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      background: 'rgba(56, 161, 105, 0.15)',
-                      borderRadius: '0.5rem 0 0 0.5rem',
-                      transition: 'background 0.2s',
-                      flexShrink: 0,
-                      marginLeft: '-1.5rem',
-                      marginTop: '-1.5rem',
-                      marginBottom: '-1.5rem'
-                    }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.35)'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.15)'; }}
-                    title="Back to Overview"
-                  >
-                    <span style={{ fontSize: '1.5rem', color: '#38a169' }}>‹</span>
-                  </div>
+        {/* EXPLAINER FLIPCARD — REMOVED IN V2 (consolidated into Choose Card back) */}
 
-                  {/* Content Area */}
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '0 0.75rem' }}>
-                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', justifyContent: 'center' }}>
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); navigate(`/${expandedInitiative}`); }}
-                        style={{ 
-                          background: '#38a169', 
-                          color: '#faf5eb',
-                          border: 'none', 
-                          cursor: 'pointer',
-                          fontSize: '0.85rem',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '0.4rem',
-                          fontWeight: 600
-                        }}
-                      >
-                        Go to {expandedInitiative === 'lets-make-dinner' ? "Let's Make Dinner" :
-                               expandedInitiative === 'lets-get-groceries' ? "Let's Get Groceries" :
-                               expandedInitiative === 'lets-go-shopping' ? "Let's Go Shopping" :
-                               expandedInitiative === 'household-concierge' ? 'Household Concierge' :
-                               expandedInitiative === 'family-table' ? 'Family Table' :
-                               expandedInitiative === 'lifeline-medications' ? 'LifeLine Meds' :
-                               expandedInitiative === 'msa' ? 'MSA' :
-                               expandedInitiative === 'defense-claws' ? 'Defense Klaus' :
-                               expandedInitiative === 'rally-group' ? 'Rally Group' :
-                               expandedInitiative === 'vsl' ? 'VSL' :
-                               expandedInitiative === 'lets-make-bread' ? "Let's Make Bread" :
-                               expandedInitiative === 'harper-guild' ? 'Harper Guild' :
-                               expandedInitiative === 'jukebox' ? 'JukeBox' :
-                               expandedInitiative === 'didasko' ? 'Didasko' :
-                               expandedInitiative === 'international' ? 'International' :
-                               expandedInitiative === 'brass-tacks' ? 'Brass Tacks' : expandedInitiative} →
-                      </button>
-                    </div>
-                  {expandedInitiative === 'lets-make-dinner' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🍽️ Let's Make Dinner</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Community-powered meal sharing. Local cooks offer home-prepared meals at Cost + 20%. 
-                        Order from neighbors, support local talent, eat better for less.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Cooks keep 83.3% of every sale. Reputation builds through verified reviews. 
-                        Crown: Maneet Chauhan.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'lets-get-groceries' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🛒 Let's Get Groceries</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Group buying power for groceries. Members pool orders for bulk discounts from 
-                        distributors and local farms. Wholesale pricing at Cost + 20%.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Save 20-40% on groceries through collective purchasing. 
-                        Delivery or pickup options available.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'lets-go-shopping' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🛍️ Let's Go Shopping</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Consumer goods at wholesale prices. Household items, electronics, clothing — 
-                        all at Cost + 20%. No retail markups.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Crown: Mary Beth Laughton. Pool demand for better manufacturer pricing.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'household-concierge' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🏠 Household Concierge</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Home services at fair rates. Cleaning, repairs, maintenance, yard work — 
-                        workers keep 83.3%, you pay Cost + 20%.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Verified providers with reputation tracking. Background checks included.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'family-table' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>👨‍👩‍👧‍👦 Family Table</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Family coordination and care management. Shared calendars, resource pooling, 
-                        elder care coordination, childcare networks.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Connect family members across households. Manage shared responsibilities together.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'lifeline-medications' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>💊 LifeLine Medications</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Prescription medications at manufacturer pricing plus 20%. 
-                        Cut out pharmacy middlemen. Save 40-80% on many prescriptions.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Negotiated directly with manufacturers and licensed pharmacies.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'msa' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🏥 MSA (Medical Savings)</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Member-funded medical savings accounts with group negotiating power. 
-                        Pool resources for better healthcare access.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Mutual aid for medical expenses. Transparent pricing on procedures.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'defense-claws' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🛡️ Defense Klaus</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Legal defense and advocacy for members. "For Someone You Love." 
-                        Pooled resources for legal representation and protection.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Pre-paid legal services, document preparation, and advocacy coordination.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'rally-group' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>📢 Rally Group</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Community organizing and advocacy. Coordinate campaigns, 
-                        amplify voices, build collective power.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Crown: Kimberly A. Williams. Tools for grassroots organizing.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'vsl' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>💳 VSL (Value Storage Layer)</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Member-owned financial services. Savings, loans, and payments 
-                        at Cost + 20% — not bank profit margins.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Crown: Cathie Mahon. Three-gear currency: Joules, Marks, Credits.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'lets-make-bread' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🍞 Let's Make Bread</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Microloans and community lending. Members fund each other's projects 
-                        at fair rates. No predatory interest.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Peer-to-peer lending with reputation-based trust. Start businesses, fund projects.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'harper-guild' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>📖 Harper Guild</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Publishing and content creation. Authors, journalists, and creators 
-                        keep 83.3% of sales. No publisher middlemen.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        IP protection, distribution, and royalty tracking built in.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'jukebox' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🎵 JukeBox</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Music and audio at fair rates. Artists keep 83.3% of streams and sales. 
-                        No exploitative streaming deals.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Direct artist-to-listener connection. Fair compensation for creators.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'didasko' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🎓 Didasko</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Education and tutoring. Teachers and tutors keep 83.3%. 
-                        Students pay Cost + 20%. Quality education, fairly priced.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Course creation, tutoring marketplace, credential verification.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'international' && (
-                    <div style={{ flex: 1, color: '#0a1628' }}>
-                      <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🌍 International</h4>
-                      <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                        Cross-border cooperation and remittances. Send money home at Cost + 20% — 
-                        not Western Union's 10% fees.
-                      </p>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                        Global member network. Fair exchange rates. Community support across borders.
-                      </p>
-                    </div>
-                  )}
-                  {expandedInitiative === 'brass-tacks' && (
-                      <div style={{ flex: 1, color: '#0a1628' }}>
-                        <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>🔩 Brass Tacks</h4>
-                        <p style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '0.75rem' }}>
-                          Skilled trades and professional services. Plumbers, electricians, accountants — 
-                          keep 83.3% while clients pay fair rates.
-                        </p>
-                        <p style={{ fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.85 }}>
-                          Verified credentials. Reputation tracking. No platform exploitation.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Right Chevron - Next Initiative or back to overview */}
-                  <div 
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      if (nextInitiative) {
-                        setExpandedInitiative(nextInitiative);
-                      } else {
-                        setExpandedInitiative(null);
-                      }
-                    }}
-                    style={{
-                      width: '40px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      background: 'rgba(56, 161, 105, 0.15)',
-                      borderRadius: '0 0.5rem 0.5rem 0',
-                      transition: 'background 0.2s',
-                      flexShrink: 0,
-                      marginRight: '-1.5rem',
-                      marginTop: '-1.5rem',
-                      marginBottom: '-1.5rem'
-                    }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.35)'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(56, 161, 105, 0.15)'; }}
-                    title={nextInitiative ? "Next Initiative" : "Back to Overview"}
-                  >
-                    <span style={{ fontSize: '1.5rem', color: '#38a169' }}>›</span>
-                  </div>
-                </div>
-                );
-              })() : (
-                /* Two Dropdowns: Initiatives and Projects */
-                <>
-                  <h3 style={{ fontSize: '1.3rem', marginBottom: '0.25rem', textAlign: 'center', color: '#0a1628' }}>
-                    <span style={{ fontSize: '1.5rem' }}>🌿</span> Not Charity TO the People
-                  </h3>
-                  <p style={{ fontSize: '1.1rem', textAlign: 'center', marginBottom: '1.25rem', color: '#0a1628' }}>
-                    But Infrastructure BY the People, FOR the People
-                  </p>
-                  
-                  {/* Two Dropdowns Side by Side */}
-                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flex: 1 }}>
-                    {/* INITIATIVES Dropdown */}
-                    <div style={{ minWidth: '200px', display: 'flex', flexDirection: 'column' }}>
-                      <details style={{ 
-                        background: '#0a1628', 
-                        borderRadius: '0.5rem', 
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        position: 'relative'
-                      }}>
-                        <summary 
-                          style={{ 
-                            padding: '0.75rem 1rem', 
-                            color: '#faf5eb', 
-                            fontSize: '1rem', 
-                            fontWeight: 600,
-                            listStyle: 'none',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          INITIATIVES <span style={{ fontSize: '0.8rem' }}>▼</span>
-                        </summary>
-                        <div style={{ 
-                          background: '#1a2744', 
-                          padding: '0.5rem',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.4rem',
-                          maxHeight: '105px',
-                          overflowY: 'auto'
-                        }}>
-                          {[
-                            { key: 'lets-make-dinner', icon: '🍽️', label: "Let's Make Dinner" },
-                            { key: 'lets-get-groceries', icon: '🛒', label: "Let's Get Groceries" },
-                            { key: 'lets-go-shopping', icon: '🛍️', label: "Let's Go Shopping" },
-                            { key: 'household-concierge', icon: '🏠', label: 'Household Concierge' },
-                            { key: 'family-table', icon: '👨‍👩‍👧‍👦', label: 'Family Table' },
-                            { key: 'lifeline-medications', icon: '💊', label: 'LifeLine Medications' },
-                            { key: 'msa', icon: '🏥', label: 'MSA' },
-                            { key: 'defense-claws', icon: '🛡️', label: 'Defense Klaus' },
-                            { key: 'rally-group', icon: '📢', label: 'Rally Group' },
-                            { key: 'vsl', icon: '💳', label: 'VSL' },
-                            { key: 'lets-make-bread', icon: '🍞', label: "Let's Make Bread" },
-                            { key: 'harper-guild', icon: '📖', label: 'Harper Guild' },
-                            { key: 'jukebox', icon: '🎵', label: 'JukeBox' },
-                            { key: 'didasko', icon: '🎓', label: 'Didasko' },
-                            { key: 'international', icon: '🌍', label: 'International' },
-                            { key: 'brass-tacks', icon: '🔩', label: 'Brass Tacks' },
-                          ].map((init) => (
-                            <button 
-                              key={init.key}
-                              style={{ 
-                                padding: '0.5rem 0.75rem', 
-                                fontSize: '0.8rem', 
-                                background: '#2d3748', 
-                                color: '#faf5eb',
-                                transition: 'background 0.2s',
-                                cursor: 'pointer',
-                                border: 'none',
-                                borderRadius: '0.3rem',
-                                textAlign: 'left',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                flexShrink: 0
-                              }} 
-                              onMouseOver={(e) => { e.currentTarget.style.background = '#38a169'; }}
-                              onMouseOut={(e) => { e.currentTarget.style.background = '#2d3748'; }}
-                              onClick={(e) => { e.stopPropagation(); navigate('/coming-soon'); }}
-                            >
-                              <span>{init.icon}</span> {init.label}
-                            </button>
-                          ))}
-                        </div>
-                      </details>
-                    </div>
-                    
-                    {/* PROJECTS Dropdown */}
-                    <div style={{ minWidth: '200px', display: 'flex', flexDirection: 'column' }}>
-                      <details style={{ 
-                        background: '#0a1628', 
-                        borderRadius: '0.5rem', 
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        position: 'relative'
-                      }}>
-                        <summary 
-                          style={{ 
-                            padding: '0.75rem 1rem', 
-                            color: '#faf5eb', 
-                            fontSize: '1rem', 
-                            fontWeight: 600,
-                            listStyle: 'none',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          PROJECTS <span style={{ fontSize: '0.8rem' }}>▼</span>
-                        </summary>
-                        <div style={{ 
-                          background: '#1a2744', 
-                          padding: '0.5rem',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.4rem',
-                          maxHeight: '105px',
-                          overflowY: 'auto'
-                        }}>
-                          {[
-                            { key: 'farmer-warrior', icon: '⚔️', label: 'Farmer/Warrior' },
-                            { key: 'healer-assassin', icon: '🗡️', label: 'Healer/Assassin' },
-                            { key: 'warhorse', icon: '🐴', label: 'WarHorse' },
-                            { key: 'pneumatic-palm', icon: '🌴', label: 'Pneumatic Palm Tree' },
-                            { key: 'hexisle', icon: '⬡', label: 'HexIsle' },
-                            { key: 'water-table', icon: '💧', label: 'Water Table' },
-                          ].map((proj) => (
-                            <button 
-                              key={proj.key}
-                              style={{ 
-                                padding: '0.5rem 0.75rem', 
-                                fontSize: '0.8rem', 
-                                background: '#2d3748', 
-                                color: '#faf5eb',
-                                transition: 'background 0.2s',
-                                cursor: 'pointer',
-                                border: 'none',
-                                borderRadius: '0.3rem',
-                                textAlign: 'left',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                flexShrink: 0
-                              }} 
-                              onMouseOver={(e) => { e.currentTarget.style.background = '#38a169'; }}
-                              onMouseOut={(e) => { e.currentTarget.style.background = '#2d3748'; }}
-                              onClick={(e) => { e.stopPropagation(); navigate('/coming-soon'); }}
-                            >
-                              <span>{proj.icon}</span> {proj.label}
-                            </button>
-                          ))}
-                        </div>
-                      </details>
-                    </div>
-                  </div>
-                  
-                  <p style={{ opacity: 0.5, fontSize: '0.65rem', marginTop: '0.75rem', textAlign: 'center', color: '#0a1628' }}>
-                    tap to flip back · click dropdown to explore
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Three Paths — FLIP CARD (entire section swivels) */}
+        {/* Choose Your Path — FLIP CARD (entire section swivels) */}
         <div 
           className={`paths-section-flip ${pathsSectionFlipped ? 'flipped' : ''}`}
-          onClick={() => setPathsSectionFlipped(!pathsSectionFlipped)}
+          onClick={() => { setPathsSectionFlipped(!pathsSectionFlipped); setExpandedWorldPortal(null); }}
           style={isProfessionalTheme ? {
             background: 'transparent',  /* Background is on front/back faces, not wrapper */
             marginTop: '2rem',
@@ -2937,10 +3036,49 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
           } : { cursor: 'pointer' }}
         >
           <div className="paths-section-inner">
-            {/* FRONT: Choose Your Path with mirrors and 3 path cards */}
+            {/* FRONT: Worker-Owned content + Choose Your Path with mirrors and 3 path cards */}
             <div className="paths-section-front" style={{ position: 'relative' }}>
               {/* Hand icon for flip indication */}
               <span className="hand" style={{ position: 'absolute', bottom: '12px', right: '16px', fontSize: '1.1rem', opacity: 0.35 }}>👉</span>
+              
+              {/* Worker-Owned. Member-Governed. section - moved from old Not Charity card front */}
+              <div style={{ 
+                padding: '2rem 2rem 1.5rem 2rem',
+                textAlign: 'center',
+                marginBottom: '1rem'
+              }}>
+                <h3 className="worker-owned-heading" style={{ 
+                  fontSize: 'clamp(1.3rem, 4vw, 1.8rem)', 
+                  marginBottom: '1.25rem', 
+                  textAlign: 'center', 
+                  color: '#faf5eb',
+                  fontWeight: 700
+                }}>
+                  <span style={{ display: 'inline' }}>Worker-Owned.</span>
+                  <span style={{ display: 'inline' }}> Member-Governed.</span>
+                </h3>
+                <p style={{ fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9, marginBottom: '0.4rem' }}>
+                  You're an Owner.
+                </p>
+                <p style={{ fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9, marginBottom: '0.4rem' }}>
+                  Your ideas/services/products Preorder-Funded and Made by Members.
+                </p>
+                <p style={{ fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9, marginBottom: '0.4rem' }}>
+                  The 20% margin funds 16 charitable initiatives for Everyone.
+                </p>
+                <p style={{ fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)', lineHeight: 1.6, textAlign: 'center', color: '#faf5eb', opacity: 0.9 }}>
+                  The People doing the Work make the Decisions and get the Benefits.
+                </p>
+              </div>
+
+              {/* Divider line */}
+              <div style={{ 
+                width: '60%', 
+                height: '1px', 
+                background: 'rgba(250, 245, 235, 0.2)', 
+                margin: '0 auto 1.5rem auto' 
+              }} />
+
               <div className="trunk-info" style={{ background: 'transparent', padding: 0 }}>
                 <div style={{ 
                   textAlign: 'center', 
@@ -2949,7 +3087,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   margin: '0 auto 2rem auto'
                 }}>
                   <h2 style={{ 
-                    fontSize: '2.5rem', 
+                    fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', 
                     fontWeight: 700, 
                     margin: 0,
                     display: 'flex',
@@ -3030,14 +3168,14 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       <div className="path-front">
                         <h3>Get a Job</h3>
                         <p>Real work. Fair pay. You keep 83.3%.</p>
-                        <button className="path-price-btn" onClick={(e) => { e.stopPropagation(); navigate('/discover/work'); }}>16 Initiatives Hiring →</button>
+                        <button className="path-price-btn" onClick={(e) => { e.stopPropagation(); navigate('/get-a-job'); }}>The Salt Mines →</button>
                         <span className="hand">👉</span>
                       </div>
                       <div className="path-back">
                         <h3>Get a Job</h3>
-                        <p>Browse opportunities across 16 initiatives — meal delivery, safety services, manufacturing, and more. No middleman taking half. You keep 83.3% of every dollar charged.</p>
-                        <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/discover/work'); }}>
-                          Browse Opportunities
+                        <p>Browse bounties across all 16 initiatives AND MEMBER'S PROJECTS. No middleman taking half. You keep 83.3% of every dollar charged. 500-2000 Credits = $500-$2000.</p>
+                        <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/get-a-job'); }}>
+                          Browse Bounties
                         </button>
                         <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(0); }}>← flip back</span>
                       </div>
@@ -3050,13 +3188,13 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       <div className="path-front">
                         <h3>Build a Business</h3>
                         <p>Same terms as the Founder. Your ship, Captain — your rules.</p>
-                        <button className="path-price-btn" onClick={(e) => { e.stopPropagation(); navigate('/auth'); }}>$5 to Start →</button>
+                        <button className="path-price-btn" onClick={(e) => { e.stopPropagation(); navigate('/build-a-business'); }}>$5 to Start →</button>
                         <span className="hand">👉</span>
                       </div>
                       <div className="path-back">
                         <h3>Build a Business</h3>
-                        <p>Launch your Keep for $5. Sell products and services, keep <strong>83.3%</strong>. Same deal as the Founder — no special treatment, no executive privilege. Your ship, Captain — your rules.</p>
-                        <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/discover/build'); }}>
+                        <p>Launch your Keep for $5. 6 production levels, volume discounts, early backer Joules. Same deal as the Founder — no special treatment. Your ship, Captain — your rules.</p>
+                        <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/build-a-business'); }}>
                           Start Building
                         </button>
                         <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(1); }}>← flip back</span>
@@ -3070,13 +3208,13 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       <div className="path-front">
                         <h3>Plant Seeds</h3>
                         <p>Support projects early. Gain more influence.</p>
-                        <button className="path-price-btn" onClick={(e) => { e.stopPropagation(); navigate('/discover/sponsor'); }}>From $25 →</button>
+                        <button className="path-price-btn" onClick={(e) => { e.stopPropagation(); navigate('/plant-seeds'); }}>5x Multiplier →</button>
                         <span className="hand">👉</span>
                       </div>
                       <div className="path-back">
                         <h3>Plant Seeds</h3>
-                        <p>Back projects early and receive <strong>5× the Joules</strong> — more collateral, more governance weight. Or sponsor innovations in our <strong>patent portfolio</strong> starting at $25.</p>
-                        <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/discover/sponsor'); }}>
+                        <p>Back projects early and receive <strong>5× the Joules</strong>. Multipliers stack up to 15x. Fractional IP ownership when you sponsor. Help others = own something real.</p>
+                        <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/plant-seeds'); }}>
                           Start Planting
                         </button>
                         <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(2); }}>← flip back</span>
@@ -3105,101 +3243,320 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               </div>
             </div>
 
-            {/* BACK: Ghost World / Real World portals */}
-            <div className="paths-section-back" onClick={() => setPathsSectionFlipped(false)}>
-              <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.5rem' }}>Two Worlds. One Platform.</h3>
+            {/* BACK: Not Charity header + Two Worlds + stacked Ghost/Real buttons */}
+            <div className="paths-section-back" onClick={() => { if (!expandedWorldPortal) setPathsSectionFlipped(false); }} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '2rem',
+            }}>
+              {/* Not Charity Header - moved from old explainer card */}
+              <h3 style={{ 
+                fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', 
+                marginBottom: '0.25rem', 
+                textAlign: 'center', 
+                color: '#faf5eb',
+                textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+              }}>
+                <span style={{ fontSize: '1.5rem' }}>🌿</span> Not Charity TO the People
+              </h3>
+              <p style={{ 
+                fontSize: 'clamp(1rem, 3vw, 1.15rem)', 
+                textAlign: 'center', 
+                marginBottom: '1.5rem', 
+                color: '#faf5eb',
+                opacity: 0.9,
+                textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+              }}>
+                But Infrastructure BY the People, FOR the People
+              </p>
               
-              <div className="gk-back-cols" style={{ gap: '2rem', padding: '0 1rem', maxWidth: '800px', margin: '0 auto' }}>
-                {/* GHOST WORLD Portal */}
-                <div 
-                  className={`portal-flip ${flippedPaths.has(10) ? 'flipped' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); togglePath(10); }}
-                  style={{ 
-                    background: 'rgba(139, 92, 246, 0.15)', 
-                    borderRadius: '1rem', 
-                    padding: '1.5rem',
-                    border: isProfessionalTheme ? '2px dashed rgba(139, 92, 246, 0.4)' : '1px solid rgba(139, 92, 246, 0.3)',
-                    cursor: 'pointer',
-                    minHeight: '200px'
-                  }}
-                >
-                  <div className="portal-inner">
-                    <div className="portal-front">
-                      <h4 style={{ marginBottom: '0.75rem', fontSize: '1.2rem' }}>👻 Ghost World</h4>
-                      <p style={{ fontSize: '0.9rem', opacity: 0.85, marginBottom: '1rem', lineHeight: 1.5 }}>
-                        Explore freely. No commitment. Test ideas. Hunt Golden Keys.
-                      </p>
-                      <button 
-                        className="gk-option" 
-                        style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', width: '100%', padding: '0.75rem 1rem' }}
+              <h4 style={{ 
+                textAlign: 'center', 
+                marginBottom: '1.25rem', 
+                fontSize: '1.25rem', 
+                color: '#38a169',
+                textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+              }}>
+                Two Worlds. One Platform.
+              </h4>
+              
+              {/* STACKED Ghost/Real World buttons - Ghost on top - with flip-to-expand */}
+              <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '1rem', 
+                width: '100%', 
+                maxWidth: '480px'
+              }}>
+                {expandedWorldPortal === 'ghost' ? (
+                  /* GHOST WORLD Expanded - takes full space */
+                  <div 
+                    onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal(null); }}
+                    style={{ 
+                      background: 'rgba(88, 60, 180, 0.5)', 
+                      borderRadius: '1rem', 
+                      padding: '1.5rem',
+                      border: '2px solid rgba(139, 92, 246, 0.7)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      color: '#faf5eb',
+                      minHeight: '240px',
+                    }}
+                  >
+                    <h4 style={{ 
+                      fontSize: '1.4rem', 
+                      fontWeight: 700, 
+                      margin: 0,
+                      color: '#faf5eb'
+                    }}>
+                      👻 What is Ghost World?
+                    </h4>
+                    <p style={{ 
+                      fontSize: '0.95rem', 
+                      lineHeight: 1.6, 
+                      textAlign: 'center', 
+                      margin: 0,
+                      textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                    }}>
+                      Ghost World lets you explore everything without commitment. Browse initiatives, test ideas, hunt Golden Keys, play and make Beacon Run games for Crow Feathers. When you're ready to participate for real, you become a member for $5/year.
+                    </p>
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal(null); }}
+                        style={{
+                          padding: '0.6rem 1.2rem',
+                          background: 'rgba(255,255,255,0.15)',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: '0.5rem',
+                          color: '#faf5eb',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        ← Back
+                      </button>
+                      <button
                         onClick={(e) => { e.stopPropagation(); navigate('/ghost'); }}
+                        style={{
+                          padding: '0.6rem 1.2rem',
+                          background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                          border: 'none',
+                          borderRadius: '0.5rem',
+                          color: '#fff',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
                       >
-                        Enter Ghost World
-                        <small>Browse everything first</small>
+                        Enter Ghost World →
                       </button>
-                      <span className="hand" style={{ position: 'absolute', bottom: '8px', right: '12px' }}>👉</span>
-                    </div>
-                    <div className="portal-back">
-                      <h4 style={{ marginBottom: '0.5rem' }}>What is Ghost World?</h4>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
-                        Ghost World lets you explore everything without commitment. Browse initiatives, test ideas, hunt Golden Keys. 
-                        When you're ready to participate for real, you become a member for $5/year.
-                      </p>
-                      <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(10); }}>← flip back</span>
                     </div>
                   </div>
-                </div>
-
-                {/* REAL WORLD Portal */}
-                <div 
-                  className={`portal-flip ${flippedPaths.has(11) ? 'flipped' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); togglePath(11); }}
-                  style={{ 
-                    background: 'rgba(52, 211, 153, 0.15)', 
-                    borderRadius: '1rem', 
-                    padding: '1.5rem',
-                    border: isProfessionalTheme ? '2px dashed rgba(52, 211, 153, 0.4)' : '1px solid rgba(52, 211, 153, 0.3)',
-                    cursor: 'pointer',
-                    minHeight: '200px'
-                  }}
-                >
-                  <div className="portal-inner">
-                    <div className="portal-front">
-                      <h4 style={{ marginBottom: '0.75rem', fontSize: '1.2rem' }}>💼 Real World</h4>
-                      <p style={{ fontSize: '0.9rem', opacity: 0.85, marginBottom: '1rem', lineHeight: 1.5 }}>
-                        Get a real job. Build a real business. Plant real seeds.
-                      </p>
-                      <button 
-                        className="gk-option" 
-                        style={{ background: 'linear-gradient(135deg, #34d399, #10b981)', color: '#022c22', width: '100%', padding: '0.75rem 1rem' }}
+                ) : expandedWorldPortal === 'real' ? (
+                  /* REAL WORLD Expanded - takes full space */
+                  <div 
+                    onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal(null); }}
+                    style={{ 
+                      background: 'rgba(16, 120, 90, 0.5)', 
+                      borderRadius: '1rem', 
+                      padding: '1.5rem',
+                      border: '2px solid rgba(52, 211, 153, 0.7)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      color: '#faf5eb',
+                      minHeight: '240px',
+                    }}
+                  >
+                    <h4 style={{ 
+                      fontSize: '1.4rem', 
+                      fontWeight: 700, 
+                      margin: 0,
+                      color: '#faf5eb'
+                    }}>
+                      💼 What is Real World?
+                    </h4>
+                    <p style={{ 
+                      fontSize: '0.95rem', 
+                      lineHeight: 1.6, 
+                      textAlign: 'center', 
+                      margin: 0,
+                      textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                    }}>
+                      Real World is where work happens. Get a job keeping 83.3%. Build a business on your terms and Post Jobs to hire. Plant seeds to back projects early. Same deal as the Founder — no special treatment: But you get to use all the patent I.P. freely - within Liana Banyan.
+                    </p>
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal(null); }}
+                        style={{
+                          padding: '0.6rem 1.2rem',
+                          background: 'rgba(255,255,255,0.15)',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: '0.5rem',
+                          color: '#faf5eb',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                        }}
+                      >
+                        ← Back
+                      </button>
+                      <button
                         onClick={(e) => { e.stopPropagation(); navigate('/portal'); }}
+                        style={{
+                          padding: '0.6rem 1.2rem',
+                          background: 'linear-gradient(135deg, #34d399, #10b981)',
+                          border: 'none',
+                          borderRadius: '0.5rem',
+                          color: '#022c22',
+                          fontSize: '0.9rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
                       >
-                        Enter Real World
-                        <small>$5/year to participate</small>
+                        Enter Real World →
                       </button>
-                      <span className="hand" style={{ position: 'absolute', bottom: '8px', right: '12px' }}>👉</span>
-                    </div>
-                    <div className="portal-back">
-                      <h4 style={{ marginBottom: '0.5rem' }}>What is Real World?</h4>
-                      <p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
-                        Real World is where work happens. Get a job keeping 83.3%. Build a business on your terms. 
-                        Plant seeds to back projects early. Same deal as the Founder — no special treatment.
-                      </p>
-                      <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(11); }}>← flip back</span>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  /* DEFAULT: Both buttons visible */
+                  <>
+                    {/* GHOST WORLD Button - darker color, text shadow */}
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal('ghost'); }}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.6)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.45)'; }}
+                      style={{ 
+                        background: 'rgba(88, 60, 180, 0.45)', 
+                        borderRadius: '1rem', 
+                        padding: '1.25rem 1.5rem',
+                        border: '2px solid rgba(139, 92, 246, 0.6)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        color: '#faf5eb',
+                      }}
+                    >
+                      <span style={{ 
+                        fontSize: '1.3rem', 
+                        fontWeight: 700,
+                        textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.3)'
+                      }}>
+                        👻 Ghost World
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.9rem', 
+                        textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+                      }}>
+                        Explore freely. No commitment. Test ideas.
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.8rem', 
+                        padding: '0.35rem 0.75rem', 
+                        background: 'rgba(139, 92, 246, 0.5)', 
+                        borderRadius: '0.5rem',
+                        marginTop: '0.25rem',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                      }}>
+                        Browse everything first
+                      </span>
+                    </button>
+
+                    {/* REAL WORLD Button - darker color, text shadow */}
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal('real'); }}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.background = 'rgba(16, 120, 90, 0.6)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(16, 120, 90, 0.45)'; }}
+                      style={{ 
+                        background: 'rgba(16, 120, 90, 0.45)', 
+                        borderRadius: '1rem', 
+                        padding: '1.25rem 1.5rem',
+                        border: '2px solid rgba(52, 211, 153, 0.6)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        color: '#faf5eb',
+                      }}
+                    >
+                      <span style={{ 
+                        fontSize: '1.3rem', 
+                        fontWeight: 700,
+                        textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.3)'
+                      }}>
+                        💼 Real World
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.9rem', 
+                        textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+                      }}>
+                        Get a real job. Build a real business. Plant real seeds.
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.8rem', 
+                        padding: '0.35rem 0.75rem', 
+                        background: 'rgba(52, 211, 153, 0.5)', 
+                        borderRadius: '0.5rem',
+                        marginTop: '0.25rem',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                      }}>
+                        $5/year to participate
+                      </span>
+                    </button>
+                  </>
+                )}
               </div>
 
               <p style={{ opacity: 0.5, fontSize: '0.7rem', marginTop: '1.5rem', textAlign: 'center' }}>
-                tap anywhere to flip back to paths
+                {expandedWorldPortal ? 'tap anywhere to go back' : 'tap anywhere to flip back to paths'}
               </p>
             </div>
           </div>
         </div>
 
-        <footer className="landing-footer">
-          <p>© 2026 Liana Banyan Corporation</p>
+        <footer className="landing-footer" style={{
+          textAlign: 'center',
+          padding: '2rem 1rem',
+          marginTop: '2rem',
+          borderTop: '1px solid rgba(250, 245, 235, 0.1)',
+          color: '#a0aec0',
+          fontSize: '0.85rem'
+        }}>
+          <p style={{ margin: 0 }}>
+            © 2026 Liana Banyan Corporation
+            <span style={{ margin: '0 0.75rem', opacity: 0.5 }}>|</span>
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); setWispActive(true); }}
+              style={{
+                color: '#38a169',
+                textDecoration: 'none',
+                cursor: 'pointer',
+                transition: 'opacity 0.2s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+              onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+            >
+              Walkthrough
+            </a>
+            <span style={{ margin: '0 0.75rem', opacity: 0.5 }}>|</span>
+            <a href="/terms" style={{ color: '#a0aec0', textDecoration: 'none', transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.7'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>Terms</a>
+            <span style={{ margin: '0 0.5rem', opacity: 0.3 }}>·</span>
+            <a href="/privacy" style={{ color: '#a0aec0', textDecoration: 'none', transition: 'opacity 0.2s' }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.7'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>Privacy</a>
+          </p>
         </footer>
       </div>
     </div>
@@ -3240,7 +3597,7 @@ function AuthenticatedDiscoveryView({
       </div>
 
       {/* Corner Toggles */}
-      <button className="ghost-toggle" onClick={() => navigate('/the-helm')}>
+      <button className="ghost-toggle" onClick={() => levelGatedNavigate('/the-helm')}>
         🧭 The Helm
       </button>
       <button className="mirror-toggle" onClick={() => navigate('/dashboard')} title="Full Dashboard">
@@ -3292,7 +3649,7 @@ function AuthenticatedDiscoveryView({
         {/* Quick Actions — Just 2 */}
         <div className="trunk-info">
           <div style={{ textAlign: 'center' }}>
-            <button className="btn" style={{ marginRight: '0.75rem' }} onClick={() => navigate('/the-helm')}>
+            <button className="btn" style={{ marginRight: '0.75rem' }} onClick={() => levelGatedNavigate('/the-helm')}>
               Enter The Helm
             </button>
             <button className="btn btn-outline" onClick={() => navigate('/dashboard')}>
@@ -3302,7 +3659,13 @@ function AuthenticatedDiscoveryView({
         </div>
 
         <footer className="landing-footer">
-          <p>© 2026 Liana Banyan Corporation</p>
+          <p>
+            © 2026 Liana Banyan Corporation
+            <span style={{ margin: '0 0.5rem', opacity: 0.3 }}>·</span>
+            <a href="/terms" style={{ color: 'inherit', textDecoration: 'none', opacity: 0.7 }}>Terms</a>
+            <span style={{ margin: '0 0.5rem', opacity: 0.3 }}>·</span>
+            <a href="/privacy" style={{ color: 'inherit', textDecoration: 'none', opacity: 0.7 }}>Privacy</a>
+          </p>
         </footer>
       </div>
     </div>
@@ -3350,9 +3713,10 @@ function ChalkOutlineSlot() {
 
 // ─── Next Discovery Slot (glowing hint - uses DeckCardFrame with special styling) ───
 function NextDiscoverySlot({ navigate }: { navigate: (path: string) => void }) {
+  const levelGatedNavigate = useLevelGatedNavigate();
   return (
     <div 
-      onClick={() => navigate('/the-helm')}
+      onClick={() => levelGatedNavigate('/the-helm')}
       style={{ cursor: 'pointer' }}
     >
       <DeckCardFrame

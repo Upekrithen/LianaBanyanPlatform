@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Download, DollarSign, Users, Award } from "lucide-react";
+import { Download, DollarSign, Tag, FileType } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const POSITION_CATEGORIES = [
@@ -41,7 +41,7 @@ export default function LBAssetLibrary() {
       let query = supabase
         .from("lb_asset_library")
         .select("*")
-        .in("status", ["approved", "active"])
+        .eq("is_public", true)
         .order("created_at", { ascending: false });
 
       if (selectedCategory !== "all") {
@@ -49,7 +49,7 @@ export default function LBAssetLibrary() {
       }
 
       if (searchTerm) {
-        query = query.ilike("asset_name", `%${searchTerm}%`);
+        query = query.ilike("name", `%${searchTerm}%`);
       }
 
       const { data, error } = await query;
@@ -59,8 +59,8 @@ export default function LBAssetLibrary() {
   });
 
   const downloadAssetMutation = useMutation({
-    mutationFn: async ({ assetId, downloadType, fee }: { assetId: string; downloadType: string; fee: number }) => {
-      // First check if user has enough credits (if fee > 0)
+    mutationFn: async ({ assetId, fee }: { assetId: string; fee: number }) => {
+      // Check credits if fee > 0
       if (fee > 0) {
         const { data: credits } = await supabase
           .from("user_credits")
@@ -68,58 +68,37 @@ export default function LBAssetLibrary() {
           .eq("user_id", user?.id)
           .single();
 
-        if (!credits || (credits.total_credits - credits.used_credits) < fee) {
+        if (!credits || ((credits.total_credits ?? 0) - (credits.used_credits ?? 0)) < fee) {
           throw new Error("Insufficient credits");
         }
 
         // Deduct credits
         await supabase
           .from("user_credits")
-          .update({ used_credits: credits.used_credits + fee })
+          .update({ used_credits: (credits.used_credits ?? 0) + fee })
           .eq("user_id", user?.id);
       }
 
-      // Log download for IP tracking
-      const { error: downloadError } = await supabase
-        .from("asset_downloads")
-        .insert({
-          asset_id: assetId,
-          user_id: user?.id,
-          download_type: downloadType,
-          fee_paid: fee
-        });
+      // Increment download count on the asset
+      const { data: asset } = await supabase
+        .from("lb_asset_library")
+        .select("download_count")
+        .eq("id", assetId)
+        .single();
 
-      if (downloadError) throw downloadError;
-
-      // Update asset stats
-      const { error: updateError } = await supabase.rpc(
-        "increment_asset_downloads" as any,
-        { asset_id: assetId, fee_amount: fee }
-      );
-
-      // If function doesn't exist, do manual update
-      if (updateError) {
-        const { data: asset } = await supabase
+      if (asset) {
+        await supabase
           .from("lb_asset_library")
-          .select("total_downloads, total_royalties_earned")
-          .eq("id", assetId)
-          .single();
-
-        if (asset) {
-          await supabase
-            .from("lb_asset_library")
-            .update({
-              total_downloads: asset.total_downloads + 1,
-              total_royalties_earned: asset.total_royalties_earned + fee
-            })
-            .eq("id", assetId);
-        }
+          .update({
+            download_count: (asset.download_count ?? 0) + 1
+          })
+          .eq("id", assetId);
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["lb-asset-library"] });
       queryClient.invalidateQueries({ queryKey: ["user-credits"] });
-      toast({ title: "Asset downloaded! IP transaction logged." });
+      toast({ title: "Asset downloaded! Transaction logged." });
     },
     onError: (error: any) => {
       toast({
@@ -145,8 +124,10 @@ export default function LBAssetLibrary() {
   });
 
   const availableCredits = userCredits
-    ? userCredits.total_credits - userCredits.used_credits
+    ? (userCredits.total_credits ?? 0) - (userCredits.used_credits ?? 0)
     : 0;
+
+  const isFree = (cost: number | null) => !cost || cost === 0;
 
   return (
     <div className="container mx-auto p-8 space-y-6">
@@ -184,72 +165,71 @@ export default function LBAssetLibrary() {
         <TabsContent value={selectedCategory}>
           {isLoading ? (
             <div>Loading assets...</div>
+          ) : assets?.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              No assets found{selectedCategory !== "all" ? " in this category" : ""}.
+            </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {assets?.map((asset: any) => (
                 <Card key={asset.id}>
-                  {asset.thumbnail_url && (
-                    <div className="aspect-video bg-muted relative">
-                      <img
-                        src={asset.thumbnail_url}
-                        alt={asset.asset_name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
                   <CardHeader>
-                    <CardTitle>{asset.asset_name}</CardTitle>
-                    <CardDescription>by {asset.creator_name || "Anonymous"}</CardDescription>
+                    <CardTitle className="text-lg">{asset.name}</CardTitle>
+                    {asset.file_type && (
+                      <CardDescription className="flex items-center gap-1">
+                        <FileType className="w-3 h-3" />
+                        {asset.file_type.toUpperCase()}
+                        {asset.category && ` \u2022 ${asset.category}`}
+                      </CardDescription>
+                    )}
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm">{asset.description}</p>
+                    {asset.description && (
+                      <p className="text-sm text-muted-foreground">{asset.description}</p>
+                    )}
+
+                    {asset.tags && asset.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {asset.tags.slice(0, 5).map((tag: string) => (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            <Tag className="w-2 h-2 mr-1" />
+                            {tag}
+                          </Badge>
+                        ))}
+                        {asset.tags.length > 5 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{asset.tags.length - 5} more
+                          </Badge>
+                        )}
+                      </div>
+                    )}
 
                     <div className="flex items-center gap-4 text-sm">
                       <span className="flex items-center gap-1">
                         <Download className="w-4 h-4" />
-                        {asset.total_downloads}
+                        {asset.download_count ?? 0}
                       </span>
                       <span className="flex items-center gap-1">
                         <DollarSign className="w-4 h-4" />
-                        {asset.download_fee_credits} credits
+                        {isFree(asset.download_cost)
+                          ? "Free"
+                          : `${asset.download_cost} credits`}
                       </span>
-                      {asset.requires_prototyping && (
-                        <Badge variant="secondary">
-                          <Users className="w-3 h-3 mr-1" />
-                          Prototyping: {asset.prototype_slots_filled}/{asset.prototype_slots_total}
-                        </Badge>
-                      )}
                     </div>
 
-                    {asset.is_free_for_personal && (
-                      <Badge variant="outline" className="w-full justify-center">
-                        <Award className="w-3 h-3 mr-1" />
-                        Free for Personal Use (LB Members)
-                      </Badge>
-                    )}
-
-                    <div className="flex gap-2">
-                      <Button
-                        className="flex-1"
-                        onClick={() => downloadAssetMutation.mutate({
-                          assetId: asset.id,
-                          downloadType: "personal_use",
-                          fee: asset.is_free_for_personal ? 0 : asset.download_fee_credits
-                        })}
-                        disabled={!user || (asset.download_fee_credits > availableCredits && !asset.is_free_for_personal)}
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        {asset.is_free_for_personal ? "Download Free" : `Download (${asset.download_fee_credits}c)`}
-                      </Button>
-                      {asset.requires_prototyping && asset.prototype_slots_filled < asset.prototype_slots_total && (
-                        <Button
-                          variant="outline"
-                          onClick={() => window.location.href = `/prototyping?asset=${asset.id}`}
-                        >
-                          Prototype
-                        </Button>
-                      )}
-                    </div>
+                    <Button
+                      className="w-full"
+                      onClick={() => downloadAssetMutation.mutate({
+                        assetId: asset.id,
+                        fee: asset.download_cost ?? 0
+                      })}
+                      disabled={!user || (!isFree(asset.download_cost) && (asset.download_cost ?? 0) > availableCredits)}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      {isFree(asset.download_cost)
+                        ? "Download Free"
+                        : `Download (${asset.download_cost}c)`}
+                    </Button>
                   </CardContent>
                 </Card>
               ))}

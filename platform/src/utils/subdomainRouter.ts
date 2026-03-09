@@ -8,8 +8,21 @@ export const getSubdomainProject = async (): Promise<string | null> => {
     return null;
   }
   
-  // Skip lovable preview domains
+  // Skip Lovable preview domains (legacy — platform now deploys via Firebase)
   if (hostname.includes('lovable.app')) {
+    return null;
+  }
+
+  // Skip Firebase hosting domains — these are our own sites, not project subdomains
+  if (hostname.includes('.web.app') || hostname.includes('.firebaseapp.com')) {
+    return null;
+  }
+
+  // Skip our own primary domains — these load portals, not projects
+  if (hostname === 'lianabanyan.com' || hostname === 'www.lianabanyan.com' ||
+      hostname === 'lianabanyan.biz' || hostname === 'lianabanyan.org' ||
+      hostname === 'lianabanyan.net' || hostname === 'the2ndsecond.com' ||
+      hostname === 'hexisle.com' || hostname === 'therallygroup.org') {
     return null;
   }
 

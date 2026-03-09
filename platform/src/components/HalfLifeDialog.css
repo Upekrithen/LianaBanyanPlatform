@@ -1,0 +1,237 @@
+/* ═══════════════════════════════════════════════════════════════════
+   HALF-LIFE DIALOG
+   "The crow remembers what the ghost forgets."
+═══════════════════════════════════════════════════════════════════ */
+
+.halflife-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: halflife-fade-in 0.5s ease-out;
+}
+
+@keyframes halflife-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.halflife-dialog {
+  background: linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%);
+  border: 2px solid rgba(136, 136, 136, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 
+    0 0 60px rgba(0, 0, 0, 0.5),
+    inset 0 0 40px rgba(0, 0, 0, 0.3);
+  animation: halflife-slide-in 0.5s ease-out;
+}
+
+@keyframes halflife-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.halflife-header {
+  margin-bottom: 1.5rem;
+}
+
+.halflife-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: feather-float 3s ease-in-out infinite;
+}
+
+@keyframes feather-float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+.halflife-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+.halflife-intro {
+  color: #999;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.halflife-intro strong {
+  color: #ff6b6b;
+}
+
+/* ═══ STATS ═══ */
+.halflife-stats {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.halflife-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.halflife-stat-row:first-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.stat-value.previous {
+  color: #666;
+  text-decoration: line-through;
+}
+
+.stat-value.remaining {
+  color: #34d399;
+}
+
+/* ═══ LOSSES ═══ */
+.halflife-losses {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.halflife-losses h4 {
+  margin: 0 0 0.75rem 0;
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.halflife-losses ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.halflife-losses li {
+  padding: 0.3rem 0;
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+/* ═══ ACTIONS ═══ */
+.halflife-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.halflife-btn {
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.halflife-btn.continue {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.halflife-btn.continue:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.halflife-btn.member {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.3);
+}
+
+.halflife-btn.member:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4);
+}
+
+/* ═══ TAGLINE ═══ */
+.halflife-tagline {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* ═══ CROW ═══ */
+.halflife-crow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.halflife-crow span {
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+
+.halflife-crow p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #555;
+  font-style: italic;
+}
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 480px) {
+  .halflife-dialog {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+  
+  .halflife-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .stat-value {
+    font-size: 1.3rem;
+  }
+}

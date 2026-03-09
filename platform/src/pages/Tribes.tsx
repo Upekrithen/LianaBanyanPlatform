@@ -19,49 +19,44 @@ export default function Clans() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedClanId, setSelectedClanId] = useState<string | null>(null);
 
-  // Fetch all clans with member counts
+  // Tribes = small guilds (guild_type='tribe' or similar)
+  // Real table: guilds (no separate clans table)
   const { data: allClans, isLoading: allClansLoading } = useQuery({
-    queryKey: ['clans', searchQuery],
+    queryKey: ['tribes', searchQuery],
     queryFn: async () => {
       let query = supabase
-        .from('clans')
-        .select(`
-          *,
-          clan_members (count),
-          profiles!clans_created_by_fkey (full_name, email)
-        `)
-        .eq('is_active', true);
+        .from('guilds')
+        .select('*')
+        .eq('status', 'active');
 
       if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,custom_name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
+        query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
       }
 
       const { data, error } = await query;
       if (error) throw error;
-      return data;
+      return data || [];
     },
   });
 
-  // Fetch user's clans
+  // Fetch user's guild memberships (tribes are small guilds)
   const { data: myClans, isLoading: myClansLoading } = useQuery({
-    queryKey: ['my-clans', user?.id],
+    queryKey: ['my-tribes', user?.id],
     queryFn: async () => {
       if (!user) return [];
       
+      // Real: guild_members (no clan_members table)
       const { data, error } = await supabase
-        .from('clan_members')
+        .from('guild_members')
         .select(`
           *,
-          clans (
-            *,
-            clan_members (count)
-          )
+          guild:guilds(*)
         `)
         .eq('user_id', user.id)
-        .eq('is_active', true);
+        .eq('status', 'active');
 
       if (error) throw error;
-      return data;
+      return data || [];
     },
     enabled: !!user,
   });
@@ -70,10 +65,16 @@ export default function Clans() {
     if (!user) return;
 
     const { error } = await supabase
-      .from('clan_members')
+      .from('guild_members')
       .insert({
-        clan_id: clanId,
+        guild_id: clanId,
         user_id: user.id,
+        status: 'active',
+        role: 'member',
+        rank: 1,
+        experience_points: 0,
+        projects_completed: 0,
+        mentees_count: 0,
       });
 
     if (error) {

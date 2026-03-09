@@ -61,7 +61,7 @@ function AdminProjectContent() {
     if (!user) return;
 
     const { data: roles } = await supabase
-      .from('user_roles')
+      .from('projects')
       .select('role')
       .eq('user_id', user.id)
       .in('role', ['admin', 'project_owner']);

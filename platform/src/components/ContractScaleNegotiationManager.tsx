@@ -65,7 +65,7 @@ export function ContractScaleNegotiationManager({ projectId }: ContractScaleNego
   const { data: clans } = useQuery({
     queryKey: ["clans"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("clans").select("id, name, display_name");
+      const { data, error } = await supabase.from("guilds").select("id, name, display_name");
       if (error) throw error;
       return data;
     }

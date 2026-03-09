@@ -1,0 +1,18 @@
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- INNOVATION LOG — Hexel Piece Grammar (March 8, 2026)
+-- Innovation #1537
+-- ═══════════════════════════════════════════════════════════════════════════════
+
+INSERT INTO innovation_log (innovation_number, title, description, category, session_tag) VALUES
+(1537, 'Hexel Piece Grammar — Complete Mechanical Taxonomy',
+ 'Formal machine-readable schema for every physical piece in the Hexel system. 27 canonical pieces registered across 16 layers (L0 Swan Neck through L15 Slotted Top). Type system: HexelLayer, PieceSystem (structural, power_transmission, seal, interface, mechanism, signal, terrain, valve, anchor), ManufacturingMethod (7 types), PowerType (7 types). Full HexelPiece interface with dimensional specs, power inputs/outputs, connection topology (above/below/lateral), CAD name cross-references, and patent references. Water Table sub-system (6 components: 3 nested reservoirs X/Y/Z, Water Wheel Escapement, Banyan Tree manifold, Central Column). Character Base sub-system (8 pieces: magnetic shaft, air piston, compliant mechanism grippers, Mana counter, HP counter, button, half-circle arc, figure). Helper functions: getPiecesByLayer, getPiecesBySystem, getHydraulicPowerChain (12-step), getPneumaticChain (6-step), getTrapChain (4-step), validateConnections (adjacency checking). Complete gap analysis: 15 pieces documented in patents but previously missing from code (ChannelLock, HollowLog, NeedleValve, Main Gear, Cradle, Football, Swan Neck, SnapCap, Timing Belt, Clamshell, Hollow Rooster Tooth Air Pistons, Roots, Capwave, Compliant Mechanism Grippers, Flip-Lid/Flip-Axis), 6 pieces described by Founder but not in patents (TurnTable, Sirens, Capshaft, PGear height-activated magnetic triggers, Timer Belt multi-player triggers, Watering Plants). All now formally registered. Derived from exhaustive search of 11 primary source documents spanning 2+ years.',
+ 'Architecture/Physical', 'Session 7E')
+
+ON CONFLICT (innovation_number) DO NOTHING;
+
+-- Also update #1536 description to reflect the CAD screenshot additions
+UPDATE innovation_log
+SET description = 'Complete CAD-to-code registry mapping Fusion 360 components to Hexel system roles. 47+ identified components across structural, power transmission, seal, interface, mechanism, signal, terrain, valve, and anchor roles. Power transmission chain documented: Adjacent Hexel cavities → RingOfPower (seal) → oneWay (valve) → goldenLotus (toothed ring, inverse hydraulic → rotation) → Helical Gear (24R@30 m=2.15) → rotor12 → ouralis15 (wave driver) → BTHU_WATERFALL (sea level output). Power is REPURPOSABLE: same hydraulic energy can drive monster mechanisms, siege engines, drawbridges, or any custom mechanic instead of waves. CAD component families: checkIt05 (v112 complete assembly), WORKINGairPump (v19 pump assembly), FlyingButtress (v40 Slotted Top), threeSisters05 (rotor/ouralis/snapCap/sawtooth/goldenLotus). Additional components from Founder CAD screenshots: lockedDown v1 (Tarabithia, GreenWall, GoldenLotus11 v11, stalagTites=Rooster Teeth), checkIt05 v21 (UnderworldRoof, BrandingIron, hollowStumpFitSlot, LOOM, barrierReef, wall), threeSisters05 v82 (channelLock, Sawtooth60, 42Library_42timerBelt=Timing Belt, BTHU_SmokeShow, BTHU_lotusd, BTHU_disc, roundabout, insideBottomFromSixShooters, yellowPetal, chandelier, orangeBase, triPod). Canonical candidate tracking: currently 27 candidates confirmed across 16 layers.'
+WHERE innovation_number = 1536;
+
+COMMENT ON TABLE public.innovation_log IS 'Complete verified innovation registry. Contains 1,537 innovations. Sources: Original Behemoth (1-53), Bags 5-10, BATCH files, filings, Feb-Mar 2026 sessions. RANGE: #1-#1537. Next: #1538.';

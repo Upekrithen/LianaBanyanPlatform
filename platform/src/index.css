@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Chalk Outline Drawing Animation ─── */
+@keyframes chalkDraw {
+  0% { clip-path: inset(0 100% 100% 0); border-color: rgba(255,255,255,0); }
+  25% { clip-path: inset(0 0 100% 0); border-color: rgba(255,255,255,0.15); }
+  50% { clip-path: inset(0 0 0 0); border-color: rgba(255,255,255,0.2); }
+  75% { clip-path: inset(0 0 0 0); border-color: rgba(255,255,255,0.25); }
+  100% { clip-path: inset(0 0 0 0); border-color: rgba(255,255,255,0.3); box-shadow: 0 0 8px rgba(255,255,255,0.1); }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
@@ -395,4 +404,95 @@ All colors MUST be HSL.
 /* Touch manipulation for better tap response */
 .touch-manipulation {
   touch-action: manipulation;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   FLIPCARD 3D EFFECTS
+   Used across marketplace, projects, and cue cards
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Smooth flip animation */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner,
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Touch devices: tap to flip instead of hover */
+@media (hover: none) {
+  .flip-card:hover .flip-card-inner {
+    transform: none;
+  }
+  
+  .flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+/* Chalk outline style for cards */
+.chalk-outline {
+  background: rgba(0, 0, 0, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+}
+
+.chalk-outline-primary {
+  border-color: hsl(var(--primary) / 0.4);
+  background: hsl(var(--primary) / 0.05);
+}
+
+/* "Add Your Own" card special styling */
+.add-your-own-card {
+  border: 2px dashed hsl(var(--primary) / 0.5);
+  background: hsl(var(--primary) / 0.05);
+  position: relative;
+}
+
+.add-your-own-card::before {
+  content: "✨";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1.5rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
 }

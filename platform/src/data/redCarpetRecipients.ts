@@ -62,7 +62,7 @@ export interface Recipient {
 const INITIATIVES: Record<string, RecipientInitiative> = {
   CEO: {
     name: "Liana Banyan Corporation",
-    tagline: "The platform that literally cannot enshittify",
+    tagline: "Member-owned. Community-governed. Cost + 20% locked forever.",
     description:
       "A cooperative commerce platform where creators keep 83.3% of every transaction, economics are locked by constitutional DNA, and the CEO role is designed as a professional, accountable seat from day one.",
   },
@@ -91,10 +91,10 @@ const INITIATIVES: Record<string, RecipientInitiative> = {
       "Academic resources, tutoring, and curriculum delivered cooperatively. Teachers and content creators keep 83.3%. Knowledge shared, not gatekept.",
   },
   VSL: {
-    name: "VSL (Village Savings & Lending)",
-    tagline: "Microfinance meets cooperative economics",
+    name: "VSL (Voucher Short Loans)",
+    tagline: "Community lending meets cooperative economics",
     description:
-      "Peer-to-peer lending circles powered by the three-gear currency system. Community members invest in each other with transparent, non-extractive terms.",
+      "Peer-to-peer lending circles powered by the three-gear currency system. Community members support each other with transparent, non-extractive terms.",
   },
   JUKEBOX: {
     name: "JukeBox",
@@ -121,7 +121,7 @@ const INITIATIVES: Record<string, RecipientInitiative> = {
       "Community treasury and savings infrastructure built on cooperative principles. Financial tools designed for people traditional banking ignores.",
   },
   LIFELINE: {
-    name: "LifeLine Medications",
+    name: "Tatiana Schlossburg Health Accords",
     tagline: "Medicine at cost, not at markup",
     description:
       "Medication access through cooperative buying power. Cost+20% applied to pharmaceuticals means members pay what drugs actually cost, plus a transparent margin.",
@@ -166,7 +166,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Former CEO of Y Combinator, launched Twitch",
     purpose: "CEO of Liana Banyan Corporation",
     whyYou:
-      "You've spent your career finding founders who see what others miss. This platform was built by an engineer over 37 years — not a pitch deck founder. It has 1,200+ documented innovations, 8 utility patents with no prior art, and economics that are constitutionally locked against extraction. The CEO seat was designed for a professional, not the founder's ego. You're the one we built it for.",
+      "You've spent your career finding founders who see what others miss. This platform was built by an engineer over 37 years — not a pitch deck founder. It has 1,200+ documented innovations — 99% utility patents, not design — protected by 210 formal claims across 7 applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art found. Economics constitutionally locked against extraction. The CEO seat was designed for a professional, not the founder's ego. You're the one we built it for.",
     category: "crown",
     categoryLabel: "Crown Leadership",
     crownTitle: "Chief Executive Officer",
@@ -314,9 +314,9 @@ export const RECIPIENTS: Recipient[] = [
     id: "alex-oshmyansky",
     name: "Alex Oshmyansky",
     bio: "Founded Mark Cuban Cost Plus Drugs, slashed medication prices",
-    purpose: "Crown: Apothecary of LifeLine Medications",
+    purpose: "Crown: Apothecary of Tatiana Schlossburg Health Accords",
     whyYou:
-      "You proved medications don't have to cost what they cost. Cost Plus Drugs showed the world what transparent pricing looks like. LifeLine Medications applies that same principle — Cost+20% — through a cooperative platform where the margin is constitutionally locked. You built the proof of concept. We built the permanent infrastructure.",
+      "You proved medications don't have to cost what they cost. Cost Plus Drugs showed the world what transparent pricing looks like. The Tatiana Schlossburg Health Accords apply that same principle — Cost+20% — through a cooperative platform where the margin is constitutionally locked. You built the proof of concept. We built the permanent infrastructure.",
     category: "crown",
     categoryLabel: "Crown Leadership",
     crownTitle: "Apothecary",
@@ -438,7 +438,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Oracle of Omaha, value investor, cooperative economics thinker",
     purpose: "Investment philosophy alignment, credibility anchor",
     whyYou:
-      "You've spent sixty years proving that value investing beats speculation. This platform's economics are designed the same way — predictable returns, transparent margins, constitutional guardrails against extraction. Cost+20% isn't a policy; it's a DNA Lock. The economics can't enshittify because they're structurally incapable of it.",
+      "You've spent sixty years proving that value investing beats speculation. This platform's economics are designed the same way — predictable returns, transparent margins, constitutional guardrails against extraction. Cost+20% isn't a policy; it's a DNA Lock. The economics can't degrade because they're structurally locked.",
     category: "high-value",
     categoryLabel: "Strategic Partnership",
     emailDomains: ["berkshirehathaway.com"],
@@ -455,7 +455,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Writes Platformer newsletter, top tech platform critic",
     purpose: "Coverage — he covers exactly what we're disrupting",
     whyYou:
-      "You write about platform power every day. What happens when a platform constitutionally locks its margin at Cost+20%, gives creators 83.3%, and makes the economics impossible to change? That's not a thought experiment. We built it. Backed by 1,200+ innovations and 8 utility patents with no prior art.",
+      "You write about platform power every day. What happens when a platform constitutionally locks its margin at Cost+20%, gives creators 83.3%, and makes the economics impossible to change? That's not a thought experiment. We built it. Backed by 1,200+ innovations and 210 formal claims across 7 applications — 8 definite with 9 more from the first 130 survived a deep dive with no prior art.",
     category: "journalist",
     categoryLabel: "Press & Media",
     emailDomains: ["platformer.news"],
@@ -550,7 +550,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "The New School — coined 'platform cooperativism'",
     purpose: "Academic ally — literally named what we're building",
     whyYou:
-      "You coined 'platform cooperativism.' We built it. 1,200+ innovations, 8 utility patents with no prior art, constitutional economics locked by DNA Lock. This isn't a theory anymore — it's a Wyoming C-Corp with 16 charitable initiatives and a patent portfolio worth $9M-$90M+.",
+      "You coined 'platform cooperativism.' We built it. 1,200+ innovations — 99% utility patents — protected by 210 formal claims across 7 applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art. This isn't a theory anymore — it's a Wyoming C-Corp with 16 charitable initiatives and a patent portfolio worth $9M-$90M+.",
     category: "academic",
     categoryLabel: "Academic Partnership",
     emailDomains: ["newschool.edu"],
@@ -602,7 +602,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Harvard Law — peer production & commons theory",
     purpose: "Academic ally — his theory of commons IS our platform",
     whyYou:
-      "You theorized peer production and the networked commons. We built the commercial infrastructure for it — a platform where commons-based production meets constitutional economics. Your theory. Our implementation. 1,200+ innovations proving it works.",
+      "You theorized peer production and the networked commons. We built the commercial infrastructure for it — a platform where commons-based production meets constitutional economics. Your theory. Our implementation. 1,200+ innovations — 210 formal claims across 7 applications — proving it works.",
     category: "academic",
     categoryLabel: "Academic Partnership",
     emailDomains: ["law.harvard.edu", "harvard.edu"],
@@ -900,7 +900,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Late night host, healthcare advocacy, broad audience",
     purpose: "Blessing — mainstream visibility, healthcare angle",
     whyYou:
-      "You stood on national television and cried about healthcare because your son nearly died. LifeLine Medications gives members access to medicine at Cost+20% — transparent, cooperative, constitutional. You don't need to run it. Just know it exists because people like you spoke up.",
+      "You stood on national television and cried about healthcare because your son nearly died. The Tatiana Schlossburg Health Accords give members access to medicine at Cost+20% — transparent, cooperative, constitutional. You don't need to run it. Just know it exists because people like you spoke up.",
     category: "blessing",
     categoryLabel: "Cultural Blessing",
     emailDomains: ["abc.com"],
@@ -935,15 +935,15 @@ export interface PressOutlet {
 }
 
 export const PRESS_OUTLETS: PressOutlet[] = [
-  { id: "hackernews", name: "Hacker News", tagline: "Show HN: A cooperative commerce platform that literally cannot enshittify", angle: "Builder community — stress-test the model, read the patents, fork the philosophy", launchFlag: "AA" },
+  { id: "hackernews", name: "Hacker News", tagline: "Show HN: A cooperative commerce platform with constitutionally locked economics", angle: "Builder community — stress-test the model, read the patents, fork the philosophy", launchFlag: "AA" },
   { id: "producthunt", name: "Product Hunt", tagline: "Liana Banyan — Cooperative commerce where creators keep 83.3%", angle: "Product launch — see the economics, try the platform, join for $5/year", launchFlag: "AA" },
-  { id: "techcrunch", name: "TechCrunch", tagline: "Startup disrupts platform economics with constitutional margins", angle: "Startup launch story — 1,200+ innovations, 8 patents with no prior art, $5/year membership", launchFlag: "AB" },
+  { id: "techcrunch", name: "TechCrunch", tagline: "Startup disrupts platform economics with constitutional margins", angle: "Startup launch story — 1,200+ innovations, 210 claims across 7 applications, $5/year membership", launchFlag: "AB" },
   { id: "theverge", name: "The Verge", tagline: "The platform that constitutionally locked its margins against extraction", angle: "Platform policy — what happens when enshittification is architecturally impossible?", launchFlag: "AB" },
   { id: "arstechnica", name: "Ars Technica", tagline: "Inside the 1,200-innovation patent portfolio of a cooperative commerce platform", angle: "Deep tech dive — patent architecture, DNA Lock, three-gear currency system", launchFlag: "AC" },
   { id: "shareable", name: "Shareable", tagline: "A cooperative platform with 16 charitable initiatives funded by commerce", angle: "Cooperative economy — this is your audience, this is your story", launchFlag: "BA" },
   { id: "yesmagazine", name: "Yes! Magazine", tagline: "How constitutional economics prevent platform extraction", angle: "Solutions journalism — cooperative commerce that actually works", launchFlag: "BA" },
   { id: "ssir", name: "Stanford Social Innovation Review", tagline: "Constitutional economics and cooperative platform governance", angle: "Social enterprise scholarship — academic rigor, real implementation", launchFlag: "BB" },
-  { id: "statnews", name: "STAT News", tagline: "LifeLine Medications: Medicine at Cost+20%, cooperatively", angle: "Healthcare vertical — medication access through cooperative buying power", launchFlag: "BC" },
+  { id: "statnews", name: "STAT News", tagline: "Tatiana Schlossburg Health Accords: Medicine at Cost+20%, cooperatively", angle: "Healthcare vertical — medication access through cooperative buying power", launchFlag: "BC" },
   { id: "kaiserhealthnews", name: "Kaiser Health News", tagline: "Cooperative platform tackles medication affordability with transparent pricing", angle: "Healthcare policy — Cost+20% applied to pharmaceuticals", launchFlag: "BC" },
   { id: "nerdwallet", name: "NerdWallet", tagline: "How a $5/year membership saves families money through cooperative commerce", angle: "Consumer savings — real numbers, real families, real impact", launchFlag: "T" },
   { id: "investopedia", name: "Investopedia", tagline: "Understanding cooperative economics: the Cost+20% model explained", angle: "Financial literacy — how constitutional margins create predictable returns", launchFlag: "T" },
@@ -987,6 +987,29 @@ export function findRecipientByEmail(email: string): Recipient | null {
 }
 
 /**
+ * Get recognized domains for a recipient (for display hints).
+ * Returns formatted domain list like "@newschool.edu, @berkman.harvard.edu"
+ */
+export function getRecipientDomainHints(recipient: Recipient): string {
+  if (!recipient.emailDomains || recipient.emailDomains.length === 0) {
+    return "";
+  }
+  return recipient.emailDomains.map((d) => `@${d}`).join(", ");
+}
+
+/**
+ * Find a recipient by name (fuzzy match for domain hint lookup).
+ * Used when we want to show domain hints based on URL slug or partial match.
+ */
+export function findRecipientByName(name: string): Recipient | null {
+  const normalizedName = name.toLowerCase().trim();
+  return RECIPIENTS.find((r) => 
+    r.name.toLowerCase().includes(normalizedName) ||
+    r.id.toLowerCase() === normalizedName
+  ) || null;
+}
+
+/**
  * Find a recipient by their URL slug (id field).
  */
 export function findRecipientBySlug(slug: string): Recipient | null {
@@ -1006,16 +1029,18 @@ export function getRecipientsByCategory(
  * Get the platform stats for display.
  */
 export const PLATFORM_STATS = {
-  innovations: "1,200+",
+  innovations: "1,243",
+  formalClaims: 210,
+  filedApplications: 7,
   crownJewels: 8,
+  possibleMore: 9,
   patentQueries: 130,
-  priorArtPatentsReviewed: "200+",
+  priorArtPatentsReviewed: "330+",
   portfolioValue: "$9M-$90M+",
   creatorKeeps: "83.3%",
   platformMargin: "Cost + 20%",
   membership: "$5/year",
   initiatives: 16,
-  plannedFilings: 22,
   innovationsSurvivingDeepDive: 8,
   founderYearsDeveloping: 37,
 };

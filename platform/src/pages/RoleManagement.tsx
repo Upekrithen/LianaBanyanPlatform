@@ -39,14 +39,16 @@ export default function RoleManagement() {
 
       if (profilesError) throw profilesError;
 
+      // No user_roles table — derive roles from other tables
       const usersWithRoles: UserWithRoles[] = [];
       for (const profile of profiles) {
-        const { data: roles, error: rolesError } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', profile.id);
-
-        if (rolesError) throw rolesError;
+        const roles: { role: string }[] = [];
+        // Check if project owner
+        const { data: owned } = await supabase.from('projects').select('id').eq('owner_id', profile.id).limit(1);
+        if (owned && owned.length > 0) roles.push({ role: 'project_owner' });
+        // Check if crown holder
+        const { data: crown } = await supabase.from('crown_positions').select('id').eq('holder_user_id', profile.id).limit(1);
+        if (crown && crown.length > 0) roles.push({ role: 'admin' });
 
         usersWithRoles.push({
           ...profile,
@@ -61,10 +63,9 @@ export default function RoleManagement() {
 
   const addRoleMutation = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
-      const { error } = await supabase
-        .from('user_roles')
-        .insert({ user_id: userId, role });
-      if (error) throw error;
+      // Roles are derived from projects/crown_positions/guilds — not a separate table
+      // To make someone admin, assign them a crown position or guild master role
+      toast.info('Roles are derived from Crown positions and Guild leadership. Assign a Crown or Guild Master role instead.');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });
@@ -79,12 +80,8 @@ export default function RoleManagement() {
 
   const removeRoleMutation = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
-      const { error } = await supabase
-        .from('user_roles')
-        .delete()
-        .eq('user_id', userId)
-        .eq('role', role);
-      if (error) throw error;
+      // Roles are derived — remove the underlying assignment instead
+      toast.info('Roles are derived from Crown positions and Guild leadership. Remove the underlying assignment instead.');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users-with-roles'] });

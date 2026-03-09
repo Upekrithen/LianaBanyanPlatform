@@ -58,7 +58,7 @@ export function ChallengeSubmissionDialog({
 
       // Check clan membership
       const { data: clanData } = await supabase
-        .from('clan_members')
+        .from('guild_members')
         .select('id')
         .eq('user_id', user.id)
         .eq('is_active', true)

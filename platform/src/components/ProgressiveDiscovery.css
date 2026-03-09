@@ -1,0 +1,497 @@
+/**
+ * PROGRESSIVE DISCOVERY CSS — Landing Page Animations
+ * ====================================================
+ * Styles for chalk-outline slots, carousel viewports,
+ * discovery gates, and keep size displays.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CHALK OUTLINE SLOT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.chalk-outline-slot {
+  position: relative;
+  min-height: 200px;
+  transition: all 0.3s ease;
+}
+
+.chalk-outline-slot--locked {
+  cursor: default;
+}
+
+.chalk-outline-slot--unlocked {
+  cursor: pointer;
+}
+
+.chalk-outline-slot--unlocked:hover {
+  transform: translateY(-2px);
+}
+
+.chalk-outline-slot__placeholder {
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chalk-outline-slot__dashed-border {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  padding: 1.5rem;
+  border: 2px dashed hsl(var(--muted-foreground) / 0.3);
+  border-radius: 0.75rem;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    hsl(var(--muted) / 0.3) 10px,
+    hsl(var(--muted) / 0.3) 20px
+  );
+  transition: all 0.3s ease;
+}
+
+.chalk-outline-slot--locked:hover .chalk-outline-slot__dashed-border {
+  border-color: hsl(var(--muted-foreground) / 0.5);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    hsl(var(--muted) / 0.4) 10px,
+    hsl(var(--muted) / 0.4) 20px
+  );
+}
+
+/* Reveal animation */
+.chalk-outline-slot--revealing {
+  animation: slot-reveal 0.6s ease-out forwards;
+}
+
+@keyframes slot-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CAROUSEL VIEWPORT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.carousel-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-viewport__container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.carousel-viewport__content {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.carousel-viewport__item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-viewport__item--animating {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.carousel-viewport__nav {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px hsl(var(--foreground) / 0.1);
+}
+
+.carousel-viewport__nav:hover {
+  background: hsl(var(--muted));
+  transform: scale(1.05);
+}
+
+.carousel-viewport__nav:active {
+  transform: scale(0.95);
+}
+
+.carousel-viewport__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.carousel-viewport__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(var(--muted-foreground) / 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.carousel-viewport__dot:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+.carousel-viewport__dot--active {
+  background: hsl(var(--primary));
+  transform: scale(1.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DISCOVERY GATE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.discovery-gate {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.discovery-gate__content {
+  transition: all 0.5s ease;
+}
+
+.discovery-gate__content--open {
+  animation: gate-open 0.8s ease-out forwards;
+}
+
+@keyframes gate-open {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.discovery-gate__barrier {
+  position: relative;
+  min-height: 300px;
+}
+
+.discovery-gate__barrier--opening {
+  animation: barrier-open 0.8s ease-out forwards;
+}
+
+@keyframes barrier-open {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+.discovery-gate__lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background) / 0.95) 0%,
+    hsl(var(--muted) / 0.9) 100%
+  );
+  backdrop-filter: blur(8px);
+  border-radius: 0.75rem;
+  border: 2px solid hsl(var(--border));
+}
+
+.discovery-gate__lock-icon {
+  padding: 1.5rem;
+  border-radius: 50%;
+  background: hsl(var(--muted));
+  border: 2px solid hsl(var(--border));
+}
+
+.discovery-gate__preview {
+  position: absolute;
+  inset: 0;
+  filter: blur(8px);
+  opacity: 0.3;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   KEEP SIZE TIERS — Visual Enhancements
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Bronze shimmer */
+.keep-tier-bronze {
+  background: linear-gradient(
+    135deg,
+    #cd7f32 0%,
+    #b87333 50%,
+    #cd7f32 100%
+  );
+  background-size: 200% 200%;
+  animation: tier-shimmer 3s ease-in-out infinite;
+}
+
+/* Silver shimmer */
+.keep-tier-silver {
+  background: linear-gradient(
+    135deg,
+    #c0c0c0 0%,
+    #a8a8a8 50%,
+    #c0c0c0 100%
+  );
+  background-size: 200% 200%;
+  animation: tier-shimmer 3s ease-in-out infinite;
+}
+
+/* Gold shimmer */
+.keep-tier-gold {
+  background: linear-gradient(
+    135deg,
+    #ffd700 0%,
+    #ffb700 50%,
+    #ffd700 100%
+  );
+  background-size: 200% 200%;
+  animation: tier-shimmer 2s ease-in-out infinite;
+}
+
+/* Platinum shimmer */
+.keep-tier-platinum {
+  background: linear-gradient(
+    135deg,
+    #e5e4e2 0%,
+    #c0c0c0 25%,
+    #e5e4e2 50%,
+    #c0c0c0 75%,
+    #e5e4e2 100%
+  );
+  background-size: 400% 400%;
+  animation: tier-shimmer 4s ease-in-out infinite;
+}
+
+/* Diamond prismatic */
+.keep-tier-diamond {
+  background: linear-gradient(
+    135deg,
+    #b9f2ff 0%,
+    #e0c3fc 20%,
+    #8ec5fc 40%,
+    #f093fb 60%,
+    #b9f2ff 80%,
+    #e0c3fc 100%
+  );
+  background-size: 400% 400%;
+  animation: diamond-prismatic 5s ease-in-out infinite;
+}
+
+@keyframes tier-shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes diamond-prismatic {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: hue-rotate(30deg);
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CSS ZEN GARDEN THEMING
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Theme: Forest */
+.zen-theme-forest {
+  --zen-primary: #2d5a27;
+  --zen-secondary: #4a7c43;
+  --zen-accent: #8fbc8f;
+  --zen-bg: linear-gradient(135deg, #1a3318 0%, #2d5a27 100%);
+}
+
+.zen-theme-forest .chalk-outline-slot__dashed-border {
+  border-color: var(--zen-secondary);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(45, 90, 39, 0.2) 10px,
+    rgba(45, 90, 39, 0.2) 20px
+  );
+}
+
+/* Theme: Ocean */
+.zen-theme-ocean {
+  --zen-primary: #1e3a5f;
+  --zen-secondary: #3d6b99;
+  --zen-accent: #87ceeb;
+  --zen-bg: linear-gradient(135deg, #0c2340 0%, #1e3a5f 100%);
+}
+
+.zen-theme-ocean .chalk-outline-slot__dashed-border {
+  border-color: var(--zen-secondary);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(30, 58, 95, 0.2) 10px,
+    rgba(30, 58, 95, 0.2) 20px
+  );
+}
+
+/* Theme: Sunset */
+.zen-theme-sunset {
+  --zen-primary: #ff6b35;
+  --zen-secondary: #f7c59f;
+  --zen-accent: #efa00b;
+  --zen-bg: linear-gradient(135deg, #2e1f27 0%, #ff6b35 100%);
+}
+
+.zen-theme-sunset .chalk-outline-slot__dashed-border {
+  border-color: var(--zen-secondary);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 107, 53, 0.15) 10px,
+    rgba(255, 107, 53, 0.15) 20px
+  );
+}
+
+/* Theme: Midnight */
+.zen-theme-midnight {
+  --zen-primary: #1a1a2e;
+  --zen-secondary: #16213e;
+  --zen-accent: #e94560;
+  --zen-bg: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+}
+
+.zen-theme-midnight .chalk-outline-slot__dashed-border {
+  border-color: var(--zen-accent);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(233, 69, 96, 0.1) 10px,
+    rgba(233, 69, 96, 0.1) 20px
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .carousel-viewport__nav {
+    width: 32px;
+    height: 32px;
+  }
+
+  .carousel-viewport__nav svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .discovery-gate__lock-icon {
+    padding: 1rem;
+  }
+
+  .discovery-gate__lock-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .chalk-outline-slot {
+    min-height: 160px;
+  }
+
+  .chalk-outline-slot__placeholder {
+    min-height: 160px;
+  }
+
+  .chalk-outline-slot__dashed-border {
+    min-height: 140px;
+    padding: 1rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DARK MODE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.dark .chalk-outline-slot__dashed-border {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    hsl(var(--muted) / 0.15) 10px,
+    hsl(var(--muted) / 0.15) 20px
+  );
+}
+
+.dark .discovery-gate__lock {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background) / 0.98) 0%,
+    hsl(var(--muted) / 0.95) 100%
+  );
+}
+
+.dark .carousel-viewport__nav {
+  background: hsl(var(--muted));
+  border-color: hsl(var(--border));
+}

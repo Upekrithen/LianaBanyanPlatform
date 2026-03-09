@@ -10,6 +10,10 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { loadStripe } from "@stripe/stripe-js";
+
+// Stripe publishable key — safe to expose in frontend
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_live_placeholder");
 
 export type HeraldTier = "torch_bearer" | "herald" | "town_crier";
 
@@ -83,35 +87,49 @@ export function getCurrentMonth(): string {
 }
 
 /**
- * Subscribe to a Herald tier.
+ * Subscribe to a Herald tier via Stripe Checkout.
+ * Opens Stripe Checkout in a new tab. On success, user lands on /herald-success.
  */
 export async function subscribeHerald(tier: HeraldTier): Promise<{ success: boolean; error?: string }> {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { success: false, error: "Not logged in" };
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return { success: false, error: "Not logged in" };
 
-  const config = getTierConfig(tier);
-  const month = getCurrentMonth();
+  try {
+    const { data, error } = await supabase.functions.invoke("create-herald-checkout", {
+      body: { tier },
+    });
 
-  const { error } = await supabase
-    .from("herald_subscriptions")
-    .upsert({
-      user_id: user.id,
-      tier,
-      monthly_price: config.price,
-      base_multiplier: config.baseMultiplier,
-      chain_bonus: 0,
-      max_multiplier: config.maxMultiplier,
-      required_posts_per_month: config.postsPerMonth,
-      posts_this_month: 0,
-      current_month: month,
-      chain_length: 0,
-      chain_started_at: new Date().toISOString(),
-      status: "active",
-      updated_at: new Date().toISOString(),
-    }, { onConflict: "user_id" });
+    if (error) return { success: false, error: error.message };
+    if (data?.error) return { success: false, error: data.error };
 
-  if (error) return { success: false, error: error.message };
-  return { success: true };
+    // Redirect to Stripe Checkout
+    if (data?.url) {
+      window.open(data.url, "_blank");
+      return { success: true };
+    }
+
+    return { success: false, error: "No checkout URL returned" };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : "Checkout failed" };
+  }
+}
+
+/**
+ * Verify Herald payment after Stripe redirect.
+ */
+export async function verifyHeraldPayment(sessionId: string, tier: HeraldTier): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { data, error } = await supabase.functions.invoke("verify-herald-payment", {
+      body: { sessionId, tier },
+    });
+
+    if (error) return { success: false, error: error.message };
+    if (data?.error) return { success: false, error: data.error };
+
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : "Verification failed" };
+  }
 }
 
 /**

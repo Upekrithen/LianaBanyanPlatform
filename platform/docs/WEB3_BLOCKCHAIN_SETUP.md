@@ -3,13 +3,31 @@
 ## Overview
 This document covers the Base L2 + ERC-1155 blockchain integration for Medallion NFT minting and management.
 
+**Philosophy**: "Blockchain Without Coin or Speculation" — we use blockchain solely as an immutable ledger for IP provenance and audit trails, not as a speculative currency.
+
 ## Architecture
 
-### Network
-- **Primary**: Base (Ethereum L2)
-- **Testnet**: Base Sepolia
-- **Gas Costs**: ~$0.01-0.05 per transaction
+### Network (Test-Net By Design)
+
+**PERMANENT TESTNET ARCHITECTURE:**
+
+**ALL blockchain operations use Base Sepolia (TESTNET ONLY)**
+- IP ownership history, contribution attribution, narrative data
+- Lives PERMANENTLY on testnet — this is deliberate, not staging
+- Cannot be traded, monetized, or bridged to mainnet
+- "Test-Net By Design" = architectural prevention of speculation
+
+**WHY NO MAINNET - EVER:**
+- Mainnet enables trading = enables speculation = violates SEC compliance
+- Platform credits are "future service coupons" not securities
+- No trading, no cashing in, ever — by design
+- This is a FEATURE, not a limitation
+
+**Network Details:**
+- **Network**: Base Sepolia (testnet) — ONLY
+- **Gas Costs**: Zero (testnet)
 - **Confirmations**: ~2 seconds
+- **Trading**: Not possible (by design)
 
 ### Token Standard
 - **ERC-1155**: Multi-token standard
@@ -78,17 +96,45 @@ New blockchain fields:
    }
    ```
 
-2. **Deploy to Base Sepolia** (testnet first)
-3. **Deploy to Base Mainnet** (production)
+2. **Deploy to Base Sepolia** (permanent — Test-Net By Design)
 
 ### Smart Contract Features Needed
 - ✅ ERC-1155 multi-token standard
 - ✅ Separate token IDs for each tier
 - ✅ Batch minting for efficiency
 - ✅ Owner/admin controls
-- ⬜ Metadata URIs (IPFS or centralized)
-- ⬜ Transfer restrictions (optional)
-- ⬜ Royalties (if secondary market)
+- ✅ Metadata URIs (IPFS) — see `src/lib/ipfsService.ts`
+- ✅ Transfer restrictions (NON-TRANSFERABLE by design)
+- ⬜ Royalties — NOT APPLICABLE (no secondary market by design)
+
+### Non-Transferable Enforcement (CRITICAL)
+
+When deploying the contract, **MUST** include this restriction:
+
+```solidity
+function _beforeTokenTransfer(
+    address operator,
+    address from,
+    address to,
+    uint256[] memory ids,
+    uint256[] memory amounts,
+    bytes memory data
+) internal virtual override {
+    // Allow minting (from == address(0)) and burning (to == address(0))
+    // Block all transfers between users
+    require(
+        from == address(0) || to == address(0),
+        "LianaBanyan: Medallions are non-transferable"
+    );
+    super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+}
+```
+
+This enforces "Test-Net By Design" at the contract level:
+- Medallions can be MINTED (provenance created)
+- Medallions can be BURNED (if needed for correction)
+- Medallions CANNOT be transferred between wallets
+- No secondary market possible = no speculation
 
 ### Frontend Integration
 1. **Wallet Connection**: `WalletConnectButton` component (✅ created)
@@ -109,9 +155,12 @@ New blockchain fields:
    - Calculate USD cost
    - Call `allocate_gas_from_pool()`
 
-3. **Metadata Server**:
+3. **Metadata Server** (✅ IPFS Implemented):
    - Serve token metadata (name, image, attributes)
-   - Can use IPFS or Lovable storage buckets
+   - Uses IPFS via Pinata for immutable storage
+   - See `src/lib/ipfsService.ts` for implementation
+   - Supports both innovation metadata and medallion metadata
+   - Content-addressed (CID) ensures integrity verification
 
 ## Usage Examples
 
@@ -145,13 +194,51 @@ const gasRecordId = await supabase.rpc('allocate_gas_from_pool', {
 });
 ```
 
+### IPFS Metadata Upload
+```typescript
+import { 
+  createInnovationMetadata, 
+  uploadToIPFS, 
+  createIPLedgerEntry,
+  PATENT_PORTFOLIO_STATS 
+} from '@/lib/ipfsService';
+
+// Create innovation metadata
+const metadata = createInnovationMetadata(
+  1244,
+  "New Innovation Title",
+  "Description of the innovation",
+  "Economics",
+  { patent_application: "63/XXX,XXX" }
+);
+
+// Upload to IPFS
+const result = await uploadToIPFS(metadata, "innovation-1244");
+console.log(`IPFS URI: ${result.uri}`);
+console.log(`Gateway URL: ${result.gateway_url}`);
+
+// Or create full IP Ledger entry (hash + IPFS + metadata)
+const ledgerEntry = await createIPLedgerEntry(metadata);
+console.log(`Content Hash: ${ledgerEntry.content_hash}`);
+console.log(`IPFS CID: ${ledgerEntry.ipfs_cid}`);
+```
+
+### Environment Variables for IPFS
+```bash
+# Add to .env for Pinata IPFS hosting
+VITE_PINATA_API_KEY=your-pinata-api-key
+VITE_PINATA_SECRET_KEY=your-pinata-secret-key
+```
+
+Note: Without Pinata keys, the service generates mock CIDs for development.
+
 ## Security Considerations
 
 1. **Private Keys**: NEVER store private keys in frontend or database
 2. **Admin Wallet**: Use a secure wallet (hardware wallet) for contract deployment
 3. **Access Control**: Only verified project owners can mint
 4. **Gas Budget**: Monitor spending, set alerts if exceeding budget
-5. **Contract Audits**: Get smart contract audited before mainnet deployment
+5. **Contract Audits**: Get smart contract audited before deployment
 
 ## Cost Estimates (Base L2)
 
@@ -177,5 +264,5 @@ const gasRecordId = await supabase.rpc('allocate_gas_from_pool', {
 For blockchain integration questions:
 1. Check wagmi/RainbowKit docs
 2. Review Base developer resources
-3. Test on Base Sepolia before mainnet
-4. Monitor gas costs in dashboard
+3. Deploy on Base Sepolia (Test-Net By Design — permanent)
+4. Monitor operations in dashboard

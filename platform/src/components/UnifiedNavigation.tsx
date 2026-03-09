@@ -1,4 +1,4 @@
-import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target } from "lucide-react";
+import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -41,22 +41,32 @@ const allNavItems: NavItem[] = [
   { title: "Prototyping", url: "/prototyping", icon: Wrench, portal: "marketplace" },
   { title: "Asset Library", url: "/asset-library", icon: Library, portal: "marketplace" },
   { title: "Pre-Beta Recruits", url: "/pre-beta-recruits", icon: Target, portal: "marketplace", requiresAdmin: true },
-  { title: "Investment Guide", url: "/investment-explainer", icon: DollarSign, portal: "marketplace" },
-  { title: "Blockchain", url: "/blockchain-explorer", icon: BadgeCheck, portal: "marketplace" },
+  { title: "Manufacturing", url: "/manufacturing", icon: Factory, portal: "marketplace" },
+  { title: "Herald", url: "/herald", icon: Megaphone, portal: "marketplace" },
+  { title: "Sponsor", url: "/sponsor", icon: TreePine, portal: "marketplace" },
+  { title: "Looking Glass", url: "/looking-glass", icon: Eye, portal: "marketplace" },
+  { title: "52-Card Hunt", url: "/treasure-map-game", icon: Map, portal: "marketplace" },
+  { title: "Hofund Studio", url: "/hofund", icon: Tv, portal: "marketplace" },
+  { title: "Start a Project", url: "/start", icon: Rocket, portal: "marketplace" },
+  // "Investment Guide" removed — SEC compliance (no investment language)
+  // "Blockchain" removed — not functional, confusing for users
   { title: "My Portfolio", url: "/portfolio", icon: LayoutDashboard, portal: "marketplace" },
   { title: "My Reputation", url: "/reputation", icon: Award, portal: "marketplace" }, // Will be made dynamic
   { title: "Profile Settings", url: "/profile-settings", icon: Settings, portal: "marketplace" },
-  { title: "Cash Out", url: "/withdraw", icon: Wallet, portal: "marketplace" },
+  // "Cash Out" removed for SEC compliance — credits are not redeemable for cash
   
   // Business (.biz)
   { title: "Dashboard", url: "/", icon: LayoutDashboard, portal: "business" },
+  { title: "The Kaleidoscope", url: "/kaleidoscope", icon: Map, portal: "business" },
+  { title: "StoreFront Aggregation", url: "/storefront-aggregation", icon: ShoppingBag, portal: "business" },
+  { title: "The Furnace", url: "/the-furnace", icon: Shield, portal: "business" },
   { title: "Position Categories", url: "/position-categories", icon: Layers, portal: "business" },
   { title: "LB Internal Hiring", url: "/lb-positions", icon: UserCheck, portal: "business", requiresAdmin: true },
   { title: "Contract Positions", url: "/positions", icon: Users, portal: "business" },
   { title: "Manage Positions", url: "/manage-positions", icon: UserPlus, portal: "business", requiresOwner: true },
   { title: "Task List", url: "/task-list", icon: FileText, portal: "business", requiresAdmin: true },
   { title: "Task Log", url: "/task-log", icon: BarChart3, portal: "business", requiresAdmin: true },
-  { title: "Create Project", url: "/create-project", icon: Package, portal: "business", requiresOwner: true },
+  { title: "Create Project", url: "/admin/project/create", icon: Package, portal: "business", requiresOwner: true },
   { title: "Subdomain Manager", url: "/subdomain-manager", icon: Network, portal: "business", requiresAdmin: true },
   { title: "Credentials", url: "/credential-management", icon: BadgeCheck, portal: "business", requiresAdmin: true },
   { title: "Client API", url: "/client-api-manager", icon: Code, portal: "business", requiresAdmin: true },
@@ -72,8 +82,8 @@ const allNavItems: NavItem[] = [
   
   // Network (.net)
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, portal: "network" },
-  { title: "Industry Pricing", url: "/industry-pricing", icon: DollarSign, portal: "network" },
-  { title: "Client API", url: "/client-api", icon: Code, portal: "network", requiresOwner: true },
+  { title: "Industry Pricing", url: "/admin/industry-pricing", icon: DollarSign, portal: "network" },
+  { title: "Client API", url: "/client-api-manager", icon: Code, portal: "network", requiresOwner: true },
   { title: "Project Costs", url: "/project-costs", icon: BarChart3, portal: "network", requiresAdmin: true },
   { title: "Production Simulator", url: "/simulator", icon: Settings, portal: "network" },
 ];
@@ -94,7 +104,7 @@ export function UnifiedNavigation() {
 
       const [teamMemberResult, medallionResult] = await Promise.all([
         supabase.from('project_member_contracts').select('id').eq('member_id', user.id).eq('status', 'active').limit(1).maybeSingle(),
-        supabase.from('medallion_eligibility').select('is_eligible').eq('user_id', user.id).eq('medallion_minted', true).limit(1).maybeSingle(),
+        supabase.from('member_medallion_collection').select('id').eq('user_id', user.id).limit(1).maybeSingle(),
       ]);
 
       return {

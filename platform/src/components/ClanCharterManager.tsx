@@ -27,7 +27,7 @@ export function ClanCharterManager({ clanId }: ClanCharterManagerProps) {
     queryKey: ['clan', clanId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('clans')
+        .from('guilds')
         .select('*')
         .eq('id', clanId)
         .single();
@@ -73,7 +73,7 @@ export function ClanCharterManager({ clanId }: ClanCharterManagerProps) {
     queryFn: async () => {
       if (!user) return false;
       const { data } = await supabase
-        .from('clan_members')
+        .from('guild_members')
         .select('id')
         .eq('clan_id', clanId)
         .eq('user_id', user.id)

@@ -1,0 +1,238 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * CROW FEATHER DISPLAY STYLES
+ * "The only persistent thing for ghosts." — Founder
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * BASE CONTAINER
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.crow-feather-display {
+  display: flex;
+  align-items: center;
+}
+
+.crow-feather-display.loading {
+  opacity: 0.5;
+}
+
+.crow-feather-display.empty {
+  opacity: 0.6;
+  gap: 0.5rem;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * BADGE VARIANT
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.crow-feather-display.badge .feather-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.2));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.crow-feather-display.badge .feather-count-badge .count {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * INLINE VARIANT
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.crow-feather-display.inline .feather-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.crow-feather-display.inline .more-count {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-left: 0.25rem;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * SINGLE FEATHER BADGE
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.crow-feather-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.crow-feather-badge:hover {
+  transform: translateY(-1px);
+}
+
+.crow-feather-badge .feather-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crow-feather-badge .feather-number {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * FULL VARIANT
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.crow-feather-display.full {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.crow-feather-display.full .feather-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #334155;
+}
+
+.crow-feather-display.full .feather-header h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #f8fafc;
+  flex: 1;
+  margin: 0;
+}
+
+.crow-feather-display.full .feather-header .total-count {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fbbf24;
+  padding: 0.125rem 0.5rem;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 0.25rem;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * FEATHER GRID
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.feather-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.feather-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border: 1px solid;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feather-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.feather-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.feather-card-header .feather-name {
+  font-weight: 600;
+  flex: 1;
+}
+
+.feather-card-header .feather-number {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.feather-card-body {
+  font-size: 0.875rem;
+}
+
+.feather-card-body .feather-description {
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.feather-card-body .feather-record {
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.feather-card-body .feather-difficulty {
+  color: #64748b;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.feather-card-footer {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #334155;
+}
+
+.feather-card-footer .feather-date {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * STATS
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.feather-stats {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #334155;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * ANIMATIONS
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+@keyframes featherShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.feather-card.new::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(251, 191, 36, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: featherShimmer 2s infinite;
+  border-radius: 0.5rem;
+  pointer-events: none;
+}

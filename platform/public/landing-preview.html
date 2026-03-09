@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liana Banyan — Help Each Other Help Ourselves</title>
+    <meta name="description" content="Member-owned. Community-governed. Creators keep 83.3%. Cost + 20% locked forever. $5/year. 16 charitable initiatives funded by commerce, not donations.">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; color: white;
+        }
+
+        /* ─── Status ─── */
+        .submarine-door-status {
+            position: fixed; top: 20px; right: 20px;
+            background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 20px;
+            display: flex; align-items: center; gap: 10px;
+            backdrop-filter: blur(10px); z-index: 1000; font-size: 0.85rem;
+        }
+        .status-dot { width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+        /* ─── Header ─── */
+        header {
+            text-align: center; padding: 3rem 1rem;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            border-radius: 20px; margin-bottom: 2rem;
+        }
+        .logo { max-width: 160px; margin: 0 auto 1.5rem; display: block; }
+
+        /* ─── THE GOLDEN KEY FLIPCARD ─── */
+        /* One card: front = "Help Each Other / Help Ourselves", back = 6 options */
+        .golden-key-flip {
+            perspective: 1000px; max-width: 500px; margin: 0 auto; cursor: pointer;
+        }
+        .golden-key-inner {
+            position: relative; width: 100%; min-height: 180px;
+            transition: transform 0.7s ease; transform-style: preserve-3d;
+        }
+        .golden-key-flip.flipped .golden-key-inner { transform: rotateY(180deg); }
+        .gk-front, .gk-back {
+            position: absolute; inset: 0; backface-visibility: hidden;
+            border-radius: 15px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 2rem;
+        }
+        .gk-front {
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+        }
+        .gk-front h2 { font-size: 2.8rem; font-weight: 700; line-height: 1.15; }
+        .gk-front .hand { position: absolute; bottom: 12px; right: 16px; font-size: 1.1rem; opacity: 0.35; }
+        .gk-back {
+            transform: rotateY(180deg);
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(12px); align-items: stretch; padding: 2rem 2.5rem;
+        }
+        .gk-back-cols { display: flex; gap: 1rem; width: 100%; }
+        .gk-back-col { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+        .gk-back-col h4 { font-size: 0.75rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .gk-option {
+            display: block; padding: 0.5rem 0.7rem; background: rgba(255,255,255,0.08);
+            border-radius: 8px; text-decoration: none; color: white; font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .gk-option:hover { background: rgba(255,255,255,0.2); }
+        .gk-option small { display: block; font-size: 0.7rem; opacity: 0.6; }
+
+        .tagline { font-size: 1rem; opacity: 0.7; max-width: 500px; margin: 1rem auto 0; }
+        .yggdrasil-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1e293b; padding: 0.5rem 1rem; border-radius: 10px;
+            display: inline-block; margin: 1rem 0; font-weight: bold; font-size: 0.9rem;
+        }
+
+        /* ─── Sections ─── */
+        .trunk-info {
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 2rem; margin-bottom: 2rem;
+        }
+
+        /* ─── PATH FLIP CARDS (Get a Job / Build / Plant) ─── */
+        .path-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .path-flip { perspective: 800px; cursor: pointer; }
+        .path-inner {
+            position: relative; min-height: 280px;
+            transition: transform 0.6s ease; transform-style: preserve-3d;
+        }
+        .path-flip.flipped .path-inner { transform: rotateY(180deg); }
+        .path-front, .path-back {
+            position: absolute; inset: 0; backface-visibility: hidden;
+            border-radius: 15px; padding: 2rem; text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .path-front {
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .path-front h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .path-front p { opacity: 0.85; font-size: 0.9rem; }
+        .path-front .price { font-size: 1.2rem; color: #10b981; font-weight: bold; margin: 0.75rem 0; }
+        .path-front .hand { position: absolute; bottom: 10px; right: 14px; font-size: 1rem; opacity: 0.3; }
+        .path-back {
+            transform: rotateY(180deg);
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2); text-align: left;
+            padding: 2rem 2.5rem;
+        }
+        .path-back h3 { font-size: 1.2rem; margin-bottom: 0.75rem; text-align: center; }
+        .path-back p { font-size: 0.9rem; opacity: 0.85; line-height: 1.5; margin-bottom: 1rem; }
+        .path-back .path-btn {
+            display: block; width: 100%; padding: 0.7rem; text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+            border: none; border-radius: 10px; font-size: 0.95rem; cursor: pointer;
+            text-decoration: none; transition: all 0.3s;
+        }
+        .path-back .path-btn:hover { transform: scale(1.03); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .path-back .flip-back {
+            display: block; text-align: center; margin-top: 0.5rem;
+            font-size: 0.75rem; opacity: 0.5; cursor: pointer;
+        }
+
+        /* ─── Feature tags ─── */
+        .features { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0; justify-content: center; }
+        .feature-tag { background: rgba(255,255,255,0.2); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; }
+
+        /* ─── Buttons ─── */
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none; color: white; padding: 0.6rem 1.5rem; border-radius: 10px;
+            font-size: 0.95rem; cursor: pointer; transition: all 0.3s;
+            text-decoration: none; display: inline-block;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.4); }
+
+        /* ─── Yggdrasil links ─── */
+        .sibling-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .sibling-link {
+            background: rgba(255,255,255,0.2); padding: 0.8rem; border-radius: 10px;
+            text-decoration: none; color: white; text-align: center; transition: all 0.3s;
+        }
+        .sibling-link:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+        /* ─── Corners ─── */
+        .ghost-toggle, .mirror-toggle {
+            position: fixed; bottom: 20px;
+            background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 20px;
+            cursor: pointer; backdrop-filter: blur(10px); text-decoration: none;
+            color: white; z-index: 100; transition: all 0.3s; font-size: 0.9rem;
+        }
+        .ghost-toggle { left: 20px; }
+        .mirror-toggle { right: 20px; animation: mglow 3s ease-in-out infinite; }
+        @keyframes mglow { 0%,100%{box-shadow:0 0 5px rgba(255,255,255,0.1)} 50%{box-shadow:0 0 15px rgba(255,255,255,0.3)} }
+
+        footer { text-align: center; padding: 2rem 0; opacity: 0.6; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="submarine-door-status"><span class="status-dot"></span><span>Operational</span></div>
+    <a href="/ghost" class="ghost-toggle">&#x1F47B; Explore as Ghost</a>
+    <a href="/durins-door" class="mirror-toggle" title="The Mirror — speak friend and enter">&#x1FA9E; The Mirror</a>
+
+    <div class="container">
+        <header>
+            <img src="/logo.png" alt="Liana Banyan" class="logo">
+
+            <!-- THE GOLDEN KEY: One flipcard with the full phrase -->
+            <div class="golden-key-flip" onclick="this.classList.toggle('flipped')">
+                <div class="golden-key-inner">
+                    <!-- FRONT: The phrase, big, colored like the original -->
+                    <div class="gk-front">
+                        <h2><span style="color:#ffffff;">Help Each Other</span><br><span style="color:#34d399;">Help Ourselves</span></h2>
+                        <span class="hand">&#x1F449;</span>
+                    </div>
+                    <!-- BACK: Two columns, 3 options each -->
+                    <div class="gk-back">
+                        <div class="gk-back-cols">
+                            <div class="gk-back-col">
+                                <h4>Help Each Other</h4>
+                                <a href="/discover/sponsor" class="gk-option">&#x1F4DC; Own Part of a Patent<small>Sponsor, get attribution</small></a>
+                                <a href="/discover/governance" class="gk-option">&#x1F5F3; Vote for a Dream<small>Back someone's project</small></a>
+                                <a href="/discover/initiatives" class="gk-option">&#x1F496; Fund an Initiative<small>Choose from Sweet Sixteen</small></a>
+                            </div>
+                            <div class="gk-back-col">
+                                <h4>Help Ourselves</h4>
+                                <a href="/discover/build" class="gk-option">&#x1F680; Post a Project<small>Idea, product, or service</small></a>
+                                <a href="/discover/work" class="gk-option">&#x1F4BC; Get a Job<small>Bounties. Keep 83.3%</small></a>
+                                <a href="/discover/learn" class="gk-option">&#x1F393; Learn a Skill<small>Courses, apprenticeships</small></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="tagline">Creators keep 83.3%. Constitutionally locked. $5/year.</p>
+            <div class="yggdrasil-badge">Cost + 20% — DNA Locked</div>
+        </header>
+
+        <!-- Three Paths — FLIP CARDS like the old static page -->
+        <div class="trunk-info">
+            <h2 style="text-align:center; margin-bottom:0.5rem;">Choose Your Path</h2>
+            <p style="text-align:center; opacity:0.8; margin-bottom:0;">Three ways in. All keep 83.3%.</p>
+            <div class="path-grid">
+                <!-- Get a Job -->
+                <div class="path-flip" onclick="this.classList.toggle('flipped')">
+                    <div class="path-inner">
+                        <div class="path-front">
+                            <h3>Get a Job</h3>
+                            <p>Join an existing initiative. Real work, fair pay.</p>
+                            <p class="price">Keep 83.3%</p>
+                            <span class="hand">&#x1F449;</span>
+                        </div>
+                        <div class="path-back">
+                            <h3>Get a Job</h3>
+                            <p>Browse real opportunities across all 16 initiatives. From Let's Make Dinner meal delivery to Defense Klaus safety services. No gig economy extraction — you keep 83.3% of every dollar you earn. Start today.</p>
+                            <a href="/discover/work" class="path-btn">Browse Opportunities</a>
+                            <span class="flip-back" onclick="event.stopPropagation(); this.closest('.path-flip').classList.remove('flipped');">&#x2190; flip back</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Build a Business -->
+                <div class="path-flip" onclick="this.classList.toggle('flipped')">
+                    <div class="path-inner">
+                        <div class="path-front">
+                            <h3>Build a Business</h3>
+                            <p>Same terms as the Founder. Keep 83.3%. Earn IP royalties.</p>
+                            <p class="price">$5 to Start &middot; Same Deal as Everyone</p>
+                            <span class="hand">&#x1F449;</span>
+                        </div>
+                        <div class="path-back">
+                            <h3>Build a Business</h3>
+                            <p>Launch your Keep with just $5. Sell products, keep <strong>83.3%</strong>. Create innovations, earn <strong>IP royalties at the same rates as the Founder</strong>. His salary is $0 base, performance-only. Yours works the same way. No special treatment. No executive privilege. Same model, same math. Your castle, your rules.</p>
+                            <a href="/discover/build" class="path-btn">Explore First</a>
+                            <span class="flip-back" onclick="event.stopPropagation(); this.closest('.path-flip').classList.remove('flipped');">&#x2190; flip back</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plant Seeds -->
+                <div class="path-flip" onclick="this.classList.toggle('flipped')">
+                    <div class="path-inner">
+                        <div class="path-front">
+                            <h3>Plant Seeds</h3>
+                            <p>Back early for 5× working power. Or buy into the patents.</p>
+                            <p class="price">From $25 fractional to $5K full patent ownership</p>
+                            <span class="hand">&#x1F449;</span>
+                        </div>
+                        <div class="path-back">
+                            <h3>Plant Seeds</h3>
+                            <p><strong>Two paths in one:</strong> Back a project at Pre-Mint and get <strong>5× the Joules</strong> — more collateral, more authority, more governance weight. Or buy into the <strong>Sponsor Pool</strong> starting at $25 to own fractional patent equity from a portfolio of 1,187+ innovations. At $5K, choose your patent, get an exclusive license, and earn 50% of royalties. Hold it for decades. Resell it. It's yours.</p>
+                            <a href="/discover/sponsor" class="path-btn">Start Planting</a>
+                            <span class="flip-back" onclick="event.stopPropagation(); this.closest('.path-flip').classList.remove('flipped');">&#x2190; flip back</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- What's Inside -->
+        <div class="trunk-info">
+            <h2 style="text-align:center; margin-bottom:1rem;">What's Inside</h2>
+            <div class="features">
+                <span class="feature-tag">16 Initiatives</span>
+                <span class="feature-tag">Ghost World</span>
+                <span class="feature-tag">Deck Cards</span>
+                <span class="feature-tag">Durin's Door</span>
+                <span class="feature-tag">Golden Keys</span>
+                <span class="feature-tag">Hofund Studio</span>
+                <span class="feature-tag">Herald Program</span>
+                <span class="feature-tag">Governance</span>
+                <span class="feature-tag">MatchTrade</span>
+                <span class="feature-tag">Manufacturing</span>
+            </div>
+            <p style="text-align:center; opacity:0.7; margin-top:1rem; font-size:0.9rem;">
+                No account needed to explore. Browse everything. Find Golden Keys. Join when you're ready.
+            </p>
+            <div style="text-align:center; margin-top:1.5rem;">
+                <a href="/auth" class="btn" style="margin-right:0.75rem;">Join for $5/year</a>
+                <a href="/ghost" class="btn btn-outline">Explore First</a>
+            </div>
+        </div>
+
+        <!-- Yggdrasil Network -->
+        <div class="trunk-info">
+            <h2 style="text-align:center; margin-bottom:0.5rem;">Yggdrasil Network</h2>
+            <div class="sibling-links">
+                <a href="https://the2ndsecond.com" class="sibling-link"><h3>Cephas</h3><p>the2ndsecond.com</p></a>
+                <a href="https://lianabanyan.biz" class="sibling-link"><h3>Business</h3><p>lianabanyan.biz</p></a>
+                <a href="https://lianabanyan.org" class="sibling-link"><h3>NonProfit</h3><p>lianabanyan.org</p></a>
+                <a href="https://lianabanyan.net" class="sibling-link"><h3>Network</h3><p>lianabanyan.net</p></a>
+                <a href="/hexisle" class="sibling-link"><h3>HexIsle</h3><p>The Twelve Cities</p></a>
+            </div>
+        </div>
+
+        <footer>
+            <p>LIANA BANYAN CORPORATION &middot; Wyoming C-Corp &middot; EIN 41-2797446</p>
+            <p style="margin-top:0.5rem;">Help each other help ourselves.</p>
+        </footer>
+    </div>
+    <script>
+        let ec=0;function ch(){if(Math.random()>0.95){ec++;if(ec>=5)document.querySelector('.status-dot').style.background='#ef4444';}else ec=0;}
+        setInterval(ch,30000);ch();
+    </script>
+</body>
+</html>

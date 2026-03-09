@@ -15,15 +15,15 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/placeholder.svg",
+      "src": "/LianaBanyanLogo.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/placeholder.svg",
+      "src": "/LianaBanyanLogo.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],
@@ -33,21 +33,21 @@
       "short_name": "Pricing",
       "description": "View production pricing",
       "url": "/industry-pricing",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/LianaBanyanLogo.png", "sizes": "96x96" }]
     },
     {
       "name": "XML Lockbox",
       "short_name": "Lockbox",
       "description": "Access project data API",
       "url": "/xml-lockbox",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/LianaBanyanLogo.png", "sizes": "96x96" }]
     },
     {
       "name": "Client API",
       "short_name": "API",
       "description": "Manage API credentials",
       "url": "/client-api-manager",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/LianaBanyanLogo.png", "sizes": "96x96" }]
     }
   ],
   "categories": ["business", "productivity", "developer tools"]

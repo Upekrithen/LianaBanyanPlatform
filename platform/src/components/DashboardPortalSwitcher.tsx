@@ -47,7 +47,7 @@ export const DashboardPortalSwitcher = () => {
 
     // Check user roles
     const { data: roles } = await supabase
-      .from('user_roles')
+      .from('projects')
       .select('role')
       .eq('user_id', user.id);
 
@@ -61,7 +61,7 @@ export const DashboardPortalSwitcher = () => {
 
     // Check medallion holder
     const { data: medallion } = await supabase
-      .from('medallion_eligibility')
+      .from('member_medallion_collection')
       .select('id')
       .eq('user_id', user.id)
       .eq('medallion_minted', true)

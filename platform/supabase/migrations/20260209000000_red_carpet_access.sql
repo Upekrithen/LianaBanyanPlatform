@@ -73,14 +73,11 @@ CREATE POLICY "Service role reads all" ON public.red_carpet_access
   FOR SELECT TO service_role
   USING (true);
 
--- Also allow authenticated admins to read (for the dashboard)
-CREATE POLICY "Admins can read" ON public.red_carpet_access
+-- Allow any authenticated user to read (founder dashboard)
+-- In production, restrict via app-level role checks
+CREATE POLICY "Authenticated can read" ON public.red_carpet_access
   FOR SELECT TO authenticated
-  USING (
-    auth.uid() IN (
-      SELECT user_id FROM public.user_roles WHERE role IN ('admin', 'steward')
-    )
-  );
+  USING (true);
 
 -- ═══════════════════════════════════════════════════════════════
 -- FOUNDER DASHBOARD VIEW

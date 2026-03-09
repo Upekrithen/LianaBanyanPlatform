@@ -35,7 +35,7 @@ export default function DefenseClawsCoverageCheck() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-purple-500" />
-          <CardTitle>Check Defense Claws™ Coverage</CardTitle>
+          <CardTitle>Check Defense Klaus™ Coverage</CardTitle>
         </div>
         <CardDescription>
           Verify if an email address has active legal defense coverage
@@ -68,7 +68,7 @@ export default function DefenseClawsCoverageCheck() {
                 <div>
                   <p className="font-semibold">Coverage Active</p>
                   <p className="text-sm text-muted-foreground">
-                    {coverage.count} active Defense Claws™ {coverage.count === 1 ? "preorder" : "preorders"}
+                    {coverage.count} active Defense Klaus™ {coverage.count === 1 ? "preorder" : "preorders"}
                   </p>
                 </div>
               </div>

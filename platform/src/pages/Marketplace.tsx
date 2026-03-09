@@ -5,9 +5,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { TrendingUp, Sparkles, DollarSign } from 'lucide-react';
+import { TrendingUp, Sparkles, DollarSign, Factory, Shield, ArrowRight, Users, Coins } from 'lucide-react';
 import { EnhancedProjectCard } from '@/components/EnhancedProjectCard';
 
 type TimeFilter = '24h' | '72h' | '1week';
@@ -126,6 +128,98 @@ export default function Marketplace() {
       </header>
       
       <main className="container mx-auto px-4 py-8 space-y-12 max-w-full overflow-x-hidden">
+        {/* Factory & Patent Ownership Banner */}
+        <section className="grid md:grid-cols-2 gap-6">
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/factory')}>
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Factory className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-lg">The Factory</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Decentralized manufacturing pipeline. From idea to physical product.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <Badge variant="outline">3D Printing</Badge>
+                    <Badge variant="outline">Injection Molding</Badge>
+                    <Badge variant="outline">CNC</Badge>
+                  </div>
+                  <Button size="sm" className="gap-2">
+                    Enter Factory <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-purple-500/10 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/sponsor')}>
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-purple-500/10">
+                  <Shield className="h-6 w-6 text-purple-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-lg">Own the Patents</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    928+ innovations. Sponsor the platform and own a piece of the IP.
+                  </p>
+                  <div className="grid grid-cols-3 gap-2 text-xs mb-3">
+                    <div className="text-center p-2 rounded bg-background/50">
+                      <p className="font-bold">60%</p>
+                      <p className="text-muted-foreground">Platform</p>
+                    </div>
+                    <div className="text-center p-2 rounded bg-background/50">
+                      <p className="font-bold">20%</p>
+                      <p className="text-muted-foreground">Sponsors</p>
+                    </div>
+                    <div className="text-center p-2 rounded bg-background/50">
+                      <p className="font-bold">20%</p>
+                      <p className="text-muted-foreground">Founder</p>
+                    </div>
+                  </div>
+                  <Button size="sm" variant="outline" className="gap-2 border-purple-500/30 text-purple-600 hover:bg-purple-500/10">
+                    Become a Sponsor <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Quick Stats */}
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="pt-4 text-center">
+              <Users className="h-6 w-6 mx-auto text-primary mb-1" />
+              <p className="text-2xl font-bold">0</p>
+              <p className="text-xs text-muted-foreground">Active Nodes</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4 text-center">
+              <Factory className="h-6 w-6 mx-auto text-green-500 mb-1" />
+              <p className="text-2xl font-bold">0</p>
+              <p className="text-xs text-muted-foreground">Products Made</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4 text-center">
+              <Coins className="h-6 w-6 mx-auto text-amber-500 mb-1" />
+              <p className="text-2xl font-bold">83.3%</p>
+              <p className="text-xs text-muted-foreground">Creator Keeps</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4 text-center">
+              <Shield className="h-6 w-6 mx-auto text-purple-500 mb-1" />
+              <p className="text-2xl font-bold">928+</p>
+              <p className="text-xs text-muted-foreground">Innovations</p>
+            </CardContent>
+          </Card>
+        </section>
+
         <section>
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">

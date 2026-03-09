@@ -1,0 +1,382 @@
+/**
+ * SCROLL UNFURL CSS — Parchment Reveal Animation
+ * ===============================================
+ * Creates the effect of an ancient scroll unfurling to reveal content.
+ * Used for dramatic reveals, announcements, and important information.
+ *
+ * Features:
+ * - Realistic scroll texture and shadows
+ * - Smooth unfurl animation with easing
+ * - Content fade-in as scroll opens
+ * - Responsive sizing
+ * - Optional auto-play or trigger-based
+ *
+ * Usage:
+ *   <div className="scroll-unfurl">
+ *     <div className="scroll-content">Your content here</div>
+ *   </div>
+ *
+ * Add class "scroll-unfurl--open" to trigger the animation.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   BASE SCROLL CONTAINER
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.scroll-unfurl {
+  --scroll-width: 100%;
+  --scroll-max-width: 600px;
+  --scroll-bg: linear-gradient(
+    135deg,
+    #f5e6d3 0%,
+    #e8d4b8 25%,
+    #f0e0c8 50%,
+    #e5d0a8 75%,
+    #f2e4cc 100%
+  );
+  --scroll-border: #c4a574;
+  --scroll-shadow: rgba(139, 90, 43, 0.3);
+  --scroll-rod-color: #8b5a2b;
+  --scroll-rod-cap: #654321;
+  --unfurl-duration: 1.2s;
+  --content-delay: 0.8s;
+
+  position: relative;
+  width: var(--scroll-width);
+  max-width: var(--scroll-max-width);
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SCROLL BODY (The parchment)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.scroll-unfurl__body {
+  position: relative;
+  background: var(--scroll-bg);
+  border: 2px solid var(--scroll-border);
+  border-radius: 4px;
+  padding: 2rem;
+  box-shadow:
+    0 4px 6px var(--scroll-shadow),
+    inset 0 0 20px rgba(139, 90, 43, 0.1);
+  
+  /* Initial state: rolled up */
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition:
+    max-height var(--unfurl-duration) cubic-bezier(0.4, 0, 0.2, 1),
+    opacity calc(var(--unfurl-duration) * 0.5) ease-out,
+    transform var(--unfurl-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Parchment texture overlay */
+.scroll-unfurl__body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Aged edges effect */
+.scroll-unfurl__body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 0 0 30px rgba(139, 90, 43, 0.2),
+    inset 0 0 60px rgba(139, 90, 43, 0.1);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SCROLL RODS (Top and bottom wooden rods)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.scroll-unfurl__rod {
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  height: 16px;
+  background: linear-gradient(
+    180deg,
+    #a67c52 0%,
+    var(--scroll-rod-color) 30%,
+    #654321 70%,
+    #8b5a2b 100%
+  );
+  border-radius: 8px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 2px 2px rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
+
+.scroll-unfurl__rod--top {
+  top: -8px;
+}
+
+.scroll-unfurl__rod--bottom {
+  bottom: -8px;
+}
+
+/* Rod end caps */
+.scroll-unfurl__rod::before,
+.scroll-unfurl__rod::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    #a67c52,
+    var(--scroll-rod-cap)
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.scroll-unfurl__rod::before {
+  left: -12px;
+}
+
+.scroll-unfurl__rod::after {
+  right: -12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SCROLL CONTENT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.scroll-unfurl__content {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s ease-out var(--content-delay),
+    transform 0.5s ease-out var(--content-delay);
+}
+
+/* Content typography */
+.scroll-unfurl__content h1,
+.scroll-unfurl__content h2,
+.scroll-unfurl__content h3 {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  color: #4a3520;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-unfurl__content p {
+  color: #5a4530;
+  line-height: 1.7;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   OPEN STATE — Unfurled scroll
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.scroll-unfurl--open .scroll-unfurl__body {
+  max-height: 2000px;
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.scroll-unfurl--open .scroll-unfurl__content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ROLL-UP ANIMATION (for closing)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.scroll-unfurl--closing .scroll-unfurl__body {
+  max-height: 0;
+  opacity: 0;
+  transform: scaleY(0);
+  transition:
+    max-height var(--unfurl-duration) cubic-bezier(0.4, 0, 0.2, 1),
+    opacity calc(var(--unfurl-duration) * 0.3) ease-in calc(var(--unfurl-duration) * 0.7),
+    transform var(--unfurl-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-unfurl--closing .scroll-unfurl__content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.3s ease-in,
+    transform 0.3s ease-in;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   VARIANTS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Royal variant — gold accents */
+.scroll-unfurl--royal {
+  --scroll-border: #d4af37;
+  --scroll-rod-color: #b8860b;
+  --scroll-rod-cap: #8b6914;
+}
+
+.scroll-unfurl--royal .scroll-unfurl__body {
+  background: linear-gradient(
+    135deg,
+    #fdf8e8 0%,
+    #f5e6c8 25%,
+    #faf0d8 50%,
+    #f0e0b8 75%,
+    #f8f0d0 100%
+  );
+}
+
+/* Ancient variant — darker, weathered */
+.scroll-unfurl--ancient {
+  --scroll-border: #8b7355;
+  --scroll-rod-color: #5c4033;
+  --scroll-rod-cap: #3d2817;
+}
+
+.scroll-unfurl--ancient .scroll-unfurl__body {
+  background: linear-gradient(
+    135deg,
+    #d4c4a8 0%,
+    #c4b090 25%,
+    #d0c0a0 50%,
+    #baa880 75%,
+    #c8b898 100%
+  );
+}
+
+/* Compact variant — smaller padding */
+.scroll-unfurl--compact .scroll-unfurl__body {
+  padding: 1rem;
+}
+
+.scroll-unfurl--compact .scroll-unfurl__rod {
+  height: 12px;
+}
+
+.scroll-unfurl--compact .scroll-unfurl__rod::before,
+.scroll-unfurl--compact .scroll-unfurl__rod::after {
+  width: 18px;
+  height: 18px;
+  top: -3px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .scroll-unfurl {
+    --scroll-max-width: 100%;
+  }
+
+  .scroll-unfurl__body {
+    padding: 1.5rem 1rem;
+  }
+
+  .scroll-unfurl__rod {
+    left: -6px;
+    right: -6px;
+    height: 12px;
+  }
+
+  .scroll-unfurl__rod::before,
+  .scroll-unfurl__rod::after {
+    width: 18px;
+    height: 18px;
+    top: -3px;
+  }
+
+  .scroll-unfurl__rod::before {
+    left: -8px;
+  }
+
+  .scroll-unfurl__rod::after {
+    right: -8px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes scroll-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.scroll-unfurl--shimmer .scroll-unfurl__body::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: scroll-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% {
+    box-shadow:
+      0 4px 6px var(--scroll-shadow),
+      inset 0 0 20px rgba(139, 90, 43, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 8px 12px var(--scroll-shadow),
+      inset 0 0 30px rgba(139, 90, 43, 0.15),
+      0 0 20px rgba(212, 175, 55, 0.3);
+  }
+}
+
+.scroll-unfurl--pulse.scroll-unfurl--open .scroll-unfurl__body {
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DARK MODE SUPPORT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.dark .scroll-unfurl {
+  --scroll-bg: linear-gradient(
+    135deg,
+    #3d3225 0%,
+    #2d2418 25%,
+    #3a2d20 50%,
+    #282015 75%,
+    #352a1d 100%
+  );
+  --scroll-border: #5c4a32;
+  --scroll-shadow: rgba(0, 0, 0, 0.5);
+}
+
+.dark .scroll-unfurl__content h1,
+.dark .scroll-unfurl__content h2,
+.dark .scroll-unfurl__content h3 {
+  color: #e8d4b8;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.dark .scroll-unfurl__content p {
+  color: #d4c4a8;
+}

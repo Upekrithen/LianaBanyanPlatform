@@ -15,15 +15,15 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/placeholder.svg",
+      "src": "/LianaBanyanLogo.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/placeholder.svg",
+      "src": "/LianaBanyanLogo.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],
@@ -33,21 +33,21 @@
       "short_name": "Pool",
       "description": "View LB funding pool",
       "url": "/funding-pool",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/LianaBanyanLogo.png", "sizes": "96x96" }]
     },
     {
       "name": "EOI Vesting",
       "short_name": "Vesting",
       "description": "Track vesting schedules",
       "url": "/eoi-vesting",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/LianaBanyanLogo.png", "sizes": "96x96" }]
     },
     {
       "name": "Gas Tracking",
       "short_name": "Gas",
       "description": "Monitor blockchain costs",
       "url": "/gas-tracking",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/LianaBanyanLogo.png", "sizes": "96x96" }]
     }
   ],
   "categories": ["finance", "business", "productivity"]

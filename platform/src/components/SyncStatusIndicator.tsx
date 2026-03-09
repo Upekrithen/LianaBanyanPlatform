@@ -34,33 +34,37 @@ export function SyncStatusIndicator() {
 
   const checkSyncStatus = async () => {
     try {
-      // Check when last EOI conversion ran
-      const { data: eoiData } = await supabase
+      // Check when last EOI conversion ran by looking at updated_at
+      const { data: eoiData, error } = await supabase
         .from('user_credits')
-        .select('eoi_last_conversion_at')
-        .order('eoi_last_conversion_at', { ascending: false })
+        .select('updated_at')
+        .order('updated_at', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
-      if (eoiData?.eoi_last_conversion_at) {
-        const lastSync = new Date(eoiData.eoi_last_conversion_at);
-        const now = new Date();
-        const hoursSinceSync = (now.getTime() - lastSync.getTime()) / (1000 * 60 * 60);
-
-        // Calculate next scheduled sync (daily at midnight)
-        const nextSync = new Date(lastSync);
-        nextSync.setDate(nextSync.getDate() + 1);
-        nextSync.setHours(0, 0, 0, 0);
-
-        setSyncStatus({
-          lastSync,
-          status: hoursSinceSync > 25 ? 'error' : 'synced',
-          nextScheduledSync: nextSync,
-        });
+      // If table doesn't exist or column missing, just show pending status
+      if (error || !eoiData?.updated_at) {
+        setSyncStatus({ lastSync: null, status: 'pending' });
+        return;
       }
-    } catch (error) {
-      console.error('Error checking sync status:', error);
-      setSyncStatus(prev => ({ ...prev, status: 'error' }));
+
+      const lastSync = new Date(eoiData.updated_at);
+      const now = new Date();
+      const hoursSinceSync = (now.getTime() - lastSync.getTime()) / (1000 * 60 * 60);
+
+      // Calculate next scheduled sync (daily at midnight)
+      const nextSync = new Date(lastSync);
+      nextSync.setDate(nextSync.getDate() + 1);
+      nextSync.setHours(0, 0, 0, 0);
+
+      setSyncStatus({
+        lastSync,
+        status: hoursSinceSync > 25 ? 'error' : 'synced',
+        nextScheduledSync: nextSync,
+      });
+    } catch {
+      // Silently handle errors - sync status is non-critical
+      setSyncStatus({ lastSync: null, status: 'pending' });
     }
   };
 

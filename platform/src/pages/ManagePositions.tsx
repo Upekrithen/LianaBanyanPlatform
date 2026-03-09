@@ -327,7 +327,7 @@ export default function ManagePositions() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="equity">Equity</SelectItem>
+                        <SelectItem value="equity">Participation</SelectItem>
                         <SelectItem value="cash">Cash</SelectItem>
                         <SelectItem value="mixed">Mixed</SelectItem>
                       </SelectContent>

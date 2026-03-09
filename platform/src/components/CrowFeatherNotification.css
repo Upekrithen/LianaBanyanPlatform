@@ -1,0 +1,274 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * CROW FEATHER NOTIFICATION STYLES
+ * Dramatic celebration animation for earning a Crow Feather
+ * ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * OVERLAY
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.crow-feather-notification {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.cfn-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95));
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * CONTENT
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * PARTICLES
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cfn-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: #fbbf24;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 2s ease-out var(--delay) forwards;
+  box-shadow: 0 0 6px #fbbf24, 0 0 12px rgba(251, 191, 36, 0.5);
+}
+
+@keyframes particleFloat {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0) rotate(var(--rotate));
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * FEATHER ICON
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-feather-icon {
+  color: #fbbf24;
+  margin-bottom: 1.5rem;
+  animation: featherDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.6));
+}
+
+@keyframes featherDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) rotate(-45deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+.cfn-feather-icon svg {
+  animation: featherGlow 2s ease-in-out infinite;
+}
+
+@keyframes featherGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.9));
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * TITLE
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+  margin-bottom: 1rem;
+  animation: titleReveal 0.5s ease-out 0.3s both;
+}
+
+@keyframes titleReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * FEATHER NUMBER
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-number {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  animation: numberReveal 0.5s ease-out 0.5s both;
+}
+
+.cfn-hash {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #94a3b8;
+  margin-right: 0.25rem;
+}
+
+.cfn-digits {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #f8fafc;
+  text-shadow: 
+    0 0 30px rgba(251, 191, 36, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.02em;
+}
+
+@keyframes numberReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * DETAILS
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-details {
+  animation: detailsReveal 0.5s ease-out 0.7s both;
+}
+
+.cfn-category {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.cfn-verb {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.cfn-previous {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+@keyframes detailsReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * DISMISS HINT
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-dismiss {
+  position: absolute;
+  bottom: 1rem;
+  font-size: 0.75rem;
+  color: #475569;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * CLOSE BUTTON
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.cfn-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cfn-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────
+ * STAGE TRANSITIONS
+ * ─────────────────────────────────────────────────────────────────────────────── */
+
+.crow-feather-notification.entering .cfn-backdrop {
+  animation: backdropIn 0.4s ease-out forwards;
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.crow-feather-notification.exiting {
+  animation: notificationOut 0.4s ease-in forwards;
+}
+
+@keyframes notificationOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

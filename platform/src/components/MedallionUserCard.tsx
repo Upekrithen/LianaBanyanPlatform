@@ -18,7 +18,7 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
     queryKey: ['medallion-eligibility', projectId, userId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('medallion_eligibility')
+        .from('member_medallion_collection')
         .select(`
           *,
           projects:project_id (

@@ -151,7 +151,7 @@ export default function ClientAPIManager() {
         <CardHeader>
           <CardTitle>What are Client API Keys?</CardTitle>
           <CardDescription>
-            Client API keys allow remixable Lovable templates to connect to your project data.
+            Client API keys allow remixable frontend templates to connect to your project data.
             Each remix can display and interact with your projects while keeping data secure on your portal.
           </CardDescription>
         </CardHeader>

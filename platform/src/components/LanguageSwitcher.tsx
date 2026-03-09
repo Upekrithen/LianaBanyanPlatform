@@ -1,129 +1,130 @@
-import { useTranslation } from 'react-i18next';
-import { Globe } from 'lucide-react';
+/**
+ * LANGUAGE SWITCHER — Easy way to switch back to English (or any language)
+ * ========================================================================
+ * Appears as a small floating button when language is not English.
+ * One click → back to English. Or open the menu to pick any language.
+ * Language is set by Durin's Door passwords but can always be overridden here.
+ */
+
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { supabase } from '@/integrations/supabase/client';
-import { useEffect, useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+import { Globe, Check } from "lucide-react";
+import { getLanguagePreference, setLanguageFromDoor } from "@/lib/durinsDoor";
 
-interface LanguageSwitcherProps {
-  className?: string;
-}
+const LANGUAGES = [
+  { code: "english", label: "English", flag: "🇺🇸" },
+  { code: "spanish", label: "Español", flag: "🇪🇸" },
+  { code: "french", label: "Français", flag: "🇫🇷" },
+  { code: "german", label: "Deutsch", flag: "🇩🇪" },
+  { code: "japanese", label: "日本語", flag: "🇯🇵" },
+  { code: "mandarin", label: "中文", flag: "🇨🇳" },
+  { code: "korean", label: "한국어", flag: "🇰🇷" },
+  { code: "arabic", label: "العربية", flag: "🇸🇦" },
+  { code: "hindi", label: "हिन्दी", flag: "🇮🇳" },
+  { code: "swahili", label: "Kiswahili", flag: "🇰🇪" },
+  { code: "elvish", label: "Elvish (Sindarin)", flag: "🧝" },
+  { code: "norse", label: "Norse", flag: "⚔️" },
+  { code: "tolkien", label: "Tolkien Lore", flag: "📖" },
+  { code: "liana", label: "Liana Banyan", flag: "🌿" },
+];
 
-export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
-  const { i18n, t } = useTranslation();
-  const { toast } = useToast();
-  const [userId, setUserId] = useState<string | null>(null);
+export function LanguageSwitcher() {
+  const [currentLang, setCurrentLang] = useState("english");
+  const [showPageTools, setShowPageTools] = useState(true);
 
   useEffect(() => {
-    // Get current user and load their language preference
-    const loadUserPreferences = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (user) {
-        setUserId(user.id);
-        
-        // Load language from database
-        const { data, error } = await supabase
-          .from('user_preferences')
-          .select('preferred_language')
-          .eq('user_id', user.id)
-          .maybeSingle();
-        
-        if (data && !error && data.preferred_language) {
-          i18n.changeLanguage(data.preferred_language);
-        } else {
-          // Fall back to localStorage
-          const savedLang = localStorage.getItem('preferred-language') || i18n.language;
-          i18n.changeLanguage(savedLang);
-        }
-      } else {
-        // Anonymous user - use localStorage or default
-        const savedLang = localStorage.getItem('preferred-language') || i18n.language;
-        i18n.changeLanguage(savedLang);
+    setCurrentLang(getLanguagePreference());
+    
+    // Check page tools visibility setting (default to hidden)
+    const checkPageTools = () => {
+      const stored = localStorage.getItem('lb_show_page_tools');
+      setShowPageTools(stored === 'true'); // Only show if explicitly set to 'true'
+    };
+    checkPageTools();
+    
+    // Listen for storage changes (when user toggles in Index.tsx)
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'lb_show_page_tools') {
+        setShowPageTools(e.newValue === 'true');
       }
     };
-
-    loadUserPreferences();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
-        loadUserPreferences();
-      } else if (event === 'SIGNED_OUT') {
-        setUserId(null);
-        const savedLang = localStorage.getItem('preferred-language') || 'en';
-        i18n.changeLanguage(savedLang);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [i18n]);
-
-  const changeLanguage = async (lng: string) => {
-    // Update immediately
-    i18n.changeLanguage(lng);
-    localStorage.setItem('preferred-language', lng);
+    window.addEventListener('storage', handleStorage);
     
-    // Save to database if logged in
-    if (userId) {
-      const { error } = await supabase
-        .from('user_preferences')
-        .upsert({
-          user_id: userId,
-          preferred_language: lng
-        }, {
-          onConflict: 'user_id'
-        });
+    // Also listen for custom event for same-tab updates
+    const handleCustomEvent = () => checkPageTools();
+    window.addEventListener('lb_page_tools_changed', handleCustomEvent);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('lb_page_tools_changed', handleCustomEvent);
+    };
+  }, []);
 
-      if (error) {
-        console.error('Error saving language preference:', error);
-        toast({
-          title: 'Language applied locally',
-          description: 'Could not sync to your account. Changes saved to this device only.',
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Language updated',
-          description: 'Your language preference has been saved to your account.'
-        });
-      }
-    }
+  const handleSwitch = (langCode: string) => {
+    setLanguageFromDoor(langCode);
+    setCurrentLang(langCode);
   };
 
-  const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' }
-  ];
+  const currentFlag = LANGUAGES.find(l => l.code === currentLang)?.flag || "🌐";
+  const isNotEnglish = currentLang !== "english";
+
+  // Hide if page tools are toggled off
+  if (!showPageTools) return null;
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <Globe className="h-4 w-4 text-muted-foreground" />
-      <Select value={i18n.language} onValueChange={changeLanguage}>
-        <SelectTrigger className="w-[160px]">
-          <SelectValue>
-            {languages.find(l => l.code === i18n.language)?.flag} {' '}
-            {languages.find(l => l.code === i18n.language)?.name}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {languages.map((lang) => (
-            <SelectItem key={lang.code} value={lang.code}>
-              <div className="flex items-center gap-2">
+    <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2">
+      {/* Quick English button — only shows when NOT in English */}
+      {isNotEnglish && (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="rounded-full shadow-lg gap-1.5 bg-background/90 backdrop-blur border"
+          onClick={() => handleSwitch("english")}
+        >
+          🇺🇸 English
+        </Button>
+      )}
+
+      {/* Full language menu */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full shadow-lg w-10 h-10 bg-background/90 backdrop-blur"
+          >
+            <span className="text-lg">{currentFlag}</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56 max-h-80 overflow-y-auto">
+          <DropdownMenuLabel className="flex items-center gap-2">
+            <Globe className="w-4 h-4" />
+            Language (set by Durin's Door)
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {LANGUAGES.map((lang) => (
+            <DropdownMenuItem
+              key={lang.code}
+              onClick={() => handleSwitch(lang.code)}
+              className="flex items-center justify-between"
+            >
+              <span className="flex items-center gap-2">
                 <span>{lang.flag}</span>
-                <span>{lang.name}</span>
-              </div>
-            </SelectItem>
+                <span>{lang.label}</span>
+              </span>
+              {currentLang === lang.code && <Check className="w-4 h-4 text-primary" />}
+            </DropdownMenuItem>
           ))}
-        </SelectContent>
-      </Select>
+          <DropdownMenuSeparator />
+          <div className="px-2 py-1.5 text-xs text-muted-foreground">
+            Tip: Use different language passwords at Durin's Door to unlock unique experiences!
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

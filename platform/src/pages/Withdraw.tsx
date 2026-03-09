@@ -27,14 +27,21 @@ export default function Withdraw() {
   const { data: credits, isLoading: creditsLoading } = useQuery({
     queryKey: ['user-credits', user?.id],
     queryFn: async () => {
+      // Real: user_credits (eoi_credits, eoi_used_credits, gleaning_credits_received, gleaning_credits_earned, is_gleaner, ...)
       const { data, error } = await supabase
         .from('user_credits')
-        .select('contribution_credits, earned_credits, initial_medallion_credit, initial_medallion_granted_at')
+        .select('eoi_credits, eoi_used_credits, gleaning_credits_received, gleaning_credits_earned, is_gleaner, first_transaction_at')
         .eq('user_id', user!.id)
         .single();
       
       if (error) throw error;
-      return data;
+      // Map to what UI expects
+      return {
+        contribution_credits: data?.eoi_credits || 0,
+        earned_credits: data?.gleaning_credits_earned || 0,
+        initial_medallion_credit: 0,
+        initial_medallion_granted_at: data?.first_transaction_at || null,
+      };
     },
     enabled: !!user,
   });

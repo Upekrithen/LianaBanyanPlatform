@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,7 @@ const TIER_COLORS: Record<HeraldTier, string> = {
 
 export default function HeraldSubscription() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [subscription, setSubscription] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [subscribing, setSubscribing] = useState(false);
@@ -190,7 +192,7 @@ export default function HeraldSubscription() {
                 {/* Actions */}
                 <div className="flex gap-3 justify-center mt-8">
                   <Button
-                    onClick={() => window.location.href = "/hofund"}
+                    onClick={() => navigate("/hofund")}
                     className="gap-2"
                   >
                     <Zap className="w-4 h-4" />
