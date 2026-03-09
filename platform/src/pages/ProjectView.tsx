@@ -13,6 +13,7 @@ import { SmartProjectActionButton } from '@/components/SmartProjectActionButton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProjectTestingTab } from '@/components/ProjectTestingTab';
 import { DerivativeProjectsManager } from '@/components/DerivativeProjectsManager';
+import { ProjectPledgeProgress } from '@/components/ProjectPledgeProgress';
 import { ClipboardCheck, LayoutDashboard } from 'lucide-react';
 
 interface Product {
@@ -367,10 +368,21 @@ export default function ProjectView() {
       <main className="container mx-auto px-4 py-8 space-y-8 max-w-full overflow-x-hidden">
         {/* Smart Action Button - Context-aware CTA */}
         <div className="flex justify-center">
-          <SmartProjectActionButton 
-            projectId={project.id} 
+          <SmartProjectActionButton
+            projectId={project.id}
             projectName={project.name}
             className="w-full max-w-md"
+          />
+        </div>
+
+        {/* Pledge Progress — Back this project with Credits */}
+        <div className="max-w-lg mx-auto">
+          <ProjectPledgeProgress
+            projectId={project.id}
+            projectName={project.name}
+            projectDescription={project.description}
+            projectTagline={project.tagline}
+            medallionEligible={project.medallion_funded}
           />
         </div>
 

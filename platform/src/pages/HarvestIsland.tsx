@@ -23,8 +23,6 @@ import {
   Compass, Shield, Users, Lightbulb, Clock
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { WhiteRabbitButton } from '@/components/journey/WhiteRabbitGuide';
-// import { HarvestPathGuide, PathType } from '@/components/journey/HarvestPathGuide';
 type PathType = 'job' | 'business' | 'seed';
 
 // Ghost World Practice Mirror Component

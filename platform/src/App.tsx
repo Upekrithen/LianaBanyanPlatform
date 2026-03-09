@@ -237,6 +237,8 @@ const PedestalBrowser = lazy(() => import("./pages/PedestalBrowser"));
 const PhaseMimicTrunkManager = lazy(() => import("./pages/PhaseMimicTrunkManager"));
 const RealWorldPuzzles = lazy(() => import("./pages/RealWorldPuzzles"));
 const GuildPhaseManager = lazy(() => import("./pages/GuildPhaseManager"));
+// Pledge System (Session 8A)
+const MyPledges = lazy(() => import("./pages/MyPledges"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -295,7 +297,14 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const location = useLocation();
   useDiscoveryTracker(); // Auto-discover cards as user navigates
-  
+
+  // Analytics page tracking (Session 8A)
+  useEffect(() => {
+    import("@/lib/analytics").then(({ trackPageView }) => {
+      trackPageView(location.pathname);
+    });
+  }, [location.pathname]);
+
   // Always clean for immersive pages (regardless of auth)
   const isAlwaysClean = ALWAYS_CLEAN_ROUTES.some(r =>
     r === '/' ? location.pathname === '/' : location.pathname.startsWith(r)
@@ -512,6 +521,8 @@ const App = () => (
                         <Route path="/ip/register" element={<ProtectedRoute><IPRegistration /></ProtectedRoute>} />
                         <Route path="/agent-onboarding" element={<ProtectedRoute><AgentOnboarding /></ProtectedRoute>} />
                         <Route path="/crowdfunding" element={<ProtectedRoute><CrowdfundingIntegration /></ProtectedRoute>} />
+                        <Route path="/my-pledges" element={<ProtectedRoute><MyPledges /></ProtectedRoute>} />
+                        <Route path="/pledges" element={<Navigate to="/my-pledges" replace />} />
                         <Route path="/deck-card-studio" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
                         <Route path="/cue-cards" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
                         <Route path="/deck-cards" element={<Navigate to="/deck" replace />} />
