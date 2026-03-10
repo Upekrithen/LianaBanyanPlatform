@@ -1,0 +1,901 @@
+{
+  "common": {
+    "helpEachOther": "Help Each Other",
+    "helpOurselves": "Help Ourselves",
+    "asYouWish": "As You Wish",
+    "enterPlatform": "Enter the Platform",
+    "doNotShowAgain": "Do Not Show Again",
+    "goBack": "Go Back",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "close": "Close",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "save": "Save",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "welcome": "Welcome",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "filter": "Filter",
+    "success": "Success",
+    "confirm": "Confirm"
+  },
+  "nav": {
+    "home": "Home",
+    "marketplace": "Marketplace",
+    "network": "Network",
+    "business": "Business",
+    "initiatives": "Initiatives",
+    "economics": "Economics",
+    "governance": "Governance",
+    "patents": "Patents",
+    "transparency": "Transparency",
+    "crowsNest": "The Crow's Nest",
+    "developers": "Developers",
+    "helpWanted": "Help Wanted",
+    "arena": "Design Arena",
+    "suggestionBox": "Suggestion Box",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login"
+  },
+  "welcomeGate": {
+    "headline": "Help Each Other / Help Ourselves",
+    "subtitle": "Two simple ideas. One platform. Everything else follows.",
+    "enter": "Enter",
+    "mutualAid": "Mutual Aid",
+    "mutualAidDesc": "When you help someone, someone helps you. The platform tracks it, so nobody gets left behind.",
+    "transparentPricing": "Transparent Pricing",
+    "transparentPricingDesc": "Every price is Cost + 20%. No hidden fees, no gouging. The math is always visible.",
+    "accessOverExclusion": "Access Over Exclusion",
+    "accessOverExclusionDesc": "$5 entry. Not a barrier — a commitment. Everyone can participate.",
+    "earnedOverGiven": "Earned Over Given",
+    "earnedOverGivenDesc": "Marks emerge from effort, not charity. Your work has value here."
+  },
+  "currencies": {
+    "credits": "Credits",
+    "creditsDesc": "Purchased with dollars. $1 = 1 Credit. Use anywhere on the platform.",
+    "marks": "Marks",
+    "marksDesc": "Earned through effort. Restricted to essentials — food, medical, housing.",
+    "joules": "Joules",
+    "joulesDesc": "Surplus storage. Forever-stamp mechanic locks your exchange rate."
+  },
+  "footer": {
+    "motto": "Help each other, Help ourselves.",
+    "company": "Liana Banyan Corporation",
+    "incorporation": "Wyoming C-Corp · EIN 41-2797446",
+    "platform": "Platform",
+    "legal": "Legal",
+    "community": "Community",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "copyright": "© {{year}} Liana Banyan Corporation. All rights reserved.",
+    "stats": "{{patents}}+ patent claims · {{innovations}} innovations · Service sponsorship, not securities"
+  },
+  "feedback": {
+    "title": "Suggestion Box",
+    "description": "Your voice matters. Tell us what you think.",
+    "category": "Category",
+    "suggestion": "Suggestion",
+    "bugReport": "Bug Report",
+    "featureRequest": "Feature Request",
+    "general": "General",
+    "subject": "Subject",
+    "message": "Message",
+    "email": "Email",
+    "thankYou": "Thank you!",
+    "received": "We read every message."
+  },
+  "durinsDoor": {
+    "speakFriendAndEnter": "Speak, Friend, and Enter",
+    "enterPassword": "Enter the word...",
+    "pushTheStone": "Push the Stone",
+    "wrongPassword": "The stone does not move.",
+    "attemptsRemaining": "{{count}} attempts remaining",
+    "doorOpens": "The door opens...",
+    "languageChanged": "Language changed to {{language}}"
+  },
+  "friendPage": {
+    "title": "Welcome, Friend",
+    "subtitle": "In every language, the door opens the same way.",
+    "helpTranslate": "Help Translate",
+    "translateDescription": "Click any word below to see this page in that language. Help us make the platform accessible to everyone.",
+    "needTranslators": "We need members who can translate and verify content in this language. Earn Marks for every translation you contribute.",
+    "needCorrections": "Active corrections needed — help ensure messages are complete and accurate. Verified by the A-Aron Device and Harper Guild consensus.",
+    "becomeTranslator": "Become a Translator",
+    "translationsMissing": "This language needs translators. Would you like to help?"
+  },
+  "accessibility": {
+    "aaronDevice": "A-Aron Device",
+    "aaronDeviceDesc": "Pronunciation guide and name accessibility system. Everyone's name matters.",
+    "pronounceAs": "Pronounce as",
+    "correction": "Correction"
+  },
+  "projects": {
+    "title": "Projects",
+    "create": "Create Project",
+    "myProjects": "My Projects",
+    "description": "Description",
+    "status": "Status",
+    "owner": "Owner",
+    "createdAt": "Created At"
+  },
+  "marketplace": {
+    "title": "Marketplace",
+    "browse": "Browse Products",
+    "categories": "Categories",
+    "featured": "Featured",
+    "newArrivals": "New Arrivals",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Customize your experience with theme and language settings.",
+    "theme": "Theme",
+    "language": "Language",
+    "changeTheme": "Change Theme",
+    "changeLanguage": "Change Language"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myDashboard": "My Dashboard",
+    "portalAccess": "Portal Access",
+    "membership": "Membership",
+    "credits": "My Credits",
+    "creditsAvailable": "available",
+    "useCredits": "Use your credits to vote on production levels",
+    "noCredits": "Accept a project invitation to receive credits",
+    "guildProgression": "Guild Progression",
+    "eoi": "Expression of Interest",
+    "overview": "Overview",
+    "marketplace": "Marketplace",
+    "browseProjects": "Browse new, trending, and funded projects",
+    "viewAllProjects": "View all crowdfunding projects",
+    "myPortfolio": "My Portfolio",
+    "trackInvestments": "Track your contributions and votes",
+    "myMedallions": "My Medallions",
+    "viewBadges": "View your project badges and tokens",
+    "adminTools": "Admin & Member Tools",
+    "roles": "Roles",
+    "externalServices": "External Services"
+  },
+  "credits": {
+    "title": "Credits",
+    "purchase": "Purchase Credits",
+    "available": "Available Credits",
+    "total": "Total Credits",
+    "used": "Used Credits",
+    "earned": "Earned Credits",
+    "contribution": "Contribution Credits",
+    "bonus": "Bonus Credits",
+    "history": "Credit History",
+    "purchasePackage": "Purchase Package",
+    "selectAmount": "Select Amount"
+  },
+  "guild": {
+    "title": "Guild",
+    "progression": "Guild Progression",
+    "currentTier": "Current Tier",
+    "currentClass": "Current Class",
+    "stakeRequired": "Stake Required",
+    "apprentice": "Apprentice",
+    "journeyman": "Journeyman",
+    "master": "Master",
+    "payStake": "Pay Stake",
+    "unlockNext": "Unlock Next Class",
+    "profitPercentage": "Revenue Percentage",
+    "contracts": "Contracts Completed",
+    "reputation": "Reputation"
+  },
+  "forms": {
+    "name": "Name",
+    "description": "Description",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Submit",
+    "required": "Required",
+    "optional": "Optional",
+    "pleaseWait": "Please wait...",
+    "processing": "Processing..."
+  },
+  "createProject": {
+    "title": "Create New Project",
+    "projectName": "Project Name",
+    "projectDescription": "Project Description",
+    "detailedDescription": "Detailed Description",
+    "category": "Category",
+    "targetAmount": "Target Amount",
+    "deadline": "Deadline",
+    "submit": "Create Project",
+    "cancel": "Cancel",
+    "success": "Project created successfully!",
+    "error": "Failed to create project"
+  },
+  "membership": {
+    "title": "Membership",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "expired": "Expired",
+    "stake": "Membership Stake",
+    "payStake": "Pay Membership Stake",
+    "expiresOn": "Expires on",
+    "renewMembership": "Renew Membership"
+  },
+  "externalServices": {
+    "title": "External Services",
+    "description": "Manage your external service platform accounts",
+    "addService": "Add Service Link",
+    "platform": "Platform",
+    "profileUrl": "Profile URL",
+    "username": "Username",
+    "rateRange": "Rate Range",
+    "verified": "Verified",
+    "pending": "Pending",
+    "flagged": "Flagged",
+    "remove": "Remove",
+    "compliance": "Compliance Warning",
+    "complianceMessage": "If you hire another LB member through an external service, you must pay LB scale rates."
+  },
+  "messages": {
+    "success": "Success!",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information",
+    "confirmDelete": "Are you sure you want to delete this?",
+    "confirmAction": "Are you sure you want to proceed?",
+    "loadingData": "Loading data...",
+    "noData": "No data available",
+    "tryAgain": "Please try again"
+  },
+  "projectsPage": {
+    "title": "Projects",
+    "back": "Back",
+    "signOut": "Sign Out",
+    "loading": "Loading projects...",
+    "noProjects": "No projects found",
+    "viewProject": "View Project",
+    "createdAt": "Created",
+    "fundingProgress": "Funding Progress"
+  },
+  "marketplacePage": {
+    "title": "Marketplace",
+    "subtitle": "Discover and back innovative projects",
+    "newProjects": "New Projects",
+    "trendingProjects": "Trending Projects",
+    "fundedProjects": "Successfully Funded",
+    "last24h": "Last 24 Hours",
+    "last72h": "Last 72 Hours",
+    "lastWeek": "Last Week",
+    "viewAll": "View All",
+    "votes": "votes",
+    "fundingGoal": "Funding Goal",
+    "funded": "Funded",
+    "backers": "Backers"
+  },
+  "createProjectPage": {
+    "title": "Create New Project",
+    "subtitle": "Launch your crowdfunding campaign",
+    "back": "Back to Dashboard",
+    "projectDetails": "Project Details",
+    "projectName": "Project Name",
+    "projectNamePlaceholder": "Enter project name",
+    "tagline": "Tagline",
+    "taglinePlaceholder": "Short catchy description",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe your project",
+    "detailedDescription": "Detailed Description",
+    "detailedDescriptionPlaceholder": "Full project details",
+    "products": "Products",
+    "addProduct": "Add Product",
+    "productName": "Product Name",
+    "productDescription": "Product Description",
+    "productDetails": "Product Details",
+    "productSku": "Product SKU",
+    "productImages": "Product Images",
+    "uploadImages": "Upload Images",
+    "productionLevels": "Production Levels",
+    "addLevel": "Add Production Level",
+    "levelName": "Level Name",
+    "unitsCount": "Units Count",
+    "unitPrice": "Unit Price",
+    "votesNeeded": "Votes Needed",
+    "remove": "Remove",
+    "projectSections": "Project Sections",
+    "addSection": "Add Section",
+    "sectionTitle": "Section Title",
+    "sectionDescription": "Section Description",
+    "videoUrl": "Video URL",
+    "sectionImages": "Section Images",
+    "createProject": "Create Project",
+    "creating": "Creating...",
+    "cancel": "Cancel",
+    "successMessage": "Project created successfully!",
+    "errorMessage": "Failed to create project"
+  },
+  "guildProgression": {
+    "title": "Guild Progression",
+    "currentTier": "Current Tier",
+    "currentClass": "Current Class",
+    "profitShare": "Revenue Percentage",
+    "experience": "Experience",
+    "hours": "hours",
+    "contracts": "Contracts Completed",
+    "stakeRequired": "Stake Required",
+    "stakePaid": "Stake Paid",
+    "payStake": "Pay Stake",
+    "unlockNext": "Unlock Next Class",
+    "lockedTier": "Locked Tier",
+    "apprentice": "Apprentice",
+    "journeyman": "Journeyman",
+    "master": "Master",
+    "captain": "Captain of Industry",
+    "processing": "Processing...",
+    "paymentInNewTab": "Complete payment in the new tab",
+    "progressToNext": "Progress to Next Level"
+  },
+  "membershipPayment": {
+    "title": "LB Membership",
+    "active": "LB Membership Active",
+    "inactive": "LB Membership Required",
+    "fullAccess": "You have full access to all LianaBanyan portals",
+    "unlockAccess": "Unlock access to",
+    "businessPortal": "Business Portal - Position & HR management",
+    "networkPortal": "Network Portal - B2B production & contracts",
+    "nonprofitPortal": "Non-Profit Portal - Fund admin & member benefits",
+    "oneTimeFee": "One-time fee",
+    "payNow": "Pay Now",
+    "processing": "Processing..."
+  },
+  "contractPositions": {
+    "title": "Contract Positions",
+    "back": "Back",
+    "selectCategory": "Select Category",
+    "viewAllPositions": "View All Positions",
+    "applyForPosition": "Apply for Position",
+    "apply": "Apply",
+    "viewDetails": "View Details",
+    "simulateAssignment": "Simulate Assignment",
+    "compensation": "Compensation",
+    "equity": "Participation",
+    "cash": "Credits",
+    "creditsReserved": "Credits Reserved",
+    "requiredStage": "Required Stage",
+    "negotiatedRate": "Negotiated Rate",
+    "noPositions": "No positions available yet",
+    "loading": "Loading positions..."
+  },
+  "toast": {
+    "paymentSuccess": "Payment processed successfully",
+    "paymentError": "Failed to process payment",
+    "applicationSubmitted": "Application submitted",
+    "applicationError": "Failed to submit application",
+    "dataLoaded": "Data loaded",
+    "dataError": "Failed to load data",
+    "saveSuccess": "Changes saved",
+    "saveError": "Failed to save",
+    "deleteSuccess": "Deleted successfully",
+    "deleteError": "Failed to delete",
+    "checkoutCreated": "Redirecting to payment...",
+    "completePayment": "Complete payment in the new tab",
+    "success": {
+      "saved": "Changes saved successfully",
+      "created": "Created successfully",
+      "updated": "Updated successfully",
+      "deleted": "Deleted successfully"
+    },
+    "error": {
+      "generic": "Something went wrong",
+      "network": "Network error. Please try again.",
+      "unauthorized": "You don't have permission to do this",
+      "notFound": "Item not found"
+    }
+  },
+  "portfolio": {
+    "title": "My Projects",
+    "subtitle": "View and manage your contributions",
+    "tabs": {
+      "overview": "Overview",
+      "investments": "Contributions",
+      "returns": "Activity",
+      "history": "History"
+    },
+    "stats": {
+      "totalInvested": "Total Contributed",
+      "currentValue": "Current Value",
+      "totalReturn": "Service Value",
+      "activeInvestments": "Active Projects"
+    },
+    "table": {
+      "project": "Project",
+      "amount": "Amount",
+      "date": "Date",
+      "status": "Status",
+      "return": "Value"
+    },
+    "empty": "No contributions yet",
+    "emptyDescription": "Start backing projects to see them here"
+  },
+  "profileSettings": {
+    "title": "Profile Settings",
+    "subtitle": "Manage your account settings and preferences",
+    "sections": {
+      "general": "General",
+      "security": "Security",
+      "notifications": "Notifications",
+      "privacy": "Privacy"
+    },
+    "general": {
+      "displayName": "Display Name",
+      "email": "Email",
+      "bio": "Bio",
+      "location": "Location",
+      "website": "Website",
+      "avatar": "Profile Picture"
+    },
+    "security": {
+      "changePassword": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "twoFactor": "Two-Factor Authentication",
+      "enable2FA": "Enable 2FA",
+      "disable2FA": "Disable 2FA"
+    },
+    "notifications": {
+      "email": "Email Notifications",
+      "push": "Push Notifications",
+      "projectUpdates": "Project Updates",
+      "messages": "Messages",
+      "marketing": "Marketing Emails"
+    },
+    "privacy": {
+      "profileVisibility": "Profile Visibility",
+      "showEmail": "Show Email",
+      "showActivity": "Show Activity",
+      "searchable": "Searchable Profile"
+    }
+  },
+  "clans": {
+    "title": "Clans",
+    "subtitle": "Collaborative groups for shared projects",
+    "createClan": "Create Clan",
+    "joinClan": "Join Clan",
+    "myClan": "My Clan",
+    "explore": "Explore Clans",
+    "members": "Members",
+    "projects": "Projects",
+    "charter": "Charter",
+    "agreements": "Agreements",
+    "stats": {
+      "totalMembers": "Total Members",
+      "activeProjects": "Active Projects",
+      "completedProjects": "Completed",
+      "reputation": "Reputation"
+    },
+    "form": {
+      "name": "Clan Name",
+      "description": "Description",
+      "mission": "Mission Statement",
+      "values": "Core Values",
+      "rules": "Rules",
+      "requirements": "Membership Requirements"
+    },
+    "empty": "No clans found",
+    "emptyDescription": "Create or join a clan to get started"
+  },
+  "guilds": {
+    "title": "Guilds",
+    "subtitle": "Professional guilds for skilled members",
+    "myGuild": "My Guild",
+    "explore": "Explore Guilds",
+    "stake": "Stake",
+    "benefits": "Benefits",
+    "requirements": "Requirements",
+    "progression": {
+      "title": "Guild Progression",
+      "currentTier": "Current Tier",
+      "nextTier": "Next Tier",
+      "progress": "Progress",
+      "requirements": "Requirements to Advance"
+    },
+    "tiers": {
+      "apprentice": "Apprentice",
+      "journeyman": "Journeyman",
+      "expert": "Expert",
+      "master": "Master"
+    },
+    "stats": {
+      "members": "Members",
+      "avgReputation": "Avg Reputation",
+      "activeContracts": "Active Contracts",
+      "completionRate": "Completion Rate"
+    },
+    "empty": "No guilds available",
+    "emptyDescription": "Guilds will be available soon"
+  },
+  "reputation": {
+    "title": "Reputation Profile",
+    "subtitle": "Your trust score and achievements",
+    "score": "Reputation Score",
+    "rank": "Rank",
+    "achievements": "Achievements",
+    "stats": {
+      "projectsCompleted": "Projects Completed",
+      "onTimeDelivery": "On-Time Delivery",
+      "qualityRating": "Quality Rating",
+      "responseTime": "Response Time"
+    },
+    "reviewsData": {
+      "given": "Reviews Given",
+      "received": "Reviews Received",
+      "positive": "Positive",
+      "neutral": "Neutral",
+      "negative": "Negative"
+    },
+    "badgesList": {
+      "earlyAdopter": "Early Adopter",
+      "topContributor": "Top Contributor",
+      "reliablePartner": "Reliable Partner",
+      "qualityFocus": "Quality Focus"
+    },
+    "empty": "No reputation data yet",
+    "emptyDescription": "Complete projects to build your reputation"
+  },
+  "ipRegistration": {
+    "title": "IP Registration",
+    "subtitle": "Register and protect your intellectual property",
+    "register": "Register IP",
+    "myIP": "My IP Assets",
+    "tiers": "Protection Tiers",
+    "form": {
+      "title": "IP Asset Title",
+      "description": "Description",
+      "type": "Type",
+      "category": "Category",
+      "tier": "Protection Tier"
+    },
+    "types": {
+      "patent": "Patent",
+      "trademark": "Trademark",
+      "copyright": "Copyright",
+      "trade_secret": "Trade Secret",
+      "design": "Design"
+    },
+    "tierFeatures": {
+      "basic": {
+        "feature1": "Basic registration",
+        "feature2": "Public record",
+        "feature3": "Email support"
+      },
+      "standard": {
+        "feature1": "Enhanced registration",
+        "feature2": "Private or public record",
+        "feature3": "Priority support",
+        "feature4": "Legal templates"
+      },
+      "premium": {
+        "feature1": "Full legal protection",
+        "feature2": "Private record",
+        "feature3": "24/7 support",
+        "feature4": "Legal consultation",
+        "feature5": "Monitoring service"
+      },
+      "enterprise": {
+        "feature1": "Maximum protection",
+        "feature2": "Dedicated account manager",
+        "feature3": "Custom legal services",
+        "feature4": "Global monitoring",
+        "feature5": "Priority dispute resolution"
+      }
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "active": "Active",
+      "expired": "Expired"
+    },
+    "empty": "No IP assets registered",
+    "emptyDescription": "Register your first IP asset to get started"
+  },
+  "auth": {
+    "title": "Welcome",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "sendResetLink": "Send Reset Link",
+    "backToLogin": "Back to Login",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "enterFullName": "Enter your full name",
+    "signInButton": "Sign In",
+    "signUpButton": "Sign Up",
+    "signingIn": "Signing in...",
+    "signingUp": "Signing up...",
+    "validation": {
+      "invalidEmail": "Invalid email address",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "enterFullName": "Please enter your full name"
+    },
+    "success": {
+      "signIn": "Signed in successfully",
+      "signUp": "Account created! Check your email to verify.",
+      "resetSent": "Password reset link sent to your email"
+    },
+    "error": {
+      "signIn": "Failed to sign in",
+      "signUp": "Failed to sign up",
+      "resetPassword": "Failed to send reset link"
+    }
+  },
+  "browseBusiness": {
+    "title": "Browse Positions",
+    "subtitle": "Find contract positions and employment opportunities",
+    "positionCategories": "Position Categories",
+    "technical": {
+      "title": "Technical Roles",
+      "description": "Development, engineering, and tech positions"
+    },
+    "creative": {
+      "title": "Creative Positions",
+      "description": "Design, content, and creative services"
+    },
+    "operations": {
+      "title": "Operations & Management",
+      "description": "HR, project management, operations"
+    },
+    "trades": {
+      "title": "Skilled Trades",
+      "description": "Manufacturing, production, hands-on work"
+    },
+    "growth": {
+      "title": "Growth & Marketing",
+      "description": "Sales, marketing, business development"
+    },
+    "hr": {
+      "title": "Human Resources",
+      "description": "Talent acquisition and people operations"
+    },
+    "openings": "openings",
+    "avgEquity": "Avg Participation",
+    "viewPositions": "View Positions"
+  },
+  "browseMarketplace": {
+    "title": "Browse Marketplace",
+    "subtitle": "Discover products and sponsorship opportunities",
+    "sustainable": {
+      "title": "Sustainable Products",
+      "description": "Eco-friendly goods and services"
+    },
+    "community": {
+      "title": "Community Projects",
+      "description": "Local initiatives and developments"
+    },
+    "investment": {
+      "title": "Sponsorship Opportunities",
+      "description": "Back projects and join the cooperative"
+    },
+    "featured": {
+      "title": "Featured Products",
+      "description": "Top-rated community offerings"
+    },
+    "items": "items",
+    "trending": "Trending",
+    "explore": "Explore"
+  },
+  "browseNetwork": {
+    "title": "Browse Network",
+    "subtitle": "Connect with production partners and service providers",
+    "manufacturing": {
+      "title": "Manufacturing Services",
+      "description": "Production capacity and capabilities"
+    },
+    "supplyChain": {
+      "title": "Supply Chain Partners",
+      "description": "Logistics and fulfillment services"
+    },
+    "scheduling": {
+      "title": "Production Scheduling",
+      "description": "Capacity planning and coordination"
+    },
+    "api": {
+      "title": "XML Lockbox API",
+      "description": "Blockchain-verified data exchange"
+    },
+    "pricing": {
+      "title": "Industry Pricing",
+      "description": "Real-time market pricing data"
+    },
+    "integration": {
+      "title": "Network Integration",
+      "description": "Connect your systems to the network"
+    },
+    "providers": "providers",
+    "viewServices": "View Services"
+  },
+  "browseNonprofit": {
+    "title": "Member Benefits",
+    "subtitle": "Explore membership perks and community programs",
+    "tiers": {
+      "title": "Membership Tiers",
+      "description": "Medallion-based benefits and perks"
+    },
+    "loans": {
+      "title": "Loan Programs",
+      "description": "Low-interest community loans"
+    },
+    "eoi": {
+      "title": "EOI Vesting",
+      "description": "Expression of Interest conversion to membership"
+    },
+    "rewards": {
+      "title": "Medallion Rewards",
+      "description": "Blockchain-verified membership tokens"
+    },
+    "subsidies": {
+      "title": "Gas Subsidies",
+      "description": "Transaction costs covered by funding pool"
+    },
+    "fundingPool": {
+      "title": "LB Funding Pool",
+      "description": "33% of medallion sales fund member benefits"
+    },
+    "learnMore": "Learn More"
+  },
+  "adminProject": {
+    "title": "Admin Project Management",
+    "subtitle": "Manage projects, funding, and team invitations",
+    "tabs": {
+      "overview": "Overview",
+      "funding": "Funding",
+      "invitations": "Invitations",
+      "tasks": "Tasks",
+      "themes": "Themes",
+      "blockchain": "Blockchain",
+      "resources": "Resources",
+      "voting": "Voting",
+      "compensation": "Compensation",
+      "applications": "Applications",
+      "positions": "Positions"
+    },
+    "selectProject": "Select Project",
+    "noProjects": "No projects found",
+    "createFirst": "Create your first project",
+    "fundingPot": "Funding Pot",
+    "currentAmount": "Current Amount",
+    "addFunds": "Add Funds",
+    "amount": "Amount",
+    "inviteTeam": "Invite Team Member",
+    "credits": "Credits",
+    "sendInvite": "Send Invite",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error"
+  },
+  "roleManagement": {
+    "title": "Role Management",
+    "subtitle": "Manage user roles and permissions",
+    "searchUser": "Search by email",
+    "selectUser": "Select User",
+    "selectRole": "Select Role",
+    "assignRole": "Assign Role",
+    "removeRole": "Remove Role",
+    "roles": {
+      "admin": "Admin",
+      "project_owner": "Project Owner",
+      "user": "User"
+    },
+    "currentRoles": "Current Roles",
+    "noRoles": "No roles assigned",
+    "adminOnly": "Admin access required",
+    "loading": "Loading users..."
+  },
+  "simulator": {
+    "title": "Project Simulator",
+    "subtitle": "Calculate scenarios and generate reports",
+    "scenarioName": "Scenario Name",
+    "saveScenario": "Save Scenario",
+    "loadScenario": "Load Scenario",
+    "projectName": "Project Name",
+    "productName": "Product Name",
+    "unitsCount": "Units Count",
+    "unitPrice": "Unit Price",
+    "volumeDiscount": "Volume Discount",
+    "equityPercentage": "Participation %",
+    "cashPercentage": "Credit %",
+    "votesNeeded": "Votes Needed",
+    "calculate": "Calculate",
+    "results": "Results",
+    "totalRevenue": "Total Revenue",
+    "discountedRevenue": "Discounted Revenue",
+    "equityValue": "Participation Value",
+    "cashValue": "Cash Value",
+    "pricePerUnit": "Price Per Unit",
+    "downloadReport": "Download Report",
+    "generateXML": "Generate XML"
+  },
+  "managePositions": {
+    "title": "Manage Positions",
+    "subtitle": "Create and manage contract positions",
+    "createPosition": "Create Position",
+    "editPosition": "Edit Position",
+    "deletePosition": "Delete Position",
+    "positionTitle": "Position Title",
+    "category": "Category",
+    "stage": "Stage",
+    "description": "Description",
+    "requirements": "Requirements",
+    "compensation": "Compensation",
+    "equity": "Participation",
+    "cash": "Credits",
+    "credits": "Credits",
+    "duration": "Duration",
+    "active": "Active",
+    "inactive": "Inactive",
+    "applicants": "Applicants",
+    "viewApplications": "View Applications",
+    "noPositions": "No positions yet",
+    "createFirst": "Create your first position"
+  },
+  "investmentExplainer": {
+    "title": "Sponsorship Guide",
+    "subtitle": "How pledges become cooperative membership and service credits",
+    "tabs": {
+      "overview": "Overview",
+      "conversion": "How It Works",
+      "calculator": "Service Calculator",
+      "scenarios": "Scenarios"
+    },
+    "howItWorks": "How It Works",
+    "step1": {
+      "title": "Kickstarter Pledge",
+      "description": "Back a project on Kickstarter"
+    },
+    "step2": {
+      "title": "EOI Conversion",
+      "description": "Pledge converts to Expression of Interest"
+    },
+    "step3": {
+      "title": "Daily Vesting",
+      "description": "1% converts to membership participation daily"
+    },
+    "step4": {
+      "title": "Full Membership",
+      "description": "Full cooperative membership after 100 days"
+    },
+    "benefits": "Membership Benefits",
+    "earlyAccess": "Early access to products",
+    "equityGrowth": "Cooperative participation growth",
+    "communityVoting": "Community voting rights",
+    "exclusivePerks": "Exclusive member perks",
+    "calculateReturn": "Calculate Your Allocation",
+    "investmentAmount": "Pledge Amount",
+    "projectedGrowth": "Projected Growth",
+    "timeframe": "Timeframe",
+    "estimatedValue": "Estimated Value"
+  }
+}

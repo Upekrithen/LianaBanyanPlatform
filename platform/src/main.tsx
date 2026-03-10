@@ -9,7 +9,7 @@ import NonprofitApp from "./NonprofitApp.tsx";
 import NetworkApp from "./NetworkApp.tsx";
 import DSSApp from "./DSSApp.tsx";
 import HexIsleApp from "./HexIsleApp.tsx";
-import "./i18n/config";
+import "./i18n"; // Full react-i18next with 58-language HttpBackend (Option B)
 import "./index.css";
 
 // Load the correct PWA manifest for this portal
