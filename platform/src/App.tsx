@@ -53,6 +53,7 @@ import ExternalServices from "./pages/ExternalServices";
 import AdminServiceReview from "./pages/AdminServiceReview";
 import The2ndSecondPortal from "./pages/The2ndSecondPortal";
 import TransparentLedger from "./pages/TransparentLedger";
+import DeveloperPortal from "./pages/DeveloperPortal";
 import MedallionSwap from "./pages/MedallionSwap";
 import DMKeepSystem from "./pages/DMKeepSystem";
 import DefenseKlausPage from "./pages/DefenseKlausPage";
@@ -67,6 +68,7 @@ import AllPositionsBrowse from "./pages/AllPositionsBrowse";
 import { FailureQueueDashboard } from "@/components/FailureQueueDashboard";
 import { RecordingProvider } from "@/contexts/RecordingContext";
 import { GlobalRecorderOverlay } from "@/components/GlobalRecorderOverlay";
+import { PlatformFooter } from "@/components/PlatformFooter";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { WelcomeGate } from "@/components/WelcomeGate";
 import { SeamlessOnboardProvider } from "@/components/SeamlessOnboardDialog";
@@ -310,6 +312,7 @@ const ALWAYS_CLEAN_ROUTES = [
   '/hexisle/encyclopedia', '/hexisle/hexels',
   '/sponsor', '/forward',
   '/crows-nest', // The Crow's Nest — full-page discovery (Session 8H)
+  '/developers', '/dev', '/terms', '/privacy',
 ];
 
 // Routes where sidebar is hidden ONLY for unauthenticated users (now empty since / moved to ALWAYS_CLEAN)
@@ -337,8 +340,9 @@ function AppShell({ children }: { children: React.ReactNode }) {
 
   if (isCleanRoute) {
     return (
-      <div className="min-h-screen">
-        <main className="min-h-screen">{children}</main>
+      <div className="min-h-screen flex flex-col">
+        <main className="flex-1">{children}</main>
+        <PlatformFooter />
         <HelmCompact />
         <PWAInstallPrompt />
         <LanguageSwitcher />
@@ -371,6 +375,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
                 </aside>
               )}
             </div>
+            <PlatformFooter />
           </div>
         </div>
         <GlobalRecorderOverlay />
@@ -637,6 +642,9 @@ const App = () => (
                         {/* Legal pages — public, no auth required (TikTok compliance) */}
                         <Route path="/terms" element={<TermsOfService />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />
+                        {/* Developer Portal — public */}
+                        <Route path="/developers" element={<DeveloperPortal />} />
+                        <Route path="/dev" element={<DeveloperPortal />} />
                         <Route path="/round-tables" element={<RoundTableHall />} />
                         <Route path="/coverage-minutes" element={<CoverageMinutesDashboard />} />
                         <Route path="/pedestals" element={<PedestalBrowser />} />

@@ -180,9 +180,9 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
             <p>Everyone should be able to participate. $5 isn't a barrier—it's a commitment.</p>
           </div>
           <div className="professional-model-card">
-            <span className="model-number">1,227</span>
+            <span className="model-number">1,552</span>
             <h3>Innovations</h3>
-            <p>Patent-pending systems for dual-currency economics, collective membership, and transparent governance.</p>
+            <p>Patent-pending systems for three-currency economics, collective membership, and transparent governance.</p>
           </div>
           <div className="professional-model-card">
             <span className="model-number">∞</span>
