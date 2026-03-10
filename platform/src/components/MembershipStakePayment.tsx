@@ -32,9 +32,9 @@ export const MembershipStakePayment = ({ hasPaid, onPaymentSuccess }: Membership
         window.open(data.url, "_blank");
         toast.info(t('toast.completePayment'));
       }
-    } catch (error) {
-      console.error("Payment error:", error);
-      toast.error(t('toast.paymentError'));
+    } catch (error: any) {
+      console.error("Membership payment error:", error);
+      toast.error(error?.message || t('toast.paymentError'));
     } finally {
       setIsProcessing(false);
     }

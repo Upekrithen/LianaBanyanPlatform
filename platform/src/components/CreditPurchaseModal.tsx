@@ -65,6 +65,8 @@ export const CreditPurchaseModal = ({ open, onOpenChange, onPurchaseComplete }: 
       setBonusInfo(data);
     } catch (error) {
       console.error('Error loading bonus info:', error);
+      // Set fallback so UI doesn't get stuck in loading state
+      setBonusInfo(null);
     } finally {
       setIsLoadingBonus(false);
     }

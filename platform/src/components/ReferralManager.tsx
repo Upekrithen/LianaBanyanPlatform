@@ -26,32 +26,46 @@ export function ReferralManager() {
   const loadData = async () => {
     if (!user) return;
 
-    // Load user credits
-    const { data: creditsData } = await supabase
-      .from('user_credits')
-      .select('*')
-      .eq('user_id', user.id)
-      .single();
+    try {
+      // Load user credits
+      const { data: creditsData, error: creditsError } = await supabase
+        .from('user_credits')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
 
-    setCredits(creditsData);
+      if (creditsError && creditsError.code !== 'PGRST116') {
+        console.error('Error loading credits:', creditsError);
+      }
+      setCredits(creditsData);
 
-    // Load active referrals
-    const { data: referrals } = await supabase
-      .from('user_referrals')
-      .select('*')
-      .eq('referrer_id', user.id)
-      .eq('status', 'active');
+      // Load active referrals
+      const { data: referrals, error: referralsError } = await supabase
+        .from('user_referrals')
+        .select('*')
+        .eq('referrer_id', user.id)
+        .eq('status', 'active');
 
-    setActiveReferrals(referrals || []);
+      if (referralsError) {
+        console.error('Error loading referrals:', referralsError);
+      }
+      setActiveReferrals(referrals || []);
 
-    // Load medallion eligibility
-    const { data: eligibility } = await supabase
-      .from('member_medallion_collection')
-      .select('*')
-      .eq('user_id', user.id)
-      .maybeSingle();
+      // Load medallion eligibility
+      const { data: eligibility, error: eligibilityError } = await supabase
+        .from('member_medallion_collection')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-    setMedallionEligibility(eligibility);
+      if (eligibilityError) {
+        console.error('Error loading medallion eligibility:', eligibilityError);
+      }
+      setMedallionEligibility(eligibility);
+    } catch (err) {
+      console.error('Referral data load failed:', err);
+      toast.error('Unable to load referral data. Please refresh.');
+    }
   };
 
   const handleCreateReferral = async () => {

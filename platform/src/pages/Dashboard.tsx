@@ -76,29 +76,42 @@ export default function Dashboard() {
   const loadUserData = async () => {
     if (!user) return;
 
-    const { data: creditsData } = await supabase
-      .from('user_credits')
-      .select('*')
-      .eq('user_id', user.id)
-      .single();
+    try {
+      const { data: creditsData, error: creditsError } = await supabase
+        .from('user_credits')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
 
-    if (creditsData) {
-      setCredits({
-        ...creditsData,
-        total_credits: creditsData.eoi_credits || 0,
-        used_credits: creditsData.eoi_used_credits || 0,
-        available_credits: (creditsData.eoi_credits || 0) - (creditsData.eoi_used_credits || 0),
-      });
-      setMembershipPaid(true);
+      if (creditsError && creditsError.code !== 'PGRST116') {
+        // PGRST116 = "no rows" which is normal for new users
+        console.error('Error loading credits:', creditsError);
+      }
+
+      if (creditsData) {
+        setCredits({
+          ...creditsData,
+          total_credits: creditsData.eoi_credits || 0,
+          used_credits: creditsData.eoi_used_credits || 0,
+          available_credits: (creditsData.eoi_credits || 0) - (creditsData.eoi_used_credits || 0),
+        });
+        setMembershipPaid(true);
+      }
+
+      const { data: ownedProjects, error: projectsError } = await supabase
+        .from('projects')
+        .select('id')
+        .eq('owner_id', user.id)
+        .limit(1);
+
+      if (projectsError) {
+        console.error('Error loading projects:', projectsError);
+      }
+
+      setIsProjectOwner(ownedProjects && ownedProjects.length > 0);
+    } catch (err) {
+      console.error('Dashboard data load failed:', err);
     }
-
-    const { data: ownedProjects } = await supabase
-      .from('projects')
-      .select('id')
-      .eq('owner_id', user.id)
-      .limit(1);
-
-    setIsProjectOwner(ownedProjects && ownedProjects.length > 0);
   };
 
   return (

@@ -76,6 +76,7 @@ export const GuildStakeProgression = () => {
 
     if (error) {
       console.error("Error loading progression:", error);
+      toast.error("Unable to load guild progression. Please try again.");
     } else if (data) {
       setProgression(data as GuildProgression);
     } else {

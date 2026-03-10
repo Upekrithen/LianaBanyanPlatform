@@ -39,6 +39,11 @@ export function ContributionReportExporter() {
         supabase.from('eoi_vesting_schedules').select('*, projects(name)').eq('user_id', user.id)
       ]);
 
+      // Check for query errors
+      if (votesRes.error) console.error('Votes query error:', votesRes.error);
+      if (creditsRes.error && creditsRes.error.code !== 'PGRST116') console.error('Credits query error:', creditsRes.error);
+      if (vestingRes.error) console.error('Vesting query error:', vestingRes.error);
+
       const votes = votesRes.data || [];
       const credits = creditsRes.data;
       const vesting = vestingRes.data || [];
