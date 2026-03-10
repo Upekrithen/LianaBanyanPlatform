@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS atti_card_designs (
   logo_url TEXT,
   color_scheme TEXT NOT NULL DEFAULT 'platform',
   back_text TEXT,
-  referrer_code TEXT UNIQUE DEFAULT encode(gen_random_bytes(6), 'hex'),
+  referrer_code TEXT UNIQUE DEFAULT substr(md5(random()::text), 1, 12),
   quantity_ordered INT DEFAULT 0,
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'ordered', 'printed', 'distributed')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
