@@ -64,8 +64,9 @@ serve(async (req) => {
     const { data: apiKey } = await supabase.rpc('generate_api_key');
 
     // Create credential with client subdomain in allowed origins
-    const allowedOrigins = client_subdomain 
-      ? [`https://${client_subdomain}.lovable.app`, `https://${client_subdomain}`]
+    const siteHost = Deno.env.get('SITE_URL') ? new URL(Deno.env.get('SITE_URL')!).hostname : 'lianabanyan.com';
+    const allowedOrigins = client_subdomain
+      ? [`https://${client_subdomain}.${siteHost}`, `https://${client_subdomain}`]
       : ['*'];
 
     const { data: credential, error: credError } = await supabase

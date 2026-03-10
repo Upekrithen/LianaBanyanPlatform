@@ -139,9 +139,11 @@ export function ContainerFlip({
             width: "100%",
             height: "100%",
             overflow: "auto",
+            cursor: "pointer",
           }}
           role="region"
-          aria-label={activeTopic ? `Details: ${activeTopic.title}` : "Card back"}
+          aria-label={activeTopic ? `Details: ${activeTopic.title} — click anywhere to go back` : "Card back"}
+          onClick={flipBack}
         >
           {activeTopic && (
             <div className="h-full rounded-lg border-2 bg-card shadow-md p-5 flex flex-col">
@@ -345,9 +347,11 @@ export function ContainerFlipControlled({
             width: "100%",
             height: "100%",
             overflow: "auto",
+            cursor: "pointer",
           }}
           role="region"
-          aria-label={activeTopic ? `Details: ${activeTopic.title}` : "Card back"}
+          aria-label={activeTopic ? `Details: ${activeTopic.title} — click anywhere to go back` : "Card back"}
+          onClick={flipBack}
         >
           {activeTopic && (
             <div className="h-full rounded-lg border-2 bg-card shadow-md p-5 flex flex-col">
