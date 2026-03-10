@@ -18,13 +18,27 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
+import { useMutation } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 import {
   Users, Handshake, Shield, Calendar, Clock, Award,
-  ArrowRight, Star, ChevronDown, ChevronUp, BookOpen
+  ArrowRight, Star, ChevronDown, ChevronUp, BookOpen,
+  Send, CheckCircle2
 } from "lucide-react";
 import { GUILDS, HANDSHAKE_PROTOCOL, type Guild, type GuildPosition } from "@/lib/guildSystem";
 import { HANDSHAKE_DOCUMENT } from "@/lib/guildHandshakeProtocol";
@@ -202,6 +216,191 @@ function HandshakeProtocolDisplay() {
   );
 }
 
+// ─── Guild Application Dialog ─────────────────────────────────────────────
+
+function GuildApplicationDialog({
+  open,
+  onOpenChange,
+  guild,
+  position,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  guild: Guild | null;
+  position: GuildPosition | null;
+}) {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [displayName, setDisplayName] = useState("");
+  const [background, setBackground] = useState("");
+  const [motivation, setMotivation] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const submitMutation = useMutation({
+    mutationFn: async () => {
+      if (!user || !guild || !position) return;
+
+      // Record application as a guild_membership with role = "applicant"
+      const { error } = await supabase.from("guild_memberships").insert({
+        guild_id: guild.id,
+        member_id: user.id,
+        role: "applicant",
+        is_active: false,
+      });
+
+      if (error) {
+        // If they've already applied, let them know
+        if (error.code === "23505") {
+          throw new Error("You've already applied to this guild.");
+        }
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      setSubmitted(true);
+      toast({
+        title: "Application submitted!",
+        description: `Your interest in ${guild?.name} has been recorded. The Handshake begins soon.`,
+      });
+    },
+    onError: (err: any) => {
+      toast({
+        title: "Could not submit",
+        description: err.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleClose = () => {
+    onOpenChange(false);
+    // Reset form after close animation
+    setTimeout(() => {
+      setDisplayName("");
+      setBackground("");
+      setMotivation("");
+      setSubmitted(false);
+    }, 300);
+  };
+
+  if (!guild || !position) return null;
+
+  return (
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="max-w-lg">
+        {submitted ? (
+          <div className="text-center py-6 space-y-4">
+            <CheckCircle2 className="w-16 h-16 mx-auto text-green-500" />
+            <DialogHeader>
+              <DialogTitle>You're In the Queue</DialogTitle>
+              <DialogDescription>
+                Your interest in {guild.name} as {position.title} has been recorded.
+                The Handshake Protocol is a 30-day mutual exploration — no tricks, no games.
+                You'll hear from us soon.
+              </DialogDescription>
+            </DialogHeader>
+            <Button onClick={handleClose} className="mt-4">
+              Got It
+            </Button>
+          </div>
+        ) : (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <span className="text-2xl">{guild.icon}</span>
+                Apply: {position.title}
+              </DialogTitle>
+              <DialogDescription>
+                {guild.name} — {position.type === "founding_partner"
+                  ? "Founding Partner (The Handshake: 30-day mutual exploration)"
+                  : "Reference Expert"}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 pt-2">
+              {/* Position details */}
+              <div className="rounded-lg bg-muted/50 p-3 text-sm space-y-1">
+                <p className="text-muted-foreground">{position.description}</p>
+                <p className="text-xs text-muted-foreground">
+                  <span className="font-medium text-foreground">Compensation:</span> {position.marksCompensation}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  <span className="font-medium text-foreground">Commitment:</span>{" "}
+                  {position.commitmentLevel === "full" ? "Full-time" : position.commitmentLevel === "part_time" ? "Part-time" : "Advisory"}
+                </p>
+              </div>
+
+              {/* Requirements */}
+              {position.requirements.length > 0 && (
+                <div>
+                  <Label className="text-xs text-muted-foreground">What we're looking for:</Label>
+                  <ul className="list-disc list-inside text-sm text-muted-foreground mt-1 space-y-0.5">
+                    {position.requirements.map((req, i) => (
+                      <li key={i}>{req}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Application fields */}
+              <div>
+                <Label htmlFor="app-name">Your name or moniker</Label>
+                <Input
+                  id="app-name"
+                  placeholder="How should we address you?"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="app-background">Relevant background</Label>
+                <Textarea
+                  id="app-background"
+                  placeholder="What experience, skills, or interests make this a good fit?"
+                  value={background}
+                  onChange={(e) => setBackground(e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="app-motivation">Why this guild?</Label>
+                <Textarea
+                  id="app-motivation"
+                  placeholder="What draws you to this guild and this role?"
+                  value={motivation}
+                  onChange={(e) => setMotivation(e.target.value)}
+                  rows={2}
+                />
+              </div>
+
+              {/* The Handshake reminder */}
+              <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3">
+                <p className="text-xs text-muted-foreground">
+                  <Handshake className="w-3 h-3 inline mr-1 text-amber-500" />
+                  By applying, you're expressing interest in The Handshake — a 30-day mutual exploration.
+                  No commitment until both sides agree. Terms are set in stone before we speak.
+                </p>
+              </div>
+
+              <Button
+                onClick={() => submitMutation.mutate()}
+                disabled={!displayName.trim() || submitMutation.isPending}
+                className="w-full gap-2"
+                style={{ background: guild.color }}
+              >
+                <Send className="w-4 h-4" />
+                {submitMutation.isPending ? "Submitting..." : "Submit Application"}
+              </Button>
+            </div>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
 export default function GuildHub() {
@@ -209,6 +408,11 @@ export default function GuildHub() {
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
   const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
+  const [applicationDialog, setApplicationDialog] = useState<{
+    open: boolean;
+    guild: Guild | null;
+    position: GuildPosition | null;
+  }>({ open: false, guild: null, position: null });
 
   const handleApply = (guild: Guild, position: GuildPosition) => {
     if (!user) {
@@ -217,15 +421,13 @@ export default function GuildHub() {
         actionLabel: "Join",
         membershipIncluded: true,
         onComplete: () => {
-          // After onboard, could navigate to application form
-          // For now, show success
+          // After onboard, open the application dialog
+          setApplicationDialog({ open: true, guild, position });
         },
       });
       return;
     }
-    // TODO: Open application dialog / form for this position
-    // For now, navigate to guilds page
-    navigate("/guilds");
+    setApplicationDialog({ open: true, guild, position });
   };
 
   return (
@@ -328,6 +530,14 @@ export default function GuildHub() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Application Dialog */}
+      <GuildApplicationDialog
+        open={applicationDialog.open}
+        onOpenChange={(open) => setApplicationDialog(prev => ({ ...prev, open }))}
+        guild={applicationDialog.guild}
+        position={applicationDialog.position}
+      />
     </div>
   );
 }

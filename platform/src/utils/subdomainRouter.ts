@@ -8,7 +8,7 @@ export const getSubdomainProject = async (): Promise<string | null> => {
     return null;
   }
   
-  // Skip Lovable preview domains (legacy — platform now deploys via Firebase)
+  // Skip legacy preview domains — platform deploys via Firebase
   if (hostname.includes('lovable.app')) {
     return null;
   }
