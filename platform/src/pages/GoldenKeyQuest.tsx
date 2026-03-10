@@ -26,6 +26,8 @@ import {
   Sparkles, Share2, Map, BookOpen, Gift, Crown, Twitter, MessageCircle,
 } from "lucide-react";
 import { GoldenKeysSocial, ShareAchievementModal } from "@/components/GoldenKeysSocial";
+import PaperQuizDialog from "@/components/PaperQuizDialog";
+import { getActiveQuizzes, type PaperQuiz } from "@/lib/paperQuiz";
 import { toast } from "sonner";
 
 export default function GoldenKeyQuest() {
@@ -38,6 +40,7 @@ export default function GoldenKeyQuest() {
   const [ticketAnswer, setTicketAnswer] = useState("");
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareAchievement, setShareAchievement] = useState<any>(null);
+  const [selectedQuizPaper, setSelectedQuizPaper] = useState<PaperQuiz | null>(null);
 
   // ─── User's feather count and key stats ───
   const { data: feathers } = useQuery({
@@ -106,6 +109,15 @@ export default function GoldenKeyQuest() {
         .order("created_at", { ascending: false })
         .limit(10);
       return data || [];
+    },
+  });
+
+  // ─── Paper quizzes (comprehension) ───
+  const { data: paperQuizzes, isLoading: loadingQuizzes } = useQuery({
+    queryKey: ["paper-quizzes"],
+    queryFn: async () => {
+      try { return await getActiveQuizzes(); }
+      catch { return []; }
     },
   });
 
@@ -242,8 +254,12 @@ export default function GoldenKeyQuest() {
       )}
 
       <Tabs defaultValue="keys" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="keys">Treasure Keys</TabsTrigger>
+          <TabsTrigger value="quizzes">
+            <BookOpen className="w-4 h-4 mr-1" />
+            Paper Quizzes
+          </TabsTrigger>
           <TabsTrigger value="tickets">Golden Tickets</TabsTrigger>
           <TabsTrigger value="submit">Submit Answer</TabsTrigger>
           <TabsTrigger value="winners">Hall of Fame</TabsTrigger>
@@ -316,6 +332,71 @@ export default function GoldenKeyQuest() {
               <CardContent className="py-8 text-center text-muted-foreground">
                 <Key className="w-12 h-12 mx-auto mb-4 opacity-20" />
                 <p>No active treasure keys right now. Check back soon!</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* ─── PAPER QUIZZES ─── */}
+        <TabsContent value="quizzes" className="space-y-4">
+          <Card className="border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-amber-500" />
+                Paper Comprehension Quizzes
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground space-y-2">
+              <p>Read an academic paper on Cephas, then test your comprehension.</p>
+              <p>Two paths: <strong>Self-attest</strong> you read the full paper (10 Marks), or <strong>take a quiz</strong> (2 Marks per correct answer, up to 10).</p>
+              <p>Questions test genuine understanding — not memorization. Each quiz pulls from a larger pool, so retakes have fresh questions.</p>
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {paperQuizzes?.map((pq) => (
+              <Card
+                key={pq.id}
+                className="cursor-pointer hover:border-amber-500/40 hover:shadow-md transition-all"
+                onClick={() => setSelectedQuizPaper(pq)}
+              >
+                <CardContent className="pt-5">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-lg bg-amber-500/10 flex-shrink-0">
+                      <Key className="w-5 h-5 text-amber-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{pq.paperTitle}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {pq.questionCount} questions · Up to {pq.questionCount * pq.marksPerCorrect} Marks
+                      </p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[10px]">
+                          <Key className="w-3 h-3 mr-0.5" />
+                          Golden Key
+                        </Badge>
+                        <Badge variant="outline" className="text-[10px]">
+                          {pq.maxAttempts} attempts
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {loadingQuizzes && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          )}
+
+          {!loadingQuizzes && (!paperQuizzes || paperQuizzes.length === 0) && (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-20" />
+                <p>Paper quizzes are being prepared. Check back soon!</p>
               </CardContent>
             </Card>
           )}
@@ -687,6 +768,17 @@ export default function GoldenKeyQuest() {
             setShareAchievement(null);
           }}
           referralCode={user?.id?.slice(0, 8).toUpperCase()}
+        />
+      )}
+
+      {/* Paper Quiz Dialog */}
+      {selectedQuizPaper && (
+        <PaperQuizDialog
+          paperId={selectedQuizPaper.paperId}
+          paperTitle={selectedQuizPaper.paperTitle}
+          paperUrl={selectedQuizPaper.paperUrl || undefined}
+          isOpen={!!selectedQuizPaper}
+          onClose={() => setSelectedQuizPaper(null)}
         />
       )}
     </div>

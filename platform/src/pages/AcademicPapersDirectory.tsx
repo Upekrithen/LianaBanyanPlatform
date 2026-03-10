@@ -2,12 +2,22 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, BookOpen, FileText, ArrowRight, Filter } from "lucide-react";
+import { Search, BookOpen, FileText, ArrowRight, Filter, Key } from "lucide-react";
 import cephasData from "../data/cephasIndex.json";
+import PaperQuizDialog from "@/components/PaperQuizDialog";
+
+// Papers that have Golden Key quizzes available
+const PAPERS_WITH_QUIZZES = new Set([
+  "academic-attention-as-funding",
+  "academic-boaz-principle-tldr-md",
+  "academic-three-gear-currency-tldr-md",
+  "academic-ghost-credits-tldr-md",
+]);
 
 export default function AcademicPapersDirectory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [quizPaper, setQuizPaper] = useState<{ id: string; title: string; url: string } | null>(null);
 
   const categories = Array.from(new Set(cephasData.map(p => p.category))).sort();
 
@@ -94,16 +104,28 @@ export default function AcademicPapersDirectory() {
                     )}
                   </div>
                 )}
-                <a 
-                  href={paper.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center w-full px-4 py-2 bg-slate-900 dark:bg-slate-800 text-white rounded-lg hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors text-sm"
-                >
-                  <FileText className="w-4 h-4 mr-2" />
-                  Read on Cephas
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </a>
+                <div className="flex gap-2">
+                  <a
+                    href={paper.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center justify-center px-4 py-2 bg-slate-900 dark:bg-slate-800 text-white rounded-lg hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors text-sm ${PAPERS_WITH_QUIZZES.has(paper.id) ? "flex-1" : "w-full"}`}
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    Read on Cephas
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </a>
+                  {PAPERS_WITH_QUIZZES.has(paper.id) && (
+                    <button
+                      onClick={() => setQuizPaper({ id: paper.id, title: paper.title, url: paper.url })}
+                      className="inline-flex items-center justify-center px-3 py-2 bg-amber-500/10 text-amber-600 border border-amber-500/30 rounded-lg hover:bg-amber-500/20 transition-colors text-sm font-medium gap-1.5"
+                      title="Take the Golden Key quiz"
+                    >
+                      <Key className="w-4 h-4" />
+                      Quiz
+                    </button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))
@@ -117,6 +139,17 @@ export default function AcademicPapersDirectory() {
           </div>
         )}
       </div>
+
+      {/* Golden Key Quiz Dialog */}
+      {quizPaper && (
+        <PaperQuizDialog
+          paperId={quizPaper.id}
+          paperTitle={quizPaper.title}
+          paperUrl={quizPaper.url}
+          isOpen={!!quizPaper}
+          onClose={() => setQuizPaper(null)}
+        />
+      )}
     </div>
   );
 }
