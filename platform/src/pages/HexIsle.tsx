@@ -26,6 +26,7 @@ import {
 
 import { RootLockDemo } from "@/components/hexisle/root-lock/RootLockDemo";
 import { ViewPhaseSwitcher } from "@/components/hexisle/ViewPhaseSwitcher";
+import { SlottedTopHero } from "@/components/hexisle/SlottedTopHero";
 
 export default function HexIsle() {
   const { user } = useAuth();
@@ -119,13 +120,16 @@ export default function HexIsle() {
         <div>
           <h1 className="text-3xl font-bold">HexIsle</h1>
           <p className="text-muted-foreground">
-            Water-powered gaming. No batteries. No screens. Just physics and imagination.
+            The universal hex platform. Water-powered. Physics-driven. Compatible with everything.
           </p>
         </div>
         <Badge className="ml-auto bg-amber-500/10 text-amber-600 border-amber-500/20">
           <Crown className="w-3 h-3 mr-1" /> Crown Jewel #3
         </Badge>
       </div>
+
+      {/* SlottedTop Innovation #1552 — THE HEADLINE FEATURE */}
+      <SlottedTopHero />
 
       {/* Quick Actions */}
       <div className="grid md:grid-cols-5 gap-4">
@@ -193,28 +197,28 @@ export default function HexIsle() {
             Tereno Hydraulic Platform
           </CardTitle>
           <CardDescription>
-            The physical game mechanics that bridge the real world and the digital platform.
+            14-piece mechanical grammar. Water-powered physics. Universal hex terrain compatibility.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid md:grid-cols-3 gap-6 text-sm">
+          <div className="space-y-3">
+            <h3 className="font-semibold flex items-center gap-2 text-amber-600">
+              <Hexagon className="w-4 h-4" /> Universal Hex Adapter
+            </h3>
+            <ul className="space-y-2 text-muted-foreground">
+              <li><strong>SlottedTop Pincers:</strong> Snap any 32-35mm hex terrain tile onto a Hexel. BattleTech, WarHex, and more.</li>
+              <li><strong>Hidden Traps:</strong> Terrain looks normal from above. Cradle flip reveals active mechanics below.</li>
+              <li><strong>Gorgon Mechanism:</strong> One lithographic part integrates pincers, flails, actuators, and torus. No assembly.</li>
+            </ul>
+          </div>
           <div className="space-y-3">
             <h3 className="font-semibold flex items-center gap-2 text-cyan-600">
               <Cog className="w-4 h-4" /> Physical Mechanics
             </h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li><strong>Hydraulic Power:</strong> Water channels power the game. No batteries.</li>
-              <li><strong>IIFIS (If It Fits It Sits):</strong> Boots snap onto specific terrain types. You can't walk on lava without lava boots.</li>
+              <li><strong>Hydraulic Power:</strong> Water channels power the game. No batteries. No screens.</li>
+              <li><strong>IIFIS (If It Fits It Sits):</strong> Boots snap onto specific terrain types. Physics-driven interaction.</li>
               <li><strong>Compliant Mechanisms:</strong> Push down on a character's backpack to ratchet their Hit Point counter.</li>
-            </ul>
-          </div>
-          <div className="space-y-3">
-            <h3 className="font-semibold flex items-center gap-2 text-amber-600">
-              <Package className="w-4 h-4" /> Fitted Coffers & Coins
-            </h3>
-            <ul className="space-y-2 text-muted-foreground">
-              <li><strong>The Armory:</strong> Modular coffers store characters and their specific biome armor.</li>
-              <li><strong>The Treasury:</strong> Coins (Square, Circle, Triangle) stack to represent character value.</li>
-              <li><strong>Coin Slots:</strong> Characters have specific slot patterns (like dice faces) restricting which coins they can hold.</li>
             </ul>
           </div>
           <div className="space-y-3">
