@@ -319,6 +319,7 @@ export function FamilyCalendar({ familyId, calendarId }: FamilyCalendarProps) {
             variant="outline"
             size="icon"
             onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+            aria-label="Previous month"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -333,6 +334,7 @@ export function FamilyCalendar({ familyId, calendarId }: FamilyCalendarProps) {
             variant="outline"
             size="icon"
             onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+            aria-label="Next month"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>

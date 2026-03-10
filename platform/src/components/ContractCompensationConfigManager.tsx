@@ -236,7 +236,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
               onChange={(e) => setNewPrerequisite(e.target.value)}
               rows={2}
             />
-            <Button onClick={addPrerequisite} size="icon">
+            <Button onClick={addPrerequisite} size="icon" aria-label="Add prerequisite">
               <Plus className="h-4 w-4" />
             </Button>
           </div>
@@ -248,6 +248,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
                   variant="ghost"
                   size="icon"
                   onClick={() => removePrerequisite(index)}
+                  aria-label="Remove prerequisite"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -272,7 +273,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
               onChange={(e) => setNewRequirement(e.target.value)}
               rows={2}
             />
-            <Button onClick={addRequirement} size="icon">
+            <Button onClick={addRequirement} size="icon" aria-label="Add requirement">
               <Plus className="h-4 w-4" />
             </Button>
           </div>
@@ -284,6 +285,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
                   variant="ghost"
                   size="icon"
                   onClick={() => removeRequirement(index)}
+                  aria-label="Remove requirement"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -323,6 +325,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
                 variant="outline"
                 size="icon"
                 onClick={() => removeTimeOption(index)}
+                aria-label="Remove time option"
               >
                 <X className="h-4 w-4" />
               </Button>

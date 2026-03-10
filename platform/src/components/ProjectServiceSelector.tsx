@@ -259,6 +259,7 @@ export function ProjectServiceSelector({ projectId }: ProjectServiceSelectorProp
                           size="icon"
                           onClick={() => removeServiceMutation.mutate(service.id)}
                           disabled={removeServiceMutation.isPending}
+                          aria-label="Remove service"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

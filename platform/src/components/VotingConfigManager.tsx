@@ -211,6 +211,7 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
                   size="icon"
                   onClick={() => removeTimeOption(index)}
                   disabled={timeOptions.length <= 1}
+                  aria-label="Remove time option"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

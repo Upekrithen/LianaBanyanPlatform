@@ -306,10 +306,10 @@ export function GiftListManager({
                     </div>
                     {isOwner && (
                       <div className="flex gap-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Edit gift item">
                           <Edit2 className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400" aria-label="Delete gift item">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

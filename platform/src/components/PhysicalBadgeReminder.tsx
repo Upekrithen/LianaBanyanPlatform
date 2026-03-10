@@ -69,6 +69,7 @@ export function PhysicalBadgeReminder() {
           size="icon"
           className="absolute top-2 right-2 h-6 w-6"
           onClick={() => setDismissed(true)}
+          aria-label="Dismiss badge reminder"
         >
           <X className="w-4 h-4" />
         </Button>

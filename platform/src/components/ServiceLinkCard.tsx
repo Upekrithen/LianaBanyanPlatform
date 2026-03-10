@@ -134,6 +134,7 @@ export function ServiceLinkCard({ link, onDelete, lbScaleRate }: ServiceLinkCard
               size="icon"
               onClick={() => onDelete(link.id)}
               className="hover:bg-destructive/10 hover:text-destructive"
+              aria-label="Delete service link"
             >
               <Trash2 className="h-4 w-4" />
             </Button>

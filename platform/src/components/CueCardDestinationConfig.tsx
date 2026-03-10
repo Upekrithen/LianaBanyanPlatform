@@ -231,10 +231,10 @@ export function CueCardDestinationConfig({
                 <code className="text-xs bg-muted px-2 py-1 rounded flex-1 truncate">
                   {result.context_url}
                 </code>
-                <Button variant="ghost" size="icon" onClick={copyUrl}>
+                <Button variant="ghost" size="icon" onClick={copyUrl} aria-label="Copy URL">
                   <Copy className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="icon" asChild>
+                <Button variant="ghost" size="icon" asChild aria-label="Open link in new tab">
                   <a href={result.context_url} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="w-4 h-4" />
                   </a>

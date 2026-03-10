@@ -178,11 +178,12 @@ export function ProprietaryRecipeForm({ open, onOpenChange, onSuccess }: Proprie
                   placeholder={`Ingredient ${idx + 1}`}
                 />
                 {ingredients.length > 1 && (
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
+                  <Button
+                    type="button"
+                    variant="ghost"
                     size="icon"
                     onClick={() => removeIngredient(idx)}
+                    aria-label="Remove ingredient"
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
@@ -216,11 +217,12 @@ export function ProprietaryRecipeForm({ open, onOpenChange, onSuccess }: Proprie
                   className="flex-1"
                 />
                 {instructions.length > 1 && (
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
+                  <Button
+                    type="button"
+                    variant="ghost"
                     size="icon"
                     onClick={() => removeInstruction(idx)}
+                    aria-label="Remove instruction"
                   >
                     <Minus className="h-4 w-4" />
                   </Button>

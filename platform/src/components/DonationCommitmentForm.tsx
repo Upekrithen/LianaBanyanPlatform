@@ -304,6 +304,7 @@ export function DonationCommitmentForm() {
                         variant="ghost"
                         size="icon"
                         onClick={() => updateCommitmentStatus.mutate({ id: commitment.id, status: "paused" })}
+                        aria-label="Pause donation"
                       >
                         <Pause className="w-4 h-4" />
                       </Button>
@@ -313,6 +314,7 @@ export function DonationCommitmentForm() {
                         variant="ghost"
                         size="icon"
                         onClick={() => updateCommitmentStatus.mutate({ id: commitment.id, status: "active" })}
+                        aria-label="Resume donation"
                       >
                         <Play className="w-4 h-4" />
                       </Button>
@@ -322,6 +324,7 @@ export function DonationCommitmentForm() {
                       size="icon"
                       className="text-destructive"
                       onClick={() => updateCommitmentStatus.mutate({ id: commitment.id, status: "cancelled" })}
+                      aria-label="Cancel donation"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

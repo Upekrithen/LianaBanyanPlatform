@@ -351,7 +351,7 @@ export function JourneyMap() {
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Portal Here
                   </Button>
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" aria-label="Remove beacon">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>

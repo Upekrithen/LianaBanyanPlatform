@@ -96,6 +96,7 @@ export function LanguageSwitcher() {
             variant="outline"
             size="icon"
             className="rounded-full shadow-lg w-10 h-10 bg-background/90 backdrop-blur"
+            aria-label="Change language"
           >
             <span className="text-lg">{currentFlag}</span>
           </Button>

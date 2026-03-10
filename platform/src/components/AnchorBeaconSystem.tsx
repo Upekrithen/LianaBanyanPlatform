@@ -373,6 +373,7 @@ export function CueCardDispatchDialog({
               size="icon"
               onClick={handlePrevCard}
               disabled={cards.length <= 1}
+              aria-label="Previous card"
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
@@ -387,6 +388,7 @@ export function CueCardDispatchDialog({
               size="icon"
               onClick={handleNextCard}
               disabled={cards.length <= 1}
+              aria-label="Next card"
             >
               <ChevronRight className="w-4 h-4" />
             </Button>

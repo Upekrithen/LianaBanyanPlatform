@@ -99,6 +99,7 @@ export function PromoCountdownBanner({
             size="icon"
             onClick={handleDismiss}
             className="hover:bg-background/10"
+            aria-label="Dismiss banner"
           >
             <X className="h-4 w-4" />
           </Button>

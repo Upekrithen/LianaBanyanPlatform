@@ -397,6 +397,7 @@ export function ProjectTaskList({ projectId }: ProjectTaskListProps) {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDeleteTask(task.id)}
+                          aria-label="Delete task"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

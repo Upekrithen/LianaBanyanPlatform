@@ -173,6 +173,7 @@ export function ThemeCarousel({ projectId, onThemeChange }: ThemeCarouselProps) 
                       size="icon"
                       className="absolute bottom-2 right-2 h-8 w-8"
                       onClick={(e) => handleDeleteClick(theme.id, e)}
+                      aria-label="Delete theme"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

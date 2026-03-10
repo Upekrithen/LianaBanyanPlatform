@@ -99,6 +99,7 @@ export function SpotlightToggleButton() {
       size="icon"
       onClick={toggleRangerMode}
       title={preferences.rangerModeEnabled ? "Turn off spotlights" : "Turn on spotlights"}
+      aria-label={preferences.rangerModeEnabled ? "Turn off spotlights" : "Turn on spotlights"}
       className="relative"
     >
       <Flashlight

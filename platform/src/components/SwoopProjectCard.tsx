@@ -354,7 +354,7 @@ export function SwoopProjectCard({ project, variant = "full", showVoteButton = t
           </Button>
         </Link>
 
-        <Button variant="ghost" size="icon" onClick={handleShare}>
+        <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share project">
           <Share2 className="w-4 h-4" />
         </Button>
       </CardFooter>

@@ -323,7 +323,7 @@ export function RecipeSubmissionForm({
                   onChange={(e) => setPhotoUrl(e.target.value)}
                   placeholder="https://example.com/photo.jpg" 
                 />
-                <Button type="button" variant="outline" size="icon">
+                <Button type="button" variant="outline" size="icon" aria-label="Upload photo">
                   <Camera className="h-4 w-4" />
                 </Button>
               </div>
@@ -530,7 +530,7 @@ export function RecipeSubmissionForm({
                     className="w-28"
                   />
                   {ingredients.length > 1 && (
-                    <Button type="button" variant="ghost" size="icon" onClick={() => removeIngredient(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => removeIngredient(index)} aria-label="Remove ingredient">
                       <Minus className="h-4 w-4" />
                     </Button>
                   )}
@@ -568,7 +568,7 @@ export function RecipeSubmissionForm({
                     />
                   </div>
                   {steps.length > 1 && (
-                    <Button type="button" variant="ghost" size="icon" onClick={() => removeStep(index)}>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => removeStep(index)} aria-label="Remove step">
                       <Minus className="h-4 w-4" />
                     </Button>
                   )}

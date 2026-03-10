@@ -256,12 +256,13 @@ export function MealOrderDialog({
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 size="icon"
                 onClick={decrementQuantity}
                 disabled={quantity <= bulkMinimum}
+                aria-label="Decrease quantity"
               >
                 <Minus className="h-4 w-4" />
               </Button>
@@ -274,12 +275,13 @@ export function MealOrderDialog({
                 step={bulkIncrement}
                 className="w-20 text-center"
               />
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 size="icon"
                 onClick={incrementQuantity}
                 disabled={quantity + bulkIncrement > portionsAvailable}
+                aria-label="Increase quantity"
               >
                 <PlusIcon className="h-4 w-4" />
               </Button>
