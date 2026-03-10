@@ -512,7 +512,7 @@ export default function Senate() {
             </div>
             <div>
               <p className="text-2xl font-bold text-primary">928+</p>
-              <p className="text-xs text-muted-foreground">Innovations</p>
+              <p className="text-xs text-muted-foreground">Patent Claims</p>
             </div>
             <div>
               <p className="text-2xl font-bold text-primary">16</p>
