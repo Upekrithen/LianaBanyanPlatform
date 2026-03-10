@@ -238,134 +238,94 @@ export default function The2ndSecondPortal() {
 
       {/* ═══════════════ SECTION 1: VALUE PROPOSITIONS (HERO) ═══════════════ */}
       <section className="mb-14" aria-labelledby="value-props-heading">
-        <div className="text-center mb-8">
-          <h2
-            id="value-props-heading"
-            className="text-2xl font-bold text-slate-900 dark:text-white mb-2"
-          >
-            What Can You Do Here?
-          </h2>
-          <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            Three ways the platform works for you — click any card to learn more.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6 items-stretch">
-          {/* Card 1: Getting Funded */}
-          <ContainerFlipControlled
-            topics={[VALUE_PROP_TOPICS[0]]}
-            className="min-h-[280px]"
-            renderFront={({ flipToTopic }) => (
-              <Card
-                className="h-full border-2 border-emerald-200 dark:border-emerald-900 bg-emerald-50/50 dark:bg-emerald-950/20 cursor-pointer hover:shadow-lg transition-shadow group"
-                onClick={() => flipToTopic(0)}
-                role="button"
-                tabIndex={0}
-                aria-label="Learn about Getting Funded — click to flip"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    flipToTopic(0);
-                  }
-                }}
-              >
-                <CardContent className="p-6 flex flex-col items-center text-center h-full justify-center">
-                  <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full mb-4 group-hover:scale-110 transition-transform">
-                    <DollarSign className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+        <ContainerFlipControlled
+          topics={VALUE_PROP_TOPICS}
+          className="w-full"
+          renderFront={({ flipToTopic }) => (
+            <Card className="border-2 border-emerald-200 dark:border-emerald-900 bg-emerald-50/30 dark:bg-emerald-950/10">
+              <CardContent className="p-6">
+                <div className="flex flex-col md:flex-row gap-6 items-start">
+                  <div className="p-4 bg-emerald-100 dark:bg-emerald-900 rounded-full flex-shrink-0">
+                    <Sparkles className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                    Getting Funded
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Launch without venture capital. Use the platform's IP-backed
-                    sponsorship model to fund your product — no equity given
-                    away, no pitch decks.
-                  </p>
-                  <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-3 font-medium">
-                    Click to learn more →
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          />
-
-          {/* Card 2: Build a Team with Marks */}
-          <ContainerFlipControlled
-            topics={[VALUE_PROP_TOPICS[1]]}
-            className="min-h-[280px]"
-            renderFront={({ flipToTopic }) => (
-              <Card
-                className="h-full border-2 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20 cursor-pointer hover:shadow-lg transition-shadow group"
-                onClick={() => flipToTopic(0)}
-                role="button"
-                tabIndex={0}
-                aria-label="Learn about building a team with Marks — click to flip"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    flipToTopic(0);
-                  }
-                }}
-              >
-                <CardContent className="p-6 flex flex-col items-center text-center h-full justify-center">
-                  <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full mb-4 group-hover:scale-110 transition-transform">
-                    <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                  <div className="flex-1">
+                    <h2
+                      id="value-props-heading"
+                      className="text-xl font-bold text-slate-900 dark:text-white mb-2"
+                    >
+                      What Can You Do Here?
+                    </h2>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4">
+                      Three ways the platform works for you — click any box to
+                      learn more.
+                    </p>
+                    <div className="grid md:grid-cols-3 gap-4 text-sm">
+                      <button
+                        className="bg-white dark:bg-slate-900 p-4 rounded-lg border-2 border-transparent hover:border-emerald-400 hover:shadow-md transition-all text-left cursor-pointer group"
+                        onClick={() => flipToTopic(0)}
+                        aria-label="Learn about Getting Funded — click to flip"
+                      >
+                        <span className="font-bold text-emerald-600 group-hover:text-emerald-700 flex items-center gap-1.5">
+                          <DollarSign className="h-3.5 w-3.5" />
+                          Getting Funded
+                        </span>
+                        <p className="text-slate-500 mt-1">
+                          Launch without venture capital. IP-backed sponsorship
+                          model — no pitch decks needed.
+                        </p>
+                        <span className="text-[10px] text-emerald-500 mt-2 block font-medium">
+                          Click to learn more →
+                        </span>
+                      </button>
+                      <button
+                        className="bg-white dark:bg-slate-900 p-4 rounded-lg border-2 border-transparent hover:border-blue-400 hover:shadow-md transition-all text-left cursor-pointer group"
+                        onClick={() => flipToTopic(1)}
+                        aria-label="Learn about building a team with Marks — click to flip"
+                      >
+                        <span className="font-bold text-blue-600 group-hover:text-blue-700 flex items-center gap-1.5">
+                          <Users className="h-3.5 w-3.5" />
+                          Build a Team with Marks
+                        </span>
+                        <p className="text-slate-500 mt-1">
+                          Post bounties. People work, earn Marks backed by the
+                          patent portfolio. No cash outlay.
+                        </p>
+                        <span className="text-[10px] text-blue-500 mt-2 block font-medium">
+                          Click to learn more →
+                        </span>
+                      </button>
+                      <button
+                        className="bg-white dark:bg-slate-900 p-4 rounded-lg border-2 border-transparent hover:border-rose-400 hover:shadow-md transition-all text-left cursor-pointer group"
+                        onClick={() => flipToTopic(2)}
+                        aria-label="Learn about backing projects — click to flip"
+                      >
+                        <span className="font-bold text-rose-600 group-hover:text-rose-700 flex items-center gap-1.5">
+                          <Heart className="h-3.5 w-3.5" />
+                          Bring Dreams to Life
+                        </span>
+                        <p className="text-slate-500 mt-1">
+                          Back projects you believe in. Get the product, earn a
+                          medallion, accumulate Joules.
+                        </p>
+                        <span className="text-[10px] text-rose-500 mt-2 block font-medium">
+                          Click to learn more →
+                        </span>
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground/60 mt-4">
+                      This is service sponsorship, not financial speculation.
+                      Medallions are notarized records, not securities. Joules
+                      are internal working power — never become cash.
+                    </p>
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                    Build a Team with Marks
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Post bounties. People work, earn Marks backed by the patent
-                    portfolio. No cash outlay required.
-                  </p>
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-3 font-medium">
-                    Click to learn more →
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        />
 
-          {/* Card 3: Bring Dreams to Life */}
-          <ContainerFlipControlled
-            topics={[VALUE_PROP_TOPICS[2]]}
-            className="min-h-[280px]"
-            renderFront={({ flipToTopic }) => (
-              <Card
-                className="h-full border-2 border-rose-200 dark:border-rose-900 bg-rose-50/50 dark:bg-rose-950/20 cursor-pointer hover:shadow-lg transition-shadow group"
-                onClick={() => flipToTopic(0)}
-                role="button"
-                tabIndex={0}
-                aria-label="Learn about backing projects — click to flip"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    flipToTopic(0);
-                  }
-                }}
-              >
-                <CardContent className="p-6 flex flex-col items-center text-center h-full justify-center">
-                  <div className="p-3 bg-rose-100 dark:bg-rose-900 rounded-full mb-4 group-hover:scale-110 transition-transform">
-                    <Heart className="h-8 w-8 text-rose-600 dark:text-rose-400" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                    Bring Dreams to Life
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Back projects you believe in. Get the product, earn a
-                    medallion, and accumulate Joules — all without speculating.
-                  </p>
-                  <p className="text-xs text-rose-600 dark:text-rose-400 mt-3 font-medium">
-                    Click to learn more →
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          />
-        </div>
-
-        {/* SEC-safe disclosure */}
-        <p className="text-[11px] text-muted-foreground/60 text-center mt-4 max-w-3xl mx-auto">
+        {/* SEC-safe disclosure (visible when not flipped) */}
+        <p className="text-[11px] text-muted-foreground/60 text-center mt-4 max-w-3xl mx-auto sr-only">
           This is service sponsorship, not financial speculation. You receive
           the product or service you preorder. Medallions are notarized records,
           not securities. Joules are internal working power — they never become
