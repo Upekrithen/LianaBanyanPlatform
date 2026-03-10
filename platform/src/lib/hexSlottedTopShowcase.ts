@@ -727,6 +727,324 @@ export const MODULAR_PRODUCT = {
     "By week 12, you have a fully operational water-powered hex game tile.",
 };
 
+// ─── Piece Engineering Teasers ────────────────────────────────────────────
+//
+// Each weekly release gets engineering teaser data for its "coming soon" stub page.
+// These become the data source for the generic HexelWeeklyDetail component.
+// Once a piece is fully released, its full detail page takes over (like SlottedTop).
+
+export interface PieceEngineeringTeaser {
+  slug: string;                  // URL slug matching detailPageRoute
+  partName: string;
+  tagline: string;               // One-line elevator pitch
+  longDescription: string;       // 2-3 sentence engineering description
+  whatItDoes: string;
+  partCount: string;             // "1 part", "2 parts (Coral + Belt)", "3 parts (PGear 1-3)"
+  connectsAbove: string;         // Which piece sits above in the stack
+  connectsBelow: string;         // Which piece sits below in the stack
+  keyEngineering: string[];      // 3-5 engineering highlights
+  manufacturingHint: string;     // Brief manufacturing note
+  gradientFrom: string;          // Tailwind gradient color for hero
+  gradientVia: string;
+  accentColor: string;           // Badge/highlight color
+  heroIcon: string;              // Emoji for hero section
+}
+
+/** Slug → route segment extraction helper */
+function routeToSlug(route: string): string {
+  return route.split("/").pop() ?? "";
+}
+
+export const PIECE_TEASERS: Record<string, PieceEngineeringTeaser> = {
+  "sawtooth-coral": {
+    slug: "sawtooth-coral",
+    partName: "SawtoothCoral + TimingBelt",
+    tagline: "The Ratchet Mechanism",
+    longDescription:
+      "Click-click-click. The most satisfying sound in tabletop gaming. The SawtoothCoral " +
+      "converts continuous rotation into precise, indexed steps. The TimingBelt synchronizes " +
+      "the ratchet with the gear train above. Together they give every Hexel its heartbeat.",
+    whatItDoes: "Ratchet indexing",
+    partCount: "2 parts (Coral + Belt)",
+    connectsAbove: "MainGear (#11)",
+    connectsBelow: "PGear-3 (#9)",
+    keyEngineering: [
+      "Sawtooth profile converts smooth rotation to discrete indexed steps",
+      "TimingBelt synchronizes ratchet cycle with MainGear engagement",
+      "Asymmetric tooth geometry: easy engage, resist backslip",
+      "Audible click feedback — mechanical UX that players feel",
+    ],
+    manufacturingHint: "FDM-printable with standard 0.4mm nozzle. Tooth geometry benefits from SLA for precision.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-orange-900/20",
+    accentColor: "amber",
+    heroIcon: "⚙️",
+  },
+  "capstone": {
+    slug: "capstone",
+    partName: "Capstone",
+    tagline: "The Structural Cap",
+    longDescription:
+      "The Capstone locks the SlottedTop assembly to the gear train below. It's the structural " +
+      "bridge between terrain interaction (above) and mechanical power (below). Without the " +
+      "Capstone, the SlottedTop floats free. With it, every movement transfers to the gears.",
+    whatItDoes: "Structural bridge",
+    partCount: "1 part",
+    connectsAbove: "SlottedTop (#14)",
+    connectsBelow: "Cradle + Football (#12)",
+    keyEngineering: [
+      "Hexagonal register ensures alignment between SlottedTop and Cradle",
+      "Load-bearing geometry distributes terrain weight across gear train",
+      "Snap-fit lip prevents vertical separation during Cradle flip",
+      "Center bore passes the Gorgon actuator shaft through cleanly",
+    ],
+    manufacturingHint: "Simple geometry — FDM, SLA, or injection molding. No overhangs.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-slate-700/20",
+    accentColor: "slate",
+    heroIcon: "🏛️",
+  },
+  "cradle": {
+    slug: "cradle",
+    partName: "Cradle + Football",
+    tagline: "The Flip Mechanism",
+    longDescription:
+      "Land or water. The entire Cradle goes up/down AND flips. The Football sits in the " +
+      "Cradle's cavity — a wave generator area that creates hydraulic effects when the Cradle " +
+      "flips to water mode. Traps work on both land and water.",
+    whatItDoes: "Flip mechanism + wave generation",
+    partCount: "2 parts (Cradle + Football)",
+    connectsAbove: "Capstone (#13)",
+    connectsBelow: "MainGear (#11)",
+    keyEngineering: [
+      "Full Cradle flip: vertical displacement + 180-degree rotation",
+      "Football wave generator area: hydraulic displacement on flip",
+      "Dual-mode traps: mechanisms activate in both land and water configurations",
+      "SlottedTop sits on top of Capstone which sits on Cradle — terrain stays level until triggered",
+      "Port for Football/wave gen area is post-launch expansion (dimensional history: 42mm → 60mm)",
+    ],
+    manufacturingHint: "Cradle requires living hinge geometry. Football is a simple ovoid. Both FDM-printable.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-blue-900/20",
+    accentColor: "blue",
+    heroIcon: "🔄",
+  },
+  "main-gear": {
+    slug: "main-gear",
+    partName: "MainGear",
+    tagline: "The Primary Drive",
+    longDescription:
+      "The MainGear is the primary power transmission element. Everything the planetary gears " +
+      "produce flows through the MainGear to drive the mechanisms above — ratchets, flips, and traps. " +
+      "It's the torque highway of the entire Hexel.",
+    whatItDoes: "Primary power transmission",
+    partCount: "1 part",
+    connectsAbove: "SawtoothCoral + TimingBelt (#10)",
+    connectsBelow: "PGear-1/2/3 (#7-9)",
+    keyEngineering: [
+      "Sun gear position in planetary system — driven by three PGears",
+      "Involute tooth profile for smooth meshing and minimal wear",
+      "Central shaft bore carries rotation to SawtoothCoral above",
+      "Torque multiplication: PGears to MainGear ratio amplifies water-driven force",
+    ],
+    manufacturingHint: "Gear tooth precision matters. SLA or SLS preferred for prototyping. Injection mold for production.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-red-900/20",
+    accentColor: "red",
+    heroIcon: "⚙️",
+  },
+  "pgears": {
+    slug: "pgears",
+    partName: "Planetary Gears (PGear 1-3)",
+    tagline: "Torque Multiplication",
+    longDescription:
+      "Three planetary gears orbit around the MainGear (sun gear), carried by the Ouralis. " +
+      "They multiply the torque from the Rotor's water-driven rotation, converting gentle " +
+      "water flow into enough force to drive traps, flips, and ratchets.",
+    whatItDoes: "Torque multiplication from water to mechanism",
+    partCount: "3 parts (PGear 1, 2, 3)",
+    connectsAbove: "SawtoothCoral + TimingBelt (#10)",
+    connectsBelow: "Ouralis (#6)",
+    keyEngineering: [
+      "Three-planet configuration: balanced load distribution, smooth operation",
+      "120-degree spacing around sun gear eliminates radial vibration",
+      "Identical parts: all three PGears are the same piece (manufacturing efficiency)",
+      "Tooth count ratio determines torque multiplier — optimized for water flow rates",
+    ],
+    manufacturingHint: "Identical geometry × 3. SLA for prototyping, injection mold for production runs.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-yellow-900/20",
+    accentColor: "yellow",
+    heroIcon: "🔩",
+  },
+  "ouralis": {
+    slug: "ouralis",
+    partName: "Ouralis",
+    tagline: "The Planetary Carrier",
+    longDescription:
+      "The Ouralis carries all three planetary gears in their orbital positions. Named for " +
+      "its function as the 'orbit rails' — it's the frame that holds the gear train together. " +
+      "Rotation of the Ouralis drives the PGears around the MainGear.",
+    whatItDoes: "Planetary gear carrier frame",
+    partCount: "1 part",
+    connectsAbove: "PGear 1-3 (#7-9)",
+    connectsBelow: "Rotor (#5)",
+    keyEngineering: [
+      "Three bearing journals at 120-degree intervals hold PGear axles",
+      "Central bore passes MainGear shaft through without contact",
+      "Driven by Rotor below — transfers rotational input to planetary system",
+      "Ring gear interface on outer circumference (optional: fixed ring gear on Clamshell)",
+    ],
+    manufacturingHint: "Bearing journal precision critical. SLA prototyping recommended.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-indigo-900/20",
+    accentColor: "indigo",
+    heroIcon: "🛞",
+  },
+  "rotor": {
+    slug: "rotor",
+    partName: "Rotor",
+    tagline: "Water In, Rotation Out",
+    longDescription:
+      "Water enters the Rotor's vane channels and exits as rotational force. This is the " +
+      "engine of the Hexel — the point where passive water becomes active mechanism. No batteries. " +
+      "No motors. Just fluid dynamics and clever geometry.",
+    whatItDoes: "Water-to-rotation conversion",
+    partCount: "1 part",
+    connectsAbove: "Ouralis (#6)",
+    connectsBelow: "GoldenLotus (#4)",
+    keyEngineering: [
+      "Radial vane channels capture water flow and convert to angular momentum",
+      "Asymmetric vane geometry: preferential rotation direction",
+      "Flow rate sensitivity: operates across a range of water volumes",
+      "Sealed bearing interface with GoldenLotus valve below",
+    ],
+    manufacturingHint: "Vane geometry benefits from SLA/SLS. Internal channels may require support removal.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-cyan-900/20",
+    accentColor: "cyan",
+    heroIcon: "💧",
+  },
+  "golden-lotus": {
+    slug: "golden-lotus",
+    partName: "GoldenLotus",
+    tagline: "The Valve Mechanism",
+    longDescription:
+      "The GoldenLotus controls water flow direction and timing through the Hexel. Petals open " +
+      "and close to route water to the Rotor. It's the traffic controller of the hydraulic " +
+      "system — deciding when and how much water drives the mechanism.",
+    whatItDoes: "Water flow valve and timing",
+    partCount: "1 part",
+    connectsAbove: "Rotor (#5)",
+    connectsBelow: "Clamshell (#3)",
+    keyEngineering: [
+      "Petal geometry: compliant hinges allow open/close without separate parts",
+      "Flow timing: petal aperture controls ratchet speed and trap activation timing",
+      "Bi-directional: controls flow in both fill and drain cycles",
+      "Named for the lotus flower form factor — petals radiate from center bore",
+    ],
+    manufacturingHint: "Compliant hinges require careful layer orientation in FDM. SLA preferred for petal flexibility.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-amber-900/20",
+    accentColor: "amber",
+    heroIcon: "🪷",
+  },
+  "clamshell": {
+    slug: "clamshell",
+    partName: "Clamshell",
+    tagline: "The Protective Enclosure",
+    longDescription:
+      "The Clamshell wraps around the gear train and hydraulic components, keeping water in " +
+      "and dirt out. It's the waterproof housing that makes the Hexel viable as an outdoor " +
+      "gaming surface. Open it to service. Close it to play.",
+    whatItDoes: "Sealed enclosure for mechanism",
+    partCount: "1 part",
+    connectsAbove: "GoldenLotus (#4)",
+    connectsBelow: "HollowLog (#2)",
+    keyEngineering: [
+      "Hinged enclosure: opens for assembly/maintenance, seals for play",
+      "O-ring groove on mating surface for water-tight seal",
+      "Ring gear surface on inner wall (optional: for Ouralis planetary system)",
+      "Drainage ports with check valves prevent overpressure",
+    ],
+    manufacturingHint: "Two-piece mold for injection. FDM printable but seal quality varies.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-green-900/20",
+    accentColor: "green",
+    heroIcon: "🐚",
+  },
+  "hollow-log": {
+    slug: "hollow-log",
+    partName: "HollowLog",
+    tagline: "The Hydraulic Highway",
+    longDescription:
+      "Water flows through the HollowLog's internal channels between the ChannelLock base " +
+      "and the Clamshell above. It's the reservoir and routing system — the plumbing that " +
+      "connects the water source to the mechanism. Capacity determines play duration.",
+    whatItDoes: "Water reservoir and routing",
+    partCount: "1 part",
+    connectsAbove: "Clamshell (#3)",
+    connectsBelow: "ChannelLock (#1)",
+    keyEngineering: [
+      "Internal channel network routes water from ChannelLock to GoldenLotus",
+      "Reservoir volume determines how long the mechanism runs per fill",
+      "Multi-path routing: water can flow to multiple Rotor vanes simultaneously",
+      "Gravity-fed by default; pressure-fed when connected to adjacent Hexels",
+    ],
+    manufacturingHint: "Internal channels require either dissolvable supports (FDM) or hollow printing (SLA).",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-emerald-900/20",
+    accentColor: "emerald",
+    heroIcon: "🪵",
+  },
+  "channel-lock": {
+    slug: "channel-lock",
+    partName: "ChannelLock",
+    tagline: "The Foundation of Everything",
+    longDescription:
+      "The ChannelLock is the base piece of every Hexel — the anchor that connects to the " +
+      "table surface and to adjacent Hexels. Its hydraulic channels are the water highways " +
+      "between connected Hexels. Lock seven together and water flows across the entire table.",
+    whatItDoes: "Base anchor + inter-Hexel water channels",
+    partCount: "1 part",
+    connectsAbove: "HollowLog (#2)",
+    connectsBelow: "Table surface / adjacent ChannelLocks",
+    keyEngineering: [
+      "Six-sided water channel ports: one per hex edge for inter-Hexel connections",
+      "Snap-lock tabs on each edge for mechanical connection to adjacent Hexels",
+      "Center bore feeds water up to HollowLog reservoir",
+      "Anti-slip base geometry for table surface grip",
+      "The piece that makes '7 Hexels = 1 Table' possible",
+    ],
+    manufacturingHint: "Channel ports require precision. Injection molding ideal for production. FDM viable for prototyping.",
+    gradientFrom: "from-slate-900",
+    gradientVia: "via-teal-900/20",
+    accentColor: "teal",
+    heroIcon: "🔗",
+  },
+};
+
+/** Get teaser by slug (URL path segment) */
+export function getPieceTeaserBySlug(slug: string): PieceEngineeringTeaser | undefined {
+  return PIECE_TEASERS[slug];
+}
+
+/** Get previous/next weekly release by slug */
+export function getAdjacentReleases(slug: string): {
+  prev: WeeklyRelease | null;
+  current: WeeklyRelease | null;
+  next: WeeklyRelease | null;
+} {
+  const currentIndex = WEEKLY_RELEASES.findIndex(
+    r => routeToSlug(r.detailPageRoute) === slug
+  );
+  return {
+    prev: currentIndex > 0 ? WEEKLY_RELEASES[currentIndex - 1] : null,
+    current: currentIndex >= 0 ? WEEKLY_RELEASES[currentIndex] : null,
+    next: currentIndex < WEEKLY_RELEASES.length - 1 ? WEEKLY_RELEASES[currentIndex + 1] : null,
+  };
+}
+
 // ─── Collaboration & Open Invitation ──────────────────────────────────────
 
 export const COLLABORATION_INVITE = {

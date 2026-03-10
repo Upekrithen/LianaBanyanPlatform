@@ -232,6 +232,7 @@ const HexIsleOverworld = lazy(() => import("./pages/HexIsleOverworld"));
 // Hexel Part Detail Pages — Weekly Series (Session 8C)
 const HexelSlottedTopDetail = lazy(() => import("./pages/HexelSlottedTopDetail"));
 const HexelSawtoothCoralDetail = lazy(() => import("./pages/HexelSawtoothCoralDetail"));
+const HexelWeeklyDetail = lazy(() => import("./pages/HexelWeeklyDetail"));
 const ContentPipelinePage = lazy(() => import("./pages/ContentPipelinePage"));
 // Legal pages (TikTok Developer Portal compliance — Session 7D)
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -617,6 +618,7 @@ const App = () => (
                         <Route path="/hexisle/overworld" element={<HexIsleOverworld />} />
                         <Route path="/hexisle/hexels/slotted-top" element={<HexelSlottedTopDetail />} />
                         <Route path="/hexisle/hexels/sawtooth-coral" element={<HexelSawtoothCoralDetail />} />
+                        <Route path="/hexisle/hexels/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexelWeeklyDetail /></Suspense>} />
                         <Route path="/content-pipeline" element={<ContentPipelinePage />} />
                         {/* Legal pages — public, no auth required (TikTok compliance) */}
                         <Route path="/terms" element={<TermsOfService />} />
