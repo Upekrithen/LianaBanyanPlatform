@@ -213,6 +213,7 @@ const C20Leaderboard = lazy(() => import("./pages/C20Leaderboard"));
 const BeaconExplainer = lazy(() => import("./pages/BeaconExplainer"));
 const WildfireRunsPage = lazy(() => import("./pages/WildfireRunsPage"));
 import { WildfireRunProvider } from "./contexts/WildfireRunContext";
+import { MockDataProvider } from "./contexts/MockDataProvider";
 import { PathwayProgressProvider } from "./contexts/PathwayProgressContext";
 import { FeatureTipProvider } from "./components/FeatureTip";
 import { GlobalWildfireRun } from "./components/GlobalWildfireRun";
@@ -430,6 +431,7 @@ const App = () => (
           <SeamlessOnboardProvider>
           <FeatureTipProvider>
           <WildfireRunProvider>
+          <MockDataProvider>
           <PathwayProgressProvider>
           <CrowsNestProvider>
             <RecordingProvider>
@@ -896,6 +898,7 @@ const App = () => (
             </RecordingProvider>
           </CrowsNestProvider>
           </PathwayProgressProvider>
+          </MockDataProvider>
           </WildfireRunProvider>
           </FeatureTipProvider>
           </SeamlessOnboardProvider>

@@ -18,6 +18,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMockData } from "@/contexts/MockDataProvider";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -58,7 +59,11 @@ import {
   Sparkles,
   Ghost,
   Compass,
+  GitBranch,
 } from "lucide-react";
+import { ContingencyOperatorDialog } from "@/components/contingency/ContingencyOperatorDialog";
+import { WhatIfButton } from "@/components/wildfire/WhatIfButton";
+import { BeaconRunEndChoices } from "@/components/wildfire/BeaconRunEndChoices";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TYPES
@@ -80,13 +85,14 @@ export interface WildfireRun {
   slug: string;
   name: string;
   description: string;
-  category: "business" | "initiatives" | "onboarding" | "governance" | "creative" | "custom";
+  category: "business" | "initiatives" | "onboarding" | "governance" | "creative" | "custom" | "level-1";
   nodes: BeaconNode[];
   totalNodes: number;
   goldenKeysRequired: number; // 5 per node for Magic Carpet
   difficulty: "beginner" | "intermediate" | "advanced" | "expert";
   estimatedMinutes: number;
   icon: string;
+  interestKey?: string; // Maps to interestMockDataMap for CO integration
 }
 
 export type StopMode = "wildfire" | "tourist" | "on-resume" | "custom";
@@ -203,15 +209,22 @@ interface WildfireBeaconRunProps {
   run: WildfireRun;
   onComplete?: (elapsedSeconds: number) => void;
   onNodeVisit?: (node: BeaconNode, index: number) => void;
+  onPickNewInterest?: () => void;
+  onGoDeeper?: () => void;
+  onContinueTrack?: () => void;
+  hasNextRun?: boolean;
 }
 
-export function WildfireBeaconRun({ run, onComplete, onNodeVisit }: WildfireBeaconRunProps) {
+export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInterest, onGoDeeper, onContinueTrack, hasNextRun }: WildfireBeaconRunProps) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const isRedCarpetRider = useRedCarpetStatus();
   const goldenKeys = useGoldenKeys();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const countdownRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Mock Data (Contingency Operators integration)
+  const mockData = useMockData();
 
   const [state, setState] = useState<RunState>({
     currentNodeIndex: 0,
@@ -227,6 +240,9 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit }: WildfireBeac
   const [nodeCountdown, setNodeCountdown] = useState(0);
   const [showModeSelector, setShowModeSelector] = useState(false);
   const [showUnlockDialog, setShowUnlockDialog] = useState(false);
+  const [showCoDialog, setShowCoDialog] = useState(false);
+  const [showEndChoices, setShowEndChoices] = useState(false);
+  const [showPostUpdatePrompt, setShowPostUpdatePrompt] = useState(false);
 
   const currentNode = run.nodes[state.currentNodeIndex];
   const progress = ((state.currentNodeIndex + 1) / run.totalNodes) * 100;
@@ -273,11 +289,52 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit }: WildfireBeac
     setNodeCountdown(duration === Infinity ? 0 : duration);
   }, [run.nodes, navigate, onNodeVisit, getNodeDuration]);
 
+  // Handle CO dialog interactions
+  const handleCoApply = useCallback(() => {
+    mockData.applyChanges();
+    setShowCoDialog(false);
+    setShowPostUpdatePrompt(true);
+    toast.success("Showcase updated with your custom numbers!", {
+      icon: "✨",
+    });
+  }, [mockData]);
+
+  const handleCoRestart = useCallback(() => {
+    mockData.resetAndRestart();
+    setShowCoDialog(false);
+    // Restart the run from the beginning
+    setState(prev => ({
+      ...prev,
+      currentNodeIndex: 0,
+      completedNodes: [],
+      elapsedSeconds: 0,
+    }));
+    navigateToNode(0);
+    toast.success("Restarting showcase with your custom numbers!", {
+      icon: "🔄",
+    });
+  }, [mockData, navigateToNode]);
+
+  // Handle restart request from context
+  useEffect(() => {
+    if (mockData.restartRequested && state.isRunning) {
+      setState(prev => ({
+        ...prev,
+        currentNodeIndex: 0,
+        completedNodes: [],
+        elapsedSeconds: 0,
+      }));
+      navigateToNode(0);
+      mockData.clearRestartRequest();
+    }
+  }, [mockData.restartRequested, state.isRunning, navigateToNode, mockData]);
+
   // Advance to next node
   const advanceToNextNode = useCallback(() => {
     if (state.currentNodeIndex >= run.totalNodes - 1) {
       // Run complete!
       setState(prev => ({ ...prev, isRunning: false }));
+      setShowEndChoices(true);
       onComplete?.(state.elapsedSeconds);
       toast.success(`🎉 Wildfire Run Complete! Time: ${formatTime(state.elapsedSeconds)}`);
       return;
@@ -294,12 +351,18 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit }: WildfireBeac
 
   // Start the run
   const startRun = () => {
+    // Load mock data if an interest key is configured
+    if (run.interestKey) {
+      mockData.loadMockData(run.interestKey, run.name);
+    }
+
     setState(prev => ({
       ...prev,
       isRunning: true,
       isPaused: false,
       startedAt: new Date().toISOString(),
     }));
+    setShowEndChoices(false);
     navigateToNode(0);
     toast.success(`🔥 Wildfire Run Started: ${run.name}`);
   };
@@ -526,6 +589,11 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit }: WildfireBeac
                       </>
                     );
                   })()}
+                  {run.interestKey && mockData.currentData && (
+                    <span className="ml-2 text-purple-500">
+                      • Showcase Active
+                    </span>
+                  )}
                 </div>
               </div>
             )}
@@ -555,8 +623,8 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit }: WildfireBeac
                   {goldenKeys}
                 </Badge>
               </div>
-              <Progress 
-                value={(goldenKeys / run.goldenKeysRequired) * 100} 
+              <Progress
+                value={(goldenKeys / run.goldenKeysRequired) * 100}
                 className="h-2"
               />
               <p className="text-xs text-muted-foreground mt-2">
@@ -632,6 +700,132 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit }: WildfireBeac
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* ── Contingency Operators: "What If?" Button ── */}
+      {state.isRunning && run.interestKey && mockData.currentData && (
+        <WhatIfButton
+          onClick={() => {
+            if (state.isRunning && !state.isPaused) {
+              setState(prev => ({ ...prev, isPaused: true }));
+            }
+            setShowCoDialog(true);
+          }}
+          isCustomized={mockData.currentData.isCustomized}
+        />
+      )}
+
+      {/* ── Contingency Operators Dialog ── */}
+      {mockData.currentData && (
+        <ContingencyOperatorDialog
+          isOpen={showCoDialog}
+          onClose={() => {
+            setShowCoDialog(false);
+            // Resume if we auto-paused
+            if (state.isPaused) {
+              setState(prev => ({ ...prev, isPaused: false }));
+            }
+          }}
+          onApply={handleCoApply}
+          onRestart={handleCoRestart}
+          fields={mockData.currentData.fields}
+          derivations={mockData.currentData.derivations}
+          onFieldChange={mockData.updateField}
+          onResetToDefaults={mockData.resetToDefaults}
+          interestLabel={mockData.currentData.interestLabel}
+          isCustomized={mockData.currentData.isCustomized}
+        />
+      )}
+
+      {/* ── Post-Update Prompt (carry on vs restart) ── */}
+      <Dialog open={showPostUpdatePrompt} onOpenChange={setShowPostUpdatePrompt}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <GitBranch className="w-5 h-5 text-purple-500" />
+              Showcase Updated
+            </DialogTitle>
+            <DialogDescription>
+              Your custom numbers are now live in the showcase.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-3 pt-2">
+            <Button
+              onClick={() => {
+                setShowPostUpdatePrompt(false);
+                // Resume the run from current point
+                setState(prev => ({ ...prev, isPaused: false }));
+              }}
+              className="gap-2"
+            >
+              <ArrowRight className="w-4 h-4" />
+              Carry on with the showcase
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowPostUpdatePrompt(false);
+                handleCoRestart();
+              }}
+              className="gap-2"
+            >
+              <Sparkles className="w-4 h-4" />
+              Start this run over with my numbers
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── SHOWCASE Badge (visible during customized runs) ── */}
+      {state.isRunning && mockData.currentData?.isCustomized && (
+        <div className="fixed top-4 right-4 z-[48]">
+          <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 gap-1.5 px-3 py-1.5 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5" />
+            SHOWCASE — Custom Numbers
+          </Badge>
+        </div>
+      )}
+
+      {/* ── End-of-Run Choices ── */}
+      {showEndChoices && (
+        <div className="fixed inset-0 z-[51] bg-background/95 backdrop-blur flex items-center justify-center p-6 overflow-y-auto">
+          <BeaconRunEndChoices
+            runName={run.name}
+            runCategory={run.category}
+            interestKey={run.interestKey}
+            elapsedSeconds={state.elapsedSeconds}
+            isCustomized={mockData.currentData?.isCustomized ?? false}
+            onPickNewInterest={() => {
+              setShowEndChoices(false);
+              mockData.unloadMockData();
+              if (onPickNewInterest) {
+                onPickNewInterest();
+              } else {
+                navigate("/crows-nest");
+              }
+            }}
+            onGoDeeper={() => {
+              setShowEndChoices(false);
+              if (onGoDeeper) {
+                onGoDeeper();
+              } else {
+                navigate("/academic-papers");
+              }
+            }}
+            onContinueTrack={() => {
+              setShowEndChoices(false);
+              if (onContinueTrack) {
+                onContinueTrack();
+              }
+            }}
+            onRegister={() => {
+              setShowEndChoices(false);
+              mockData.unloadMockData();
+              navigate("/RedCarpet");
+            }}
+            hasNextRun={hasNextRun}
+          />
+        </div>
+      )}
     </>
   );
 }
