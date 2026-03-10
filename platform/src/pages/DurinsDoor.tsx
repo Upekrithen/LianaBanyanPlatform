@@ -63,6 +63,7 @@ import {
   FRIEND_WORD_MAP,
   SUPPORTED_LANGUAGES,
 } from "@/i18n";
+import SnowDoorBeacons from "@/components/SnowDoorBeacons";
 
 // ── Wrong-try result state ──
 
@@ -124,6 +125,7 @@ export default function DurinsDoor() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [attemptsThisSession, setAttemptsThisSession] = useState(0);
+  const [snowDoorUnlocked, setSnowDoorUnlocked] = useState(false);
 
   // Focus input on mount
   useEffect(() => {
@@ -204,6 +206,11 @@ export default function DurinsDoor() {
           isFriendWord: false,
           isThinkingWord: false,
         });
+
+        // If Snow Door was unlocked, trigger beacon path
+        if (door.doorId === "snow-door") {
+          setSnowDoorUnlocked(true);
+        }
 
         toast({
           title: t("durinsDoor.doorOpens"),
@@ -594,6 +601,12 @@ export default function DurinsDoor() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Northern Path — Snow Door Beacon Chain */}
+          <SnowDoorBeacons
+            snowDoorUnlocked={snowDoorUnlocked}
+            className="mt-2"
+          />
         </div>
       </div>
     </div>
