@@ -3,6 +3,13 @@
  * ====================================
  * Full-screen overlay shown to every first-time visitor on ANY page.
  *
+ * Supports TWO layouts:
+ *   "standard" — Headline + highlight cards + single CTA button
+ *   "bluf"     — BLUF (Bottom Line Up Front) triage fork with 2-3 branching
+ *                buttons that route directly to what the user needs TODAY.
+ *                "Go into the store and get the milk and eggs without having
+ *                to walk to the back of the store."
+ *
  * Behavior:
  * - Shows once per session by default
  * - "Do Not Show This Again" checkbox → permanent dismissal
@@ -11,13 +18,15 @@
  * - Mobile-responsive: single column on mobile, two columns on desktop
  * - PWA prompt is suppressed while this is visible
  *
- * The Founder updates content by entering Durin's Door passwords:
- *   "HELP EACH OTHER" → Default philosophy page
- *   "HEXISLE LAUNCH"  → HexIsle promotional content
- *   "SHIELD WALL"     → Defense Klaus campaign
+ * Durin's Door passwords:
+ *   "HELP EACH OTHER" → Default philosophy page (standard)
+ *   "HEXISLE LAUNCH"  → HexIsle promotional content (standard)
+ *   "SHIELD WALL"     → Defense Klaus campaign (standard)
+ *   "BOTTOM LINE"     → BLUF triage fork (bluf)
  */
 
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   getActiveVariant,
@@ -25,6 +34,7 @@ import {
   dismissWelcomeGate,
   incrementVisitCount,
   type WelcomeVariant,
+  type WelcomeBranch,
 } from "@/lib/welcomeGateContent";
 
 export function WelcomeGate({ children }: { children: React.ReactNode }) {
@@ -33,6 +43,7 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
   const [variant, setVariant] = useState<WelcomeVariant | null>(null);
   const [entering, setEntering] = useState(false);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Increment visit count on mount
@@ -53,6 +64,19 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
     }, 400);
   }, [doNotShowAgain]);
 
+  /** BLUF branch click — dismiss gate and navigate to the branch route */
+  const handleBranch = useCallback((branch: WelcomeBranch) => {
+    setEntering(true);
+    setTimeout(() => {
+      dismissWelcomeGate(doNotShowAgain);
+      setVisible(false);
+      if (branch.route) {
+        navigate(branch.route);
+      }
+      // Empty route = "Let me look around" = just dismiss
+    }, 400);
+  }, [doNotShowAgain, navigate]);
+
   // Handle keyboard — Enter to proceed, Escape to proceed
   useEffect(() => {
     if (!visible) return;
@@ -69,6 +93,8 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
   if (!visible || !variant) {
     return <>{children}</>;
   }
+
+  const isBluf = variant.layout === "bluf";
 
   return (
     <>
@@ -107,43 +133,92 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
               </p>
             </div>
 
-            {/* Highlight cards */}
-            <div
-              className={`grid gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 ${
-                isMobile ? "grid-cols-1" : "grid-cols-2"
-              }`}
-            >
-              {variant.highlights.map((h, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm hover:border-green-500/30 transition-colors"
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl flex-shrink-0">{h.icon}</span>
-                    <div>
-                      <h3 className="font-semibold text-white text-sm">{h.title}</h3>
-                      <p className="text-white/50 text-xs mt-1 leading-relaxed">{h.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Enter button + Do Not Show Again */}
-            <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
-              <button
-                onClick={handleEnter}
-                className={`
-                  rounded-xl font-bold tracking-wide uppercase transition-all
-                  bg-gradient-to-r from-green-600 to-green-500 text-white
-                  hover:from-green-500 hover:to-green-400 hover:shadow-lg hover:shadow-green-500/20
-                  active:scale-95
-                  ${isMobile ? "px-10 py-3 text-base" : "px-16 py-4 text-lg"}
-                `}
+            {/* ─── BLUF Layout: Branching Triage Buttons ─── */}
+            {isBluf && variant.branches && (
+              <div
+                className={`grid gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 ${
+                  isMobile ? "grid-cols-1" : "grid-cols-1"
+                }`}
               >
-                {variant.ctaText}
-              </button>
+                {variant.branches.map((branch, i) => (
+                  <button
+                    key={branch.id}
+                    onClick={() => handleBranch(branch)}
+                    className={`
+                      w-full rounded-2xl border p-6 text-left transition-all duration-300
+                      bg-gradient-to-r ${branch.color}
+                      hover:scale-[1.02] active:scale-[0.98]
+                      group cursor-pointer
+                      animate-in fade-in slide-in-from-bottom-4
+                    `}
+                    style={{ animationDelay: `${200 + i * 150}ms` }}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className={`flex-shrink-0 ${isMobile ? "text-3xl" : "text-4xl"}`}>{branch.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <h2 className={`font-bold text-white group-hover:text-green-300 transition-colors ${
+                          isMobile ? "text-lg" : "text-xl"
+                        }`}>
+                          {branch.title}
+                        </h2>
+                        <p className={`text-white/50 mt-1 ${isMobile ? "text-xs" : "text-sm"}`}>
+                          {branch.subtitle}
+                        </p>
+                      </div>
+                      <span className="text-white/30 group-hover:text-green-400 transition-colors text-2xl flex-shrink-0">
+                        →
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
 
+            {/* ─── Standard Layout: Highlight Cards + CTA ─── */}
+            {!isBluf && (
+              <>
+                {/* Highlight cards */}
+                <div
+                  className={`grid gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 ${
+                    isMobile ? "grid-cols-1" : "grid-cols-2"
+                  }`}
+                >
+                  {variant.highlights.map((h, i) => (
+                    <div
+                      key={i}
+                      className="rounded-xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm hover:border-green-500/30 transition-colors"
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl flex-shrink-0">{h.icon}</span>
+                        <div>
+                          <h3 className="font-semibold text-white text-sm">{h.title}</h3>
+                          <p className="text-white/50 text-xs mt-1 leading-relaxed">{h.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Enter button */}
+                <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
+                  <button
+                    onClick={handleEnter}
+                    className={`
+                      rounded-xl font-bold tracking-wide uppercase transition-all
+                      bg-gradient-to-r from-green-600 to-green-500 text-white
+                      hover:from-green-500 hover:to-green-400 hover:shadow-lg hover:shadow-green-500/20
+                      active:scale-95
+                      ${isMobile ? "px-10 py-3 text-base" : "px-16 py-4 text-lg"}
+                    `}
+                  >
+                    {variant.ctaText}
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Do Not Show Again — both layouts */}
+            <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
               <label className="flex items-center gap-2 cursor-pointer group">
                 <input
                   type="checkbox"

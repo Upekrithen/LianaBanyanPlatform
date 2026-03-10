@@ -14,17 +14,23 @@
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
+export type WelcomeLayout = "standard" | "bluf";
+
 export interface WelcomeVariant {
   id: string;
   /** Durin's Door password that activates this variant (founder-only) */
   activationPassword: string;
+  /** Layout mode: "standard" = headline+highlights+CTA, "bluf" = triage fork with branching buttons */
+  layout: WelcomeLayout;
   /** Hero headline — two parts for the split display */
   headline: { top: string; bottom: string };
   /** Subtitle under the headline */
   subtitle: string;
-  /** 3-4 key points shown as cards */
+  /** 3-4 key points shown as cards (standard layout) */
   highlights: WelcomeHighlight[];
-  /** The call-to-action button text */
+  /** Branching triage buttons (bluf layout only) */
+  branches?: WelcomeBranch[];
+  /** The call-to-action button text (standard layout) */
   ctaText: string;
   /** Footer tagline */
   tagline: string;
@@ -34,6 +40,16 @@ export interface WelcomeHighlight {
   icon: string; // emoji
   title: string;
   description: string;
+}
+
+/** BLUF branch — one of 2-3 triage options shown as big clickable cards */
+export interface WelcomeBranch {
+  id: string;
+  icon: string; // emoji
+  title: string;
+  subtitle: string;
+  route: string; // where this branch takes the user
+  color: string; // tailwind gradient classes
 }
 
 // ─── Storage Keys ───────────────────────────────────────────────────────────
@@ -53,6 +69,7 @@ export const WELCOME_VARIANTS: WelcomeVariant[] = [
   {
     id: "help-each-other",
     activationPassword: "HELP EACH OTHER",
+    layout: "standard",
     headline: { top: "Help Each Other", bottom: "Help Ourselves" },
     subtitle: "A platform built on the idea that your success helps my success. My contribution enables yours.",
     highlights: [
@@ -83,6 +100,7 @@ export const WELCOME_VARIANTS: WelcomeVariant[] = [
   {
     id: "hexisle-launch",
     activationPassword: "HEXISLE LAUNCH",
+    layout: "standard",
     headline: { top: "HexIsle", bottom: "The Universal Hex Platform" },
     subtitle: "Decades of designs. Now releasing FREE STL files for every hex gamer. Water-powered. Physics-driven. Compatible with everything.",
     highlights: [
@@ -113,6 +131,7 @@ export const WELCOME_VARIANTS: WelcomeVariant[] = [
   {
     id: "defense-klaus",
     activationPassword: "SHIELD WALL",
+    layout: "standard",
     headline: { top: "Defense Klaus", bottom: "Legal Protection for All" },
     subtitle: "A $6 bracelet that funds real legal defense for members. Help each other stay protected.",
     highlights: [
@@ -139,6 +158,42 @@ export const WELCOME_VARIANTS: WelcomeVariant[] = [
     ],
     ctaText: "Learn More",
     tagline: "Protection shouldn't be a luxury.",
+  },
+  {
+    id: "bluf",
+    activationPassword: "BOTTOM LINE",
+    layout: "bluf",
+    headline: { top: "What do you need", bottom: "today?" },
+    subtitle: "Skip the tour. Pick a door. Go.",
+    highlights: [], // BLUF uses branches, not highlights
+    branches: [
+      {
+        id: "earn",
+        icon: "💰",
+        title: "I Need to Earn Money",
+        subtitle: "Real work. Fair pay. You keep 83.3%. Start today.",
+        route: "/help-wanted",
+        color: "from-emerald-600/20 to-green-600/10 border-emerald-500/30 hover:border-emerald-400/60",
+      },
+      {
+        id: "build",
+        icon: "🚀",
+        title: "I Want to Build Something",
+        subtitle: "$5/year. Same terms as the Founder. Launch your idea.",
+        route: "/build-a-business",
+        color: "from-violet-600/20 to-purple-600/10 border-violet-500/30 hover:border-violet-400/60",
+      },
+      {
+        id: "explore",
+        icon: "👻",
+        title: "Let Me Look Around First",
+        subtitle: "No signup. No pressure. Explore everything as a Ghost.",
+        route: "",
+        color: "from-white/5 to-white/[0.02] border-white/20 hover:border-white/40",
+      },
+    ],
+    ctaText: "", // Not used in BLUF — branches have their own routes
+    tagline: "Milk and eggs. Not the back of the store.",
   },
 ];
 

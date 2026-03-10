@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
+import { PaidMemberRoute } from "@/components/PaidMemberRoute";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UnifiedNavigation } from "@/components/UnifiedNavigation";
@@ -235,6 +236,8 @@ const ContentPipelinePage = lazy(() => import("./pages/ContentPipelinePage"));
 // Legal pages (TikTok Developer Portal compliance — Session 7D)
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+// Guild Hub — NOIDs landing with Handshake Protocol (Session 8D)
+const GuildHub = lazy(() => import("./pages/GuildHub"));
 // Muffled Rule / Coverage Minutes / Phase MimicTrunks (Session 6M)
 const RoundTableHall = lazy(() => import("./pages/RoundTableHall"));
 const CoverageMinutesDashboard = lazy(() => import("./pages/CoverageMinutesDashboard"));
@@ -517,7 +520,7 @@ const App = () => (
                         <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
                         <Route path="/blockchain/:projectId" element={<ProtectedRoute><BlockchainExplorer /></ProtectedRoute>} />
                         <Route path="/medallions" element={<ProtectedRoute><MedallionViewer /></ProtectedRoute>} />
-                        <Route path="/withdraw" element={<ProtectedRoute><Withdraw /></ProtectedRoute>} />
+                        <Route path="/withdraw" element={<PaidMemberRoute><Withdraw /></PaidMemberRoute>} />
                         <Route path="/reputation/:userId" element={<ReputationProfile />} />
                         <Route path="/profile-settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
                         <Route path="/content-controls" element={<ProtectedRoute><ContentControlsPage /></ProtectedRoute>} />
@@ -526,6 +529,7 @@ const App = () => (
                         <Route path="/help" element={<ExplorerRoute><CommunitySupport /></ExplorerRoute>} />
                         <Route path="/peer-contracts" element={<ProtectedRoute><PeerContracts /></ProtectedRoute>} />
                         <Route path="/guilds" element={<ExplorerRoute><Guilds /></ExplorerRoute>} />
+                        <Route path="/guilds/hub" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GuildHub /></Suspense></ExplorerRoute>} />
                         <Route path="/tribes" element={<ExplorerRoute><Tribes /></ExplorerRoute>} />
                         <Route path="/position-categories" element={<ProtectedRoute><PositionCategories /></ProtectedRoute>} />
                         <Route path="/lb-positions" element={<ProtectedRoute><LBInternalPositions /></ProtectedRoute>} />
