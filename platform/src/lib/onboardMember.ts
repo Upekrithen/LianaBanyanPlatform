@@ -195,7 +195,7 @@ export async function onboardNewMember(user: User): Promise<void> {
     // ─── 5. MARK ONBOARDED ───
     localStorage.setItem(`${ONBOARDED_KEY}_${user.id}`, "true");
 
-    console.log(`[Onboard] Member ${user.email} onboarded. Feathers converted: ${feathersConverted}`);
+    // Onboarding complete — feathers converted: ${feathersConverted}
   } catch (err) {
     console.error("[Onboard] Error during onboarding:", err);
     // Non-fatal — user can still use the platform

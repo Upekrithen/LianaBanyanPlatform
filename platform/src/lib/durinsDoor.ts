@@ -219,7 +219,7 @@ export function tryPasswordAnywhere(input: string): { door: DurinDoor; password:
       const variant = tryWelcomeVariantPassword(normalized);
       if (variant) {
         setActiveVariant(variant.id);
-        console.log(`[Durin's Door] Welcome Gate switched to: ${variant.id}`);
+        // Gate variant activated silently
       }
     });
   } catch {

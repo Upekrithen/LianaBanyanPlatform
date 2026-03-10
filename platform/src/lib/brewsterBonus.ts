@@ -330,11 +330,7 @@ export async function recordBrewsterBonus(
 ): Promise<BrewsterBonusResult> {
   const result = calculateBrewsterBonus(marksCleared, true);
 
-  // brewster_bonus_records table not yet created — log only for now
-  console.log(
-    `[Brewster Bonus] ${userId}: ${marksCleared} Marks cleared → ` +
-    `${result.totalBonus} Credits (${result.highestTier.displayName} tier)`
-  );
+  // brewster_bonus_records table not yet created — silent until DB table exists
 
   return result;
 }

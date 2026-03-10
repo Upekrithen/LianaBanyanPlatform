@@ -22,7 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Key, Trophy, Feather, Star, Search, Lock, Unlock, Check, X,
+  Key, Trophy, Feather, Star, Search, Lock, Unlock, Check, X, Loader2,
   Sparkles, Share2, Map, BookOpen, Gift, Crown, Twitter, MessageCircle,
 } from "lucide-react";
 import { GoldenKeysSocial, ShareAchievementModal } from "@/components/GoldenKeysSocial";
@@ -70,7 +70,7 @@ export default function GoldenKeyQuest() {
   });
 
   // ─── Active treasure keys (hints visible) ───
-  const { data: activeKeys } = useQuery({
+  const { data: activeKeys, isLoading: loadingKeys } = useQuery({
     queryKey: ["treasure-keys"],
     queryFn: async () => {
       const { data } = await supabase
@@ -84,7 +84,7 @@ export default function GoldenKeyQuest() {
   });
 
   // ─── Active golden tickets (puzzles) ───
-  const { data: goldenTickets } = useQuery({
+  const { data: goldenTickets, isLoading: loadingTickets } = useQuery({
     queryKey: ["golden-tickets"],
     queryFn: async () => {
       const { data } = await supabase
@@ -305,7 +305,13 @@ export default function GoldenKeyQuest() {
             ))}
           </div>
 
-          {(!activeKeys || activeKeys.length === 0) && (
+          {loadingKeys && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          )}
+
+          {!loadingKeys && (!activeKeys || activeKeys.length === 0) && (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
                 <Key className="w-12 h-12 mx-auto mb-4 opacity-20" />
@@ -383,7 +389,13 @@ export default function GoldenKeyQuest() {
             ))}
           </div>
 
-          {(!goldenTickets || goldenTickets.length === 0) && (
+          {loadingTickets && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          )}
+
+          {!loadingTickets && (!goldenTickets || goldenTickets.length === 0) && (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
                 <Gift className="w-12 h-12 mx-auto mb-4 opacity-20" />

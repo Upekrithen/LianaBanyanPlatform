@@ -9,7 +9,7 @@ export const SubdomainRouter = ({ children }: { children: React.ReactNode }) => 
   useEffect(() => {
     // Safety timeout — never block rendering for more than 3 seconds
     const safetyTimer = setTimeout(() => {
-      console.log('[SubdomainRouter] Safety timeout — proceeding without subdomain check');
+      // Safety timeout — proceeding without subdomain check
       setIsChecking(false);
     }, 3000);
 
@@ -26,7 +26,7 @@ export const SubdomainRouter = ({ children }: { children: React.ReactNode }) => 
           }
         }
       } catch (err) {
-        console.log('[SubdomainRouter] Subdomain check failed, proceeding normally');
+        // Subdomain check failed — proceeding normally
       }
       clearTimeout(safetyTimer);
       setIsChecking(false);

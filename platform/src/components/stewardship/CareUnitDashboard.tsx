@@ -26,7 +26,7 @@ export const CareUnitDashboard: React.FC<CareUnitDashboardProps> = ({ initiative
         }
       } catch (err) {
         // Table not yet available — component renders honest empty state
-        console.log('[CareUnitDashboard] initiative_care_units table not yet available');
+        // Table not yet available — renders empty state
       }
       setLoading(false);
     };
