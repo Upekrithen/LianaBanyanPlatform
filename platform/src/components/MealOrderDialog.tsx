@@ -128,7 +128,7 @@ export function MealOrderDialog({
           meal_offering_id: mealId,
           recipient_id: user.id,
           payment_method: paymentMethod,
-          profit_percentage_repayment: paymentMethod === "tab" ? profitPercentage : null,
+          service_credit_percentage_repayment: paymentMethod === "tab" ? profitPercentage : null,
           order_status: "pending",
           // Store quantity and pricing details
           quantity: quantity,

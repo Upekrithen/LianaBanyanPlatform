@@ -97,7 +97,7 @@ const SPOTLIGHT_CONTENT: Record<string, { title: string; bullets: string[]; tip:
     bullets: [
       "Be a Johnny Appleseed — sponsor $5 memberships for others",
       "Fund initiatives you believe in and watch your impact grow",
-      "Sponsors can earn fractional patent ownership as a thank-you",
+      "Sponsors can earn fractional patent participation as a thank-you",
     ],
     tip: "Every seed you plant changes someone's trajectory.",
   },

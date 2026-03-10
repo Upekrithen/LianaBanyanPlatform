@@ -120,7 +120,7 @@ export default function GuildStakeSuccess() {
                   <li>Shared pool bonus participation</li>
                   <li>Voting rights in Guild Sponsorship Fund</li>
                   {paymentInfo.tier === "master" && (
-                    <li>Project ownership eligibility (10,000+ credits)</li>
+                    <li>Project participation eligibility (10,000+ credits)</li>
                   )}
                 </ul>
               </div>

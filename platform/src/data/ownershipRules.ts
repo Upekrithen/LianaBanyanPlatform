@@ -1,26 +1,28 @@
-// Ownership Rules — LEVIATHAN IP Load Balancing (#1228-1231)
+// Participation Rules — LEVIATHAN IP Load Balancing (#1228-1231)
 // 60/20/20 split: Platform / Global Sponsor Pool / Founder
+// NOTE: Export names kept as "ownership" for backward compatibility across 17+ consumers.
+// User-facing text always uses "participation" / "membership" per SEC guidelines.
 
 export const ownershipRules = {
   // Founder always retains 20%
   founderRetention: 0.20,
-  
+
   // Maximum transferable to backers is 40%
   maxTransferable: 0.40,
-  
+
   // Platform retains minimum 40% (60% of non-founder portion)
   platformRetentionMin: 0.40,
-  
+
   // Per-person cap in Credits
   perPersonCapCredits: 5_000,
-  
-  // Maximum payout per stake (from #1230)
+
+  // Maximum service value per stake (from #1230)
   stakeCapUsd: 10_000_000,
 };
 
 /**
- * Calculate ownership allocation for a user's contribution
- * 
+ * Calculate participation allocation for a user's contribution
+ *
  * From LEVIATHAN #1228-1231:
  * - 20% always retained by inventor (Founder)
  * - 40% maximum transferable to backers
@@ -51,9 +53,9 @@ export function allocateOwnership(
   const transferablePool = ownershipRules.maxTransferable;
   const userOwnershipFraction = userShareOfCredits * transferablePool;
 
-  // Calculate potential payout
+  // Calculate potential service value
   const rawPayout = userOwnershipFraction * bucketValueUsd;
-  
+
   // Apply $10M cap
   const cappedPayout = Math.min(rawPayout, ownershipRules.stakeCapUsd);
 
@@ -61,10 +63,10 @@ export function allocateOwnership(
   // Assuming 1 Credit = $1 for simplicity
   const purchasePrice = credits;
   const wouldSplit = rawPayout > purchasePrice * 10;
-  
+
   // If splitting, estimate number of child stakes ($2,500 default)
   const childStakeDefaultSize = 2_500;
-  const estimatedChildStakes = wouldSplit 
+  const estimatedChildStakes = wouldSplit
     ? Math.ceil(rawPayout / childStakeDefaultSize)
     : 1;
 
@@ -78,7 +80,7 @@ export function allocateOwnership(
 }
 
 /**
- * Display ownership breakdown for a bucket
+ * Display participation breakdown for a bucket
  */
 export function getOwnershipBreakdown(
   totalCreditsInBucket: number,
@@ -93,9 +95,9 @@ export function getOwnershipBreakdown(
   const founderShare = ownershipRules.founderRetention;
   const backerPoolShare = ownershipRules.maxTransferable;
   const platformShare = 1 - founderShare - backerPoolShare;
-  
+
   const backerPoolValue = bucketValueUsd * backerPoolShare;
-  
+
   // How many credits needed for 1% of the bucket
   const creditsPerPercent = totalCreditsInBucket > 0
     ? totalCreditsInBucket / (backerPoolShare * 100)

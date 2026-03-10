@@ -21,7 +21,7 @@ const COLLABORATOR_TYPES = [
 
 const COMPENSATION_TYPES = [
   { value: "participation", label: "Participation Only", description: "Long-term cooperative membership" },
-  { value: "profit_share", label: "Revenue Share Only", description: "% of revenue generated" },
+  { value: "revenue_share", label: "Revenue Share Only", description: "% of revenue generated" },
   { value: "hybrid", label: "Hybrid", description: "Participation + Revenue share" },
 ];
 
@@ -272,7 +272,7 @@ export function ExternalCollaboratorManager() {
                         />
                       </div>
                     )}
-                    {(formData.compensation_type === 'profit_share' || formData.compensation_type === 'hybrid') && (
+                    {(formData.compensation_type === 'revenue_share' || formData.compensation_type === 'hybrid') && (
                       <div className="space-y-2">
                         <Label htmlFor="service_credit_percentage">Revenue Share %</Label>
                         <Input

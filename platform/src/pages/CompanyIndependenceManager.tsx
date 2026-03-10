@@ -31,7 +31,7 @@ export default function CompanyIndependenceManager() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('projects')
-        .select('id, name, company_status, became_independent_at, independence_equity_bonus, can_use_external_services')
+        .select('id, name, company_status, became_independent_at, independence_participation_bonus, can_use_external_services')
         .order('name');
       if (error) throw error;
       return data;
@@ -45,7 +45,7 @@ export default function CompanyIndependenceManager() {
 
       const updateData: any = {
         company_status: newStatus,
-        independence_equity_bonus: parseFloat(equityBonus),
+        independence_participation_bonus: parseFloat(equityBonus),
         can_use_external_services: canUseExternal,
       };
 
@@ -159,7 +159,7 @@ export default function CompanyIndependenceManager() {
                   </div>
                   <div>
                     <Label className="text-sm text-muted-foreground">Participation Bonus</Label>
-                    <div className="font-medium">+{selectedProject.independence_equity_bonus}%</div>
+                    <div className="font-medium">+{selectedProject.independence_participation_bonus}%</div>
                   </div>
                   <div>
                     <Label className="text-sm text-muted-foreground">External Services</Label>

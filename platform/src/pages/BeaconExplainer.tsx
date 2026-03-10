@@ -266,7 +266,7 @@ export default function BeaconExplainer() {
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Membership includes access to all platform features, cooperative IP ownership, and more.
+                    Membership includes access to all platform features, cooperative IP participation, and more.
                   </p>
                 </>
               )}

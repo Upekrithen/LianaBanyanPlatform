@@ -16,7 +16,7 @@ export function CompanyIndependenceCard({ projectId }: CompanyIndependenceCardPr
     queryFn: async () => {
       const { data, error } = await supabase
         .from('projects')
-        .select('company_status, became_independent_at, independence_equity_bonus, can_use_external_services')
+        .select('company_status, became_independent_at, independence_participation_bonus, can_use_external_services')
         .eq('id', projectId)
         .single();
       if (error) throw error;
@@ -87,7 +87,7 @@ export function CompanyIndependenceCard({ projectId }: CompanyIndependenceCardPr
               <div className="flex items-center gap-2 text-sm">
                 <TrendingUp className="h-4 w-4 text-green-500" />
                 <span>
-                  Participation Bonus: <strong>+{project.independence_equity_bonus}%</strong>
+                  Participation Bonus: <strong>+{project.independence_participation_bonus}%</strong>
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm">

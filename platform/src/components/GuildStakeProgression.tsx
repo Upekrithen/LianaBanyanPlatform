@@ -25,30 +25,30 @@ const TIER_COLORS = {
   captain: "bg-amber-500",
 };
 
-const STAKE_INFO: Record<string, Record<number, { amount: number; cumulative: number; profitPercent: number }>> = {
+const STAKE_INFO: Record<string, Record<number, { amount: number; cumulative: number; benefitPercent: number }>> = {
   apprentice: {
-    1: { amount: 0, cumulative: 0, profitPercent: 40 },
-    2: { amount: 0, cumulative: 0, profitPercent: 42 },
-    3: { amount: 0, cumulative: 0, profitPercent: 44 },
-    4: { amount: 0, cumulative: 0, profitPercent: 46 },
-    5: { amount: 0, cumulative: 0, profitPercent: 48 },
-    6: { amount: 0, cumulative: 0, profitPercent: 50 },
+    1: { amount: 0, cumulative: 0, benefitPercent: 40 },
+    2: { amount: 0, cumulative: 0, benefitPercent: 42 },
+    3: { amount: 0, cumulative: 0, benefitPercent: 44 },
+    4: { amount: 0, cumulative: 0, benefitPercent: 46 },
+    5: { amount: 0, cumulative: 0, benefitPercent: 48 },
+    6: { amount: 0, cumulative: 0, benefitPercent: 50 },
   },
   journeyman: {
-    1: { amount: 500, cumulative: 500, profitPercent: 53 },
-    2: { amount: 750, cumulative: 1250, profitPercent: 56 },
-    3: { amount: 1000, cumulative: 2250, profitPercent: 59 },
-    4: { amount: 1250, cumulative: 3500, profitPercent: 62 },
-    5: { amount: 1500, cumulative: 5000, profitPercent: 65 },
-    6: { amount: 2000, cumulative: 7000, profitPercent: 68 },
+    1: { amount: 500, cumulative: 500, benefitPercent: 53 },
+    2: { amount: 750, cumulative: 1250, benefitPercent: 56 },
+    3: { amount: 1000, cumulative: 2250, benefitPercent: 59 },
+    4: { amount: 1250, cumulative: 3500, benefitPercent: 62 },
+    5: { amount: 1500, cumulative: 5000, benefitPercent: 65 },
+    6: { amount: 2000, cumulative: 7000, benefitPercent: 68 },
   },
   master: {
-    1: { amount: 10000, cumulative: 10000, profitPercent: 71 },
-    2: { amount: 5000, cumulative: 15000, profitPercent: 74 },
-    3: { amount: 7500, cumulative: 22500, profitPercent: 77 },
-    4: { amount: 10000, cumulative: 32500, profitPercent: 80 },
-    5: { amount: 15000, cumulative: 47500, profitPercent: 83 },
-    6: { amount: 20000, cumulative: 67500, profitPercent: 86 },
+    1: { amount: 10000, cumulative: 10000, benefitPercent: 71 },
+    2: { amount: 5000, cumulative: 15000, benefitPercent: 74 },
+    3: { amount: 7500, cumulative: 22500, benefitPercent: 77 },
+    4: { amount: 10000, cumulative: 32500, benefitPercent: 80 },
+    5: { amount: 15000, cumulative: 47500, benefitPercent: 83 },
+    6: { amount: 20000, cumulative: 67500, benefitPercent: 86 },
   },
 };
 
@@ -191,7 +191,7 @@ export const GuildStakeProgression = () => {
           </div>
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Platform Benefit Percentage</p>
-            <p className="text-2xl font-bold text-green-600">{currentInfo?.profitPercent}%</p>
+            <p className="text-2xl font-bold text-green-600">{currentInfo?.benefitPercent}%</p>
           </div>
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Contracts Completed</p>
@@ -218,7 +218,7 @@ export const GuildStakeProgression = () => {
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Stake: ${nextPayment.amount.toLocaleString()} • 
-                  Platform Benefit: {nextPayment.profitPercent}% •
+                  Platform Benefit: {nextPayment.benefitPercent}% •
                   Total: ${nextPayment.cumulative.toLocaleString()}
                 </p>
               </div>

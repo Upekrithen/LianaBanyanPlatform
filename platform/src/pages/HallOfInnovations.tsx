@@ -63,7 +63,7 @@ const IP_ALLOCATION: IPAllocation[] = [
   {
     recipient: "Platform (Cooperative)",
     percentage: 60,
-    description: "The cooperative owns the majority — this is shared infrastructure",
+    description: "The cooperative holds the majority — this is shared infrastructure",
     color: "bg-blue-500",
   },
   {

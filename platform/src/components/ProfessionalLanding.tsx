@@ -178,7 +178,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
           <div className="professional-model-card">
             <span className="model-number">1,227</span>
             <h3>Innovations</h3>
-            <p>Patent-pending systems for dual-currency economics, collective ownership, and transparent governance.</p>
+            <p>Patent-pending systems for dual-currency economics, collective membership, and transparent governance.</p>
           </div>
           <div className="professional-model-card">
             <span className="model-number">∞</span>

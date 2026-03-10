@@ -94,7 +94,7 @@ const CUE_CARDS: Record<string, CueCardData> = {
     icon: <Stamp className="w-12 h-12 text-emerald-400" />,
     benefits: [
       '16 Practical Initiatives',
-      'Cooperative Ownership',
+      'Cooperative Membership',
       'Fixed Margins',
       'Community Governance',
     ],

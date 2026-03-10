@@ -1402,7 +1402,7 @@ export default function RedCarpet() {
                       <li>Physical products, digital goods, and services</li>
                       <li>Transparent pricing on every listing</li>
                       <li>Built-in reputation and medallion system</li>
-                      <li>Cooperative ownership — members own the platform</li>
+                      <li>Cooperative membership — members participate in the platform</li>
                     </ul>
                   </ExpandableBlock>
 
