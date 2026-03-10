@@ -60,6 +60,7 @@ import DefenseKlausPage from "./pages/DefenseKlausPage";
 import HouseholdConciergePage from "./pages/HouseholdConciergePage";
 import HealthAccordsPage from "./pages/HealthAccordsPage";
 import DurinsDoor from "./pages/DurinsDoor";
+import FriendPage from "./pages/FriendPage";
 import VideoScripts from "./pages/VideoScripts";
 import PreBetaRecruits from "./pages/PreBetaRecruits";
 import LBAssetLibrary from "./pages/LBAssetLibrary";
@@ -313,6 +314,7 @@ const ALWAYS_CLEAN_ROUTES = [
   '/sponsor', '/forward',
   '/crows-nest', // The Crow's Nest — full-page discovery (Session 8H)
   '/developers', '/dev', '/terms', '/privacy',
+  '/friend', // Friend page — Warp Room for Durin's Door friend words
 ];
 
 // Routes where sidebar is hidden ONLY for unauthenticated users (now empty since / moved to ALWAYS_CLEAN)
@@ -586,6 +588,7 @@ const App = () => (
                         <Route path="/initiatives/health-accords" element={<ExplorerRoute><HealthAccordsPage /></ExplorerRoute>} />
                         <Route path="/durins-door" element={<ExplorerRoute><DurinsDoor /></ExplorerRoute>} />
                         <Route path="/international" element={<ExplorerRoute><DurinsDoor /></ExplorerRoute>} />
+                        <Route path="/friend" element={<ExplorerRoute><FriendPage /></ExplorerRoute>} />
                         <Route path="/the-helm" element={<ExplorerRoute><TheHelm /></ExplorerRoute>} />
                         <Route path="/helm" element={<ExplorerRoute><TheHelm /></ExplorerRoute>} />
                         <Route path="/herald" element={<ProtectedRoute><HeraldSubscription /></ProtectedRoute>} />
