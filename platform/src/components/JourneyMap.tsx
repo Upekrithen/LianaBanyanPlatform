@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -67,6 +68,7 @@ const BEACON_COLORS: Record<BeaconColor, { bg: string; border: string; text: str
 
 export function JourneyMap() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const navigate = useNavigate();
   const [selectedBeacon, setSelectedBeacon] = useState<Beacon | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
@@ -141,7 +143,10 @@ export function JourneyMap() {
       <Card>
         <CardContent className="pt-6 text-center">
           <Map className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-          <p>Log in to view your journey map</p>
+          <p className="text-muted-foreground mb-3">Your journey map tracks your progress across the platform.</p>
+          <Button variant="outline" size="sm" onClick={() => openOnboard({ reason: "Track your journey across the platform", actionLabel: "View Journey Map" })}>
+            Get Started
+          </Button>
         </CardContent>
       </Card>
     );

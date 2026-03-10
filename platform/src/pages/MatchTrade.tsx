@@ -345,7 +345,7 @@ export default function MatchTrade() {
           ) : (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
-                {user ? "You haven't posted any offers yet." : "Log in to create offers."}
+                No offers posted yet. Create one to start trading services!
               </CardContent>
             </Card>
           )}
@@ -381,7 +381,7 @@ export default function MatchTrade() {
           ) : (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
-                {user ? "No active trades. Browse offers to start one!" : "Log in to view trades."}
+                No active trades. Browse offers to start one!
               </CardContent>
             </Card>
           )}

@@ -168,7 +168,7 @@ export default function DeckCollection() {
             <Card>
               <CardContent className="py-12 text-center text-muted-foreground">
                 <Layers className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                <p>{user ? "No cards yet. Explore to find them!" : "Log in to view your collection."}</p>
+                <p>No cards yet. Explore the platform to discover and collect them!</p>
               </CardContent>
             </Card>
           )}

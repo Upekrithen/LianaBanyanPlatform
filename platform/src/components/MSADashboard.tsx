@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,6 +67,7 @@ interface MSATransaction {
 
 export function MSADashboard() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const queryClient = useQueryClient();
   const [contributionAmount, setContributionAmount] = useState("");
   const [contributionDialogOpen, setContributionDialogOpen] = useState(false);
@@ -215,7 +217,10 @@ export function MSADashboard() {
       <Card>
         <CardContent className="pt-6 text-center">
           <Shield className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-          <p>Please log in to access your Medical Savings Account</p>
+          <p className="text-muted-foreground mb-3">Your Medical Savings Account helps you set aside funds for healthcare needs.</p>
+          <Button variant="outline" size="sm" onClick={() => openOnboard({ reason: "Access your Medical Savings Account", actionLabel: "Open MSA" })}>
+            Get Started
+          </Button>
         </CardContent>
       </Card>
     );

@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Award, Shield, Package, Settings } from 'lucide-react';
@@ -13,6 +14,7 @@ import { MedallionMintingManager } from '@/components/MedallionMintingManager';
 export default function MedallionManagement() {
   const { projectId } = useParams<{ projectId: string }>();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
 
   const { data: project } = useQuery({
     queryKey: ['project', projectId],
@@ -56,10 +58,15 @@ export default function MedallionManagement() {
 
   if (!user) {
     return (
-      <div className="container mx-auto p-6">
-        <Alert>
-          <AlertDescription>Please log in to manage medallions</AlertDescription>
-        </Alert>
+      <div className="container mx-auto p-6 text-center">
+        <Award className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+        <p className="text-muted-foreground mb-3">Manage your medallion designs, production, and minting.</p>
+        <button
+          onClick={() => openOnboard({ reason: "Manage your medallion collection", actionLabel: "Manage Medallions" })}
+          className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+        >
+          Get Started
+        </button>
       </div>
     );
   }

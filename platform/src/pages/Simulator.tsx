@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ interface ScenarioData {
 
 export default function Simulator() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { toast } = useToast();
   const [scenarioName, setScenarioName] = useState("");
   const [scenarios, setScenarios] = useState<any[]>([]);
@@ -118,7 +120,7 @@ export default function Simulator() {
 
   const saveScenario = async () => {
     if (!user) {
-      toast({ title: "Please log in to save scenarios", variant: "destructive" });
+      openOnboard({ reason: "Save your simulation scenarios", actionLabel: "Save Scenario" });
       return;
     }
 

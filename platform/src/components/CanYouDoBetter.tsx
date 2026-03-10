@@ -11,6 +11,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -36,6 +37,7 @@ interface CanYouDoBetterProps {
 
 export function CanYouDoBetter({ elementId, elementLabel }: CanYouDoBetterProps) {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -60,7 +62,7 @@ export function CanYouDoBetter({ elementId, elementLabel }: CanYouDoBetterProps)
   // Submit theme
   const submitTheme = useMutation({
     mutationFn: async () => {
-      if (!user) throw new Error("Log in to submit themes");
+      if (!user) { openOnboard({ reason: "Submit your CSS theme design", actionLabel: "Submit Theme" }); return; }
       if (!newName || !newCss) throw new Error("Name and CSS required");
 
       const { error } = await supabase.from("user_themes").insert({
@@ -83,7 +85,7 @@ export function CanYouDoBetter({ elementId, elementLabel }: CanYouDoBetterProps)
   // Vote
   const vote = useMutation({
     mutationFn: async ({ themeId, voteValue }: { themeId: string; voteValue: number }) => {
-      if (!user) throw new Error("Log in to vote");
+      if (!user) { openOnboard({ reason: "Vote on community themes", actionLabel: "Vote" }); return; }
       await supabase.from("theme_votes").upsert({
         user_id: user.id,
         theme_id: themeId,

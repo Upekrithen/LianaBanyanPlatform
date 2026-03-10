@@ -14,6 +14,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -72,6 +73,7 @@ export default function Petitions() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const queryClient = useQueryClient();
   const arenaFilter = searchParams.get("arena");
 
@@ -127,7 +129,7 @@ export default function Petitions() {
   // Sign petition
   const signPetition = useMutation({
     mutationFn: async (petitionId: string) => {
-      if (!user) throw new Error("Log in to sign petitions");
+      if (!user) { openOnboard({ reason: "Sign this petition to add your voice", actionLabel: "Sign Petition" }); return; }
       const { error } = await supabase.from("petition_signatures").insert({
         petition_id: petitionId,
         user_id: user.id,
@@ -156,7 +158,7 @@ export default function Petitions() {
   // Create petition
   const createPetition = useMutation({
     mutationFn: async () => {
-      if (!user) throw new Error("Log in to create petitions");
+      if (!user) { openOnboard({ reason: "Create a petition for your community", actionLabel: "Create Petition" }); return; }
       if (!newTitle || !newDescription) throw new Error("Title and description required");
 
       // Default to first arena if no filter

@@ -376,7 +376,7 @@ export default function GoldenKeyQuest() {
                       </Button>
                     )
                   ) : (
-                    <p className="text-sm text-muted-foreground">Log in to attempt this puzzle</p>
+                    <Button variant="outline" size="sm" onClick={() => openOnboard({ reason: "Attempt this puzzle and earn Golden Keys", actionLabel: "Start Puzzle" })}>Try to Solve</Button>
                   )}
                 </CardContent>
               </Card>

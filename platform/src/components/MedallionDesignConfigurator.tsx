@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,7 @@ interface MedallionDesignConfiguratorProps {
 
 export function MedallionDesignConfigurator({ projectId }: MedallionDesignConfiguratorProps) {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -123,8 +125,12 @@ export function MedallionDesignConfigurator({ projectId }: MedallionDesignConfig
   if (!user) {
     return (
       <Card>
-        <CardContent className="pt-6 text-center text-muted-foreground">
-          Please log in to configure medallion designs
+        <CardContent className="pt-6 text-center">
+          <Award className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+          <p className="text-muted-foreground mb-3">Design and configure custom medallions for your achievements.</p>
+          <Button variant="outline" size="sm" onClick={() => openOnboard({ reason: "Configure your medallion designs", actionLabel: "Design Medallions" })}>
+            Get Started
+          </Button>
         </CardContent>
       </Card>
     );

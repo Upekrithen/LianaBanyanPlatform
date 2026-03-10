@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,7 @@ import SingleImageUpload from '@/components/SingleImageUpload';
 
 export function PhysicalBadgeDesigner() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [designName, setDesignName] = useState('');
@@ -99,8 +101,12 @@ export function PhysicalBadgeDesigner() {
   if (!user) {
     return (
       <Card>
-        <CardContent className="pt-6 text-center text-muted-foreground">
-          Please log in to design your physical badge
+        <CardContent className="pt-6 text-center">
+          <Award className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+          <p className="text-muted-foreground mb-3">Design a custom physical badge for your platform identity.</p>
+          <Button variant="outline" size="sm" onClick={() => openOnboard({ reason: "Design your physical badge", actionLabel: "Design Badge" })}>
+            Get Started
+          </Button>
         </CardContent>
       </Card>
     );

@@ -488,7 +488,7 @@ export default function HexIsle() {
           ) : (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
-                {user ? "No buildings yet. Complete quests to unlock building." : "Log in to track your buildings."}
+                No buildings yet. Complete quests to unlock building opportunities.
               </CardContent>
             </Card>
           )}
@@ -515,7 +515,7 @@ export default function HexIsle() {
           ) : (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
-                {user ? "No active quests. Browse the Quests tab to start one!" : "Log in to accept quests."}
+                No active quests. Browse the Quests tab to start one!
               </CardContent>
             </Card>
           )}

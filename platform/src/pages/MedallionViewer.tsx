@@ -1,4 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { MedallionUserCard } from '@/components/MedallionUserCard';
@@ -10,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 
 export default function MedallionViewer() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
 
   const { data: userProjects, isLoading } = useQuery({
     queryKey: ['user-medallion-projects', user?.id],
@@ -38,11 +40,18 @@ export default function MedallionViewer() {
   if (!user) {
     return (
       <div className="container mx-auto p-6">
-        <Alert>
-          <AlertDescription>
-            Please log in to view your medallions.
-          </AlertDescription>
-        </Alert>
+        <Card>
+          <CardContent className="pt-6 text-center">
+            <Award className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-muted-foreground mb-3">View and manage your earned medallion collection.</p>
+            <button
+              onClick={() => openOnboard({ reason: "View your medallion collection", actionLabel: "View Medallions" })}
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+            >
+              Get Started
+            </button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
