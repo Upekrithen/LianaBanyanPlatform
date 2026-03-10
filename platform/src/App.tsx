@@ -212,6 +212,8 @@ const C20PilotDashboard = lazy(() => import("./pages/C20PilotDashboard"));
 const C20Leaderboard = lazy(() => import("./pages/C20Leaderboard"));
 const BeaconExplainer = lazy(() => import("./pages/BeaconExplainer"));
 const WildfireRunsPage = lazy(() => import("./pages/WildfireRunsPage"));
+const ATTILanding = lazy(() => import("./pages/ATTILanding"));
+const BifrostCardBuilder = lazy(() => import("./pages/BifrostCardBuilder"));
 import { WildfireRunProvider } from "./contexts/WildfireRunContext";
 import { MockDataProvider } from "./contexts/MockDataProvider";
 import { PathwayProgressProvider } from "./contexts/PathwayProgressContext";
@@ -869,6 +871,11 @@ const App = () => (
           <Route path="/hexisle/keeps" element={<KeepsLobby />} />
           <Route path="/cue/hexisle-world" element={<HexIsleWorldCard />} />
           
+          {/* A.T.T.I. Campaign (Innovation #1555) */}
+          <Route path="/atti" element={<ATTILanding />} />
+          <Route path="/bifrost" element={<ProtectedRoute><BifrostCardBuilder /></ProtectedRoute>} />
+          <Route path="/card-builder" element={<ProtectedRoute><BifrostCardBuilder /></ProtectedRoute>} />
+
           {/* Cold Start & Stewardship System (Milestone 2) */}
           <Route path="/cold-start-dashboard" element={<ColdStartDashboard />} />
           <Route path="/become-captain/:initiativeId" element={<BecomeCaptain />} />
