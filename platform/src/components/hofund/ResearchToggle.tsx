@@ -27,6 +27,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TYPES
@@ -80,7 +81,8 @@ export function ResearchToggle({
   initiativeSlug
 }: ResearchToggleProps) {
   const { user } = useAuth();
-  
+  const { openOnboard } = useSeamlessOnboard();
+
   // State
   const [isCommitted, setIsCommitted] = useState(false);
   const [hasActiveLock, setHasActiveLock] = useState(false);
@@ -150,7 +152,7 @@ export function ResearchToggle({
   // ─── Toggle commitment ───
   const handleToggleCommitment = async () => {
     if (!user) {
-      toast.error('Please sign in to access research features');
+      openOnboard({ reason: "access research features", actionLabel: "Join", membershipIncluded: true });
       return;
     }
 
@@ -175,7 +177,7 @@ export function ResearchToggle({
   // ─── Access research pool (creates lock) ───
   const handleAccessResearch = async () => {
     if (!user) {
-      toast.error('Please sign in to access research');
+      openOnboard({ reason: "access research features", actionLabel: "Join", membershipIncluded: true });
       return;
     }
 

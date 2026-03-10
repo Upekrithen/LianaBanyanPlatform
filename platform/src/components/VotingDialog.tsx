@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { Clock, TrendingUp } from 'lucide-react';
 import { ReferralCodeInput } from './ReferralCodeInput';
 
@@ -40,6 +41,7 @@ export function VotingDialog({
   onVoteSuccess
 }: VotingDialogProps) {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [votes, setVotes] = useState<{ [key: string]: string }>({});
   const [timeCommitments, setTimeCommitments] = useState<{ [key: string]: number }>({});
   const [participationRatios, setParticipationRatios] = useState<{ [key: string]: { participation: number; cash: number } }>({});
@@ -128,7 +130,7 @@ export function VotingDialog({
 
   const handleSubmitVote = async (levelId: string) => {
     if (!user) {
-      toast.error('Please sign in to vote');
+      openOnboard({ reason: "cast your vote", actionLabel: "Join", membershipIncluded: true });
       return;
     }
 

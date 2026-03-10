@@ -48,6 +48,7 @@ import {
   Navigation,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 
 const ONBOARDING_KEY = 'lb_beacon_onboarding_complete';
 
@@ -100,6 +101,7 @@ export function BeaconDropButton({
   beaconNumber,
 }: BeaconDropButtonProps) {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<'onboarding' | 'color' | 'orange' | 'details'>('color');
@@ -233,7 +235,7 @@ export function BeaconDropButton({
         variant="outline"
         size={compact ? 'icon' : 'default'}
         className={className}
-        onClick={() => toast.info('Log in to drop beacons')}
+        onClick={() => { openOnboard({ reason: "drop beacons", actionLabel: "Join", membershipIncluded: true }); return; }}
       >
         <MapPin className={compact ? 'w-4 h-4' : 'w-4 h-4 mr-2'} />
         {!compact && 'Drop Beacon'}

@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { ClanGuildContextualPrompt } from '@/components/TribeGuildContextualPrompt';
 
 interface Position {
@@ -42,6 +43,7 @@ export function PositionApplicationDialog({
 }: PositionApplicationDialogProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { openOnboard } = useSeamlessOnboard();
   const [loading, setLoading] = useState(false);
   const [isClanMember, setIsClanMember] = useState(false);
   const [hasGuildMemberships, setHasGuildMemberships] = useState(false);
@@ -119,7 +121,7 @@ export function PositionApplicationDialog({
         toast.info('Please register to track your application', {
           action: {
             label: 'Register',
-            onClick: () => navigate('/auth'),
+            onClick: () => openOnboard({ reason: "apply for this position", actionLabel: "Join", membershipIncluded: true }),
           },
         });
       }

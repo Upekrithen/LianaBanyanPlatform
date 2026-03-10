@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { Loader2 } from 'lucide-react';
 import { ClanGuildContextualPrompt } from '@/components/TribeGuildContextualPrompt';
 
@@ -41,6 +42,7 @@ export function ChallengeSubmissionDialog({
   onSubmitSuccess 
 }: ChallengeSubmissionDialogProps) {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [loading, setLoading] = useState(false);
   const [isClanMember, setIsClanMember] = useState(false);
   const [hasGuildMemberships, setHasGuildMemberships] = useState(false);
@@ -82,7 +84,7 @@ export function ChallengeSubmissionDialog({
 
   const handleSubmit = async () => {
     if (!challenge || !user) {
-      toast.error('Please log in to submit');
+      openOnboard({ reason: "submit your challenge", actionLabel: "Join", membershipIncluded: true });
       return;
     }
 

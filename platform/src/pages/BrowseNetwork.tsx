@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Network, Package, FileCode, TrendingUp, Truck, Factory } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useNavigate } from "react-router-dom";
 
 const serviceCategories = [
@@ -51,6 +53,16 @@ const serviceCategories = [
 
 export default function BrowseNetwork() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
+
+  const handleConnect = () => {
+    if (!user) {
+      openOnboard({ reason: "connect with network partners", actionLabel: "Connect", membershipIncluded: true });
+      return;
+    }
+    navigate('/dashboard');
+  };
 
   return (
     <div className="container mx-auto p-8 space-y-8">
@@ -91,8 +103,8 @@ export default function BrowseNetwork() {
                   )}
                 </div>
               </div>
-              <Button variant="outline" className="w-full" onClick={() => navigate('/auth')}>
-                Sign in to connect
+              <Button variant="outline" className="w-full" onClick={handleConnect}>
+                {user ? "View Providers" : "Connect to Explore"}
               </Button>
             </CardContent>
           </Card>
@@ -120,8 +132,8 @@ export default function BrowseNetwork() {
             </div>
           </div>
           <div className="text-center pt-4 space-y-2">
-            <Button size="lg" onClick={() => navigate('/auth')}>
-              Request network access
+            <Button size="lg" onClick={handleConnect}>
+              {user ? "Go to Network" : "Request Network Access"}
             </Button>
             <p className="text-sm text-muted-foreground">
               B2B partnerships require verification

@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format, addDays, isSameDay } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { DeckCardFrame } from "@/components/DeckCardFrame";
 import { CreateMealOfferingDialog } from "@/components/CreateMealOfferingDialog";
 import { MealOrderDialog } from "@/components/MealOrderDialog";
@@ -61,6 +62,7 @@ function getDateRange(): Date[] {
 export default function LetsMakeDinnerPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [showOfferDialog, setShowOfferDialog] = useState(false);
   const [showRequestDialog, setShowRequestDialog] = useState(false);
@@ -756,7 +758,7 @@ export default function LetsMakeDinnerPage() {
             <span style={{ margin: '0 1rem', opacity: 0.4 }}>—</span>
             <span style={{ opacity: 0.5 }}>Join to order or offer meals</span>
             <button 
-              onClick={() => navigate('/auth')}
+              onClick={() => openOnboard({ reason: "start cooking and earning", actionLabel: "Join", membershipIncluded: true })}
               className="btn"
               style={{ marginLeft: '1rem', padding: '0.4rem 1rem', fontSize: '0.85rem' }}
             >

@@ -15,6 +15,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { BenefitCard, useBenefitAccumulator, type BenefitItem } from "@/components/progressive/BenefitCard";
 import { ProgressiveSection, ProgressiveContainer } from "@/components/progressive/ProgressiveSection";
 import {
@@ -413,6 +414,7 @@ function ProducerPathways({ onNavigate }: { onNavigate: (path: string) => void }
 export default function LetsMakeDinnerLanding() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { benefits, addBenefits } = useBenefitAccumulator();
   const [currentLayer, setCurrentLayer] = useState(1);
   const [benefitsExpanded, setBenefitsExpanded] = useState(false);
@@ -796,7 +798,7 @@ export default function LetsMakeDinnerLanding() {
                 Browse Available Meals
               </button>
               <button
-                onClick={() => navigate('/auth')}
+                onClick={() => openOnboard({ reason: "start cooking and earning", actionLabel: "Join", membershipIncluded: true })}
                 className="px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold text-lg hover:bg-white/20 transition-all"
               >
                 Join for $5/year
@@ -820,7 +822,7 @@ export default function LetsMakeDinnerLanding() {
           totalSections={4}
           isExpanded={benefitsExpanded}
           onToggleExpand={() => setBenefitsExpanded(!benefitsExpanded)}
-          onJoinClick={() => navigate('/auth')}
+          onJoinClick={() => openOnboard({ reason: "start cooking and earning", actionLabel: "Join", membershipIncluded: true })}
         />
       )}
     </div>

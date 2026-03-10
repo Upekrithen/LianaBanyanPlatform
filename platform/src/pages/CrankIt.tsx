@@ -16,6 +16,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -49,6 +50,7 @@ const BATCH_PRICE = 5;
 export default function CrankIt() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [usageStats, setUsageStats] = useState<UsageStats>({
     totalAttempts: 0,
     freeRemaining: FREE_TIER_LIMIT,
@@ -294,7 +296,7 @@ export default function CrankIt() {
                     Join for $5/year to save them permanently and adopt your best ideas.
                   </p>
                 </div>
-                <Button onClick={() => navigate('/auth')}>
+                <Button onClick={() => openOnboard({ reason: "save your simulations", actionLabel: "Join", membershipIncluded: true })}>
                   Join for $5/year
                 </Button>
               </div>

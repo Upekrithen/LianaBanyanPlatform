@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeckCardFrame } from "@/components/DeckCardFrame";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import '@/styles/landing.css';
 
 // The discoverable opportunity cards in this layer
@@ -45,6 +46,7 @@ const OPPORTUNITY_CARDS = [
 export default function HelpWanted() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [collectedCards, setCollectedCards] = useState<Set<string>>(new Set());
 
   // Load collected cards on mount
@@ -179,8 +181,8 @@ export default function HelpWanted() {
             <span style={{ opacity: 0.7 }}>👻 Exploring as Ghost</span>
             <span style={{ margin: '0 1rem', opacity: 0.4 }}>—</span>
             <span style={{ opacity: 0.5 }}>Your progress saves when you join</span>
-            <button 
-              onClick={() => navigate('/auth')}
+            <button
+              onClick={() => openOnboard({ reason: "save your progress", actionLabel: "Join", membershipIncluded: true })}
               className="btn"
               style={{ marginLeft: '1rem', padding: '0.4rem 1rem', fontSize: '0.85rem' }}
             >

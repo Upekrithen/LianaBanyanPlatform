@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { ArrowLeft, Plus, Trash2, RefreshCw, TrendingUp } from 'lucide-react';
 
 interface Product {
@@ -33,6 +34,7 @@ interface PricingData {
 export default function IndustryPricing() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState('');
   const [pricingData, setPricingData] = useState<PricingData[]>([]);
@@ -105,7 +107,7 @@ export default function IndustryPricing() {
     try {
       const { data, error } = await supabase.auth.getSession();
       if (error || !data.session) {
-        toast.error('Not authenticated');
+        openOnboard({ reason: "access industry pricing", actionLabel: "Join", membershipIncluded: true });
         return;
       }
 

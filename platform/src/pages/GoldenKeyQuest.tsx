@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +30,7 @@ import { toast } from "sonner";
 
 export default function GoldenKeyQuest() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [keyAnswer, setKeyAnswer] = useState("");
@@ -427,7 +429,7 @@ export default function GoldenKeyQuest() {
                 <div className="text-center py-8">
                   <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground/20" />
                   <p className="text-muted-foreground">Log in or join to submit answers and earn rewards.</p>
-                  <Button className="mt-4" onClick={() => navigate("/auth")}>
+                  <Button className="mt-4" onClick={() => openOnboard({ reason: "submit answers and earn rewards", actionLabel: "Join", membershipIncluded: true })}>
                     Join for $5/year
                   </Button>
                 </div>

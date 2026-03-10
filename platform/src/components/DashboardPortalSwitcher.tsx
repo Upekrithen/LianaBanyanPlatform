@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PortalAccessCard, AccessLevel } from "./PortalAccessCard";
 import { ShoppingBag, Briefcase, Heart, Network } from "lucide-react";
 import { toast } from "sonner";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 
 interface PortalAccess {
   marketplace: AccessLevel;
@@ -12,6 +13,7 @@ interface PortalAccess {
 }
 
 export const DashboardPortalSwitcher = () => {
+  const { openOnboard } = useSeamlessOnboard();
   const [access, setAccess] = useState<PortalAccess>({
     marketplace: 'browse',
     business: 'locked',
@@ -88,7 +90,7 @@ export const DashboardPortalSwitcher = () => {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      toast.error("Please log in to request access");
+      openOnboard({ reason: "request access", actionLabel: "Join", membershipIncluded: true });
       return;
     }
 

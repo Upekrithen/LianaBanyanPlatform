@@ -30,6 +30,8 @@ import {
   ArrowRight, Check, X, Sparkles, Target, Navigation,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import type { User } from "@supabase/supabase-js";
 
 // ─── TYPES ───
@@ -125,6 +127,7 @@ function createEmptyQuestion(): EndQuestion {
 
 export default function TreasureMapCreator() {
   const navigate = useNavigate();
+  const { openOnboard } = useSeamlessOnboard();
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   
@@ -164,14 +167,6 @@ export default function TreasureMapCreator() {
     }
     loadInitialData();
   }, []);
-
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!authLoading && !user) {
-      toast.error("Please log in to create treasure maps");
-      navigate("/auth");
-    }
-  }, [user, authLoading, navigate]);
 
   const updateDraft = (updates: Partial<TreasureMapDraft>) => {
     setDraft((prev) => ({ ...prev, ...updates }));

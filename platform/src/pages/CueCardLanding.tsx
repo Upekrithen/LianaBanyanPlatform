@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { getGateBountyById, type GateArtworkBounty } from '@/data/gateArtworkBounties';
 import { TreasureKeyIndicator } from '@/components/TreasureKeyIndicator';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 
 interface CueCardData {
   id: string;
@@ -117,6 +119,8 @@ const CUE_CARDS: Record<string, CueCardData> = {
 // Gate Bounty Card Component
 function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -167,7 +171,13 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
           
           <div className="flex flex-wrap gap-4">
             <button
-              onClick={() => navigate('/auth')}
+              onClick={() => {
+                if (!user) {
+                  openOnboard({ reason: "claim this bounty", actionLabel: "Claim Bounty", membershipIncluded: true });
+                } else {
+                  navigate('/salt-mines');
+                }
+              }}
               className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-semibold flex items-center gap-2"
             >
               Claim This Bounty

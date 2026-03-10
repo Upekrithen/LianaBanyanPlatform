@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Map, MapPin, Save, Plus, Trash2, ArrowLeft, Lock, Unlock, Play } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { getOrCreateGhostSession } from "@/lib/ghostWorld";
 
 // Mock data for system beacons
@@ -29,6 +30,7 @@ interface MapNode {
 export default function TreasureMapBuilder() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [hasAccess, setHasAccess] = useState(false);
   const [mapName, setMapName] = useState("My Game Night Campaign");
   const [nodes, setNodes] = useState<MapNode[]>([]);
@@ -92,7 +94,7 @@ export default function TreasureMapBuilder() {
             </ul>
             <div className="pt-4 flex gap-4 justify-center">
               <Button variant="outline" onClick={() => navigate('/ghost-world')}>Back to Ghost World</Button>
-              <Button onClick={() => navigate('/auth')}>Become a Member</Button>
+              <Button onClick={() => openOnboard({ reason: "build a treasure map", actionLabel: "Join", membershipIncluded: true })}>Become a Member</Button>
             </div>
           </CardContent>
         </Card>

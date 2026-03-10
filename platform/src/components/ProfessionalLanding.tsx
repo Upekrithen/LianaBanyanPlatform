@@ -13,6 +13,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import './ProfessionalLanding.css';
 
 // Theme definitions for palette switcher
@@ -34,6 +36,7 @@ interface ProfessionalLandingProps {
 
 export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: ProfessionalLandingProps) {
   const navigate = useNavigate();
+  const { openOnboard } = useSeamlessOnboard();
   const [heroFlipped, setHeroFlipped] = useState(false);
   const [pathFlipped, setPathFlipped] = useState<Record<string, boolean>>({});
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -134,7 +137,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
                   <p>Explore freely. No commitment. Test ideas. Hunt Golden Keys.</p>
                   <button className="portal-btn ghost-btn">Enter Ghost World</button>
                 </div>
-                <div className="professional-portal real-portal" onClick={(e) => { e.stopPropagation(); navigate('/auth'); }}>
+                <div className="professional-portal real-portal" onClick={(e) => { e.stopPropagation(); openOnboard({ reason: "get started", actionLabel: "Join", membershipIncluded: true }); }}>
                   <span className="portal-icon">💼</span>
                   <h4>Real World</h4>
                   <p>Get a real job. Build a real business. Plant real seeds.</p>

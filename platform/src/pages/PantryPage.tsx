@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { RecipeSubmissionForm } from "@/components/RecipeSubmissionForm";
 import { RecipeCard } from "@/components/RecipeCard";
 import { RecipeBountyBanner } from "@/components/RecipeBountyBanner";
@@ -62,6 +63,7 @@ const MEAL_TYPES = [
 export default function PantryPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCuisine, setSelectedCuisine] = useState("All");
   const [selectedMealType, setSelectedMealType] = useState("All");
@@ -407,7 +409,7 @@ export default function PantryPage() {
             <span style={{ margin: '0 1rem', opacity: 0.4 }}>—</span>
             <span style={{ opacity: 0.5 }}>Join to share recipes and earn credits</span>
             <button 
-              onClick={() => navigate('/auth')}
+              onClick={() => openOnboard({ reason: "manage your pantry", actionLabel: "Join", membershipIncluded: true })}
               className="btn"
               style={{ marginLeft: '1rem', padding: '0.4rem 1rem', fontSize: '0.85rem' }}
             >

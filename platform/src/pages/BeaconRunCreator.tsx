@@ -46,6 +46,7 @@ import {
   Navigation,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { BeaconDropButton, BEACON_COLORS } from "@/components/BeaconDropButton";
 import { BeaconRunCueCard } from "@/components/BeaconRunCueCard";
 
@@ -62,6 +63,7 @@ interface BeaconRunDraft {
 export default function BeaconRunCreator() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { openOnboard } = useSeamlessOnboard();
   const queryClient = useQueryClient();
   
   const [isGhostMode, setIsGhostMode] = useState(false);
@@ -92,14 +94,6 @@ export default function BeaconRunCreator() {
     },
     enabled: !!user && isGhostMode,
   });
-
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      toast.error("Please log in to create Beacon Runs");
-      navigate("/auth");
-    }
-  }, [user, navigate]);
 
   // Enter Ghost Mode (local UI state — ghost_mode_sessions table not yet created)
   const enterGhostMode = async () => {

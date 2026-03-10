@@ -26,6 +26,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format, addDays } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import {
   Dialog,
   DialogContent,
@@ -76,6 +77,7 @@ const EARLY_WITHDRAWAL_PENALTY_PER_DAY = 0.10; // 10% per day early
 export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealRequestDialogProps) {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const queryClient = useQueryClient();
   
   // State
@@ -197,7 +199,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
             <p className="text-muted-foreground mb-4">
               Join for $5/year to request meals and back them with Marks.
             </p>
-            <Button onClick={() => navigate('/auth')}>
+            <Button onClick={() => openOnboard({ reason: "request meals", actionLabel: "Join", membershipIncluded: true })}>
               Join Now
             </Button>
           </div>

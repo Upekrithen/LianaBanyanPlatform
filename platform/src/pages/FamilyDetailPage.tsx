@@ -9,7 +9,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
+import {
   Users, ArrowLeft, Calendar, Gift, UserPlus, Settings,
   Heart, Link2, MessageSquare
 } from "lucide-react";
@@ -25,6 +26,7 @@ export default function FamilyDetailPage() {
   const navigate = useNavigate();
   const { familyId } = useParams<{ familyId: string }>();
   const { user, session } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [activeTab, setActiveTab] = useState("members");
 
@@ -147,7 +149,7 @@ export default function FamilyDetailPage() {
       <div className="landing-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="text-center">
           <p style={{ marginBottom: '1rem' }}>Please sign in to view this family</p>
-          <Button onClick={() => navigate('/auth')}>Sign In</Button>
+          <Button onClick={() => openOnboard({ reason: "view family details", actionLabel: "Join", membershipIncluded: true })}>Sign In</Button>
         </div>
       </div>
     );

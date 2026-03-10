@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { 
   Users, Plus, ArrowLeft, Heart, Calendar, Gift, 
   Settings, ChevronRight, Sparkles
@@ -34,6 +35,7 @@ interface Family {
 export default function FamilyPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   // Fetch user's families
@@ -134,7 +136,7 @@ export default function FamilyPage() {
             <p style={{ opacity: 0.6, marginBottom: '1.5rem' }}>
               Create families, share calendars, and coordinate gift lists.
             </p>
-            <Button onClick={() => navigate('/auth')} className="bg-purple-600 hover:bg-purple-700">
+            <Button onClick={() => openOnboard({ reason: "access Family Table", actionLabel: "Join", membershipIncluded: true })} className="bg-purple-600 hover:bg-purple-700">
               Sign In
             </Button>
           </div>

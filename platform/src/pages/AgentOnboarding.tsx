@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +27,7 @@ interface OnboardingRecord {
 
 export default function AgentOnboarding() {
   const navigate = useNavigate();
+  const { openOnboard } = useSeamlessOnboard();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [onboardingRecord, setOnboardingRecord] = useState<OnboardingRecord | null>(null);
@@ -38,7 +41,7 @@ export default function AgentOnboarding() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        navigate("/auth");
+        setIsLoading(false);
         return;
       }
 

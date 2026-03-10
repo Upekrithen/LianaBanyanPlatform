@@ -20,6 +20,7 @@ import { RotatingQuotes } from '@/components/RotatingQuotes';
 import { useLevelGatedNavigate, getRouteLevel } from '@/components/LevelGatedLink';
 import { usePathwayProgress } from '@/contexts/PathwayProgressContext';
 import { Lock } from 'lucide-react';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import '@/styles/landing.css';
 
 // Durin's Door Dialog Component
@@ -387,6 +388,7 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 const Index = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { discoveries, discoveryLevel } = useDiscovery();
   const [showWelcomeChoice, setShowWelcomeChoice] = useState<boolean | null>(null);
   const [userChoice, setUserChoice] = useState<'keep' | 'explore' | null>(null);
@@ -1886,12 +1888,12 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                             We Own what we Build for $5/yr.
                           </span>
                           {/* Line 3 - Join us link */}
-                          <a 
-                            href="/auth" 
-                            onClick={(e) => { e.stopPropagation(); navigate('/auth'); e.preventDefault(); }}
-                            style={{ 
+                          <a
+                            href="#"
+                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); openOnboard({ reason: "join the community", actionLabel: "Join", membershipIncluded: true }); }}
+                            style={{
                               display: 'block',
-                              color: '#38a169', 
+                              color: '#38a169',
                               textDecoration: 'none',
                               fontWeight: 600,
                               transition: 'opacity 0.2s ease'
@@ -2519,7 +2521,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                           </button>
                         </form>
                         <p style={{ fontSize: '0.7rem', textAlign: 'center', marginTop: '0.5rem', opacity: 0.6 }}>
-                          Already have an account? <a href="/auth" onClick={(e) => { e.stopPropagation(); navigate('/auth'); e.preventDefault(); }} style={{ color: '#38a169' }}>Sign In</a>
+                          Already have an account? <a href="#" onClick={(e) => { e.stopPropagation(); e.preventDefault(); openOnboard({ reason: "join the community", actionLabel: "Join", membershipIncluded: true }); }} style={{ color: '#38a169' }}>Sign In</a>
                         </p>
                       </div>
                     ) : (

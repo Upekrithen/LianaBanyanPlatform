@@ -16,6 +16,8 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -228,6 +230,7 @@ function saveGameState(state: GameState) {
 
 export default function TreasureMapGame() {
   const navigate = useNavigate();
+  const { openOnboard } = useSeamlessOnboard();
   const [gameState, setGameState] = useState<GameState>(loadGameState);
   const [redeemCode, setRedeemCode] = useState("");
   const [selectedSuit, setSelectedSuit] = useState<string | null>(null);
@@ -499,7 +502,7 @@ export default function TreasureMapGame() {
             {gameState.totalFeathers > 0 && ` You have ${gameState.totalFeathers} feathers waiting.`}
           </p>
           <div className="flex gap-3 justify-center">
-            <Button onClick={() => navigate("/auth")} className="gap-2">
+            <Button onClick={() => openOnboard({ reason: "play treasure map games", actionLabel: "Join", membershipIncluded: true })} className="gap-2">
               <Star className="w-4 h-4" />
               Join for $5/year
             </Button>

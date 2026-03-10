@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ExpandableBlock, DataVizBar } from "@/components/pudding";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import {
   ArrowRight,
   Shield,
@@ -534,6 +536,8 @@ export default function RedCarpet() {
   const { slug } = useParams<{ slug?: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
 
   const [email, setEmail] = useState("");
   const [recipient, setRecipient] = useState<Recipient | null>(null);
@@ -1708,7 +1712,7 @@ export default function RedCarpet() {
                         👻 Explore First
                       </Button>
                       <Button size="lg" variant="outline" className="gap-2 h-14 px-8 text-lg rounded-xl"
-                        onClick={() => navigate("/auth")}>
+                        onClick={() => openOnboard({ reason: "join Liana Banyan", actionLabel: "Join", membershipIncluded: true })}>
                         <Users className="w-5 h-5" />
                         {entryMode === "referral" ? "Join & Claim Credits" : "Join for $5/year"}
                       </Button>

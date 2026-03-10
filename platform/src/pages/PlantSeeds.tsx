@@ -6,6 +6,8 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { motion } from 'framer-motion';
 import { 
   Sprout, Vote, Layers, TrendingUp, Gift,
@@ -42,6 +44,8 @@ const MULTIPLIER_TYPES = [
 
 export default function PlantSeeds() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { benefits, addBenefit } = useBenefitAccumulator();
   const [currentSection, setCurrentSection] = useState(0);
   const [benefitCardExpanded, setBenefitCardExpanded] = useState(false);
@@ -422,7 +426,7 @@ export default function PlantSeeds() {
               </div>
               
               <button
-                onClick={() => navigate('/auth')}
+                onClick={() => openOnboard({ reason: "back projects and earn service credits", actionLabel: "Join", membershipIncluded: true })}
                 className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-500/90 hover:to-purple-500/90 text-white text-xl font-bold flex items-center justify-center gap-3 transition-all"
               >
                 <Unlock className="w-6 h-6" />
@@ -447,7 +451,7 @@ export default function PlantSeeds() {
         totalSections={totalSections}
         isExpanded={benefitCardExpanded}
         onToggleExpand={() => setBenefitCardExpanded(!benefitCardExpanded)}
-        onJoinClick={() => navigate('/auth')}
+        onJoinClick={() => openOnboard({ reason: "back projects and earn service credits", actionLabel: "Join", membershipIncluded: true })}
       />
     </div>
   );

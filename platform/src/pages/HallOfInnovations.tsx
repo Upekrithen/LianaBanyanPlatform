@@ -15,6 +15,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -241,6 +242,7 @@ const STATS = {
 export default function HallOfInnovations() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [selectedBucket, setSelectedBucket] = useState<PatentBucket | null>(null);
   const [selectedShowcase, setSelectedShowcase] = useState<ShowcasePedestal | null>(null);
   const [showSponsorDialog, setShowSponsorDialog] = useState(false);
@@ -253,7 +255,7 @@ export default function HallOfInnovations() {
         description: "Your votes fund prosecution and earn you stakes in the bucket.",
         action: {
           label: "Join Now",
-          onClick: () => navigate("/auth"),
+          onClick: () => openOnboard({ reason: "participate in patent voting", actionLabel: "Join", membershipIncluded: true }),
         },
       });
       return;
@@ -267,7 +269,7 @@ export default function HallOfInnovations() {
         description: "Sponsors get stakes in the Global Pool — a slice of everything.",
         action: {
           label: "Join $5/yr",
-          onClick: () => navigate("/auth"),
+          onClick: () => openOnboard({ reason: "participate in patent voting", actionLabel: "Join", membershipIncluded: true }),
         },
       });
       return;
@@ -888,7 +890,7 @@ export default function HallOfInnovations() {
                 onClick={() => {
                   if (isGhost) {
                     toast.info("Join for $5/year to vote on patents", {
-                      action: { label: "Join Now", onClick: () => navigate("/auth") },
+                      action: { label: "Join Now", onClick: () => openOnboard({ reason: "participate in patent voting", actionLabel: "Join", membershipIncluded: true }) },
                     });
                   } else {
                     toast.success("Opening voting interface...");

@@ -13,6 +13,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -70,6 +71,7 @@ const EXPLORATION_MILESTONES = [
 
 export default function GhostWorld() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const navigate = useNavigate();
   const [ghostProfile, setGhostProfile] = useState<GhostProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -526,7 +528,7 @@ export default function GhostWorld() {
 
                 <Button
                   className="w-full h-12 text-lg gap-2 bg-emerald-600 hover:bg-emerald-700"
-                  onClick={() => navigate("/auth")}
+                  onClick={() => openOnboard({ reason: "join the real world", actionLabel: "Join", membershipIncluded: true })}
                 >
                   Join the Real World
                   <ArrowRight className="w-5 h-5" />

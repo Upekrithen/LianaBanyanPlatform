@@ -13,6 +13,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowRight, ArrowLeft, Ghost, UserPlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { DeckCardFrame } from "@/components/DeckCardFrame";
 
 /**
@@ -296,6 +298,8 @@ const PATHS: Record<string, DiscoveryPath> = {
 export default function Discover() {
   const { area } = useParams<{ area: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [revealedCards, setRevealedCards] = useState<number>(0);
   const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
   const [showSpotlight, setShowSpotlight] = useState<boolean>(false);
@@ -508,7 +512,7 @@ export default function Discover() {
             <Button
               size="lg"
               className="bg-white/10 hover:bg-white/20 border border-white/20 gap-2"
-              onClick={() => navigate("/auth")}
+              onClick={() => openOnboard({ reason: "join the community", actionLabel: "Join", membershipIncluded: true })}
             >
               <UserPlus className="w-5 h-5" /> Join for $5/year
             </Button>

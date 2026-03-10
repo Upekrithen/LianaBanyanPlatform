@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, TrendingUp, Users, Star } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
@@ -37,6 +39,16 @@ const categories = [
 
 export default function BrowseMarketplace() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
+
+  const handleExplore = () => {
+    if (!user) {
+      openOnboard({ reason: "explore the marketplace", actionLabel: "Start Exploring", membershipIncluded: true });
+      return;
+    }
+    navigate('/dashboard');
+  };
 
   return (
     <div className="container mx-auto p-8 space-y-8">
@@ -69,8 +81,8 @@ export default function BrowseMarketplace() {
                 <p className="text-sm text-muted-foreground">
                   {category.count} active {category.count === 1 ? 'project' : 'projects'}
                 </p>
-                <Button variant="outline" onClick={() => navigate('/auth')}>
-                  Sign in to explore
+                <Button variant="outline" onClick={handleExplore}>
+                  {user ? "Explore" : "Join to Explore"}
                 </Button>
               </div>
             </CardContent>
@@ -85,11 +97,8 @@ export default function BrowseMarketplace() {
             Create an account to back projects, earn participation, and join the community
           </p>
           <div className="flex gap-4 justify-center">
-            <Button size="lg" onClick={() => navigate('/auth')}>
-              Sign Up
-            </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate('/auth')}>
-              Sign In
+            <Button size="lg" onClick={handleExplore}>
+              {user ? "Go to Marketplace" : "Join for $5/year"}
             </Button>
           </div>
         </CardContent>

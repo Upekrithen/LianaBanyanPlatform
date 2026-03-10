@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heart, DollarSign, Trophy, TrendingUp, Gift, Shield } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useNavigate } from "react-router-dom";
 
 const benefitCategories = [
@@ -45,6 +47,16 @@ const benefitCategories = [
 
 export default function BrowseNonprofit() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
+
+  const handleJoin = () => {
+    if (!user) {
+      openOnboard({ reason: "access member benefits", actionLabel: "Join", membershipIncluded: true });
+      return;
+    }
+    navigate('/dashboard');
+  };
 
   return (
     <div className="container mx-auto p-8 space-y-8">
@@ -72,8 +84,8 @@ export default function BrowseNonprofit() {
                   <span className="text-muted-foreground">{detail}</span>
                 </div>
               ))}
-              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/auth')}>
-                Sign in for full access
+              <Button variant="outline" className="w-full mt-4" onClick={handleJoin}>
+                {user ? "View Benefits" : "Join for Full Access"}
               </Button>
             </CardContent>
           </Card>
@@ -101,8 +113,8 @@ export default function BrowseNonprofit() {
             </div>
           </div>
           <div className="text-center pt-4">
-            <Button size="lg" onClick={() => navigate('/auth')}>
-              Apply for membership
+            <Button size="lg" onClick={handleJoin}>
+              {user ? "Go to Dashboard" : "Join for $5/year"}
             </Button>
           </div>
         </CardContent>

@@ -15,6 +15,8 @@ import {
   Code, PenTool, Video, Music, Box, MapPin, RotateCcw
 } from 'lucide-react';
 import { FableFlipbook } from '@/components/FableFlipbook';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { 
   BenefitCard, 
   useBenefitAccumulator, 
@@ -230,6 +232,7 @@ function FlippableBountyCard({ category, delay }: { category: BountyCategory; de
 export default function SaltMines() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { benefits, addBenefit } = useBenefitAccumulator();
   const [currentSection, setCurrentSection] = useState(0);
   const [benefitCardExpanded, setBenefitCardExpanded] = useState(false);
@@ -881,7 +884,7 @@ export default function SaltMines() {
               </blockquote>
               
               <button
-                onClick={() => navigate('/auth')}
+                onClick={() => openOnboard({ reason: "find work and earn", actionLabel: "Join", membershipIncluded: true })}
                 className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 text-white text-xl font-bold flex items-center justify-center gap-3 transition-all"
               >
                 <Unlock className="w-6 h-6" />
@@ -906,7 +909,7 @@ export default function SaltMines() {
         totalSections={totalSections}
         isExpanded={benefitCardExpanded}
         onToggleExpand={() => setBenefitCardExpanded(!benefitCardExpanded)}
-        onJoinClick={() => navigate('/auth')}
+        onJoinClick={() => openOnboard({ reason: "find work and earn", actionLabel: "Join", membershipIncluded: true })}
       />
 
       {/* Floating Beacon Pill - above Patent Portfolio */}

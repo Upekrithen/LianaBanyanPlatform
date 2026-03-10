@@ -18,6 +18,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -51,6 +52,7 @@ interface SavedSimulation {
 export default function ThoughtExperiment() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { toast } = useToast();
   
   const [activeTab, setActiveTab] = useState('simulate');
@@ -136,7 +138,7 @@ export default function ThoughtExperiment() {
         title: "Join to adopt your idea",
         description: "Members can turn simulations into real businesses",
       });
-      navigate('/auth');
+      openOnboard({ reason: "save your simulations", actionLabel: "Join", membershipIncluded: true });
     } else {
       // Navigate to initiative enrollment with pre-filled data
       navigate(`/initiatives/${scenario.initiativeId}`, { 
@@ -190,7 +192,7 @@ export default function ThoughtExperiment() {
           </div>
           
           {isGhost && (
-            <Button variant="outline" size="sm" onClick={() => navigate('/auth')} className="gap-1">
+            <Button variant="outline" size="sm" onClick={() => openOnboard({ reason: "save your simulations", actionLabel: "Join", membershipIncluded: true })} className="gap-1">
               <Sparkles className="w-3 h-3" />
               Join to save permanently
             </Button>
@@ -276,7 +278,7 @@ export default function ThoughtExperiment() {
                     adopt your best ideas, and start your business.
                   </p>
                 </div>
-                <Button onClick={() => navigate('/auth')}>
+                <Button onClick={() => openOnboard({ reason: "save your simulations", actionLabel: "Join", membershipIncluded: true })}>
                   Join for $5/year
                 </Button>
               </div>

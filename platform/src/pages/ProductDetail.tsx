@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { Clock, TrendingUp } from 'lucide-react';
 import { MedallionFundingExplainer } from "@/components/MedallionFundingExplainer";
 import { RealTimeProductStats } from "@/components/RealTimeProductStats";
@@ -43,6 +44,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const { productId } = useParams();
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<Product | null>(null);
   const [credits, setCredits] = useState<any>(null);
@@ -222,7 +224,7 @@ export default function ProductDetail() {
 
   const handleSubmitVote = async (levelId: string) => {
     if (!user) {
-      toast.error('Please sign in to vote');
+      openOnboard({ reason: "vote on products", actionLabel: "Join", membershipIncluded: true });
       return;
     }
 
