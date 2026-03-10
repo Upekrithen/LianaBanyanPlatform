@@ -3,10 +3,12 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Lock, Unlock, Mail, ShieldCheck } from "lucide-react";
 import { CROWN_LETTERS } from '@/data/crownLetters';
 import { RECIPIENTS } from '@/data/redCarpetRecipients';
+import { CrownResponseDialog } from "@/components/CrownResponseDialog";
 
 interface LockedCrownLetterViewProps {
   recipientId: string;
@@ -16,6 +18,7 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [responseOpen, setResponseOpen] = useState(false);
 
   const recipient = RECIPIENTS.find(r => r.id === recipientId);
   const letterContent = CROWN_LETTERS[recipientId];
@@ -115,11 +118,26 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
         </div>
         
         <div className="mt-12 pt-8 border-t border-slate-200 flex justify-center">
-          <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-8">
+          <Button
+            size="lg"
+            className="bg-slate-900 hover:bg-slate-800 text-white px-8"
+            onClick={() => setResponseOpen(true)}
+          >
             Reply to Founder
           </Button>
         </div>
       </CardContent>
+
+      {/* Crown Response Dialog — bridges Red Carpet → outboundDispatch → platform_feedback */}
+      <CrownResponseDialog
+        open={responseOpen}
+        onOpenChange={setResponseOpen}
+        recipientName={recipient.name}
+        recipientId={recipientId}
+        recipientCategory={recipient.category}
+        verifiedEmail={email}
+        verifiedDomain={email.split('@')[1]?.toLowerCase()}
+      />
     </Card>
   );
 }
