@@ -17,6 +17,7 @@ import {
   Megaphone
 } from 'lucide-react';
 import { getGateBountyById, type GateArtworkBounty } from '@/data/gateArtworkBounties';
+import { GUILD_LANDING_CARDS } from '@/data/guildRecruitingCards';
 import { TreasureKeyIndicator } from '@/components/TreasureKeyIndicator';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
@@ -114,6 +115,23 @@ const CUE_CARDS: Record<string, CueCardData> = {
       'Non-partisan civic engagement for all',
     ],
   },
+  // Guild recruiting cards — dynamically merged from guildRecruitingCards.ts
+  ...Object.fromEntries(
+    Object.entries(GUILD_LANDING_CARDS).map(([key, card]) => [
+      key,
+      {
+        id: card.id,
+        title: card.title,
+        tagline: card.tagline,
+        content: card.content,
+        destination: card.destination,
+        destinationLabel: card.destinationLabel,
+        color: card.color,
+        icon: <span className="text-5xl">{card.iconEmoji}</span>,
+        benefits: card.benefits,
+      } satisfies CueCardData,
+    ])
+  ),
 };
 
 // Gate Bounty Card Component
