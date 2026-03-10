@@ -1,18 +1,23 @@
 /**
  * DeckCardFrame — Reusable deck card with 4 corner locks
- * 
+ *
  * Used throughout Liana Banyan for collectible cards.
  * Click all 4 locks to unlock and collect the card.
  * Some cards cost Marks or Joules to unlock each prong.
- * 
+ *
  * SOCIAL UNLOCK: Cards can be unlocked by sharing Cue Cards.
  * When socialUnlock is provided, the card shows progress toward
  * unlock based on clicks on shared Cue Cards.
+ *
+ * V2 (Session 8H): Refined frame aesthetic — elegant museum-style
+ * corners replacing emoji locks, inset border detail, subtle
+ * metallic gradient. No more glassmorphism.
  */
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Lock, Unlock } from 'lucide-react';
 import { getFrameLockProgress, getGhostFrameLockProgress, generateShareId } from '@/lib/cueCardClickTracking';
 
 interface SocialUnlockConfig {
@@ -294,54 +299,48 @@ export function DeckCardFrame({
 
   return (
     <div className={frameClass} style={styles.frame}>
-      {/* Four locks */}
-      <button
-        className={`deck-lock top ${!locks.top ? 'unlocked' : ''}`}
-        onClick={() => handleLockClick('top')}
-        title={locks.top ? `Click to unlock (${unlockCost.type === 'free' ? 'free' : `${unlockCost.amount} ${unlockCost.type}`})` : 'Unlocked'}
-        disabled={!locks.top}
-      >
-        {locks.top ? '🔒' : '🔓'}
-      </button>
-      <button
-        className={`deck-lock right ${!locks.right ? 'unlocked' : ''}`}
-        onClick={() => handleLockClick('right')}
-        title={locks.right ? `Click to unlock` : 'Unlocked'}
-        disabled={!locks.right}
-      >
-        {locks.right ? '🔒' : '🔓'}
-      </button>
-      <button
-        className={`deck-lock bottom ${!locks.bottom ? 'unlocked' : ''}`}
-        onClick={() => handleLockClick('bottom')}
-        title={locks.bottom ? `Click to unlock` : 'Unlocked'}
-        disabled={!locks.bottom}
-      >
-        {locks.bottom ? '🔒' : '🔓'}
-      </button>
-      <button
-        className={`deck-lock left ${!locks.left ? 'unlocked' : ''}`}
-        onClick={() => handleLockClick('left')}
-        title={locks.left ? `Click to unlock` : 'Unlocked'}
-        disabled={!locks.left}
-      >
-        {locks.left ? '🔒' : '🔓'}
-      </button>
+      {/* Outer ornate border */}
+      <div style={styles.outerBorder}>
+        {/* Inner inset border */}
+        <div style={styles.innerBorder}>
 
-      {/* Card content */}
-      <div style={styles.content}>
-        {children || (
-          <>
-            <span style={styles.icon}>{icon}</span>
-            <h3 style={styles.title}>{title}</h3>
-            {description && <p style={styles.description}>{description}</p>}
-            {isCollected && destinationRoute && (
-              <a href={destinationRoute} style={styles.goButton}>
-                Go →
-              </a>
+          {/* Four corner locks — positioned at corners of inner border */}
+          {(['top', 'right', 'bottom', 'left'] as const).map((pos) => (
+            <button
+              key={pos}
+              className={`deck-lock ${pos} ${!locks[pos] ? 'unlocked' : ''}`}
+              onClick={() => handleLockClick(pos)}
+              title={locks[pos]
+                ? `Click to unlock (${unlockCost.type === 'free' ? 'free' : `${unlockCost.amount} ${unlockCost.type}`})`
+                : 'Unlocked'}
+              disabled={!locks[pos]}
+              style={{
+                ...styles.lockButton,
+                ...styles[`lock_${pos}` as keyof typeof styles],
+              }}
+            >
+              {locks[pos]
+                ? <Lock className="h-3 w-3" />
+                : <Unlock className="h-3 w-3" />}
+            </button>
+          ))}
+
+          {/* Card content canvas */}
+          <div style={styles.content}>
+            {children || (
+              <>
+                <span style={styles.icon}>{icon}</span>
+                <h3 style={styles.title}>{title}</h3>
+                {description && <p style={styles.description}>{description}</p>}
+                {isCollected && destinationRoute && (
+                  <a href={destinationRoute} style={styles.goButton}>
+                    Go &rarr;
+                  </a>
+                )}
+              </>
             )}
-          </>
-        )}
+          </div>
+        </div>
       </div>
 
       {/* Lock count indicator */}
@@ -355,23 +354,20 @@ export function DeckCardFrame({
       {socialUnlock && !isCollected && (
         <div style={styles.socialProgress}>
           <div style={styles.progressBar}>
-            <div 
+            <div
               style={{
                 ...styles.progressFill,
-                width: `${socialProgress ? (socialProgress.locksUnlocked / 4) * 100 : 0}%`
+                width: `${socialProgress ? (socialProgress.locksUnlocked / 4) * 100 : 0}%`,
               }}
             />
           </div>
           <div style={styles.progressText}>
-            {socialProgress 
-              ? `${socialProgress.totalClicks} clicks • ${4 - socialProgress.locksUnlocked} locks left`
+            {socialProgress
+              ? `${socialProgress.totalClicks} clicks \u00b7 ${4 - socialProgress.locksUnlocked} locks remaining`
               : 'Share to unlock'}
           </div>
-          <button 
-            onClick={handleShareToUnlock}
-            style={styles.shareButton}
-          >
-            🔗 Share to Unlock
+          <button onClick={handleShareToUnlock} style={styles.shareButton}>
+            Share to Unlock
           </button>
         </div>
       )}
@@ -379,48 +375,70 @@ export function DeckCardFrame({
       {/* Collected badge */}
       {isCollected && (
         <div style={styles.collectedBadge}>
-          ✓ In Deck
+          <Unlock className="h-3 w-3 inline-block mr-1" style={{ verticalAlign: 'middle' }} />
+          In Deck
         </div>
       )}
     </div>
   );
 }
 
+// ── Elegant Museum-Style Styling ──
 const styles: { [key: string]: React.CSSProperties } = {
   frame: {
     position: 'relative',
-    background: 'rgba(255,255,255,0.1)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '15px',
-    padding: '1.5rem',
-    border: '2px solid rgba(255,255,255,0.2)',
+    padding: '4px',
+    // Subtle metallic gradient border via background on frame
+    background: 'linear-gradient(145deg, hsl(var(--primary) / 0.15), hsl(var(--muted) / 0.3), hsl(var(--primary) / 0.10))',
+    borderRadius: '6px',
     transition: 'all 0.3s ease',
-    minHeight: '180px',
+    minHeight: '200px',
+    boxShadow: '0 2px 8px hsl(var(--foreground) / 0.08), inset 0 1px 0 hsl(var(--background) / 0.5)',
+  },
+  outerBorder: {
+    border: '1px solid hsl(var(--border))',
+    borderRadius: '4px',
+    padding: '6px',
+    height: '100%',
+    background: 'hsl(var(--card))',
+  },
+  innerBorder: {
+    position: 'relative',
+    border: '1px solid hsl(var(--border) / 0.5)',
+    borderRadius: '2px',
+    padding: '1.25rem',
+    height: '100%',
+    minHeight: '160px',
+    display: 'flex',
+    flexDirection: 'column',
   },
   chalkFrame: {
     position: 'relative',
-    background: 'transparent',
-    borderRadius: '15px',
-    padding: '1.5rem',
-    border: '2px dashed rgba(255,255,255,0.3)',
-    minHeight: '180px',
+    padding: '4px',
+    background: 'hsl(var(--muted) / 0.3)',
+    borderRadius: '6px',
+    minHeight: '200px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    border: '1px dashed hsl(var(--border) / 0.4)',
   },
   chalkContent: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: '0.5rem',
-    opacity: 0.4,
+    opacity: 0.35,
   },
   chalkIcon: {
-    fontSize: '2rem',
+    fontSize: '1.75rem',
+    fontFamily: 'serif',
   },
   chalkText: {
-    fontSize: '0.9rem',
+    fontSize: '0.8rem',
     fontStyle: 'italic',
+    letterSpacing: '0.05em',
+    textTransform: 'uppercase' as const,
   },
   content: {
     display: 'flex',
@@ -428,91 +446,121 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    height: '100%',
+    flex: 1,
     gap: '0.5rem',
   },
   icon: {
-    fontSize: '2rem',
-    marginBottom: '0.5rem',
+    fontSize: '1.75rem',
+    marginBottom: '0.25rem',
   },
   title: {
-    fontSize: '1.1rem',
+    fontSize: '1rem',
     fontWeight: 600,
     margin: 0,
+    letterSpacing: '0.01em',
+    color: 'hsl(var(--foreground))',
   },
   description: {
-    fontSize: '0.85rem',
-    opacity: 0.8,
+    fontSize: '0.8rem',
+    color: 'hsl(var(--muted-foreground))',
     margin: 0,
-    lineHeight: 1.4,
+    lineHeight: 1.5,
+    maxWidth: '90%',
   },
   goButton: {
     marginTop: '0.75rem',
-    padding: '0.4rem 1rem',
-    background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)',
-    borderRadius: '8px',
-    color: 'white',
+    padding: '0.35rem 1rem',
+    background: 'hsl(var(--primary))',
+    borderRadius: '4px',
+    color: 'hsl(var(--primary-foreground))',
     textDecoration: 'none',
-    fontSize: '0.85rem',
-    transition: 'transform 0.2s',
+    fontSize: '0.8rem',
+    fontWeight: 500,
+    letterSpacing: '0.02em',
+    transition: 'opacity 0.2s',
   },
+  // Lock buttons — small, refined, positioned at corners
+  lockButton: {
+    position: 'absolute',
+    width: '22px',
+    height: '22px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    border: '1.5px solid hsl(var(--border))',
+    background: 'hsl(var(--card))',
+    color: 'hsl(var(--muted-foreground))',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    zIndex: 2,
+    padding: 0,
+    boxShadow: '0 1px 3px hsl(var(--foreground) / 0.1)',
+  },
+  lock_top: { top: '-11px', left: '50%', transform: 'translateX(-50%)' },
+  lock_right: { right: '-11px', top: '50%', transform: 'translateY(-50%)' },
+  lock_bottom: { bottom: '-11px', left: '50%', transform: 'translateX(-50%)' },
+  lock_left: { left: '-11px', top: '50%', transform: 'translateY(-50%)' },
   lockIndicator: {
     position: 'absolute',
-    bottom: '8px',
-    right: '8px',
-    fontSize: '0.7rem',
-    opacity: 0.5,
-    background: 'rgba(0,0,0,0.3)',
-    padding: '2px 6px',
-    borderRadius: '4px',
+    bottom: '10px',
+    right: '10px',
+    fontSize: '0.65rem',
+    color: 'hsl(var(--muted-foreground))',
+    letterSpacing: '0.03em',
   },
   collectedBadge: {
     position: 'absolute',
-    top: '8px',
-    right: '8px',
-    fontSize: '0.7rem',
-    background: 'rgba(52, 211, 153, 0.3)',
-    color: '#34d399',
+    top: '10px',
+    right: '10px',
+    fontSize: '0.65rem',
+    background: 'hsl(142 76% 36% / 0.12)',
+    color: 'hsl(142 76% 36%)',
     padding: '2px 8px',
-    borderRadius: '10px',
+    borderRadius: '3px',
     fontWeight: 600,
+    letterSpacing: '0.03em',
+    border: '1px solid hsl(142 76% 36% / 0.2)',
   },
   socialProgress: {
     position: 'absolute',
-    bottom: '8px',
-    left: '8px',
-    right: '8px',
+    bottom: '10px',
+    left: '12px',
+    right: '12px',
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
   },
   progressBar: {
-    height: '4px',
-    background: 'rgba(255,255,255,0.1)',
-    borderRadius: '2px',
+    height: '3px',
+    background: 'hsl(var(--muted))',
+    borderRadius: '1.5px',
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    background: 'linear-gradient(90deg, #a78bfa 0%, #7c3aed 100%)',
-    borderRadius: '2px',
+    background: 'hsl(var(--primary))',
+    borderRadius: '1.5px',
     transition: 'width 0.3s ease',
   },
   progressText: {
-    fontSize: '0.65rem',
-    color: 'rgba(255,255,255,0.6)',
+    fontSize: '0.6rem',
+    color: 'hsl(var(--muted-foreground))',
     textAlign: 'center' as const,
+    letterSpacing: '0.03em',
   },
   shareButton: {
-    fontSize: '0.7rem',
-    padding: '4px 8px',
-    background: 'rgba(167, 139, 250, 0.2)',
-    border: '1px solid rgba(167, 139, 250, 0.3)',
-    borderRadius: '6px',
-    color: '#a78bfa',
+    fontSize: '0.65rem',
+    padding: '3px 8px',
+    background: 'hsl(var(--primary) / 0.08)',
+    border: '1px solid hsl(var(--primary) / 0.2)',
+    borderRadius: '3px',
+    color: 'hsl(var(--primary))',
     cursor: 'pointer',
     transition: 'all 0.2s',
     marginTop: '2px',
+    fontWeight: 500,
+    letterSpacing: '0.02em',
   },
 };
 
