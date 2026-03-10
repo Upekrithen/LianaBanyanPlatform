@@ -171,6 +171,71 @@ const DOORS: DurinDoor[] = [
       { word: "CARDBOARD BOOTS", language: "liana", tier: "gold", timeWindow: "any", reward: { credits: 30, marks: 20, joules: 10 }, unlocks: "Chamber + MacKenzie Scott puzzle" },
     ],
   },
+  {
+    doorId: "snow-door",
+    name: "The Snow Door",
+    description: "A door rimmed with frost. Snowflake seals at every corner. This path leads North.",
+    creditCost: 0, // Joules-only entry — 12 Joules
+    icon: "❄️",
+    passwords: [
+      { word: "NORTH", language: "english", tier: "gold", timeWindow: "any", reward: { credits: 0, marks: 0, joules: 12 }, unlocks: "Founder's Keep — the northern starting point" },
+      { word: "NORTE", language: "spanish", tier: "gold", timeWindow: "any", reward: { credits: 0, marks: 0, joules: 12 }, unlocks: "Founder's Keep + language bonus" },
+      { word: "NORD", language: "french", tier: "gold", timeWindow: "any", reward: { credits: 0, marks: 0, joules: 12 }, unlocks: "Founder's Keep + language bonus" },
+      { word: "NORDEN", language: "german", tier: "gold", timeWindow: "any", reward: { credits: 0, marks: 0, joules: 12 }, unlocks: "Founder's Keep + language bonus" },
+      { word: "KITA", language: "japanese", tier: "gold", timeWindow: "any", reward: { credits: 0, marks: 0, joules: 15 }, unlocks: "Founder's Keep + rare language bonus" },
+      { word: "FOROCHEL", language: "tolkien", tier: "mithril", timeWindow: "night", reward: { credits: 0, marks: 10, joules: 25 }, unlocks: "Founder's Keep + Ice Bay of Forochel passage" },
+    ],
+  },
+];
+
+// ─── WRONG-TRY DESTINATIONS ───
+// 3 wrong tries → random destination from A-E, no repeats until all exhausted.
+// Each shows a brief platform highlight before returning.
+
+export interface WrongTryDestination {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  teaserFact: string;
+}
+
+export const WRONG_TRY_DESTINATIONS: WrongTryDestination[] = [
+  {
+    id: "A",
+    title: "The Echoing Hall",
+    description: "Your voice bounces off stone walls. In the distance, you hear the hum of printers.",
+    icon: "🏛️",
+    teaserFact: "The HexIsle Slotted Top locks interchangeably between water and land terrain — both trapping mechanisms work from the same cradle flip.",
+  },
+  {
+    id: "B",
+    title: "The Empty Workshop",
+    description: "Blueprints line the walls. Someone was here recently.",
+    icon: "🔧",
+    teaserFact: "928+ patent claims protect every innovation on this platform. Micro-entity filing means $65 per provisional — accessible to everyone.",
+  },
+  {
+    id: "C",
+    title: "The Flickering Lantern Room",
+    description: "A single candle illuminates a notice board covered in paper.",
+    icon: "🕯️",
+    teaserFact: "Three currencies work together: Credits (purchased), Marks (earned through effort), and Joules (surplus storage with a forever-stamp exchange lock).",
+  },
+  {
+    id: "D",
+    title: "The Winding Stair",
+    description: "Steps spiral downward. A faint melody drifts up from below.",
+    icon: "🌀",
+    teaserFact: "Every price on the platform is Cost + 20%. No hidden fees, no gouging. The math is always visible and the creator keeps 83.3% of every sale.",
+  },
+  {
+    id: "E",
+    title: "The Sleeping Garden",
+    description: "Stone benches surround a dry fountain. Names are carved in every language.",
+    icon: "🌿",
+    teaserFact: "Durin's Door accepts passwords in 58 languages. Each language earns bonus Marks — because every person who helps translate makes the platform stronger.",
+  },
 ];
 
 // ─── LOOKUP FUNCTIONS ───
@@ -331,6 +396,51 @@ export function getNextAvailableTime(useType: CardUseType): Date | null {
     case "yearly": return new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
     default: return null;
   }
+}
+
+// ─── WRONG-TRY TRACKING ───
+
+/**
+ * Get a random wrong-try destination. No repeats until all 5 exhausted.
+ * Stored in localStorage for persistence across page reloads.
+ */
+export function getNextWrongTryDestination(): WrongTryDestination {
+  const key = "lb_durins_wrong_tries";
+  const stored = localStorage.getItem(key);
+  let remaining: string[] = stored ? JSON.parse(stored) : [];
+
+  // If empty or exhausted, refill and shuffle
+  if (remaining.length === 0) {
+    remaining = WRONG_TRY_DESTINATIONS.map((d) => d.id);
+    // Fisher-Yates shuffle
+    for (let i = remaining.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+    }
+  }
+
+  // Pop the next one
+  const nextId = remaining.shift()!;
+  localStorage.setItem(key, JSON.stringify(remaining));
+
+  return WRONG_TRY_DESTINATIONS.find((d) => d.id === nextId)!;
+}
+
+/**
+ * Get wrong-try count for this session.
+ */
+export function getWrongTryCount(): number {
+  return parseInt(localStorage.getItem("lb_durins_wrong_count") || "0", 10);
+}
+
+export function incrementWrongTryCount(): number {
+  const count = getWrongTryCount() + 1;
+  localStorage.setItem("lb_durins_wrong_count", String(count));
+  return count;
+}
+
+export function resetWrongTryCount(): void {
+  localStorage.setItem("lb_durins_wrong_count", "0");
 }
 
 export { getCurrentTimeWindow };
