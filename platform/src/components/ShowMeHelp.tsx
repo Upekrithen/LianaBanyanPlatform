@@ -414,7 +414,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
 
       {/* Help Dialog - appears when clicking page elements */}
       {helpDialog && (
-        <div className="showme-help-dialog-overlay" onClick={handleCloseWithDismiss}>
+        <div className="showme-help-dialog-overlay" onClick={handleCloseWithDismiss} onKeyDown={(e) => { if (e.key === 'Escape') handleCloseWithDismiss(); }} role="button" tabIndex={0} aria-label="Close help dialog">
           <div className="showme-help-dialog" onClick={(e) => e.stopPropagation()}>
             <h3 className="showme-help-dialog-title">{helpDialog.title}</h3>
             <div className="showme-help-dialog-content">

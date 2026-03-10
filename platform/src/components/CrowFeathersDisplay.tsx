@@ -223,7 +223,7 @@ export const NewFeatherNotification: React.FC<NewFeatherNotificationProps> = ({
   onClose,
 }) => {
   return (
-    <div className="new-feather-overlay" onClick={onClose}>
+    <div className="new-feather-overlay" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={0} aria-label="Close notification">
       <div className="new-feather-card" onClick={(e) => e.stopPropagation()}>
         <div className="new-feather-celebration">
           <span className="feather-burst">🪶</span>

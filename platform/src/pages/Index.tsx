@@ -223,7 +223,7 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   if (!isOpen) return null;
   
   return (
-    <div className="durins-dialog-overlay" onClick={onClose}>
+    <div className="durins-dialog-overlay" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={0} aria-label="Close dialog">
       <div 
         className="durins-dialog" 
         onClick={(e) => e.stopPropagation()}

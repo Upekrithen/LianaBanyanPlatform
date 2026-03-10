@@ -141,7 +141,7 @@ export const RosettaKeyboard: React.FC<RosettaKeyboardProps> = ({ onCharacter, o
   const language = family && selectedLanguage ? family.languages[selectedLanguage] : null;
 
   return (
-    <div className="rosetta-overlay" onClick={onClose}>
+    <div className="rosetta-overlay" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={0} aria-label="Close keyboard">
       <div className="rosetta-panel" onClick={(e) => e.stopPropagation()}>
         <button className="rosetta-close" onClick={onClose}>×</button>
         

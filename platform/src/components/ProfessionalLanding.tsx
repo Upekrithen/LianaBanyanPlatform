@@ -214,9 +214,12 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
         
         <div className="professional-path-grid four-cards">
           {/* Get a Job */}
-          <div 
+          <div
             className={`professional-path-flip ${pathFlipped['job'] ? 'flipped' : ''}`}
             onClick={() => togglePath('job')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePath('job'); }}}
+            role="button"
+            tabIndex={0}
           >
             <div className="professional-path-inner">
               <div className="professional-path-front">
@@ -237,9 +240,12 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
           </div>
 
           {/* Build a Business */}
-          <div 
+          <div
             className={`professional-path-flip ${pathFlipped['build'] ? 'flipped' : ''}`}
             onClick={() => togglePath('build')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePath('build'); }}}
+            role="button"
+            tabIndex={0}
           >
             <div className="professional-path-inner">
               <div className="professional-path-front">
@@ -260,20 +266,23 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
           </div>
 
           {/* Plant Seeds */}
-          <div 
+          <div
             className={`professional-path-flip ${pathFlipped['seed'] ? 'flipped' : ''}`}
             onClick={() => togglePath('seed')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePath('seed'); }}}
+            role="button"
+            tabIndex={0}
           >
             <div className="professional-path-inner">
               <div className="professional-path-front">
                 <h3>🌱 Plant Seeds</h3>
-                <p>Sponsor memberships. Fund initiatives. Own fractional patents.</p>
+                <p>Sponsor memberships. Fund initiatives. Earn fractional patent participation.</p>
                 <span className="path-price">From $5</span>
                 <span className="flip-hint">👉</span>
               </div>
               <div className="professional-path-back">
                 <h3>Plant Seeds</h3>
-                <p>Be a Johnny Appleseed — sponsor memberships for people who need a start. Fund initiatives you believe in. Own fractional patent participation. Watch your forest grow.</p>
+                <p>Be a Johnny Appleseed — sponsor memberships for people who need a start. Fund initiatives you believe in. Earn fractional patent participation. Watch your forest grow.</p>
                 <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/sponsor'); }}>
                   Start Planting
                 </button>
@@ -283,9 +292,12 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
           </div>
 
           {/* Discover Initiatives - NEW 4th Card */}
-          <div 
+          <div
             className={`professional-path-flip ${pathFlipped['discover'] ? 'flipped' : ''}`}
             onClick={() => togglePath('discover')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePath('discover'); }}}
+            role="button"
+            tabIndex={0}
           >
             <div className="professional-path-inner">
               <div className="professional-path-front">
