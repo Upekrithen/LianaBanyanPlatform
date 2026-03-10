@@ -144,6 +144,9 @@ export async function updateProductC20Config(
     })
     .eq('id', configId);
 
+  if (error) {
+    console.error('Error updating C+20 config:', error);
+  }
   return !error;
 }
 

@@ -1729,7 +1729,7 @@ export const patentBuckets: Bucket[] = [
         code: "META-PEDESTAL-VOTING",
         name: "Patent Bucket Pedestal Voting System",
         shortDescription:
-          "System for presenting patent portfolios as interactive pedestal cards with voting, valuations, and fractional ownership.",
+          "System for presenting patent portfolios as interactive pedestal cards with voting, valuations, and fractional participation.",
         category: "Platform",
         valuations: {
           oneYear: { conservative: 25_000, moderate: 50_000, aggressive: 80_000 },

@@ -59,7 +59,7 @@ const PLATFORM_DESTINATIONS: Destination[] = [
   { id: 'dotnet', name: 'Network (.net)', description: 'B2B production, contracts, XML lockbox', url: '/net', icon: '🌐', background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', category: 'Platform' },
   { id: 'get-a-job', name: 'Get a Job', description: 'Browse bounties, find work, keep 83.3%. Real work, real pay.', url: '/get-a-job', icon: '💼', background: 'linear-gradient(135deg, #f59e0b 0%, #ea580c 100%)', category: 'Platform' },
   { id: 'build-a-business', name: 'Build a Business', description: 'Launch your Keep for $5. Same terms as the Founder.', url: '/build-a-business', icon: '🏰', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', category: 'Platform' },
-  { id: 'plant-seeds', name: 'Plant Seeds', description: 'Back projects early. 5x multiplier. Fractional IP ownership.', url: '/plant-seeds', icon: '🌱', background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)', category: 'Platform' },
+  { id: 'plant-seeds', name: 'Plant Seeds', description: 'Back projects early. 5x multiplier. Fractional IP participation.', url: '/plant-seeds', icon: '🌱', background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)', category: 'Platform' },
 ];
 
 const INITIATIVE_DESTINATIONS: Destination[] = [

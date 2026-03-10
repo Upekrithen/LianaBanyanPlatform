@@ -5,7 +5,7 @@
  * and options to opt-in/opt-out.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -75,18 +75,24 @@ export function AggregationDashboard({ zipCode }: AggregationDashboardProps) {
   });
 
   // Fetch pending demand
-  const { data: pendingDemand = [] } = useQuery({
+  const { data: pendingDemand = [], isError: pendingError } = useQuery({
     queryKey: ['my-pending-demand'],
     queryFn: getMyPendingDemand,
     enabled: !!user,
   });
 
   // Fetch shopping list for selected window
-  const { data: shoppingList = [] } = useQuery({
+  const { data: shoppingList = [], isError: shoppingError } = useQuery({
     queryKey: ['aggregated-shopping-list', selectedWindow?.id],
     queryFn: () => selectedWindow ? getAggregatedShoppingList(selectedWindow.id) : Promise.resolve([]),
     enabled: !!selectedWindow,
   });
+
+  // Show error toasts for failed queries
+  useEffect(() => {
+    if (pendingError) toast.error('Unable to load pending demand data.');
+    if (shoppingError) toast.error('Unable to load shopping list.');
+  }, [pendingError, shoppingError]);
 
   // Opt out mutation
   const optOutMutation = useMutation({

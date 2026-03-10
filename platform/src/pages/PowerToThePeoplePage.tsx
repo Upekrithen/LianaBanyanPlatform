@@ -65,7 +65,7 @@ export default function PowerToThePeoplePage() {
                 Helping Each Other Help Ourselves
               </CardTitle>
               <CardDescription className="text-base text-slate-700 dark:text-slate-300 mt-2">
-                Liana Banyan is neutral ground. If you want to argue politics, you go "Outside the Gates." Inside, we agree on 16 initiatives that prioritize localism, worker ownership, and family independence.
+                Liana Banyan is neutral ground. If you want to argue politics, you go "Outside the Gates." Inside, we agree on 16 initiatives that prioritize localism, worker participation, and family independence.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

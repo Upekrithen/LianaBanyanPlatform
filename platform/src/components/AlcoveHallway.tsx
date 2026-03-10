@@ -169,6 +169,10 @@ export function AlcoveHallway({
             <CardHeader
               className="cursor-pointer"
               onClick={() => setExpandedTier(isExpanded ? null : tier)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedTier(isExpanded ? null : tier); }}}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isExpanded}
             >
               <div className="flex items-center justify-between">
                 <CardTitle className={`flex items-center gap-2 text-lg ${style.color}`}>
@@ -300,6 +304,9 @@ function AlcoveCard({
               : 'opacity-40 border-transparent'
       }`}
       onClick={onClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(); }}}
+      role="button"
+      tabIndex={isActive ? 0 : -1}
     >
       {/* Position Number */}
       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${

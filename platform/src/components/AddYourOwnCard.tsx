@@ -71,10 +71,14 @@ export function AddYourOwnCard({
   const navigate = useNavigate();
 
   return (
-    <div 
+    <div
       className="perspective-1000 cursor-pointer"
       style={{ height }}
       onClick={() => setIsFlipped(!isFlipped)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsFlipped(!isFlipped); }}}
+      role="button"
+      tabIndex={0}
+      aria-label="Flip card to see details"
     >
       <div 
         className={`relative w-full h-full transition-transform duration-500 ${

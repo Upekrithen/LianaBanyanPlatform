@@ -35,22 +35,34 @@ interface DictionaryPanelProps {
 
 export default function DictionaryPanel({ termId, onClose }: DictionaryPanelProps) {
   // Load term
-  const { data: term } = useQuery({
+  const { data: term, isLoading, isError } = useQuery({
     queryKey: ["areopagus-term", termId],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("areopagus_dictionary")
         .select("*")
         .eq("id", termId)
         .single();
+      if (error) throw error;
       return data as unknown as AreopagusTerm | null;
     },
   });
 
-  if (!term) {
+  if (isLoading || (!term && !isError)) {
     return (
       <div className="fixed inset-y-0 right-0 w-full sm:w-[480px] bg-background border-l shadow-2xl z-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    );
+  }
+
+  if (isError || !term) {
+    return (
+      <div className="fixed inset-y-0 right-0 w-full sm:w-[480px] bg-background border-l shadow-2xl z-50 flex items-center justify-center">
+        <div className="text-center text-muted-foreground p-6">
+          <p>Unable to load term.</p>
+          <button className="text-primary underline mt-2" onClick={onClose}>Close</button>
+        </div>
       </div>
     );
   }

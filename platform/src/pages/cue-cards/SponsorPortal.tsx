@@ -35,7 +35,7 @@ export default function SponsorPortal() {
                 The 60% Sponsor Incentive Structure
               </CardTitle>
               <CardDescription className="text-zinc-400 text-base mt-2">
-                We don't just ask for funding; we offer a mathematically sound, legally compliant "Balanced Bag" of fractional IP ownership. 
+                We don't just ask for funding; we offer a mathematically sound, legally compliant "Balanced Bag" of fractional IP participation. 
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 grid md:grid-cols-3 gap-6">
@@ -52,7 +52,7 @@ export default function SponsorPortal() {
                 <div className="text-3xl font-bold text-blue-500">20%</div>
                 <h4 className="font-semibold text-zinc-200">Bounty Backers</h4>
                 <p className="text-sm text-zinc-400">
-                  Directly funds the Code Breakers and Builders executing the work. You help others succeed, and you own a piece of that success.
+                  Directly funds the Code Breakers and Builders executing the work. You help others succeed, and you participate in that success.
                 </p>
               </div>
 
@@ -117,7 +117,7 @@ export default function SponsorPortal() {
                 Patent IP Purchasing
               </CardTitle>
               <CardDescription className="text-zinc-400">
-                Acquire fractional ownership of the 1,244 documented innovations protected by our 7 Patent Applications.
+                Acquire fractional participation in the 1,244 documented innovations protected by our 7 Patent Applications.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -128,7 +128,7 @@ export default function SponsorPortal() {
                 </li>
                 <li className="flex items-start gap-2">
                   <Briefcase className="h-5 w-5 text-blue-500 shrink-0" />
-                  <span><strong>Immutable Provenance:</strong> Ownership is recorded on our Test-Net blockchain ledger. This is not a speculative crypto token; it is a legally binding receipt of IP ownership.</span>
+                  <span><strong>Immutable Provenance:</strong> Participation is recorded on our Test-Net blockchain ledger. This is not a speculative crypto token; it is a legally binding receipt of IP participation.</span>
                 </li>
               </ul>
               <Button className="w-full bg-blue-600 hover:bg-blue-500 text-white">

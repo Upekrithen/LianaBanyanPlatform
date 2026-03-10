@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, TrendingDown, TrendingUp } from "lucide-react";
 
 export function CharitableLoanAccount() {
-  const { data: account, isLoading } = useQuery({
+  const { data: account, isLoading, isError } = useQuery({
     queryKey: ['lmd-charity-account'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -41,8 +41,12 @@ export function CharitableLoanAccount() {
     }
   });
 
-  if (isLoading || !account) {
+  if (isLoading) {
     return <div>Loading account...</div>;
+  }
+
+  if (isError || !account) {
+    return <div className="text-muted-foreground p-4">Unable to load charitable loan account.</div>;
   }
 
   return (

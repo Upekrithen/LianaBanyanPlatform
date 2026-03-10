@@ -215,7 +215,7 @@
       "currency",
       "economics",
       "international",
-      "equity",
+      "participation",
       "tldr"
     ]
   },
@@ -366,7 +366,7 @@
     "id": "articles-business-plan-md",
     "title": "Liana Banyan IP Platform Business Plan",
     "category": "Article",
-    "description": "Executive Summary Document - Democratize intellectual property creation, funding, and ownership for the next generation of creators.",
+    "description": "Executive Summary Document - Democratize intellectual property creation, funding, and participation for the next generation of creators.",
     "url": "https://cephas.lianabanyan.com/articles/business-plan/",
     "tags": [
       "business-plan",
@@ -379,25 +379,25 @@
     "id": "articles-how-liana-banyan-works-md",
     "title": "How Liana Banyan Actually Works",
     "category": "Article",
-    "description": "The complete guide to understanding the Liana Banyan platform - equity + product crowdfunding",
+    "description": "The complete guide to understanding the Liana Banyan platform - participation + product crowdfunding",
     "url": "https://cephas.lianabanyan.com/articles/how-liana-banyan-works/",
     "tags": [
       "guide",
       "platform",
-      "equity",
+      "participation",
       "crowdfunding",
       "credits"
     ]
   },
   {
     "id": "articles-hybrid-compensation-md",
-    "title": "Hybrid Equity + Cash Compensation Model",
+    "title": "Hybrid Participation + Cash Compensation Model",
     "category": "Article",
-    "description": "How LianaBanyan offers service providers the option to be compensated through a combination of cash and equity/credits",
+    "description": "How LianaBanyan offers service providers the option to be compensated through a combination of cash and participation credits",
     "url": "https://cephas.lianabanyan.com/articles/hybrid-compensation/",
     "tags": [
       "compensation",
-      "equity",
+      "participation",
       "hybrid",
       "contractors",
       "legal"
@@ -766,7 +766,7 @@
     "id": "initiatives-jukebox-md",
     "title": "JukeBox",
     "category": "Initiative",
-    "description": "Music infrastructure — fair streaming, direct sales, artist ownership",
+    "description": "Music infrastructure — fair streaming, direct sales, artist empowerment",
     "url": "https://cephas.lianabanyan.com/initiatives/jukebox/",
     "tags": [
       "initiative",
@@ -958,7 +958,7 @@
     "tags": [
       "pillar",
       "medallion",
-      "ownership",
+      "participation",
       "blockchain",
       "patent-filed"
     ]
@@ -2545,7 +2545,7 @@
       "patents",
       "ip",
       "voting",
-      "ownership"
+      "participation"
     ]
   },
   {
@@ -2564,13 +2564,13 @@
   },
   {
     "id": "under-the-hood-patent-ownership-detailed-md",
-    "title": "Patent Ownership: Detailed Mechanics",
+    "title": "Patent Participation: Detailed Mechanics",
     "category": "Architecture",
-    "description": "How to share utility patent ownership through existing infrastructure",
+    "description": "How to share utility patent participation through existing infrastructure",
     "url": "https://cephas.lianabanyan.com/under-the-hood/patent-ownership-detailed/",
     "tags": [
       "patents",
-      "ownership",
+      "participation",
       "credits",
       "joules",
       "marks",
@@ -2579,29 +2579,29 @@
   },
   {
     "id": "under-the-hood-patent-ownership-mechanics-md",
-    "title": "Patent Ownership Mechanics: Upekrithen → LB Ironclad",
+    "title": "Patent Participation Mechanics: Upekrithen → LB Ironclad",
     "category": "Architecture",
-    "description": "How 5K sponsors can purchase fractional patent ownership that becomes irrevocable LB licensing",
+    "description": "How 5K sponsors can purchase fractional patent participation that becomes irrevocable LB licensing",
     "url": "https://cephas.lianabanyan.com/under-the-hood/patent-ownership-mechanics/",
     "tags": [
       "patents",
       "upekrithen",
-      "ownership",
+      "participation",
       "ironclad",
       "sponsors"
     ]
   },
   {
     "id": "under-the-hood-patent-ownership-offering-md",
-    "title": "Patent Ownership Offering for Crowns & Sponsors",
+    "title": "Patent Participation Offering for Crowns & Sponsors",
     "category": "Architecture",
-    "description": "How to offer utility patent ownership stakes to strategic supporters",
+    "description": "How to offer utility patent participation to strategic supporters",
     "url": "https://cephas.lianabanyan.com/under-the-hood/patent-ownership-offering/",
     "tags": [
       "patents",
       "crowns",
       "sponsors",
-      "ownership",
+      "participation",
       "the-300"
     ]
   },
@@ -2754,7 +2754,7 @@
       "patents",
       "ip",
       "voting",
-      "ownership",
+      "participation",
       "salt-mines"
     ]
   },
@@ -2858,14 +2858,14 @@
   },
   {
     "id": "under-the-hood-sponsor-to-own-md",
-    "title": "Sponsor Someone. Own Our Patents.",
+    "title": "Sponsor Someone. Participate in Our Patents.",
     "category": "Architecture",
-    "description": "How sponsoring new members earns you fractional ownership in our utility patent portfolio — the most valuable thing we have",
+    "description": "How sponsoring new members earns you fractional participation in our utility patent portfolio — the most valuable thing we have",
     "url": "https://cephas.lianabanyan.com/under-the-hood/sponsor-to-own/",
     "tags": [
       "patents",
       "sponsorship",
-      "ownership",
+      "participation",
       "viral",
       "giving"
     ]

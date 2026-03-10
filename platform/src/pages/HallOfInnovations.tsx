@@ -641,7 +641,7 @@ export default function HallOfInnovations() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start gap-2">
                       <Sparkles className="w-4 h-4 text-emerald-500 mt-0.5" />
-                      <span>Fractional ownership in the Global Sponsor Pool (10% of all existing patents)</span>
+                      <span>Fractional participation in the Global Sponsor Pool (10% of all existing patents)</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Sparkles className="w-4 h-4 text-emerald-500 mt-0.5" />

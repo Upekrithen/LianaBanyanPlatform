@@ -82,7 +82,7 @@ export function BeaconRunCueCard({
   const shareUrl = shareId ? `${runUrl}?ref=${shareId}` : runUrl;
 
   // Get click count for this user's shares
-  const { data: clickCount = 0 } = useQuery({
+  const { data: clickCount = 0, isError: clickError } = useQuery({
     queryKey: ["beacon-run-clicks", user?.id, templateId],
     queryFn: () => user ? getClickCount(user.id, templateId) : 0,
     enabled: !!user,

@@ -72,7 +72,7 @@ export default function Canada40K() {
                 <CardTitle>Developers & Engineers</CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-slate-600">
-                Claim bounties to build out the platform infrastructure. Earn Credits and fractional IP ownership in the code you write.
+                Claim bounties to build out the platform infrastructure. Earn Credits and fractional IP participation in the code you write.
               </CardContent>
             </Card>
             <Card>

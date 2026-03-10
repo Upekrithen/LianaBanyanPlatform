@@ -157,7 +157,7 @@ export function PathSelector() {
       benefits: [
         'Back projects at any production level',
         'Multipliers up to 15x for early commitment',
-        'Fractional IP ownership when you sponsor',
+        'Fractional IP participation when you sponsor',
         '5× Joules for Pre-Mint backing',
       ],
     },
@@ -171,7 +171,7 @@ export function PathSelector() {
         </h2>
         <p className="text-lg text-white/60 max-w-2xl mx-auto">
           Three ways in. Same destination. All paths lead to the $5 membership 
-          with access to 1,244 innovations and fractional patent ownership.
+          with access to 1,244 innovations and fractional patent participation.
         </p>
       </div>
 

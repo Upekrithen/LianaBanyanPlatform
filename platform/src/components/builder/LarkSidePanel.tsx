@@ -50,13 +50,13 @@ export const LarkSidePanel: React.FC = () => {
               <div className="bg-slate-900 p-3 rounded-md border border-slate-800 flex items-start gap-3 mt-4">
                 <ShieldCheck className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <p className="text-xs text-slate-300">
-                <strong>Backed by Real IP:</strong> 50 Credits is real economic value. Not a made-up valuation, not a guess — we have the receipts. We spent $525,000 over 9 years developing the IP that backs this platform. You are earning fractional ownership of that proven value.
+                <strong>Backed by Real IP:</strong> 50 Credits is real economic value. Not a made-up valuation, not a guess — we have the receipts. We spent $525,000 over 9 years developing the IP that backs this platform. You are earning fractional participation in that proven value.
               </p>
             </div>
                       <div className="bg-slate-900 p-3 rounded-md border border-slate-800 flex items-start gap-3 mt-2">
                         <FileText className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
                         <p className="text-xs text-slate-300">
-                          <strong>SEC Compliance & Crowdfunding:</strong> When we use third-party sites like Kickstarter, we are offering <em>Rewards</em> (Joules/Utility Vouchers). Kickstarter strictly prohibits offering equity or fractional IP ownership. To legally offer fractional IP ownership under Regulation Crowdfunding (Reg CF) of the JOBS Act, we must use registered equity portals (like Wefunder or Republic) who handle the SEC Form C filings, or manage it internally through our compliant cooperative revenue-share structure.
+                          <strong>SEC Compliance & Crowdfunding:</strong> When we use third-party sites like Kickstarter, we are offering <em>Rewards</em> (Joules/Utility Vouchers). Kickstarter strictly prohibits offering securities or fractional IP participation. To legally offer fractional IP participation under Regulation Crowdfunding (Reg CF) of the JOBS Act, we must use registered crowdfunding portals (like Wefunder or Republic) who handle the SEC Form C filings, or manage it internally through our compliant cooperative revenue-share structure.
                         </p>
                       </div>
           </CardContent>

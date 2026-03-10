@@ -3167,7 +3167,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 
                 <div className="path-grid">
                   {/* Get a Job */}
-                  <div className={`path-flip ${flippedPaths.has(0) ? 'flipped' : ''}`} onClick={(e) => { e.stopPropagation(); togglePath(0); }}>
+                  <div className={`path-flip ${flippedPaths.has(0) ? 'flipped' : ''}`} onClick={(e) => { e.stopPropagation(); togglePath(0); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); togglePath(0); }}} role="button" tabIndex={0}>
                     <div className="path-inner">
                       <div className="path-front">
                         <h3>Get a Job</h3>
@@ -3181,13 +3181,13 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/get-a-job'); }}>
                           Browse Bounties
                         </button>
-                        <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(0); }}>← flip back</span>
+                        <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(0); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); togglePath(0); }}} role="button" tabIndex={0}>← flip back</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Build a Business */}
-                  <div className={`path-flip ${flippedPaths.has(1) ? 'flipped' : ''}`} onClick={(e) => { e.stopPropagation(); togglePath(1); }}>
+                  <div className={`path-flip ${flippedPaths.has(1) ? 'flipped' : ''}`} onClick={(e) => { e.stopPropagation(); togglePath(1); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); togglePath(1); }}} role="button" tabIndex={0}>
                     <div className="path-inner">
                       <div className="path-front">
                         <h3>Build a Business</h3>
@@ -3201,13 +3201,13 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/build-a-business'); }}>
                           Start Building
                         </button>
-                        <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(1); }}>← flip back</span>
+                        <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(1); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); togglePath(1); }}} role="button" tabIndex={0}>← flip back</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Plant Seeds */}
-                  <div className={`path-flip ${flippedPaths.has(2) ? 'flipped' : ''}`} onClick={(e) => { e.stopPropagation(); togglePath(2); }}>
+                  <div className={`path-flip ${flippedPaths.has(2) ? 'flipped' : ''}`} onClick={(e) => { e.stopPropagation(); togglePath(2); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); togglePath(2); }}} role="button" tabIndex={0}>
                     <div className="path-inner">
                       <div className="path-front">
                         <h3>Plant Seeds</h3>
@@ -3221,7 +3221,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         <button className="path-btn" onClick={(e) => { e.stopPropagation(); navigate('/plant-seeds'); }}>
                           Start Planting
                         </button>
-                        <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(2); }}>← flip back</span>
+                        <span className="flip-back" onClick={(e) => { e.stopPropagation(); togglePath(2); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); togglePath(2); }}} role="button" tabIndex={0}>← flip back</span>
                       </div>
                     </div>
                   </div>

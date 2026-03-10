@@ -53,7 +53,7 @@ export const LarkWrapper: React.FC<LarkWrapperProps> = ({
                 <Coins className="w-4 h-4" /> Real Value, Not Monopoly Money
               </p>
               <p className="text-xs">
-                50 Credits is real economic value. Not a made-up valuation, not a guess — we have the receipts. We spent $525,000 over 9 years developing the IP that backs this platform. You are earning fractional ownership of that proven value.
+                50 Credits is real economic value. Not a made-up valuation, not a guess — we have the receipts. We spent $525,000 over 9 years developing the IP that backs this platform. You are earning fractional participation in that proven value.
               </p>
             </TooltipContent>
           </Tooltip>
