@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { TrendingUp, Sparkles, DollarSign, Factory, Shield, ArrowRight, Users, Coins } from 'lucide-react';
+import { TrendingUp, Sparkles, DollarSign, Factory, Shield, ArrowRight, Users, Coins, Loader2 } from 'lucide-react';
 import { EnhancedProjectCard } from '@/components/EnhancedProjectCard';
 
 type TimeFilter = '24h' | '72h' | '1week';
@@ -40,7 +40,7 @@ export default function Marketplace() {
     return now.toISOString();
   };
 
-  const { data: newProjects = [] } = useQuery({
+  const { data: newProjects = [], isLoading: loadingNew } = useQuery({
     queryKey: ['newProjects', newTimeFilter],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -58,7 +58,7 @@ export default function Marketplace() {
     },
   });
 
-  const { data: trendingProjects = [] } = useQuery({
+  const { data: trendingProjects = [], isLoading: loadingTrending } = useQuery({
     queryKey: ['trendingProjects', trendingTimeFilter],
     queryFn: async () => {
       const threshold = getTimeThreshold(trendingTimeFilter);
@@ -86,7 +86,7 @@ export default function Marketplace() {
     },
   });
 
-  const { data: fundedProjects = [] } = useQuery({
+  const { data: fundedProjects = [], isLoading: loadingFunded } = useQuery({
     queryKey: ['fundedProjects'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -163,7 +163,7 @@ export default function Marketplace() {
                 <div className="flex-1">
                   <h3 className="font-bold text-lg">Own the Patents</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    928+ innovations. Sponsor the platform and own a piece of the IP.
+                    928+ patent claims. Sponsor the platform and own a piece of the IP.
                   </p>
                   <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                     <div className="text-center p-2 rounded bg-background/50">
@@ -215,7 +215,7 @@ export default function Marketplace() {
             <CardContent className="pt-4 text-center">
               <Shield className="h-6 w-6 mx-auto text-purple-500 mb-1" />
               <p className="text-2xl font-bold">928+</p>
-              <p className="text-xs text-muted-foreground">Innovations</p>
+              <p className="text-xs text-muted-foreground">Patent Claims</p>
             </CardContent>
           </Card>
         </section>
@@ -238,17 +238,30 @@ export default function Marketplace() {
             </Select>
           </div>
           
-          <Carousel className="w-full max-w-full" opts={{ align: "start" }}>
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {newProjects.map((project) => (
-                <CarouselItem key={project.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-                  <EnhancedProjectCard project={project} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex" />
-            <CarouselNext className="hidden sm:flex" />
-          </Carousel>
+          {loadingNew ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : newProjects.length > 0 ? (
+            <Carousel className="w-full max-w-full" opts={{ align: "start" }}>
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {newProjects.map((project) => (
+                  <CarouselItem key={project.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                    <EnhancedProjectCard project={project} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
+            </Carousel>
+          ) : (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                <Sparkles className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                <p>No new projects in this time range. Try a wider filter.</p>
+              </CardContent>
+            </Card>
+          )}
         </section>
 
         <section>
@@ -268,18 +281,31 @@ export default function Marketplace() {
               </SelectContent>
             </Select>
           </div>
-          
-          <Carousel className="w-full max-w-full" opts={{ align: "start" }}>
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {trendingProjects.map((project) => (
-                <CarouselItem key={project.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-                  <EnhancedProjectCard project={project} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex" />
-            <CarouselNext className="hidden sm:flex" />
-          </Carousel>
+
+          {loadingTrending ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : trendingProjects.length > 0 ? (
+            <Carousel className="w-full max-w-full" opts={{ align: "start" }}>
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {trendingProjects.map((project) => (
+                  <CarouselItem key={project.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                    <EnhancedProjectCard project={project} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
+            </Carousel>
+          ) : (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                <TrendingUp className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                <p>No trending projects yet. Create one and get the first votes!</p>
+              </CardContent>
+            </Card>
+          )}
         </section>
 
         <section>
@@ -289,12 +315,25 @@ export default function Marketplace() {
               <h2 className="text-2xl font-bold">{t('marketplacePage.fundedProjects')}</h2>
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {fundedProjects.map((project) => (
-              <EnhancedProjectCard key={project.id} project={project} />
-            ))}
-          </div>
+
+          {loadingFunded ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : fundedProjects.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {fundedProjects.map((project) => (
+                <EnhancedProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                <DollarSign className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                <p>No backed projects yet. Browse new projects and sponsor what inspires you.</p>
+              </CardContent>
+            </Card>
+          )}
         </section>
       </main>
     </div>
