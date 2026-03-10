@@ -39,17 +39,26 @@ import {
   Link2,
   Copy,
   CheckCircle,
+  BarChart3,
+  Flame,
+  Users,
+  MousePointerClick,
+  TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
   createCardDesign,
   getUserCardDesigns,
   updateCardDesign,
+  updateCardStatus,
   getCardScanUrl,
   getReferralStats,
+  getCardAnalytics,
   CARD_TEMPLATES,
   COLOR_SCHEMES,
   type CardDesign,
+  type CardAnalytics,
+  type CardStatus,
 } from "@/lib/attiCampaign";
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -151,6 +160,7 @@ export default function BifrostCardBuilder() {
   const { user } = useAuth();
 
   const [savedCards, setSavedCards] = useState<CardDesign[]>([]);
+  const [cardAnalytics, setCardAnalytics] = useState<CardAnalytics[]>([]);
   const [referralStats, setReferralStats] = useState({ directReferrals: 0, totalChainMembers: 0, totalMarksEarned: 0 });
   const [copiedUrl, setCopiedUrl] = useState(false);
 
@@ -167,11 +177,12 @@ export default function BifrostCardBuilder() {
   const [saving, setSaving] = useState(false);
   const [savedResult, setSavedResult] = useState<{ id: string; referrerCode: string } | null>(null);
 
-  // Load saved cards and referral stats
+  // Load saved cards, referral stats, and analytics
   useEffect(() => {
     if (user) {
       getUserCardDesigns(user.id).then(setSavedCards);
       getReferralStats(user.id).then(setReferralStats);
+      getCardAnalytics(user.id).then(setCardAnalytics);
     }
   }, [user]);
 
@@ -435,29 +446,117 @@ export default function BifrostCardBuilder() {
             </Card>
           )}
 
-          {/* Saved Cards */}
+          {/* Saved Cards with Analytics */}
           {savedCards.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Your Card Designs</CardTitle>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <BarChart3 className="w-5 h-5 text-blue-500" />
+                  Your Cards & Analytics
+                </CardTitle>
+                <CardDescription>
+                  Track performance of each card design
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {savedCards.slice(0, 5).map(card => (
-                  <div
-                    key={card.id}
-                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium text-sm">{card.headline}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {card.format} • {card.initiative} • {card.status}
-                      </p>
+              <CardContent className="space-y-4">
+                {savedCards.slice(0, 10).map(card => {
+                  const analytics = cardAnalytics.find(a => a.cardId === card.id);
+                  return (
+                    <div
+                      key={card.id}
+                      className="p-4 border rounded-lg space-y-3"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-semibold text-sm">{card.headline}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {card.format} • {card.initiative}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="outline"
+                            className={`text-[10px] ${
+                              card.status === "distributed" ? "border-emerald-400 text-emerald-600" :
+                              card.status === "printed" ? "border-blue-400 text-blue-600" :
+                              card.status === "ordered" ? "border-amber-400 text-amber-600" :
+                              "border-muted"
+                            }`}
+                          >
+                            {card.status}
+                          </Badge>
+                          <Badge variant="outline" className="text-[10px] font-mono">
+                            {card.referrerCode}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      {/* Per-card stats */}
+                      {analytics && (analytics.totalScans > 0 || analytics.conversions > 0) ? (
+                        <div className="grid grid-cols-4 gap-2">
+                          <div className="p-2 bg-muted/50 rounded text-center">
+                            <div className="text-lg font-bold text-blue-500">{analytics.totalScans}</div>
+                            <div className="text-[10px] text-muted-foreground flex items-center justify-center gap-0.5">
+                              <QrCode className="w-2.5 h-2.5" /> Scans
+                            </div>
+                          </div>
+                          <div className="p-2 bg-muted/50 rounded text-center">
+                            <div className="text-lg font-bold text-purple-500">{analytics.avgClicks}</div>
+                            <div className="text-[10px] text-muted-foreground flex items-center justify-center gap-0.5">
+                              <MousePointerClick className="w-2.5 h-2.5" /> Avg Clicks
+                            </div>
+                          </div>
+                          <div className="p-2 bg-muted/50 rounded text-center">
+                            <div className="text-lg font-bold text-amber-500">{analytics.candleBursts}</div>
+                            <div className="text-[10px] text-muted-foreground flex items-center justify-center gap-0.5">
+                              <Flame className="w-2.5 h-2.5" /> Bursts
+                            </div>
+                          </div>
+                          <div className="p-2 bg-muted/50 rounded text-center">
+                            <div className="text-lg font-bold text-emerald-500">{analytics.conversions}</div>
+                            <div className="text-[10px] text-muted-foreground flex items-center justify-center gap-0.5">
+                              <Users className="w-2.5 h-2.5" /> Joins
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-muted-foreground italic">
+                          No scans yet — share your QR link to start tracking
+                        </p>
+                      )}
+
+                      {/* Quick actions */}
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-1 text-xs"
+                          onClick={() => {
+                            navigator.clipboard.writeText(getCardScanUrl(card.referrerCode || "", card.initiative));
+                            toast.success("QR link copied!");
+                          }}
+                        >
+                          <Copy className="w-3 h-3" /> Copy Link
+                        </Button>
+                        {card.status === "draft" && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1 text-xs"
+                            onClick={async () => {
+                              if (card.id && await updateCardStatus(card.id, "distributed")) {
+                                toast.success("Card marked as distributed");
+                                if (user) getUserCardDesigns(user.id).then(setSavedCards);
+                              }
+                            }}
+                          >
+                            <TrendingUp className="w-3 h-3" /> Mark Distributed
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                    <Badge variant="outline" className="text-[10px]">
-                      {card.referrerCode}
-                    </Badge>
-                  </div>
-                ))}
+                  );
+                })}
               </CardContent>
             </Card>
           )}

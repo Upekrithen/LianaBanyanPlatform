@@ -470,6 +470,103 @@ export async function getReferralStats(userId: string): Promise<{
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// CARD ANALYTICS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/** Per-card scan and engagement analytics */
+export interface CardAnalytics {
+  cardId: string;
+  referrerCode: string;
+  totalScans: number;
+  uniqueSessions: number;
+  conversions: number;          // scans that led to registration
+  avgClicks: number;            // average meaningful clicks per session
+  candleBursts: number;         // sessions reaching 20 clicks
+  topInitiative: string | null; // most-scanned initiative
+}
+
+/** Get analytics for all cards belonging to a user */
+export async function getCardAnalytics(userId: string): Promise<CardAnalytics[]> {
+  try {
+    // Get user's card designs
+    const { data: cards, error: cardError } = await (supabase.from as any)("atti_card_designs")
+      .select("id, referrer_code, initiative")
+      .eq("creator_id", userId);
+
+    if (cardError || !cards?.length) return [];
+
+    // Get scans for all their referrer codes
+    const referrerCodes = cards.map((c: any) => c.referrer_code);
+    const { data: scans } = await (supabase.from as any)("atti_campaign_scans")
+      .select("id, referrer_code, session_id, initiative, registered_user_id, converted_at")
+      .in("referrer_code", referrerCodes);
+
+    // Get engagement progress for sessions from their scans
+    const sessionIds = [...new Set((scans || []).map((s: any) => s.session_id))];
+    let progressData: any[] = [];
+    if (sessionIds.length > 0) {
+      const { data: progress } = await (supabase.from as any)("atti_engagement_progress")
+        .select("session_id, meaningful_clicks, candle_burst_triggered")
+        .in("session_id", sessionIds);
+      progressData = progress || [];
+    }
+
+    // Build analytics per card
+    return cards.map((card: any) => {
+      const cardScans = (scans || []).filter((s: any) => s.referrer_code === card.referrer_code);
+      const cardSessionIds = [...new Set(cardScans.map((s: any) => s.session_id))];
+      const cardProgress = progressData.filter((p: any) => cardSessionIds.includes(p.session_id));
+
+      const totalClicks = cardProgress.reduce((sum: number, p: any) => sum + (p.meaningful_clicks || 0), 0);
+      const candleBursts = cardProgress.filter((p: any) => p.candle_burst_triggered).length;
+      const conversions = cardScans.filter((s: any) => s.registered_user_id || s.converted_at).length;
+
+      // Find most common initiative
+      const initiativeCounts: Record<string, number> = {};
+      cardScans.forEach((s: any) => {
+        if (s.initiative) {
+          initiativeCounts[s.initiative] = (initiativeCounts[s.initiative] || 0) + 1;
+        }
+      });
+      const topInitiative = Object.entries(initiativeCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+
+      return {
+        cardId: card.id,
+        referrerCode: card.referrer_code,
+        totalScans: cardScans.length,
+        uniqueSessions: cardSessionIds.length,
+        conversions,
+        avgClicks: cardSessionIds.length > 0 ? Math.round(totalClicks / cardSessionIds.length) : 0,
+        candleBursts,
+        topInitiative,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+/** Update card distribution status */
+export async function updateCardStatus(
+  cardId: string,
+  status: CardStatus,
+  quantity?: number
+): Promise<boolean> {
+  try {
+    const updateData: any = { status, updated_at: new Date().toISOString() };
+    if (quantity !== undefined) updateData.quantity_ordered = quantity;
+
+    const { error } = await (supabase.from as any)("atti_card_designs")
+      .update(updateData)
+      .eq("id", cardId);
+
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // QR CODE GENERATION HELPERS
 // ═══════════════════════════════════════════════════════════════════════════════
 
