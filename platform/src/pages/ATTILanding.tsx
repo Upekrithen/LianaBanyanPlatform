@@ -50,6 +50,7 @@ import {
   type EngagementProgress,
 } from "@/lib/attiCampaign";
 import { CandleBurst, LockProgress } from "@/components/atti/CandleBurst";
+import { SocialShareBar } from "@/components/atti/SocialShareBar";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // INITIATIVE SHOWCASE DATA
@@ -227,6 +228,14 @@ export default function ATTILanding() {
                   )}
                 </div>
 
+                {/* Social Sharing */}
+                <SocialShareBar
+                  moment="initiative"
+                  initiativeName={selectedInitiative.name}
+                  referrerCode={params.referrerCode}
+                  onShare={(platform) => trackClick("share", `share-${platform}-${selectedInitiative.key}`)}
+                />
+
                 {/* SEC Disclaimer */}
                 <p className="text-[10px] text-white/30 text-center">
                   Showcase demonstration. Explore how platform services work.
@@ -303,6 +312,13 @@ export default function ATTILanding() {
           <p className="text-[10px] text-white/30">
             No financial speculation. No equity. Just services. All That That Implies.
           </p>
+          {/* General share bar at bottom */}
+          <SocialShareBar
+            moment="general"
+            referrerCode={params.referrerCode}
+            onShare={(platform) => trackClick("share", `share-${platform}-bottom`)}
+            className="pt-4"
+          />
         </div>
       </div>
 

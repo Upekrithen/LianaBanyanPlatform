@@ -11,6 +11,7 @@
 import { useState, useEffect } from "react";
 import { Flame, Sparkles, Key } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SocialShareBar } from "@/components/atti/SocialShareBar";
 
 interface CandleBurstProps {
   isActive: boolean;
@@ -145,6 +146,14 @@ export function CandleBurst({
             You've earned {locksEarned} Locks with {locksEarned * 5} meaningful
             interactions. The platform is yours to explore.
           </p>
+
+          {/* Share this moment */}
+          <SocialShareBar
+            moment="candle_burst"
+            locksEarned={locksEarned}
+            compact
+            className="justify-center"
+          />
 
           {/* Actions */}
           <div className="flex flex-col gap-3 pt-2">
