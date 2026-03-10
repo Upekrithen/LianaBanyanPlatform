@@ -20,7 +20,7 @@
  * and name accessibility are both under Harper Guild oversight.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -52,6 +52,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { AudioRecorder } from "@/components/aaron/AudioRecorder";
+import { supabase } from "@/integrations/supabase/client";
 
 // ── Types ──
 
@@ -122,6 +124,17 @@ const EXAMPLE_NAMES: NamePronunciation[] = [
 // ── Name Card (read-only display) ──
 
 function NameCard({ name }: { name: NamePronunciation }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const playAudio = () => {
+    if (!name.audioUrl || isPlaying) return;
+    setIsPlaying(true);
+    const audio = new Audio(name.audioUrl);
+    audio.onended = () => setIsPlaying(false);
+    audio.onerror = () => setIsPlaying(false);
+    audio.play().catch(() => setIsPlaying(false));
+  };
+
   return (
     <div className="p-3 rounded-lg border bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
       <div className="flex items-start justify-between">
@@ -135,8 +148,15 @@ function NameCard({ name }: { name: NamePronunciation }) {
         </div>
         <div className="flex items-center gap-1.5">
           {name.audioUrl && (
-            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-              <Volume2 className="h-3.5 w-3.5 text-slate-400" />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0"
+              onClick={playAudio}
+              disabled={isPlaying}
+              aria-label={`Play pronunciation of ${name.displayName}`}
+            >
+              <Volume2 className={`h-3.5 w-3.5 ${isPlaying ? "text-blue-500 animate-pulse" : "text-slate-400"}`} />
             </Button>
           )}
           {name.isVerified && (
@@ -175,24 +195,64 @@ function NameCard({ name }: { name: NamePronunciation }) {
 
 interface SetPronunciationDialogProps {
   currentName?: string;
+  userId?: string;
   onSave?: (data: {
     phoneticSpelling: string;
     commonMistakes: string;
     languageOrigin: string;
+    audioUrl?: string;
   }) => void;
 }
 
 function SetPronunciationDialog({
   currentName = "",
+  userId,
   onSave,
 }: SetPronunciationDialogProps) {
   const { toast } = useToast();
   const [phonetic, setPhonetic] = useState("");
   const [mistakes, setMistakes] = useState("");
   const [origin, setOrigin] = useState("");
+  const [audioUrl, setAudioUrl] = useState<string | undefined>();
+  const [existingAudioUrl, setExistingAudioUrl] = useState<string | undefined>();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
+  // Load existing pronunciation when dialog opens
+  useEffect(() => {
+    if (open && userId) {
+      loadExisting();
+    }
+  }, [open, userId]);
+
+  const loadExisting = async () => {
+    if (!userId) return;
+    setLoading(true);
+    try {
+      const { data } = await supabase
+        .from("aaron_pronunciations" as any)
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (data) {
+        setPhonetic((data as any).phonetic_spelling || "");
+        setMistakes(
+          Array.isArray((data as any).common_mistakes)
+            ? (data as any).common_mistakes.join(", ")
+            : ""
+        );
+        setOrigin((data as any).language_origin || "");
+        setExistingAudioUrl((data as any).audio_url || undefined);
+        setAudioUrl((data as any).audio_url || undefined);
+      }
+    } catch (err) {
+      // Silent fail — first-time users won't have a record
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
     if (!phonetic.trim()) {
       toast({
         title: "Phonetic spelling required",
@@ -200,17 +260,60 @@ function SetPronunciationDialog({
       });
       return;
     }
-    onSave?.({
-      phoneticSpelling: phonetic.trim(),
-      commonMistakes: mistakes.trim(),
-      languageOrigin: origin.trim(),
-    });
-    toast({
-      title: "Pronunciation saved",
-      description:
-        "Your name pronunciation has been submitted for Harper Guild verification.",
-    });
-    setOpen(false);
+
+    if (!userId) {
+      toast({
+        title: "Sign in required",
+        description: "You must be signed in to save your pronunciation.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const mistakesArr = mistakes
+      .split(",")
+      .map((m) => m.trim())
+      .filter(Boolean);
+
+    try {
+      // Upsert into aaron_pronunciations
+      const { error } = await supabase
+        .from("aaron_pronunciations" as any)
+        .upsert(
+          {
+            user_id: userId,
+            display_name: currentName,
+            phonetic_spelling: phonetic.trim(),
+            common_mistakes: mistakesArr.length > 0 ? mistakesArr : null,
+            language_origin: origin.trim() || null,
+            audio_url: audioUrl || null,
+            updated_at: new Date().toISOString(),
+          } as any,
+          { onConflict: "user_id" }
+        );
+
+      if (error) throw error;
+
+      onSave?.({
+        phoneticSpelling: phonetic.trim(),
+        commonMistakes: mistakes.trim(),
+        languageOrigin: origin.trim(),
+        audioUrl,
+      });
+      toast({
+        title: "Pronunciation saved",
+        description:
+          "Your name pronunciation has been submitted for Harper Guild verification.",
+      });
+      setOpen(false);
+    } catch (err) {
+      console.error("Save error:", err);
+      toast({
+        title: "Save failed",
+        description: "Could not save your pronunciation. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -221,7 +324,7 @@ function SetPronunciationDialog({
           Set My Pronunciation
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mic className="h-5 w-5 text-blue-500" />
@@ -278,14 +381,23 @@ function SetPronunciationDialog({
               onChange={(e) => setOrigin(e.target.value)}
             />
           </div>
-          {/* Audio recording placeholder */}
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-600 text-center">
-            <Mic className="h-6 w-6 mx-auto text-slate-400 mb-1" />
-            <p className="text-xs text-slate-500">
-              Audio recording coming soon — record yourself saying your name.
-            </p>
-          </div>
-          <Button onClick={handleSave} className="w-full">
+          {/* Audio recording — real implementation */}
+          {userId ? (
+            <AudioRecorder
+              userId={userId}
+              existingAudioUrl={existingAudioUrl}
+              onUploadComplete={(url) => setAudioUrl(url)}
+              onDelete={() => setAudioUrl(undefined)}
+            />
+          ) : (
+            <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-600 text-center">
+              <Mic className="h-6 w-6 mx-auto text-slate-400 mb-1" />
+              <p className="text-xs text-slate-500">
+                Sign in to record an audio pronunciation.
+              </p>
+            </div>
+          )}
+          <Button onClick={handleSave} className="w-full" disabled={loading}>
             <Check className="h-4 w-4 mr-1.5" />
             Save Pronunciation
           </Button>
@@ -300,12 +412,15 @@ function SetPronunciationDialog({
 interface AAronDeviceProps {
   /** Current user's display name (if authenticated) */
   userName?: string;
+  /** Current user's ID (for audio storage) */
+  userId?: string;
   /** Whether to show the full explainer or just the compact widget */
   variant?: "full" | "compact";
 }
 
 export function AAronDevice({
   userName,
+  userId,
   variant = "full",
 }: AAronDeviceProps) {
   if (variant === "compact") {
@@ -324,7 +439,7 @@ export function AAronDevice({
             </p>
             {userName && (
               <div className="mt-2">
-                <SetPronunciationDialog currentName={userName} />
+                <SetPronunciationDialog currentName={userName} userId={userId} />
               </div>
             )}
           </div>
@@ -389,7 +504,7 @@ export function AAronDevice({
                 Help others say it right.
               </p>
             </div>
-            <SetPronunciationDialog currentName={userName} />
+            <SetPronunciationDialog currentName={userName} userId={userId} />
           </div>
         )}
 
