@@ -322,7 +322,7 @@ function PoolResourceCard({
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-lg">
-            {resource.iconUrl && <img src={resource.iconUrl} className="w-5 h-5" alt="" />}
+            {resource.iconUrl && <img src={resource.iconUrl} className="w-5 h-5" alt={resource.name} />}
             {resource.name}
             <Badge variant="secondary" className="text-[10px]">{resource.provider}</Badge>
           </CardTitle>

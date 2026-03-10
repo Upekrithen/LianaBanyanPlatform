@@ -358,7 +358,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
                   }`}
                 >
                   {recipe.photo_url ? (
-                    <img src={recipe.photo_url} alt="" className="w-10 h-10 rounded object-cover" />
+                    <img src={recipe.photo_url} alt={recipe.title} className="w-10 h-10 rounded object-cover" />
                   ) : (
                     <div className="w-10 h-10 rounded bg-muted flex items-center justify-center">
                       <ChefHat className="h-5 w-5 text-muted-foreground" />
@@ -379,7 +379,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
           {selectedRecipe && (
             <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 flex items-center gap-3">
               {selectedRecipe.photo_url ? (
-                <img src={selectedRecipe.photo_url} alt="" className="w-12 h-12 rounded object-cover" />
+                <img src={selectedRecipe.photo_url} alt={selectedRecipe.title} className="w-12 h-12 rounded object-cover" />
               ) : (
                 <div className="w-12 h-12 rounded bg-muted flex items-center justify-center">
                   <ChefHat className="h-6 w-6 text-muted-foreground" />

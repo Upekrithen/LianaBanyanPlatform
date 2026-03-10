@@ -173,7 +173,7 @@ export function ScrollReveal({
 
   return (
     <div className="space-y-4">
-      <div onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
+      <div onClick={() => setIsOpen(!isOpen)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsOpen(!isOpen); }}} role="button" tabIndex={0} className="cursor-pointer">
         {trigger}
       </div>
       <ScrollUnfurl variant={variant} isOpen={isOpen}>

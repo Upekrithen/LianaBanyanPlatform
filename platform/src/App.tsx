@@ -10,6 +10,7 @@ import { PaidMemberRoute } from "@/components/PaidMemberRoute";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UnifiedNavigation } from "@/components/UnifiedNavigation";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import TikTokCallback from "./pages/TikTokCallback";
@@ -420,6 +421,7 @@ const App = () => (
                 <WelcomeGate>
                 <AppShell>
                   <GlobalWildfireRun />
+                  <ErrorBoundary>
                   <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}>
                       <Routes>
                         {/* Public Routes */}
@@ -860,6 +862,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
                       </Routes>
                   </Suspense>
+                  </ErrorBoundary>
                 </AppShell>
                 </WelcomeGate>
               </SubdomainRouter>

@@ -208,7 +208,7 @@ export function UniversalDispatch({
               <Label>Attached Images ({initialImages.length})</Label>
               <div className="flex gap-2 mt-1 flex-wrap">
                 {initialImages.map((url, i) => (
-                  <img key={i} src={url} alt="" className="w-16 h-16 rounded object-cover border" />
+                  <img key={i} src={url} alt={`Attached image ${i + 1}`} className="w-16 h-16 rounded object-cover border" />
                 ))}
               </div>
             </div>

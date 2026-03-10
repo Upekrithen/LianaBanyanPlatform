@@ -75,7 +75,7 @@ export const CrowFeatherNotification: React.FC<CrowFeatherNotificationProps> = (
   const categoryInfo = CATEGORY_NAMES[feather.category];
 
   return (
-    <div className={`crow-feather-notification ${stage}`} onClick={handleDismiss}>
+    <div className={`crow-feather-notification ${stage}`} onClick={handleDismiss} onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter') handleDismiss(); }} role="button" tabIndex={0} aria-label="Dismiss notification">
       <div className="cfn-backdrop" />
       
       <div className="cfn-content">

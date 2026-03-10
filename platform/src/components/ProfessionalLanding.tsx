@@ -112,9 +112,13 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
         <span className="professional-eyebrow">Member-Owned · Community-Governed</span>
         
         {/* Hero Flipcard */}
-        <div 
+        <div
           className={`professional-hero-flip ${heroFlipped ? 'flipped' : ''}`}
           onClick={() => setHeroFlipped(!heroFlipped)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setHeroFlipped(!heroFlipped); }}}
+          role="button"
+          tabIndex={0}
+          aria-label={heroFlipped ? "Flip card back" : "Flip card to see options"}
         >
           <div className="professional-hero-inner">
             {/* FRONT */}
@@ -131,13 +135,13 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
             <div className="professional-hero-back">
               <h3>Two Worlds. One Platform.</h3>
               <div className="professional-portal-row">
-                <div className="professional-portal ghost-portal" onClick={(e) => { e.stopPropagation(); navigate('/ghost'); }}>
+                <div className="professional-portal ghost-portal" onClick={(e) => { e.stopPropagation(); navigate('/ghost'); }} onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); navigate('/ghost'); }}} role="button" tabIndex={0}>
                   <span className="portal-icon">👻</span>
                   <h4>Ghost World</h4>
                   <p>Explore freely. No commitment. Test ideas. Hunt Golden Keys.</p>
                   <button className="portal-btn ghost-btn">Enter Ghost World</button>
                 </div>
-                <div className="professional-portal real-portal" onClick={(e) => { e.stopPropagation(); openOnboard({ reason: "get started", actionLabel: "Join", membershipIncluded: true }); }}>
+                <div className="professional-portal real-portal" onClick={(e) => { e.stopPropagation(); openOnboard({ reason: "get started", actionLabel: "Join", membershipIncluded: true }); }} onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); openOnboard({ reason: "get started", actionLabel: "Join", membershipIncluded: true }); }}} role="button" tabIndex={0}>
                   <span className="portal-icon">💼</span>
                   <h4>Real World</h4>
                   <p>Get a real job. Build a real business. Plant real seeds.</p>

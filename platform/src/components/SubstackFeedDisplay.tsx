@@ -143,7 +143,7 @@ export function SubstackFeedDisplay({
             {post.imageUrl && (
               <img
                 src={post.imageUrl}
-                alt=""
+                alt={post.title || "Article image"}
                 className="w-16 h-16 rounded object-cover flex-shrink-0"
               />
             )}
@@ -202,7 +202,7 @@ export function SubstackFeedDisplay({
             {post.imageUrl && (
               <img
                 src={post.imageUrl}
-                alt=""
+                alt={post.title || "Article image"}
                 className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
               />
             )}
