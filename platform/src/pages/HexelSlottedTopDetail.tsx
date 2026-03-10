@@ -29,6 +29,7 @@ import {
   CENTER_HEX_ANALYSIS, GAP_ANALYSIS, WIDENING_TRADEOFFS, STRATEGIC_CALL,
   MANUFACTURING_PATH, MANUFACTURING_PHILOSOPHY, DESIGN_CONTESTS,
   BOUNTY_PROGRAMS, WEEKLY_RELEASES, MODULAR_PRODUCT, COLLABORATION_INVITE,
+  FOUNDER_STORY, ANCILLARY_DESIGN_PROGRAM, RELEASE_CADENCE, COMMUNITY_ENGAGEMENT,
   CENTER_HEX_MM, GAP_MM, RETENTION_ZONE_MM, TOTAL_PIECE_MM,
   type CompatibilityRating, type HexTerrainSystem,
 } from "@/lib/hexSlottedTopShowcase";
@@ -446,6 +447,126 @@ function CollaborationSection() {
   );
 }
 
+function CommunitySection() {
+  return (
+    <div className="space-y-6">
+      {/* Founder's Story */}
+      <Card className="border-2 border-green-500/20 bg-gradient-to-br from-green-500/5 to-cyan-500/5">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Download className="w-5 h-5 text-green-500" />
+            {FOUNDER_STORY.headline}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-muted-foreground">{FOUNDER_STORY.narrative}</p>
+          <div className="rounded-lg border border-green-500/20 p-4 bg-green-500/5">
+            <h4 className="font-semibold text-green-600 dark:text-green-400 mb-2">{FOUNDER_STORY.freeSTLs.title}</h4>
+            <p className="text-sm text-muted-foreground mb-2">{FOUNDER_STORY.freeSTLs.description}</p>
+            <p className="text-xs text-muted-foreground italic">{FOUNDER_STORY.freeSTLs.license}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Release Cadence */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-blue-500" />
+            {RELEASE_CADENCE.title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid md:grid-cols-2 gap-3">
+            <div className="rounded-lg border p-3">
+              <p className="text-sm font-medium mb-1">Weekly Updates</p>
+              <p className="text-xs text-muted-foreground">{RELEASE_CADENCE.updates}</p>
+            </div>
+            <div className="rounded-lg border p-3">
+              <p className="text-sm font-medium mb-1">File Drops</p>
+              <p className="text-xs text-muted-foreground">{RELEASE_CADENCE.fileDrops}</p>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground">{RELEASE_CADENCE.ahead}</p>
+          <p className="text-sm font-medium text-green-600 dark:text-green-400">{RELEASE_CADENCE.promise}</p>
+        </CardContent>
+      </Card>
+
+      {/* Ancillary Design Program — 6 Month Timeline */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Target className="w-5 h-5 text-amber-500" />
+            {ANCILLARY_DESIGN_PROGRAM.title}
+          </CardTitle>
+          <CardDescription>Opens: {ANCILLARY_DESIGN_PROGRAM.openDate}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">{ANCILLARY_DESIGN_PROGRAM.description}</p>
+
+          {/* Timeline */}
+          <div className="space-y-3">
+            {Object.values(ANCILLARY_DESIGN_PROGRAM.timeline).map((phase) => (
+              <div key={phase.label} className="rounded-lg border p-4">
+                <h4 className="font-semibold text-sm mb-2">{phase.label}</h4>
+                <ul className="space-y-1">
+                  {phase.tasks.map((task, i) => (
+                    <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
+                      {task}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-xs text-muted-foreground italic">{ANCILLARY_DESIGN_PROGRAM.whySixMonths}</p>
+          <p className="text-sm font-medium text-amber-600 dark:text-amber-400">{ANCILLARY_DESIGN_PROGRAM.countdown}</p>
+        </CardContent>
+      </Card>
+
+      {/* Discord Q&A */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="w-5 h-5 text-purple-500" />
+            {COMMUNITY_ENGAGEMENT.title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-muted-foreground">{COMMUNITY_ENGAGEMENT.description}</p>
+
+          <div className="rounded-lg border border-purple-500/20 p-4 bg-purple-500/5">
+            <h4 className="font-semibold text-purple-600 dark:text-purple-400 mb-2">
+              {COMMUNITY_ENGAGEMENT.discord.title}
+            </h4>
+            <p className="text-sm text-muted-foreground mb-1">{COMMUNITY_ENGAGEMENT.discord.description}</p>
+            <p className="text-xs text-muted-foreground italic">{COMMUNITY_ENGAGEMENT.discord.format}</p>
+          </div>
+
+          {/* What We Need */}
+          <div>
+            <h4 className="font-semibold mb-3">Who We Need</h4>
+            <div className="grid md:grid-cols-2 gap-2">
+              {COMMUNITY_ENGAGEMENT.whatWeNeed.map((role) => (
+                <div key={role.role} className="rounded-lg border p-3">
+                  <p className="text-sm font-medium mb-1">{role.role}</p>
+                  <p className="text-xs text-muted-foreground">{role.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+            {COMMUNITY_ENGAGEMENT.invitation}
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
 export default function HexelSlottedTopDetail() {
@@ -471,12 +592,13 @@ export default function HexelSlottedTopDetail() {
 
       {/* Tabbed Content */}
       <Tabs defaultValue="engineering" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="engineering">Engineering</TabsTrigger>
           <TabsTrigger value="manufacturing">Manufacturing</TabsTrigger>
           <TabsTrigger value="contests">Contests</TabsTrigger>
           <TabsTrigger value="bounties">Bounties</TabsTrigger>
           <TabsTrigger value="series">Weekly Series</TabsTrigger>
+          <TabsTrigger value="community">Community</TabsTrigger>
         </TabsList>
 
         <TabsContent value="engineering">
@@ -497,6 +619,10 @@ export default function HexelSlottedTopDetail() {
 
         <TabsContent value="series">
           <WeeklySeriesSection />
+        </TabsContent>
+
+        <TabsContent value="community">
+          <CommunitySection />
         </TabsContent>
       </Tabs>
 

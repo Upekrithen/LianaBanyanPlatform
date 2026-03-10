@@ -213,6 +213,19 @@ export function tryPasswordAnywhere(input: string): { door: DurinDoor; password:
   const normalized = input.trim().toUpperCase();
   const currentTime = getCurrentTimeWindow();
 
+  // Check if password switches the Welcome Gate content variant
+  try {
+    import("@/lib/welcomeGateContent").then(({ tryWelcomeVariantPassword, setActiveVariant }) => {
+      const variant = tryWelcomeVariantPassword(normalized);
+      if (variant) {
+        setActiveVariant(variant.id);
+        console.log(`[Durin's Door] Welcome Gate switched to: ${variant.id}`);
+      }
+    });
+  } catch {
+    // Welcome gate module not loaded — ignore
+  }
+
   for (const door of DOORS) {
     const match = door.passwords.find((p) => {
       if (p.word !== normalized) return false;

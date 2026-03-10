@@ -765,3 +765,146 @@ export const COLLABORATION_INVITE = {
   ctaLine: "If you make hex terrain, if you own a 3D printer, if you design game pieces — " +
            "this platform is built for you. Start with the SlottedTop. Start now.",
 };
+
+// ─── Community & Release Plan ────────────────────────────────────────────
+
+/**
+ * The Founder's Story — decades of designs, now releasing for everyone.
+ * This is promotional content for universal integration.
+ */
+export const FOUNDER_STORY = {
+  headline: "Decades of Designs. Now Releasing for Everyone.",
+  narrative:
+    "These designs didn't happen overnight. They've been refined over decades — " +
+    "iterated, tested, rethought, and perfected through countless prototypes. " +
+    "Now we're cleaning them up and releasing them as FREE STL files for personal use. " +
+    "Every hex gamer, every terrain maker, every 3D printer enthusiast gets access.",
+  freeSTLs: {
+    title: "Free HexIsle STL Files",
+    description:
+      "Download and print Hexel parts for personal use. No cost, no catch. " +
+      "These are production-quality design files refined over decades. " +
+      "New files release at least every two weeks — we're ahead of schedule.",
+    license: "Personal use free. Commercial use requires Node registration and official licensing.",
+    schedule: "New STL files at least every two weeks. Weekly design updates and notes.",
+  },
+};
+
+/**
+ * Ancillary Design Submissions — opens 6 months after Water Table funding.
+ * This gives everyone a countdown to work on ancillary designs and lets the
+ * company mature enough to have staff to review and certify submissions.
+ */
+export const ANCILLARY_DESIGN_PROGRAM = {
+  title: "Ancillary Design Submissions",
+  openDate: "6 Months After Water Table Funding",
+  description:
+    "Once we fund the Water Table (the full 7-Hexel Tereno Hydraulic Table), " +
+    "we open the doors for community-designed ancillary parts. This gives you " +
+    "a countdown to start designing — and gives us time to bring on staff who " +
+    "can review, test, and certify community submissions properly.",
+  timeline: {
+    month1_2: {
+      label: "Months 1-2: Foundation",
+      tasks: [
+        "Staff onboard — design reviewers, community managers, QA testers",
+        "Design contest infrastructure goes live on the platform",
+        "First placed SLS machine at an established Node",
+        "Integration rules documentation published in full",
+      ],
+    },
+    month3_4: {
+      label: "Months 3-4: Portal Opens",
+      tasks: [
+        "Ancillary design submission portal opens for community uploads",
+        "First community designs enter review pipeline",
+        "Compatibility testing lab established at primary Node",
+        "Design feedback loop — submit, review, iterate, resubmit",
+      ],
+    },
+    month5_6: {
+      label: "Months 5-6: First Certifications",
+      tasks: [
+        "First Official Tereno ancillary models certified and listed",
+        "Community manufacturing begins — certified designs at registered Nodes",
+        "Design contest winners announced — licensing activated",
+        "Creator keeps 83.3% on every sale through the platform",
+      ],
+    },
+  },
+  whySixMonths:
+    "Six months is ambitious but realistic. We need staff to do this right — " +
+    "review designs, test compatibility, certify quality. This isn't a rubber stamp. " +
+    "Every ancillary part has to work in concert with the Hexel stack. " +
+    "That means the integration rules, the dimensional specs, the compliant pincers — " +
+    "everything has to be validated. That takes people, and people take time to hire and train.",
+  countdown:
+    "Start designing now. The clock starts when we fund the Water Table. " +
+    "You have six months from that moment to submit your first design. " +
+    "Use the weekly STL releases to understand how the pieces fit together. " +
+    "Design for the system. The system is open.",
+};
+
+/**
+ * Release Cadence — weekly updates, bi-weekly file drops.
+ * The Founder is ahead of schedule, so at least every two weeks.
+ */
+export const RELEASE_CADENCE = {
+  title: "Release Schedule",
+  updates: "Weekly — design notes, progress photos, dimensional data, community Q&A",
+  fileDrops: "At least every two weeks — new STL files for the next Hexel component",
+  ahead:
+    "We're ahead of schedule. The designs exist — they've been in development for decades. " +
+    "What we're doing now is cleaning them up, dimensioning them precisely, and releasing " +
+    "them in a logical build order so everyone can follow along and start printing.",
+  promise:
+    "You will always have something new to print, something new to test, " +
+    "something new to build with. This is an active project, not a one-time drop.",
+};
+
+/**
+ * Discord Community — Q&A after each funded campaign.
+ */
+export const COMMUNITY_ENGAGEMENT = {
+  title: "Active Participation Group Project",
+  description:
+    "This is not a store where you buy things and leave. This is a workshop. " +
+    "An active participation group project where your feedback shapes what we build next. " +
+    "We need people — designers, printers, testers, gamers, engineers.",
+  discord: {
+    title: "Discord Q&A Sessions",
+    description:
+      "After each funded campaign, the Founder hosts a live Q&A on the HexIsle Discord. " +
+      "Every question raised up to that point gets addressed. No ducking, no corporate non-answers. " +
+      "Real answers about real engineering decisions.",
+    schedule: "Q&A after each funded campaign milestone",
+    format: "All questions collected from Discord up to that point. Every one addressed.",
+  },
+  whatWeNeed: [
+    {
+      role: "Designers",
+      description: "Create ancillary parts, terrain skins, character figures. Your designs become official products.",
+    },
+    {
+      role: "3D Printers",
+      description: "Print the weekly releases, validate dimensions, test fit. Best printers become Node operators.",
+    },
+    {
+      role: "Game Piece Testers",
+      description: "Own hex terrain? Test it on the SlottedTop. Your measurements validate our compatibility matrix.",
+    },
+    {
+      role: "Engineers",
+      description: "Mechanical, hydraulic, material science. Help us optimize the manufacturing path.",
+    },
+    {
+      role: "Gamers",
+      description: "Play on the platform. Break it. Tell us what works and what doesn't. User testing is engineering.",
+    },
+  ],
+  invitation:
+    "If you have ideas, skills, or just enthusiasm — we want you. " +
+    "This project succeeds because of the people who show up and build with us. " +
+    "Start with a SlottedTop. Print it. Test your hex tiles. Tell us what you find. " +
+    "That's how this works. Help each other. Help ourselves.",
+};

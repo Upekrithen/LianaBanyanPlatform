@@ -66,6 +66,7 @@ import { FailureQueueDashboard } from "@/components/FailureQueueDashboard";
 import { RecordingProvider } from "@/contexts/RecordingContext";
 import { GlobalRecorderOverlay } from "@/components/GlobalRecorderOverlay";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { WelcomeGate } from "@/components/WelcomeGate";
 import { SyncStatusIndicator } from "@/components/SyncStatusIndicator";
 import IPRegistration from "./pages/IPRegistration";
 import AgentOnboarding from "./pages/AgentOnboarding";
@@ -256,17 +257,18 @@ const ExternalRedirect = ({ to }: { to: string }) => {
 
 // HardReload component REMOVED — unconditional reload = infinite loop risk
 
-import TowerOfPeace from "./pages/cue-cards/TowerOfPeace";
-import CueCardSponsorPortal from "./pages/cue-cards/SponsorPortal";
-import CueCardDurinsDoor from "./pages/cue-cards/DurinsDoor";
-import Canada40K from "./pages/cue-cards/Canada40K";
-import WildfireBeaconRun from "./pages/cue-cards/WildfireBeaconRun";
-import HallOfRecords from "./pages/cue-cards/HallOfRecords";
-import MainlandHub from "./pages/cue-cards/MainlandHub";
-import CodeBreakersHub from "./pages/cue-cards/CodeBreakersHub";
-import BusinessCardPortal from "./pages/cue-cards/BusinessCardPortal";
-import KeepsLobby from "./pages/cue-cards/KeepsLobby";
-import HexIsleWorldCard from "./pages/cue-cards/HexIsleWorldCard";
+// Cue-card pages — lazy-loaded (not needed at startup)
+const TowerOfPeace = lazy(() => import("./pages/cue-cards/TowerOfPeace"));
+const CueCardSponsorPortal = lazy(() => import("./pages/cue-cards/SponsorPortal"));
+const CueCardDurinsDoor = lazy(() => import("./pages/cue-cards/DurinsDoor"));
+const Canada40K = lazy(() => import("./pages/cue-cards/Canada40K"));
+const WildfireBeaconRun = lazy(() => import("./pages/cue-cards/WildfireBeaconRun"));
+const HallOfRecords = lazy(() => import("./pages/cue-cards/HallOfRecords"));
+const MainlandHub = lazy(() => import("./pages/cue-cards/MainlandHub"));
+const CodeBreakersHub = lazy(() => import("./pages/cue-cards/CodeBreakersHub"));
+const BusinessCardPortal = lazy(() => import("./pages/cue-cards/BusinessCardPortal"));
+const KeepsLobby = lazy(() => import("./pages/cue-cards/KeepsLobby"));
+const HexIsleWorldCard = lazy(() => import("./pages/cue-cards/HexIsleWorldCard"));
 // Using the main RedCarpet page instead of the cue-card specific one
 // import RedCarpet from "./pages/cue-cards/RedCarpet";
 
@@ -410,6 +412,7 @@ const App = () => (
           <PathwayProgressProvider>
             <RecordingProvider>
               <SubdomainRouter>
+                <WelcomeGate>
                 <AppShell>
                   <GlobalWildfireRun />
                   <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}>
@@ -852,6 +855,7 @@ const App = () => (
                       </Routes>
                   </Suspense>
                 </AppShell>
+                </WelcomeGate>
               </SubdomainRouter>
             </RecordingProvider>
           </PathwayProgressProvider>
