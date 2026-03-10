@@ -250,11 +250,11 @@ export default function The2ndSecondPortal() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 items-stretch">
           {/* Card 1: Getting Funded */}
           <ContainerFlipControlled
             topics={[VALUE_PROP_TOPICS[0]]}
-            className="min-h-[260px]"
+            className="min-h-[280px]"
             renderFront={({ flipToTopic }) => (
               <Card
                 className="h-full border-2 border-emerald-200 dark:border-emerald-900 bg-emerald-50/50 dark:bg-emerald-950/20 cursor-pointer hover:shadow-lg transition-shadow group"
@@ -292,7 +292,7 @@ export default function The2ndSecondPortal() {
           {/* Card 2: Build a Team with Marks */}
           <ContainerFlipControlled
             topics={[VALUE_PROP_TOPICS[1]]}
-            className="min-h-[260px]"
+            className="min-h-[280px]"
             renderFront={({ flipToTopic }) => (
               <Card
                 className="h-full border-2 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20 cursor-pointer hover:shadow-lg transition-shadow group"
@@ -329,7 +329,7 @@ export default function The2ndSecondPortal() {
           {/* Card 3: Bring Dreams to Life */}
           <ContainerFlipControlled
             topics={[VALUE_PROP_TOPICS[2]]}
-            className="min-h-[260px]"
+            className="min-h-[280px]"
             renderFront={({ flipToTopic }) => (
               <Card
                 className="h-full border-2 border-rose-200 dark:border-rose-900 bg-rose-50/50 dark:bg-rose-950/20 cursor-pointer hover:shadow-lg transition-shadow group"

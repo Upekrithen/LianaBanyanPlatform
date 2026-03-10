@@ -111,6 +111,7 @@ export function ContainerFlip({
         style={{
           position: "relative",
           width: "100%",
+          height: "100%",
           transition: "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -122,6 +123,7 @@ export function ContainerFlip({
             backfaceVisibility: "hidden",
             position: "relative",
             width: "100%",
+            height: "100%",
           }}
         >
           {frontContent}
@@ -322,13 +324,14 @@ export function ContainerFlipControlled({
         style={{
           position: "relative",
           width: "100%",
+          height: "100%",
           transition: "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
         {/* FRONT */}
-        <div style={{ backfaceVisibility: "hidden", position: "relative", width: "100%" }}>
+        <div style={{ backfaceVisibility: "hidden", position: "relative", width: "100%", height: "100%" }}>
           {renderFront(renderProps)}
         </div>
 
