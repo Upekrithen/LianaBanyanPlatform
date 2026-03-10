@@ -226,6 +226,9 @@ const CommunitySupport = lazy(() => import("./pages/CommunitySupport"));
 const HexIsleWorld3D = lazy(() => import("./pages/HexIsleWorld3D"));
 // HexIsle 2D Overworld (Session 6M — Mario World-style overworld)
 const HexIsleOverworld = lazy(() => import("./pages/HexIsleOverworld"));
+// Hexel Part Detail Pages — Weekly Series (Session 8C)
+const HexelSlottedTopDetail = lazy(() => import("./pages/HexelSlottedTopDetail"));
+const HexelSawtoothCoralDetail = lazy(() => import("./pages/HexelSawtoothCoralDetail"));
 const ContentPipelinePage = lazy(() => import("./pages/ContentPipelinePage"));
 // Legal pages (TikTok Developer Portal compliance — Session 7D)
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -290,7 +293,7 @@ const ALWAYS_CLEAN_ROUTES = [
   '/get-a-job', '/salt-mines', '/build-a-business', '/plant-seeds', '/cue',
   '/patent-portfolio', '/economics', '/c20/leaderboard', '/reciprocity-leaderboard', '/pathway', '/business-pathway', '/beacon-explainer', '/wildfire-runs', '/magic-carpet', '/hall-of-records',
   '/coaster-medallion', '/farmer-supply-chain', '/meal-kits', '/freeze-dried',
-  '/hexisle/encyclopedia',
+  '/hexisle/encyclopedia', '/hexisle/hexels',
   '/sponsor', '/forward',
 ];
 
@@ -603,6 +606,8 @@ const App = () => (
                         <Route path="/hexisle/world-map" element={<IslandWorldMap />} />
                         <Route path="/hexisle/world-3d" element={<HexIsleWorld3D />} />
                         <Route path="/hexisle/overworld" element={<HexIsleOverworld />} />
+                        <Route path="/hexisle/hexels/slotted-top" element={<HexelSlottedTopDetail />} />
+                        <Route path="/hexisle/hexels/sawtooth-coral" element={<HexelSawtoothCoralDetail />} />
                         <Route path="/content-pipeline" element={<ContentPipelinePage />} />
                         {/* Legal pages — public, no auth required (TikTok compliance) */}
                         <Route path="/terms" element={<TermsOfService />} />

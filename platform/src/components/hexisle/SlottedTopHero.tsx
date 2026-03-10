@@ -11,6 +11,7 @@
  */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -113,6 +114,7 @@ function HexelStackMini() {
 // ─── Main Component ────────────────────────────────────────────────────────
 
 export function SlottedTopHero() {
+  const navigate = useNavigate();
   const [showDetails, setShowDetails] = useState(false);
   const [showStack, setShowStack] = useState(false);
 
@@ -193,6 +195,13 @@ export function SlottedTopHero() {
                 >
                   <Layers className="w-4 h-4 mr-1" />
                   {showStack ? "Hide" : "Show"} Hexel Stack
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-amber-500/80 text-white hover:bg-amber-500 ml-auto"
+                  onClick={() => navigate("/hexisle/hexels/slotted-top")}
+                >
+                  Full Detail Page <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
               </div>
             </div>

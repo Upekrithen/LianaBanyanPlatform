@@ -289,7 +289,479 @@ export const ECOSYSTEM_NARRATIVE = {
     "active terrain with hidden trap mechanics, water power, and physics-driven gameplay. " +
     "BattleTech tiles. WarHex tiles. Green Stuff World tiles. They all fit. " +
     "They all become HexIsle terrain.",
+  competitorInvite:
+    "We don't crush competitors. We invite them in. If you make hex terrain, " +
+    "your tiles physically fit on our active mechanical platform — no modification needed. " +
+    "Your customers get more value. Our customers get more terrain options. Everyone wins.",
+  ipSharing:
+    "We share our IP with partners who want to build for the Hexel ecosystem. " +
+    "Design files, dimensional specs, integration rules — all available. " +
+    "Build for HexIsle, sell through HexIsle, keep 83.3% of every sale.",
   compatibleCount: COMPATIBLE_SYSTEMS.filter(s => s.rating !== "incompatible").length,
   retentionRange: "32-35mm",
   clearanceRange: "0.5-2.0mm per side",
+};
+
+// ─── Dimensional Analysis (Full Engineering Detail) ────────────────────────
+
+export interface DimensionalEntry {
+  label: string;
+  tileSizeMm: number;
+  overhangPerSideMm: number;
+  clearancePerSideMm: number;
+  verdict: string;
+}
+
+/**
+ * The 24mm Center Hex — why it's perfect:
+ * The center hex is what the terrain tile SITS ON. It needs to be significantly
+ * smaller than the smallest compatible tile so the tile always has full coverage
+ * with overhang into the pincer zone.
+ *
+ * 24mm gives 4-5mm of overhang across the entire target range. That's the
+ * mechanical sweet spot — enough edge for the pincers to grip, enough center
+ * for the tile to sit flat.
+ */
+export const CENTER_HEX_ANALYSIS: DimensionalEntry[] = [
+  { label: "Green Stuff World",  tileSizeMm: 32,    overhangPerSideMm: 4.0,   clearancePerSideMm: 2.0,   verdict: "Full coverage" },
+  { label: "BattleTech (old)",   tileSizeMm: 32,    overhangPerSideMm: 4.0,   clearancePerSideMm: 2.0,   verdict: "Full coverage" },
+  { label: "BattleTech (new)",   tileSizeMm: 33,    overhangPerSideMm: 4.5,   clearancePerSideMm: 1.5,   verdict: "Full coverage" },
+  { label: "33mm standard",      tileSizeMm: 33,    overhangPerSideMm: 4.5,   clearancePerSideMm: 1.5,   verdict: "Full coverage" },
+  { label: "Open WarHex",        tileSizeMm: 34.29, overhangPerSideMm: 5.145, clearancePerSideMm: 0.855, verdict: "Near-perfect snap" },
+];
+
+/**
+ * The 6mm Gap — Goldilocks Zone:
+ * Retention zone = 24 + (2 x 6) = 36mm max tile diameter.
+ * Compliant pincers spring outward at rest, flex inward when tile is pressed down.
+ * The 0.855mm clearance for WarHex is actually ideal: tight enough for secure
+ * retention, loose enough for tool-free snap-in/snap-out.
+ */
+export const GAP_ANALYSIS = {
+  retentionZoneFormula: "24mm center + (2 x 6mm gap) = 36mm max tile diameter",
+  clearanceRange: "0.5mm to 2.0mm per side",
+  pincerBehavior: "Spring outward at rest, flex inward when tile is pressed down",
+  warHexIdeal: "0.855mm for WarHex — tight enough for secure retention, loose enough for tool-free snap-in/snap-out",
+};
+
+/**
+ * What You'd Lose by Widening to 7mm:
+ * Each point explains why the 6mm gap is right and 7mm would be worse.
+ */
+export const WIDENING_TRADEOFFS: string[] = [
+  "WarHex clearance goes to 1.855mm — still works but looser, less satisfying snap",
+  "32mm tiles get 3mm clearance — pincers need to flex 3mm inward, harder to maintain grip force",
+  "Total piece becomes 62mm — breaks the clean 60mm footprint already built around",
+  "You gain Terragon/Heroscape (38.1mm) — but those are niche markets vs. BattleTech (the biggest hex wargaming franchise on earth)",
+  "Every existing Fusion 360 model needs rebasing — the dimensional cascade touches Football, Cradle, ChannelLock, everything",
+];
+
+/**
+ * Strategic Call:
+ * The 32-35mm range covers 90%+ of the hex terrain market.
+ * The remaining 10% gets the Wide Adapter variant.
+ */
+export const STRATEGIC_CALL = {
+  marketCoverage: "90%+",
+  coveredSystems: ["BattleTech (all variants)", "Open WarHex", "Green Stuff World", "33mm standard"],
+  wideAdapterVariant: {
+    centerHex: "24mm (same)",
+    gapWidth: "7.5mm",
+    retentionZone: "39mm",
+    purpose: "Product line extension for Terragon (38.1mm) and Heroscape (38.1mm playable area)",
+    note: "Product line extension, not a base model change",
+  },
+  bottomLine: "24mm center + 6mm gap — don't touch it. It's right.",
+};
+
+// ─── Manufacturing Path ───────────────────────────────────────────────────
+
+export interface ManufacturingStage {
+  phase: number;
+  name: string;
+  method: string;
+  unitRange: string;
+  costPerUnit: string;
+  timeline: string;
+  description: string;
+}
+
+export const MANUFACTURING_PATH: ManufacturingStage[] = [
+  {
+    phase: 1,
+    name: "MVP Prototype",
+    method: "Formlabs Form Now (SLA on-demand)",
+    unitRange: "10-50 units",
+    costPerUnit: "$100",
+    timeline: "2-4 weeks",
+    description:
+      "High-quality SLA resin prints via Formlabs Form Now on-demand service. " +
+      "Upload designs, select materials, receive finished parts. No printer ownership needed. " +
+      "Perfect for validation, photography, and first backers.",
+  },
+  {
+    phase: 2,
+    name: "Small Batch",
+    method: "FDM short run (community printers + Nodes)",
+    unitRange: "100+ units preordered",
+    costPerUnit: "$85",
+    timeline: "4-6 weeks",
+    description:
+      "Community Node operators print at registered locations. Quality verified via test prints. " +
+      "Bounties paid to prototypers and testers for quality assurance reports.",
+  },
+  {
+    phase: 3,
+    name: "Medium Production",
+    method: "SLS Nylon (placed SLS machines at Nodes)",
+    unitRange: "500-1,000 units",
+    costPerUnit: "$70",
+    timeline: "6-8 weeks",
+    description:
+      "First placed SLS machines (Formlabs Fuse, Sinterit) at established Nodes. " +
+      "Funded by the 1/3, 1/3, 1/3 model: 1/3 community pre-orders, 1/3 platform treasury, " +
+      "1/3 Node operator contribution. Locations chosen from existing Node infrastructure.",
+  },
+  {
+    phase: 4,
+    name: "Scale Production",
+    method: "Desktop injection molding",
+    unitRange: "2,000-10,000 units",
+    costPerUnit: "$60",
+    timeline: "Ongoing",
+    description:
+      "Desktop injection molding at Node locations. Tooling funded through production revenue. " +
+      "Each Node serves its geographic region — decentralized, local industry.",
+  },
+  {
+    phase: 5,
+    name: "Mass Production",
+    method: "Factory tooling + industrial injection molding",
+    unitRange: "10,000+ units",
+    costPerUnit: "$40-50",
+    timeline: "Ongoing",
+    description:
+      "Full factory tooling at dedicated facilities. Cost + 20% floor pricing. " +
+      "Creator/worker keeps 83.3%. Local industry, decentralized manufacturing. " +
+      "Every product made through the Liana Banyan cooperative manufacturing network.",
+  },
+];
+
+/**
+ * The manufacturing philosophy: ALL product making goes to LOCAL INDUSTRY
+ * through decentralized Factory Nodes. No single factory. No single point of failure.
+ */
+export const MANUFACTURING_PHILOSOPHY = {
+  core: "All product manufacturing routes through the Liana Banyan decentralized Factory network. " +
+        "No single factory. No single supplier. Local industry, local jobs, local resilience.",
+  slsMachineModel: "1/3, 1/3, 1/3 — community pre-orders, platform treasury, Node operator contribution",
+  nodePlacement: "SLS machines placed at locations that are already established Nodes — " +
+                 "the beginning infrastructure started by the 16 initiatives and the Marketing Deck Cards (Cue Card) system",
+  pricing: "Cost + 20% floor. Sellers set prices. Market discovery. Creator/worker keeps 83.3%.",
+  incentive: "Nodes earn priority bounty assignments, higher Joule allocations, and equipment subsidies (first 100 pioneers)",
+};
+
+// ─── Design Contests & Licensing ──────────────────────────────────────────
+
+export interface DesignContest {
+  name: string;
+  category: string;
+  description: string;
+  prize: string;
+  integrationRules: string[];
+}
+
+/**
+ * Official Tereno HexIsle Models — design contests that produce licensed products.
+ * The Wide Adapter SlottedTop variant is the first example of how the community
+ * creates official product line extensions.
+ */
+export const DESIGN_CONTESTS: DesignContest[] = [
+  {
+    name: "Wide Adapter SlottedTop",
+    category: "Product Line Extension",
+    description:
+      "Design a SlottedTop variant with 24mm center hex, 7.5mm gaps, and 39mm retention zone " +
+      "for Terragon (38.1mm) and Heroscape (38.1mm) compatibility. Same snap-in mechanism, wider gap. " +
+      "Winner becomes an Official Tereno HexIsle Model with licensing included.",
+    prize: "Official Tereno licensing + 83.3% of all sales through the platform",
+    integrationRules: [
+      "Must maintain 24mm center hex (non-negotiable — universal standard)",
+      "Must use compliant pincer retention (no adhesives, magnets, or clips)",
+      "Must be single lithographic part (3D printable without assembly)",
+      "Must preserve trap mechanism compatibility (Cradle flip still works)",
+      "Must pass snap-in/snap-out test: tool-free, repeatable, no damage to tiles",
+      "STL file submitted for quality verification at registered Node",
+    ],
+  },
+  {
+    name: "Biome Terrain Skin Pack",
+    category: "Terrain Design",
+    description:
+      "Design a set of 7 terrain skins (hex tiles) in a thematic biome: desert, arctic, volcanic, swamp, " +
+      "forest, ocean reef, or alien. Must be flat hex tiles in the 32-35mm range that snap onto SlottedTop.",
+    prize: "Official Tereno licensing + 83.3% of all sales + featured in HexIsle campaign",
+    integrationRules: [
+      "Hex tiles must be 32-35mm flat-to-flat (within SlottedTop retention zone)",
+      "Flat bottom surface (sits flush on 24mm center hex)",
+      "No protrusions below 0.5mm from bottom face (pincers need clearance)",
+      "STL files provided for community prototyping",
+    ],
+  },
+  {
+    name: "Character Figure Design",
+    category: "Game Piece",
+    description:
+      "Design a character figure that interfaces with the Hexel IIFIS (If It Fits It Sits) boot system. " +
+      "Figure must have boot slots compatible with terrain-specific biome boots.",
+    prize: "Official Tereno licensing + 83.3% of all sales + IP credit in patent documentation",
+    integrationRules: [
+      "Boot slot geometry matches IIFIS specification",
+      "Figure fits within single hex footprint (max 24mm base diameter)",
+      "Backpack ratchet compatible (push-down Hit Point counter mechanism)",
+      "Coin slot pattern defined (Square/Circle/Triangle currency slots)",
+    ],
+  },
+];
+
+// ─── Bounty Programs ──────────────────────────────────────────────────────
+
+export interface BountyProgram {
+  title: string;
+  reward: string;
+  currency: string;
+  description: string;
+  requirements: string[];
+}
+
+export const BOUNTY_PROGRAMS: BountyProgram[] = [
+  {
+    title: "Game Piece Tester",
+    reward: "5-25",
+    currency: "Credits",
+    description:
+      "Download free STL files from the HexIsle repository. Print them. Play with them. " +
+      "Report back: fit, feel, durability, fun factor. Detailed reports earn more.",
+    requirements: [
+      "Access to any FDM or SLA 3D printer",
+      "Print the test file at specified settings",
+      "Complete the structured test report form",
+      "Submit photos of printed parts (minimum 3 angles)",
+      "Optional: video of snap-in/snap-out test (bonus Credits)",
+    ],
+  },
+  {
+    title: "3D Print Prototyper",
+    reward: "10-50",
+    currency: "Credits",
+    description:
+      "Prototype new Hexel components as they're released weekly. Each week, a new piece " +
+      "of the 14-piece Hexel stack drops. Print it, test it, improve it. " +
+      "The best prototypers become registered Node operators.",
+    requirements: [
+      "Calibrated FDM or SLA printer (tolerance test passed)",
+      "Print weekly release within 48 hours of drop",
+      "Submit dimensional verification (caliper measurements)",
+      "Report material recommendations for production",
+      "Top prototypers invited to Node operator registration",
+    ],
+  },
+  {
+    title: "Compatibility Validator",
+    reward: "15-40",
+    currency: "Credits",
+    description:
+      "Own hex terrain from other systems? Test how it fits on the SlottedTop. " +
+      "BattleTech, WarHex, Green Stuff World — we need real-world fit data. " +
+      "Your measurements validate the compatibility matrix.",
+    requirements: [
+      "Own at least one hex terrain system (BattleTech, WarHex, Green Stuff World, etc.)",
+      "Print or obtain a SlottedTop test piece",
+      "Photograph tile seated on SlottedTop (top and side views)",
+      "Measure actual clearance with calipers",
+      "Rate snap quality: 1-5 scale (loose/snug/tight/press-fit/stuck)",
+    ],
+  },
+];
+
+// ─── Weekly Series Release Schedule ───────────────────────────────────────
+
+export interface WeeklyRelease {
+  week: number;
+  partName: string;
+  stackPosition: number;
+  description: string;
+  status: "released" | "upcoming" | "planned";
+  detailPageRoute: string;
+}
+
+/**
+ * Weekly Hexel Component Release Series:
+ * Start with SlottedTop (the piece people can use NOW with their existing tiles),
+ * then work down the stack adding each component until the full water table is ready.
+ * The 7-hexel modular prototype IS the actual product because it is modular.
+ */
+export const WEEKLY_RELEASES: WeeklyRelease[] = [
+  {
+    week: 1,
+    partName: "SlottedTop",
+    stackPosition: 14,
+    description: "The crown piece. Universal hex terrain adapter. Use it NOW with your existing tiles.",
+    status: "released",
+    detailPageRoute: "/hexisle/hexels/slotted-top",
+  },
+  {
+    week: 2,
+    partName: "SawtoothCoral + TimingBelt",
+    stackPosition: 10,
+    description: "The ratchet mechanism. Click-click-click — satisfying mechanical feedback.",
+    status: "upcoming",
+    detailPageRoute: "/hexisle/hexels/sawtooth-coral",
+  },
+  {
+    week: 3,
+    partName: "Capstone",
+    stackPosition: 13,
+    description: "Structural cap. Locks the SlottedTop assembly to the gear train below.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/capstone",
+  },
+  {
+    week: 4,
+    partName: "Cradle + Football",
+    stackPosition: 12,
+    description: "The flip mechanism. Land or water. Traps work both ways.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/cradle",
+  },
+  {
+    week: 5,
+    partName: "MainGear",
+    stackPosition: 11,
+    description: "Primary drive gear. The power that moves everything above it.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/main-gear",
+  },
+  {
+    week: 6,
+    partName: "Planetary Gears (PGear 1-3)",
+    stackPosition: 7,
+    description: "Three planetary gears. Torque multiplication from water to mechanism.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/pgears",
+  },
+  {
+    week: 7,
+    partName: "Ouralis",
+    stackPosition: 6,
+    description: "Planetary gear carrier. The frame that holds the gear train.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/ouralis",
+  },
+  {
+    week: 8,
+    partName: "Rotor",
+    stackPosition: 5,
+    description: "Rotation driver. Water enters, rotation exits.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/rotor",
+  },
+  {
+    week: 9,
+    partName: "GoldenLotus",
+    stackPosition: 4,
+    description: "Valve mechanism. Controls water flow direction and timing.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/golden-lotus",
+  },
+  {
+    week: 10,
+    partName: "Clamshell",
+    stackPosition: 3,
+    description: "Protective enclosure. Keeps the mechanism sealed and the water in.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/clamshell",
+  },
+  {
+    week: 11,
+    partName: "HollowLog",
+    stackPosition: 2,
+    description: "Water reservoir and routing. The hydraulic highway.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/hollow-log",
+  },
+  {
+    week: 12,
+    partName: "ChannelLock",
+    stackPosition: 1,
+    description: "Base anchor with hydraulic channels. The foundation of everything.",
+    status: "planned",
+    detailPageRoute: "/hexisle/hexels/channel-lock",
+  },
+];
+
+/**
+ * The 7-Hexel Modular Product:
+ * Once all 14 pieces are released and validated, the product IS 7 connected Hexels.
+ * Modular by design — buy 7, connect them, add water, play.
+ * This is the actual product because each Hexel is a self-contained modular unit.
+ */
+export const MODULAR_PRODUCT = {
+  name: "The Tereno Hydraulic Table",
+  hexelCount: 7,
+  description:
+    "Seven Hexels snap together into a modular hydraulic game table. Each Hexel is a self-contained " +
+    "14-piece mechanism: water channels, gear trains, trap mechanics, and universal terrain adapter. " +
+    "Connect them. Add water. Play. This IS the product — modular by design, expandable forever.",
+  whyModular: [
+    "Start with 1 Hexel — it works standalone with any hex terrain tile",
+    "Add more Hexels to expand your game board",
+    "7 Hexels form the standard table configuration",
+    "Water flows between connected Hexels through ChannelLock joints",
+    "Each Hexel can have different terrain — mix and match freely",
+    "Prototype each piece individually, validate, then assemble the full product",
+  ],
+  startNow:
+    "You don't need all 14 pieces to start. The SlottedTop alone turns any hex tile into " +
+    "a HexIsle terrain piece. Each weekly release adds another layer of functionality. " +
+    "By week 12, you have a fully operational water-powered hex game tile.",
+};
+
+// ─── Collaboration & Open Invitation ──────────────────────────────────────
+
+export const COLLABORATION_INVITE = {
+  headline: "Build With Us",
+  subheadline: "Your hex terrain. Your designs. Your manufacturing. Our active mechanics. Our platform. Our IP.",
+  points: [
+    {
+      title: "Competitors Welcome",
+      description:
+        "We don't crush competitors — we invite them in. If you make hex terrain tiles, " +
+        "your products physically fit on our active mechanical platform. No modification needed. " +
+        "Your customers get more value. Our customers get more terrain options. Everyone wins.",
+    },
+    {
+      title: "IP Shared Freely",
+      description:
+        "We share our IP with partners who want to build for the Hexel ecosystem. " +
+        "Dimensional specs. Integration rules. Design files. STL templates. " +
+        "Build for HexIsle, sell through HexIsle, keep 83.3% of every sale.",
+    },
+    {
+      title: "Decentralized Manufacturing",
+      description:
+        "No single factory. No single supplier. Register as a manufacturing Node, " +
+        "print or mold official Tereno products, serve your local region. " +
+        "The Factory is everywhere. The industry is local.",
+    },
+    {
+      title: "Design Contests = Real Products",
+      description:
+        "Win a design contest and your creation becomes an Official Tereno HexIsle Model. " +
+        "Licensing included. You keep 83.3%. From community design to production shelf, " +
+        "manufactured at the nearest Node.",
+    },
+  ],
+  ctaLine: "If you make hex terrain, if you own a 3D printer, if you design game pieces — " +
+           "this platform is built for you. Start with the SlottedTop. Start now.",
 };
