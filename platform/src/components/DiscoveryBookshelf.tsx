@@ -17,7 +17,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { ChevronUp, ChevronDown, Plus } from "lucide-react";
+import { ChevronUp, ChevronDown, Plus, Telescope } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -425,6 +425,19 @@ export function DiscoveryBookshelf() {
           </span>
         </div>
       )}
+
+      {/* Crow's Nest cross-link */}
+      <button
+        onClick={() => navigate("/crows-nest")}
+        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted/50 transition-colors text-left group mt-2"
+        aria-label="Open the Crow's Nest for guided discovery"
+      >
+        <Telescope className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+        <div className="min-w-0">
+          <div className="text-xs font-medium group-hover:text-primary transition-colors">The Crow's Nest</div>
+          <div className="text-[10px] text-muted-foreground/60">Guided flyover of everything</div>
+        </div>
+      </button>
 
       {/* Card Placement Dialog */}
       <Dialog open={!!placementTarget} onOpenChange={() => setPlacementTarget(null)}>

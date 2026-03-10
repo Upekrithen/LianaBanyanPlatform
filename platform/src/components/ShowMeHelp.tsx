@@ -14,7 +14,8 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Flame, ChevronDown, X, Save, Share2, Bookmark, Printer, Settings, MessageSquare, RotateCcw } from 'lucide-react';
+import { Flame, ChevronDown, X, Save, Share2, Bookmark, Printer, Settings, MessageSquare, RotateCcw, Telescope } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // ============================================================================
 // DISMISSED HELP TYPES SYSTEM
@@ -158,6 +159,7 @@ interface ShowMeHelpProps {
 }
 
 export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDialog, onProceedHelpDialog, currentContext = 'start-page' }: ShowMeHelpProps) {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string>('getting-started');
   const [activeTopic, setActiveTopic] = useState<string>('welcome');
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
@@ -261,6 +263,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
     { icon: Printer, label: 'Print', onClick: () => {} },
     { icon: Settings, label: 'Settings', onClick: () => setShowSettingsMenu(!showSettingsMenu) },
     { icon: MessageSquare, label: 'Feedback', onClick: () => {} },
+    { icon: Telescope, label: "Crow's Nest", onClick: () => { onRequestClose(); navigate('/crows-nest'); } },
   ];
 
   // Render markdown-style bold

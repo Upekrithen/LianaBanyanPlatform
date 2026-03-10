@@ -252,6 +252,8 @@ const MyPledges = lazy(() => import("./pages/MyPledges"));
 const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 // Side Quests — Flexible Work System (Session 8B)
 const SideQuests = lazy(() => import("./pages/SideQuests"));
+// The Crow's Nest — Multi-Depth Guided Discovery (Session 8H)
+const CrowsNest = lazy(() => import("./pages/CrowsNest"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -280,6 +282,11 @@ const HexIsleWorldCard = lazy(() => import("./pages/cue-cards/HexIsleWorldCard")
 import { BuilderModeProvider } from "@/components/builder/BuilderModeContext";
 import { LarkSidePanel } from "@/components/builder/LarkSidePanel";
 
+// The Crow's Nest — global provider, float button, overlay (Session 8H)
+import { CrowsNestProvider } from "@/contexts/CrowsNestContext";
+import { CrowsNestFloat } from "@/components/crows-nest/CrowsNestFloat";
+import { CrowsNestOverlay } from "@/components/crows-nest/CrowsNestOverlay";
+
 // Cold Start & Stewardship System (Milestone 2)
 import ColdStartDashboard from "./pages/ColdStartDashboard";
 import BecomeCaptain from "./pages/BecomeCaptain";
@@ -302,6 +309,7 @@ const ALWAYS_CLEAN_ROUTES = [
   '/coaster-medallion', '/farmer-supply-chain', '/meal-kits', '/freeze-dried',
   '/hexisle/encyclopedia', '/hexisle/hexels',
   '/sponsor', '/forward',
+  '/crows-nest', // The Crow's Nest — full-page discovery (Session 8H)
 ];
 
 // Routes where sidebar is hidden ONLY for unauthenticated users (now empty since / moved to ALWAYS_CLEAN)
@@ -416,6 +424,7 @@ const App = () => (
           <FeatureTipProvider>
           <WildfireRunProvider>
           <PathwayProgressProvider>
+          <CrowsNestProvider>
             <RecordingProvider>
               <SubdomainRouter>
                 <WelcomeGate>
@@ -496,6 +505,11 @@ const App = () => (
                         <Route path="/pudding" element={<PuddingDemo />} />
                         <Route path="/components" element={<PuddingDemo />} />
                         
+                        {/* The Crow's Nest — Multi-Depth Discovery (Session 8H) */}
+                        <Route path="/crows-nest" element={<CrowsNest />} />
+                        <Route path="/lookout" element={<Navigate to="/crows-nest" replace />} />
+                        <Route path="/flyover" element={<Navigate to="/crows-nest" replace />} />
+
                         {/* Progressive Disclosure Paths */}
                         <Route path="/get-a-job" element={<SaltMines />} />
                         <Route path="/salt-mines" element={<SaltMines />} />
@@ -866,7 +880,10 @@ const App = () => (
                 </AppShell>
                 </WelcomeGate>
               </SubdomainRouter>
+              <CrowsNestFloat />
+              <CrowsNestOverlay />
             </RecordingProvider>
+          </CrowsNestProvider>
           </PathwayProgressProvider>
           </WildfireRunProvider>
           </FeatureTipProvider>
