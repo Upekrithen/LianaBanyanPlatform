@@ -21,13 +21,27 @@ export default function Auth() {
   const emailSchema = z.string().email(t('auth.validation.invalidEmail'));
   const passwordSchema = z.string().min(6, t('auth.validation.passwordTooShort'));
 
+  // Where to go after auth — check if there's a stored return path
+  const getReturnPath = () => {
+    const storedPath = sessionStorage.getItem('lb_auth_return_path');
+    if (storedPath && storedPath !== '/auth') {
+      sessionStorage.removeItem('lb_auth_return_path');
+      return storedPath;
+    }
+    return null;
+  };
+
   useEffect(() => {
-    // Check if user is already logged in
+    // Check if user is already logged in — redirect away from auth page
+    let cancelled = false;
     supabase.auth.getSession().then(({ data: { session } }) => {
+      if (cancelled) return;
       if (session) {
-        navigate('/dashboard');
+        const returnPath = getReturnPath();
+        navigate(returnPath || '/dashboard', { replace: true });
       }
     });
+    return () => { cancelled = true; };
   }, [navigate]);
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -69,18 +83,23 @@ export default function Auth() {
       toast.error(t('auth.error.signUp'));
     } else {
       toast.success(t('auth.success.signUp'));
-      
-      // Domain-specific routing logic
-      const domain = email.split('@')[1]?.toLowerCase();
+
+      // Return to where they came from, or domain-specific routing
+      const returnPath = getReturnPath();
       setTimeout(() => {
-        if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {
-          navigate('/tower-of-peace');
-        } else if (domain === 'craigslist.org') {
-          navigate('/redcarpet/craig-newmark');
-        } else if (domain === 'ycombinator.com') {
-          navigate('/redcarpet/michael-seibel');
+        if (returnPath) {
+          navigate(returnPath, { replace: true });
         } else {
-          navigate('/dashboard');
+          const domain = email.split('@')[1]?.toLowerCase();
+          if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {
+            navigate('/tower-of-peace');
+          } else if (domain === 'craigslist.org') {
+            navigate('/redcarpet/craig-newmark');
+          } else if (domain === 'ycombinator.com') {
+            navigate('/redcarpet/michael-seibel');
+          } else {
+            navigate('/dashboard');
+          }
         }
       }, 1000);
     }
@@ -112,17 +131,22 @@ export default function Auth() {
       toast.error(t('auth.error.signIn'));
     } else {
       toast.success(t('auth.success.signIn'));
-      
-      // Domain-specific routing logic
-      const domain = email.split('@')[1]?.toLowerCase();
-      if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {
-        navigate('/tower-of-peace');
-      } else if (domain === 'craigslist.org') {
-        navigate('/redcarpet/craig-newmark');
-      } else if (domain === 'ycombinator.com') {
-        navigate('/redcarpet/michael-seibel');
+
+      // Return to where they came from, or domain-specific routing
+      const returnPath = getReturnPath();
+      if (returnPath) {
+        navigate(returnPath, { replace: true });
       } else {
-        navigate('/dashboard');
+        const domain = email.split('@')[1]?.toLowerCase();
+        if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {
+          navigate('/tower-of-peace');
+        } else if (domain === 'craigslist.org') {
+          navigate('/redcarpet/craig-newmark');
+        } else if (domain === 'ycombinator.com') {
+          navigate('/redcarpet/michael-seibel');
+        } else {
+          navigate('/dashboard');
+        }
       }
     }
   };

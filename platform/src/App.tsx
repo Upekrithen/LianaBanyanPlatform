@@ -67,6 +67,7 @@ import { RecordingProvider } from "@/contexts/RecordingContext";
 import { GlobalRecorderOverlay } from "@/components/GlobalRecorderOverlay";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { WelcomeGate } from "@/components/WelcomeGate";
+import { SeamlessOnboardProvider } from "@/components/SeamlessOnboardDialog";
 import { SyncStatusIndicator } from "@/components/SyncStatusIndicator";
 import IPRegistration from "./pages/IPRegistration";
 import AgentOnboarding from "./pages/AgentOnboarding";
@@ -407,6 +408,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+          <SeamlessOnboardProvider>
           <FeatureTipProvider>
           <WildfireRunProvider>
           <PathwayProgressProvider>
@@ -861,6 +863,7 @@ const App = () => (
           </PathwayProgressProvider>
           </WildfireRunProvider>
           </FeatureTipProvider>
+          </SeamlessOnboardProvider>
         </AuthProvider>
       </BrowserRouter>
       <LarkSidePanel />

@@ -36,6 +36,8 @@ import {
 } from '@/components/progressive';
 import { saveGhostBeacon } from '@/lib/beacons';
 import { PathwayNavigator } from '@/components/PathwayNavigator';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 
 const PRODUCTION_LEVELS = [
   { level: 0, state: 'Concept', credits: '0', multiplier: 'N/A', risk: 'Pre-listing', color: 'bg-slate-500/20' },
@@ -55,6 +57,8 @@ const VOLUME_DISCOUNTS = [
 
 export default function BuildBusiness() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const { benefits, addBenefit } = useBenefitAccumulator();
   const [currentSection, setCurrentSection] = useState(0);
   const [benefitCardExpanded, setBenefitCardExpanded] = useState(false);
@@ -601,7 +605,18 @@ export default function BuildBusiness() {
               </div>
               
               <button
-                onClick={() => navigate('/auth')}
+                onClick={() => {
+                  if (!user) {
+                    openOnboard({
+                      reason: "start building your business",
+                      actionLabel: "Go to Dashboard",
+                      membershipIncluded: true,
+                      onComplete: () => navigate('/dashboard'),
+                    });
+                  } else {
+                    navigate('/dashboard');
+                  }
+                }}
                 className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-500/90 hover:to-green-500/90 text-white text-xl font-bold flex items-center justify-center gap-3 transition-all"
               >
                 <Unlock className="w-6 h-6" />

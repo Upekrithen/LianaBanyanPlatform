@@ -8,6 +8,7 @@ function isGhostMode(): boolean {
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -18,6 +19,8 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!user) {
+    // Save where they were trying to go so Auth can bring them back
+    sessionStorage.setItem('lb_auth_return_path', location.pathname + location.search);
     return <Navigate to="/auth" replace />;
   }
 
@@ -45,87 +48,66 @@ export const ExplorerRoute = ({ children }: { children: React.ReactNode }) => {
     return <>{children}</>;
   }
 
+  // Ghost banner — used for both existing and new ghost users
+  const ghostBanner = (
+    <div
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: 'linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%)',
+        color: 'white',
+        padding: '0.5rem 1rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.75rem',
+        zIndex: 1000,
+        fontSize: '0.85rem'
+      }}
+    >
+      <span>👻 Exploring freely — your progress saves when you join</span>
+      <a
+        href="/auth"
+        onClick={(e) => {
+          e.preventDefault();
+          // Save return path so Auth sends them back here after signup
+          sessionStorage.setItem('lb_auth_return_path', location.pathname + location.search);
+          window.location.href = '/auth';
+        }}
+        style={{
+          background: 'rgba(255,255,255,0.2)',
+          padding: '0.35rem 0.75rem',
+          borderRadius: '6px',
+          color: 'white',
+          textDecoration: 'none',
+          fontWeight: 600,
+          fontSize: '0.8rem'
+        }}
+      >
+        Join for $5/year →
+      </a>
+    </div>
+  );
+
   // Allow ghost mode users through
   if (isGhostMode()) {
     return (
       <>
         {children}
-        {/* Ghost mode banner */}
-        <div 
-          style={{
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            background: 'linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%)',
-            color: 'white',
-            padding: '0.75rem 1rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '1rem',
-            zIndex: 1000,
-            fontSize: '0.9rem'
-          }}
-        >
-          <span>👻 Exploring as Ghost — your progress saves when you join</span>
-          <a 
-            href="/auth" 
-            style={{
-              background: 'rgba(255,255,255,0.2)',
-              padding: '0.4rem 1rem',
-              borderRadius: '6px',
-              color: 'white',
-              textDecoration: 'none',
-              fontWeight: 600
-            }}
-          >
-            Join for $5/year →
-          </a>
-        </div>
+        {ghostBanner}
       </>
     );
   }
 
-  // Not logged in and not ghost mode — redirect to ghost exploration
-  // But first, enable ghost mode so they can explore
+  // Not logged in and not ghost mode — enable ghost mode so they can explore
   localStorage.setItem('ghost_mode', 'true');
   localStorage.setItem('ghost_entry_path', location.pathname);
   return (
     <>
       {children}
-      <div 
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: 'linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%)',
-          color: 'white',
-          padding: '0.75rem 1rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '1rem',
-          zIndex: 1000,
-          fontSize: '0.9rem'
-        }}
-      >
-        <span>👻 Exploring as Ghost — your progress saves when you join</span>
-        <a 
-          href="/auth" 
-          style={{
-            background: 'rgba(255,255,255,0.2)',
-            padding: '0.4rem 1rem',
-            borderRadius: '6px',
-            color: 'white',
-            textDecoration: 'none',
-            fontWeight: 600
-          }}
-        >
-          Join for $5/year →
-        </a>
-      </div>
+      {ghostBanner}
     </>
   );
 };

@@ -27,9 +27,11 @@ import {
   Award, Target, MapPin, Star, Coins, Crown, Shield,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 
 export default function SponsorPortal() {
   const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
   const [sponsorAmount, setSponsorAmount] = useState("");
 
   // Sponsor profile
@@ -210,26 +212,40 @@ export default function SponsorPortal() {
                   className="h-12 px-8 gap-2"
                   disabled={!sponsorAmount || Number(sponsorAmount) < 5}
                   onClick={async () => {
-                    if (!user) {
-                      toast.error("Please log in to sponsor memberships.");
-                      return;
-                    }
                     const amt = Number(sponsorAmount);
                     if (amt < 5 || amt % 5 !== 0) {
                       toast.error("Amount must be at least $5 and a multiple of $5");
                       return;
                     }
-                    toast.info("Opening payment...");
-                    const { data, error } = await supabase.functions.invoke("create-sponsor-checkout", {
-                      body: { amount: amt },
-                    });
-                    if (error || data?.error) {
-                      toast.error(data?.error || error?.message || "Checkout failed");
+
+                    // Seamless onboard: if not logged in, inline signup + payment flow
+                    const triggerCheckout = async () => {
+                      toast.info("Opening payment...");
+                      const { data, error } = await supabase.functions.invoke("create-sponsor-checkout", {
+                        body: { amount: amt },
+                      });
+                      if (error || data?.error) {
+                        toast.error(data?.error || error?.message || "Checkout failed");
+                        return;
+                      }
+                      if (data?.url) {
+                        window.open(data.url, "_blank");
+                      }
+                    };
+
+                    if (!user) {
+                      openOnboard({
+                        reason: "sponsor memberships",
+                        actionLabel: `Sponsor $${amt}`,
+                        membershipIncluded: true,
+                        additionalAmount: amt,
+                        additionalLabel: `Johnny Appleseed Sponsorship (${Math.floor(amt / 5)} memberships)`,
+                        onComplete: triggerCheckout,
+                      });
                       return;
                     }
-                    if (data?.url) {
-                      window.open(data.url, "_blank");
-                    }
+
+                    await triggerCheckout();
                   }}
                 >
                   <Heart className="w-4 h-4" />
