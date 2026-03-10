@@ -235,4 +235,4 @@ VALUES
    25, 15,
    'Snowflake of the Northern Wind',
    '0°N — The Crown of the World',
-   'You walked the entire path. Every step earned. Every beacon lit by your effort. The Northern Wind now carries you — anywhere on the platform, instantly. This is what it means to have explored.'),
+   'You walked the entire path. Every step earned. Every beacon lit by your effort. The Northern Wind now carries you — anywhere on the platform, instantly. This is what it means to have explored.');
