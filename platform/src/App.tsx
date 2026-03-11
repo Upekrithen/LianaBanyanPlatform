@@ -365,7 +365,11 @@ function HomepageGateway() {
   }
 
   // Unauthenticated visitors get the 4-door gateway
-  return <PortalGateway />;
+  return (
+    <WelcomeGate>
+      <PortalGateway />
+    </WelcomeGate>
+  );
 }
 
 const App = () => (
@@ -384,7 +388,6 @@ const App = () => (
           <CrowsNestProvider>
             <RecordingProvider>
               <SubdomainRouter>
-                <WelcomeGate>
                 <AppShell>
                   <GlobalWildfireRun />
                   <ErrorBoundary>
@@ -846,7 +849,6 @@ const App = () => (
                   </Suspense>
                   </ErrorBoundary>
                 </AppShell>
-                </WelcomeGate>
               </SubdomainRouter>
               <CrowsNestFloat />
               <CrowsNestOverlay />

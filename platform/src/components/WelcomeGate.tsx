@@ -31,45 +31,8 @@ type TabId = "concept" | "getStarted" | "moreDetail";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
-const TABS: { id: TabId; label: string }[] = [
-  { id: "concept", label: "Concept" },
-  { id: "getStarted", label: "Get Started" },
-  { id: "moreDetail", label: "More Detail" },
-];
-
 const STORYBOARD_FRAMES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const FRAME_DURATIONS: Record<1 | 2 | 3, number> = { 1: 1200, 2: 600, 3: 300 };
-
-const TRIAGE_BUTTONS = [
-  {
-    id: "earn",
-    label: "Earn Money",
-    icon: "\u{1F4B0}",
-    route: "/help-wanted",
-    color: "from-emerald-600/20 to-green-600/10 border-emerald-500/30 hover:border-emerald-400/60",
-  },
-  {
-    id: "build",
-    label: "Build Something",
-    icon: "\u{1F680}",
-    route: "/build-a-business",
-    color: "from-violet-600/20 to-purple-600/10 border-violet-500/30 hover:border-violet-400/60",
-  },
-  {
-    id: "learn",
-    label: "Learn & Earn",
-    icon: "\u{1F4D6}",
-    route: "/papers",
-    color: "from-amber-600/20 to-yellow-600/10 border-amber-500/30 hover:border-amber-400/60",
-  },
-  {
-    id: "explore",
-    label: "Look Around",
-    icon: "\u{1F47B}",
-    route: "",
-    color: "from-white/5 to-white/[0.02] border-white/20 hover:border-white/40",
-  },
-];
 
 const SEC_SAFE_LINES = [
   "Member-Governed. Cooperative Commerce.",
@@ -182,8 +145,8 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
   const skipFlipbook = useCallback(() => {
     cancelAutoSwitch();
     setIsPlaying(false);
-    setActiveTab("getStarted");
-  }, [cancelAutoSwitch]);
+    closeGate();
+  }, [cancelAutoSwitch, closeGate]);
 
   const togglePlay = useCallback(() => {
     cancelAutoSwitch();
@@ -222,7 +185,7 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
   // ── Shared styles ──
   const overlayBg = "linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #0a0a0a 70%, #0d0d1f 100%)";
   const hexPatternUrl = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`;
-  const ctaBtnClass = `rounded-xl font-bold tracking-wide uppercase transition-all bg-gradient-to-r from-green-600 to-green-500 text-white hover:from-green-500 hover:to-green-400 hover:shadow-lg hover:shadow-green-500/20 active:scale-95 ${isMobile ? "px-10 py-3 text-base" : "px-16 py-4 text-lg"}`;
+  const ctaBtnClass = `rounded-xl font-bold tracking-wide uppercase transition-all bg-gradient-to-r from-green-600 to-green-500 text-white hover:from-green-500 hover:to-green-400 hover:shadow-lg hover:shadow-green-500/20 active:scale-95 w-full ${isMobile ? "px-10 py-4 text-base" : "px-16 py-5 text-lg"}`;
 
   return (
     <>
@@ -235,36 +198,17 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: hexPatternUrl }} />
 
         <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8 overflow-y-auto">
-          <div className={`w-full ${isMobile ? "max-w-sm" : "max-w-3xl"}`}>
+          <div className={`w-full ${isMobile ? "max-w-sm" : "max-w-xl"}`}>
 
-            {/* Tab Bar */}
-            <div className="flex gap-px mb-4 animate-in fade-in duration-500">
-              {TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-1.5 text-xs font-medium transition-all rounded-t-lg ${
-                    activeTab === tab.id
-                      ? "bg-white/10 text-green-400 border-b-2 border-green-500"
-                      : "bg-white/[0.02] text-white/25 hover:text-white/50 hover:bg-white/[0.04]"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* ─── TAB A: Concept — Flipbook ─── */}
-            {activeTab === "concept" && (
-              <div className="space-y-6 animate-in fade-in duration-500">
-                <div
-                  className={`relative rounded-xl overflow-hidden border border-white/10 bg-white/[0.02] mx-auto ${isMobile ? "max-w-xs" : "max-w-md"}`}
-                  style={{ aspectRatio: "1" }}
-                >
-                  <img
-                    key={frame}
-                    src={`/images/storyboard/storyboard${STORYBOARD_FRAMES[frame]}.png`}
-                    alt={`Seed to Banyan \u2014 frame ${frame + 1} of 12`}
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div
+                className={`relative rounded-xl overflow-hidden border border-white/10 bg-white/[0.02] mx-auto ${isMobile ? "max-w-xs" : "max-w-md"}`}
+                style={{ aspectRatio: "1" }}
+              >
+                <img
+                  key={frame}
+                  src={`/images/storyboard/storyboard${STORYBOARD_FRAMES[frame]}.png`}
+                  alt={`Seed to Banyan — frame ${frame + 1} of 12`}
                     className="w-full h-full object-contain"
                   />
                   <div className="absolute bottom-2 right-3 text-[10px] text-white/30 font-mono">
@@ -289,7 +233,7 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
                     </button>
                   ))}
                   <button onClick={togglePlay} className="px-2.5 py-1 rounded text-xs text-white/40 hover:text-white/80 hover:bg-white/10 transition-all" aria-label={isPlaying ? "Pause" : "Play"}>
-                    {isPlaying ? "\u23F8" : "\u25B6"}
+                    {isPlaying ? "⏸" : "▶"}
                   </button>
                   <button onClick={skipFlipbook} className="px-2.5 py-1 rounded text-xs text-white/30 hover:text-green-400 hover:bg-white/10 transition-all">
                     Skip &rarr;
@@ -297,73 +241,31 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
                   <button onClick={nextFrame} className="px-2 py-1 rounded text-xs text-white/40 hover:text-white/80 hover:bg-white/10 transition-all" aria-label="Next frame">&rsaquo;</button>
                 </div>
 
-                <p className="text-center text-[8px] text-white/15 tracking-widest uppercase">Illustrated by Ausbin</p>
-              </div>
-            )}
-
-            {/* ─── TAB B: Get Started — Flat BLUF Triage ─── */}
-            {activeTab === "getStarted" && (
-              <div className="space-y-6 animate-in fade-in duration-500">
-                <div className="text-center space-y-2">
-                  <h2 className={`font-bold leading-tight ${isMobile ? "text-2xl" : "text-3xl"}`}>
-                    <span className="text-white">What do you need </span>
-                    <span className="text-green-400">today?</span>
-                  </h2>
-                  <p className="text-white/40 text-sm">Pick a door. Go.</p>
-                </div>
-
-                <div className="grid gap-3 grid-cols-1">
-                  {TRIAGE_BUTTONS.map((btn, i) => (
-                    <button
-                      key={btn.id}
-                      onClick={() => closeGate(btn.route || undefined)}
-                      className={`w-full rounded-xl border p-5 text-left transition-all duration-300 bg-gradient-to-r ${btn.color} hover:scale-[1.02] active:scale-[0.98] group cursor-pointer animate-in fade-in slide-in-from-bottom-4`}
-                      style={{ animationDelay: `${i * 100}ms` }}
+                <div className="space-y-3 text-center pt-4">
+                  {SEC_SAFE_LINES.map((line, i) => (
+                    <p
+                      key={i}
+                      className={
+                        i === 0
+                          ? `font-bold text-green-400 ${isMobile ? "text-lg" : "text-xl"}`
+                          : `text-white/70 ${isMobile ? "text-xs" : "text-sm"} leading-relaxed`
+                      }
                     >
-                      <div className="flex items-center gap-4">
-                        <span className={`flex-shrink-0 ${isMobile ? "text-3xl" : "text-4xl"}`}>{btn.icon}</span>
-                        <h3 className={`font-bold text-white group-hover:text-green-300 transition-colors flex-1 ${isMobile ? "text-lg" : "text-xl"}`}>
-                          {btn.label}
-                        </h3>
-                        <span className="text-white/30 group-hover:text-green-400 transition-colors text-2xl flex-shrink-0">&rarr;</span>
-                      </div>
-                    </button>
+                      {line}
+                    </p>
                   ))}
                 </div>
-              </div>
-            )}
 
-            {/* ─── TAB C: More Detail — SEC-Safe Manifesto ─── */}
-            {activeTab === "moreDetail" && (
-              <div className="space-y-8 animate-in fade-in duration-500">
-                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-sm">
-                  <div className="space-y-3 text-center">
-                    {SEC_SAFE_LINES.map((line, i) => (
-                      <p
-                        key={i}
-                        className={
-                          i === 0
-                            ? `font-bold text-green-400 ${isMobile ? "text-xl" : "text-2xl"}`
-                            : `text-white/70 ${isMobile ? "text-sm" : "text-base"} leading-relaxed`
-                        }
-                      >
-                        {line}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center">
-                  <button onClick={handleTourInitiatives} className={ctaBtnClass}>
-                    Tour the 16 Initiatives
+                <div className="pt-6">
+                  <button onClick={() => closeGate()} className={ctaBtnClass}>
+                    Enter the Ecosystem
                   </button>
                 </div>
 
-                <div className="text-center">
-                  <p className="text-sm text-green-400/60 italic">One hand builds. One hand gives. Both are needed.</p>
-                </div>
+                <p className="text-center text-[8px] text-white/15 tracking-widest uppercase mt-4">Illustrated by Ausbin</p>
               </div>
-            )}
+
+            {/* TAB B AND C REMOVED FOR ONE-DOOR POLICY */}
           </div>
 
           {/* Do Not Show Again + Branding — always visible */}
