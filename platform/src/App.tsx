@@ -8,8 +8,6 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
 import { PaidMemberRoute } from "@/components/PaidMemberRoute";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { UnifiedNavigation } from "@/components/UnifiedNavigation";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import MoneyPenny from "./pages/MoneyPenny";
 import Academy from "./pages/Academy";
@@ -75,12 +73,10 @@ import { PlatformFooter } from "@/components/PlatformFooter";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { WelcomeGate } from "@/components/WelcomeGate";
 import { SeamlessOnboardProvider } from "@/components/SeamlessOnboardDialog";
-import { SyncStatusIndicator } from "@/components/SyncStatusIndicator";
 import IPRegistration from "./pages/IPRegistration";
 import AgentOnboarding from "./pages/AgentOnboarding";
 import CrowdfundingIntegration from "./pages/CrowdfundingIntegration";
 import MedallionManagement from "./pages/MedallionManagement";
-import { GlobalBreadcrumbs } from "@/components/GlobalBreadcrumbs";
 import { useAuth } from "@/contexts/AuthContext";
 // Business portal pages reused here
 import ContractPositions from "./pages/ContractPositions";
@@ -301,29 +297,7 @@ import BecomeCaptain from "./pages/BecomeCaptain";
 import TreasureMapBuilder from "./pages/TreasureMapBuilder";
 import IncumbentAdvantage from "./pages/IncumbentAdvantage";
 
-const queryClient = new QueryClient();
-
-// Routes where sidebar/header should ALWAYS be hidden (immersive/public pages)
-// These show clean full-page layouts regardless of auth status
-const ALWAYS_CLEAN_ROUTES = [
-  '/', // Homepage should ALWAYS be clean - even for logged-in users seeing the welcome modal
-  '/portal', '/enter', '/RedCarpet', '/redcarpet', '/ghost', '/explore',
-  '/treasure-map-game', '/52-cards', '/card-hunt', '/golden-key', '/treasure-hunt',
-  '/durins-door', '/door', '/arenas', '/political-expedition', '/areopagus', '/crucible',
-  '/discover', '/auth', '/hofund', '/reputation', '/start', '/begin', '/pudding', '/components',
-  '/initiatives', // ALL initiative pages should be clean for guests
-  '/get-a-job', '/salt-mines', '/build-a-business', '/plant-seeds', '/cue',
-  '/patent-portfolio', '/economics', '/c20/leaderboard', '/reciprocity-leaderboard', '/pathway', '/business-pathway', '/beacon-explainer', '/wildfire-runs', '/magic-carpet', '/hall-of-records',
-  '/coaster-medallion', '/farmer-supply-chain', '/meal-kits', '/freeze-dried',
-  '/hexisle/encyclopedia', '/hexisle/hexels',
-  '/sponsor', '/forward',
-  '/crows-nest', // The Crow's Nest — full-page discovery (Session 8H)
-  '/developers', '/dev', '/terms', '/privacy',
-  '/friend', // Friend page — Warp Room for Durin's Door friend words
-];
-
-// Routes where sidebar is hidden ONLY for unauthenticated users (now empty since / moved to ALWAYS_CLEAN)
-const GUEST_CLEAN_ROUTES: string[] = [];
+  const queryClient = new QueryClient();
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -337,44 +311,16 @@ function AppShell({ children }: { children: React.ReactNode }) {
     });
   }, [location.pathname]);
 
-  // Always clean for immersive pages (regardless of auth)
-  const isAlwaysClean = ALWAYS_CLEAN_ROUTES.some(r =>
-    r === '/' ? location.pathname === '/' : location.pathname.startsWith(r)
-  );
-  // Clean for guests on landing page
-  const isGuestClean = !user && (location.pathname === '/' || GUEST_CLEAN_ROUTES.some(r => location.pathname === r));
-  const isCleanRoute = isAlwaysClean || isGuestClean;
-
-  if (isCleanRoute) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-1">{children}</main>
-        <PlatformFooter />
-        <HelmCompact />
-        <PWAInstallPrompt />
-        <LanguageSwitcher />
-        <DevelopmentBadge />
-        <PatentPortfolioTicker mode="compact" />
-      </div>
-    );
-  }
-
   return (
     <DiscoveryProvider>
       <DiscoveryGateProvider>
-        <SidebarProvider defaultOpen={false}>
         <div className="min-h-screen flex w-full overflow-x-hidden">
-          <UnifiedNavigation />
           <div className="flex-1 flex flex-col min-w-0">
-            <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-              <div className="flex items-center gap-4 min-w-0">
-                <SidebarTrigger />
-                <GlobalBreadcrumbs />
-              </div>
-              <SyncStatusIndicator />
-            </header>
             <div className="flex flex-1 overflow-x-hidden">
-              <main className="flex-1 overflow-x-hidden">{children}</main>
+              <main className="flex-1 overflow-x-hidden flex flex-col">
+                <div className="flex-1">{children}</div>
+                <PlatformFooter />
+              </main>
               {/* Discovery Bookshelf — right panel for logged-in users */}
               {user && (
                 <aside className="hidden xl:block w-64 border-l bg-card/30 overflow-y-auto shrink-0">
@@ -382,7 +328,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
                 </aside>
               )}
             </div>
-            <PlatformFooter />
           </div>
         </div>
         <GlobalRecorderOverlay />
@@ -391,7 +336,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
         <LanguageSwitcher />
         <DevelopmentBadge />
         <PatentPortfolioTicker mode="compact" />
-        </SidebarProvider>
       </DiscoveryGateProvider>
     </DiscoveryProvider>
   );
