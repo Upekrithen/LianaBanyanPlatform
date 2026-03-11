@@ -1,0 +1,139 @@
+---
+description: Liana Banyan Platform context management rules for AI assistants
+globs:
+alwaysApply: true
+---
+
+# Liana Banyan Platform â€” AI Context Rules
+
+## MANDATORY: Context Loading
+
+At the start of EVERY session, read these files in order:
+1. `CONTEXT_MANAGEMENT/01_MASTER_CONTEXT.md` â€” THE source of truth
+2. `CONTEXT_MANAGEMENT/04_UNIFIED_AGENT_SYNC.md` â€” Current state
+3. `CONTEXT_MANAGEMENT/LETTER_SYNC_PROTOCOL.md` â€” Letter sync requirements
+4. `CONTEXT_MANAGEMENT/SOCIAL_MEDIA_POSTING_SYSTEM.md` â€” Social media setup & status
+
+## Critical Numbers (Memorize)
+
+- **Creator keeps:** 83.3% (never round to 83%)
+- **Platform margin:** Cost + 20%
+- **On $500 transaction:** Creator gets $416.67
+- **Innovations:** 1,370 (as of Feb 20, 2026)
+- **Formal claims:** 210 across 7 patent applications
+- **Crown Jewels:** 8 definite + 9 probable
+- **Membership:** $5/year
+
+## The Sweet Sixteen Initiatives
+
+1. Let's Make Dinner (Crown: Maneet Chauhan)
+2. Let's Get Groceries
+3. Let's Go Shopping (Crown: Mary Beth Laughton)
+4. Household Concierge
+5. The Family Table
+6. Tatiana Schlossburg Health Accords
+7. MSA
+8. Defense Klaus ("For Someone You Love")
+9. Rally Group (Crown: Kimberly A. Williams)
+10. VSL (Crown: Cathie Mahon)
+11. Let's Make Bread
+12. Harper Guild
+13. JukeBox
+14. Didasko (Academic)
+15. International
+16. Brass Tacks
+
+## Legal Entity
+
+- **Name:** LIANA BANYAN CORPORATION
+- **EIN:** 41-2797446
+- **State:** Wyoming C-Corp
+
+## Founder Credentials
+
+- 52-year-old Army veteran (Infantry 11B + Aviation 15A)
+- FAA Commercial Rotary Wing IFR rating
+- Father of eight
+- 21 years IT development
+- Chess: top 0.4% globally (2080s rating)
+- 37 years developing this system (1989-2026)
+
+## Key File Locations
+
+| Content | Location |
+|---------|----------|
+| Context Management | `CONTEXT_MANAGEMENT/` |
+| **Show Me & Help System** | `CONTEXT_MANAGEMENT/SHOW_ME_HELP_SYSTEM.md` |
+| All Letters | `letters/` |
+| Launch Documents | `LAUNCH_DOCUMENTS_MASTER/` |
+| **DSS the2ndsecond** | `dss-the2ndsecond/` (Show Me & Help reference impl) |
+| KNIGHT tasks | `KNIGHT_DROPZONE/` |
+| BISHOP tasks | `BISHOP_DROPZONE/` |
+| ROOK tasks | `ROOK_DROPZONE/` |
+| PAWN tasks | `PAWN_DROPZONE/` |
+| **API Keys (SENSITIVE)** | `Asteroid-ProofVault/LockBox/DOUBLESECRET.env` |
+
+## CRITICAL: Deployment Commands (MEMORIZE THIS!)
+
+### Full Deploy (All Sites)
+```powershell
+# One command to deploy everything:
+cd "C:\Users\Administrator\Documents\LianaBanyanPlatform\platform"; npm run build; firebase deploy --only hosting:main -P default; cd "..\Cephas\cephas-hugo"; hugo --minify; firebase deploy; cd "..\business-trunk"; firebase deploy --only hosting:biz
+```
+
+### Individual Site Deployments
+
+| Site | Command |
+|------|---------|
+| **lianabanyan.com** (main platform) | `cd platform; npm run build; firebase deploy --only hosting:main -P default` |
+| **cephas.lianabanyan.com** (docs) | `cd Cephas/cephas-hugo; hugo --minify; firebase deploy` |
+| **lianabanyan.biz** (business) | `cd business-trunk; firebase deploy --only hosting:biz` |
+| **the2ndsecond.com** (DSS explanation) | `cd dss-the2ndsecond; npm run build; firebase deploy --only hosting:2ndsecond -P default` |
+
+### Firebase Project Mapping
+
+| Domain | Project | Hosting Target | Source Folder |
+|--------|---------|----------------|---------------|
+| lianabanyan.com | lianabanyan-403dc | `hosting:main` â†’ lianabanyan-main | `platform/` |
+| cephas.lianabanyan.com | lianabanyan-403dc | (default) | `Cephas/cephas-hugo/` |
+| lianabanyan.biz | lianabanyan-403dc | `hosting:biz` â†’ lianabanyan-biz-trunk | `business-trunk/` |
+| lianabanyan.org | lianabanyan-403dc | `hosting:org` â†’ lianabanyan-org-trunk | TBD |
+| lianabanyan.net | lianabanyan-403dc | `hosting:net` â†’ lianabanyan-net-trunk | TBD |
+| **the2ndsecond.com** | **lianabanyan-403dc** | `hosting:2ndsecond` â†’ the2ndsecond-trunk | `dss-the2ndsecond/` |
+
+### WARNINGS
+- **lianabanyan.com** uses `hosting:main`, NOT `hosting:dotcom`
+- **the2ndsecond.com** uses `hosting:2ndsecond` â†’ the2ndsecond-trunk on **lianabanyan-403dc**
+- **mroz-74540** is STAGING only â€” never deploy production there
+- **PowerShell** uses `;` not `&&` to chain commands
+- Always run `npm run build` before deploying platform
+- Always run `hugo --minify` before deploying Cephas
+
+### If Reauth Needed
+```powershell
+firebase login --reauth
+```
+
+## Behavioral Rules
+
+1. **Never guess numbers** â€” read Master Context or ask
+2. **Use "may earn"** not "will earn" for income discussions
+3. **Note system interconnections** â€” initiatives are integrated
+4. **Update sync file** after significant accomplishments
+5. **Check Recent Corrections** before writing content
+6. **Sign off with "FOR THE KEEP!"** on major completions
+7. **File references as clickable links** â€” When referencing files for the user to open, use backtick paths like \`platform/src/App.tsx\` so they're clickable in Cursor. NEVER dump entire file contents when the user just needs to open it â€” give them a clickable link instead.
+8. **Query before assuming database state** â€” Before writing SQL fixes for migration errors, FIRST query Supabase to see what columns/tables actually exist. Do NOT guess â€” guessing costs the user money. Run `SELECT column_name FROM information_schema.columns WHERE table_name = 'tablename';` to know the actual state, THEN write the fix correctly the first time.
+9. **LETTER SYNC IS MANDATORY** â€” When ANY letter is updated in `LAUNCH_DOCUMENTS_MASTER/letters/`, the corresponding Cephas letter MUST be updated immediately. Cephas is the public mirror. See `CONTEXT_MANAGEMENT/LETTER_SYNC_PROTOCOL.md` for full mapping. Include Red Carpet CTA in all Cephas letters.
+10. **WildFire Tours vs Real Data** â€” When building UI, mock data (like a $4,250 MSA balance) should ONLY be shown when a "WildFire Tour" mode is active (for onboarding/demonstration). The default "Real Data" state for a new user must always be empty/zeroed out until they have actual participation.
+
+## Agent Roles
+
+- **KNIGHT:** Tech, code, deployment, data
+- **BISHOP:** Letters, articles, communications
+- **ROOK:** Patents, innovation extraction
+- **PAWN:** Legal review, compliance, QA
+
+## Golden Key
+
+**"Help each other help ourselves"**

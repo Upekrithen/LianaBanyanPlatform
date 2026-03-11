@@ -36,7 +36,7 @@ const BOUNTY_CATEGORIES = [
     icon: '🎨', 
     lucideIcon: Palette,
     credits: '500-2000', 
-    jobs: 0,
+    bounties: 0,
     description: 'UI/UX, graphics, branding, illustrations',
     examples: ['Landing page mockups', 'Logo design', 'Icon sets', 'Marketing materials'],
     link: '/help-wanted'
@@ -46,7 +46,7 @@ const BOUNTY_CATEGORIES = [
     icon: '💻', 
     lucideIcon: Code,
     credits: '1000-5000', 
-    jobs: 0,
+    bounties: 0,
     description: 'Web, mobile, backend, integrations',
     examples: ['React components', 'API integrations', 'Bug fixes', 'Feature builds'],
     link: '/help-wanted'
@@ -56,7 +56,7 @@ const BOUNTY_CATEGORIES = [
     icon: '✍️', 
     lucideIcon: PenTool,
     credits: '200-1000', 
-    jobs: 0,
+    bounties: 0,
     description: 'Content, copy, documentation, scripts',
     examples: ['Blog posts', 'Documentation', 'Video scripts', 'Email sequences'],
     link: '/help-wanted'
@@ -66,7 +66,7 @@ const BOUNTY_CATEGORIES = [
     icon: '🗺️', 
     lucideIcon: MapPin,
     credits: '50-500', 
-    jobs: 24,
+    bounties: 24,
     description: 'Gather local pricing data to enable Volume Dumps',
     examples: ['Price check local print shops', 'Find communal kitchens', 'Verify local business hours'],
     link: '/salt-mines'
@@ -76,7 +76,7 @@ const BOUNTY_CATEGORIES = [
     icon: '🖨️', 
     lucideIcon: Box,
     credits: '100-1500', 
-    jobs: 14,
+    bounties: 14,
     description: '3D Printing, QR Deck Cards, Local Delivery',
     examples: ['Print 500 QR Cards', '3D Print HexIsle Medallions', 'Local Delivery Setup'],
     link: '/salt-mines'
@@ -86,7 +86,7 @@ const BOUNTY_CATEGORIES = [
     icon: '🎬', 
     lucideIcon: Video,
     credits: '500-3000', 
-    jobs: 0,
+    bounties: 0,
     description: 'Editing, motion graphics, tutorials',
     examples: ['Explainer videos', 'Social clips', 'Tutorials', 'Animations'],
     link: '/help-wanted'
@@ -96,7 +96,7 @@ const BOUNTY_CATEGORIES = [
     icon: '🎵', 
     lucideIcon: Music,
     credits: '300-1500', 
-    jobs: 0,
+    bounties: 0,
     description: 'Music, podcasts, voiceover, sound design',
     examples: ['Podcast editing', 'Jingles', 'Voiceover', 'Sound effects'],
     link: '/help-wanted'
@@ -106,7 +106,7 @@ const BOUNTY_CATEGORIES = [
     icon: '📐', 
     lucideIcon: Box,
     credits: '800-4000', 
-    jobs: 0,
+    bounties: 0,
     description: 'Modeling, rendering, product design',
     examples: ['Product renders', '3D printing files', 'Architectural viz', 'Game assets'],
     link: '/help-wanted'
@@ -116,7 +116,7 @@ const BOUNTY_CATEGORIES = [
     icon: '🖨️', 
     lucideIcon: Box,
     credits: '1000-5000', 
-    jobs: 0,
+    bounties: 0,
     description: 'Volume dump print bounties for QR Cue Cards',
     examples: ['Business cards', 'NFC plastic cards', 'Metal cards', 'Stickers'],
     link: '/help-wanted'
