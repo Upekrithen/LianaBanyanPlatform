@@ -114,6 +114,7 @@ export function ContainerFlip({
           height: "100%",
           transition: "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
           transformStyle: "preserve-3d",
+          WebkitTransformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
@@ -121,6 +122,7 @@ export function ContainerFlip({
         <div
           style={{
             backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
             position: "relative",
             width: "100%",
             height: "100%",
@@ -133,6 +135,7 @@ export function ContainerFlip({
         <div
           style={{
             backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
             position: "absolute",
             inset: 0,
@@ -144,6 +147,13 @@ export function ContainerFlip({
           role="region"
           aria-label={activeTopic ? `Details: ${activeTopic.title} — click anywhere to go back` : "Card back"}
           onClick={flipBack}
+          tabIndex={isFlipped ? 0 : -1}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              flipBack();
+            }
+          }}
         >
           {activeTopic && (
             <div className="h-full rounded-lg border-2 bg-card shadow-md p-5 flex flex-col">
@@ -329,6 +339,7 @@ export function ContainerFlipControlled({
           height: "100%",
           transition: "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
           transformStyle: "preserve-3d",
+          WebkitTransformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
@@ -341,6 +352,7 @@ export function ContainerFlipControlled({
         <div
           style={{
             backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
             position: "absolute",
             inset: 0,
@@ -352,6 +364,13 @@ export function ContainerFlipControlled({
           role="region"
           aria-label={activeTopic ? `Details: ${activeTopic.title} — click anywhere to go back` : "Card back"}
           onClick={flipBack}
+          tabIndex={isFlipped ? 0 : -1}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              flipBack();
+            }
+          }}
         >
           {activeTopic && (
             <div className="h-full rounded-lg border-2 bg-card shadow-md p-5 flex flex-col">

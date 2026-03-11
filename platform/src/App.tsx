@@ -11,6 +11,8 @@ import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UnifiedNavigation } from "@/components/UnifiedNavigation";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import MoneyPenny from "./pages/MoneyPenny";
+import Academy from "./pages/Academy";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import TikTokCallback from "./pages/TikTokCallback";
@@ -784,8 +786,10 @@ const App = () => (
                         <Route path="/campaign-production/:workstationId" element={<ProtectedRoute><CampaignProduction /></ProtectedRoute>} />
                         <Route path="/project-landing/:projectId/:segmentSlug?" element={<ProjectLanding />} />
                         <Route path="/landing-manager/:projectId" element={<ProtectedRoute><LandingPageManager /></ProtectedRoute>} />
-                        <Route path="/briefcase" element={<ProtectedRoute><Briefcase /></ProtectedRoute>} />
-                        <Route path="/hexisle-dashboard" element={<ProtectedRoute><HexisleDashboard /></ProtectedRoute>} />
+                          <Route path="/briefcase" element={<ProtectedRoute><Briefcase /></ProtectedRoute>} />
+                          <Route path="/moneypenny" element={<ProtectedRoute><MoneyPenny /></ProtectedRoute>} />
+                          <Route path="/academy" element={<ExplorerRoute><Academy /></ExplorerRoute>} />
+                          <Route path="/hexisle-dashboard" element={<ProtectedRoute><HexisleDashboard /></ProtectedRoute>} />
                         
                         {/* Initiative Project Routes */}
                         <Route path="/initiatives" element={<ExplorerRoute><InitiativeProjectsPage /></ExplorerRoute>} />

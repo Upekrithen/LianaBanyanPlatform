@@ -1,5 +1,5 @@
-﻿/**
- * The Salt Mines - Get a Job Progressive Disclosure
+/**
+ * The Salt Mines - Fulfill a Bounty Progressive Disclosure
  * 
  * One of the six halls in the Hexagon Senate.
  * Progressive disclosure from bounties → patent ownership → $5 membership
@@ -146,7 +146,7 @@ interface BountyCategory {
   icon: string;
   lucideIcon: React.ElementType;
   credits: string;
-  jobs: number;
+  bounties: number;
   description: string;
   examples: string[];
   link: string;
@@ -185,7 +185,7 @@ function FlippableBountyCard({ category, delay }: { category: BountyCategory; de
           </div>
           <p className="text-white/60 text-sm mb-3">{category.description}</p>
           <div className="flex justify-between text-sm">
-            <span className="text-white/60">{category.jobs > 0 ? `${category.jobs} open bounties` : 'Coming soon'}</span>
+            <span className="text-white/60">{category.bounties > 0 ? `${category.bounties} open bounties` : 'Coming soon'}</span>
             <span className="text-primary font-medium">{category.credits} Credits</span>
           </div>
           <div className="absolute bottom-2 right-2 text-white/20 text-xs flex items-center gap-1">
@@ -296,7 +296,7 @@ export default function SaltMines() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-bold text-white mb-6"
           >
-            Get a Job. Keep <span className="text-primary">83.3%</span>.
+            Fulfill a Bounty. Keep <span className="text-primary">83.3%</span>.
           </motion.h1>
           
           <motion.p
@@ -306,7 +306,7 @@ export default function SaltMines() {
             className="text-xl text-white/70 mb-8 max-w-2xl mx-auto"
           >
             Real work. Real pay. No middleman taking half. Browse bounties, 
-            post your own, and discover why this platform exists.
+            post your own, and discover why this platform exists. You are an independent participant. The platform does not dictate your hours, methods, or guarantee bounty acceptance.
           </motion.p>
 
           <motion.div
@@ -392,6 +392,22 @@ export default function SaltMines() {
 
           <div className="mt-12 p-6 rounded-xl bg-gradient-to-r from-amber-500/10 to-amber-600/10 border border-amber-500/30">
             <div className="flex items-center gap-3 mb-4">
+              <Shield className="h-8 w-8 text-amber-500" />
+              <h3 className="text-2xl font-bold text-amber-500">The Three-Human Rule</h3>
+            </div>
+            <p className="text-slate-300 mb-6">
+              To ensure quality and prevent AI slop, every bounty requires three humans: the <strong>Creator</strong> (who does the work), the <strong>Peer</strong> (who reviews it), and the <strong>Approver</strong> (who posted the bounty).
+            </p>
+            <div className="bg-black/20 p-4 rounded-lg border border-amber-500/20 mb-6">
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-amber-200/80">
+                  <strong>Peer Review Protocol:</strong> Peers are assigned via randomized Noid routing to prevent collusion. Staked Marks are required to accept a Peer Review bounty. If the Approver rejects the work due to poor Peer review, the Peer's stake is slashed.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mb-4 mt-8">
               <Shield className="h-8 w-8 text-amber-500" />
               <h3 className="text-2xl font-bold text-amber-500">Captain's Collateral & Print Bounties</h3>
             </div>
@@ -588,10 +604,44 @@ export default function SaltMines() {
               <Sparkles className="w-8 h-8 text-primary mb-4" />
               <h4 className="font-semibold text-white mb-2">The Point</h4>
               <p className="text-white/80">
-                <strong>If you want to build a business, these ARE valuable.</strong> 
+                <strong>If you want to build a business, these ARE valuable.</strong>
                 Credits buy real services: design, development, marketing, manufacturing.
               </p>
             </div>
+          </div>
+
+          {/* Barter Wash Tax Explainer */}
+          <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+            <div className="flex items-center gap-3 mb-4">
+              <Scale className="w-8 h-8 text-emerald-400" />
+              <h3 className="text-xl font-bold text-emerald-300">The Barter Wash</h3>
+            </div>
+            <p className="text-white/80 mb-4">
+              Yes, the IRS taxes barter income. If you earn 1,000 in Marks, that's taxable.{' '}
+              <strong className="text-emerald-300">BUT</strong>, if you spend those 1,000 Marks to hire
+              someone for your project, that's a deductible business expense.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 mb-4">
+              <div className="p-4 rounded-lg bg-black/20 border border-emerald-500/20 text-center">
+                <div className="text-2xl font-bold text-white mb-1">+1,000</div>
+                <div className="text-xs text-white/60">Marks Earned</div>
+                <div className="text-xs text-emerald-400">Taxable Income</div>
+              </div>
+              <div className="p-4 rounded-lg bg-black/20 border border-emerald-500/20 text-center">
+                <div className="text-2xl font-bold text-white mb-1">−1,000</div>
+                <div className="text-xs text-white/60">Marks Spent</div>
+                <div className="text-xs text-emerald-400">Business Expense</div>
+              </div>
+              <div className="p-4 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-center">
+                <div className="text-2xl font-bold text-emerald-300 mb-1">= $0</div>
+                <div className="text-xs text-white/60">Net Tax Impact</div>
+                <div className="text-xs text-emerald-400">The Barter Wash</div>
+              </div>
+            </div>
+            <p className="text-sm text-white/60 italic">
+              The platform tracks both sides automatically for you.
+              Consult your own tax professional for advice specific to your situation.
+            </p>
           </div>
         </ProgressiveSection>
 

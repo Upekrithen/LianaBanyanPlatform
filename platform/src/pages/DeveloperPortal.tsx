@@ -23,6 +23,8 @@ import {
   Lightbulb,
   Terminal,
   Puzzle,
+  Briefcase,
+  Link as LinkIcon
 } from "lucide-react";
 
 const DEVELOPER_SECTIONS = [
@@ -164,6 +166,40 @@ export default function DeveloperPortal() {
               </Card>
             );
           })}
+        </div>
+
+        {/* Integration Ecosystem */}
+        <div className="bg-muted/30 border-y py-16 mb-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl font-bold mb-4">Developer Bounty Marketplace</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Innovation #1560: Connect external talent pools directly to Liana Banyan projects. Build plugins that sync our internal bounty system with external marketplaces.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { name: "Indeed Integration", status: "Bounty Open", reward: "500 Marks", icon: Briefcase },
+                { name: "LinkedIn Jobs Sync", status: "Bounty Open", reward: "450 Marks", icon: LinkIcon },
+                { name: "Fiverr Connect", status: "In Progress", reward: "Claimed", icon: Puzzle },
+                { name: "Guru Bridge", status: "Bounty Open", reward: "300 Marks", icon: Briefcase },
+              ].map((plugin) => (
+                <Card key={plugin.name} className="flex flex-col items-center text-center p-6 hover:border-primary/50 transition-colors cursor-pointer">
+                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                    <plugin.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2">{plugin.name}</h3>
+                  <div className="mt-auto flex flex-col gap-2 w-full">
+                    <span className="text-xs text-muted-foreground">{plugin.status}</span>
+                    <Button variant={plugin.status === "Bounty Open" ? "default" : "secondary"} size="sm" className="w-full">
+                      {plugin.reward}
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Contribution Paths */}

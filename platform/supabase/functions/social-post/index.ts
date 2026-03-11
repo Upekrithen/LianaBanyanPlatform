@@ -275,16 +275,52 @@ async function postToTwitter(
   imageUrl?: string
 ): Promise<PostResponse> {
   try {
-    // TODO: Handle image upload if imageUrl provided
-    // Twitter requires uploading media separately first
+    let mediaId: string | undefined;
     
+    // Handle image upload if imageUrl provided
+    // Twitter requires uploading media separately first
+    if (imageUrl) {
+      try {
+        // Fetch the image data
+        const imageRes = await fetch(imageUrl);
+        if (imageRes.ok) {
+          const imageBlob = await imageRes.blob();
+          const formData = new FormData();
+          formData.append('media', imageBlob);
+          
+          // Upload to Twitter
+          const uploadRes = await fetch('https://upload.twitter.com/1.1/media/upload.json', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+            },
+            body: formData,
+          });
+          
+          if (uploadRes.ok) {
+            const uploadData = await uploadRes.json();
+            mediaId = uploadData.media_id_string;
+          } else {
+            console.error('Twitter media upload failed:', await uploadRes.text());
+          }
+        }
+      } catch (mediaErr) {
+        console.error('Error uploading media to Twitter:', mediaErr);
+      }
+    }
+    
+    const tweetPayload: any = { text };
+    if (mediaId) {
+      tweetPayload.media = { media_ids: [mediaId] };
+    }
+
     const response = await fetch('https://api.twitter.com/2/tweets', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify(tweetPayload),
     });
 
     if (!response.ok) {

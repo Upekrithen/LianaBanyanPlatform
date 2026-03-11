@@ -111,7 +111,29 @@ serve(async (req) => {
             
             // Send notification to admins
             console.log(`Operation ${failure.id} requires manual review after ${newAttemptCount} attempts`);
-            // TODO: Send email/notification to admins
+            const resendApiKey = Deno.env.get('RESEND_API_KEY');
+            if (resendApiKey) {
+              try {
+                await fetch('https://api.resend.com/emails', {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${resendApiKey}`,
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    from: 'system@lianabanyan.org',
+                    to: 'admin@lianabanyan.org',
+                    subject: `[ACTION REQUIRED] Operation ${failure.id} Failed`,
+                    html: `<p>Operation <strong>${failure.id}</strong> of type <strong>${failure.operation_type}</strong> has failed ${newAttemptCount} times and requires manual review.</p><p>Entity ID: ${failure.entity_id}</p>`
+                  })
+                });
+                console.log(`Admin notification sent for failure ${failure.id}`);
+              } catch (emailError) {
+                console.error(`Failed to send admin notification for failure ${failure.id}:`, emailError);
+              }
+            } else {
+              console.warn('RESEND_API_KEY not set, skipping admin email notification');
+            }
           } else {
             results.failed++;
           }

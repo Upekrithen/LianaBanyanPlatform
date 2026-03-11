@@ -24,9 +24,9 @@ export const HexelViewer3D = () => {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Hexel Component: Slotted Top Capstone</CardTitle>
+            <CardTitle>Hexel Component: SlottedTop Universal Adapter</CardTitle>
             <CardDescription>
-              3D model of the hexagonal capstone piece (36-48mm tower component)
+              3D model of the universal hex terrain adapter (Innovation #1552)
             </CardDescription>
           </div>
           <Badge variant="outline">Interactive 3D Model</Badge>
@@ -65,10 +65,10 @@ export const HexelViewer3D = () => {
             <strong>Controls:</strong> Left-click and drag to rotate • Right-click and drag to pan • Scroll to zoom
           </p>
           <div className="flex gap-2 flex-wrap">
-            <Badge variant="secondary">Capstone Component</Badge>
-            <Badge variant="secondary">Hexagonal Tower</Badge>
-            <Badge variant="secondary">36-48mm Height</Badge>
-            <Badge variant="secondary">3D Printable</Badge>
+            <Badge variant="secondary">32-35mm Compatible</Badge>
+            <Badge variant="secondary">Lithographic Compliant Pincers</Badge>
+            <Badge variant="secondary">6A- Torque Safety Margin</Badge>
+            <Badge variant="secondary">3D Printable (FDM/Resin)</Badge>
           </div>
         </div>
       </CardContent>

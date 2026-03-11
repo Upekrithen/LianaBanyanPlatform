@@ -38,12 +38,28 @@ Deno.serve(async (req) => {
           confirm_url: confirmUrl,
         });
 
-        // TODO: Replace with actual email service (SendGrid, Resend, etc.)
-        // await sendEmail({
-        //   to: candidate.email,
-        //   subject: 'Your LianaBanyan membership expires in 7 days',
-        //   html: `Click here to continue: <a href="${confirmUrl}">Extend Membership</a>`,
-        // });
+        // Send actual email using Resend
+        const resendApiKey = Deno.env.get('RESEND_API_KEY');
+        if (resendApiKey) {
+          const res = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${resendApiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              from: 'membership@lianabanyan.org',
+              to: candidate.email,
+              subject: 'Your Liana Banyan membership expires in 7 days',
+              html: `<p>Your Liana Banyan membership is expiring soon.</p><p>Click here to continue: <a href="${confirmUrl}">Extend Membership</a></p>`
+            })
+          });
+          if (!res.ok) {
+            throw new Error(`Resend API error: ${await res.text()}`);
+          }
+        } else {
+          console.warn('RESEND_API_KEY not set, skipping actual email send');
+        }
 
         // Mark reminder as sent
         await supabase.rpc('mark_reminder_sent', { _user_id: candidate.user_id });

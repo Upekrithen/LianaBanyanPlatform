@@ -555,7 +555,71 @@ export default function CampaignProduction() {
                 <HexisleCampaignManager />
                 <HexelViewer3D />
                 
-                {/* Brainstorm: HexIsle as Life Improvement Game */}
+                  {/* Brainstorm: HexIsle as Life Improvement Game */}
+                  <Collapsible>
+                    <Card>
+                      <CollapsibleTrigger className="w-full">
+                        <CardHeader className="flex flex-row items-center justify-between">
+                          <CardTitle className="text-lg">SlottedTop Kickstarter Draft</CardTitle>
+                          <Button variant="ghost" size="sm">Expand</Button>
+                        </CardHeader>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <CardContent className="space-y-4">
+                          <div className="bg-muted p-4 rounded-md whitespace-pre-wrap font-mono text-sm">
+{`# KICKSTARTER CAMPAIGN DRAFT: SLOTTEDTOP (HEXISLE CAPSTONE)
+**Date:** March 10, 2026
+**Project:** SlottedTop Universal Hex Terrain Adapter
+**Campaign Goal:** $10,000 (Break-even threshold: 500 members)
+**Duration:** 30 Days
+
+## 1. CAMPAIGN COPY & STRUCTURE
+
+### The Hook (BLUF)
+**Title:** SlottedTop: The Universal Hex Terrain Adapter (HexIsle System)
+**Subtitle:** Snap any 32-35mm flat hex terrain together. No glue, no magnets, no wobble. The physical engine of a cooperative economy.
+
+### The Problem
+Tabletop terrain is fragmented. You have beautiful 3D printed hexes, but they slide around the table. Magnets are expensive and tedious to install. OpenLock clips are permanent and break easily. You want a modular battlefield that stays together during play but packs away flat.
+
+### The Solution (The SlottedTop)
+Enter the **SlottedTop** (Patent Innovation #1552). Using lithographic compliant pincers, it snaps onto ANY flat hex terrain tile in the 32-35mm range. 
+*   **Universal:** Works with existing BattleTech terrain, Open WarHex, and custom STLs.
+*   **Mechanical:** Uses a 6A- torque safety margin. Twist-lock couplers and compliant seals mean it holds tight but releases with a simple twist.
+*   **The First of Many:** This is Component #1 of the HexIsle system—a 60mm flat-to-flat hexagonal terrain platform that serves as the physical engine for the Liana Banyan cooperative economy.
+
+### The "Why" (The Cooperative Engine)
+We aren't just selling a piece of plastic. We are proving a distributed manufacturing pipeline. By backing this campaign, you are hiring the **Prototyper Guild** (our decentralized network of 3D printers). You aren't just buying terrain; you are participating in a Cost+20% cooperative economy where the creators keep 83.3% of the value.
+
+## 2. REWARD TIER STRUCTURE
+
+**Tier 1: The Scout ($1)**
+*   **Reward:** Access to backer updates and the Pledge Manager.
+*   **Bonus:** 1 Liana Banyan Joule (Forever Stamp) to use on the platform.
+
+**Tier 2: The Maker (STL Only) ($15)**
+*   **Reward:** The official SlottedTop STL file (optimized for FDM and Resin).
+*   **Bonus:** Commercial license to print and sell on the Liana Banyan platform (Cost+20% rules apply).
+
+**Tier 3: The Skirmisher (Physical Starter) ($25)**
+*   **Reward:** 20x Physical SlottedTop adapters. Printed in high-durability PETG by the Prototyper Guild.
+*   **Shipping:** US Domestic included. International calculated in Pledge Manager.
+
+**Tier 4: The Battalion (Physical Core) ($50)**
+*   **Reward:** 50x Physical SlottedTop adapters + 10x Blank 60mm Hex Bases.
+*   **Bonus:** "Alpha Adopter" badge on the Liana Banyan platform (First 10,000 members).
+
+**Tier 5: The Founding 300 ($250) - LIMITED TO 300**
+*   **Reward:** 100x Physical SlottedTop adapters + 20x Blank Hex Bases + 1x Golden Lotus mechanical escapement prototype.
+*   **Bonus:** Direct access to the HexIsle design council. You are one of the 300 Spartans proving this economic model.
+`}
+                          </div>
+                        </CardContent>
+                      </CollapsibleContent>
+                    </Card>
+                  </Collapsible>
+
+                  {/* Brainstorm: HexIsle as Life Improvement Game */}
                 <Collapsible>
                   <Card>
                     <CollapsibleTrigger className="w-full">

@@ -69,7 +69,7 @@ const VALUE_PROP_TOPICS: FlipTopic[] = [
     quickFacts:
       "The platform uses a patent sponsorship model — not venture capital. Your product is backed by the IP portfolio (928+ patent claims). Sponsors contribute to pools, not to your company. You keep full control. The Cost+20% pricing model means you keep 83.3% of every sale.",
     intermediate:
-      "Two sponsorship mechanisms: (1) Global Sponsor Pool — diversified across all platform projects, balanced quarterly. (2) Patent Buckets — concentrated funding for specific innovations. The 60/20/20 split: 60% platform operations, 20% creator allocation, 20% external capital pool. All stakes are capped at $10M with splitting for accessibility. This is service sponsorship — sponsors receive platform benefits, not equity.",
+      "Two sponsorship mechanisms: (1) Global Sponsor Pool — diversified across all platform projects, balanced quarterly. (2) Patent Buckets — concentrated funding for specific innovations. The 60/20/20 split: 60% platform operations, 20% creator allocation, 20% external capital pool. All stakes are capped at $10M with splitting for accessibility. This is service sponsorship — sponsors receive platform benefits, not securities.",
     deepLink: {
       label: "Read the Economics",
       route: "/economics",
@@ -91,9 +91,9 @@ const VALUE_PROP_TOPICS: FlipTopic[] = [
     title: "Bring Dreams to Life",
     icon: Heart,
     quickFacts:
-      "Back projects from real creators. You receive the product or service you preordered — that is the primary value. You also earn a project medallion (a notarized record of your contribution) and Joules (internal platform working power). No speculation. No equity. Just supporting good work and getting real things in return.",
+      "Back projects from real creators. You receive the product or service you preordered — that is the primary value. You also earn a project medallion (a notarized record of your contribution) and Joules (internal platform working power). No speculation. No securities. Just supporting good work and getting real things in return.",
     intermediate:
-      "Two tracks: Product-Only Track (just get what you ordered) or Backer Track (product + medallion + Joules). Joules use a \"forever stamp\" mechanic — they lock the exchange rate at the moment of earning, so 1 Joule always buys what it could when you earned it. Joules never become cash, never turn into equity, and their value does not change based on project performance. This is service sponsorship, not financial speculation.",
+      "Two tracks: Product-Only Track (just get what you ordered) or Backer Track (product + medallion + Joules). Joules use a \"forever stamp\" mechanic — they lock the exchange rate at the moment of earning, so 1 Joule always buys what it could when you earned it. Joules never become cash, never turn into securities, and their value does not change based on project performance. This is service sponsorship, not financial speculation.",
     deepLink: {
       label: "Learn About Backing",
       route: "/crows-nest",

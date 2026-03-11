@@ -1,0 +1,4232 @@
+[
+  {
+    "innovation_number": 131,
+    "title": "Skill Retention Across Realms",
+    "core_claim": "Learning persistence from simulation to live",
+    "category": "Education",
+    "patent_bag": "Bag 10",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 132,
+    "title": "Learning Analytics from Ghost World",
+    "core_claim": "Behavior-based personalized guidance",
+    "category": "Analytics",
+    "patent_bag": "Bag 10",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 133,
+    "title": "Physical State as Game State",
+    "core_claim": "Character position represents life state (upright=alive, supine=dead)",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 134,
+    "title": "Mechanical Hit Point Counter",
+    "core_claim": "Integrated counter in character base with automatic advancement",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 135,
+    "title": "Bend-Back Damage Mechanism",
+    "core_claim": "Knee-bend with piston-connected counter and spring return",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 136,
+    "title": "Drachma Token Economy",
+    "core_claim": "In-game currency for character investment and trading",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 137,
+    "title": "Combat Resolution Without Dice",
+    "core_claim": "Physical actions cause game effects directly",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 138,
+    "title": "Rules Embedded in Physics",
+    "core_claim": "Mechanics enforce rules - can't cheat physics",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 139,
+    "title": "Visual Damage Representation",
+    "core_claim": "Character bending shows damage taken",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 140,
+    "title": "Ratchet Prevention Mechanism",
+    "core_claim": "One-way counter prevents accidental healing",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 141,
+    "title": "View Window HP Display",
+    "core_claim": "Visible remaining hit points on character",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 142,
+    "title": "Child-Friendly Combat",
+    "core_claim": "System playable by 5-year-olds without rule memorization",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 143,
+    "title": "Tereno Water Table Integration",
+    "core_claim": "Diceless combat on hydraulic game surface",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 144,
+    "title": "Character Stat Encoding",
+    "core_claim": "Physical character properties encode game stats",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 145,
+    "title": "Formation-Based Combat",
+    "core_claim": "Physical positioning affects combat outcomes",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 146,
+    "title": "Zone Control Mechanics",
+    "core_claim": "Territorial influence through physical presence",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 147,
+    "title": "Morale System Physical Representation",
+    "core_claim": "Unit confidence shown through character posture",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 148,
+    "title": "Supply Line Mechanics",
+    "core_claim": "Resource logistics through physical tokens",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 149,
+    "title": "Terrain Effects Integration",
+    "core_claim": "Water table surface affects combat",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 150,
+    "title": "Campaign Mode Progression",
+    "core_claim": "Linked battles with persistent state",
+    "category": "Gaming",
+    "patent_bag": "Bag 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 151,
+    "title": "Codebreakers Testing System",
+    "core_claim": "Distributed software testing with MARKS currency and Thread Verification for engagement",
+    "category": "QA",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 152,
+    "title": "The 300 Framework",
+    "core_claim": "Fixed-capacity organizational framework with 6 Domain Circles and Shields/Spears/Phalanx tiers",
+    "category": "Governance",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 153,
+    "title": "Testing the Waters Protocol",
+    "core_claim": "Three-phase crowdfunding pre-clearance with Ghost Credits and Forever Stamps",
+    "category": "Fintech",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 154,
+    "title": "Boaz Principle (Expanded)",
+    "core_claim": "Automated corner allocation of project yields to Newcomer Benefit Pool",
+    "category": "Economics",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 155,
+    "title": "Company Island Program",
+    "core_claim": "Corporate labor allocation: 20% workforce contribution for 40% platform discounts",
+    "category": "Corporate",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 156,
+    "title": "Challenge-Based Hiring System",
+    "core_claim": "Red Queen AI task generation with Steward oversight and performance-based retention",
+    "category": "HR",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 157,
+    "title": "Golden Wrapper Treasure Hunt (Expanded)",
+    "core_claim": "Community voting-based discovery with MARKS Vote Multipliers",
+    "category": "Gamification",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 158,
+    "title": "Side Quests System",
+    "core_claim": "Fractional contribution with diminishing multipliers (0.6x, 0.5x, 0.4x)",
+    "category": "Economics",
+    "patent_bag": "Batch 1",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 159,
+    "title": "Chronicler's Hall (Expanded)",
+    "core_claim": "Story-driven campaign creation with Boaz Principle yield allocation",
+    "category": "Content",
+    "patent_bag": "Batch 2",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 160,
+    "title": "Realm Registry",
+    "core_claim": "Comprehensive project tracking with ownership distribution and provenance chain",
+    "category": "Infrastructure",
+    "patent_bag": "Batch 2",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 161,
+    "title": "College of Hard Knocks",
+    "core_claim": "AI-driven skills training with practical challenges from platform tasks",
+    "category": "Education",
+    "patent_bag": "Batch 2",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 162,
+    "title": "Production Pipeline Protocol",
+    "core_claim": "Structured content production with Star Chamber quality verification",
+    "category": "Production",
+    "patent_bag": "Batch 2",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 163,
+    "title": "MARKS Currency Protocol",
+    "core_claim": "Ecosystem-specific digital currency with Utility-Gating and Retention Burn",
+    "category": "Economics",
+    "patent_bag": "Batch 3",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 164,
+    "title": "12-Door Transition Logic",
+    "core_claim": "Stage-gate project management with Red Queen AI validation",
+    "category": "Workflow",
+    "patent_bag": "Batch 3",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 165,
+    "title": "Asteroid-Proof Vault Architecture",
+    "core_claim": "Seed-to-Fruit data storage with geographic redundancy",
+    "category": "Infrastructure",
+    "patent_bag": "Batch 3",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 166,
+    "title": "Steward/Red Queen Oversight Loop",
+    "core_claim": "Hybrid AI/human management with 83.3% retention constraint",
+    "category": "AI",
+    "patent_bag": "Batch 3",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 167,
+    "title": "Rebel Coalition Voting Engine",
+    "core_claim": "Decentralized feature prioritization for Rebel/Colony tier members",
+    "category": "Governance",
+    "patent_bag": "Batch 3",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 168,
+    "title": "20% Partnership Revenue Split",
+    "core_claim": "Automated 83.3/16.7 split with Cost Verification",
+    "category": "Economics",
+    "patent_bag": "Batch 3",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 169,
+    "title": "Cue Card Viral Marketing System",
+    "core_claim": "Multi-channel customizable digital cue cards with social proof",
+    "category": "Marketing",
+    "patent_bag": "Batch 4",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 170,
+    "title": "Medallion Viral Share System",
+    "core_claim": "Token-based viral unlocking with viral tree visualization",
+    "category": "Marketing",
+    "patent_bag": "Batch 4",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 171,
+    "title": "Campaign Viral Windows",
+    "core_claim": "Time-bounded viral campaigns with configurable multipliers",
+    "category": "Marketing",
+    "patent_bag": "Batch 4",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 172,
+    "title": "Golden Wrapper Viral Thresholds",
+    "core_claim": "Engagement-triggered reward multipliers with S-tier status",
+    "category": "Marketing",
+    "patent_bag": "Batch 4",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 173,
+    "title": "QR-Gated Cue Card Marketing",
+    "core_claim": "QR-embedded viral marketing with gate wrapper access control",
+    "category": "Marketing",
+    "patent_bag": "Batch 4",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 174,
+    "title": "HexIsle Game Ecosystem (Expanded)",
+    "core_claim": "Hexagonal grid gaming with 12 cities, quest systems, and physical table integration",
+    "category": "Gaming",
+    "patent_bag": "Batch 5",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 175,
+    "title": "Guild System (Expanded)",
+    "core_claim": "Organizational management with $2K collective stake and hierarchical structure",
+    "category": "Community",
+    "patent_bag": "Batch 5",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 176,
+    "title": "Tribe System",
+    "core_claim": "Chosen family networks with charter management and vessel evolution",
+    "category": "Community",
+    "patent_bag": "Batch 5",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 177,
+    "title": "$5 Santa Initiative",
+    "core_claim": "Year-round micro-donations with tiered giving and workshop voting",
+    "category": "Initiative",
+    "patent_bag": "Batch 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 178,
+    "title": "Let's Make Dinner Enhanced System",
+    "core_claim": "Community meal coordination with chef network and batch cooking",
+    "category": "Initiative",
+    "patent_bag": "Batch 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 179,
+    "title": "Defense Klaus Safety Network (Expanded)",
+    "core_claim": "$6 bracelet with legal defense fund and Rally Group integration",
+    "category": "Initiative",
+    "patent_bag": "Batch 6",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 180,
+    "title": "Wave Pricing System",
+    "core_claim": "Dynamic pricing with production waves and surge multipliers",
+    "category": "Economics",
+    "patent_bag": "Batch 7",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 181,
+    "title": "Bifrost Portal Hub",
+    "core_claim": "Portal navigation with FarCaster key access control",
+    "category": "Navigation",
+    "patent_bag": "Batch 7",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 182,
+    "title": "Realm Toggle System",
+    "core_claim": "Multi-realm platform (Ghost/Material/HexIsle) with currency conversion",
+    "category": "Infrastructure",
+    "patent_bag": "Batch 7",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 183,
+    "title": "Secondary Marketplace",
+    "core_claim": "Fractional ownership trading with escrow and ownership transfer",
+    "category": "Economics",
+    "patent_bag": "Batch 7",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 184,
+    "title": "Vouch Pledge System",
+    "core_claim": "Steward backing with escrow and fraud protection pool",
+    "category": "Trust",
+    "patent_bag": "Batch 7",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 185,
+    "title": "AI Content Attribution Tiered Icons",
+    "core_claim": "Seedling/Growing/Tree icons for AI involvement levels",
+    "category": "Content",
+    "patent_bag": "Batch 9",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 186,
+    "title": "AI Content Replacement Workflow",
+    "core_claim": "Systematic replacement of AI content with human alternatives",
+    "category": "Content",
+    "patent_bag": "Batch 9",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 187,
+    "title": "Content Provenance Chain",
+    "core_claim": "Complete history from AI generation through human replacement",
+    "category": "Content",
+    "patent_bag": "Batch 9",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 188,
+    "title": "Reputation-Weighted Flamer Dampening",
+    "core_claim": "Time-decay and anti-gaming for bad-faith actors",
+    "category": "Governance",
+    "patent_bag": "Batch 9",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 189,
+    "title": "Consistent Virtual Mascot Character System",
+    "core_claim": "Unified character system across all platform content",
+    "category": "Branding",
+    "patent_bag": "Batch 9",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 190,
+    "title": "First-Person CSS 3D Navigation World",
+    "core_claim": "Pure CSS 3D navigation without WebGL",
+    "category": "UX",
+    "patent_bag": "Batch 9",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 191,
+    "title": "Codebreakers Testing (Patent Version)",
+    "core_claim": "Claims 1-12: Thread Verification with MARKS currency",
+    "category": "QA",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 192,
+    "title": "300 Framework (Patent Version)",
+    "core_claim": "Claims 13-22: Domain Circles with Crown/Blessing distinctions",
+    "category": "Governance",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 193,
+    "title": "Testing Waters (Patent Version)",
+    "core_claim": "Claims 23-30: Ghost Credits and Forever Stamps",
+    "category": "Fintech",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 194,
+    "title": "Boaz Principle (Patent Version)",
+    "core_claim": "Claims 31-35: Corner Allocation engine",
+    "category": "Economics",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 195,
+    "title": "Company Island (Patent Version)",
+    "core_claim": "Claims 36-45: Rebel to Empire progression",
+    "category": "Corporate",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 196,
+    "title": "Challenge-Based Hiring (Patent Version)",
+    "core_claim": "Claims 46-53: Red Queen with Steward oversight",
+    "category": "HR",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 197,
+    "title": "Golden Wrapper (Patent Version)",
+    "core_claim": "Claims 54-59: Community-driven discovery",
+    "category": "Gamification",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 198,
+    "title": "Side Quests (Patent Version)",
+    "core_claim": "Claims 60-65: Diminishing multiplier system",
+    "category": "Economics",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 199,
+    "title": "Chronicler's Hall (Patent Version)",
+    "core_claim": "Claims 66-73: Boaz-integrated campaign creation",
+    "category": "Content",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 200,
+    "title": "Realm Registry (Patent Version)",
+    "core_claim": "Claims 74-79: Provenance chain for projects",
+    "category": "Infrastructure",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 201,
+    "title": "College of Hard Knocks (Patent Version)",
+    "core_claim": "Claims 80-84: AI instructor with competency tracking",
+    "category": "Education",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 202,
+    "title": "Production Pipeline (Patent Version)",
+    "core_claim": "Claims 85-92: Star Chamber integration",
+    "category": "Production",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 203,
+    "title": "MARKS Currency (Patent Version)",
+    "core_claim": "Claims 93-97: Retention Burn protocol",
+    "category": "Economics",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 204,
+    "title": "12-Door Transition (Patent Version)",
+    "core_claim": "Claims 98-102: Red Queen validator",
+    "category": "Workflow",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 205,
+    "title": "Asteroid-Proof Vault (Patent Version)",
+    "core_claim": "Claims 103-107: Seed/Growth/Fruit layers",
+    "category": "Infrastructure",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 206,
+    "title": "Steward/Red Queen (Patent Version)",
+    "core_claim": "Claims 108-112: Hybrid AI management",
+    "category": "AI",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 207,
+    "title": "Rebel Coalition Voting (Patent Version)",
+    "core_claim": "Claims 113-116: Anti-Cabal algorithm",
+    "category": "Governance",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 208,
+    "title": "20% Partnership Split (Patent Version)",
+    "core_claim": "Claims 117-120: Automated settlement",
+    "category": "Economics",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 209,
+    "title": "Cue Card Viral (Patent Version)",
+    "core_claim": "Claims 121-125: Multi-channel distribution",
+    "category": "Marketing",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 210,
+    "title": "Medallion Viral Share (Patent Version)",
+    "core_claim": "Claims 126-130: Viral tree visualization",
+    "category": "Marketing",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 211,
+    "title": "Campaign Viral Windows (Patent Version)",
+    "core_claim": "Claims 131-135: Time-bounded multipliers",
+    "category": "Marketing",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 212,
+    "title": "Golden Wrapper Thresholds (Patent Version)",
+    "core_claim": "Claims 136-140: S-tier publication",
+    "category": "Marketing",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 213,
+    "title": "QR-Gated Cue Cards (Patent Version)",
+    "core_claim": "Claims 141-145: Gate wrapper access",
+    "category": "Marketing",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 214,
+    "title": "HexIsle Ecosystem (Patent Version)",
+    "core_claim": "Claims 146-153: 12-city guild halls",
+    "category": "Gaming",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 215,
+    "title": "Guild System (Patent Version)",
+    "core_claim": "Claims 154-161: $2K collective stake",
+    "category": "Community",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 216,
+    "title": "Tribe System (Patent Version)",
+    "core_claim": "Claims 162-168: Cross-guild social",
+    "category": "Community",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 217,
+    "title": "$5 Santa (Patent Version)",
+    "core_claim": "Claims 169-176: Tiered voting allocation",
+    "category": "Initiative",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 218,
+    "title": "LMD Enhanced (Patent Version)",
+    "core_claim": "Claims 177-183: Chef network with batch cooking",
+    "category": "Initiative",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 219,
+    "title": "Defense Klaus Network (Patent Version)",
+    "core_claim": "Claims 184-190: Rally Group integration",
+    "category": "Initiative",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 220,
+    "title": "Wave Pricing (Patent Version)",
+    "core_claim": "Claims 191-195: Surge multipliers",
+    "category": "Economics",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 221,
+    "title": "Bifrost Portal (Patent Version)",
+    "core_claim": "Claims 196-200: FarCaster keys",
+    "category": "Navigation",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 222,
+    "title": "Realm Toggle (Patent Version)",
+    "core_claim": "Claims 201-205: Ghost/Material/HexIsle",
+    "category": "Infrastructure",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 223,
+    "title": "Secondary Marketplace (Patent Version)",
+    "core_claim": "Claims 206-210: Medallion trading",
+    "category": "Economics",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 224,
+    "title": "Vouch Pledge (Patent Version)",
+    "core_claim": "Claims 211-215: Fraud protection pool",
+    "category": "Trust",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 225,
+    "title": "AI Attribution Icons (Patent Version)",
+    "core_claim": "Claims 216-221: Tiered icon system",
+    "category": "Content",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 226,
+    "title": "AI Replacement Workflow (Patent Version)",
+    "core_claim": "Claims 222-227: Human alternative submissions",
+    "category": "Content",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 227,
+    "title": "Content Provenance (Patent Version)",
+    "core_claim": "Claims 228-232: C2PA compatibility",
+    "category": "Content",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 228,
+    "title": "Flamer Dampening (Patent Version)",
+    "core_claim": "Claims 233-239: Time-decay reputation",
+    "category": "Governance",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 229,
+    "title": "Virtual Mascot (Patent Version)",
+    "core_claim": "Claims 240-244: Character consistency",
+    "category": "Branding",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 230,
+    "title": "CSS 3D Navigation (Patent Version)",
+    "core_claim": "Claims 245-250: Pure CSS transforms",
+    "category": "UX",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 231,
+    "title": "AI Transparency Declaration",
+    "core_claim": "Claims 251-254: Philosophy message inviting community input",
+    "category": "Content",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 232,
+    "title": "Flip Card Narrative Marketing",
+    "core_claim": "Claims 255-258: Antagonist/protagonist reveal structure",
+    "category": "Marketing",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 233,
+    "title": "Ownership Hat Visual Narrative",
+    "core_claim": "Claims 259-261: Hat size as ownership metaphor",
+    "category": "Marketing",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 234,
+    "title": "Connected Fable Universe",
+    "core_claim": "Claims 262-265: Little Red Hen across all fables",
+    "category": "Content",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 235,
+    "title": "Steganographic Access Control",
+    "core_claim": "Claims 266-269: Hidden admin access via UI elements",
+    "category": "Security",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 236,
+    "title": "VIP Preview-to-Conversion",
+    "core_claim": "Claims 270-271: Advantages not credits for conversion",
+    "category": "Onboarding",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 237,
+    "title": "Cross-Realm Treasure Hunt",
+    "core_claim": "Claims 272-274: Hidden collectibles across platform",
+    "category": "Gamification",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 238,
+    "title": "Continuous Email Verification",
+    "core_claim": "Claim 275: Apollo 13 admin email test protocol",
+    "category": "DevOps",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 239,
+    "title": "User Content Filtering",
+    "core_claim": "Claim 276: Shirley Temple three-tier system",
+    "category": "UX",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 240,
+    "title": "Conditional Access Revelation",
+    "core_claim": "Claim 277: Durin's Day time-based access",
+    "category": "Gamification",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 241,
+    "title": "Domain-Verified VIP Claim",
+    "core_claim": "Claims 278-280: Public invitation with domain verification",
+    "category": "Security",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 242,
+    "title": "Adaptive Narrative Delivery",
+    "core_claim": "Claims 281-282: Context-aware content adaptation",
+    "category": "Content",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 243,
+    "title": "Fractional IP Licensing",
+    "core_claim": "Claims 283-284: MARKS tokenization for IP",
+    "category": "IP",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 244,
+    "title": "Milestone Revenue Clearing",
+    "core_claim": "Claims 285-286: Threshold-based revenue release",
+    "category": "Economics",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 245,
+    "title": "Narrative-Driven HR",
+    "core_claim": "Claims 287-288: Skill tree certification paths",
+    "category": "HR",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 246,
+    "title": "Cross-Entity Data Mesh",
+    "core_claim": "Claims 289-290: Federated data architecture",
+    "category": "Infrastructure",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 247,
+    "title": "Community Governance Protocol",
+    "core_claim": "Claims 291-292: Decentralized decision-making",
+    "category": "Governance",
+    "patent_bag": "Jan 24 Filing",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 248,
+    "title": "Hexel 12-Part Modular Construction",
+    "core_claim": "Snap-together terrain without adhesive",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 249,
+    "title": "Inverse Hydraulic Coupling",
+    "core_claim": "Self-balancing adjacent Hexels without pumps",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 250,
+    "title": "Ouralis Tidal Mechanism",
+    "core_claim": "12-rotation tide cycle with clock escapement",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 251,
+    "title": "Sawtooth60 Directional Current",
+    "core_claim": "Unidirectional water flow at 60-degree intervals",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 252,
+    "title": "Rudder Keel Ship Mechanics",
+    "core_claim": "Physical sailing dynamics with adjustable components",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 253,
+    "title": "Magnetic Character Placement",
+    "core_claim": "Embedded magnets for secure piece placement",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 254,
+    "title": "Character-Triggered Mechanisms",
+    "core_claim": "Magnetic placement activates terrain features",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 255,
+    "title": "Compliant Mechanism Terrain Caps",
+    "core_claim": "Capstone system with universal scale support",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 256,
+    "title": "Universal Scale Adapter",
+    "core_claim": "25mm, 28mm, 32mm interchangeable scales",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 257,
+    "title": "Hydraulic-to-Pneumatic Plant System",
+    "core_claim": "Trees that physically grow during gameplay",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 258,
+    "title": "AC Pressure Generation",
+    "core_claim": "Alternating pressure waves without external pumps",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 259,
+    "title": "Clock-as-Game-State Controller",
+    "core_claim": "Physical clock IS the game state",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 260,
+    "title": "Banyan Tree Distribution Manifold",
+    "core_claim": "Decorative tree doubles as hydraulic manifold",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 261,
+    "title": "One-Way Valve Network",
+    "core_claim": "Self-propagating pressure waves",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 262,
+    "title": "Gravity-Powered Baseline",
+    "core_claim": "8-foot elevated reservoir eliminates pumps",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 263,
+    "title": "Cascading Hexagonal Containers",
+    "core_claim": "Phase-shifted pressure waves",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 264,
+    "title": "Continuous Fluid Loop",
+    "core_claim": "Closed-loop circulation without friction cascade",
+    "category": "Mechanical",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 265,
+    "title": "Temperature Differential Stirling Cycle",
+    "core_claim": "Energy generation from water table thermal differential",
+    "category": "Energy",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 266,
+    "title": "Electrolysis Water Purification",
+    "core_claim": "Stirling-powered water purification",
+    "category": "Humanitarian",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 267,
+    "title": "Lithographic Dual-Process Design",
+    "core_claim": "Same CAD files for 3D printing AND injection molding",
+    "category": "Manufacturing",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 268,
+    "title": "Print Once Snap Together Forever",
+    "core_claim": "Modular character customization without painting",
+    "category": "Manufacturing",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 269,
+    "title": "Zero-Overhang CAD Constraints",
+    "core_claim": "Universal manufacturability constraints",
+    "category": "Manufacturing",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 270,
+    "title": "Siege Tower Terrain Piece",
+    "core_claim": "Multi-level assault vehicle with internal mechanisms",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 271,
+    "title": "Ship Deck Modularity",
+    "core_claim": "Interchangeable deck sections",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 272,
+    "title": "Underwater Terrain Layer",
+    "core_claim": "Transparent lower level for submarine gameplay",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 273,
+    "title": "Weather Mechanism Integration",
+    "core_claim": "Physical storm effects via hydraulics",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 274,
+    "title": "Lava Flow Terrain",
+    "core_claim": "Heated fluid channels for volcanic zones",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 275,
+    "title": "Ice/Snow Terrain with Thermal Effects",
+    "core_claim": "Temperature-reactive terrain surfaces",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 276,
+    "title": "Bridge Collapse Mechanism",
+    "core_claim": "Weight-triggered terrain destruction",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 277,
+    "title": "Mineshaft Elevator System",
+    "core_claim": "Hydraulic vertical transport",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 278,
+    "title": "Catapult/Trebuchet Mechanism",
+    "core_claim": "Functional siege weapons",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 279,
+    "title": "Gate/Portcullis Control",
+    "core_claim": "Remote-operated entrance mechanisms",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 280,
+    "title": "Rotating Platform System",
+    "core_claim": "Turntable terrain sections",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 281,
+    "title": "Fog Machine Integration",
+    "core_claim": "Atmospheric effects for terrain",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 282,
+    "title": "LED Lighting System",
+    "core_claim": "Programmable terrain illumination",
+    "category": "Gaming",
+    "patent_bag": "Bag 5",
+    "status": "filed",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 283,
+    "title": "Adjustable Head Support for Mobility Device",
+    "core_claim": "Pivoting/swiveling arm with collapsible design",
+    "category": "Accessibility",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 284,
+    "title": "Rotating Eyeball Targeting Device",
+    "core_claim": "Central target/focus point with sensor integration",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 285,
+    "title": "Curved/Contoured Product Designs",
+    "core_claim": "Multi-part articulated mechanisms",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 286,
+    "title": "Adjustable Power Tool Guard",
+    "core_claim": "Positioning cover with integrated LED",
+    "category": "Tools",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 287,
+    "title": "Ergonomic Handle System",
+    "core_claim": "Enhanced control and reduced fatigue design",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 288,
+    "title": "Interlocking Modular Components",
+    "core_claim": "Snap-fit reconfigurable systems",
+    "category": "Manufacturing",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 289,
+    "title": "Pivoting Articulated Joints",
+    "core_claim": "Adjustable positioning mechanisms",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 290,
+    "title": "Sliding Telescoping Components",
+    "core_claim": "Length/height adjustment systems",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 291,
+    "title": "Mechanical Linkage Systems",
+    "core_claim": "Movable joints and interconnected elements",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 292,
+    "title": "Novel Handle/Grip Designs",
+    "core_claim": "Improved comfort and control",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 293,
+    "title": "Weight-Saving Structural Reinforcement",
+    "core_claim": "Optimized strength-to-weight ratio",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 294,
+    "title": "Compact Space-Saving Form Factor",
+    "core_claim": "Efficient deployment design",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 295,
+    "title": "Angle Adjustment Mechanism",
+    "core_claim": "Tool/object position control",
+    "category": "Tools",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 296,
+    "title": "Magnetic Attachment System",
+    "core_claim": "Quick-connect component mounting",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 297,
+    "title": "Gear Train Mechanism",
+    "core_claim": "Precision mechanical transmission",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 298,
+    "title": "Lever-Actuated Control System",
+    "core_claim": "Mechanical user input device",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 299,
+    "title": "Spring-Loaded Return Mechanism",
+    "core_claim": "Self-resetting components",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 300,
+    "title": "Cam-Driven Motion Profile",
+    "core_claim": "Complex movement from rotation",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 301,
+    "title": "Ratchet Lock System",
+    "core_claim": "One-way adjustable positioning",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 302,
+    "title": "Quick-Release Mechanism",
+    "core_claim": "Fast component disengagement",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 303,
+    "title": "Hinged Panel System",
+    "core_claim": "Fold-flat storage design",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 304,
+    "title": "Nested Container Storage",
+    "core_claim": "Space-efficient component organization",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 305,
+    "title": "Tool-Free Assembly System",
+    "core_claim": "Snap-together without tools",
+    "category": "Manufacturing",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 306,
+    "title": "Color-Coded Component Identification",
+    "core_claim": "Visual assembly guidance",
+    "category": "UX",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 307,
+    "title": "Keyed Alignment Features",
+    "core_claim": "Prevents incorrect assembly",
+    "category": "Manufacturing",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 308,
+    "title": "Graduated Scale Markings",
+    "core_claim": "Measurement reference on components",
+    "category": "Tools",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 309,
+    "title": "Anti-Slip Surface Texture",
+    "core_claim": "Enhanced grip surfaces",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 310,
+    "title": "Vibration Dampening Mount",
+    "core_claim": "Reduced mechanical noise/wear",
+    "category": "Mechanical",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 311,
+    "title": "Water-Resistant Seal Design",
+    "core_claim": "Environmental protection",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 312,
+    "title": "Heat Dissipation Channels",
+    "core_claim": "Thermal management features",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 313,
+    "title": "Cable Routing Channels",
+    "core_claim": "Organized wire management",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 314,
+    "title": "Modular Expansion Ports",
+    "core_claim": "Future-proof connectivity",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 315,
+    "title": "Status Indicator Window",
+    "core_claim": "Visual feedback mechanism",
+    "category": "UX",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 316,
+    "title": "Tool Storage Integration",
+    "core_claim": "Built-in accessory compartments",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 317,
+    "title": "Carrying Handle Design",
+    "core_claim": "Portable product handling",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 318,
+    "title": "Stacking Alignment Features",
+    "core_claim": "Multiple unit organization",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 319,
+    "title": "Protective Cap System",
+    "core_claim": "Component damage prevention",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 320,
+    "title": "Reversible Component Design",
+    "core_claim": "Ambidextrous or multi-use parts",
+    "category": "Design",
+    "patent_bag": "HexIsle Journals",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 321,
+    "title": "Graduated Success Deferred Settlement",
+    "core_claim": "Tab System mathematical foundation",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 322,
+    "title": "Commitment-Triggered Democratic Funding",
+    "core_claim": "Position Funding mechanics",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 323,
+    "title": "Recursive Fractional Ownership",
+    "core_claim": "Medallion Cascade detailed mechanics",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 324,
+    "title": "Multi-Agent Consensus Verification",
+    "core_claim": "Star Chamber detailed protocol",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 325,
+    "title": "Spatial-Digital Navigation",
+    "core_claim": "Castle Portal Cards mechanics",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 326,
+    "title": "Tiered Node Economics",
+    "core_claim": "Micro to Large node funding tiers",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 327,
+    "title": "Demand-Validated Manufacturing Bridge",
+    "core_claim": "Ghost Items Bridge protocol",
+    "category": "Manufacturing",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 328,
+    "title": "Multi-Platform Coordinated Launch",
+    "core_claim": "Omnibus Launch mechanics",
+    "category": "Marketing",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 329,
+    "title": "Generosity Corner Allocation",
+    "core_claim": "Boaz Principle mathematics",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 330,
+    "title": "Water-Powered Physical Computing",
+    "core_claim": "HexIsle foundation concepts",
+    "category": "Gaming",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 331,
+    "title": "Dynamic Headquarters Growth",
+    "core_claim": "Living Castle mechanics",
+    "category": "Architecture",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 332,
+    "title": "Distributed Manufacturing Scale",
+    "core_claim": "Galactic Empire model",
+    "category": "Manufacturing",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 333,
+    "title": "Star Chamber as a Service",
+    "core_claim": "SCaaS detailed architecture",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 334,
+    "title": "Reputation Currency Foundation",
+    "core_claim": "MARKS original design",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 335,
+    "title": "Discovery-Based Engagement",
+    "core_claim": "Golden Wrapper Hunt mechanics",
+    "category": "Gamification",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 336,
+    "title": "Graduated Contribution Schedule",
+    "core_claim": "Tab Economics 8 tiers",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 337,
+    "title": "Performance-Based Selection",
+    "core_claim": "Arena Hiring protocol",
+    "category": "HR",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 338,
+    "title": "History Preservation System",
+    "core_claim": "Chronicler's Hall mechanics",
+    "category": "Content",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 339,
+    "title": "Music Rights Justice",
+    "core_claim": "VivaLaRevolucion 83% model",
+    "category": "Initiative",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 340,
+    "title": "Constitutional Documentation",
+    "core_claim": "Cephas Ring of Articles",
+    "category": "Governance",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 341,
+    "title": "IP Protection Balance",
+    "core_claim": "The Membrane mechanics",
+    "category": "IP",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 342,
+    "title": "User-Controlled Filtering",
+    "core_claim": "Shirley Temple Ratings system",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 343,
+    "title": "Governance Stability",
+    "core_claim": "Political Expedition doubling",
+    "category": "Governance",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 344,
+    "title": "Reputation Infrastructure",
+    "core_claim": "Marks Ledger System",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 345,
+    "title": "Distributed Marketplace",
+    "core_claim": "Bazaar & 12 Cities architecture",
+    "category": "Architecture",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 346,
+    "title": "Combat Strategy System",
+    "core_claim": "Tereno Platform mechanics",
+    "category": "Gaming",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 347,
+    "title": "Logistics Metaphor",
+    "core_claim": "Venice Canal System",
+    "category": "Architecture",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 348,
+    "title": "Collective Buying Power",
+    "core_claim": "Volume Discount Pools",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 349,
+    "title": "Progressive Unlock System",
+    "core_claim": "Vessel Evolution mechanics",
+    "category": "Gamification",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 350,
+    "title": "Deep Infrastructure",
+    "core_claim": "Wells & Labyrinth Network",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 351,
+    "title": "Emergency Assistance",
+    "core_claim": "Hot Water Company humanitarian tech",
+    "category": "Humanitarian",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 352,
+    "title": "Music Licensing Mechanics",
+    "core_claim": "JukeBox detailed system",
+    "category": "Initiative",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 353,
+    "title": "Local Manufacturing Scale",
+    "core_claim": "Distributed Factory Network",
+    "category": "Manufacturing",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 354,
+    "title": "Platform Branching Model",
+    "core_claim": "Yggdrasil architecture",
+    "category": "Architecture",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 355,
+    "title": "Creative Works Framework",
+    "core_claim": "Harper Guild licensing",
+    "category": "IP",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 356,
+    "title": "Blockchain Access Keys",
+    "core_claim": "College of Hard Knocks keys",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 357,
+    "title": "Community Financial Services",
+    "core_claim": "Super Short Loan mechanics",
+    "category": "Fintech",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 358,
+    "title": "Observation System Design",
+    "core_claim": "Observatory architecture",
+    "category": "Architecture",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 359,
+    "title": "Staged Trust Progression",
+    "core_claim": "MimicTrunk system",
+    "category": "Trust",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 360,
+    "title": "Democratic Team Formation",
+    "core_claim": "Collaborative project creation",
+    "category": "Governance",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 361,
+    "title": "Volunteer Routing",
+    "core_claim": "NOID Routing System",
+    "category": "Operations",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 362,
+    "title": "Feedback System",
+    "core_claim": "Maître D' mechanics",
+    "category": "QA",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 363,
+    "title": "Dynamic Content Display",
+    "core_claim": "Poster Walls system",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 364,
+    "title": "Leadership Investment",
+    "core_claim": "Team Lead Ante mechanics",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 365,
+    "title": "Emergency Response",
+    "core_claim": "Answer the Call protocol",
+    "category": "Safety",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 366,
+    "title": "Collaborative Ideation",
+    "core_claim": "Brainstorm Chamber mechanics",
+    "category": "Innovation",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 367,
+    "title": "Leadership Competition",
+    "core_claim": "Crown Competition system",
+    "category": "Governance",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 368,
+    "title": "Contribution Tracking",
+    "core_claim": "Contributor Stake System",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 369,
+    "title": "Game Integration",
+    "core_claim": "Catharsis Game mechanics",
+    "category": "Gaming",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 370,
+    "title": "Exponential Innovation",
+    "core_claim": "Innovation Engine mathematics",
+    "category": "Innovation",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 371,
+    "title": "Competitor Integration",
+    "core_claim": "Competitor Welcome Protocol",
+    "category": "Acquisition",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 372,
+    "title": "Physical Medallion Design",
+    "core_claim": "Four-part coaster mechanism",
+    "category": "Manufacturing",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 373,
+    "title": "QR Code Integration",
+    "core_claim": "Medallion digital linking",
+    "category": "Identity",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 374,
+    "title": "Cascading Ownership",
+    "core_claim": "Fractional ownership chain",
+    "category": "Economics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 375,
+    "title": "Mentor Badge System",
+    "core_claim": "Recognition for teaching",
+    "category": "Gamification",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 376,
+    "title": "Apprentice Tracking",
+    "core_claim": "Learning progression tracking",
+    "category": "Education",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 377,
+    "title": "Skill Tree Visualization",
+    "core_claim": "Competency mapping display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 378,
+    "title": "Project Dependencies",
+    "core_claim": "Task prerequisite mapping",
+    "category": "Architecture",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 379,
+    "title": "Resource Allocation Optimizer",
+    "core_claim": "Automated distribution",
+    "category": "Operations",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 380,
+    "title": "Milestone Celebration",
+    "core_claim": "Achievement recognition events",
+    "category": "Gamification",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 381,
+    "title": "Cross-Initiative Integration",
+    "core_claim": "Sweet Sixteen connections",
+    "category": "Architecture",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 382,
+    "title": "Member Onboarding Flow",
+    "core_claim": "Progressive platform introduction",
+    "category": "Onboarding",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 383,
+    "title": "Communication Templates",
+    "core_claim": "Standard message formats",
+    "category": "Operations",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 384,
+    "title": "Dispute Resolution",
+    "core_claim": "Conflict handling protocol",
+    "category": "Governance",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 385,
+    "title": "Quality Assurance Tiers",
+    "core_claim": "Multiple review levels",
+    "category": "QA",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 386,
+    "title": "Feedback Loop Automation",
+    "core_claim": "Continuous improvement system",
+    "category": "Operations",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 387,
+    "title": "Performance Analytics",
+    "core_claim": "Contributor metrics dashboard",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 388,
+    "title": "Initiative Health Monitoring",
+    "core_claim": "Project status tracking",
+    "category": "Operations",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 389,
+    "title": "Resource Forecasting",
+    "core_claim": "Predictive capacity planning",
+    "category": "Operations",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 390,
+    "title": "Event Calendar Integration",
+    "core_claim": "Platform-wide scheduling",
+    "category": "Operations",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 391,
+    "title": "Notification Preferences",
+    "core_claim": "User communication settings",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 392,
+    "title": "Mobile-First Design",
+    "core_claim": "Progressive web app features",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 393,
+    "title": "Offline Capability",
+    "core_claim": "Service worker functionality",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 394,
+    "title": "Sync Conflict Resolution",
+    "core_claim": "Data merge handling",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 395,
+    "title": "Multi-Language Support",
+    "core_claim": "Internationalization framework",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 396,
+    "title": "Accessibility Features",
+    "core_claim": "WCAG compliance system",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 397,
+    "title": "Theme Customization",
+    "core_claim": "User interface personalization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 398,
+    "title": "Keyboard Navigation",
+    "core_claim": "Full keyboard accessibility",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 399,
+    "title": "Screen Reader Optimization",
+    "core_claim": "ARIA label implementation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 400,
+    "title": "Print Stylesheet",
+    "core_claim": "Physical document generation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 401,
+    "title": "Export Formats",
+    "core_claim": "PDF/CSV/JSON data export",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 402,
+    "title": "API Documentation",
+    "core_claim": "Interactive developer docs",
+    "category": "Documentation",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 403,
+    "title": "Webhook Integration",
+    "core_claim": "External system notifications",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 404,
+    "title": "OAuth Provider",
+    "core_claim": "Third-party authentication",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 405,
+    "title": "Rate Limiting",
+    "core_claim": "API abuse prevention",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 406,
+    "title": "Caching Strategy",
+    "core_claim": "Performance optimization",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 407,
+    "title": "CDN Distribution",
+    "core_claim": "Global content delivery",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 408,
+    "title": "Image Optimization",
+    "core_claim": "Automatic format conversion",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 409,
+    "title": "Lazy Loading",
+    "core_claim": "Deferred resource loading",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 410,
+    "title": "Skeleton Screens",
+    "core_claim": "Loading state visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 411,
+    "title": "Error Boundary",
+    "core_claim": "Graceful failure handling",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 412,
+    "title": "Session Management",
+    "core_claim": "Multi-device authentication",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 413,
+    "title": "Audit Logging",
+    "core_claim": "Action history tracking",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 414,
+    "title": "Two-Factor Authentication",
+    "core_claim": "Enhanced account security",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 415,
+    "title": "Password Policy",
+    "core_claim": "Strength requirements system",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 416,
+    "title": "Account Recovery",
+    "core_claim": "Self-service restoration",
+    "category": "Security",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 417,
+    "title": "Privacy Controls",
+    "core_claim": "Data visibility settings",
+    "category": "Privacy",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 418,
+    "title": "Data Retention Policy",
+    "core_claim": "Automated cleanup rules",
+    "category": "Privacy",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 419,
+    "title": "Consent Management",
+    "core_claim": "Permission tracking system",
+    "category": "Privacy",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 420,
+    "title": "GDPR Compliance",
+    "core_claim": "Right to deletion support",
+    "category": "Privacy",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 421,
+    "title": "Data Portability",
+    "core_claim": "Personal data export",
+    "category": "Privacy",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 422,
+    "title": "Cookie Consent",
+    "core_claim": "Tracking permission flow",
+    "category": "Privacy",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 423,
+    "title": "Analytics Dashboard",
+    "core_claim": "Usage statistics display",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 424,
+    "title": "A/B Testing Framework",
+    "core_claim": "Feature experiment system",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 425,
+    "title": "Funnel Analysis",
+    "core_claim": "Conversion tracking",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 426,
+    "title": "Cohort Analysis",
+    "core_claim": "User group comparison",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 427,
+    "title": "Retention Metrics",
+    "core_claim": "User engagement tracking",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 428,
+    "title": "Revenue Attribution",
+    "core_claim": "Income source tracking",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 429,
+    "title": "Geographic Analysis",
+    "core_claim": "Location-based insights",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 430,
+    "title": "Device Analytics",
+    "core_claim": "Platform usage breakdown",
+    "category": "Analytics",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 431,
+    "title": "Performance Monitoring",
+    "core_claim": "Page speed tracking",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 432,
+    "title": "Error Tracking",
+    "core_claim": "Exception monitoring",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 433,
+    "title": "Uptime Monitoring",
+    "core_claim": "Service availability tracking",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 434,
+    "title": "Database Monitoring",
+    "core_claim": "Query performance tracking",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 435,
+    "title": "Cost Monitoring",
+    "core_claim": "Infrastructure spend tracking",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 436,
+    "title": "Deployment Pipeline",
+    "core_claim": "Automated release system",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 437,
+    "title": "Environment Management",
+    "core_claim": "Dev/staging/prod separation",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 438,
+    "title": "Feature Flags",
+    "core_claim": "Controlled rollout system",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 439,
+    "title": "Database Migrations",
+    "core_claim": "Schema version control",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 440,
+    "title": "Backup Strategy",
+    "core_claim": "Data protection system",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 441,
+    "title": "Disaster Recovery",
+    "core_claim": "Service restoration plan",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 442,
+    "title": "Scaling Strategy",
+    "core_claim": "Auto-scaling configuration",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 443,
+    "title": "Load Balancing",
+    "core_claim": "Traffic distribution",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 444,
+    "title": "Queue Management",
+    "core_claim": "Background job processing",
+    "category": "DevOps",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 445,
+    "title": "Email Delivery",
+    "core_claim": "Transactional email system",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 446,
+    "title": "SMS Integration",
+    "core_claim": "Text notification system",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 447,
+    "title": "Push Notifications",
+    "core_claim": "Mobile alert system",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 448,
+    "title": "In-App Messaging",
+    "core_claim": "Real-time chat system",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 449,
+    "title": "Search Infrastructure",
+    "core_claim": "Full-text search system",
+    "category": "Infrastructure",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 450,
+    "title": "Recommendation Engine",
+    "core_claim": "Personalized suggestions",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 451,
+    "title": "Content Moderation",
+    "core_claim": "Automated review system",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 452,
+    "title": "Spam Detection",
+    "core_claim": "Abuse prevention system",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 453,
+    "title": "Sentiment Analysis",
+    "core_claim": "Emotion detection",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 454,
+    "title": "Topic Classification",
+    "core_claim": "Content categorization",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 455,
+    "title": "Entity Extraction",
+    "core_claim": "Named entity recognition",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 456,
+    "title": "Language Detection",
+    "core_claim": "Automatic locale identification",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 457,
+    "title": "Translation Integration",
+    "core_claim": "Multi-language support",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 458,
+    "title": "Summarization",
+    "core_claim": "Content condensation",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 459,
+    "title": "Image Classification",
+    "core_claim": "Visual content analysis",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 460,
+    "title": "OCR Integration",
+    "core_claim": "Text from images",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 461,
+    "title": "Voice Transcription",
+    "core_claim": "Audio to text",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 462,
+    "title": "Video Analysis",
+    "core_claim": "Motion and scene detection",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 463,
+    "title": "Document Processing",
+    "core_claim": "PDF/form extraction",
+    "category": "AI",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 464,
+    "title": "Chart Generation",
+    "core_claim": "Data visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 465,
+    "title": "Map Integration",
+    "core_claim": "Geographic visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 466,
+    "title": "Calendar Widget",
+    "core_claim": "Date scheduling interface",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 467,
+    "title": "Timeline View",
+    "core_claim": "Chronological display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 468,
+    "title": "Kanban Board",
+    "core_claim": "Task management view",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 469,
+    "title": "Gantt Chart",
+    "core_claim": "Project timeline view",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 470,
+    "title": "Tree View",
+    "core_claim": "Hierarchical navigation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 471,
+    "title": "Tab Navigation",
+    "core_claim": "Sectioned content",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 472,
+    "title": "Breadcrumb Trail",
+    "core_claim": "Navigation context",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 473,
+    "title": "Search Filters",
+    "core_claim": "Advanced query options",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 474,
+    "title": "Sort Controls",
+    "core_claim": "List ordering options",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 475,
+    "title": "Pagination",
+    "core_claim": "Large list handling",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 476,
+    "title": "Infinite Scroll",
+    "core_claim": "Continuous loading",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 477,
+    "title": "Modal Dialogs",
+    "core_claim": "Overlay interactions",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 478,
+    "title": "Toast Notifications",
+    "core_claim": "Non-blocking alerts",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 479,
+    "title": "Progress Indicators",
+    "core_claim": "Action status display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 480,
+    "title": "Form Validation",
+    "core_claim": "Input verification",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 481,
+    "title": "Auto-Save",
+    "core_claim": "Continuous data preservation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 482,
+    "title": "Undo/Redo",
+    "core_claim": "Action reversal",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 483,
+    "title": "Drag and Drop",
+    "core_claim": "Direct manipulation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 484,
+    "title": "File Upload",
+    "core_claim": "Document attachment",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 485,
+    "title": "Image Cropper",
+    "core_claim": "Visual editing tool",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 486,
+    "title": "Rich Text Editor",
+    "core_claim": "Formatted content creation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 487,
+    "title": "Markdown Editor",
+    "core_claim": "Technical writing tool",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 488,
+    "title": "Code Editor",
+    "core_claim": "Syntax-highlighted editing",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 489,
+    "title": "Color Picker",
+    "core_claim": "Visual color selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 490,
+    "title": "Date Picker",
+    "core_claim": "Calendar date selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 491,
+    "title": "Time Picker",
+    "core_claim": "Clock time selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 492,
+    "title": "Autocomplete",
+    "core_claim": "Suggestion-based input",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 493,
+    "title": "Tag Input",
+    "core_claim": "Multi-value entry",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 494,
+    "title": "Rating Input",
+    "core_claim": "Star/score selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 495,
+    "title": "Slider Input",
+    "core_claim": "Range selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 496,
+    "title": "Toggle Switch",
+    "core_claim": "Binary option",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 497,
+    "title": "Checkbox Group",
+    "core_claim": "Multiple selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 498,
+    "title": "Radio Group",
+    "core_claim": "Single selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 499,
+    "title": "Select Dropdown",
+    "core_claim": "Option menu",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 500,
+    "title": "Multi-Select",
+    "core_claim": "Multiple option selection",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 501,
+    "title": "Combobox",
+    "core_claim": "Searchable dropdown",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 502,
+    "title": "Data Table",
+    "core_claim": "Sortable/filterable grid",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 503,
+    "title": "Pivot Table",
+    "core_claim": "Multi-dimensional analysis",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 504,
+    "title": "Spreadsheet View",
+    "core_claim": "Editable data grid",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 505,
+    "title": "Card Layout",
+    "core_claim": "Visual content organization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 506,
+    "title": "Masonry Layout",
+    "core_claim": "Variable-height grid",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 507,
+    "title": "List View",
+    "core_claim": "Linear content display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 508,
+    "title": "Grid View",
+    "core_claim": "Uniform content grid",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 509,
+    "title": "Carousel",
+    "core_claim": "Rotating content display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 510,
+    "title": "Gallery",
+    "core_claim": "Image collection display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 511,
+    "title": "Lightbox",
+    "core_claim": "Full-screen image view",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 512,
+    "title": "Video Player",
+    "core_claim": "Media playback control",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 513,
+    "title": "Audio Player",
+    "core_claim": "Sound playback control",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 514,
+    "title": "Document Viewer",
+    "core_claim": "PDF/file preview",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 515,
+    "title": "Code Viewer",
+    "core_claim": "Syntax-highlighted display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 516,
+    "title": "Diff Viewer",
+    "core_claim": "Change comparison display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 517,
+    "title": "Comment Thread",
+    "core_claim": "Discussion display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 518,
+    "title": "Activity Feed",
+    "core_claim": "Event stream display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 519,
+    "title": "Notification Center",
+    "core_claim": "Alert aggregation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 520,
+    "title": "User Profile Card",
+    "core_claim": "Member information display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 521,
+    "title": "Avatar Stack",
+    "core_claim": "Multiple user display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 522,
+    "title": "Badge Display",
+    "core_claim": "Achievement visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 523,
+    "title": "Progress Bar",
+    "core_claim": "Completion visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 524,
+    "title": "Stats Counter",
+    "core_claim": "Animated number display",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 525,
+    "title": "Metric Card",
+    "core_claim": "KPI visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 526,
+    "title": "Alert Banner",
+    "core_claim": "System-wide notification",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 527,
+    "title": "Help Tooltip",
+    "core_claim": "Contextual guidance",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 528,
+    "title": "Walkthrough Tour",
+    "core_claim": "Guided onboarding",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 529,
+    "title": "Feature Spotlight",
+    "core_claim": "New feature highlight",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 530,
+    "title": "Empty State",
+    "core_claim": "No-data visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 531,
+    "title": "Error State",
+    "core_claim": "Failure visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 532,
+    "title": "Loading State",
+    "core_claim": "Wait visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 533,
+    "title": "Success State",
+    "core_claim": "Completion visualization",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 534,
+    "title": "Confirmation Dialog",
+    "core_claim": "Action verification",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 535,
+    "title": "Warning Dialog",
+    "core_claim": "Risk notification",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 536,
+    "title": "Prompt Dialog",
+    "core_claim": "User input request",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 537,
+    "title": "Share Dialog",
+    "core_claim": "Social distribution",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 538,
+    "title": "Invite Dialog",
+    "core_claim": "Member invitation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 539,
+    "title": "Settings Panel",
+    "core_claim": "Configuration interface",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 540,
+    "title": "Sidebar Navigation",
+    "core_claim": "Persistent menu",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 541,
+    "title": "Top Navigation",
+    "core_claim": "Header menu",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 542,
+    "title": "Bottom Navigation",
+    "core_claim": "Mobile tab bar",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 543,
+    "title": "Floating Action Button",
+    "core_claim": "Primary action trigger",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 544,
+    "title": "Speed Dial",
+    "core_claim": "Multiple action menu",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 545,
+    "title": "Context Menu",
+    "core_claim": "Right-click options",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 546,
+    "title": "Command Palette",
+    "core_claim": "Keyboard-driven navigation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 547,
+    "title": "Quick Actions",
+    "core_claim": "Shortcut menu",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 548,
+    "title": "Recent Items",
+    "core_claim": "History-based navigation",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 549,
+    "title": "Favorites",
+    "core_claim": "Bookmarked items",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 550,
+    "title": "Search Spotlight",
+    "core_claim": "Global search interface",
+    "category": "UX",
+    "patent_bag": "Founder Notes",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 551,
+    "title": "Let's Make Dinner Matching Algorithm",
+    "core_claim": "Geographic and dietary matrix matching",
+    "category": "Initiative",
+    "patent_bag": "LMD",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 552,
+    "title": "Chef Certification Pathway",
+    "core_claim": "Ghost kitchen compliance progression",
+    "category": "Initiative",
+    "patent_bag": "LMD",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 553,
+    "title": "Meal Train Automation",
+    "core_claim": "Ongoing support coordination",
+    "category": "Initiative",
+    "patent_bag": "LMD",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 554,
+    "title": "Delivery Routing Optimization",
+    "core_claim": "Multi-stop efficiency algorithm",
+    "category": "Initiative",
+    "patent_bag": "LMD",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 555,
+    "title": "Batch Cooking Coordination",
+    "core_claim": "Bulk meal preparation system",
+    "category": "Initiative",
+    "patent_bag": "LMD",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 556,
+    "title": "Let's Get Groceries Pooling",
+    "core_claim": "Volume discount aggregation",
+    "category": "Initiative",
+    "patent_bag": "LGG",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 557,
+    "title": "Grocery Order Splitting",
+    "core_claim": "Multi-household order management",
+    "category": "Initiative",
+    "patent_bag": "LGG",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 558,
+    "title": "Store API Integration",
+    "core_claim": "HEB/Kroger/Instacart connectivity",
+    "category": "Initiative",
+    "patent_bag": "LGG",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 559,
+    "title": "Delivery Reimbursement",
+    "core_claim": "Stripe-based member payment",
+    "category": "Initiative",
+    "patent_bag": "LGG",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 560,
+    "title": "Pantry Inventory Tracking",
+    "core_claim": "Household supply management",
+    "category": "Initiative",
+    "patent_bag": "LGG",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 561,
+    "title": "Let's Go Shopping Cross-Promotion",
+    "core_claim": "Creator product marketplace",
+    "category": "Initiative",
+    "patent_bag": "LGS",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 562,
+    "title": "Product Certification System",
+    "core_claim": "Quality verification badges",
+    "category": "Initiative",
+    "patent_bag": "LGS",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 563,
+    "title": "Seller Rating System",
+    "core_claim": "Trust-based seller scores",
+    "category": "Initiative",
+    "patent_bag": "LGS",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 564,
+    "title": "Group Buying Power",
+    "core_claim": "Collective negotiation system",
+    "category": "Initiative",
+    "patent_bag": "LGS",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 565,
+    "title": "Product Discovery Algorithm",
+    "core_claim": "Recommendation engine",
+    "category": "Initiative",
+    "patent_bag": "LGS",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 566,
+    "title": "Household Concierge Request System",
+    "core_claim": "Service request management",
+    "category": "Initiative",
+    "patent_bag": "HC",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 567,
+    "title": "Task Assignment Algorithm",
+    "core_claim": "Available helper matching",
+    "category": "Initiative",
+    "patent_bag": "HC",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 568,
+    "title": "Service Rating System",
+    "core_claim": "Quality feedback mechanism",
+    "category": "Initiative",
+    "patent_bag": "HC",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 569,
+    "title": "Recurring Task Scheduling",
+    "core_claim": "Automated service booking",
+    "category": "Initiative",
+    "patent_bag": "HC",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 570,
+    "title": "Cost Estimation Tool",
+    "core_claim": "Service pricing calculator",
+    "category": "Initiative",
+    "patent_bag": "HC",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 571,
+    "title": "Family Table Gathering Coordination",
+    "core_claim": "Community meal event system",
+    "category": "Initiative",
+    "patent_bag": "FT",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 572,
+    "title": "Potluck Organization",
+    "core_claim": "Dish coordination system",
+    "category": "Initiative",
+    "patent_bag": "FT",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 573,
+    "title": "Venue Matching",
+    "core_claim": "Location finding for gatherings",
+    "category": "Initiative",
+    "patent_bag": "FT",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 574,
+    "title": "RSVP Management",
+    "core_claim": "Attendance tracking system",
+    "category": "Initiative",
+    "patent_bag": "FT",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 575,
+    "title": "Dietary Accommodation Tracking",
+    "core_claim": "Guest food requirements",
+    "category": "Initiative",
+    "patent_bag": "FT",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 576,
+    "title": "LifeLine Medications Request Flow",
+    "core_claim": "Prescription assistance workflow",
+    "category": "Initiative",
+    "patent_bag": "LLM",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 577,
+    "title": "Verification System",
+    "core_claim": "Medical need confirmation",
+    "category": "Initiative",
+    "patent_bag": "LLM",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 578,
+    "title": "Pharmacy Partnership",
+    "core_claim": "Discounted medication access",
+    "category": "Initiative",
+    "patent_bag": "LLM",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 579,
+    "title": "Insurance Navigation",
+    "core_claim": "Coverage assistance system",
+    "category": "Initiative",
+    "patent_bag": "LLM",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 580,
+    "title": "Cost Reduction Tracking",
+    "core_claim": "Savings documentation",
+    "category": "Initiative",
+    "patent_bag": "LLM",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 581,
+    "title": "MSA Contract Negotiation",
+    "core_claim": "Collective bargaining system",
+    "category": "Initiative",
+    "patent_bag": "MSA",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 582,
+    "title": "Union-Style Organization",
+    "core_claim": "Worker collective structure",
+    "category": "Initiative",
+    "patent_bag": "MSA",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 583,
+    "title": "Benefits Pooling",
+    "core_claim": "Group insurance negotiation",
+    "category": "Initiative",
+    "patent_bag": "MSA",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 584,
+    "title": "Rate Standardization",
+    "core_claim": "Fair wage establishment",
+    "category": "Initiative",
+    "patent_bag": "MSA",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 585,
+    "title": "Dispute Resolution",
+    "core_claim": "Worker-employer mediation",
+    "category": "Initiative",
+    "patent_bag": "MSA",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 586,
+    "title": "Defense Klaus Coverage Check",
+    "core_claim": "Enrollment verification system",
+    "category": "Initiative",
+    "patent_bag": "DK",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 587,
+    "title": "Anonymous Enrollment",
+    "core_claim": "Privacy-preserving signup",
+    "category": "Initiative",
+    "patent_bag": "DK",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 588,
+    "title": "Legal Fund Allocation",
+    "core_claim": "Defense fund distribution",
+    "category": "Initiative",
+    "patent_bag": "DK",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 589,
+    "title": "Incident Reporting",
+    "core_claim": "Security event documentation",
+    "category": "Initiative",
+    "patent_bag": "DK",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 590,
+    "title": "Rally Group Integration",
+    "core_claim": "Emergency response coordination",
+    "category": "Initiative",
+    "patent_bag": "DK",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 591,
+    "title": "Rally Group Availability Toggle",
+    "core_claim": "Helper presence signaling",
+    "category": "Initiative",
+    "patent_bag": "Rally",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 592,
+    "title": "Urgency Level Classification",
+    "core_claim": "Request priority system",
+    "category": "Initiative",
+    "patent_bag": "Rally",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 593,
+    "title": "Location Sharing Protocol",
+    "core_claim": "Privacy-safe positioning",
+    "category": "Initiative",
+    "patent_bag": "Rally",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 594,
+    "title": "Response Coordination",
+    "core_claim": "Multi-helper organization",
+    "category": "Initiative",
+    "patent_bag": "Rally",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 595,
+    "title": "Safety Network Mapping",
+    "core_claim": "Geographic coverage visualization",
+    "category": "Initiative",
+    "patent_bag": "Rally",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 596,
+    "title": "VSL Artist Onboarding",
+    "core_claim": "Musician registration flow",
+    "category": "Initiative",
+    "patent_bag": "VSL",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 597,
+    "title": "Catalog Integration",
+    "core_claim": "Music library connectivity",
+    "category": "Initiative",
+    "patent_bag": "VSL",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 598,
+    "title": "Revenue Distribution",
+    "core_claim": "83% artist payment system",
+    "category": "Initiative",
+    "patent_bag": "VSL",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 599,
+    "title": "Streaming Analytics",
+    "core_claim": "Play count and royalty tracking",
+    "category": "Initiative",
+    "patent_bag": "VSL",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  },
+  {
+    "innovation_number": 600,
+    "title": "Licensing Marketplace",
+    "core_claim": "Commercial use permissions",
+    "category": "Initiative",
+    "patent_bag": "VSL",
+    "status": "documented",
+    "source_file": "20260212200000_complete_innovation_registry.sql"
+  }
+]

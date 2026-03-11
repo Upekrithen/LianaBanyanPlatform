@@ -1,473 +1,383 @@
 /**
- * WELCOME GATE — First-Visit Overlay with Container-Flip
- * ========================================================
+ * WELCOME GATE — Flattened Deck (3-Tab, No Flip Cards)
+ * =====================================================
  * Full-screen overlay shown to every first-time visitor on ANY page.
  *
- * Supports TWO layouts:
- *   "standard" — Headline + highlight cards + single CTA button.
- *                Clicking any highlight card OR the title flips the
- *                entire content area to show details about that topic.
- *   "bluf"     — BLUF (Bottom Line Up Front) triage fork with 2-3 branching
- *                buttons that route directly to what the user needs TODAY.
+ * Three tabs (flat — NO nested flip-cards):
+ *   "Concept"      — Tab A: 12-frame seed-to-banyan flipbook by Ausbin.
+ *                    Auto-plays, then auto-advances to Tab B.
+ *   "Get Started"  — Tab B: BLUF triage — 4 large flat buttons.
+ *                    Clicking any button closes the gate + routes (Ghost Mode).
+ *   "More Detail"  — Tab C: SEC-safe manifesto text.
+ *                    Single CTA: "Tour the 16 Initiatives" → Wildfire Beacon Run.
  *
- * Behavior:
- * - Shows once per session by default
- * - "Do Not Show This Again" checkbox → permanent dismissal
- * - If checkbox NOT checked → shows again next visit
- * - Content is switchable via Durin's Door passwords
- * - Mobile-responsive: single column on mobile, two columns on desktop
- * - PWA prompt is suppressed while this is visible
- * - Click anywhere on back face (not buttons) flips back to front
- * - Escape key flips back to front when flipped
+ * Miller's Law (cognitive load) and Howey Test (SEC) compliant.
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useWildfireRun } from "@/contexts/WildfireRunContext";
+import { INITIATIVES_FULL_RUN } from "@/data/wildfireRuns";
 import {
-  getActiveVariant,
   shouldShowWelcomeGate,
   dismissWelcomeGate,
   incrementVisitCount,
-  type WelcomeVariant,
-  type WelcomeBranch,
 } from "@/lib/welcomeGateContent";
 
-// ── Extended content for card flip backs ──
+// ── Types ──────────────────────────────────────────────────────────────────
 
-interface FlipBackContent {
-  quickFacts: string;
-  deeper: string;
-}
+type TabId = "concept" | "getStarted" | "moreDetail";
 
-/** Back-face content for each highlight, keyed by title */
-const HIGHLIGHT_FLIP_CONTENT: Record<string, FlipBackContent> = {
-  "Mutual Aid, Not Charity": {
-    quickFacts:
-      "Every initiative creates mutual benefit. When you buy, sell, or contribute, the whole network strengthens. 83.3% of every transaction goes directly to the creator — constitutionally locked. The remaining 20% runs the platform. No investor extraction. No venture capital skimming.",
-    deeper:
-      "The Cost+20% model means creators set their own prices. The platform margin is transparent and immutable. Three currencies work together: Credits (purchased with dollars), Marks (earned through effort), and Joules (stored surplus with forever-stamp exchange rates). All three have equal value but different acquisition rules — this prevents speculation while rewarding real participation.",
-  },
-  "Transparent Pricing": {
-    quickFacts:
-      "Cost + 20%. That is the entire pricing model. No hidden fees, no dynamic pricing, no surge charges. Every transaction is logged on the Immutable Ledger so anyone can verify the math. The 20% is split into platform operations, creator allocation, and external capital pools.",
-    deeper:
-      "The 60/20/20 split: 60% funds platform operations, 20% goes to creator allocations, 20% feeds the external capital pool for new projects. Patent sponsorship stakes are capped at $10M with automatic splitting for accessibility. This is service sponsorship — sponsors receive platform benefits, not equity. Sellers set prices. Markets discover fair value. Nobody manipulates the spread.",
-  },
-  "Access Over Exclusion": {
-    quickFacts:
-      "Ghost mode lets anyone explore the entire platform for free — no signup, no credit card. 20% of cold start slots in every initiative are donated to people who cannot afford the $5/year membership. The ladder, not the gate. We build entry points, not barriers.",
-    deeper:
-      "Ghost World uses a Half-Life decay system: non-members can accumulate up to 30 days of persistence (session time, pages visited, golden keys found). After 30 days of inactivity, progress decays. This creates a natural conversion funnel without hard walls. Members get permanent persistence, but Ghosts always have access to explore.",
-  },
-  "Earned Over Given": {
-    quickFacts:
-      "Marks emerge from the differential between your contribution and the platform's value — they are never granted as gifts. Commitment unlocks trust. Reputation is locked as collateral for high-value roles. There are no shortcuts to platform standing.",
-    deeper:
-      "Marks are restricted to essential spending: food, medical, and platform services. They clear through continued participation, not cash. NOID roles (Network Operators In Distributed Systems) require locking reputation collateral for time-based bonuses — faster completion earns more Marks. This ensures quality: you stake your standing on your work.",
-  },
-};
+// ── Constants ──────────────────────────────────────────────────────────────
 
-/** Back-face content when the TITLE is clicked */
-const TITLE_FLIP_CONTENT = {
-  heading: "What You Get Here",
-  categories: [
-    { label: "Build & Sell", items: ["Launch products at Cost+20%", "Keep 83.3% of every sale", "Access the distributed factory network"] },
-    { label: "Earn & Grow", items: ["Real work, fair pay via bounties", "Earn Marks through contributions", "Build reputation with collateral-backed roles"] },
-    { label: "Back & Support", items: ["Sponsor projects you believe in", "Earn medallions and Joules", "Pre-order products from real creators"] },
-    { label: "Learn & Explore", items: ["Ghost mode — free exploration", "16 initiatives to discover", "Academic papers and research"] },
-  ],
-};
+const TABS: { id: TabId; label: string }[] = [
+  { id: "concept", label: "Concept" },
+  { id: "getStarted", label: "Get Started" },
+  { id: "moreDetail", label: "More Detail" },
+];
 
-// ── Component ──
+const STORYBOARD_FRAMES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const FRAME_DURATIONS: Record<1 | 2 | 3, number> = { 1: 1200, 2: 600, 3: 300 };
+
+const TRIAGE_BUTTONS = [
+  {
+    id: "earn",
+    label: "Earn Money",
+    icon: "\u{1F4B0}",
+    route: "/help-wanted",
+    color: "from-emerald-600/20 to-green-600/10 border-emerald-500/30 hover:border-emerald-400/60",
+  },
+  {
+    id: "build",
+    label: "Build Something",
+    icon: "\u{1F680}",
+    route: "/build-a-business",
+    color: "from-violet-600/20 to-purple-600/10 border-violet-500/30 hover:border-violet-400/60",
+  },
+  {
+    id: "learn",
+    label: "Learn & Earn",
+    icon: "\u{1F4D6}",
+    route: "/papers",
+    color: "from-amber-600/20 to-yellow-600/10 border-amber-500/30 hover:border-amber-400/60",
+  },
+  {
+    id: "explore",
+    label: "Look Around",
+    icon: "\u{1F47B}",
+    route: "",
+    color: "from-white/5 to-white/[0.02] border-white/20 hover:border-white/40",
+  },
+];
+
+const SEC_SAFE_LINES = [
+  "Member-Governed. Cooperative Commerce.",
+  "You hold the rights to your work.",
+  "Your ideas/services/products Preorder-Funded and Made by Members.",
+  "The 20% margin funds 16 charitable initiatives for Everyone.",
+  "The People doing the Work make the Decisions and get the Benefits.",
+];
+
+// ── Component ──────────────────────────────────────────────────────────────
 
 export function WelcomeGate({ children }: { children: React.ReactNode }) {
   const [visible, setVisible] = useState(false);
   const [doNotShowAgain, setDoNotShowAgain] = useState(false);
-  const [variant, setVariant] = useState<WelcomeVariant | null>(null);
   const [entering, setEntering] = useState(false);
-  /** null = front face, "title" = title benefits, number = highlight index */
-  const [flippedTo, setFlippedTo] = useState<"title" | number | null>(null);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const { startRun } = useWildfireRun();
 
-  const isFlipped = flippedTo !== null;
+  // Tab state
+  const [activeTab, setActiveTab] = useState<TabId>("concept");
 
+  // Flipbook state
+  const [frame, setFrame] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [speed, setSpeed] = useState<1 | 2 | 3>(1);
+  const autoSwitchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Init ──
   useEffect(() => {
     incrementVisitCount();
     if (shouldShowWelcomeGate()) {
-      setVariant(getActiveVariant());
       setVisible(true);
     }
   }, []);
 
-  const handleEnter = useCallback(() => {
-    setEntering(true);
-    setTimeout(() => {
-      dismissWelcomeGate(doNotShowAgain);
-      setVisible(false);
-    }, 400);
-  }, [doNotShowAgain]);
-
-  const handleBranch = useCallback((branch: WelcomeBranch) => {
-    setEntering(true);
-    setTimeout(() => {
-      dismissWelcomeGate(doNotShowAgain);
-      setVisible(false);
-      if (branch.route) navigate(branch.route);
-    }, 400);
-  }, [doNotShowAgain, navigate]);
-
-  const flipTo = useCallback((target: "title" | number) => {
-    setFlippedTo(target);
+  // ── Preload storyboard images ──
+  useEffect(() => {
+    STORYBOARD_FRAMES.forEach((n) => {
+      const img = new Image();
+      img.src = `/images/storyboard/storyboard${n}.png`;
+    });
   }, []);
 
-  const flipBack = useCallback(() => {
-    setFlippedTo(null);
+  // ── Flipbook auto-advance ──
+  useEffect(() => {
+    if (!isPlaying || activeTab !== "concept") return;
+    const ms = FRAME_DURATIONS[speed];
+    const timer = setInterval(() => {
+      setFrame((prev) => {
+        if (prev >= 11) {
+          setIsPlaying(false);
+          return 11;
+        }
+        return prev + 1;
+      });
+    }, ms);
+    return () => clearInterval(timer);
+  }, [isPlaying, speed, activeTab]);
+
+  // ── Auto-switch to Tab B when flipbook ends ──
+  useEffect(() => {
+    if (frame === 11 && !isPlaying && activeTab === "concept") {
+      autoSwitchTimer.current = setTimeout(() => setActiveTab("getStarted"), 1500);
+      return () => {
+        if (autoSwitchTimer.current) clearTimeout(autoSwitchTimer.current);
+      };
+    }
+  }, [frame, isPlaying, activeTab]);
+
+  const cancelAutoSwitch = useCallback(() => {
+    if (autoSwitchTimer.current) {
+      clearTimeout(autoSwitchTimer.current);
+      autoSwitchTimer.current = null;
+    }
   }, []);
 
-  // Keyboard: Escape flips back (when flipped) or enters (when not flipped)
+  // ── Gate close → dismiss + optional route ──
+  const closeGate = useCallback(
+    (route?: string) => {
+      setEntering(true);
+      setTimeout(() => {
+        dismissWelcomeGate(doNotShowAgain);
+        setVisible(false);
+        if (route) navigate(route);
+      }, 400);
+    },
+    [doNotShowAgain, navigate],
+  );
+
+  // ── Tour the 16 Initiatives (Wildfire Beacon Run) ──
+  const handleTourInitiatives = useCallback(() => {
+    startRun(INITIATIVES_FULL_RUN);
+    closeGate(`/wildfire-run/${INITIATIVES_FULL_RUN.slug}`);
+  }, [startRun, closeGate]);
+
+  // ── Flipbook controls ──
+  const prevFrame = useCallback(() => {
+    cancelAutoSwitch();
+    setIsPlaying(false);
+    setFrame((f) => Math.max(0, f - 1));
+  }, [cancelAutoSwitch]);
+
+  const nextFrame = useCallback(() => {
+    cancelAutoSwitch();
+    setIsPlaying(false);
+    setFrame((f) => Math.min(11, f + 1));
+  }, [cancelAutoSwitch]);
+
+  const skipFlipbook = useCallback(() => {
+    cancelAutoSwitch();
+    setIsPlaying(false);
+    setActiveTab("getStarted");
+  }, [cancelAutoSwitch]);
+
+  const togglePlay = useCallback(() => {
+    cancelAutoSwitch();
+    if (frame === 11 && !isPlaying) {
+      setFrame(0);
+      setIsPlaying(true);
+    } else {
+      setIsPlaying((p) => !p);
+    }
+  }, [frame, isPlaying, cancelAutoSwitch]);
+
+  const setSpeedTo = useCallback(
+    (s: 1 | 2 | 3) => {
+      cancelAutoSwitch();
+      setSpeed(s);
+      if (!isPlaying) setIsPlaying(true);
+    },
+    [cancelAutoSwitch, isPlaying],
+  );
+
+  // ── Keyboard ──
   useEffect(() => {
     if (!visible) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        if (isFlipped) {
-          e.preventDefault();
-          flipBack();
-        } else {
-          handleEnter();
-        }
-      } else if (e.key === "Enter" && !isFlipped) {
-        handleEnter();
+      if (e.key === "Escape" || e.key === "Enter") {
+        closeGate();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [visible, isFlipped, flipBack, handleEnter]);
+  }, [visible, closeGate]);
 
-  if (!visible || !variant) {
-    return <>{children}</>;
-  }
+  // ── Early return ──
+  if (!visible) return <>{children}</>;
 
-  const isBluf = variant.layout === "bluf";
-
-  // Get the active highlight's flip content
-  const activeHighlight = typeof flippedTo === "number" ? variant.highlights[flippedTo] : null;
-  const activeFlipContent = activeHighlight ? HIGHLIGHT_FLIP_CONTENT[activeHighlight.title] : null;
+  // ── Shared styles ──
+  const overlayBg = "linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #0a0a0a 70%, #0d0d1f 100%)";
+  const hexPatternUrl = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`;
+  const ctaBtnClass = `rounded-xl font-bold tracking-wide uppercase transition-all bg-gradient-to-r from-green-600 to-green-500 text-white hover:from-green-500 hover:to-green-400 hover:shadow-lg hover:shadow-green-500/20 active:scale-95 ${isMobile ? "px-10 py-3 text-base" : "px-16 py-4 text-lg"}`;
 
   return (
     <>
       <div className="hidden">{children}</div>
 
-      {/* Full-screen overlay */}
       <div
-        className={`fixed inset-0 z-[9999] transition-opacity duration-400 ${
-          entering ? "opacity-0" : "opacity-100"
-        }`}
-        style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #0a0a0a 70%, #0d0d1f 100%)" }}
+        className={`fixed inset-0 z-[9999] transition-opacity duration-400 ${entering ? "opacity-0" : "opacity-100"}`}
+        style={{ background: overlayBg }}
       >
-        {/* Subtle hex pattern background */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: hexPatternUrl }} />
 
         <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8 overflow-y-auto">
           <div className={`w-full ${isMobile ? "max-w-sm" : "max-w-3xl"}`}>
 
-            {/* ═══ 3D FLIP CONTAINER (standard layout only) ═══ */}
-            {!isBluf ? (
-              <div style={{ perspective: "1200px" }}>
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    transition: "transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
-                    transformStyle: "preserve-3d",
-                    transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
-                  }}
+            {/* Tab Bar */}
+            <div className="flex gap-px mb-4 animate-in fade-in duration-500">
+              {TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-1.5 text-xs font-medium transition-all rounded-t-lg ${
+                    activeTab === tab.id
+                      ? "bg-white/10 text-green-400 border-b-2 border-green-500"
+                      : "bg-white/[0.02] text-white/25 hover:text-white/50 hover:bg-white/[0.04]"
+                  }`}
                 >
-                  {/* ─── FRONT FACE ─── */}
-                  <div
-                    style={{ backfaceVisibility: "hidden", position: "relative", width: "100%" }}
-                    className="space-y-8"
-                  >
-                    {/* Headline — clickable to flip */}
-                    <div className="text-center space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                      <h1
-                        className={`font-bold leading-tight cursor-pointer group ${isMobile ? "text-3xl" : "text-5xl"}`}
-                        onClick={() => flipTo("title")}
-                        role="button"
-                        tabIndex={0}
-                        aria-label="Click to see categorized benefits"
-                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flipTo("title"); } }}
-                      >
-                        <span className="text-white group-hover:text-white/80 transition-colors">{variant.headline.top}</span>
-                        <br />
-                        <span className="text-green-400 group-hover:text-green-300 transition-colors">{variant.headline.bottom}</span>
-                      </h1>
-                      <p className={`text-white/60 max-w-xl mx-auto ${isMobile ? "text-sm" : "text-lg"}`}>
-                        {variant.subtitle}
-                      </p>
-                    </div>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
 
-                    {/* Highlight cards — each clickable to flip */}
-                    <div
-                      className={`grid gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 ${
-                        isMobile ? "grid-cols-1" : "grid-cols-2"
+            {/* ─── TAB A: Concept — Flipbook ─── */}
+            {activeTab === "concept" && (
+              <div className="space-y-6 animate-in fade-in duration-500">
+                <div
+                  className={`relative rounded-xl overflow-hidden border border-white/10 bg-white/[0.02] mx-auto ${isMobile ? "max-w-xs" : "max-w-md"}`}
+                  style={{ aspectRatio: "1" }}
+                >
+                  <img
+                    key={frame}
+                    src={`/images/storyboard/storyboard${STORYBOARD_FRAMES[frame]}.png`}
+                    alt={`Seed to Banyan \u2014 frame ${frame + 1} of 12`}
+                    className="w-full h-full object-contain"
+                  />
+                  <div className="absolute bottom-2 right-3 text-[10px] text-white/30 font-mono">
+                    {frame + 1} / 12
+                  </div>
+                </div>
+
+                {/* Playback controls: < 1x 2x 3x || > */}
+                <div className="flex items-center justify-center gap-1 flex-wrap">
+                  <button onClick={prevFrame} className="px-2 py-1 rounded text-xs text-white/40 hover:text-white/80 hover:bg-white/10 transition-all" aria-label="Previous frame">&lsaquo;</button>
+                  {([1, 2, 3] as const).map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setSpeedTo(s)}
+                      className={`px-2 py-1 rounded text-xs font-mono transition-all ${
+                        speed === s && isPlaying
+                          ? "bg-green-600/30 text-green-400 border border-green-500/40"
+                          : "text-white/30 hover:text-white/60 hover:bg-white/10"
                       }`}
                     >
-                      {variant.highlights.map((h, i) => (
-                        <button
-                          key={i}
-                          onClick={() => flipTo(i)}
-                          className="rounded-xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm
-                            hover:border-green-500/30 hover:bg-white/[0.06] transition-all cursor-pointer text-left group"
-                          aria-label={`Learn more about ${h.title} — click to flip`}
-                        >
-                          <div className="flex items-start gap-3">
-                            <span className="text-2xl flex-shrink-0">{h.icon}</span>
-                            <div>
-                              <h3 className="font-semibold text-white text-sm group-hover:text-green-300 transition-colors">{h.title}</h3>
-                              <p className="text-white/50 text-xs mt-1 leading-relaxed">{h.description}</p>
-                              <span className="text-[10px] text-green-500/60 mt-2 block font-medium">Click to learn more →</span>
-                            </div>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
+                      {s}&times;
+                    </button>
+                  ))}
+                  <button onClick={togglePlay} className="px-2.5 py-1 rounded text-xs text-white/40 hover:text-white/80 hover:bg-white/10 transition-all" aria-label={isPlaying ? "Pause" : "Play"}>
+                    {isPlaying ? "\u23F8" : "\u25B6"}
+                  </button>
+                  <button onClick={skipFlipbook} className="px-2.5 py-1 rounded text-xs text-white/30 hover:text-green-400 hover:bg-white/10 transition-all">
+                    Skip &rarr;
+                  </button>
+                  <button onClick={nextFrame} className="px-2 py-1 rounded text-xs text-white/40 hover:text-white/80 hover:bg-white/10 transition-all" aria-label="Next frame">&rsaquo;</button>
+                </div>
 
-                    {/* Enter button */}
-                    <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
-                      <button
-                        onClick={handleEnter}
-                        className={`
-                          rounded-xl font-bold tracking-wide uppercase transition-all
-                          bg-gradient-to-r from-green-600 to-green-500 text-white
-                          hover:from-green-500 hover:to-green-400 hover:shadow-lg hover:shadow-green-500/20
-                          active:scale-95
-                          ${isMobile ? "px-10 py-3 text-base" : "px-16 py-4 text-lg"}
-                        `}
-                      >
-                        {variant.ctaText}
-                      </button>
-                    </div>
+                <p className="text-center text-[8px] text-white/15 tracking-widest uppercase">Illustrated by Ausbin</p>
+              </div>
+            )}
 
-                    {/* Do Not Show Again */}
-                    <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
-                      <label className="flex items-center gap-2 cursor-pointer group">
-                        <input
-                          type="checkbox"
-                          checked={doNotShowAgain}
-                          onChange={(e) => setDoNotShowAgain(e.target.checked)}
-                          className="w-4 h-4 rounded border-white/30 bg-transparent text-green-500 focus:ring-green-500/50 focus:ring-offset-0 cursor-pointer"
-                        />
-                        <span className="text-xs text-white/40 group-hover:text-white/60 transition-colors select-none">
-                          Do Not Show This Again
-                        </span>
-                      </label>
-                    </div>
+            {/* ─── TAB B: Get Started — Flat BLUF Triage ─── */}
+            {activeTab === "getStarted" && (
+              <div className="space-y-6 animate-in fade-in duration-500">
+                <div className="text-center space-y-2">
+                  <h2 className={`font-bold leading-tight ${isMobile ? "text-2xl" : "text-3xl"}`}>
+                    <span className="text-white">What do you need </span>
+                    <span className="text-green-400">today?</span>
+                  </h2>
+                  <p className="text-white/40 text-sm">Pick a door. Go.</p>
+                </div>
 
-                    {/* Tagline */}
-                    <div className="text-center animate-in fade-in duration-700 delay-700">
-                      <p className="text-sm text-green-400/60 italic">{variant.tagline}</p>
-                    </div>
-                  </div>
-
-                  {/* ─── BACK FACE ─── */}
-                  <div
-                    style={{
-                      backfaceVisibility: "hidden",
-                      transform: "rotateY(180deg)",
-                      position: "absolute",
-                      inset: 0,
-                      width: "100%",
-                      overflow: "auto",
-                      cursor: "pointer",
-                    }}
-                    onClick={flipBack}
-                    role="region"
-                    aria-label={
-                      flippedTo === "title"
-                        ? "Benefits overview — click anywhere to go back"
-                        : activeHighlight
-                        ? `${activeHighlight.title} details — click anywhere to go back`
-                        : "Card back"
-                    }
-                  >
-                    <div className="space-y-6 py-2">
-                      {/* Go Back button */}
-                      <button
-                        onClick={(e) => { e.stopPropagation(); flipBack(); }}
-                        className="text-xs text-white/40 hover:text-white/80 transition-colors flex items-center gap-1.5"
-                        aria-label="Go back to front"
-                      >
-                        ← Go Back
-                      </button>
-
-                      {/* ── Title flip: categorized benefits list ── */}
-                      {flippedTo === "title" && (
-                        <div className="space-y-6">
-                          <h2 className={`font-bold text-white text-center ${isMobile ? "text-2xl" : "text-3xl"}`}>
-                            {TITLE_FLIP_CONTENT.heading}
-                          </h2>
-                          <div className={`grid gap-5 ${isMobile ? "grid-cols-1" : "grid-cols-2"}`}>
-                            {TITLE_FLIP_CONTENT.categories.map((cat) => (
-                              <div key={cat.label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                                <h3 className="font-semibold text-green-400 text-sm mb-2">{cat.label}</h3>
-                                <ul className="space-y-1.5">
-                                  {cat.items.map((item, j) => (
-                                    <li key={j} className="text-white/60 text-xs flex items-start gap-2">
-                                      <span className="text-green-500 mt-0.5">✓</span>
-                                      <span>{item}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── Highlight flip: topic details ── */}
-                      {typeof flippedTo === "number" && activeHighlight && (
-                        <div className="space-y-5">
-                          <div className="flex items-center gap-3">
-                            <span className="text-3xl">{activeHighlight.icon}</span>
-                            <h2 className={`font-bold text-white ${isMobile ? "text-xl" : "text-2xl"}`}>
-                              {activeHighlight.title}
-                            </h2>
-                          </div>
-
-                          {/* Quick Facts */}
-                          <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-green-500/60 mb-2">
-                              Quick Facts
-                            </p>
-                            <p className="text-white/70 text-sm leading-relaxed">
-                              {activeFlipContent?.quickFacts || activeHighlight.description}
-                            </p>
-                          </div>
-
-                          {/* Deeper Look */}
-                          {activeFlipContent?.deeper && (
-                            <div>
-                              <p className="text-[10px] font-semibold uppercase tracking-wider text-green-500/60 mb-2">
-                                Deeper Look
-                              </p>
-                              <p className="text-white/50 text-sm leading-relaxed">
-                                {activeFlipContent.deeper}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Enter button on back too */}
-                      <div className="flex flex-col items-center gap-4 pt-2">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleEnter(); }}
-                          className={`
-                            rounded-xl font-bold tracking-wide uppercase transition-all
-                            bg-gradient-to-r from-green-600 to-green-500 text-white
-                            hover:from-green-500 hover:to-green-400 hover:shadow-lg hover:shadow-green-500/20
-                            active:scale-95
-                            ${isMobile ? "px-10 py-3 text-base" : "px-16 py-4 text-lg"}
-                          `}
-                        >
-                          {variant.ctaText}
-                        </button>
+                <div className="grid gap-3 grid-cols-1">
+                  {TRIAGE_BUTTONS.map((btn, i) => (
+                    <button
+                      key={btn.id}
+                      onClick={() => closeGate(btn.route || undefined)}
+                      className={`w-full rounded-xl border p-5 text-left transition-all duration-300 bg-gradient-to-r ${btn.color} hover:scale-[1.02] active:scale-[0.98] group cursor-pointer animate-in fade-in slide-in-from-bottom-4`}
+                      style={{ animationDelay: `${i * 100}ms` }}
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className={`flex-shrink-0 ${isMobile ? "text-3xl" : "text-4xl"}`}>{btn.icon}</span>
+                        <h3 className={`font-bold text-white group-hover:text-green-300 transition-colors flex-1 ${isMobile ? "text-lg" : "text-xl"}`}>
+                          {btn.label}
+                        </h3>
+                        <span className="text-white/30 group-hover:text-green-400 transition-colors text-2xl flex-shrink-0">&rarr;</span>
                       </div>
-
-                      <p className="text-center text-[10px] text-white/20">
-                        Click anywhere to flip back
-                      </p>
-                    </div>
-                  </div>
+                    </button>
+                  ))}
                 </div>
               </div>
-            ) : (
-              /* ═══ BLUF Layout (unchanged) ═══ */
-              <div className="space-y-8">
-                {/* Headline */}
-                <div className="text-center space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                  <h1 className={`font-bold leading-tight ${isMobile ? "text-3xl" : "text-5xl"}`}>
-                    <span className="text-white">{variant.headline.top}</span>
-                    <br />
-                    <span className="text-green-400">{variant.headline.bottom}</span>
-                  </h1>
-                  <p className={`text-white/60 max-w-xl mx-auto ${isMobile ? "text-sm" : "text-lg"}`}>
-                    {variant.subtitle}
-                  </p>
-                </div>
+            )}
 
-                {/* Branches */}
-                {variant.branches && (
-                  <div className="grid gap-4 grid-cols-1 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
-                    {variant.branches.map((branch, i) => (
-                      <button
-                        key={branch.id}
-                        onClick={() => handleBranch(branch)}
-                        className={`
-                          w-full rounded-2xl border p-6 text-left transition-all duration-300
-                          bg-gradient-to-r ${branch.color}
-                          hover:scale-[1.02] active:scale-[0.98]
-                          group cursor-pointer
-                          animate-in fade-in slide-in-from-bottom-4
-                        `}
-                        style={{ animationDelay: `${200 + i * 150}ms` }}
+            {/* ─── TAB C: More Detail — SEC-Safe Manifesto ─── */}
+            {activeTab === "moreDetail" && (
+              <div className="space-y-8 animate-in fade-in duration-500">
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-sm">
+                  <div className="space-y-3 text-center">
+                    {SEC_SAFE_LINES.map((line, i) => (
+                      <p
+                        key={i}
+                        className={
+                          i === 0
+                            ? `font-bold text-green-400 ${isMobile ? "text-xl" : "text-2xl"}`
+                            : `text-white/70 ${isMobile ? "text-sm" : "text-base"} leading-relaxed`
+                        }
                       >
-                        <div className="flex items-center gap-4">
-                          <span className={`flex-shrink-0 ${isMobile ? "text-3xl" : "text-4xl"}`}>{branch.icon}</span>
-                          <div className="flex-1 min-w-0">
-                            <h2 className={`font-bold text-white group-hover:text-green-300 transition-colors ${
-                              isMobile ? "text-lg" : "text-xl"
-                            }`}>
-                              {branch.title}
-                            </h2>
-                            <p className={`text-white/50 mt-1 ${isMobile ? "text-xs" : "text-sm"}`}>
-                              {branch.subtitle}
-                            </p>
-                          </div>
-                          <span className="text-white/30 group-hover:text-green-400 transition-colors text-2xl flex-shrink-0">
-                            →
-                          </span>
-                        </div>
-                      </button>
+                        {line}
+                      </p>
                     ))}
                   </div>
-                )}
-
-                {/* Do Not Show Again */}
-                <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500">
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={doNotShowAgain}
-                      onChange={(e) => setDoNotShowAgain(e.target.checked)}
-                      className="w-4 h-4 rounded border-white/30 bg-transparent text-green-500 focus:ring-green-500/50 focus:ring-offset-0 cursor-pointer"
-                    />
-                    <span className="text-xs text-white/40 group-hover:text-white/60 transition-colors select-none">
-                      Do Not Show This Again
-                    </span>
-                  </label>
                 </div>
 
-                {/* Tagline */}
-                <div className="text-center animate-in fade-in duration-700 delay-700">
-                  <p className="text-sm text-green-400/60 italic">{variant.tagline}</p>
+                <div className="flex flex-col items-center">
+                  <button onClick={handleTourInitiatives} className={ctaBtnClass}>
+                    Tour the 16 Initiatives
+                  </button>
+                </div>
+
+                <div className="text-center">
+                  <p className="text-sm text-green-400/60 italic">One hand builds. One hand gives. Both are needed.</p>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Liana Banyan branding — bottom */}
-          <div className="mt-8 text-center">
-            <p className="text-[10px] text-white/20 tracking-widest uppercase">
-              Liana Banyan Corporation
-            </p>
+          {/* Do Not Show Again + Branding — always visible */}
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <label className="flex items-center gap-2 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={doNotShowAgain}
+                onChange={(e) => setDoNotShowAgain(e.target.checked)}
+                className="w-4 h-4 rounded border-white/30 bg-transparent text-green-500 focus:ring-green-500/50 focus:ring-offset-0 cursor-pointer"
+              />
+              <span className="text-xs text-white/40 group-hover:text-white/60 transition-colors select-none">Do Not Show This Again</span>
+            </label>
+            <p className="text-[10px] text-white/20 tracking-widest uppercase">Member Governed &middot; Cooperative Commerce</p>
           </div>
         </div>
       </div>

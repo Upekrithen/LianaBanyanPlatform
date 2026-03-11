@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project serves as a **Central Data Portal** that can be accessed by multiple client instances (remixed Lovable templates). Each client connects to this portal's API to display and interact with project data while maintaining data security and isolation.
+This project serves as a **Central Data Portal** that can be accessed by multiple client instances (remixed templates). Each client connects to this portal's API to display and interact with project data while maintaining data security and isolation.
 
 ## Architecture
 
@@ -129,7 +129,7 @@ Generates a new API key for a client instance. Requires authentication as projec
 
 ### Step 2: Create Template Project
 
-Create a new Lovable project with this structure:
+Create a new template project with this structure:
 
 ```typescript
 // config/api.ts
@@ -209,7 +209,7 @@ export default function Projects() {
 ### Step 4: Deploy & Remix
 
 1. Deploy your template project
-2. Share the Lovable project URL
+2. Share the template project URL
 3. Users can remix it and deploy to their own subdomain
 4. Each remix connects to YOUR central database via the shared API key
 
@@ -230,7 +230,7 @@ export default function Projects() {
 ### CORS Configuration
 Configure allowed origins when generating client keys:
 - Development: `http://localhost:5173`
-- Staging: `https://[subdomain].lovable.app`
+- Staging: `https://[subdomain].web.app`
 - Production: Your custom domain
 
 ## Monitoring

@@ -28,6 +28,7 @@ import { DiscoverySlot, DiscoveryGated } from '@/components/DiscoverySlot';
 import { ReferralManager } from '@/components/ReferralManager';
 import { EOIToggle } from '@/components/EOIToggle';
 import { EOIDashboard } from '@/components/EOIDashboard';
+import { MoneyPennyWidget } from '@/components/MoneyPennyWidget';
 import { MembershipStakePayment } from '@/components/MembershipStakePayment';
 import { GuildStakeProgression } from '@/components/GuildStakeProgression';
 import { ProjectPreferenceRanking } from '@/components/ProjectPreferenceRanking';
@@ -172,6 +173,8 @@ export default function Dashboard() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
+            <MoneyPennyWidget />
+
             {/* ════════════════════════════════════════════════════════════════
                 ESSENTIALS - Always visible for authenticated users
                ════════════════════════════════════════════════════════════════ */}

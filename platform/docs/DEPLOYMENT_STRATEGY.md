@@ -49,11 +49,11 @@ nonprofit.lianabanyan.com          → Nonprofit Portal
 ### DNS Configuration Required
 ```
 Type    Host          Target                      TTL
-A       @             [Lovable IP]                3600
-CNAME   marketplace   [Lovable deployment]        3600
-CNAME   business      [Lovable deployment]        3600
-CNAME   network       [Lovable deployment]        3600
-CNAME   nonprofit     [Lovable deployment]        3600
+A       @             [Firebase IP]               3600
+CNAME   marketplace   [Firebase deployment]       3600
+CNAME   business      [Firebase deployment]       3600
+CNAME   network       [Firebase deployment]       3600
+CNAME   nonprofit     [Firebase deployment]       3600
 ```
 
 ### SSL/TLS Certificates
@@ -298,10 +298,10 @@ CNAME   nonprofit     [Lovable deployment]        3600
 - Performance degradation > 75%
 
 ### Rollback Steps
-1. **Lovable Platform**:
-   - Navigate to project history
-   - Select last stable version
-   - Click "Revert to this version"
+1. **Firebase Hosting**:
+   - Navigate to Firebase Console > Hosting
+   - Select last stable release
+   - Click "Rollback"
    - Verify deployment successful
 
 2. **Database Migrations**:

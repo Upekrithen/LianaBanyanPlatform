@@ -4,18 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Search, Filter, SlidersHorizontal, Flame, Briefcase, QrCode } from "lucide-react";
+import { MapPin, Search, Filter, SlidersHorizontal, Flame, Briefcase, QrCode, ExternalLink } from "lucide-react";
 
 // Seed data for the kaleidoscope — example business cards
 const SEED_BUSINESS_CARDS = [
-  { id: 1, name: "Springfield Bakery", category: "Food & Beverage", tier: "Flame", zip: "12345", color: "bg-amber-100 dark:bg-amber-900/30", border: "border-amber-200 dark:border-amber-800", link: "https://example.com" },
-  { id: 2, name: "TechFix Repair", category: "Services", tier: "Ember", zip: "12345", color: "bg-blue-100 dark:bg-blue-900/30", border: "border-blue-200 dark:border-blue-800", link: "https://example.com" },
-  { id: 3, name: "Green Thumb Landscaping", category: "Services", tier: "Blaze", zip: "12346", color: "bg-green-100 dark:bg-green-900/30", border: "border-green-200 dark:border-green-800", link: "https://example.com" },
-  { id: 4, name: "Artisan Crafts Co.", category: "Retail", tier: "Inferno", zip: "12345", color: "bg-purple-100 dark:bg-purple-900/30", border: "border-purple-200 dark:border-purple-800", link: "https://example.com" },
-  { id: 5, name: "Local Legal Help", category: "Professional", tier: "Ember", zip: "12347", color: "bg-slate-100 dark:bg-slate-800", border: "border-slate-200 dark:border-slate-700", link: "https://example.com" },
-  { id: 6, name: "Main Street Coffee", category: "Food & Beverage", tier: "Flame", zip: "12345", color: "bg-amber-100 dark:bg-amber-900/30", border: "border-amber-200 dark:border-amber-800", link: "https://example.com" },
-  { id: 7, name: "Quick Print Shop", category: "B2B", tier: "Blaze", zip: "12346", color: "bg-indigo-100 dark:bg-indigo-900/30", border: "border-indigo-200 dark:border-indigo-800", link: "https://example.com" },
-  { id: 8, name: "Wellness Yoga", category: "Health", tier: "Flame", zip: "12345", color: "bg-teal-100 dark:bg-teal-900/30", border: "border-teal-200 dark:border-teal-800", link: "https://example.com" },
+  { id: 1, name: "Springfield Bakery", category: "Food & Beverage", tier: "Flame", zip: "12345", color: "bg-amber-100 dark:bg-amber-900/30", border: "border-amber-200 dark:border-amber-800", link: "https://example.com", isExternal: false },
+  { id: 2, name: "TechFix Repair", category: "Services", tier: "Ember", zip: "12345", color: "bg-blue-100 dark:bg-blue-900/30", border: "border-blue-200 dark:border-blue-800", link: "https://example.com", isExternal: false },
+  { id: 3, name: "Green Thumb Landscaping", category: "Services", tier: "Blaze", zip: "12346", color: "bg-green-100 dark:bg-green-900/30", border: "border-green-200 dark:border-green-800", link: "https://example.com", isExternal: false },
+  { id: 4, name: "Artisan Crafts Co.", category: "Retail", tier: "Inferno", zip: "12345", color: "bg-purple-100 dark:bg-purple-900/30", border: "border-purple-200 dark:border-purple-800", link: "https://etsy.com/shop/example", isExternal: true, platform: "Etsy" },
+  { id: 5, name: "Local Legal Help", category: "Professional", tier: "Ember", zip: "12347", color: "bg-slate-100 dark:bg-slate-800", border: "border-slate-200 dark:border-slate-700", link: "https://example.com", isExternal: false },
+  { id: 6, name: "Main Street Coffee", category: "Food & Beverage", tier: "Flame", zip: "12345", color: "bg-amber-100 dark:bg-amber-900/30", border: "border-amber-200 dark:border-amber-800", link: "https://example.com", isExternal: false },
+  { id: 7, name: "Quick Print Shop", category: "B2B", tier: "Blaze", zip: "12346", color: "bg-indigo-100 dark:bg-indigo-900/30", border: "border-indigo-200 dark:border-indigo-800", link: "https://example.myshopify.com", isExternal: true, platform: "Shopify" },
+  { id: 8, name: "Wellness Yoga", category: "Health", tier: "Flame", zip: "12345", color: "bg-teal-100 dark:bg-teal-900/30", border: "border-teal-200 dark:border-teal-800", link: "https://example.com", isExternal: false },
 ];
 
 export default function BizKaleidoscope() {
@@ -107,6 +107,17 @@ export default function BizKaleidoscope() {
                 </div>
               </div>
             </CardContent>
+            {card.isExternal && (
+              <div className="bg-slate-900 text-white text-xs p-3 border-t border-slate-800">
+                <div className="flex items-center gap-1.5 mb-1 font-semibold">
+                  <ExternalLink className="h-3 w-3" />
+                  Checkout on {card.platform}
+                </div>
+                <p className="text-slate-300 opacity-90 leading-tight">
+                  Cost+20% rebate applied via Liana Banyan Joules upon receipt verification.
+                </p>
+              </div>
+            )}
           </Card>
         ))}
         
