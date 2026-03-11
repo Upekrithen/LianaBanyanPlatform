@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ExpandableBlock, DataVizBar, RevealBlock } from "@/components/pudding";
+import LearningPathway from "@/components/LearningPathway";
 import {
   Heart,
   Users,
@@ -371,10 +372,17 @@ export default function HelpEachOtherPage() {
           </CardContent>
         </Card>
 
+        {/* Learn & Earn Pathway */}
+        <Separator className="bg-white/10 my-6" />
+        <LearningPathway compact={false} />
+
         {/* Footer Quote */}
         <div className="text-center py-8">
           <p className="text-lg text-green-400 font-semibold">
             Help Each Other Help Ourselves
+          </p>
+          <p className="text-xs text-white/30 mt-1">
+            Interdependence
           </p>
           <p className="text-sm text-white/40 mt-2">
             The Golden Key

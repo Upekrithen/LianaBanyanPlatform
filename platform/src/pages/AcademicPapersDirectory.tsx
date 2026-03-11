@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Search, BookOpen, FileText, ArrowRight, Filter, Key } from "lucide-react";
 import cephasData from "../data/cephasIndex.json";
 import PaperQuizDialog from "@/components/PaperQuizDialog";
+import LearningPathway from "@/components/LearningPathway";
 
 // Papers that have Golden Key quizzes available
 const PAPERS_WITH_QUIZZES = new Set([
@@ -139,6 +140,9 @@ export default function AcademicPapersDirectory() {
           </div>
         )}
       </div>
+
+      {/* Learning Pathway — compact version */}
+      <LearningPathway compact />
 
       {/* Golden Key Quiz Dialog */}
       {quizPaper && (

@@ -184,6 +184,14 @@ export const WELCOME_VARIANTS: WelcomeVariant[] = [
         color: "from-violet-600/20 to-purple-600/10 border-violet-500/30 hover:border-violet-400/60",
       },
       {
+        id: "learn",
+        icon: "📖",
+        title: "I Want to Learn & Earn",
+        subtitle: "Read papers. Take quizzes. Earn Marks and Golden Keys. Three reading levels.",
+        route: "/papers",
+        color: "from-amber-600/20 to-yellow-600/10 border-amber-500/30 hover:border-amber-400/60",
+      },
+      {
         id: "explore",
         icon: "👻",
         title: "Let Me Look Around First",
