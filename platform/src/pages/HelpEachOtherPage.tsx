@@ -45,7 +45,8 @@ export default function HelpEachOtherPage() {
       description: "Protect yourself AND fund legal defense for all members. $6 bracelet, 100% to the fund.",
       action: "Get Protected",
       route: "/initiatives/defense-klaus",
-      color: "purple",
+      color: "text-purple-600",
+      bg: "bg-purple-100 dark:bg-purple-900/30",
     },
     {
       icon: Users,
@@ -53,7 +54,8 @@ export default function HelpEachOtherPage() {
       description: "Each signup gets 2 gift passes. Share protection with people you care about.",
       action: "Share Now",
       route: "/initiatives/defense-klaus?tab=share",
-      color: "pink",
+      color: "text-pink-600",
+      bg: "bg-pink-100 dark:bg-pink-900/30",
     },
     {
       icon: Coins,
@@ -61,7 +63,8 @@ export default function HelpEachOtherPage() {
       description: "If you have a business, commit to transparent pricing. Earn C+20 purchasing power in return.",
       action: "Learn More",
       route: "/c20-certification",
-      color: "green",
+      color: "text-green-600",
+      bg: "bg-green-100 dark:bg-green-900/30",
     },
     {
       icon: Gift,
@@ -69,7 +72,8 @@ export default function HelpEachOtherPage() {
       description: "Purchase a Defense Klaus voucher for someone who can't afford it.",
       action: "Donate",
       route: "/initiatives/defense-klaus?tab=cold-start",
-      color: "amber",
+      color: "text-amber-600",
+      bg: "bg-amber-100 dark:bg-amber-900/30",
     },
     {
       icon: Handshake,
@@ -77,7 +81,8 @@ export default function HelpEachOtherPage() {
       description: "16 initiatives working together. Find one that matches your skills and interests.",
       action: "Browse Initiatives",
       route: "/initiatives",
-      color: "blue",
+      color: "text-blue-600",
+      bg: "bg-blue-100 dark:bg-blue-900/30",
     },
     {
       icon: Scale,
@@ -85,7 +90,8 @@ export default function HelpEachOtherPage() {
       description: "Join the Legal Defense Fund network. Competitive rates, meaningful work helping members.",
       action: "Learn More",
       route: "/initiatives/defense-klaus?tab=lawyers",
-      color: "orange",
+      color: "text-orange-600",
+      bg: "bg-orange-100 dark:bg-orange-900/30",
     },
   ];
 
@@ -113,25 +119,27 @@ export default function HelpEachOtherPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900/10 to-gray-900">
-      <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="container mx-auto px-4 py-16 max-w-5xl space-y-16">
         
         {/* Hero Section */}
-        <div className="text-center space-y-4 py-8">
-          <h1 className="text-4xl md:text-5xl font-bold">
-            <span className="text-white">Help Each Other</span>
-            <br />
-            <span className="text-green-400">Help Ourselves</span>
+        <div className="text-center space-y-6 py-8">
+          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
+            <Heart className="h-8 w-8 text-primary" />
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+            Help Each Other <br className="hidden md:block" />
+            <span className="text-primary">Help Ourselves</span>
           </h1>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            The philosophy that powers everything we build.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            The philosophy that powers everything we build. It's not just a slogan; it's the economic engine of the platform.
           </p>
         </div>
 
         {/* Audrey Hepburn Quote Card - Flippable Cue Card */}
         <div 
           className="relative mx-auto cursor-pointer perspective-1000"
-          style={{ maxWidth: 500, height: 280 }}
+          style={{ maxWidth: 600, height: 320 }}
           onClick={() => setQuoteFlipped(!quoteFlipped)}
         >
           <div 
@@ -140,49 +148,51 @@ export default function HelpEachOtherPage() {
           >
             {/* Front - Audrey Hepburn Image with Quote */}
             <Card 
-              className="absolute inset-0 bg-gradient-to-br from-amber-900/40 to-amber-800/20 border-amber-500/30 backface-hidden overflow-hidden"
+              className="absolute inset-0 bg-stone-100 dark:bg-stone-900 border-stone-200 dark:border-stone-800 backface-hidden overflow-hidden shadow-lg"
               style={{ backfaceVisibility: 'hidden' }}
             >
-              <CardContent className="h-full flex flex-col items-center justify-center p-4 text-center relative">
+              <CardContent className="h-full flex flex-col items-center justify-center p-8 text-center relative">
                 <img 
                   src="/images/Audrey_Hepburn.avif" 
                   alt="Audrey Hepburn" 
-                  className="absolute inset-0 w-full h-full object-cover opacity-30"
+                  className="absolute inset-0 w-full h-full object-cover opacity-10 dark:opacity-20 grayscale mix-blend-multiply"
                 />
                 <div className="relative z-10">
-                  <Quote className="h-6 w-6 text-amber-400 mb-2 mx-auto" />
-                  <blockquote className="text-base md:text-lg text-white italic font-serif leading-relaxed max-w-md">
+                  <Quote className="h-8 w-8 text-stone-400 mb-6 mx-auto" />
+                  <blockquote className="text-xl md:text-2xl text-stone-800 dark:text-stone-200 italic font-serif leading-relaxed max-w-lg mx-auto">
                     "As you grow older, you will discover that you have two hands, one for helping yourself, the other for helping others."
                   </blockquote>
-                  <p className="mt-3 text-amber-400 font-semibold">— Audrey Hepburn</p>
-                  <p className="text-xs text-white/40 mt-2">Click to flip</p>
+                  <p className="mt-6 text-stone-600 dark:text-stone-400 font-semibold tracking-wide uppercase text-sm">?" Audrey Hepburn</p>
+                  <div className="mt-8 inline-flex items-center gap-2 text-xs font-medium text-stone-500 bg-stone-200/50 dark:bg-stone-800/50 px-3 py-1.5 rounded-full">
+                    <Sparkles className="h-3 w-3" /> Click to flip
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Back - Source & Context */}
             <Card 
-              className="absolute inset-0 bg-gradient-to-br from-green-900/40 to-green-800/20 border-green-500/30 rotate-y-180"
+              className="absolute inset-0 bg-primary/5 border-primary/20 rotate-y-180 shadow-lg"
               style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
             >
               <CardContent className="h-full flex flex-col items-center justify-center p-8 text-center">
-                <Heart className="h-8 w-8 text-green-400 mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">The Two Hands Philosophy</h3>
-                <p className="text-white/70 text-sm leading-relaxed mb-4">
+                <Heart className="h-10 w-10 text-primary mb-6" />
+                <h3 className="text-2xl font-bold mb-4">The Two Hands Philosophy</h3>
+                <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md">
                   Audrey Hepburn lived this philosophy. After decades of film stardom, 
                   she dedicated her later years to UNICEF, helping children in need around the world.
                 </p>
-                <p className="text-green-400 text-sm font-semibold mb-4">
+                <p className="text-primary text-lg font-semibold mb-8">
                   One hand builds. One hand gives. Both are needed.
                 </p>
                 <a 
                   href="https://economictimes.indiatimes.com/news/international/us/quote-of-the-day-february-24-quote-of-the-day-by-audrey-hepburn-as-you-grow-older-you-will-discover-that-you-have-two-hands-one-for-helping/articleshow/128747800.cms"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-white/50 hover:text-white/70 transition-colors"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <ExternalLink className="h-3 w-3" />
+                  <ExternalLink className="h-4 w-4" />
                   Source: Economic Times
                 </a>
               </CardContent>
@@ -190,204 +200,71 @@ export default function HelpEachOtherPage() {
           </div>
         </div>
 
-        {/* Philosophy Pillars - Progressive Disclosure */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 mb-2">
-            <BookOpen className="h-5 w-5 text-green-400" />
-            <h2 className="text-xl font-bold text-white">The Four Pillars</h2>
-          </div>
-          <p className="text-white/60 text-sm mb-4">
-            How we put "Help Each Other Help Ourselves" into practice
-          </p>
-          
-          {philosophyPillars.map((pillar, i) => {
-            const colors = ['#22c55e', '#3b82f6', '#f59e0b', '#8b5cf6'];
-            return (
-              <ExpandableBlock
-                key={i}
-                title={pillar.title}
-                subtitle="Click to learn more"
-                preview={pillar.description}
-                accentColor={colors[i]}
-                defaultExpanded={i === 0}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div 
-                      className="w-10 h-10 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: colors[i] + '20' }}
-                    >
-                      <pillar.icon className="h-5 w-5" style={{ color: colors[i] }} />
-                    </div>
-                    <p className="text-white/70">{pillar.description}</p>
-                  </div>
-                  
-                  <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                    <p className="text-xs text-white/50">
-                      <strong className="text-white/70">In practice:</strong>{' '}
-                      {i === 0 && "Every initiative is designed to create mutual benefit. Your participation strengthens the whole network."}
-                      {i === 1 && "Cost + 20% pricing is published on every listing. No hidden fees, no surprise markups."}
-                      {i === 2 && "20% of cold start slots are reserved for those who can't afford membership. Ghost mode lets anyone explore."}
-                      {i === 3 && "Harrows, medallions, and rare cards are earned through contribution, not purchased."}
-                    </p>
-                  </div>
-                </div>
-              </ExpandableBlock>
-            );
-          })}
-        </div>
-
-        {/* What YOU Can Do NOW */}
-        <div className="space-y-4">
+        {/* Philosophy Pillars */}
+        <div className="space-y-8 pt-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-white">What YOU Can Do NOW</h2>
-            <p className="text-white/60">Concrete actions to help each other help ourselves</p>
-          </div>
-
-          <div className="space-y-3">
-            {actionItems.map((item, i) => {
-              const colorMap: Record<string, string> = {
-                purple: '#8b5cf6',
-                pink: '#ec4899',
-                green: '#22c55e',
-                amber: '#f59e0b',
-                blue: '#3b82f6',
-                orange: '#f97316',
-              };
-              const accentColor = colorMap[item.color] || '#22c55e';
-              
-              return (
-                <ExpandableBlock
-                  key={i}
-                  title={item.title}
-                  subtitle={item.description}
-                  preview={`${item.action} →`}
-                  accentColor={accentColor}
-                  defaultExpanded={i === 0}
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                      <div 
-                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: accentColor + '20' }}
-                      >
-                        <item.icon className="h-6 w-6" style={{ color: accentColor }} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-white/70 mb-3">{item.description}</p>
-                        <Button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(item.route);
-                          }}
-                          className="gap-2"
-                          style={{ backgroundColor: accentColor }}
-                        >
-                          {item.action}
-                          <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </ExpandableBlock>
-              );
-            })}
-          </div>
-        </div>
-
-        <Separator className="bg-white/10" />
-
-        {/* The Economics */}
-        <ExpandableBlock
-          title="💰 The Economics of Helping"
-          subtitle="How mutual aid creates sustainable value"
-          preview="Creator/Worker keeps 83.3% on every transaction. $5/year membership. 20% cold start slots free..."
-          accentColor="#22c55e"
-          defaultExpanded={true}
-        >
-          {/* Visual Data Bar */}
-          <DataVizBar
-            title="Revenue Distribution"
-            subtitle="On every transaction — locked forever"
-            data={[
-              { label: 'Creator keeps', value: 83.3, color: '#22c55e', icon: '💰' },
-              { label: 'Platform (C+20%)', value: 16.7, color: '#f97316', icon: '🏛️' }
-            ]}
-            maxValue={100}
-            showPercentages={true}
-            height={28}
-          />
-          
-          <div className="mt-6 grid md:grid-cols-3 gap-4 text-center">
-            <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-              <div className="text-3xl font-bold text-green-400">83.3%</div>
-              <div className="text-sm text-white/60">Creator keeps on every transaction</div>
-            </div>
-            <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
-              <div className="text-3xl font-bold text-amber-400">$5/year</div>
-              <div className="text-sm text-white/60">Membership cost</div>
-            </div>
-            <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
-              <div className="text-3xl font-bold text-purple-400">20%</div>
-              <div className="text-sm text-white/60">Cold start slots donated free</div>
-            </div>
-          </div>
-
-          <div className="mt-4 p-4 rounded-lg bg-white/5 border border-white/10">
-            <p className="text-sm text-white/70">
-              <strong className="text-green-400">The C+20 Reciprocity Law:</strong> For every dollar of margin 
-              you give up by adopting Cost + 20% pricing, you earn one dollar of C+20 purchasing power 
-              inside the ecosystem. Help others → help yourself. It's not charity; it's mutual credit.
+            <h2 className="text-3xl font-bold mb-4">The Four Pillars</h2>
+            <p className="text-muted-foreground text-lg">
+              How we put "Help Each Other Help Ourselves" into practice
             </p>
           </div>
-        </ExpandableBlock>
-
-        {/* Share This Page */}
-        <Card className="border-white/10 bg-white/5">
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div>
-                <h3 className="font-semibold text-white">Share This Philosophy</h3>
-                <p className="text-sm text-white/60">Help others discover what we're building</p>
-              </div>
-              <Button 
-                variant="outline" 
-                className="border-green-500/50 text-green-400 hover:bg-green-500/10"
-                onClick={() => {
-                  if (navigator.share) {
-                    navigator.share({
-                      title: "Help Each Other Help Ourselves",
-                      text: "As you grow older, you will discover that you have two hands, one for helping yourself, the other for helping others. — Audrey Hepburn",
-                      url: window.location.href,
-                    });
-                  } else {
-                    navigator.clipboard.writeText(window.location.href);
-                  }
-                }}
-              >
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Learn & Earn Pathway */}
-        <Separator className="bg-white/10 my-6" />
-        <LearningPathway compact={false} />
-
-        {/* Footer Quote */}
-        <div className="text-center py-8">
-          <p className="text-lg text-green-400 font-semibold">
-            Help Each Other Help Ourselves
-          </p>
-          <p className="text-xs text-white/30 mt-1">
-            Interdependence
-          </p>
-          <p className="text-sm text-white/40 mt-2">
-            The Golden Key
-          </p>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {philosophyPillars.map((pillar, idx) => (
+              <Card key={idx} className="border-border/50 hover:border-primary/30 transition-colors">
+                <CardContent className="p-6 flex gap-4 items-start">
+                  <div className="p-3 bg-primary/10 rounded-xl">
+                    <pillar.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">{pillar.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {pillar.description}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
+
+        <Separator className="my-12" />
+
+        {/* Action Items Grid */}
+        <div className="space-y-8 pb-16">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-4">Take Action Now</h2>
+            <p className="text-muted-foreground text-lg">
+              The philosophy only works if we act on it. Choose your path.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {actionItems.map((item, i) => (
+              <Card key={i} className="flex flex-col hover:shadow-md transition-all hover:-translate-y-1">
+                <CardHeader>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${item.bg}`}>
+                    <item.icon className={`h-6 w-6 ${item.color}`} />
+                  </div>
+                  <CardTitle className="text-xl">{item.title}</CardTitle>
+                  <CardDescription className="text-base mt-2">
+                    {item.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="mt-auto pt-4">
+                  <Button 
+                    className="w-full gap-2" 
+                    variant="outline"
+                    onClick={() => navigate(item.route)}
+                  >
+                    {item.action} <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+        
       </div>
     </div>
   );
