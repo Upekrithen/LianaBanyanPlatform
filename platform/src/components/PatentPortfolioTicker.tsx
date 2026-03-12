@@ -16,7 +16,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingDown, FileText, ExternalLink, ChevronUp, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface PatentPortfolioTickerProps {
   mode?: 'compact' | 'full';
@@ -47,6 +47,9 @@ const formatCurrency = (amount: number): string => {
 export function PatentPortfolioTicker({ mode = 'compact', className = '' }: PatentPortfolioTickerProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [totalAllocated, setTotalAllocated] = useState(0);
+  const location = useLocation();
+
+  if (location.pathname === '/' && mode === 'compact') return null;
   
   const remaining = AVAILABLE_BASE - totalAllocated;
   const percentRemaining = (remaining / AVAILABLE_BASE) * 100;

@@ -19,8 +19,8 @@ At the start of EVERY session, read these files in order:
 - **Creator keeps:** 83.3% (never round to 83%)
 - **Platform margin:** Cost + 20%
 - **On $500 transaction:** Creator gets $416.67
-- **Innovations:** 1,370 (as of Feb 20, 2026)
-- **Formal claims:** 210 across 7 patent applications
+- **Innovations:** 1,560 (1,555 filed + 5 pending, as of March 10, 2026)
+- **Formal claims:** 928+ across multiple patent applications
 - **Crown Jewels:** 8 definite + 9 probable
 - **Membership:** $5/year
 
@@ -40,7 +40,7 @@ At the start of EVERY session, read these files in order:
 12. Harper Guild
 13. JukeBox
 14. Didasko (Academic)
-15. International
+15. Power to the People (Political Expedition)
 16. Brass Tacks
 
 ## Legal Entity
@@ -113,6 +113,13 @@ cd "C:\Users\Administrator\Documents\LianaBanyanPlatform\platform"; npm run buil
 ```powershell
 firebase login --reauth
 ```
+
+## Session Management Rules
+
+1. **MAX 3 features per session.** Context compression causes looping after ~10 major tool call sequences. When you've built and deployed 3 features, STOP and tell the Founder to start a fresh session with the MILESTONE_HANDOFF.
+2. **Use Edit, not Write, for files over 200 lines.** Surgical edits preserve context. Full file rewrites burn tokens and hit output limits.
+3. **Read MILESTONE_HANDOFF_MARCH_2026.md at session start** to know the current state (latest commit, migration number, what's done, what's next).
+4. **Check BISHOP_DROPZONE/ for task prompts** before asking what to do.
 
 ## Behavioral Rules
 

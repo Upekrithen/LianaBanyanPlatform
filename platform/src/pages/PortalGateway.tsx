@@ -70,17 +70,17 @@ export default function PortalGateway() {
           {/* Door 3: Launch & Build */}
           <div 
             className="group relative bg-card border-2 border-border hover:border-green-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
-            onClick={() => navigate('/simulator')}
+            onClick={() => navigate('/launch')}
           >
             <div className="bg-green-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
               <Rocket className="w-8 h-8 text-green-500" />
             </div>
             <h3 className="text-xl font-bold mb-2">Launch & Build</h3>
             <p className="text-sm text-muted-foreground mb-6">
-              Have an idea? Use our Business Simulator and Deck Card Studio to fund and launch it.
+              Have an idea? Launch it. Want to run something? Pick an initiative and start a node.
             </p>
             <div className="flex items-center text-green-500 font-semibold text-sm">
-              Start Your Project <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+              Get Started <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
 

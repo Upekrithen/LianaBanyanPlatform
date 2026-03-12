@@ -11,7 +11,7 @@ import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import MoneyPenny from "./pages/MoneyPenny";
 import Academy from "./pages/Academy";
-import Index from "./pages/Index";
+import Index, { KeepView } from "./pages/Index";
 import Auth from "./pages/Auth";
 import TikTokCallback from "./pages/TikTokCallback";
 import Dashboard from "./pages/Dashboard";
@@ -176,6 +176,11 @@ const TreasureMapCreator = lazy(() => import("./pages/TreasureMapCreator"));
 const BeaconRunCreator = lazy(() => import("./pages/BeaconRunCreator"));
 const Discover = lazy(() => import("./pages/Discover"));
 const PortalGateway = lazy(() => import("./pages/PortalGateway"));
+const LaunchHub = lazy(() => import("./pages/LaunchHub"));
+const RunANode = lazy(() => import("./pages/RunANode"));
+const GroceryNodeRegistration = lazy(() => import("./pages/GroceryNodeRegistration"));
+const FoundingRunLanding = lazy(() => import("./pages/FoundingRunLanding"));
+const PreOrderFlow = lazy(() => import("./pages/PreOrderFlow"));
 const Arenas = lazy(() => import("./pages/Arenas"));
 const Petitions = lazy(() => import("./pages/Petitions"));
 const BrowseMarketplace = lazy(() => import("./pages/BrowseMarketplace"));
@@ -322,7 +327,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
                 <PlatformFooter />
               </main>
               {/* Discovery Bookshelf — right panel for logged-in users */}
-              {user && (
+              {user && location.pathname !== '/' && (
                 <aside className="hidden xl:block w-64 border-l bg-card/30 overflow-y-auto shrink-0">
                   <DiscoveryBookshelf />
                 </aside>
@@ -359,15 +364,9 @@ function HomepageGateway() {
     );
   }
 
-  // Authenticated users get the full discovery experience
-  if (user) {
-    return <Index />;
-  }
-
-  // Unauthenticated visitors get the 4-door gateway
   return (
     <WelcomeGate>
-      <PortalGateway />
+      <Index />
     </WelcomeGate>
   );
 }
@@ -404,6 +403,7 @@ const App = () => (
                         <Route path="/free-explore" element={<GhostWorld />} />
 
                         {/* Convenience redirects — prevent 404s for common URL guesses */}
+                        <Route path="/keep" element={<ProtectedRoute><KeepView /></ProtectedRoute>} />
                         <Route path="/login" element={<Navigate to="/auth" replace />} />
                         <Route path="/signin" element={<Navigate to="/auth" replace />} />
                         <Route path="/sign-in" element={<Navigate to="/auth" replace />} />
@@ -458,6 +458,8 @@ const App = () => (
 
                         <Route path="/portal" element={<PortalGateway />} />
                         <Route path="/enter" element={<PortalGateway />} />
+                        <Route path="/launch" element={<LaunchHub />} />
+                        <Route path="/launch/run-a-node" element={<RunANode />} />
                         <Route path="/start" element={<OnboardingStart />} />
                         <Route path="/begin" element={<OnboardingStart />} />
                         <Route path="/pathway" element={<BusinessPathway />} />
@@ -594,6 +596,8 @@ const App = () => (
                         <Route path="/hexisle/overworld" element={<HexIsleOverworld />} />
                         <Route path="/hexisle/hexels/slotted-top" element={<HexelSlottedTopDetail />} />
                         <Route path="/hexisle/hexels/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexelWeeklyDetail /></Suspense>} />
+                        <Route path="/hexisle/founding-run" element={<FoundingRunLanding />} />
+                        <Route path="/hexisle/founding-run/order" element={<ProtectedRoute><PreOrderFlow /></ProtectedRoute>} />
                         <Route path="/content-pipeline" element={<ContentPipelinePage />} />
                         {/* Legal pages — public, no auth required (TikTok compliance) */}
                         <Route path="/terms" element={<TermsOfService />} />
@@ -774,6 +778,7 @@ const App = () => (
                         <Route path="/initiatives/lets-go-shopping" element={<ExplorerRoute><LetsGoShoppingPage /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-get-groceries" element={<ExplorerRoute><LetsGetGroceriesPage /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-get-groceries/box" element={<ExplorerRoute><GroceryBoxPage /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-get-groceries/start-node" element={<ProtectedRoute><GroceryNodeRegistration /></ProtectedRoute>} />
                         <Route path="/initiatives/proprietary-recipes" element={<ExplorerRoute><ProprietaryRecipesPage /></ExplorerRoute>} />
                         <Route path="/initiatives/taste-tester" element={<ExplorerRoute><TasteTesterDashboard /></ExplorerRoute>} />
                         <Route path="/initiatives/cottage-law" element={<ExplorerRoute><CottageLawPage /></ExplorerRoute>} />

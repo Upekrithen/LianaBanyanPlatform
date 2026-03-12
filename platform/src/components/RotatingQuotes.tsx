@@ -212,7 +212,7 @@ export function RotatingQuotes({
     <div 
       className={`text-center ${className}`}
       style={{
-        minHeight: '80px',
+        minHeight: '100px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

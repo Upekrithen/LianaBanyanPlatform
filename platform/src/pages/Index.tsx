@@ -1,4 +1,4 @@
-﻿/**
+/**
  * INDEX PAGE — BLINDERS VIEW
  * ===========================
  * Unauthenticated: Full-page landing matching original landing.html
@@ -19,9 +19,43 @@ import { ProfessionalLanding } from '@/components/ProfessionalLanding';
 import { RotatingQuotes } from '@/components/RotatingQuotes';
 import { useLevelGatedNavigate, getRouteLevel } from '@/components/LevelGatedLink';
 import { usePathwayProgress } from '@/contexts/PathwayProgressContext';
-import { Lock } from 'lucide-react';
+import { Lock, Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
+import PortalGatewayPage from './PortalGateway';
 import '@/styles/landing.css';
+
+const FABLE_SUBTITLES: Record<number, string> = {
+  1: "The Little Red Hen found some seeds.",
+  2: "She asked the Dog, the Cat, and the Pig for help. They refused.",
+  3: "So she planted, tended, harvested, and baked — all by herself.",
+  4: "Now everyone wanted her bread.",
+  5: "But she had a bigger idea.",
+  6: '"Then I\'ll feed everyone — and we\'ll build something together."',
+  7: "She came to a town where people were struggling.",
+  8: '"I\'m making soup from a stone. Would you like to help?"',
+  9: "One brought salt. One brought a potato. One brought herbs. Everyone gave a little.",
+  10: "And everyone ate well.",
+  11: 'Over the meal, a small ant asked: "How did you know what to do?"',
+  12: '"I was daydreaming in my kitchen..."',
+  13: '"...and I looked out my window and saw people lined up for food that had been locked away."',
+  14: '"So I reached into my daydream and pulled out something useful."',
+  15: '"To make bread, you have to plant seeds."',
+  16: "But outside the city, the ants were already harvesting — for grasshoppers who only watched and took.",
+  17: "The Hen called out to the ants. The grasshoppers heard, too.",
+  18: "She told the ants what they needed to do to make bread for themselves.",
+  19: "And together — ants, city folk, and the Hen — they planted, kneaded, baked, and shared.",
+  20: "The grasshoppers noticed.",
+  21: '"It\'s not about food. It\'s about keeping these ants IN LINE."',
+  22: "They came to put a stop to it.",
+  23: "But one ant looked around and realized: they outnumbered the grasshoppers 10,000 to 1.",
+  24: "Grasshoppers need ants. Ants don't need grasshoppers.",
+  25: "WE ARE THE ANTS.",
+  26: '"You\'ve got the makings of greatness in you. You\'re gonna rattle the stars, you are."',
+  27: "And when she looked down... her basket had been refilled.",
+  28: "Speckles from the young ones' messy eating took root and grew for others to harvest.",
+  29: "Hopper sat alone.",
+  30: "...",
+};
 
 // Durin's Door Dialog Component
 function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -421,7 +455,7 @@ const Index = () => {
     // Show welcome choice dialog
     if (showWelcomeChoice) {
       return (
-        <div className="landing-page">
+        <div className="landing-page" style={isProfessionalTheme ? { background: '#faf5eb', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' } : undefined}>
           <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
             <div style={{
               background: 'rgba(26, 32, 44, 0.95)',
@@ -492,8 +526,8 @@ const Index = () => {
     return null;
   }
 
-  // ─── NOT AUTHENTICATED: Landing Page (matches landing.html) ───
-  return <PublicLandingView navigate={navigate} />;
+  // ─── NOT AUTHENTICATED: Post-gate Portal Gateway (Choose Your Path) ───
+  return <PortalGatewayPage />;
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -502,6 +536,23 @@ const Index = () => {
 function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [heroFlipped, setHeroFlipped] = useState(false);      // HEOHO card flip
+
+  const [fableFrame, setFableFrame] = useState(1);            // Fable frame index
+  const [fableIsPlaying, setFableIsPlaying] = useState(false); // Fable playback state
+
+  useEffect(() => {
+    if (!fableIsPlaying) return;
+    const timer = setInterval(() => {
+      setFableFrame((prev) => {
+        if (prev >= 30) {
+          setFableIsPlaying(false);
+          return 30;
+        }
+        return prev + 1;
+      });
+    }, 1200);
+    return () => clearInterval(timer);
+  }, [fableIsPlaying]);
   const [mainCardFlipped, setMainCardFlipped] = useState(false); // Main card (logo + G&G) flip
   const [heroBackExpanded, setHeroBackExpanded] = useState<string | null>(null);  // Expanded topic on Hero Card back
   const [mainBackExpanded, setMainBackExpanded] = useState<string | null>(null);  // Expanded topic on Main Card back
@@ -695,8 +746,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     },
     '/durins-door': {
       icon: '🪞',
-      title: 'Mirror/Mirror',
-      description: 'The reflection portal. See yourself as others see you, manage your public profile, and control what you share. Your identity, your rules.',
+      title: 'Mirror Mirror',
+      description: '"Speak friend and enter." You found the keyhole. The Mirror is your reflection portal — see yourself as others see you, manage your public profile, and control what you share. Your identity, your rules. 50+ languages recognized.',
     },
   };
   
@@ -989,9 +1040,9 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
   // Deep navy gradient, chalk-outlined hero, cream/green text pattern
   // ═══════════════════════════════════════════════════════════════════
   const isProfessionalTheme = currentTheme === '001';
-  // SOLID background - NO gradient, same #0a1628 everywhere
+  // Warm off-white page background — Main Card stands out like a physical object on a table
   const professionalBackground = isProfessionalTheme 
-    ? '#0a1628'
+    ? '#faf5eb'
     : undefined;
   
   return (
@@ -1099,12 +1150,12 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         )}
       </div>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          PROFESSIONAL MODE NAVIGATION — Top Right (like static site)
-          Shows: The Helm | Free Explore | Mirror/Mirror
-      ═══════════════════════════════════════════════════════════════════ */}
-      {/* Professional Nav — Hidden on mobile unless showPageTools is true */}
-      {isProfessionalTheme && (!isMobile || showPageTools) ? (
+      {/* Navigation, status badges, and floating toggles removed per homepage spec.
+         Clean landing: only Main Card + ENTER/WATCH buttons visible.
+         Entire block wrapped in false to suppress all three ternary branches. */}
+      {false ? (
+        null
+      ) : false && isProfessionalTheme && (!isMobile || showPageTools) ? (
         <nav className="professional-nav" style={{
           position: 'fixed',
           top: '1.5rem',
@@ -1354,8 +1405,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
             )}
           </div>
         </nav>
-      ) : isProfessionalTheme && isMobile ? (
-        /* Mobile Professional Mode - "Explore" dropdown button */
+      ) : false && isProfessionalTheme && isMobile ? (
+        /* Mobile Professional Mode - removed per homepage spec */
         <>
           {/* Mobile Explore Dropdown - replaces "Operational" badge */}
           <div style={{
@@ -1463,53 +1514,14 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
           )}
         </>
       ) : (
-        /* Non-Professional Mode (original behavior) */
-        <>
-          {/* Status Badge — Top Right (non-professional only) */}
-          <div className="submarine-door-status">
-            <span className="status-dot" />
-            <span>Operational</span>
-          </div>
-
-          {/* Corner Toggle — Ghost only (non-professional only) */}
-          <button className="ghost-toggle" onClick={() => navigate('/ghost')}>
-            👻 Explore as Ghost
-          </button>
-          
-          {/* Mirror Toggle — Bottom Right (non-professional only) */}
-          <button className="mirror-toggle" onClick={() => setDurinsDoorOpen(true)} title="The Mirror">
-            🪞
-          </button>
-        </>
+        null
       )}
+      {/* END of suppressed floating UI block */}
       
-        {/* Refactor Theme Toggle — HIDDEN when page tools off in Professional mode */}
-        {(!isProfessionalTheme || showPageTools) && (
-        <button 
-          className="refactor-toggle" 
-          onClick={() => setRefactorPanelOpen(!refactorPanelOpen)} 
-          title="Theme Palette Switcher"
-          style={{
-            // Theme palette button - visible for switching between 8 themes
-            position: 'fixed',
-            bottom: '1.5rem',
-            left: '1.5rem',
-            background: refactorPanelOpen ? 'rgba(52, 211, 153, 0.3)' : (isProfessionalTheme ? 'rgba(10, 22, 40, 0.9)' : 'rgba(255,255,255,0.15)'),
-            border: isProfessionalTheme ? '2px solid #d69e2e' : '1px solid rgba(255,255,255,0.2)',
-            borderRadius: '12px',
-            padding: '0.5rem 0.75rem',
-            cursor: 'pointer',
-            fontSize: '1.2rem',
-            zIndex: 100,
-            transition: 'all 0.2s ease',
-          }}
-        >
-          🎨
-        </button>
-      )}
+        {/* Theme palette button removed per homepage spec — clean landing focus */}
 
-      {/* Refactor Panel — Floating Theme Switcher (hidden when page tools off in Professional mode) */}
-      {refactorPanelOpen && (!isProfessionalTheme || showPageTools) && (
+      {/* Refactor Panel — hidden per homepage spec (clean landing) */}
+      {false && refactorPanelOpen && (!isProfessionalTheme || showPageTools) && (
         <div 
           className="refactor-panel"
           style={{
@@ -1699,32 +1711,30 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         }}
       />
 
-      <div className="container">
+      <div className="container" style={isProfessionalTheme ? { maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', width: '100%', flex: 1, position: 'relative', zIndex: 1, minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' } : undefined}>
         {/* ═══════════════════════════════════════════════════════════════════
             MAIN CARD (larger) — Contains Logo + Hero Card slot + G&G Button
             Flips independently to show "How It Works"
         ═══════════════════════════════════════════════════════════════════ */}
         <div 
-          className={`main-card-flip ${mainCardFlipped ? 'flipped' : ''} ${isProfessionalTheme ? 'professional-card' : ''}`}
+          className={`main-card-flip ${isProfessionalTheme ? 'professional-card' : ''}`}
         >
-          <div className="main-card-inner">
-            {/* FRONT: Logo + Hero Card + G&G Button — entire surface flips (except hero card) */}
+          <div className="main-card-inner" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', flex: 1 }}>
+            {/* FRONT: Logo + Hero Card + ENTER/WATCH — Main Card is static frame, does NOT flip */}
             <div 
               className="main-card-front" 
-              onClick={() => setMainCardFlipped(true)} 
-              style={{ cursor: 'pointer' }}
+              style={isProfessionalTheme ? { 
+                position: 'relative',
+                boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.10)',
+                padding: '2.5rem 2.5rem 2rem',
+              } : undefined}
             >
               {/* Logo at top (professional mode has no logo here - it's inside the Hero Card) */}
               {!isProfessionalTheme && (
                 <img src="/logo.png" alt="Liana Banyan" className="logo" style={{ marginBottom: '1.5rem' }} />
               )}
               
-              {/* Rotating Quotes - shows above hero card in professional mode */}
-              {isProfessionalTheme && (
-                <div style={{ marginBottom: '1.5rem', width: '100%', maxWidth: '600px' }}>
-                  <RotatingQuotes intervalMs={8000} />
-                </div>
-              )}
+              {/* Rotating Quotes moved INSIDE Hero Card front — see below */}
               
               {/* ═══════════════════════════════════════════════════════════
                   HERO CARD (smaller) — HEOHO text, flips independently
@@ -1733,12 +1743,12 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   NOTE: Flip disabled in professional mode for V2 (preserved for Secret Access Door)
               ═══════════════════════════════════════════════════════════ */}
               <div 
-                className={`hero-flip ${(!isProfessionalTheme && heroFlipped) || hofundAccessGranted ? 'flipped' : ''} ${isProfessionalTheme ? 'no-chalk-outline' : ''}`}
+                className={`hero-flip ${heroFlipped || hofundAccessGranted ? 'flipped' : ''} ${isProfessionalTheme ? 'no-chalk-outline' : ''}`}
                 /* V2: Click-to-flip disabled in professional mode UNLESS Hofund access granted (Secret Access Door) */
                 onClick={isProfessionalTheme && !hofundAccessGranted ? undefined : (e) => { e.stopPropagation(); if (!hofundAccessGranted) setHeroFlipped(!heroFlipped); }}
                 style={isProfessionalTheme && !hofundAccessGranted ? { cursor: 'default' } : undefined}
               >
-                <div className="hero-flip-inner">
+                <div className="hero-flip-inner" style={{ minHeight: '680px', borderRadius: '1rem', overflow: 'visible', width: '100%', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', flexGrow: 1, border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
                   {/* FRONT: Professional mode matches "Ideas are Free" layout exactly */}
                   {/* OR shows Helm item explanation when hovered from nav */}
                   <div className="hero-front" style={isProfessionalTheme ? { 
@@ -1833,7 +1843,11 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     ) : isProfessionalTheme ? (
                       /* DEFAULT PROFESSIONAL CONTENT */
                       <>
-                        {/* COOPERATIVE COMMERCE eyebrow - now inside Hero Card */}
+                        {/* Rotating Quotes — inside Hero Card, flips with it */}
+                        <div style={{ marginBottom: '1rem', width: '100%', maxWidth: '500px', minHeight: '60px' }}>
+                          <RotatingQuotes intervalMs={8000} />
+                        </div>
+                        {/* COOPERATIVE COMMERCE eyebrow */}
                         <span className="cooperative-header" style={{ 
                           fontFamily: "'JetBrains Mono', monospace",
                           fontSize: 'clamp(0.6rem, 2.5vw, 0.8rem)',
@@ -1850,68 +1864,63 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         </span>
                         {/* "Ideas are Free" style - large serif text - CLICKABLE to philosophy page */}
                         <h2 
-                          onClick={(e) => { e.stopPropagation(); navigate('/help-each-other'); }}
                           style={{ 
                             fontFamily: "'Crimson Pro', Georgia, serif",
-                            fontSize: 'clamp(1.5rem, 6.4vw, 4.4rem)',  /* Responsive: 20% smaller - scales 1.5rem on tiny screens up to 4.4rem on large */
+                            fontSize: 'clamp(1.5rem, 6.4vw, 4.4rem)',
                             fontWeight: 700,
                             lineHeight: 1.1,
                             marginBottom: '1.5rem',
                             textAlign: 'center',
-                            cursor: 'pointer',
-                            transition: 'opacity 0.2s ease'
                           }}
-                          onMouseOver={(e) => e.currentTarget.style.opacity = '0.85'}
-                          onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
-                          title="Click to learn more about our philosophy"
                         >
                           {/* Line 1: "Help Each Other" - white like "Ideas are Free" */}
                           <span style={{ color: '#faf5eb', display: 'block' }}>Help Each Other</span>
-                          {/* Line 2: "Help Ourselves" - green like "Infrastructure" */}
-                          <span style={{ color: '#38a169', display: 'block' }}>Help Ourselves.</span>
+                          {/* Line 2: "Help Ourselves" - green. The "O" is Durin's Door keyhole */}
+                          <span style={{ color: '#38a169', display: 'block' }}>Help <span 
+                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); setHofundCodeEntry(true); setHofundWrongCodeMessage(false); setHofundCode(''); }} 
+                            style={{ cursor: 'pointer', position: 'relative', display: 'inline', transition: 'text-shadow 0.2s ease' }} 
+                            onMouseOver={(e) => { e.currentTarget.style.textShadow = '0 0 12px rgba(56, 161, 105, 0.7)'; }} 
+                            onMouseOut={(e) => { e.currentTarget.style.textShadow = 'none'; }} 
+                            title="Speak friend and enter"
+                          >O<span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '0.2em', opacity: 0.25, pointerEvents: 'none' }}>🕳️</span></span>urselves.</span>
                         </h2>
-                        {/* Subtitle - white text */}
                         <p style={{ 
-                          fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+                          fontSize: 'clamp(0.95rem, 2.2vw, 1.15rem)',
                           color: '#faf5eb',
                           maxWidth: '500px',
                           margin: '0 auto',
                           lineHeight: 1.7,
+                          textAlign: 'center',
+                          fontWeight: 600
+                        }}>
+                          Own your Work. Member-Governed.
+                        </p>
+                        <p style={{ 
+                          fontSize: 'clamp(0.85rem, 1.8vw, 1rem)',
+                          color: '#faf5eb',
+                          maxWidth: '500px',
+                          margin: '0.75rem auto 0',
+                          lineHeight: 1.7,
                           textAlign: 'center'
                         }}>
-                          {/* Line 1 */}
-                          <span style={{ display: 'block', marginBottom: '0.25rem' }}>
-                            Ideas are Free. Infrastructure costs Money.
-                          </span>
-                          {/* Line 2 */}
-                          <span style={{ display: 'block', marginBottom: '0.25rem' }}>
-                            We Own what we Build for $5/yr.
-                          </span>
-                          {/* Line 3 - Join us link */}
-                          <a
-                            href="#"
-                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); openOnboard({ reason: "join the community", actionLabel: "Join", membershipIncluded: true }); }}
-                            style={{
-                              display: 'block',
-                              color: '#38a169',
-                              textDecoration: 'none',
-                              fontWeight: 600,
-                              transition: 'opacity 0.2s ease'
-                            }}
-                            onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
-                            onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
-                          >
-                            Join us.
-                          </a>
+                          <span style={{ display: 'block' }}>Your ideas/services/products</span>
+                          <span style={{ display: 'block' }}>Preorder-Funded &amp; Made by Members</span>
+                        </p>
+                        <p style={{ 
+                          fontSize: 'clamp(0.85rem, 1.8vw, 1rem)',
+                          color: '#38a169',
+                          maxWidth: '500px',
+                          margin: '0.75rem auto 1.5rem',
+                          lineHeight: 1.7,
+                          textAlign: 'center',
+                          fontWeight: 600
+                        }}>
+                          The 20% margin funds 16 charitable initiatives for Everyone.
                         </p>
                       </>
                     ) : (
-                      /* NON-PROFESSIONAL MODE - also clickable */
-                      <h2 
-                        onClick={(e) => { e.stopPropagation(); navigate('/help-each-other'); }}
-                        style={{ cursor: 'pointer' }}
-                        title="Click to learn more"
-                      >
+                      /* NON-PROFESSIONAL MODE */
+                      <h2>
                         <span style={{ color: '#ffffff' }}>Help Each Other</span>
                         <br />
                         <span style={{ color: '#34d399' }}>Help Ourselves</span>
@@ -1919,29 +1928,18 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         <span style={{ color: '#ffffff', opacity: 0.6 }}>Help Each Other</span>
                       </h2>
                     )}
-                    {/* Only show hand icon when not showing Helm item - HOFUND Secret Entry */}
-                    {!(isProfessionalTheme && hoveredHelmItem) && (
-                      <span 
-                        className="hand hofund-hand"
-                        onClick={(e) => { 
-                          e.stopPropagation(); 
-                          setHofundCodeEntry(true); 
-                        }}
-                        style={{ cursor: 'pointer', zIndex: 10 }}
-                        title=""
-                      >
-                        👉
-                      </span>
-                    )}
+                    {/* Hand icon removed — keyhole in "O" is the Durin's Door entry now */}
                     
-                    {/* HOFUND Code Entry Popup - appears when hand is clicked */}
+                    {/* Durin's Door Keyhole Popup — "Speak Friend in Your Language" */}
                     {hofundCodeEntry && !hofundAccessGranted && (
                       <div 
                         onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => { if (e.key === 'Escape') { setHofundCodeEntry(false); setHofundCode(''); } }}
                         style={{
                           position: 'absolute',
                           bottom: '60px',
-                          right: '20px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
                           background: 'rgba(20, 18, 30, 0.98)',
                           border: '1px solid rgba(139, 92, 246, 0.5)',
                           borderRadius: '0.75rem',
@@ -1951,7 +1949,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                           gap: '0.5rem',
                           zIndex: 100,
                           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-                          minWidth: hofundWrongCodeMessage ? '320px' : '180px',
+                          minWidth: hofundWrongCodeMessage ? '320px' : '220px',
                           maxWidth: '360px',
                           transition: 'all 0.3s ease'
                         }}
@@ -2124,26 +2122,33 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                             </div>
                           </>
                         ) : (
-                          /* Initial Code Entry */
+                          /* Speak Friend and Enter */
                           <>
-                            <label style={{ fontSize: '0.75rem', opacity: 0.6, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                              Enter Code
+                            <label style={{ fontSize: '0.7rem', opacity: 0.7, letterSpacing: '0.05em', textAlign: 'center', color: '#faf5eb' }}>
+                              Speak "Friend" in Your Language
                             </label>
                             <input
                               type="text"
                               value={hofundCode}
-                              onChange={(e) => setHofundCode(e.target.value.toUpperCase())}
+                              onChange={(e) => setHofundCode(e.target.value)}
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
-                                  const code = hofundCode.trim();
-                                  if (validHofundCodes.includes(code)) {
-                                    setHofundAccessGranted(true);
-                                    setHofundCodeEntry(false);
-                                    setHeroFlipped(true);
-                                  } else if (specialCodes[code]) {
-                                    specialCodes[code].action();
+                                  const word = hofundCode.trim().toLowerCase();
+                                  const friendTranslations: Record<string, string> = {
+                                    'friend': 'English', 'amigo': 'Español', 'ami': 'Français', 'freund': 'Deutsch',
+                                    '朋友': '中文', '友達': '日本語', 'tomodachi': '日本語', 'amico': 'Italiano',
+                                    'друг': 'Русский', '친구': '한국어', 'chingu': '한국어', 'rafiki': 'Kiswahili',
+                                    'vinur': 'Íslenska', 'vriend': 'Nederlands', 'przyjaciel': 'Polski',
+                                    'arkadas': 'Türkçe', 'mellon': 'Sindarin (Elvish)', 'amiko': 'Esperanto',
+                                    'amicus': 'Latin', 'dost': 'हिंदी', 'ban': 'Tiếng Việt', 'kawan': 'Bahasa',
+                                    'kaibigan': 'Filipino', 'chaver': 'עברית', 'doost': 'فارسی',
+                                    'jup': 'Klingon', 'vod': "Mando'a", 'raqiros': 'High Valyrian',
+                                  };
+                                  const lang = friendTranslations[word];
+                                  if (lang) {
                                     setHofundCodeEntry(false);
                                     setHofundCode('');
+                                    setHoveredHelmItem('/durins-door');
                                   } else {
                                     setHofundWrongCodeMessage(true);
                                     setHofundCode('');
@@ -2160,12 +2165,11 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                                 borderRadius: '0.5rem',
                                 padding: '0.5rem 0.75rem',
                                 color: '#faf5eb',
-                                fontSize: '1rem',
-                                fontFamily: 'monospace',
-                                letterSpacing: '0.15em',
+                                fontSize: '0.95rem',
                                 outline: 'none',
+                                textAlign: 'center',
                               }}
-                              placeholder="• • • • • •"
+                              placeholder="friend, ami, 朋友, mellon..."
                             />
                             <button
                               onClick={() => { setHofundCodeEntry(false); setHofundCode(''); }}
@@ -2175,7 +2179,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                                 color: 'rgba(255,255,255,0.4)',
                                 fontSize: '0.7rem',
                                 cursor: 'pointer',
-                                textAlign: 'right',
+                                textAlign: 'center',
                                 padding: '0.25rem 0 0 0'
                               }}
                             >
@@ -2190,420 +2194,99 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   {/* BACK: Two columns - GET & GIVE - with expandable topics */}
                   {/* OR: HOFUND SubSystem when access granted via secret code */}
                   <div className="hero-back" style={isProfessionalTheme ? { 
-                    padding: '1.5rem',
+                    padding: '0',
                     display: 'flex',
                     flexDirection: 'column',
-                    height: '100%'
+                    height: '100%',
+                    background: '#ffffff',
+                    overflow: 'hidden',
+                    minHeight: '680px',
+                    borderRadius: '1rem',
+                    width: '100%',
+                    flex: 1,
+                    flexGrow: 1,
+                    boxShadow: 'none',
+                    border: 'none'
                   } : undefined}>
-                    {/* HOFUND SubSystem - Secret Access Granted */}
-                    {hofundAccessGranted ? (
-                      <div 
-                        style={{ 
-                          display: 'flex', 
-                          flexDirection: 'column', 
-                          alignItems: 'center', 
-                          justifyContent: 'center',
-                          height: '100%', 
-                          gap: '1.5rem',
-                          padding: '1rem',
-                          textAlign: 'center'
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <p style={{ 
-                          fontSize: '1rem', 
-                          color: '#38a169', 
-                          margin: 0, 
-                          fontStyle: 'italic',
-                          textShadow: '0 1px 3px rgba(0,0,0,0.5)'
-                        }}>
-                          Welcome Captain, to the SubSystem.
-                        </p>
-                        <p style={{ 
-                          fontSize: '1.1rem', 
-                          color: '#faf5eb', 
-                          margin: 0,
-                          textShadow: '0 1px 3px rgba(0,0,0,0.5)'
-                        }}>
-                          Your Ship Awaits, please enter your Coordinates.
-                        </p>
-                        
-                        {/* Ship's Wheel */}
-                        <div style={{ 
-                          fontSize: '4rem', 
-                          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))',
-                          animation: 'slowSpin 20s linear infinite'
-                        }}>
-                          ⎈
-                        </div>
-                        
-                        {/* Coordinates Entry */}
-                        <input
-                          type="text"
-                          value={hofundCoordinates}
-                          onChange={(e) => setHofundCoordinates(e.target.value.toUpperCase())}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' && hofundCoordinates.trim()) {
-                              // Route based on coordinates - to be configured
-                              // For now, navigate to a secret route or show a message
-                              const coords = hofundCoordinates.trim();
-                              // Placeholder routing - user will define coordinate mappings
-                              if (coords === 'HELM') levelGatedNavigate('/the-helm');
-                              else if (coords === 'BRIDGE') levelGatedNavigate('/the-bridge');
-                              else if (coords === 'HOFUND') levelGatedNavigate('/hofund');
-                              else if (coords === 'KEEP') levelGatedNavigate('/dashboard');
-                              else if (coords === 'GHOST') navigate('/ghost');
-                              // Reset state after navigation attempt
-                              setHofundAccessGranted(false);
-                              setHofundCoordinates('');
-                              setHeroFlipped(false);
-                            } else if (e.key === 'Escape') {
-                              setHofundAccessGranted(false);
-                              setHofundCoordinates('');
-                              setHeroFlipped(false);
-                            }
-                          }}
-                          autoFocus
-                          style={{
-                            background: 'rgba(56, 161, 105, 0.15)',
-                            border: '2px solid rgba(56, 161, 105, 0.5)',
-                            borderRadius: '0.75rem',
-                            padding: '0.75rem 1.25rem',
-                            color: '#faf5eb',
-                            fontSize: '1.1rem',
-                            fontFamily: 'monospace',
-                            letterSpacing: '0.2em',
-                            textAlign: 'center',
-                            outline: 'none',
-                            width: '200px',
-                            textTransform: 'uppercase'
-                          }}
-                          placeholder="COORDINATES"
+                    {isProfessionalTheme ? (
+                      <div className="group" onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setFableIsPlaying(false); }} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', width: '100%', height: '100%', cursor: 'pointer' }}>
+                        <img 
+                          src={`/images/fable/${fableFrame}.png`} 
+                          alt={`Fable Frame ${fableFrame}`} 
+                          style={{ maxWidth: '90%', maxHeight: '85%', objectFit: 'contain', marginTop: '0.5rem' }}
                         />
                         
-                        <button
-                          onClick={() => { 
-                            setHofundAccessGranted(false); 
-                            setHofundCoordinates(''); 
-                            setHeroFlipped(false); 
-                          }}
-                          style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: 'rgba(255,255,255,0.4)',
-                            fontSize: '0.75rem',
-                            cursor: 'pointer',
-                            marginTop: '0.5rem'
-                          }}
-                        >
-                          [ESC to exit SubSystem]
-                        </button>
-                      </div>
-                    ) : heroBackExpanded ? (
-                      <div 
-                        style={{ display: 'flex', flexDirection: 'column', height: '100%', cursor: 'pointer' }}
-                        onClick={(e) => { e.stopPropagation(); setHeroBackExpanded(null); }}
-                      >
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setHeroBackExpanded(null); }}
-                          style={{ 
-                            background: 'transparent', 
-                            border: 'none', 
-                            color: '#38a169', 
-                            cursor: 'pointer',
-                            fontSize: '0.9rem',
-                            textAlign: 'left',
-                            padding: '0 0 0.75rem 0',
-                            fontWeight: 600
-                          }}
-                        >
-                          ← Back
-                        </button>
-                        {heroBackExpanded === 'cost20' && (
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🛒 Cost + 20%</h4>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Every product and service on our platform is priced at <strong>Cost + 20%</strong>. 
-                              We buy, From You & For You, in advance at wholesale prices from your preorders, and add exactly 20% — no hidden markups, no middlemen fees. 
-                              The 20% margin funds platform operations and charitable initiatives.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Volume makes it work — 20% of 10,000 ( = 2,000) is a lot more than 80% of 1,000 ( = 800). 
-                              Especially when your costs are now 50% lower. For everything except Payroll. 
-                              We prepay PER JOB / ORDER CONTRACT 50% down, 50% upon completion; funded by 100% prefunded preorders. In Public.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              When larger preorder volume tiers are reached resulting in lower prices — the savings are automatically passed to you, 
-                              and the difference in what you preorder paid is returned as platform credits to purchase more. 
-                              You either get a good deal, or a better one.
-                            </p>
-                            <a 
-                              href="https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="gk-option"
-                              style={{ 
-                                background: 'linear-gradient(135deg, #38a169, #10b981)', 
-                                fontSize: '0.9rem', 
-                                padding: '0.6rem',
-                                marginTop: 'auto',
-                                textDecoration: 'none',
-                                color: '#faf5eb',
-                                display: 'block',
-                                textAlign: 'center',
-                                borderRadius: '0.5rem'
-                              }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              📊 See the Full Explanation →
-                            </a>
-                          </div>
-                        )}
-                        {heroBackExpanded === 'volume' && (
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>📦 Volume Savings</h4>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Group buying power for <strong>food, medications, and shopping</strong>. 
-                              When members buy together, everyone saves.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Let's Get Groceries aggregates orders for bulk discounts. The Tatiana Schlossburg Health Accords negotiate 
-                              manufacturer pricing. Let's Go Shopping pools demand for better deals.
-                            </p>
-                          </div>
-                        )}
-                        {heroBackExpanded === 'member' && (
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <h4 style={{ color: '#38a169', fontSize: '1.3rem', margin: 0 }}>🤝 Member Benefits</h4>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              You're not a customer — <strong>you're a member-owner</strong>. 
-                              $5/year membership gives you voting rights and governance participation. You can:
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Post ideas to get funded; Make products to sell (and get funded for making the products); 
-                              Work for someone else's business, Start your OWN business with all the services provided by other Members to make it easy; 
-                              Provide those services to other Members for THEIR businesses; Provide services AS your business, 
-                              Plant seeds by voting on other Member's Projects of Ideas, or Businesses, or Products, or Services, 
-                              AND have access to ALL the Charitable Initiatives provided.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Members elect representatives and propose changes. 
-                              The people most affected by decisions help make them.
-                            </p>
-                          </div>
-                        )}
-                        {heroBackExpanded === 'keep83' && (
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <h4 style={{ color: '#8b5cf6', fontSize: '1.3rem', margin: 0 }}>💰 Keep 83.3%</h4>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              When you earn on our platform, you keep <strong>83.3% of every dollar</strong>. 
-                              Compare that to 50-70% on most gig platforms.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              On a $500 job: you get <strong>$416.67</strong>. The platform takes only $83.33 (16.7%) 
-                              to cover operations and fund charitable initiatives.
-                            </p>
-                          </div>
-                        )}
-                        {heroBackExpanded === 'reputation' && (
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <h4 style={{ color: '#8b5cf6', fontSize: '1.3rem', margin: 0 }}>⭐ Build Reputation</h4>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Quality work builds lasting reputation. <strong>Finish fast with quality</strong> and 
-                              watch your opportunities grow.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Your reputation is portable and belongs to you. Verified reviews, completion rates, 
-                              and skill endorsements follow you across all projects started or worked on as well as all 16 initiatives. 
-                              <strong>Make a Name for Yourself.</strong>
-                            </p>
-                          </div>
-                        )}
-                        {heroBackExpanded === 'ownwork' && (
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <h4 style={{ color: '#8b5cf6', fontSize: '1.3rem', margin: 0 }}>📜 Own Your Work</h4>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Your intellectual property stays yours. <strong>IP is protected</strong> through our ledger system.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Create content, recipes, designs, or code — it's registered to your account with timestamps. 
-                              Earn platform credits when others create derivative works based on your contributions.
-                            </p>
-                          </div>
-                        )}
-                        {heroBackExpanded === 'explore' && (
-                          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <h4 style={{ color: '#8b5cf6', fontSize: '1.3rem', margin: 0 }}>👻 Free Explore</h4>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              Explore the platform without commitment. <strong>Ghost World</strong> lets you browse, 
-                              discover, and learn how everything works before joining.
-                            </p>
-                            <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                              See available services, browse recipes, check out the marketplace, and understand the 
-                              cooperative model. No signup required.
-                            </p>
-                            <button 
-                              className="gk-option"
-                              style={{ 
-                                background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', 
-                                fontSize: '0.95rem', 
-                                padding: '0.7rem',
-                                marginTop: 'auto'
-                              }}
-                              onClick={(e) => { e.stopPropagation(); navigate('/ghost'); }}
-                            >
-                              👻 Enter Ghost World
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ) : showSignUpForm ? (
-                      /* Inline Sign Up Form */
-                      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setShowSignUpForm(false); }}
-                          style={{ 
-                            background: 'transparent', 
-                            border: 'none', 
-                            color: '#38a169', 
-                            cursor: 'pointer',
-                            fontSize: '0.9rem',
-                            textAlign: 'left',
-                            padding: '0 0 0.75rem 0',
-                            fontWeight: 600
-                          }}
-                        >
-                          ← Back
-                        </button>
-                        <h4 style={{ fontSize: '1.3rem', margin: '0 0 0.5rem 0', textAlign: 'center' }}>Join for $5/year</h4>
-                        <p style={{ fontSize: '0.85rem', textAlign: 'center', margin: '0 0 1rem 0', opacity: 0.8 }}>
-                          Become a member-owner
-                        </p>
-                        <form onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/auth?signup=true'); }} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 }}>
-                          <input 
-                            type="email" 
-                            placeholder="Email address" 
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ 
-                              padding: '0.7rem', 
-                              borderRadius: '0.4rem', 
-                              border: '1px solid rgba(0,0,0,0.2)', 
-                              fontSize: '0.9rem',
-                              background: 'white',
-                              color: '#0a1628'
-                            }} 
-                          />
-                          <input 
-                            type="password" 
-                            placeholder="Create password" 
-                            onClick={(e) => e.stopPropagation()}
-                            style={{ 
-                              padding: '0.7rem', 
-                              borderRadius: '0.4rem', 
-                              border: '1px solid rgba(0,0,0,0.2)', 
-                              fontSize: '0.9rem',
-                              background: 'white',
-                              color: '#0a1628'
-                            }} 
-                          />
-                          <button 
-                            type="submit"
-                            className="gk-option"
-                            style={{ 
-                              background: 'linear-gradient(135deg, #34d399, #10b981)', 
-                              color: '#022c22', 
-                              fontSize: '0.95rem', 
-                              padding: '0.7rem',
-                              marginTop: 'auto'
-                            }}
+                        {/* Subtitle Overlay — below the image, outside the artwork */}
+                        {FABLE_SUBTITLES[fableFrame] && (
+                          <div 
+                            className="absolute bottom-0 left-0 right-0 px-4 text-center pointer-events-none flex justify-center"
+                            style={{ zIndex: 10 }}
                           >
-                            Sign Up — $5/year
-                          </button>
-                        </form>
-                        <p style={{ fontSize: '0.7rem', textAlign: 'center', marginTop: '0.5rem', opacity: 0.6 }}>
-                          Already have an account? <a href="#" onClick={(e) => { e.stopPropagation(); e.preventDefault(); openOnboard({ reason: "join the community", actionLabel: "Join", membershipIncluded: true }); }} style={{ color: '#38a169' }}>Sign In</a>
-                        </p>
+                            <p style={{
+                              background: 'rgba(255, 255, 255, 0.85)',
+                              color: '#0a1628',
+                              padding: '0.5rem 1rem',
+                              borderRadius: '0.35rem 0.35rem 0 0',
+                              fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)',
+                              fontFamily: "'Source Sans 3', system-ui, sans-serif",
+                              maxWidth: '95%',
+                              margin: 0,
+                              transition: 'opacity 0.3s ease',
+                              lineHeight: 1.4,
+                              fontWeight: 500
+                            }}>
+                              {FABLE_SUBTITLES[fableFrame]}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Left Button (Previous) */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setFableFrame(prev => Math.max(1, prev - 1)); setFableIsPlaying(false); }}
+                          className="absolute left-0 top-0 bottom-0 w-16 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-gradient-to-r from-black/10 to-transparent hover:from-black/20"
+                          style={{ border: 'none', cursor: 'pointer', color: '#333' }}
+                          title="Previous"
+                        >
+                          <ChevronLeft className="w-10 h-10 opacity-70 hover:opacity-100 transition-opacity" />
+                        </button>
+
+                        {/* Right Button (Next) */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setFableFrame(prev => Math.min(30, prev + 1)); setFableIsPlaying(false); }}
+                          className="absolute right-0 top-0 bottom-0 w-16 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-gradient-to-l from-black/10 to-transparent hover:from-black/20"
+                          style={{ border: 'none', cursor: 'pointer', color: '#333' }}
+                          title="Next"
+                        >
+                          <ChevronRight className="w-10 h-10 opacity-70 hover:opacity-100 transition-opacity" />
+                        </button>
+
+                        {/* Center Play/Pause Button */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setFableIsPlaying(!fableIsPlaying); }}
+                          className="absolute inset-0 m-auto w-20 h-20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm scale-95 hover:scale-100"
+                          style={{ border: 'none', cursor: 'pointer' }}
+                          title={fableIsPlaying ? "Pause" : "Play"}
+                        >
+                          {fableIsPlaying ? (
+                            <Pause className="w-10 h-10 fill-current" />
+                          ) : (
+                            <Play className="w-10 h-10 fill-current ml-1" />
+                          )}
+                        </button>
+                        
+                        {/* Close button top right */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setFableIsPlaying(false); }}
+                          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
+                          style={{ border: 'none', cursor: 'pointer' }}
+                          title="Close"
+                        >
+                          ×
+                        </button>
                       </div>
                     ) : (
-                      /* Default GET & GIVE Grid */
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', flex: 1 }}>
-                        {/* GET Column */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                          {/* GET/GIVE headers removed for cleaner layout */}
-                          <div 
-                            onClick={(e) => { e.stopPropagation(); setHeroBackExpanded('cost20'); }}
-                            style={{ background: 'rgba(56, 161, 105, 0.2)', padding: '0.6rem', borderRadius: '0.5rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                          >
-                            <strong style={{ fontSize: '0.95rem' }}>Cost + 20%</strong>
-                            <span style={{ opacity: 0.75, fontSize: '0.75rem' }}>Wholesale on everything →</span>
-                          </div>
-                          <div 
-                            onClick={(e) => { e.stopPropagation(); setHeroBackExpanded('volume'); }}
-                            style={{ background: 'rgba(56, 161, 105, 0.2)', padding: '0.6rem', borderRadius: '0.5rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                          >
-                            <strong style={{ fontSize: '0.95rem' }}>Volume Savings</strong>
-                            <span style={{ opacity: 0.75, fontSize: '0.75rem' }}>Food, meds, shopping →</span>
-                          </div>
-                          <div 
-                            onClick={(e) => { e.stopPropagation(); setHeroBackExpanded('member'); }}
-                            style={{ background: 'rgba(56, 161, 105, 0.2)', padding: '0.6rem', borderRadius: '0.5rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                          >
-                            <strong style={{ fontSize: '0.95rem' }}>Member Benefits</strong>
-                            <span style={{ opacity: 0.75, fontSize: '0.75rem' }}>Not a customer—an owner →</span>
-                          </div>
-                          <button 
-                            className="gk-option" 
-                            style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', fontSize: '0.85rem', padding: '0.5rem', width: '100%', marginTop: 'auto' }}
-                            onClick={(e) => { e.stopPropagation(); setHeroBackExpanded('explore'); }}
-                          >
-                            👻 Explore Free
-                          </button>
-                        </div>
-                        
-                        {/* GIVE Column */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                          {/* GET/GIVE headers removed for cleaner layout */}
-                          <div 
-                            onClick={(e) => { e.stopPropagation(); setHeroBackExpanded('keep83'); }}
-                            style={{ background: 'rgba(139, 92, 246, 0.2)', padding: '0.6rem', borderRadius: '0.5rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                          >
-                            <strong style={{ fontSize: '0.95rem' }}>Keep 83.3%</strong>
-                            <span style={{ opacity: 0.75, fontSize: '0.75rem' }}>Of what you earn →</span>
-                          </div>
-                          <div 
-                            onClick={(e) => { e.stopPropagation(); setHeroBackExpanded('reputation'); }}
-                            style={{ background: 'rgba(139, 92, 246, 0.2)', padding: '0.6rem', borderRadius: '0.5rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                          >
-                            <strong style={{ fontSize: '0.95rem' }}>Build Reputation</strong>
-                            <span style={{ opacity: 0.75, fontSize: '0.75rem' }}>Finish fast with quality →</span>
-                          </div>
-                          <div 
-                            onClick={(e) => { e.stopPropagation(); setHeroBackExpanded('ownwork'); }}
-                            style={{ background: 'rgba(139, 92, 246, 0.2)', padding: '0.6rem', borderRadius: '0.5rem', textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                          >
-                            <strong style={{ fontSize: '0.95rem' }}>Own Your Work</strong>
-                            <span style={{ opacity: 0.75, fontSize: '0.75rem' }}>IP & royalties protected →</span>
-                          </div>
-                          <button 
-                            className="gk-option" 
-                            style={{ background: 'linear-gradient(135deg, #34d399, #10b981)', color: '#022c22', fontSize: '0.85rem', padding: '0.5rem', width: '100%', marginTop: 'auto' }}
-                            onClick={(e) => { e.stopPropagation(); setShowSignUpForm(true); }}
-                          >
-                            💼 Join $5/yr
-                          </button>
-                        </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', background: '#0a1628' }}>
+                        {/* Non-professional theme back content */}
                       </div>
                     )}
                   </div>
@@ -2611,49 +2294,65 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               </div>
               {/* END HERO CARD */}
               
-              {/* Button at bottom - Professional mode uses "How It Works" style from static page */}
-              {isProfessionalTheme ? (
+              {/* ENTER + WATCH buttons — on Main Card frame, outside Hero Card */}
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
                 <button 
-                  className="how-it-works-btn"
-                  onClick={(e) => { e.stopPropagation(); setMainCardFlipped(true); }}
+                  onClick={(e) => { e.stopPropagation(); navigate('/portal'); }}
                   style={{ 
                     cursor: 'pointer',
-                    marginTop: '2rem',
-                    padding: '0.875rem 2rem',
+                    padding: '0.875rem 2.5rem',
                     fontSize: '1rem',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     fontFamily: "'Source Sans 3', system-ui, sans-serif",
-                    color: '#faf5eb',  /* White text on green background */
-                    background: '#38a169',  /* Green background */
+                    color: '#faf5eb',
+                    background: '#38a169',
                     border: '2px solid #38a169',
                     borderRadius: '0.5rem',
                     transition: 'all 0.3s ease',
+                    letterSpacing: '0.1em'
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.background = '#faf5eb';  /* White on hover */
-                    e.currentTarget.style.color = '#0a1628';  /* Black text */
+                    e.currentTarget.style.background = '#faf5eb';
+                    e.currentTarget.style.color = '#0a1628';
                     e.currentTarget.style.borderColor = '#faf5eb';
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.background = '#38a169';  /* Back to green */
-                    e.currentTarget.style.color = '#faf5eb';  /* White text */
+                    e.currentTarget.style.background = '#38a169';
+                    e.currentTarget.style.color = '#faf5eb';
                     e.currentTarget.style.borderColor = '#38a169';
                   }}
                 >
-                  How Liana Banyan Works
+                  ENTER
                 </button>
-              ) : (
                 <button 
-                  className="yggdrasil-badge" 
-                  onClick={(e) => { e.stopPropagation(); setMainCardFlipped(true); }}
-                  style={{ cursor: 'pointer', border: 'none', marginTop: '1.5rem' }}
+                  onClick={(e) => { e.stopPropagation(); setHeroFlipped(true); }}
+                  style={{ 
+                    cursor: 'pointer',
+                    padding: '0.875rem 2.5rem',
+                    fontSize: '1rem',
+                    fontWeight: 700,
+                    fontFamily: "'Source Sans 3', system-ui, sans-serif",
+                    color: '#faf5eb',
+                    background: 'transparent',
+                    border: '2px solid rgba(250, 245, 235, 0.4)',
+                    borderRadius: '0.5rem',
+                    transition: 'all 0.3s ease',
+                    letterSpacing: '0.1em'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = '#faf5eb';
+                    e.currentTarget.style.background = 'rgba(250, 245, 235, 0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(250, 245, 235, 0.4)';
+                    e.currentTarget.style.background = 'transparent';
+                  }}
                 >
-                  <span style={{ display: 'block', fontWeight: 700 }}>Get & Give · Cost + 20%</span>
-                  <span style={{ display: 'block', fontSize: '0.85rem', opacity: 0.9, marginTop: '2px' }}>For $5 a Year</span>
+                  WATCH
                 </button>
-              )}
+              </div>
               
-              <span className="hand" style={{ position: 'absolute', bottom: '12px', right: '16px' }}>👉</span>
+              {/* Hand icon removed — Main Card is static frame, no flip */}
             </div>
 
             {/* BACK: How Liana Banyan Works - with expandable topics in SINGLE COLUMN */}
@@ -3574,7 +3273,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
 // ═══════════════════════════════════════════════════════════════════════════
 // AUTHENTICATED DISCOVERY VIEW — Minimal chalk-outline aesthetic
 // ═══════════════════════════════════════════════════════════════════════════
-function AuthenticatedDiscoveryView({ 
+export function KeepView({ 
   navigate, 
   discoveries, 
   discoveryLevel 

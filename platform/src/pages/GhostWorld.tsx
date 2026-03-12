@@ -80,10 +80,13 @@ export default function GhostWorld() {
   const [wasDecayed, setWasDecayed] = useState(false);
 
   useEffect(() => {
-    // If user is logged in, they're not a ghost
+    // If user is logged in and didn't explicitly choose to explore as a ghost, redirect to dashboard
     if (user) {
-      navigate("/dashboard");
-      return;
+      const sessionChoice = sessionStorage.getItem('lb_landing_choice');
+      if (sessionChoice !== 'explore') {
+        navigate("/dashboard");
+        return;
+      }
     }
     loadOrCreateGhostProfile();
     loadGoldenKeys();

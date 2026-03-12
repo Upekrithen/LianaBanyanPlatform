@@ -24,9 +24,9 @@
   overflow-x: hidden;
 }
 
-/* Professional mode - SOLID deep navy background, NO gradient */
+/* Professional mode - warm off-white background so Main Card stands out like a physical object */
 .landing-page.professional-mode {
-  background: #0a1628 !important;
+  background: #faf5eb !important;
 }
 
 /* ─── Animated diagonal text background ─── */
@@ -315,7 +315,7 @@
 ═══════════════════════════════════════════════════════════════════ */
 .main-card-flip {
   perspective: 1200px;
-  max-width: 900px;  /* Match the Choose Your Path section width */
+  max-width: 1000px;
   width: 95%;
   margin: 2rem auto;
   position: relative;
@@ -396,9 +396,9 @@
   cursor: pointer;
 }
 
-/* Professional mode Hero Card - wider and taller to accommodate larger HEOHO text */
+/* Professional mode Hero Card - wider to fit within 1000px Main Card */
 .landing-page.professional-mode .hero-flip {
-  max-width: 680px;  /* Much wider to fit "Help Each Other" at full size */
+  max-width: 900px;
 }
 
 .landing-page.professional-mode .hero-flip-inner {
@@ -1041,7 +1041,7 @@
 
 /* Professional mode title styling */
 .landing-page.professional-mode .landing-title .liana {
-  color: #faf5eb;
+  color: #0a1628;
   font-family: 'Crimson Pro', Georgia, serif;
 }
 
