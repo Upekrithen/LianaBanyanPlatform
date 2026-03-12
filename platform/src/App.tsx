@@ -185,6 +185,8 @@ const TreasureMap = lazy(() => import("./pages/TreasureMap"));
 const CrewNewPage = lazy(() => import("./pages/CrewNewPage"));
 const CrewDashboard = lazy(() => import("./pages/CrewDashboard"));
 const CrewInvite = lazy(() => import("./pages/CrewInvite"));
+const AmbassadorRegistration = lazy(() => import("./pages/AmbassadorRegistration"));
+const AmbassadorDashboard = lazy(() => import("./pages/AmbassadorDashboard"));
 const Arenas = lazy(() => import("./pages/Arenas"));
 const Petitions = lazy(() => import("./pages/Petitions"));
 const BrowseMarketplace = lazy(() => import("./pages/BrowseMarketplace"));
@@ -466,6 +468,8 @@ const App = () => (
                         <Route path="/crew/new" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewNewPage /></Suspense></ProtectedRoute>} />
                         <Route path="/crew/:crewId" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/crew/:crewId/invite" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewInvite /></Suspense>} />
+                        <Route path="/ambassador/register" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorRegistration /></Suspense></ProtectedRoute>} />
+                        <Route path="/ambassador/dashboard" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/launch" element={<LaunchHub />} />
                         <Route path="/launch/run-a-node" element={<RunANode />} />
                         <Route path="/start" element={<OnboardingStart />} />
