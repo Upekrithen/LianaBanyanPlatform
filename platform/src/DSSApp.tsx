@@ -36,7 +36,7 @@ function DSSLoadingFallback() {
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">
       <div className="text-center">
         <div className="text-5xl mb-4 animate-pulse">🖨️</div>
-        <p className="text-zinc-400 animate-pulse text-lg">Loading The 2nd Second...</p>
+        <p className="text-zinc-400 animate-pulse text-lg">Loading The 2nd Second Industrial Revolution...</p>
       </div>
     </div>
   );

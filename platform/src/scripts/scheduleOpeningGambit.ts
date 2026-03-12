@@ -182,7 +182,7 @@ Cross-link: Full article from BISHOP_DROPZONE/ARTICLE_01_EKING_DRAFT.md`,
     title: "Day 1 — Reddit r/Entrepreneur: 9 Years Building",
     content: `I spent 9 years building a cooperative commerce platform. Here's why I'm giving the IP away.
 
-I'm a 52-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where creators keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
+I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where creators keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
 
 I put 928+ patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
 

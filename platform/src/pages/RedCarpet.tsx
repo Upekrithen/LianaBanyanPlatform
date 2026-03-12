@@ -1568,7 +1568,7 @@ export default function RedCarpet() {
                 <div className="text-center mb-8">
                   <h3 className="text-3xl font-bold text-foreground mb-4">37 Years in the Making</h3>
                   <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                    Built by a 52-year-old Army veteran (Infantry + Aviation), father of eight, with 21 years in IT development. 
+                    Built by a 53-year-old Army veteran (Infantry + Aviation), father of eight, with 21 years in IT development. 
                     This system has been in development since 1989 — not as software, but as a philosophy.
                   </p>
                 </div>

@@ -116,6 +116,11 @@ const QUOTES: Quote[] = [
     author: "Liana Banyan",
     link: "/help-each-other",
   },
+  // Founder
+  {
+    text: "Find the Will to Act, and the Courage to Believe.",
+    author: "The Founder, Liana Banyan",
+  },
   // 36. Zig Ziglar
   {
     text: "You can get everything in life you want if you will just help enough other people get what they want.",

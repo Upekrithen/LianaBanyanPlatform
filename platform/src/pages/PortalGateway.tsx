@@ -33,37 +33,37 @@ export default function PortalGateway() {
         {/* The 4 Doors (Dell-Style Routing) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* Door 1: Play & Collect */}
+          {/* Door 1: I Want to Earn Money → Treasure Map */}
           <div 
-            className="group relative bg-card border-2 border-border hover:border-blue-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
-            onClick={() => navigate('/hexisle')}
+            className="group relative bg-card border-2 border-border hover:border-green-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
+            onClick={() => navigate('/treasure-map?source=earn')}
           >
-            <div className="bg-blue-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
-              <Gamepad2 className="w-8 h-8 text-blue-500" />
+            <div className="bg-green-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
+              <Gamepad2 className="w-8 h-8 text-green-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Play & Collect</h3>
+            <h3 className="text-xl font-bold mb-2">I Want to Earn Money</h3>
             <p className="text-sm text-muted-foreground mb-6">
-              Explore HexIsle, collect physical miniatures, and experience the tactile Water Table.
+              Answer a few questions and we'll show you 3 ways to start earning in the next 7–14 days.
             </p>
-            <div className="flex items-center text-blue-500 font-semibold text-sm">
-              Enter the Game <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            <div className="flex items-center text-green-500 font-semibold text-sm">
+              Find My Path <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
 
-          {/* Door 2: Make & Print */}
+          {/* Door 2: I Want to Build Something → Treasure Map */}
           <div 
-            className="group relative bg-card border-2 border-border hover:border-orange-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
-            onClick={() => window.open('https://the2ndsecond.com', '_blank', 'noopener,noreferrer')}
+            className="group relative bg-card border-2 border-border hover:border-amber-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
+            onClick={() => navigate('/treasure-map?source=build')}
           >
-            <div className="bg-orange-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
-              <Printer className="w-8 h-8 text-orange-500" />
+            <div className="bg-amber-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-amber-500/20 transition-colors">
+              <Printer className="w-8 h-8 text-amber-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Make & Print</h3>
+            <h3 className="text-xl font-bold mb-2">I Want to Build Something</h3>
             <p className="text-sm text-muted-foreground mb-6">
-              Got a 3D printer? Get free STLs, join a Prototyper Guild, and earn by testing designs.
+              Tell us your skills and tools — we'll match you to a product or initiative you can start this week.
             </p>
-            <div className="flex items-center text-orange-500 font-semibold text-sm">
-              Go to the2ndSecond <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            <div className="flex items-center text-amber-500 font-semibold text-sm">
+              Find My Path <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
 
@@ -102,6 +102,16 @@ export default function PortalGateway() {
           </div>
 
         </div>
+
+        <p className="text-center text-sm text-muted-foreground mt-6">
+          <button
+            type="button"
+            className="hover:underline hover:text-foreground transition-colors"
+            onClick={() => navigate("/treasure-map")}
+          >
+            Join a Crew — find your path in 3 minutes
+          </button>
+        </p>
 
         {/* The Legal/Economic Shield (TestNet Explainer) */}
         <div className="mt-16 max-w-4xl mx-auto">
