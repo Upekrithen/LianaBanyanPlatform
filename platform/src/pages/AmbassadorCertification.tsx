@@ -3,11 +3,12 @@
  * Gated by level-up requirements. 80% pass threshold.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AmbassadorLevelBadge } from "@/components/ambassador/AmbassadorLevelBadge";
+import { AmbassadorCertificationQuiz } from "@/components/ambassador/AmbassadorCertificationQuiz";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";
@@ -25,26 +26,31 @@ export default function AmbassadorCertification() {
   const [ambassador, setAmbassador] = useState<{ id: string; level: number; level_title: string | null; slots_filled: number } | null>(null);
   const [completedCount, setCompletedCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [failMessage, setFailMessage] = useState<{ scorePct: number; message: string } | null>(null);
+
+  const fetchProgress = useCallback(async () => {
+    if (!user?.id) return;
+    const { data: amb } = await supabase
+      .from("ambassadors")
+      .select("id, level, level_title, slots_filled")
+      .eq("user_id", user.id)
+      .single();
+    setAmbassador(amb ?? null);
+    if (amb?.id) {
+      const { count } = await supabase
+        .from("ambassador_recruits")
+        .select("id", { count: "exact", head: true })
+        .eq("ambassador_id", amb.id)
+        .eq("status", "completed");
+      setCompletedCount(count ?? 0);
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user?.id) return;
-    (async () => {
-      const { data: amb } = await supabase
-        .from("ambassadors")
-        .select("id, level, level_title, slots_filled")
-        .eq("user_id", user.id)
-        .single();
-      setAmbassador(amb ?? null);
-      if (amb?.id) {
-        const { count } = await supabase
-          .from("ambassador_recruits")
-          .select("id", { count: "exact", head: true })
-          .eq("ambassador_id", amb.id)
-          .eq("status", "completed");
-        setCompletedCount(count ?? 0);
-      }
-    })().finally(() => setLoading(false));
-  }, [user?.id]);
+    fetchProgress().finally(() => setLoading(false));
+  }, [user?.id, fetchProgress]);
 
   const canLevelUp = ambassador && ambassador.level < 5 && ambassador.level === 1 && completedCount >= 10;
   const nextLevel = ambassador ? ambassador.level + 1 : 0;
@@ -90,14 +96,33 @@ export default function AmbassadorCertification() {
             )}
           </CardContent>
         </Card>
-        {canLevelUp ? (
+        {canLevelUp && !showQuiz && !failMessage && (
           <Card>
             <CardContent className="pt-6">
-              <p className="text-sm mb-3">Assessment for Level {nextLevel} will include scenario questions, process knowledge, and platform knowledge. Pass threshold: 80%.</p>
-              <Button disabled>Assessment coming soon</Button>
+              <p className="text-sm mb-3">Assessment for Level {nextLevel} includes scenario questions, process knowledge, and platform knowledge. Pass threshold: 80%. On pass you advance to Lamplighter and earn 25 Marks.</p>
+              <Button onClick={() => setShowQuiz(true)}>Start assessment</Button>
             </CardContent>
           </Card>
-        ) : (
+        )}
+        {canLevelUp && showQuiz && (
+          <AmbassadorCertificationQuiz
+            ambassadorId={ambassador.id}
+            fromLevel={ambassador.level}
+            toLevel={nextLevel}
+            onPass={() => { setShowQuiz(false); setFailMessage(null); fetchProgress(); }}
+            onFail={(scorePct, message) => { setShowQuiz(false); setFailMessage({ scorePct, message }); }}
+          />
+        )}
+        {failMessage && (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-sm font-medium">Score: {failMessage.scorePct}%</p>
+              <p className="text-sm text-muted-foreground mt-1">{failMessage.message}</p>
+              <Button variant="outline" className="mt-3" onClick={() => setFailMessage(null)}>Back to progress</Button>
+            </CardContent>
+          </Card>
+        )}
+        {!canLevelUp && (
           <Card>
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground">

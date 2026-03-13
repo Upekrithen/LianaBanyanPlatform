@@ -2293,7 +2293,10 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 </div>
               </div>
               {/* END HERO CARD */}
-              
+              {/* Self-funding value prop (STRATEGY_AMBASSADOR_GRADUATION_SYSTEM Section 6) */}
+              <p className="text-center text-sm text-muted-foreground mt-4" style={isProfessionalTheme ? { color: 'rgba(250, 245, 235, 0.75)', marginTop: '1rem' } : undefined} data-xray-id="front-page-self-funding-copy">
+                Every tool on Liana Banyan pays for itself. No venture capital subsidies. The economics work from day one.
+              </p>
               {/* ENTER + WATCH buttons — on Main Card frame, outside Hero Card */}
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
                 <button 

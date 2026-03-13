@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { AmbassadorLevelBadge } from "@/components/ambassador/AmbassadorLevelBadge";
 import { RecruitStatusCard } from "@/components/ambassador/RecruitStatusCard";
 import { AmbassadorMenteeGrid } from "@/components/ambassador/AmbassadorMenteeGrid";
+import type { MenteeSlot } from "@/components/ambassador/AmbassadorMenteeGrid";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";
@@ -58,6 +59,7 @@ export default function AmbassadorDashboard() {
   const [addContact, setAddContact] = useState("");
   const [addNotes, setAddNotes] = useState("");
   const [addLoading, setAddLoading] = useState(false);
+  const [menteeSlots, setMenteeSlots] = useState<MenteeSlot[]>([]);
 
   const fetchAmbassadorAndRecruits = useCallback(async () => {
     if (!user?.id) return;
@@ -74,8 +76,52 @@ export default function AmbassadorDashboard() {
         .eq("ambassador_id", amb.id)
         .order("slot_number");
       setRecruits(rec ?? []);
+
+      if (amb.level >= 2) {
+        const { data: mentorships } = await supabase
+          .from("ambassador_mentorships")
+          .select("id, mentee_id, slot_number, status")
+          .eq("mentor_id", amb.id)
+          .order("slot_number");
+        if (mentorships?.length) {
+          const menteeIds = [...new Set(mentorships.map((m) => m.mentee_id))];
+          const { data: mentees } = await supabase
+            .from("ambassadors")
+            .select("id, display_name, level, level_title")
+            .in("id", menteeIds);
+          const menteeMap = new Map((mentees ?? []).map((m) => [m.id, m]));
+          const completedCounts: Record<string, number> = {};
+          for (const mid of menteeIds) {
+            const { count } = await supabase
+              .from("ambassador_recruits")
+              .select("id", { count: "exact", head: true })
+              .eq("ambassador_id", mid)
+              .eq("status", "completed");
+            completedCounts[mid] = count ?? 0;
+          }
+          const slots: MenteeSlot[] = mentorships.map((m) => {
+            const mentee = menteeMap.get(m.mentee_id);
+            return {
+              id: m.mentee_id,
+              mentee_display_name: mentee?.display_name ?? "—",
+              mentee_level: mentee?.level ?? 1,
+              mentee_level_title: mentee?.level_title ?? null,
+              slot_number: m.slot_number,
+              status: m.status,
+              onboarded_count: completedCounts[m.mentee_id],
+              last_active: null,
+            };
+          });
+          setMenteeSlots(slots);
+        } else {
+          setMenteeSlots([]);
+        }
+      } else {
+        setMenteeSlots([]);
+      }
     } else {
       setRecruits([]);
+      setMenteeSlots([]);
     }
   }, [user?.id]);
 
@@ -222,7 +268,8 @@ export default function AmbassadorDashboard() {
         {ambassador.level >= 2 && (
           <AmbassadorMenteeGrid
             level={ambassador.level}
-            slots={[]}
+            slots={menteeSlots}
+            onViewDashboard={(menteeId) => navigate(`/ambassador/portfolio/${menteeId}`)}
             onAssignMentee={() => {}}
           />
         )}

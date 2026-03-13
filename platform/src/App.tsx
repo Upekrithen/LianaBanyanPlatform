@@ -201,6 +201,7 @@ const Senate = lazy(() => import("./pages/Senate"));
 const HallOfInnovations = lazy(() => import("./pages/HallOfInnovations"));
 const OnboardingStart = lazy(() => import("./pages/OnboardingStart"));
 const BusinessPathway = lazy(() => import("./pages/BusinessPathway"));
+const PatrioticInterdependentalist = lazy(() => import("./pages/PatrioticInterdependentalist"));
 const PuddingDemo = lazy(() => import("./pages/PuddingDemo"));
 const SaltMines = lazy(() => import("./pages/SaltMines"));
 const BuildBusiness = lazy(() => import("./pages/BuildBusiness"));
@@ -484,6 +485,8 @@ const App = () => (
                         <Route path="/begin" element={<OnboardingStart />} />
                         <Route path="/pathway" element={<BusinessPathway />} />
                         <Route path="/business-pathway" element={<BusinessPathway />} />
+                        <Route path="/about/patriotic-interdependentalist" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PatrioticInterdependentalist /></Suspense>} />
+                        <Route path="/philosophy" element={<Navigate to="/about/patriotic-interdependentalist" replace />} />
                         <Route path="/pudding" element={<PuddingDemo />} />
                         <Route path="/components" element={<PuddingDemo />} />
                         
