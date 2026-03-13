@@ -1,0 +1,114 @@
+/**
+ * AMBASSADOR CERTIFICATION — Level-up assessment at /ambassador/certify (V2).
+ * Gated by level-up requirements. 80% pass threshold.
+ */
+
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AmbassadorLevelBadge } from "@/components/ambassador/AmbassadorLevelBadge";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { ArrowLeft } from "lucide-react";
+
+const LEVEL_UP_REQUIREMENTS: Record<number, { label: string; required: string }> = {
+  1: { label: "Level 1 → 2", required: "10 completed onboardings" },
+  2: { label: "Level 2 → 3", required: "10 Torch Bearers graduated to Level 2" },
+  3: { label: "Level 3 → 4", required: "10 Lamplighters graduated to Level 3" },
+  4: { label: "Level 4 → 5", required: "10 Beacon Keepers graduated to Level 4" },
+};
+
+export default function AmbassadorCertification() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [ambassador, setAmbassador] = useState<{ id: string; level: number; level_title: string | null; slots_filled: number } | null>(null);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    (async () => {
+      const { data: amb } = await supabase
+        .from("ambassadors")
+        .select("id, level, level_title, slots_filled")
+        .eq("user_id", user.id)
+        .single();
+      setAmbassador(amb ?? null);
+      if (amb?.id) {
+        const { count } = await supabase
+          .from("ambassador_recruits")
+          .select("id", { count: "exact", head: true })
+          .eq("ambassador_id", amb.id)
+          .eq("status", "completed");
+        setCompletedCount(count ?? 0);
+      }
+    })().finally(() => setLoading(false));
+  }, [user?.id]);
+
+  const canLevelUp = ambassador && ambassador.level < 5 && ambassador.level === 1 && completedCount >= 10;
+  const nextLevel = ambassador ? ambassador.level + 1 : 0;
+  const requirement = nextLevel <= 4 ? LEVEL_UP_REQUIREMENTS[ambassador?.level ?? 0] : null;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <p className="text-muted-foreground">Loading…</p>
+      </div>
+    );
+  }
+
+  if (!ambassador) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-4 p-6">
+        <p className="text-muted-foreground">You&apos;re not an Ambassador.</p>
+        <Button variant="outline" onClick={() => navigate("/ambassador/register")}>Register</Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="ambassador-certification">
+      <div className="max-w-xl mx-auto space-y-6">
+        <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => navigate("/ambassador/dashboard")}>
+          <ArrowLeft className="w-4 h-4 mr-1" /> Dashboard
+        </Button>
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold">Level-up certification</h1>
+          <AmbassadorLevelBadge level={ambassador.level} levelTitle={ambassador.level_title} />
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Current progress</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p className="text-sm">Completed onboardings: {completedCount}</p>
+            {requirement && (
+              <p className="text-sm text-muted-foreground">
+                To certify for {requirement.label}: {requirement.required}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+        {canLevelUp ? (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-sm mb-3">Assessment for Level {nextLevel} will include scenario questions, process knowledge, and platform knowledge. Pass threshold: 80%.</p>
+              <Button disabled>Assessment coming soon</Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-sm text-muted-foreground">
+                {ambassador.level >= 5
+                  ? "You're at the highest level — Harbormaster."
+                  : "Complete the requirements above to unlock the next level assessment."}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+}

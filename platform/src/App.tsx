@@ -187,6 +187,10 @@ const CrewDashboard = lazy(() => import("./pages/CrewDashboard"));
 const CrewInvite = lazy(() => import("./pages/CrewInvite"));
 const AmbassadorRegistration = lazy(() => import("./pages/AmbassadorRegistration"));
 const AmbassadorDashboard = lazy(() => import("./pages/AmbassadorDashboard"));
+const AmbassadorWalkthrough = lazy(() => import("./pages/AmbassadorWalkthrough"));
+const AmbassadorChainPage = lazy(() => import("./pages/AmbassadorChainPage"));
+const AmbassadorPortfolio = lazy(() => import("./pages/AmbassadorPortfolio"));
+const AmbassadorCertification = lazy(() => import("./pages/AmbassadorCertification"));
 const Arenas = lazy(() => import("./pages/Arenas"));
 const Petitions = lazy(() => import("./pages/Petitions"));
 const BrowseMarketplace = lazy(() => import("./pages/BrowseMarketplace"));
@@ -470,6 +474,10 @@ const App = () => (
                         <Route path="/crew/:crewId/invite" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewInvite /></Suspense>} />
                         <Route path="/ambassador/register" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorRegistration /></Suspense></ProtectedRoute>} />
                         <Route path="/ambassador/dashboard" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/ambassador/walkthrough" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorWalkthrough /></Suspense></ProtectedRoute>} />
+                        <Route path="/ambassador/chain" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorChainPage /></Suspense>} />
+                        <Route path="/ambassador/portfolio/:ambassadorId" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorPortfolio /></Suspense>} />
+                        <Route path="/ambassador/certify" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorCertification /></Suspense></ProtectedRoute>} />
                         <Route path="/launch" element={<LaunchHub />} />
                         <Route path="/launch/run-a-node" element={<RunANode />} />
                         <Route path="/start" element={<OnboardingStart />} />

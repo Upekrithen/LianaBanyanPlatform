@@ -101,6 +101,41 @@ export const TREASURE_MAP_QUESTIONS: TreasureMapQuestionDef[] = [
       { id: "efficient", label: "Efficient — they got things done fast", tags: ["efficient"] },
     ],
   },
+  // Q8–Q10: Keirsey-informed (temperament hint); tags used for play weighting & Ambassador focus
+  {
+    id: "q8",
+    question: "When you're learning something new, you prefer to:",
+    type: "single",
+    options: [
+      { id: "q8_sj", label: "Follow step-by-step instructions", tags: ["temperament_sj"] },
+      { id: "q8_sp", label: "Jump in and figure it out as you go", tags: ["temperament_sp"] },
+      { id: "q8_nf", label: "Understand the big picture and purpose first", tags: ["temperament_nf"] },
+      { id: "q8_nt", label: "Analyze the system and find the logic behind it", tags: ["temperament_nt"] },
+    ],
+    microcopy: "No wrong answers — this helps us match you to the right path.",
+  },
+  {
+    id: "q9",
+    question: "In a group project, you naturally tend to:",
+    type: "single",
+    options: [
+      { id: "q9_sj", label: "Make sure everyone follows the plan", tags: ["temperament_sj"] },
+      { id: "q9_sp", label: "Handle the hands-on work", tags: ["temperament_sp"] },
+      { id: "q9_nf", label: "Keep the team motivated and connected", tags: ["temperament_nf"] },
+      { id: "q9_nt", label: "Optimize the process and spot inefficiencies", tags: ["temperament_nt"] },
+    ],
+  },
+  {
+    id: "q10",
+    question: "What sounds most rewarding?",
+    type: "single",
+    options: [
+      { id: "q10_sj", label: "Building something reliable that people depend on", tags: ["temperament_sj"] },
+      { id: "q10_sp", label: "Creating something with your hands that you can see and touch", tags: ["temperament_sp"] },
+      { id: "q10_nf", label: "Helping someone discover what they're good at", tags: ["temperament_nf"] },
+      { id: "q10_nt", label: "Solving a problem nobody else has figured out yet", tags: ["temperament_nt"] },
+    ],
+  },
 ];
 
 export const TOTAL_QUESTIONS = TREASURE_MAP_QUESTIONS.length;
