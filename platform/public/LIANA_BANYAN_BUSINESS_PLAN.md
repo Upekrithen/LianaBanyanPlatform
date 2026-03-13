@@ -919,7 +919,7 @@ Example: "Gold Tier - A+ (★★★★★)"
 **Backend**: Supabase (PostgreSQL, Auth, Storage, Edge Functions)  
 **Payments**: Stripe (membership stakes, guild stakes, marketplace)  
 **Blockchain**: Base L2 (Ethereum), ERC-1155 (medallion NFTs), wagmi, viem, RainbowKit  
-**Hosting**: Lovable Cloud  
+**Hosting**: Firebase (8 targets) + Supabase  
 **Domains**: .com (marketplace), .biz (business), .net (network), .org (nonprofit)
 
 ## Appendix B: Key Metrics Dashboard
