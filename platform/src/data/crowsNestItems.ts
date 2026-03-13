@@ -83,6 +83,8 @@ export const CROWS_NEST_SECTIONS: CrowsNestSectionDef[] = [
       "welcome",
       "how-it-works",
       "first-steps",
+      "ghost-world",
+      "cue-cards",
       "your-profile",
       "the-crows-nest",
     ],
@@ -94,22 +96,22 @@ export const CROWS_NEST_SECTIONS: CrowsNestSectionDef[] = [
     icon: "Grid3x3",
     sortOrder: 2,
     items: [
-      "hexisle",
-      "c-plus-20",
-      "ghost-world",
-      "cue-cards",
       "lets-make-dinner",
-      "lets-make-bread",
-      "rally-group",
-      "jukebox",
+      "lets-get-groceries",
+      "lets-go-shopping",
       "household-concierge",
-      "vsl",
-      "harper-guild",
-      "power-to-the-people",
       "family-table",
-      "defense-klaus",
       "health-accords",
-      "seed-the-quan",
+      "msa",
+      "defense-klaus",
+      "rally-group",
+      "vsl",
+      "lets-make-bread",
+      "harper-guild",
+      "jukebox",
+      "didasko",
+      "power-to-the-people",
+      "brass-tacks",
     ],
   },
   {
@@ -120,6 +122,7 @@ export const CROWS_NEST_SECTIONS: CrowsNestSectionDef[] = [
     sortOrder: 3,
     items: [
       "three-currencies",
+      "c-plus-20",
       "guilds-and-handshake",
       "court-of-justice",
       "the-300-framework",
@@ -127,6 +130,7 @@ export const CROWS_NEST_SECTIONS: CrowsNestSectionDef[] = [
       "deck-cards",
       "brewster-bonus",
       "as-you-wish",
+      "seed-the-quan",
     ],
   },
   {
@@ -151,6 +155,7 @@ export const CROWS_NEST_SECTIONS: CrowsNestSectionDef[] = [
     icon: "Globe",
     sortOrder: 5,
     items: [
+      "hexisle",
       "hexisle-3d",
       "ghost-world-explore",
       "alcove-hallway",
@@ -265,7 +270,7 @@ const GETTING_STARTED_ITEMS: CrowsNestItem[] = [
 const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
   {
     id: "hexisle",
-    sectionId: "sweet_sixteen",
+    sectionId: "world",
     icon: "Hexagon",
     title: "HexIsle",
     glimpse:
@@ -284,7 +289,7 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
   },
   {
     id: "c-plus-20",
-    sectionId: "sweet_sixteen",
+    sectionId: "platform_mechanics",
     icon: "Calculator",
     title: "C+20 (Cost Plus 20%)",
     glimpse:
@@ -303,7 +308,7 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
   },
   {
     id: "ghost-world",
-    sectionId: "sweet_sixteen",
+    sectionId: "getting_started",
     icon: "Ghost",
     title: "Ghost World",
     glimpse:
@@ -321,7 +326,7 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
   },
   {
     id: "cue-cards",
-    sectionId: "sweet_sixteen",
+    sectionId: "getting_started",
     icon: "Layers",
     title: "Cue Cards & Deck System",
     glimpse:
@@ -355,6 +360,42 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
     toGoItems: [
       { label: "Browse the chef marketplace", type: "try", route: "/initiatives/lets-make-dinner/chefs", estimatedMinutes: 3 },
       { label: "Learn about Family Table sessions", type: "try", route: "/initiatives/family-table", estimatedMinutes: 3 },
+    ],
+  },
+  {
+    id: "lets-get-groceries",
+    sectionId: "sweet_sixteen",
+    icon: "ShoppingCart",
+    title: "Let's Get Groceries",
+    glimpse:
+      "Grocery co-op with bulk purchasing power. Cost+20% on groceries. Member-owned distribution and same-day local delivery.",
+    peek:
+      "Let's Get Groceries brings cooperative economics to grocery shopping. Bulk purchasing power lowers costs for everyone. True cost plus 20% — no hidden markups. Member-owned distribution network. Same-day local delivery. Credits and Marks accepted. Integrates with The Pantry and Let's Make Dinner for meal planning.",
+    tellMeMore:
+      "Let's Get Groceries is the grocery co-op initiative. Members pool purchasing power to buy at volume; savings pass through at Cost+20% pricing. The network supports member-owned distribution — not a corporate supply chain. Same-day local delivery connects neighborhoods. You can pay with Credits (purchased) or Marks (earned through participation). The initiative ties into The Pantry for bulk ingredient sourcing and Let's Make Dinner for meal planning. Transparent pricing at every step.",
+    sampleRoute: "/initiatives/lets-get-groceries",
+    tags: ["groceries", "co-op", "bulk", "delivery", "cost-plus-20"],
+    relatedItemIds: ["lets-make-dinner", "household-concierge", "c-plus-20"],
+    toGoItems: [
+      { label: "Explore Let's Get Groceries", type: "try", route: "/initiatives/lets-get-groceries", estimatedMinutes: 3 },
+    ],
+  },
+  {
+    id: "lets-go-shopping",
+    sectionId: "sweet_sixteen",
+    icon: "Store",
+    title: "Let's Go Shopping",
+    glimpse:
+      "The cooperative marketplace. Creators keep 83.3%. No algorithm manipulation. Quality curation by Harper Guild.",
+    peek:
+      "Let's Go Shopping is the cooperative marketplace — Etsy-style but cooperative. Every sale uses Cost+20%: creators keep 83.3%. No algorithm manipulation; quality curation by Harper Guild. Cross-initiative product listings. Discover goods from every initiative in one place.",
+    tellMeMore:
+      "Let's Go Shopping is the platform's unified marketplace. Sellers list products and services at transparent Cost+20% pricing. Creators keep 83.3% of every transaction. The Harper Guild curates for quality and fairness — no black-box algorithms favoring paid promotion. Listings span all initiatives: food, crafts, services, digital goods. Buy with Credits or (where applicable) Marks. The marketplace connects to Let's Make Bread for seller onboarding and Household Concierge for local delivery coordination.",
+    sampleRoute: "/initiatives/lets-go-shopping",
+    tags: ["marketplace", "shopping", "creators", "curation", "cost-plus-20"],
+    relatedItemIds: ["harper-guild", "lets-make-bread", "c-plus-20"],
+    toGoItems: [
+      { label: "Browse the marketplace", type: "try", route: "/initiatives/lets-go-shopping", estimatedMinutes: 3 },
     ],
   },
   {
@@ -409,6 +450,24 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
     relatedItemIds: ["c-plus-20", "lets-make-bread"],
     toGoItems: [
       { label: "Visit JukeBox", type: "try", route: "/initiatives/jukebox", estimatedMinutes: 3 },
+    ],
+  },
+  {
+    id: "didasko",
+    sectionId: "sweet_sixteen",
+    icon: "GraduationCap",
+    title: "Didasko",
+    glimpse:
+      "Learn and teach on the same platform. Earn Marks for study bounties. Community-driven courses and skill certification.",
+    peek:
+      "Didasko is the education initiative. Learn and teach on the same platform. Earn Marks while learning through study bounties. Community-driven courses. Skill certification through peer validation. Academic bounties for research contributions.",
+    tellMeMore:
+      "Didasko turns education into participation. Members create and take courses; completion and quality are verified by peers. Study bounties reward learners with Marks. Teachers earn through Cost+20% pricing on courses and tutoring. Skill certification is peer-validated — no single authority. Academic bounties fund research and documentation that benefits the whole cooperative. The initiative connects to Let's Make Bread (business skills), Harper Guild (ethics training), and the Cephas knowledge base. Learning is a form of contribution; contribution earns Marks.",
+    sampleRoute: "/initiatives/didasko",
+    tags: ["education", "learning", "teaching", "bounties", "certification"],
+    relatedItemIds: ["lets-make-bread", "harper-guild", "marks-differential"],
+    toGoItems: [
+      { label: "Explore Didasko", type: "try", route: "/initiatives/didasko", estimatedMinutes: 3 },
     ],
   },
   {
@@ -484,6 +543,24 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
     ],
   },
   {
+    id: "brass-tacks",
+    sectionId: "sweet_sixteen",
+    icon: "Wrench",
+    title: "Brass Tacks",
+    glimpse:
+      "Manufacturing and hardware. Get things physically made. Distributed manufacturing network. Prototype to production at Cost+20%.",
+    peek:
+      "Brass Tacks is the manufacturing and hardware initiative. Get things physically made through the distributed manufacturing network. Connects with HexIsle printers and fabrication. Quality assurance through the test-pilot program. From prototype to production at Cost+20%.",
+    tellMeMore:
+      "Brass Tacks handles physical manufacturing on the platform. Members submit designs; the network of makers, printers, and fabricators produces at transparent Cost+20% pricing. The initiative connects to HexIsle for 3D printing and desktop fabrication. Quality is assured through a test-pilot program — independent verification before scale. From single prototypes to short runs, the same pricing and participation rules apply. Creators keep 83.3%; the platform takes cost plus 20%. No venture subsidies; the economics work from day one.",
+    sampleRoute: "/initiatives/brass-tacks",
+    tags: ["manufacturing", "hardware", "making", "prototype", "cost-plus-20"],
+    relatedItemIds: ["hexisle", "lets-make-bread", "c-plus-20"],
+    toGoItems: [
+      { label: "Explore Brass Tacks", type: "try", route: "/initiatives/brass-tacks", estimatedMinutes: 3 },
+    ],
+  },
+  {
     id: "family-table",
     sectionId: "sweet_sixteen",
     icon: "Utensils",
@@ -538,8 +615,26 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
     ],
   },
   {
-    id: "seed-the-quan",
+    id: "msa",
     sectionId: "sweet_sixteen",
+    icon: "HeartPulse",
+    title: "MSA (Medical Savings Accounts)",
+    glimpse:
+      "Savings accounts for medical expenses. Not insurance. Affordable services at Cost+20%. Community health network.",
+    peek:
+      "MSA is the Medical Savings Accounts initiative — not insurance. Members save for medical expenses in platform Credits. Services are offered at Cost+20% by participating providers. Community health network. Marks accepted for essential care. Preventive care incentives built in.",
+    tellMeMore:
+      "MSA provides medical savings accounts denominated in platform Credits. This is not insurance; it is cooperative savings for healthcare costs. Participating providers list services at transparent Cost+20% pricing. Members use saved Credits (or Marks, where eligible) to pay. The community health network includes preventive care incentives — the system rewards staying healthy. Lifeline Medications (under Health Accords) handles prescription volume pricing. VSL offers voucher support for short-term medical cash flow. Together they form a transparent, participation-based health finance layer.",
+    sampleRoute: "/initiatives/msa",
+    tags: ["medical", "savings", "health", "cost-plus-20", "community"],
+    relatedItemIds: ["health-accords", "vsl", "c-plus-20"],
+    toGoItems: [
+      { label: "Learn about MSA", type: "try", route: "/initiatives/msa", estimatedMinutes: 3 },
+    ],
+  },
+  {
+    id: "seed-the-quan",
+    sectionId: "platform_mechanics",
     icon: "Sprout",
     title: "Seed the Quan",
     glimpse:
