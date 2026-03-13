@@ -16,7 +16,7 @@ export interface ProductCalculations {
 
 export interface UserCalculations {
   totalCreditValue: number;
-  equityPercentages: Record<string, number>;
+  participationPercentages: Record<string, number>;
   votingPower: number;
 }
 
@@ -360,7 +360,7 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
         .eq('user_id', userId);
 
       // Calculate portfolio allocation (user's own distribution across projects)
-      const equityPercentages: Record<string, number> = {};
+      const participationPercentages: Record<string, number> = {};
       let totalVotingPower = 0;
       const userProjectTotals: Record<string, number> = {};
 
@@ -375,12 +375,12 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
 
       const userTotalAcrossProjects = Object.values(userProjectTotals).reduce((a, b) => a + b, 0);
       for (const [projectId, amt] of Object.entries(userProjectTotals)) {
-        equityPercentages[projectId] = userTotalAcrossProjects > 0 ? (amt / userTotalAcrossProjects) * 100 : 0;
+        participationPercentages[projectId] = userTotalAcrossProjects > 0 ? (amt / userTotalAcrossProjects) * 100 : 0;
       }
 
       setUserCalcs({
         totalCreditValue: Number(credits.total_credits) - Number(credits.used_credits),
-        equityPercentages,
+        participationPercentages,
         votingPower: totalVotingPower,
       });
       

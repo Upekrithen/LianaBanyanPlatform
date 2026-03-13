@@ -20,7 +20,7 @@ export default function CompanyIndependenceManager() {
 
   const [selectedProjectId, setSelectedProjectId] = useState<string>('');
   const [newStatus, setNewStatus] = useState<string>('lb_project');
-  const [equityBonus, setEquityBonus] = useState<string>('0');
+  const [participationBonus, setParticipationBonus] = useState<string>('0');
   const [canUseExternal, setCanUseExternal] = useState<boolean>(false);
 
   const [milestoneType, setMilestoneType] = useState<string>('');
@@ -45,7 +45,7 @@ export default function CompanyIndependenceManager() {
 
       const updateData: any = {
         company_status: newStatus,
-        independence_participation_bonus: parseFloat(equityBonus),
+        independence_participation_bonus: parseFloat(participationBonus),
         can_use_external_services: canUseExternal,
       };
 
@@ -203,8 +203,8 @@ export default function CompanyIndependenceManager() {
                   <Label>Independence Participation Bonus (%)</Label>
                   <Input
                     type="number"
-                    value={equityBonus}
-                    onChange={(e) => setEquityBonus(e.target.value)}
+                    value={participationBonus}
+                    onChange={(e) => setParticipationBonus(e.target.value)}
                     placeholder="0"
                     min="0"
                     max="100"

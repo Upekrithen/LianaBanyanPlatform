@@ -257,7 +257,7 @@ export function ExternalCollaboratorManager() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    {(formData.compensation_type === 'equity' || formData.compensation_type === 'hybrid') && (
+                    {(/* TODO(SEC-RENAME): DB enum */ formData.compensation_type === 'equity' || formData.compensation_type === 'hybrid') && (
                       <div className="space-y-2">
                         <Label htmlFor="participation_percentage">Participation % (max 5%)</Label>
                         <Input

@@ -23,8 +23,8 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
   const [saving, setSaving] = useState(false);
   
   const [assignmentLeadTimeDays, setAssignmentLeadTimeDays] = useState(90);
-  const [minEquityRatio, setMinEquityRatio] = useState(0.1);
-  const [maxEquityRatio, setMaxEquityRatio] = useState(0.9);
+  const [minParticipationRatio, setMinEquityRatio] = useState(0.1);
+  const [maxParticipationRatio, setMaxEquityRatio] = useState(0.9);
   const [timeOptions, setTimeOptions] = useState<TimeCommitmentOption[]>([
     { days: 30, label: "1 Month" },
     { days: 60, label: "2 Months" },
@@ -72,7 +72,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
   };
 
   const handleSave = async () => {
-    if (minEquityRatio < 0 || minEquityRatio > 1 || maxEquityRatio < 0 || maxEquityRatio > 1) {
+    if (minParticipationRatio < 0 || minParticipationRatio > 1 || maxParticipationRatio < 0 || maxParticipationRatio > 1) {
       toast({
         title: "Validation Error",
         description: "Participation ratios must be between 0 and 1",
@@ -81,7 +81,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
       return;
     }
 
-    if (minEquityRatio > maxEquityRatio) {
+    if (minParticipationRatio > maxParticipationRatio) {
       toast({
         title: "Validation Error",
         description: "Minimum participation ratio cannot exceed maximum participation ratio",
@@ -97,8 +97,8 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
         .upsert({
           project_id: projectId,
           assignment_lead_time_days: assignmentLeadTimeDays,
-          min_participation_ratio: minEquityRatio,
-          max_participation_ratio: maxEquityRatio,
+          min_participation_ratio: minParticipationRatio,
+          max_participation_ratio: maxParticipationRatio,
           time_commitment_options: timeOptions as any,
           prerequisites: prerequisites as any,
           requirements: requirements as any
@@ -188,33 +188,33 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
               />
             </div>
             <div>
-              <Label htmlFor="minEquity">Minimum Participation Ratio</Label>
+              <Label htmlFor="minParticipation">Minimum Participation Ratio</Label>
               <Input
-                id="minEquity"
+                id="minParticipation"
                 type="number"
                 step="0.01"
-                value={minEquityRatio}
+                value={minParticipationRatio}
                 onChange={(e) => setMinEquityRatio(parseFloat(e.target.value) || 0)}
                 min={0}
                 max={1}
               />
               <p className="text-xs text-muted-foreground mt-1">
-                {(minEquityRatio * 100).toFixed(0)}% participation / {((1 - minEquityRatio) * 100).toFixed(0)}% credits
+                {(minParticipationRatio * 100).toFixed(0)}% participation / {((1 - minParticipationRatio) * 100).toFixed(0)}% credits
               </p>
             </div>
             <div>
-              <Label htmlFor="maxEquity">Maximum Participation Ratio</Label>
+              <Label htmlFor="maxParticipation">Maximum Participation Ratio</Label>
               <Input
-                id="maxEquity"
+                id="maxParticipation"
                 type="number"
                 step="0.01"
-                value={maxEquityRatio}
+                value={maxParticipationRatio}
                 onChange={(e) => setMaxEquityRatio(parseFloat(e.target.value) || 0)}
                 min={0}
                 max={1}
               />
               <p className="text-xs text-muted-foreground mt-1">
-                {(maxEquityRatio * 100).toFixed(0)}% participation / {((1 - maxEquityRatio) * 100).toFixed(0)}% credits
+                {(maxParticipationRatio * 100).toFixed(0)}% participation / {((1 - maxParticipationRatio) * 100).toFixed(0)}% credits
               </p>
             </div>
           </div>

@@ -36,7 +36,7 @@ export const ContractAssignmentSimulator = ({
     requirements: string[];
   } | null>(null);
 
-  const [equityRatio, setEquityRatio] = useState(0.5);
+  const [participationRatio, setEquityRatio] = useState(0.5);
   const [cashRatio, setCashRatio] = useState(0.5);
 
   useEffect(() => {
@@ -88,11 +88,11 @@ export const ContractAssignmentSimulator = ({
       selectedTimeCommitment / config.assignment_lead_time_days
     ));
 
-    const calculatedEquityRatio = config.min_participation_ratio + 
+    const calculatedParticipationRatio = config.min_participation_ratio + 
       (ratioFactor * (config.max_participation_ratio - config.min_participation_ratio));
     
-    setEquityRatio(calculatedEquityRatio);
-    setCashRatio(1 - calculatedEquityRatio);
+    setEquityRatio(calculatedParticipationRatio);
+    setCashRatio(1 - calculatedParticipationRatio);
   };
 
   if (loading) {
@@ -115,7 +115,7 @@ export const ContractAssignmentSimulator = ({
     );
   }
 
-  const equityAmount = baseCompensation * equityRatio;
+  const participationAmount = baseCompensation * participationRatio;
   const cashAmount = baseCompensation * cashRatio;
 
   return (
@@ -158,12 +158,12 @@ export const ContractAssignmentSimulator = ({
                   Participation Portion
                 </Label>
                 <span className="text-sm font-medium">
-                  {(equityRatio * 100).toFixed(1)}%
+                  {(participationRatio * 100).toFixed(1)}%
                 </span>
               </div>
-              <Progress value={equityRatio * 100} className="h-2" />
+              <Progress value={participationRatio * 100} className="h-2" />
               <p className="text-sm text-muted-foreground">
-                ${equityAmount.toFixed(2)} in project participation
+                ${participationAmount.toFixed(2)} in project participation
               </p>
             </div>
 

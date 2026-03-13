@@ -156,13 +156,13 @@ export function RealTimeUserStats() {
         </div>
 
         {/* Project Participation Breakdown */}
-        {Object.keys(userCalcs.equityPercentages).length > 0 && (
+        {Object.keys(userCalcs.participationPercentages).length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <TrendingUp className="h-4 w-4" />
               <span>Project Participation</span>
             </div>
-            {Object.entries(userCalcs.equityPercentages).map(([projectId, percentage]) => (
+            {Object.entries(userCalcs.participationPercentages).map(([projectId, percentage]) => (
               <div key={projectId} className="space-y-1">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground truncate">

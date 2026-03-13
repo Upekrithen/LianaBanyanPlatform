@@ -15,42 +15,42 @@ export default function BrowseBusiness() {
       descriptionKey: "browseBusiness.technical.description",
       icon: <Code className="h-8 w-8" />,
       openings: 8,
-      avgEquity: "5-15%"
+      avgParticipation: "5-15%"
     },
     {
       titleKey: "browseBusiness.creative.title",
       descriptionKey: "browseBusiness.creative.description",
       icon: <Palette className="h-8 w-8" />,
       openings: 5,
-      avgEquity: "3-10%"
+      avgParticipation: "3-10%"
     },
     {
       titleKey: "browseBusiness.operations.title",
       descriptionKey: "browseBusiness.operations.description",
       icon: <Briefcase className="h-8 w-8" />,
       openings: 6,
-      avgEquity: "10-20%"
+      avgParticipation: "10-20%"
     },
     {
       titleKey: "browseBusiness.trades.title",
       descriptionKey: "browseBusiness.trades.description",
       icon: <Wrench className="h-8 w-8" />,
       openings: 12,
-      avgEquity: "2-8%"
+      avgParticipation: "2-8%"
     },
     {
       titleKey: "browseBusiness.growth.title",
       descriptionKey: "browseBusiness.growth.description",
       icon: <TrendingUp className="h-8 w-8" />,
       openings: 4,
-      avgEquity: "4-12%"
+      avgParticipation: "4-12%"
     },
     {
       titleKey: "browseBusiness.hr.title",
       descriptionKey: "browseBusiness.hr.description",
       icon: <Users className="h-8 w-8" />,
       openings: 3,
-      avgEquity: "8-15%"
+      avgParticipation: "8-15%"
     }
   ];
 
@@ -79,7 +79,7 @@ export default function BrowseBusiness() {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">
-                    {t('browseBusiness.avgEquity')}: {category.avgEquity}
+                    {t('browseBusiness.avgEquity')}: {category.avgParticipation}
                   </span>
                   <Button
                     size="sm"

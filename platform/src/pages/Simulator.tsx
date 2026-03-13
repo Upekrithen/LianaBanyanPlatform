@@ -18,7 +18,7 @@ interface ScenarioData {
   unitsCount: number;
   unitPrice: number;
   volumeDiscount: number;
-  equityPercentage: number;
+  participationPercentage: number;
   cashPercentage: number;
   votesNeeded: number;
 }
@@ -37,7 +37,7 @@ export default function Simulator() {
     unitsCount: 100,
     unitPrice: 50,
     volumeDiscount: 0,
-    equityPercentage: 50,
+    participationPercentage: 50,
     cashPercentage: 50,
     votesNeeded: 1000,
   });
@@ -45,7 +45,7 @@ export default function Simulator() {
   const [results, setResults] = useState({
     totalRevenue: 0,
     discountedRevenue: 0,
-    equityValue: 0,
+    participationValue: 0,
     cashValue: 0,
     pricePerUnit: 0,
   });
@@ -78,14 +78,14 @@ export default function Simulator() {
     const totalRevenue = data.unitsCount * data.unitPrice;
     const discountAmount = (totalRevenue * data.volumeDiscount) / 100;
     const discountedRevenue = totalRevenue - discountAmount;
-    const equityValue = (discountedRevenue * data.equityPercentage) / 100;
+    const participationValue = (discountedRevenue * data.participationPercentage) / 100;
     const cashValue = (discountedRevenue * data.cashPercentage) / 100;
     const pricePerUnit = discountedRevenue / data.unitsCount;
 
     setResults({
       totalRevenue,
       discountedRevenue,
-      equityValue,
+      participationValue,
       cashValue,
       pricePerUnit,
     });
@@ -108,8 +108,8 @@ export default function Simulator() {
         <VotesNeeded>${data.votesNeeded}</VotesNeeded>
       </ProductionLevel>
       <Funding>
-        <EquityPercentage>${data.equityPercentage}%</EquityPercentage>
-        <EquityValue>${results.equityValue.toFixed(2)}</EquityValue>
+        <ParticipationPercentage>${data.participationPercentage}%</ParticipationPercentage>
+        <ParticipationValue>${results.participationValue.toFixed(2)}</ParticipationValue>
         <CashPercentage>${data.cashPercentage}%</CashPercentage>
         <CashValue>${results.cashValue.toFixed(2)}</CashValue>
       </Funding>
@@ -194,7 +194,7 @@ export default function Simulator() {
     y += 15;
     doc.text("Funding Split:", 20, y);
     y += 10;
-    doc.text(`Participation: ${data.equityPercentage}%`, 25, y);
+    doc.text(`Participation: ${data.participationPercentage}%`, 25, y);
     y += 7;
     doc.text(`Cash: ${data.cashPercentage}%`, 25, y);
     
@@ -207,7 +207,7 @@ export default function Simulator() {
     y += 7;
     doc.text(`Price Per Unit (after discount): $${results.pricePerUnit.toFixed(2)}`, 25, y);
     y += 7;
-    doc.text(`Participation Value: $${results.equityValue.toFixed(2)}`, 25, y);
+    doc.text(`Participation Value: $${results.participationValue.toFixed(2)}`, 25, y);
     y += 7;
     doc.text(`Cash Value: $${results.cashValue.toFixed(2)}`, 25, y);
     
@@ -331,13 +331,13 @@ export default function Simulator() {
             </div>
 
             <div>
-              <Label>Participation Split: {data.equityPercentage}%</Label>
+              <Label>Participation Split: {data.participationPercentage}%</Label>
               <Slider
-                value={[data.equityPercentage]}
+                value={[data.participationPercentage]}
                 onValueChange={([value]) => {
                   setData({ 
                     ...data, 
-                    equityPercentage: value,
+                    participationPercentage: value,
                     cashPercentage: 100 - value 
                   });
                 }}
@@ -385,8 +385,8 @@ export default function Simulator() {
               <h3 className="font-semibold mb-3">Funding Breakdown</h3>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Participation ({data.equityPercentage}%)</span>
-                  <span className="font-bold">${results.equityValue.toFixed(2)}</span>
+                  <span className="text-muted-foreground">Participation ({data.participationPercentage}%)</span>
+                  <span className="font-bold">${results.participationValue.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Cash ({data.cashPercentage}%)</span>

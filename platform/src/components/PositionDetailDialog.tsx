@@ -110,7 +110,7 @@ export function PositionDetailDialog({ position, open, onClose }: PositionDetail
             </h3>
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>
-                <strong>Type:</strong> {position.compensation_type === 'equity' ? 'Participation-based' :
+                <strong>Type:</strong> {/* TODO(SEC-RENAME): DB enum */ position.compensation_type === 'equity' ? 'Participation-based' :
                   position.compensation_type === 'cash' ? 'Cash compensation' :
                   position.compensation_type === 'hybrid' ? 'Participation + Cash hybrid' :
                   position.compensation_type === 'credits' ? 'Credit-based' : position.compensation_type}
@@ -119,7 +119,7 @@ export function PositionDetailDialog({ position, open, onClose }: PositionDetail
                 As a service provider or agent of Liana Banyan, you'll receive:
               </p>
               <ul className="space-y-1 ml-4">
-                <li>• {position.compensation_type === 'equity' || position.compensation_type === 'hybrid' ? 'Project participation allocation based on contribution' : ''}</li>
+                <li>• {/* TODO(SEC-RENAME): DB enum */ position.compensation_type === 'equity' || position.compensation_type === 'hybrid' ? 'Project participation allocation based on contribution' : ''}</li>
                 <li>• {position.compensation_type === 'credits' || position.compensation_type === 'hybrid' ? 'LB credits for platform services and resources' : ''}</li>
                 <li>• Access to Liana Banyan's manufacturing network and resources</li>
                 <li>• Professional development and mentorship opportunities</li>

@@ -135,9 +135,9 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
           {/* Participation Ratio Bounds */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="minEquity">Minimum Participation Ratio</Label>
+              <Label htmlFor="minParticipation">Minimum Participation Ratio</Label>
               <Input
-                id="minEquity"
+                id="minParticipation"
                 type="number"
                 step="0.01"
                 min="0"
@@ -150,9 +150,9 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="maxEquity">Maximum Participation Ratio</Label>
+              <Label htmlFor="maxParticipation">Maximum Participation Ratio</Label>
               <Input
-                id="maxEquity"
+                id="maxParticipation"
                 type="number"
                 step="0.01"
                 min="0"

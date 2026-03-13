@@ -36,8 +36,8 @@ export const PositionAssignmentDialog = ({
   const [startDate, setStartDate] = useState("");
   
   // Compensation adjustments
-  const [originalEquity, setOriginalEquity] = useState(0);
-  const [adjustedEquity, setAdjustedEquity] = useState(0);
+  const [originalParticipation, setOriginalParticipation] = useState(0);
+  const [adjustedParticipation, setAdjustedParticipation] = useState(0);
   const [originalCash, setOriginalCash] = useState(0);
   const [adjustedCash, setAdjustedCash] = useState(0);
   const [originalCredits, setOriginalCredits] = useState(0);
@@ -53,21 +53,21 @@ export const PositionAssignmentDialog = ({
     // Auto-adjust compensation based on assignment type
     if (assignmentType === 'primary') {
       setDutyPercentage(100);
-      setAdjustedEquity(originalEquity);
+      setAdjustedParticipation(originalParticipation);
       setAdjustedCash(originalCash);
       setAdjustedCredits(originalCredits);
     } else if (assignmentType === 'secondary') {
       setDutyPercentage(70);
-      setAdjustedEquity(originalEquity * 0.7);
+      setAdjustedParticipation(originalParticipation * 0.7);
       setAdjustedCash(originalCash * 0.7);
       setAdjustedCredits(originalCredits * 0.7);
     } else if (assignmentType === 'backup') {
       setDutyPercentage(50);
-      setAdjustedEquity(originalEquity * 0.5);
+      setAdjustedParticipation(originalParticipation * 0.5);
       setAdjustedCash(originalCash * 0.5);
       setAdjustedCredits(originalCredits * 0.5);
     }
-  }, [assignmentType, originalEquity, originalCash, originalCredits]);
+  }, [assignmentType, originalParticipation, originalCash, originalCredits]);
 
   const loadPositionDetails = async () => {
     try {
@@ -79,10 +79,10 @@ export const PositionAssignmentDialog = ({
 
       if (error) throw error;
 
-      setOriginalEquity(data.participation_percentage || 0);
+      setOriginalParticipation(data.participation_percentage || 0);
       setOriginalCash(data.cash_amount || 0);
       setOriginalCredits(data.credits_reserved || 0);
-      setAdjustedEquity(data.participation_percentage || 0);
+      setAdjustedParticipation(data.participation_percentage || 0);
       setAdjustedCash(data.cash_amount || 0);
       setAdjustedCredits(data.credits_reserved || 0);
     } catch (error) {
@@ -106,8 +106,8 @@ export const PositionAssignmentDialog = ({
           project_id: projectId,
           assignment_type: assignmentType,
           assignment_status: 'pending',
-          original_participation_percentage: originalEquity,
-          adjusted_participation_percentage: adjustedEquity,
+          original_participation_percentage: originalParticipation,
+          adjusted_participation_percentage: adjustedParticipation,
           original_cash_amount: originalCash,
           adjusted_cash_amount: adjustedCash,
           original_credits: originalCredits,
@@ -233,14 +233,14 @@ export const PositionAssignmentDialog = ({
                     <TrendingUp className="h-4 w-4" />
                     Original Participation
                   </Label>
-                  <p className="text-2xl font-bold">{originalEquity}%</p>
+                  <p className="text-2xl font-bold">{originalParticipation}%</p>
                 </div>
                 <div>
                   <Label>Adjusted Participation</Label>
                   <Input
                     type="number"
-                    value={adjustedEquity}
-                    onChange={(e) => setAdjustedEquity(parseFloat(e.target.value) || 0)}
+                    value={adjustedParticipation}
+                    onChange={(e) => setAdjustedParticipation(parseFloat(e.target.value) || 0)}
                     step="0.1"
                   />
                 </div>

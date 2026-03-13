@@ -90,6 +90,7 @@ export default function SampleDataXML() {
     const currentDate = new Date();
     const daysSinceAcceptance = Math.floor((currentDate.getTime() - sampleAcceptedDate.getTime()) / (1000 * 60 * 60 * 24));
     const daysRemaining = Math.max(0, 100 - daysSinceAcceptance);
+    // TODO(SEC-RENAME): XML element name is CurrentEquityPercentage (data format); variable feeds it
     const equityPercentage = Math.max(0, 100 - daysSinceAcceptance);
     const cashPercentage = Math.min(100, daysSinceAcceptance);
     const isCashOutEligible = daysSinceAcceptance >= 90;

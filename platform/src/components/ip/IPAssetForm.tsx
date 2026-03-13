@@ -53,7 +53,7 @@ export function IPAssetForm({ selectedTier }: IPAssetFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const equitySplits = {
+  const participationSplits = {
     tier_a: { creator: 49, lb: 51 },
     tier_b: { creator: 60, lb: 40 },
     tier_c: { creator: 75, lb: 25 },
@@ -105,8 +105,8 @@ export function IPAssetForm({ selectedTier }: IPAssetFormProps) {
         asset_description: data.asset_description,
         asset_type: data.asset_type,
         control_tier: selectedTier,
-        participation_split_creator: equitySplits[selectedTier].creator,
-        participation_split_lb: equitySplits[selectedTier].lb,
+        participation_split_creator: participationSplits[selectedTier].creator,
+        participation_split_lb: participationSplits[selectedTier].lb,
         patent_number: data.patent_number || null,
         filing_date: data.filing_date || null,
         grant_date: data.grant_date || null,
@@ -162,7 +162,7 @@ export function IPAssetForm({ selectedTier }: IPAssetFormProps) {
           <div>
             <CardTitle>Register IP Asset - {selectedTier.toUpperCase()}</CardTitle>
             <CardDescription>
-              Participation Split: {equitySplits[selectedTier].creator}% Creator / {equitySplits[selectedTier].lb}% LB
+              Participation Split: {participationSplits[selectedTier].creator}% Creator / {participationSplits[selectedTier].lb}% LB
             </CardDescription>
           </div>
           <Badge variant="secondary">{selectedTier.replace("_", " ").toUpperCase()}</Badge>
