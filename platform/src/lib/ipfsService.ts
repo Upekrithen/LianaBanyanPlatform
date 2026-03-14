@@ -397,5 +397,5 @@ export const PATENT_PORTFOLIO_STATS = {
   prior_art_reviewed: 330,
 
   // Standard description for use across platform
-  description: "The patent portfolio behind this platform includes 1,647 documented innovations — 99% utility patents, not design — protected by 1,336 formal claims across 6 provisional applications. Eight definite with 9 more out of the first 130 so far have survived a deep dive against the U.S. patent office with no prior art found.",
+  description: "The patent portfolio behind this platform includes 1,662 documented innovations — 99% utility patents, not design — protected by 1,336 formal claims across 6 provisional applications. Eight definite with 9 more out of the first 130 so far have survived a deep dive against the U.S. patent office with no prior art found.",
 } as const;

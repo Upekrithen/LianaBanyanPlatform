@@ -80,7 +80,7 @@ export const PRINCIPLES = {
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 1647,         // As of Session 11B Batch 6, March 14 2026 (+8 Modular Mfg/Crew Call #1640-#1647)
+  canonicalCount: 1662,         // As of Session 17, March 14 2026 (delegation, XP, trickle, STAMP)
   patentClaims: 1336,           // Across 6 provisional applications
   utilityPatents: 8,
   patentPortfolioValue: { low: 9_000_000, high: 80_000_000 },

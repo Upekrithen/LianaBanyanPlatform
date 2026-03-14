@@ -9,6 +9,8 @@ import { Lock, Unlock, Mail, ShieldCheck } from "lucide-react";
 import { CROWN_LETTERS } from '@/data/crownLetters';
 import { RECIPIENTS } from '@/data/redCarpetRecipients';
 import { CrownResponseDialog } from "@/components/CrownResponseDialog";
+import { DelegationResponseButtons } from "@/components/delegation/DelegationResponseButtons";
+import { useCrownLetterInvitationId } from "@/components/delegation/useCrownLetterInvitationId";
 
 interface LockedCrownLetterViewProps {
   recipientId: string;
@@ -19,6 +21,7 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [responseOpen, setResponseOpen] = useState(false);
+  const invitationId = useCrownLetterInvitationId(recipientId);
 
   const recipient = RECIPIENTS.find(r => r.id === recipientId);
   const letterContent = CROWN_LETTERS[recipientId];
@@ -117,14 +120,27 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
           </ReactMarkdown>
         </div>
         
-        <div className="mt-12 pt-8 border-t border-slate-200 flex justify-center">
-          <Button
-            size="lg"
-            className="bg-slate-900 hover:bg-slate-800 text-white px-8"
-            onClick={() => setResponseOpen(true)}
-          >
-            Reply to Founder
-          </Button>
+        <div className="mt-12 pt-8 border-t border-slate-200 space-y-6">
+          <div className="flex justify-center">
+            <Button
+              size="lg"
+              className="bg-slate-900 hover:bg-slate-800 text-white px-8"
+              onClick={() => setResponseOpen(true)}
+            >
+              Reply to Founder
+            </Button>
+          </div>
+          {invitationId && (
+            <div className="pt-4 border-t border-slate-200">
+              <p className="text-sm font-medium text-slate-600 mb-2">Or respond with delegation:</p>
+              <DelegationResponseButtons
+                invitationId={invitationId}
+                recipientId={recipientId}
+                recipientName={recipient.name}
+                verifiedEmail={email}
+              />
+            </div>
+          )}
         </div>
       </CardContent>
 

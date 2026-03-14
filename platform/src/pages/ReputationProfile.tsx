@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ReputationDisplay } from '@/components/ReputationDisplay';
 import { UnifiedBadgeDisplay } from '@/components/UnifiedBadgeDisplay';
+import { XPScoreDisplay } from '@/components/profile/XPScoreDisplay';
 import { Award, TrendingUp, Users, Shield, EyeOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -142,6 +143,11 @@ export default function ReputationProfile() {
       {/* Unified Badge Display */}
       {(visibility?.show_achievements !== false || isOwnProfile) && (
         <UnifiedBadgeDisplay userId={userId!} size="lg" />
+      )}
+
+      {/* XP Score — accomplishment metric (separate from reputation) */}
+      {(visibility?.show_achievements !== false || isOwnProfile) && userId && (
+        <XPScoreDisplay userId={userId} />
       )}
 
       {/* Reputation Display */}
