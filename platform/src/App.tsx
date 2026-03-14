@@ -210,6 +210,7 @@ const SaltMines = lazy(() => import("./pages/SaltMines"));
 const BuildBusiness = lazy(() => import("./pages/BuildBusiness"));
 const PlantSeeds = lazy(() => import("./pages/PlantSeeds"));
 const CueCardLanding = lazy(() => import("./pages/CueCardLanding"));
+const CueCardShare = lazy(() => import("./pages/CueCardShare"));
 const NotLeftNotRightPage = lazy(() => import('./pages/cue-cards/NotLeftNotRightPage'));
 const AcademicPapersDirectory = lazy(() => import('./pages/AcademicPapersDirectory'));
 const CollegeOfHardKnocks = lazy(() => import('./pages/CollegeOfHardKnocks'));
@@ -230,6 +231,7 @@ const C20Leaderboard = lazy(() => import("./pages/C20Leaderboard"));
 const BeaconExplainer = lazy(() => import("./pages/BeaconExplainer"));
 const WildfireRunsPage = lazy(() => import("./pages/WildfireRunsPage"));
 const ATTILanding = lazy(() => import("./pages/ATTILanding"));
+const SanAntonioLanding = lazy(() => import("./pages/SanAntonioLanding"));
 const BifrostCardBuilder = lazy(() => import("./pages/BifrostCardBuilder"));
 import { WildfireRunProvider } from "./contexts/WildfireRunContext";
 import { MockDataProvider } from "./contexts/MockDataProvider";
@@ -473,6 +475,7 @@ const App = () => (
                         <Route path="/portal" element={<PortalGateway />} />
                         <Route path="/enter" element={<PortalGateway />} />
                         <Route path="/treasure-map" element={<TreasureMap />} />
+                        <Route path="/sanantonio" element={<SanAntonioLanding />} />
                         <Route path="/crew/new" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewNewPage /></Suspense></ProtectedRoute>} />
                         <Route path="/crew/:crewId" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/crew/:crewId/invite" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewInvite /></Suspense>} />
@@ -548,6 +551,7 @@ const App = () => (
                         <Route path="/pledges" element={<Navigate to="/my-pledges" replace />} />
                         <Route path="/deck-card-studio" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
                         <Route path="/cue-cards" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
+                        <Route path="/cue-cards/:cardType" element={<CueCardShare />} />
                         <Route path="/deck-cards" element={<Navigate to="/deck" replace />} />
                         <Route path="/hofund" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
                         <Route path="/hofund-studio" element={<Navigate to="/hofund" replace />} />

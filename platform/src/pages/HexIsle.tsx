@@ -9,7 +9,7 @@
  */
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +23,7 @@ import {
   Hexagon, Building, Droplets, Cog, Zap, Target, Crown,
   Package, ArrowRight, Shield, Anchor, Wrench, Sprout, Wand2, Search
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 import { RootLockDemo } from "@/components/hexisle/root-lock/RootLockDemo";
 import { ViewPhaseSwitcher } from "@/components/hexisle/ViewPhaseSwitcher";
@@ -108,6 +109,19 @@ export default function HexIsle() {
     hard: "bg-orange-500/10 text-orange-600",
     epic: "bg-purple-500/10 text-purple-600",
   };
+
+  const [notifyEmail, setNotifyEmail] = useState("");
+  const queryClient = useQueryClient();
+  const waitlistMutation = useMutation({
+    mutationFn: async (email: string) => {
+      const { error } = await supabase.from("hexisle_waitlist").upsert({ email }, { onConflict: "email" });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      setNotifyEmail("");
+      queryClient.invalidateQueries({ queryKey: ["hexisle-waitlist"] });
+    },
+  });
 
   return (
     <div className="container mx-auto p-6 max-w-6xl space-y-6">
@@ -521,6 +535,100 @@ export default function HexIsle() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* How It's Made */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Wrench className="h-5 w-5" />
+            How It's Made
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            HexIsle uses a 27-piece mechanical taxonomy called the Hexel Piece Grammar.
+            Each piece — from the ChannelLock base to the Capstone crown — is designed to snap-fit together without glue or fasteners.
+          </p>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            The Definitive Stack: ChannelLock → HollowLog → Clamshell → GoldenLotus → Rotor → Ouralis → PGears×3 → SawtoothCoral+TimingBelt → MainGear → Cradle+Football → Capstone → SlottedTop
+          </p>
+          <Button variant="link" className="px-0 h-auto text-primary" asChild>
+            <a href="https://cephas.lianabanyan.com/hexisle/" target="_blank" rel="noopener noreferrer">
+              See the full piece grammar →
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Production Journal */}
+      <Card className="mt-6" data-xray-id="hexisle-production-journal">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BookOpen className="h-5 w-5" />
+            Production Journal
+          </CardTitle>
+          <CardDescription>Transparent build log</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li>2025-11-26: Patent filed — 37 core innovations (Application 63/925,672)</li>
+            <li>2026-01-28: HexIsle piece grammar finalized — 27 pieces catalogued</li>
+            <li>2026-02-24: LEVIATHAN PLUS filed — 102 additional innovations</li>
+            <li>2026-03-13: Founding Run page live</li>
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* Cost Transparency */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Package className="h-5 w-5" />
+            Cost Transparency
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            Every HexIsle set is priced at manufacturing cost plus exactly 20%. The margin funds platform operations and 16 charitable initiatives. No hidden markups.
+          </p>
+          <div className="rounded-lg bg-muted/50 p-4 text-sm font-medium">
+            Materials + Labor + 20% = Price
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Notify Me */}
+      <Card className="mt-6" data-xray-id="hexisle-notify">
+        <CardHeader>
+          <CardTitle>Get notified when HexIsle launches on Kickstarter</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form
+            className="flex flex-col sm:flex-row gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (notifyEmail.trim()) waitlistMutation.mutate(notifyEmail.trim());
+            }}
+          >
+            <Input
+              type="email"
+              placeholder="your@email.com"
+              value={notifyEmail}
+              onChange={(e) => setNotifyEmail(e.target.value)}
+              className="flex-1"
+            />
+            <Button type="submit" disabled={waitlistMutation.isPending || !notifyEmail.trim()}>
+              {waitlistMutation.isPending ? "..." : "Notify me"}
+            </Button>
+          </form>
+          {waitlistMutation.isSuccess && (
+            <p className="text-sm text-green-600 mt-2">You're on the list. We'll email you at launch.</p>
+          )}
+          {waitlistMutation.isError && (
+            <p className="text-sm text-destructive mt-2">Something went wrong. Try again.</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
