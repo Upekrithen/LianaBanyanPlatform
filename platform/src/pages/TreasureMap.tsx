@@ -13,7 +13,15 @@ import {
   TOTAL_QUESTIONS,
   type TreasureMapQuestionDef,
 } from "@/components/treasure-map/treasureMapQuestions";
-import { getRecommendedPlays, type OptionTag } from "@/components/treasure-map/treasureMapEngine";
+import {
+  getRecommendedPlays,
+  getTemperamentScoresFromTags,
+  type OptionTag,
+  type TemperamentScores,
+} from "@/components/treasure-map/treasureMapEngine";
+
+const TREASURE_MAP_TEMPERAMENT_KEY = "treasure_map_temperament_hint";
+// TODO: migration — store temperament_hint on user profile (e.g. profiles.temperament_hint JSONB)
 
 type Step = "intro" | number | "results";
 
@@ -80,21 +88,39 @@ export default function TreasureMap() {
   })();
 
   const allTags: OptionTag[] = [];
-  TREASURE_MAP_QUESTIONS.forEach((q) => {
+  const temperamentTags: OptionTag[] = [];
+  TREASURE_MAP_QUESTIONS.forEach((q, idx) => {
     const chosen = answers[q.id] ?? [];
     chosen.forEach((optionId) => {
       const opt = q.options.find((o) => o.id === optionId);
-      if (opt) allTags.push(...opt.tags);
+      if (opt) {
+        allTags.push(...opt.tags);
+        if (idx >= 7 && idx <= 9) temperamentTags.push(...opt.tags);
+      }
     });
   });
-  const plays = getRecommendedPlays(allTags, sourceWeight);
+  const temperamentScores = getTemperamentScoresFromTags(temperamentTags);
+  if (typeof localStorage !== "undefined") {
+    try {
+      localStorage.setItem(TREASURE_MAP_TEMPERAMENT_KEY, JSON.stringify(temperamentScores));
+    } catch {
+      // ignore
+    }
+  }
+  const plays = getRecommendedPlays(allTags, sourceWeight, temperamentScores);
 
   if (step === "intro") {
     return <TreasureMapIntro onStart={handleNext} />;
   }
 
   if (step === "results") {
-    return <TreasureMapResults plays={plays} onBack={handleBack} />;
+    return (
+      <TreasureMapResults
+        plays={plays}
+        onBack={handleBack}
+        temperamentWeighted={temperamentTags.length > 0}
+      />
+    );
   }
 
   if (typeof step === "number" && currentQuestion) {

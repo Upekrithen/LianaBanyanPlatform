@@ -32,7 +32,7 @@ Founder & General Manager, Liana Banyan Corporation
 
 p.s. Naturally I'll move forward either way, but now I have asked. "I bargained with Life for a penny…" — Jessie B. Rittenhouse
 
-p.p.s. I've filed 928 patent claims since November 26, 2025—the last 44 about ten minutes ago, at 12:08 AM on January 28, 2026. Provisionally, because I can't yet afford the full filings at $8,000-$10,000 each. *Yet* is the operative word. Four decades of thinking. Nine years building this specific platform. Ludicrous speed for the last five months. 170+ innovations. All of it, protected. All of it, ready to share. Join me. The IP is the invitation. $5 per year for life if you sign up before we launch. Merry Late Christmas. And I still have two suits.
+p.p.s. I've filed 1,336 patent claims across 6 provisional applications since November 26, 2025—the latest batch (408 claims) filed February 24, 2026. Provisionally, because I can't yet afford the full filings at $8,000-$10,000 each. *Yet* is the operative word. Four decades of thinking. Nine years building this specific platform. Ludicrous speed for the last five months. 170+ innovations. All of it, protected. All of it, ready to share. Join me. The IP is the invitation. $5 per year for life if you sign up before we launch. Merry Late Christmas. And I still have two suits.
 
 ---
 

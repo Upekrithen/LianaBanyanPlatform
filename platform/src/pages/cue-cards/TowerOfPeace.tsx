@@ -30,7 +30,7 @@ export default function TowerOfPeace() {
           <CardHeader className="bg-slate-100 border-b border-slate-200">
             <CardTitle className="text-2xl flex items-center gap-3">
               <BookOpen className="w-6 h-6 text-slate-700" />
-              A Considered Approach to Universal Sustained Economic Prosperity
+              A Considered Approach to Sustained Universal Economic Prosperity
             </CardTitle>
           </CardHeader>
           <CardContent className="p-8 space-y-6 text-lg leading-relaxed">

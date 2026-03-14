@@ -23,7 +23,7 @@ I've found a way. Simultaneous market penetration AND price skimming — we pre-
 - Three-Gear Currency System (Credits, Marks, Joules) — mathematical solvency proofs, not promises
 - Position Funding model — democratic project financing without equity dilution
 - Tab System — graduated contribution based on success, not debt
-- 170+ innovations with 928 patent claims filed
+- 170+ innovations with 1,336 patent claims filed
 
 **The manufacturing backbone exists:**
 

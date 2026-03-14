@@ -191,6 +191,9 @@ const AmbassadorWalkthrough = lazy(() => import("./pages/AmbassadorWalkthrough")
 const AmbassadorChainPage = lazy(() => import("./pages/AmbassadorChainPage"));
 const AmbassadorPortfolio = lazy(() => import("./pages/AmbassadorPortfolio"));
 const AmbassadorCertification = lazy(() => import("./pages/AmbassadorCertification"));
+const ReviewerApplication = lazy(() => import("./pages/ReviewerApplication"));
+const ReviewerDashboard = lazy(() => import("./pages/ReviewerDashboard"));
+const ReviewQueueItemPage = lazy(() => import("./pages/ReviewQueueItemPage"));
 const Arenas = lazy(() => import("./pages/Arenas"));
 const Petitions = lazy(() => import("./pages/Petitions"));
 const BrowseMarketplace = lazy(() => import("./pages/BrowseMarketplace"));
@@ -479,6 +482,9 @@ const App = () => (
                         <Route path="/ambassador/chain" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorChainPage /></Suspense>} />
                         <Route path="/ambassador/portfolio/:ambassadorId" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorPortfolio /></Suspense>} />
                         <Route path="/ambassador/certify" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorCertification /></Suspense></ProtectedRoute>} />
+                        <Route path="/reviewer/apply" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ReviewerApplication /></Suspense></ProtectedRoute>} />
+                        <Route path="/reviewer/dashboard" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ReviewerDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/reviewer/queue/:id" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ReviewQueueItemPage /></Suspense></ProtectedRoute>} />
                         <Route path="/launch" element={<LaunchHub />} />
                         <Route path="/launch/run-a-node" element={<RunANode />} />
                         <Route path="/start" element={<OnboardingStart />} />

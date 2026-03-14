@@ -10,9 +10,11 @@ import type { Play } from "./treasureMapEngine";
 interface TreasureMapResultsProps {
   plays: Play[];
   onBack: () => void;
+  /** Optional: show that results are temperament-weighted (for data-xray-id) */
+  temperamentWeighted?: boolean;
 }
 
-export function TreasureMapResults({ plays, onBack }: TreasureMapResultsProps) {
+export function TreasureMapResults({ plays, onBack, temperamentWeighted }: TreasureMapResultsProps) {
   const navigate = useNavigate();
 
   const handleCta = (play: Play) => {
@@ -24,7 +26,7 @@ export function TreasureMapResults({ plays, onBack }: TreasureMapResultsProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
+    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="temperament-results">
       <div className="max-w-4xl mx-auto">
         <Button
           variant="ghost"
@@ -43,7 +45,7 @@ export function TreasureMapResults({ plays, onBack }: TreasureMapResultsProps) {
           comfort level.
         </p>
 
-        <div className="space-y-6">
+        <div className="space-y-6" data-xray-id={temperamentWeighted ? "temperament-weighted-plays" : undefined}>
           {plays.map((play) => (
             <div
               key={play.id}

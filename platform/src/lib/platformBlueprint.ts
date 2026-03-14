@@ -26,7 +26,7 @@ export const TIMELINE = [
   { year: 2020, event: "First provisional patent filed" },
   { year: 2023, event: "8 utility patents filed; Hexel mechanical taxonomy defined" },
   { year: 2024, event: "Platform architecture begins; AI team formed (Rook, Knight, Bishop, Pawn)" },
-  { year: 2025, event: "1,594 innovations cataloged; 928+ patent claims across multiple provisional bags" },
+  { year: 2025, event: "1,599 innovations cataloged; 1,336 patent claims across 6 provisional applications" },
   { year: 2026, event: "Public launch — 16 initiatives, 8 domains, full multi-portal architecture" },
 ] as const;
 
@@ -58,7 +58,7 @@ export const SACRIFICE_PRINCIPLE = {
     "Through building 8 utility patents worth between $9M and $80M",
     "$525,000 of personal investment over 9 years into patent portfolio",
     "1,594 innovations cataloged and documented",
-    "928+ patent claims across multiple provisional bags",
+    "1,336 patent claims across 6 provisional applications",
     "The platform exists because someone was willing to do what others wouldn't",
   ],
 } as const;
@@ -80,8 +80,8 @@ export const PRINCIPLES = {
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 1594,         // As of Session 9A, March 12 2026 (1,560 filed + 34 pending)
-  patentClaims: 928,            // Across multiple provisional bags
+  canonicalCount: 1599,         // As of Session 10, March 13 2026 (+5 Reviewer Pipeline)
+  patentClaims: 1336,           // Across 6 provisional applications
   utilityPatents: 8,
   patentPortfolioValue: { low: 9_000_000, high: 80_000_000 },
   personalInvestment: 525_000,  // Over 9 years

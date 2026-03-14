@@ -213,7 +213,7 @@ export const WRONG_TRY_DESTINATIONS: WrongTryDestination[] = [
     title: "The Empty Workshop",
     description: "Blueprints line the walls. Someone was here recently.",
     icon: "🔧",
-    teaserFact: "928+ patent claims protect every innovation on this platform. Micro-entity filing means $65 per provisional — accessible to everyone.",
+    teaserFact: "1,336 patent claims protect every innovation on this platform. Micro-entity filing means $65 per provisional — accessible to everyone.",
   },
   {
     id: "C",

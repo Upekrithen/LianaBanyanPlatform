@@ -19,7 +19,7 @@ A **12-piece modular mechanical assembly** (60mm hexagonal, 45-55mm height) that
 - **27 canonical mechanical components** across 16 stack layers
 - **6 assembly families:** threeSisters05 (v82, power train master), checkIt05 (v21, complete Hexel), lockedDown (v1, lock verification), D09DEV (v1, full engineering), WORKINGairPump (v19, pneumatic), FlyingButtress (v40, Slotted Top)
 - **3 power chains:** hydraulic (wave generation), pneumatic (plant growth/bloom), trap (timing belt countdown)
-- **928+ patent claims** filed across multiple provisional applications
+- **1,336 patent claims** filed across multiple provisional applications
 - **8 section analysis views** in threeSisters05 alone (Section2, 3, 4, 9, 10, 12, 14, 17) revealing internal geometry
 - Full mechanical specification: gear ratios (20:3 = 6.67:1 amplification, 12x final output), operating pressure (2.17 psi), Tesla valve flow rectification, compliant mechanism grippers, variable-amplitude cam followers
 

@@ -437,10 +437,10 @@ export const ALCOVES: Alcove[] = [
     position: 14,
     tier: 3,
     title: 'The Patent Portfolio',
-    subtitle: '928+ claims, $65 each',
+    subtitle: '1,336 claims, $65 each',
     icon: '📜',
     route: '/learn/patents',
-    preview: 'Micro-entity filing at $65 per provisional. 928+ claims across multiple patent bags. IP as cooperative asset.',
+    preview: 'Micro-entity filing at $65 per provisional. 1,336 claims across 6 provisional applications. IP as cooperative asset.',
     innovations: [],
     questions: [
       {

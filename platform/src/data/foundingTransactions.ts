@@ -70,9 +70,9 @@ export const FOUNDING_LEDGER_SUMMARY = {
   netAvailable: 0,
   periodStart: '2017-01-01',
   periodEnd: '2026-02-24',
-  innovationsProduced: 1594,
+  innovationsProduced: 1599,
   patentApplicationsFiled: 7,
-  formalClaims: 218,
+  formalClaims: 1336,
   crownJewels: 17, // 8 definite + 9 probable
   
   // Breakdown by category (approximate)

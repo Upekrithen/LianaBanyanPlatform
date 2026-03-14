@@ -69,7 +69,7 @@ function buildShareContent(
     case "general":
     default:
       return {
-        text: `Check out Liana Banyan — a cooperative platform where creators keep 83.3% of every sale, backed by 928+ patent claims. $5/year. No speculation. Just services.`,
+        text: `Check out Liana Banyan — a cooperative platform where creators keep 83.3% of every sale, backed by 1,336 patent claims. $5/year. No speculation. Just services.`,
         url,
         hashtags,
       };

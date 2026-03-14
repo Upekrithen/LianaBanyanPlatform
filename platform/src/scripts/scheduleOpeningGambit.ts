@@ -143,7 +143,7 @@ Liana Banyan is what came from forty years of thinking about that. A cooperative
 → 16 charitable initiatives are funded by architecture, not pledges
 → Every member can start a business for $5
 
-The platform is live. The architecture is backed by 928+ patent claims. The operating agreement locks the economics.
+The platform is live. The architecture is backed by 1,336 patent claims. The operating agreement locks the economics.
 
 I'm looking for 300 founding members who are tired of eking their way through life.
 
@@ -184,7 +184,7 @@ Cross-link: Full article from BISHOP_DROPZONE/ARTICLE_01_EKING_DRAFT.md`,
 
 I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where creators keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
 
-I put 928+ patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
+I put 1,336 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
 
 The cost to join: $5/year. The economic model: Cost + 20%, locked in the operating agreement. The goal: 300 founding members who want to build something that can't be enshittified.
 
@@ -353,7 +353,7 @@ The economic model: Cost + 20%, constitutionally locked. Creators keep 83.3%. Th
 
 What makes it different: The margin is in the operating agreement, not a settings panel. You literally cannot enshittify it without rewriting the corporate charter.
 
-928+ patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
+1,336 patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
 
 Looking for 300 founding members at $5/year to stress-test the model.
 

@@ -5,6 +5,14 @@
 
 export type OptionTag = string;
 
+/** Temperament scores from Q8–Q10 (max 3 per type). Used to weight play ordering. */
+export interface TemperamentScores {
+  sj: number;
+  sp: number;
+  nf: number;
+  nt: number;
+}
+
 export interface Play {
   id: string;
   title: string;
@@ -15,6 +23,8 @@ export interface Play {
   icon: string;
   /** Optional: for run-a-node, which initiative to highlight (e.g. lets-make-dinner, lets-get-groceries) */
   nodeId?: string;
+  /** Temperament tags for weighting: SJ (Guardian), SP (Artisan), NF (Idealist), NT (Rational) */
+  temperamentTags?: ("sj" | "sp" | "nf" | "nt")[];
 }
 
 /** All play definitions for the results screen. */
@@ -32,6 +42,7 @@ export const PLAYS: Record<string, Play> = {
     route: "/launch/run-a-node",
     icon: "🍽️",
     nodeId: "lets-make-dinner",
+    temperamentTags: ["sj", "sp"],
   },
   grocery_runner: {
     id: "grocery_runner",
@@ -46,6 +57,7 @@ export const PLAYS: Record<string, Play> = {
     route: "/launch/run-a-node",
     icon: "🛒",
     nodeId: "lets-get-groceries",
+    temperamentTags: ["sj"],
   },
   skill_session: {
     id: "skill_session",
@@ -59,6 +71,7 @@ export const PLAYS: Record<string, Play> = {
     cta: "Draft My First Listing",
     route: "/launch",
     icon: "💡",
+    temperamentTags: ["nf", "nt"],
   },
   digital_product: {
     id: "digital_product",
@@ -72,6 +85,7 @@ export const PLAYS: Record<string, Play> = {
     cta: "Start Your Product",
     route: "/launch",
     icon: "📦",
+    temperamentTags: ["nt"],
   },
   baked_goods: {
     id: "baked_goods",
@@ -85,6 +99,7 @@ export const PLAYS: Record<string, Play> = {
     cta: "List Your First Item",
     route: "/launch",
     icon: "🥖",
+    temperamentTags: ["sj", "sp"],
   },
   care_tutoring: {
     id: "care_tutoring",
@@ -98,6 +113,7 @@ export const PLAYS: Record<string, Play> = {
     cta: "Create Your Care Listing",
     route: "/launch",
     icon: "❤️",
+    temperamentTags: ["nf"],
   },
 };
 
@@ -147,10 +163,38 @@ function getBestComboMatch(tags: OptionTag[]): string | null {
 }
 
 /**
+ * Compute temperament score from tags (e.g. from Q8–Q10 answers).
+ * Each tag temperament_sj, temperament_sp, temperament_nf, temperament_nt adds 1 to that bucket; max 3 per type.
+ */
+export function getTemperamentScoresFromTags(tags: OptionTag[]): TemperamentScores {
+  const out: TemperamentScores = { sj: 0, sp: 0, nf: 0, nt: 0 };
+  for (const t of tags) {
+    if (t === "temperament_sj") out.sj = Math.min(3, out.sj + 1);
+    else if (t === "temperament_sp") out.sp = Math.min(3, out.sp + 1);
+    else if (t === "temperament_nf") out.nf = Math.min(3, out.nf + 1);
+    else if (t === "temperament_nt") out.nt = Math.min(3, out.nt + 1);
+  }
+  return out;
+}
+
+/**
+ * Score a play by temperament: sum of user's scores for each of the play's temperament tags.
+ */
+function temperamentScore(play: Play, scores: TemperamentScores): number {
+  if (!play.temperamentTags || play.temperamentTags.length === 0) return 0;
+  return play.temperamentTags.reduce((sum, t) => sum + (scores[t] ?? 0), 0);
+}
+
+/**
  * Returns exactly 3 plays, ranked by match strength.
+ * If temperamentScores provided, reorders the 3 plays so highest temperament match comes first.
  * If explore + minimal, or no strong match, returns default 3.
  */
-export function getRecommendedPlays(tags: OptionTag[], sourceWeight?: "earn" | "build"): Play[] {
+export function getRecommendedPlays(
+  tags: OptionTag[],
+  sourceWeight?: "earn" | "build",
+  temperamentScores?: TemperamentScores
+): Play[] {
   const weighted = [...tags];
   if (sourceWeight === "earn") {
     weighted.push("fast", "labor");
@@ -173,7 +217,6 @@ export function getRecommendedPlays(tags: OptionTag[], sourceWeight?: "earn" | "
     const s = scorePlay(playId, weighted);
     playScores.set(playId, (playScores.get(playId) ?? 0) + s);
   }
-  // Add default plays so they can be chosen
   DEFAULT_PLAY_IDS.forEach((id) => {
     if (!playScores.has(id)) playScores.set(id, 0);
   });
@@ -187,12 +230,16 @@ export function getRecommendedPlays(tags: OptionTag[], sourceWeight?: "earn" | "
     if (uniqueOrdered.length >= 3) break;
     if (!uniqueOrdered.includes(id)) uniqueOrdered.push(id);
   }
-
-  // If we have fewer than 3, fill with defaults
   for (const id of DEFAULT_PLAY_IDS) {
     if (uniqueOrdered.length >= 3) break;
     if (!uniqueOrdered.includes(id)) uniqueOrdered.push(id);
   }
 
-  return uniqueOrdered.slice(0, 3).map((id) => PLAYS[id]).filter(Boolean);
+  let plays = uniqueOrdered.slice(0, 3).map((id) => PLAYS[id]).filter(Boolean) as Play[];
+  if (temperamentScores && plays.length > 0) {
+    plays = [...plays].sort(
+      (a, b) => temperamentScore(b, temperamentScores) - temperamentScore(a, temperamentScores)
+    );
+  }
+  return plays;
 }
