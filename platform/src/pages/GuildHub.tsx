@@ -38,9 +38,10 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Users, Handshake, Shield, Calendar, Clock, Award,
   ArrowRight, Star, ChevronDown, ChevronUp, BookOpen,
-  Send, CheckCircle2
+  Send, CheckCircle2, Target
 } from "lucide-react";
 import { GUILDS, HANDSHAKE_PROTOCOL, type Guild, type GuildPosition } from "@/lib/guildSystem";
+import { TasteRangerDashboard, FantasyBridge } from "@/components/bandwagon";
 import { HANDSHAKE_DOCUMENT } from "@/lib/guildHandshakeProtocol";
 
 // ─── Guild Card Component ──────────────────────────────────────────────────
@@ -445,12 +446,15 @@ export default function GuildHub() {
       </div>
 
       <Tabs defaultValue="guilds" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="guilds" className="gap-2">
             <Users className="w-4 h-4" /> The 7 Guilds
           </TabsTrigger>
           <TabsTrigger value="handshake" className="gap-2">
             <Handshake className="w-4 h-4" /> The Handshake Protocol
+          </TabsTrigger>
+          <TabsTrigger value="bandwagon" className="gap-2">
+            <Target className="w-4 h-4" /> BandWagon
           </TabsTrigger>
         </TabsList>
 
@@ -497,6 +501,15 @@ export default function GuildHub() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* ─── BANDWAGON TAB ─── */}
+        <TabsContent value="bandwagon" className="space-y-6">
+          <p className="text-sm text-muted-foreground">
+            Earn allocation authority by identifying and sponsoring high-quality projects. Service Allocation Authority (SAA) and Backed Marks — no investment, no return; you direct cooperative resources.
+          </p>
+          <TasteRangerDashboard />
+          <FantasyBridge />
         </TabsContent>
 
         {/* ─── HANDSHAKE TAB ─── */}
