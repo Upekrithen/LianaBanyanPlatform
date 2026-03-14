@@ -173,6 +173,9 @@ const NodeRegistration = lazy(() => import("./pages/NodeRegistration"));
 const ServiceNodeRegistration = lazy(() => import("./pages/ServiceNodeRegistration"));
 const LookingGlass = lazy(() => import("./pages/LookingGlass"));
 const ProposalDetail = lazy(() => import("./pages/ProposalDetail"));
+const ProposalsListing = lazy(() => import("./pages/ProposalsListing"));
+const StewardDashboard = lazy(() => import("./pages/StewardDashboard"));
+const StewardApply = lazy(() => import("./pages/StewardApply"));
 const TreasureMapGame = lazy(() => import("./pages/TreasureMapGame"));
 const TreasureMapCreator = lazy(() => import("./pages/TreasureMapCreator"));
 const BeaconRunCreator = lazy(() => import("./pages/BeaconRunCreator"));
@@ -665,6 +668,7 @@ const App = () => (
                         <Route path="/wildfire-run/:slug" element={<ExplorerRoute><WildfireRunsPage /></ExplorerRoute>} />
                         <Route path="/magic-carpet" element={<ExplorerRoute><WildfireRunsPage /></ExplorerRoute>} />
                         <Route path="/governance" element={<Governance />} />
+                        <Route path="/governance/proposals" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProposalsListing /></Suspense></ExplorerRoute>} />
                         <Route path="/the-300" element={<Governance />} />
                         <Route path="/patent-portfolio" element={<PatentPortfolio />} />
                         <Route path="/economics" element={<EconomicLaws />} />
@@ -703,6 +707,8 @@ const App = () => (
                         <Route path="/looking-glass" element={<LookingGlass />} />
                         <Route path="/glass" element={<LookingGlass />} />
                         <Route path="/governance/proposals/:id" element={<ProposalDetail />} />
+                        <Route path="/steward" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StewardDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/steward/apply" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StewardApply /></Suspense></ProtectedRoute>} />
                         <Route path="/treasure-map-game" element={<TreasureMapGame />} />
                         <Route path="/52-cards" element={<TreasureMapGame />} />
                         <Route path="/card-hunt" element={<TreasureMapGame />} />

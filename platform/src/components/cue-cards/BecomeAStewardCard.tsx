@@ -24,7 +24,7 @@ export function BecomeAStewardCard() {
           The oven&apos;s already hot — cook more pizzas.
         </p>
         <Button variant="outline" size="sm" asChild>
-          <Link to="/guilds/hub?tab=bandwagon">Learn more</Link>
+          <Link to="/steward/apply">Learn more</Link>
         </Button>
       </CardContent>
     </Card>
