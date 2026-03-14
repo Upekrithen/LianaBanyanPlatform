@@ -40,6 +40,7 @@ import { RealTimeUserStats } from '@/components/RealTimeUserStats';
 import { DashboardPortalSwitcher } from '@/components/DashboardPortalSwitcher';
 import { BandWagonDashboardCard } from '@/components/BandWagonDashboardCard';
 import { GetFamousCard } from '@/components/cue-cards/GetFamousCard';
+import { InviteCreatorCard } from '@/components/cue-cards/InviteCreatorCard';
 import { PhysicalBadgeReminder } from '@/components/PhysicalBadgeReminder';
 import { MembershipStatusCard } from '@/components/MembershipStatusCard';
 import NavigateToGuilds from '@/components/NavigateToGuilds';
@@ -205,6 +206,7 @@ export default function Dashboard() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <BandWagonDashboardCard />
                 <GetFamousCard />
+                <InviteCreatorCard />
                 <NavigateToGuilds />
                 
                 <DiscoverySlot

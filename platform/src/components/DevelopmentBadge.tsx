@@ -135,7 +135,7 @@ export function DevelopmentBadge() {
 
           <div className="border-t pt-4 text-center text-xs text-muted-foreground">
             <p>Built in public since October 2025</p>
-            <p className="mt-1">1,630 innovations • 1,336 patent claims • Member-owned</p>
+            <p className="mt-1">1,639 innovations • 1,336 patent claims • Member-owned</p>
           </div>
         </DialogContent>
       </Dialog>

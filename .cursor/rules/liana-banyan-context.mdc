@@ -19,7 +19,7 @@ At the start of EVERY session, read these files in order:
 - **Creator keeps:** 83.3% (never round to 83%)
 - **Platform margin:** Cost + 20%
 - **On $500 transaction:** Creator gets $416.67
-- **Innovations:** 1,630 (Session 11B Batch 4: +7 Steward & Pizza Oven #1624-#1630, March 14, 2026)
+- **Innovations:** 1,639 (Session 11B Batch 5: +9 Creator Draft Pick #1631-#1639, March 14, 2026)
 - **Formal claims:** 1,336 across 6 provisional applications
 - **Crown Jewels:** 8 definite + 9 probable
 - **Membership:** $5/year
@@ -120,6 +120,7 @@ firebase login --reauth
 2. **Use Edit, not Write, for files over 200 lines.** Surgical edits preserve context. Full file rewrites burn tokens and hit output limits.
 3. **Read MILESTONE_HANDOFF_MARCH_2026.md at session start** to know the current state (latest commit, migration number, what's done, what's next).
 4. **Check BISHOP_DROPZONE/ for task prompts** before asking what to do.
+5. **At session end:** Update `CONTEXT_MANAGEMENT/MILESTONE_HANDOFF_MARCH_2026.md` with a Session End / Handoff summary: what was built or threshed, latest commit(s), current innovation count, and any pending steps (e.g. `supabase db push`). See the HANDOFF PROTOCOL section in that file.
 
 ## Behavioral Rules
 

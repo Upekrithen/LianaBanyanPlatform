@@ -163,7 +163,7 @@ export function PlatformFooter() {
           <div className="border-t mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Shield className="h-3.5 w-3.5" />
-              <span>1,336 patent claims · 1,630 innovations · Service sponsorship, not securities</span>
+              <span>1,336 patent claims · 1,639 innovations · Service sponsorship, not securities</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>&copy; {currentYear} Liana Banyan Corporation. All rights reserved.</span>

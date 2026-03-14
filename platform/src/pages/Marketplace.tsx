@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { TrendingUp, Sparkles, DollarSign, Factory, Shield, ArrowRight, Users, Coins, Loader2 } from 'lucide-react';
+import { InviteCreatorCard } from '@/components/cue-cards/InviteCreatorCard';
 import { EnhancedProjectCard } from '@/components/EnhancedProjectCard';
 
 type TimeFilter = '24h' | '72h' | '1week';
@@ -186,6 +187,9 @@ export default function Marketplace() {
               </div>
             </CardContent>
           </Card>
+          <div className="md:col-span-2">
+            <InviteCreatorCard />
+          </div>
         </section>
 
         {/* Quick Stats */}
