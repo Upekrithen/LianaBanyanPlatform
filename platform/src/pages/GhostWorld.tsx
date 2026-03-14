@@ -41,6 +41,7 @@ import {
   Download
 } from "lucide-react";
 import { GhostLeaderboard } from "@/components/Leaderboards/GhostLeaderboard";
+import { GhostCreditBalance } from "@/components/ghost/GhostCreditBalance";
 import { 
   getOrCreateGhostSession, 
   upgradePersistence, 
@@ -219,9 +220,12 @@ export default function GhostWorld() {
       <div className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Ghost className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Ghost World</span>
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+              <Ghost className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Ghost World</span>
+            </div>
+            <GhostCreditBalance compact />
           </div>
           <h1 className="text-4xl font-bold text-foreground mb-3">
             Welcome, {ghostProfile?.ghost_alias || "Ghost"}

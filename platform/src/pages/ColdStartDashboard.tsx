@@ -20,6 +20,7 @@ import { ExpandableBlock } from "@/components/pudding";
 import { LocalColdStartDashboard } from "@/components/cold-start/LocalColdStartDashboard";
 import { CareUnitSelector } from "@/components/cold-start/CareUnitSelector";
 import { JesperDashboard } from "@/components/cold-start/JesperDashboard";
+import { BecomeAStewardCard } from "@/components/cue-cards/BecomeAStewardCard";
 import { 
   Flame, MapPin, Users, Crown, ArrowRight, 
   Sparkles, TrendingUp, Globe, Building2, 
@@ -80,6 +81,9 @@ const ColdStartDashboard: React.FC = () => {
             Watch initiatives grow from a single spark to a wildfire of community action.
             Find your city. Claim your Dukedom. Light the beacon.
           </p>
+          <div className="mt-6 max-w-md mx-auto">
+            <BecomeAStewardCard />
+          </div>
         </div>
 
         {/* Explainer */}

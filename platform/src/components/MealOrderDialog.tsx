@@ -186,14 +186,28 @@ export function MealOrderDialog({
 
       return order;
     },
-    onSuccess: () => {
+    onSuccess: (order: { id: string; meal_offering_id?: string } | undefined) => {
+      const orderId = order?.id;
+      const reviewMealId = order?.meal_offering_id ?? mealId;
       toast({
         title: isCharity ? "Charity Meal Reserved!" : "Order Placed!",
-        description: `Your order for ${quantity > 1 ? `${quantity}x ` : ''}${mealName} has been placed successfully.${isCharity ? '' : ` Total: $${actualPrice.toFixed(2)}`}${bulkCalc.savings > 0 ? ` (Saved $${bulkCalc.savings.toFixed(2)}!)` : ''}`,
+        description: orderId ? (
+          <span>
+            Your order for {quantity > 1 ? `${quantity}x ` : ""}{mealName} has been placed successfully.
+            {!isCharity && ` Total: $${actualPrice.toFixed(2)}`}
+            {bulkCalc.savings > 0 && ` (Saved $${bulkCalc.savings.toFixed(2)}!)`}
+            <br />
+            <span className="text-muted-foreground text-sm mt-2 block">
+              Remember to review this meal within 72 hours to earn 5 Marks (service value for participation, not investment return).{" "}
+              <a href={`/initiatives/lets-make-dinner/review/${reviewMealId}?orderId=${orderId}`} className="underline text-primary">Review now</a>
+            </span>
+          </span>
+        ) : `Your order for ${quantity > 1 ? `${quantity}x ` : ""}${mealName} has been placed successfully.${!isCharity ? ` Total: $${actualPrice.toFixed(2)}` : ""}${bulkCalc.savings > 0 ? ` (Saved $${bulkCalc.savings.toFixed(2)}!)` : ""}`,
       });
       queryClient.invalidateQueries({ queryKey: ["meal-orders"] });
       queryClient.invalidateQueries({ queryKey: ["lmd-meals"] });
       queryClient.invalidateQueries({ queryKey: ["charitable-loan-account"] });
+      queryClient.invalidateQueries({ queryKey: ["lmd-orders-to-review"] });
       setOpen(false);
     },
     onError: (error) => {

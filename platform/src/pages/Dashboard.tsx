@@ -38,6 +38,8 @@ import { ContributionReportExporter } from '@/components/ContributionReportExpor
 import { MilestoneNotifications } from '@/components/MilestoneNotifications';
 import { RealTimeUserStats } from '@/components/RealTimeUserStats';
 import { DashboardPortalSwitcher } from '@/components/DashboardPortalSwitcher';
+import { BandWagonDashboardCard } from '@/components/BandWagonDashboardCard';
+import { GetFamousCard } from '@/components/cue-cards/GetFamousCard';
 import { PhysicalBadgeReminder } from '@/components/PhysicalBadgeReminder';
 import { MembershipStatusCard } from '@/components/MembershipStatusCard';
 import NavigateToGuilds from '@/components/NavigateToGuilds';
@@ -201,6 +203,8 @@ export default function Dashboard() {
               
               {/* Core Navigation */}
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <BandWagonDashboardCard />
+                <GetFamousCard />
                 <NavigateToGuilds />
                 
                 <DiscoverySlot

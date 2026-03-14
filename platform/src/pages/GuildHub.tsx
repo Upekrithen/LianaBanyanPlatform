@@ -14,8 +14,8 @@
  * Route: /guilds/hub (separate from /guilds which is the DB-driven list)
  */
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useMutation } from "@tanstack/react-query";
@@ -404,8 +404,19 @@ function GuildApplicationDialog({
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
+const GUILD_HUB_TABS = ["guilds", "handshake", "bandwagon"] as const;
+type GuildHubTab = (typeof GUILD_HUB_TABS)[number];
+
+function getTabFromSearchParams(searchParams: URLSearchParams): GuildHubTab {
+  const t = searchParams.get("tab");
+  if (t === "bandwagon" || t === "handshake") return t;
+  return "guilds";
+}
+
 export default function GuildHub() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState<GuildHubTab>(() => getTabFromSearchParams(searchParams));
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
   const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
@@ -414,6 +425,16 @@ export default function GuildHub() {
     guild: Guild | null;
     position: GuildPosition | null;
   }>({ open: false, guild: null, position: null });
+
+  useEffect(() => {
+    setActiveTab(getTabFromSearchParams(searchParams));
+  }, [searchParams]);
+
+  const handleTabChange = (value: string) => {
+    const tab = GUILD_HUB_TABS.includes(value as GuildHubTab) ? (value as GuildHubTab) : "guilds";
+    setActiveTab(tab);
+    setSearchParams({ tab });
+  };
 
   const handleApply = (guild: Guild, position: GuildPosition) => {
     if (!user) {
@@ -445,7 +466,7 @@ export default function GuildHub() {
         </p>
       </div>
 
-      <Tabs defaultValue="guilds" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="guilds" className="gap-2">
             <Users className="w-4 h-4" /> The 7 Guilds

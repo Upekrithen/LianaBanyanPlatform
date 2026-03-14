@@ -1,4 +1,4 @@
-import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket } from "lucide-react";
+import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket, TrendingUp } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -35,6 +35,7 @@ const allNavItems: NavItem[] = [
   { title: "Projects", url: "/projects", icon: Briefcase, portal: "marketplace" },
   { title: "Production Queue", url: "/production-queue", icon: BarChart3, portal: "marketplace" },
   { title: "Guilds", url: "/guilds", icon: Users2, portal: "marketplace" },
+  { title: "BandWagon", url: "/guilds/hub?tab=bandwagon", icon: TrendingUp, portal: "marketplace" },
   { title: "Clans", url: "/clans", icon: Shield, portal: "marketplace" },
   { title: "Peer Contracts", url: "/peer-contracts", icon: FileSignature, portal: "marketplace" },
   { title: "All Positions", url: "/positions/browse", icon: Briefcase, portal: "marketplace" },

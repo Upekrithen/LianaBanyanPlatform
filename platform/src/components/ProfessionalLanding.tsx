@@ -15,6 +15,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
+import { IDontWantYourMoneyCard } from "@/components/cue-cards/IDontWantYourMoneyCard";
+import { GetFamousCard } from "@/components/cue-cards/GetFamousCard";
 import './ProfessionalLanding.css';
 
 // Theme definitions for palette switcher
@@ -157,6 +159,10 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
           Creators and Workers keep 83.3%. Constitutionally locked. $5/year.
         </p>
         <div className="professional-badge">Cost + 20% — DNA Locked</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-3xl mx-auto">
+          <IDontWantYourMoneyCard />
+          <GetFamousCard />
+        </div>
       </section>
 
       {/* The Model Section */}

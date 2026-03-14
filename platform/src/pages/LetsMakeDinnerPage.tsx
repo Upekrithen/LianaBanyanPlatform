@@ -21,6 +21,7 @@ import { MealOrderDialog } from "@/components/MealOrderDialog";
 import { MealRequestDialog } from "@/components/MealRequestDialog";
 import { calculateMealPrice, formatHoursUntilPickup, getNextTierInfo, type PriceTierInfo } from "@/lib/lmdPricing";
 import { DemandAggregationExplainer } from "@/components/DemandAggregationExplainer";
+import { BecomeAStewardCard } from "@/components/cue-cards/BecomeAStewardCard";
 import { AnonymousVolumeExplainer } from "@/components/AnonymousVolumeExplainer";
 import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { ChefHat, Clock, MapPin, Users, Heart, ArrowLeft, Calendar, HelpCircle, Target, Search, ShoppingCart, Coins, ArrowRight, MessageSquare } from "lucide-react";
@@ -92,6 +93,30 @@ export default function LetsMakeDinnerPage() {
 
   const remaining = (meal: LmdMeal) => meal.portions_available - meal.portions_claimed;
 
+  // Meals to review count (for badge)
+  const { data: mealsToReviewCount } = useQuery({
+    queryKey: ["lmd-orders-to-review", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return 0;
+      const { data: orders } = await supabase
+        .from("meal_orders")
+        .select("id, meal_id")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (!orders?.length) return 0;
+      const mealIds = [...new Set(orders.map((o: { meal_id: string }) => o.meal_id))];
+      const { data: existing } = await supabase
+        .from("lmd_recipe_iteration_reviews")
+        .select("meal_id")
+        .eq("reviewer_id", user.id)
+        .in("meal_id", mealIds);
+      const reviewed = new Set((existing ?? []).map((r: { meal_id: string }) => r.meal_id));
+      return orders.filter((o: { meal_id: string }) => !reviewed.has(o.meal_id)).length;
+    },
+    enabled: !!user?.id,
+  });
+
   // Calculate price for each meal
   const getMealPricing = (meal: LmdMeal): PriceTierInfo => {
     return calculateMealPrice(meal.pickup_date, meal.pickup_time, meal.is_charity);
@@ -119,12 +144,17 @@ export default function LetsMakeDinnerPage() {
       {user && (
         <button
           onClick={() => navigate('/initiatives/lets-make-dinner/reviews')}
-          className="ghost-toggle"
+          className="ghost-toggle flex items-center gap-2"
           style={{ right: 20, left: 'auto' }}
           title="Review meals you've received"
         >
-          <MessageSquare className="inline h-4 w-4 mr-1" />
-          Review meals
+          <MessageSquare className="inline h-4 w-4" />
+          <span>Reviews</span>
+          {typeof mealsToReviewCount === "number" && mealsToReviewCount > 0 && (
+            <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1.5 text-xs">
+              {mealsToReviewCount} to review
+            </Badge>
+          )}
         </button>
       )}
       {/* Help / Explainer button */}
@@ -156,6 +186,9 @@ export default function LetsMakeDinnerPage() {
           <p style={{ opacity: 0.8, maxWidth: 500, margin: '0 auto' }}>
             Home-cooked meals from your community. Chefs keep 83.3%.
           </p>
+          <div className="mt-4 max-w-md mx-auto">
+            <BecomeAStewardCard />
+          </div>
           
           {/* Pricing Info Banner - Expandable */}
           <div style={{ marginTop: '1.5rem', maxWidth: 600, margin: '1.5rem auto 0' }}>

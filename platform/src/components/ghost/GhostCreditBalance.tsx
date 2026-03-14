@@ -97,7 +97,25 @@ export function GhostCreditBalance({ compact = false }: { compact?: boolean }) {
     enabled: !!user,
   });
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-muted/50 text-muted-foreground text-sm font-medium cursor-help">
+            <Sparkles className="w-4 h-4" />
+            <span>0</span>
+            <span className="hidden sm:inline">feathers</span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="max-w-xs">
+          <p>What are these?</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Ghost Credits (feathers) track your exploration. Sign in or convert to member to earn and keep them.
+          </p>
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
 
   const needsTermsAcceptance = !termsStatus?.accepted;
   const currentBalance = balance?.current_balance || 0;

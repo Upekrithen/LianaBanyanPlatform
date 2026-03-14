@@ -51,6 +51,7 @@ import {
 } from "@/lib/attiCampaign";
 import { CandleBurst, LockProgress } from "@/components/atti/CandleBurst";
 import { SocialShareBar } from "@/components/atti/SocialShareBar";
+import { IDontWantYourMoneyCard } from "@/components/cue-cards/IDontWantYourMoneyCard";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // INITIATIVE SHOWCASE DATA
@@ -154,6 +155,10 @@ export default function ATTILanding() {
           </p>
         </div>
 
+        {/* Cue card */}
+        <div className="mt-6 max-w-md mx-auto">
+          <IDontWantYourMoneyCard />
+        </div>
         {/* Lock Progress */}
         <div className="mt-6 flex justify-center">
           <LockProgress

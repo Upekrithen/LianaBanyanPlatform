@@ -6,43 +6,62 @@ import { supabase } from "@/integrations/supabase/client";
 import { CreditPurchaseModal } from "@/components/CreditPurchaseModal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function TreasureIsland() {
   const [showPurchase, setShowPurchase] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const { data: credits } = useQuery({
-    queryKey: ["user-credits"],
+    queryKey: ["user-credits", user?.id],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-      
+      if (!user) return null;
       const { data } = await supabase
         .from("user_credits")
         .select("available_credits")
         .eq("user_id", user.id)
         .single();
-      
       return data;
     },
+    enabled: !!user,
   });
 
   const { data: recentTransactions } = useQuery({
-    queryKey: ["recent-transactions"],
+    queryKey: ["recent-transactions", user?.id],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-      
+      if (!user) return [];
       const { data } = await supabase
         .from("credit_transactions")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(5);
-      
-      return data;
+      return data ?? [];
     },
+    enabled: !!user,
   });
+
+  if (!user) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-3 bg-primary/10 rounded-lg">
+            <Coins className="h-8 w-8 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">Treasure Island</h1>
+            <p className="text-muted-foreground">Your Credit Command Center</p>
+          </div>
+        </div>
+        <Card>
+          <CardContent className="py-8 text-center text-muted-foreground">
+            Sign in to view your credit balance and transactions.
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
