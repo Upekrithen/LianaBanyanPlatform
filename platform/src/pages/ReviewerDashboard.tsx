@@ -20,6 +20,13 @@ type QueueItem = {
   sec_flag_count: number;
 };
 
+type HistoryEntry = {
+  id: string;
+  action: string;
+  created_at: string;
+  queue_item_id: string;
+};
+
 export default function ReviewerDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -27,6 +34,7 @@ export default function ReviewerDashboard() {
   const [reviewer, setReviewer] = useState<{ id: string; tier: ReviewerTier; reviews_completed: number; accuracy_rate: number } | null>(null);
   const [myQueue, setMyQueue] = useState<QueueItem[]>([]);
   const [availableQueue, setAvailableQueue] = useState<QueueItem[]>([]);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
     if (!user?.id) {
@@ -62,6 +70,14 @@ export default function ReviewerDashboard() {
         .limit(20);
       setAvailableQueue((pending ?? []) as QueueItem[]);
 
+      const { data: hist } = await supabase
+        .from("review_history")
+        .select("id, action, created_at, queue_item_id")
+        .eq("reviewer_id", rev.id)
+        .order("created_at", { ascending: false })
+        .limit(15);
+      setHistory((hist ?? []) as HistoryEntry[]);
+
       setLoading(false);
     })();
   }, [user?.id, navigate]);
@@ -75,6 +91,17 @@ export default function ReviewerDashboard() {
   }
 
   if (!reviewer) return null;
+
+  const contentReviewsForStat = 50;
+  const canApplyStat = reviewer.tier === "content" && reviewer.reviews_completed >= contentReviewsForStat;
+  const promotionEligibility =
+    reviewer.tier === "content"
+      ? canApplyStat
+        ? "Eligible for Stat Reviewer (Harper nomination required)."
+        : `${contentReviewsForStat - reviewer.reviews_completed} more content reviews to qualify for Stat.`
+      : reviewer.tier === "stat"
+        ? "Harper promotion is by Guild nomination."
+        : null;
 
   const handleClaim = async (queueId: string) => {
     if (!reviewer?.id || !user?.id) return;
@@ -104,6 +131,9 @@ export default function ReviewerDashboard() {
           </span>
         </div>
       </div>
+      {promotionEligibility && (
+        <p className="text-sm text-muted-foreground mb-4">{promotionEligibility}</p>
+      )}
 
       <Card className="mb-6">
         <CardHeader>
@@ -139,7 +169,7 @@ export default function ReviewerDashboard() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="mb-6">
         <CardHeader>
           <CardTitle>Available queue</CardTitle>
           <p className="text-sm text-muted-foreground">Claim an item to review</p>
@@ -167,6 +197,32 @@ export default function ReviewerDashboard() {
                 </Button>
               </div>
             ))
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>My history</CardTitle>
+          <p className="text-sm text-muted-foreground">Recent review actions</p>
+        </CardHeader>
+        <CardContent>
+          {history.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No actions yet.</p>
+          ) : (
+            <ul className="space-y-2 text-sm">
+              {history.map((h) => (
+                <li key={h.id} className="flex items-center gap-2">
+                  <span className="font-medium">{h.action}</span>
+                  <span className="text-muted-foreground">
+                    {new Date(h.created_at).toLocaleString()}
+                  </span>
+                  <Link to={`/reviewer/queue/${h.queue_item_id}`} className="text-primary underline">
+                    View item
+                  </Link>
+                </li>
+              ))}
+            </ul>
           )}
         </CardContent>
       </Card>

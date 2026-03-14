@@ -12,8 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUp, Unlock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ReviewStatusBadge } from "@/components/reviewer/ReviewStatusBadge";
 
 type QueueRow = {
   id: string;
@@ -23,6 +24,7 @@ type QueueRow = {
   sec_flags: { term: string; suggestion: string; severity: string }[] | null;
   sec_flag_count: number;
   assigned_to: string | null;
+  reviewer_notes?: string | null;
 };
 
 export default function ReviewQueueItemPage() {
@@ -51,7 +53,7 @@ export default function ReviewQueueItemPage() {
 
       const { data, error } = await supabase
         .from("review_queue")
-        .select("id, content_type, content_snapshot, status, sec_flags, sec_flag_count, assigned_to")
+        .select("id, content_type, content_snapshot, status, sec_flags, sec_flag_count, assigned_to, reviewer_notes")
         .eq("id", id)
         .single();
       if (!error && data) setItem(data as QueueRow);
@@ -59,20 +61,32 @@ export default function ReviewQueueItemPage() {
     })();
   }, [id, user?.id]);
 
-  const handleAction = async (action: "approved" | "rejected" | "needs_revision") => {
+  const handleAction = async (action: "approved" | "rejected" | "needs_revision" | "escalated" | "released") => {
     if (!id || !reviewerId) return;
     if (action === "rejected" && !rejectionReason.trim()) return;
     if (action === "needs_revision" && !revisionInstructions.trim()) return;
     setActionLoading(true);
-    await supabase
-      .from("review_queue")
-      .update({
-        status: action,
-        reviewed_at: new Date().toISOString(),
-        rejection_reason: action === "rejected" ? rejectionReason : null,
-        revision_instructions: action === "needs_revision" ? revisionInstructions : null,
-      })
-      .eq("id", id);
+    if (action === "released") {
+      await supabase
+        .from("review_queue")
+        .update({ assigned_to: null, assigned_at: null, status: "pending" })
+        .eq("id", id);
+    } else if (action === "escalated") {
+      await supabase
+        .from("review_queue")
+        .update({ status: "escalated", reviewer_notes: (item?.reviewer_notes || "") + "\n[Escalated to next tier]" })
+        .eq("id", id);
+    } else {
+      await supabase
+        .from("review_queue")
+        .update({
+          status: action,
+          reviewed_at: new Date().toISOString(),
+          rejection_reason: action === "rejected" ? rejectionReason : null,
+          revision_instructions: action === "needs_revision" ? revisionInstructions : null,
+        })
+        .eq("id", id);
+    }
     await supabase.from("review_history").insert({
       queue_item_id: id,
       reviewer_id: reviewerId,
@@ -104,7 +118,10 @@ export default function ReviewQueueItemPage() {
 
       <Card className="mb-4">
         <CardHeader>
-          <CardTitle>Content</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Content</CardTitle>
+            <ReviewStatusBadge status={item.status as "pending" | "assigned" | "approved" | "rejected" | "needs_revision" | "escalated" | "auto_flagged"} />
+          </div>
           <p className="text-sm text-muted-foreground">{item.content_type}</p>
         </CardHeader>
         <CardContent>
@@ -158,21 +175,39 @@ export default function ReviewQueueItemPage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <Button onClick={() => handleAction("approved")} disabled={actionLoading}>
-                Approve
+                ✅ Approve
               </Button>
               <Button
                 variant="destructive"
                 onClick={() => handleAction("rejected")}
                 disabled={actionLoading || !rejectionReason.trim()}
               >
-                Reject
+                ❌ Reject
               </Button>
               <Button
                 variant="secondary"
                 onClick={() => handleAction("needs_revision")}
                 disabled={actionLoading || !revisionInstructions.trim()}
               >
-                Needs revision
+                ✏️ Needs revision
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleAction("escalated")}
+                disabled={actionLoading}
+                title="Send to next tier (Content → Stat → Harper)"
+              >
+                <ArrowUp className="w-4 h-4 mr-1" /> Escalate
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleAction("released")}
+                disabled={actionLoading}
+                title="Return to available queue"
+              >
+                <Unlock className="w-4 h-4 mr-1" /> Release
               </Button>
             </div>
           </CardContent>

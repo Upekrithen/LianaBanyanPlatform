@@ -21,6 +21,7 @@ export default function ReviewerApplication() {
   const [loading, setLoading] = useState(true);
   const [hasReviewer, setHasReviewer] = useState(false);
   const [pendingApp, setPendingApp] = useState<{ tier: string } | null>(null);
+  const [canApplyStat, setCanApplyStat] = useState(false);
   const [tier, setTier] = useState<"content" | "stat">("content");
   const [motivation, setMotivation] = useState("");
   const [experience, setExperience] = useState("");
@@ -51,6 +52,14 @@ export default function ReviewerApplication() {
         .eq("status", "pending")
         .maybeSingle();
       if (app) setPendingApp(app);
+      const { data: existingReviewer } = await supabase
+        .from("reviewers")
+        .select("tier, reviews_completed")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (existingReviewer?.tier === "content" && (existingReviewer?.reviews_completed ?? 0) >= 50) {
+        setCanApplyStat(true);
+      }
       setLoading(false);
     })();
   }, [user?.id]);
@@ -132,9 +141,19 @@ export default function ReviewerApplication() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="content">Content Reviewer</SelectItem>
-                  <SelectItem value="stat">Stat Reviewer (requires 50+ content reviews)</SelectItem>
+                  <SelectItem
+                    value="stat"
+                    disabled={!canApplyStat}
+                  >
+                    Stat Reviewer (50+ content reviews + Harper nomination)
+                  </SelectItem>
                 </SelectContent>
               </Select>
+              {!canApplyStat && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Stat Reviewer requires 50+ content reviews; apply as Content first.
+                </p>
+              )}
             </div>
             <div>
               <Label>Why do you want to review? (50–500 characters)</Label>

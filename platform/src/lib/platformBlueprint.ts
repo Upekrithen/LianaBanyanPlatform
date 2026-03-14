@@ -80,7 +80,7 @@ export const PRINCIPLES = {
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 1623,         // As of Session 11B Batch 3, March 14 2026 (+1 AI Tuner)
+  canonicalCount: 1630,         // As of Session 11B Batch 4, March 14 2026 (+7 Steward & Pizza Oven)
   patentClaims: 1336,           // Across 6 provisional applications
   utilityPatents: 8,
   patentPortfolioValue: { low: 9_000_000, high: 80_000_000 },

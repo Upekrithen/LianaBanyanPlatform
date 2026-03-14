@@ -23,7 +23,7 @@ import { calculateMealPrice, formatHoursUntilPickup, getNextTierInfo, type Price
 import { DemandAggregationExplainer } from "@/components/DemandAggregationExplainer";
 import { AnonymousVolumeExplainer } from "@/components/AnonymousVolumeExplainer";
 import { ExpandableBlock, DataVizBar } from "@/components/pudding";
-import { ChefHat, Clock, MapPin, Users, Heart, ArrowLeft, Calendar, HelpCircle, Target, Search, ShoppingCart, Coins, ArrowRight } from "lucide-react";
+import { ChefHat, Clock, MapPin, Users, Heart, ArrowLeft, Calendar, HelpCircle, Target, Search, ShoppingCart, Coins, ArrowRight, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import '@/styles/landing.css';
@@ -115,11 +115,23 @@ export default function LetsMakeDinnerPage() {
         Back to Initiatives
       </button>
 
+      {/* Review your meals */}
+      {user && (
+        <button
+          onClick={() => navigate('/initiatives/lets-make-dinner/reviews')}
+          className="ghost-toggle"
+          style={{ right: 20, left: 'auto' }}
+          title="Review meals you've received"
+        >
+          <MessageSquare className="inline h-4 w-4 mr-1" />
+          Review meals
+        </button>
+      )}
       {/* Help / Explainer button */}
       <button 
         onClick={() => navigate('/initiatives/lets-make-dinner/about')}
         className="ghost-toggle"
-        style={{ right: 20, left: 'auto' }}
+        style={{ right: user ? 140 : 20, left: 'auto' }}
         title="Learn about the meal ecosystem"
       >
         <HelpCircle className="inline h-4 w-4 mr-1" />

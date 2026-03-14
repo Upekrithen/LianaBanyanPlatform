@@ -94,6 +94,8 @@ import Briefcase from "./pages/Briefcase";
 const HexisleDashboard = lazy(() => import("./pages/HexisleDashboard"));
 const LetsMakeDinnerPage = lazy(() => import("./pages/LetsMakeDinnerPage"));
 const LetsMakeDinnerLanding = lazy(() => import("./pages/LetsMakeDinnerLanding"));
+const LMDReviewerDashboard = lazy(() => import("./pages/LMDReviewerDashboard"));
+const LMDReviewSubmitPage = lazy(() => import("./pages/LMDReviewSubmitPage"));
 const GroceryBoxPage = lazy(() => import("./pages/GroceryBoxPage"));
 const GroupCookPage = lazy(() => import("./pages/GroupCookPage"));
 const ChefMarketplacePage = lazy(() => import("./pages/ChefMarketplacePage"));
@@ -779,6 +781,8 @@ const App = () => (
                         <Route path="/initiatives" element={<ExplorerRoute><InitiativeProjectsPage /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-make-dinner" element={<ExplorerRoute><LetsMakeDinnerPage /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-make-dinner/about" element={<ExplorerRoute><LetsMakeDinnerLanding /></ExplorerRoute>} />
+                        <Route path="/initiatives/lets-make-dinner/reviews" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LMDReviewerDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/initiatives/lets-make-dinner/review/:mealId" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LMDReviewSubmitPage /></Suspense></ProtectedRoute>} />
                         <Route path="/initiatives/lets-make-dinner/start-node" element={<ProtectedRoute><ServiceNodeRegistration /></ProtectedRoute>} />
                         <Route path="/initiatives/lets-make-dinner/chefs" element={<ExplorerRoute><ChefMarketplacePage /></ExplorerRoute>} />
                         <Route path="/service-node/register" element={<ProtectedRoute><ServiceNodeRegistration /></ProtectedRoute>} />
