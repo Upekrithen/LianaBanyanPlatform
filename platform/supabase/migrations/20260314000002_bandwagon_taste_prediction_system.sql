@@ -49,6 +49,8 @@ DROP POLICY IF EXISTS "Users view own ledger" ON public.backed_marks_ledger;
 CREATE POLICY "Users view own ledger" ON public.backed_marks_ledger FOR SELECT USING (auth.uid() = user_id);
 
 -- Table 3: project_backings
+-- NOTE: This table may already exist (from 20260210) with user_id instead of backer_id.
+-- Add BandWagon columns defensively to existing table.
 CREATE TABLE IF NOT EXISTS public.project_backings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   backer_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -64,12 +66,39 @@ CREATE TABLE IF NOT EXISTS public.project_backings (
   saa_earned NUMERIC(12,2) DEFAULT 0.00
 );
 
-CREATE INDEX IF NOT EXISTS idx_backings_backer ON public.project_backings(backer_id);
-CREATE INDEX IF NOT EXISTS idx_backings_project ON public.project_backings(project_id, project_type);
+-- If table already existed (legacy schema uses user_id not backer_id), add BandWagon columns
+ALTER TABLE public.project_backings ADD COLUMN IF NOT EXISTS project_type TEXT;
+ALTER TABLE public.project_backings ADD COLUMN IF NOT EXISTS amount_backed NUMERIC(12,2);
+ALTER TABLE public.project_backings ADD COLUMN IF NOT EXISTS currency_type TEXT DEFAULT 'backed_marks';
+ALTER TABLE public.project_backings ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'active';
+ALTER TABLE public.project_backings ADD COLUMN IF NOT EXISTS backer_sequence INTEGER;
+ALTER TABLE public.project_backings ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMPTZ;
+ALTER TABLE public.project_backings ADD COLUMN IF NOT EXISTS saa_earned NUMERIC(12,2) DEFAULT 0.00;
+
+-- Index on whichever user column exists (user_id for legacy, backer_id for new)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='project_backings' AND column_name='backer_id') THEN
+    CREATE INDEX IF NOT EXISTS idx_backings_backer ON public.project_backings(backer_id);
+  ELSIF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='project_backings' AND column_name='user_id') THEN
+    CREATE INDEX IF NOT EXISTS idx_backings_user ON public.project_backings(user_id);
+  END IF;
+END $$;
+CREATE INDEX IF NOT EXISTS idx_backings_project ON public.project_backings(project_id);
 CREATE INDEX IF NOT EXISTS idx_backings_status ON public.project_backings(status);
 ALTER TABLE public.project_backings ENABLE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS "Users view own backings" ON public.project_backings;
-CREATE POLICY "Users view own backings" ON public.project_backings FOR SELECT USING (auth.uid() = backer_id);
+
+-- RLS: use whichever user column exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='project_backings' AND column_name='backer_id') THEN
+    DROP POLICY IF EXISTS "Users view own backings" ON public.project_backings;
+    CREATE POLICY "Users view own backings" ON public.project_backings FOR SELECT USING (auth.uid() = backer_id);
+  ELSIF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='project_backings' AND column_name='user_id') THEN
+    DROP POLICY IF EXISTS "Users view own backings" ON public.project_backings;
+    CREATE POLICY "Users view own backings" ON public.project_backings FOR SELECT USING (auth.uid() = user_id);
+  END IF;
+END $$;
 DROP POLICY IF EXISTS "Public read for project stats" ON public.project_backings;
 CREATE POLICY "Public read for project stats" ON public.project_backings FOR SELECT USING (true);
 

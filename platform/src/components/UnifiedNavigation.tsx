@@ -1,4 +1,4 @@
-import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket, TrendingUp, Scale } from "lucide-react";
+import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket, TrendingUp, Scale, User, CreditCard } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -32,6 +32,7 @@ const allNavItems: NavItem[] = [
   // Marketplace (.com)
   { title: "Home", url: "/", icon: Home, portal: "marketplace" },
   { title: "Browse", url: "/marketplace", icon: ShoppingBag, portal: "marketplace" },
+  { title: "Creators", url: "/creators", icon: User, portal: "marketplace" },
   { title: "Projects", url: "/projects", icon: Briefcase, portal: "marketplace" },
   { title: "Production Queue", url: "/production-queue", icon: BarChart3, portal: "marketplace" },
   { title: "Guilds", url: "/guilds", icon: Users2, portal: "marketplace" },
@@ -45,6 +46,8 @@ const allNavItems: NavItem[] = [
   { title: "Asset Library", url: "/asset-library", icon: Library, portal: "marketplace" },
   { title: "Pre-Beta Recruits", url: "/pre-beta-recruits", icon: Target, portal: "marketplace", requiresAdmin: true },
   { title: "Manufacturing", url: "/manufacturing", icon: Factory, portal: "marketplace" },
+  { title: "Crew Call", url: "/crew-call", icon: Wrench, portal: "marketplace" },
+  { title: "Cue Cards", url: "/cue-cards", icon: CreditCard, portal: "marketplace" },
   { title: "Herald", url: "/herald", icon: Megaphone, portal: "marketplace" },
   { title: "Sponsor", url: "/sponsor", icon: TreePine, portal: "marketplace" },
   { title: "Looking Glass", url: "/looking-glass", icon: Eye, portal: "marketplace" },

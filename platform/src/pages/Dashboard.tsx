@@ -41,6 +41,7 @@ import { DashboardPortalSwitcher } from '@/components/DashboardPortalSwitcher';
 import { BandWagonDashboardCard } from '@/components/BandWagonDashboardCard';
 import { GetFamousCard } from '@/components/cue-cards/GetFamousCard';
 import { InviteCreatorCard } from '@/components/cue-cards/InviteCreatorCard';
+import { WeNeedYouCard } from '@/components/cue-cards/WeNeedYouCard';
 import { PhysicalBadgeReminder } from '@/components/PhysicalBadgeReminder';
 import { MembershipStatusCard } from '@/components/MembershipStatusCard';
 import NavigateToGuilds from '@/components/NavigateToGuilds';
@@ -207,6 +208,7 @@ export default function Dashboard() {
                 <BandWagonDashboardCard />
                 <GetFamousCard />
                 <InviteCreatorCard />
+                <WeNeedYouCard />
                 <NavigateToGuilds />
                 
                 <DiscoverySlot

@@ -177,6 +177,10 @@ const ProposalsListing = lazy(() => import("./pages/ProposalsListing"));
 const StewardDashboard = lazy(() => import("./pages/StewardDashboard"));
 const StewardApply = lazy(() => import("./pages/StewardApply"));
 const CreatorPitchPage = lazy(() => import("./pages/CreatorPitchPage"));
+const CreatorShowcasePage = lazy(() => import("./pages/CreatorShowcasePage"));
+const CreatorProfilePage = lazy(() => import("./pages/CreatorProfilePage"));
+const CrewCallPage = lazy(() => import("./pages/CrewCallPage"));
+const CueCardDeckPage = lazy(() => import("./pages/CueCardDeckPage"));
 const TreasureMapGame = lazy(() => import("./pages/TreasureMapGame"));
 const TreasureMapCreator = lazy(() => import("./pages/TreasureMapCreator"));
 const BeaconRunCreator = lazy(() => import("./pages/BeaconRunCreator"));
@@ -433,6 +437,10 @@ const App = () => (
                         <Route path="/sign-up" element={<Navigate to="/auth" replace />} />
                         <Route path="/join" element={<Navigate to="/auth" replace />} />
                         <Route path="/join/creator" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorPitchPage /></Suspense></ExplorerRoute>} />
+                        <Route path="/creators" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorShowcasePage /></Suspense></ExplorerRoute>} />
+                        <Route path="/creators/:creatorId" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorProfilePage /></Suspense></ExplorerRoute>} />
+                        <Route path="/crew-call" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewCallPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/cue-cards" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardDeckPage /></Suspense></ExplorerRoute>} />
                         <Route path="/home" element={<Navigate to="/" replace />} />
                         <Route path="/browse" element={<Navigate to="/browse/marketplace" replace />} />
                         <Route path="/all-positions" element={<Navigate to="/positions/browse" replace />} />

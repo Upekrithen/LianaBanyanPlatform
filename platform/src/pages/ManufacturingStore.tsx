@@ -29,6 +29,7 @@ import {
   Factory, Package, Printer, Clock, ShoppingCart,
   Plus, Minus, Truck, CheckCircle, DollarSign,
 } from "lucide-react";
+import { WeNeedYouCard } from "@/components/cue-cards/WeNeedYouCard";
 import { toast } from "sonner";
 import { calculateCostPlus20 } from "@/lib/currencyService";
 
@@ -160,6 +161,8 @@ export default function ManufacturingStore() {
           </p>
         </div>
       </div>
+
+      <WeNeedYouCard />
 
       {/* Production Methods */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

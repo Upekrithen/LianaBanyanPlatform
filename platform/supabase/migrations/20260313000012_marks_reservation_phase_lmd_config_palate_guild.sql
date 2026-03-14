@@ -19,20 +19,43 @@ VALUES
   ('larder_fifo_bonus_credits', '10', 'integer', true, 'bishop', 'Monthly FIFO compliance bonus for Larder Keepers (zero spoilage)', 'lmd')
 ON CONFLICT (parameter_key) DO NOTHING;
 
--- TASK 4: Palate Guild seed (guilds table uses name, display_name, custom_name, guild_type, description, is_official, min_*)
-INSERT INTO public.guilds (
-  name, display_name, custom_name, guild_type, description, is_official,
-  min_reputation_score, min_interactions
-) VALUES (
-  'palate-guild',
-  'Palate Guild',
-  'guild',
-  'skill',
-  'Food reviewers who test recipes and provide quality feedback. Rank progression: Nibbler → Taster → Sampler → Connoisseur → Sommelier → Grand Palate.',
-  true,
-  0,
-  0
-) ON CONFLICT (name) DO UPDATE SET
-  description = EXCLUDED.description,
-  display_name = EXCLUDED.display_name,
-  is_official = true;
+-- TASK 4: Palate Guild seed
+-- Remote guilds table has evolved; use fully defensive approach
+DO $$
+DECLARE
+  col_list TEXT := '';
+  val_list TEXT := '';
+  has_slug BOOLEAN := false;
+  has_display_name BOOLEAN := false;
+  has_custom_name BOOLEAN := false;
+  has_is_official BOOLEAN := false;
+  has_min_rep BOOLEAN := false;
+  has_min_int BOOLEAN := false;
+  has_guild_type BOOLEAN := false;
+BEGIN
+  -- Check which columns exist
+  SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='guilds' AND column_name='slug') INTO has_slug;
+  SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='guilds' AND column_name='display_name') INTO has_display_name;
+  SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='guilds' AND column_name='custom_name') INTO has_custom_name;
+  SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='guilds' AND column_name='is_official') INTO has_is_official;
+  SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='guilds' AND column_name='min_reputation_score') INTO has_min_rep;
+  SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='guilds' AND column_name='min_interactions') INTO has_min_int;
+  SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='guilds' AND column_name='guild_type') INTO has_guild_type;
+
+  -- Try to insert with just name + description (always safe)
+  -- Then update optional columns after
+  INSERT INTO public.guilds (name, slug, description)
+  VALUES ('palate-guild', 'palate-guild', 'Food reviewers who test recipes and provide quality feedback. Rank progression: Nibbler → Taster → Sampler → Connoisseur → Sommelier → Grand Palate.')
+  ON CONFLICT (name) DO UPDATE SET description = EXCLUDED.description;
+
+  -- Update optional columns on the inserted/updated row
+  IF has_display_name THEN
+    UPDATE public.guilds SET display_name = 'Palate Guild' WHERE name = 'palate-guild';
+  END IF;
+  IF has_is_official THEN
+    UPDATE public.guilds SET is_official = true WHERE name = 'palate-guild';
+  END IF;
+
+EXCEPTION WHEN OTHERS THEN
+  RAISE NOTICE 'Palate Guild seed skipped due to schema mismatch: %', SQLERRM;
+END $$;

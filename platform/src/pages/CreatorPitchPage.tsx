@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { InviteCreatorCard } from "@/components/cue-cards/InviteCreatorCard";
+import { WeNeedYouCard } from "@/components/cue-cards/WeNeedYouCard";
 
 const CREATOR_PATHS = [
   {
@@ -177,6 +178,11 @@ export default function CreatorPitchPage() {
             Share a cue card. When they join, you earn rewards. No platform extraction — we reward referrals.
           </p>
           <InviteCreatorCard />
+        </section>
+
+        {/* We Need You — Crew Call */}
+        <section className="pt-6 border-t">
+          <WeNeedYouCard />
         </section>
       </div>
     </div>

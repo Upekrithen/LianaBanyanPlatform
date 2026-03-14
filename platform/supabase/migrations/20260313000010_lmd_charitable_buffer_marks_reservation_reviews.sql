@@ -73,6 +73,9 @@ ON CONFLICT (parameter_key) DO NOTHING;
 -- Add optional delivery_postal_code to meal_orders for area
 ALTER TABLE public.meal_orders ADD COLUMN IF NOT EXISTS delivery_postal_code TEXT;
 
+-- Ensure lmd_meals has title (should exist from 20260210, but defensive)
+ALTER TABLE public.lmd_meals ADD COLUMN IF NOT EXISTS title TEXT;
+
 -- Ensure lmd_meals has portfolio_recipe_id (some migrations add it)
 DO $$
 BEGIN
