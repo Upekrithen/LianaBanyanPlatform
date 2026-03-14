@@ -226,7 +226,7 @@ const PATENT_BUCKETS: PatentBucket[] = [
 ];
 
 const STATS = {
-  totalInnovations: 1613,
+  totalInnovations: 1614,
   formalClaims: 1336,
   filedApplications: 7,
   crownJewels: 8,
