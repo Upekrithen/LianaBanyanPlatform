@@ -26,7 +26,7 @@ export const TIMELINE = [
   { year: 2020, event: "First provisional patent filed" },
   { year: 2023, event: "8 utility patents filed; Hexel mechanical taxonomy defined" },
   { year: 2024, event: "Platform architecture begins; AI team formed (Rook, Knight, Bishop, Pawn)" },
-  { year: 2025, event: "1,622 innovations cataloged; 1,336 patent claims across 6 provisional applications" },
+  { year: 2025, event: "1,623 innovations cataloged; 1,336 patent claims across 6 provisional applications" },
   { year: 2026, event: "Public launch — 16 initiatives, 8 domains, full multi-portal architecture" },
 ] as const;
 
@@ -80,7 +80,7 @@ export const PRINCIPLES = {
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 1622,         // As of Session 11B Batch 2, March 14 2026 (+8 BandWagon)
+  canonicalCount: 1623,         // As of Session 11B Batch 3, March 14 2026 (+1 AI Tuner)
   patentClaims: 1336,           // Across 6 provisional applications
   utilityPatents: 8,
   patentPortfolioValue: { low: 9_000_000, high: 80_000_000 },
