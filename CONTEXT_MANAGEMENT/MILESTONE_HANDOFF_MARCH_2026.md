@@ -9,9 +9,51 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 22 (March 15, 2026)
+## RUNWAY / SESSION STOP (current) — Session 23 (March 15, 2026)
 
-**Latest commit:** `3364f41` — Session 22 addendum: Print pipeline refinement + Dead Internet Defense article
+**Latest commit:** `dfde988` — Session 23: Live IPFS (Pinata), Printful API, outreach email, Hugo canonical pipeline
+
+### What Was Done This Session (Session 23 — Knight)
+
+1. **Supabase secrets set** — PINATA_API_KEY, PINATA_SECRET_KEY, PRINTFUL_API_TOKEN pushed to project ruuxzilgmuwddcofqecc
+2. **IPFS edge function (ipfs-pin)** — Real Pinata pinning via `pinJSONToIPFS`. Tested and verified: CID `QmWw8LW742nzQJgMeDTrsW9vVJa3Y6DaAGENLLPQAjDNRQ` resolves on gateway. Mock mode is dead.
+3. **ipfsService.ts rewired** — Replaced direct Pinata client call + mock fallback with Edge Function routing via `supabase.functions.invoke('ipfs-pin')`. Graceful fallback to mock only if edge function is unreachable (dev/offline).
+4. **Printful API edge function (printful-api)** — Product catalog browse, pricing estimates, draft/confirmed order creation. Tested: returns code 200 from live API.
+5. **Outreach email type** — Added `outreach` case to `send-transactional-email` edge function with Georgia-serif template, CTA button, cue card attribution, and platform footer. Deployed.
+6. **Hugo canonical data pipeline** — `Cephas/cephas-hugo/scripts/fetch-canonical.js` pulls all 14 rows from `platform_canonical` table at build time, writes `data/canonical.json`. Hugo templates can use `{{ .Site.Data.canonical.innovation_count }}`. Tested: 14 rows fetched live.
+7. **platform_metrics.json updated** — Replaced stale v1 data (984 innovations, 210 claims) with current v2 (1,662 innovations, 1,336 claims, 7 provisionals, $630K valuation).
+8. **BEHEMOTH REBORN valuation page** — Already created in Session 22, now deployed and live on Cephas at `/patents/behemoth-reborn/`.
+9. **Both sites deployed** — lianabanyan.com (566 files) + the2ndsecond.com (964 pages, 1387 files)
+10. **All 3 edge functions deployed** — ipfs-pin, printful-api, send-transactional-email (updated)
+11. **Git pushed** — Commit `dfde988` pushed to remote
+
+### Files Changed (Platform)
+
+- `src/lib/ipfsService.ts` — Replaced mock/direct Pinata with Edge Function routing
+- `supabase/functions/ipfs-pin/index.ts` — NEW (Pinata IPFS pinning)
+- `supabase/functions/printful-api/index.ts` — NEW (Printful catalog/order API)
+- `supabase/functions/send-transactional-email/index.ts` — Added outreach email type + template
+
+### Files Changed (Cephas)
+
+- `scripts/fetch-canonical.js` — NEW (build-time Supabase → Hugo data pipeline)
+- `data/canonical.json` — NEW (live canonical data, 14 rows)
+- `data/platform_metrics.json` — Updated from v1 (stale) to v2 (current)
+- `content/patents/_index.md` — Minor (already had BEHEMOTH link from Session 22)
+
+### Edge Functions Now Deployed on Supabase
+
+| Function | Purpose | Status |
+|----------|---------|--------|
+| `ipfs-pin` | Real IPFS pinning via Pinata | LIVE ✓ |
+| `printful-api` | Merch catalog, estimates, orders | LIVE ✓ |
+| `send-transactional-email` | 6 email types (welcome, pledge, credit, cancel, milestone, outreach) | LIVE ✓ |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 22 (March 15, 2026)
+
+**Latest commit:** `a9e24fe` — Session 22 addendum: Print pipeline refinement + Dead Internet Defense article
 
 ### What Was Done This Session (Session 22 — Knight)
 
@@ -263,6 +305,9 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+dfde988 Session 23: Live IPFS (Pinata), Printful API, outreach email, Hugo canonical pipeline
+a9e24fe Session 22 addendum: Print pipeline refinement (3-vendor, approval gate, production levels) + Dead Internet Defense
+70cb23a Session 22: Canonical DB propagation, QR-Innovation linkage, 7th provisional stale value sweep
 5f0fd6d Fix build: supabaseClient import path, operator precedence, Hugo shortcode stubs
 32b5081 Cephas: Crown Jewels 123 registry, prior art research, updated innovation/patent indexes
 8ed58b3 Add skeleton fill migration (#1573-#1594) and creator share fix migration
