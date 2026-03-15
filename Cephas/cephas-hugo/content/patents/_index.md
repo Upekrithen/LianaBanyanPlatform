@@ -1,13 +1,13 @@
 ---
 title: "Patent Portfolio"
-description: "THE BEHEMOTH — 1,662 innovations, 1,336 claims, 6 provisional applications filed with the USPTO"
+description: "THE BEHEMOTH — 1,662 innovations, 1,336 claims, 7 provisional applications filed with the USPTO"
 ---
 
 # Patent Portfolio
 
 **THE BEHEMOTH**
 
-> 1,662 innovations. 1,336 formal claims. 6 provisional applications filed. 37 years of development.
+> 1,662 innovations. 1,336 formal claims. 7 provisional applications filed. 37 years of development.
 
 ## Filed Applications
 
@@ -19,13 +19,14 @@ description: "THE BEHEMOTH — 1,662 innovations, 1,336 claims, 6 provisional ap
 | 63/967,200 | Jan 23–24, 2026 | 292 | Defense Klaus through MSA | FILED |
 | 63/969,601 | Jan 28, 2026 | 44 | Ghost World + Extensions | FILED |
 | 63/989,913 | Feb 24, 2026 | 408 | LEVIATHAN PLUS | FILED |
-| **Total** | | **1,336** | **123 Crown Jewels** | |
+| 64/006,010 | Mar 15, 2026 | TBD | #1001–#1662 (Full Specs) | FILED |
+| **Total** | | **1,336+** | **1,662 innovations** | |
 
 ## Innovation Coverage
 
 | Range | Count | Status |
 |-------|-------|--------|
-| #1–#123 | 123 | Crown Jewels — filed across 6 provisionals |
+| #1–#123 | 123 | Crown Jewels — filed across 7 provisionals |
 | #124–#1000 | 877 | Extended systems — filed in bulk provisionals |
 | #1001–#1572 | 572 | Spec-expanded (568 descriptions written) |
 | #1573–#1594 | 22 | INBOX goldmine harvest — specs complete |

@@ -234,6 +234,7 @@ const NotLeftNotRightPage = lazy(() => import('./pages/cue-cards/NotLeftNotRight
 const AcademicPapersDirectory = lazy(() => import('./pages/AcademicPapersDirectory'));
 const CollegeOfHardKnocks = lazy(() => import('./pages/CollegeOfHardKnocks'));
 const PatentPortfolio = lazy(() => import("./pages/PatentPortfolio"));
+const IPPortfolioPage = lazy(() => import("./pages/IPPortfolioPage"));
 const EconomicLaws = lazy(() => import("./pages/EconomicLaws"));
 const SwoopPage = lazy(() => import("./pages/SwoopPage"));
 const SwoopProjectPage = lazy(() => import("./pages/SwoopProjectPage"));
@@ -699,6 +700,7 @@ const App = () => (
                         <Route path="/governance/proposals" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProposalsListing /></Suspense></ExplorerRoute>} />
                         <Route path="/the-300" element={<Governance />} />
                         <Route path="/patent-portfolio" element={<PatentPortfolio />} />
+                        <Route path="/ip-portfolio/:qrCode?" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><IPPortfolioPage /></Suspense>} />
                         <Route path="/economics" element={<EconomicLaws />} />
                         <Route path="/economics/:paperId" element={<PaperPage />} />
                         <Route path="/the300" element={<Governance />} />

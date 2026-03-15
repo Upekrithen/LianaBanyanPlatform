@@ -26,8 +26,8 @@ export const TIMELINE = [
   { year: 2020, event: "First provisional patent filed" },
   { year: 2023, event: "8 utility patents filed; Hexel mechanical taxonomy defined" },
   { year: 2024, event: "Platform architecture begins; AI team formed (Rook, Knight, Bishop, Pawn)" },
-  { year: 2025, event: "1,623 innovations cataloged; 1,336 patent claims across 6 provisional applications" },
-  { year: 2026, event: "Public launch — 16 initiatives, 8 domains, full multi-portal architecture" },
+  { year: 2025, event: "1,662 innovations cataloged; 1,336 patent claims across 7 provisional applications" },
+  { year: 2026, event: "Public launch — 16 initiatives, 14 domains, full multi-portal architecture" },
 ] as const;
 
 // ─── THE SACRIFICE PRINCIPLE ─────────────────────────────────────────────────
@@ -57,8 +57,8 @@ export const SACRIFICE_PRINCIPLE = {
     "Through raising eight children — four grown, four still at home",
     "Through building 8 utility patents worth between $9M and $80M",
     "$525,000 of personal investment over 9 years into patent portfolio",
-    "1,594 innovations cataloged and documented",
-    "1,336 patent claims across 6 provisional applications",
+    "1,662 innovations cataloged and documented",
+    "1,336 patent claims across 7 provisional applications",
     "The platform exists because someone was willing to do what others wouldn't",
   ],
 } as const;
@@ -81,7 +81,7 @@ export const PRINCIPLES = {
 
 export const INNOVATION_STATS = {
   canonicalCount: 1662,         // As of Session 17, March 14 2026 (delegation, XP, trickle, STAMP)
-  patentClaims: 1336,           // Across 6 provisional applications
+  patentClaims: 1336,           // Across 7 provisional applications (7th: 64/006,010, March 15 2026)
   utilityPatents: 8,
   patentPortfolioValue: { low: 9_000_000, high: 80_000_000 },
   personalInvestment: 525_000,  // Over 9 years

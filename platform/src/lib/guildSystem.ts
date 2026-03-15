@@ -223,7 +223,7 @@ export const GUILDS: Guild[] = [
         title: "Founding Partner — Patent Attorney",
         type: "founding_partner",
         description:
-          "Own the patent strategy for 1,336 claims across 6 provisional " +
+          "Own the patent strategy for 1,336 claims across 7 provisional " +
           "filings. Convert provisionals to non-provisionals. Identify white space " +
           "for new filings. Coordinate with the Founder on IP priorities.",
         marksCompensation: "500 Marks/month",

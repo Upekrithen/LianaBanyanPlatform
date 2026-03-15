@@ -1,11 +1,11 @@
 ---
 title: "Hall of Records"
-description: "The complete registry of Liana Banyan innovations — 1,662 patented systems, 1,336 claims across 6 provisional applications"
+description: "The complete registry of Liana Banyan innovations — 1,662 patented systems, 1,336 claims across 7 provisional applications"
 ---
 
 # The Hall of Records
 
-> **1,662 Innovations. 1,336 Patent Claims. 6 Provisional Applications Filed.**
+> **1,662 Innovations. 1,336 Patent Claims. 7 Provisional Applications Filed.**
 >
 > All innovations are owned by Liana Banyan Corporation. As a member, you get **free, unlimited use** of everything we build together.
 
@@ -127,7 +127,7 @@ description: "The complete registry of Liana Banyan innovations — 1,662 patent
 
 ## The Crown Jewels
 
-**[View the complete 123 Crown Jewels registry](/innovations/crown-jewels/)** — the flagship innovations filed across 6 provisional applications.
+**[View the complete 123 Crown Jewels registry](/innovations/crown-jewels/)** — the flagship innovations filed across 7 provisional applications.
 
 ---
 
@@ -137,7 +137,7 @@ description: "The complete registry of Liana Banyan innovations — 1,662 patent
 |--------|-------|
 | **Total Innovations** | 1,662 |
 | **Total Patent Claims** | 1,336 |
-| **Provisional Applications** | 6 |
+| **Provisional Applications** | 7 |
 | **Spec-Expanded Innovations** | 593 |
 | **Years in Development** | 37 (1989–2026) |
 | **Crown Jewels** | 123 (#1–#123) |

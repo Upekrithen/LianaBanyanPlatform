@@ -9,7 +9,48 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 21 (March 15, 2026)
+## RUNWAY / SESSION STOP (current) — Session 22 (March 15, 2026)
+
+**Latest commit:** `7151a7b` — Session 22: Canonical DB propagation, QR-Innovation linkage, 7th provisional stale value sweep
+
+### What Was Done This Session (Session 22 — Knight)
+
+1. **Stale value corrections** — Updated "6 provisional" → "7 provisional" across 12 platform source files + 2 Cephas content files. Updated "1,200+" → "1,662" in redCarpetRecipients. Updated "1,594/1,623" → "1,662" in platformBlueprint. Added 7th application (64/006,010) to Cephas patents table.
+2. **Canonical DB propagation** — Created `platform_canonical` table with 14 seed values (single source of truth for all critical numbers). Created `useCanonicalStats()` React hook with 5-minute cache, typed defaults, and DB fallback.
+3. **QR → Innovation linkage** — `pedestal_innovations` junction table, `pedestal_innovation_history` (immutable ledger), `portfolio_qr_codes` for brand/pedestal/ledger/initiative/bag QR routing.
+4. **Medallion → Innovation FK** — `medallion_innovations` junction table with `seed_medallion_innovations()` trigger (auto-populates 123 Crown Jewels on medallion mint).
+5. **Print pipeline schema** — `print_orders` and `print_batches` tables with volume discount aggregation, status tracking (draft → delivered), batch thresholds.
+6. **IP Portfolio page** — `IPPortfolioPage.tsx` — unified QR-routed page with overview, ledger, and bag views. Context-sensitive display based on QR code prefix (PQR-, BAG-, PED-, INIT-, LEDGER).
+7. **Hofund channel 5** — IP Portfolio channel added for all existing users.
+8. **Migration pushed** — `20260315000003_canonical_qr_medallion_portfolio.sql` pushed to Supabase remote. All tables created.
+9. **Both sites deployed** — lianabanyan.com (276 new files) + the2ndsecond.com (2 updated files). Both LIVE.
+
+### Files Changed (Platform)
+
+- `src/lib/platformBlueprint.ts` — 3 stale value fixes
+- `src/lib/guildSystem.ts` — 6→7 provisionals
+- `src/lib/ipfsService.ts` — 6→7 provisionals
+- `src/lib/alcoveSystem.ts` — 6→7 provisionals
+- `src/lib/guildHandshakeProtocol.ts` — 6→7 provisionals + 1,540→1,662
+- `src/lib/nervous-system/platformMetrics.ts` — already correct (1662)
+- `src/lib/nervous-system/index.ts` — already correct (7, 123)
+- `src/data/redCarpetRecipients.ts` — 6→7 (5 instances) + 1,200+→1,662 (5 instances)
+- `src/data/crowsNestItems.ts` — 3 stale references fixed
+- `src/pages/LBInternalPositions.tsx` — 6→7 provisionals
+- `src/components/ShowMeHelp.tsx` — 6→7 provisionals
+- `src/hooks/useCanonicalStats.ts` — NEW (canonical stats hook)
+- `src/pages/IPPortfolioPage.tsx` — NEW (unified QR-routed IP portfolio)
+- `src/App.tsx` — Added IPPortfolioPage route
+- `supabase/migrations/20260315000003_canonical_qr_medallion_portfolio.sql` — NEW
+
+### Files Changed (Cephas)
+
+- `content/patents/_index.md` — 6→7 provisionals, added 7th application row
+- `content/innovations/_index.md` — 6→7 provisionals (4 instances)
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 21 (March 15, 2026)
 
 **Latest commit:** `5f0fd6d` — Fix build: supabaseClient import, operator precedence, Hugo shortcode stubs
 
@@ -18,10 +59,10 @@
 1. **SEC cleanup committed** — Bishop committed 13 SEC files as `2f80abc` in prior session
 2. **2 new migrations committed** (`8ed58b3`) — skeleton fill #1573-#1594 + creator share fix
 3. **3 Supabase migrations pushed to remote** — `20260314000021` (creator share), `20260315000001` (568 spec expansions), `20260315000002` (22 skeleton fills). All prior migrations already pushed.
-4. **Cephas Crown Jewels 123 page** — `Cephas/cephas-hugo/content/innovations/crown-jewels.md` — definitive list of all 123 flagship innovations across 6 provisional applications, categorized by filing bag
+4. **Cephas Crown Jewels 123 page** — `Cephas/cephas-hugo/content/innovations/crown-jewels.md` — definitive list of all 123 flagship innovations across 7 provisional applications, categorized by filing bag
 5. **Cephas Prior Art Research page** — `Cephas/cephas-hugo/content/patents/prior-art-research.md` — 16 innovations screened, all found structurally novel or defensibly distinct
-6. **Cephas innovations _index.md updated** — 1,662 innovations, 1,336 claims, 6 provisionals (was 90+/380+/3)
-7. **Cephas patents _index.md updated** — Full filing table with all 6 applications
+6. **Cephas innovations _index.md updated** — 1,662 innovations, 1,336 claims, 7 provisionals (was 90+/380+/3)
+7. **Cephas patents _index.md updated** — Full filing table with all 7 applications
 8. **Build fixes** — `CephasInnovationPedestalsPage.tsx` import path, `DelegationResponseButtons.tsx` operator precedence
 9. **Hugo shortcode stubs** — `related-innovations`, `vote-to-elevate`, `alert`, `dead-end`
 10. **Both sites built** — Cephas (948 pages), Platform (38.38s, zero errors)
@@ -31,7 +72,7 @@
 14. **Filing documents archived** to `Asteroid-ProofVault/03_PATENT_BAGS/2026/15 Mar 2026 - Application 64006010/`
 15. **Git pushed** to remote (all commits through `adc17b7`)
 
-### Commits This Session
+### Commits This Session (Session 21)
 
 ```
 5f0fd6d Fix build: supabaseClient import path, operator precedence, Hugo shortcode stubs
@@ -101,10 +142,11 @@
 
 ### Migrations NOT YET Pushed
 
-**None** — all migrations pushed as of Session 21. Last 3 pushed:
+**None** — all migrations pushed as of Session 22. Last 4 pushed:
 - `20260314000021` — Creator share description fix
 - `20260315000001` — 568 spec expansion UPDATEs
 - `20260315000002` — 22 skeleton fill UPDATEs (#1573-#1594)
+- `20260315000003` — Canonical DB + QR linkage + Medallion FK + Print pipeline
 
 ---
 
@@ -115,7 +157,7 @@
 | **Creator keeps** | 83.3% (never round to 83%) | Immutable |
 | **Platform margin** | Cost + 20% | Immutable |
 | **Innovations (canonical)** | **1,662** | Session 17 POLLINATION; propagated everywhere |
-| **Innovations in DB** | Through #1662 (all pushed) | All migrations applied as of Session 21 |
+| **Innovations in DB** | Through #1662 (all pushed) | All migrations applied as of Session 22 |
 | **Spec expansions written** | 593 (568 batch + 22 skeleton + 3 overflow) | Migrations `20260315000001` + `20260315000002` |
 | **Formal patent claims** | 1,336 across 7 provisional applications | USPTO receipts |
 | **7th provisional** | Application 64/006,010 — filed March 15, 2026 | 653 innovations with full specs |
@@ -128,7 +170,7 @@
 
 | Range | Status | Notes |
 |-------|--------|-------|
-| #1-#1000 | Filed (6 provisionals) | Covered by existing USPTO filings |
+| #1-#1000 | Filed (7 provisionals) | Covered by existing USPTO filings |
 | #1001-#1049 | **Unfiled gap** | Need single provisional |
 | #1050-#1140 | Filed | Covered |
 | #1141-#1227 | **Unfiled gap** | Need single provisional |
