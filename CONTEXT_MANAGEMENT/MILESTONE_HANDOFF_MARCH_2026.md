@@ -9,9 +9,57 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 24 (March 15, 2026)
+## RUNWAY / SESSION STOP (current) — Session 25 (March 15, 2026)
 
-**Latest commit:** `6127a12` — Session 24: Dispatch pipeline, print order service, canonical stats migration
+**Latest commit:** `40e4003` — Session 25: dispatch queue seeded, landing page restored, golden key pipeline
+
+### What Was Done This Session (Session 25 — Knight)
+
+1. **Dispatch Queue Seeded** — 18 new articles seeded into `outbound_dispatch` (5 tiers: open letters, op-eds, bot defense, platform mechanics, academic papers). Migration `20260315000006` adds `content_type`, `content_path`, `metadata JSONB` columns to table. 21 total items in queue (18 new + 3 existing).
+2. **UniversalDispatch Copy-to-Clipboard** — "Copy for Manual" button added with per-channel text formatting (title, first paragraph, URL, hashtags). Fallback for channels without API tokens (Medium, LinkedIn, X).
+3. **Cue Card Auto-Generation** — On dispatch, auto-inserts into `hofund_cue_cards` with title, hook, QR URL, golden key hint.
+4. **Golden Key Pipeline** — `registerDispatchKeys()` function in `treasureKeyEmbed.ts` reads dispatch metadata JSONB and auto-registers golden keys in `treasure_keys` table. `dispatch-executor` edge function wired to call this after successful dispatch + update `key_registered: true` in metadata.
+5. **Quiz System** — Migration `20260315000007` adds `title`, `source_path`, `dispatch_id`, `questions_per_attempt`, `self_attest_marks` columns to `paper_quizzes`. Scott quiz: 8 questions seeded. Buffett quiz: 8 questions seeded. Config: 5 random per attempt, 2 Marks each, max 3 attempts, self-attest path 10 Marks.
+6. **Landing Page Restoration** (Founder-approved):
+   - WelcomeGate: first-visit-only (`lb_visit_count === 0`), Fable-only (tabs 2+3 removed), dismisses permanently.
+   - Index.tsx: unauthenticated visitors now see `PublicLandingView` directly (HEOHO + Hero flip + Fable + keyhole).
+   - Hero card flip re-enabled (professional mode guard removed).
+   - PortalGatewayPage: now behind `ProtectedRoute` (authenticated-only).
+7. **Deployed** — lianabanyan.com (569 files), dispatch-executor edge function redeployed.
+8. **Committed + pushed** — `40e4003` on main.
+
+### Files Changed (Session 25)
+
+| File | Change |
+|------|--------|
+| `platform/src/pages/Index.tsx` | Unauthenticated → PublicLandingView; hero flip guard removed |
+| `platform/src/components/WelcomeGate.tsx` | First-visit Fable-only; tabs 2+3 removed; dismiss → `/` not `/portal` |
+| `platform/src/lib/welcomeGateContent.ts` | `shouldShowWelcomeGate()` checks `lb_visit_count > 0` → skip |
+| `platform/src/App.tsx` | PortalGateway routes wrapped in ProtectedRoute |
+| `platform/src/components/UniversalDispatch.tsx` | Copy-to-Clipboard button + cue card auto-gen + toast |
+| `platform/src/lib/treasureKeyEmbed.ts` | `registerDispatchKeys()` function + dispatch key metadata types |
+| `platform/supabase/functions/dispatch-executor/index.ts` | Golden key registration after dispatch |
+| `platform/supabase/migrations/20260315000006_dispatch_columns_and_seed.sql` | 18 article seed + metadata columns |
+| `platform/supabase/migrations/20260315000007_quiz_tables_and_seed.sql` | Quiz tables + 16 questions (Scott + Buffett) |
+
+### Pending Work (Session 26+)
+
+| Item | Status |
+|------|--------|
+| TheBattery → dispatch-executor wiring | Deferred |
+| Bluesky/Threads API integration in process-scheduled-posts | Deferred |
+| Admin approval UI for print orders | Deferred |
+| Moo API integration (waiting on Business Services team) | Blocked |
+| Full SESSION_7E_LAUNCH_QUEUE migration to DB (13 items) | Deferred |
+| Content Pipeline → Outbound Dispatch auto-linking | Deferred |
+| Medium Integration Token (Founder action) | Blocked |
+| LINKEDIN_ACCESS_TOKEN / X_BEARER_TOKEN setup (Founder action) | Blocked |
+
+---
+
+## Session 24 (March 15, 2026)
+
+**Commit:** `6127a12` — Session 24: Dispatch pipeline, print order service, canonical stats migration
 
 ### What Was Done This Session (Session 24 — Knight)
 
