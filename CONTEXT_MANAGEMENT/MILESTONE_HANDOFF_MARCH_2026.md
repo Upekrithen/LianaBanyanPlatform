@@ -11,7 +11,7 @@
 
 ## RUNWAY / SESSION STOP (current) — Session 22 (March 15, 2026)
 
-**Latest commit:** `7151a7b` — Session 22: Canonical DB propagation, QR-Innovation linkage, 7th provisional stale value sweep
+**Latest commit:** `3364f41` — Session 22 addendum: Print pipeline refinement + Dead Internet Defense article
 
 ### What Was Done This Session (Session 22 — Knight)
 
@@ -24,6 +24,9 @@
 7. **Hofund channel 5** — IP Portfolio channel added for all existing users.
 8. **Migration pushed** — `20260315000003_canonical_qr_medallion_portfolio.sql` pushed to Supabase remote. All tables created.
 9. **Both sites deployed** — lianabanyan.com (276 new files) + the2ndsecond.com (2 updated files). Both LIVE.
+10. **Print pipeline refinement** — Three-vendor model (Moo/Printful/Challenge Coin), Founder approval gate, `print_production_levels` table with real vendor pricing (5 products seeded), expanded order types and statuses, Credits payment tracking, Crew Call local producer claiming.
+11. **Dead Internet Defense article** — Ingested to `Cephas/cephas-hugo/content/articles/dead-internet-defense.md`. Deployed to the2ndsecond.com (957 pages, up from 948).
+12. **Migration `20260315000004`** pushed — print pipeline refinement applied to remote.
 
 ### Files Changed (Platform)
 
@@ -147,6 +150,7 @@
 - `20260315000001` — 568 spec expansion UPDATEs
 - `20260315000002` — 22 skeleton fill UPDATEs (#1573-#1594)
 - `20260315000003` — Canonical DB + QR linkage + Medallion FK + Print pipeline
+- `20260315000004` — Print pipeline refinement (3-vendor, approval gate, production levels)
 
 ---
 
