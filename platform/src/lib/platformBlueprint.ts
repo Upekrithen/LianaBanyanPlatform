@@ -87,6 +87,6 @@ export const INNOVATION_STATS = {
   personalInvestment: 525_000,  // Over 9 years
   investmentYears: 9,
   initiatives: 16,              // The Sweet Sixteen
-  domains: 8,                   // Firebase hosting targets
+  domains: 14,                  // Major innovation domains
   portals: 6,                   // marketplace, business, nonprofit, network, dss, hexisle
 } as const;

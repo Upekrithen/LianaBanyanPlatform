@@ -25,7 +25,11 @@
 8. **Build fixes** — `CephasInnovationPedestalsPage.tsx` import path, `DelegationResponseButtons.tsx` operator precedence
 9. **Hugo shortcode stubs** — `related-innovations`, `vote-to-elevate`, `alert`, `dead-end`
 10. **Both sites built** — Cephas (948 pages), Platform (38.38s, zero errors)
-11. **BLOCKED: Firebase deploy** — needs `firebase login --reauth`
+11. **Firebase deployed** — both lianabanyan.com and the2ndsecond.com LIVE
+12. **Provisional PDF rebuilt** with embedded fonts (653 innovations, 615.9 KB)
+13. **7th provisional FILED** — Application 64/006,010, March 15, 2026, 2:13 AM ET
+14. **Filing documents archived** to `Asteroid-ProofVault/03_PATENT_BAGS/2026/15 Mar 2026 - Application 64006010/`
+15. **Git pushed** to remote (all commits through `adc17b7`)
 
 ### Commits This Session
 
@@ -113,7 +117,8 @@
 | **Innovations (canonical)** | **1,662** | Session 17 POLLINATION; propagated everywhere |
 | **Innovations in DB** | Through #1662 (all pushed) | All migrations applied as of Session 21 |
 | **Spec expansions written** | 593 (568 batch + 22 skeleton + 3 overflow) | Migrations `20260315000001` + `20260315000002` |
-| **Formal patent claims** | 1,336 across 6 provisional applications | USPTO receipts |
+| **Formal patent claims** | 1,336 across 7 provisional applications | USPTO receipts |
+| **7th provisional** | Application 64/006,010 — filed March 15, 2026 | 653 innovations with full specs |
 | **Crown Jewels** | 123 definitive (see Cephas crown-jewels page) | Cephas + DB |
 | **Membership** | $5/year | Immutable |
 
@@ -168,7 +173,8 @@ The 22 skeleton placeholders now have source material. The following files in `A
 | 1 | ~~DONE~~ | ~~Commit SEC cleanup changes~~ | Committed as `2f80abc` (Session 21) |
 | 2 | ~~DONE~~ | ~~Push Supabase migrations~~ | All pushed (Session 21) |
 | 3 | ~~DONE~~ | ~~Map INBOX innovations to #1573-#1594~~ | 22 skeleton slots filled with full specs (Session 21) |
-| 4 | **URGENT** | **Deploy to Firebase** | Both sites built, needs `firebase login --reauth` first |
+| 4 | ~~DONE~~ | ~~Deploy to Firebase~~ | Both sites live (Session 21) |
+| 4b | ~~DONE~~ | ~~File 7th provisional~~ | Application 64/006,010 filed March 15, 2026 |
 | 5 | **MEDIUM** | **Content Pipeline build** | Sequential pipeline: tl;dr → blog → article → academic paper (system designed but not automated) |
 | 6 | **MEDIUM** | **Battery Dispatch — Grassroots Intelligence** | Create campaign from 4 new academic papers + Political Expedition cue card |
 | 7 | **MEDIUM** | **Treasure Key injection** | Inject keys into all letters, articles, social posts for real treasure hunt |

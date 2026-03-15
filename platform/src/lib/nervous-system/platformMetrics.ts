@@ -198,7 +198,7 @@ export async function getHealthDashboard(): Promise<{
   ]);
 
   return {
-    innovationCount: metrics[0]?.metric_value || 1623,
+    innovationCount: metrics[0]?.metric_value || 1662,
     patentClaims: metrics[1]?.metric_value || 1336,
     activeMembers: metrics[2]?.metric_value || 0,
     creatorEarnings: metrics[3]?.metric_value || 0,
