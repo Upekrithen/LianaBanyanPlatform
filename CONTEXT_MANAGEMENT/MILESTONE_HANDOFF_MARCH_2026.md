@@ -9,7 +9,50 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 23 (March 15, 2026)
+## RUNWAY / SESSION STOP (current) — Session 24 (March 15, 2026)
+
+**Latest commit:** `6127a12` — Session 24: Dispatch pipeline, print order service, canonical stats migration
+
+### What Was Done This Session (Session 24 — Knight)
+
+1. **dispatch-executor edge function** — Central dispatch router: email (via outreach template), Medium, social (Twitter/LinkedIn/Facebook/Bluesky/Threads via scheduled_posts), Cephas flagging. Updates outbound_dispatch status on completion.
+2. **medium-publish edge function** — Medium API integration with markdown content format, auto-draft, tag support. Awaits `MEDIUM_INTEGRATION_TOKEN` Supabase secret from Founder.
+3. **UniversalDispatch.tsx wired** — `handleDispatch()` now calls `dispatch-executor` edge function for each selected target channel. No more dead callback pattern.
+4. **outbound_dispatch DB table** — Migration `20260315000005` creates persistent dispatch queue with full approval workflow columns. 3 seed items: Dead Internet article (Medium), Moo outreach (email), Coins For Anything outreach (email). RLS for authenticated read + admin full control.
+5. **outboundDispatch.ts rewired to DB** — All helper functions (createOutboundDraft, submitForReview, stampItem, queueForDispatch, markDispatched, recordResponse, requestRevision) now async DB-backed operations via Supabase. Added `insertOutboundDraft()`, `getAllDispatchItems()`. SESSION_7E_LAUNCH_QUEUE retained as in-memory seed data for backward compat.
+6. **printOrderService.ts** — Full CRUD: `createPrintOrder` (pending_approval), `approvePrintOrder` (creates Printful draft), `confirmPrintfulOrder` (sends to production), `getPendingOrders`. Two-step Founder approval pattern preserved.
+7. **printful-api: confirm_order action** — Added `POST /orders/{id}/confirm` routing to edge function. Redeployed.
+8. **useCanonicalStats() migration** — 4 priority components now pull live numbers from `platform_canonical`: HallOfInnovations (innovation count, claims, applications, Crown Jewels), ProfessionalLanding (innovation count), DevelopmentBadge (innovations + claims), PlatformFooter (claims + innovations).
+9. **Both sites deployed** — lianabanyan.com (274 files updated) + cephas.lianabanyan.com (964 pages)
+10. **Migration pushed** — `20260315000005_outbound_dispatch_table.sql` applied to remote
+
+### Files Changed (Platform)
+
+- `src/components/UniversalDispatch.tsx` — Wired to dispatch-executor edge function
+- `src/components/DevelopmentBadge.tsx` — useCanonicalStats() migration
+- `src/components/PlatformFooter.tsx` — useCanonicalStats() migration
+- `src/components/ProfessionalLanding.tsx` — useCanonicalStats() migration
+- `src/pages/HallOfInnovations.tsx` — useCanonicalStats() migration (4 stats)
+- `src/lib/outboundDispatch.ts` — Rewired from in-memory to DB-backed
+- `src/lib/services/printOrderService.ts` — NEW (Printful order lifecycle)
+- `supabase/functions/dispatch-executor/index.ts` — NEW (central dispatch router)
+- `supabase/functions/medium-publish/index.ts` — NEW (Medium API)
+- `supabase/functions/printful-api/index.ts` — Added confirm_order action
+- `supabase/migrations/20260315000005_outbound_dispatch_table.sql` — NEW
+
+### Edge Functions Now Deployed on Supabase
+
+| Function | Purpose | Status |
+|----------|---------|--------|
+| `dispatch-executor` | Central dispatch router (email/medium/social/cephas) | LIVE |
+| `medium-publish` | Medium API publishing | LIVE (awaits token) |
+| `ipfs-pin` | Real IPFS pinning via Pinata | LIVE |
+| `printful-api` | Merch catalog, estimates, orders, confirm | LIVE |
+| `send-transactional-email` | 6 email types (incl. outreach) | LIVE |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 23 (March 15, 2026)
 
 **Latest commit:** `dfde988` — Session 23: Live IPFS (Pinata), Printful API, outreach email, Hugo canonical pipeline
 
@@ -187,12 +230,12 @@
 
 ### Migrations NOT YET Pushed
 
-**None** — all migrations pushed as of Session 22. Last 4 pushed:
-- `20260314000021` — Creator share description fix
+**None** — all migrations pushed as of Session 24. Last 5 pushed:
 - `20260315000001` — 568 spec expansion UPDATEs
 - `20260315000002` — 22 skeleton fill UPDATEs (#1573-#1594)
 - `20260315000003` — Canonical DB + QR linkage + Medallion FK + Print pipeline
 - `20260315000004` — Print pipeline refinement (3-vendor, approval gate, production levels)
+- `20260315000005` — Outbound dispatch table + 3 seed items (Session 24)
 
 ---
 
@@ -305,6 +348,7 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+6127a12 Session 24: Dispatch pipeline, print order service, canonical stats migration
 dfde988 Session 23: Live IPFS (Pinata), Printful API, outreach email, Hugo canonical pipeline
 a9e24fe Session 22 addendum: Print pipeline refinement (3-vendor, approval gate, production levels) + Dead Internet Defense
 70cb23a Session 22: Canonical DB propagation, QR-Innovation linkage, 7th provisional stale value sweep
