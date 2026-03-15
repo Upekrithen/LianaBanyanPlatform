@@ -1,0 +1,21 @@
+{
+  "hosting": {
+    "site": "the2ndsecond-trunk",
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [{"key": "Cache-Control", "value": "max-age=3600"}]
+      },
+      {
+        "source": "**/*.css",
+        "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+      },
+      {
+        "source": "**/*.js",
+        "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+      }
+    ]
+  }
+}
