@@ -1139,7 +1139,7 @@ export default function PatentPortfolio() {
           className="mt-12 pt-8 border-t border-slate-800 text-center"
         >
           <p className="text-white/50 text-sm">
-            LIANA BANYAN CORPORATION · Wyoming C-Corp · EIN 41-2797446
+            LIANA BANYAN CORPORATION
           </p>
           <p className="text-white/30 text-xs mt-2">
             Forward-looking statements apply. Actual results may differ materially.

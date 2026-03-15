@@ -66,7 +66,7 @@ export default function CephasCategoryListingPage() {
           {meta.title}
         </h1>
         <p className="text-muted-foreground mt-1">
-          {category === "papers" && "Clean academic prose. Version toggle for Academic / TLDR / 6th Grade where available."}
+          {category === "papers" && "Clean academic prose. Version toggle for Full Detail / More Info / At a Glance where available."}
           {category === "letters" && "Crown letters and outreach. Pudding-style interactive layout."}
           {category === "systems" && "System design and technical specs. Pudding styling."}
           {category === "initiatives" && "Sweet Sixteen initiative content. Links to platform initiative pages."}

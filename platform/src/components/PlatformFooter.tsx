@@ -55,8 +55,7 @@ export function PlatformFooter() {
                 "Help each other, Help ourselves."
               </p>
               <p className="text-xs text-muted-foreground">
-                Liana Banyan Corporation<br />
-                Wyoming C-Corp · EIN 41-2797446
+                Liana Banyan Corporation
               </p>
             </div>
 

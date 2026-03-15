@@ -245,7 +245,7 @@ export function IslandManagementSystem() {
         {
           id: 'SEED-004',
           type: 'cherry',
-          plantedBy: 'Diana',
+          plantedBy: 'Coral',
           plantedDate: new Date('2024-04-01'),
           growthStage: 60,
           fruit: 8

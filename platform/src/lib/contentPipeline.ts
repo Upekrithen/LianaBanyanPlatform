@@ -134,7 +134,7 @@ export const PIPELINE_STAGES: StageRequirements[] = [
     requiredFields: ['title', 'tldrContent', 'category'],
     icon: 'Zap',
     color: 'amber',
-    readingLevel: '6th grade — 2 minutes',
+    readingLevel: 'At a Glance — 2 minutes',
   },
   {
     stage: 'blog',

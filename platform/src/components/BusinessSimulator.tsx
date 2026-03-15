@@ -208,7 +208,7 @@ export function BusinessSimulator({
           </CardTitle>
           <CardDescription>
             Test your business idea with platform economics before committing real resources.
-            Creator keeps 83.3% — always.
+            Creators/Workers keep 83.3% — always.
           </CardDescription>
         </CardHeader>
         <CardContent>

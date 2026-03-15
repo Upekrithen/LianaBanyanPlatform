@@ -40,9 +40,9 @@ const LAW_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e', '#f59e0b', '#ef4444'];
 type ReadingLevel = 'academic' | 'freshman' | 'sixth-grade';
 
 const READING_LEVELS = [
-  { id: 'academic' as const, label: 'Full Paper', icon: GraduationCap, description: 'Academic version with citations' },
-  { id: 'freshman' as const, label: 'Explained', icon: BookOpen, description: 'College freshman level' },
-  { id: 'sixth-grade' as const, label: 'Summary', icon: Baby, description: '6th grade level' },
+  { id: 'academic' as const, label: 'Full Detail', icon: GraduationCap, description: 'Complete version with citations' },
+  { id: 'freshman' as const, label: 'More Info', icon: BookOpen, description: 'Accessible deep dive' },
+  { id: 'sixth-grade' as const, label: 'At a Glance', icon: Baby, description: 'Quick overview' },
 ];
 
 function ReadingLevelSelector({ 
@@ -435,7 +435,7 @@ export default function PaperPage() {
           className="mt-12 pt-8 border-t border-slate-800 text-center"
         >
           <p className="text-white/50 text-sm">
-            LIANA BANYAN CORPORATION · Wyoming C-Corp · EIN 41-2797446
+            LIANA BANYAN CORPORATION
           </p>
         </motion.div>
       </div>

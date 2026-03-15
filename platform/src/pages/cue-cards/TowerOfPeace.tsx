@@ -38,7 +38,7 @@ export default function TowerOfPeace() {
               The Liana Banyan Platform is built upon a fundamental restructuring of cooperative economics. We assert that it is structurally possible to cure world hunger and achieve sustained prosperity by locking the platform margin at <strong>Cost + 20%</strong> and ensuring the creator retains <strong>83.3%</strong> of all revenue generated.
             </p>
             <p>
-              This is not a charity. It is a Wyoming C-Corp (EIN: 41-2797446) utilizing a Three-Gear Currency system (Credits, Marks, Joules) to eliminate speculative extraction while maintaining aggressive market incentives.
+              This is not a charity. It is a cooperative commerce corporation utilizing a Three-Gear Currency system (Credits, Marks, Joules) to eliminate speculative extraction while maintaining aggressive market incentives.
             </p>
             <Button className="bg-slate-800 hover:bg-slate-700 text-white w-full md:w-auto">
               Read the Full Academic Paper <ArrowRight className="w-4 h-4 ml-2" />

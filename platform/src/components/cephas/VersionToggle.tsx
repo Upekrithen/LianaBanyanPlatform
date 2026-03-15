@@ -1,5 +1,5 @@
 /**
- * Switch between Academic / TLDR / 6th Grade versions (Session 19).
+ * Switch between Full Detail / More Info / At a Glance versions (Session 19, labels updated Session 12).
  */
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,9 +13,9 @@ interface VersionToggleProps {
 }
 
 const DEFAULT_VERSIONS: { id: PaperVersion; label: string }[] = [
-  { id: "academic", label: "Academic" },
-  { id: "tldr", label: "TL;DR" },
-  { id: "grade6", label: "6th Grade" },
+  { id: "academic", label: "Full Detail" },
+  { id: "tldr", label: "More Info" },
+  { id: "grade6", label: "At a Glance" },
 ];
 
 export function VersionToggle({

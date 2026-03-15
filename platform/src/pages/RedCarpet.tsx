@@ -1606,14 +1606,14 @@ export default function RedCarpet() {
 
                   <ExpandableBlock
                     title="🏛️ Legal Entity & Structure"
-                    subtitle="Wyoming C-Corp with constitutional protections"
-                    preview="LIANA BANYAN CORPORATION — EIN 41-2797446..."
+                    subtitle="Corporation with constitutional protections"
+                    preview="LIANA BANYAN CORPORATION — Legal structure details..."
                     accentColor="#3b82f6"
                   >
                     <div className="p-4 rounded-lg bg-background border border-border mb-4">
                       <div className="text-sm text-muted-foreground mb-1">Legal Entity</div>
                       <div className="font-semibold text-foreground">LIANA BANYAN CORPORATION</div>
-                      <div className="text-sm text-muted-foreground">Wyoming C-Corp — EIN 41-2797446</div>
+                      <div className="text-sm text-muted-foreground">Cooperative Commerce Corporation</div>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       Wyoming was chosen for its strong corporate privacy protections and business-friendly environment. 
@@ -1729,7 +1729,7 @@ export default function RedCarpet() {
           {/* ─── FOOTER ─── */}
           <footer className="py-8 px-6 border-t border-border">
             <div className="max-w-4xl mx-auto text-center text-sm text-muted-foreground">
-              <p className="mb-2">LIANA BANYAN CORPORATION — Wyoming C-Corp — EIN 41-2797446</p>
+              <p className="mb-2">LIANA BANYAN CORPORATION</p>
               <p>
                 {PLATFORM_STATS.innovations} innovations • {PLATFORM_STATS.crownJewels} Crown Jewel patents •{" "}
                 {PLATFORM_STATS.initiatives} charitable initiatives • {PLATFORM_STATS.creatorKeeps} to creators and workers

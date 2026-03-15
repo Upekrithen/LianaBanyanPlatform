@@ -125,7 +125,7 @@ export default function FlyOnTheWall() {
           <Card>
             <CardContent className="pt-6 text-center">
               <Zap className="w-8 h-8 mx-auto mb-2 text-purple-500" />
-              <div className="text-3xl font-bold">{innovations || "1,200+"}</div>
+              <div className="text-3xl font-bold">{innovations || "1,662"}</div>
               <div className="text-sm text-muted-foreground">Documented Innovations</div>
             </CardContent>
           </Card>
@@ -283,7 +283,7 @@ export default function FlyOnTheWall() {
 
         {/* Footer */}
         <div className="text-center text-sm text-muted-foreground pt-8 border-t">
-          <p>LIANA BANYAN CORPORATION — Wyoming C-Corp — EIN 41-2797446</p>
+          <p>LIANA BANYAN CORPORATION</p>
           <p className="mt-1">"Help each other help ourselves."</p>
           <p className="mt-2 text-xs">
             Last updated: {m.period_end ? new Date(m.period_end).toLocaleDateString() : "Real-time"}

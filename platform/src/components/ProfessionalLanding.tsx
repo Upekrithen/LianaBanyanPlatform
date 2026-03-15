@@ -390,7 +390,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
       {/* Footer */}
       <footer className="professional-footer">
         <p className="footer-motto">"Help each other, Help ourselves."</p>
-        <p className="footer-info">LIANA BANYAN CORPORATION · Wyoming C-Corp · EIN 41-2797446</p>
+        <p className="footer-info">LIANA BANYAN CORPORATION</p>
         <p className="footer-links">
           <a href="https://the2ndsecond.com">Cephas Archive</a> · 
           <a href="/fly-on-the-wall">Transparency Dashboard</a>
