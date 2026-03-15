@@ -1,13 +1,23 @@
 /**
- * Cephas Gateway — Links to Cephas docs, Under the Hood, Fly on the Wall (Session 19)
+ * Cephas Gateway — Links to Cephas docs, Under the Hood, Fly on the Wall, category listings, search (Session 19/20)
  */
 
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Eye, ExternalLink, FileText } from "lucide-react";
+import { BookOpen, Wrench, Eye, ExternalLink, FileText, Search, Megaphone } from "lucide-react";
 
 const CEPHAS_BASE = "https://cephas.lianabanyan.com";
+
+const CATEGORIES: { path: string; label: string }[] = [
+  { path: "papers", label: "Academic Papers" },
+  { path: "letters", label: "Crown & Outreach Letters" },
+  { path: "systems", label: "System Design" },
+  { path: "initiatives", label: "Initiatives" },
+  { path: "innovations", label: "Innovation Registry" },
+  { path: "articles", label: "Articles & Thought Leadership" },
+  { path: "vault", label: "Vault Archives" },
+];
 
 export default function CephasGatewayPage() {
   return (
@@ -17,6 +27,24 @@ export default function CephasGatewayPage() {
         <p className="text-muted-foreground mt-2">
           Searchable document library — papers, letters, system design, initiatives. Clean prose for academic; pudding styles for the rest.
         </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2 justify-center">
+        <Button asChild variant="outline" size="sm">
+          <Link to="/cephas/search" className="inline-flex items-center gap-1">
+            <Search className="w-4 h-4" /> Search
+          </Link>
+        </Button>
+        {CATEGORIES.map((c) => (
+          <Button key={c.path} asChild variant="outline" size="sm">
+            <Link to={`/cephas/${c.path}`}>{c.label}</Link>
+          </Button>
+        ))}
+        <Button asChild variant="outline" size="sm">
+          <Link to="/cephas/press-junket" className="inline-flex items-center gap-1">
+            <Megaphone className="w-4 h-4" /> Press Junket
+          </Link>
+        </Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

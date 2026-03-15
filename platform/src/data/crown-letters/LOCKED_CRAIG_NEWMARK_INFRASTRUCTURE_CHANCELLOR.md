@@ -18,10 +18,10 @@ GoFundMe takes a cut of medical emergencies. Uber takes a cut of someone driving
 Liana Banyan is what Craigslist would look like if you designed it today, knowing everything you know now about what platforms become.
 
 - **Cost + 20%.** That's our margin on everything. Not "up to 20%" — exactly 20% over actual cost.
-- **Workers own the platform.** Every person who contributes earns medallions — blockchain-verified equity.
+- **Workers own the platform.** Every person who contributes earns medallions — blockchain-verified participation and service allocation authority.
 - **Three commercial portals fund charitable initiatives.** The .com, .biz, and .net generate margin that sustains the .org.
 
-We've built fourteen ready-to-launch initiatives across food security, healthcare access, education, financial inclusion, and crisis response — from neighbors feeding neighbors (Let's Make Dinner) to affordable prescriptions (LifeLine Medications) to cooperative manufacturing (Let's Make Bread).
+We've built sixteen ready-to-launch initiatives across food security, healthcare access, education, financial inclusion, and crisis response — from neighbors feeding neighbors (Let's Make Dinner) to affordable prescriptions (LifeLine Medications) to cooperative manufacturing (Let's Make Bread).
 
 The platform is live. The patents are filed. The first medallions are minted.
 

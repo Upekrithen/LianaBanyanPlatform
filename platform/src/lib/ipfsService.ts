@@ -387,7 +387,7 @@ export async function createIPLedgerEntry(
  * Updated: February 18, 2026
  */
 export const PATENT_PORTFOLIO_STATS = {
-  total_innovations: 1647,
+  total_innovations: 1662,
   utility_patent_percentage: 99,
   formal_claims: 1336,
   filed_applications: 7,

@@ -481,7 +481,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Runs 'Web3 Is Going Great,' skeptic of tech grift",
     purpose: "Coverage — we're the real thing she's been looking for",
     whyYou:
-      "You've spent years proving that 'decentralized' platforms are usually centralized grift. We're not crypto. We're not blockchain. We're a Wyoming C-Corp with constitutional economics, 8 utility patents with no prior art, and a DNA Lock that prevents the founder from changing the deal. Come be skeptical. We built this for skeptics.",
+      "You've spent years proving that 'decentralized' platforms are usually centralized grift. We're not crypto. We're not blockchain. We're a cooperative with constitutional economics, 8 utility patents with no prior art, and a DNA Lock that prevents the founder from changing the deal. Come be skeptical. We built this for skeptics.",
     category: "journalist",
     categoryLabel: "Press & Media",
     emailDomains: ["mollywhite.net"],
@@ -550,7 +550,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "The New School — coined 'platform cooperativism'",
     purpose: "Academic ally — literally named what we're building",
     whyYou:
-      "You coined 'platform cooperativism.' We built it. 1,200+ innovations — 99% utility patents — protected by 1,336 formal claims across 6 provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art. This isn't a theory anymore — it's a Wyoming C-Corp with 16 charitable initiatives and a patent portfolio worth $9M-$90M+.",
+      "You coined 'platform cooperativism.' We built it. 1,200+ innovations — 99% utility patents — protected by 1,336 formal claims across 6 provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art. This isn't a theory anymore — it's a cooperative with 16 charitable initiatives and a patent portfolio worth $9M-$90M+.",
     category: "academic",
     categoryLabel: "Academic Partnership",
     emailDomains: ["newschool.edu"],
@@ -828,7 +828,7 @@ export const RECIPIENTS: Recipient[] = [
   {
     id: "melinda-french-gates",
     name: "Melinda French Gates",
-    bio: "Philanthropist, Pivotal Ventures, equity focus",
+    bio: "Philanthropist, Pivotal Ventures, economic empowerment focus",
     purpose: "Major funder — women's economic empowerment",
     whyYou:
       "You fund women's economic empowerment. This platform gives women entrepreneurs 83.3% of every transaction — constitutionally locked. From Let's Make Dinner to Harper Guild to MSA, women lead the initiatives. The economics guarantee their earnings can never be extracted.",
