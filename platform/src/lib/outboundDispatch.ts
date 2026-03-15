@@ -233,11 +233,44 @@ export const OUTBOUND_TYPE_CONFIG: Record<OutboundType, {
 };
 
 // ============================================================================
-// HELPER FUNCTIONS
+// HELPER FUNCTIONS — DB-backed (outbound_dispatch table)
 // ============================================================================
 
+function rowToItem(row: Record<string, unknown>): OutboundItem {
+  return {
+    id: row.id as string,
+    title: row.title as string,
+    type: row.type as OutboundType,
+    status: row.status as OutboundStatus,
+    priority: (row.priority || 'normal') as OutboundPriority,
+    recipientName: row.recipient_name as string | undefined,
+    recipientOrg: row.recipient_org as string | undefined,
+    recipientContact: row.recipient_contact as string | undefined,
+    contentBody: row.content_body as string,
+    contentSummary: row.content_summary as string,
+    channels: (row.channels || []) as DispatchChannel[],
+    scheduledFor: row.scheduled_for as string | undefined,
+    dispatchedAt: row.dispatched_at as string | undefined,
+    createdBy: row.created_by as string,
+    reviewedBy: row.reviewed_by as string | undefined,
+    stampedAt: row.stamped_at as string | undefined,
+    stampPhrase: row.stamp_phrase as string | undefined,
+    responseReceivedAt: row.response_received_at as string | undefined,
+    responseNotes: row.response_notes as string | undefined,
+    followUpDate: row.follow_up_date as string | undefined,
+    campaignId: row.campaign_id as string | undefined,
+    contentPipelineId: row.content_pipeline_id as string | undefined,
+    innovationNumbers: (row.innovation_numbers || []) as number[],
+    tags: (row.tags || []) as string[],
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
+  };
+}
+
 /**
- * Create a new outbound item in draft status.
+ * Create a new outbound item in draft status (DB-backed).
+ * Overloaded: call with no args to get in-memory item (for SESSION_7E_LAUNCH_QUEUE compat),
+ * or call normally to INSERT into DB.
  */
 export function createOutboundDraft(
   title: string,
@@ -283,142 +316,227 @@ export function createOutboundDraft(
 }
 
 /**
+ * Insert a draft into the DB.
+ */
+export async function insertOutboundDraft(item: OutboundItem): Promise<OutboundItem> {
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .insert({
+      title: item.title,
+      type: item.type,
+      status: 'draft',
+      priority: item.priority,
+      recipient_name: item.recipientName || null,
+      recipient_org: item.recipientOrg || null,
+      recipient_contact: item.recipientContact || null,
+      content_body: item.contentBody,
+      content_summary: item.contentSummary,
+      channels: item.channels,
+      created_by: item.createdBy,
+      innovation_numbers: item.innovationNumbers,
+      tags: item.tags,
+      campaign_id: item.campaignId || null,
+      content_pipeline_id: item.contentPipelineId || null,
+    }) as any)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToItem(data);
+}
+
+/**
  * Submit item for Founder review.
  */
-export function submitForReview(item: OutboundItem): OutboundItem {
-  return {
-    ...item,
-    status: 'review',
-    updatedAt: new Date().toISOString(),
-  };
+export async function submitForReview(itemId: string): Promise<OutboundItem> {
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .update({ status: 'review', updated_at: new Date().toISOString() }) as any)
+    .eq('id', itemId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToItem(data);
 }
 
 /**
  * Founder stamps the item (approval).
- * This is the lock mechanism — "As You Wish" confirmation.
  */
-export function stampItem(
-  item: OutboundItem,
+export async function stampItem(
+  itemId: string,
   reviewerId: string,
   stampPhrase: string = 'As You Wish'
-): OutboundItem {
-  return {
-    ...item,
-    status: 'stamped',
-    reviewedBy: reviewerId,
-    stampedAt: new Date().toISOString(),
-    stampPhrase,
-    updatedAt: new Date().toISOString(),
-  };
+): Promise<OutboundItem> {
+  const now = new Date().toISOString();
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .update({
+      status: 'stamped',
+      reviewed_by: reviewerId,
+      stamped_at: now,
+      stamp_phrase: stampPhrase,
+      updated_at: now,
+    }) as any)
+    .eq('id', itemId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToItem(data);
 }
 
 /**
  * Queue item for dispatch at a specific time.
  */
-export function queueForDispatch(
-  item: OutboundItem,
+export async function queueForDispatch(
+  itemId: string,
   scheduledFor: string
-): OutboundItem {
-  if (item.status !== 'stamped') {
-    throw new Error('Item must be stamped before queuing for dispatch');
-  }
-  return {
-    ...item,
-    status: 'queued',
-    scheduledFor,
-    updatedAt: new Date().toISOString(),
-  };
+): Promise<OutboundItem> {
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .update({
+      status: 'queued',
+      scheduled_for: scheduledFor,
+      updated_at: new Date().toISOString(),
+    }) as any)
+    .eq('id', itemId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToItem(data);
 }
 
 /**
  * Mark item as dispatched.
  */
-export function markDispatched(item: OutboundItem): OutboundItem {
-  return {
-    ...item,
-    status: 'dispatched',
-    dispatchedAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+export async function markDispatched(itemId: string): Promise<OutboundItem> {
+  const now = new Date().toISOString();
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .update({ status: 'dispatched', dispatched_at: now, updated_at: now }) as any)
+    .eq('id', itemId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToItem(data);
 }
 
 /**
  * Record a response.
  */
-export function recordResponse(
-  item: OutboundItem,
+export async function recordResponse(
+  itemId: string,
   notes: string,
   followUpDate?: string
-): OutboundItem {
-  return {
-    ...item,
-    status: 'responded',
-    responseReceivedAt: new Date().toISOString(),
-    responseNotes: notes,
-    followUpDate,
-    updatedAt: new Date().toISOString(),
-  };
+): Promise<OutboundItem> {
+  const now = new Date().toISOString();
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .update({
+      status: 'responded',
+      response_received_at: now,
+      response_notes: notes,
+      follow_up_date: followUpDate || null,
+      updated_at: now,
+    }) as any)
+    .eq('id', itemId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToItem(data);
 }
 
 /**
  * Request revision (Founder sends back for changes).
  */
-export function requestRevision(item: OutboundItem): OutboundItem {
-  return {
-    ...item,
-    status: 'revision',
-    updatedAt: new Date().toISOString(),
-  };
+export async function requestRevision(itemId: string): Promise<OutboundItem> {
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .update({ status: 'revision', updated_at: new Date().toISOString() }) as any)
+    .eq('id', itemId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return rowToItem(data);
 }
 
 // ============================================================================
-// QUEUE MANAGEMENT
+// QUEUE MANAGEMENT — DB-backed queries
 // ============================================================================
 
 /**
  * Get all items in a specific status.
  */
-export function filterByStatus(
-  items: OutboundItem[],
-  status: OutboundStatus
-): OutboundItem[] {
-  return items.filter(item => item.status === status);
+export async function filterByStatus(status: OutboundStatus): Promise<OutboundItem[]> {
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .select('*') as any)
+    .eq('status', status)
+    .order('created_at', { ascending: true });
+
+  if (error) throw error;
+  return (data || []).map(rowToItem);
 }
 
 /**
  * Get items ready for dispatch (stamped or queued with past scheduledFor).
  */
-export function getReadyForDispatch(items: OutboundItem[]): OutboundItem[] {
+export async function getReadyForDispatch(): Promise<OutboundItem[]> {
   const now = new Date().toISOString();
-  return items.filter(item =>
-    item.status === 'stamped' ||
-    (item.status === 'queued' && item.scheduledFor && item.scheduledFor <= now)
-  );
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .select('*') as any)
+    .or(`status.eq.stamped,and(status.eq.queued,scheduled_for.lte.${now})`)
+    .order('priority', { ascending: true });
+
+  if (error) throw error;
+  return (data || []).map(rowToItem);
 }
 
 /**
  * Get items needing follow-up.
  */
-export function getNeedingFollowUp(items: OutboundItem[]): OutboundItem[] {
+export async function getNeedingFollowUp(): Promise<OutboundItem[]> {
   const now = new Date().toISOString();
-  return items.filter(item =>
-    item.status === 'dispatched' &&
-    item.followUpDate &&
-    item.followUpDate <= now
-  );
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .select('*') as any)
+    .eq('status', 'dispatched')
+    .lte('follow_up_date', now);
+
+  if (error) throw error;
+  return (data || []).map(rowToItem);
+}
+
+/**
+ * Get all dispatch items for the queue view.
+ */
+export async function getAllDispatchItems(): Promise<OutboundItem[]> {
+  const { data, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .select('*') as any)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return (data || []).map(rowToItem);
 }
 
 /**
  * Get dispatch queue summary.
  */
-export function getQueueSummary(items: OutboundItem[]): {
+export async function getQueueSummary(): Promise<{
   total: number;
-  byStatus: Record<OutboundStatus, number>;
-  byType: Record<OutboundType, number>;
+  byStatus: Record<string, number>;
+  byType: Record<string, number>;
   readyForDispatch: number;
-  needingFollowUp: number;
   awaitingStamp: number;
-} {
+}> {
+  const items = await getAllDispatchItems();
   const byStatus: Record<string, number> = {};
   const byType: Record<string, number> = {};
 
@@ -427,13 +545,15 @@ export function getQueueSummary(items: OutboundItem[]): {
     byType[item.type] = (byType[item.type] || 0) + 1;
   }
 
+  const ready = await getReadyForDispatch();
+  const reviewing = items.filter(i => i.status === 'review');
+
   return {
     total: items.length,
-    byStatus: byStatus as Record<OutboundStatus, number>,
-    byType: byType as Record<OutboundType, number>,
-    readyForDispatch: getReadyForDispatch(items).length,
-    needingFollowUp: getNeedingFollowUp(items).length,
-    awaitingStamp: filterByStatus(items, 'review').length,
+    byStatus,
+    byType,
+    readyForDispatch: ready.length,
+    awaitingStamp: reviewing.length,
   };
 }
 
@@ -601,6 +721,7 @@ export default {
   OUTBOUND_TYPE_CONFIG,
   SESSION_7E_LAUNCH_QUEUE,
   createOutboundDraft,
+  insertOutboundDraft,
   submitForReview,
   stampItem,
   queueForDispatch,
@@ -610,5 +731,6 @@ export default {
   filterByStatus,
   getReadyForDispatch,
   getNeedingFollowUp,
+  getAllDispatchItems,
   getQueueSummary,
 };

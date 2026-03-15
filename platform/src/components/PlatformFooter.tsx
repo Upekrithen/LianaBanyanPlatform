@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MessageSquarePlus, ExternalLink, Code2, Heart, Shield } from "lucide-react";
 import { FeedbackDialog } from "@/components/FeedbackDialog";
+import { useCanonicalStats } from '@/hooks/useCanonicalStats';
 
 // Pages where footer is hidden (immersive experiences)
 const HIDE_FOOTER_ROUTES = [
@@ -30,6 +31,7 @@ const HIDE_FOOTER_ROUTES = [
 export function PlatformFooter() {
   const location = useLocation();
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const canonical = useCanonicalStats();
 
   // Hide on immersive routes
   const shouldHide = HIDE_FOOTER_ROUTES.some(r =>
@@ -162,7 +164,7 @@ export function PlatformFooter() {
           <div className="border-t mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Shield className="h-3.5 w-3.5" />
-              <span>1,336 patent claims · 1,662 innovations · Service sponsorship, not securities</span>
+              <span>{canonical.patentClaims.toLocaleString()} patent claims · {canonical.innovationCount.toLocaleString()} innovations · Service sponsorship, not securities</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>&copy; {currentYear} Liana Banyan Corporation. All rights reserved.</span>

@@ -47,6 +47,11 @@ serve(async (req) => {
         requestBody = JSON.stringify(data.order);
         break;
 
+      case 'confirm_order':
+        endpoint = `https://api.printful.com/orders/${data.order_id}/confirm`;
+        method = 'POST';
+        break;
+
       default:
         return new Response(
           JSON.stringify({ error: `Unknown action: ${action}` }),

@@ -23,7 +23,8 @@
  * "Approve and forget until next week."
  */
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -145,7 +146,7 @@ export function UniversalDispatch({
     .filter(t => t.maxChars && content.length > t.maxChars)
     .map(t => `${t.name}: ${content.length}/${t.maxChars} chars`);
 
-  const handleDispatch = () => {
+  const handleDispatch = useCallback(async () => {
     const item: DispatchItem = {
       id: crypto.randomUUID(),
       content,
@@ -156,8 +157,38 @@ export function UniversalDispatch({
       status: scheduledFor ? 'scheduled' : 'ready',
       createdAt: new Date().toISOString(),
     };
+
+    const channelMap: Record<string, string> = {
+      twitter: 'twitter', linkedin: 'linkedin', bluesky: 'bluesky',
+      threads: 'threads', facebook: 'facebook', medium: 'medium',
+      email: 'email', discord: 'discord',
+    };
+
+    for (const targetId of selectedTargets) {
+      const channel = channelMap[targetId];
+      if (channel) {
+        try {
+          await supabase.functions.invoke('dispatch-executor', {
+            body: {
+              channel,
+              payload: {
+                title,
+                content,
+                imageUrls: initialImages,
+                scheduledFor: scheduledFor || undefined,
+                tags: [],
+              },
+            },
+          });
+        } catch (err) {
+          console.error(`Dispatch to ${targetId} error:`, err);
+        }
+      }
+    }
+
+    item.status = 'dispatched';
     onDispatch?.(item);
-  };
+  }, [content, title, initialImages, selectedTargets, scheduledFor, onDispatch]);
 
   return (
     <div className="space-y-6">

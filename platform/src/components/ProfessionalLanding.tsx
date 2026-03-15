@@ -15,6 +15,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
+import { useCanonicalStats } from '@/hooks/useCanonicalStats';
 import { IDontWantYourMoneyCard } from "@/components/cue-cards/IDontWantYourMoneyCard";
 import { GetFamousCard } from "@/components/cue-cards/GetFamousCard";
 import './ProfessionalLanding.css';
@@ -39,6 +40,7 @@ interface ProfessionalLandingProps {
 export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: ProfessionalLandingProps) {
   const navigate = useNavigate();
   const { openOnboard } = useSeamlessOnboard();
+  const canonical = useCanonicalStats();
   const [heroFlipped, setHeroFlipped] = useState(false);
   const [pathFlipped, setPathFlipped] = useState<Record<string, boolean>>({});
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -186,7 +188,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
             <p>Everyone should be able to participate. $5 isn't a barrier—it's a commitment.</p>
           </div>
           <div className="professional-model-card">
-            <span className="model-number">1,662</span>
+            <span className="model-number">{canonical.innovationCount.toLocaleString()}</span>
             <h3>Innovations</h3>
             <p>Patent-pending systems for three-currency economics, collective membership, and transparent governance.</p>
           </div>

@@ -4,11 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Badge } from "@/components/ui/badge";
 import { Construction, Users, Briefcase, Gift, ChevronRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useCanonicalStats } from '@/hooks/useCanonicalStats';
 
 export function DevelopmentBadge() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const canonical = useCanonicalStats();
 
   if (location.pathname === '/') return null;
 
@@ -135,7 +137,7 @@ export function DevelopmentBadge() {
 
           <div className="border-t pt-4 text-center text-xs text-muted-foreground">
             <p>Built in public since October 2025</p>
-            <p className="mt-1">1,662 innovations • 1,336 patent claims • Member-owned</p>
+            <p className="mt-1">{canonical.innovationCount.toLocaleString()} innovations • {canonical.patentClaims.toLocaleString()} patent claims • Member-owned</p>
           </div>
         </DialogContent>
       </Dialog>

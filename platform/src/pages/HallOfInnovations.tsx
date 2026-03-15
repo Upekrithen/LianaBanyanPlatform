@@ -13,6 +13,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { useCanonicalStats } from '@/hooks/useCanonicalStats';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
@@ -225,12 +226,7 @@ const PATENT_BUCKETS: PatentBucket[] = [
   },
 ];
 
-const STATS = {
-  totalInnovations: 1662,
-  formalClaims: 1336,
-  filedApplications: 7,
-  crownJewels: 8,
-  possibleMore: 9,
+const STATIC_STATS = {
   queriesRun: 130,
   priorArtReviewed: 330,
 };
@@ -243,6 +239,7 @@ export default function HallOfInnovations() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
+  const stats = useCanonicalStats();
   const [selectedBucket, setSelectedBucket] = useState<PatentBucket | null>(null);
   const [selectedShowcase, setSelectedShowcase] = useState<ShowcasePedestal | null>(null);
   const [showSponsorDialog, setShowSponsorDialog] = useState(false);
@@ -321,7 +318,7 @@ export default function HallOfInnovations() {
           <Card className="bg-gradient-to-br from-yellow-100 to-amber-100 dark:from-yellow-900/20 dark:to-amber-900/20">
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-yellow-700 dark:text-yellow-400">
-                {STATS.totalInnovations.toLocaleString()}
+                {stats.innovationCount.toLocaleString()}
               </div>
               <div className="text-sm text-muted-foreground">Innovations</div>
             </CardContent>
@@ -329,7 +326,7 @@ export default function HallOfInnovations() {
           <Card className="bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20">
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-blue-700 dark:text-blue-400">
-                {STATS.formalClaims}
+                {stats.patentClaims.toLocaleString()}
               </div>
               <div className="text-sm text-muted-foreground">Formal Claims</div>
             </CardContent>
@@ -337,7 +334,7 @@ export default function HallOfInnovations() {
           <Card className="bg-gradient-to-br from-emerald-100 to-green-100 dark:from-emerald-900/20 dark:to-green-900/20">
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-emerald-700 dark:text-emerald-400">
-                {STATS.filedApplications}
+                {stats.patentApplications}
               </div>
               <div className="text-sm text-muted-foreground">Applications</div>
             </CardContent>
@@ -345,7 +342,7 @@ export default function HallOfInnovations() {
           <Card className="bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20">
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-purple-700 dark:text-purple-400">
-                {STATS.crownJewels}+{STATS.possibleMore}
+                {stats.crownJewels}
               </div>
               <div className="text-sm text-muted-foreground">Crown Jewels</div>
             </CardContent>
