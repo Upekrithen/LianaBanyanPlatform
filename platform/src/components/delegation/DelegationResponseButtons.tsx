@@ -83,7 +83,7 @@ export function DelegationResponseButtons({
       const { data, error } = await supabase.from("delegation_actions").insert({
         invitation_id: invitationId,
         actor_id: user?.id ?? null,
-        actor_name: verifiedActorName || (user as { user_metadata?: { full_name?: string } })?.user_metadata?.full_name ?? null,
+        actor_name: verifiedActorName || ((user as { user_metadata?: { full_name?: string } })?.user_metadata?.full_name ?? null),
         actor_email: verifiedEmail ?? (user as { email?: string })?.email ?? null,
         action_type: payload.action_type,
         target_name: payload.target_name || null,

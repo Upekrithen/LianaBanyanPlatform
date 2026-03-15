@@ -1,0 +1,9 @@
+{{ $ids := split (.Get "ids") "," }}
+<div class="related-innovations">
+  <h4>Related Innovations</h4>
+  <ul>
+    {{ range $ids }}
+    <li><a href="/innovations/crown-jewels/#bag-{{ . }}">#{{ . }}</a></li>
+    {{ end }}
+  </ul>
+</div>
