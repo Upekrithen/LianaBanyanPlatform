@@ -526,8 +526,10 @@ const Index = () => {
     return null;
   }
 
-  // ─── NOT AUTHENTICATED: Post-gate Portal Gateway (Choose Your Path) ───
-  return <PortalGatewayPage />;
+  // ─── NOT AUTHENTICATED: Original HEOHO Landing with Hero flip + Fable ───
+  // Session 25: Restored per Founder directive — returning visitors see the real landing.
+  // PortalGatewayPage only accessible to authenticated users via /portal route.
+  return <PublicLandingView navigate={navigate} />;
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1744,9 +1746,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               ═══════════════════════════════════════════════════════════ */}
               <div 
                 className={`hero-flip ${heroFlipped || hofundAccessGranted ? 'flipped' : ''} ${isProfessionalTheme ? 'no-chalk-outline' : ''}`}
-                /* V2: Click-to-flip disabled in professional mode UNLESS Hofund access granted (Secret Access Door) */
-                onClick={isProfessionalTheme && !hofundAccessGranted ? undefined : (e) => { e.stopPropagation(); if (!hofundAccessGranted) setHeroFlipped(!heroFlipped); }}
-                style={isProfessionalTheme && !hofundAccessGranted ? { cursor: 'default' } : undefined}
+                onClick={(e) => { e.stopPropagation(); if (!hofundAccessGranted) setHeroFlipped(!heroFlipped); }}
               >
                 <div className="hero-flip-inner" style={{ minHeight: '680px', borderRadius: '1rem', overflow: 'visible', width: '100%', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', flexGrow: 1, border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
                   {/* FRONT: Professional mode matches "Ideas are Free" layout exactly */}

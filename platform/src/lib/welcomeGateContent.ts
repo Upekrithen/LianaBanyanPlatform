@@ -228,12 +228,12 @@ export function setActiveVariant(variantId: string): void {
   localStorage.setItem(WELCOME_VARIANT_KEY, variantId);
 }
 
-/** Check whether the welcome gate should be shown */
+/** Check whether the welcome gate should be shown — FIRST VISIT ONLY */
 export function shouldShowWelcomeGate(): boolean {
-  // Permanently dismissed?
   if (localStorage.getItem(WELCOME_DISMISSED_KEY) === "true") return false;
-  // Already seen this session?
   if (sessionStorage.getItem(WELCOME_SESSION_KEY) === "true") return false;
+  const visitCount = parseInt(localStorage.getItem(VISIT_COUNT_KEY) || "0", 10);
+  if (visitCount > 0) return false;
   return true;
 }
 

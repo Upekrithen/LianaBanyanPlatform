@@ -99,13 +99,34 @@ serve(async (req) => {
     }
 
     if (payload.outboundItemId) {
-      await supabase
+      const { data: dispatchRow } = await supabase
         .from('outbound_dispatch')
         .update({
           status: 'dispatched',
           dispatched_at: new Date().toISOString(),
         })
-        .eq('id', payload.outboundItemId);
+        .eq('id', payload.outboundItemId)
+        .select('title, metadata, content_path')
+        .single();
+
+      if (dispatchRow?.metadata?.golden_key) {
+        await supabase.from('treasure_keys').upsert({
+          key_word: dispatchRow.metadata.golden_key,
+          document_name: dispatchRow.title,
+          document_path: dispatchRow.content_path || '',
+          tier: dispatchRow.metadata.key_tier || 'fledgling',
+          hiding_method: dispatchRow.metadata.key_method || 'natural',
+          feathers: dispatchRow.metadata.feathers || 1,
+          hint: `Hidden in "${dispatchRow.title}"`,
+          is_active: true,
+          source: 'dispatch',
+          dispatch_id: payload.outboundItemId,
+        }, { onConflict: 'key_word' });
+
+        await supabase.from('outbound_dispatch')
+          .update({ metadata: { ...dispatchRow.metadata, key_registered: true } })
+          .eq('id', payload.outboundItemId);
+      }
     }
 
     return new Response(

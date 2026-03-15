@@ -35,8 +35,9 @@ import { Separator } from '@/components/ui/separator';
 import {
   Send, Image, FileText, Calendar, Clock, Eye, CheckCircle,
   Mail, MessageSquare, Share2, Rss, Globe, Smartphone,
-  CreditCard, QrCode, Megaphone, ArrowRight, Plus
+  CreditCard, QrCode, Megaphone, ArrowRight, Plus, Copy
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 // ============================================================================
 // DISPATCH TARGET DEFINITIONS
@@ -118,6 +119,12 @@ interface UniversalDispatchProps {
   onDispatch?: (item: DispatchItem) => void;
 }
 
+function formatForClipboard(targetId: string, title: string, content: string, tags: string[] = []): string {
+  const firstParagraph = content.split('\n').find(l => l.trim().length > 0) || content.slice(0, 200);
+  const hashTags = ['#lianabanyan', ...tags.map(t => `#${t.replace(/\s/g, '')}`)].join(' ');
+  return `${title}\n\n${firstParagraph}\n\nRead the full article: https://lianabanyan.com\n\n${hashTags}`;
+}
+
 export function UniversalDispatch({
   initialContent = '',
   initialTitle = '',
@@ -130,6 +137,7 @@ export function UniversalDispatch({
   const [selectedTargets, setSelectedTargets] = useState<string[]>(initialTargets);
   const [scheduledFor, setScheduledFor] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const { toast } = useToast();
 
   const toggleTarget = (targetId: string) => {
     setSelectedTargets(prev =>
@@ -186,9 +194,31 @@ export function UniversalDispatch({
       }
     }
 
+    if (title) {
+      try {
+        await supabase.from('hofund_cue_cards' as never).insert({
+          title,
+          hook: content.split('\n').find(l => l.trim().length > 0)?.slice(0, 120) || '',
+          qr_url: `https://lianabanyan.com/articles/${encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-'))}`,
+          golden_key_hint: 'Find the key hidden in this article',
+          source: 'dispatch',
+          created_at: new Date().toISOString(),
+        } as never);
+      } catch (_) { /* cue card table may not exist yet */ }
+    }
+
     item.status = 'dispatched';
     onDispatch?.(item);
-  }, [content, title, initialImages, selectedTargets, scheduledFor, onDispatch]);
+    toast({ title: 'Dispatched', description: `Sent to ${selectedTargets.length} channel(s)` });
+  }, [content, title, initialImages, selectedTargets, scheduledFor, onDispatch, toast]);
+
+  const handleCopyToClipboard = useCallback(async () => {
+    const formatted = selectedTargets.map(targetId =>
+      `--- ${targetId.toUpperCase()} ---\n${formatForClipboard(targetId, title, content)}`
+    ).join('\n\n');
+    await navigator.clipboard.writeText(formatted);
+    toast({ title: 'Copied', description: 'Content copied to clipboard for manual posting' });
+  }, [content, title, selectedTargets, toast]);
 
   return (
     <div className="space-y-6">
@@ -350,6 +380,15 @@ export function UniversalDispatch({
             >
               <Eye className="w-4 h-4" />
               {showPreview ? 'Hide Preview' : 'Preview'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleCopyToClipboard}
+              disabled={!content.trim() || selectedTargets.length === 0}
+              className="flex items-center gap-2"
+            >
+              <Copy className="w-4 h-4" />
+              Copy for Manual
             </Button>
             <Button
               onClick={handleDispatch}

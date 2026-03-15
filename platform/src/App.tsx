@@ -386,7 +386,8 @@ import { BuilderModeToggle } from "@/components/builder/BuilderModeToggle";
 
 /**
  * HomepageGateway — Route switcher for "/"
- * Unauthenticated: 4-door PortalGateway (Dell-Style)
+ * Session 25: Unauthenticated → PublicLandingView (HEOHO + Hero flip + Fable + keyhole)
+ * First-time visitors see WelcomeGate (Fable only) before landing.
  * Authenticated: Original Index (discovery view with choice dialog)
  */
 function HomepageGateway() {
@@ -498,8 +499,8 @@ const App = () => (
                         <Route path="/lets-get-groceries" element={<Navigate to="/initiatives/lets-get-groceries" replace />} />
                         <Route path="/lifeline-medications" element={<Navigate to="/initiatives/lifeline-medications" replace />} />
 
-                        <Route path="/portal" element={<PortalGateway />} />
-                        <Route path="/enter" element={<PortalGateway />} />
+                        <Route path="/portal" element={<ProtectedRoute><PortalGateway /></ProtectedRoute>} />
+                        <Route path="/enter" element={<ProtectedRoute><PortalGateway /></ProtectedRoute>} />
                         <Route path="/treasure-map" element={<TreasureMap />} />
                         <Route path="/sanantonio" element={<SanAntonioLanding />} />
                         <Route path="/crew/new" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewNewPage /></Suspense></ProtectedRoute>} />

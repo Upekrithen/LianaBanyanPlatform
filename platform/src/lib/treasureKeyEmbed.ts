@@ -322,6 +322,77 @@ export function generateKeyChallenge(keyWord: string, hint: string): string {
 }
 
 // ============================================================================
+// DISPATCH KEY REGISTRATION — Auto-register golden keys when articles dispatch
+// ============================================================================
+
+interface DispatchKeyMetadata {
+  golden_key?: string;
+  key_tier?: 'fledgling' | 'flight' | 'murder';
+  key_method?: 'natural' | 'acrostic' | 'hidden_text' | 'puzzle';
+  feathers?: number;
+  golden_key_type?: string;
+  quiz_path?: string;
+  status_note?: string;
+}
+
+/**
+ * When an article is dispatched, register its golden key in treasure_keys.
+ * Reads metadata JSONB from the outbound_dispatch row.
+ */
+export async function registerDispatchKeys(dispatchId: string): Promise<void> {
+  const { data: row, error } = await (supabase
+    .from('outbound_dispatch' as never)
+    .select('title, metadata, content_path') as any)
+    .eq('id', dispatchId)
+    .single();
+
+  if (error || !row) return;
+
+  const meta = (row.metadata || {}) as DispatchKeyMetadata;
+
+  if (meta.golden_key) {
+    await (supabase
+      .from('treasure_keys' as never)
+      .upsert({
+        key_word: meta.golden_key,
+        document_name: row.title,
+        document_path: row.content_path || '',
+        tier: meta.key_tier || 'fledgling',
+        hiding_method: meta.key_method || 'natural',
+        feathers: meta.feathers || 1,
+        hint: `Hidden in "${row.title}"`,
+        is_active: true,
+        source: 'dispatch',
+        dispatch_id: dispatchId,
+      }, { onConflict: 'key_word' }) as any);
+  }
+
+  if (meta.golden_key_type === 'comprehension_quiz' && meta.quiz_path) {
+    await (supabase
+      .from('treasure_keys' as never)
+      .upsert({
+        key_word: `QUIZ_${row.title.substring(0, 20).replace(/\s/g, '_').toUpperCase()}`,
+        document_name: row.title,
+        document_path: meta.quiz_path,
+        tier: 'fledgling',
+        hiding_method: 'puzzle',
+        feathers: 2,
+        hint: `Complete the comprehension quiz for "${row.title}"`,
+        is_active: true,
+        source: 'dispatch_quiz',
+        dispatch_id: dispatchId,
+      }, { onConflict: 'key_word' }) as any);
+  }
+
+  await (supabase
+    .from('outbound_dispatch' as never)
+    .update({
+      metadata: { ...row.metadata, key_registered: true },
+    }) as any)
+    .eq('id', dispatchId);
+}
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -335,5 +406,6 @@ export default {
   getTotalKeyCount,
   addKeyHintToPost,
   generateKeyChallenge,
+  registerDispatchKeys,
   CONTENT_KEY_MAP,
 };

@@ -1,11 +1,12 @@
 /**
- * DO NOT TOUCH — WelcomeGate "Flattened Deck" (Session 11)
- * Three-tab system: Concept (flipbook) | Get Started (BLUF triage) | More Detail (HEOHO)
- * Approved by Founder + Rook. Any changes require explicit Founder approval.
+ * WelcomeGate — First-Visit Fable Only (Session 25)
+ * Simplified per Founder directive: Fable IS the orientation.
+ * 30 frames, subtitles, done. Shown only when lb_visit_count === 0.
+ * After Fable or Enter, gate dismisses permanently → PublicLandingView.
+ * Previous: Three-tab "Flattened Deck" (Session 11). Tabs removed Session 25.
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { RotatingQuotes } from "@/components/RotatingQuotes";
 import {
@@ -13,13 +14,6 @@ import {
   dismissWelcomeGate,
   incrementVisitCount,
 } from "@/lib/welcomeGateContent";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
@@ -65,7 +59,6 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
   const [visible, setVisible] = useState(() => shouldShowWelcomeGate());
   const [entering, setEntering] = useState(false);
   const isMobile = useIsMobile();
-  const navigate = useNavigate();
 
   const [frame, setFrame] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -101,8 +94,11 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
 
   const handleEnter = useCallback(() => {
     setEntering(true);
-    setTimeout(() => navigate("/portal"), 400);
-  }, [navigate]);
+    dismissWelcomeGate(true);
+    setTimeout(() => {
+      setVisible(false);
+    }, 400);
+  }, []);
 
   const dismissGate = useCallback(() => {
     setEntering(true);
@@ -192,208 +188,95 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
           }}
           data-xray-id="welcomegate-tabs"
         >
-          <Tabs defaultValue="concept" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-white/10 border border-white/10 mb-4">
-              <TabsTrigger value="concept" className="data-[state=active]:bg-green-600/30 data-[state=active]:text-white">
-                Concept
-              </TabsTrigger>
-              <TabsTrigger value="get-started" className="data-[state=active]:bg-green-600/30 data-[state=active]:text-white">
-                Get Started
-              </TabsTrigger>
-              <TabsTrigger value="more-detail" className="data-[state=active]:bg-green-600/30 data-[state=active]:text-white">
-                More Detail
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Tab A — Concept: flipbook + controls + RotatingQuotes */}
-            <TabsContent value="concept" className="mt-0" data-xray-id="welcomegate-concept">
-              {conceptComplete ? (
-                <div className="space-y-4">
-                  <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
-                    <h2 className="text-white font-semibold text-lg mb-2">Concept</h2>
-                    <p className="text-white/80 text-sm leading-relaxed">
-                      Liana Banyan is a cooperative where neighbors help each other eat, earn, and build.
-                      One small commitment—back one neighbor's offer—leads to your first customer and a shared story.
-                    </p>
-                  </div>
-                  <div className="h-16 overflow-hidden">
-                    <RotatingQuotes intervalMs={8000} className="opacity-70 text-white/80 text-sm" />
+          {/* Fable-only orientation — 30 frames, subtitles, done */}
+          <div data-xray-id="welcomegate-fable">
+            {conceptComplete ? (
+              <div className="space-y-4">
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+                  <h2 className="text-white font-semibold text-lg mb-2">
+                    Help Each Other Help Ourselves
+                  </h2>
+                  <p className="text-white/80 text-sm leading-relaxed">
+                    Liana Banyan is a cooperative where neighbors help each other eat, earn, and build.
+                    One small commitment — back one neighbor's offer — leads to your first customer and a shared story.
+                  </p>
+                </div>
+                <div className="h-16 overflow-hidden">
+                  <RotatingQuotes intervalMs={8000} className="opacity-70 text-white/80 text-sm" />
+                </div>
+              </div>
+            ) : (
+              <>
+                <div
+                  className="relative rounded-xl overflow-hidden border border-white/10 bg-white w-full group"
+                  style={{
+                    aspectRatio: "1",
+                    maxHeight: isMobile ? "280px" : "360px",
+                  }}
+                >
+                  <img
+                    key={frame}
+                    src={`/images/fable/${frame + 1}.png`}
+                    alt={`Liana Banyan Fable — frame ${frame + 1} of ${FABLE_FRAME_COUNT}`}
+                    className="w-full h-full object-contain animate-in fade-in duration-300"
+                  />
+                  <div className="absolute top-2 right-2 text-[10px] text-slate-500 font-mono bg-white/80 px-1.5 py-0.5 rounded">
+                    {frame + 1} / {FABLE_FRAME_COUNT}
                   </div>
                 </div>
-              ) : (
-                <>
-                  <div
-                    className="relative rounded-xl overflow-hidden border border-white/10 bg-white w-full group"
-                    style={{
-                      aspectRatio: "1",
-                      maxHeight: isMobile ? "280px" : "360px",
-                    }}
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
+                  <button
+                    type="button"
+                    onClick={prevFrame}
+                    className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
+                    aria-label="Previous frame"
                   >
-                    <img
-                      key={frame}
-                      src={`/images/fable/${frame + 1}.png`}
-                      alt={`Liana Banyan Fable — frame ${frame + 1} of ${FABLE_FRAME_COUNT}`}
-                      className="w-full h-full object-contain animate-in fade-in duration-300"
-                    />
-                    <div className="absolute top-2 right-2 text-[10px] text-slate-500 font-mono bg-white/80 px-1.5 py-0.5 rounded">
-                      {frame + 1} / {FABLE_FRAME_COUNT}
-                    </div>
+                    ◀
+                  </button>
+                  <div className="flex gap-1">
+                    {([1, 2, 3] as const).map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSpeed(s);
+                        }}
+                        className={`min-w-[2rem] py-1.5 rounded text-xs font-medium transition-colors ${
+                          speed === s ? "bg-green-600/50 text-white" : "bg-white/10 text-white/70 hover:bg-white/20"
+                        }`}
+                      >
+                        {s}×
+                      </button>
+                    ))}
                   </div>
-                  {/* Controls: ◀ | 1× 2× 3× | ⏸ | Skip ▶ */}
-                  <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
-                    <button
-                      type="button"
-                      onClick={prevFrame}
-                      className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
-                      aria-label="Previous frame"
-                    >
-                      ◀
-                    </button>
-                    <div className="flex gap-1">
-                      {([1, 2, 3] as const).map((s) => (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSpeed(s);
-                          }}
-                          className={`min-w-[2rem] py-1.5 rounded text-xs font-medium transition-colors ${
-                            speed === s ? "bg-green-600/50 text-white" : "bg-white/10 text-white/70 hover:bg-white/20"
-                          }`}
-                        >
-                          {s}×
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={togglePlay}
-                      className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
-                      aria-label={isPlaying ? "Pause" : "Play"}
-                    >
-                      ⏸
-                    </button>
-                    <button
-                      type="button"
-                      onClick={skipToEnd}
-                      className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center gap-1 text-sm"
-                    >
-                      Skip ▶
-                    </button>
-                  </div>
-                  <p
-                    className="text-white/90 text-center italic leading-snug mt-3 text-xs min-h-[2.4em] flex items-center justify-center"
+                  <button
+                    type="button"
+                    onClick={togglePlay}
+                    className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
+                    aria-label={isPlaying ? "Pause" : "Play"}
                   >
-                    {subtitle || "\u00A0"}
-                  </p>
-                  <div className="h-12 overflow-hidden mt-2">
-                    <RotatingQuotes intervalMs={8000} className="opacity-70 text-white/70 text-xs" />
-                  </div>
-                </>
-              )}
-            </TabsContent>
-
-            {/* Tab B — Get Started: 4 buttons */}
-            <TabsContent value="get-started" className="mt-0" data-xray-id="welcomegate-get-started">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => navigate("/treasure-map")}
-                  className="w-full py-4 px-4 rounded-xl font-semibold text-left flex items-center gap-3 bg-green-600/30 border border-green-500/40 text-white hover:bg-green-600/50 transition-colors"
+                    ⏸
+                  </button>
+                  <button
+                    type="button"
+                    onClick={skipToEnd}
+                    className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center gap-1 text-sm"
+                  >
+                    Skip ▶
+                  </button>
+                </div>
+                <p
+                  className="text-white/90 text-center italic leading-snug mt-3 text-xs min-h-[2.4em] flex items-center justify-center"
                 >
-                  <span className="text-2xl">🟢</span>
-                  Earn
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate("/crew/new")}
-                  className="w-full py-4 px-4 rounded-xl font-semibold text-left flex items-center gap-3 bg-blue-600/30 border border-blue-500/40 text-white hover:bg-blue-600/50 transition-colors"
-                >
-                  <span className="text-2xl">🔵</span>
-                  Build
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate("/academy")}
-                  className="w-full py-4 px-4 rounded-xl font-semibold text-left flex items-center gap-3 bg-amber-500/30 border border-amber-400/40 text-white hover:bg-amber-500/50 transition-colors"
-                >
-                  <span className="text-2xl">🟡</span>
-                  Learn
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate("/portal")}
-                  className="w-full py-4 px-4 rounded-xl font-semibold text-left flex items-center gap-3 bg-violet-600/30 border border-violet-500/40 text-white hover:bg-violet-600/50 transition-colors"
-                >
-                  <span className="text-2xl">🟣</span>
-                  Explore
-                </button>
-              </div>
-              <p className="text-center mt-4">
-                <button
-                  type="button"
-                  onClick={() => navigate("/treasure-map")}
-                  className="text-green-400 hover:text-green-300 text-sm underline"
-                >
-                  Not sure? Take the 5-minute Treasure Map quiz →
-                </button>
-              </p>
-            </TabsContent>
-
-            {/* Tab C — More Detail: accordions + CTA + SEC */}
-            <TabsContent value="more-detail" className="mt-0" data-xray-id="welcomegate-more-detail">
-              <h2 className="text-white font-bold text-lg mb-4 text-center">
-                Member-Owned. Member-Governed. You are a Member-Owner.
-              </h2>
-              <Accordion type="single" collapsible className="w-full text-left">
-                <AccordionItem value="mutual-aid" className="border-white/10">
-                  <AccordionTrigger className="text-white/90 hover:text-white hover:no-underline">
-                    Mutual Aid
-                  </AccordionTrigger>
-                  <AccordionContent className="text-white/75 text-sm">
-                    Every transaction generates reciprocal value. When you back a neighbor's offer, they back yours. The platform takes only Cost+20%; the rest stays in the community.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="pricing" className="border-white/10">
-                  <AccordionTrigger className="text-white/90 hover:text-white hover:no-underline">
-                    Transparent Pricing
-                  </AccordionTrigger>
-                  <AccordionContent className="text-white/75 text-sm">
-                    Cost+20% floor. Sellers set prices. No hidden fees.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="access" className="border-white/10">
-                  <AccordionTrigger className="text-white/90 hover:text-white hover:no-underline">
-                    Universal Access
-                  </AccordionTrigger>
-                  <AccordionContent className="text-white/75 text-sm">
-                    Credits, Marks, Joules — three currencies, one value. Everyone can earn, spend, and participate.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="participation" className="border-white/10">
-                  <AccordionTrigger className="text-white/90 hover:text-white hover:no-underline">
-                    Earned Participation
-                  </AccordionTrigger>
-                  <AccordionContent className="text-white/75 text-sm">
-                    The people doing the work make the decisions. Governance is tied to participation, not capital.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              <div className="mt-6 flex flex-col items-center gap-4">
-                <button
-                  type="button"
-                  onClick={handleEnter}
-                  className="rounded-xl font-bold tracking-wide uppercase px-8 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white hover:from-green-500 hover:to-green-400 transition-all"
-                >
-                  Tour the 16 Initiatives
-                </button>
-                <p className="text-white/50 text-xs text-center max-w-sm">
-                  This is not an investment. You're backing real products and services from real people.
+                  {subtitle || "\u00A0"}
                 </p>
-              </div>
-            </TabsContent>
-          </Tabs>
+                <div className="h-12 overflow-hidden mt-2">
+                  <RotatingQuotes intervalMs={8000} className="opacity-70 text-white/70 text-xs" />
+                </div>
+              </>
+            )}
+          </div>
 
           {/* ENTER button — always visible */}
           <div className="flex justify-center mt-6">
