@@ -30,6 +30,7 @@ import {
   Plus, Minus, Truck, CheckCircle, DollarSign,
 } from "lucide-react";
 import { WeNeedYouCard } from "@/components/cue-cards/WeNeedYouCard";
+import { PreorderFundedBadge } from "@/components/ui/PreorderFundedBadge";
 import { toast } from "sonner";
 import { calculateCostPlus20 } from "@/lib/currencyService";
 
@@ -159,6 +160,9 @@ export default function ManufacturingStore() {
           <p className="text-muted-foreground">
             Cooperative manufacturing. 95% cost reduction vs traditional. Creators/Workers keep 83.3%.
           </p>
+          <div className="mt-2">
+            <PreorderFundedBadge />
+          </div>
         </div>
       </div>
 

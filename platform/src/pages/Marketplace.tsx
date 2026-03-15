@@ -12,6 +12,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { TrendingUp, Sparkles, DollarSign, Factory, Shield, ArrowRight, Users, Coins, Loader2 } from 'lucide-react';
 import { InviteCreatorCard } from '@/components/cue-cards/InviteCreatorCard';
 import { EnhancedProjectCard } from '@/components/EnhancedProjectCard';
+import { PreorderFundedBadge } from '@/components/ui/PreorderFundedBadge';
 
 type TimeFilter = '24h' | '72h' | '1week';
 
@@ -129,6 +130,9 @@ export default function Marketplace() {
       </header>
       
       <main className="container mx-auto px-4 py-8 space-y-12 max-w-full overflow-x-hidden">
+        <div className="flex justify-center">
+          <PreorderFundedBadge />
+        </div>
         {/* Factory & Patent Ownership Banner */}
         <section className="grid md:grid-cols-2 gap-6">
           <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/factory')}>

@@ -1,6 +1,6 @@
 /**
  * STAMPVerification — Client/sponsor sign-off on completed work before XP award.
- * Accomplishment score 0.5–5.0 (half-steps). Cannot STAMP your own work.
+ * Bounty, Product (price × volume × score/5), Production (points × volume × score/5). Cannot self-STAMP. Session 18: product/production + box notation.
  */
 
 import { useState } from "react";
@@ -20,17 +20,30 @@ import {
 } from "@/components/ui/dialog";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
+import { XPBoxDisplay } from "@/components/reputation/XPBoxDisplay";
 
 const SCORE_STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+
+export type STAMPXpType = "bounty" | "product" | "production";
 
 export interface STAMPVerificationProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** Worker who completed the bounty */
   workerUserId: string;
   workerDisplayName: string;
-  bountyId: string | null;
-  bountyPoints: number;
+  /** Default: bounty */
+  xpType?: STAMPXpType;
+  /** Bounty: task points */
+  bountyPoints?: number;
+  bountyId?: string | null;
+  /** Product: unit price (Credits), preorder volume, run id; volume must be locked */
+  unitPrice?: number;
+  preorderVolume?: number;
+  productionRunId?: string | null;
+  volumeLockedAt?: string | null;
+  /** Production: points per unit × units produced */
+  bountyPointsPerUnit?: number;
+  unitsProduced?: number;
   onSuccess?: () => void;
 }
 
@@ -39,8 +52,15 @@ export function STAMPVerification({
   onOpenChange,
   workerUserId,
   workerDisplayName,
-  bountyId,
-  bountyPoints,
+  xpType = "bounty",
+  bountyPoints = 0,
+  bountyId = null,
+  unitPrice = 0,
+  preorderVolume = 0,
+  productionRunId = null,
+  volumeLockedAt = null,
+  bountyPointsPerUnit = 0,
+  unitsProduced = 0,
   onSuccess,
 }: STAMPVerificationProps) {
   const { user } = useAuth();
@@ -49,23 +69,44 @@ export function STAMPVerification({
   const [notes, setNotes] = useState("");
 
   const isSelf = user?.id === workerUserId;
-  const canStamp = !!user && !isSelf && bountyPoints > 0;
 
-  const xpEarned = Math.round(bountyPoints * accomplishmentScore);
+  const xpEarned =
+    xpType === "bounty"
+      ? Math.round(bountyPoints * accomplishmentScore)
+      : xpType === "product"
+        ? Math.round(unitPrice * preorderVolume * (accomplishmentScore / 5))
+        : Math.round((bountyPointsPerUnit ?? 0) * (unitsProduced ?? 0) * (accomplishmentScore / 5));
+
+  const volumeLocked = !!volumeLockedAt;
+  const productOrProductionBlocked = (xpType === "product" || xpType === "production") && !volumeLocked;
+  const canStamp =
+    !!user &&
+    !isSelf &&
+    (xpType === "bounty" ? bountyPoints > 0 : xpType === "product" ? unitPrice > 0 && preorderVolume > 0 && volumeLocked : (bountyPointsPerUnit ?? 0) > 0 && (unitsProduced ?? 0) > 0 && volumeLocked);
 
   const stampMutation = useMutation({
     mutationFn: async () => {
       if (!user || isSelf) throw new Error("Cannot stamp your own work");
-      const { error } = await supabase.from("xp_transactions").insert({
+      const payload: Record<string, unknown> = {
         user_id: workerUserId,
-        bounty_id: bountyId,
-        bounty_points: bountyPoints,
+        xp_type: xpType,
         accomplishment_score: accomplishmentScore,
         xp_earned: xpEarned,
         stamped_by: user.id,
         stamp_timestamp: new Date().toISOString(),
         notes: notes.trim() || null,
-      });
+      };
+      if (xpType === "bounty") {
+        payload.bounty_id = bountyId;
+        payload.bounty_points = bountyPoints;
+      } else {
+        payload.production_run_id = productionRunId;
+        payload.volume_locked_at = volumeLockedAt;
+        payload.preorder_volume = xpType === "product" ? preorderVolume : unitsProduced;
+        payload.unit_price = xpType === "product" ? unitPrice : null;
+        payload.bounty_points = xpType === "production" ? (bountyPointsPerUnit ?? 0) * (unitsProduced ?? 0) : 0;
+      }
+      const { error } = await supabase.from("xp_transactions").insert(payload);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -96,13 +137,41 @@ export function STAMPVerification({
           <p className="text-muted-foreground text-sm py-4">
             You cannot sign off on your own work. Ask the client or bounty sponsor to STAMP this completion.
           </p>
+        ) : productOrProductionBlocked ? (
+          <p className="text-muted-foreground text-sm py-4">
+            Preorder volume must be locked at production start before a STAMP can be issued. Lock the run first.
+          </p>
         ) : (
           <div className="space-y-6 py-2">
-            <p className="text-sm">
-              This bounty is worth <strong>{bountyPoints}</strong> points. At score{" "}
-              <strong>{accomplishmentScore}</strong>, {workerDisplayName} earns{" "}
-              <strong>{xpEarned} XP</strong>.
-            </p>
+            {xpType === "bounty" && (
+              <p className="text-sm">
+                This bounty is worth <strong>{bountyPoints}</strong> points. At score{" "}
+                <strong>{accomplishmentScore}</strong>, {workerDisplayName} earns{" "}
+                <strong>{xpEarned} XP</strong>.
+              </p>
+            )}
+            {xpType === "product" && (
+              <p className="text-sm">
+                At score <strong>{accomplishmentScore}</strong>, {workerDisplayName} earns{" "}
+                <strong>{xpEarned.toLocaleString()} XP</strong> from {preorderVolume.toLocaleString()} units at ${unitPrice}.
+                {xpEarned >= 10000 && (
+                  <span className="block mt-1 text-muted-foreground">
+                    That&apos;s <XPBoxDisplay totalXp={xpEarned} />!
+                  </span>
+                )}
+              </p>
+            )}
+            {xpType === "production" && (
+              <p className="text-sm">
+                At score <strong>{accomplishmentScore}</strong>, {workerDisplayName} earns{" "}
+                <strong>{xpEarned.toLocaleString()} XP</strong> from {(unitsProduced ?? 0).toLocaleString()} units.
+                {xpEarned >= 10000 && (
+                  <span className="block mt-1 text-muted-foreground">
+                    That&apos;s <XPBoxDisplay totalXp={xpEarned} />!
+                  </span>
+                )}
+              </p>
+            )}
             <div>
               <Label>Accomplishment score (0.5 – 5.0)</Label>
               <div className="flex items-center gap-2 mt-2">
@@ -143,7 +212,7 @@ export function STAMPVerification({
               <Button variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSignOff} disabled={!canStamp || stampMutation.isPending}>
+              <Button onClick={handleSignOff} disabled={!canStamp || stampMutation.isPending || productOrProductionBlocked}>
                 {stampMutation.isPending ? "Signing…" : "Sign off"}
               </Button>
             </DialogFooter>

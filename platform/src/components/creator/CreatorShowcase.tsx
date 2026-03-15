@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, User, Award } from "lucide-react";
 import { ProjectBackingFlow } from "@/components/bandwagon";
+import { PreorderFundedBadge } from "@/components/ui/PreorderFundedBadge";
 
 export interface CreatorShowcaseProps {
   creatorName: string;
@@ -66,12 +67,15 @@ export function CreatorShowcase({
               </a>
             )}
           </div>
-          {medallionTier && (
-            <Badge variant="secondary" className="gap-1 shrink-0">
-              <Award className="w-3 h-3" />
-              {medallionTier}
-            </Badge>
-          )}
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <PreorderFundedBadge className="text-[10px] px-1.5 py-0" />
+            {medallionTier && (
+              <Badge variant="secondary" className="gap-1">
+                <Award className="w-3 h-3" />
+                {medallionTier}
+              </Badge>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
