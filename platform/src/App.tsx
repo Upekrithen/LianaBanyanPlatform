@@ -189,6 +189,7 @@ const CephasCategoryListingPage = lazy(() => import("./pages/CephasCategoryListi
 const CephasContentDetailPage = lazy(() => import("./pages/CephasContentDetailPage"));
 const CephasSearchPage = lazy(() => import("./pages/CephasSearchPage"));
 const CephasPressJunketPage = lazy(() => import("./pages/CephasPressJunketPage"));
+const CephasInnovationPedestalsPage = lazy(() => import("./pages/CephasInnovationPedestalsPage"));
 const TreasureMapGame = lazy(() => import("./pages/TreasureMapGame"));
 const TreasureMapCreator = lazy(() => import("./pages/TreasureMapCreator"));
 const BeaconRunCreator = lazy(() => import("./pages/BeaconRunCreator"));
@@ -538,6 +539,7 @@ const App = () => (
                         <Route path="/papers" element={<AcademicPapersDirectory />} />
                         <Route path="/cephas/search" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CephasSearchPage /></Suspense></ExplorerRoute>} />
                         <Route path="/cephas/press-junket" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CephasPressJunketPage /></Suspense></ExplorerRoute>} />
+                        <Route path="/cephas/innovation-pedestals" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CephasInnovationPedestalsPage /></Suspense></ExplorerRoute>} />
                         <Route path="/cephas/under-the-hood" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><UnderTheHoodPage /></Suspense></ExplorerRoute>} />
                         <Route path="/cephas/fly-on-the-wall" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><FlyOnTheWallRegistryPage /></Suspense></ExplorerRoute>} />
                         <Route path="/cephas/:category/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CephasContentDetailPage /></Suspense></ExplorerRoute>} />

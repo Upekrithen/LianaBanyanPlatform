@@ -11,3 +11,4 @@ export { CitationBlock } from "./CitationBlock";
 export { InnovationClaimList } from "./InnovationClaimList";
 export { VersionToggle } from "./VersionToggle";
 export type { PaperVersion } from "./VersionToggle";
+export { InnovationPedestal } from "./InnovationPedestal";

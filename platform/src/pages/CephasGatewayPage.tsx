@@ -5,7 +5,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Wrench, Eye, ExternalLink, FileText, Search, Megaphone } from "lucide-react";
+import { BookOpen, Wrench, Eye, ExternalLink, FileText, Search, Megaphone, Lightbulb } from "lucide-react";
 
 const CEPHAS_BASE = "https://cephas.lianabanyan.com";
 
@@ -40,6 +40,11 @@ export default function CephasGatewayPage() {
             <Link to={`/cephas/${c.path}`}>{c.label}</Link>
           </Button>
         ))}
+        <Button asChild variant="outline" size="sm">
+          <Link to="/cephas/innovation-pedestals" className="inline-flex items-center gap-1">
+            <Lightbulb className="w-4 h-4" /> Innovation Pedestals
+          </Link>
+        </Button>
         <Button asChild variant="outline" size="sm">
           <Link to="/cephas/press-junket" className="inline-flex items-center gap-1">
             <Megaphone className="w-4 h-4" /> Press Junket
