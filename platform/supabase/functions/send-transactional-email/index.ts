@@ -218,6 +218,57 @@ function milestoneUpdateEmail(
   );
 }
 
+function outreachEmail(
+  recipientName: string,
+  senderName: string,
+  body: string,
+  ctaText: string,
+  ctaUrl: string,
+  cueCardType: string | null
+): string {
+  return `
+    <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+      <div style="border-bottom: 3px solid #e94560; padding-bottom: 20px; margin-bottom: 30px;">
+        <h1 style="color: #1a1a2e; margin: 0;">Liana Banyan</h1>
+        <p style="color: #666; margin: 5px 0 0;">A Worker-Owned Cooperative</p>
+      </div>
+
+      ${recipientName ? `<p>Dear ${recipientName},</p>` : ''}
+
+      <div style="line-height: 1.8; color: #333;">
+        ${body}
+      </div>
+
+      <div style="margin: 30px 0; text-align: center;">
+        <a href="${ctaUrl}" style="
+          display: inline-block;
+          background: #e94560;
+          color: white;
+          padding: 14px 32px;
+          text-decoration: none;
+          border-radius: 6px;
+          font-weight: bold;
+          font-size: 16px;
+        ">${ctaText}</a>
+      </div>
+
+      ${cueCardType ? `
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 0; font-size: 14px; color: #666;">
+            This message was sent via a <strong>${cueCardType}</strong> cue card by ${senderName}.
+          </p>
+        </div>
+      ` : ''}
+
+      <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; font-size: 12px; color: #999;">
+        <p>Liana Banyan Corporation &mdash; A worker-owned cooperative</p>
+        <p>1,662 innovations. 7 USPTO provisional applications. One cooperative.</p>
+        <p><a href="https://lianabanyan.com" style="color: #e94560;">lianabanyan.com</a></p>
+      </div>
+    </div>
+  `;
+}
+
 // ─── Main Handler ───────────────────────────────────────────────
 
 Deno.serve(async (req) => {
@@ -291,6 +342,18 @@ Deno.serve(async (req) => {
           data?.projectName || 'Unknown Project',
           data?.milestoneName || 'New Milestone',
           data?.description || ''
+        );
+        break;
+
+      case 'outreach':
+        subject = data?.subject || 'A message from Liana Banyan';
+        html = outreachEmail(
+          data?.recipientName || '',
+          data?.senderName || 'Liana Banyan',
+          data?.body || '',
+          data?.ctaText || 'Learn More',
+          data?.ctaUrl || 'https://lianabanyan.com',
+          data?.cueCardType || null
         );
         break;
 

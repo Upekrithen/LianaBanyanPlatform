@@ -1,0 +1,18 @@
+{
+  "innovation_count": 1662,
+  "crown_jewels": 123,
+  "patent_applications": 7,
+  "patent_claims": 1336,
+  "domains": 14,
+  "initiatives": 16,
+  "membership_cost": 5,
+  "creator_keeps_pct": 83.3,
+  "platform_margin_pct": 20,
+  "spec_expanded": 653,
+  "portfolio_value_low": 9000000,
+  "portfolio_value_high": 80000000,
+  "personal_investment": 525000,
+  "investment_years": 9,
+  "fetched_at": "2026-03-15T09:35:01.196Z",
+  "source": "Supabase (14 rows)"
+}

@@ -36,6 +36,7 @@ description: "THE BEHEMOTH — 1,662 innovations, 1,336 claims, 7 provisional ap
 
 ## Key Resources
 
+- [BEHEMOTH REBORN — Portfolio Valuation](/patents/behemoth-reborn/) — $630,000 declared (Cost + 20%). Full sensitivity analysis.
 - [The 123 Crown Jewels](/innovations/crown-jewels/) — Complete flagship registry
 - [Prior Art Research](/patents/prior-art-research/) — 16 innovations screened, all found novel
 - [Hall of Records](/innovations/) — Full innovation index

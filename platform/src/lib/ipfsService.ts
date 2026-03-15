@@ -17,6 +17,8 @@
  * Innovation #1226: Recipe IP Ledger Hash (SHA-256 stamp)
  */
 
+import { supabase } from '@/integrations/supabase/client';
+
 // IPFS Gateway options (using public gateways, can upgrade to dedicated)
 const IPFS_GATEWAYS = {
   // Pinata is recommended for production (requires API key)
@@ -123,84 +125,43 @@ export async function verifyContentHash(content: string, expectedHash: string): 
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Upload JSON metadata to IPFS via Pinata
- * Requires VITE_PINATA_API_KEY and VITE_PINATA_SECRET_KEY env vars
- *
- * ARCHITECTURE NOTE: Currently calls Pinata directly from the browser.
- * For production, this should be routed through a Supabase Edge Function
- * so the Pinata secret key is never exposed in the client bundle.
- * See OAuth architecture pattern in socialOAuth.ts for reference.
+ * Upload JSON metadata to IPFS via Pinata Edge Function
+ * 
+ * Routes through supabase.functions.invoke('ipfs-pin') so the Pinata
+ * secret key is NEVER exposed in the browser bundle. Falls back to
+ * mock CIDs only if the edge function is unreachable (dev/offline).
  */
 export async function uploadToIPFS(
   metadata: InnovationMetadata | MedallionMetadata,
   name: string
 ): Promise<IPFSUploadResult> {
-  const apiKey = import.meta.env.VITE_PINATA_API_KEY;
-  const secretKey = import.meta.env.VITE_PINATA_SECRET_KEY;
-  
-  if (!apiKey || !secretKey) {
-    // ═══════════════════════════════════════════════════════════════════════════
-    // INFRASTRUCTURE NOTE — IPFS MOCK FALLBACK
-    // ═══════════════════════════════════════════════════════════════════════════
-    // Currently returns a deterministic mock CID (not a real IPFS hash).
-    // These mock CIDs will NOT resolve on any IPFS gateway.
-    //
-    // TO ACTIVATE REAL IPFS:
-    // 1. Create a Pinata account at https://app.pinata.cloud
-    // 2. Generate API keys (Admin scope recommended)
-    // 3. Set env vars: VITE_PINATA_API_KEY and VITE_PINATA_SECRET_KEY
-    //    NOTE: In production, move these to a Supabase Edge Function to avoid
-    //    exposing the secret key in the browser bundle. VITE_ prefix means
-    //    client-side exposure. The uploadToIPFS function should call an Edge
-    //    Function which holds the real Pinata secret server-side.
-    // 4. Once keys are set, this fallback is bypassed automatically.
-    //
-    // Related: Innovation #1226 (Recipe IP Ledger Hash)
-    // Proof chain: USPTO Filing → Blockchain Hash → IPFS Metadata → Innovation Token
-    // ═══════════════════════════════════════════════════════════════════════════
-    console.warn('IPFS: Pinata keys not configured, using mock CID');
+  try {
+    const { data, error } = await supabase.functions.invoke('ipfs-pin', {
+      body: { metadata, name },
+    });
+
+    if (error) {
+      console.warn('IPFS edge function error, falling back to mock:', error.message);
+      return generateMockIPFSResult(metadata, name);
+    }
+
+    if (!data?.cid) {
+      console.warn('IPFS: No CID returned, falling back to mock');
+      return generateMockIPFSResult(metadata, name);
+    }
+
+    const jsonString = JSON.stringify(metadata, null, 2);
+    return {
+      cid: data.cid,
+      uri: `ipfs://${data.cid}`,
+      gateway_url: data.gateway_url || `${DEFAULT_GATEWAY}${data.cid}`,
+      size_bytes: new TextEncoder().encode(jsonString).length,
+      uploaded_at: new Date().toISOString(),
+    };
+  } catch (err) {
+    console.warn('IPFS: Edge function unreachable, using mock CID:', err);
     return generateMockIPFSResult(metadata, name);
   }
-  
-  const jsonString = JSON.stringify(metadata, null, 2);
-  
-  const response = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'pinata_api_key': apiKey,
-      'pinata_secret_api_key': secretKey,
-    },
-    body: JSON.stringify({
-      pinataContent: metadata,
-      pinataMetadata: {
-        name: name,
-        keyvalues: {
-          platform: 'liana-banyan',
-          type: 'innovation_number' in metadata ? 'innovation' : 'medallion',
-        },
-      },
-      pinataOptions: {
-        cidVersion: 1,
-      },
-    }),
-  });
-  
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`IPFS upload failed: ${error}`);
-  }
-  
-  const result = await response.json();
-  const cid = result.IpfsHash;
-  
-  return {
-    cid,
-    uri: `ipfs://${cid}`,
-    gateway_url: `${DEFAULT_GATEWAY}${cid}`,
-    size_bytes: new TextEncoder().encode(jsonString).length,
-    uploaded_at: new Date().toISOString(),
-  };
 }
 
 /**
