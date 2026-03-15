@@ -48,6 +48,7 @@ const allNavItems: NavItem[] = [
   { title: "Manufacturing", url: "/manufacturing", icon: Factory, portal: "marketplace" },
   { title: "Crew Call", url: "/crew-call", icon: Wrench, portal: "marketplace" },
   { title: "Cue Cards", url: "/cue-cards", icon: CreditCard, portal: "marketplace" },
+  { title: "Cephas", url: "/cephas", icon: FileText, portal: "marketplace" },
   { title: "Herald", url: "/herald", icon: Megaphone, portal: "marketplace" },
   { title: "Sponsor", url: "/sponsor", icon: TreePine, portal: "marketplace" },
   { title: "Looking Glass", url: "/looking-glass", icon: Eye, portal: "marketplace" },

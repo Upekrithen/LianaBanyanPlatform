@@ -182,6 +182,9 @@ const CreatorProfilePage = lazy(() => import("./pages/CreatorProfilePage"));
 const CrewCallPage = lazy(() => import("./pages/CrewCallPage"));
 const CueCardDeckPage = lazy(() => import("./pages/CueCardDeckPage"));
 const OnboardingStatusPage = lazy(() => import("./pages/OnboardingStatusPage"));
+const CephasGatewayPage = lazy(() => import("./pages/CephasGatewayPage"));
+const UnderTheHoodPage = lazy(() => import("./pages/UnderTheHoodPage"));
+const FlyOnTheWallRegistryPage = lazy(() => import("./pages/FlyOnTheWallPage"));
 const TreasureMapGame = lazy(() => import("./pages/TreasureMapGame"));
 const TreasureMapCreator = lazy(() => import("./pages/TreasureMapCreator"));
 const BeaconRunCreator = lazy(() => import("./pages/BeaconRunCreator"));
@@ -529,6 +532,9 @@ const App = () => (
                         <Route path="/cue/:cardId" element={<CueCardLanding />} />
                         <Route path="/forward" element={<NotLeftNotRightPage />} />
                         <Route path="/papers" element={<AcademicPapersDirectory />} />
+                        <Route path="/cephas" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CephasGatewayPage /></Suspense></ExplorerRoute>} />
+                        <Route path="/cephas/under-the-hood" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><UnderTheHoodPage /></Suspense></ExplorerRoute>} />
+                        <Route path="/cephas/fly-on-the-wall" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><FlyOnTheWallRegistryPage /></Suspense></ExplorerRoute>} />
               <Route path="/hard-knocks" element={<CollegeOfHardKnocks />} />
                         <Route path="/RedCarpet" element={<RedCarpet />} />
                         <Route path="/RedCarpet/:slug" element={<RedCarpet />} />
