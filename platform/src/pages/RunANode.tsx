@@ -14,6 +14,8 @@ import {
   ArrowLeft,
   Clock,
 } from "lucide-react";
+import { ProductionRunDraft } from "@/components/ProductionRunDraft";
+import { SuccessStories } from "@/components/SuccessStories";
 
 const INITIATIVE_NODES = [
   {
@@ -183,6 +185,24 @@ export default function RunANode() {
             More initiatives opening for node operators soon. All 16 Sweet
             Sixteen initiatives will eventually have node opportunities.
           </p>
+        </div>
+
+        {/* Production Run Draft — Fantasy Football for Makers */}
+        <div className="mt-16 pt-12 border-t border-border">
+          <ProductionRunDraft maxItems={4} />
+          <div className="text-center mt-6">
+            <button
+              onClick={() => navigate("/production-runs")}
+              className="text-sm text-primary hover:underline flex items-center gap-1 mx-auto"
+            >
+              Browse all production runs <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Success Stories */}
+        <div className="mt-12">
+          <SuccessStories maxItems={3} />
         </div>
       </div>
     </div>

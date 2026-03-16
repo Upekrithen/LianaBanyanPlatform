@@ -45,6 +45,8 @@ import {
   Percent, DollarSign, Calendar
 } from "lucide-react";
 import { toast } from "sonner";
+import { ColdStartRecipeCards } from "@/components/ColdStartRecipeCards";
+import { SuccessStories } from "@/components/SuccessStories";
 
 // Infrastructure types with details
 const INFRASTRUCTURE_TYPES = [
@@ -831,6 +833,12 @@ export default function ServiceNodeRegistration() {
           )}
         </CardFooter>
       </Card>
+
+      {/* Cold Start Recipe Cards */}
+      <div className="max-w-4xl mx-auto mt-12 space-y-8">
+        <ColdStartRecipeCards initiative="lets-make-dinner" />
+        <SuccessStories filter="node_launch" maxItems={2} compact />
+      </div>
 
       {/* Success Dialog */}
       <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>

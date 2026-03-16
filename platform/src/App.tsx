@@ -197,6 +197,7 @@ const Discover = lazy(() => import("./pages/Discover"));
 const PortalGateway = lazy(() => import("./pages/PortalGateway"));
 const LaunchHub = lazy(() => import("./pages/LaunchHub"));
 const RunANode = lazy(() => import("./pages/RunANode"));
+const ProductionRuns = lazy(() => import("./pages/ProductionRuns"));
 const GroceryNodeRegistration = lazy(() => import("./pages/GroceryNodeRegistration"));
 const FoundingRunLanding = lazy(() => import("./pages/FoundingRunLanding"));
 const PreOrderFlow = lazy(() => import("./pages/PreOrderFlow"));
@@ -518,6 +519,7 @@ const App = () => (
                         <Route path="/reviewer/queue/:id" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ReviewQueueItemPage /></Suspense></ProtectedRoute>} />
                         <Route path="/launch" element={<LaunchHub />} />
                         <Route path="/launch/run-a-node" element={<RunANode />} />
+                        <Route path="/production-runs" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProductionRuns /></Suspense></ExplorerRoute>} />
                         <Route path="/start" element={<OnboardingStart />} />
                         <Route path="/begin" element={<OnboardingStart />} />
                         <Route path="/pathway" element={<BusinessPathway />} />

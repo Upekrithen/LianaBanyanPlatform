@@ -31,6 +31,8 @@ import {
   Package,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ColdStartRecipeCards } from "@/components/ColdStartRecipeCards";
+import { SuccessStories } from "@/components/SuccessStories";
 
 const VEHICLE_TYPES = [
   {
@@ -637,6 +639,12 @@ export default function GroceryNodeRegistration() {
             </Button>
           )}
         </div>
+      </div>
+
+      {/* Cold Start Recipe Cards */}
+      <div className="max-w-4xl mx-auto mt-12 space-y-8">
+        <ColdStartRecipeCards initiative="lets-get-groceries" />
+        <SuccessStories filter="node_launch" maxItems={2} compact />
       </div>
     </div>
   );
