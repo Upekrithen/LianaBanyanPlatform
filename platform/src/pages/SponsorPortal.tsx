@@ -367,15 +367,63 @@ export default function SponsorPortal() {
                   </CardHeader>
                   <CardContent>
                     {recipients && recipients.length > 0 ? (
-                      <div className="space-y-2">
-                        {recipients.map((r) => (
-                          <div key={r.id} className="flex items-center justify-between p-2 rounded bg-muted/50">
-                            <span className="text-sm">{r.recipient_name || r.recipient_email || "Pending"}</span>
-                            <Badge variant={r.claimed_at ? "default" : "outline"}>
-                              {r.claimed_at ? "Active" : "Pending"}
-                            </Badge>
-                          </div>
-                        ))}
+                      <div className="space-y-3">
+                        {recipients.map((r) => {
+                          const isActive = !!r.claimed_at;
+                          // Milestone thresholds for sponsored members
+                          const milestones = [
+                            { label: "Joined", reached: isActive, icon: "🌱" },
+                            { label: "First Exploration", reached: isActive && (r.pages_visited ?? 0) >= 5, icon: "🧭" },
+                            { label: "First Bounty", reached: (r.bounties_completed ?? 0) >= 1, icon: "⚡" },
+                            { label: "First Earned Mark", reached: (r.marks_earned ?? 0) >= 1, icon: "⭐" },
+                            { label: "Community Contributor", reached: (r.bounties_completed ?? 0) >= 5, icon: "🔥" },
+                          ];
+                          const milestonesReached = milestones.filter(m => m.reached).length;
+
+                          return (
+                            <div key={r.id} className="p-3 rounded-lg bg-muted/50 border border-border space-y-2">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <TreePine className="w-4 h-4 text-green-500" />
+                                  <span className="text-sm font-medium">
+                                    {r.recipient_name || r.recipient_email || "Seed Planted"}
+                                  </span>
+                                </div>
+                                <Badge variant={isActive ? "default" : "outline"} className={isActive ? "bg-green-600" : ""}>
+                                  {isActive ? "Growing" : "Planted"}
+                                </Badge>
+                              </div>
+
+                              {/* Milestone Progress — limited visibility */}
+                              <div className="flex items-center gap-1">
+                                {milestones.map((m, i) => (
+                                  <div
+                                    key={i}
+                                    title={m.reached ? m.label : "???"}
+                                    className={`flex items-center justify-center w-8 h-8 rounded-full text-sm transition-all ${
+                                      m.reached
+                                        ? "bg-primary/20 border border-primary/40 scale-100"
+                                        : "bg-muted border border-border opacity-40 scale-90"
+                                    }`}
+                                  >
+                                    {m.reached ? m.icon : "?"}
+                                  </div>
+                                ))}
+                                <span className="text-xs text-muted-foreground ml-2">
+                                  {milestonesReached}/{milestones.length} milestones
+                                </span>
+                              </div>
+
+                              {/* Latest milestone notification */}
+                              {milestonesReached > 0 && (
+                                <p className="text-xs text-muted-foreground italic">
+                                  Latest: {milestones.filter(m => m.reached).pop()?.icon}{" "}
+                                  {milestones.filter(m => m.reached).pop()?.label}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     ) : (
                       <p className="text-center text-muted-foreground py-4">

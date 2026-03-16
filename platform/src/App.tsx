@@ -383,6 +383,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 import { BuilderModeToggle } from "@/components/builder/BuilderModeToggle";
+import { XRayOverlay } from "@/components/builder/XRayOverlay";
 
 /**
  * HomepageGateway — Route switcher for "/"
@@ -499,8 +500,8 @@ const App = () => (
                         <Route path="/lets-get-groceries" element={<Navigate to="/initiatives/lets-get-groceries" replace />} />
                         <Route path="/lifeline-medications" element={<Navigate to="/initiatives/lifeline-medications" replace />} />
 
-                        <Route path="/portal" element={<ProtectedRoute><PortalGateway /></ProtectedRoute>} />
-                        <Route path="/enter" element={<ProtectedRoute><PortalGateway /></ProtectedRoute>} />
+                        <Route path="/portal" element={<ExplorerRoute><PortalGateway /></ExplorerRoute>} />
+                        <Route path="/enter" element={<ExplorerRoute><PortalGateway /></ExplorerRoute>} />
                         <Route path="/treasure-map" element={<TreasureMap />} />
                         <Route path="/sanantonio" element={<SanAntonioLanding />} />
                         <Route path="/crew/new" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewNewPage /></Suspense></ProtectedRoute>} />
@@ -820,9 +821,9 @@ const App = () => (
                         <Route path="/initiatives/lets-make-dinner/about" element={<ExplorerRoute><LetsMakeDinnerLanding /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-make-dinner/reviews" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LMDReviewerDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/initiatives/lets-make-dinner/review/:mealId" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LMDReviewSubmitPage /></Suspense></ProtectedRoute>} />
-                        <Route path="/initiatives/lets-make-dinner/start-node" element={<ProtectedRoute><ServiceNodeRegistration /></ProtectedRoute>} />
+                        <Route path="/initiatives/lets-make-dinner/start-node" element={<ExplorerRoute><ServiceNodeRegistration /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-make-dinner/chefs" element={<ExplorerRoute><ChefMarketplacePage /></ExplorerRoute>} />
-                        <Route path="/service-node/register" element={<ProtectedRoute><ServiceNodeRegistration /></ProtectedRoute>} />
+                        <Route path="/service-node/register" element={<ExplorerRoute><ServiceNodeRegistration /></ExplorerRoute>} />
                         <Route path="/initiatives/the-pantry" element={<ExplorerRoute><PantryPage /></ExplorerRoute>} />
                         <Route path="/initiatives/family-table" element={<ExplorerRoute><FamilyTablePage /></ExplorerRoute>} />
                         <Route path="/initiatives/family-table/sessions" element={<ExplorerRoute><GroupCookPage /></ExplorerRoute>} />
@@ -852,7 +853,7 @@ const App = () => (
                         <Route path="/initiatives/lets-go-shopping" element={<ExplorerRoute><LetsGoShoppingPage /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-get-groceries" element={<ExplorerRoute><LetsGetGroceriesPage /></ExplorerRoute>} />
                         <Route path="/initiatives/lets-get-groceries/box" element={<ExplorerRoute><GroceryBoxPage /></ExplorerRoute>} />
-                        <Route path="/initiatives/lets-get-groceries/start-node" element={<ProtectedRoute><GroceryNodeRegistration /></ProtectedRoute>} />
+                        <Route path="/initiatives/lets-get-groceries/start-node" element={<ExplorerRoute><GroceryNodeRegistration /></ExplorerRoute>} />
                         <Route path="/initiatives/proprietary-recipes" element={<ExplorerRoute><ProprietaryRecipesPage /></ExplorerRoute>} />
                         <Route path="/initiatives/taste-tester" element={<ExplorerRoute><TasteTesterDashboard /></ExplorerRoute>} />
                         <Route path="/initiatives/cottage-law" element={<ExplorerRoute><CottageLawPage /></ExplorerRoute>} />
@@ -942,6 +943,7 @@ const App = () => (
       </BrowserRouter>
       <LarkSidePanel />
       <BuilderModeToggle />
+      <XRayOverlay />
     </TooltipProvider>
     </BuilderModeProvider>
   </QueryClientProvider>

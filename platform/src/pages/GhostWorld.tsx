@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   Ghost,
   Key,
@@ -42,6 +43,7 @@ import {
 } from "lucide-react";
 import { GhostLeaderboard } from "@/components/Leaderboards/GhostLeaderboard";
 import { GhostCreditBalance } from "@/components/ghost/GhostCreditBalance";
+import { BusinessSimulator } from "@/components/BusinessSimulator";
 import { 
   getOrCreateGhostSession, 
   upgradePersistence, 
@@ -79,6 +81,8 @@ export default function GhostWorld() {
   const [goldenKeys, setGoldenKeys] = useState<any[]>([]);
   const [ghostSession, setGhostSession] = useState<GhostSession | null>(null);
   const [wasDecayed, setWasDecayed] = useState(false);
+  const [showSimulator, setShowSimulator] = useState(false);
+  const [savedSimulations, setSavedSimulations] = useState<any[]>([]);
 
   useEffect(() => {
     // If user is logged in and didn't explicitly choose to explore as a ghost, redirect to dashboard
@@ -168,6 +172,11 @@ export default function GhostWorld() {
       .limit(5);
 
     setGoldenKeys(data || []);
+  };
+
+  const handleSimulationComplete = (result: any) => {
+    setSavedSimulations(prev => [...prev, result]);
+    setShowSimulator(false);
   };
 
   const handleUpgradePersistence = (tier: PersistenceTier) => {
