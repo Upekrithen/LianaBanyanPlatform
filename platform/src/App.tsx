@@ -108,6 +108,8 @@ const VSLPage = lazy(() => import("./pages/VSLPage"));
 const LetsMakeBreadPage = lazy(() => import("./pages/LetsMakeBreadPage"));
 const DidaskoPage = lazy(() => import("./pages/DidaskoPage"));
 const PowerToThePeoplePage = lazy(() => import("./pages/PowerToThePeoplePage"));
+const WhyNoAds = lazy(() => import("./pages/WhyNoAds"));
+const WhyNoVC = lazy(() => import("./pages/WhyNoVC"));
 const BrassTacksPage = lazy(() => import("./pages/BrassTacksPage"));
 const FamilyPage = lazy(() => import("./pages/FamilyPage"));
 const FamilyDetailPage = lazy(() => import("./pages/FamilyDetailPage"));
@@ -684,6 +686,9 @@ const App = () => (
                         <Route path="/guild-phases" element={<GuildPhaseManager />} />
                         <Route path="/fly-on-the-wall" element={<FlyOnTheWall />} />
                         <Route path="/transparency" element={<FlyOnTheWall />} />
+                        <Route path="/why-no-ads" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><WhyNoAds /></Suspense></ExplorerRoute>} />
+                        <Route path="/why-no-vc" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><WhyNoVC /></Suspense></ExplorerRoute>} />
+                        <Route path="/create" element={<CreateProject />} />
                         <Route path="/feathers" element={<ExplorerRoute><DeckCollection /></ExplorerRoute>} />
                         <Route path="/the-bridge" element={<Navigate to="/durins-door" replace />} />
                         <Route path="/bridge" element={<Navigate to="/durins-door" replace />} />
