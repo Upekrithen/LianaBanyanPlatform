@@ -138,6 +138,12 @@ const INITIATIVES: Record<string, RecipientInitiative> = {
     description:
       "Trained community facilitators (Harpers) who help resolve conflicts, onboard new members, and maintain the cooperative culture. Trust as infrastructure.",
   },
+  POWER_TO_THE_PEOPLE: {
+    name: "Power to the People",
+    tagline: "Not Left, Not Right — Forward Together",
+    description:
+      "Civic engagement, voter education, and community organizing tools funded sustainably by cooperative commerce. Two Door-Openers (left and right) prove this is not partisan. Two Builders (culture and action) make the infrastructure real.",
+  },
   HOME_LOGISTICS: {
     name: "Household Concierge",
     tagline: "Home logistics, cooperatively",
@@ -412,6 +418,68 @@ export const RECIPIENTS: Recipient[] = [
     crownTitle: "Commerce Secretary",
     initiative: INITIATIVES.INTERNATIONAL,
     emailDomains: ["grameen.com", "yunuscentre.org"],
+    launchFlag: "H",
+    icon: "👑",
+  },
+
+  // ── Political Expedition: 4 Crown holders ──
+  {
+    id: "alexandria-ocasio-cortez",
+    name: "Alexandria Ocasio-Cortez",
+    bio: "U.S. Representative, civic engagement champion, cooperative economics advocate",
+    purpose: "Crown: Door-Opener (Left) — Power to the People",
+    whyYou:
+      "You bartended. You organized. You ran. You won. The cooperative encodes into an operating agreement what you've been arguing for in legislation — every member earns governance rights through contribution. Initiative #15 needs a leader who understands that civic participation and economic participation are the same fight.",
+    category: "crown",
+    categoryLabel: "Crown Leadership",
+    crownTitle: "Door-Opener (Left)",
+    initiative: INITIATIVES.POWER_TO_THE_PEOPLE,
+    emailDomains: ["ocasiocortez.com", "mail.house.gov"],
+    launchFlag: "H",
+    icon: "👑",
+  },
+  {
+    id: "arnold-schwarzenegger",
+    name: "Arnold Schwarzenegger",
+    bio: "Former Governor, actor, advocate for bipartisan civic engagement",
+    purpose: "Crown: Door-Opener (Right) — Power to the People",
+    whyYou:
+      "You told graduates there is no such thing as a self-made man, then listed every person who helped you. Two Door-Opening Crowns — left and right — prove cooperative economics is not partisan. If both doors open, people on every side of the aisle walk through the same entrance into the same cooperative.",
+    category: "crown",
+    categoryLabel: "Crown Leadership",
+    crownTitle: "Door-Opener (Right)",
+    initiative: INITIATIVES.POWER_TO_THE_PEOPLE,
+    emailDomains: ["schwarzenegger.com"],
+    launchFlag: "H",
+    icon: "👑",
+  },
+  {
+    id: "keanu-reeves",
+    name: "Keanu Reeves",
+    bio: "Actor, quiet philanthropist, universally respected for genuine humility",
+    purpose: "Crown: Builder (Culture) — Power to the People",
+    whyYou:
+      "You gave your Matrix earnings to the special effects and costume design crews. You ride the subway. You gave up your seat. The Builder Crown (Culture) demonstrates that civic participation and mutual generosity are the same impulse. You already live the way this platform asks people to live.",
+    category: "crown",
+    categoryLabel: "Crown Leadership",
+    crownTitle: "Builder (Culture)",
+    initiative: INITIATIVES.POWER_TO_THE_PEOPLE,
+    emailDomains: [],
+    launchFlag: "H",
+    icon: "👑",
+  },
+  {
+    id: "sandra-bullock",
+    name: "Sandra Bullock",
+    bio: "Academy Award winner, quiet disaster relief builder, community infrastructure advocate",
+    purpose: "Crown: Builder (Action) — Power to the People",
+    whyYou:
+      "After Katrina, you gave a million dollars. After the tsunami, a million. After Harvey, a million. After the wildfires, a million. And in between, you built the actual infrastructure of recovery most people never see. The Builder Crown (Action) is the operational seat — infrastructure, logistics, the unsexy machinery of sustained civic engagement.",
+    category: "crown",
+    categoryLabel: "Crown Leadership",
+    crownTitle: "Builder (Action)",
+    initiative: INITIATIVES.POWER_TO_THE_PEOPLE,
+    emailDomains: [],
     launchFlag: "H",
     icon: "👑",
   },
