@@ -5,13 +5,14 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Building2, Layers, Users, Coins, TrendingUp, 
   ArrowRight, Sparkles, Unlock, ChevronDown, Package,
-  Percent, Zap, Gift
+  Percent, Zap, Gift, Sprout, ChevronRight
 } from 'lucide-react';
+import { useBuilderMode } from '@/components/builder/BuilderModeContext';
 
 // Word pairs for the spinning wheel animation
 const WORD_PAIRS = [
@@ -60,6 +61,7 @@ export default function BuildBusiness() {
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
   const { benefits, addBenefit } = useBenefitAccumulator();
+  const { isBuilderModeActive } = useBuilderMode();
   const [currentSection, setCurrentSection] = useState(0);
   const [benefitCardExpanded, setBenefitCardExpanded] = useState(false);
   const totalSections = 5;
@@ -133,6 +135,15 @@ export default function BuildBusiness() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* Breadcrumb */}
+      <nav className="px-6 pt-4 max-w-6xl mx-auto">
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <Link to="/portal" className="hover:text-slate-300 transition-colors">Portal</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-slate-300">Build a Business</span>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center px-6 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/10 via-transparent to-transparent" />
@@ -421,31 +432,49 @@ export default function BuildBusiness() {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className={`p-4 rounded-xl ${level.color} border border-white/10 flex items-center justify-between`}
+                className={`p-4 rounded-xl ${level.color} border border-white/10`}
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold text-white">
-                    {level.level}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold text-white">
+                      {level.level}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white">{level.state}</h4>
+                      <p className="text-sm text-white/60">{level.credits} Credits</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-white">{level.state}</h4>
-                    <p className="text-sm text-white/60">{level.credits} Credits pledged</p>
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-primary">{level.multiplier}</div>
+                    </div>
+                    {level.level > 0 && (
+                      <button
+                        onClick={() => navigate('/plant-seeds')}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/40 text-primary text-sm font-medium hover:bg-primary/30 transition-colors whitespace-nowrap"
+                      >
+                        <Sprout className="w-3.5 h-3.5" /> Pledge
+                      </button>
+                    )}
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-xl font-bold text-primary">{level.multiplier}</div>
-                  <div className="text-xs text-white/50">{level.risk} risk</div>
-                </div>
+                {isBuilderModeActive && (
+                  <div className="mt-2 ml-14 text-xs text-white/50 border-t border-white/5 pt-2">
+                    {level.risk} risk · {level.credits} credits pledged to reach this tier
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
-          
-          <div className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-            <p className="text-emerald-200">
-              <strong>Key Insight:</strong> Early backers get higher multipliers because they take more risk. 
-              Pre-Mint (5x) rewards those who believe before proof exists.
-            </p>
-          </div>
+
+          {isBuilderModeActive && (
+            <div className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              <p className="text-emerald-200 text-sm">
+                <strong>X-Ray:</strong> Early backers get higher multipliers because they take more risk.
+                Pre-Mint (5x) rewards those who believe before proof exists.
+              </p>
+            </div>
+          )}
         </ProgressiveSection>
 
         {/* Section B3: Volume Discounts */}

@@ -5,14 +5,14 @@
  */
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { motion } from 'framer-motion';
 import { 
   Sprout, Vote, Layers, TrendingUp, Gift,
   ArrowRight, Sparkles, Unlock, ChevronDown, Key,
-  Users, Coins, Star, Award
+  Users, Coins, Star, Award, ChevronRight
 } from 'lucide-react';
 import { 
   BenefitCard, 
@@ -66,6 +66,15 @@ export default function PlantSeeds() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* Breadcrumb */}
+      <nav className="px-6 pt-4 max-w-6xl mx-auto">
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <Link to="/portal" className="hover:text-slate-300 transition-colors">Portal</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-slate-300">Plant Seeds</span>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center px-6 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-500/10 via-transparent to-transparent" />

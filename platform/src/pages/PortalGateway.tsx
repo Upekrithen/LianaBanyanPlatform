@@ -1,123 +1,126 @@
 /**
- * PORTAL GATEWAY — The "Dell-Style" Progressive Disclosure Gateway
+ * PORTAL GATEWAY — Action-First Routing Hub
  * ================================================================
- * Replaces the old Ghost/Real world binary with a 4-door open world approach.
- * Users choose their path based on their immediate interest, but all paths
- * eventually expose them to the full ecosystem.
+ * Session 27: Every card is a door, not a poster.
+ * Verb-first CTAs. Explanations live in X-Ray Goggles only.
  */
 
 import { useNavigate } from 'react-router-dom';
-import { Gamepad2, Printer, Rocket, Landmark, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { TestNetExplainer } from '@/components/TestNetExplainer';
+import {
+  Gamepad2, Printer, Rocket, Landmark, ArrowRight, Sprout,
+  ShoppingBag, Users, Scroll, Building2, Heart, Search
+} from 'lucide-react';
 import './PortalGateway.css';
 
 export default function PortalGateway() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white p-6 md:p-12">
       <div className="max-w-6xl mx-auto space-y-12">
-        
-        {/* Header */}
+
         <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            What do you want to do today?
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            What do you want to do?
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Choose your path. Every door leads to the same cooperative ecosystem, 
-            but you get to start exactly where you want.
+          <p className="text-lg text-slate-400 max-w-xl mx-auto">
+            Every door leads somewhere. Pick one.
           </p>
         </div>
 
-        {/* The 4 Doors (Dell-Style Routing) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* Door 1: I Want to Earn Money → Treasure Map */}
-          <div 
-            className="group relative bg-card border-2 border-border hover:border-green-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
+        {/* Primary Actions — 2×2 grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+
+          <div
+            className="group relative bg-slate-800/50 border-2 border-slate-700 hover:border-green-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
             onClick={() => navigate('/treasure-map?source=earn')}
+            data-xray-id="portal-earn"
           >
-            <div className="bg-green-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
-              <Gamepad2 className="w-8 h-8 text-green-500" />
+            <div className="bg-green-500/10 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-500/20 transition-colors">
+              <Gamepad2 className="w-7 h-7 text-green-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2">I Want to Earn Money</h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Answer a few questions and we'll show you 3 ways to start earning in the next 7–14 days.
-            </p>
+            <h3 className="text-xl font-bold mb-2">Earn Money</h3>
+            <p className="text-sm text-slate-400 mb-4">3 ways to start earning in 7–14 days.</p>
             <div className="flex items-center text-green-500 font-semibold text-sm">
               Find My Path <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
 
-          {/* Door 2: I Want to Build Something → Treasure Map */}
-          <div 
-            className="group relative bg-card border-2 border-border hover:border-amber-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
-            onClick={() => navigate('/treasure-map?source=build')}
+          <div
+            className="group relative bg-slate-800/50 border-2 border-slate-700 hover:border-amber-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
+            onClick={() => navigate('/build-a-business')}
+            data-xray-id="portal-build"
           >
-            <div className="bg-amber-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-amber-500/20 transition-colors">
-              <Printer className="w-8 h-8 text-amber-500" />
+            <div className="bg-amber-500/10 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-500/20 transition-colors">
+              <Building2 className="w-7 h-7 text-amber-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2">I Want to Build Something</h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Tell us your skills and tools — we'll match you to a product or initiative you can start this week.
-            </p>
+            <h3 className="text-xl font-bold mb-2">Build a Business</h3>
+            <p className="text-sm text-slate-400 mb-4">Launch a product with zero upfront cost.</p>
             <div className="flex items-center text-amber-500 font-semibold text-sm">
-              Find My Path <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+              Start Building <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
 
-          {/* Door 3: Launch & Build */}
-          <div 
-            className="group relative bg-card border-2 border-border hover:border-green-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
-            onClick={() => navigate('/launch')}
+          <div
+            className="group relative bg-slate-800/50 border-2 border-slate-700 hover:border-violet-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
+            onClick={() => navigate('/plant-seeds')}
+            data-xray-id="portal-plant"
           >
-            <div className="bg-green-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
-              <Rocket className="w-8 h-8 text-green-500" />
+            <div className="bg-violet-500/10 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:bg-violet-500/20 transition-colors">
+              <Sprout className="w-7 h-7 text-violet-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Launch & Build</h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Have an idea? Launch it. Want to run something? Pick an initiative and start a node.
-            </p>
-            <div className="flex items-center text-green-500 font-semibold text-sm">
-              Get Started <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            <h3 className="text-xl font-bold mb-2">Back a Project</h3>
+            <p className="text-sm text-slate-400 mb-4">Pre-order, earn Joules, watch it grow.</p>
+            <div className="flex items-center text-violet-500 font-semibold text-sm">
+              Plant a Seed <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
 
-          {/* Door 4: Sponsor & Support */}
-          <div 
-            className="group relative bg-card border-2 border-border hover:border-purple-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
+          <div
+            className="group relative bg-slate-800/50 border-2 border-slate-700 hover:border-pink-500 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
             onClick={() => navigate('/sponsor')}
+            data-xray-id="portal-sponsor"
           >
-            <div className="bg-purple-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-500/20 transition-colors">
-              <Landmark className="w-8 h-8 text-purple-500" />
+            <div className="bg-pink-500/10 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:bg-pink-500/20 transition-colors">
+              <Heart className="w-7 h-7 text-pink-500" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Sponsor & Support</h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Back projects, fund initiatives, and earn Platform Service Vouchers (Joules) for the future.
-            </p>
-            <div className="flex items-center text-purple-500 font-semibold text-sm">
-              View Opportunities <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+            <h3 className="text-xl font-bold mb-2">Sponsor a Member</h3>
+            <p className="text-sm text-slate-400 mb-4">$5 gives someone a year of access.</p>
+            <div className="flex items-center text-pink-500 font-semibold text-sm">
+              Sponsor Now <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
-
         </div>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
+        {/* Secondary Actions — quick links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <button onClick={() => navigate('/projects')} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-800/30 border border-slate-700 hover:border-blue-500/50 hover:bg-slate-800/50 transition-all text-slate-300 hover:text-white">
+            <Search className="w-5 h-5 text-blue-400" />
+            <span className="text-xs font-medium">Browse Projects</span>
+          </button>
+          <button onClick={() => navigate('/create')} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-800/30 border border-slate-700 hover:border-green-500/50 hover:bg-slate-800/50 transition-all text-slate-300 hover:text-white">
+            <Rocket className="w-5 h-5 text-green-400" />
+            <span className="text-xs font-medium">Create Project</span>
+          </button>
+          <button onClick={() => navigate('/guilds')} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-800/30 border border-slate-700 hover:border-amber-500/50 hover:bg-slate-800/50 transition-all text-slate-300 hover:text-white">
+            <Users className="w-5 h-5 text-amber-400" />
+            <span className="text-xs font-medium">Join a Guild</span>
+          </button>
+          <button onClick={() => navigate('/bounties')} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-800/30 border border-slate-700 hover:border-purple-500/50 hover:bg-slate-800/50 transition-all text-slate-300 hover:text-white">
+            <Scroll className="w-5 h-5 text-purple-400" />
+            <span className="text-xs font-medium">Bounty Board</span>
+          </button>
+        </div>
+
+        <p className="text-center text-sm text-slate-500 mt-4">
           <button
             type="button"
-            className="hover:underline hover:text-foreground transition-colors"
+            className="hover:underline hover:text-slate-300 transition-colors"
             onClick={() => navigate("/treasure-map")}
           >
-            Join a Crew — find your path in 3 minutes
+            Not sure? Join a Crew — find your path in 3 minutes →
           </button>
         </p>
-
-        {/* The Legal/Economic Shield (TestNet Explainer) */}
-        <div className="mt-16 max-w-4xl mx-auto">
-          <TestNetExplainer />
-        </div>
-
       </div>
     </div>
   );
