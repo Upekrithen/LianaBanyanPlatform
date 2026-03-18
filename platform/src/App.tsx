@@ -182,6 +182,7 @@ const StewardApply = lazy(() => import("./pages/StewardApply"));
 const CreatorPitchPage = lazy(() => import("./pages/CreatorPitchPage"));
 const CreatorShowcasePage = lazy(() => import("./pages/CreatorShowcasePage"));
 const CreatorProfilePage = lazy(() => import("./pages/CreatorProfilePage"));
+const LikeWhatPage = lazy(() => import("./pages/LikeWhatPage"));
 const CrewCallPage = lazy(() => import("./pages/CrewCallPage"));
 const CueCardDeckPage = lazy(() => import("./pages/CueCardDeckPage"));
 const OnboardingStatusPage = lazy(() => import("./pages/OnboardingStatusPage"));
@@ -465,6 +466,7 @@ const App = () => (
                         <Route path="/join/creator" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorPitchPage /></Suspense></ExplorerRoute>} />
                         <Route path="/creators" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorShowcasePage /></Suspense></ExplorerRoute>} />
                         <Route path="/creators/:creatorId" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorProfilePage /></Suspense></ExplorerRoute>} />
+                        <Route path="/like-what" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LikeWhatPage /></Suspense>} />
                         <Route path="/crew-call" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewCallPage /></Suspense></ProtectedRoute>} />
                         <Route path="/cue-cards" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardDeckPage /></Suspense></ExplorerRoute>} />
                         <Route path="/onboarding/status" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><OnboardingStatusPage /></Suspense></ProtectedRoute>} />

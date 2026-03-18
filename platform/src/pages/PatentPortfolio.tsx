@@ -574,6 +574,9 @@ export default function PatentPortfolio() {
                   <p className="text-xs text-white/50">
                     All dollar amounts represent platform service unit value, not cash. Platform credits are "future service coupons" — prepaid access to platform services at Cost+20%. <span className="text-amber-400 font-medium">Test-Net By Design</span> means no trading, no speculation, no cashing out. This is a feature, not a limitation. <span className="text-white/70 font-medium">Because it has ACTUAL real life value.</span>
                   </p>
+                  <a href="/like-what" className="inline-flex items-center gap-1.5 mt-3 text-xs text-amber-400 hover:text-amber-300 font-medium transition-colors">
+                    Like what? See examples &rarr;
+                  </a>
                 </div>
               </div>
             }
