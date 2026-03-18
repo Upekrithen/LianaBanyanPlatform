@@ -2752,7 +2752,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     <div
                       style={{
                         position: 'absolute',
-                        top: 'calc(100% + 0.5rem)',
+                        bottom: 'calc(100% + 0.5rem)',
                         left: '50%',
                         transform: 'translateX(-50%)',
                         background: '#1a2332',
@@ -2760,8 +2760,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         borderRadius: '0.75rem',
                         padding: '0.5rem',
                         minWidth: '200px',
-                        zIndex: 50,
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+                        zIndex: 100,
+                        boxShadow: '0 -10px 30px rgba(0,0,0,0.4)',
                       }}
                     >
                       {[
