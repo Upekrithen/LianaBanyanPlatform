@@ -72,6 +72,7 @@ import { GlobalRecorderOverlay } from "@/components/GlobalRecorderOverlay";
 import { PlatformFooter } from "@/components/PlatformFooter";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { WelcomeGate } from "@/components/WelcomeGate";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { SeamlessOnboardProvider } from "@/components/SeamlessOnboardDialog";
 import IPRegistration from "./pages/IPRegistration";
 import AgentOnboarding from "./pages/AgentOnboarding";
@@ -442,6 +443,7 @@ const App = () => (
               <SubdomainRouter>
                 <AppShell>
                   <GlobalWildfireRun />
+                  <ScrollToTop />
                   <ErrorBoundary>
                   <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}>
                       <Routes>
