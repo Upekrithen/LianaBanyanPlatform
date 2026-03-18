@@ -17,6 +17,7 @@ const BAG_LABELS: Record<string, { name: string; range: string; claims: number }
   '5': { name: 'Bag 5 — Ghost World', range: 'Ghost + Extensions', claims: 44 },
   '6': { name: 'Bag 6 — LEVIATHAN PLUS', range: 'Leviathan expansion', claims: 408 },
   '7': { name: 'Bag 7 — Full Specs', range: '#1001–#1719', claims: 0 },
+  '8': { name: 'Bag 8 — Character Layers + Hitbase + Gameplay', range: '#1720–#1748', claims: 0 },
 };
 
 const INITIATIVES = [
@@ -195,7 +196,8 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/969,601</td><td>Jan 28, 2026</td><td className="text-right">44</td><td>Ghost World</td></tr>
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/989,913</td><td>Feb 24, 2026</td><td className="text-right">408</td><td>LEVIATHAN PLUS</td></tr>
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right text-slate-500">TBD</td><td>Full Specs (#1001–#1719)</td></tr>
-              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,336+</td><td>7 provisional applications</td></tr>
+              <tr className="border-b border-slate-800"><td className="py-2 font-mono text-slate-500">TBD</td><td className="text-slate-500">Pending</td><td className="text-right text-slate-500">29</td><td className="text-slate-500">Character Layers + Hitbase + Gameplay (#1720–#1748)</td></tr>
+              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,365+</td><td>7 provisional + 1 pending (8th filing)</td></tr>
             </tbody>
           </table>
         </div>
@@ -230,6 +232,10 @@ function LedgerView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }) 
           <p><span className="text-amber-400 font-medium">Discipline Limits:</span> Max 2 patents per discipline per sponsor</p>
           <p><span className="text-amber-400 font-medium">Community Oversight:</span> {'>'}10 patents requires 60% member vote</p>
         </div>
+        <p className="mt-4 text-sm text-slate-400 italic border-l-2 border-amber-500/30 pl-3">
+          "I'm not trying to be Valjean. I'm trying to be the Bishop — one of many — and these patents are my silver candlesticks. I don't have any silver spoons."
+          <span className="block text-amber-400/60 mt-1 not-italic">— Founder</span>
+        </p>
       </div>
 
       <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">

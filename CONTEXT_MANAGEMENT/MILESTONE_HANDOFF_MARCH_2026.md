@@ -11,7 +11,14 @@
 
 ## RUNWAY / SESSION STOP (current) — Session 30 (March 18, 2026)
 
-**Latest commit:** (pending) — Session 30: Shadow Mark Demand Signaling, FAQ chain linking, 10 innovations #1710-#1719
+**Latest commit:** `bf6a7bd` — Session 30: Shadow Mark Demand Signaling, FAQ chain linking, 10 innovations #1710-#1719
+
+**Morning Status (March 18, 2026):**
+- All code committed and pushed. Working tree clean (only this handoff file modified).
+- Both sites deployed and live: lianabanyan-main.web.app + cephas-lianabanyan.web.app
+- All Supabase migrations pushed (through `20260318000001`). DB canonical count = 1,719.
+- **Last night's marathon:** Sessions 29 → 29b → 30 ran consecutively. 39 innovations threshed (#1681-#1719), 3 new pages built (`/chain`, `/hexisle/downloads`, `/demand`), 7 Crew Call bounties posted, Shadow Mark Demand Signaling system built, FAQ chain linking + Chapter 9 added, 3 POLLINATION sweeps completed.
+- **No blockers.** Ready for Session 31.
 
 ### What Was Done This Session (Session 30 — Knight)
 
@@ -798,15 +805,17 @@ Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three fe
 
 ### Migrations NOT YET Pushed
 
-**None** — all migrations pushed as of Session 28. Last 7 pushed:
+**None** — all migrations pushed as of Session 30. Last 10 pushed:
 - `20260315000001` — 568 spec expansion UPDATEs
 - `20260315000002` — 22 skeleton fill UPDATEs (#1573-#1594)
 - `20260315000003` — Canonical DB + QR linkage + Medallion FK + Print pipeline
 - `20260315000004` — Print pipeline refinement (3-vendor, approval gate, production levels)
 - `20260315000005` — Outbound dispatch table + 3 seed items (Session 24)
 - `20260316000002` — Creator invites + project drafts tables (Session 26)
-- `20260317000001` — 18 Six Degrees innovations (#1663-#1680) + canonical count update (Session 28)
-- `20260317000002` — 10 Kickstarter Chain innovations (#1681-#1690) + canonical count update (Session 29)
+- `20260317000001` — 18 Six Degrees innovations (#1663-#1680) + canonical count (Session 28)
+- `20260317000002` — 10 Kickstarter Chain innovations (#1681-#1690) + canonical count (Session 29)
+- `20260317000003` — 19 Bishop 012 innovations (#1691-#1709) + canonical count (Session 29b)
+- `20260318000001` — 10 Shadow Mark Demand innovations (#1710-#1719) + canonical count (Session 30)
 
 ---
 

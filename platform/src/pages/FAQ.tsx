@@ -6,7 +6,7 @@ import {
   ArrowLeft, Search, ChevronDown, ChevronRight,
   ExternalLink, Hash, X
 } from 'lucide-react';
-import { FAQ_CHAPTERS, searchFAQ, type FAQEntry, type FAQChapter } from '@/lib/nervous-system/knowledgeBase';
+import { FAQ_CHAPTERS, searchFAQ, getRelatedEntries, type FAQEntry, type FAQChapter } from '@/lib/nervous-system/knowledgeBase';
 
 export default function FAQ() {
   const navigate = useNavigate();
@@ -97,14 +97,17 @@ export default function FAQ() {
           >
             {entry.question}
           </span>
-          <button
+          <span
+            role="button"
+            tabIndex={0}
             onClick={(e) => { e.stopPropagation(); copyAnchorLink(entry.id); }}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); copyAnchorLink(entry.id); } }}
             className="ml-auto opacity-0 group-hover:opacity-50 hover:!opacity-100 shrink-0 transition-opacity"
             title="Copy link to this question"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem' }}
+            style={{ cursor: 'pointer', padding: '0.25rem' }}
           >
             <Hash className="h-4 w-4 text-slate-400" />
-          </button>
+          </span>
         </button>
 
         {isExpanded && (
@@ -143,6 +146,47 @@ export default function FAQ() {
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>
             )}
+
+            {/* See Also — chain-linked related entries */}
+            {entry.relatedEntries && entry.relatedEntries.length > 0 && (() => {
+              const related = getRelatedEntries(entry.id);
+              if (related.length === 0) return null;
+              return (
+                <div className="mt-3 pt-3 border-t border-slate-700/50">
+                  <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">See also</span>
+                  <div className="flex flex-wrap gap-2 mt-1.5">
+                    {related.map(rel => (
+                      <button
+                        key={rel.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Expand the related entry and scroll to it
+                          setExpandedEntries(prev => new Set([...prev, rel.id]));
+                          for (const ch of FAQ_CHAPTERS) {
+                            if (ch.entries.some(e => e.id === rel.id)) {
+                              setExpandedChapters(prev => new Set([...prev, ch.id]));
+                              break;
+                            }
+                          }
+                          setTimeout(() => {
+                            const el = entryRefs.current[rel.id];
+                            if (el) {
+                              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                              el.classList.add('ring-2', 'ring-amber-400/60');
+                              setTimeout(() => el.classList.remove('ring-2', 'ring-amber-400/60'), 3000);
+                            }
+                          }, 100);
+                        }}
+                        className="px-2.5 py-1 rounded-md text-xs bg-slate-700/40 border border-slate-600/40 text-amber-300/80 hover:text-amber-300 hover:border-amber-500/40 hover:bg-amber-500/10 transition-all"
+                        style={{ cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}
+                      >
+                        {rel.question.length > 50 ? rel.question.slice(0, 47) + '...' : rel.question}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>

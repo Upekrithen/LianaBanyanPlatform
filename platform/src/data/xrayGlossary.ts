@@ -336,7 +336,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // ─── FOOTER ───
   "platform-footer": {
-    explanation: "Platform footer — links to legal, community, and platform tools. 1,336 patent claims, 1,719 innovations. Service sponsorship, not securities.",
+    explanation: "Platform footer — links to legal, community, and platform tools. 1,336 patent claims, 1,748 innovations. Service sponsorship, not securities.",
   },
 
   // ─── SIX DEGREES ───
@@ -387,7 +387,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── WHY NO ADS / WHY NO VC ───
   "why-no-ads-vc": {
     explanation: "Why No Ads and Why No V.C. — two philosophy pages explaining the platform's funding model. No external advertising (growth is word-of-mouth via Heralds). No venture capital (funded by patents and grit, 100% member-owned). Every dollar that would go to Big Tech or investors goes to the community instead.",
-    connectedTo: "Ties to the Herald system (referral bonuses replace ad spend), the patent portfolio (7 provisionals with 1,719 innovations replace VC runway), and the Joules system (early supporters get forever-stamp rates instead of dilution).",
+    connectedTo: "Ties to the Herald system (referral bonuses replace ad spend), the patent portfolio (7 provisionals with 1,748 innovations replace VC runway), and the Joules system (early supporters get forever-stamp rates instead of dilution).",
     why: "If you take ad money, users become the product. If you take VC money, the exit becomes the product. We took neither, so the cooperative stays the product — owned by and for its members.",
     learnMoreUrl: "/why-no-ads",
     learnMoreLabel: "Why No Ads?",

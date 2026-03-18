@@ -1,7 +1,7 @@
 /**
  * ChainDashboard — HexIsle Chain Loyalty Dashboard
  * ==================================================
- * /chain — Tracks a backer's 13-campaign Kickstarter chain.
+ * /chain — Tracks a backer's 14-campaign Kickstarter chain.
  * 5% stacking Joule bonus per link, 14-day timer, 20% floor on break.
  *
  * Bishop Session 011 / Knight Session 29
@@ -26,19 +26,20 @@ interface Campaign {
 }
 
 const CAMPAIGNS: Campaign[] = [
-  { number: 1, name: 'Peasant', character: 'Peasant', type: 'character', description: 'Sword Path entry — the humble beginning', launchEstimate: 'Ready' },
-  { number: 2, name: 'Merchant', character: 'Merchant', type: 'character', description: 'Crown Path entry — trade and diplomacy', launchEstimate: 'Ready' },
-  { number: 3, name: 'Golden Lotus', type: 'component', description: 'Tesla-valve turbine — the heart of every Hexel', launchEstimate: 'TBD' },
-  { number: 4, name: 'Farmer', character: 'Farmer', type: 'character', description: 'Sword Path level 2 — cultivate the land', launchEstimate: 'Ready' },
-  { number: 5, name: 'Healer', character: 'Healer', type: 'character', description: 'Crown Path level 2 — mend and protect', launchEstimate: 'Ready' },
-  { number: 6, name: 'Sawtooth Coral', type: 'component', description: 'Ship keel engagement — 6-angle terrain piece', launchEstimate: 'TBD' },
-  { number: 7, name: 'Warrior', character: 'Warrior', type: 'character', description: 'Sword Path level 3 — defend the realm', launchEstimate: 'Ready' },
-  { number: 8, name: 'Assassin', character: 'Assassin', type: 'character', description: 'Crown Path level 3 — stealth and precision', launchEstimate: 'Ready' },
-  { number: 9, name: 'Ouralis Gear', type: 'component', description: '20-tooth dual-level gear with tide cam slopes', launchEstimate: 'TBD' },
-  { number: 10, name: 'King', character: 'King', type: 'character', description: 'Sword Path capstone — rule the board', launchEstimate: 'Ready' },
-  { number: 11, name: 'Queen', character: 'Queen', type: 'character', description: 'Crown Path capstone — the ultimate strategist', launchEstimate: 'Ready' },
-  { number: 12, name: 'Complete Hexels', type: 'assembly', description: 'Full 27-piece Hexel assembly — all pieces finalized by community', launchEstimate: 'TBD' },
-  { number: 13, name: 'Water Table', type: 'capstone', description: 'The gravity-powered Water Table — launches when engineering is complete', launchEstimate: 'TBD' },
+  { number: 1, name: 'SlottedTop', type: 'component', description: 'Universal hex tile adapter — the first piece of the 27-piece Hexel', launchEstimate: 'Ready' },
+  { number: 2, name: 'Peasant', character: 'Peasant', type: 'character', description: 'Base body — becomes every character. Layers snap on top.', launchEstimate: 'Ready' },
+  { number: 3, name: 'Merchant', character: 'Merchant', type: 'character', description: 'Same body + snap-on cloak. Remove cloak = Assassin beneath.', launchEstimate: 'Ready' },
+  { number: 4, name: 'Golden Lotus', type: 'component', description: 'Tesla-valve turbine — the heart of every Hexel', launchEstimate: 'TBD' },
+  { number: 5, name: 'Farmer / Warrior', character: 'Farmer', type: 'character', description: 'Peasant body + tool belt (Farmer) or + ScaleMail (Warrior). Same body, different layers.', launchEstimate: 'Ready' },
+  { number: 6, name: 'Character Base', type: 'component', description: 'Hitbase Counter — coin-loaded boots base with level overlays, weapon scabbards, and dice-face terrain lock.', launchEstimate: 'TBD' },
+  { number: 7, name: 'Sawtooth Coral', type: 'component', description: 'Ship keel engagement — 6-angle terrain piece + hidden Timing Belt', launchEstimate: 'TBD' },
+  { number: 8, name: 'Healer / Assassin', character: 'Healer', type: 'character', description: 'Crown Path layers: +herbs+staff (Healer) or -cloak (Assassin reveals)', launchEstimate: 'Ready' },
+  { number: 9, name: 'War Horse', character: 'Horse', type: 'character', description: 'Same horse body: Wild → Farm (bridle+cart) → War (armor). Layer system for creatures.', launchEstimate: 'Ready' },
+  { number: 10, name: 'King', character: 'King', type: 'character', description: 'Sword Path capstone — ALL layers: tunic + ScaleMail + Terrain Armor + Crown', launchEstimate: 'Ready' },
+  { number: 11, name: 'Pneumatic Palm', type: 'component', description: 'Telescoping plant — grows during play via pneumatic pump', launchEstimate: 'TBD' },
+  { number: 12, name: 'Queen', character: 'Queen', type: 'character', description: 'Crown Path capstone — Orbs + Fiery Wings + Crown Helmet. 4-body evolution display.', launchEstimate: 'Ready' },
+  { number: 13, name: 'Hexel Assembly', type: 'assembly', description: 'Full 27-piece Hexel — all pieces finalized by community improvements', launchEstimate: 'TBD' },
+  { number: 14, name: 'Tereno Water Table', type: 'capstone', description: '420 Hexels, gravity-powered hydraulic surface. The crown jewel.', launchEstimate: 'TBD' },
 ];
 
 const CHAIN_PERKS = [
@@ -50,7 +51,8 @@ const CHAIN_PERKS = [
   { minLinks: 6, perk: 'LB membership months + Marks grant' },
   { minLinks: 9, perk: 'Early access to unreleased products' },
   { minLinks: 10, perk: 'Name in credits' },
-  { minLinks: 13, perk: 'Complete Collection pricing + Steward nomination' },
+  { minLinks: 13, perk: 'Complete Collection pricing' },
+  { minLinks: 14, perk: 'Steward nomination + Grand Chain badge' },
 ];
 
 // ─── MOCK USER STATE (replace with Supabase when wired) ───
@@ -144,7 +146,7 @@ const ChainDashboard: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold">HexIsle Chain</h1>
-            <p className="text-slate-400 text-sm">13 Campaigns. One Journey. Rewards that grow.</p>
+            <p className="text-slate-400 text-sm">14 Campaigns. One Journey. Rewards that grow.</p>
           </div>
         </div>
       </div>
@@ -154,7 +156,7 @@ const ChainDashboard: React.FC = () => {
         <section className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
           <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
             <Link2 className="w-4 h-4 text-cyan-400" />
-            Your Chain ({chain.chainLength}/13 links)
+            Your Chain ({chain.chainLength}/14 links)
           </h2>
           <div className="flex items-center gap-1 overflow-x-auto pb-2">
             {CAMPAIGNS.map((c) => {
@@ -171,7 +173,7 @@ const ChainDashboard: React.FC = () => {
                   >
                     {c.number}
                   </div>
-                  {c.number < 13 && (
+                  {c.number < 14 && (
                     <div className={`w-3 h-0.5 ${isBacked && chain.backedCampaigns.includes(c.number + 1) ? 'bg-cyan-400' : 'bg-slate-700'}`} />
                   )}
                 </div>
@@ -214,7 +216,7 @@ const ChainDashboard: React.FC = () => {
             </div>
             <div>
               <span className="text-3xl font-bold text-cyan-300">{currentBonus}%</span>
-              {chain.chainLength < 13 && (
+              {chain.chainLength < 14 && (
                 <span className="text-slate-500 text-sm ml-2">→ {nextBonus}% at next link</span>
               )}
             </div>
@@ -242,7 +244,7 @@ const ChainDashboard: React.FC = () => {
                     <Hexagon className={`w-5 h-5 ${campaignTypeColor(nextCampaign.type)}`} />
                     <span className="font-bold text-lg">{nextCampaign.name}</span>
                     <span className="text-xs text-slate-400 bg-slate-700/60 px-2 py-0.5 rounded-full">
-                      Campaign {nextCampaign.number} of 13
+                      Campaign {nextCampaign.number} of 14
                     </span>
                   </div>
                   <p className="text-slate-400 text-sm">{nextCampaign.description}</p>

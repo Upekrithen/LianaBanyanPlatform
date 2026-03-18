@@ -262,8 +262,10 @@ import { MockDataProvider } from "./contexts/MockDataProvider";
 import { PathwayProgressProvider } from "./contexts/PathwayProgressContext";
 import { FeatureTipProvider } from "./components/FeatureTip";
 import { GlobalWildfireRun } from "./components/GlobalWildfireRun";
-import { DevelopmentBadge } from "./components/DevelopmentBadge";
-import { PatentPortfolioTicker } from "./components/PatentPortfolioTicker";
+// Removed per Founder directive — floating buttons cluttered the UI.
+// Dedicated pages remain: /patent-portfolio and /ip-portfolio
+// import { DevelopmentBadge } from "./components/DevelopmentBadge";
+// import { PatentPortfolioTicker } from "./components/PatentPortfolioTicker";
 const BrewsterBonusPage = lazy(() => import("./pages/BrewsterBonusPage"));
 import { AlcoveHallway } from "./components/AlcoveHallway";
 const CoasterMedallionProject = lazy(() => import("./pages/CoasterMedallionProject"));
@@ -273,6 +275,9 @@ const HexIsleIslandPage = lazy(() => import("./pages/HexIsleIslandPage"));
 const ChainDashboard = lazy(() => import("./pages/ChainDashboard"));
 const HexIsleDownloads = lazy(() => import("./pages/HexIsleDownloads"));
 const DemandSignaling = lazy(() => import("./pages/DemandSignaling"));
+const HexIsleVote = lazy(() => import("./pages/HexIsleVote"));
+const HexIsleBattlePhilosophy = lazy(() => import("./pages/HexIsleBattlePhilosophy"));
+const HexIsleCueCard = lazy(() => import("./pages/cue-cards/HexIsleCueCard"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -382,8 +387,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
         <HelmCompact />
         <PWAInstallPrompt />
         <LanguageSwitcher />
-        <DevelopmentBadge />
-        <PatentPortfolioTicker mode="compact" />
+        {/* DevelopmentBadge and PatentPortfolioTicker removed — Founder directive */}
+        {/* Dedicated pages remain at /patent-portfolio and /ip-portfolio */}
       </DiscoveryGateProvider>
     </DiscoveryProvider>
   );
@@ -675,6 +680,9 @@ const App = () => (
                         <Route path="/hexisle/hexels/slotted-top" element={<HexelSlottedTopDetail />} />
                         <Route path="/hexisle/hexels/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexelWeeklyDetail /></Suspense>} />
                         <Route path="/hexisle/downloads" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleDownloads /></Suspense></ExplorerRoute>} />
+                        <Route path="/hexisle/vote" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleVote /></Suspense></ExplorerRoute>} />
+                        <Route path="/hexisle/battle-philosophy" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleBattlePhilosophy /></Suspense>} />
+                        <Route path="/cue-cards/hexisle" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleCueCard /></Suspense>} />
                         <Route path="/chain" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainDashboard /></Suspense></ExplorerRoute>} />
                         <Route path="/demand" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DemandSignaling /></Suspense></ExplorerRoute>} />
                         <Route path="/hexisle/founding-run" element={<FoundingRunLanding />} />

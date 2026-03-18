@@ -284,4 +284,16 @@ export const SAMPLE_PEDESTALS: Pedestal[] = [
     activationThreshold: 150, currentCommitments: 8, creditPledges: 120, shadowMarkTotal: 90,
     alphaLeadWeeks: 2, betaLeadWeeks: 3, operationalLeadWeeks: 4, icon: '🏷️',
   },
+  {
+    id: 'hitbase-counter', featureName: 'Hitbase Counter System', area: 'hexisle', status: 'pre-operational',
+    description: 'Patented mechanical boots base: coin-loaded Pez-style HP, sliding tab (HP/Mana/Both), level overlays with weapon scabbard slots, dice-face terrain compatibility. Push to hit — physics tracks damage.',
+    activationThreshold: 400, currentCommitments: 112, creditPledges: 6800, shadowMarkTotal: 2850,
+    alphaLeadWeeks: 6, betaLeadWeeks: 10, operationalLeadWeeks: 14, icon: '🎯',
+  },
+  {
+    id: 'character-layer-kits', featureName: 'Character Layer Kits', area: 'hexisle', status: 'pre-operational',
+    description: 'Snap-on equipment layers for character progression. Same body, different layers: Peasant→Farmer→Warrior→King. Compliant mechanism clips.',
+    activationThreshold: 350, currentCommitments: 95, creditPledges: 5400, shadowMarkTotal: 2200,
+    alphaLeadWeeks: 4, betaLeadWeeks: 8, operationalLeadWeeks: 12, icon: '🛡️',
+  },
 ];

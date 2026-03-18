@@ -125,7 +125,7 @@ export default function FlyOnTheWall() {
           <Card>
             <CardContent className="pt-6 text-center">
               <Zap className="w-8 h-8 mx-auto mb-2 text-purple-500" />
-              <div className="text-3xl font-bold">{innovations || "1,719"}</div>
+              <div className="text-3xl font-bold">{innovations || "1,748"}</div>
               <div className="text-sm text-muted-foreground">Documented Innovations</div>
             </CardContent>
           </Card>
