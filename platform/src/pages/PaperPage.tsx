@@ -199,7 +199,7 @@ export default function PaperPage() {
 
           {/* Reading Level Selector */}
           <div className="mt-6">
-            <p className="text-white/50 text-sm mb-2">Choose your reading level:</p>
+            <p className="text-white/50 text-sm mb-2">Choose your interest level:</p>
             <ReadingLevelSelector selected={readingLevel} onChange={setReadingLevel} />
           </div>
         </motion.header>
@@ -291,7 +291,35 @@ export default function PaperPage() {
             {readingLevel === 'academic' ? 'Abstract' : readingLevel === 'freshman' ? 'Overview' : 'What Is This?'}
           </h2>
           <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
-            <p className="text-white/80 leading-relaxed">{paper.summary}</p>
+            {readingLevel === 'sixth-grade' ? (
+              <>
+                <p className="text-white/80 leading-relaxed text-lg">{paper.keyInsight}</p>
+                <p className="text-white/50 text-sm mt-3 italic">Want more? Switch to "More Info" or "Full Detail" above.</p>
+              </>
+            ) : readingLevel === 'freshman' ? (
+              <>
+                <p className="text-white/80 leading-relaxed">{paper.summary}</p>
+                <div className="mt-4 p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
+                  <p className="text-sm font-medium text-white/60 mb-1">The Problem</p>
+                  <p className="text-white/80">{paper.problemStatement}</p>
+                  <p className="text-sm font-medium text-white/60 mb-1 mt-3">The Solution</p>
+                  <p className="text-white/80">{paper.solution}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-white/80 leading-relaxed">{paper.summary}</p>
+                <div className="mt-4 p-4 bg-slate-800/50 rounded-lg border border-slate-600/30">
+                  <p className="text-sm font-medium text-white/60 mb-1">Problem Statement</p>
+                  <p className="text-white/80">{paper.problemStatement}</p>
+                  <p className="text-sm font-medium text-white/60 mb-1 mt-3">Proposed Solution</p>
+                  <p className="text-white/80">{paper.solution}</p>
+                </div>
+                {paper.academicSource && (
+                  <p className="text-xs text-white/30 mt-3">Source: {paper.academicSource}</p>
+                )}
+              </>
+            )}
           </div>
         </motion.section>
 
