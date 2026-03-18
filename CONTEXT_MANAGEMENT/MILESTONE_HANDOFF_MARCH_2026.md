@@ -9,9 +9,70 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 33 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 34 (March 18, 2026)
 
-**Latest commit:** (pending) — Session 33: TL;DR Tour, Moneypenny Phase 1 Briefing Dashboard
+**Latest commit:** PENDING — Session 34: Spotlight Carousel System
+
+**Status (March 18, 2026 — Session 34):**
+- Platform deployed and live: lianabanyan-main.web.app
+- All Supabase migrations pushed (through `20260319000003`). DB canonical count = 1,748.
+- **Innovation count:** 1,748 (unchanged — no new innovations this session)
+- **No blockers.** Ready for Session 35.
+
+### What Was Done This Session (Session 34 — Knight)
+
+1. **Feature 1: Spotlight Carousel System** — Universal content surface replacing static landing page bottom cards.
+   - **SpotlightCarousel component** (`src/components/SpotlightCarousel.tsx`) — Horizontal carousel with left/right arrows, touch swipe, auto-rotate every 8 seconds (pause on hover), responsive card count (3 desktop / 2 tablet / 1 mobile), category pill selector, dot indicators, green-border active highlight.
+   - **Selection Algorithm** (`src/lib/spotlightAlgorithm.ts`) — Scores cards by `priority × timeOfDayBonus × underviewedBonus + randomSalt`. Filters by category and valid date range. Configurable weights for A/B testing. Includes `SEED_CARDS` (10 cards across featured/benefits/announcements/campaigns) and `SPOTLIGHT_CATEGORIES` (6 categories).
+   - **Reusable Hook** (`src/hooks/useSpotlightCarousel.ts`) — `useSpotlightCarousel(pageContext, defaultCategory)` returns `{ cards, category, setCategory, categories, logEvent }`. Any page can add a carousel in 3 lines. Logs impression events to `spotlight_impressions` table.
+   - **Migration** (`20260319000003_spotlight_system.sql`) — `spotlight_content` table (dynamic cards managed via Moneypenny) + `spotlight_impressions` table (Fly on the Wall tracking: impression, click, spotlight, cta_click, dismiss). RLS on both. Seeded 8 initial content cards.
+   - **Index.tsx Wiring** — Replaced 3 static bottom cards (`charity-deck-row`) with `<SpotlightCarousel>`. Updated `spotlightCard` state to accept any string ID (not just hardcoded 3). Added generic spotlight rendering in hero face for dynamic cards. Preserved legacy "Built to Last", "What's In It For You?", "Know a Maker?" rich hero content.
+
+### Files Created (Session 34)
+
+| File | Purpose |
+|------|---------|
+| `platform/src/components/SpotlightCarousel.tsx` | **NEW** — Horizontal carousel with arrows, swipe, auto-rotate, category pills |
+| `platform/src/lib/spotlightAlgorithm.ts` | **NEW** — Card selection algorithm + SEED_CARDS + SPOTLIGHT_CATEGORIES |
+| `platform/src/hooks/useSpotlightCarousel.ts` | **NEW** — Reusable hook for any page to add a spotlight carousel |
+| `platform/supabase/migrations/20260319000003_spotlight_system.sql` | **NEW** — spotlight_content + spotlight_impressions tables + RLS + seed data |
+
+### Files Modified (Session 34)
+
+| File | Changes |
+|------|---------|
+| `platform/src/pages/Index.tsx` | Imported SpotlightCarousel + algorithm. Replaced 3 static bottom cards with carousel. Widened spotlightCard state type. Added generic dynamic card hero rendering. |
+
+### Migrations Pushed (Session 34)
+
+- `20260319000003_spotlight_system.sql` — Applied successfully to remote
+
+### Deployment (Session 34)
+
+- **Platform**: lianabanyan-main.web.app
+
+### Pending Work (Session 35+)
+
+| Item | Status |
+|------|--------|
+| **Spotlight Manager panel in Moneypenny** — CRUD for spotlight_content, stats view | **NEXT** |
+| **Moneypenny Edge Functions** — `moneypenny-intake`, `moneypenny-daily-digest`, `moneypenny-signal` | **NEXT** |
+| **Wire MoneyPenny.tsx tabs to real Supabase data** (replace mock data) | **NEXT** |
+| **Wrap remaining 11 initiative pages** with LaunchConditionOverlay | MEDIUM |
+| **Hitbase Counter Showcase** + **Character Layer Explorer** | MEDIUM |
+| **Wire Demand Signaling + Pledged Mark Voting to Supabase** | MEDIUM |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 33 (March 18, 2026) — Previous
+
+**Latest commit:** `59353ed` — Session 33: TL;DR Tour, Moneypenny Phase 1 Briefing Dashboard
 
 **Status (March 18, 2026 — Session 33):**
 - Both sites deployed and live: lianabanyan-main.web.app + cephas-lianabanyan.web.app
@@ -59,7 +120,7 @@
 
 ### Deployment (Session 33)
 
-- **Platform**: lianabanyan-main.web.app (614 files)
+- **Platform**: lianabanyan-main.web.app
 
 ### Pending Work (Session 34+)
 
