@@ -37,6 +37,8 @@ export interface FAQEntry {
   learnMoreLabel?: string;
   /** Related innovation numbers from patent portfolio */
   innovations?: number[];
+  /** IDs of related FAQ entries for "See also" chain linking */
+  relatedEntries?: string[];
   /** Tags for search */
   tags: string[];
 }
@@ -131,9 +133,10 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'how-marks-work',
         question: 'How do you earn Marks?',
-        answer: "Marks emerge from differential ONLY — never granted as gifts. You earn them by completing bounties, participating in initiatives, Lark submissions, and platform contribution. Every Mark represents real work.",
+        answer: "Marks emerge from differential ONLY — never granted as gifts. You earn them by completing bounties, participating in initiatives, Lark submissions, and platform contribution. Every Mark represents real work. Shadow Marks that crystallize through consistent demand signaling also become real Marks.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/three-currencies',
         learnMoreLabel: 'How Marks Work',
+        relatedEntries: ['shadow-marks', 'crystallization', 'brewster-bonus', 'three-currencies'],
         tags: ['marks', 'earning', 'differential', 'bounties'],
       },
       {
@@ -150,6 +153,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "A reward multiplier for early backers of production runs. The earlier you believe in a project, the higher your multiplier. First 100 backers share influence proportionally.",
         learnMoreUrl: '/learn/brewster-bonus',
         learnMoreLabel: 'Alcove: Brewster Bonus',
+        relatedEntries: ['shadow-marks', 'brewster-distribution', 'production-runs', 'how-marks-work'],
         tags: ['brewster', 'bonus', 'early-backer', 'multiplier'],
       },
     ],
@@ -174,7 +178,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'no-vc',
         question: 'Why no venture capital?',
-        answer: "V.C. money comes with strings: 10x return demands force unsustainable growth, exit pressure means selling you in 5-7 years, and each funding round dilutes everyone. We're funded by 7 provisional patents with 1,709 innovations and started with $1,000. No burn rate. We own 100% — forever.",
+        answer: "V.C. money comes with strings: 10x return demands force unsustainable growth, exit pressure means selling you in 5-7 years, and each funding round dilutes everyone. We're funded by 7 provisional patents with 1,719 innovations and started with $1,000. No burn rate. We own 100% — forever.",
         detail: "The math: At Year 10, if we're worth $500M with VC money, we'd own ~$25M. Growing organically, even at half that valuation ($250M), we own ALL of it. Our patent portfolio IS our runway. Micro-entity filing at $65 per provisional. Your early contribution = permanent credit via Ghost Attribution. The 300 founding members get Joules — no VC means no dilution of YOUR stake.",
         learnMoreUrl: '/why-no-vc',
         learnMoreLabel: 'Full Explanation: Why No V.C.',
@@ -229,9 +233,10 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'production-runs',
         question: 'How do production runs work?',
-        answer: "A maker's product needs pre-orders to trigger manufacturing. Zero risk — only produce what's already paid for. All pre-orders paid in full before production begins. First 100 backers get Brewster Bonus multipliers.",
+        answer: "A maker's product needs pre-orders to trigger manufacturing. Zero risk — only produce what's already paid for. All pre-orders paid in full before production begins. First 100 backers get Brewster Bonus multipliers. Pre-operational features use Shadow Mark thermometers to gauge demand before committing to production.",
         learnMoreUrl: '/production-runs',
         learnMoreLabel: 'Browse Production Runs',
+        relatedEntries: ['pre-operational', 'ranked-choice', 'brewster-bonus', 'shadow-marks'],
         tags: ['production', 'manufacturing', 'pre-order', 'maker'],
       },
       {
@@ -320,7 +325,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'patent-portfolio',
         question: 'What is the patent portfolio?',
-        answer: "7 provisional applications filed as a micro-entity ($65 each). 1,709 innovations documented. This is the cooperative's runway — IP as a shared asset instead of venture capital debt. 60% of Founder patents go to the platform.",
+        answer: "7 provisional applications filed as a micro-entity ($65 each). 1,719 innovations documented. This is the cooperative's runway — IP as a shared asset instead of venture capital debt. 60% of Founder patents go to the platform.",
         learnMoreUrl: '/learn/patents',
         learnMoreLabel: 'Alcove: Patent Portfolio',
         tags: ['patents', 'ip', 'innovations', 'portfolio'],
@@ -441,6 +446,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         learnMoreUrl: "/hexisle",
         learnMoreLabel: "HexIsle Portal",
         innovations: [1537],
+        relatedEntries: ['hexisle-chain', 'hexisle-golden-lotus', 'hexisle-swan-neck', 'hexisle-water-table', 'hexisle-open-ip'],
         tags: ['hexisle', 'tereno', 'board-game', 'hydraulic', 'hexel'],
       },
       {
@@ -450,13 +456,16 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "Chain timer: 14 days between backings (21 during holiday weeks). Perks escalate: free STLs at link 2, free color upgrade at 3, exclusive stretch goals at 4, free shipping at 5, platform perks at 6-8, early access at 9-12, and Complete Collection pricing + Steward nomination at 13.",
         learnMoreUrl: "/chain",
         learnMoreLabel: "Track Your Chain",
+        relatedEntries: ['hexisle-overview', 'hexisle-open-ip', 'hexisle-leap-frog', 'beacon-persistence'],
         tags: ['hexisle', 'chain', 'kickstarter', 'loyalty', 'joules'],
       },
       {
         id: 'hexisle-swan-neck',
         question: 'What is the Swan Neck connector?',
-        answer: "The inter-Hexel hydraulic connector. Dual-channel design routes water between adjacent tiles. Layer 0 — the plumbing between rooms.",
+        answer: "The dual-channel hydraulic connector linking adjacent Hexels into one continuous power network. When one Hexel pushes, its neighbor pulls — inverse coupling that powers everything. Without Swan Necks, each Hexel is an island. With them, 420 Hexels become one living ocean.",
+        detail: "Each Swan Neck contains two channels arranged so the top channel of Hexel A connects to the bottom channel of Hexel B, and vice versa. This creates inverse coupling — when one cavity pressurizes (pushes), the neighboring cavity depressurizes (pulls). This alternating push-pull drives the Golden Lotus rotation. Lithographic (SLA) or injection mold — both channels produced in one print, no assembly.",
         innovations: [1537],
+        relatedEntries: ['hexisle-snap-cap-connector', 'hexisle-channel-lock', 'hexisle-golden-lotus', 'hexisle-overview'],
         tags: ['hexisle', 'swan-neck', 'connector', 'hydraulic'],
       },
       {
@@ -490,9 +499,10 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'hexisle-golden-lotus',
         question: 'What is the Golden Lotus?',
-        answer: "The heart of every Hexel. Six Tesla-valve cups with Rooster Teeth that convert alternating-current water flow into unidirectional rotation — no moving valve parts, just geometry forcing one-way flow. Layer 4.",
-        detail: "Named for its lotus-petal geometry. Tesla valves are valvular conduits with zero moving parts — the fluid path itself creates preferential flow direction. Six cups = six pulses per cycle for smooth rotation.",
+        answer: "The power converter at the heart of every Hexel. Six Tesla Valve cups — three facing up, three facing down — convert bidirectional hydraulic flow into continuous, unidirectional rotation. Push creates clockwise. Pull creates clockwise. Both directions, same result. No batteries, no motors — just geometry refined through 9 versions over 9 years.",
+        detail: "Water pressure enters from below through the HollowLog, filling six Tesla Valve cups. The asymmetric cup geometry (Rooster Teeth protrusions, 30-degree exit angles) ensures fluid exiting any cup strikes the Rotor vanes tangentially, always driving the same rotation direction. This is the breakthrough: both push AND pull create the same rotation. A tide that rises and falls drives continuous spin powering waves, tides, traps, and plant growth.",
         innovations: [1537],
+        relatedEntries: ['hexisle-rooster-teeth', 'hexisle-rotor', 'hexisle-ouralis', 'hexisle-hollow-log'],
         tags: ['hexisle', 'golden-lotus', 'tesla-valve', 'actuator'],
       },
       {
@@ -512,8 +522,10 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'hexisle-ouralis',
         question: 'What is the Ouralis gear?',
-        answer: "20-tooth dual-level gear with 3 cam slopes for tide simulation. The primary gear connecting water power to mechanical action. Drives 3× PGears at 6.67:1 speed ratio. Layer 7.",
+        answer: "The primary gear and tide accumulator — a 20-tooth, dual-level gear with offset half-tooth between levels for silky engagement. Drives 3 PGears at 6.67:1 speed. Three cam slopes on top (120° apart) produce sinusoidal tide — 12 increments up, 12 down. The piece that makes the ocean breathe.",
+        detail: "Named for its orbital-like periodic motion. 20 teeth per level, two stacked levels (6.14mm each), peak aligns with valley for smooth engagement. The sinusoidal cam profile means tide is slow at peaks, faster in the middle — just like real tides. Every rotation drives the tide a fraction of its cycle.",
         innovations: [1537],
+        relatedEntries: ['hexisle-pgear', 'hexisle-rotor', 'hexisle-golden-lotus', 'hexisle-cradle'],
         tags: ['hexisle', 'ouralis', 'gear', 'tide'],
       },
       {
@@ -624,6 +636,93 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       },
     ],
   },
+
+  // ─── CHAPTER 9: SHADOW MARK DEMAND SIGNALING ───
+  {
+    id: 'demand-signaling',
+    title: 'Shadow Mark Demand Signaling',
+    subtitle: 'How the platform discovers what to build next without surveys or guessing',
+    icon: '✨',
+    entries: [
+      {
+        id: 'shadow-marks',
+        question: 'What are Shadow Marks (Demand Signaling)?',
+        answer: "Shadow Marks are free demand-signaling tokens you receive when entering a platform area. Distribute them across pre-operational features to tell us what you want built. They persist at 50%/day — consistent allocation compounds. After 3 consecutive days, the persistent portion crystallizes into real Marks backed by the patent portfolio. Impulse allocations die fast; genuine interest compounds.",
+        detail: "The math: with daily allocation X and 50% carry-forward, Day 1 = X, Day 2 = 1.5X, Day 3 = 1.75X (crystallizes). The limit is 2X (geometric series). Higher Beacon streaks increase carry-forward up to 75% and reduce crystallization to 2 days.",
+        learnMoreUrl: '/demand',
+        learnMoreLabel: 'Demand Discovery Dashboard',
+        innovations: [1710, 1712, 1713],
+        relatedEntries: ['brewster-bonus', 'how-marks-work', 'ip-load-balance', 'beacon-persistence', 'pre-operational'],
+        tags: ['shadow-marks', 'demand', 'signaling', 'allocation', 'crystallization'],
+      },
+      {
+        id: 'brewster-distribution',
+        question: 'Why must I spend all my Shadow Marks? (Brewster\'s Millions)',
+        answer: "You MUST distribute your Shadow Mark allocation before leaving an area — use it or lose it. You can't hoard them. You can't say 'I want everything equally.' This forced distribution reveals genuine preference. The act of ranking IS the demand signal. If you put 15 on Business Cards and 5 on Stickers, that's a 3:1 demand ratio — real data, not a survey answer.",
+        innovations: [1711],
+        relatedEntries: ['shadow-marks', 'brewster-bonus', 'pre-operational'],
+        tags: ['brewster', 'forced-distribution', 'demand', 'ranking'],
+      },
+      {
+        id: 'carry-forward',
+        question: 'How does the 50% carry-forward work?',
+        answer: "Each day, 50% of your previous allocation persists on each pedestal. Day 1: you put 15 SM on Business Cards. Day 2: you start with 7.5 SM already there, add 15 more = 22.5 total. Day 3: start with 11.25, add 15 = 26.25 (crystallization triggers). The asymptote is 2x your daily allocation. If you stop allocating, your balance halves daily — gone in ~5 days.",
+        innovations: [1712],
+        relatedEntries: ['shadow-marks', 'crystallization', 'beacon-persistence'],
+        tags: ['carry-forward', 'persistence', 'compounding', 'decay'],
+      },
+      {
+        id: 'crystallization',
+        question: 'How does crystallization turn Shadow Marks into real Marks?',
+        answer: "After 3 consecutive days of allocation to the same pedestal, the carry-forward portion (NOT the fresh daily allocation) crystallizes into real Marks. These are backed by the patent portfolio under IP Load Balance (60% LB, 20% Founder, 10% Community, 10% Prosecution). Example: Day 3 total is 26.25, fresh today is 15, so 11.25 → 11 real Marks crystallize.",
+        innovations: [1713],
+        relatedEntries: ['shadow-marks', 'carry-forward', 'ip-load-balance', 'how-marks-work'],
+        tags: ['crystallization', 'marks', 'ip-load-balance', 'patent-portfolio'],
+      },
+      {
+        id: 'beacon-persistence',
+        question: 'How do Beacon Streaks boost my demand signal?',
+        answer: "Consecutive engagement streaks increase your carry-forward rate and decrease crystallization time. Base: 50% carry, 3-day crystallization. 7-day streak: 60% carry. 14-day: 65%, 2-day crystallization. 30-day: 70%. 90-day: 75%, 2-day crystallization. Long-term members get stronger signals because they'll actually USE the features they're signaling for.",
+        innovations: [1714],
+        relatedEntries: ['shadow-marks', 'carry-forward', 'crystallization'],
+        tags: ['beacon', 'streak', 'persistence', 'loyalty', 'carry-forward'],
+      },
+      {
+        id: 'pre-operational',
+        question: 'What is a pre-operational feature?',
+        answer: "A feature that's visible on the platform but not yet activated — it needs enough committed orders to justify building. Each has a thermometer showing progress toward its activation threshold. Once the threshold is hit, the feature enters Alpha (2-4 weeks), then Beta, then full Operational status. Shadow Marks show interest; Credit pledges show commitment. Both count.",
+        learnMoreUrl: '/demand',
+        learnMoreLabel: 'See All Thermometers',
+        innovations: [1715],
+        relatedEntries: ['shadow-marks', 'ranked-choice', 'production-runs'],
+        tags: ['pre-operational', 'thermometer', 'activation', 'threshold'],
+      },
+      {
+        id: 'ranked-choice',
+        question: 'What is Ranked Choice Production Tier Lock-In?',
+        answer: "When pledging Credits for a pre-operational feature, you set a primary preference (e.g., Tier 3 at $0.25/card, fills in 7 days) and a fallback (Tier 4 at $0.15/card, fills in 30 days). If your primary doesn't fill in time, your order cascades to the fallback — same Credits, but you get MORE units at the cheaper price. If neither fills, Credits return. Shadow Mark signal persists regardless.",
+        innovations: [1716, 1717, 1718],
+        relatedEntries: ['pre-operational', 'shadow-marks', 'production-runs'],
+        tags: ['ranked-choice', 'cascade', 'production', 'tier', 'credits'],
+      },
+      {
+        id: 'cascade-amplification',
+        question: 'What happens when my order cascades to a cheaper tier?',
+        answer: "Your Credits stay the same but buy MORE units. Example: 250 Credits at Tier 3 ($0.25/card) = 1,000 cards. Cascaded to Tier 4 ($0.15/card) = 1,667 cards — 667 bonus cards for being patient. Cascading DOWN rewards patience. You can also opt in to cascade UP (premium tier) if it fills first.",
+        innovations: [1717],
+        relatedEntries: ['ranked-choice', 'pre-operational'],
+        tags: ['cascade', 'amplification', 'units', 'patience', 'production'],
+      },
+      {
+        id: 'moneypenny-admin',
+        question: 'What is Moneypenny?',
+        answer: "The platform's AI administrative assistant (named after M's secretary). Moneypenny processes daily Shadow Mark crystallizations, monitors thermometer thresholds, triggers cascade notifications, and coordinates vendor batches. Phase 1: daily digest emails + threshold alerts. Phase 2: interactive assistant. Phase 3: full AI admin with predictive analytics.",
+        innovations: [1719],
+        relatedEntries: ['shadow-marks', 'crystallization', 'pre-operational'],
+        tags: ['moneypenny', 'admin', 'assistant', 'ai', 'automation'],
+      },
+    ],
+  },
 ];
 
 // ============================================================================
@@ -654,4 +753,14 @@ export function searchFAQ(query: string): FAQEntry[] {
 /** Get chapter by ID */
 export function getFAQChapter(id: string): FAQChapter | undefined {
   return FAQ_CHAPTERS.find(ch => ch.id === id);
+}
+
+/** Get related FAQ entries for a given entry (chain linking) */
+export function getRelatedEntries(entryId: string): FAQEntry[] {
+  const entry = getFAQEntry(entryId);
+  if (!entry?.relatedEntries?.length) return [];
+  const all = getAllFAQEntries();
+  return entry.relatedEntries
+    .map(id => all.find(e => e.id === id))
+    .filter((e): e is FAQEntry => !!e);
 }

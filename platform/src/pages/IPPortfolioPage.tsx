@@ -16,7 +16,7 @@ const BAG_LABELS: Record<string, { name: string; range: string; claims: number }
   '4': { name: 'Bag 4 — Defense Klaus → MSA', range: 'Defense through MSA', claims: 292 },
   '5': { name: 'Bag 5 — Ghost World', range: 'Ghost + Extensions', claims: 44 },
   '6': { name: 'Bag 6 — LEVIATHAN PLUS', range: 'Leviathan expansion', claims: 408 },
-  '7': { name: 'Bag 7 — Full Specs', range: '#1001–#1709', claims: 0 },
+  '7': { name: 'Bag 7 — Full Specs', range: '#1001–#1719', claims: 0 },
 };
 
 const INITIATIVES = [
@@ -194,7 +194,7 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/967,200</td><td>Jan 23–24, 2026</td><td className="text-right">292</td><td>Defense Klaus → MSA</td></tr>
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/969,601</td><td>Jan 28, 2026</td><td className="text-right">44</td><td>Ghost World</td></tr>
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/989,913</td><td>Feb 24, 2026</td><td className="text-right">408</td><td>LEVIATHAN PLUS</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right text-slate-500">TBD</td><td>Full Specs (#1001–#1709)</td></tr>
+              <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right text-slate-500">TBD</td><td>Full Specs (#1001–#1719)</td></tr>
               <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,336+</td><td>7 provisional applications</td></tr>
             </tbody>
           </table>

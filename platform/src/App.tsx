@@ -272,6 +272,7 @@ const HexIsleEncyclopedia = lazy(() => import("./pages/HexIsleEncyclopedia"));
 const HexIsleIslandPage = lazy(() => import("./pages/HexIsleIslandPage"));
 const ChainDashboard = lazy(() => import("./pages/ChainDashboard"));
 const HexIsleDownloads = lazy(() => import("./pages/HexIsleDownloads"));
+const DemandSignaling = lazy(() => import("./pages/DemandSignaling"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -675,6 +676,7 @@ const App = () => (
                         <Route path="/hexisle/hexels/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexelWeeklyDetail /></Suspense>} />
                         <Route path="/hexisle/downloads" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleDownloads /></Suspense></ExplorerRoute>} />
                         <Route path="/chain" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainDashboard /></Suspense></ExplorerRoute>} />
+                        <Route path="/demand" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DemandSignaling /></Suspense></ExplorerRoute>} />
                         <Route path="/hexisle/founding-run" element={<FoundingRunLanding />} />
                         <Route path="/hexisle/founding-run/order" element={<ProtectedRoute><PreOrderFlow /></ProtectedRoute>} />
                         <Route path="/content-pipeline" element={<ContentPipelinePage />} />

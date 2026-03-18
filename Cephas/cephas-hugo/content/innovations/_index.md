@@ -1,11 +1,11 @@
 ---
 title: "Hall of Records"
-description: "The complete registry of Liana Banyan innovations — 1,709 patented systems, 1,336 claims across 7 provisional applications"
+description: "The complete registry of Liana Banyan innovations — 1,719 patented systems, 1,336 claims across 7 provisional applications"
 ---
 
 # The Hall of Records
 
-> **1,709 Innovations. 1,336 Patent Claims. 7 Provisional Applications Filed.**
+> **1,719 Innovations. 1,336 Patent Claims. 7 Provisional Applications Filed.**
 >
 > All innovations are owned by Liana Banyan Corporation. As a member, you get **free, unlimited use** of everything we build together.
 
@@ -135,7 +135,7 @@ description: "The complete registry of Liana Banyan innovations — 1,709 patent
 
 | Metric | Count |
 |--------|-------|
-| **Total Innovations** | 1,709 |
+| **Total Innovations** | 1,719 |
 | **Total Patent Claims** | 1,336 |
 | **Provisional Applications** | 7 |
 | **Spec-Expanded Innovations** | 593 |
@@ -163,7 +163,7 @@ Creators keep 83.3% on every transaction. The platform takes Cost + 20%. That's 
 
 ---
 
-> "51 became 123. 123 became 1,709. The Behemoth grows."
+> "51 became 123. 123 became 1,719. The Behemoth grows."
 
 ---
 

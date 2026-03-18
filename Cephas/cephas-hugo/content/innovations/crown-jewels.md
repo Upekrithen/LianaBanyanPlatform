@@ -272,13 +272,13 @@ weight: 1
 
 ## Beyond the Crown Jewels
 
-The 123 Crown Jewels are the foundation. The full Liana Banyan innovation registry contains **1,709 innovations** as of March 2026, with **593 having full patent-quality specification paragraphs**. The remaining innovations span:
+The 123 Crown Jewels are the foundation. The full Liana Banyan innovation registry contains **1,719 innovations** as of March 2026, with **593 having full patent-quality specification paragraphs**. The remaining innovations span:
 
 - **#124–#1000**: Extended platform systems, manufacturing processes, game mechanics
 - **#1001–#1572**: Spec-expanded innovations across all 16 initiatives
 - **#1573–#1594**: INBOX goldmine harvest (filled from Founder's original session transcripts)
 - **#1600–#1662**: Session 11B addendum (BandWagon, Steward, Creator Draft, XP systems)
-- **#1663–#1709**: Six Degrees Crown Jewel + Bishop Session 010 (connection engine, anti-discrimination, quad-crown)
+- **#1663–#1719**: Six Degrees Crown Jewel + Bishop Session 010 (connection engine, anti-discrimination, quad-crown)
 
 Every innovation is owned by Liana Banyan Corporation. As a $5/year member, you get free, unlimited use of everything we build together.
 

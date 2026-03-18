@@ -9,9 +9,83 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 29b (March 17, 2026)
+## RUNWAY / SESSION STOP (current) — Session 30 (March 18, 2026)
 
-**Latest commit:** (pending) — Session 29b: Bishop 012 thresh (19 innovations #1691-#1709), POLLINATE 1690→1709, 7 HexIsle bounties on /crew-call
+**Latest commit:** (pending) — Session 30: Shadow Mark Demand Signaling, FAQ chain linking, 10 innovations #1710-#1719
+
+### What Was Done This Session (Session 30 — Knight)
+
+1. **Thresh 10 innovations (#1710-#1719)** — Shadow Mark Demand Signaling cluster from Bishop Session 012. Per-Area Allocation, Brewster's Forced Distribution, 50% Carry-Forward, 3-Day Crystallization, Beacon Streak Amplifier, Feature Thermometer, Ranked Choice Tier Lock-In, Cascade-Down Amplification, Shadow Mark Persistence, Moneypenny Admin. Migration `20260318000001` pushed to Supabase.
+
+2. **POLLINATION 1,709 → 1,719** across 23 files (47 replacements).
+
+3. **Feature 1: Shadow Mark Demand Signaling System** — Full implementation:
+   - `demandSignalingService.ts` — Per-area allocation config (6 area categories with SM amounts), Beacon streak persistence boost tiers (50%-75% carry-forward), carry-forward math (geometric series), crystallization logic, thermometer data builder, ranked choice cascade calculation, 8 sample pre-operational pedestals (Business Cards, Letterhead, Medallion Coins, T-Shirts, Stickers, HexIsle Expansions, Posters, Labels)
+   - `components/demand/FeatureThermometer.tsx` — Full and compact thermometer cards with: progress bar, Credits/SM/est. days stats, Alpha→Beta→Operational milestone timeline, user allocation display with persistence day count and crystallization countdown, action buttons, expandable how-it-works with FAQ deep links, ThermometerGrid component
+   - `pages/DemandSignaling.tsx` at `/demand` — Dashboard with: platform-wide stats, Beacon streak display with tier ladder, area category filter buttons, thermometer grid, 3-step "How It Works" explainer, SEC disclosure, FAQ cross-links
+
+4. **Feature 2: FAQ Chain Linking (`relatedEntries`)** — Extended `FAQEntry` interface with `relatedEntries?: string[]` field. Added `getRelatedEntries()` utility function. Added relatedEntries cross-links to: brewster-bonus, how-marks-work, production-runs, hexisle-overview, hexisle-chain, hexisle-swan-neck, hexisle-golden-lotus, hexisle-ouralis + all 9 new Shadow Mark entries.
+
+5. **Feature 3: Shadow Mark FAQ Chapter + HexIsle Supplement** — Added Chapter 9 "Shadow Mark Demand Signaling" to knowledgeBase with 9 entries: shadow-marks, brewster-distribution, carry-forward, crystallization, beacon-persistence, pre-operational, ranked-choice, cascade-amplification, moneypenny-admin. Enriched HexIsle FAQ entries (Swan Neck, Golden Lotus, Ouralis) with deeper Bishop content including detail fields.
+
+### Innovations Filed (#1710-#1719)
+
+| # | Innovation | Category |
+|---|-----------|----------|
+| 1710 | Shadow Mark Per-Area Demand Allocation | platform-economics |
+| 1711 | Brewster's Millions Forced Distribution | platform-economics |
+| 1712 | 50% Carry-Forward Persistence Compounding | platform-economics |
+| 1713 | 3-Day Crystallization Threshold | platform-economics |
+| 1714 | Beacon Streak Persistence Amplifier | platform-economics |
+| 1715 | Pre-Operational Feature Thermometer | ux-design |
+| 1716 | Ranked Choice Production Tier Lock-In | platform-economics |
+| 1717 | Cascade-Down Unit Amplification | platform-economics |
+| 1718 | Shadow Mark Persistence Regardless of Credit Return | platform-economics |
+| 1719 | Moneypenny Administrative Threshold Monitor | ux-design |
+
+### Files Created/Changed (Session 30)
+
+| File | Change |
+|------|--------|
+| `platform/src/lib/demandSignalingService.ts` | **NEW** — Demand signaling engine (allocations, carry-forward, crystallization, thermometers, ranked choice) |
+| `platform/src/components/demand/FeatureThermometer.tsx` | **NEW** — Thermometer display component + compact grid |
+| `platform/src/pages/DemandSignaling.tsx` | **NEW** — /demand dashboard page |
+| `platform/src/App.tsx` | Added DemandSignaling lazy import + route |
+| `platform/src/lib/nervous-system/knowledgeBase.ts` | Extended FAQEntry with relatedEntries[], Ch 9 (9 entries), enriched HexIsle entries, getRelatedEntries() utility |
+| `platform/supabase/migrations/20260318000001_*.sql` | **NEW** — 10 innovations + canonical count 1719 |
+| 23 platform/src + Cephas files | POLLINATION: 1,709 → 1,719 (47 replacements) |
+
+### Migrations Pushed (Session 30)
+
+- `20260318000001_innovation_log_session30_shadow_marks.sql` — Applied successfully to remote
+
+### Deployment (Session 30)
+
+- **Platform**: lianabanyan-main.web.app (600 files, 207 new)
+- **Cephas**: cephas-lianabanyan.web.app (1410 files, 980 pages)
+
+### Pending Work (Session 31+)
+
+| Item | Status |
+|------|--------|
+| **Pledged Mark Voting** (`/hexisle/vote`) — Task 4 from Bishop Session 011 | **NEXT** |
+| **HexIsle Cue Card** — "Know a Gamer? Know an Engineer?" (Task 6) | **NEXT** |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Shadow Mark Demand Signaling — wire to Supabase backend (real data) | MEDIUM |
+| Moneypenny Phase 1 — daily digest cron + threshold alerts | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| Battery Dispatch — Grassroots Intelligence | MEDIUM |
+| Treasure Key injection | MEDIUM |
+| SEC language cleanup (broader pass) | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 29b (March 17, 2026) — Previous
+
+**Latest commit:** `6ab9899` — Session 29b: Bishop 012 thresh (19 innovations #1691-#1709), POLLINATE 1690→1709, 7 HexIsle bounties on /crew-call
 
 ### What Was Done This Session (Session 29b — Knight, continued)
 
@@ -742,8 +816,8 @@ Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three fe
 |--------|-------|--------|
 | **Creator keeps** | 83.3% (never round to 83%) | Immutable |
 | **Platform margin** | Cost + 20% | Immutable |
-| **Innovations (canonical)** | **1,709** | Session 29b POLLINATION; propagated everywhere |
-| **Innovations in DB** | Through #1709 (all pushed) | All migrations applied as of Session 29b |
+| **Innovations (canonical)** | **1,719** | Session 30 POLLINATION; propagated everywhere |
+| **Innovations in DB** | Through #1719 (all pushed) | All migrations applied as of Session 30 |
 | **Spec expansions written** | 593 (568 batch + 22 skeleton + 3 overflow) | Migrations `20260315000001` + `20260315000002` |
 | **Formal patent claims** | 1,336 across 7 provisional applications | USPTO receipts |
 | **8th provisional** | 18 innovations (#1663-#1680) — PDF ready, awaiting filing | Six Degrees Crown Jewel |
