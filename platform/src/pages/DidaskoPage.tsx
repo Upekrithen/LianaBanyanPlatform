@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, GraduationCap, Code, BrainCircuit, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function DidaskoPage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="didasko" initiativeName="Didasko">
     <div className="container mx-auto py-8 max-w-6xl">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-indigo-600 rounded-full text-white">
@@ -137,5 +139,6 @@ export default function DidaskoPage() {
         </div>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

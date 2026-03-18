@@ -278,6 +278,7 @@ const DemandSignaling = lazy(() => import("./pages/DemandSignaling"));
 const HexIsleVote = lazy(() => import("./pages/HexIsleVote"));
 const HexIsleBattlePhilosophy = lazy(() => import("./pages/HexIsleBattlePhilosophy"));
 const HexIsleCueCard = lazy(() => import("./pages/cue-cards/HexIsleCueCard"));
+const LaunchTracker = lazy(() => import("./pages/LaunchTracker"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -531,6 +532,7 @@ const App = () => (
                         <Route path="/reviewer/queue/:id" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ReviewQueueItemPage /></Suspense></ProtectedRoute>} />
                         <Route path="/launch" element={<LaunchHub />} />
                         <Route path="/launch/run-a-node" element={<RunANode />} />
+                        <Route path="/launch-tracker" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LaunchTracker /></Suspense></ExplorerRoute>} />
                         <Route path="/production-runs" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProductionRuns /></Suspense></ExplorerRoute>} />
                         <Route path="/start" element={<OnboardingStart />} />
                         <Route path="/begin" element={<OnboardingStart />} />

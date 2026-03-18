@@ -9,6 +9,7 @@ import {
   Eye, Building2, FileText, Star
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 const SAMPLE_REPS = [
   {
@@ -70,6 +71,7 @@ export default function PowerToThePeoplePage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
+    <LaunchConditionOverlay initiativeSlug="power-to-the-people" initiativeName="Power to the People">
     <div className="container mx-auto py-8 max-w-6xl">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-purple-600 rounded-full text-white">
@@ -521,5 +523,6 @@ export default function PowerToThePeoplePage() {
         </p>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

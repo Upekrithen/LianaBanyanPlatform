@@ -9,7 +9,85 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 30 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 31 (March 18, 2026)
+
+**Latest commit:** (pending) — Session 31: "All Live" Initiative Transformation, Attack Wheel Interactive Demo, LaunchTracker dashboard
+
+**Status (March 18, 2026 — Session 31):**
+- Both sites deployed and live: lianabanyan-main.web.app + cephas-lianabanyan.web.app
+- All Supabase migrations pushed (through `20260319000001`). DB canonical count = 1,748.
+- **Innovation count:** 1,748 (unchanged — no new innovations this session)
+- **No blockers.** Ready for Session 32.
+
+### What Was Done This Session (Session 31 — Knight)
+
+1. **Feature 1: "All Live" Initiative Transformation** — Founder directive to replace all "Coming Soon" grayed-out initiative pages with live pages showing launch condition progress.
+   - `LaunchConditionOverlay.tsx` — Reusable component with sticky top banner showing 3 progress bars (Leadership, Members, Funding), dismissible to floating pill, collapsible, auto-fetches from Supabase `launch_conditions` table, links to `/launch-tracker`
+   - `LaunchConditionCard` — Compact card variant for the tracker grid
+   - `LaunchTracker.tsx` at `/launch-tracker` — Dashboard showing all 16 initiatives in a filterable/sortable grid with progress cards, stats row (Ready/In Progress/Overall %), filter buttons (All/Ready/>50%/<50%), sort toggle (by progress/by number), node scaling message, SEC disclosure
+   - Migration `20260319000001_launch_conditions.sql` — `launch_conditions` table with RLS (anyone can read), seeded with 3 conditions × 16 initiatives = 48 rows (Leadership, Members, Funding targets per initiative)
+   - **Wrapped 5 initiative pages** as proof of concept: VSLPage, DidaskoPage, HarperGuildPage, DefenseKlausPage, PowerToThePeoplePage
+
+2. **Feature 2: Attack Wheel Interactive Demo** — Canonical L1-L6 deterministic combat system for HexIsle.
+   - `components/hexisle/AttackWheelDemo.tsx` — Interactive visual with: SVG wheel with color-coded hit/miss segments, pointer indicator for current position, level selector (L1-L6), "Attack" button (costs coins), "Shoot Tree" button (free advance), combat log with running history, stats panel (Hits/Coins Spent/Hit Rate), expandable all-level reference, reset button
+   - CANONICAL patterns preserved exactly: L1 (M,M,H @1c), L2 (M,H @2c), L3 (H,M,H,M @3c), L4 (H,H,M,M @4c), L5 (H,H,M @5c), L6 (H,H,H,M @6c)
+   - Added to HexIsle portal page between quick actions grid and player stats
+
+3. **Deployment:** Platform (605 files) + Cephas (1410 files) deployed. Migration `20260319000001` pushed to Supabase.
+
+### Files Created (Session 31)
+
+| File | Purpose |
+|------|---------|
+| `platform/src/components/LaunchConditionOverlay.tsx` | **NEW** — Launch condition progress overlay + compact card |
+| `platform/src/pages/LaunchTracker.tsx` | **NEW** — All-initiatives launch progress dashboard |
+| `platform/src/components/hexisle/AttackWheelDemo.tsx` | **NEW** — Interactive deterministic attack wheel |
+| `platform/supabase/migrations/20260319000001_launch_conditions.sql` | **NEW** — launch_conditions table + 48-row seed |
+
+### Files Modified (Session 31)
+
+| File | Changes |
+|------|---------|
+| `platform/src/App.tsx` | Added LaunchTracker lazy import + `/launch-tracker` ExplorerRoute |
+| `platform/src/pages/VSLPage.tsx` | Wrapped in LaunchConditionOverlay |
+| `platform/src/pages/DidaskoPage.tsx` | Wrapped in LaunchConditionOverlay |
+| `platform/src/pages/HarperGuildPage.tsx` | Wrapped in LaunchConditionOverlay |
+| `platform/src/pages/DefenseKlausPage.tsx` | Wrapped in LaunchConditionOverlay |
+| `platform/src/pages/PowerToThePeoplePage.tsx` | Wrapped in LaunchConditionOverlay |
+| `platform/src/pages/HexIsle.tsx` | Added AttackWheelDemo import + section |
+| `platform/src/pages/PatentPortfolio.tsx` | Founder's valuation updates (Silver Candlesticks framing) |
+
+### Migrations Pushed (Session 31)
+
+- `20260319000001_launch_conditions.sql` — Applied successfully to remote
+
+### Deployment (Session 31)
+
+- **Platform**: lianabanyan-main.web.app (605 files)
+- **Cephas**: cephas-lianabanyan.web.app (1410 files)
+
+### Pending Work (Session 32+)
+
+| Item | Status |
+|------|--------|
+| **Wrap remaining 11 initiative pages** with LaunchConditionOverlay | **NEXT** |
+| **Hitbase Counter Showcase** — Interactive visual explainer | **NEXT** |
+| **Character Layer Explorer** — Snap-on layer progression visualizer | **NEXT** |
+| **Wire Demand Signaling to Supabase** — Replace mock data | MEDIUM |
+| **Wire Pledged Mark Voting to Supabase** — Replace mock data | MEDIUM |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Moneypenny Phase 1 — daily digest cron + threshold alerts | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| Battery Dispatch — Grassroots Intelligence | MEDIUM |
+| Treasure Key injection | MEDIUM |
+| SEC language cleanup (broader pass) | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 30 (March 18, 2026) — Previous
 
 **Latest commit:** `bf6a7bd` — Session 30: Shadow Mark Demand Signaling, FAQ chain linking, 10 innovations #1710-#1719
 

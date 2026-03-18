@@ -4,12 +4,14 @@ import { Building2, HandHeart, Users, ShieldCheck, ArrowRight, Star, Heart } fro
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 import '@/styles/landing.css';
 
 export default function VSLPage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="vsl" initiativeName="VSL (Voucher Short Loans)">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -114,5 +116,6 @@ export default function VSLPage() {
 
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

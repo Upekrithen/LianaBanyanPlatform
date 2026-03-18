@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { RootLockDemo } from "@/components/hexisle/root-lock/RootLockDemo";
 import { ViewPhaseSwitcher } from "@/components/hexisle/ViewPhaseSwitcher";
 import { SlottedTopHero } from "@/components/hexisle/SlottedTopHero";
+import AttackWheelDemo from "@/components/hexisle/AttackWheelDemo";
 
 export default function HexIsle() {
   const { user } = useAuth();
@@ -316,6 +317,9 @@ export default function HexIsle() {
           </Card>
         </div>
       </div>
+
+      {/* Attack Wheel — Deterministic Combat (Session 31) */}
+      <AttackWheelDemo />
 
       {/* Player Stats (if logged in and has state) */}
       {playerState && (

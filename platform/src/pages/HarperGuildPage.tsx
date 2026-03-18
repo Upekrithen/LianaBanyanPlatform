@@ -4,12 +4,14 @@ import { Shield, Heart, Eye, AlertTriangle, Users, BookOpen, Star, Activity } fr
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 import '@/styles/landing.css';
 
 export default function HarperGuildPage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="harper-guild" initiativeName="Harper Guild">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -114,5 +116,6 @@ export default function HarperGuildPage() {
 
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

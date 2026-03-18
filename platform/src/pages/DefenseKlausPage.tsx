@@ -10,12 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { SWOOPVoting } from "@/components/SWOOPVoting";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 import '@/styles/landing.css';
 
 export default function DefenseKlausPage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="defense-klaus" initiativeName="Defense Klaus">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -255,5 +257,6 @@ export default function DefenseKlausPage() {
         </Tabs>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

@@ -507,8 +507,8 @@ export default function PatentPortfolio() {
                     <span className="text-white/70 font-medium">Patent Portfolio Value</span>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold text-amber-400">$9.00M<span className="text-lg text-white/50">equivalent</span></div>
-                    <div className="text-xs text-white/50">Conservative Floor Valuation</div>
+                    <div className="text-3xl font-bold text-amber-400">$116M <span className="text-lg text-white/50">equivalent</span></div>
+                    <div className="text-xs text-white/50">Pessimist's Floor (4% utilization)</div>
                   </div>
                 </div>
                 
@@ -516,29 +516,29 @@ export default function PatentPortfolio() {
                 <div className="bg-slate-950/50 rounded-lg p-4 mb-4">
                   <div className="text-xs text-white/50 mb-2">10-Year Projection Range (for context):</div>
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="text-green-400 font-mono">$145M</span>
+                    <span className="text-green-400 font-mono">$3.94B</span>
                     <span className="text-white/30">→</span>
-                    <span className="text-amber-400 font-mono">$600M</span>
+                    <span className="text-amber-400 font-mono">$7.87B</span>
                     <span className="text-white/30">→</span>
-                    <span className="text-red-400 font-mono">$2B</span>
+                    <span className="text-red-400 font-mono">$15.74B</span>
                   </div>
                   <div className="text-xs text-white/40 mt-1">
-                    We claim only <span className="text-amber-400">$9M</span> — the conservative floor.
+                    We declare only <span className="text-amber-400">$630K</span> — Cost + 20%. The rest is candlesticks.
                   </div>
                 </div>
                 
                 {/* Allocation bars */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <div className="bg-slate-900/50 border border-green-500/20 rounded-lg p-3 text-center">
-                    <div className="text-lg font-bold text-green-400">$5.40M</div>
+                    <div className="text-lg font-bold text-green-400">$69.6M</div>
                     <div className="text-xs text-white/50">Platform (60%)</div>
                   </div>
                   <div className="bg-slate-900/50 border border-blue-500/20 rounded-lg p-3 text-center">
-                    <div className="text-lg font-bold text-blue-400">$900K</div>
+                    <div className="text-lg font-bold text-blue-400">$11.6M</div>
                     <div className="text-xs text-white/50">Sponsor Pool (10%)</div>
                   </div>
                   <div className="bg-slate-900/50 border border-purple-500/20 rounded-lg p-3 text-center">
-                    <div className="text-lg font-bold text-purple-400">$900K</div>
+                    <div className="text-lg font-bold text-purple-400">$11.6M</div>
                     <div className="text-xs text-white/50">Patent Buckets (10%)</div>
                   </div>
                 </div>
@@ -547,7 +547,7 @@ export default function PatentPortfolio() {
                 <div className="mb-2">
                   <div className="flex justify-between text-xs text-white/50 mb-1">
                     <span>Platform Allocation Remaining</span>
-                    <span className="text-green-400">$5.40M / $5.40M</span>
+                    <span className="text-green-400">$69.6M / $69.6M</span>
                   </div>
                   <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-green-500 to-green-400 w-full" />
