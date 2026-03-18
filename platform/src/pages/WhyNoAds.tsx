@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import {
   ArrowLeft, Ban, Users, Heart, MessageSquare,
   Share2, Gift, Sparkles, Check, X,
-  Volume2, VolumeX, DollarSign, TrendingUp
+  Volume2, VolumeX, DollarSign, TrendingUp,
+  Flame, QrCode, CreditCard, MapPin, Link2, Zap
 } from 'lucide-react';
 
 export default function WhyNoAds() {
@@ -93,6 +94,65 @@ export default function WhyNoAds() {
                   This creates a community of people who actually want to be here.
                 </p>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-8 bg-gradient-to-r from-orange-500/10 to-amber-500/10 border-orange-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-orange-300">
+              <Flame className="h-5 w-5" />
+              The Engine: How It Actually Works
+            </CardTitle>
+            <CardDescription className="text-slate-400">Three systems replace the entire ad industry</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <Flame className="h-5 w-5 text-orange-400" />
+                  <h3 className="font-semibold text-white">The Furnace</h3>
+                </div>
+                <p className="text-sm text-slate-400">
+                  Every Cue Card has a <strong className="text-orange-300">QR code linked to an immutable verification registry</strong>.
+                  Scan it and you can verify the card is authentic, see the business's trust score, and confirm
+                  their charitable tier (Ember → Flame → Blaze → Inferno).
+                </p>
+                <button onClick={() => navigate('/the-furnace')} className="mt-2 text-xs text-orange-400 hover:text-orange-300 flex items-center gap-1">
+                  <Link2 className="h-3 w-3" /> Visit The Furnace →
+                </button>
+              </div>
+              <div className="p-4 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <CreditCard className="h-5 w-5 text-amber-400" />
+                  <h3 className="font-semibold text-white">Viral Cue Card Deck</h3>
+                </div>
+                <p className="text-sm text-slate-400">
+                  <strong className="text-amber-300">$5/year</strong> gives you a complete deck of shareable cards — digital and printable.
+                  Each card carries your unique referral code. Every card is both a benefit explainer AND a recruitment tool.
+                  Five cards: Invite a Creator, Become a Steward, Get Famous, I Don't Want Your $, We Need You.
+                </p>
+              </div>
+              <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <MapPin className="h-5 w-5 text-green-400" />
+                  <h3 className="font-semibold text-white">The Cue Card Drop</h3>
+                </div>
+                <p className="text-sm text-slate-400">
+                  Our cold start viral loop. <strong className="text-green-300">6 steps</strong>: Get your deck → drop a card at a coffee shop, laundromat,
+                  library, church → track your referral scans → seed 10 locations → earn Pioneer-tier Marks (10 per conversion) →
+                  build your attribution chain 5 links deep.
+                </p>
+              </div>
+            </div>
+            <div className="p-4 bg-slate-800/50 rounded-lg">
+              <p className="text-center text-sm text-slate-300">
+                <Zap className="h-4 w-4 inline text-amber-400 mr-1" />
+                This is the orbit: <strong className="text-white">The Furnace</strong> verifies authenticity →
+                <strong className="text-white"> Cue Card Deck</strong> arms every member with marketing materials →
+                <strong className="text-white"> The Cue Card Drop</strong> tells them exactly where to put them.
+                No ad agency. No algorithm. Just people who believe in what we're building, handing a card to someone who might too.
+              </p>
             </div>
           </CardContent>
         </Card>

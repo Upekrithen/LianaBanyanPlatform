@@ -22,8 +22,8 @@ export function CrowsNestFloat() {
     openOverlay("browse");
   }, [openOverlay]);
 
-  // Hide on the full Crow's Nest page (redundant) and when overlay is already open
-  if (location.pathname === "/crows-nest" || isOverlayOpen) {
+  // Hide on the full Crow's Nest page (redundant), when overlay is open, or on landing page
+  if (location.pathname === "/crows-nest" || location.pathname === "/" || isOverlayOpen) {
     return null;
   }
 

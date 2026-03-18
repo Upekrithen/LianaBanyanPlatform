@@ -1,5 +1,5 @@
-const CACHE_NAME = 'lianabanyan-v1';
-const RUNTIME_CACHE = 'runtime-cache-v1';
+const CACHE_NAME = 'lianabanyan-v3';
+const RUNTIME_CACHE = 'runtime-cache-v3';
 
 const PRECACHE_URLS = [
   '/',

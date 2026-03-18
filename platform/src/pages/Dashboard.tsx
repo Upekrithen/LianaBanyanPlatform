@@ -15,6 +15,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { FounderConsole } from '@/components/FounderConsole';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -677,9 +678,12 @@ export default function Dashboard() {
         </Tabs>
       </main>
       
+      {/* ═══ FOUNDER CONSOLE — only visible to founder role ═══ */}
+      <FounderConsole userId={user?.id} />
+
       {/* Will-o'-Wisp Chase Launcher */}
-      <WispChaseLauncher 
-        isOpen={showChaseLauncher} 
+      <WispChaseLauncher
+        isOpen={showChaseLauncher}
         onClose={() => setShowChaseLauncher(false)}
         onCrowFeatherEarned={(feather) => setCrowFeatherEarned(feather)}
       />

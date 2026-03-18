@@ -13,8 +13,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDiscovery } from '@/hooks/useDiscovery';
 import { DeckCardFrame } from '@/components/DeckCardFrame';
+import { LemonadeStandFlipbook } from '@/components/LemonadeStandFlipbook';
+import { FableFlipbook } from '@/components/FableFlipbook';
+import { OriginStoryFlipbook } from '@/components/OriginStoryFlipbook';
 import { WillOWisp } from '@/components/WillOWisp';
 import { RosettaKeyboard } from '@/components/RosettaKeyboard';
+import { AccessibilityMirror } from '@/components/AccessibilityMirror';
 import { ProfessionalLanding } from '@/components/ProfessionalLanding';
 import { RotatingQuotes } from '@/components/RotatingQuotes';
 import { useLevelGatedNavigate, getRouteLevel } from '@/components/LevelGatedLink';
@@ -22,39 +26,41 @@ import { usePathwayProgress } from '@/contexts/PathwayProgressContext';
 import { Lock, Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import PortalGatewayPage from './PortalGateway';
+import { SWEET_SIXTEEN } from '@/lib/daisyChainLink';
 import '@/styles/landing.css';
 
 const FABLE_SUBTITLES: Record<number, string> = {
-  1: "The Little Red Hen found some seeds.",
-  2: "She asked the Dog, the Cat, and the Pig for help. They refused.",
-  3: "So she planted, tended, harvested, and baked — all by herself.",
+  1: "The Little Red Hen\nfound some seeds.",
+  2: "She asked the Dog, the Cat, and the Pig for help.\nThey refused.",
+  3: "So she planted, tended, harvested, and baked —\nall by herself.",
   4: "Now everyone wanted her bread.",
   5: "But she had a bigger idea.",
-  6: '"Then I\'ll feed everyone — and we\'ll build something together."',
-  7: "She came to a town where people were struggling.",
-  8: '"I\'m making soup from a stone. Would you like to help?"',
-  9: "One brought salt. One brought a potato. One brought herbs. Everyone gave a little.",
+  6: "\"Then I'll feed everyone —\nand we'll build something together.\"",
+  7: "She came to a town\nwhere people were struggling.",
+  8: "\"I'm making soup from a stone.\nWould you like to help?\"",
+  9: "One brought salt. One brought a potato.\nOne brought herbs. Everyone gave a little.",
   10: "And everyone ate well.",
-  11: 'Over the meal, a small ant asked: "How did you know what to do?"',
-  12: '"I was daydreaming in my kitchen..."',
-  13: '"...and I looked out my window and saw people lined up for food that had been locked away."',
-  14: '"So I reached into my daydream and pulled out something useful."',
-  15: '"To make bread, you have to plant seeds."',
-  16: "But outside the city, the ants were already harvesting — for grasshoppers who only watched and took.",
-  17: "The Hen called out to the ants. The grasshoppers heard, too.",
-  18: "She told the ants what they needed to do to make bread for themselves.",
-  19: "And together — ants, city folk, and the Hen — they planted, kneaded, baked, and shared.",
+  11: "Over the meal, a small ant asked:\n\"How did you know what to do?\"",
+  12: "\"I was daydreaming\nin my kitchen...\"",
+  13: "\"...and I looked out my window and saw people\nlined up for food that had been locked away.\"",
+  14: "\"So I reached into my daydream\nand pulled out something useful.\"",
+  15: "\"To make bread,\nyou have to plant seeds.\"",
+  16: "But outside the city, the ants were already harvesting —\nfor grasshoppers who only watched and took.",
+  17: "The Hen called out to the ants.\nThe grasshoppers heard, too.",
+  18: "She told the ants what they needed to do\nto make bread for themselves.",
+  19: "And together — ants, city folk, and the Hen —\nthey planted, kneaded, baked, and shared.",
   20: "The grasshoppers noticed.",
-  21: '"It\'s not about food. It\'s about keeping these ants IN LINE."',
+  21: "\"It's not about food.\nIt's about keeping these ants IN LINE.\"",
   22: "They came to put a stop to it.",
-  23: "But one ant looked around and realized: they outnumbered the grasshoppers 10,000 to 1.",
-  24: "Grasshoppers need ants. Ants don't need grasshoppers.",
+  23: "But one ant looked around and realized:\nthey outnumbered the grasshoppers 10,000 to 1.",
+  24: "Grasshoppers need ants.\nAnts don't need grasshoppers.",
   25: "WE ARE THE ANTS.",
-  26: '"You\'ve got the makings of greatness in you. You\'re gonna rattle the stars, you are."',
-  27: "And when she looked down... her basket had been refilled.",
-  28: "Speckles from the young ones' messy eating took root and grew for others to harvest.",
+  26: "\"You've got the makings of greatness in you.\nYou're gonna rattle the stars, you are.\"",
+  27: "And when she looked down...\nher basket had been refilled.",
+  28: "Speckles from the young ones' messy eating\ntook root and grew for others to harvest.",
   29: "Hopper sat alone.",
   30: "...",
+  31: "",  // End card — "Where To Go From Here"
 };
 
 // Durin's Door Dialog Component
@@ -405,15 +411,36 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           </p>
         )}
         
-        <div style={{ textAlign: 'center' }}>
-          <button className="btn" onClick={handleSubmit}>
-            Enter
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '0.5rem' }}>
+          <button
+            onClick={onClose}
+            style={{
+              padding: '0.75rem 2rem',
+              fontSize: '1rem',
+              fontWeight: 600,
+              borderRadius: '10px',
+              border: '2px solid rgba(255,255,255,0.3)',
+              background: 'transparent',
+              color: 'white',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; }}
+          >
+            ← Back
+          </button>
+          <button className="btn" onClick={handleSubmit} style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
+            ENTER
           </button>
         </div>
 
         <p style={{ opacity: 0.4, fontSize: '0.75rem', marginTop: '1.5rem', textAlign: 'center' }}>
           50+ languages recognized · Icelandic, Swahili, Korean, Arabic, and more
         </p>
+
+        {/* Accessibility Mirror — "Fair means everyone can use it" */}
+        <AccessibilityMirror />
       </div>
     </div>
   );
@@ -541,20 +568,76 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
 
   const [fableFrame, setFableFrame] = useState(1);            // Fable frame index
   const [fableIsPlaying, setFableIsPlaying] = useState(false); // Fable playback state
+  const [originFrame, setOriginFrame] = useState(0);          // Origin story frame index (0-based)
+  const [originIsPlaying, setOriginIsPlaying] = useState(false);
+  const [lemonadeFrame, setLemonadeFrame] = useState(0);      // Lemonade stand frame index (0-based)
+  const [lemonadeIsPlaying, setLemonadeIsPlaying] = useState(false);
+
+  // Origin Story scene data (12 scenes)
+  const ORIGIN_SCENES = [
+    { img: 'concept_01_idea.jpg', caption: 'A person has an idea —\na tiny seed of something.' },
+    { img: 'concept_02_planting.jpg', caption: 'They plant it.\nJust one seed, in one spot of dirt.' },
+    { img: 'concept_03_growing.jpg', caption: 'It grows. Slowly at first —\na sprout reaching for light.' },
+    { img: 'concept_04_banyan.jpg', caption: 'Water it. Feed it.\nThe seed becomes a sapling.' },
+    { img: 'concept_05_figs.jpg', caption: 'The sapling becomes a tree.\nAnd the tree bears fruit.' },
+    { img: 'concept_06_harvest.jpg', caption: "The fruit fills a wheelbarrow.\nOne person's idea — harvested." },
+    { img: 'concept_07_more_growth.jpg', caption: "A banyan doesn't stop at one trunk.\nIt sends down roots that become new trunks." },
+    { img: 'concept_08_expansion.jpg', caption: 'One tree becomes two. Two become four.\nA forest from a single seed.' },
+    { img: 'concept_09_more_harvest.jpg', caption: 'More trees, more fruit.\nMore wheelbarrows. More people harvesting.' },
+    { img: 'concept_10_abundance.jpg', caption: 'The forest feeds everyone\nwho helped it grow.' },
+    { img: 'concept_11_ecosystem.jpg', caption: 'It becomes an ecosystem.\nSelf-sustaining. Self-expanding. Alive.' },
+    { img: 'concept_12_legacy.jpg', caption: 'And it all started with one person,\none idea, one seed.\nYOU.' },
+    { img: '', caption: '' },  // End card — "Where To Go From Here"
+  ];
+
+  // Lemonade Stand scene data (8 scenes) — uses emoji placeholders until son's drawings arrive
+  const LEMONADE_SCENES = [
+    { caption: "The goat wants to build\nbut can't afford the supplies." },
+    { caption: "One chicken and the dog\nput nickels in the goat's wheelbarrow." },
+    { caption: "The goat uses the money\nto buy wood, nails, and tools." },
+    { caption: "The goat, chicken, pig, and cat\nall work together to build." },
+    { caption: "The new lemonade stand\nsells cups for five cents each." },
+    { caption: "The goat, dog, and cat put money\nin the chef chicken's wheelbarrow." },
+    { caption: "Six friends with lemonade and pizza\nhelp the dog start his dream." },
+    { caption: '"A true selfless act\nalways sparks another." — Klaus' },
+    { caption: '' },  // End card — "Where To Go From Here"
+  ];
 
   useEffect(() => {
     if (!fableIsPlaying) return;
     const timer = setInterval(() => {
       setFableFrame((prev) => {
-        if (prev >= 30) {
+        if (prev >= 31) {
           setFableIsPlaying(false);
-          return 30;
+          return 31;
         }
         return prev + 1;
       });
     }, 1200);
     return () => clearInterval(timer);
   }, [fableIsPlaying]);
+
+  useEffect(() => {
+    if (!originIsPlaying) return;
+    const timer = setInterval(() => {
+      setOriginFrame((prev) => {
+        if (prev >= ORIGIN_SCENES.length - 1) { setOriginIsPlaying(false); return prev; }
+        return prev + 1;
+      });
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [originIsPlaying]);
+
+  useEffect(() => {
+    if (!lemonadeIsPlaying) return;
+    const timer = setInterval(() => {
+      setLemonadeFrame((prev) => {
+        if (prev >= LEMONADE_SCENES.length - 1) { setLemonadeIsPlaying(false); return prev; }
+        return prev + 1;
+      });
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [lemonadeIsPlaying]);
   const [mainCardFlipped, setMainCardFlipped] = useState(false); // Main card (logo + G&G) flip
   const [heroBackExpanded, setHeroBackExpanded] = useState<string | null>(null);  // Expanded topic on Hero Card back
   const [mainBackExpanded, setMainBackExpanded] = useState<string | null>(null);  // Expanded topic on Main Card back
@@ -566,9 +649,21 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     // Check localStorage for previously earned candle
     return localStorage.getItem('liana_first_candle') === 'true';
   });
+  const [charityFlipped, setCharityFlipped] = useState(false);  // Charity card flip — front shows 3 deck cards, back shows 16 initiative pills
+  const [selectedInitiative, setSelectedInitiative] = useState<string | null>(null);  // Selected initiative on charity card back, null = pill grid
   const [explainerFlipped, setExplainerFlipped] = useState(false);  // Start unflipped showing white front (simple message), click to flip to dark back (16 initiatives)
   const [pathsSectionFlipped, setPathsSectionFlipped] = useState(false);  // Choose Your Path section flip (trunk-info)
   const [expandedWorldPortal, setExpandedWorldPortal] = useState<'ghost' | 'real' | null>(null);  // Which world portal is expanded on Choose Card back
+  const [activeSlideshow, setActiveSlideshow] = useState<string | null>(null);  // Which content is showing: 'fable' | 'lemonade' | 'origin' | 'noads' | 'novc' | null
+  const [watchDropdownOpen, setWatchDropdownOpen] = useState(false);  // WATCH button dropdown menu
+
+  // Close WATCH dropdown when clicking anywhere else
+  useEffect(() => {
+    if (!watchDropdownOpen) return;
+    const handleClickAway = () => setWatchDropdownOpen(false);
+    const timer = setTimeout(() => document.addEventListener('click', handleClickAway), 0);
+    return () => { clearTimeout(timer); document.removeEventListener('click', handleClickAway); };
+  }, [watchDropdownOpen]);
   
   // Level-gated navigation
   const levelGatedNavigate = useLevelGatedNavigate();
@@ -749,7 +844,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     '/durins-door': {
       icon: '🪞',
       title: 'Mirror Mirror',
-      description: '"Speak friend and enter." You found the keyhole. The Mirror is your reflection portal — see yourself as others see you, manage your public profile, and control what you share. Your identity, your rules. 50+ languages recognized.',
+      description: 'You found a keyhole. Hidden doors are scattered throughout — each one unlocks something different, all worth finding. This one opens Mirror Mirror — the fairest of them all. Not fairest as in beauty. Fairest as in how we treat each other. Mirror Mirror translates this entire site into 50+ languages — because fair means everyone can read it. And YOU can help translate. Enter to find out more.',
     },
   };
   
@@ -1043,8 +1138,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
   // ═══════════════════════════════════════════════════════════════════
   const isProfessionalTheme = currentTheme === '001';
   // Warm off-white page background — Main Card stands out like a physical object on a table
-  const professionalBackground = isProfessionalTheme 
-    ? '#faf5eb'
+  const professionalBackground = isProfessionalTheme
+    ? 'linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #0a0a0a 70%, #0d0d1f 100%)'
     : undefined;
   
   return (
@@ -1713,7 +1808,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         }}
       />
 
-      <div className="container" style={isProfessionalTheme ? { maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', width: '100%', flex: 1, position: 'relative', zIndex: 1, minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' } : undefined}>
+      <div className="container" style={isProfessionalTheme ? { maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', width: '100%', position: 'relative', zIndex: 1, minHeight: '100vh', boxSizing: 'border-box' } : undefined}>
         {/* ═══════════════════════════════════════════════════════════════════
             MAIN CARD (larger) — Contains Logo + Hero Card slot + G&G Button
             Flips independently to show "How It Works"
@@ -1723,9 +1818,10 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         >
           <div className="main-card-inner" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', flex: 1 }}>
             {/* FRONT: Logo + Hero Card + ENTER/WATCH — Main Card is static frame, does NOT flip */}
-            <div 
-              className="main-card-front" 
-              style={isProfessionalTheme ? { 
+            <div
+              className="main-card-front"
+              data-xray-id="main-card"
+              style={isProfessionalTheme ? {
                 position: 'relative',
                 boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.10)',
                 padding: '2.5rem 2.5rem 2rem',
@@ -1744,16 +1840,17 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   Professional mode: chalk outline + cream/green colors
                   NOTE: Flip disabled in professional mode for V2 (preserved for Secret Access Door)
               ═══════════════════════════════════════════════════════════ */}
-              <div 
+              <div
                 className={`hero-flip ${heroFlipped || hofundAccessGranted ? 'flipped' : ''} ${isProfessionalTheme ? 'no-chalk-outline' : ''}`}
+                data-xray-id="hero-card"
                 onClick={(e) => { e.stopPropagation(); if (!hofundAccessGranted) setHeroFlipped(!heroFlipped); }}
               >
-                <div className="hero-flip-inner" style={{ minHeight: '680px', borderRadius: '1rem', overflow: 'visible', width: '100%', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', flexGrow: 1, border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
+                <div className="hero-flip-inner" style={{ minHeight: 'auto', borderRadius: '1rem', overflow: 'visible', width: '100%', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', flexGrow: 1, border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
                   {/* FRONT: Professional mode matches "Ideas are Free" layout exactly */}
                   {/* OR shows Helm item explanation when hovered from nav */}
                   <div className="hero-front" style={isProfessionalTheme ? { 
                     background: '#0a1628',  /* Same as page background */
-                    padding: '4rem 3rem',  /* More vertical padding for taller card */
+                    padding: '1.5rem 2rem',  /* Compact padding */
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -1844,23 +1941,74 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       /* DEFAULT PROFESSIONAL CONTENT */
                       <>
                         {/* Rotating Quotes — inside Hero Card, flips with it */}
-                        <div style={{ marginBottom: '1rem', width: '100%', maxWidth: '500px', minHeight: '60px' }}>
+                        <div data-xray-id="rotating-quotes" style={{ marginBottom: '1rem', width: '100%', maxWidth: '500px', minHeight: '60px' }}>
                           <RotatingQuotes intervalMs={8000} />
                         </div>
-                        {/* COOPERATIVE COMMERCE eyebrow */}
-                        <span className="cooperative-header" style={{ 
+                        {/* COOPERATIVE COMMERCE eyebrow — with No Ads / No V.C. flanking */}
+                        <span className="cooperative-header" data-xray-id="cooperative-commerce-header" style={{
                           fontFamily: "'JetBrains Mono', monospace",
                           fontSize: 'clamp(0.6rem, 2.5vw, 0.8rem)',
-                          color: '#d69e2e',
-                          letterSpacing: '0.25em',
+                          letterSpacing: '0.15em',
                           textTransform: 'uppercase',
                           marginBottom: '1.25rem',
-                          display: 'block',
-                          textAlign: 'center'
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.5em',
+                          textAlign: 'center',
+                          flexWrap: 'wrap',
                         }}>
-                          <span style={{ display: 'inline' }} className="coop-line">COOPERATIVE</span>
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setWatchDropdownOpen(false);
+                              if (activeSlideshow === 'noads') {
+                                setActiveSlideshow(null);
+                                setHeroFlipped(false);
+                                setFableIsPlaying(false);
+                              } else {
+                                setActiveSlideshow('noads');
+                                setHeroFlipped(true);
+                                setFableIsPlaying(false);
+                              }
+                            }}
+                            style={{
+                              color: activeSlideshow === 'noads' ? '#faf5eb' : 'rgba(250, 245, 235, 0.5)',
+                              cursor: 'pointer',
+                              transition: 'color 0.3s ease',
+                              fontSize: 'clamp(0.55rem, 2vw, 0.7rem)',
+                            }}
+                            onMouseOver={(e) => { e.currentTarget.style.color = '#faf5eb'; }}
+                            onMouseOut={(e) => { if (activeSlideshow !== 'noads') e.currentTarget.style.color = 'rgba(250, 245, 235, 0.5)'; }}
+                          >No Ads</span>
+                          <span style={{ color: 'rgba(250, 245, 235, 0.25)' }}>&middot;</span>
+                          <span style={{ display: 'inline' }} className="coop-line"><span style={{ color: '#d69e2e' }}>COOPERATIVE</span></span>
                           <br className="mobile-break" style={{ display: 'none' }} />
-                          <span style={{ display: 'inline' }} className="coop-line"> COMMERCE</span>
+                          <span style={{ display: 'inline' }} className="coop-line"><span style={{ color: '#d69e2e' }}> COMMERCE</span></span>
+                          <span style={{ color: 'rgba(250, 245, 235, 0.25)' }}>&middot;</span>
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setWatchDropdownOpen(false);
+                              if (activeSlideshow === 'novc') {
+                                setActiveSlideshow(null);
+                                setHeroFlipped(false);
+                                setFableIsPlaying(false);
+                              } else {
+                                setActiveSlideshow('novc');
+                                setHeroFlipped(true);
+                                setFableIsPlaying(false);
+                              }
+                            }}
+                            style={{
+                              color: activeSlideshow === 'novc' ? '#faf5eb' : 'rgba(250, 245, 235, 0.5)',
+                              cursor: 'pointer',
+                              transition: 'color 0.3s ease',
+                              fontSize: 'clamp(0.55rem, 2vw, 0.7rem)',
+                            }}
+                            onMouseOver={(e) => { e.currentTarget.style.color = '#faf5eb'; }}
+                            onMouseOut={(e) => { if (activeSlideshow !== 'novc') e.currentTarget.style.color = 'rgba(250, 245, 235, 0.5)'; }}
+                          >No V.C.</span>
                         </span>
                         {/* "Ideas are Free" style - large serif text - CLICKABLE to philosophy page */}
                         <h2 
@@ -1874,15 +2022,39 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                           }}
                         >
                           {/* Line 1: "Help Each Other" - white like "Ideas are Free" */}
-                          <span style={{ color: '#faf5eb', display: 'block' }}>Help Each Other</span>
+                          <span style={{ color: '#faf5eb', display: 'block' }} data-xray-id="heoho-headline">Help Each Other</span>
                           {/* Line 2: "Help Ourselves" - green. The "O" is Durin's Door keyhole */}
-                          <span style={{ color: '#38a169', display: 'block' }}>Help <span 
-                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); setHofundCodeEntry(true); setHofundWrongCodeMessage(false); setHofundCode(''); }} 
-                            style={{ cursor: 'pointer', position: 'relative', display: 'inline', transition: 'text-shadow 0.2s ease' }} 
-                            onMouseOver={(e) => { e.currentTarget.style.textShadow = '0 0 12px rgba(56, 161, 105, 0.7)'; }} 
-                            onMouseOut={(e) => { e.currentTarget.style.textShadow = 'none'; }} 
+                          <span style={{ color: '#38a169', display: 'block' }}>Help <span
+                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); setHofundCodeEntry(true); setHofundWrongCodeMessage(false); setHofundCode(''); }}
+                            style={{ cursor: 'pointer', position: 'relative', display: 'inline', transition: 'color 0.3s ease, filter 0.3s ease', color: 'inherit' }}
+                            onMouseOver={(e) => {
+                              const el = e.currentTarget;
+                              el.style.color = '#d69e2e';
+                              el.style.filter = 'drop-shadow(0 0 8px rgba(214, 158, 46, 0.7))';
+                              const bg = el.querySelector('.keyhole-bg');
+                              if (bg) bg.setAttribute('fill', '#d69e2e');
+                              const outline = el.querySelector('.keyhole-outline');
+                              if (outline) outline.setAttribute('stroke', '#0a1628');
+                              const fills = el.querySelectorAll('.keyhole-fill');
+                              fills.forEach(f => f.setAttribute('fill', '#0a1628'));
+                            }}
+                            onMouseOut={(e) => {
+                              const el = e.currentTarget;
+                              el.style.color = 'inherit';
+                              el.style.filter = 'none';
+                              const bg = el.querySelector('.keyhole-bg');
+                              if (bg) bg.setAttribute('fill', '#0a1628');
+                              const outline = el.querySelector('.keyhole-outline');
+                              if (outline) outline.setAttribute('stroke', '#0a1628');
+                              const fills = el.querySelectorAll('.keyhole-fill');
+                              fills.forEach(f => f.setAttribute('fill', '#8b7355'));
+                            }}
                             title="Speak friend and enter"
-                          >O<span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '0.2em', opacity: 0.25, pointerEvents: 'none' }}>🕳️</span></span>urselves.</span>
+                            role="button"
+                            aria-label="Hidden keyhole in the O of Ourselves. Click to open Mirror Mirror — accessibility options including language translation, text sizing, high contrast, and dyslexia-friendly font. Keyboard: press Enter to activate."
+                            tabIndex={0}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setHofundCodeEntry(true); setHofundWrongCodeMessage(false); setHofundCode(''); }}}
+                          ><span style={{ position: 'relative', display: 'inline-block', isolation: 'isolate', WebkitTextStroke: '2px #0a1628', paintOrder: 'stroke fill' }}>O<svg viewBox="0 0 100 100" aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -1 }}><ellipse cx="50" cy="50" rx="36" ry="38" fill="#0a1628" className="keyhole-bg" style={{ transition: 'fill 0.3s ease' }}/><circle cx="50.5" cy="50" r="8" fill="#8b7355" className="keyhole-fill" style={{ transition: 'fill 0.3s ease' }}/><polygon points="46.75,55 41.5,73 59.5,73 54.25,55" fill="#8b7355" className="keyhole-fill" style={{ transition: 'fill 0.3s ease' }}/></svg></span></span>urselves.</span>
                         </h2>
                         <p style={{ 
                           fontSize: 'clamp(0.95rem, 2.2vw, 1.15rem)',
@@ -2200,7 +2372,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     height: '100%',
                     background: '#ffffff',
                     overflow: 'hidden',
-                    minHeight: '680px',
+                    minHeight: 'auto',
                     borderRadius: '1rem',
                     width: '100%',
                     flex: 1,
@@ -2209,80 +2381,193 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     border: 'none'
                   } : undefined}>
                     {isProfessionalTheme ? (
-                      <div className="group" onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setFableIsPlaying(false); }} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', width: '100%', height: '100%', cursor: 'pointer' }}>
-                        <img 
-                          src={`/images/fable/${fableFrame}.png`} 
-                          alt={`Fable Frame ${fableFrame}`} 
-                          style={{ maxWidth: '90%', maxHeight: '85%', objectFit: 'contain', marginTop: '0.5rem' }}
-                        />
-                        
-                        {/* Subtitle Overlay — below the image, outside the artwork */}
-                        {FABLE_SUBTITLES[fableFrame] && (
-                          <div 
-                            className="absolute bottom-0 left-0 right-0 px-4 text-center pointer-events-none flex justify-center"
-                            style={{ zIndex: 10 }}
-                          >
-                            <p style={{
-                              background: 'rgba(255, 255, 255, 0.85)',
-                              color: '#0a1628',
-                              padding: '0.5rem 1rem',
-                              borderRadius: '0.35rem 0.35rem 0 0',
-                              fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)',
-                              fontFamily: "'Source Sans 3', system-ui, sans-serif",
-                              maxWidth: '95%',
-                              margin: 0,
-                              transition: 'opacity 0.3s ease',
-                              lineHeight: 1.4,
-                              fontWeight: 500
-                            }}>
-                              {FABLE_SUBTITLES[fableFrame]}
-                            </p>
-                          </div>
-                        )}
-                        
-                        {/* Left Button (Previous) */}
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', width: '100%', height: '100%' }}>
+                        {/* Close button — always visible top right */}
                         <button
-                          onClick={(e) => { e.stopPropagation(); setFableFrame(prev => Math.max(1, prev - 1)); setFableIsPlaying(false); }}
-                          className="absolute left-0 top-0 bottom-0 w-16 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-gradient-to-r from-black/10 to-transparent hover:from-black/20"
-                          style={{ border: 'none', cursor: 'pointer', color: '#333' }}
-                          title="Previous"
-                        >
-                          <ChevronLeft className="w-10 h-10 opacity-70 hover:opacity-100 transition-opacity" />
-                        </button>
-
-                        {/* Right Button (Next) */}
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setFableFrame(prev => Math.min(30, prev + 1)); setFableIsPlaying(false); }}
-                          className="absolute right-0 top-0 bottom-0 w-16 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-gradient-to-l from-black/10 to-transparent hover:from-black/20"
-                          style={{ border: 'none', cursor: 'pointer', color: '#333' }}
-                          title="Next"
-                        >
-                          <ChevronRight className="w-10 h-10 opacity-70 hover:opacity-100 transition-opacity" />
-                        </button>
-
-                        {/* Center Play/Pause Button */}
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setFableIsPlaying(!fableIsPlaying); }}
-                          className="absolute inset-0 m-auto w-20 h-20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm scale-95 hover:scale-100"
-                          style={{ border: 'none', cursor: 'pointer' }}
-                          title={fableIsPlaying ? "Pause" : "Play"}
-                        >
-                          {fableIsPlaying ? (
-                            <Pause className="w-10 h-10 fill-current" />
-                          ) : (
-                            <Play className="w-10 h-10 fill-current ml-1" />
-                          )}
-                        </button>
-                        
-                        {/* Close button top right */}
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setFableIsPlaying(false); }}
-                          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
+                          onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setFableIsPlaying(false); setActiveSlideshow(null); }}
+                          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 text-slate-600 hover:text-white flex items-center justify-center transition-colors z-20"
                           style={{ border: 'none', cursor: 'pointer' }}
                           title="Close"
                         >
                           ×
                         </button>
+
+                        {/* FABLE VIEW — default when WATCH is clicked or 'fable' pill selected */}
+                        {(!activeSlideshow || activeSlideshow === 'fable') && (
+                          fableFrame === 31 ? (
+                            /* END CARD — "Where To Go From Here" */
+                            <div data-dark-theme style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', background: 'linear-gradient(135deg, #0a1628 0%, #1a2332 100%)', padding: '1.5rem', gap: '1rem' }}>
+                              <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#faf5eb', fontFamily: "'Source Sans 3', system-ui, sans-serif", margin: 0 }}>Where To Go From Here</p>
+                              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                <button onClick={(e) => { e.stopPropagation(); setFableFrame(1); setFableIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>🔄 Watch Again</button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveSlideshow('origin'); setOriginFrame(0); setOriginIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>🌱 Origin Story</button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveSlideshow('lemonade'); setLemonadeFrame(0); setLemonadeIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>🍋 Lemonade Stand</button>
+                                <button onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setActiveSlideshow(null); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>✖ Close</button>
+                              </div>
+                              <button onClick={(e) => { e.stopPropagation(); setFableFrame(30); }} style={{ background: 'none', border: 'none', color: 'rgba(250,245,235,0.5)', fontSize: '0.75rem', cursor: 'pointer', marginTop: '0.25rem' }}>← Back</button>
+                            </div>
+                          ) : (
+                          <div data-dark-theme onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setFableIsPlaying(false); setActiveSlideshow(null); }} style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', height: '100%', cursor: 'pointer', background: '#0a1628' }}>
+                            {/* Controls above image */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', padding: '0.5rem 1rem 0.25rem' }} onClick={(e) => e.stopPropagation()}>
+                              <button onClick={(e) => { e.stopPropagation(); setFableFrame(prev => Math.max(1, prev - 1)); setFableIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#faf5eb', padding: '0.25rem', borderRadius: '50%' }}><ChevronLeft className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
+                              <button onClick={(e) => { e.stopPropagation(); setFableIsPlaying(!fableIsPlaying); }} style={{ border: '1px solid rgba(250,245,235,0.2)', cursor: 'pointer', background: 'transparent', color: '#faf5eb', width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{fableIsPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" style={{ marginLeft: '2px' }} />}</button>
+                              <button onClick={(e) => { e.stopPropagation(); setFableFrame(prev => Math.min(31, prev + 1)); setFableIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#faf5eb', padding: '0.25rem', borderRadius: '50%' }}><ChevronRight className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
+                            </div>
+                            {/* Clean image */}
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                              <img src={`/images/fable/${fableFrame}.png`} alt={`Fable Frame ${fableFrame}`} style={{ maxWidth: '90%', maxHeight: '85%', objectFit: 'contain' }} />
+                            </div>
+                            {FABLE_SUBTITLES[fableFrame] && (
+                              <div style={{ textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
+                                <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line' }}>
+                                  {FABLE_SUBTITLES[fableFrame]}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                          )
+                        )}
+
+                        {/* ORIGIN STORY VIEW — same pattern as Fable */}
+                        {activeSlideshow === 'origin' && (
+                          originFrame === ORIGIN_SCENES.length - 1 ? (
+                            /* END CARD — Origin Story */
+                            <div data-dark-theme style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', background: 'linear-gradient(135deg, #0a1628 0%, #1a2332 100%)', padding: '1.5rem', gap: '1rem' }}>
+                              <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#faf5eb', fontFamily: "'Source Sans 3', system-ui, sans-serif", margin: 0 }}>Where To Go From Here</p>
+                              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                <button onClick={(e) => { e.stopPropagation(); setOriginFrame(0); setOriginIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>🔄 Watch Again</button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveSlideshow('fable'); setFableFrame(1); setFableIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>📖 The Fable</button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveSlideshow('lemonade'); setLemonadeFrame(0); setLemonadeIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>🍋 Lemonade Stand</button>
+                                <button onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setActiveSlideshow(null); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>✖ Close</button>
+                              </div>
+                              <button onClick={(e) => { e.stopPropagation(); setOriginFrame(ORIGIN_SCENES.length - 2); }} style={{ background: 'none', border: 'none', color: 'rgba(250,245,235,0.5)', fontSize: '0.75rem', cursor: 'pointer', marginTop: '0.25rem' }}>← Back</button>
+                            </div>
+                          ) : (
+                          <div onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setOriginIsPlaying(false); setActiveSlideshow(null); }} style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', height: '100%', cursor: 'pointer', background: '#f5f0e8' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', padding: '0.5rem 1rem 0.25rem' }} onClick={(e) => e.stopPropagation()}>
+                              <button onClick={(e) => { e.stopPropagation(); setOriginFrame(prev => Math.max(0, prev - 1)); setOriginIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#333', padding: '0.25rem', borderRadius: '50%' }}><ChevronLeft className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
+                              <button onClick={(e) => { e.stopPropagation(); setOriginIsPlaying(!originIsPlaying); }} style={{ border: '1px solid rgba(0,0,0,0.15)', cursor: 'pointer', background: 'transparent', color: '#333', width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{originIsPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" style={{ marginLeft: '2px' }} />}</button>
+                              <button onClick={(e) => { e.stopPropagation(); setOriginFrame(prev => Math.min(ORIGIN_SCENES.length - 1, prev + 1)); setOriginIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#333', padding: '0.25rem', borderRadius: '50%' }}><ChevronRight className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
+                            </div>
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                              <img src={`/origin-story/${ORIGIN_SCENES[originFrame].img}`} alt={`Origin Story ${originFrame + 1}`} style={{ maxWidth: '90%', maxHeight: '85%', objectFit: 'contain' }} />
+                            </div>
+                            {ORIGIN_SCENES[originFrame].caption && (
+                              <div style={{ textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
+                                <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line' }}>
+                                  {ORIGIN_SCENES[originFrame].caption}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                          )
+                        )}
+
+                        {/* LEMONADE STAND VIEW — same pattern as Fable (emoji placeholders until drawings arrive) */}
+                        {activeSlideshow === 'lemonade' && (
+                          lemonadeFrame === LEMONADE_SCENES.length - 1 ? (
+                            /* END CARD — Lemonade Stand */
+                            <div data-dark-theme style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', background: 'linear-gradient(135deg, #0a1628 0%, #1a2332 100%)', padding: '1.5rem', gap: '1rem' }}>
+                              <p style={{ fontSize: '1.4rem', fontWeight: 700, color: '#faf5eb', fontFamily: "'Source Sans 3', system-ui, sans-serif", margin: 0 }}>Where To Go From Here</p>
+                              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                <button onClick={(e) => { e.stopPropagation(); setLemonadeFrame(0); setLemonadeIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>🔄 Watch Again</button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveSlideshow('fable'); setFableFrame(1); setFableIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>📖 The Fable</button>
+                                <button onClick={(e) => { e.stopPropagation(); setActiveSlideshow('origin'); setOriginFrame(0); setOriginIsPlaying(true); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>🌱 Origin Story</button>
+                                <button onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setActiveSlideshow(null); }} style={{ padding: '0.5rem 1.25rem', background: 'rgba(250,245,235,0.15)', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', color: '#faf5eb', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>✖ Close</button>
+                              </div>
+                              <button onClick={(e) => { e.stopPropagation(); setLemonadeFrame(LEMONADE_SCENES.length - 2); }} style={{ background: 'none', border: 'none', color: 'rgba(250,245,235,0.5)', fontSize: '0.75rem', cursor: 'pointer', marginTop: '0.25rem' }}>← Back</button>
+                            </div>
+                          ) : (
+                          <div onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setLemonadeIsPlaying(false); setActiveSlideshow(null); }} style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', height: '100%', cursor: 'pointer', background: '#fff8e7' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', padding: '0.5rem 1rem 0.25rem' }} onClick={(e) => e.stopPropagation()}>
+                              <button onClick={(e) => { e.stopPropagation(); setLemonadeFrame(prev => Math.max(0, prev - 1)); setLemonadeIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#333', padding: '0.25rem', borderRadius: '50%' }}><ChevronLeft className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
+                              <button onClick={(e) => { e.stopPropagation(); setLemonadeIsPlaying(!lemonadeIsPlaying); }} style={{ border: '1px solid rgba(0,0,0,0.15)', cursor: 'pointer', background: 'transparent', color: '#333', width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{lemonadeIsPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" style={{ marginLeft: '2px' }} />}</button>
+                              <button onClick={(e) => { e.stopPropagation(); setLemonadeFrame(prev => Math.min(LEMONADE_SCENES.length - 1, prev + 1)); setLemonadeIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#333', padding: '0.25rem', borderRadius: '50%' }}><ChevronRight className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
+                            </div>
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <div style={{ fontSize: '5rem', textAlign: 'center', lineHeight: 1.2 }}>
+                                {['🐐', '🐔🐕', '🔨', '🐐🐔🐷🐱', '🍋', '💰', '🍕', '✨'][lemonadeFrame] || '🐐'}
+                              </div>
+                            </div>
+                            {LEMONADE_SCENES[lemonadeFrame].caption && (
+                              <div style={{ textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
+                                <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line' }}>
+                                  {LEMONADE_SCENES[lemonadeFrame].caption}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                          )
+                        )}
+
+                        {/* WHY NO ADS — inline summary — click anywhere to flip back */}
+                        {activeSlideshow === 'noads' && (
+                          <div data-dark-theme onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setActiveSlideshow(null); }} style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '1.25rem 1.75rem', overflow: 'hidden', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', cursor: 'pointer', justifyContent: 'center' }}>
+                            <h3 style={{ color: '#faf5eb', fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.75rem', fontFamily: "'Source Sans 3', system-ui, sans-serif", textAlign: 'center' }}>
+                              🚫 Why No Outside Advertising?
+                            </h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                              <div style={{ background: 'rgba(239, 68, 68, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                                <p style={{ color: '#fca5a5', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>The Ad-Funded Trap</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}>Ad-funded platforms sell your attention. They optimize for addiction, not help.</p>
+                              </div>
+                              <div style={{ background: 'rgba(34, 197, 94, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+                                <p style={{ color: '#86efac', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>Our Engine Instead</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fb923c' }}>The Furnace</strong> verifies Cue Cards → <strong style={{ color: '#fbbf24' }}>$5/yr Deck</strong> arms members → <strong style={{ color: '#4ade80' }}>The Cue Card Drop</strong> seeds 10 locations.</p>
+                              </div>
+                              <div style={{ background: 'rgba(139, 92, 246, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
+                                <p style={{ color: '#c4b5fd', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>What It Means For You</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}>No creepy targeting. Earn 25 Marks per referral. Every ad dollar goes to members instead.</p>
+                              </div>
+                            </div>
+                            <a
+                              href="/faq#no-ads"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              style={{ marginTop: '0.75rem', padding: '0.5rem 1.25rem', background: '#dc2626', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, fontFamily: "'Source Sans 3', system-ui, sans-serif", alignSelf: 'center', transition: 'background 0.2s', textDecoration: 'none', display: 'inline-block' }}
+                              onMouseOver={(e) => { (e.currentTarget as HTMLElement).style.background = '#b91c1c'; }}
+                              onMouseOut={(e) => { (e.currentTarget as HTMLElement).style.background = '#dc2626'; }}
+                            >
+                              Read Full Explanation →
+                            </a>
+                          </div>
+                        )}
+
+                        {/* WHY NO V.C. — inline summary — click anywhere to flip back */}
+                        {activeSlideshow === 'novc' && (
+                          <div data-dark-theme onClick={(e) => { e.stopPropagation(); setHeroFlipped(false); setActiveSlideshow(null); }} style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '1.25rem 1.75rem', overflow: 'hidden', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', cursor: 'pointer', justifyContent: 'center' }}>
+                            <h3 style={{ color: '#faf5eb', fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.75rem', fontFamily: "'Source Sans 3', system-ui, sans-serif", textAlign: 'center' }}>
+                              🛡️ Why No V.C.?
+                            </h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                              <div style={{ background: 'rgba(239, 68, 68, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                                <p style={{ color: '#fca5a5', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>V.C. Money Comes With Strings</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}>10x return demands force unsustainable growth. Exit pressure = selling you in 5-7 years. Each round dilutes everyone.</p>
+                              </div>
+                              <div style={{ background: 'rgba(34, 197, 94, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+                                <p style={{ color: '#86efac', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>Patent-Backed Bootstrap</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>7 provisionals, 1,690 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="https://cephas.lianabanyan.com/articles/one-of-us-building-trust-through-shared-economics/" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
+                              </div>
+                              <div style={{ background: 'rgba(139, 92, 246, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
+                                <p style={{ color: '#c4b5fd', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>The Math</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}>VC at $500M, we'd own ~$25M. Organic at $250M, we own <strong style={{ color: '#4ade80' }}>all of it</strong>. Your early contribution = permanent credit.</p>
+                              </div>
+                            </div>
+                            <a
+                              href="/faq#no-vc"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              style={{ marginTop: '0.75rem', padding: '0.5rem 1.25rem', background: '#7c3aed', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, fontFamily: "'Source Sans 3', system-ui, sans-serif", alignSelf: 'center', transition: 'background 0.2s', textDecoration: 'none', display: 'inline-block' }}
+                              onMouseOver={(e) => { (e.currentTarget as HTMLElement).style.background = '#6d28d9'; }}
+                              onMouseOut={(e) => { (e.currentTarget as HTMLElement).style.background = '#7c3aed'; }}
+                            >
+                              Read Full Explanation →
+                            </a>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', background: '#0a1628' }}>
@@ -2293,15 +2578,11 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 </div>
               </div>
               {/* END HERO CARD */}
-              {/* Self-funding value prop (STRATEGY_AMBASSADOR_GRADUATION_SYSTEM Section 6) */}
-              <p className="text-center text-sm text-muted-foreground mt-4" style={isProfessionalTheme ? { color: 'rgba(250, 245, 235, 0.75)', marginTop: '1rem' } : undefined} data-xray-id="front-page-self-funding-copy">
-                Every tool on Liana Banyan pays for itself. No venture capital subsidies. The economics work from day one.
-              </p>
-              {/* ENTER + WATCH buttons — on Main Card frame, outside Hero Card */}
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
-                <button 
+              {/* ENTER + WATCH buttons + No Ads / No VC pills */}
+              <div data-xray-id="enter-watch-buttons" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                <button
                   onClick={(e) => { e.stopPropagation(); navigate('/portal'); }}
-                  style={{ 
+                  style={{
                     cursor: 'pointer',
                     padding: '0.875rem 2.5rem',
                     fontSize: '1rem',
@@ -2312,7 +2593,9 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                     border: '2px solid #38a169',
                     borderRadius: '0.5rem',
                     transition: 'all 0.3s ease',
-                    letterSpacing: '0.1em'
+                    letterSpacing: '0.1em',
+                    minWidth: '180px',
+                    textAlign: 'center' as const
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.background = '#faf5eb';
@@ -2327,33 +2610,116 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 >
                   ENTER
                 </button>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); setHeroFlipped(true); }}
-                  style={{ 
-                    cursor: 'pointer',
-                    padding: '0.875rem 2.5rem',
-                    fontSize: '1rem',
-                    fontWeight: 700,
-                    fontFamily: "'Source Sans 3', system-ui, sans-serif",
-                    color: '#faf5eb',
-                    background: 'transparent',
-                    border: '2px solid rgba(250, 245, 235, 0.4)',
-                    borderRadius: '0.5rem',
-                    transition: 'all 0.3s ease',
-                    letterSpacing: '0.1em'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = '#faf5eb';
-                    e.currentTarget.style.background = 'rgba(250, 245, 235, 0.1)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(250, 245, 235, 0.4)';
-                    e.currentTarget.style.background = 'transparent';
-                  }}
-                >
-                  WATCH
-                </button>
+
+                {/* WATCH dropdown button */}
+                <div style={{ position: 'relative' }}>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setWatchDropdownOpen(!watchDropdownOpen); }}
+                    style={{
+                      cursor: 'pointer',
+                      padding: '0.875rem 2.5rem',
+                      fontSize: '1rem',
+                      fontWeight: 700,
+                      fontFamily: "'Source Sans 3', system-ui, sans-serif",
+                      color: '#faf5eb',
+                      background: 'transparent',
+                      border: '2px solid rgba(250, 245, 235, 0.4)',
+                      borderRadius: '0.5rem',
+                      transition: 'all 0.3s ease',
+                      letterSpacing: '0.1em',
+                      minWidth: '180px',
+                      textAlign: 'center' as const
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.borderColor = '#faf5eb';
+                      e.currentTarget.style.background = 'rgba(250, 245, 235, 0.1)';
+                    }}
+                    onMouseOut={(e) => {
+                      if (!watchDropdownOpen) {
+                        e.currentTarget.style.borderColor = 'rgba(250, 245, 235, 0.4)';
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    WATCH ▾
+                  </button>
+
+                  {/* Dropdown menu */}
+                  {watchDropdownOpen && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 'calc(100% + 0.5rem)',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background: '#1a2332',
+                        border: '1px solid rgba(250, 245, 235, 0.2)',
+                        borderRadius: '0.75rem',
+                        padding: '0.5rem',
+                        minWidth: '200px',
+                        zIndex: 50,
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+                      }}
+                    >
+                      {[
+                        { id: 'origin', label: '🌱 Origin Story' },
+                        { id: 'fable', label: '📖 The Fable' },
+                        { id: 'lemonade', label: '🍋 Lemonade Stand' },
+                        { id: 'office', label: '🎬 Founder\'s Office' },
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setWatchDropdownOpen(false);
+                            if (item.id === 'office') {
+                              window.open('https://youtube.com/@lianabanyan', '_blank', 'noopener,noreferrer');
+                            } else {
+                              setActiveSlideshow(item.id);
+                              setHeroFlipped(true);
+                              if (item.id === 'fable') {
+                                setFableFrame(1);
+                                setFableIsPlaying(true);
+                              } else if (item.id === 'origin') {
+                                setOriginFrame(0);
+                                setOriginIsPlaying(true);
+                                setFableIsPlaying(false);
+                              } else if (item.id === 'lemonade') {
+                                setLemonadeFrame(0);
+                                setLemonadeIsPlaying(true);
+                                setFableIsPlaying(false);
+                              } else {
+                                setFableIsPlaying(false);
+                              }
+                            }
+                          }}
+                          style={{
+                            display: 'block',
+                            width: '100%',
+                            padding: '0.65rem 1rem',
+                            fontSize: '0.9rem',
+                            fontWeight: 600,
+                            fontFamily: "'Source Sans 3', system-ui, sans-serif",
+                            color: activeSlideshow === item.id ? '#d69e2e' : '#faf5eb',
+                            background: 'transparent',
+                            border: 'none',
+                            borderRadius: '0.5rem',
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            transition: 'background 0.2s',
+                          }}
+                          onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(250, 245, 235, 0.1)'; }}
+                          onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* No Ads / No VC pills moved up to COOPERATIVE COMMERCE eyebrow line */}
               
               {/* Hand icon removed — Main Card is static frame, no flip */}
             </div>
@@ -2731,8 +3097,9 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
 
         {/* EXPLAINER FLIPCARD — REMOVED IN V2 (consolidated into Choose Card back) */}
 
-        {/* Choose Your Path — FLIP CARD (entire section swivels) */}
-        <div 
+        {/* FOUNDER DECISION: Bottom "explainer" card commented out — slot reserved for Charity Card */}
+        {false && (
+        <div
           className={`paths-section-flip ${pathsSectionFlipped ? 'flipped' : ''}`}
           onClick={() => { setPathsSectionFlipped(!pathsSectionFlipped); setExpandedWorldPortal(null); }}
           style={isProfessionalTheme ? {
@@ -3229,6 +3596,232 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               <p style={{ opacity: 0.5, fontSize: '0.7rem', marginTop: '1.5rem', textAlign: 'center' }}>
                 {expandedWorldPortal ? 'tap anywhere to go back' : 'tap anywhere to flip back to paths'}
               </p>
+            </div>
+          </div>
+        </div>
+        )}
+
+        {/* ═══ CHARITY CARD — CSS 3D Flip: front = 3 deck cards, back = 16 initiative pills ═══ */}
+        <div className="charity-flip-container">
+          <div className={`charity-flip-inner${charityFlipped ? ' flipped' : ''}`}>
+            {/* ─── FRONT FACE ─── */}
+            <div className="charity-flip-front">
+              <div className="charity-deck-row" style={{
+                display: 'flex',
+                gap: '1rem',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+              }}>
+                <div style={{
+                  flex: '1 1 280px',
+                  maxWidth: '320px',
+                  background: '#0a1628',
+                  border: '1px solid rgba(250, 245, 235, 0.15)',
+                  borderRadius: '1rem',
+                  padding: '1.5rem',
+                  textAlign: 'center',
+                }}>
+                  <h4 style={{ color: '#faf5eb', fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0' }}>Built to Last</h4>
+                  <p style={{ color: '#faf5eb', fontSize: '0.95rem', lineHeight: 1.8, margin: 0 }}>
+                    <span style={{ color: '#38a169', fontWeight: 700 }}>8</span> Patent Applications<br />
+                    <span style={{ color: '#38a169', fontWeight: 700 }}>1,690</span> Innovations<br />
+                    <span style={{ color: '#38a169', fontWeight: 700 }}>47</span> Creators Identified
+                  </p>
+                </div>
+
+                <div style={{
+                  flex: '1 1 280px',
+                  maxWidth: '320px',
+                  background: '#0a1628',
+                  border: '1px solid rgba(250, 245, 235, 0.15)',
+                  borderRadius: '1rem',
+                  padding: '1.5rem',
+                  textAlign: 'center',
+                }}>
+                  <h4 style={{ color: '#faf5eb', fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0' }}>What's In It For You?</h4>
+                  <p style={{ color: '#faf5eb', fontSize: '0.95rem', lineHeight: 2, margin: 0, textAlign: 'left', paddingLeft: '0.5rem' }}>
+                    {'\u{1F6E0}\uFE0F Maker? Sell what you build.'}<br />
+                    {'\u{1F6D2} Shopper? Own the store.'}<br />
+                    {'\u{1F331} Curious? Start here.'}
+                  </p>
+                </div>
+
+                <div style={{
+                  flex: '1 1 280px',
+                  maxWidth: '320px',
+                  background: '#0a1628',
+                  border: '1px solid rgba(250, 245, 235, 0.15)',
+                  borderRadius: '1rem',
+                  padding: '1.5rem',
+                  textAlign: 'center',
+                }}>
+                  <h4 style={{ color: '#faf5eb', fontSize: '1.1rem', fontWeight: 700, margin: '0 0 0.75rem 0' }}>Know a Maker?</h4>
+                  <p style={{ color: '#faf5eb', fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Invite them. Earn 10 Marks.</p>
+                  <p style={{ color: 'rgba(250, 245, 235, 0.6)', fontSize: '0.8rem', margin: '0 0 0.75rem 0' }}>6-tier rewards &middot; Everyone gets something &middot; Forever</p>
+                  <button
+                    onClick={() => window.open('/initiatives/brass-tacks', '_blank')}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#38a169',
+                      cursor: 'pointer',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      padding: 0,
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.color = '#68d391'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.color = '#38a169'; }}
+                  >
+                    Learn More {'\u2192'}
+                  </button>
+                </div>
+              </div>
+
+              <p
+                onClick={() => { setCharityFlipped(true); setSelectedInitiative(null); }}
+                style={{
+                  textAlign: 'center',
+                  marginTop: '1.5rem',
+                  color: '#38a169',
+                  fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)',
+                  cursor: 'pointer',
+                  transition: 'color 0.2s',
+                  fontWeight: 600,
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.color = '#68d391'; }}
+                onMouseOut={(e) => { e.currentTarget.style.color = '#38a169'; }}
+              >
+                The 20% margin funds 16 charitable initiatives for Everyone.
+              </p>
+            </div>
+
+            {/* ─── BACK FACE ─── */}
+            <div className="charity-flip-back">
+              <p style={{
+                textAlign: 'center',
+                color: '#38a169',
+                fontFamily: "'Source Sans 3', 'Source Sans Pro', sans-serif",
+                fontSize: 'clamp(0.85rem, 2vw, 1.05rem)',
+                marginBottom: '1rem',
+                marginTop: 0,
+                lineHeight: 1.4,
+              }}>
+                {'\u{1F33F}'} Not Charity <span style={{ fontWeight: 700, color: '#faf5eb' }}>TO</span> the People {'\u2014'} but Infrastructure <span style={{ fontWeight: 700, color: '#faf5eb' }}>BY</span> the People, <span style={{ fontWeight: 700, color: '#faf5eb' }}>FOR</span> the People
+              </p>
+              {selectedInitiative === null ? (
+                <>
+                  <h3 style={{ color: '#faf5eb', textAlign: 'center', fontSize: '1.15rem', fontWeight: 600, margin: '0 0 1.5rem 0' }}>
+                    16 Initiatives &middot; Click to Explore
+                  </h3>
+                  <div className="charity-pill-grid" style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gap: '0.75rem',
+                  }}>
+                    {SWEET_SIXTEEN.map((init) => (
+                      <button
+                        key={init.slug}
+                        onClick={() => setSelectedInitiative(init.slug)}
+                        style={{
+                          background: 'rgba(250, 245, 235, 0.08)',
+                          border: '1px solid rgba(250, 245, 235, 0.15)',
+                          borderRadius: '0.75rem',
+                          padding: '0.6rem 0.5rem',
+                          color: '#faf5eb',
+                          cursor: 'pointer',
+                          fontSize: 'clamp(0.65rem, 1.5vw, 0.8rem)',
+                          fontWeight: 500,
+                          transition: 'all 0.2s ease',
+                          textAlign: 'center',
+                          lineHeight: 1.3,
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.background = 'rgba(56, 161, 105, 0.2)';
+                          e.currentTarget.style.borderColor = 'rgba(56, 161, 105, 0.5)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.background = 'rgba(250, 245, 235, 0.08)';
+                          e.currentTarget.style.borderColor = 'rgba(250, 245, 235, 0.15)';
+                        }}
+                      >
+                        <span style={{ fontSize: '1.2rem', display: 'block', marginBottom: '0.25rem' }}>{init.emoji}</span>
+                        {init.name}
+                      </button>
+                    ))}
+                  </div>
+                  <p
+                    onClick={() => setCharityFlipped(false)}
+                    style={{
+                      textAlign: 'center',
+                      color: 'rgba(250, 245, 235, 0.5)',
+                      fontSize: '0.8rem',
+                      cursor: 'pointer',
+                      margin: '1.25rem 0 0 0',
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.color = '#faf5eb'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.color = 'rgba(250, 245, 235, 0.5)'; }}
+                  >
+                    {'\u2190'} Back
+                  </p>
+                </>
+              ) : (
+                (() => {
+                  const sel = SWEET_SIXTEEN.find(i => i.slug === selectedInitiative);
+                  if (!sel) return null;
+                  return (
+                    <div style={{ textAlign: 'center' }}>
+                      <h3 style={{ color: '#faf5eb', fontSize: '1.5rem', margin: '0 0 0.5rem 0' }}>
+                        {sel.emoji} {sel.name}
+                      </h3>
+                      <p style={{ color: 'rgba(250, 245, 235, 0.7)', fontSize: '0.85rem', margin: '0 0 0.3rem 0' }}>
+                        {sel.category}
+                      </p>
+                      <p style={{ color: 'rgba(250, 245, 235, 0.8)', fontSize: '1.05rem', margin: '0 0 1.5rem 0' }}>
+                        {sel.tagline}
+                      </p>
+                      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                        <button
+                          onClick={() => setSelectedInitiative(null)}
+                          style={{
+                            background: 'rgba(250, 245, 235, 0.1)',
+                            border: '1px solid rgba(250, 245, 235, 0.25)',
+                            borderRadius: '0.5rem',
+                            padding: '0.6rem 1.2rem',
+                            color: '#faf5eb',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem',
+                            fontWeight: 600,
+                            transition: 'background 0.2s',
+                          }}
+                          onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(250, 245, 235, 0.2)'; }}
+                          onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(250, 245, 235, 0.1)'; }}
+                        >
+                          {'\u2190'} Back to All
+                        </button>
+                        <button
+                          onClick={() => window.open(`/initiatives/${selectedInitiative}`, '_blank')}
+                          style={{
+                            background: 'linear-gradient(135deg, #38a169, #2f855a)',
+                            border: 'none',
+                            borderRadius: '0.5rem',
+                            padding: '0.6rem 1.2rem',
+                            color: '#fff',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem',
+                            fontWeight: 600,
+                            transition: 'opacity 0.2s',
+                          }}
+                          onMouseOver={(e) => { e.currentTarget.style.opacity = '0.85'; }}
+                          onMouseOut={(e) => { e.currentTarget.style.opacity = '1'; }}
+                        >
+                          Explore {'\u2192'}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })()
+              )}
             </div>
           </div>
         </div>

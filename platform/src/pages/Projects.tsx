@@ -1,38 +1,31 @@
 /**
- * PROJECTS SHOWCASE — Backable Projects with Funding Progress
- * =============================================================
+ * PROJECTS SHOWCASE — Filterable Grid with Initiative & Category Filters
+ * ======================================================================
  * Innovation #1549: Flagship Project Seeding (Session 8B)
- *
- * Full project showcase page with:
- * - Featured projects hero section
- * - Funding progress bars with backer counts
- * - "Back This Project" buttons (pledging with Credits)
- * - Category filtering
- * - Medallion eligibility badges
- * - Links to project detail pages and initiative landing pages
+ * Session 28: Added initiative filter bar, search, category toggle
  *
  * SEC-safe: No investment, equity, or returns language.
- * All transactions are Credits → utility, not securities.
+ * All transactions are Credits -> utility, not securities.
  */
 
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Input } from '@/components/ui/input';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { ProjectPledgeProgress } from '@/components/ProjectPledgeProgress';
 import { GlobalBreadcrumbs } from '@/components/GlobalBreadcrumbs';
+import { SWEET_SIXTEEN } from '@/lib/daisyChainLink';
 import {
   Loader2, Hexagon, ChefHat, Factory, Sparkles, ArrowRight,
   Users, TrendingUp, Heart, Shield, Package, LayoutDashboard,
+  Search, X, Filter,
 } from 'lucide-react';
-
-// ═══════════════════════════════════════════════════════════════════
-// CATEGORY CONFIG
-// ═══════════════════════════════════════════════════════════════════
 
 const CATEGORY_CONFIG: Record<string, { icon: any; label: string; color: string }> = {
   manufacturing: { icon: Factory, label: 'Manufacturing', color: 'text-amber-600' },
@@ -41,22 +34,20 @@ const CATEGORY_CONFIG: Record<string, { icon: any; label: string; color: string 
   default: { icon: Hexagon, label: 'Project', color: 'text-primary' },
 };
 
-// ═══════════════════════════════════════════════════════════════════
-// LANDING PAGE ROUTES — Projects with dedicated landing pages
-// ═══════════════════════════════════════════════════════════════════
-
 const LANDING_ROUTES: Record<string, string> = {
   "Let's Make Dinner": '/lets-make-dinner',
   'Coaster Medallion': '/coaster-medallion',
 };
 
-// ═══════════════════════════════════════════════════════════════════
-// MAIN COMPONENT
-// ═══════════════════════════════════════════════════════════════════
-
 export default function Projects() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
+
+  const initialInitiative = searchParams.get('initiative') || 'all';
+  const [activeInitiative, setActiveInitiative] = useState(initialInitiative);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(true);
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects'],
@@ -66,11 +57,33 @@ export default function Projects() {
         .select('*')
         .eq('status', 'active')
         .order('created_at', { ascending: false });
-
       if (error) throw error;
       return data;
     },
   });
+
+  const filteredProjects = useMemo(() => {
+    if (!projects) return [];
+    return projects.filter((p) => {
+      const matchesInit = activeInitiative === 'all' ||
+        (p as any).initiative_slug === activeInitiative;
+      const matchesSearch = !searchTerm ||
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ((p as any).tagline || '').toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesInit && matchesSearch;
+    });
+  }, [projects, activeInitiative, searchTerm]);
+
+  const handleInitiativeFilter = (slug: string) => {
+    setActiveInitiative(slug);
+    if (slug === 'all') {
+      searchParams.delete('initiative');
+    } else {
+      searchParams.set('initiative', slug);
+    }
+    setSearchParams(searchParams, { replace: true });
+  };
 
   const getCategoryConfig = (category?: string | null) =>
     CATEGORY_CONFIG[category || 'default'] || CATEGORY_CONFIG.default;
@@ -82,7 +95,7 @@ export default function Projects() {
     <div className="min-h-screen bg-background">
       <GlobalBreadcrumbs />
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
+      <main className="container mx-auto px-4 py-8 max-w-5xl space-y-6">
         {/* Hero */}
         <div className="text-center space-y-4">
           <Badge variant="outline" className="gap-1">
@@ -96,6 +109,89 @@ export default function Projects() {
           </p>
         </div>
 
+        {/* Search + Filter Toggle */}
+        <div className="flex gap-2 items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search projects..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9 pr-9"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+          <Button
+            variant={showFilters ? 'default' : 'outline'}
+            size="sm"
+            className="gap-1 shrink-0"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="w-4 h-4" />
+            Initiatives
+          </Button>
+        </div>
+
+        {/* Initiative Filter Bar */}
+        {showFilters && (
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              onClick={() => handleInitiativeFilter('all')}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                activeInitiative === 'all'
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-muted/50 text-muted-foreground border-transparent hover:bg-muted'
+              }`}
+            >
+              All Projects
+            </button>
+            {SWEET_SIXTEEN.map((init) => (
+              <button
+                key={init.slug}
+                onClick={() => handleInitiativeFilter(init.slug)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                  activeInitiative === init.slug
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-muted/50 text-muted-foreground border-transparent hover:bg-muted'
+                }`}
+              >
+                {init.emoji} {init.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Active Filter Summary */}
+        {(activeInitiative !== 'all' || searchTerm) && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}</span>
+            {activeInitiative !== 'all' && (
+              <Badge variant="secondary" className="gap-1">
+                {SWEET_SIXTEEN.find(i => i.slug === activeInitiative)?.emoji}{' '}
+                {SWEET_SIXTEEN.find(i => i.slug === activeInitiative)?.name}
+                <button onClick={() => handleInitiativeFilter('all')}>
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            )}
+            {searchTerm && (
+              <Badge variant="secondary" className="gap-1">
+                &ldquo;{searchTerm}&rdquo;
+                <button onClick={() => setSearchTerm('')}>
+                  <X className="w-3 h-3" />
+                </button>
+              </Badge>
+            )}
+          </div>
+        )}
+
         {/* Economics Banner */}
         <Card className="border-primary/20 bg-primary/5">
           <CardContent className="pt-6">
@@ -106,7 +202,7 @@ export default function Projects() {
                 <p className="text-sm text-muted-foreground">
                   Pledge Credits to move projects through production levels.
                   More backers = lower unit costs for everyone. Creators keep
-                  83.3% of every transaction. Cost+20% — no hidden fees, ever.
+                  83.3% of every transaction. Cost+20% &mdash; no hidden fees, ever.
                   Credits are service tokens, not securities.
                 </p>
               </div>
@@ -122,9 +218,9 @@ export default function Projects() {
         )}
 
         {/* Projects Grid */}
-        {!isLoading && projects && projects.length > 0 && (
+        {!isLoading && filteredProjects.length > 0 && (
           <div className="grid gap-6 md:grid-cols-2">
-            {projects.map((project) => {
+            {filteredProjects.map((project) => {
               const cat = getCategoryConfig((project as any).category);
               const CatIcon = cat.icon;
               const slug = getProjectSlug(project.name);
@@ -135,6 +231,8 @@ export default function Projects() {
               const tagline = (project as any).tagline;
               const medallionEligible = (project as any).medallion_eligible || false;
               const pct = fundingGoal > 0 ? Math.min(100, (currentFunding / fundingGoal) * 100) : 0;
+              const initSlug = (project as any).initiative_slug;
+              const initiative = initSlug ? SWEET_SIXTEEN.find(i => i.slug === initSlug) : null;
 
               return (
                 <Card
@@ -142,12 +240,20 @@ export default function Projects() {
                   className="flex flex-col hover:shadow-lg transition-shadow"
                 >
                   <CardHeader className="space-y-2">
-                    {/* Category + Medallion badges */}
                     <div className="flex items-center gap-2 flex-wrap">
                       <Badge variant="outline" className="gap-1">
                         <CatIcon className={`w-3 h-3 ${cat.color}`} />
                         {cat.label}
                       </Badge>
+                      {initiative && (
+                        <Badge
+                          variant="outline"
+                          className="gap-1 cursor-pointer hover:bg-primary/10"
+                          onClick={() => handleInitiativeFilter(initiative.slug)}
+                        >
+                          {initiative.emoji} {initiative.name}
+                        </Badge>
+                      )}
                       {medallionEligible && (
                         <Badge variant="default" className="gap-1">
                           <Sparkles className="w-3 h-3" />
@@ -177,7 +283,6 @@ export default function Projects() {
                   </CardHeader>
 
                   <CardContent className="flex-1">
-                    {/* Funding Progress */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-1">
@@ -202,7 +307,6 @@ export default function Projects() {
                   </CardContent>
 
                   <CardFooter className="flex flex-col gap-2">
-                    {/* Pledge Button */}
                     <ProjectPledgeProgress
                       projectId={project.id}
                       projectName={project.name}
@@ -214,8 +318,6 @@ export default function Projects() {
                       medallionEligible={medallionEligible}
                       compact
                     />
-
-                    {/* Links */}
                     <div className="flex gap-2 w-full">
                       <Button
                         variant="ghost"
@@ -245,16 +347,28 @@ export default function Projects() {
           </div>
         )}
 
-        {/* Empty State */}
-        {!isLoading && (!projects || projects.length === 0) && (
+        {/* Empty / No Results */}
+        {!isLoading && filteredProjects.length === 0 && (
           <Card>
             <CardContent className="py-12 text-center space-y-4">
               <Hexagon className="w-12 h-12 text-muted-foreground mx-auto" />
-              <h2 className="text-xl font-semibold">No Projects Yet</h2>
+              <h2 className="text-xl font-semibold">
+                {projects && projects.length > 0 ? 'No Matching Projects' : 'No Projects Yet'}
+              </h2>
               <p className="text-muted-foreground max-w-md mx-auto">
-                Projects will appear here once they're seeded into the platform.
-                Check back soon — flagship projects are on the way.
+                {projects && projects.length > 0
+                  ? 'Try adjusting your filters or search terms.'
+                  : 'Projects will appear here once they\'re seeded into the platform. Check back soon \u2014 flagship projects are on the way.'}
               </p>
+              {(activeInitiative !== 'all' || searchTerm) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { handleInitiativeFilter('all'); setSearchTerm(''); }}
+                >
+                  Clear Filters
+                </Button>
+              )}
             </CardContent>
           </Card>
         )}

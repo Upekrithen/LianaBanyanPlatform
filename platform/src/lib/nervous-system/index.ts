@@ -15,6 +15,7 @@ export * from './ipLedger';
 export * from './contentVersioning';
 export * from './platformMetrics';
 export * from './cephasSync';
+export * from './knowledgeBase';
 
 import { getLedgerStats, verifyLedgerIntegrity } from './ipLedger';
 import { getVersioningStats } from './contentVersioning';
@@ -99,7 +100,7 @@ export async function getNervousSystemStatus(): Promise<{
 export const CRITICAL_NUMBERS = {
   CREATOR_KEEPS: 83.3,
   PLATFORM_MARGIN: 20,
-  INNOVATIONS: 1662,
+  INNOVATIONS: 1690,
   PATENT_CLAIMS: 1336,
   PATENT_APPLICATIONS: 7,
   CROWN_JEWELS: 123,

@@ -24,9 +24,20 @@
   overflow-x: hidden;
 }
 
-/* Professional mode - warm off-white background so Main Card stands out like a physical object */
+/* Professional mode - dark gradient matching WelcomeGate aesthetic */
 .landing-page.professional-mode {
-  background: #faf5eb !important;
+  background: linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #0a0a0a 70%, #0d0d1f 100%) !important;
+  position: relative;
+}
+
+.landing-page.professional-mode::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  z-index: 0;
 }
 
 /* ─── Animated diagonal text background ─── */
@@ -402,12 +413,13 @@
 }
 
 .landing-page.professional-mode .hero-flip-inner {
-  min-height: 380px;  /* Taller for professional mode - more breathing room */
+  height: 520px;  /* Fixed height — prevents jump when flipping between content types */
+  min-height: 0;
 }
 .hero-flip-inner {
   position: relative;
   width: 100%;
-  min-height: 280px;  /* Taller to fit Choose Your Path content */
+  min-height: 280px;
   transition: transform 0.6s ease;
   transform-style: preserve-3d;
 }
@@ -847,8 +859,8 @@
   border: 2px solid rgba(255,255,255,0.2);
   border-radius: 20px;
   padding: 2.5rem;
-  max-width: 500px;
-  width: 90%;
+  max-width: 680px;
+  width: 95%;
   text-align: center;
   position: relative;
   animation: slideUp 0.3s ease;
@@ -997,34 +1009,18 @@
   box-shadow: 0 0 20px rgba(250, 245, 235, 0.1) !important;
 }
 
-/* V2: Hero card with no-chalk-outline class - completely disable chalk outline and hover effects */
-.landing-page.professional-mode .hero-flip.no-chalk-outline {
-  border: none !important;
-  box-shadow: none !important;
-}
+/* V2: no-chalk-outline class no longer disables chalk — chalk belongs on hero card */
+/* (Class kept for backward compat but now behaves same as base .hero-flip) */
 
-.landing-page.professional-mode .hero-flip.no-chalk-outline:hover {
-  border: none !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Main card in professional mode - no border until hover */
+/* Main card in professional mode - NO chalk outline (chalk lives on hero card only) */
 .landing-page.professional-mode .main-card-flip {
-  border: 2px dashed transparent !important;
+  border: none !important;
   border-radius: 1.5rem !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: none !important;
 }
 
-/* Main card shows chalk lines ONLY when hovered AND hero is NOT hovered */
-.landing-page.professional-mode .main-card-flip:hover:not(:has(.hero-flip:hover)) {
-  border-color: rgba(250, 245, 235, 0.5) !important;
-  box-shadow: 0 0 25px rgba(250, 245, 235, 0.1) !important;
-}
-
-/* When hero IS hovered, main card has no chalk lines */
-.landing-page.professional-mode .main-card-flip:has(.hero-flip:hover) {
-  border-color: transparent !important;
+.landing-page.professional-mode .main-card-flip:hover {
+  border: none !important;
   box-shadow: none !important;
 }
 
@@ -1041,7 +1037,7 @@
 
 /* Professional mode title styling */
 .landing-page.professional-mode .landing-title .liana {
-  color: #0a1628;
+  color: #ffffff;
   font-family: 'Crimson Pro', Georgia, serif;
 }
 
@@ -1101,9 +1097,19 @@
 }
 
 /* Professional mode: center Hero Card + button vertically in Main Card */
+/* Main card doesn't flip in professional mode, so use static positioning */
+.landing-page.professional-mode .main-card-inner {
+  min-height: auto;  /* Let content determine height, not fixed 560px */
+}
 .landing-page.professional-mode .main-card-front {
-  justify-content: center;  /* Vertically center contents */
-  padding: 2rem;  /* Even padding */
+  position: relative;  /* Override absolute — card doesn't flip in pro mode */
+  inset: auto;  /* Override inset: 0 which stretches the element */
+  justify-content: center;
+  padding: 2rem;
+}
+.landing-page.professional-mode .hero-front {
+  position: relative;  /* Override absolute — hero doesn't flip in pro mode */
+  inset: auto;  /* Override inset: 0 */
 }
 
 .landing-page.professional-mode .hero-front,
@@ -1333,11 +1339,26 @@
   color: #0a1628 !important;
 }
 
+/* Override for dark-themed hero-back content (No Ads, No VC) */
+.landing-page.professional-mode .hero-back:has([data-dark-theme]) {
+  background: transparent !important;
+  color: inherit !important;
+}
+
 .landing-page.professional-mode .hero-back h3,
 .landing-page.professional-mode .hero-back h4,
 .landing-page.professional-mode .hero-back p,
 .landing-page.professional-mode .hero-back strong {
   color: #0a1628 !important;
+}
+
+/* Override for dark-themed content — allow their own colors */
+.landing-page.professional-mode .hero-back:has([data-dark-theme]) h3,
+.landing-page.professional-mode .hero-back:has([data-dark-theme]) h4,
+.landing-page.professional-mode .hero-back:has([data-dark-theme]) p,
+.landing-page.professional-mode .hero-back:has([data-dark-theme]) strong,
+.landing-page.professional-mode .hero-back:has([data-dark-theme]) a {
+  color: inherit !important;
 }
 
 /* Explainer back is white/cream - dark text */
@@ -1503,9 +1524,10 @@
     padding: 1rem;
   }
   
-  /* Smaller card minimum heights */
+  /* Fixed card height on mobile */
   .landing-page.professional-mode .hero-flip-inner {
-    min-height: 280px;
+    height: 380px;
+    min-height: 0;
   }
   
   /* Ensure cards don't overflow viewport */
@@ -1559,7 +1581,8 @@
   }
   
   .landing-page.professional-mode .hero-flip-inner {
-    min-height: 240px;
+    height: 320px;
+    min-height: 0;
   }
   
   /* Even smaller heading */
@@ -1634,4 +1657,65 @@
     font-size: 1rem !important;
     line-height: 1.4;
   }
+
+  /* Charity card pill grid: 2 columns on mobile */
+  .charity-pill-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CHARITY CARD — CSS 3D Flip (front = 3 deck cards, back = 16 initiative pills)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.charity-flip-container {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto 0;
+}
+
+.charity-flip-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.charity-flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.charity-flip-front,
+.charity-flip-back {
+  width: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.charity-flip-front {
+  position: relative;
+}
+
+.charity-flip-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+  background: #0a1628;
+  border: 1px solid rgba(250, 245, 235, 0.15);
+  border-radius: 1.5rem;
+  padding: 2rem;
+}
+
+.charity-flip-inner:not(.flipped) .charity-flip-back {
+  pointer-events: none;
+}
+.charity-flip-inner.flipped .charity-flip-front {
+  pointer-events: none;
+}
+
+@keyframes charityFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

@@ -1,0 +1,22 @@
+-- ============================================================================
+-- Session 29: Kickstarter Chain innovations from Bishop Session 011
+-- 10 innovations (#1681-#1690)
+-- ============================================================================
+
+INSERT INTO innovation_log (innovation_number, title, description, category, status, patent_bag)
+VALUES
+  (1681, 'Chain Loyalty Engine', 'A 13-campaign Kickstarter loyalty system where consecutive backers earn 5% stacking Joule bonuses per link, up to 65%. Breaking the chain drops bonus to a 20% floor. Chain timer is 14 days with holiday extensions. The chain is tracked on the LB dashboard, converting Kickstarter backers into platform members.', 'platform-economics', 'documented', NULL),
+  (1682, 'Leap Frog Cadence', 'A campaign scheduling strategy where character campaigns (ready NOW) alternate with component campaigns (need dev time). If a component needs more time, the next character launches instead — the biweekly cadence never breaks. Two character progression lines serve as safety nets for the production schedule.', 'manufacturing', 'documented', NULL),
+  (1683, 'Open IP Kickstarter Model', 'Each Hexel component gets its own Kickstarter mini-campaign with STL download. Community prints, experiments, and submits improvements via the Piggy-Back Protocol with 6-tier classification (Tereno Certified through HexIsle Inspired). Best improvements become official products with IP Ledger entries. Transforms backers into makers.', 'manufacturing', 'documented', NULL),
+  (1684, 'Campaign-Funded Engineering', 'Revenue from character campaigns (which are ready to ship) funds Crew Call bounties that pay engineers to solve harder component challenges. Campaign 1-11 revenue directly funds the Water Table engineering bounties. The audience literally pays for the R&D of the product they want.', 'platform-economics', 'documented', NULL),
+  (1685, 'Maker-to-Node Pipeline', 'Kickstarter backers who 3D-print and improve HexIsle pieces organically become Factory Node candidates. The Piggy-Back submission process is the de facto Factory Node application. Community contributors with accepted improvements are pre-qualified as manufacturing nodes.', 'manufacturing', 'documented', NULL),
+  (1686, 'Character Progression Campaigns', 'Two 4-character progression lines, each evolving across consecutive Kickstarter campaigns: Peasant to Farmer to Warrior to King (Sword Path) and Merchant to Healer to Assassin to Queen (Crown Path). Each character has internal mechanical progression (diceless combat, mana/HP counters) that improves across campaigns.', 'ux-design', 'documented', NULL),
+  (1687, 'X-Ray Patent Integration', 'Every X-Ray Goggles glossary entry can link to its FAQ anchor, STL download, Piggy-Back submission form, and specific patent innovation number. Creates a seamless path from curiosity (hover) to explanation (tooltip) to deep knowledge (FAQ) to action (download/improve).', 'ux-design', 'documented', NULL),
+  (1688, 'Chain Backer Cross-Pollination', 'Kickstarter backers who claim their chain on the LB platform are exposed to all 16 initiatives, not just HexIsle. The chain dashboard is the entry point — but Cue Cards, Crows Nest discovery, and initiative cross-links convert single-product backers into cooperative members.', 'platform-economics', 'documented', NULL),
+  (1689, '14-Day Chain Timer', 'A configurable countdown timer with 14-day default lifespan that extends with each backing. Holiday exceptions (Thanksgiving, Christmas) extend to 21 days. Timer creates gentle urgency without punishing — the 20% floor means broken chains retain value. Visual countdown on the chain dashboard.', 'ux-design', 'documented', NULL),
+  (1690, 'Kickstarter-to-LB Conversion Funnel', 'A 5-step conversion path: Kickstarter discovery to first pledge to LB account creation (chain claim) to chain dashboard engagement to cooperative membership. Every step has a clear CTA. Confirmation emails carry chain branding. The funnel is designed so that by the time backers claim their chain, they are already LB members.', 'platform-economics', 'documented', NULL)
+ON CONFLICT (innovation_number) DO NOTHING;
+
+-- Update canonical count
+UPDATE platform_canonical SET value = '1690', updated_at = NOW() WHERE key = 'innovation_count';
+UPDATE platform_canonical SET value = '8', updated_at = NOW() WHERE key = 'provisional_applications';

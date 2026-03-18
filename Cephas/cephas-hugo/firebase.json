@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "the2ndsecond-trunk",
+    "site": "cephas-lianabanyan",
     "public": "public",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [

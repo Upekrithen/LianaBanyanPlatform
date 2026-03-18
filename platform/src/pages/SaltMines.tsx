@@ -9,10 +9,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  Briefcase, Shield, Database, Palette, Key, 
+  Briefcase, Shield, Database, Palette, Key,
   Share2, Users, Stamp, Scale, Gift, ArrowRight,
   ExternalLink, Sparkles, Lock, Unlock, ChevronDown,
-  Code, PenTool, Video, Music, Box, MapPin, RotateCcw
+  Code, PenTool, Video, Music, Box, MapPin, RotateCcw, Info
 } from 'lucide-react';
 import { FableFlipbook } from '@/components/FableFlipbook';
 import { useAuth } from '@/contexts/AuthContext';
@@ -25,7 +25,6 @@ import {
   type BenefitItem 
 } from '@/components/progressive';
 import { saveGhostBeacon, emailBeacon } from '@/lib/beacons';
-import { useAuth } from '@/contexts/AuthContext';
 import { BeaconDropButton } from '@/components/BeaconDropButton';
 import { PathwayNavigator } from '@/components/PathwayNavigator';
 import { usePathwayProgress } from '@/contexts/PathwayProgressContext';
@@ -927,11 +926,15 @@ export default function SaltMines() {
                 </p>
               </div>
               
-              <blockquote className="text-white/70 italic text-center mb-8">
-                "I spent 37 years building this. I could have kept 100% of the patents. 
-                Instead, I'm giving 60% to the platform — which means to YOU, the members. 
+              <blockquote className="text-white/70 italic text-center mb-4">
+                "I spent 37 years building this. I could have kept 100% of the patents.
+                Instead, I'm giving 60% to the platform — which means to YOU, the members.
                 80% of something built by a community beats 100% of something built alone."
               </blockquote>
+
+              <p className="text-white/40 text-sm text-center italic mb-8">
+                "Muzzle not the ox that treadeth out the corn, for the laborer is worthy of his hire."
+              </p>
               
               <button
                 onClick={() => openOnboard({ reason: "find work and earn", actionLabel: "Join", membershipIncluded: true })}

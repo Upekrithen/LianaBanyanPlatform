@@ -79,7 +79,7 @@ export default function WhyNoVC() {
                 <Crown className="h-6 w-6 text-amber-400 mb-2" />
                 <h3 className="font-semibold text-white">Patent Portfolio</h3>
                 <p className="text-sm text-slate-400">
-                  <strong className="text-amber-300">7 provisional applications</strong> with 1,662 documented innovations.
+                  <strong className="text-amber-300">7 provisional applications</strong> with 1,690 documented innovations.
                   This is our "runway."
                 </p>
               </div>

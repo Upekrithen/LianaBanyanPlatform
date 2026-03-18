@@ -9,6 +9,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { RotatingQuotes } from "@/components/RotatingQuotes";
+import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   shouldShowWelcomeGate,
   dismissWelcomeGate,
@@ -62,7 +63,6 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
 
   const [frame, setFrame] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState<1 | 2 | 3>(1);
   const [conceptComplete, setConceptComplete] = useState(false);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isPlaying) return;
-    const ms = FABLE_MS_BASE / speed;
+    const ms = FABLE_MS_BASE;
     const timer = setInterval(() => {
       setFrame((prev) => {
         if (prev >= FABLE_FRAME_COUNT - 1) {
@@ -90,7 +90,7 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
       });
     }, ms);
     return () => clearInterval(timer);
-  }, [isPlaying, speed]);
+  }, [isPlaying]);
 
   const handleEnter = useCallback(() => {
     setEntering(true);
@@ -143,12 +143,6 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
     [frame, isPlaying],
   );
 
-  const skipToEnd = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsPlaying(false);
-    setFrame(FABLE_FRAME_COUNT - 1);
-    setConceptComplete(true);
-  }, []);
 
   if (!visible) return <>{children}</>;
 
@@ -207,11 +201,49 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
               </div>
             ) : (
               <>
+                {/* Cinema controls ABOVE the image — big, visible */}
+                <div className="flex items-center justify-between mb-4 px-2">
+                  <button
+                    type="button"
+                    onClick={prevFrame}
+                    className="flex items-center justify-center rounded-full w-12 h-12 text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                    style={{ border: 'none', cursor: 'pointer' }}
+                    aria-label="Previous frame"
+                  >
+                    <ChevronLeft className="w-8 h-8" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={togglePlay}
+                    className="flex items-center justify-center rounded-full w-14 h-14 text-white/80 hover:text-white border border-white/20 hover:border-white/40 hover:bg-white/10 transition-all"
+                    style={{ cursor: 'pointer' }}
+                    aria-label={isPlaying ? "Pause" : "Play"}
+                  >
+                    {isPlaying ? (
+                      <Pause className="w-6 h-6 fill-current" />
+                    ) : (
+                      <Play className="w-6 h-6 fill-current ml-0.5" />
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={nextFrame}
+                    className="flex items-center justify-center rounded-full w-12 h-12 text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                    style={{ border: 'none', cursor: 'pointer' }}
+                    aria-label="Next frame"
+                  >
+                    <ChevronRight className="w-8 h-8" />
+                  </button>
+                </div>
+
+                {/* Fable image — clean, no overlaid controls */}
                 <div
-                  className="relative rounded-xl overflow-hidden border border-white/10 bg-white w-full group"
+                  className="relative rounded-xl overflow-hidden border border-white/10 bg-white w-full"
                   style={{
                     aspectRatio: "1",
-                    maxHeight: isMobile ? "280px" : "360px",
+                    maxHeight: isMobile ? "280px" : "400px",
                   }}
                 >
                   <img
@@ -220,60 +252,14 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
                     alt={`Liana Banyan Fable — frame ${frame + 1} of ${FABLE_FRAME_COUNT}`}
                     className="w-full h-full object-contain animate-in fade-in duration-300"
                   />
-                  <div className="absolute top-2 right-2 text-[10px] text-slate-500 font-mono bg-white/80 px-1.5 py-0.5 rounded">
-                    {frame + 1} / {FABLE_FRAME_COUNT}
-                  </div>
                 </div>
-                <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
-                  <button
-                    type="button"
-                    onClick={prevFrame}
-                    className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
-                    aria-label="Previous frame"
-                  >
-                    ◀
-                  </button>
-                  <div className="flex gap-1">
-                    {([1, 2, 3] as const).map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSpeed(s);
-                        }}
-                        className={`min-w-[2rem] py-1.5 rounded text-xs font-medium transition-colors ${
-                          speed === s ? "bg-green-600/50 text-white" : "bg-white/10 text-white/70 hover:bg-white/20"
-                        }`}
-                      >
-                        {s}×
-                      </button>
-                    ))}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={togglePlay}
-                    className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
-                    aria-label={isPlaying ? "Pause" : "Play"}
-                  >
-                    ⏸
-                  </button>
-                  <button
-                    type="button"
-                    onClick={skipToEnd}
-                    className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center gap-1 text-sm"
-                  >
-                    Skip ▶
-                  </button>
-                </div>
+                {/* Subtitle BELOW the image */}
                 <p
-                  className="text-white/90 text-center italic leading-snug mt-3 text-xs min-h-[2.4em] flex items-center justify-center"
+                  className="text-white/90 text-center italic leading-snug mt-3 text-sm flex items-center justify-center"
+                  style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", fontWeight: 500, transition: 'opacity 0.3s ease', height: '3.6em', textWrap: 'balance', maxWidth: '90%', margin: '0.75rem auto 0' }}
                 >
                   {subtitle || "\u00A0"}
                 </p>
-                <div className="h-12 overflow-hidden mt-2">
-                  <RotatingQuotes intervalMs={8000} className="opacity-70 text-white/70 text-xs" />
-                </div>
               </>
             )}
           </div>

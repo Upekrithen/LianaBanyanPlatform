@@ -217,7 +217,8 @@ export function RotatingQuotes({
     <div 
       className={`text-center ${className}`}
       style={{
-        minHeight: '100px',
+        minHeight: '90px',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -241,8 +242,10 @@ export function RotatingQuotes({
               fontFamily: "'Crimson Pro', Georgia, serif",
               fontSize: 'clamp(0.85rem, 2vw, 1.1rem)',
               lineHeight: 1.5,
-              maxWidth: '600px',
+              width: '500px',
+              maxWidth: '90vw',
               margin: '0 auto',
+              textWrap: 'balance' as any,
             }}
           >
             "{currentQuote.text}"

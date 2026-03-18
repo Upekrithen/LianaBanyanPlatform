@@ -500,3 +500,52 @@ All colors MUST be HSL.
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.7; transform: scale(1.1); }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY MIRROR — "The Fairest of Them All"
+   Fair means everyone can use it.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* High Contrast Mode */
+html.lb-high-contrast {
+  filter: contrast(1.4);
+}
+
+html.lb-high-contrast body {
+  --border: 0 0% 60%;
+}
+
+/* Light/Inverted Mode */
+html.lb-inverted {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Invert images and videos back so they look normal */
+html.lb-inverted img,
+html.lb-inverted video,
+html.lb-inverted svg,
+html.lb-inverted canvas,
+html.lb-inverted [data-no-invert] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Dyslexia-Friendly Font — OpenDyslexic loaded from CDN */
+@import url('https://fonts.cdnfonts.com/css/opendyslexic');
+
+html.lb-dyslexia-font,
+html.lb-dyslexia-font * {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+  letter-spacing: 0.05em;
+  word-spacing: 0.15em;
+  line-height: 1.8;
+}
+
+/* Reduced Motion — disable all animations and transitions */
+html.lb-reduced-motion *,
+html.lb-reduced-motion *::before,
+html.lb-reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}

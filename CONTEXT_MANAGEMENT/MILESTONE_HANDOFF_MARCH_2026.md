@@ -9,7 +9,374 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 25 (March 15, 2026)
+## RUNWAY / SESSION STOP (current) — Session 29 (March 17, 2026)
+
+**Latest commit:** (pending commit) — Session 29: X-Ray→FAQ Pipeline, Chain Dashboard, HexIsle Downloads + 10 innovations threshed
+
+### What Was Done This Session (Session 29 — Knight)
+
+1. **Feature 1: X-Ray → FAQ Pipeline** — Extended `XRayGlossaryEntry` interface with 4 new fields: `faqAnchorId`, `downloadUrl`, `piggybackUrl`, `innovationNumber`. Added `faqAnchorId` cross-links to 18 existing glossary entries (credits, marks, joules, babylon candles, cue cards, bandwagon, production runs, steward, ghost world, golden keys, xp, coverage minutes, fly on the wall, cost+20, guilds, six degrees, chalk outline, double-dipping, star chamber, why-no-ads). Added 27 new HexIsle piece entries with full explanations, FAQ anchors, piggyback URLs, and innovation references. Updated `XRayOverlay.tsx` with 4 new rendered link types: FAQ (amber), Download STL (green), Submit Improvement (orange), Innovation # (purple). Added complete HexIsle FAQ chapter (Chapter 8) to `knowledgeBase.ts` with 27 piece entries + overview + chain + open IP + leap frog entries.
+
+2. **Feature 2: Chain Dashboard (`/chain`)** — New `ChainDashboard.tsx` page with: visual 13-link chain (lit/unlit), 14-day chain timer with countdown, Joule bonus display (current + next link), next campaign card with "Back on Kickstarter" CTA, full 13-campaign roadmap grid with type badges (character/component/assembly/capstone), chain perk ladder (9 tiers from founding badge to Complete Collection pricing), referral link with copy button (TasteMaker Trust Chain attribution), top-10 chain leaderboard. Routed at `/chain` as ExplorerRoute.
+
+3. **Feature 3: HexIsle Downloads (`/hexisle/downloads`)** — New `HexIsleDownloads.tsx` page with: 27-piece card grid from hexelPieceGrammar taxonomy, 6-tier Tereno badge system (Certified/Approved/Official/Compatible/Adaptable/Inspired), search bar + tier filter dropdown, STL download buttons (3 pieces marked available: Golden Lotus, Ouralis, Sawtooth Coral), Piggy-Back Improvement submission form (piece select, tier self-declare, description, STL upload), community version counts, innovation number cross-references, tier classification explainer section. Routed at `/hexisle/downloads` as ExplorerRoute.
+
+4. **Thresh 10 Innovations (#1681-#1690)** — Chain Loyalty Engine, Leap Frog Cadence, Open IP Kickstarter Model, Campaign-Funded Engineering, Maker-to-Node Pipeline, Character Progression Campaigns, X-Ray Patent Integration, Chain Backer Cross-Pollination, 14-Day Chain Timer, Kickstarter-to-LB Conversion Funnel.
+
+5. **POLLINATION** — Innovation count 1,680 → **1,690** propagated across 23 files (49 replacements): 20 platform/src files + 3 Cephas content files.
+
+### Innovations Filed (#1681-#1690)
+
+| # | Innovation | Category |
+|---|-----------|----------|
+| 1681 | Chain Loyalty Engine | platform-economics |
+| 1682 | Leap Frog Cadence | manufacturing |
+| 1683 | Open IP Kickstarter Model | manufacturing |
+| 1684 | Campaign-Funded Engineering | platform-economics |
+| 1685 | Maker-to-Node Pipeline | manufacturing |
+| 1686 | Character Progression Campaigns | ux-design |
+| 1687 | X-Ray Patent Integration | ux-design |
+| 1688 | Chain Backer Cross-Pollination | platform-economics |
+| 1689 | 14-Day Chain Timer | ux-design |
+| 1690 | Kickstarter-to-LB Conversion Funnel | platform-economics |
+
+### Files Created/Changed (Session 29)
+
+| File | Change |
+|------|--------|
+| `platform/src/data/xrayGlossary.ts` | Extended interface + faqAnchorId on 18 entries + 27 HexIsle entries |
+| `platform/src/components/builder/XRayOverlay.tsx` | Render FAQ/STL/Improve/Innovation# links |
+| `platform/src/lib/nervous-system/knowledgeBase.ts` | HexIsle FAQ chapter (30 entries) |
+| `platform/src/pages/ChainDashboard.tsx` | **NEW** — Chain loyalty dashboard at /chain |
+| `platform/src/pages/HexIsleDownloads.tsx` | **NEW** — STL library + tier classification at /hexisle/downloads |
+| `platform/src/App.tsx` | Added ChainDashboard + HexIsleDownloads lazy imports + routes |
+| `platform/supabase/migrations/20260317000002_*.sql` | **NEW** — 10 innovations + canonical count update |
+| 23 platform/src + Cephas files | POLLINATION: 1,680 → 1,690 (49 replacements) |
+
+### Migrations Pushed (Session 29)
+
+- `20260317000002_innovation_log_session29_kickstarter_chain.sql` — Applied successfully to remote
+
+### Deployment
+
+- **Platform**: lianabanyan-main.web.app (599 files, 286 new)
+- **Cephas**: cephas-lianabanyan.web.app (1410 files, 980 pages)
+
+### Pending Work (Session 30+)
+
+| Item | Status |
+|------|--------|
+| **Pledged Mark Voting** (`/hexisle/vote`) — Task 4 from Bishop Session 011 | **NEXT** |
+| **Crew Call HexIsle Bounties** — 5 engineering bounties (Task 5) | **NEXT** |
+| **HexIsle Cue Card** — "Know a Gamer? Know an Engineer?" (Task 6) | **NEXT** |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| Battery Dispatch — Grassroots Intelligence | MEDIUM |
+| Treasure Key injection | MEDIUM |
+| SEC language cleanup (broader pass) | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 28 (March 17, 2026) — Previous
+
+### What Was Done This Session (Session 28 — Knight)
+
+1. **Feature 3: 8th Provisional Patent Application — Six Degrees Crown Jewel** — Extracted 18 innovations (#1663-#1680) from Bishop Session 010 transcripts (Claude Opus 4.6.021-024.docx). Converted 4 Bishop .docx files to .md. Six Degrees Universal Connection Engine designated Crown Jewel by Bishop ("the connective tissue that ties all 16 initiatives together"). Full patent-quality specifications written for all 18 innovations. PDF generated (PROVISIONAL_APPLICATION_8_SIX_DEGREES.pdf, 27.3 KB). Supabase migration pushed (20260317000001). Innovation count: 1,662 → **1,680**.
+
+2. **Feature 1: Charity Card Phase 2 — CSS 3D Flip + SWEET_SIXTEEN Wiring** — Replaced conditional render (fade-in) with true CSS 3D flip animation (`perspective: 1200px`, `rotateY(180deg)`, `backface-visibility: hidden`). Eliminated hardcoded `INITIATIVE_DATA` and hardcoded pill arrays — now imports `SWEET_SIXTEEN` from `daisyChainLink.ts` as single source of truth. Added `emoji` field to the `Initiative` interface. Updated patent count from 7 to 8 on the "Built to Last" deck card. Initiative detail view now also shows `category` from SWEET_SIXTEEN.
+
+3. **Feature 2: Browse Projects — Filterable Grid** — `Projects.tsx` at `/projects` now has: a search bar with real-time text filtering, a 16-initiative filter bar (pills from SWEET_SIXTEEN), URL-synced `?initiative=slug` query param, active filter summary with clear buttons, clickable initiative badges on project cards that cross-filter, and a "No Matching Projects" empty state with Clear Filters button. All data still comes from Supabase `projects` table — filters operate client-side on the `initiative_slug` column.
+
+### Innovations Filed (#1663-#1680)
+
+| # | Innovation | Category |
+|---|-----------|----------|
+| 1663 | **Six Degrees Universal Connection Engine** (CROWN JEWEL) | platform-economics |
+| 1664 | Fractional Degree Bounty System | platform-economics |
+| 1665 | Time-Decay Bounty Valuation | platform-economics |
+| 1666 | Six Degrees of Opportunity (Job/Business Matching) | platform-economics |
+| 1667 | Six Medical Degrees of Separation (Diagnostic Chains) | health-safety |
+| 1668 | Double-Dipping and Stacking Reward Architecture | platform-economics |
+| 1669 | Milestone-Based Bounty Progression | platform-economics |
+| 1670 | Service Allocation Authority as Backer Return | platform-economics |
+| 1671 | Connection XP (Social Capital Reputation) | reputation-identity |
+| 1672 | Six-Scoop Ice Cream Cone Reward Visualization | ux-design |
+| 1673 | Campaign Cooldown Rate Limiting | platform-economics |
+| 1674 | Crowdfunded Social Capital Bounties | platform-economics |
+| 1675 | Medical Treasure Map Diagnostic Trails | health-safety |
+| 1676 | Zero-Demographic Architecture (Anti-Discrimination) | platform-economics |
+| 1677 | Named Accessibility Preset System | ux-design |
+| 1678 | Quad-Crown Bipartisan Proof Architecture | governance |
+| 1679 | Mirror Mirror Triple-Meaning Interface | ux-design |
+| 1680 | Crown Letter Votable Pedestals (Attention-as-Funding) | platform-economics |
+
+### Files Created/Changed (Session 28)
+
+| File | Change |
+|------|--------|
+| `BISHOP_DROPZONE/PROVISIONAL_ADDENDUM_1663_1680.md` | **NEW** — Full patent specs for 18 innovations |
+| `BISHOP_DROPZONE/PROVISIONAL_APPLICATION_8_SIX_DEGREES.pdf` | **NEW** — USPTO-ready PDF |
+| `BISHOP_DROPZONE/build_provisional_pdf_v3.py` | **NEW** — PDF generator for 8th provisional |
+| `BISHOP_DROPZONE/Claude_Opus_4_6_021.md` | **NEW** — Converted from .docx |
+| `BISHOP_DROPZONE/Claude_Opus_4_6_022.md` | **NEW** — Converted from .docx |
+| `BISHOP_DROPZONE/Claude_Opus_4_6_023.md` | **NEW** — Converted from .docx |
+| `BISHOP_DROPZONE/Claude_Opus_4_6_024.md` | **NEW** — Converted from .docx |
+| `platform/supabase/migrations/20260317000001_*.sql` | **NEW** — 18 innovations + canonical count update |
+| 20 platform/src files | POLLINATION: 1,662 → 1,680 (32 replacements) |
+| 3 Cephas content files | Innovation count + 8th provisional in patent table |
+| `platform/src/lib/daisyChainLink.ts` | Added `emoji` field to `Initiative` interface + all 16 entries |
+| `platform/src/pages/Index.tsx` | Charity Card: CSS 3D flip, SWEET_SIXTEEN import, patent count 7→8 |
+| `platform/src/pages/Projects.tsx` | Browse Projects: initiative filter bar, search, URL query sync |
+| `platform/src/styles/landing.css` | `.charity-flip-container/inner/front/back` CSS 3D flip classes |
+
+### Migrations Pushed (Session 28)
+
+- `20260317000001_innovation_log_session28_six_degrees.sql` — Applied successfully to remote
+
+### What Was Done This Session (Bishop Session 011)
+
+1. **HexIsle Kickstarter Strategy (Rev 3 Final)** — `BISHOP_DROPZONE/KICKSTARTER_STRATEGY_HEXISLE_ROLLING_CAMPAIGNS.md`. Key Rev 3 changes:
+   - Character progression lines: Peasant→Farmer→Warrior→King (Sword Path) and Merchant→Healer→Assassin→Queen (Crown Path) — each character evolves across 4 campaigns
+   - Leap Frog cadence: Characters (ready NOW) alternate with components (need dev time). If a component needs more time, the next character launches instead. Cadence never breaks.
+   - Open IP model: Each Hexel component gets its own mini-campaign with STL download. Community prints, experiments, submits improvements via Piggy-Back Protocol with tier classification. Best improvements become official products.
+   - Hexels moved to end: Complete Hexel assembly is Campaign 12 (only after all pieces finalized by community + Founder). Individual known-good pieces (Golden Lotus, Sawtooth Coral) launch as standalone campaigns earlier.
+   - Water Table stays capstone: Campaign 13, launches only when engineering is complete. Earlier campaigns fund the Crew Call bounties that pay the engineers.
+   - Chain mechanic upfront: Backers see "Campaign 1 of 13 / Chain rewards grow" BEFORE first pledge.
+   - CoLab/Zoo outreach APPROVED.
+
+2. **Knight Prompts Written:**
+   - `PROMPT_KNIGHT_SESSION_27.md` — Portal routing, production levels, DenkenMenu nav (DONE by Knight Session 27)
+   - `PROMPT_KNIGHT_SESSION_29_KICKSTARTER_CHAIN.md` — Chain dashboard, HexIsle downloads, X-Ray→FAQ pipeline, Pledged Mark Voting, Crew Call bounties, HexIsle Cue Card
+
+3. **10 Innovations to Thresh (Session 29):** Chain Loyalty Engine, Leap Frog Cadence, Open IP Kickstarter Model, Campaign-Funded Engineering, Maker-to-Node Pipeline, Character Progression Campaigns, X-Ray Patent Integration, Chain Backer Cross-Pollination, 14-Day Chain Timer, Kickstarter-to-LB Conversion Funnel
+
+4. **X-Ray → FAQ Confirmation:** 67 glossary entries exist but are NOT linked to FAQ anchors yet. Need `faqAnchorId` field added + 27 HexIsle piece entries. Knight Session 29 task.
+
+5. **Cephas Firebase Fix:** `the2ndsecond-trunk` → `cephas-lianabanyan` corrected and redeployed. Cephas = knowledge repository, The2ndSecond = Makers' trunk.
+
+### Pending Work (Session 29+)
+
+| Item | Status |
+|------|--------|
+| **Knight Session 29 Prompt** — `PROMPT_KNIGHT_SESSION_29_KICKSTARTER_CHAIN.md` | **NEXT** |
+| Thresh 10 innovations from Bishop Session 011 (Chain Loyalty Engine, Leap Frog Cadence, etc.) | **NEXT (Session 29)** |
+| X-Ray→FAQ pipeline: add `faqAnchorId` to 67 glossary entries + 27 HexIsle piece entries | **NEXT (Session 29)** |
+| **Founder files 8th provisional with USPTO** | FOUNDER ACTION — PDF ready at `BISHOP_DROPZONE/PROVISIONAL_APPLICATION_8_SIX_DEGREES.pdf` |
+| Charity Card Phase 2 — CSS 3D flip + SWEET_SIXTEEN wiring | **DONE (Session 28)** |
+| Browse Projects — filterable grid with initiative/search filters at /projects | **DONE (Session 28)** |
+| Deploy platform + Cephas | **DONE** — Platform deployed to `lianabanyan-main`. Cephas deployed to `cephas-lianabanyan` (FIXED: was incorrectly targeting `the2ndsecond-trunk` since Session 22) |
+| Fix Cephas firebase.json site target | **DONE** — `the2ndsecond-trunk` → `cephas-lianabanyan` (bug since commit 89d9b27, March 15) |
+| **POLITICAL EXPEDITION FULL BUILD** — See detailed spec below | **PRIORITY — Founder directive** |
+| Arena visualization on Power to the People | ASK FOUNDER |
+| Accessibility presets (Mirror Mirror panel) | Deferred |
+| X-Ray Goggles deep interconnection mode | Deferred |
+| Six Degrees voting system implementation | Deferred |
+| Profile Preview (Mirror Mirror View) | Deferred |
+| Fairness Dashboard | Deferred |
+
+### FOUNDER DIRECTIVE: Political Expedition / Power to the People — Full Build Spec
+
+**Context (Session 28):** Founder wants the Political Expedition fully operational — not just philosophy, but all the working parts that make it real. This is the only initiative without a finalized crown assignment, and it has the most complex operational requirements. The Quad-Crown structure (AOC/Schwarzenegger/Keanu/Sandra Bullock) is designed but the PLATFORM TOOLS need to be built and wired.
+
+**What exists today (already built):**
+- `PowerToThePeoplePage.tsx` — Philosophy section (Ella Wheeler Wilcox poem, Switzerland Protocol, Quad-Crown sidebar) + operational tabs (Representatives, Tracked Bills, Take Action) merged in Session 26
+- Four Crown Letters drafted in `BISHOP_DROPZONE/` (AOC, Schwarzenegger, Keanu, Sandra Bullock)
+- Six Degrees system documented and innovations filed (#1663-#1680)
+- Votable Pedestals concept (#1680) — Crown Letters on public display with SWOOP voting
+
+**What needs to be built (Founder's full vision):**
+
+1. **Political Expedition Gateway Page** — Entry point explaining what this initiative IS and HOW it works. Not philosophy — the actual mechanics: we track elected officials' votes, we have a listening rule, we connect citizens to their representatives, we make political engagement cooperative instead of adversarial.
+
+2. **Power to the People Pedestal** — The initiative described on a public Innovation Pedestal (like the Cephas pedestals) with three reading levels (glance/more/full). This is the public face that anyone — including Crown Letter recipients — sees.
+
+3. **FAQ Entries** — X-Ray Goggles and FAQ must explain:
+   - What the Listening Rule is (listen before you legislate — track what representatives actually DO, not what they SAY)
+   - How vote tracking works (alignment scores, YES/NO badges, color-coded)
+   - What the Quad-Crown structure means and why it exists
+   - How Six Degrees campaigns work for reaching the four Crown recipients
+   - How the Switzerland Protocol works (different tribes, shared infrastructure)
+   - Why "Not Left, Not Right — Forward Together" is the operating principle
+
+4. **Vote Tracking System** — The operational core: track elected officials' voting records, compute alignment scores against cooperative values, display with color-coded cards. Already partially built in Session 26 (sample rep cards with alignment scores in the Representatives tab).
+
+5. **Listening Rule Implementation** — Members can see what their representatives ACTUALLY voted for, not just what they campaigned on. This is transparency as a service.
+
+6. **All parts working together** — Gateway → Pedestal → FAQ → Vote Tracking → Listening Rule → Six Degrees bounty campaigns → Crown Letter Votable Pedestals → Take Action panel. Every piece connects.
+
+**CRITICAL FOUNDER NOTE (Session 28):**
+> "Those campaigns are completely contingent on me getting other people to take charge of LB and all its parts and pieces. I cannot possibly focus on the campaigns if I'm also running each of all the things I am doing now."
+
+This means: The Six Degrees bounty campaigns to reach AOC/Arnold/Keanu/Sandra CANNOT launch until the Founder has delegated operational control of LB's day-to-day. The platform tools must be built NOW so they're ready when delegation happens, but the campaigns themselves are gated on organizational readiness.
+
+**AOC Analysis (Session 28):**
+The Founder asked whether AOC (as an elected official) would be willing to participate in a platform that tracks elected officials' votes. The Quad-Crown architecture HELPS — she's one of four, paired with Schwarzenegger (opposite side), making it structurally bipartisan. Vote-tracking transparency is something AOC has publicly advocated for. The risk is bandwidth, not ideology — which is why the Delegation Protocol (#1660) exists: she can delegate to staff or accept at an advisory level.
+
+**FOUNDER STRATEGY CHANGE (Session 28): SEND ALL CROWN LETTERS AT ONCE**
+
+> "There's no time to let the blood dry. We're hitting the ground running. And building in public."
+
+The Founder's directive is to send ALL crown letters simultaneously — not drip them out over weeks. Every letter goes at once. The rationale:
+- Building in public means showing intent, not hiding strategy
+- If recipients find out before and want to engage, great — the pedestals are already live
+- The simultaneous launch prevents any single letter from being mischaracterized in isolation
+- The Quad-Crown political pair (AOC + Arnold) goes together as part of the full wave
+
+**This means ALL of the following must be ready before launch:**
+- All Crown Letters displayed on Votable Pedestals (public, visible, even before sending)
+- Cephas pages for every Crown Letter recipient
+- Press Junket entries for every letter
+- Six Degrees bounty campaigns pre-configured (activate after letters send)
+- FAQ entries explaining the full Political Expedition system
+- The "turn the key" infrastructure described below
+
+**"TURN THE KEY" READINESS — Political Expedition Detail Page**
+
+The Founder wants the PowerToThePeoplePage (or a dedicated Political Expedition gateway) to present the FULL operational vision with explanations and examples, so that when someone takes charge, everything is laid out:
+
+1. **Fully-built vote tracker** — Track elected officials, alignment scores, YES/NO badges (already partially built in Session 26 tabs)
+2. **Quad-Crown framework** — Four crowns explained with examples (AOC Left, Arnold Right, Keanu Culture, Sandra Action)
+3. **Four Crown Letters ready to send** — Displayed on pedestals even BEFORE sending. The letters ARE the pitch. Show them publicly. Let the community see what we're doing.
+4. **Six Degrees bounty system** — Pre-configured campaigns for each Crown recipient, ready to activate
+5. **FAQ explaining every piece** — Listening Rule, vote tracking, Switzerland Protocol, "Not Left Not Right — Forward Together"
+
+**Crown Letters on Pedestals BEFORE Sending:**
+The Founder explicitly wants the crown letters displayed on Innovation Pedestals NOW — not after they're sent. This preps the community, shows intent, builds anticipation, and means if anyone in the community has a connection to a recipient, they can start working the Six Degrees chain organically before the formal bounty launches.
+
+**Delegation Gate Remains:**
+All Six Degrees bounty campaigns are gated on the Founder delegating operational control. The tools get built. The letters go on pedestals. The FAQ gets written. But the bounty campaigns activate only when someone other than the Founder is running the day-to-day.
+
+**POLLINATION NOTE:** The innovation count is now **1,680** (18 new from Session 28). All platform files updated. Cephas updated. DB canonical value updated. 8th provisional PDF ready for USPTO filing.
+
+---
+
+## Session 27 (March 17, 2026) — Previous
+
+**Commit:** `9bc090f` — Session 27: Action-first Portal, production level Pledge buttons, DenkenMenu nav wiring
+
+### What Was Done (Session 27 — Knight, Bishop-Managed)
+
+Bishop managed this session via `PROMPT_KNIGHT_SESSION_27.md`. Three features per 3-feature cap.
+
+1. **Feature 1: Portal Routing Hub (Action-First)** — `PortalGateway.tsx` rebuilt from scratch. Dark gradient theme. 4 primary action cards: Earn Money → /treasure-map, Build a Business → /build-a-business, Back a Project → /plant-seeds, Sponsor a Member → /sponsor. 4 secondary quick-link buttons: Browse Projects → /projects, Create Project → /create, Join a Guild → /guilds, Bounty Board → /bounties. No explanation cards in default view — every card is a door. Founder directive: "I want to DO IT, not read about it."
+
+2. **Feature 2: Production Level Pledge Buttons** — `BuildBusiness.tsx` production level cards now have "Pledge" buttons (Sprout icon) routing to /plant-seeds. Risk/credit tier detail text hidden by default, only visible in X-Ray Goggles mode. "Key Insight" explainer box also X-Ray-only. Uses `useBuilderMode()` for conditional rendering.
+
+3. **Feature 3: DenkenMenu Nav + Breadcrumbs** — `DenkenMenu.tsx` expanded from 2 items (Crow's Nest, X-Ray) to 5 items: Portal, Plant Seeds, Build a Business, Crow's Nest, X-Ray Goggles. Both `PlantSeeds.tsx` and `BuildBusiness.tsx` now have breadcrumb nav (Portal → Page Name) at top.
+
+### Files Changed (Session 27)
+
+| File | Change |
+|------|--------|
+| `platform/src/pages/PortalGateway.tsx` | Rebuilt: action-first hub with dark theme, 4 primary + 4 secondary action cards |
+| `platform/src/pages/BuildBusiness.tsx` | Added Pledge buttons to production levels, X-Ray conditional tier details, breadcrumb |
+| `platform/src/pages/PlantSeeds.tsx` | Added breadcrumb nav (Portal → Plant Seeds) |
+| `platform/src/components/builder/DenkenMenu.tsx` | Added Portal, Plant Seeds, Build a Business nav items (2→5 items) |
+
+### Migrations Pushed (Session 27)
+
+None — no database changes this session.
+
+### Pending Work (Session 27+)
+
+| Item | Status |
+|------|--------|
+| Charity Card Phase 2 — wire `daisyChainLink.ts`, CSS 3D flip, real taglines from `SWEET_SIXTEEN_CANONICAL.md` | **NEXT (Task 4 from Bishop Session 011)** |
+| Browse Projects page — filterable grid with mock data at `/projects` or new page | **NEXT (Task 5 from Bishop Session 011)** |
+| Arena visualization on Power to the People | ASK FOUNDER |
+| Accessibility presets (Mirror Mirror panel) | Deferred |
+| X-Ray Goggles deep interconnection mode | Deferred |
+| Six Degrees voting system | Deferred |
+| Profile Preview (Mirror Mirror View) | Deferred |
+| Fairness Dashboard | Deferred |
+
+---
+
+## Session 26 (March 16, 2026) — Previous
+
+**Commit:** `b7908fa` — Session 26: Pnyx merge, WhyNoAds/VC pages, Chalk Outline wiring, X-Ray FAQ additions
+
+### What Was Done (Session 26 — Knight, Bishop-Managed)
+
+Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three features + FAQ, exactly as directed.
+
+1. **Feature 1: Political Expedition Merge into PowerToThePeoplePage** — Merged operational tools from old `escape-velocity PoliticalExpeditionPage.tsx` into `PowerToThePeoplePage.tsx`. Existing philosophy section (Ella Wheeler Wilcox poem, Switzerland Protocol, Quad-Crown sidebar, Council of Crowns nomination) preserved intact. Added tabbed section below with three tabs:
+   - **Representatives tab**: Sample rep cards with vote alignment scores (color-coded), YES/NO vote badges with aligned/misaligned icons, ZIP code lookup input, Full Record + Contact buttons
+   - **Tracked Bills tab**: 3 tracked bills with bill number badges, relevance priority badges, status, sponsor/cosponsor counts, Track This Bill button
+   - **Take Action tab**: Contact Your Rep, Register to Vote, Join the Pnyx action cards + motivational quote footer
+   - **Arena visualization**: Skipped per Bishop directive ("ASK FOUNDER before placing Arena")
+   - Sample Data badge displayed prominently
+
+2. **Feature 2: WhyNoAds + WhyNoVC Philosophy Pages** — Created two new pages ported from old codebase:
+   - `WhyNoAds.tsx` — Ad-Funded Trap analysis, Herald System alternative, growth budget economics ($100K comparison showing $0 to members vs $100K to members), viral vs paid growth statistics, Vanguard Effect, What This Means For YOU section
+   - `WhyNoVC.tsx` — VC Strings analysis, Patent-Backed Bootstrap (**corrected**: 7 provisional applications with 1,662 documented innovations), organic growth projections table (Year 1-10), Seed→Forest organic growth path visualization, What This Means For YOU section
+   - Both wired as public routes: `/why-no-ads` and `/why-no-vc`
+   - Cross-links to `/herald`, `/the-300`, `/fly-on-the-wall`, and each other
+
+3. **Feature 3: Chalk Outline Onboarding Wiring** — Wired existing `ChalkOutlineOnboarding.tsx` component (573 lines, already built with Lock/Unlock, progress bar, Launch button, preview toggle, two field templates) to a live route:
+   - `CreateProject.tsx` page: reads `?invite=CREATOR_ID` from URL, fetches invite from Supabase `creator_invites`, pre-fills creator name/handle, renders `ChalkOutlineOnboarding` with `CREATOR_INVITE_FIELDS` template, `onSave` persists to `project_drafts`, `onLaunch` creates `products` entry with status `live` and links back to invite
+   - Migration `20260316000002_creator_invites.sql`: `creator_invites` table (uuid PK, creator_handle, invite_code unique, status, project_id nullable FK) + `project_drafts` table (text PK, invite_id FK, field_data JSONB, progress_percent, updated_at) + RLS policies
+   - Public `/create` route (no auth required — creators can start before signing up)
+
+4. **FAQ / X-Ray Glossary Additions** — 6 new entries added to `xrayGlossary.ts`:
+   - `six-degrees`: Universal connection engine (Outreach/Medical/Opportunity domains, referral chains, bounty campaigns)
+   - `chalk-outline-onboarding`: Coloring-book project creation UX, progress bar, lock/unlock, preview
+   - `double-dipping-stacking`: Ice cream cone reward stacking philosophy
+   - `star-chamber`: Multi-AI governance (7 agents, 5/7 consensus, dissenting opinions published)
+   - `life-compass`: Personal goal tracking with personality-matched recommendations
+   - `why-no-ads-vc`: Philosophy pages explaining no-ad/no-VC funding model
+
+### Files Changed (Session 26)
+
+| File | Change |
+|------|--------|
+| `platform/src/pages/PowerToThePeoplePage.tsx` | Merged Pnyx operational tools (Reps/Bills/Actions tabs) below philosophy section |
+| `platform/src/pages/WhyNoAds.tsx` | **NEW** — Why No Ads philosophy page |
+| `platform/src/pages/WhyNoVC.tsx` | **NEW** — Why No VC philosophy page (corrected patent numbers) |
+| `platform/src/pages/CreateProject.tsx` | Rewired as Chalk Outline route handler for `/create?invite=` |
+| `platform/src/App.tsx` | Added lazy imports for WhyNoAds/WhyNoVC + routes `/why-no-ads`, `/why-no-vc`, `/create` |
+| `platform/src/components/ChalkOutlineOnboarding.tsx` | Tracked (already existed, now committed) |
+| `platform/src/data/xrayGlossary.ts` | Added 6 new FAQ entries (Six Degrees, Chalk Outline, Double-Dipping, Star Chamber, LifeCompass, WhyNoAds/VC) |
+| `platform/supabase/migrations/20260316000002_creator_invites.sql` | **NEW** — creator_invites + project_drafts tables + RLS |
+
+### Migrations Pushed (Session 26)
+
+- `20260316000002_creator_invites.sql` — Applied successfully to remote
+
+### Deployment
+
+- **Build**: Vite build succeeded (37.2s, 588 files)
+- **Firebase**: Deployed to `lianabanyan-main.web.app` (284 new files uploaded)
+- **Commit**: `b7908fa` on main
+
+### Pending Work (Session 27+)
+
+| Item | Status |
+|------|--------|
+| Arena visualization placement on Power to the People | **ASK FOUNDER** — Bishop says get approval before adding |
+| Accessibility presets (Mirror Mirror panel) | Deferred per Bishop |
+| X-Ray Goggles deep interconnection mode | Deferred per Bishop |
+| Six Degrees voting system implementation | Deferred per Bishop |
+| Profile Preview ("Mirror Mirror View") | Deferred per Bishop |
+| Fairness Dashboard | Deferred per Bishop |
+| The 300 dedicated page (update Canada Visa Crisis section) | Backlog |
+| Star Chamber 7-agent UI | Backlog |
+| Santa Evermore → Let's Go Shopping full build | Backlog (scoping only) |
+| Boaz Principle visualization | Backlog |
+| Castle/12-Door hub (confirm dashboard nav with Founder) | Backlog |
+| Alexandrian Library | Backlog |
+| Letter Observatory | Backlog |
+| Fleet Formation | Backlog |
+| LifeCompass (approved for merge) | Backlog |
+| TheBattery → dispatch-executor wiring | Deferred |
+| Medium Integration Token (Founder action) | Blocked |
+| LINKEDIN_ACCESS_TOKEN / X_BEARER_TOKEN setup (Founder action) | Blocked |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 25 (March 15, 2026)
 
 **Latest commit:** `40e4003` — Session 25: dispatch queue seeded, landing page restored, golden key pipeline
 
@@ -278,12 +645,15 @@
 
 ### Migrations NOT YET Pushed
 
-**None** — all migrations pushed as of Session 24. Last 5 pushed:
+**None** — all migrations pushed as of Session 28. Last 7 pushed:
 - `20260315000001` — 568 spec expansion UPDATEs
 - `20260315000002` — 22 skeleton fill UPDATEs (#1573-#1594)
 - `20260315000003` — Canonical DB + QR linkage + Medallion FK + Print pipeline
 - `20260315000004` — Print pipeline refinement (3-vendor, approval gate, production levels)
 - `20260315000005` — Outbound dispatch table + 3 seed items (Session 24)
+- `20260316000002` — Creator invites + project drafts tables (Session 26)
+- `20260317000001` — 18 Six Degrees innovations (#1663-#1680) + canonical count update (Session 28)
+- `20260317000002` — 10 Kickstarter Chain innovations (#1681-#1690) + canonical count update (Session 29)
 
 ---
 
@@ -293,10 +663,11 @@
 |--------|-------|--------|
 | **Creator keeps** | 83.3% (never round to 83%) | Immutable |
 | **Platform margin** | Cost + 20% | Immutable |
-| **Innovations (canonical)** | **1,662** | Session 17 POLLINATION; propagated everywhere |
-| **Innovations in DB** | Through #1662 (all pushed) | All migrations applied as of Session 22 |
+| **Innovations (canonical)** | **1,690** | Session 29 POLLINATION; propagated everywhere |
+| **Innovations in DB** | Through #1690 (all pushed) | All migrations applied as of Session 29 |
 | **Spec expansions written** | 593 (568 batch + 22 skeleton + 3 overflow) | Migrations `20260315000001` + `20260315000002` |
 | **Formal patent claims** | 1,336 across 7 provisional applications | USPTO receipts |
+| **8th provisional** | 18 innovations (#1663-#1680) — PDF ready, awaiting filing | Six Degrees Crown Jewel |
 | **7th provisional** | Application 64/006,010 — filed March 15, 2026 | 653 innovations with full specs |
 | **Crown Jewels** | 123 definitive (see Cephas crown-jewels page) | Cephas + DB |
 | **Membership** | $5/year | Immutable |
@@ -396,6 +767,12 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+9bc090f Session 27: Action-first Portal, production level Pledge buttons, DenkenMenu nav wiring
+b7908fa Session 26: Pnyx merge, WhyNoAds/VC pages, Chalk Outline wiring, X-Ray FAQ additions
+ee62ad3 Session 25B: Crown Letters (Political Expedition) + Six Degrees system
+602c909 Add Cold Start Recipe Cards, Production Run Draft, Success Stories & Ticker
+cb859c9 Fix Ghost World crash, remove auth wall from registration, add sponsor milestones
+40e4003 Session 25: dispatch queue seeded, landing page restored, golden key pipeline
 6127a12 Session 24: Dispatch pipeline, print order service, canonical stats migration
 dfde988 Session 23: Live IPFS (Pinata), Printful API, outreach email, Hugo canonical pipeline
 a9e24fe Session 22 addendum: Print pipeline refinement (3-vendor, approval gate, production levels) + Dead Internet Defense

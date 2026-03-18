@@ -110,6 +110,7 @@ const DidaskoPage = lazy(() => import("./pages/DidaskoPage"));
 const PowerToThePeoplePage = lazy(() => import("./pages/PowerToThePeoplePage"));
 const WhyNoAds = lazy(() => import("./pages/WhyNoAds"));
 const WhyNoVC = lazy(() => import("./pages/WhyNoVC"));
+const FAQ = lazy(() => import("./pages/FAQ"));
 const BrassTacksPage = lazy(() => import("./pages/BrassTacksPage"));
 const FamilyPage = lazy(() => import("./pages/FamilyPage"));
 const FamilyDetailPage = lazy(() => import("./pages/FamilyDetailPage"));
@@ -269,6 +270,8 @@ const CoasterMedallionProject = lazy(() => import("./pages/CoasterMedallionProje
 const FarmerSupplyChainPage = lazy(() => import("./pages/FarmerSupplyChainPage"));
 const HexIsleEncyclopedia = lazy(() => import("./pages/HexIsleEncyclopedia"));
 const HexIsleIslandPage = lazy(() => import("./pages/HexIsleIslandPage"));
+const ChainDashboard = lazy(() => import("./pages/ChainDashboard"));
+const HexIsleDownloads = lazy(() => import("./pages/HexIsleDownloads"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -332,7 +335,7 @@ import { LarkSidePanel } from "@/components/builder/LarkSidePanel";
 
 // The Crow's Nest — global provider, float button, overlay (Session 8H)
 import { CrowsNestProvider } from "@/contexts/CrowsNestContext";
-import { CrowsNestFloat } from "@/components/crows-nest/CrowsNestFloat";
+// import { CrowsNestFloat } from "@/components/crows-nest/CrowsNestFloat"; // Replaced by DenkenMenu
 import { CrowsNestOverlay } from "@/components/crows-nest/CrowsNestOverlay";
 
 // Cold Start & Stewardship System (Milestone 2)
@@ -385,7 +388,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-import { BuilderModeToggle } from "@/components/builder/BuilderModeToggle";
+// import { BuilderModeToggle } from "@/components/builder/BuilderModeToggle"; // Replaced by DenkenMenu
+import { DenkenMenu } from "@/components/builder/DenkenMenu";
 import { XRayOverlay } from "@/components/builder/XRayOverlay";
 
 /**
@@ -669,6 +673,8 @@ const App = () => (
                         <Route path="/hexisle/overworld" element={<HexIsleOverworld />} />
                         <Route path="/hexisle/hexels/slotted-top" element={<HexelSlottedTopDetail />} />
                         <Route path="/hexisle/hexels/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexelWeeklyDetail /></Suspense>} />
+                        <Route path="/hexisle/downloads" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleDownloads /></Suspense></ExplorerRoute>} />
+                        <Route path="/chain" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainDashboard /></Suspense></ExplorerRoute>} />
                         <Route path="/hexisle/founding-run" element={<FoundingRunLanding />} />
                         <Route path="/hexisle/founding-run/order" element={<ProtectedRoute><PreOrderFlow /></ProtectedRoute>} />
                         <Route path="/content-pipeline" element={<ContentPipelinePage />} />
@@ -688,6 +694,7 @@ const App = () => (
                         <Route path="/transparency" element={<FlyOnTheWall />} />
                         <Route path="/why-no-ads" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><WhyNoAds /></Suspense></ExplorerRoute>} />
                         <Route path="/why-no-vc" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><WhyNoVC /></Suspense></ExplorerRoute>} />
+                        <Route path="/faq" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><FAQ /></Suspense>} />
                         <Route path="/create" element={<CreateProject />} />
                         <Route path="/feathers" element={<ExplorerRoute><DeckCollection /></ExplorerRoute>} />
                         <Route path="/the-bridge" element={<Navigate to="/durins-door" replace />} />
@@ -937,7 +944,8 @@ const App = () => (
                   </ErrorBoundary>
                 </AppShell>
               </SubdomainRouter>
-              <CrowsNestFloat />
+              {/* <CrowsNestFloat /> */}{/* Replaced by DenkenMenu */}
+              <DenkenMenu />
               <CrowsNestOverlay />
             </RecordingProvider>
           </CrowsNestProvider>
@@ -949,7 +957,6 @@ const App = () => (
         </AuthProvider>
       </BrowserRouter>
       <LarkSidePanel />
-      <BuilderModeToggle />
       <XRayOverlay />
     </TooltipProvider>
     </BuilderModeProvider>
