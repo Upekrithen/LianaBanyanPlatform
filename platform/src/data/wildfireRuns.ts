@@ -790,6 +790,74 @@ export const CREATIVE_RUN: WildfireRun = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// TL;DR TOUR — "Okay, this is real" path (Session 33)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export const TLDR_TOUR_RUN: WildfireRun = {
+  id: "tldr-tour",
+  slug: "tldr-tour",
+  name: "The TL;DR Tour",
+  description: "See it all in 10 minutes — the 'Okay, this is real' path",
+  category: "onboarding",
+  difficulty: "beginner",
+  estimatedMinutes: 10,
+  icon: "⚡",
+  totalNodes: 6,
+  goldenKeysRequired: 30,
+  nodes: [
+    {
+      id: "tldr-1",
+      order: 1,
+      title: "Like What?",
+      description: "Projects + Vernacular glossary",
+      route: "/like-what",
+      duration: 8,
+    },
+    {
+      id: "tldr-2",
+      order: 2,
+      title: "Patent Portfolio",
+      description: "$116M equivalent, declared at $630K",
+      route: "/patent-portfolio",
+      duration: 8,
+    },
+    {
+      id: "tldr-3",
+      order: 3,
+      title: "Battle Philosophy",
+      description: "No dice — luck is consequence",
+      route: "/hexisle/battle-philosophy",
+      duration: 8,
+    },
+    {
+      id: "tldr-4",
+      order: 4,
+      title: "Economic Model",
+      description: "Cost+20%, three currencies, no VC",
+      route: "/economics",
+      duration: 8,
+    },
+    {
+      id: "tldr-5",
+      order: 5,
+      title: "Founder's Vernacular",
+      description: "The language we invented",
+      route: "/faq#vernacular",
+      duration: 8,
+    },
+    {
+      id: "tldr-6",
+      order: 6,
+      title: "Launch Tracker",
+      description: "How close each initiative is",
+      route: "/launch-tracker",
+      duration: 8,
+      goldenKeysReward: 10,
+    },
+  ],
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // ALL RUNS EXPORT
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -807,6 +875,7 @@ export const ALL_WILDFIRE_RUNS: WildfireRun[] = [
   INITIATIVES_HEALTH_RUN,
   INITIATIVES_FULL_RUN,
   // Onboarding
+  TLDR_TOUR_RUN,
   ONBOARDING_QUICK_RUN,
   ONBOARDING_DEEP_RUN,
   // Governance
@@ -819,7 +888,7 @@ export const RUNS_BY_CATEGORY = {
   'level-1': [GET_A_JOB_RUN, BUILD_A_BUSINESS_RUN, PLANT_SEEDS_RUN],
   business: [BUSINESS_EXISTING_RUN, BUSINESS_IDEA_RUN, BUSINESS_WORK_RUN],
   initiatives: [INITIATIVES_FOOD_RUN, INITIATIVES_HEALTH_RUN, INITIATIVES_FULL_RUN],
-  onboarding: [ONBOARDING_QUICK_RUN, ONBOARDING_DEEP_RUN],
+  onboarding: [TLDR_TOUR_RUN, ONBOARDING_QUICK_RUN, ONBOARDING_DEEP_RUN],
   governance: [GOVERNANCE_RUN],
   creative: [CREATIVE_RUN],
 };

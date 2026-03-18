@@ -25,6 +25,9 @@ export default function MoneyPenny() {
           </h1>
           <p className="text-muted-foreground">Your virtual administrative assistant</p>
         </div>
+        <Button variant="default" className="gap-2" onClick={() => navigate('/moneypenny/briefing')}>
+          <Calendar className="h-4 w-4" /> Morning Briefing
+        </Button>
         <Button variant="outline" className="gap-2">
           <Settings className="h-4 w-4" /> Configure
         </Button>

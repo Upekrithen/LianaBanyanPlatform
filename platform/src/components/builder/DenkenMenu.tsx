@@ -12,7 +12,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useBuilderMode } from './BuilderModeContext';
 import { useCrowsNest } from '@/contexts/CrowsNestContext';
-import { Telescope, Glasses, Sprout, Building2, Compass } from 'lucide-react';
+import { Telescope, Glasses, Sprout, Building2, Compass, Zap } from 'lucide-react';
 
 interface MenuItem {
   id: string;
@@ -99,6 +99,12 @@ export const DenkenMenu: React.FC = () => {
       label: 'X-Ray Goggles',
       onClick: handleXRayClick,
       isActive: isBuilderModeActive,
+    },
+    {
+      id: 'tldr-tour',
+      icon: <Zap className="h-4 w-4" />,
+      label: 'TL;DR Tour',
+      onClick: () => { navigate('/wildfire/tldr-tour'); setIsMenuOpen(false); },
     },
   ];
 

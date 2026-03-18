@@ -281,6 +281,7 @@ const HexIsleVote = lazy(() => import("./pages/HexIsleVote"));
 const HexIsleBattlePhilosophy = lazy(() => import("./pages/HexIsleBattlePhilosophy"));
 const HexIsleCueCard = lazy(() => import("./pages/cue-cards/HexIsleCueCard"));
 const LaunchTracker = lazy(() => import("./pages/LaunchTracker"));
+const MoneypennyBriefing = lazy(() => import("./pages/MoneypennyBriefing"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -842,6 +843,7 @@ const App = () => (
                         <Route path="/landing-manager/:projectId" element={<ProtectedRoute><LandingPageManager /></ProtectedRoute>} />
                           <Route path="/briefcase" element={<ProtectedRoute><Briefcase /></ProtectedRoute>} />
                           <Route path="/moneypenny" element={<ProtectedRoute><MoneyPenny /></ProtectedRoute>} />
+                          <Route path="/moneypenny/briefing" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MoneypennyBriefing /></Suspense></ProtectedRoute>} />
                           <Route path="/academy" element={<ExplorerRoute><Academy /></ExplorerRoute>} />
                           <Route path="/hexisle-dashboard" element={<ProtectedRoute><HexisleDashboard /></ProtectedRoute>} />
                         

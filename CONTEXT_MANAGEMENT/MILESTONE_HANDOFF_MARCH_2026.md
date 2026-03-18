@@ -9,9 +9,79 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 31 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 33 (March 18, 2026)
 
-**Latest commit:** (pending) — Session 31: "All Live" Initiative Transformation, Attack Wheel Interactive Demo, LaunchTracker dashboard
+**Latest commit:** (pending) — Session 33: TL;DR Tour, Moneypenny Phase 1 Briefing Dashboard
+
+**Status (March 18, 2026 — Session 33):**
+- Both sites deployed and live: lianabanyan-main.web.app + cephas-lianabanyan.web.app
+- All Supabase migrations pushed (through `20260319000002`). DB canonical count = 1,748.
+- **Innovation count:** 1,748 (unchanged — no new innovations this session)
+- **No blockers.** Ready for Session 34.
+
+### What Was Done This Session (Session 33 — Knight)
+
+1. **Feature 1: TL;DR Tour Wildfire Run** — 6-stop guided onboarding path through the platform's key pages.
+   - Added `TLDR_TOUR_RUN` to `wildfireRuns.ts` with 6 nodes: Like What?, Patent Portfolio, Battle Philosophy, Economic Model, Founder's Vernacular, Launch Tracker
+   - Added to ALL_WILDFIRE_RUNS, RUNS_BY_CATEGORY.onboarding
+   - Added lightning bolt "TL;DR Tour" button to DenkenMenu as 6th option
+
+2. **Feature 2: Moneypenny Phase 1 — Admin Briefing Dashboard**
+   - Migration `20260319000002_moneypenny_briefing_tables.sql` — 6 new tables: `moneypenny_inbox`, `moneypenny_actions`, `moneypenny_social_drafts`, `moneypenny_ideas`, `moneypenny_schedule`, `red_carpet_signals`. All with RLS (authenticated users only). Seeded 4 schedule items (patent filing, deploy, crown letter, kickstarter).
+   - `MoneypennyBriefing.tsx` at `/moneypenny/briefing` — 5-panel morning briefing dashboard:
+     - **Response Tracker** — Reads from `moneypenny_inbox`, shows priority-sorted items with status icons, action buttons (Replied/Needs Action)
+     - **Action Items Queue** — CRUD from `moneypenny_actions`, checkbox completion, manual add, priority badges
+     - **Social Media Draft Station** — Reads from `moneypenny_social_drafts`, Approve & Copy to clipboard, Reject
+     - **Idea Capture + Relay** — Input + dropdown (Bishop/Knight/Rook/Founder), saves to `moneypenny_ideas`
+     - **Schedule View** — Reads from `moneypenny_schedule`, overdue highlighting, manual add, category badges, completion checkboxes
+   - Added "Morning Briefing" button to existing `MoneyPenny.tsx`
+   - Route wired in App.tsx as ProtectedRoute (lazy-loaded)
+
+### Files Created (Session 33)
+
+| File | Purpose |
+|------|---------|
+| `platform/src/pages/MoneypennyBriefing.tsx` | **NEW** — 5-panel morning briefing dashboard |
+| `platform/supabase/migrations/20260319000002_moneypenny_briefing_tables.sql` | **NEW** — 6 Moneypenny tables + RLS + seed data |
+
+### Files Modified (Session 33)
+
+| File | Changes |
+|------|---------|
+| `platform/src/data/wildfireRuns.ts` | Added TLDR_TOUR_RUN (6 nodes) to all exports |
+| `platform/src/components/builder/DenkenMenu.tsx` | Added TL;DR Tour as 6th menu item |
+| `platform/src/App.tsx` | Added MoneypennyBriefing lazy import + /moneypenny/briefing route |
+| `platform/src/pages/MoneyPenny.tsx` | Added "Morning Briefing" nav button |
+
+### Migrations Pushed (Session 33)
+
+- `20260319000002_moneypenny_briefing_tables.sql` — Applied successfully to remote
+
+### Deployment (Session 33)
+
+- **Platform**: lianabanyan-main.web.app (614 files)
+
+### Pending Work (Session 34+)
+
+| Item | Status |
+|------|--------|
+| **Moneypenny Edge Functions** — `moneypenny-intake`, `moneypenny-daily-digest`, `moneypenny-signal` | **NEXT** |
+| **Wire MoneyPenny.tsx tabs to real Supabase data** (replace mock data) | **NEXT** |
+| **Wrap remaining 11 initiative pages** with LaunchConditionOverlay | MEDIUM |
+| **Hitbase Counter Showcase** + **Character Layer Explorer** | MEDIUM |
+| **Wire Demand Signaling + Pledged Mark Voting to Supabase** | MEDIUM |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 31 (March 18, 2026) — Previous
+
+**Latest commit:** `3e20ef5` — Session 31: All Live Initiative Transformation, Attack Wheel, LaunchTracker dashboard
 
 **Status (March 18, 2026 — Session 31):**
 - Both sites deployed and live: lianabanyan-main.web.app + cephas-lianabanyan.web.app
