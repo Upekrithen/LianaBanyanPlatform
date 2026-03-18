@@ -16,11 +16,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FileText, Shield, TrendingUp, Users, Lock, ArrowLeft, Sparkles, 
   RefreshCw, Award, Stamp, Calculator, ChevronRight, RotateCcw,
-  Scale, Building, Briefcase, Globe, BookOpen, Zap
+  Scale, Building, Briefcase, Globe, BookOpen, Zap, Share2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PatentPortfolioTicker } from '@/components/PatentPortfolioTicker';
 import { DataVizBar, ExpandableBlock, ComparisonBar } from '@/components/pudding';
+import { SocialShareBar } from '@/components/atti/SocialShareBar';
 
 // Swivel Card Component - JUMBO Deck Card style
 interface SwivelCardProps {
@@ -1139,6 +1140,22 @@ export default function PatentPortfolio() {
           </div>
         </motion.section>
         
+        {/* Share */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+          className="mt-8"
+        >
+          <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Share2 className="w-4 h-4 text-amber-400" />
+              <h3 className="text-sm font-medium text-white/70">Share the Patent Portfolio</h3>
+            </div>
+            <SocialShareBar moment="general" initiativeName="Patent Portfolio" />
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

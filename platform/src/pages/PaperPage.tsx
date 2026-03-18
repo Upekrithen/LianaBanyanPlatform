@@ -18,6 +18,7 @@ import {
   FileText,
   Lightbulb,
   ExternalLink,
+  Share2,
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
@@ -34,6 +35,7 @@ import {
   DataVizBar
 } from '@/components/pudding';
 import { TreasureKeyIndicator } from '@/components/TreasureKeyIndicator';
+import { SocialShareBar } from '@/components/atti/SocialShareBar';
 
 const LAW_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e', '#f59e0b', '#ef4444'];
 
@@ -454,6 +456,22 @@ export default function PaperPage() {
           variant="inline"
           className="mt-8"
         />
+
+        {/* Share This Paper */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-8 mb-8"
+        >
+          <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Share2 className="w-4 h-4 text-amber-400" />
+              <h3 className="text-sm font-medium text-white/70">Share this paper</h3>
+            </div>
+            <SocialShareBar moment="general" initiativeName={paper.title} />
+          </div>
+        </motion.section>
 
         {/* Footer */}
         <motion.div

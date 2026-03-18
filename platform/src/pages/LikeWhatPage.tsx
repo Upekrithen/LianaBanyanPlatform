@@ -29,9 +29,11 @@ import {
   ChevronUp,
   Flame,
   ExternalLink,
+  Share2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { SocialShareBar } from '@/components/atti/SocialShareBar';
 import { Badge } from '@/components/ui/badge';
 
 // ─── VERNACULAR DATA ───
@@ -371,6 +373,15 @@ export default function LikeWhatPage() {
                 Full FAQ
               </Button>
             </Link>
+          </div>
+
+          {/* Share */}
+          <div className="mt-8 bg-slate-900/50 border border-slate-700 rounded-xl p-6 max-w-md mx-auto">
+            <div className="flex items-center gap-2 mb-3">
+              <Share2 className="w-4 h-4 text-amber-400" />
+              <h3 className="text-sm font-medium text-white/70">Share this page</h3>
+            </div>
+            <SocialShareBar moment="general" initiativeName="Like What? — Innovation Examples" />
           </div>
         </motion.div>
       </div>
