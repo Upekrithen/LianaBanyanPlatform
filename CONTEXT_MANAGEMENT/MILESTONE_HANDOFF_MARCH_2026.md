@@ -9,9 +9,88 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 29 (March 17, 2026)
+## RUNWAY / SESSION STOP (current) — Session 29b (March 17, 2026)
 
-**Latest commit:** (pending commit) — Session 29: X-Ray→FAQ Pipeline, Chain Dashboard, HexIsle Downloads + 10 innovations threshed
+**Latest commit:** (pending) — Session 29b: Bishop 012 thresh (19 innovations #1691-#1709), POLLINATE 1690→1709, 7 HexIsle bounties on /crew-call
+
+### What Was Done This Session (Session 29b — Knight, continued)
+
+1. **Thresh 19 innovations (#1691-#1709)** from Bishop Session 012. Renumbered from Bishop's original #1663-#1681 to avoid collision with Knight Sessions 28-29. Sources: XRAY_FAQ content (3), Campaign Copy (7), Crew Call Bounties (3), Character Lore (6). Supabase migration `20260317000003_innovation_log_session29b_bishop_012.sql` pushed successfully.
+
+2. **POLLINATION 1,690 → 1,709** across 23 files (47 replacements). All platform/src and Cephas content files updated.
+
+3. **7 HexIsle Engineering Bounties on /crew-call** — Added full bounty board to `CrewCallPage.tsx` with:
+   - CREW-HEXISLE-001: Hydraulic Seal Design (CRITICAL, 2000 Credits / 50 Marks / 200 XP)
+   - CREW-HEXISLE-002: 42→60mm Dimensional Port (HIGH, 3000 / 75 / 300)
+   - CREW-HEXISLE-003: Tesla Valve Optimization (HIGH, 2500 / 60 / 250)
+   - CREW-HEXISLE-004: Reservoir Pressure Testing (MEDIUM, 1500 / 40 / 150)
+   - CREW-HEXISLE-005: Ouralis Gear Train QC (MEDIUM, 2000 / 50 / 200)
+   - CREW-HEXISLE-006: Compliant Mechanism Durability (MEDIUM, 1500 / 40 / 150)
+   - CREW-HEXISLE-007: Pneumatic Plant Growth (LOW, 2500 / 60 / 250)
+   - Each bounty card: problem statement, skills required, 5 deliverables, 5-point STAMP criteria, XP formula, priority/difficulty badges
+   - Total: 15,000 Credits + 375 Marks + 1,500 XP across 7 bounties
+   - Assignment rules section (Primary/Secondary/Backup, Process Pioneer bonus)
+
+### Innovations Filed (#1691-#1709)
+
+| # | Innovation | Category |
+|---|-----------|----------|
+| 1691 | X-Ray Hexel Piece Tooltips | ux-design |
+| 1692 | FAQ Deep-Link Architecture | ux-design |
+| 1693 | Piece-Level Open Build Integration | ux-design |
+| 1694 | Dual-Mode Character Miniatures | manufacturing |
+| 1695 | Mountable Creature System | manufacturing |
+| 1696 | King-Class Adjacent Hex Influence | manufacturing |
+| 1697 | Queen-Class Hydraulic Modulation | manufacturing |
+| 1698 | Chain Backer Dynamic Pricing | platform-economics |
+| 1699 | Community-Refined Assembly Launch | manufacturing |
+| 1700 | Scale-Tiered Water Table Fulfillment | platform-economics |
+| 1701 | Structured Bounty Specification Format | platform-economics |
+| 1702 | Pneumatic Plant Growth Bounty | manufacturing |
+| 1703 | Compliant Mechanism Fatigue Bounty | manufacturing |
+| 1704 | Dual-Path Character Progression Narrative | ux-design |
+| 1705 | Character-Hexel Mechanical Interaction Tiers | manufacturing |
+| 1706 | Character Interaction Matrix | ux-design |
+| 1707 | Healer Counter-Mechanism | manufacturing |
+| 1708 | Queen Pneumatic Resonance | manufacturing |
+| 1709 | Character-as-Cooperative-Metaphor | ux-design |
+
+### Files Created/Changed (Session 29b)
+
+| File | Change |
+|------|--------|
+| `platform/src/pages/CrewCallPage.tsx` | Added 7 HexIsle bounty cards + BountyCard/HexIsleBountyBoard components |
+| `platform/supabase/migrations/20260317000003_*.sql` | **NEW** — 19 innovations + canonical count 1709 |
+| 23 platform/src + Cephas files | POLLINATION: 1,690 → 1,709 (47 replacements) |
+
+### Migrations Pushed (Session 29b)
+
+- `20260317000003_innovation_log_session29b_bishop_012.sql` — Applied successfully to remote
+
+### Deployment (Session 29b)
+
+- **Platform**: lianabanyan-main.web.app (599 files, 174 new)
+- **Cephas**: cephas-lianabanyan.web.app (1410 files, 980 pages)
+
+### Pending Work (Session 30+)
+
+| Item | Status |
+|------|--------|
+| **Pledged Mark Voting** (`/hexisle/vote`) — Task 4 from Bishop Session 011 | **NEXT** |
+| **HexIsle Cue Card** — "Know a Gamer? Know an Engineer?" (Task 6) | **NEXT** |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| Battery Dispatch — Grassroots Intelligence | MEDIUM |
+| Treasure Key injection | MEDIUM |
+| SEC language cleanup (broader pass) | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 29 (March 17, 2026) — Previous
+
+**Latest commit:** `ffa1ca2` — Session 29: X-Ray→FAQ Pipeline, Chain Dashboard, HexIsle Downloads + 10 innovations threshed
 
 ### What Was Done This Session (Session 29 — Knight)
 
@@ -663,8 +742,8 @@ Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three fe
 |--------|-------|--------|
 | **Creator keeps** | 83.3% (never round to 83%) | Immutable |
 | **Platform margin** | Cost + 20% | Immutable |
-| **Innovations (canonical)** | **1,690** | Session 29 POLLINATION; propagated everywhere |
-| **Innovations in DB** | Through #1690 (all pushed) | All migrations applied as of Session 29 |
+| **Innovations (canonical)** | **1,709** | Session 29b POLLINATION; propagated everywhere |
+| **Innovations in DB** | Through #1709 (all pushed) | All migrations applied as of Session 29b |
 | **Spec expansions written** | 593 (568 batch + 22 skeleton + 3 overflow) | Migrations `20260315000001` + `20260315000002` |
 | **Formal patent claims** | 1,336 across 7 provisional applications | USPTO receipts |
 | **8th provisional** | 18 innovations (#1663-#1680) — PDF ready, awaiting filing | Six Degrees Crown Jewel |

@@ -1,13 +1,13 @@
 ---
 title: "Patent Portfolio"
-description: "THE BEHEMOTH — 1,690 innovations, 1,336 claims, 7 provisional applications filed with the USPTO"
+description: "THE BEHEMOTH — 1,709 innovations, 1,336 claims, 7 provisional applications filed with the USPTO"
 ---
 
 # Patent Portfolio
 
 **THE BEHEMOTH**
 
-> 1,690 innovations. 1,336 formal claims. 7 provisional applications filed. 37 years of development.
+> 1,709 innovations. 1,336 formal claims. 7 provisional applications filed. 37 years of development.
 
 ## Filed Applications
 
@@ -20,8 +20,8 @@ description: "THE BEHEMOTH — 1,690 innovations, 1,336 claims, 7 provisional ap
 | 63/969,601 | Jan 28, 2026 | 44 | Ghost World + Extensions | FILED |
 | 63/989,913 | Feb 24, 2026 | 408 | LEVIATHAN PLUS | FILED |
 | 64/006,010 | Mar 15, 2026 | TBD | #1001–#1662 (Full Specs) | FILED |
-| TBD (8th) | Mar 17, 2026 | 18 | #1663–#1690 (Six Degrees Crown Jewel) | PREPARED |
-| **Total** | | **1,354+** | **1,690 innovations** | |
+| TBD (8th) | Mar 17, 2026 | 18 | #1663–#1709 (Six Degrees Crown Jewel) | PREPARED |
+| **Total** | | **1,354+** | **1,709 innovations** | |
 
 ## Innovation Coverage
 
@@ -33,8 +33,8 @@ description: "THE BEHEMOTH — 1,690 innovations, 1,336 claims, 7 provisional ap
 | #1573–#1594 | 22 | INBOX goldmine harvest — specs complete |
 | #1595–#1599 | 5 | Gap slots (pending assignment) |
 | #1600–#1662 | 63 | Session 11B addendum — specs complete |
-| #1663–#1690 | 18 | Six Degrees Crown Jewel + Bishop Session 010 |
-| **Total** | **1,690** | |
+| #1663–#1709 | 18 | Six Degrees Crown Jewel + Bishop Session 010 |
+| **Total** | **1,709** | |
 
 ## Key Resources
 

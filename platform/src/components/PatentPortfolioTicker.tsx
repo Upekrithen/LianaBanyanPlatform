@@ -99,7 +99,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
             Patent Portfolio Value
           </h2>
           <p className="text-white/60 mt-1">
-            Conservative floor valuation of 1,690 documented innovations
+            Conservative floor valuation of 1,709 documented innovations
           </p>
         </div>
         <div className="text-right">
