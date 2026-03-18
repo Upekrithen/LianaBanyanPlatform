@@ -650,6 +650,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     return localStorage.getItem('liana_first_candle') === 'true';
   });
   const [charityFlipped, setCharityFlipped] = useState(false);  // Charity card flip — front shows 3 deck cards, back shows 16 initiative pills
+  const [spotlightCard, setSpotlightCard] = useState<'built' | 'whats-in-it' | 'know-maker' | null>(null);  // Bottom card spotlight — replaces hero card face
   const [selectedInitiative, setSelectedInitiative] = useState<string | null>(null);  // Selected initiative on charity card back, null = pill grid
   const [explainerFlipped, setExplainerFlipped] = useState(false);  // Start unflipped showing white front (simple message), click to flip to dark back (16 initiatives)
   const [pathsSectionFlipped, setPathsSectionFlipped] = useState(false);  // Choose Your Path section flip (trunk-info)
@@ -1937,6 +1938,108 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                           </button>
                         </div>
                       </>
+                    ) : isProfessionalTheme && spotlightCard ? (
+                      /* SPOTLIGHT CARD — Bottom button content replaces hero face */
+                      <div style={{ width: '100%', maxWidth: '600px', textAlign: 'center' }}>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setSpotlightCard(null); }}
+                          style={{
+                            background: 'none', border: 'none', color: 'rgba(250,245,235,0.5)',
+                            fontSize: '0.8rem', cursor: 'pointer', marginBottom: '1rem',
+                            transition: 'color 0.2s', fontWeight: 600,
+                          }}
+                          onMouseOver={(e) => { e.currentTarget.style.color = '#faf5eb'; }}
+                          onMouseOut={(e) => { e.currentTarget.style.color = 'rgba(250,245,235,0.5)'; }}
+                        >
+                          ← Back to Main
+                        </button>
+                        {spotlightCard === 'built' && (
+                          <>
+                            <h2 style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 700, color: '#faf5eb', marginBottom: '1.5rem' }}>
+                              Built to Last
+                            </h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>8</div>
+                                <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Patent Applications</div>
+                              </div>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>1,748</div>
+                                <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Innovations</div>
+                              </div>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>47</div>
+                                <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Creators Identified</div>
+                              </div>
+                            </div>
+                            <p style={{ color: 'rgba(250,245,235,0.8)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '1rem' }}>
+                              Every system is documented, filed, and open for inspection. $116M in patent IP at the pessimist's floor — donated 80% to the cooperative.
+                            </p>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigate('/patent-portfolio'); }}
+                              style={{ background: '#38a169', color: '#fff', border: 'none', borderRadius: '0.5rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer' }}
+                            >
+                              See the Patent Portfolio →
+                            </button>
+                          </>
+                        )}
+                        {spotlightCard === 'whats-in-it' && (
+                          <>
+                            <h2 style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 700, color: '#faf5eb', marginBottom: '1.5rem' }}>
+                              What's In It For You?
+                            </h2>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', marginBottom: '1.5rem' }}>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#38a169', marginBottom: '0.25rem' }}>{'\u{1F6E0}\uFE0F'} Maker?</div>
+                                <div style={{ color: 'rgba(250,245,235,0.8)', fontSize: '0.9rem' }}>Sell what you build. Keep 83.3% of every sale. No algorithms. No ad spend.</div>
+                              </div>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#38a169', marginBottom: '0.25rem' }}>{'\u{1F6D2}'} Shopper?</div>
+                                <div style={{ color: 'rgba(250,245,235,0.8)', fontSize: '0.9rem' }}>Own the store you buy from. Cost+20% pricing. Every purchase funds something real.</div>
+                              </div>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#38a169', marginBottom: '0.25rem' }}>{'\u{1F331}'} Curious?</div>
+                                <div style={{ color: 'rgba(250,245,235,0.8)', fontSize: '0.9rem' }}>$5/year. Explore everything. No risk. Cancel anytime.</div>
+                              </div>
+                            </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigate('/RedCarpet'); }}
+                              style={{ background: '#38a169', color: '#fff', border: 'none', borderRadius: '0.5rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer' }}
+                            >
+                              Join for $5/year →
+                            </button>
+                          </>
+                        )}
+                        {spotlightCard === 'know-maker' && (
+                          <>
+                            <h2 style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 700, color: '#faf5eb', marginBottom: '1rem' }}>
+                              Know a Maker?
+                            </h2>
+                            <p style={{ color: '#38a169', fontSize: '1.2rem', fontWeight: 700, marginBottom: '1rem' }}>
+                              Invite them. Earn 10 Marks.
+                            </p>
+                            <p style={{ color: 'rgba(250,245,235,0.8)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '1rem' }}>
+                              Six-tier referral rewards. Everyone gets something — forever. The first 100 members get Pioneer status and permanent founding badges.
+                            </p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', borderRadius: '0.5rem', padding: '0.75rem', textAlign: 'center' }}>
+                                <div style={{ color: '#38a169', fontWeight: 700 }}>Pioneer</div>
+                                <div style={{ color: 'rgba(250,245,235,0.6)', fontSize: '0.8rem' }}>First 100 · 10 Marks</div>
+                              </div>
+                              <div style={{ background: 'rgba(56,161,105,0.05)', borderRadius: '0.5rem', padding: '0.75rem', textAlign: 'center' }}>
+                                <div style={{ color: 'rgba(250,245,235,0.7)', fontWeight: 700 }}>Ambassador</div>
+                                <div style={{ color: 'rgba(250,245,235,0.5)', fontSize: '0.8rem' }}>50K+ · 1 Mark forever</div>
+                              </div>
+                            </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigate('/initiatives/brass-tacks'); }}
+                              style={{ background: '#38a169', color: '#fff', border: 'none', borderRadius: '0.5rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer' }}
+                            >
+                              Learn About Referrals →
+                            </button>
+                          </>
+                        )}
+                      </div>
                     ) : isProfessionalTheme ? (
                       /* DEFAULT PROFESSIONAL CONTENT */
                       <>
@@ -3612,15 +3715,22 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 justifyContent: 'center',
                 flexWrap: 'wrap',
               }}>
-                <div style={{
-                  flex: '1 1 280px',
-                  maxWidth: '320px',
-                  background: '#0a1628',
-                  border: '1px solid rgba(250, 245, 235, 0.15)',
-                  borderRadius: '1rem',
-                  padding: '1.5rem',
-                  textAlign: 'center',
-                }}>
+                <div
+                  onClick={() => { setSpotlightCard('built'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  style={{
+                    flex: '1 1 280px',
+                    maxWidth: '320px',
+                    background: spotlightCard === 'built' ? 'rgba(56,161,105,0.15)' : '#0a1628',
+                    border: spotlightCard === 'built' ? '1px solid rgba(56,161,105,0.5)' : '1px solid rgba(250, 245, 235, 0.15)',
+                    borderRadius: '1rem',
+                    padding: '1.5rem',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseOver={(e) => { if (spotlightCard !== 'built') { e.currentTarget.style.borderColor = 'rgba(250,245,235,0.4)'; e.currentTarget.style.background = 'rgba(250,245,235,0.05)'; } }}
+                  onMouseOut={(e) => { if (spotlightCard !== 'built') { e.currentTarget.style.borderColor = 'rgba(250,245,235,0.15)'; e.currentTarget.style.background = '#0a1628'; } }}
+                >
                   <h4 style={{ color: '#faf5eb', fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0' }}>Built to Last</h4>
                   <p style={{ color: '#faf5eb', fontSize: '0.95rem', lineHeight: 1.8, margin: 0 }}>
                     <span style={{ color: '#38a169', fontWeight: 700 }}>8</span> Patent Applications<br />
@@ -3629,15 +3739,22 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   </p>
                 </div>
 
-                <div style={{
-                  flex: '1 1 280px',
-                  maxWidth: '320px',
-                  background: '#0a1628',
-                  border: '1px solid rgba(250, 245, 235, 0.15)',
-                  borderRadius: '1rem',
-                  padding: '1.5rem',
-                  textAlign: 'center',
-                }}>
+                <div
+                  onClick={() => { setSpotlightCard('whats-in-it'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  style={{
+                    flex: '1 1 280px',
+                    maxWidth: '320px',
+                    background: spotlightCard === 'whats-in-it' ? 'rgba(56,161,105,0.15)' : '#0a1628',
+                    border: spotlightCard === 'whats-in-it' ? '1px solid rgba(56,161,105,0.5)' : '1px solid rgba(250, 245, 235, 0.15)',
+                    borderRadius: '1rem',
+                    padding: '1.5rem',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseOver={(e) => { if (spotlightCard !== 'whats-in-it') { e.currentTarget.style.borderColor = 'rgba(250,245,235,0.4)'; e.currentTarget.style.background = 'rgba(250,245,235,0.05)'; } }}
+                  onMouseOut={(e) => { if (spotlightCard !== 'whats-in-it') { e.currentTarget.style.borderColor = 'rgba(250,245,235,0.15)'; e.currentTarget.style.background = '#0a1628'; } }}
+                >
                   <h4 style={{ color: '#faf5eb', fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0' }}>What's In It For You?</h4>
                   <p style={{ color: '#faf5eb', fontSize: '0.95rem', lineHeight: 2, margin: 0, textAlign: 'left', paddingLeft: '0.5rem' }}>
                     {'\u{1F6E0}\uFE0F Maker? Sell what you build.'}<br />
@@ -3646,35 +3763,25 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   </p>
                 </div>
 
-                <div style={{
-                  flex: '1 1 280px',
-                  maxWidth: '320px',
-                  background: '#0a1628',
-                  border: '1px solid rgba(250, 245, 235, 0.15)',
-                  borderRadius: '1rem',
-                  padding: '1.5rem',
-                  textAlign: 'center',
-                }}>
+                <div
+                  onClick={() => { setSpotlightCard('know-maker'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  style={{
+                    flex: '1 1 280px',
+                    maxWidth: '320px',
+                    background: spotlightCard === 'know-maker' ? 'rgba(56,161,105,0.15)' : '#0a1628',
+                    border: spotlightCard === 'know-maker' ? '1px solid rgba(56,161,105,0.5)' : '1px solid rgba(250, 245, 235, 0.15)',
+                    borderRadius: '1rem',
+                    padding: '1.5rem',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseOver={(e) => { if (spotlightCard !== 'know-maker') { e.currentTarget.style.borderColor = 'rgba(250,245,235,0.4)'; e.currentTarget.style.background = 'rgba(250,245,235,0.05)'; } }}
+                  onMouseOut={(e) => { if (spotlightCard !== 'know-maker') { e.currentTarget.style.borderColor = 'rgba(250,245,235,0.15)'; e.currentTarget.style.background = '#0a1628'; } }}
+                >
                   <h4 style={{ color: '#faf5eb', fontSize: '1.1rem', fontWeight: 700, margin: '0 0 0.75rem 0' }}>Know a Maker?</h4>
                   <p style={{ color: '#faf5eb', fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Invite them. Earn 10 Marks.</p>
-                  <p style={{ color: 'rgba(250, 245, 235, 0.6)', fontSize: '0.8rem', margin: '0 0 0.75rem 0' }}>6-tier rewards &middot; Everyone gets something &middot; Forever</p>
-                  <button
-                    onClick={() => window.open('/initiatives/brass-tacks', '_blank')}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#38a169',
-                      cursor: 'pointer',
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                      padding: 0,
-                      transition: 'color 0.2s',
-                    }}
-                    onMouseOver={(e) => { e.currentTarget.style.color = '#68d391'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.color = '#38a169'; }}
-                  >
-                    Learn More {'\u2192'}
-                  </button>
+                  <p style={{ color: 'rgba(250, 245, 235, 0.6)', fontSize: '0.8rem', margin: 0 }}>6-tier rewards · Everyone gets something · Forever</p>
                 </div>
               </div>
 

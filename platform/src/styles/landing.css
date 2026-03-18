@@ -1100,12 +1100,14 @@
 /* Main card doesn't flip in professional mode, so use static positioning */
 .landing-page.professional-mode .main-card-inner {
   min-height: auto;  /* Let content determine height, not fixed 560px */
+  overflow: visible;  /* Never clip chalk outline of child cards */
 }
 .landing-page.professional-mode .main-card-front {
   position: relative;  /* Override absolute — card doesn't flip in pro mode */
   inset: auto;  /* Override inset: 0 which stretches the element */
   justify-content: center;
-  padding: 2rem;
+  padding: 2.5rem 2rem;  /* Extra vertical padding so chalk outline isn't clipped */
+  overflow: visible;  /* Ensure dashed border on hero-flip is never clipped */
 }
 .landing-page.professional-mode .hero-front {
   position: relative;  /* Override absolute — hero doesn't flip in pro mode */

@@ -254,12 +254,17 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
                   />
                 </div>
                 {/* Subtitle BELOW the image */}
-                <p
-                  className="text-white/90 text-center italic leading-snug mt-3 text-sm flex items-center justify-center"
-                  style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", fontWeight: 500, transition: 'opacity 0.3s ease', height: '3.6em', textWrap: 'balance', maxWidth: '90%', margin: '0.75rem auto 0' }}
+                <div
+                  className="flex items-center justify-center mt-3"
+                  style={{ height: '3.6em', maxWidth: '90%', margin: '0.75rem auto 0' }}
                 >
-                  {subtitle || "\u00A0"}
-                </p>
+                  <p
+                    className="text-center italic leading-snug text-sm"
+                    style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", fontWeight: 600, transition: 'opacity 0.3s ease', textWrap: 'balance', color: '#1e293b' }}
+                  >
+                    {subtitle || "\u00A0"}
+                  </p>
+                </div>
               </>
             )}
           </div>
