@@ -572,7 +572,7 @@ export default function PatentPortfolio() {
                   </p>
                   <h4 className="text-white/70 text-sm font-medium mb-2">Why "Equivalent"?</h4>
                   <p className="text-xs text-white/50">
-                    All dollar amounts represent platform service unit value, not cash. Platform credits are "future service coupons" — prepaid access to platform services at Cost+20%. <span className="text-amber-400 font-medium">Test-Net By Design</span> means no trading, no speculation, no cashing out. This is a feature, not a limitation.
+                    All dollar amounts represent platform service unit value, not cash. Platform credits are "future service coupons" — prepaid access to platform services at Cost+20%. <span className="text-amber-400 font-medium">Test-Net By Design</span> means no trading, no speculation, no cashing out. This is a feature, not a limitation. <span className="text-white/70 font-medium">Because it has ACTUAL real life value.</span>
                   </p>
                 </div>
               </div>
