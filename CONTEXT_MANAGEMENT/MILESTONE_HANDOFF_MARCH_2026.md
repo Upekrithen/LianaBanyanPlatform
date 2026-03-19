@@ -9,7 +9,77 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 37 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 38 (March 18, 2026)
+
+**Latest commit:** `8ed032b` — Session 38 Task B: Main Square Supabase wiring
+**Previous commit:** `540f74d` — Session 38 Task A: Political Expedition full civic hub
+
+**Status (March 18, 2026 — Session 38):**
+- Platform deployed and live: lianabanyan-main.web.app (628 files)
+- All Supabase migrations pushed (through `20260319000007`). DB canonical count = **1,751**.
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.** Ready for Session 39.
+
+### What Was Done This Session (Session 38 — Knight)
+
+1. **Task A: Political Expedition Full Build (Founder Directive Priority)**
+   - Rebuilt `PowerToThePeoplePage.tsx` as a full 5-tab civic engagement hub:
+     - **Dashboard tab** — Philosophy section, Expedition Map (6 pathway buttons), Know Your Government (local/state/federal), Ella Wheeler Wilcox quote
+     - **Representatives tab** — ZIP code lookup, 2 sample reps with alignment scores, vote tallies (with/against/abstained), recent vote history with aligned/misaligned badges, contact buttons
+     - **Legislation Tracker tab** — 5 tracked bills with status progression bars (Introduced → Committee → Floor Vote → Passed → Signed), relevance badges (HIGH/MEDIUM), community impact cards, "Watch This Bill" toggle button with watch count
+     - **Civic Engagement Scorecard tab** — 10-tier civic XP level system (Observer → Keeper of the Republic), streak tracking (day counter + longest streak), 5 action types with XP earned, 6 civic badges (4 earned, 2 locked)
+     - **Coverage Minutes tab** — Muffled Rule explainer, 4-card balance (Earned/Spent/Remaining/Expiry), progress bar, interactive 3-minute debate chunk timer with start/pause/reset and red flash at 30 seconds, "How to Earn" guide
+   - Dashboard stat strip at top: Your District, Representatives, Active Legislation, Community Priorities
+   - Switzerland Protocol banner on all tabs
+   - `/political-expedition` route now points to enhanced page (was pointing to Arenas)
+   - Sidebar nav entry added ("Political Expedition" with Flag icon)
+   - ALL sample data only — no Supabase wiring this session (per prompt)
+
+2. **Task B: Main Square Supabase Wiring**
+   - Migration `20260319000007_storefronts_and_products.sql` — 2 new tables:
+     - `storefronts` — id, user_id, name, description, category (7 CHECK values), owner_name, is_open, xp_score, member_since, template_id, created_at, updated_at
+     - `storefront_products` — id, storefront_id, name, price, currency_type (credit/mark/joule), is_featured, created_at
+   - Full RLS: owner CRUD own rows, all authenticated SELECT
+   - Product RLS via EXISTS subquery to storefront owner
+   - Seed data: 8 sample storefronts + 24 products (3 per store)
+   - **MainSquare.tsx** wired: fetches storefronts with nested products from Supabase, maps snake_case DB columns to camelCase frontend types, falls back to SAMPLE_STORES on error
+   - Loading spinner while fetching
+
+### Files Created (Session 38)
+
+| File | Purpose |
+|------|---------|
+| `platform/supabase/migrations/20260319000007_storefronts_and_products.sql` | **NEW** — 2 tables + RLS + seed data |
+
+### Files Modified (Session 38)
+
+| File | Changes |
+|------|---------|
+| `platform/src/pages/PowerToThePeoplePage.tsx` | **REWRITTEN** — 5-tab civic hub with Dashboard, Reps, Legislation, Scorecard, Coverage Minutes |
+| `platform/src/pages/MainSquare.tsx` | Wired to Supabase with sample fallback, loading state |
+| `platform/src/App.tsx` | `/political-expedition` route → PowerToThePeoplePage + Bishop additions (DailyNews, SendLists) |
+| `platform/src/components/AppSidebar.tsx` | Added Political Expedition nav entry |
+
+### Deployment (Session 38)
+
+- **Platform**: lianabanyan-main.web.app (628 files)
+- **Migration**: 20260319000007 pushed to Supabase
+
+### Pending Work (Session 39+)
+
+| Item | Status |
+|------|--------|
+| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Content Pipeline build | MEDIUM |
+| RLS security hardening | MEDIUM |
+| Ghost World Mall integration (Session 41 prompt exists) | QUEUED |
+| Member Agreement page (Session 41 prompt exists) | QUEUED |
+
+---
+
+## Session 37 (March 18, 2026) — Previous
 
 **Latest commit:** `d003784` — Session 37: Demand Signaling + Pledged Mark Voting Supabase wiring, Boise Business Cards worked example
 
@@ -1226,6 +1296,7 @@ Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three fe
 - `20260319000004` — Launch conditions for 4 missing initiative slugs (Session 36)
 - `20260319000005` — Canonical stats: 1,751 innovations, 1,401 claims, 8 apps (Session 36)
 - `20260319000006` — Demand Signaling + Pledged Mark Voting tables + views + seed data (Session 37)
+- `20260319000007` — Storefronts + storefront_products tables + RLS + seed data (Session 38)
 
 ---
 
@@ -1339,6 +1410,8 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+8ed032b Session 38 Task B: Main Square Supabase wiring — storefronts + storefront_products tables, RLS, seed data, live query with sample fallback
+540f74d Session 38 Task A: Political Expedition full civic hub — 5-tab dashboard, legislation tracker, civic scorecard, coverage minutes/muffled rule
 d003784 Session 37: Demand Signaling + Pledged Mark Voting Supabase wiring, Boise Business Cards worked example
 d62be1a Add canonical stats migration for 8th provisional - 1751 innovations 1401 claims 8 apps
 7bd617e Pollination: 8th provisional filed (64/009,803) — 1,751 innovations, 1,401 claims, 8 applications
