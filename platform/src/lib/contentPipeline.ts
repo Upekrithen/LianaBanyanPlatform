@@ -469,6 +469,155 @@ export async function publishContent(contentId: string): Promise<boolean> {
 }
 
 /**
+ * Update content metadata (title, subtitle, tags, category, innovation refs).
+ */
+export async function updateContent(
+  contentId: string,
+  updates: {
+    title?: string;
+    subtitle?: string;
+    tags?: string[];
+    category?: ContentCategory;
+    innovationNumbers?: number[];
+    patentSeries?: string;
+    relatedContentIds?: string[];
+  }
+): Promise<PipelineContent | null> {
+  const dbUpdates: Record<string, any> = { updated_at: new Date().toISOString() };
+  if (updates.title !== undefined) {
+    dbUpdates.title = updates.title;
+    dbUpdates.slug = updates.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+  if (updates.subtitle !== undefined) dbUpdates.subtitle = updates.subtitle;
+  if (updates.tags !== undefined) dbUpdates.tags = updates.tags;
+  if (updates.category !== undefined) dbUpdates.category = updates.category;
+  if (updates.innovationNumbers !== undefined) dbUpdates.innovation_numbers = updates.innovationNumbers;
+  if (updates.patentSeries !== undefined) dbUpdates.patent_series = updates.patentSeries;
+  if (updates.relatedContentIds !== undefined) dbUpdates.related_content_ids = updates.relatedContentIds;
+
+  const { data, error } = await supabase
+    .from('content_pipeline')
+    .update(dbUpdates)
+    .eq('id', contentId)
+    .select()
+    .single();
+
+  if (error) { console.error('Error updating content:', error); return null; }
+  return mapDbToContent(data);
+}
+
+/**
+ * Update content text at the current stage (in-place edit, not advancement).
+ */
+export async function updateStageContent(
+  contentId: string,
+  stage: PipelineStage,
+  text: string
+): Promise<PipelineContent | null> {
+  const stageFieldMap: Record<PipelineStage, string> = {
+    seed: 'seed_content', tldr: 'tldr_content', blog: 'blog_content',
+    article: 'article_content', paper: 'paper_content',
+  };
+
+  const wc = countWords(text);
+  const { data, error } = await supabase
+    .from('content_pipeline')
+    .update({
+      [stageFieldMap[stage]]: text,
+      word_count: wc,
+      reading_time_minutes: calculateReadingTime(wc),
+      coverage_minutes_value: calculateCoverageMinutesValue(wc),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', contentId)
+    .select()
+    .single();
+
+  if (error) { console.error('Error updating stage content:', error); return null; }
+  return mapDbToContent(data);
+}
+
+/**
+ * Transition content status (draft → review → approved → published → archived).
+ */
+export async function setContentStatus(
+  contentId: string,
+  newStatus: ContentStatus
+): Promise<boolean> {
+  const updates: Record<string, any> = {
+    status: newStatus,
+    updated_at: new Date().toISOString(),
+  };
+  if (newStatus === 'published') updates.published_at = new Date().toISOString();
+
+  const { error } = await supabase
+    .from('content_pipeline')
+    .update(updates)
+    .eq('id', contentId);
+
+  return !error;
+}
+
+/**
+ * Archive content.
+ */
+export async function archiveContent(contentId: string): Promise<boolean> {
+  return setContentStatus(contentId, 'archived');
+}
+
+/**
+ * Delete content permanently.
+ */
+export async function deleteContent(contentId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('content_pipeline')
+    .delete()
+    .eq('id', contentId);
+
+  return !error;
+}
+
+/**
+ * Link content to outbound dispatch for social media distribution.
+ */
+export async function linkToDispatch(
+  contentId: string,
+  channel: string,
+  title: string
+): Promise<boolean> {
+  const { error } = await supabase
+    .from('outbound_dispatch')
+    .insert({
+      content_pipeline_id: contentId,
+      title,
+      target_channel: channel,
+      status: 'draft',
+    });
+
+  return !error;
+}
+
+/**
+ * Update Cephas sync status for a content item.
+ */
+export async function updateCephasSync(
+  contentId: string,
+  cephasPath: string,
+  syncStatus: 'synced' | 'pending' | 'outdated' | 'new' = 'synced'
+): Promise<boolean> {
+  const { error } = await supabase
+    .from('content_pipeline')
+    .update({
+      cephas_path: cephasPath,
+      cephas_sync_status: syncStatus,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', contentId);
+
+  return !error;
+}
+
+/**
  * Get all content items, optionally filtered.
  */
 export async function getContentList(options: {
@@ -697,6 +846,13 @@ export default {
   createContent,
   advanceStage,
   publishContent,
+  updateContent,
+  updateStageContent,
+  setContentStatus,
+  archiveContent,
+  deleteContent,
+  linkToDispatch,
+  updateCephasSync,
   getContentList,
   getContentById,
   getContentBySlug,

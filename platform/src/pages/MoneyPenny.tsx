@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import {
   Bot, Mail, CheckSquare, Megaphone, Scan, ArrowLeft, Settings, Plus,
-  Calendar, Star, Check, Clock, Send, AlertCircle, RefreshCw
+  Calendar, Star, Check, Clock, Send, AlertCircle, RefreshCw, Zap, Loader2, ExternalLink
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -42,6 +42,8 @@ interface SocialDraft {
   content_source: string | null;
   status: string;
   created_at: string;
+  posted_at?: string | null;
+  post_url?: string | null;
 }
 
 interface DispatchItem {
@@ -64,6 +66,8 @@ export default function MoneyPenny() {
   const [drafts, setDrafts] = useState<SocialDraft[]>([]);
   const [dispatches, setDispatches] = useState<DispatchItem[]>([]);
   const [newAction, setNewAction] = useState('');
+  const [postingId, setPostingId] = useState<string | null>(null);
+  const [autoPosting, setAutoPosting] = useState(false);
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
@@ -97,6 +101,38 @@ export default function MoneyPenny() {
   const updateInboxStatus = async (id: string, status: string) => {
     await supabase.from('moneypenny_inbox').update({ status }).eq('id', id);
     setInbox(prev => prev.map(i => i.id === id ? { ...i, status } : i));
+  };
+
+  const approveAndPost = async (draftId: string) => {
+    setPostingId(draftId);
+    try {
+      await supabase.from('moneypenny_social_drafts').update({
+        status: 'approved', approved_at: new Date().toISOString()
+      }).eq('id', draftId);
+
+      const { data } = await supabase.functions.invoke('moneypenny-auto-post', {
+        body: { draftId },
+      });
+
+      if (data?.success && data.draftsPosted > 0) {
+        const detail = data.details?.[0];
+        setDrafts(prev => prev.map(d => d.id === draftId
+          ? { ...d, status: 'posted', posted_at: new Date().toISOString(), post_url: detail?.postUrl || null }
+          : d));
+      } else {
+        setDrafts(prev => prev.map(d => d.id === draftId ? { ...d, status: 'approved' } : d));
+      }
+    } catch { setDrafts(prev => prev.map(d => d.id === draftId ? { ...d, status: 'approved' } : d)); }
+    setPostingId(null);
+  };
+
+  const postAllApproved = async () => {
+    setAutoPosting(true);
+    try {
+      const { data } = await supabase.functions.invoke('moneypenny-auto-post', { body: {} });
+      if (data?.success) await fetchAll();
+    } catch { /* fallback: refresh */ await fetchAll(); }
+    setAutoPosting(false);
   };
 
   const needsAction = inbox.filter(i => i.status === 'needs-action' || i.status === 'new');
@@ -171,7 +207,7 @@ export default function MoneyPenny() {
                 </CardHeader>
                 <CardContent>
                   {inbox.length === 0 ? (
-                    <p className="text-sm text-muted-foreground py-4">No inbound messages yet. Connect `moneypenny-intake` Edge Function to start receiving.</p>
+                    <p className="text-sm text-muted-foreground py-4">No inbound messages yet. Deploy <code>moneypenny-intake</code> and forward Gmail to its webhook URL to start receiving.</p>
                   ) : (
                     <div className="space-y-2">
                       {inbox.slice(0, 3).map(item => (
@@ -315,7 +351,15 @@ export default function MoneyPenny() {
 
         {/* === SOCIAL TAB === */}
         <TabsContent value="communications" className="space-y-4">
-          <h2 className="text-xl font-semibold">Social Media Drafts</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Social Media Drafts</h2>
+            {drafts.some(d => d.status === 'approved' && !d.posted_at) && (
+              <Button size="sm" className="gap-2" onClick={postAllApproved} disabled={autoPosting}>
+                {autoPosting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
+                Post All Approved
+              </Button>
+            )}
+          </div>
           {drafts.length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center text-muted-foreground">
@@ -344,6 +388,14 @@ export default function MoneyPenny() {
                         }}>
                           <Check className="h-3.5 w-3.5" /> Approve & Copy
                         </Button>
+                        <Button size="sm" variant="default" className="gap-1 bg-green-600 hover:bg-green-700"
+                          disabled={postingId === draft.id}
+                          onClick={() => approveAndPost(draft.id)}>
+                          {postingId === draft.id
+                            ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            : <Zap className="h-3.5 w-3.5" />}
+                          Approve & Post
+                        </Button>
                         <Button size="sm" variant="ghost" className="text-red-500" onClick={async () => {
                           await supabase.from('moneypenny_social_drafts').update({ status: 'rejected' }).eq('id', draft.id);
                           setDrafts(prev => prev.map(d => d.id === draft.id ? { ...d, status: 'rejected' } : d));
@@ -352,7 +404,15 @@ export default function MoneyPenny() {
                         </Button>
                       </div>
                     )}
-                    <span className="text-xs text-muted-foreground">{new Date(draft.created_at).toLocaleString()}</span>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-muted-foreground">{new Date(draft.created_at).toLocaleString()}</span>
+                      {draft.status === 'posted' && draft.post_url && (
+                        <a href={draft.post_url} target="_blank" rel="noopener noreferrer"
+                          className="text-xs text-blue-500 hover:underline flex items-center gap-1">
+                          <ExternalLink className="h-3 w-3" /> View post
+                        </a>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               ))}

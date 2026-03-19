@@ -38,6 +38,12 @@ import {
   Search,
   BarChart3,
   Layers,
+  Pencil,
+  Trash2,
+  Globe,
+  Megaphone,
+  RefreshCw,
+  Save,
 } from 'lucide-react';
 import {
   type PipelineContent,
@@ -55,6 +61,13 @@ import {
   createContent,
   advanceStage,
   publishContent,
+  updateContent,
+  updateStageContent,
+  setContentStatus,
+  archiveContent,
+  deleteContent,
+  linkToDispatch,
+  updateCephasSync,
   getContentList,
   getContentById,
   getBestContent,
@@ -482,6 +495,14 @@ function ContentDetailView({
   const [showAdvance, setShowAdvance] = useState(false);
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editSubtitle, setEditSubtitle] = useState('');
+  const [editTags, setEditTags] = useState('');
+  const [editCategory, setEditCategory] = useState<ContentCategory>('general');
+  const [editingContent, setEditingContent] = useState(false);
+  const [editContentText, setEditContentText] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     loadContent();
@@ -529,6 +550,94 @@ function ContentDetailView({
       toast({ title: 'Error', description: 'Failed to publish.', variant: 'destructive' });
     }
     setIsPublishing(false);
+  };
+
+  const startEdit = () => {
+    if (!content) return;
+    setEditTitle(content.title);
+    setEditSubtitle(content.subtitle || '');
+    setEditTags(content.tags.join(', '));
+    setEditCategory(content.category);
+    setIsEditing(true);
+  };
+
+  const saveEdit = async () => {
+    if (!content) return;
+    setIsSaving(true);
+    const result = await updateContent(content.id, {
+      title: editTitle,
+      subtitle: editSubtitle || undefined,
+      tags: editTags.split(',').map(t => t.trim()).filter(Boolean),
+      category: editCategory,
+    });
+    if (result) {
+      toast({ title: 'Saved', description: 'Content metadata updated.' });
+      setContent(result);
+      setIsEditing(false);
+      onRefresh();
+    } else {
+      toast({ title: 'Error', description: 'Failed to save.', variant: 'destructive' });
+    }
+    setIsSaving(false);
+  };
+
+  const startContentEdit = () => {
+    if (!content || !viewLevel) return;
+    setEditContentText(getContentAtLevel(content, viewLevel));
+    setEditingContent(true);
+  };
+
+  const saveContentEdit = async () => {
+    if (!content || !viewLevel) return;
+    setIsSaving(true);
+    const result = await updateStageContent(content.id, viewLevel, editContentText);
+    if (result) {
+      toast({ title: 'Content updated', description: `${getStageRequirements(viewLevel).label} text saved.` });
+      setContent(result);
+      setEditingContent(false);
+      onRefresh();
+    } else {
+      toast({ title: 'Error', description: 'Failed to save content.', variant: 'destructive' });
+    }
+    setIsSaving(false);
+  };
+
+  const handleStatusChange = async (newStatus: ContentStatus) => {
+    if (!content) return;
+    const success = await setContentStatus(content.id, newStatus);
+    if (success) {
+      toast({ title: 'Status updated', description: `Moved to ${newStatus}.` });
+      await loadContent();
+      onRefresh();
+    }
+  };
+
+  const handleArchive = async () => {
+    if (!content) return;
+    const success = await archiveContent(content.id);
+    if (success) {
+      toast({ title: 'Archived', description: `"${content.title}" archived.` });
+      onBack();
+      onRefresh();
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!content) return;
+    const success = await deleteContent(content.id);
+    if (success) {
+      toast({ title: 'Deleted', description: `"${content.title}" permanently deleted.` });
+      onBack();
+      onRefresh();
+    }
+  };
+
+  const handleDispatch = async (channel: string) => {
+    if (!content) return;
+    const success = await linkToDispatch(content.id, channel, content.title);
+    if (success) {
+      toast({ title: 'Dispatched', description: `Linked to ${channel} dispatch queue.` });
+    }
   };
 
   if (loading) {
@@ -584,23 +693,66 @@ function ContentDetailView({
             <CurrentIcon className="w-7 h-7" style={{ color: STAGE_COLORS[content.currentStage] }} />
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-white mb-1">{content.title}</h1>
-            {content.subtitle && <p className="text-white/60">{content.subtitle}</p>}
-            <div className="flex items-center gap-4 mt-2 text-sm text-white/40">
-              <span>{currentReq.label} stage</span>
-              <span>{content.wordCount.toLocaleString()} words</span>
-              <span>{content.readingTimeMinutes} min read</span>
-              <span>{content.coverageMinutesValue} CM earned</span>
-              <span
-                className="px-2 py-0.5 rounded-full text-xs"
-                style={{
-                  backgroundColor: STATUS_LABELS[content.status].color + '20',
-                  color: STATUS_LABELS[content.status].color,
-                }}
-              >
-                {STATUS_LABELS[content.status].label}
-              </span>
-            </div>
+            {isEditing ? (
+              <div className="space-y-2">
+                <input type="text" value={editTitle} onChange={e => setEditTitle(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-white text-lg font-bold focus:outline-none focus:border-blue-500" />
+                <input type="text" value={editSubtitle} onChange={e => setEditSubtitle(e.target.value)}
+                  placeholder="Subtitle (optional)"
+                  className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-white/60 text-sm focus:outline-none focus:border-blue-500" />
+                <div className="flex gap-2">
+                  <select value={editCategory} onChange={e => setEditCategory(e.target.value as ContentCategory)}
+                    className="bg-slate-800 border border-slate-600 rounded px-2 py-1 text-white text-sm focus:outline-none">
+                    {['economics','governance','technology','civic','gaming','community','legal','education','culture','general','religion','perspective'].map(c =>
+                      <option key={c} value={c}>{c}</option>
+                    )}
+                  </select>
+                  <input type="text" value={editTags} onChange={e => setEditTags(e.target.value)}
+                    placeholder="Tags (comma separated)"
+                    className="flex-1 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-white text-sm focus:outline-none focus:border-blue-500" />
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={saveEdit} disabled={isSaving}
+                    className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                    <Save className="w-3 h-3" /> {isSaving ? 'Saving...' : 'Save'}
+                  </button>
+                  <button onClick={() => setIsEditing(false)} className="text-white/50 hover:text-white text-sm px-3 py-1">Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold text-white mb-1">{content.title}</h1>
+                  <button onClick={startEdit} className="text-white/30 hover:text-blue-400 transition-colors" title="Edit metadata">
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                </div>
+                {content.subtitle && <p className="text-white/60">{content.subtitle}</p>}
+                <div className="flex items-center gap-4 mt-2 text-sm text-white/40">
+                  <span>{currentReq.label} stage</span>
+                  <span>{content.wordCount.toLocaleString()} words</span>
+                  <span>{content.readingTimeMinutes} min read</span>
+                  <span>{content.coverageMinutesValue} CM earned</span>
+                  <span
+                    className="px-2 py-0.5 rounded-full text-xs"
+                    style={{
+                      backgroundColor: STATUS_LABELS[content.status].color + '20',
+                      color: STATUS_LABELS[content.status].color,
+                    }}
+                  >
+                    {STATUS_LABELS[content.status].label}
+                  </span>
+                  {content.cephasSyncStatus && content.cephasSyncStatus !== 'new' && (
+                    <span className={`flex items-center gap-1 text-xs ${
+                      content.cephasSyncStatus === 'synced' ? 'text-green-400' :
+                      content.cephasSyncStatus === 'pending' ? 'text-amber-400' : 'text-red-400'
+                    }`}>
+                      <Globe className="w-3 h-3" /> Cephas: {content.cephasSyncStatus}
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -681,17 +833,49 @@ function ContentDetailView({
 
       {/* Content Display */}
       <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6 mb-6">
-        <div className="prose prose-invert max-w-none">
-          <div className="text-white/80 leading-relaxed whitespace-pre-wrap">
-            {displayText || <span className="text-white/30 italic">No content at this level yet.</span>}
-          </div>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-sm text-white/50">
+            {viewLevel ? getStageRequirements(viewLevel).label : 'Best'} content
+          </span>
+          {!editingContent && displayText && content.status !== 'published' && (
+            <button onClick={startContentEdit}
+              className="flex items-center gap-1 text-xs text-white/40 hover:text-blue-400 transition-colors">
+              <Pencil className="w-3 h-3" /> Edit
+            </button>
+          )}
         </div>
+        {editingContent ? (
+          <div>
+            <textarea
+              value={editContentText}
+              onChange={e => setEditContentText(e.target.value)}
+              rows={16}
+              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-blue-500 resize-y"
+            />
+            <div className="flex items-center justify-between mt-2">
+              <span className="text-xs text-white/30">{countWords(editContentText)} words</span>
+              <div className="flex gap-2">
+                <button onClick={() => setEditingContent(false)} className="text-white/50 hover:text-white text-sm px-3 py-1">Cancel</button>
+                <button onClick={saveContentEdit} disabled={isSaving}
+                  className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                  <Save className="w-3 h-3" /> {isSaving ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="prose prose-invert max-w-none">
+            <div className="text-white/80 leading-relaxed whitespace-pre-wrap">
+              {displayText || <span className="text-white/30 italic">No content at this level yet.</span>}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Actions */}
       <div className="flex flex-wrap gap-3 mb-6">
         {/* Advance Stage */}
-        {nextStage && content.status !== 'published' && (
+        {nextStage && content.status !== 'published' && content.status !== 'archived' && (
           <button
             onClick={() => setShowAdvance(!showAdvance)}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
@@ -702,8 +886,20 @@ function ContentDetailView({
           </button>
         )}
 
-        {/* Publish */}
+        {/* Status transitions */}
         {content.status === 'draft' && (
+          <button onClick={() => handleStatusChange('review')}
+            className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-colors">
+            <Eye className="w-4 h-4" /> Submit for Review
+          </button>
+        )}
+        {content.status === 'review' && (
+          <button onClick={() => handleStatusChange('approved')}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-colors">
+            <Check className="w-4 h-4" /> Approve
+          </button>
+        )}
+        {(content.status === 'approved' || content.status === 'draft') && (
           <button
             onClick={handlePublish}
             disabled={isPublishing}
@@ -714,7 +910,33 @@ function ContentDetailView({
           </button>
         )}
 
-        {/* Already at final stage */}
+        {/* Dispatch to social */}
+        {content.status === 'published' && (
+          <div className="flex items-center gap-1">
+            {['twitter', 'linkedin', 'medium'].map(ch => (
+              <button key={ch} onClick={() => handleDispatch(ch)}
+                className="flex items-center gap-1 bg-purple-600/80 hover:bg-purple-600 text-white px-3 py-2 rounded-lg text-sm transition-colors">
+                <Megaphone className="w-3.5 h-3.5" /> {ch}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Archive / Delete */}
+        {content.status !== 'archived' && (
+          <button onClick={handleArchive}
+            className="flex items-center gap-2 text-white/40 hover:text-amber-400 px-3 py-2 rounded-lg transition-colors">
+            <Archive className="w-4 h-4" /> Archive
+          </button>
+        )}
+        {(content.status === 'draft' || content.status === 'archived') && (
+          <button onClick={handleDelete}
+            className="flex items-center gap-2 text-white/40 hover:text-red-400 px-3 py-2 rounded-lg transition-colors">
+            <Trash2 className="w-4 h-4" /> Delete
+          </button>
+        )}
+
+        {/* Final stage indicator */}
         {!nextStage && (
           <div className="flex items-center gap-2 text-amber-400 text-sm bg-amber-500/10 px-4 py-2 rounded-lg">
             <GraduationCap className="w-4 h-4" />
