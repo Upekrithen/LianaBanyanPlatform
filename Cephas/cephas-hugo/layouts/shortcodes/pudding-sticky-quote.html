@@ -1,0 +1,10 @@
+{{/* pudding-sticky-quote: Quote that sticks during scroll
+     Usage: {{< pudding-sticky-quote attribution="Jonathan Jones, Founder" >}}
+     "I gave away the mechanism for extraction before I launched."
+     {{< /pudding-sticky-quote >}}
+*/}}
+{{ $attribution := .Get "attribution" | default "" }}
+<div class="pudding-quote">
+  {{ .Inner | markdownify }}
+  {{ if $attribution }}<span class="pudding-quote__attribution">— {{ $attribution }}</span>{{ end }}
+</div>

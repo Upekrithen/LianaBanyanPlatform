@@ -344,6 +344,8 @@ const TerenoCertificationPage = lazy(() => import("./pages/TerenoCertification")
 const ModularManufacturing = lazy(() => import("./pages/ModularManufacturing"));
 const MakerSpotlightPage = lazy(() => import("./pages/MakerSpotlight"));
 const DesignedToBeBroken = lazy(() => import("./pages/DesignedToBeBroken"));
+const AsYouWishCard = lazy(() => import("./pages/AsYouWishCard"));
+const NoAtomo = lazy(() => import("./pages/NoAtomo"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -807,6 +809,8 @@ const App = () => (
                         <Route path="/the-forge" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ModularManufacturing /></Suspense></ProtectedRoute>} />
                         <Route path="/maker-spotlight" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MakerSpotlightPage /></Suspense>} />
                         <Route path="/designed-to-be-broken" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DesignedToBeBroken /></Suspense>} />
+                        <Route path="/as-you-wish" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AsYouWishCard /></Suspense>} />
+                        <Route path="/no-atomo" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><NoAtomo /></Suspense>} />
 
                         {/* New Routes — Feb 9 Session 2 */}
                         <Route path="/herald-success" element={<ProtectedRoute><HeraldSuccess /></ProtectedRoute>} />

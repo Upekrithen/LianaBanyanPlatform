@@ -1,0 +1,17 @@
+{{/* pudding-compare: Side-by-side comparison boxes
+     Usage: {{< pudding-compare before-title="Traditional" before-value="50-70% platform take" after-title="Liana Banyan" after-value="16.7% platform take" >}}
+*/}}
+{{ $bt := .Get "before-title" }}
+{{ $bv := .Get "before-value" }}
+{{ $at := .Get "after-title" }}
+{{ $av := .Get "after-value" }}
+<div class="pudding-compare pudding-reveal">
+  <div class="pudding-compare__box pudding-compare__box--before">
+    <div class="pudding-compare__title">{{ $bt }}</div>
+    <div class="pudding-compare__value">{{ $bv }}</div>
+  </div>
+  <div class="pudding-compare__box pudding-compare__box--after">
+    <div class="pudding-compare__title">{{ $at }}</div>
+    <div class="pudding-compare__value">{{ $av }}</div>
+  </div>
+</div>

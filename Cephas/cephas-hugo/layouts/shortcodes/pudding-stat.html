@@ -1,0 +1,13 @@
+{{/* pudding-stat: Large number display with label
+     Usage: {{< pudding-stat number="83.3%" label="Creator Share" sublabel="On every transaction" color="green" >}}
+     Colors: default (amber/red gradient), green, blue
+*/}}
+{{ $number := .Get "number" }}
+{{ $label := .Get "label" }}
+{{ $sublabel := .Get "sublabel" | default "" }}
+{{ $color := .Get "color" | default "" }}
+<div class="pudding-stat pudding-reveal pudding-reveal--scale{{ if $color }} pudding-stat--{{ $color }}{{ end }}">
+  <span class="pudding-stat__number">{{ $number }}</span>
+  <span class="pudding-stat__label">{{ $label }}</span>
+  {{ if $sublabel }}<span class="pudding-stat__sublabel">{{ $sublabel }}</span>{{ end }}
+</div>

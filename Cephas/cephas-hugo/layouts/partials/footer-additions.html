@@ -1,0 +1,15 @@
+<!-- Netlify Identity redirect script -->
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+
+<!-- Pudding.js — Scroll-triggered animations -->
+<script src="/js/pudding.js"></script>

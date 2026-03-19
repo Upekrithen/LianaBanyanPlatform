@@ -1,0 +1,317 @@
+/* Pudding Styles — Interactive Scrollytelling for Cephas
+ * Inspired by pudding.cool
+ * Applies to: letters, articles, innovations, general pages
+ * Does NOT apply to: academic papers (they keep clean prose)
+ */
+
+/* ============================================================================
+   BASE: Scroll-triggered reveal
+   ============================================================================ */
+
+.pudding-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.pudding-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide-in variants */
+.pudding-reveal--left {
+  transform: translateX(-40px);
+}
+.pudding-reveal--left.is-visible {
+  transform: translateX(0);
+}
+
+.pudding-reveal--right {
+  transform: translateX(40px);
+}
+.pudding-reveal--right.is-visible {
+  transform: translateX(0);
+}
+
+/* Scale variant */
+.pudding-reveal--scale {
+  transform: scale(0.9);
+}
+.pudding-reveal--scale.is-visible {
+  transform: scale(1);
+}
+
+/* ============================================================================
+   STICKY SECTIONS
+   ============================================================================ */
+
+.pudding-section {
+  position: relative;
+  min-height: 80vh;
+  padding: 2rem 0;
+}
+
+.pudding-sticky {
+  position: sticky;
+  top: 20vh;
+  z-index: 10;
+  padding: 1.5rem 2rem;
+  background: rgba(15, 23, 42, 0.95);
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 8px 8px 0;
+  backdrop-filter: blur(8px);
+  margin-bottom: 2rem;
+}
+
+.pudding-sticky h2,
+.pudding-sticky h3 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1.5rem;
+}
+
+.pudding-content {
+  position: relative;
+  z-index: 5;
+}
+
+/* ============================================================================
+   STAT CALLOUTS
+   ============================================================================ */
+
+.pudding-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  margin: 2rem auto;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.pudding-stat__number {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pudding-stat__label {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.pudding-stat__sublabel {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+/* Color variants */
+.pudding-stat--green .pudding-stat__number {
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.pudding-stat--blue .pudding-stat__number {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ============================================================================
+   COMPARISON BOXES
+   ============================================================================ */
+
+.pudding-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.pudding-compare__box {
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.pudding-compare__box--before {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(127, 29, 29, 0.15);
+}
+
+.pudding-compare__box--after {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(20, 83, 45, 0.15);
+}
+
+.pudding-compare__title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
+}
+
+.pudding-compare__box--before .pudding-compare__title { color: #f87171; }
+.pudding-compare__box--after .pudding-compare__title { color: #4ade80; }
+
+.pudding-compare__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+/* ============================================================================
+   STICKY QUOTES
+   ============================================================================ */
+
+.pudding-quote {
+  position: sticky;
+  top: 30vh;
+  margin: 3rem 0;
+  padding: 2rem 2.5rem;
+  background: rgba(15, 23, 42, 0.95);
+  border-left: 4px solid #6366f1;
+  border-radius: 0 12px 12px 0;
+  backdrop-filter: blur(8px);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: #e2e8f0;
+  line-height: 1.6;
+  z-index: 10;
+}
+
+.pudding-quote__attribution {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-style: normal;
+  color: #94a3b8;
+}
+
+/* ============================================================================
+   PROGRESS INDICATOR
+   ============================================================================ */
+
+.pudding-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(30, 41, 59, 0.5);
+  z-index: 1000;
+}
+
+.pudding-progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* Chapter markers */
+.pudding-chapters {
+  position: fixed;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 100;
+}
+
+.pudding-chapter-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #475569;
+  border: 2px solid #64748b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pudding-chapter-dot.is-active {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  transform: scale(1.3);
+}
+
+.pudding-chapter-dot:hover {
+  background: #94a3b8;
+  border-color: #94a3b8;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .pudding-stat__number {
+    font-size: 3rem;
+  }
+
+  .pudding-compare {
+    grid-template-columns: 1fr;
+  }
+
+  .pudding-sticky {
+    top: 10vh;
+    padding: 1rem 1.5rem;
+  }
+
+  .pudding-sticky h2,
+  .pudding-sticky h3 {
+    font-size: 1.2rem;
+  }
+
+  .pudding-quote {
+    top: 15vh;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .pudding-chapters {
+    display: none; /* Hide chapter dots on mobile — too small to tap */
+  }
+}
+
+/* ============================================================================
+   PRINT FALLBACK — No animations in print
+   ============================================================================ */
+
+@media print {
+  .pudding-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .pudding-sticky {
+    position: static !important;
+  }
+
+  .pudding-quote {
+    position: static !important;
+  }
+
+  .pudding-progress,
+  .pudding-chapters {
+    display: none !important;
+  }
+}

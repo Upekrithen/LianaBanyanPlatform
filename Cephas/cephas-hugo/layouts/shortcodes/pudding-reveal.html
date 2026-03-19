@@ -1,0 +1,10 @@
+{{/* pudding-reveal: Content that fades in on scroll
+     Usage: {{< pudding-reveal direction="left" >}}
+     Content here that reveals on scroll...
+     {{< /pudding-reveal >}}
+     Directions: (default=up), left, right, scale
+*/}}
+{{ $dir := .Get "direction" | default "" }}
+<div class="pudding-reveal{{ if $dir }} pudding-reveal--{{ $dir }}{{ end }}">
+  {{ .Inner | markdownify }}
+</div>
