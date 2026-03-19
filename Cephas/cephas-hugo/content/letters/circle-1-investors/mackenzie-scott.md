@@ -1,0 +1,27 @@
+# MacKenzie Scott Letter — VERSION 02 (Updated)
+
+Dear Ms. Scott,
+
+I don't want your money. I'm asking for something far more valuable: your guidance on who should run six ready-to-launch initiatives that transform how communities provide for each other, and the platform that enables, and from now on sustainably funds, those initiatives.
+
+In college, at one time I had two roommates. One was wealthy—his family literally owned ten homes. The other was poor like me. When I needed a suit and couldn't afford one, my poor roommate immediately gave me one of the two he owned. Only then did my wealthy roommate offer one of his fifteen. That sacrifice thirty years ago still makes me cry, and it exemplifies the truth you wrote about which gift means more—$100 from someone earning $50,000 or $100,000 from someone with millions.
+
+Through Liana Banyan and The Rally Group (501c3), I've built infrastructure for that kind of real, and sustainably reciprocative, generosity: Let's Make Dinner (neighbors feeding neighbors), Let's Get Groceries (volume purchasing), Defense Klaus (product & legal defense), Let's Go Shopping (group buying for necessities and holidays), Lifeline Medications (cheap prescription access), and Liana Banyan MSA (medical savings accounts). These initiatives embody our governing mantra of "Helping Each Other Help Ourselves" and your principle that communities removing obstacles for different groups become better for everyone.
+
+Someone has to go first, and it doesn't have to take millions to make a world of difference. I'm launching the Alpha of Liana Banyan and using $5,000 I've saved from my $30,000 annual income to seed the launch through our medallion program - $100 each to 50 waitresses, bus drivers, laborers, etc. who would never otherwise know about or see any of these opportunities to change their lives. Each recipient can split their medallion into ten $10 stakes, bringing their own communities into ownership. No strings attached. One bus driver becomes ten transit workers becomes hundreds understanding they can own equity in what they and others work to achieve—the "chain reaction that goes on for years".
+
+Our platform creates a portfolio supporting all people's ability to participate in solutions. Three commercial portals (.com/.biz/.net) sustainably fund the .org charitable initiatives through margin economics. Every member starts with just $5 and can get a job, build their own designs or product or service businesses within our structure. This isn't charity TO people but infrastructure BY people - "nothing about us without us." I like to say: Of the People (preorder funding), By the People (do the work), and For the People (profits and benefits).
+
+My military service taught me that "you're not a leader until you fail." In war, failure is almost always catastrophic in consequence, and yet, you remain in charge. Giving up is not an option if you care about the failure you made, so the only thing to do is to use what you learned for what comes next. Humbly. One of the things savagely learned is to prepare in advance for predictable outcomes, as well as have contingency plans for unpredictable ones. As a child living in Africa with my missionary parents I learned how proper infrastructure, like a clean water well, transforms communities. These concepts are mirrored in the business world, with less obvious but just as catastrophic, or beneficial, consequences. Because of current realities in people's lives, 6 months ago I shifted to working longer days and every day (which my wife and kids... will appreciate, but definitely and actively support). Then last month I saw the writing on the wall and knew it had to be now. I pulled out all the stops, restructured Liana Banyan to "work while building" to move up our Alpha Launch by a year and we're ALL IN - definitely riskier than the planned gradual approach. But needed. As the 2ndSecond Medallion quips "A ship in harbor is safe, but that is not what ships are built for." After 9 years planning and building this platform with 53 innovations and 205 patent claims filed in the last week (that are given to the company), I know I could eventually succeed through trial and error. But eventually isn't fast enough for people who need help now, and soon, more.
+
+You've demonstrated extraordinary ability to identify and empower those with "lived experience in the issues they're addressing." That's what Liana Banyan needs - not funding, but connections to operators who understand that helping any of us helps us all. What we need is people; the money will follow.
+
+My specific request: Would you introduce me to operators in your network who excel at scaling community-driven solutions? And ethical CEO, CFO and CTO candidates who will follow through, even if fractional? Even one connection to someone experienced in food security or cooperative healthcare, or whom I can trust knows better than I do, to vet the pitfalls I don't know about yet could multiply impact exponentially. I'm prepared to hand any or all of these initiatives, and in fact the entire platform, to leaders you trust. It simply needs informed, experienced guidance to succeed, the first time.
+
+The medallions are minted. The platform is built. The first fifty members are ready. What we need is wisdom to ensure we serve millions, not hundreds. And I have two suits.
+
+With shared purpose,
+
+Jonathan Jones
+Founder & General Manager, Liana Banyan
+406-578-1232 | Support@LianaBanyan.org /.net /.biz /.com
