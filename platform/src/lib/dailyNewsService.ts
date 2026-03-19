@@ -1,8 +1,10 @@
 // ---------------------------------------------------------------------------
 // Daily News Service
-// Supabase-ready data layer for The Daily News page.
-// TODO: Wire to Supabase daily_news_slides table when migration is created.
+// Supabase-backed data layer for The Daily News page.
+// Falls back to sample data when DB returns empty or errors.
 // ---------------------------------------------------------------------------
+
+import { supabase } from "@/integrations/supabase/client";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -178,58 +180,90 @@ export const SAMPLE_MILESTONES: MilestoneEntry[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Service functions
+// DB → Frontend mapping helper
 // ---------------------------------------------------------------------------
 
-/**
- * Fetch the daily news slides for a given date.
- * Currently returns sample data. When Supabase is wired, this will query
- * the `daily_news_slides` table.
- */
-export async function fetchDailySlides(_date: Date): Promise<NewsSlide[]> {
-  // TODO(SUPABASE): Replace with real query:
-  // const { data, error } = await supabase
-  //   .from('daily_news_slides')
-  //   .select('*')
-  //   .eq('publish_date', date.toISOString().split('T')[0])
-  //   .order('sort_order', { ascending: true });
-  // if (error) throw error;
-  // return data as NewsSlide[];
+function mapDbSlide(row: any): NewsSlide {
+  return {
+    id: row.id ?? 0,
+    type: row.slide_type as SlideType,
+    title: row.title,
+    subtitle: row.subtitle ?? "",
+    price: row.price != null ? Number(row.price) : undefined,
+    storeName: row.store_name ?? undefined,
+    isSponsored: row.slide_type === "SHOWCASE_PROMOTION",
+    ctaLabel: row.cta_text ?? undefined,
+    ctaUrl: row.cta_url ?? undefined,
+  };
+}
 
+// ---------------------------------------------------------------------------
+// Service functions — Supabase-backed with sample fallback
+// ---------------------------------------------------------------------------
+
+export async function fetchDailySlides(date: Date): Promise<NewsSlide[]> {
+  try {
+    const dateStr = date.toISOString().split("T")[0];
+    const { data } = await supabase
+      .from("daily_news_slides")
+      .select("*")
+      .eq("display_date", dateStr)
+      .eq("is_active", true)
+      .lt("sort_order", 100)
+      .order("sort_order", { ascending: true });
+
+    if (data && data.length > 0) return data.map(mapDbSlide);
+  } catch (err) {
+    console.error("Failed to fetch daily slides from DB", err);
+  }
   return SAMPLE_SLIDES;
 }
 
-/**
- * Fetch headline slides for a given date.
- */
-export async function fetchHeadlines(_date: Date): Promise<NewsSlide[]> {
-  // TODO(SUPABASE): Replace with real query:
-  // const { data, error } = await supabase
-  //   .from('daily_news_headlines')
-  //   .select('*')
-  //   .eq('publish_date', date.toISOString().split('T')[0])
-  //   .order('sort_order', { ascending: true });
-  // if (error) throw error;
-  // return data as NewsSlide[];
+export async function fetchHeadlines(date: Date): Promise<NewsSlide[]> {
+  try {
+    const dateStr = date.toISOString().split("T")[0];
+    const { data } = await supabase
+      .from("daily_news_slides")
+      .select("*")
+      .eq("display_date", dateStr)
+      .eq("is_active", true)
+      .gte("sort_order", 100)
+      .order("sort_order", { ascending: true });
 
+    if (data && data.length > 0) return data.map(mapDbSlide);
+  } catch (err) {
+    console.error("Failed to fetch headlines from DB", err);
+  }
   return SAMPLE_HEADLINES;
 }
 
-/**
- * Fetch showcase promotions for a given date.
- * Returns slides of type SHOWCASE_PROMOTION or FEATURED_PRODUCT.
- */
-export async function fetchShowcasePromotions(_date: Date): Promise<ShowcasePromotion[]> {
-  // TODO(SUPABASE): Replace with real query:
-  // const { data, error } = await supabase
-  //   .from('daily_news_slides')
-  //   .select('id, store_name, title, subtitle, price, is_sponsored, cta_label, cta_url')
-  //   .eq('publish_date', date.toISOString().split('T')[0])
-  //   .in('type', ['SHOWCASE_PROMOTION', 'FEATURED_PRODUCT'])
-  //   .order('sort_order', { ascending: true });
-  // if (error) throw error;
-  // return data as ShowcasePromotion[];
+export async function fetchShowcasePromotions(date: Date): Promise<ShowcasePromotion[]> {
+  try {
+    const dateStr = date.toISOString().split("T")[0];
+    const { data } = await supabase
+      .from("daily_news_slides")
+      .select("*")
+      .eq("display_date", dateStr)
+      .eq("is_active", true)
+      .in("slide_type", ["SHOWCASE_PROMOTION", "FEATURED_PRODUCT"])
+      .lt("sort_order", 100)
+      .order("sort_order", { ascending: true });
 
+    if (data && data.length > 0) {
+      return data.map((row: any) => ({
+        id: row.id ?? 0,
+        storeName: row.store_name ?? "",
+        title: row.title,
+        subtitle: row.subtitle ?? "",
+        price: row.price != null ? Number(row.price) : undefined,
+        isSponsored: row.slide_type === "SHOWCASE_PROMOTION",
+        ctaLabel: row.cta_text ?? undefined,
+        ctaUrl: row.cta_url ?? undefined,
+      }));
+    }
+  } catch (err) {
+    console.error("Failed to fetch showcase promotions from DB", err);
+  }
   return SAMPLE_SLIDES
     .filter((s) => s.type === "SHOWCASE_PROMOTION" || s.type === "FEATURED_PRODUCT")
     .map((s) => ({
@@ -244,20 +278,8 @@ export async function fetchShowcasePromotions(_date: Date): Promise<ShowcaseProm
     }));
 }
 
-/**
- * Fetch milestone entries for the current week.
- */
 export async function fetchMilestones(_date: Date): Promise<MilestoneEntry[]> {
-  // TODO(SUPABASE): Replace with real query:
-  // const weekStart = new Date(date);
-  // weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-  // const { data, error } = await supabase
-  //   .from('member_milestones')
-  //   .select('name, achievement, xp')
-  //   .gte('achieved_at', weekStart.toISOString())
-  //   .order('achieved_at', { ascending: false });
-  // if (error) throw error;
-  // return data as MilestoneEntry[];
-
+  // Milestones come from a different source (member achievements) — 
+  // no dedicated table yet. Return sample data for now.
   return SAMPLE_MILESTONES;
 }
