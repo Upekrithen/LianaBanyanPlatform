@@ -26,7 +26,7 @@ export const TIMELINE = [
   { year: 2020, event: "First provisional patent filed" },
   { year: 2023, event: "8 utility patents filed; Hexel mechanical taxonomy defined" },
   { year: 2024, event: "Platform architecture begins; AI team formed (Rook, Knight, Bishop, Pawn)" },
-  { year: 2025, event: "1,748 innovations cataloged; 1,336 patent claims across 7 provisional applications" },
+  { year: 2025, event: "1,751 innovations cataloged; 1,401 patent claims across 8 provisional applications" },
   { year: 2026, event: "Public launch — 16 initiatives, 14 domains, full multi-portal architecture" },
 ] as const;
 
@@ -57,8 +57,8 @@ export const SACRIFICE_PRINCIPLE = {
     "Through raising eight children — four grown, four still at home",
     "Through building 8 utility patents worth between $9M and $80M",
     "$525,000 of personal investment over 9 years into patent portfolio",
-    "1,748 innovations cataloged and documented",
-    "1,336 patent claims across 7 provisional applications",
+    "1,751 innovations cataloged and documented",
+    "1,401 patent claims across 8 provisional applications",
     "The platform exists because someone was willing to do what others wouldn't",
   ],
 } as const;
@@ -80,10 +80,10 @@ export const PRINCIPLES = {
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 1748,         // As of Bishop 012 continued, March 18 2026 (Hitbase Counter details)
-  patentClaims: 1336,           // Across 7 provisional applications (7th: 64/006,010, March 15 2026)
+  canonicalCount: 1751,         // As of 8th provisional filing, March 18 2026 (64/009,803)
+  patentClaims: 1401,           // Across 8 provisional applications (8th: 64/009,803, March 18 2026)
   utilityPatents: 8,
-  patentPortfolioValue: { low: 9_000_000, high: 80_000_000 },
+  patentPortfolioValue: { low: 116_000_000, high: 15_740_000_000 },
   personalInvestment: 525_000,  // Over 9 years
   investmentYears: 9,
   initiatives: 16,              // The Sweet Sixteen

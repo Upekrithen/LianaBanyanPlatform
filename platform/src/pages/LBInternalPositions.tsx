@@ -104,7 +104,7 @@ const lbInternalPositions: LBPosition[] = [
   {
     category: 'legal_services',
     title: 'General Counsel',
-    description: 'Primary legal architect. Defense Klaus fund. IP protection for 1,336 patent claims. Harper Guild ethics oversight.',
+    description: 'Primary legal architect. Defense Klaus fund. IP protection for 1,401 patent claims. Harper Guild ethics oversight.',
     icon: Scale,
     priority: 'critical',
     tier: 'c_suite',
@@ -114,7 +114,7 @@ const lbInternalPositions: LBPosition[] = [
     keyResponsibilities: [
       'Design legal framework for cooperative operations',
       'Manage Defense Klaus legal protection fund',
-      'IP strategy for 1,336 patent claims across multiple provisionals',
+      'IP strategy for 1,401 patent claims across multiple provisionals',
       'Review and draft all major contracts and member agreements',
       'Securities compliance — ensure Marks are not classified as securities',
       'Regulatory compliance (crowdfunding, financial, cooperative law)',
@@ -526,7 +526,7 @@ const lbInternalPositions: LBPosition[] = [
   {
     category: 'research_development',
     title: 'Patent Filing Specialist',
-    description: 'Provisional patent applications. Micro-entity filings ($65 each). 1,336 claims across 7 provisional applications.',
+    description: 'Provisional patent applications. Micro-entity filings ($65 each). 1,401 claims across 8 provisional applications.',
     icon: BookOpen,
     priority: 'high',
     tier: 'guild_staff',

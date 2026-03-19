@@ -84,7 +84,7 @@ const HALLS: Hall[] = [
     id: "innovations",
     name: "Hall of Innovations",
     subtitle: "Patent Registry",
-    description: "1,748 innovations. Vote on which patents to prosecute. Bucket pedestals for IP Load Balancing.",
+    description: "1,751 innovations. Vote on which patents to prosecute. Bucket pedestals for IP Load Balancing.",
     icon: Lightbulb,
     color: "from-yellow-500/20 to-yellow-600/10",
     route: "/senate/innovations",
@@ -511,7 +511,7 @@ export default function Senate() {
               <p className="text-xs text-muted-foreground">Halls</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-primary">1,336</p>
+              <p className="text-2xl font-bold text-primary">1,401</p>
               <p className="text-xs text-muted-foreground">Patent Claims</p>
             </div>
             <div>

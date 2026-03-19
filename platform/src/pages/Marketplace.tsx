@@ -168,7 +168,7 @@ export default function Marketplace() {
                 <div className="flex-1">
                   <h3 className="font-bold text-lg">Own the Patents</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    1,336 patent claims. Sponsor the platform and own a piece of the IP.
+                    1,401 patent claims. Sponsor the platform and own a piece of the IP.
                   </p>
                   <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                     <div className="text-center p-2 rounded bg-background/50">
@@ -222,7 +222,7 @@ export default function Marketplace() {
           <Card>
             <CardContent className="pt-4 text-center">
               <Shield className="h-6 w-6 mx-auto text-purple-500 mb-1" />
-              <p className="text-2xl font-bold">1,336</p>
+              <p className="text-2xl font-bold">1,401</p>
               <p className="text-xs text-muted-foreground">Patent Claims</p>
             </CardContent>
           </Card>

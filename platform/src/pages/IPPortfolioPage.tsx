@@ -195,9 +195,9 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/967,200</td><td>Jan 23–24, 2026</td><td className="text-right">292</td><td>Defense Klaus → MSA</td></tr>
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/969,601</td><td>Jan 28, 2026</td><td className="text-right">44</td><td>Ghost World</td></tr>
               <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/989,913</td><td>Feb 24, 2026</td><td className="text-right">408</td><td>LEVIATHAN PLUS</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right text-slate-500">TBD</td><td>Full Specs (#1001–#1719)</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono text-slate-500">TBD</td><td className="text-slate-500">Pending</td><td className="text-right text-slate-500">29</td><td className="text-slate-500">Character Layers + Hitbase + Gameplay (#1720–#1748)</td></tr>
-              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,365+</td><td>7 provisional + 1 pending (8th filing)</td></tr>
+              <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right">464</td><td>Full Specs (#1001–#1662)</td></tr>
+              <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/009,803</td><td>Mar 18, 2026</td><td className="text-right">89</td><td>Six Degrees + Game Mechanics + Demand Signaling (#1663–#1751)</td></tr>
+              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,401+</td><td>8 provisional applications filed</td></tr>
             </tbody>
           </table>
         </div>

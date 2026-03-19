@@ -213,7 +213,7 @@ export const GUILDS: Guild[] = [
     focus: "Patent law, IP strategy, cooperative compliance, SEC-safe language",
     partnerRole: "Patent Attorney + Business Attorney",
     partnerDescription:
-      "Legal professionals who can manage a 1,336-claim patent portfolio, " +
+      "Legal professionals who can manage a 1,401-claim patent portfolio, " +
       "navigate cooperative law, ensure SEC compliance for the three-currency " +
       "system, and provide strategic counsel as the platform scales.",
     currentMembers: 0,
@@ -223,7 +223,7 @@ export const GUILDS: Guild[] = [
         title: "Founding Partner — Patent Attorney",
         type: "founding_partner",
         description:
-          "Own the patent strategy for 1,336 claims across 7 provisional " +
+          "Own the patent strategy for 1,401 claims across 8 provisional " +
           "filings. Convert provisionals to non-provisionals. Identify white space " +
           "for new filings. Coordinate with the Founder on IP priorities.",
         marksCompensation: "500 Marks/month",

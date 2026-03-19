@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { FileText, Download, Send, Lock, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const INNOVATION_COUNT = "1,748";
-const PATENT_CLAIMS = "1,336";
-const PROVISIONAL_APPS = "6";
+const INNOVATION_COUNT = "1,751";
+const PATENT_CLAIMS = "1,401";
+const PROVISIONAL_APPS = "8";
 
 export default function CephasPressJunketPage() {
   return (

@@ -67,7 +67,7 @@ const VALUE_PROP_TOPICS: FlipTopic[] = [
     title: "Getting Funded",
     icon: DollarSign,
     quickFacts:
-      "The platform uses a patent sponsorship model — not venture capital. Your product is backed by the IP portfolio (1,336 patent claims). Sponsors contribute to pools, not to your company. You keep full control. The Cost+20% pricing model means you keep 83.3% of every sale.",
+      "The platform uses a patent sponsorship model — not venture capital. Your product is backed by the IP portfolio (1,401 patent claims). Sponsors contribute to pools, not to your company. You keep full control. The Cost+20% pricing model means you keep 83.3% of every sale.",
     intermediate:
       "Two sponsorship mechanisms: (1) Global Sponsor Pool — diversified across all platform projects, balanced quarterly. (2) Patent Buckets — concentrated funding for specific innovations. The 60/20/20 split: 60% platform operations, 20% creator allocation, 20% external capital pool. All stakes are capped at $10M with splitting for accessibility. This is service sponsorship — sponsors receive platform benefits, not securities.",
     deepLink: {
@@ -132,7 +132,7 @@ const HEXISLE_TEMPLATE_TOPICS: FlipTopic[] = [
     quickFacts:
       "Maximum control, traditional IP protection. Your designs stay private and are produced only through authorized channels. Lower community multiplier but highest per-unit creator allocation. Best for products where design secrecy is critical.",
     intermediate:
-      "Closed engagement uses the platform for distribution, payment processing, and the three-currency system, but keeps your designs fully proprietary. You still benefit from the patent portfolio protection (your IP is shielded alongside 1,336 claims), but you handle your own manufacturing. Community testing is opt-in via NDA-protected NOID contracts.",
+      "Closed engagement uses the platform for distribution, payment processing, and the three-currency system, but keeps your designs fully proprietary. You still benefit from the patent portfolio protection (your IP is shielded alongside 1,401 claims), but you handle your own manufacturing. Community testing is opt-in via NDA-protected NOID contracts.",
     deepLink: {
       label: "Read About IP Protection",
       route: "/crows-nest",
