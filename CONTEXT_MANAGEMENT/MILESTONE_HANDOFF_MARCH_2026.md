@@ -9,7 +9,70 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Bishop 013 Extended (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 49 (March 19, 2026)
+
+**Latest commit:** `9a4a693` — Session 49: Wire GleanersCorner/ChainVoting/ConcentricCircles to Supabase, Lovable cleanup
+**Previous commit:** `c31e3be` — Bishop 013: Pudding Styles scrollytelling + AsYouWish/NoAtomo cue cards + Knight prompts 51-54
+
+**Status (March 19, 2026 — Session 49):**
+- Platform deployed and live: lianabanyan-main.web.app
+- Cephas deployed: **1,145 pages, 1,640 files** (97 new letters + Pudding scrollytelling system)
+- 3 new Supabase migrations pushed: `20260319200004` (gleaners_corner), `20260319200005` (chain_voting), `20260319200006` (concentric_circles)
+- GleanersCorner, ChainVoting, ConcentricCircles all wired to Supabase with sample fallback
+- "Lovable" references cleaned from 5 non-migration files (4 remaining are migrations/types — untouchable)
+- Git origin up to date.
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.**
+
+### What Was Done (Session 49 — Knight)
+
+#### Feature 1: Deploy Cephas (97 Letters + Pudding System)
+
+- **Hugo build:** 1,145 pages, 1,640 files
+- **Firebase deploy:** `cephas-lianabanyan.web.app` live with all 97 new letter files from Bishop 013 + Pudding scrollytelling CSS/JS/shortcodes
+- Pudding assets: `pudding.css`, `pudding.js`, 5 shortcodes (`pudding-compare`, `pudding-progress`, `pudding-reveal`, `pudding-stat`, `pudding-sticky-quote`)
+
+#### Feature 2: Wire GleanersCorner + ChainVoting + ConcentricCircles to Supabase
+
+All three pages were on sample data only. Now fully wired with Supabase queries + sample fallback.
+
+| Service | Tables Created | Read Functions | Write Functions |
+|---------|---------------|----------------|-----------------|
+| `gleanersCornerService.ts` | `gleaners_fund_summary`, `gleaners_distributions` | `fetchFundSummary()`, `fetchDistributions()`, `fetchGleanerStats()` | Read-only (system-calculated splits) |
+| `chainVotingService.ts` | `chain_voting_chains`, `chain_voting_proposals`, `chain_voting_votes` | `fetchChainStatus()`, `fetchActiveProposals()`, `fetchVoteHistory()`, `fetchGovernanceStats()` | `castVote()` (inserts vote + updates chain + tallies), `createProposal()` |
+| `concentricCircleService.ts` | `concentric_circle_members`, `concentric_circle_feedback`, `concentric_circle_rings` | `fetchRingMembersLive()`, `fetchFeedbackLive()`, `fetchAllFeedbackLive()`, `fetchRingStatusLive()`, `fetchStatsLive()` | `activateRingLive()`, `submitFeedbackLive()`, `updateRingStatusLive()` |
+
+- **RLS:** Authenticated SELECT on all tables, admin-only writes on Gleaners/Rings, owner-based writes on Chain Voting votes/chains, open INSERT on feedback
+- **Seed data:** 10 distributions, 5 proposals, 14 members, 15 feedback items, 5 rings
+
+#### Feature 3: "Lovable" Reference Cleanup
+
+- **`subdomainRouter.ts`** — Removed `lovable.app` hostname check (no longer deployed on Lovable)
+- **`MercuryBankBalance.tsx`** — Cleaned migration comment
+- **`TASKS.md`** — Changed "Auto-provisioned by Lovable" → "Auto-provisioned by Firebase Hosting"
+- **`.gitignore`** — Changed `escape-velocity Lovable Site/` → `escape-velocity-legacy/`
+- **Skipped:** `types.ts` (auto-generated DB column name), 4 migration files (historical records), 2 seed data entries (Lovable is a real product/tool name)
+
+### Pending Work (Session 50+)
+
+| Item | Status |
+|------|--------|
+| ~~Deploy Cephas (97 letters + Pudding)~~ | **DONE (49)** |
+| ~~Wire GleanersCorner/ChainVoting/ConcentricCircles to Supabase~~ | **DONE (49)** |
+| ~~"Lovable" reference cleanup~~ | **DONE (49)** |
+| Deploy moneypenny-auto-post and moneypenny-intake edge functions to Supabase | NEXT |
+| Maker Spotlight: expand SAMPLE_SPOTLIGHTS to 47 makers | MEDIUM |
+| Edge Functions Phase 3: admin notifications, email service, Twitter image uploads | MEDIUM |
+| Proteus Anchor System (Innovation #1553) | MEDIUM |
+| Content Pipeline → Cephas auto-sync | MEDIUM |
+| Content Pipeline → Cue Card minting integration | MEDIUM |
+| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
+| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Bishop 013 Extended (March 18, 2026)
 
 **Latest commit:** `c31e3be` — Bishop 013: Pudding Styles scrollytelling + AsYouWish/NoAtomo cue cards + Knight prompts 51-54
 **Previous commits:** `a034feb` (97 Cephas letters), `8a2fa2a` (Session 48 handoff), `c2398d4` (Session 48)
