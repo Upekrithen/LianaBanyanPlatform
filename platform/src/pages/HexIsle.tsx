@@ -29,6 +29,8 @@ import { RootLockDemo } from "@/components/hexisle/root-lock/RootLockDemo";
 import { ViewPhaseSwitcher } from "@/components/hexisle/ViewPhaseSwitcher";
 import { SlottedTopHero } from "@/components/hexisle/SlottedTopHero";
 import AttackWheelDemo from "@/components/hexisle/AttackWheelDemo";
+import HitbaseCounterShowcase from "@/components/hexisle/HitbaseCounterShowcase";
+import CharacterLayerExplorer from "@/components/hexisle/CharacterLayerExplorer";
 
 export default function HexIsle() {
   const { user } = useAuth();
@@ -317,6 +319,12 @@ export default function HexIsle() {
           </Card>
         </div>
       </div>
+
+      {/* Hitbase Counter Showcase (Session 36) */}
+      <HitbaseCounterShowcase />
+
+      {/* Character Layer Explorer (Session 36) */}
+      <CharacterLayerExplorer />
 
       {/* Attack Wheel — Deterministic Combat (Session 31) */}
       <AttackWheelDemo />

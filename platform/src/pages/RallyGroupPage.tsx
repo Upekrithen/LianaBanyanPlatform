@@ -7,12 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { ExpandableBlock } from "@/components/pudding";
 import { AnonymousVolumeExplainer } from "@/components/AnonymousVolumeExplainer";
 import '@/styles/landing.css';
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function RallyGroupPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'chalkboard' | 'swoop' | 'railroad'>('chalkboard');
 
   return (
+    <LaunchConditionOverlay initiativeSlug="rally-group" initiativeName="Rally Group">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -193,5 +195,6 @@ export default function RallyGroupPage() {
 
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

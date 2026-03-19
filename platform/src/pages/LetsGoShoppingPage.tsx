@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { ShoppingOrderCard } from "@/components/ShoppingOrderCard";
 import { CreateShoppingOrderDialog } from "@/components/CreateShoppingOrderDialog";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function LetsGoShoppingPage() {
   const { data: orders, isLoading, refetch } = useQuery({
@@ -37,6 +38,7 @@ export default function LetsGoShoppingPage() {
   }
 
   return (
+    <LaunchConditionOverlay initiativeSlug="lets-go-shopping" initiativeName="Let's Go Shopping">
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -153,5 +155,6 @@ export default function LetsGoShoppingPage() {
         </Card>
       )}
     </div>
+    </LaunchConditionOverlay>
   );
 }

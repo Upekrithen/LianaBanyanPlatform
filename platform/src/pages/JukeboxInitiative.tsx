@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import '@/styles/landing.css';
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function JukeboxInitiative() {
   const [activeTab, setActiveTab] = useState<'lobbying' | 'artists' | 'creators'>('lobbying');
 
   return (
+    <LaunchConditionOverlay initiativeSlug="jukebox" initiativeName="JukeBox">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -319,5 +321,6 @@ export default function JukeboxInitiative() {
 
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

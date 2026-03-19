@@ -9,7 +9,85 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 34 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 35 (March 18, 2026)
+
+**Latest commit:** `df1f437` — Session 35: Spotlight Manager, 3 Moneypenny Edge Functions, MoneyPenny live-wiring to Supabase
+
+**Status (March 18, 2026 — Session 35):**
+- Platform deployed and live: lianabanyan-main.web.app
+- All Supabase migrations pushed (through `20260319000003`). DB canonical count = 1,748.
+- **Innovation count:** 1,748 (unchanged — no new innovations this session)
+- **No blockers.** Ready for Session 36.
+
+### What Was Done This Session (Session 35 — Knight)
+
+1. **Feature 1: Spotlight Manager Panel** — Admin CRUD interface for `spotlight_content` table at `/moneypenny/spotlight`.
+   - Full CRUD: create, edit, toggle active/inactive, delete spotlight cards
+   - **Impression Stats Dashboard** — Aggregates `spotlight_impressions` data: total impressions, total clicks, overall CTR, per-card breakdown (views, clicks, CTR, avg dwell time)
+   - Category filter bar (all/featured/campaigns/benefits/announcements/makers/projects)
+   - Edit form with all fields: title, subtitle, body preview, body full, CTA label/route, priority (1-100), time-of-day bias, valid from/until, page context
+   - Togglable stats overlay on card list
+   - Linked from MoneyPenny.tsx header ("Spotlight Manager" button)
+
+2. **Feature 2: Moneypenny Edge Functions** — Three Supabase edge functions for admin automation.
+   - **`moneypenny-intake`** — Inbound message processor: classifies emails by sender domain (crown/press/patent/member/support), assigns priority (1-4), inserts into `moneypenny_inbox`, auto-creates action items for P1-P2 messages, triggers `red_carpet_signals` for crown responses. Crown domain detection for Schwarzenegger, AOC, Chauhan, Laughton, Mahon, Williams, etc. Press domain detection for 12 major outlets.
+   - **`moneypenny-daily-digest`** — Daily summary generator (designed for 6 AM CST cron): escalates overdue schedule items to urgent actions, counts pending inbox/action items, checks spotlight performance (last 24h impressions/clicks), monitors launch condition thresholds (creates alerts at 75%+), generates milestone social media drafts (at innovation count round numbers).
+   - **`moneypenny-signal`** — Red Carpet signal processor with 3 actions: `process_pending` (sends queued signals via email), `check_thresholds` (member milestones + launch condition monitoring), `send_signal` (send specific signal by ID). Uses `send-transactional-email` for delivery. Template system: crown_response_ack, milestone_announcement, launch_condition_met, welcome.
+
+3. **Feature 3: MoneyPenny.tsx Live-Wired to Supabase** — Complete replacement of mock/placeholder data with real DB queries.
+   - **Overview tab**: Live summary cards pulling from `moneypenny_inbox` (with need-attention count), `moneypenny_actions` (pending count), `moneypenny_social_drafts` (pending drafts), spotlight manager link
+   - **Inbox tab**: Full message list from `moneypenny_inbox` with status icons, category/priority badges, replied/action buttons, body preview, timestamps
+   - **Social tab**: Draft management from `moneypenny_social_drafts` — approve & copy to clipboard, reject, platform/source badges, status tracking
+   - **Dispatch tab**: Reads from `outbound_dispatch` table — shows dispatch queue items with channel badges, status, and dispatch timestamps. Links to full Dispatch page.
+   - **Tasks tab**: CRUD from `moneypenny_actions` — checkbox completion, manual add via input, priority badges (urgent/normal/low), source labels, due dates
+   - Badge counts on tab triggers (inbox needs-action, pending drafts, pending tasks)
+
+### Files Created (Session 35)
+
+| File | Purpose |
+|------|---------|
+| `platform/src/pages/SpotlightManager.tsx` | **NEW** — CRUD admin for spotlight_content + impression stats |
+| `platform/supabase/functions/moneypenny-intake/index.ts` | **NEW** — Inbound message classifier + auto-actions |
+| `platform/supabase/functions/moneypenny-daily-digest/index.ts` | **NEW** — Daily digest with overdue escalation + milestone drafts |
+| `platform/supabase/functions/moneypenny-signal/index.ts` | **NEW** — Red Carpet signal processor + threshold alerts |
+
+### Files Modified (Session 35)
+
+| File | Changes |
+|------|---------|
+| `platform/src/pages/MoneyPenny.tsx` | Complete rewrite: 5 tabs wired to live Supabase data, badge counts, CRUD |
+| `platform/src/App.tsx` | Added SpotlightManager lazy import + `/moneypenny/spotlight` route |
+
+### Deployment (Session 35)
+
+- **Platform**: lianabanyan-main.web.app (616 files)
+
+### Edge Functions Created (Session 35 — deploy via `supabase functions deploy`)
+
+| Function | Purpose |
+|----------|---------|
+| `moneypenny-intake` | Inbound message classifier → inbox + auto-actions + crown signals |
+| `moneypenny-daily-digest` | Daily summary + overdue escalation + launch alerts + social drafts |
+| `moneypenny-signal` | Red Carpet signal processor + threshold checks + email dispatch |
+
+### Pending Work (Session 36+)
+
+| Item | Status |
+|------|--------|
+| **Deploy 3 Moneypenny Edge Functions** to Supabase (`supabase functions deploy`) | **NEXT** |
+| **Wrap remaining 11 initiative pages** with LaunchConditionOverlay | MEDIUM |
+| **Hitbase Counter Showcase** + **Character Layer Explorer** | MEDIUM |
+| **Wire Demand Signaling + Pledged Mark Voting to Supabase** | MEDIUM |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 34 (March 18, 2026) — Previous
 
 **Latest commit:** `728af51` — Session 34: Spotlight Carousel System
 
@@ -50,23 +128,6 @@
 ### Deployment (Session 34)
 
 - **Platform**: lianabanyan-main.web.app
-
-### Pending Work (Session 35+)
-
-| Item | Status |
-|------|--------|
-| **Spotlight Manager panel in Moneypenny** — CRUD for spotlight_content, stats view | **NEXT** |
-| **Moneypenny Edge Functions** — `moneypenny-intake`, `moneypenny-daily-digest`, `moneypenny-signal` | **NEXT** |
-| **Wire MoneyPenny.tsx tabs to real Supabase data** (replace mock data) | **NEXT** |
-| **Wrap remaining 11 initiative pages** with LaunchConditionOverlay | MEDIUM |
-| **Hitbase Counter Showcase** + **Character Layer Explorer** | MEDIUM |
-| **Wire Demand Signaling + Pledged Mark Voting to Supabase** | MEDIUM |
-| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
-| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
-| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
-| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
-| Content Pipeline build | MEDIUM |
-| RLS security hardening | MEDIUM |
 
 ---
 

@@ -11,11 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import '@/styles/landing.css';
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function FamilyTablePage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="family-table" initiativeName="The Family Table">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -320,5 +322,6 @@ export default function FamilyTablePage() {
         </Tabs>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

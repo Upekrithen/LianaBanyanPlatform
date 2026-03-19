@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { GroceryOrderForm } from "@/components/GroceryOrderForm";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function LetsGetGroceriesPage() {
   const { data: { user } } = useQuery({
@@ -35,6 +36,7 @@ export default function LetsGetGroceriesPage() {
   const schedules: any[] = [];
 
   return (
+    <LaunchConditionOverlay initiativeSlug="lets-get-groceries" initiativeName="Let's Get Groceries">
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center gap-3">
         <ShoppingBag className="h-8 w-8 text-green-600" />
@@ -191,5 +193,6 @@ export default function LetsGetGroceriesPage() {
         </TabsContent>
       </Tabs>
     </div>
+    </LaunchConditionOverlay>
   );
 }

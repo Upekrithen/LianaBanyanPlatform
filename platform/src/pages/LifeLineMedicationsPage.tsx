@@ -12,12 +12,14 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { SWOOPVoting } from "@/components/SWOOPVoting";
 import '@/styles/landing.css';
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function LifeLineMedicationsPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
+    <LaunchConditionOverlay initiativeSlug="lifeline-medications" initiativeName="LifeLine Medications">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -270,5 +272,6 @@ export default function LifeLineMedicationsPage() {
         </Tabs>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

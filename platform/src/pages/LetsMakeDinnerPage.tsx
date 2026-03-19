@@ -18,6 +18,7 @@ import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { DeckCardFrame } from "@/components/DeckCardFrame";
 import { CreateMealOfferingDialog } from "@/components/CreateMealOfferingDialog";
 import { MealOrderDialog } from "@/components/MealOrderDialog";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 import { MealRequestDialog } from "@/components/MealRequestDialog";
 import { calculateMealPrice, formatHoursUntilPickup, getNextTierInfo, type PriceTierInfo } from "@/lib/lmdPricing";
 import { DemandAggregationExplainer } from "@/components/DemandAggregationExplainer";
@@ -123,6 +124,7 @@ export default function LetsMakeDinnerPage() {
   };
 
   return (
+    <LaunchConditionOverlay initiativeSlug="lets-make-dinner" initiativeName="Let's Make Dinner">
     <div className="landing-page" style={{ minHeight: '100vh' }}>
       {/* Brand Title — Top Left */}
       <div className="landing-title">
@@ -833,5 +835,6 @@ export default function LetsMakeDinnerPage() {
         preselectedDate={selectedDate}
       />
     </div>
+    </LaunchConditionOverlay>
   );
 }

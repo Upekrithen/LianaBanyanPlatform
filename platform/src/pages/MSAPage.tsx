@@ -10,12 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import '@/styles/landing.css';
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function MSAPage() {
   const navigate = useNavigate();
   const [isWildFireTour, setIsWildFireTour] = useState(true);
 
   return (
+    <LaunchConditionOverlay initiativeSlug="msa" initiativeName="MSA (Medical Savings Accounts)">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -286,5 +288,6 @@ export default function MSAPage() {
         </Tabs>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

@@ -5,11 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import '@/styles/landing.css';
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function LetsMakeBreadPage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="lets-make-bread" initiativeName="Let's Make Bread">
     <div className="landing-page min-h-screen bg-slate-50">
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -123,5 +125,6 @@ export default function LetsMakeBreadPage() {
 
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

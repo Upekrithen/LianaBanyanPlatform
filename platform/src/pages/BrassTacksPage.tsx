@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Hammer, Factory, Wrench, Cog, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function BrassTacksPage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="brass-tacks" initiativeName="Brass Tacks">
     <div className="container mx-auto py-8 max-w-6xl">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-zinc-600 rounded-full text-white">
@@ -114,5 +116,6 @@ export default function BrassTacksPage() {
         </div>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }

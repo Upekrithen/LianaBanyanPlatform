@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Activity, Pill, Stethoscope, HeartPulse, ShieldAlert, CheckCircle2, ArrowRight, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function HealthAccordsPage() {
   const navigate = useNavigate();
 
   return (
+    <LaunchConditionOverlay initiativeSlug="health-accords" initiativeName="Tatiana Schlossburg Health Accords">
     <div className="container mx-auto py-8 max-w-6xl">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-rose-600 rounded-full text-white">
@@ -124,5 +126,6 @@ export default function HealthAccordsPage() {
         </div>
       </div>
     </div>
+    </LaunchConditionOverlay>
   );
 }
