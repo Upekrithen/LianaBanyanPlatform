@@ -284,9 +284,12 @@ const HexIsleBattlePhilosophy = lazy(() => import("./pages/HexIsleBattlePhilosop
 const HexIsleCueCard = lazy(() => import("./pages/cue-cards/HexIsleCueCard"));
 const LaunchTracker = lazy(() => import("./pages/LaunchTracker"));
 const MoneypennyBriefing = lazy(() => import("./pages/MoneypennyBriefing"));
+const MoneyPennyQA = lazy(() => import("./pages/MoneyPennyQA"));
 const SpotlightManager = lazy(() => import("./pages/SpotlightManager"));
 const BoiseBusinessCardsExample = lazy(() => import("./pages/BoiseBusinessCardsExample"));
 const DailyNews = lazy(() => import("./pages/DailyNews"));
+const BandWagon = lazy(() => import("./pages/BandWagon"));
+const MoneyPennySocial = lazy(() => import("./pages/MoneyPennySocial"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -320,6 +323,14 @@ const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 const SideQuests = lazy(() => import("./pages/SideQuests"));
 // The Crow's Nest — Multi-Depth Guided Discovery (Session 8H)
 const CrowsNest = lazy(() => import("./pages/CrowsNest"));
+const XPLeaderboard = lazy(() => import("./pages/XPLeaderboard"));
+const StoreTemplates = lazy(() => import("./pages/StoreTemplates"));
+const ShowcasePromotion = lazy(() => import("./pages/ShowcasePromotion"));
+const GhostWorldMall = lazy(() => import("./pages/GhostWorldMall"));
+const MemberAgreement = lazy(() => import("./pages/MemberAgreement"));
+const CreatorDraftPick = lazy(() => import("./pages/CreatorDraftPick"));
+const TrickleOnboarding = lazy(() => import("./pages/TrickleOnboarding"));
+const VouchSystem = lazy(() => import("./pages/VouchSystem"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -587,6 +598,7 @@ const App = () => (
                         <Route path="/project/:projectSlug/product/:productId" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                         <Route path="/sponsorship-guide" element={<ProtectedRoute><ContributionExplainer /></ProtectedRoute>} />
                         <Route path="/daily-news" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DailyNews /></Suspense>} />
+                        <Route path="/bandwagon" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BandWagon /></Suspense>} />
 
                         {/* Protected Sponsor Routes */}
                         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -760,7 +772,17 @@ const App = () => (
                         <Route path="/toe-dipping" element={<ProtectedRoute><C20PilotDashboard /></ProtectedRoute>} />
                         <Route path="/c20/leaderboard" element={<C20Leaderboard />} />
                         <Route path="/reciprocity-leaderboard" element={<C20Leaderboard />} />
-                        
+                        <Route path="/xp-leaderboard" element={<XPLeaderboard />} />
+
+                        {/* Sessions 40-45 routes */}
+                        <Route path="/store-templates" element={<ExplorerRoute><StoreTemplates /></ExplorerRoute>} />
+                        <Route path="/showcase-promotion" element={<ProtectedRoute><ShowcasePromotion /></ProtectedRoute>} />
+                        <Route path="/ghost-world/mall" element={<ExplorerRoute><GhostWorldMall /></ExplorerRoute>} />
+                        <Route path="/member-agreement" element={<MemberAgreement />} />
+                        <Route path="/creator-draft-pick" element={<ExplorerRoute><CreatorDraftPick /></ExplorerRoute>} />
+                        <Route path="/onboarding/trickle" element={<ProtectedRoute><TrickleOnboarding /></ProtectedRoute>} />
+                        <Route path="/vouch" element={<ProtectedRoute><VouchSystem /></ProtectedRoute>} />
+
                         {/* New Routes — Feb 9 Session 2 */}
                         <Route path="/herald-success" element={<ProtectedRoute><HeraldSuccess /></ProtectedRoute>} />
                         <Route path="/sponsor-success" element={<ProtectedRoute><SponsorSuccess /></ProtectedRoute>} />
@@ -853,6 +875,8 @@ const App = () => (
                           <Route path="/moneypenny" element={<ProtectedRoute><MoneyPenny /></ProtectedRoute>} />
                           <Route path="/moneypenny/briefing" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MoneypennyBriefing /></Suspense></ProtectedRoute>} />
                           <Route path="/moneypenny/spotlight" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><SpotlightManager /></Suspense></ProtectedRoute>} />
+                          <Route path="/moneypenny/social" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MoneyPennySocial /></Suspense></ProtectedRoute>} />
+                          <Route path="/moneypenny/qa" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MoneyPennyQA /></Suspense></ProtectedRoute>} />
                           <Route path="/academy" element={<ExplorerRoute><Academy /></ExplorerRoute>} />
                           <Route path="/hexisle-dashboard" element={<ProtectedRoute><HexisleDashboard /></ProtectedRoute>} />
                         

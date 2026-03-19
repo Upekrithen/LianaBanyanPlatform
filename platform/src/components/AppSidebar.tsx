@@ -1,4 +1,4 @@
-import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag } from "lucide-react";
+import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -29,7 +29,20 @@ const marketplaceMainItems = [
   { title: "Clans", url: "/clans", icon: Shield },
   { title: "Peer Contracts", url: "/peer-contracts", icon: HandshakeIcon },
   { title: "Daily News", url: "/daily-news", icon: Newspaper },
+  { title: "BandWagon", url: "/bandwagon", icon: Rocket },
   { title: "Political Expedition", url: "/political-expedition", icon: Flag },
+  { title: "XP Leaderboard", url: "/xp-leaderboard", icon: Trophy },
+  { title: "Steward Command Post", url: "/steward", icon: Shield },
+  { title: "Store Templates", url: "/store-templates", icon: Palette },
+  { title: "Showcase Promotion", url: "/showcase-promotion", icon: Star },
+  { title: "Ghost World Mall", url: "/ghost-world/mall", icon: Ghost },
+  { title: "Creator Draft Pick", url: "/creator-draft-pick", icon: UserPlus },
+  { title: "Crew Call", url: "/crew-call", icon: Hammer },
+  { title: "Vouch & Recommend", url: "/vouch", icon: Heart },
+  { title: "Coverage Minutes", url: "/coverage-minutes", icon: Timer },
+  { title: "Member Agreement", url: "/member-agreement", icon: FileSignature },
+  { title: "Onboarding", url: "/onboarding/trickle", icon: UserCheck },
+  { title: "Creator Showcase", url: "/creators", icon: Palette },
   { title: "Sponsorship Guide", url: "/sponsorship-guide", icon: BookOpen },
   { title: "Register IP", url: "/ip/register", icon: ShieldCheck },
 ];
@@ -43,6 +56,8 @@ const marketplaceAdminItems = [
   { title: "Task Log", url: "/task-log", icon: ScrollText, requiresAdmin: true },
   { title: "Sample XML", url: "/sample-xml", icon: FileX, requiresAdmin: true },
   { title: "Send Lists", url: "/send-lists", icon: Send, requiresAdmin: true },
+  { title: "Q&A Intelligence", url: "/moneypenny/qa", icon: Brain, requiresAdmin: true },
+  { title: "Social Command", url: "/moneypenny/social", icon: Radio, requiresAdmin: true },
 ];
 
 // Business Portal Navigation
