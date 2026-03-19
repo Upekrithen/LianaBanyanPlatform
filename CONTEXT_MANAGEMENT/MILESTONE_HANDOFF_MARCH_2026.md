@@ -9,7 +9,76 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 35 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 36 (March 18, 2026)
+
+**Latest commit:** `09818e0` — Session 36: Wrap all 16 initiative pages with LaunchConditionOverlay, Hitbase Counter Showcase, Character Layer Explorer
+
+**Status (March 18, 2026 — Session 36):**
+- Platform deployed and live: lianabanyan-main.web.app
+- All Supabase migrations pushed (through `20260319000004`). DB canonical count = 1,748.
+- **Innovation count:** 1,748 (unchanged — no new innovations this session)
+- 3 Moneypenny Edge Functions deployed to Supabase (from Session 35)
+- **No blockers.** Ready for Session 37.
+
+### What Was Done This Session (Session 36 — Knight)
+
+1. **Deployed 3 Moneypenny Edge Functions** — `moneypenny-intake`, `moneypenny-daily-digest`, `moneypenny-signal` all deployed to Supabase.
+
+2. **Feature 1: Wrapped All 16 Initiative Pages with LaunchConditionOverlay** — All remaining initiative pages now show launch condition progress bars (leadership, members, funding) with real data from `launch_conditions` table.
+   - 12 pages wrapped: LetsMakeDinnerPage, LetsGetGroceriesPage, LetsGoShoppingPage, HouseholdConciergePage, FamilyTablePage, LifeLineMedicationsPage, HealthAccordsPage, MSAPage, RallyGroupPage, LetsMakeBreadPage, JukeboxInitiative, BrassTacksPage
+   - (5 already wrapped in Session 31: VSLPage, DidaskoPage, HarperGuildPage, DefenseKlausPage, PowerToThePeoplePage)
+   - Migration `20260319000004` adds launch_conditions for 4 missing slugs: lets-get-groceries, rally-group, lifeline-medications, health-accords
+
+3. **Feature 2: Hitbase Counter Showcase** — Interactive visual explainer at `/hexisle` showing the mechanical hit-tracking system.
+   - Pez-style coin loading with 6 denominations × 3 terrain shapes (circle/triangle/square = Water/Fire/Earth)
+   - HP and Mana bar visualization with sliding tab mode selector (HP Only / HP+Mana / Mana Only)
+   - Take Hit button with coin ejection animation and supine-lock on depletion
+   - Combat log tracking all actions
+   - Expandable "How it works" explainer referencing Patent Innovation #1579
+
+4. **Feature 3: Character Layer Explorer** — Snap-on layer progression visualizer at `/hexisle`.
+   - 3 progression paths: Sword Path (Peasant→Farmer→Warrior→King), Crown Path (Merchant→Healer→Assassin→Queen), Horse Path (WildHorse→FarmHorse→WarHorse)
+   - Visual layer stack with click-to-select and toggle visibility
+   - Timeline navigation with progressive reveal
+   - Subtraction mechanic highlighted for Assassin (removal of cloak)
+   - Design principles: "Same Body, Different Destiny" — Peasant body IS the King body
+
+### Files Created (Session 36)
+
+| File | Purpose |
+|------|---------|
+| `platform/src/components/hexisle/HitbaseCounterShowcase.tsx` | **NEW** — Interactive Hitbase counter demo |
+| `platform/src/components/hexisle/CharacterLayerExplorer.tsx` | **NEW** — Snap-on layer progression visualizer |
+| `platform/supabase/migrations/20260319000004_launch_conditions_remaining.sql` | **NEW** — Missing launch_conditions for 4 initiative slugs |
+
+### Files Modified (Session 36)
+
+| File | Changes |
+|------|---------|
+| `platform/src/pages/HexIsle.tsx` | Added HitbaseCounterShowcase + CharacterLayerExplorer imports & rendering |
+| 12 initiative pages | Added LaunchConditionOverlay import + wrapper (LMD, Groceries, Shopping, Concierge, Family, LifeLine, Health, MSA, Rally, Bread, Jukebox, Brass) |
+
+### Deployment (Session 36)
+
+- **Platform**: lianabanyan-main.web.app
+- **Edge Functions**: moneypenny-intake, moneypenny-daily-digest, moneypenny-signal (deployed)
+- **Migration**: 20260319000004 pushed to Supabase
+
+### Pending Work (Session 37+)
+
+| Item | Status |
+|------|--------|
+| **Wire Demand Signaling + Pledged Mark Voting to Supabase** | **NEXT** |
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| Content Pipeline build | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 35 (March 18, 2026) — Previous
 
 **Latest commit:** `df1f437` — Session 35: Spotlight Manager, 3 Moneypenny Edge Functions, MoneyPenny live-wiring to Supabase
 
@@ -1199,6 +1268,8 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+09818e0 Session 36: Wrap all 16 initiative pages with LaunchConditionOverlay, Hitbase Counter Showcase, Character Layer Explorer
+df1f437 Session 35: Spotlight Manager, 3 Moneypenny Edge Functions, MoneyPenny live-wiring to Supabase
 9bc090f Session 27: Action-first Portal, production level Pledge buttons, DenkenMenu nav wiring
 b7908fa Session 26: Pnyx merge, WhyNoAds/VC pages, Chalk Outline wiring, X-Ray FAQ additions
 ee62ad3 Session 25B: Crown Letters (Political Expedition) + Six Degrees system
