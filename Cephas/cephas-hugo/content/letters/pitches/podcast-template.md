@@ -15,7 +15,7 @@ tags: ["media-pitch", "podcast", "how-i-built-this", "decoder", "pivot", "acquir
 
 ## THE 30-SECOND PITCH
 
-Jonathan Jones is a 52-year-old Army veteran who's spent 15 years building Liana Banyan, a cooperative platform where creators keep 83.3% of every transaction. Unlike every other platform, the margin is locked in the legal structure — it literally cannot be raised. Three commercial divisions fund fourteen charitable initiatives across food, healthcare, manufacturing, and creative work. With 150+ patents filed and a flagship hardware product (HexIsle, a hydraulic gaming table) launching on Kickstarter, Liana Banyan is attempting to prove that platforms don't have to enshittify.
+Jonathan Jones is a 53-year-old ARNG veteran who's spent 15 years building Liana Banyan, a cooperative platform where creators keep 83.3% of every transaction. Unlike every other platform, the margin is locked in the legal structure — it literally cannot be raised. Three commercial divisions fund fourteen charitable initiatives across food, healthcare, manufacturing, and creative work. With 150+ patents filed and a flagship hardware product (HexIsle, a hydraulic gaming table) launching on Kickstarter, Liana Banyan is attempting to prove that platforms don't have to enshittify.
 
 ---
 
@@ -160,4 +160,12 @@ Long-term value creation vs. extraction. Why patient capital models produce diff
 **Jonathan Jones**
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com

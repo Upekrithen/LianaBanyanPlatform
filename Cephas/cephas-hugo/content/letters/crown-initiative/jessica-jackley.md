@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Jackley"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Jackley"
+initiative: "VSL"
+initiative_number: 10
+tags: ["crown-letter", "initiative", "jessica-jackley"]
+---
+
 # 👑 CROWN LETTER: JESSICA JACKLEY
 ## Lender Mentor
 ## Lady Banyan of Village Savings & Loans
@@ -21,7 +31,7 @@ I'm writing to ask if you'll help me build the next chapter.
 
 ## WHO I AM
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, U.S. Army veteran (ARNG, 11B/15A), 21 years I.T. developer. I was the child of missionaries in Tanzania — no television until 13, so I read a lot, and I'm good at chess. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, U.S. ARNG veteran (, 11B/15A), 21 years I.T. developer. I was the child of missionaries in Tanzania — no television until 13, so I read a lot, and I'm good at chess. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan.
 
 I'm not famous. I don't have an MBA from Stanford. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD. The systems we have aren't protecting or helping people well enough, and arguably are part of the problem. So I've designed different ones.
 
@@ -143,6 +153,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

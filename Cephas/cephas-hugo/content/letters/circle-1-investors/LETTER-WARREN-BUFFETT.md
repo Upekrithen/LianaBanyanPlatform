@@ -1,3 +1,11 @@
+---
+title: "Letter to Buffett"
+date: 2026-01-15
+letter_type: "Investor Letter"
+recipient: "Buffett"
+tags: ["circle-1", "investor", "LETTER-WARREN-BUFFETT"]
+---
+
 # A Business Model, Not a Charity
 ## An Open Letter to Warren Buffett
 
@@ -56,5 +64,13 @@ Full economics at Cephas.LianaBanyan.org
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 P.S. — You've said the American economy works best when prosperity is shared. I built a platform where sharing is structural, not optional.

@@ -8,7 +8,7 @@ weight: 1
 
 # The 123 Crown Jewels
 
-> **123 Flagship Innovations. 1,336 Formal Claims. 6 Provisional Applications Filed.**
+> **123 Flagship Innovations. 1,401 Formal Claims. 8 Provisional Applications Filed.**
 >
 > These are the foundational innovations of the Liana Banyan cooperative ecosystem — filed with the United States Patent and Trademark Office between November 2025 and February 2026. Each represents a distinct, novel system that no extractive platform has built.
 
@@ -245,7 +245,7 @@ weight: 1
 | 63/967,200 | Jan 23–24, 2026 | 292 | #77–#120 |
 | 63/969,601 | Jan 28, 2026 | 44 | #121–#123 (+ extensions) |
 | 63/989,913 | Feb 24, 2026 | 408 | LEVIATHAN PLUS |
-| **Total** | | **1,336** | **123 Crown Jewels** |
+| **Total** | | **1,401** | **123 Crown Jewels** |
 
 ---
 
@@ -272,13 +272,14 @@ weight: 1
 
 ## Beyond the Crown Jewels
 
-The 123 Crown Jewels are the foundation. The full Liana Banyan innovation registry contains **1,719 innovations** as of March 2026, with **593 having full patent-quality specification paragraphs**. The remaining innovations span:
+The 123 Crown Jewels are the foundation. The full Liana Banyan innovation registry contains **1,754 innovations** as of March 2026, with **653 having full patent-quality specification paragraphs**. The remaining innovations span:
 
 - **#124–#1000**: Extended platform systems, manufacturing processes, game mechanics
 - **#1001–#1572**: Spec-expanded innovations across all 16 initiatives
 - **#1573–#1594**: INBOX goldmine harvest (filled from Founder's original session transcripts)
 - **#1600–#1662**: Session 11B addendum (BandWagon, Steward, Creator Draft, XP systems)
-- **#1663–#1719**: Six Degrees Crown Jewel + Bishop Session 010 (connection engine, anti-discrimination, quad-crown)
+- **#1663–#1751**: Six Degrees Crown Jewel — 8th provisional (Application 64/009,803)
+- **#1752–#1754**: SMS + recent additions (pending DB migration)
 
 Every innovation is owned by Liana Banyan Corporation. As a $5/year member, you get free, unlimited use of everything we build together.
 

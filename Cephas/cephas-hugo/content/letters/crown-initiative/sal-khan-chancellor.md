@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Sal Khan Chancellor"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Sal Khan Chancellor"
+initiative: "Didasko"
+initiative_number: 14
+tags: ["crown-letter", "initiative", "sal-khan-chancellor"]
+---
+
 # CROWN LETTER: SAL KHAN
 ## Chancellor — Didasko Education Initiative
 ## Liana Banyan Corporation
@@ -49,7 +59,7 @@ The cascade is: Chancellor → Advisory Board → Ambassador. I'm offering the t
 
 **Who I Am:**
 
-I'm a 52-year-old Army veteran — Infantry (11B) and Aviation (15A), helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess rating 2118 on a good day - nowadays I hover in the 2080s when I take a chess break from work - top 0.4% globally.
+I'm a 53-year-old ARNG veteran — Infantry (11B) and Aviation (15A), helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess rating 2118 on a good day - nowadays I hover in the 2080s when I take a chess break from work - top 0.4% globally.
 
 I've been thinking about cooperative economics for 47 years. I've been actively building this for nine. I have 18 handwritten journals documenting the journey, 150+ innovations with 470+ patent claims filed, and a manufacturing backbone ready to prove the system works.
 
@@ -88,6 +98,14 @@ Jonathan Jones
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

@@ -144,8 +144,7 @@ export const PeerContractList = () => {
                 {contract.compensation_type === "cash" && (
                   <span>${contract.cash_amount}</span>
                 )}
-                {/* TODO(SEC-RENAME): compensation_type is DB enum; rename after migration */}
-                {contract.compensation_type === "equity" && (
+                {contract.compensation_type === "participation" && (
                   <span>{contract.participation_percentage}% Participation</span>
                 )}
                 {contract.compensation_type === "hybrid" && (

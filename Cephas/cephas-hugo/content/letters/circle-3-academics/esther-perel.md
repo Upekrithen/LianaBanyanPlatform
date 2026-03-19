@@ -1,3 +1,11 @@
+---
+title: "Letter to Esther"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Esther"
+tags: ["circle-3", "academic", "esther-perel"]
+---
+
 # LETTER: ESTHER PEREL
 ## Psychotherapist & Author
 ## Relationships & Modern Life Expert
@@ -20,7 +28,7 @@ Everything, it turns out.
 
 ## WHO I AM
 
-I'm a 52-year-old Army veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development.
+I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development.
 
 I've been thinking about cooperative economics for four decades. Building this specific platform for nine. The technical architecture was hard. The trust architecture is harder.
 
@@ -118,6 +126,14 @@ With respect for your wisdom,
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

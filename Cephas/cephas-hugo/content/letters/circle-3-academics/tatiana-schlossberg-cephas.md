@@ -1,3 +1,11 @@
+---
+title: "Letter to Schlossberg"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Schlossberg"
+tags: ["circle-3", "academic", "tatiana-schlossberg-cephas"]
+---
+
 # Can I Take a Second?
 ## An Open Letter to Tatiana Schlossberg
 
@@ -43,6 +51,14 @@ P.S. — I'm not trying to be Valjean, I'm trying to be the Bishop. One of many.
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

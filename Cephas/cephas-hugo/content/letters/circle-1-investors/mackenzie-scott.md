@@ -1,3 +1,11 @@
+---
+title: "Letter to Scott"
+date: 2026-01-15
+letter_type: "Investor Letter"
+recipient: "Scott"
+tags: ["circle-1", "investor", "mackenzie-scott"]
+---
+
 # MacKenzie Scott Letter — VERSION 02 (Updated)
 
 Dear Ms. Scott,
@@ -25,3 +33,11 @@ With shared purpose,
 Jonathan Jones
 Founder & General Manager, Liana Banyan
 406-578-1232 | Support@LianaBanyan.org /.net /.biz /.com
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

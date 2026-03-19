@@ -1,3 +1,11 @@
+---
+title: "Letter to Seth"
+date: 2026-01-15
+letter_type: "Investor Letter"
+recipient: "Seth"
+tags: ["circle-1", "investor", "seth-godin"]
+---
+
 # LETTER: SETH GODIN
 ## Author & Marketing Legend
 ## Tribes Builder
@@ -18,7 +26,7 @@ I need help leading it.
 
 ## WHO I AM
 
-I'm a 52-year-old Army veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Not a marketer. Not a writer. A builder who needs to become both.
+I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Not a marketer. Not a writer. A builder who needs to become both.
 
 I've been thinking about cooperative economics for four decades. Building this specific platform for nine. I have 18 handwritten journals, 1,200+ technical diagrams, and 150+ innovations with 928 patent claims filed.
 
@@ -152,6 +160,14 @@ With respect for your work,
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

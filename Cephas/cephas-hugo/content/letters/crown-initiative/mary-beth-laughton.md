@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Laughton"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Laughton"
+initiative: "Let's Go Shopping"
+initiative_number: 3
+tags: ["crown-letter", "initiative", "mary-beth-laughton"]
+---
+
 # 👑 CROWN LETTER: MARY BETH LAUGHTON
 ## Merchant Mentor, Lady Banyan of the Marketplace
 ## First Steward of Let's Go Shopping
@@ -21,7 +31,7 @@ That's exactly what I believe. And that's why I'm writing.
 
 ## WHO I AM
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, a U.S. Army veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, a U.S. ARNG veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
 
 I was a child of missionaries in Tanzania — no television until 13, so I read a lot, and I'm good at chess. I've spent 47 years thinking about cooperative economics and nine years building this platform. I'm not a billionaire. I'm not famous. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD.
 
@@ -158,6 +168,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

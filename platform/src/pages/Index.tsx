@@ -1969,7 +1969,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                                 <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Patent Applications</div>
                               </div>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
-                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>1,751</div>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>1,754</div>
                                 <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Innovations</div>
                               </div>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
@@ -2684,7 +2684,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               </div>
                               <div style={{ background: 'rgba(34, 197, 94, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
                                 <p style={{ color: '#86efac', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>Patent-Backed Bootstrap</p>
-                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>8 provisionals, 1,751 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="https://cephas.lianabanyan.com/articles/one-of-us-building-trust-through-shared-economics/" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>8 provisionals, 1,754 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="https://cephas.lianabanyan.com/articles/one-of-us-building-trust-through-shared-economics/" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
                               </div>
                               <div style={{ background: 'rgba(139, 92, 246, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
                                 <p style={{ color: '#c4b5fd', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>The Math</p>

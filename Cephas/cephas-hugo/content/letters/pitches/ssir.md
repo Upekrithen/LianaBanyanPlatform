@@ -18,7 +18,7 @@ tags: ["media-pitch", "academic", "social-innovation", "platform-cooperativism"]
 
 **The Pitch:**
 
-A 52-year-old Army veteran has spent 15 years building a platform cooperative where the economics literally cannot change. The platform margin is locked at Cost + 20% in the operating agreement—not as policy, but as architecture.
+A 53-year-old ARNG veteran has spent 15 years building a platform cooperative where the economics literally cannot change. The platform margin is locked at Cost + 20% in the operating agreement—not as policy, but as architecture.
 
 This isn't theoretical. The platform exists. The math is published. And the founder is inviting scrutiny.
 
@@ -61,7 +61,7 @@ This isn't theoretical. The platform exists. The math is published. And the foun
 
 **Author Background:**
 
-Jonathan Jones, 52. Army veteran (Infantry, Aviation). Helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years IT development. Has invested $5,000 annually from $30,000 income.
+Jonathan Jones, 52. ARNG veteran (Infantry, Aviation). Helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years IT development. Has invested $5,000 annually from $30,000 income.
 
 Not a typical social enterprise founder. That's part of the story.
 
@@ -72,6 +72,14 @@ Not a typical social enterprise founder. That's part of the story.
 Jonathan Jones
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 **Documentation:** Cephas.LianaBanyan.org

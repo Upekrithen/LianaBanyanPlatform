@@ -198,7 +198,7 @@ export async function getHealthDashboard(): Promise<{
   ]);
 
   return {
-    innovationCount: metrics[0]?.metric_value || 1751,
+    innovationCount: metrics[0]?.metric_value || 1754,
     patentClaims: metrics[1]?.metric_value || 1401,
     activeMembers: metrics[2]?.metric_value || 0,
     creatorEarnings: metrics[3]?.metric_value || 0,
@@ -215,7 +215,7 @@ export async function getHealthDashboard(): Promise<{
  */
 export async function recordCriticalNumbers(): Promise<void> {
   await Promise.all([
-    recordMetric('innovation_count', 1751, 'count', { source: 'manual', date: '2026-03-18' }),
+    recordMetric('innovation_count', 1754, 'count', { source: 'manual', date: '2026-03-18' }),
     recordMetric('patent_claims', 1401, 'count', { applications: 8 }),
     recordMetric('platform_margin', 20, 'percent', { locked: true }),
   ]);

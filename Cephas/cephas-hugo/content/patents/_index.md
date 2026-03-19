@@ -1,13 +1,13 @@
 ---
 title: "Patent Portfolio"
-description: "THE BEHEMOTH — 1,719 innovations, 1,336 claims, 7 provisional applications filed with the USPTO"
+description: "THE BEHEMOTH — 1,754 innovations, 1,401 claims, 8 provisional applications filed with the USPTO"
 ---
 
 # Patent Portfolio
 
 **THE BEHEMOTH**
 
-> 1,719 innovations. 1,336 formal claims. 7 provisional applications filed. 37 years of development.
+> 1,754 innovations. 1,401 formal claims. 8 provisional applications filed. 37 years of development.
 
 ## Filed Applications
 
@@ -19,22 +19,23 @@ description: "THE BEHEMOTH — 1,719 innovations, 1,336 claims, 7 provisional ap
 | 63/967,200 | Jan 23–24, 2026 | 292 | Defense Klaus through MSA | FILED |
 | 63/969,601 | Jan 28, 2026 | 44 | Ghost World + Extensions | FILED |
 | 63/989,913 | Feb 24, 2026 | 408 | LEVIATHAN PLUS | FILED |
-| 64/006,010 | Mar 15, 2026 | TBD | #1001–#1662 (Full Specs) | FILED |
-| TBD (8th) | Mar 17, 2026 | 18 | #1663–#1719 (Six Degrees Crown Jewel) | PREPARED |
-| **Total** | | **1,354+** | **1,719 innovations** | |
+| 64/006,010 | Mar 15, 2026 | 0 | #1001–#1662 (653 Full Specs) | FILED |
+| 64/009,803 | Mar 17, 2026 | 65 | #1663–#1751 (Six Degrees Crown Jewel) | FILED |
+| **Total** | | **1,401** | **1,754 innovations** | |
 
 ## Innovation Coverage
 
 | Range | Count | Status |
 |-------|-------|--------|
-| #1–#123 | 123 | Crown Jewels — filed across 7 provisionals |
+| #1–#123 | 123 | Crown Jewels — filed across 8 provisionals |
 | #124–#1000 | 877 | Extended systems — filed in bulk provisionals |
 | #1001–#1572 | 572 | Spec-expanded (568 descriptions written) |
 | #1573–#1594 | 22 | INBOX goldmine harvest — specs complete |
 | #1595–#1599 | 5 | Gap slots (pending assignment) |
 | #1600–#1662 | 63 | Session 11B addendum — specs complete |
-| #1663–#1719 | 18 | Six Degrees Crown Jewel + Bishop Session 010 |
-| **Total** | **1,719** | |
+| #1663–#1751 | 89 | Six Degrees Crown Jewel (8th provisional) |
+| #1752–#1754 | 3 | SMS + recent additions (pending migration) |
+| **Total** | **1,754** | |
 
 ## Key Resources
 

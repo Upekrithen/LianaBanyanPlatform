@@ -1,3 +1,11 @@
+---
+title: "Letter to Mazzucato"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Mazzucato"
+tags: ["circle-3", "academic", "mariana-mazzucato"]
+---
+
 # LETTER TO MARIANA MAZZUCATO
 ## Author, "The Entrepreneurial State"
 ## Founding Director, UCL Institute for Innovation and Public Purpose
@@ -17,7 +25,7 @@ You've spent your career arguing that the state creates value — that public in
 
 I've spent fifteen years building a platform that captures value differently. Not for the state, but for the workers who create it.
 
-My name is Jonathan Jones. I'm 52, an Army veteran, helicopter pilot, father of eight. I've invested $5,000 annually from a $30,000 income into this work — 47 years thinking about cooperative economics, 15 years actively building.
+My name is Jonathan Jones. I'm 52, an ARNG veteran, helicopter pilot, father of eight. I've invested $5,000 annually from a $30,000 income into this work — 47 years thinking about cooperative economics, 15 years actively building.
 
 **The Value Problem**
 
@@ -89,6 +97,14 @@ Respectfully,
 **Jonathan Jones**
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 ---

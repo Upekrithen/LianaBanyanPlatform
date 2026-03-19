@@ -13,7 +13,7 @@ tags: ["platform-post", "hacker-news", "developer-community", "technical-scrutin
 
 **Post:**
 
-I'm a 52-year-old Army veteran who's spent 15 years building a platform cooperative where the economics literally can't change. The margin is locked at Cost + 20% in the operating agreement. Creators keep 83.3%.
+I'm a 53-year-old ARNG veteran who's spent 15 years building a platform cooperative where the economics literally can't change. The margin is locked at Cost + 20% in the operating agreement. Creators keep 83.3%.
 
 I'm posting here because I want technical scrutiny. If there's a flaw in this architecture, HN will find it.
 
@@ -56,7 +56,15 @@ Everything is published at Cephas.LianaBanyan.org:
 
 **About Me:**
 
-Jonathan Jones. Army veteran (Infantry 11B, Aviation 15A). Helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years IT development. Have invested $5K/year from $30K income.
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
+Jonathan Jones. ARNG veteran (Infantry 11B, Aviation 15A). Helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years IT development. Have invested $5K/year from $30K income.
 
 Not a typical tech founder. I'm a practitioner who's been thinking about cooperative economics for 47 years. I need people smarter than me to verify the architecture works.
 

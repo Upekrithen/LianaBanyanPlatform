@@ -1,3 +1,11 @@
+---
+title: "Letter to Anand"
+date: 2026-01-15
+letter_type: "Investor Letter"
+recipient: "Anand"
+tags: ["circle-1", "investor", "anand-giridharadas"]
+---
+
 # This Isn't Philanthropy
 ## A Letter to Anand Giridharadas
 
@@ -53,3 +61,11 @@ P.S. — You wrote that the question isn't "how can I help?" but "how am I compl
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

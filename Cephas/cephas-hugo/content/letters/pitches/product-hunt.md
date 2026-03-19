@@ -38,7 +38,7 @@ Liana Banyan is a cooperative commerce platform where the economics are locked i
 
 **The story:**
 
-15 years in development. 150+ innovations. 470+ patent claims. Built by a 52-year-old Army veteran who's invested $5K/year from a $30K income because he couldn't find a platform that didn't extract.
+15 years in development. 150+ innovations. 470+ patent claims. Built by a 53-year-old ARNG veteran who's invested $5K/year from a $30K income because he couldn't find a platform that didn't extract.
 
 The math is published. Scrutiny is invited.
 
@@ -53,7 +53,7 @@ I'm Jonathan, and I've spent 15 years building this because I was tired of platf
 The solution was simple: lock the economics in the operating agreement. Cost + 20% can't change because changing it would require dissolving the company.
 
 Some context:
-- I'm 52, Army veteran, helicopter pilot, father of eight
+- I'm 52, ARNG veteran, helicopter pilot, father of eight
 - I've invested $5K/year from a $30K income
 - I started designing this in 2003 while on active duty
 - The economic model originated in 2011
@@ -85,3 +85,12 @@ The full architecture is documented if you want to dig in: Cephas.LianaBanyan.or
 ---
 
 **Tags:** Productivity, Creator Economy, Marketplace, Blockchain, Social Impact
+
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Andrés"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Andrés"
+initiative: "Let's Make Dinner"
+initiative_number: 1
+tags: ["crown-letter", "initiative", "jose-andres"]
+---
+
 # 👑 CROWN LETTER: JOSÉ ANDRÉS
 ## Provisioner Mentor
 ## Lord Banyan of Let's Get Groceries
@@ -19,7 +29,7 @@ I believe that. And I've spent nine years building a platform designed to prove 
 
 ## WHO I AM
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, U.S. Army veteran (ARNG, 11B/15A), 21 years I.T. developer. I was the child of missionaries in Tanzania — no television until 13, so I read a lot, and I'm good at chess. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, U.S. ARNG veteran (, 11B/15A), 21 years I.T. developer. I was the child of missionaries in Tanzania — no television until 13, so I read a lot, and I'm good at chess. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan.
 
 I'm not famous. I'm not a James Beard Award winner. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD. The systems we have aren't protecting or helping people well enough, and arguably are part of the problem. So I've designed different ones.
 
@@ -164,6 +174,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

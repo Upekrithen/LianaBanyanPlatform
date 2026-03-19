@@ -464,7 +464,7 @@ export default function PatentPortfolio() {
             Patent Portfolio
           </h1>
           <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            1,370 documented innovations across economics, governance, privacy, 
+            1,754 documented innovations across economics, governance, privacy,
             IP management, and cooperative business systems.
           </p>
         </motion.div>
@@ -478,7 +478,7 @@ export default function PatentPortfolio() {
         >
           <DataVizBar
             title="Portfolio Allocation"
-            subtitle="How the $9M equivalent is distributed"
+            subtitle="How the $116M equivalent is distributed"
             data={[
               { label: 'Platform (60%)', value: 60, color: '#22c55e', icon: '🏛️' },
               { label: 'Founder (20%)', value: 20, color: '#8b5cf6', icon: '👤' },
@@ -855,7 +855,7 @@ export default function PatentPortfolio() {
                 </div>
                 <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
                   <p className="text-xs text-amber-200">
-                    We publicly claim only the <strong>$9M conservative floor</strong> to maintain 
+                    We publicly claim only <strong>$630K — Cost + 20%</strong> to maintain
                     credibility and avoid overpromising.
                   </p>
                 </div>
@@ -872,9 +872,9 @@ export default function PatentPortfolio() {
           className="mb-12"
         >
           <ExpandableBlock
-            title="📊 Why We Claim Only $9M"
-            subtitle="Understanding the conservative floor vs. full potential"
-            preview="The portfolio could be worth $145M-$2B at Year 10, but we publicly claim only the conservative floor..."
+            title="📊 Why We Claim Only $630K"
+            subtitle="Understanding Cost + 20% vs. the $116M pessimist's floor"
+            preview="The portfolio valuation is $116M at the pessimist's floor, but we publicly claim only $630K — Cost + 20%..."
             accentColor="#f59e0b"
             defaultExpanded={false}
           >

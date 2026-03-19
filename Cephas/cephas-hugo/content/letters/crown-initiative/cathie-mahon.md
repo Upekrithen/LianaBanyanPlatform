@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Mahon"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Mahon"
+initiative: "VSL"
+initiative_number: 10
+tags: ["crown-letter", "initiative", "cathie-mahon"]
+---
+
 # 👑 CROWN LETTER: CATHIE MAHON
 ## Treasury Mentor, Lady Banyan of the Vault
 ## First Keeper of the Member Service Account (MSA)
@@ -19,7 +29,7 @@ Liana Banyan is building the same thing, but bigger. And I need someone who unde
 
 ## WHO I AM
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, a U.S. Army veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, a U.S. ARNG veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
 
 I was a child of missionaries in Tanzania — no television until 13, so I read a lot, and I'm good at chess. I've spent 47 years thinking about cooperative economics and nine years building this platform. I'm not a billionaire. I'm not famous. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD.
 
@@ -174,6 +184,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

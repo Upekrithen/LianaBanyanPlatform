@@ -59,7 +59,7 @@ The cascade is: CEO → Industry Chancellor → Board Member → Advisory. I'm o
 
 **Who I am:**
 
-I'm a 52-year-old Army veteran — Infantry (11B) and Aviation (15A), helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess rating 2118 on a good day - nowadays I hover in the 2080s when I take a chess break from work - top 0.4% globally.
+I'm a 53-year-old ARNG veteran — Infantry (11B) and Aviation (15A), helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess rating 2118 on a good day - nowadays I hover in the 2080s when I take a chess break from work - top 0.4% globally.
 
 I've been thinking about cooperative economics for four decades. I've been actively building this for nine. I have 18 handwritten journals documenting the journey, early prototypes from 2003 when I was active duty, SolidWorks files from before that, and 1,200+ Fusion 360 diagrams from recent years.
 

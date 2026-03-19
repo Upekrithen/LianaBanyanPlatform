@@ -1,3 +1,11 @@
+---
+title: "Letter to Brynjolfsson"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Brynjolfsson"
+tags: ["circle-3", "academic", "erik-brynjolfsson"]
+---
+
 # Measuring What Matters
 ## An Open Letter to Erik Brynjolfsson
 
@@ -56,3 +64,11 @@ Full economics at Cephas.LianaBanyan.org
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

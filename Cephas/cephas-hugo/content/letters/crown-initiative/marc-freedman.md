@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Freedman"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Freedman"
+initiative: "The Family Table"
+initiative_number: 5
+tags: ["crown-letter", "initiative", "marc-freedman"]
+---
+
 # Crown Letter: Dr. Marc Freedman
 ## The Family Table — Bridge Builder
 ## January 24, 2026
@@ -65,6 +75,14 @@ That's you.
 **Jonathan Jones**
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com | 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 **Full documentation:** the2ndsecond.com
 

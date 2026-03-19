@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Poo"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Poo"
+initiative: "Harper Guild"
+initiative_number: 12
+tags: ["crown-letter", "initiative", "ai-jen-poo"]
+---
+
 # Crown Letter: Ai-jen Poo
 ## The Family Table — Household Steward
 ## January 24, 2026
@@ -63,6 +73,14 @@ That's you.
 **Jonathan Jones**
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com | 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 **Full documentation:** the2ndsecond.com
 

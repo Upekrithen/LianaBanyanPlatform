@@ -18,7 +18,7 @@ In sixth grade, I designed floating modular cities for a school project. The loc
 
 I was a child of missionaries in Tanzania — we left on the last flight before Idi Amin's invasion. Back in the States, my parents fostered children in our home when I was 8yrs old; for 5 years. We had no television until I was 13 in Montana, so I read a lot, tinkered with everything I could get my hands on, and got good at chess.
 
-I'm 52 now. Father of eight. Army veteran. 21 years in I.T. And for the last nine years, I've been building a cooperative commerce platform called **Liana Banyan** — with fourteen charitable initiatives, 150+ innovations across 6 patent bags, and a manufacturing backbone called **HexIsle** that's about to launch on Kickstarter.
+I'm 52 now. Father of eight. ARNG veteran. 21 years in I.T. And for the last nine years, I've been building a cooperative commerce platform called **Liana Banyan** — with fourteen charitable initiatives, 150+ innovations across 6 patent bags, and a manufacturing backbone called **HexIsle** that's about to launch on Kickstarter.
 
 One of those fourteen initiatives is called **Let's Make Bread**. It's a business incubator. And I need someone who understands what it means to empower makers to lead it.
 
@@ -186,6 +186,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

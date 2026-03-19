@@ -262,7 +262,7 @@ function outreachEmail(
 
       <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; font-size: 12px; color: #999;">
         <p>Liana Banyan Corporation &mdash; A worker-owned cooperative</p>
-        <p>1,662 innovations. 7 USPTO provisional applications. One cooperative.</p>
+        <p>1,754 innovations. 8 USPTO provisional applications. One cooperative.</p>
         <p><a href="https://lianabanyan.com" style="color: #e94560;">lianabanyan.com</a></p>
       </div>
     </div>

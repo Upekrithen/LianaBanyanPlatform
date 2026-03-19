@@ -1,3 +1,11 @@
+---
+title: "Letter to Sundararajan"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Sundararajan"
+tags: ["circle-3", "academic", "arun-sundararajan"]
+---
+
 # LETTER: ARUN SUNDARARAJAN
 ## Professor, NYU Stern School of Business
 ## Author, "The Sharing Economy"
@@ -21,7 +29,7 @@ I believe I've built what comes next.
 
 ## WHO I AM
 
-I'm a 52-year-old Army veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess player (2118 rating, top 0.4% globally).
+I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess player (2118 rating, top 0.4% globally).
 
 I've been thinking about cooperative economics for 47 years. Building this specific platform for nine. I have 18 handwritten journals documenting every iteration, 1,200+ technical diagrams, and 150+ innovations with 470+ patent claims filed.
 
@@ -140,6 +148,14 @@ With respect for your expertise,
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

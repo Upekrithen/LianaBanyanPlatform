@@ -1,3 +1,11 @@
+---
+title: "Letter to Schor"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Schor"
+tags: ["circle-3", "academic", "juliet-schor"]
+---
+
 # LETTER: JULIET SCHOR
 ## Professor, Boston College
 ## Author, "After the Gig"
@@ -21,7 +29,7 @@ I'm not writing to ask for your endorsement. I'm writing because your work predi
 
 ## WHO I AM
 
-I'm a 52-year-old Army veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Not an academic. Not a tech founder in the traditional sense.
+I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Not an academic. Not a tech founder in the traditional sense.
 
 I've been thinking about cooperative economics for 47 years. Building this for nine. I have 18 handwritten journals documenting every iteration, 1,200+ technical diagrams, and 150+ innovations with 470+ patent claims filed.
 
@@ -119,6 +127,14 @@ With respect for your scholarship,
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

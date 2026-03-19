@@ -132,3 +132,12 @@ See also:
 *"No one should have to choose between trying to save their life and the livelihood of the survivors."*
 
 **For the Keep.**
+
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

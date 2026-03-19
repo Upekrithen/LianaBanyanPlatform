@@ -261,7 +261,7 @@ const DemandSignaling: React.FC = () => {
               <p>
                 50% of your allocation carries forward each day (more with Beacon streaks).
                 Come back 3 days in a row and your persistent allocation crystallizes into
-                real Marks — backed by the patent portfolio ({'>'}1,751 innovations).
+                real Marks — backed by the patent portfolio ({'>'}1,754 innovations).
               </p>
             </div>
             <div>

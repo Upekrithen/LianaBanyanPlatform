@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { FileText, Download, Send, Lock, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const INNOVATION_COUNT = "1,751";
+const INNOVATION_COUNT = "1,754";
 const PATENT_CLAIMS = "1,401";
 const PROVISIONAL_APPS = "8";
 
@@ -35,7 +35,7 @@ export default function CephasPressJunketPage() {
         <CardContent className="space-y-4">
           <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
             <li>Liana Banyan logo (PNG/SVG)</li>
-            <li>Founder bio: 52-year-old Army veteran (11B + 15A), FAA Commercial Rotary Wing IFR, father of eight, 21 years IT, 37 years developing this system (1989–2026)</li>
+            <li>Founder bio: 53-year-old ARNG veteran (11B + 15A), FAA Commercial Rotary Wing IFR, father of eight, 21 years IT, 37 years developing this system (1989–2026)</li>
             <li>Key facts: {INNOVATION_COUNT} innovations, {PATENT_CLAIMS} patent claims across {PROVISIONAL_APPS} provisional applications, 83.3% to creators (Cost + 20%), $5/year membership, 16 initiatives</li>
           </ul>
           <Button variant="outline" size="sm" asChild>

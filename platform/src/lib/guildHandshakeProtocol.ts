@@ -85,7 +85,7 @@ export const HANDSHAKE_DOCUMENT: HandshakeDocument = {
       bullets: [
         "Full transparency into the platform's current state, challenges, and trajectory",
         "Access to the patent portfolio (1,401 claims across 8 provisional applications)",
-        "Access to the innovation log (1,751 canonical innovations)",
+        "Access to the innovation log (1,754 canonical innovations)",
         "Marks compensation starting from conversation 1 — your time has value from day one",
         "Guild standing regardless of outcome — you belong here even if the timing is not right",
         "Honest answers to hard questions, including 'I do not know yet'",

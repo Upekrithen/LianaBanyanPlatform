@@ -36,7 +36,7 @@ export interface GuildCueCard {
 export const GUILD_RECRUITING_CUE_CARDS: GuildCueCard[] = [
   {
     id: 'guild-forge-partner',
-    guildId: 'forge',
+    guildId: 'the-forge',
     title: 'The Forge — Seeking Lead CAD Architect',
     subtitle: 'Shape the geometry. Build the future.',
     front: `🔧 THE FORGE
@@ -340,7 +340,7 @@ Help Each Other Help Ourselves.`,
 
 export const HANDSHAKE_CUE_CARD: GuildCueCard = {
   id: 'the-handshake',
-  guildId: 'forge', // generic, not guild-specific
+  guildId: 'the-forge', // generic, not guild-specific
   title: 'The Handshake',
   subtitle: '30 days. Mutual exploration. No games.',
   front: `🤝 THE HANDSHAKE
@@ -432,13 +432,13 @@ ${guild.focus}`,
 }
 
 export const GUILD_DECK_CARDS: DeckCardData[] = [
-  buildGuildDeckCard('forge', 'NOID-001', '🔧', 'amber'),
-  buildGuildDeckCard('scale', 'NOID-002', '⚖️', 'indigo'),
-  buildGuildDeckCard('engine_room', 'NOID-003', '🏭', 'red'),
-  buildGuildDeckCard('war_table', 'NOID-004', '🎲', 'purple'),
-  buildGuildDeckCard('ledger', 'NOID-005', '📊', 'emerald'),
-  buildGuildDeckCard('crows_nest', 'NOID-006', '🔭', 'sky'),
-  buildGuildDeckCard('quarterdeck', 'NOID-007', '🚢', 'red'),
+  buildGuildDeckCard('the-forge', 'NOID-001', '🔧', 'amber'),
+  buildGuildDeckCard('the-scale', 'NOID-002', '⚖️', 'indigo'),
+  buildGuildDeckCard('the-engine-room', 'NOID-003', '🏭', 'red'),
+  buildGuildDeckCard('the-war-table', 'NOID-004', '🎲', 'purple'),
+  buildGuildDeckCard('the-ledger', 'NOID-005', '📊', 'emerald'),
+  buildGuildDeckCard('the-crows-nest', 'NOID-006', '🔭', 'sky'),
+  buildGuildDeckCard('the-quarterdeck', 'NOID-007', '🚢', 'red'),
 ];
 
 // The Handshake as a Deck Card

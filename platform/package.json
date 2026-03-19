@@ -9,7 +9,9 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "smoke": "node scripts/smoke-test.mjs"
+    "smoke": "node scripts/smoke-test.mjs",
+    "sync:letters": "node scripts/sync_letters_to_cephas.cjs --apply",
+    "mint:cue-cards": "node scripts/mint_letter_cue_cards.cjs --generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

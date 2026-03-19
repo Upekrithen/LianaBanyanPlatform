@@ -16,7 +16,7 @@ tags: ["media-pitch", "wsj", "patents", "feature-story", "anti-startup"]
 
 ## THE STORY
 
-At 11:52 PM on January 23, 2026, a 52-year-old Army veteran hit "submit" on his 15th patent application of the night. Combined with earlier filings, the total: 611 claims across inventions ranging from water-powered children's games to a three-currency economic system the IMF has been trying to solve since Bretton Woods.
+At 11:52 PM on January 23, 2026, a 53-year-old ARNG veteran hit "submit" on his 15th patent application of the night. Combined with earlier filings, the total: 611 claims across inventions ranging from water-powered children's games to a three-currency economic system the IMF has been trying to solve since Bretton Woods.
 
 No VC funding. No Stanford MBA. No Y Combinator batch.
 
@@ -107,4 +107,12 @@ $1.4 trillion pledged. ~4% delivered. What if the problem isn't willpower but in
 Founder & General Manager, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 LianaBanyan.com | Cephas.LianaBanyan.com

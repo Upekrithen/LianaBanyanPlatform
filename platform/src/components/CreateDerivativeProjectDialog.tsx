@@ -61,7 +61,7 @@ export const CreateDerivativeProjectDialog = ({
           owner_id: user.id,
           ip_compliance_rules: {
             enforce_tier_model: true,
-            parent_equity_share: 10, // TODO(SEC-RENAME): DB column; rename after migration
+            parent_participation_share: 10,
             contract_template_source: 'parent',
             dispute_resolution: 'parent_arbiter',
             revenue_share_percentage: data.royalty_percentage,

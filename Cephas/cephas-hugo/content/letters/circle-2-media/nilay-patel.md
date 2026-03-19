@@ -1,3 +1,11 @@
+---
+title: "Letter to Patel"
+date: 2026-01-15
+letter_type: "Media Letter"
+recipient: "Patel"
+tags: ["circle-2", "media", "nilay-patel"]
+---
+
 # LETTER TO NILAY PATEL
 ## Editor-in-Chief, The Verge
 
@@ -17,7 +25,7 @@ Most of them dance around it. They talk about "ecosystem value" and "network eff
 
 Here's my direct answer: **Cost + 20%**.
 
-My name is Jonathan Jones. I'm 52, an Army veteran, helicopter pilot, father of eight. I've been building Liana Banyan for fifteen years — 47 years thinking about cooperative economics, 9 years actively building this specific platform.
+My name is Jonathan Jones. I'm 52, an ARNG veteran, helicopter pilot, father of eight. I've been building Liana Banyan for fifteen years — 47 years thinking about cooperative economics, 9 years actively building this specific platform.
 
 **The Business Model**
 
@@ -90,6 +98,14 @@ Respectfully,
 **Jonathan Jones**
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 ---

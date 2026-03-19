@@ -127,7 +127,7 @@ const NotLeftNotRightPage = () => {
             <p>In practice, "power to the people" here is very literal. Economic power lives in an 83.3% payout and a non‑speculative credit system, not in a stock chart or token price. Governance power lives in The 300 — Captains, Commodores, Admirals, and Crowns sorted by what you contribute and how you show up, not by party registration. Service power lives in these sixteen concrete initiatives, funded by everyday commerce instead of election cycles or fundraising campaigns, so that food, medicine, legal defense, and community finance sit in community hands regardless of who is in office.</p>
 
             <h3 className="text-2xl font-bold text-white mt-12 mb-6">Who I Am</h3>
-            <p>I'm a 52‑year‑old Army veteran (Infantry 11B and Aviation 15A). Helicopter pilot. Father of eight. I spent 21 years in IT development.</p>
+            <p>I'm a 52‑year‑old ARNG veteran (Infantry 11B and Aviation 15A). Helicopter pilot. Father of eight. I spent 21 years in IT development.</p>
             <p>I voted for candidates from both parties. I've been frustrated with both parties. I've watched both parties promise things and deliver gridlock.</p>
             <p>I stopped waiting for politics to fix things.</p>
             <p>I built something instead.</p>

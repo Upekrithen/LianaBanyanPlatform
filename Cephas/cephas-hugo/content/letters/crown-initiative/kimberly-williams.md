@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Williams"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Williams"
+initiative: "Rally Group"
+initiative_number: 9
+tags: ["crown-letter", "initiative", "kimberly-williams"]
+---
+
 # 👑 CROWN LETTER: KIMBERLY A. WILLIAMS
 ## Responder General, Lady Banyan of the Lifeline
 ## First Responder of the Rally Group
@@ -29,7 +39,15 @@ We're building the community that wraps around them before, during, and after.
 
 ## WHO I AM
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, a U.S. Army veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, a U.S. ARNG veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
 
 I was a child of missionaries in Tanzania — we left on the last flight before Idi Amin's invasion. Back in the States, my parents fostered children in our home when I was 8yrs old; for 5 years. I know the stories that they would never tell an adult. And the systems that didn't just not help, but harmed.
 

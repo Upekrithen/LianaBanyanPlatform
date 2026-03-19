@@ -1,3 +1,11 @@
+---
+title: "Letter to Newmark"
+date: 2026-01-15
+letter_type: "Investor Letter"
+recipient: "Newmark"
+tags: ["circle-1", "investor", "craig-newmark"]
+---
+
 # Craigslist for Everything Else
 ## A Letter to Craig Newmark
 
@@ -41,10 +49,18 @@ With respect for what you've built and rebuilt,
 
 **Jonathan Jones**
 Founding Manager, Liana Banyan Corporation
-U.S. Army veteran
+U.S. ARNG veteran
 January 2026
 
 P.S. — You kept Craigslist simple when everyone said to monetize it. That restraint created more value than the monetization ever would have. I think about that a lot.
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

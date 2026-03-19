@@ -136,6 +136,14 @@ Founder@LianaBanyan.com
 
 I appreciate your time and look forward to working with you.
 
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Respectfully,
 
 **Jonathan Jones**

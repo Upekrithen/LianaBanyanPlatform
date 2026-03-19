@@ -1,3 +1,11 @@
+---
+title: "Letter to Scholz"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Scholz"
+tags: ["circle-3", "academic", "trebor-scholz"]
+---
+
 # Someone Actually Built It
 ## An Open Letter to Trebor Scholz
 
@@ -64,3 +72,11 @@ Platform Cooperativism Consortium member (pending)
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

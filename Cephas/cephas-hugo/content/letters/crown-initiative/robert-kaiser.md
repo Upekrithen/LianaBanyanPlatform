@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Kaiser"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Kaiser"
+initiative: "Defense Klaus"
+initiative_number: 8
+tags: ["crown-letter", "initiative", "robert-kaiser"]
+---
+
 # 🛡️ SHIELD LETTER: ROBERT KAISER
 ## First Shield Knight, Lord Banyan of the Watch
 ## Guardian of the United Kingdom
@@ -12,7 +22,7 @@ I found your work because I was looking for someone who could see violence comin
 
 That sounds dramatic. Let me explain.
 
-My name is Jonathan Jones. I'm an American — a 52-year-old father of eight, U.S. 11B and 15A veteran, 21 years I.T. developer. I was a child of missionaries in Tanzania — we left on the last flight before Idi Amin's invasion. Back in the States, my parents fostered children in our home when I was 8yrs old; for 5 years. We had no television until I was 13 in Montana, so I read a lot, and I'm good at chess. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan, and one of its fourteen initiatives is a protection system called Defense Klaus.
+My name is Jonathan Jones. I'm an American — a 53-year-old father of eight, U.S. 11B and 15A veteran, 21 years I.T. developer. I was a child of missionaries in Tanzania — we left on the last flight before Idi Amin's invasion. Back in the States, my parents fostered children in our home when I was 8yrs old; for 5 years. We had no television until I was 13 in Montana, so I read a lot, and I'm good at chess. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan, and one of its fourteen initiatives is a protection system called Defense Klaus.
 
 The problem is, I'm not a protection expert. I'm an infrastructure builder. I can design economic systems and network architectures and organizational hierarchies. But when it comes to actually understanding how to keep people safe from intimate partner violence?
 
@@ -161,6 +171,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

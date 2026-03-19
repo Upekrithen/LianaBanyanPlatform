@@ -2,10 +2,11 @@
  * PRE-ORDER FLOW — Multi-step pledge commitment
  * ===============================================
  * Browse items → Select quantities → Review cost breakdown → Commit pledge
- * Uses mock data until Supabase migrations land.
+ * Fetches items + pricing from founding_run_items at the current production level.
+ * Falls back to hardcoded sample data if Supabase is unavailable.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,10 +26,20 @@ import {
   Heart,
   Truck,
   Users,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
-const ITEMS = [
+interface PreOrderItem {
+  id: string;
+  name: string;
+  description: string;
+  unitCost: number;
+  costBreakdown: { materials: number; production: number; shipping: number; platform: number };
+}
+
+const SAMPLE_ITEMS: PreOrderItem[] = [
   {
     id: "starter-set",
     name: "Starter Set — 6 Miniatures",
@@ -59,6 +70,8 @@ const ITEMS = [
   },
 ];
 
+const LEVEL_NAMES = ['', 'SLA Prototyping', 'FDM Short Run', 'SLS Printing', 'Desktop Injection', 'Factory Tooling', 'Mass Production'];
+
 const STEPS = [
   { step: 1, title: "Select Items" },
   { step: 2, title: "Review Cost" },
@@ -72,6 +85,77 @@ export default function PreOrderFlow() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreePioneer, setAgreePioneer] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [ITEMS, setItems] = useState<PreOrderItem[]>(SAMPLE_ITEMS);
+  const [productionLevel, setProductionLevel] = useState(1);
+  const [runId, setRunId] = useState<string>("00000000-0000-0000-0000-000000000001");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRunItems();
+  }, []);
+
+  const fetchRunItems = async () => {
+    try {
+      const { data: run } = await supabase
+        .from("founding_runs")
+        .select("id, current_production_level")
+        .eq("status", "funding")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!run) { setLoading(false); return; }
+
+      setRunId(run.id);
+      const level = run.current_production_level ?? 1;
+      setProductionLevel(level);
+
+      const { data: items } = await supabase
+        .from("founding_run_items")
+        .select("id, item_key, name, description, unit_cost, cost_materials, cost_production, cost_shipping, cost_platform, sort_order")
+        .eq("run_id", run.id)
+        .order("sort_order", { ascending: true });
+
+      if (!items || items.length === 0) { setLoading(false); return; }
+
+      // Try to get tier-specific pricing for the current production level
+      const itemIds = items.map(i => i.id);
+      const { data: tiers } = await supabase
+        .from("founding_run_item_tiers")
+        .select("item_id, unit_cost, cost_materials, cost_production, cost_shipping, cost_platform")
+        .in("item_id", itemIds)
+        .eq("production_level", level);
+
+      const tierMap = new Map(tiers?.map(t => [t.item_id, t]) ?? []);
+
+      const mapped: PreOrderItem[] = items.map(item => {
+        const tier = tierMap.get(item.id);
+        const cost = tier?.unit_cost ?? item.unit_cost;
+        const mat = tier?.cost_materials ?? item.cost_materials ?? cost * 0.45;
+        const prod = tier?.cost_production ?? item.cost_production ?? cost * 0.20;
+        const ship = tier?.cost_shipping ?? item.cost_shipping ?? cost * 0.15;
+        const plat = tier?.cost_platform ?? item.cost_platform ?? cost * 0.20;
+        return {
+          id: item.item_key || item.id,
+          name: item.name,
+          description: item.description || "",
+          unitCost: Number(cost),
+          costBreakdown: {
+            materials: Number(mat),
+            production: Number(prod),
+            shipping: Number(ship),
+            platform: Number(plat),
+          },
+        };
+      });
+
+      setItems(mapped);
+    } catch (err) {
+      console.warn("PreOrderFlow: using sample data", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const setQty = (id: string, delta: number) => {
     setQuantities((prev) => {
@@ -119,17 +203,26 @@ export default function PreOrderFlow() {
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      await new Promise((r) => setTimeout(r, 1000));
-      toast.success(
-        "Pledge committed! Welcome to the Founding Run, Pioneer.",
-      );
-      setTimeout(
-        () => navigate("/hexisle/founding-run"),
-        1500,
-      );
-    } catch {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
+      const orderItems = selectedItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        quantity: quantities[item.id] ?? 0,
+        unitCost: item.unitCost,
+      }));
+
+      const { data, error } = await supabase.functions.invoke("create-preorder-checkout", {
+        body: { items: orderItems, run_id: runId },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       setSubmitting(false);
     }
   };
@@ -152,9 +245,21 @@ export default function PreOrderFlow() {
             Select your items, review where every dollar goes, commit your
             pledge.
           </p>
+          {productionLevel > 0 && (
+            <Badge variant="outline" className="text-xs">
+              Production Level {productionLevel}: {LEVEL_NAMES[productionLevel] || 'Unknown'} — Prices reflect current manufacturing tier
+            </Badge>
+          )}
         </div>
 
+        {loading && (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+          </div>
+        )}
+
         {/* Progress */}
+        {!loading && (<>
         <div className="space-y-3">
           <div className="flex justify-between">
             {STEPS.map((s) => (
@@ -424,6 +529,7 @@ export default function PreOrderFlow() {
             </Button>
           )}
         </div>
+        </>)}
       </div>
     </div>
   );

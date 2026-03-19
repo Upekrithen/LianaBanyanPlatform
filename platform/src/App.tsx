@@ -45,6 +45,7 @@ import TaskList from "./pages/TaskList";
 import MembershipSuccess from "./pages/MembershipSuccess";
 import GuildStakeSuccess from "./pages/GuildStakeSuccess";
 import CreditPurchaseSuccess from "./pages/CreditPurchaseSuccess";
+import PreOrderSuccess from "./pages/PreOrderSuccess";
 import MembershipConfirm from "./pages/MembershipConfirm";
 import RoleManagement from "./pages/RoleManagement";
 import CompanyIndependenceManager from "./pages/CompanyIndependenceManager";
@@ -884,6 +885,7 @@ const App = () => (
               <Route path="/positions/browse" element={<ProtectedRoute><AllPositionsBrowse /></ProtectedRoute>} />
                         <Route path="/guild-stake-success" element={<ProtectedRoute><GuildStakeSuccess /></ProtectedRoute>} />
                         <Route path="/credit-purchase-success" element={<ProtectedRoute><CreditPurchaseSuccess /></ProtectedRoute>} />
+                        <Route path="/preorder-success" element={<ProtectedRoute><PreOrderSuccess /></ProtectedRoute>} />
                         <Route path="/business-plan-generator" element={<ProtectedRoute><BusinessPlanGenerator /></ProtectedRoute>} />
                         <Route path="/business-plan" element={<ProtectedRoute><BusinessPlan /></ProtectedRoute>} />
                         <Route path="/docs/business-plan" element={<ProtectedRoute><BusinessPlan /></ProtectedRoute>} />

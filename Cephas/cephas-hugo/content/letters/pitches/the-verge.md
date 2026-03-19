@@ -14,7 +14,7 @@ tags: ["media-pitch", "technology", "creator-economy", "enshittification"]
 
 **The Hook:**
 
-What if a platform couldn't enshittify because the economics were locked in the operating agreement? A 52-year-old Army veteran spent 15 years building exactly that.
+What if a platform couldn't enshittify because the economics were locked in the operating agreement? A 53-year-old ARNG veteran spent 15 years building exactly that.
 
 **The Platform:**
 
@@ -60,6 +60,14 @@ This isn't "another platform promising to be different." It's an attempt to make
 Jonathan Jones
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 **Documentation:** Cephas.LianaBanyan.org

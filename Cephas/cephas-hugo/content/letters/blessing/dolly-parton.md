@@ -27,7 +27,7 @@ I've been pouring cups of ambition for nine years now, building something I hope
 
 ## WHAT I'VE BUILT
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, Army veteran, and the founder of Liana Banyan — a cooperative platform where workers keep 80% of what they earn.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, ARNG veteran, and the founder of Liana Banyan — a cooperative platform where workers keep 80% of what they earn.
 
 I built a platform where that doesn't happen. **Cost + 20%.** Workers keep 80%. No middlemen extracting value. No algorithms pushing wages down. No "gig economy" that's really just exploitation with an app.
 
@@ -92,6 +92,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Huambachano"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Huambachano"
+initiative: "International"
+initiative_number: 15
+tags: ["crown-letter", "initiative", "mariaelena-huambachano"]
+---
+
 # CROWN LETTER: DR. MARIAELENA HUAMBACHANO
 ## Builder Crown - Power to the People Initiative
 ## Liana Banyan Corporation
@@ -45,6 +55,14 @@ With gratitude,
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

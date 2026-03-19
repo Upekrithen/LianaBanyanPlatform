@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Maneet Chauhan"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Maneet Chauhan"
+initiative: "Let's Make Dinner"
+initiative_number: 1
+tags: ["crown-letter", "initiative", "maneet-chauhan"]
+---
+
 # 👑 CROWN LETTER: MANEET CHAUHAN
 ## Grand Chef Mentor, Lady Banyan of the Table
 ## Spice Queen • Empress of Cuisine
@@ -229,3 +239,12 @@ Finding this key grants early access to The Hearth Guild and The Larder.
 **Enclosures:**
 - The Considered Approach (Academic Paper)
 - Let's Make Dinner Business Plan
+
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

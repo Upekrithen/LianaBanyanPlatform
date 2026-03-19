@@ -1,3 +1,11 @@
+---
+title: "Letter to Zuboff"
+date: 2026-01-15
+letter_type: "Academic Letter"
+recipient: "Zuboff"
+tags: ["circle-3", "academic", "shoshana-zuboff"]
+---
+
 # LETTER TO SHOSHANA ZUBOFF
 ## Author, "The Age of Surveillance Capitalism"
 ## Professor Emerita, Harvard Business School
@@ -18,7 +26,7 @@ In *The Age of Surveillance Capitalism*, you documented how digital platforms ex
 
 I've spent fifteen years building a platform with a different architecture.
 
-My name is Jonathan Jones. I'm 52, an Army veteran, helicopter pilot, father of eight. I've invested $5,000 annually from a $30,000 income into this work — 47 years thinking about cooperative economics, 15 years actively building.
+My name is Jonathan Jones. I'm 52, an ARNG veteran, helicopter pilot, father of eight. I've invested $5,000 annually from a $30,000 income into this work — 47 years thinking about cooperative economics, 15 years actively building.
 
 **The Surveillance Capitalism Alternative**
 
@@ -84,6 +92,14 @@ Respectfully,
 **Jonathan Jones**
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 ---

@@ -115,7 +115,7 @@ function DSSGetHiredApp() {
             <div className="space-y-4 text-gray-300">
               <p>
                 <span className="text-amber-500 font-semibold">We paid $525,000</span> over 9 years 
-                to build 8 utility patents worth between $9M and $80M today.
+                to build 8 utility patents worth $630K declared (Cost + 20%) with a $116M pessimist's floor.
               </p>
               
               <p>

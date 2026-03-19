@@ -327,7 +327,7 @@ export default function ManagePositions() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {/* TODO(SEC-RENAME): value sent to DB */}<SelectItem value="equity">Participation</SelectItem>
+                        <SelectItem value="participation">Participation</SelectItem>
                         <SelectItem value="cash">Cash</SelectItem>
                         <SelectItem value="mixed">Mixed</SelectItem>
                       </SelectContent>

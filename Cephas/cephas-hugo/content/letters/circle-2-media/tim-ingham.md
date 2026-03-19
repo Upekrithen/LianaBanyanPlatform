@@ -1,3 +1,11 @@
+---
+title: "Letter to Ingham"
+date: 2026-01-15
+letter_type: "Media Letter"
+recipient: "Ingham"
+tags: ["circle-2", "media", "tim-ingham"]
+---
+
 # The Math You've Been Writing About
 ## An Open Letter to Tim Ingham
 
@@ -61,3 +69,11 @@ P.S. — You once wrote that the streaming royalty debate "misses the point." I 
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

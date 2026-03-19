@@ -14,7 +14,7 @@ tags: ["media-pitch", "technology", "startup", "platform-cooperativism", "enshit
 
 **The Hook:**
 
-A 52-year-old Army veteran has spent 15 years building a platform cooperative with economics that can't be changed—and the math is published for anyone to verify.
+A 53-year-old ARNG veteran has spent 15 years building a platform cooperative with economics that can't be changed—and the math is published for anyone to verify.
 
 **The Platform:**
 
@@ -50,7 +50,7 @@ Liana Banyan is a cooperative commerce platform where:
 
 **The Founder:**
 
-Jonathan Jones, 52. Army veteran (Infantry 11B, Aviation 15A). Helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Has invested $5,000 annually from a $30,000 income.
+Jonathan Jones, 52. ARNG veteran (Infantry 11B, Aviation 15A). Helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Has invested $5,000 annually from a $30,000 income.
 
 Not a typical tech founder. That's the point.
 
@@ -75,6 +75,14 @@ The question isn't whether the vision is compelling. It's whether the economics 
 Jonathan Jones
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 **Documentation:** Cephas.LianaBanyan.org

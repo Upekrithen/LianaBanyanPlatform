@@ -565,7 +565,7 @@ export default function OnboardingStart() {
             It's in the operating agreement.
           </p>
           <p>
-            16 initiatives • 1,370 innovations • Built in public • Designed to be copied
+            16 initiatives • 1,754 innovations • Built in public • Designed to be copied
           </p>
         </div>
       </div>

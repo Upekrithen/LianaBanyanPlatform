@@ -259,7 +259,7 @@ export default function ATTILanding() {
                 <div className="text-xs text-white/50">Annual Membership</div>
               </div>
               <div className="p-4 bg-white/5 rounded-xl text-center">
-                <div className="text-2xl font-bold text-amber-400">1,751</div>
+                <div className="text-2xl font-bold text-amber-400">1,754</div>
                 <div className="text-xs text-white/50">Innovations</div>
               </div>
             </div>

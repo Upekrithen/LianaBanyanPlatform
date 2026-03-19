@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Krawcheck"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Krawcheck"
+initiative: "VSL"
+initiative_number: 10
+tags: ["crown-letter", "initiative", "sallie-krawcheck"]
+---
+
 # 👑 CROWN LETTER: SALLIE KRAWCHECK
 ## Treasury Mentor, Lady Banyan of the Vault
 ## First Keeper of the Member Service Account (MSA)
@@ -21,7 +31,7 @@ I'm offering you the Crown.
 
 ## WHO I AM
 
-I'm a 52-year-old Army veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development.
+I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development.
 
 I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, 1,200+ technical diagrams, and 170+ innovations with 928 patent claims filed since November 26, 2025—the last 44 about ten minutes ago.
 
@@ -173,6 +183,14 @@ With respect for your work,
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

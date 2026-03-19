@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Swift"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Swift"
+initiative: "JukeBox"
+initiative_number: 13
+tags: ["crown-letter", "initiative", "taylor-swift"]
+---
+
 # 👑 CROWN LETTER: TAYLOR SWIFT
 ## Maestro Mentor, Lady Banyan of the Stage
 ## First Voice of the JukeBox Initiative
@@ -205,3 +215,12 @@ Finding this key grants early access to The Sound Guild and JukeBox beta.
 | V04 | Jan 2026 | Crown Offer format — Added: Crown title, Founder's Reserve stake, Medallion, Sound Guild structure, ceremonial crown, all Crown benefits |
 | V05 | Jan 2026 | Updated — Added: Council structure, daisy chain (Maneet), ecosystem language, feedback tool language, business-side revenue |
 | **V06** | **Jan 2026** | **Signature updated to Redshirt Crewman #6** |
+
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

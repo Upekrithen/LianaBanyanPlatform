@@ -90,8 +90,7 @@ export default function SampleDataXML() {
     const currentDate = new Date();
     const daysSinceAcceptance = Math.floor((currentDate.getTime() - sampleAcceptedDate.getTime()) / (1000 * 60 * 60 * 24));
     const daysRemaining = Math.max(0, 100 - daysSinceAcceptance);
-    // TODO(SEC-RENAME): XML element name is CurrentEquityPercentage (data format); variable feeds it
-    const equityPercentage = Math.max(0, 100 - daysSinceAcceptance);
+    const participationPercentage = Math.max(0, 100 - daysSinceAcceptance);
     const cashPercentage = Math.min(100, daysSinceAcceptance);
     const isCashOutEligible = daysSinceAcceptance >= 90;
     
@@ -112,16 +111,16 @@ export default function SampleDataXML() {
     xml += '      <TotalCredits>100.00</TotalCredits>\n';
     xml += '      <UsedCredits>0.00</UsedCredits>\n';
     xml += '      <AvailableCredits>100.00</AvailableCredits>\n';
-    xml += '      <EquityConversion>0.00</EquityConversion>\n';
+    xml += '      <ParticipationConversion>0.00</ParticipationConversion>\n';
     xml += '    </CreditAccount>\n';
-    xml += '    <EquityCashTimer>\n';
+    xml += '    <ParticipationCashTimer>\n';
     xml += `      <DaysSinceAcceptance>${daysSinceAcceptance}</DaysSinceAcceptance>\n`;
     xml += `      <DaysRemaining>${daysRemaining}</DaysRemaining>\n`;
-    xml += `      <CurrentEquityPercentage>${equityPercentage}</CurrentEquityPercentage>\n`;
+    xml += `      <CurrentParticipationPercentage>${participationPercentage}</CurrentParticipationPercentage>\n`;
     xml += `      <CurrentCashPercentage>${cashPercentage}</CurrentCashPercentage>\n`;
     xml += `      <CashOutEligible>${isCashOutEligible}</CashOutEligible>\n`;
     xml += '      <CashOutEligibilityDay>90</CashOutEligibilityDay>\n';
-    xml += '    </EquityCashTimer>\n';
+    xml += '    </ParticipationCashTimer>\n';
     xml += '    <MemberChoices>\n';
     xml += '      <Choice id="1">\n';
     xml += '        <Type>ConvertToEquity</Type>\n';

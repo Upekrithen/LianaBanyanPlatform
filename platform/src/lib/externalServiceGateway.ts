@@ -24,7 +24,7 @@ export type CampaignType =
   | 'product'      // Physical products, manufacturing (Kickstarter, Indiegogo)
   | 'medical'      // Medical/crisis support (GoFundMe, GiveSendGo)
   | 'donation'     // General charitable (GiveButter)
-  | 'equity'       // TODO(SEC-RENAME): external API value (Wefunder); rename when API supports
+  | 'participation' // Cooperative participation (Wefunder integration)
   | 'recurring';   // Ongoing support (Patreon, GiveButter)
 
 export type CampaignStatus = 

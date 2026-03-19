@@ -50,4 +50,12 @@ January 2026
 
 P.S. — I'm not trying to be Valjean, I'm trying to be the Bishop. One of many.
 
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Support@LianaBanyan.org

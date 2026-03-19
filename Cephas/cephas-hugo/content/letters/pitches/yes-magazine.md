@@ -32,7 +32,7 @@ Liana Banyan is a cooperative commerce platform:
 
 **The Story:**
 
-Jonathan Jones, 52, is an Army veteran, helicopter pilot, and father of eight. He's invested $5,000 annually from a $30,000 income for years. He started designing this platform in 2003 while on active duty.
+Jonathan Jones, 52, is an ARNG veteran, helicopter pilot, and father of eight. He's invested $5,000 annually from a $30,000 income for years. He started designing this platform in 2003 while on active duty.
 
 The core insight came in 2010-2011: when businesses trade at cost instead of retail, both win. A pizza restaurant and ice cream shop exchanging product at cost—both pay pennies on the dollar, both get full value. No extraction from workers or customers.
 
@@ -72,4 +72,12 @@ Three commercial portals permanently fund all fourteen. The structure means char
 Jonathan Jones
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com

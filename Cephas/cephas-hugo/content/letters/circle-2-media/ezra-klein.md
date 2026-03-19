@@ -1,3 +1,11 @@
+---
+title: "Letter to Ezra"
+date: 2026-01-15
+letter_type: "Media Letter"
+recipient: "Ezra"
+tags: ["circle-2", "media", "ezra-klein"]
+---
+
 # The System Isn't Broken — It's Working
 ## A Letter to Ezra Klein
 
@@ -53,3 +61,11 @@ P.S. — You once asked why we can't build things anymore. This is me trying to 
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

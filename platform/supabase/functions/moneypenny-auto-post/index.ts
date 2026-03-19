@@ -234,7 +234,7 @@ async function postToSocialPlatform(
     .from('member_social_accounts')
     .select('id, access_token, platform_user_id, account_handle')
     .eq('platform', normalizedPlatform)
-    .eq('is_connected', true)
+    .eq('is_active', true)
     .limit(1);
 
   if (!accounts || accounts.length === 0) {

@@ -39,7 +39,7 @@ export default function AcademicPapersDirectory() {
         <div>
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Cephas Library Directory</h1>
           <p className="text-lg text-slate-600 dark:text-slate-400">
-            Search across all 1,370 innovations, academic papers, letters, and architectural documents.
+            Search across all 1,754 innovations, academic papers, letters, and architectural documents.
           </p>
         </div>
       </div>

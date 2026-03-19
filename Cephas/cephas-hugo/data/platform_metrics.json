@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-03-15T04:30:00Z",
-  "version": "2.0.0",
+  "generated_at": "2026-03-19T04:00:00Z",
+  "version": "3.0.0",
   "metrics": {
-    "total_innovations": 1662,
-    "patent_claims": 1336,
-    "provisional_applications": 7,
+    "total_innovations": 1754,
+    "patent_claims": 1401,
+    "provisional_applications": 8,
     "crown_jewels": 123,
     "development_years": 37,
-    "domains": 14,
+    "domains": 16,
     "initiatives": 16,
     "membership_cost_usd": 5,
     "creator_keeps_pct": 83.3,
@@ -18,8 +18,8 @@
     "investment_years": 9
   },
   "patents": {
-    "total_claims": 1336,
-    "bags_filed": 7,
+    "total_claims": 1401,
+    "bags_filed": 8,
     "applications": [
       {"number": "63/925,672", "filed": "Nov 25-26 2025", "claims": 123},
       {"number": "63/927,674", "filed": "Nov 30 2025", "claims": 72},
@@ -27,14 +27,15 @@
       {"number": "63/967,200", "filed": "Jan 23-24 2026", "claims": 292},
       {"number": "63/969,601", "filed": "Jan 28 2026", "claims": 44},
       {"number": "63/989,913", "filed": "Feb 24 2026", "claims": 408},
-      {"number": "64/006,010", "filed": "Mar 15 2026", "claims": 0}
+      {"number": "64/006,010", "filed": "Mar 15 2026", "claims": 0},
+      {"number": "64/009,803", "filed": "Mar 17 2026", "claims": 65}
     ],
     "verified": true,
-    "last_verification": "2026-03-15"
+    "last_verification": "2026-03-19"
   },
   "sync": {
-    "last_sync": "2026-03-15T04:30:00Z",
+    "last_sync": "2026-03-19T04:00:00Z",
     "is_current": true,
-    "source": "session-23-manual-update"
+    "source": "session-56-number-fix"
   }
 }

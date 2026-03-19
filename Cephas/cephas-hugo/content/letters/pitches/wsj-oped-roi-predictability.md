@@ -79,7 +79,7 @@ The risk premium we pay on every transaction—the hidden tax on inefficiency—
 
 ---
 
-**Jonathan Jones** is founder of Liana Banyan Corporation, an Army veteran, and holds patents in cooperative commerce infrastructure. The full mathematical proof is available at Cephas.LianaBanyan.Com.
+**Jonathan Jones** is founder of Liana Banyan Corporation, an ARNG veteran, and holds patents in cooperative commerce infrastructure. The full mathematical proof is available at Cephas.LianaBanyan.Com.
 
 ---
 
@@ -89,6 +89,14 @@ The risk premium we pay on every transaction—the hidden tax on inefficiency—
 - **Exclusive:** This piece has not been submitted elsewhere
 - **Accompanying materials:** Full academic paper available on request (3,400 words with appendices)
 - **Contact:** Founder@LianaBanyan.com | 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

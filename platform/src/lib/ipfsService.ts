@@ -348,7 +348,7 @@ export async function createIPLedgerEntry(
  * Updated: February 18, 2026
  */
 export const PATENT_PORTFOLIO_STATS = {
-  total_innovations: 1751,
+  total_innovations: 1754,
   utility_patent_percentage: 99,
   formal_claims: 1401,
   filed_applications: 8,
@@ -358,5 +358,5 @@ export const PATENT_PORTFOLIO_STATS = {
   prior_art_reviewed: 330,
 
   // Standard description for use across platform
-  description: "The patent portfolio behind this platform includes 1,751 documented innovations — 99% utility patents, not design — protected by 1,401 formal claims across 8 provisional applications. Eight definite with 9 more out of the first 130 so far have survived a deep dive against the U.S. patent office with no prior art found.",
+  description: "The patent portfolio behind this platform includes 1,754 documented innovations — 99% utility patents, not design — protected by 1,401 formal claims across 8 provisional applications. Eight definite with 9 more out of the first 130 so far have survived a deep dive against the U.S. patent office with no prior art found.",
 } as const;

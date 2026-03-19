@@ -1,3 +1,11 @@
+---
+title: "Letter to Jin"
+date: 2026-01-15
+letter_type: "Investor Letter"
+recipient: "Jin"
+tags: ["circle-1", "investor", "li-jin"]
+---
+
 # LETTER TO LI JIN
 ## Investor, Variant Fund
 ## Author, "The Passion Economy"
@@ -17,7 +25,7 @@ You've been writing about the passion economy — the idea that creators can mak
 
 I've been building the infrastructure for that economy for fifteen years.
 
-My name is Jonathan Jones. I'm 52, an Army veteran, helicopter pilot, father of eight. I've invested $5,000 annually from a $30,000 income into this platform — 47 years thinking about cooperative economics, 15 years actively building.
+My name is Jonathan Jones. I'm 52, an ARNG veteran, helicopter pilot, father of eight. I've invested $5,000 annually from a $30,000 income into this platform — 47 years thinking about cooperative economics, 15 years actively building.
 
 **The Passion Economy Problem**
 
@@ -109,6 +117,14 @@ Respectfully,
 **Jonathan Jones**
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 ---

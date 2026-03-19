@@ -78,6 +78,14 @@ Founder, Liana Banyan Corporation
 
 ---
 
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
+
+---
+
 *"No parent should ever have to decide if they can afford to save their child's life."*  
 *— Jimmy Kimmel, 2017*
 

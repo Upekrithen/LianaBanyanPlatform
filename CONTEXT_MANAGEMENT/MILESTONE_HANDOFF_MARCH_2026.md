@@ -11,7 +11,7 @@
 
 ## RUNWAY / SESSION STOP (current) — Session 53 (March 19, 2026)
 
-**Latest commit:** `TBD` — Session 53: Moneypenny SMS + Quiz Fix
+**Latest commit:** `18089f5` — Session 53: Moneypenny SMS + Quiz Fix
 **Previous commit:** `dc0eabe` (Session 52)
 
 **Status (March 19, 2026 — Session 53 COMPLETE):**
@@ -1951,6 +1951,161 @@ The 22 skeleton placeholders now have source material. The following files in `A
 
 ---
 
+## SESSION 54 SUMMARY (Knight — March 19, 2026)
+
+**3 Features Shipped:**
+
+1. **Content Pipeline → Cephas Auto-Sync** (HIGH)
+   - Built `platform/scripts/sync_letters_to_cephas.cjs` — comprehensive letter sync script
+   - Expanded `LETTER_SYNC_MAP` in `cephasSync.ts` from 16 → 94+ entries (all letters across 9 categories)
+   - Added Hugo frontmatter to 57 letters that lacked it
+   - Injected Red Carpet CTA into 90 letters (only 4 previously had it)
+   - Hugo builds clean: 1,273 pages
+   - Run: `npm run sync:letters` (in `platform/`)
+
+2. **Social Media Cron Fix** (MED)
+   - Fixed `moneypenny-auto-post` bug: `is_connected` → `is_active` (column name mismatch caused all posts to fail silently)
+   - Rewrote `process-scheduled-posts` to use `member_social_accounts` as primary token source
+   - Now processes BOTH `member_scheduled_posts` (modern) AND `scheduled_posts` (legacy) tables
+   - Falls back to `social_media_plugs` for legacy posts if no `member_social_accounts` match
+   - Added Bluesky support to scheduled post processing
+   - Added hashtag/link assembly from `member_scheduled_posts` fields
+
+3. **Cue Card Minting Integration** (HIGH)
+   - Built `platform/scripts/mint_letter_cue_cards.cjs` — auto-generates cue card templates from letters
+   - Generated 68 letter cue cards (4 crown, 3 blessing, 11 investor, 14 media, 14 academic, 22 initiative)
+   - Output: SQL migration `20260319000001_letter_cue_card_templates.sql` + TypeScript `platform/src/data/letterCueCards.ts`
+   - Each card has: front (key quote + C+20 message), back (why this person + platform summary), Twitter text, LinkedIn text
+   - Wired into CueCardDeck component with category filter tabs and flip-card interaction
+   - Run: `npm run mint:cue-cards` (in `platform/`)
+
+**Files Changed:**
+- `platform/supabase/functions/moneypenny-auto-post/index.ts` — bug fix (is_connected → is_active)
+- `platform/supabase/functions/process-scheduled-posts/index.ts` — full rewrite to member_social_accounts
+- `platform/src/lib/nervous-system/cephasSync.ts` — expanded LETTER_SYNC_MAP (16 → 94+ entries)
+- `platform/scripts/sync_letters_to_cephas.cjs` — NEW: letter sync script
+- `platform/scripts/mint_letter_cue_cards.cjs` — NEW: cue card generation pipeline
+- `platform/src/data/letterCueCards.ts` — NEW: 68 auto-generated letter cue cards
+- `platform/supabase/migrations/20260319000001_letter_cue_card_templates.sql` — NEW: 68 cue card templates
+- `platform/src/components/cue-cards/CueCardDeck.tsx` — added letter outreach cards section
+- `platform/package.json` — added sync:letters + mint:cue-cards scripts
+- `Cephas/cephas-hugo/content/letters/**` — 90 letters updated (frontmatter + Red Carpet CTA)
+
+**Session 54 Deployments (completed by Bishop):**
+- Migration `20260319000001` → renamed to `20260320000003`, pushed
+- Edge functions `moneypenny-auto-post` + `process-scheduled-posts` redeployed
+- Firebase deployed (all 7 targets, twice)
+
+**Session 54 Addendum: HexIsle Pre-Order Stripe Wiring**
+- Created `create-preorder-checkout` edge function — dynamic Stripe line items from cart, records pledge in `founding_run_pledges`
+- Created `verify-preorder-payment` edge function — verifies Stripe session, marks pledge as paid, increments founding run totals
+- Created `PreOrderSuccess.tsx` — verification + success page at `/preorder-success`
+- Wired `PreOrderFlow.tsx` — replaced setTimeout mock with real Stripe Checkout redirect
+- Route added in `App.tsx`: `/preorder-success`
+
+**Session 54 Addendum B: Production Level Pricing**
+- Created migration `20260319000030_founding_run_production_levels.sql`:
+  - Added `current_production_level` + `slug` columns to `founding_runs`
+  - Added `item_key` + `sort_order` columns to `founding_run_items`
+  - Created `founding_run_item_tiers` table (per-item pricing across 6 production levels)
+  - Seeded HexIsle Founding Run #1 with 4 items + 24 tier prices (6 levels × 4 items)
+  - Price scaling: L1=100%, L2=85%, L3=70%, L4=60%, L5=50%, L6=40%
+- `PreOrderFlow.tsx` now fetches items from Supabase at the current production level
+  - Shows production level badge in UI
+  - Falls back to sample data if Supabase unavailable
+  - Loading state while fetching
+
+**Pending Deployment (Session 54 full):**
+- `supabase db push` for migration `20260319000030`
+- `supabase functions deploy create-preorder-checkout`
+- `supabase functions deploy verify-preorder-payment`
+- `firebase deploy --only hosting:main` (platform rebuild done)
+
+---
+
+## SESSION 56 (Knight — March 19, 2026)
+
+**Focus:** Stripe Webhook Handler — Launch Night Safety Net
+
+**Built:**
+- Created `platform/supabase/functions/stripe-webhook/index.ts` — unified Stripe webhook handler
+  - Signature verification via `STRIPE_WEBHOOK_SECRET` + `stripe.webhooks.constructEventAsync()`
+  - Routes on `checkout.session.completed` → reads `metadata.payment_type` to dispatch
+  - 6 payment type handlers, each with idempotency checks:
+    1. `hexisle_preorder` → mark `founding_run_pledges` paid, increment `founding_runs` totals
+    2. `lb_membership_stake` → set `user_credits.membership_stake_paid = true`
+    3. `credit_purchase` → add credits to `user_credits`, insert `credit_transactions` (deduplicated by `stripe_session_id`)
+    4. `herald_subscription` → upsert `herald_subscriptions` with tier config
+    5. `guild_stake` → insert `guild_stake_payments`, upsert `user_guild_progression`
+    6. `sponsor_memberships` → insert into `sponsor_memberships`
+  - Returns 200 on all events (unknown events logged but not acted on)
+  - Deployed with `--no-verify-jwt` (Stripe sends raw POST, no auth header)
+
+**Secrets Audit (all present in Supabase):**
+- STRIPE_SECRET_KEY ✓
+- STRIPE_WEBHOOK_SECRET ✓ (already configured by Founder)
+- RESEND_API_KEY ✓
+- TWITTER_CLIENT_ID/SECRET ✓
+- LINKEDIN_CLIENT_ID/SECRET ✓
+- FACEBOOK_APP_ID/SECRET ✓
+- MASTODON keys ✓
+- BLUESKY credentials ✓
+- MEDIUM_INTEGRATION_TOKEN ✗ — NOT SET (used by `medium-publish` function, will fail if called)
+
+**Session 56 Part 2: Stale Number Purge**
+
+Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase. Also fixed claims (→ 1,401), provisionals (→ 8), and added 7th + 8th application numbers everywhere.
+
+**Files Updated:**
+- `CONTEXT_MANAGEMENT/01_MASTER_CONTEXT.md` — Executive summary, patent portfolio table, application list (added 64/006,010 + 64/009,803)
+- `.cursor/rules/liana-banyan-context.mdc` — Critical Numbers section
+- `Cephas/cephas-hugo/data/platform_metrics.json` — all metrics + 8th app in applications array
+- `Cephas/cephas-hugo/data/canonical.json` — all metrics
+- `Cephas/cephas-hugo/layouts/partials/innovation-footer.html` — two instances
+- `Cephas/cephas-hugo/content/innovations/_index.md` — description, header, table, Crown Jewels link, footer quote
+- `Cephas/cephas-hugo/content/patents/_index.md` — description, header, application table, coverage table
+- `Cephas/cephas-hugo/content/innovations/crown-jewels.md` — innovation count, coverage ranges
+- `platform/scripts/mint_letter_cue_cards.cjs` — back card text + LinkedIn text
+- `platform/src/data/letterCueCards.ts` — auto-regenerated (68 cards, all now 1,754/8)
+- `platform/supabase/functions/send-transactional-email/index.ts` — email footer
+
+**Supabase Types Regenerated:**
+- `platform/src/integrations/supabase/types.ts` — 37,411 lines, includes `founding_run_item_tiers` and all new columns
+
+**Redeployed:**
+- `send-transactional-email` edge function (number fix in email footer)
+
+**Edge Function Audit:**
+- Bishop's prompt listed 6 functions as "coded but never deployed" — all 6 were already deployed by prior sessions. No action needed.
+
+**Flagged for Founder Review:**
+- `platform/src/data/crown-letters/LOCKED_TOM_SIMON_CFO.md` — contains 1,662 innovations / 1,336 claims / "six provisional applications". Not auto-fixed because file is marked LOCKED.
+- 33 pitch/partnership/legal letters in Cephas have Red Carpet CTA — may be inappropriate on business correspondence (per Bishop's flag)
+- 57 letters all stamped 2026-01-15 (actual dates vary Nov 2025–Mar 2026)
+- LETTER-WARREN-BUFFETT.md has uppercase prefix unlike all others
+
+**Missing Context Docs (still missing):**
+- `CONTEXT_MANAGEMENT/LETTER_SYNC_PROTOCOL.md` — referenced in rules, doesn't exist (info lives in `cephasSync.ts` + `sync_letters_to_cephas.cjs`)
+- `CONTEXT_MANAGEMENT/SOCIAL_MEDIA_POSTING_SYSTEM.md` — same, doesn't exist
+
+**Founder Action Items:**
+1. **Stripe Dashboard webhook endpoint** — If not already done, go to Stripe Dashboard → Developers → Webhooks → Add endpoint:
+   - URL: `https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1/stripe-webhook`
+   - Event: `checkout.session.completed`
+   - The `STRIPE_WEBHOOK_SECRET` is already in Supabase secrets
+2. **MEDIUM_INTEGRATION_TOKEN** — Get from Medium Settings → Integration tokens → set via:
+   `npx supabase secrets set MEDIUM_INTEGRATION_TOKEN=<token> --project-ref ruuxzilgmuwddcofqecc`
+3. **Test with Stripe CLI** (optional):
+   `stripe listen --forward-to localhost:54321/functions/v1/stripe-webhook`
+4. **Review LOCKED_TOM_SIMON_CFO.md** — decide whether to update stale numbers in locked letter
+
+**Deployments:**
+- `stripe-webhook` edge function deployed (with `--no-verify-jwt`)
+- `send-transactional-email` edge function redeployed (number fix)
+- Platform built clean (29s, no errors)
+
+---
+
 ## PENDING WORK (Next Session Priority Order)
 
 | # | Priority | Item | Notes |
@@ -1960,16 +2115,19 @@ The 22 skeleton placeholders now have source material. The following files in `A
 | 3 | ~~DONE~~ | ~~Map INBOX innovations to #1573-#1594~~ | 22 skeleton slots filled with full specs (Session 21) |
 | 4 | ~~DONE~~ | ~~Deploy to Firebase~~ | Both sites live (Session 21) |
 | 4b | ~~DONE~~ | ~~File 7th provisional~~ | Application 64/006,010 filed March 15, 2026 |
-| 5 | **MEDIUM** | **Content Pipeline build** | Sequential pipeline: tl;dr → blog → article → academic paper (system designed but not automated) |
+| 5 | ~~DONE~~ | ~~Content Pipeline → Cephas auto-sync~~ | Session 54: 90 letters synced, `npm run sync:letters` |
+| 5b | ~~DONE~~ | ~~Cue Card minting integration~~ | Session 54: 68 cards auto-generated, `npm run mint:cue-cards` |
+| 5c | ~~DONE~~ | ~~Social media cron: member_social_accounts~~ | Session 54: bug fix + full rewrite |
 | 6 | **MEDIUM** | **Battery Dispatch — Grassroots Intelligence** | Create campaign from 4 new academic papers + Political Expedition cue card |
 | 7 | **MEDIUM** | **Treasure Key injection** | Inject keys into all letters, articles, social posts for real treasure hunt |
 | 8 | **MEDIUM** | **SEC language cleanup (pre-existing files)** | Broader pass on older files per audit |
 | 9 | **MEDIUM** | **RLS security hardening** | Per `RLS_AUDIT_REPORT.md` |
-| 10 | **LOW** | **CoLab/Zoo outreach** | AI-CAD partnership brief ready, pending Founder approval |
-| 11 | **LOW** | **Letter rewrites** | Founder wants to review/rewrite 30+ Crown Letters |
-| 12 | **LOW** | **the2ndsecond.com storyboard images** | 12 son's storyboard PNGs identified for front page |
-| 13 | **LOW** | **HexIsle MimicTrunk integration** | Phase MimicTrunk bridge exists but needs deeper wiring |
-| 14 | **FUTURE** | **42mm→60mm Hexel port** | Founder's CAD task, not blocking launch |
+| 10 | **MEDIUM** | **Gmail forwarding** | Google Cloud Pub/Sub → moneypenny-intake webhook for inbound email |
+| 11 | **LOW** | **CoLab/Zoo outreach** | AI-CAD partnership brief ready, pending Founder approval |
+| 12 | **LOW** | **Letter rewrites** | Founder wants to review/rewrite 30+ Crown Letters |
+| 13 | **LOW** | **the2ndsecond.com storyboard images** | 12 son's storyboard PNGs identified for front page |
+| 14 | **LOW** | **HexIsle MimicTrunk integration** | Phase MimicTrunk bridge exists but needs deeper wiring |
+| 15 | **FUTURE** | **42mm→60mm Hexel port** | Founder's CAD task, not blocking launch |
 
 ---
 

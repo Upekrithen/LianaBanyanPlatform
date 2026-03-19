@@ -1,3 +1,11 @@
+---
+title: "Letter to Swift"
+date: 2026-01-15
+letter_type: "Media Letter"
+recipient: "Swift"
+tags: ["circle-2", "media", "taylor-swift-v03"]
+---
+
 # Are We Out of the Woods?
 ## An Open Letter to Taylor Swift
 
@@ -69,3 +77,11 @@ P.S. — You once said "I deserve to own what I make." Now the infrastructure ex
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

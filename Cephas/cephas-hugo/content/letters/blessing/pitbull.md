@@ -19,7 +19,7 @@ That song — the original, your remix, the whole message — is exactly why I'v
 
 ## WHAT I'VE BUILT
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, Army veteran, and the founder of Liana Banyan — a cooperative platform where workers keep 80% of what they earn instead of getting squeezed by middlemen.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, ARNG veteran, and the founder of Liana Banyan — a cooperative platform where workers keep 80% of what they earn instead of getting squeezed by middlemen.
 
 I'm not famous. I'm not a billionaire. I'm just someone who got tired of watching people work hard and get barely enough to survive. The systems we have aren't designed to help workers — they're designed to extract from them.
 
@@ -89,4 +89,12 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com

@@ -1,3 +1,11 @@
+---
+title: "Letter to Kara"
+date: 2026-01-15
+letter_type: "Media Letter"
+recipient: "Kara"
+tags: ["circle-2", "media", "kara-swisher"]
+---
+
 # I Built a Platform and I Don't Want to Be a Billionaire
 ## A Letter to Kara Swisher
 
@@ -50,3 +58,11 @@ P.S. — You once said "most founders are not your friends." I'm not trying to b
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.

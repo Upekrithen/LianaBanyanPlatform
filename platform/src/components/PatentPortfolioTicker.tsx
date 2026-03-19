@@ -2,8 +2,8 @@
  * PATENT PORTFOLIO TICKER
  * =======================
  * Displays the patent portfolio countdown showing:
- * - $9M equivalent (conservative floor value)
- * - 60% available = $5.4M equivalent for platform operations
+ * - $116M equivalent (pessimist's floor, 4% utilization)
+ * - 60% available = $69.6M equivalent for platform operations
  * - Countdown as allocations are made
  * 
  * Two display modes:
@@ -99,7 +99,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
             Patent Portfolio Value
           </h2>
           <p className="text-white/60 mt-1">
-            Conservative floor valuation of 1,751 documented innovations
+            Conservative floor valuation of 1,754 documented innovations
           </p>
         </div>
         <div className="text-right">

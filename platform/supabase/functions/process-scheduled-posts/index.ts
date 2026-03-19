@@ -1,9 +1,11 @@
-// PROCESS SCHEDULED SOCIAL MEDIA POSTS
-// =====================================
-// Cron-based function that runs every 5 minutes.
-// Picks up posts from scheduled_posts where scheduled_for <= NOW.
-// Posts to the connected social platform using stored OAuth tokens.
-// Schedule: every 5 minutes (set in Supabase Dashboard)
+/**
+ * PROCESS SCHEDULED SOCIAL MEDIA POSTS
+ * =====================================
+ * Cron-based function that runs every 5 minutes.
+ * Processes BOTH legacy (scheduled_posts + social_media_plugs)
+ * and modern (member_scheduled_posts + member_social_accounts) tables.
+ * Schedule: every 5 minutes (set in Supabase Dashboard)
+ */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -23,56 +25,109 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Fetch posts that are due
-    const { data: pendingPosts, error: fetchError } = await supabase
-      .from('scheduled_posts')
-      .select('*, social_media_plugs(*)')
-      .eq('status', 'scheduled')
-      .lte('scheduled_for', new Date().toISOString())
-      .order('scheduled_for', { ascending: true })
-      .limit(10); // Process 10 at a time
-
-    if (fetchError) throw fetchError;
-
-    if (!pendingPosts || pendingPosts.length === 0) {
-      return new Response(
-        JSON.stringify({ message: 'No pending posts', processed: 0 }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    console.log(`Processing ${pendingPosts.length} scheduled posts`);
-
+    const now = new Date().toISOString();
     let successCount = 0;
     let failCount = 0;
+    const details: Array<{ source: string; id: string; platform: string; status: string }> = [];
 
-    for (const post of pendingPosts) {
+    // ─── 1. Process modern member_scheduled_posts ────────────────────
+
+    const { data: memberPosts, error: memberError } = await supabase
+      .from('member_scheduled_posts')
+      .select('*')
+      .eq('status', 'scheduled')
+      .lte('scheduled_for', now)
+      .order('scheduled_for', { ascending: true })
+      .limit(10);
+
+    if (memberError) {
+      console.error('Error fetching member_scheduled_posts:', memberError);
+    }
+
+    for (const post of (memberPosts ?? [])) {
       try {
-        // Mark as posting
+        await supabase
+          .from('member_scheduled_posts')
+          .update({ status: 'posting' })
+          .eq('id', post.id);
+
+        const account = await getAccountForPost(supabase, post.social_account_id, post.user_id, post.platform);
+        if (!account) throw new Error(`No active ${post.platform} account found`);
+
+        const content = buildPostContent(post.content, post.hashtags, post.link_url);
+        const postUrl = await postToPlatform(account, post.platform, content);
+
+        await supabase
+          .from('member_scheduled_posts')
+          .update({ status: 'posted', posted_at: new Date().toISOString() })
+          .eq('id', post.id);
+
+        await supabase
+          .from('member_social_accounts')
+          .update({ last_used_at: new Date().toISOString() })
+          .eq('id', account.id);
+
+        successCount++;
+        details.push({ source: 'member', id: post.id, platform: post.platform, status: 'posted' });
+        console.log(`✅ [member] Posted to ${post.platform} for user ${post.user_id}`);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Unknown error';
+        await supabase
+          .from('member_scheduled_posts')
+          .update({ status: 'failed' })
+          .eq('id', post.id);
+
+        failCount++;
+        details.push({ source: 'member', id: post.id, platform: post.platform, status: `failed: ${message}` });
+        console.error(`❌ [member] Failed ${post.platform}: ${message}`);
+      }
+    }
+
+    // ─── 2. Process legacy scheduled_posts (backward compat) ─────────
+
+    const { data: legacyPosts, error: legacyError } = await supabase
+      .from('scheduled_posts')
+      .select('*')
+      .eq('status', 'scheduled')
+      .lte('scheduled_for', now)
+      .order('scheduled_for', { ascending: true })
+      .limit(10);
+
+    if (legacyError) {
+      console.error('Error fetching scheduled_posts:', legacyError);
+    }
+
+    for (const post of (legacyPosts ?? [])) {
+      try {
         await supabase
           .from('scheduled_posts')
           .update({ status: 'posting', updated_at: new Date().toISOString() })
           .eq('id', post.id);
 
-        // Get the user's OAuth token for this platform
-        const plug = post.social_media_plugs;
+        // Try member_social_accounts first, fall back to social_media_plugs
+        let account = await getAccountForUser(supabase, post.user_id, post.platform);
 
-        if (!plug || !plug.is_connected || !plug.access_token) {
-          throw new Error(`No connected ${post.platform} account`);
+        if (!account && post.plug_id) {
+          const { data: plug } = await supabase
+            .from('social_media_plugs')
+            .select('*')
+            .eq('id', post.plug_id)
+            .single();
+
+          if (plug?.is_connected && plug?.access_token) {
+            account = {
+              id: plug.id,
+              access_token: plug.access_token,
+              platform_user_id: plug.platform_user_id,
+              account_handle: plug.account_handle || null,
+            };
+          }
         }
 
-        // Post to the platform
-        let postUrl: string | null = null;
+        if (!account) throw new Error(`No connected ${post.platform} account`);
 
-        if (post.platform === 'twitter') {
-          postUrl = await postToTwitter(plug.access_token, post.post_text);
-        } else if (post.platform === 'linkedin') {
-          postUrl = await postToLinkedIn(plug.access_token, plug.platform_user_id, post.post_text);
-        } else if (post.platform === 'facebook') {
-          postUrl = await postToFacebook(plug.access_token, plug.platform_user_id, post.post_text);
-        }
+        const postUrl = await postToPlatform(account, post.platform, post.post_text);
 
-        // Mark as posted
         await supabase
           .from('scheduled_posts')
           .update({
@@ -82,40 +137,27 @@ Deno.serve(async (req) => {
           })
           .eq('id', post.id);
 
-        // If this is a Herald post, record it
         if (post.herald_post_id) {
           await supabase
             .from('herald_posts')
-            .update({
-              posted_at: new Date().toISOString(),
-              post_url: postUrl,
-              status: 'posted',
-            })
+            .update({ posted_at: new Date().toISOString(), post_url: postUrl, status: 'posted' })
             .eq('id', post.herald_post_id);
         }
 
-        // Update plug post count
-        await supabase
-          .from('social_media_plugs')
-          .update({
-            post_count: (plug.post_count || 0) + 1,
-            last_posted_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', plug.id);
-
         successCount++;
-        console.log(`✅ Posted to ${post.platform} for user ${post.user_id}`);
-      } catch (postError) {
-        // Mark as failed
+        details.push({ source: 'legacy', id: post.id, platform: post.platform, status: 'posted' });
+        console.log(`✅ [legacy] Posted to ${post.platform} for user ${post.user_id}`);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Unknown error';
+        const retryCount = (post.retry_count || 0) + 1;
+
         await supabase
           .from('scheduled_posts')
           .update({
-            status: post.retry_count >= 3 ? 'failed' : 'scheduled', // Retry up to 3 times
-            error_message: postError.message,
-            retry_count: (post.retry_count || 0) + 1,
-            // If retrying, push 15 min into future
-            scheduled_for: post.retry_count < 3
+            status: retryCount >= 3 ? 'failed' : 'scheduled',
+            error_message: message,
+            retry_count: retryCount,
+            scheduled_for: retryCount < 3
               ? new Date(Date.now() + 15 * 60 * 1000).toISOString()
               : post.scheduled_for,
             updated_at: new Date().toISOString(),
@@ -123,28 +165,108 @@ Deno.serve(async (req) => {
           .eq('id', post.id);
 
         failCount++;
-        console.error(`❌ Failed to post to ${post.platform}: ${postError.message}`);
+        details.push({ source: 'legacy', id: post.id, platform: post.platform, status: `failed: ${message}` });
+        console.error(`❌ [legacy] Failed ${post.platform}: ${message}`);
       }
     }
 
     return new Response(
       JSON.stringify({
-        processed: pendingPosts.length,
+        processed: (memberPosts?.length ?? 0) + (legacyPosts?.length ?? 0),
         success: successCount,
         failed: failCount,
+        details,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (err) {
     console.error('Scheduler error:', err);
     return new Response(
-      JSON.stringify({ error: err.message }),
+      JSON.stringify({ error: err instanceof Error ? err.message : 'Unknown error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
 
-// ─── PLATFORM-SPECIFIC POSTING ───
+// ─── ACCOUNT LOOKUP ─────────────────────────────────────────────────
+
+interface SocialAccount {
+  id: string;
+  access_token: string;
+  platform_user_id: string | null;
+  account_handle: string | null;
+}
+
+async function getAccountForPost(
+  supabase: any,
+  socialAccountId: string | null,
+  userId: string,
+  platform: string
+): Promise<SocialAccount | null> {
+  if (socialAccountId) {
+    const { data } = await supabase
+      .from('member_social_accounts')
+      .select('id, access_token, platform_user_id, account_handle')
+      .eq('id', socialAccountId)
+      .eq('is_active', true)
+      .single();
+    if (data) return data;
+  }
+  return getAccountForUser(supabase, userId, platform);
+}
+
+async function getAccountForUser(
+  supabase: any,
+  userId: string,
+  platform: string
+): Promise<SocialAccount | null> {
+  const normalizedPlatform = platform === 'x' ? 'twitter' : platform;
+
+  // Prefer default account, then any active account for this platform
+  const { data } = await supabase
+    .from('member_social_accounts')
+    .select('id, access_token, platform_user_id, account_handle, is_default')
+    .eq('user_id', userId)
+    .eq('platform', normalizedPlatform)
+    .eq('is_active', true)
+    .order('is_default', { ascending: false })
+    .limit(1);
+
+  return data?.[0] || null;
+}
+
+function buildPostContent(content: string, hashtags?: string[] | null, linkUrl?: string | null): string {
+  let text = content;
+  if (hashtags?.length) {
+    text += '\n\n' + hashtags.map(t => t.startsWith('#') ? t : `#${t}`).join(' ');
+  }
+  if (linkUrl) {
+    text += '\n\n' + linkUrl;
+  }
+  return text;
+}
+
+// ─── PLATFORM-SPECIFIC POSTING ──────────────────────────────────────
+
+async function postToPlatform(
+  account: SocialAccount,
+  platform: string,
+  text: string
+): Promise<string | null> {
+  const normalized = platform === 'x' ? 'twitter' : platform;
+  switch (normalized) {
+    case 'twitter':
+      return postToTwitter(account.access_token, text);
+    case 'linkedin':
+      return postToLinkedIn(account.access_token, account.platform_user_id, text);
+    case 'facebook':
+      return postToFacebook(account.access_token, account.platform_user_id, text);
+    case 'bluesky':
+      return postToBluesky(account.access_token, account.platform_user_id, text);
+    default:
+      throw new Error(`Unsupported platform: ${normalized}`);
+  }
+}
 
 async function postToTwitter(accessToken: string, text: string): Promise<string | null> {
   const response = await fetch('https://api.twitter.com/2/tweets', {
@@ -158,7 +280,7 @@ async function postToTwitter(accessToken: string, text: string): Promise<string 
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`Twitter API error: ${error}`);
+    throw new Error(`Twitter ${response.status}: ${error}`);
   }
 
   const data = await response.json();
@@ -194,10 +316,10 @@ async function postToLinkedIn(
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`LinkedIn API error: ${error}`);
+    throw new Error(`LinkedIn ${response.status}: ${error}`);
   }
 
-  return null; // LinkedIn doesn't return a direct post URL easily
+  return null;
 }
 
 async function postToFacebook(
@@ -211,18 +333,48 @@ async function postToFacebook(
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: text,
-        access_token: accessToken,
-      }),
+      body: JSON.stringify({ message: text, access_token: accessToken }),
     }
   );
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`Facebook API error: ${error}`);
+    throw new Error(`Facebook ${response.status}: ${error}`);
   }
 
   const data = await response.json();
   return `https://facebook.com/${data.id}`;
+}
+
+async function postToBluesky(
+  accessToken: string,
+  did: string | null,
+  text: string
+): Promise<string | null> {
+  if (!did) throw new Error('Bluesky DID required');
+  const response = await fetch('https://bsky.social/xrpc/com.atproto.repo.createRecord', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      repo: did,
+      collection: 'app.bsky.feed.post',
+      record: {
+        text,
+        createdAt: new Date().toISOString(),
+        $type: 'app.bsky.feed.post',
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Bluesky ${response.status}: ${error}`);
+  }
+
+  const data = await response.json();
+  const rkey = data?.uri?.split('/')?.pop();
+  return rkey ? `https://bsky.app/profile/${did}/post/${rkey}` : null;
 }

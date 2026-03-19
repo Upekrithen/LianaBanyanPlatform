@@ -70,6 +70,14 @@ This matters because most token projects can change their economics whenever ins
 Jonathan Jones
 Founder, Liana Banyan Corporation
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 Founder@LianaBanyan.com
 
 **Documentation:** Cephas.LianaBanyan.org

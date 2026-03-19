@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Glenn"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Glenn"
+initiative: "Defense Klaus"
+initiative_number: 8
+tags: ["crown-letter", "initiative", "ruth-glenn"]
+---
+
 # 🛡️ SHIELD LETTER: RUTH M. GLENN
 ## First Shield Mentor, Lady Banyan of Protection
 ## Guardian of the Shield Table, First Seat
@@ -20,7 +30,7 @@ That's why I'm writing to you. That's why I've spent 40+ years thinking and nine
 
 I can't do everything. But I can do something. This. And so can a lot of people.
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, a U.S. Army veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable. I'm not a billionaire. I'm not famous. Who I am really doesn't matter, only what I'm trying to do. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD. The systems we have aren't protecting or helping people well enough, and arguably are part of the problem. So I've designed different ones.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, a U.S. ARNG veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable. I'm not a billionaire. I'm not famous. Who I am really doesn't matter, only what I'm trying to do. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD. The systems we have aren't protecting or helping people well enough, and arguably are part of the problem. So I've designed different ones.
 
 One of those fourteen initiatives is called **Defense Klaus**. And I need someone who actually knows what they're doing to lead it.
 
@@ -165,6 +175,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

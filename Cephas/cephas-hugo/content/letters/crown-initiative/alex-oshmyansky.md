@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Oshmyansky"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Oshmyansky"
+initiative: "LifeLine Medications"
+initiative_number: 6
+tags: ["crown-letter", "initiative", "alex-oshmyansky"]
+---
+
 # 👑 CROWN LETTER: ALEX OSHMYANSKY
 ## Apothecary Mentor
 ## Lord Banyan of Lifeline Medications
@@ -21,7 +31,7 @@ You cold-emailed a billionaire and convinced him to fund your entire company. I'
 
 ## WHO I AM
 
-My name is Jonathan Jones. I'm a 52-year-old father of eight, U.S. Army veteran (ARNG, 11B/15A), 21 years I.T. developer. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, U.S. ARNG veteran (, 11B/15A), 21 years I.T. developer. I've spent 40+ years thinking and nine years building a cooperative commerce platform called Liana Banyan.
 
 I'm not famous. I'm not a doctor or a Marshall Scholar. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD. And I read a lot, and I'm good at chess.
 
@@ -142,6 +152,14 @@ Liana Banyan Corporation
 
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 lianabanyan.com
 
 ---

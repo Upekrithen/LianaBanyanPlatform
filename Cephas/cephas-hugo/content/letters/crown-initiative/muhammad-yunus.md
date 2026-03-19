@@ -1,3 +1,13 @@
+---
+title: "Crown Letter: Yunus"
+date: 2026-01-15
+letter_type: "Crown Letter"
+recipient: "Yunus"
+initiative: "VSL"
+initiative_number: 10
+tags: ["crown-letter", "initiative", "muhammad-yunus"]
+---
+
 # 👑 CROWN LETTER: MUHAMMAD YUNUS
 ## Commerce Secretary, Lord Banyan of the World
 ## First Keeper of the International Initiative
@@ -21,7 +31,7 @@ I've built a platform based on everything you proved — and I need your help to
 
 ## WHO I AM
 
-I'm a 52-year-old Army veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess player (2118 rating, top 0.4% globally). I was born in Tanzania to American missionary parents — I left on the last flight before Idi Amin's invasion.
+I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess player (2118 rating, top 0.4% globally). I was born in Tanzania to American missionary parents — I left on the last flight before Idi Amin's invasion.
 
 I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, 1,200+ technical diagrams, and 170+ innovations with 928 patent claims filed since November 26, 2025—the last 44 about ten minutes ago.
 
@@ -184,6 +194,14 @@ With profound respect for your life's work,
 Founder, Liana Banyan Corporation
 Founder@LianaBanyan.com
 406-578-1232
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
 
 ---
 

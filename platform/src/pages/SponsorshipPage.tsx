@@ -150,7 +150,7 @@ export default function SponsorshipPage() {
                   <div>
                     <h4 className="font-medium">Founder Reserve</h4>
                     <p className="text-sm text-muted-foreground">
-                      Reserved for the founder who developed 1,370 innovations over 37 years.
+                      Reserved for the founder who developed 1,754 innovations over 37 years.
                     </p>
                   </div>
                 </div>

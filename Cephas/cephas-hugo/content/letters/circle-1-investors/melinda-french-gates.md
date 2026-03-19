@@ -1,3 +1,11 @@
+---
+title: "Letter to French Gates"
+date: 2026-01-15
+letter_type: "Investor Letter"
+recipient: "French Gates"
+tags: ["circle-1", "investor", "melinda-french-gates"]
+---
+
 # What Comes After the Foundation
 ## A Letter to Melinda French Gates
 
@@ -53,3 +61,11 @@ P.S. — Pivotal means "of crucial importance." That's not subtle, and I don't t
 
 406-578-1232
 Support@LianaBanyan.org
+
+---
+
+There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
+
+Help each other help ourselves.
+
+As You Wish.
