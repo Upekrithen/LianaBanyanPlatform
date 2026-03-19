@@ -9,17 +9,50 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Sessions 39-45 Mega-Build (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 46 (March 18, 2026)
 
-**Latest commit:** `796607d` — Sessions 40-45: 7 new pages + routes + sidebar nav
-**Previous commit:** `27045d3` — Sessions 39-45: 12 Supabase migrations (000009-000020) + Send Lists wiring
+**Latest commit:** `8bb22d5` — Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes
+**Previous commit:** `796607d` — Sessions 40-45: 7 new pages + routes + sidebar nav
 
-**Status (March 18, 2026 — Session 39-45 Mega-Build):**
-- Platform deployed and live: lianabanyan-main.web.app (**640 files**, up from 628)
-- All Supabase migrations pushed (through `20260319000020`). **20 total tables added across Sessions 38-45.**
+**Status (March 18, 2026 — Session 46):**
+- Platform deployed and live: lianabanyan-main.web.app (**645 files**, up from 640)
+- All 5 existing pages now wired to their Supabase tables with sample fallback.
+- Also committed untracked files from mega-build (MoneyPenny, ChainVoting, ConcentricCircles, GleanersCorner pages + services).
 - **Innovation count:** 1,751 (unchanged this session)
 - **Patent claims:** 1,401 across 8 provisional applications
 - **No blockers.**
+
+### What Was Done (Session 46 — Knight)
+
+#### Supabase Wiring — 5 Existing Pages
+
+| Page | Service File | Tables Queried | Fallback |
+|------|-------------|----------------|----------|
+| `BandWagon.tsx` | `bandWagonService.ts` | `bandwagon_backings`, `taste_ranger_profiles` | SAMPLE_PROJECTS, SAMPLE_BACKINGS, SAMPLE_TASTE_RANGER, SAMPLE_SAA |
+| `StewardDashboard.tsx` | `stewardService.ts` | `steward_profiles`, `steward_campaigns` | SAMPLE_STEWARD_PROFILE, SAMPLE_CAMPAIGNS, etc. |
+| `XPLeaderboard.tsx` | `xpService.ts` | `xp_scores` + `profiles` join | SAMPLE_LEADERBOARD |
+| `CrewCallPage.tsx` | (inline queries) | `manufacturing_process_modules` → `crew_call_roles` fallback | Empty grid if both fail |
+| `CoverageMinutesDashboard.tsx` | (inline queries) | `coverage_minutes`, `coverage_minute_transactions` | DEFAULT_ACCOUNT + SAMPLE_TRANSACTIONS |
+
+#### Service Layer Changes
+
+- **`bandWagonService.ts`** — `fetchUserBackings()`, `fetchTasteRangerProfile()`, `fetchSAA()` now query Supabase with `try/catch` → sample fallback. `fetchActiveProjects()` still sample-only (no projects table). `backProject()` inserts to DB when userId provided.
+- **`stewardService.ts`** — `fetchStewardProfile()`, `fetchStewardCampaigns()`, `fetchPledgedMarks()`, `fetchDeferredCompensation()` all wire to `steward_profiles` + `steward_campaigns` with mapping functions. `fetchPizzaOvenGroups()` still sample-only.
+- **`xpService.ts`** — `fetchLeaderboard()` queries `xp_scores` with `profiles` join, maps to `LeaderboardEntry` with tier calculation. `fetchUserXP()` queries single user.
+- **`CrewCallPage.tsx`** — Manufacturing process modules query now falls back to `crew_call_roles` (17 seeded roles). All queries wrapped in try/catch to prevent hang on missing tables.
+- **`CoverageMinutesDashboard.tsx`** — Replaced inline mock `useState` with `useEffect` that queries `coverage_minutes` and `coverage_minute_transactions`. Fixed type mismatch (donatedMinutes vs donatedOutMinutes).
+
+#### Also Committed (from Sessions 39-45 mega-build, previously untracked)
+
+- `MoneyPennyQA.tsx` + `moneyPennyQAService.ts`
+- `MoneyPennySocial.tsx` + `socialMediaService.ts`
+- `ChainVoting.tsx` + `chainVotingService.ts`
+- `ConcentricCircles.tsx` + `concentricCircleService.ts`
+- `GleanersCorner.tsx` + `gleanersCornerService.ts`
+- `XPBoxDisplay.tsx`, `creatorShowcaseService.ts`
+- Updated `App.tsx` routes + `AppSidebar.tsx` nav entries
+
+---
 
 ### What Was Done (Sessions 39-45 Mega-Build — Knight)
 
@@ -78,15 +111,12 @@ All tables have full RLS policies. Seed data included where specified in prompts
 - **Platform**: lianabanyan-main.web.app (640 files)
 - **Migrations**: 000008-000020 all pushed to Supabase (13 migrations total this session)
 
-### Pending Work (Session 46+)
+### Pending Work (Session 47+)
 
 | Item | Status |
 |------|--------|
-| Wire existing BandWagon.tsx to Supabase tables | NEXT |
-| Wire existing StewardDashboard.tsx to Supabase tables | NEXT |
-| Wire existing CrewCallPage.tsx to Supabase tables | NEXT |
-| Wire existing XPLeaderboard.tsx to Supabase tables | NEXT |
-| Wire existing CoverageMinutesDashboard.tsx to Supabase tables | NEXT |
+| **BISHOP Session 46 Task A:** MoneyPenny Q&A Supabase wiring (3 migrations + service) | NEXT |
+| **BISHOP Session 46 Task B:** Social Media Command Center Supabase wiring (2 migrations + service) | NEXT |
 | Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
 | FAQ page "See Also" rendering for relatedEntries | MEDIUM |
 | Content Pipeline build | MEDIUM |
@@ -1509,6 +1539,7 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+8bb22d5 Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes live queries with sample fallback
 796607d Sessions 40-45: 7 new pages (StoreTemplates, ShowcasePromotion, GhostWorldMall, MemberAgreement, CreatorDraftPick, TrickleOnboarding, VouchSystem) + routes + sidebar nav
 27045d3 Sessions 39-45: 12 Supabase migrations (000009-000020) + Send Lists service wiring
 832545a Session 39 Task A: Daily News Supabase wiring — daily_news_slides + showcase_promotions tables, RLS, 14 seed slides
