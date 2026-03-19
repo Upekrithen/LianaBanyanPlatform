@@ -9,7 +9,72 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 36 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 37 (March 18, 2026)
+
+**Latest commit:** `d003784` — Session 37: Demand Signaling + Pledged Mark Voting Supabase wiring, Boise Business Cards worked example
+
+**Status (March 18, 2026 — Session 37):**
+- Platform deployed and live: lianabanyan-main.web.app (620 files)
+- All Supabase migrations pushed (through `20260319000006`). DB canonical count = **1,751**.
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.** Ready for Session 38.
+
+### What Was Done This Session (Session 37 — Knight)
+
+1. **Task A: Demand Signaling + Pledged Mark Voting — Supabase Wiring**
+   - Migration `20260319000006_demand_signaling_and_pledged_votes.sql` — 4 new tables:
+     - `demand_pedestals` — pre-operational features tracked for demand (10 seeded)
+     - `demand_pedestal_allocations` — user Shadow Mark allocations per pedestal
+     - `hexisle_vote_candidates` — 14 HexIsle vote candidates seeded
+     - `pledged_mark_votes` — user pledge votes with escrow status
+   - 2 aggregate views: `demand_pedestal_stats`, `hexisle_vote_tallies` (publicly readable)
+   - Full RLS on all 4 tables (users own their rows, aggregates public)
+   - **DemandSignaling.tsx** wired: fetches pedestals + user allocations from Supabase, falls back to SAMPLE_PEDESTALS
+   - **HexIsleVote.tsx** wired: fetches candidates + vote tallies from Supabase, pledge button writes to `pledged_mark_votes`
+
+2. **Task B: Boise Business Cards Worked Example Page** — `/worked-example`
+   - 7-step interactive walkthrough: Buy Joules → Back Marks → Create Campaign → Community Responds → Production Triggers → Cards Ship → Pizza Oven Effect
+   - Step indicator bar with progress navigation (Previous/Next + click any step)
+   - Running ledger sidebar tracking: Joules, Backed Marks, Credits Earned, XP, Escrowed Marks, Fiat in Cooperative, Members Involved, Steward Tier
+   - Immutable Ledger Trail preview (visible from Step 6+)
+   - Comparison table: Traditional vs Liana Banyan (shown on final step)
+   - Uses `CurrencyGlyph` component for all currency displays
+   - Mobile-responsive grid layout (sidebar below on mobile)
+
+### Files Created (Session 37)
+
+| File | Purpose |
+|------|---------|
+| `platform/src/pages/BoiseBusinessCardsExample.tsx` | **NEW** — 7-step worked example with running ledger |
+| `platform/supabase/migrations/20260319000006_demand_signaling_and_pledged_votes.sql` | **NEW** — 4 tables + 2 views + RLS + seed data |
+
+### Files Modified (Session 37)
+
+| File | Changes |
+|------|---------|
+| `platform/src/pages/DemandSignaling.tsx` | Wired to Supabase: fetches pedestals + user allocations, loading state |
+| `platform/src/pages/HexIsleVote.tsx` | Wired to Supabase: fetches candidates + tallies, pledge writes to DB |
+| `platform/src/App.tsx` | Added BoiseBusinessCardsExample lazy import + `/worked-example` route |
+
+### Deployment (Session 37)
+
+- **Platform**: lianabanyan-main.web.app (620 files)
+- **Migration**: 20260319000006 pushed to Supabase
+
+### Pending Work (Session 38+)
+
+| Item | Status |
+|------|--------|
+| **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
+| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
+| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
+| Content Pipeline build | MEDIUM |
+| RLS security hardening | MEDIUM |
+
+---
+
+## Session 36 (March 18, 2026) — Previous
 
 **Latest commit:** `d62be1a` — Add canonical stats migration for 8th provisional (1,751 innovations, 1,401 claims, 8 apps)
 
@@ -1160,6 +1225,7 @@ Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three fe
 - `20260318000001` — 10 Shadow Mark Demand innovations (#1710-#1719) + canonical count (Session 30)
 - `20260319000004` — Launch conditions for 4 missing initiative slugs (Session 36)
 - `20260319000005` — Canonical stats: 1,751 innovations, 1,401 claims, 8 apps (Session 36)
+- `20260319000006` — Demand Signaling + Pledged Mark Voting tables + views + seed data (Session 37)
 
 ---
 
@@ -1273,6 +1339,7 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+d003784 Session 37: Demand Signaling + Pledged Mark Voting Supabase wiring, Boise Business Cards worked example
 d62be1a Add canonical stats migration for 8th provisional - 1751 innovations 1401 claims 8 apps
 7bd617e Pollination: 8th provisional filed (64/009,803) — 1,751 innovations, 1,401 claims, 8 applications
 3cd7551 Update handoff for Session 36
