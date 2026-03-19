@@ -4,7 +4,7 @@
  * Fetches real-time bank balance from Mercury via Supabase Edge Function.
  * Displays aggregate balance + per-account breakdowns + sanitized transactions.
  *
- * MIGRATED FROM: escape-velocity Lovable Site → SantaTransparency.tsx
+ * MIGRATED FROM: escape-velocity site → SantaTransparency.tsx
  * EDGE FUNCTION: get-mercury-balance (calls Mercury API v1)
  *
  * The Edge Function sanitizes transaction descriptions for privacy:

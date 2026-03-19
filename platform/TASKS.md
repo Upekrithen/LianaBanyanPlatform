@@ -612,7 +612,7 @@
   - [x] `lianabanyan.org` → Non-Profit Portal ✅
   - [x] `lianabanyan.net` → Business Network Portal ✅
 - [x] Configure DNS records for all portals ✅ 2025-01-15
-- [x] SSL certificates (Auto-provisioned by Lovable) ✅
+- [x] SSL certificates (Auto-provisioned by Firebase Hosting) ✅
 - [ ] Test subdomain routing in production (Ready - awaiting DNS propagation)
 - [ ] Test all portal access in live environment
 - [ ] User communication and migration plan

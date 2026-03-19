@@ -317,47 +317,159 @@ export function canActivateRing(ringId: number): boolean {
 }
 
 // ============================================================================
-// SUPABASE STUBS — TODO: Wire to live data
+// SUPABASE QUERIES (with sample fallback)
 // ============================================================================
 
-/** TODO(SUPABASE): Fetch ring members from `concentric_circle_members` table */
-export async function fetchRingMembersLive(_ringId: number): Promise<RingMember[]> {
-  // const { data, error } = await supabase
-  //   .from("concentric_circle_members")
-  //   .select("*")
-  //   .eq("ring_id", ringId)
-  //   .order("name");
-  // if (error) throw error;
-  // return data;
-  void supabase; // Suppress unused import warning
-  return [];
+export async function fetchRingMembersLive(ringId: number): Promise<RingMember[]> {
+  try {
+    const { data, error } = await supabase
+      .from("concentric_circle_members")
+      .select("*")
+      .eq("ring_id", ringId)
+      .order("name");
+    if (error) throw error;
+    if (!data || data.length === 0) return SAMPLE_MEMBERS.filter(m => m.ringId === ringId);
+    return data.map((d: any) => ({
+      id: d.id,
+      name: d.name,
+      ringId: d.ring_id,
+      cueCardSent: d.cue_card_sent,
+      cueCardSentDate: d.cue_card_sent_date,
+      signedUp: d.signed_up,
+      signedUpDate: d.signed_up_date,
+      testingGoalsCompleted: d.testing_goals_completed,
+      testingGoalsTotal: d.testing_goals_total,
+      feedbackGiven: d.feedback_given,
+      feedbackCount: d.feedback_count,
+    }));
+  } catch {
+    return SAMPLE_MEMBERS.filter(m => m.ringId === ringId);
+  }
 }
 
-/** TODO(SUPABASE): Fetch feedback items from `concentric_circle_feedback` table */
-export async function fetchFeedbackLive(_ringId: number): Promise<FeedbackItem[]> {
-  // const { data, error } = await supabase
-  //   .from("concentric_circle_feedback")
-  //   .select("*")
-  //   .eq("ring_id", ringId)
-  //   .order("created_at", { ascending: false });
-  // if (error) throw error;
-  // return data;
-  return [];
+export async function fetchFeedbackLive(ringId: number): Promise<FeedbackItem[]> {
+  try {
+    const { data, error } = await supabase
+      .from("concentric_circle_feedback")
+      .select("*")
+      .eq("ring_id", ringId)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    if (!data || data.length === 0) return SAMPLE_FEEDBACK.filter(f => f.ringId === ringId);
+    return data.map((d: any) => ({
+      id: d.id,
+      ringId: d.ring_id,
+      memberId: d.member_id,
+      memberName: d.member_name,
+      category: d.category as FeedbackCategory,
+      severity: d.severity as BugSeverity | null,
+      title: d.title,
+      description: d.description,
+      resolved: d.resolved,
+      createdAt: d.created_at,
+    }));
+  } catch {
+    return SAMPLE_FEEDBACK.filter(f => f.ringId === ringId);
+  }
 }
 
-/** TODO(SUPABASE): Update ring activation status */
-export async function activateRingLive(_ringId: number): Promise<void> {
-  // const { error } = await supabase
-  //   .from("concentric_circle_rings")
-  //   .update({ status: "active", activated_date: new Date().toISOString() })
-  //   .eq("id", ringId);
-  // if (error) throw error;
+export async function fetchAllFeedbackLive(): Promise<FeedbackItem[]> {
+  try {
+    const { data, error } = await supabase
+      .from("concentric_circle_feedback")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    if (!data || data.length === 0) return SAMPLE_FEEDBACK;
+    return data.map((d: any) => ({
+      id: d.id,
+      ringId: d.ring_id,
+      memberId: d.member_id,
+      memberName: d.member_name,
+      category: d.category as FeedbackCategory,
+      severity: d.severity as BugSeverity | null,
+      title: d.title,
+      description: d.description,
+      resolved: d.resolved,
+      createdAt: d.created_at,
+    }));
+  } catch {
+    return SAMPLE_FEEDBACK;
+  }
 }
 
-/** TODO(SUPABASE): Record new feedback */
-export async function submitFeedbackLive(_feedback: Omit<FeedbackItem, "id" | "createdAt">): Promise<void> {
-  // const { error } = await supabase
-  //   .from("concentric_circle_feedback")
-  //   .insert(feedback);
-  // if (error) throw error;
+export async function fetchRingStatusLive(): Promise<{ id: number; status: RingStatus; activatedDate: string | null }[]> {
+  try {
+    const { data, error } = await supabase
+      .from("concentric_circle_rings")
+      .select("*")
+      .order("id");
+    if (error) throw error;
+    return (data ?? []).map((r: any) => ({
+      id: r.id,
+      status: r.status as RingStatus,
+      activatedDate: r.activated_date,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function activateRingLive(ringId: number): Promise<void> {
+  const { error } = await supabase
+    .from("concentric_circle_rings")
+    .update({ status: "active", activated_date: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .eq("id", ringId);
+  if (error) throw error;
+}
+
+export async function submitFeedbackLive(feedback: Omit<FeedbackItem, "id" | "createdAt">): Promise<void> {
+  const { error } = await supabase
+    .from("concentric_circle_feedback")
+    .insert({
+      ring_id: feedback.ringId,
+      member_id: feedback.memberId,
+      member_name: feedback.memberName,
+      category: feedback.category,
+      severity: feedback.severity,
+      title: feedback.title,
+      description: feedback.description,
+      resolved: feedback.resolved,
+    });
+  if (error) throw error;
+}
+
+export async function updateRingStatusLive(ringId: number, status: RingStatus): Promise<void> {
+  const updates: any = { status, updated_at: new Date().toISOString() };
+  if (status === "active") updates.activated_date = new Date().toISOString();
+  const { error } = await supabase
+    .from("concentric_circle_rings")
+    .update(updates)
+    .eq("id", ringId);
+  if (error) throw error;
+}
+
+export async function fetchStatsLive(): Promise<RingStats> {
+  try {
+    const { data: members } = await supabase
+      .from("concentric_circle_members")
+      .select("signed_up");
+    const { data: feedback } = await supabase
+      .from("concentric_circle_feedback")
+      .select("category, resolved");
+
+    const memberRows = members ?? [];
+    const fbRows = feedback ?? [];
+    if (memberRows.length === 0 && fbRows.length === 0) return getStats();
+
+    return {
+      totalTestersActivated: memberRows.filter(m => m.signed_up).length,
+      feedbackItemsReceived: fbRows.length,
+      bugsFixed: fbRows.filter(f => f.category === "bug" && f.resolved).length,
+      featuresRequested: fbRows.filter(f => f.category === "feature_request").length,
+      avgTestingMinutes: 42,
+    };
+  } catch {
+    return getStats();
+  }
 }

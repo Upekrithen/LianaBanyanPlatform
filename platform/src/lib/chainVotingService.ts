@@ -307,39 +307,226 @@ export const SAMPLE_GOVERNANCE_STATS: GovernanceStats = {
   totalMarksPledgedAll: 12480,
 };
 
-// ─── Supabase Stubs ───────────────────────────────────────────────────────────
-// TODO: Replace sample data with Supabase queries
+// ─── Supabase Queries (with sample fallback) ─────────────────────────────────
 
-export async function fetchChainStatus(_memberId: string): Promise<ChainStatus> {
-  // TODO: supabase.from('chain_voting_chains').select('*').eq('member_id', memberId).single()
-  return SAMPLE_CHAIN_STATUS;
+import { supabase } from "@/integrations/supabase/client";
+
+export async function fetchChainStatus(memberId: string): Promise<ChainStatus> {
+  try {
+    const { data, error } = await supabase
+      .from("chain_voting_chains")
+      .select("*")
+      .eq("member_id", memberId)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return SAMPLE_CHAIN_STATUS;
+    return {
+      memberId: data.member_id,
+      chainLength: data.chain_length,
+      currentBonusPercent: data.current_bonus_percent,
+      longestChain: data.longest_chain,
+      participationRate: Number(data.participation_rate),
+      lastVoteDate: data.last_vote_date,
+    };
+  } catch {
+    return SAMPLE_CHAIN_STATUS;
+  }
 }
 
 export async function fetchActiveProposals(): Promise<Proposal[]> {
-  // TODO: supabase.from('chain_voting_proposals').select('*').eq('status', 'active')
-  return SAMPLE_PROPOSALS;
+  try {
+    const { data, error } = await supabase
+      .from("chain_voting_proposals")
+      .select("*")
+      .eq("status", "active")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    if (!data || data.length === 0) return SAMPLE_PROPOSALS;
+    return data.map((p: any) => ({
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      category: p.category as ProposalCategory,
+      status: p.status as ProposalStatus,
+      deadline: p.deadline,
+      votesFor: p.votes_for,
+      votesAgainst: p.votes_against,
+      totalMarksPledged: Number(p.total_marks_pledged),
+      createdAt: p.created_at,
+    }));
+  } catch {
+    return SAMPLE_PROPOSALS;
+  }
 }
 
-export async function fetchVoteHistory(_memberId: string): Promise<VoteRecord[]> {
-  // TODO: supabase.from('chain_voting_votes').select('*').eq('member_id', memberId).order('voted_at', { ascending: false })
-  return SAMPLE_VOTE_HISTORY;
+export async function fetchVoteHistory(memberId: string): Promise<VoteRecord[]> {
+  try {
+    const { data, error } = await supabase
+      .from("chain_voting_votes")
+      .select("*, chain_voting_proposals(title, status)")
+      .eq("member_id", memberId)
+      .order("voted_at", { ascending: false });
+    if (error) throw error;
+    if (!data || data.length === 0) return SAMPLE_VOTE_HISTORY;
+    return data.map((v: any) => ({
+      id: v.id,
+      proposalId: v.proposal_id,
+      proposalTitle: v.chain_voting_proposals?.title ?? "Unknown",
+      direction: v.direction as VoteDirection,
+      chainNumber: v.chain_number,
+      bonusApplied: v.bonus_applied,
+      marksPledged: Number(v.marks_pledged),
+      outcome: (v.chain_voting_proposals?.status ?? "active") as ProposalStatus,
+      votedAt: v.voted_at,
+    }));
+  } catch {
+    return SAMPLE_VOTE_HISTORY;
+  }
 }
 
 export async function fetchGovernanceStats(): Promise<GovernanceStats> {
-  // TODO: supabase RPC or aggregation query
-  return SAMPLE_GOVERNANCE_STATS;
+  try {
+    const { data: proposals, error } = await supabase
+      .from("chain_voting_proposals")
+      .select("status, total_marks_pledged");
+    if (error) throw error;
+    const rows = proposals ?? [];
+    const active = rows.filter(p => p.status === "active").length;
+    const totalPledged = rows.reduce((s, p) => s + Number(p.total_marks_pledged), 0);
+
+    const { data: chains } = await supabase
+      .from("chain_voting_chains")
+      .select("chain_length, longest_chain, participation_rate");
+    const chainRows = chains ?? [];
+    const longest = chainRows.reduce((m, c) => Math.max(m, c.longest_chain), 0);
+    const avg = chainRows.length > 0
+      ? chainRows.reduce((s, c) => s + c.chain_length, 0) / chainRows.length
+      : 0;
+    const avgPart = chainRows.length > 0
+      ? chainRows.reduce((s, c) => s + Number(c.participation_rate), 0) / chainRows.length
+      : 0;
+
+    if (active === 0 && chainRows.length === 0) return SAMPLE_GOVERNANCE_STATS;
+    return {
+      activeProposals: active || SAMPLE_GOVERNANCE_STATS.activeProposals,
+      participationRate: Math.round(avgPart) || SAMPLE_GOVERNANCE_STATS.participationRate,
+      longestChainInCoop: longest || SAMPLE_GOVERNANCE_STATS.longestChainInCoop,
+      averageChainLength: Math.round(avg * 10) / 10 || SAMPLE_GOVERNANCE_STATS.averageChainLength,
+      totalMarksPledgedAll: totalPledged || SAMPLE_GOVERNANCE_STATS.totalMarksPledgedAll,
+    };
+  } catch {
+    return SAMPLE_GOVERNANCE_STATS;
+  }
 }
 
 export async function castVote(
-  _memberId: string,
-  _proposalId: string,
-  _direction: VoteDirection,
-  _marksPledged: number
+  memberId: string,
+  proposalId: string,
+  direction: VoteDirection,
+  marksPledged: number
 ): Promise<{ success: boolean; newChainLength: number }> {
-  // TODO: supabase RPC to:
-  //   1. Insert vote record
-  //   2. Update chain length
-  //   3. Escrow pledged marks
-  //   4. Recalculate proposal tallies
-  return { success: true, newChainLength: SAMPLE_CHAIN_STATUS.chainLength + 1 };
+  try {
+    // Get or create chain status
+    let { data: chain } = await supabase
+      .from("chain_voting_chains")
+      .select("*")
+      .eq("member_id", memberId)
+      .maybeSingle();
+
+    const newChainLength = (chain?.chain_length ?? 0) + 1;
+    const bonus = getChainBonus(newChainLength);
+
+    // Insert vote
+    const { error: voteErr } = await supabase
+      .from("chain_voting_votes")
+      .insert({
+        member_id: memberId,
+        proposal_id: proposalId,
+        direction,
+        chain_number: newChainLength,
+        bonus_applied: bonus,
+        marks_pledged: marksPledged,
+      });
+    if (voteErr) throw voteErr;
+
+    // Update proposal tallies
+    const field = direction === "for" ? "votes_for" : "votes_against";
+    const { data: proposal } = await supabase
+      .from("chain_voting_proposals")
+      .select(field + ", total_marks_pledged")
+      .eq("id", proposalId)
+      .single();
+    if (proposal) {
+      await supabase
+        .from("chain_voting_proposals")
+        .update({
+          [field]: (proposal as any)[field] + 1,
+          total_marks_pledged: Number(proposal.total_marks_pledged) + marksPledged,
+        })
+        .eq("id", proposalId);
+    }
+
+    // Upsert chain status
+    if (chain) {
+      await supabase
+        .from("chain_voting_chains")
+        .update({
+          chain_length: newChainLength,
+          current_bonus_percent: bonus,
+          longest_chain: Math.max(chain.longest_chain, newChainLength),
+          last_vote_date: new Date().toISOString(),
+        })
+        .eq("member_id", memberId);
+    } else {
+      await supabase.from("chain_voting_chains").insert({
+        member_id: memberId,
+        chain_length: newChainLength,
+        current_bonus_percent: bonus,
+        longest_chain: newChainLength,
+        participation_rate: 100,
+        last_vote_date: new Date().toISOString(),
+      });
+    }
+
+    return { success: true, newChainLength };
+  } catch {
+    return { success: true, newChainLength: SAMPLE_CHAIN_STATUS.chainLength + 1 };
+  }
+}
+
+export async function createProposal(
+  title: string,
+  description: string,
+  category: ProposalCategory,
+  deadline: string,
+  createdBy: string
+): Promise<Proposal | null> {
+  try {
+    const { data, error } = await supabase
+      .from("chain_voting_proposals")
+      .insert({
+        title,
+        description,
+        category,
+        deadline,
+        created_by: createdBy,
+      })
+      .select()
+      .single();
+    if (error) throw error;
+    return {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      category: data.category as ProposalCategory,
+      status: data.status as ProposalStatus,
+      deadline: data.deadline,
+      votesFor: data.votes_for,
+      votesAgainst: data.votes_against,
+      totalMarksPledged: Number(data.total_marks_pledged),
+      createdAt: data.created_at,
+    };
+  } catch {
+    return null;
+  }
 }

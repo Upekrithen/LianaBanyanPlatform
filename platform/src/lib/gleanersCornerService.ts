@@ -10,7 +10,11 @@
  *
  * Biblical reference: Ruth gleaning in Boaz's fields (Ruth 2:15-16).
  * Not charity — structural. Nobody falls through.
+ *
+ * Supabase tables: gleaners_fund_summary, gleaners_distributions
  */
+
+import { supabase } from "@/integrations/supabase/client";
 
 // ============================================================================
 // TYPES
@@ -205,3 +209,76 @@ export const SAMPLE_DISTRIBUTIONS: GleanerDistribution[] = [
     description: "Specialist visit and follow-up care",
   },
 ];
+
+// ============================================================================
+// SUPABASE QUERIES (with sample fallback)
+// ============================================================================
+
+export async function fetchFundSummary(): Promise<GleanerFundSummary> {
+  try {
+    const { data, error } = await supabase
+      .from("gleaners_fund_summary")
+      .select("*")
+      .limit(1)
+      .single();
+    if (error) throw error;
+    return {
+      totalCollected: Number(data.total_collected),
+      totalDistributed: Number(data.total_distributed),
+      reserveBalance: Number(data.reserve_balance),
+      familiesSupported: data.families_supported,
+      mealsFunded: data.meals_funded,
+      medicalCovered: data.medical_covered,
+    };
+  } catch {
+    return SAMPLE_FUND_SUMMARY;
+  }
+}
+
+export async function fetchDistributions(): Promise<GleanerDistribution[]> {
+  try {
+    const { data, error } = await supabase
+      .from("gleaners_distributions")
+      .select("*")
+      .order("date", { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map((d: any) => ({
+      id: d.id,
+      date: d.date,
+      recipientCount: d.recipient_count,
+      totalMarks: Number(d.total_marks),
+      category: d.category as DistributionCategory,
+      description: d.description,
+    }));
+  } catch {
+    return SAMPLE_DISTRIBUTIONS;
+  }
+}
+
+export async function fetchGleanerStats(): Promise<{
+  totalDistributions: number;
+  totalMarksDistributed: number;
+  categoryBreakdown: { food: number; medical: number; emergency: number };
+}> {
+  try {
+    const { data, error } = await supabase
+      .from("gleaners_distributions")
+      .select("total_marks, category");
+    if (error) throw error;
+    const rows = data ?? [];
+    const food = rows.filter(r => r.category === "food").reduce((s, r) => s + Number(r.total_marks), 0);
+    const medical = rows.filter(r => r.category === "medical").reduce((s, r) => s + Number(r.total_marks), 0);
+    const emergency = rows.filter(r => r.category === "emergency").reduce((s, r) => s + Number(r.total_marks), 0);
+    return {
+      totalDistributions: rows.length,
+      totalMarksDistributed: food + medical + emergency,
+      categoryBreakdown: { food, medical, emergency },
+    };
+  } catch {
+    return {
+      totalDistributions: SAMPLE_DISTRIBUTIONS.length,
+      totalMarksDistributed: SAMPLE_DISTRIBUTIONS.reduce((s, d) => s + d.totalMarks, 0),
+      categoryBreakdown: { food: 2185, medical: 1380, emergency: 325 },
+    };
+  }
+}

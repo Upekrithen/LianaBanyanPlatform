@@ -8,11 +8,6 @@ export const getSubdomainProject = async (): Promise<string | null> => {
     return null;
   }
   
-  // Skip legacy preview domains — platform deploys via Firebase
-  if (hostname.includes('lovable.app')) {
-    return null;
-  }
-
   // Skip Firebase hosting domains — these are our own sites, not project subdomains
   if (hostname.includes('.web.app') || hostname.includes('.firebaseapp.com')) {
     return null;
