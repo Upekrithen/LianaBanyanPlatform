@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import {
   type NodeCaptainProfile, type ProductionCampaign, type ProductionStamp, type CampaignStatus,
   SAMPLE_CAPTAINS, SAMPLE_CAMPAIGNS, SAMPLE_STAMPS,
-  fetchNodeCaptains, fetchProductionCampaigns, fetchStamps,
+  fetchNodeCaptains, fetchProductionCampaigns, fetchStamps, applyStamp,
 } from "@/lib/nodeCaptainService";
 
 const CAMPAIGN_STYLES: Record<CampaignStatus, { bg: string; text: string; label: string }> = {
@@ -25,6 +25,8 @@ export default function NodeCaptain() {
   const { user } = useAuth();
   const [captains, setCaptains] = useState<NodeCaptainProfile[]>(SAMPLE_CAPTAINS);
   const [campaigns, setCampaigns] = useState<ProductionCampaign[]>(SAMPLE_CAMPAIGNS);
+  const [stampCampaignId, setStampCampaignId] = useState("");
+  const [stampScore, setStampScore] = useState(4);
 
   useEffect(() => {
     fetchNodeCaptains().then(setCaptains);
@@ -119,7 +121,11 @@ export default function NodeCaptain() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs text-slate-400 block mb-1">Campaign</label>
-                  <select className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-white">
+                  <select
+                    className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-white"
+                    value={stampCampaignId}
+                    onChange={e => setStampCampaignId(e.target.value)}
+                  >
                     <option value="">Select a campaign...</option>
                     {campaigns.filter(c => c.status === "quality_check").map(c => (
                       <option key={c.id} value={c.id}>{c.productName} ({c.unitsCompleted} units)</option>
@@ -127,11 +133,29 @@ export default function NodeCaptain() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs text-slate-400 block mb-1">Quality Score (1-5)</label>
-                  <input type="range" min="1" max="5" step="0.1" defaultValue="4" className="w-full" />
+                  <label className="text-xs text-slate-400 block mb-1">Quality Score: {stampScore.toFixed(1)}</label>
+                  <input type="range" min="1" max="5" step="0.1" value={stampScore} onChange={e => setStampScore(Number(e.target.value))} className="w-full" />
                 </div>
               </div>
-              <Button className="mt-3" size="sm">Apply STAMP</Button>
+              <Button
+                className="mt-3"
+                size="sm"
+                disabled={!stampCampaignId || !user?.id}
+                onClick={async () => {
+                  if (!stampCampaignId || !user?.id) return;
+                  const campaign = campaigns.find(c => c.id === stampCampaignId);
+                  const result = await applyStamp({
+                    campaignId: stampCampaignId,
+                    stamperUserId: user.id,
+                    unitsVerified: campaign?.unitsCompleted || 25,
+                    qualityScore: stampScore,
+                  });
+                  if (result) {
+                    setStampCampaignId("");
+                    fetchProductionCampaigns().then(setCampaigns);
+                  }
+                }}
+              >Apply STAMP</Button>
             </CardContent>
           </Card>
         </section>

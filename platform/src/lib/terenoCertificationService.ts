@@ -129,6 +129,90 @@ export async function fetchExclusions(): Promise<TerenoExclusion[]> {
   } catch { return SAMPLE_EXCLUSIONS; }
 }
 
+// ============================================================================
+// WRITE OPERATIONS
+// ============================================================================
+
+export async function submitCertification(cert: {
+  productName: string; productDescription: string; designerName: string;
+  tier: number; tierName: string; manufacturingProcess: string;
+  dimensionsCompliant: boolean; waterSafe: boolean; stackCompatible: boolean;
+  compliantMechanisms: boolean; costUnderCeiling: boolean; lithographicManufacturing: boolean;
+  designerUserId?: string; deviationNotes?: string;
+}): Promise<TerenoCertification | null> {
+  try {
+    const { data, error } = await supabase.from("tereno_certifications").insert({
+      product_name: cert.productName,
+      product_description: cert.productDescription,
+      designer_name: cert.designerName,
+      designer_user_id: cert.designerUserId || null,
+      tier: cert.tier,
+      tier_name: cert.tierName,
+      manufacturing_process: cert.manufacturingProcess,
+      dimensions_compliant: cert.dimensionsCompliant,
+      water_safe: cert.waterSafe,
+      stack_compatible: cert.stackCompatible,
+      compliant_mechanisms: cert.compliantMechanisms,
+      cost_under_ceiling: cert.costUnderCeiling,
+      lithographic_manufacturing: cert.lithographicManufacturing,
+      deviation_notes: cert.deviationNotes || null,
+      status: "submitted",
+    }).select().single();
+    if (error || !data) return null;
+    return mapCert(data);
+  } catch { return null; }
+}
+
+export async function approveCertification(certId: string, ipLedgerEntry?: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("tereno_certifications").update({
+      status: "certified",
+      certified_at: new Date().toISOString(),
+      ip_ledger_entry: ipLedgerEntry || null,
+    }).eq("id", certId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function rejectCertification(certId: string, reason: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("tereno_certifications").update({
+      status: "rejected",
+      rejection_reason: reason,
+    }).eq("id", certId);
+    return !error;
+  } catch { return false; }
+}
+
+// ============================================================================
+// STATS
+// ============================================================================
+
+export async function fetchCertStats(): Promise<{
+  total: number; certified: number; pending: number; byTier: Record<number, number>;
+}> {
+  try {
+    const { data, error } = await supabase.from("tereno_certifications").select("status, tier");
+    if (error || !data?.length) {
+      return { total: SAMPLE_CERTIFICATIONS.length, certified: 7, pending: 1, byTier: { 1: 3, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 } };
+    }
+    const byTier: Record<number, number> = {};
+    data.filter(c => c.status === "certified").forEach(c => { byTier[c.tier] = (byTier[c.tier] || 0) + 1; });
+    return {
+      total: data.length,
+      certified: data.filter(c => c.status === "certified").length,
+      pending: data.filter(c => c.status === "submitted" || c.status === "reviewing").length,
+      byTier,
+    };
+  } catch {
+    return { total: SAMPLE_CERTIFICATIONS.length, certified: 7, pending: 1, byTier: { 1: 3, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 } };
+  }
+}
+
+// ============================================================================
+// MAPPERS
+// ============================================================================
+
 function mapCert(row: any): TerenoCertification {
   return {
     id: row.id, productName: row.product_name, productDescription: row.product_description,

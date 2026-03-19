@@ -106,12 +106,52 @@ export async function fetchC20Examples(): Promise<C20Example[]> {
       .select("*")
       .order("base_cost", { ascending: true });
     if (error || !data?.length) return SAMPLE_EXAMPLES;
-    return data.map(row => ({
-      id: row.id, productName: row.product_name, category: row.category,
-      baseCost: Number(row.base_cost), finalPrice: Number(row.final_price),
-      marginAmount: Number(row.margin_amount), creatorShare: Number(row.creator_share),
-      platformShare: Number(row.platform_share), gleanersShare: Number(row.gleaners_share),
-      stewardShare: Number(row.steward_share), createdAt: row.created_at,
-    }));
+    return data.map(mapExample);
   } catch { return SAMPLE_EXAMPLES; }
+}
+
+// ============================================================================
+// WRITE OPERATIONS
+// ============================================================================
+
+export async function addC20Example(example: {
+  productName: string; category: string; baseCost: number;
+}): Promise<C20Example | null> {
+  try {
+    const calc = calculateC20(example.baseCost);
+    const { data, error } = await supabase.from("c20_pricing_examples").insert({
+      product_name: example.productName,
+      category: example.category,
+      base_cost: calc.baseCost,
+      final_price: calc.finalPrice,
+      margin_amount: calc.marginAmount,
+      creator_share: calc.creatorShare,
+      platform_share: calc.platformShare,
+      gleaners_share: calc.gleanersShare,
+      steward_share: 0,
+    }).select().single();
+    if (error || !data) return null;
+    return mapExample(data);
+  } catch { return null; }
+}
+
+export async function deleteC20Example(exampleId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("c20_pricing_examples").delete().eq("id", exampleId);
+    return !error;
+  } catch { return false; }
+}
+
+// ============================================================================
+// MAPPERS
+// ============================================================================
+
+function mapExample(row: any): C20Example {
+  return {
+    id: row.id, productName: row.product_name, category: row.category,
+    baseCost: Number(row.base_cost), finalPrice: Number(row.final_price),
+    marginAmount: Number(row.margin_amount), creatorShare: Number(row.creator_share),
+    platformShare: Number(row.platform_share), gleanersShare: Number(row.gleaners_share),
+    stewardShare: Number(row.steward_share), createdAt: row.created_at,
+  };
 }

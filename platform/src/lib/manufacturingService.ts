@@ -107,6 +107,87 @@ export async function fetchCrewApplications(): Promise<CrewApplication[]> {
   } catch { return []; }
 }
 
+// ============================================================================
+// WRITE OPERATIONS
+// ============================================================================
+
+export async function applyForCrew(application: {
+  userId: string; moduleId: string; roleRequested: CrewRole;
+  experienceDescription: string; availability: string; equipmentOwned?: string;
+}): Promise<CrewApplication | null> {
+  try {
+    const { data, error } = await supabase.from("forge_crew_applications").insert({
+      user_id: application.userId,
+      module_id: application.moduleId,
+      role_requested: application.roleRequested,
+      experience_description: application.experienceDescription,
+      availability: application.availability,
+      equipment_owned: application.equipmentOwned || null,
+    }).select().single();
+    if (error || !data) return null;
+    return mapApplication(data);
+  } catch { return null; }
+}
+
+export async function reviewCrewApplication(
+  applicationId: string,
+  status: "accepted" | "rejected" | "waitlisted",
+): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("forge_crew_applications").update({
+      status,
+      reviewed_at: new Date().toISOString(),
+    }).eq("id", applicationId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function updateModuleStatus(moduleId: string, status: ModuleStatus): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("manufacturing_modules").update({ status }).eq("id", moduleId);
+    return !error;
+  } catch { return false; }
+}
+
+// ============================================================================
+// STATS
+// ============================================================================
+
+export async function fetchForgeStats(): Promise<{
+  activeStations: number; totalCapacity: number; totalQueue: number; pioneers: number;
+}> {
+  try {
+    const { data, error } = await supabase
+      .from("manufacturing_modules")
+      .select("status, capacity_per_day, current_queue, process_pioneer_name");
+    if (error || !data?.length) {
+      return { activeStations: 4, totalCapacity: 215, totalQueue: 47, pioneers: 2 };
+    }
+    const active = data.filter(m => m.status === "active");
+    return {
+      activeStations: active.length,
+      totalCapacity: active.reduce((sum, m) => sum + (m.capacity_per_day || 0), 0),
+      totalQueue: data.reduce((sum, m) => sum + (m.current_queue || 0), 0),
+      pioneers: data.filter(m => m.process_pioneer_name).length,
+    };
+  } catch {
+    return { activeStations: 4, totalCapacity: 215, totalQueue: 47, pioneers: 2 };
+  }
+}
+
+// ============================================================================
+// MAPPERS
+// ============================================================================
+
+function mapApplication(row: any): CrewApplication {
+  return {
+    id: row.id, userId: row.user_id, moduleId: row.module_id,
+    roleRequested: row.role_requested, experienceDescription: row.experience_description,
+    equipmentOwned: row.equipment_owned, availability: row.availability,
+    status: row.status, createdAt: row.created_at, reviewedAt: row.reviewed_at,
+  };
+}
+
 function mapModule(row: any): ManufacturingModule {
   return {
     id: row.id, moduleType: row.module_type, displayName: row.display_name,

@@ -10,6 +10,7 @@ import {
   type SantaGift, type CaptainProfile, type GiftStatus,
   SAMPLE_GIFTS, SAMPLE_CAPTAINS,
   fetchSentGifts, fetchReceivedGifts, fetchCaptains, fetchCaptainProfile,
+  activateOopsCode, fetchSantaStats,
 } from "@/lib/santaService";
 
 const STATUS_STYLES: Record<GiftStatus, { bg: string; text: string; label: string }> = {
@@ -213,7 +214,20 @@ export default function SantaEverAfter() {
                   onChange={e => setOopsInput(e.target.value)}
                   className="bg-slate-900 border border-red-800 rounded px-4 py-2 text-center text-xl font-mono tracking-widest w-40 text-white"
                 />
-                <Button variant="destructive" size="sm" disabled={oopsInput !== "9-9-9-9"}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  disabled={oopsInput !== "9-9-9-9"}
+                  onClick={async () => {
+                    const eligible = sentGifts.find(g => g.status === "in_transit" || g.status === "delivered");
+                    if (!eligible) return;
+                    const ok = await activateOopsCode(eligible.id);
+                    if (ok && user?.id) {
+                      fetchSentGifts(user.id).then(setSentGifts);
+                      setOopsInput("");
+                    }
+                  }}
+                >
                   Activate Oops Code
                 </Button>
               </div>

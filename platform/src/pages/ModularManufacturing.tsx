@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import {
   type ManufacturingModule, type ModuleStatus, type ModuleType,
   MODULE_ICONS, SAMPLE_MODULES,
-  fetchModules,
+  fetchModules, applyForCrew,
 } from "@/lib/manufacturingService";
 
 const MODULE_ICON_COMPONENTS: Record<string, any> = {
@@ -173,7 +173,23 @@ export default function ModularManufacturing() {
                         <span className="font-medium text-sm">{mod.displayName}</span>
                         <span className="text-xs text-slate-400 ml-2 capitalize">{role}</span>
                       </div>
-                      <Button variant="outline" size="sm" className="text-xs">Apply</Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        disabled={!user?.id}
+                        onClick={async () => {
+                          if (!user?.id) return;
+                          await applyForCrew({
+                            userId: user.id,
+                            moduleId: mod.id,
+                            roleRequested: role,
+                            experienceDescription: "Applied via UI",
+                            availability: "flexible",
+                          });
+                          fetchModules().then(setModules);
+                        }}
+                      >Apply</Button>
                     </div>
                   ))
                 )}

@@ -8,7 +8,7 @@ import { Scale, Eye, Brain, Crown, Gavel, AlertTriangle, Shield, Clock, ChevronD
 import { Link } from "react-router-dom";
 import {
   type StarChamberCase, type CaseSeverity, type CaseStatus, type CaseType,
-  JUDGES, SAMPLE_CASES, fetchCases,
+  JUDGES, SAMPLE_CASES, fetchCases, fetchChamberStats,
 } from "@/lib/starChamberService";
 
 const SEVERITY_STYLES: Record<CaseSeverity, { bg: string; text: string }> = {

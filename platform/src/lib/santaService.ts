@@ -125,6 +125,107 @@ export async function fetchCaptainProfile(userId: string): Promise<CaptainProfil
 }
 
 // ============================================================================
+// WRITE OPERATIONS
+// ============================================================================
+
+export async function createGift(gift: {
+  senderUserId: string; recipientName: string; recipientContact: string;
+  giftDescription: string; amountPaid: number; currencyType: CurrencyType;
+  recipientUserId?: string; productId?: string;
+}): Promise<SantaGift | null> {
+  try {
+    const { data, error } = await supabase.from("santa_gifts").insert({
+      sender_user_id: gift.senderUserId,
+      recipient_name: gift.recipientName,
+      recipient_contact: gift.recipientContact,
+      gift_description: gift.giftDescription,
+      amount_paid: gift.amountPaid,
+      currency_type: gift.currencyType,
+      recipient_user_id: gift.recipientUserId || null,
+      product_id: gift.productId || null,
+    }).select().single();
+    if (error || !data) return null;
+    return mapGift(data);
+  } catch { return null; }
+}
+
+export async function assignCaptain(giftId: string, captainUserId: string, marksStaked: number): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("santa_gifts").update({
+      captain_user_id: captainUserId,
+      captain_marks_staked: marksStaked,
+      status: "assigned",
+      assigned_at: new Date().toISOString(),
+    }).eq("id", giftId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function confirmGift(giftId: string, role: "sender" | "captain" | "recipient"): Promise<boolean> {
+  try {
+    const field = role === "sender" ? "sender_confirmed" : role === "captain" ? "captain_confirmed" : "recipient_confirmed";
+    const { error } = await supabase.from("santa_gifts").update({ [field]: true }).eq("id", giftId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function markDelivered(giftId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("santa_gifts").update({
+      status: "delivered",
+      delivered_at: new Date().toISOString(),
+    }).eq("id", giftId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function completeGift(giftId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("santa_gifts").update({
+      status: "completed",
+      completed_at: new Date().toISOString(),
+    }).eq("id", giftId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function activateOopsCode(giftId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("santa_gifts").update({
+      oops_code_used: true,
+      status: "oops_code",
+    }).eq("id", giftId);
+    return !error;
+  } catch { return false; }
+}
+
+// ============================================================================
+// STATS
+// ============================================================================
+
+export async function fetchSantaStats(): Promise<{
+  total: number; pending: number; inTransit: number;
+  delivered: number; completed: number; oopsCodes: number;
+}> {
+  try {
+    const { data, error } = await supabase.from("santa_gifts").select("status");
+    if (error || !data?.length) {
+      return { total: SAMPLE_GIFTS.length, pending: 1, inTransit: 1, delivered: 1, completed: 1, oopsCodes: 1 };
+    }
+    return {
+      total: data.length,
+      pending: data.filter(g => g.status === "pending").length,
+      inTransit: data.filter(g => g.status === "in_transit").length,
+      delivered: data.filter(g => g.status === "delivered").length,
+      completed: data.filter(g => g.status === "completed").length,
+      oopsCodes: data.filter(g => g.status === "oops_code").length,
+    };
+  } catch {
+    return { total: SAMPLE_GIFTS.length, pending: 1, inTransit: 1, delivered: 1, completed: 1, oopsCodes: 1 };
+  }
+}
+
+// ============================================================================
 // MAPPERS
 // ============================================================================
 

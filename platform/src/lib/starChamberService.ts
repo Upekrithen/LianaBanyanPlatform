@@ -162,6 +162,112 @@ export async function fetchUserCases(userId: string): Promise<StarChamberCase[]>
   } catch { return SAMPLE_CASES; }
 }
 
+// ============================================================================
+// WRITE OPERATIONS
+// ============================================================================
+
+export async function createCase(caseData: {
+  caseType: CaseType; title: string; description: string; severity: CaseSeverity;
+  complainantUserId?: string; respondentUserId?: string; evidence?: { type: string; description: string; url?: string }[];
+}): Promise<StarChamberCase | null> {
+  try {
+    const { data, error } = await supabase.from("star_chamber_cases").insert({
+      case_type: caseData.caseType,
+      title: caseData.title,
+      description: caseData.description,
+      severity: caseData.severity,
+      complainant_user_id: caseData.complainantUserId || null,
+      respondent_user_id: caseData.respondentUserId || null,
+      evidence: caseData.evidence || [],
+    }).select().single();
+    if (error || !data) return null;
+    return mapCase(data);
+  } catch { return null; }
+}
+
+export async function updateCaseStatus(caseId: string, status: CaseStatus): Promise<boolean> {
+  try {
+    const updates: Record<string, any> = { status };
+    if (status === "closed" || status === "verdict_reached") {
+      updates.resolved_at = new Date().toISOString();
+    }
+    const { error } = await supabase.from("star_chamber_cases").update(updates).eq("id", caseId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function addJudgeAnalysis(
+  caseId: string,
+  judge: "oracle" | "morpheus" | "red_queen" | "dredd",
+  analysis: string,
+): Promise<boolean> {
+  try {
+    const field = judge === "dredd" ? "dredd_verdict" : `${judge}_analysis`;
+    const { error } = await supabase.from("star_chamber_cases").update({ [field]: analysis }).eq("id", caseId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function setRecommendedAction(caseId: string, action: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("star_chamber_cases").update({
+      recommended_action: action,
+      status: "analysis_complete",
+    }).eq("id", caseId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function setFinalAction(caseId: string, action: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("star_chamber_cases").update({
+      final_action: action,
+      status: "verdict_reached",
+      resolved_at: new Date().toISOString(),
+    }).eq("id", caseId);
+    return !error;
+  } catch { return false; }
+}
+
+export async function setFounderOverride(caseId: string, reason: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("star_chamber_cases").update({
+      founder_override: true,
+      founder_override_reason: reason,
+    }).eq("id", caseId);
+    return !error;
+  } catch { return false; }
+}
+
+// ============================================================================
+// STATS
+// ============================================================================
+
+export async function fetchChamberStats(): Promise<{
+  total: number; open: number; resolved: number; overrideRate: number;
+}> {
+  try {
+    const { data, error } = await supabase.from("star_chamber_cases").select("status, founder_override");
+    if (error || !data?.length) {
+      return { total: SAMPLE_CASES.length, open: 1, resolved: 2, overrideRate: 20 };
+    }
+    const resolved = data.filter(c => c.status === "closed" || c.status === "verdict_reached").length;
+    const overrides = data.filter(c => c.founder_override).length;
+    return {
+      total: data.length,
+      open: data.filter(c => c.status === "open").length,
+      resolved,
+      overrideRate: data.length > 0 ? Math.round((overrides / data.length) * 100) : 0,
+    };
+  } catch {
+    return { total: SAMPLE_CASES.length, open: 1, resolved: 2, overrideRate: 20 };
+  }
+}
+
+// ============================================================================
+// MAPPERS
+// ============================================================================
+
 function mapCase(row: any): StarChamberCase {
   return {
     id: row.id, caseNumber: row.case_number, caseType: row.case_type, title: row.title,
