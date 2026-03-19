@@ -283,6 +283,7 @@ const HexIsleCueCard = lazy(() => import("./pages/cue-cards/HexIsleCueCard"));
 const LaunchTracker = lazy(() => import("./pages/LaunchTracker"));
 const MoneypennyBriefing = lazy(() => import("./pages/MoneypennyBriefing"));
 const SpotlightManager = lazy(() => import("./pages/SpotlightManager"));
+const BoiseBusinessCardsExample = lazy(() => import("./pages/BoiseBusinessCardsExample"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -693,6 +694,7 @@ const App = () => (
                         <Route path="/cue-cards/hexisle" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleCueCard /></Suspense>} />
                         <Route path="/chain" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainDashboard /></Suspense></ExplorerRoute>} />
                         <Route path="/demand" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DemandSignaling /></Suspense></ExplorerRoute>} />
+                        <Route path="/worked-example" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BoiseBusinessCardsExample /></Suspense>} />
                         <Route path="/hexisle/founding-run" element={<FoundingRunLanding />} />
                         <Route path="/hexisle/founding-run/order" element={<ProtectedRoute><PreOrderFlow /></ProtectedRoute>} />
                         <Route path="/content-pipeline" element={<ContentPipelinePage />} />

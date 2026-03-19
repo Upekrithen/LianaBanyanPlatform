@@ -5,7 +5,7 @@
  * carry-forward, crystallization, beacon streaks, thermometers.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -17,10 +17,13 @@ import {
   BarChart3,
   Info,
   Filter,
+  Loader2,
 } from 'lucide-react';
 import { FeatureThermometer } from '@/components/demand/FeatureThermometer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   AREA_ALLOCATIONS,
   SAMPLE_PEDESTALS,
@@ -29,27 +32,98 @@ import {
   calculateCarryForward,
   carryForwardLimit,
   type AreaCategory,
+  type Pedestal,
   type UserPedestalAllocation,
 } from '@/lib/demandSignalingService';
 
-const MOCK_STREAK_DAYS = 0;
-const MOCK_USER_ALLOCATIONS: Record<string, UserPedestalAllocation> = {};
-
 const DemandSignaling: React.FC = () => {
+  const { user } = useAuth();
   const [areaFilter, setAreaFilter] = useState<AreaCategory | 'all'>('all');
-  const beaconTier = getBeaconTier(MOCK_STREAK_DAYS);
+  const [pedestals, setPedestals] = useState<Pedestal[]>(SAMPLE_PEDESTALS);
+  const [userAllocations, setUserAllocations] = useState<Record<string, UserPedestalAllocation>>({});
+  const [streakDays, setStreakDays] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const { data: dbPedestals } = await supabase
+          .from('demand_pedestals')
+          .select('*')
+          .order('shadow_mark_total', { ascending: false });
+
+        if (dbPedestals && dbPedestals.length > 0) {
+          setPedestals(dbPedestals.map((p: any) => ({
+            id: p.id,
+            featureName: p.feature_name,
+            description: p.description,
+            area: p.area as AreaCategory,
+            status: p.status,
+            activationThreshold: p.activation_threshold,
+            currentCommitments: p.current_commitments,
+            creditPledges: Number(p.credit_pledges),
+            shadowMarkTotal: Number(p.shadow_mark_total),
+            alphaLeadWeeks: p.alpha_lead_weeks,
+            betaLeadWeeks: p.beta_lead_weeks,
+            operationalLeadWeeks: p.operational_lead_weeks,
+            icon: p.icon,
+          })));
+        }
+
+        if (user) {
+          const { data: allocations } = await supabase
+            .from('demand_pedestal_allocations')
+            .select('*')
+            .eq('user_id', user.id);
+
+          if (allocations) {
+            const allocMap: Record<string, UserPedestalAllocation> = {};
+            for (const a of allocations) {
+              allocMap[a.pedestal_id] = {
+                pedestalId: a.pedestal_id,
+                freshToday: Number(a.fresh_today),
+                carryForward: Number(a.carry_forward),
+                total: Number(a.total),
+                consecutiveDays: a.consecutive_days,
+                crystallized: Number(a.crystallized),
+                lastAllocatedAt: a.last_allocated_at,
+              };
+            }
+            setUserAllocations(allocMap);
+            const maxStreak = allocations.reduce((mx: number, a: any) => Math.max(mx, a.consecutive_days), 0);
+            setStreakDays(maxStreak);
+          }
+        }
+      } catch {
+        // Fall back to SAMPLE_PEDESTALS (already set as default)
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [user]);
+
+  const beaconTier = getBeaconTier(streakDays);
 
   const filtered = useMemo(
-    () => areaFilter === 'all' ? SAMPLE_PEDESTALS : SAMPLE_PEDESTALS.filter(p => p.area === areaFilter),
-    [areaFilter],
+    () => areaFilter === 'all' ? pedestals : pedestals.filter(p => p.area === areaFilter),
+    [areaFilter, pedestals],
   );
 
   const areas = Object.values(AREA_ALLOCATIONS);
-  const totalSM = SAMPLE_PEDESTALS.reduce((s, p) => s + p.shadowMarkTotal, 0);
-  const totalCredits = SAMPLE_PEDESTALS.reduce((s, p) => s + p.creditPledges, 0);
+  const totalSM = pedestals.reduce((s, p) => s + p.shadowMarkTotal, 0);
+  const totalCredits = pedestals.reduce((s, p) => s + p.creditPledges, 0);
   const avgProgress = Math.round(
-    SAMPLE_PEDESTALS.reduce((s, p) => s + (p.currentCommitments / p.activationThreshold) * 100, 0) / SAMPLE_PEDESTALS.length,
+    pedestals.reduce((s, p) => s + (p.currentCommitments / p.activationThreshold) * 100, 0) / (pedestals.length || 1),
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="demand-signaling">
@@ -88,7 +162,7 @@ const DemandSignaling: React.FC = () => {
             <div className="text-xs text-slate-500">Avg. Progress</div>
           </div>
           <div className="text-center p-3 rounded-lg bg-slate-800/50 border border-slate-700">
-            <div className="text-xl font-bold text-purple-400">{SAMPLE_PEDESTALS.length}</div>
+            <div className="text-xl font-bold text-purple-400">{pedestals.length}</div>
             <div className="text-xs text-slate-500">Features Tracking</div>
           </div>
         </div>
@@ -100,7 +174,7 @@ const DemandSignaling: React.FC = () => {
               <Zap className="w-4 h-4 text-amber-400" />
               <span className="text-slate-400">Your Beacon Streak:</span>
               <Badge variant="outline" className="text-amber-400 border-amber-500/30">
-                {MOCK_STREAK_DAYS} days
+                {streakDays} days
               </Badge>
               <span className="text-slate-500">·</span>
               <span className="text-slate-400">
@@ -115,8 +189,8 @@ const DemandSignaling: React.FC = () => {
               {BEACON_STREAK_TIERS.slice().reverse().map(t => (
                 <Badge
                   key={t.minDays}
-                  variant={t.minDays <= MOCK_STREAK_DAYS ? 'default' : 'outline'}
-                  className={`text-[9px] ${t.minDays <= MOCK_STREAK_DAYS ? '' : 'text-slate-600 border-slate-700'}`}
+                  variant={t.minDays <= streakDays ? 'default' : 'outline'}
+                  className={`text-[9px] ${t.minDays <= streakDays ? '' : 'text-slate-600 border-slate-700'}`}
                 >
                   {t.minDays === 0 ? 'Base' : `${t.minDays}d`}: {(t.carryForwardRate * 100).toFixed(0)}%
                 </Badge>
@@ -156,7 +230,7 @@ const DemandSignaling: React.FC = () => {
             <FeatureThermometer
               key={p.id}
               pedestal={p}
-              userAllocation={MOCK_USER_ALLOCATIONS[p.id]}
+              userAllocation={userAllocations[p.id]}
               beaconTier={beaconTier}
               dailyGrowthRate={p.currentCommitments > 10 ? Math.round(p.currentCommitments / 14) : 0}
             />

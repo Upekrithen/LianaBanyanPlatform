@@ -9,17 +9,17 @@
  * Innovation: #1630 (Pledged Mark Voting — Pawn Batch 07)
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   ArrowLeft, Vote, Trophy, Users, Clock, Hexagon,
-  ChevronDown, ChevronUp, Lock, Unlock, TrendingUp, Info
+  ChevronDown, ChevronUp, Lock, Unlock, TrendingUp, Info, Loader2
 } from 'lucide-react';
-
-// ─── Candidate Products ─────────────────────────────────────────────────────
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface VoteCandidate {
   id: string;
@@ -31,151 +31,6 @@ interface VoteCandidate {
   voterCount: number;
   status: 'open' | 'leading' | 'funded';
 }
-
-const CANDIDATES: VoteCandidate[] = [
-  {
-    id: 'slotted-top',
-    name: 'SlottedTop',
-    description: 'Universal hex tile adapter with compliant mechanism snap-locks. The first piece of the 27-piece Hexel system.',
-    campaign: 1,
-    type: 'component',
-    pledgedMarks: 847,
-    voterCount: 63,
-    status: 'leading',
-  },
-  {
-    id: 'peasant',
-    name: 'Peasant (Base Body)',
-    description: 'The base body that becomes every character. Same body for Peasant, Farmer, Warrior, King — layers snap on top.',
-    campaign: 2,
-    type: 'character',
-    pledgedMarks: 612,
-    voterCount: 48,
-    status: 'open',
-  },
-  {
-    id: 'merchant',
-    name: 'Merchant (Base Body + Cloak)',
-    description: 'Same base body + snap-on Merchant Cloak. Remove the cloak and the Assassin is underneath.',
-    campaign: 3,
-    type: 'character',
-    pledgedMarks: 534,
-    voterCount: 41,
-    status: 'open',
-  },
-  {
-    id: 'golden-lotus',
-    name: 'Golden Lotus',
-    description: 'Tesla Valve flow-to-rotation converter. Six cups, bidirectional input, unidirectional output. The heart of every Hexel.',
-    campaign: 4,
-    type: 'component',
-    pledgedMarks: 723,
-    voterCount: 55,
-    status: 'open',
-  },
-  {
-    id: 'farmer-warrior',
-    name: 'Farmer / Warrior',
-    description: 'Peasant body + tool belt + cart (Farmer) or + ScaleMail + Terrain Armor (Warrior). Ships complete body with all layers.',
-    campaign: 5,
-    type: 'character',
-    pledgedMarks: 489,
-    voterCount: 37,
-    status: 'open',
-  },
-  {
-    id: 'character-base',
-    name: 'Character Base (Hitbase Counter)',
-    description: 'Patented mechanical boots base: coin-loaded Pez-style HP, 3-position sliding tab (HP/Mana/Both), level overlays with weapon slots, dice-face terrain lock. Push to hit — physics tracks damage.',
-    campaign: 6,
-    type: 'component',
-    pledgedMarks: 412,
-    voterCount: 32,
-    status: 'open',
-  },
-  {
-    id: 'sawtooth-coral',
-    name: 'Sawtooth Coral + Timing Belt',
-    description: 'The ocean floor piece. Six asymmetric slant angles create trade winds and currents. Hidden Timing Belt counts trap revolutions.',
-    campaign: 7,
-    type: 'component',
-    pledgedMarks: 356,
-    voterCount: 28,
-    status: 'open',
-  },
-  {
-    id: 'healer-assassin',
-    name: 'Healer / Assassin',
-    description: 'Crown Path layers: Healer adds herbs + staff over cloak. Assassin = cloak removed (subtraction reveals what was always there).',
-    campaign: 8,
-    type: 'character',
-    pledgedMarks: 445,
-    voterCount: 34,
-    status: 'open',
-  },
-  {
-    id: 'war-horse',
-    name: 'War Horse',
-    description: 'Same horse body: WildHorse → FarmHorse (bridle+yoke+cart) → WarHorse (remove cart, add armor). Layer system for creatures.',
-    campaign: 9,
-    type: 'creature',
-    pledgedMarks: 578,
-    voterCount: 44,
-    status: 'open',
-  },
-  {
-    id: 'king',
-    name: 'King (Sword Path Capstone)',
-    description: 'Same body wearing ALL layers: tunic + ScaleMail + Terrain Armor + Boots + Crown. Ships with 4-body evolution display.',
-    campaign: 10,
-    type: 'character',
-    pledgedMarks: 667,
-    voterCount: 51,
-    status: 'open',
-  },
-  {
-    id: 'pneumatic-palm',
-    name: 'Pneumatic Palm Tree',
-    description: 'Telescoping mechanism powered by pneumatic system. Plants a seed, grows during play. Trunk is harvestable for ship masts.',
-    campaign: 11,
-    type: 'component',
-    pledgedMarks: 401,
-    voterCount: 31,
-    status: 'open',
-  },
-  {
-    id: 'queen',
-    name: 'Queen (Crown Path Capstone)',
-    description: 'Same body + cloak + herbs + Orbs of Wisdom + Fiery Wings + Crown Helmet. Ships with 4-body evolution display.',
-    campaign: 12,
-    type: 'character',
-    pledgedMarks: 523,
-    voterCount: 40,
-    status: 'open',
-  },
-  {
-    id: 'hexel-assembly',
-    name: 'Hexel Assembly',
-    description: 'All 12 internal pieces assembled into a single working Hexel unit. Community-refined from earlier campaign improvements.',
-    campaign: 13,
-    type: 'assembly',
-    pledgedMarks: 890,
-    voterCount: 67,
-    status: 'open',
-  },
-  {
-    id: 'tereno-water-table',
-    name: 'Tereno Water Table',
-    description: '420 Hexels, gravity-powered hydraulic surface. No batteries. No motors. 9 years of engineering. The crown jewel.',
-    campaign: 14,
-    type: 'assembly',
-    pledgedMarks: 1234,
-    voterCount: 89,
-    status: 'funded',
-  },
-];
-
-// ─── Voting Period ──────────────────────────────────────────────────────────
 
 const VOTING_PERIOD = {
   start: new Date('2026-03-15T00:00:00Z'),
@@ -192,28 +47,73 @@ function getTimeRemaining(): string {
   return `${days}d ${hours}h remaining`;
 }
 
-// ─── Component ──────────────────────────────────────────────────────────────
-
 export default function HexIsleVote() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [sortBy, setSortBy] = useState<'marks' | 'voters' | 'campaign'>('marks');
   const [filterType, setFilterType] = useState<string>('all');
   const [pledgeAmounts, setPledgeAmounts] = useState<Record<string, number>>({});
-  const [userMarksAvailable] = useState(50); // Mock — would come from auth/Supabase
+  const [userMarksAvailable, setUserMarksAvailable] = useState(50);
+  const [candidates, setCandidates] = useState<VoteCandidate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [pledging, setPledging] = useState<string | null>(null);
+
+  const loadCandidates = useCallback(async () => {
+    try {
+      const { data: dbCandidates } = await supabase
+        .from('hexisle_vote_candidates')
+        .select('*')
+        .order('campaign', { ascending: true });
+
+      if (!dbCandidates || dbCandidates.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      const { data: tallies } = await supabase
+        .from('hexisle_vote_tallies')
+        .select('*');
+
+      const tallyMap: Record<string, { voter_count: number; total_pledged: number }> = {};
+      if (tallies) {
+        for (const t of tallies) {
+          tallyMap[t.candidate_id] = {
+            voter_count: Number(t.voter_count),
+            total_pledged: Number(t.total_pledged),
+          };
+        }
+      }
+
+      const merged: VoteCandidate[] = dbCandidates.map((c: any) => ({
+        id: c.id,
+        name: c.name,
+        description: c.description,
+        campaign: c.campaign,
+        type: c.type,
+        pledgedMarks: tallyMap[c.id]?.total_pledged ?? 0,
+        voterCount: tallyMap[c.id]?.voter_count ?? 0,
+        status: c.status,
+      }));
+
+      setCandidates(merged);
+    } catch {
+      // Leave empty; no fallback to hardcoded data per WildFire Tour rules
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { loadCandidates(); }, [loadCandidates]);
 
   const totalPledged = useMemo(
-    () => CANDIDATES.reduce((sum, c) => sum + c.pledgedMarks, 0),
-    []
-  );
-  const totalVoters = useMemo(
-    () => new Set(CANDIDATES.flatMap(() => ['placeholder'])).size, // Mock unique count
-    []
+    () => candidates.reduce((sum, c) => sum + c.pledgedMarks, 0),
+    [candidates]
   );
 
   const sorted = useMemo(() => {
     let filtered = filterType === 'all'
-      ? [...CANDIDATES]
-      : CANDIDATES.filter(c => c.type === filterType);
+      ? [...candidates]
+      : candidates.filter(c => c.type === filterType);
 
     switch (sortBy) {
       case 'marks': return filtered.sort((a, b) => b.pledgedMarks - a.pledgedMarks);
@@ -221,16 +121,40 @@ export default function HexIsleVote() {
       case 'campaign': return filtered.sort((a, b) => a.campaign - b.campaign);
       default: return filtered;
     }
-  }, [sortBy, filterType]);
+  }, [sortBy, filterType, candidates]);
 
-  const maxMarks = Math.max(...CANDIDATES.map(c => c.pledgedMarks));
+  const maxMarks = Math.max(1, ...candidates.map(c => c.pledgedMarks));
 
-  const handlePledge = (candidateId: string) => {
+  const handlePledge = async (candidateId: string) => {
     const amount = pledgeAmounts[candidateId] || 0;
-    if (amount <= 0 || amount > userMarksAvailable) return;
-    // Mock — would call Supabase to escrow marks
-    console.log(`Pledging ${amount} Marks to ${candidateId}`);
+    if (amount <= 0 || amount > userMarksAvailable || !user) return;
+
+    setPledging(candidateId);
+    try {
+      const { error } = await supabase.from('pledged_mark_votes').insert({
+        user_id: user.id,
+        candidate_id: candidateId,
+        marks_pledged: amount,
+        vote_direction: 'for',
+      });
+
+      if (!error) {
+        setUserMarksAvailable(prev => prev - amount);
+        setPledgeAmounts(prev => ({ ...prev, [candidateId]: 0 }));
+        await loadCandidates();
+      }
+    } finally {
+      setPledging(null);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950">
@@ -275,7 +199,7 @@ export default function HexIsleVote() {
           </Card>
           <Card className="bg-slate-800/40 border-slate-700">
             <CardContent className="py-4 text-center">
-              <div className="text-2xl font-bold text-emerald-400">{CANDIDATES.length}</div>
+              <div className="text-2xl font-bold text-emerald-400">{candidates.length}</div>
               <div className="text-xs text-slate-500">Candidates</div>
             </CardContent>
           </Card>
@@ -441,9 +365,9 @@ export default function HexIsleVote() {
                               variant="outline"
                               className="text-xs h-7 border-purple-500/40 text-purple-300 hover:bg-purple-500/10"
                               onClick={() => handlePledge(candidate.id)}
-                              disabled={!pledgeAmounts[candidate.id] || pledgeAmounts[candidate.id]! > userMarksAvailable}
+                              disabled={!user || !pledgeAmounts[candidate.id] || pledgeAmounts[candidate.id]! > userMarksAvailable || pledging === candidate.id}
                             >
-                              Pledge
+                              {pledging === candidate.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Pledge'}
                             </Button>
                           </div>
                         )}
