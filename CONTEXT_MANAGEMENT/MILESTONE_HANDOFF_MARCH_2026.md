@@ -9,10 +9,71 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 49 (March 19, 2026)
+## RUNWAY / SESSION STOP (current) — Session 50 (March 19, 2026)
 
-**Latest commit:** `9a4a693` — Session 49: Wire GleanersCorner/ChainVoting/ConcentricCircles to Supabase, Lovable cleanup
-**Previous commit:** `c31e3be` — Bishop 013: Pudding Styles scrollytelling + AsYouWish/NoAtomo cue cards + Knight prompts 51-54
+**Latest commit:** pending (uncommitted — edge functions + Proteus Anchor)
+**Previous commit:** `563c335` — Session 49 handoff
+
+**Status (March 19, 2026 — Session 50):**
+- Platform deployed and live: lianabanyan-main.web.app (661 files)
+- Cephas deployed: **1,145 pages, 1,640 files**
+- 2 new Supabase migrations pushed: `20260319200007` (admin_notifications), `20260319200008` (proteus_anchors)
+- 4 edge functions deployed: `moneypenny-auto-post`, `refresh-social-tokens`, `admin-notify`, `social-image-upload`
+- Proteus Anchor page live at `/proteus-anchor` with HexIsle as inaugural Proteus
+- Git origin: needs commit + push
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.**
+
+### What Was Done (Session 50 — Knight)
+
+#### Feature 1: Deploy MoneyPenny Auto-Post + Refresh Social Tokens
+
+- **`moneypenny-auto-post`** — Deployed to Supabase (was on disk only). Posts approved drafts from `moneypenny_social_drafts` to Twitter, LinkedIn, Facebook, Bluesky.
+- **`refresh-social-tokens`** — Fixed deprecated `serve` import → `Deno.serve`, deployed. Proactively refreshes OAuth tokens for 7 platforms.
+- **`config.toml`** — Registered both functions + `moneypenny-intake`, `moneypenny-daily-digest`, `moneypenny-signal` (all 5 were missing from config).
+
+#### Feature 2: Edge Functions Phase 3 — Admin Notify + Social Image Upload
+
+- **`admin-notify/index.ts`** — Event notification system. 7 event types (`new_user`, `dispute_filed`, `campaign_complete`, `rls_violation`, `founder_override`, `edge_function_error`, `high_value_transaction`). 4 severity levels. High/critical → emails admins via `send-transactional-email`. Critical → also creates `moneypenny_actions` entry.
+- **`social-image-upload/index.ts`** — Stores images in Supabase Storage bucket `social-media-assets`. Accepts URL or base64. 5MB limit. Returns public URL for social API calls.
+- **Migration `20260319200007_admin_notifications.sql`** — `admin_notifications` table with severity, event_type, details JSONB, RLS (admin read/update, service insert).
+- **`send-email` skipped** — already covered by `send-transactional-email` (deployed March 15).
+
+#### Feature 3: Proteus Anchor System (Innovation #1553)
+
+- **Migration `20260319200008_proteus_anchors.sql`** — 3 tables:
+  - `proteus_anchors` — name, slug, product_type, manufacturing_processes[], tereno_tier, anchor_status, hexisle_compatible
+  - `proteus_manufacturing_compat` — compatibility matrix (full/partial/experimental per module type)
+  - `proteus_transformations` — transformation log (design_revision, material_change, process_upgrade, scale_shift, market_pivot)
+  - RLS: public read on active anchors, admin write, authenticated read on transformations
+  - Seed: HexIsle as inaugural Proteus with 6 compat entries + 3 transformation log entries
+- **`proteusAnchorService.ts`** — Full service layer with types, sample fallback, DB mappers, read functions (`fetchAnchors`, `fetchAnchorBySlug`, `fetchCompatMatrix`, `fetchTransformations`), computed helpers
+- **`ProteusAnchor.tsx`** (`/proteus-anchor`) — Anchor cards with status/tier badges, manufacturing compatibility matrix with full/partial/experimental visual indicators, transformation timeline with before→after state diffs, "Become a Test-Pilot" CTA linking to The Forge
+- **Route** wired in `App.tsx`, sidebar link added in `AppSidebar.tsx`
+
+### Pending Work (Session 51+)
+
+| Item | Status |
+|------|--------|
+| ~~Deploy moneypenny-auto-post + refresh-social-tokens~~ | **DONE (50)** |
+| ~~Edge Functions Phase 3 (admin-notify, social-image-upload)~~ | **DONE (50)** |
+| ~~Proteus Anchor System (Innovation #1553)~~ | **DONE (50)** |
+| Maker Spotlight: expand SAMPLE_SPOTLIGHTS to 47 makers | NEXT |
+| Pudding Styles integration into Cephas content (Session 53 prompt) | MEDIUM |
+| Cephas navigation enhancement (Session 53 prompt) | MEDIUM |
+| RLS Phase 3 + Golden Key Quiz Seeding (Session 54 prompt) | MEDIUM |
+| Content Pipeline → Cephas auto-sync | MEDIUM |
+| Content Pipeline → Cue Card minting integration | MEDIUM |
+| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
+| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 49 (March 19, 2026)
+
+**Latest commit:** `563c335` — Session 49 handoff
+**Previous commit:** `9a4a693` — Session 49: Wire GleanersCorner/ChainVoting/ConcentricCircles to Supabase, Lovable cleanup
 
 **Status (March 19, 2026 — Session 49):**
 - Platform deployed and live: lianabanyan-main.web.app
@@ -20,55 +81,8 @@
 - 3 new Supabase migrations pushed: `20260319200004` (gleaners_corner), `20260319200005` (chain_voting), `20260319200006` (concentric_circles)
 - GleanersCorner, ChainVoting, ConcentricCircles all wired to Supabase with sample fallback
 - "Lovable" references cleaned from 5 non-migration files (4 remaining are migrations/types — untouchable)
-- Git origin up to date.
 - **Innovation count:** 1,751 (unchanged this session)
 - **Patent claims:** 1,401 across 8 provisional applications
-- **No blockers.**
-
-### What Was Done (Session 49 — Knight)
-
-#### Feature 1: Deploy Cephas (97 Letters + Pudding System)
-
-- **Hugo build:** 1,145 pages, 1,640 files
-- **Firebase deploy:** `cephas-lianabanyan.web.app` live with all 97 new letter files from Bishop 013 + Pudding scrollytelling CSS/JS/shortcodes
-- Pudding assets: `pudding.css`, `pudding.js`, 5 shortcodes (`pudding-compare`, `pudding-progress`, `pudding-reveal`, `pudding-stat`, `pudding-sticky-quote`)
-
-#### Feature 2: Wire GleanersCorner + ChainVoting + ConcentricCircles to Supabase
-
-All three pages were on sample data only. Now fully wired with Supabase queries + sample fallback.
-
-| Service | Tables Created | Read Functions | Write Functions |
-|---------|---------------|----------------|-----------------|
-| `gleanersCornerService.ts` | `gleaners_fund_summary`, `gleaners_distributions` | `fetchFundSummary()`, `fetchDistributions()`, `fetchGleanerStats()` | Read-only (system-calculated splits) |
-| `chainVotingService.ts` | `chain_voting_chains`, `chain_voting_proposals`, `chain_voting_votes` | `fetchChainStatus()`, `fetchActiveProposals()`, `fetchVoteHistory()`, `fetchGovernanceStats()` | `castVote()` (inserts vote + updates chain + tallies), `createProposal()` |
-| `concentricCircleService.ts` | `concentric_circle_members`, `concentric_circle_feedback`, `concentric_circle_rings` | `fetchRingMembersLive()`, `fetchFeedbackLive()`, `fetchAllFeedbackLive()`, `fetchRingStatusLive()`, `fetchStatsLive()` | `activateRingLive()`, `submitFeedbackLive()`, `updateRingStatusLive()` |
-
-- **RLS:** Authenticated SELECT on all tables, admin-only writes on Gleaners/Rings, owner-based writes on Chain Voting votes/chains, open INSERT on feedback
-- **Seed data:** 10 distributions, 5 proposals, 14 members, 15 feedback items, 5 rings
-
-#### Feature 3: "Lovable" Reference Cleanup
-
-- **`subdomainRouter.ts`** — Removed `lovable.app` hostname check (no longer deployed on Lovable)
-- **`MercuryBankBalance.tsx`** — Cleaned migration comment
-- **`TASKS.md`** — Changed "Auto-provisioned by Lovable" → "Auto-provisioned by Firebase Hosting"
-- **`.gitignore`** — Changed `escape-velocity Lovable Site/` → `escape-velocity-legacy/`
-- **Skipped:** `types.ts` (auto-generated DB column name), 4 migration files (historical records), 2 seed data entries (Lovable is a real product/tool name)
-
-### Pending Work (Session 50+)
-
-| Item | Status |
-|------|--------|
-| ~~Deploy Cephas (97 letters + Pudding)~~ | **DONE (49)** |
-| ~~Wire GleanersCorner/ChainVoting/ConcentricCircles to Supabase~~ | **DONE (49)** |
-| ~~"Lovable" reference cleanup~~ | **DONE (49)** |
-| Deploy moneypenny-auto-post and moneypenny-intake edge functions to Supabase | NEXT |
-| Maker Spotlight: expand SAMPLE_SPOTLIGHTS to 47 makers | MEDIUM |
-| Edge Functions Phase 3: admin notifications, email service, Twitter image uploads | MEDIUM |
-| Proteus Anchor System (Innovation #1553) | MEDIUM |
-| Content Pipeline → Cephas auto-sync | MEDIUM |
-| Content Pipeline → Cue Card minting integration | MEDIUM |
-| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
-| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
 
 ---
 

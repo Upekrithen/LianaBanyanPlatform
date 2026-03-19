@@ -76,3 +76,27 @@ verify_jwt = false
 
 [functions.vault-unlock]
 verify_jwt = false
+
+[functions.moneypenny-auto-post]
+verify_jwt = false
+# schedule = "*/5 * * * *"  -- set in Dashboard
+
+[functions.moneypenny-intake]
+verify_jwt = false
+
+[functions.moneypenny-daily-digest]
+verify_jwt = false
+# schedule = "0 8 * * *"  -- set in Dashboard
+
+[functions.moneypenny-signal]
+verify_jwt = false
+
+[functions.refresh-social-tokens]
+verify_jwt = false
+# schedule = "0 * * * *"  -- set in Dashboard (hourly)
+
+[functions.admin-notify]
+verify_jwt = false
+
+[functions.social-image-upload]
+verify_jwt = true
