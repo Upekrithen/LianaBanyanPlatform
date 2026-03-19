@@ -11,13 +11,15 @@
 
 ## RUNWAY / SESSION STOP (current) — Session 36 (March 18, 2026)
 
-**Latest commit:** `09818e0` — Session 36: Wrap all 16 initiative pages with LaunchConditionOverlay, Hitbase Counter Showcase, Character Layer Explorer
+**Latest commit:** `d62be1a` — Add canonical stats migration for 8th provisional (1,751 innovations, 1,401 claims, 8 apps)
 
 **Status (March 18, 2026 — Session 36):**
 - Platform deployed and live: lianabanyan-main.web.app
-- All Supabase migrations pushed (through `20260319000004`). DB canonical count = 1,748.
-- **Innovation count:** 1,748 (unchanged — no new innovations this session)
+- All Supabase migrations pushed (through `20260319000005`). DB canonical count = **1,751**.
+- **Innovation count:** 1,751 (8th provisional added 3 new innovations #1749-#1751)
+- **Patent claims:** 1,401 across 8 provisional applications
 - 3 Moneypenny Edge Functions deployed to Supabase (from Session 35)
+- 8th provisional filed: Application 64/009,803 — 89 innovations (#1663-#1751), 65 claims
 - **No blockers.** Ready for Session 37.
 
 ### What Was Done This Session (Session 36 — Knight)
@@ -50,6 +52,7 @@
 | `platform/src/components/hexisle/HitbaseCounterShowcase.tsx` | **NEW** — Interactive Hitbase counter demo |
 | `platform/src/components/hexisle/CharacterLayerExplorer.tsx` | **NEW** — Snap-on layer progression visualizer |
 | `platform/supabase/migrations/20260319000004_launch_conditions_remaining.sql` | **NEW** — Missing launch_conditions for 4 initiative slugs |
+| `platform/supabase/migrations/20260319000005_update_canonical_stats_prov8.sql` | **NEW** — Canonical stats: 1,751 innovations, 1,401 claims, 8 apps |
 
 ### Files Modified (Session 36)
 
@@ -62,7 +65,7 @@
 
 - **Platform**: lianabanyan-main.web.app
 - **Edge Functions**: moneypenny-intake, moneypenny-daily-digest, moneypenny-signal (deployed)
-- **Migration**: 20260319000004 pushed to Supabase
+- **Migrations**: 20260319000004 + 20260319000005 pushed to Supabase
 
 ### Pending Work (Session 37+)
 
@@ -72,7 +75,7 @@
 | **POLITICAL EXPEDITION FULL BUILD** — See Session 28 spec | **PRIORITY — Founder directive** |
 | Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
 | FAQ page "See Also" rendering for relatedEntries | MEDIUM |
-| Founder files 8th provisional with USPTO | FOUNDER ACTION — PDF ready |
+| ~~Founder files 8th provisional with USPTO~~ | **DONE** — Application 64/009,803 filed |
 | Content Pipeline build | MEDIUM |
 | RLS security hardening | MEDIUM |
 
@@ -1155,6 +1158,8 @@ Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three fe
 - `20260317000002` — 10 Kickstarter Chain innovations (#1681-#1690) + canonical count (Session 29)
 - `20260317000003` — 19 Bishop 012 innovations (#1691-#1709) + canonical count (Session 29b)
 - `20260318000001` — 10 Shadow Mark Demand innovations (#1710-#1719) + canonical count (Session 30)
+- `20260319000004` — Launch conditions for 4 missing initiative slugs (Session 36)
+- `20260319000005` — Canonical stats: 1,751 innovations, 1,401 claims, 8 apps (Session 36)
 
 ---
 
@@ -1164,11 +1169,11 @@ Bishop managed this session via `PROMPT_KNIGHT_SESSION_26_ADDENDUM.md`. Three fe
 |--------|-------|--------|
 | **Creator keeps** | 83.3% (never round to 83%) | Immutable |
 | **Platform margin** | Cost + 20% | Immutable |
-| **Innovations (canonical)** | **1,719** | Session 30 POLLINATION; propagated everywhere |
-| **Innovations in DB** | Through #1719 (all pushed) | All migrations applied as of Session 30 |
+| **Innovations (canonical)** | **1,751** | Session 36 — 8th provisional added #1749-#1751; POLLINATION in commit 7bd617e |
+| **Innovations in DB** | Through #1751 (all pushed) | All migrations applied through 20260319000005 |
 | **Spec expansions written** | 593 (568 batch + 22 skeleton + 3 overflow) | Migrations `20260315000001` + `20260315000002` |
-| **Formal patent claims** | 1,336 across 7 provisional applications | USPTO receipts |
-| **8th provisional** | 18 innovations (#1663-#1680) — PDF ready, awaiting filing | Six Degrees Crown Jewel |
+| **Formal patent claims** | 1,401 across 8 provisional applications | USPTO receipts |
+| **8th provisional** | Application 64/009,803 — 89 innovations (#1663-#1751), 65 claims — **FILED** | Six Degrees Crown Jewel |
 | **7th provisional** | Application 64/006,010 — filed March 15, 2026 | 653 innovations with full specs |
 | **Crown Jewels** | 123 definitive (see Cephas crown-jewels page) | Cephas + DB |
 | **Membership** | $5/year | Immutable |
@@ -1268,6 +1273,9 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+d62be1a Add canonical stats migration for 8th provisional - 1751 innovations 1401 claims 8 apps
+7bd617e Pollination: 8th provisional filed (64/009,803) — 1,751 innovations, 1,401 claims, 8 applications
+3cd7551 Update handoff for Session 36
 09818e0 Session 36: Wrap all 16 initiative pages with LaunchConditionOverlay, Hitbase Counter Showcase, Character Layer Explorer
 df1f437 Session 35: Spotlight Manager, 3 Moneypenny Edge Functions, MoneyPenny live-wiring to Supabase
 9bc090f Session 27: Action-first Portal, production level Pledge buttons, DenkenMenu nav wiring
