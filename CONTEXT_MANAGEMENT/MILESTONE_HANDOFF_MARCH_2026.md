@@ -11,13 +11,16 @@
 
 ## RUNWAY / SESSION STOP (current) — Session 47 (March 18, 2026)
 
-**Latest commit:** `20384d6` — Session 47: Wire 6 other-session pages to Supabase — full CRUD + stats
-**Previous commit:** `8c8ad85` — Session 46B: MoneyPenny QA + Social wired to Supabase
+**Latest commit:** `42203c8` — Session 47: RLS hardening migration
+**Previous commits:** `ed1bdb3` (FAQ See Also), `20384d6` (6 pages wired to Supabase)
 
 **Status (March 18, 2026 — Session 47):**
-- Platform deployed and live: lianabanyan-main.web.app (**656 files**, up from 652)
-- All 6 remaining other-session pages now fully wired to Supabase with write operations + stats aggregation.
-- UI buttons wired: Oops Code (Santa), Apply STAMP (NodeCaptain), Crew Apply (Manufacturing).
+- Platform deployed and live: lianabanyan-main.web.app (**656 files**)
+- All 6 remaining other-session pages fully wired to Supabase with write operations + stats.
+- FAQ "See Also" cross-links complete — 34 entries linked, 2 missing entries added.
+- RLS security hardening: 1 migration pushed — admin-only policies on 13+ tables.
+- Migration 20260319100027 (maker_spotlights) pushed to Supabase.
+- Git origin up to date.
 - **Innovation count:** 1,751 (unchanged this session)
 - **Patent claims:** 1,401 across 8 provisional applications
 - **No blockers.**
@@ -38,6 +41,20 @@ All 6 services already had read functions querying Supabase with sample fallback
 | `manufacturingService.ts` | fetchModules, fetchCrewApplications | applyForCrew, reviewCrewApplication, updateModuleStatus | fetchForgeStats | Crew Apply buttons |
 
 **Pattern:** Every write function uses `try/catch` with Supabase insert/update, returns `null`/`false` on failure. Stats functions aggregate from DB with sample fallback on error.
+
+#### Task B: FAQ "See Also" Cross-Linking
+
+- **34 entries** that had no `relatedEntries` now have meaningful cross-links.
+- **2 missing entries created:** `hexisle-water-table` and `ip-load-balance` (referenced by other entries but didn't exist).
+- Every FAQ entry now participates in the "See Also" chain-linking system.
+- Rendering was already implemented — this task was purely data enrichment.
+
+#### Task C: RLS Security Hardening
+
+- **1 migration pushed:** `20260319200001_rls_hardening.sql`
+- **Tables hardened:** qa_entries, social_interactions, manufacturing_modules, forge_crew_applications, moneypenny_inbox, moneypenny_actions, moneypenny_social_drafts, moneypenny_ideas, moneypenny_schedule, red_carpet_signals, creator_invites, project_drafts, social_daily_digests
+- **Pattern:** Replaced overly permissive `auth.uid() IS NOT NULL` admin policies with `public.is_admin()` checks via `user_roles` table.
+- **P2 items remaining:** matchtrade_offers/matches (FOR ALL TO authenticated), 21 missing_admin_tables, project_invitations broad SELECT.
 
 ---
 
@@ -198,13 +215,12 @@ All tables have full RLS policies. Seed data included where specified in prompts
 
 | Item | Status |
 |------|--------|
-| ~~BISHOP Session 46 Task A: MoneyPenny Q&A Supabase wiring~~ | **DONE (46B)** |
-| ~~BISHOP Session 46 Task B: Social Media Command Center Supabase wiring~~ | **DONE (46B)** |
-| ~~Wire remaining other-session pages to Supabase (Santa, StarChamber, NodeCaptain, C+20, Tereno, Modular Mfg)~~ | **DONE (47)** |
+| ~~Wire remaining other-session pages to Supabase~~ | **DONE (47)** |
+| ~~FAQ page "See Also" rendering for relatedEntries~~ | **DONE (47)** |
+| ~~RLS security hardening (P0/P1)~~ | **DONE (47)** |
+| RLS hardening Phase 2 (P2 — matchtrade, missing_admin_tables, project_invitations) | MEDIUM |
 | Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | NEXT |
-| FAQ page "See Also" rendering for relatedEntries | MEDIUM |
 | Content Pipeline build | MEDIUM |
-| RLS security hardening | MEDIUM |
 
 ---
 
@@ -1623,6 +1639,8 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+42203c8 Session 47: RLS hardening -- admin-only policies on 13+ tables
+ed1bdb3 Session 47: FAQ See Also complete -- 34 cross-links, 2 missing entries
 20384d6 Session 47: Wire 6 other-session pages to Supabase -- full CRUD + stats for Santa, StarChamber, NodeCaptain, C+20, Tereno, Manufacturing
 8c8ad85 Session 46B: MoneyPenny QA + Social wired to Supabase — 5 migrations, 6 other-session migrations fixed and pushed, both services live with sample fallback
 8bb22d5 Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes live queries with sample fallback
