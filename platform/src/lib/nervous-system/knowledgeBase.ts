@@ -75,6 +75,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "Liana Banyan is the world's first cooperative platform designed so that the more people participate, the more everyone benefits. Traditional platforms extract value from users and send it to shareholders. We do the opposite: 83.3% of every transaction goes to the creator, 16.7% funds the cooperative's 16 initiatives, and 0% goes to outside investors.",
         learnMoreUrl: '/learn/what-is-lb',
         learnMoreLabel: 'Alcove: What Is Liana Banyan?',
+        relatedEntries: ['cost-plus-20', 'sweet-sixteen', 'vernacular-heoho'],
         tags: ['basics', 'cooperative', 'platform', 'overview'],
       },
       {
@@ -84,6 +85,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "The $5 covers your Cue Card deck (shareable recruitment cards), full platform access, and participation in all 16 initiatives. There is no 'premium' version. Every member gets the same access. The platform sustains itself through the Cost+20% model on marketplace transactions, not membership fees.",
         learnMoreUrl: '/learn/membership',
         learnMoreLabel: 'Alcove: The Five-Dollar Door',
+        relatedEntries: ['cost-plus-20', 'vernacular-cue-cards', 'three-currencies'],
         tags: ['cost', 'membership', 'pricing', '$5'],
       },
       {
@@ -93,6 +95,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "Cost+20% means the platform takes a 20% margin on marketplace transactions (83.3% creator / 16.7% platform). That 20% funds all 16 initiatives — food programs, education, housing, everything. Sellers set their own prices through market discovery. The 20% floor is constitutional — it can't be changed without member governance approval.",
         learnMoreUrl: '/learn/cost-plus-20',
         learnMoreLabel: 'Alcove: Cost+20%',
+        relatedEntries: ['three-currencies', 'how-marks-work', 'vernacular-silver-candlesticks'],
         tags: ['pricing', 'economics', 'cost-plus-20', 'margin', 'creator'],
       },
       {
@@ -101,6 +104,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Sixteen interconnected programs funded by the platform's 20% margin: food, groceries, shopping, education, housing assistance, healthcare, political engagement, entertainment, business incubation, international aid, family services, and more.",
         learnMoreUrl: '/learn/initiatives',
         learnMoreLabel: 'Alcove: The Sweet Sixteen',
+        relatedEntries: ['what-is-lb', 'production-runs', 'hexisle-overview'],
         tags: ['initiatives', 'programs', 'sweet-sixteen'],
       },
       {
@@ -109,6 +113,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "It's the universal transaction confirmation phrase. Every significant action on the platform is confirmed with 'As You Wish' — a deliberate, human-speed pause before anything irreversible happens.",
         learnMoreUrl: '/learn/as-you-wish',
         learnMoreLabel: 'Alcove: As You Wish',
+        relatedEntries: ['what-is-lb', 'vernacular-heoho'],
         tags: ['confirmation', 'as-you-wish', 'transaction'],
       },
     ],
@@ -128,6 +133,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "Credits: purchased with fiat ($1 = 1 Credit), universal use, closed-loop (no cash-out). Marks: effort-debt currency earned through participation, restricted to essentials (food, medical), cleared via contribution. Joules: surplus storage with 'forever stamp' mechanic — locks your exchange rate at purchase time. LB owns the Joules; members earn authority to direct them, not ownership.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/three-currencies',
         learnMoreLabel: 'Three-Currency Deep Dive',
+        relatedEntries: ['how-marks-work', 'joules-forever-stamp', 'shadow-marks'],
         tags: ['credits', 'marks', 'joules', 'currency', 'money'],
       },
       {
@@ -145,6 +151,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "When you acquire Joules, your exchange rate is locked at that moment — forever. Like buying postage stamps before the price goes up. Early supporters permanently benefit from today's rates.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/three-currencies',
         learnMoreLabel: 'Joules Explained',
+        relatedEntries: ['three-currencies', 'how-marks-work', 'brewster-bonus'],
         tags: ['joules', 'forever-stamp', 'exchange-rate'],
       },
       {
@@ -173,6 +180,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "Instead of paying Facebook to show you ads, we pay our own members to invite people they actually know and trust. Heralds (our word-of-mouth recruiters) earn 25 Marks per successful referral. Cost per customer via Herald referral: $25 (and it goes to a member). Referral lifetime value: 3-5x higher than paid acquisition. Referral churn rate: 37% lower than paid users. Word-of-mouth isn't just cheaper — it's better.",
         learnMoreUrl: '/why-no-ads',
         learnMoreLabel: 'Full Explanation: Why No Ads',
+        relatedEntries: ['no-vc', 'cost-plus-20', 'herald-system'],
         tags: ['no-ads', 'advertising', 'herald', 'word-of-mouth', 'growth', 'marketing'],
       },
       {
@@ -182,6 +190,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "The math: At Year 10, if we're worth $500M with VC money, we'd own ~$25M. Growing organically, even at half that valuation ($250M), we own ALL of it. Our patent portfolio IS our runway. Micro-entity filing at $65 per provisional. Your early contribution = permanent credit via Ghost Attribution. The 300 founding members get Joules — no VC means no dilution of YOUR stake.",
         learnMoreUrl: '/why-no-vc',
         learnMoreLabel: 'Full Explanation: Why No V.C.',
+        relatedEntries: ['no-ads', 'cost-plus-20', 'howey-defense'],
         tags: ['no-vc', 'venture-capital', 'patents', 'bootstrap', 'ownership', 'growth'],
       },
       {
@@ -190,6 +199,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Heralds are members who invite others through word-of-mouth. Instead of paying Google/Meta for ads, we pay Heralds 25 Marks per successful referral. That's our entire advertising budget — going to real people, not corporations.",
         learnMoreUrl: '/why-no-ads',
         learnMoreLabel: 'Herald Details',
+        relatedEntries: ['cue-cards', 'referral-tiers', 'six-degrees'],
         tags: ['herald', 'referral', 'word-of-mouth', 'invitation'],
       },
       {
@@ -198,6 +208,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Shareable recruitment cards included with your $5/year membership. Each card is both a benefit explainer AND a recruitment tool carrying your unique referral code. Five cards in the deck: Invite a Creator, Become a Steward, Get Famous, I Don't Want Your $, We Need You.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/cue-cards',
         learnMoreLabel: 'Cue Card System',
+        relatedEntries: ['vernacular-cue-cards', 'cue-card-drop', 'referral-tiers'],
         tags: ['cue-cards', 'recruitment', 'referral', 'deck'],
       },
       {
@@ -206,18 +217,21 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Every Cue Card has a QR code linked to an immutable verification registry. Scan it and you can verify the card is authentic, see the business's trust score, and confirm their charitable tier (Ember → Flame → Blaze → Inferno). The Furnace prevents fake cards and builds trust.",
         learnMoreUrl: '/the-furnace',
         learnMoreLabel: 'Visit The Furnace',
+        relatedEntries: ['cue-cards', 'herald-system', 'production-runs'],
         tags: ['furnace', 'verification', 'qr-code', 'trust', 'cue-cards'],
       },
       {
         id: 'cue-card-drop',
         question: 'What is the Cue Card Drop?',
         answer: "Our cold start viral loop in 6 steps: Get your deck → drop a card at a coffee shop, laundromat, library, church → track your referral scans → seed 10 locations → earn Pioneer-tier Marks (10 per conversion) → build your attribution chain 5 links deep.",
+        relatedEntries: ['cue-cards', 'referral-tiers', 'herald-system'],
         tags: ['cue-card-drop', 'cold-start', 'viral', 'growth'],
       },
       {
         id: 'referral-tiers',
         question: 'How do referral rewards work?',
         answer: "Six-tier rewards based on when you join: Pioneer (members 1-100, 10 Marks/referral) → Vanguard (101-500, 5) → Pathfinder (501-2K, 3) → Trailblazer (2K-10K, 2) → Guide (10K-50K, 1.5) → Ambassador (50K+, 1 Mark). Everyone gets something forever — the universal floor is 1 Mark.",
+        relatedEntries: ['cue-cards', 'six-degrees', 'cue-card-drop'],
         tags: ['referral', 'tiers', 'rewards', 'pioneer', 'ambassador'],
       },
     ],
@@ -246,6 +260,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         detail: "Box notation display: every 10,000 XP = 1 box. Tier colors: Bronze (0-9999) → Silver → Gold → Platinum → Diamond → Obsidian. All members start at 100 reputation; XP adds on top as EXPERIENCE.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/xp-system',
         learnMoreLabel: 'XP Score System',
+        relatedEntries: ['production-runs', 'guilds', 'stewards'],
         tags: ['xp', 'score', 'reputation', 'accomplishment'],
       },
       {
@@ -254,6 +269,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Professional communities organized by skill and initiative. Join a guild to access training, mentorship, and crew formation. Guilds provide the structure for the modular manufacturing system.",
         learnMoreUrl: '/guilds',
         learnMoreLabel: 'Browse Guilds',
+        relatedEntries: ['stewards', 'production-runs', 'xp-score'],
         tags: ['guilds', 'community', 'skills', 'mentorship'],
       },
       {
@@ -262,6 +278,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "A project/campaign manager who pledges their own Marks as skin in the game. Pledged Marks are escrowed per-project — released on success plus proportional surplus, absorbed on failure. Progression: Apprentice → Journeyman → Master → Grand Steward.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/stewards',
         learnMoreLabel: 'Steward System',
+        relatedEntries: ['guilds', 'bandwagon', 'production-runs'],
         tags: ['steward', 'project-management', 'pledged-marks'],
       },
       {
@@ -270,6 +287,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Back projects with Marks. If the project succeeds, you earn increased Service Allocation Authority (SAA) — the ability to direct more cooperative resources. This is NOT an investment return. This is earned authority based on demonstrated judgment.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/bandwagon',
         learnMoreLabel: 'BandWagon Deep Dive',
+        relatedEntries: ['stewards', 'production-runs', 'hexisle-deterministic-chance'],
         tags: ['bandwagon', 'backing', 'saa', 'projects'],
       },
     ],
@@ -288,6 +306,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "The first 300 founding members shape the cooperative's constitution. Every voice matters. They receive Joules (equity-like authority tokens) and permanent Founding Status. No VC means no dilution of their stake.",
         learnMoreUrl: '/learn/the-300',
         learnMoreLabel: 'Alcove: The 300',
+        relatedEntries: ['coverage-minutes', 'star-chamber', 'howey-defense'],
         tags: ['the-300', 'founding', 'governance', 'constitution'],
       },
       {
@@ -296,6 +315,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "No. Credits, Marks, and Joules fail ALL FOUR prongs of the Howey Test: no investment of money (membership is $5 for services), no common enterprise (each initiative operates independently), no expectation of profits (Marks emerge from effort, not appreciation), no reliance on others' efforts (members actively participate).",
         learnMoreUrl: '/learn/howey',
         learnMoreLabel: 'Alcove: The Howey Defense',
+        relatedEntries: ['the-300', 'cost-plus-20', 'no-vc'],
         tags: ['howey', 'securities', 'legal', 'sec'],
       },
       {
@@ -304,6 +324,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Multi-AI governance verification. Seven specialized AI agents evaluate platform decisions. 5 of 7 must agree before any system-level action proceeds. Dissenting opinions are recorded and published. No single AI — and no single human — should have unchecked authority.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/star-chamber',
         learnMoreLabel: 'Star Chamber Governance',
+        relatedEntries: ['the-300', 'coverage-minutes', 'defense-klaus'],
         tags: ['star-chamber', 'ai', 'governance', 'verification'],
       },
       {
@@ -312,6 +333,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "The public ledger. Real bank transactions proving the system works. Complete transparency. Every dollar in, every dollar out, verifiable by any member. Test-Net By Design.",
         learnMoreUrl: '/fly-on-the-wall',
         learnMoreLabel: 'View Public Ledger',
+        relatedEntries: ['vernacular-fly-on-the-wall', 'vernacular-cephas', 'coverage-minutes'],
         tags: ['fly-on-the-wall', 'transparency', 'ledger', 'audit'],
       },
       {
@@ -320,6 +342,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Speaking time is gated by listening time. 3-minute chunks, 180-minute cap, 90-day expiry. Earn the right to speak by listening first. Prevents any single voice from dominating community discourse.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/muffled-rule',
         learnMoreLabel: 'The Muffled Rule',
+        relatedEntries: ['the-300', 'star-chamber', 'fly-on-the-wall'],
         tags: ['muffled-rule', 'coverage-minutes', 'speaking', 'listening', 'governance'],
       },
       {
@@ -328,6 +351,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "8 provisional applications filed as a micro-entity ($65 each). 1,751 innovations documented. This is the cooperative's runway — IP as a shared asset instead of venture capital debt. 60% of Founder patents go to the platform.",
         learnMoreUrl: '/learn/patents',
         learnMoreLabel: 'Alcove: Patent Portfolio',
+        relatedEntries: ['vernacular-silver-candlesticks', 'cost-plus-20', 'howey-defense'],
         tags: ['patents', 'ip', 'innovations', 'portfolio'],
       },
     ],
@@ -346,6 +370,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "The pre-member experience. Browse freely, no account needed. Find Golden Keys, explore every page, build a ghost profile. Everything carries over when you join. Risk-free practice realm with time dilation (1hr = 10hr of content).",
         learnMoreUrl: '/ghost',
         learnMoreLabel: 'Enter Ghost World',
+        relatedEntries: ['golden-keys', 'babylon-candles', 'alcove-hallway'],
         tags: ['ghost-world', 'exploration', 'pre-member', 'free'],
       },
       {
@@ -354,6 +379,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Hidden puzzles scattered across Cephas articles and platform pages. Find them to unlock rewards and prove your exploration depth. Part of the gamification layer that rewards curiosity.",
         learnMoreUrl: '/learn/golden-key',
         learnMoreLabel: 'Alcove: The Golden Key',
+        relatedEntries: ['ghost-world', 'babylon-candles', 'chalk-outline'],
         tags: ['golden-keys', 'puzzles', 'exploration', 'rewards'],
       },
       {
@@ -362,6 +388,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "One-use invitation tokens that transport someone directly into the platform — like a teleportation spell from Stardust. When YOU give someone a candle, they arrive knowing someone real brought them here. Your attribution is permanently recorded.",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/babylon-candles',
         learnMoreLabel: 'Babylon Candle System',
+        relatedEntries: ['ghost-world', 'golden-keys', 'cue-cards'],
         tags: ['babylon-candles', 'invitation', 'referral', 'onboarding'],
       },
       {
@@ -370,6 +397,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Project creation as a coloring book. New creators see translucent overlays with dashed chalk outlines for every field. Fill in a section and it solidifies. Lock completed sections, preview your live page, launch when ready. Nobody likes blank forms.",
         learnMoreUrl: '/create',
         learnMoreLabel: 'Try It Now',
+        relatedEntries: ['ghost-world', 'golden-keys', 'alcove-hallway'],
         tags: ['chalk-outline', 'onboarding', 'creator', 'project-creation'],
       },
       {
@@ -378,6 +406,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "A progressive disclosure learning system with 18 stops in 3 tiers. Foundation (What is LB, currencies, membership) → Mechanics (Brewster Bonus, bidding, AVA) → Depth (Howey Defense, patents, governance). Answer comprehension questions to earn Marks. Complete all 18 for the Founder's Forge badge.",
         learnMoreUrl: '/learn',
         learnMoreLabel: 'Enter the Hallway',
+        relatedEntries: ['ghost-world', 'chalk-outline', 'three-currencies'],
         tags: ['alcove', 'hallway', 'learning', 'education', 'progressive-disclosure'],
       },
     ],
@@ -396,6 +425,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Help Each Other, Help Ourselves. The foundational principle. Interdependence, not collectivism. Each person maintains individual agency while creating collective benefit. Collectivism subordinates the individual — we don't do that. (1 Corinthians 12:21-26)",
         learnMoreUrl: 'https://cephas.lianabanyan.com/under-the-hood/heoho',
         learnMoreLabel: 'The HEOHO Philosophy',
+        relatedEntries: ['vernacular-heoho', 'what-is-lb', 'cost-plus-20'],
         tags: ['heoho', 'philosophy', 'interdependence', 'foundational'],
       },
       {
@@ -404,6 +434,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Marks-for-Marks service exchange. Post what you need, post what you offer. Platform matches locally. 'I'll babysit if you fix my AC.' Every offer backed by Joules in your Stake Account.",
         learnMoreUrl: '/learn/matchtrade',
         learnMoreLabel: 'Alcove: MatchTrade',
+        relatedEntries: ['six-degrees', 'bandwagon', 'heoho'],
         tags: ['matchtrade', 'exchange', 'services', 'local'],
       },
       {
@@ -412,6 +443,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "The universal connection engine. Bounty campaigns that leverage social networks to reach anyone: outreach (Crown Letters), medical (rare specialist access), and opportunity (job/mentorship connections). You already know someone who knows someone.",
         learnMoreUrl: '/six-degrees',
         learnMoreLabel: 'Six Degrees Engine',
+        relatedEntries: ['matchtrade', 'cue-cards', 'herald-system'],
         tags: ['six-degrees', 'connections', 'social', 'outreach'],
       },
       {
@@ -420,12 +452,14 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         answer: "Community safety net. Passive abuse detection, Community Alert Network, and emergency support systems. The submarine blast door for families in crisis. Integrates with Family Table for private family operations.",
         learnMoreUrl: '/initiatives/defense-klaus',
         learnMoreLabel: 'Defense Klaus System',
+        relatedEntries: ['star-chamber', 'coverage-minutes', 'heoho'],
         tags: ['defense-klaus', 'safety', 'protection', 'family'],
       },
       {
         id: 'double-dipping',
         question: 'What is "double-dipping and stacking"?',
         answer: "Reward layers that intentionally compound. Like an ice cream cone: each scoop is a separate reward. Herald referral bonus + BandWagon SAA increase + Production Run early-backer multiplier + Guild XP = four scoops from one action. Traditional platforms penalize double-dipping. We encourage it.",
+        relatedEntries: ['cost-plus-20', 'brewster-bonus', 'production-runs'],
         tags: ['double-dipping', 'stacking', 'rewards', 'multiplier'],
       },
     ],
@@ -448,6 +482,13 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         innovations: [1537],
         relatedEntries: ['hexisle-chain', 'hexisle-golden-lotus', 'hexisle-swan-neck', 'hexisle-water-table', 'hexisle-open-ip'],
         tags: ['hexisle', 'tereno', 'board-game', 'hydraulic', 'hexel'],
+      },
+      {
+        id: 'hexisle-water-table',
+        question: 'What is the Water Table?',
+        answer: "The central reservoir that provides 2.17 psi of gravity-driven water pressure to every HexIsle tile. No pumps, no batteries — just physics. The Water Table feeds hydraulic channels through each Hexel, powering Golden Lotus turbines, wave generators, and plant growth mechanisms. It's the beating heart of the entire terrain system.",
+        relatedEntries: ['hexisle-overview', 'hexisle-golden-lotus', 'hexisle-channel-lock'],
+        tags: ['hexisle', 'water-table', 'hydraulic', 'reservoir', 'gravity'],
       },
       {
         id: 'hexisle-chain',
@@ -756,6 +797,13 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         innovations: [1710, 1712, 1713],
         relatedEntries: ['brewster-bonus', 'how-marks-work', 'ip-load-balance', 'beacon-persistence', 'pre-operational'],
         tags: ['shadow-marks', 'demand', 'signaling', 'allocation', 'crystallization'],
+      },
+      {
+        id: 'ip-load-balance',
+        question: 'What is IP Load Balancing?',
+        answer: "The mechanism that distributes crystallized Shadow Marks proportionally across the patent portfolio. When your Shadow Marks crystallize into real Marks, their value is backed by a proportional slice of the cooperative's 1,751 innovations. This creates a direct link between member demand signaling and IP asset allocation — the portfolio funds what people actually want built.",
+        relatedEntries: ['shadow-marks', 'crystallization', 'patent-portfolio'],
+        tags: ['ip-load-balance', 'patents', 'demand', 'allocation', 'portfolio'],
       },
       {
         id: 'brewster-distribution',
