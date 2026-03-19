@@ -9,7 +9,69 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 48 (March 19, 2026)
+## RUNWAY / SESSION STOP (current) — Bishop 013 Extended (March 18, 2026)
+
+**Latest commit:** `c31e3be` — Bishop 013: Pudding Styles scrollytelling + AsYouWish/NoAtomo cue cards + Knight prompts 51-54
+**Previous commits:** `a034feb` (97 Cephas letters), `8a2fa2a` (Session 48 handoff), `c2398d4` (Session 48)
+
+**Status (March 18, 2026 — Bishop 013 Extended):**
+- Cephas deployed: **1,145 pages, 1,640 files** live at cephas-lianabanyan.web.app
+- Platform: 4 new pages (MakerSpotlight, DesignedToBeBroken, AsYouWishCard, NoAtomo)
+- Pudding scrollytelling system complete (CSS + JS + 5 Hugo shortcodes)
+- 97 new Cephas letters converted and deployed (45 → 102 total, 127% increase)
+- Knight prompts 51-54 written and ready for execution
+- Buffett SEC language fixes applied (disk only, gitignored)
+- Golden Key expansion note created for post-launch
+- **Innovation count:** 1,751 (unchanged)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.**
+
+### What Was Done (Bishop 013 Extended)
+
+#### Maker Spotlight System
+- **Migration `20260319100027_maker_spotlights.sql`** — `maker_spotlights` table with all 47 Instagram Factor-y creators seeded, RLS (public SELECT, admin write)
+- **`makerSpotlightService.ts`** — Types, rotation logic, Supabase fetch + sample fallback (12 of 47 in fallback)
+- **`MakerSpotlight.tsx`** — Slideshow engine (30s slides, 3-min sessions, play/pause/skip), directory grid with tier/HexIsle/pioneer filters, cue card banner, six-tier referral rewards
+
+#### Cue Card Landing Pages
+- **`DesignedToBeBroken.tsx`** (`/designed-to-be-broken`) — Marks participation currency explainer, three-currency visual, earn methods grid, FAQ accordion
+- **`AsYouWishCard.tsx`** (`/as-you-wish`) — Transaction confirmation philosophy, Princess Bride reference, 6 transaction contexts
+- **`NoAtomo.tsx`** (`/no-atomo`) — Anti-extraction manifesto, Iron Giant reference, "What We Refuse" (6 items), "What We Build Instead"
+
+#### Pudding Styles Scrollytelling System (Cephas)
+- **`pudding.css`** — Reveal animations (left/right/scale), sticky sections, stat blocks, comparison boxes, quote blocks, progress bar, chapter dots, responsive + print
+- **`pudding.js`** — IntersectionObserver engine: reveal, progress bar, chapter navigation, auto-wrap content
+- **5 Hugo shortcodes**: `pudding-stat`, `pudding-compare`, `pudding-sticky-quote`, `pudding-progress`, `pudding-reveal`
+- **Partials**: `head-additions.html` (CSS), `footer-additions.html` (JS)
+
+#### 97 Cephas Letter Conversions
+- 9 Crown Initiative, 4 Circle 1, 6 Circle 2, 8 Circle 3, 3 Blessing, 17 Pitches, 5 Partnerships, 1 Professional + directory _index.md files
+- Hugo build: 1,145 pages. Firebase deploy: 1,640 files to cephas-lianabanyan.web.app
+
+#### Buffett Letter SEC Fix (disk only)
+- "ROI" → "service value", "ROI variance" → "outcome variance", "Equity stake" → "A founding participation..."
+
+#### Knight Prompts Written
+- **Session 51**: GleanersCorner/ChainVoting/ConcentricCircles Supabase wiring + Lovable cleanup + Maker Spotlight sample expansion
+- **Session 52**: Edge Functions Phase 3 (admin-notify, send-email, social-image-upload) + Proteus Anchor System + Cephas deploy
+- **Session 53**: Pudding Styles integration into Cephas content + navigation enhancement
+- **Session 54**: RLS Phase 3 complete audit + Golden Key Quiz Seeding (8 Crown letters) + Platform Smoke Test
+
+#### Post-Launch Note
+- `POST_LAUNCH_GOLDEN_KEY_EXPANSION.md` — All 102 letters need quizzes and/or treasure keys (currently only Buffett + Scott have quizzes)
+
+### Pending (for Knight Sessions 51-54)
+- GleanersCorner, ChainVoting, ConcentricCircles wiring to Supabase
+- Edge Functions Phase 3 (admin notifications, email service, social image upload)
+- Proteus Anchor System (table + service + page)
+- Pudding Styles integration into actual Cephas letter content
+- RLS Phase 3 complete audit
+- Golden Key Quiz Seeding for 8 Crown letters
+- Platform smoke test
+
+---
+
+## Previous: Session 48 (March 19, 2026)
 
 **Latest commit:** `c2398d4` — Session 48: MoneyPenny Edge Functions Phase 2, RLS Phase 2, Content Pipeline build
 **Previous commit:** `42203c8` — Session 47: RLS hardening migration
