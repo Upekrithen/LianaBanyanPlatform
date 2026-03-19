@@ -1,4 +1,4 @@
-import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart, Sprout, Link2, Crosshair } from "lucide-react";
+import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart, Sprout, Link2, Crosshair, Gift, Anchor, Scale, Factory } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -47,6 +47,12 @@ const marketplaceMainItems = [
   { title: "Gleaner's Corner", url: "/gleaners-corner", icon: Sprout },
   { title: "Sponsorship Guide", url: "/sponsorship-guide", icon: BookOpen },
   { title: "Register IP", url: "/ip/register", icon: ShieldCheck },
+  { title: "C+20 Reciprocity", url: "/c-plus-20", icon: Scale },
+  { title: "Santa Ever After", url: "/santa", icon: Gift },
+  { title: "Node Captain", url: "/node-captain", icon: Anchor },
+  { title: "Star Chamber", url: "/star-chamber", icon: Scale },
+  { title: "Tereno Certification", url: "/tereno-certification", icon: Award },
+  { title: "The Forge", url: "/the-forge", icon: Factory },
 ];
 
 const marketplaceAdminItems = [

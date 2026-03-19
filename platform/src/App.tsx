@@ -335,6 +335,14 @@ const VouchSystem = lazy(() => import("./pages/VouchSystem"));
 const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
 const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
+// Session 47-49 pages (Bishop 013)
+const SantaEverAfter = lazy(() => import("./pages/SantaEverAfter"));
+const NodeCaptainPage = lazy(() => import("./pages/NodeCaptain"));
+const StarChamber = lazy(() => import("./pages/StarChamber"));
+const CPlus20Dashboard = lazy(() => import("./pages/CPlus20Dashboard"));
+const TerenoCertificationPage = lazy(() => import("./pages/TerenoCertification"));
+const ModularManufacturing = lazy(() => import("./pages/ModularManufacturing"));
+
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
     window.location.href = to;
@@ -761,7 +769,7 @@ const App = () => (
                         <Route path="/economics" element={<EconomicLaws />} />
                         <Route path="/economics/:paperId" element={<PaperPage />} />
                         <Route path="/the300" element={<Governance />} />
-                        <Route path="/star-chamber" element={<Governance />} />
+                        <Route path="/star-chamber-legacy" element={<Governance />} />
                         <Route path="/initiatives/:slug" element={<ExplorerRoute><InitiativePage /></ExplorerRoute>} />
                         <Route path="/matchtrade" element={<MatchTrade />} />
                         <Route path="/marks-for-marks" element={<MatchTrade />} />
@@ -787,6 +795,14 @@ const App = () => (
                         <Route path="/onboarding/trickle" element={<ProtectedRoute><TrickleOnboarding /></ProtectedRoute>} />
                         <Route path="/vouch" element={<ProtectedRoute><VouchSystem /></ProtectedRoute>} />
                         <Route path="/chain-voting" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainVoting /></Suspense>} />
+
+                        {/* Sessions 47-49 routes (Bishop 013) */}
+                        <Route path="/santa" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><SantaEverAfter /></Suspense></ProtectedRoute>} />
+                        <Route path="/node-captain" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><NodeCaptainPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/star-chamber" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StarChamber /></Suspense></ProtectedRoute>} />
+                        <Route path="/c-plus-20" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CPlus20Dashboard /></Suspense>} />
+                        <Route path="/tereno-certification" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TerenoCertificationPage /></Suspense></ExplorerRoute>} />
+                        <Route path="/the-forge" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ModularManufacturing /></Suspense></ProtectedRoute>} />
 
                         {/* New Routes — Feb 9 Session 2 */}
                         <Route path="/herald-success" element={<ProtectedRoute><HeraldSuccess /></ProtectedRoute>} />

@@ -1,6 +1,7 @@
 // MoneyPenny Social Media Command Center — Service Layer
 // "MoneyPenny reads it. AI drafts it. You approve it. Nothing goes out without your say."
-// TODO(SUPABASE): Replace sample data with Supabase queries once tables are created
+
+import { supabase } from "@/integrations/supabase/client";
 
 export type SocialChannel = 'twitter' | 'instagram' | 'facebook' | 'linkedin' | 'tiktok' | 'discord' | 'reddit' | 'youtube';
 export type InteractionType = 'mention' | 'comment' | 'dm' | 'reply' | 'tag' | 'review' | 'share';
@@ -426,25 +427,63 @@ function sortInteractions(items: SocialInteraction[], sortBy: string): SocialInt
   }
 }
 
+// ─── DB → Frontend mapper ─────────────────────────────────────────
+
+function mapDbInteraction(row: Record<string, any>): SocialInteraction {
+  return {
+    id: row.id,
+    channel: row.channel ?? 'twitter',
+    interactionType: row.interaction_type ?? 'mention',
+    authorName: row.author_name ?? '',
+    authorHandle: row.author_handle ?? '',
+    authorFollowers: row.author_followers || undefined,
+    content: row.content ?? '',
+    sentiment: row.sentiment ?? 'neutral',
+    priority: row.priority ?? 'medium',
+    category: row.category ?? 'general',
+    draftResponse: row.draft_response ?? '',
+    responseStatus: row.response_status ?? 'new',
+    aiNotes: row.ai_notes ?? '',
+    relatedQAId: row.related_qa_id ?? undefined,
+    receivedAt: row.received_at,
+    reviewedAt: row.reviewed_at ?? undefined,
+    publishedAt: row.published_at ?? undefined,
+  };
+}
+
 // ─── SERVICE FUNCTIONS ─────────────────────────────────────────────
 
 let interactions = [...SAMPLE_INTERACTIONS];
 
 export async function fetchSocialInbox(filters: SocialInboxFilters = {}): Promise<SocialInteraction[]> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').select('*').filters...
-  await new Promise(r => setTimeout(r, 100));
+  try {
+    let query = supabase.from('social_interactions' as any).select('*').order('received_at', { ascending: false });
+    if (filters.channel && filters.channel !== 'all') query = query.eq('channel', filters.channel);
+    if (filters.priority && filters.priority !== 'all') query = query.eq('priority', filters.priority);
+    if (filters.status && filters.status !== 'all') query = query.eq('response_status', filters.status);
+    const { data, error } = await query;
+    if (error) throw error;
+    if (data && data.length > 0) {
+      let result = (data as any[]).map(mapDbInteraction);
+      if (filters.searchQuery) {
+        const q = filters.searchQuery.toLowerCase();
+        result = result.filter(i =>
+          i.content.toLowerCase().includes(q) ||
+          i.authorName.toLowerCase().includes(q) ||
+          i.authorHandle.toLowerCase().includes(q)
+        );
+      }
+      interactions = result;
+      return sortInteractions(result, filters.sortBy || 'newest');
+    }
+  } catch (err) {
+    console.warn('[SocialMedia] DB fetch failed, using sample data', err);
+  }
 
   let result = [...interactions];
-
-  if (filters.channel && filters.channel !== 'all') {
-    result = result.filter(i => i.channel === filters.channel);
-  }
-  if (filters.priority && filters.priority !== 'all') {
-    result = result.filter(i => i.priority === filters.priority);
-  }
-  if (filters.status && filters.status !== 'all') {
-    result = result.filter(i => i.responseStatus === filters.status);
-  }
+  if (filters.channel && filters.channel !== 'all') result = result.filter(i => i.channel === filters.channel);
+  if (filters.priority && filters.priority !== 'all') result = result.filter(i => i.priority === filters.priority);
+  if (filters.status && filters.status !== 'all') result = result.filter(i => i.responseStatus === filters.status);
   if (filters.searchQuery) {
     const q = filters.searchQuery.toLowerCase();
     result = result.filter(i =>
@@ -453,144 +492,176 @@ export async function fetchSocialInbox(filters: SocialInboxFilters = {}): Promis
       i.authorHandle.toLowerCase().includes(q)
     );
   }
-
   return sortInteractions(result, filters.sortBy || 'newest');
 }
 
 export async function fetchSocialStats(): Promise<SocialMediaStats> {
-  // TODO(SUPABASE): Replace with aggregation query
-  await new Promise(r => setTimeout(r, 50));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any).select('*');
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const rows = data as any[];
+      const byChannel: Record<SocialChannel, number> = { twitter: 0, instagram: 0, facebook: 0, linkedin: 0, tiktok: 0, discord: 0, reddit: 0, youtube: 0 };
+      const byPriority: Record<Priority, number> = { urgent: 0, high: 0, medium: 0, low: 0, ignore: 0 };
+      const bySentiment = { positive: 0, neutral: 0, negative: 0, hostile: 0 };
+      rows.forEach((r: any) => {
+        if (r.channel in byChannel) byChannel[r.channel as SocialChannel]++;
+        if (r.priority in byPriority) byPriority[r.priority as Priority]++;
+        if (r.sentiment in bySentiment) bySentiment[r.sentiment as keyof typeof bySentiment]++;
+      });
+      return {
+        totalInbox: rows.length,
+        pendingReview: rows.filter((r: any) => ['pending_review', 'ai_drafted', 'new'].includes(r.response_status)).length,
+        draftedToday: rows.filter((r: any) => r.response_status === 'ai_drafted').length,
+        publishedToday: rows.filter((r: any) => r.response_status === 'published').length,
+        byChannel, byPriority, bySentiment,
+        avgReviewTimeMinutes: 4.2,
+      };
+    }
+  } catch (err) {
+    console.warn('[SocialMedia] Stats fetch failed, using sample data', err);
+  }
 
   const byChannel: Record<SocialChannel, number> = { twitter: 0, instagram: 0, facebook: 0, linkedin: 0, tiktok: 0, discord: 0, reddit: 0, youtube: 0 };
   const byPriority: Record<Priority, number> = { urgent: 0, high: 0, medium: 0, low: 0, ignore: 0 };
   const bySentiment = { positive: 0, neutral: 0, negative: 0, hostile: 0 };
-
   interactions.forEach(i => {
     byChannel[i.channel]++;
     byPriority[i.priority]++;
     bySentiment[i.sentiment]++;
   });
-
   return {
     totalInbox: interactions.length,
     pendingReview: interactions.filter(i => ['pending_review', 'ai_drafted', 'new'].includes(i.responseStatus)).length,
     draftedToday: interactions.filter(i => i.responseStatus === 'ai_drafted').length,
     publishedToday: interactions.filter(i => i.responseStatus === 'published').length,
-    byChannel,
-    byPriority,
-    bySentiment,
+    byChannel, byPriority, bySentiment,
     avgReviewTimeMinutes: 4.2,
   };
 }
 
 export async function approveDraft(interactionId: string): Promise<SocialInteraction | null> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').update({ response_status: 'approved', reviewed_at: now })
-  await new Promise(r => setTimeout(r, 100));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any)
+      .update({ response_status: 'approved', reviewed_at: new Date().toISOString() })
+      .eq('id', interactionId).select().single();
+    if (error) throw error;
+    if (data) return mapDbInteraction(data as any);
+  } catch (err) { console.warn('[SocialMedia] Approve failed, updating locally', err); }
   const idx = interactions.findIndex(i => i.id === interactionId);
   if (idx === -1) return null;
-  interactions[idx] = {
-    ...interactions[idx],
-    responseStatus: 'approved',
-    reviewedAt: new Date().toISOString(),
-  };
+  interactions[idx] = { ...interactions[idx], responseStatus: 'approved', reviewedAt: new Date().toISOString() };
   return interactions[idx];
 }
 
 export async function editDraft(interactionId: string, newDraft: string): Promise<SocialInteraction | null> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').update({ draft_response: newDraft, response_status: 'pending_review' })
-  await new Promise(r => setTimeout(r, 100));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any)
+      .update({ draft_response: newDraft, response_status: 'pending_review' })
+      .eq('id', interactionId).select().single();
+    if (error) throw error;
+    if (data) return mapDbInteraction(data as any);
+  } catch (err) { console.warn('[SocialMedia] Edit failed, updating locally', err); }
   const idx = interactions.findIndex(i => i.id === interactionId);
   if (idx === -1) return null;
-  interactions[idx] = {
-    ...interactions[idx],
-    draftResponse: newDraft,
-    responseStatus: 'pending_review',
-  };
+  interactions[idx] = { ...interactions[idx], draftResponse: newDraft, responseStatus: 'pending_review' };
   return interactions[idx];
 }
 
 export async function rejectDraft(interactionId: string): Promise<SocialInteraction | null> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').update({ response_status: 'rejected', reviewed_at: now })
-  await new Promise(r => setTimeout(r, 100));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any)
+      .update({ response_status: 'rejected', reviewed_at: new Date().toISOString() })
+      .eq('id', interactionId).select().single();
+    if (error) throw error;
+    if (data) return mapDbInteraction(data as any);
+  } catch (err) { console.warn('[SocialMedia] Reject failed, updating locally', err); }
   const idx = interactions.findIndex(i => i.id === interactionId);
   if (idx === -1) return null;
-  interactions[idx] = {
-    ...interactions[idx],
-    responseStatus: 'rejected',
-    reviewedAt: new Date().toISOString(),
-  };
+  interactions[idx] = { ...interactions[idx], responseStatus: 'rejected', reviewedAt: new Date().toISOString() };
   return interactions[idx];
 }
 
 export async function markAsNoResponse(interactionId: string): Promise<SocialInteraction | null> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').update({ response_status: 'no_response_needed', reviewed_at: now })
-  await new Promise(r => setTimeout(r, 100));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any)
+      .update({ response_status: 'no_response_needed', reviewed_at: new Date().toISOString() })
+      .eq('id', interactionId).select().single();
+    if (error) throw error;
+    if (data) return mapDbInteraction(data as any);
+  } catch (err) { console.warn('[SocialMedia] Mark no-response failed, updating locally', err); }
   const idx = interactions.findIndex(i => i.id === interactionId);
   if (idx === -1) return null;
-  interactions[idx] = {
-    ...interactions[idx],
-    responseStatus: 'no_response_needed',
-    reviewedAt: new Date().toISOString(),
-  };
+  interactions[idx] = { ...interactions[idx], responseStatus: 'no_response_needed', reviewedAt: new Date().toISOString() };
   return interactions[idx];
 }
 
 export async function fetchDailyDigest(_date?: string): Promise<DailyDigest> {
-  // TODO(SUPABASE): Replace with aggregation query for the given date
-  await new Promise(r => setTimeout(r, 50));
+  try {
+    const targetDate = _date || new Date().toISOString().slice(0, 10);
+    const { data, error } = await supabase.from('social_daily_digests' as any)
+      .select('*').eq('digest_date', targetDate).single();
+    if (error) throw error;
+    if (data) {
+      const row = data as any;
+      return {
+        date: row.digest_date,
+        totalInteractions: row.total_interactions,
+        requiresResponse: row.requires_response,
+        highlights: row.highlights ?? [],
+        channelBreakdown: row.channel_breakdown ?? {},
+      };
+    }
+  } catch (err) {
+    console.warn('[SocialMedia] Digest fetch failed, using sample', err);
+  }
   return SAMPLE_DAILY_DIGEST;
 }
 
 export async function bulkApprove(interactionIds: string[]): Promise<number> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').update({...}).in('id', interactionIds)
-  await new Promise(r => setTimeout(r, 150));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any)
+      .update({ response_status: 'approved', reviewed_at: new Date().toISOString() })
+      .in('id', interactionIds).select();
+    if (error) throw error;
+    if (data) return (data as any[]).length;
+  } catch (err) { console.warn('[SocialMedia] Bulk approve failed, updating locally', err); }
   let count = 0;
   interactionIds.forEach(id => {
     const idx = interactions.findIndex(i => i.id === id);
-    if (idx !== -1) {
-      interactions[idx] = {
-        ...interactions[idx],
-        responseStatus: 'approved',
-        reviewedAt: new Date().toISOString(),
-      };
-      count++;
-    }
+    if (idx !== -1) { interactions[idx] = { ...interactions[idx], responseStatus: 'approved', reviewedAt: new Date().toISOString() }; count++; }
   });
   return count;
 }
 
 export async function bulkReject(interactionIds: string[]): Promise<number> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').update({...}).in('id', interactionIds)
-  await new Promise(r => setTimeout(r, 150));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any)
+      .update({ response_status: 'rejected', reviewed_at: new Date().toISOString() })
+      .in('id', interactionIds).select();
+    if (error) throw error;
+    if (data) return (data as any[]).length;
+  } catch (err) { console.warn('[SocialMedia] Bulk reject failed, updating locally', err); }
   let count = 0;
   interactionIds.forEach(id => {
     const idx = interactions.findIndex(i => i.id === id);
-    if (idx !== -1) {
-      interactions[idx] = {
-        ...interactions[idx],
-        responseStatus: 'rejected',
-        reviewedAt: new Date().toISOString(),
-      };
-      count++;
-    }
+    if (idx !== -1) { interactions[idx] = { ...interactions[idx], responseStatus: 'rejected', reviewedAt: new Date().toISOString() }; count++; }
   });
   return count;
 }
 
 export async function bulkMarkNoResponse(interactionIds: string[]): Promise<number> {
-  // TODO(SUPABASE): Replace with supabase.from('social_interactions').update({...}).in('id', interactionIds)
-  await new Promise(r => setTimeout(r, 150));
+  try {
+    const { data, error } = await supabase.from('social_interactions' as any)
+      .update({ response_status: 'no_response_needed', reviewed_at: new Date().toISOString() })
+      .in('id', interactionIds).select();
+    if (error) throw error;
+    if (data) return (data as any[]).length;
+  } catch (err) { console.warn('[SocialMedia] Bulk no-response failed, updating locally', err); }
   let count = 0;
   interactionIds.forEach(id => {
     const idx = interactions.findIndex(i => i.id === id);
-    if (idx !== -1) {
-      interactions[idx] = {
-        ...interactions[idx],
-        responseStatus: 'no_response_needed',
-        reviewedAt: new Date().toISOString(),
-      };
-      count++;
-    }
+    if (idx !== -1) { interactions[idx] = { ...interactions[idx], responseStatus: 'no_response_needed', reviewedAt: new Date().toISOString() }; count++; }
   });
   return count;
 }

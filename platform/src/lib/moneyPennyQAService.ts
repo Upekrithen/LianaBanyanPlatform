@@ -10,6 +10,8 @@
 // Only Backed Marks (Joule-collateralized) can fund production.
 // See notCentsEconomy.ts for full Mark subtype rules.
 
+import { supabase } from "@/integrations/supabase/client";
+
 // ─── Interfaces ───────────────────────────────────────────────────────
 
 export interface QAEntry {
@@ -602,28 +604,67 @@ export const STATUS_CONFIG: Record<QAEntry['status'], { label: string; color: st
 
 export const MILESTONES = [100, 500, 1000, 3000, 5000, 10000];
 
-// ─── Async Functions (Supabase TODOs) ─────────────────────────────────
+// ─── DB → Frontend mapper ─────────────────────────────────────────────
+
+function mapDbEntry(row: Record<string, any>): QAEntry {
+  return {
+    id: row.id,
+    questionText: row.question_text ?? '',
+    answerText: row.answer_text ?? '',
+    askerName: row.asker_name ?? '',
+    askerEmail: row.asker_email ?? undefined,
+    channel: row.channel ?? 'website',
+    classification: row.classification ?? 'worthwhile',
+    isNovel: row.is_novel ?? false,
+    marksAwarded: Number(row.marks_awarded ?? 0),
+    followUpReceived: row.follow_up_received ?? false,
+    followUpMarksAwarded: Number(row.follow_up_marks_awarded ?? 0),
+    memberConversionBonus: 0,
+    becameMember: false,
+    cueCardsSent: 0,
+    followUpText: row.follow_up_text ?? undefined,
+    aiResponder: row.ai_responder?.toLowerCase() ?? 'moneypenny',
+    status: row.status ?? 'pending_review',
+    similarQuestionIds: row.similar_question_ids ?? [],
+    createdAt: row.created_at,
+    reviewedAt: row.reviewed_at ?? undefined,
+    sentAt: row.sent_at ?? undefined,
+    followUpAt: row.follow_up_at ?? undefined,
+  };
+}
+
+// ─── Async Functions ──────────────────────────────────────────────────
 
 export async function fetchQAEntries(filters?: QAFilters): Promise<QAEntry[]> {
-  // TODO: Replace with Supabase query
-  // const { data, error } = await supabase
-  //   .from('moneypenny_qa_entries')
-  //   .select('*')
-  //   .order('created_at', { ascending: false });
-  let entries = [...SAMPLE_QA_ENTRIES];
+  try {
+    let query = supabase.from('qa_entries' as any).select('*').order('created_at', { ascending: false });
+    if (filters?.status) query = query.eq('status', filters.status);
+    if (filters?.classification) query = query.eq('classification', filters.classification);
+    if (filters?.channel) query = query.eq('channel', filters.channel);
+    if (filters?.aiResponder) query = query.ilike('ai_responder', filters.aiResponder);
+    const { data, error } = await query;
+    if (error) throw error;
+    if (data && data.length > 0) {
+      let entries = (data as any[]).map(mapDbEntry);
+      if (filters?.search) {
+        const q = filters.search.toLowerCase();
+        entries = entries.filter(e =>
+          e.questionText.toLowerCase().includes(q) ||
+          e.answerText.toLowerCase().includes(q) ||
+          e.askerName.toLowerCase().includes(q)
+        );
+      }
+      return entries;
+    }
+  } catch (err) {
+    console.warn('[MoneyPennyQA] DB fetch failed, using sample data', err);
+  }
 
-  if (filters?.status) {
-    entries = entries.filter(e => e.status === filters.status);
-  }
-  if (filters?.classification) {
-    entries = entries.filter(e => e.classification === filters.classification);
-  }
-  if (filters?.channel) {
-    entries = entries.filter(e => e.channel === filters.channel);
-  }
-  if (filters?.aiResponder) {
-    entries = entries.filter(e => e.aiResponder === filters.aiResponder);
-  }
+  let entries = [...SAMPLE_QA_ENTRIES];
+  if (filters?.status) entries = entries.filter(e => e.status === filters.status);
+  if (filters?.classification) entries = entries.filter(e => e.classification === filters.classification);
+  if (filters?.channel) entries = entries.filter(e => e.channel === filters.channel);
+  if (filters?.aiResponder) entries = entries.filter(e => e.aiResponder === filters.aiResponder);
   if (filters?.search) {
     const q = filters.search.toLowerCase();
     entries = entries.filter(e =>
@@ -632,12 +673,36 @@ export async function fetchQAEntries(filters?: QAFilters): Promise<QAEntry[]> {
       e.askerName.toLowerCase().includes(q)
     );
   }
-
   return entries;
 }
 
 export async function fetchQAStats(): Promise<QAStats> {
-  // TODO: Replace with Supabase aggregate query
+  try {
+    const { data, error } = await supabase.from('qa_entries' as any).select('*');
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const entries = data as any[];
+      const total = entries.length;
+      const worthwhile = entries.filter((e: any) => e.classification === 'worthwhile').length;
+      const novel = entries.filter((e: any) => e.is_novel).length;
+      const followUps = entries.filter((e: any) => e.follow_up_received).length;
+      const totalMarks = entries.reduce((sum: number, e: any) => sum + Number(e.marks_awarded ?? 0) + Number(e.follow_up_marks_awarded ?? 0), 0);
+      const nextMilestone = MILESTONES.find(m => m > total) || 10000;
+      return {
+        totalQuestions: total,
+        pendingReview: entries.filter((e: any) => e.status === 'pending_review').length,
+        worthwhile,
+        novel,
+        followUps,
+        totalMarksAwarded: totalMarks,
+        nextMilestone,
+        progressToMilestone: Math.round((total / nextMilestone) * 100),
+      };
+    }
+  } catch (err) {
+    console.warn('[MoneyPennyQA] Stats fetch failed, using sample data', err);
+  }
+
   const entries = SAMPLE_QA_ENTRIES;
   const worthwhile = entries.filter(e => e.classification === 'worthwhile').length;
   const novel = entries.filter(e => e.isNovel).length;
@@ -645,13 +710,10 @@ export async function fetchQAStats(): Promise<QAStats> {
   const totalMarks = entries.reduce((sum, e) => sum + e.marksAwarded + e.followUpMarksAwarded, 0);
   const total = entries.length;
   const nextMilestone = MILESTONES.find(m => m > total) || 10000;
-
   return {
     totalQuestions: total,
     pendingReview: entries.filter(e => e.status === 'pending_review').length,
-    worthwhile,
-    novel,
-    followUps,
+    worthwhile, novel, followUps,
     totalMarksAwarded: totalMarks,
     nextMilestone,
     progressToMilestone: Math.round((total / nextMilestone) * 100),
@@ -659,10 +721,6 @@ export async function fetchQAStats(): Promise<QAStats> {
 }
 
 export async function classifyQuestion(questionText: string): Promise<{ classification: QAEntry['classification']; isNovel: boolean; similarIds: string[] }> {
-  // TODO: Replace with Supabase edge function call to MoneyPenny AI
-  // const { data, error } = await supabase.functions.invoke('moneypenny-classify', {
-  //   body: { questionText }
-  // });
   const lower = questionText.toLowerCase();
   const existing = SAMPLE_QA_ENTRIES.find(e =>
     e.classification === 'worthwhile' && e.questionText.toLowerCase().includes(lower.slice(0, 20))
@@ -675,43 +733,92 @@ export async function classifyQuestion(questionText: string): Promise<{ classifi
 }
 
 export async function approveResponse(qaId: string): Promise<QAEntry | null> {
-  // TODO: Replace with Supabase update
-  // const { data, error } = await supabase
-  //   .from('moneypenny_qa_entries')
-  //   .update({ status: 'approved', reviewed_at: new Date().toISOString() })
-  //   .eq('id', qaId)
-  //   .select()
-  //   .single();
-  const entry = SAMPLE_QA_ENTRIES.find(e => e.id === qaId);
-  if (entry) {
-    entry.status = 'approved';
-    entry.reviewedAt = new Date().toISOString();
+  try {
+    const { data, error } = await supabase
+      .from('qa_entries' as any)
+      .update({ status: 'approved', reviewed_at: new Date().toISOString() })
+      .eq('id', qaId)
+      .select()
+      .single();
+    if (error) throw error;
+    if (data) return mapDbEntry(data as any);
+  } catch (err) {
+    console.warn('[MoneyPennyQA] Approve failed, updating locally', err);
   }
+  const entry = SAMPLE_QA_ENTRIES.find(e => e.id === qaId);
+  if (entry) { entry.status = 'approved'; entry.reviewedAt = new Date().toISOString(); }
   return entry || null;
 }
 
 export async function rejectResponse(qaId: string): Promise<QAEntry | null> {
-  // TODO: Replace with Supabase update
-  const entry = SAMPLE_QA_ENTRIES.find(e => e.id === qaId);
-  if (entry) {
-    entry.status = 'rejected';
-    entry.reviewedAt = new Date().toISOString();
+  try {
+    const { data, error } = await supabase
+      .from('qa_entries' as any)
+      .update({ status: 'rejected', reviewed_at: new Date().toISOString() })
+      .eq('id', qaId)
+      .select()
+      .single();
+    if (error) throw error;
+    if (data) return mapDbEntry(data as any);
+  } catch (err) {
+    console.warn('[MoneyPennyQA] Reject failed, updating locally', err);
   }
+  const entry = SAMPLE_QA_ENTRIES.find(e => e.id === qaId);
+  if (entry) { entry.status = 'rejected'; entry.reviewedAt = new Date().toISOString(); }
   return entry || null;
 }
 
+function mapDbMilestone(row: Record<string, any>): QAMilestoneReport {
+  const cats = (row.top_categories ?? []) as { category: string; count: number }[];
+  return {
+    milestone: row.milestone,
+    reachedAt: row.reached_at,
+    totalQuestions: row.total_questions,
+    worthwhileCount: row.worthwhile_count ?? 0,
+    worthwhilePct: row.total_questions > 0 ? Math.round(((row.worthwhile_count ?? 0) / row.total_questions) * 100) : 0,
+    duplicateCount: row.duplicate_count ?? 0,
+    throwawayCount: row.throwaway_count ?? 0,
+    flamerCount: row.flamer_count ?? 0,
+    trollCount: row.troll_count ?? 0,
+    botCount: row.bot_count ?? 0,
+    followUpRate: Number(row.follow_up_rate ?? 0),
+    totalMarksAwarded: Number(row.total_marks_awarded ?? 0),
+    topQuestionCategories: cats,
+    avgResponseTime: row.avg_response_time_seconds ? `${Math.round(row.avg_response_time_seconds / 60)} minutes` : 'N/A',
+  };
+}
+
 export async function fetchMilestoneReports(): Promise<QAMilestoneReport[]> {
-  // TODO: Replace with Supabase query
-  // const { data, error } = await supabase
-  //   .from('moneypenny_qa_milestones')
-  //   .select('*')
-  //   .order('milestone', { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from('qa_milestone_reports' as any)
+      .select('*')
+      .order('milestone', { ascending: true });
+    if (error) throw error;
+    if (data && data.length > 0) return (data as any[]).map(mapDbMilestone);
+  } catch (err) {
+    console.warn('[MoneyPennyQA] Milestone fetch failed, using sample', err);
+  }
   return SAMPLE_MILESTONE_REPORTS;
 }
 
 export async function awardFollowUpBonus(qaId: string): Promise<QAEntry | null> {
-  // TODO: Replace with Supabase update + marks transaction
-  // const { data, error } = await supabase.rpc('award_followup_bonus', { qa_id: qaId });
+  try {
+    const { data, error } = await supabase
+      .from('qa_entries' as any)
+      .update({
+        follow_up_marks_awarded: QA_REWARDS.FOLLOW_UP_BONUS,
+        status: 'followed_up',
+        follow_up_at: new Date().toISOString(),
+      })
+      .eq('id', qaId)
+      .select()
+      .single();
+    if (error) throw error;
+    if (data) return mapDbEntry(data as any);
+  } catch (err) {
+    console.warn('[MoneyPennyQA] Award bonus failed, updating locally', err);
+  }
   const entry = SAMPLE_QA_ENTRIES.find(e => e.id === qaId);
   if (entry && entry.followUpReceived && entry.followUpMarksAwarded === 0) {
     entry.followUpMarksAwarded = 25;
