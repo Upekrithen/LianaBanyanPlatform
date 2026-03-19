@@ -135,7 +135,7 @@ Liana Banyan is what came from forty years of thinking about that. A cooperative
 → 16 charitable initiatives are funded by architecture, not pledges
 → Every member can start a business for $5
 
-The platform is live. The architecture is backed by 1,336 patent claims. The operating agreement locks the economics.
+The platform is live. The architecture is backed by 1,401 patent claims. The operating agreement locks the economics.
 
 I'm looking for 300 founding members who are tired of eking their way through life.
 
@@ -171,7 +171,7 @@ $5 a year. No Plan B.`,
     priority: 'high',
     content: `I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where creators keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
 
-I put 1,336 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
+I put 1,401 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
 
 The cost to join: $5/year. The economic model: Cost + 20%, locked in the operating agreement. The goal: 300 founding members who want to build something that can't be enshittified.
 
@@ -340,7 +340,7 @@ The economic model: Cost + 20%, constitutionally locked. Creators keep 83.3%. Th
 
 What makes it different: The margin is in the operating agreement, not a settings panel. You literally cannot enshittify it without rewriting the corporate charter.
 
-1,336 patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
+1,401 patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
 
 Looking for 300 founding members at $5/year to stress-test the model.
 
@@ -358,7 +358,23 @@ Full technical architecture: cephas.lianabanyan.com`,
     title: 'Maker Communities — 3D creators keep 83.3%',
     type: 'post',
     priority: 'medium',
-    content: 'Tailored post about HexIsle terrain system, hydraulic terrain, maker-focused features for r/PrintedMinis, r/TerrainBuilding, r/3Dprinting',
+    content: `I've spent 3 years designing a modular terrain system that's actually cooperative-owned. The IP belongs to the members who use it. Here's the tech:
+
+HexIsle uses 60mm hexagonal tiles — not 42mm like most hex games. The larger footprint lets us do things that are physically impossible at smaller scales:
+
+→ Hydraulic terrain: channels molded into tile undersides that route actual water for river/waterfall dioramas. The hex geometry makes every connection watertight without gaskets.
+
+→ Compliant mechanisms: living hinges printed directly into the terrain. Drawbridges, trap doors, rotating platforms — no assembly, no glue, no separate hardware. Single-print articulation.
+
+→ Tereno certification tiers: creators can submit terrain designs for testing. Tier 1 (tested by creator), Tier 2 (community-verified), Tier 3 (stress-tested for tournament play). Your certification level follows the design forever — it's a permanent quality signal.
+
+The founding run is live now. SLA resin miniatures + PLA+ terrain tiles, cooperative-produced. Creators keep 83.3% of every sale — the margin is constitutionally locked at Cost + 20%. That 20% funds 16 charitable initiatives.
+
+Pre-orders open: lianabanyan.com/hexisle/founding-run
+
+I'm happy to answer technical questions about the hex geometry, the hydraulic routing system, or how compliant mechanisms work at this scale.
+
+Subreddits: r/PrintedMinis, r/TerrainBuilding, r/3Dprinting`,
     hashtags: [],
     imageUrls: [],
   },
@@ -474,7 +490,7 @@ Not by charity. By math.
 
 Because in OUR Castle, we build more arrows instead of escape tunnels.
 
-Most platforms build escape hatches for the people who run them. We built 1,422 innovations — and 80% of the IP goes into the cooperative.
+Most platforms build escape hatches for the people who run them. We built 1,754 innovations — and 80% of the IP goes into the cooperative.
 
 That's not idealism. That's architecture.
 
@@ -492,7 +508,25 @@ lianabanyan.com/join`,
     title: 'Three-Gear Currency: How we solved the "same work, different value" problem',
     type: 'post',
     priority: 'medium',
-    content: 'Technical deep-dive on Credits/Marks/Joules system for Hacker News and Indie Hackers.',
+    content: `Three-Gear Currency: How we solved the "same work, different value" problem
+
+Most platforms have one currency: dollars. That creates a structural problem — a mass-produced cutting board from a factory in Shenzhen and a hand-carved one from a workshop in Louisville are priced against each other on the same axis. The factory always wins on price. The craftsperson always loses.
+
+We built a three-gear system to decouple value from geography:
+
+**Gear 1: Credits** — 1:1 with USD. This is spending money. You buy credits, you spend credits. No mystery. No token speculation. Credits are arcade tokens: they work inside the system and cannot be traded outside it.
+
+**Gear 2: Marks** — Earned, not bought. Marks represent contribution to the cooperative. Review a product, teach a skill, moderate a community space, fulfill an order — you earn Marks. Marks unlock purchasing power within the platform (discounts, priority access, production capacity). A maker in Lagos who contributes 40 hours of community moderation earns the same Marks as a maker in Louisville who contributes 40 hours. Equivalent work = equivalent purchasing power.
+
+**Gear 3: Joules** — The forever stamp. Joules are an immutable record of contribution. They never expire, can never be traded, and cannot be speculated on. They're minted on a test network (deliberately — not as a staging step, but as an architectural choice to prevent speculation). Your Joules are your permanent receipt: "I contributed this much to the cooperative." They influence governance weight and unlock higher certification tiers.
+
+The key design constraint: no gear converts to cash. Credits convert to goods/services. Marks convert to platform purchasing power. Joules convert to governance weight. None of them convert to USD. This makes the entire system speculation-proof by architecture, not policy.
+
+Purchasing power parity: because Marks are earned by contribution (not purchased), and because the platform margin is locked at Cost + 20%, a member in a low-cost-of-living area receives equivalent platform purchasing power to someone in Manhattan. The three-gear separation is what makes this work — if Marks were convertible to dollars, arbitrage would destroy the parity immediately.
+
+Full technical docs: cephas.lianabanyan.com/under-the-hood/
+
+Interested in the economic model or the governance implications — happy to go deeper in the comments.`,
     hashtags: [],
     imageUrls: [],
   },
@@ -509,9 +543,28 @@ lianabanyan.com/join`,
     title: 'Week 1 Recap',
     type: 'engagement',
     priority: 'medium',
-    content: `[X] members joined in 5 days. Here's what we learned.
+    content: `Week 1 of @LianaBanyan is in the books.
 
-[Honest recap — what worked, what surprised us, what we're fixing]`,
+Here's the honest truth — no spin:
+
+What landed:
+→ The dog antibiotics story. It's real. That's why.
+→ Makers immediately understood 83.3%
+→ "The Man With Two Suits" got the most saves
+
+What surprised us:
+→ People asked about the three-gear currency more than the margin
+→ International interest was immediate
+→ People wanted to read the operating agreement (it's on the site)
+
+What we're working on:
+→ Onboarding flow — smoother path from "curious" to "founding member"
+→ More Cephas documentation for the technically curious
+→ Mobile experience polish
+
+Every founding member matters. Every piece of feedback shapes what this becomes.
+
+$5/year. No Plan B. lianabanyan.com/join`,
     hashtags: ['#LianaBanyan', '#WeekOne'],
     imageUrls: [],
   },

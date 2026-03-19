@@ -3,9 +3,11 @@
  * ==========================================================
  * "You're not just buying miniatures — you're building the playbook."
  *
- * Uses mock data until Supabase migrations for founding_runs land.
+ * Fetches live funding data from Supabase founding_runs table.
+ * Falls back to zeroed-out display if DB unavailable.
  */
 
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, ShieldCheck, Clock, MessageSquare, Star, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,10 +15,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FundingTracker } from "@/components/FundingTracker";
 import { BuildJournal, JournalEntry } from "@/components/BuildJournal";
+import { supabase } from "@/integrations/supabase/client";
 
-// ── Mock data (will come from Supabase) ──────────────────────────────────
-
-const MOCK_FUNDING = {
+const DEFAULT_FUNDING = {
   currentAmount: 0,
   targetAmount: 5000,
   backerCount: 0,
@@ -67,6 +68,37 @@ const MOCK_JOURNAL: JournalEntry[] = [
 
 export default function FoundingRunLanding() {
   const navigate = useNavigate();
+  const [funding, setFunding] = useState(DEFAULT_FUNDING);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: run } = await supabase
+          .from("founding_runs")
+          .select("current_amount, target_amount, backer_count, cost_breakdown_materials, cost_breakdown_production, cost_breakdown_shipping, cost_breakdown_platform")
+          .eq("status", "funding")
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (run) {
+          setFunding({
+            currentAmount: Number(run.current_amount) || 0,
+            targetAmount: Number(run.target_amount) || 5000,
+            backerCount: Number(run.backer_count) || 0,
+            breakdown: {
+              materials: Number(run.cost_breakdown_materials) || 45,
+              production: Number(run.cost_breakdown_production) || 20,
+              shipping: Number(run.cost_breakdown_shipping) || 15,
+              platform: Number(run.cost_breakdown_platform) || 20,
+            },
+          });
+        }
+      } catch (err) {
+        console.warn("[FoundingRunLanding] DB fetch failed, using defaults:", err);
+      }
+    })();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -105,7 +137,7 @@ export default function FoundingRunLanding() {
           <h2 className="text-2xl font-bold">Funding Progress</h2>
           <Card>
             <CardContent className="pt-6">
-              <FundingTracker {...MOCK_FUNDING} />
+              <FundingTracker {...funding} />
             </CardContent>
           </Card>
           <p className="text-xs text-muted-foreground text-center">
