@@ -1,4 +1,4 @@
-import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart } from "lucide-react";
+import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart, Sprout, Link2, Crosshair } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -39,10 +39,12 @@ const marketplaceMainItems = [
   { title: "Creator Draft Pick", url: "/creator-draft-pick", icon: UserPlus },
   { title: "Crew Call", url: "/crew-call", icon: Hammer },
   { title: "Vouch & Recommend", url: "/vouch", icon: Heart },
+  { title: "Chain Voting", url: "/chain-voting", icon: Link2 },
   { title: "Coverage Minutes", url: "/coverage-minutes", icon: Timer },
   { title: "Member Agreement", url: "/member-agreement", icon: FileSignature },
   { title: "Onboarding", url: "/onboarding/trickle", icon: UserCheck },
   { title: "Creator Showcase", url: "/creators", icon: Palette },
+  { title: "Gleaner's Corner", url: "/gleaners-corner", icon: Sprout },
   { title: "Sponsorship Guide", url: "/sponsorship-guide", icon: BookOpen },
   { title: "Register IP", url: "/ip/register", icon: ShieldCheck },
 ];
@@ -58,6 +60,7 @@ const marketplaceAdminItems = [
   { title: "Send Lists", url: "/send-lists", icon: Send, requiresAdmin: true },
   { title: "Q&A Intelligence", url: "/moneypenny/qa", icon: Brain, requiresAdmin: true },
   { title: "Social Command", url: "/moneypenny/social", icon: Radio, requiresAdmin: true },
+  { title: "Circle Testing", url: "/testing/circles", icon: Crosshair, requiresAdmin: true },
 ];
 
 // Business Portal Navigation

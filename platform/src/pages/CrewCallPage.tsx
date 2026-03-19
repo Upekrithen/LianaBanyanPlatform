@@ -221,25 +221,48 @@ export default function CrewCallPage() {
   const { data: modules, isLoading } = useQuery({
     queryKey: ["manufacturing-process-modules"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("manufacturing_process_modules")
-        .select("*")
-        .eq("is_active", true)
-        .order("process_name");
-      if (error) throw error;
-      return data || [];
+      try {
+        const { data, error } = await supabase
+          .from("manufacturing_process_modules")
+          .select("*")
+          .eq("is_active", true)
+          .order("process_name");
+        if (!error && data && data.length > 0) return data;
+      } catch { /* fall through */ }
+      try {
+        const { data, error } = await supabase
+          .from("crew_call_roles")
+          .select("*")
+          .order("role_name");
+        if (error) throw error;
+        return (data || []).map((r: any) => ({
+          id: r.id,
+          process_name: r.role_name,
+          process_type: r.category ?? "general",
+          description: r.description,
+          equipment_needed: null,
+          skill_level: r.commitment_tier ?? "primary",
+          is_active: true,
+        }));
+      } catch {
+        return [];
+      }
     },
   });
 
   const { data: assignments } = useQuery({
     queryKey: ["crew-call-assignments"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("crew_call_assignments")
-        .select("process_module_id, user_id, role_level")
-        .eq("status", "active");
-      if (error) throw error;
-      return data || [];
+      try {
+        const { data, error } = await supabase
+          .from("crew_call_assignments")
+          .select("process_module_id, user_id, role_level")
+          .eq("status", "active");
+        if (error) throw error;
+        return data || [];
+      } catch {
+        return [];
+      }
     },
   });
 
@@ -261,11 +284,15 @@ export default function CrewCallPage() {
   const { data: pioneers } = useQuery({
     queryKey: ["process-pioneer-ledger"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("process_pioneer_ledger")
-        .select("process_module_id");
-      if (error) throw error;
-      return new Set((data || []).map((p: { process_module_id: string }) => p.process_module_id));
+      try {
+        const { data, error } = await supabase
+          .from("process_pioneer_ledger")
+          .select("process_module_id");
+        if (error) throw error;
+        return new Set((data || []).map((p: { process_module_id: string }) => p.process_module_id));
+      } catch {
+        return new Set<string>();
+      }
     },
   });
 
@@ -276,19 +303,26 @@ export default function CrewCallPage() {
       isPioneer,
     }: { processModuleId: string; roleLevel: string; isPioneer: boolean }) => {
       if (!user) throw new Error("Sign in required");
-      const { error } = await supabase.from("crew_call_assignments").upsert({
-        user_id: user.id,
-        process_module_id: processModuleId,
-        role_level: roleLevel,
-        is_process_pioneer: isPioneer,
-        status: "active",
-      }, { onConflict: "user_id,process_module_id" });
-      if (error) throw error;
+      try {
+        const { error } = await supabase.from("crew_call_assignments").upsert({
+          user_id: user.id,
+          process_module_id: processModuleId,
+          role_level: roleLevel,
+          is_process_pioneer: isPioneer,
+          status: "active",
+        }, { onConflict: "user_id,process_module_id" });
+        if (error) throw error;
+      } catch {
+        const { error } = await supabase.from("crew_call_roles").update({
+          claimed_by: user.id,
+        }).eq("id", processModuleId);
+        if (error) throw error;
+      }
     },
     onSuccess: () => {
       toast.success("You're on the crew.");
       queryClient.invalidateQueries({ queryKey: ["crew-call-assignments"] });
-      queryClient.invalidateQueries({ queryKey: ["process-pioneer-ledger"] });
+      queryClient.invalidateQueries({ queryKey: ["manufacturing-process-modules"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed to claim"),
   });

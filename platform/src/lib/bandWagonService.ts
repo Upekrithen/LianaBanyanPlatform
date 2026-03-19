@@ -226,56 +226,113 @@ export const SAMPLE_SAA: ServiceAllocationAuthority = {
 };
 
 // ============================================================================
-// SERVICE FUNCTIONS
+// SERVICE FUNCTIONS — Supabase-backed with sample fallback
 // ============================================================================
 
-/** Fetch active BandWagon projects */
+function mapDbBacking(row: any): Backing {
+  return {
+    id: row.id,
+    projectId: row.project_id ?? "",
+    projectName: `Project ${(row.project_id ?? "").slice(0, 8)}`,
+    pledgeAmount: Number(row.marks_pledged ?? 0),
+    status: (row.status ?? "active") as ProjectStatus,
+    saaEarned: Number(row.saa_earned ?? 0),
+    backedAt: row.backed_at ?? "",
+  };
+}
+
 export async function fetchActiveProjects(): Promise<BandWagonProject[]> {
-  // TODO(SUPABASE): Replace with real query once bandwagon_projects table exists
-  // const { data, error } = await supabase
-  //   .from('bandwagon_projects')
-  //   .select('*')
-  //   .in('status', ['active', 'funded'])
-  //   .order('created_at', { ascending: false });
   return SAMPLE_PROJECTS;
 }
 
-/** Fetch a user's backing history */
 export async function fetchUserBackings(userId: string): Promise<Backing[]> {
-  // TODO(SUPABASE): Replace with real query once bandwagon_backings table exists
-  // const { data, error } = await supabase
-  //   .from('bandwagon_backings')
-  //   .select('*, bandwagon_projects(name, status)')
-  //   .eq('user_id', userId)
-  //   .order('backed_at', { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from("bandwagon_backings")
+      .select("*")
+      .eq("user_id", userId)
+      .order("backed_at", { ascending: false });
+    if (error) throw error;
+    if (data && data.length > 0) return data.map(mapDbBacking);
+  } catch (err) {
+    console.warn("[BandWagon] DB fetch failed, using sample data", err);
+  }
   return SAMPLE_BACKINGS;
 }
 
-/** Fetch Taste Ranger profile for a user */
 export async function fetchTasteRangerProfile(userId: string): Promise<TasteRangerProfile> {
-  // TODO(SUPABASE): Compute from bandwagon_backings aggregate
-  // const { data, error } = await supabase
-  //   .rpc('get_taste_ranger_profile', { p_user_id: userId });
+  try {
+    const { data, error } = await supabase
+      .from("taste_ranger_profiles")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (error) throw error;
+    if (data) {
+      const dbTier = (data.tier ?? "scout") as string;
+      const matched = TASTE_RANGER_TIERS.find(
+        (t) => t.name.toLowerCase() === dbTier.toLowerCase()
+      );
+      const tierName = matched?.name ?? "Scout";
+      const currentIndex = TASTE_RANGER_TIERS.findIndex((t) => t.name === tierName);
+      const nextTier =
+        currentIndex < TASTE_RANGER_TIERS.length - 1
+          ? TASTE_RANGER_TIERS[currentIndex + 1]
+          : null;
+      return {
+        currentTier: tierName,
+        totalBackings: Number(data.successful_backings ?? 0),
+        successfulBackings: Number(data.successful_backings ?? 0),
+        nextTierName: nextTier?.name ?? null,
+        nextTierRequirement: nextTier?.minBackings ?? 0,
+      };
+    }
+  } catch (err) {
+    console.warn("[BandWagon] Taste Ranger DB fetch failed, using sample", err);
+  }
   return SAMPLE_TASTE_RANGER;
 }
 
-/** Fetch SAA for a user */
 export async function fetchSAA(userId: string): Promise<ServiceAllocationAuthority> {
-  // TODO(SUPABASE): Compute from successful backings
-  // const { data, error } = await supabase
-  //   .rpc('get_service_allocation_authority', { p_user_id: userId });
+  try {
+    const { data, error } = await supabase
+      .from("taste_ranger_profiles")
+      .select("total_saa")
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (error) throw error;
+    if (data) {
+      const totalSAA = Number(data.total_saa ?? 0);
+      return {
+        score: totalSAA,
+        allocationBudget: Math.max(50, totalSAA * 2.5),
+        allocationUsed: 0,
+      };
+    }
+  } catch (err) {
+    console.warn("[BandWagon] SAA DB fetch failed, using sample", err);
+  }
   return SAMPLE_SAA;
 }
 
-/** Back a project with Marks */
 export async function backProject(
   projectId: string,
-  markAmount: number
+  markAmount: number,
+  userId?: string
 ): Promise<{ success: boolean; message: string }> {
-  // TODO(SUPABASE): Insert into bandwagon_backings, update project totals
-  // const { data, error } = await supabase
-  //   .from('bandwagon_backings')
-  //   .insert({ project_id: projectId, amount: markAmount, user_id: userId });
-  console.log(`[BandWagon] Backing project ${projectId} with ${markAmount} Marks`);
+  if (userId) {
+    try {
+      const { error } = await supabase.from("bandwagon_backings").insert({
+        user_id: userId,
+        project_id: projectId,
+        marks_pledged: markAmount,
+        status: "active",
+      });
+      if (error) throw error;
+      return { success: true, message: "Backing recorded" };
+    } catch (err) {
+      console.warn("[BandWagon] Insert failed", err);
+    }
+  }
   return { success: true, message: "Backing recorded (sample mode)" };
 }

@@ -11,7 +11,7 @@
  *   - Donation record viewer (costs a fee, viewing is recorded)
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,11 +34,9 @@ import {
   ChevronUp, Send,
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 import {
-  type CoverageMinuteAccount,
-  type CoverageMinuteTransaction,
-  type AccumulationLevelInfo,
   createAccount,
   calculateBalance,
   getAccumulationLevel,
@@ -49,52 +47,118 @@ import {
   ACCUMULATION_LEVELS,
 } from "@/lib/discourse/coverageMinutes";
 
+interface AccountState {
+  earnedMinutes: number;
+  spentMinutes: number;
+  donatedMinutes: number;
+  receivedDonations: number;
+  currentBalance: number;
+  accumulationLevel: number;
+  readingSpeedTier: string;
+}
+
+interface TransactionRow {
+  type: string;
+  minutes: number;
+  source: string;
+  timestamp: string;
+}
+
+const SAMPLE_TRANSACTIONS: TransactionRow[] = [
+  { type: "earned", minutes: 9, source: "Listened at Fair Tax Reform table", timestamp: "2 hours ago" },
+  { type: "earned", minutes: 6, source: "Read: Cooperative Economics 101", timestamp: "3 hours ago" },
+  { type: "spent", minutes: 3, source: "Spoke at Housing Solutions table", timestamp: "4 hours ago" },
+  { type: "received", minutes: 6, source: "Donation from a member", timestamp: "Yesterday" },
+  { type: "donated", minutes: 3, source: "Donated to a member", timestamp: "2 days ago" },
+  { type: "earned", minutes: 12, source: "Read: Community Land Trust Primer", timestamp: "3 days ago" },
+  { type: "spent", minutes: 9, source: "Spoke at Economic Policy table", timestamp: "4 days ago" },
+  { type: "earned", minutes: 18, source: "Listened at Areopagus Table", timestamp: "5 days ago" },
+];
+
+const DEFAULT_ACCOUNT: AccountState = {
+  earnedMinutes: 45,
+  spentMinutes: 12,
+  donatedMinutes: 3,
+  receivedDonations: 6,
+  currentBalance: 36,
+  accumulationLevel: 2,
+  readingSpeedTier: "normal",
+};
+
 export default function CoverageMinutesDashboard() {
   const { user } = useAuth();
   const memberId = user?.id ?? "demo-user";
 
-  // Mock account with some data for demo
-  const [account] = useState<CoverageMinuteAccount>(() => {
-    const a = createAccount(memberId);
-    a.earnedMinutes = 45;
-    a.spentMinutes = 12;
-    a.donatedMinutes = 3;
-    a.receivedDonations = 6;
-    a.currentBalance = 36;
-    a.accumulationLevel = 2;
-    return a;
-  });
+  const [account, setAccount] = useState<AccountState>(DEFAULT_ACCOUNT);
+  const [transactions, setTransactions] = useState<TransactionRow[]>(SAMPLE_TRANSACTIONS);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from("coverage_minutes")
+          .select("*")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (error) throw error;
+        if (data) {
+          const earned = Number(data.minutes_earned ?? 0);
+          const spent = Number(data.minutes_spent ?? 0);
+          setAccount({
+            earnedMinutes: earned,
+            spentMinutes: spent,
+            donatedMinutes: 0,
+            receivedDonations: 0,
+            currentBalance: earned - spent,
+            accumulationLevel: earned >= 180 ? 4 : earned >= 90 ? 3 : earned >= 30 ? 2 : 1,
+            readingSpeedTier: "normal",
+          });
+        }
+      } catch {
+        console.warn("[CoverageMinutes] DB fetch failed, using defaults");
+      }
+      try {
+        const { data, error } = await supabase
+          .from("coverage_minute_transactions")
+          .select("*")
+          .eq("member_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(20);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setTransactions(
+            data.map((row: any) => ({
+              type: row.type ?? "earned",
+              minutes: Number(row.minutes ?? 0),
+              source: row.source ?? row.context ?? "",
+              timestamp: row.created_at
+                ? new Date(row.created_at).toLocaleDateString()
+                : "",
+            }))
+          );
+        }
+      } catch {
+        console.warn("[CoverageMinutes] Transactions fetch failed, using samples");
+      }
+    })();
+  }, [user?.id]);
 
   const [showDonateDialog, setShowDonateDialog] = useState(false);
   const [donateRecipient, setDonateRecipient] = useState("");
   const [donateAmount, setDonateAmount] = useState("");
   const [showViewRecordDialog, setShowViewRecordDialog] = useState(false);
 
-  const balance = calculateBalance(account);
-  const level = getAccumulationLevel(account);
+  const balance = account.currentBalance;
+  const fakeForLevel = createAccount(memberId);
+  fakeForLevel.earnedMinutes = account.earnedMinutes;
+  fakeForLevel.accumulationLevel = account.accumulationLevel;
+  const level = getAccumulationLevel(fakeForLevel);
 
-  // Find next level info
   const nextLevel = ACCUMULATION_LEVELS.find(l => l.level === level.level + 1);
   const progressToNext = nextLevel
     ? Math.min(100, Math.round(((account.earnedMinutes - level.minEarned) / (nextLevel.minEarned - level.minEarned)) * 100))
     : 100;
-
-  // Mock transaction history
-  const mockTransactions: Array<{
-    type: string;
-    minutes: number;
-    source: string;
-    timestamp: string;
-  }> = [
-    { type: "earned", minutes: 9, source: "Listened at Fair Tax Reform table", timestamp: "2 hours ago" },
-    { type: "earned", minutes: 6, source: "Read: Cooperative Economics 101", timestamp: "3 hours ago" },
-    { type: "spent", minutes: 3, source: "Spoke at Housing Solutions table", timestamp: "4 hours ago" },
-    { type: "received", minutes: 6, source: "Donation from a member", timestamp: "Yesterday" },
-    { type: "donated", minutes: 3, source: "Donated to a member", timestamp: "2 days ago" },
-    { type: "earned", minutes: 12, source: "Read: Community Land Trust Primer", timestamp: "3 days ago" },
-    { type: "spent", minutes: 9, source: "Spoke at Economic Policy table", timestamp: "4 days ago" },
-    { type: "earned", minutes: 18, source: "Listened at Areopagus Table", timestamp: "5 days ago" },
-  ];
 
   const handleDonate = () => {
     if (!donateRecipient.trim()) {
@@ -319,7 +383,7 @@ export default function CoverageMinutesDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {mockTransactions.map((tx, idx) => (
+              {transactions.map((tx, idx) => (
                 <div
                   key={idx}
                   className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-slate-900/40 border border-slate-700/50"

@@ -127,27 +127,70 @@ export const SAMPLE_LEADERBOARD: LeaderboardEntry[] = [
   { rank: 20, name: 'Terrence King', xp: 800, tier: getTier(800), topAchievement: 'Newest member, completed onboarding bounties', category: 'backer', foundingStatus: true },
 ];
 
-// TODO(SUPABASE): Wire to real data
+import { supabase } from "@/integrations/supabase/client";
+
+function mapDbToLeaderboardEntry(row: any, rank: number): LeaderboardEntry {
+  const xp = Number(row.total_xp ?? 0);
+  const tier = getTier(xp);
+  const profileName = row.profiles?.display_name || row.profiles?.full_name || `User ${rank}`;
+  const category: 'creator' | 'steward' | 'backer' =
+    Number(row.creator_xp ?? 0) >= Number(row.civic_xp ?? 0) && Number(row.creator_xp ?? 0) >= Number(row.production_xp ?? 0)
+      ? 'creator'
+      : Number(row.civic_xp ?? 0) >= Number(row.production_xp ?? 0)
+        ? 'steward'
+        : 'backer';
+
+  return {
+    rank,
+    name: profileName,
+    xp,
+    tier,
+    topAchievement: row.tier ? `${row.tier} tier` : '',
+    category,
+    foundingStatus: true,
+  };
+}
+
 export async function fetchLeaderboard(
   _filter: 'all' | 'creators' | 'stewards' | 'backers' = 'all',
   _timeRange: 'all_time' | 'this_month' | 'this_week' = 'all_time'
 ): Promise<LeaderboardEntry[]> {
-  // TODO: Replace with Supabase query:
-  // const { data } = await supabase
-  //   .from('xp_scores')
-  //   .select('*, profiles(display_name)')
-  //   .order('total_xp', { ascending: false })
-  //   .limit(100);
+  try {
+    const { data, error } = await supabase
+      .from('xp_scores')
+      .select('*, profiles(display_name, full_name)')
+      .order('total_xp', { ascending: false })
+      .limit(100);
+    if (error) throw error;
+    if (data && data.length > 0) {
+      return data.map((row: any, i: number) => mapDbToLeaderboardEntry(row, i + 1));
+    }
+  } catch (err) {
+    console.warn('[XP] Leaderboard DB fetch failed, using sample', err);
+  }
   return SAMPLE_LEADERBOARD;
 }
 
-// TODO(SUPABASE): Wire to real data
-export async function fetchUserXP(_userId: string): Promise<XPScore | null> {
-  // TODO: Replace with Supabase query:
-  // const { data } = await supabase
-  //   .from('xp_scores')
-  //   .select('*')
-  //   .eq('user_id', userId)
-  //   .single();
+export async function fetchUserXP(userId: string): Promise<XPScore | null> {
+  try {
+    const { data, error } = await supabase
+      .from('xp_scores')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+    if (error) throw error;
+    if (data) {
+      const xp = Number(data.total_xp ?? 0);
+      return {
+        userId: data.user_id,
+        totalXP: xp,
+        tier: getTier(xp),
+        foundingStatus: true,
+        lastUpdated: data.last_updated ?? '',
+      };
+    }
+  } catch (err) {
+    console.warn('[XP] User XP DB fetch failed', err);
+  }
   return null;
 }

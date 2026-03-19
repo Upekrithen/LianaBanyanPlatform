@@ -290,6 +290,7 @@ const BoiseBusinessCardsExample = lazy(() => import("./pages/BoiseBusinessCardsE
 const DailyNews = lazy(() => import("./pages/DailyNews"));
 const BandWagon = lazy(() => import("./pages/BandWagon"));
 const MoneyPennySocial = lazy(() => import("./pages/MoneyPennySocial"));
+const ConcentricCircles = lazy(() => import("./pages/ConcentricCircles"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -331,6 +332,8 @@ const MemberAgreement = lazy(() => import("./pages/MemberAgreement"));
 const CreatorDraftPick = lazy(() => import("./pages/CreatorDraftPick"));
 const TrickleOnboarding = lazy(() => import("./pages/TrickleOnboarding"));
 const VouchSystem = lazy(() => import("./pages/VouchSystem"));
+const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
+const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -599,6 +602,7 @@ const App = () => (
                         <Route path="/sponsorship-guide" element={<ProtectedRoute><ContributionExplainer /></ProtectedRoute>} />
                         <Route path="/daily-news" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DailyNews /></Suspense>} />
                         <Route path="/bandwagon" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BandWagon /></Suspense>} />
+                        <Route path="/gleaners-corner" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GleanersCorner /></Suspense>} />
 
                         {/* Protected Sponsor Routes */}
                         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -782,6 +786,7 @@ const App = () => (
                         <Route path="/creator-draft-pick" element={<ExplorerRoute><CreatorDraftPick /></ExplorerRoute>} />
                         <Route path="/onboarding/trickle" element={<ProtectedRoute><TrickleOnboarding /></ProtectedRoute>} />
                         <Route path="/vouch" element={<ProtectedRoute><VouchSystem /></ProtectedRoute>} />
+                        <Route path="/chain-voting" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainVoting /></Suspense>} />
 
                         {/* New Routes — Feb 9 Session 2 */}
                         <Route path="/herald-success" element={<ProtectedRoute><HeraldSuccess /></ProtectedRoute>} />
@@ -925,6 +930,9 @@ const App = () => (
                         <Route path="/initiatives/documentation" element={<ExplorerRoute><DocumentationMarketplacePage /></ExplorerRoute>} />
                         {/* Generic InitiativePage routes removed — these slugs have dedicated page components defined above */}
                         
+                        {/* Concentric Circle Testing Dashboard */}
+                        <Route path="/testing/circles" element={<ProtectedRoute><ConcentricCircles /></ProtectedRoute>} />
+
                         {/* Steward & Admin Tools */}
                         <Route path="/steward/legal-formations" element={<ProtectedRoute><StewardLegalDashboard /></ProtectedRoute>} />
                         <Route path="/send-lists" element={<ProtectedRoute><SendLists /></ProtectedRoute>} />
