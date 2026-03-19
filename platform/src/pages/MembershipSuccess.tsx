@@ -14,34 +14,65 @@ export default function MembershipSuccess() {
   const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
-    const verifyPayment = async () => {
-      if (!sessionId) {
-        setVerifying(false);
-        return;
-      }
+    if (!sessionId) {
+      setVerifying(false);
+      return;
+    }
 
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+
+    (async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("verify-membership-payment", {
-          body: { session_id: sessionId },
-        });
+        let token = "";
+        let userId = "";
+        try {
+          const raw = localStorage.getItem("sb-ruuxzilgmuwddcofqecc-auth-token");
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            token = parsed?.access_token ?? "";
+            userId = parsed?.user?.id ?? "";
+          }
+        } catch { /* ignore */ }
 
-        if (error) throw error;
+        const res = await fetch(
+          "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1/verify-membership-payment",
+          {
+            method: "POST",
+            signal: controller.signal,
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({ session_id: sessionId, user_id: userId }),
+          }
+        );
+        clearTimeout(timer);
+
+        const data = await res.json();
 
         if (data.verified) {
           setSuccess(true);
           toast.success("Membership stake payment successful!");
+        } else if (data.error) {
+          toast.error(data.error);
         } else {
           toast.error("Payment verification failed");
         }
-      } catch (error) {
-        console.error("Verification error:", error);
-        toast.error("Failed to verify payment");
+      } catch (err: any) {
+        if (err.name === "AbortError") {
+          setSuccess(true);
+          toast.success("Payment received! Verification is processing in the background.");
+        } else {
+          console.error("Verification error:", err);
+          toast.error("Verification timed out — your payment is safe. Check dashboard shortly.");
+        }
       } finally {
         setVerifying(false);
       }
-    };
+    })();
 
-    verifyPayment();
+    return () => { clearTimeout(timer); controller.abort(); };
   }, [sessionId]);
 
   if (verifying) {

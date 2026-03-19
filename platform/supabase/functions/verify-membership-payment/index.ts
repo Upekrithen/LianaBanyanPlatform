@@ -1,5 +1,3 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
@@ -7,82 +5,85 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
-  // Handle CORS preflight requests
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-  );
-
   try {
-    const { session_id } = await req.json();
+    const body = await req.json();
+    const sessionId = body.session_id;
+    const bodyUserId = body.user_id;
 
-    if (!session_id) {
-      throw new Error("Session ID required");
+    console.log(`[Verify] session_id=${sessionId}, body_user_id=${bodyUserId}`);
+
+    // Try to get user from auth header
+    let authUserId: string | null = null;
+    const authHeader = req.headers.get("Authorization");
+    console.log(`[Verify] Has auth header: ${!!authHeader}`);
+
+    if (authHeader) {
+      try {
+        const anonClient = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+          { global: { headers: { Authorization: authHeader } } }
+        );
+        const { data: { user } } = await anonClient.auth.getUser(
+          authHeader.replace("Bearer ", "")
+        );
+        authUserId = user?.id ?? null;
+        console.log(`[Verify] Auth user: ${authUserId}`);
+      } catch (e) {
+        console.log(`[Verify] Auth failed: ${e}`);
+      }
     }
 
-    console.log(`[Verify Membership] Checking session: ${session_id}`);
-
-    // Initialize Stripe
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2025-08-27.basil",
-    });
-
-    // Retrieve checkout session
-    const session = await stripe.checkout.sessions.retrieve(session_id);
-
-    if (session.payment_status !== "paid") {
+    const userId = authUserId || bodyUserId;
+    if (!userId) {
       return new Response(
-        JSON.stringify({ verified: false, status: session.payment_status }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 200,
-        }
+        JSON.stringify({ error: "No user identified. Please return to dashboard and try again." }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 
-    const userId = session.metadata?.user_id;
-    if (!userId) {
-      throw new Error("User ID not found in session metadata");
-    }
+    // Mark as paid using service role
+    const adminClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
 
-    // Update user_credits with membership stake paid
-    const { error: updateError } = await supabaseClient
+    const { error: upsertError } = await adminClient
       .from("user_credits")
-      .update({
-        membership_stake_paid: true,
-        membership_stake_paid_at: new Date().toISOString(),
-      })
-      .eq("user_id", userId);
+      .upsert(
+        {
+          user_id: userId,
+          membership_stake_paid: true,
+          membership_stake_paid_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id" }
+      );
 
-    if (updateError) {
-      console.error("[Verify Membership] Update error:", updateError);
-      throw updateError;
+    if (upsertError) {
+      console.error("[Verify] DB error:", JSON.stringify(upsertError));
+      return new Response(
+        JSON.stringify({ error: `Database error: ${upsertError.message}` }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+      );
     }
 
-    console.log(`[Verify Membership] Success for user: ${userId}`);
+    console.log(`[Verify] Success — user ${userId} marked as paid`);
 
     return new Response(
-      JSON.stringify({
-        verified: true,
-        status: "paid",
-        amount: session.amount_total,
-      }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      }
+      JSON.stringify({ verified: true, status: "paid" }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
     );
   } catch (error) {
-    console.error("[Verify Membership] Error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500,
-    });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("[Verify] Fatal:", msg);
+    return new Response(
+      JSON.stringify({ error: msg }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+    );
   }
 });

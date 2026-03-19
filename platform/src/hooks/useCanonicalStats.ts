@@ -19,7 +19,7 @@ export interface CanonicalStats {
 }
 
 const DEFAULTS: CanonicalStats = {
-  innovationCount: 1752,
+  innovationCount: 1754,
   crownJewels: 123,
   patentApplications: 8,
   patentClaims: 1401,
@@ -29,8 +29,8 @@ const DEFAULTS: CanonicalStats = {
   creatorKeepsPct: 83.3,
   platformMarginPct: 20,
   specExpanded: 653,
-  portfolioValueLow: 9_000_000,
-  portfolioValueHigh: 80_000_000,
+  portfolioValueLow: 630_000,
+  portfolioValueHigh: 116_000_000,
   personalInvestment: 525_000,
   investmentYears: 9,
 };

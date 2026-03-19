@@ -11,33 +11,35 @@ interface MembershipStakePaymentProps {
   onPaymentSuccess?: () => void;
 }
 
+const SUPABASE_URL = "https://ruuxzilgmuwddcofqecc.supabase.co";
+
 export const MembershipStakePayment = ({ hasPaid, onPaymentSuccess }: MembershipStakePaymentProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const { t } = useTranslation();
 
-  const handlePayment = async () => {
+  const handlePayment = () => {
     setIsProcessing(true);
+
+    // Read token directly from localStorage — zero network calls
+    let token: string | null = null;
     try {
-      const { data, error } = await supabase.functions.invoke("create-membership-checkout");
-
-      if (error) throw error;
-
-      if (data.error) {
-        toast.error(data.error);
-        return;
+      const raw = localStorage.getItem("sb-ruuxzilgmuwddcofqecc-auth-token");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        token = parsed?.access_token ?? null;
       }
-
-      // Open Stripe checkout in new tab
-      if (data.url) {
-        window.open(data.url, "_blank");
-        toast.info(t('toast.completePayment'));
-      }
-    } catch (error: any) {
-      console.error("Membership payment error:", error);
-      toast.error(error?.message || t('toast.paymentError'));
-    } finally {
-      setIsProcessing(false);
+    } catch {
+      // parse failed
     }
+
+    if (!token) {
+      toast.error("Session expired — please log in again.");
+      setIsProcessing(false);
+      return;
+    }
+
+    const target = `${SUPABASE_URL}/functions/v1/create-membership-checkout?token=${encodeURIComponent(token)}`;
+    window.open(target, "_self");
   };
 
   if (hasPaid) {
@@ -77,8 +79,8 @@ export const MembershipStakePayment = ({ hasPaid, onPaymentSuccess }: Membership
           </ul>
         </div>
 
-        <Button 
-          onClick={handlePayment} 
+        <Button
+          onClick={handlePayment}
           disabled={isProcessing}
           className="w-full"
           size="lg"

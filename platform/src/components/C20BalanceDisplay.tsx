@@ -57,32 +57,46 @@ export function C20BalanceDisplay({ variant = 'compact', className }: C20Balance
     setLoading(true);
 
     try {
-      // Get user's anchor
-      const { data: anchorData } = await supabase
-        .from('anchors')
-        .select('*')
-        .eq('owner_id', user.id)
-        .single();
+      // Wrap EVERYTHING in a 3-second race so the widget never hangs
+      await Promise.race([
+        (async () => {
+          // Get user's anchor — use maybeSingle to avoid error when no anchor exists
+          const { data: anchorData } = await supabase
+            .from('anchors')
+            .select('*')
+            .eq('owner_id', user.id)
+            .maybeSingle();
 
-      if (anchorData) {
-        setAnchor(anchorData);
-        
-        // Get reciprocity summary
-        const summaryData = await getReciprocitySummary(anchorData.id);
-        setSummary(summaryData);
-      }
+          if (anchorData) {
+            setAnchor(anchorData);
 
-      // Get Joule balance from user_credits
-      const { data: credits } = await supabase
-        .from('user_credits')
-        .select('joules')
-        .eq('user_id', user.id)
-        .single();
+            // Get reciprocity summary — wrap in timeout to prevent hanging
+            try {
+              const summaryData = await Promise.race([
+                getReciprocitySummary(anchorData.id),
+                new Promise<null>((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
+              ]);
+              setSummary(summaryData);
+            } catch {
+              // Timeout or error — just skip summary
+            }
+          }
 
-      if (credits) {
-        setJouleBalance(credits.joules || 0);
-      }
+          // Get Joule balance from user_credits
+          const { data: credits } = await supabase
+            .from('user_credits')
+            .select('joules')
+            .eq('user_id', user.id)
+            .maybeSingle();
+
+          if (credits) {
+            setJouleBalance(credits.joules || 0);
+          }
+        })(),
+        new Promise<void>((_, reject) => setTimeout(() => reject(new Error('global-timeout')), 4000))
+      ]);
     } catch (error) {
+      // Timeout or any error — just stop loading and show whatever state we have
       console.error('Error loading C+20 balance:', error);
     } finally {
       setLoading(false);

@@ -33,7 +33,7 @@ I've built a platform based on everything you proved — and I need your help to
 
 I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess player (2118 rating, top 0.4% globally). I was born in Tanzania to American missionary parents — I left on the last flight before Idi Amin's invasion.
 
-I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, 1,200+ technical diagrams, and 170+ innovations with 928 patent claims filed since November 26, 2025—the last 44 about ten minutes ago.
+I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, and 1,754 innovations with 1,401 patent claims filed since November 26, 2025—the last 44 about ten minutes ago.
 
 I first learned about Grameen Bank in college. The idea that small loans to poor people could transform communities — that the poor are bankable, that trust can scale, that commerce can be structured to serve the underserved — shaped how I thought about economics for decades.
 

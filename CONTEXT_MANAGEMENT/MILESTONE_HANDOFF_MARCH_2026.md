@@ -9,7 +9,51 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 53 (March 19, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 58 (March 19, 2026)
+
+**Latest commit:** TBD (uncommitted — see Session 58 below)
+**Previous commit:** `18089f5` (Session 53)
+
+**Status (March 19, 2026 — Session 58 IN PROGRESS):**
+- All 9 Stripe SDK edge functions rewritten to raw `fetch` and deployed
+- Migration `20260320000006` created for `membership_stake_paid` columns
+- Membership payment flow fully working (fixed Session 57)
+- **Innovation count:** 1,754 | **Patent claims:** 1,401 across 8 provisionals
+
+### What Was Done (Session 58 — Knight)
+
+#### Stripe SDK Purge — All 9 Remaining Edge Functions
+
+The `stripe@18.5.0` SDK from `esm.sh` hangs in Deno runtime. Session 57 proved raw `fetch` to Stripe REST API works perfectly. This session applied the same fix to all remaining functions:
+
+**Create checkout functions (4):**
+- `create-credit-checkout` — removed SDK + `customers.list`, uses `customer_email` + `price` ID
+- `create-guild-stake-checkout` — same pattern, 12 tier price IDs preserved
+- `create-herald-checkout` — subscription mode with `price_data` + `recurring[interval]=month`
+- `create-sponsor-checkout` — dynamic `price_data` for variable $ amounts
+
+**Verify payment functions (3):**
+- `verify-credit-payment` — `GET /v1/checkout/sessions/{id}` replaces `sessions.retrieve()`
+- `verify-guild-stake-payment` — same, plus guild progression + fund update logic preserved
+- `verify-herald-payment` — same, plus subscription activation upsert preserved
+
+**Utility functions (2):**
+- `process-withdrawal` — `customers.list` + `customers.create` → raw fetch
+- `get-transparency-data` — `balance.retrieve` + `sessions.list` + `paymentIntents.list` → parallel `Promise.all` raw fetch
+
+All functions also migrated from deprecated `serve()` import to `Deno.serve()`.
+
+All 9 deployed with `--no-verify-jwt` to Supabase project `ruuxzilgmuwddcofqecc`.
+
+**Zero** Stripe SDK imports remain in the codebase.
+
+#### Migration: membership_stake_paid columns
+
+`20260320000006_membership_stake_paid_columns.sql` — codifies the `membership_stake_paid` and `membership_stake_paid_at` columns that were added directly to production DB during Session 57 payment debugging. Keeps local/staging in sync.
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 53 (March 19, 2026)
 
 **Latest commit:** `18089f5` — Session 53: Moneypenny SMS + Quiz Fix
 **Previous commit:** `dc0eabe` (Session 52)

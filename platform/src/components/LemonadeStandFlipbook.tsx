@@ -205,23 +205,8 @@ export function LemonadeStandFlipbook({
               exit="exit"
               transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
-              {/* Placeholder image area */}
               <div className="w-full flex-1 flex items-center justify-center bg-gradient-to-b from-sky-100 to-green-100 rounded-md mb-2 relative overflow-hidden">
-                {/* Placeholder illustration */}
-                <div className="text-center p-4">
-                  <div className="text-5xl mb-2">
-                    {scene.id === 1 && '🐐'}
-                    {scene.id === 2 && '🐔🐕'}
-                    {scene.id === 3 && '🐐🔨'}
-                    {scene.id === 4 && '🐐🐔🐷🐱'}
-                    {scene.id === 5 && '🍋'}
-                    {scene.id === 6 && '👩‍🍳🐔'}
-                    {scene.id === 7 && '🍕🐕'}
-                    {scene.id === 8 && '🌟'}
-                  </div>
-                  <p className="text-xs text-amber-600 italic">Drawing by the Founder's son — coming soon</p>
-                </div>
-                {/* Will be replaced with: <img src={`/lemonade/scene${scene.id}.png`} alt={scene.alt} className="w-full h-full object-contain" /> */}
+                <img src={`/images/Lemonade Stand/goat (${scene.id}).png`} alt={scene.alt} className="w-full h-full object-contain" />
               </div>
               <p className="text-xs text-amber-800 text-center font-serif italic">{scene.subtitle}</p>
             </motion.div>
@@ -298,35 +283,12 @@ export function LemonadeStandFlipbook({
               exit="exit"
               transition={{ duration: 0.5, ease: 'easeInOut' }}
             >
-              {/* Image area — placeholder until son's drawings arrive */}
               <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-sky-100 to-green-100 relative overflow-hidden">
-                {/* Placeholder with emoji scene indicators */}
-                <div className="text-center p-6">
-                  <div className="text-7xl mb-4" role="img" aria-label={scene.alt}>
-                    {scene.id === 1 && '🐐'}
-                    {scene.id === 2 && '🐔🐕'}
-                    {scene.id === 3 && '🐐🛒'}
-                    {scene.id === 4 && '🐐🐔🐷🐱🔨'}
-                    {scene.id === 5 && '🍋🥤'}
-                    {scene.id === 6 && '👩‍🍳🐔💰'}
-                    {scene.id === 7 && '🍕🐕🎉'}
-                    {scene.id === 8 && '🌟❤️🤝'}
-                  </div>
-                  <p className="text-sm text-amber-600 italic font-serif">
-                    {scene.isMoral ? '' : 'Illustration by the Founder\'s son — arriving soon'}
-                  </p>
-                  <p className="text-xs text-amber-500 mt-1">
-                    Scene {scene.id} of {SCENES.length}
-                  </p>
-                </div>
-                {/*
-                  REPLACE WITH ACTUAL IMAGES:
-                  <img
-                    src={`/lemonade/scene${scene.id}.png`}
-                    alt={scene.alt}
-                    className="w-full h-full object-contain"
-                  />
-                */}
+                <img
+                  src={`/images/Lemonade Stand/goat (${scene.id}).png`}
+                  alt={scene.alt}
+                  className="w-full h-full object-contain"
+                />
               </div>
 
               {/* Kid subtitle at bottom */}

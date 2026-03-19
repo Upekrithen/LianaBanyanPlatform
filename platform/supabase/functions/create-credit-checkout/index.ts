@@ -1,5 +1,3 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
@@ -7,14 +5,13 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Credit packages mapping (Stripe price IDs) - base credits without bonuses
 const CREDIT_PACKAGES: Record<string, { price_id: string; credits: number; amount: number }> = {
   small: { price_id: "price_1SIXinDMOngHJB3UWGOCz64N", credits: 10, amount: 1000 },
   medium: { price_id: "price_1SIXioDMOngHJB3UsAUM63vM", credits: 50, amount: 5000 },
   large: { price_id: "price_1SIXipDMOngHJB3UnkpC4Gwx", credits: 100, amount: 10000 },
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -26,100 +23,74 @@ serve(async (req) => {
 
   try {
     const { package_size } = await req.json();
-
-    // Validate input
     if (!package_size || !CREDIT_PACKAGES[package_size]) {
       throw new Error("Invalid package size");
     }
 
-    // Get authenticated user
     const authHeader = req.headers.get("Authorization")!;
     const token = authHeader.replace("Bearer ", "");
     const { data } = await supabaseClient.auth.getUser(token);
     const user = data.user;
-    
-    if (!user?.email) {
-      throw new Error("User not authenticated");
-    }
+    if (!user?.email) throw new Error("User not authenticated");
 
-    console.log(`[Credit Purchase] Creating checkout for ${package_size} package - user: ${user.email}`);
+    console.log(`[Credit Purchase] ${package_size} package — user: ${user.email}`);
 
-    // Calculate bonus percentage for this user
     const { data: bonusData, error: bonusError } = await supabaseClient.rpc(
       'calculate_user_bonus_percentage',
       { _user_id: user.id }
     );
 
-    if (bonusError) {
-      console.error('[Credit Purchase] Error calculating bonus:', bonusError);
-      throw new Error('Failed to calculate bonus');
-    }
-
+    if (bonusError) throw new Error('Failed to calculate bonus');
     if (!bonusData.can_purchase) {
       return new Response(
         JSON.stringify({ error: bonusData.message }),
-        { 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 400,
-        },
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 
-    const packageInfo = CREDIT_PACKAGES[package_size];
-    const baseCredits = packageInfo.credits;
-    const bonusPercentage = bonusData.bonus_percentage;
-    const totalCredits = Math.floor(baseCredits * (1 + bonusPercentage / 100));
+    const pkg = CREDIT_PACKAGES[package_size];
+    const totalCredits = Math.floor(pkg.credits * (1 + bonusData.bonus_percentage / 100));
 
-    console.log(`[Credit Purchase] Bonus calculation: ${bonusPercentage}% bonus (${baseCredits} base → ${totalCredits} total)`);
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY") || "";
+    const origin = req.headers.get("origin") || "https://lianabanyan.com";
 
-    // Initialize Stripe
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2025-08-27.basil",
+    const params = new URLSearchParams({
+      "customer_email": user.email,
+      "line_items[0][price]": pkg.price_id,
+      "line_items[0][quantity]": "1",
+      "mode": "payment",
+      "success_url": `${origin}/credit-purchase-success?session_id={CHECKOUT_SESSION_ID}`,
+      "cancel_url": `${origin}/dashboard`,
+      "metadata[user_id]": user.id,
+      "metadata[payment_type]": "credit_purchase",
+      "metadata[package_size]": package_size,
+      "metadata[credits]": totalCredits.toString(),
+      "metadata[base_credits]": pkg.credits.toString(),
+      "metadata[bonus_percentage]": bonusData.bonus_percentage.toString(),
+      "metadata[amount]": pkg.amount.toString(),
     });
 
-    // Check for existing Stripe customer
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    let customerId;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-    }
-
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : user.email,
-      line_items: [
-        {
-          price: packageInfo.price_id,
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      success_url: `${req.headers.get("origin")}/credit-purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/dashboard`,
-      metadata: {
-        user_id: user.id,
-        payment_type: "credit_purchase",
-        package_size,
-        credits: totalCredits.toString(),
-        base_credits: baseCredits.toString(),
-        bonus_percentage: bonusPercentage.toString(),
-        amount: packageInfo.amount.toString(),
+    const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Basic ${btoa(stripeKey + ":")}`,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
+      body: params,
     });
 
-    console.log(`[Credit Purchase] Checkout session created: ${session.id}`);
+    const session = await stripeRes.json();
+    if (!stripeRes.ok) throw new Error(session?.error?.message || "Stripe error");
 
+    console.log(`[Credit Purchase] Session created: ${session.id}`);
     return new Response(JSON.stringify({ url: session.url }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200,
     });
   } catch (error) {
     console.error("[Credit Purchase] Error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500,
+    const msg = error instanceof Error ? error.message : "Unknown error";
+    return new Response(JSON.stringify({ error: msg }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500,
     });
   }
 });

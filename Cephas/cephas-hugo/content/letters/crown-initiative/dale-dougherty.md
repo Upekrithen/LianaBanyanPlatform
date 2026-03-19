@@ -18,7 +18,7 @@ In sixth grade, I designed floating modular cities for a school project. The loc
 
 I was a child of missionaries in Tanzania — we left on the last flight before Idi Amin's invasion. Back in the States, my parents fostered children in our home when I was 8yrs old; for 5 years. We had no television until I was 13 in Montana, so I read a lot, tinkered with everything I could get my hands on, and got good at chess.
 
-I'm 52 now. Father of eight. ARNG veteran. 21 years in I.T. And for the last nine years, I've been building a cooperative commerce platform called **Liana Banyan** — with fourteen charitable initiatives, 150+ innovations across 6 patent bags, and a manufacturing backbone called **HexIsle** that's about to launch on Kickstarter.
+I'm 53 now. Father of eight. ARNG veteran. 21 years in I.T. And for the last nine years, I've been building a cooperative commerce platform called **Liana Banyan** — with fourteen charitable initiatives, 1,754 innovations across 8 provisional patent applications, and a manufacturing backbone called **HexIsle** that's about to launch on Kickstarter.
 
 One of those fourteen initiatives is called **Let's Make Bread**. It's a business incubator. And I need someone who understands what it means to empower makers to lead it.
 
@@ -131,7 +131,7 @@ Floating cities in sixth grade. Six forts: one under sand, a five-level treehous
 
 {{< pudding-stat number="1,200+" label="Fusion 360 Diagrams" sublabel="For HexIsle alone" color="blue" >}}
 
-Modular game systems since 1978. A patent portfolio valued at $2.8M to $15.2M. And a platform designed to help other makers do what I'm doing.
+Modular game systems since 1978. A patent portfolio valued at $630K declared (Cost + 20%) with a $116M pessimist's floor. And a platform designed to help other makers do what I'm doing.
 
 You didn't create the Maker Movement — you gave it a name and a home. Let's Make Bread is the economic infrastructure that makes it sustainable.
 

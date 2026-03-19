@@ -37,7 +37,7 @@ I'm offering you the Crown.
 
 I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development.
 
-I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, 1,200+ technical diagrams, and 170+ innovations with 928 patent claims filed since November 26, 2025—the last 44 about ten minutes ago.
+I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, and 1,754 innovations with 1,401 patent claims filed since November 26, 2025—the last 44 about ten minutes ago.
 
 I've watched your TED talks, read *Daring Greatly* and *Dare to Lead*. Your research on shame, vulnerability, and courage helped me understand something I'd been building without naming: a platform that requires people to trust strangers, and therefore requires infrastructure that makes trust possible.
 

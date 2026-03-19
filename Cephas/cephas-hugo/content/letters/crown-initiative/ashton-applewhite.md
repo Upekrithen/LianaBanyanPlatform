@@ -108,7 +108,7 @@ As You Wish.
 
 *P.S. — You wrote: "Aging is living." The Family Table is built on that truth — a system where aging isn't managed, it's integrated.*
 
-**P.P.S.** I just filed 928 patent claims twenty minutes ago. Provisionally—because I can't yet afford the real thing at $8,000-$10,000 each. *Yet* is the operative word.
+**P.P.S.** I just filed 1,401 patent claims twenty minutes ago. Provisionally—because I can't yet afford the real thing at $8,000-$10,000 each. *Yet* is the operative word.
 
 Join me. Share my I.P. Unlimited possibilities.
 

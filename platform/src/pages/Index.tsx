@@ -484,7 +484,7 @@ const Index = () => {
     // Show welcome choice dialog
     if (showWelcomeChoice) {
       return (
-        <div className="landing-page" style={isProfessionalTheme ? { background: '#faf5eb', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' } : undefined}>
+        <div className="landing-page" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
           <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
             <div style={{
               background: 'rgba(26, 32, 44, 0.95)',
@@ -541,9 +541,10 @@ const Index = () => {
       );
     }
 
-    // User chose to go to Keep
+    // User chose to go to Keep — redirect to Dashboard
     if (userChoice === 'keep') {
-      return <AuthenticatedDiscoveryView navigate={navigate} discoveries={discoveries} discoveryLevel={discoveryLevel} />;
+      navigate('/dashboard');
+      return null;
     }
 
     // User chose to explore — show public landing
@@ -2621,10 +2622,12 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               <button onClick={(e) => { e.stopPropagation(); setLemonadeIsPlaying(!lemonadeIsPlaying); }} style={{ border: '1px solid rgba(0,0,0,0.15)', cursor: 'pointer', background: 'transparent', color: '#333', width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{lemonadeIsPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" style={{ marginLeft: '2px' }} />}</button>
                               <button onClick={(e) => { e.stopPropagation(); setLemonadeFrame(prev => Math.min(LEMONADE_SCENES.length - 1, prev + 1)); setLemonadeIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#333', padding: '0.25rem', borderRadius: '50%' }}><ChevronRight className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
                             </div>
-                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <div style={{ fontSize: '5rem', textAlign: 'center', lineHeight: 1.2 }}>
-                                {['🐐', '🐔🐕', '🔨', '🐐🐔🐷🐱', '🍋', '💰', '🍕', '✨'][lemonadeFrame] || '🐐'}
-                              </div>
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                              <img
+                                src={`/images/Lemonade Stand/goat (${lemonadeFrame + 1}).png`}
+                                alt={`Lemonade Stand scene ${lemonadeFrame + 1}`}
+                                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                              />
                             </div>
                             {LEMONADE_SCENES[lemonadeFrame].caption && (
                               <div style={{ textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>

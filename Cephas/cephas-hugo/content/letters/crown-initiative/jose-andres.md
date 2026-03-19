@@ -3,8 +3,8 @@ title: "Crown Letter: Andrés"
 date: 2026-01-15
 letter_type: "Crown Letter"
 recipient: "Andrés"
-initiative: "Let's Make Dinner"
-initiative_number: 1
+initiative: "Let's Get Groceries"
+initiative_number: 2
 tags: ["crown-letter", "initiative", "jose-andres"]
 ---
 

@@ -90,7 +90,7 @@ As You Wish.
 
 *P.S. — In "How to Live Forever," you wrote about purpose being the key to longevity. The Family Table gives older adults a purpose: the families who need them. And it gives families a village: the older adults who want to belong.*
 
-**P.P.S.** I just filed 928 patent claims twenty minutes ago. Provisionally—because I can't yet afford the real thing at $8,000-$10,000 each. *Yet* is the operative word.
+**P.P.S.** I just filed 1,401 patent claims twenty minutes ago. Provisionally—because I can't yet afford the real thing at $8,000-$10,000 each. *Yet* is the operative word.
 
 Join me. Share my I.P. Unlimited possibilities.
 

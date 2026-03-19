@@ -61,7 +61,7 @@ The cascade is: Chancellor → Advisory Board → Ambassador. I'm offering the t
 
 I'm a 53-year-old ARNG veteran — Infantry (11B) and Aviation (15A), helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess rating 2118 on a good day - nowadays I hover in the 2080s when I take a chess break from work - top 0.4% globally.
 
-I've been thinking about cooperative economics for 47 years. I've been actively building this for nine. I have 18 handwritten journals documenting the journey, 150+ innovations with 470+ patent claims filed, and a manufacturing backbone ready to prove the system works.
+I've been thinking about cooperative economics for 47 years. I've been actively building this for nine. I have 18 handwritten journals documenting the journey, 1,754 innovations with 1,401 patent claims filed, and a manufacturing backbone ready to prove the system works.
 
 I read a lot, and I'm good at chess. I suspect you'd appreciate both.
 

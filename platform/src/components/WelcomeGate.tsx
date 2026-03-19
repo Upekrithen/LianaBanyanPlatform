@@ -260,7 +260,7 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
                 >
                   <p
                     className="text-center italic leading-snug text-sm"
-                    style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", fontWeight: 600, transition: 'opacity 0.3s ease', textWrap: 'balance', color: '#1e293b' }}
+                    style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", fontWeight: 600, transition: 'opacity 0.3s ease', textWrap: 'balance', color: '#faf5eb' }}
                   >
                     {subtitle || "\u00A0"}
                   </p>

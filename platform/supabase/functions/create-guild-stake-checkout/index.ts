@@ -1,5 +1,3 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
@@ -7,7 +5,6 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Stake price mappings (Stripe price IDs)
 const STAKE_PRICES: Record<string, Record<number, { price_id: string; amount: number; cumulative: number }>> = {
   journeyman: {
     1: { price_id: "price_1SIXbLDMOngHJB3UEDaWbiPS", amount: 500, cumulative: 500 },
@@ -27,7 +24,7 @@ const STAKE_PRICES: Record<string, Record<number, { price_id: string; amount: nu
   },
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -39,105 +36,69 @@ serve(async (req) => {
 
   try {
     const { tier, class_level } = await req.json();
+    if (!tier || !class_level) throw new Error("Tier and class level required");
+    if (!["journeyman", "master"].includes(tier)) throw new Error("Invalid tier");
+    if (class_level < 1 || class_level > 6) throw new Error("Invalid class level");
 
-    // Validate input
-    if (!tier || !class_level) {
-      throw new Error("Tier and class level required");
-    }
-
-    if (!["journeyman", "master"].includes(tier)) {
-      throw new Error("Invalid tier");
-    }
-
-    if (class_level < 1 || class_level > 6) {
-      throw new Error("Invalid class level");
-    }
-
-    // Get authenticated user
     const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
+    const { data } = await supabaseClient.auth.getUser(authHeader.replace("Bearer ", ""));
     const user = data.user;
-    
-    if (!user?.email) {
-      throw new Error("User not authenticated");
-    }
+    if (!user?.email) throw new Error("User not authenticated");
 
-    console.log(`[Guild Stake] Creating checkout for ${tier} class ${class_level} - user: ${user.email}`);
+    console.log(`[Guild Stake] ${tier} class ${class_level} — user: ${user.email}`);
 
-    // Check if already paid for this tier/class
     const { data: existingPayment } = await supabaseClient
-      .from("guild_stake_payments")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("tier", tier)
-      .eq("class_level", class_level)
-      .eq("payment_status", "completed")
-      .maybeSingle();
+      .from("guild_stake_payments").select("id")
+      .eq("user_id", user.id).eq("tier", tier).eq("class_level", class_level)
+      .eq("payment_status", "completed").maybeSingle();
 
     if (existingPayment) {
       return new Response(
         JSON.stringify({ error: `Stake for ${tier} class ${class_level} already paid` }),
-        {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 400,
-        }
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 
-    // Get stake price info
     const stakeInfo = STAKE_PRICES[tier][class_level];
-    if (!stakeInfo) {
-      throw new Error("Invalid stake configuration");
-    }
+    if (!stakeInfo) throw new Error("Invalid stake configuration");
 
-    // Initialize Stripe
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2025-08-27.basil",
-    });
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY") || "";
+    const origin = req.headers.get("origin") || "https://lianabanyan.com";
 
-    // Check for existing Stripe customer
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    let customerId;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-    }
-
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : user.email,
-      line_items: [
-        {
-          price: stakeInfo.price_id,
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      success_url: `${req.headers.get("origin")}/guild-stake-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/dashboard`,
-      metadata: {
-        user_id: user.id,
-        payment_type: "guild_stake",
-        tier,
-        class_level: class_level.toString(),
-        amount: stakeInfo.amount.toString(),
-        cumulative: stakeInfo.cumulative.toString(),
+    const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Basic ${btoa(stripeKey + ":")}`,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
+      body: new URLSearchParams({
+        "customer_email": user.email,
+        "line_items[0][price]": stakeInfo.price_id,
+        "line_items[0][quantity]": "1",
+        "mode": "payment",
+        "success_url": `${origin}/guild-stake-success?session_id={CHECKOUT_SESSION_ID}`,
+        "cancel_url": `${origin}/dashboard`,
+        "metadata[user_id]": user.id,
+        "metadata[payment_type]": "guild_stake",
+        "metadata[tier]": tier,
+        "metadata[class_level]": class_level.toString(),
+        "metadata[amount]": stakeInfo.amount.toString(),
+        "metadata[cumulative]": stakeInfo.cumulative.toString(),
+      }),
     });
 
-    console.log(`[Guild Stake] Checkout session created: ${session.id}`);
+    const session = await stripeRes.json();
+    if (!stripeRes.ok) throw new Error(session?.error?.message || "Stripe error");
 
+    console.log(`[Guild Stake] Session created: ${session.id}`);
     return new Response(JSON.stringify({ url: session.url }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200,
     });
   } catch (error) {
     console.error("[Guild Stake] Error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500,
+    const msg = error instanceof Error ? error.message : "Unknown error";
+    return new Response(JSON.stringify({ error: msg }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500,
     });
   }
 });

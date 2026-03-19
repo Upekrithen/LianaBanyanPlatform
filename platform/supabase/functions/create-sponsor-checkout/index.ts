@@ -1,5 +1,3 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
@@ -7,13 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-/**
- * Sponsor (Johnny Appleseed) Checkout
- * =====================================
- * Creates a Stripe Checkout Session for sponsoring memberships.
- * Every $5 = 1 membership. Min $5, any multiple of $5.
- */
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -25,74 +17,57 @@ serve(async (req) => {
 
   try {
     const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
+    const { data } = await supabaseClient.auth.getUser(authHeader.replace("Bearer ", ""));
     const user = data.user;
-
-    if (!user?.email) {
-      throw new Error("User not authenticated or email not available");
-    }
+    if (!user?.email) throw new Error("User not authenticated");
 
     const { amount } = await req.json();
     const amountCents = Math.round(Number(amount) * 100);
-
     if (amountCents < 500 || amountCents % 500 !== 0) {
       throw new Error("Amount must be at least $5 and a multiple of $5");
     }
 
     const memberships = amountCents / 500;
-    console.log(`[Sponsor] Creating checkout for ${user.email}, $${amount} = ${memberships} memberships`);
+    console.log(`[Sponsor] ${user.email}, $${amount} = ${memberships} memberships`);
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2025-08-27.basil",
-    });
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY") || "";
+    const origin = req.headers.get("origin") || "https://lianabanyan.com";
 
-    // Find or create Stripe customer
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    let customerId;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-    }
-
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      customer_email: customerId ? undefined : user.email,
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "Johnny Appleseed — Membership Sponsorships",
-              description: `Sponsor ${memberships} membership${memberships > 1 ? "s" : ""} ($5 each)`,
-            },
-            unit_amount: amountCents,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      success_url: `${req.headers.get("origin")}/sponsor-success?session_id={CHECKOUT_SESSION_ID}&count=${memberships}`,
-      cancel_url: `${req.headers.get("origin")}/sponsor`,
-      metadata: {
-        user_id: user.id,
-        payment_type: "sponsor_memberships",
-        memberships_count: String(memberships),
-        amount_dollars: String(amount),
+    const stripeRes = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Basic ${btoa(stripeKey + ":")}`,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
+      body: new URLSearchParams({
+        "customer_email": user.email,
+        "line_items[0][price_data][currency]": "usd",
+        "line_items[0][price_data][product_data][name]": "Johnny Appleseed — Membership Sponsorships",
+        "line_items[0][price_data][product_data][description]": `Sponsor ${memberships} membership${memberships > 1 ? "s" : ""} ($5 each)`,
+        "line_items[0][price_data][unit_amount]": amountCents.toString(),
+        "line_items[0][quantity]": "1",
+        "mode": "payment",
+        "success_url": `${origin}/sponsor-success?session_id={CHECKOUT_SESSION_ID}&count=${memberships}`,
+        "cancel_url": `${origin}/sponsor`,
+        "metadata[user_id]": user.id,
+        "metadata[payment_type]": "sponsor_memberships",
+        "metadata[memberships_count]": String(memberships),
+        "metadata[amount_dollars]": String(amount),
+      }),
     });
 
-    console.log(`[Sponsor] Checkout session created: ${session.id}`);
+    const session = await stripeRes.json();
+    if (!stripeRes.ok) throw new Error(session?.error?.message || "Stripe error");
 
+    console.log(`[Sponsor] Session created: ${session.id}`);
     return new Response(JSON.stringify({ url: session.url }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200,
     });
   } catch (error) {
     console.error("[Sponsor] Error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500,
+    const msg = error instanceof Error ? error.message : "Unknown error";
+    return new Response(JSON.stringify({ error: msg }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500,
     });
   }
 });
