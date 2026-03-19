@@ -4034,6 +4034,54 @@ export function KeepView({
           </div>
         </div>
 
+        {/* NotCents Economy Banner */}
+        <div className="trunk-info" style={{ marginTop: '2rem' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(59,130,246,0.1) 50%, rgba(245,158,11,0.1) 100%)', border: '1px solid rgba(148,163,184,0.2)', borderRadius: '12px', padding: '1.5rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Powered by NotCents™ <span style={{ fontFamily: 'monospace' }}>Ↄ‖</span></p>
+            <p style={{ opacity: 0.7, fontSize: '0.875rem', marginBottom: '1rem' }}>Three currencies. One fair economy. Credits for buying, Marks for effort, Joules for the future.</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <span style={{ background: 'rgba(16,185,129,0.15)', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem' }}>💰 Credits — Buy with fiat</span>
+              <span style={{ background: 'rgba(59,130,246,0.15)', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem' }}>⚡ Marks — Earn through effort</span>
+              <span style={{ background: 'rgba(245,158,11,0.15)', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem' }}>🔒 Joules — Store for the future</span>
+            </div>
+            <button className="btn btn-outline" style={{ marginTop: '1rem', fontSize: '0.75rem' }} onClick={() => navigate('/c-plus-20')}>
+              Learn More — C+20 Reciprocity
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Navigation Grid */}
+        <div className="trunk-info" style={{ marginTop: '1.5rem' }}>
+          <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Explore the Platform</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '0.75rem' }}>
+            {[
+              { label: 'Main Square', path: '/main-square', emoji: '🏪' },
+              { label: 'BandWagon', path: '/bandwagon', emoji: '🚀' },
+              { label: 'C+20 Pricing', path: '/c-plus-20', emoji: '⚖️' },
+              { label: 'XP Board', path: '/xp-leaderboard', emoji: '🏆' },
+              { label: 'The Forge', path: '/the-forge', emoji: '🏭' },
+              { label: 'Tereno Cert', path: '/tereno-certification', emoji: '🏅' },
+              { label: 'Daily News', path: '/daily-news', emoji: '📰' },
+              { label: 'Vouch', path: '/vouch', emoji: '❤️' },
+              { label: 'Star Chamber', path: '/star-chamber', emoji: '⚖️' },
+              { label: 'Steward Post', path: '/steward', emoji: '🛡️' },
+              { label: 'Node Captain', path: '/node-captain', emoji: '⚓' },
+              { label: 'Santa Ever After', path: '/santa', emoji: '🎁' },
+            ].map(item => (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                style={{ background: 'rgba(30,41,59,0.6)', border: '1px solid rgba(148,163,184,0.2)', borderRadius: '10px', padding: '0.75rem', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.8rem', color: 'inherit' }}
+                onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(30,41,59,0.9)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(99,102,241,0.5)'; }}
+                onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(30,41,59,0.6)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(148,163,184,0.2)'; }}
+              >
+                <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{item.emoji}</div>
+                <div>{item.label}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <footer className="landing-footer">
           <p>
             © 2026 Liana Banyan Corporation

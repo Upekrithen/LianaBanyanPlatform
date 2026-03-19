@@ -9,20 +9,71 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 46 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 46B (March 18, 2026)
 
-**Latest commit:** `8bb22d5` — Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes
-**Previous commit:** `796607d` — Sessions 40-45: 7 new pages + routes + sidebar nav
+**Latest commit:** `8c8ad85` — Session 46B: MoneyPenny QA + Social wired to Supabase — 5 migrations, 6 other-session migrations fixed
+**Previous commit:** `8bb22d5` — Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes
 
-**Status (March 18, 2026 — Session 46):**
-- Platform deployed and live: lianabanyan-main.web.app (**645 files**, up from 640)
-- All 5 existing pages now wired to their Supabase tables with sample fallback.
-- Also committed untracked files from mega-build (MoneyPenny, ChainVoting, ConcentricCircles, GleanersCorner pages + services).
+**Status (March 18, 2026 — Session 46B):**
+- Platform deployed and live: lianabanyan-main.web.app (**652 files**, up from 645)
+- MoneyPenny Q&A Intelligence and Social Media Command Center both wired to Supabase.
+- 5 new migrations pushed (qa_entries, qa_milestone_reports, qa_question_signatures, social_interactions, social_daily_digests).
+- 6 other-session migrations (santa_gifts, node_captain, star_chamber, c20_pricing, tereno_certifications, manufacturing_modules) fixed and pushed.
+- Also committed untracked pages/services from other sessions (Santa, StarChamber, NodeCaptain, C+20, TerenoCert, ModularManufacturing).
 - **Innovation count:** 1,751 (unchanged this session)
 - **Patent claims:** 1,401 across 8 provisional applications
 - **No blockers.**
 
-### What Was Done (Session 46 — Knight)
+### What Was Done (Session 46B — Knight)
+
+#### Task A: MoneyPenny Q&A Intelligence → Supabase
+
+- **3 migrations pushed:**
+  - `20260319000021_qa_entries.sql` — `qa_entries` table (25 seed entries across all channels/classifications)
+  - `20260319000022_qa_milestone_reports.sql` — `qa_milestone_reports` table (1 seed at 100-question milestone)
+  - `20260319000023_qa_question_signatures.sql` — `qa_question_signatures` novelty detection table
+- **`moneyPennyQAService.ts`** wired:
+  - `fetchQAEntries()` — Queries `qa_entries` with filter support (status, classification, channel, responder, search), sample fallback
+  - `fetchQAStats()` — Aggregates from `qa_entries` with computed worthwhile/novel/followUp rates, sample fallback
+  - `approveResponse()` / `rejectResponse()` — Updates `qa_entries` status + reviewed_at
+  - `fetchMilestoneReports()` — Queries `qa_milestone_reports` with mapping (top_categories JSON, response time conversion)
+  - `awardFollowUpBonus()` — Updates follow_up_marks_awarded + status in DB
+  - Added `mapDbEntry()` and `mapDbMilestone()` snake_case → camelCase mappers
+
+#### Task B: Social Media Command Center → Supabase
+
+- **2 migrations pushed:**
+  - `20260319000024_social_interactions.sql` — `social_interactions` table (20 seed entries across 8 channels)
+  - `20260319000025_social_daily_digests.sql` — `social_daily_digests` table (1 seed for today)
+- **`socialMediaService.ts`** wired:
+  - `fetchSocialInbox()` — Queries `social_interactions` with filter support, sample fallback
+  - `fetchSocialStats()` — Aggregates channel/priority/sentiment breakdowns from DB
+  - `approveDraft()` / `editDraft()` / `rejectDraft()` / `markAsNoResponse()` — All update DB with fallback
+  - `fetchDailyDigest()` — Queries `social_daily_digests` by date
+  - `bulkApprove()` / `bulkReject()` / `bulkMarkNoResponse()` — Bulk `.in('id', ids)` updates
+  - Added `mapDbInteraction()` snake_case → camelCase mapper
+
+#### Other-Session Migrations Fixed and Pushed
+
+- `20260319100021_santa_gifts.sql` — Fixed: nullable columns for existing table, removed fake-user seeds, simplified admin policies
+- `20260319100022_node_captain_profiles.sql` — Fixed: admin policies, removed fake-user seeds
+- `20260319100023_star_chamber_cases.sql` — Fixed: admin policies, removed fake-user seeds
+- `20260319100024_c20_pricing_examples.sql` — Fixed: admin policies (seed data kept — no user FK)
+- `20260319100025_tereno_certifications.sql` — Fixed: admin policies, invalid hex UUIDs replaced with gen_random_uuid()
+- `20260319100026_manufacturing_modules.sql` — Fixed: admin policies, invalid hex UUIDs, removed fake-user crew app seeds
+
+#### Also Committed (from other sessions, previously untracked)
+
+- `SantaEverAfter.tsx` + `santaService.ts`
+- `StarChamber.tsx` + `starChamberService.ts`
+- `NodeCaptain.tsx` + `nodeCaptainService.ts`
+- `CPlus20Dashboard.tsx` + `c20Service.ts`
+- `TerenoCertification.tsx` + `terenoCertificationService.ts`
+- `ModularManufacturing.tsx` + `manufacturingService.ts`
+
+---
+
+### What Was Done (Session 46A — Knight — previous chat)
 
 #### Supabase Wiring — 5 Existing Pages
 
@@ -115,8 +166,9 @@ All tables have full RLS policies. Seed data included where specified in prompts
 
 | Item | Status |
 |------|--------|
-| **BISHOP Session 46 Task A:** MoneyPenny Q&A Supabase wiring (3 migrations + service) | NEXT |
-| **BISHOP Session 46 Task B:** Social Media Command Center Supabase wiring (2 migrations + service) | NEXT |
+| ~~BISHOP Session 46 Task A: MoneyPenny Q&A Supabase wiring~~ | **DONE (46B)** |
+| ~~BISHOP Session 46 Task B: Social Media Command Center Supabase wiring~~ | **DONE (46B)** |
+| Wire remaining other-session pages to Supabase (Santa, StarChamber, NodeCaptain, C+20, Tereno, Modular Mfg) | NEXT |
 | Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
 | FAQ page "See Also" rendering for relatedEntries | MEDIUM |
 | Content Pipeline build | MEDIUM |
@@ -1539,6 +1591,7 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+8c8ad85 Session 46B: MoneyPenny QA + Social wired to Supabase — 5 migrations, 6 other-session migrations fixed and pushed, both services live with sample fallback
 8bb22d5 Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes live queries with sample fallback
 796607d Sessions 40-45: 7 new pages (StoreTemplates, ShowcasePromotion, GhostWorldMall, MemberAgreement, CreatorDraftPick, TrickleOnboarding, VouchSystem) + routes + sidebar nav
 27045d3 Sessions 39-45: 12 Supabase migrations (000009-000020) + Send Lists service wiring
