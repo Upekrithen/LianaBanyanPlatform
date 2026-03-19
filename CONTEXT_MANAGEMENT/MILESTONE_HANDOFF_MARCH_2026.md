@@ -9,59 +9,102 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 39 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Sessions 39-45 Mega-Build (March 18, 2026)
 
-**Latest commit:** `832545a` — Session 39 Task A: Daily News Supabase wiring
-**Previous commit:** `8ed032b` — Session 38 Task B: Main Square Supabase wiring
+**Latest commit:** `796607d` — Sessions 40-45: 7 new pages + routes + sidebar nav
+**Previous commit:** `27045d3` — Sessions 39-45: 12 Supabase migrations (000009-000020) + Send Lists wiring
 
-**Status (March 18, 2026 — Session 39):**
-- Platform deployed and live: lianabanyan-main.web.app (628 files)
-- All Supabase migrations pushed (through `20260319000008`). DB canonical count = **1,751**.
+**Status (March 18, 2026 — Session 39-45 Mega-Build):**
+- Platform deployed and live: lianabanyan-main.web.app (**640 files**, up from 628)
+- All Supabase migrations pushed (through `20260319000020`). **20 total tables added across Sessions 38-45.**
 - **Innovation count:** 1,751 (unchanged this session)
 - **Patent claims:** 1,401 across 8 provisional applications
-- **No blockers.** Ready for Session 40.
+- **No blockers.**
 
-### What Was Done This Session (Session 39 — Knight)
+### What Was Done (Sessions 39-45 Mega-Build — Knight)
 
-1. **Task A: Daily News Supabase Wiring**
-   - Migration `20260319000008_daily_news_and_showcase.sql` — 2 new tables:
-     - `daily_news_slides` — id, slide_type (6 CHECK values), title, subtitle, description, store_name, product_name, price, currency_type, cta_text, cta_url, badge_text, is_active, display_date, sort_order, created_at
-     - `showcase_promotions` — id, user_id (FK auth.users), storefront_id (FK storefronts), slide_id (FK daily_news_slides), credits_paid, promotion_date, status (4 CHECK values), created_at
-   - RLS: All authenticated SELECT on slides; owner-only CRUD on showcase_promotions
-   - Seed data: 14 slides (8 carousel + 6 headlines) — same data that was in sample arrays
-   - **dailyNewsService.ts** wired: `fetchDailySlides`, `fetchHeadlines`, `fetchShowcasePromotions` now query Supabase with sample data fallback on error/empty
-   - Carousel slides use sort_order < 100; headlines use sort_order >= 100
+#### Database Infrastructure (12 new migrations: 000009 through 000020)
 
-2. **Task B: Send Lists Supabase Wiring** — Deferred to Session 40 (3-feature limit reached)
+| Migration | Tables | Session |
+|-----------|--------|---------|
+| `000009_send_lists.sql` | `send_lists`, `send_list_recipients`, `send_list_audit` | 39B |
+| `000010_store_templates.sql` | `store_templates` (6 seeded themes) | 40A |
+| `000011_ghost_world.sql` | `ghost_world_locations`, `ghost_transactions` | 41A |
+| `000012_member_agreement.sql` | `member_agreement_acceptances` | 41B |
+| `000013_bandwagon.sql` | `bandwagon_backings`, `taste_ranger_profiles` | 42A |
+| `000014_steward_system.sql` | `steward_profiles`, `steward_campaigns` | 42B |
+| `000015_creator_draft_pick.sql` | `creator_draft_picks` (10 seeded creators) | 43A |
+| `000016_crew_call_roles.sql` | `crew_call_roles` (17 seeded roles) | 43B |
+| `000017_xp_system.sql` | `xp_scores`, `xp_events` | 44A |
+| `000018_onboarding_cohorts.sql` | `onboarding_cohorts`, `onboarding_members` | 44B |
+| `000019_coverage_minutes.sql` | `coverage_minutes` + augmented existing `coverage_minute_transactions` | 45A |
+| `000020_vouch_system.sql` | `vouches`, `crown_letter_delegations` | 45B |
 
-### Files Created (Session 39)
+All tables have full RLS policies. Seed data included where specified in prompts.
 
-| File | Purpose |
-|------|---------|
-| `platform/supabase/migrations/20260319000008_daily_news_and_showcase.sql` | **NEW** — 2 tables + RLS + 14 seed slides |
+#### Service Layer Wiring
 
-### Files Modified (Session 39)
+- **`sendListService.ts`** — Full Supabase wiring: `fetchUserSendLists`, `createSendList`, `applyStamp`, `addRecipient`, `executeSend` all query/insert Supabase with sample fallback
+- **`dailyNewsService.ts`** — Previously wired in Session 39A (fetchDailySlides, fetchHeadlines, fetchShowcasePromotions)
 
-| File | Changes |
-|------|---------|
-| `platform/src/lib/dailyNewsService.ts` | Wired to Supabase with sample fallback, added `mapDbSlide` helper |
+#### New Pages Created (7)
 
-### Deployment (Session 39)
+| Page | Route | Session |
+|------|-------|---------|
+| `StoreTemplates.tsx` | `/store-templates` | 40A |
+| `ShowcasePromotion.tsx` | `/showcase-promotion` | 40B |
+| `GhostWorldMall.tsx` | `/ghost-world/mall` | 41A |
+| `MemberAgreement.tsx` | `/member-agreement` | 41B |
+| `CreatorDraftPick.tsx` | `/creator-draft-pick` | 43A |
+| `TrickleOnboarding.tsx` | `/onboarding/trickle` | 44B |
+| `VouchSystem.tsx` | `/vouch` | 45B |
 
-- **Platform**: lianabanyan-main.web.app (628 files)
-- **Migration**: 20260319000008 pushed to Supabase
+#### Existing Pages (already had routes, now have DB tables backing them)
 
-### Pending Work (Session 40+)
+| Page | Route | Tables Ready |
+|------|-------|-------------|
+| `BandWagon.tsx` | `/bandwagon` | `bandwagon_backings`, `taste_ranger_profiles` |
+| `StewardDashboard.tsx` | `/steward` | `steward_profiles`, `steward_campaigns` |
+| `CrewCallPage.tsx` | `/crew-call` | `crew_call_roles` |
+| `XPLeaderboard.tsx` | `/xp-leaderboard` | `xp_scores`, `xp_events` |
+| `CoverageMinutesDashboard.tsx` | `/coverage-minutes` | `coverage_minutes`, `coverage_minute_transactions` |
+
+#### Sidebar Navigation
+
+9 new entries added to AppSidebar.tsx: Store Templates, Showcase Promotion, Ghost World Mall, Creator Draft Pick, Crew Call, Vouch & Recommend, Coverage Minutes, Member Agreement, Onboarding.
+
+### Deployment (Sessions 39-45)
+
+- **Platform**: lianabanyan-main.web.app (640 files)
+- **Migrations**: 000008-000020 all pushed to Supabase (13 migrations total this session)
+
+### Pending Work (Session 46+)
 
 | Item | Status |
 |------|--------|
-| Send Lists Supabase wiring (Session 39 Task B — prompt exists) | NEXT |
-| Ghost World Mall integration (Session 41 prompt exists) | QUEUED |
-| Member Agreement page (Session 41 prompt exists) | QUEUED |
+| Wire existing BandWagon.tsx to Supabase tables | NEXT |
+| Wire existing StewardDashboard.tsx to Supabase tables | NEXT |
+| Wire existing CrewCallPage.tsx to Supabase tables | NEXT |
+| Wire existing XPLeaderboard.tsx to Supabase tables | NEXT |
+| Wire existing CoverageMinutesDashboard.tsx to Supabase tables | NEXT |
 | Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
 | FAQ page "See Also" rendering for relatedEntries | MEDIUM |
 | Content Pipeline build | MEDIUM |
 | RLS security hardening | MEDIUM |
+
+---
+
+## Session 39A (March 18, 2026) — Previous
+
+### What Was Done (Session 39A — Knight)
+
+1. **Task A: Daily News Supabase Wiring**
+   - Migration `20260319000008_daily_news_and_showcase.sql` — 2 new tables:
+     - `daily_news_slides` — slide_type, title, subtitle, store_name, price, cta_text, cta_url, is_active, display_date, sort_order
+     - `showcase_promotions` — user_id, storefront_id, slide_id, credits_paid, promotion_date, status
+   - RLS: All authenticated SELECT on slides; owner-only CRUD on showcase_promotions
+   - Seed data: 14 slides (8 carousel + 6 headlines)
+   - **dailyNewsService.ts** wired with sample fallback
 
 ---
 
@@ -1466,7 +1509,9 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
-832545a Session 39 Task A: Daily News Supabase wiring — daily_news_slides + showcase_promotions tables, RLS, 14 seed slides, service layer live queries with sample fallback
+796607d Sessions 40-45: 7 new pages (StoreTemplates, ShowcasePromotion, GhostWorldMall, MemberAgreement, CreatorDraftPick, TrickleOnboarding, VouchSystem) + routes + sidebar nav
+27045d3 Sessions 39-45: 12 Supabase migrations (000009-000020) + Send Lists service wiring
+832545a Session 39 Task A: Daily News Supabase wiring — daily_news_slides + showcase_promotions tables, RLS, 14 seed slides
 8ed032b Session 38 Task B: Main Square Supabase wiring — storefronts + storefront_products tables, RLS, seed data, live query with sample fallback
 540f74d Session 38 Task A: Political Expedition full civic hub — 5-tab dashboard, legislation tracker, civic scorecard, coverage minutes/muffled rule
 d003784 Session 37: Demand Signaling + Pledged Mark Voting Supabase wiring, Boise Business Cards worked example
