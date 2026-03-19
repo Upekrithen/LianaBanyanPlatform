@@ -75,12 +75,13 @@ export const PRINCIPLES = {
   microEntityPatent: "$65 per filing (micro-entity)",
   currencyEquality: "1 Credit = 1 Mark = 1 Joule (different acquisition, same value)",
   marksFromDifferential: "Marks emerge from differential ONLY — never granted as gifts",
+  economyBrand: "NotCents™ — The NotCents Economy (Innovation #1752)",
 } as const;
 
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 1751,         // As of 8th provisional filing, March 18 2026 (64/009,803)
+  canonicalCount: 1752,         // +1 for NotCents Economy brand (Innovation #1752)
   patentClaims: 1401,           // Across 8 provisional applications (8th: 64/009,803, March 18 2026)
   utilityPatents: 8,
   patentPortfolioValue: { low: 116_000_000, high: 15_740_000_000 },

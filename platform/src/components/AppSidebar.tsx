@@ -1,4 +1,4 @@
-import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map } from "lucide-react";
+import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -21,12 +21,15 @@ const marketplaceMainItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home },
   { title: "Projects", url: "/projects", icon: FolderKanban },
   { title: "Marketplace", url: "/marketplace", icon: ShoppingBag },
+  { title: "Main Square", url: "/main-square", icon: Store },
   { title: "Portfolio", url: "/portfolio", icon: Briefcase },
   { title: "Medallions", url: "/medallions", icon: Award },
   { title: "HexIsle", url: "/hexisle-dashboard", icon: Map },
   { title: "Guilds", url: "/guilds", icon: Swords },
   { title: "Clans", url: "/clans", icon: Shield },
   { title: "Peer Contracts", url: "/peer-contracts", icon: HandshakeIcon },
+  { title: "Daily News", url: "/daily-news", icon: Newspaper },
+  { title: "Political Expedition", url: "/political-expedition", icon: Flag },
   { title: "Sponsorship Guide", url: "/sponsorship-guide", icon: BookOpen },
   { title: "Register IP", url: "/ip/register", icon: ShieldCheck },
 ];
@@ -39,6 +42,7 @@ const marketplaceAdminItems = [
   { title: "Simulator", url: "/simulator", icon: FlaskConical, requiresAdmin: true },
   { title: "Task Log", url: "/task-log", icon: ScrollText, requiresAdmin: true },
   { title: "Sample XML", url: "/sample-xml", icon: FileX, requiresAdmin: true },
+  { title: "Send Lists", url: "/send-lists", icon: Send, requiresAdmin: true },
 ];
 
 // Business Portal Navigation

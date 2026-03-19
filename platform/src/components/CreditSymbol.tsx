@@ -1,6 +1,9 @@
 /**
  * THE ANVIL — Liana Banyan Currency Symbol System
  * ==================================================
+ * Part of the NotCents Economy (Innovation #1752).
+ * Brand reference: see @/lib/notCentsEconomy.ts for NOTCENTS_BRAND.
+ *
  * Named after the tool where raw materials are shaped into something useful.
  * Like the Thorn (Þ) was to Old English, the Anvil (Ↄ‖) is our unique glyph.
  *

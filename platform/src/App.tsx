@@ -127,6 +127,7 @@ const DefenseKlausSubmarineDoor = lazy(() => import("./pages/DefenseKlausSubmari
 const HelpEachOtherPage = lazy(() => import("./pages/HelpEachOtherPage"));
 const TheFurnace = lazy(() => import("./pages/TheFurnace"));
 const StoreFrontAggregation = lazy(() => import("./pages/StoreFrontAggregation"));
+const MainSquare = lazy(() => import("./pages/MainSquare"));
 const GarageSalesPage = lazy(() => import("./pages/GarageSalesPage"));
 const BizKaleidoscope = lazy(() => import("./pages/BizKaleidoscope"));
 const MSAPage = lazy(() => import("./pages/MSAPage"));
@@ -259,6 +260,7 @@ const WildfireRunsPage = lazy(() => import("./pages/WildfireRunsPage"));
 const ATTILanding = lazy(() => import("./pages/ATTILanding"));
 const SanAntonioLanding = lazy(() => import("./pages/SanAntonioLanding"));
 const BifrostCardBuilder = lazy(() => import("./pages/BifrostCardBuilder"));
+const SendLists = lazy(() => import("./pages/SendLists"));
 import { WildfireRunProvider } from "./contexts/WildfireRunContext";
 import { MockDataProvider } from "./contexts/MockDataProvider";
 import { PathwayProgressProvider } from "./contexts/PathwayProgressContext";
@@ -284,6 +286,7 @@ const LaunchTracker = lazy(() => import("./pages/LaunchTracker"));
 const MoneypennyBriefing = lazy(() => import("./pages/MoneypennyBriefing"));
 const SpotlightManager = lazy(() => import("./pages/SpotlightManager"));
 const BoiseBusinessCardsExample = lazy(() => import("./pages/BoiseBusinessCardsExample"));
+const DailyNews = lazy(() => import("./pages/DailyNews"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -583,7 +586,8 @@ const App = () => (
                         <Route path="/project/:projectSlug" element={<ProtectedRoute><ProjectView /></ProtectedRoute>} />
                         <Route path="/project/:projectSlug/product/:productId" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                         <Route path="/sponsorship-guide" element={<ProtectedRoute><ContributionExplainer /></ProtectedRoute>} />
-                        
+                        <Route path="/daily-news" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DailyNews /></Suspense>} />
+
                         {/* Protected Sponsor Routes */}
                         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                         <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
@@ -666,6 +670,7 @@ const App = () => (
                         <Route path="/furnace" element={<TheFurnace />} />
                         <Route path="/storefront-aggregation" element={<StoreFrontAggregation />} />
                         <Route path="/biz-aggregation" element={<StoreFrontAggregation />} />
+                        <Route path="/main-square" element={<MainSquare />} />
                         <Route path="/kaleidoscope" element={<BizKaleidoscope />} />
                         <Route path="/biz-directory" element={<BizKaleidoscope />} />
                         <Route path="/family-table/garage-sales" element={<GarageSalesPage />} />
@@ -796,7 +801,7 @@ const App = () => (
                         
                         {/* Switzerland Rule Arenas — OUTSIDE LB proper */}
                         <Route path="/arenas" element={<Arenas />} />
-                        <Route path="/political-expedition" element={<Arenas />} />
+                        <Route path="/political-expedition" element={<ExplorerRoute><PowerToThePeoplePage /></ExplorerRoute>} />
                         <Route path="/areopagus" element={<Arenas />} />
                         <Route path="/crucible" element={<Arenas />} />
                         <Route path="/petitions" element={<Petitions />} />
@@ -898,6 +903,7 @@ const App = () => (
                         
                         {/* Steward & Admin Tools */}
                         <Route path="/steward/legal-formations" element={<ProtectedRoute><StewardLegalDashboard /></ProtectedRoute>} />
+                        <Route path="/send-lists" element={<ProtectedRoute><SendLists /></ProtectedRoute>} />
                         <Route path="/themes" element={<ProtectedRoute><ThemeManagement /></ProtectedRoute>} />
                         
                         {/* Contingency Operators — Innovation #1188 */}

@@ -170,6 +170,9 @@ export function PlatformFooter() {
               <span>&copy; {currentYear} Liana Banyan Corporation. All rights reserved.</span>
               <Heart className="h-3 w-3 text-red-400" />
             </div>
+            <div className="text-xs text-muted-foreground mt-1 sm:mt-0">
+              Powered by NotCents&trade;
+            </div>
           </div>
         </div>
       </footer>
