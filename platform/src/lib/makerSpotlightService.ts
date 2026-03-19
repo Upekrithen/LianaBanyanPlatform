@@ -50,9 +50,9 @@ export const SLIDE_DURATION_MS = 30 * 1000; // 30 seconds per slide
 export const SLIDES_PER_SESSION = 6; // 6 slides per session
 
 export const TIER_LABELS: Record<number, string> = {
-  1: "High-Value",
-  2: "Mid-Value",
-  3: "Emerging",
+  1: "Established",
+  2: "Rising",
+  3: "Pioneer",
 };
 
 export const TIER_COLORS: Record<number, string> = {
@@ -73,7 +73,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
 // ============================================================================
 
 export const SAMPLE_SPOTLIGHTS: MakerSpotlight[] = [
-  // Tier 1: HIGH-VALUE (24 makers)
+  // Tier 1: ESTABLISHED (24 makers)
   { id: "ms1", handle: "forgecoreco", displayName: "ForgeCore Co", tier: 1, specialty: "Plant accessories, coasters, sports toys", description: "High-volume 3D print manufacturer with 514K+ likes.", verified: true, bestPostLikes: "514K", sellsOn: "Own site", externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 1, active: true },
   { id: "ms2", handle: "nicholepaclibar", displayName: "Nichole Paclibar", tier: 1, specialty: "Product influencer", description: "Product influencer with 664K likes reach. Amazon affiliate network.", verified: true, bestPostLikes: "664K", sellsOn: "Amazon affiliate", externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "influencer", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 2, active: true },
   { id: "ms3", handle: "loftedgoods", displayName: "Lofted Goods", tier: 1, specialty: "Wall-mount planters with drip jars", description: "Innovative wall-mount planters with integrated drip jar systems. STL file seller.", verified: true, bestPostLikes: "230K", sellsOn: "STL files", externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 3, active: true },
@@ -98,7 +98,7 @@ export const SAMPLE_SPOTLIGHTS: MakerSpotlight[] = [
   { id: "ms22", handle: "josefprusa", displayName: "Josef Prusa", tier: 1, specialty: "Prusa Research founder", description: "Founder of Prusa Research — legendary 3D printer manufacturer. 31.4K likes.", verified: true, bestPostLikes: "31.4K", sellsOn: "Printables.com", externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 22, active: true },
   { id: "ms23", handle: "pyahik", displayName: "Pyahik", tier: 1, specialty: "Resin keychains, small business", description: "Resin keychain artisan with dedicated shop. 31.8K likes.", verified: true, bestPostLikes: "31.8K", sellsOn: "Own shop", externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 23, active: true },
   { id: "ms24", handle: "dinarakasko", displayName: "Dinara Kasko", tier: 1, specialty: "Silicone mold cake design", description: "Silicone mold cake/pastry designer. Food + manufacturing crossover. 24.7K likes.", verified: true, bestPostLikes: "24.7K", sellsOn: "Own mold shop", externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "food", hexisleRelevant: false, slipCastingPioneer: true, rotationOrder: 24, active: true },
-  // Tier 2: MID-VALUE (15 makers)
+  // Tier 2: RISING (15 makers)
   { id: "ms25", handle: "yird_ceramics", displayName: "Yird Ceramics", tier: 2, specialty: "Slip cast cups with plaster molds", description: "Traditional slip casting with plaster molds. 25.6K likes.", verified: false, bestPostLikes: "25.6K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: true, rotationOrder: 25, active: true },
   { id: "ms26", handle: "turn.studio", displayName: "Turn Studio", tier: 2, specialty: "Full slip casting pipeline", description: "Full 3D to silicone to plaster to porcelain pipeline. 23.1K likes.", verified: false, bestPostLikes: "23.1K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: true, rotationOrder: 26, active: true },
   { id: "ms27", handle: "bloblab3d", displayName: "BlobLab 3D", tier: 2, specialty: "Character design (Blob Beetles)", description: "Character designer specializing in Blob Beetles. 22.1K likes.", verified: false, bestPostLikes: "22.1K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 27, active: true },
@@ -114,7 +114,7 @@ export const SAMPLE_SPOTLIGHTS: MakerSpotlight[] = [
   { id: "ms37", handle: "printsculptors", displayName: "Print Sculptors", tier: 2, specialty: "Fidget toys, clickers", description: "Fidget toy and clicker specialist. 40.6K likes.", verified: true, bestPostLikes: "40.6K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 37, active: true },
   { id: "ms38", handle: "krakdrag3d", displayName: "KrakDrag 3D", tier: 2, specialty: "Cyber Cat headphone holder", description: "Cyber Cat headphone holder designer. 63.3K likes.", verified: false, bestPostLikes: "63.3K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 38, active: true },
   { id: "ms39", handle: "elden_designs", displayName: "Elden Designs", tier: 2, specialty: "3D printed lamp designs", description: "Lamp designer using 3D printing. 5.3K likes.", verified: false, bestPostLikes: "5.3K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 39, active: true },
-  // Tier 3: EMERGING/NICHE (8 makers)
+  // Tier 3: PIONEER (8 makers)
   { id: "ms40", handle: "fusefoxdesign", displayName: "FuseFox Design (Tactocrat)", tier: 3, specialty: "Magnetic spring mechanisms", description: "Magnetic spring mechanism specialist. HexIsle partner candidate. ~2K likes.", verified: false, bestPostLikes: "2K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: true, slipCastingPioneer: false, rotationOrder: 40, active: true },
   { id: "ms41", handle: "greg.dean.mann", displayName: "Greg Dean Mann", tier: 3, specialty: "Lamp design", description: "Lamp designer. ~1K likes.", verified: false, bestPostLikes: "1K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 41, active: true },
   { id: "ms42", handle: "moritz__walter", displayName: "Moritz Walter", tier: 3, specialty: "Tool design", description: "Tool designer and maker. ~1K likes.", verified: false, bestPostLikes: "1K", sellsOn: null, externalUrl: null, lbProjectUrl: null, imageUrl: null, category: "maker", hexisleRelevant: false, slipCastingPioneer: false, rotationOrder: 42, active: true },

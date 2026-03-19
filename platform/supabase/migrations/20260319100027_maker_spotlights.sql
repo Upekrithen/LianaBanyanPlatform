@@ -35,7 +35,7 @@ CREATE POLICY "Admins manage spotlights" ON maker_spotlights
 
 -- Seed the 47 creators from Instagram Factor-y collection
 INSERT INTO maker_spotlights (handle, display_name, tier, specialty, description, verified, best_post_likes, sells_on, category, hexisle_relevant, slip_casting_pioneer, rotation_order) VALUES
--- Tier 1: HIGH-VALUE
+-- Tier 1: ESTABLISHED
 ('forgecoreco', 'ForgeCore Co', 1, 'Plant accessories, coasters, sports toys', 'High-volume 3D print manufacturer with 514K+ likes. Plant accessories, coasters, and sports toys.', true, '514K', 'Own site', 'maker', false, false, 1),
 ('nicholepaclibar', 'Nichole Paclibar', 1, 'Product influencer', 'Product influencer with 664K likes reach. Amazon affiliate network.', true, '664K', 'Amazon affiliate', 'influencer', false, false, 2),
 ('loftedgoods', 'Lofted Goods', 1, 'Wall-mount planters with drip jars', 'Innovative wall-mount planters with integrated drip jar systems. STL file seller.', true, '230K', 'STL files', 'maker', false, false, 3),
@@ -60,7 +60,7 @@ INSERT INTO maker_spotlights (handle, display_name, tier, specialty, description
 ('josefprusa', 'Josef Prusa', 1, 'Prusa Research founder', 'Founder of Prusa Research — legendary 3D printer manufacturer. 31.4K likes.', true, '31.4K', 'Printables.com', 'maker', false, false, 22),
 ('pyahik', 'Pyahik', 1, 'Resin keychains, small business', 'Resin keychain artisan with dedicated shop. 31.8K likes.', true, '31.8K', 'Own shop', 'maker', false, false, 23),
 ('dinarakasko', 'Dinara Kasko', 1, 'Silicone mold cake design', 'Silicone mold cake/pastry designer. Food + manufacturing crossover. 24.7K likes.', true, '24.7K', 'Own mold shop', 'food', false, true, 24),
--- Tier 2: MID-VALUE
+-- Tier 2: RISING
 ('yird_ceramics', 'Yird Ceramics', 2, 'Slip cast cups with plaster molds', 'Traditional slip casting with plaster molds. 25.6K likes.', false, '25.6K', NULL, 'maker', false, true, 25),
 ('turn.studio', 'Turn Studio', 2, 'Full slip casting pipeline', 'Full 3D to silicone to plaster to porcelain pipeline. 23.1K likes.', false, '23.1K', NULL, 'maker', false, true, 26),
 ('bloblab3d', 'BlobLab 3D', 2, 'Character design (Blob Beetles)', 'Character designer specializing in Blob Beetles. 22.1K likes.', false, '22.1K', NULL, 'maker', false, false, 27),
@@ -76,7 +76,7 @@ INSERT INTO maker_spotlights (handle, display_name, tier, specialty, description
 ('printsculptors', 'Print Sculptors', 2, 'Fidget toys, clickers', 'Fidget toy and clicker specialist. 40.6K likes.', true, '40.6K', NULL, 'maker', false, false, 37),
 ('krakdrag3d', 'KrakDrag 3D', 2, 'Cyber Cat headphone holder', 'Cyber Cat headphone holder designer. 63.3K likes.', false, '63.3K', NULL, 'maker', false, false, 38),
 ('elden_designs', 'Elden Designs', 2, '3D printed lamp designs', 'Lamp designer using 3D printing. 5.3K likes.', false, '5.3K', NULL, 'maker', false, false, 39),
--- Tier 3: EMERGING/NICHE
+-- Tier 3: PIONEER
 ('fusefoxdesign', 'FuseFox Design (Tactocrat)', 3, 'Magnetic spring mechanisms', 'Magnetic spring mechanism specialist. HexIsle partner candidate. ~2K likes.', false, '2K', NULL, 'maker', true, false, 40),
 ('greg.dean.mann', 'Greg Dean Mann', 3, 'Lamp design', 'Lamp designer. ~1K likes.', false, '1K', NULL, 'maker', false, false, 41),
 ('moritz__walter', 'Moritz Walter', 3, 'Tool design', 'Tool designer and maker. ~1K likes.', false, '1K', NULL, 'maker', false, false, 42),
