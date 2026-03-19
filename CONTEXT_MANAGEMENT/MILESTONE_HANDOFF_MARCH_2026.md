@@ -9,7 +9,49 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 47 (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 48 (March 19, 2026)
+
+**Latest commit:** `c2398d4` — Session 48: MoneyPenny Edge Functions Phase 2, RLS Phase 2, Content Pipeline build
+**Previous commit:** `42203c8` — Session 47: RLS hardening migration
+
+**Status (March 19, 2026 — Session 48):**
+- Platform deployed and live: lianabanyan-main.web.app (**658 files**)
+- 2 new edge functions: `moneypenny-auto-post`, `moneypenny-intake`
+- 2 new migrations pushed: `20260319200002` (RLS Phase 2 + auto-post columns), `20260319200003` (content pipeline seeds)
+- RLS Phase 2 complete: matchtrade, project_invitations, 9 admin tables hardened
+- Content Pipeline fully functional: edit, status transitions, dispatch linking, Cephas sync tracking
+- MoneyPenny auto-posting: Approve & Post button, Post All Approved
+- Git origin up to date.
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.**
+
+### What Was Done (Session 48 — Knight)
+
+#### Feature 1: MoneyPenny Edge Functions Phase 2
+
+- **`moneypenny-auto-post/index.ts`** — Edge function that finds approved-but-unposted drafts from `moneypenny_social_drafts` and approved responses from `social_interactions`, posts them via platform social accounts (Twitter, LinkedIn, Facebook, Bluesky). Supports single-item posting via `draftId`/`interactionId`, dry run mode, and logs runs to `moneypenny_actions`.
+- **`moneypenny-intake/index.ts`** — Email classification webhook. Accepts Gmail Pub/Sub or direct POST. Classifies emails by sender domain into categories (crown_response, press, patent, member, support) with priority 1-4. Creates `moneypenny_inbox` entries, auto-generates `moneypenny_actions` for P1-P2 emails, creates `red_carpet_signals` for crown/press contacts. Deduplicates via `messageId`.
+- **MoneyPenny.tsx** — Added "Approve & Post" button (green, with Zap icon + loading spinner), "Post All Approved" button in Social tab header, post URL display with external link for posted drafts.
+- **Migration `20260319200002`** — Added `post_url` column to `moneypenny_social_drafts`.
+
+#### Feature 2: RLS Phase 2 Hardening
+
+In same migration `20260319200002`:
+- **matchtrade_offers**: Replaced `FOR ALL USING (true)` with owner-based policies (owner CRUD own rows, all authenticated SELECT, admin override)
+- **matchtrade_matches**: Admin-only write, all authenticated SELECT
+- **project_invitations**: Replaced broad `auth.uid() IS NOT NULL` SELECT with scoped policy (invitee + inviter + admin)
+- **9 admin tables**: tereno_certifications, tereno_exclusions, c20_pricing_examples, node_captain_profiles, production_campaigns, production_stamps, star_chamber_cases, santa_gifts, captain_collateral_profiles — all replaced `auth.uid() IS NOT NULL` with `public.is_admin()`
+
+#### Feature 3: Content Pipeline Build
+
+- **contentPipeline.ts** — 7 new functions: `updateContent` (edit metadata), `updateStageContent` (edit in-place), `setContentStatus` (status transitions), `archiveContent`, `deleteContent`, `linkToDispatch` (create outbound_dispatch link), `updateCephasSync`
+- **ContentPipelinePage.tsx** — Inline edit mode for metadata (title, subtitle, category, tags), inline content editor for stage text, full status transition chain (draft → review → approved → published → archived), dispatch linking buttons (twitter, linkedin, medium), Cephas sync status indicator, archive and delete buttons
+- **Migration `20260319200003`** — 5 seed content items: "Cost + 20% Why It Matters" (blog, published), "Shadow Marks Reputation Without Surveillance" (tldr, draft), "Defense Klaus For Someone You Love" (seed, draft), "The Muffled Rule Fair Debate" (article, review), "The Sweet Sixteen" (seed, draft)
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 47 (March 18, 2026)
 
 **Latest commit:** `42203c8` — Session 47: RLS hardening migration
 **Previous commits:** `ed1bdb3` (FAQ See Also), `20384d6` (6 pages wired to Supabase)
@@ -211,16 +253,21 @@ All tables have full RLS policies. Seed data included where specified in prompts
 - **Platform**: lianabanyan-main.web.app (640 files)
 - **Migrations**: 000008-000020 all pushed to Supabase (13 migrations total this session)
 
-### Pending Work (Session 48+)
+### Pending Work (Session 49+)
 
 | Item | Status |
 |------|--------|
 | ~~Wire remaining other-session pages to Supabase~~ | **DONE (47)** |
 | ~~FAQ page "See Also" rendering for relatedEntries~~ | **DONE (47)** |
 | ~~RLS security hardening (P0/P1)~~ | **DONE (47)** |
-| RLS hardening Phase 2 (P2 — matchtrade, missing_admin_tables, project_invitations) | MEDIUM |
-| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | NEXT |
-| Content Pipeline build | MEDIUM |
+| ~~RLS hardening Phase 2 (matchtrade, admin_tables, project_invitations)~~ | **DONE (48)** |
+| ~~MoneyPenny Edge Functions Phase 2 (auto-posting, Gmail forwarding)~~ | **DONE (48)** |
+| ~~Content Pipeline build~~ | **DONE (48)** |
+| Deploy moneypenny-auto-post and moneypenny-intake edge functions to Supabase | NEXT |
+| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | NEXT |
+| Content Pipeline → Cephas auto-sync (generate Hugo markdown from published content) | MEDIUM |
+| Content Pipeline → Cue Card minting integration | MEDIUM |
+| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
 
 ---
 
