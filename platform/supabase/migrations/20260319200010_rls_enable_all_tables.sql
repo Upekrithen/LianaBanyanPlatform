@@ -46,7 +46,6 @@ BEGIN
           AND c.relkind = 'r'
           AND c.relrowsecurity
     LOOP
-        -- Check if any SELECT or ALL policy exists
         SELECT EXISTS (
             SELECT 1 FROM pg_policies
             WHERE schemaname = 'public'
@@ -55,11 +54,15 @@ BEGIN
         ) INTO has_select;
 
         IF NOT has_select THEN
-            RAISE NOTICE 'Adding authenticated SELECT to locked-out table: %', t.tablename;
-            EXECUTE format(
-                'CREATE POLICY "Authenticated read %s" ON public.%I FOR SELECT TO authenticated USING (true)',
-                t.tablename, t.tablename
-            );
+            BEGIN
+                RAISE NOTICE 'Adding authenticated SELECT to locked-out table: %', t.tablename;
+                EXECUTE format(
+                    'CREATE POLICY "Authenticated read %s" ON public.%I FOR SELECT TO authenticated USING (true)',
+                    t.tablename, t.tablename
+                );
+            EXCEPTION WHEN duplicate_object THEN
+                RAISE NOTICE 'Policy already exists for %, skipping', t.tablename;
+            END;
         END IF;
     END LOOP;
 END;
@@ -270,20 +273,24 @@ BEGIN
             'pantry_ingredients_master',
             'cottage_law_rules',
             'innovation_log',
-            'current_metrics',
             'votable_items'
         ])
     LOOP
         IF EXISTS (SELECT 1 FROM information_schema.tables
-                   WHERE table_schema = 'public' AND table_name = tbl) THEN
-            EXECUTE format(
-                'DROP POLICY IF EXISTS "Authenticated read %s" ON public.%I',
-                tbl, tbl
-            );
-            EXECUTE format(
-                'CREATE POLICY "Public read %s" ON public.%I FOR SELECT USING (true)',
-                tbl, tbl
-            );
+                   WHERE table_schema = 'public' AND table_name = tbl
+                     AND table_type = 'BASE TABLE') THEN
+            BEGIN
+                EXECUTE format(
+                    'DROP POLICY IF EXISTS "Authenticated read %s" ON public.%I',
+                    tbl, tbl
+                );
+                EXECUTE format(
+                    'CREATE POLICY "Public read %s" ON public.%I FOR SELECT USING (true)',
+                    tbl, tbl
+                );
+            EXCEPTION WHEN duplicate_object THEN
+                RAISE NOTICE 'Policy already exists for %, skipping', tbl;
+            END;
         END IF;
     END LOOP;
 END;

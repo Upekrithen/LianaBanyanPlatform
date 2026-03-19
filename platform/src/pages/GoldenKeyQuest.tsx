@@ -347,8 +347,8 @@ export default function GoldenKeyQuest() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground space-y-2">
-              <p>Read an academic paper on Cephas, then test your comprehension.</p>
-              <p>Two paths: <strong>Self-attest</strong> you read the full paper (10 Marks), or <strong>take a quiz</strong> (2 Marks per correct answer, up to 10).</p>
+              <p>Read a Crown letter or academic paper on Cephas, then test your comprehension.</p>
+              <p>Two paths: <strong>Self-attest</strong> you read the full document (10 Marks), or <strong>take a quiz</strong> (2 Marks per correct answer, up to 10).</p>
               <p>Questions test genuine understanding — not memorization. Each quiz pulls from a larger pool, so retakes have fresh questions.</p>
             </CardContent>
           </Card>
@@ -371,10 +371,17 @@ export default function GoldenKeyQuest() {
                         {pq.questionCount} questions · Up to {pq.questionCount * pq.marksPerCorrect} Marks
                       </p>
                       <div className="flex items-center gap-2 mt-2">
-                        <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[10px]">
-                          <Key className="w-3 h-3 mr-0.5" />
-                          Golden Key
-                        </Badge>
+                        {pq.paperId?.startsWith("crown-") ? (
+                          <Badge className="bg-purple-500/10 text-purple-600 border-purple-500/20 text-[10px]">
+                            <Crown className="w-3 h-3 mr-0.5" />
+                            Crown Letter
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[10px]">
+                            <Key className="w-3 h-3 mr-0.5" />
+                            Golden Key
+                          </Badge>
+                        )}
                         <Badge variant="outline" className="text-[10px]">
                           {pq.maxAttempts} attempts
                         </Badge>

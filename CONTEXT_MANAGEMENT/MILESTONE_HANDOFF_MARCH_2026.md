@@ -9,20 +9,158 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 50 (March 19, 2026)
+## RUNWAY / SESSION STOP (current) — Session 52 (March 19, 2026)
 
-**Latest commit:** `3c9d7a6` — Session 50: Edge Functions Phase 3 + Proteus Anchor System + Maker Spotlight 47 expansion
+**Latest commit:** `TBD` — Session 52: Crown Quiz Seeding + Platform Smoke Test
+**Previous commit:** `3617702` (Session 51)
+
+**Status (March 19, 2026 — Session 52 COMPLETE):**
+- Platform deployed: **661 files** at lianabanyan-main.web.app
+- Supabase migration pushed: `20260319200011` (Crown letter quiz seed — 8 quizzes, 64 questions)
+- Fixed migration `20260319200010` (idempotency fix for duplicate policy + `current_metrics` view exclusion)
+- Platform smoke test: **35/35 passed** (21 routes + build integrity + asset reachability)
+- **All committed and pushed to origin**
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.**
+
+### What Was Done (Session 52 — Knight)
+
+#### Feature 1: Golden Key Quiz Seeding — 8 Crown Letters × 8 Questions
+
+- **Migration `20260319200011_crown_letter_quiz_seed.sql`** — 64 comprehension questions across 8 Crown letters:
+  - Maneet Chauhan (Let's Make Dinner) — 8 questions
+  - Mary Beth Laughton (Let's Go Shopping) — 8 questions
+  - Kimberly A. Williams (Rally Group) — 8 questions
+  - Cathie Mahon (MSA) — 8 questions
+  - Dale Dougherty (Let's Make Bread) — 8 questions
+  - José Andrés (Let's Get Groceries) — 8 questions
+  - Taylor Swift (JukeBox) — 8 questions
+  - Muhammad Yunus (International Initiative) — 8 questions
+- Each quiz: `paper_id` matches Cephas slug, `paper_url` links to Cephas page, 5 questions per attempt (2 easy + 2 medium + 1 hard), 2 Marks per correct, max 3 attempts, 10 Marks self-attest
+- **Back-filled `paper_id`** on Scott/Buffett quizzes so they appear in `getQuizByPaperId()` lookup
+- **Frontend update** (`GoldenKeyQuest.tsx`): Crown letter quizzes display with purple Crown badge, academic quizzes keep amber Golden Key badge. Description text updated.
+- **Total quizzes in system:** 14 (4 academic + 2 open letters + 8 Crown letters)
+
+#### Feature 2: Platform Smoke Test — 21 Critical Routes
+
+- **`platform/scripts/smoke-test.mjs`** — Automated 3-phase smoke test:
+  - Phase 1: Build output integrity (index.html, root div, script tags, JS/CSS bundle counts)
+  - Phase 2: Preview server + 21 route checks (Homepage, Auth, Ghost World, Portal, Launch Hub, FAQ, Terms, Privacy, Patent Portfolio, Developers, Red Carpet, Forward, Browse Marketplace, Economics, Hard Knocks, Pedestals, Why No Ads, Fly on the Wall, Golden Key Quest, Dashboard, The Keep)
+  - Phase 3: Asset reachability (key JS/CSS bundles from index.html)
+- **Wired as `npm run smoke`** in `package.json`
+- Results: **35 passed, 0 failed**
+
+#### Fix: Migration 200010 Idempotency
+
+- Added `EXCEPTION WHEN duplicate_object` handler to Step 2 (authenticated SELECT policy creation)
+- Removed `current_metrics` from Step 4 public-read list (it's a view, not a table)
+- Added `table_type = 'BASE TABLE'` filter to Step 4 to prevent future view conflicts
+- Both migrations `200010` + `200011` now successfully pushed
+
+---
+
+### Pending Work (Session 53+)
+
+| Item | Status |
+|------|--------|
+| ~~Golden Key Quiz Seeding — 8 Crown letters x 8 questions~~ | **DONE (52)** |
+| ~~Platform Smoke Test — 21 critical routes~~ | **DONE (52)** |
+| Content Pipeline → Cephas auto-sync | MEDIUM |
+| Content Pipeline → Cue Card minting integration | MEDIUM |
+| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
+| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 51 (March 19, 2026)
+
+**Latest commit:** `3617702` — Session 51: Pudding Styles + Cephas nav + RLS Phase 3
+**Previous commits:** `1d8550d` + `3c9d7a6` (Session 50)
+
+**Status (March 19, 2026 — Session 51 COMPLETE):**
+- Cephas deployed: **1,157 pages, 1,660 files** (was 1,145/1,640)
+- RLS Phase 3 migrations pushed: `20260319200009` + `20260319200010`
+- Pudding Styles wired and live on Cephas (CSS/JS/shortcodes/letter layout)
+- Dale Dougherty letter: proof-of-concept with 7 Pudding shortcodes
+- Letters Directory on Cephas homepage with 9 category cards
+- Nav menu updated: +Letters, +Innovations
+- **All committed and pushed to origin**
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.**
+
+### What Was Done (Session 51 — Knight)
+
+#### Feature 1: Pudding Styles Integration on Cephas
+
+- **`layouts/partials/extend_head.html`** — Wires pudding.css into PaperMod's head. The existing `head-additions.html` was never loaded because PaperMod expects `extend_head.html`.
+- **`layouts/partials/extend_footer.html`** — Wires pudding.js into PaperMod's footer. Same fix.
+- **`layouts/letters/single.html`** — Letter-specific layout override: auto-injects reading progress bar, Red Carpet CTA ("Vote to Elevate"), inherits PaperMod's full single page structure (breadcrumbs, meta, cover, toc, tags, nav links, share icons).
+- **Dale Dougherty proof-of-concept** — Letter updated with front matter + 7 Pudding shortcodes:
+  - 3x `pudding-sticky-quote` (founder quote, Dougherty quotes, closing manifesto)
+  - 2x `pudding-reveal` (Maker Faire stats, Let's Make Bread bullets, enclosures)
+  - 1x `pudding-compare` (Traditional 30-50% vs Liana Banyan 16.7%)
+  - 2x `pudding-stat` (14 initiatives, 1,200+ Fusion 360 diagrams)
+- **Auto-wrap behavior** — `pudding.js` automatically wraps h2/h3 headings, blockquotes, and tables in scroll-triggered reveal animations on all non-paper pages.
+
+#### Feature 2: Cephas Navigation Enhancement
+
+- **`content/letters/_index.md`** — Full category directory with descriptions and counts (94 letters, 9 categories).
+- **`content/letters/crown-initiative/_index.md`** — New index: "22 letters across the Sweet Sixteen Initiatives."
+- **`content/letters/health/_index.md`** — New index: "3 letters — healthcare access and community wellness."
+- **`layouts/partials/home_info.html`** — Homepage override: adds Letters Directory grid below the existing Cephas tagline. 9 category cards with counts, descriptions, and a "Browse All Letters" link.
+- **`config.toml`** — Menu updated: +Letters (weight 1), +Innovations (weight 3). Articles shifted to weight 2. All other items re-weighted.
+
+#### Feature 3: RLS Phase 3 — Comprehensive Hardening
+
+- **`20260319200009_rls_phase3_hardening.sql`** — Single migration, 22 steps:
+  - **Step 1:** Drops `Baseline Auth Write Access` from ALL public tables (the blanket `USING (true) WITH CHECK (true)` policy from `security_advisor_rls_fix`)
+  - **Steps 2-16:** Table-specific write policies:
+    - 50+ admin-only tables (system config, financial, governance, production, manufacturing)
+    - Owner-check policies for user-owned tables (profiles, pledges, proposals, votes, task_log, portfolios, preferences)
+    - Authenticated INSERT-only for analytics/tracking tables (impressions, clicks, shares)
+    - Ambassador self-management policies
+    - Paper quiz attempt tracking
+    - Family/gift table owner access
+  - **Step 17-21:** Service node, grocery, social, onboarding specific policies
+  - **Step 22:** Catch-all fallback — any remaining table without a write policy gets admin-only write
+- **Fixed specific vulnerabilities:**
+  - `admin_notifications` INSERT: was `WITH CHECK (TRUE)`, now restricted to admin + service_role
+  - `creator_invites` UPDATE: was `USING (true)`, removed
+  - `project_drafts` INSERT/UPDATE: was `WITH CHECK (true)`, removed
+  - Blanket write removed from 100+ tables
+
+---
+
+### Pending Work (Session 52+)
+
+| Item | Status |
+|------|--------|
+| ~~Pudding Styles integration on Cephas~~ | **DONE (51)** |
+| ~~Cephas navigation enhancement~~ | **DONE (51)** |
+| ~~RLS Phase 3 — complete hardening~~ | **DONE (51)** |
+| Golden Key Quiz Seeding — 8 Crown letters x 8 questions (Session 54B) | NEXT |
+| Platform Smoke Test — 21 critical routes (Session 54C) | NEXT |
+| Content Pipeline → Cephas auto-sync | MEDIUM |
+| Content Pipeline → Cue Card minting integration | MEDIUM |
+| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
+| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 50 (March 19, 2026)
+
+**Latest commits:** `1d8550d` + `3c9d7a6` — Session 50
 **Previous commit:** `563c335` — Session 49 handoff
 
-**Status (March 19, 2026 — Session 50):**
+**Status (March 19, 2026 — Session 50 COMPLETE):**
 - Platform deployed and live: lianabanyan-main.web.app (661 files)
 - Cephas deployed: **1,145 pages, 1,640 files**
 - 2 new Supabase migrations pushed: `20260319200007` (admin_notifications), `20260319200008` (proteus_anchors)
 - 4 edge functions deployed: `moneypenny-auto-post`, `refresh-social-tokens`, `admin-notify`, `social-image-upload`
 - Proteus Anchor page live at `/proteus-anchor` with HexIsle as inaugural Proteus
-- Git origin: needs commit + push
-- **Innovation count:** 1,751 (unchanged this session)
-- **Patent claims:** 1,401 across 8 provisional applications
+- **Session 50 stats:** 3 features, 12 files, 1,185 insertions
 - **No blockers.**
 
 ### What Was Done (Session 50 — Knight)
@@ -59,14 +197,10 @@
 | ~~Deploy moneypenny-auto-post + refresh-social-tokens~~ | **DONE (50)** |
 | ~~Edge Functions Phase 3 (admin-notify, social-image-upload)~~ | **DONE (50)** |
 | ~~Proteus Anchor System (Innovation #1553)~~ | **DONE (50)** |
-| Maker Spotlight: expand SAMPLE_SPOTLIGHTS to 47 makers | NEXT |
-| Pudding Styles integration into Cephas content (Session 53 prompt) | MEDIUM |
-| Cephas navigation enhancement (Session 53 prompt) | MEDIUM |
-| RLS Phase 3 + Golden Key Quiz Seeding (Session 54 prompt) | MEDIUM |
-| Content Pipeline → Cephas auto-sync | MEDIUM |
-| Content Pipeline → Cue Card minting integration | MEDIUM |
-| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
-| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
+| ~~Maker Spotlight: expand SAMPLE_SPOTLIGHTS to 47 makers~~ | **DONE (50)** |
+| ~~Pudding Styles integration on Cephas~~ | **DONE (51)** |
+| ~~Cephas navigation enhancement~~ | **DONE (51)** |
+| ~~RLS Phase 3 — complete hardening~~ | **DONE (51)** |
 
 ---
 
