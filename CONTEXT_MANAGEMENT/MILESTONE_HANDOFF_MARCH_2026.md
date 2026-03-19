@@ -9,7 +9,39 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 46B (March 18, 2026)
+## RUNWAY / SESSION STOP (current) — Session 47 (March 18, 2026)
+
+**Latest commit:** `20384d6` — Session 47: Wire 6 other-session pages to Supabase — full CRUD + stats
+**Previous commit:** `8c8ad85` — Session 46B: MoneyPenny QA + Social wired to Supabase
+
+**Status (March 18, 2026 — Session 47):**
+- Platform deployed and live: lianabanyan-main.web.app (**656 files**, up from 652)
+- All 6 remaining other-session pages now fully wired to Supabase with write operations + stats aggregation.
+- UI buttons wired: Oops Code (Santa), Apply STAMP (NodeCaptain), Crew Apply (Manufacturing).
+- **Innovation count:** 1,751 (unchanged this session)
+- **Patent claims:** 1,401 across 8 provisional applications
+- **No blockers.**
+
+### What Was Done (Session 47 — Knight)
+
+#### Task: Wire 6 Other-Session Pages to Supabase (Full CRUD + Stats)
+
+All 6 services already had read functions querying Supabase with sample fallback (committed in 46B). This session added **write operations** and **stats aggregation** to bring them up to the same level as MoneyPennyQA and Social services.
+
+| Service | Reads (already done) | Writes Added | Stats Added | UI Wired |
+|---------|---------------------|-------------|-------------|----------|
+| `santaService.ts` | fetchSentGifts, fetchReceivedGifts, fetchCaptains, fetchCaptainProfile | createGift, assignCaptain, confirmGift, markDelivered, completeGift, activateOopsCode | fetchSantaStats | Oops Code button |
+| `starChamberService.ts` | fetchCases, fetchUserCases | createCase, updateCaseStatus, addJudgeAnalysis, setRecommendedAction, setFinalAction, setFounderOverride | fetchChamberStats | — |
+| `nodeCaptainService.ts` | fetchNodeCaptains, fetchProductionCampaigns, fetchStamps | createCampaign, updateCampaignStatus, applyStamp | fetchNodeStats | Apply STAMP button |
+| `c20Service.ts` | fetchC20Examples | addC20Example, deleteC20Example | — (read-only page) | — |
+| `terenoCertificationService.ts` | fetchCertifications, fetchExclusions | submitCertification, approveCertification, rejectCertification | fetchCertStats | — |
+| `manufacturingService.ts` | fetchModules, fetchCrewApplications | applyForCrew, reviewCrewApplication, updateModuleStatus | fetchForgeStats | Crew Apply buttons |
+
+**Pattern:** Every write function uses `try/catch` with Supabase insert/update, returns `null`/`false` on failure. Stats functions aggregate from DB with sample fallback on error.
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Session 46B (March 18, 2026)
 
 **Latest commit:** `8c8ad85` — Session 46B: MoneyPenny QA + Social wired to Supabase — 5 migrations, 6 other-session migrations fixed
 **Previous commit:** `8bb22d5` — Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes
@@ -162,14 +194,14 @@ All tables have full RLS policies. Seed data included where specified in prompts
 - **Platform**: lianabanyan-main.web.app (640 files)
 - **Migrations**: 000008-000020 all pushed to Supabase (13 migrations total this session)
 
-### Pending Work (Session 47+)
+### Pending Work (Session 48+)
 
 | Item | Status |
 |------|--------|
 | ~~BISHOP Session 46 Task A: MoneyPenny Q&A Supabase wiring~~ | **DONE (46B)** |
 | ~~BISHOP Session 46 Task B: Social Media Command Center Supabase wiring~~ | **DONE (46B)** |
-| Wire remaining other-session pages to Supabase (Santa, StarChamber, NodeCaptain, C+20, Tereno, Modular Mfg) | NEXT |
-| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | MEDIUM |
+| ~~Wire remaining other-session pages to Supabase (Santa, StarChamber, NodeCaptain, C+20, Tereno, Modular Mfg)~~ | **DONE (47)** |
+| Moneypenny Edge Functions Phase 2 — auto-posting, Gmail forwarding | NEXT |
 | FAQ page "See Also" rendering for relatedEntries | MEDIUM |
 | Content Pipeline build | MEDIUM |
 | RLS security hardening | MEDIUM |
@@ -1591,6 +1623,7 @@ The 22 skeleton placeholders now have source material. The following files in `A
 ## LATEST COMMITS
 
 ```
+20384d6 Session 47: Wire 6 other-session pages to Supabase -- full CRUD + stats for Santa, StarChamber, NodeCaptain, C+20, Tereno, Manufacturing
 8c8ad85 Session 46B: MoneyPenny QA + Social wired to Supabase — 5 migrations, 6 other-session migrations fixed and pushed, both services live with sample fallback
 8bb22d5 Session 46: Wire 5 pages to Supabase — BandWagon, StewardDashboard, XPLeaderboard, CrewCall, CoverageMinutes live queries with sample fallback
 796607d Sessions 40-45: 7 new pages (StoreTemplates, ShowcasePromotion, GhostWorldMall, MemberAgreement, CreatorDraftPick, TrickleOnboarding, VouchSystem) + routes + sidebar nav
