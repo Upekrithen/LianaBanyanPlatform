@@ -9,20 +9,70 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Session 52 (March 19, 2026)
+## RUNWAY / SESSION STOP (current) — Session 53 (March 19, 2026)
 
-**Latest commit:** `TBD` — Session 52: Crown Quiz Seeding + Platform Smoke Test
-**Previous commit:** `3617702` (Session 51)
+**Latest commit:** `TBD` — Session 53: Moneypenny SMS + Quiz Fix
+**Previous commit:** `dc0eabe` (Session 52)
 
-**Status (March 19, 2026 — Session 52 COMPLETE):**
+**Status (March 19, 2026 — Session 53 COMPLETE):**
 - Platform deployed: **661 files** at lianabanyan-main.web.app
-- Supabase migration pushed: `20260319200011` (Crown letter quiz seed — 8 quizzes, 64 questions)
-- Fixed migration `20260319200010` (idempotency fix for duplicate policy + `current_metrics` view exclusion)
-- Platform smoke test: **35/35 passed** (21 routes + build integrity + asset reachability)
+- Supabase migrations pushed: `20260320000001` (Moneypenny SMS) + `20260320000002` (quiz fix)
+- Edge Function deployed: `moneypenny-sms` (Twilio webhook + outbound queue + Claude AI replies)
+- Quiz fix: Taylor Swift + Muhammad Yunus → Alex Oshmyansky + Ruth Glenn
+- Platform smoke test: **35/35 passed**
 - **All committed and pushed to origin**
-- **Innovation count:** 1,751 (unchanged this session)
+- **Innovation count:** 1,751 (unchanged — SMS is Innovation #1754)
 - **Patent claims:** 1,401 across 8 provisional applications
-- **No blockers.**
+- **FOUNDER ACTION NEEDED:** Twilio setup (see below)
+
+### Founder Action: Moneypenny SMS Activation
+
+1. Sign up at twilio.com (or use existing account)
+2. Buy a phone number (~$1.15/month)
+3. Set secrets:
+   ```
+   supabase secrets set TWILIO_ACCOUNT_SID=ACXXXXXXXX
+   supabase secrets set TWILIO_AUTH_TOKEN=XXXXXXXX
+   supabase secrets set TWILIO_PHONE_NUMBER=+1XXXXXXXXXX
+   supabase secrets set FOUNDER_PHONE_NUMBER=+1XXXXXXXXXX
+   supabase secrets set ANTHROPIC_API_KEY=sk-ant-XXXXXXXX
+   ```
+4. In Twilio Console → Phone Number → Messaging webhook:
+   `https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1/moneypenny-sms`
+5. Text Moneypenny. She's live.
+
+### What Was Done (Session 53 — Knight)
+
+#### Feature 1: Moneypenny SMS Gateway (URGENT — deployed)
+
+- **Migration `20260320000001_moneypenny_sms.sql`** — 3 tables: `moneypenny_sms_queue` (outbound), `moneypenny_sms_log` (audit trail), `moneypenny_sms_schedules` (Phase 3 templates). RLS admin-only + service-role bypass. Indexes on pending queue and conversation log.
+- **Edge Function `moneypenny-sms`** — Deno/Supabase. Two modes:
+  - INBOUND: Twilio webhook receives Founder's text → security check (Founder phone only) → conversation history → Claude Sonnet reply → Twilio send → log
+  - OUTBOUND: Process queued messages (other Edge Functions insert into `sms_queue`) + direct send API
+- System prompt: Moneypenny personality, SEC-safe language, quick commands (status/inbox/deploy/next/approve), short replies (160-320 chars)
+- Deployed with `--no-verify-jwt` (required for Twilio webhook — form data, not JWT)
+
+#### Feature 2: Quiz Fix — Correct Crown Selection
+
+- **Migration `20260320000002_quiz_fix_crown_selection.sql`** — Deletes Taylor Swift + Muhammad Yunus quizzes, inserts Alex Oshmyansky (Lifeline Medications) + Ruth Glenn (Defense Klaus) with 8 questions each
+- Now matches Bishop's BA spec: the correct 8 Crown ambassadors
+- **Final quiz roster (14 total):** 4 academic + 2 open letters (Scott, Buffett) + 8 Crown (Maneet Chauhan, Mary Beth Laughton, Kimberly Williams, Cathie Mahon, Dale Dougherty, José Andrés, Alex Oshmyansky, Ruth Glenn)
+
+---
+
+### Pending Work (Session 54+)
+
+| Item | Status |
+|------|--------|
+| ~~Moneypenny SMS deployment~~ | **DONE (53)** |
+| ~~Quiz fix: Swift/Yunus → Oshmyansky/Glenn~~ | **DONE (53)** |
+| Founder: Twilio setup + secrets | **FOUNDER ACTION** |
+| Content Pipeline → Cephas auto-sync | MEDIUM |
+| Content Pipeline → Cue Card minting integration | MEDIUM |
+| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
+| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
+
+---
 
 ### What Was Done (Session 52 — Knight)
 
@@ -60,16 +110,9 @@
 
 ---
 
-### Pending Work (Session 53+)
+## RUNWAY / SESSION STOP (previous) — Session 52 (March 19, 2026)
 
-| Item | Status |
-|------|--------|
-| ~~Golden Key Quiz Seeding — 8 Crown letters x 8 questions~~ | **DONE (52)** |
-| ~~Platform Smoke Test — 21 critical routes~~ | **DONE (52)** |
-| Content Pipeline → Cephas auto-sync | MEDIUM |
-| Content Pipeline → Cue Card minting integration | MEDIUM |
-| Social media cron: wire process-scheduled-posts to use member_social_accounts | LOW |
-| Gmail forwarding setup (Google Cloud Pub/Sub → moneypenny-intake webhook) | LOW |
+**Latest commit:** `dc0eabe` — Session 52: Crown Quiz Seeding + Platform Smoke Test
 
 ---
 
