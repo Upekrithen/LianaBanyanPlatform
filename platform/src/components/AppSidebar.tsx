@@ -53,6 +53,8 @@ const marketplaceMainItems = [
   { title: "Star Chamber", url: "/star-chamber", icon: Scale },
   { title: "Tereno Certification", url: "/tereno-certification", icon: Award },
   { title: "The Forge", url: "/the-forge", icon: Factory },
+  { title: "Maker Spotlight", url: "/maker-spotlight", icon: Star },
+  { title: "Designed to Be Broken", url: "/designed-to-be-broken", icon: Hammer },
 ];
 
 const marketplaceAdminItems = [
