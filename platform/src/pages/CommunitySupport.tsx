@@ -32,6 +32,7 @@ import {
   Scale,
   Rss,
 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { StackOverflowFeedWidget } from "@/components/StackOverflowFeedWidget";
 import {
   SO_TAG_URL,
@@ -83,17 +84,17 @@ const SUPPORT_TOPICS = [
 
 export default function CommunitySupport() {
   return (
-    <div className="container mx-auto py-8 max-w-4xl">
+    <PortalPageLayout maxWidth="lg" xrayId="community-support-page">
       {/* Hero Section */}
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-orange-500 rounded-full text-white">
           <HelpCircle className="h-8 w-8" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-foreground dark:text-white">
             Community Support
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-slate-400">
             Public Q&A powered by Stack Overflow. Members help members.
           </p>
         </div>
@@ -249,6 +250,6 @@ export default function CommunitySupport() {
           </Card>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

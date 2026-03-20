@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Pill, Factory, Heart, ShieldCheck, FileText, Stethoscope, 
-  ArrowRight, Search, Activity, AlertCircle, Plus 
+  ArrowRight, Search, Activity, AlertCircle, Plus, CheckCircle2 
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { SWOOPVoting } from "@/components/SWOOPVoting";
-import '@/styles/landing.css';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 
 export default function LifeLineMedicationsPage() {
@@ -20,22 +20,16 @@ export default function LifeLineMedicationsPage() {
 
   return (
     <LaunchConditionOverlay initiativeSlug="lifeline-medications" initiativeName="LifeLine Medications">
-    <div className="landing-page min-h-screen bg-slate-50">
-      <div className="landing-title">
-        <span className="liana">Liana</span>
-        <span className="banyan">Banyan</span>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+    <PortalPageLayout maxWidth="xl" xrayId="lifeline-medications-page">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div>
             <Badge variant="outline" className="mb-4 text-rose-600 border-rose-600 bg-rose-50">Initiative #6</Badge>
-            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+            <h1 className="text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
               <Pill className="h-10 w-10 text-rose-600" />
               Tatiana Schlossburg Health Accords
             </h1>
-            <p className="mt-2 text-xl text-slate-600 max-w-2xl">
+            <p className="mt-2 text-xl text-muted-foreground max-w-2xl">
               Affordable prescriptions, navigating medical systems, and ethical manufacturing at Cost+20%.
             </p>
           </div>
@@ -60,17 +54,17 @@ export default function LifeLineMedicationsPage() {
         </div>
 
         <Tabs defaultValue="pharmacy" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto p-1 bg-slate-200/50">
-            <TabsTrigger value="pharmacy" className="py-3 text-base data-[state=active]:bg-white">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto p-1 bg-muted/50">
+            <TabsTrigger value="pharmacy" className="py-3 text-base data-[state=active]:bg-background">
               <Pill className="w-4 h-4 mr-2" /> Cost+20% Pharmacy
             </TabsTrigger>
-            <TabsTrigger value="navigator" className="py-3 text-base data-[state=active]:bg-white">
+            <TabsTrigger value="navigator" className="py-3 text-base data-[state=active]:bg-background">
               <Stethoscope className="w-4 h-4 mr-2" /> Medical Navigators
             </TabsTrigger>
-            <TabsTrigger value="manufacturing" className="py-3 text-base data-[state=active]:bg-white">
+            <TabsTrigger value="manufacturing" className="py-3 text-base data-[state=active]:bg-background">
               <Factory className="w-4 h-4 mr-2" /> Manufacturing
             </TabsTrigger>
-            <TabsTrigger value="msa" className="py-3 text-base data-[state=active]:bg-white">
+            <TabsTrigger value="msa" className="py-3 text-base data-[state=active]:bg-background">
               <Activity className="w-4 h-4 mr-2" /> MSA Integration
             </TabsTrigger>
           </TabsList>
@@ -80,7 +74,7 @@ export default function LifeLineMedicationsPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
                 placeholder="Search for medications (e.g., Insulin, Albuterol, Lisinopril)..." 
-                className="pl-12 h-14 text-lg bg-white border-slate-300 shadow-sm"
+                className="pl-12 h-14 text-lg bg-white border-border shadow-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -97,7 +91,7 @@ export default function LifeLineMedicationsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex justify-between text-sm text-slate-500 line-through">
+                    <div className="flex justify-between text-sm text-muted-foreground line-through">
                       <span>Standard Market Rate:</span>
                       <span>\.00</span>
                     </div>
@@ -122,7 +116,7 @@ export default function LifeLineMedicationsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex justify-between text-sm text-slate-500 line-through">
+                    <div className="flex justify-between text-sm text-muted-foreground line-through">
                       <span>Standard Market Rate:</span>
                       <span>\.00</span>
                     </div>
@@ -131,7 +125,7 @@ export default function LifeLineMedicationsPage() {
                       <span>\.20</span>
                     </div>
                     <Progress value={85} className="h-1.5 mt-2" />
-                    <p className="text-xs text-slate-500 text-center">85% of funding reached for production run</p>
+                    <p className="text-xs text-muted-foreground text-center">85% of funding reached for production run</p>
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -167,26 +161,26 @@ export default function LifeLineMedicationsPage() {
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-slate-900">What an RNA does for you:</h3>
+                  <h3 className="font-semibold text-foreground">What an RNA does for you:</h3>
                   <ul className="space-y-3">
-                    <li className="flex items-start gap-2 text-sm text-slate-600">
+                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
                       <CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" />
                       <span><strong>Bill Auditing:</strong> Reviewing hospital bills for upcoding and errors (average savings: 35%).</span>
                     </li>
-                    <li className="flex items-start gap-2 text-sm text-slate-600">
+                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
                       <CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" />
                       <span><strong>Prior Authorizations:</strong> Fighting insurance denials on your behalf.</span>
                     </li>
-                    <li className="flex items-start gap-2 text-sm text-slate-600">
+                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
                       <CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" />
                       <span><strong>Care Coordination:</strong> Ensuring your specialists are actually talking to each other.</span>
                     </li>
                   </ul>
                 </div>
-                <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 flex flex-col justify-center items-center text-center">
+                <div className="bg-muted/50 p-6 rounded-xl border border-border flex flex-col justify-center items-center text-center">
                   <AlertCircle className="w-10 h-10 text-amber-500 mb-3" />
-                  <h3 className="font-bold text-slate-900 mb-2">Facing a Medical Crisis?</h3>
-                  <p className="text-sm text-slate-600 mb-4">
+                  <h3 className="font-bold text-foreground mb-2">Facing a Medical Crisis?</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
                     Do not fight the system alone while fighting for your health. Connect with an RNA immediately.
                   </p>
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
@@ -201,7 +195,7 @@ export default function LifeLineMedicationsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Factory className="h-6 w-6 text-slate-700" />
+                  <Factory className="h-6 w-6 text-foreground" />
                   The Manufacturing Pipeline
                 </CardTitle>
                 <CardDescription>
@@ -215,11 +209,11 @@ export default function LifeLineMedicationsPage() {
                       <h3 className="font-bold">Project: Open Source EpiPen</h3>
                       <Badge variant="outline" className="text-amber-600 border-amber-600">Phase 2: Prototyping</Badge>
                     </div>
-                    <p className="text-sm text-slate-600 mb-4">
+                    <p className="text-sm text-muted-foreground mb-4">
                       Developing a reusable, reliable auto-injector mechanism that bypasses existing patent thickets, utilizing the Brass Tacks manufacturing network.
                     </p>
                     <Progress value={45} className="h-2 mb-2" />
-                    <div className="flex justify-between text-xs text-slate-500">
+                    <div className="flex justify-between text-xs text-muted-foreground">
                       <span>Funding: \,000 / \,000</span>
                       <span>Estimated Completion: Q4 2026</span>
                     </div>
@@ -230,11 +224,11 @@ export default function LifeLineMedicationsPage() {
                       <h3 className="font-bold">Project: Generic Salbutamol (Albuterol)</h3>
                       <Badge variant="outline" className="text-blue-600 border-blue-600">Phase 4: FDA Approval</Badge>
                     </div>
-                    <p className="text-sm text-slate-600 mb-4">
+                    <p className="text-sm text-muted-foreground mb-4">
                       Finalizing ANDA (Abbreviated New Drug Application) submission for generic albuterol inhalers.
                     </p>
                     <Progress value={85} className="h-2 mb-2" />
-                    <div className="flex justify-between text-xs text-slate-500">
+                    <div className="flex justify-between text-xs text-muted-foreground">
                       <span>Funding: Fully Funded</span>
                       <span>Estimated Completion: Q2 2026</span>
                     </div>
@@ -270,8 +264,7 @@ export default function LifeLineMedicationsPage() {
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
-    </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Rocket, ArrowUpDown, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { LaunchConditionCard, type LaunchCondition } from '@/components/LaunchConditionOverlay';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface InitiativeData {
   slug: string;
@@ -111,18 +112,17 @@ export default function LaunchTracker() {
   const progressCount = initiatives.filter(i => i.avg >= 50 && i.avg < 100).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout maxWidth="xl" xrayId="launch-tracker-page">
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 rounded-full text-sm font-medium mb-4">
             <Rocket className="h-4 w-4" />
             This is what we're building together
           </div>
-          <h1 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-4xl font-extrabold text-foreground dark:text-white tracking-tight">
             Initiative Launch Tracker
           </h1>
-          <p className="mt-3 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="mt-3 text-lg text-muted-foreground dark:text-slate-400 max-w-2xl mx-auto">
             Every initiative launches when its conditions are met. No gatekeepers — just community momentum.
             The first node is the hard one. After that, it scales.
           </p>
@@ -138,9 +138,9 @@ export default function LaunchTracker() {
             <div className="text-2xl font-bold text-amber-700 dark:text-amber-400">{progressCount}</div>
             <div className="text-xs text-amber-600 dark:text-amber-500">In Progress</div>
           </div>
-          <div className="text-center p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
-            <div className="text-2xl font-bold text-slate-700 dark:text-slate-300">{totalAvg}%</div>
-            <div className="text-xs text-slate-500">Overall</div>
+          <div className="text-center p-3 bg-muted/50 dark:bg-slate-800 rounded-xl border border-border dark:border-slate-700">
+            <div className="text-2xl font-bold text-foreground dark:text-slate-300">{totalAvg}%</div>
+            <div className="text-xs text-muted-foreground">Overall</div>
           </div>
         </div>
 
@@ -182,7 +182,7 @@ export default function LaunchTracker() {
             variant="ghost"
             size="sm"
             onClick={() => setSortBy(s => s === 'closest' ? 'number' : 'closest')}
-            className="text-slate-600"
+            className="text-muted-foreground"
           >
             <ArrowUpDown className="h-4 w-4 mr-1" />
             {sortBy === 'closest' ? 'By progress' : 'By number'}
@@ -191,9 +191,9 @@ export default function LaunchTracker() {
 
         {/* Grid */}
         {loading ? (
-          <div className="text-center py-20 text-slate-400">Loading launch conditions...</div>
+          <div className="text-center py-20 text-muted-foreground/70">Loading launch conditions...</div>
         ) : sorted.length === 0 ? (
-          <div className="text-center py-20 text-slate-400">
+          <div className="text-center py-20 text-muted-foreground/70">
             No initiatives match this filter.
           </div>
         ) : (
@@ -215,23 +215,22 @@ export default function LaunchTracker() {
         )}
 
         {/* Node scaling message */}
-        <div className="mt-12 p-6 bg-slate-100 dark:bg-slate-800 rounded-2xl text-center max-w-2xl mx-auto">
-          <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+        <div className="mt-12 p-6 bg-muted dark:bg-slate-800 rounded-2xl text-center max-w-2xl mx-auto">
+          <p className="text-foreground dark:text-slate-300 text-sm leading-relaxed">
             <strong>The first node is the hardest.</strong> Going from 0 to 1 location requires ~500 members.
             But once that first node works, every subsequent node is incremental — the infrastructure,
             processes, training, and supply chain already exist.
           </p>
-          <p className="text-slate-500 dark:text-slate-400 text-xs mt-3">
+          <p className="text-muted-foreground dark:text-slate-400 text-xs mt-3">
             Cost + 20% locked forever. Creators/workers keep 83.3% of every transaction.
           </p>
         </div>
 
         {/* SEC disclosure */}
-        <p className="text-center text-xs text-slate-400 mt-8 max-w-xl mx-auto">
+        <p className="text-center text-xs text-muted-foreground/70 mt-8 max-w-xl mx-auto">
           Progress indicators reflect community participation milestones, not financial returns.
           Participation in Liana Banyan does not constitute an investment and carries no guarantee of income.
         </p>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

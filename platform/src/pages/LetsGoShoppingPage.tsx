@@ -7,6 +7,7 @@ import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { ShoppingOrderCard } from "@/components/ShoppingOrderCard";
 import { CreateShoppingOrderDialog } from "@/components/CreateShoppingOrderDialog";
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function LetsGoShoppingPage() {
   const { data: orders, isLoading, refetch } = useQuery({
@@ -31,7 +32,7 @@ export default function LetsGoShoppingPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="p-6">
         <p>Loading shopping orders...</p>
       </div>
     );
@@ -39,7 +40,8 @@ export default function LetsGoShoppingPage() {
 
   return (
     <LaunchConditionOverlay initiativeSlug="lets-go-shopping" initiativeName="Let's Go Shopping">
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="lets-go-shopping-page">
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <ShoppingCart className="h-8 w-8 text-primary" />
@@ -154,7 +156,8 @@ export default function LetsGoShoppingPage() {
           </CardContent>
         </Card>
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

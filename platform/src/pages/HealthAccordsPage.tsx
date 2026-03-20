@@ -5,20 +5,21 @@ import { Badge } from "@/components/ui/badge";
 import { Activity, Pill, Stethoscope, HeartPulse, ShieldAlert, CheckCircle2, ArrowRight, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function HealthAccordsPage() {
   const navigate = useNavigate();
 
   return (
     <LaunchConditionOverlay initiativeSlug="health-accords" initiativeName="Tatiana Schlossburg Health Accords">
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="health-accords-page">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-rose-600 rounded-full text-white">
           <Activity className="h-8 w-8" />
         </div>
         <div>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Tatiana Schlossberg Health Accords</h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <h1 className="text-4xl font-bold text-foreground dark:text-white">Tatiana Schlossberg Health Accords</h1>
+          <p className="text-lg text-muted-foreground dark:text-slate-400">
             Affordable prescriptions, navigating medical systems, and RNA help.
           </p>
         </div>
@@ -35,7 +36,7 @@ export default function HealthAccordsPage() {
               <CardTitle className="text-2xl text-rose-900 dark:text-rose-400">
                 The System is Failing. Let's Build a New One.
               </CardTitle>
-              <CardDescription className="text-base text-slate-700 dark:text-slate-300 mt-2">
+              <CardDescription className="text-base text-foreground dark:text-slate-300 mt-2">
                 Named in honor of Tatiana Schlossberg, who had the courage to name the system that was failing her. We are building a way for communities to pool their purchasing power for medications and health products, the same way they can for groceries.
               </CardDescription>
             </CardHeader>
@@ -44,13 +45,13 @@ export default function HealthAccordsPage() {
               <div className="flex gap-4 items-start bg-white dark:bg-slate-900 p-5 rounded-xl border shadow-sm">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/50 flex items-center justify-center text-rose-600 font-bold text-lg">1</div>
                 <div>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                  <h4 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center gap-2">
                     <Pill className="h-5 w-5 text-rose-500" /> Affordable Prescriptions (LifeLine)
                   </h4>
-                  <p className="text-slate-600 dark:text-slate-400 mb-3">
+                  <p className="text-muted-foreground dark:text-slate-400 mb-3">
                     We use Anonymous Volume Aggregation to group demand for essential medications. By pooling our purchasing power, we bypass the extractive middlemen and secure wholesale pricing for the community.
                   </p>
-                  <ul className="space-y-1 text-sm text-slate-500">
+                  <ul className="space-y-1 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-rose-500" /> Transparent pricing: Cost + 20%</li>
                     <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-rose-500" /> Crown Target: Alex Oshmyansky (Cost Plus Drugs)</li>
                   </ul>
@@ -60,10 +61,10 @@ export default function HealthAccordsPage() {
               <div className="flex gap-4 items-start bg-white dark:bg-slate-900 p-5 rounded-xl border shadow-sm">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/50 flex items-center justify-center text-rose-600 font-bold text-lg">2</div>
                 <div>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                  <h4 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center gap-2">
                     <Stethoscope className="h-5 w-5 text-blue-500" /> Navigating Medical Systems
                   </h4>
-                  <p className="text-slate-600 dark:text-slate-400 mb-3">
+                  <p className="text-muted-foreground dark:text-slate-400 mb-3">
                     The healthcare system is intentionally opaque. We provide community-vetted guides, advocates, and "Curators" who help you navigate insurance, billing disputes, and finding the right care without getting bankrupted.
                   </p>
                 </div>
@@ -72,10 +73,10 @@ export default function HealthAccordsPage() {
               <div className="flex gap-4 items-start bg-white dark:bg-slate-900 p-5 rounded-xl border shadow-sm">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/50 flex items-center justify-center text-rose-600 font-bold text-lg">3</div>
                 <div>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                  <h4 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center gap-2">
                     <HeartPulse className="h-5 w-5 text-emerald-500" /> RNA / Medical Professional Help
                   </h4>
-                  <p className="text-slate-600 dark:text-slate-400 mb-3">
+                  <p className="text-muted-foreground dark:text-slate-400 mb-3">
                     Register with local RNAs or medical professionals (without formal medical advice liability) who can help you understand what you need, find cheaper alternatives for "Y", and provide guidance when you are overwhelmed.
                   </p>
                 </div>
@@ -92,14 +93,14 @@ export default function HealthAccordsPage() {
               <CardTitle>Crown: Apothecary Mentor</CardTitle>
               <CardDescription>Target: Alex Oshmyansky</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 text-sm text-slate-600">
+            <CardContent className="space-y-4 text-sm text-muted-foreground">
               <p>
                 We have written to Alex Oshmyansky, the person who helped Mark Cuban build Cost Plus Drugs from a cold call, asking him to be the Crown of this initiative.
               </p>
               <p>
                 We need someone who understands how to turn outrage into operational reality, with deep knowledge of pharmaceutical supply chains and a commitment to cooperative structures.
               </p>
-              <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg border text-xs">
+              <div className="p-3 bg-muted dark:bg-slate-800 rounded-lg border text-xs">
                 <strong>Status:</strong> Letter Sent. Awaiting Response.
               </div>
             </CardContent>
@@ -125,7 +126,7 @@ export default function HealthAccordsPage() {
           </Card>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

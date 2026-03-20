@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExpandableBlock } from "@/components/pudding";
 import { AnonymousVolumeExplainer } from "@/components/AnonymousVolumeExplainer";
-import '@/styles/landing.css';
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function RallyGroupPage() {
   const navigate = useNavigate();
@@ -15,21 +15,15 @@ export default function RallyGroupPage() {
 
   return (
     <LaunchConditionOverlay initiativeSlug="rally-group" initiativeName="Rally Group">
-    <div className="landing-page min-h-screen bg-slate-50">
-      <div className="landing-title">
-        <span className="liana">Liana</span>
-        <span className="banyan">Banyan</span>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+    <PortalPageLayout maxWidth="xl" xrayId="rally-group-page">
         {/* Header */}
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4 text-purple-600 border-purple-600">Initiative #9</Badge>
-          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight sm:text-5xl flex items-center justify-center gap-3">
+          <h1 className="text-4xl font-extrabold text-foreground tracking-tight sm:text-5xl flex items-center justify-center gap-3">
             <Users className="h-10 w-10 text-purple-600" />
             Rally Group
           </h1>
-          <p className="mt-4 text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
             Community action, "In My Backyard" neighborhood support, The Swoop, and the Underground Railroad. 
             When disaster strikes or a neighbor needs help, the Rally Group moves.
           </p>
@@ -61,7 +55,7 @@ export default function RallyGroupPage() {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 mb-16 min-h-[500px]">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-8 mb-16 min-h-[500px]">
           
           {activeTab === 'chalkboard' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -70,8 +64,8 @@ export default function RallyGroupPage() {
                   <MessageSquare className="h-8 w-8 text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">The Community Chalkboard</h2>
-                  <p className="text-slate-500">The 3-Step Spark to Wildfire progression for local resource sharing.</p>
+                  <h2 className="text-2xl font-bold text-foreground">The Community Chalkboard</h2>
+                  <p className="text-muted-foreground">The 3-Step Spark to Wildfire progression for local resource sharing.</p>
                 </div>
               </div>
               
@@ -83,7 +77,7 @@ export default function RallyGroupPage() {
                       The Digital Chalkboard
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-slate-600">
+                  <CardContent className="text-muted-foreground">
                     Neighbors log into the local portal and simply list "Haves" and "Wants" without forcing immediate transactions. 
                     <em>"I have a pickup truck," "I have extra lemons," "I need a lawnmower for Saturday."</em> 
                     Once a neighborhood hits 50 active Haves/Wants, the Spark is lit.
@@ -97,7 +91,7 @@ export default function RallyGroupPage() {
                       The Block Swap
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-slate-600">
+                  <CardContent className="text-muted-foreground">
                     A local Captain steps up and organizes a physical weekend event—an aggregated neighborhood Garage Sale + Tool Swap + Potluck. 
                     Neighbors meet face-to-face to fulfill the "Haves/Wants" they saw on the digital chalkboard.
                   </CardContent>
@@ -110,7 +104,7 @@ export default function RallyGroupPage() {
                       The Continuous Local Larder
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-slate-600">
+                  <CardContent className="text-muted-foreground">
                     The exchange becomes a self-sustaining continuous marketplace. The Captain acts as the local escrow. 
                     If someone needs to lend a tool, they drop it at the Captain's porch (the "Local Larder") for asynchronous pickup.
                   </CardContent>
@@ -126,25 +120,25 @@ export default function RallyGroupPage() {
                   <HeartHandshake className="h-8 w-8 text-pink-600" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">The Swoop</h2>
-                  <p className="text-slate-500">Community-driven crisis and life-event support.</p>
+                  <h2 className="text-2xl font-bold text-foreground">The Swoop</h2>
+                  <p className="text-muted-foreground">Community-driven crisis and life-event support.</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <p className="text-lg text-slate-700 mb-4">
+                  <p className="text-lg text-foreground mb-4">
                     The Swoop is how a community rallies around a family in need. Whether it's a new baby, a medical emergency, or a sudden loss, the community uses The Swoop to organize help.
                   </p>
-                  <ul className="space-y-3 text-slate-600">
+                  <ul className="space-y-3 text-muted-foreground">
                     <li className="flex items-center gap-2"><HandHeart className="h-5 w-5 text-pink-500" /> Meal trains automatically integrated with local prep.</li>
                     <li className="flex items-center gap-2"><HandHeart className="h-5 w-5 text-pink-500" /> Financial pooling without platform extraction fees.</li>
                     <li className="flex items-center gap-2"><HandHeart className="h-5 w-5 text-pink-500" /> Service donations (lawn care, babysitting).</li>
                   </ul>
                 </div>
-                <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
-                  <h3 className="font-semibold text-slate-900 mb-2">Integration with The Family Table</h3>
-                  <p className="text-sm text-slate-600">
+                <div className="bg-muted/50 rounded-lg p-6 border border-border">
+                  <h3 className="font-semibold text-foreground mb-2">Integration with The Family Table</h3>
+                  <p className="text-sm text-muted-foreground">
                     While The Swoop is organized here in the Rally Group by the community, the receiving family manages the incoming support privately through their <strong>Family Table</strong> dashboard, ensuring they are never overwhelmed by the logistics of accepting help.
                   </p>
                 </div>
@@ -164,8 +158,8 @@ export default function RallyGroupPage() {
                   <ShieldAlert className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">The Underground Railroad</h2>
-                  <p className="text-slate-500">Emergency extraction and safe-harbor networks.</p>
+                  <h2 className="text-2xl font-bold text-foreground">The Underground Railroad</h2>
+                  <p className="text-muted-foreground">Emergency extraction and safe-harbor networks.</p>
                 </div>
               </div>
 
@@ -193,8 +187,7 @@ export default function RallyGroupPage() {
 
         </div>
 
-      </div>
-    </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

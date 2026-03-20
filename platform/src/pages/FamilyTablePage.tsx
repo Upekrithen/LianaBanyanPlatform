@@ -10,30 +10,24 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import '@/styles/landing.css';
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function FamilyTablePage() {
   const navigate = useNavigate();
 
   return (
     <LaunchConditionOverlay initiativeSlug="family-table" initiativeName="The Family Table">
-    <div className="landing-page min-h-screen bg-slate-50">
-      <div className="landing-title">
-        <span className="liana">Liana</span>
-        <span className="banyan">Banyan</span>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+    <PortalPageLayout maxWidth="xl" xrayId="family-table-page">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
           <div>
             <Badge variant="outline" className="mb-4 text-indigo-600 border-indigo-600 bg-indigo-50">Initiative #5</Badge>
-            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+            <h1 className="text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
               <Users className="h-10 w-10 text-indigo-600" />
               The Family Table
             </h1>
-            <p className="mt-2 text-xl text-slate-600">
+            <p className="mt-2 text-xl text-muted-foreground">
               The private, invite-only operational hub for the people you define as family.
             </p>
           </div>
@@ -50,17 +44,17 @@ export default function FamilyTablePage() {
         </div>
 
         <Tabs defaultValue="operations" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto p-1 bg-slate-200/50">
-            <TabsTrigger value="operations" className="py-3 text-base data-[state=active]:bg-white">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto p-1 bg-muted/50">
+            <TabsTrigger value="operations" className="py-3 text-base data-[state=active]:bg-background">
               <Shield className="w-4 h-4 mr-2" /> Daily Ops
             </TabsTrigger>
-            <TabsTrigger value="calendar" className="py-3 text-base data-[state=active]:bg-white">
+            <TabsTrigger value="calendar" className="py-3 text-base data-[state=active]:bg-background">
               <Calendar className="w-4 h-4 mr-2" /> Master Calendar
             </TabsTrigger>
-            <TabsTrigger value="portfolio" className="py-3 text-base data-[state=active]:bg-white">
+            <TabsTrigger value="portfolio" className="py-3 text-base data-[state=active]:bg-background">
               <ImageIcon className="w-4 h-4 mr-2" /> Portfolios
             </TabsTrigger>
-            <TabsTrigger value="swoop" className="py-3 text-base data-[state=active]:bg-white">
+            <TabsTrigger value="swoop" className="py-3 text-base data-[state=active]:bg-background">
               <HeartHandshake className="w-4 h-4 mr-2" /> Swoop Receiving
             </TabsTrigger>
           </TabsList>
@@ -80,12 +74,12 @@ export default function FamilyTablePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                      <p className="font-medium text-slate-900">Lemon Herb Chicken</p>
-                      <p className="text-sm text-slate-500">Prep: 15m | Cook: 30m</p>
+                    <div className="p-3 bg-muted/50 rounded-lg border border-border">
+                      <p className="font-medium text-foreground">Lemon Herb Chicken</p>
+                      <p className="text-sm text-muted-foreground">Prep: 15m | Cook: 30m</p>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-600">Assigned to:</span>
+                      <span className="text-muted-foreground">Assigned to:</span>
                       <span className="font-medium">Dad (Cooking)</span>
                     </div>
                   </div>
@@ -112,17 +106,17 @@ export default function FamilyTablePage() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-sm text-slate-600 line-through">Milk (2 Gallons)</span>
+                      <span className="text-sm text-muted-foreground line-through">Milk (2 Gallons)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-slate-300" />
+                      <div className="w-4 h-4 rounded-full border-2 border-border" />
                       <span className="text-sm font-medium">Coffee Beans</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-slate-300" />
+                      <div className="w-4 h-4 rounded-full border-2 border-border" />
                       <span className="text-sm font-medium">Paper Towels</span>
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">+ 14 more items synced from Meal Plan</p>
+                    <p className="text-xs text-muted-foreground/70 mt-2">+ 14 more items synced from Meal Plan</p>
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -152,12 +146,12 @@ export default function FamilyTablePage() {
                       </div>
                       <span className="text-xs text-emerald-600">Armed</span>
                     </div>
-                    <div className="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-100">
+                    <div className="flex items-center justify-between p-2 bg-muted/50 rounded border border-border">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-slate-400" />
                         <span className="text-sm font-medium">Daughter (College)</span>
                       </div>
-                      <span className="text-xs text-slate-500">Bracelet Active</span>
+                      <span className="text-xs text-muted-foreground">Bracelet Active</span>
                     </div>
                   </div>
                 </CardContent>
@@ -182,7 +176,7 @@ export default function FamilyTablePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-64 flex items-center justify-center border-2 border-dashed border-slate-200 rounded-lg bg-slate-50 text-slate-500">
+                <div className="h-64 flex items-center justify-center border-2 border-dashed border-border rounded-lg bg-muted/50 text-muted-foreground">
                   <div className="text-center">
                     <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
                     <p className="font-medium">Interactive Calendar View</p>
@@ -205,29 +199,29 @@ export default function FamilyTablePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="p-3 bg-slate-50 rounded-lg border flex justify-between items-center cursor-pointer hover:bg-slate-100">
+                    <div className="p-3 bg-muted/50 rounded-lg border flex justify-between items-center cursor-pointer hover:bg-muted">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-pink-100 rounded flex items-center justify-center">
                           <ImageIcon className="w-5 h-5 text-pink-600" />
                         </div>
                         <div>
                           <p className="font-medium">2025 Family Vacation</p>
-                          <p className="text-xs text-slate-500">Synced from Google Photos</p>
+                          <p className="text-xs text-muted-foreground">Synced from Google Photos</p>
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-slate-400" />
+                      <ArrowRight className="w-4 h-4 text-muted-foreground/70" />
                     </div>
-                    <div className="p-3 bg-slate-50 rounded-lg border flex justify-between items-center cursor-pointer hover:bg-slate-100">
+                    <div className="p-3 bg-muted/50 rounded-lg border flex justify-between items-center cursor-pointer hover:bg-muted">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-blue-100 rounded flex items-center justify-center">
                           <FileText className="w-5 h-5 text-blue-600" />
                         </div>
                         <div>
                           <p className="font-medium">Letters to the Kids</p>
-                          <p className="text-xs text-slate-500">Time-locked until 18th birthdays</p>
+                          <p className="text-xs text-muted-foreground">Time-locked until 18th birthdays</p>
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-slate-400" />
+                      <ArrowRight className="w-4 h-4 text-muted-foreground/70" />
                     </div>
                   </div>
                 </CardContent>
@@ -282,11 +276,11 @@ export default function FamilyTablePage() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <h3 className="font-semibold text-slate-900">Active Community Support</h3>
+                    <h3 className="font-semibold text-foreground">Active Community Support</h3>
                     <div className="p-4 bg-white rounded-xl border shadow-sm">
                       <div className="flex justify-between items-center mb-4">
                         <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-100">Meal Train Active</Badge>
-                        <span className="text-sm font-medium text-slate-500">Organized via Rally Group</span>
+                        <span className="text-sm font-medium text-muted-foreground">Organized via Rally Group</span>
                       </div>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center text-sm border-b pb-2">
@@ -297,7 +291,7 @@ export default function FamilyTablePage() {
                           <span>Tomorrow (5:30 PM)</span>
                           <span className="font-medium">Tacos (The Johnsons)</span>
                         </div>
-                        <div className="flex justify-between items-center text-sm text-slate-500">
+                        <div className="flex justify-between items-center text-sm text-muted-foreground">
                           <span>Thursday</span>
                           <span>Open Slot</span>
                         </div>
@@ -306,13 +300,13 @@ export default function FamilyTablePage() {
                   </div>
                   
                   <div className="space-y-4">
-                    <h3 className="font-semibold text-slate-900">Silent Financial Support</h3>
+                    <h3 className="font-semibold text-foreground">Silent Financial Support</h3>
                     <div className="p-4 bg-white rounded-xl border shadow-sm flex flex-col justify-center items-center text-center h-[180px]">
-                      <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-3">
-                        <Shield className="w-6 h-6 text-slate-400" />
+                      <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mb-3">
+                        <Shield className="w-6 h-6 text-muted-foreground/70" />
                       </div>
-                      <p className="text-slate-600 text-sm">No active financial Swoops.</p>
-                      <p className="text-slate-400 text-xs mt-2">Funds sent via Rally Group appear here silently, without the burden of managing the helpers.</p>
+                      <p className="text-muted-foreground text-sm">No active financial Swoops.</p>
+                      <p className="text-muted-foreground/70 text-xs mt-2">Funds sent via Rally Group appear here silently, without the burden of managing the helpers.</p>
                     </div>
                   </div>
                 </div>
@@ -320,8 +314,7 @@ export default function FamilyTablePage() {
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
-    </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

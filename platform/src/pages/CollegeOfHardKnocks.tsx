@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   ExternalLink
 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 export default function CollegeOfHardKnocks() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,22 +86,22 @@ export default function CollegeOfHardKnocks() {
   ];
 
   return (
-    <div className="container mx-auto py-12 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="college-hard-knocks-page">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
         <div className="flex items-center gap-4">
           <div className="p-4 bg-amber-600 rounded-xl text-white shadow-lg shadow-amber-900/20">
             <Wrench className="h-10 w-10" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-4xl font-bold text-foreground dark:text-white tracking-tight">
               College of Hard Knocks
             </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-400 mt-1">
+            <p className="text-lg text-muted-foreground dark:text-slate-400 mt-1">
               Real-world consensus, curated tutorials, and badges for those who help.
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+        <div className="flex items-center gap-2 bg-muted dark:bg-slate-800 p-2 rounded-lg border border-border dark:border-slate-700">
           <Flame className="text-orange-500 w-5 h-5" />
           <span className="text-sm font-medium pr-2">1,402 Active Helpers Today</span>
         </div>
@@ -110,14 +111,14 @@ export default function CollegeOfHardKnocks() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input 
           placeholder="Search for 'How to...', error codes, or verified solutions..." 
-          className="pl-12 h-14 text-lg bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 shadow-sm"
+          className="pl-12 h-14 text-lg bg-white dark:bg-slate-900 border-border dark:border-slate-700 shadow-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
 
       <Tabs defaultValue="consensus" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-8 h-14 bg-slate-100 dark:bg-slate-800/50">
+        <TabsList className="grid w-full grid-cols-3 mb-8 h-14 bg-muted dark:bg-slate-800/50">
           <TabsTrigger value="consensus" className="text-base data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900">
             <MessageSquare className="w-4 h-4 mr-2" />
             Consensus Threads
@@ -157,7 +158,7 @@ export default function CollegeOfHardKnocks() {
                   
                   <div className="flex-grow">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">
+                      <h3 className="text-xl font-bold text-foreground dark:text-white leading-tight">
                         {thread.title}
                       </h3>
                       {thread.verified && (
@@ -168,11 +169,11 @@ export default function CollegeOfHardKnocks() {
                       )}
                     </div>
                     
-                    <p className="text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">
+                    <p className="text-muted-foreground dark:text-slate-400 mb-4 line-clamp-2">
                       {thread.preview}
                     </p>
                     
-                    <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-slate-400">
                       <span className="font-medium text-blue-600 dark:text-blue-400">@{thread.author}</span>
                       <div className="flex gap-1">
                         {thread.badges.map(badge => (
@@ -248,28 +249,28 @@ export default function CollegeOfHardKnocks() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
+                <div className="p-4 border border-border dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
                   <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-3">
                     <CheckCircle2 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                   </div>
                   <h4 className="font-bold">Verified Solver</h4>
                   <p className="text-xs text-muted-foreground mt-1">Provided 10+ solutions marked as verified by the community.</p>
                 </div>
-                <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
+                <div className="p-4 border border-border dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
                   <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mb-3">
                     <Wrench className="w-8 h-8 text-amber-600 dark:text-amber-400" />
                   </div>
                   <h4 className="font-bold">Master Wrench</h4>
                   <p className="text-xs text-muted-foreground mt-1">Top 5% contributor in technical and physical mechanics threads.</p>
                 </div>
-                <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
+                <div className="p-4 border border-border dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
                   <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-3">
                     <Youtube className="w-8 h-8 text-red-600 dark:text-red-400" />
                   </div>
                   <h4 className="font-bold">Curator</h4>
                   <p className="text-xs text-muted-foreground mt-1">Submitted 5+ tutorials that maintained a &gt;90% helpful rating.</p>
                 </div>
-                <div className="p-4 border border-slate-200 dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
+                <div className="p-4 border border-border dark:border-slate-800 rounded-xl text-center flex flex-col items-center">
                   <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mb-3">
                     <Award className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                   </div>
@@ -281,6 +282,6 @@ export default function CollegeOfHardKnocks() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

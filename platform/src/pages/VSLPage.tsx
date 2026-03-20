@@ -5,28 +5,22 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
-import '@/styles/landing.css';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function VSLPage() {
   const navigate = useNavigate();
 
   return (
     <LaunchConditionOverlay initiativeSlug="vsl" initiativeName="VSL (Voucher Short Loans)">
-    <div className="landing-page min-h-screen bg-slate-50">
-      <div className="landing-title">
-        <span className="liana">Liana</span>
-        <span className="banyan">Banyan</span>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+    <PortalPageLayout maxWidth="xl" xrayId="vsl-page">
         {/* Header */}
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4 text-emerald-600 border-emerald-600">Initiative #10</Badge>
-          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight sm:text-5xl flex items-center justify-center gap-3">
+          <h1 className="text-4xl font-extrabold text-foreground tracking-tight sm:text-5xl flex items-center justify-center gap-3">
             <Building2 className="h-10 w-10 text-emerald-600" />
             VSL (Vouched Short Loans)
           </h1>
-          <p className="mt-4 text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
             Social trust replaces credit scores. Small loans starting at $50 backed by the people who know you, not by collateral you don't have.
           </p>
         </div>
@@ -39,8 +33,8 @@ export default function VSLPage() {
               The USAA Principle
             </CardTitle>
           </CardHeader>
-          <CardContent className="text-lg text-slate-700 space-y-4">
-            <p className="italic text-slate-600 border-l-2 border-slate-300 pl-4 py-2">
+          <CardContent className="text-lg text-foreground space-y-4">
+            <p className="italic text-muted-foreground border-l-2 border-border pl-4 py-2">
               "I thank God, truthfully and with respect, for USAA, because when I had at least one dollar in my checking account, I could go to the gas pump and fill up in order to drive and pick up the kids from school, and USAA would pay it, and charge my account no fee if I paid it back within a day... A little generosity, just a tiny little bit, made ALL the difference in my life, and my wife and children's lives."
             </p>
             <p>
@@ -93,20 +87,20 @@ export default function VSLPage() {
           <div className="relative z-10">
             <Badge className="bg-emerald-500 text-white mb-4">The Crown: Lender Mentor</Badge>
             <h2 className="text-3xl font-bold mb-4">Why We Wrote to Jessica Jackley</h2>
-            <p className="text-slate-300 text-lg mb-6 max-w-3xl">
+            <p className="text-muted-foreground text-lg mb-6 max-w-3xl">
               As the co-founder of Kiva, she proved that person-to-person micro-lending could scale globally. She saw in East Africa what the Founder saw in the States: the hardest-working people are often the most structurally undercapitalized.
             </p>
-            <p className="text-slate-300 text-lg mb-6 max-w-3xl">
+            <p className="text-muted-foreground text-lg mb-6 max-w-3xl">
               Where Kiva helped route capital to specific entrepreneurs, Liana Banyan re-wires the market those entrepreneurs operate in. We asked her to lead VSL because she understands that microfinance isn't about money—it's about dignity, trust, and connection.
             </p>
           </div>
         </div>
 
         {/* College of Hard Knocks / Anecdotes */}
-        <div className="text-center bg-slate-100 p-8 rounded-2xl border border-slate-200">
+        <div className="text-center bg-muted p-8 rounded-2xl border border-border">
           <Heart className="h-12 w-12 text-rose-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Born from the College of Hard Knocks</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Born from the College of Hard Knocks</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
             Every humanitarian feature in this platform exists because the Founder or someone he knew needed it and it didn't exist—or because someone like USAA showed what it looked like when it did. VSL is built from the lived reality of needing $50 just to get to work.
           </p>
           <Button variant="outline" onClick={() => window.open('https://cephas.lianabanyan.com/founder-proof', '_blank', 'noopener,noreferrer')}>
@@ -114,8 +108,7 @@ export default function VSLPage() {
           </Button>
         </div>
 
-      </div>
-    </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }
