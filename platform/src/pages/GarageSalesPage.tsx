@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Search, Calendar, Clock, Map as MapIcon, ArrowLeft, Tag, Store, Package, Gift, Wrench, Car } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function GarageSalesPage() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function GarageSalesPage() {
     : listings.filter((l: any) => l.type === activeTab);
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="garage-sales">
       <Button 
         variant="ghost" 
         onClick={() => navigate('/initiatives/the-family-table')}
@@ -155,6 +156,6 @@ export default function GarageSalesPage() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

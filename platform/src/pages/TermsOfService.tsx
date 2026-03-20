@@ -12,13 +12,13 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function TermsOfService() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto max-w-4xl px-6 py-12">
+    <PortalPageLayout maxWidth="lg" xrayId="terms-of-service">
         {/* Back button */}
         <Button
           variant="ghost"
@@ -308,7 +308,6 @@ export default function TermsOfService() {
             <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>
           </nav>
         </div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

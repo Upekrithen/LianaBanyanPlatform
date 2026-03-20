@@ -17,6 +17,7 @@ import {
   Shield, Users, Scale, Crown, FileText, Vote, Eye,
   CheckCircle, XCircle, Clock, Star, Lock, BookOpen,
 } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function Governance() {
   const { user } = useAuth();
@@ -96,7 +97,8 @@ export default function Governance() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="governance">
+      <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Shield className="h-8 w-8 text-primary" />
         <div>
@@ -332,6 +334,7 @@ export default function Governance() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Brain, ArrowRight, Check, X, RotateCcw, Award } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Mock data for spaced repetition items
 const FLASHCARDS = [
@@ -63,7 +64,7 @@ export default function Academy() {
   };
 
   return (
-    <div className="container mx-auto py-12 px-4 max-w-4xl">
+    <PortalPageLayout maxWidth="lg" xrayId="academy">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -155,6 +156,6 @@ export default function Academy() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

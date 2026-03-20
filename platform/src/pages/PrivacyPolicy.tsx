@@ -12,14 +12,13 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function PrivacyPolicy() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto max-w-4xl px-6 py-12">
-        {/* Back button */}
+    <PortalPageLayout maxWidth="lg" xrayId="privacy-policy">
         <Button
           variant="ghost"
           className="mb-6 gap-2"
@@ -308,7 +307,6 @@ export default function PrivacyPolicy() {
             <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>
           </nav>
         </div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -5,6 +5,7 @@ import { Heart, DollarSign, Trophy, TrendingUp, Gift, Shield } from "lucide-reac
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useNavigate } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const benefitCategories = [
   {
@@ -59,7 +60,7 @@ export default function BrowseNonprofit() {
   };
 
   return (
-    <div className="container mx-auto p-8 space-y-8">
+    <PortalPageLayout maxWidth="xl" xrayId="browse-nonprofit">
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold">Non-Profit Portal - Member Benefits</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -119,6 +120,6 @@ export default function BrowseNonprofit() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

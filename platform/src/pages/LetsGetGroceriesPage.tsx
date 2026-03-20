@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { GroceryOrderForm } from "@/components/GroceryOrderForm";
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function LetsGetGroceriesPage() {
   const { data: { user } } = useQuery({
@@ -37,7 +38,8 @@ export default function LetsGetGroceriesPage() {
 
   return (
     <LaunchConditionOverlay initiativeSlug="lets-get-groceries" initiativeName="Let's Get Groceries">
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="lets-get-groceries">
+      <div className="space-y-6">
       <div className="flex items-center gap-3">
         <ShoppingBag className="h-8 w-8 text-green-600" />
         <div>
@@ -192,7 +194,8 @@ export default function LetsGetGroceriesPage() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

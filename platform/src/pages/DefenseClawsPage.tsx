@@ -8,10 +8,12 @@ import DefenseKlausColdStart from "@/components/DefenseKlausColdStart";
 import DefenseKlausLawyerBounty from "@/components/DefenseKlausLawyerBounty";
 import DefenseKlausTreasureMap from "@/components/DefenseKlausTreasureMap";
 import DefenseKlausDaisyChain from "@/components/DefenseKlausDaisyChain";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function DefenseClawsPage() {
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="defense-claws">
+      <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Shield className="h-8 w-8 text-purple-500" />
         <div>
@@ -151,6 +153,7 @@ export default function DefenseClawsPage() {
           <DefenseKlausLawyerBounty />
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

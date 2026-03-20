@@ -5,6 +5,7 @@ import { Network, Package, FileCode, TrendingUp, Truck, Factory } from "lucide-r
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useNavigate } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const serviceCategories = [
   {
@@ -65,7 +66,7 @@ export default function BrowseNetwork() {
   };
 
   return (
-    <div className="container mx-auto p-8 space-y-8">
+    <PortalPageLayout maxWidth="xl" xrayId="browse-network">
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold">Business Network Portal</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -141,6 +142,6 @@ export default function BrowseNetwork() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

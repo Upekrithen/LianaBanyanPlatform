@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Wrench, ExternalLink } from "lucide-react";
 import { useState } from "react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CEPHAS_BASE = "https://cephas.lianabanyan.com";
 
@@ -37,7 +38,8 @@ export default function UnderTheHoodPage() {
   );
 
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-6" data-xray-id="under-the-hood-page">
+    <PortalPageLayout maxWidth="lg" xrayId="under-the-hood-page">
+      <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Wrench className="w-8 h-8 text-primary" />
@@ -117,6 +119,7 @@ export default function UnderTheHoodPage() {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }
