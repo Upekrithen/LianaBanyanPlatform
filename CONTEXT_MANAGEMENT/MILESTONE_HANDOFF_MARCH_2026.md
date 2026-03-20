@@ -9,16 +9,48 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 61 (March 20, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 62 (March 20, 2026)
 
-**Latest commit:** `961e0c5` — Knight 61 Batch 6: 12 pages migrated to PortalPageLayout
-**Previous commits:** `987bb7c` (complex edge cases), `3268d6c` (Session 60: Batch 5)
+**Latest commit:** `38f6760` — Knight 62 Batch 9: 15 pages migrated to PortalPageLayout
+**Previous commits:** `d896a46` (Batches 7-8: 35 pages), `961e0c5` (Session 61)
 
-**Status (March 20, 2026 — Session 61 COMPLETE):**
-- Phase 1 Visual Unification: 15 more pages migrated this session (3 complex + 12 quick-wins)
-- Total pages on PortalPageLayout: ~54 (39 prior + 15 this session)
-- Remaining pages needing PortalPageLayout: ~215 (156 already use semantic tokens, just need wrapper)
+**Status (March 20, 2026 — Session 62 COMPLETE):**
+- Phase 1 Visual Unification: 50 more pages migrated this session (3 batches of quick-wins)
+- Total pages on PortalPageLayout: **104** (54 prior + 50 this session)
+- Remaining pages: ~208 total .tsx files in pages/, minus ~104 migrated = ~208 remaining
+  - Many are sub-pages, success pages, auth pages that may not need migration
+  - Estimated ~120-140 still need PortalPageLayout wrapper
+  - ~12 "needs care" pages identified (complex layouts: Dashboard, SaltMines, BeaconExplainer, TheHelm, HallOfInnovations, CueCardLanding, C20PilotDashboard, MoneypennyBriefing, GroceryBoxPage, GroupCookPage, PantryPage, ProprietaryRecipesPage)
 - **Innovation count:** 1,754 | **Patent claims:** 1,401 across 8 provisionals
+- **Deployed to lianabanyan.com** — all 50 new migrations live
+
+### What Was Done (Session 62 — Knight)
+
+#### 1. Batch 7 — 21 pages migrated
+Single-container pages and dark gradient pages:
+HexIsle, MoneyPenny, CueCardDeckPage, Briefcase, TreasureMapGame, ProposalsListing, MyPledges, DurinsDoor (both copies), GoldenKeyQuest, Tribes, MatchTrade, TheFurnace, FlyOnTheWallPage, Workshop, ManufacturingStore, ShowcasePromotion, GhostWorldMall, MemberAgreement, TrickleOnboarding, VouchSystem
+
+#### 2. Batch 8 — 14 pages migrated
+Dark stage pages + default variant pages:
+DailyNews, MainSquare, SendLists, CreatorDraftPick, CoverageMinutesDashboard, GhostWorld, FlyOnTheWall, CrewCallPage, PuddingDemo, Marketplace, StoreTemplates, LookingGlass, XPLeaderboard, ModularManufacturing
+
+#### 3. Batch 9 — 15 pages migrated
+Dark stage pages + single-container pages:
+NodeCaptain, StarChamber, SantaEverAfter, TerenoCertification, CPlus20Dashboard, C20Leaderboard, MoneyPennyQA, MoneyPennySocial, BoiseBusinessCardsExample, SponsorPortal (both copies), DeckCardStudio, DeckCollection, SponsorshipPage, BlockchainExplorer
+
+#### 4. Production Deploy
+Built and deployed all 50 migrations to lianabanyan.com.
+
+Commits: `d896a46`, `38f6760`
+
+### Next Session Should:
+- Continue wrapping remaining ~120-140 pages in batches of 15-20
+- Tackle the ~12 "needs care" pages (complex layouts with custom headers, sticky elements, immersive views)
+- Pattern is still mechanical for most: add import, replace outer container div, close with PortalPageLayout
+
+---
+
+## PREVIOUS SESSION: Knight Session 61 (March 20, 2026)
 
 ### What Was Done (Session 61 — Knight)
 
