@@ -62,6 +62,7 @@ import {
   LIST_STATUSES,
   SAMPLE_SEND_LISTS,
 } from "@/lib/sendListService";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 // ─── Status Helpers ──────────────────────────────────────────────────────────
 
@@ -684,8 +685,7 @@ export default function SendLists() {
   const currentStampList = lists.find((l) => l.id === stampDialog.listId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="send-lists">
         {/* Header */}
         <div className="space-y-2 mb-8">
           <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -811,7 +811,6 @@ export default function SendLists() {
             onConfirm={handleStampConfirm}
           />
         )}
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

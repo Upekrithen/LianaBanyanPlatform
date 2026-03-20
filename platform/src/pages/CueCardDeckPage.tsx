@@ -4,11 +4,12 @@
  */
 
 import { CueCardDeck } from "@/components/cue-cards/CueCardDeck";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function CueCardDeckPage() {
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-8" data-xray-id="cue-card-deck-page">
+    <PortalPageLayout maxWidth="lg" xrayId="cue-card-deck">
       <CueCardDeck />
-    </div>
+    </PortalPageLayout>
   );
 }

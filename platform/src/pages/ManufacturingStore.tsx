@@ -33,6 +33,7 @@ import { WeNeedYouCard } from "@/components/cue-cards/WeNeedYouCard";
 import { PreorderFundedBadge } from "@/components/ui/PreorderFundedBadge";
 import { toast } from "sonner";
 import { calculateCostPlus20 } from "@/lib/currencyService";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface ManufacturingProduct {
   id: string;
@@ -141,9 +142,11 @@ export default function ManufacturingStore() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-      </div>
+      <PortalPageLayout maxWidth="xl" xrayId="manufacturing-store">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
@@ -151,7 +154,8 @@ export default function ManufacturingStore() {
   const split = calculateCostPlus20(totalCost);
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="manufacturing-store">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Factory className="h-8 w-8 text-primary" />
@@ -353,6 +357,7 @@ export default function ManufacturingStore() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

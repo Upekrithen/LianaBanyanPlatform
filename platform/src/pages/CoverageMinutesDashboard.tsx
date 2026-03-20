@@ -46,6 +46,7 @@ import {
   DONATION_RECORD_VIEW_FEE,
   ACCUMULATION_LEVELS,
 } from "@/lib/discourse/coverageMinutes";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 interface AccountState {
   earnedMinutes: number;
@@ -196,7 +197,7 @@ export default function CoverageMinutesDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="coverage-minutes">
       {/* Header */}
       <div className="border-b border-slate-700 bg-slate-900/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 py-4">
@@ -525,6 +526,6 @@ export default function CoverageMinutesDashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PortalPageLayout>
   );
 }

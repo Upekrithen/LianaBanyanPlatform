@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { TrendingUp, Sparkles, DollarSign, Factory, Shield, ArrowRight, Users, Coins, Loader2 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { InviteCreatorCard } from '@/components/cue-cards/InviteCreatorCard';
 import { EnhancedProjectCard } from '@/components/EnhancedProjectCard';
 import { PreorderFundedBadge } from '@/components/ui/PreorderFundedBadge';
@@ -111,7 +112,7 @@ export default function Marketplace() {
   });
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <PortalPageLayout maxWidth="full" xrayId="marketplace" className="overflow-x-hidden">
       <header className="border-b bg-card sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex flex-wrap gap-4 justify-between items-center">
           <div>
@@ -344,6 +345,6 @@ export default function Marketplace() {
           )}
         </section>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

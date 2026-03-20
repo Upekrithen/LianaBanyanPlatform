@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 interface LookingGlassEntry {
   id: string;
@@ -79,14 +80,17 @@ export default function LookingGlass() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-      </div>
+      <PortalPageLayout maxWidth="xl" xrayId="looking-glass">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="looking-glass">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Eye className="h-8 w-8 text-primary" />
@@ -237,6 +241,7 @@ export default function LookingGlass() {
           </Card>
         )}
       </div>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Eye, ExternalLink, History } from "lucide-react";
 import { useState } from "react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CEPHAS_BASE = "https://cephas.lianabanyan.com";
 
@@ -37,7 +38,8 @@ export default function FlyOnTheWallPage() {
   );
 
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-6" data-xray-id="fly-on-the-wall-page">
+    <PortalPageLayout maxWidth="lg" xrayId="fly-on-the-wall-page">
+      <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Eye className="w-8 h-8 text-primary" />
@@ -123,6 +125,7 @@ export default function FlyOnTheWallPage() {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

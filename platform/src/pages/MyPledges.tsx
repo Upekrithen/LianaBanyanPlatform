@@ -41,6 +41,7 @@ import {
 } from "@/lib/pledgeService";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface ProjectInfo {
   id: string;
@@ -219,7 +220,8 @@ export default function MyPledges() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl space-y-6">
+    <PortalPageLayout maxWidth="md" xrayId="my-pledges">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
@@ -363,6 +365,7 @@ export default function MyPledges() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

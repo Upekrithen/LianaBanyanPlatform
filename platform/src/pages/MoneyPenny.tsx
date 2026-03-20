@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface InboxItem {
   id: string;
@@ -147,7 +148,7 @@ export default function MoneyPenny() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="moneypenny">
       <div className="flex items-center gap-4 mb-8 flex-wrap">
         <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-4 w-4" />
@@ -518,6 +519,6 @@ export default function MoneyPenny() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

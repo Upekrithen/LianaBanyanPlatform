@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Scale, FileText, Plus, Clock, Vote } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const STATUS_OPTIONS = ["all", "open", "pending", "voting", "passed", "rejected", "failed", "implemented"];
 
@@ -86,7 +87,8 @@ export default function ProposalsListing() {
   };
 
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-6" data-xray-id="proposals-listing">
+    <PortalPageLayout maxWidth="lg" xrayId="proposals-listing">
+      <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -192,6 +194,7 @@ export default function ProposalsListing() {
           })}
         </div>
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

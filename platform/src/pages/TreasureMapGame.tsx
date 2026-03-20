@@ -29,6 +29,7 @@ import {
   ArrowRight, Eye, Gift, Crown,
 } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── TYPES ───
 
@@ -298,7 +299,8 @@ export default function TreasureMapGame() {
     : DECK;
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="treasure-map-game">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Map className="h-8 w-8 text-primary" />
@@ -513,6 +515,7 @@ export default function TreasureMapGame() {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

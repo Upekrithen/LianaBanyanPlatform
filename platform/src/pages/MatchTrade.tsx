@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { calculateMatchTradeCacheRequired, MATCHTRADE_BOUNTY_COST } from "@/lib/currencyService";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CATEGORIES = [
   "Design", "Development", "Writing", "Marketing", "Accounting",
@@ -143,7 +144,8 @@ export default function MatchTrade() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="match-trade">
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <ArrowLeftRight className="h-8 w-8 text-primary" />
@@ -387,6 +389,7 @@ export default function MatchTrade() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Factory, Droplets, Mountain, Zap, Layers, Box, Printer, Cog, Scissors, Star, Users, ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import {
   type ManufacturingModule, type ModuleStatus, type ModuleType,
   MODULE_ICONS, SAMPLE_MODULES,
@@ -46,15 +47,17 @@ export default function ModularManufacturing() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center">
-        <Card className="bg-slate-900/80 border-slate-800 max-w-md"><CardContent className="py-8 text-center"><p className="text-slate-400 mb-4">Sign in to access The Forge.</p><Button asChild><Link to="/auth">Sign in</Link></Button></CardContent></Card>
-      </div>
+      <PortalPageLayout variant="stage" maxWidth="xl" xrayId="modular-manufacturing">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Card className="bg-slate-900/80 border-slate-800 max-w-md"><CardContent className="py-8 text-center"><p className="text-slate-400 mb-4">Sign in to access The Forge.</p><Button asChild><Link to="/auth">Sign in</Link></Button></CardContent></Card>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="modular-manufacturing">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="modular-manufacturing">
+      <div className="space-y-8">
         <header className="space-y-2">
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Factory className="w-8 h-8 text-orange-400" />
@@ -229,6 +232,6 @@ export default function ModularManufacturing() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

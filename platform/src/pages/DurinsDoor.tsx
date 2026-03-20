@@ -64,6 +64,7 @@ import {
   SUPPORTED_LANGUAGES,
 } from "@/i18n";
 import SnowDoorBeacons from "@/components/SnowDoorBeacons";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ── Wrong-try result state ──
 
@@ -251,7 +252,7 @@ export default function DurinsDoor() {
   const foundPasswords = getFoundPasswords();
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl px-4">
+    <PortalPageLayout maxWidth="xl" xrayId="durins-door">
       {/* ═══ HEADER with Keyhole in the O ═══ */}
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-slate-800 rounded-full text-slate-100">
@@ -609,6 +610,6 @@ export default function DurinsDoor() {
           />
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

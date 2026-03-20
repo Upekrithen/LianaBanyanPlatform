@@ -12,6 +12,7 @@ import { ClanAgreementManager } from '@/components/ClanAgreementManager';
 import { Users, Search, Shield, FileText } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useNavigate } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function Clans() {
   const { user } = useAuth();
@@ -83,7 +84,8 @@ export default function Clans() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="tribes">
+      <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -164,7 +166,8 @@ export default function Clans() {
           <ClanGrid clans={allClans} isLoading={allClansLoading} onJoin={handleJoinClan} />
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }
 

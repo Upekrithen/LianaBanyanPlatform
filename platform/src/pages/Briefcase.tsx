@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, CheckCircle2, XCircle, Clock, Award, Upload } from "lucide-react";
 import { format } from "date-fns";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function Briefcase() {
   const { user } = useAuth();
@@ -89,7 +90,8 @@ export default function Briefcase() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="briefcase">
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">My Briefcase</h1>
@@ -277,6 +279,7 @@ export default function Briefcase() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

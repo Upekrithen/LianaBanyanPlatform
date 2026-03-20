@@ -31,6 +31,7 @@ import { SlottedTopHero } from "@/components/hexisle/SlottedTopHero";
 import AttackWheelDemo from "@/components/hexisle/AttackWheelDemo";
 import HitbaseCounterShowcase from "@/components/hexisle/HitbaseCounterShowcase";
 import CharacterLayerExplorer from "@/components/hexisle/CharacterLayerExplorer";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function HexIsle() {
   const { user } = useAuth();
@@ -127,7 +128,8 @@ export default function HexIsle() {
   });
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="hexisle">
+      <div className="space-y-6">
       {/* View Phase Switcher (Portals / 2D / 3D) */}
       <ViewPhaseSwitcher />
 
@@ -641,6 +643,7 @@ export default function HexIsle() {
           )}
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

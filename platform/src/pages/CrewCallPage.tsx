@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Wrench, ChevronDown, ChevronUp, Hexagon, Zap, Award, AlertTriangle, Target, Beaker, Cog, Droplets, FlaskConical, Leaf } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { ProcessModuleCard } from "@/components/manufacturing/ProcessModuleCard";
 import { InviteCreatorCard } from "@/components/cue-cards/InviteCreatorCard";
 import { toast } from "sonner";
@@ -349,19 +350,19 @@ export default function CrewCallPage() {
 
   if (!user) {
     return (
-      <div className="container max-w-4xl mx-auto p-6">
+      <PortalPageLayout maxWidth="lg" xrayId="crew-call-page">
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             Sign in to join the crew.
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background" data-xray-id="crew-call-page">
-      <div className="container max-w-4xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout maxWidth="lg" xrayId="crew-call-page">
+      <div className="space-y-8">
         <header className="text-center">
           <h1 className="text-4xl font-bold">Crew Call</h1>
           <p className="text-xl text-muted-foreground mt-2">
@@ -440,7 +441,7 @@ export default function CrewCallPage() {
           <InviteCreatorCard />
         </section>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
 

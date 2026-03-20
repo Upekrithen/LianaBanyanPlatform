@@ -41,6 +41,7 @@ import {
   Clock,
   Download
 } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { GhostLeaderboard } from "@/components/Leaderboards/GhostLeaderboard";
 import { GhostCreditBalance } from "@/components/ghost/GhostCreditBalance";
 import { BusinessSimulator } from "@/components/BusinessSimulator";
@@ -218,15 +219,16 @@ export default function GhostWorld() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Ghost className="w-12 h-12 animate-pulse text-muted-foreground" />
-      </div>
+      <PortalPageLayout maxWidth="xl" xrayId="ghost-world">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Ghost className="w-12 h-12 animate-pulse text-muted-foreground" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
+    <PortalPageLayout maxWidth="xl" xrayId="ghost-world">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
@@ -657,7 +659,6 @@ export default function GhostWorld() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

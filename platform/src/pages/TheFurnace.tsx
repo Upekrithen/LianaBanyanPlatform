@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, ShieldCheck, AlertTriangle, Flame, ExternalLink, QrCode, BookOpen, Newspaper, Megaphone, Users } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function TheFurnace() {
   const { toast } = useToast();
@@ -48,7 +49,7 @@ export default function TheFurnace() {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-5xl">
+    <PortalPageLayout maxWidth="xl" xrayId="the-furnace">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-orange-500 rounded-full text-white">
           <Flame className="h-8 w-8" />
@@ -341,6 +342,6 @@ export default function TheFurnace() {
         </Tabs>
       </div>
 
-    </div>
+    </PortalPageLayout>
   );
 }

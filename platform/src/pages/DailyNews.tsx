@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CurrencyAmount } from "@/components/CreditSymbol";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 import {
   type SlideType,
@@ -456,15 +457,16 @@ export default function DailyNews() {
   // Don't render carousel until slides are loaded
   if (slides.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center">
-        <div className="animate-pulse text-slate-400">Loading The Daily News...</div>
-      </div>
+      <PortalPageLayout variant="stage" maxWidth="xl" xrayId="daily-news">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-pulse text-slate-400">Loading The Daily News...</div>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="daily-news">
         {/* ---------------------------------------------------------------- */}
         {/* Header                                                           */}
         {/* ---------------------------------------------------------------- */}
@@ -626,7 +628,6 @@ export default function DailyNews() {
             </CardContent>
           </Card>
         </section>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

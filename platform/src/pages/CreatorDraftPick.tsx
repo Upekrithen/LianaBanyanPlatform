@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function CreatorDraftPick() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-4xl mx-auto px-4 py-8">
+    <PortalPageLayout variant="stage" maxWidth="lg" xrayId="creator-draft-pick">
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6">
           <ArrowLeft className="w-4 h-4" /> Back
         </Link>
@@ -20,7 +20,6 @@ export default function CreatorDraftPick() {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -17,6 +17,7 @@ import {
   Eye, Users, TrendingUp, DollarSign, Heart, Shield,
   Activity, BarChart3, Globe, Zap, Clock, Coins,
 } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function FlyOnTheWall() {
   const { data: metrics } = useQuery({
@@ -66,8 +67,8 @@ export default function FlyOnTheWall() {
   const m = metrics || {} as any;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
+    <PortalPageLayout maxWidth="xl" xrayId="fly-on-the-wall">
+      <div className="space-y-8">
         {/* Header */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
@@ -290,6 +291,6 @@ export default function FlyOnTheWall() {
           </p>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

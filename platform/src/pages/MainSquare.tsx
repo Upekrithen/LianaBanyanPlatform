@@ -17,6 +17,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 // ============================================================================
 // TYPES
@@ -455,8 +456,7 @@ export default function MainSquare() {
   const isEmpty = !loading && filteredStores.length === 0 && searchQuery === "" && activeCategory === "All";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="main-square">
         {/* Back Link */}
         <Link
           to="/"
@@ -587,7 +587,6 @@ export default function MainSquare() {
             ))}
           </div>
         )}
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Folder, Briefcase as BriefcaseIcon } from "lucide-react";
 import { WorkstationCard } from "@/components/WorkstationCard";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function Workshop() {
   const { user } = useAuth();
@@ -68,14 +69,15 @@ export default function Workshop() {
 
   if (projectsLoading) {
     return (
-      <div className="container mx-auto p-6">
+      <PortalPageLayout maxWidth="xl" xrayId="workshop">
         <div className="text-center">Loading your workshop...</div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="workshop">
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Workshop</h1>
@@ -177,6 +179,7 @@ export default function Workshop() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

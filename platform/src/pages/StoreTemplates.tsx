@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Palette, Check, Grid, List, Star, Loader2 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const SAMPLE_TEMPLATES = [
   { id: "t1", name: "The Artisan", theme_key: "artisan", description: "Warm earth tones with a craft-focused layout.", primary_color: "#8B4513", secondary_color: "#DEB887", accent_color: "#D2691E", font_family: "Georgia, serif", layout_type: "featured" },
@@ -62,17 +63,17 @@ export default function StoreTemplates() {
 
   if (loading) {
     return (
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+      <PortalPageLayout maxWidth="xl" xrayId="store-templates">
         <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
           <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
           <p className="text-muted-foreground">Loading templates...</p>
         </div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout maxWidth="xl" xrayId="store-templates">
       <div className="flex flex-wrap items-center gap-3 mb-8">
         <h1 className="text-2xl font-bold flex items-center gap-2 text-foreground dark:text-foreground">
           <Palette className="h-7 w-7" />
@@ -136,6 +137,6 @@ export default function StoreTemplates() {
           </Card>
         ))}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

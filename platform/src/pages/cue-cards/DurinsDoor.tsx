@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Globe2, Key, ArrowRight, Lock, Unlock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function DurinsDoor() {
   const [password, setPassword] = useState('');
@@ -80,7 +81,8 @@ export default function DurinsDoor() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-slate-50 flex flex-col items-center justify-center p-6">
+    <PortalPageLayout maxWidth="xl" xrayId="durins-door">
+      <div className="bg-black text-slate-50 flex flex-col items-center justify-center py-12 rounded-lg">
       <div className="max-w-md w-full space-y-8 text-center">
         
         <Lock className="w-16 h-16 mx-auto text-slate-700" />
@@ -108,6 +110,7 @@ export default function DurinsDoor() {
         </form>
 
       </div>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

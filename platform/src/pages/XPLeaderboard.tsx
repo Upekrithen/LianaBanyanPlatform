@@ -18,6 +18,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 type CategoryFilter = 'all' | 'creators' | 'stewards' | 'backers';
 type TimeFilter = 'all_time' | 'this_month' | 'this_week';
@@ -46,7 +47,7 @@ export default function XPLeaderboard() {
   }, [categoryFilter, leaderboard]);
 
   return (
-    <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout maxWidth="xl" xrayId="xp-leaderboard">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
@@ -202,7 +203,7 @@ export default function XPLeaderboard() {
           </CollapsibleContent>
         </Collapsible>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
 

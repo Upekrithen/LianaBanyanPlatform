@@ -29,6 +29,7 @@ import { GoldenKeysSocial, ShareAchievementModal } from "@/components/GoldenKeys
 import PaperQuizDialog from "@/components/PaperQuizDialog";
 import { getActiveQuizzes, type PaperQuiz } from "@/lib/paperQuiz";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function GoldenKeyQuest() {
   const { user } = useAuth();
@@ -200,7 +201,8 @@ export default function GoldenKeyQuest() {
   const circlesCompleted = feathers?.circles_completed?.length || 0;
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="golden-key-quest">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Key className="h-8 w-8 text-amber-500" />
@@ -788,6 +790,7 @@ export default function GoldenKeyQuest() {
           onClose={() => setSelectedQuizPaper(null)}
         />
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

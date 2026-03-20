@@ -7,6 +7,7 @@ import {
   DataVizBar,
   ComparisonBar
 } from '../components/pudding';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const DEMO_CAROUSEL_ITEMS = [
   {
@@ -60,8 +61,7 @@ export default function PuddingDemo() {
   const [votes, setVotes] = useState({ up: 342, down: 58 });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-4xl mx-auto px-6 py-12">
+    <PortalPageLayout maxWidth="lg" xrayId="pudding-demo">
         <header className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Pudding-Style Component Library
@@ -265,7 +265,6 @@ export default function PuddingDemo() {
           <p>Inspired by <a href="https://pudding.cool" className="text-orange-500 hover:underline">The Pudding</a></p>
           <p className="mt-2">FOR THE KEEP! ⚔️</p>
         </footer>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }
