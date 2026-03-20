@@ -19,6 +19,7 @@ import {
   Filter,
   Loader2,
 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { FeatureThermometer } from '@/components/demand/FeatureThermometer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -119,70 +120,70 @@ const DemandSignaling: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
-      </div>
+      <PortalPageLayout variant="stage" xrayId="demand-signaling">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="demand-signaling">
-      {/* Header */}
-      <div className="container max-w-6xl mx-auto px-4 py-8">
-        <Link to="/" className="inline-flex items-center gap-1 text-slate-400 hover:text-white text-sm mb-6">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="demand-signaling">
+        <Link to="/" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to Platform
         </Link>
 
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <Sparkles className="w-7 h-7 text-amber-400" />
+            <Sparkles className="w-7 h-7 text-primary" />
             <h1 className="text-3xl font-bold">Demand Discovery</h1>
           </div>
-          <p className="text-slate-400 max-w-xl mx-auto">
+          <p className="text-muted-foreground max-w-xl mx-auto">
             Tell us what to build next. Distribute Shadow Marks across pre-operational features.
             Consistent allocation crystallizes into real Marks backed by the patent portfolio.
           </p>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-muted-foreground/70 mt-2">
             Innovation #1710 · Brewster's Millions — you MUST spend them, so HOW you spend reveals what you really want.
           </p>
         </div>
 
         {/* Stats Row */}
         <div className="grid grid-cols-4 gap-4 mb-8">
-          <div className="text-center p-3 rounded-lg bg-slate-800/50 border border-slate-700">
-            <div className="text-xl font-bold text-amber-400">{totalSM.toLocaleString()}</div>
-            <div className="text-xs text-slate-500">Total Shadow Marks</div>
+          <div className="text-center p-3 rounded-lg bg-card/50 border border-border">
+            <div className="text-xl font-bold text-primary">{totalSM.toLocaleString()}</div>
+            <div className="text-xs text-muted-foreground/70">Total Shadow Marks</div>
           </div>
-          <div className="text-center p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+          <div className="text-center p-3 rounded-lg bg-card/50 border border-border">
             <div className="text-xl font-bold text-emerald-400">{totalCredits.toLocaleString()}</div>
-            <div className="text-xs text-slate-500">Credits Pledged</div>
+            <div className="text-xs text-muted-foreground/70">Credits Pledged</div>
           </div>
-          <div className="text-center p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+          <div className="text-center p-3 rounded-lg bg-card/50 border border-border">
             <div className="text-xl font-bold text-blue-400">{avgProgress}%</div>
-            <div className="text-xs text-slate-500">Avg. Progress</div>
+            <div className="text-xs text-muted-foreground/70">Avg. Progress</div>
           </div>
-          <div className="text-center p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+          <div className="text-center p-3 rounded-lg bg-card/50 border border-border">
             <div className="text-xl font-bold text-purple-400">{pedestals.length}</div>
-            <div className="text-xs text-slate-500">Features Tracking</div>
+            <div className="text-xs text-muted-foreground/70">Features Tracking</div>
           </div>
         </div>
 
         {/* Beacon Streak Info */}
-        <div className="mb-6 p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+        <div className="mb-6 p-3 rounded-lg bg-card/50 border border-border">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2 text-sm">
-              <Zap className="w-4 h-4 text-amber-400" />
-              <span className="text-slate-400">Your Beacon Streak:</span>
-              <Badge variant="outline" className="text-amber-400 border-amber-500/30">
+              <Zap className="w-4 h-4 text-primary" />
+              <span className="text-muted-foreground">Your Beacon Streak:</span>
+              <Badge variant="outline" className="text-primary border-primary/30">
                 {streakDays} days
               </Badge>
-              <span className="text-slate-500">·</span>
-              <span className="text-slate-400">
-                Carry-forward: <span className="text-white">{(beaconTier.carryForwardRate * 100).toFixed(0)}%</span>
+              <span className="text-muted-foreground/70">·</span>
+              <span className="text-muted-foreground">
+                Carry-forward: <span className="text-foreground">{(beaconTier.carryForwardRate * 100).toFixed(0)}%</span>
               </span>
-              <span className="text-slate-500">·</span>
-              <span className="text-slate-400">
-                Crystallizes in: <span className="text-white">{beaconTier.crystallizationDays} days</span>
+              <span className="text-muted-foreground/70">·</span>
+              <span className="text-muted-foreground">
+                Crystallizes in: <span className="text-foreground">{beaconTier.crystallizationDays} days</span>
               </span>
             </div>
             <div className="flex gap-1">
@@ -190,7 +191,7 @@ const DemandSignaling: React.FC = () => {
                 <Badge
                   key={t.minDays}
                   variant={t.minDays <= streakDays ? 'default' : 'outline'}
-                  className={`text-[9px] ${t.minDays <= streakDays ? '' : 'text-slate-600 border-slate-700'}`}
+                  className={`text-[9px] ${t.minDays <= streakDays ? '' : 'text-muted-foreground/50 border-border'}`}
                 >
                   {t.minDays === 0 ? 'Base' : `${t.minDays}d`}: {(t.carryForwardRate * 100).toFixed(0)}%
                 </Badge>
@@ -201,7 +202,7 @@ const DemandSignaling: React.FC = () => {
 
         {/* Area Filter */}
         <div className="flex items-center gap-2 mb-6 flex-wrap">
-          <Filter className="w-4 h-4 text-slate-500" />
+          <Filter className="w-4 h-4 text-muted-foreground/70" />
           <Button
             size="sm"
             variant={areaFilter === 'all' ? 'default' : 'outline'}
@@ -219,7 +220,7 @@ const DemandSignaling: React.FC = () => {
               className="text-xs gap-1"
             >
               {a.icon} {a.label}
-              <span className="text-slate-500 ml-1">{a.shadowMarksPerEntry} SM</span>
+              <span className="text-muted-foreground/70 ml-1">{a.shadowMarksPerEntry} SM</span>
             </Button>
           ))}
         </div>
@@ -238,15 +239,15 @@ const DemandSignaling: React.FC = () => {
         </div>
 
         {/* How It Works Section */}
-        <div className="mt-12 p-6 rounded-lg bg-slate-800/30 border border-slate-700">
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
-            <Info className="w-5 h-5 text-amber-400" />
+        <div className="mt-12 p-6 rounded-lg bg-card/30 border border-border">
+          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2 mb-4">
+            <Info className="w-5 h-5 text-primary" />
             How Demand Discovery Works
           </h2>
-          <div className="grid gap-6 md:grid-cols-3 text-sm text-slate-400">
+          <div className="grid gap-6 md:grid-cols-3 text-sm text-muted-foreground">
             <div>
-              <h3 className="text-white font-medium mb-2 flex items-center gap-1">
-                <Sparkles className="w-4 h-4 text-amber-400" /> 1. Enter & Allocate
+              <h3 className="text-foreground font-medium mb-2 flex items-center gap-1">
+                <Sparkles className="w-4 h-4 text-primary" /> 1. Enter & Allocate
               </h3>
               <p>
                 Visit any area to receive Shadow Marks (free, 24-hour cooldown).
@@ -255,7 +256,7 @@ const DemandSignaling: React.FC = () => {
               </p>
             </div>
             <div>
-              <h3 className="text-white font-medium mb-2 flex items-center gap-1">
+              <h3 className="text-foreground font-medium mb-2 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4 text-emerald-400" /> 2. Persist & Compound
               </h3>
               <p>
@@ -265,7 +266,7 @@ const DemandSignaling: React.FC = () => {
               </p>
             </div>
             <div>
-              <h3 className="text-white font-medium mb-2 flex items-center gap-1">
+              <h3 className="text-foreground font-medium mb-2 flex items-center gap-1">
                 <BarChart3 className="w-4 h-4 text-blue-400" /> 3. Activate Features
               </h3>
               <p>
@@ -276,22 +277,21 @@ const DemandSignaling: React.FC = () => {
             </div>
           </div>
           <div className="mt-4 flex gap-3 text-xs">
-            <a href="/faq#shadow-marks" className="text-amber-400 hover:text-amber-300">What are Shadow Marks?</a>
-            <a href="/faq#brewster-bonus" className="text-amber-400 hover:text-amber-300">Brewster's Millions</a>
-            <a href="/faq#pre-operational" className="text-amber-400 hover:text-amber-300">Pre-operational features</a>
-            <a href="/faq#ip-load-balance" className="text-amber-400 hover:text-amber-300">IP Load Balance</a>
-            <a href="/faq#beacon-persistence" className="text-amber-400 hover:text-amber-300">Beacon Streaks</a>
+            <a href="/faq#shadow-marks" className="text-primary hover:text-primary/80">What are Shadow Marks?</a>
+            <a href="/faq#brewster-bonus" className="text-primary hover:text-primary/80">Brewster's Millions</a>
+            <a href="/faq#pre-operational" className="text-primary hover:text-primary/80">Pre-operational features</a>
+            <a href="/faq#ip-load-balance" className="text-primary hover:text-primary/80">IP Load Balance</a>
+            <a href="/faq#beacon-persistence" className="text-primary hover:text-primary/80">Beacon Streaks</a>
           </div>
         </div>
 
         {/* SEC Disclosure */}
-        <p className="text-center text-[10px] text-slate-600 mt-8">
+        <p className="text-center text-[10px] text-muted-foreground/50 mt-8">
           Shadow Marks are effort-earned demand signals, not investments. Crystallized Marks are backed by
           cooperative-held intellectual property under IP Load Balance. No money invested, no common enterprise,
           no profit expectation, no reliance on others' efforts.
         </p>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 

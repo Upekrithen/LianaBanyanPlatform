@@ -1,4 +1,4 @@
-﻿/**
+/**
  * PATENT PORTFOLIO PAGE
  * =====================
  * Pudding.cool-style detailed view of the patent portfolio
@@ -19,6 +19,7 @@ import {
   Scale, Building, Briefcase, Globe, BookOpen, Zap, Share2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { PatentPortfolioTicker } from '@/components/PatentPortfolioTicker';
 import { DataVizBar, ExpandableBlock, ComparisonBar } from '@/components/pudding';
 import { SocialShareBar } from '@/components/atti/SocialShareBar';
@@ -50,7 +51,7 @@ function SwivelCard({ front, back, className = '' }: SwivelCardProps) {
           style={{ backfaceVisibility: 'hidden' }}
         >
           {front}
-          <div className="absolute bottom-2 right-2 text-white/30 text-xs flex items-center gap-1">
+          <div className="absolute bottom-2 right-2 text-muted-foreground/50 text-xs flex items-center gap-1">
             <RotateCcw className="w-3 h-3" /> Click to flip
           </div>
         </div>
@@ -64,7 +65,7 @@ function SwivelCard({ front, back, className = '' }: SwivelCardProps) {
           }}
         >
           {back}
-          <div className="absolute bottom-2 right-2 text-white/30 text-xs flex items-center gap-1">
+          <div className="absolute bottom-2 right-2 text-muted-foreground/50 text-xs flex items-center gap-1">
             <RotateCcw className="w-3 h-3" /> Click to flip back
           </div>
         </div>
@@ -124,7 +125,7 @@ function FlippableButton({
         >
           <div className={`h-full ${colors.bg} border ${colors.border} rounded-lg p-4 hover:border-opacity-60 transition-colors`}>
             {frontContent}
-            <div className="absolute bottom-1 right-2 text-white/20 text-[10px] flex items-center gap-1">
+            <div className="absolute bottom-1 right-2 text-muted-foreground/30 text-[10px] flex items-center gap-1">
               <RotateCcw className="w-2.5 h-2.5" /> flip
             </div>
           </div>
@@ -143,7 +144,7 @@ function FlippableButton({
             <div className="flex items-center justify-between mb-2">
               <h4 className={`text-sm font-semibold ${colors.text}`}>{backTitle}</h4>
             </div>
-            <p className="text-xs text-white/60 flex-grow mb-2">{backDescription}</p>
+            <p className="text-xs text-muted-foreground flex-grow mb-2">{backDescription}</p>
             <div className="flex gap-2 mt-auto">
               {academicLink && (
                 academicLink.startsWith('http') ? (
@@ -188,10 +189,10 @@ function FlippableButton({
                 )
               )}
               {!academicLink && !technicalLink && (
-                <span className="text-xs text-white/40 italic">Specs coming soon</span>
+                <span className="text-xs text-muted-foreground/60 italic">Specs coming soon</span>
               )}
             </div>
-            <div className="absolute bottom-1 right-2 text-white/20 text-[10px] flex items-center gap-1">
+            <div className="absolute bottom-1 right-2 text-muted-foreground/30 text-[10px] flex items-center gap-1">
               <RotateCcw className="w-2.5 h-2.5" /> flip back
             </div>
           </div>
@@ -445,11 +446,10 @@ const CROWN_JEWELS = [
 
 export default function PatentPortfolio() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <PortalPageLayout variant="stage" maxWidth="lg" xrayId="patent-portfolio">
         <Link 
           to="/"
-          className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
@@ -460,10 +460,10 @@ export default function PatentPortfolio() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Patent Portfolio
           </h1>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             1,754 documented innovations across economics, governance, privacy,
             IP management, and cooperative business systems.
           </p>
@@ -501,79 +501,79 @@ export default function PatentPortfolio() {
           <SwivelCard
             className="min-h-[320px]"
             front={
-              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-2 border-amber-500/30 rounded-2xl p-6 h-full">
+              <div className="bg-card border-2 border-amber-500/30 rounded-2xl p-6 h-full">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <FileText className="w-5 h-5 text-amber-400" />
-                    <span className="text-white/70 font-medium">Patent Portfolio Value</span>
+                    <span className="text-muted-foreground font-medium">Patent Portfolio Value</span>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold text-amber-400">$116M <span className="text-lg text-white/50">equivalent</span></div>
-                    <div className="text-xs text-white/50">Pessimist's Floor (4% utilization)</div>
+                    <div className="text-3xl font-bold text-amber-400">$116M <span className="text-lg text-muted-foreground/70">equivalent</span></div>
+                    <div className="text-xs text-muted-foreground/70">Pessimist's Floor (4% utilization)</div>
                   </div>
                 </div>
                 
                 {/* Full valuation breakdown */}
-                <div className="bg-slate-950/50 rounded-lg p-4 mb-4">
-                  <div className="text-xs text-white/50 mb-2">10-Year Projection Range (for context):</div>
+                <div className="bg-background/50 rounded-lg p-4 mb-4">
+                  <div className="text-xs text-muted-foreground/70 mb-2">10-Year Projection Range (for context):</div>
                   <div className="flex items-center gap-2 text-sm">
                     <span className="text-green-400 font-mono">$3.94B</span>
-                    <span className="text-white/30">→</span>
+                    <span className="text-muted-foreground/50">→</span>
                     <span className="text-amber-400 font-mono">$7.87B</span>
-                    <span className="text-white/30">→</span>
+                    <span className="text-muted-foreground/50">→</span>
                     <span className="text-red-400 font-mono">$15.74B</span>
                   </div>
-                  <div className="text-xs text-white/40 mt-1">
+                  <div className="text-xs text-muted-foreground/60 mt-1">
                     We declare only <span className="text-amber-400">$630K</span> — Cost + 20%. The rest is candlesticks.
                   </div>
                 </div>
                 
                 {/* Allocation bars */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
-                  <div className="bg-slate-900/50 border border-green-500/20 rounded-lg p-3 text-center">
+                  <div className="bg-card/50 border border-green-500/20 rounded-lg p-3 text-center">
                     <div className="text-lg font-bold text-green-400">$69.6M</div>
-                    <div className="text-xs text-white/50">Platform (60%)</div>
+                    <div className="text-xs text-muted-foreground/70">Platform (60%)</div>
                   </div>
-                  <div className="bg-slate-900/50 border border-blue-500/20 rounded-lg p-3 text-center">
+                  <div className="bg-card/50 border border-blue-500/20 rounded-lg p-3 text-center">
                     <div className="text-lg font-bold text-blue-400">$11.6M</div>
-                    <div className="text-xs text-white/50">Sponsor Pool (10%)</div>
+                    <div className="text-xs text-muted-foreground/70">Sponsor Pool (10%)</div>
                   </div>
-                  <div className="bg-slate-900/50 border border-purple-500/20 rounded-lg p-3 text-center">
+                  <div className="bg-card/50 border border-purple-500/20 rounded-lg p-3 text-center">
                     <div className="text-lg font-bold text-purple-400">$11.6M</div>
-                    <div className="text-xs text-white/50">Patent Buckets (10%)</div>
+                    <div className="text-xs text-muted-foreground/70">Patent Buckets (10%)</div>
                   </div>
                 </div>
                 
                 {/* Progress bar */}
                 <div className="mb-2">
-                  <div className="flex justify-between text-xs text-white/50 mb-1">
+                  <div className="flex justify-between text-xs text-muted-foreground/70 mb-1">
                     <span>Platform Allocation Remaining</span>
                     <span className="text-green-400">$69.6M / $69.6M</span>
                   </div>
-                  <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-2 bg-card rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-green-500 to-green-400 w-full" />
                   </div>
-                  <div className="flex justify-between text-xs text-white/40 mt-1">
+                  <div className="flex justify-between text-xs text-muted-foreground/60 mt-1">
                     <span>Allocated: $0</span>
                     <span>100.0% remaining</span>
                   </div>
                 </div>
                 
-                <details className="text-xs text-white/50">
-                  <summary className="cursor-pointer hover:text-white/70">Show Allocation Breakdown</summary>
-                  <div className="mt-2 p-2 bg-slate-900/50 rounded text-white/60">
+                <details className="text-xs text-muted-foreground/70">
+                  <summary className="cursor-pointer hover:text-muted-foreground">Show Allocation Breakdown</summary>
+                  <div className="mt-2 p-2 bg-card/50 rounded text-muted-foreground">
                     60% Platform + 10% Sponsor Pool + 10% Patent Buckets + 20% Founder = 100%
                   </div>
                 </details>
                 
-                <div className="mt-4 pt-4 border-t border-slate-700">
-                  <p className="text-xs text-white/50 italic border-l-2 border-amber-500/30 pl-3 mb-3">
+                <div className="mt-4 pt-4 border-t border-border">
+                  <p className="text-xs text-muted-foreground/70 italic border-l-2 border-amber-500/30 pl-3 mb-3">
                     "I'm not trying to be Valjean. I'm trying to be the Bishop — one of many — and these patents are my silver candlesticks. I don't have any silver spoons."
                     <span className="block text-amber-400/60 mt-1 not-italic">— Founder</span>
                   </p>
-                  <h4 className="text-white/70 text-sm font-medium mb-2">Why "Equivalent"?</h4>
-                  <p className="text-xs text-white/50">
-                    All dollar amounts represent platform service unit value, not cash. Platform credits are "future service coupons" — prepaid access to platform services at Cost+20%. <span className="text-amber-400 font-medium">Test-Net By Design</span> means no trading, no speculation, no cashing out. This is a feature, not a limitation. <span className="text-white/70 font-medium">Because it has ACTUAL real life value.</span>
+                  <h4 className="text-muted-foreground text-sm font-medium mb-2">Why "Equivalent"?</h4>
+                  <p className="text-xs text-muted-foreground/70">
+                    All dollar amounts represent platform service unit value, not cash. Platform credits are "future service coupons" — prepaid access to platform services at Cost+20%. <span className="text-amber-400 font-medium">Test-Net By Design</span> means no trading, no speculation, no cashing out. This is a feature, not a limitation. <span className="text-muted-foreground font-medium">Because it has ACTUAL real life value.</span>
                   </p>
                   <a href="/like-what" className="inline-flex items-center gap-1.5 mt-3 text-xs text-amber-400 hover:text-amber-300 font-medium transition-colors">
                     Like what? See examples &rarr;
@@ -582,23 +582,23 @@ export default function PatentPortfolio() {
               </div>
             }
             back={
-              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-2 border-amber-500/30 rounded-2xl p-6 h-full">
-                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <div className="bg-card border-2 border-amber-500/30 rounded-2xl p-6 h-full">
+                <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-amber-400" />
                   Revenue Pathways
                 </h3>
-                <p className="text-sm text-white/60 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   How the patent portfolio may generate value (not guarantees):
                 </p>
                 
                 <div className="space-y-3">
                   {REVENUE_PATHWAYS.map((pathway) => (
-                    <div key={pathway.name} className="bg-slate-900/50 rounded-lg p-3">
+                    <div key={pathway.name} className="bg-card/50 rounded-lg p-3">
                       <div className="flex items-center gap-2 mb-1">
                         <pathway.icon className="w-4 h-4 text-amber-400" />
-                        <span className="text-white font-medium text-sm">{pathway.name}</span>
+                        <span className="text-foreground font-medium text-sm">{pathway.name}</span>
                       </div>
-                      <p className="text-xs text-white/50">{pathway.description}</p>
+                      <p className="text-xs text-muted-foreground/70">{pathway.description}</p>
                       <p className="text-xs text-amber-400/70 mt-1">{pathway.potential}</p>
                     </div>
                   ))}
@@ -628,7 +628,7 @@ export default function PatentPortfolio() {
               <BookOpen className="w-6 h-6 text-purple-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">The Nine Economic Laws</h2>
+              <h2 className="text-2xl font-bold text-foreground">The Nine Economic Laws</h2>
               <p className="text-xs text-purple-300">37 years in the making • Click any law to flip and explore</p>
             </div>
           </div>
@@ -636,19 +636,19 @@ export default function PatentPortfolio() {
           <div className="flex items-center gap-4 mb-6 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-purple-400 font-bold">9</span>
-              <span className="text-white/50">Laws</span>
+              <span className="text-muted-foreground/70">Laws</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-amber-400 font-bold">3</span>
-              <span className="text-white/50">Crown Jewels</span>
+              <span className="text-muted-foreground/70">Crown Jewels</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-400 font-bold">~126</span>
-              <span className="text-white/50">Claims</span>
+              <span className="text-muted-foreground/70">Claims</span>
             </div>
             <div className="flex items-center gap-2 ml-auto">
               <span className="text-purple-400">Est. 10-Year:</span>
-              <span className="text-white/70">$42M – $89M equiv</span>
+              <span className="text-muted-foreground">$42M – $89M equiv</span>
             </div>
           </div>
           
@@ -663,7 +663,7 @@ export default function PatentPortfolio() {
                       {law.num}
                     </span>
                     <div className="flex-grow">
-                      <span className={`text-sm font-medium ${law.crown ? 'text-amber-400' : 'text-white'}`}>
+                      <span className={`text-sm font-medium ${law.crown ? 'text-amber-400' : 'text-foreground'}`}>
                         {law.name}
                       </span>
                       {law.crown && <span className="text-amber-400 text-xs ml-1">⭐</span>}
@@ -700,7 +700,7 @@ export default function PatentPortfolio() {
               <Zap className="w-6 h-6 text-cyan-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">HexIsle Mechanical Systems</h2>
+              <h2 className="text-2xl font-bold text-foreground">HexIsle Mechanical Systems</h2>
               <p className="text-xs text-cyan-300">Real hydraulics that DO something • Click any innovation to flip</p>
             </div>
           </div>
@@ -708,19 +708,19 @@ export default function PatentPortfolio() {
           <div className="flex items-center gap-4 mb-6 text-sm">
             <div className="flex items-center gap-2">
               <span className="text-cyan-400 font-bold">6</span>
-              <span className="text-white/50">Innovations</span>
+              <span className="text-muted-foreground/70">Innovations</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-amber-400 font-bold">3</span>
-              <span className="text-white/50">Crown Jewels</span>
+              <span className="text-muted-foreground/70">Crown Jewels</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-400 font-bold">~154</span>
-              <span className="text-white/50">Claims</span>
+              <span className="text-muted-foreground/70">Claims</span>
             </div>
             <div className="flex items-center gap-2 ml-auto">
               <span className="text-cyan-400">Est. 10-Year:</span>
-              <span className="text-white/70">$35M – $71M equiv</span>
+              <span className="text-muted-foreground">$35M – $71M equiv</span>
             </div>
           </div>
           
@@ -733,7 +733,7 @@ export default function PatentPortfolio() {
                   <div className="flex items-start gap-2">
                     <span className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${innov.crown ? 'bg-amber-400' : 'bg-cyan-400'}`} />
                     <div className="flex-grow">
-                      <span className={`text-sm font-medium ${innov.crown ? 'text-amber-400' : 'text-white'}`}>
+                      <span className={`text-sm font-medium ${innov.crown ? 'text-amber-400' : 'text-foreground'}`}>
                         {innov.name}
                       </span>
                       {innov.crown && <span className="text-amber-400 text-xs ml-1">⭐</span>}
@@ -748,8 +748,8 @@ export default function PatentPortfolio() {
             ))}
           </div>
           
-          <div className="mt-4 p-3 bg-slate-900/50 border border-cyan-500/20 rounded-lg">
-            <p className="text-xs text-white/50">
+          <div className="mt-4 p-3 bg-card/50 border border-cyan-500/20 rounded-lg">
+            <p className="text-xs text-muted-foreground/70">
               <strong className="text-cyan-400">System Validated:</strong> 469 Hexels, 
               5-gallon reservoir, 10× torque margin, 95% pressure retention
             </p>
@@ -781,7 +781,7 @@ export default function PatentPortfolio() {
               Enter the Hall of Innovations
               <ChevronRight className="w-4 h-4" />
             </Link>
-            <p className="text-xs text-white/40 mt-2">
+            <p className="text-xs text-muted-foreground/60 mt-2">
               Vote with Credits to fund patent prosecution and earn fractional participation
             </p>
           </div>
@@ -794,7 +794,7 @@ export default function PatentPortfolio() {
           transition={{ delay: 0.2 }}
           className="mb-12"
         >
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
             <TrendingUp className="w-6 h-6 text-amber-400" />
             Valuation Scenarios
           </h2>
@@ -802,29 +802,29 @@ export default function PatentPortfolio() {
           <SwivelCard
             className="min-h-[200px]"
             front={
-              <div className="bg-slate-900/50 border border-slate-700 rounded-xl overflow-hidden">
+              <div className="bg-card/50 border border-border rounded-xl overflow-hidden">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-700">
-                      <th className="px-4 py-3 text-left text-sm font-semibold text-white/70">Scenario</th>
-                      <th className="px-4 py-3 text-right text-sm font-semibold text-white/70">Year 1</th>
-                      <th className="px-4 py-3 text-right text-sm font-semibold text-white/70">Year 5</th>
-                      <th className="px-4 py-3 text-right text-sm font-semibold text-white/70">Year 10</th>
+                    <tr className="border-b border-border">
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-muted-foreground">Scenario</th>
+                      <th className="px-4 py-3 text-right text-sm font-semibold text-muted-foreground">Year 1</th>
+                      <th className="px-4 py-3 text-right text-sm font-semibold text-muted-foreground">Year 5</th>
+                      <th className="px-4 py-3 text-right text-sm font-semibold text-muted-foreground">Year 10</th>
                     </tr>
                   </thead>
                   <tbody>
                     {Object.values(VALUATION_BREAKDOWN).map((row, i) => (
-                      <tr key={row.label} className={i < 2 ? 'border-b border-slate-800' : ''}>
-                        <td className="px-4 py-3 text-white font-medium">{row.label}</td>
-                        <td className="px-4 py-3 text-right font-mono text-green-400">{row.year1} <span className="text-white/50 text-xs">equiv</span></td>
-                        <td className="px-4 py-3 text-right font-mono text-amber-400">{row.year5} <span className="text-white/50 text-xs">equiv</span></td>
-                        <td className="px-4 py-3 text-right font-mono text-blue-400">{row.year10} <span className="text-white/50 text-xs">equiv</span></td>
+                      <tr key={row.label} className={i < 2 ? 'border-b border-border' : ''}>
+                        <td className="px-4 py-3 text-foreground font-medium">{row.label}</td>
+                        <td className="px-4 py-3 text-right font-mono text-green-400">{row.year1} <span className="text-muted-foreground/70 text-xs">equiv</span></td>
+                        <td className="px-4 py-3 text-right font-mono text-amber-400">{row.year5} <span className="text-muted-foreground/70 text-xs">equiv</span></td>
+                        <td className="px-4 py-3 text-right font-mono text-blue-400">{row.year10} <span className="text-muted-foreground/70 text-xs">equiv</span></td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <div className="p-4 bg-slate-950/50 border-t border-slate-700">
-                  <p className="text-sm text-white/50">
+                <div className="p-4 bg-background/50 border-t border-border">
+                  <p className="text-sm text-muted-foreground/70">
                     All amounts represent platform service unit value ("equivalent"), not cash. 
                     See "Test-Net By Design" section below.
                   </p>
@@ -832,9 +832,9 @@ export default function PatentPortfolio() {
               </div>
             }
             back={
-              <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-white mb-4">Valuation Methodology</h3>
-                <div className="space-y-3 text-sm text-white/70">
+              <div className="bg-card/50 border border-border rounded-xl p-6">
+                <h3 className="text-lg font-bold text-foreground mb-4">Valuation Methodology</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
                   <p>
                     <strong className="text-amber-400">Relief-from-Royalty Method:</strong> Estimates 
                     the royalty a company would pay to license the technology, then calculates 
@@ -888,7 +888,7 @@ export default function PatentPortfolio() {
               leftColor="#22c55e"
               rightColor="#ef4444"
             />
-            <div className="mt-4 space-y-3 text-sm text-white/70">
+            <div className="mt-4 space-y-3 text-sm text-muted-foreground">
               <p>
                 <strong className="text-amber-400">Why the conservative claim?</strong> Credibility matters more than hype. 
                 We'd rather under-promise and over-deliver than join the chorus of inflated valuations.
@@ -908,11 +908,11 @@ export default function PatentPortfolio() {
           transition={{ delay: 0.3 }}
           className="mb-12"
         >
-          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
             <Shield className="w-6 h-6 text-green-400" />
             Crown Jewels (No Prior Art)
           </h2>
-          <p className="text-white/50 text-sm mb-6">
+          <p className="text-muted-foreground/70 text-sm mb-6">
             Click any jewel to flip it and see details, then choose to read academic or technical specs.
           </p>
           
@@ -924,8 +924,8 @@ export default function PatentPortfolio() {
                 frontContent={
                   <div className="flex items-start justify-between h-full">
                     <div>
-                      <h3 className="text-white font-medium">{jewel.name}</h3>
-                      <p className="text-sm text-white/50 mt-1">{jewel.category}</p>
+                      <h3 className="text-foreground font-medium">{jewel.name}</h3>
+                      <p className="text-sm text-muted-foreground/70 mt-1">{jewel.category}</p>
                     </div>
                     <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded flex-shrink-0">
                       {jewel.status}
@@ -949,7 +949,7 @@ export default function PatentPortfolio() {
             defaultExpanded={false}
             className="mt-6"
           >
-            <div className="space-y-3 text-sm text-white/70">
+            <div className="space-y-3 text-sm text-muted-foreground">
               <p>
                 <strong className="text-green-400">No Prior Art Found:</strong> Extensive patent 
                 searches found no existing patents, publications, or products that anticipate 
@@ -982,7 +982,7 @@ export default function PatentPortfolio() {
           transition={{ delay: 0.4 }}
           className="mb-12"
         >
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
             <Lock className="w-6 h-6 text-amber-400" />
             Test-Net By Design
           </h2>
@@ -991,25 +991,25 @@ export default function PatentPortfolio() {
             className="min-h-[280px]"
             front={
               <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-6">
-                <p className="text-white/90 leading-relaxed mb-4">
+                <p className="text-foreground/90 leading-relaxed mb-4">
                   The platform operates <strong className="text-amber-400">permanently on testnet</strong>. 
                   This is not a staging environment — it's an architectural decision that prevents speculation 
                   and maintains SEC compliance.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                  <div className="bg-slate-900/50 rounded-lg p-4">
-                    <h4 className="text-white font-semibold mb-2">What This Means</h4>
-                    <ul className="text-sm text-white/70 space-y-1">
+                  <div className="bg-card/50 rounded-lg p-4">
+                    <h4 className="text-foreground font-semibold mb-2">What This Means</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• No trading on exchanges</li>
                       <li>• No speculation possible</li>
                       <li>• No cashing out — ever</li>
                       <li>• Credits = prepaid services</li>
                     </ul>
                   </div>
-                  <div className="bg-slate-900/50 rounded-lg p-4">
-                    <h4 className="text-white font-semibold mb-2">Why This Matters</h4>
-                    <ul className="text-sm text-white/70 space-y-1">
+                  <div className="bg-card/50 rounded-lg p-4">
+                    <h4 className="text-foreground font-semibold mb-2">Why This Matters</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Fails Howey Test = not a security</li>
                       <li>• No SEC registration required</li>
                       <li>• Stable value, not volatile</li>
@@ -1021,26 +1021,26 @@ export default function PatentPortfolio() {
             }
             back={
               <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-white mb-4">The Howey Test</h3>
-                <p className="text-sm text-white/70 mb-4">
+                <h3 className="text-lg font-bold text-foreground mb-4">The Howey Test</h3>
+                <p className="text-sm text-muted-foreground mb-4">
                   A transaction is a "security" if it involves:
                 </p>
                 <div className="space-y-2 text-sm">
                   <div className="flex items-start gap-2">
                     <span className="text-green-400">✓</span>
-                    <span className="text-white/70">Investment of money — <span className="text-green-400">Yes, but...</span></span>
+                    <span className="text-muted-foreground">Investment of money — <span className="text-green-400">Yes, but...</span></span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-400">✗</span>
-                    <span className="text-white/70">In a common enterprise — <span className="text-green-400">No, prepaid services</span></span>
+                    <span className="text-muted-foreground">In a common enterprise — <span className="text-green-400">No, prepaid services</span></span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-400">✗</span>
-                    <span className="text-white/70">With expectation of profit — <span className="text-green-400">No, service access</span></span>
+                    <span className="text-muted-foreground">With expectation of profit — <span className="text-green-400">No, service access</span></span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-400">✗</span>
-                    <span className="text-white/70">From efforts of others — <span className="text-green-400">No, self-service</span></span>
+                    <span className="text-muted-foreground">From efforts of others — <span className="text-green-400">No, self-service</span></span>
                   </div>
                 </div>
                 <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
@@ -1060,7 +1060,7 @@ export default function PatentPortfolio() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
             <Users className="w-6 h-6 text-blue-400" />
             Allocation Structure
           </h2>
@@ -1069,41 +1069,41 @@ export default function PatentPortfolio() {
             className="min-h-[320px]"
             front={
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-white mb-3">Why We Show This Valuation</h3>
-                <p className="text-white/80 leading-relaxed mb-4">
+                <h3 className="text-lg font-semibold text-foreground mb-3">Why We Show This Valuation</h3>
+                <p className="text-foreground/80 leading-relaxed mb-4">
                   This patent portfolio isn't just documentation — it's the <strong className="text-blue-400">fuel for the platform</strong>. 
                   The Founder is committing real intellectual property to fund operations, reward contributors, and give every 
                   $5 member a stake in something substantial.
                 </p>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-slate-900/50 border border-green-500/30 rounded-lg p-4 text-center">
+                  <div className="bg-card/50 border border-green-500/30 rounded-lg p-4 text-center">
                     <div className="text-3xl font-bold text-green-400 mb-1">60%</div>
-                    <div className="text-sm text-white/70">Platform & Sponsors</div>
-                    <div className="text-xs text-white/50 mt-1">Operations + Cascade Pool</div>
+                    <div className="text-sm text-muted-foreground">Platform & Sponsors</div>
+                    <div className="text-xs text-muted-foreground/70 mt-1">Operations + Cascade Pool</div>
                   </div>
-                  <div className="bg-slate-900/50 border border-blue-500/30 rounded-lg p-4 text-center">
+                  <div className="bg-card/50 border border-blue-500/30 rounded-lg p-4 text-center">
                     <div className="text-3xl font-bold text-blue-400 mb-1">10%</div>
-                    <div className="text-sm text-white/70">Patent Buckets</div>
-                    <div className="text-xs text-white/50 mt-1">5K max per person</div>
+                    <div className="text-sm text-muted-foreground">Patent Buckets</div>
+                    <div className="text-xs text-muted-foreground/70 mt-1">5K max per person</div>
                   </div>
-                  <div className="bg-slate-900/50 border border-purple-500/30 rounded-lg p-4 text-center">
+                  <div className="bg-card/50 border border-purple-500/30 rounded-lg p-4 text-center">
                     <div className="text-3xl font-bold text-purple-400 mb-1">20%</div>
-                    <div className="text-sm text-white/70">Founder</div>
-                    <div className="text-xs text-white/50 mt-1">Development reserve</div>
+                    <div className="text-sm text-muted-foreground">Founder</div>
+                    <div className="text-xs text-muted-foreground/70 mt-1">Development reserve</div>
                   </div>
-                  <div className="bg-slate-900/50 border border-cyan-500/30 rounded-lg p-4 text-center">
+                  <div className="bg-card/50 border border-cyan-500/30 rounded-lg p-4 text-center">
                     <div className="text-3xl font-bold text-cyan-400 mb-1">10%</div>
-                    <div className="text-sm text-white/70">Prosecution</div>
-                    <div className="text-xs text-white/50 mt-1">Legal + Implementation</div>
+                    <div className="text-sm text-muted-foreground">Prosecution</div>
+                    <div className="text-xs text-muted-foreground/70 mt-1">Legal + Implementation</div>
                   </div>
                 </div>
               </div>
             }
             back={
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-white mb-4">The Sponsorship Cascade</h3>
-                <div className="space-y-3 text-sm text-white/70">
+                <h3 className="text-lg font-bold text-foreground mb-4">The Sponsorship Cascade</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
                   <div className="flex items-start gap-2">
                     <span className="w-6 h-6 rounded-full bg-green-500/20 text-green-400 text-xs flex items-center justify-center flex-shrink-0">1</span>
                     <span><strong className="text-green-400">25 Credit Minimum:</strong> Anyone can sponsor someone else</span>
@@ -1121,8 +1121,8 @@ export default function PatentPortfolio() {
                     <span><strong className="text-purple-400">Renewal Cycle:</strong> At $10M cap, pool resets</span>
                   </div>
                 </div>
-                <div className="mt-4 p-3 bg-slate-900/50 rounded-lg">
-                  <p className="text-xs text-white/60 font-mono">
+                <div className="mt-4 p-3 bg-card/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground font-mono">
                     100 Credits → split to 10 (10 each) → each splits to 9 (1 each) → resurgence to 5K
                   </p>
                 </div>
@@ -1134,7 +1134,7 @@ export default function PatentPortfolio() {
             <p className="text-amber-200 italic text-lg">
               "For I will not offer that which costs me nothing."
             </p>
-            <p className="text-white/50 text-sm mt-2">
+            <p className="text-muted-foreground/70 text-sm mt-2">
               — The Founder's commitment: real IP, real value, real skin in the game.
             </p>
           </div>
@@ -1147,10 +1147,10 @@ export default function PatentPortfolio() {
           transition={{ delay: 0.55 }}
           className="mt-8"
         >
-          <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-card/50 border border-border rounded-xl p-6">
             <div className="flex items-center gap-2 mb-3">
               <Share2 className="w-4 h-4 text-amber-400" />
-              <h3 className="text-sm font-medium text-white/70">Share the Patent Portfolio</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">Share the Patent Portfolio</h3>
             </div>
             <SocialShareBar moment="general" initiativeName="Patent Portfolio" />
           </div>
@@ -1160,16 +1160,15 @@ export default function PatentPortfolio() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="mt-12 pt-8 border-t border-slate-800 text-center"
+          className="mt-12 pt-8 border-t border-border text-center"
         >
-          <p className="text-white/50 text-sm">
+          <p className="text-muted-foreground/70 text-sm">
             LIANA BANYAN CORPORATION
           </p>
-          <p className="text-white/30 text-xs mt-2">
+          <p className="text-muted-foreground/50 text-xs mt-2">
             Forward-looking statements apply. Actual results may differ materially.
           </p>
         </motion.div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }
