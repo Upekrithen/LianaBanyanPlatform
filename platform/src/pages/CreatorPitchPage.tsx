@@ -21,6 +21,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { InviteCreatorCard } from "@/components/cue-cards/InviteCreatorCard";
 import { WeNeedYouCard } from "@/components/cue-cards/WeNeedYouCard";
 
@@ -88,8 +89,8 @@ export default function CreatorPitchPage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-background" data-xray-id="creator-pitch-page">
-      <div className="container max-w-3xl mx-auto px-4 py-12 space-y-10">
+    <PortalPageLayout maxWidth="md" xrayId="creator-pitch-page">
+      <div className="space-y-10">
         {/* Hero */}
         <header className="text-center space-y-4">
           <h1 className="text-4xl font-bold">
@@ -185,6 +186,6 @@ export default function CreatorPitchPage() {
           <WeNeedYouCard />
         </section>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

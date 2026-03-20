@@ -28,6 +28,7 @@ import {
   Heart,
   Building2,
 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 export function FinancialTransparencyPage() {
   const [activeTab, setActiveTab] = useState("ledgers");
@@ -100,7 +101,7 @@ export function FinancialTransparencyPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <PortalPageLayout maxWidth="xl" xrayId="financial-transparency-page">
       {/* Hero Section */}
       <div className="text-center mb-8">
         <Badge className="mb-4 bg-green-100 text-green-800">
@@ -439,7 +440,7 @@ export function FinancialTransparencyPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }
 
