@@ -168,15 +168,14 @@ export const DenkenMenu: React.FC = () => {
         className={`rounded-full shadow-2xl transition-all duration-500 flex items-center justify-center border-2 overflow-hidden ${
           isBuilderModeActive
             ? 'border-cyan-400 scale-110 shadow-[0_0_30px_rgba(34,211,238,0.3)]'
-            : 'border-slate-600 hover:border-cyan-500/50 hover:scale-105'
+            : 'border-slate-500 hover:border-cyan-500/50 hover:scale-105 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
         }`}
         style={{
           width: '56px',
           height: '56px',
           padding: 0,
           position: 'relative',
-          background: isBuilderModeActive ? '#0a1628' : '#f0ede6',
-          opacity: isBuilderModeActive ? 1 : 0.85,
+          background: isBuilderModeActive ? '#0a1628' : '#e8e4dc',
           transition: 'all 0.5s ease',
         }}
         aria-label="Denken tools"
@@ -190,7 +189,7 @@ export const DenkenMenu: React.FC = () => {
           style={{
             filter: isBuilderModeActive
               ? 'drop-shadow(0 0 3px rgba(34,211,238,0.9)) drop-shadow(0 0 6px rgba(34,211,238,0.6)) drop-shadow(0 0 12px rgba(34,211,238,0.3))'
-              : 'none',
+              : 'contrast(1.15) saturate(1.3) sepia(0.15) hue-rotate(-10deg)',
           }}
         />
 
@@ -208,7 +207,7 @@ export const DenkenMenu: React.FC = () => {
           />
         )}
 
-        {/* Lens shimmer when NOT in X-Ray mode */}
+        {/* Per-lens shimmer when NOT in X-Ray mode */}
         {!isBuilderModeActive && (
           <div
             style={{
@@ -219,19 +218,56 @@ export const DenkenMenu: React.FC = () => {
               borderRadius: '50%',
             }}
           >
+            {/* Left lens shimmer */}
             <div
               style={{
                 position: 'absolute',
-                top: '35%',
-                left: '-100%',
-                width: '50%',
-                height: '20%',
-                background:
-                  'linear-gradient(90deg, transparent 0%, rgba(34,211,238,0.3) 40%, rgba(34,211,238,0.5) 50%, rgba(34,211,238,0.3) 60%, transparent 100%)',
-                transform: 'skewX(-20deg)',
-                animation: 'denkenShimmer 6s ease-in-out infinite',
+                top: '32%',
+                left: '12%',
+                width: '28%',
+                height: '22%',
+                overflow: 'hidden',
+                borderRadius: '50%',
               }}
-            />
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: '-150%',
+                  width: '100%',
+                  height: '100%',
+                  background:
+                    'linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.4) 60%, transparent 100%)',
+                  animation: 'denkenLensShimmerL 8s ease-in-out infinite',
+                }}
+              />
+            </div>
+            {/* Right lens shimmer */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '32%',
+                left: '58%',
+                width: '28%',
+                height: '22%',
+                overflow: 'hidden',
+                borderRadius: '50%',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: '-150%',
+                  width: '100%',
+                  height: '100%',
+                  background:
+                    'linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.4) 60%, transparent 100%)',
+                  animation: 'denkenLensShimmerR 8s ease-in-out infinite',
+                }}
+              />
+            </div>
           </div>
         )}
 
@@ -247,12 +283,19 @@ export const DenkenMenu: React.FC = () => {
         )}
       </button>
 
-      {/* Shimmer keyframes */}
+      {/* Per-lens shimmer keyframes — left fires slightly before right for realism */}
       <style>{`
-        @keyframes denkenShimmer {
-          0%, 85% { left: -100%; opacity: 0; }
-          90% { opacity: 1; }
-          100% { left: 200%; opacity: 0; }
+        @keyframes denkenLensShimmerL {
+          0%, 80% { left: -150%; opacity: 0; }
+          85% { opacity: 1; }
+          92% { left: 250%; opacity: 0; }
+          100% { left: 250%; opacity: 0; }
+        }
+        @keyframes denkenLensShimmerR {
+          0%, 83% { left: -150%; opacity: 0; }
+          88% { opacity: 1; }
+          95% { left: 250%; opacity: 0; }
+          100% { left: 250%; opacity: 0; }
         }
       `}</style>
     </div>
