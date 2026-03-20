@@ -9,12 +9,64 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 58 (March 19, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 60 (March 20, 2026)
 
-**Latest commit:** TBD (uncommitted — see Session 58 below)
+**Latest commit:** `3268d6c` — Knight Phase 1 Batch 5: 13 pages migrated to PortalPageLayout
+**Previous commit:** `e2870b6` (Session 59: Batches 2-4, 21 pages)
+
+**Status (March 20, 2026 — Session 60 COMPLETE):**
+- Phase 1 Visual Unification: 13 more pages migrated to PortalPageLayout this session
+- Total pages on PortalPageLayout: ~39 (26 from Bishop/Session 59 + 13 this session)
+- Remaining pages needing migration: ~130+ (mostly dashboard, admin, tool pages)
+- **Innovation count:** 1,754 | **Patent claims:** 1,401 across 8 provisionals
+
+### What Was Done (Session 60 — Knight)
+
+#### Phase 1 Visual Unification — Batch 5 (13 pages)
+
+Continued the mass CSS migration from `BISHOP_DROPZONE/KNIGHT_HANDOFF_PHASE1_VISUAL_MIGRATION.md`.
+
+Bishop pre-completed Batches 1-4 (26 pages) before handoff. This session migrated 13 additional pages:
+
+**Initiative pages (10):**
+- MSAPage, VSLPage, RallyGroupPage, FamilyTablePage, HouseholdConciergePage
+- HealthAccordsPage, BrassTacksPage, DidaskoPage, LetsGoShoppingPage, LifeLineMedicationsPage
+
+**Public pages (3):**
+- LaunchTracker, CommunitySupport, CollegeOfHardKnocks
+
+**Migration pattern applied:**
+- Strip `landing-page` / `landing-title` / `container mx-auto` wrappers
+- Wrap in `<PortalPageLayout maxWidth="xl" xrayId="...">`
+- Replace `text-slate-900` → `text-foreground`, `text-slate-600` → `text-muted-foreground`, etc.
+- Remove `import '@/styles/landing.css'` where present
+- Preserve intentional dark accent sections (Underground Railroad, Mark Cuban Model, Crown sections)
+
+**Skipped (complex edge cases for Bishop):**
+- DemandSignaling.tsx — fully dark themed page, needs `variant="stage"` approach
+- PowerToThePeoplePage.tsx — 921 lines, mixed dark/light, needs dedicated session
+- PatentPortfolio.tsx — 1,162 lines with framer-motion animations
+- ~130+ remaining dashboard/admin/tool pages
+
+**Verification:** `tsc --noEmit` PASS, `vite build` PASS after each batch.
+
+### Pending Work
+
+| Priority | Task | Notes |
+|----------|------|-------|
+| HIGH | Continue Phase 1 migration — remaining ~130 pages | Next session should target DemandSignaling (stage variant), PowerToThePeople, portal gateway pages |
+| HIGH | Deploy to production | `npm run build; firebase deploy --only hosting:main -P default` |
+| MEDIUM | PatentPortfolio.tsx migration | 1,162 lines with framer-motion, needs careful handling |
+| LOW | Remove unused `@/styles/landing.css` if no pages reference it | Check after all migrations complete |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Knight Session 58 (March 19, 2026)
+
+**Latest commit:** `08a5523` — Session 58: Stripe SDK purge + membership payment fixes
 **Previous commit:** `18089f5` (Session 53)
 
-**Status (March 19, 2026 — Session 58 IN PROGRESS):**
+**Status (March 19, 2026 — Session 58 COMPLETE):**
 - All 9 Stripe SDK edge functions rewritten to raw `fetch` and deployed
 - Migration `20260320000006` created for `membership_stake_paid` columns
 - Membership payment flow fully working (fixed Session 57)
