@@ -171,8 +171,8 @@ export const DenkenMenu: React.FC = () => {
             : 'border-slate-500 hover:border-cyan-500/50 hover:scale-105 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
         }`}
         style={{
-          width: '56px',
-          height: '56px',
+          width: '64px',
+          height: '64px',
           padding: 0,
           position: 'relative',
           background: isBuilderModeActive ? '#0a1628' : '#e8e4dc',
