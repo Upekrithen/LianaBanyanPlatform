@@ -9,55 +9,74 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 60 (March 20, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 61 (March 20, 2026)
 
-**Latest commit:** `3268d6c` — Knight Phase 1 Batch 5: 13 pages migrated to PortalPageLayout
-**Previous commit:** `e2870b6` (Session 59: Batches 2-4, 21 pages)
+**Latest commit:** `961e0c5` — Knight 61 Batch 6: 12 pages migrated to PortalPageLayout
+**Previous commits:** `987bb7c` (complex edge cases), `3268d6c` (Session 60: Batch 5)
 
-**Status (March 20, 2026 — Session 60 COMPLETE):**
-- Phase 1 Visual Unification: 13 more pages migrated to PortalPageLayout this session
-- Total pages on PortalPageLayout: ~39 (26 from Bishop/Session 59 + 13 this session)
-- Remaining pages needing migration: ~130+ (mostly dashboard, admin, tool pages)
+**Status (March 20, 2026 — Session 61 COMPLETE):**
+- Phase 1 Visual Unification: 15 more pages migrated this session (3 complex + 12 quick-wins)
+- Total pages on PortalPageLayout: ~54 (39 prior + 15 this session)
+- Remaining pages needing PortalPageLayout: ~215 (156 already use semantic tokens, just need wrapper)
 - **Innovation count:** 1,754 | **Patent claims:** 1,401 across 8 provisionals
 
-### What Was Done (Session 60 — Knight)
+### What Was Done (Session 61 — Knight)
 
-#### Phase 1 Visual Unification — Batch 5 (13 pages)
+#### 1. Deployed Session 60 build to production
+Pushed 9 commits, built, and deployed to lianabanyan.com.
 
-Continued the mass CSS migration from `BISHOP_DROPZONE/KNIGHT_HANDOFF_PHASE1_VISUAL_MIGRATION.md`.
+#### 2. Complex Edge Cases — 3 pages (Batch 5b)
 
-Bishop pre-completed Batches 1-4 (26 pages) before handoff. This session migrated 13 additional pages:
+All 3 "skipped" pages from Session 60, fully migrated:
 
-**Initiative pages (10):**
-- MSAPage, VSLPage, RallyGroupPage, FamilyTablePage, HouseholdConciergePage
-- HealthAccordsPage, BrassTacksPage, DidaskoPage, LetsGoShoppingPage, LifeLineMedicationsPage
+| Page | Lines | Approach | Replacements |
+|------|-------|----------|-------------|
+| DemandSignaling.tsx | 298 | `variant="stage"` (dark cinematic) | ~20 |
+| PowerToThePeoplePage.tsx | 921 | Default (light) + preserved dark accent sections | ~75 |
+| PatentPortfolio.tsx | 1,176 | `variant="stage"` (dark cinematic) | ~120 |
 
-**Public pages (3):**
-- LaunchTracker, CommunitySupport, CollegeOfHardKnocks
+**Key decisions:**
+- DemandSignaling & PatentPortfolio: `variant="stage"` — dark navy + amber-gold palette
+- PowerToThePeople: Default variant — preserved intentional dark sections (Switzerland Protocol, debate timer, quote block) and all accent card colors (purple/green/red/amber/orange/emerald)
+- PatentPortfolio: All framer-motion animations preserved untouched
 
-**Migration pattern applied:**
-- Strip `landing-page` / `landing-title` / `container mx-auto` wrappers
-- Wrap in `<PortalPageLayout maxWidth="xl" xrayId="...">`
-- Replace `text-slate-900` → `text-foreground`, `text-slate-600` → `text-muted-foreground`, etc.
-- Remove `import '@/styles/landing.css'` where present
-- Preserve intentional dark accent sections (Underground Railroad, Mark Cuban Model, Crown sections)
+Commit: `987bb7c`
 
-**Skipped (complex edge cases for Bishop):**
-- DemandSignaling.tsx — fully dark themed page, needs `variant="stage"` approach
-- PowerToThePeoplePage.tsx — 921 lines, mixed dark/light, needs dedicated session
-- PatentPortfolio.tsx — 1,162 lines with framer-motion animations
-- ~130+ remaining dashboard/admin/tool pages
+#### 3. Batch 6 — 12 quick-win pages
 
-**Verification:** `tsc --noEmit` PASS, `vite build` PASS after each batch.
+Pages that already used semantic tokens but just needed PortalPageLayout wrapper:
+
+| Category | Pages |
+|----------|-------|
+| Portal | PortalGateway (stage variant + full color migration) |
+| Browse | BrowseNetwork, BrowseNonprofit |
+| Legal | PrivacyPolicy, TermsOfService |
+| Initiative | DefenseClawsPage, LetsGetGroceriesPage, GarageSalesPage |
+| Public | NotFound, UnderTheHoodPage, Academy |
+| Governance | Governance |
+
+Commit: `961e0c5`
+
+**Verification:** `tsc --noEmit` PASS, `vite build` PASS after every batch. All deployed to production.
+
+### Key Discovery
+
+Of the ~227 unmigrated pages found, **156 already use semantic tokens** (`text-muted-foreground`, `bg-primary`, etc.) — they just need the PortalPageLayout wrapper. This makes future batches very fast (add import + swap outer container div).
 
 ### Pending Work
 
 | Priority | Task | Notes |
 |----------|------|-------|
-| HIGH | Continue Phase 1 migration — remaining ~130 pages | Next session should target DemandSignaling (stage variant), PowerToThePeople, portal gateway pages |
-| HIGH | Deploy to production | `npm run build; firebase deploy --only hosting:main -P default` |
-| MEDIUM | PatentPortfolio.tsx migration | 1,162 lines with framer-motion, needs careful handling |
-| LOW | Remove unused `@/styles/landing.css` if no pages reference it | Check after all migrations complete |
+| HIGH | Continue Phase 1 — remaining ~215 pages | 156 are quick-wins (just need wrapper), 59 need color token replacement too |
+| MEDIUM | CottageLawPage, HelpEachOtherPage, Marketplace | Two-wrapper patterns, slightly more complex |
+| LOW | Remove unused `@/styles/landing.css` | Check after all migrations complete |
+
+---
+
+## RUNWAY / SESSION STOP (previous) — Knight Session 60 (March 20, 2026)
+
+**Latest commit:** `3268d6c` — Knight Phase 1 Batch 5: 13 pages migrated to PortalPageLayout
+**Previous commit:** `e2870b6` (Session 59: Batches 2-4, 21 pages)
 
 ---
 
