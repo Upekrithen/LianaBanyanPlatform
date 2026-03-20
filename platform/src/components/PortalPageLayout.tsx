@@ -10,7 +10,12 @@
  *     <p className="text-muted-foreground">Content here...</p>
  *   </PortalPageLayout>
  *
- * For immersive pages (games, landing):
+ * For "stage" pages (Cephas, deep content, showcase — dark + immersive feel):
+ *   <PortalPageLayout variant="stage" title="SlottedTop">
+ *     <p className="text-muted-foreground">Deep technical content...</p>
+ *   </PortalPageLayout>
+ *
+ * For full-viewport pages (games, landing — no padding):
  *   <PortalPageLayout variant="immersive">
  *     <FullScreenGame />
  *   </PortalPageLayout>
@@ -33,8 +38,12 @@ interface PortalPageLayoutProps {
   backButton?: boolean;
   /** data-xray-id for X-Ray Goggles compatibility */
   xrayId?: string;
-  /** Immersive mode: no padding, full viewport, for games/landing pages */
-  variant?: 'default' | 'immersive';
+  /** Layout variant:
+   *  - 'default' (workshop): light bg, readable, decision-making pages
+   *  - 'stage': dark bg, cinematic, deep content / Cephas / showcase pages
+   *  - 'immersive': no padding, full viewport, games/landing pages
+   */
+  variant?: 'default' | 'stage' | 'immersive';
   /** Additional className on the outer wrapper */
   className?: string;
 }
@@ -60,10 +69,12 @@ export const PortalPageLayout: React.FC<PortalPageLayoutProps> = ({
   const portal = detectPortal();
   const navigate = useNavigate();
 
+  // Immersive: full viewport, no padding (games, landing)
   if (variant === 'immersive') {
     return (
       <div
         data-portal={portal}
+        data-variant={variant}
         data-xray-id={xrayId}
         className={`min-h-screen bg-background text-foreground ${className}`}
       >
@@ -72,9 +83,14 @@ export const PortalPageLayout: React.FC<PortalPageLayoutProps> = ({
     );
   }
 
+  // Stage: dark cinematic bg for deep content / Cephas / showcase
+  // Workshop (default): light readable bg for explainers / browse / admin
+  const isStage = variant === 'stage';
+
   return (
     <div
       data-portal={portal}
+      data-variant={variant}
       data-xray-id={xrayId}
       className={`min-h-screen bg-background text-foreground ${className}`}
     >

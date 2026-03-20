@@ -427,6 +427,86 @@ All colors MUST be HSL.
     --ring: 18 100% 60%;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════
+     STAGE VARIANT — Dark cinematic mode for deep content / Cephas / showcase
+     The "sandwich": dark (stage) → light (workshop) → dark (stage)
+     Wonder → Decisions → Wonder
+  ═══════════════════════════════════════════════════════════════════ */
+
+  /* Marketplace Stage — dark navy + amber-gold accent */
+  [data-portal="marketplace"][data-variant="stage"] {
+    --background: 222 47% 7%;
+    --foreground: 35 20% 95%;
+    --card: 222 40% 11%;
+    --card-foreground: 35 20% 95%;
+    --popover: 222 40% 11%;
+    --popover-foreground: 35 20% 95%;
+    --primary: 38 92% 50%;
+    --primary-foreground: 222 47% 7%;
+    --secondary: 222 30% 16%;
+    --secondary-foreground: 35 20% 90%;
+    --muted: 222 30% 16%;
+    --muted-foreground: 215 20% 60%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 222 47% 7%;
+    --border: 222 25% 18%;
+    --input: 222 25% 18%;
+    --ring: 38 92% 50%;
+  }
+
+  /* Business Stage — dark slate + blue accent */
+  [data-portal="business"][data-variant="stage"] {
+    --background: 215 30% 10%;
+    --foreground: 210 20% 92%;
+    --card: 215 28% 14%;
+    --card-foreground: 210 20% 92%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 210 20% 90%;
+    --muted: 215 25% 18%;
+    --muted-foreground: 215 16% 55%;
+    --border: 215 22% 20%;
+    --input: 215 22% 20%;
+    --ring: 221 83% 53%;
+  }
+
+  /* Nonprofit Stage — dark emerald + amber accent */
+  [data-portal="nonprofit"][data-variant="stage"] {
+    --background: 160 40% 8%;
+    --foreground: 35 20% 92%;
+    --card: 160 35% 12%;
+    --card-foreground: 35 20% 92%;
+    --primary: 38 92% 50%;
+    --primary-foreground: 160 40% 8%;
+    --secondary: 160 25% 16%;
+    --secondary-foreground: 35 20% 90%;
+    --muted: 160 25% 16%;
+    --muted-foreground: 160 15% 55%;
+    --border: 160 20% 18%;
+    --input: 160 20% 18%;
+    --ring: 38 92% 50%;
+  }
+
+  /* Network Stage — dark steel + cyan accent */
+  [data-portal="network"][data-variant="stage"] {
+    --background: 217 33% 10%;
+    --foreground: 210 15% 90%;
+    --card: 217 30% 14%;
+    --card-foreground: 210 15% 90%;
+    --primary: 188 90% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 25% 18%;
+    --secondary-foreground: 210 15% 88%;
+    --muted: 217 25% 18%;
+    --muted-foreground: 215 16% 55%;
+    --border: 217 22% 20%;
+    --input: 217 22% 20%;
+    --ring: 188 90% 42%;
+  }
+
+  /* DSS and HexIsle are already dark — stage is their default, no override needed */
+
   /* HexIsle — Island Adventure (DARK) */
   [data-portal="hexisle"] {
     --background: 215 40% 10%;

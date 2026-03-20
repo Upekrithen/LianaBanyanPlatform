@@ -78,7 +78,7 @@ function HeroSection() {
         <p className="text-base text-white/60 max-w-3xl mb-4">
           {ECOSYSTEM_NARRATIVE.thesis}
         </p>
-        <p className="text-sm text-white/50 max-w-3xl italic">
+        <p className="text-sm text-white/70 max-w-3xl italic">
           {ECOSYSTEM_NARRATIVE.competitorInvite}
         </p>
       </div>
