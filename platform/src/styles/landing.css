@@ -331,6 +331,7 @@
   margin: 2rem auto;
   position: relative;
   z-index: 10;
+  overflow: visible; /* Never clip child card chalk outlines */
 }
 .main-card-inner {
   position: relative;
@@ -338,6 +339,7 @@
   min-height: 560px;
   transition: transform 0.7s ease;
   transform-style: preserve-3d;
+  overflow: visible; /* Never clip child card chalk outlines */
 }
 .main-card-flip.flipped .main-card-inner {
   transform: rotateY(180deg);
@@ -357,6 +359,7 @@
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.12);
+  overflow: visible; /* Never clip hero card's chalk outline */
 }
 .main-card-front .logo {
   max-width: 180px;
@@ -1012,7 +1015,20 @@
 /* V2: no-chalk-outline class no longer disables chalk — chalk belongs on hero card */
 /* (Class kept for backward compat but now behaves same as base .hero-flip) */
 
-/* Main card in professional mode - NO chalk outline (chalk lives on hero card only) */
+/* CINEMA VIEW: When hero card is flipped (slideshows), show chalk outlines on BOTH cards */
+/* This frames the cinema view with visible card boundaries */
+.landing-page.professional-mode .hero-flip.flipped {
+  border-color: rgba(250, 245, 235, 0.4) !important;
+  box-shadow: 0 0 15px rgba(250, 245, 235, 0.08) !important;
+}
+
+.landing-page.professional-mode .main-card-flip:has(.hero-flip.flipped) {
+  border: 2px dashed rgba(250, 245, 235, 0.25) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 0 20px rgba(250, 245, 235, 0.06) !important;
+}
+
+/* Main card in professional mode - NO chalk outline by default (chalk lives on hero card only) */
 .landing-page.professional-mode .main-card-flip {
   border: none !important;
   border-radius: 1.5rem !important;
@@ -1022,6 +1038,12 @@
 .landing-page.professional-mode .main-card-flip:hover {
   border: none !important;
   box-shadow: none !important;
+}
+
+/* Re-apply cinema view outline even on hover (takes precedence) */
+.landing-page.professional-mode .main-card-flip:has(.hero-flip.flipped):hover {
+  border: 2px dashed rgba(250, 245, 235, 0.25) !important;
+  box-shadow: 0 0 20px rgba(250, 245, 235, 0.06) !important;
 }
 
 /* Professional card styling - remove old styles */

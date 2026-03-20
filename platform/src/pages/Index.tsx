@@ -456,20 +456,12 @@ const Index = () => {
   const [showWelcomeChoice, setShowWelcomeChoice] = useState<boolean | null>(null);
   const [userChoice, setUserChoice] = useState<'keep' | 'explore' | null>(null);
 
-  // Check if user has made a session choice already
+  // Logged-in users always land on the normal page — no modal needed.
+  // Everyone explores as ghost by default. Member events just work when authenticated.
   useEffect(() => {
     if (user) {
-      const sessionChoice = sessionStorage.getItem('lb_landing_choice');
-      if (sessionChoice === 'keep') {
-        setUserChoice('keep');
-        setShowWelcomeChoice(false);
-      } else if (sessionChoice === 'explore') {
-        setUserChoice('explore');
-        setShowWelcomeChoice(false);
-      } else {
-        // No choice yet — show the dialog
-        setShowWelcomeChoice(true);
-      }
+      setUserChoice('explore');
+      setShowWelcomeChoice(false);
     }
   }, [user]);
 
@@ -593,17 +585,18 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     { img: '', caption: '' },  // End card — "Where To Go From Here"
   ];
 
-  // Lemonade Stand scene data (8 scenes) — uses emoji placeholders until son's drawings arrive
+  // Lemonade Stand scene data (8 scenes + end card)
+  // Each scene has a rhyme (poetic) and caption (kid-friendly subtitle)
   const LEMONADE_SCENES = [
-    { caption: "The goat wants to build\nbut can't afford the supplies." },
-    { caption: "One chicken and the dog\nput nickels in the goat's wheelbarrow." },
-    { caption: "The goat uses the money\nto buy wood, nails, and tools." },
-    { caption: "The goat, chicken, pig, and cat\nall work together to build." },
-    { caption: "The new lemonade stand\nsells cups for five cents each." },
-    { caption: "The goat, dog, and cat put money\nin the chef chicken's wheelbarrow." },
-    { caption: "Six friends with lemonade and pizza\nhelp the dog start his dream." },
-    { caption: '"A true selfless act\nalways sparks another." — Klaus' },
-    { caption: '' },  // End card — "Where To Go From Here"
+    { rhyme: "The goat has a dream and a big, brave plan,\nbut wood, nails, and tools cost more than he can.", caption: "The goat wants to build\nbut can't afford the supplies." },
+    { rhyme: "A chicken and dog both wish him the best,\nthey drop five-cent coins in his barrow's wide nest.", caption: "One chicken and the dog\nput nickels in the goat's wheelbarrow." },
+    { rhyme: "With jingling coins, he buys what he needs,\na wheelbarrow full for his building deeds.", caption: "The goat uses the money\nto buy wood, nails, and tools." },
+    { rhyme: "The goat and his friends all hammer and cheer,\nthe lemonade stand is almost right here.", caption: "The goat, chicken, pig, and cat\nall work together to build." },
+    { rhyme: "The stand is now ready, the sign says 'Five Cents,'\ncold lemonade smiles make perfect sense.", caption: "The new lemonade stand\nsells cups for five cents each." },
+    { rhyme: "With lemonade cups, three friends gladly share,\ngoat's dollar, their nickels, fill her barrow with care.", caption: "The goat, dog, and cat put money\nin the chef chicken's wheelbarrow." },
+    { rhyme: "They bake tasty pizzas in ovens that glow,\nsix friends with their nickels help his dreams to grow.", caption: "Six friends with lemonade and pizza\nhelp the dog start his dream." },
+    { rhyme: '"A true selfless act\nalways sparks another."', caption: '— Klaus' },
+    { rhyme: '', caption: '' },  // End card — "Where To Go From Here"
   ];
 
   useEffect(() => {
@@ -2552,16 +2545,14 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               <button onClick={(e) => { e.stopPropagation(); setFableFrame(prev => Math.min(31, prev + 1)); setFableIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#faf5eb', padding: '0.25rem', borderRadius: '50%' }}><ChevronRight className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
                             </div>
                             {/* Clean image */}
-                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                              <img src={`/images/fable/${fableFrame}.png`} alt={`Fable Frame ${fableFrame}`} style={{ maxWidth: '90%', maxHeight: '85%', objectFit: 'contain' }} />
+                            <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                              <img src={`/images/fable/${fableFrame}.png`} alt={`Fable Frame ${fableFrame}`} style={{ maxWidth: '90%', maxHeight: '100%', objectFit: 'contain' }} />
                             </div>
-                            {FABLE_SUBTITLES[fableFrame] && (
-                              <div style={{ textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
-                                <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line' }}>
-                                  {FABLE_SUBTITLES[fableFrame]}
-                                </p>
-                              </div>
-                            )}
+                            <div style={{ flexShrink: 0, textAlign: 'center', padding: '0.25rem 1rem 0.5rem', minHeight: '3.5rem' }}>
+                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line', height: 'calc(1.4em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {FABLE_SUBTITLES[fableFrame] || '\u00A0'}
+                              </p>
+                            </div>
                           </div>
                           )
                         )}
@@ -2587,16 +2578,14 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               <button onClick={(e) => { e.stopPropagation(); setOriginIsPlaying(!originIsPlaying); }} style={{ border: '1px solid rgba(0,0,0,0.15)', cursor: 'pointer', background: 'transparent', color: '#333', width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{originIsPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" style={{ marginLeft: '2px' }} />}</button>
                               <button onClick={(e) => { e.stopPropagation(); setOriginFrame(prev => Math.min(ORIGIN_SCENES.length - 1, prev + 1)); setOriginIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#333', padding: '0.25rem', borderRadius: '50%' }}><ChevronRight className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
                             </div>
-                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                              <img src={`/origin-story/${ORIGIN_SCENES[originFrame].img}`} alt={`Origin Story ${originFrame + 1}`} style={{ maxWidth: '90%', maxHeight: '85%', objectFit: 'contain' }} />
+                            <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                              <img src={`/origin-story/${ORIGIN_SCENES[originFrame].img}`} alt={`Origin Story ${originFrame + 1}`} style={{ maxWidth: '90%', maxHeight: '100%', objectFit: 'contain' }} />
                             </div>
-                            {ORIGIN_SCENES[originFrame].caption && (
-                              <div style={{ textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
-                                <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line' }}>
-                                  {ORIGIN_SCENES[originFrame].caption}
-                                </p>
-                              </div>
-                            )}
+                            <div style={{ flexShrink: 0, textAlign: 'center', padding: '0.25rem 1rem 0.5rem', minHeight: '3.5rem' }}>
+                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line', height: 'calc(1.4em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {ORIGIN_SCENES[originFrame].caption}
+                              </p>
+                            </div>
                           </div>
                           )
                         )}
@@ -2622,20 +2611,23 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               <button onClick={(e) => { e.stopPropagation(); setLemonadeIsPlaying(!lemonadeIsPlaying); }} style={{ border: '1px solid rgba(0,0,0,0.15)', cursor: 'pointer', background: 'transparent', color: '#333', width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{lemonadeIsPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" style={{ marginLeft: '2px' }} />}</button>
                               <button onClick={(e) => { e.stopPropagation(); setLemonadeFrame(prev => Math.min(LEMONADE_SCENES.length - 1, prev + 1)); setLemonadeIsPlaying(false); }} style={{ border: 'none', cursor: 'pointer', background: 'transparent', color: '#333', padding: '0.25rem', borderRadius: '50%' }}><ChevronRight className="w-7 h-7 opacity-70 hover:opacity-100" /></button>
                             </div>
-                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                            <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                               <img
                                 src={`/images/Lemonade Stand/goat (${lemonadeFrame + 1}).png`}
                                 alt={`Lemonade Stand scene ${lemonadeFrame + 1}`}
                                 style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                               />
                             </div>
-                            {LEMONADE_SCENES[lemonadeFrame].caption && (
-                              <div style={{ textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
-                                <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line' }}>
-                                  {LEMONADE_SCENES[lemonadeFrame].caption}
-                                </p>
-                              </div>
-                            )}
+                            <div style={{ flexShrink: 0, textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
+                              {/* Rhyme — italic, slightly larger */}
+                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.4rem 1rem', borderRadius: '0.35rem 0.35rem 0 0', fontSize: 'clamp(0.7rem, 1.5vw, 0.85rem)', fontFamily: "'Crimson Pro', Georgia, serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.45, fontWeight: 400, fontStyle: 'italic', whiteSpace: 'pre-line', minHeight: 'calc(1.45em * 2 + 0.8rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {LEMONADE_SCENES[lemonadeFrame].rhyme || '\u00A0'}
+                              </p>
+                              {/* Kid subtitle — plain, smaller */}
+                              <p style={{ background: 'rgba(240, 235, 225, 0.9)', color: '#4a5568', padding: '0.3rem 1rem', borderRadius: '0 0 0.35rem 0.35rem', fontSize: 'clamp(0.65rem, 1.3vw, 0.78rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.35, fontWeight: 500, whiteSpace: 'pre-line', minHeight: 'calc(1.35em * 2 + 0.6rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {LEMONADE_SCENES[lemonadeFrame].caption || '\u00A0'}
+                              </p>
+                            </div>
                           </div>
                           )
                         )}
@@ -2812,7 +2804,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                             e.stopPropagation();
                             setWatchDropdownOpen(false);
                             if (item.id === 'office') {
-                              window.open('https://youtube.com/@lianabanyan', '_blank', 'noopener,noreferrer');
+                              window.open('https://youtu.be/03k2oUCy23I', '_blank', 'noopener,noreferrer');
                             } else {
                               setActiveSlideshow(item.id);
                               setHeroFlipped(true);

@@ -38,6 +38,12 @@ import Briefcase from "./pages/Briefcase";
 import ProjectView from "./pages/ProjectView";
 import NotFound from "./pages/NotFound";
 
+// Business Portal — shared pages (also available on marketplace)
+import { lazy, Suspense } from "react";
+const BizKaleidoscope = lazy(() => import("./pages/BizKaleidoscope"));
+const StoreFrontAggregation = lazy(() => import("./pages/StoreFrontAggregation"));
+const TheFurnace = lazy(() => import("./pages/TheFurnace"));
+
 const queryClient = new QueryClient();
 
 const BusinessApp = () => {
@@ -246,6 +252,14 @@ const BusinessApp = () => {
                             element={<Navigate to="https://lianabanyan.com/portfolio" replace />} 
                           />
                           
+                          {/* Business Portal shared pages */}
+                          <Route path="/kaleidoscope" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BizKaleidoscope /></Suspense>} />
+                          <Route path="/biz-directory" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BizKaleidoscope /></Suspense>} />
+                          <Route path="/storefront-aggregation" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StoreFrontAggregation /></Suspense>} />
+                          <Route path="/biz-aggregation" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StoreFrontAggregation /></Suspense>} />
+                          <Route path="/the-furnace" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TheFurnace /></Suspense>} />
+                          <Route path="/furnace" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TheFurnace /></Suspense>} />
+
                           {/* 404 */}
                           <Route path="*" element={<NotFound />} />
                         </Routes>
