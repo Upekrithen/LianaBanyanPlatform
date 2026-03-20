@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CurrencyAmount } from "@/components/CreditSymbol";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   fetchQAEntries,
   fetchQAStats,
@@ -421,9 +422,11 @@ export default function MoneyPennyQA() {
 
   if (loading || !stats) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center">
-        <div className="text-slate-400 animate-pulse">Loading Q&A Intelligence...</div>
-      </div>
+      <PortalPageLayout variant="stage" maxWidth="xl" xrayId="moneypenny-qa">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-slate-400 animate-pulse">Loading Q&A Intelligence...</div>
+        </div>
+      </PortalPageLayout>
     );
   }
 
@@ -431,8 +434,7 @@ export default function MoneyPennyQA() {
   const followUpPct = stats.worthwhile > 0 ? Math.round((stats.followUps / stats.worthwhile) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="moneypenny-qa">
 
         {/* Header */}
         <div className="mb-8">
@@ -596,7 +598,6 @@ export default function MoneyPennyQA() {
             <ClassificationBreakdown entries={entries} />
           </div>
         </div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

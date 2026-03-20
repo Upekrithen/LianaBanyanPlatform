@@ -15,6 +15,7 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 import { getReciprocityLeaderboard } from '@/lib/c20ReciprocityService';
 import { CostPlusBadge } from '@/components/CostPlusBadge';
@@ -96,7 +97,7 @@ export default function C20Leaderboard() {
   const totalProducts = entries.reduce((sum, e) => sum + (e.products_at_c20 || 0), 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="c20-leaderboard">
       {/* Header */}
       <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 py-8">
@@ -243,7 +244,7 @@ export default function C20Leaderboard() {
           <p>Help Each Other Help Ourselves.</p>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
 

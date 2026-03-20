@@ -1,4 +1,4 @@
-﻿/**
+/**
  * SPONSORSHIP PAGE — Full Sponsorship Cascade Dashboard
  * ======================================================
  * Complete view of the 60/10/20/10 sponsorship system with
@@ -11,10 +11,11 @@ import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TreePine, TrendingUp, Info, Users, ArrowDown, Sparkles } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function SponsorshipPage() {
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <PortalPageLayout maxWidth="lg" xrayId="sponsorship-page">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold flex items-center justify-center gap-3">
@@ -201,6 +202,6 @@ export default function SponsorshipPage() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

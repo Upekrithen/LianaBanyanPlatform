@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Shield, Check, X, ArrowLeft, Lock, FileText, Hash } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface ModuleData {
   id: string;
@@ -127,16 +128,19 @@ export default function BlockchainExplorer() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6 space-y-6">
-        <Skeleton className="h-12 w-3/4" />
-        <Skeleton className="h-64 w-full" />
-        <Skeleton className="h-64 w-full" />
-      </div>
+      <PortalPageLayout maxWidth="xl" xrayId="blockchain-explorer">
+        <div className="space-y-6">
+          <Skeleton className="h-12 w-3/4" />
+          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="blockchain-explorer">
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -274,6 +278,7 @@ export default function BlockchainExplorer() {
           })}
         </div>
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

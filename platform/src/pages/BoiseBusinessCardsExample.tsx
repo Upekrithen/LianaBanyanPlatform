@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CurrencyGlyph, CurrencyAmount } from '@/components/CreditSymbol';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   ArrowLeft, ArrowRight, ChevronLeft, ChevronRight,
   Zap, Shield, Megaphone, Users, Truck, Award, Flame,
@@ -340,8 +341,7 @@ export default function BoiseBusinessCardsExample() {
   const step = STEPS[currentStep];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="boise-business-cards">
         <Link to="/" className="inline-flex items-center gap-1 text-slate-400 hover:text-white text-sm mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to Platform
         </Link>
@@ -538,7 +538,6 @@ export default function BoiseBusinessCardsExample() {
           Joules, Marks, and Credits are cooperative-internal currencies, not securities.
           No financial return is promised or implied. "Help Each Other, Help Ourselves."
         </p>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

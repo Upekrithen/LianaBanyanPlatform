@@ -6,12 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, FileText, TrendingUp, ShieldCheck, ArrowRight, PieChart, Users } from "lucide-react";
 
 import { LarkWrapper } from '@/components/builder/LarkWrapper';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function SponsorPortal() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 p-6 md:p-12">
-      <div className="max-w-5xl mx-auto space-y-12">
+    <PortalPageLayout maxWidth="xl" xrayId="sponsor-portal">
+      <div className="space-y-6">
         
         {/* Header */}
         <div className="space-y-4">
@@ -140,6 +141,6 @@ export default function SponsorPortal() {
 
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

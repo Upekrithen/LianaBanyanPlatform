@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Award, Crown, Shield, Hexagon, Puzzle, Wrench, Sparkles, Zap, Droplets, AlertTriangle, Ban, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   type TerenoCertification as TCert, type TerenoExclusion,
   TIER_DEFINITIONS, PROCESS_TIER_MAP, SAMPLE_CERTIFICATIONS, SAMPLE_EXCLUSIONS,
@@ -29,8 +30,8 @@ export default function TerenoCertification() {
   const certifiedCerts = certs.filter(c => c.status === "certified");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="tereno-certification">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="tereno-certification">
+      <div className="space-y-8">
         <header className="space-y-2">
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Award className="w-8 h-8 text-yellow-400" />
@@ -169,6 +170,6 @@ export default function TerenoCertification() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

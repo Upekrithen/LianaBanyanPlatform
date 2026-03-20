@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function SponsorPortal() {
   const { user } = useAuth();
@@ -110,7 +111,8 @@ export default function SponsorPortal() {
   const totalContributed = Number(sponsorProfile?.total_contributed || 0);
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="sponsor-portal">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <TreePine className="h-8 w-8 text-green-600" />
@@ -453,6 +455,7 @@ export default function SponsorPortal() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

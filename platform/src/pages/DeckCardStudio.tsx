@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import html2canvas from "html2canvas";
 import { uploadCanvasToImgur } from "@/lib/imgurUpload";
 import { recordShare, generateShareUrl } from "@/lib/socialPlugSystem";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // EXPORT PRESETS
@@ -140,7 +141,7 @@ export default function DeckCardStudio() {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="deck-card-studio">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-indigo-600 rounded-full text-white">
           <QrCode className="h-8 w-8" />
@@ -343,6 +344,6 @@ export default function DeckCardStudio() {
           </Card>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

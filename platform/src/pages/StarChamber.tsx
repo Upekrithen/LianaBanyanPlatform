@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Scale, Eye, Brain, Crown, Gavel, AlertTriangle, Shield, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   type StarChamberCase, type CaseSeverity, type CaseStatus, type CaseType,
   JUDGES, SAMPLE_CASES, fetchCases, fetchChamberStats,
@@ -48,9 +49,11 @@ export default function StarChamber() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center">
-        <Card className="bg-slate-900/80 border-slate-800 max-w-md"><CardContent className="py-8 text-center"><p className="text-slate-400 mb-4">Sign in to access the Star Chamber.</p><Button asChild><Link to="/auth">Sign in</Link></Button></CardContent></Card>
-      </div>
+      <PortalPageLayout variant="stage" maxWidth="xl" xrayId="star-chamber">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Card className="bg-slate-900/80 border-slate-800 max-w-md"><CardContent className="py-8 text-center"><p className="text-slate-400 mb-4">Sign in to access the Star Chamber.</p><Button asChild><Link to="/auth">Sign in</Link></Button></CardContent></Card>
+        </div>
+      </PortalPageLayout>
     );
   }
 
@@ -58,8 +61,8 @@ export default function StarChamber() {
   const closedCases = cases.filter(c => c.status === "closed" || c.status === "verdict_reached");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="star-chamber">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="star-chamber">
+      <div className="space-y-8">
         <header className="space-y-2">
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Scale className="w-8 h-8 text-amber-400" />
@@ -212,6 +215,6 @@ export default function StarChamber() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

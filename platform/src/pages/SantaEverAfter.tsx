@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Gift, Truck, CheckCircle, AlertTriangle, User, Star, Package, ChevronRight, ShieldCheck, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   type SantaGift, type CaptainProfile, type GiftStatus,
   SAMPLE_GIFTS, SAMPLE_CAPTAINS,
@@ -58,22 +59,24 @@ export default function SantaEverAfter() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center">
-        <Card className="bg-slate-900/80 border-slate-800 max-w-md">
-          <CardContent className="py-8 text-center">
-            <p className="text-slate-400 mb-4">Sign in to access Santa Ever After.</p>
-            <Button asChild><Link to="/auth">Sign in</Link></Button>
-          </CardContent>
-        </Card>
-      </div>
+      <PortalPageLayout variant="stage" maxWidth="xl" xrayId="santa-ever-after">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Card className="bg-slate-900/80 border-slate-800 max-w-md">
+            <CardContent className="py-8 text-center">
+              <p className="text-slate-400 mb-4">Sign in to access Santa Ever After.</p>
+              <Button asChild><Link to="/auth">Sign in</Link></Button>
+            </CardContent>
+          </Card>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   const activeGifts = tab === "sent" ? sentGifts : receivedGifts;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="santa-ever-after">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="santa-ever-after">
+      <div className="space-y-8">
         {/* Header */}
         <header className="space-y-2">
           <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -265,6 +268,6 @@ export default function SantaEverAfter() {
           </div>
         </section>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

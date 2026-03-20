@@ -17,6 +17,7 @@ import { Progress } from "@/components/ui/progress";
 import { Layers, Trophy, Hammer, Star, Lock } from "lucide-react";
 import { DeckCard, type DeckCardData, type CardRarity } from "@/components/DeckCard";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const RARITY_ORDER: CardRarity[] = ["common", "uncommon", "rare", "epic", "legendary", "mythic", "secret"];
 
@@ -113,7 +114,8 @@ export default function DeckCollection() {
     : myCollection?.filter((c) => (c as any).deck_cards?.rarity === rarityFilter);
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="deck-collection">
+      <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Layers className="h-8 w-8 text-primary" />
         <div>
@@ -210,6 +212,7 @@ export default function DeckCollection() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

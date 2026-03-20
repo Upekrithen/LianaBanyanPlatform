@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   Radio,
   Twitter,
@@ -489,8 +490,7 @@ export default function MoneyPennySocial() {
   const allChannels: (SocialChannel | "all")[] = ["all", "twitter", "instagram", "facebook", "linkedin", "tiktok", "discord", "reddit", "youtube"];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="moneypenny-social">
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
           <Radio className="h-8 w-8 text-cyan-400" />
@@ -801,7 +801,6 @@ export default function MoneyPennySocial() {
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

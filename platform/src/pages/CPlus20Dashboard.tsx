@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Scale, Calculator, BookOpen, ShieldCheck, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { type C20Example, C20_LAWS, SAMPLE_EXAMPLES, calculateC20, fetchC20Examples } from "@/lib/c20Service";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -28,8 +29,8 @@ export default function CPlus20Dashboard() {
   useEffect(() => { fetchC20Examples().then(setExamples); }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="c-plus-20">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="cplus20-dashboard">
+      <div className="space-y-8">
         <header className="space-y-2">
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Scale className="w-8 h-8 text-green-400" />
@@ -188,6 +189,6 @@ export default function CPlus20Dashboard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
