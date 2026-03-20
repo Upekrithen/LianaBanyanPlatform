@@ -59,6 +59,8 @@ export function FableFlipbook({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [direction, setDirection] = useState(1);
+  const [speed, setSpeed] = useState(1);
+  const effectiveInterval = Math.round(interval / speed);
 
   const goToNext = useCallback(() => {
     setDirection(1);
@@ -93,9 +95,9 @@ export function FableFlipbook({
   useEffect(() => {
     if (!isPlaying) return;
 
-    const timer = setInterval(goToNext, interval);
+    const timer = setInterval(goToNext, effectiveInterval);
     return () => clearInterval(timer);
-  }, [isPlaying, interval, goToNext]);
+  }, [isPlaying, effectiveInterval, goToNext]);
 
   const variants = {
     enter: (dir: number) => ({
@@ -276,7 +278,7 @@ export function FableFlipbook({
           >
             <ChevronRight className="w-5 h-5 text-amber-800" />
           </button>
-          
+
           <button
             onClick={goToEnd}
             className="p-2 rounded-full bg-amber-100 hover:bg-amber-200 transition-colors"
@@ -284,6 +286,24 @@ export function FableFlipbook({
           >
             <SkipForward className="w-5 h-5 text-amber-800" />
           </button>
+
+          {/* Speed controls */}
+          <div className="flex items-center gap-1 ml-2 border-l border-amber-300 pl-3">
+            {([1, 2, 3] as const).map((s) => (
+              <button
+                key={s}
+                onClick={() => setSpeed(s)}
+                className={`px-2 py-1 text-xs font-bold rounded transition-colors ${
+                  speed === s
+                    ? 'bg-amber-600 text-white'
+                    : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                }`}
+                title={`${s}x speed`}
+              >
+                {s}x
+              </button>
+            ))}
+          </div>
         </div>
       )}
       

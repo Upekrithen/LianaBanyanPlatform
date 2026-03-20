@@ -90,6 +90,8 @@ export function OriginStoryFlipbook({
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [direction, setDirection] = useState(1);
   const [showEndScreen, setShowEndScreen] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const effectiveInterval = Math.round(interval / speed);
   const navigate = useNavigate();
 
   const goToNext = useCallback(() => {
@@ -127,9 +129,9 @@ export function OriginStoryFlipbook({
 
   useEffect(() => {
     if (!isPlaying) return;
-    const timer = setInterval(goToNext, interval);
+    const timer = setInterval(goToNext, effectiveInterval);
     return () => clearInterval(timer);
-  }, [isPlaying, interval, goToNext]);
+  }, [isPlaying, effectiveInterval, goToNext]);
 
   const variants = {
     enter: (dir: number) => ({
@@ -308,6 +310,23 @@ export function OriginStoryFlipbook({
             </button>
             <button onClick={goToNext} disabled={currentIndex === SCENES.length - 1} className="p-2 text-green-400 hover:text-green-200 disabled:opacity-30 transition-colors"><ChevronRight className="w-5 h-5" /></button>
             <button onClick={goToEnd} className="p-2 text-green-400 hover:text-green-200 transition-colors"><SkipForward className="w-5 h-5" /></button>
+            {/* Speed controls */}
+            <div className="flex items-center gap-1 ml-2 border-l border-green-700 pl-3">
+              {([1, 2, 3] as const).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setSpeed(s)}
+                  className={`px-2 py-1 text-xs font-bold rounded transition-colors ${
+                    speed === s
+                      ? 'bg-green-500 text-white'
+                      : 'text-green-400 hover:text-green-200 bg-green-900/50'
+                  }`}
+                  title={`${s}x speed`}
+                >
+                  {s}x
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

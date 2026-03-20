@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { DeckCardFrame } from "@/components/DeckCardFrame";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { useDiscovery } from "@/hooks/useDiscovery";
 
 /**
  * MIRROR CONNECTION MAP
@@ -300,6 +302,7 @@ export default function Discover() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
+  const { discoverCard } = useDiscovery();
   const [revealedCards, setRevealedCards] = useState<number>(0);
   const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
   const [showSpotlight, setShowSpotlight] = useState<boolean>(false);
@@ -371,16 +374,7 @@ export default function Discover() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        {/* Back to landing */}
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to Liana Banyan
-        </button>
-
+    <PortalPageLayout variant="stage" maxWidth="lg" backButton>
         {/* Header with Connected Mirrors */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-2 flex items-center justify-center gap-4">
@@ -416,20 +410,20 @@ export default function Discover() {
           {/* Spotlight Ranger trigger */}
           <button 
             onClick={() => setShowSpotlight(true)}
-            className="text-sm text-white/50 hover:text-white/80 transition-colors mt-1"
+            className="text-sm text-muted-foreground/70 hover:text-foreground/80 transition-colors mt-1"
             style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
           >
             🔦 Spotlight Ranger Explainer
           </button>
           
-          <p className="text-xl text-white/80 mb-4 mt-2">{path.subtitle}</p>
-          <p className="text-white/60 max-w-2xl mx-auto">{path.description}</p>
+          <p className="text-xl text-foreground/80 mb-4 mt-2">{path.subtitle}</p>
+          <p className="text-muted-foreground max-w-2xl mx-auto">{path.description}</p>
           
           {/* Loop Preview button for Level 3 paths */}
           {mirrorConnections.loopPreview && (
             <button 
               onClick={() => setShowLoopPreview(true)}
-              className="mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors"
+              className="mt-4 px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg text-sm transition-colors"
             >
               🌐 Preview the Full World
             </button>
@@ -462,7 +456,8 @@ export default function Discover() {
                     unlockCost={{ type: 'free', amount: 0 }}
                     isChalkOutline={false}
                     onCollect={() => {
-                      // Card collected - could trigger additional effects
+                      const slug = card.name.toLowerCase().replace(/\s+/g, '-');
+                      discoverCard(slug, currentArea);
                     }}
                   />
                 ) : (
@@ -475,50 +470,49 @@ export default function Discover() {
                     }}
                   >
                     <span className="text-4xl mb-3 opacity-30">?</span>
-                    <p className="text-sm text-white/30">Revealing...</p>
+                    <p className="text-sm text-muted-foreground/40">Revealing...</p>
                   </div>
                 )}
               </div>
             );
           })}
           
-          {/* Extra chalk outline hinting at more to discover */}
-          <div 
-            className="rounded-xl flex flex-col items-center justify-center text-center p-6 aspect-[3/4]"
-            style={{
-              border: "2px dashed rgba(255,255,255,0.15)",
-              background: "transparent",
-              opacity: revealedCards >= path.cards.length ? 1 : 0,
-              transition: "opacity 0.5s ease 0.5s",
-            }}
-          >
-            <span className="text-4xl mb-3 opacity-20">+</span>
-            <p className="text-sm text-white/30 italic">More to discover...</p>
-            <p className="text-xs text-white/20 mt-2">Use 🪞 mirrors to explore</p>
+          {/* +1 Chalk Outline — the Rule of 3+1 */}
+          <div style={{
+            opacity: revealedCards >= path.cards.length ? 1 : 0,
+            transition: "opacity 0.5s ease 0.5s",
+          }}>
+            <DeckCardFrame
+              cardId={`discover-${currentArea}-more`}
+              cardType="quest"
+              title="More to discover..."
+              description="Use 🪞 mirrors to explore"
+              icon="+"
+              isChalkOutline={true}
+            />
           </div>
         </div>
 
         {/* CTA */}
         <div className="text-center space-y-4">
-          <p className="text-white/50 text-sm">Ready to dive deeper?</p>
+          <p className="text-muted-foreground/70 text-sm">Ready to dive deeper?</p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Button
               size="lg"
-              className="bg-white/10 hover:bg-white/20 border border-white/20 gap-2"
+              className="bg-muted hover:bg-muted/80 border border-border gap-2"
               onClick={() => navigate("/ghost")}
             >
               <Ghost className="w-5 h-5" /> Explore as Ghost
             </Button>
             <Button
               size="lg"
-              className="bg-white/10 hover:bg-white/20 border border-white/20 gap-2"
+              className="bg-muted hover:bg-muted/80 border border-border gap-2"
               onClick={() => openOnboard({ reason: "join the community", actionLabel: "Join", membershipIncluded: true })}
             >
               <UserPlus className="w-5 h-5" /> Join for $5/year
             </Button>
           </div>
         </div>
-      </div>
 
       {/* Loop Preview Modal — Non-interactive world tour */}
       {showLoopPreview && mirrorConnections.loopPreview && (
@@ -539,7 +533,7 @@ export default function Discover() {
           >
             <button
               onClick={() => setShowLoopPreview(false)}
-              className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20 transition-colors"
+              className="absolute top-3 right-3 p-1 rounded-full hover:bg-muted/80 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -547,7 +541,7 @@ export default function Discover() {
             <div className="text-center mb-6">
               <span className="text-5xl">🌐</span>
               <h2 className="text-2xl font-bold mt-3">The Liana Banyan World</h2>
-              <p className="text-sm text-white/60 mt-1">A preview of the interconnected ecosystem (view only)</p>
+              <p className="text-sm text-muted-foreground mt-1">A preview of the interconnected ecosystem (view only)</p>
             </div>
 
             {/* Animated path loop visualization */}
@@ -559,7 +553,7 @@ export default function Discover() {
               >
                 <span className="text-2xl">{PATH_LABELS[currentArea]?.emoji || '📍'}</span>
                 <p className="text-sm font-medium mt-1">{PATH_LABELS[currentArea]?.name || 'You Are Here'}</p>
-                <p className="text-xs text-white/50">Current</p>
+                <p className="text-xs text-muted-foreground/70">Current</p>
               </div>
 
               <span className="text-2xl opacity-50">→</span>
@@ -580,7 +574,7 @@ export default function Discover() {
                     >
                       <span className="text-2xl">{label.emoji}</span>
                       <p className="text-sm font-medium mt-1">{label.name}</p>
-                      <p className="text-xs text-white/40">Preview</p>
+                      <p className="text-xs text-muted-foreground/50">Preview</p>
                     </div>
                     {i < mirrorConnections.loopPreview!.length - 1 && (
                       <span className="text-2xl opacity-30">→</span>
@@ -598,7 +592,7 @@ export default function Discover() {
               >
                 <span className="text-2xl">🔄</span>
                 <p className="text-sm font-medium mt-1">Back Here</p>
-                <p className="text-xs text-white/50">Loop Complete</p>
+                <p className="text-xs text-muted-foreground/70">Loop Complete</p>
               </div>
             </div>
 
@@ -606,17 +600,17 @@ export default function Discover() {
               className="p-4 rounded-lg text-center"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)' }}
             >
-              <p className="text-sm text-white/70">
+              <p className="text-sm text-foreground/70">
                 <strong>🔒 This is a preview only.</strong> Use the mirrors (🪞) on each page to travel between worlds.
                 <br />
-                <span className="text-white/50">Each path connects to others — explore to discover the full ecosystem.</span>
+                <span className="text-muted-foreground/70">Each path connects to others — explore to discover the full ecosystem.</span>
               </p>
             </div>
 
             <div className="text-center mt-4">
               <Button
                 onClick={() => setShowLoopPreview(false)}
-                className="bg-white/10 hover:bg-white/20 border border-white/20"
+                className="bg-muted hover:bg-muted/80 border border-border"
               >
                 Close Preview
               </Button>
@@ -645,7 +639,7 @@ export default function Discover() {
             {/* Close button */}
             <button
               onClick={() => dismissSpotlight(false)}
-              className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/20 transition-colors"
+              className="absolute top-3 right-3 p-1 rounded-full hover:bg-muted/80 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -654,7 +648,7 @@ export default function Discover() {
             <div className="text-center mb-4">
               <span className="text-4xl">🔦</span>
               <h2 className="text-2xl font-bold mt-2">{spotlight.title}</h2>
-              <p className="text-sm text-white/60 mt-1">Spotlight Ranger Explainer</p>
+              <p className="text-sm text-muted-foreground mt-1">Spotlight Ranger Explainer</p>
             </div>
 
             {/* Bullet points */}
@@ -662,7 +656,7 @@ export default function Discover() {
               {spotlight.bullets.map((bullet, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="text-lg mt-0.5">✦</span>
-                  <span className="text-white/90">{bullet}</span>
+                  <span className="text-foreground/90">{bullet}</span>
                 </li>
               ))}
             </ul>
@@ -672,7 +666,7 @@ export default function Discover() {
               className="p-3 rounded-lg mb-4"
               style={{ background: 'rgba(255,255,255,0.1)', border: '1px dashed rgba(255,255,255,0.3)' }}
             >
-              <p className="text-sm text-white/80">
+              <p className="text-sm text-foreground/80">
                 <strong>💡 Tip:</strong> {spotlight.tip}
               </p>
             </div>
@@ -681,7 +675,7 @@ export default function Discover() {
             <div className="flex gap-3 justify-center flex-wrap">
               <Button
                 size="sm"
-                className="bg-white/20 hover:bg-white/30 border border-white/30"
+                className="bg-muted/80 hover:bg-muted border border-border"
                 onClick={() => dismissSpotlight(false)}
               >
                 Got it (show next session)
@@ -695,7 +689,7 @@ export default function Discover() {
               </Button>
             </div>
 
-            <p className="text-center text-xs text-white/40 mt-3">
+            <p className="text-center text-xs text-muted-foreground/50 mt-3">
               Click 🔦 Spotlight Ranger anytime to see this again
             </p>
           </div>
@@ -714,6 +708,6 @@ export default function Discover() {
           100% { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
-    </div>
+    </PortalPageLayout>
   );
 }

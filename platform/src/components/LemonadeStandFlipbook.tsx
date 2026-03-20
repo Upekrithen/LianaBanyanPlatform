@@ -79,6 +79,8 @@ export function LemonadeStandFlipbook({
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [direction, setDirection] = useState(1);
   const [showEndScreen, setShowEndScreen] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const effectiveInterval = Math.round(interval / speed);
   const navigate = useNavigate();
 
   const goToNext = useCallback(() => {
@@ -116,9 +118,9 @@ export function LemonadeStandFlipbook({
 
   useEffect(() => {
     if (!isPlaying) return;
-    const timer = setInterval(goToNext, interval);
+    const timer = setInterval(goToNext, effectiveInterval);
     return () => clearInterval(timer);
-  }, [isPlaying, interval, goToNext]);
+  }, [isPlaying, effectiveInterval, goToNext]);
 
   const variants = {
     enter: (dir: number) => ({
@@ -340,6 +342,23 @@ export function LemonadeStandFlipbook({
             <button onClick={goToEnd} className="p-2 text-amber-400 hover:text-amber-200 transition-colors" title="Go to end">
               <SkipForward className="w-5 h-5" />
             </button>
+            {/* Speed controls */}
+            <div className="flex items-center gap-1 ml-2 border-l border-amber-700 pl-3">
+              {([1, 2, 3] as const).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setSpeed(s)}
+                  className={`px-2 py-1 text-xs font-bold rounded transition-colors ${
+                    speed === s
+                      ? 'bg-amber-500 text-white'
+                      : 'text-amber-400 hover:text-amber-200 bg-amber-900/50'
+                  }`}
+                  title={`${s}x speed`}
+                >
+                  {s}x
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
