@@ -8,6 +8,7 @@
  */
 
 import { useState } from "react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -99,17 +100,17 @@ function ChainLinksVisual({ chainLength }: { chainLength: number }) {
                   w-10 h-14 rounded-full border-[3px] flex items-center justify-center
                   transition-all duration-500
                   ${isActive
-                    ? "border-amber-400 bg-amber-500/15 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
-                    : "border-slate-700 bg-slate-800/50"
+                    ? "border-primary bg-primary/15 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
+                    : "border-border bg-muted"
                   }
-                  ${isCurrent ? "ring-2 ring-amber-400/50 ring-offset-2 ring-offset-slate-950" : ""}
+                  ${isCurrent ? "ring-2 ring-amber-400/50 ring-offset-2 ring-offset-background" : ""}
                 `}
               >
-                <span className={`text-xs font-bold ${isActive ? "text-amber-400" : "text-slate-600"}`}>
+                <span className={`text-xs font-bold ${isActive ? "text-primary" : "text-muted-foreground/70"}`}>
                   {step.bonus}%
                 </span>
               </div>
-              <span className={`text-[10px] mt-1 ${isActive ? "text-slate-300" : "text-slate-600"}`}>
+              <span className={`text-[10px] mt-1 ${isActive ? "text-muted-foreground" : "text-muted-foreground/70"}`}>
                 #{step.vote}
               </span>
             </div>
@@ -117,7 +118,7 @@ function ChainLinksVisual({ chainLength }: { chainLength: number }) {
             {step.vote < 10 && (
               <div
                 className={`w-3 h-1 rounded-full mx-0.5 ${
-                  chainLength > step.vote ? "bg-amber-400/60" : "bg-slate-700"
+                  chainLength > step.vote ? "bg-amber-400/60" : "bg-muted"
                 }`}
               />
             )}
@@ -162,10 +163,10 @@ function VoteDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-slate-950 border-slate-800">
+      <DialogContent className="sm:max-w-lg bg-background border-border">
         <DialogHeader>
-          <DialogTitle className="text-white">Cast Your Vote</DialogTitle>
-          <DialogDescription className="text-slate-400">
+          <DialogTitle className="text-foreground">Cast Your Vote</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             {proposal.title}
           </DialogDescription>
         </DialogHeader>
@@ -173,18 +174,18 @@ function VoteDialog({
         <div className="space-y-6 py-4">
           {/* Direction */}
           <div className="space-y-2">
-            <Label className="text-slate-300">Your Position</Label>
+            <Label className="text-muted-foreground">Your Position</Label>
             <div className="flex gap-3">
               <Button
                 variant={direction === "for" ? "default" : "outline"}
-                className={direction === "for" ? "bg-emerald-600 hover:bg-emerald-700" : "border-slate-700 text-slate-400"}
+                className={direction === "for" ? "bg-emerald-600 hover:bg-emerald-700" : "border-border text-muted-foreground"}
                 onClick={() => setDirection("for")}
               >
                 <ThumbsUp className="w-4 h-4 mr-2" /> For
               </Button>
               <Button
                 variant={direction === "against" ? "default" : "outline"}
-                className={direction === "against" ? "bg-red-600 hover:bg-red-700" : "border-slate-700 text-slate-400"}
+                className={direction === "against" ? "bg-red-600 hover:bg-red-700" : "border-border text-muted-foreground"}
                 onClick={() => setDirection("against")}
               >
                 <ThumbsDown className="w-4 h-4 mr-2" /> Against
@@ -194,8 +195,8 @@ function VoteDialog({
 
           {/* Pledged Marks */}
           <div className="space-y-2">
-            <Label className="text-slate-300">Pledge Marks (Optional)</Label>
-            <p className="text-xs text-slate-500">
+            <Label className="text-muted-foreground">Pledge Marks (Optional)</Label>
+            <p className="text-xs text-muted-foreground/70">
               Pledged Marks are escrowed until the proposal resolves. Released on success, absorbed on failure.
             </p>
             <Input
@@ -204,18 +205,18 @@ function VoteDialog({
               placeholder="0"
               value={marksPledged}
               onChange={(e) => setMarksPledged(e.target.value)}
-              className="bg-slate-900 border-slate-700 text-white"
+              className="bg-card border-border text-foreground"
             />
           </div>
 
           {/* Weight Preview */}
-          <div className="p-3 bg-slate-900 rounded-lg border border-slate-800">
-            <div className="text-sm text-slate-400">Your Vote Weight</div>
+          <div className="p-3 bg-card rounded-lg border border-border">
+            <div className="text-sm text-muted-foreground">Your Vote Weight</div>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-bold text-amber-400">
+              <span className="text-2xl font-bold text-primary">
                 {weight.effectiveVotes.toFixed(1)}
               </span>
-              <span className="text-slate-500 text-sm">
+              <span className="text-muted-foreground/70 text-sm">
                 effective votes ({weight.bonusPercent}% chain bonus)
               </span>
             </div>
@@ -227,17 +228,17 @@ function VoteDialog({
             <Button
               onClick={() => setConfirming(true)}
               disabled={!direction}
-              className="bg-amber-600 hover:bg-amber-700 text-white"
+              className="bg-primary hover:bg-primary/90 text-foreground"
             >
               Cast Vote
             </Button>
           ) : (
             <div className="flex items-center gap-3 w-full">
-              <span className="text-sm text-slate-400 italic">Confirm:</span>
-              <Button onClick={handleCast} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+              <span className="text-sm text-muted-foreground italic">Confirm:</span>
+              <Button onClick={handleCast} className="bg-emerald-600 hover:bg-emerald-700 text-foreground">
                 As You Wish
               </Button>
-              <Button variant="ghost" onClick={() => setConfirming(false)} className="text-slate-400">
+              <Button variant="ghost" onClick={() => setConfirming(false)} className="text-muted-foreground">
                 Cancel
               </Button>
             </div>
@@ -265,12 +266,12 @@ function ProposalCard({
 
   return (
     <>
-      <Card className="bg-slate-900/60 border-slate-800 hover:border-slate-700 transition-colors">
+      <Card className="bg-card border-border hover:border-border transition-colors">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
-              <CardTitle className="text-base text-white leading-snug">{proposal.title}</CardTitle>
-              <CardDescription className="text-slate-400 mt-1 line-clamp-2">
+              <CardTitle className="text-base text-foreground leading-snug">{proposal.title}</CardTitle>
+              <CardDescription className="text-muted-foreground mt-1 line-clamp-2">
                 {proposal.description}
               </CardDescription>
             </div>
@@ -281,7 +282,7 @@ function ProposalCard({
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Deadline */}
-          <div className="flex items-center gap-2 text-sm text-slate-400">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="w-4 h-4" />
             <span>{timeUntil(proposal.deadline)}</span>
           </div>
@@ -292,7 +293,7 @@ function ProposalCard({
               <span className="text-emerald-400">For: {proposal.votesFor}</span>
               <span className="text-red-400">Against: {proposal.votesAgainst}</span>
             </div>
-            <div className="h-2 rounded-full bg-slate-800 overflow-hidden flex">
+            <div className="h-2 rounded-full bg-muted overflow-hidden flex">
               <div
                 className="h-full bg-emerald-500 transition-all"
                 style={{ width: `${forPercent}%` }}
@@ -305,21 +306,21 @@ function ProposalCard({
           </div>
 
           {/* Marks Pledged */}
-          <div className="flex items-center gap-2 text-sm text-slate-400">
-            <Coins className="w-4 h-4 text-amber-400" />
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Coins className="w-4 h-4 text-primary" />
             <span>{proposal.totalMarksPledged.toLocaleString()} Marks pledged</span>
           </div>
 
           {/* Your Chain Bonus */}
-          <div className="p-2 bg-amber-500/10 rounded border border-amber-500/20">
-            <div className="text-xs text-amber-400">
+          <div className="p-2 bg-primary/10 rounded border border-primary/20">
+            <div className="text-xs text-primary">
               Your vote counts as <span className="font-bold">{weight.effectiveVotes.toFixed(1)} votes</span> ({nextBonus}% chain bonus)
             </div>
           </div>
 
           <Button
             onClick={() => setVoteOpen(true)}
-            className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+            className="w-full bg-primary hover:bg-primary/90 text-foreground"
           >
             <Vote className="w-4 h-4 mr-2" /> Cast Vote
           </Button>
@@ -355,25 +356,24 @@ export default function ChainVoting() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout maxWidth="xl" xrayId="chain-voting">
         {/* ── Header ── */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-amber-500/20 rounded-lg">
-              <Link2 className="w-6 h-6 text-amber-400" />
+            <div className="p-2 bg-primary/20 rounded-lg">
+              <Link2 className="w-6 h-6 text-primary" />
             </div>
             <h1 className="text-3xl font-bold">Chain Voting</h1>
           </div>
-          <p className="text-slate-400 text-lg">
+          <p className="text-muted-foreground text-lg">
             Consistency is power. Every vote in the chain makes the next one stronger.
           </p>
         </div>
 
         {/* ── Your Chain Status ── */}
-        <Card className="bg-slate-900/80 border-amber-500/30 mb-8">
+        <Card className="bg-card border-amber-500/30 mb-8">
           <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2 text-amber-400">
+            <CardTitle className="text-xl flex items-center gap-2 text-primary">
               <Zap className="w-5 h-5" />
               Your Chain Status
             </CardTitle>
@@ -381,41 +381,41 @@ export default function ChainVoting() {
           <CardContent className="space-y-6">
             {/* Current Stats Row */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 bg-slate-800/60 rounded-lg text-center">
-                <div className="text-3xl font-bold text-amber-400">{chainStatus.chainLength}</div>
-                <div className="text-sm text-slate-400 mt-1">Consecutive Votes</div>
+              <div className="p-4 bg-muted rounded-lg text-center">
+                <div className="text-3xl font-bold text-primary">{chainStatus.chainLength}</div>
+                <div className="text-sm text-muted-foreground mt-1">Consecutive Votes</div>
               </div>
-              <div className="p-4 bg-slate-800/60 rounded-lg text-center">
+              <div className="p-4 bg-muted rounded-lg text-center">
                 <div className="text-3xl font-bold text-emerald-400">{chainStatus.currentBonusPercent}%</div>
-                <div className="text-sm text-slate-400 mt-1">Current Bonus</div>
+                <div className="text-sm text-muted-foreground mt-1">Current Bonus</div>
               </div>
-              <div className="p-4 bg-slate-800/60 rounded-lg text-center">
+              <div className="p-4 bg-muted rounded-lg text-center">
                 <div className="text-3xl font-bold text-blue-400">{chainStatus.longestChain}</div>
-                <div className="text-sm text-slate-400 mt-1">Personal Best</div>
+                <div className="text-sm text-muted-foreground mt-1">Personal Best</div>
               </div>
             </div>
 
             {/* Progress Bar */}
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-slate-400">Chain Bonus Progress</span>
-                <span className="text-amber-400 font-medium">{chainStatus.currentBonusPercent}% / 100%</span>
+                <span className="text-muted-foreground">Chain Bonus Progress</span>
+                <span className="text-primary font-medium">{chainStatus.currentBonusPercent}% / 100%</span>
               </div>
-              <Progress value={chainStatus.currentBonusPercent} className="h-3 bg-slate-800" />
+              <Progress value={chainStatus.currentBonusPercent} className="h-3 bg-muted" />
             </div>
 
             {/* Chain Links Visualization */}
             <div>
-              <div className="text-sm text-slate-400 mb-1">Chain Bonus Schedule</div>
+              <div className="text-sm text-muted-foreground mb-1">Chain Bonus Schedule</div>
               <ChainLinksVisual chainLength={chainStatus.chainLength} />
             </div>
 
             {/* Reset Warning */}
-            <div className="flex items-start gap-3 p-3 bg-amber-500/10 rounded-lg border border-amber-500/20">
-              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+              <AlertTriangle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-medium text-amber-400">Miss a vote?</div>
-                <div className="text-sm text-slate-400">
+                <div className="text-sm font-medium text-primary">Miss a vote?</div>
+                <div className="text-sm text-muted-foreground">
                   Your bonus resets to {CHAIN_RESET_FLOOR}% — not zero. We reward coming back.
                 </div>
               </div>
@@ -428,7 +428,7 @@ export default function ChainVoting() {
           {/* Proposals Grid */}
           <div className="lg:col-span-3">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Vote className="w-5 h-5 text-slate-400" />
+              <Vote className="w-5 h-5 text-muted-foreground" />
               Active Proposals
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -441,30 +441,30 @@ export default function ChainVoting() {
           {/* Governance Stats Sidebar */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-slate-400" />
+              <BarChart3 className="w-5 h-5 text-muted-foreground" />
               Governance
             </h2>
 
-            <Card className="bg-slate-900/60 border-slate-800">
+            <Card className="bg-card border-border">
               <CardContent className="pt-6 space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-400">Active Proposals</span>
-                  <span className="font-bold text-white">{stats.activeProposals}</span>
+                  <span className="text-sm text-muted-foreground">Active Proposals</span>
+                  <span className="font-bold text-foreground">{stats.activeProposals}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-400">Your Participation</span>
+                  <span className="text-sm text-muted-foreground">Your Participation</span>
                   <span className="font-bold text-emerald-400">{stats.participationRate}%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-400">Longest Chain (Coop)</span>
-                  <span className="font-bold text-amber-400">{stats.longestChainInCoop} votes</span>
+                  <span className="text-sm text-muted-foreground">Longest Chain (Coop)</span>
+                  <span className="font-bold text-primary">{stats.longestChainInCoop} votes</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-400">Avg Chain Length</span>
+                  <span className="text-sm text-muted-foreground">Avg Chain Length</span>
                   <span className="font-bold text-blue-400">{stats.averageChainLength} votes</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-400">Total Marks Pledged</span>
+                  <span className="text-sm text-muted-foreground">Total Marks Pledged</span>
                   <span className="font-bold text-purple-400">{stats.totalMarksPledgedAll.toLocaleString()}</span>
                 </div>
               </CardContent>
@@ -473,10 +473,10 @@ export default function ChainVoting() {
         </div>
 
         {/* ── Voting History ── */}
-        <Card className="bg-slate-900/60 border-slate-800 mb-8">
+        <Card className="bg-card border-border mb-8">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-slate-400" />
+              <TrendingUp className="w-5 h-5 text-muted-foreground" />
               Your Voting History
             </CardTitle>
           </CardHeader>
@@ -484,21 +484,21 @@ export default function ChainVoting() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-slate-800 hover:bg-transparent">
-                    <TableHead className="text-slate-400">Chain</TableHead>
-                    <TableHead className="text-slate-400">Proposal</TableHead>
-                    <TableHead className="text-slate-400">Vote</TableHead>
-                    <TableHead className="text-slate-400 text-right">Bonus</TableHead>
-                    <TableHead className="text-slate-400 text-right">Pledged</TableHead>
-                    <TableHead className="text-slate-400">Outcome</TableHead>
-                    <TableHead className="text-slate-400 text-right">Date</TableHead>
+                  <TableRow className="border-border hover:bg-transparent">
+                    <TableHead className="text-muted-foreground">Chain</TableHead>
+                    <TableHead className="text-muted-foreground">Proposal</TableHead>
+                    <TableHead className="text-muted-foreground">Vote</TableHead>
+                    <TableHead className="text-muted-foreground text-right">Bonus</TableHead>
+                    <TableHead className="text-muted-foreground text-right">Pledged</TableHead>
+                    <TableHead className="text-muted-foreground">Outcome</TableHead>
+                    <TableHead className="text-muted-foreground text-right">Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {voteHistory.map((record, idx) => {
                     const indicator = getChainIndicator(record, idx);
                     return (
-                      <TableRow key={record.id} className="border-slate-800/50">
+                      <TableRow key={record.id} className="border-border/50">
                         <TableCell>
                           <div className="flex items-center gap-1.5">
                             {indicator === "break" ? (
@@ -506,13 +506,13 @@ export default function ChainVoting() {
                                 <XCircle className="w-3 h-3 text-red-400" />
                               </div>
                             ) : (
-                              <div className="w-5 h-5 rounded-full border-2 border-amber-400/60 bg-amber-500/10 flex items-center justify-center">
-                                <span className="text-[10px] font-bold text-amber-400">{record.chainNumber}</span>
+                              <div className="w-5 h-5 rounded-full border-2 border-primary/60 bg-primary/10 flex items-center justify-center">
+                                <span className="text-[10px] font-bold text-primary">{record.chainNumber}</span>
                               </div>
                             )}
                           </div>
                         </TableCell>
-                        <TableCell className="text-slate-300 max-w-[200px] truncate">
+                        <TableCell className="text-muted-foreground max-w-[200px] truncate">
                           {record.proposalTitle}
                         </TableCell>
                         <TableCell>
@@ -522,10 +522,10 @@ export default function ChainVoting() {
                             <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Against</Badge>
                           )}
                         </TableCell>
-                        <TableCell className="text-right text-amber-400 font-medium">
+                        <TableCell className="text-right text-primary font-medium">
                           +{record.bonusApplied}%
                         </TableCell>
-                        <TableCell className="text-right text-slate-300">
+                        <TableCell className="text-right text-muted-foreground">
                           {record.marksPledged > 0 ? `${record.marksPledged} M` : "—"}
                         </TableCell>
                         <TableCell>
@@ -539,7 +539,7 @@ export default function ChainVoting() {
                             <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Active</Badge>
                           )}
                         </TableCell>
-                        <TableCell className="text-right text-slate-500 text-sm">
+                        <TableCell className="text-right text-muted-foreground/70 text-sm">
                           {formatDate(record.votedAt)}
                         </TableCell>
                       </TableRow>
@@ -552,23 +552,23 @@ export default function ChainVoting() {
         </Card>
 
         {/* ── How Chain Voting Works ── */}
-        <Card className="bg-slate-900/60 border-slate-800">
+        <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <Shield className="w-5 h-5 text-slate-400" />
+              <Shield className="w-5 h-5 text-muted-foreground" />
               How Chain Voting Works
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="the-chain" className="border-slate-800">
-                <AccordionTrigger className="text-slate-200 hover:text-white hover:no-underline">
+              <AccordionItem value="the-chain" className="border-border">
+                <AccordionTrigger className="text-foreground hover:text-foreground hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <Link2 className="w-4 h-4 text-amber-400" />
+                    <Link2 className="w-4 h-4 text-primary" />
                     The Chain
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-400">
+                <AccordionContent className="text-muted-foreground">
                   Every time you vote on a proposal, your chain grows by one link. Each link increases
                   your voting bonus: Vote 1 starts at 0%, Vote 2 earns 10%, and it climbs steadily until
                   Vote 10 where you reach the maximum 100% bonus. At full chain, every vote you cast
@@ -576,28 +576,28 @@ export default function ChainVoting() {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="the-reset" className="border-slate-800">
-                <AccordionTrigger className="text-slate-200 hover:text-white hover:no-underline">
+              <AccordionItem value="the-reset" className="border-border">
+                <AccordionTrigger className="text-foreground hover:text-foreground hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-400" />
+                    <AlertTriangle className="w-4 h-4 text-primary" />
                     The Reset
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-400">
+                <AccordionContent className="text-muted-foreground">
                   Miss a vote and your bonus drops — but not to zero. The floor is {CHAIN_RESET_FLOOR}%.
                   This is not punitive. It is a welcome-back bonus. Life happens. The cooperative recognizes
                   that returning is itself an act of commitment. You rebuild from {CHAIN_RESET_FLOOR}%, not from nothing.
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="pledged-marks" className="border-slate-800">
-                <AccordionTrigger className="text-slate-200 hover:text-white hover:no-underline">
+              <AccordionItem value="pledged-marks" className="border-border">
+                <AccordionTrigger className="text-foreground hover:text-foreground hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <Coins className="w-4 h-4 text-amber-400" />
+                    <Coins className="w-4 h-4 text-primary" />
                     Pledged Mark Voting
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-400">
+                <AccordionContent className="text-muted-foreground">
                   When you vote, you can optionally pledge your own Marks. Pledged Marks are escrowed — locked
                   into the proposal until it resolves. If the proposal passes, your Marks are released back to you.
                   If it fails, the Marks are absorbed by the cooperative. This is skin in the game. It means your
@@ -605,14 +605,14 @@ export default function ChainVoting() {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="why-chain" className="border-slate-800">
-                <AccordionTrigger className="text-slate-200 hover:text-white hover:no-underline">
+              <AccordionItem value="why-chain" className="border-border">
+                <AccordionTrigger className="text-foreground hover:text-foreground hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <ChevronRight className="w-4 h-4 text-amber-400" />
+                    <ChevronRight className="w-4 h-4 text-primary" />
                     Why Chain?
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-400">
+                <AccordionContent className="text-muted-foreground">
                   Consistent participation means informed participation. A member who votes on every proposal
                   has context that a drive-by voter does not. They have read the discussions, understood the
                   tradeoffs, and earned the right to greater influence through demonstrated engagement.
@@ -620,14 +620,14 @@ export default function ChainVoting() {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="combined-power" className="border-slate-800">
-                <AccordionTrigger className="text-slate-200 hover:text-white hover:no-underline">
+              <AccordionItem value="combined-power" className="border-border">
+                <AccordionTrigger className="text-foreground hover:text-foreground hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-amber-400" />
+                    <Zap className="w-4 h-4 text-primary" />
                     Combined Power
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-400">
+                <AccordionContent className="text-muted-foreground">
                   Your total influence on any proposal combines two factors: your Chain Bonus multiplied by
                   your Pledged Marks. A member with a 10-vote chain (100% bonus) who pledges 10 Marks has
                   an effective vote weight of (1 + 10) x 2.0 = 22 votes. Compare that to a first-time voter
@@ -637,7 +637,6 @@ export default function ChainVoting() {
             </Accordion>
           </CardContent>
         </Card>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

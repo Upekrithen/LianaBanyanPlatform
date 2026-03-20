@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,12 +66,12 @@ function categoryBadge(category: string) {
     Production: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
     Education: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
     "Food & Dining": "bg-orange-500/20 text-orange-300 border-orange-500/30",
-    Craftsmanship: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+    Craftsmanship: "bg-amber-500/20 text-amber-300 border-primary/30",
     Technology: "bg-violet-500/20 text-violet-300 border-violet-500/30",
     Services: "bg-teal-500/20 text-teal-300 border-teal-500/30",
   };
   return (
-    <Badge variant="outline" className={colors[category] || "bg-slate-500/20 text-slate-300"}>
+    <Badge variant="outline" className={colors[category] || "bg-muted text-muted-foreground"}>
       {category}
     </Badge>
   );
@@ -111,14 +112,14 @@ function StatsBar({ projects, backings, tasteRanger }: {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       {stats.map((s) => (
-        <Card key={s.label} className="bg-slate-800/60 border-slate-700/50">
+        <Card key={s.label} className="bg-card border-border">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/10">
-              <s.icon className="h-5 w-5 text-amber-400" />
+            <div className="p-2 rounded-lg bg-primary/10">
+              <s.icon className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="text-xs text-slate-400">{s.label}</p>
-              <p className="text-lg font-bold text-white">
+              <p className="text-xs text-muted-foreground">{s.label}</p>
+              <p className="text-lg font-bold text-foreground">
                 {s.isCurrency ? (
                   <CurrencyAmount amount={s.value as number} currency="mark" simple={false} size={16} />
                 ) : (
@@ -140,12 +141,12 @@ function ProjectCard({ project }: { project: BandWagonProject }) {
   const isFirst100 = project.backerCount <= 100;
 
   return (
-    <Card className="bg-slate-800/60 border-slate-700/50 hover:border-amber-500/30 transition-colors">
+    <Card className="bg-card border-border hover:border-primary/30 transition-colors">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <CardTitle className="text-lg text-white">{project.name}</CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardTitle className="text-lg text-foreground">{project.name}</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Steward: {project.stewardName}
             </CardDescription>
           </div>
@@ -156,33 +157,33 @@ function ProjectCard({ project }: { project: BandWagonProject }) {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-sm text-slate-300 line-clamp-2">{project.description}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
 
         {/* Funding progress */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-400">
+            <span className="text-muted-foreground">
               <CurrencyAmount amount={project.backedMarks} currency="mark" simple={false} size={12} />
               {" / "}
               <CurrencyAmount amount={project.goalMarks} currency="mark" simple={false} size={12} />
             </span>
-            <span className={isAlmostFunded ? "text-green-400 font-semibold" : "text-slate-400"}>
+            <span className={isAlmostFunded ? "text-green-400 font-semibold" : "text-muted-foreground"}>
               {pct}%
             </span>
           </div>
           <Progress
             value={pct}
-            className="h-2 bg-slate-700"
+            className="h-2 bg-muted"
           />
         </div>
 
         {/* Bottom row */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 text-xs text-slate-400">
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Users className="h-3.5 w-3.5" />
               {isFirst100 ? (
-                <span className="text-amber-400">{project.backerCount}/100 first backers</span>
+                <span className="text-primary">{project.backerCount}/100 first backers</span>
               ) : (
                 <span>{project.backerCount}+ backers</span>
               )}
@@ -196,7 +197,7 @@ function ProjectCard({ project }: { project: BandWagonProject }) {
           </div>
 
           {project.status === "active" ? (
-            <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-black font-semibold">
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
               Back This Project
             </Button>
           ) : (
@@ -214,8 +215,8 @@ function ProjectCard({ project }: { project: BandWagonProject }) {
 function ActiveProjectsGrid({ projects }: { projects: BandWagonProject[] }) {
   return (
     <section className="mb-10">
-      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        <Megaphone className="h-5 w-5 text-amber-400" />
+      <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+        <Megaphone className="h-5 w-5 text-primary" />
         Active Projects
       </h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -238,12 +239,12 @@ function YourBackedProjects({ backings }: { backings: Backing[] }) {
 
   return (
     <section className="mb-10">
-      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        <Star className="h-5 w-5 text-amber-400" />
+      <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+        <Star className="h-5 w-5 text-primary" />
         Your Backed Projects
       </h2>
       <Tabs value={filter} onValueChange={setFilter}>
-        <TabsList className="bg-slate-800/60 border border-slate-700/50 mb-4">
+        <TabsList className="bg-card border border-border mb-4">
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="active">Active</TabsTrigger>
           <TabsTrigger value="funded">Succeeded</TabsTrigger>
@@ -251,15 +252,15 @@ function YourBackedProjects({ backings }: { backings: Backing[] }) {
         </TabsList>
         <TabsContent value={filter}>
           {filtered.length === 0 ? (
-            <p className="text-slate-500 text-sm py-4">No projects in this category yet.</p>
+            <p className="text-muted-foreground/70 text-sm py-4">No projects in this category yet.</p>
           ) : (
             <div className="space-y-3">
               {filtered.map((b) => (
-                <Card key={b.id} className="bg-slate-800/40 border-slate-700/50">
+                <Card key={b.id} className="bg-card border-border">
                   <CardContent className="p-4 flex items-center justify-between">
                     <div className="space-y-1">
-                      <p className="text-white font-medium">{b.projectName}</p>
-                      <div className="flex items-center gap-3 text-sm text-slate-400">
+                      <p className="text-foreground font-medium">{b.projectName}</p>
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground">
                         <span>Pledged: <CurrencyAmount amount={b.pledgeAmount} currency="mark" simple={false} size={12} /></span>
                         {b.saaEarned > 0 && (
                           <span className="text-green-400">+{b.saaEarned} SAA</span>
@@ -284,11 +285,11 @@ function TasteRangerProgression({ profile }: { profile: TasteRangerProfile }) {
 
   return (
     <section className="mb-10">
-      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        <Award className="h-5 w-5 text-amber-400" />
+      <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+        <Award className="h-5 w-5 text-primary" />
         Taste Ranger Progression
       </h2>
-      <Card className="bg-slate-800/60 border-slate-700/50">
+      <Card className="bg-card border-border">
         <CardContent className="p-6">
           {/* Tier progression bar */}
           <div className="flex items-center gap-1 mb-6 overflow-x-auto pb-2">
@@ -307,15 +308,15 @@ function TasteRangerProgression({ profile }: { profile: TasteRangerProfile }) {
                       ${isFuture ? "opacity-30" : ""}
                     `}
                   >
-                    <span className={`text-xs font-bold ${isCurrent ? "text-white" : "text-slate-400"}`}>
+                    <span className={`text-xs font-bold ${isCurrent ? "text-foreground" : "text-muted-foreground"}`}>
                       {tier.name}
                     </span>
-                    <span className="text-[10px] text-slate-500 mt-0.5">
+                    <span className="text-[10px] text-muted-foreground/70 mt-0.5">
                       {tier.minBackings}+ backings
                     </span>
                   </div>
                   {i < TASTE_RANGER_TIERS.length - 1 && (
-                    <ChevronRight className={`h-4 w-4 mx-1 ${i < currentIndex ? "text-green-500" : "text-slate-600"}`} />
+                    <ChevronRight className={`h-4 w-4 mx-1 ${i < currentIndex ? "text-green-500" : "text-muted-foreground/70"}`} />
                   )}
                 </div>
               );
@@ -323,18 +324,18 @@ function TasteRangerProgression({ profile }: { profile: TasteRangerProfile }) {
           </div>
 
           {/* Current status */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-700/50">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border">
             <div>
-              <p className="text-sm text-slate-400">Current Tier</p>
-              <p className="text-lg font-bold text-white">{profile.currentTier}</p>
-              <p className="text-xs text-slate-500">
+              <p className="text-sm text-muted-foreground">Current Tier</p>
+              <p className="text-lg font-bold text-foreground">{profile.currentTier}</p>
+              <p className="text-xs text-muted-foreground/70">
                 {profile.successfulBackings} successful backing{profile.successfulBackings !== 1 ? "s" : ""}
               </p>
             </div>
             {profile.nextTierName && (
               <div className="text-right">
-                <p className="text-sm text-slate-400">Next Tier: {profile.nextTierName}</p>
-                <p className="text-xs text-amber-400">
+                <p className="text-sm text-muted-foreground">Next Tier: {profile.nextTierName}</p>
+                <p className="text-xs text-primary">
                   {profile.nextTierRequirement - profile.successfulBackings} more successful backings needed
                 </p>
               </div>
@@ -352,35 +353,35 @@ function SAACard({ saa }: { saa: ServiceAllocationAuthority }) {
 
   return (
     <section className="mb-10">
-      <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-        <Zap className="h-5 w-5 text-amber-400" />
+      <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+        <Zap className="h-5 w-5 text-primary" />
         Service Allocation Authority
       </h2>
-      <Card className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-amber-500/20">
+      <Card className="bg-card border-primary/20">
         <CardContent className="p-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wider">SAA Score</p>
-              <p className="text-3xl font-bold text-amber-400">{saa.score}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">SAA Score</p>
+              <p className="text-3xl font-bold text-primary">{saa.score}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wider">Allocation Budget</p>
-              <p className="text-3xl font-bold text-white">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Allocation Budget</p>
+              <p className="text-3xl font-bold text-foreground">
                 <CurrencyAmount amount={saa.allocationBudget} currency="mark" simple={false} size={20} />
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wider">Budget Used</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Budget Used</p>
               <div className="space-y-1">
-                <p className="text-3xl font-bold text-white">
+                <p className="text-3xl font-bold text-foreground">
                   <CurrencyAmount amount={saa.allocationUsed} currency="mark" simple={false} size={20} />
                 </p>
-                <Progress value={usedPct} className="h-1.5 bg-slate-700" />
-                <p className="text-xs text-slate-500">{usedPct}% allocated</p>
+                <Progress value={usedPct} className="h-1.5 bg-muted" />
+                <p className="text-xs text-muted-foreground/70">{usedPct}% allocated</p>
               </div>
             </div>
           </div>
-          <p className="text-sm text-slate-400 italic border-t border-slate-700/50 pt-4">
+          <p className="text-sm text-muted-foreground italic border-t border-border pt-4">
             Your demonstrated judgment earns you the authority to direct cooperative resources.
           </p>
         </CardContent>
@@ -393,19 +394,19 @@ function SAACard({ saa }: { saa: ServiceAllocationAuthority }) {
 function HowItWorks() {
   return (
     <section className="mb-10">
-      <h2 className="text-xl font-bold text-white mb-4">How BandWagon Works</h2>
-      <Card className="bg-slate-800/60 border-slate-700/50">
+      <h2 className="text-xl font-bold text-foreground mb-4">How BandWagon Works</h2>
+      <Card className="bg-card border-border">
         <CardContent className="p-6">
-          <p className="text-sm text-amber-400 font-medium mb-4">
+          <p className="text-sm text-primary font-medium mb-4">
             This is not an investment return. This is earned authority to allocate cooperative
             resources based on demonstrated judgment.
           </p>
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="backing" className="border-slate-700/50">
-              <AccordionTrigger className="text-white hover:text-amber-400">
+            <AccordionItem value="backing" className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
                 Back Projects with Marks
               </AccordionTrigger>
-              <AccordionContent className="text-slate-300">
+              <AccordionContent className="text-muted-foreground">
                 Browse active projects and pledge your Marks to the ones you believe will succeed.
                 When a project reaches its funding goal and delivers, you earn Service Allocation
                 Authority (SAA) — increasing your future ability to direct cooperative resources
@@ -413,11 +414,11 @@ function HowItWorks() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="first100" className="border-slate-700/50">
-              <AccordionTrigger className="text-white hover:text-amber-400">
+            <AccordionItem value="first100" className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
                 The First-100 Rule
               </AccordionTrigger>
-              <AccordionContent className="text-slate-300">
+              <AccordionContent className="text-muted-foreground">
                 The first 100 backers of any project share influence proportionally. Early
                 conviction matters — those who identify promising projects before the crowd
                 earn more SAA. After 100 backers, returns diminish so the system rewards
@@ -425,11 +426,11 @@ function HowItWorks() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="positive" className="border-slate-700/50">
-              <AccordionTrigger className="text-white hover:text-amber-400">
+            <AccordionItem value="positive" className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
                 Positive-Only QA
               </AccordionTrigger>
-              <AccordionContent className="text-slate-300">
+              <AccordionContent className="text-muted-foreground">
                 BandWagon promotes — it does not ding. There are no downvotes and no public
                 failure shaming. Absence of backing is sufficient signal. Projects that do
                 not attract support simply do not fund. This protects creators while still
@@ -437,11 +438,11 @@ function HowItWorks() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="trustchain" className="border-slate-700/50">
-              <AccordionTrigger className="text-white hover:text-amber-400">
+            <AccordionItem value="trustchain" className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
                 TasteMaker Trust Chain
               </AccordionTrigger>
-              <AccordionContent className="text-slate-300">
+              <AccordionContent className="text-muted-foreground">
                 When you back a project, your recommendation creates an attributed daisy chain.
                 The originator who first spotted the project, the first follower who validated it,
                 and subsequent chain followers (up to 5 links, with branching supported) all share
@@ -449,11 +450,11 @@ function HowItWorks() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="tiers" className="border-slate-700/50">
-              <AccordionTrigger className="text-white hover:text-amber-400">
+            <AccordionItem value="tiers" className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
                 Taste Ranger Progression
               </AccordionTrigger>
-              <AccordionContent className="text-slate-300">
+              <AccordionContent className="text-muted-foreground">
                 Your track record of successful backings earns you higher Taste Ranger tiers:
                 Scout, Ranger, Curator, TasteMaker, Patron, and Luminary. Each tier unlocks
                 greater allocation authority and recognition within the cooperative. A Patron
@@ -489,17 +490,16 @@ export default function BandWagon() {
   }, [user?.id]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <PortalPageLayout maxWidth="xl" xrayId="bandwagon">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-lg bg-amber-500/10">
-              <Rocket className="h-7 w-7 text-amber-400" />
+            <div className="p-2 rounded-lg bg-primary/10">
+              <Rocket className="h-7 w-7 text-primary" />
             </div>
             <h1 className="text-3xl font-bold tracking-tight">BandWagon</h1>
           </div>
-          <p className="text-slate-400 text-lg ml-14">Back What You Believe In</p>
+          <p className="text-muted-foreground text-lg ml-14">Back What You Believe In</p>
         </div>
 
         <StatsBar projects={projects} backings={backings} tasteRanger={tasteRanger} />
@@ -508,7 +508,6 @@ export default function BandWagon() {
         <TasteRangerProgression profile={tasteRanger} />
         <SAACard saa={saa} />
         <HowItWorks />
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -14,6 +14,7 @@
  */
 
 import { useState } from "react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -161,18 +162,18 @@ export default function RoundTableHall() {
   // ── Render ──
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+    <PortalPageLayout maxWidth="full" xrayId="round-table-hall">
       {/* Header */}
-      <div className="border-b border-slate-700 bg-slate-900/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="border-b border-border bg-card backdrop-blur-sm -mx-4 sm:-mx-6 px-4 sm:px-6 -mt-8 sm:-mt-12 mb-6">
+        <div className="max-w-7xl mx-auto py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-amber-400" />
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                <MessageSquare className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <h1 className="text-xl font-bold">Round Table Hall</h1>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted-foreground">
                   Muffled Rule: Earn the right to speak by listening first
                 </p>
               </div>
@@ -180,7 +181,7 @@ export default function RoundTableHall() {
 
             <Button
               onClick={() => setShowCreateDialog(true)}
-              className="bg-amber-500 hover:bg-amber-600 text-black"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Plus className="w-4 h-4 mr-2" />
               New Table
@@ -189,25 +190,25 @@ export default function RoundTableHall() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Panel: Tables List */}
           <div className="lg:col-span-3 space-y-4">
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
               Active Tables
             </h2>
 
             {tables.map(table => (
               <Card
                 key={table.id}
-                className={`bg-slate-800/50 border-slate-700 cursor-pointer transition-all hover:border-amber-500/50 ${
+                className={`bg-card border-border cursor-pointer transition-all hover:border-amber-500/50 ${
                   selectedTable?.id === table.id ? "border-amber-500 ring-1 ring-amber-500/30" : ""
                 }`}
                 onClick={() => setSelectedTable(table)}
               >
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm font-medium text-slate-200">
+                    <CardTitle className="text-sm font-medium text-foreground">
                       {table.topicName}
                     </CardTitle>
                     <Badge
@@ -215,7 +216,7 @@ export default function RoundTableHall() {
                       className={
                         table.status === "active"
                           ? "border-green-500 text-green-400 text-xs"
-                          : "border-slate-600 text-slate-400 text-xs"
+                          : "border-border text-muted-foreground text-xs"
                       }
                     >
                       {table.status === "active" ? "Live" : "Waiting"}
@@ -223,7 +224,7 @@ export default function RoundTableHall() {
                   </div>
                 </CardHeader>
                 <CardContent className="pb-3">
-                  <div className="flex items-center gap-3 text-xs text-slate-400">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Users className="w-3 h-3" />
                       {table.participantIds.length}/{table.maxParticipants}
@@ -238,7 +239,7 @@ export default function RoundTableHall() {
             ))}
 
             {tables.length === 0 && (
-              <div className="text-center py-8 text-slate-500">
+              <div className="text-center py-8 text-muted-foreground/70">
                 <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No active tables</p>
                 <p className="text-xs mt-1">Create one to start a discussion</p>
@@ -249,14 +250,14 @@ export default function RoundTableHall() {
           {/* Center Panel: Active Table View */}
           <div className="lg:col-span-6">
             {selectedTable ? (
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-lg text-slate-100">
+                      <CardTitle className="text-lg text-foreground">
                         {selectedTable.topicName}
                       </CardTitle>
-                      <CardDescription className="text-slate-400">
+                      <CardDescription className="text-muted-foreground">
                         {selectedTable.topicDescription}
                       </CardDescription>
                     </div>
@@ -275,25 +276,25 @@ export default function RoundTableHall() {
 
                 <CardContent className="space-y-6">
                   {/* Active Speaker Zone */}
-                  <div className="rounded-xl bg-slate-900/60 border border-slate-700 p-6 text-center">
+                  <div className="rounded-xl bg-card border border-border p-6 text-center">
                     {selectedTable.activeSpeakerId ? (
                       <div className="space-y-3">
                         <div className="w-16 h-16 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mx-auto animate-pulse">
                           <Mic className="w-8 h-8 text-green-400" />
                         </div>
                         <p className="text-green-400 font-semibold">Speaking Now</p>
-                        <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
+                        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                           <Timer className="w-4 h-4" />
                           <span>Coverage Minutes remaining: {balance}</span>
                         </div>
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        <div className="w-16 h-16 rounded-full bg-slate-700/50 border-2 border-slate-600 flex items-center justify-center mx-auto">
-                          <MicOff className="w-8 h-8 text-slate-500" />
+                        <div className="w-16 h-16 rounded-full bg-muted border-2 border-border flex items-center justify-center mx-auto">
+                          <MicOff className="w-8 h-8 text-muted-foreground/70" />
                         </div>
-                        <p className="text-slate-500 font-medium">No Active Speaker</p>
-                        <p className="text-xs text-slate-600">
+                        <p className="text-muted-foreground/70 font-medium">No Active Speaker</p>
+                        <p className="text-xs text-muted-foreground/70">
                           Request the mic to speak. You'll be added to the queue.
                         </p>
                       </div>
@@ -302,7 +303,7 @@ export default function RoundTableHall() {
 
                   {/* Mic Queue */}
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-400 mb-3 flex items-center gap-2">
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                       <Hand className="w-4 h-4" />
                       Mic Queue
                     </h3>
@@ -313,16 +314,16 @@ export default function RoundTableHall() {
                           .map((req, idx) => (
                             <div
                               key={req.id}
-                              className="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-900/40 border border-slate-700/50"
+                              className="flex items-center justify-between px-3 py-2 rounded-lg bg-card border border-border"
                             >
                               <div className="flex items-center gap-2">
-                                <span className="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-bold">
+                                <span className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs flex items-center justify-center font-bold">
                                   {idx + 1}
                                 </span>
-                                <span className="text-sm text-slate-300">{req.memberName}</span>
+                                <span className="text-sm text-muted-foreground">{req.memberName}</span>
                               </div>
                               {req.estimatedDuration && (
-                                <span className="text-xs text-slate-500">
+                                <span className="text-xs text-muted-foreground/70">
                                   ~{req.estimatedDuration} min
                                 </span>
                               )}
@@ -330,7 +331,7 @@ export default function RoundTableHall() {
                           ))}
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-600 text-center py-3">
+                      <p className="text-xs text-muted-foreground/70 text-center py-3">
                         Queue is empty. Request the mic to be first!
                       </p>
                     )}
@@ -338,7 +339,7 @@ export default function RoundTableHall() {
 
                   {/* Participants */}
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-400 mb-3 flex items-center gap-2">
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
                       <Users className="w-4 h-4" />
                       Participants ({selectedTable.participantIds.length}/{selectedTable.maxParticipants})
                     </h3>
@@ -346,10 +347,10 @@ export default function RoundTableHall() {
                       {selectedTable.participantIds.map((pid, idx) => (
                         <div
                           key={pid}
-                          className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-slate-900/40 border border-slate-700/50"
+                          className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-card border border-border"
                         >
                           <Ear className="w-3 h-3 text-blue-400" />
-                          <span className="text-xs text-slate-400">
+                          <span className="text-xs text-muted-foreground">
                             Listener {idx + 1}
                           </span>
                         </div>
@@ -358,10 +359,10 @@ export default function RoundTableHall() {
                   </div>
 
                   {/* Muffled Rule Reminder */}
-                  <div className="rounded-lg bg-amber-500/5 border border-amber-500/20 p-3">
+                  <div className="rounded-lg bg-amber-500/5 border border-primary/20 p-3">
                     <div className="flex items-start gap-2">
-                      <Shield className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
-                      <div className="text-xs text-amber-400/80">
+                      <Shield className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      <div className="text-xs text-primary/80">
                         <p className="font-semibold mb-1">Muffled Rule Active</p>
                         <p>
                           Your microphone broadcasts only for as long as you have Coverage Minutes.
@@ -373,7 +374,7 @@ export default function RoundTableHall() {
                   </div>
                 </CardContent>
 
-                <CardFooter className="flex gap-2 border-t border-slate-700 pt-4">
+                <CardFooter className="flex gap-2 border-t border-border pt-4">
                   {!isListening ? (
                     <Button
                       onClick={() => handleJoinTable(selectedTable)}
@@ -395,7 +396,7 @@ export default function RoundTableHall() {
                       <Button
                         onClick={handleLeaveTable}
                         variant="outline"
-                        className="border-slate-600 text-slate-300"
+                        className="border-border text-muted-foreground"
                       >
                         Leave
                       </Button>
@@ -404,7 +405,7 @@ export default function RoundTableHall() {
                 </CardFooter>
               </Card>
             ) : (
-              <div className="flex items-center justify-center h-96 text-slate-500">
+              <div className="flex items-center justify-center h-96 text-muted-foreground/70">
                 <div className="text-center">
                   <Coffee className="w-12 h-12 mx-auto mb-3 opacity-30" />
                   <p className="font-medium">Select a Round Table</p>
@@ -417,49 +418,49 @@ export default function RoundTableHall() {
           {/* Right Panel: Coverage Minutes */}
           <div className="lg:col-span-3 space-y-4">
             {/* Balance Card */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-slate-400 flex items-center gap-2">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <Timer className="w-4 h-4" />
                   Coverage Minutes
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
-                  <p className="text-4xl font-bold text-amber-400">
+                  <p className="text-4xl font-bold text-primary">
                     {balance}
                   </p>
-                  <p className="text-xs text-slate-500 mt-1">minutes available</p>
+                  <p className="text-xs text-muted-foreground/70 mt-1">minutes available</p>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-500">Max Session</span>
-                    <span className="text-slate-300">{MAX_SESSION_BROADCAST} min</span>
+                    <span className="text-muted-foreground/70">Max Session</span>
+                    <span className="text-muted-foreground">{MAX_SESSION_BROADCAST} min</span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-slate-500">Increment</span>
-                    <span className="text-slate-300">{ACCUMULATION_INCREMENT} min</span>
+                    <span className="text-muted-foreground/70">Increment</span>
+                    <span className="text-muted-foreground">{ACCUMULATION_INCREMENT} min</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Accumulation Level */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-slate-400 flex items-center gap-2">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <Crown className="w-4 h-4" />
                   Accumulation Level
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center mb-3">
-                  <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-sm px-3 py-1">
+                  <Badge className="bg-primary/20 text-primary border-primary/30 text-sm px-3 py-1">
                     Level {level.level}: {level.name}
                   </Badge>
                 </div>
-                <div className="space-y-1 text-xs text-slate-500">
+                <div className="space-y-1 text-xs text-muted-foreground/70">
                   <div className="flex justify-between">
                     <span>Min Earned</span>
                     <span>{level.minEarned} min</span>
@@ -473,9 +474,9 @@ export default function RoundTableHall() {
             </Card>
 
             {/* How It Works */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-slate-400 flex items-center gap-2">
+                <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
                   <BookOpen className="w-4 h-4" />
                   How It Works
                 </CardTitle>
@@ -485,32 +486,32 @@ export default function RoundTableHall() {
                   <div className="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 mt-0.5">
                     <span className="text-xs text-blue-400 font-bold">1</span>
                   </div>
-                  <p className="text-xs text-slate-400">
-                    <strong className="text-slate-300">Listen</strong> at Round Tables to earn Coverage Minutes (1:1 ratio)
+                  <p className="text-xs text-muted-foreground">
+                    <strong className="text-muted-foreground">Listen</strong> at Round Tables to earn Coverage Minutes (1:1 ratio)
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
                     <span className="text-xs text-green-400 font-bold">2</span>
                   </div>
-                  <p className="text-xs text-slate-400">
-                    <strong className="text-slate-300">Read</strong> articles and publications to earn more minutes
+                  <p className="text-xs text-muted-foreground">
+                    <strong className="text-muted-foreground">Read</strong> articles and publications to earn more minutes
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
-                  <div className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs text-amber-400 font-bold">3</span>
+                  <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-xs text-primary font-bold">3</span>
                   </div>
-                  <p className="text-xs text-slate-400">
-                    <strong className="text-slate-300">Speak</strong> when your turn comes. Mic auto-mutes when minutes run out.
+                  <p className="text-xs text-muted-foreground">
+                    <strong className="text-muted-foreground">Speak</strong> when your turn comes. Mic auto-mutes when minutes run out.
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
                   <div className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0 mt-0.5">
                     <span className="text-xs text-purple-400 font-bold">4</span>
                   </div>
-                  <p className="text-xs text-slate-400">
-                    <strong className="text-slate-300">Donate</strong> minutes to others (recorded on the Immutable Ledger)
+                  <p className="text-xs text-muted-foreground">
+                    <strong className="text-muted-foreground">Donate</strong> minutes to others (recorded on the Immutable Ledger)
                   </p>
                 </div>
               </CardContent>
@@ -536,37 +537,37 @@ export default function RoundTableHall() {
 
       {/* Create Table Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="bg-slate-800 border-slate-700 text-slate-100">
+        <DialogContent className="bg-card border-border text-foreground">
           <DialogHeader>
             <DialogTitle>Create a Round Table</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted-foreground">
               Start a new discussion. One table per topic. You'll be the moderator.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div>
-              <label className="text-sm text-slate-400 mb-1 block">Topic Name</label>
+              <label className="text-sm text-muted-foreground mb-1 block">Topic Name</label>
               <Input
                 value={newTopicName}
                 onChange={e => setNewTopicName(e.target.value)}
                 placeholder="e.g., Fair Tax Reform"
-                className="bg-slate-900/50 border-slate-600 text-slate-200"
+                className="bg-card border-border text-foreground"
               />
             </div>
             <div>
-              <label className="text-sm text-slate-400 mb-1 block">Description</label>
+              <label className="text-sm text-muted-foreground mb-1 block">Description</label>
               <Textarea
                 value={newTopicDescription}
                 onChange={e => setNewTopicDescription(e.target.value)}
                 placeholder="What should participants discuss?"
-                className="bg-slate-900/50 border-slate-600 text-slate-200"
+                className="bg-card border-border text-foreground"
                 rows={3}
               />
             </div>
 
-            <div className="rounded-lg bg-amber-500/5 border border-amber-500/20 p-3">
-              <p className="text-xs text-amber-400/80">
+            <div className="rounded-lg bg-amber-500/5 border border-primary/20 p-3">
+              <p className="text-xs text-primary/80">
                 <strong>Muffled Rule:</strong> As moderator, you manage the mic queue.
                 Speakers are auto-muted when their Coverage Minutes run out.
                 Maximum {MAX_TABLE_PARTICIPANTS} participants per table.
@@ -578,19 +579,19 @@ export default function RoundTableHall() {
             <Button
               variant="outline"
               onClick={() => setShowCreateDialog(false)}
-              className="border-slate-600 text-slate-300"
+              className="border-border text-muted-foreground"
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreateTable}
-              className="bg-amber-500 hover:bg-amber-600 text-black"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               Create Table
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PortalPageLayout>
   );
 }

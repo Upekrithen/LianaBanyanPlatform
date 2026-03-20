@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, Scale, FileText, ExternalLink } from 'lucide-react';
 import { 
   NINE_ECONOMIC_LAWS, 
@@ -39,17 +40,17 @@ function LawCard({ law, index }: { law: typeof NINE_ECONOMIC_LAWS[0]; index: num
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             <div 
-              className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold text-white shrink-0"
+              className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold text-foreground shrink-0"
               style={{ backgroundColor: LAW_COLORS[index] + '30', borderColor: LAW_COLORS[index], borderWidth: 2 }}
             >
               {law.number}
             </div>
             <div className="flex-1">
-              <p className="text-white/70 text-sm mb-3">
+              <p className="text-foreground/70 text-sm mb-3">
                 {law.principle}
               </p>
               {law.equation && (
-                <div className="bg-slate-800/50 rounded-lg px-3 py-2 font-mono text-sm text-amber-400 mb-3">
+                <div className="bg-muted rounded-lg px-3 py-2 font-mono text-sm text-primary mb-3">
                   {law.equation}
                 </div>
               )}
@@ -57,11 +58,11 @@ function LawCard({ law, index }: { law: typeof NINE_ECONOMIC_LAWS[0]; index: num
           </div>
           
           {/* Additional context for each law */}
-          <div className="p-3 rounded-lg bg-slate-800/30 border border-slate-700">
-            <p className="text-xs text-white/50 mb-2">
-              <strong className="text-white/70">Why it matters:</strong>
+          <div className="p-3 rounded-lg bg-muted border border-border">
+            <p className="text-xs text-foreground/50 mb-2">
+              <strong className="text-foreground/70">Why it matters:</strong>
             </p>
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-foreground/60">
               {law.number === 1 && "Currency exchange rates shouldn't determine who can participate in the global economy."}
               {law.number === 2 && "Value should accumulate to those who create it, not those who extract it."}
               {law.number === 3 && "Transparent pricing aligns incentives between buyers and sellers."}
@@ -99,7 +100,7 @@ function PaperCard({ paper, index }: { paper: EconomicPaper; index: number }) {
     >
       <Link
         to={`/economics/${paper.id}`}
-        className="block bg-slate-900/50 border border-slate-700 rounded-lg p-4 hover:border-slate-500 hover:bg-slate-800/50 transition-all group h-full"
+        className="block bg-card border border-border rounded-lg p-4 hover:border-muted-foreground/50 hover:bg-muted transition-all group h-full"
       >
         <div className="flex items-start gap-3">
           <div 
@@ -110,7 +111,7 @@ function PaperCard({ paper, index }: { paper: EconomicPaper; index: number }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h4 className="text-white font-medium truncate group-hover:text-blue-400 transition-colors">
+              <h4 className="text-foreground font-medium truncate group-hover:text-blue-400 transition-colors">
                 {paper.title}
               </h4>
               {paper.lawNumber && (
@@ -122,7 +123,7 @@ function PaperCard({ paper, index }: { paper: EconomicPaper; index: number }) {
                 </span>
               )}
             </div>
-            <p className="text-white/50 text-sm line-clamp-2">
+            <p className="text-foreground/50 text-sm line-clamp-2">
               {paper.keyInsight}
             </p>
           </div>
@@ -170,12 +171,11 @@ export default function EconomicLaws() {
   const applicationPapers = getPapersByCategory('application');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      <div className="max-w-6xl mx-auto px-4 py-12">
+    <PortalPageLayout maxWidth="xl" xrayId="economic-laws">
         {/* Back Link */}
         <Link 
           to="/"
-          className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-foreground/60 hover:text-foreground mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Home
@@ -187,15 +187,15 @@ export default function EconomicLaws() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-2 mb-6">
-            <Scale className="w-4 h-4 text-amber-400" />
-            <span className="text-amber-400 text-sm font-medium">New Economic Theory</span>
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-2 mb-6">
+            <Scale className="w-4 h-4 text-primary" />
+            <span className="text-primary text-sm font-medium">New Economic Theory</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
             Nine Economic Laws
           </h1>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-foreground/70 max-w-3xl mx-auto mb-8">
             We're not just building a platform — we're testing nine new economic laws. 
             Each law has a full academic paper, a college-freshman explainer, and a 6th-grade summary.
           </p>
@@ -204,19 +204,19 @@ export default function EconomicLaws() {
           <div className="flex flex-wrap justify-center gap-8 text-center">
             <div>
               <div className="text-3xl font-bold text-blue-400">9</div>
-              <div className="text-white/50 text-sm">Economic Laws</div>
+              <div className="text-foreground/50 text-sm">Economic Laws</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-purple-400">20</div>
-              <div className="text-white/50 text-sm">Academic Papers</div>
+              <div className="text-foreground/50 text-sm">Academic Papers</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-green-400">3</div>
-              <div className="text-white/50 text-sm">Reading Levels</div>
+              <div className="text-foreground/50 text-sm">Reading Levels</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-amber-400">1</div>
-              <div className="text-white/50 text-sm">Platform Testing Them</div>
+              <div className="text-3xl font-bold text-primary">1</div>
+              <div className="text-foreground/50 text-sm">Platform Testing Them</div>
             </div>
           </div>
         </motion.div>
@@ -228,8 +228,8 @@ export default function EconomicLaws() {
           transition={{ delay: 0.2 }}
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-            <Lightbulb className="w-6 h-6 text-amber-400" />
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+            <Lightbulb className="w-6 h-6 text-primary" />
             The Nine Economic Laws
           </h2>
           
@@ -245,10 +245,10 @@ export default function EconomicLaws() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mb-16 bg-slate-900/50 border border-slate-700 rounded-xl p-6"
+          className="mb-16 bg-card border border-border rounded-xl p-6"
         >
-          <h3 className="text-lg font-bold text-white mb-4">The Math Behind It All</h3>
-          <p className="text-white/70 mb-6">
+          <h3 className="text-lg font-bold text-foreground mb-4">The Math Behind It All</h3>
+          <p className="text-foreground/70 mb-6">
             Every transaction follows the same formula: Cost + 20%. Creator/Worker keeps 83.3%.
           </p>
           <DataVizBar 
@@ -268,7 +268,7 @@ export default function EconomicLaws() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground mb-8 flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-blue-400" />
             All 20 Academic Papers
           </h2>
@@ -305,25 +305,25 @@ export default function EconomicLaws() {
           transition={{ delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-green-500/10 border border-slate-700 rounded-xl p-8">
-            <h3 className="text-2xl font-bold text-white mb-4">
+          <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-green-500/10 border border-border rounded-xl p-8">
+            <h3 className="text-2xl font-bold text-foreground mb-4">
               Ready to See These Laws in Action?
             </h3>
-            <p className="text-white/70 mb-6 max-w-2xl mx-auto">
+            <p className="text-foreground/70 mb-6 max-w-2xl mx-auto">
               Join for $5/year and experience economics that works for you, not against you.
               Creator/Worker keeps 83.3%. It's in the operating agreement.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 to="/RedCarpet"
-                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-foreground px-6 py-3 rounded-lg font-medium transition-colors"
               >
                 Join for $5/year
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/patent-portfolio"
-                className="inline-flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-muted hover:bg-muted/80 text-foreground px-6 py-3 rounded-lg font-medium transition-colors"
               >
                 View Patent Portfolio
                 <ExternalLink className="w-4 h-4" />
@@ -337,16 +337,15 @@ export default function EconomicLaws() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="mt-12 pt-8 border-t border-slate-800 text-center"
+          className="mt-12 pt-8 border-t border-border text-center"
         >
-          <p className="text-white/50 text-sm">
+          <p className="text-foreground/50 text-sm">
             LIANA BANYAN CORPORATION
           </p>
-          <p className="text-white/30 text-xs mt-2">
+          <p className="text-foreground/30 text-xs mt-2">
             These economic laws are being empirically tested through platform operations.
           </p>
         </motion.div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

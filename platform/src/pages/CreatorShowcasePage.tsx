@@ -41,6 +41,7 @@ import {
   Sparkles,
   Gift,
 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { InviteCreatorCard } from "@/components/cue-cards/InviteCreatorCard";
 import {
   SAMPLE_CREATORS,
@@ -105,11 +106,11 @@ function CreatorCard({ creator, onView }: { creator: ShowcaseCreator; onView: ()
   const TypeIcon = TYPE_ICONS[creator.specialty] || User;
 
   return (
-    <Card className="bg-slate-900/60 border-slate-800 overflow-hidden hover:border-primary/30 transition-colors group">
+    <Card className="bg-card border-border overflow-hidden hover:border-primary/30 transition-colors group">
       {creator.featured && (
         <div className="bg-gradient-to-r from-amber-500/20 to-amber-600/10 px-3 py-1 flex items-center gap-1.5">
           <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-          <span className="text-xs font-medium text-amber-400">Featured Creator</span>
+          <span className="text-xs font-medium text-primary">Featured Creator</span>
         </div>
       )}
       <CardHeader className="pb-2">
@@ -122,8 +123,8 @@ function CreatorCard({ creator, onView }: { creator: ShowcaseCreator; onView: ()
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <p className="font-semibold truncate">{creator.displayName}</p>
-            <Badge variant="secondary" className="gap-1 mt-1 text-xs bg-slate-800 border-slate-700">
+            <p className="font-semibold truncate text-foreground">{creator.displayName}</p>
+            <Badge variant="secondary" className="gap-1 mt-1 text-xs">
               <TypeIcon className="w-3 h-3" />
               {creator.specialtyLabel}
             </Badge>
@@ -131,14 +132,14 @@ function CreatorCard({ creator, onView }: { creator: ShowcaseCreator; onView: ()
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        <p className="text-sm text-slate-400 line-clamp-2">{creator.bio}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2">{creator.bio}</p>
 
         <div className="flex items-center justify-between">
           <XpBadge xp={creator.xpScore} />
-          <span className="text-xs text-slate-500">{creator.productsCount} products</span>
+          <span className="text-xs text-muted-foreground/70">{creator.productsCount} products</span>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-slate-400">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>Cost+20 — keeps 83.3%</span>
           {creator.totalBackings > 0 && (
             <span>{creator.totalBackings} backings</span>
@@ -149,7 +150,7 @@ function CreatorCard({ creator, onView }: { creator: ShowcaseCreator; onView: ()
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 border-slate-700 text-slate-300 hover:text-white"
+            className="flex-1"
             onClick={onView}
           >
             Visit Store
@@ -185,13 +186,13 @@ function CreatorCard({ creator, onView }: { creator: ShowcaseCreator; onView: ()
 
 function ReferralTiersSection() {
   return (
-    <Card className="bg-slate-900/60 border-slate-800">
+    <Card className="bg-card border-border">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
-          <Gift className="w-5 h-5 text-amber-500" />
+          <Gift className="w-5 h-5 text-primary" />
           Six-Tier Referral Rewards
         </CardTitle>
-        <CardDescription className="text-slate-400">
+        <CardDescription>
           Invite a maker. Earn Marks forever. Earlier tiers earn more.
         </CardDescription>
       </CardHeader>
@@ -202,18 +203,18 @@ function ReferralTiersSection() {
               key={tier.key}
               className={`rounded-lg p-3 border ${
                 i === 0
-                  ? "bg-amber-500/10 border-amber-500/30"
-                  : "bg-slate-800/50 border-slate-700/50"
+                  ? "bg-primary/10 border-primary/30"
+                  : "bg-muted/50 border-border"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className={`font-semibold text-sm ${i === 0 ? "text-amber-400" : ""}`}>
+                <span className={`font-semibold text-sm ${i === 0 ? "text-primary" : "text-foreground"}`}>
                   {tier.label}
                 </span>
-                <CurrencyAmount amount={tier.marksReward} currency="mark" size={12} className={i === 0 ? "text-amber-400" : ""} />
+                <CurrencyAmount amount={tier.marksReward} currency="mark" size={12} className={i === 0 ? "text-primary" : ""} />
               </div>
-              <p className="text-xs text-slate-500">Members #{tier.range}</p>
-              <p className="text-xs text-slate-400 mt-1">{tier.description}</p>
+              <p className="text-xs text-muted-foreground/70">Members #{tier.range}</p>
+              <p className="text-xs text-muted-foreground mt-1">{tier.description}</p>
             </div>
           ))}
         </div>
@@ -235,10 +236,10 @@ function DraftPickPipeline() {
   ];
 
   return (
-    <Card className="bg-slate-900/60 border-slate-800">
+    <Card className="bg-card border-border">
       <CardHeader>
         <CardTitle className="text-lg">From Instagram to Main Square</CardTitle>
-        <CardDescription className="text-slate-400">
+        <CardDescription>
           The Creator Draft Pick pipeline. Recruit makers you love into the cooperative.
         </CardDescription>
       </CardHeader>
@@ -247,18 +248,18 @@ function DraftPickPipeline() {
           {steps.map((step, i) => (
             <div key={step.label} className="flex items-center gap-2 sm:gap-4">
               <div className="flex flex-col items-center gap-1 min-w-[80px]">
-                <div className="w-12 h-12 rounded-full bg-slate-800/80 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
                   <step.icon className={`w-5 h-5 ${step.color}`} />
                 </div>
-                <span className="text-xs text-slate-400 text-center">{step.label}</span>
+                <span className="text-xs text-muted-foreground text-center">{step.label}</span>
               </div>
               {i < steps.length - 1 && (
-                <ArrowRight className="w-4 h-4 text-slate-600 flex-shrink-0" />
+                <ArrowRight className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />
               )}
             </div>
           ))}
         </div>
-        <p className="text-xs text-slate-500 text-center mt-4">
+        <p className="text-xs text-muted-foreground/70 text-center mt-4">
           Cue Card invitation must be sent BEFORE the maker signs up. Timestamp-verified attribution.
         </p>
       </CardContent>
@@ -309,9 +310,8 @@ export default function CreatorShowcasePage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="creator-showcase-page">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
-
+    <PortalPageLayout maxWidth="xl" xrayId="creator-showcase-page">
+      <div className="space-y-8">
         {/* ================================================================ */}
         {/* HEADER */}
         {/* ================================================================ */}
@@ -320,10 +320,10 @@ export default function CreatorShowcasePage() {
             <Palette className="w-8 h-8 text-primary" />
             <h1 className="text-4xl font-bold">Creator Showcase</h1>
           </div>
-          <p className="text-2xl font-semibold text-amber-400">
+          <p className="text-2xl font-semibold text-primary">
             Get Famous. Make Money. Do Good.
           </p>
-          <p className="text-slate-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Your craft deserves a cooperative home. Cost+20 pricing — you keep 83.3%.
             Join the maker community where creators own their success.
           </p>
@@ -355,17 +355,17 @@ export default function CreatorShowcasePage() {
           </section>
         )}
 
-        <Separator className="bg-slate-800" />
+        <Separator />
 
         {/* ================================================================ */}
         {/* ALL CREATORS GRID */}
         {/* ================================================================ */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">All Creators</h2>
+          <h2 className="text-xl font-semibold text-foreground">All Creators</h2>
 
           <div className="flex flex-wrap gap-4">
             <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="w-44 bg-slate-900 border-slate-800">
+              <SelectTrigger className="w-44 bg-card border-border">
                 <SelectValue placeholder="Specialty" />
               </SelectTrigger>
               <SelectContent>
@@ -375,7 +375,7 @@ export default function CreatorShowcasePage() {
               </SelectContent>
             </Select>
             <Select value={sort} onValueChange={v => setSort(v as SortOption)}>
-              <SelectTrigger className="w-44 bg-slate-900 border-slate-800">
+              <SelectTrigger className="w-44 bg-card border-border">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -389,15 +389,15 @@ export default function CreatorShowcasePage() {
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3].map(i => (
-                <Card key={i} className="animate-pulse bg-slate-900/60 border-slate-800">
-                  <CardHeader><div className="h-6 bg-slate-800 rounded" /></CardHeader>
-                  <CardContent><div className="h-24 bg-slate-800 rounded" /></CardContent>
+                <Card key={i} className="animate-pulse bg-card border-border">
+                  <CardHeader><div className="h-6 bg-muted rounded" /></CardHeader>
+                  <CardContent><div className="h-24 bg-muted rounded" /></CardContent>
                 </Card>
               ))}
             </div>
           ) : sorted.length === 0 ? (
-            <Card className="bg-slate-900/60 border-slate-800">
-              <CardContent className="py-12 text-center text-slate-400">
+            <Card className="bg-card border-border">
+              <CardContent className="py-12 text-center text-muted-foreground">
                 <User className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 <p>No creators match that filter. Try a different specialty.</p>
               </CardContent>
@@ -415,7 +415,7 @@ export default function CreatorShowcasePage() {
           )}
         </section>
 
-        <Separator className="bg-slate-800" />
+        <Separator />
 
         {/* ================================================================ */}
         {/* KNOW A MAKER? CTA */}
@@ -433,8 +433,7 @@ export default function CreatorShowcasePage() {
         {/* FROM INSTAGRAM TO MAIN SQUARE */}
         {/* ================================================================ */}
         <DraftPickPipeline />
-
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

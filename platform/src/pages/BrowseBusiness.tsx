@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Briefcase, Users, Code, Palette, Wrench, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 export default function BrowseBusiness() {
   const navigate = useNavigate();
@@ -55,9 +56,9 @@ export default function BrowseBusiness() {
   ];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">{t('browseBusiness.title')}</h1>
+    <PortalPageLayout maxWidth="xl" xrayId="browse-business-page">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-foreground">{t('browseBusiness.title')}</h1>
         <p className="text-muted-foreground">{t('browseBusiness.subtitle')}</p>
       </div>
 
@@ -93,6 +94,6 @@ export default function BrowseBusiness() {
           ))}
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -9,6 +9,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   Link2, Clock, Gift, Trophy, Share2, ChevronRight, ExternalLink,
   Hexagon, Zap, Users, ArrowLeft, Copy, Check,
@@ -129,10 +130,8 @@ const ChainDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="hexisle-chain">
-      {/* Header */}
-      <div className="max-w-5xl mx-auto px-4 pt-8 pb-4">
-        <div className="flex items-center gap-2 text-sm text-slate-400 mb-6">
+    <PortalPageLayout maxWidth="xl" xrayId="hexisle-chain">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
           <Link to="/hexisle" className="hover:text-cyan-400 transition-colors flex items-center gap-1">
             <ArrowLeft className="w-4 h-4" /> HexIsle
           </Link>
@@ -146,15 +145,14 @@ const ChainDashboard: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold">HexIsle Chain</h1>
-            <p className="text-slate-400 text-sm">14 Campaigns. One Journey. Rewards that grow.</p>
+            <p className="text-muted-foreground text-sm">14 Campaigns. One Journey. Rewards that grow.</p>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-5xl mx-auto px-4 space-y-6 pb-16">
+      <div className="space-y-6">
         {/* ── Visual Chain ── */}
-        <section className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
-          <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <section className="rounded-xl border border-border bg-muted p-5">
+          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
             <Link2 className="w-4 h-4 text-cyan-400" />
             Your Chain ({chain.chainLength}/14 links)
           </h2>
@@ -167,14 +165,14 @@ const ChainDashboard: React.FC = () => {
                     className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-xs font-bold transition-all ${
                       isBacked
                         ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.3)]'
-                        : 'bg-slate-800/60 border-slate-600/40 text-slate-500'
+                        : 'bg-muted border-border text-muted-foreground/70'
                     }`}
                     title={`Campaign ${c.number}: ${c.name}`}
                   >
                     {c.number}
                   </div>
                   {c.number < 14 && (
-                    <div className={`w-3 h-0.5 ${isBacked && chain.backedCampaigns.includes(c.number + 1) ? 'bg-cyan-400' : 'bg-slate-700'}`} />
+                    <div className={`w-3 h-0.5 ${isBacked && chain.backedCampaigns.includes(c.number + 1) ? 'bg-cyan-400' : 'bg-muted'}`} />
                   )}
                 </div>
               );
@@ -191,64 +189,64 @@ const ChainDashboard: React.FC = () => {
         {/* ── Stats Row ── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Chain Timer */}
-          <div className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-4">
+          <div className="rounded-xl border border-border bg-muted p-4">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-amber-400" />
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Chain Timer</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Chain Timer</span>
             </div>
             {daysLeft !== null ? (
               <div>
                 <span className={`text-3xl font-bold ${daysLeft <= 3 ? 'text-red-400' : 'text-amber-300'}`}>
                   {daysLeft}
                 </span>
-                <span className="text-slate-400 text-sm ml-1">days left</span>
+                <span className="text-muted-foreground text-sm ml-1">days left</span>
               </div>
             ) : (
-              <p className="text-slate-500 text-sm">No active chain — back your first campaign to start!</p>
+              <p className="text-muted-foreground/70 text-sm">No active chain — back your first campaign to start!</p>
             )}
           </div>
 
           {/* Joule Bonus */}
-          <div className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-4">
+          <div className="rounded-xl border border-border bg-muted p-4">
             <div className="flex items-center gap-2 mb-2">
               <Zap className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Joule Bonus</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Joule Bonus</span>
             </div>
             <div>
               <span className="text-3xl font-bold text-cyan-300">{currentBonus}%</span>
               {chain.chainLength < 14 && (
-                <span className="text-slate-500 text-sm ml-2">→ {nextBonus}% at next link</span>
+                <span className="text-muted-foreground/70 text-sm ml-2">→ {nextBonus}% at next link</span>
               )}
             </div>
           </div>
 
           {/* Perks Unlocked */}
-          <div className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-4">
+          <div className="rounded-xl border border-border bg-muted p-4">
             <div className="flex items-center gap-2 mb-2">
               <Gift className="w-4 h-4 text-emerald-400" />
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Perks Unlocked</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Perks Unlocked</span>
             </div>
             <span className="text-3xl font-bold text-emerald-300">{unlockedPerks.length}</span>
-            <span className="text-slate-500 text-sm ml-1">/ {CHAIN_PERKS.length}</span>
+            <span className="text-muted-foreground/70 text-sm ml-1">/ {CHAIN_PERKS.length}</span>
           </div>
         </div>
 
         {/* ── Next Campaign ── */}
         {nextCampaign && (
-          <section className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Next Campaign</h2>
+          <section className="rounded-xl border border-border bg-muted p-5">
+            <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Next Campaign</h2>
             <div className={`rounded-lg border p-4 ${campaignTypeBg(nextCampaign.type)}`}>
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Hexagon className={`w-5 h-5 ${campaignTypeColor(nextCampaign.type)}`} />
                     <span className="font-bold text-lg">{nextCampaign.name}</span>
-                    <span className="text-xs text-slate-400 bg-slate-700/60 px-2 py-0.5 rounded-full">
+                    <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                       Campaign {nextCampaign.number} of 14
                     </span>
                   </div>
-                  <p className="text-slate-400 text-sm">{nextCampaign.description}</p>
-                  <p className="text-slate-500 text-xs mt-1">Launch: {nextCampaign.launchEstimate}</p>
+                  <p className="text-muted-foreground text-sm">{nextCampaign.description}</p>
+                  <p className="text-muted-foreground/70 text-xs mt-1">Launch: {nextCampaign.launchEstimate}</p>
                 </div>
                 <a
                   href="https://kickstarter.com"
@@ -264,8 +262,8 @@ const ChainDashboard: React.FC = () => {
         )}
 
         {/* ── Full Campaign Roadmap ── */}
-        <section className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
-          <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Campaign Roadmap</h2>
+        <section className="rounded-xl border border-border bg-muted p-5">
+          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Campaign Roadmap</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {CAMPAIGNS.map((c) => {
               const isBacked = chain.backedCampaigns.includes(c.number);
@@ -275,23 +273,23 @@ const ChainDashboard: React.FC = () => {
                   className={`rounded-lg border p-3 transition-all ${
                     isBacked
                       ? 'bg-cyan-500/10 border-cyan-500/30'
-                      : 'bg-slate-800/60 border-slate-700/40'
+                      : 'bg-muted border-border'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${
-                      isBacked ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-700/60 text-slate-400'
+                      isBacked ? 'bg-cyan-500/20 text-cyan-300' : 'bg-muted text-muted-foreground'
                     }`}>
                       #{c.number}
                     </span>
-                    <span className={`font-medium text-sm ${isBacked ? 'text-cyan-200' : 'text-slate-300'}`}>
+                    <span className={`font-medium text-sm ${isBacked ? 'text-cyan-200' : 'text-muted-foreground'}`}>
                       {c.name}
                     </span>
                     <span className={`text-[10px] uppercase tracking-wider ${campaignTypeColor(c.type)}`}>
                       {c.type}
                     </span>
                   </div>
-                  <p className="text-slate-500 text-xs">{c.description}</p>
+                  <p className="text-muted-foreground/70 text-xs">{c.description}</p>
                   {isBacked && (
                     <span className="inline-block mt-1.5 text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">
                       ✓ Backed
@@ -304,8 +302,8 @@ const ChainDashboard: React.FC = () => {
         </section>
 
         {/* ── Perk Ladder ── */}
-        <section className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
-          <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+        <section className="rounded-xl border border-border bg-muted p-5">
+          <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
             <Gift className="w-4 h-4 text-emerald-400" />
             Chain Perk Ladder
           </h2>
@@ -318,16 +316,16 @@ const ChainDashboard: React.FC = () => {
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
                     unlocked
                       ? 'bg-emerald-500/10 border border-emerald-500/20'
-                      : 'bg-slate-800/40 border border-slate-700/30'
+                      : 'bg-muted border border-border'
                   }`}
                 >
-                  <span className={`text-xs font-bold w-12 ${unlocked ? 'text-emerald-300' : 'text-slate-500'}`}>
+                  <span className={`text-xs font-bold w-12 ${unlocked ? 'text-emerald-300' : 'text-muted-foreground/70'}`}>
                     {p.minLinks === 1 ? '1 link' : `${p.minLinks}+ links`}
                   </span>
-                  <span className={`text-xs font-bold mr-2 ${unlocked ? 'text-emerald-400' : 'text-slate-600'}`}>
+                  <span className={`text-xs font-bold mr-2 ${unlocked ? 'text-emerald-400' : 'text-muted-foreground/70'}`}>
                     {bonusPercent(p.minLinks)}%
                   </span>
-                  <span className={`text-sm ${unlocked ? 'text-slate-200' : 'text-slate-500'}`}>
+                  <span className={`text-sm ${unlocked ? 'text-foreground' : 'text-muted-foreground/70'}`}>
                     {p.perk}
                   </span>
                   {unlocked && <Check className="w-4 h-4 text-emerald-400 ml-auto" />}
@@ -339,19 +337,19 @@ const ChainDashboard: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* ── Referral Link ── */}
-          <section className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <section className="rounded-xl border border-border bg-muted p-5">
+            <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
               <Share2 className="w-4 h-4 text-cyan-400" />
               Referral Link
             </h2>
-            <p className="text-slate-400 text-xs mb-3">
+            <p className="text-muted-foreground text-xs mb-3">
               Share your chain link. Referrals earn you Marks through the TasteMaker Trust Chain (5 links deep, 40/25/15/10/10% attribution).
             </p>
             <div className="flex gap-2">
               <input
                 readOnly
                 value={referralLink}
-                className="flex-1 bg-slate-900/60 border border-slate-600/40 rounded-lg px-3 py-2 text-xs text-slate-300 font-mono"
+                className="flex-1 bg-card border border-border rounded-lg px-3 py-2 text-xs text-muted-foreground font-mono"
               />
               <button
                 onClick={handleCopy}
@@ -364,31 +362,31 @@ const ChainDashboard: React.FC = () => {
           </section>
 
           {/* ── Leaderboard ── */}
-          <section className="rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <section className="rounded-xl border border-border bg-muted p-5">
+            <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
               <Trophy className="w-4 h-4 text-amber-400" />
               Chain Leaderboard
             </h2>
             <div className="space-y-2">
               {MOCK_LEADERBOARD.map((entry) => (
-                <div key={entry.rank} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800/60 border border-slate-700/30">
+                <div key={entry.rank} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-muted border border-border">
                   <span className={`text-sm font-bold w-6 text-center ${
-                    entry.rank === 1 ? 'text-amber-400' : entry.rank === 2 ? 'text-slate-300' : entry.rank === 3 ? 'text-orange-400' : 'text-slate-500'
+                    entry.rank === 1 ? 'text-amber-400' : entry.rank === 2 ? 'text-muted-foreground' : entry.rank === 3 ? 'text-orange-400' : 'text-muted-foreground/70'
                   }`}>
                     {entry.rank}
                   </span>
-                  <Users className="w-3.5 h-3.5 text-slate-500" />
-                  <span className="text-sm text-slate-300 flex-1">{entry.username}</span>
+                  <Users className="w-3.5 h-3.5 text-muted-foreground/70" />
+                  <span className="text-sm text-muted-foreground flex-1">{entry.username}</span>
                   <span className="text-xs font-bold text-cyan-400">{entry.chainLength} links</span>
-                  <span className="text-xs text-slate-500">{bonusPercent(entry.chainLength)}%</span>
+                  <span className="text-xs text-muted-foreground/70">{bonusPercent(entry.chainLength)}%</span>
                 </div>
               ))}
             </div>
-            <p className="text-slate-600 text-[10px] mt-2 uppercase tracking-wider">Sample Data — live leaderboard populates with Kickstarter backers</p>
+            <p className="text-muted-foreground/70 text-[10px] mt-2 uppercase tracking-wider">Sample Data — live leaderboard populates with Kickstarter backers</p>
           </section>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 

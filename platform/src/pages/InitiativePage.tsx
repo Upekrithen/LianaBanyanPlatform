@@ -20,6 +20,7 @@ import {
   Users, Briefcase, Heart, ArrowRight, ArrowLeft, Star, DollarSign,
   UtensilsCrossed, ShoppingCart, ShoppingBag, Pill, Shield, Zap,
 } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface InitiativeConfig {
   slug: string;
@@ -228,7 +229,7 @@ export default function InitiativePage() {
   const progressPercent = goalAmount > 0 ? (totalRaised / goalAmount) * 100 : 0;
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="initiative-page"><div className="space-y-6">
       {/* Back to Initiatives button */}
       <Button 
         variant="ghost" 
@@ -311,5 +312,6 @@ export default function InitiativePage() {
         )}
       </div>
     </div>
+    </PortalPageLayout>
   );
 }

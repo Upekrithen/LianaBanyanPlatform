@@ -28,6 +28,7 @@ import { ExpandableBlock, DataVizBar } from "@/components/pudding";
 import { ChefHat, Clock, MapPin, Users, Heart, ArrowLeft, Calendar, HelpCircle, Target, Search, ShoppingCart, Coins, ArrowRight, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import '@/styles/landing.css';
 
 interface LmdMeal {
@@ -125,7 +126,7 @@ export default function LetsMakeDinnerPage() {
 
   return (
     <LaunchConditionOverlay initiativeSlug="lets-make-dinner" initiativeName="Let's Make Dinner">
-    <div className="landing-page" style={{ minHeight: '100vh' }}>
+    <PortalPageLayout variant="immersive" className="landing-page" xrayId="lets-make-dinner-page">
       {/* Brand Title — Top Left */}
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -834,7 +835,7 @@ export default function LetsMakeDinnerPage() {
         onOpenChange={setShowRequestDialog}
         preselectedDate={selectedDate}
       />
-    </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { SWOOPVoting } from "@/components/SWOOPVoting";
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import '@/styles/landing.css';
 
 export default function DefenseKlausPage() {
@@ -18,7 +19,7 @@ export default function DefenseKlausPage() {
 
   return (
     <LaunchConditionOverlay initiativeSlug="defense-klaus" initiativeName="Defense Klaus">
-    <div className="landing-page min-h-screen bg-slate-50">
+    <PortalPageLayout variant="immersive" className="landing-page" xrayId="defense-klaus-page">
       <div className="landing-title">
         <span className="liana">Liana</span>
         <span className="banyan">Banyan</span>
@@ -29,11 +30,11 @@ export default function DefenseKlausPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div>
             <Badge variant="outline" className="mb-4 text-red-600 border-red-600 bg-red-50">Initiative #8</Badge>
-            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+            <h1 className="text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
               <Shield className="h-10 w-10 text-red-600" />
               Defense Klaus
             </h1>
-            <p className="mt-2 text-xl text-slate-600 max-w-2xl">
+            <p className="mt-2 text-xl text-muted-foreground max-w-2xl">
               "For Someone You Love." Personal safety fashion, 24/7 monitoring, and a pooled legal defense fund for the vulnerable.
             </p>
           </div>
@@ -58,7 +59,7 @@ export default function DefenseKlausPage() {
         </div>
 
         <Tabs defaultValue="network" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto p-1 bg-slate-200/50">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto p-1 bg-muted">
             <TabsTrigger value="network" className="py-3 text-base data-[state=active]:bg-white">
               <Heart className="w-4 h-4 mr-2" /> My Network
             </TabsTrigger>
@@ -76,26 +77,26 @@ export default function DefenseKlausPage() {
           <TabsContent value="network" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2 space-y-6">
-                <h2 className="text-2xl font-bold text-slate-900">Protected Loved Ones</h2>
+                <h2 className="text-2xl font-bold text-foreground">Protected Loved Ones</h2>
                 
                 <Card className="border-l-4 border-l-emerald-500">
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-lg">M</div>
+                        <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-bold text-lg">M</div>
                         <div>
                           <h3 className="font-bold text-lg">Mom</h3>
-                          <p className="text-sm text-slate-500">Home Base System</p>
+                          <p className="text-sm text-muted-foreground/70">Home Base System</p>
                         </div>
                       </div>
                       <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-100 flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3" /> Armed
                       </Badge>
                     </div>
-                    <div className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div className="flex justify-between items-center bg-muted p-3 rounded-lg border border-border">
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-slate-400" />
-                        <span className="text-sm text-slate-600">Last Ping: 10 mins ago (Home)</span>
+                        <MapPin className="w-4 h-4 text-muted-foreground/70" />
+                        <span className="text-sm text-muted-foreground">Last Ping: 10 mins ago (Home)</span>
                       </div>
                       <Button variant="ghost" size="sm" className="text-blue-600">View Status</Button>
                     </div>
@@ -106,20 +107,20 @@ export default function DefenseKlausPage() {
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-lg">S</div>
+                        <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-bold text-lg">S</div>
                         <div>
                           <h3 className="font-bold text-lg">Sarah (College)</h3>
-                          <p className="text-sm text-slate-500">Wearable Bracelet</p>
+                          <p className="text-sm text-muted-foreground/70">Wearable Bracelet</p>
                         </div>
                       </div>
                       <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-100 flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3" /> Active
                       </Badge>
                     </div>
-                    <div className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div className="flex justify-between items-center bg-muted p-3 rounded-lg border border-border">
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-slate-400" />
-                        <span className="text-sm text-slate-600">Last Ping: 2 mins ago (Campus)</span>
+                        <MapPin className="w-4 h-4 text-muted-foreground/70" />
+                        <span className="text-sm text-muted-foreground">Last Ping: 2 mins ago (Campus)</span>
                       </div>
                       <Button variant="ghost" size="sm" className="text-blue-600">View Status</Button>
                     </div>
@@ -152,10 +153,10 @@ export default function DefenseKlausPage() {
           <TabsContent value="gift" className="space-y-6">
             <Card className="overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="p-8 bg-slate-900 text-white flex flex-col justify-center">
+                <div className="p-8 bg-card flex flex-col justify-center">
                   <Heart className="h-12 w-12 text-red-400 mb-6" />
                   <h2 className="text-3xl font-bold mb-4">The Gift of Defense</h2>
-                  <p className="text-lg text-slate-300 mb-6">
+                  <p className="text-lg text-muted-foreground mb-6">
                     It becomes so standard that receiving one isn't a declaration of a crisis, but just a commonplace gift of love.
                   </p>
                   <ul className="space-y-3 mb-8">
@@ -175,14 +176,14 @@ export default function DefenseKlausPage() {
                 </div>
                 <div className="p-8 flex flex-col justify-center bg-white">
                   <div className="text-center mb-8">
-                    <span className="text-5xl font-bold text-slate-900">\.00</span>
-                    <span className="text-slate-500 ml-2">/ voucher</span>
+                    <span className="text-5xl font-bold text-foreground">\.00</span>
+                    <span className="text-muted-foreground/70 ml-2">/ voucher</span>
                   </div>
                   <div className="space-y-4">
                     <Button className="w-full h-14 text-lg bg-red-600 hover:bg-red-700 text-white">
                       Purchase Voucher
                     </Button>
-                    <p className="text-sm text-center text-slate-500">
+                    <p className="text-sm text-center text-muted-foreground/70">
                       You will receive a digital voucher to email to your loved one. They enter their shipping address privately.
                     </p>
                   </div>
@@ -195,7 +196,7 @@ export default function DefenseKlausPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Scale className="h-6 w-6 text-slate-700" />
+                  <Scale className="h-6 w-6 text-muted-foreground" />
                   Pooled Legal Defense Fund
                 </CardTitle>
                 <CardDescription>
@@ -204,23 +205,23 @@ export default function DefenseKlausPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <div className="p-6 bg-slate-50 rounded-xl border text-center">
-                    <p className="text-sm text-slate-500 mb-2">Current Fund Pool</p>
+                  <div className="p-6 bg-muted rounded-xl border text-center">
+                    <p className="text-sm text-muted-foreground/70 mb-2">Current Fund Pool</p>
                     <p className="text-3xl font-bold text-emerald-600">\.2M</p>
                   </div>
-                  <div className="p-6 bg-slate-50 rounded-xl border text-center">
-                    <p className="text-sm text-slate-500 mb-2">Active Cases</p>
-                    <p className="text-3xl font-bold text-slate-900">14</p>
+                  <div className="p-6 bg-muted rounded-xl border text-center">
+                    <p className="text-sm text-muted-foreground/70 mb-2">Active Cases</p>
+                    <p className="text-3xl font-bold text-foreground">14</p>
                   </div>
-                  <div className="p-6 bg-slate-50 rounded-xl border text-center">
-                    <p className="text-sm text-slate-500 mb-2">Retained Firms</p>
-                    <p className="text-3xl font-bold text-slate-900">8</p>
+                  <div className="p-6 bg-muted rounded-xl border text-center">
+                    <p className="text-sm text-muted-foreground/70 mb-2">Retained Firms</p>
+                    <p className="text-3xl font-bold text-foreground">8</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-slate-900">How it Works</h3>
-                  <p className="text-slate-600">
+                  <h3 className="font-semibold text-foreground">How it Works</h3>
+                  <p className="text-muted-foreground">
                     A portion of every Defense Klaus subscription goes into the central Legal Defense Fund. If a member with an active bracelet is assaulted, stalked, or harassed, they do not have to pay out of pocket to file a restraining order or pursue civil litigation. The platform retains the law firm on their behalf.
                   </p>
                 </div>
@@ -256,7 +257,7 @@ export default function DefenseKlausPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </PortalPageLayout>
     </LaunchConditionOverlay>
   );
 }

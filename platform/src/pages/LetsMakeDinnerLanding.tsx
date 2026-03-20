@@ -27,6 +27,7 @@ import {
 import { AnonymousVolumeExplainer } from "@/components/AnonymousVolumeExplainer";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import '@/styles/landing.css';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -93,7 +94,7 @@ function PriceTimeline() {
               "px-4 py-3 rounded-xl border-2 transition-all cursor-pointer",
               isActive 
                 ? `bg-${tier.color}-500/20 border-${tier.color}-500/60` 
-                : "bg-white/5 border-white/20"
+                : "bg-card border-border"
             )}
             onClick={() => setActiveIndex(idx)}
             style={{
@@ -109,8 +110,8 @@ function PriceTimeline() {
                 {tier.price}
               </span>
             </div>
-            <div className="text-sm text-white/70">{tier.label}</div>
-            <div className="text-xs text-white/50">{tier.time}</div>
+            <div className="text-sm text-muted-foreground">{tier.label}</div>
+            <div className="text-xs text-muted-foreground/70">{tier.time}</div>
           </motion.div>
         );
       })}
@@ -150,11 +151,11 @@ function MealChainAnimation() {
           >
             <div className={cn(
               "w-32 p-4 rounded-xl border-2 text-center transition-all",
-              step === idx ? "bg-purple-500/20 border-purple-500/60" : "bg-white/5 border-white/20"
+              step === idx ? "bg-purple-500/20 border-purple-500/60" : "bg-card border-border"
             )}>
               <div className="text-3xl mb-2">{item.icon}</div>
-              <div className="font-semibold text-white">{item.day}</div>
-              <div className="text-sm text-white/70">{item.meal}</div>
+              <div className="font-semibold text-foreground">{item.day}</div>
+              <div className="text-sm text-muted-foreground">{item.meal}</div>
             </div>
             {idx < chain.length - 1 && (
               <motion.div
@@ -172,7 +173,7 @@ function MealChainAnimation() {
         animate={{ opacity: step === 3 ? 1 : 0.5 }}
       >
         <span className="text-emerald-400 font-semibold">Zero waste</span>
-        <span className="text-white/60 ml-2">— Every ingredient has a purpose</span>
+        <span className="text-muted-foreground ml-2">— Every ingredient has a purpose</span>
       </motion.div>
     </div>
   );
@@ -247,23 +248,23 @@ function ThreePathsSelector({ onSelect }: { onSelect: (path: string) => void }) 
                   <Icon className="h-6 w-6" style={{ color: colors.text }} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-lg">{path.title}</h3>
-                  <p className="text-sm text-white/60">{path.subtitle}</p>
+                  <h3 className="font-bold text-foreground text-lg">{path.title}</h3>
+                  <p className="text-sm text-muted-foreground">{path.subtitle}</p>
                 </div>
               </div>
 
               <ul className="space-y-2 mb-4">
                 {path.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-sm text-white/80">
+                  <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Check className="h-4 w-4" style={{ color: colors.text }} />
                     {feature}
                   </li>
                 ))}
               </ul>
 
-              <div className="pt-4 border-t border-white/10">
-                <div className="text-xs text-white/50 mb-1">Best for:</div>
-                <div className="text-sm text-white/80">{path.bestFor}</div>
+              <div className="pt-4 border-t border-border">
+                <div className="text-xs text-muted-foreground/70 mb-1">Best for:</div>
+                <div className="text-sm text-muted-foreground">{path.bestFor}</div>
               </div>
 
               <motion.div
@@ -303,11 +304,11 @@ function GroceryBoxVisual() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: idx * 0.1 }}
           viewport={{ once: true }}
-          className="p-4 rounded-xl bg-white/5 border border-white/15 text-center hover:bg-white/10 transition-all"
+          className="p-4 rounded-xl bg-card border border-border text-center hover:bg-muted transition-all"
         >
           <div className="text-3xl mb-2">{size.icon}</div>
-          <div className="font-bold text-white">{size.name}</div>
-          <div className="text-sm text-white/60">Serves {size.serves}</div>
+          <div className="font-bold text-foreground">{size.name}</div>
+          <div className="text-sm text-muted-foreground">Serves {size.serves}</div>
           <div className="text-xs text-purple-400 mt-1">{size.meals} meals</div>
         </motion.div>
       ))}
@@ -379,12 +380,12 @@ function ProducerPathways({ onNavigate }: { onNavigate: (path: string) => void }
             onClick={() => onNavigate(path.id)}
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-xl bg-white/10">
+              <div className="p-3 rounded-xl bg-muted">
                 <Icon className="h-6 w-6" style={{ color: colors.text }} />
               </div>
               <div>
-                <h3 className="font-bold text-white">{path.title}</h3>
-                <p className="text-sm text-white/60">{path.description}</p>
+                <h3 className="font-bold text-foreground">{path.title}</h3>
+                <p className="text-sm text-muted-foreground">{path.description}</p>
               </div>
             </div>
             <div className="text-sm font-medium mb-4" style={{ color: colors.text }}>
@@ -451,13 +452,13 @@ export default function LetsMakeDinnerLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+    <PortalPageLayout variant="immersive" xrayId="lets-make-dinner-landing">
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <button
             onClick={() => navigate('/?view=initiatives')}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Back to Initiatives</span>
@@ -465,7 +466,7 @@ export default function LetsMakeDinnerLanding() {
 
           <div className="flex items-center gap-2">
             <ChefHat className="h-6 w-6 text-purple-400" />
-            <span className="font-bold text-white">Let's Make Dinner</span>
+            <span className="font-bold text-foreground">Let's Make Dinner</span>
           </div>
 
           <button
@@ -484,7 +485,7 @@ export default function LetsMakeDinnerLanding() {
               onClick={() => scrollToLayer(layer)}
               className={cn(
                 "w-2 h-2 rounded-full transition-all",
-                currentLayer >= layer ? "bg-purple-400 w-4" : "bg-white/30"
+                currentLayer >= layer ? "bg-purple-400 w-4" : "bg-muted"
               )}
             />
           ))}
@@ -509,7 +510,7 @@ export default function LetsMakeDinnerLanding() {
             <span className="text-purple-300 text-sm">Part of the Sweet Sixteen Initiatives</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             What if dinner was
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
@@ -517,14 +518,14 @@ export default function LetsMakeDinnerLanding() {
             </span>
           </h1>
 
-          <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Home-cooked meals from your neighbors. Pre-cut ingredients in refrigerator-ready boxes.
             Group cooking sessions. Chefs keep <span className="text-emerald-400 font-semibold">83.3%</span>.
           </p>
 
           {/* Dynamic Pricing Display */}
           <div className="mb-12">
-            <p className="text-sm text-white/50 mb-4">Order early, save more:</p>
+            <p className="text-sm text-muted-foreground/70 mb-4">Order early, save more:</p>
             <PriceTimeline />
           </div>
 
@@ -535,8 +536,8 @@ export default function LetsMakeDinnerLanding() {
             className="cursor-pointer"
             onClick={() => scrollToLayer(2)}
           >
-            <ChevronDown className="h-8 w-8 text-white/40 mx-auto" />
-            <span className="text-sm text-white/40">Scroll to discover</span>
+            <ChevronDown className="h-8 w-8 text-muted-foreground/70 mx-auto" />
+            <span className="text-sm text-muted-foreground/70">Scroll to discover</span>
           </motion.div>
         </motion.div>
       </section>
@@ -558,10 +559,10 @@ export default function LetsMakeDinnerLanding() {
             <span className="text-purple-400 text-sm font-medium uppercase tracking-wider">
               Layer 2 of 4
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold text-white mt-2 mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">
               Three Ways to Eat
             </h2>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Choose your level of involvement. All paths lead to great food.
             </p>
           </div>
@@ -577,9 +578,9 @@ export default function LetsMakeDinnerLanding() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-16 p-6 rounded-2xl bg-white/5 border border-white/15 max-w-3xl mx-auto"
+            className="mt-16 p-6 rounded-2xl bg-card border border-border max-w-3xl mx-auto"
           >
-            <h3 className="text-lg font-bold text-white mb-4 text-center">
+            <h3 className="text-lg font-bold text-foreground mb-4 text-center">
               Cost Comparison (Family of 4, per meal)
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
@@ -589,11 +590,11 @@ export default function LetsMakeDinnerLanding() {
                 { method: 'Group Cook', cost: '$5-8', time: '45-60 min', waste: '<2%' },
                 { method: 'Chef Prep', cost: '$12-18', time: '0 min', waste: '0%' },
               ].map((item) => (
-                <div key={item.method} className="p-3 rounded-lg bg-white/5">
-                  <div className="font-medium text-white mb-1">{item.method}</div>
+                <div key={item.method} className="p-3 rounded-lg bg-card">
+                  <div className="font-medium text-foreground mb-1">{item.method}</div>
                   <div className="text-emerald-400 font-bold">{item.cost}</div>
-                  <div className="text-xs text-white/50">{item.time}</div>
-                  <div className="text-xs text-white/50">{item.waste} waste</div>
+                  <div className="text-xs text-muted-foreground/70">{item.time}</div>
+                  <div className="text-xs text-muted-foreground/70">{item.waste} waste</div>
                 </div>
               ))}
             </div>
@@ -618,10 +619,10 @@ export default function LetsMakeDinnerLanding() {
             <span className="text-purple-400 text-sm font-medium uppercase tracking-wider">
               Layer 3 of 4
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold text-white mt-2 mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">
               The Grocery Box Innovation
             </h2>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Refrigerator shelf-compatible. Pre-cut ingredients. Zero waste meal chains.
             </p>
           </div>
@@ -631,7 +632,7 @@ export default function LetsMakeDinnerLanding() {
 
           {/* Meal Chain Animation */}
           <div className="mt-16">
-            <h3 className="text-xl font-bold text-white text-center mb-6">
+            <h3 className="text-xl font-bold text-foreground text-center mb-6">
               The Meal Chain Concept
             </h3>
             <MealChainAnimation />
@@ -651,11 +652,11 @@ export default function LetsMakeDinnerLanding() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="p-4 rounded-xl bg-white/5 border border-white/15 text-center"
+                  className="p-4 rounded-xl bg-card border border-border text-center"
                 >
                   <Icon className="h-8 w-8 text-purple-400 mx-auto mb-3" />
-                  <h4 className="font-bold text-white mb-1">{feature.title}</h4>
-                  <p className="text-sm text-white/60">{feature.desc}</p>
+                  <h4 className="font-bold text-foreground mb-1">{feature.title}</h4>
+                  <p className="text-sm text-muted-foreground">{feature.desc}</p>
                 </motion.div>
               );
             })}
@@ -670,25 +671,25 @@ export default function LetsMakeDinnerLanding() {
           >
             <div className="flex items-center gap-3 mb-4">
               <EyeOff className="w-6 h-6 text-green-400" />
-              <h3 className="text-xl font-bold text-white">Anonymous Volume Aggregation</h3>
+              <h3 className="text-xl font-bold text-foreground">Anonymous Volume Aggregation</h3>
             </div>
-            <p className="text-white/70 mb-4">
+            <p className="text-muted-foreground mb-4">
               When multiple orders go to the same restaurant, the platform batches them into one
               volume order. The restaurant sees volume, not individuals. Charity recipients are
               indistinguishable from paying customers. Dignity intact.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 rounded-lg bg-white/5 border border-white/10 text-center">
+              <div className="p-4 rounded-lg bg-card border border-border text-center">
                 <div className="text-2xl font-bold text-green-400 mb-1">3x</div>
-                <div className="text-sm text-white/60">More food per $10 donation at volume pricing</div>
+                <div className="text-sm text-muted-foreground">More food per $10 donation at volume pricing</div>
               </div>
-              <div className="p-4 rounded-lg bg-white/5 border border-white/10 text-center">
+              <div className="p-4 rounded-lg bg-card border border-border text-center">
                 <div className="text-2xl font-bold text-green-400 mb-1">83.3%</div>
-                <div className="text-sm text-white/60">Goes to the restaurant. No 30% platform cut.</div>
+                <div className="text-sm text-muted-foreground">Goes to the restaurant. No 30% platform cut.</div>
               </div>
-              <div className="p-4 rounded-lg bg-white/5 border border-white/10 text-center">
+              <div className="p-4 rounded-lg bg-card border border-border text-center">
                 <div className="text-2xl font-bold text-green-400 mb-1">Zero</div>
-                <div className="text-sm text-white/60">Means testing. No shame. No gatekeeping.</div>
+                <div className="text-sm text-muted-foreground">Means testing. No shame. No gatekeeping.</div>
               </div>
             </div>
           </motion.div>
@@ -712,10 +713,10 @@ export default function LetsMakeDinnerLanding() {
             <span className="text-purple-400 text-sm font-medium uppercase tracking-wider">
               Layer 4 of 4
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold text-white mt-2 mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">
               Join the Network
             </h2>
-            <p className="text-lg text-white/60 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Don't just eat — participate. Build a micro-business, start a pod, or host sessions.
             </p>
           </div>
@@ -738,42 +739,42 @@ export default function LetsMakeDinnerLanding() {
               <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/50 mb-3">
                 The Cold Start Guide
               </Badge>
-              <h3 className="text-2xl font-bold text-white mb-2">
+              <h3 className="text-2xl font-bold text-foreground mb-2">
                 Share Knowledge, Save Money, and Knock Out 3 Meals a Week
               </h3>
-              <p className="text-white/70">
+              <p className="text-muted-foreground">
                 You don't have to think about dinner anymore. Here is how you start a local Chef Circle using communal kitchens and the Family Table.
               </p>
             </div>
 
             <div className="space-y-6">
-              <div className="flex gap-4 items-start bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+              <div className="flex gap-4 items-start bg-card p-4 rounded-xl border border-border">
                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">1</div>
                 <div>
-                  <h4 className="text-lg font-bold text-white mb-1">Potluck & Prep (The First Meeting)</h4>
-                  <p className="text-sm text-white/70">
+                  <h4 className="text-lg font-bold text-foreground mb-1">Potluck & Prep (The First Meeting)</h4>
+                  <p className="text-sm text-muted-foreground">
                     Meet at a communal kitchen. Share a potluck meal. Afterward, everyone preps one meal together to take home. 
                     <strong> Costs are prepaid and shared.</strong> You just eat, chop veggies, and leave with tomorrow's dinner.
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-4 items-start bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+              <div className="flex gap-4 items-start bg-card p-4 rounded-xl border border-border">
                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400 font-bold">2</div>
                 <div>
-                  <h4 className="text-lg font-bold text-white mb-1">Ramp Up (3-6 Meals a Week)</h4>
-                  <p className="text-sm text-white/70">
+                  <h4 className="text-lg font-bold text-foreground mb-1">Ramp Up (3-6 Meals a Week)</h4>
+                  <p className="text-sm text-muted-foreground">
                     Once the weekly day is set, get ambitious. Spend 2 hours together and prep 3 to 6 meals for every family to take home. 
                     Take turns leading the Chef Circle. No one is selling anything yet—just sharing costs and results.
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-4 items-start bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+              <div className="flex gap-4 items-start bg-card p-4 rounded-xl border border-border">
                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">3</div>
                 <div>
-                  <h4 className="text-lg font-bold text-white mb-1">The Business (Selling to the Neighborhood)</h4>
-                  <p className="text-sm text-white/70">
+                  <h4 className="text-lg font-bold text-foreground mb-1">The Business (Selling to the Neighborhood)</h4>
+                  <p className="text-sm text-muted-foreground">
                     Turn your group's efficiency into a business. Sell advance subscriptions to neighbors: 
                     <em> "Next week we make Mack's HotHouse Burgers with 3 sides. $5/serving if you subscribe for 4 weeks, or $10/serving one-off."</em>
                   </p>
@@ -789,7 +790,7 @@ export default function LetsMakeDinnerLanding() {
             viewport={{ once: true }}
             className="mt-16 text-center"
           >
-            <p className="text-white/60 mb-4">Ready to transform how you eat?</p>
+            <p className="text-muted-foreground mb-4">Ready to transform how you eat?</p>
             <div className="flex flex-wrap justify-center gap-4">
               <button
                 onClick={() => navigate('/initiatives/lets-make-dinner')}
@@ -799,7 +800,7 @@ export default function LetsMakeDinnerLanding() {
               </button>
               <button
                 onClick={() => openOnboard({ reason: "start cooking and earning", actionLabel: "Join", membershipIncluded: true })}
-                className="px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold text-lg hover:bg-white/20 transition-all"
+                className="px-8 py-4 rounded-xl bg-muted border border-border text-foreground font-bold text-lg hover:bg-muted/80 transition-all"
               >
                 Join for $5/year
               </button>
@@ -809,7 +810,7 @@ export default function LetsMakeDinnerLanding() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 text-center text-white/40 text-sm border-t border-white/10">
+      <footer className="py-8 text-center text-muted-foreground/70 text-sm border-t border-border">
         <p>© 2026 Liana Banyan Corporation</p>
         <p className="mt-1">Crown: Maneet Chauhan</p>
       </footer>
@@ -825,6 +826,6 @@ export default function LetsMakeDinnerLanding() {
           onJoinClick={() => openOnboard({ reason: "start cooking and earning", actionLabel: "Join", membershipIncluded: true })}
         />
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

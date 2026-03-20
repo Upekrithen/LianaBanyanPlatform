@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Wrench, Eye, ExternalLink, FileText, Search, Megaphone, Lightbulb } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const CEPHAS_BASE = "https://cephas.lianabanyan.com";
 
@@ -21,7 +22,7 @@ const CATEGORIES: { path: string; label: string }[] = [
 
 export default function CephasGatewayPage() {
   return (
-    <div className="container max-w-3xl mx-auto p-6 space-y-8" data-xray-id="cephas-gateway-page">
+    <PortalPageLayout maxWidth="md" xrayId="cephas-gateway-page">
       <div className="text-center">
         <h1 className="text-4xl font-bold">Cephas</h1>
         <p className="text-muted-foreground mt-2">
@@ -110,6 +111,6 @@ export default function CephasGatewayPage() {
           </Link>
         </Button>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

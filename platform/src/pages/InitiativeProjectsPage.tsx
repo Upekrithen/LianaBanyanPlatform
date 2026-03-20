@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Heart, ArrowLeft, Coins } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 /**
  * The Sweet Sixteen Initiatives — Deck Card Edition
@@ -288,13 +289,13 @@ export default function InitiativeProjectsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+    <PortalPageLayout variant="immersive" xrayId="initiative-projects">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/10">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <button
             onClick={() => navigate('/?view=initiatives')}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Back to Main</span>
@@ -317,25 +318,25 @@ export default function InitiativeProjectsPage() {
             <Heart className="h-8 w-8 text-red-500" />
             <h1 className="text-4xl font-bold">The Sweet Sixteen</h1>
           </div>
-          <p className="text-white/60 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             16 charitable initiatives funded by the Cost+20% margin. 
             Click the side locks to unlock each card. Priority initiatives are <span className="text-green-400 font-semibold">FREE</span>!
           </p>
         </div>
 
         {/* How It Works */}
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">How Initiatives Work</CardTitle>
+            <CardTitle className="text-foreground">How Initiatives Work</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm text-white/70">
+          <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
               Three commercial websites (LianaBanyan.com, .biz, .net) sustainably fund 
               sixteen charitable initiatives through a baked-in 20% "Cost of Doing Good" margin.
               No donations required. Commerce funds community.
             </p>
             <p>
-              <strong className="text-white">Creators and Workers keep 83.3%</strong> of every transaction. The remaining margin 
+              <strong className="text-foreground">Creators and Workers keep 83.3%</strong> of every transaction. The remaining margin 
               funds these initiatives — constitutionally locked by DNA Lock.
             </p>
           </CardContent>
@@ -368,7 +369,7 @@ export default function InitiativeProjectsPage() {
                     className={`relative bg-gradient-to-br ${
                       initiative.priority 
                         ? 'from-green-500/20 to-emerald-500/30 border-green-500/30' 
-                        : 'from-white/10 to-white/5 border-white/20'
+                        : 'bg-card border-border'
                     } backdrop-blur-sm rounded-xl p-6 border-2 min-h-[220px] cursor-pointer transition-all hover:shadow-lg ${
                       state.isCollected ? 'hover:scale-[1.02]' : ''
                     }`}
@@ -386,7 +387,7 @@ export default function InitiativeProjectsPage() {
                     <button
                       className={`absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
                         state.locks.top 
-                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'top'); }}
@@ -398,7 +399,7 @@ export default function InitiativeProjectsPage() {
                     <button
                       className={`absolute top-1/2 -right-2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
                         state.locks.right 
-                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'right'); }}
@@ -409,7 +410,7 @@ export default function InitiativeProjectsPage() {
                     <button
                       className={`absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
                         state.locks.bottom 
-                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'bottom'); }}
@@ -420,7 +421,7 @@ export default function InitiativeProjectsPage() {
                     <button
                       className={`absolute top-1/2 -left-2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
                         state.locks.left 
-                          ? 'bg-slate-700 hover:bg-slate-600 cursor-pointer' 
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'left'); }}
@@ -432,13 +433,13 @@ export default function InitiativeProjectsPage() {
                     {/* Card Content */}
                     <div className="text-center space-y-2 mt-4">
                       <div className="text-4xl">{initiative.emoji}</div>
-                      <h3 className="text-lg font-bold text-white">{initiative.name}</h3>
-                      <p className="text-sm text-white/60">{initiative.tagline}</p>
+                      <h3 className="text-lg font-bold text-foreground">{initiative.name}</h3>
+                      <p className="text-sm text-muted-foreground">{initiative.tagline}</p>
                     </div>
 
                     {/* Lock Status */}
                     {lockedCount > 0 && (
-                      <div className="absolute bottom-2 right-2 text-xs text-white/40 bg-black/30 px-2 py-0.5 rounded">
+                      <div className="absolute bottom-2 right-2 text-xs text-muted-foreground/70 bg-background/30 px-2 py-0.5 rounded">
                         {lockedCount}/4 locked
                       </div>
                     )}
@@ -452,7 +453,7 @@ export default function InitiativeProjectsPage() {
 
                     {/* Flip hint when collected */}
                     {state.isCollected && !state.isFlipped && (
-                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-white/40">
+                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-muted-foreground/70">
                         Click to flip →
                       </div>
                     )}
@@ -470,10 +471,10 @@ export default function InitiativeProjectsPage() {
                     <div className="flex flex-col h-full">
                       <div className="flex items-center gap-2 mb-3">
                         <span className="text-2xl">{initiative.emoji}</span>
-                        <h3 className="text-lg font-bold text-white">{initiative.name}</h3>
+                        <h3 className="text-lg font-bold text-foreground">{initiative.name}</h3>
                       </div>
                       
-                      <p className="text-sm text-white/70 flex-1">
+                      <p className="text-sm text-muted-foreground flex-1">
                         {initiative.description}
                       </p>
 
@@ -484,7 +485,7 @@ export default function InitiativeProjectsPage() {
                         Explore as Ghost →
                       </Button>
 
-                      <p className="text-xs text-white/40 text-center mt-2">
+                      <p className="text-xs text-muted-foreground/70 text-center mt-2">
                         Click to flip back
                       </p>
                     </div>
@@ -505,6 +506,6 @@ export default function InitiativeProjectsPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

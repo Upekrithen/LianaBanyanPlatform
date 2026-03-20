@@ -278,7 +278,7 @@ export function FinancialTransparencyPage() {
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm bg-slate-200 px-2 py-1 rounded">
+                        <span className="font-mono text-sm bg-muted px-2 py-1 rounded">
                           {param.parameter_key}
                         </span>
                         <Badge variant="outline" className="text-xs">
@@ -424,12 +424,12 @@ export function FinancialTransparencyPage() {
       </Tabs>
 
       {/* Bottom CTA */}
-      <Card className="mt-8 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+      <Card className="mt-8 bg-primary text-primary-foreground">
         <CardContent className="py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-xl font-bold mb-2">Questions About Our Finances?</h3>
-              <p className="text-slate-300">
+              <p className="text-primary-foreground/70">
                 We're committed to answering any questions about how funds are managed.
               </p>
             </div>

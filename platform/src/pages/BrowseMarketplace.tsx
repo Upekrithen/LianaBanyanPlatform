@@ -5,6 +5,7 @@ import { ShoppingBag, TrendingUp, Users, Star } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { useNavigate } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const categories = [
   {
@@ -51,9 +52,9 @@ export default function BrowseMarketplace() {
   };
 
   return (
-    <div className="container mx-auto p-8 space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">Marketplace Discovery</h1>
+    <PortalPageLayout title="Marketplace Discovery" maxWidth="xl" xrayId="browse-marketplace-page">
+      <div className="text-center space-y-4 mb-8">
+        <h1 className="text-4xl font-bold text-foreground">Marketplace Discovery</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Browse community projects and products. Sign in to sponsor and participate.
         </p>
@@ -103,6 +104,6 @@ export default function BrowseMarketplace() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }
