@@ -2468,12 +2468,55 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 - `create-menu-checkout` edge function ✓
 
 **Commerce Engine Remaining (for next session):**
-- Task 3: Order aggregation edge function (midnight cutoff → consolidated list to provider)
-- Task 4: Provider Dashboard (`/dashboard/provider`)
-- Task 5: Runner Dashboard (`/dashboard/runner`)
+- ~~Task 3: Order aggregation edge function~~ ✅ DONE (Session 68)
+- ~~Task 4: Provider Dashboard~~ ✅ DONE (Session 68)
+- ~~Task 5: Runner Dashboard~~ ✅ DONE (Session 68)
 - Task 6: QR Cue Card Generator (`/tools/cue-card-generator`)
 - Task 7: Treasure Map Chest Page (`/treasure-maps`)
 - Task 9: Passive Income Dashboard (`/dashboard/onboarder`)
+
+---
+
+## Commerce Engine Phase 2 (Knight Session 68) — March 21, 2026
+
+**Innovation Count:** 1,856 (unchanged)
+
+**Completed:**
+
+1. **`aggregate-orders` Edge Function** — Deployed with `--no-verify-jwt`:
+   - Queries `menu_orders` where `delivery_date = target_date`, `delivery_status = 'pending'`, `stripe_payment_status = 'paid'`
+   - Groups orders by storefront → builds consolidated item list
+   - Sends provider email via Resend with: itemized prep table, individual order list, totals, delivery window
+   - Updates all processed orders to `delivery_status = 'aggregated'`
+   - Supports manual trigger (POST with `delivery_date`) and cron (defaults to tomorrow)
+
+2. **Provider Dashboard (`/dashboard/provider`)** — Full management view:
+   - Storefront selector (multi-storefront support)
+   - Stats: today's orders, tomorrow pre-orders, this week revenue, total orders
+   - Tomorrow's consolidated prep list (item name + total qty across all orders)
+   - Expandable order cards with item breakdown, customer info, status badge
+   - Status flow: pending → aggregated → preparing → out_for_delivery → delivered
+   - "Aggregate Orders" button triggers `aggregate-orders` edge function
+   - Empty state links to Storefront Builder
+
+3. **Runner Dashboard (`/dashboard/runner`)** — Delivery route + earnings:
+   - Stats: tomorrow's stops, orders, delivery earnings, storefronts count
+   - Tomorrow's route: numbered stops with storefront name, location, delivery window, order count
+   - Per-order STAMP photo upload (camera capture → Supabase Storage → marks delivered)
+   - Onboarding credits section: qualified/in-progress status per storefront, 3% passive income display
+   - Today's orders section with delivery status
+   - My Storefronts grid with links to menu pages + "Onboard Another Business" CTA
+   - SEC-safe language: "may earn" for passive income
+
+**Routes Added:**
+- `/dashboard/provider` → ProtectedRoute → ProviderDashboard
+- `/dashboard/runner` → ProtectedRoute → RunnerDashboard
+
+**Navigation:** Both dashboards added to AppSidebar and UnifiedNavigation (marketplace portal)
+
+**Deployed:**
+- lianabanyan.com (hosting:main) ✓
+- `aggregate-orders` edge function ✓
 
 ---
 

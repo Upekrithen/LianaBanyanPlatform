@@ -1,4 +1,4 @@
-import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket, TrendingUp, Scale, User, CreditCard, Repeat } from "lucide-react";
+import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket, TrendingUp, Scale, User, CreditCard, Repeat, Truck } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -39,6 +39,8 @@ const allNavItems: NavItem[] = [
   { title: "BandWagon", url: "/guilds/hub?tab=bandwagon", icon: TrendingUp, portal: "marketplace" },
   { title: "Subscriptions", url: "/subscriptions", icon: Repeat, portal: "marketplace" },
   { title: "Storefront Builder", url: "/tools/storefront-builder", icon: Building2, portal: "marketplace" },
+  { title: "Provider Dashboard", url: "/dashboard/provider", icon: Package, portal: "marketplace" },
+  { title: "Runner Dashboard", url: "/dashboard/runner", icon: Truck, portal: "marketplace" },
   { title: "Steward", url: "/steward", icon: Shield, portal: "marketplace" },
   { title: "Governance", url: "/governance/proposals", icon: Scale, portal: "marketplace" },
   { title: "Clans", url: "/clans", icon: Shield, portal: "marketplace" },
