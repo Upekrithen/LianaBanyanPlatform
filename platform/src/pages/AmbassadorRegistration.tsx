@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";
 
@@ -90,18 +91,20 @@ export default function AmbassadorRegistration() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-4 p-6">
-        <p className="text-muted-foreground">Sign in to register as an Ambassador.</p>
-        <Button variant="outline" onClick={() => navigate("/auth")}>
-          Sign in
-        </Button>
-      </div>
+      <PortalPageLayout maxWidth="sm" xrayId="ambassador-registration">
+        <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+          <p className="text-muted-foreground">Sign in to register as an Ambassador.</p>
+          <Button variant="outline" onClick={() => navigate("/auth")}>
+            Sign in
+          </Button>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="ambassador-register-form">
-      <div className="max-w-xl mx-auto space-y-6">
+    <PortalPageLayout maxWidth="sm" xrayId="ambassador-registration">
+      <div className="space-y-6">
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => navigate("/portal")}>
           <ArrowLeft className="w-4 h-4 mr-1" /> Portal
         </Button>
@@ -168,6 +171,6 @@ export default function AmbassadorRegistration() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

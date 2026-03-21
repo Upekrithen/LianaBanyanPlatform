@@ -12,6 +12,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -228,7 +229,7 @@ export default function BifrostCardBuilder() {
   };
 
   return (
-    <div className="container mx-auto py-12 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="bifrost-card-builder">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full text-white">
@@ -562,6 +563,6 @@ export default function BifrostCardBuilder() {
           )}
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

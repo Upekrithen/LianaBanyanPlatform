@@ -13,6 +13,7 @@ import {
   Percent, Zap, Gift, Sprout, ChevronRight
 } from 'lucide-react';
 import { useBuilderMode } from '@/components/builder/BuilderModeContext';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Word pairs for the spinning wheel animation
 const WORD_PAIRS = [
@@ -134,7 +135,7 @@ export default function BuildBusiness() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="build-business">
       {/* Breadcrumb */}
       <nav className="px-6 pt-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -672,6 +673,6 @@ export default function BuildBusiness() {
         onToggleExpand={() => setBenefitCardExpanded(!benefitCardExpanded)}
         onJoinClick={() => navigate('/auth')}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

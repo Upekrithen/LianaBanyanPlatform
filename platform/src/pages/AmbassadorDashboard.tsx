@@ -22,6 +22,7 @@ import { AmbassadorLevelBadge } from "@/components/ambassador/AmbassadorLevelBad
 import { RecruitStatusCard } from "@/components/ambassador/RecruitStatusCard";
 import { AmbassadorMenteeGrid } from "@/components/ambassador/AmbassadorMenteeGrid";
 import type { MenteeSlot } from "@/components/ambassador/AmbassadorMenteeGrid";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";
@@ -161,25 +162,29 @@ export default function AmbassadorDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-muted-foreground">Loading…</p>
-      </div>
+      <PortalPageLayout maxWidth="md" xrayId="ambassador-dashboard">
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <p className="text-muted-foreground">Loading…</p>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   if (!ambassador) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-4 p-6">
-        <p className="text-muted-foreground">You&apos;re not registered as an Ambassador yet.</p>
-        <Button onClick={() => navigate("/ambassador/register")}>Register as Ambassador</Button>
-        <Button variant="outline" onClick={() => navigate("/portal")}>Back to Portal</Button>
-      </div>
+      <PortalPageLayout maxWidth="md" xrayId="ambassador-dashboard">
+        <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+          <p className="text-muted-foreground">You&apos;re not registered as an Ambassador yet.</p>
+          <Button onClick={() => navigate("/ambassador/register")}>Register as Ambassador</Button>
+          <Button variant="outline" onClick={() => navigate("/portal")}>Back to Portal</Button>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="ambassador-dashboard">
-      <div className="max-w-3xl mx-auto space-y-6">
+    <PortalPageLayout maxWidth="md" xrayId="ambassador-dashboard">
+      <div className="space-y-6">
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => navigate("/portal")}>
           <ArrowLeft className="w-4 h-4 mr-1" /> Portal
         </Button>
@@ -289,6 +294,6 @@ export default function AmbassadorDashboard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

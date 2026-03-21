@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AmbassadorLevelBadge } from "@/components/ambassador/AmbassadorLevelBadge";
 import { AmbassadorPortfolioStats } from "@/components/ambassador/AmbassadorPortfolioStats";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { supabase } from "@/integrations/supabase/client";
 
 const FOCUS_LABELS: Record<string, string> = {
@@ -98,18 +99,22 @@ export default function AmbassadorPortfolio() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-muted-foreground">Loading…</p>
-      </div>
+      <PortalPageLayout maxWidth="sm" xrayId="ambassador-portfolio">
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <p className="text-muted-foreground">Loading…</p>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   if (!ambassador) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-4 p-6">
-        <p className="text-muted-foreground">Ambassador not found.</p>
-        <Button variant="outline" onClick={() => navigate("/portal")}>Portal</Button>
-      </div>
+      <PortalPageLayout maxWidth="sm" xrayId="ambassador-portfolio">
+        <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+          <p className="text-muted-foreground">Ambassador not found.</p>
+          <Button variant="outline" onClick={() => navigate("/portal")}>Portal</Button>
+        </div>
+      </PortalPageLayout>
     );
   }
 
@@ -119,8 +124,8 @@ export default function AmbassadorPortfolio() {
     : "";
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="ambassador-portfolio">
-      <div className="max-w-2xl mx-auto space-y-6">
+    <PortalPageLayout maxWidth="sm" xrayId="ambassador-portfolio">
+      <div className="space-y-6">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16">
             <AvatarFallback className="bg-green-500/20 text-green-600 dark:text-green-400 text-xl font-semibold">
@@ -217,6 +222,6 @@ export default function AmbassadorPortfolio() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

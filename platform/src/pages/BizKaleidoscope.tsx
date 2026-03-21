@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +30,7 @@ export default function BizKaleidoscope() {
   });
 
   return (
-    <div className="container mx-auto py-8 max-w-7xl">
+    <PortalPageLayout maxWidth="full" xrayId="biz-kaleidoscope">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
@@ -138,6 +139,6 @@ export default function BizKaleidoscope() {
           We believe advertising should be a utilitarian reference, not a psychological manipulation. The Kaleidoscope allows consumers to find exactly what they need, when they need it, based on objective filters like location and charitable contribution. No algorithms pushing you to buy things you don't want.
         </p>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

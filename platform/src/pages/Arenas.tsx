@@ -48,6 +48,7 @@ import {
 } from "lucide-react";
 import DoctrineExplorer from "@/components/areopagus/DoctrineExplorer";
 import { toast } from "sonner";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 // ─── TYPES ───
 
@@ -267,7 +268,8 @@ export default function Arenas() {
   const getMembership = (arenaId: string) => memberships?.find((m) => m.arena_id === arenaId);
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="arenas">
+    <div className="space-y-6">
       {/* Header + Switzerland Rule */}
       <div className="flex items-center gap-3">
         <Shield className="h-8 w-8 text-primary" />
@@ -724,5 +726,6 @@ export default function Arenas() {
         </Card>
       )}
     </div>
+    </PortalPageLayout>
   );
 }

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AmbassadorLevelBadge } from "@/components/ambassador/AmbassadorLevelBadge";
 import { AmbassadorCertificationQuiz } from "@/components/ambassador/AmbassadorCertificationQuiz";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";
@@ -58,24 +59,28 @@ export default function AmbassadorCertification() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-muted-foreground">Loading…</p>
-      </div>
+      <PortalPageLayout maxWidth="sm" xrayId="ambassador-certification">
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <p className="text-muted-foreground">Loading…</p>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   if (!ambassador) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-4 p-6">
-        <p className="text-muted-foreground">You&apos;re not an Ambassador.</p>
-        <Button variant="outline" onClick={() => navigate("/ambassador/register")}>Register</Button>
-      </div>
+      <PortalPageLayout maxWidth="sm" xrayId="ambassador-certification">
+        <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+          <p className="text-muted-foreground">You&apos;re not an Ambassador.</p>
+          <Button variant="outline" onClick={() => navigate("/ambassador/register")}>Register</Button>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="ambassador-certification">
-      <div className="max-w-xl mx-auto space-y-6">
+    <PortalPageLayout maxWidth="sm" xrayId="ambassador-certification">
+      <div className="space-y-6">
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => navigate("/ambassador/dashboard")}>
           <ArrowLeft className="w-4 h-4 mr-1" /> Dashboard
         </Button>
@@ -134,6 +139,6 @@ export default function AmbassadorCertification() {
           </Card>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

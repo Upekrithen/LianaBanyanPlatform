@@ -13,6 +13,7 @@ import { ArrowLeft, CheckCircle2, Clock, ExternalLink, FileText, AlertCircle } f
 import { KeirseyAssessmentCard } from "@/components/onboarding/KeirseyAssessmentCard";
 import { KeirseyResultsForm } from "@/components/onboarding/KeirseyResultsForm";
 import { Loader2 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 interface OnboardingRecord {
   id: string;
@@ -86,9 +87,11 @@ export default function AgentOnboarding() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+      <PortalPageLayout maxWidth="lg" xrayId="agent-onboarding">
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
@@ -97,8 +100,8 @@ export default function AgentOnboarding() {
   const isApproved = onboardingRecord?.approval_status === "approved";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <PortalPageLayout maxWidth="lg" xrayId="agent-onboarding">
+      <div className="space-y-8">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button
@@ -251,6 +254,6 @@ export default function AgentOnboarding() {
           </Alert>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

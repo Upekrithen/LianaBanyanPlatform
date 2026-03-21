@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { WalkthroughSequence } from "@/components/ambassador/WalkthroughSequence";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";
@@ -63,26 +64,30 @@ export default function AmbassadorWalkthrough() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-muted-foreground">Loading walkthrough…</p>
-      </div>
+      <PortalPageLayout maxWidth="full" xrayId="ambassador-walkthrough">
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <p className="text-muted-foreground">Loading walkthrough…</p>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   if (!recruitId || !ambassadorId) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center gap-4 p-6">
-        <p className="text-muted-foreground">Missing recruit or you&apos;re not an Ambassador.</p>
-        <Button variant="outline" onClick={() => navigate("/ambassador/dashboard")}>
-          Back to dashboard
-        </Button>
-      </div>
+      <PortalPageLayout maxWidth="xl" xrayId="ambassador-walkthrough">
+        <div className="flex flex-col items-center justify-center gap-4 min-h-[50vh]">
+          <p className="text-muted-foreground">Missing recruit or you&apos;re not an Ambassador.</p>
+          <Button variant="outline" onClick={() => navigate("/ambassador/dashboard")}>
+            Back to dashboard
+          </Button>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
-      <div className="max-w-xl mx-auto space-y-4">
+    <PortalPageLayout maxWidth="sm" xrayId="ambassador-walkthrough">
+      <div className="space-y-4">
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => navigate("/ambassador/dashboard")}>
           <ArrowLeft className="w-4 h-4 mr-1" /> Dashboard
         </Button>
@@ -93,6 +98,6 @@ export default function AmbassadorWalkthrough() {
           onComplete={() => navigate("/ambassador/dashboard")}
         />
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

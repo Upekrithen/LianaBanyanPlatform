@@ -17,6 +17,7 @@
 
 import React from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ClaimCaptainForm } from "@/components/cold-start/ClaimDukedomForm";
@@ -52,7 +53,7 @@ const BecomeCaptain: React.FC = () => {
 
   if (!city || !state) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center">
+      <PortalPageLayout maxWidth="lg" xrayId="become-captain" className="flex items-center justify-center">
         <div className="text-center p-8">
           <MapPin className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
           <h1 className="text-2xl font-bold mb-2">Port Required</h1>
@@ -64,15 +65,15 @@ const BecomeCaptain: React.FC = () => {
             Back to Cold Start Dashboard
           </Button>
         </div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <PortalPageLayout maxWidth="lg" xrayId="become-captain">
+      <div className="space-y-6">
         {/* Header */}
-        <div className="mb-8">
+        <div>
           <Button 
             variant="ghost" 
             onClick={() => navigate(`/cold-start-dashboard?city=${city}&state=${state}`)}
@@ -108,7 +109,7 @@ const BecomeCaptain: React.FC = () => {
           }}
         />
       </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 

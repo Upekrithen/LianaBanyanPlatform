@@ -16,6 +16,7 @@
  */
 
 import { useState } from 'react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -33,7 +34,8 @@ export function BrewsterBonusPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 p-6">
+    <PortalPageLayout maxWidth="lg" xrayId="brewster-bonus">
+      <div className="space-y-8">
       {/* Hero */}
       <div className="text-center space-y-4 py-8">
         <div className="flex justify-center">
@@ -304,7 +306,8 @@ export function BrewsterBonusPage() {
           </Button>
         </div>
       </div>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }
 

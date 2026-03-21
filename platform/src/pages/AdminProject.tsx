@@ -1,35 +1,49 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ProjectTaskList } from '@/components/ProjectTaskList';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ThemeCarousel } from '@/components/ThemeCarousel';
-import { ThemeUploader } from '@/components/ThemeUploader';
-import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ProjectTaskList } from "@/components/ProjectTaskList";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ThemeCarousel } from "@/components/ThemeCarousel";
+import { ThemeUploader } from "@/components/ThemeUploader";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { BlockchainGasDashboard } from "@/components/BlockchainGasDashboard";
 import { MedallionMintingManager } from "@/components/MedallionMintingManager";
-import { ResourceAllocation } from '@/components/ResourceAllocation';
-import { VotingConfigManager } from '@/components/VotingConfigManager';
-import { ContractCompensationConfigManager } from '@/components/ContractCompensationConfigManager';
-import { ApplicationReviewManager } from '@/components/ApplicationReviewManager';
-import { ProjectVisualThemeManager } from '@/components/ProjectVisualThemeManager';
-import { ProjectServiceSelector } from '@/components/ProjectServiceSelector';
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
-import LBInternalPositions from './LBInternalPositions';
-import { EditModeProvider, useEditMode } from '@/contexts/EditModeContext';
-import { QRLandingPage } from '@/components/QRLandingPage';
-import { BusinessPlanTreeChart } from '@/components/BusinessPlanTreeChart';
-import { InfluencerChallengeManager } from '@/components/InfluencerChallengeManager';
-import { ProjectIslandMapper } from '@/components/ProjectIslandMapper';
-import { IslandChallengeBoard } from '@/components/IslandChallengeBoard';
-import { Switch } from '@/components/ui/switch';
-import { Edit3 } from 'lucide-react';
+import { ResourceAllocation } from "@/components/ResourceAllocation";
+import { VotingConfigManager } from "@/components/VotingConfigManager";
+import { ContractCompensationConfigManager } from "@/components/ContractCompensationConfigManager";
+import { ApplicationReviewManager } from "@/components/ApplicationReviewManager";
+import { ProjectVisualThemeManager } from "@/components/ProjectVisualThemeManager";
+import { ProjectServiceSelector } from "@/components/ProjectServiceSelector";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import LBInternalPositions from "./LBInternalPositions";
+import { EditModeProvider, useEditMode } from "@/contexts/EditModeContext";
+import { QRLandingPage } from "@/components/QRLandingPage";
+import { BusinessPlanTreeChart } from "@/components/BusinessPlanTreeChart";
+import { InfluencerChallengeManager } from "@/components/InfluencerChallengeManager";
+import { ProjectIslandMapper } from "@/components/ProjectIslandMapper";
+import { IslandChallengeBoard } from "@/components/IslandChallengeBoard";
+import { Switch } from "@/components/ui/switch";
+import { Edit3 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 function AdminProjectContent() {
   const { user } = useAuth();
@@ -41,11 +55,11 @@ function AdminProjectContent() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [funding, setFunding] = useState<any>(null);
   const [invitations, setInvitations] = useState<any[]>([]);
-  
+
   // Form states
-  const [potAmount, setPotAmount] = useState('');
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteCredits, setInviteCredits] = useState('100');
+  const [potAmount, setPotAmount] = useState("");
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteCredits, setInviteCredits] = useState("100");
 
   useEffect(() => {
     checkOwnerStatus();
@@ -61,14 +75,14 @@ function AdminProjectContent() {
     if (!user) return;
 
     const { data: roles } = await supabase
-      .from('projects')
-      .select('role')
-      .eq('user_id', user.id)
-      .in('role', ['admin', 'project_owner']);
+      .from("projects")
+      .select("role")
+      .eq("user_id", user.id)
+      .in("role", ["admin", "project_owner"]);
 
     if (!roles || roles.length === 0) {
-      toast.error('Access denied. Project owner privileges required.');
-      navigate('/dashboard');
+      toast.error("Access denied. Project owner privileges required.");
+      navigate("/dashboard");
       return;
     }
 
@@ -78,12 +92,12 @@ function AdminProjectContent() {
 
   const loadProjects = async () => {
     const { data, error } = await supabase
-      .from('projects')
-      .select('*')
-      .eq('owner_id', user?.id);
+      .from("projects")
+      .select("*")
+      .eq("owner_id", user?.id);
 
     if (error) {
-      toast.error('Failed to load projects');
+      toast.error("Failed to load projects");
       console.error(error);
     } else {
       setProjects(data || []);
@@ -99,26 +113,26 @@ function AdminProjectContent() {
 
     // Load funding
     const { data: fundingData, error: fundingError } = await supabase
-      .from('project_funding')
-      .select('*')
-      .eq('project_id', selectedProject)
+      .from("project_funding")
+      .select("*")
+      .eq("project_id", selectedProject)
       .maybeSingle();
 
     if (fundingError) {
-      console.error('Error loading funding:', fundingError);
+      console.error("Error loading funding:", fundingError);
     } else {
       setFunding(fundingData);
     }
 
     // Load invitations
     const { data: invitationsData, error: invitationsError } = await supabase
-      .from('project_invitations')
-      .select('*')
-      .eq('project_id', selectedProject)
-      .order('created_at', { ascending: false });
+      .from("project_invitations")
+      .select("*")
+      .eq("project_id", selectedProject)
+      .order("created_at", { ascending: false });
 
     if (invitationsError) {
-      console.error('Error loading invitations:', invitationsError);
+      console.error("Error loading invitations:", invitationsError);
     } else {
       setInvitations(invitationsData || []);
     }
@@ -126,90 +140,92 @@ function AdminProjectContent() {
 
   const handleAllocateFunds = async () => {
     if (!selectedProject || !potAmount) {
-      toast.error('Please enter a valid amount');
+      toast.error("Please enter a valid amount");
       return;
     }
 
     const amount = parseFloat(potAmount);
     if (isNaN(amount) || amount <= 0) {
-      toast.error('Please enter a valid positive number');
+      toast.error("Please enter a valid positive number");
       return;
     }
 
     if (funding) {
       // Update existing funding
       const { error } = await supabase
-        .from('project_funding')
+        .from("project_funding")
         .update({ total_pot: amount })
-        .eq('project_id', selectedProject);
+        .eq("project_id", selectedProject);
 
       if (error) {
-        toast.error('Failed to update funding');
+        toast.error("Failed to update funding");
         console.error(error);
       } else {
-        toast.success('Funding pot updated successfully');
+        toast.success("Funding pot updated successfully");
         loadProjectData();
-        setPotAmount('');
+        setPotAmount("");
       }
     } else {
       // Create new funding
       const { error } = await supabase
-        .from('project_funding')
+        .from("project_funding")
         .insert({ project_id: selectedProject, total_pot: amount });
 
       if (error) {
-        toast.error('Failed to create funding');
+        toast.error("Failed to create funding");
         console.error(error);
       } else {
-        toast.success('Funding pot created successfully');
+        toast.success("Funding pot created successfully");
         loadProjectData();
-        setPotAmount('');
+        setPotAmount("");
       }
     }
   };
 
   const handleSendInvitation = async () => {
     if (!selectedProject || !inviteEmail) {
-      toast.error('Please enter an email address');
+      toast.error("Please enter an email address");
       return;
     }
 
     const credits = parseFloat(inviteCredits);
     if (isNaN(credits) || credits <= 0) {
-      toast.error('Please enter a valid credit amount');
+      toast.error("Please enter a valid credit amount");
       return;
     }
 
     if (funding && funding.available_pot < credits) {
-      toast.error('Insufficient funds in pot');
+      toast.error("Insufficient funds in pot");
       return;
     }
 
-    const { error } = await supabase
-      .from('project_invitations')
-      .insert({
-        project_id: selectedProject,
-        email: inviteEmail,
-        invited_by: user?.id,
-        credits_allocated: credits,
-      });
+    const { error } = await supabase.from("project_invitations").insert({
+      project_id: selectedProject,
+      email: inviteEmail,
+      invited_by: user?.id,
+      credits_allocated: credits,
+    });
 
     if (error) {
-      if (error.code === '23505') {
-        toast.error('This email has already been invited');
+      if (error.code === "23505") {
+        toast.error("This email has already been invited");
       } else {
-        toast.error('Failed to send invitation');
+        toast.error("Failed to send invitation");
         console.error(error);
       }
     } else {
-      toast.success('Invitation sent successfully');
+      toast.success("Invitation sent successfully");
       loadProjectData();
-      setInviteEmail('');
+      setInviteEmail("");
     }
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <PortalPageLayout maxWidth="xl" xrayId="admin-project">
+        <div className="flex items-center justify-center py-20">Loading...</div>
+      </PortalPageLayout>
+    );
   }
 
   if (!isOwner) {
@@ -217,63 +233,100 @@ function AdminProjectContent() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Project Development</h1>
-        <div className="flex gap-2 items-center">
-          <div className="flex items-center gap-2 px-3 py-2 border rounded-lg bg-background">
-            <Edit3 className="h-4 w-4" />
-            <span className="text-sm font-medium">Edit Mode</span>
-            <Switch checked={isEditMode} onCheckedChange={toggleEditMode} />
+    <PortalPageLayout maxWidth="xl" xrayId="admin-project">
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Project Development</h1>
+          <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2 px-3 py-2 border rounded-lg bg-background">
+              <Edit3 className="h-4 w-4" />
+              <span className="text-sm font-medium">Edit Mode</span>
+              <Switch checked={isEditMode} onCheckedChange={toggleEditMode} />
+            </div>
+            <Button onClick={() => navigate("/create-project")}>
+              Create New Project
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/")}>
+              Back to Dashboard
+            </Button>
           </div>
-          <Button onClick={() => navigate('/create-project')}>
-            Create New Project
-          </Button>
-          <Button variant="outline" onClick={() => navigate('/')}>
-            Back to Dashboard
-          </Button>
         </div>
-      </div>
-      <div className="mb-6">
-        <Label>Select Project</Label>
-        <select
-          className="w-full mt-2 p-2 border rounded-md bg-background"
-          value={selectedProject || ''}
-          onChange={(e) => setSelectedProject(e.target.value)}
-        >
-          {projects.map((project) => (
-            <option key={project.id} value={project.id}>
-              {project.name}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div className="mb-6">
+          <Label>Select Project</Label>
+          <select
+            className="w-full mt-2 p-2 border rounded-md bg-background"
+            value={selectedProject || ""}
+            onChange={(e) => setSelectedProject(e.target.value)}
+          >
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <Tabs defaultValue="funding">
-        <div className="space-y-2">
-          <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 w-full gap-1">
-            <TabsTrigger value="plan-tree" className="text-xs sm:text-sm">Plan Tree</TabsTrigger>
-            <TabsTrigger value="islands" className="text-xs sm:text-sm">Islands</TabsTrigger>
-            <TabsTrigger value="challenge" className="text-xs sm:text-sm">Challenges</TabsTrigger>
-            <TabsTrigger value="qr-landing" className="text-xs sm:text-sm">QR Landing</TabsTrigger>
-            <TabsTrigger value="funding" className="text-xs sm:text-sm">Funding</TabsTrigger>
-            <TabsTrigger value="invitations" className="text-xs sm:text-sm">Invitations</TabsTrigger>
-            <TabsTrigger value="positions" className="text-xs sm:text-sm">Positions</TabsTrigger>
-            <TabsTrigger value="lb-positions" className="text-xs sm:text-sm">LB Positions</TabsTrigger>
-            <TabsTrigger value="applications" className="text-xs sm:text-sm">Applications</TabsTrigger>
-            <TabsTrigger value="tasks" className="text-xs sm:text-sm">Tasks</TabsTrigger>
-            <TabsTrigger value="resources" className="text-xs sm:text-sm">Resources</TabsTrigger>
-            <TabsTrigger value="voting" className="text-xs sm:text-sm">Voting</TabsTrigger>
-            <TabsTrigger value="compensation" className="text-xs sm:text-sm">Compensation</TabsTrigger>
-            <TabsTrigger value="themes" className="text-xs sm:text-sm">Themes</TabsTrigger>
-            <TabsTrigger value="visual" className="text-xs sm:text-sm">Visual</TabsTrigger>
-            <TabsTrigger value="services" className="text-xs sm:text-sm">Services</TabsTrigger>
-            <TabsTrigger value="blockchain" className="text-xs sm:text-sm">Blockchain</TabsTrigger>
-          </TabsList>
-        </div>
+        <Tabs defaultValue="funding">
+          <div className="space-y-2">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 w-full gap-1">
+              <TabsTrigger value="plan-tree" className="text-xs sm:text-sm">
+                Plan Tree
+              </TabsTrigger>
+              <TabsTrigger value="islands" className="text-xs sm:text-sm">
+                Islands
+              </TabsTrigger>
+              <TabsTrigger value="challenge" className="text-xs sm:text-sm">
+                Challenges
+              </TabsTrigger>
+              <TabsTrigger value="qr-landing" className="text-xs sm:text-sm">
+                QR Landing
+              </TabsTrigger>
+              <TabsTrigger value="funding" className="text-xs sm:text-sm">
+                Funding
+              </TabsTrigger>
+              <TabsTrigger value="invitations" className="text-xs sm:text-sm">
+                Invitations
+              </TabsTrigger>
+              <TabsTrigger value="positions" className="text-xs sm:text-sm">
+                Positions
+              </TabsTrigger>
+              <TabsTrigger value="lb-positions" className="text-xs sm:text-sm">
+                LB Positions
+              </TabsTrigger>
+              <TabsTrigger value="applications" className="text-xs sm:text-sm">
+                Applications
+              </TabsTrigger>
+              <TabsTrigger value="tasks" className="text-xs sm:text-sm">
+                Tasks
+              </TabsTrigger>
+              <TabsTrigger value="resources" className="text-xs sm:text-sm">
+                Resources
+              </TabsTrigger>
+              <TabsTrigger value="voting" className="text-xs sm:text-sm">
+                Voting
+              </TabsTrigger>
+              <TabsTrigger value="compensation" className="text-xs sm:text-sm">
+                Compensation
+              </TabsTrigger>
+              <TabsTrigger value="themes" className="text-xs sm:text-sm">
+                Themes
+              </TabsTrigger>
+              <TabsTrigger value="visual" className="text-xs sm:text-sm">
+                Visual
+              </TabsTrigger>
+              <TabsTrigger value="services" className="text-xs sm:text-sm">
+                Services
+              </TabsTrigger>
+              <TabsTrigger value="blockchain" className="text-xs sm:text-sm">
+                Blockchain
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="plan-tree">
-            {selectedProject && <BusinessPlanTreeChart projectId={selectedProject} />}
+            {selectedProject && (
+              <BusinessPlanTreeChart projectId={selectedProject} />
+            )}
           </TabsContent>
 
           <TabsContent value="islands">
@@ -283,7 +336,9 @@ function AdminProjectContent() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Island Challenge Board</CardTitle>
-                    <CardDescription>View all challenges organized by island</CardDescription>
+                    <CardDescription>
+                      View all challenges organized by island
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <IslandChallengeBoard projectId={selectedProject} />
@@ -294,7 +349,9 @@ function AdminProjectContent() {
           </TabsContent>
 
           <TabsContent value="challenge">
-            {selectedProject && <InfluencerChallengeManager projectId={selectedProject} />}
+            {selectedProject && (
+              <InfluencerChallengeManager projectId={selectedProject} />
+            )}
           </TabsContent>
 
           <TabsContent value="qr-landing">
@@ -302,11 +359,14 @@ function AdminProjectContent() {
               <CardHeader>
                 <CardTitle>QR Landing Pages</CardTitle>
                 <CardDescription>
-                  Create and manage QR code landing pages for market segmentation
+                  Create and manage QR code landing pages for market
+                  segmentation
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {selectedProject && <QRLandingPage projectId={selectedProject} />}
+                {selectedProject && (
+                  <QRLandingPage projectId={selectedProject} />
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -324,15 +384,21 @@ function AdminProjectContent() {
                   <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-muted rounded-lg">
                     <div>
                       <p className="text-sm text-muted-foreground">Total Pot</p>
-                      <p className="text-2xl font-bold">${Number(funding.total_pot).toFixed(2)}</p>
+                      <p className="text-2xl font-bold">
+                        ${Number(funding.total_pot).toFixed(2)}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Allocated</p>
-                      <p className="text-2xl font-bold">${Number(funding.allocated_credits).toFixed(2)}</p>
+                      <p className="text-2xl font-bold">
+                        ${Number(funding.allocated_credits).toFixed(2)}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Available</p>
-                      <p className="text-2xl font-bold text-primary">${Number(funding.available_pot).toFixed(2)}</p>
+                      <p className="text-2xl font-bold text-primary">
+                        ${Number(funding.available_pot).toFixed(2)}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -350,7 +416,7 @@ function AdminProjectContent() {
                 </div>
 
                 <Button onClick={handleAllocateFunds} className="w-full">
-                  {funding ? 'Update Funding Pot' : 'Create Funding Pot'}
+                  {funding ? "Update Funding Pot" : "Create Funding Pot"}
                 </Button>
               </CardContent>
             </Card>
@@ -378,7 +444,9 @@ function AdminProjectContent() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="invite-credits">Credits to Allocate ($)</Label>
+                    <Label htmlFor="invite-credits">
+                      Credits to Allocate ($)
+                    </Label>
                     <Input
                       id="invite-credits"
                       type="number"
@@ -415,24 +483,35 @@ function AdminProjectContent() {
                       {invitations.map((invitation) => (
                         <TableRow key={invitation.id}>
                           <TableCell>{invitation.email}</TableCell>
-                          <TableCell>${Number(invitation.credits_allocated).toFixed(2)}</TableCell>
                           <TableCell>
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              invitation.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                              invitation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
+                            ${Number(invitation.credits_allocated).toFixed(2)}
+                          </TableCell>
+                          <TableCell>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                invitation.status === "accepted"
+                                  ? "bg-green-100 text-green-800"
+                                  : invitation.status === "pending"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-red-100 text-red-800"
+                              }`}
+                            >
                               {invitation.status}
                             </span>
                           </TableCell>
                           <TableCell>
-                            {new Date(invitation.created_at).toLocaleDateString()}
+                            {new Date(
+                              invitation.created_at,
+                            ).toLocaleDateString()}
                           </TableCell>
                         </TableRow>
                       ))}
                       {invitations.length === 0 && (
                         <TableRow>
-                          <TableCell colSpan={4} className="text-center text-muted-foreground">
+                          <TableCell
+                            colSpan={4}
+                            className="text-center text-muted-foreground"
+                          >
                             No invitations sent yet
                           </TableCell>
                         </TableRow>
@@ -453,8 +532,11 @@ function AdminProjectContent() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button 
-                  onClick={() => selectedProject && navigate(`/manage-positions?project=${selectedProject}`)}
+                <Button
+                  onClick={() =>
+                    selectedProject &&
+                    navigate(`/manage-positions?project=${selectedProject}`)
+                  }
                   className="w-full"
                 >
                   Manage Contract Positions
@@ -472,19 +554,27 @@ function AdminProjectContent() {
           </TabsContent>
 
           <TabsContent value="resources">
-            {selectedProject && <ResourceAllocation projectId={selectedProject} />}
+            {selectedProject && (
+              <ResourceAllocation projectId={selectedProject} />
+            )}
           </TabsContent>
 
           <TabsContent value="voting">
-            {selectedProject && <VotingConfigManager projectId={selectedProject} />}
+            {selectedProject && (
+              <VotingConfigManager projectId={selectedProject} />
+            )}
           </TabsContent>
 
           <TabsContent value="applications">
-            {selectedProject && <ApplicationReviewManager projectId={selectedProject} />}
+            {selectedProject && (
+              <ApplicationReviewManager projectId={selectedProject} />
+            )}
           </TabsContent>
 
           <TabsContent value="compensation">
-            {selectedProject && <ContractCompensationConfigManager projectId={selectedProject} />}
+            {selectedProject && (
+              <ContractCompensationConfigManager projectId={selectedProject} />
+            )}
           </TabsContent>
 
           <TabsContent value="themes">
@@ -501,9 +591,9 @@ function AdminProjectContent() {
                     {selectedProject && (
                       <>
                         <ThemeSwitcher projectId={selectedProject} />
-                        <ThemeUploader 
-                          projectId={selectedProject} 
-                          onThemeUploaded={() => window.location.reload()} 
+                        <ThemeUploader
+                          projectId={selectedProject}
+                          onThemeUploaded={() => window.location.reload()}
                         />
                       </>
                     )}
@@ -529,11 +619,15 @@ function AdminProjectContent() {
               <CardHeader>
                 <CardTitle>Service Providers</CardTitle>
                 <CardDescription>
-                  Select the service providers your project will use across all business categories. Assign Stewards to manage each service through contract positions.
+                  Select the service providers your project will use across all
+                  business categories. Assign Stewards to manage each service
+                  through contract positions.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {selectedProject && <ProjectServiceSelector projectId={selectedProject} />}
+                {selectedProject && (
+                  <ProjectServiceSelector projectId={selectedProject} />
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -546,9 +640,9 @@ function AdminProjectContent() {
               </>
             )}
           </TabsContent>
-
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </PortalPageLayout>
   );
 }
 

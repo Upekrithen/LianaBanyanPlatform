@@ -49,6 +49,7 @@ import { toast } from "sonner";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { BeaconDropButton, BEACON_COLORS } from "@/components/BeaconDropButton";
 import { BeaconRunCueCard } from "@/components/BeaconRunCueCard";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 interface BeaconRunDraft {
   id?: string;
@@ -185,14 +186,17 @@ export default function BeaconRunCreator() {
 
   if (!user) {
     return (
-      <div className="container mx-auto p-6 flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
+      <PortalPageLayout maxWidth="full" xrayId="beacon-run-creator">
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
+    <PortalPageLayout maxWidth="lg" xrayId="beacon-run-creator">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -539,5 +543,6 @@ export default function BeaconRunCreator() {
         "The crow remembers what the ghost forgets." — Drop beacons to mark your path.
       </p>
     </div>
+    </PortalPageLayout>
   );
 }

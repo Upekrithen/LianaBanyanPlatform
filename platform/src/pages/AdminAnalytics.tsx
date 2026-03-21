@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlobalBreadcrumbs } from "@/components/GlobalBreadcrumbs";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import {
   BarChart3, TrendingUp, Users, Eye, MousePointer, CreditCard,
   ArrowRight, Calendar, RefreshCw, ShieldCheck, Activity,
@@ -275,9 +276,9 @@ export default function AdminAnalytics() {
   const { data: stats, isLoading, refetch, isRefetching } = useAnalyticsData(days);
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout maxWidth="xl" xrayId="admin-analytics">
       <GlobalBreadcrumbs />
-      <main className="container mx-auto px-4 py-8 max-w-6xl space-y-6">
+      <div className="space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -604,7 +605,7 @@ export default function AdminAnalytics() {
           <br />
           All analytics are aggregate-level. No personally identifiable information is stored in events.
         </div>
-      </main>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

@@ -4,11 +4,12 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Heart, ArrowRight, Coins, ShieldCheck, Handshake, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 export default function AsYouWishCard() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="as-you-wish">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="as-you-wish-card">
+      <div className="space-y-8">
         {/* Hero */}
         <header className="text-center space-y-4 py-8">
           <div className="flex justify-center">
@@ -127,6 +128,6 @@ export default function AsYouWishCard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
