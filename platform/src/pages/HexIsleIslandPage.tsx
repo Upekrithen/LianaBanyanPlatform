@@ -96,7 +96,7 @@ const HexIsleIslandPage = () => {
             <Button onClick={() => navigate('/hexisle')}>Back to HexIsle</Button>
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -112,7 +112,7 @@ const HexIsleIslandPage = () => {
   const islandCharacters = CHARACTERS.filter((_, i) => i % SEVEN_ISLANDS.length === island.number - 1);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-blue-50">
+    <PortalPageLayout>
       {/* Hero */}
       <div className="bg-gradient-to-r from-cyan-700 to-blue-800 text-white py-12 px-6">
         <div className="max-w-6xl mx-auto">

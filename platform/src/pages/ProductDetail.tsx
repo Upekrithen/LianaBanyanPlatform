@@ -298,7 +298,7 @@ export default function ProductDetail() {
     return (
       <PortalPageLayout>
         <p>Loading product...</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -311,7 +311,7 @@ export default function ProductDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">

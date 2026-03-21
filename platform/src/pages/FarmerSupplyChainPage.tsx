@@ -494,7 +494,7 @@ const FarmerSupplyChainPage = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 
@@ -600,7 +600,7 @@ const MealKitCard = ({
           <div className="font-bold text-amber-700">${kit.pricing.bulkPerServing}</div>
           <div className="text-gray-500">bulk</div>
         </div>
-      </PortalPageLayout>
+      </div>
     </CardContent>
   </Card>
 );

@@ -53,13 +53,13 @@ export default function MedallionManagement() {
         <Alert variant="destructive">
           <AlertDescription>Invalid project ID</AlertDescription>
         </Alert>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   if (!user) {
     return (
-      <div className="container mx-auto p-6 text-center">
+      <PortalPageLayout>
         <Award className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
         <p className="text-muted-foreground mb-3">Manage your medallion designs, production, and minting.</p>
         <button
@@ -68,12 +68,12 @@ export default function MedallionManagement() {
         >
           Get Started
         </button>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-3">
           <Award className="w-8 h-8" />

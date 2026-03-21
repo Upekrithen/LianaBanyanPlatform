@@ -68,7 +68,7 @@ function PracticeMirror({ isVisible, onClose, onEnterPractice, onStartGuidedPath
   const content = mirrorContent[optionType];
 
   return (
-    <PortalPageLayout>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <Card className="max-w-lg w-full bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 border-purple-500/50 shadow-[0_0_50px_rgba(139,92,246,0.3)]">
         <CardHeader className="relative">
           <Button 
@@ -290,7 +290,7 @@ export default function HarvestIsland() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950">
+    <PortalPageLayout>
       {/* Atmospheric particles */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {[...Array(30)].map((_, i) => (

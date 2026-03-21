@@ -53,7 +53,7 @@ export default function MedallionViewer() {
             </button>
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -66,7 +66,7 @@ export default function MedallionViewer() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">

@@ -99,12 +99,12 @@ export default function TreasureMapBuilder() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Header */}

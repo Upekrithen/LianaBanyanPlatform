@@ -60,12 +60,12 @@ export default function TreasureIsland() {
             Sign in to view your credit balance and transactions.
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center gap-3 mb-6">
         <div className="p-3 bg-primary/10 rounded-lg">
           <Coins className="h-8 w-8 text-primary" />

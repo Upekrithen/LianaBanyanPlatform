@@ -165,7 +165,7 @@ export default function SwoopProjectPage() {
         <Skeleton className="h-8 w-48 mb-4" />
         <Skeleton className="h-64 w-full mb-4" />
         <Skeleton className="h-32 w-full" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -192,7 +192,7 @@ export default function SwoopProjectPage() {
   const voteProgress = (project.vote_count / project.vote_threshold) * 100;
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <PortalPageLayout>
       {/* Back Button */}
       <Link to="/swoop" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4">
         <ArrowLeft className="w-4 h-4 mr-1" />

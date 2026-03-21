@@ -151,7 +151,7 @@ export default function FamilyDetailPage() {
           <p style={{ marginBottom: '1rem' }}>Please sign in to view this family</p>
           <Button onClick={() => openOnboard({ reason: "view family details", actionLabel: "Join", membershipIncluded: true })}>Sign In</Button>
         </div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -175,7 +175,7 @@ export default function FamilyDetailPage() {
   }
 
   return (
-    <div className="landing-page" style={{ minHeight: '100vh' }}>
+    <PortalPageLayout>
       {/* Brand Title */}
       <div className="landing-title">
         <span className="liana">Liana</span>

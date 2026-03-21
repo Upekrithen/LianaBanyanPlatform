@@ -90,7 +90,7 @@ export default function StewardApply() {
             <Button asChild><Link to="/auth">Sign in</Link></Button>
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -108,7 +108,7 @@ export default function StewardApply() {
   }
 
   return (
-    <div className="container max-w-xl mx-auto p-6 space-y-6" data-xray-id="steward-apply">
+    <PortalPageLayout>
       <Button variant="ghost" asChild>
         <Link to="/steward" className="gap-2">
           <ArrowLeft className="w-4 h-4" />

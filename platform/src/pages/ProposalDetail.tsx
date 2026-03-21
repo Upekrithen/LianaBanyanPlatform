@@ -108,7 +108,7 @@ export default function ProposalDetail() {
     return (
       <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -138,7 +138,7 @@ export default function ProposalDetail() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
+    <PortalPageLayout>
       {/* Back */}
       <Button variant="ghost" onClick={() => navigate("/governance")} className="gap-2">
         <ArrowLeft className="w-4 h-4" />

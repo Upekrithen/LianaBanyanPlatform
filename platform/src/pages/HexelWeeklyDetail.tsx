@@ -59,7 +59,7 @@ export default function HexelWeeklyDetail() {
         <Button variant="outline" onClick={() => navigate("/hexisle")} className="mt-4">
           Back to HexIsle
         </Button>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -91,7 +91,7 @@ export default function HexelWeeklyDetail() {
   const status = STATUS_STYLES[current.status] ?? STATUS_STYLES.planned;
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl space-y-8">
+    <PortalPageLayout>
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <button

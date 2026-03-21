@@ -142,7 +142,7 @@ export default function HeroProjectPage() {
             <Button onClick={() => navigate("/heroes")}>Browse Heroes</Button>
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -154,7 +154,7 @@ export default function HeroProjectPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
+    <PortalPageLayout>
       {/* Back button */}
       <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
         <ArrowLeft className="w-4 h-4" />

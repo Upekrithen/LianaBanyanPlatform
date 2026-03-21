@@ -69,7 +69,7 @@ export default function ReviewerApplication() {
     return (
       <PortalPageLayout>
         <p className="text-muted-foreground">Loading…</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -124,7 +124,7 @@ export default function ReviewerApplication() {
   };
 
   return (
-    <div className="min-h-screen p-6 max-w-lg mx-auto" data-xray-id="reviewer-application">
+    <PortalPageLayout>
       <Card>
         <CardHeader>
           <CardTitle>Become a Reviewer</CardTitle>

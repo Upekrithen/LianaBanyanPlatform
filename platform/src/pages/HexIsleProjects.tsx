@@ -306,8 +306,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
   }[project.status];
 
   return (
-    <PortalPageLayout> setIsFlipped(!isFlipped)}
-    >
+    <div onClick={() => setIsFlipped(!isFlipped)}>
       <div 
         className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${
           isFlipped ? "rotate-y-180" : ""
@@ -446,7 +445,7 @@ export default function HexIsleProjects() {
   const inProductionCount = productProjects.filter(p => p.status === 'in_production').length;
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-8">
+    <PortalPageLayout>
       {/* Header */}
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-3">

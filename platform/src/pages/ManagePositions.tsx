@@ -231,12 +231,12 @@ export default function ManagePositions() {
     return (
       <PortalPageLayout>
         <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">

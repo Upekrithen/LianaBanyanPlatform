@@ -54,7 +54,7 @@ export default function OnboardingStatusPage() {
             Sign in to see your onboarding status.
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -66,7 +66,7 @@ export default function OnboardingStatusPage() {
   const progress = goalsTotal > 0 ? (goalsCompleted / goalsTotal) * 100 : 0;
 
   return (
-    <div className="container max-w-lg mx-auto p-6 space-y-6" data-xray-id="onboarding-status-page">
+    <PortalPageLayout>
       <h1 className="text-2xl font-bold">Onboarding status</h1>
 
       {membership ? (

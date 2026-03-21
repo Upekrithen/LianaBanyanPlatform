@@ -74,7 +74,7 @@ export default function ProjectLanding() {
     return (
       <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -100,7 +100,7 @@ export default function ProjectLanding() {
     : [];
 
   return (
-    <div className="min-h-screen">
+    <PortalPageLayout>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary/10 via-background to-secondary/10 pt-20 pb-32">
         <div className="container mx-auto px-6">

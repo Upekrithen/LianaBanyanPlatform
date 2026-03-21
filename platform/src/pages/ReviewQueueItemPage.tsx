@@ -102,7 +102,7 @@ export default function ReviewQueueItemPage() {
     return (
       <PortalPageLayout>
         <p className="text-muted-foreground">{item ? "Loading…" : "Not found."}</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -110,7 +110,7 @@ export default function ReviewQueueItemPage() {
   const textContent = typeof snapshot.body === "string" ? snapshot.body : typeof snapshot.description === "string" ? snapshot.description : JSON.stringify(snapshot);
 
   return (
-    <div className="min-h-screen p-6 max-w-3xl mx-auto" data-xray-id="review-queue-item">
+    <PortalPageLayout>
       <Button variant="ghost" size="sm" className="mb-4" asChild>
         <Link to="/reviewer/dashboard">
           <ArrowLeft className="w-4 h-4 mr-1" /> Back to dashboard

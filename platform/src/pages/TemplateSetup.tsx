@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const TemplateSetup = () => {
   const copyToClipboard = (text: string, label: string) => {
@@ -103,7 +104,7 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <PortalPageLayout>
+      <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
@@ -354,7 +355,7 @@ Add the new routes to your App.tsx routing configuration
 - Monitor usage in the Client API Manager`;
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <PortalPageLayout>
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Client Template Code</h1>
         <p className="text-muted-foreground">

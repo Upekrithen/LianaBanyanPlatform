@@ -93,12 +93,12 @@ export default function HeraldSubscription() {
     return (
       <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <div className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Header */}
         <div className="text-center mb-12">

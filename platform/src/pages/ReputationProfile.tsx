@@ -98,7 +98,7 @@ export default function ReputationProfile() {
     return (
       <PortalPageLayout>
         <div className="text-center">Loading reputation profile...</div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -119,7 +119,7 @@ export default function ReputationProfile() {
     : null;
 
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout>
       {/* Privacy Notice */}
       {!isOwnProfile && (
         <div className="p-3 bg-muted rounded-lg flex items-center gap-2 text-sm">

@@ -60,7 +60,7 @@ export default function LMDReviewSubmitPage() {
     return (
       <PortalPageLayout>
         <p className="text-muted-foreground">Sign in to submit a review.</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -84,7 +84,7 @@ export default function LMDReviewSubmitPage() {
   }
 
   return (
-    <div className="container max-w-lg mx-auto p-6 space-y-4" data-xray-id="lmd-review-submit-page">
+    <PortalPageLayout>
       <Button variant="ghost" size="sm" asChild>
         <Link to="/initiatives/lets-make-dinner/reviews">
           <ArrowLeft className="w-4 h-4 mr-1" /> Back to reviews

@@ -80,7 +80,7 @@ const IslandDetail = () => {
     return (
       <PortalPageLayout>
         <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -121,7 +121,7 @@ const IslandDetail = () => {
   };
 
   return (
-    <div className="container mx-auto p-8">
+    <PortalPageLayout>
       {/* Breadcrumb Navigation */}
       <div className="mb-6 flex items-center gap-4">
         <Link to="/world-map">

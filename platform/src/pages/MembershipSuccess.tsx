@@ -90,12 +90,12 @@ export default function MembershipSuccess() {
             </CardDescription>
           </CardHeader>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container max-w-2xl mx-auto py-20">
+    <PortalPageLayout>
       <Card className={success ? "border-green-500/50 bg-green-500/5" : "border-destructive/50 bg-destructive/5"}>
         <CardHeader>
           <div className="flex items-center gap-2">

@@ -66,7 +66,7 @@ export default function StewardLegalDashboard() {
     return (
       <PortalPageLayout>
         <p>Loading legal formations...</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -75,7 +75,7 @@ export default function StewardLegalDashboard() {
   const completedFormations = formations?.filter(f => f.current_status === "completed") || [];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center gap-3">
         <Scale className="h-8 w-8 text-primary" />
         <div>

@@ -202,12 +202,12 @@ export default function Petitions() {
     return (
       <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl space-y-6">
+    <PortalPageLayout>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

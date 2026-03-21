@@ -327,7 +327,7 @@ export default function ProjectView() {
     return (
       <PortalPageLayout>
         <p>Loading project...</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -348,7 +348,7 @@ export default function ProjectView() {
   }
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <PortalPageLayout>
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">

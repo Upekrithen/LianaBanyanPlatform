@@ -142,7 +142,7 @@ export default function Guilds() {
       </Tabs>
 
       <GuildCreationDialog open={showCreateDialog} onOpenChange={setShowCreateDialog} />
-    </div>
+    </PortalPageLayout>
   );
 }
 
@@ -162,7 +162,7 @@ function GuildGrid({ guilds, isLoading }: { guilds: any[] | undefined; isLoading
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <PortalPageLayout>
       {guilds.map((guild) => (
         <Card key={guild.id} className="hover:shadow-lg transition-shadow">
           <CardHeader>

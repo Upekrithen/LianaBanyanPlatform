@@ -153,12 +153,12 @@ export default function HexIsleVote() {
     return (
       <PortalPageLayout>
         <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950">
+    <PortalPageLayout>
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Back */}
         <Button

@@ -87,7 +87,7 @@ export default function ReviewerDashboard() {
     return (
       <PortalPageLayout>
         <p className="text-muted-foreground">Loading…</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -123,7 +123,7 @@ export default function ReviewerDashboard() {
   };
 
   return (
-    <div className="min-h-screen p-6 max-w-4xl mx-auto" data-xray-id="reviewer-dashboard">
+    <PortalPageLayout>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <ReviewerBadge tier={reviewer.tier} />

@@ -112,12 +112,12 @@ export default function TasteTesterDashboard() {
             </CardDescription>
           </CardHeader>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="landing-page min-h-screen p-6">
+    <PortalPageLayout>
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Explainer Dialog */}
         <DemandAggregationExplainer

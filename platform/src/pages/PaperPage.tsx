@@ -56,7 +56,7 @@ function ReadingLevelSelector({
   onChange: (level: ReadingLevel) => void;
 }) {
   return (
-    <PortalPageLayout>
+    <div className="flex gap-2">
       {READING_LEVELS.map((level) => {
         const Icon = level.icon;
         const isSelected = selected === level.id;
@@ -138,7 +138,7 @@ export default function PaperPage() {
   const lawColor = paper.lawNumber ? LAW_COLORS[paper.lawNumber - 1] : paper.color;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+    <PortalPageLayout>
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Back Link */}
         <Link 

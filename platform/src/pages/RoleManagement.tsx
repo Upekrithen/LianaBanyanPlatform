@@ -97,7 +97,7 @@ export default function RoleManagement() {
     return (
       <PortalPageLayout>
         <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -111,7 +111,7 @@ export default function RoleManagement() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <header className="border-b bg-card sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">Role Management</h1>

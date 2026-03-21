@@ -774,7 +774,7 @@ export default function LBInternalPositions() {
           <PositionCards positions={guildStaffPositions} />
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }
 
@@ -848,6 +848,6 @@ function PositionCards({ positions }: { positions: LBPosition[] }) {
           </CardContent>
         </Card>
       ))}
-    </PortalPageLayout>
+    </div>
   );
 }

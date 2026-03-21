@@ -109,7 +109,7 @@ export default function LMDReviewerDashboard() {
             <CardDescription>Sign in to see your reviewer tier and meals waiting for your review.</CardDescription>
           </CardHeader>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -118,7 +118,7 @@ export default function LMDReviewerDashboard() {
   const list = ordersToReview ?? [];
 
   return (
-    <div className="container max-w-2xl mx-auto p-6 space-y-6" data-xray-id="lmd-reviewer-dashboard">
+    <PortalPageLayout>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

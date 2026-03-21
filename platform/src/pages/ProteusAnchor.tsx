@@ -55,7 +55,7 @@ export default function ProteusAnchorPage() {
     return (
       <PortalPageLayout>
         <div className="text-slate-400 animate-pulse">Loading Proteus Anchors...</div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -64,7 +64,7 @@ export default function ProteusAnchorPage() {
   const experimentalCount = compatMatrix.filter((c) => c.compatibilityLevel === "experimental").length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="proteus-anchor-page">
+    <PortalPageLayout>
       {/* Header */}
       <div className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-8">

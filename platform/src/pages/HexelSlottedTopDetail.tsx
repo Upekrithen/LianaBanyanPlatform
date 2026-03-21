@@ -83,7 +83,7 @@ function HeroSection() {
           {ECOSYSTEM_NARRATIVE.competitorInvite}
         </p>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
 
@@ -574,7 +574,7 @@ export default function HexelSlottedTopDetail() {
   const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl space-y-8">
+    <PortalPageLayout>
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <button onClick={() => navigate("/hexisle")} className="hover:text-foreground transition-colors">
