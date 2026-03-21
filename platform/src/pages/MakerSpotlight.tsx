@@ -1,12 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Star, ExternalLink, Plug, Play, Pause, SkipForward, SkipBack, CheckCircle2, Sparkles, Users, Map, Beaker, ChevronLeft, ChevronRight } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Star, ExternalLink, Plug, Play, Pause, SkipForward, SkipBack,
+  CheckCircle2, Sparkles, Users, Map, Beaker, ChevronLeft, ChevronRight,
+  Swords, Vote, Clock, Trophy
+} from "lucide-react";
 import {
   type MakerSpotlight as MakerSpotlightType,
+  type ActiveBattleInfo,
   TIER_LABELS,
   TIER_COLORS,
   CATEGORY_COLORS,
@@ -15,6 +23,7 @@ import {
   SLIDES_PER_SESSION,
   fetchSpotlights,
   getRotatedSpotlights,
+  fetchActiveBattleSpotlight,
 } from "@/lib/makerSpotlightService";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
@@ -23,6 +32,8 @@ type ViewMode = "directory" | "slideshow";
 
 export default function MakerSpotlightPage() {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [spotlights, setSpotlights] = useState<MakerSpotlightType[]>([]);
   const [rotated, setRotated] = useState<MakerSpotlightType[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>("directory");
@@ -38,6 +49,35 @@ export default function MakerSpotlightPage() {
   const [countdown, setCountdown] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const idleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Battle mode: active Design Battle takes over spotlight
+  const [battleSlideIndex, setBattleSlideIndex] = useState(0);
+
+  const { data: activeBattle } = useQuery({
+    queryKey: ["active-battle-spotlight"],
+    queryFn: fetchActiveBattleSpotlight,
+    refetchInterval: 60_000,
+  });
+
+  const battleVoteMutation = useMutation({
+    mutationFn: async (submissionId: string) => {
+      if (!user || !activeBattle) throw new Error("Must be logged in");
+      const { error } = await supabase.from("design_battle_votes" as never).insert({
+        battle_id: activeBattle.battleId,
+        participant_id: submissionId,
+        voter_id: user.id,
+        vote_credits: 1,
+      } as never);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast({ title: "Vote Cast!", description: "Your vote has been recorded." });
+      queryClient.invalidateQueries({ queryKey: ["active-battle-spotlight"] });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Vote failed", description: err.message, variant: "destructive" });
+    },
+  });
 
   useEffect(() => {
     fetchSpotlights().then(data => {
@@ -302,6 +342,92 @@ export default function MakerSpotlightPage() {
             </CardContent>
           )}
         </Card>
+
+        {/* === BATTLE MODE SPOTLIGHT === */}
+        {activeBattle && activeBattle.entries.length > 0 && (
+          <Card className="bg-gradient-to-r from-red-900/30 to-orange-900/20 border-red-500/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-red-400">
+                <Swords className="w-5 h-5" />
+                Design Battle Active — {activeBattle.battleTitle}
+              </CardTitle>
+              <CardDescription className="flex items-center gap-2">
+                <Clock className="w-3 h-3" />
+                Voting ends {new Date(activeBattle.endsAt).toLocaleDateString()} at{" "}
+                {new Date(activeBattle.endsAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                <span className="text-red-400 font-medium ml-2">
+                  {activeBattle.entries.length} entries competing
+                </span>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {activeBattle.entries.map((entry, idx) => (
+                  <Card
+                    key={entry.id}
+                    className={`overflow-hidden transition-all ${
+                      battleSlideIndex === idx
+                        ? "ring-2 ring-amber-400 scale-[1.02]"
+                        : "hover:scale-[1.01]"
+                    }`}
+                    onClick={() => setBattleSlideIndex(idx)}
+                  >
+                    <div className="relative aspect-[4/3] bg-muted overflow-hidden">
+                      <img
+                        src={entry.imageUrl}
+                        alt={entry.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                      />
+                      <Badge className="absolute top-2 left-2 bg-red-600/90">
+                        <Trophy className="h-3 w-3 mr-1" /> Entry #{idx + 1}
+                      </Badge>
+                    </div>
+                    <CardContent className="p-3">
+                      <h4 className="font-semibold text-sm truncate">{entry.title}</h4>
+                      <Badge variant="outline" className="mt-1 text-xs">
+                        {entry.category.replace(/_/g, " ")}
+                      </Badge>
+                      {entry.description && (
+                        <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{entry.description}</p>
+                      )}
+                      {entry.tags && entry.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {entry.tags.slice(0, 3).map(tag => (
+                            <Badge key={tag} variant="secondary" className="text-[10px]">{tag}</Badge>
+                          ))}
+                        </div>
+                      )}
+                      <div className="mt-3">
+                        {user ? (
+                          <Button
+                            size="sm"
+                            className="w-full gap-1 bg-red-600 hover:bg-red-700"
+                            onClick={(e) => { e.stopPropagation(); battleVoteMutation.mutate(entry.id); }}
+                            disabled={battleVoteMutation.isPending}
+                          >
+                            <Vote className="h-3 w-3" /> Vote for This Design
+                          </Button>
+                        ) : (
+                          <p className="text-xs text-center text-muted-foreground">
+                            Sign in to vote
+                          </p>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="mt-4 p-3 rounded-lg bg-slate-900/50 border border-slate-700">
+                <p className="text-xs text-muted-foreground">
+                  <strong className="text-foreground">Voting costs 1 Coverage Minute.</strong>{" "}
+                  Winner takes 50% of the pot + a Crow Feather trophy. Non-winners keep their Emporium listing — your work is never wasted.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <Separator className="border-slate-800" />
 

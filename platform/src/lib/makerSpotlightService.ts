@@ -236,6 +236,71 @@ export async function fetchHexIsleRelevant(): Promise<MakerSpotlight[]> {
   }
 }
 
+// ============================================================================
+// BATTLE MODE — Arena submissions as spotlight entries during active battles
+// ============================================================================
+
+export interface BattleSpotlightEntry {
+  id: string;
+  title: string;
+  creatorId: string;
+  category: string;
+  description: string | null;
+  imageUrl: string;
+  battleId: string;
+  tags: string[] | null;
+}
+
+export interface ActiveBattleInfo {
+  battleId: string;
+  battleTitle: string;
+  endsAt: string;
+  entries: BattleSpotlightEntry[];
+}
+
+/**
+ * Check for active Design Battles that should take over the spotlight.
+ * Returns the first active/voting battle with its arena submissions, or null.
+ */
+export async function fetchActiveBattleSpotlight(): Promise<ActiveBattleInfo | null> {
+  try {
+    const { data: battles, error: bErr } = await supabase
+      .from("design_battles")
+      .select("id, bounty_title, ends_at, status")
+      .in("status", ["active", "voting"])
+      .order("ends_at", { ascending: true })
+      .limit(1);
+
+    if (bErr || !battles?.length) return null;
+    const battle = battles[0];
+
+    const { data: entries, error: eErr } = await supabase
+      .from("arena_submissions" as never)
+      .select("id, title, creator_id, category, description, image_url, battle_id, tags")
+      .eq("battle_id", battle.id as never) as { data: any[] | null; error: unknown };
+
+    if (eErr || !entries?.length) return null;
+
+    return {
+      battleId: battle.id,
+      battleTitle: battle.bounty_title,
+      endsAt: battle.ends_at,
+      entries: entries.map((e: any) => ({
+        id: e.id,
+        title: e.title,
+        creatorId: e.creator_id,
+        category: e.category,
+        description: e.description,
+        imageUrl: e.image_url,
+        battleId: e.battle_id,
+        tags: e.tags,
+      })),
+    };
+  } catch {
+    return null;
+  }
+}
+
 function mapSpotlight(row: any): MakerSpotlight {
   return {
     id: row.id,

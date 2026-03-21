@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Store, Plus, Trash2, Clock, Truck, Image, ChevronRight, ChevronLeft, Eye, Check } from 'lucide-react';
+import { ArrowLeft, Store, Plus, Trash2, Clock, Truck, Image, ChevronRight, ChevronLeft, Eye, Check, Paintbrush, CreditCard, FileImage, Package, Sparkles, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -43,6 +44,7 @@ export default function StorefrontBuilder() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
+  const [publishedSlug, setPublishedSlug] = useState<string | null>(null);
 
   const [businessName, setBusinessName] = useState('');
   const [category, setCategory] = useState('food_drink');
@@ -134,7 +136,8 @@ export default function StorefrontBuilder() {
       if (itemErr) throw new Error('Failed to add menu items');
 
       toast.success('Storefront published!');
-      navigate(`/menu/${slug}`);
+      setPublishedSlug(slug);
+      setStep(5);
     } catch (err) {
       console.error(err);
       toast.error(err instanceof Error ? err.message : 'Something went wrong');
@@ -328,7 +331,107 @@ export default function StorefrontBuilder() {
         </div>
       )}
 
+      {/* Step 5: Success + Design Onboarding Prompt */}
+      {step === 5 && publishedSlug && (
+        <div className="space-y-6">
+          <Card className="bg-gradient-to-br from-emerald-900/30 to-teal-900/20 border-emerald-500/30">
+            <CardContent className="pt-8 pb-8 text-center">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-emerald-400" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2">Your storefront is live!</h2>
+              <p className="text-slate-400 mb-4">
+                Customers can now order from <span className="text-emerald-400 font-medium">{businessName}</span>
+              </p>
+              <Link to={`/menu/${publishedSlug}`}>
+                <Button className="bg-emerald-600 hover:bg-emerald-700 gap-2">
+                  <Eye className="w-4 h-4" /> View Your Storefront
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card className="border-amber-500/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+                Want to attract customers?
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-400">
+                Stand out with professional designs. Browse templates from LB designers or commission custom work.
+              </p>
+
+              <div className="grid gap-3">
+                <Link to="/emporium/templates?category=cue_card_template" className="block">
+                  <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-amber-500/30 transition-colors">
+                    <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
+                      <CreditCard className="w-5 h-5 text-blue-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">Cue Card</p>
+                      <p className="text-xs text-slate-500">Hand out cards that link directly to your storefront</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </div>
+                </Link>
+
+                <Link to="/emporium/templates?category=logo" className="block">
+                  <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-amber-500/30 transition-colors">
+                    <div className="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center shrink-0">
+                      <Paintbrush className="w-5 h-5 text-pink-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">Logo</p>
+                      <p className="text-xs text-slate-500">Get a custom logo from an LB designer</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </div>
+                </Link>
+
+                <Link to="/emporium/templates?category=business_card_template" className="block">
+                  <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-amber-500/30 transition-colors">
+                    <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                      <FileImage className="w-5 h-5 text-emerald-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">Business Card</p>
+                      <p className="text-xs text-slate-500">Professional business cards with your storefront QR code</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                  </div>
+                </Link>
+              </div>
+
+              <Separator className="border-slate-700" />
+
+              <div className="p-4 rounded-lg bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-purple-500/20">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center shrink-0">
+                    <Package className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">New Business Starter Package</p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Get everything at once — assemble a Crew Table with a designer, photographer, writer, and printer.
+                      Your team builds your brand together.
+                    </p>
+                    <Link to="/bandwagon">
+                      <Button size="sm" className="mt-3 gap-1 bg-purple-600 hover:bg-purple-700">
+                        <Users className="w-3 h-3" /> Create Crew Table
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Navigation */}
+      {step < 5 && (
       <div className="flex justify-between mt-6">
         <Button variant="outline" onClick={() => setStep(s => Math.max(1, s - 1))} disabled={step === 1} className="border-slate-600">
           <ChevronLeft className="w-4 h-4 mr-1" /> Back
@@ -343,6 +446,7 @@ export default function StorefrontBuilder() {
           </Button>
         )}
       </div>
+      )}
     </PortalPageLayout>
   );
 }
