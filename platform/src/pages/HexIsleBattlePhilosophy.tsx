@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ---------------------------------------------------------------------------
 // Data
@@ -114,7 +115,7 @@ export default function HexIsleBattlePhilosophy() {
   const [viewMode, setViewMode] = useState<"game" | "life" | "both">("both");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+    <PortalPageLayout>
       {/* Header */}
       <div className="container max-w-4xl mx-auto px-4 py-8">
         <Link to="/hexisle" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6">
@@ -363,6 +364,6 @@ export default function HexIsleBattlePhilosophy() {
           </Link>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

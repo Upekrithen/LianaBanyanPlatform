@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { DeckCardFrame } from "@/components/DeckCardFrame";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
-import '@/styles/landing.css';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // The discoverable opportunity cards in this layer
 const OPPORTUNITY_CARDS = [
@@ -67,7 +67,7 @@ export default function HelpWanted() {
   };
 
   return (
-    <div className="landing-page" style={{ minHeight: '100vh' }}>
+    <PortalPageLayout>
       {/* Brand Title — Top Left */}
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -196,6 +196,6 @@ export default function HelpWanted() {
           <p>© 2026 Liana Banyan Corporation</p>
         </footer>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

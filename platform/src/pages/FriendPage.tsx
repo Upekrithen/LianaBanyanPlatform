@@ -40,6 +40,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ── Translation status (static for now — will be data-driven later) ──
 
@@ -120,7 +121,7 @@ export default function FriendPage() {
     : null;
 
   return (
-    <div className="container mx-auto py-8 max-w-5xl px-4">
+    <PortalPageLayout>
       {/* ═══ HEADER ═══ */}
       <div className="flex items-center gap-4 mb-8">
         <Button
@@ -381,6 +382,6 @@ export default function FriendPage() {
           Return to Durin's Door
         </Button>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

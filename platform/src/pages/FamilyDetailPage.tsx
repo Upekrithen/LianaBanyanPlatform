@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FamilyMemberCard } from "@/components/family/FamilyMemberCard";
 import { FamilyInviteVoting } from "@/components/family/FamilyInviteVoting";
 import { InviteMemberDialog } from "@/components/family/InviteMemberDialog";
-import '@/styles/landing.css';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function FamilyDetailPage() {
   const navigate = useNavigate();
@@ -146,7 +146,7 @@ export default function FamilyDetailPage() {
 
   if (!user) {
     return (
-      <div className="landing-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <PortalPageLayout>
         <div className="text-center">
           <p style={{ marginBottom: '1rem' }}>Please sign in to view this family</p>
           <Button onClick={() => openOnboard({ reason: "view family details", actionLabel: "Join", membershipIncluded: true })}>Sign In</Button>
@@ -338,11 +338,6 @@ export default function FamilyDetailPage() {
             </Button>
           </div>
         </div>
-
-        {/* Footer */}
-        <footer className="landing-footer">
-          <p>© 2026 Liana Banyan Corporation</p>
-        </footer>
       </div>
 
       {/* Invite Member Dialog */}
@@ -354,6 +349,6 @@ export default function FamilyDetailPage() {
         familyDisplayName={family.display_name}
         memberCount={memberList.length}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

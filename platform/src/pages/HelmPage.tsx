@@ -36,6 +36,7 @@ import {
 import { JourneyMap } from "@/components/JourneyMap";
 import { BeaconDropUI } from "@/components/BeaconDropUI";
 import { BeaconRunCard, BeaconRunCreator, BeaconRunLeaderboard } from "@/components/BeaconRunGame";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface BeaconRun {
   id: string;
@@ -105,7 +106,7 @@ export function HelmPage() {
   const regularRuns = filteredRuns?.filter((r) => !r.is_featured) || [];
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-7xl">
+    <PortalPageLayout>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
@@ -355,7 +356,7 @@ export function HelmPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }
 

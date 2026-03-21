@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { PaymentPlugsBadge } from "@/components/PaymentPlugsBadge";
 import { CreditSymbol } from "@/components/CreditSymbol";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ============================================================================
 // HERO REGISTRY — Crown Candidates & Community Heroes
@@ -130,7 +131,7 @@ export default function HeroProjectPage() {
 
   if (!hero) {
     return (
-      <div className="container mx-auto p-6 max-w-4xl">
+      <PortalPageLayout>
         <Card>
           <CardContent className="p-12 text-center">
             <Award className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
@@ -376,6 +377,6 @@ export default function HeroProjectPage() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

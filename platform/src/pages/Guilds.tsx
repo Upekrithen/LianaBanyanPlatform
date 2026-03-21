@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { GuildCreationDialog } from '@/components/GuildCreationDialog';
 import { Plus, Users, Search, Network } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function Guilds() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -58,7 +59,7 @@ export default function Guilds() {
   const skills = guilds?.filter(g => g.guild_type === 'skill') || [];
 
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -192,6 +193,6 @@ function GuildGrid({ guilds, isLoading }: { guilds: any[] | undefined; isLoading
           </CardContent>
         </Card>
       ))}
-    </div>
+    </PortalPageLayout>
   );
 }

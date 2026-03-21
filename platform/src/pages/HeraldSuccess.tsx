@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Loader2, Megaphone } from "lucide-react";
 import { verifyHeraldPayment, type HeraldTier } from "@/lib/heraldSystem";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function HeraldSuccess() {
   const [searchParams] = useSearchParams();
@@ -41,7 +42,7 @@ export default function HeraldSuccess() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <PortalPageLayout>
       <Card className="max-w-md w-full mx-4">
         <CardContent className="pt-8 pb-8 text-center space-y-4">
           {status === "verifying" && (
@@ -83,6 +84,6 @@ export default function HeraldSuccess() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

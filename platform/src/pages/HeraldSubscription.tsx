@@ -35,6 +35,7 @@ import {
   freezeChain,
   getCurrentMonth,
 } from "@/lib/heraldSystem";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const TIER_ICONS: Record<HeraldTier, React.ElementType> = {
   torch_bearer: Flame,
@@ -90,7 +91,7 @@ export default function HeraldSubscription() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     );
@@ -338,6 +339,6 @@ export default function HeraldSubscription() {
           </p>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

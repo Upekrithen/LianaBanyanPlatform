@@ -23,6 +23,7 @@ import {
   Compass, Shield, Users, Lightbulb, Clock
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 type PathType = 'job' | 'business' | 'seed';
 
 // Ghost World Practice Mirror Component
@@ -67,7 +68,7 @@ function PracticeMirror({ isVisible, onClose, onEnterPractice, onStartGuidedPath
   const content = mirrorContent[optionType];
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <PortalPageLayout>
       <Card className="max-w-lg w-full bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 border-purple-500/50 shadow-[0_0_50px_rgba(139,92,246,0.3)]">
         <CardHeader className="relative">
           <Button 
@@ -480,6 +481,6 @@ export default function HarvestIsland() {
           optionType={selectedOption}
         />
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

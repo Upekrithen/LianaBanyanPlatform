@@ -43,6 +43,7 @@ import {
 import { GUILDS, HANDSHAKE_PROTOCOL, type Guild, type GuildPosition } from "@/lib/guildSystem";
 import { TasteRangerDashboard, FantasyBridge } from "@/components/bandwagon";
 import { HANDSHAKE_DOCUMENT } from "@/lib/guildHandshakeProtocol";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── Guild Card Component ──────────────────────────────────────────────────
 
@@ -453,7 +454,7 @@ export default function GuildHub() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-8">
+    <PortalPageLayout>
       {/* Header */}
       <div className="text-center space-y-3">
         <h1 className="text-4xl font-bold">The Guilds</h1>
@@ -572,6 +573,6 @@ export default function GuildHub() {
         guild={applicationDialog.guild}
         position={applicationDialog.position}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

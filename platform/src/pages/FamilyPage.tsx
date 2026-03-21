@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreateFamilyDialog } from "@/components/family/CreateFamilyDialog";
-import '@/styles/landing.css';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Family {
   id: string;
@@ -96,7 +96,7 @@ export default function FamilyPage() {
   };
 
   return (
-    <div className="landing-page" style={{ minHeight: '100vh' }}>
+    <PortalPageLayout>
       {/* Brand Title */}
       <div className="landing-title">
         <span className="liana">Liana</span>
@@ -254,11 +254,6 @@ export default function FamilyPage() {
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <footer className="landing-footer">
-          <p>© 2026 Liana Banyan Corporation</p>
-        </footer>
       </div>
 
       {/* Create Family Dialog */}
@@ -267,6 +262,6 @@ export default function FamilyPage() {
         onOpenChange={setShowCreateDialog}
         onSuccess={handleFamilyCreated}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { FundingTracker } from "@/components/FundingTracker";
 import { BuildJournal, JournalEntry } from "@/components/BuildJournal";
 import { supabase } from "@/integrations/supabase/client";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const DEFAULT_FUNDING = {
   currentAmount: 0,
@@ -101,7 +102,7 @@ export default function FoundingRunLanding() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto px-6 py-12 space-y-16">
         <button
           onClick={() => navigate("/hexisle")}
@@ -261,6 +262,6 @@ export default function FoundingRunLanding() {
           </p>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

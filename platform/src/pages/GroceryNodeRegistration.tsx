@@ -33,6 +33,7 @@ import {
 import { toast } from "sonner";
 import { ColdStartRecipeCards } from "@/components/ColdStartRecipeCards";
 import { SuccessStories } from "@/components/SuccessStories";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const VEHICLE_TYPES = [
   {
@@ -199,7 +200,7 @@ export default function GroceryNodeRegistration() {
   const activationThreshold = Math.ceil(weeklyCapacity * 0.5);
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-3xl mx-auto space-y-8">
         <button
           onClick={() => navigate("/launch/run-a-node")}
@@ -646,6 +647,6 @@ export default function GroceryNodeRegistration() {
         <ColdStartRecipeCards initiative="lets-get-groceries" />
         <SuccessStories filter="node_launch" maxItems={2} compact />
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

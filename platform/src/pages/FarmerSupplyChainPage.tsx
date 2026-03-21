@@ -19,6 +19,7 @@ import {
   INITIATIVE_CONNECTIONS,
   type FreezeDriedKit,
 } from '@/lib/farmerSupplyChain';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // MAIN PAGE
@@ -28,7 +29,7 @@ const FarmerSupplyChainPage = () => {
   const [selectedKit, setSelectedKit] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-amber-50">
+    <PortalPageLayout>
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-green-700 to-green-900 text-white py-16 px-6">
         <div className="max-w-6xl mx-auto">
@@ -599,7 +600,7 @@ const MealKitCard = ({
           <div className="font-bold text-amber-700">${kit.pricing.bulkPerServing}</div>
           <div className="text-gray-500">bulk</div>
         </div>
-      </div>
+      </PortalPageLayout>
     </CardContent>
   </Card>
 );

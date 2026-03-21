@@ -36,6 +36,7 @@ import {
   getPieceTeaserBySlug,
   getAdjacentReleases,
 } from "@/lib/hexSlottedTopShowcase";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── Status Badge Colors ─────────────────────────────────────────────────
 
@@ -53,7 +54,7 @@ export default function HexelWeeklyDetail() {
 
   if (!slug) {
     return (
-      <div className="container mx-auto p-6 text-center">
+      <PortalPageLayout>
         <p className="text-muted-foreground">No piece specified.</p>
         <Button variant="outline" onClick={() => navigate("/hexisle")} className="mt-4">
           Back to HexIsle
@@ -346,6 +347,6 @@ export default function HexelWeeklyDetail() {
           </Button>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

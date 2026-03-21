@@ -33,6 +33,7 @@ import {
   CENTER_HEX_MM, GAP_MM, RETENTION_ZONE_MM, TOTAL_PIECE_MM,
   type CompatibilityRating, type HexTerrainSystem,
 } from "@/lib/hexSlottedTopShowcase";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── Rating Styling ────────────────────────────────────────────────────────
 
@@ -48,7 +49,7 @@ const RATING_STYLE: Record<CompatibilityRating, string> = {
 
 function HeroSection() {
   return (
-    <div className="relative overflow-hidden rounded-xl border-2 border-amber-500/30 bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-900/30 text-white p-8 md:p-12">
+    <PortalPageLayout>
       {/* Hex pattern */}
       <div
         className="absolute inset-0 opacity-[0.04]"
@@ -638,6 +639,6 @@ export default function HexelSlottedTopDetail() {
           Next: SawtoothCoral <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
