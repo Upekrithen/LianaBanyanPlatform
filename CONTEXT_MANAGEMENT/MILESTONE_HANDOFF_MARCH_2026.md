@@ -2369,6 +2369,36 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 
 ---
 
+## Session 66 (Knight) — March 21, 2026
+
+**Commit:** `0dd0221`
+**Innovation Count:** 1,828 (was 1,810)
+
+**Completed:**
+
+1. **Task 0: Supabase Migration Push** — Pushed 8 pending migrations including `crown_letter_updates` (from Session 65) plus 6 innovation_log batches and `membership_stake_paid_columns`. All applied clean.
+2. **Task 1: Subscriptions Page (`/subscriptions`)** — Full page with:
+   - Member section: 6 benefit cards, 3-tier comparison (Taste/Regular/All-In), "How It Works" 4-step flow
+   - Business section: 5 benefit cards, expandable "All Day Buffet Problem" explainer, Turn-Key Setup callout
+   - Coalition section: formation guide, active coalitions placeholder, BandWagon link
+   - Interactive Tier Calculator with sliders (meals/week × avg price → savings)
+   - Chewy Autoship comparison callout
+   - Innovation #1826 badge
+3. **Task 2: Subscription System Migration** — 5 new tables: `subscription_tiers`, `member_subscriptions`, `business_coalitions`, `coalition_members`, `subscription_orders` + full RLS. Pushed to Supabase.
+4. **Task 3: Innovation Count** — `useCanonicalStats.ts` DEFAULTS updated: 1,810 → 1,828
+5. **Task 4: Cephas Deploy** — Hugo built (1,281 pages), deployed to cephas.lianabanyan.com. Bishop 019 pudding.css/js changes (callout, flow, flipblock styles + smooth scroll) now live.
+6. **Task 5: Navigation** — `/subscriptions` added to both `AppSidebar.tsx` (near BandWagon) and `UnifiedNavigation.tsx` with Repeat icon.
+
+**Deployed:**
+- lianabanyan.com (hosting:main) ✓
+- cephas.lianabanyan.com ✓
+
+**Not Started (deferred to future sessions):**
+- Color token sweep (Part 2)
+- Interactive Tier Calculator enhancement (blind box mode)
+
+---
+
 ## PENDING WORK (Next Session Priority Order)
 
 | # | Priority | Item | Notes |
@@ -2423,6 +2453,7 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 ## LATEST COMMITS
 
 ```
+0dd0221 Knight 66: Subscriptions page, coalition system, innovation count 1828, Cephas deploy
 42203c8 Session 47: RLS hardening -- admin-only policies on 13+ tables
 ed1bdb3 Session 47: FAQ See Also complete -- 34 cross-links, 2 missing entries
 20384d6 Session 47: Wire 6 other-session pages to Supabase -- full CRUD + stats for Santa, StarChamber, NodeCaptain, C+20, Tereno, Manufacturing
