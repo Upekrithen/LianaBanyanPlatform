@@ -339,6 +339,9 @@ const StorefrontBuilder = lazy(() => import("./pages/tools/StorefrontBuilder"));
 const MenuPage = lazy(() => import("./pages/MenuPage"));
 const ProviderDashboard = lazy(() => import("./pages/ProviderDashboard"));
 const RunnerDashboard = lazy(() => import("./pages/RunnerDashboard"));
+const CueCardGenerator = lazy(() => import("./pages/tools/CueCardGenerator"));
+const TreasureMaps = lazy(() => import("./pages/TreasureMaps"));
+const OnboarderDashboard = lazy(() => import("./pages/OnboarderDashboard"));
 const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
 const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
@@ -813,6 +816,9 @@ const App = () => (
                         <Route path="/menu/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MenuPage /></Suspense>} />
                         <Route path="/dashboard/provider" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProviderDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/dashboard/runner" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><RunnerDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/onboarder" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><OnboarderDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/tools/cue-card-generator" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardGenerator /></Suspense></ProtectedRoute>} />
+                        <Route path="/treasure-maps" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TreasureMaps /></Suspense>} />
                         <Route path="/chain-voting" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainVoting /></Suspense>} />
 
                         {/* Sessions 47-49 routes (Bishop 013) */}

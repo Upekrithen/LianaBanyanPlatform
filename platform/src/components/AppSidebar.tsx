@@ -1,4 +1,4 @@
-import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart, Sprout, Link2, Crosshair, Gift, Anchor, Scale, Factory, Repeat, Package, Truck } from "lucide-react";
+import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart, Sprout, Link2, Crosshair, Gift, Anchor, Scale, Factory, Repeat, Package, Truck, CreditCard } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -34,6 +34,9 @@ const marketplaceMainItems = [
   { title: "Storefront Builder", url: "/tools/storefront-builder", icon: Store },
   { title: "Provider Dashboard", url: "/dashboard/provider", icon: Package },
   { title: "Runner Dashboard", url: "/dashboard/runner", icon: Truck },
+  { title: "Passive Income", url: "/dashboard/onboarder", icon: DollarSign },
+  { title: "Cue Card Generator", url: "/tools/cue-card-generator", icon: CreditCard },
+  { title: "Treasure Maps", url: "/treasure-maps", icon: Map },
   { title: "Political Expedition", url: "/political-expedition", icon: Flag },
   { title: "XP Leaderboard", url: "/xp-leaderboard", icon: Trophy },
   { title: "Steward Command Post", url: "/steward", icon: Shield },

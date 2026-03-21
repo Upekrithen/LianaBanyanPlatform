@@ -2471,9 +2471,9 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 - ~~Task 3: Order aggregation edge function~~ ✅ DONE (Session 68)
 - ~~Task 4: Provider Dashboard~~ ✅ DONE (Session 68)
 - ~~Task 5: Runner Dashboard~~ ✅ DONE (Session 68)
-- Task 6: QR Cue Card Generator (`/tools/cue-card-generator`)
-- Task 7: Treasure Map Chest Page (`/treasure-maps`)
-- Task 9: Passive Income Dashboard (`/dashboard/onboarder`)
+- ~~Task 6: QR Cue Card Generator~~ ✅ DONE (Session 68)
+- ~~Task 7: Treasure Map Chest Page~~ ✅ DONE (Session 68)
+- ~~Task 9: Passive Income Dashboard~~ ✅ DONE (Session 68)
 
 ---
 
@@ -2517,6 +2517,57 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 **Deployed:**
 - lianabanyan.com (hosting:main) ✓
 - `aggregate-orders` edge function ✓
+
+---
+
+## Commerce Engine Phase 3 (Knight Session 68 continued) — March 21, 2026
+
+**Innovation Count:** 1,856 (unchanged)
+
+**Completed:**
+
+4. **QR Cue Card Generator (`/tools/cue-card-generator`)** — Full business card creator:
+   - Select storefront from dropdown (fetches user's storefronts)
+   - 4 color templates: Classic (slate/amber), Clean White (white/purple), Bold Red (red/gold), Forest (green)
+   - Editable tagline with 60-char limit
+   - Live front/back preview with QR code (via `qrcode.react`)
+   - PDF download via `jsPDF` — standard 3.5"×2" business card format
+   - Front: business name, location, tagline, order cutoff + delivery window, LB branding
+   - Back: QR code linking to `/menu/:slug`, URL text, LIANA BANYAN brand
+
+5. **Treasure Map Chest Page (`/treasure-maps`)** — 6 treasure map cards:
+   - Breakfast Runner ($0 startup, $1,200–$2,400/mo, 1 week to first $)
+   - Lunch Runner ($0 startup, $2,000–$4,000/mo)
+   - Taco Truck Circuit ($0 startup, $1,500–$3,000/mo, 3 days to first $)
+   - Catering Coordinator ($0, $3,000–$6,000/mo)
+   - Grocery Runner ($0, $1,800–$3,500/mo)
+   - Service Runner ($0, $2,000–$5,000/mo)
+   - Each card: 4-level progression, startup cost, monthly estimate, time-to-first-dollar
+   - Runner → Steward → Node Captain progression callout
+   - Innovation references (#1829–#1847)
+   - SEC disclaimer at bottom
+
+6. **Passive Income Dashboard (`/dashboard/onboarder`)** — Full onboarding credit tracker:
+   - Summary: total passive income, onboarding credits, steward fees, business revenue (this month)
+   - Qualified credits: expandable cards with per-business revenue, 3% credit earned, steward fee
+   - Qualifying credits: progress bar (orders/10 + days/30), orders-to-go badge
+   - Active steward agreements with management fee display
+   - "How onboarding credits work" explainer callout
+   - Empty state with links to Treasure Maps and Storefront Builder
+   - SEC-safe language throughout
+
+**Routes Added:**
+- `/tools/cue-card-generator` → ProtectedRoute → CueCardGenerator
+- `/treasure-maps` → TreasureMaps (public, ExplorerRoute-friendly)
+- `/dashboard/onboarder` → ProtectedRoute → OnboarderDashboard
+
+**Navigation:** All three added to AppSidebar and UnifiedNavigation (marketplace portal)
+
+**Deployed:** lianabanyan.com (hosting:main) ✓
+
+**COMMERCE ENGINE: ALL 9 TASKS COMPLETE** ✅
+Tasks 1-9 from BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_67_COMMERCE_ENGINE.md are done.
+The full "scan QR → order → pay → aggregate → deliver → earn passive income" loop is live.
 
 ---
 
