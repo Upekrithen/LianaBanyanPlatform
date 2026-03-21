@@ -30,8 +30,8 @@ export default function DefenseKlausPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div>
             <Badge variant="outline" className="mb-4 text-red-600 border-red-600 bg-red-50">Initiative #8</Badge>
-            <h1 className="text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
-              <Shield className="h-10 w-10 text-red-600" />
+            <h1 className="text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-4">
+              <img src="/images/defense-klaus-shield.png" alt="Defense Klaus Shield" className="h-[120px] w-auto drop-shadow-lg" />
               Defense Klaus
             </h1>
             <p className="mt-2 text-xl text-muted-foreground max-w-2xl">
@@ -45,6 +45,37 @@ export default function DefenseKlausPage() {
             <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50">
               <AlertTriangle className="w-4 h-4 mr-2" /> Emergency Trigger
             </Button>
+          </div>
+        </div>
+
+        {/* "I Need a Hero" Permanent Banner */}
+        <div className="mb-8 rounded-xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #991b1b 0%, #7f1d1d 50%, #450a0a 100%)' }}>
+          <div className="px-6 py-5 flex items-center gap-5 text-white">
+            <img src="/images/defense-klaus-shield.png" alt="" className="h-12 w-auto flex-shrink-0 drop-shadow-md" />
+            <div className="flex-1 text-center">
+            <p className="text-2xl font-bold tracking-tight mb-1">$5/Week: &ldquo;I Need a Hero&rdquo;</p>
+            <p className="text-red-200 text-sm mb-3">
+              3 Elves + 3 Spotters minimum per activation. Never respond alone.<br />
+              Your $5 subscription funds the standing bounty.
+            </p>
+            <div className="flex justify-center gap-3">
+              <Button
+                className="bg-white text-red-900 hover:bg-red-50 font-semibold"
+                onClick={() => navigate('/defense-klaus/subscribe')}
+              >
+                Sign Up
+              </Button>
+              <Button
+                variant="outline"
+                className="border-red-300 text-white hover:bg-red-900/50"
+                onClick={() => {
+                  document.getElementById('dk-how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Learn More
+              </Button>
+            </div>
+            </div>
           </div>
         </div>
 

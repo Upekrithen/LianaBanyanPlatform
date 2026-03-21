@@ -28,6 +28,7 @@ import { usePathwayProgress } from '@/contexts/PathwayProgressContext';
 import { Lock, Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import PortalGatewayPage from './PortalGateway';
+import { DailyNewsWidget } from './DailyNews';
 import { SWEET_SIXTEEN } from '@/lib/daisyChainLink';
 import '@/styles/landing.css';
 
@@ -4027,6 +4028,11 @@ export function KeepView({
               Full Dashboard
             </button>
           </div>
+        </div>
+
+        {/* Daily News Widget */}
+        <div className="trunk-info" style={{ marginTop: '1.5rem' }}>
+          <DailyNewsWidget />
         </div>
 
         {/* NotCents Economy Banner */}

@@ -308,6 +308,7 @@ const ContentPipelinePage = lazy(() => import("./pages/ContentPipelinePage"));
 // Legal pages (TikTok Developer Portal compliance — Session 7D)
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const CrownLetterUpdate = lazy(() => import("./pages/CrownLetterUpdate"));
 // Guild Hub — NOIDs landing with Handshake Protocol (Session 8D)
 const GuildHub = lazy(() => import("./pages/GuildHub"));
 // Muffled Rule / Coverage Minutes / Phase MimicTrunks (Session 6M)
@@ -736,6 +737,8 @@ const App = () => (
                         {/* Legal pages — public, no auth required (TikTok compliance) */}
                         <Route path="/terms" element={<TermsOfService />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />
+                        {/* Crown Letter Updates — public, dynamic slug */}
+                        <Route path="/updates/crown/:slug" element={<CrownLetterUpdate />} />
                         {/* Developer Portal — public */}
                         <Route path="/developers" element={<DeveloperPortal />} />
                         <Route path="/dev" element={<DeveloperPortal />} />

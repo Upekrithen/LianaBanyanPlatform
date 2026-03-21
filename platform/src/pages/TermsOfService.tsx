@@ -32,7 +32,7 @@ export default function TermsOfService() {
         <article className="prose prose-neutral dark:prose-invert max-w-none">
           <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
           <p className="text-muted-foreground text-sm mb-8">
-            Last updated: March 8, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
+            Last updated: March 20, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
           </p>
 
           <section className="space-y-4">
@@ -58,8 +58,8 @@ export default function TermsOfService() {
             </p>
             <ul>
               <li>
-                <strong>Community Membership</strong> — Tiered membership with
-                progressive discovery and participation features.
+                <strong>Community Membership</strong> — Annual membership at $5/year
+                with progressive discovery and participation features.
               </li>
               <li>
                 <strong>Three-Currency Economy</strong> — Credits (purchased with fiat,
@@ -248,7 +248,65 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>11. Disclaimers</h2>
+            <h2>11. SMS Program Terms</h2>
+            <p>
+              The Platform offers an SMS-based assistant service (&quot;Moneypenny&quot;)
+              for account management and platform interaction.
+            </p>
+            <ul>
+              <li>
+                <strong>Opt-In:</strong> You may opt in to SMS messaging by texting
+                our published number or enabling SMS in your account settings. By
+                opting in, you consent to receive automated SMS messages from
+                Liana Banyan Corporation.
+              </li>
+              <li>
+                <strong>Message Frequency:</strong> Message frequency varies based on
+                your interactions. You control conversation frequency by initiating
+                or ceasing text messages.
+              </li>
+              <li>
+                <strong>Opt-Out:</strong> Text STOP to any message to unsubscribe from
+                all SMS communications. You will receive a single confirmation message.
+              </li>
+              <li>
+                <strong>Help:</strong> Text HELP at any time for assistance or contact
+                Founder@LianaBanyan.com.
+              </li>
+              <li>
+                <strong>Rates:</strong> Message and data rates may apply. Check with
+                your wireless carrier for details.
+              </li>
+              <li>
+                <strong>Carriers:</strong> Carriers are not liable for delayed or
+                undelivered messages.
+              </li>
+              <li>
+                <strong>Privacy:</strong> No mobile information will be shared with
+                third parties or affiliates for marketing or promotional purposes.
+                See our <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a> for
+                full data handling details.
+              </li>
+            </ul>
+            <p>
+              <strong>Support contact:</strong> Founder@LianaBanyan.com | 406-578-1232
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2>12. Intellectual Property Contribution</h2>
+            <p>
+              Members who develop innovations, tools, processes, or improvements
+              while using Platform resources contribute those innovations to the
+              cooperative IP estate. This contribution-back mechanism ensures that
+              the collective benefits from individual advances. Individual contributors
+              are credited and may receive ongoing royalty participation through the
+              Platform&apos;s Mark and reputation systems.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2>13. Disclaimers</h2>
             <p>
               The Platform is provided &quot;as is&quot; and &quot;as available&quot; without
               warranties of any kind. We do not guarantee uninterrupted access,
@@ -263,7 +321,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>12. Limitation of Liability</h2>
+            <h2>14. Limitation of Liability</h2>
             <p>
               To the maximum extent permitted by law, Liana Banyan Corporation shall not
               be liable for any indirect, incidental, special, consequential, or punitive
@@ -272,7 +330,23 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>13. Modifications</h2>
+            <h2>15. Dispute Resolution — Star Chamber Governance</h2>
+            <p>
+              Disputes between members, or between members and the Platform, are
+              resolved through the Star Chamber — the Platform&apos;s internal
+              governance body. The Star Chamber reviews evidence, hears from all
+              parties, and issues binding decisions. This process is designed to be
+              faster, fairer, and less expensive than traditional litigation.
+            </p>
+            <p>
+              Either party may escalate to binding arbitration under the rules of
+              the American Arbitration Association if the Star Chamber process does
+              not resolve the dispute within 60 days.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2>16. Modifications</h2>
             <p>
               We may update these Terms at any time. Material changes will be communicated
               through the Platform. Continued use after changes constitutes acceptance of
@@ -281,21 +355,25 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>14. Governing Law</h2>
+            <h2>17. Governing Law</h2>
             <p>
-              These Terms are governed by the laws of the State of Oklahoma, United States
-              of America. Any disputes shall be resolved in the courts of Oklahoma.
+              These Terms are governed by the laws of the State of Wyoming, United States
+              of America, where Liana Banyan Corporation is incorporated. Any disputes
+              not resolved through the Star Chamber shall be resolved in the courts of
+              Wyoming.
             </p>
           </section>
 
           <section className="space-y-4">
-            <h2>15. Contact</h2>
+            <h2>18. Contact</h2>
             <p>
               For questions about these Terms, contact us at:
               <br />
               <strong>Liana Banyan Corporation</strong>
               <br />
-              Email: support@lianabanyan.com
+              Email: Founder@LianaBanyan.com
+              <br />
+              Phone: 406-578-1232
             </p>
           </section>
         </article>

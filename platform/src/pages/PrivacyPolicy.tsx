@@ -31,7 +31,7 @@ export default function PrivacyPolicy() {
         <article className="prose prose-neutral dark:prose-invert max-w-none">
           <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
           <p className="text-muted-foreground text-sm mb-8">
-            Last updated: March 8, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
+            Last updated: March 20, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
           </p>
 
           <section className="space-y-4">
@@ -72,7 +72,21 @@ export default function PrivacyPolicy() {
                 <strong>Communications</strong> — Messages you send through the
                 Platform and support inquiries.
               </li>
+              <li>
+                <strong>Phone Number</strong> — If you initiate SMS contact with
+                our Moneypenny assistant or opt in to SMS notifications through
+                account settings, we store your phone number to facilitate
+                messaging.
+              </li>
             </ul>
+
+            <h3>2d. Zero Demographics Policy</h3>
+            <p>
+              We do not collect or store demographic information such as race,
+              ethnicity, gender, religion, political affiliation, or sexual
+              orientation. This is a deliberate design decision — we believe
+              these categories have no place in platform operations.
+            </p>
 
             <h3>2b. Information Collected Automatically</h3>
             <ul>
@@ -137,6 +151,13 @@ export default function PrivacyPolicy() {
                 <strong>Improvement</strong> — To understand usage patterns and
                 improve Platform features.
               </li>
+              <li>
+                <strong>SMS Messaging</strong> — To send and receive SMS messages
+                through our Moneypenny assistant service. We send SMS messages only
+                to users who initiate contact or opt in through account settings.
+                Message frequency varies. Message and data rates may apply. Reply
+                STOP to any message to unsubscribe. Reply HELP for assistance.
+              </li>
             </ul>
             <p>
               We do NOT sell your personal information. We do NOT use your data
@@ -156,9 +177,9 @@ export default function PrivacyPolicy() {
               </li>
               <li>
                 <strong>Service Providers</strong> — We use Supabase (database and
-                authentication), Firebase (hosting), and Resend (email delivery).
-                These providers process data on our behalf under contractual
-                data protection obligations.
+                authentication), Firebase (hosting), Resend (email delivery), and
+                Twilio (SMS messaging). These providers process data on our behalf
+                under contractual data protection obligations.
               </li>
               <li>
                 <strong>Legal Requirements</strong> — We may disclose information
@@ -292,9 +313,11 @@ export default function PrivacyPolicy() {
               <br />
               <strong>Liana Banyan Corporation</strong>
               <br />
-              Email: support@lianabanyan.com
+              Email: Founder@LianaBanyan.com
               <br />
-              Privacy inquiries: support@lianabanyan.com (subject: Privacy Request)
+              Phone: 406-578-1232
+              <br />
+              Privacy inquiries: Founder@LianaBanyan.com (subject: Privacy Request)
             </p>
           </section>
         </article>

@@ -192,9 +192,11 @@ export default function DefenseKlausSubmarineDoor() {
         <CardContent className="pt-8 pb-8 space-y-6">
           {/* Header */}
           <div className="text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto">
-              <Shield className="h-8 w-8 text-purple-400" />
-            </div>
+            <img
+              src="/images/defense-klaus-shield.png"
+              alt="Defense Klaus Shield"
+              className="h-[200px] w-auto mx-auto drop-shadow-xl"
+            />
             
             <div className="space-y-2">
               <h1 className="text-2xl font-bold text-white">
