@@ -9,49 +9,53 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 63 (March 20, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 64 (March 20, 2026)
 
-**Latest commit:** `7909d79` — Knight 63 Batch 12: 20 pages migrated to PortalPageLayout
-**Previous commits:** `c152b37` (Batch 11), `c35e34a` (Batch 10), `38f6760` (Session 62)
+**Latest commit:** `4e9a043` — Knight 64: Fix PortalPageLayout tag mismatches
+**Previous commits:** `2a4349e` (B18), `36f2d72` (B17), `aaf1da5` (B16), `77fa880` (B15), `a1453d4` (B14), `de5207e` (B13)
 
-**Status (March 20, 2026 — Session 63 COMPLETE):**
-- Phase 1 Visual Unification: 60 more pages migrated this session (3 batches)
-- **Total pages on PortalPageLayout: 165** (104 prior + ~61 this session)
-- **Remaining: 147 un-migrated** (of 312 total .tsx files)
-  - 108 TODO (need wrapper)
-  - 18 SKIP (12 needs-care for Bishop + Index + Senate + Auth + RedCarpet + TikTokCallback + Index_REFERENCE)
-  - 21 MAYBE SKIP (success/confirmation pages, HexIsle sub-pages, utility pages)
+**Status (March 20, 2026 — Session 64 COMPLETE):**
+- **PHASE 1 VISUAL UNIFICATION: COMPLETE!**
+- All 108 remaining TODO pages wrapped in PortalPageLayout (6 batches)
+- Fixed 40+ tag mismatch issues (early returns with swapped open/close tags)
+- **Total pages on PortalPageLayout: 293** (of 312 total .tsx files)
+- **19 un-migrated** = 18 SKIP + 1 re-export (HexelSawtoothCoralDetail)
 - **Innovation count:** 1,784 | **Patent claims:** 1,401 across 8 provisionals
 - **Deployed to lianabanyan.com** — all migrations live
 
-### What Was Done (Session 63 — Knight)
+### What Was Done (Session 64 — Knight)
 
-#### 1. Batch 10 — 20 pages migrated
-Admin, Ambassador (5), Arenas, AsYouWishCard, ATTILanding, BeaconRunCreator, BecomeCaptain, BifrostCardBuilder, BizKaleidoscope, BrewsterBonus, BuildBusiness
+#### 1. Batch 13 — 20 pages migrated
+FamilyDetailPage, FamilyPage, FarmerSupplyChainPage, FoundingRunLanding, FriendPage, GroceryNodeRegistration, GuildHub, GuildPhaseManager, Guilds, GuildStakeSuccess, HarvestIsland, HelmPage, HelpEachOtherPage, HelpWanted, HeraldSubscription, HeraldSuccess, HeroProjectPage, HexelSlottedTopDetail, HexelWeeklyDetail, HexIsleBattlePhilosophy
 
-#### 2. Batch 11 — 20 pages migrated (+ 3 tag-mismatch fixes)
-BusinessPathway, BusinessPlan, BusinessPlanGenerator, CampaignProduction, CephasCategoryListing, CephasContentDetail, CephasInnovationPedestals, CephasPressJunket, CephasSearch, ChefMarketplace, ClientAPIManager, CoasterMedallion, ColdStartDashboard, CompanyIndependence, CompanyIsland, ContentControls, ContentPipeline, ContingencyOperators, ContractPositions, ContractScaleManager
+#### 2. Batch 14 — 20 pages migrated
+HexisleDashboard, HexIsleDownloads, HexIsleEncyclopedia, HexIsleIslandPage, HexIsleOverworld, HexIsleProjects, HexIsleVote, HexIsleWorld3D, IncumbentAdvantage, IndustryPricing, IPPortfolioPage, IPRegistration, IslandAssignmentBoard, IslandBuilderPage, IslandCreator, IslandDesignPortfolio, IslandDetail, IslandWorldMap, LandingPageManager, LaunchHub
 
-#### 3. Batch 12 — 20 pages migrated
-Contribution, CottageLaw, CrankIt, CreateProject, CreatorProfile, Credentials, CrewDashboard, CrewInvite, CrewNew, Crowdfunding, CrowsNest, CueCardShare, DefenseKlausSub, DesignBattle, DesignedToBeBroken, DeveloperPortal, DMKeep, DocMarketplace, ExternalServices, FactoryHub
+#### 3. Batch 15 — 20 pages migrated
+LBAssetLibrary, LBInternalPositions, LikeWhatPage, LMDReviewerDashboard, LMDReviewSubmitPage, MakerSpotlight, ManagePositions, MedallionManagement, MedallionSwap, MedallionViewer, MemberResources, MembershipConfirm, MembershipSuccess, NoAtomo, NodeRegistration, OnboardingStart, OnboardingStatusPage, PaperPage, PatrioticInterdependentalist, PedestalBrowser
 
-#### 4. Production Deploy
-Built and deployed all 60 migrations to lianabanyan.com.
+#### 4. Batch 16 — 20 pages migrated
+PeerContracts, Petitions, PhaseMimicTrunkManager, PlantSeeds, Portfolio, PositionCategories, PreBetaRecruits, PreOrderFlow, PreOrderSuccess, ProductDetail, ProductionQueue, ProductionRuns, ProfileSettings, ProjectLanding, Projects, ProjectView, ProposalDetail, ProteusAnchor, PrototypingContracts, RealWorldPuzzles
 
-Commits: `c35e34a`, `c152b37`, `7909d79`
+#### 5. Batch 17 — 20 pages migrated
+ReputationProfile, ReviewerApplication, ReviewerDashboard, ReviewQueueItemPage, RoleManagement, RunANode, SampleDataXML, SanAntonioLanding, ScrollForgePage, ServiceNodeRegistration, SideQuests, Simulator, SpotlightManager, SponsorSuccess, StewardApply, StewardLegalDashboard, StoreFrontAggregation, SubdomainManager, SwoopAdminPage, SwoopPage
 
-### Remaining Page Inventory (for next session)
+#### 6. Batch 18 — 28 pages migrated (final batch)
+SwoopProjectPage, TaskList, TaskLog, TasteTesterDashboard, TemplateSetup, The2ndSecondPortal, ThemeManagement, ThoughtExperiment, TransparentLedger, TreasureIsland, TreasureMap, TreasureMapBuilder, TreasureMapCreator, VideoScripts, WildfireRunsPage, Withdraw, CreditPurchaseSuccess + 11 cue-cards subpages (BusinessCardPortal, Canada40K, CodeBreakersHub, HallOfRecords, HexIsleCueCard, HexIsleWorldCard, KeepsLobby, MainlandHub, NotLeftNotRightPage, TowerOfPeace, WildfireBeaconRun)
 
-**108 TODO pages** (need PortalPageLayout wrapper):
-FamilyDetailPage, FamilyPage, FarmerSupplyChain, FoundingRunLanding, FriendPage, GroceryNodeRegistration, GuildHub, GuildPhaseManager, Guilds, GuildStakeSuccess, HarvestIsland, HelmPage, HelpEachOther, HelpWanted, HeraldSubscription, HeraldSuccess, HeroProject, HexelSawtoothCoralDetail, HexelSlottedTopDetail, HexelWeeklyDetail, HexIsleBattlePhilosophy, HexisleDashboard, HexIsleDownloads, HexIsleEncyclopedia, HexIsleIslandPage, HexIsleOverworld, HexIsleProjects, HexIsleVote, HexIsleWorld3D, IncumbentAdvantage, IndustryPricing, IPPortfolio, IPRegistration, IslandAssignmentBoard, IslandBuilder, IslandCreator, IslandDesignPortfolio, IslandDetail, IslandWorldMap, LandingPageManager, LaunchHub, LBAssetLibrary, LBInternalPositions, LikeWhat, LMDReviewerDashboard, LMDReviewSubmit, MakerSpotlight, ManagePositions, MedallionManagement, MedallionSwap, MedallionViewer, MemberResources, MembershipConfirm, MembershipSuccess, NoAtomo, NodeRegistration, OnboardingStart, OnboardingStatus, PaperPage, PatrioticInterdependentalist, PedestalBrowser, PeerContracts, Petitions, PhaseMimicTrunk, PlantSeeds, Portfolio, PositionCategories, PreBetaRecruits, PreOrderFlow, PreOrderSuccess, ProductDetail, ProductionQueue, ProductionRuns, ProfileSettings, ProjectLanding, Projects, ProjectView, ProposalDetail, ProteusAnchor, PrototypingContracts, RealWorldPuzzles, ReputationProfile, ReviewerApplication, ReviewerDashboard, ReviewQueueItem, RoleManagement, RunANode, SampleDataXML, SanAntonioLanding, ScrollForge, ServiceNodeRegistration, SideQuests, Simulator, SpotlightManager, SponsorSuccess, StewardApply, StewardLegalDashboard, StoreFrontAggregation, SubdomainManager, SwoopAdmin, SwoopPage, SwoopProject, TaskList, TaskLog, TasteTester, TemplateSetup, The2ndSecondPortal, ThemeManagement, ThoughtExperiment, TransparentLedger, TreasureIsland, TreasureMap, TreasureMapBuilder, TreasureMapCreator, VideoScripts, WildfireRunsPage, Withdraw, CreditPurchaseSuccess, + 11 cue-cards/ subpages
+#### 7. Tag mismatch fixes (40+ files)
+Migration script occasionally replaced divs in sub-components instead of the main return. Fixed all open/close tag mismatches across early returns and main returns.
 
-**18 SKIP pages** (Bishop edge cases + untouchables):
-Dashboard, SaltMines, BeaconExplainer, TheHelm, HallOfInnovations, CueCardLanding, C20PilotDashboard, MoneypennyBriefing, GroceryBoxPage, GroupCookPage, PantryPage, ProprietaryRecipesPage, Index, Senate, Auth, RedCarpet, TikTokCallback, Index_REFERENCE
+#### 8. Production Deploy
+Built and deployed all 128 migrations to lianabanyan.com.
+
+### SKIP Pages (19 files, NOT migrated — by design):
+Auth, BeaconExplainer, C20PilotDashboard, CueCardLanding, Dashboard, GroceryBoxPage, GroupCookPage, HallOfInnovations, HexelSawtoothCoralDetail (re-export), Index, Index_REFERENCE_FEB16_2026, MoneypennyBriefing, PantryPage, ProprietaryRecipesPage, RedCarpet, SaltMines, Senate, TheHelm, TikTokCallback
 
 ### Next Session Should:
-- Continue wrapping the 108 TODO pages in batches of 15-20 (5-6 more batches to finish Part 1)
-- DO NOT start Part 2 (interior color token replacement) until ALL wrappers are in place
-- After all mechanical wraps are done, write final handoff listing which pages are ready for Part 2
+- **Part 2: Interior color token sweep** — Now that all 293 pages have PortalPageLayout wrapper, replace remaining hardcoded colors (bg-slate-900, text-white, etc.) with semantic tokens (bg-background, text-foreground, etc.)
+- Start with pages that have the most hardcoded colors
+- The 18 SKIP pages are Bishop edge cases or special pages that need custom handling
 
 ---
 
