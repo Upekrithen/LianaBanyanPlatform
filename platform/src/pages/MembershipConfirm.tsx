@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MembershipConfirm() {
   const [searchParams] = useSearchParams();
@@ -48,7 +49,7 @@ export default function MembershipConfirm() {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <PortalPageLayout>
       <Card className="max-w-md w-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -108,6 +109,6 @@ export default function MembershipConfirm() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

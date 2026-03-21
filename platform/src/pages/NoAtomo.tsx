@@ -4,10 +4,11 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Zap, Shield, Lock, ArrowRight, Ban, Scale } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function NoAtomo() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="no-atomo">
+    <PortalPageLayout>
       <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
         {/* Hero */}
         <header className="text-center space-y-4 py-8">
@@ -114,6 +115,6 @@ export default function NoAtomo() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

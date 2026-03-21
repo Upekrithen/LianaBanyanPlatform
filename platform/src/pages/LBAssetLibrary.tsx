@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Download, DollarSign, Tag, FileType } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const POSITION_CATEGORIES = [
   { value: "create_idea" as const, label: "Ideation & Creation" },
@@ -130,7 +131,7 @@ export default function LBAssetLibrary() {
   const isFree = (cost: number | null) => !cost || cost === 0;
 
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">LB Asset Library</h1>
@@ -237,6 +238,6 @@ export default function LBAssetLibrary() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function PatrioticInterdependentalist() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function PatrioticInterdependentalist() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <PortalPageLayout>
         <div className="container mx-auto max-w-3xl px-4 py-12">
           {/* Hero */}
           <section className="text-center py-12" data-xray-id="patriotic-interdependentalist-hero">
@@ -121,6 +122,6 @@ export default function PatrioticInterdependentalist() {
             </div>
           </section>
         </div>
-      </div>
+      </PortalPageLayout>
   );
 }

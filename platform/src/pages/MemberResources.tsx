@@ -19,6 +19,7 @@ import {
 import { useState } from "react";
 import { ProcessDetailDialog } from "@/components/ProcessDetailDialog";
 import { PositionDetailDialog } from "@/components/PositionDetailDialog";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MemberResources() {
   const [selectedProcess, setSelectedProcess] = useState<any>(null);
@@ -74,7 +75,7 @@ export default function MemberResources() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <div className="space-y-2">
         <h1 className="text-4xl font-bold">Member Resources</h1>
         <p className="text-muted-foreground">
@@ -246,7 +247,7 @@ export default function MemberResources() {
           onClose={() => setSelectedPosition(null)}
         />
       )}
-    </div>
+    </PortalPageLayout>
   );
 }
 

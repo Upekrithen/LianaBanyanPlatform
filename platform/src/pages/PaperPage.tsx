@@ -36,6 +36,7 @@ import {
 } from '@/components/pudding';
 import { TreasureKeyIndicator } from '@/components/TreasureKeyIndicator';
 import { SocialShareBar } from '@/components/atti/SocialShareBar';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const LAW_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e', '#f59e0b', '#ef4444'];
 
@@ -55,7 +56,7 @@ function ReadingLevelSelector({
   onChange: (level: ReadingLevel) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <PortalPageLayout>
       {READING_LEVELS.map((level) => {
         const Icon = level.icon;
         const isSelected = selected === level.id;
@@ -485,6 +486,6 @@ export default function PaperPage() {
           </p>
         </motion.div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -35,6 +35,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { SocialShareBar } from '@/components/atti/SocialShareBar';
 import { Badge } from '@/components/ui/badge';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── VERNACULAR DATA ───
 const VERNACULAR = [
@@ -142,7 +143,7 @@ export default function LikeWhatPage() {
   const displayedVernacular = showAllVernacular ? filteredVernacular : filteredVernacular.slice(0, 10);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+    <PortalPageLayout>
       <div className="max-w-6xl mx-auto px-4 py-12">
 
         {/* Header */}
@@ -385,6 +386,6 @@ export default function LikeWhatPage() {
           </div>
         </motion.div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

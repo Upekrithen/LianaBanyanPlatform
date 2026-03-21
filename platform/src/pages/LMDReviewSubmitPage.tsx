@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LMDReviewForm } from "@/components/lmd/LMDReviewForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function LMDReviewSubmitPage() {
   const { mealId } = useParams<{ mealId: string }>();
@@ -57,7 +58,7 @@ export default function LMDReviewSubmitPage() {
 
   if (!user) {
     return (
-      <div className="container max-w-lg mx-auto p-6">
+      <PortalPageLayout>
         <p className="text-muted-foreground">Sign in to submit a review.</p>
       </div>
     );
@@ -97,6 +98,6 @@ export default function LMDReviewSubmitPage() {
         existingReview={existing ? { taste: existing.taste!, flavor: existing.flavor!, spice: existing.spice!, mouthfeel: existing.mouthfeel!, review_text: existing.review_text, within_incentive_window: existing.within_incentive_window ?? false } : undefined}
         onSuccess={() => navigate("/initiatives/lets-make-dinner/reviews")}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

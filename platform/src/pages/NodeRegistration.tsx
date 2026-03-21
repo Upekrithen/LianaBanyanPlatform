@@ -44,6 +44,7 @@ import {
   ArrowRight, ArrowLeft, AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Equipment categories
 const EQUIPMENT_TYPES = [
@@ -237,7 +238,7 @@ export default function NodeRegistration() {
   const isPioneerEligible = (pioneerSlotsRemaining || 0) > 0;
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
+    <PortalPageLayout>
       {/* Header */}
       <div className="text-center space-y-2">
         <div className="flex items-center justify-center gap-3">
@@ -687,6 +688,6 @@ export default function NodeRegistration() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PortalPageLayout>
   );
 }

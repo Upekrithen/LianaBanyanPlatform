@@ -8,6 +8,7 @@ import { Award, Loader2, Wallet } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { WalletConnectButton } from '@/components/WalletConnectButton';
 import { Separator } from '@/components/ui/separator';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MedallionViewer() {
   const { user } = useAuth();
@@ -39,7 +40,7 @@ export default function MedallionViewer() {
 
   if (!user) {
     return (
-      <div className="container mx-auto p-6">
+      <PortalPageLayout>
         <Card>
           <CardContent className="pt-6 text-center">
             <Award className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
@@ -117,6 +118,6 @@ export default function MedallionViewer() {
           ))}
         </div>
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

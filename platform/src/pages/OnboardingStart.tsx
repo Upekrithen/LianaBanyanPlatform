@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ONBOARDING START PAGE — "You have a... I have a..."
  * ====================================================
  * The entry point for new users to understand what they can do.
@@ -47,6 +47,7 @@ import {
   Sword,
   Shield,
 } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // DROPDOWN OPTIONS
@@ -271,7 +272,7 @@ export default function OnboardingStart() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
+    <PortalPageLayout>
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="text-center space-y-8">
@@ -569,6 +570,6 @@ export default function OnboardingStart() {
           </p>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

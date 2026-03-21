@@ -17,6 +17,7 @@ import { AgentAuditLog } from '@/components/AgentAuditLog';
 import { ProjectCategoryManager } from '@/components/ProjectCategoryManager';
 import { toast } from 'sonner';
 import { Loader2, Trash2, Edit, Plus } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CATEGORIES = [
   { value: 'create_idea', label: 'Create Idea' },
@@ -228,7 +229,7 @@ export default function ManagePositions() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
@@ -508,6 +509,6 @@ export default function ManagePositions() {
           </TabsContent>
         </Tabs>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -16,6 +16,7 @@ import {
   fetchSpotlights,
   getRotatedSpotlights,
 } from "@/lib/makerSpotlightService";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Slideshow states
 type ViewMode = "directory" | "slideshow";
@@ -138,7 +139,7 @@ export default function MakerSpotlightPage() {
   const currentMaker = rotated[currentSlide] || null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="maker-spotlight">
+    <PortalPageLayout>
       <div className="container max-w-6xl mx-auto px-4 py-8 space-y-8">
         {/* Header */}
         <header className="space-y-2">
@@ -472,6 +473,6 @@ export default function MakerSpotlightPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -10,6 +10,7 @@ import {
   Cog, Globe, HeartPulse, Palette, Wrench, BookOpen, Building2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 type PositionTier = 'c_suite' | 'workshop_crew' | 'guild_staff' | 'operations';
 
@@ -645,7 +646,7 @@ export default function LBInternalPositions() {
   const guildStaffPositions = lbInternalPositions.filter(p => p.tier === 'guild_staff');
 
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">LB Internal Positions</h1>
@@ -847,6 +848,6 @@ function PositionCards({ positions }: { positions: LBPosition[] }) {
           </CardContent>
         </Card>
       ))}
-    </div>
+    </PortalPageLayout>
   );
 }

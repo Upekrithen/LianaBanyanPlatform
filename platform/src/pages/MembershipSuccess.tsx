@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MembershipSuccess() {
   const [searchParams] = useSearchParams();
@@ -77,7 +78,7 @@ export default function MembershipSuccess() {
 
   if (verifying) {
     return (
-      <div className="container max-w-2xl mx-auto py-20">
+      <PortalPageLayout>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -157,6 +158,6 @@ export default function MembershipSuccess() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

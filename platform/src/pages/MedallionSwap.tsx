@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, Link2, Users, ShieldCheck, ArrowRightLeft, QrCode } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MedallionSwap() {
   const { toast } = useToast();
@@ -22,7 +23,7 @@ export default function MedallionSwap() {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout>
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-purple-600 rounded-full text-white">
           <ArrowRightLeft className="h-8 w-8" />
@@ -142,6 +143,6 @@ export default function MedallionSwap() {
           </Card>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

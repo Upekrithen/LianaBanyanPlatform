@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Users, Trophy, Target, Clock } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function OnboardingStatusPage() {
   const { user } = useAuth();
@@ -47,7 +48,7 @@ export default function OnboardingStatusPage() {
 
   if (!user) {
     return (
-      <div className="container max-w-lg mx-auto p-6">
+      <PortalPageLayout>
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
             Sign in to see your onboarding status.
@@ -124,6 +125,6 @@ export default function OnboardingStatusPage() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -10,6 +10,7 @@ import { MedallionDesignConfigurator } from '@/components/MedallionDesignConfigu
 import { MedallionQRVerification } from '@/components/MedallionQRVerification';
 import { MedallionProductionTracker } from '@/components/MedallionProductionTracker';
 import { MedallionMintingManager } from '@/components/MedallionMintingManager';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MedallionManagement() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -48,7 +49,7 @@ export default function MedallionManagement() {
 
   if (!projectId) {
     return (
-      <div className="container mx-auto p-6">
+      <PortalPageLayout>
         <Alert variant="destructive">
           <AlertDescription>Invalid project ID</AlertDescription>
         </Alert>
@@ -127,6 +128,6 @@ export default function MedallionManagement() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

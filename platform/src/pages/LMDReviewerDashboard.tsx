@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Coins, Star, MessageSquare } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const PALATE_TIERS: { minReviews: number; label: string; icon: string }[] = [
   { minReviews: 0, label: "Nibbler", icon: "🥢" },
@@ -98,7 +99,7 @@ export default function LMDReviewerDashboard() {
 
   if (!user) {
     return (
-      <div className="container max-w-2xl mx-auto p-6" data-xray-id="lmd-reviewer-dashboard">
+      <PortalPageLayout>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -189,6 +190,6 @@ export default function LMDReviewerDashboard() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }
