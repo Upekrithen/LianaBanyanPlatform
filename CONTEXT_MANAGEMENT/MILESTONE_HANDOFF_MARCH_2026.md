@@ -9,7 +9,73 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 64 (March 20, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 65 (March 21, 2026)
+
+**Latest commit:** `b57c026` — Knight 65: Privacy/Terms A2P, DailyNewsWidget, Defense Klaus shield, Crown Letter scaffold
+**Previous (Session 64):** `4212161` (milestone handoff)
+
+---
+
+### What Was Done (Session 65 — Knight)
+
+All 5 tasks from `BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_65.md` completed and deployed.
+
+| Task | Files | Summary |
+|------|-------|---------|
+| **Task 0 (URGENT):** Privacy + Terms | `PrivacyPolicy.tsx`, `TermsOfService.tsx` | SMS/Twilio A2P disclosures: STOP/HELP opt-out, zero demographics policy, Twilio as service provider, contact → Founder@LianaBanyan.com + 406-578-1232, SMS Program section (ToS §11), IP contribution-back (§12), Star Chamber disputes (§15), governing law corrected to Wyoming |
+| **Task 1:** DailyNewsWidget | `Index.tsx` | Imported `DailyNewsWidget` from `DailyNews.tsx`, placed in KeepView between Quick Actions and NotCents banner |
+| **Task 2:** Defense Klaus banner | `DefenseKlausPage.tsx` | "I Need a Hero" $5/week permanent banner with sign-up CTA |
+| **Task 3:** Crown Letter Updates | `CrownLetterUpdate.tsx`, `App.tsx`, migration | Scaffold at `/updates/crown/:slug` for 11 recipients (scott, buffett, khan, dougherty, newmark, glenn, williams, kaiser, seibel, simon, schlossberg). Migration: `20260321000001_crown_letter_updates.sql` |
+| **Task 4:** Innovation count | `useCanonicalStats.ts` | Default 1,754 → 1,810 |
+
+**Defense Klaus shield crest** (`DefenseKlausShield.png`) deployed to `platform/public/images/defense-klaus-shield.png` in 3 placements:
+- Page header hero (120px) — replaces generic Lucide Shield icon
+- "I Need a Hero" banner (48px) — left-aligned brand accent
+- Submarine Door gift page (200px) — centered trust signal for recipients
+
+**Deployed:** lianabanyan.com — 660 files, all live.
+**Innovation count:** 1,810 | **Patent claims:** 1,401 across 8 provisionals
+
+### Pending
+
+| Priority | Task | Notes |
+|----------|------|-------|
+| HIGH | `supabase db push` | Run to create `crown_letter_updates` table in production |
+| MEDIUM | Bishop: populate `crown_letter_updates` | Write timeline entries for each Crown Letter recipient |
+| LOW | Defense Klaus shield at 32-40px on `/allies` or Mission ONE | Founder noted as future cross-reference |
+| LOW | Phase 2: Interior color token sweep | All 293 pages have PortalPageLayout; next is replacing hardcoded Tailwind colors with semantic tokens |
+
+---
+
+### TOMORROW MORNING (March 22, 2026) — SESSION 66 PICKUP
+
+**Check dropzones first.** The Founder may have new priority tasks overnight.
+
+#### If no dropzone tasks:
+1. Run `supabase db push` to create `crown_letter_updates` table
+2. Begin Phase 2 color token sweep (heaviest files first, batches of 15-20)
+3. Or pick up any Bishop/Rook tasks that appeared overnight
+
+#### Quick-Start Commands
+```powershell
+cd "C:\Users\Administrator\Documents\LianaBanyanPlatform"
+git log --oneline -5
+
+# Verify deploy:
+# https://lianabanyan.com/privacy
+# https://lianabanyan.com/terms
+# https://lianabanyan.com/initiatives/defense-klaus
+
+# Push crown_letter_updates migration:
+cd platform; npx supabase db push
+
+# Check dropzones:
+Get-ChildItem KNIGHT_DROPZONE,BISHOP_DROPZONE,ROOK_DROPZONE -File -Recurse | Sort-Object LastWriteTime -Descending | Select-Object -First 5 Name, LastWriteTime
+```
+
+---
+
+## PREVIOUS SESSION: Knight Session 64 (March 20, 2026)
 
 **Latest commit:** `4212161` — Session 64 milestone handoff: Phase 1 COMPLETE
 **All Session 64 commits:** `de5207e` (B13) → `a1453d4` (B14) → `77fa880` (B15) → `aaf1da5` (B16) → `36f2d72` (B17) → `2a4349e` (B18) → `4e9a043` (tag fixes) → `b7ee141` (handoff) → `4212161` (milestone handoff)
