@@ -35,6 +35,7 @@ import {
   BookOpen, Bug, Users, Flame, LayoutDashboard,
   ChevronRight, Award, Send,
 } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ═══════════════════════════════════════════════════════════════════
 // TYPES
@@ -475,7 +476,7 @@ export default function SideQuests() {
   const categories = ["all", ...Object.keys(CATEGORY_ICONS)];
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <GlobalBreadcrumbs />
       <main className="container mx-auto px-4 py-8 max-w-6xl space-y-6">
         {/* Hero */}
@@ -631,6 +632,6 @@ export default function SideQuests() {
           </Button>
         </div>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

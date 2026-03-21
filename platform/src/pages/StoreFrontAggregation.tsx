@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Store, ShoppingBag, Link as LinkIcon, Plus, Info, CheckCircle2, ArrowRight, MapPin } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function StoreFrontAggregation() {
   const { toast } = useToast();
@@ -35,7 +36,7 @@ export default function StoreFrontAggregation() {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout>
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-blue-600 rounded-full text-white">
           <Store className="h-8 w-8" />
@@ -233,6 +234,6 @@ export default function StoreFrontAggregation() {
           </Card>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

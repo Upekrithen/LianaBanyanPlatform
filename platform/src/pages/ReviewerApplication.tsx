@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const SAMPLE_PIECE = `Our platform lets you invest in creator projects. You get equity in the project and can expect ROI as the project grows. Shareholders receive dividend payments.`;
 
@@ -66,7 +67,7 @@ export default function ReviewerApplication() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <PortalPageLayout>
         <p className="text-muted-foreground">Loading…</p>
       </div>
     );
@@ -191,6 +192,6 @@ export default function ReviewerApplication() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

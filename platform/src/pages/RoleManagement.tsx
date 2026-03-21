@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { useUserRole } from '@/hooks/useUserRole';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, UserPlus, Trash2 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 type AppRole = 'admin' | 'project_owner' | 'user';
 
@@ -94,7 +95,7 @@ export default function RoleManagement() {
 
   if (roleLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
@@ -235,6 +236,6 @@ export default function RoleManagement() {
           </CardContent>
         </Card>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

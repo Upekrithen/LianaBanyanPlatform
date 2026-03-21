@@ -36,6 +36,7 @@ import {
 import { SwoopProjectCard } from "@/components/SwoopProjectCard";
 import { SwoopNominationForm } from "@/components/SwoopNominationForm";
 import { DonationCommitmentForm } from "@/components/DonationCommitmentForm";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface SwoopProject {
   id: string;
@@ -138,7 +139,7 @@ export default function SwoopPage() {
   );
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -402,6 +403,6 @@ export default function SwoopPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

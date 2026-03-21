@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Download, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function SampleDataXML() {
   const navigate = useNavigate();
@@ -303,7 +304,7 @@ export default function SampleDataXML() {
   const fullProjectXML = generateFullProjectXML();
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -387,6 +388,6 @@ export default function SampleDataXML() {
             </TabsContent>
           </Tabs>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

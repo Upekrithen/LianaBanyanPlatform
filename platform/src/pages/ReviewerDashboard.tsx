@@ -11,6 +11,7 @@ import { ReviewerBadge, type ReviewerTier } from "@/components/reviewer/Reviewer
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 type QueueItem = {
   id: string;
@@ -84,7 +85,7 @@ export default function ReviewerDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <PortalPageLayout>
         <p className="text-muted-foreground">Loading…</p>
       </div>
     );
@@ -226,6 +227,6 @@ export default function ReviewerDashboard() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

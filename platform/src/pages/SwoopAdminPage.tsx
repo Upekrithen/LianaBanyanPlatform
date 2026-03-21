@@ -1,9 +1,10 @@
 import { SwoopAdminDashboard } from "@/components/SwoopAdminDashboard";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function SwoopAdminPage() {
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
+    <PortalPageLayout>
       <SwoopAdminDashboard />
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Loader2, TreePine } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function SponsorSuccess() {
   const [searchParams] = useSearchParams();
@@ -90,7 +91,7 @@ export default function SponsorSuccess() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
+    <PortalPageLayout>
       <Card className="max-w-md w-full mx-4">
         <CardContent className="pt-8 pb-8 text-center space-y-4">
           {status === "verifying" && (
@@ -138,6 +139,6 @@ export default function SponsorSuccess() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

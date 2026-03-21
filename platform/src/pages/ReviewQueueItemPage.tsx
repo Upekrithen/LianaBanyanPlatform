@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, ArrowUp, Unlock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ReviewStatusBadge } from "@/components/reviewer/ReviewStatusBadge";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 type QueueRow = {
   id: string;
@@ -99,7 +100,7 @@ export default function ReviewQueueItemPage() {
 
   if (loading || !item) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <PortalPageLayout>
         <p className="text-muted-foreground">{item ? "Loading…" : "Not found."}</p>
       </div>
     );
@@ -213,6 +214,6 @@ export default function ReviewQueueItemPage() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -11,6 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { Download, Save, FileText, Calculator } from "lucide-react";
 import jsPDF from "jspdf";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface ScenarioData {
   projectName: string;
@@ -228,7 +229,7 @@ export default function Simulator() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Project Simulator</h1>
@@ -419,6 +420,6 @@ export default function Simulator() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

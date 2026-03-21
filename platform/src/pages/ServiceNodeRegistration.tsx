@@ -47,6 +47,7 @@ import {
 import { toast } from "sonner";
 import { ColdStartRecipeCards } from "@/components/ColdStartRecipeCards";
 import { SuccessStories } from "@/components/SuccessStories";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Infrastructure types with details
 const INFRASTRUCTURE_TYPES = [
@@ -292,7 +293,7 @@ export default function ServiceNodeRegistration() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
+    <PortalPageLayout>
       {/* Header */}
       <div className="text-center space-y-2">
         <div className="flex items-center justify-center gap-3">
@@ -880,6 +881,6 @@ export default function ServiceNodeRegistration() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PortalPageLayout>
   );
 }

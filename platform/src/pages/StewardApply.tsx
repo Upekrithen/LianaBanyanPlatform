@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Shield, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const INITIATIVE_OPTIONS = [
   "Let's Make Dinner",
@@ -82,7 +83,7 @@ export default function StewardApply() {
 
   if (!user) {
     return (
-      <div className="container max-w-xl mx-auto p-6">
+      <PortalPageLayout>
         <Card>
           <CardContent className="py-8 text-center">
             <p className="text-muted-foreground mb-4">Sign in to apply as a Steward.</p>
@@ -178,6 +179,6 @@ export default function StewardApply() {
           </Button>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

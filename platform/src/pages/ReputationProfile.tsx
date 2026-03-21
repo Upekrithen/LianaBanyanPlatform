@@ -9,6 +9,7 @@ import { UnifiedBadgeDisplay } from '@/components/UnifiedBadgeDisplay';
 import { XPScoreDisplay } from '@/components/profile/XPScoreDisplay';
 import { Award, TrendingUp, Users, Shield, EyeOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function ReputationProfile() {
   const { userId } = useParams();
@@ -95,7 +96,7 @@ export default function ReputationProfile() {
 
   if (!profile || !reputation) {
     return (
-      <div className="container mx-auto p-8">
+      <PortalPageLayout>
         <div className="text-center">Loading reputation profile...</div>
       </div>
     );
@@ -315,6 +316,6 @@ export default function ReputationProfile() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

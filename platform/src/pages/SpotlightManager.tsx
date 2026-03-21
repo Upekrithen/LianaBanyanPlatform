@@ -10,6 +10,7 @@ import {
   ArrowLeft, Plus, Pencil, Trash2, Eye, EyeOff, BarChart3, Save, X,
   TrendingUp, MousePointerClick, Clock, Star
 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface SpotlightRow {
   id: string;
@@ -143,7 +144,7 @@ export default function SpotlightManager() {
   const overallCTR = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+    <PortalPageLayout>
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex items-center gap-4 mb-6">
           <Button variant="ghost" size="icon" onClick={() => navigate('/moneypenny')}>
@@ -355,6 +356,6 @@ export default function SpotlightManager() {
           </div>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Scale, FileText, DollarSign, CheckCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function StewardLegalDashboard() {
   const { user } = useAuth();
@@ -63,7 +64,7 @@ export default function StewardLegalDashboard() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
+      <PortalPageLayout>
         <p>Loading legal formations...</p>
       </div>
     );
@@ -317,6 +318,6 @@ export default function StewardLegalDashboard() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

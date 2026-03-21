@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { ProductionRunDraft } from "@/components/ProductionRunDraft";
 import { SuccessStories } from "@/components/SuccessStories";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const INITIATIVE_NODES = [
   {
@@ -94,7 +95,7 @@ export default function RunANode() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-10">
         <button
           onClick={() => navigate("/launch")}
@@ -205,6 +206,6 @@ export default function RunANode() {
           <SuccessStories maxItems={3} />
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

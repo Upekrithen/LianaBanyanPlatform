@@ -6,11 +6,12 @@
  */
 
 import { ScrollForge } from "@/components/ScrollForge";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function ScrollForgePage() {
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <PortalPageLayout>
       <ScrollForge />
-    </div>
+    </PortalPageLayout>
   );
 }

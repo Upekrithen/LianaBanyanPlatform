@@ -13,10 +13,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function SanAntonioLanding() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" data-xray-id="sa-landing-page">
+    <PortalPageLayout>
       <div className="container mx-auto px-4 py-10 max-w-3xl">
         {/* Hero */}
         <section className="text-center mb-12" data-xray-id="sa-landing-hero">
@@ -214,6 +215,6 @@ export default function SanAntonioLanding() {
           </Table>
         </section>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
