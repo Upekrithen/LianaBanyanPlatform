@@ -9,44 +9,55 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 62 (March 20, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 63 (March 20, 2026)
 
-**Latest commit:** `38f6760` — Knight 62 Batch 9: 15 pages migrated to PortalPageLayout
-**Previous commits:** `d896a46` (Batches 7-8: 35 pages), `961e0c5` (Session 61)
+**Latest commit:** `7909d79` — Knight 63 Batch 12: 20 pages migrated to PortalPageLayout
+**Previous commits:** `c152b37` (Batch 11), `c35e34a` (Batch 10), `38f6760` (Session 62)
 
-**Status (March 20, 2026 — Session 62 COMPLETE):**
-- Phase 1 Visual Unification: 50 more pages migrated this session (3 batches of quick-wins)
-- Total pages on PortalPageLayout: **104** (54 prior + 50 this session)
-- Remaining pages: ~208 total .tsx files in pages/, minus ~104 migrated = ~208 remaining
-  - Many are sub-pages, success pages, auth pages that may not need migration
-  - Estimated ~120-140 still need PortalPageLayout wrapper
-  - ~12 "needs care" pages identified (complex layouts: Dashboard, SaltMines, BeaconExplainer, TheHelm, HallOfInnovations, CueCardLanding, C20PilotDashboard, MoneypennyBriefing, GroceryBoxPage, GroupCookPage, PantryPage, ProprietaryRecipesPage)
-- **Innovation count:** 1,754 | **Patent claims:** 1,401 across 8 provisionals
-- **Deployed to lianabanyan.com** — all 50 new migrations live
+**Status (March 20, 2026 — Session 63 COMPLETE):**
+- Phase 1 Visual Unification: 60 more pages migrated this session (3 batches)
+- **Total pages on PortalPageLayout: 165** (104 prior + ~61 this session)
+- **Remaining: 147 un-migrated** (of 312 total .tsx files)
+  - 108 TODO (need wrapper)
+  - 18 SKIP (12 needs-care for Bishop + Index + Senate + Auth + RedCarpet + TikTokCallback + Index_REFERENCE)
+  - 21 MAYBE SKIP (success/confirmation pages, HexIsle sub-pages, utility pages)
+- **Innovation count:** 1,784 | **Patent claims:** 1,401 across 8 provisionals
+- **Deployed to lianabanyan.com** — all migrations live
 
-### What Was Done (Session 62 — Knight)
+### What Was Done (Session 63 — Knight)
 
-#### 1. Batch 7 — 21 pages migrated
-Single-container pages and dark gradient pages:
-HexIsle, MoneyPenny, CueCardDeckPage, Briefcase, TreasureMapGame, ProposalsListing, MyPledges, DurinsDoor (both copies), GoldenKeyQuest, Tribes, MatchTrade, TheFurnace, FlyOnTheWallPage, Workshop, ManufacturingStore, ShowcasePromotion, GhostWorldMall, MemberAgreement, TrickleOnboarding, VouchSystem
+#### 1. Batch 10 — 20 pages migrated
+Admin, Ambassador (5), Arenas, AsYouWishCard, ATTILanding, BeaconRunCreator, BecomeCaptain, BifrostCardBuilder, BizKaleidoscope, BrewsterBonus, BuildBusiness
 
-#### 2. Batch 8 — 14 pages migrated
-Dark stage pages + default variant pages:
-DailyNews, MainSquare, SendLists, CreatorDraftPick, CoverageMinutesDashboard, GhostWorld, FlyOnTheWall, CrewCallPage, PuddingDemo, Marketplace, StoreTemplates, LookingGlass, XPLeaderboard, ModularManufacturing
+#### 2. Batch 11 — 20 pages migrated (+ 3 tag-mismatch fixes)
+BusinessPathway, BusinessPlan, BusinessPlanGenerator, CampaignProduction, CephasCategoryListing, CephasContentDetail, CephasInnovationPedestals, CephasPressJunket, CephasSearch, ChefMarketplace, ClientAPIManager, CoasterMedallion, ColdStartDashboard, CompanyIndependence, CompanyIsland, ContentControls, ContentPipeline, ContingencyOperators, ContractPositions, ContractScaleManager
 
-#### 3. Batch 9 — 15 pages migrated
-Dark stage pages + single-container pages:
-NodeCaptain, StarChamber, SantaEverAfter, TerenoCertification, CPlus20Dashboard, C20Leaderboard, MoneyPennyQA, MoneyPennySocial, BoiseBusinessCardsExample, SponsorPortal (both copies), DeckCardStudio, DeckCollection, SponsorshipPage, BlockchainExplorer
+#### 3. Batch 12 — 20 pages migrated
+Contribution, CottageLaw, CrankIt, CreateProject, CreatorProfile, Credentials, CrewDashboard, CrewInvite, CrewNew, Crowdfunding, CrowsNest, CueCardShare, DefenseKlausSub, DesignBattle, DesignedToBeBroken, DeveloperPortal, DMKeep, DocMarketplace, ExternalServices, FactoryHub
 
 #### 4. Production Deploy
-Built and deployed all 50 migrations to lianabanyan.com.
+Built and deployed all 60 migrations to lianabanyan.com.
 
-Commits: `d896a46`, `38f6760`
+Commits: `c35e34a`, `c152b37`, `7909d79`
+
+### Remaining Page Inventory (for next session)
+
+**108 TODO pages** (need PortalPageLayout wrapper):
+FamilyDetailPage, FamilyPage, FarmerSupplyChain, FoundingRunLanding, FriendPage, GroceryNodeRegistration, GuildHub, GuildPhaseManager, Guilds, GuildStakeSuccess, HarvestIsland, HelmPage, HelpEachOther, HelpWanted, HeraldSubscription, HeraldSuccess, HeroProject, HexelSawtoothCoralDetail, HexelSlottedTopDetail, HexelWeeklyDetail, HexIsleBattlePhilosophy, HexisleDashboard, HexIsleDownloads, HexIsleEncyclopedia, HexIsleIslandPage, HexIsleOverworld, HexIsleProjects, HexIsleVote, HexIsleWorld3D, IncumbentAdvantage, IndustryPricing, IPPortfolio, IPRegistration, IslandAssignmentBoard, IslandBuilder, IslandCreator, IslandDesignPortfolio, IslandDetail, IslandWorldMap, LandingPageManager, LaunchHub, LBAssetLibrary, LBInternalPositions, LikeWhat, LMDReviewerDashboard, LMDReviewSubmit, MakerSpotlight, ManagePositions, MedallionManagement, MedallionSwap, MedallionViewer, MemberResources, MembershipConfirm, MembershipSuccess, NoAtomo, NodeRegistration, OnboardingStart, OnboardingStatus, PaperPage, PatrioticInterdependentalist, PedestalBrowser, PeerContracts, Petitions, PhaseMimicTrunk, PlantSeeds, Portfolio, PositionCategories, PreBetaRecruits, PreOrderFlow, PreOrderSuccess, ProductDetail, ProductionQueue, ProductionRuns, ProfileSettings, ProjectLanding, Projects, ProjectView, ProposalDetail, ProteusAnchor, PrototypingContracts, RealWorldPuzzles, ReputationProfile, ReviewerApplication, ReviewerDashboard, ReviewQueueItem, RoleManagement, RunANode, SampleDataXML, SanAntonioLanding, ScrollForge, ServiceNodeRegistration, SideQuests, Simulator, SpotlightManager, SponsorSuccess, StewardApply, StewardLegalDashboard, StoreFrontAggregation, SubdomainManager, SwoopAdmin, SwoopPage, SwoopProject, TaskList, TaskLog, TasteTester, TemplateSetup, The2ndSecondPortal, ThemeManagement, ThoughtExperiment, TransparentLedger, TreasureIsland, TreasureMap, TreasureMapBuilder, TreasureMapCreator, VideoScripts, WildfireRunsPage, Withdraw, CreditPurchaseSuccess, + 11 cue-cards/ subpages
+
+**18 SKIP pages** (Bishop edge cases + untouchables):
+Dashboard, SaltMines, BeaconExplainer, TheHelm, HallOfInnovations, CueCardLanding, C20PilotDashboard, MoneypennyBriefing, GroceryBoxPage, GroupCookPage, PantryPage, ProprietaryRecipesPage, Index, Senate, Auth, RedCarpet, TikTokCallback, Index_REFERENCE
 
 ### Next Session Should:
-- Continue wrapping remaining ~120-140 pages in batches of 15-20
-- Tackle the ~12 "needs care" pages (complex layouts with custom headers, sticky elements, immersive views)
-- Pattern is still mechanical for most: add import, replace outer container div, close with PortalPageLayout
+- Continue wrapping the 108 TODO pages in batches of 15-20 (5-6 more batches to finish Part 1)
+- DO NOT start Part 2 (interior color token replacement) until ALL wrappers are in place
+- After all mechanical wraps are done, write final handoff listing which pages are ready for Part 2
+
+---
+
+## PREVIOUS SESSION: Knight Session 62 (March 20, 2026)
+
+Batches 7-9: 50 pages migrated (HexIsle, MoneyPenny, CueCardDeckPage, Briefcase, TreasureMapGame, ProposalsListing, MyPledges, DurinsDoor, GoldenKeyQuest, Tribes, MatchTrade, TheFurnace, FlyOnTheWallPage, Workshop, ManufacturingStore, ShowcasePromotion, GhostWorldMall, MemberAgreement, TrickleOnboarding, VouchSystem, DailyNews, MainSquare, SendLists, CreatorDraftPick, CoverageMinutesDashboard, GhostWorld, FlyOnTheWall, CrewCallPage, PuddingDemo, Marketplace, StoreTemplates, LookingGlass, XPLeaderboard, ModularManufacturing, NodeCaptain, StarChamber, SantaEverAfter, TerenoCertification, CPlus20Dashboard, C20Leaderboard, MoneyPennyQA, MoneyPennySocial, BoiseBusinessCardsExample, SponsorPortal x2, DeckCardStudio, DeckCollection, SponsorshipPage, BlockchainExplorer)
 
 ---
 
