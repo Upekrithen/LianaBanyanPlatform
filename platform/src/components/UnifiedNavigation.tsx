@@ -38,6 +38,7 @@ const allNavItems: NavItem[] = [
   { title: "Guilds", url: "/guilds", icon: Users2, portal: "marketplace" },
   { title: "BandWagon", url: "/guilds/hub?tab=bandwagon", icon: TrendingUp, portal: "marketplace" },
   { title: "Subscriptions", url: "/subscriptions", icon: Repeat, portal: "marketplace" },
+  { title: "Storefront Builder", url: "/tools/storefront-builder", icon: Building2, portal: "marketplace" },
   { title: "Steward", url: "/steward", icon: Shield, portal: "marketplace" },
   { title: "Governance", url: "/governance/proposals", icon: Scale, portal: "marketplace" },
   { title: "Clans", url: "/clans", icon: Shield, portal: "marketplace" },

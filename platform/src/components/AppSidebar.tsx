@@ -31,6 +31,7 @@ const marketplaceMainItems = [
   { title: "Daily News", url: "/daily-news", icon: Newspaper },
   { title: "BandWagon", url: "/bandwagon", icon: Rocket },
   { title: "Subscriptions", url: "/subscriptions", icon: Repeat },
+  { title: "Storefront Builder", url: "/tools/storefront-builder", icon: Store },
   { title: "Political Expedition", url: "/political-expedition", icon: Flag },
   { title: "XP Leaderboard", url: "/xp-leaderboard", icon: Trophy },
   { title: "Steward Command Post", url: "/steward", icon: Shield },

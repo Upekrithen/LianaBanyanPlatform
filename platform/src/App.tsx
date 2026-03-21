@@ -335,6 +335,8 @@ const CreatorDraftPick = lazy(() => import("./pages/CreatorDraftPick"));
 const TrickleOnboarding = lazy(() => import("./pages/TrickleOnboarding"));
 const VouchSystem = lazy(() => import("./pages/VouchSystem"));
 const Subscriptions = lazy(() => import("./pages/Subscriptions"));
+const StorefrontBuilder = lazy(() => import("./pages/tools/StorefrontBuilder"));
+const MenuPage = lazy(() => import("./pages/MenuPage"));
 const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
 const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
@@ -805,6 +807,8 @@ const App = () => (
                         <Route path="/onboarding/trickle" element={<ProtectedRoute><TrickleOnboarding /></ProtectedRoute>} />
                         <Route path="/vouch" element={<ProtectedRoute><VouchSystem /></ProtectedRoute>} />
                         <Route path="/subscriptions" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><Subscriptions /></Suspense>} />
+                        <Route path="/tools/storefront-builder" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StorefrontBuilder /></Suspense></ProtectedRoute>} />
+                        <Route path="/menu/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MenuPage /></Suspense>} />
                         <Route path="/chain-voting" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainVoting /></Suspense>} />
 
                         {/* Sessions 47-49 routes (Bishop 013) */}
