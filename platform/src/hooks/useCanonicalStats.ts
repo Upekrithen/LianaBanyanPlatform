@@ -19,7 +19,7 @@ export interface CanonicalStats {
 }
 
 const DEFAULTS: CanonicalStats = {
-  innovationCount: 1810,
+  innovationCount: 1828,
   crownJewels: 123,
   patentApplications: 8,
   patentClaims: 1401,
