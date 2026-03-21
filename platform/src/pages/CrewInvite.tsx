@@ -16,6 +16,7 @@ import { CrewInviteShare } from "@/components/crew/CrewInviteShare";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 interface CrewRow {
   id: string;
@@ -141,8 +142,8 @@ export default function CrewInvite() {
 
   if (step === "joined") {
     return (
-      <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="crew-invite-page">
-        <div className="max-w-2xl mx-auto space-y-8">
+      <PortalPageLayout maxWidth="sm" xrayId="crew-invite">
+        <div className="space-y-8">
           <h1 className="text-3xl font-bold">{crew.name}</h1>
           <p className="text-lg text-green-600 dark:text-green-400 font-medium">
             You&apos;re member #{members.length}. {remainingSpots} spot{remainingSpots !== 1 ? "s" : ""} left.
@@ -158,15 +159,15 @@ export default function CrewInvite() {
             Go to Crew dashboard →
           </Button>
         </div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   if (step === "joining") {
     const canSubmit = joinForm.offerTitle.trim().length > 0 && joinForm.committed;
     return (
-      <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="crew-invite-join-form">
-        <div className="max-w-xl mx-auto space-y-8">
+      <PortalPageLayout maxWidth="sm" xrayId="crew-invite">
+        <div className="space-y-8">
           <h1 className="text-2xl font-bold">Join {crew.name}</h1>
           <p className="text-muted-foreground">What will you offer in this first run?</p>
           <div className="space-y-4">
@@ -216,13 +217,13 @@ export default function CrewInvite() {
             </Button>
           </div>
         </div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="crew-invite-page">
-      <div className="max-w-2xl mx-auto space-y-8">
+    <PortalPageLayout maxWidth="sm" xrayId="crew-invite">
+      <div className="space-y-8">
         <h1 className="text-3xl font-bold">{crew.name}</h1>
         <p className="inline-block px-3 py-1 rounded-full bg-green-500/20 text-green-600 dark:text-green-400 text-sm font-medium">
           {focusLabel}
@@ -273,6 +274,6 @@ export default function CrewInvite() {
           </button>
         </p>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

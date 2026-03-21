@@ -36,6 +36,7 @@ import {
   Ghost,
   User,
 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface UsageStats {
   totalAttempts: number;
@@ -82,8 +83,7 @@ export default function CrankIt() {
   const hasFreeTierRemaining = usageStats.freeRemaining > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-amber-500/5">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <PortalPageLayout maxWidth="lg" xrayId="crank-it" className="bg-gradient-to-br from-background via-background to-amber-500/5">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
@@ -303,7 +303,6 @@ export default function CrankIt() {
             </CardContent>
           </Card>
         )}
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -9,6 +9,7 @@
  */
 
 import { useMemo, useCallback } from "react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -100,7 +101,7 @@ function CrowsNestInner() {
   const showBottomPanel = overlayMode === "queue" || overlayMode === "to_go";
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout variant="immersive" xrayId="crows-nest">
       {/* Header */}
       <div className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 sticky top-0 z-30">
         <div className="container mx-auto px-4 py-4 max-w-7xl">
@@ -274,7 +275,7 @@ function CrowsNestInner() {
 
       {/* Bottom spacer so content isn't hidden behind fixed bar */}
       <div className="h-14" />
-    </div>
+    </PortalPageLayout>
   );
 }
 

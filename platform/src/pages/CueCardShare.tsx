@@ -4,6 +4,7 @@
  */
 
 import { useState, useCallback } from "react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { useParams } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import QRCode from "qrcode";
@@ -134,8 +135,8 @@ export default function CueCardShare() {
   }, [cardUrl, type, content.backCopy]);
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-6" data-xray-id="cue-card-share">
-      <div className="w-full max-w-md space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="cue-card-share">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-6rem)] w-full max-w-md mx-auto space-y-6">
         {/* Card preview — CR80 aspect ratio 3.375:2.125 */}
         <div
           className="relative w-full mx-auto cursor-pointer select-none"
@@ -192,6 +193,6 @@ export default function CueCardShare() {
           </Button>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -20,6 +20,7 @@ import type { CrewOfferMember } from "@/components/crew/CrewOfferGrid";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 interface CrewRow {
   id: string;
@@ -177,8 +178,8 @@ export default function CrewDashboard() {
   const isActive = crew.status === "active";
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12" data-xray-id="crew-dashboard">
-      <div className="max-w-3xl mx-auto space-y-8">
+    <PortalPageLayout maxWidth="md" xrayId="crew-dashboard">
+      <div className="space-y-8">
         <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => navigate("/portal")}>
           <ArrowLeft className="w-4 h-4 mr-1" /> Portal
         </Button>
@@ -314,6 +315,6 @@ export default function CrewDashboard() {
           </>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

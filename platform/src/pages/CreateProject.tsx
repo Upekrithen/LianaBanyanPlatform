@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface InviteData {
   id: string;
@@ -125,12 +126,12 @@ export default function CreateProject() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <PortalPageLayout variant="immersive" xrayId="create-project" className="flex items-center justify-center bg-slate-950">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-amber-400 mx-auto mb-4" />
           <p className="text-slate-400">Loading your invite...</p>
         </div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
@@ -145,17 +146,19 @@ export default function CreateProject() {
   }) : fields;
 
   return (
-    <ChalkOutlineOnboarding
-      projectId={projectId}
-      fields={preFilledFields}
-      onSave={handleSave}
-      onLaunch={handleLaunch}
-      onClose={handleClose}
-      title={inviteData ? `Welcome, ${inviteData.creator_handle}!` : 'Create Your Project'}
-      subtitle={inviteData
-        ? 'Fill in the chalk outlines to set up your creator profile'
-        : 'Fill in the chalk outlines to bring your project to life'
-      }
-    />
+    <PortalPageLayout variant="immersive" xrayId="create-project">
+      <ChalkOutlineOnboarding
+        projectId={projectId}
+        fields={preFilledFields}
+        onSave={handleSave}
+        onLaunch={handleLaunch}
+        onClose={handleClose}
+        title={inviteData ? `Welcome, ${inviteData.creator_handle}!` : 'Create Your Project'}
+        subtitle={inviteData
+          ? 'Fill in the chalk outlines to set up your creator profile'
+          : 'Fill in the chalk outlines to bring your project to life'
+        }
+      />
+    </PortalPageLayout>
   );
 }

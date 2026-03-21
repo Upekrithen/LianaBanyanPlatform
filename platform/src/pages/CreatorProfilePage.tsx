@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, User, ExternalLink } from "lucide-react";
 import { CreatorShowcase } from "@/components/creator";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const CREATOR_TYPE_LABELS: Record<string, string> = {
   physical: "Physical Products",
@@ -104,9 +105,11 @@ export default function CreatorProfilePage() {
   if (!creatorId) return null;
   if (isLoading || !profile) {
     return (
-      <div className="container max-w-2xl mx-auto p-6 flex justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-      </div>
+      <PortalPageLayout maxWidth="md" xrayId="creator-profile">
+        <div className="flex justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
@@ -114,8 +117,8 @@ export default function CreatorProfilePage() {
   const firstProjectId = (projects || [])[0]?.id;
 
   return (
-    <div className="min-h-screen bg-background" data-xray-id="creator-profile-page">
-      <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
+    <PortalPageLayout maxWidth="md" xrayId="creator-profile">
+      <div className="space-y-6">
         <Button variant="ghost" onClick={() => navigate("/creators")} className="gap-2">
           <ArrowLeft className="w-4 h-4" />
           Back to Creators
@@ -199,6 +202,6 @@ export default function CreatorProfilePage() {
           </p>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

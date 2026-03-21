@@ -47,6 +47,7 @@ import {
   TYPICALLY_PROHIBITED,
   type CottageLawRule,
 } from '@/lib/cottageLawService';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const US_STATES = [
   { code: 'AL', name: 'Alabama' }, { code: 'AK', name: 'Alaska' }, { code: 'AZ', name: 'Arizona' },
@@ -88,8 +89,8 @@ export default function CottageLawPage() {
   const checklist = rules ? getComplianceChecklist(rules) : [];
 
   return (
-    <div className="landing-page min-h-screen p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="cottage-law">
+      <div className="space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -408,6 +409,6 @@ export default function CottageLawPage() {
           </Card>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

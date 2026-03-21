@@ -101,8 +101,7 @@ export function CrewCreationWizard() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
-      <div className="max-w-2xl mx-auto space-y-8">
+    <div className="space-y-8">
         <Button
           variant="ghost"
           size="sm"
@@ -277,7 +276,6 @@ export function CrewCreationWizard() {
             </CardContent>
           </Card>
         )}
-      </div>
     </div>
   );
 }

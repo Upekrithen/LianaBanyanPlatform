@@ -14,7 +14,7 @@
  * They can invoke protection by remembering the domain.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { Shield, Check, Mail, Heart, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 export default function DefenseKlausSubmarineDoor() {
   const { referralCode } = useParams<{ referralCode?: string }>();
@@ -131,7 +132,7 @@ export default function DefenseKlausSubmarineDoor() {
 
   if (isComplete) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center p-4">
+      <PortalPageLayout variant="stage" maxWidth="xl" xrayId="defense-klaus-submarine" className="flex flex-col justify-center">
         <Card className="max-w-md w-full bg-gray-900/80 border-green-500/30">
           <CardContent className="pt-8 pb-8 text-center space-y-6">
             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto">
@@ -181,12 +182,12 @@ export default function DefenseKlausSubmarineDoor() {
             </p>
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 flex items-center justify-center p-4">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="defense-klaus-submarine" className="flex flex-col justify-center">
       <Card className="max-w-md w-full bg-gray-900/80 border-purple-500/30">
         <CardContent className="pt-8 pb-8 space-y-6">
           {/* Header */}
@@ -255,6 +256,6 @@ export default function DefenseKlausSubmarineDoor() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

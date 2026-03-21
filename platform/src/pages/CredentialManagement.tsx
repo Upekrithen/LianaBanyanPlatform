@@ -10,6 +10,7 @@ import { Copy, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CredentialManagement = () => {
   const { toast } = useToast();
@@ -127,7 +128,8 @@ const CredentialManagement = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="credential-management">
+      <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">XML Access Credentials</h1>
@@ -307,7 +309,8 @@ const CredentialManagement = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 };
 

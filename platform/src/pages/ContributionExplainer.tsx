@@ -1,3 +1,4 @@
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServiceValueCalculator } from "@/components/ServiceValueCalculator";
@@ -6,7 +7,8 @@ import { ArrowRight, TrendingUp, Clock, DollarSign, Award, ShieldCheck } from "l
 
 const ContributionExplainer = () => {
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout maxWidth="xl" xrayId="contribution-explainer">
+      <div className="space-y-8">
       {/* Hero Section */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold text-foreground">Sponsorship Guide</h1>
@@ -317,7 +319,8 @@ const ContributionExplainer = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 };
 

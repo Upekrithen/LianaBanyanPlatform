@@ -26,6 +26,7 @@ import {
   Briefcase,
   Link as LinkIcon
 } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const DEVELOPER_SECTIONS = [
   {
@@ -99,7 +100,8 @@ const CONTRIBUTION_PATHS = [
 
 export default function DeveloperPortal() {
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout maxWidth="xl" xrayId="developer-portal">
+      <div className="w-full">
       {/* Hero */}
       <div className="bg-gradient-to-b from-primary/5 to-background border-b">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
@@ -254,6 +256,7 @@ export default function DeveloperPortal() {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

@@ -50,6 +50,7 @@ import {
   type DocType,
   type DocCategory,
 } from '@/lib/documentationMarketplace';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CATEGORY_ICONS: Record<DocCategory, React.ReactNode> = {
   cottage_law: <Home className="h-4 w-4" />,
@@ -91,8 +92,8 @@ export default function DocumentationMarketplacePage() {
   });
 
   return (
-    <div className="landing-page min-h-screen p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="documentation-marketplace">
+      <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -320,7 +321,7 @@ export default function DocumentationMarketplacePage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }
 

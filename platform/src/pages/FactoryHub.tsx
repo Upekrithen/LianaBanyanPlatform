@@ -35,6 +35,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Production levels — canonical from hexisleProjectSpec.ts, NOT fiction
 const PRODUCTION_LEVELS = [
@@ -224,7 +225,8 @@ export default function FactoryHub() {
   }));
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl space-y-8">
+    <PortalPageLayout maxWidth="full" xrayId="factory-hub">
+      <div className="space-y-8">
       {/* Hero Header */}
       <div className="text-center space-y-4">
         <motion.div
@@ -514,6 +516,7 @@ export default function FactoryHub() {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

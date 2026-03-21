@@ -18,6 +18,7 @@ import {
   Users,
   DollarSign
 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function CrowdfundingIntegration() {
   const { toast } = useToast();
@@ -117,7 +118,8 @@ export default function CrowdfundingIntegration() {
   ];
 
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="crowdfunding">
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
@@ -339,6 +341,7 @@ export default function CrowdfundingIntegration() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

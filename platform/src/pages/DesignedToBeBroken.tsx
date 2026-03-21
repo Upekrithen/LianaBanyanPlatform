@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Hammer, ArrowRight, CheckCircle2, Shield, Users, Coins, Gift, Zap, Heart, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const MARKS_FACTS = [
   { q: "How do I earn Marks?", a: "Through participation — completing bounties, production work, quality verification (STAMP), backing successful projects, and any form of cooperative contribution. Marks emerge from differential: the gap between what you contribute and what you consume." },
@@ -20,8 +21,8 @@ export default function DesignedToBeBroken() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="designed-to-be-broken">
-      <div className="container max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="designed-to-be-broken">
+      <div className="space-y-8">
         {/* Hero */}
         <header className="text-center space-y-4 py-8">
           <div className="flex justify-center">
@@ -204,6 +205,6 @@ export default function DesignedToBeBroken() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

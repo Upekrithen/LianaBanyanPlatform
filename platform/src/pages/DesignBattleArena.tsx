@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { DesignBattleCard } from "@/components/DesignBattleCard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -101,7 +102,7 @@ export default function DesignBattleArena() {
   const myFeathers = crowFeathers?.length || 0;
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="design-battle-arena">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold flex items-center justify-center gap-3">
@@ -352,6 +353,6 @@ export default function DesignBattleArena() {
           )}
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

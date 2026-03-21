@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Map, Trophy, Timer, Feather, Key, Flame, Plus, GripHorizontal, Settings, Users, Share2, Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function DMKeepSystem() {
   const { toast } = useToast();
@@ -23,7 +24,7 @@ export default function DMKeepSystem() {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="dm-keep-system">
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-rose-600 rounded-full text-white">
           <Map className="h-8 w-8" />
@@ -267,6 +268,6 @@ export default function DMKeepSystem() {
         </TabsContent>
 
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }
