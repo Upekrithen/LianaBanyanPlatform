@@ -1,10 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FileCheck, Clock, Award, Wrench } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function PrototypingContracts() {
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout>
       <div>
         <h1 className="text-3xl font-bold">Prototyping Contracts</h1>
         <p className="text-muted-foreground">
@@ -71,6 +72,6 @@ export default function PrototypingContracts() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

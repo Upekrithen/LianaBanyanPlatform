@@ -15,6 +15,7 @@ import { ProjectTestingTab } from '@/components/ProjectTestingTab';
 import { DerivativeProjectsManager } from '@/components/DerivativeProjectsManager';
 import { ProjectPledgeProgress } from '@/components/ProjectPledgeProgress';
 import { ClipboardCheck, LayoutDashboard } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Product {
   id: string;
@@ -324,7 +325,7 @@ export default function ProjectView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <PortalPageLayout>
         <p>Loading project...</p>
       </div>
     );
@@ -597,6 +598,6 @@ export default function ProjectView() {
           </TabsContent>
         </Tabs>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

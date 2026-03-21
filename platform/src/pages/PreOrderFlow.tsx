@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface PreOrderItem {
   id: string;
@@ -228,7 +229,7 @@ export default function PreOrderFlow() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-3xl mx-auto space-y-8">
         <button
           onClick={() => navigate("/hexisle/founding-run")}
@@ -531,6 +532,6 @@ export default function PreOrderFlow() {
         </div>
         </>)}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

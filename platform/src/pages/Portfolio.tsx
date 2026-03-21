@@ -11,6 +11,7 @@ import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { BlockchainVerificationBadge } from '@/components/BlockchainVerificationBadge';
 import { SpeckleGarden } from '@/components/gamification/SpeckleGarden';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function Portfolio() {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -300,6 +301,6 @@ export default function Portfolio() {
           </div>
         </div>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

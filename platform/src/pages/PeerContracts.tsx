@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PeerContractList } from "@/components/PeerContractList";
 import { FileSignature } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const PeerContracts = () => {
   const { user, loading } = useAuth();
@@ -16,7 +17,7 @@ const PeerContracts = () => {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
+    <PortalPageLayout>
       <Card className="mb-6">
         <CardHeader>
           <div className="flex items-center gap-3">
@@ -45,7 +46,7 @@ const PeerContracts = () => {
       </Card>
 
       <PeerContractList />
-    </div>
+    </PortalPageLayout>
   );
 };
 

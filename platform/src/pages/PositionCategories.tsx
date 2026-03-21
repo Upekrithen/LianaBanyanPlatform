@@ -21,6 +21,7 @@ import {
   Truck,
   Plus
 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface PositionCategory {
   id: string;
@@ -174,7 +175,7 @@ export default function PositionCategories() {
   const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Position Categories</h1>
@@ -289,6 +290,6 @@ export default function PositionCategories() {
           </Button>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

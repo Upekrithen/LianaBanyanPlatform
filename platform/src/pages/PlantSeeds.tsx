@@ -25,6 +25,7 @@ import { saveGhostBeacon } from '@/lib/beacons';
 import { PathwayNavigator } from '@/components/PathwayNavigator';
 
 import { LarkWrapper } from '@/components/builder/LarkWrapper';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const PRODUCTION_LEVELS_BACKER = [
   { level: 1, state: 'Pre-Mint', joules: '5x', description: 'Highest risk, highest reward', color: 'text-red-400' },
@@ -65,7 +66,7 @@ export default function PlantSeeds() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+    <PortalPageLayout>
       {/* Breadcrumb */}
       <nav className="px-6 pt-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -462,6 +463,6 @@ export default function PlantSeeds() {
         onToggleExpand={() => setBenefitCardExpanded(!benefitCardExpanded)}
         onJoinClick={() => openOnboard({ reason: "back projects and earn service credits", actionLabel: "Join", membershipIncluded: true })}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

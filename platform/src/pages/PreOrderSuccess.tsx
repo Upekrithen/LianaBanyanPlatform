@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle, Loader2, XCircle, Package } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function PreOrderSuccess() {
   const [searchParams] = useSearchParams();
@@ -42,7 +43,7 @@ export default function PreOrderSuccess() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-background" data-xray-id="preorder-success">
+    <PortalPageLayout>
       <Card className="max-w-md w-full">
         <CardHeader className="text-center">
           {status === "verifying" && <Loader2 className="w-12 h-12 mx-auto animate-spin text-muted-foreground" />}
@@ -88,6 +89,6 @@ export default function PreOrderSuccess() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

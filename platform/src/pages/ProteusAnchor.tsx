@@ -15,6 +15,7 @@ import {
   type ProteusTransformation,
   type CompatLevel,
 } from "@/lib/proteusAnchorService";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const COMPAT_ICONS: Record<CompatLevel, typeof CheckCircle> = {
   full: CheckCircle,
@@ -52,7 +53,7 @@ export default function ProteusAnchorPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <PortalPageLayout>
         <div className="text-slate-400 animate-pulse">Loading Proteus Anchors...</div>
       </div>
     );
@@ -295,6 +296,6 @@ export default function ProteusAnchorPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

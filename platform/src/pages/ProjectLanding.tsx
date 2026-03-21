@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CheckCircle, Star, Users } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function ProjectLanding() {
   const { projectId, segmentSlug } = useParams();
@@ -71,7 +72,7 @@ export default function ProjectLanding() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
@@ -281,6 +282,6 @@ export default function ProjectLanding() {
           </Button>
         </div>
       </section>
-    </div>
+    </PortalPageLayout>
   );
 }

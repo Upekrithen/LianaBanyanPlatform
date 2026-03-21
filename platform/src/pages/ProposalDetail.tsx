@@ -23,6 +23,7 @@ import {
   AlertTriangle, FileText,
 } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function ProposalDetail() {
   const { id } = useParams<{ id: string }>();
@@ -105,7 +106,7 @@ export default function ProposalDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     );
@@ -315,6 +316,6 @@ export default function ProposalDetail() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

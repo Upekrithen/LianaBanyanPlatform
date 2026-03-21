@@ -26,6 +26,7 @@ import {
   Users, TrendingUp, Heart, Shield, Package, LayoutDashboard,
   Search, X, Filter,
 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CATEGORY_CONFIG: Record<string, { icon: any; label: string; color: string }> = {
   manufacturing: { icon: Factory, label: 'Manufacturing', color: 'text-amber-600' },
@@ -92,7 +93,7 @@ export default function Projects() {
     name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout>
       <GlobalBreadcrumbs />
 
       <main className="container mx-auto px-4 py-8 max-w-5xl space-y-6">
@@ -385,6 +386,6 @@ export default function Projects() {
           </Button>
         </div>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

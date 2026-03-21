@@ -45,6 +45,7 @@ import {
 import {
   getHandshakeFailureMessage,
 } from "@/lib/discourse/sourceDistribution";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ── Status Styling ─────────────────────────────────────────────────────────
 
@@ -139,7 +140,7 @@ export default function PhaseMimicTrunkManager() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white">
+    <PortalPageLayout>
       {/* Header */}
       <div className="border-b border-slate-700 bg-slate-900/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 py-4">
@@ -397,6 +398,6 @@ export default function PhaseMimicTrunkManager() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PortalPageLayout>
   );
 }

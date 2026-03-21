@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { UserPlus, Mail, CheckCircle, Star } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const POSITION_CATEGORIES = [
   { value: "create_idea" as const, label: "Ideation & Creation" },
@@ -128,7 +129,7 @@ export default function PreBetaRecruits() {
   }, {});
 
   return (
-    <div className="container mx-auto p-8 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Pre-Beta Recruits</h1>
@@ -350,6 +351,6 @@ export default function PreBetaRecruits() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

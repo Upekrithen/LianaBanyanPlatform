@@ -36,6 +36,7 @@ import {
   AlertTriangle, CheckCircle, XCircle, Landmark,
 } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Petition {
   id: string;
@@ -199,7 +200,7 @@ export default function Petitions() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     );
@@ -440,6 +441,6 @@ export default function Petitions() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PortalPageLayout>
   );
 }

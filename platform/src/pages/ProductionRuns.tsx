@@ -12,12 +12,13 @@ import { ProductionRunDraft } from "@/components/ProductionRunDraft";
 import { SuccessStories } from "@/components/SuccessStories";
 import { SuccessTicker } from "@/components/SuccessTicker";
 import { ColdStartRecipeCards } from "@/components/ColdStartRecipeCards";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function ProductionRuns() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-10">
         <button
           onClick={() => navigate(-1)}
@@ -60,6 +61,6 @@ export default function ProductionRuns() {
           <ColdStartRecipeCards initiative="lets-go-shopping" />
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

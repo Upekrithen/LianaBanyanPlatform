@@ -14,6 +14,7 @@ import { MedallionFundingExplainer } from "@/components/MedallionFundingExplaine
 import { RealTimeProductStats } from "@/components/RealTimeProductStats";
 import { PreorderVotingExplainer } from "@/components/PreorderVotingExplainer";
 import { BackerTrackPrompt } from "@/components/BackerTrackPrompt";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Product {
   id: string;
@@ -295,7 +296,7 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <PortalPageLayout>
         <p>Loading product...</p>
       </div>
     );
@@ -490,6 +491,6 @@ export default function ProductDetail() {
           onUnderstood={() => setExplainerUnderstood(true)}
         />
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }
