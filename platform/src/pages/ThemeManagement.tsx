@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Trash2, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Theme {
   id: string;
@@ -116,7 +117,7 @@ export default function ThemeManagement() {
 
   if (!user) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <PortalPageLayout>
         <Card>
           <CardHeader>
             <CardTitle>Authentication Required</CardTitle>
@@ -276,6 +277,6 @@ export default function ThemeManagement() {
           </Tabs>
         </div>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Film, DollarSign, Users, Download, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function VideoScripts() {
   const handlePrint = () => {
@@ -9,7 +10,7 @@ export default function VideoScripts() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-7xl">
+    <PortalPageLayout>
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">Video Production Scripts</h1>
         <p className="text-muted-foreground">
@@ -805,6 +806,6 @@ export default function VideoScripts() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

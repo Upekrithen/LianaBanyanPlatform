@@ -17,6 +17,7 @@ import {
   ArrowRight, QrCode, Droplets, Cog, Users
 } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function HexIsleCueCard() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function HexIsleCueCard() {
   const referrer = searchParams.get('ref');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-50 p-4 md:p-8">
+    <PortalPageLayout>
       <div className="max-w-3xl mx-auto space-y-8">
 
         {/* ─── FRONT OF CARD ─── */}
@@ -184,6 +185,6 @@ export default function HexIsleCueCard() {
           No ads. No data sales. $5/year funds the entire operation.
         </p>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -42,6 +42,7 @@ import {
   getTasteTesterExplanation,
   calculateMasterTasterProgress,
 } from '@/lib/tasteTesterService';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface TasteTestRecord {
   id: string;
@@ -102,7 +103,7 @@ export default function TasteTesterDashboard() {
 
   if (!user) {
     return (
-      <div className="landing-page min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <Card className="max-w-md">
           <CardHeader>
             <CardTitle>Sign In Required</CardTitle>
@@ -350,6 +351,6 @@ export default function TasteTesterDashboard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

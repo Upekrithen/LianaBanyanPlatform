@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Scale, ShieldAlert, Landmark, ArrowRight } from "lucide-react";
 
 import { LarkWrapper } from '@/components/builder/LarkWrapper';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function TowerOfPeace() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 p-6 md:p-12 font-serif">
+    <PortalPageLayout>
       <div className="max-w-4xl mx-auto space-y-12">
         
         {/* Header */}
@@ -91,6 +92,6 @@ export default function TowerOfPeace() {
         </div>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

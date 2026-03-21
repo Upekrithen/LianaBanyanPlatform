@@ -2,12 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, ChevronRight, Shield, Anchor, HeartHandshake } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const NotLeftNotRightPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-emerald-500/30">
+    <PortalPageLayout>
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <motion.div 
@@ -253,7 +254,7 @@ const NotLeftNotRightPage = () => {
           </div>
         </motion.div>
       </section>
-    </div>
+    </PortalPageLayout>
   );
 };
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function CreditPurchaseSuccess() {
   const [searchParams] = useSearchParams();
@@ -46,7 +47,7 @@ export default function CreditPurchaseSuccess() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <PortalPageLayout>
       <Card className="max-w-md w-full">
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -85,6 +86,6 @@ export default function CreditPurchaseSuccess() {
           </Button>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

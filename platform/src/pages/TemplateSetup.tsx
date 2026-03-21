@@ -103,7 +103,7 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <PortalPageLayout>
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
@@ -299,6 +299,7 @@ VITE_API_KEY=your-api-key-here`;
   const appRouterCode = `// src/App.tsx - Add these routes
 import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // In your Routes section:
 <Route path="/projects" element={<Projects />} />
@@ -547,7 +548,7 @@ Add the new routes to your App.tsx routing configuration
           </p>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 };
 

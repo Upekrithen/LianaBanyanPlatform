@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ClipboardList, Plus, Trash2, Download } from "lucide-react";
 import { format } from "date-fns";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface TaskLogEntry {
   id: string;
@@ -108,7 +109,7 @@ export default function TaskLog() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Task Log</h1>
@@ -215,6 +216,6 @@ export default function TaskLog() {
           </ScrollArea>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -59,6 +59,7 @@ import {
   ContainerFlipControlled,
   type FlipTopic,
 } from "@/components/ContainerFlip";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ── Topic data for each flip container ──
 
@@ -219,7 +220,7 @@ export default function The2ndSecondPortal() {
   );
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl px-4">
+    <PortalPageLayout>
       {/* ═══════════════ HEADER ═══════════════ */}
       <div className="flex items-center gap-4 mb-10">
         <div className="p-3 bg-zinc-800 rounded-full text-zinc-100">
@@ -847,6 +848,6 @@ export default function The2ndSecondPortal() {
           </Button>
         </div>
       </section>
-    </div>
+    </PortalPageLayout>
   );
 }

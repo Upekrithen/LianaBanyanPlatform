@@ -28,6 +28,7 @@ import {
   Hexagon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── Island Data for Cards ──────────────────────────────────────────────────
 
@@ -47,7 +48,7 @@ export default function HexIsleWorldCard() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-50 p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-12">
 
         {/* Header */}
@@ -207,6 +208,6 @@ export default function HexIsleWorldCard() {
         </div>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

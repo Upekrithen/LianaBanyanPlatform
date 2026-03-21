@@ -39,6 +39,7 @@ import { toast } from "sonner";
 import { SwoopNominationForm } from "@/components/SwoopNominationForm";
 import { SwoopVerificationWorkflow } from "@/components/SwoopVerificationWorkflow";
 import { useAuth } from "@/contexts/AuthContext";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Transaction {
   id: string;
@@ -160,7 +161,7 @@ export default function SwoopProjectPage() {
 
   if (projectLoading) {
     return (
-      <div className="container mx-auto p-6 max-w-4xl">
+      <PortalPageLayout>
         <Skeleton className="h-8 w-48 mb-4" />
         <Skeleton className="h-64 w-full mb-4" />
         <Skeleton className="h-32 w-full" />
@@ -527,6 +528,6 @@ export default function SwoopProjectPage() {
           </div>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

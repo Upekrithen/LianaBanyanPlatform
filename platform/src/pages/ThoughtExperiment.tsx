@@ -40,6 +40,7 @@ import { BusinessSimulator } from '@/components/BusinessSimulator';
 import { SimulationPortfolio } from '@/components/SimulationPortfolio';
 import { useToast } from '@/hooks/use-toast';
 import type { BusinessScenario, BusinessProjections } from '@/lib/businessSimulationService';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const FREE_TIER_LIMIT = 100;
 
@@ -151,7 +152,7 @@ export default function ThoughtExperiment() {
   const canSimulate = freeRemaining > 0 || parseInt(localStorage.getItem('lb_thought_experiment_batches') || '0') > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-purple-500/5">
+    <PortalPageLayout>
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
@@ -286,6 +287,6 @@ export default function ThoughtExperiment() {
           </Card>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

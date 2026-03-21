@@ -9,6 +9,7 @@ import { Map, MapPin, Save, Plus, Trash2, ArrowLeft, Lock, Unlock, Play } from "
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { getOrCreateGhostSession } from "@/lib/ghostWorld";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Mock data for system beacons
 const SYSTEM_BEACONS = [
@@ -73,7 +74,7 @@ export default function TreasureMapBuilder() {
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+      <PortalPageLayout>
         <Card className="max-w-md w-full bg-slate-900 border-red-900/50">
           <CardHeader className="text-center">
             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -224,6 +225,6 @@ export default function TreasureMapBuilder() {
         </div>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

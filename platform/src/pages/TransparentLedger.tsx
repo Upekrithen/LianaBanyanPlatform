@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link2, Activity, PieChart, Calendar, ShieldCheck, ArrowRight, TrendingUp, Clock } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function TransparentLedger() {
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout>
       <div className="flex items-center gap-4 mb-8">
         <div className="p-3 bg-emerald-600 rounded-full text-white">
           <Activity className="h-8 w-8" />
@@ -214,6 +215,6 @@ export default function TransparentLedger() {
           </Card>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

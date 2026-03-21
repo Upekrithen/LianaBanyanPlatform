@@ -14,6 +14,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import TASKS_MD from "../../TASKS.md?raw";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const TaskList = () => {
   const { toast } = useToast();
@@ -546,7 +547,7 @@ ESTIMATED TIMELINE:
 
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <PortalPageLayout>
       <div className="flex justify-between items-start mb-6 print:mb-4">
         <div>
           <h1 className="text-3xl font-bold mb-2">Project Management</h1>
@@ -1307,7 +1308,7 @@ ESTIMATED TIMELINE:
           @page { margin: 1cm; }
         }
       `}</style>
-    </div>
+    </PortalPageLayout>
   );
 };
 

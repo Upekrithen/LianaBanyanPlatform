@@ -51,6 +51,7 @@ import { ALL_WILDFIRE_RUNS, RUNS_BY_CATEGORY, getRunBySlug, LEVEL_1_RUNS, LEVEL_
 import { useWildfireRun } from "@/contexts/WildfireRunContext";
 import { PathwayProgressCard } from "@/components/PathwayProgressCard";
 import { usePathwayProgress } from "@/contexts/PathwayProgressContext";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CATEGORY CONFIG
@@ -270,7 +271,7 @@ export default function WildfireRunsPage() {
   // If specific run requested via URL
   if (specificRun) {
     return (
-      <div className="container mx-auto p-6 max-w-4xl">
+      <PortalPageLayout>
         <div className="space-y-6">
           <Button 
             variant="ghost" 
@@ -324,13 +325,13 @@ export default function WildfireRunsPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   // Main browse page
   return (
-    <div className="container mx-auto p-6 max-w-6xl space-y-6">
+    <PortalPageLayout>
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center">
@@ -503,6 +504,6 @@ export default function WildfireRunsPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

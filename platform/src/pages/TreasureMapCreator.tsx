@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import type { User } from "@supabase/supabase-js";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── TYPES ───
 
@@ -344,7 +345,7 @@ export default function TreasureMapCreator() {
 
   if (authLoading) {
     return (
-      <div className="container mx-auto p-6 flex items-center justify-center min-h-[50vh]">
+      <PortalPageLayout>
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
@@ -818,6 +819,6 @@ export default function TreasureMapCreator() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

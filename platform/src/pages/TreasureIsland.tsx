@@ -7,6 +7,7 @@ import { CreditPurchaseModal } from "@/components/CreditPurchaseModal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function TreasureIsland() {
   const [showPurchase, setShowPurchase] = useState(false);
@@ -44,7 +45,7 @@ export default function TreasureIsland() {
 
   if (!user) {
     return (
-      <div className="container mx-auto p-6 space-y-6">
+      <PortalPageLayout>
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-primary/10 rounded-lg">
             <Coins className="h-8 w-8 text-primary" />
@@ -196,6 +197,6 @@ export default function TreasureIsland() {
         open={showPurchase} 
         onOpenChange={setShowPurchase}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

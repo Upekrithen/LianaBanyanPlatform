@@ -3,10 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Ship, Hammer, Globe2, ArrowRight, ShieldCheck } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function Canada40K() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-12">
         
         {/* Header */}
@@ -97,6 +98,6 @@ export default function Canada40K() {
         </div>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

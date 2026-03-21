@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Shield, Lock, FileText, ArrowRight } from "lucide-react";
 import { LarkWrapper } from '@/components/builder/LarkWrapper';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function HallOfRecords() {
   const patentPedestals = [
@@ -16,7 +17,7 @@ export default function HallOfRecords() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 p-6 md:p-12 font-serif">
+    <PortalPageLayout>
       <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Header */}
@@ -67,6 +68,6 @@ export default function HallOfRecords() {
         </div>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

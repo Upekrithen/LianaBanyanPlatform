@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Flame, Play, Pause, Ghost, Map, Crosshair, ArrowRight, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function WildfireBeaconRun() {
   const [isTourActive, setIsTourActive] = useState(true);
@@ -40,7 +41,7 @@ export default function WildfireBeaconRun() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 p-6 md:p-12 relative overflow-hidden">
+    <PortalPageLayout>
       
       {/* Tour Overlay UI */}
       <div className="absolute top-6 left-0 right-0 flex justify-center z-50">
@@ -151,6 +152,6 @@ export default function WildfireBeaconRun() {
         </div>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -6,12 +6,13 @@ import { Building2, Landmark, Scale, Shield, ArrowRight, Map, MapPin } from "luc
 import { useNavigate } from 'react-router-dom';
 
 import { LarkWrapper } from '@/components/builder/LarkWrapper';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MainlandHub() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Header */}
@@ -146,6 +147,6 @@ export default function MainlandHub() {
 
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

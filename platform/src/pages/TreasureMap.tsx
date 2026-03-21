@@ -13,6 +13,7 @@ import {
   TOTAL_QUESTIONS,
   type TreasureMapQuestionDef,
 } from "@/components/treasure-map/treasureMapQuestions";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import {
   getRecommendedPlays,
   getTemperamentScoresFromTags,
@@ -109,22 +110,20 @@ export default function TreasureMap() {
   }
   const plays = getRecommendedPlays(allTags, sourceWeight, temperamentScores);
 
-  if (step === "intro") {
-    return <TreasureMapIntro onStart={handleNext} />;
-  }
+  let content: React.ReactNode = null;
 
-  if (step === "results") {
-    return (
+  if (step === "intro") {
+    content = <TreasureMapIntro onStart={handleNext} />;
+  } else if (step === "results") {
+    content = (
       <TreasureMapResults
         plays={plays}
         onBack={handleBack}
         temperamentWeighted={temperamentTags.length > 0}
       />
     );
-  }
-
-  if (typeof step === "number" && currentQuestion) {
-    return (
+  } else if (typeof step === "number" && currentQuestion) {
+    content = (
       <TreasureMapQuestion
         definition={currentQuestion}
         stepIndex={step}
@@ -138,5 +137,9 @@ export default function TreasureMap() {
     );
   }
 
-  return null;
+  return (
+    <PortalPageLayout>
+      {content}
+    </PortalPageLayout>
+  );
 }

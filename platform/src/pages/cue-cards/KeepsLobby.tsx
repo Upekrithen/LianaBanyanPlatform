@@ -6,12 +6,13 @@ import { Building, Users, Coins, ArrowRight, ShieldCheck, Gamepad2, Map, Snowfla
 import { useNavigate } from 'react-router-dom';
 
 import { LarkWrapper } from '@/components/builder/LarkWrapper';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function KeepsLobby() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-12">
         
         {/* Header */}
@@ -197,6 +198,6 @@ export default function KeepsLobby() {
         </Card>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

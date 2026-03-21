@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { DollarSign, Clock, Zap, History } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 type WithdrawalType = 'contribution' | 'earned_instant' | 'earned_vested';
 
@@ -162,7 +163,7 @@ export default function Withdraw() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <PortalPageLayout>
       <h1 className="text-3xl font-bold mb-6">Cash Out Credits</h1>
 
       {/* Balance Cards */}
@@ -354,6 +355,6 @@ export default function Withdraw() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PortalPageLayout>
   );
 }
