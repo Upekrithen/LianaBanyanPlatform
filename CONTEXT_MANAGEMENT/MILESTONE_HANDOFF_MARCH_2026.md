@@ -2399,6 +2399,32 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 
 ---
 
+## Session 67 (Knight, continued) — March 21, 2026
+
+**Commit:** `402968a`
+
+**Completed:**
+
+1. **SEC Language Cleanup (15 fixes across 10 files):**
+   - "will earn" → "may earn" in GhostEmailCapture (2), RecipeSubmissionForm (1), ReferralCodeInput (1)
+   - "invest in patents" → "support patent development" in ShowMeHelp
+   - "equity-like Joules — shares in" → "participation Joules — a stake in" in WhyNoVC
+   - "guaranteed revenue/customers" → "pre-sold revenue" / "committed customers" in ServiceNodeRegistration (3), TransparentLedger (3), HexIsleShowcase (1)
+   - Annotated ReviewerApplication SAMPLE_PIECE as intentionally SEC-problematic test text
+   - Left defensive disclaimers ("This is NOT an investment") untouched — those are correct
+
+2. **RLS Security Hardening (18 tables):**
+   - Replaced `auth.uid() IS NOT NULL` with `public.is_admin()` on 11 tables: manufacturing_modules, forge_crew_applications, star_chamber_cases, santa_gifts, captain_collateral_profiles, node_captain_profiles, production_campaigns, production_stamps, c20_pricing_examples, tereno_certifications, tereno_exclusions
+   - Scoped 6 Moneypenny tables (inbox, actions, social_drafts, ideas, schedule, red_carpet_signals) to admin-write/authenticated-read
+   - Scoped crown_letter_invitations INSERT to admin-only
+
+3. **Stale Number Sweep:**
+   - CrownLetterUpdate.tsx: 1,810 → 1,828
+
+**Deployed:** lianabanyan.com (hosting:main) ✓
+
+---
+
 ## PENDING WORK (Next Session Priority Order)
 
 | # | Priority | Item | Notes |
@@ -2413,8 +2439,8 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 | 5c | ~~DONE~~ | ~~Social media cron: member_social_accounts~~ | Session 54: bug fix + full rewrite |
 | 6 | **MEDIUM** | **Battery Dispatch — Grassroots Intelligence** | Create campaign from 4 new academic papers + Political Expedition cue card |
 | 7 | **MEDIUM** | **Treasure Key injection** | Inject keys into all letters, articles, social posts for real treasure hunt |
-| 8 | **MEDIUM** | **SEC language cleanup (pre-existing files)** | Broader pass on older files per audit |
-| 9 | **MEDIUM** | **RLS security hardening** | Per `RLS_AUDIT_REPORT.md` |
+| 8 | ~~DONE~~ | ~~SEC language cleanup (pre-existing files)~~ | Session 67: 15 fixes across 10 files — will earn, invest, equity, guaranteed |
+| 9 | ~~DONE~~ | ~~RLS security hardening~~ | Session 67: 18 tables hardened — is_admin() on 11, Moneypenny 6, crown invitations 1 |
 | 10 | **MEDIUM** | **Gmail forwarding** | Google Cloud Pub/Sub → moneypenny-intake webhook for inbound email |
 | 11 | **LOW** | **CoLab/Zoo outreach** | AI-CAD partnership brief ready, pending Founder approval |
 | 12 | **LOW** | **Letter rewrites** | Founder wants to review/rewrite 30+ Crown Letters |
@@ -2453,6 +2479,7 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 ## LATEST COMMITS
 
 ```
+402968a Knight 67: SEC language cleanup (15 fixes across 10 files), RLS hardening (18 tables), stale 1810 to 1828
 0dd0221 Knight 66: Subscriptions page, coalition system, innovation count 1828, Cephas deploy
 42203c8 Session 47: RLS hardening -- admin-only policies on 13+ tables
 ed1bdb3 Session 47: FAQ See Also complete -- 34 cross-links, 2 missing entries
