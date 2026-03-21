@@ -2425,6 +2425,58 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 
 ---
 
+## Commerce Engine Phase 1 (Knight, continued) — March 21, 2026
+
+**Commit:** `b7e133c`
+**Innovation Count:** 1,856 (was 1,828)
+
+**Completed:**
+
+1. **Storefront Builder (`/tools/storefront-builder`)** — 4-step wizard:
+   - Step 1: Business name, category, location, phone
+   - Step 2: Menu items with name, price, description, category, available days (day picker)
+   - Step 3: Order cutoff time, delivery window, delivery fee
+   - Step 4: Preview → Publish (creates storefront + items in Supabase, navigates to menu page)
+
+2. **Menu Page (`/menu/:slug`)** — Public, no auth required:
+   - Displays storefront header (name, location, cutoff time, delivery window)
+   - Menu organized by category with add-to-cart +/- buttons
+   - Sticky cart footer with expand view, email/name fields, "Pay" button
+   - Stripe Checkout via `create-menu-checkout` edge function (dynamic `price_data`)
+   - Guest checkout supported (email only, no login required)
+
+3. **Commerce Engine Migration** — 7 schema changes:
+   - ALTER storefronts: +slug, +business_location, +logo_url, +order_cutoff_time, +delivery windows, +phone, +delivery_fee, +anon SELECT policy
+   - CREATE storefront_items (menu items with available_days, sort_order)
+   - CREATE menu_orders (with Stripe session tracking, delivery status)
+   - CREATE onboarding_credits (3% passive income for business onboarders)
+   - CREATE steward_agreements (2% management fee)
+   - CREATE storefront_transfers (ownership transfer log)
+   - Full RLS on all new tables
+
+4. **Edge Function: `create-menu-checkout`** — Deployed with `--no-verify-jwt`:
+   - Creates menu_order in Supabase → builds Stripe Checkout Session with dynamic line items → returns checkout URL
+   - Supports guest checkout (no auth header required) and authenticated checkout
+   - Delivery fee as separate line item
+
+5. **Innovation Count:** 1,828 → 1,856 in `useCanonicalStats.ts`
+
+6. **Navigation:** Storefront Builder added to both AppSidebar and UnifiedNavigation
+
+**Deployed:**
+- lianabanyan.com (hosting:main) ✓
+- `create-menu-checkout` edge function ✓
+
+**Commerce Engine Remaining (for next session):**
+- Task 3: Order aggregation edge function (midnight cutoff → consolidated list to provider)
+- Task 4: Provider Dashboard (`/dashboard/provider`)
+- Task 5: Runner Dashboard (`/dashboard/runner`)
+- Task 6: QR Cue Card Generator (`/tools/cue-card-generator`)
+- Task 7: Treasure Map Chest Page (`/treasure-maps`)
+- Task 9: Passive Income Dashboard (`/dashboard/onboarder`)
+
+---
+
 ## PENDING WORK (Next Session Priority Order)
 
 | # | Priority | Item | Notes |
@@ -2479,6 +2531,7 @@ Fixed **1,630/1,662/1,719** → **1,754** innovations across the entire codebase
 ## LATEST COMMITS
 
 ```
+b7e133c Commerce Engine Phase 1: Storefront Builder, Menu Page with cart + Stripe checkout, innovation count 1856
 402968a Knight 67: SEC language cleanup (15 fixes across 10 files), RLS hardening (18 tables), stale 1810 to 1828
 0dd0221 Knight 66: Subscriptions page, coalition system, innovation count 1828, Cephas deploy
 42203c8 Session 47: RLS hardening -- admin-only policies on 13+ tables
