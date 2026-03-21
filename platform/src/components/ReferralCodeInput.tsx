@@ -25,7 +25,7 @@ export function ReferralCodeInput({ onCodeApplied, disabled }: ReferralCodeInput
       <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
         <div className="flex items-center gap-2 text-sm text-primary font-medium">
           <Gift className="w-4 h-4" />
-          Referral code applied! You'll earn matched credits.
+          Referral code applied! You may earn matched credits.
         </div>
       </div>
     );

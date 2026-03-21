@@ -172,7 +172,7 @@ export default function TransparentLedger() {
                   <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-900 mb-6">
                     <h4 className="font-bold text-blue-800 dark:text-blue-400 flex items-center gap-2 mb-2">
                       <Calendar className="h-5 w-5" />
-                      6-Month Guaranteed Revenue
+                      6-Month Pre-Sold Revenue
                     </h4>
                     <p className="text-sm text-blue-900/80 dark:text-blue-300/80">
                       Pre-orders are allocated to local manufacturing nodes (Makers in the Salt Mines) to provide maximum stability. 
@@ -188,7 +188,7 @@ export default function TransparentLedger() {
                       </div>
                       <div className="flex justify-between text-sm text-slate-600 mb-2">
                         <span>Month 1 of 6</span>
-                        <span>$2,400 / mo guaranteed</span>
+                        <span>$2,400 / mo pre-sold</span>
                       </div>
                       <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2">
                         <div className="bg-blue-600 h-2 rounded-full" style={{ width: '16%' }}></div>
@@ -202,7 +202,7 @@ export default function TransparentLedger() {
                       </div>
                       <div className="flex justify-between text-sm text-slate-600 mb-2">
                         <span>Month 3 of 6</span>
-                        <span>$1,800 / mo guaranteed</span>
+                        <span>$1,800 / mo pre-sold</span>
                       </div>
                       <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2">
                         <div className="bg-blue-600 h-2 rounded-full" style={{ width: '50%' }}></div>

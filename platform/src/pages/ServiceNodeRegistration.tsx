@@ -314,7 +314,7 @@ export default function ServiceNodeRegistration() {
               <p className="font-bold text-emerald-700">The 50% Rule</p>
               <p className="text-sm text-muted-foreground">
                 Your node activates when 50% of weekly capacity is pre-ordered. 
-                You'll have guaranteed customers and upfront payment before you start.
+                You'll have committed customers and pre-sold orders before you start.
                 <span className="block mt-1 font-medium text-emerald-600">
                   We don't predict the market — we already sold it.
                 </span>
@@ -515,7 +515,7 @@ export default function ServiceNodeRegistration() {
                     <div className="p-3 rounded bg-emerald-500/10 border border-emerald-500/20">
                       <div className="font-medium text-emerald-700">Pre-sold (50%)</div>
                       <div className="text-2xl font-bold">{activationThreshold}</div>
-                      <div className="text-xs text-muted-foreground">Guaranteed revenue</div>
+                      <div className="text-xs text-muted-foreground">Pre-sold revenue</div>
                     </div>
                     <div className="p-3 rounded bg-amber-500/10 border border-amber-500/20">
                       <div className="font-medium text-amber-700">Reserved (50%)</div>
@@ -793,7 +793,7 @@ export default function ServiceNodeRegistration() {
                     <li>Your node enters <strong>Pending Activation</strong> status</li>
                     <li>We'll help you promote to collect pre-orders in your ZIP code</li>
                     <li>When {activationThreshold} meals are pre-ordered (50%), your node <strong>activates</strong></li>
-                    <li>You'll have guaranteed customers and 50% upfront payment</li>
+                    <li>You'll have committed customers and 50% pre-sold orders</li>
                     <li>Start cooking! Keep 83.3% of every sale.</li>
                   </ol>
                 </CardContent>

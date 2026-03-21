@@ -112,7 +112,7 @@ export function GhostEmailCapture({
       // Generate the QR URL with their tracking token
       const qrUrl = `https://lianabanyan.com/RedCarpet?ghost=${trackingToken}`;
 
-      toast.success("You're all set! Your shares will earn rewards.", {
+      toast.success("You're all set! Your activity may earn rewards.", {
         description: "Sign up anytime to claim your accumulated credits.",
       });
 
@@ -152,7 +152,7 @@ export function GhostEmailCapture({
           {/* Benefits callout */}
           <div className="bg-gradient-to-r from-primary/10 to-amber-500/10 rounded-lg p-4 space-y-3">
             <p className="text-sm font-medium text-foreground">
-              What you'll earn:
+              What you may earn:
             </p>
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div className="flex items-center gap-2">

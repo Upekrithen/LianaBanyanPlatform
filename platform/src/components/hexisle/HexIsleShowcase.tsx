@@ -192,7 +192,7 @@ export const HexIsleShowcase: React.FC = () => {
                   <strong>Why do we do this?</strong> By backing this project, you are helping us reach the volume needed for Cost+20% manufacturing. The Joules you earn are vouchers you can use to hire artists, buy other games, or launch your own project on this platform. They are not an investment or security, but stored potential for your own ideas.
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  <strong>Distributed Node Scheduled Runs:</strong> Pre-orders are allocated to local manufacturing nodes to provide 6 months of guaranteed, stable revenue. You can view these allocations on the Transparent Ledger for this project.
+                  <strong>Distributed Node Scheduled Runs:</strong> Pre-orders are allocated to local manufacturing nodes to provide 6 months of committed, pre-sold revenue. You can view these allocations on the Transparent Ledger for this project.
                 </p>
                 <p className="text-xs text-muted-foreground">
                   <strong>You can do this yourself.</strong> The founder owns all the IP and can sell or give it away. You can launch your own project on Kickstarter — but you <em>should</em> do it here, where the community, the 1/3 split, and the Chain Voting Advantage are already built in.

@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
-const SAMPLE_PIECE = `Our platform lets you invest in creator projects. You get equity in the project and can expect ROI as the project grows. Shareholders receive dividend payments.`;
+const SAMPLE_PIECE = `Our platform lets you invest in creator projects. You get equity in the project and can expect ROI as the project grows. Shareholders receive dividend payments.`; // Intentionally SEC-problematic — this is the TEST PIECE reviewers must flag
 
 export default function ReviewerApplication() {
   const { user } = useAuth();

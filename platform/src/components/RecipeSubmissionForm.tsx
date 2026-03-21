@@ -412,7 +412,7 @@ export function RecipeSubmissionForm({
                   <Sparkles className="h-5 w-5 text-amber-400 shrink-0" />
                   <div className="flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium">You'll earn</span>
+                      <span className="font-medium">You may earn</span>
                       <Badge className={cn(
                         "font-bold",
                         BOUNTY_TIERS[matchingBounty.shelfStatus].bg,

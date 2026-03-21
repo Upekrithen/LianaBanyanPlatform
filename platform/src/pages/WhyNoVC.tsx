@@ -211,7 +211,7 @@ export default function WhyNoVC() {
               <Lightbulb className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-primary">The 300 Are Getting Joules</p>
-                <p className="text-sm text-muted-foreground">Our first 300 members get equity-like Joules — shares in our patent portfolio. No VC means no dilution of YOUR stake.</p>
+                <p className="text-sm text-muted-foreground">Our first 300 members get participation Joules — a stake in our patent portfolio. No VC means no dilution of YOUR contribution.</p>
               </div>
             </div>
           </div>
