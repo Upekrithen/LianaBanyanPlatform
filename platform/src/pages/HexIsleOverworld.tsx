@@ -22,9 +22,11 @@ import { OverworldMinimap } from "@/components/hexisle/overworld/OverworldMinima
 import { OverworldPipeTransit } from "@/components/hexisle/overworld/OverworldPipeTransit";
 import { OverworldGondola } from "@/components/hexisle/overworld/OverworldGondola";
 import { ViewPhaseSwitcher } from "@/components/hexisle/ViewPhaseSwitcher";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function HexIsleOverworld() {
   return (
+    <PortalPageLayout>
     <OverworldNavigationProvider>
       <PipePortalProvider>
         <CanalAccessProvider>
@@ -50,5 +52,6 @@ export default function HexIsleOverworld() {
         </CanalAccessProvider>
       </PipePortalProvider>
     </OverworldNavigationProvider>
+    </PortalPageLayout>
   );
 }

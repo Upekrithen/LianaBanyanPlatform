@@ -6,6 +6,7 @@ import {
   ChevronDown, ChevronUp, ExternalLink, QrCode, Briefcase, Sparkles,
 } from 'lucide-react';
 import { useCanonicalStats } from '@/hooks/useCanonicalStats';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 type ViewMode = 'brand' | 'pedestal' | 'upekrithen_ledger' | 'initiative' | 'bag' | 'overview';
 
@@ -284,7 +285,7 @@ export default function IPPortfolioPage() {
   const { mode, context } = resolveViewMode(qrCode);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
@@ -319,6 +320,6 @@ export default function IPPortfolioPage() {
           &copy; {new Date().getFullYear()} Liana Banyan Corporation &middot; $5/year membership &middot; Creators keep {stats.creatorKeepsPct}%
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

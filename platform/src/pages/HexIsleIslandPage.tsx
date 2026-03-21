@@ -16,6 +16,7 @@ import {
   HEXISLE_GAMES,
   type Island,
 } from '@/lib/hexisleProjectSpec';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const ISLAND_DESCRIPTIONS: Record<string, {
   fullDescription: string;
@@ -85,7 +86,7 @@ const HexIsleIslandPage = () => {
 
   if (!island) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PortalPageLayout>
         <Card className="max-w-md">
           <CardHeader>
             <CardTitle>Island Not Found</CardTitle>
@@ -285,7 +286,7 @@ const HexIsleIslandPage = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 

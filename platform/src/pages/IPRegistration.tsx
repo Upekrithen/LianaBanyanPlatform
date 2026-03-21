@@ -7,6 +7,7 @@ import { ArrowLeft, ShieldCheck, Scale, Lock } from "lucide-react";
 import { IPAssetForm } from "@/components/ip/IPAssetForm";
 import { TierSelectionWizard } from "@/components/ip/TierSelectionWizard";
 import { TierComparisonTable } from "@/components/ip/TierComparisonTable";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function IPRegistration() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function IPRegistration() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-4 md:p-8">
+    <PortalPageLayout>
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex items-center gap-4">
@@ -159,6 +160,6 @@ export default function IPRegistration() {
           <IPAssetForm selectedTier={selectedTier} />
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

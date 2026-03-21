@@ -31,6 +31,7 @@ import {
   HEXISLE_DAISYCHAIN,
   ARCHIVE,
 } from '@/lib/hexisleProjectSpec';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const CATEGORY_COLORS = {
   mechanical: 'bg-blue-100 text-blue-800 border-blue-300',
@@ -48,7 +49,7 @@ const HexIsleEncyclopedia = () => {
     : PATENTED_INNOVATIONS.filter(i => i.category === innovationFilter);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-blue-50">
+    <PortalPageLayout>
       {/* Hero */}
       <div className="bg-gradient-to-r from-cyan-800 to-blue-900 text-white py-16 px-6">
         <div className="max-w-6xl mx-auto">
@@ -660,7 +661,7 @@ const HexIsleEncyclopedia = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 

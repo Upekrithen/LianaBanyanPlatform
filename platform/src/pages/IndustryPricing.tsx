@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { ArrowLeft, Plus, Trash2, RefreshCw, TrendingUp } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Product {
   id: string;
@@ -167,7 +168,7 @@ export default function IndustryPricing() {
   const selectedProductData = products.find(p => p.id === selectedProduct);
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <PortalPageLayout>
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -337,6 +338,6 @@ export default function IndustryPricing() {
           </>
         )}
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -7,12 +7,13 @@
 
 import { useNavigate } from "react-router-dom";
 import { Rocket, Building2, ArrowRight, ArrowLeft } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function LaunchHub() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-6 md:p-12">
+    <PortalPageLayout>
       <div className="max-w-4xl mx-auto space-y-12">
         <button
           onClick={() => navigate("/portal")}
@@ -102,6 +103,6 @@ export default function LaunchHub() {
           </div>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

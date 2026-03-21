@@ -19,6 +19,7 @@ const useIslandExport = () => ({
   exportIslandAs3DModel: (id: string, format: string) => {}
 });
 import { useState } from "react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // Import island images (mocking with placeholders if missing)
 // We will use a fallback system if the asset doesn't exist
@@ -77,7 +78,7 @@ const IslandDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <PortalPageLayout>
         <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );
@@ -293,7 +294,7 @@ const IslandDetail = () => {
         open={assignmentDialogOpen}
         onOpenChange={setAssignmentDialogOpen}
       />
-    </div>
+    </PortalPageLayout>
   );
 };
 

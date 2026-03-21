@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Castle, Users, Building2, Globe } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function IslandCreator() {
   const navigate = useNavigate();
@@ -146,7 +147,7 @@ export default function IslandCreator() {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-4xl">
+    <PortalPageLayout>
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">Create Your Island</h1>
         <p className="text-muted-foreground">
@@ -372,6 +373,6 @@ export default function IslandCreator() {
           </Button>
         </div>
       </form>
-    </div>
+    </PortalPageLayout>
   );
 }

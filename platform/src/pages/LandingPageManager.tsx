@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Plus, Trash2, Eye, Save } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function LandingPageManager() {
   const { projectId } = useParams();
@@ -108,7 +109,7 @@ export default function LandingPageManager() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Landing Page Manager</h1>
@@ -425,6 +426,6 @@ export default function LandingPageManager() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Briefcase, Clock, DollarSign, Loader2, MapPin } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function IslandAssignmentBoard() {
   const { user } = useAuth();
@@ -99,7 +100,7 @@ export default function IslandAssignmentBoard() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <PortalPageLayout>
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Island Design Assignment Board</h1>
         <p className="text-muted-foreground">
@@ -290,6 +291,6 @@ export default function IslandAssignmentBoard() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

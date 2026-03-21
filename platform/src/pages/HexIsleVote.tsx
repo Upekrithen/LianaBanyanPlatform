@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface VoteCandidate {
   id: string;
@@ -150,7 +151,7 @@ export default function HexIsleVote() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 flex items-center justify-center">
+      <PortalPageLayout>
         <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
       </div>
     );
@@ -422,6 +423,6 @@ export default function HexIsleVote() {
           based on demonstrated judgment.
         </p>
       </main>
-    </div>
+    </PortalPageLayout>
   );
 }

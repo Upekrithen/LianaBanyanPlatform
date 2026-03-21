@@ -26,6 +26,7 @@ import {
   Star, Heart, TrendingUp, Factory, ChevronRight, Hexagon, Droplets
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TYPES
@@ -305,9 +306,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
   }[project.status];
 
   return (
-    <div 
-      className="perspective-1000 h-[380px] cursor-pointer"
-      onClick={() => setIsFlipped(!isFlipped)}
+    <PortalPageLayout> setIsFlipped(!isFlipped)}
     >
       <div 
         className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${
@@ -593,6 +592,6 @@ export default function HexIsleProjects() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -21,6 +21,7 @@ import {
   Download, Search, Hexagon, ChevronRight, ArrowLeft,
   Upload, Filter, Wrench, Hash, Award, ExternalLink,
 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── TYPES ───
 
@@ -101,7 +102,7 @@ const HexIsleDownloads: React.FC = () => {
   const availableCount = PIECES.filter(p => p.stlAvailable).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white" data-xray-id="hexisle">
+    <PortalPageLayout>
       {/* Header */}
       <div className="max-w-6xl mx-auto px-4 pt-8 pb-4">
         <div className="flex items-center gap-2 text-sm text-slate-400 mb-6">
@@ -325,7 +326,7 @@ const HexIsleDownloads: React.FC = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 

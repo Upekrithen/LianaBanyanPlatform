@@ -12,6 +12,7 @@ import {
   Wand2, GraduationCap, Trophy, Users, Lock 
 } from "lucide-react";
 import { toast } from "sonner";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const ISLAND_CONFIG = {
   harvest: {
@@ -160,7 +161,7 @@ export default function HexisleDashboard() {
   const unlockedIslands = userSkills?.filter(s => s.island_unlocked).length || 0;
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <PortalPageLayout>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -391,6 +392,6 @@ export default function HexisleDashboard() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

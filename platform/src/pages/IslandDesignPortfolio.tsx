@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
 import { Award, Eye, MapPin, Star } from "lucide-react";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function IslandDesignPortfolio() {
   const { user } = useAuth();
@@ -69,7 +70,7 @@ export default function IslandDesignPortfolio() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <PortalPageLayout>
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Island Designer Portfolio</h1>
         <p className="text-muted-foreground">
@@ -259,6 +260,6 @@ export default function IslandDesignPortfolio() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

@@ -3,10 +3,11 @@ import { Shield, Image as ImageIcon, ArrowRight, Coins, Zap, Eye } from 'lucide-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function IncumbentAdvantage() {
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
+    <PortalPageLayout>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -135,6 +136,6 @@ export default function IncumbentAdvantage() {
         </div>
 
       </div>
-    </div>
+    </PortalPageLayout>
   );
 }

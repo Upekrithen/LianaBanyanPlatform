@@ -25,6 +25,7 @@ import { WorldHUD } from "@/components/hexisle/world3d/WorldHUD";
 import { ViewPhaseSwitcher } from "@/components/hexisle/ViewPhaseSwitcher";
 import { ISLANDS, JOURNEY_PATH } from "@/lib/hexIsleWorldData";
 import * as THREE from "three";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── Journey Path Lines ─────────────────────────────────────────────────────
 
@@ -141,6 +142,7 @@ function LoadingFallback() {
 
 export default function HexIsleWorld3D() {
   return (
+    <PortalPageLayout>
     <WorldNavigationProvider>
       <div className="relative w-full h-screen bg-gradient-to-b from-sky-900 to-blue-950 overflow-hidden">
         {/* 3D Canvas */}
@@ -165,5 +167,6 @@ export default function HexIsleWorld3D() {
         <ViewPhaseSwitcher />
       </div>
     </WorldNavigationProvider>
+    </PortalPageLayout>
   );
 }
