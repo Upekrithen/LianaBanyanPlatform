@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, Download, Send, Lock, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const INNOVATION_COUNT = "1,754";
 const PATENT_CLAIMS = "1,401";
@@ -13,7 +14,8 @@ const PROVISIONAL_APPS = "8";
 
 export default function CephasPressJunketPage() {
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-8" data-xray-id="cephas-press-junket">
+    <PortalPageLayout maxWidth="lg" xrayId="cephas-press-junket">
+      <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Megaphone className="w-8 h-8 text-primary" />
@@ -90,6 +92,7 @@ export default function CephasPressJunketPage() {
           </Button>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

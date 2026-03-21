@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Printer } from 'lucide-react';
 import { toast } from 'sonner';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function BusinessPlan() {
   const [content, setContent] = useState<string>('');
@@ -41,18 +42,18 @@ export default function BusinessPlan() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6 max-w-5xl">
+      <PortalPageLayout maxWidth="xl" xrayId="business-plan">
         <Card>
           <CardContent className="p-12 text-center">
             <p className="text-muted-foreground">Loading business plan...</p>
           </CardContent>
         </Card>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl">
+    <PortalPageLayout maxWidth="xl" xrayId="business-plan">
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
@@ -80,6 +81,6 @@ export default function BusinessPlan() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PortalPageLayout>
   );
 }

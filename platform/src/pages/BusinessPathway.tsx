@@ -36,6 +36,7 @@ import {
   DollarSign,
   Handshake,
 } from "lucide-react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // PATHWAY DATA
@@ -248,19 +249,17 @@ export default function BusinessPathway() {
   const accentColor = PATHWAY_COLORS[activeTab as keyof typeof PATHWAY_COLORS];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="business-pathway">
         {/* Header */}
         <div className="text-center space-y-4 mb-8">
           <Badge variant="outline" className="border-green-500/30 text-green-400">
             <Sparkles className="w-4 h-4 mr-2" />
             Your Pathway
           </Badge>
-          <h1 className="text-3xl md:text-4xl font-bold text-white">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">
             Choose Your Starting Point
           </h1>
-          <p className="text-lg text-white/60 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Everyone's situation is different. Pick the path that matches where you are today.
           </p>
         </div>
@@ -397,7 +396,7 @@ export default function BusinessPathway() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="font-semibold text-lg">Ready to Start?</h3>
-                <p className="text-sm text-white/60">
+                <p className="text-sm text-muted-foreground">
                   $5/year membership. Creator/Worker keeps 83.3% forever.
                 </p>
               </div>
@@ -439,26 +438,25 @@ export default function BusinessPathway() {
         <div className="mt-6 grid grid-cols-3 gap-4 text-center">
           <div className="p-4 bg-white/5 rounded-lg">
             <div className="text-2xl font-bold text-green-400">83.3%</div>
-            <div className="text-xs text-white/60">Creator Keeps</div>
+            <div className="text-xs text-muted-foreground">Creator Keeps</div>
           </div>
           <div className="p-4 bg-white/5 rounded-lg">
             <div className="text-2xl font-bold text-amber-400">$5/yr</div>
-            <div className="text-xs text-white/60">Membership</div>
+            <div className="text-xs text-muted-foreground">Membership</div>
           </div>
           <div className="p-4 bg-white/5 rounded-lg">
             <div className="text-2xl font-bold text-blue-400">C+20%</div>
-            <div className="text-xs text-white/60">Transparent Pricing</div>
+            <div className="text-xs text-muted-foreground">Transparent Pricing</div>
           </div>
         </div>
 
         {/* Philosophy Quote */}
         <div className="mt-8 text-center">
-          <p className="text-white/40 italic text-sm">
+          <p className="text-muted-foreground italic text-sm">
             "Help each other help ourselves."
           </p>
-          <p className="text-white/30 text-xs mt-1">— The Golden Key</p>
+          <p className="text-muted-foreground/70 text-xs mt-1">— The Golden Key</p>
         </div>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 }

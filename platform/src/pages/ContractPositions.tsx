@@ -19,6 +19,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface Position {
   id: string;
@@ -112,22 +113,26 @@ export default function ContractPositions() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
+      <PortalPageLayout maxWidth="full" xrayId="contract-positions">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      </PortalPageLayout>
     );
   }
 
   if (!project) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Project not found</p>
-      </div>
+      <PortalPageLayout maxWidth="full" xrayId="contract-positions">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p>Project not found</p>
+        </div>
+      </PortalPageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout maxWidth="full" xrayId="contract-positions">
       <header className="border-b bg-card sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-card/95">
         <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex justify-between items-center gap-2">
@@ -288,6 +293,6 @@ export default function ContractPositions() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </PortalPageLayout>
   );
 }

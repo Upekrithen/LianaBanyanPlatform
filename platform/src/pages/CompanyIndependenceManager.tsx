@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { useUserRole } from '@/hooks/useUserRole';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, Building2, Award } from 'lucide-react';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function CompanyIndependenceManager() {
   const navigate = useNavigate();
@@ -110,9 +111,8 @@ export default function CompanyIndependenceManager() {
   const selectedProject = projects?.find(p => p.id === selectedProjectId);
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <PortalPageLayout maxWidth="xl" xrayId="company-independence">
+      <header className="border-b bg-card sticky top-0 z-50 -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 mb-6 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Building2 className="h-6 w-6" />
             <h1 className="text-2xl font-bold">Company Independence Manager</h1>
@@ -120,10 +120,9 @@ export default function CompanyIndependenceManager() {
           <Button variant="outline" onClick={() => navigate('/dashboard')}>
             Back to Dashboard
           </Button>
-        </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 space-y-6">
+      <div className="space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Select Project</CardTitle>
@@ -279,7 +278,7 @@ export default function CompanyIndependenceManager() {
             </Card>
           </>
         )}
-      </main>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

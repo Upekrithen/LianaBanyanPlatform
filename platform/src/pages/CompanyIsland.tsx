@@ -17,6 +17,7 @@ import {
   Shield, Sparkles, Globe, Hammer,
 } from "lucide-react";
 import { GlobalBreadcrumbs } from "@/components/GlobalBreadcrumbs";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const ISLAND_FEATURES = [
   {
@@ -72,9 +73,9 @@ export default function CompanyIsland() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <PortalPageLayout maxWidth="xl" xrayId="company-island">
       <GlobalBreadcrumbs />
-      <main className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
+      <div className="space-y-8">
         {/* Hero */}
         <div className="text-center space-y-4">
           <Badge variant="outline" className="gap-1">
@@ -175,7 +176,7 @@ export default function CompanyIsland() {
             Build a Business
           </Button>
         </div>
-      </main>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

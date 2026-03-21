@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import { AcademicHeader, LetterHeader, InnovationCard } from "@/components/cephas";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import ReactMarkdown from "react-markdown";
 
 export default function CephasContentDetailPage() {
@@ -30,20 +31,33 @@ export default function CephasContentDetailPage() {
 
   if (!slug) {
     return (
-      <div className="container max-w-3xl mx-auto p-6">
+      <PortalPageLayout maxWidth="md" xrayId="cephas-content-detail">
         <p className="text-muted-foreground">Missing slug.</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
-  if (isLoading) return <div className="container max-w-3xl mx-auto p-6 text-muted-foreground">Loading…</div>;
-  if (isError || !row) return <div className="container max-w-3xl mx-auto p-6 text-destructive">Document not found.</div>;
+  if (isLoading) {
+    return (
+      <PortalPageLayout maxWidth="md" xrayId="cephas-content-detail">
+        <div className="text-muted-foreground">Loading…</div>
+      </PortalPageLayout>
+    );
+  }
+  if (isError || !row) {
+    return (
+      <PortalPageLayout maxWidth="md" xrayId="cephas-content-detail">
+        <div className="text-destructive">Document not found.</div>
+      </PortalPageLayout>
+    );
+  }
 
   const isAcademic = row.style === "clean_academic";
   const backHref = category ? `/cephas/${category}` : "/cephas";
 
   return (
-    <div className="container max-w-3xl mx-auto p-6 space-y-6" data-xray-id="cephas-content-detail">
+    <PortalPageLayout maxWidth="md" xrayId="cephas-content-detail">
+      <div className="space-y-6">
       <Link to={backHref} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="w-4 h-4" /> Back to {category || "Cephas"}
       </Link>
@@ -99,6 +113,7 @@ export default function CephasContentDetailPage() {
         {row.knight_session && <Badge variant="outline">Knight {row.knight_session}</Badge>}
         {row.bishop_session && <Badge variant="outline">Bishop {row.bishop_session}</Badge>}
       </div>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

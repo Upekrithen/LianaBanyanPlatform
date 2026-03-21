@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const CATEGORY_TO_SEGMENT: Record<string, string> = {
   academic_paper: "papers",
@@ -61,7 +62,8 @@ export default function CephasSearchPage() {
   };
 
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-6" data-xray-id="cephas-search-page">
+    <PortalPageLayout maxWidth="lg" xrayId="cephas-search">
+      <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Search className="w-8 h-8 text-primary" />
@@ -118,6 +120,7 @@ export default function CephasSearchPage() {
           )}
         </>
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

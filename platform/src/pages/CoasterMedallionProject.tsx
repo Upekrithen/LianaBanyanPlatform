@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 
 import { DaisyChainLinkVisualizer } from '@/components/DaisyChainLinkVisualizer';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { COASTER_MEDALLION_PROJECT, SWEET_SIXTEEN, HEXISLE_PROJECT } from '@/lib/daisyChainLink';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -123,7 +124,7 @@ export default function CoasterMedallionProject() {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <div className="container mx-auto py-8 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="coaster-medallion">
       {/* Hero */}
       <div className="text-center mb-8">
         <div className="inline-flex p-4 rounded-full bg-amber-500/10 mb-4">
@@ -586,6 +587,6 @@ export default function CoasterMedallionProject() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }

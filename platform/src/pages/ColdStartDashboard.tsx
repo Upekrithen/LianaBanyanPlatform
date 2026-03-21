@@ -21,6 +21,7 @@ import { LocalColdStartDashboard } from "@/components/cold-start/LocalColdStartD
 import { CareUnitSelector } from "@/components/cold-start/CareUnitSelector";
 import { JesperDashboard } from "@/components/cold-start/JesperDashboard";
 import { BecomeAStewardCard } from "@/components/cue-cards/BecomeAStewardCard";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { 
   Flame, MapPin, Users, Crown, ArrowRight, 
   Sparkles, TrendingUp, Globe, Building2, 
@@ -65,8 +66,7 @@ const ColdStartDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('local');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="cold-start-dashboard" className="bg-gradient-to-b from-background to-muted/20">
         {/* Header */}
         <div className="text-center mb-8">
           <Badge variant="outline" className="mb-4">
@@ -352,8 +352,7 @@ const ColdStartDashboard: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
-    </div>
+    </PortalPageLayout>
   );
 };
 

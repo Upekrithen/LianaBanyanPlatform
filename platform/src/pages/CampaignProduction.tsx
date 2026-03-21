@@ -15,6 +15,7 @@ import { GoogleDocImporter } from "@/components/GoogleDocImporter";
 import { HexisleCampaignManager } from "@/components/HexisleCampaignManager";
 import { HexelViewer3D } from "@/components/HexelViewer3D";
 import hexisleHarvestConcept from "@/assets/hexisle-harvest-concept.png";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 export default function CampaignProduction() {
   const { workstationId } = useParams();
@@ -96,7 +97,8 @@ export default function CampaignProduction() {
   ];
 
   return (
-    <div className="container mx-auto p-6 space-y-6 overflow-x-hidden max-w-full">
+    <PortalPageLayout maxWidth="full" xrayId="campaign-production" className="overflow-x-hidden">
+      <div className="space-y-6">
 
       <div className="flex items-center justify-between">
         <div>
@@ -845,6 +847,7 @@ We aren't just selling a piece of plastic. We are proving a distributed manufact
           </TabsContent>
         )}
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

@@ -20,6 +20,7 @@ import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { 
   FlaskConical, 
   GitBranch, 
@@ -211,7 +212,7 @@ export default function ContingencyOperatorsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <PortalPageLayout maxWidth="xl" xrayId="contingency-operators">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -529,7 +530,7 @@ export default function ContingencyOperatorsPage() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PortalPageLayout>
   );
 }
 

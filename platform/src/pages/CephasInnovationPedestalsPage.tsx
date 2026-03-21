@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { InnovationPedestal } from "@/components/cephas/InnovationPedestal";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { Loader2, Search } from "lucide-react";
 
 export default function CephasInnovationPedestalsPage() {
@@ -47,7 +48,8 @@ export default function CephasInnovationPedestalsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <PortalPageLayout maxWidth="lg" xrayId="cephas-pedestals">
+      <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Innovation Pedestals</h1>
         <p className="text-muted-foreground mt-1">
@@ -99,6 +101,7 @@ export default function CephasInnovationPedestalsPage() {
       <p className="text-xs text-muted-foreground text-center pt-4">
         {filtered.length} of {innovations?.length ?? 0} innovations displayed
       </p>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }

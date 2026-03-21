@@ -76,6 +76,7 @@ import {
 } from '@/lib/contentPipeline';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ─── Stage Icons ─────────────────────────────────────────────────────────────
 
@@ -1124,132 +1125,128 @@ export default function ContentPipelinePage() {
 
   if (selectedId) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-        <div className="max-w-4xl mx-auto px-4 py-12">
-          <ContentDetailView
-            contentId={selectedId}
-            onBack={() => setSelectedId(null)}
-            onRefresh={loadData}
-          />
-        </div>
-      </div>
+      <PortalPageLayout variant="stage" maxWidth="lg" xrayId="content-pipeline">
+        <ContentDetailView
+          contentId={selectedId}
+          onBack={() => setSelectedId(null)}
+          onRefresh={loadData}
+        />
+      </PortalPageLayout>
     );
   }
 
   const stages: PipelineStage[] = ['seed', 'tldr', 'blog', 'article', 'paper'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      <div className="max-w-5xl mx-auto px-4 py-12">
-        {/* Header */}
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 via-blue-500/20 to-purple-500/20 flex items-center justify-center">
-                <Layers className="w-6 h-6 text-blue-400" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-white">Content Pipeline</h1>
-                <p className="text-white/50">SEED → TL;DR → BLOG → ARTICLE → PAPER</p>
-              </div>
+    <PortalPageLayout variant="stage" maxWidth="xl" xrayId="content-pipeline">
+      {/* Header */}
+      <motion.header
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 via-blue-500/20 to-purple-500/20 flex items-center justify-center">
+              <Layers className="w-6 h-6 text-blue-400" />
             </div>
-            <button
-              onClick={() => setShowCreate(true)}
-              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              New Seed
-            </button>
+            <div>
+              <h1 className="text-3xl font-bold text-white">Content Pipeline</h1>
+              <p className="text-white/50">SEED → TL;DR → BLOG → ARTICLE → PAPER</p>
+            </div>
           </div>
-        </motion.header>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            New Seed
+          </button>
+        </div>
+      </motion.header>
 
-        {/* Stats */}
-        {stats && <PipelineStatsBar stats={stats} />}
+      {/* Stats */}
+      {stats && <PipelineStatsBar stats={stats} />}
 
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
-          {/* Search */}
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search content..."
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"
-            />
-          </div>
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        {/* Search */}
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search content..."
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"
+          />
+        </div>
 
-          {/* Stage filter */}
-          <div className="flex items-center gap-1">
-            <Filter className="w-4 h-4 text-white/30" />
-            <select
-              value={filterStage}
-              onChange={(e) => setFilterStage(e.target.value as PipelineStage | 'all')}
-              className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
-            >
-              <option value="all">All Stages</option>
-              {stages.map((s) => (
-                <option key={s} value={s}>{getStageRequirements(s).label}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Status filter */}
+        {/* Stage filter */}
+        <div className="flex items-center gap-1">
+          <Filter className="w-4 h-4 text-white/30" />
           <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as ContentStatus | 'all')}
+            value={filterStage}
+            onChange={(e) => setFilterStage(e.target.value as PipelineStage | 'all')}
             className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
           >
-            <option value="all">All Statuses</option>
-            <option value="draft">Draft</option>
-            <option value="review">In Review</option>
-            <option value="approved">Approved</option>
-            <option value="published">Published</option>
-            <option value="archived">Archived</option>
+            <option value="all">All Stages</option>
+            {stages.map((s) => (
+              <option key={s} value={s}>{getStageRequirements(s).label}</option>
+            ))}
           </select>
         </div>
 
-        {/* Content List */}
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : filteredList.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <Sprout className="w-12 h-12 text-emerald-500/30 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">No content yet</h3>
-            <p className="text-white/50 mb-6">
-              Plant your first seed to start the content evolution pipeline.
-            </p>
-            <button
-              onClick={() => setShowCreate(true)}
-              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              Plant a Seed
-            </button>
-          </motion.div>
-        ) : (
-          <div className="space-y-3">
-            {filteredList.map((item) => (
-              <ContentCard key={item.id} content={item} onSelect={setSelectedId} />
-            ))}
-          </div>
-        )}
+        {/* Status filter */}
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value as ContentStatus | 'all')}
+          className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+        >
+          <option value="all">All Statuses</option>
+          <option value="draft">Draft</option>
+          <option value="review">In Review</option>
+          <option value="approved">Approved</option>
+          <option value="published">Published</option>
+          <option value="archived">Archived</option>
+        </select>
+      </div>
 
-        {/* Footer */}
-        <div className="mt-12 text-center text-white/30 text-sm">
-          Innovation #1505 — Sequential Content Evolution Pipeline
+      {/* Content List */}
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
+      ) : filteredList.length === 0 ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-20"
+        >
+          <Sprout className="w-12 h-12 text-emerald-500/30 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-white mb-2">No content yet</h3>
+          <p className="text-white/50 mb-6">
+            Plant your first seed to start the content evolution pipeline.
+          </p>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Plant a Seed
+          </button>
+        </motion.div>
+      ) : (
+        <div className="space-y-3">
+          {filteredList.map((item) => (
+            <ContentCard key={item.id} content={item} onSelect={setSelectedId} />
+          ))}
+        </div>
+      )}
+
+      {/* Footer */}
+      <div className="mt-12 text-center text-white/30 text-sm">
+        Innovation #1505 — Sequential Content Evolution Pipeline
       </div>
 
       {/* Create Modal */}
@@ -1261,6 +1258,6 @@ export default function ContentPipelinePage() {
           loadData();
         }}
       />
-    </div>
+    </PortalPageLayout>
   );
 }

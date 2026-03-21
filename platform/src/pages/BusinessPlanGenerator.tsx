@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AdvancedThemeSwitcher } from "@/components/AdvancedThemeSwitcher";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const BusinessPlanGenerator = () => {
   const [projectName, setProjectName] = useState("");
@@ -126,7 +127,8 @@ const BusinessPlanGenerator = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="business-plan-generator">
+      <div className="space-y-6">
       <div className="flex items-start justify-between gap-4 mb-2">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">AI Business Plan Generator</h1>
@@ -269,7 +271,8 @@ const BusinessPlanGenerator = () => {
           </TabsContent>
         ))}
       </Tabs>
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 };
 

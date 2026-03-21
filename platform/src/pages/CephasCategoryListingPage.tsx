@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { FileText, Mail, Wrench, Lightbulb, BookOpen, FolderArchive, Newspaper } from "lucide-react";
 import { useState } from "react";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 const CATEGORY_META: Record<string, { title: string; icon: React.ElementType; registryCategories: string[] }> = {
   papers: { title: "Academic Papers", icon: FileText, registryCategories: ["academic_paper"] },
@@ -50,16 +51,17 @@ export default function CephasCategoryListingPage() {
 
   if (!category || !meta) {
     return (
-      <div className="container max-w-4xl mx-auto p-6">
+      <PortalPageLayout maxWidth="lg" xrayId="cephas-category-listing">
         <p className="text-muted-foreground">Unknown category. Use: papers, letters, systems, initiatives, innovations, articles, vault.</p>
-      </div>
+      </PortalPageLayout>
     );
   }
 
   const Icon = meta.icon;
 
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-6" data-xray-id={`cephas-category-${category}`}>
+    <PortalPageLayout maxWidth="lg" xrayId="cephas-category-listing">
+      <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Icon className="w-8 h-8 text-primary" />
@@ -112,6 +114,7 @@ export default function CephasCategoryListingPage() {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </PortalPageLayout>
   );
 }
