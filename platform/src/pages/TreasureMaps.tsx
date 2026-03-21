@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Map, Star, DollarSign, Clock, Rocket, ChevronRight, Utensils, Coffee, Truck, Users, ShoppingBag, Wrench } from 'lucide-react';
+import { ArrowLeft, Map, Star, DollarSign, Clock, Rocket, ChevronRight, Utensils, Coffee, Truck, Users, ShoppingBag, Wrench, Paintbrush } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -142,6 +142,26 @@ const TREASURE_MAPS: TreasureMap[] = [
       { name: 'Level 4: Community Steward', description: 'Full service network with passive income' },
     ],
   },
+  {
+    id: 'designer',
+    title: 'Become an LB Designer',
+    subtitle: 'Creative Services Engine',
+    icon: Paintbrush,
+    iconColor: 'text-pink-400',
+    borderColor: 'border-pink-500/30',
+    bgGradient: 'from-pink-950/40 to-slate-900/60',
+    startupCost: '$0',
+    monthlyEstimate: '$500–$5,000',
+    timeToFirst: '1 week',
+    innovations: '#1876–#1896',
+    description: 'Design Lotería cards, cue cards, logos, business cards, and menu templates. Earn royalties every time a business uses your work. Win Design Battles for bonus payouts + Crow Feathers.',
+    levels: [
+      { name: 'Level 1: First Submission', description: 'Submit 1 design to the Arena, pass STAMP review' },
+      { name: 'Level 2: Template Seller', description: '3+ approved templates in the Emporium, first royalty earned' },
+      { name: 'Level 3: Battle Winner', description: 'Win a Design Battle, earn Crow Feather + pot payout' },
+      { name: 'Level 4: Design Steward', description: '10+ templates, recurring commissions, Crew Table leader' },
+    ],
+  },
 ];
 
 export default function TreasureMaps() {
@@ -155,7 +175,7 @@ export default function TreasureMaps() {
         <Map className="w-14 h-14 mx-auto mb-3 text-amber-400" />
         <h1 className="text-3xl font-bold mb-2" data-xray-id="treasure-maps-title">Treasure Maps</h1>
         <p className="text-slate-400 max-w-xl mx-auto">
-          Six paths to building a local commerce network. Every map starts with $0 and a camera phone.
+          Seven paths to building a local commerce network. Every map starts with $0 and a camera phone.
           Pick one, follow the levels, and build passive income.
         </p>
       </div>
@@ -240,7 +260,7 @@ export default function TreasureMaps() {
                 </div>
 
                 {/* CTA */}
-                <Link to="/tools/storefront-builder">
+                <Link to={map.id === 'designer' ? '/arena' : '/tools/storefront-builder'}>
                   <Button className="w-full bg-amber-600 hover:bg-amber-700">
                     Start This Map <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>

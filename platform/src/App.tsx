@@ -166,6 +166,7 @@ const Governance = lazy(() => import("./pages/Governance"));
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
 const MatchTrade = lazy(() => import("./pages/MatchTrade"));
 const DesignBattleArena = lazy(() => import("./pages/DesignBattleArena"));
+const EmporiumTemplates = lazy(() => import("./pages/EmporiumTemplates"));
 import { DiscoveryBookshelf } from "./components/DiscoveryBookshelf";
 import { DiscoveryGateProvider } from "./components/DiscoveryGate";
 import { DiscoveryProvider } from "./hooks/useDiscovery";
@@ -793,6 +794,9 @@ const App = () => (
                         <Route path="/arena" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
                         <Route path="/design-battle" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
                         <Route path="/battles" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
+                        <Route path="/emporium/templates" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><EmporiumTemplates /></Suspense>} />
+                        <Route path="/emporium/designs" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><EmporiumTemplates /></Suspense>} />
+                        <Route path="/emporium" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><EmporiumTemplates /></Suspense>} />
                         <Route path="/medallion-management" element={<ProtectedRoute><MedallionManagement /></ProtectedRoute>} />
                         
                         {/* C+20 Pilot Program Routes */}

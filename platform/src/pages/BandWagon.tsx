@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +16,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { CurrencyAmount, CurrencyGlyph } from "@/components/CreditSymbol";
+import { useToast } from "@/hooks/use-toast";
 import {
   Rocket,
   Users,
@@ -25,6 +29,9 @@ import {
   ChevronRight,
   Megaphone,
   Star,
+  CircleDot,
+  UserPlus,
+  Armchair,
 } from "lucide-react";
 import {
   SAMPLE_PROJECTS,
@@ -470,6 +477,216 @@ function HowItWorks() {
 }
 
 // ============================================================================
+// CREW TABLES SECTION
+// ============================================================================
+
+interface CrewTable {
+  id: string;
+  creator_id: string;
+  title: string;
+  description: string | null;
+  template_type: string | null;
+  stage_current: number;
+  min_seats_to_activate: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+interface CrewSeat {
+  id: string;
+  table_id: string;
+  role_name: string;
+  slot_type: string;
+  member_id: string | null;
+  seated_at: string | null;
+  payment_amount: number | null;
+  is_required: boolean;
+}
+
+const ROLE_COLORS: Record<string, string> = {
+  designer: "bg-pink-500/20 text-pink-400 border-pink-500/30",
+  photographer: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  writer: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  printer: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+  runner: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+};
+
+function CrewTablesSection() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: crewTables } = useQuery({
+    queryKey: ["crew-tables"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("crew_tables" as never)
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(12) as { data: CrewTable[] | null };
+      return (data || []) as CrewTable[];
+    },
+  });
+
+  const { data: allSeats } = useQuery({
+    queryKey: ["crew-table-seats"],
+    queryFn: async () => {
+      const tableIds = crewTables?.map(t => t.id) || [];
+      if (tableIds.length === 0) return [] as CrewSeat[];
+      const { data } = await supabase
+        .from("crew_table_seats" as never)
+        .select("*")
+        .in("table_id", tableIds as never) as { data: CrewSeat[] | null };
+      return (data || []) as CrewSeat[];
+    },
+    enabled: (crewTables?.length || 0) > 0,
+  });
+
+  const joinSeatMutation = useMutation({
+    mutationFn: async (seatId: string) => {
+      if (!user) throw new Error("Must be logged in");
+      const { error } = await supabase
+        .from("crew_table_seats" as never)
+        .update({ member_id: user.id, seated_at: new Date().toISOString() } as never)
+        .eq("id", seatId as never)
+        .is("member_id", null);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast({ title: "Seat Claimed!", description: "You've joined the Crew Table." });
+      queryClient.invalidateQueries({ queryKey: ["crew-table-seats"] });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Could not join", description: err.message, variant: "destructive" });
+    },
+  });
+
+  const seatsForTable = (tableId: string) =>
+    allSeats?.filter(s => s.table_id === tableId) || [];
+
+  const openPrimaryCount = (tableId: string) =>
+    seatsForTable(tableId).filter(s => s.is_required && !s.member_id).length;
+
+  const stageLabel = (n: number) =>
+    n === 1 ? "PREP" : n === 2 ? "BUILD" : n === 3 ? "DELIVER" : `Stage ${n}`;
+
+  return (
+    <section className="mb-10">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+          <Armchair className="h-5 w-5 text-primary" />
+          Open Crew Tables
+        </h2>
+        {user && (
+          <Link to="/crew/new">
+            <Button variant="outline" size="sm" className="gap-1">
+              <CircleDot className="h-4 w-4" /> Create Table
+            </Button>
+          </Link>
+        )}
+      </div>
+
+      {!crewTables || crewTables.length === 0 ? (
+        <Card className="border-dashed">
+          <CardContent className="pt-6 pb-6 text-center">
+            <Armchair className="h-10 w-10 mx-auto mb-3 text-muted-foreground/50" />
+            <p className="font-medium">No Crew Tables Yet</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Create one to assemble a team for your next project
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-4">
+          {crewTables.map(table => {
+            const seats = seatsForTable(table.id);
+            const openPrimary = openPrimaryCount(table.id);
+            const filledCount = seats.filter(s => s.member_id).length;
+
+            return (
+              <Card key={table.id} className={`${table.is_active ? "border-emerald-500/30" : "border-border"}`}>
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <CardTitle className="text-base">{table.title}</CardTitle>
+                      {table.description && (
+                        <CardDescription className="text-xs mt-1">{table.description}</CardDescription>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={table.is_active ? "default" : "outline"}>
+                        {table.is_active ? "Active" : stageLabel(table.stage_current)}
+                      </Badge>
+                      {table.template_type && (
+                        <Badge variant="secondary" className="text-xs">
+                          {table.template_type.replace(/_/g, " ")}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* Seats display — round table visual */}
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {seats.map(seat => (
+                      <div
+                        key={seat.id}
+                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border text-xs font-medium
+                          ${seat.member_id
+                            ? "bg-muted/50 border-border text-foreground"
+                            : ROLE_COLORS[seat.role_name] || "bg-muted/30 border-dashed border-muted-foreground/30 text-muted-foreground"
+                          }`}
+                      >
+                        {seat.member_id ? (
+                          <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                        ) : (
+                          <UserPlus className="h-3 w-3" />
+                        )}
+                        <span>{seat.role_name}</span>
+                        {!seat.member_id && seat.payment_amount && (
+                          <span className="text-[10px] opacity-70">${seat.payment_amount}</span>
+                        )}
+                        {!seat.is_required && (
+                          <span className="text-[9px] opacity-50">opt</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Seat count + join */}
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">
+                      {filledCount}/{seats.length} seated
+                      {openPrimary > 0 && (
+                        <span className="text-primary ml-1">({openPrimary} open)</span>
+                      )}
+                    </p>
+                    {user && openPrimary > 0 && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="gap-1"
+                        disabled={joinSeatMutation.isPending}
+                        onClick={() => {
+                          const openSeat = seats.find(s => !s.member_id && s.is_required);
+                          if (openSeat) joinSeatMutation.mutate(openSeat.id);
+                        }}
+                      >
+                        <UserPlus className="h-3 w-3" /> Join Seat
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ============================================================================
 // MAIN PAGE
 // ============================================================================
 
@@ -503,6 +720,7 @@ export default function BandWagon() {
         </div>
 
         <StatsBar projects={projects} backings={backings} tasteRanger={tasteRanger} />
+        <CrewTablesSection />
         <ActiveProjectsGrid projects={projects} />
         <YourBackedProjects backings={backings} />
         <TasteRangerProgression profile={tasteRanger} />
