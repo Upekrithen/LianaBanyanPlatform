@@ -67,7 +67,17 @@ Innovation count stays at 1,896 until Session B when it bumps to 1,897.
 | A6 | Calendar migration | DONE — `calendar_events` + `calendar_shares` with RLS, pushed to Supabase |
 | A7 | Calendar page + service | DONE — `/calendar` with month/week/day/list views, 7 calendar type toggles, create/edit/delete dialog |
 
-**Current session: B** — Next up: Beacon tutorials + Calendar completion
+### Session B — COMPLETED (commit `98a697e`)
+| # | Task | Status |
+|---|------|--------|
+| B1 | Beacon Bite 1 nudge | DONE — BeaconBiteNudge.tsx (speech bubble, 2s delay, zero-beacon trigger) |
+| B2 | Universal beacon drops | DONE — BeaconDropButton added to TreasureMaps, Arena, Emporium, Subscriptions, DefenseKlaus |
+| B3 | Calendar auto-events | DONE — calendarSync.ts (storefront order cutoffs, delivery windows, runner routes) |
+| B4 | Calendar sync integration | DONE — Calendar page runs sync on mount |
+| B5 | Calendar navigation | DONE — added to AppSidebar with CalendarDays icon |
+| B6 | Innovation count → 1,897 | DONE |
+
+**Current session: C** — Next up: Ghost World (73)
 
 ### Instructions for Each New Session
 1. Read `MILESTONE_HANDOFF_MARCH_2026.md` (this file) — find the current session letter

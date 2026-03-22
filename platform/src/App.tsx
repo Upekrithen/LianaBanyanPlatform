@@ -344,6 +344,7 @@ const CueCardGenerator = lazy(() => import("./pages/tools/CueCardGenerator"));
 const TreasureMaps = lazy(() => import("./pages/TreasureMaps"));
 const OnboarderDashboard = lazy(() => import("./pages/OnboarderDashboard"));
 const CalendarPage = lazy(() => import("./pages/Calendar"));
+const GhostWorldMap = lazy(() => import("./pages/GhostWorldMap"));
 const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
 const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
@@ -812,6 +813,8 @@ const App = () => (
                         <Route path="/store-templates" element={<ExplorerRoute><StoreTemplates /></ExplorerRoute>} />
                         <Route path="/showcase-promotion" element={<ProtectedRoute><ShowcasePromotion /></ProtectedRoute>} />
                         <Route path="/ghost-world/mall" element={<ExplorerRoute><GhostWorldMall /></ExplorerRoute>} />
+                        <Route path="/ghost-world/map" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GhostWorldMap /></Suspense>} />
+                        <Route path="/hexisle/explore" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GhostWorldMap /></Suspense>} />
                         <Route path="/member-agreement" element={<MemberAgreement />} />
                         <Route path="/creator-draft-pick" element={<ExplorerRoute><CreatorDraftPick /></ExplorerRoute>} />
                         <Route path="/onboarding/trickle" element={<ProtectedRoute><TrickleOnboarding /></ProtectedRoute>} />

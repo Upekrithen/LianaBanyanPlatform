@@ -32,6 +32,7 @@ const marketplaceMainItems = [
   { title: "BandWagon", url: "/bandwagon", icon: Rocket },
   { title: "Subscriptions", url: "/subscriptions", icon: Repeat },
   { title: "Calendar", url: "/calendar", icon: CalendarDays },
+  { title: "Ghost World Map", url: "/ghost-world/map", icon: Globe },
   { title: "Storefront Builder", url: "/tools/storefront-builder", icon: Store },
   { title: "Provider Dashboard", url: "/dashboard/provider", icon: Package },
   { title: "Runner Dashboard", url: "/dashboard/runner", icon: Truck },
