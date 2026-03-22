@@ -87,7 +87,17 @@ Innovation count stays at 1,896 until Session B when it bumps to 1,897.
 | C5 | Map controls + navigation | DONE — zoom/pan/fit-all, sidebar entry, /ghost-world/map + /hexisle/explore |
 | C6 | DB push | DONE |
 
-**Current session: D** — Next up: Onboarding Credit Redesign + Treasure Map Guides (74)
+### Session D — COMPLETED (commit `c3803bc`)
+| # | Task | Status |
+|---|------|--------|
+| D1 | TreasureMaps SEC fix | DONE — all "passive income" → "allocation authority" |
+| D2 | Onboarding credit migration | DONE — backed_marks_earned, saa_accumulated, allocation_rate columns |
+| D3 | OnboarderDashboard redesign | DONE — Direct Earnings + Allocation Authority sections, SEC-safe |
+| D4 | RunnerDashboard update | DONE — "Backed Marks" language throughout |
+| D5 | Treasure Map Guide pages | DONE — /treasure-maps/:mapId with 7 full guides |
+| D6 | Deploy + DB push | DONE |
+
+**All sessions A-D COMPLETE.** Sessions 71-74 fully allocated and executed.
 
 ### Instructions for Each New Session
 1. Read `MILESTONE_HANDOFF_MARCH_2026.md` (this file) — find the current session letter
@@ -99,10 +109,12 @@ Innovation count stays at 1,896 until Session B when it bumps to 1,897.
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 70 (March 22, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Sessions 71-74 (March 22, 2026)
 
-**Latest commit:** `3892874` — Knight 70c: Phase 2 color token sweep — 417 replacements across 25 pages
-**Previous:** `042cda0` (70b: Spotlight battle mode + onboarding prompt) → `c1bf7e9` (70: Design Pipeline + Crew Tables + Emporium)
+**Latest commit:** `c3803bc` — Session D (74): Onboarding credit redesign + Treasure Map guides
+**Commit chain:** `c3803bc` (D) → `6b77e66` (C: Ghost World) → `98a697e` (B: Beacons + Calendar) → `99502b0` (A: Quick wins + foundation) → `3892874` (70c: color sweep)
+**Innovation count:** 1,897
+**DB migrations pushed:** calendar, ghost_world, onboarding_credit_redesign
 
 ---
 
