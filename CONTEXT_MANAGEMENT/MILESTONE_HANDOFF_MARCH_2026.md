@@ -9,10 +9,67 @@
 
 ---
 
+## MASTER ALLOCATION: Sessions 71-74 (Knight Pipeline)
+
+Sessions 71-74 span 4 prompt files. Allocated into 4 x 3-feature sessions (A-D).
+Innovation count stays at 1,896 until Session B when it bumps to 1,897.
+
+### Session A — Quick Wins + Beacon Foundation + Calendar Foundation
+| # | Source | Task | Files |
+|---|--------|------|-------|
+| A1 | 74-T1 | Fix TreasureMaps routing bug (`/treasure-maps` → TreasureMaps not DMKeepSystem) | `App.tsx` |
+| A2 | 74-T2 | Wire "Become an LB Designer" into treasure map quiz engine | `treasureMapEngine.ts`, `treasureMapQuestions.ts` |
+| A3 | 71-T1A | Beacon data model migration (`member_beacons` table) | `20260322000003_beacons.sql` |
+| A4 | 71-T1B | Denken component (beacon widget — collapsed/expanded states) | `src/components/Denken.tsx` |
+| A5 | 72-T1 | Install FullCalendar packages | `package.json` |
+| A6 | 72-T2 | Calendar data model migration (`calendar_events` + `calendar_shares`) | `20260323000001_calendar.sql` |
+| A7 | 72-T3 | Calendar page + service layer | `Calendar.tsx`, `calendarService.ts` |
+
+### Session B — Beacon Tutorials + Calendar Completion
+| # | Source | Task | Files |
+|---|--------|------|-------|
+| B1 | 71-T1C | Beacon Bite 1 tutorial (first-encounter flow after Benefits Sheet) | `Denken.tsx`, `BenefitsSheet logic` |
+| B2 | 71-T1D-E | Beacon Bite 2 (full palette) + Universal beacon drop button | `BeaconDropButton.tsx`, page integrations |
+| B3 | 72-T4 | Auto-populated business events (calendarSync.ts) | `calendarSync.ts` |
+| B4 | 72-T5 | Event create/edit dialog | `CalendarEventDialog.tsx` |
+| B5 | 72-T6 | Calendar in navigation + sidebar | `App.tsx`, sidebar config |
+| B6 | 72-T7 | Innovation count → 1,897 | `useCanonicalStats.ts` |
+
+### Session C — Ghost World
+| # | Source | Task | Files |
+|---|--------|------|-------|
+| C1 | 73-T2 | Ghost World data model migration (islands, buildings, popups) | `20260323000002_ghost_world.sql` |
+| C2 | 73-T1 | Ghost World map page (full-width SVG hex grid) | `GhostWorld.tsx` |
+| C3 | 73-T3 | Island renderer component | `IslandRenderer.tsx` |
+| C4 | 73-T4 | Building click-through popup | `GhostWorld.tsx` |
+| C5 | 73-T6 | Pop-up kiosk display | `GhostWorld.tsx` |
+| C6 | 73-T7 | Map controls (zoom, pan, search, filter) | `GhostWorld.tsx` |
+| C7 | 73-T5 + 71-T4 | All navigation wiring (Ghost World + Calendar + Beacons) | sidebar, Benefits Sheet |
+
+### Session D — Onboarding Credit Redesign + Treasure Map Guides
+| # | Source | Task | Files |
+|---|--------|------|-------|
+| D1 | 74-T3A | TreasureMaps SEC fix (passive income → allocation authority) | `TreasureMaps.tsx` |
+| D2 | 74-T3D | Onboarding credit migration (backed_marks columns) | `20260323000003_onboarding_credit_redesign.sql` |
+| D3 | 74-T3B | OnboarderDashboard redesign (Direct Earnings + Allocation Authority) | `OnboarderDashboard.tsx` |
+| D4 | 74-T3C | RunnerDashboard onboarding credit section update | `RunnerDashboard.tsx` |
+| D5 | 74-T4A-C | Treasure Map Guide pages (dynamic `/treasure-maps/:mapId`) | `TreasureMapGuide.tsx`, `treasureMapGuides.ts` |
+| D6 | 74-T5-T6 | Final innovation count + full deploy + verification | all |
+
+### Instructions for Each New Session
+1. Read `MILESTONE_HANDOFF_MARCH_2026.md` (this file) — find the current session letter
+2. Read the corresponding prompt file(s) from `BISHOP_DROPZONE/`
+3. Execute the tasks listed for that session letter in order
+4. At session end: update this handoff with commit hash, what was done, move to next session letter
+5. **MAX 3 features per session** — the table groups tasks into ~3 logical features per session
+6. Always `npm run build` before deploying. Always `supabase db push` after creating migrations.
+
+---
+
 ## RUNWAY / SESSION STOP (current) — Knight Session 70 (March 22, 2026)
 
-**Latest commit:** `042cda0` — Knight 70b: Spotlight battle mode + storefront onboarding prompt + db push
-**Previous:** `c1bf7e9` (Knight 70: Design Pipeline + Crew Tables + Emporium wiring)
+**Latest commit:** `3892874` — Knight 70c: Phase 2 color token sweep — 417 replacements across 25 pages
+**Previous:** `042cda0` (70b: Spotlight battle mode + onboarding prompt) → `c1bf7e9` (70: Design Pipeline + Crew Tables + Emporium)
 
 ---
 
@@ -54,12 +111,25 @@ All tasks from `BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_70_DESIGN_PIPELINE.md` —
 | 8 | Innovation Count → 1,896 | DONE — `c1bf7e9` |
 | 9 | Passive Income Dashboard | EXISTS — `OnboarderDashboard.tsx` already built |
 
+### Session 70c — Phase 2 Color Token Sweep
+
+| Metric | Value |
+|--------|-------|
+| **Total replacements** | 417 |
+| **Files modified** | 25 pages |
+| **Patterns swept** | `text-slate-400/500` → `text-muted-foreground`, `border-slate-700/800` → `border-border`, `bg-slate-800/50` → `bg-card/50`, `bg-slate-800/30` → `bg-card/30` |
+| **Heaviest files** | MoneyPennySocial (49), OnboarderDashboard (45), MoneyPennyQA (43), SendLists (39), IPPortfolioPage (37), StorefrontBuilder (36) |
+| **Accent colors** | Preserved (amber, emerald, purple, red, etc.) |
+
+Also verified: Task 9 `OnboarderDashboard.tsx` fully matches A&A 019E spec (qualified credits 3%, steward fees 2%, per-business revenue, qualification progress, SEC-safe language).
+
 ### Pending
 
 | Priority | Task | Notes |
 |----------|------|-------|
-| LOW | Phase 2: Interior color token sweep | Replace hardcoded Tailwind colors with semantic tokens |
-| LOW | Task 9 verification | Verify `OnboarderDashboard.tsx` matches A&A 019E spec |
+| LOW | Phase 2 continued | ~200+ more pages still have hardcoded slate colors — continue in future sessions |
+| LOW | `text-white` → `text-foreground` sweep | Needs per-file review (some `text-white` is intentional) |
+| LOW | `bg-slate-900` background sweep | Many are in gradient combos — needs care |
 
 ---
 

@@ -115,6 +115,20 @@ export const PLAYS: Record<string, Play> = {
     icon: "❤️",
     temperamentTags: ["nf"],
   },
+  designer: {
+    id: "designer",
+    title: "Become an LB Designer",
+    subtitle: "Design Lotería cards, cue cards, logos, and templates. Earn royalties every time a business uses your work.",
+    bullets: [
+      "Submit designs to the Arena — compete in battles for bounties.",
+      "Approved work enters the Emporium for ongoing royalties.",
+      "Start with one category. $0 startup, flexible hours.",
+    ],
+    cta: "Enter the Design Arena",
+    route: "/arena",
+    icon: "🎨",
+    temperamentTags: ["sp", "nt"],
+  },
 };
 
 /** Default top 3 when no strong match (explore / minimal). */
@@ -132,6 +146,9 @@ const TAG_COMBO_MAP: Array<{ tags: Set<string>; playId: string }> = [
   { tags: new Set(["assets", "car", "moderate"]), playId: "grocery_runner" },
   { tags: new Set(["food", "labor", "fast"]), playId: "baked_goods" },
   { tags: new Set(["people", "caring", "open"]), playId: "care_tutoring" },
+  { tags: new Set(["digital", "creative", "build"]), playId: "designer" },
+  { tags: new Set(["digital", "creative", "computer"]), playId: "designer" },
+  { tags: new Set(["creative", "computer", "build"]), playId: "designer" },
   { tags: new Set(["explore", "minimal"]), playId: "dinner_crew" }, // will still return 3 via default
 ];
 

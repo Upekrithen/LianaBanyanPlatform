@@ -343,6 +343,7 @@ const RunnerDashboard = lazy(() => import("./pages/RunnerDashboard"));
 const CueCardGenerator = lazy(() => import("./pages/tools/CueCardGenerator"));
 const TreasureMaps = lazy(() => import("./pages/TreasureMaps"));
 const OnboarderDashboard = lazy(() => import("./pages/OnboarderDashboard"));
+const CalendarPage = lazy(() => import("./pages/Calendar"));
 const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
 const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
@@ -665,7 +666,6 @@ const App = () => (
                         <Route path="/medallion-swap" element={<ExplorerRoute><MedallionSwap /></ExplorerRoute>} />
                         <Route path="/senior-pics" element={<ExplorerRoute><MedallionSwap /></ExplorerRoute>} />
                         <Route path="/dm-keep" element={<ExplorerRoute><DMKeepSystem /></ExplorerRoute>} />
-                        <Route path="/treasure-maps" element={<ExplorerRoute><DMKeepSystem /></ExplorerRoute>} />
                         <Route path="/initiatives/defense-klaus" element={<ExplorerRoute><DefenseKlausPage /></ExplorerRoute>} />
                         <Route path="/initiatives/household-concierge" element={<ExplorerRoute><HouseholdConciergePage /></ExplorerRoute>} />
                         <Route path="/initiatives/rally-group" element={<ExplorerRoute><RallyGroupPage /></ExplorerRoute>} />
@@ -821,6 +821,7 @@ const App = () => (
                         <Route path="/dashboard/provider" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProviderDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/dashboard/runner" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><RunnerDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/dashboard/onboarder" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><OnboarderDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/calendar" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CalendarPage /></Suspense></ProtectedRoute>} />
                         <Route path="/tools/cue-card-generator" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardGenerator /></Suspense></ProtectedRoute>} />
                         <Route path="/treasure-maps" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TreasureMaps /></Suspense>} />
                         <Route path="/chain-voting" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainVoting /></Suspense>} />

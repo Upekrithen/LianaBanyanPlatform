@@ -8,11 +8,28 @@
  * Hidden on landing page ("/") and full Crow's Nest page ("/crows-nest").
  */
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useBuilderMode } from './BuilderModeContext';
 import { useCrowsNest } from '@/contexts/CrowsNestContext';
-import { Telescope, Glasses, Sprout, Building2, Compass, Zap } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { Telescope, Glasses, Sprout, Building2, Compass, Zap, MapPin, ChevronRight, Trash2, X } from 'lucide-react';
+import { BEACON_COLORS } from '@/components/BeaconDropButton';
+
+interface StoredBeacon {
+  id: string;
+  name: string;
+  beacon_color: string;
+  location_path: string;
+  page_title: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+const COLOR_ORDER = ['green', 'blue', 'yellow', 'red', 'purple', 'orange'] as const;
+const COLOR_EMOJI: Record<string, string> = { green: '🟢', blue: '🔵', yellow: '🟡', red: '🔴', purple: '🟣', orange: '🟠' };
+const COLOR_LABELS: Record<string, string> = { green: 'Return', blue: 'Important', yellow: 'Decision', red: 'Blocked', purple: 'Complete', orange: 'Custom' };
 
 interface MenuItem {
   id: string;
@@ -25,11 +42,39 @@ interface MenuItem {
 export const DenkenMenu: React.FC = () => {
   const { isBuilderModeActive, toggleBuilderMode } = useBuilderMode();
   const { queue, openOverlay, isOverlayOpen } = useCrowsNest();
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [beaconPanelOpen, setBeaconPanelOpen] = useState(false);
+  const [beacons, setBeacons] = useState<StoredBeacon[]>([]);
   const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('beacons')
+      .select('id, name, beacon_color, location_path, page_title, notes, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => setBeacons((data as StoredBeacon[] | null) || []));
+  }, [user, beaconPanelOpen]);
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, StoredBeacon[]>();
+    for (const b of beacons) {
+      const list = map.get(b.beacon_color) || [];
+      list.push(b);
+      map.set(b.beacon_color, list);
+    }
+    return map;
+  }, [beacons]);
+
+  const handleRemoveBeacon = async (id: string) => {
+    await supabase.from('beacons').delete().eq('id', id);
+    setBeacons(prev => prev.filter(b => b.id !== id));
+  };
 
   // Hide on full Crow's Nest page or when overlay is open
   if (
@@ -69,6 +114,12 @@ export const DenkenMenu: React.FC = () => {
   }, [openOverlay]);
 
   const menuItems: MenuItem[] = [
+    {
+      id: 'beacons',
+      icon: <MapPin className="h-4 w-4" />,
+      label: `My Beacons${beacons.length > 0 ? ` (${beacons.length})` : ''}`,
+      onClick: () => { setBeaconPanelOpen(true); setIsMenuOpen(false); },
+    },
     {
       id: 'portal',
       icon: <Compass className="h-4 w-4" />,
@@ -271,20 +322,96 @@ export const DenkenMenu: React.FC = () => {
           </div>
         )}
 
-        {/* Queue badge when Crow's Nest has items */}
-        {queue.length > 0 && (
+        {/* Badge: beacon count + Crow's Nest queue */}
+        {(queue.length + beacons.length) > 0 && (
           <span
             className="absolute -top-1 -right-1 flex items-center justify-center
                        text-[10px] font-bold text-white bg-red-500 rounded-full
                        min-w-[18px] h-[18px] px-1 leading-none shadow-md"
           >
-            {queue.length}
+            {queue.length + beacons.length}
           </span>
         )}
       </button>
 
+      {/* Beacon Panel — slides in from right when open */}
+      {beaconPanelOpen && (
+        <div
+          className="fixed bottom-24 right-6 w-80 max-h-[60vh] rounded-xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+          style={{ animation: 'denkenSlideIn 200ms ease-out' }}
+        >
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-amber-500" />
+              <span className="font-semibold text-sm">My Beacons</span>
+              <span className="text-[10px] text-muted-foreground">({beacons.length})</span>
+            </div>
+            <button onClick={() => setBeaconPanelOpen(false)} className="p-1 rounded hover:bg-muted">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
+            {beacons.length === 0 && (
+              <div className="text-center py-8">
+                <MapPin className="w-8 h-8 mx-auto mb-2 text-muted-foreground/30" />
+                <p className="text-sm text-muted-foreground">No beacons yet</p>
+                <p className="text-[10px] text-muted-foreground/60 mt-1">Drop beacons on pages to find your way back.</p>
+              </div>
+            )}
+            {COLOR_ORDER.map(color => {
+              const items = grouped.get(color);
+              if (!items || items.length === 0) return null;
+              const colorDef = BEACON_COLORS[color];
+              return (
+                <div key={color}>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                    {COLOR_EMOJI[color]} {COLOR_LABELS[color]} ({items.length})
+                  </p>
+                  <div className="space-y-0.5">
+                    {items.map(b => (
+                      <div
+                        key={b.id}
+                        className="group flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-muted/60 cursor-pointer transition-colors"
+                        onClick={() => { setBeaconPanelOpen(false); navigate(b.location_path); }}
+                      >
+                        <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: colorDef?.color || '#888' }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm truncate">{b.name || b.page_title || b.location_path}</p>
+                          {b.notes && <p className="text-[10px] text-muted-foreground truncate">{b.notes}</p>}
+                        </div>
+                        <ChevronRight className="w-3 h-3 text-muted-foreground/30 group-hover:text-foreground shrink-0" />
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleRemoveBeacon(b.id); }}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                        >
+                          <Trash2 className="w-3 h-3 text-muted-foreground hover:text-red-400" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {beacons.length > 0 && (
+            <div className="px-3 py-2 border-t border-border">
+              <button
+                onClick={() => { setBeaconPanelOpen(false); navigate('/helm'); }}
+                className="text-xs text-muted-foreground hover:text-foreground w-full text-center"
+              >
+                Manage All in Helm →
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Per-lens shimmer keyframes — left fires slightly before right for realism */}
       <style>{`
+        @keyframes denkenSlideIn {
+          from { opacity: 0; transform: translateY(12px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
         @keyframes denkenLensShimmerL {
           0%, 80% { left: -150%; opacity: 0; }
           85% { opacity: 1; }
