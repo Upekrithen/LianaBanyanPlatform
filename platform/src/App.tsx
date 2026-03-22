@@ -345,6 +345,7 @@ const TreasureMaps = lazy(() => import("./pages/TreasureMaps"));
 const OnboarderDashboard = lazy(() => import("./pages/OnboarderDashboard"));
 const CalendarPage = lazy(() => import("./pages/Calendar"));
 const GhostWorldMap = lazy(() => import("./pages/GhostWorldMap"));
+const TreasureMapGuide = lazy(() => import("./pages/TreasureMapGuide"));
 const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
 const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
@@ -828,6 +829,7 @@ const App = () => (
                         <Route path="/calendar" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CalendarPage /></Suspense></ProtectedRoute>} />
                         <Route path="/tools/cue-card-generator" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardGenerator /></Suspense></ProtectedRoute>} />
                         <Route path="/treasure-maps" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TreasureMaps /></Suspense>} />
+                        <Route path="/treasure-maps/:mapId" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TreasureMapGuide /></Suspense>} />
                         <Route path="/chain-voting" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainVoting /></Suspense>} />
 
                         {/* Sessions 47-49 routes (Bishop 013) */}

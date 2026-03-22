@@ -202,7 +202,7 @@ export default function RunnerDashboard() {
         <div className="text-center py-16">
           <Truck className="w-16 h-16 mx-auto mb-4 text-slate-600" />
           <h1 className="text-2xl font-bold mb-2">No Routes Yet</h1>
-          <p className="text-slate-400 mb-6">Onboard a local business to start running deliveries and earning passive income.</p>
+          <p className="text-slate-400 mb-6">Onboard a local business to start running deliveries and earning allocation authority.</p>
           <Link to="/tools/storefront-builder">
             <Button className="bg-amber-600 hover:bg-amber-700">Onboard a Business</Button>
           </Link>
@@ -255,7 +255,7 @@ export default function RunnerDashboard() {
         <Card className="bg-emerald-950/30 border-emerald-800/50 mb-8">
           <CardHeader className="pb-3">
             <CardTitle className="text-emerald-300 flex items-center gap-2">
-              <DollarSign className="w-5 h-5" /> Onboarding Credits (Passive Income)
+              <DollarSign className="w-5 h-5" /> Onboarding Credits (Backed Marks)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -271,7 +271,7 @@ export default function RunnerDashboard() {
                     <div className="text-right">
                       {credit.is_qualified ? (
                         <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                          <CheckCircle className="w-3 h-3 mr-1" /> {credit.credit_percentage}% Passive
+                          <CheckCircle className="w-3 h-3 mr-1" /> {credit.credit_percentage}% Backed Marks
                         </Badge>
                       ) : (
                         <Badge variant="outline" className="border-slate-600 text-slate-400">
@@ -285,7 +285,7 @@ export default function RunnerDashboard() {
             </div>
             {totalOnboardingRevenue > 0 && (
               <p className="text-sm text-emerald-400 mt-3">
-                You may earn {totalOnboardingRevenue}% passive income from qualified storefronts — paid from the platform's share, not the business's 83.3%.
+                You earn {totalOnboardingRevenue}% in Backed Marks (allocation authority) from qualified storefronts — from the platform's share, not the business's 83.3%.
               </p>
             )}
           </CardContent>

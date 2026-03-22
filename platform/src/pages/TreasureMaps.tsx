@@ -40,7 +40,7 @@ const TREASURE_MAPS: TreasureMap[] = [
       { name: 'Level 1: First Route', description: '1 shop, 1 office building, 5+ orders/day' },
       { name: 'Level 2: Morning Circuit', description: '3 shops, 3 delivery points, subscription pitch' },
       { name: 'Level 3: Breakfast Captain', description: '5+ shops, Multiplier helpers, Coalition forming' },
-      { name: 'Level 4: Node Builder', description: '10+ shops, full network, passive income from all' },
+      { name: 'Level 4: Node Builder', description: '10+ shops, full network, allocation authority from all' },
     ],
   },
   {
@@ -140,7 +140,7 @@ const TREASURE_MAPS: TreasureMap[] = [
       { name: 'Level 1: First Service', description: '1 service business on LB, booking flow live' },
       { name: 'Level 2: Multi-Service', description: '3+ service businesses, cross-referral active' },
       { name: 'Level 3: Service Hub', description: 'Home services bundle, scheduling coordination' },
-      { name: 'Level 4: Community Steward', description: 'Full service network with passive income' },
+      { name: 'Level 4: Community Steward', description: 'Full service network with allocation authority' },
     ],
   },
   {
@@ -180,7 +180,7 @@ export default function TreasureMaps() {
         </div>
         <p className="text-muted-foreground max-w-xl mx-auto">
           Seven paths to building a local commerce network. Every map starts with $0 and a camera phone.
-          Pick one, follow the levels, and build passive income.
+          Pick one, follow the levels, and grow your voice in the cooperative.
         </p>
       </div>
 
@@ -192,8 +192,8 @@ export default function TreasureMaps() {
             <div>
               <p className="font-semibold text-amber-300">The Runner → Steward → Node Captain Path</p>
               <p className="text-sm text-muted-foreground mt-1">
-                Start delivering. Onboard businesses (earn 3% passive from platform's share — forever). Become their Steward (add 2% management fee).
-                10 businesses at $3,000/mo each = <span className="text-emerald-400 font-bold">$900/mo passive income</span> before delivery fees.
+                Start delivering (earn delivery fees). Onboard businesses (earn allocation authority through Backed Marks).
+                Become their Steward (add management influence). Your direct earnings grow AND your voice in cooperative governance grows.
               </p>
             </div>
           </div>
@@ -264,9 +264,9 @@ export default function TreasureMaps() {
                 </div>
 
                 {/* CTA */}
-                <Link to={map.id === 'designer' ? '/arena' : '/tools/storefront-builder'}>
+                <Link to={`/treasure-maps/${map.id}`}>
                   <Button className="w-full bg-amber-600 hover:bg-amber-700">
-                    Start This Map <ChevronRight className="w-4 h-4 ml-1" />
+                    View Full Guide <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
               </CardContent>

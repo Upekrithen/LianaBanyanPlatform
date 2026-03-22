@@ -154,13 +154,13 @@ export default function OnboarderDashboard() {
     return total;
   }, [agreements, orderStats]);
 
-  const totalPassiveIncome = totalOnboardingIncome + totalStewardIncome;
+  const totalAllocationAuthority = totalOnboardingIncome + totalStewardIncome;
 
   if (loading) {
     return (
       <PortalPageLayout variant="stage" maxWidth="lg" xrayId="onboarder-dashboard">
         <div className="flex items-center justify-center py-20">
-          <div className="animate-pulse text-muted-foreground">Loading passive income dashboard...</div>
+          <div className="animate-pulse text-muted-foreground">Loading earnings & allocation authority...</div>
         </div>
       </PortalPageLayout>
     );
@@ -176,7 +176,7 @@ export default function OnboarderDashboard() {
           <DollarSign className="w-16 h-16 mx-auto mb-4 text-slate-600" />
           <h1 className="text-2xl font-bold mb-2">No Onboarding Credits Yet</h1>
           <p className="text-muted-foreground mb-2 max-w-md mx-auto">
-            Onboard local businesses onto Liana Banyan to earn 3% passive income from the platform's share — forever.
+            Onboard local businesses onto Liana Banyan to earn allocation authority through Backed Marks from the platform's share — forever.
           </p>
           <p className="text-sm text-muted-foreground mb-6">
             Qualify by creating a storefront and generating 10 paid orders within 30 days.
@@ -201,16 +201,16 @@ export default function OnboarderDashboard() {
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-3xl font-bold" data-xray-id="onboarder-dash-title">Passive Income Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Your onboarding credits and steward earnings</p>
+        <h1 className="text-3xl font-bold" data-xray-id="onboarder-dash-title">Earnings & Allocation Authority</h1>
+        <p className="text-muted-foreground mt-1">Your direct earnings and allocation authority</p>
       </div>
 
       {/* Summary stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <Card className="bg-emerald-950/30 border-emerald-800/50">
           <CardContent className="pt-4 pb-3 px-4">
-            <p className="text-xs text-emerald-500 uppercase tracking-wider">Total Passive Income</p>
-            <p className="text-3xl font-bold text-emerald-400 mt-1">${totalPassiveIncome.toFixed(0)}</p>
+            <p className="text-xs text-emerald-500 uppercase tracking-wider">Allocation Authority</p>
+            <p className="text-3xl font-bold text-emerald-400 mt-1">${totalAllocationAuthority.toFixed(0)}</p>
             <p className="text-xs text-muted-foreground">this month</p>
           </CardContent>
         </Card>
@@ -241,9 +241,8 @@ export default function OnboarderDashboard() {
       <Card className="bg-card/30 border-border/50 mb-8">
         <CardContent className="py-4 px-6">
           <p className="text-sm text-muted-foreground">
-            <span className="font-semibold text-amber-400">How onboarding credits work:</span> You earn {' '}
-            <span className="text-emerald-400 font-bold">3%</span> of every transaction from businesses you onboard — paid from the platform's 13.3% share, not the business's 83.3%.
-            The business pays exactly the same. Qualify with 10 paid orders + 30 active days.
+            <span className="font-semibold text-amber-400">How it works:</span> You earn delivery fees directly. Onboarding businesses generates Backed Marks — {' '}
+            <span className="text-emerald-400 font-bold">3%</span> of the platform's 13.3% share becomes your allocation authority, not cash. The business pays exactly the same. Backed Marks give you governance influence in the cooperative. Qualify with 10 paid orders + 30 active days.
           </p>
         </CardContent>
       </Card>
@@ -301,7 +300,7 @@ export default function OnboarderDashboard() {
                           </div>
                         )}
                         <div className="flex justify-between text-sm pt-2 border-t border-border">
-                          <span className="text-slate-300 font-medium">Total passive income</span>
+                          <span className="text-slate-300 font-medium">Total direct earnings</span>
                           <span className="text-emerald-400 font-bold">${(creditEarned + stewardEarned).toFixed(2)}</span>
                         </div>
                         <div className="flex gap-4 text-xs text-muted-foreground pt-2">
@@ -370,6 +369,16 @@ export default function OnboarderDashboard() {
         </div>
       )}
 
+      {/* Allocation authority explainer — between onboarding credits and steward agreements */}
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold text-emerald-300 mb-2 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5" /> Your Allocation Authority
+        </h2>
+        <p className="text-sm text-muted-foreground max-w-3xl">
+          Backed Marks earned from businesses you've onboarded. These represent your governance influence — the more businesses you bring to the cooperative, the more weight your voice carries.
+        </p>
+      </div>
+
       {/* Active steward agreements */}
       {agreements.length > 0 && (
         <div className="mb-8">
@@ -400,7 +409,7 @@ export default function OnboarderDashboard() {
       {/* CTA */}
       <Card className="bg-card/30 border-border/50">
         <CardContent className="py-6 text-center">
-          <p className="text-muted-foreground mb-4">Onboard more businesses to grow your passive income.</p>
+          <p className="text-muted-foreground mb-4">Onboard more businesses to grow your allocation authority.</p>
           <div className="flex gap-3 justify-center">
             <Link to="/treasure-maps">
               <Button variant="outline" className="border-slate-600">Browse Treasure Maps</Button>
@@ -413,7 +422,7 @@ export default function OnboarderDashboard() {
       </Card>
 
       <p className="text-[10px] text-slate-600 text-center mt-6">
-        Income shown represents service compensation from the platform's operational share.
+        Income shown represents direct service compensation. Backed Marks represent cooperative governance authority, not investment returns.
         Actual earnings may vary. This is not an investment.
       </p>
     </PortalPageLayout>

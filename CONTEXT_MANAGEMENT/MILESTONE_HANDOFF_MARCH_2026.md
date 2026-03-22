@@ -77,7 +77,17 @@ Innovation count stays at 1,896 until Session B when it bumps to 1,897.
 | B5 | Calendar navigation | DONE — added to AppSidebar with CalendarDays icon |
 | B6 | Innovation count → 1,897 | DONE |
 
-**Current session: C** — Next up: Ghost World (73)
+### Session C — COMPLETED (commit `6b77e66`)
+| # | Task | Status |
+|---|------|--------|
+| C1 | Ghost World migration | DONE — ghost_world_islands, buildings, popups with RLS + seed |
+| C2 | Ghost World map page | DONE — GhostWorldMap.tsx (SVG hex grid, zoom/pan, search, category filters) |
+| C3 | Island renderer + building click-through | DONE — hex clusters, category icons, size scaling, popup card |
+| C4 | Pop-up kiosks | DONE — dashed stroke + purple tag |
+| C5 | Map controls + navigation | DONE — zoom/pan/fit-all, sidebar entry, /ghost-world/map + /hexisle/explore |
+| C6 | DB push | DONE |
+
+**Current session: D** — Next up: Onboarding Credit Redesign + Treasure Map Guides (74)
 
 ### Instructions for Each New Session
 1. Read `MILESTONE_HANDOFF_MARCH_2026.md` (this file) — find the current session letter
