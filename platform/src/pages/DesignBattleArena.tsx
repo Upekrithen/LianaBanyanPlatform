@@ -16,6 +16,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { BeaconDropButton } from "@/components/BeaconDropButton";
 import { DesignBattleCard } from "@/components/DesignBattleCard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -229,6 +230,7 @@ export default function DesignBattleArena() {
         <h1 className="text-4xl font-bold flex items-center justify-center gap-3">
           <Swords className="h-10 w-10 text-red-500" />
           Design Battle Arena
+          <BeaconDropButton compact className="ml-2" />
         </h1>
         <p className="text-muted-foreground mt-2">
           Compete for bounties. Winner takes 50% + a Crow Feather.

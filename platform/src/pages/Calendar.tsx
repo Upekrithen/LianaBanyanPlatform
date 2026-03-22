@@ -3,7 +3,7 @@
  * Uses calendar_events table with toggleable calendar types.
  */
 
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -33,6 +33,7 @@ import {
   type CalendarType,
   type CalendarEvent,
 } from '@/lib/calendarService';
+import { runCalendarSync } from '@/lib/calendarSync';
 
 const ALL_TYPES: CalendarType[] = ['personal', 'family', 'business', 'coalition', 'route', 'defense', 'education'];
 
@@ -75,6 +76,15 @@ export default function CalendarPage() {
     end: new Date(new Date().getFullYear(), new Date().getMonth() + 2, 0),
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [synced, setSynced] = useState(false);
+
+  useEffect(() => {
+    if (!user || synced) return;
+    runCalendarSync(user.id).then(() => {
+      setSynced(true);
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
+    });
+  }, [user, synced, queryClient]);
 
   const { data: events = [], isLoading } = useQuery({
     queryKey: ['calendar-events', user?.id, [...enabledTypes].sort().join(','), dateRange.start.toISOString()],

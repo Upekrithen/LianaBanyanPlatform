@@ -444,6 +444,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
 
 // import { BuilderModeToggle } from "@/components/builder/BuilderModeToggle"; // Replaced by DenkenMenu
 import { DenkenMenu } from "@/components/builder/DenkenMenu";
+import { BeaconBiteNudge } from "@/components/BeaconBiteNudge";
 import { XRayOverlay } from "@/components/builder/XRayOverlay";
 
 /**
@@ -1058,6 +1059,7 @@ const App = () => (
               </SubdomainRouter>
               {/* <CrowsNestFloat /> */}{/* Replaced by DenkenMenu */}
               <DenkenMenu />
+              <BeaconBiteNudge />
               <CrowsNestOverlay />
             </RecordingProvider>
           </CrowsNestProvider>

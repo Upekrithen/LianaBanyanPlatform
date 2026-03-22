@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { SWOOPVoting } from "@/components/SWOOPVoting";
 import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { BeaconDropButton } from '@/components/BeaconDropButton';
 import '@/styles/landing.css';
 
 export default function DefenseKlausPage() {
@@ -30,9 +31,10 @@ export default function DefenseKlausPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div>
             <Badge variant="outline" className="mb-4 text-red-600 border-red-600 bg-red-50">Initiative #8</Badge>
-            <h1 className="text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-4">
+            <h1 className="text-4xl font-extrabold text-foreground tracking-tight flex items-center gap-4 flex-wrap">
               <img src="/images/defense-klaus-shield.png" alt="Defense Klaus Shield" className="h-[120px] w-auto drop-shadow-lg" />
               Defense Klaus
+              <BeaconDropButton compact className="ml-2" />
             </h1>
             <p className="mt-2 text-xl text-muted-foreground max-w-2xl">
               "For Someone You Love." Personal safety fashion, 24/7 monitoring, and a pooled legal defense fund for the vulnerable.

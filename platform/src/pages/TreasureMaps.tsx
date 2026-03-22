@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { BeaconDropButton } from '@/components/BeaconDropButton';
 
 interface TreasureMap {
   id: string;
@@ -173,7 +174,10 @@ export default function TreasureMaps() {
 
       <div className="text-center mb-10">
         <Map className="w-14 h-14 mx-auto mb-3 text-amber-400" />
-        <h1 className="text-3xl font-bold mb-2" data-xray-id="treasure-maps-title">Treasure Maps</h1>
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <h1 className="text-3xl font-bold" data-xray-id="treasure-maps-title">Treasure Maps</h1>
+          <BeaconDropButton compact className="ml-2" />
+        </div>
         <p className="text-muted-foreground max-w-xl mx-auto">
           Seven paths to building a local commerce network. Every map starts with $0 and a camera phone.
           Pick one, follow the levels, and build passive income.

@@ -56,6 +56,19 @@ Innovation count stays at 1,896 until Session B when it bumps to 1,897.
 | D5 | 74-T4A-C | Treasure Map Guide pages (dynamic `/treasure-maps/:mapId`) | `TreasureMapGuide.tsx`, `treasureMapGuides.ts` |
 | D6 | 74-T5-T6 | Final innovation count + full deploy + verification | all |
 
+### Session A — COMPLETED (commit `99502b0`)
+| # | Task | Status |
+|---|------|--------|
+| A1 | Fix TreasureMaps routing bug | DONE — removed duplicate `/treasure-maps` → DMKeepSystem route |
+| A2 | Designer quiz wiring | DONE — designer play + 3 tag combos in treasureMapEngine.ts |
+| A3 | Beacon migration | SKIPPED — `beacons` table already exists from migration 20260223000003 |
+| A4 | Denken beacon panel | DONE — integrated into DenkenMenu FAB with grouped list, remove, navigate |
+| A5 | FullCalendar install | DONE — react, daygrid, timegrid, interaction, list, rrule (all MIT) |
+| A6 | Calendar migration | DONE — `calendar_events` + `calendar_shares` with RLS, pushed to Supabase |
+| A7 | Calendar page + service | DONE — `/calendar` with month/week/day/list views, 7 calendar type toggles, create/edit/delete dialog |
+
+**Current session: B** — Next up: Beacon tutorials + Calendar completion
+
 ### Instructions for Each New Session
 1. Read `MILESTONE_HANDOFF_MARCH_2026.md` (this file) — find the current session letter
 2. Read the corresponding prompt file(s) from `BISHOP_DROPZONE/`

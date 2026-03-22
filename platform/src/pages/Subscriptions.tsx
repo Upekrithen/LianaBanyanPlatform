@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { BeaconDropButton } from '@/components/BeaconDropButton';
 import { Slider } from '@/components/ui/slider';
 
 const TIERS = [
@@ -138,7 +139,10 @@ export default function Subscriptions() {
       {/* Hero */}
       <div className="text-center mb-12">
         <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 mb-4">Innovation #1826</Badge>
-        <h1 className="text-4xl font-bold mb-3" data-xray-id="sub-title">Subscriptions</h1>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <h1 className="text-4xl font-bold" data-xray-id="sub-title">Subscriptions</h1>
+          <BeaconDropButton compact className="ml-2" />
+        </div>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           One subscription. Many businesses. Your choice every week. Savings that grow with your commitment.
         </p>

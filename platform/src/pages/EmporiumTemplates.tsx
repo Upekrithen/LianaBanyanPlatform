@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { BeaconDropButton } from "@/components/BeaconDropButton";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -105,9 +106,12 @@ export default function EmporiumTemplates() {
       {/* Header */}
       <div className="text-center mb-8">
         <Store className="h-12 w-12 mx-auto mb-3 text-amber-400" />
-        <h1 className="text-3xl font-bold" data-xray-id="emporium-title">
-          Design Emporium
-        </h1>
+        <div className="flex items-center justify-center gap-2">
+          <h1 className="text-3xl font-bold" data-xray-id="emporium-title">
+            Design Emporium
+          </h1>
+          <BeaconDropButton compact className="ml-2" />
+        </div>
         <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
           Browse templates from LB designers. Use them for your business, or commission the designer directly.
           Every use earns the designer royalties.
