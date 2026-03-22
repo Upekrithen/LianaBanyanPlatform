@@ -64,7 +64,7 @@ interface XpTier {
 
 const XP_TIERS: XpTier[] = [
   { name: "Bronze", min: 0, max: 9_999, colorClass: "text-amber-700" },
-  { name: "Silver", min: 10_000, max: 99_999, colorClass: "text-slate-400" },
+  { name: "Silver", min: 10_000, max: 99_999, colorClass: "text-muted-foreground" },
   { name: "Gold", min: 100_000, max: 999_999, colorClass: "text-yellow-400" },
   { name: "Platinum", min: 1_000_000, max: 9_999_999, colorClass: "text-blue-300" },
   { name: "Diamond", min: 10_000_000, max: 99_999_999, colorClass: "text-cyan-300" },
@@ -287,23 +287,23 @@ function StorefrontCard({ store }: { store: Storefront }) {
   });
 
   return (
-    <Card className="bg-slate-900/60 border-slate-700/50 hover:border-slate-600/70 transition-all duration-200 hover:shadow-lg hover:shadow-slate-900/50 flex flex-col">
+    <Card className="bg-slate-900/60 border-border/50 hover:border-slate-600/70 transition-all duration-200 hover:shadow-lg hover:shadow-slate-900/50 flex flex-col">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="shrink-0 w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center">
-              <Store className="w-5 h-5 text-slate-400" />
+            <div className="shrink-0 w-10 h-10 rounded-lg bg-slate-800 border border-border flex items-center justify-center">
+              <Store className="w-5 h-5 text-muted-foreground" />
             </div>
             <div className="min-w-0">
               <h3 className="font-semibold text-white truncate">{store.name}</h3>
-              <p className="text-sm text-slate-400 truncate">by {store.ownerName}</p>
+              <p className="text-sm text-muted-foreground truncate">by {store.ownerName}</p>
             </div>
           </div>
           <span
             className={`shrink-0 inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-full ${
               store.isOpen
                 ? "bg-emerald-500/20 text-emerald-400"
-                : "bg-slate-700/50 text-slate-500"
+                : "bg-slate-700/50 text-muted-foreground"
             }`}
           >
             <span
@@ -327,10 +327,10 @@ function StorefrontCard({ store }: { store: Storefront }) {
           <XpBoxNotation xp={store.xp} />
         </div>
 
-        <p className="text-sm text-slate-400 line-clamp-2">{store.description}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2">{store.description}</p>
 
         <div className="space-y-1.5">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             Featured
           </p>
           {store.featuredProducts.map((product) => (
@@ -346,15 +346,15 @@ function StorefrontCard({ store }: { store: Storefront }) {
                   className="text-amber-400 shrink-0"
                 />
               ) : (
-                <span className="text-slate-500 text-xs italic shrink-0">Free</span>
+                <span className="text-muted-foreground text-xs italic shrink-0">Free</span>
               )}
             </div>
           ))}
         </div>
       </CardContent>
 
-      <CardFooter className="pt-3 border-t border-slate-800 flex items-center justify-between">
-        <span className="text-xs text-slate-500 flex items-center gap-1">
+      <CardFooter className="pt-3 border-t border-border flex items-center justify-between">
+        <span className="text-xs text-muted-foreground flex items-center gap-1">
           <Clock className="w-3 h-3" />
           Member since {memberDate}
         </span>
@@ -460,7 +460,7 @@ export default function MainSquare() {
         {/* Back Link */}
         <Link
           to="/"
-          className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white transition-colors mb-6"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back
         </Link>
@@ -472,7 +472,7 @@ export default function MainSquare() {
           </div>
           <div>
             <h1 className="text-4xl font-bold">Main Square</h1>
-            <p className="text-lg text-slate-400">
+            <p className="text-lg text-muted-foreground">
               The cooperative marketplace — every maker, every shop, one square
             </p>
           </div>
@@ -480,28 +480,28 @@ export default function MainSquare() {
 
         {/* Stats Bar */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-slate-900/60 border border-slate-700/50 rounded-lg px-4 py-3 text-center">
+          <div className="bg-slate-900/60 border border-border/50 rounded-lg px-4 py-3 text-center">
             <p className="text-2xl font-bold text-amber-400">{totalStores}</p>
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Total Stores</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Stores</p>
           </div>
-          <div className="bg-slate-900/60 border border-slate-700/50 rounded-lg px-4 py-3 text-center">
+          <div className="bg-slate-900/60 border border-border/50 rounded-lg px-4 py-3 text-center">
             <p className="text-2xl font-bold text-emerald-400">{totalProducts}</p>
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Total Products</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Products</p>
           </div>
-          <div className="bg-slate-900/60 border border-slate-700/50 rounded-lg px-4 py-3 text-center">
+          <div className="bg-slate-900/60 border border-border/50 rounded-lg px-4 py-3 text-center">
             <p className="text-2xl font-bold text-violet-400">{activeCategories}</p>
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Categories Active</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Categories Active</p>
           </div>
         </div>
 
         {/* Search Bar */}
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search stores by name, owner, or description..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500 focus:border-amber-600"
+            className="pl-10 bg-slate-900/60 border-border text-white placeholder:text-muted-foreground focus:border-amber-600"
           />
         </div>
 
@@ -509,7 +509,7 @@ export default function MainSquare() {
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           {/* Category Filters */}
           <div className="flex-1 flex flex-wrap gap-2">
-            <SlidersHorizontal className="w-4 h-4 text-slate-500 mt-1.5 shrink-0 hidden sm:block" />
+            <SlidersHorizontal className="w-4 h-4 text-muted-foreground mt-1.5 shrink-0 hidden sm:block" />
             <Button
               size="sm"
               variant={activeCategory === "All" ? "default" : "outline"}
@@ -517,7 +517,7 @@ export default function MainSquare() {
               className={
                 activeCategory === "All"
                   ? "bg-amber-600 hover:bg-amber-700 text-white"
-                  : "border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800"
+                  : "border-border text-muted-foreground hover:text-white hover:bg-slate-800"
               }
             >
               All
@@ -531,7 +531,7 @@ export default function MainSquare() {
                 className={
                   activeCategory === cat
                     ? "bg-amber-600 hover:bg-amber-700 text-white"
-                    : "border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800"
+                    : "border-border text-muted-foreground hover:text-white hover:bg-slate-800"
                 }
               >
                 {cat}
@@ -541,11 +541,11 @@ export default function MainSquare() {
 
           {/* Sort Dropdown */}
           <div className="flex items-center gap-2 shrink-0">
-            <ArrowUpDown className="w-4 h-4 text-slate-500" />
+            <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="bg-slate-900/60 border border-slate-700 rounded-md text-sm text-slate-300 px-3 py-1.5 focus:outline-none focus:border-amber-600"
+              className="bg-slate-900/60 border border-border rounded-md text-sm text-slate-300 px-3 py-1.5 focus:outline-none focus:border-amber-600"
             >
               <option value="featured">Featured</option>
               <option value="newest">Newest</option>
@@ -559,7 +559,7 @@ export default function MainSquare() {
         {loading ? (
           <div className="text-center py-20">
             <Loader2 className="w-10 h-10 text-amber-500 mx-auto mb-4 animate-spin" />
-            <p className="text-slate-400">Loading storefronts...</p>
+            <p className="text-muted-foreground">Loading storefronts...</p>
           </div>
         ) : isEmpty ? (
           <div className="text-center py-20">
@@ -567,7 +567,7 @@ export default function MainSquare() {
             <h2 className="text-2xl font-semibold text-slate-300 mb-2">
               The Square is quiet... for now.
             </h2>
-            <p className="text-slate-500 mb-6">Be the first to open shop.</p>
+            <p className="text-muted-foreground mb-6">Be the first to open shop.</p>
             <Button className="bg-amber-600 hover:bg-amber-700 text-white">
               <Store className="w-4 h-4 mr-2" />
               Open Your Store
@@ -576,7 +576,7 @@ export default function MainSquare() {
         ) : filteredStores.length === 0 ? (
           <div className="text-center py-16">
             <Search className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400">
+            <p className="text-muted-foreground">
               No stores match your search. Try broadening your filters.
             </p>
           </div>

@@ -99,7 +99,7 @@ export default function C20Leaderboard() {
   return (
     <PortalPageLayout variant="stage" maxWidth="xl" xrayId="c20-leaderboard">
       {/* Header */}
-      <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+      <div className="border-b border-border bg-slate-900/50 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-500/30 mb-4">
@@ -109,7 +109,7 @@ export default function C20Leaderboard() {
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
               Businesses Building the Community
             </h1>
-            <p className="text-slate-400 max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               These businesses have committed to Cost + 20% pricing, sacrificing margin to build 
               a transparent, cooperative economy. Every dollar they give up earns them purchasing 
               power within the ecosystem.
@@ -165,7 +165,7 @@ export default function C20Leaderboard() {
         </div>
 
         {/* Leaderboard */}
-        <Card className="bg-slate-900/50 border-slate-700">
+        <Card className="bg-slate-900/50 border-border">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -177,7 +177,7 @@ export default function C20Leaderboard() {
                   Ranked by total margin contributed to the community
                 </CardDescription>
               </div>
-              <Button onClick={loadLeaderboard} variant="outline" size="sm" className="border-slate-700">
+              <Button onClick={loadLeaderboard} variant="outline" size="sm" className="border-border">
                 <RefreshCw className={cn("w-4 h-4 mr-2", loading && "animate-spin")} />
                 Refresh
               </Button>
@@ -187,13 +187,13 @@ export default function C20Leaderboard() {
             {loading ? (
               <div className="text-center py-12">
                 <RefreshCw className="w-8 h-8 animate-spin text-emerald-400 mx-auto mb-4" />
-                <p className="text-slate-400">Loading leaderboard...</p>
+                <p className="text-muted-foreground">Loading leaderboard...</p>
               </div>
             ) : entries.length === 0 ? (
               <div className="text-center py-12">
                 <Heart className="w-12 h-12 text-slate-600 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-slate-300 mb-2">Be the First!</h3>
-                <p className="text-slate-500 mb-4 max-w-md mx-auto">
+                <p className="text-muted-foreground mb-4 max-w-md mx-auto">
                   No businesses have joined the C+20 program yet. Be a pioneer and start 
                   building the cooperative economy.
                 </p>
@@ -226,7 +226,7 @@ export default function C20Leaderboard() {
           <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/30 inline-block">
             <CardContent className="pt-6 pb-6 px-8">
               <h3 className="text-xl font-bold text-white mb-2">Ready to Join?</h3>
-              <p className="text-slate-400 mb-4">
+              <p className="text-muted-foreground mb-4">
                 Start with toe-dipping: 3-10 products at 25-50 units each.
               </p>
               <Link to="/c20">
@@ -240,7 +240,7 @@ export default function C20Leaderboard() {
         </div>
 
         {/* Footer */}
-        <div className="mt-12 text-center text-slate-500 text-sm">
+        <div className="mt-12 text-center text-muted-foreground text-sm">
           <p>Help Each Other Help Ourselves.</p>
         </div>
       </div>
@@ -270,15 +270,15 @@ function LeaderboardRow({
 
   return (
     <div className={cn(
-      "flex items-center gap-4 p-4 rounded-lg border transition-all hover:bg-slate-800/50",
-      isTopThree ? "bg-slate-800/30 border-slate-600" : "bg-slate-900/30 border-slate-800"
+      "flex items-center gap-4 p-4 rounded-lg border transition-all hover:bg-card/50",
+      isTopThree ? "bg-card/30 border-slate-600" : "bg-slate-900/30 border-border"
     )}>
       {/* Rank */}
       <div className={cn(
         "w-10 h-10 rounded-full flex items-center justify-center font-bold border",
         isTopThree 
           ? rankColors[rank as 1 | 2 | 3] 
-          : "text-slate-500 bg-slate-800/50 border-slate-700"
+          : "text-muted-foreground bg-card/50 border-border"
       )}>
         {rank}
       </div>
@@ -289,7 +289,7 @@ function LeaderboardRow({
           <h4 className="font-medium text-white truncate">{entry.anchor_name || 'Anonymous Business'}</h4>
           {getTierIcon(entry.badge_tier)}
         </div>
-        <div className="flex items-center gap-3 text-sm text-slate-400">
+        <div className="flex items-center gap-3 text-sm text-muted-foreground">
           <span>{entry.products_at_c20 || 0} products</span>
           <span className="text-slate-600">•</span>
           <Badge variant="outline" className="text-xs border-slate-600">
@@ -303,7 +303,7 @@ function LeaderboardRow({
         <p className="text-lg font-bold text-emerald-400">
           {formatCurrency(entry.total_margin_contributed || 0)}
         </p>
-        <p className="text-xs text-slate-500">margin contributed</p>
+        <p className="text-xs text-muted-foreground">margin contributed</p>
       </div>
     </div>
   );

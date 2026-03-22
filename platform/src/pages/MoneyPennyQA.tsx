@@ -31,9 +31,9 @@ import {
 
 function StatCard({ label, value, icon: Icon, accent }: { label: string; value: string | number; icon: any; accent?: string }) {
   return (
-    <div className="bg-slate-800/60 border border-slate-700/50 rounded-lg p-4 flex flex-col gap-1">
-      <div className="flex items-center gap-2 text-slate-400 text-xs uppercase tracking-wider">
-        <Icon className={`h-3.5 w-3.5 ${accent || 'text-slate-500'}`} />
+    <div className="bg-slate-800/60 border border-border/50 rounded-lg p-4 flex flex-col gap-1">
+      <div className="flex items-center gap-2 text-muted-foreground text-xs uppercase tracking-wider">
+        <Icon className={`h-3.5 w-3.5 ${accent || 'text-muted-foreground'}`} />
         {label}
       </div>
       <div className={`text-2xl font-bold ${accent || 'text-white'}`}>{value}</div>
@@ -92,7 +92,7 @@ function QAEntryCard({ entry, onApprove, onReject, onAwardBonus }: {
   const [editText, setEditText] = useState(entry.answerText);
 
   return (
-    <Card className="bg-slate-800/40 border-slate-700/50 hover:border-slate-600/60 transition-colors">
+    <Card className="bg-slate-800/40 border-border/50 hover:border-slate-600/60 transition-colors">
       <CardContent className="p-5">
         {/* Top row: badges */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -109,11 +109,11 @@ function QAEntryCard({ entry, onApprove, onReject, onAwardBonus }: {
 
         {/* Question */}
         <div className="mb-3">
-          <p className="text-sm text-slate-400 mb-1">
+          <p className="text-sm text-muted-foreground mb-1">
             <span className="font-medium text-slate-300">{entry.askerName}</span>
-            {entry.askerEmail && <span className="ml-1 text-slate-500">({entry.askerEmail})</span>}
+            {entry.askerEmail && <span className="ml-1 text-muted-foreground">({entry.askerEmail})</span>}
             <span className="mx-2 text-slate-600">|</span>
-            <span className="text-slate-500">{new Date(entry.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+            <span className="text-muted-foreground">{new Date(entry.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
           </p>
           <p className="text-white text-base font-medium leading-relaxed">{entry.questionText}</p>
         </div>
@@ -123,13 +123,13 @@ function QAEntryCard({ entry, onApprove, onReject, onAwardBonus }: {
           <div className="mb-3">
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-1 text-sm text-slate-400 hover:text-slate-300 transition-colors mb-1"
+              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-slate-300 transition-colors mb-1"
             >
               {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
               AI Response
             </button>
             {expanded && (
-              <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-4 mt-1">
+              <div className="bg-slate-900/60 border border-border/40 rounded-lg p-4 mt-1">
                 {editing ? (
                   <div className="space-y-2">
                     <Textarea
@@ -186,7 +186,7 @@ function QAEntryCard({ entry, onApprove, onReject, onAwardBonus }: {
         )}
 
         {/* Actions */}
-        <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-700/40">
+        <div className="flex flex-wrap gap-2 pt-2 border-t border-border/40">
           {entry.status === 'pending_review' && (
             <>
               <Button size="sm" onClick={() => onApprove(entry.id)} className="bg-emerald-600 hover:bg-emerald-700 text-white">
@@ -235,7 +235,7 @@ function ClassificationBreakdown({ entries }: { entries: QAEntry[] }) {
   const healthColor = healthScore >= 60 ? 'text-emerald-400' : healthScore >= 40 ? 'text-yellow-400' : 'text-red-400';
 
   return (
-    <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-5">
+    <div className="bg-slate-800/40 border border-border/50 rounded-lg p-5">
       <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
         <BarChart3 className="h-4 w-4 text-blue-400" />
         Classification Breakdown
@@ -248,7 +248,7 @@ function ClassificationBreakdown({ entries }: { entries: QAEntry[] }) {
             <div key={key}>
               <div className="flex justify-between text-xs mb-1">
                 <span className={cfg.color}>{cfg.label}</span>
-                <span className="text-slate-400">{counts[key]} ({pct}%)</span>
+                <span className="text-muted-foreground">{counts[key]} ({pct}%)</span>
               </div>
               <div className="w-full bg-slate-700/50 rounded-full h-2">
                 <div
@@ -260,10 +260,10 @@ function ClassificationBreakdown({ entries }: { entries: QAEntry[] }) {
           );
         })}
       </div>
-      <div className="mt-4 pt-4 border-t border-slate-700/40 text-center">
-        <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Health Score</p>
+      <div className="mt-4 pt-4 border-t border-border/40 text-center">
+        <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Health Score</p>
         <p className={`text-3xl font-bold ${healthColor}`}>{healthScore}%</p>
-        <p className="text-xs text-slate-500 mt-1">worthwhile / total ratio</p>
+        <p className="text-xs text-muted-foreground mt-1">worthwhile / total ratio</p>
       </div>
     </div>
   );
@@ -275,14 +275,14 @@ function MilestoneReportCard({ report }: { report: QAMilestoneReport }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Card className="bg-slate-800/40 border-slate-700/50">
+    <Card className="bg-slate-800/40 border-border/50">
       <CardHeader className="cursor-pointer" onClick={() => setExpanded(!expanded)}>
         <CardTitle className="flex items-center justify-between text-base">
           <span className="flex items-center gap-2">
             <Award className="h-5 w-5 text-amber-400" />
             <span className="text-white">{report.milestone.toLocaleString()} Questions Milestone</span>
           </span>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-muted-foreground">
             {new Date(report.reachedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             {expanded ? <ChevronUp className="h-4 w-4 inline ml-2" /> : <ChevronDown className="h-4 w-4 inline ml-2" />}
           </span>
@@ -293,26 +293,26 @@ function MilestoneReportCard({ report }: { report: QAMilestoneReport }) {
           {/* Stats grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             <div className="bg-slate-900/60 rounded-lg p-3 text-center">
-              <p className="text-xs text-slate-400">Worthwhile</p>
+              <p className="text-xs text-muted-foreground">Worthwhile</p>
               <p className="text-lg font-bold text-emerald-400">{report.worthwhilePct}%</p>
             </div>
             <div className="bg-slate-900/60 rounded-lg p-3 text-center">
-              <p className="text-xs text-slate-400">Follow-Up Rate</p>
+              <p className="text-xs text-muted-foreground">Follow-Up Rate</p>
               <p className="text-lg font-bold text-purple-400">{report.followUpRate}%</p>
             </div>
             <div className="bg-slate-900/60 rounded-lg p-3 text-center">
-              <p className="text-xs text-slate-400">Marks Awarded</p>
+              <p className="text-xs text-muted-foreground">Marks Awarded</p>
               <p className="text-lg font-bold text-amber-400">{report.totalMarksAwarded.toLocaleString()}</p>
             </div>
             <div className="bg-slate-900/60 rounded-lg p-3 text-center">
-              <p className="text-xs text-slate-400">Avg Response</p>
+              <p className="text-xs text-muted-foreground">Avg Response</p>
               <p className="text-lg font-bold text-blue-400">{report.avgResponseTime}</p>
             </div>
           </div>
 
           {/* Classification breakdown bars */}
           <div className="mb-4">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Classification Breakdown</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Classification Breakdown</p>
             <div className="flex h-4 rounded-full overflow-hidden">
               <div className="bg-emerald-500/60" style={{ width: `${report.worthwhilePct}%` }} title={`Worthwhile: ${report.worthwhileCount}`} />
               <div className="bg-yellow-500/60" style={{ width: `${(report.duplicateCount / report.totalQuestions) * 100}%` }} title={`Duplicate: ${report.duplicateCount}`} />
@@ -321,7 +321,7 @@ function MilestoneReportCard({ report }: { report: QAMilestoneReport }) {
               <div className="bg-red-500/60" style={{ width: `${(report.trollCount / report.totalQuestions) * 100}%` }} title={`Troll: ${report.trollCount}`} />
               <div className="bg-purple-500/60" style={{ width: `${(report.botCount / report.totalQuestions) * 100}%` }} title={`Bot: ${report.botCount}`} />
             </div>
-            <div className="flex flex-wrap gap-3 mt-2 text-xs text-slate-400">
+            <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
               <span><span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1" />Worthwhile {report.worthwhileCount}</span>
               <span><span className="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1" />Duplicate {report.duplicateCount}</span>
               <span><span className="inline-block w-2 h-2 rounded-full bg-slate-500 mr-1" />Throwaway {report.throwawayCount}</span>
@@ -333,7 +333,7 @@ function MilestoneReportCard({ report }: { report: QAMilestoneReport }) {
 
           {/* Top categories */}
           <div>
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Top Question Categories</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Top Question Categories</p>
             <div className="space-y-1.5">
               {report.topQuestionCategories.map(cat => (
                 <div key={cat.category} className="flex items-center gap-2">
@@ -344,7 +344,7 @@ function MilestoneReportCard({ report }: { report: QAMilestoneReport }) {
                     />
                   </div>
                   <span className="text-xs text-slate-300 w-40 truncate">{cat.category}</span>
-                  <span className="text-xs text-slate-500 w-8 text-right">{cat.count}</span>
+                  <span className="text-xs text-muted-foreground w-8 text-right">{cat.count}</span>
                 </div>
               ))}
             </div>
@@ -424,7 +424,7 @@ export default function MoneyPennyQA() {
     return (
       <PortalPageLayout variant="stage" maxWidth="xl" xrayId="moneypenny-qa">
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-slate-400 animate-pulse">Loading Q&A Intelligence...</div>
+          <div className="text-muted-foreground animate-pulse">Loading Q&A Intelligence...</div>
         </div>
       </PortalPageLayout>
     );
@@ -447,7 +447,7 @@ export default function MoneyPennyQA() {
                 MoneyPenny Q&A Intelligence
                 <MessageCircle className="h-5 w-5 text-fuchsia-400" />
               </h1>
-              <p className="text-sm text-slate-400">Every question is a gift. The good ones earn Marks.</p>
+              <p className="text-sm text-muted-foreground">Every question is a gift. The good ones earn Marks.</p>
             </div>
           </div>
         </div>
@@ -463,10 +463,10 @@ export default function MoneyPennyQA() {
         </div>
 
         {/* Milestone Progress Bar */}
-        <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 mb-6">
+        <div className="bg-slate-800/40 border border-border/50 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-slate-300 font-medium">Milestone Progress</span>
-            <span className="text-slate-400">
+            <span className="text-muted-foreground">
               {stats.totalQuestions.toLocaleString()} / {stats.nextMilestone.toLocaleString()} — next report at {stats.nextMilestone.toLocaleString()}
             </span>
           </div>
@@ -486,31 +486,31 @@ export default function MoneyPennyQA() {
 
             {/* Search */}
             <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search questions, answers, or askers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-slate-800/60 border-slate-700/50 text-white placeholder:text-slate-500"
+                className="pl-10 bg-slate-800/60 border-border/50 text-white placeholder:text-muted-foreground"
               />
             </div>
 
             {/* Tab Filters */}
             <Tabs value={statusFilter} onValueChange={setStatusFilter} className="mb-4">
-              <TabsList className="bg-slate-800/60 border border-slate-700/50">
-                <TabsTrigger value="all" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400">
+              <TabsList className="bg-slate-800/60 border border-border/50">
+                <TabsTrigger value="all" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-muted-foreground">
                   All ({entries.length})
                 </TabsTrigger>
-                <TabsTrigger value="pending_review" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 text-slate-400">
+                <TabsTrigger value="pending_review" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 text-muted-foreground">
                   Pending ({entries.filter(e => e.status === 'pending_review').length})
                 </TabsTrigger>
-                <TabsTrigger value="approved" className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 text-slate-400">
+                <TabsTrigger value="approved" className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 text-muted-foreground">
                   Approved ({entries.filter(e => e.status === 'approved').length})
                 </TabsTrigger>
-                <TabsTrigger value="sent" className="data-[state=active]:bg-emerald-500/20 data-[state=active]:text-emerald-400 text-slate-400">
+                <TabsTrigger value="sent" className="data-[state=active]:bg-emerald-500/20 data-[state=active]:text-emerald-400 text-muted-foreground">
                   Sent ({entries.filter(e => e.status === 'sent').length})
                 </TabsTrigger>
-                <TabsTrigger value="followed_up" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 text-slate-400">
+                <TabsTrigger value="followed_up" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 text-muted-foreground">
                   Followed Up ({entries.filter(e => e.status === 'followed_up').length})
                 </TabsTrigger>
               </TabsList>
@@ -519,7 +519,7 @@ export default function MoneyPennyQA() {
             {/* Entry Cards */}
             <div className="space-y-4">
               {filteredEntries.length === 0 ? (
-                <div className="text-center py-12 text-slate-500">
+                <div className="text-center py-12 text-muted-foreground">
                   No questions match your filters.
                 </div>
               ) : (
@@ -577,11 +577,11 @@ export default function MoneyPennyQA() {
                       <MilestoneReportCard key={report.milestone} report={report} />
                     ))
                   ) : (
-                    <p className="text-sm text-slate-500">No milestones reached yet. First report at 100 questions.</p>
+                    <p className="text-sm text-muted-foreground">No milestones reached yet. First report at 100 questions.</p>
                   )}
                   {/* Next milestone indicator */}
-                  <div className="bg-slate-800/30 border border-dashed border-slate-700/50 rounded-lg p-4 text-center">
-                    <p className="text-sm text-slate-500">
+                  <div className="bg-card/30 border border-dashed border-border/50 rounded-lg p-4 text-center">
+                    <p className="text-sm text-muted-foreground">
                       Next milestone: <span className="text-white font-medium">{stats.nextMilestone.toLocaleString()} questions</span>
                     </p>
                     <p className="text-xs text-slate-600 mt-1">

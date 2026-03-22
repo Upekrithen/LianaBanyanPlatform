@@ -142,7 +142,7 @@ function LiveIndicator() {
   }
 
   return (
-    <div className="flex items-center gap-2 text-slate-400">
+    <div className="flex items-center gap-2 text-muted-foreground">
       <Clock className="h-4 w-4" />
       <span className="text-sm">Next broadcast: <span className="text-white font-mono font-semibold">{countdown}</span></span>
     </div>
@@ -237,7 +237,7 @@ function SlideCard({ slide }: { slide: NewsSlide }) {
 
 function HeadlineCard({ slide }: { slide: NewsSlide }) {
   return (
-    <Card className="bg-slate-800/60 border-slate-700/50 hover:border-slate-600/70 transition-colors">
+    <Card className="bg-slate-800/60 border-border/50 hover:border-slate-600/70 transition-colors">
       <CardContent className="p-5">
         <div className="flex items-start gap-3">
           <div className="p-1.5 rounded-md bg-white/10 text-white/70 shrink-0 mt-0.5">
@@ -246,14 +246,14 @@ function HeadlineCard({ slide }: { slide: NewsSlide }) {
           <div className="min-w-0">
             <Badge
               variant="outline"
-              className="text-[10px] uppercase tracking-wider text-slate-400 border-slate-600 mb-2"
+              className="text-[10px] uppercase tracking-wider text-muted-foreground border-slate-600 mb-2"
             >
               {SLIDE_LABELS[slide.type]}
             </Badge>
             <h3 className="font-semibold text-white text-sm leading-snug mb-1">
               {slide.title}
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
               {slide.subtitle}
             </p>
             {slide.price != null && (
@@ -285,7 +285,7 @@ function ShowcaseCard({ promo }: { promo: ShowcasePromotion }) {
         <h3 className="text-lg font-semibold text-white mb-1">
           {promo.title}
         </h3>
-        <p className="text-sm text-slate-400 mb-3">{promo.subtitle}</p>
+        <p className="text-sm text-muted-foreground mb-3">{promo.subtitle}</p>
         {promo.storeName && (
           <p className="text-xs text-purple-400">{promo.storeName}</p>
         )}
@@ -329,7 +329,7 @@ export function DailyNewsWidget() {
   const slide = slides[currentSlide];
 
   return (
-    <Card className="bg-slate-900/80 border-slate-700/50 overflow-hidden">
+    <Card className="bg-slate-900/80 border-border/50 overflow-hidden">
       <CardContent className="p-0">
         <div
           className={`bg-gradient-to-br ${SLIDE_GRADIENTS[slide.type]} p-5`}
@@ -459,7 +459,7 @@ export default function DailyNews() {
     return (
       <PortalPageLayout variant="stage" maxWidth="xl" xrayId="daily-news">
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-pulse text-slate-400">Loading The Daily News...</div>
+          <div className="animate-pulse text-muted-foreground">Loading The Daily News...</div>
         </div>
       </PortalPageLayout>
     );
@@ -477,14 +477,14 @@ export default function DailyNews() {
               The Daily News
             </h1>
           </div>
-          <p className="text-slate-400 text-sm md:text-base mb-4">
+          <p className="text-muted-foreground text-sm md:text-base mb-4">
             Your cooperative morning briefing &mdash; live every day at 11 AM
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <LiveIndicator />
             <span className="hidden sm:inline text-slate-600">|</span>
-            <span className="text-slate-400 text-sm">{formatDate()}</span>
+            <span className="text-muted-foreground text-sm">{formatDate()}</span>
           </div>
         </div>
 
@@ -533,7 +533,7 @@ export default function DailyNews() {
                 />
               ))}
             </div>
-            <span className="text-xs text-slate-500 font-mono ml-2">
+            <span className="text-xs text-muted-foreground font-mono ml-2">
               {currentSlide + 1} of {totalSlides}
             </span>
           </div>
@@ -595,7 +595,7 @@ export default function DailyNews() {
                     <div>
                       <h3 className="font-semibold text-white text-sm">{m.name}</h3>
                       <p className="text-xs text-sky-300">{m.achievement}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">{m.xp} XP</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{m.xp} XP</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -614,7 +614,7 @@ export default function DailyNews() {
               <h2 className="text-2xl font-bold text-white mb-2">
                 Want to be featured?
               </h2>
-              <p className="text-slate-400 mb-2 max-w-lg mx-auto">
+              <p className="text-muted-foreground mb-2 max-w-lg mx-auto">
                 Showcase your store on The Daily News. Get your products,
                 milestones, and grand openings in front of every cooperative
                 member.

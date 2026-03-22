@@ -47,7 +47,7 @@ const TIER_CONFIG: Record<TierLevel, { label: string; emoji: string; color: stri
   official:   { label: 'HexIsle Official',  emoji: '🔵', color: 'text-blue-400',    bg: 'bg-blue-500/10',    border: 'border-blue-500/30' },
   compatible: { label: 'HexIsle Compatible', emoji: '🟢', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30' },
   adaptable:  { label: 'HexIsle Adaptable', emoji: '🟡', color: 'text-yellow-400',  bg: 'bg-yellow-500/10',  border: 'border-yellow-500/30' },
-  inspired:   { label: 'HexIsle Inspired',  emoji: '⚪', color: 'text-slate-400',   bg: 'bg-slate-500/10',   border: 'border-slate-500/30' },
+  inspired:   { label: 'HexIsle Inspired',  emoji: '⚪', color: 'text-muted-foreground',   bg: 'bg-slate-500/10',   border: 'border-slate-500/30' },
 };
 
 // ─── PIECE DATA (from hexelPieceGrammar.ts) ───
@@ -105,7 +105,7 @@ const HexIsleDownloads: React.FC = () => {
     <PortalPageLayout>
       {/* Header */}
       <div className="max-w-6xl mx-auto px-4 pt-8 pb-4">
-        <div className="flex items-center gap-2 text-sm text-slate-400 mb-6">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
           <Link to="/hexisle" className="hover:text-cyan-400 transition-colors flex items-center gap-1">
             <ArrowLeft className="w-4 h-4" /> HexIsle
           </Link>
@@ -120,7 +120,7 @@ const HexIsleDownloads: React.FC = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold">HexIsle Downloads</h1>
-              <p className="text-slate-400 text-sm">
+              <p className="text-muted-foreground text-sm">
                 {PIECES.length} canonical pieces · {availableCount} STLs available · Open IP model
               </p>
             </div>
@@ -146,21 +146,21 @@ const HexIsleDownloads: React.FC = () => {
         {/* Search + Filter */}
         <div className="flex gap-3 flex-wrap">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search pieces by name, layer, or description..."
-              className="w-full bg-slate-800/60 border border-slate-700/60 rounded-lg pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
+              className="w-full bg-slate-800/60 border border-border/60 rounded-lg pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
             />
           </div>
           <div className="relative">
-            <Filter className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Filter className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <select
               value={tierFilter}
               onChange={(e) => setTierFilter(e.target.value as TierLevel | 'all')}
-              className="bg-slate-800/60 border border-slate-700/60 rounded-lg pl-10 pr-8 py-2.5 text-sm text-slate-200 appearance-none cursor-pointer focus:outline-none focus:border-cyan-500/50"
+              className="bg-slate-800/60 border border-border/60 rounded-lg pl-10 pr-8 py-2.5 text-sm text-slate-200 appearance-none cursor-pointer focus:outline-none focus:border-cyan-500/50"
             >
               <option value="all">All Tiers</option>
               {(Object.entries(TIER_CONFIG) as [TierLevel, typeof TIER_CONFIG[TierLevel]][]).map(([key, cfg]) => (
@@ -179,14 +179,14 @@ const HexIsleDownloads: React.FC = () => {
               <Wrench className="w-4 h-4" />
               Piggy-Back Improvement Submission
             </h3>
-            <p className="text-slate-400 text-xs mb-4">
+            <p className="text-muted-foreground text-xs mb-4">
               Upload your improved version of a HexIsle piece. Best improvements become official products.
               Approved submissions earn an IP Ledger entry and Marks.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-slate-400 mb-1">Original Piece</label>
-                <select className="w-full bg-slate-800/60 border border-slate-700/60 rounded-lg px-3 py-2 text-sm text-slate-200">
+                <label className="block text-xs text-muted-foreground mb-1">Original Piece</label>
+                <select className="w-full bg-slate-800/60 border border-border/60 rounded-lg px-3 py-2 text-sm text-slate-200">
                   <option value="">Select piece...</option>
                   {PIECES.map(p => (
                     <option key={p.id} value={p.id}>{p.name} ({p.layer})</option>
@@ -194,26 +194,26 @@ const HexIsleDownloads: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1">Self-Declared Tier</label>
-                <select className="w-full bg-slate-800/60 border border-slate-700/60 rounded-lg px-3 py-2 text-sm text-slate-200">
+                <label className="block text-xs text-muted-foreground mb-1">Self-Declared Tier</label>
+                <select className="w-full bg-slate-800/60 border border-border/60 rounded-lg px-3 py-2 text-sm text-slate-200">
                   {(Object.entries(TIER_CONFIG) as [TierLevel, typeof TIER_CONFIG[TierLevel]][]).map(([key, cfg]) => (
                     <option key={key} value={key}>{cfg.emoji} {cfg.label}</option>
                   ))}
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-xs text-slate-400 mb-1">Description of Improvement</label>
+                <label className="block text-xs text-muted-foreground mb-1">Description of Improvement</label>
                 <textarea
                   rows={3}
                   placeholder="What did you improve? Why? What problem does it solve?"
-                  className="w-full bg-slate-800/60 border border-slate-700/60 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 resize-none"
+                  className="w-full bg-slate-800/60 border border-border/60 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-500 resize-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1">Upload STL/OBJ File</label>
+                <label className="block text-xs text-muted-foreground mb-1">Upload STL/OBJ File</label>
                 <div className="bg-slate-800/60 border border-dashed border-slate-600/60 rounded-lg p-4 text-center">
-                  <Upload className="w-6 h-6 text-slate-500 mx-auto mb-1" />
-                  <p className="text-xs text-slate-500">Drag & drop or click to browse</p>
+                  <Upload className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
+                  <p className="text-xs text-muted-foreground">Drag & drop or click to browse</p>
                   <p className="text-[10px] text-slate-600">.stl, .obj — max 50MB</p>
                 </div>
               </div>
@@ -233,7 +233,7 @@ const HexIsleDownloads: React.FC = () => {
 
       {/* ── Piece Grid ── */}
       <div className="max-w-6xl mx-auto px-4 pb-16">
-        <p className="text-slate-500 text-xs mb-3">{filtered.length} piece{filtered.length !== 1 ? 's' : ''} shown</p>
+        <p className="text-muted-foreground text-xs mb-3">{filtered.length} piece{filtered.length !== 1 ? 's' : ''} shown</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((piece) => {
             const tier = TIER_CONFIG[piece.tier];
@@ -252,9 +252,9 @@ const HexIsleDownloads: React.FC = () => {
                     {tier.emoji} {tier.label}
                   </span>
                 </div>
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider">{piece.layer}</span>
-                <p className="text-slate-400 text-xs mt-1 mb-2">{piece.description}</p>
-                <p className="text-slate-500 text-[11px] italic mb-3">{piece.role}</p>
+                <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{piece.layer}</span>
+                <p className="text-muted-foreground text-xs mt-1 mb-2">{piece.description}</p>
+                <p className="text-muted-foreground text-[11px] italic mb-3">{piece.role}</p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -262,7 +262,7 @@ const HexIsleDownloads: React.FC = () => {
                       <Hash className="w-3 h-3" /> {piece.innovationNumber}
                     </span>
                     {piece.communityVersions > 0 && (
-                      <span className="text-[10px] text-slate-500">
+                      <span className="text-[10px] text-muted-foreground">
                         {piece.communityVersions} community version{piece.communityVersions !== 1 ? 's' : ''}
                       </span>
                     )}
@@ -283,7 +283,7 @@ const HexIsleDownloads: React.FC = () => {
         {filtered.length === 0 && (
           <div className="text-center py-12">
             <Hexagon className="w-12 h-12 text-slate-700 mx-auto mb-3" />
-            <p className="text-slate-500">No pieces match your search.</p>
+            <p className="text-muted-foreground">No pieces match your search.</p>
             <button
               onClick={() => { setSearch(''); setTierFilter('all'); }}
               className="text-cyan-400 text-sm mt-2 hover:underline"
@@ -294,20 +294,20 @@ const HexIsleDownloads: React.FC = () => {
         )}
 
         {/* ── How Tiers Work ── */}
-        <section className="mt-8 rounded-xl border border-slate-700/60 bg-slate-800/40 p-5">
+        <section className="mt-8 rounded-xl border border-border/60 bg-slate-800/40 p-5">
           <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
             <Award className="w-4 h-4 text-amber-400" />
             How Tier Classification Works
           </h2>
-          <div className="space-y-2 text-xs text-slate-400">
+          <div className="space-y-2 text-xs text-muted-foreground">
             <p><span className="text-amber-400 font-bold">🥇 Tereno Certified</span> — Manufactured by LB Factory Nodes. Full QC, patent-backed, guaranteed compatibility.</p>
             <p><span className="text-slate-300 font-bold">🥈 Tereno Approved</span> — Community design reviewed and validated by the Founder. Official dimensions confirmed.</p>
             <p><span className="text-blue-400 font-bold">🔵 HexIsle Official</span> — Published by the Founder or core team. Reference implementation.</p>
             <p><span className="text-emerald-400 font-bold">🟢 HexIsle Compatible</span> — Community-verified to fit the standard. May have creative modifications.</p>
             <p><span className="text-yellow-400 font-bold">🟡 HexIsle Adaptable</span> — Works with modifications. May require adapter pieces or filing.</p>
-            <p><span className="text-slate-400 font-bold">⚪ HexIsle Inspired</span> — Creative interpretation. Shares the concept but may not fit standard Hexels.</p>
+            <p><span className="text-muted-foreground font-bold">⚪ HexIsle Inspired</span> — Creative interpretation. Shares the concept but may not fit standard Hexels.</p>
           </div>
-          <p className="text-slate-500 text-[10px] mt-3">
+          <p className="text-muted-foreground text-[10px] mt-3">
             Submit improvements via the Piggy-Back Protocol. Star Chamber reviews submissions for tier classification.
             Accepted improvements earn IP Ledger entries and Marks.
           </p>

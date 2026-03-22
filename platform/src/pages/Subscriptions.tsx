@@ -65,7 +65,7 @@ function TierCalculator() {
   const savings = walkInMonthly - subMonthly;
 
   return (
-    <Card className="bg-slate-800/60 border-slate-700">
+    <Card className="bg-slate-800/60 border-border">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <Calculator className="w-5 h-5 text-amber-400" />
@@ -74,28 +74,28 @@ function TierCalculator() {
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <label className="text-sm text-slate-400 mb-2 block">Meals / services per week: <span className="text-white font-semibold">{meals}</span></label>
+          <label className="text-sm text-muted-foreground mb-2 block">Meals / services per week: <span className="text-white font-semibold">{meals}</span></label>
           <Slider value={[meals]} onValueChange={(v) => setMeals(v[0])} min={1} max={10} step={1} className="mt-2" />
         </div>
         <div>
-          <label className="text-sm text-slate-400 mb-2 block">Average price per visit: <span className="text-white font-semibold">${avgPrice}</span></label>
+          <label className="text-sm text-muted-foreground mb-2 block">Average price per visit: <span className="text-white font-semibold">${avgPrice}</span></label>
           <Slider value={[avgPrice]} onValueChange={(v) => setAvgPrice(v[0])} min={5} max={50} step={1} className="mt-2" />
         </div>
         <div className="grid grid-cols-3 gap-4 pt-2">
           <div className="text-center">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Walk-in / mo</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Walk-in / mo</p>
             <p className="text-xl font-bold text-slate-300">${walkInMonthly.toFixed(0)}</p>
           </div>
           <div className="text-center">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Subscription / mo</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Subscription / mo</p>
             <p className="text-xl font-bold text-amber-400">${subMonthly.toFixed(0)}</p>
           </div>
           <div className="text-center">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">You save / mo</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">You save / mo</p>
             <p className="text-xl font-bold text-emerald-400">${savings.toFixed(0)}</p>
           </div>
         </div>
-        <p className="text-center text-sm text-slate-400">
+        <p className="text-center text-sm text-muted-foreground">
           You'd be on the <Badge className={tier.badge}>{tier.name}</Badge> tier at <strong className="text-white">{discountPct}% off</strong> everything.
         </p>
       </CardContent>
@@ -115,7 +115,7 @@ function BuffetProblem() {
         {expanded && (
           <div className="mt-4 space-y-3 text-slate-300 text-sm">
             <p>Every food business faces the same impossible calculus:</p>
-            <ul className="list-disc list-inside space-y-1 text-slate-400">
+            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
               <li><strong className="text-red-300">Prepare for too many</strong> → food waste, thrown-out labor, lost margin</li>
               <li><strong className="text-red-300">Prepare for too few</strong> → missed revenue, bad customer experience, empty shelves</li>
             </ul>
@@ -131,7 +131,7 @@ function BuffetProblem() {
 export default function Subscriptions() {
   return (
     <PortalPageLayout variant="stage" maxWidth="xl" xrayId="subscriptions-page">
-      <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6" data-xray-id="sub-back">
+      <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white mb-6" data-xray-id="sub-back">
         <ArrowLeft className="w-4 h-4" /> Back
       </Link>
 
@@ -139,7 +139,7 @@ export default function Subscriptions() {
       <div className="text-center mb-12">
         <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 mb-4">Innovation #1826</Badge>
         <h1 className="text-4xl font-bold mb-3" data-xray-id="sub-title">Subscriptions</h1>
-        <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           One subscription. Many businesses. Your choice every week. Savings that grow with your commitment.
         </p>
       </div>
@@ -155,7 +155,7 @@ export default function Subscriptions() {
           <h3 className="text-lg font-semibold text-slate-200 mb-4">Why Subscribe?</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {MEMBER_BENEFITS.map((b, i) => (
-              <Card key={i} className="bg-slate-800/40 border-slate-700">
+              <Card key={i} className="bg-slate-800/40 border-border">
                 <CardContent className="pt-5 flex gap-3">
                   <b.icon className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                   <p className="text-sm text-slate-300">{b.text}</p>
@@ -189,7 +189,7 @@ export default function Subscriptions() {
         </div>
 
         {/* How it works */}
-        <Card className="bg-slate-800/50 border-slate-700 mb-8">
+        <Card className="bg-card/50 border-border mb-8">
           <CardHeader>
             <CardTitle className="text-lg">How It Works</CardTitle>
           </CardHeader>
@@ -230,7 +230,7 @@ export default function Subscriptions() {
           <h3 className="text-lg font-semibold text-slate-200 mb-4">Why Offer Subscriptions?</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {BUSINESS_BENEFITS.map((b, i) => (
-              <Card key={i} className="bg-slate-800/40 border-slate-700">
+              <Card key={i} className="bg-slate-800/40 border-border">
                 <CardContent className="pt-5 flex gap-3">
                   <b.icon className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <p className="text-sm text-slate-300">{b.text}</p>
@@ -242,7 +242,7 @@ export default function Subscriptions() {
 
         <BuffetProblem />
 
-        <Card className="bg-slate-800/50 border-slate-700 mt-6">
+        <Card className="bg-card/50 border-border mt-6">
           <CardContent className="pt-6">
             <h3 className="text-lg font-semibold text-slate-200 mb-3">Turn-Key Setup</h3>
             <p className="text-sm text-slate-300 mb-4">
@@ -274,28 +274,28 @@ export default function Subscriptions() {
             <div className="grid sm:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-violet-300">10+</p>
-                <p className="text-xs text-slate-500">Businesses minimum</p>
+                <p className="text-xs text-muted-foreground">Businesses minimum</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-violet-300">200+</p>
-                <p className="text-xs text-slate-500">Subscribers to activate</p>
+                <p className="text-xs text-muted-foreground">Subscribers to activate</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-violet-300">∞</p>
-                <p className="text-xs text-slate-500">Categories welcome</p>
+                <p className="text-xs text-muted-foreground">Categories welcome</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardHeader>
               <CardTitle className="text-base">How to Form a Coalition</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-slate-300 space-y-2">
               <p>Coalitions form through <strong className="text-white">BandWagon</strong> — Liana Banyan's demand-aggregation system.</p>
-              <ol className="list-decimal list-inside space-y-1 text-slate-400">
+              <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
                 <li>Businesses register interest on BandWagon</li>
                 <li>Once 10 businesses in an area sign up, the coalition forms</li>
                 <li>Members subscribe and hit the 200 threshold</li>
@@ -307,12 +307,12 @@ export default function Subscriptions() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardHeader>
               <CardTitle className="text-base">Active Coalitions Near You</CardTitle>
             </CardHeader>
             <CardContent className="text-center py-8">
-              <p className="text-slate-500 text-sm">No active coalitions in your area yet.</p>
+              <p className="text-muted-foreground text-sm">No active coalitions in your area yet.</p>
               <p className="text-slate-600 text-xs mt-1">Be the first to start one!</p>
               <Button variant="outline" size="sm" className="mt-4 border-violet-500/30 text-violet-300 hover:bg-violet-500/10">
                 Browse Forming Coalitions
@@ -339,7 +339,7 @@ export default function Subscriptions() {
 
       {/* CTA */}
       <div className="text-center pb-8">
-        <p className="text-slate-500 text-sm mb-4">Subscriptions launch when your local coalition reaches critical mass.</p>
+        <p className="text-muted-foreground text-sm mb-4">Subscriptions launch when your local coalition reaches critical mass.</p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link to="/bandwagon">
             <Button className="bg-amber-600 hover:bg-amber-700">Start or Join a Coalition</Button>

@@ -37,7 +37,7 @@ export default function TerenoCertification() {
             <Award className="w-8 h-8 text-yellow-400" />
             Tereno Certification — The Gold Standard
           </h1>
-          <p className="text-slate-400">Six tiers of compatibility. One ecosystem.</p>
+          <p className="text-muted-foreground">Six tiers of compatibility. One ecosystem.</p>
         </header>
 
         {/* Six-Tier Display */}
@@ -49,7 +49,7 @@ export default function TerenoCertification() {
             return (
               <Card
                 key={tier.tier}
-                className={`cursor-pointer transition-all ${tier.bgColor} border-2 ${isActive ? tier.borderColor + " ring-2 ring-offset-2 ring-offset-slate-950" : "border-slate-800 hover:border-slate-600"}`}
+                className={`cursor-pointer transition-all ${tier.bgColor} border-2 ${isActive ? tier.borderColor + " ring-2 ring-offset-2 ring-offset-slate-950" : "border-border hover:border-slate-600"}`}
                 onClick={() => setFilterTier(isActive ? null : tier.tier)}
               >
                 <CardContent className="pt-4 pb-3">
@@ -58,8 +58,8 @@ export default function TerenoCertification() {
                     <Icon className={`w-5 h-5 ${tier.color}`} />
                   </div>
                   <p className="font-semibold text-sm">{tier.name}</p>
-                  <p className="text-xs text-slate-400 mb-2">{tier.label}</p>
-                  <p className="text-xs text-slate-500 mb-2">{tier.description}</p>
+                  <p className="text-xs text-muted-foreground mb-2">{tier.label}</p>
+                  <p className="text-xs text-muted-foreground mb-2">{tier.description}</p>
                   <Badge variant="outline" className="text-xs">{count} certified</Badge>
                 </CardContent>
               </Card>
@@ -77,16 +77,16 @@ export default function TerenoCertification() {
             {filtered.map(cert => {
               const tierDef = TIER_DEFINITIONS.find(t => t.tier === cert.tier);
               return (
-                <Card key={cert.id} className="bg-slate-900/60 border-slate-800">
+                <Card key={cert.id} className="bg-slate-900/60 border-border">
                   <CardContent className="py-3">
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <div>
                         <p className="font-medium text-sm">{cert.productName}</p>
-                        <p className="text-xs text-slate-400">{cert.designerName} &middot; {cert.manufacturingProcess}</p>
+                        <p className="text-xs text-muted-foreground">{cert.designerName} &middot; {cert.manufacturingProcess}</p>
                       </div>
                       <Badge className={`${tierDef?.bgColor || ""} ${tierDef?.color || ""} border-0 text-xs`}>Tier {cert.tier}</Badge>
                     </div>
-                    <p className="text-xs text-slate-500 mb-2">{cert.productDescription}</p>
+                    <p className="text-xs text-muted-foreground mb-2">{cert.productDescription}</p>
                     <div className="flex flex-wrap gap-1.5">
                       {[
                         { label: "60mm", ok: cert.dimensionsCompliant },
@@ -96,7 +96,7 @@ export default function TerenoCertification() {
                         { label: "Cost ≤ Ceiling", ok: cert.costUnderCeiling },
                         { label: "Lithographic", ok: cert.lithographicManufacturing },
                       ].map(check => (
-                        <span key={check.label} className={`text-xs px-1.5 py-0.5 rounded ${check.ok ? "bg-green-500/20 text-green-400" : "bg-slate-800 text-slate-500"}`}>
+                        <span key={check.label} className={`text-xs px-1.5 py-0.5 rounded ${check.ok ? "bg-green-500/20 text-green-400" : "bg-slate-800 text-muted-foreground"}`}>
                           {check.ok ? "✓" : "✗"} {check.label}
                         </span>
                       ))}
@@ -110,20 +110,20 @@ export default function TerenoCertification() {
           </div>
         </section>
 
-        <Separator className="border-slate-800" />
+        <Separator className="border-border" />
 
         {/* Process-to-Tier Map */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">Process-to-Tier Mapping</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead><tr className="border-b border-slate-800 text-slate-400"><th className="text-left py-2 pr-4">Process</th><th className="text-center py-2 px-4">Tier Range</th><th className="text-left py-2 pl-4">Notes</th></tr></thead>
+              <thead><tr className="border-b border-border text-muted-foreground"><th className="text-left py-2 pr-4">Process</th><th className="text-center py-2 px-4">Tier Range</th><th className="text-left py-2 pl-4">Notes</th></tr></thead>
               <tbody>
                 {PROCESS_TIER_MAP.map(row => (
-                  <tr key={row.process} className="border-b border-slate-800/50">
+                  <tr key={row.process} className="border-b border-border/50">
                     <td className="py-2 pr-4 font-medium">{row.process}</td>
                     <td className="py-2 px-4 text-center"><Badge variant="outline">{row.tierRange}</Badge></td>
-                    <td className="py-2 pl-4 text-slate-400">{row.notes}</td>
+                    <td className="py-2 pl-4 text-muted-foreground">{row.notes}</td>
                   </tr>
                 ))}
               </tbody>
@@ -131,7 +131,7 @@ export default function TerenoCertification() {
           </div>
         </section>
 
-        <Separator className="border-slate-800" />
+        <Separator className="border-border" />
 
         {/* Exclusions */}
         <section className="space-y-4">
@@ -151,7 +151,7 @@ export default function TerenoCertification() {
                   <ex.icon className={`w-5 h-5 ${ex.color} shrink-0 mt-0.5`} />
                   <div>
                     <p className="font-medium text-sm text-red-400">{ex.label}</p>
-                    <p className="text-xs text-slate-400">{ex.desc}</p>
+                    <p className="text-xs text-muted-foreground">{ex.desc}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -159,14 +159,14 @@ export default function TerenoCertification() {
           </div>
         </section>
 
-        <Separator className="border-slate-800" />
+        <Separator className="border-border" />
 
         {/* Piggy-Back Protocol */}
         <Card className="bg-gradient-to-r from-green-950/30 to-slate-900/60 border-green-800/30">
           <CardContent className="py-6">
             <h3 className="text-lg font-bold text-green-400 mb-2">Third-Party Maker? Welcome to the Ecosystem</h3>
-            <p className="text-sm text-slate-400 mb-3">Submit your design → receive tier classification → earn IP ledger entry → receive tier-scaled deferred payment for design services.</p>
-            <p className="text-xs text-slate-500">This is deferred compensation for services rendered — not a participation interest. SEC-safe by design.</p>
+            <p className="text-sm text-muted-foreground mb-3">Submit your design → receive tier classification → earn IP ledger entry → receive tier-scaled deferred payment for design services.</p>
+            <p className="text-xs text-muted-foreground">This is deferred compensation for services rendered — not a participation interest. SEC-safe by design.</p>
           </CardContent>
         </Card>
       </div>

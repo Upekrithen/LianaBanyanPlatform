@@ -167,14 +167,14 @@ const TREASURE_MAPS: TreasureMap[] = [
 export default function TreasureMaps() {
   return (
     <PortalPageLayout variant="stage" maxWidth="lg" xrayId="treasure-maps">
-      <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6">
+      <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white mb-6">
         <ArrowLeft className="w-4 h-4" /> Back
       </Link>
 
       <div className="text-center mb-10">
         <Map className="w-14 h-14 mx-auto mb-3 text-amber-400" />
         <h1 className="text-3xl font-bold mb-2" data-xray-id="treasure-maps-title">Treasure Maps</h1>
-        <p className="text-slate-400 max-w-xl mx-auto">
+        <p className="text-muted-foreground max-w-xl mx-auto">
           Seven paths to building a local commerce network. Every map starts with $0 and a camera phone.
           Pick one, follow the levels, and build passive income.
         </p>
@@ -187,7 +187,7 @@ export default function TreasureMaps() {
             <Rocket className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
             <div>
               <p className="font-semibold text-amber-300">The Runner → Steward → Node Captain Path</p>
-              <p className="text-sm text-slate-400 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Start delivering. Onboard businesses (earn 3% passive from platform's share — forever). Become their Steward (add 2% management fee).
                 10 businesses at $3,000/mo each = <span className="text-emerald-400 font-bold">$900/mo passive income</span> before delivery fees.
               </p>
@@ -211,10 +211,10 @@ export default function TreasureMaps() {
                     </div>
                     <div>
                       <h2 className="text-xl font-bold">{map.title}</h2>
-                      <p className="text-sm text-slate-400">{map.subtitle}</p>
+                      <p className="text-sm text-muted-foreground">{map.subtitle}</p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="border-slate-600 text-slate-500 text-[10px]">{map.innovations}</Badge>
+                  <Badge variant="outline" className="border-slate-600 text-muted-foreground text-[10px]">{map.innovations}</Badge>
                 </div>
 
                 {/* Description */}
@@ -224,17 +224,17 @@ export default function TreasureMaps() {
                 <div className="grid grid-cols-3 gap-3 mb-5">
                   <div className="bg-slate-900/50 rounded-lg p-2 text-center">
                     <DollarSign className="w-4 h-4 mx-auto text-emerald-400 mb-0.5" />
-                    <p className="text-xs text-slate-500">Startup</p>
+                    <p className="text-xs text-muted-foreground">Startup</p>
                     <p className="text-sm font-bold text-emerald-400">{map.startupCost}</p>
                   </div>
                   <div className="bg-slate-900/50 rounded-lg p-2 text-center">
                     <Star className="w-4 h-4 mx-auto text-amber-400 mb-0.5" />
-                    <p className="text-xs text-slate-500">Est. Monthly</p>
+                    <p className="text-xs text-muted-foreground">Est. Monthly</p>
                     <p className="text-sm font-bold text-amber-400">{map.monthlyEstimate}</p>
                   </div>
                   <div className="bg-slate-900/50 rounded-lg p-2 text-center">
                     <Clock className="w-4 h-4 mx-auto text-blue-400 mb-0.5" />
-                    <p className="text-xs text-slate-500">First $</p>
+                    <p className="text-xs text-muted-foreground">First $</p>
                     <p className="text-sm font-bold text-blue-400">{map.timeToFirst}</p>
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export default function TreasureMaps() {
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-medium">{level.name}</p>
-                        <p className="text-xs text-slate-500">{level.description}</p>
+                        <p className="text-xs text-muted-foreground">{level.description}</p>
                       </div>
                     </div>
                   ))}

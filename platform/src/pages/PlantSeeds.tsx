@@ -69,7 +69,7 @@ export default function PlantSeeds() {
     <PortalPageLayout>
       {/* Breadcrumb */}
       <nav className="px-6 pt-4 max-w-6xl mx-auto">
-        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <Link to="/portal" className="hover:text-slate-300 transition-colors">Portal</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-slate-300">Plant Seeds</span>
@@ -110,7 +110,7 @@ export default function PlantSeeds() {
             more governance weight. 
             
             <LarkWrapper componentId="plant-seeds-explainer" bountyCredits={50} className="inline-block mt-4 w-full">
-              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 text-left">
+              <div className="bg-card/50 border border-border rounded-xl p-6 text-left">
                 <h3 className="text-white font-semibold flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-violet-400" />
                   "Help others succeed, own a piece of that success."
@@ -118,14 +118,14 @@ export default function PlantSeeds() {
                 <p className="text-sm text-slate-300 leading-relaxed mb-4">
                   What does this actually mean? When you plant seeds (sponsor a project), you aren't just donating. You are acquiring <strong>Joules</strong> (Platform Service Vouchers) and fractional IP participation in the Liana Banyan ecosystem.
                 </p>
-                <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-700/50">
-                  <p className="text-xs text-slate-400 mb-3">
+                <div className="bg-slate-900/80 p-4 rounded-lg border border-border/50">
+                  <p className="text-xs text-muted-foreground mb-3">
                     <strong>The Medallion System:</strong> Every contribution is tracked on our immutable ledger. We call this "Test-Net By Design." You can view the actual bank transactions proving this system works on our <a href="/public-ledger" className="text-violet-400 hover:underline">"Fly on the Wall" Public Ledger</a>. 
                   </p>
-                  <p className="text-xs text-slate-400 mb-3">
+                  <p className="text-xs text-muted-foreground mb-3">
                     <strong>Predicting the Market:</strong> We don't guess the market. We pre-order everything. With 50% machine capacity and after-the-fact Cost+20% pricing, the only thing that can disrupt us is an "Act of God". In an era of tariff wars and supply chain gaffes, our decentralized local manufacturing network solves the crisis.
                   </p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-foreground">
                     <strong>SEC Compliance & Crowdfunding:</strong> When we use third-party sites like Kickstarter, we are offering <em>Rewards</em> (Joules/Utility Vouchers). Kickstarter strictly prohibits offering equity or fractional IP ownership. To legally offer fractional IP ownership under Regulation Crowdfunding (Reg CF) of the JOBS Act, we must use registered equity portals (like Wefunder or Republic) who handle the SEC Form C filings, or manage it internally through our compliant cooperative revenue-share structure.
                   </p>
                 </div>
@@ -263,7 +263,7 @@ export default function PlantSeeds() {
             ))}
           </div>
           
-          <div className="p-6 rounded-xl bg-slate-800/50 border border-white/10">
+          <div className="p-6 rounded-xl bg-card/50 border border-white/10">
             <h4 className="font-semibold text-white mb-3">Key Message</h4>
             <p className="text-lg text-white/80 italic">
               "When you help someone else succeed, you participate in that success."

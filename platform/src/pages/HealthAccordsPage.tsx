@@ -19,7 +19,7 @@ export default function HealthAccordsPage() {
         </div>
         <div>
           <h1 className="text-4xl font-bold text-foreground dark:text-white">Tatiana Schlossberg Health Accords</h1>
-          <p className="text-lg text-muted-foreground dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Affordable prescriptions, navigating medical systems, and RNA help.
           </p>
         </div>
@@ -48,7 +48,7 @@ export default function HealthAccordsPage() {
                   <h4 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center gap-2">
                     <Pill className="h-5 w-5 text-rose-500" /> Affordable Prescriptions (LifeLine)
                   </h4>
-                  <p className="text-muted-foreground dark:text-slate-400 mb-3">
+                  <p className="text-muted-foreground dark:text-muted-foreground mb-3">
                     We use Anonymous Volume Aggregation to group demand for essential medications. By pooling our purchasing power, we bypass the extractive middlemen and secure wholesale pricing for the community.
                   </p>
                   <ul className="space-y-1 text-sm text-muted-foreground">
@@ -64,7 +64,7 @@ export default function HealthAccordsPage() {
                   <h4 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center gap-2">
                     <Stethoscope className="h-5 w-5 text-blue-500" /> Navigating Medical Systems
                   </h4>
-                  <p className="text-muted-foreground dark:text-slate-400 mb-3">
+                  <p className="text-muted-foreground dark:text-muted-foreground mb-3">
                     The healthcare system is intentionally opaque. We provide community-vetted guides, advocates, and "Curators" who help you navigate insurance, billing disputes, and finding the right care without getting bankrupted.
                   </p>
                 </div>
@@ -76,7 +76,7 @@ export default function HealthAccordsPage() {
                   <h4 className="text-xl font-bold text-foreground dark:text-white mb-2 flex items-center gap-2">
                     <HeartPulse className="h-5 w-5 text-emerald-500" /> RNA / Medical Professional Help
                   </h4>
-                  <p className="text-muted-foreground dark:text-slate-400 mb-3">
+                  <p className="text-muted-foreground dark:text-muted-foreground mb-3">
                     Register with local RNAs or medical professionals (without formal medical advice liability) who can help you understand what you need, find cheaper alternatives for "Y", and provide guidance when you are overwhelmed.
                   </p>
                 </div>

@@ -118,7 +118,7 @@ export default function HexIsleBattlePhilosophy() {
     <PortalPageLayout>
       {/* Header */}
       <div className="container max-w-4xl mx-auto px-4 py-8">
-        <Link to="/hexisle" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6">
+        <Link to="/hexisle" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to HexIsle
         </Link>
 
@@ -164,7 +164,7 @@ export default function HexIsleBattlePhilosophy() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 viewMode === mode
                   ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                  : "text-slate-400 hover:text-slate-200 border border-slate-700 hover:border-slate-600"
+                  : "text-muted-foreground hover:text-slate-200 border border-border hover:border-slate-600"
               }`}
             >
               {mode === "game" ? "Battle Lore" : mode === "life" ? "Real-Life Application" : "Both Worlds"}
@@ -182,32 +182,32 @@ export default function HexIsleBattlePhilosophy() {
               <motion.div
                 key={section.id}
                 layout
-                className="rounded-xl border border-slate-700/50 overflow-hidden bg-slate-900/50"
+                className="rounded-xl border border-border/50 overflow-hidden bg-slate-900/50"
               >
                 <button
                   onClick={() => setExpanded(isExpanded ? null : section.id)}
-                  className="w-full flex items-center gap-4 p-5 text-left hover:bg-slate-800/30 transition-colors"
+                  className="w-full flex items-center gap-4 p-5 text-left hover:bg-card/30 transition-colors"
                 >
                   <div className="p-2 rounded-lg bg-amber-500/10">
                     <Icon className="w-6 h-6 text-amber-400" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-bold text-white">{section.title}</h3>
-                    <p className="text-sm text-slate-400">{section.subtitle}</p>
+                    <p className="text-sm text-muted-foreground">{section.subtitle}</p>
                   </div>
                   {section.innovations && (
                     <div className="hidden sm:flex gap-1">
                       {section.innovations.map((n) => (
-                        <Badge key={n} variant="outline" className="text-xs text-slate-500 border-slate-700">
+                        <Badge key={n} variant="outline" className="text-xs text-muted-foreground border-border">
                           #{n}
                         </Badge>
                       ))}
                     </div>
                   )}
                   {isExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-slate-500 shrink-0" />
+                    <ChevronUp className="w-5 h-5 text-muted-foreground shrink-0" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-slate-500 shrink-0" />
+                    <ChevronDown className="w-5 h-5 text-muted-foreground shrink-0" />
                   )}
                 </button>
 
@@ -262,7 +262,7 @@ export default function HexIsleBattlePhilosophy() {
         </div>
 
         {/* Chess Comparison */}
-        <Card className="mt-8 bg-slate-900/50 border-slate-700/50">
+        <Card className="mt-8 bg-slate-900/50 border-border/50">
           <CardHeader>
             <CardTitle className="text-lg text-white flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-amber-400" />
@@ -273,7 +273,7 @@ export default function HexIsleBattlePhilosophy() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-slate-400 border-b border-slate-700">
+                  <tr className="text-muted-foreground border-b border-border">
                     <th className="text-left py-2 pr-4">Dimension</th>
                     <th className="text-left py-2 pr-4">Chess</th>
                     <th className="text-left py-2 pr-4">Catan</th>
@@ -282,43 +282,43 @@ export default function HexIsleBattlePhilosophy() {
                   </tr>
                 </thead>
                 <tbody className="text-slate-300">
-                  <tr className="border-b border-slate-800">
-                    <td className="py-2 pr-4 text-slate-400">Randomness</td>
+                  <tr className="border-b border-border">
+                    <td className="py-2 pr-4 text-muted-foreground">Randomness</td>
                     <td className="py-2 pr-4">None</td>
                     <td className="py-2 pr-4">Dice</td>
                     <td className="py-2 pr-4">Dice (all)</td>
                     <td className="py-2 text-amber-300">None</td>
                   </tr>
-                  <tr className="border-b border-slate-800">
-                    <td className="py-2 pr-4 text-slate-400">Information</td>
+                  <tr className="border-b border-border">
+                    <td className="py-2 pr-4 text-muted-foreground">Information</td>
                     <td className="py-2 pr-4">Perfect</td>
                     <td className="py-2 pr-4">Partial</td>
                     <td className="py-2 pr-4">Partial</td>
                     <td className="py-2 text-amber-300">Perfect</td>
                   </tr>
-                  <tr className="border-b border-slate-800">
-                    <td className="py-2 pr-4 text-slate-400">Freedom</td>
+                  <tr className="border-b border-border">
+                    <td className="py-2 pr-4 text-muted-foreground">Freedom</td>
                     <td className="py-2 pr-4">64 squares</td>
                     <td className="py-2 pr-4">Fixed tiles</td>
                     <td className="py-2 pr-4">Narrative</td>
                     <td className="py-2 text-amber-300">Modifiable terrain</td>
                   </tr>
-                  <tr className="border-b border-slate-800">
-                    <td className="py-2 pr-4 text-slate-400">Economy</td>
+                  <tr className="border-b border-border">
+                    <td className="py-2 pr-4 text-muted-foreground">Economy</td>
                     <td className="py-2 pr-4">None</td>
                     <td className="py-2 pr-4">Trade</td>
                     <td className="py-2 pr-4">Loot</td>
                     <td className="py-2 text-amber-300">Coin HP + ransom + cairns</td>
                   </tr>
-                  <tr className="border-b border-slate-800">
-                    <td className="py-2 pr-4 text-slate-400">Preparation</td>
+                  <tr className="border-b border-border">
+                    <td className="py-2 pr-4 text-muted-foreground">Preparation</td>
                     <td className="py-2 pr-4">Free (positional)</td>
                     <td className="py-2 pr-4">None</td>
                     <td className="py-2 pr-4">None</td>
                     <td className="py-2 text-amber-300">Costly pre-spending</td>
                   </tr>
                   <tr>
-                    <td className="py-2 pr-4 text-slate-400">Chance model</td>
+                    <td className="py-2 pr-4 text-muted-foreground">Chance model</td>
                     <td className="py-2 pr-4">Eliminated</td>
                     <td className="py-2 pr-4">Externalized</td>
                     <td className="py-2 pr-4">Externalized</td>
@@ -331,12 +331,12 @@ export default function HexIsleBattlePhilosophy() {
         </Card>
 
         {/* Closing Quote */}
-        <div className="mt-10 text-center py-8 border-t border-slate-800">
+        <div className="mt-10 text-center py-8 border-t border-border">
           <blockquote className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent mb-4">
             "It is better to practice shooting arrows at trees<br />
             so that when battle comes, you hit."
           </blockquote>
-          <p className="text-slate-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             This is the lesson of the game. It is also the lesson of the platform.
             It is also, we argue, the lesson of economics itself.
           </p>
@@ -346,19 +346,19 @@ export default function HexIsleBattlePhilosophy() {
         <div className="flex flex-wrap justify-center gap-3 mt-6 mb-12">
           <Link
             to="/hexisle"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-sm transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-border hover:border-slate-600 text-sm transition-all"
           >
             <Swords className="w-4 h-4" /> HexIsle Portal
           </Link>
           <Link
             to="/faq"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-sm transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-border hover:border-slate-600 text-sm transition-all"
           >
             <BookOpen className="w-4 h-4" /> FAQ
           </Link>
           <Link
             to="/cephas"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-sm transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-border hover:border-slate-600 text-sm transition-all"
           >
             <ExternalLink className="w-4 h-4" /> Cephas Academic Papers
           </Link>

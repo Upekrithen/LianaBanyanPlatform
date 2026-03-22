@@ -57,27 +57,24 @@ export interface KeyPlacement {
  * Components check this registry to know if they should embed a key.
  */
 const CONTENT_KEY_MAP: Record<string, KeyPlacement[]> = {
-  // Academic Papers — Attention as Funding
+  // ─── Academic Papers ──────────────────────────────────────────────
   '/academic-papers/attention-as-funding': [
     { keyWord: 'TRIANGULATE', method: 'embedded', position: 'middle' },
     { keyWord: 'VIEWPORT', method: 'hidden_text', position: 'end' },
   ],
-  // Academic Papers — Grassroots Intelligence
   '/academic-papers/grassroots-intelligence': [
     { keyWord: 'SYBIL', method: 'cipher', position: 'middle' },
     { keyWord: 'ZEROGRAPHIC', method: 'hidden_text', position: 'start' },
   ],
-  // Academic Papers — Muffled Rule
   '/academic-papers/muffled-rule': [
     { keyWord: 'SHIRLEY', method: 'embedded', position: 'middle' },
     { keyWord: 'COVERAGE', method: 'hidden_text', position: 'end' },
   ],
-  // Academic Papers — Marks Democracy
   '/academic-papers/marks-democracy': [
     { keyWord: 'CORNERSTONE', method: 'embedded', position: 'middle' },
     { keyWord: 'PERMANENT', method: 'hidden_text', position: 'start' },
   ],
-  // Cue Cards
+  // ─── Cue Cards ────────────────────────────────────────────────────
   '/cue/stage-play': [
     { keyWord: 'AIRCRAFTCARRIER', method: 'embedded', position: 'middle' },
   ],
@@ -90,19 +87,314 @@ const CONTENT_KEY_MAP: Record<string, KeyPlacement[]> = {
   '/cue/political-expedition': [
     { keyWord: 'SIXTEENINITIATIVES', method: 'cipher', position: 'middle' },
   ],
-  // Battery Campaign
+  // ─── Battery Campaign ─────────────────────────────────────────────
   '/battery/grassroots-intelligence': [
     { keyWord: 'PETITION', method: 'embedded', position: 'start' },
     { keyWord: 'THREESECONDS', method: 'cipher', position: 'middle' },
     { keyWord: 'EXPEDITION', method: 'embedded', position: 'end' },
   ],
-  // HexIsle
+  // ─── HexIsle ──────────────────────────────────────────────────────
   '/hexisle/world-3d': [
     { keyWord: 'GONDOLA', method: 'embedded', position: 'middle' },
     { keyWord: 'ALLACCESS', method: 'hidden_text', position: 'end' },
   ],
   '/hexisle/overworld': [
     { keyWord: 'WARPPIPE', method: 'embedded', position: 'middle' },
+  ],
+  // ─── Circle 1: Investors ──────────────────────────────────────────
+  '/letters/circle-1-investors/craig-newmark': [
+    { keyWord: 'PUBLICINTEREST', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-1-investors/mackenzie-scott': [
+    { keyWord: 'DAYONEFUND', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-1-investors/mackenzie-scott-cardboard-boots': [
+    { keyWord: 'CARDBOARD', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-1-investors/warren-buffett': [
+    { keyWord: 'COMPOUNDING', method: 'cipher', position: 'middle' },
+  ],
+  '/letters/circle-1-investors/michael-seibel': [
+    { keyWord: 'BATCHMODE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-1-investors/tom-simon': [
+    { keyWord: 'FIDUCIARY', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-1-investors/melinda-french-gates': [
+    { keyWord: 'PIVOTALVENTURES', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-1-investors/anand-giridharadas': [
+    { keyWord: 'WINNERSTAKEALL', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-1-investors/howard-marks': [
+    { keyWord: 'SECONDLEVEL', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-1-investors/li-jin': [
+    { keyWord: 'PASSIONECONOMY', method: 'cipher', position: 'middle' },
+  ],
+  '/letters/circle-1-investors/majora-carter': [
+    { keyWord: 'GREENHOOD', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-1-investors/seth-godin': [
+    { keyWord: 'PURPLECOW', method: 'hidden_text', position: 'end' },
+  ],
+  // ─── Circle 2: Media ──────────────────────────────────────────────
+  '/letters/circle-2-media/casey-newton': [
+    { keyWord: 'PLATFORMER', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-2-media/taylor-swift': [
+    { keyWord: 'FOLKLORE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-2-media/taylor-swift-v02': [
+    { keyWord: 'ANTIHERO', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-2-media/taylor-swift-v03': [
+    { keyWord: 'ALCHEMY', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-2-media/hank-green': [
+    { keyWord: 'NERDFIGHTER', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-2-media/kara-swisher': [
+    { keyWord: 'CODECONFERENCE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-2-media/ezra-klein': [
+    { keyWord: 'POLARIZATION', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-2-media/tim-ingham': [
+    { keyWord: 'MUSICBIZ', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-2-media/brian-merchant': [
+    { keyWord: 'LUDDITE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-2-media/douglas-rushkoff': [
+    { keyWord: 'TEAMHUMAN', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-2-media/ed-zitron': [
+    { keyWord: 'ROTECONOMY', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-2-media/nilay-patel': [
+    { keyWord: 'DECODERRING', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-2-media/paris-marx': [
+    { keyWord: 'ROADTONOWHERE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-2-media/simon-sinek': [
+    { keyWord: 'INFINITEGAME', method: 'hidden_text', position: 'end' },
+  ],
+  // ─── Circle 3: Academics ──────────────────────────────────────────
+  '/letters/circle-3-academics/trebor-scholz': [
+    { keyWord: 'PLATFORMCOOP', method: 'cipher', position: 'middle' },
+  ],
+  '/letters/circle-3-academics/nathan-schneider': [
+    { keyWord: 'EXITCOMMUNITY', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-3-academics/erik-brynjolfsson': [
+    { keyWord: 'MACHINEAGE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-3-academics/tatiana-schlossberg': [
+    { keyWord: 'INCONSPICUOUS', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-3-academics/tatiana-schlossberg-cephas': [
+    { keyWord: 'HEALTHACCORDS', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-3-academics/tatiana-schlossberg-short': [
+    { keyWord: 'CONSUMPTION', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-3-academics/arun-sundararajan': [
+    { keyWord: 'SHARINGECONOMY', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-3-academics/daron-acemoglu': [
+    { keyWord: 'INSTITUTIONS', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-3-academics/esther-perel': [
+    { keyWord: 'RELATIONAL', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-3-academics/juliet-schor': [
+    { keyWord: 'PLENITUDE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-3-academics/kate-raworth': [
+    { keyWord: 'DOUGHNUTMODEL', method: 'cipher', position: 'middle' },
+  ],
+  '/letters/circle-3-academics/mariana-mazzucato': [
+    { keyWord: 'MISSIONECONOMY', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/circle-3-academics/shoshana-zuboff': [
+    { keyWord: 'SURVEILLANCE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/circle-3-academics/yochai-benkler': [
+    { keyWord: 'COMMONSBASED', method: 'hidden_text', position: 'end' },
+  ],
+  // ─── Crown Initiative ─────────────────────────────────────────────
+  '/letters/crown-initiative/maneet-chauhan': [
+    { keyWord: 'SPICEROUTE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/jose-andres': [
+    { keyWord: 'WORLDKITCHEN', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/mary-beth-laughton': [
+    { keyWord: 'PERSONALSTYLE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/marie-kondo': [
+    { keyWord: 'SPARKJOY', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/ashton-applewhite': [
+    { keyWord: 'CHAIRROCKING', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/marc-freedman': [
+    { keyWord: 'ENCORECAREER', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/alex-oshmyansky': [
+    { keyWord: 'COSTPLUSDRUGS', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/cathie-mahon': [
+    { keyWord: 'CREDITUNION', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/sallie-krawcheck': [
+    { keyWord: 'ELLEVEST', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/jessica-jackley': [
+    { keyWord: 'MICROLOAN', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/dale-dougherty': [
+    { keyWord: 'MAKERFAIRE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/molly-hemstreet': [
+    { keyWord: 'INDUSTRIALCOMMONS', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/sal-khan-chancellor': [
+    { keyWord: 'FREEFORALL', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/kimberly-williams': [
+    { keyWord: 'RALLYPOINT', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/ruth-glenn': [
+    { keyWord: 'SAFEZONE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/robert-kaiser': [
+    { keyWord: 'BRIDLEMAKER', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/brene-brown': [
+    { keyWord: 'VULNERABLE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/ai-jen-poo': [
+    { keyWord: 'DOMESTICWORKERS', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/taylor-swift': [
+    { keyWord: 'SWIFTIENATION', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/michael-seibel-ceo': [
+    { keyWord: 'LAUNCHPAD', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-initiative/mariaelena-huambachano': [
+    { keyWord: 'ANCESTRALKITCHEN', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-initiative/muhammad-yunus': [
+    { keyWord: 'MICROCREDIT', method: 'embedded', position: 'middle' },
+  ],
+  // ─── Crown Letters (root) ─────────────────────────────────────────
+  '/letters/crown-letter-aoc': [
+    { keyWord: 'GREENNEWAL', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-letter-keanu-reeves': [
+    { keyWord: 'KINDNESSMATRIX', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/crown-letter-sandra-bullock': [
+    { keyWord: 'GRAVITYPULL', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/crown-letter-schwarzenegger': [
+    { keyWord: 'COMEBACK', method: 'hidden_text', position: 'end' },
+  ],
+  // ─── Pitches ──────────────────────────────────────────────────────
+  '/letters/pitches/ars-technica': [
+    { keyWord: 'DEEPDIVE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/hacker-news': [
+    { keyWord: 'FRONTPAGE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/investopedia': [
+    { keyWord: 'FUNDAMENTALS', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/kaiser-health-news': [
+    { keyWord: 'PREMIUMS', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/mit-media-lab': [
+    { keyWord: 'INVENTING', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/nerdwallet': [
+    { keyWord: 'BUDGETWISE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/penny-hoarder': [
+    { keyWord: 'PENNYSAVED', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/podcast-template': [
+    { keyWord: 'AIRWAVES', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/product-hunt': [
+    { keyWord: 'UPVOTE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/shareable': [
+    { keyWord: 'COMMONGOOD', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/ssir': [
+    { keyWord: 'SOCIALIMPACT', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/stat-news': [
+    { keyWord: 'CLINICALTRIAL', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/techcrunch': [
+    { keyWord: 'DISRUPTOR', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/the-verge': [
+    { keyWord: 'CUTTINGEDGE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/wsj-feature-611-patents': [
+    { keyWord: 'SIXELEVENPATENTS', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/pitches/wsj-oped-roi-predictability': [
+    { keyWord: 'PREDICTABLEROI', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/pitches/yes-magazine': [
+    { keyWord: 'POSITIVECHANGE', method: 'embedded', position: 'middle' },
+  ],
+  // ─── Partnerships ─────────────────────────────────────────────────
+  '/letters/partnerships/bambu-lab': [
+    { keyWord: 'PRINTERFARM', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/partnerships/kallistra': [
+    { keyWord: 'HEXWARGAME', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/partnerships/lorescape': [
+    { keyWord: 'WORLDBUILDER', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/partnerships/openwarhex': [
+    { keyWord: 'OPENHEX', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/partnerships/terratiles': [
+    { keyWord: 'TERRAINTILE', method: 'hidden_text', position: 'end' },
+  ],
+  // ─── Blessing ─────────────────────────────────────────────────────
+  '/letters/blessing/dolly-parton': [
+    { keyWord: 'NINETOFIVE', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/blessing/jimmy-kimmel': [
+    { keyWord: 'LATENIGHT', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/blessing/pitbull': [
+    { keyWord: 'WORLDWIDE', method: 'embedded', position: 'middle' },
+  ],
+  // ─── Health ───────────────────────────────────────────────────────
+  '/letters/health/facebook-friend-impossible-choice': [
+    { keyWord: 'IMPOSSIBLECHOICE', method: 'hidden_text', position: 'end' },
+  ],
+  '/letters/health/jimmy-kimmel-healthcare': [
+    { keyWord: 'PREEXISTING', method: 'embedded', position: 'middle' },
+  ],
+  '/letters/health/pet-store-consideration': [
+    { keyWord: 'RXCOSTPLUS', method: 'hidden_text', position: 'end' },
+  ],
+  // ─── Professional ─────────────────────────────────────────────────
+  '/letters/professional/legal-counsel-request': [
+    { keyWord: 'RETAINER', method: 'embedded', position: 'middle' },
   ],
 };
 

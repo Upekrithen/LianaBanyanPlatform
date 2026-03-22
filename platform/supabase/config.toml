@@ -100,3 +100,8 @@ verify_jwt = false
 
 [functions.social-image-upload]
 verify_jwt = true
+
+[functions.gmail-bridge]
+verify_jwt = false
+# Gmail Push sends Pub/Sub notifications — no JWT
+# Cron for watch renewal: 0 0 * * 0 (weekly Sunday midnight)

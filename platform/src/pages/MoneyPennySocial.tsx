@@ -88,7 +88,7 @@ function PriorityBadge({ priority }: { priority: Priority }) {
     high: { label: "High", cls: "bg-amber-500/20 text-amber-300 border-amber-500/30" },
     medium: { label: "Medium", cls: "bg-blue-500/20 text-blue-300 border-blue-500/30" },
     low: { label: "Low", cls: "bg-slate-500/20 text-slate-300 border-slate-500/30" },
-    ignore: { label: "Ignore", cls: "bg-slate-700/20 text-slate-500 border-slate-700/30" },
+    ignore: { label: "Ignore", cls: "bg-slate-700/20 text-muted-foreground border-border/30" },
   };
   const c = cfg[priority];
   return <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold ${c.cls}`}>{c.label}</span>;
@@ -103,7 +103,7 @@ function CategoryBadge({ category }: { category: string }) {
     partnership_inquiry: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
     press: "bg-pink-500/20 text-pink-300 border-pink-500/30",
     spam: "bg-red-700/20 text-red-400 border-red-700/30",
-    troll: "bg-slate-600/20 text-slate-400 border-slate-600/30",
+    troll: "bg-slate-600/20 text-muted-foreground border-slate-600/30",
     general: "bg-slate-500/20 text-slate-300 border-slate-500/30",
   };
   const label = category.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
@@ -118,7 +118,7 @@ function StatusIndicator({ status }: { status: ResponseStatus }) {
     approved: { label: "Approved", cls: "text-emerald-400" },
     published: { label: "Published", cls: "text-green-400" },
     rejected: { label: "Rejected", cls: "text-red-400" },
-    no_response_needed: { label: "No Response", cls: "text-slate-400" },
+    no_response_needed: { label: "No Response", cls: "text-muted-foreground" },
   };
   const c = cfg[status];
   return <span className={`text-xs font-medium ${c.cls}`}>{c.label}</span>;
@@ -132,7 +132,7 @@ function SentimentBar({ stats }: { stats: SocialMediaStats }) {
   const pct = (n: number) => `${((n / total) * 100).toFixed(0)}%`;
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-2 text-xs text-slate-400">
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <span>Sentiment</span>
       </div>
       <div className="flex h-3 w-full rounded-full overflow-hidden">
@@ -141,9 +141,9 @@ function SentimentBar({ stats }: { stats: SocialMediaStats }) {
         <div className="bg-orange-500 transition-all" style={{ width: pct(stats.bySentiment.negative) }} title={`Negative: ${stats.bySentiment.negative}`} />
         <div className="bg-red-500 transition-all" style={{ width: pct(stats.bySentiment.hostile) }} title={`Hostile: ${stats.bySentiment.hostile}`} />
       </div>
-      <div className="flex justify-between text-[10px] text-slate-500">
+      <div className="flex justify-between text-[10px] text-muted-foreground">
         <span className="text-emerald-400">{stats.bySentiment.positive} positive</span>
-        <span className="text-slate-400">{stats.bySentiment.neutral} neutral</span>
+        <span className="text-muted-foreground">{stats.bySentiment.neutral} neutral</span>
         <span className="text-orange-400">{stats.bySentiment.negative} negative</span>
         <span className="text-red-400">{stats.bySentiment.hostile} hostile</span>
       </div>
@@ -178,7 +178,7 @@ function InteractionCard({
   const isResolved = ["approved", "published", "rejected", "no_response_needed"].includes(interaction.responseStatus);
 
   return (
-    <Card className={`bg-slate-900/60 border-slate-700/50 ${isResolved ? "opacity-60" : ""}`}>
+    <Card className={`bg-slate-900/60 border-border/50 ${isResolved ? "opacity-60" : ""}`}>
       <CardContent className="p-4 space-y-3">
         {/* Header row */}
         <div className="flex items-start gap-3">
@@ -191,9 +191,9 @@ function InteractionCard({
             <div className="flex items-center gap-2 flex-wrap">
               <ChannelIcon className={`h-4 w-4 ${channelCfg.color}`} />
               <span className="font-semibold text-white text-sm">{interaction.authorName}</span>
-              <span className="text-slate-400 text-xs">{interaction.authorHandle}</span>
+              <span className="text-muted-foreground text-xs">{interaction.authorHandle}</span>
               {interaction.authorFollowers && (
-                <Badge variant="outline" className="text-[10px] py-0 px-1.5 border-slate-600 text-slate-400">
+                <Badge variant="outline" className="text-[10px] py-0 px-1.5 border-slate-600 text-muted-foreground">
                   <Users className="h-2.5 w-2.5 mr-0.5" />
                   {interaction.authorFollowers >= 1000
                     ? `${(interaction.authorFollowers / 1000).toFixed(interaction.authorFollowers >= 10000 ? 0 : 1)}K`
@@ -209,14 +209,14 @@ function InteractionCard({
             </div>
           </div>
           <div className="text-right shrink-0">
-            <div className="text-[10px] text-slate-500">
+            <div className="text-[10px] text-muted-foreground">
               {new Date(interaction.receivedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </div>
           </div>
         </div>
 
         {/* Original content */}
-        <div className="pl-8 text-sm text-slate-200 bg-slate-800/40 rounded-lg p-3 border border-slate-700/30">
+        <div className="pl-8 text-sm text-slate-200 bg-slate-800/40 rounded-lg p-3 border border-border/30">
           {interaction.content}
         </div>
 
@@ -230,7 +230,7 @@ function InteractionCard({
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <div className="pl-8 mt-1 text-xs text-slate-400 bg-violet-950/20 rounded-lg p-3 border border-violet-500/10">
+            <div className="pl-8 mt-1 text-xs text-muted-foreground bg-violet-950/20 rounded-lg p-3 border border-violet-500/10">
               {interaction.aiNotes}
             </div>
           </CollapsibleContent>
@@ -239,7 +239,7 @@ function InteractionCard({
         {/* Draft response + actions */}
         {interaction.draftResponse && (
           <div className="pl-8">
-            <div className="text-xs text-slate-400 mb-1 font-medium">Draft Response:</div>
+            <div className="text-xs text-muted-foreground mb-1 font-medium">Draft Response:</div>
             {editing ? (
               <div className="space-y-2">
                 <Textarea
@@ -259,7 +259,7 @@ function InteractionCard({
                     size="sm"
                     variant="ghost"
                     onClick={() => { setEditText(interaction.draftResponse); setEditing(false); }}
-                    className="text-xs text-slate-400"
+                    className="text-xs text-muted-foreground"
                   >
                     Cancel
                   </Button>
@@ -308,7 +308,7 @@ function InteractionCard({
               size="sm"
               variant="ghost"
               onClick={() => onNoResponse(interaction.id)}
-              className="text-slate-400 hover:text-slate-300 text-xs gap-1"
+              className="text-muted-foreground hover:text-slate-300 text-xs gap-1"
             >
               <EyeOff className="h-3 w-3" />
               No Response
@@ -335,7 +335,7 @@ function InteractionCard({
 function ChannelHealthSidebar({ stats }: { stats: SocialMediaStats }) {
   const channels = Object.entries(stats.byChannel).sort((a, b) => b[1] - a[1]);
   return (
-    <Card className="bg-slate-900/60 border-slate-700/50">
+    <Card className="bg-slate-900/60 border-border/50">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm text-slate-300">Channel Health</CardTitle>
       </CardHeader>
@@ -496,7 +496,7 @@ export default function MoneyPennySocial() {
           <Radio className="h-8 w-8 text-cyan-400" />
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Social Media Command Center</h1>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-muted-foreground">
               MoneyPenny reads it. AI drafts it. You approve it. Nothing goes out without your say.
             </p>
           </div>
@@ -514,13 +514,13 @@ export default function MoneyPennySocial() {
                     <Sparkles className="h-5 w-5" />
                     Daily Briefing — {new Date(digest.date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
                   </CardTitle>
-                  <CardDescription className="text-slate-400 mt-1">
+                  <CardDescription className="text-muted-foreground mt-1">
                     {digest.totalInteractions} new interactions across {Object.values(digest.channelBreakdown).filter(v => v > 0).length} channels
                     {" "} | {digest.requiresResponse} require response
                   </CardDescription>
                 </div>
                 <div className="text-right">
-                  <div className="flex items-center gap-1 text-xs text-slate-400">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
                     Est. review: ~{estimatedMinutes} min
                   </div>
@@ -549,7 +549,7 @@ export default function MoneyPennySocial() {
                   onClick={loadData}
                   variant="ghost"
                   size="sm"
-                  className="text-slate-400 text-sm gap-1"
+                  className="text-muted-foreground text-sm gap-1"
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
                   Refresh
@@ -562,25 +562,25 @@ export default function MoneyPennySocial() {
         {/* Stats Row */}
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-            <Card className="bg-slate-900/60 border-slate-700/50">
+            <Card className="bg-slate-900/60 border-border/50">
               <CardContent className="p-3 text-center">
                 <div className="text-2xl font-bold text-white">{stats.totalInbox}</div>
-                <div className="text-xs text-slate-400">Total Inbox</div>
+                <div className="text-xs text-muted-foreground">Total Inbox</div>
               </CardContent>
             </Card>
-            <Card className="bg-slate-900/60 border-slate-700/50">
+            <Card className="bg-slate-900/60 border-border/50">
               <CardContent className="p-3 text-center">
                 <div className="text-2xl font-bold text-yellow-400">{stats.pendingReview}</div>
-                <div className="text-xs text-slate-400">Pending Review</div>
+                <div className="text-xs text-muted-foreground">Pending Review</div>
               </CardContent>
             </Card>
-            <Card className="bg-slate-900/60 border-slate-700/50">
+            <Card className="bg-slate-900/60 border-border/50">
               <CardContent className="p-3 text-center">
                 <div className="text-2xl font-bold text-emerald-400">{stats.publishedToday}</div>
-                <div className="text-xs text-slate-400">Published Today</div>
+                <div className="text-xs text-muted-foreground">Published Today</div>
               </CardContent>
             </Card>
-            <Card className="bg-slate-900/60 border-slate-700/50">
+            <Card className="bg-slate-900/60 border-border/50">
               <CardContent className="p-3 text-center">
                 <div className="flex items-center justify-center gap-1 flex-wrap">
                   {Object.entries(stats.byChannel).filter(([, c]) => c > 0).map(([ch, c]) => {
@@ -593,7 +593,7 @@ export default function MoneyPennySocial() {
                     );
                   })}
                 </div>
-                <div className="text-xs text-slate-400 mt-1">By Channel</div>
+                <div className="text-xs text-muted-foreground mt-1">By Channel</div>
               </CardContent>
             </Card>
           </div>
@@ -612,7 +612,7 @@ export default function MoneyPennySocial() {
           <div className="flex-1 min-w-0 space-y-4">
             {/* Channel tabs */}
             <Tabs value={channelFilter} onValueChange={(v) => setChannelFilter(v as SocialChannel | "all")}>
-              <TabsList className="bg-slate-800/50 border border-slate-700/50 flex-wrap h-auto gap-0.5 p-1">
+              <TabsList className="bg-card/50 border border-border/50 flex-wrap h-auto gap-0.5 p-1">
                 {allChannels.map(ch => {
                   const label = ch === "all" ? "All" : CHANNEL_CONFIG[ch].label;
                   const Icon = ch === "all" ? null : CHANNEL_ICONS[ch];
@@ -629,7 +629,7 @@ export default function MoneyPennySocial() {
             {/* Secondary filters */}
             <div className="flex items-center gap-2 flex-wrap">
               <Select value={priorityFilter} onValueChange={(v) => setPriorityFilter(v as Priority | "all")}>
-                <SelectTrigger className="w-[130px] h-8 text-xs bg-slate-800 border-slate-700">
+                <SelectTrigger className="w-[130px] h-8 text-xs bg-slate-800 border-border">
                   <SelectValue placeholder="Priority" />
                 </SelectTrigger>
                 <SelectContent>
@@ -641,7 +641,7 @@ export default function MoneyPennySocial() {
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as ResponseStatus | "all")}>
-                <SelectTrigger className="w-[140px] h-8 text-xs bg-slate-800 border-slate-700">
+                <SelectTrigger className="w-[140px] h-8 text-xs bg-slate-800 border-border">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -654,7 +654,7 @@ export default function MoneyPennySocial() {
                 </SelectContent>
               </Select>
               <Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
-                <SelectTrigger className="w-[120px] h-8 text-xs bg-slate-800 border-slate-700">
+                <SelectTrigger className="w-[120px] h-8 text-xs bg-slate-800 border-border">
                   <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent>
@@ -665,19 +665,19 @@ export default function MoneyPennySocial() {
                 </SelectContent>
               </Select>
               <div className="relative flex-1 min-w-[150px]">
-                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="Search interactions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-8 pl-7 pr-3 text-xs bg-slate-800 border border-slate-700 rounded-md text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500/50"
+                  className="w-full h-8 pl-7 pr-3 text-xs bg-slate-800 border border-border rounded-md text-slate-200 placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-cyan-500/50"
                 />
               </div>
             </div>
 
             {/* Select all */}
-            <div className="flex items-center gap-2 text-xs text-slate-400">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Checkbox
                 checked={selected.size > 0 && selected.size === inbox.filter(i => !["approved", "published", "rejected", "no_response_needed"].includes(i.responseStatus)).length}
                 onCheckedChange={(checked) => handleSelectAll(!!checked)}
@@ -689,12 +689,12 @@ export default function MoneyPennySocial() {
 
             {/* Interaction list */}
             {loading ? (
-              <div className="flex items-center justify-center py-12 text-slate-400">
+              <div className="flex items-center justify-center py-12 text-muted-foreground">
                 <RefreshCw className="h-5 w-5 animate-spin mr-2" />
                 Loading inbox...
               </div>
             ) : inbox.length === 0 ? (
-              <div className="text-center py-12 text-slate-500">
+              <div className="text-center py-12 text-muted-foreground">
                 <Eye className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p>No interactions match your filters.</p>
               </div>
@@ -720,21 +720,21 @@ export default function MoneyPennySocial() {
           {stats && (
             <div className="hidden lg:block w-56 shrink-0 space-y-4">
               <ChannelHealthSidebar stats={stats} />
-              <Card className="bg-slate-900/60 border-slate-700/50">
+              <Card className="bg-slate-900/60 border-border/50">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-slate-300">Review Stats</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Avg review time</span>
+                    <span className="text-muted-foreground">Avg review time</span>
                     <span className="text-white">{stats.avgReviewTimeMinutes} min</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Urgent items</span>
+                    <span className="text-muted-foreground">Urgent items</span>
                     <span className="text-red-400 font-medium">{stats.byPriority.urgent}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400">High priority</span>
+                    <span className="text-muted-foreground">High priority</span>
                     <span className="text-amber-400">{stats.byPriority.high}</span>
                   </div>
                 </CardContent>
@@ -745,7 +745,7 @@ export default function MoneyPennySocial() {
 
         {/* Batch operations bar (sticky bottom) */}
         {selected.size > 0 && (
-          <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-700 backdrop-blur-sm z-50">
+          <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-border backdrop-blur-sm z-50">
             <div className="container max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
               <span className="text-sm text-slate-300">
                 <span className="text-cyan-400 font-bold">{selected.size}</span> item{selected.size !== 1 ? "s" : ""} selected
@@ -757,7 +757,7 @@ export default function MoneyPennySocial() {
                     <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs" onClick={() => handleBulkAction("approve")}>
                       As You Wish
                     </Button>
-                    <Button size="sm" variant="ghost" className="text-xs text-slate-400" onClick={() => setConfirmBulk(null)}>
+                    <Button size="sm" variant="ghost" className="text-xs text-muted-foreground" onClick={() => setConfirmBulk(null)}>
                       Cancel
                     </Button>
                   </div>
@@ -767,7 +767,7 @@ export default function MoneyPennySocial() {
                     <Button size="sm" className="bg-red-600 hover:bg-red-700 text-xs" onClick={() => handleBulkAction("reject")}>
                       Confirm
                     </Button>
-                    <Button size="sm" variant="ghost" className="text-xs text-slate-400" onClick={() => setConfirmBulk(null)}>
+                    <Button size="sm" variant="ghost" className="text-xs text-muted-foreground" onClick={() => setConfirmBulk(null)}>
                       Cancel
                     </Button>
                   </div>
@@ -777,7 +777,7 @@ export default function MoneyPennySocial() {
                     <Button size="sm" className="bg-slate-600 hover:bg-slate-700 text-xs" onClick={() => handleBulkAction("noresponse")}>
                       Confirm
                     </Button>
-                    <Button size="sm" variant="ghost" className="text-xs text-slate-400" onClick={() => setConfirmBulk(null)}>
+                    <Button size="sm" variant="ghost" className="text-xs text-muted-foreground" onClick={() => setConfirmBulk(null)}>
                       Cancel
                     </Button>
                   </div>
@@ -791,7 +791,7 @@ export default function MoneyPennySocial() {
                       <XCircle className="h-3 w-3" />
                       Reject Selected
                     </Button>
-                    <Button size="sm" variant="ghost" className="text-slate-400 text-xs gap-1" onClick={() => setConfirmBulk("noresponse")}>
+                    <Button size="sm" variant="ghost" className="text-muted-foreground text-xs gap-1" onClick={() => setConfirmBulk("noresponse")}>
                       <EyeOff className="h-3 w-3" />
                       Mark No Response
                     </Button>

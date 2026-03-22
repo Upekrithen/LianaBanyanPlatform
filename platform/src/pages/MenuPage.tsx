@@ -159,7 +159,7 @@ export default function MenuPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="animate-pulse text-slate-400">Loading menu...</div>
+        <div className="animate-pulse text-muted-foreground">Loading menu...</div>
       </div>
     );
   }
@@ -170,7 +170,7 @@ export default function MenuPage() {
         <div>
           <Store className="w-16 h-16 mx-auto mb-4 text-slate-600" />
           <h1 className="text-2xl font-bold text-slate-300 mb-2">Storefront Not Found</h1>
-          <p className="text-slate-500 mb-4">This menu doesn't exist or has been deactivated.</p>
+          <p className="text-muted-foreground mb-4">This menu doesn't exist or has been deactivated.</p>
           <Link to="/" className="text-amber-400 hover:text-amber-300">← Back to Home</Link>
         </div>
       </div>
@@ -180,9 +180,9 @@ export default function MenuPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       {/* Header */}
-      <div className="bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800">
+      <div className="bg-gradient-to-b from-slate-900 to-slate-950 border-b border-border">
         <div className="max-w-2xl mx-auto px-4 py-6">
-          <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-300 mb-4">
+          <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-slate-300 mb-4">
             <ArrowLeft className="w-3 h-3" /> Liana Banyan
           </Link>
           <div className="flex items-start gap-4">
@@ -195,7 +195,7 @@ export default function MenuPage() {
             )}
             <div>
               <h1 className="text-2xl font-bold" data-xray-id="menu-title">{storefront.name}</h1>
-              <div className="flex flex-wrap gap-3 mt-1 text-sm text-slate-400">
+              <div className="flex flex-wrap gap-3 mt-1 text-sm text-muted-foreground">
                 {storefront.business_location && (
                   <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {storefront.business_location}</span>
                 )}
@@ -220,10 +220,10 @@ export default function MenuPage() {
               {items.filter(i => i.category === cat).map(item => {
                 const inCart = cart.get(item.id);
                 return (
-                  <div key={item.id} className="flex items-center justify-between p-3 bg-slate-900/60 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors">
+                  <div key={item.id} className="flex items-center justify-between p-3 bg-slate-900/60 rounded-lg border border-border hover:border-border transition-colors">
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{item.item_name}</p>
-                      {item.description && <p className="text-xs text-slate-500 truncate">{item.description}</p>}
+                      {item.description && <p className="text-xs text-muted-foreground truncate">{item.description}</p>}
                       <p className="text-sm font-bold text-amber-400 mt-0.5">${item.price.toFixed(2)}</p>
                     </div>
                     <div className="flex items-center gap-2 ml-3">
@@ -251,7 +251,7 @@ export default function MenuPage() {
         ))}
 
         {items.length === 0 && (
-          <div className="text-center py-12 text-slate-500">
+          <div className="text-center py-12 text-muted-foreground">
             <Store className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>This menu is being set up. Check back soon!</p>
           </div>
@@ -260,13 +260,13 @@ export default function MenuPage() {
 
       {/* Cart footer */}
       {totalItems > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-700 px-4 py-3 z-50">
+        <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-border px-4 py-3 z-50">
           <div className="max-w-2xl mx-auto">
             {showCart ? (
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="font-bold">Your Order</h3>
-                  <Button variant="ghost" size="sm" onClick={() => setShowCart(false)} className="text-slate-400">Close</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowCart(false)} className="text-muted-foreground">Close</Button>
                 </div>
                 <div className="max-h-40 overflow-y-auto space-y-1">
                   {cartItems.map(ci => (
@@ -275,10 +275,10 @@ export default function MenuPage() {
                       <span className="text-amber-400">${(ci.item.price * ci.qty).toFixed(2)}</span>
                     </div>
                   ))}
-                  <div className="flex justify-between text-sm text-slate-400 pt-1 border-t border-slate-800">
+                  <div className="flex justify-between text-sm text-muted-foreground pt-1 border-t border-border">
                     <span>Delivery fee</span><span>${deliveryFee.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between font-bold pt-1 border-t border-slate-700">
+                  <div className="flex justify-between font-bold pt-1 border-t border-border">
                     <span>Total</span><span className="text-amber-400">${total.toFixed(2)}</span>
                   </div>
                 </div>

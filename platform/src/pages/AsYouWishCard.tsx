@@ -35,7 +35,7 @@ export default function AsYouWishCard() {
               <div className="text-center space-y-3">
                 <Coins className="w-10 h-10 text-amber-400 mx-auto" />
                 <h3 className="font-bold">You Set the Price</h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted-foreground">
                   Sellers choose their prices. The platform adds Cost+20% for transparent economics.
                   No hidden fees. No algorithmic manipulation.
                 </p>
@@ -43,7 +43,7 @@ export default function AsYouWishCard() {
               <div className="text-center space-y-3">
                 <ShieldCheck className="w-10 h-10 text-green-400 mx-auto" />
                 <h3 className="font-bold">You Know the Split</h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted-foreground">
                   83.3% to the creator. 13.3% to the platform. 3.3% to the Gleaner's Corner.
                   Every penny accounted for, every time.
                 </p>
@@ -51,7 +51,7 @@ export default function AsYouWishCard() {
               <div className="text-center space-y-3">
                 <Handshake className="w-10 h-10 text-blue-400 mx-auto" />
                 <h3 className="font-bold">You Confirm with Respect</h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted-foreground">
                   "As You Wish" means: I understand this transaction. I trust this person.
                   I'm choosing to participate in this economy.
                 </p>
@@ -61,7 +61,7 @@ export default function AsYouWishCard() {
         </Card>
 
         {/* The Reference */}
-        <Card className="bg-slate-900/60 border-slate-800">
+        <Card className="bg-slate-900/60 border-border">
           <CardHeader>
             <CardTitle>Why "As You Wish"?</CardTitle>
           </CardHeader>
@@ -70,18 +70,18 @@ export default function AsYouWishCard() {
               In <em>The Princess Bride</em>, Westley says "As you wish" to Buttercup — and what he means is
               "I love you." Every time he says it, he's putting her needs before his own.
             </p>
-            <p className="text-slate-400">
+            <p className="text-muted-foreground">
               On Liana Banyan, when you click "As You Wish" to confirm a transaction, you're saying:
               I trust this creator. I value their work. I choose to participate in an economy where
               83.3% goes to the person who made the thing.
             </p>
-            <p className="text-slate-400">
+            <p className="text-muted-foreground">
               It's not a button. It's a declaration.
             </p>
           </CardContent>
         </Card>
 
-        <Separator className="border-slate-800" />
+        <Separator className="border-border" />
 
         {/* Where You'll See It */}
         <section className="space-y-4">
@@ -95,12 +95,12 @@ export default function AsYouWishCard() {
               { context: "Casting a Chain Vote", detail: "Lock in your governance decision with Pledged Marks" },
               { context: "Joining a Crew Call", detail: "Sign up for a manufacturing production role" },
             ].map((item, idx) => (
-              <Card key={idx} className="bg-slate-900/60 border-slate-800">
+              <Card key={idx} className="bg-slate-900/60 border-border">
                 <CardContent className="py-3 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-pink-400 mt-0.5 shrink-0" />
                   <div>
                     <p className="font-medium text-sm">{item.context}</p>
-                    <p className="text-xs text-slate-400">{item.detail}</p>
+                    <p className="text-xs text-muted-foreground">{item.detail}</p>
                   </div>
                 </CardContent>
               </Card>

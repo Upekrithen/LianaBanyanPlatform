@@ -188,7 +188,7 @@ export default function LikeWhatPage() {
                 transition={{ delay: 0.1 + i * 0.05 }}
               >
                 <Link to={feature.link}>
-                  <Card className="bg-slate-800/50 border-slate-700/50 hover:border-amber-500/30 transition-all h-full group">
+                  <Card className="bg-card/50 border-border/50 hover:border-amber-500/30 transition-all h-full group">
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
                         <div className="text-amber-400">{feature.icon}</div>
@@ -250,25 +250,25 @@ export default function LikeWhatPage() {
           </div>
 
           {/* Vernacular table */}
-          <div className="bg-slate-800/30 rounded-xl border border-slate-700/50 overflow-hidden">
+          <div className="bg-card/30 rounded-xl border border-border/50 overflow-hidden">
             <div className="grid grid-cols-[1fr_2fr_auto] gap-0">
               {/* Header */}
-              <div className="px-4 py-2 bg-slate-800/60 text-xs font-medium text-white/50 uppercase tracking-wider border-b border-slate-700/50">Term</div>
-              <div className="px-4 py-2 bg-slate-800/60 text-xs font-medium text-white/50 uppercase tracking-wider border-b border-slate-700/50">What It Means</div>
-              <div className="px-4 py-2 bg-slate-800/60 text-xs font-medium text-white/50 uppercase tracking-wider border-b border-slate-700/50">Type</div>
+              <div className="px-4 py-2 bg-slate-800/60 text-xs font-medium text-white/50 uppercase tracking-wider border-b border-border/50">Term</div>
+              <div className="px-4 py-2 bg-slate-800/60 text-xs font-medium text-white/50 uppercase tracking-wider border-b border-border/50">What It Means</div>
+              <div className="px-4 py-2 bg-slate-800/60 text-xs font-medium text-white/50 uppercase tracking-wider border-b border-border/50">Type</div>
 
               {displayedVernacular.map((item, i) => (
                 <React.Fragment key={item.term}>
                   <Link
                     to={`/faq#vernacular-${item.term.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`}
-                    className="px-4 py-3 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors border-b border-slate-700/30"
+                    className="px-4 py-3 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors border-b border-border/30"
                   >
                     {item.term}
                   </Link>
-                  <div className="px-4 py-3 text-sm text-white/70 border-b border-slate-700/30">
+                  <div className="px-4 py-3 text-sm text-white/70 border-b border-border/30">
                     {item.short}
                   </div>
-                  <div className="px-4 py-3 border-b border-slate-700/30">
+                  <div className="px-4 py-3 border-b border-border/30">
                     <span className={`px-2 py-0.5 rounded-full text-xs capitalize ${CATEGORY_COLORS[item.category] || 'bg-white/10 text-white/50'}`}>
                       {item.category}
                     </span>
@@ -312,7 +312,7 @@ export default function LikeWhatPage() {
             {PAPERS.map((paper, i) => (
               <div
                 key={paper.title}
-                className="flex items-start gap-3 p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 hover:border-green-500/20 transition-colors"
+                className="flex items-start gap-3 p-4 bg-card/30 rounded-lg border border-border/30 hover:border-green-500/20 transition-colors"
               >
                 <div className="mt-1 text-green-400/60">
                   <FileText className="h-4 w-4" />
@@ -351,7 +351,7 @@ export default function LikeWhatPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="text-center border-t border-slate-700/50 pt-8"
+          className="text-center border-t border-border/50 pt-8"
         >
           <blockquote className="text-lg text-white/60 italic max-w-2xl mx-auto mb-4">
             <Quote className="h-5 w-5 text-amber-400/40 inline mr-2" />
@@ -377,7 +377,7 @@ export default function LikeWhatPage() {
           </div>
 
           {/* Share */}
-          <div className="mt-8 bg-slate-900/50 border border-slate-700 rounded-xl p-6 max-w-md mx-auto">
+          <div className="mt-8 bg-slate-900/50 border border-border rounded-xl p-6 max-w-md mx-auto">
             <div className="flex items-center gap-2 mb-3">
               <Share2 className="w-4 h-4 text-amber-400" />
               <h3 className="text-sm font-medium text-white/70">Share this page</h3>

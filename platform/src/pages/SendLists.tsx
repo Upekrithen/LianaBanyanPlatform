@@ -145,7 +145,7 @@ function StampConfirmationDialog({ open, onOpenChange, stampNumber, recipientCou
         </DialogHeader>
 
         <div className="space-y-3 py-4">
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted-foreground">
             Type <span className="font-mono font-bold text-white">"As You Wish"</span> to confirm:
           </p>
           <Input
@@ -267,7 +267,7 @@ function RecipientTable({ recipients, editable, onRemove }: RecipientTableProps)
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-700 text-slate-400">
+            <tr className="border-b border-border text-muted-foreground">
               <th className="text-left py-2 px-3">Name</th>
               <th className="text-left py-2 px-3">Delivery</th>
               <th className="text-left py-2 px-3">Card Type</th>
@@ -277,7 +277,7 @@ function RecipientTable({ recipients, editable, onRemove }: RecipientTableProps)
           </thead>
           <tbody>
             {recipients.map((r) => (
-              <tr key={r.id} className="border-b border-slate-800 hover:bg-slate-800/50">
+              <tr key={r.id} className="border-b border-border hover:bg-card/50">
                 <td className="py-2 px-3 font-medium">{r.name}</td>
                 <td className="py-2 px-3">
                   <span className="flex items-center gap-1.5">
@@ -285,7 +285,7 @@ function RecipientTable({ recipients, editable, onRemove }: RecipientTableProps)
                     {r.deliveryMethod}
                   </span>
                 </td>
-                <td className="py-2 px-3 text-slate-400">{r.cardType}</td>
+                <td className="py-2 px-3 text-muted-foreground">{r.cardType}</td>
                 <td className="py-2 px-3">
                   <Badge variant="outline" className="text-xs capitalize">{r.status}</Badge>
                 </td>
@@ -310,10 +310,10 @@ function RecipientTable({ recipients, editable, onRemove }: RecipientTableProps)
       {/* Mobile list view */}
       <div className="md:hidden space-y-2">
         {recipients.map((r) => (
-          <div key={r.id} className="flex items-center justify-between bg-slate-800/50 rounded-lg p-3">
+          <div key={r.id} className="flex items-center justify-between bg-card/50 rounded-lg p-3">
             <div className="space-y-1">
               <p className="font-medium text-sm">{r.name}</p>
-              <div className="flex items-center gap-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 {getDeliveryIcon(r.deliveryMethod)}
                 <span>{r.deliveryMethod}</span>
                 <span className="text-slate-600">|</span>
@@ -348,7 +348,7 @@ function StatusProgressBar({ status }: { status: ListStatus }) {
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between text-xs text-slate-500">
+      <div className="flex justify-between text-xs text-muted-foreground">
         {steps.map((step, i) => (
           <span
             key={step}
@@ -396,16 +396,16 @@ function SendListCard({ list, onApplyStamp1, onApplyStamp2, onExecuteSend, onRem
   };
 
   return (
-    <Card className="bg-slate-900/70 border-slate-700">
+    <Card className="bg-slate-900/70 border-border">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="space-y-1">
             <CardTitle className="text-lg flex items-center gap-2">
               {list.name}
               {isLocked && <Lock className="h-3.5 w-3.5 text-yellow-500" />}
-              {!isLocked && <Unlock className="h-3.5 w-3.5 text-slate-500" />}
+              {!isLocked && <Unlock className="h-3.5 w-3.5 text-muted-foreground" />}
             </CardTitle>
-            <CardDescription className="text-slate-400">{list.description}</CardDescription>
+            <CardDescription className="text-muted-foreground">{list.description}</CardDescription>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <Badge className={typeBadgeColor[list.type]}>{list.type}</Badge>
@@ -415,7 +415,7 @@ function SendListCard({ list, onApplyStamp1, onApplyStamp2, onExecuteSend, onRem
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Stats row */}
-        <div className="flex flex-wrap gap-4 text-sm text-slate-400">
+        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <Users className="h-3.5 w-3.5" /> {list.recipients.length} recipients
           </span>
@@ -465,7 +465,7 @@ function SendListCard({ list, onApplyStamp1, onApplyStamp2, onExecuteSend, onRem
                 <CheckCircle2 className="h-4 w-4" />
                 STAMP 1 applied — List locked with {list.recipients.length} recipients.
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Review the recipient list below before applying STAMP 2.
               </p>
             </div>
@@ -503,7 +503,7 @@ function SendListCard({ list, onApplyStamp1, onApplyStamp2, onExecuteSend, onRem
                 <AlertTriangle className="h-4 w-4" />
                 Both stamps applied. Ready to send {list.recipients.length} messages.
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 This is the final step. Once sent, messages cannot be recalled.
               </p>
             </div>
@@ -534,23 +534,23 @@ function SendListCard({ list, onApplyStamp1, onApplyStamp2, onExecuteSend, onRem
                 All messages sent successfully.
               </p>
               {list.sentAt && (
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Sent at {new Date(list.sentAt).toLocaleString()}
                 </p>
               )}
             </div>
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-slate-800/50 rounded-lg p-3 text-center">
+              <div className="bg-card/50 rounded-lg p-3 text-center">
                 <p className="text-2xl font-bold text-white">{list.deliveryStats.sent}</p>
-                <p className="text-xs text-slate-400">Sent</p>
+                <p className="text-xs text-muted-foreground">Sent</p>
               </div>
-              <div className="bg-slate-800/50 rounded-lg p-3 text-center">
+              <div className="bg-card/50 rounded-lg p-3 text-center">
                 <p className="text-2xl font-bold text-blue-400">{list.deliveryStats.delivered}</p>
-                <p className="text-xs text-slate-400">Delivered</p>
+                <p className="text-xs text-muted-foreground">Delivered</p>
               </div>
-              <div className="bg-slate-800/50 rounded-lg p-3 text-center">
+              <div className="bg-card/50 rounded-lg p-3 text-center">
                 <p className="text-2xl font-bold text-emerald-400">{list.deliveryStats.opened}</p>
-                <p className="text-xs text-slate-400">Opened</p>
+                <p className="text-xs text-muted-foreground">Opened</p>
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={() => setExpanded(!expanded)}>
@@ -562,7 +562,7 @@ function SendListCard({ list, onApplyStamp1, onApplyStamp2, onExecuteSend, onRem
 
         {/* Expandable recipient list for DRAFT / STAMP_1 / SENT */}
         {expanded && (list.status === "DRAFT" || list.status === "STAMP_1" || list.status === "SENT") && (
-          <div className="pt-2 border-t border-slate-800">
+          <div className="pt-2 border-t border-border">
             <RecipientTable
               recipients={list.recipients}
               editable={list.status === "DRAFT"}
@@ -692,35 +692,35 @@ export default function SendLists() {
             <Send className="h-8 w-8 text-indigo-400" />
             Send Lists
           </h1>
-          <p className="text-slate-400 text-lg">
+          <p className="text-muted-foreground text-lg">
             Two stamps. No accidents. Every message intentional.
           </p>
         </div>
 
         {/* Stats Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold">{stats.total}</p>
-              <p className="text-xs text-slate-400">Total Lists</p>
+              <p className="text-xs text-muted-foreground">Total Lists</p>
             </CardContent>
           </Card>
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-green-400">{stats.pendingStamp1}</p>
-              <p className="text-xs text-slate-400">Pending STAMP 1</p>
+              <p className="text-xs text-muted-foreground">Pending STAMP 1</p>
             </CardContent>
           </Card>
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-red-400">{stats.pendingStamp2}</p>
-              <p className="text-xs text-slate-400">Pending STAMP 2</p>
+              <p className="text-xs text-muted-foreground">Pending STAMP 2</p>
             </CardContent>
           </Card>
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-emerald-400">{stats.sentToday}</p>
-              <p className="text-xs text-slate-400">Sent Today</p>
+              <p className="text-xs text-muted-foreground">Sent Today</p>
             </CardContent>
           </Card>
         </div>
@@ -746,15 +746,15 @@ export default function SendLists() {
         {/* Active Send Lists */}
         <div className="space-y-4 mb-8">
           <h2 className="text-xl font-semibold flex items-center gap-2">
-            <Users className="h-5 w-5 text-slate-400" />
+            <Users className="h-5 w-5 text-muted-foreground" />
             Active Send Lists
             {activeLists.length > 0 && (
               <Badge variant="outline" className="ml-2">{activeLists.length}</Badge>
             )}
           </h2>
           {activeLists.length === 0 ? (
-            <Card className="bg-slate-900/50 border-slate-700">
-              <CardContent className="p-8 text-center text-slate-500">
+            <Card className="bg-slate-900/50 border-border">
+              <CardContent className="p-8 text-center text-muted-foreground">
                 <Send className="h-12 w-12 mx-auto mb-3 opacity-30" />
                 <p>No active send lists. Create one to get started.</p>
               </CardContent>

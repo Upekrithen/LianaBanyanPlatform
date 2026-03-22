@@ -148,21 +148,21 @@ export default function StorefrontBuilder() {
 
   return (
     <PortalPageLayout variant="stage" maxWidth="lg" xrayId="storefront-builder">
-      <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6">
+      <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white mb-6">
         <ArrowLeft className="w-4 h-4" /> Back
       </Link>
 
       <div className="text-center mb-8">
         <Store className="w-12 h-12 mx-auto mb-3 text-amber-400" />
         <h1 className="text-3xl font-bold mb-2" data-xray-id="sfb-title">Storefront Builder</h1>
-        <p className="text-slate-400">Create a menu page for a local business. They get orders — you may earn onboarding credit.</p>
+        <p className="text-muted-foreground">Create a menu page for a local business. They get orders — you may earn onboarding credit.</p>
       </div>
 
       {/* Step indicator */}
       <div className="flex justify-center gap-2 mb-8">
         {[1, 2, 3, 4].map(s => (
           <div key={s} className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-            s === step ? 'bg-amber-500 text-black' : s < step ? 'bg-emerald-600 text-white' : 'bg-slate-700 text-slate-400'
+            s === step ? 'bg-amber-500 text-black' : s < step ? 'bg-emerald-600 text-white' : 'bg-slate-700 text-muted-foreground'
           }`}>
             {s < step ? <Check className="w-4 h-4" /> : s}
           </div>
@@ -171,7 +171,7 @@ export default function StorefrontBuilder() {
 
       {/* Step 1: Business Info */}
       {step === 1 && (
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card/50 border-border">
           <CardHeader>
             <CardTitle>Business Details</CardTitle>
           </CardHeader>
@@ -204,22 +204,22 @@ export default function StorefrontBuilder() {
       {/* Step 2: Menu Items */}
       {step === 2 && (
         <div className="space-y-4">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Menu Items</CardTitle>
               <Button size="sm" onClick={addItem}><Plus className="w-4 h-4 mr-1" /> Add Item</Button>
             </CardHeader>
             <CardContent>
               {items.length === 0 && (
-                <div className="text-center py-8 text-slate-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <p>No items yet. Click "Add Item" to start building the menu.</p>
                 </div>
               )}
               <div className="space-y-4">
                 {items.map((item, idx) => (
-                  <div key={item.id} className="p-4 bg-slate-900/50 rounded-lg border border-slate-700 space-y-3">
+                  <div key={item.id} className="p-4 bg-slate-900/50 rounded-lg border border-border space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-slate-500 font-mono">Item {idx + 1}</span>
+                      <span className="text-xs text-muted-foreground font-mono">Item {idx + 1}</span>
                       <Button variant="ghost" size="sm" onClick={() => removeItem(item.id)} className="text-red-400 hover:text-red-300">
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -247,7 +247,7 @@ export default function StorefrontBuilder() {
                       <div className="flex gap-1 mt-1">
                         {DAYS.map(d => (
                           <button key={d} onClick={() => toggleDay(item.id, d)} className={`w-8 h-8 rounded text-xs font-bold ${
-                            item.available_days.includes(d) ? 'bg-amber-500 text-black' : 'bg-slate-700 text-slate-400'
+                            item.available_days.includes(d) ? 'bg-amber-500 text-black' : 'bg-slate-700 text-muted-foreground'
                           }`}>
                             {DAY_LABELS[d]}
                           </button>
@@ -264,14 +264,14 @@ export default function StorefrontBuilder() {
 
       {/* Step 3: Delivery Settings */}
       {step === 3 && (
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card/50 border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2"><Clock className="w-5 h-5 text-amber-400" /> Order & Delivery Settings</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <Label>Order Cutoff Time</Label>
-              <p className="text-xs text-slate-500 mb-1">Orders placed after this time go to the next day</p>
+              <p className="text-xs text-muted-foreground mb-1">Orders placed after this time go to the next day</p>
               <Input type="time" value={cutoffTime} onChange={e => setCutoffTime(e.target.value)} className="mt-1 w-48" />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -295,7 +295,7 @@ export default function StorefrontBuilder() {
       {/* Step 4: Preview */}
       {step === 4 && (
         <div className="space-y-4">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card/50 border-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2"><Eye className="w-5 h-5 text-amber-400" /> Preview</CardTitle>
             </CardHeader>
@@ -308,18 +308,18 @@ export default function StorefrontBuilder() {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-slate-400 flex items-center gap-2">
+                <p className="text-sm text-muted-foreground flex items-center gap-2">
                   <Truck className="w-4 h-4" />
                   Delivery: {deliveryStart}–{deliveryEnd} | Cutoff: {cutoffTime === '00:00' ? 'Midnight' : cutoffTime} | Fee: ${deliveryFee}
                 </p>
               </div>
-              <div className="border-t border-slate-700 pt-4">
+              <div className="border-t border-border pt-4">
                 <h3 className="font-semibold mb-3">Menu ({items.length} items)</h3>
                 {items.map(item => (
-                  <div key={item.id} className="flex justify-between items-center py-2 border-b border-slate-800">
+                  <div key={item.id} className="flex justify-between items-center py-2 border-b border-border">
                     <div>
                       <p className="font-medium">{item.item_name}</p>
-                      {item.description && <p className="text-xs text-slate-500">{item.description}</p>}
+                      {item.description && <p className="text-xs text-muted-foreground">{item.description}</p>}
                       <p className="text-xs text-slate-600">{item.category}</p>
                     </div>
                     <p className="font-bold text-amber-400">${parseFloat(item.price || '0').toFixed(2)}</p>
@@ -340,7 +340,7 @@ export default function StorefrontBuilder() {
                 <Check className="w-8 h-8 text-emerald-400" />
               </div>
               <h2 className="text-2xl font-bold mb-2">Your storefront is live!</h2>
-              <p className="text-slate-400 mb-4">
+              <p className="text-muted-foreground mb-4">
                 Customers can now order from <span className="text-emerald-400 font-medium">{businessName}</span>
               </p>
               <Link to={`/menu/${publishedSlug}`}>
@@ -359,52 +359,52 @@ export default function StorefrontBuilder() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted-foreground">
                 Stand out with professional designs. Browse templates from LB designers or commission custom work.
               </p>
 
               <div className="grid gap-3">
                 <Link to="/emporium/templates?category=cue_card_template" className="block">
-                  <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-amber-500/30 transition-colors">
+                  <div className="flex items-center gap-4 p-3 rounded-lg bg-card/50 border border-border hover:border-amber-500/30 transition-colors">
                     <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
                       <CreditCard className="w-5 h-5 text-blue-400" />
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Cue Card</p>
-                      <p className="text-xs text-slate-500">Hand out cards that link directly to your storefront</p>
+                      <p className="text-xs text-muted-foreground">Hand out cards that link directly to your storefront</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
                 </Link>
 
                 <Link to="/emporium/templates?category=logo" className="block">
-                  <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-amber-500/30 transition-colors">
+                  <div className="flex items-center gap-4 p-3 rounded-lg bg-card/50 border border-border hover:border-amber-500/30 transition-colors">
                     <div className="w-10 h-10 rounded-lg bg-pink-500/20 flex items-center justify-center shrink-0">
                       <Paintbrush className="w-5 h-5 text-pink-400" />
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Logo</p>
-                      <p className="text-xs text-slate-500">Get a custom logo from an LB designer</p>
+                      <p className="text-xs text-muted-foreground">Get a custom logo from an LB designer</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
                 </Link>
 
                 <Link to="/emporium/templates?category=business_card_template" className="block">
-                  <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-amber-500/30 transition-colors">
+                  <div className="flex items-center gap-4 p-3 rounded-lg bg-card/50 border border-border hover:border-amber-500/30 transition-colors">
                     <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
                       <FileImage className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Business Card</p>
-                      <p className="text-xs text-slate-500">Professional business cards with your storefront QR code</p>
+                      <p className="text-xs text-muted-foreground">Professional business cards with your storefront QR code</p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
                 </Link>
               </div>
 
-              <Separator className="border-slate-700" />
+              <Separator className="border-border" />
 
               <div className="p-4 rounded-lg bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-purple-500/20">
                 <div className="flex items-start gap-3">
@@ -413,7 +413,7 @@ export default function StorefrontBuilder() {
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">New Business Starter Package</p>
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Get everything at once — assemble a Crew Table with a designer, photographer, writer, and printer.
                       Your team builds your brand together.
                     </p>

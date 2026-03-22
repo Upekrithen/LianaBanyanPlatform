@@ -456,7 +456,7 @@ export default function PowerToThePeoplePage() {
               </div>
             </div>
 
-            <div className="p-6 bg-slate-900/50 border border-slate-800 rounded-xl max-w-3xl mx-auto">
+            <div className="p-6 bg-slate-900/50 border border-border rounded-xl max-w-3xl mx-auto">
               <p className="text-slate-300 italic text-base leading-relaxed text-center">
                 "'Tis the set of the sails and not the gales,
                 <br />
@@ -836,7 +836,7 @@ export default function PowerToThePeoplePage() {
                   <Mic className="h-5 w-5 text-purple-400" />
                   {SAMPLE_COVERAGE.chunkMinutes}-Minute Debate Chunk Timer
                 </CardTitle>
-                <CardDescription className="text-slate-400">
+                <CardDescription className="text-muted-foreground">
                   Speaking in the Political Expedition is limited to{" "}
                   {SAMPLE_COVERAGE.chunkMinutes}-minute chunks. Start the timer when you begin
                   speaking.

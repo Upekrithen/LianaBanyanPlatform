@@ -9,10 +9,61 @@
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Session 65 (March 21, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 70 (March 22, 2026)
 
-**Latest commit:** `b57c026` — Knight 65: Privacy/Terms A2P, DailyNewsWidget, Defense Klaus shield, Crown Letter scaffold
-**Previous (Session 64):** `4212161` (milestone handoff)
+**Latest commit:** `042cda0` — Knight 70b: Spotlight battle mode + storefront onboarding prompt + db push
+**Previous:** `c1bf7e9` (Knight 70: Design Pipeline + Crew Tables + Emporium wiring)
+
+---
+
+### What Was Done (Session 70 — Knight)
+
+All tasks from `BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_70_DESIGN_PIPELINE.md` — Tasks 1, 2, 4, 5, 7, 8 completed and deployed.
+
+| Task | Files | Summary |
+|------|-------|---------|
+| **Task 1: Arena Upload Flow** | `DesignBattleArena.tsx`, migration `20260322000001` | `arena_submissions` table with RLS, Submit Design form (6 categories: loteria/cue/business/logo/menu/coalition), STAMP review queue tab, image URL upload |
+| **Task 2: Battle Auto-Trigger** | migration `20260322000001` | DB trigger `check_arena_battle_trigger` — when submission approved, counts same-category approvals in 7-day window; if ≥2, auto-creates Design Battle with 48h voting period |
+| **Task 4: Emporium Template Gallery** | `EmporiumTemplates.tsx`, `App.tsx` | `/emporium/templates` (+ `/emporium/designs`, `/emporium`) — browsable grid with category filter, sort (newest/popular/rating/price), ghost credit mechanic for non-members, conversion prompt at 3+ ghost credits (#1894), "Your Work Is Never Wasted" explainer |
+| **Task 5: Crew Tables** | `BandWagon.tsx`, migration `20260322000002` | `crew_tables` + `crew_table_seats` tables with auto-activation trigger, Crew Tables section on BandWagon with round-table seat display, role colors, Join Seat mutation |
+| **Task 7: Designer Treasure Map** | `TreasureMaps.tsx` | "Become an LB Designer" 7th map card — $0 startup, $500-$5K/mo, 4 levels (First Submission → Template Seller → Battle Winner → Design Steward), links to /arena |
+| **Task 8: Innovation Count** | `useCanonicalStats.ts` | Default 1,856 → 1,896 (86 unfiled from Bishop 019: #1811-#1896) |
+
+**Deployed:** lianabanyan.com — 670 files, all live.
+**Innovation count:** 1,896 | **Patent claims:** 1,401 across 8 provisionals
+
+### Session 70b — Continuation
+
+| Task | Files | Summary |
+|------|-------|---------|
+| **supabase db push** | 3 migrations | `arena_submissions`, `crew_tables`, `crew_table_seats`, `treasure_keys_all_letters` all pushed to production |
+| **Task 3: Spotlight Battle Mode** | `makerSpotlightService.ts`, `MakerSpotlight.tsx` | `fetchActiveBattleSpotlight()` queries for active/voting battles + arena submissions; battle voting grid with Vote button renders on Maker Spotlight page when battle active; auto-reverts to normal rotation when no battle |
+| **Task 6: Onboarding Prompt** | `StorefrontBuilder.tsx` | Step 5 success screen after storefront publish — Cue Card, Logo, Business Card links to Emporium (filtered by category), New Business Starter Package CTA linking to BandWagon Crew Tables |
+
+### All 9 Tasks from Session 70 Prompt — STATUS
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Arena Upload Flow | DONE — `c1bf7e9` |
+| 2 | Battle Auto-Trigger | DONE — DB trigger in migration `20260322000001` |
+| 3 | Spotlight Battle Mode | DONE — `042cda0` |
+| 4 | Emporium Template Gallery | DONE — `c1bf7e9` |
+| 5 | Crew Tables | DONE — `c1bf7e9` |
+| 6 | Onboarding Design Prompt | DONE — `042cda0` |
+| 7 | Designer Treasure Map | DONE — `c1bf7e9` |
+| 8 | Innovation Count → 1,896 | DONE — `c1bf7e9` |
+| 9 | Passive Income Dashboard | EXISTS — `OnboarderDashboard.tsx` already built |
+
+### Pending
+
+| Priority | Task | Notes |
+|----------|------|-------|
+| LOW | Phase 2: Interior color token sweep | Replace hardcoded Tailwind colors with semantic tokens |
+| LOW | Task 9 verification | Verify `OnboarderDashboard.tsx` matches A&A 019E spec |
+
+---
+
+## PREVIOUS SESSION: Knight Session 65 (March 21, 2026)
 
 ---
 
@@ -2571,6 +2622,70 @@ The full "scan QR → order → pay → aggregate → deliver → earn passive i
 
 ---
 
+## Knight Session 69 — March 21, 2026 (continued)
+
+**Innovation Count:** 1,856 (unchanged)
+
+**3 features completed:**
+
+### 1. Battery Dispatch — Grassroots Intelligence ✅ VERIFIED COMPLETE
+- 15 posts across 5 days × multiple platforms (Twitter, LinkedIn, Bluesky, Reddit, Medium, HN)
+- `scheduleGrassrootsIntelligencePosts.ts` — scheduler with date offsets + platform mapping
+- `TheBattery.tsx` — ARM/FIRE UI with campaign selection
+- Political Expedition cue card at `/cue/political-expedition`
+- 4 academic papers wired in `economicPapers.ts`
+- **Status:** Ready for Founder to ARM and FIRE. No code changes needed.
+
+### 2. Treasure Key Injection — ALL 95 Letters ✅ BUILT
+- **Migration:** `20260321000005_treasure_keys_all_letters.sql` — 95 treasure keys
+- **CONTENT_KEY_MAP:** Expanded from 12 entries to 107 entries in `treasureKeyEmbed.ts`
+- **Key distribution:**
+  - Circle 1 Investors: 12 keys (circle 2-3, rare-legendary, 50-300 feathers)
+  - Circle 2 Media: 14 keys (circle 1-2, uncommon-rare, 50-100 feathers)
+  - Circle 3 Academics: 14 keys (circle 2-3, rare-epic, 75-300 feathers)
+  - Crown Initiative: 22 keys (circle 1-2, uncommon-rare, 50-100 feathers)
+  - Crown Letters Root: 4 keys (circle 1-2, uncommon-rare, 50-100 feathers)
+  - Pitches: 17 keys (circle 1, common-uncommon, 25-50 feathers)
+  - Partnerships: 5 keys (circle 1, common, 25 feathers)
+  - Blessing: 3 keys (circle 1, common-uncommon, 25-50 feathers)
+  - Health: 3 keys (circle 1, common-uncommon, 25-50 feathers)
+  - Professional: 1 key (circle 1, common, 25 feathers)
+- **Total feathers available from letters:** 8,600
+- **Platform total:** 30 (previous) + 95 (letters) = 125 treasure keys
+- Each key has a thematic word related to the letter recipient (e.g., COMPOUNDING for Buffett, SURVEILLANCE for Zuboff, SPARKJOY for Kondo)
+- Hiding methods: 48 embedded, 42 hidden_text, 5 cipher
+
+### 3. Gmail Bridge — MoneyPenny Email Forwarding ✅ BUILT
+- **Edge function:** `platform/supabase/functions/gmail-bridge/index.ts`
+- **Config:** Added to `config.toml` with `verify_jwt = false`
+- **Architecture:** Gmail Push → Cloud Pub/Sub → `gmail-bridge` → `moneypenny_inbox`
+- **Features:**
+  - Receives Gmail Pub/Sub notifications (`{ emailAddress, historyId }`)
+  - Refreshes Google OAuth access token from stored refresh token
+  - Fetches message history from Gmail API
+  - Extracts from/to/subject/body from full MIME message
+  - Dedup via `gmail_id:messageId` in action_notes
+  - Full email classification (crown/press/patent/member/support)
+  - Auto-creates moneypenny_actions for P1-P2 emails
+  - Auto-creates red_carpet_signals for crown/press
+  - Watch renewal endpoint: `?action=renew-watch`
+- **Setup guide:** `CONTEXT_MANAGEMENT/GMAIL_BRIDGE_SETUP.md`
+- **Secrets needed:** GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN, GMAIL_WATCH_EMAIL, GMAIL_PUBSUB_TOPIC
+- **Founder action required:** GCP Pub/Sub setup + OAuth consent flow (see setup guide)
+
+**Deployed:** lianabanyan.com (hosting:main) ✓
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `platform/supabase/migrations/20260321000005_treasure_keys_all_letters.sql` | 95 treasure keys for all letters |
+| `platform/src/lib/treasureKeyEmbed.ts` | CONTENT_KEY_MAP expanded to 107 entries |
+| `platform/supabase/functions/gmail-bridge/index.ts` | Gmail Push → MoneyPenny bridge |
+| `platform/supabase/config.toml` | Added gmail-bridge function |
+| `CONTEXT_MANAGEMENT/GMAIL_BRIDGE_SETUP.md` | GCP setup instructions |
+
+---
+
 ## PENDING WORK (Next Session Priority Order)
 
 | # | Priority | Item | Notes |
@@ -2583,11 +2698,11 @@ The full "scan QR → order → pay → aggregate → deliver → earn passive i
 | 5 | ~~DONE~~ | ~~Content Pipeline → Cephas auto-sync~~ | Session 54: 90 letters synced, `npm run sync:letters` |
 | 5b | ~~DONE~~ | ~~Cue Card minting integration~~ | Session 54: 68 cards auto-generated, `npm run mint:cue-cards` |
 | 5c | ~~DONE~~ | ~~Social media cron: member_social_accounts~~ | Session 54: bug fix + full rewrite |
-| 6 | **MEDIUM** | **Battery Dispatch — Grassroots Intelligence** | Create campaign from 4 new academic papers + Political Expedition cue card |
-| 7 | **MEDIUM** | **Treasure Key injection** | Inject keys into all letters, articles, social posts for real treasure hunt |
+| 6 | ~~DONE~~ | ~~Battery Dispatch — Grassroots Intelligence~~ | Session 69: Verified complete — 15 posts, 5-day arc, Battery UI, scheduler, cue card all built. Ready for Founder ARM/FIRE |
+| 7 | ~~DONE~~ | ~~Treasure Key injection~~ | Session 69: 95 keys injected for ALL letters, CONTENT_KEY_MAP expanded, migration `20260321000005` |
 | 8 | ~~DONE~~ | ~~SEC language cleanup (pre-existing files)~~ | Session 67: 15 fixes across 10 files — will earn, invest, equity, guaranteed |
 | 9 | ~~DONE~~ | ~~RLS security hardening~~ | Session 67: 18 tables hardened — is_admin() on 11, Moneypenny 6, crown invitations 1 |
-| 10 | **MEDIUM** | **Gmail forwarding** | Google Cloud Pub/Sub → moneypenny-intake webhook for inbound email |
+| 10 | ~~DONE~~ | ~~Gmail forwarding~~ | Session 69: `gmail-bridge` edge function built, config.toml updated, setup guide in `CONTEXT_MANAGEMENT/GMAIL_BRIDGE_SETUP.md` |
 | 11 | **LOW** | **CoLab/Zoo outreach** | AI-CAD partnership brief ready, pending Founder approval |
 | 12 | **LOW** | **Letter rewrites** | Founder wants to review/rewrite 30+ Crown Letters |
 | 13 | **LOW** | **the2ndsecond.com storyboard images** | 12 son's storyboard PNGs identified for front page |

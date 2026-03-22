@@ -142,7 +142,7 @@ function CardPreview({
           <p className="text-slate-700 text-sm leading-relaxed">
             {design.backText || "Scan the QR code to discover a platform where creators keep 83.3% of every sale. All That That Implies."}
           </p>
-          <div className="flex items-center justify-between text-[10px] text-slate-400">
+          <div className="flex items-center justify-between text-[10px] text-muted-foreground">
             <span>lianabanyan.com/atti</span>
             {referrerCode && <span>ref: {referrerCode}</span>}
           </div>
@@ -239,7 +239,7 @@ export default function BifrostCardBuilder() {
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
             Bifrost Card Builder
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-slate-600 dark:text-muted-foreground">
             Design your own A.T.T.I. cue cards with unique QR codes
           </p>
         </div>

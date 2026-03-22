@@ -62,10 +62,10 @@ function StatCard({ label, value, icon: Icon, sub }: {
     >
       <div className="flex items-center gap-3 mb-2">
         <Icon className="w-5 h-5 text-purple-400" />
-        <span className="text-slate-400 text-sm">{label}</span>
+        <span className="text-muted-foreground text-sm">{label}</span>
       </div>
       <div className="text-2xl font-bold text-white">{typeof value === 'number' ? value.toLocaleString() : value}</div>
-      {sub && <div className="text-xs text-slate-500 mt-1">{sub}</div>}
+      {sub && <div className="text-xs text-muted-foreground mt-1">{sub}</div>}
     </motion.div>
   );
 }
@@ -75,7 +75,7 @@ function BagCard({ id, bag }: { id: string; bag: { name: string; range: string; 
   return (
     <motion.div
       layout
-      className="bg-slate-800/50 rounded-lg border border-purple-500/10 overflow-hidden"
+      className="bg-card/50 rounded-lg border border-purple-500/10 overflow-hidden"
     >
       <button
         onClick={() => setOpen(!open)}
@@ -86,13 +86,13 @@ function BagCard({ id, bag }: { id: string; bag: { name: string; range: string; 
           <span className="font-medium text-white">{bag.name}</span>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-slate-400">{bag.range}</span>
+          <span className="text-sm text-muted-foreground">{bag.range}</span>
           {bag.claims > 0 && (
             <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">
               {bag.claims} claims
             </span>
           )}
-          {open ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />}
+          {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
         </div>
       </button>
       <AnimatePresence>
@@ -103,7 +103,7 @@ function BagCard({ id, bag }: { id: string; bag: { name: string; range: string; 
             exit={{ height: 0, opacity: 0 }}
             className="px-4 pb-4"
           >
-            <div className="text-sm text-slate-400 space-y-2">
+            <div className="text-sm text-muted-foreground space-y-2">
               <p>Innovation range: {bag.range}</p>
               {bag.claims > 0 && <p>Formal patent claims filed: {bag.claims}</p>}
               {id === '7' && <p>653 innovations with full inline patent specifications. Filed March 15, 2026.</p>}
@@ -149,13 +149,13 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
       <div>
         <h2 className="text-xl font-bold text-white mb-4">Filing Bags</h2>
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Filter bags..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+            className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
           />
         </div>
         <div className="space-y-2">
@@ -169,7 +169,7 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
         <h2 className="text-xl font-bold text-white mb-4">The Sweet Sixteen Initiatives</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {INITIATIVES.map((name, i) => (
-            <div key={i} className="bg-slate-800/50 rounded-lg px-3 py-2 border border-slate-700/50 text-sm text-slate-300">
+            <div key={i} className="bg-card/50 rounded-lg px-3 py-2 border border-border/50 text-sm text-slate-300">
               <span className="text-purple-400 font-mono mr-2">{i + 1}.</span>
               {name}
             </div>
@@ -182,7 +182,7 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-slate-400 border-b border-slate-700">
+              <tr className="text-muted-foreground border-b border-border">
                 <th className="text-left py-2">Application</th>
                 <th className="text-left py-2">Filed</th>
                 <th className="text-right py-2">Claims</th>
@@ -190,14 +190,14 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
               </tr>
             </thead>
             <tbody className="text-slate-300">
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/925,672</td><td>Nov 25–26, 2025</td><td className="text-right">123</td><td>Core Platform (#1–#37)</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/927,674</td><td>Nov 30, 2025</td><td className="text-right">72</td><td>Physical + Community</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/938,216</td><td>Dec 10, 2025</td><td className="text-right">397</td><td>HexIsle / Tereno</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/967,200</td><td>Jan 23–24, 2026</td><td className="text-right">292</td><td>Defense Klaus → MSA</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/969,601</td><td>Jan 28, 2026</td><td className="text-right">44</td><td>Ghost World</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">63/989,913</td><td>Feb 24, 2026</td><td className="text-right">408</td><td>LEVIATHAN PLUS</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right">464</td><td>Full Specs (#1001–#1662)</td></tr>
-              <tr className="border-b border-slate-800"><td className="py-2 font-mono">64/009,803</td><td>Mar 18, 2026</td><td className="text-right">89</td><td>Six Degrees + Game Mechanics + Demand Signaling (#1663–#1751)</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">63/925,672</td><td>Nov 25–26, 2025</td><td className="text-right">123</td><td>Core Platform (#1–#37)</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">63/927,674</td><td>Nov 30, 2025</td><td className="text-right">72</td><td>Physical + Community</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">63/938,216</td><td>Dec 10, 2025</td><td className="text-right">397</td><td>HexIsle / Tereno</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">63/967,200</td><td>Jan 23–24, 2026</td><td className="text-right">292</td><td>Defense Klaus → MSA</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">63/969,601</td><td>Jan 28, 2026</td><td className="text-right">44</td><td>Ghost World</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">63/989,913</td><td>Feb 24, 2026</td><td className="text-right">408</td><td>LEVIATHAN PLUS</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right">464</td><td>Full Specs (#1001–#1662)</td></tr>
+              <tr className="border-b border-border"><td className="py-2 font-mono">64/009,803</td><td>Mar 18, 2026</td><td className="text-right">89</td><td>Six Degrees + Game Mechanics + Demand Signaling (#1663–#1751)</td></tr>
               <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,401+</td><td>8 provisional applications filed</td></tr>
             </tbody>
           </table>
@@ -212,7 +212,7 @@ function LedgerView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }) 
     <div className="space-y-6">
       <div className="bg-gradient-to-br from-amber-900/30 to-purple-900/20 rounded-xl p-6 border border-amber-500/20">
         <h2 className="text-2xl font-bold text-white mb-2">Upekrithen Ledger</h2>
-        <p className="text-slate-400">
+        <p className="text-muted-foreground">
           The Founder retains 20% of all {stats.innovationCount.toLocaleString()} innovations as permanently reserved.
           This ledger shows the complete innovation catalog owned by Liana Banyan Corporation.
         </p>
@@ -225,25 +225,25 @@ function LedgerView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }) 
         <StatCard label="Crown Jewels" value={stats.crownJewels} icon={Award} />
       </div>
 
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+      <div className="bg-card/50 rounded-xl p-6 border border-border/50">
         <h3 className="text-lg font-bold text-white mb-3">Anti-Concentration Provisions</h3>
-        <div className="space-y-2 text-sm text-slate-400">
+        <div className="space-y-2 text-sm text-muted-foreground">
           <p><span className="text-amber-400 font-medium">Founder Reserve:</span> 20% of patents permanently reserved</p>
           <p><span className="text-amber-400 font-medium">Single-Entity Cap:</span> Max 5% regardless of funding</p>
           <p><span className="text-amber-400 font-medium">Discipline Limits:</span> Max 2 patents per discipline per sponsor</p>
           <p><span className="text-amber-400 font-medium">Community Oversight:</span> {'>'}10 patents requires 60% member vote</p>
         </div>
-        <p className="mt-4 text-sm text-slate-400 italic border-l-2 border-amber-500/30 pl-3">
+        <p className="mt-4 text-sm text-muted-foreground italic border-l-2 border-amber-500/30 pl-3">
           "I'm not trying to be Valjean. I'm trying to be the Bishop — one of many — and these patents are my silver candlesticks. I don't have any silver spoons."
           <span className="block text-amber-400/60 mt-1 not-italic">— Founder</span>
         </p>
       </div>
 
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+      <div className="bg-card/50 rounded-xl p-6 border border-border/50">
         <h3 className="text-lg font-bold text-white mb-3">Coverage Map</h3>
         <div className="space-y-1">
           {Object.entries(BAG_LABELS).map(([id, bag]) => (
-            <div key={id} className="flex items-center justify-between py-2 border-b border-slate-700/50 last:border-0">
+            <div key={id} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
               <span className="text-slate-300 text-sm">{bag.name}</span>
               <span className="text-purple-400 text-sm font-mono">{bag.range}</span>
             </div>
@@ -256,13 +256,13 @@ function LedgerView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }) 
 
 function BagView({ bagId, stats }: { bagId: string; stats: ReturnType<typeof useCanonicalStats> }) {
   const bag = BAG_LABELS[bagId];
-  if (!bag) return <div className="text-slate-400">Unknown bag: {bagId}</div>;
+  if (!bag) return <div className="text-muted-foreground">Unknown bag: {bagId}</div>;
 
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-br from-purple-900/30 to-slate-800 rounded-xl p-6 border border-purple-500/20">
         <h2 className="text-2xl font-bold text-white mb-2">{bag.name}</h2>
-        <p className="text-slate-400">Innovation range: {bag.range}</p>
+        <p className="text-muted-foreground">Innovation range: {bag.range}</p>
         {bag.claims > 0 && (
           <p className="text-purple-300 mt-2">{bag.claims} formal patent claims filed</p>
         )}
@@ -271,7 +271,7 @@ function BagView({ bagId, stats }: { bagId: string; stats: ReturnType<typeof use
         <StatCard label="Innovations in Bag" value={bag.range} icon={FileText} />
         <StatCard label="Patent Claims" value={bag.claims || 'TBD'} icon={Shield} />
       </div>
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50 text-slate-400">
+      <div className="bg-card/50 rounded-xl p-6 border border-border/50 text-muted-foreground">
         <p>Pedestal contents for this bag are managed by curators. Changes are immutably recorded in the
           IP ledger. Innovation assignments can be rebalanced quarterly based on performance and strategic needs.</p>
       </div>
@@ -289,20 +289,20 @@ export default function IPPortfolioPage() {
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <Link to="/dashboard" className="text-slate-400 hover:text-white transition-colors">
+            <Link to="/dashboard" className="text-muted-foreground hover:text-white transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-amber-400 bg-clip-text text-transparent">
                 IP Portfolio
               </h1>
-              <p className="text-slate-500 text-sm mt-1">
+              <p className="text-muted-foreground text-sm mt-1">
                 {stats.innovationCount.toLocaleString()} innovations &middot; {stats.patentClaims.toLocaleString()} claims &middot; {stats.patentApplications} provisionals
               </p>
             </div>
           </div>
           {qrCode && (
-            <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-800 px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground bg-slate-800 px-3 py-1.5 rounded-full">
               <QrCode className="w-3 h-3" />
               <span className="font-mono">{qrCode}</span>
             </div>

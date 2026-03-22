@@ -160,7 +160,7 @@ export default function OnboarderDashboard() {
     return (
       <PortalPageLayout variant="stage" maxWidth="lg" xrayId="onboarder-dashboard">
         <div className="flex items-center justify-center py-20">
-          <div className="animate-pulse text-slate-400">Loading passive income dashboard...</div>
+          <div className="animate-pulse text-muted-foreground">Loading passive income dashboard...</div>
         </div>
       </PortalPageLayout>
     );
@@ -169,16 +169,16 @@ export default function OnboarderDashboard() {
   if (credits.length === 0 && agreements.length === 0) {
     return (
       <PortalPageLayout variant="stage" maxWidth="lg" xrayId="onboarder-dashboard">
-        <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6">
+        <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white mb-6">
           <ArrowLeft className="w-4 h-4" /> Dashboard
         </Link>
         <div className="text-center py-16">
           <DollarSign className="w-16 h-16 mx-auto mb-4 text-slate-600" />
           <h1 className="text-2xl font-bold mb-2">No Onboarding Credits Yet</h1>
-          <p className="text-slate-400 mb-2 max-w-md mx-auto">
+          <p className="text-muted-foreground mb-2 max-w-md mx-auto">
             Onboard local businesses onto Liana Banyan to earn 3% passive income from the platform's share — forever.
           </p>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
             Qualify by creating a storefront and generating 10 paid orders within 30 days.
           </p>
           <div className="flex gap-3 justify-center">
@@ -196,13 +196,13 @@ export default function OnboarderDashboard() {
 
   return (
     <PortalPageLayout variant="stage" maxWidth="lg" xrayId="onboarder-dashboard">
-      <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-6">
+      <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white mb-6">
         <ArrowLeft className="w-4 h-4" /> Dashboard
       </Link>
 
       <div className="mb-6">
         <h1 className="text-3xl font-bold" data-xray-id="onboarder-dash-title">Passive Income Dashboard</h1>
-        <p className="text-slate-400 mt-1">Your onboarding credits and steward earnings</p>
+        <p className="text-muted-foreground mt-1">Your onboarding credits and steward earnings</p>
       </div>
 
       {/* Summary stats */}
@@ -211,36 +211,36 @@ export default function OnboarderDashboard() {
           <CardContent className="pt-4 pb-3 px-4">
             <p className="text-xs text-emerald-500 uppercase tracking-wider">Total Passive Income</p>
             <p className="text-3xl font-bold text-emerald-400 mt-1">${totalPassiveIncome.toFixed(0)}</p>
-            <p className="text-xs text-slate-500">this month</p>
+            <p className="text-xs text-muted-foreground">this month</p>
           </CardContent>
         </Card>
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card/50 border-border">
           <CardContent className="pt-4 pb-3 px-4">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Onboarding Credits</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Onboarding Credits</p>
             <p className="text-3xl font-bold text-amber-400 mt-1">${totalOnboardingIncome.toFixed(0)}</p>
-            <p className="text-xs text-slate-500">{qualifiedCredits.length} qualified</p>
+            <p className="text-xs text-muted-foreground">{qualifiedCredits.length} qualified</p>
           </CardContent>
         </Card>
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card/50 border-border">
           <CardContent className="pt-4 pb-3 px-4">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Steward Fees</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Steward Fees</p>
             <p className="text-3xl font-bold text-purple-400 mt-1">${totalStewardIncome.toFixed(0)}</p>
-            <p className="text-xs text-slate-500">{agreements.length} active</p>
+            <p className="text-xs text-muted-foreground">{agreements.length} active</p>
           </CardContent>
         </Card>
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card/50 border-border">
           <CardContent className="pt-4 pb-3 px-4">
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Business Revenue</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Business Revenue</p>
             <p className="text-3xl font-bold text-slate-300 mt-1">${totalMonthlyRevenue.toFixed(0)}</p>
-            <p className="text-xs text-slate-500">through your businesses</p>
+            <p className="text-xs text-muted-foreground">through your businesses</p>
           </CardContent>
         </Card>
       </div>
 
       {/* How it works callout */}
-      <Card className="bg-slate-800/30 border-slate-700/50 mb-8">
+      <Card className="bg-card/30 border-border/50 mb-8">
         <CardContent className="py-4 px-6">
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted-foreground">
             <span className="font-semibold text-amber-400">How onboarding credits work:</span> You earn {' '}
             <span className="text-emerald-400 font-bold">3%</span> of every transaction from businesses you onboard — paid from the platform's 13.3% share, not the business's 83.3%.
             The business pays exactly the same. Qualify with 10 paid orders + 30 active days.
@@ -265,46 +265,46 @@ export default function OnboarderDashboard() {
               const isExpanded = expandedCredit === credit.id;
 
               return (
-                <Card key={credit.id} className="bg-slate-800/50 border-slate-700">
+                <Card key={credit.id} className="bg-card/50 border-border">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedCredit(isExpanded ? null : credit.id)}>
                       <div className="flex items-center gap-3">
                         <Store className="w-5 h-5 text-emerald-400" />
                         <div>
                           <p className="font-medium">{sf?.name || 'Unknown'}</p>
-                          <p className="text-xs text-slate-500">{sf?.business_location || sf?.category || ''}</p>
+                          <p className="text-xs text-muted-foreground">{sf?.business_location || sf?.category || ''}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <p className="text-sm text-slate-500">This month</p>
+                          <p className="text-sm text-muted-foreground">This month</p>
                           <p className="font-bold text-emerald-400">${(creditEarned + stewardEarned).toFixed(2)}</p>
                         </div>
-                        {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />}
+                        {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                       </div>
                     </div>
 
                     {isExpanded && (
-                      <div className="mt-4 pt-4 border-t border-slate-700 space-y-2">
+                      <div className="mt-4 pt-4 border-t border-border space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-slate-400">Business revenue (this month)</span>
+                          <span className="text-muted-foreground">Business revenue (this month)</span>
                           <span className="text-slate-300">${monthlyRev.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-slate-400">Onboarding credit ({credit.credit_percentage}%)</span>
+                          <span className="text-muted-foreground">Onboarding credit ({credit.credit_percentage}%)</span>
                           <span className="text-amber-400 font-medium">${creditEarned.toFixed(2)}</span>
                         </div>
                         {agreement && (
                           <div className="flex justify-between text-sm">
-                            <span className="text-slate-400">Steward fee ({agreement.management_fee_percentage}%)</span>
+                            <span className="text-muted-foreground">Steward fee ({agreement.management_fee_percentage}%)</span>
                             <span className="text-purple-400 font-medium">${stewardEarned.toFixed(2)}</span>
                           </div>
                         )}
-                        <div className="flex justify-between text-sm pt-2 border-t border-slate-800">
+                        <div className="flex justify-between text-sm pt-2 border-t border-border">
                           <span className="text-slate-300 font-medium">Total passive income</span>
                           <span className="text-emerald-400 font-bold">${(creditEarned + stewardEarned).toFixed(2)}</span>
                         </div>
-                        <div className="flex gap-4 text-xs text-slate-500 pt-2">
+                        <div className="flex gap-4 text-xs text-muted-foreground pt-2">
                           <span>Qualified: {credit.qualification_date || 'N/A'}</span>
                           <span>Orders: {stats?.order_count || 0} this month</span>
                           {sf?.slug && (
@@ -339,14 +339,14 @@ export default function OnboarderDashboard() {
               const progress = Math.min(100, (credit.orders_count / 10) * 100);
 
               return (
-                <Card key={credit.id} className="bg-slate-800/50 border-slate-700">
+                <Card key={credit.id} className="bg-card/50 border-border">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <Store className="w-5 h-5 text-yellow-400" />
                         <div>
                           <p className="font-medium">{sf?.name || 'Unknown'}</p>
-                          <p className="text-xs text-slate-500">{sf?.business_location || ''}</p>
+                          <p className="text-xs text-muted-foreground">{sf?.business_location || ''}</p>
                         </div>
                       </div>
                       <Badge variant="outline" className="border-yellow-500/30 text-yellow-400">
@@ -358,7 +358,7 @@ export default function OnboarderDashboard() {
                     <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
                       <div className="h-full bg-amber-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
                     </div>
-                    <div className="flex justify-between text-xs text-slate-500 mt-1">
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
                       <span>{credit.orders_count}/10 paid orders</span>
                       {credit.first_order_date && <span>{daysNeeded > 0 ? `${30 - daysNeeded}/30 days` : '30/30 days ✓'}</span>}
                     </div>
@@ -382,13 +382,13 @@ export default function OnboarderDashboard() {
               const stats = orderStats.get(agr.storefront_id);
               const monthlyFee = (stats?.revenue || 0) * (agr.management_fee_percentage / 100);
               return (
-                <Card key={agr.id} className="bg-slate-800/50 border-slate-700">
+                <Card key={agr.id} className="bg-card/50 border-border">
                   <CardContent className="p-4 flex items-center justify-between">
                     <div>
                       <p className="font-medium">{sf?.name || 'Unknown'}</p>
-                      <p className="text-xs text-slate-500">{agr.management_fee_percentage}% management fee · Since {agr.start_date}</p>
+                      <p className="text-xs text-muted-foreground">{agr.management_fee_percentage}% management fee · Since {agr.start_date}</p>
                     </div>
-                    <p className="font-bold text-purple-400">${monthlyFee.toFixed(2)}<span className="text-xs font-normal text-slate-500">/mo</span></p>
+                    <p className="font-bold text-purple-400">${monthlyFee.toFixed(2)}<span className="text-xs font-normal text-muted-foreground">/mo</span></p>
                   </CardContent>
                 </Card>
               );
@@ -398,9 +398,9 @@ export default function OnboarderDashboard() {
       )}
 
       {/* CTA */}
-      <Card className="bg-slate-800/30 border-slate-700/50">
+      <Card className="bg-card/30 border-border/50">
         <CardContent className="py-6 text-center">
-          <p className="text-slate-400 mb-4">Onboard more businesses to grow your passive income.</p>
+          <p className="text-muted-foreground mb-4">Onboard more businesses to grow your passive income.</p>
           <div className="flex gap-3 justify-center">
             <Link to="/treasure-maps">
               <Button variant="outline" className="border-slate-600">Browse Treasure Maps</Button>

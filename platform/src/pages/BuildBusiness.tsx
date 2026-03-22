@@ -138,7 +138,7 @@ export default function BuildBusiness() {
     <PortalPageLayout variant="stage" maxWidth="xl" xrayId="build-business">
       {/* Breadcrumb */}
       <nav className="px-6 pt-4 max-w-6xl mx-auto">
-        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <Link to="/portal" className="hover:text-slate-300 transition-colors">Portal</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-slate-300">Build a Business</span>
@@ -529,7 +529,7 @@ export default function BuildBusiness() {
             { label: 'Forex Ratchet', href: 'https://cephas.lianabanyan.com/under-the-hood/forex-ratchet-valuation' },
           ]}
         >
-          <div className="p-6 rounded-xl bg-slate-800/50 border border-white/10 mb-8">
+          <div className="p-6 rounded-xl bg-card/50 border border-white/10 mb-8">
             <h4 className="font-semibold text-white mb-4">The Flow</h4>
             <div className="space-y-4">
               {[
