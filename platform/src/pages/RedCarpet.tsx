@@ -25,6 +25,7 @@ import {
   UserPlus,
   QrCode,
   Share2,
+  BookOpen,
 } from "lucide-react";
 import {
   findRecipientByEmail,
@@ -1182,8 +1183,8 @@ export default function RedCarpet() {
 
           {/* --- WELCOME BANNER (Recipient or General) --- */}
           {entryMode !== "press" && (
-            <FadeInSection>
-              <section className="py-16 px-6">
+            <FadeInSection delay={0} className={entryMode === "slug" || entryMode === "card" || entryMode === "herald" || entryMode === "referral" ? "!opacity-100 !translate-y-0" : ""}>
+              <section className="py-16 px-6 bg-gradient-to-b from-primary/5 via-background to-background">
                 <div className="max-w-4xl mx-auto text-center">
                   {recipient ? (
                     <>

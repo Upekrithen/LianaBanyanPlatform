@@ -1,0 +1,90 @@
+import { lazy } from "react";
+import { Route, Navigate } from "react-router-dom";
+import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
+import { LazyPage } from "./LazyPage";
+
+const Guilds = lazy(() => import("@/pages/Guilds"));
+const GuildHub = lazy(() => import("@/pages/GuildHub"));
+const GuildDetail = lazy(() => import("@/pages/GuildDetail"));
+const GuildFormationWizard = lazy(() => import("@/components/GuildFormationWizard"));
+const Tribes = lazy(() => import("@/pages/Tribes"));
+const TribeDetail = lazy(() => import("@/pages/TribeDetail"));
+const TribeFormationWizard = lazy(() => import("@/components/TribeFormationWizard"));
+const PeerContracts = lazy(() => import("@/pages/PeerContracts"));
+const CrewNewPage = lazy(() => import("@/pages/CrewNewPage"));
+const CrewDashboard = lazy(() => import("@/pages/CrewDashboard"));
+const CrewInvite = lazy(() => import("@/pages/CrewInvite"));
+const AmbassadorRegistration = lazy(() => import("@/pages/AmbassadorRegistration"));
+const AmbassadorDashboard = lazy(() => import("@/pages/AmbassadorDashboard"));
+const AmbassadorWalkthrough = lazy(() => import("@/pages/AmbassadorWalkthrough"));
+const AmbassadorChainPage = lazy(() => import("@/pages/AmbassadorChainPage"));
+const AmbassadorPortfolio = lazy(() => import("@/pages/AmbassadorPortfolio"));
+const AmbassadorCertification = lazy(() => import("@/pages/AmbassadorCertification"));
+const ReviewerApplication = lazy(() => import("@/pages/ReviewerApplication"));
+const ReviewerDashboard = lazy(() => import("@/pages/ReviewerDashboard"));
+const ReviewQueueItemPage = lazy(() => import("@/pages/ReviewQueueItemPage"));
+const CoalitionDirectory = lazy(() => import("@/pages/CoalitionDirectory"));
+const CoalitionCreate = lazy(() => import("@/pages/CoalitionCreate"));
+const CoalitionDetail = lazy(() => import("@/pages/CoalitionDetail"));
+const CoalitionsPage = lazy(() => import("@/pages/Coalitions"));
+const ChainDashboard = lazy(() => import("@/pages/ChainDashboard"));
+const ChainVoting = lazy(() => import("@/pages/ChainVoting"));
+const VouchSystem = lazy(() => import("@/pages/VouchSystem"));
+const SocialImportPage = lazy(() => import("@/pages/SocialImportPage"));
+const FamilyPage = lazy(() => import("@/pages/FamilyPage"));
+const FamilyDetailPage = lazy(() => import("@/pages/FamilyDetailPage"));
+const DesignCrewPage = lazy(() => import("@/pages/DesignCrewPage"));
+const CrewTablesPage = lazy(() => import("@/pages/CrewTables"));
+const RoundTableHall = lazy(() => import("@/pages/RoundTableHall"));
+const CoverageMinutesDashboard = lazy(() => import("@/pages/CoverageMinutesDashboard"));
+const PedestalBrowser = lazy(() => import("@/pages/PedestalBrowser"));
+const PhaseMimicTrunkManager = lazy(() => import("@/pages/PhaseMimicTrunkManager"));
+const RealWorldPuzzles = lazy(() => import("@/pages/RealWorldPuzzles"));
+const GuildPhaseManager = lazy(() => import("@/pages/GuildPhaseManager"));
+const ConcentricCircles = lazy(() => import("@/pages/ConcentricCircles"));
+
+export const socialRoutes = (
+  <>
+    <Route path="/guilds" element={<ExplorerRoute><LazyPage><Guilds /></LazyPage></ExplorerRoute>} />
+    <Route path="/guilds/create" element={<ProtectedRoute><LazyPage><GuildFormationWizard /></LazyPage></ProtectedRoute>} />
+    <Route path="/guilds/hub" element={<ExplorerRoute><LazyPage><GuildHub /></LazyPage></ExplorerRoute>} />
+    <Route path="/guilds/:slug" element={<ExplorerRoute><LazyPage><GuildDetail /></LazyPage></ExplorerRoute>} />
+    <Route path="/tribes" element={<ExplorerRoute><LazyPage><Tribes /></LazyPage></ExplorerRoute>} />
+    <Route path="/tribes/create" element={<ProtectedRoute><LazyPage><TribeFormationWizard /></LazyPage></ProtectedRoute>} />
+    <Route path="/tribes/:slug" element={<ExplorerRoute><LazyPage><TribeDetail /></LazyPage></ExplorerRoute>} />
+    <Route path="/clans" element={<ProtectedRoute><LazyPage><Tribes /></LazyPage></ProtectedRoute>} />
+    <Route path="/peer-contracts" element={<ProtectedRoute><LazyPage><PeerContracts /></LazyPage></ProtectedRoute>} />
+    <Route path="/crew/new" element={<ExplorerRoute><LazyPage><CrewNewPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/crew/:crewId" element={<ProtectedRoute><LazyPage><CrewDashboard /></LazyPage></ProtectedRoute>} />
+    <Route path="/crew/:crewId/invite" element={<LazyPage><CrewInvite /></LazyPage>} />
+    <Route path="/crew/design" element={<LazyPage><DesignCrewPage /></LazyPage>} />
+    <Route path="/ambassador/register" element={<ProtectedRoute><LazyPage><AmbassadorRegistration /></LazyPage></ProtectedRoute>} />
+    <Route path="/ambassador/dashboard" element={<ProtectedRoute><LazyPage><AmbassadorDashboard /></LazyPage></ProtectedRoute>} />
+    <Route path="/ambassador/walkthrough" element={<ProtectedRoute><LazyPage><AmbassadorWalkthrough /></LazyPage></ProtectedRoute>} />
+    <Route path="/ambassador/chain" element={<LazyPage><AmbassadorChainPage /></LazyPage>} />
+    <Route path="/ambassador/portfolio/:ambassadorId" element={<LazyPage><AmbassadorPortfolio /></LazyPage>} />
+    <Route path="/ambassador/certify" element={<ProtectedRoute><LazyPage><AmbassadorCertification /></LazyPage></ProtectedRoute>} />
+    <Route path="/reviewer/apply" element={<ProtectedRoute><LazyPage><ReviewerApplication /></LazyPage></ProtectedRoute>} />
+    <Route path="/reviewer/dashboard" element={<ProtectedRoute><LazyPage><ReviewerDashboard /></LazyPage></ProtectedRoute>} />
+    <Route path="/reviewer/queue/:id" element={<ProtectedRoute><LazyPage><ReviewQueueItemPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/coalitions" element={<ExplorerRoute><LazyPage><CoalitionDirectory /></LazyPage></ExplorerRoute>} />
+    <Route path="/coalitions/create" element={<ProtectedRoute><LazyPage><CoalitionCreate /></LazyPage></ProtectedRoute>} />
+    <Route path="/coalitions/:slug" element={<ExplorerRoute><LazyPage><CoalitionDetail /></LazyPage></ExplorerRoute>} />
+    <Route path="/chain" element={<ExplorerRoute><LazyPage><ChainDashboard /></LazyPage></ExplorerRoute>} />
+    <Route path="/chain-voting" element={<LazyPage><ChainVoting /></LazyPage>} />
+    <Route path="/vouch" element={<ProtectedRoute><LazyPage><VouchSystem /></LazyPage></ProtectedRoute>} />
+    <Route path="/import" element={<ProtectedRoute><LazyPage><SocialImportPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/family" element={<ExplorerRoute><LazyPage><FamilyPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/family/:familyId" element={<ProtectedRoute><LazyPage><FamilyDetailPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/family/:familyId/gifts" element={<ProtectedRoute><LazyPage><FamilyDetailPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/family/:familyId/calendar" element={<ProtectedRoute><LazyPage><FamilyDetailPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/crew-tables" element={<ExplorerRoute><LazyPage><CrewTablesPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/round-tables" element={<LazyPage><RoundTableHall /></LazyPage>} />
+    <Route path="/coverage-minutes" element={<LazyPage><CoverageMinutesDashboard /></LazyPage>} />
+    <Route path="/pedestals" element={<LazyPage><PedestalBrowser /></LazyPage>} />
+    <Route path="/phase-mimictrunks" element={<LazyPage><PhaseMimicTrunkManager /></LazyPage>} />
+    <Route path="/real-world-puzzles" element={<LazyPage><RealWorldPuzzles /></LazyPage>} />
+    <Route path="/guild-phases" element={<LazyPage><GuildPhaseManager /></LazyPage>} />
+    <Route path="/testing/circles" element={<ProtectedRoute><LazyPage><ConcentricCircles /></LazyPage></ProtectedRoute>} />
+  </>
+);

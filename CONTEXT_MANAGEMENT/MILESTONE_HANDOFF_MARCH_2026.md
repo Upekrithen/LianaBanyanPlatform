@@ -4676,18 +4676,34 @@ All 8 hosting targets: 729 files each.
 7. `platform/src/pages/HexIsleDownloads.tsx`
 8. `platform/src/components/cue-cards/CueCardDeck.tsx`
 
-### NEXT SESSION: K148 — App.tsx Architectural Refactor
+### Session K148 — App.tsx Architectural Refactor — COMPLETED (Mar 28, 2026)
 
-**The big one.** App.tsx is 1,400+ lines with 591 routes, 8 levels of provider nesting, and no route isolation by portal. This is not sustainable for the long haul.
+**What was done:**
+1. Split 1,401-line `App.tsx` monolith into 20 modular files
+2. Created `AppProviders.tsx` (49 lines) — 13-level provider stack
+3. Created `AppShell.tsx` (69 lines) — layout: sidebar + top bar + footer + bookshelf
+4. Created `AppRouter.tsx` (44 lines) — imports 14 route groups into `<Routes>`
+5. Created `routes/LazyPage.tsx` (12 lines) — shared Suspense wrapper replacing 400+ duplicate fallbacks
+6. Created 14 domain-grouped route files in `routes/`:
+   - `public.tsx` (38 routes), `onboarding.tsx` (33), `dashboard.tsx` (47)
+   - `production.tsx` (43), `initiatives.tsx` (43), `hexisle.tsx` (32)
+   - `social.tsx` (41), `commerce.tsx` (77), `cephas.tsx` (24)
+   - `tools.tsx` (56), `admin.tsx` (33), `captain.tsx` (33)
+   - `defense.tsx` (12), `misc.tsx` (45 — redirects + catch-all)
+7. Created `routes/index.ts` barrel export
+8. Slimmed `App.tsx` to 30 lines: providers + shell + overlays
+9. Converted ~80 eager page imports to `lazy()` for better code-splitting
+10. Build: clean (`npm run build` — 47s, zero errors)
+11. Deployed all 8 hosting targets + Cephas
+12. Smoke tested 7 pages on lianabanyan.com — all pass
 
-**Plan:**
-1. Split routes into a `routes/` directory with index files per domain group
-2. Create `AppRouter.tsx` — clean router importing route groups
-3. Create `AppShell.tsx` — layout component (sidebar + topbar + footer + overlays)
-4. Create `AppProviders.tsx` — provider hierarchy in one place
-5. Gate routes by portal type at router level (not just sidebar visibility)
-6. App.tsx becomes ~100 lines: providers + shell + router
-7. Full deploy + verification
+**Files created:** AppProviders.tsx, AppShell.tsx, AppRouter.tsx, routes/LazyPage.tsx, routes/public.tsx, routes/onboarding.tsx, routes/dashboard.tsx, routes/production.tsx, routes/initiatives.tsx, routes/hexisle.tsx, routes/social.tsx, routes/commerce.tsx, routes/cephas.tsx, routes/tools.tsx, routes/admin.tsx, routes/captain.tsx, routes/defense.tsx, routes/misc.tsx, routes/index.ts
+**Files modified:** App.tsx (1,401 → 30 lines)
+**Latest commit:** pending (not yet committed)
+
+**Phase 2 (Portal Route Gating) — NOT YET DONE:**
+- Add portal-aware route gating so .biz/.org/.net portals only serve their relevant routes
+- PortalGate component + PORTAL_ROUTES config in routes/LazyPage.tsx
 
 **Also pending:**
 - Bishop B-2 through B-8 (Stripe products, STL seed, MoneyPenny digest, webhook, smoke test, content seed, stats sync)
