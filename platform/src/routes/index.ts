@@ -12,3 +12,7 @@ export { adminRoutes } from "./admin";
 export { captainRoutes } from "./captain";
 export { defenseRoutes } from "./defense";
 export { miscRoutes } from "./misc";
+
+export { PortalGate } from "./PortalGate";
+export { isGroupAllowed, PORTAL_ROUTE_ACCESS, UNIVERSAL_GROUPS } from "./portalConfig";
+export type { RouteGroup } from "./portalConfig";
