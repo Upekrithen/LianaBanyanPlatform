@@ -9,15 +9,74 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share2, CreditCard, Wrench, Heart, Award, UserPlus, TrendingUp, Mail, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Share2, CreditCard, Wrench, Heart, Award, UserPlus, TrendingUp, Mail,
+  ChevronDown, ChevronUp, Sparkles, Megaphone, FileSignature, Hammer,
+  Flame, ShoppingBag, Shield, Music, GraduationCap, Vote, Coins,
+  Wheat, Store, Landmark, Factory, Hexagon, Swords, Users, MapPin,
+  Map, Key, Navigation, UtensilsCrossed, ChefHat, Ghost, Glasses,
+  DollarSign, Zap, Ban, Package, Sprout,
+} from "lucide-react";
 import { LETTER_CUE_CARDS } from "@/data/letterCueCards";
 
 const DECK_CARDS = [
+  // Core roles
   { id: "invite-creator", title: "Invite a Creator", icon: UserPlus, href: "/join/creator", description: "Invite creators to the platform. Earn referral rewards." },
-  { id: "become-steward", title: "Become a Steward", icon: Award, href: "/steward/apply", description: "Manage campaigns. Pledge your Marks. The oven's already hot." },
+  { id: "become-steward", title: "Become a Steward", icon: Award, href: "/cue-cards/steward", description: "Manage ten. Grow together. Concentric Circles." },
   { id: "get-famous", title: "Get Famous", icon: TrendingUp, href: "/guilds/hub?tab=bandwagon", description: "Back projects. Put your service units where your mouth is." },
   { id: "idont-want-your-money", title: "I Don't Want Your $", icon: Heart, href: "/", description: "I want your success." },
   { id: "we-need-you", title: "We Need You", icon: Wrench, href: "/crew-call", description: "Do what you're already good at. Join the crew." },
+  { id: "become-influencer", title: "Become an Influencer", icon: Sparkles, href: "/cue-cards/influencer", description: "Pretend this is a Seed. Find businesses, build your reputation." },
+  { id: "become-presenter", title: "Become an Ambassador", icon: Megaphone, href: "/cue-cards/presenter", description: "Be a Presenter. Deliver the card, earn the reward." },
+  { id: "work-on-your-terms", title: "Work on Your Terms", icon: FileSignature, href: "/cue-cards/contracts", description: "Get contracts, get paid. Keep 83.3%. Your art, your rules." },
+  { id: "make-dreams-happen", title: "Make Dreams Happen", icon: Hammer, href: "/cue-cards/maker", description: "Prototype, Design, Produce. From desktop to factory." },
+  { id: "join-the-revolution", title: "Join the Revolution", icon: Sprout, href: "/cue-cards/revolution", description: "Plant Businesses for Work. Hand out seed cards." },
+
+  // Commerce & marketplace
+  { id: "back-a-project", title: "Back a Project", icon: Coins, href: "/cue-cards/back-a-project", description: "Pre-order what you believe in. Threshold-funded." },
+  { id: "starter-kit", title: "Get the Starter Kit", icon: CreditCard, href: "/cue-cards/starter-kit", description: "$5/year. Unlock everything. 100 free Marks." },
+  { id: "browse-marketplace", title: "Browse the Marketplace", icon: Store, href: "/cue-cards/marketplace", description: "Discover what people are building. Cost+20%." },
+  { id: "sponsor-something", title: "Sponsor Something Real", icon: Landmark, href: "/cue-cards/sponsor", description: "Your name on work that matters. 60/10/20/10 cascade." },
+
+  // Sweet Sixteen initiatives
+  { id: "dinner", title: "Let's Make Dinner", icon: UtensilsCrossed, href: "/cue-cards/dinner", description: "Turn one recipe into rent money." },
+  { id: "grocery", title: "Let's Get Groceries", icon: ShoppingBag, href: "/cue-cards/grocery", description: "Got a car? Turn errands into income." },
+  { id: "defense-klaus", title: "For Someone You Love", icon: Shield, href: "/cue-cards/defense-klaus", description: "Defense Klaus. Protection that works." },
+  { id: "rally-group", title: "Rally Together", icon: Users, href: "/cue-cards/rally-group", description: "Group purchasing power. Negotiate as one." },
+  { id: "harper-guild", title: "Join Harper Guild", icon: GraduationCap, href: "/cue-cards/harper-guild", description: "Writers. Editors. Storytellers." },
+  { id: "jukebox", title: "Drop a Track", icon: Music, href: "/cue-cards/jukebox", description: "JukeBox. Keep 83.3% of every stream." },
+  { id: "didasko", title: "Teach What You Know", icon: GraduationCap, href: "/cue-cards/didasko", description: "Didasko. Academic excellence for all." },
+  { id: "political-expedition", title: "Power to the People", icon: Vote, href: "/cue-cards/political-expedition", description: "Your voice. Your representatives." },
+  { id: "brass-tacks", title: "Brass Tacks", icon: DollarSign, href: "/cue-cards/brass-tacks", description: "Real talk. Real numbers. Transparent." },
+  { id: "bread", title: "Let's Make Bread", icon: Wheat, href: "/cue-cards/bread", description: "Cottage bakery. Flour to freedom." },
+  { id: "shopping", title: "Let's Go Shopping", icon: ShoppingBag, href: "/cue-cards/shopping", description: "Buy local. Buy smart. Community storefronts." },
+  { id: "vsl", title: "Build Real Wealth", icon: Landmark, href: "/cue-cards/vsl", description: "VSL. Financial services for all." },
+
+  // Production & manufacturing
+  { id: "factory-node", title: "Start a Factory", icon: Factory, href: "/cue-cards/factory-node", description: "Desktop to production line. 1/3 co-op funded." },
+  { id: "canister-system", title: "The Canister System", icon: Package, href: "/cue-cards/canister-system", description: "Injection molding for everyone." },
+  { id: "design-battle", title: "Enter the Arena", icon: Swords, href: "/cue-cards/design-battle", description: "Design battles. Real stakes. Winner gets produced." },
+
+  // Social & community
+  { id: "join-a-crew", title: "Join a Crew", icon: Users, href: "/cue-cards/join-a-crew", description: "12 people. One mission. Back each other." },
+  { id: "join-a-guild", title: "Join a Guild", icon: Users, href: "/cue-cards/join-a-guild", description: "Skill-based communities. Shared resources." },
+  { id: "join-a-tribe", title: "Join a Tribe", icon: MapPin, href: "/cue-cards/join-a-tribe", description: "Location-based community. Neighbors helping neighbors." },
+  { id: "treasure-hunt", title: "Go Treasure Hunting", icon: Map, href: "/cue-cards/treasure-hunt", description: "Follow the map. Cold start your business." },
+  { id: "golden-key", title: "Find a Golden Key", icon: Key, href: "/cue-cards/golden-key", description: "Unlock hidden content. Earn rare rewards." },
+  { id: "beacon-run", title: "Start a Beacon Run", icon: Navigation, href: "/cue-cards/beacon-run", description: "Light the way. Others follow your trail." },
+
+  // Family & home
+  { id: "family-table", title: "Set the Family Table", icon: UtensilsCrossed, href: "/cue-cards/family-table", description: "Cook together. Eat together." },
+  { id: "cottage-kitchen", title: "Open a Cottage Kitchen", icon: ChefHat, href: "/cue-cards/cottage-kitchen", description: "Cook from home, sell to neighbors." },
+
+  // Platform meta
+  { id: "ghost-world", title: "Explore Ghost World", icon: Ghost, href: "/cue-cards/ghost-world", description: "Browse free. Join when ready." },
+  { id: "xray-goggles", title: "X-Ray Goggles", icon: Glasses, href: "/cue-cards/xray-goggles", description: "See how everything works. Help us build." },
+  { id: "five-dollars", title: "$5 a Year", icon: DollarSign, href: "/cue-cards/five-dollars", description: "That's it. No upsells. 1,979 innovations." },
+  { id: "wildfire-run", title: "Start a Wildfire Run", icon: Flame, href: "/cue-cards/wildfire-run", description: "Share fast. Earn fast. Time-limited bursts." },
+  { id: "no-ads", title: "No Ads. Ever.", icon: Ban, href: "/cue-cards/no-ads", description: "We mean it. Zero advertising. Zero data selling." },
+  { id: "hexisle-game", title: "HexIsle", icon: Hexagon, href: "/cue-cards/hexisle", description: "Build the Game. Own the Story. 27-piece hexel." },
+  { id: "ambassador-card", title: "Become an Ambassador", icon: Zap, href: "/cue-cards/ambassador", description: "Earn rewards tied to our patent portfolio." },
 ] as const;
 
 const CATEGORY_LABELS: Record<string, string> = {
