@@ -231,6 +231,53 @@ const CARD_CONTENT: Record<string, CardContent> = {
     frontSub: "We mean it.",
     backCopy: "Zero advertising • Zero data selling • Cost+20% transparent margin • Platform funded by members • Your attention is yours to keep",
   },
+
+  // --- CLASSIC / FOUNDER CUE CARDS ---
+  "not-a-job": {
+    frontTitle: "Not a Job.",
+    frontSub: "A Way Out.",
+    backCopy: "Bounties, not bosses • You choose what to work on • Build your portfolio as you go • Credits become real income • No schedule, no permission needed",
+  },
+  "angry": {
+    frontTitle: "Angry? Start a Business.",
+    frontSub: "Channel it.",
+    backCopy: "Anger comes from frustration • Frustration from a lack of control • Control comes from ownership • Ownership starts at $5/year • Turn rage into revenue",
+  },
+  "golden-key-card": {
+    frontTitle: "The Golden Key.",
+    frontSub: "Help each other help ourselves.",
+    backCopy: "83.3% to creators, constitutionally locked • Cost+20% forever • 1,979 innovations • No VC, no extraction • $5/year membership • The economics cannot change",
+  },
+  "cardboard-boots": {
+    frontTitle: "Cardboard Boots.",
+    frontSub: "I don't want your money. I want your rolodex.",
+    backCopy: "An open letter to the people who can open doors • Three references • That's the ask • Not charity — reputation lending • Read it on Cephas",
+  },
+  "play-and-stage": {
+    frontTitle: "You Have a Play.",
+    frontSub: "I Have a Stage.",
+    backCopy: "Your product, your pricing, your customers • We provide the infrastructure • Cost+20% transparent margin • Payment processing, trust, marketing • 83.3% is yours",
+  },
+  "the-300": {
+    frontTitle: "The 300.",
+    frontSub: "We're identifying 300 leaders.",
+    backCopy: "Not politicians — builders, teachers, healers, makers • Governance with hard-coded size limits • Community-owned platform of millions • Apply to lead",
+  },
+  "i-dont-want-your-money": {
+    frontTitle: "I Don't Want Your $.",
+    frontSub: "I want your success.",
+    backCopy: "This platform exists so YOU succeed • 83.3% to creators • No extraction • No hidden fees • We make money when you make money • Help each other help ourselves",
+  },
+  "get-famous": {
+    frontTitle: "Get Famous. Make Money. Do Good.",
+    frontSub: "Back projects with your service units.",
+    backCopy: "Six-tier referral system • Pioneer → Vanguard → Pathfinder → Trailblazer → Legend → Founder's Circle • Each tier unlocks more earning power • Your reputation is your currency",
+  },
+  "constitutional": {
+    frontTitle: "Constitutionally Locked.",
+    frontSub: "The economics can't change.",
+    backCopy: "Cost+20% margin locked by DNA Lock • 83.3% to creators, forever • No vote can change it • No CEO can override it • No investor can demand it • This is architecture, not policy",
+  },
 };
 
 const INVITE_TEXT: Record<string, string> = Object.fromEntries(

@@ -225,6 +225,58 @@ export const TREASURE_MAP_GUIDES: Record<string, TreasureMapGuide> = {
       { name: 'Onboarder Dashboard', route: '/dashboard/onboarder', description: 'Track your onboarded businesses' },
     ],
   },
+  'seeder-presenter': {
+    id: 'seeder-presenter',
+    title: 'Seeder / Presenter',
+    subtitle: 'Discover businesses online, deliver personalized pitch packages in person — or do both.',
+    whoThisIsFor: 'Online scouts who find great businesses (Seeders), boots-on-the-ground ambassadors who deliver pitch packages (Presenters), or hustlers who do both and earn double.',
+    whatYouNeed: ['Smartphone with internet', 'Eye for spotting good local businesses', 'Social media presence (Seeder path)', 'LB Card with QR code (Presenter path)', 'Confidence to walk in and talk to owners'],
+    economics: [
+      { label: 'Startup cost', value: '$0' },
+      { label: 'Per seed signup', value: '25 Marks + 50 XP + Seeder credential' },
+      { label: 'Per presentation', value: '25 Marks + 50 XP + Reputation badge' },
+      { label: 'Both roles (same person)', value: '50 Marks + 100 XP — double reward' },
+      { label: 'Steward recurring', value: '2% of your direct\'s platform revenue, ongoing' },
+      { label: 'Monthly potential', value: '10 seeds/mo = 500+ Marks + Steward income on conversions' },
+    ],
+    phases: [
+      { name: 'Seed a Business', steps: [
+        { title: 'Find a business', detail: 'Spot any business — Etsy shop, restaurant, freelancer, local service. Browse online or walk your neighborhood.' },
+        { title: 'Fill the Seeding Form', detail: 'Enter business name, what they sell, location, social links, and why they\'d be a great fit for LB.' },
+        { title: 'Auto-generated package', detail: 'LB creates a personalized Red Carpet URL and mini-business plan from boilerplate — ready to share.' },
+      ]},
+      { name: 'The Influencer Connection', steps: [
+        { title: 'Seed from anywhere', detail: 'You don\'t have to go in person. Discover businesses online and share the Red Carpet link through your social channels.' },
+        { title: 'Connect to Influencer path', detail: 'This plugs directly into the Influencer & Creator category on HexIsle. Your existing audience becomes your seeding ground.' },
+        { title: 'Track attribution', detail: 'If the business signs up through your Red Carpet link, you get credited as the Seeder automatically.' },
+      ]},
+      { name: 'Present to Business', steps: [
+        { title: 'Claim a prepped package', detail: 'Another member (or you) seeded the business. Now claim the package as a Presenter to deliver it in person.' },
+        { title: 'Boots on the ground', detail: 'Take an LB Card with the QR code to the business. Walk in, introduce LB, hand over the pitch.' },
+        { title: 'Both rewards stack', detail: 'One person CAN fill Seeder + Presenter. You earn both reward slots. The system splits naturally if two people collaborate.' },
+      ]},
+      { name: 'When Business Signs Up', steps: [
+        { title: 'Seeder gets credited', detail: 'XP + Marks + permanent Seeder credential on your profile. Reputation boost sticks forever.' },
+        { title: 'Presenter gets delivery reward', detail: 'Separate delivery bonus + Reputation boost for the in-person handoff.' },
+        { title: 'Steward conversion', detail: 'Either Seeder or Presenter can become partial Steward for that business — one of your ten Concentric Circle directs. Turns a one-off bounty into recurring value.' },
+      ]},
+    ],
+    levelProgression: [
+      { name: 'Level 1: First Seed', description: '1 business seeded, Red Carpet link shared' },
+      { name: 'Level 2: Active Seeder', description: '5 businesses seeded, 2+ signed up, Presenter missions claimed' },
+      { name: 'Level 3: Seeder Captain', description: '10+ seeds, 5+ signups, Steward for 3+ businesses, Guild/Tribe cascade active' },
+      { name: 'Level 4: Network Builder', description: '25+ seeds, full Concentric Circle, recruiting other Seeders/Presenters' },
+    ],
+    toolLinks: [
+      { name: 'Ambassador Chain', route: '/dashboard/ambassador', description: 'Track your seeder referrals and rewards' },
+      { name: 'Red Carpet URLs', route: '/RedCarpet', description: 'Personalized landing pages for each business' },
+      { name: 'Steward Dashboard', route: '/dashboard/steward', description: 'Manage your Concentric Circle directs' },
+      { name: 'Cold Start Hub', route: '/cold-start', description: 'All six pathways to launching on LB' },
+      { name: 'Influencer Challenge', route: '/influencer-challenge', description: 'Connect seeding to your influencer audience' },
+      { name: 'Cue Card Generator', route: '/tools/cue-card-generator', description: 'Generate shareable pitch cards for businesses' },
+      { name: 'HexIsle Marketplace', route: '/hexisle', description: 'Influencer & Creator category' },
+    ],
+  },
   'designer': {
     id: 'designer',
     title: 'Become an LB Designer',
