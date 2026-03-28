@@ -84,6 +84,14 @@ export function ProductionRunDraft({ compact = false, maxItems }: ProductionRunD
         </div>
       )}
 
+      {/* Example Banner */}
+      <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-2.5 text-center">
+        <p className="text-sm text-amber-200">
+          <span className="font-semibold">✨ These are example runs</span> showing how Production Run Draft works.
+          Real maker proposals coming soon — yours could be first.
+        </p>
+      </div>
+
       {/* Filters */}
       <div className="flex flex-wrap gap-2 justify-center">
         {FILTER_OPTIONS.map((opt) => (

@@ -30,9 +30,16 @@ export default function PrivacyPolicy() {
 
         <article className="prose prose-neutral dark:prose-invert max-w-none">
           <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
-          <p className="text-muted-foreground text-sm mb-8">
-            Last updated: March 20, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
+          <p className="text-muted-foreground text-sm mb-4">
+            Last updated: March 26, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
           </p>
+
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700 rounded-lg p-4 mb-8">
+            <p className="text-amber-800 dark:text-amber-200 text-sm font-medium m-0">
+              This privacy policy is under legal review and subject to change. A licensed
+              attorney review is pending before final publication.
+            </p>
+          </div>
 
           <section className="space-y-4">
             <h2>1. Introduction</h2>

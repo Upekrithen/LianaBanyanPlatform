@@ -113,8 +113,8 @@ const HEXISLE_FEATURES = [
   },
   {
     icon: <FileText className="h-6 w-6" />,
-    title: '1,754 Documented Innovations',
-    desc: '8 provisional patent applications. 1,401+ formal claims. Micro-entity filing cost: $0.34 per claim.',
+    title: '2,007 Documented Innovations',
+    desc: '10 provisional patent applications. 1,511+ formal claims. Micro-entity filing cost: $0.34 per claim.',
     innovations: 'Full portfolio',
     link: '/patent-portfolio',
   },
@@ -159,7 +159,7 @@ export default function LikeWhatPage() {
             </h1>
           </div>
           <p className="text-xl text-white/60 max-w-3xl mx-auto">
-            1,754 innovations sounds impossible. Here's what they look like — and the language we invented to build them.
+            2,007 innovations sounds impossible. Here's what they look like — and the language we invented to build them.
           </p>
           <p className="text-sm text-white/40 mt-2">
             This page exists so you can say "Okay... maybe this is real" without reading everything.
@@ -337,7 +337,7 @@ export default function LikeWhatPage() {
                 Full Paper Directory
               </Button>
             </Link>
-            <a href="https://cephas.lianabanyan.com" target="_blank" rel="noopener noreferrer">
+            <a href="/cephas">
               <Button variant="outline" size="sm" className="text-white/50 border-white/20 hover:bg-white/5">
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Cephas Archive

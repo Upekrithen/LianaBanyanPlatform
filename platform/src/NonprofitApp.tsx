@@ -11,9 +11,13 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UnifiedNavigation } from "@/components/UnifiedNavigation";
 import { SyncStatusIndicator } from "@/components/SyncStatusIndicator";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { CrossPortalNav } from "@/components/CrossPortalNav";
 
 // Auth
 import Auth from "./pages/Auth";
+
+// Non-Profit Portal Landing (public entry page)
+import NonprofitLanding from "./pages/NonprofitLanding";
 
 // Non-Profit Portal Pages
 import Dashboard from "./pages/Dashboard";
@@ -22,6 +26,13 @@ import { EOIMilestoneDashboard } from "@/components/EOIMilestoneDashboard";
 import { BlockchainGasDashboard } from "@/components/BlockchainGasDashboard";
 import MemberResources from "./pages/MemberResources";
 import NotFound from "./pages/NotFound";
+
+// K110: Mission ONE & Charitable Features
+import { lazy, Suspense } from "react";
+const MissionOnePage = lazy(() => import("./pages/MissionOnePage"));
+const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
+const EarmarkCredits = lazy(() => import("./pages/EarmarkCredits"));
+const CharitableSubscription = lazy(() => import("./pages/CharitableSubscription"));
 
 const queryClient = new QueryClient();
 
@@ -52,14 +63,24 @@ const NonprofitApp = () => {
                         </div>
                         <SyncStatusIndicator />
                       </header>
+                      <CrossPortalNav />
                       <main className="flex-1 overflow-auto p-6">
                         <Routes>
                           {/* Public Routes */}
                           <Route path="/auth" element={<Auth />} />
                           
+                          {/* Public landing for unauthenticated visitors */}
+                          <Route path="/" element={<NonprofitLanding />} />
+
+                          {/* K110: Mission ONE & Charitable (public) */}
+                          <Route path="/mission-one" element={<Suspense fallback={<div className="flex justify-center py-16"><span className="animate-spin">Loading...</span></div>}><MissionOnePage /></Suspense>} />
+                          <Route path="/gleaners-corner" element={<Suspense fallback={<div className="flex justify-center py-16"><span className="animate-spin">Loading...</span></div>}><GleanersCorner /></Suspense>} />
+                          <Route path="/earmark" element={<Suspense fallback={<div className="flex justify-center py-16"><span className="animate-spin">Loading...</span></div>}><EarmarkCredits /></Suspense>} />
+                          <Route path="/subscribe-to-feed" element={<Suspense fallback={<div className="flex justify-center py-16"><span className="animate-spin">Loading...</span></div>}><CharitableSubscription /></Suspense>} />
+
                           {/* Protected Non-Profit Routes */}
                           <Route 
-                            path="/" 
+                            path="/dashboard" 
                             element={
                               <ProtectedRoute>
                                 <Dashboard />

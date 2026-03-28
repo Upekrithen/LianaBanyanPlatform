@@ -103,7 +103,7 @@ export default function VSLPage() {
           <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
             Every humanitarian feature in this platform exists because the Founder or someone he knew needed it and it didn't exist—or because someone like USAA showed what it looked like when it did. VSL is built from the lived reality of needing $50 just to get to work.
           </p>
-          <Button variant="outline" onClick={() => window.open('https://cephas.lianabanyan.com/founder-proof', '_blank', 'noopener,noreferrer')}>
+          <Button variant="outline" onClick={() => navigate('/cephas/founder-proof')}>
             Read the Founder's Anecdotes
           </Button>
         </div>

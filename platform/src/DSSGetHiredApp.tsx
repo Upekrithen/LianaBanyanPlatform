@@ -92,7 +92,7 @@ function DSSGetHiredApp() {
       <footer className="text-center py-4 text-gray-600 text-xs border-t border-gray-800">
         <p>
           © 2026 Liana Banyan Corporation · Cost + 20% — Forever · 
-          <a href="https://cephas.lianabanyan.com" className="text-amber-600 hover:underline ml-1">
+          <a href="/cephas" className="text-amber-600 hover:underline ml-1">
             Learn More
           </a>
         </p>

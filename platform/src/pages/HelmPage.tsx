@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -32,7 +34,10 @@ import {
   Users,
   Clock,
   MapPin,
+  ArrowRight,
+  Award,
 } from "lucide-react";
+import { ShipMedallion } from "@/components/ShipMedallion";
 import { JourneyMap } from "@/components/JourneyMap";
 import { BeaconDropUI } from "@/components/BeaconDropUI";
 import { BeaconRunCard, BeaconRunCreator, BeaconRunLeaderboard } from "@/components/BeaconRunGame";
@@ -58,8 +63,32 @@ interface BeaconRun {
   created_at: string;
 }
 
+type TreasureProgress = {
+  id: string;
+  map_id: string;
+  current_phase: string;
+  current_level: number;
+  quiz_score: number | null;
+  completed_at: string | null;
+  last_activity_at: string;
+  phase_data: Record<string, Record<string, boolean>>;
+};
+
+const MAP_LABELS: Record<string, string> = {
+  "breakfast-runner": "Breakfast Runner",
+  "lunch-runner": "Lunch Runner",
+  "taco-truck": "Taco Truck",
+  "catering": "Catering Coordinator",
+  "grocery": "Grocery Runner",
+  "service": "Service Business",
+  "designer": "LB Designer",
+};
+
+const PHASE_COUNT = 4;
+
 export function HelmPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("journey");
   const [searchQuery, setSearchQuery] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
@@ -91,6 +120,21 @@ export function HelmPage() {
 
       if (error) throw error;
       return data as BeaconRun[];
+    },
+    enabled: !!user,
+  });
+
+  const { data: treasureProgress } = useQuery({
+    queryKey: ["treasure-map-progress-all", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from("treasure_map_progress" as any)
+        .select("*")
+        .eq("user_id", user.id)
+        .order("last_activity_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as TreasureProgress[];
     },
     enabled: !!user,
   });
@@ -327,6 +371,117 @@ export function HelmPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* My Treasure Map Progress */}
+      {user && treasureProgress && treasureProgress.length > 0 && (
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Map className="w-5 h-5 text-amber-500" />
+              My Treasure Map Progress
+            </CardTitle>
+            <CardDescription>Your active journeys and knowledge scores</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {treasureProgress.map((tp) => {
+                const phaseIdx = ["scout", "pitch", "launch", "expand"].indexOf(tp.current_phase);
+                const phasesComplete = tp.completed_at ? PHASE_COUNT : Math.max(0, phaseIdx);
+                const pct = Math.round((phasesComplete / PHASE_COUNT) * 100);
+
+                return (
+                  <Card
+                    key={tp.id}
+                    className="bg-card/50 border-border hover:border-amber-500/30 cursor-pointer transition-colors"
+                    onClick={() => navigate(`/treasure-maps/${tp.map_id}`)}
+                  >
+                    <CardContent className="pt-4 pb-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-semibold">
+                          {MAP_LABELS[tp.map_id] || tp.map_id}
+                        </p>
+                        <Badge variant="outline" className="text-xs">
+                          Lvl {tp.current_level}
+                        </Badge>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span className="capitalize">{tp.current_phase} phase</span>
+                          <span>{pct}%</span>
+                        </div>
+                        <Progress value={pct} className="h-2" />
+                      </div>
+                      {tp.quiz_score != null && (
+                        <p className="text-xs text-muted-foreground">
+                          Quiz: {tp.quiz_score}/5
+                        </p>
+                      )}
+                      {tp.completed_at && (
+                        <Badge className="bg-emerald-600/20 text-emerald-400 border-emerald-500/30 text-[10px]">
+                          Completed
+                        </Badge>
+                      )}
+                      <Button size="sm" variant="ghost" className="w-full text-xs gap-1">
+                        Continue <ArrowRight className="w-3 h-3" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Medallions Earned */}
+      {user && (
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-amber-500" />
+              Medallions Earned
+            </CardTitle>
+            <CardDescription>
+              Physical and digital medallions awarded for platform achievements
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {/* Ship Medallion — first entry, future medallions follow same pattern */}
+              <Card className="bg-card/50 border-border hover:border-amber-500/30 transition-colors">
+                <CardContent className="pt-6 pb-4 flex flex-col items-center text-center gap-3">
+                  <ShipMedallion size="sm" earned={false} remainingLinks={13} />
+                  <div>
+                    <p className="text-sm font-semibold">Ship Medallion</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Complete all 13 HexIsle campaigns to earn
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="text-[10px]">
+                    Locked
+                  </Badge>
+                </CardContent>
+              </Card>
+
+              {/* Placeholder slots for future medallions */}
+              <Card className="bg-muted/20 border-dashed border-border">
+                <CardContent className="pt-6 pb-4 flex flex-col items-center justify-center text-center gap-2 min-h-[180px]">
+                  <Award className="w-8 h-8 text-muted-foreground/30" />
+                  <p className="text-xs text-muted-foreground/50">Guild Medallion</p>
+                  <p className="text-[10px] text-muted-foreground/30">Coming Soon</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-muted/20 border-dashed border-border">
+                <CardContent className="pt-6 pb-4 flex flex-col items-center justify-center text-center gap-2 min-h-[180px]">
+                  <Award className="w-8 h-8 text-muted-foreground/30" />
+                  <p className="text-xs text-muted-foreground/50">Captain Medallion</p>
+                  <p className="text-[10px] text-muted-foreground/30">Coming Soon</p>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Footer Info */}
       <Card className="mt-8 bg-muted/30">

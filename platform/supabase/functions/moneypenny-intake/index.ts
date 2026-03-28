@@ -146,6 +146,70 @@ function classifyEmail(from: string, subject: string, body?: string): Classifica
   return { category: 'unknown', priority: 4, isRedCarpet: false };
 }
 
+async function aiClassifySecondPass(
+  subject: string,
+  bodySnippet: string,
+  currentClassification: Classification,
+): Promise<Classification> {
+  if (currentClassification.priority <= 2) return currentClassification;
+
+  const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
+  const perplexityKey = Deno.env.get('PERPLEXITY_API_KEY');
+  if (!anthropicKey && !perplexityKey) return currentClassification;
+
+  const systemPrompt = `You classify emails for Liana Banyan cooperative platform. Return ONLY valid JSON:
+{"priority":1-4,"category":"crown_response"|"press"|"patent"|"member"|"support"|"unknown","sentiment":"positive"|"neutral"|"negative","suggested_action":"brief action"}
+Priority 1=urgent VIP/press/patent, 2=important member/partnership, 3=support, 4=low/unknown.
+IMPORTANT: You may UPGRADE priority (lower number) but NEVER downgrade it.`;
+
+  const userPrompt = `Subject: ${subject}\nBody preview: ${bodySnippet.substring(0, 500)}\n\nCurrent classification: priority=${currentClassification.priority}, category=${currentClassification.category}`;
+
+  const tryProvider = async (url: string, headers: Record<string, string>, body: unknown): Promise<string | null> => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    try {
+      const resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body), signal: controller.signal });
+      clearTimeout(timer);
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      return data.content?.[0]?.text || data.choices?.[0]?.message?.content || null;
+    } catch { clearTimeout(timer); return null; }
+  };
+
+  let aiText: string | null = null;
+
+  if (anthropicKey) {
+    aiText = await tryProvider('https://api.anthropic.com/v1/messages', {
+      'x-api-key': anthropicKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json',
+    }, { model: 'claude-haiku-4-5-20251001', max_tokens: 256, system: systemPrompt, messages: [{ role: 'user', content: userPrompt }] });
+  }
+
+  if (!aiText && perplexityKey) {
+    aiText = await tryProvider('https://api.perplexity.ai/chat/completions', {
+      Authorization: `Bearer ${perplexityKey}`, 'Content-Type': 'application/json',
+    }, { model: 'sonar', messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }], max_tokens: 256 });
+  }
+
+  if (!aiText) return currentClassification;
+
+  try {
+    const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return currentClassification;
+    const parsed = JSON.parse(jsonMatch[0]);
+
+    // ADDITIVE only — never downgrade priority
+    const newPriority = Math.min(parsed.priority || 4, currentClassification.priority);
+    return {
+      category: newPriority < currentClassification.priority ? (parsed.category || currentClassification.category) : currentClassification.category,
+      priority: newPriority,
+      isRedCarpet: currentClassification.isRedCarpet || (newPriority === 1 && ['crown_response', 'press'].includes(parsed.category)),
+      actionTitle: newPriority < currentClassification.priority ? parsed.suggested_action : currentClassification.actionTitle,
+    };
+  } catch {
+    return currentClassification;
+  }
+}
+
 function parseGmailPubSub(rawBody: any): EmailPayload | null {
   try {
     const pubsub = rawBody as GmailPubSubMessage;
@@ -210,7 +274,16 @@ Deno.serve(async (req) => {
       }
     }
 
-    const classification = classifyEmail(email.from, email.subject, email.bodyFull);
+    let classification = classifyEmail(email.from, email.subject, email.bodyFull);
+
+    // AI second pass for P3/P4 items (additive — never downgrades)
+    if (classification.priority >= 3) {
+      classification = await aiClassifySecondPass(
+        email.subject,
+        email.bodyPreview || email.bodyFull || '',
+        classification,
+      );
+    }
 
     // ─── Insert into moneypenny_inbox ──────────────────────────────
 

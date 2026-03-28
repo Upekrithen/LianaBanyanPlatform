@@ -1,10 +1,48 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Map, Star, DollarSign, Clock, Rocket, ChevronRight, Utensils, Coffee, Truck, Users, ShoppingBag, Wrench, Paintbrush } from 'lucide-react';
+import { ArrowLeft, Map, Star, DollarSign, Clock, Rocket, ChevronRight, Utensils, Coffee, Truck, Users, ShoppingBag, Wrench, Paintbrush, Coins } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { BeaconDropButton } from '@/components/BeaconDropButton';
+import { supabase } from '@/integrations/supabase/client';
+
+const CATEGORY_MAP: Record<string, string> = {
+  'breakfast-runner': 'breakfast',
+  'lunch-runner': 'lunch',
+  'taco-truck': 'food_truck',
+  'catering': 'catering',
+  'grocery': 'grocery',
+  'service': 'service',
+  'designer': 'design',
+};
+
+function useDemandSignals() {
+  const [signals, setSignals] = useState<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('earmarked_credits' as any)
+          .select('category, amount')
+          .gt('amount', 0) as { data: { category: string; amount: number }[] | null; error: any };
+
+        if (error || !data) return;
+        const map = new Map<string, number>();
+        for (const row of data) {
+          map.set(row.category, (map.get(row.category) || 0) + row.amount);
+        }
+        setSignals(map);
+      } catch {
+        // Table doesn't exist yet — that's fine, show nothing
+      }
+    })();
+  }, []);
+
+  return signals;
+}
 
 interface TreasureMap {
   id: string;
@@ -166,6 +204,8 @@ const TREASURE_MAPS: TreasureMap[] = [
 ];
 
 export default function TreasureMaps() {
+  const demandSignals = useDemandSignals();
+
   return (
     <PortalPageLayout variant="stage" maxWidth="lg" xrayId="treasure-maps">
       <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-white mb-6">
@@ -224,6 +264,21 @@ export default function TreasureMaps() {
                 {/* Description */}
                 <p className="text-sm text-slate-300 mb-4 leading-relaxed">{map.description}</p>
 
+                {/* Demand signal */}
+                {(() => {
+                  const cat = CATEGORY_MAP[map.id];
+                  const amt = cat ? demandSignals.get(cat) : undefined;
+                  if (!amt || amt <= 0) return null;
+                  return (
+                    <div className="flex items-center gap-2 mb-4 p-2 rounded-lg bg-emerald-950/40 border border-emerald-800/30">
+                      <Coins className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <p className="text-xs text-emerald-300">
+                        <strong>${amt.toLocaleString()}</strong> in earmarked Credits waiting for the first {map.title.toLowerCase()} in your area
+                      </p>
+                    </div>
+                  );
+                })()}
+
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-3 mb-5">
                   <div className="bg-slate-900/50 rounded-lg p-2 text-center">
@@ -263,12 +318,15 @@ export default function TreasureMaps() {
                   ))}
                 </div>
 
-                {/* CTA */}
-                <Link to={`/treasure-maps/${map.id}`}>
-                  <Button className="w-full bg-amber-600 hover:bg-amber-700">
-                    View Full Guide <ChevronRight className="w-4 h-4 ml-1" />
-                  </Button>
-                </Link>
+                {/* CTA + Beacon */}
+                <div className="flex gap-2">
+                  <Link to={`/treasure-maps/${map.id}`} className="flex-1">
+                    <Button className="w-full bg-amber-600 hover:bg-amber-700">
+                      View Full Guide <ChevronRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </Link>
+                  <BeaconDropButton compact />
+                </div>
               </CardContent>
             </Card>
           );

@@ -280,7 +280,7 @@ const SAMPLE_INTERACTIONS: SocialInteraction[] = [
     sentiment: 'hostile',
     priority: 'medium',
     category: 'troll',
-    draftResponse: 'We understand the skepticism — the startup space has earned it. We have a live platform in beta, 8 provisional patent filings (1,754 innovations), and a deployed React/Supabase stack. We\'re not asking anyone to invest — we\'re a cooperative, not a securities offering. Happy to show receipts.',
+    draftResponse: 'We understand the skepticism — the startup space has earned it. We have a live platform in beta, 10 provisional patent filings (2,007 innovations), and a deployed React/Supabase stack. We\'re not asking anyone to invest — we\'re a cooperative, not a securities offering. Happy to show receipts.',
     responseStatus: 'ai_drafted',
     aiNotes: 'Hostile but on a high-traffic subreddit. Unlike the Twitter troll, this accusation could gain traction and should be addressed factually. Response is calm, specific, and avoids SEC language. "Show receipts" matches Reddit tone.',
     receivedAt: '2026-03-18T10:45:00Z',
@@ -664,6 +664,38 @@ export async function bulkMarkNoResponse(interactionIds: string[]): Promise<numb
     if (idx !== -1) { interactions[idx] = { ...interactions[idx], responseStatus: 'no_response_needed', reviewedAt: new Date().toISOString() }; count++; }
   });
   return count;
+}
+
+export async function requestSocialAIDraft(
+  interactionId: string,
+  content: string,
+  channel: string,
+  sentiment: string,
+): Promise<{ draft: string; engine: string } | null> {
+  try {
+    const { data: fnData, error: fnErr } = await supabase.functions.invoke('moneypenny-ai-draft', {
+      body: {
+        task_type: 'draft_social_response',
+        context: content,
+        metadata: { channel, sentiment },
+      },
+    });
+    if (fnErr) throw fnErr;
+    const draft = fnData?.result;
+    const engine = fnData?.engine || 'unknown';
+    if (!draft) return null;
+
+    await supabase.from('social_interactions' as any).update({
+      draft_response: draft,
+      response_status: 'ai_drafted',
+      ai_notes: `Drafted by MoneyPenny AI (${engine})`,
+    }).eq('id', interactionId);
+
+    return { draft, engine };
+  } catch (err) {
+    console.warn('[SocialMedia] AI draft request failed', err);
+    return null;
+  }
 }
 
 // Channel display helpers

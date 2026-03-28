@@ -70,7 +70,7 @@ interface InitiativeShowcase {
 }
 
 const INITIATIVE_SHOWCASES: InitiativeShowcase[] = [
-  { key: "lets-make-bread", name: "Let's Make Bread", tagline: "Business Incubator", icon: Wheat, color: "amber", highlights: ["Start with $5", "Keep 83.3% of every sale", "Cooperative manufacturing support"], route: "/initiatives/lets-make-bread", cephasLink: "https://cephas.lianabanyan.com/initiatives/lets-make-bread/" },
+  { key: "lets-make-bread", name: "Let's Make Bread", tagline: "Business Incubator", icon: Wheat, color: "amber", highlights: ["Start with $5", "Keep 83.3% of every sale", "Cooperative manufacturing support"], route: "/initiatives/lets-make-bread", cephasLink: "/cephas/initiatives/lets-make-bread" },
   { key: "hexisle-manufacturing", name: "HexIsle", tagline: "Distributed Manufacturing", icon: Building2, color: "blue", highlights: ["3D printing network", "Open-source hardware", "Community test-pilots"], route: "/hexisle" },
   { key: "household-concierge", name: "Household Concierge", tagline: "Shared Butler for Your Home", icon: Home, color: "teal", highlights: ["World-class home management", "Shared across households", "Earn Marks for tasks"], route: "/initiatives/household-concierge" },
   { key: "jukebox", name: "JukeBox", tagline: "Fair Music Licensing", icon: Music, color: "purple", highlights: ["Artists keep 83.3%", "One Take Wonders", "Fair licensing model"], route: "/initiatives/jukebox" },
@@ -253,7 +253,7 @@ export default function ATTILanding() {
                   <div className="text-xs text-muted-foreground">Annual Membership</div>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl text-center">
-                  <div className="text-2xl font-bold text-amber-400">1,754</div>
+                  <div className="text-2xl font-bold text-amber-400">2,007</div>
                   <div className="text-xs text-muted-foreground">Innovations</div>
                 </div>
               </div>

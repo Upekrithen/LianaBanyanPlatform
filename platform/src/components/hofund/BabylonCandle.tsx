@@ -93,7 +93,7 @@ const HEXAGON_DESTINATIONS: Destination[] = [
   { id: 'academics', name: 'College of Hard Knocks', description: 'Skills training and verification. Research wing.', url: '/senate/academics', icon: '🎓', background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', category: 'The Hexagon', subcategory: 'Second Floor' },
   { id: 'guild-access', name: 'Guild Access', description: 'Enter the guild halls. Join or create guilds.', url: '/guilds', icon: '🏰', background: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)', category: 'The Hexagon', subcategory: 'Second Floor' },
   { id: 'observatory', name: 'Observatory', description: 'Glass dome ceiling with stars. Long-term vision space.', url: '/senate/observatory', icon: '🔭', background: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%)', category: 'The Hexagon', subcategory: 'Second Floor' },
-  { id: 'cephas-lighthouse', name: 'Cephas Lighthouse', description: 'The Book of Peace — ALL of Cephas available to peruse.', url: 'https://cephas.lianabanyan.com', icon: '🗼', background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', category: 'The Hexagon', subcategory: 'Second Floor' },
+  { id: 'cephas-lighthouse', name: 'Cephas Lighthouse', description: 'The Book of Peace — ALL of Cephas available to peruse.', url: '/cephas', icon: '🗼', background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', category: 'The Hexagon', subcategory: 'Second Floor' },
 ];
 
 const OMEGA16_DESTINATIONS: Destination[] = [

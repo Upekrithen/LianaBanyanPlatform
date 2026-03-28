@@ -802,6 +802,35 @@ export async function fetchMilestoneReports(): Promise<QAMilestoneReport[]> {
   return SAMPLE_MILESTONE_REPORTS;
 }
 
+export async function requestAIDraft(qaId: string, questionText: string): Promise<{ draft: string; engine: string } | null> {
+  try {
+    const { data: fnData, error: fnErr } = await supabase.functions.invoke('moneypenny-ai-draft', {
+      body: {
+        task_type: 'draft_qa_response',
+        context: questionText,
+      },
+    });
+    if (fnErr) throw fnErr;
+    const draft = fnData?.result;
+    const engine = fnData?.engine || 'unknown';
+    if (!draft) return null;
+
+    await supabase
+      .from('qa_entries' as any)
+      .update({
+        answer_text: draft,
+        ai_responder: `moneypenny_${engine}`,
+        status: 'draft',
+      })
+      .eq('id', qaId);
+
+    return { draft, engine };
+  } catch (err) {
+    console.warn('[MoneyPennyQA] AI draft request failed', err);
+    return null;
+  }
+}
+
 export async function awardFollowUpBonus(qaId: string): Promise<QAEntry | null> {
   try {
     const { data, error } = await supabase

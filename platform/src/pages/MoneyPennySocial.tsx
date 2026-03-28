@@ -46,6 +46,7 @@ import {
   bulkApprove,
   bulkReject,
   bulkMarkNoResponse,
+  requestSocialAIDraft,
   CHANNEL_CONFIG,
   type SocialInteraction,
   type SocialMediaStats,
@@ -161,6 +162,8 @@ function InteractionCard({
   onEdit,
   onReject,
   onNoResponse,
+  onDraftAI,
+  drafting,
 }: {
   interaction: SocialInteraction;
   isSelected: boolean;
@@ -169,6 +172,8 @@ function InteractionCard({
   onEdit: (id: string, draft: string) => void;
   onReject: (id: string) => void;
   onNoResponse: (id: string) => void;
+  onDraftAI?: (id: string) => void;
+  drafting?: boolean;
 }) {
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(interaction.draftResponse);
@@ -276,6 +281,17 @@ function InteractionCard({
         {/* Action buttons */}
         {!isResolved && (
           <div className="pl-8 flex items-center gap-2 flex-wrap">
+            {!interaction.draftResponse && onDraftAI && (
+              <Button
+                size="sm"
+                onClick={() => onDraftAI(interaction.id)}
+                disabled={drafting}
+                className="bg-violet-600 hover:bg-violet-700 text-xs gap-1"
+              >
+                <Sparkles className="h-3 w-3" />
+                {drafting ? "Drafting..." : "Draft AI Response"}
+              </Button>
+            )}
             <Button
               size="sm"
               onClick={() => onApprove(interaction.id)}
@@ -385,6 +401,8 @@ export default function MoneyPennySocial() {
 
   // Confirm dialog state
   const [confirmBulk, setConfirmBulk] = useState<null | "approve" | "reject" | "noresponse">(null);
+  const [draftingId, setDraftingId] = useState<string | null>(null);
+  const [draftingAll, setDraftingAll] = useState(false);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -446,6 +464,32 @@ export default function MoneyPennySocial() {
   const handleNoResponse = async (id: string) => {
     await markAsNoResponse(id);
     toast({ title: "Noted", description: "Marked as no response needed." });
+    loadData();
+  };
+
+  const handleDraftAI = async (id: string) => {
+    const interaction = inbox.find(i => i.id === id);
+    if (!interaction) return;
+    setDraftingId(id);
+    const result = await requestSocialAIDraft(id, interaction.content, interaction.channel, interaction.sentiment);
+    setDraftingId(null);
+    if (result) {
+      toast({ title: "Draft ready", description: `AI response drafted (${result.engine}). Review and approve.` });
+    }
+    loadData();
+  };
+
+  const handleDraftAllPending = async () => {
+    const pending = inbox.filter(i => i.responseStatus === "new" && !i.draftResponse);
+    if (pending.length === 0) return;
+    setDraftingAll(true);
+    let drafted = 0;
+    for (const item of pending.slice(0, 10)) {
+      const result = await requestSocialAIDraft(item.id, item.content, item.channel, item.sentiment);
+      if (result) drafted++;
+    }
+    setDraftingAll(false);
+    toast({ title: "Bulk draft complete", description: `${drafted} responses drafted.` });
     loadData();
   };
 
@@ -544,6 +588,15 @@ export default function MoneyPennySocial() {
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   Bulk Approve AI-Recommended
+                </Button>
+                <Button
+                  onClick={handleDraftAllPending}
+                  disabled={draftingAll}
+                  className="bg-violet-600 hover:bg-violet-700 text-sm gap-1"
+                  size="sm"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  {draftingAll ? "Drafting..." : "Draft All Pending"}
                 </Button>
                 <Button
                   onClick={loadData}
@@ -710,6 +763,8 @@ export default function MoneyPennySocial() {
                     onEdit={handleEdit}
                     onReject={handleReject}
                     onNoResponse={handleNoResponse}
+                    onDraftAI={handleDraftAI}
+                    drafting={draftingId === interaction.id}
                   />
                 ))}
               </div>

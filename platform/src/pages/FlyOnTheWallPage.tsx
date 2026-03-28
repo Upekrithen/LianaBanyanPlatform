@@ -12,7 +12,7 @@ import { Eye, ExternalLink, History } from "lucide-react";
 import { useState } from "react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
-const CEPHAS_BASE = "https://cephas.lianabanyan.com";
+const CEPHAS_BASE = "/cephas";
 
 export default function FlyOnTheWallPage() {
   const [search, setSearch] = useState("");
@@ -64,7 +64,7 @@ export default function FlyOnTheWallPage() {
           <CardContent className="py-12 text-center text-muted-foreground">
             <History className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>Registry not available. Run migration 000020 and the ingestion script.</p>
-            <a href={CEPHAS_BASE} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1 mt-4">
+            <a href={CEPHAS_BASE} className="text-primary hover:underline inline-flex items-center gap-1 mt-4">
               Open Cephas <ExternalLink className="w-4 h-4" />
             </a>
           </CardContent>

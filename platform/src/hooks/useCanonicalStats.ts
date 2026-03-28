@@ -16,13 +16,14 @@ export interface CanonicalStats {
   portfolioValueHigh: number;
   personalInvestment: number;
   investmentYears: number;
+  productionSystems: number;
 }
 
 const DEFAULTS: CanonicalStats = {
-  innovationCount: 1897,
-  crownJewels: 123,
-  patentApplications: 8,
-  patentClaims: 1401,
+  innovationCount: 2078,
+  crownJewels: 146,
+  patentApplications: 10,
+  patentClaims: 1511,
   domains: 14,
   initiatives: 16,
   membershipCost: 5,
@@ -33,6 +34,7 @@ const DEFAULTS: CanonicalStats = {
   portfolioValueHigh: 116_000_000,
   personalInvestment: 525_000,
   investmentYears: 9,
+  productionSystems: 28,
 };
 
 const KEY_MAP: Record<string, keyof CanonicalStats> = {
@@ -50,6 +52,7 @@ const KEY_MAP: Record<string, keyof CanonicalStats> = {
   portfolio_value_high: 'portfolioValueHigh',
   personal_investment: 'personalInvestment',
   investment_years: 'investmentYears',
+  production_systems: 'productionSystems',
 };
 
 interface CanonicalRow {

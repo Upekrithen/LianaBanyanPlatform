@@ -423,7 +423,7 @@ export default function BuildBusiness() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Voting System', href: 'https://cephas.lianabanyan.com/under-the-hood/voting-system' },
+            { label: 'Voting System', href: '/cephas/under-the-hood/voting-system' },
           ]}
         >
           <div className="space-y-3">
@@ -525,8 +525,8 @@ export default function BuildBusiness() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Joules Economics', href: 'https://cephas.lianabanyan.com/under-the-hood/joules-economics-model-a' },
-            { label: 'Forex Ratchet', href: 'https://cephas.lianabanyan.com/under-the-hood/forex-ratchet-valuation' },
+            { label: 'Joules Economics', href: '/cephas/under-the-hood/joules-economics-model-a' },
+            { label: 'Forex Ratchet', href: '/cephas/under-the-hood/forex-ratchet-valuation' },
           ]}
         >
           <div className="p-6 rounded-xl bg-card/50 border border-white/10 mb-8">

@@ -13,6 +13,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { createEvent } from "@/lib/calendarService";
 
 // ─── Types ───
 
@@ -208,6 +209,34 @@ export async function completeBeacon(
 
   const progress = mapProgress(data as any);
 
+  // Log beacon completion to calendar (fire-and-forget)
+  try {
+    const now = new Date().toISOString();
+    const endTime = new Date(Date.now() + 3600_000).toISOString();
+    await createEvent({
+      owner_id: userId,
+      calendar_type: 'personal',
+      title: `Beacon ${beacon.beaconNumber} Completed: ${beacon.name}`,
+      description: beacon.challengeDescription,
+      start_time: now,
+      end_time: endTime,
+      all_day: false,
+      recurrence_rule: null,
+      location: null,
+      color: '#22c55e',
+      source_type: 'beacon',
+      source_id: beaconId,
+      is_private: false,
+      metadata: {
+        beacon_number: beacon.beaconNumber,
+        joules_earned: beacon.joulesReward,
+        snowflake_keys_earned: beacon.snowflakeKeyName || null,
+      },
+    });
+  } catch (_calErr) {
+    // Calendar write is non-critical — don't block beacon completion
+  }
+
   // Check if chain is now complete
   const newCompletedCount = completedIds.size + 1;
   const isChainComplete = newCompletedCount >= beacons.length;
@@ -235,6 +264,26 @@ export async function completeBeacon(
     if (!cardError && cardData) {
       teleportationCard = mapCard(cardData as any);
     }
+
+    // Milestone calendar event for full chain completion
+    try {
+      await createEvent({
+        owner_id: userId,
+        calendar_type: 'personal',
+        title: 'Snow Door Complete — Teleportation Deck Card Earned!',
+        description: 'All 7 Snow Door beacons completed. Northern Wind card unlocked.',
+        start_time: new Date().toISOString(),
+        end_time: new Date(Date.now() + 3600_000).toISOString(),
+        all_day: false,
+        recurrence_rule: null,
+        location: null,
+        color: '#eab308',
+        source_type: 'beacon',
+        source_id: `chain_complete_${userId}`,
+        is_private: false,
+        metadata: { milestone: 'snow_door_complete', beacons_completed: beacons.length },
+      });
+    } catch (_) { /* non-critical */ }
   }
 
   return {
@@ -299,6 +348,40 @@ export function getChainProgress(
     total: beacons.length,
     percentage: beacons.length > 0 ? Math.round((completed / beacons.length) * 100) : 0,
   };
+}
+
+// ─── Persistence Extension (Ghost Scenario Rewards) ───
+
+const PERSISTENCE_HOURS = [24, 48, 72, 96, 120, 144, 168];
+
+export async function getBeaconRunCount(userId: string): Promise<number> {
+  const progress = await getUserBeaconProgress();
+  return progress.filter((p) => p.isCompleted).length;
+}
+
+export function getPersistenceExtensionHours(runsCompleted: number): number {
+  return PERSISTENCE_HOURS[Math.min(runsCompleted, PERSISTENCE_HOURS.length - 1)];
+}
+
+export async function extendScenarioPersistence(
+  userId: string,
+): Promise<{ extended: number; hoursAdded: number }> {
+  const runsCompleted = await getBeaconRunCount(userId);
+  const extensionHours = getPersistenceExtensionHours(runsCompleted);
+
+  const newExpiry = new Date(
+    Date.now() + extensionHours * 3_600_000,
+  ).toISOString();
+
+  const { data, error } = await supabase
+    .from("saved_business_scenarios" as any)
+    .update({ expires_at: newExpiry })
+    .eq("user_id", userId)
+    .not("expires_at", "is", null)
+    .select("id");
+
+  if (error) throw error;
+  return { extended: (data ?? []).length, hoursAdded: extensionHours };
 }
 
 // ─── Mappers ───

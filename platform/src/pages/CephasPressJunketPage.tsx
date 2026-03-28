@@ -8,9 +8,9 @@ import { FileText, Download, Send, Lock, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
 
-const INNOVATION_COUNT = "1,754";
-const PATENT_CLAIMS = "1,401";
-const PROVISIONAL_APPS = "8";
+const INNOVATION_COUNT = "2,007";
+const PATENT_CLAIMS = "1,511";
+const PROVISIONAL_APPS = "10";
 
 export default function CephasPressJunketPage() {
   return (
@@ -41,7 +41,7 @@ export default function CephasPressJunketPage() {
             <li>Key facts: {INNOVATION_COUNT} innovations, {PATENT_CLAIMS} patent claims across {PROVISIONAL_APPS} provisional applications, 83.3% to creators (Cost + 20%), $5/year membership, 16 initiatives</li>
           </ul>
           <Button variant="outline" size="sm" asChild>
-            <a href="https://cephas.lianabanyan.com/press-kit/" target="_blank" rel="noopener noreferrer">
+            <a href="/cephas/press-kit">
               Open press kit (Cephas)
             </a>
           </Button>

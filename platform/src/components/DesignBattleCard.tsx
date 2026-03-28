@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { spendCoverageMinutes } from "@/lib/discourse/coverageMinutesDB";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -396,10 +397,20 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
     },
   });
 
-  // Vote mutation
+  // Vote mutation — costs 1 Coverage Minute
   const voteMutation = useMutation({
     mutationFn: async (participantId: string) => {
       if (!user) throw new Error("Must be logged in");
+
+      // Deduct 1 Coverage Minute for voting
+      const spent = await spendCoverageMinutes(
+        user.id, 1, "spent_voting",
+        `Vote in Design Battle ${battle.id}`,
+        battle.id, "design_battle",
+      );
+      if (!spent) {
+        throw new Error("Not enough Coverage Minutes to vote (1 required)");
+      }
       
       const { error } = await supabase.from("design_battle_votes").insert({
         battle_id: battle.id,
@@ -416,7 +427,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
       });
     },
     onSuccess: () => {
-      toast({ title: "Vote Cast!", description: "Your voice has been heard." });
+      toast({ title: "Vote Cast!", description: "Your voice has been heard. (1 Coverage Minute spent)" });
       queryClient.invalidateQueries({ queryKey: ["battle-participants", battle.id] });
       queryClient.invalidateQueries({ queryKey: ["battle-vote-check", battle.id] });
     },

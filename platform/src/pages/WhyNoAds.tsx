@@ -97,12 +97,13 @@ export default function WhyNoAds() {
                 <h3 className="font-semibold text-foreground">The Furnace</h3>
               </div>
               <p className="text-sm text-muted-foreground">
-                Every Cue Card has a <strong className="text-primary">QR code linked to an immutable verification registry</strong>.
-                Scan it to verify authenticity, see the business's trust score, and confirm their charitable tier.
+                The Furnace is our <strong className="text-primary">Cue Card authenticator</strong>. A Cue Card is a shareable QR business card
+                for any project or cause on the platform. Scan one and The Furnace checks if it's real — showing the trust score,
+                charitable tier, and verification status. No fakes, no scams.
               </p>
-              <button onClick={() => navigate('/the-furnace')} className="mt-2 text-xs text-primary hover:text-primary/80 flex items-center gap-1 bg-transparent border-none cursor-pointer p-0">
-                <Link2 className="h-3 w-3" /> Visit The Furnace →
-              </button>
+              <a href="/the-furnace" target="_blank" rel="noopener noreferrer" className="mt-2 text-xs text-primary hover:text-primary/80 flex items-center gap-1">
+                <Link2 className="h-3 w-3" /> Full Explanation →
+              </a>
             </div>
             <div className="p-4 rounded-lg bg-primary/5 border border-primary/15">
               <div className="flex items-center gap-2 mb-2">
@@ -111,7 +112,9 @@ export default function WhyNoAds() {
               </div>
               <p className="text-sm text-muted-foreground">
                 <strong className="text-primary">$5/year</strong> gives you a complete deck of shareable cards — digital and printable.
-                Each card carries your unique referral code. Every card is both a benefit explainer AND a recruitment tool.
+                Each card carries your unique referral code. Every card is both a benefit explainer AND a recruitment tool
+                for <strong className="text-foreground">YOUR</strong> project, business, or whatever cause you want to promote.
+                You control where it goes from your Bridge Control Room.
               </p>
             </div>
             <div className="p-4 rounded-lg bg-green-500/5 border border-green-500/15">
@@ -131,7 +134,8 @@ export default function WhyNoAds() {
               This is the orbit: <strong className="text-foreground">The Furnace</strong> verifies authenticity →
               <strong className="text-foreground"> Cue Card Deck</strong> arms every member with marketing materials →
               <strong className="text-foreground"> The Cue Card Drop</strong> tells them exactly where to put them.
-              No ad agency. No algorithm. Just people who believe in what we're building.
+              No ad agency. No algorithm. Just people who believe in what we're building — together.
+              And the best part? <strong className="text-foreground">You get to use the same viral marketing engine for YOUR business, project, or cause.</strong>
             </p>
           </div>
         </CardContent>
@@ -222,9 +226,10 @@ export default function WhyNoAds() {
         <CardContent>
           <div className="space-y-4">
             {[
-              { title: 'No Creepy Targeting', desc: "We're not tracking your every move to show you \"personalized\" ads. Your behavior is yours." },
-              { title: 'You Can Earn by Sharing', desc: 'Become a Herald and earn 25 MARKS every time someone you invite joins. That\'s our advertising budget going to you.' },
-              { title: 'Better Community', desc: 'People who join through friends are better members than people who clicked an ad. Higher trust, better interactions.' },
+              { title: 'No Creepy Targeting', desc: "We're not tracking your every move to show you \"personalized\" ads. Your behavior is yours. Period." },
+              { title: 'Earn 25 Marks Per Referral', desc: 'Marks are the cooperative\'s internal reward currency. Earn 25 every time someone you invite joins. That\'s our advertising budget going directly to you instead of Google or Meta.' },
+              { title: 'Use It For YOUR Business Too', desc: 'The same viral Cue Card system that markets Liana Banyan also markets YOUR project, business, or cause. You get the same tools — free.' },
+              { title: 'Better Community', desc: 'People who join through friends are better members than people who clicked an ad. Higher trust, better interactions, real relationships.' },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 border border-border">
                 <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />

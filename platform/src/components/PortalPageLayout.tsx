@@ -31,7 +31,7 @@ interface PortalPageLayoutProps {
   /** Max content width: sm=640px, md=768px, lg=1024px, xl=1280px, full=100% */
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   /** Optional page title rendered as consistent h1 */
-  title?: string;
+  title?: React.ReactNode;
   /** Optional subtitle below the title */
   subtitle?: string;
   /** Show a back button in the top-left */

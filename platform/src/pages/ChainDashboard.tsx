@@ -1,109 +1,85 @@
 /**
  * ChainDashboard — HexIsle Chain Loyalty Dashboard
  * ==================================================
- * /chain — Tracks a backer's 14-campaign Kickstarter chain.
- * 5% stacking Joule bonus per link, 14-day timer, 20% floor on break.
+ * /chain — Tracks a backer's 13-campaign Kickstarter chain.
+ * 5% stacking bonus per link, 14-day timer, 20% floor on break.
  *
- * Bishop Session 011 / Knight Session 29
+ * K144 / Bishop 036
  */
 
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { PortalPageLayout } from '@/components/PortalPageLayout';
+import React, { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { ShipMedallion } from "@/components/ShipMedallion";
+import {
+  useChainStatus,
+  useCampaigns,
+  useChainLeaderboard,
+  type KickstarterCampaign,
+} from "@/hooks/useChainDashboard";
 import {
   Link2, Clock, Gift, Trophy, Share2, ChevronRight, ExternalLink,
   Hexagon, Zap, Users, ArrowLeft, Copy, Check,
-} from 'lucide-react';
-
-// ─── CAMPAIGN DATA ───
-
-interface Campaign {
-  number: number;
-  name: string;
-  character?: string;
-  type: 'character' | 'component' | 'assembly' | 'capstone';
-  description: string;
-  launchEstimate: string;
-}
-
-const CAMPAIGNS: Campaign[] = [
-  { number: 1, name: 'SlottedTop', type: 'component', description: 'Universal hex tile adapter — the first piece of the 27-piece Hexel', launchEstimate: 'Ready' },
-  { number: 2, name: 'Peasant', character: 'Peasant', type: 'character', description: 'Base body — becomes every character. Layers snap on top.', launchEstimate: 'Ready' },
-  { number: 3, name: 'Merchant', character: 'Merchant', type: 'character', description: 'Same body + snap-on cloak. Remove cloak = Assassin beneath.', launchEstimate: 'Ready' },
-  { number: 4, name: 'Golden Lotus', type: 'component', description: 'Tesla-valve turbine — the heart of every Hexel', launchEstimate: 'TBD' },
-  { number: 5, name: 'Farmer / Warrior', character: 'Farmer', type: 'character', description: 'Peasant body + tool belt (Farmer) or + ScaleMail (Warrior). Same body, different layers.', launchEstimate: 'Ready' },
-  { number: 6, name: 'Character Base', type: 'component', description: 'Hitbase Counter — coin-loaded boots base with level overlays, weapon scabbards, and dice-face terrain lock.', launchEstimate: 'TBD' },
-  { number: 7, name: 'Sawtooth Coral', type: 'component', description: 'Ship keel engagement — 6-angle terrain piece + hidden Timing Belt', launchEstimate: 'TBD' },
-  { number: 8, name: 'Healer / Assassin', character: 'Healer', type: 'character', description: 'Crown Path layers: +herbs+staff (Healer) or -cloak (Assassin reveals)', launchEstimate: 'Ready' },
-  { number: 9, name: 'War Horse', character: 'Horse', type: 'character', description: 'Same horse body: Wild → Farm (bridle+cart) → War (armor). Layer system for creatures.', launchEstimate: 'Ready' },
-  { number: 10, name: 'King', character: 'King', type: 'character', description: 'Sword Path capstone — ALL layers: tunic + ScaleMail + Terrain Armor + Crown', launchEstimate: 'Ready' },
-  { number: 11, name: 'Pneumatic Palm', type: 'component', description: 'Telescoping plant — grows during play via pneumatic pump', launchEstimate: 'TBD' },
-  { number: 12, name: 'Queen', character: 'Queen', type: 'character', description: 'Crown Path capstone — Orbs + Fiery Wings + Crown Helmet. 4-body evolution display.', launchEstimate: 'Ready' },
-  { number: 13, name: 'Hexel Assembly', type: 'assembly', description: 'Full 27-piece Hexel — all pieces finalized by community improvements', launchEstimate: 'TBD' },
-  { number: 14, name: 'Tereno Water Table', type: 'capstone', description: '420 Hexels, gravity-powered hydraulic surface. The crown jewel.', launchEstimate: 'TBD' },
-];
+} from "lucide-react";
 
 const CHAIN_PERKS = [
-  { minLinks: 1, perk: 'Founding backer badge' },
-  { minLinks: 2, perk: 'Free STL of previous campaign product' },
-  { minLinks: 3, perk: 'Free color upgrade on current campaign' },
-  { minLinks: 4, perk: 'Chain Backer exclusive stretch goals' },
-  { minLinks: 5, perk: 'Free shipping on current campaign' },
-  { minLinks: 6, perk: 'LB membership months + Marks grant' },
-  { minLinks: 9, perk: 'Early access to unreleased products' },
-  { minLinks: 10, perk: 'Name in credits' },
-  { minLinks: 13, perk: 'Complete Collection pricing' },
-  { minLinks: 14, perk: 'Steward nomination + Grand Chain badge' },
+  { minLinks: 1, perk: "Founding backer badge" },
+  { minLinks: 2, perk: "Free STL of previous campaign product" },
+  { minLinks: 3, perk: "Free color upgrade on current campaign" },
+  { minLinks: 4, perk: "Chain Backer exclusive stretch goals" },
+  { minLinks: 5, perk: "Free shipping on current campaign" },
+  { minLinks: 6, perk: "LB membership months + Marks grant" },
+  { minLinks: 9, perk: "Early access to unreleased products" },
+  { minLinks: 10, perk: "Name in credits" },
+  { minLinks: 13, perk: "Complete Collection pricing + Ship Medallion" },
 ];
 
-// ─── MOCK USER STATE (replace with Supabase when wired) ───
+function formatTimeRemaining(seconds: number): string {
+  if (seconds <= 0) return "Expired";
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  if (days > 0) return `${days}d ${hours}h`;
+  const mins = Math.floor((seconds % 3600) / 60);
+  return `${hours}h ${mins}m`;
+}
 
-const MOCK_CHAIN = {
-  chainLength: 0,
-  lastBackingDate: null as string | null,
-  backedCampaigns: [] as number[],
-  username: 'guest',
+const typeColor = (t: KickstarterCampaign["product_type"]) => {
+  switch (t) {
+    case "character": return "text-emerald-400";
+    case "component": return "text-cyan-400";
+    case "creature": return "text-purple-400";
+    case "assembly": return "text-amber-400";
+  }
 };
 
-const MOCK_LEADERBOARD = [
-  { rank: 1, username: 'Hex_Pioneer_01', chainLength: 4 },
-  { rank: 2, username: 'WaterTableDreamer', chainLength: 3 },
-  { rank: 3, username: 'CoralBuilder', chainLength: 3 },
-  { rank: 4, username: 'LotusLover', chainLength: 2 },
-  { rank: 5, username: 'GearHead99', chainLength: 2 },
-];
-
-// ─── HELPERS ───
-
-function daysUntilExpiry(lastBackingDate: string | null): number | null {
-  if (!lastBackingDate) return null;
-  const last = new Date(lastBackingDate);
-  const expiry = new Date(last.getTime() + 14 * 24 * 60 * 60 * 1000);
-  const now = new Date();
-  const diff = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.max(0, diff);
-}
-
-function bonusPercent(chainLength: number): number {
-  return chainLength * 5;
-}
-
-// ─── COMPONENT ───
+const typeBg = (t: KickstarterCampaign["product_type"]) => {
+  switch (t) {
+    case "character": return "bg-emerald-500/15 border-emerald-500/30";
+    case "component": return "bg-cyan-500/15 border-cyan-500/30";
+    case "creature": return "bg-purple-500/15 border-purple-500/30";
+    case "assembly": return "bg-amber-500/15 border-amber-500/30";
+  }
+};
 
 const ChainDashboard: React.FC = () => {
-  const [chain] = useState(MOCK_CHAIN);
+  const {
+    chainLength, bonusPct, isComplete, getTimeRemaining,
+    backedCampaignIds, bonusPerLink, maxChainLength, isLoading: chainLoading,
+  } = useChainStatus();
+  const { campaigns, isLoading: campLoading } = useCampaigns();
+  const { leaderboard, totalHolders, isLoading: lbLoading } = useChainLeaderboard();
   const [copied, setCopied] = useState(false);
 
-  const daysLeft = daysUntilExpiry(chain.lastBackingDate);
-  const currentBonus = bonusPercent(chain.chainLength);
-  const nextBonus = bonusPercent(chain.chainLength + 1);
-  const nextCampaign = CAMPAIGNS.find(c => !chain.backedCampaigns.includes(c.number));
+  const timeLeft = getTimeRemaining();
+  const nextCampaign = campaigns.find(
+    (c) => !backedCampaignIds.has(c.id) && c.status !== "cancelled"
+  );
   const unlockedPerks = useMemo(
-    () => CHAIN_PERKS.filter(p => p.minLinks <= chain.chainLength),
-    [chain.chainLength]
+    () => CHAIN_PERKS.filter((p) => p.minLinks <= chainLength),
+    [chainLength]
   );
 
-  const referralLink = `https://lianabanyan.com/chain?ref=${chain.username}`;
+  const referralLink = `https://lianabanyan.com/chain?ref=me`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink);
@@ -111,116 +87,136 @@ const ChainDashboard: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const campaignTypeColor = (type: Campaign['type']) => {
-    switch (type) {
-      case 'character': return 'text-emerald-400';
-      case 'component': return 'text-cyan-400';
-      case 'assembly': return 'text-amber-400';
-      case 'capstone': return 'text-purple-400';
-    }
-  };
-
-  const campaignTypeBg = (type: Campaign['type']) => {
-    switch (type) {
-      case 'character': return 'bg-emerald-500/15 border-emerald-500/30';
-      case 'component': return 'bg-cyan-500/15 border-cyan-500/30';
-      case 'assembly': return 'bg-amber-500/15 border-amber-500/30';
-      case 'capstone': return 'bg-purple-500/15 border-purple-500/30';
-    }
-  };
+  const isLoading = chainLoading || campLoading;
 
   return (
     <PortalPageLayout maxWidth="xl" xrayId="hexisle-chain">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-          <Link to="/hexisle" className="hover:text-cyan-400 transition-colors flex items-center gap-1">
-            <ArrowLeft className="w-4 h-4" /> HexIsle
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-cyan-400">Chain Dashboard</span>
-        </div>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+        <Link to="/hexisle" className="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <ArrowLeft className="w-4 h-4" /> HexIsle
+        </Link>
+        <ChevronRight className="w-3 h-3" />
+        <span className="text-cyan-400">Chain Dashboard</span>
+      </div>
 
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
-            <Link2 className="w-7 h-7 text-cyan-400" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">HexIsle Chain</h1>
-            <p className="text-muted-foreground text-sm">14 Campaigns. One Journey. Rewards that grow.</p>
-          </div>
+      <div className="flex items-center gap-3 mb-2">
+        <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+          <Link2 className="w-7 h-7 text-cyan-400" />
         </div>
+        <div>
+          <h1 className="text-2xl font-bold">HexIsle Chain</h1>
+          <p className="text-muted-foreground text-sm">
+            13 Campaigns. One Journey. 5% bonus per link.
+          </p>
+        </div>
+      </div>
 
       <div className="space-y-6">
-        {/* ── Visual Chain ── */}
+        {/* Medallion + Chain Visual */}
         <section className="rounded-xl border border-border bg-muted p-5">
           <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
             <Link2 className="w-4 h-4 text-cyan-400" />
-            Your Chain ({chain.chainLength}/14 links)
+            Your Chain ({chainLength}/{maxChainLength} links)
           </h2>
-          <div className="flex items-center gap-1 overflow-x-auto pb-2">
-            {CAMPAIGNS.map((c) => {
-              const isBacked = chain.backedCampaigns.includes(c.number);
-              return (
-                <div key={c.number} className="flex items-center flex-shrink-0">
-                  <div
-                    className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-xs font-bold transition-all ${
-                      isBacked
-                        ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.3)]'
-                        : 'bg-muted border-border text-muted-foreground/70'
-                    }`}
-                    title={`Campaign ${c.number}: ${c.name}`}
-                  >
-                    {c.number}
-                  </div>
-                  {c.number < 14 && (
-                    <div className={`w-3 h-0.5 ${isBacked && chain.backedCampaigns.includes(c.number + 1) ? 'bg-cyan-400' : 'bg-muted'}`} />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div className="flex flex-wrap gap-3 mt-3 text-[11px]">
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-emerald-500/40 border border-emerald-500/60" /> Character</span>
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-cyan-500/40 border border-cyan-500/60" /> Component</span>
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-amber-500/40 border border-amber-500/60" /> Assembly</span>
-            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-purple-500/40 border border-purple-500/60" /> Capstone</span>
+
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            {/* Medallion */}
+            <div className="flex-shrink-0">
+              <ShipMedallion
+                size="md"
+                earned={isComplete}
+                flipEnabled={isComplete}
+                remainingLinks={Math.max(0, maxChainLength - chainLength)}
+              />
+              {isComplete && (
+                <p className="text-center text-amber-300 text-xs font-medium mt-2">
+                  Ship Medallion Earned
+                </p>
+              )}
+            </div>
+
+            {/* Chain Links */}
+            <div className="flex-1 w-full">
+              <div className="flex items-center gap-1 overflow-x-auto pb-2">
+                {campaigns.map((c) => {
+                  const isBacked = backedCampaignIds.has(c.id);
+                  const isNext = nextCampaign?.id === c.id;
+                  return (
+                    <div key={c.id} className="flex items-center flex-shrink-0">
+                      <div
+                        className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-xs font-bold transition-all ${
+                          isBacked
+                            ? "bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.3)]"
+                            : isNext
+                            ? "bg-amber-500/10 border-amber-400/60 text-amber-300 animate-pulse"
+                            : "bg-muted border-border text-muted-foreground/70"
+                        }`}
+                        title={`Campaign ${c.campaign_number}: ${c.title}`}
+                      >
+                        {c.campaign_number}
+                      </div>
+                      {c.campaign_number < maxChainLength && (
+                        <div
+                          className={`w-3 h-0.5 ${
+                            isBacked ? "bg-cyan-400" : "bg-muted"
+                          }`}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+                {campaigns.length === 0 && !isLoading && (
+                  <p className="text-muted-foreground/70 text-sm">No campaigns loaded</p>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-3 mt-3 text-[11px]">
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-emerald-500/40 border border-emerald-500/60" /> Character</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-cyan-500/40 border border-cyan-500/60" /> Component</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-purple-500/40 border border-purple-500/60" /> Creature</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-amber-500/40 border border-amber-500/60" /> Assembly</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* ── Stats Row ── */}
+        {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {/* Chain Timer */}
           <div className="rounded-xl border border-border bg-muted p-4">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-amber-400" />
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Chain Timer</span>
             </div>
-            {daysLeft !== null ? (
+            {timeLeft > 0 ? (
               <div>
-                <span className={`text-3xl font-bold ${daysLeft <= 3 ? 'text-red-400' : 'text-amber-300'}`}>
-                  {daysLeft}
+                <span className={`text-3xl font-bold ${timeLeft < 3 * 86400 ? "text-red-400" : "text-amber-300"}`}>
+                  {formatTimeRemaining(timeLeft)}
                 </span>
-                <span className="text-muted-foreground text-sm ml-1">days left</span>
+                <span className="text-muted-foreground text-sm ml-1">remaining</span>
               </div>
             ) : (
-              <p className="text-muted-foreground/70 text-sm">No active chain — back your first campaign to start!</p>
+              <p className="text-muted-foreground/70 text-sm">
+                No active chain — back your first campaign to start!
+              </p>
             )}
+            <p className="text-muted-foreground/50 text-[10px] mt-1">14-day window (21 days during holidays)</p>
           </div>
 
-          {/* Joule Bonus */}
           <div className="rounded-xl border border-border bg-muted p-4">
             <div className="flex items-center gap-2 mb-2">
               <Zap className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Joule Bonus</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Chain Bonus</span>
             </div>
             <div>
-              <span className="text-3xl font-bold text-cyan-300">{currentBonus}%</span>
-              {chain.chainLength < 14 && (
-                <span className="text-muted-foreground/70 text-sm ml-2">→ {nextBonus}% at next link</span>
+              <span className="text-3xl font-bold text-cyan-300">{bonusPct}%</span>
+              {chainLength < maxChainLength && (
+                <span className="text-muted-foreground/70 text-sm ml-2">
+                  → {bonusPct + bonusPerLink}% at next link
+                </span>
               )}
             </div>
+            <p className="text-muted-foreground/50 text-[10px] mt-1">{bonusPerLink}% per link · 20% floor on break</p>
           </div>
 
-          {/* Perks Unlocked */}
           <div className="rounded-xl border border-border bg-muted p-4">
             <div className="flex items-center gap-2 mb-2">
               <Gift className="w-4 h-4 text-emerald-400" />
@@ -231,65 +227,84 @@ const ChainDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* ── Next Campaign ── */}
+        {/* Next Campaign */}
         {nextCampaign && (
           <section className="rounded-xl border border-border bg-muted p-5">
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Next Campaign</h2>
-            <div className={`rounded-lg border p-4 ${campaignTypeBg(nextCampaign.type)}`}>
-              <div className="flex items-start justify-between">
+            <div className={`rounded-lg border p-4 ${typeBg(nextCampaign.product_type)}`}>
+              <div className="flex items-start justify-between flex-wrap gap-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Hexagon className={`w-5 h-5 ${campaignTypeColor(nextCampaign.type)}`} />
-                    <span className="font-bold text-lg">{nextCampaign.name}</span>
+                    <Hexagon className={`w-5 h-5 ${typeColor(nextCampaign.product_type)}`} />
+                    <span className="font-bold text-lg">{nextCampaign.title}</span>
                     <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-                      Campaign {nextCampaign.number} of 14
+                      Campaign {nextCampaign.campaign_number} of {maxChainLength}
                     </span>
                   </div>
-                  <p className="text-muted-foreground text-sm">{nextCampaign.description}</p>
-                  <p className="text-muted-foreground/70 text-xs mt-1">Launch: {nextCampaign.launchEstimate}</p>
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
+                    <span>Goal: ${nextCampaign.goal_amount.toLocaleString()}</span>
+                    {nextCampaign.status !== "upcoming" && (
+                      <span>Raised: ${nextCampaign.raised_amount.toLocaleString()}</span>
+                    )}
+                    <span className={`uppercase tracking-wider font-bold ${
+                      nextCampaign.status === "live" ? "text-emerald-400" : "text-muted-foreground/50"
+                    }`}>
+                      {nextCampaign.status}
+                    </span>
+                  </div>
                 </div>
-                <a
-                  href="https://kickstarter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-shrink-0"
-                >
-                  Back on Kickstarter <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+                {nextCampaign.kickstarter_url ? (
+                  <a
+                    href={nextCampaign.kickstarter_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-shrink-0"
+                  >
+                    Back on Kickstarter <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                ) : (
+                  <span className="text-xs text-muted-foreground/50 bg-muted px-3 py-2 rounded-lg">Coming Soon</span>
+                )}
               </div>
             </div>
           </section>
         )}
 
-        {/* ── Full Campaign Roadmap ── */}
+        {/* Campaign Roadmap */}
         <section className="rounded-xl border border-border bg-muted p-5">
           <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Campaign Roadmap</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {CAMPAIGNS.map((c) => {
-              const isBacked = chain.backedCampaigns.includes(c.number);
+            {campaigns.map((c) => {
+              const isBacked = backedCampaignIds.has(c.id);
+              const progress = c.goal_amount > 0 ? Math.min(100, (c.raised_amount / c.goal_amount) * 100) : 0;
               return (
                 <div
-                  key={c.number}
+                  key={c.id}
                   className={`rounded-lg border p-3 transition-all ${
-                    isBacked
-                      ? 'bg-cyan-500/10 border-cyan-500/30'
-                      : 'bg-muted border-border'
+                    isBacked ? "bg-cyan-500/10 border-cyan-500/30" : "bg-muted border-border"
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${
-                      isBacked ? 'bg-cyan-500/20 text-cyan-300' : 'bg-muted text-muted-foreground'
+                      isBacked ? "bg-cyan-500/20 text-cyan-300" : "bg-muted text-muted-foreground"
                     }`}>
-                      #{c.number}
+                      #{c.campaign_number}
                     </span>
-                    <span className={`font-medium text-sm ${isBacked ? 'text-cyan-200' : 'text-muted-foreground'}`}>
-                      {c.name}
+                    <span className={`font-medium text-sm truncate ${
+                      isBacked ? "text-cyan-200" : "text-muted-foreground"
+                    }`}>
+                      {c.title.split(" — ")[0]}
                     </span>
-                    <span className={`text-[10px] uppercase tracking-wider ${campaignTypeColor(c.type)}`}>
-                      {c.type}
+                    <span className={`text-[10px] uppercase tracking-wider flex-shrink-0 ${typeColor(c.product_type)}`}>
+                      {c.product_type}
                     </span>
                   </div>
-                  <p className="text-muted-foreground/70 text-xs">{c.description}</p>
+                  <p className="text-muted-foreground/70 text-xs truncate">{c.title}</p>
+                  {c.status !== "upcoming" && progress > 0 && (
+                    <div className="mt-2 h-1 rounded-full bg-border overflow-hidden">
+                      <div className="h-full bg-cyan-400 rounded-full transition-all" style={{ width: `${progress}%` }} />
+                    </div>
+                  )}
                   {isBacked && (
                     <span className="inline-block mt-1.5 text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">
                       ✓ Backed
@@ -301,7 +316,7 @@ const ChainDashboard: React.FC = () => {
           </div>
         </section>
 
-        {/* ── Perk Ladder ── */}
+        {/* Perk Ladder */}
         <section className="rounded-xl border border-border bg-muted p-5">
           <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
             <Gift className="w-4 h-4 text-emerald-400" />
@@ -309,23 +324,23 @@ const ChainDashboard: React.FC = () => {
           </h2>
           <div className="space-y-2">
             {CHAIN_PERKS.map((p) => {
-              const unlocked = p.minLinks <= chain.chainLength;
+              const unlocked = p.minLinks <= chainLength;
               return (
                 <div
                   key={p.minLinks}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
                     unlocked
-                      ? 'bg-emerald-500/10 border border-emerald-500/20'
-                      : 'bg-muted border border-border'
+                      ? "bg-emerald-500/10 border border-emerald-500/20"
+                      : "bg-muted border border-border"
                   }`}
                 >
-                  <span className={`text-xs font-bold w-12 ${unlocked ? 'text-emerald-300' : 'text-muted-foreground/70'}`}>
-                    {p.minLinks === 1 ? '1 link' : `${p.minLinks}+ links`}
+                  <span className={`text-xs font-bold w-12 ${unlocked ? "text-emerald-300" : "text-muted-foreground/70"}`}>
+                    {p.minLinks === 1 ? "1 link" : `${p.minLinks}+ links`}
                   </span>
-                  <span className={`text-xs font-bold mr-2 ${unlocked ? 'text-emerald-400' : 'text-muted-foreground/70'}`}>
-                    {bonusPercent(p.minLinks)}%
+                  <span className={`text-xs font-bold mr-2 ${unlocked ? "text-emerald-400" : "text-muted-foreground/70"}`}>
+                    {p.minLinks * bonusPerLink}%
                   </span>
-                  <span className={`text-sm ${unlocked ? 'text-foreground' : 'text-muted-foreground/70'}`}>
+                  <span className={`text-sm ${unlocked ? "text-foreground" : "text-muted-foreground/70"}`}>
                     {p.perk}
                   </span>
                   {unlocked && <Check className="w-4 h-4 text-emerald-400 ml-auto" />}
@@ -336,14 +351,14 @@ const ChainDashboard: React.FC = () => {
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* ── Referral Link ── */}
+          {/* Referral Link */}
           <section className="rounded-xl border border-border bg-muted p-5">
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
               <Share2 className="w-4 h-4 text-cyan-400" />
               Referral Link
             </h2>
             <p className="text-muted-foreground text-xs mb-3">
-              Share your chain link. Referrals earn you Marks through the TasteMaker Trust Chain (5 links deep, 40/25/15/10/10% attribution).
+              Share your chain link. Referrals earn you Marks through the TasteMaker Trust Chain (5 links deep, 40/25/15/10/10%).
             </p>
             <div className="flex gap-2">
               <input
@@ -356,34 +371,57 @@ const ChainDashboard: React.FC = () => {
                 className="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors"
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                {copied ? 'Copied' : 'Copy'}
+                {copied ? "Copied" : "Copy"}
               </button>
             </div>
           </section>
 
-          {/* ── Leaderboard ── */}
+          {/* Leaderboard */}
           <section className="rounded-xl border border-border bg-muted p-5">
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
               <Trophy className="w-4 h-4 text-amber-400" />
               Chain Leaderboard
             </h2>
-            <div className="space-y-2">
-              {MOCK_LEADERBOARD.map((entry) => (
-                <div key={entry.rank} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-muted border border-border">
-                  <span className={`text-sm font-bold w-6 text-center ${
-                    entry.rank === 1 ? 'text-amber-400' : entry.rank === 2 ? 'text-muted-foreground' : entry.rank === 3 ? 'text-orange-400' : 'text-muted-foreground/70'
-                  }`}>
-                    {entry.rank}
-                  </span>
-                  <Users className="w-3.5 h-3.5 text-muted-foreground/70" />
-                  <span className="text-sm text-muted-foreground flex-1">{entry.username}</span>
-                  <span className="text-xs font-bold text-cyan-400">{entry.chainLength} links</span>
-                  <span className="text-xs text-muted-foreground/70">{bonusPercent(entry.chainLength)}%</span>
-                </div>
-              ))}
-            </div>
-            <p className="text-muted-foreground/70 text-[10px] mt-2 uppercase tracking-wider">Sample Data — live leaderboard populates with Kickstarter backers</p>
+            {leaderboard.length > 0 ? (
+              <div className="space-y-2">
+                {leaderboard.map((entry, i) => (
+                  <div key={entry.user_id} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-muted border border-border">
+                    <span className={`text-sm font-bold w-6 text-center ${
+                      i === 0 ? "text-amber-400" : i === 1 ? "text-slate-300" : i === 2 ? "text-orange-400" : "text-muted-foreground/70"
+                    }`}>
+                      {i + 1}
+                    </span>
+                    <Users className="w-3.5 h-3.5 text-muted-foreground/70" />
+                    <span className="text-sm text-muted-foreground flex-1 truncate">
+                      {entry.profiles?.display_name ?? "Chain Holder"}
+                    </span>
+                    <span className="text-xs font-bold text-cyan-400">{entry.chain_length} links</span>
+                    <span className="text-xs text-muted-foreground/70">{entry.chain_length * bonusPerLink}%</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground/70 text-sm">
+                {lbLoading ? "Loading..." : "No chain holders yet — be the first!"}
+              </p>
+            )}
+            {totalHolders > 0 && (
+              <p className="text-muted-foreground/50 text-[10px] mt-2">{totalHolders} total chain holders</p>
+            )}
           </section>
+        </div>
+
+        {/* Cross-links */}
+        <div className="flex flex-wrap gap-4 text-sm">
+          <Link to="/hexisle/downloads" className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 transition-colors">
+            STL Downloads <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
+          <Link to="/hexisle" className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 transition-colors">
+            HexIsle Portal <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
+          <Link to="/2nd-second" className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 transition-colors">
+            The 2nd Second <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
         </div>
       </div>
     </PortalPageLayout>

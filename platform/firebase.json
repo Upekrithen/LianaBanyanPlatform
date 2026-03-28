@@ -12,6 +12,7 @@
       ],
       "headers": [
         { "source": "**", "headers": [{ "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" }] },
+        { "source": "index.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }, { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
         { "source": "**/*.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }] },
         { "source": "**/*.@(js|mjs)", "headers": [{ "key": "Content-Type", "value": "application/javascript; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
         { "source": "**/*.css", "headers": [{ "key": "Content-Type", "value": "text/css; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
@@ -29,6 +30,7 @@
         { "source": "**", "destination": "/index.html" }
       ],
       "headers": [
+        { "source": "index.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }, { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
         { "source": "**/*.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }] },
         { "source": "**/*.@(js|mjs)", "headers": [{ "key": "Content-Type", "value": "application/javascript; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
         { "source": "**/*.css", "headers": [{ "key": "Content-Type", "value": "text/css; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
@@ -95,6 +97,21 @@
         { "source": "**", "destination": "/index.html" }
       ],
       "headers": [
+        { "source": "**/*.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }] },
+        { "source": "**/*.@(js|mjs)", "headers": [{ "key": "Content-Type", "value": "application/javascript; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
+        { "source": "**/*.css", "headers": [{ "key": "Content-Type", "value": "text/css; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] }
+      ]
+    },
+    {
+      "target": "upekrithen",
+      "public": "dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
+      ],
+      "headers": [
+        { "source": "**", "headers": [{ "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" }] },
+        { "source": "index.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }, { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
         { "source": "**/*.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }] },
         { "source": "**/*.@(js|mjs)", "headers": [{ "key": "Content-Type", "value": "application/javascript; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
         { "source": "**/*.css", "headers": [{ "key": "Content-Type", "value": "text/css; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] }

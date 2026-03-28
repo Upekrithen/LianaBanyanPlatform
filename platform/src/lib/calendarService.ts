@@ -33,7 +33,7 @@ export interface CalendarShare {
   created_at: string;
 }
 
-export type CalendarType = 'personal' | 'family' | 'business' | 'coalition' | 'route' | 'defense' | 'education';
+export type CalendarType = 'personal' | 'family' | 'business' | 'coalition' | 'route' | 'defense' | 'education' | 'platform' | 'crew' | 'storefront';
 
 export const CALENDAR_TYPE_CONFIG: Record<CalendarType, { label: string; emoji: string; color: string }> = {
   personal: { label: 'Personal', emoji: '📅', color: '#3b82f6' },
@@ -43,6 +43,9 @@ export const CALENDAR_TYPE_CONFIG: Record<CalendarType, { label: string; emoji: 
   route: { label: 'Delivery Route', emoji: '🚚', color: '#06b6d4' },
   defense: { label: 'Defense Klaus', emoji: '🛡️', color: '#ef4444' },
   education: { label: 'Didasko', emoji: '📚', color: '#8b5cf6' },
+  platform: { label: 'Platform', emoji: '📢', color: '#6366f1' },
+  crew: { label: 'Crew', emoji: '👥', color: '#ec4899' },
+  storefront: { label: 'Storefront', emoji: '🏪', color: '#f97316' },
 };
 
 export async function fetchEvents(

@@ -4,7 +4,7 @@
     "title": "The 300 Framework: The tl;dr",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/300-framework-tldr/",
+    "url": "/cephas/academic/300-framework-tldr",
     "tags": [
       "organization",
       "governance",
@@ -18,7 +18,7 @@
     "title": "The Anti-Extractive Derivative: The tl;dr",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/anti-extractive-derivative-tldr/",
+    "url": "/cephas/academic/anti-extractive-derivative-tldr",
     "tags": [
       "quality",
       "incentives",
@@ -32,7 +32,7 @@
     "title": "Generosity for Potential",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/boaz-generosity-potential/",
+    "url": "/cephas/academic/boaz-generosity-potential",
     "tags": [
       "generosity",
       "potential",
@@ -47,7 +47,7 @@
     "title": "The Boaz Principle: The tl;dr",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/boaz-principle-tldr/",
+    "url": "/cephas/academic/boaz-principle-tldr",
     "tags": [
       "generosity",
       "gleaning",
@@ -61,7 +61,7 @@
     "title": "Jeep of Theseus Cold Start",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/cold-start-theseus/",
+    "url": "/cephas/academic/cold-start-theseus",
     "tags": [
       "cold-start",
       "risk",
@@ -76,7 +76,7 @@
     "title": "Ghost Credits and Demand Validation: The tl;dr",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/ghost-credits-tldr/",
+    "url": "/cephas/academic/ghost-credits-tldr",
     "tags": [
       "demand",
       "validation",
@@ -90,7 +90,7 @@
     "title": "Historical Influence Value Index (HIVI) — tl;dr",
     "category": "Academic Paper",
     "description": "Every purchase is a vote. We count the votes.",
-    "url": "https://cephas.lianabanyan.com/academic/hivi-tldr/",
+    "url": "/cephas/academic/hivi-tldr",
     "tags": [
       "academic",
       "economics",
@@ -103,7 +103,7 @@
     "title": "The Inception Principle",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/inception-principle/",
+    "url": "/cephas/academic/inception-principle",
     "tags": [
       "innovation",
       "perspective",
@@ -118,7 +118,7 @@
     "title": "IP Load Balancing on a Cooperative Ledger",
     "category": "Academic Paper",
     "description": "We present IP Load Balancing, a system that integrates capped, recyclable capital returns with dynamic bucket rebalancing, running atop an IP ledger that encodes attribution and combinatorial innovation.",
-    "url": "https://cephas.lianabanyan.com/academic/ip-load-balancing-academic/",
+    "url": "/cephas/academic/ip-load-balancing-academic",
     "tags": [
       "academic",
       "patents",
@@ -135,7 +135,7 @@
     "title": "Margin Sacrifice as Mutual Credit: A Novel Mechanism for Cooperative Platform Economics",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/margin-sacrifice-mutual-credit/",
+    "url": "/cephas/academic/margin-sacrifice-mutual-credit",
     "tags": [
       "economics",
       "academic",
@@ -149,7 +149,7 @@
     "title": "The 3³ Laws of Cooperative Robotics (Plus Zeroth): A Systems Analysis of Platform Economics",
     "category": "Academic Paper",
     "description": "Academic paper analyzing how nine interconnected economic principles create emergent stability in cooperative platform ecosystems",
-    "url": "https://cephas.lianabanyan.com/academic/nine-laws-interaction-dynamics/",
+    "url": "/cephas/academic/nine-laws-interaction-dynamics",
     "tags": [
       "academic",
       "economics",
@@ -164,7 +164,7 @@
     "title": "A Capped, Rebalanced Patent Sponsorship Model for a Cooperative IP Platform",
     "category": "Academic Paper",
     "description": "A patent economics model where the platform retains majority control, sponsors get generous but capped returns, and dynamic rebalancing keeps participation fair.",
-    "url": "https://cephas.lianabanyan.com/academic/patent-sponsorship-model/",
+    "url": "/cephas/academic/patent-sponsorship-model",
     "tags": [
       "patents",
       "economics",
@@ -179,7 +179,7 @@
     "title": "The Simultaneous Pricing Paradox",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/simultaneous-pricing/",
+    "url": "/cephas/academic/simultaneous-pricing",
     "tags": [
       "pricing",
       "economics",
@@ -193,7 +193,7 @@
     "title": "A Considered Approach to Sustained Universal Economic Prosperity",
     "category": "Academic Paper",
     "description": "Economic Innovation in Distributed Commerce: A New Model for Value Creation and Distribution. The foundational economic paper for Liana Banyan.",
-    "url": "https://cephas.lianabanyan.com/academic/sustained-prosperity/",
+    "url": "/cephas/academic/sustained-prosperity",
     "tags": [
       "economics",
       "platform",
@@ -210,7 +210,7 @@
     "title": "Three-Gear Currency: The tl;dr",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/three-gear-currency-tldr/",
+    "url": "/cephas/academic/three-gear-currency-tldr",
     "tags": [
       "currency",
       "economics",
@@ -224,7 +224,7 @@
     "title": "The 20 Laws of C+20: A Complete Economic Constitution for Cooperative Commerce",
     "category": "Academic Paper",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/academic/twenty-laws-of-c20/",
+    "url": "/cephas/academic/twenty-laws-of-c20",
     "tags": [
       "economics",
       "laws",
@@ -239,7 +239,7 @@
     "title": "Automated Trust: The Harper Certification System",
     "category": "Document",
     "description": "How Liana Banyan Codified Reputation into Algorithmic Selection",
-    "url": "https://cephas.lianabanyan.com/academics/automated-trust-harper-system/",
+    "url": "/cephas/academics/automated-trust-harper-system",
     "tags": [
       "harper",
       "trust",
@@ -253,7 +253,7 @@
     "title": "Peace Economics: The Structural Elimination of Conflict Preconditions",
     "category": "Document",
     "description": "Academic paper on how economic architecture can systematically remove the root causes of conflict",
-    "url": "https://cephas.lianabanyan.com/academics/PAPER_BOOK_OF_PEACE_MECHANICS/",
+    "url": "/cephas/academics/PAPER_BOOK_OF_PEACE_MECHANICS",
     "tags": [
       "peace",
       "economics",
@@ -267,7 +267,7 @@
     "title": "Academic Publishing Targets",
     "category": "Document",
     "description": "Target journals and venues for Liana Banyan academic papers",
-    "url": "https://cephas.lianabanyan.com/academics/publishing-targets/",
+    "url": "/cephas/academics/publishing-targets",
     "tags": [
       "publishing",
       "journals",
@@ -280,7 +280,7 @@
     "title": "How Funding Flows",
     "category": "Document",
     "description": "Complete guide to how money moves through Liana Banyan - from credits to services to your business",
-    "url": "https://cephas.lianabanyan.com/architecture/funding-flow/",
+    "url": "/cephas/architecture/funding-flow",
     "tags": []
   },
   {
@@ -288,7 +288,7 @@
     "title": "The Superstructure",
     "category": "Document",
     "description": "From Crown to Kitchen Helper - how everything connects in the Liana Banyan cooperative empire",
-    "url": "https://cephas.lianabanyan.com/architecture/superstructure/",
+    "url": "/cephas/architecture/superstructure",
     "tags": []
   },
   {
@@ -296,7 +296,7 @@
     "title": "The Three-Gear Currency",
     "category": "Document",
     "description": "Credits, Marks, and Joules - how the three currencies work together to power Liana Banyan",
-    "url": "https://cephas.lianabanyan.com/architecture/three-gear-currency/",
+    "url": "/cephas/architecture/three-gear-currency",
     "tags": []
   },
   {
@@ -304,7 +304,7 @@
     "title": "How Voting Works",
     "category": "Document",
     "description": "Complete guide to voting mechanics, production levels, and how your credits become influence",
-    "url": "https://cephas.lianabanyan.com/architecture/voting-mechanics/",
+    "url": "/cephas/architecture/voting-mechanics",
     "tags": []
   },
   {
@@ -312,7 +312,7 @@
     "title": "I Built an Aircraft Carrier to Launch My Plane",
     "category": "Article",
     "description": "I'm using my patents to fund the platform so others can launch their own businesses — here's why that's not as crazy as it sounds",
-    "url": "https://cephas.lianabanyan.com/articles/aircraft-carrier-ip-funding/",
+    "url": "/cephas/articles/aircraft-carrier-ip-funding",
     "tags": [
       "patents",
       "founding",
@@ -326,7 +326,7 @@
     "title": "Anticipated Critiques & Preemptive Responses",
     "category": "Article",
     "description": "We've thought through the objections. Here are our responses—with treasure hunt keys embedded—written before the critiques arrive.",
-    "url": "https://cephas.lianabanyan.com/articles/anticipated-critiques/",
+    "url": "/cephas/articles/anticipated-critiques",
     "tags": [
       "critiques",
       "responses",
@@ -339,7 +339,7 @@
     "title": "The Book of Peace: Cephas as Peace Architecture",
     "category": "Article",
     "description": "How solving root causes of conflict creates peace - the philosophy behind Cephas",
-    "url": "https://cephas.lianabanyan.com/articles/ARTICLE_BOOK_OF_PEACE/",
+    "url": "/cephas/articles/ARTICLE_BOOK_OF_PEACE",
     "tags": [
       "book-of-peace",
       "cephas",
@@ -353,7 +353,7 @@
     "title": "Designed for Efficiency: Zero-Cost Value Creation",
     "category": "Article",
     "description": "How Liana Banyan creates real benefits through structural design, not marketing gimmicks",
-    "url": "https://cephas.lianabanyan.com/articles/ARTICLE_DESIGNED_FOR_EFFICIENCY/",
+    "url": "/cephas/articles/ARTICLE_DESIGNED_FOR_EFFICIENCY",
     "tags": [
       "efficiency",
       "design",
@@ -367,7 +367,7 @@
     "title": "Liana Banyan IP Platform Business Plan",
     "category": "Article",
     "description": "Executive Summary Document - Democratize intellectual property creation, funding, and participation for the next generation of creators.",
-    "url": "https://cephas.lianabanyan.com/articles/business-plan/",
+    "url": "/cephas/articles/business-plan",
     "tags": [
       "business-plan",
       "executive-summary",
@@ -380,7 +380,7 @@
     "title": "How Liana Banyan Actually Works",
     "category": "Article",
     "description": "The complete guide to understanding the Liana Banyan platform - participation + product crowdfunding",
-    "url": "https://cephas.lianabanyan.com/articles/how-liana-banyan-works/",
+    "url": "/cephas/articles/how-liana-banyan-works",
     "tags": [
       "guide",
       "platform",
@@ -394,7 +394,7 @@
     "title": "Hybrid Participation + Cash Compensation Model",
     "category": "Article",
     "description": "How LianaBanyan offers service providers the option to be compensated through a combination of cash and participation credits",
-    "url": "https://cephas.lianabanyan.com/articles/hybrid-compensation/",
+    "url": "/cephas/articles/hybrid-compensation",
     "tags": [
       "compensation",
       "participation",
@@ -408,7 +408,7 @@
     "title": "Why We're Not Looking for VC Funding",
     "category": "Article",
     "description": "A detailed comparison of Liana Banyan's cooperative IP funding model versus traditional venture capital, and why we chose a different path.",
-    "url": "https://cephas.lianabanyan.com/articles/liana-banyan-vs-traditional-vc/",
+    "url": "/cephas/articles/liana-banyan-vs-traditional-vc",
     "tags": [
       "economics",
       "VC",
@@ -423,7 +423,7 @@
     "title": "More Than Me: Sustainability Thresholds",
     "category": "Article",
     "description": "How many people do we need at each stage for this to become self-sustaining—independent of any one person, including the founder?",
-    "url": "https://cephas.lianabanyan.com/articles/more-than-me/",
+    "url": "/cephas/articles/more-than-me",
     "tags": [
       "sustainability",
       "thresholds",
@@ -436,7 +436,7 @@
     "title": "One of Us: Building Trust Through Shared Economics",
     "category": "Article",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/articles/one-of-us-building-trust-through-shared-economics/",
+    "url": "/cephas/articles/one-of-us-building-trust-through-shared-economics",
     "tags": [
       "economics",
       "trust",
@@ -450,7 +450,7 @@
     "title": "Liana Banyan Patent Economics: Fair Upside, No Feudalism",
     "category": "Article",
     "description": "One-page investor summary of how patent economics work on Liana Banyan: 60/20/20 split, sponsor pools, caps, and fairness through rebalancing.",
-    "url": "https://cephas.lianabanyan.com/articles/patent-economics-one-pager/",
+    "url": "/cephas/articles/patent-economics-one-pager",
     "tags": [
       "patents",
       "economics",
@@ -464,7 +464,7 @@
     "title": "Reciprocity Economics: A New Model for Platform Commerce",
     "category": "Article",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/articles/reciprocity-economics-new-model/",
+    "url": "/cephas/articles/reciprocity-economics-new-model",
     "tags": [
       "economics",
       "business",
@@ -478,7 +478,7 @@
     "title": "SCE to AUX — The Call That Saved Apollo 12",
     "category": "Article",
     "description": "How John Aaron's natural curiosity and a random night shift observation saved the Apollo 12 mission 36 seconds after launch",
-    "url": "https://cephas.lianabanyan.com/articles/sce-to-aux-apollo-12/",
+    "url": "/cephas/articles/sce-to-aux-apollo-12",
     "tags": [
       "apollo",
       "nasa",
@@ -492,7 +492,7 @@
     "title": "Can I Take a Second?",
     "category": "Article",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/articles/tatiana-schlossberg-letter/",
+    "url": "/cephas/articles/tatiana-schlossberg-letter",
     "tags": [
       "lifeline-medications",
       "healthcare",
@@ -505,7 +505,7 @@
     "title": "Tatiana Schlossburg Health Accords: The Full Picture",
     "category": "Article",
     "description": "How community coordination can fix medication access - the detailed economics",
-    "url": "https://cephas.lianabanyan.com/articles/tatiana-schlossburg-health-accords-detailed/",
+    "url": "/cephas/articles/tatiana-schlossburg-health-accords-detailed",
     "tags": [
       "healthcare",
       "health-accords",
@@ -518,7 +518,7 @@
     "title": "The Eleven Economic Laws of the Keep",
     "category": "Article",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/",
+    "url": "/cephas/articles/ten-economic-laws-of-the-keep",
     "tags": [
       "economics",
       "laws",
@@ -532,7 +532,7 @@
     "title": "Unlimited Throws: What If the Carnival Game Was Free?",
     "category": "Article",
     "description": "Why I built a free business simulator — and how failure becomes tuition instead of ruin",
-    "url": "https://cephas.lianabanyan.com/articles/unlimited-throws-carnival-game/",
+    "url": "/cephas/articles/unlimited-throws-carnival-game",
     "tags": [
       "founder",
       "philosophy",
@@ -548,7 +548,7 @@
     "title": "Unlimited Throws: What If the Carnival Game Was Free?",
     "category": "Article",
     "description": "A structural intervention for entrepreneurial access inequality through cooperative business simulation",
-    "url": "https://cephas.lianabanyan.com/articles/unlimited-throws-ssir-version/",
+    "url": "/cephas/articles/unlimited-throws-ssir-version",
     "tags": [
       "ssir",
       "academic",
@@ -563,7 +563,7 @@
     "title": "Rotating Header Banner Quotes",
     "category": "Document",
     "description": "Inspirational quotes for the Cephas header rotation",
-    "url": "https://cephas.lianabanyan.com/config/rotating-header-quotes/",
+    "url": "/cephas/config/rotating-header-quotes",
     "tags": []
   },
   {
@@ -571,7 +571,7 @@
     "title": "Founder Anecdotes",
     "category": "Founder",
     "description": "Personal stories from the Founder - lessons learned from paper routes, intramural games, and 25,000 chess losses",
-    "url": "https://cephas.lianabanyan.com/founder/anecdotes/",
+    "url": "/cephas/founder/anecdotes",
     "tags": []
   },
   {
@@ -579,7 +579,7 @@
     "title": "Founder Credentials",
     "category": "Founder",
     "description": "53-year-old ARNG veteran, father of eight, 21 years IT development, 37 years building this system",
-    "url": "https://cephas.lianabanyan.com/founder/credentials/",
+    "url": "/cephas/founder/credentials",
     "tags": []
   },
   {
@@ -587,7 +587,7 @@
     "title": "The Founder's Creed",
     "category": "Founder",
     "description": "Principles learned through life — never offer someone something you wouldn't take yourself.",
-    "url": "https://cephas.lianabanyan.com/founder/creed/",
+    "url": "/cephas/founder/creed",
     "tags": []
   },
   {
@@ -595,7 +595,7 @@
     "title": "Crown Candidates Tracker",
     "category": "Founder",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/founder/crown-tracker/",
+    "url": "/cephas/founder/crown-tracker",
     "tags": []
   },
   {
@@ -603,7 +603,7 @@
     "title": "Origin Story",
     "category": "Founder",
     "description": "How 37 years of lived experience became Liana Banyan — from paper routes to patents",
-    "url": "https://cephas.lianabanyan.com/founder/origin-story/",
+    "url": "/cephas/founder/origin-story",
     "tags": []
   },
   {
@@ -611,7 +611,7 @@
     "title": "Founder Reading List & Contributions",
     "category": "Founder",
     "description": "Complete index of all Founder contributions for review tracking",
-    "url": "https://cephas.lianabanyan.com/founder/reading-list/",
+    "url": "/cephas/founder/reading-list",
     "tags": [
       "founder",
       "contributions",
@@ -625,7 +625,7 @@
     "title": "Welcome from the Founder",
     "category": "Document",
     "description": "A personal welcome from Denken, founder of Liana Banyan",
-    "url": "https://cephas.lianabanyan.com/founder-welcome/",
+    "url": "/cephas/founder-welcome",
     "tags": []
   },
   {
@@ -633,7 +633,7 @@
     "title": "HexIsle Hydraulic System - Academic Paper",
     "category": "Document",
     "description": "A Self-Sustaining Gravity-Driven Hydraulic Oscillation System for Mechanical Wave Generation in Modular Game Environments",
-    "url": "https://cephas.lianabanyan.com/hexisle/hydraulic-paper/",
+    "url": "/cephas/hexisle/hydraulic-paper",
     "tags": [
       "hexisle",
       "academic",
@@ -647,7 +647,7 @@
     "title": "How Credits Flow: Before & After Collection",
     "category": "Document",
     "description": "The complete lifecycle of Credits in Liana Banyan - from bootstrap to circulation",
-    "url": "https://cephas.lianabanyan.com/how-it-works/credit-lifecycle-flowchart/",
+    "url": "/cephas/how-it-works/credit-lifecycle-flowchart",
     "tags": [
       "credits",
       "flowchart",
@@ -661,7 +661,7 @@
     "title": "Academic / Learning",
     "category": "Initiative",
     "description": "Education and skill-building through the BOUNTY curriculum and guild progression",
-    "url": "https://cephas.lianabanyan.com/initiatives/academic/",
+    "url": "/cephas/initiatives/academic",
     "tags": [
       "initiative",
       "education",
@@ -674,7 +674,7 @@
     "title": "Brass Tacks",
     "category": "Initiative",
     "description": "Business services and professional tools — the infrastructure that makes everything else work",
-    "url": "https://cephas.lianabanyan.com/initiatives/brass-tacks/",
+    "url": "/cephas/initiatives/brass-tacks",
     "tags": [
       "initiative",
       "brass-tacks",
@@ -687,7 +687,7 @@
     "title": "Defense Klaus",
     "category": "Initiative",
     "description": "Evidence preservation system — secure documentation for those who need protection",
-    "url": "https://cephas.lianabanyan.com/initiatives/defense-klaus/",
+    "url": "/cephas/initiatives/defense-klaus",
     "tags": [
       "initiative",
       "defense-klaus",
@@ -701,7 +701,7 @@
     "title": "Didasko",
     "category": "Initiative",
     "description": "Education infrastructure — learning that's accessible, verifiable, and fair to educators",
-    "url": "https://cephas.lianabanyan.com/initiatives/didasko/",
+    "url": "/cephas/initiatives/didasko",
     "tags": [
       "initiative",
       "didasko",
@@ -715,7 +715,7 @@
     "title": "Do The Swoop: Initiative #17",
     "category": "Initiative",
     "description": "The Ripple 'Make A Difference' Initiative — covering living expenses for families facing medical crisis",
-    "url": "https://cephas.lianabanyan.com/initiatives/do-the-swoop/",
+    "url": "/cephas/initiatives/do-the-swoop",
     "tags": [
       "healthcare",
       "family",
@@ -728,7 +728,7 @@
     "title": "Harper Guild",
     "category": "Initiative",
     "description": "Creator tools and digital marketplace — everything creators need to make and sell their work",
-    "url": "https://cephas.lianabanyan.com/initiatives/harper-guild/",
+    "url": "/cephas/initiatives/harper-guild",
     "tags": [
       "initiative",
       "harper-guild",
@@ -741,7 +741,7 @@
     "title": "Household Concierge",
     "category": "Initiative",
     "description": "Home services coordination — fair work for providers, fair prices for households",
-    "url": "https://cephas.lianabanyan.com/initiatives/household-concierge/",
+    "url": "/cephas/initiatives/household-concierge",
     "tags": [
       "initiative",
       "household-concierge",
@@ -754,7 +754,7 @@
     "title": "International",
     "category": "Initiative",
     "description": "Global expansion — bringing Liana Banyan infrastructure to the world",
-    "url": "https://cephas.lianabanyan.com/initiatives/international/",
+    "url": "/cephas/initiatives/international",
     "tags": [
       "initiative",
       "international",
@@ -767,7 +767,7 @@
     "title": "JukeBox",
     "category": "Initiative",
     "description": "Music infrastructure — fair streaming, direct sales, artist empowerment",
-    "url": "https://cephas.lianabanyan.com/initiatives/jukebox/",
+    "url": "/cephas/initiatives/jukebox",
     "tags": [
       "initiative",
       "jukebox",
@@ -781,7 +781,7 @@
     "title": "LB MSA",
     "category": "Initiative",
     "description": "Medical Savings Accounts — healthcare funding that works for everyone",
-    "url": "https://cephas.lianabanyan.com/initiatives/lb-msa/",
+    "url": "/cephas/initiatives/lb-msa",
     "tags": [
       "initiative",
       "lb-msa",
@@ -795,7 +795,7 @@
     "title": "Let's Get Groceries",
     "category": "Initiative",
     "description": "Food access coordination — getting groceries to families at fair prices",
-    "url": "https://cephas.lianabanyan.com/initiatives/lets-get-groceries/",
+    "url": "/cephas/initiatives/lets-get-groceries",
     "tags": [
       "initiative",
       "lets-get-groceries",
@@ -809,7 +809,7 @@
     "title": "Let's Go Shopping",
     "category": "Initiative",
     "description": "Ethical retail coordination — fair prices for buyers, fair revenue for sellers",
-    "url": "https://cephas.lianabanyan.com/initiatives/lets-go-shopping/",
+    "url": "/cephas/initiatives/lets-go-shopping",
     "tags": [
       "initiative",
       "lets-go-shopping",
@@ -822,7 +822,7 @@
     "title": "Let's Make Bread",
     "category": "Initiative",
     "description": "Artisan and maker marketplace — handmade goods at fair prices",
-    "url": "https://cephas.lianabanyan.com/initiatives/lets-make-bread/",
+    "url": "/cephas/initiatives/lets-make-bread",
     "tags": [
       "initiative",
       "lets-make-bread",
@@ -836,7 +836,7 @@
     "title": "Let's Make Dinner",
     "category": "Initiative",
     "description": "Meal planning and community cooking — helping families eat well together",
-    "url": "https://cephas.lianabanyan.com/initiatives/lets-make-dinner/",
+    "url": "/cephas/initiatives/lets-make-dinner",
     "tags": [
       "initiative",
       "lets-make-dinner",
@@ -850,7 +850,7 @@
     "title": "MSA Treasury",
     "category": "Initiative",
     "description": "Medical Savings Accounts with cooperative benefits and the Three-Gear Currency system",
-    "url": "https://cephas.lianabanyan.com/initiatives/msa/",
+    "url": "/cephas/initiatives/msa",
     "tags": [
       "initiative",
       "healthcare",
@@ -863,7 +863,7 @@
     "title": "Power to the People",
     "category": "Initiative",
     "description": "Citizen advocacy - funding proposals to Congress and tracking every vote",
-    "url": "https://cephas.lianabanyan.com/initiatives/power-to-the-people/",
+    "url": "/cephas/initiatives/power-to-the-people",
     "tags": []
   },
   {
@@ -871,7 +871,7 @@
     "title": "Rally Group",
     "category": "Initiative",
     "description": "Survivor support network — peer support, emergency response, and safe passage",
-    "url": "https://cephas.lianabanyan.com/initiatives/rally-group/",
+    "url": "/cephas/initiatives/rally-group",
     "tags": [
       "initiative",
       "rally-group",
@@ -884,7 +884,7 @@
     "title": "Tatiana Schlossburg Health Accords",
     "category": "Initiative",
     "description": "Preventive care framework — health as infrastructure, not afterthought",
-    "url": "https://cephas.lianabanyan.com/initiatives/tatiana-schlossburg-health-accords/",
+    "url": "/cephas/initiatives/tatiana-schlossburg-health-accords",
     "tags": [
       "initiative",
       "health-accords",
@@ -897,7 +897,7 @@
     "title": "The Family Table",
     "category": "Initiative",
     "description": "Community meals and food connection — bringing people together around the table",
-    "url": "https://cephas.lianabanyan.com/initiatives/the-family-table/",
+    "url": "/cephas/initiatives/the-family-table",
     "tags": [
       "initiative",
       "family-table",
@@ -911,7 +911,7 @@
     "title": "VSL (Village Savings & Loans)",
     "category": "Initiative",
     "description": "Peer-to-peer microfinance — small loans that make big differences",
-    "url": "https://cephas.lianabanyan.com/initiatives/vsl/",
+    "url": "/cephas/initiatives/vsl",
     "tags": [
       "initiative",
       "vsl",
@@ -925,7 +925,7 @@
     "title": "Innovation #1: Tab System",
     "category": "Innovation",
     "description": "Three-Gear Currency Architecture - Platform Credits, Platform Marks, and Platform Joules working together",
-    "url": "https://cephas.lianabanyan.com/innovations/001-tab-system/",
+    "url": "/cephas/innovations/001-tab-system",
     "tags": [
       "pillar",
       "currency",
@@ -940,7 +940,7 @@
     "title": "Innovation #2: Position Funding",
     "category": "Innovation",
     "description": "Hybrid Compensation Framework - Platform Credits, Joules, or both",
-    "url": "https://cephas.lianabanyan.com/innovations/002-position-funding/",
+    "url": "/cephas/innovations/002-position-funding",
     "tags": [
       "pillar",
       "compensation",
@@ -954,7 +954,7 @@
     "title": "Innovation #3: Medallion Cascade",
     "category": "Innovation",
     "description": "Recursive Fractional Ownership - The token that funds everything",
-    "url": "https://cephas.lianabanyan.com/innovations/003-medallion-cascade/",
+    "url": "/cephas/innovations/003-medallion-cascade",
     "tags": [
       "pillar",
       "medallion",
@@ -968,7 +968,7 @@
     "title": "Innovation #9: The Boaz Principle",
     "category": "Innovation",
     "description": "Gleaner's Rights in Digital Commerce - Leave grain in the field",
-    "url": "https://cephas.lianabanyan.com/innovations/009-boaz-principle/",
+    "url": "/cephas/innovations/009-boaz-principle",
     "tags": [
       "pillar",
       "economics",
@@ -982,7 +982,7 @@
     "title": "Privacy Policy",
     "category": "Document",
     "description": "Privacy Policy for Liana Banyan Corporation platform and services",
-    "url": "https://cephas.lianabanyan.com/legal/privacy-policy/",
+    "url": "/cephas/legal/privacy-policy",
     "tags": []
   },
   {
@@ -990,7 +990,7 @@
     "title": "Terms of Service",
     "category": "Document",
     "description": "Terms of Service for Liana Banyan Corporation platform and services",
-    "url": "https://cephas.lianabanyan.com/legal/terms-of-service/",
+    "url": "/cephas/legal/terms-of-service",
     "tags": []
   },
   {
@@ -998,7 +998,7 @@
     "title": "Crown Letter: Dr. Alex Oshmyansky",
     "category": "Letter",
     "description": "Invitation to lead LifeLine Medications — making generic medications accessible at cost",
-    "url": "https://cephas.lianabanyan.com/letters/alex-oshmyansky/",
+    "url": "/cephas/letters/alex-oshmyansky",
     "tags": [
       "crown-letter",
       "lifeline-medications",
@@ -1011,7 +1011,7 @@
     "title": "Crown Letter: Cathie Mahon",
     "category": "Letter",
     "description": "Invitation to lead Village Savings & Loans — peer-to-peer microfinance for the underbanked",
-    "url": "https://cephas.lianabanyan.com/letters/cathie-mahon/",
+    "url": "/cephas/letters/cathie-mahon",
     "tags": [
       "crown-letter",
       "vsl",
@@ -1024,7 +1024,7 @@
     "title": "This Isn't Philanthropy",
     "category": "Letter",
     "description": "Routing around the philanthropy problem — infrastructure instead of charity",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/anand-giridharadas/",
+    "url": "/cephas/letters/circle-1-investors/anand-giridharadas",
     "tags": [
       "circle-1",
       "investors",
@@ -1037,7 +1037,7 @@
     "title": "Crown Letter: Craig Newmark — Infrastructure Chancellor",
     "category": "Letter",
     "description": "Final LOCKED version of the Craig Newmark letter - Infrastructure Chancellor Crown",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/craig-newmark/",
+    "url": "/cephas/letters/circle-1-investors/craig-newmark",
     "tags": [
       "craig-newmark",
       "crown-letter",
@@ -1050,7 +1050,7 @@
     "title": "A Business Model, Not a Charity",
     "category": "Letter",
     "description": "Stress-testing cooperative economics with the Oracle of Omaha",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/LETTER-WARREN-BUFFETT/",
+    "url": "/cephas/letters/circle-1-investors/LETTER-WARREN-BUFFETT",
     "tags": [
       "circle-1",
       "investors",
@@ -1063,7 +1063,7 @@
     "title": "Cardboard Boots: An Open Letter to MacKenzie Scott",
     "category": "Letter",
     "description": "Final LOCKED version of the MacKenzie Scott letter - asking for reputation, not money",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/mackenzie-scott-cardboard-boots/",
+    "url": "/cephas/letters/circle-1-investors/mackenzie-scott-cardboard-boots",
     "tags": [
       "mackenzie-scott",
       "open-letter",
@@ -1077,7 +1077,7 @@
     "title": "What Comes After the Foundation",
     "category": "Letter",
     "description": "Infrastructure that works for women works for everyone",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/melinda-french-gates/",
+    "url": "/cephas/letters/circle-1-investors/melinda-french-gates",
     "tags": [
       "circle-1",
       "investors",
@@ -1091,7 +1091,7 @@
     "title": "Crown Letter: Michael Seibel — CEO",
     "category": "Letter",
     "description": "Final LOCKED version of the Michael Seibel letter - CEO Crown",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/michael-seibel/",
+    "url": "/cephas/letters/circle-1-investors/michael-seibel",
     "tags": [
       "michael-seibel",
       "crown-letter",
@@ -1105,7 +1105,7 @@
     "title": "Crown Letter: Tom Simon — CFO",
     "category": "Letter",
     "description": "Final LOCKED version of the Tom Simon letter - CFO Crown - Blockchain Without Coin or Speculation",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/tom-simon/",
+    "url": "/cephas/letters/circle-1-investors/tom-simon",
     "tags": [
       "tom-simon",
       "crown-letter",
@@ -1120,7 +1120,7 @@
     "title": "Warren Buffett",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/circle-1-investors/warren-buffett/",
+    "url": "/cephas/letters/circle-1-investors/warren-buffett",
     "tags": [
       "investor",
       "philanthropy",
@@ -1133,7 +1133,7 @@
     "title": "Are We Out of the Woods?",
     "category": "Letter",
     "description": "Music licensing that pays artists fairly — from Taylor Swift to the single mom in Tulsa",
-    "url": "https://cephas.lianabanyan.com/letters/circle-2-media/taylor-swift-v02/",
+    "url": "/cephas/letters/circle-2-media/taylor-swift-v02",
     "tags": [
       "circle-2",
       "media",
@@ -1146,7 +1146,7 @@
     "title": "Are We Out of the Woods?",
     "category": "Letter",
     "description": "Music licensing that pays artists fairly — from Taylor Swift to the single mom in Tulsa",
-    "url": "https://cephas.lianabanyan.com/letters/circle-2-media/taylor-swift-v03/",
+    "url": "/cephas/letters/circle-2-media/taylor-swift-v03",
     "tags": [
       "circle-2",
       "media",
@@ -1159,7 +1159,7 @@
     "title": "Letter to Taylor Swift",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/circle-2-media/taylor-swift/",
+    "url": "/cephas/letters/circle-2-media/taylor-swift",
     "tags": [
       "taylor-swift",
       "circle-2",
@@ -1172,7 +1172,7 @@
     "title": "The Math You've Been Writing About",
     "category": "Letter",
     "description": "Music economics scrutinized by the person who's documented them for a decade",
-    "url": "https://cephas.lianabanyan.com/letters/circle-2-media/tim-ingham/",
+    "url": "/cephas/letters/circle-2-media/tim-ingham",
     "tags": [
       "circle-2",
       "media",
@@ -1186,7 +1186,7 @@
     "title": "Letter to Erik Brynjolfsson",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/circle-3-academics/erik-brynjolfsson/",
+    "url": "/cephas/letters/circle-3-academics/erik-brynjolfsson",
     "tags": [
       "ai",
       "cqo",
@@ -1203,7 +1203,7 @@
     "title": "Letter to Nathan Schneider",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/circle-3-academics/nathan-schneider/",
+    "url": "/cephas/letters/circle-3-academics/nathan-schneider",
     "tags": [
       "platform-cooperativism",
       "academic",
@@ -1216,7 +1216,7 @@
     "title": "Can I Take a Second?",
     "category": "Letter",
     "description": "Healthcare infrastructure that doesn't depend on charity",
-    "url": "https://cephas.lianabanyan.com/letters/circle-3-academics/tatiana-schlossberg-cephas/",
+    "url": "/cephas/letters/circle-3-academics/tatiana-schlossberg-cephas",
     "tags": [
       "circle-3",
       "academics",
@@ -1229,7 +1229,7 @@
     "title": "Can I Take a Second?",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/circle-3-academics/tatiana-schlossberg/",
+    "url": "/cephas/letters/circle-3-academics/tatiana-schlossberg",
     "tags": [
       "healthcare",
       "lifeline-medications",
@@ -1241,7 +1241,7 @@
     "title": "Letter to Trebor Scholz",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/circle-3-academics/trebor-scholz/",
+    "url": "/cephas/letters/circle-3-academics/trebor-scholz",
     "tags": [
       "platform-cooperativism",
       "academic",
@@ -1257,7 +1257,7 @@
     "title": "Crown Letter: Craig Newmark",
     "category": "Letter",
     "description": "Invitation to serve as Infrastructure Chancellor — the person who keeps the lights on",
-    "url": "https://cephas.lianabanyan.com/letters/craig-newmark/",
+    "url": "/cephas/letters/craig-newmark",
     "tags": [
       "crown-letter",
       "infrastructure",
@@ -1270,7 +1270,7 @@
     "title": "Crown Letter: Cathie Mahon",
     "category": "Letter",
     "description": "Invitation to lead VSL — cooperative microfinance for the underbanked",
-    "url": "https://cephas.lianabanyan.com/letters/crown-initiative/cathie-mahon/",
+    "url": "/cephas/letters/crown-initiative/cathie-mahon",
     "tags": [
       "crown-letter",
       "vsl",
@@ -1284,7 +1284,7 @@
     "title": "Crown Letter to Jessica Jackley",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/crown-initiative/jessica-jackley/",
+    "url": "/cephas/letters/crown-initiative/jessica-jackley",
     "tags": [
       "vsl",
       "microfinance",
@@ -1298,7 +1298,7 @@
     "title": "Crown Letter: José Andrés",
     "category": "Letter",
     "description": "Invitation to lead Let's Get Groceries — food as infrastructure",
-    "url": "https://cephas.lianabanyan.com/letters/crown-initiative/jose-andres/",
+    "url": "/cephas/letters/crown-initiative/jose-andres",
     "tags": [
       "crown-letter",
       "lets-get-groceries",
@@ -1311,7 +1311,7 @@
     "title": "Crown Letter: Kimberly A. Williams",
     "category": "Letter",
     "description": "Invitation to lead Rally Group — crisis response and survivor support",
-    "url": "https://cephas.lianabanyan.com/letters/crown-initiative/kimberly-williams/",
+    "url": "/cephas/letters/crown-initiative/kimberly-williams",
     "tags": [
       "crown-letter",
       "rally-group",
@@ -1324,7 +1324,7 @@
     "title": "Crown Letter: Michael Seibel — CEO Candidate",
     "category": "Letter",
     "description": "Leading the cooperative that shouldn't work (but does)",
-    "url": "https://cephas.lianabanyan.com/letters/crown-initiative/michael-seibel-ceo/",
+    "url": "/cephas/letters/crown-initiative/michael-seibel-ceo",
     "tags": [
       "crown-letter",
       "ceo",
@@ -1338,7 +1338,7 @@
     "title": "Shield Letter: Ruth M. Glenn",
     "category": "Letter",
     "description": "Invitation to lead Defense Klaus — protection for domestic abuse survivors",
-    "url": "https://cephas.lianabanyan.com/letters/crown-initiative/ruth-glenn/",
+    "url": "/cephas/letters/crown-initiative/ruth-glenn",
     "tags": [
       "shield-letter",
       "defense-klaus",
@@ -1351,7 +1351,7 @@
     "title": "Crown Letter to Sal Khan",
     "category": "Letter",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/letters/crown-initiative/sal-khan-chancellor/",
+    "url": "/cephas/letters/crown-initiative/sal-khan-chancellor",
     "tags": [
       "education",
       "didasko",
@@ -1366,7 +1366,7 @@
     "title": "Crown Letter: Dale Dougherty",
     "category": "Letter",
     "description": "Invitation to lead Let's Make Bread — the artisan and maker marketplace",
-    "url": "https://cephas.lianabanyan.com/letters/dale-dougherty/",
+    "url": "/cephas/letters/dale-dougherty",
     "tags": [
       "crown-letter",
       "lets-make-bread",
@@ -1379,7 +1379,7 @@
     "title": "The Facebook Friend: An Impossible Choice",
     "category": "Letter",
     "description": "The mother who had to choose between fighting for her life and leaving her family with something",
-    "url": "https://cephas.lianabanyan.com/letters/health/facebook-friend-impossible-choice/",
+    "url": "/cephas/letters/health/facebook-friend-impossible-choice",
     "tags": [
       "healthcare",
       "personal",
@@ -1392,7 +1392,7 @@
     "title": "Letter to Jimmy Kimmel: Healthcare Courage",
     "category": "Letter",
     "description": "To the father who used his platform when his son's heart stopped",
-    "url": "https://cephas.lianabanyan.com/letters/health/jimmy-kimmel-healthcare/",
+    "url": "/cephas/letters/health/jimmy-kimmel-healthcare",
     "tags": [
       "healthcare",
       "courage",
@@ -1405,7 +1405,7 @@
     "title": "The Pet Store Consideration",
     "category": "Letter",
     "description": "When I considered taking my child to a veterinarian because I couldn't afford a doctor",
-    "url": "https://cephas.lianabanyan.com/letters/health/pet-store-consideration/",
+    "url": "/cephas/letters/health/pet-store-consideration",
     "tags": [
       "healthcare",
       "poverty",
@@ -1418,7 +1418,7 @@
     "title": "Crown Letter: Jessica Jackley",
     "category": "Letter",
     "description": "Invitation to lead VSL International — bringing peer-to-peer microfinance to the world",
-    "url": "https://cephas.lianabanyan.com/letters/jessica-jackley/",
+    "url": "/cephas/letters/jessica-jackley",
     "tags": [
       "crown-letter",
       "vsl",
@@ -1432,7 +1432,7 @@
     "title": "Crown Letter: José Andrés",
     "category": "Letter",
     "description": "Invitation to lead The Family Table — food as community infrastructure",
-    "url": "https://cephas.lianabanyan.com/letters/jose-andres/",
+    "url": "/cephas/letters/jose-andres",
     "tags": [
       "crown-letter",
       "family-table",
@@ -1446,7 +1446,7 @@
     "title": "Crown Letter: Kimberly A. Williams",
     "category": "Letter",
     "description": "Invitation to lead Rally Group — survivor support and evidence preservation",
-    "url": "https://cephas.lianabanyan.com/letters/kimberly-williams/",
+    "url": "/cephas/letters/kimberly-williams",
     "tags": [
       "crown-letter",
       "rally-group",
@@ -1459,7 +1459,7 @@
     "title": "Crown Letter: MacKenzie Scott",
     "category": "Letter",
     "description": "Invitation to serve as Board Chair — the person who ensures the mission stays pure",
-    "url": "https://cephas.lianabanyan.com/letters/mackenzie-scott/",
+    "url": "/cephas/letters/mackenzie-scott",
     "tags": [
       "crown-letter",
       "board-chair",
@@ -1472,7 +1472,7 @@
     "title": "Crown Letter: Maneet Chauhan",
     "category": "Letter",
     "description": "Invitation to lead Let's Make Dinner — meal planning and community cooking",
-    "url": "https://cephas.lianabanyan.com/letters/maneet-chauhan/",
+    "url": "/cephas/letters/maneet-chauhan",
     "tags": [
       "crown-letter",
       "lets-make-dinner",
@@ -1486,7 +1486,7 @@
     "title": "Crown Letter: Mary Beth Laughton",
     "category": "Letter",
     "description": "Invitation to lead Let's Go Shopping — ethical retail coordination",
-    "url": "https://cephas.lianabanyan.com/letters/mary-beth-laughton/",
+    "url": "/cephas/letters/mary-beth-laughton",
     "tags": [
       "crown-letter",
       "lets-go-shopping",
@@ -1500,7 +1500,7 @@
     "title": "Crown Letter: Michael Seibel",
     "category": "Letter",
     "description": "Invitation to serve as CEO — the person who builds the machine",
-    "url": "https://cephas.lianabanyan.com/letters/michael-seibel/",
+    "url": "/cephas/letters/michael-seibel",
     "tags": [
       "crown-letter",
       "ceo",
@@ -1514,7 +1514,7 @@
     "title": "You Have A Play. I Have A Stage.",
     "category": "Letter",
     "description": "To the 40,000 entrepreneurs stranded by Canada's Start-Up Visa freeze — your visa got cancelled, your dream didn't.",
-    "url": "https://cephas.lianabanyan.com/letters/rescue-fleet/canada-40k-appeal/",
+    "url": "/cephas/letters/rescue-fleet/canada-40k-appeal",
     "tags": [
       "rescue-fleet",
       "canada",
@@ -1529,7 +1529,7 @@
     "title": "Crown Letter: Robert Kaiser",
     "category": "Letter",
     "description": "Invitation to lead Household Concierge — home services coordination",
-    "url": "https://cephas.lianabanyan.com/letters/robert-kaiser/",
+    "url": "/cephas/letters/robert-kaiser",
     "tags": [
       "crown-letter",
       "household-concierge",
@@ -1542,7 +1542,7 @@
     "title": "Crown Letter: Ruth Glenn",
     "category": "Letter",
     "description": "Invitation to advise Rally Group — survivor advocacy and policy",
-    "url": "https://cephas.lianabanyan.com/letters/ruth-glenn/",
+    "url": "/cephas/letters/ruth-glenn",
     "tags": [
       "crown-letter",
       "rally-group",
@@ -1556,7 +1556,7 @@
     "title": "Crown Letter: Sal Khan",
     "category": "Letter",
     "description": "Invitation to lead Didasko — education infrastructure for everyone",
-    "url": "https://cephas.lianabanyan.com/letters/sal-khan/",
+    "url": "/cephas/letters/sal-khan",
     "tags": [
       "crown-letter",
       "didasko",
@@ -1569,7 +1569,7 @@
     "title": "Crown Letter: Taylor Swift",
     "category": "Letter",
     "description": "Invitation to lead JukeBox — music infrastructure that pays artists fairly",
-    "url": "https://cephas.lianabanyan.com/letters/taylor-swift/",
+    "url": "/cephas/letters/taylor-swift",
     "tags": [
       "crown-letter",
       "jukebox",
@@ -1582,7 +1582,7 @@
     "title": "Crown Letter: Tom Simon",
     "category": "Letter",
     "description": "Invitation to serve as CFO — the person who keeps the numbers honest",
-    "url": "https://cephas.lianabanyan.com/letters/tom-simon/",
+    "url": "/cephas/letters/tom-simon",
     "tags": [
       "crown-letter",
       "cfo",
@@ -1595,7 +1595,7 @@
     "title": "HexIsle Licensing Program",
     "category": "Document",
     "description": "Two-tier licensing for HexIsle terrain manufacturing - LB Members get functional, External gets static",
-    "url": "https://cephas.lianabanyan.com/licensing/hexisle-licensing/",
+    "url": "/cephas/licensing/hexisle-licensing",
     "tags": [
       "licensing",
       "hexisle",
@@ -1608,7 +1608,7 @@
     "title": "The Differential Economy",
     "category": "Document",
     "description": "Why Liana Banyan's currency works differently — a three-gear system for global economic fairness.",
-    "url": "https://cephas.lianabanyan.com/patents/ARTICLE-THE-DIFFERENTIAL-ECONOMY/",
+    "url": "/cephas/patents/ARTICLE-THE-DIFFERENTIAL-ECONOMY",
     "tags": [
       "economics",
       "currency",
@@ -1620,7 +1620,7 @@
     "title": "The Arena Policy: No Religion, No Politics",
     "category": "Document",
     "description": "Why Liana Banyan maintains strict neutrality on religion and politics — and created a separate arena for political engagement",
-    "url": "https://cephas.lianabanyan.com/policies/no-religion-no-politics/",
+    "url": "/cephas/policies/no-religion-no-politics",
     "tags": []
   },
   {
@@ -1628,7 +1628,7 @@
     "title": "The 1,000 Member Proof: Local Economic Infusion",
     "category": "Document",
     "description": "Any locality with 1,000 engaged members becomes a self-sustaining economic engine",
-    "url": "https://cephas.lianabanyan.com/proof/local-economics/",
+    "url": "/cephas/proof/local-economics",
     "tags": []
   },
   {
@@ -1636,7 +1636,7 @@
     "title": "The Underground Railroad",
     "category": "Document",
     "description": "The Rally Group's discreet safety network - present on every page, ready to help",
-    "url": "https://cephas.lianabanyan.com/rally-group/underground-railroad/",
+    "url": "/cephas/rally-group/underground-railroad",
     "tags": []
   },
   {
@@ -1644,7 +1644,7 @@
     "title": "The Banyan Charter Pledge",
     "category": "Document",
     "description": "Pledge of Service for Crown Holders, Agents, and NOIDs",
-    "url": "https://cephas.lianabanyan.com/sacred-texts/charter-pledge/",
+    "url": "/cephas/sacred-texts/charter-pledge",
     "tags": []
   },
   {
@@ -1652,7 +1652,7 @@
     "title": "Liana Banyan Economics Explained",
     "category": "Document",
     "description": "How 100% goes to members while the platform operates. The work is important, but not mysterious.",
-    "url": "https://cephas.lianabanyan.com/sacred-texts/economics-explained/",
+    "url": "/cephas/sacred-texts/economics-explained",
     "tags": [
       "Economics",
       "Transparency",
@@ -1666,7 +1666,7 @@
     "title": "Unified Fable Arc — Drawing Instructions",
     "category": "Document",
     "description": "Complete drawing instructions for the unified Liana Banyan fable arc - 26 drawings across 6 acts",
-    "url": "https://cephas.lianabanyan.com/scripts/fable-arc-drawing-instructions/",
+    "url": "/cephas/scripts/fable-arc-drawing-instructions",
     "tags": [
       "fable",
       "drawing",
@@ -1681,7 +1681,7 @@
     "title": "Little Red Hen: The Sponsor's Story (Animation Script)",
     "category": "Document",
     "description": "Flip-book animation script for the sponsorship process",
-    "url": "https://cephas.lianabanyan.com/stories/little-red-hen-sponsor-animation/",
+    "url": "/cephas/stories/little-red-hen-sponsor-animation",
     "tags": [
       "little-red-hen",
       "animation",
@@ -1695,7 +1695,7 @@
     "title": "The Tatiana Schlossberg Health Accords",
     "category": "Document",
     "description": "A tribute to the journalist who documented broken systems while facing her own — and the infrastructure built in response",
-    "url": "https://cephas.lianabanyan.com/tributes/tatiana-schlossberg-health-accords-tribute/",
+    "url": "/cephas/tributes/tatiana-schlossberg-health-accords-tribute",
     "tags": []
   },
   {
@@ -1703,7 +1703,7 @@
     "title": "In Honor of Tatiana Schlossberg — The Health Accords",
     "category": "Document",
     "description": "A second open letter to those who continue her work",
-    "url": "https://cephas.lianabanyan.com/tributes/tatiana-schlossberg-health-accords/",
+    "url": "/cephas/tributes/tatiana-schlossberg-health-accords",
     "tags": [
       "healthcare",
       "tribute",
@@ -1717,7 +1717,7 @@
     "title": "3D Rendition: First Experience Walkthrough",
     "category": "Architecture",
     "description": "Immersive first-time user experience through virtual Liana Banyan spaces",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/3d-rendition-first-experience/",
+    "url": "/cephas/under-the-hood/3d-rendition-first-experience",
     "tags": [
       "3d",
       "onboarding",
@@ -1730,7 +1730,7 @@
     "title": "AI Custom Instructions",
     "category": "Architecture",
     "description": "Copy-paste instructions for ChatGPT, Claude, and Cursor to maintain Liana Banyan context",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/ai-custom-instructions/",
+    "url": "/cephas/under-the-hood/ai-custom-instructions",
     "tags": []
   },
   {
@@ -1738,7 +1738,7 @@
     "title": "Anticipated Criticism Index",
     "category": "Architecture",
     "description": "Master index of all anticipated criticisms and pre-written responses",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/anticipated-criticism-index/",
+    "url": "/cephas/under-the-hood/anticipated-criticism-index",
     "tags": [
       "criticism",
       "responses",
@@ -1751,7 +1751,7 @@
     "title": "Backer Benefits, Medallions, and Joules",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/backer-benefits-medallions-joules/",
+    "url": "/cephas/under-the-hood/backer-benefits-medallions-joules",
     "tags": [
       "economics",
       "joules",
@@ -1764,7 +1764,7 @@
     "title": "Bifrost System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/bifrost-system/",
+    "url": "/cephas/under-the-hood/bifrost-system",
     "tags": []
   },
   {
@@ -1772,7 +1772,7 @@
     "title": "IP Load Balancing vs. Existing Blockchain IP Systems",
     "category": "Architecture",
     "description": "How Liana Banyan's IP Load Balancing differs from existing blockchain IP platforms, plus legal considerations for patenting the concept.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/blockchain-ip-comparison/",
+    "url": "/cephas/under-the-hood/blockchain-ip-comparison",
     "tags": [
       "blockchain",
       "IP",
@@ -1787,7 +1787,7 @@
     "title": "Blueprints & Treasure Maps",
     "category": "Architecture",
     "description": "Project journey documentation with dead-end markers and success paths",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/blueprints-treasure-maps/",
+    "url": "/cephas/under-the-hood/blueprints-treasure-maps",
     "tags": [
       "blueprints",
       "treasure-maps",
@@ -1801,7 +1801,7 @@
     "title": "Bounty System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/bounty-system/",
+    "url": "/cephas/under-the-hood/bounty-system",
     "tags": []
   },
   {
@@ -1809,7 +1809,7 @@
     "title": "Brass Tacks: Medallion Sponsorship",
     "category": "Architecture",
     "description": "How Johnny Appleseed sponsorship scales the platform — $5k = 50 medallions + patent choice",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/brass-tacks/",
+    "url": "/cephas/under-the-hood/brass-tacks",
     "tags": []
   },
   {
@@ -1817,7 +1817,7 @@
     "title": "Built In Public Roadmap",
     "category": "Architecture",
     "description": "Transparent tracking of future features, integrations, and community-funded milestones",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/built-in-public-roadmap/",
+    "url": "/cephas/under-the-hood/built-in-public-roadmap",
     "tags": [
       "roadmap",
       "transparency",
@@ -1830,7 +1830,7 @@
     "title": "Business Cards: Verification & Specifications",
     "category": "Architecture",
     "description": "Business card design, print specifications, and verification checklist",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/business-cards-verification/",
+    "url": "/cephas/under-the-hood/business-cards-verification",
     "tags": [
       "business-cards",
       "branding",
@@ -1843,7 +1843,7 @@
     "title": "Canada 40K Integration",
     "category": "Architecture",
     "description": "Integration pathway with Canada's 40,000+ registered cooperatives",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/canada-40k-integration/",
+    "url": "/cephas/under-the-hood/canada-40k-integration",
     "tags": [
       "canada",
       "cooperatives",
@@ -1856,7 +1856,7 @@
     "title": "The Cloth & Bag Analogy: Why Joules Beat Credits",
     "category": "Architecture",
     "description": "The foundational explanation of why same-value currencies have different potential",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/cloth-bag-currency-analogy/",
+    "url": "/cephas/under-the-hood/cloth-bag-currency-analogy",
     "tags": [
       "joules",
       "credits",
@@ -1871,7 +1871,7 @@
     "title": "Integrating Combinatorial Synthesis with IP Load Balancing",
     "category": "Architecture",
     "description": "Critical analysis of how the Exponential Innovation Engine and IP Load Balancing work together, with recommendations for strengthening the integration.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/combinatorial-synthesis-integration/",
+    "url": "/cephas/under-the-hood/combinatorial-synthesis-integration",
     "tags": [
       "innovation",
       "patents",
@@ -1886,7 +1886,7 @@
     "title": "Commercial Potential & Valuation",
     "category": "Architecture",
     "description": "Revenue projections, market positioning, and exit scenarios for the Liana Banyan ecosystem",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/commercial-potential/",
+    "url": "/cephas/under-the-hood/commercial-potential",
     "tags": []
   },
   {
@@ -1894,7 +1894,7 @@
     "title": "How IP Load Balancing Integrates with the Considered Approach",
     "category": "Architecture",
     "description": "Understanding how IP Load Balancing fits into the broader economic architecture of Liana Banyan's Considered Approach to Sustained Universal Prosperity.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/considered-approach-integration/",
+    "url": "/cephas/under-the-hood/considered-approach-integration",
     "tags": [
       "economics",
       "integration",
@@ -1909,7 +1909,7 @@
     "title": "Context Management System Overview",
     "category": "Architecture",
     "description": "How Liana Banyan maintains AI awareness across unlimited conversation sessions",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/context-management-overview/",
+    "url": "/cephas/under-the-hood/context-management-overview",
     "tags": []
   },
   {
@@ -1917,7 +1917,7 @@
     "title": "Context Protocol",
     "category": "Architecture",
     "description": "Rules and procedures for maintaining AI context across sessions",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/context-protocol/",
+    "url": "/cephas/under-the-hood/context-protocol",
     "tags": []
   },
   {
@@ -1925,7 +1925,7 @@
     "title": "Core Philosophy: Battle-Tested, Built in Public",
     "category": "Architecture",
     "description": "The foundational philosophy driving Liana Banyan's approach",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/core-philosophy/",
+    "url": "/cephas/under-the-hood/core-philosophy",
     "tags": [
       "philosophy",
       "no-vc",
@@ -1939,7 +1939,7 @@
     "title": "C+20 Certification — Cost + 20% Forever",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/cost-plus-20-certification/",
+    "url": "/cephas/under-the-hood/cost-plus-20-certification",
     "tags": [
       "economics",
       "certification",
@@ -1952,7 +1952,7 @@
     "title": "Cost+20% Model",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/",
+    "url": "/cephas/under-the-hood/cost-plus-twenty",
     "tags": []
   },
   {
@@ -1960,7 +1960,7 @@
     "title": "Credits & Joules",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/credits-and-joules/",
+    "url": "/cephas/under-the-hood/credits-and-joules",
     "tags": []
   },
   {
@@ -1968,7 +1968,7 @@
     "title": "The Crown System",
     "category": "Architecture",
     "description": "How initiative leadership works — Crowns, Wardens, Captains, and the Ruprecht Principle",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/crown-system/",
+    "url": "/cephas/under-the-hood/crown-system",
     "tags": []
   },
   {
@@ -1976,7 +1976,7 @@
     "title": "The Factory: Decentralized Manufacturing",
     "category": "Architecture",
     "description": "How Liana Banyan turns ideas into physical products through distributed manufacturing nodes",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/decentralized-factory/",
+    "url": "/cephas/under-the-hood/decentralized-factory",
     "tags": [
       "manufacturing",
       "factory",
@@ -1990,7 +1990,7 @@
     "title": "Defense Klaus: Family Shield & Harbor Defense Network",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/defense-klaus-dual-arm-structure/",
+    "url": "/cephas/under-the-hood/defense-klaus-dual-arm-structure",
     "tags": [
       "defense-klaus",
       "family-shield",
@@ -2004,7 +2004,7 @@
     "title": "Defense Klaus IP Pool",
     "category": "Architecture",
     "description": "How our defensive patent pool protects member businesses",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/defense-klaus-ip-pool/",
+    "url": "/cephas/under-the-hood/defense-klaus-ip-pool",
     "tags": []
   },
   {
@@ -2012,7 +2012,7 @@
     "title": "Deployment Environments",
     "category": "Architecture",
     "description": "Understanding Template, Staging, and Production environments",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/deployment-environments/",
+    "url": "/cephas/under-the-hood/deployment-environments",
     "tags": []
   },
   {
@@ -2020,7 +2020,7 @@
     "title": "Derivatives & Collaboration",
     "category": "Architecture",
     "description": "How to build on each other's work safely and fairly within Liana Banyan",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/derivatives-collaboration/",
+    "url": "/cephas/under-the-hood/derivatives-collaboration",
     "tags": [
       "ip",
       "legal",
@@ -2034,7 +2034,7 @@
     "title": "Equipment & Depreciation Policy",
     "category": "Architecture",
     "description": "Preventing cost-gaming while allowing legitimate equipment expenses",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/equipment-depreciation-policy/",
+    "url": "/cephas/under-the-hood/equipment-depreciation-policy",
     "tags": []
   },
   {
@@ -2042,7 +2042,7 @@
     "title": "Factory Nodes: Distributed Manufacturing Network",
     "category": "Architecture",
     "description": "How to become a manufacturing node in Liana Banyan's decentralized factory network",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/factory-nodes/",
+    "url": "/cephas/under-the-hood/factory-nodes",
     "tags": [
       "manufacturing",
       "nodes",
@@ -2056,7 +2056,7 @@
     "title": "Fly on the Wall — Public Viewport",
     "category": "Architecture",
     "description": "Read-only public viewport for non-members to observe platform health",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/fly-on-the-wall/",
+    "url": "/cephas/under-the-hood/fly-on-the-wall",
     "tags": [
       "transparency",
       "observatory",
@@ -2068,7 +2068,7 @@
     "title": "Forex Ratchet Valuation: Why Joules Appreciate",
     "category": "Architecture",
     "description": "How Liana Banyan captures external value signals without internal trading chaos",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/forex-ratchet-valuation/",
+    "url": "/cephas/under-the-hood/forex-ratchet-valuation",
     "tags": [
       "economics",
       "joules",
@@ -2082,7 +2082,7 @@
     "title": "Founder Philosophy & Anecdotes",
     "category": "Architecture",
     "description": "The principles that guide Liana Banyan, told through stories",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/founder-philosophy/",
+    "url": "/cephas/under-the-hood/founder-philosophy",
     "tags": []
   },
   {
@@ -2090,7 +2090,7 @@
     "title": "The Founder's Story",
     "category": "Architecture",
     "description": "37 years of thinking, 9 years of building, one mission — Help each other help ourselves",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/founder-story/",
+    "url": "/cephas/under-the-hood/founder-story",
     "tags": []
   },
   {
@@ -2098,7 +2098,7 @@
     "title": "The Founder's Standard Vernacular",
     "category": "Architecture",
     "description": "The shared language of Liana Banyan — terms, metaphors, and protocols developed over 47 years",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/founders-standard-vernacular/",
+    "url": "/cephas/under-the-hood/founders-standard-vernacular",
     "tags": []
   },
   {
@@ -2106,7 +2106,7 @@
     "title": "Generic Template",
     "category": "Architecture",
     "description": "Replicable AI Context Management template for any project",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/generic-template/",
+    "url": "/cephas/under-the-hood/generic-template",
     "tags": []
   },
   {
@@ -2114,7 +2114,7 @@
     "title": "Ghost Credits: Practice Currency Explained",
     "category": "Architecture",
     "description": "What Ghost Credits are and why they have no cash value",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/ghost-credits-three-tier/",
+    "url": "/cephas/under-the-hood/ghost-credits-three-tier",
     "tags": [
       "economics",
       "ghost-credits",
@@ -2127,7 +2127,7 @@
     "title": "Ghost Credits & Demand Validation",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/ghost-credits/",
+    "url": "/cephas/under-the-hood/ghost-credits",
     "tags": []
   },
   {
@@ -2135,7 +2135,7 @@
     "title": "Ghost World & Half-Life System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/ghost-world-half-life/",
+    "url": "/cephas/under-the-hood/ghost-world-half-life",
     "tags": [
       "gamification",
       "economics",
@@ -2148,7 +2148,7 @@
     "title": "The Golden Key Puzzle",
     "category": "Architecture",
     "description": "Hidden discovery mechanism rewarding deep platform exploration",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/golden-key-puzzle/",
+    "url": "/cephas/under-the-hood/golden-key-puzzle",
     "tags": [
       "gamification",
       "discovery",
@@ -2161,7 +2161,7 @@
     "title": "Golden Key System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/golden-key-system/",
+    "url": "/cephas/under-the-hood/golden-key-system",
     "tags": []
   },
   {
@@ -2169,7 +2169,7 @@
     "title": "GRAFTING Process",
     "category": "Architecture",
     "description": "The process of scanning documentation and implementing improvements into the living codebase",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/grafting-process/",
+    "url": "/cephas/under-the-hood/grafting-process",
     "tags": [
       "process",
       "implementation",
@@ -2181,7 +2181,7 @@
     "title": "Handoff Template",
     "category": "Architecture",
     "description": "Standardized template for session handoffs to maintain context continuity",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/handoff-template/",
+    "url": "/cephas/under-the-hood/handoff-template",
     "tags": []
   },
   {
@@ -2189,7 +2189,7 @@
     "title": "HELM + Bridge (Spec Only)",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/helm-bridge/",
+    "url": "/cephas/under-the-hood/helm-bridge",
     "tags": []
   },
   {
@@ -2197,7 +2197,7 @@
     "title": "HEXEL Technical Specification",
     "category": "Architecture",
     "description": "Complete technical specification for the Hydraulic Executable Element (HEXEL) - Innovation #54",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/hexel-technical-specification/",
+    "url": "/cephas/under-the-hood/hexel-technical-specification",
     "tags": [
       "gaming",
       "hexisle",
@@ -2211,7 +2211,7 @@
     "title": "HexIsle Technical System",
     "category": "Architecture",
     "description": "Complete specifications for the hydraulic game table system — Design #3 Golden Lotus/Rotor configuration",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/hexisle-system/",
+    "url": "/cephas/under-the-hood/hexisle-system",
     "tags": []
   },
   {
@@ -2219,7 +2219,7 @@
     "title": "HIVI Deterministic Economics",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/hivi-economics/",
+    "url": "/cephas/under-the-hood/hivi-economics",
     "tags": []
   },
   {
@@ -2227,7 +2227,7 @@
     "title": "Home Business Cost+20% Model",
     "category": "Architecture",
     "description": "How members calculate costs for home-based businesses — same rules as the CEO",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/home-business-cost-model/",
+    "url": "/cephas/under-the-hood/home-business-cost-model",
     "tags": []
   },
   {
@@ -2235,7 +2235,7 @@
     "title": "How The Founder Gets Paid: Complete Transparency",
     "category": "Architecture",
     "description": "Full disclosure of Founder compensation - because it will become known, and we hide nothing",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/how-founder-gets-paid/",
+    "url": "/cephas/under-the-hood/how-founder-gets-paid",
     "tags": [
       "founder",
       "compensation",
@@ -2249,7 +2249,7 @@
     "title": "Implementation Overview: AI vs Human vs Hybrid",
     "category": "Architecture",
     "description": "Where AI leads, where humans lead, and where both collaborate",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/implementation-overview/",
+    "url": "/cephas/under-the-hood/implementation-overview",
     "tags": []
   },
   {
@@ -2257,7 +2257,7 @@
     "title": "The Sweet Sixteen Initiatives",
     "category": "Architecture",
     "description": "All 16 initiatives — what they do, who leads them, and how they connect",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/initiatives-overview/",
+    "url": "/cephas/under-the-hood/initiatives-overview",
     "tags": []
   },
   {
@@ -2265,7 +2265,7 @@
     "title": "Innovation Extraction: Context Management",
     "category": "Architecture",
     "description": "12 patentable innovations extracted from the AI Context Management System",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/innovation-extraction/",
+    "url": "/cephas/under-the-hood/innovation-extraction",
     "tags": []
   },
   {
@@ -2273,7 +2273,7 @@
     "title": "IP Ledger: Foundation Documents Registry",
     "category": "Architecture",
     "description": "The permanent record of all intellectual property, innovations, and attributions",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/ip-ledger-foundation/",
+    "url": "/cephas/under-the-hood/ip-ledger-foundation",
     "tags": [
       "ip-ledger",
       "foundation",
@@ -2287,7 +2287,7 @@
     "title": "IP Load Balancing on the Ledger",
     "category": "Architecture",
     "description": "How we keep intellectual property fair, cooperative, and useful at scale — using a test-net-by-design blockchain for transparent, auditable IP economics.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/ip-load-balancing-ledger/",
+    "url": "/cephas/under-the-hood/ip-load-balancing-ledger",
     "tags": [
       "patents",
       "blockchain",
@@ -2302,7 +2302,7 @@
     "title": "Joule Eligibility on Progress Bars",
     "category": "Architecture",
     "description": "First X purchasers can choose Joules instead of Credits - mechanics explained",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/joule-eligibility-progress-bars/",
+    "url": "/cephas/under-the-hood/joule-eligibility-progress-bars",
     "tags": [
       "joules",
       "credits",
@@ -2316,7 +2316,7 @@
     "title": "Joules Economics: Model A Architecture",
     "category": "Architecture",
     "description": "Why Joules are fuel not stock, how they help individuals without becoming securities, and the founder's definitive explanation",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/joules-economics-model-a/",
+    "url": "/cephas/under-the-hood/joules-economics-model-a",
     "tags": []
   },
   {
@@ -2324,7 +2324,7 @@
     "title": "The Joules Pouch: Seeds for Tomorrow",
     "category": "Architecture",
     "description": "Johnny Appleseed's pouch of seeds - deferred Joule conversions",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/joules-pouch/",
+    "url": "/cephas/under-the-hood/joules-pouch",
     "tags": [
       "joules",
       "pouch",
@@ -2339,7 +2339,7 @@
     "title": "Linchpin Influencer Program",
     "category": "Architecture",
     "description": "Multi-tier influencer system with chain rewards - NOT MLM",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/linchpin-influencer-program/",
+    "url": "/cephas/under-the-hood/linchpin-influencer-program",
     "tags": [
       "linchpin",
       "matchstick",
@@ -2353,7 +2353,7 @@
     "title": "Marks for Marks: Reciprocal Services System",
     "category": "Architecture",
     "description": "Dead-simple reciprocal services - I'll babysit, you fix my AC",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/marks-for-marks-reciprocal-services/",
+    "url": "/cephas/under-the-hood/marks-for-marks-reciprocal-services",
     "tags": [
       "marks",
       "joules",
@@ -2368,7 +2368,7 @@
     "title": "Master Context",
     "category": "Architecture",
     "description": "THE single source of truth for all Liana Banyan facts, numbers, and credentials",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/master-context/",
+    "url": "/cephas/under-the-hood/master-context",
     "tags": []
   },
   {
@@ -2376,7 +2376,7 @@
     "title": "Master Context Tree",
     "category": "Architecture",
     "description": "Complete system map and documentation index for Liana Banyan Platform",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/MASTER_CONTEXT_TREE/",
+    "url": "/cephas/under-the-hood/MASTER_CONTEXT_TREE",
     "tags": []
   },
   {
@@ -2384,7 +2384,7 @@
     "title": "The Meal Ecosystem",
     "category": "Architecture",
     "description": "How Grocery Boxes, Group Cooking, and Member Chefs create perpetual potluck",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/meal-ecosystem/",
+    "url": "/cephas/under-the-hood/meal-ecosystem",
     "tags": [
       "food",
       "cooperative",
@@ -2398,7 +2398,7 @@
     "title": "Medallion System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/medallion-system/",
+    "url": "/cephas/under-the-hood/medallion-system",
     "tags": []
   },
   {
@@ -2406,7 +2406,7 @@
     "title": "Member Benefit: Software Project Tools",
     "category": "Architecture",
     "description": "AI-ready project management templates for Liana Banyan members",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/member-benefit-software-tools/",
+    "url": "/cephas/under-the-hood/member-benefit-software-tools",
     "tags": []
   },
   {
@@ -2414,7 +2414,7 @@
     "title": "Member Benefits Overview",
     "category": "Architecture",
     "description": "Complete list of benefits available to Liana Banyan members",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/member-benefits-overview/",
+    "url": "/cephas/under-the-hood/member-benefits-overview",
     "tags": []
   },
   {
@@ -2422,7 +2422,7 @@
     "title": "Member IP Rules: What You Keep, What You Share",
     "category": "Architecture",
     "description": "Clear rules about intellectual property on Liana Banyan — when you share, when you don't, and how to use platform IP freely.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/member-ip-rules/",
+    "url": "/cephas/under-the-hood/member-ip-rules",
     "tags": [
       "IP",
       "membership",
@@ -2436,7 +2436,7 @@
     "title": "The Messy Office Defense",
     "category": "Architecture",
     "description": "Why the founder's cluttered workspace is a feature, not a bug — and the famous minds who agree",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/messy-office-defense/",
+    "url": "/cephas/under-the-hood/messy-office-defense",
     "tags": [
       "founder",
       "office",
@@ -2449,7 +2449,7 @@
     "title": "MimicTrunk System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/mimictrunk-system/",
+    "url": "/cephas/under-the-hood/mimictrunk-system",
     "tags": []
   },
   {
@@ -2457,7 +2457,7 @@
     "title": "Nervous System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/nervous-system/",
+    "url": "/cephas/under-the-hood/nervous-system",
     "tags": []
   },
   {
@@ -2465,7 +2465,7 @@
     "title": "The Nine Economic Laws of Liana Banyan",
     "category": "Architecture",
     "description": "Nine interconnected economic principles that govern how value flows through the Liana Banyan cooperative ecosystem",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/nine-economic-laws/",
+    "url": "/cephas/under-the-hood/nine-economic-laws",
     "tags": [
       "economics",
       "laws",
@@ -2480,7 +2480,7 @@
     "title": "No Religion, No Politics: The Founder's Clarification",
     "category": "Architecture",
     "description": "How the platform remains neutral while being built by someone with beliefs",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/no-religion-no-politics-linkage/",
+    "url": "/cephas/under-the-hood/no-religion-no-politics-linkage",
     "tags": [
       "policy",
       "neutrality",
@@ -2493,7 +2493,7 @@
     "title": "No VC Strategy: Community-Funded Growth",
     "category": "Architecture",
     "description": "Why we don't take venture capital and how it protects the platform",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/no-vc-strategy-three-tier/",
+    "url": "/cephas/under-the-hood/no-vc-strategy-three-tier",
     "tags": [
       "economics",
       "funding",
@@ -2506,7 +2506,7 @@
     "title": "Observatory System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/observatory-system/",
+    "url": "/cephas/under-the-hood/observatory-system",
     "tags": []
   },
   {
@@ -2514,7 +2514,7 @@
     "title": "Opening Gambit: Contingency Plans",
     "category": "Architecture",
     "description": "No Plan Survives First Contact - at least 2 options per decision point",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/opening-gambit-contingencies/",
+    "url": "/cephas/under-the-hood/opening-gambit-contingencies",
     "tags": [
       "opening-gambit",
       "contingency",
@@ -2527,7 +2527,7 @@
     "title": "Opening Gambit: Interactive Flowchart",
     "category": "Architecture",
     "description": "Visual strategy map with linked decision points",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/opening-gambit-flowchart/",
+    "url": "/cephas/under-the-hood/opening-gambit-flowchart",
     "tags": [
       "opening-gambit",
       "flowchart",
@@ -2540,7 +2540,7 @@
     "title": "Patent Bucket Pedestals",
     "category": "Architecture",
     "description": "Interactive pedestal cards for Liana Banyan patent groupings, with valuations and member voting.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-bucket-pedestals/",
+    "url": "/cephas/under-the-hood/patent-bucket-pedestals",
     "tags": [
       "patents",
       "ip",
@@ -2553,7 +2553,7 @@
     "title": "Patent Buckets: Questions and Answers",
     "category": "Architecture",
     "description": "Plain-language FAQ about Patent Buckets, Global Sponsor Pools, caps, rebalancing, and how external funding works on Liana Banyan.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-buckets-faq/",
+    "url": "/cephas/under-the-hood/patent-buckets-faq",
     "tags": [
       "patents",
       "faq",
@@ -2567,7 +2567,7 @@
     "title": "Patent Participation: Detailed Mechanics",
     "category": "Architecture",
     "description": "How to share utility patent participation through existing infrastructure",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-ownership-detailed/",
+    "url": "/cephas/under-the-hood/patent-ownership-detailed",
     "tags": [
       "patents",
       "participation",
@@ -2582,7 +2582,7 @@
     "title": "Patent Participation Mechanics: Upekrithen → LB Ironclad",
     "category": "Architecture",
     "description": "How 5K sponsors can purchase fractional patent participation that becomes irrevocable LB licensing",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-ownership-mechanics/",
+    "url": "/cephas/under-the-hood/patent-ownership-mechanics",
     "tags": [
       "patents",
       "upekrithen",
@@ -2596,7 +2596,7 @@
     "title": "Patent Participation Offering for Crowns & Sponsors",
     "category": "Architecture",
     "description": "How to offer utility patent participation to strategic supporters",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-ownership-offering/",
+    "url": "/cephas/under-the-hood/patent-ownership-offering",
     "tags": [
       "patents",
       "crowns",
@@ -2610,7 +2610,7 @@
     "title": "Patent Portfolio: What You're Joining",
     "category": "Architecture",
     "description": "The intellectual property foundation of Liana Banyan — what makes this different",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-portfolio-credibility/",
+    "url": "/cephas/under-the-hood/patent-portfolio-credibility",
     "tags": [
       "patents",
       "IP",
@@ -2624,7 +2624,7 @@
     "title": "THE BEHEMOTH Patent Portfolio",
     "category": "Architecture",
     "description": "1130+ documented innovations across mechanical, economic, and digital systems",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-portfolio/",
+    "url": "/cephas/under-the-hood/patent-portfolio",
     "tags": []
   },
   {
@@ -2632,7 +2632,7 @@
     "title": "Patent Prior Art Research: Deep Analysis",
     "category": "Architecture",
     "description": "Comprehensive prior art searches and dual-AI valuation assessments for Liana Banyan innovations",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/patent-prior-art-research/",
+    "url": "/cephas/under-the-hood/patent-prior-art-research",
     "tags": [
       "patents",
       "prior-art",
@@ -2646,7 +2646,7 @@
     "title": "Platform Evaluation - February 2026",
     "category": "Architecture",
     "description": "Comprehensive strategic evaluation of the Liana Banyan Platform - building in public",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/platform-evaluation-feb2026/",
+    "url": "/cephas/under-the-hood/platform-evaluation-feb2026",
     "tags": []
   },
   {
@@ -2654,7 +2654,7 @@
     "title": "Political & Religious Arenas",
     "category": "Architecture",
     "description": "Structured discourse systems with tiered moderation and reputation accountability",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/political-religious-arenas/",
+    "url": "/cephas/under-the-hood/political-religious-arenas",
     "tags": [
       "discourse",
       "politics",
@@ -2668,7 +2668,7 @@
     "title": "Position Benefits Codification",
     "category": "Architecture",
     "description": "Complete benefits for every rank and position in Liana Banyan",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/position-benefits-codification/",
+    "url": "/cephas/under-the-hood/position-benefits-codification",
     "tags": [
       "positions",
       "benefits",
@@ -2682,7 +2682,7 @@
     "title": "Potluck Pod vs Meal Node: Legal Distinction",
     "category": "Architecture",
     "description": "Understanding the legal framework separating non-commercial food sharing from commercial meal operations",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/potluck-pod-vs-meal-node/",
+    "url": "/cephas/under-the-hood/potluck-pod-vs-meal-node",
     "tags": [
       "legal",
       "compliance",
@@ -2696,7 +2696,7 @@
     "title": "Press Pass Credentials System",
     "category": "Architecture",
     "description": "Journalist access system for platform observation and reporting",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/press-pass-credentials/",
+    "url": "/cephas/under-the-hood/press-pass-credentials",
     "tags": [
       "press",
       "journalists",
@@ -2709,7 +2709,7 @@
     "title": "Privacy Architecture",
     "category": "Architecture",
     "description": "Zero PII Policy and Data Access Framework",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/privacy-architecture/",
+    "url": "/cephas/under-the-hood/privacy-architecture",
     "tags": []
   },
   {
@@ -2717,7 +2717,7 @@
     "title": "QR Medallion & Digital Business Card System",
     "category": "Architecture",
     "description": "Member-generated QR codes linking to their HoFund portfolio with customizable Cue Cards",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/qr-medallion-system/",
+    "url": "/cephas/under-the-hood/qr-medallion-system",
     "tags": []
   },
   {
@@ -2725,7 +2725,7 @@
     "title": "RAG Decision Analysis",
     "category": "Architecture",
     "description": "Why we chose file-based context over RAG (for now)",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/rag-decision/",
+    "url": "/cephas/under-the-hood/rag-decision",
     "tags": []
   },
   {
@@ -2733,7 +2733,7 @@
     "title": "The Rally Group: Safety at Every Entry",
     "category": "Architecture",
     "description": "Crisis response and safety protocols — the Underground Railroad of Liana Banyan",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/rally-group/",
+    "url": "/cephas/under-the-hood/rally-group",
     "tags": []
   },
   {
@@ -2741,7 +2741,7 @@
     "title": "Recent Corrections",
     "category": "Architecture",
     "description": "Error tracking log to prevent error propagation across AI sessions",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/recent-corrections/",
+    "url": "/cephas/under-the-hood/recent-corrections",
     "tags": []
   },
   {
@@ -2749,7 +2749,7 @@
     "title": "The Salt Mines",
     "category": "Architecture",
     "description": "Enter the Salt Mines — where the real value is extracted. The gateway to Liana Banyan's patent portfolio.",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/salt-mines/",
+    "url": "/cephas/under-the-hood/salt-mines",
     "tags": [
       "patents",
       "ip",
@@ -2763,7 +2763,7 @@
     "title": "Scanner Darkly Pass",
     "category": "Architecture",
     "description": "Deep inspection of hidden and preview content for accuracy and consistency",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/scanner-darkly-pass/",
+    "url": "/cephas/under-the-hood/scanner-darkly-pass",
     "tags": [
       "quality-assurance",
       "content",
@@ -2776,7 +2776,7 @@
     "title": "The Seedling Draft System",
     "category": "Architecture",
     "description": "Johnny Appleseed Draft Night, Bracket League participation, and the Prospect Pool",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/seedling-draft-system/",
+    "url": "/cephas/under-the-hood/seedling-draft-system",
     "tags": []
   },
   {
@@ -2784,7 +2784,7 @@
     "title": "SENTINEL Monitoring System",
     "category": "Architecture",
     "description": "Automated monitoring and synchronization system for platform consistency",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/sentinel-system/",
+    "url": "/cephas/under-the-hood/sentinel-system",
     "tags": [
       "monitoring",
       "automation",
@@ -2796,7 +2796,7 @@
     "title": "Sharing Cue Cards: Document-Level Social Sharing",
     "category": "Architecture",
     "description": "Every Cephas document can be shared with one click",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/sharing-cue-cards/",
+    "url": "/cephas/under-the-hood/sharing-cue-cards",
     "tags": [
       "sharing",
       "cue-cards",
@@ -2810,7 +2810,7 @@
     "title": "Six Degrees of Separation Strategy",
     "category": "Architecture",
     "description": "Leveraging connection chains for strategic outreach",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/six-degrees-strategy/",
+    "url": "/cephas/under-the-hood/six-degrees-strategy",
     "tags": [
       "six-degrees",
       "outreach",
@@ -2825,7 +2825,7 @@
     "title": "Slingshot Pass-Through System",
     "category": "Architecture",
     "description": "How external businesses can use Cue Cards to route traffic through Liana Banyan",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/slingshot-pass-through/",
+    "url": "/cephas/under-the-hood/slingshot-pass-through",
     "tags": [
       "cue-cards",
       "external-business",
@@ -2839,7 +2839,7 @@
     "title": "Sponsor Allocation System",
     "category": "Architecture",
     "description": "How sponsor contributions are distributed to initiatives — including automatic Defense Klaus and Let's Make Dinner defaults",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/sponsor-allocation-system/",
+    "url": "/cephas/under-the-hood/sponsor-allocation-system",
     "tags": []
   },
   {
@@ -2847,7 +2847,7 @@
     "title": "5K Sponsor Offering: Joules + IP License (No Equity)",
     "category": "Architecture",
     "description": "How to offer real value through Joules and IP licensing without SEC issues",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/sponsor-joule-offering/",
+    "url": "/cephas/under-the-hood/sponsor-joule-offering",
     "tags": [
       "sponsors",
       "joules",
@@ -2861,7 +2861,7 @@
     "title": "Sponsor Someone. Participate in Our Patents.",
     "category": "Architecture",
     "description": "How sponsoring new members earns you fractional participation in our utility patent portfolio — the most valuable thing we have",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/sponsor-to-own/",
+    "url": "/cephas/under-the-hood/sponsor-to-own",
     "tags": [
       "patents",
       "sponsorship",
@@ -2875,7 +2875,7 @@
     "title": "Sponsor Value Proof: Mini-Business Plan",
     "category": "Architecture",
     "description": "Mathematical proof that the 5K sponsor offer is genuinely valuable",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/sponsor-value-proof/",
+    "url": "/cephas/under-the-hood/sponsor-value-proof",
     "tags": [
       "sponsors",
       "joules",
@@ -2889,7 +2889,7 @@
     "title": "Stake Account System (Joule Collateral)",
     "category": "Architecture",
     "description": "Reserved Joule pools that back bounty commitments and contract fulfillment",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/stake-account-system/",
+    "url": "/cephas/under-the-hood/stake-account-system",
     "tags": []
   },
   {
@@ -2897,7 +2897,7 @@
     "title": "Star Chamber Verification",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/star-chamber/",
+    "url": "/cephas/under-the-hood/star-chamber",
     "tags": []
   },
   {
@@ -2905,7 +2905,7 @@
     "title": "State Compliance Checklist: Meal Operations",
     "category": "Architecture",
     "description": "Jurisdiction-by-jurisdiction guide for cottage food, MEHKO, and commercial kitchen compliance",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/state-compliance-checklist/",
+    "url": "/cephas/under-the-hood/state-compliance-checklist",
     "tags": [
       "legal",
       "compliance",
@@ -2919,7 +2919,7 @@
     "title": "Structural Bylaws (Master Document)",
     "category": "Architecture",
     "description": "All foundational commitments that cannot be changed without supermajority vote",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/structural-bylaws-master/",
+    "url": "/cephas/under-the-hood/structural-bylaws-master",
     "tags": []
   },
   {
@@ -2927,7 +2927,7 @@
     "title": "Structural Privacy Bylaw (No Demographics)",
     "category": "Architecture",
     "description": "Foundational bylaw prohibiting demographic data collection — on par with Cost+20%",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/structural-privacy-bylaw/",
+    "url": "/cephas/under-the-hood/structural-privacy-bylaw",
     "tags": []
   },
   {
@@ -2935,7 +2935,7 @@
     "title": "The Sweet Sixteen Initiatives",
     "category": "Architecture",
     "description": "The 16 core charitable initiatives that comprise the Liana Banyan ecosystem",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/sweet-sixteen-initiatives/",
+    "url": "/cephas/under-the-hood/sweet-sixteen-initiatives",
     "tags": []
   },
   {
@@ -2943,7 +2943,7 @@
     "title": "The Switzerland Protocol",
     "category": "Architecture",
     "description": "How Liana Banyan maintains neutrality through the No Politics, No Religion rule — and how Power to the People operates outside the gates",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/switzerland-protocol/",
+    "url": "/cephas/under-the-hood/switzerland-protocol",
     "tags": [
       "governance",
       "protocol",
@@ -2956,7 +2956,7 @@
     "title": "System Registry",
     "category": "Architecture",
     "description": "Complete inventory of all 16 initiatives and platform systems with integration maps",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/system-registry/",
+    "url": "/cephas/under-the-hood/system-registry",
     "tags": []
   },
   {
@@ -2964,7 +2964,7 @@
     "title": "The 300 Governance System",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/the-300/",
+    "url": "/cephas/under-the-hood/the-300",
     "tags": []
   },
   {
@@ -2972,7 +2972,7 @@
     "title": "The Liana Banyan Covenant (IMD V2.0)",
     "category": "Architecture",
     "description": "The definitive, unified touchstone — synthesized from all 6 Founder's Log documents (831+ pages)",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/the-covenant/",
+    "url": "/cephas/under-the-hood/the-covenant",
     "tags": []
   },
   {
@@ -2980,7 +2980,7 @@
     "title": "The Furnace — QR Verification Registry",
     "category": "Architecture",
     "description": "Verify any Cue Card before you scan it",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/the-furnace/",
+    "url": "/cephas/under-the-hood/the-furnace",
     "tags": [
       "security",
       "verification",
@@ -2994,7 +2994,7 @@
     "title": "Asteroid-Proof Protocol",
     "category": "Architecture",
     "description": "Autonomous operation protocol - the platform continues even if Founder is unavailable",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/the-wall-protocol/",
+    "url": "/cephas/under-the-hood/the-wall-protocol",
     "tags": [
       "asteroid-proof",
       "autonomous",
@@ -3007,7 +3007,7 @@
     "title": "Three-Gear Currency System",
     "category": "Architecture",
     "description": "Credits for services, MARKS for reputation, Joules for locked value",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/three-gear-currency/",
+    "url": "/cephas/under-the-hood/three-gear-currency",
     "tags": []
   },
   {
@@ -3015,7 +3015,7 @@
     "title": "Trademark: HEHO (Help Each Other Help Ourselves)",
     "category": "Architecture",
     "description": "Trademark registration strategy for the platform's core phrase",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/trademark-heho/",
+    "url": "/cephas/under-the-hood/trademark-heho",
     "tags": [
       "trademark",
       "legal",
@@ -3028,7 +3028,7 @@
     "title": "Treasure Maps (The Scrolls)",
     "category": "Architecture",
     "description": "Curated pathways through Liana Banyan — presented as scrolls separated by purpose",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/treasure-maps-scrolls/",
+    "url": "/cephas/under-the-hood/treasure-maps-scrolls",
     "tags": []
   },
   {
@@ -3036,7 +3036,7 @@
     "title": "Launch Trigger Sheet",
     "category": "Architecture",
     "description": "Event-based triggers for letters, social media, and milestones",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/trigger-sheet/",
+    "url": "/cephas/under-the-hood/trigger-sheet",
     "tags": [
       "triggers",
       "launch",
@@ -3050,7 +3050,7 @@
     "title": "Unified Agent Sync",
     "category": "Architecture",
     "description": "Cross-session state synchronization for all AI agents",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/unified-agent-sync/",
+    "url": "/cephas/under-the-hood/unified-agent-sync",
     "tags": []
   },
   {
@@ -3058,7 +3058,7 @@
     "title": "Upekrithen: Fortress of Solitude",
     "category": "Architecture",
     "description": "Founder's private eagle's nest - comprehensive overview with automatic versioning",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/upekrithen-fortress-of-solitude/",
+    "url": "/cephas/under-the-hood/upekrithen-fortress-of-solitude",
     "tags": [
       "upekrithen",
       "fortress-of-solitude",
@@ -3072,7 +3072,7 @@
     "title": "Viral Marketing Campaigns Registry",
     "category": "Architecture",
     "description": "All viral marketing dynamics, strategies, and when each applies",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/viral-campaigns-registry/",
+    "url": "/cephas/under-the-hood/viral-campaigns-registry",
     "tags": [
       "viral",
       "marketing",
@@ -3086,7 +3086,7 @@
     "title": "Voting System: 6 Production Levels",
     "category": "Architecture",
     "description": "How the voting system with 6 production levels powers all decision-making",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/voting-system/",
+    "url": "/cephas/under-the-hood/voting-system",
     "tags": []
   },
   {
@@ -3094,7 +3094,7 @@
     "title": "Wall-E's Wall — Letter Gallery",
     "category": "Architecture",
     "description": "Rotating shelf-based letter gallery with voting and elevation",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/wall-e-wall-gallery/",
+    "url": "/cephas/under-the-hood/wall-e-wall-gallery",
     "tags": [
       "letters",
       "gallery",
@@ -3107,7 +3107,7 @@
     "title": "Why Do The Swoop Exists: The Stories Behind Initiative #17",
     "category": "Architecture",
     "description": "The personal experiences that led to building medical crisis family support",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/why-do-the-swoop-exists/",
+    "url": "/cephas/under-the-hood/why-do-the-swoop-exists",
     "tags": [
       "founder-story",
       "motivation",
@@ -3120,7 +3120,7 @@
     "title": "Yggdrasil Architecture",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/yggdrasil-architecture/",
+    "url": "/cephas/under-the-hood/yggdrasil-architecture",
     "tags": []
   },
   {
@@ -3128,7 +3128,7 @@
     "title": "Zero PII Policy",
     "category": "Architecture",
     "description": "",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/zero-pii-policy/",
+    "url": "/cephas/under-the-hood/zero-pii-policy",
     "tags": []
   },
   {
@@ -3136,7 +3136,7 @@
     "title": "ZiWe/Vince Staples Pitch: Final Version",
     "category": "Architecture",
     "description": "The corrected pitch with King David principle and proper value exchange",
-    "url": "https://cephas.lianabanyan.com/under-the-hood/ziwe-pitch-final/",
+    "url": "/cephas/under-the-hood/ziwe-pitch-final",
     "tags": [
       "ziwe",
       "vince-staples",
@@ -3150,7 +3150,7 @@
     "title": "🏆 Crown Jewels Patent Portfolio",
     "category": "Document",
     "description": "8 Crown Jewel innovations with NO PRIOR ART — The foundation of Liana Banyan IP",
-    "url": "https://cephas.lianabanyan.com/verification/crown-jewels-showcase/",
+    "url": "/cephas/verification/crown-jewels-showcase",
     "tags": [
       "patents",
       "crown-jewels",
@@ -3164,7 +3164,7 @@
     "title": "What 5-Sigma Means",
     "category": "Document",
     "description": "A plain English explanation of the statistical certainty behind Liana Banyan",
-    "url": "https://cephas.lianabanyan.com/verification/five-sigma-explained/",
+    "url": "/cephas/verification/five-sigma-explained",
     "tags": []
   },
   {
@@ -3172,7 +3172,7 @@
     "title": "Star Chamber Final Verdict",
     "category": "Document",
     "description": "Comprehensive analysis of the Liana Banyan patent portfolio",
-    "url": "https://cephas.lianabanyan.com/verification/star-chamber-verdict/",
+    "url": "/cephas/verification/star-chamber-verdict",
     "tags": []
   },
   {
@@ -3180,7 +3180,7 @@
     "title": "USPTO Filing Confirmations",
     "category": "Document",
     "description": "All 5 provisional patent applications confirmed — 928 claims",
-    "url": "https://cephas.lianabanyan.com/verification/uspto-filings/",
+    "url": "/cephas/verification/uspto-filings",
     "tags": []
   },
   {
@@ -3188,7 +3188,7 @@
     "title": "Founder's Office One-Take",
     "category": "Document",
     "description": "The unfiltered, unedited introduction to Liana Banyan — one take, messy office, real founder",
-    "url": "https://cephas.lianabanyan.com/videos/founders-office-one-take/",
+    "url": "/cephas/videos/founders-office-one-take",
     "tags": []
   },
   {
@@ -3196,7 +3196,7 @@
     "title": "Stone Soup: The Platform Recipe",
     "category": "Document",
     "description": "The flagship explainer video — how collective contribution creates abundance",
-    "url": "https://cephas.lianabanyan.com/videos/stone-soup/",
+    "url": "/cephas/videos/stone-soup",
     "tags": [
       "video",
       "explainer",

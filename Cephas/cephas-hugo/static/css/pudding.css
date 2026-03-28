@@ -5,6 +5,80 @@
  */
 
 /* ============================================================================
+   HEOHO HERO BANNER — Homepage
+   ============================================================================ */
+
+.heoho-hero {
+  background-color: #1A1F36;
+  padding: 80px 24px;
+  text-align: center;
+  width: 100%;
+}
+
+.heoho-hero__content {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.heoho-hero__title {
+  color: #D4A843;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.heoho-hero__tagline {
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 32px;
+}
+
+.heoho-hero__body {
+  color: #E2E8F0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.heoho-hero__emphasis {
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+.heoho-hero__scripture {
+  color: rgba(212, 168, 67, 0.6);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.heoho-hero__amplifier {
+  color: #F59E0B;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .heoho-hero {
+    padding: 48px 16px;
+  }
+  .heoho-hero__title {
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+  }
+  .heoho-hero__tagline {
+    font-size: 1.1rem;
+  }
+  .heoho-hero__body {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================================================
    BASE: Scroll-triggered reveal
    ============================================================================ */
 

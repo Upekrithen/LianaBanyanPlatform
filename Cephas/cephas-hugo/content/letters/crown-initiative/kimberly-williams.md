@@ -265,4 +265,14 @@ Finding this key grants early access to Rally Group Responder training.
 
 ---
 
+## How We Amplify You
+
+Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
+
+The louder you get, the louder we get — because your success is our revenue, and our revenue is your influence.
+
+**We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
+
+---
+
 *"We'd rather check on you 100 times for nothing than miss the one time you need us."*

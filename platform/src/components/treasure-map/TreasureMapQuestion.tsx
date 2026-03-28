@@ -5,8 +5,9 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { TreasureMapQuestionDef, QuestionOption } from "./treasureMapQuestions";
+import type { Play } from "./treasureMapEngine";
 
 interface TreasureMapQuestionProps {
   definition: TreasureMapQuestionDef;
@@ -17,6 +18,12 @@ interface TreasureMapQuestionProps {
   onBack: () => void;
   onNext: () => void;
   canAdvance: boolean;
+  /** Preview plays shown progressively after answering a question */
+  previewPlays?: Play[];
+  /** Callback to jump directly to the full results view */
+  onShowResults?: () => void;
+  /** Whether this is the final question (triggers auto-show of results label) */
+  isFinalQuestion?: boolean;
 }
 
 export function TreasureMapQuestion({
@@ -28,6 +35,9 @@ export function TreasureMapQuestion({
   onBack,
   onNext,
   canAdvance,
+  previewPlays,
+  onShowResults,
+  isFinalQuestion,
 }: TreasureMapQuestionProps) {
   const isMulti = definition.type === "multi";
   const maxSelections = definition.maxSelections ?? 999;
@@ -113,12 +123,45 @@ export function TreasureMapQuestion({
         <Button
           size="lg"
           className="w-full bg-green-600 hover:bg-green-700 text-white"
-          onClick={onNext}
+          onClick={isFinalQuestion ? onShowResults : onNext}
           disabled={!canAdvance}
         >
-          Next
+          {isFinalQuestion ? "Show My Results" : "Next"}
         </Button>
       </div>
+
+      {/* Progressive play preview — shown after answering at least 1 question */}
+      {previewPlays && previewPlays.length > 0 && (
+        <div className="mt-8 border-t border-border pt-6">
+          <p className="text-sm font-medium text-muted-foreground mb-3">
+            Based on your answers so far:
+          </p>
+          <div className="space-y-3">
+            {previewPlays.map((play) => (
+              <div
+                key={play.id}
+                className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border"
+              >
+                <span className="text-2xl shrink-0" aria-hidden>{play.icon}</span>
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm leading-tight">{play.title}</p>
+                  <p className="text-xs text-muted-foreground leading-snug">{play.subtitle}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {onShowResults && !isFinalQuestion && (
+            <button
+              type="button"
+              className="mt-4 text-green-500 hover:underline text-sm font-medium flex items-center gap-1"
+              onClick={onShowResults}
+            >
+              These look good — show me the full details
+              <ArrowRight className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

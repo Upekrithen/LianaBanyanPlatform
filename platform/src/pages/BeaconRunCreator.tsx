@@ -50,6 +50,7 @@ import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
 import { BeaconDropButton, BEACON_COLORS } from "@/components/BeaconDropButton";
 import { BeaconRunCueCard } from "@/components/BeaconRunCueCard";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { LearnMoreBadge } from "@/components/cephas/LearnMoreBadge";
 
 interface BeaconRunDraft {
   id?: string;
@@ -202,7 +203,7 @@ export default function BeaconRunCreator() {
         <div className="flex items-center gap-3">
           <Gamepad2 className="h-8 w-8 text-orange-500" />
           <div>
-            <h1 className="text-3xl font-bold">Create Beacon Run</h1>
+            <h1 className="text-3xl font-bold inline-flex items-center gap-2">Create Beacon Run <LearnMoreBadge featurePath="/beacons" variant="icon" /></h1>
             <p className="text-muted-foreground">
               Design a speedrun game. Ghost Mode only.
             </p>

@@ -25,17 +25,34 @@ export function PaidMemberRoute({ children }: { children: React.ReactNode }) {
   const { user, loading: authLoading } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
 
-  // Check membership status from profiles table
   const { data: membershipStatus, isLoading: profileLoading } = useQuery({
     queryKey: ["membership-status", user?.id],
     queryFn: async () => {
       if (!user) return null;
-      const { data } = await supabase
+
+      // Check member_profiles first (K94 canonical source)
+      const { data: mp } = await supabase
+        .from("member_profiles" as never)
+        .select("membership_status")
+        .eq("user_id", user.id)
+        .maybeSingle() as { data: { membership_status: string } | null };
+      if (mp?.membership_status && mp.membership_status !== "free") return mp.membership_status;
+
+      // Fallback: check user_credits.membership_stake_paid
+      const { data: uc } = await supabase
+        .from("user_credits")
+        .select("membership_stake_paid")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (uc?.membership_stake_paid) return "active";
+
+      // Fallback: profiles table
+      const { data: prof } = await supabase
         .from("profiles")
         .select("membership_status")
         .eq("id", user.id)
-        .single();
-      return data?.membership_status || "inactive";
+        .maybeSingle();
+      return prof?.membership_status || "inactive";
     },
     enabled: !!user,
   });
@@ -78,8 +95,7 @@ export function PaidMemberRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Logged in but membership not active → activate prompt
-  if (membershipStatus !== "active") {
+  if (membershipStatus !== "active" && membershipStatus !== "lifetime") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md">

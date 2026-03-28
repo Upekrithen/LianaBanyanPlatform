@@ -19,8 +19,9 @@ export function GlobalWildfireRun() {
     <WildfireBeaconRun
       run={activeRun}
       onComplete={(elapsedSeconds) => {
+        const isOnboarding = activeRun.category === "onboarding";
         endRun();
-        navigate("/wildfire-runs");
+        navigate(isOnboarding ? "/join" : "/wildfire-runs");
       }}
       onNodeVisit={(node, index) => {
       }}

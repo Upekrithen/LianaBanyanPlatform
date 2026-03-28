@@ -37,6 +37,7 @@ import {
   Timer, ChevronRight, ArrowUp, Shield, BookOpen,
   Ear, Hand, Crown, Coffee,
 } from "lucide-react";
+import { RoundTableChat } from "@/components/RoundTableChat";
 import { toast } from "sonner";
 
 import {
@@ -530,6 +531,11 @@ export default function RoundTableHall() {
                   </p>
                 </CardContent>
               </Card>
+            )}
+
+            {/* Text Chat Panel */}
+            {selectedTable && (
+              <RoundTableChat tableId={selectedTable.id} />
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { Link, useSearchParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
@@ -10,10 +10,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 import {
   Store, Search, Filter, Paintbrush, Download, Ghost,
-  ShoppingCart, Star, Eye, Users, Trophy, Sparkles, ArrowLeft
+  ShoppingCart, Star, Eye, Users, Trophy, Sparkles, ArrowLeft, X
 } from "lucide-react";
+import SlingshotSuggestion from "@/components/slingshot/SlingshotSuggestion";
 
 interface EmporiumItem {
   id: string;
@@ -52,10 +55,17 @@ const SORT_OPTIONS = [
 
 export default function EmporiumTemplates() {
   const { user } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const urlCategory = searchParams.get("category") || "";
+  const urlSearch = searchParams.get("search") || "";
+
+  const [searchQuery, setSearchQuery] = useState(urlSearch);
+  const [selectedCategory, setSelectedCategory] = useState(urlCategory && CATEGORIES.some(c => c.value === urlCategory) ? urlCategory : "all");
   const [sortBy, setSortBy] = useState("newest");
   const [ghostCredits, setGhostCredits] = useState<string[]>([]);
+  const [selectedItem, setSelectedItem] = useState<EmporiumItem | null>(null);
 
   const { data: templates, isLoading } = useQuery({
     queryKey: ["emporium-templates", selectedCategory, sortBy],
@@ -88,6 +98,31 @@ export default function EmporiumTemplates() {
     t.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  // Purchase template — 83.3% to designer, 16.7% to platform
+  const purchaseMutation = useMutation({
+    mutationFn: async (item: EmporiumItem) => {
+      if (!user) throw new Error("Must be logged in");
+      if (!item.price) throw new Error("This is a bounty submission — commission the designer instead");
+
+      const designerShare = Number((item.price * 0.833).toFixed(2));
+
+      await supabase.from("arena_submissions" as never).update({
+        royalty_uses: item.royalty_uses + 1,
+        royalty_earnings: Number(item.royalty_earnings) + designerShare,
+      } as never).eq("id", item.id as never);
+
+      return { designerShare, price: item.price };
+    },
+    onSuccess: (result) => {
+      toast({ title: "Template Purchased!", description: `Designer earned ${result.designerShare.toFixed(2)} Credits.` });
+      queryClient.invalidateQueries({ queryKey: ["emporium-templates"] });
+      setSelectedItem(null);
+    },
+    onError: (err: Error) => {
+      toast({ title: "Purchase failed", description: err.message, variant: "destructive" });
+    },
+  });
+
   function handleGhostBuy(itemId: string) {
     setGhostCredits(prev =>
       prev.includes(itemId) ? prev : [...prev, itemId]
@@ -117,6 +152,13 @@ export default function EmporiumTemplates() {
           Every use earns the designer royalties.
         </p>
       </div>
+
+      {/* Slingshot Suggestion Banner */}
+      {user && (
+        <div className="mb-4">
+          <SlingshotSuggestion onFilterDesigner={(designerId) => setSearchQuery(designerId)} />
+        </div>
+      )}
 
       {/* Ghost Credit Banner (non-members) */}
       {!user && ghostCredits.length > 0 && (
@@ -214,7 +256,7 @@ export default function EmporiumTemplates() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredTemplates.map(item => (
-            <Card key={item.id} className="overflow-hidden hover:scale-[1.01] transition-transform group">
+            <Card key={item.id} className="overflow-hidden hover:scale-[1.01] transition-transform group cursor-pointer" onClick={() => setSelectedItem(item)}>
               {/* Image */}
               <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                 <img
@@ -277,14 +319,14 @@ export default function EmporiumTemplates() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2">
+                <div className="flex gap-2" onClick={e => e.stopPropagation()}>
                   {user ? (
                     <>
-                      <Button size="sm" className="flex-1 gap-1">
+                      <Button size="sm" className="flex-1 gap-1" onClick={() => item.price ? purchaseMutation.mutate(item) : setSelectedItem(item)}>
                         <Download className="h-3 w-3" />
-                        Use Template
+                        {item.price ? "Use Template" : "View"}
                       </Button>
-                      <Button size="sm" variant="outline" className="gap-1">
+                      <Button size="sm" variant="outline" className="gap-1" onClick={() => setSelectedItem(item)}>
                         <Users className="h-3 w-3" />
                         Commission
                       </Button>
@@ -330,9 +372,102 @@ export default function EmporiumTemplates() {
         </CardContent>
       </Card>
 
+      {/* Design Detail Modal */}
+      <Dialog open={!!selectedItem} onOpenChange={(open) => !open && setSelectedItem(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {selectedItem && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  {selectedItem.title}
+                  {selectedItem.status === "in_emporium" && (
+                    <Badge className="bg-amber-600"><Trophy className="h-3 w-3 mr-1" /> Battle Winner</Badge>
+                  )}
+                </DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-4">
+                <div className="rounded-lg overflow-hidden bg-muted aspect-video">
+                  <img
+                    src={selectedItem.image_url}
+                    alt={selectedItem.title}
+                    className="w-full h-full object-contain"
+                    onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                  />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Badge variant="outline">{categoryLabel(selectedItem.category)}</Badge>
+                  {selectedItem.stamp_rating && (
+                    <div className="flex items-center gap-1 text-amber-400">
+                      <Star className="h-4 w-4 fill-current" />
+                      <span className="text-sm font-bold">{selectedItem.stamp_rating}</span>
+                    </div>
+                  )}
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Download className="h-3 w-3" /> Used by {selectedItem.royalty_uses} businesses
+                  </span>
+                </div>
+
+                {selectedItem.description && (
+                  <p className="text-sm text-muted-foreground">{selectedItem.description}</p>
+                )}
+
+                {selectedItem.tags && selectedItem.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {selectedItem.tags.map(tag => (
+                      <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                    ))}
+                  </div>
+                )}
+
+                <div className="border-t pt-4 space-y-3">
+                  {user ? (
+                    <>
+                      {selectedItem.price ? (
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-bold text-lg">{selectedItem.price} Credits</p>
+                            <p className="text-xs text-muted-foreground">Designer earns {(selectedItem.price * 0.833).toFixed(2)} Credits (83.3%)</p>
+                          </div>
+                          <Button
+                            onClick={() => purchaseMutation.mutate(selectedItem)}
+                            disabled={purchaseMutation.isPending}
+                            className="gap-2"
+                          >
+                            <Download className="h-4 w-4" />
+                            {purchaseMutation.isPending ? "Processing..." : "Use This Template"}
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-muted-foreground">This designer is available for commissions</p>
+                          <Button variant="outline" className="gap-2">
+                            <Users className="h-4 w-4" /> Commission This Designer
+                          </Button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-center p-4 rounded-lg bg-muted/50">
+                      <p className="font-medium">Join LB ($5/year) to purchase</p>
+                      <Link to="/auth">
+                        <Button className="mt-2 gap-2">
+                          <Sparkles className="h-4 w-4" /> Join & Unlock
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <p className="text-[10px] text-muted-foreground text-center mt-6 max-w-lg mx-auto">
-        Revenue estimates are illustrative only. Designer royalties (5 Credits per template use) come from
-        the platform's operational share. This is not an investment.
+        Revenue estimates are illustrative only. Designer royalties come from
+        the platform's operational share. Creator keeps 83.3%. This is not an investment.
       </p>
     </PortalPageLayout>
   );

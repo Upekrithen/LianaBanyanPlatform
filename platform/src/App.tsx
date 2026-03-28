@@ -15,6 +15,7 @@ import Index, { KeepView } from "./pages/Index";
 import Auth from "./pages/Auth";
 import TikTokCallback from "./pages/TikTokCallback";
 import Dashboard from "./pages/Dashboard";
+import CreatorDashboard from "./pages/CreatorDashboard";
 import Projects from "./pages/Projects";
 import Portfolio from "./pages/Portfolio";
 import NotFound from "./pages/NotFound";
@@ -72,6 +73,8 @@ import { RecordingProvider } from "@/contexts/RecordingContext";
 import { GlobalRecorderOverlay } from "@/components/GlobalRecorderOverlay";
 import { PlatformFooter } from "@/components/PlatformFooter";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 import { WelcomeGate } from "@/components/WelcomeGate";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { SeamlessOnboardProvider } from "@/components/SeamlessOnboardDialog";
@@ -172,10 +175,18 @@ import { DiscoveryGateProvider } from "./components/DiscoveryGate";
 import { DiscoveryProvider } from "./hooks/useDiscovery";
 import { HelmCompact } from "./components/HelmCompact";
 import { useDiscoveryTracker } from "./hooks/useDiscoveryTracker";
+import { NotificationBell } from "./components/notifications/NotificationBell";
+import { GlobalSearch } from "./components/GlobalSearch";
+const SearchResultsPage = lazy(() => import("./pages/SearchResultsPage"));
+import { CreditBalanceHeader } from "./components/CreditBalanceHeader";
 import HeraldSuccess from "./pages/HeraldSuccess";
 import SponsorSuccess from "./pages/SponsorSuccess";
 const ManufacturingStore = lazy(() => import("./pages/ManufacturingStore"));
 const FactoryHub = lazy(() => import("./pages/FactoryHub"));
+const CanisterConfigurator = lazy(() => import("./pages/CanisterConfigurator"));
+const CanisterProductCatalog = lazy(() => import("./pages/CanisterProductCatalog"));
+const CanisterBOMPage = lazy(() => import("./pages/CanisterBOMPage"));
+const StarterKitPage = lazy(() => import("./pages/StarterKitPage"));
 const NodeRegistration = lazy(() => import("./pages/NodeRegistration"));
 const ServiceNodeRegistration = lazy(() => import("./pages/ServiceNodeRegistration"));
 const LookingGlass = lazy(() => import("./pages/LookingGlass"));
@@ -232,6 +243,7 @@ const Senate = lazy(() => import("./pages/Senate"));
 const HallOfInnovations = lazy(() => import("./pages/HallOfInnovations"));
 const OnboardingStart = lazy(() => import("./pages/OnboardingStart"));
 const BusinessPathway = lazy(() => import("./pages/BusinessPathway"));
+const CaptainLanding = lazy(() => import("./pages/CaptainLanding"));
 const PatrioticInterdependentalist = lazy(() => import("./pages/PatrioticInterdependentalist"));
 const PuddingDemo = lazy(() => import("./pages/PuddingDemo"));
 const SaltMines = lazy(() => import("./pages/SaltMines"));
@@ -263,6 +275,7 @@ const ATTILanding = lazy(() => import("./pages/ATTILanding"));
 const SanAntonioLanding = lazy(() => import("./pages/SanAntonioLanding"));
 const BifrostCardBuilder = lazy(() => import("./pages/BifrostCardBuilder"));
 const SendLists = lazy(() => import("./pages/SendLists"));
+const KnowledgeViewer = lazy(() => import("./pages/KnowledgeViewer"));
 import { WildfireRunProvider } from "./contexts/WildfireRunContext";
 import { MockDataProvider } from "./contexts/MockDataProvider";
 import { PathwayProgressProvider } from "./contexts/PathwayProgressContext";
@@ -279,6 +292,8 @@ const FarmerSupplyChainPage = lazy(() => import("./pages/FarmerSupplyChainPage")
 const HexIsleEncyclopedia = lazy(() => import("./pages/HexIsleEncyclopedia"));
 const HexIsleIslandPage = lazy(() => import("./pages/HexIsleIslandPage"));
 const ChainDashboard = lazy(() => import("./pages/ChainDashboard"));
+const HexIsleCampaignsPage = lazy(() => import("./pages/HexIsleCampaignsPage"));
+const KickstarterCampaignPage = lazy(() => import("./pages/KickstarterCampaignPage"));
 const HexIsleDownloads = lazy(() => import("./pages/HexIsleDownloads"));
 const DemandSignaling = lazy(() => import("./pages/DemandSignaling"));
 const HexIsleVote = lazy(() => import("./pages/HexIsleVote"));
@@ -293,6 +308,63 @@ const DailyNews = lazy(() => import("./pages/DailyNews"));
 const BandWagon = lazy(() => import("./pages/BandWagon"));
 const MoneyPennySocial = lazy(() => import("./pages/MoneyPennySocial"));
 const ConcentricCircles = lazy(() => import("./pages/ConcentricCircles"));
+const HelmActionsPage = lazy(() => import("./pages/HelmActionsPage"));
+const OutOfBoundsPage = lazy(() => import("./pages/OutOfBoundsPage"));
+const SocialAccountsPage = lazy(() => import("./pages/SocialAccountsPage"));
+const PoliticalExpeditionPage = lazy(() => import("./pages/PoliticalExpedition"));
+const CrewTablesPage = lazy(() => import("./pages/CrewTables"));
+const HousingPage = lazy(() => import("./pages/Housing"));
+const GuidedDiscovery = lazy(() => import("./pages/GuidedDiscovery"));
+const MembershipGate = lazy(() => import("./pages/MembershipGate"));
+const FirstSteps = lazy(() => import("./pages/FirstSteps"));
+const MemberProfile = lazy(() => import("./pages/MemberProfile"));
+const InviteGenerator = lazy(() => import("./pages/InviteGenerator"));
+const PipelinePage = lazy(() => import("./pages/PipelinePage"));
+const CoalitionsPage = lazy(() => import("./pages/Coalitions"));
+
+// K107: Product Catalog + Makers + Production Pipeline
+const ProductCatalog = lazy(() => import("./pages/ProductCatalog"));
+const CatalogProductDetail = lazy(() => import("./pages/CatalogProductDetail"));
+const MakerDirectory = lazy(() => import("./pages/MakerDirectory"));
+const MakerProfile = lazy(() => import("./pages/MakerProfile"));
+const MakerRegistration = lazy(() => import("./pages/MakerRegistration"));
+const ProductionOrderFlow = lazy(() => import("./pages/ProductionOrderFlow"));
+
+// K116: Turn-Key Project Templates + Cue Card Campaign System
+const ProjectDirectory = lazy(() => import("./pages/ProjectDirectory"));
+const TurnKeyCreatePage = lazy(() => import("./pages/TurnKeyCreatePage"));
+const TurnKeyProjectDetailPage = lazy(() => import("./pages/TurnKeyProjectDetailPage"));
+const CueCardCampaignLibrary = lazy(() => import("./pages/CueCardCampaignLibrary"));
+const CueCardCampaignDetailPage = lazy(() => import("./pages/CueCardCampaignDetailPage"));
+
+// K117: Red Carpet Showcase — demand-signal system for creator onboarding
+const ShowcaseClaimPage = lazy(() => import("./pages/ShowcaseClaimPage"));
+const ShowcaseAdminPage = lazy(() => import("./pages/ShowcaseAdminPage"));
+
+// K118: Treasure Map Interactive Guides + "What Do You Want to Do?" Entry Flow
+const WhatDoYouWantFlow = lazy(() => import("./pages/WhatDoYouWantFlow"));
+const CraftTreasureMapPage = lazy(() => import("./pages/CraftTreasureMapPage"));
+
+// K119: One-Click Social Import + Bridge-to-Local
+const SocialImportPage = lazy(() => import("./pages/SocialImportPage"));
+const ConnectedServicesPage = lazy(() => import("./pages/ConnectedServicesPage"));
+
+// K120: Contest Infrastructure + Stripe Connect
+const ContestDirectory = lazy(() => import("./pages/ContestDirectory"));
+const ContestDetailPage = lazy(() => import("./pages/ContestDetailPage"));
+const ContestEntryPage = lazy(() => import("./pages/ContestEntryPage"));
+const BuyCreditsPage = lazy(() => import("./pages/BuyCreditsPage"));
+
+// K121: Stripe Billing — Subscriptions, Credits, Payouts
+const MembershipPage = lazy(() => import("./pages/MembershipPage"));
+const MembershipDashboard = lazy(() => import("./pages/MembershipDashboard"));
+const EarningsDashboard = lazy(() => import("./pages/EarningsDashboard"));
+
+// K114: Subscription Engine + Coalition Formation + Hybrid Discount
+const SubscribePage = lazy(() => import("./pages/SubscribePage"));
+const CoalitionDirectory = lazy(() => import("./pages/CoalitionDirectory"));
+const CoalitionCreate = lazy(() => import("./pages/CoalitionCreate"));
+const CoalitionDetail = lazy(() => import("./pages/CoalitionDetail"));
 
 // Content Controls & Progressive Disclosure (Session 6L)
 const ContentControlsPage = lazy(() => import("./pages/ContentControlsPage"));
@@ -310,8 +382,15 @@ const ContentPipelinePage = lazy(() => import("./pages/ContentPipelinePage"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const CrownLetterUpdate = lazy(() => import("./pages/CrownLetterUpdate"));
+const CrownLettersPage = lazy(() => import("./pages/CrownLettersPage"));
+const BenefitsPage = lazy(() => import("./pages/BenefitsPage"));
 // Guild Hub — NOIDs landing with Handshake Protocol (Session 8D)
 const GuildHub = lazy(() => import("./pages/GuildHub"));
+// K133 — Guild & Tribe System
+const GuildDetail = lazy(() => import("./pages/GuildDetail"));
+const TribeDetail = lazy(() => import("./pages/TribeDetail"));
+const GuildFormationWizard = lazy(() => import("./components/GuildFormationWizard"));
+const TribeFormationWizard = lazy(() => import("./components/TribeFormationWizard"));
 // Muffled Rule / Coverage Minutes / Phase MimicTrunks (Session 6M)
 const RoundTableHall = lazy(() => import("./pages/RoundTableHall"));
 const CoverageMinutesDashboard = lazy(() => import("./pages/CoverageMinutesDashboard"));
@@ -349,10 +428,28 @@ const TreasureMapGuide = lazy(() => import("./pages/TreasureMapGuide"));
 const GleanersCorner = lazy(() => import("./pages/GleanersCorner"));
 const ChainVoting = lazy(() => import("./pages/ChainVoting"));
 
+// Vehicle Systems — Rally Group (Session 85)
+const LemonLot = lazy(() => import("./pages/LemonLot"));
+const LocalWheels = lazy(() => import("./pages/LocalWheels"));
+const RideshareRoutesPage = lazy(() => import("./pages/RideshareRoutes"));
+
+// ADAPT Score Dashboard (Session 92)
+const AdaptScore = lazy(() => import("./pages/AdaptScore"));
+
+// LB Card + War Chest (Session 76 — Two-Domain Architecture)
+const LBCardPage = lazy(() => import("./pages/LBCardPage"));
+const WarChestPage = lazy(() => import("./pages/WarChestPage"));
+const PayoutsPage = lazy(() => import("./pages/PayoutsPage"));
+const FounderFeatureFlags = lazy(() => import("./pages/FounderFeatureFlags"));
+
+// LB Card Scheduled Funding (Session 136 — Innovations #2008-#2009)
+const FundMyCard = lazy(() => import("./pages/FundMyCard"));
+
 // Session 47-49 pages (Bishop 013)
 const SantaEverAfter = lazy(() => import("./pages/SantaEverAfter"));
 const NodeCaptainPage = lazy(() => import("./pages/NodeCaptain"));
 const StarChamber = lazy(() => import("./pages/StarChamber"));
+const Castle = lazy(() => import("./pages/Castle"));
 const CPlus20Dashboard = lazy(() => import("./pages/CPlus20Dashboard"));
 const TerenoCertificationPage = lazy(() => import("./pages/TerenoCertification"));
 const ModularManufacturing = lazy(() => import("./pages/ModularManufacturing"));
@@ -361,6 +458,63 @@ const ProteusAnchorPage = lazy(() => import("./pages/ProteusAnchor"));
 const DesignedToBeBroken = lazy(() => import("./pages/DesignedToBeBroken"));
 const AsYouWishCard = lazy(() => import("./pages/AsYouWishCard"));
 const NoAtomo = lazy(() => import("./pages/NoAtomo"));
+const MissionOnePage = lazy(() => import("./pages/MissionOnePage"));
+
+// K124: Captain Onboarding + Leadership Pedestals
+const CaptainOnboardingPage = lazy(() => import("./pages/CaptainOnboardingPage"));
+const CaptainDashboardPage = lazy(() => import("./pages/CaptainDashboardPage"));
+const ShipMedallionPage = lazy(() => import("./pages/ShipMedallionPage"));
+const The300Page = lazy(() => import("./pages/The300Page"));
+const PedestalDetailPage = lazy(() => import("./pages/PedestalDetailPage"));
+
+// K127: Business Campaign Onboarding
+const BusinessCampaignDirectory = lazy(() => import("./pages/BusinessCampaignDirectory"));
+const BusinessCampaignDetail = lazy(() => import("./pages/BusinessCampaignDetail"));
+const NominateBusinessPage = lazy(() => import("./pages/NominateBusinessPage"));
+const PitchPacketPage = lazy(() => import("./pages/PitchPacketPage"));
+
+// K130: Family Table Cookbook — Meal Planning + Restaurant Menus
+const FamilyTableHub = lazy(() => import("./pages/FamilyTableHub"));
+const CookbookPage = lazy(() => import("./pages/CookbookPage"));
+const RestaurantDetailPage = lazy(() => import("./pages/RestaurantDetailPage"));
+const MealPlanBuilder = lazy(() => import("./pages/MealPlanBuilder"));
+const OrderManifestPage = lazy(() => import("./pages/OrderManifestPage"));
+
+// K131: Programmable Card — Durin's Door, Sponsored Cards, Brand Bounties, Designer Marketplace
+const WelcomeGatePage = lazy(() => import("./pages/WelcomeGatePage"));
+const CueCardGeneratorV2 = lazy(() => import("./pages/tools/CueCardGeneratorV2"));
+const DesignCrewPage = lazy(() => import("./pages/DesignCrewPage"));
+
+// K134: MoneyPenny Gatekeeper — AI Receptionist for Inbound Contact Screening
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const GatekeeperInboxPage = lazy(() => import("./pages/GatekeeperInboxPage"));
+
+// K135: Design Democracy — X-Ray Overlay + Community Theme System
+const ThemeGallery = lazy(() => import("./pages/ThemeGallery"));
+const ThemeEditorPage = lazy(() => import("./pages/ThemeEditor"));
+
+// K141: X-Ray Bounty Arena — gamified error-hunting + design auctions (Innovations #2023-#2028)
+const XRayBountyDashboard = lazy(() => import("./pages/XRayBountyDashboard"));
+const DesignAuctionPage = lazy(() => import("./pages/DesignAuctionPage"));
+
+// K147: Piggyback Improvement Pipeline — community improvement submissions + review
+const PiggybackSubmitPage = lazy(() => import("./pages/PiggybackSubmitPage"));
+const PiggybackReviewPage = lazy(() => import("./pages/PiggybackReviewPage"));
+const MyPiggybackPage = lazy(() => import("./pages/MyPiggybackPage"));
+
+// K142: Production Project Pages — Industry Backbone (Innovations #2029-#2030)
+const ProjectsDirectoryPage = lazy(() => import("./pages/ProjectsDirectoryPage"));
+const ProductionProjectPage = lazy(() => import("./pages/ProductionProjectPage"));
+
+// K143: Manufacturing Escalation Ladder + 2nd Second Landing (Innovations #2031-#2033)
+const SecondSecondLanding = lazy(() => import("./pages/SecondSecondLanding"));
+
+// K128: Cold Start Cue Cards — Four Pathways to Captain
+const ColdStartHub = lazy(() => import("./pages/ColdStartHub"));
+const FoodNodeCueCard = lazy(() => import("./pages/FoodNodeCueCard"));
+const ManufacturingNodeCueCard = lazy(() => import("./pages/ManufacturingNodeCueCard"));
+const ServiceNodeCueCard = lazy(() => import("./pages/ServiceNodeCueCard"));
+const LocalBusinessNodeCueCard = lazy(() => import("./pages/LocalBusinessNodeCueCard"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -414,31 +568,46 @@ function AppShell({ children }: { children: React.ReactNode }) {
     });
   }, [location.pathname]);
 
+  const isLanding = location.pathname === '/';
+  const showChrome = !!user && !isLanding;
+
   return (
     <DiscoveryProvider>
       <DiscoveryGateProvider>
-        <div className="min-h-screen flex w-full overflow-x-hidden">
-          <div className="flex-1 flex flex-col min-w-0">
-            <div className="flex flex-1 overflow-x-hidden">
-              <main className="flex-1 overflow-x-hidden flex flex-col">
-                <div className="flex-1">{children}</div>
-                <PlatformFooter />
-              </main>
-              {/* Discovery Bookshelf — right panel for logged-in users */}
-              {user && location.pathname !== '/' && (
-                <aside className="hidden xl:block w-64 border-l bg-card/30 overflow-y-auto shrink-0">
-                  <DiscoveryBookshelf />
-                </aside>
+        <SidebarProvider defaultOpen={false}>
+          <div className="min-h-screen flex w-full overflow-x-hidden">
+            {showChrome && <AppSidebar />}
+            <div className="flex-1 flex flex-col min-w-0">
+              {showChrome && (
+                <div className="flex items-center gap-3 px-4 py-2 border-b bg-background/80 backdrop-blur-sm">
+                  <SidebarTrigger className="shrink-0" />
+                  <div className="flex-1" />
+                  <GlobalSearch />
+                  <CreditBalanceHeader />
+                  <NotificationBell />
+                  <span className="text-xs text-muted-foreground hidden sm:inline truncate max-w-[140px]" title={user.email || ''}>
+                    Signed in{user.email ? ` as ${user.email.split('@')[0]}` : ''}
+                  </span>
+                </div>
               )}
+              <div className="flex flex-1 overflow-x-hidden">
+                <main className="flex-1 overflow-x-hidden flex flex-col">
+                  <div className="flex-1">{children}</div>
+                  <PlatformFooter />
+                </main>
+                {showChrome && (
+                  <aside className="hidden xl:block w-64 border-l bg-card/30 overflow-y-auto shrink-0">
+                    <DiscoveryBookshelf />
+                  </aside>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </SidebarProvider>
         <GlobalRecorderOverlay />
         <HelmCompact />
         <PWAInstallPrompt />
         <LanguageSwitcher />
-        {/* DevelopmentBadge and PatentPortfolioTicker removed — Founder directive */}
-        {/* Dedicated pages remain at /patent-portfolio and /ip-portfolio */}
       </DiscoveryGateProvider>
     </DiscoveryProvider>
   );
@@ -448,6 +617,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
 import { DenkenMenu } from "@/components/builder/DenkenMenu";
 import { BeaconBiteNudge } from "@/components/BeaconBiteNudge";
 import { XRayOverlay } from "@/components/builder/XRayOverlay";
+import { CoinFlipAnimation } from "@/components/xray/CoinFlipAnimation";
 
 /**
  * HomepageGateway — Route switcher for "/"
@@ -501,9 +671,19 @@ const App = () => (
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/auth/tiktok/callback" element={<TikTokCallback />} />
                         <Route path="/ghost" element={<GhostWorld />} />
-                        <Route path="/ghost-world" element={<GhostWorld />} />
+                        <Route path="/ghost-world" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GhostWorldMap /></Suspense>} />
                         <Route path="/explore" element={<GhostWorld />} />
                         <Route path="/free-explore" element={<GhostWorld />} />
+
+                        {/* Front Door: Guided Discovery → Membership → First Steps → Profile (K91) */}
+                        <Route path="/welcome" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GuidedDiscovery /></Suspense>} />
+                        <Route path="/discover" element={<Navigate to="/welcome" replace />} />
+                        <Route path="/first-steps" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><FirstSteps /></Suspense></ProtectedRoute>} />
+                        <Route path="/member/:username" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MemberProfile /></Suspense>} />
+
+                        {/* Red Carpet + Slingshot (K93) */}
+                        <Route path="/invite" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><InviteGenerator /></Suspense></ProtectedRoute>} />
+                        <Route path="/pipeline" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PipelinePage /></Suspense></ProtectedRoute>} />
 
                         {/* Convenience redirects — prevent 404s for common URL guesses */}
                         <Route path="/keep" element={<ProtectedRoute><KeepView /></ProtectedRoute>} />
@@ -512,7 +692,7 @@ const App = () => (
                         <Route path="/sign-in" element={<Navigate to="/auth" replace />} />
                         <Route path="/signup" element={<Navigate to="/auth" replace />} />
                         <Route path="/sign-up" element={<Navigate to="/auth" replace />} />
-                        <Route path="/join" element={<Navigate to="/auth" replace />} />
+                        <Route path="/join" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MembershipGate /></Suspense>} />
                         <Route path="/join/creator" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorPitchPage /></Suspense></ExplorerRoute>} />
                         <Route path="/creators" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorShowcasePage /></Suspense></ExplorerRoute>} />
                         <Route path="/creators/:creatorId" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CreatorProfilePage /></Suspense></ExplorerRoute>} />
@@ -520,6 +700,8 @@ const App = () => (
                         <Route path="/crew-call" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewCallPage /></Suspense></ProtectedRoute>} />
                         <Route path="/cue-cards" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardDeckPage /></Suspense></ExplorerRoute>} />
                         <Route path="/onboarding/status" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><OnboardingStatusPage /></Suspense></ProtectedRoute>} />
+                        {/* Catch stale /under-the-hood/ links — redirect to Cephas hub */}
+                        <Route path="/under-the-hood/*" element={<Navigate to="/cephas/under-the-hood" replace />} />
                         <Route path="/home" element={<Navigate to="/" replace />} />
                         <Route path="/browse" element={<Navigate to="/browse/marketplace" replace />} />
                         <Route path="/all-positions" element={<Navigate to="/positions/browse" replace />} />
@@ -559,7 +741,11 @@ const App = () => (
                         <Route path="/brass-tacks" element={<Navigate to="/initiatives/brass-tacks" replace />} />
                         <Route path="/health-accords" element={<Navigate to="/initiatives/health-accords" replace />} />
                         <Route path="/msa" element={<Navigate to="/initiatives/msa" replace />} />
-                        <Route path="/family-table" element={<Navigate to="/initiatives/family-table" replace />} />
+                        <Route path="/family-table" element={<ExplorerRoute><FamilyTableHub /></ExplorerRoute>} />
+                        <Route path="/family-table/meal-plan" element={<ProtectedRoute><MealPlanBuilder /></ProtectedRoute>} />
+                        <Route path="/cookbook" element={<ExplorerRoute><CookbookPage /></ExplorerRoute>} />
+                        <Route path="/cookbook/:restaurantId" element={<ExplorerRoute><RestaurantDetailPage /></ExplorerRoute>} />
+                        <Route path="/business/orders" element={<ProtectedRoute><OrderManifestPage /></ProtectedRoute>} />
                         <Route path="/lets-make-dinner" element={<Navigate to="/initiatives/lets-make-dinner" replace />} />
                         <Route path="/the-pantry" element={<Navigate to="/initiatives/the-pantry" replace />} />
                         <Route path="/lets-go-shopping" element={<Navigate to="/initiatives/lets-go-shopping" replace />} />
@@ -569,8 +755,9 @@ const App = () => (
                         <Route path="/portal" element={<ExplorerRoute><PortalGateway /></ExplorerRoute>} />
                         <Route path="/enter" element={<ExplorerRoute><PortalGateway /></ExplorerRoute>} />
                         <Route path="/treasure-map" element={<TreasureMap />} />
+                        <Route path="/treasure-map/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CraftTreasureMapPage /></Suspense>} />
                         <Route path="/sanantonio" element={<SanAntonioLanding />} />
-                        <Route path="/crew/new" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewNewPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/crew/new" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewNewPage /></Suspense></ExplorerRoute>} />
                         <Route path="/crew/:crewId" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/crew/:crewId/invite" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewInvite /></Suspense>} />
                         <Route path="/ambassador/register" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AmbassadorRegistration /></Suspense></ProtectedRoute>} />
@@ -586,8 +773,26 @@ const App = () => (
                         <Route path="/launch/run-a-node" element={<RunANode />} />
                         <Route path="/launch-tracker" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LaunchTracker /></Suspense></ExplorerRoute>} />
                         <Route path="/production-runs" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProductionRuns /></Suspense></ExplorerRoute>} />
-                        <Route path="/start" element={<OnboardingStart />} />
-                        <Route path="/begin" element={<OnboardingStart />} />
+                        <Route path="/start" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><WhatDoYouWantFlow /></Suspense>} />
+                        {/* K128: Cold Start — Four Pathways to Captain */}
+                        <Route path="/start/cold-start" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ColdStartHub /></Suspense>} />
+                        <Route path="/start/cold-start/food" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><FoodNodeCueCard /></Suspense>} />
+                        <Route path="/start/cold-start/manufacturing" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ManufacturingNodeCueCard /></Suspense>} />
+                        <Route path="/start/cold-start/service" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ServiceNodeCueCard /></Suspense>} />
+                        <Route path="/start/cold-start/local-business" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LocalBusinessNodeCueCard /></Suspense>} />
+                        <Route path="/captain" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CaptainLanding /></Suspense>} />
+                        <Route path="/captain/become" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CaptainOnboardingPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/captain/dashboard" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CaptainDashboardPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/captain/medallion" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ShipMedallionPage /></Suspense>} />
+                        {/* K131: Programmable Card — Welcome Gate + Designer Marketplace */}
+                        <Route path="/w/:medallionId" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><WelcomeGatePage /></Suspense>} />
+                        <Route path="/tools/card-generator" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardGeneratorV2 /></Suspense></ProtectedRoute>} />
+                        <Route path="/crew/design" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DesignCrewPage /></Suspense>} />
+                        {/* K134: MoneyPenny Gatekeeper — Contact Form + Admin Inbox */}
+                        <Route path="/contact" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ContactPage /></Suspense>} />
+                        <Route path="/dashboard/gatekeeper" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GatekeeperInboxPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/begin" element={<Navigate to="/welcome" replace />} />
+                        <Route path="/onboarding" element={<Navigate to="/welcome" replace />} />
                         <Route path="/pathway" element={<BusinessPathway />} />
                         <Route path="/business-pathway" element={<BusinessPathway />} />
                         <Route path="/about/patriotic-interdependentalist" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PatrioticInterdependentalist /></Suspense>} />
@@ -624,7 +829,10 @@ const App = () => (
                         
                         {/* Protected Marketplace Routes */}
                         <Route path="/marketplace" element={<ExplorerRoute><Marketplace /></ExplorerRoute>} />
-                        <Route path="/projects" element={<ExplorerRoute><Projects /></ExplorerRoute>} />
+                        <Route path="/projects" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><ProjectDirectory /></Suspense></ExplorerRoute>} />
+                        <Route path="/projects/create" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><TurnKeyCreatePage /></Suspense></ProtectedRoute>} />
+                        <Route path="/projects/:slug/claim" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><ShowcaseClaimPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/projects/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><TurnKeyProjectDetailPage /></Suspense></ExplorerRoute>} />
                         <Route path="/project/:projectSlug" element={<ProtectedRoute><ProjectView /></ProtectedRoute>} />
                         <Route path="/project/:projectSlug/product/:productId" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                         <Route path="/sponsorship-guide" element={<ProtectedRoute><ContributionExplainer /></ProtectedRoute>} />
@@ -633,7 +841,9 @@ const App = () => (
                         <Route path="/gleaners-corner" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GleanersCorner /></Suspense>} />
 
                         {/* Protected Sponsor Routes */}
-                        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                        <Route path="/dashboard" element={<ProtectedRoute><CreatorDashboard /></ProtectedRoute>} />
+                        <Route path="/dashboard/legacy" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                        <Route path="/search" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><SearchResultsPage /></Suspense>} />
                         <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
                         <Route path="/blockchain/:projectId" element={<ProtectedRoute><BlockchainExplorer /></ProtectedRoute>} />
                         <Route path="/medallions" element={<ProtectedRoute><MedallionViewer /></ProtectedRoute>} />
@@ -646,8 +856,12 @@ const App = () => (
                         <Route path="/help" element={<ExplorerRoute><CommunitySupport /></ExplorerRoute>} />
                         <Route path="/peer-contracts" element={<ProtectedRoute><PeerContracts /></ProtectedRoute>} />
                         <Route path="/guilds" element={<ExplorerRoute><Guilds /></ExplorerRoute>} />
+                        <Route path="/guilds/create" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GuildFormationWizard /></Suspense></ProtectedRoute>} />
                         <Route path="/guilds/hub" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GuildHub /></Suspense></ExplorerRoute>} />
+                        <Route path="/guilds/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><GuildDetail /></Suspense></ExplorerRoute>} />
                         <Route path="/tribes" element={<ExplorerRoute><Tribes /></ExplorerRoute>} />
+                        <Route path="/tribes/create" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TribeFormationWizard /></Suspense></ProtectedRoute>} />
+                        <Route path="/tribes/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TribeDetail /></Suspense></ExplorerRoute>} />
                         <Route path="/position-categories" element={<ProtectedRoute><PositionCategories /></ProtectedRoute>} />
                         <Route path="/lb-positions" element={<ProtectedRoute><LBInternalPositions /></ProtectedRoute>} />
                         <Route path="/production-queue" element={<ProtectedRoute><ProductionQueue /></ProtectedRoute>} />
@@ -658,12 +872,21 @@ const App = () => (
                         <Route path="/pledges" element={<Navigate to="/my-pledges" replace />} />
                         <Route path="/deck-card-studio" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
                         <Route path="/cue-cards" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
+                        <Route path="/cue-cards/campaigns" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><CueCardCampaignLibrary /></Suspense></ExplorerRoute>} />
+                        <Route path="/cue-cards/campaigns/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><CueCardCampaignDetailPage /></Suspense></ExplorerRoute>} />
                         <Route path="/cue-cards/:cardType" element={<CueCardShare />} />
                         <Route path="/deck-cards" element={<Navigate to="/deck" replace />} />
                         <Route path="/hofund" element={<ExplorerRoute><DeckCardStudio /></ExplorerRoute>} />
                         <Route path="/hofund-studio" element={<Navigate to="/hofund" replace />} />
                         <Route path="/the-2nd-second" element={<ExplorerRoute><The2ndSecondPortal /></ExplorerRoute>} />
-                        <Route path="/makers" element={<ExplorerRoute><The2ndSecondPortal /></ExplorerRoute>} />
+
+                        {/* K107: Product Catalog + Makers + Production Pipeline */}
+                        <Route path="/products" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><ProductCatalog /></Suspense></ExplorerRoute>} />
+                        <Route path="/products/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><CatalogProductDetail /></Suspense></ExplorerRoute>} />
+                        <Route path="/makers" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><MakerDirectory /></Suspense></ExplorerRoute>} />
+                        <Route path="/makers/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><MakerProfile /></Suspense></ExplorerRoute>} />
+                        <Route path="/register-maker" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><MakerRegistration /></Suspense></ProtectedRoute>} />
+                        <Route path="/production/new" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><ProductionOrderFlow /></Suspense></ProtectedRoute>} />
                         <Route path="/ledger" element={<ExplorerRoute><TransparentLedger /></ExplorerRoute>} />
                         <Route path="/transparent-ledger" element={<ExplorerRoute><TransparentLedger /></ExplorerRoute>} />
                         <Route path="/medallion-swap" element={<ExplorerRoute><MedallionSwap /></ExplorerRoute>} />
@@ -680,6 +903,7 @@ const App = () => (
                         <Route path="/initiatives/power-to-the-people" element={<ExplorerRoute><PowerToThePeoplePage /></ExplorerRoute>} />
                         <Route path="/initiatives/brass-tacks" element={<ExplorerRoute><BrassTacksPage /></ExplorerRoute>} />
                         <Route path="/initiatives/health-accords" element={<ExplorerRoute><HealthAccordsPage /></ExplorerRoute>} />
+                        <Route path="/mission-one" element={<ExplorerRoute><MissionOnePage /></ExplorerRoute>} />
                         <Route path="/durins-door" element={<ExplorerRoute><DurinsDoor /></ExplorerRoute>} />
                         <Route path="/international" element={<ExplorerRoute><DurinsDoor /></ExplorerRoute>} />
                         <Route path="/friend" element={<ExplorerRoute><FriendPage /></ExplorerRoute>} />
@@ -740,6 +964,8 @@ const App = () => (
                         <Route path="/hexisle/vote" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleVote /></Suspense></ExplorerRoute>} />
                         <Route path="/hexisle/battle-philosophy" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleBattlePhilosophy /></Suspense>} />
                         <Route path="/cue-cards/hexisle" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleCueCard /></Suspense>} />
+                        <Route path="/hexisle/campaigns" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HexIsleCampaignsPage /></Suspense>} />
+                        <Route path="/hexisle/campaign/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><KickstarterCampaignPage /></Suspense>} />
                         <Route path="/chain" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainDashboard /></Suspense></ExplorerRoute>} />
                         <Route path="/demand" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DemandSignaling /></Suspense></ExplorerRoute>} />
                         <Route path="/worked-example" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BoiseBusinessCardsExample /></Suspense>} />
@@ -749,6 +975,9 @@ const App = () => (
                         {/* Legal pages — public, no auth required (TikTok compliance) */}
                         <Route path="/terms" element={<TermsOfService />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />
+                        {/* Crown Letters — full inventory page */}
+                        <Route path="/crown-letters" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrownLettersPage /></Suspense>} />
+                        <Route path="/benefits" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BenefitsPage /></Suspense>} />
                         {/* Crown Letter Updates — public, dynamic slug */}
                         <Route path="/updates/crown/:slug" element={<CrownLetterUpdate />} />
                         {/* Developer Portal — public */}
@@ -775,7 +1004,6 @@ const App = () => (
                         <Route path="/scroll-forge" element={<ExplorerRoute><ScrollForgePage /></ExplorerRoute>} />
                         <Route path="/beacons" element={<TheHelm />} />
                         <Route path="/beacon-explainer" element={<BeaconExplainer />} />
-                        <Route path="/treasure-map" element={<TheHelm />} />
                         <Route path="/journey-map" element={<ExplorerRoute><HelmPage /></ExplorerRoute>} />
                         <Route path="/beacon-runs" element={<ExplorerRoute><HelmPage /></ExplorerRoute>} />
                         <Route path="/beacon-run/:slug" element={<ExplorerRoute><HelmPage /></ExplorerRoute>} />
@@ -789,7 +1017,8 @@ const App = () => (
                         <Route path="/ip-portfolio/:qrCode?" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><IPPortfolioPage /></Suspense>} />
                         <Route path="/economics" element={<EconomicLaws />} />
                         <Route path="/economics/:paperId" element={<PaperPage />} />
-                        <Route path="/the300" element={<Governance />} />
+                        <Route path="/the300" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><The300Page /></Suspense>} />
+                        <Route path="/the300/:pedestalId" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PedestalDetailPage /></Suspense>} />
                         <Route path="/star-chamber-legacy" element={<Governance />} />
                         <Route path="/initiatives/:slug" element={<ExplorerRoute><InitiativePage /></ExplorerRoute>} />
                         <Route path="/matchtrade" element={<MatchTrade />} />
@@ -797,6 +1026,8 @@ const App = () => (
                         <Route path="/arena" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
                         <Route path="/design-battle" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
                         <Route path="/battles" element={<ExplorerRoute><DesignBattleArena /></ExplorerRoute>} />
+                        <Route path="/design/themes" element={<ExplorerRoute><ThemeGallery /></ExplorerRoute>} />
+                        <Route path="/design/themes/create" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ThemeEditorPage /></Suspense></ProtectedRoute>} />
                         <Route path="/emporium/templates" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><EmporiumTemplates /></Suspense>} />
                         <Route path="/emporium/designs" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><EmporiumTemplates /></Suspense>} />
                         <Route path="/emporium" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><EmporiumTemplates /></Suspense>} />
@@ -826,16 +1057,29 @@ const App = () => (
                         <Route path="/dashboard/provider" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProviderDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/dashboard/runner" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><RunnerDashboard /></Suspense></ProtectedRoute>} />
                         <Route path="/dashboard/onboarder" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><OnboarderDashboard /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/lb-card" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LBCardPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/fund-card" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><FundMyCard /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/war-chest" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><WarChestPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/payouts" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PayoutsPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/helm" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HelmActionsPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/oob" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><OutOfBoundsPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/settings/social-accounts" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><SocialAccountsPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/admin/feature-flags" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><FounderFeatureFlags /></Suspense></ProtectedRoute>} />
                         <Route path="/calendar" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CalendarPage /></Suspense></ProtectedRoute>} />
                         <Route path="/tools/cue-card-generator" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CueCardGenerator /></Suspense></ProtectedRoute>} />
                         <Route path="/treasure-maps" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TreasureMaps /></Suspense>} />
                         <Route path="/treasure-maps/:mapId" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TreasureMapGuide /></Suspense>} />
                         <Route path="/chain-voting" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ChainVoting /></Suspense>} />
 
+                        {/* K119: Social Import + Bridge-to-Local */}
+                        <Route path="/import" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><SocialImportPage /></Suspense></ProtectedRoute>} />
+                        <Route path="/dashboard/bridges" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><ConnectedServicesPage /></Suspense></ProtectedRoute>} />
+
                         {/* Sessions 47-49 routes (Bishop 013) */}
                         <Route path="/santa" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><SantaEverAfter /></Suspense></ProtectedRoute>} />
                         <Route path="/node-captain" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><NodeCaptainPage /></Suspense></ProtectedRoute>} />
                         <Route path="/star-chamber" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StarChamber /></Suspense></ProtectedRoute>} />
+                        <Route path="/castle" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><Castle /></Suspense>} />
                         <Route path="/c-plus-20" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CPlus20Dashboard /></Suspense>} />
                         <Route path="/tereno-certification" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TerenoCertificationPage /></Suspense></ExplorerRoute>} />
                         <Route path="/the-forge" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ModularManufacturing /></Suspense></ProtectedRoute>} />
@@ -858,6 +1102,9 @@ const App = () => (
                         <Route path="/factory/nodes" element={<ProtectedRoute><NodeRegistration /></ProtectedRoute>} />
                         <Route path="/factory/register" element={<ProtectedRoute><NodeRegistration /></ProtectedRoute>} />
                         <Route path="/factory/bounties" element={<ProtectedRoute><ManufacturingStore /></ProtectedRoute>} />
+                        <Route path="/factory/canister" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CanisterConfigurator /></Suspense></ExplorerRoute>} />
+                        <Route path="/factory/canister/shop" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CanisterProductCatalog /></Suspense></ExplorerRoute>} />
+                        <Route path="/canister/bom" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CanisterBOMPage /></Suspense></ExplorerRoute>} />
                         <Route path="/brass-tacks" element={<ExplorerRoute><FactoryHub /></ExplorerRoute>} />
                         <Route path="/looking-glass" element={<LookingGlass />} />
                         <Route path="/glass" element={<LookingGlass />} />
@@ -885,7 +1132,7 @@ const App = () => (
                         
                         {/* Switzerland Rule Arenas — OUTSIDE LB proper */}
                         <Route path="/arenas" element={<Arenas />} />
-                        <Route path="/political-expedition" element={<ExplorerRoute><PowerToThePeoplePage /></ExplorerRoute>} />
+                        <Route path="/political-expedition" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PoliticalExpeditionPage /></Suspense></ExplorerRoute>} />
                         <Route path="/areopagus" element={<Arenas />} />
                         <Route path="/crucible" element={<Arenas />} />
                         <Route path="/petitions" element={<Petitions />} />
@@ -902,6 +1149,7 @@ const App = () => (
                         <Route path="/membership-success" element={<ProtectedRoute><MembershipSuccess /></ProtectedRoute>} />
                         <Route path="/membership/confirm" element={<MembershipConfirm />} />
               <Route path="/admin/roles" element={<ProtectedRoute><RoleManagement /></ProtectedRoute>} />
+              <Route path="/admin/showcase" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><ShowcaseAdminPage /></Suspense></ProtectedRoute>} />
               <Route path="/admin/company-independence" element={<ProtectedRoute><CompanyIndependenceManager /></ProtectedRoute>} />
               <Route path="/projects/:projectId/scale-rates" element={<ProtectedRoute><ContractScaleManager /></ProtectedRoute>} />
               <Route path="/external-services" element={<ProtectedRoute><ExternalServices /></ProtectedRoute>} />
@@ -975,6 +1223,7 @@ const App = () => (
                         
                         {/* Help Each Other Help Ourselves - Philosophy Page */}
                         <Route path="/help-each-other" element={<ExplorerRoute><HelpEachOtherPage /></ExplorerRoute>} />
+                        <Route path="/starter-kit" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StarterKitPage /></Suspense></ExplorerRoute>} />
                         <Route path="/initiatives/msa" element={<ExplorerRoute><MSAPage /></ExplorerRoute>} />
                         <Route path="/initiatives/lifeline-medications" element={<ExplorerRoute><LifeLineMedicationsPage /></ExplorerRoute>} />
                         <Route path="/initiatives/tatiana-schlossburg-health-accords" element={<ExplorerRoute><LifeLineMedicationsPage /></ExplorerRoute>} />
@@ -1050,11 +1299,76 @@ const App = () => (
           <Route path="/hexisle/encyclopedia" element={<ExplorerRoute><HexIsleEncyclopedia /></ExplorerRoute>} />
           <Route path="/hexisle/:islandName" element={<ExplorerRoute><HexIsleIslandPage /></ExplorerRoute>} />
 
+          {/* Crew Tables — Design Pipeline (Session 87) */}
+          <Route path="/crew-tables" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CrewTablesPage /></Suspense></ExplorerRoute>} />
+
+          {/* Mission TWO: Housing (Session 89) */}
+          <Route path="/housing" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><HousingPage /></Suspense></ExplorerRoute>} />
+          <Route path="/shelter" element={<Navigate to="/housing" replace />} />
+          <Route path="/mission-two" element={<Navigate to="/housing" replace />} />
+
+          {/* Vehicle Systems — Rally Group (Session 85) */}
+          <Route path="/lemon-lot" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LemonLot /></Suspense></ExplorerRoute>} />
+          <Route path="/local-wheels" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><LocalWheels /></Suspense></ExplorerRoute>} />
+          <Route path="/rideshare-routes" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><RideshareRoutesPage /></Suspense></ExplorerRoute>} />
+          <Route path="/rideshare" element={<Navigate to="/rideshare-routes" replace />} />
+          <Route path="/fleet" element={<Navigate to="/local-wheels" replace />} />
+          <Route path="/vehicle-sharing" element={<Navigate to="/lemon-lot" replace />} />
+
+          {/* ADAPT Score Dashboard (Session 92) */}
+          <Route path="/adapt-score" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AdaptScore /></Suspense></ExplorerRoute>} />
+          <Route path="/adapt" element={<Navigate to="/adapt-score" replace />} />
+          <Route path="/effectiveness" element={<Navigate to="/adapt-score" replace />} />
+
+          {/* K114: Subscription Engine + Coalition Formation */}
+          <Route path="/subscribe" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><SubscribePage /></Suspense></ExplorerRoute>} />
+          <Route path="/coalitions" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CoalitionDirectory /></Suspense></ExplorerRoute>} />
+          <Route path="/coalitions/create" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CoalitionCreate /></Suspense></ProtectedRoute>} />
+          <Route path="/coalitions/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><CoalitionDetail /></Suspense></ExplorerRoute>} />
+          <Route path="/alliances" element={<Navigate to="/coalitions" replace />} />
+
           {/* Coaster Medallion & Farmer Supply Chain (Session 6F/6G) */}
           <Route path="/coaster-medallion" element={<ExplorerRoute><CoasterMedallionProject /></ExplorerRoute>} />
           <Route path="/farmer-supply-chain" element={<ExplorerRoute><FarmerSupplyChainPage /></ExplorerRoute>} />
           <Route path="/meal-kits" element={<ExplorerRoute><FarmerSupplyChainPage /></ExplorerRoute>} />
           <Route path="/freeze-dried" element={<ExplorerRoute><FarmerSupplyChainPage /></ExplorerRoute>} />
+
+          {/* K120: Contest Infrastructure + Buy Credits */}
+          <Route path="/contests" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ContestDirectory /></Suspense></ExplorerRoute>} />
+          <Route path="/contests/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ContestDetailPage /></Suspense></ExplorerRoute>} />
+          <Route path="/contests/:slug/enter" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ContestEntryPage /></Suspense></ProtectedRoute>} />
+          <Route path="/buy-credits" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BuyCreditsPage /></Suspense></ProtectedRoute>} />
+          <Route path="/dashboard/payments" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PayoutsPage /></Suspense></ProtectedRoute>} />
+
+          {/* K127: Business Campaign Onboarding */}
+          <Route path="/campaigns" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BusinessCampaignDirectory /></Suspense>} />
+          <Route path="/campaigns/nominate" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><NominateBusinessPage /></Suspense></ProtectedRoute>} />
+          <Route path="/campaigns/:slug" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BusinessCampaignDetail /></Suspense>} />
+          <Route path="/campaigns/:slug/pitch-packet" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PitchPacketPage /></Suspense></ProtectedRoute>} />
+
+          {/* K137: Cephas Knowledge Graph — community resources + bidirectional links */}
+          <Route path="/knowledge/:slug" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-foreground">Loading...</div></div>}><KnowledgeViewer /></Suspense></ExplorerRoute>} />
+
+          {/* K141: X-Ray Bounty Arena — gamified error hunting + design auctions */}
+          <Route path="/dashboard/bounty-arena" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><XRayBountyDashboard /></Suspense></ProtectedRoute>} />
+          <Route path="/auction" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><DesignAuctionPage /></Suspense>} />
+
+          {/* K147: Piggyback Improvement Pipeline — community improvement submissions */}
+          <Route path="/piggyback" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PiggybackSubmitPage /></Suspense></ProtectedRoute>} />
+          <Route path="/dashboard/piggyback-review" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><PiggybackReviewPage /></Suspense></ProtectedRoute>} />
+          <Route path="/dashboard/my-improvements" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MyPiggybackPage /></Suspense></ProtectedRoute>} />
+
+          {/* K142: Production Project Pages — Industry Backbone */}
+          <Route path="/production" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProjectsDirectoryPage /></Suspense></ExplorerRoute>} />
+          <Route path="/production/:projectId" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><ProductionProjectPage /></Suspense></ExplorerRoute>} />
+
+          {/* K143: 2nd Second Landing — Manufacturing Escalation Ladder */}
+          <Route path="/2nd-second" element={<ExplorerRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><SecondSecondLanding /></Suspense></ExplorerRoute>} />
+
+          {/* K121: Stripe Billing — Membership Tiers, Credits, Earnings */}
+          <Route path="/membership" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MembershipPage /></Suspense>} />
+          <Route path="/dashboard/membership" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MembershipDashboard /></Suspense></ProtectedRoute>} />
+          <Route path="/dashboard/earnings" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><EarningsDashboard /></Suspense></ProtectedRoute>} />
 
           <Route path="*" element={<NotFound />} />
                       </Routes>
@@ -1066,6 +1380,9 @@ const App = () => (
               <DenkenMenu />
               <BeaconBiteNudge />
               <CrowsNestOverlay />
+              <LarkSidePanel />
+              <XRayOverlay />
+              <CoinFlipAnimation />
             </RecordingProvider>
           </CrowsNestProvider>
           </PathwayProgressProvider>
@@ -1075,8 +1392,6 @@ const App = () => (
           </SeamlessOnboardProvider>
         </AuthProvider>
       </BrowserRouter>
-      <LarkSidePanel />
-      <XRayOverlay />
     </TooltipProvider>
     </BuilderModeProvider>
   </QueryClientProvider>

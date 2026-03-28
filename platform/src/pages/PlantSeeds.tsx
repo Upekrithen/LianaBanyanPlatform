@@ -238,7 +238,7 @@ export default function PlantSeeds() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Sponsor to Own', href: 'https://cephas.lianabanyan.com/under-the-hood/sponsor-to-own' },
+            { label: 'Sponsor to Own', href: '/cephas/under-the-hood/sponsor-to-own' },
           ]}
         >
           <div className="grid md:grid-cols-3 gap-4 mb-8">
@@ -286,7 +286,7 @@ export default function PlantSeeds() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Voting System', href: 'https://cephas.lianabanyan.com/under-the-hood/voting-system' },
+            { label: 'Voting System', href: '/cephas/under-the-hood/voting-system' },
           ]}
         >
           <div className="space-y-3">

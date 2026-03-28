@@ -116,7 +116,7 @@ export default function PatrioticInterdependentalist() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Button onClick={() => navigate("/welcome")}>See the Platform</Button>
-              <Button variant="outline" onClick={() => window.open("https://cephas.lianabanyan.com", "_blank")}>
+              <Button variant="outline" onClick={() => navigate("/cephas")}>
                 Read the Academic Papers
               </Button>
             </div>

@@ -14,11 +14,26 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useBuilderMode } from './BuilderModeContext';
-import { Hammer, MessageSquare, X, Glasses, ExternalLink, Link2, Send, FileQuestion, Download, Wrench, Hash, GripHorizontal, Lightbulb } from 'lucide-react';
+import { Hammer, MessageSquare, X, Glasses, ExternalLink, Link2, Send, FileQuestion, Download, Wrench, Hash, GripHorizontal, Lightbulb, Paintbrush, Palette, AlertTriangle, FileText, Eye, Coins, Flame, Target } from 'lucide-react';
 import { getXRayExplanation } from '@/data/xrayGlossary';
+import { FeedbackCategoryDropdown } from './FeedbackCategoryDropdown';
+import { XRayBountyFlip } from './XRayBountyFlip';
+import { OverlayTrigger } from '@/components/xray/OverlayTrigger';
+import { OverlayEditor } from '@/components/xray/OverlayEditor';
+import { useElementOverlays } from '@/hooks/useDesignDemocracy';
+import { useErrorReports, useDailyTracker } from '@/hooks/useXRayBountyArena';
+import { triggerCoinFlip } from '@/components/xray/CoinFlipAnimation';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
 
 interface XRayTarget {
   id: string;
+  rect: DOMRect;
+  element: HTMLElement;
+}
+
+interface OverlayTarget {
+  ref: string;
   rect: DOMRect;
   element: HTMLElement;
 }
@@ -31,14 +46,29 @@ interface PanelPosition {
 export const XRayOverlay: React.FC = () => {
   const { isBuilderModeActive, openLarkPanel } = useBuilderMode();
   const [targets, setTargets] = useState<XRayTarget[]>([]);
+  const [overlayTargets, setOverlayTargets] = useState<OverlayTarget[]>([]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showExplainer, setShowExplainer] = useState(true);
   const [quickNote, setQuickNote] = useState('');
   const [panelPositions, setPanelPositions] = useState<Record<string, PanelPosition>>({});
+  const [feedbackCategory, setFeedbackCategory] = useState<string | null>(null);
   const [dragging, setDragging] = useState<{ id: string; offsetX: number; offsetY: number } | null>(null);
+  const [designModeActive, setDesignModeActive] = useState(false);
+  const [activeOverlayEditor, setActiveOverlayEditor] = useState<string | null>(null);
   const scanRef = useRef<number | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const location = useLocation();
+  const { data: existingOverlays = [] } = useElementOverlays(location.pathname);
+
+  const overlayRefSet = new Set(existingOverlays.map((o) => o.element_ref));
+
+  const { user } = useAuth();
+  const { reportError } = useErrorReports(location.pathname);
+  const { dailyStats, incrementStat } = useDailyTracker();
+  const stats = dailyStats.data;
+  const [trackerExpanded, setTrackerExpanded] = useState(false);
+  const [reportingElement, setReportingElement] = useState<string | null>(null);
 
   // Reset state when toggled on
   useEffect(() => {
@@ -46,13 +76,17 @@ export const XRayOverlay: React.FC = () => {
       setShowExplainer(true);
       setExpandedId(null);
       setQuickNote('');
+      setFeedbackCategory(null);
       setPanelPositions({});
+      setDesignModeActive(false);
+      setActiveOverlayEditor(null);
     }
   }, [isBuilderModeActive]);
 
   const scanDOM = useCallback(() => {
     if (!isBuilderModeActive) {
       setTargets([]);
+      setOverlayTargets([]);
       return;
     }
 
@@ -78,7 +112,25 @@ export const XRayOverlay: React.FC = () => {
     });
 
     setTargets(visible);
-  }, [isBuilderModeActive]);
+
+    if (designModeActive) {
+      const overlayEls = document.querySelectorAll<HTMLElement>('[data-overlay-id]');
+      const visibleOverlays: OverlayTarget[] = [];
+      overlayEls.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight) {
+          visibleOverlays.push({
+            ref: el.getAttribute('data-overlay-id') || 'unknown',
+            rect,
+            element: el,
+          });
+        }
+      });
+      setOverlayTargets(visibleOverlays);
+    } else {
+      setOverlayTargets([]);
+    }
+  }, [isBuilderModeActive, designModeActive]);
 
   useEffect(() => {
     if (!isBuilderModeActive) {
@@ -506,8 +558,6 @@ export const XRayOverlay: React.FC = () => {
                     {glossary.learnMoreUrl && (
                       <a
                         href={glossary.learnMoreUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 transition-colors"
                         style={{ fontSize: '0.7rem', fontWeight: 600, textDecoration: 'none' }}
                       >
@@ -563,6 +613,82 @@ export const XRayOverlay: React.FC = () => {
                       </div>
                     )}
 
+                    {/* ── Bounty Arena Actions ── */}
+                    {user && (
+                      <div
+                        style={{
+                          borderTop: '1px solid rgba(245, 158, 11, 0.3)',
+                          marginTop: '0.5rem',
+                          paddingTop: '0.5rem',
+                        }}
+                      >
+                        <div className="flex items-center gap-1.5 mb-2">
+                          <Target className="w-3.5 h-3.5 text-amber-400" strokeWidth={2} />
+                          <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider">
+                            Bounty Arena
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          <button
+                            onClick={(e) => {
+                              reportError.mutate(
+                                { pageUrl: location.pathname, elementSelector: target.id, errorType: 'visual' },
+                                {
+                                  onSuccess: () => {
+                                    incrementStat.mutate('errors_found');
+                                    triggerCoinFlip(e.clientX, e.clientY, 1);
+                                  },
+                                },
+                              );
+                            }}
+                            disabled={reportError.isPending}
+                            className="flex items-center gap-1 text-red-400 hover:text-red-300 transition-colors"
+                            style={{
+                              fontSize: '0.6rem', fontWeight: 600,
+                              background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)',
+                              borderRadius: '0.375rem', padding: '0.3rem 0.5rem', cursor: 'pointer',
+                            }}
+                          >
+                            <AlertTriangle className="w-3 h-3" /> Report Error
+                          </button>
+                          <button
+                            onClick={() => setReportingElement(target.id)}
+                            className="flex items-center gap-1 text-purple-400 hover:text-purple-300 transition-colors"
+                            style={{
+                              fontSize: '0.6rem', fontWeight: 600,
+                              background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.25)',
+                              borderRadius: '0.375rem', padding: '0.3rem 0.5rem', cursor: 'pointer',
+                            }}
+                          >
+                            <FileText className="w-3 h-3" /> Document This
+                          </button>
+                          <button
+                            onClick={() => openLarkPanel(target.id)}
+                            className="flex items-center gap-1 text-green-400 hover:text-green-300 transition-colors"
+                            style={{
+                              fontSize: '0.6rem', fontWeight: 600,
+                              background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.25)',
+                              borderRadius: '0.375rem', padding: '0.3rem 0.5rem', cursor: 'pointer',
+                            }}
+                          >
+                            <Wrench className="w-3 h-3" /> Propose Fix
+                          </button>
+                          <a
+                            href={`/dashboard/bounty-arena?element=${encodeURIComponent(target.id)}`}
+                            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors"
+                            style={{
+                              fontSize: '0.6rem', fontWeight: 600,
+                              background: 'rgba(34, 211, 238, 0.1)', border: '1px solid rgba(34, 211, 238, 0.25)',
+                              borderRadius: '0.375rem', padding: '0.3rem 0.5rem', cursor: 'pointer',
+                              textDecoration: 'none',
+                            }}
+                          >
+                            <Eye className="w-3 h-3" /> View Reports
+                          </a>
+                        </div>
+                      </div>
+                    )}
+
                     {/* ── Feedback section — clearly labeled ── */}
                     <div
                       style={{
@@ -581,38 +707,51 @@ export const XRayOverlay: React.FC = () => {
                         </span>
                       </div>
 
-                      {/* Quick suggestion input */}
-                      <div className="flex gap-1.5 mb-1.5">
-                        <input
-                          type="text"
-                          value={quickNote}
-                          onChange={(e) => setQuickNote(e.target.value)}
-                          onKeyDown={(e) => { if (e.key === 'Enter') handleQuickSubmit(target.id); }}
-                          placeholder="Quick idea or suggestion..."
-                          className="flex-1 text-xs text-slate-200 placeholder-slate-600"
-                          style={{
-                            background: 'rgba(30, 41, 59, 0.8)',
-                            border: '1px solid rgba(100, 116, 139, 0.3)',
-                            borderRadius: '0.375rem',
-                            padding: '0.375rem 0.5rem',
-                            outline: 'none',
-                          }}
-                        />
-                        <button
-                          onClick={() => handleQuickSubmit(target.id)}
-                          disabled={!quickNote.trim()}
-                          className="flex-shrink-0"
-                          title="Send quick suggestion"
-                          style={{
-                            background: quickNote.trim() ? 'rgba(34, 211, 238, 0.2)' : 'rgba(30, 41, 59, 0.5)',
-                            border: `1px solid ${quickNote.trim() ? 'rgba(34, 211, 238, 0.5)' : 'rgba(100, 116, 139, 0.2)'}`,
-                            borderRadius: '0.375rem',
-                            padding: '0.375rem',
-                            cursor: quickNote.trim() ? 'pointer' : 'default',
-                          }}
-                        >
-                          <Send className={`w-3 h-3 ${quickNote.trim() ? 'text-cyan-400' : 'text-slate-600'}`} />
-                        </button>
+                      {/* Category dropdown — select before typing */}
+                      <FeedbackCategoryDropdown
+                        selectedCategory={feedbackCategory}
+                        onSelect={setFeedbackCategory}
+                      />
+
+                      {/* Quick suggestion input — only shows after category selected */}
+                      {feedbackCategory && (
+                        <div className="flex gap-1.5 mb-1.5">
+                          <input
+                            type="text"
+                            value={quickNote}
+                            onChange={(e) => setQuickNote(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') handleQuickSubmit(target.id); }}
+                            placeholder={`Describe the ${feedbackCategory.replace(/_/g, ' ')}...`}
+                            className="flex-1 text-xs text-slate-200 placeholder-slate-600"
+                            style={{
+                              background: 'rgba(30, 41, 59, 0.8)',
+                              border: '1px solid rgba(100, 116, 139, 0.3)',
+                              borderRadius: '0.375rem',
+                              padding: '0.375rem 0.5rem',
+                              outline: 'none',
+                            }}
+                          />
+                          <button
+                            onClick={() => handleQuickSubmit(target.id)}
+                            disabled={!quickNote.trim()}
+                            className="flex-shrink-0"
+                            title="Send quick suggestion"
+                            style={{
+                              background: quickNote.trim() ? 'rgba(34, 211, 238, 0.2)' : 'rgba(30, 41, 59, 0.5)',
+                              border: `1px solid ${quickNote.trim() ? 'rgba(34, 211, 238, 0.5)' : 'rgba(100, 116, 139, 0.2)'}`,
+                              borderRadius: '0.375rem',
+                              padding: '0.375rem',
+                              cursor: quickNote.trim() ? 'pointer' : 'default',
+                            }}
+                          >
+                            <Send className={`w-3 h-3 ${quickNote.trim() ? 'text-cyan-400' : 'text-slate-600'}`} />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* "You can do better!" bounty flip */}
+                      <div style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                        <XRayBountyFlip xrayId={target.id} onOpenLark={openLarkPanel} />
                       </div>
 
                       {/* Full Lark submission link */}
@@ -642,6 +781,58 @@ export const XRayOverlay: React.FC = () => {
                       No explanation yet for this component. Want to help write one?
                     </p>
 
+                    {/* ── Bounty Arena Actions (no-glossary) ── */}
+                    {user && (
+                      <div
+                        style={{
+                          borderTop: '1px solid rgba(245, 158, 11, 0.3)',
+                          paddingTop: '0.5rem',
+                        }}
+                      >
+                        <div className="flex items-center gap-1.5 mb-2">
+                          <Target className="w-3.5 h-3.5 text-amber-400" strokeWidth={2} />
+                          <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider">
+                            Bounty Arena
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          <button
+                            onClick={(e) => {
+                              reportError.mutate(
+                                { pageUrl: location.pathname, elementSelector: target.id, errorType: 'visual' },
+                                {
+                                  onSuccess: () => {
+                                    incrementStat.mutate('errors_found');
+                                    triggerCoinFlip(e.clientX, e.clientY, 1);
+                                  },
+                                },
+                              );
+                            }}
+                            disabled={reportError.isPending}
+                            className="flex items-center gap-1 text-red-400 hover:text-red-300 transition-colors"
+                            style={{
+                              fontSize: '0.6rem', fontWeight: 600,
+                              background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)',
+                              borderRadius: '0.375rem', padding: '0.3rem 0.5rem', cursor: 'pointer',
+                            }}
+                          >
+                            <AlertTriangle className="w-3 h-3" /> Report Error
+                          </button>
+                          <button
+                            onClick={() => openLarkPanel(target.id)}
+                            className="flex items-center gap-1 text-green-400 hover:text-green-300 transition-colors"
+                            style={{
+                              fontSize: '0.6rem', fontWeight: 600,
+                              background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.25)',
+                              borderRadius: '0.375rem', padding: '0.3rem 0.5rem', cursor: 'pointer',
+                            }}
+                          >
+                            <Wrench className="w-3 h-3" /> Propose Fix
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
                     {/* ── Feedback section ── */}
                     <div
                       style={{
@@ -656,37 +847,50 @@ export const XRayOverlay: React.FC = () => {
                         </span>
                       </div>
 
-                      <div className="flex gap-1.5 mb-1.5">
-                        <input
-                          type="text"
-                          value={quickNote}
-                          onChange={(e) => setQuickNote(e.target.value)}
-                          onKeyDown={(e) => { if (e.key === 'Enter') handleQuickSubmit(target.id); }}
-                          placeholder="Suggest an explanation..."
-                          className="flex-1 text-xs text-slate-200 placeholder-slate-600"
-                          style={{
-                            background: 'rgba(30, 41, 59, 0.8)',
-                            border: '1px solid rgba(100, 116, 139, 0.3)',
-                            borderRadius: '0.375rem',
-                            padding: '0.375rem 0.5rem',
-                            outline: 'none',
-                          }}
-                        />
-                        <button
-                          onClick={() => handleQuickSubmit(target.id)}
-                          disabled={!quickNote.trim()}
-                          className="flex-shrink-0"
-                          title="Send quick suggestion"
-                          style={{
-                            background: quickNote.trim() ? 'rgba(34, 211, 238, 0.2)' : 'rgba(30, 41, 59, 0.5)',
-                            border: `1px solid ${quickNote.trim() ? 'rgba(34, 211, 238, 0.5)' : 'rgba(100, 116, 139, 0.2)'}`,
-                            borderRadius: '0.375rem',
-                            padding: '0.375rem',
-                            cursor: quickNote.trim() ? 'pointer' : 'default',
-                          }}
-                        >
-                          <Send className={`w-3 h-3 ${quickNote.trim() ? 'text-cyan-400' : 'text-slate-600'}`} />
-                        </button>
+                      {/* Category dropdown */}
+                      <FeedbackCategoryDropdown
+                        selectedCategory={feedbackCategory}
+                        onSelect={setFeedbackCategory}
+                      />
+
+                      {feedbackCategory && (
+                        <div className="flex gap-1.5 mb-1.5">
+                          <input
+                            type="text"
+                            value={quickNote}
+                            onChange={(e) => setQuickNote(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') handleQuickSubmit(target.id); }}
+                            placeholder="Suggest an explanation..."
+                            className="flex-1 text-xs text-slate-200 placeholder-slate-600"
+                            style={{
+                              background: 'rgba(30, 41, 59, 0.8)',
+                              border: '1px solid rgba(100, 116, 139, 0.3)',
+                              borderRadius: '0.375rem',
+                              padding: '0.375rem 0.5rem',
+                              outline: 'none',
+                            }}
+                          />
+                          <button
+                            onClick={() => handleQuickSubmit(target.id)}
+                            disabled={!quickNote.trim()}
+                            className="flex-shrink-0"
+                            title="Send quick suggestion"
+                            style={{
+                              background: quickNote.trim() ? 'rgba(34, 211, 238, 0.2)' : 'rgba(30, 41, 59, 0.5)',
+                              border: `1px solid ${quickNote.trim() ? 'rgba(34, 211, 238, 0.5)' : 'rgba(100, 116, 139, 0.2)'}`,
+                              borderRadius: '0.375rem',
+                              padding: '0.375rem',
+                              cursor: quickNote.trim() ? 'pointer' : 'default',
+                            }}
+                          >
+                            <Send className={`w-3 h-3 ${quickNote.trim() ? 'text-cyan-400' : 'text-slate-600'}`} />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* "You can do better!" bounty flip */}
+                      <div style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                        <XRayBountyFlip xrayId={target.id} onOpenLark={openLarkPanel} />
                       </div>
 
                       <button
@@ -714,6 +918,166 @@ export const XRayOverlay: React.FC = () => {
           </div>
         );
       })}
+
+      {/* ── Design Mode sub-toggle (bottom-left) ── */}
+      {isBuilderModeActive && (
+        <div
+          className="pointer-events-auto fixed"
+          style={{ bottom: 20, left: 20, zIndex: 10004, display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+        >
+          <button
+            onClick={() => setDesignModeActive(!designModeActive)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 0.75rem',
+              background: designModeActive
+                ? 'rgba(245, 158, 11, 0.25)'
+                : 'rgba(15, 23, 42, 0.9)',
+              border: `1px solid ${designModeActive ? 'rgba(245, 158, 11, 0.6)' : 'rgba(34, 211, 238, 0.3)'}`,
+              borderRadius: '9999px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <Paintbrush
+              style={{ width: 14, height: 14, color: designModeActive ? '#fbbf24' : '#67e8f9' }}
+            />
+            <span
+              style={{
+                fontSize: '0.65rem',
+                fontWeight: 700,
+                color: designModeActive ? '#fbbf24' : '#67e8f9',
+              }}
+            >
+              Design Mode {designModeActive ? 'ON' : 'OFF'}
+            </span>
+          </button>
+
+          {designModeActive && (
+            <a
+              href="/design/themes"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.25rem',
+                padding: '0.35rem 0.6rem',
+                background: 'rgba(139, 92, 246, 0.15)',
+                border: '1px solid rgba(139, 92, 246, 0.3)',
+                borderRadius: '9999px',
+                color: '#c4b5fd',
+                fontSize: '0.6rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              <Palette style={{ width: 12, height: 12 }} />
+              Theme Gallery
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* ── Design Mode: OverlayTrigger badges on data-overlay-id elements ── */}
+      {designModeActive && overlayTargets.map((ot) => (
+        <OverlayTrigger
+          key={`overlay-trigger-${ot.ref}`}
+          elementRef={ot.ref}
+          rect={ot.rect}
+          hasOverlays={overlayRefSet.has(ot.ref)}
+          onActivate={(ref) => setActiveOverlayEditor(ref)}
+        />
+      ))}
+
+      {/* ── Design Mode: OverlayEditor for active element ── */}
+      {designModeActive && activeOverlayEditor && (() => {
+        const ot = overlayTargets.find((t) => t.ref === activeOverlayEditor);
+        if (!ot) return null;
+        return (
+          <OverlayEditor
+            elementRef={ot.ref}
+            rect={ot.rect}
+            onClose={() => setActiveOverlayEditor(null)}
+          />
+        );
+      })()}
+
+      {/* ── Design Mode: amber dashed outlines on overlay-id elements ── */}
+      {designModeActive && overlayTargets.map((ot) => (
+        <div
+          key={`overlay-outline-${ot.ref}`}
+          style={{
+            position: 'fixed',
+            top: ot.rect.top - 2,
+            left: ot.rect.left - 2,
+            width: ot.rect.width + 4,
+            height: ot.rect.height + 4,
+            border: '2px dashed rgba(245, 158, 11, 0.35)',
+            borderRadius: '0.375rem',
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
+
+      {/* ── Floating Daily Tracker (bottom-right) ── */}
+      {user && (
+        <div
+          className="pointer-events-auto fixed"
+          style={{ bottom: 20, right: 20, zIndex: 10004 }}
+        >
+          {trackerExpanded ? (
+            <div
+              style={{
+                background: 'rgba(15, 23, 42, 0.97)',
+                border: '1px solid rgba(245, 158, 11, 0.4)',
+                borderRadius: '0.75rem',
+                padding: '0.75rem',
+                minWidth: 200,
+                boxShadow: '0 4px 24px rgba(0, 0, 0, 0.5)',
+              }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#fbbf24' }}>Daily Stats</span>
+                <button
+                  onClick={() => setTrackerExpanded(false)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}
+                >
+                  <X className="w-3.5 h-3.5 text-slate-500 hover:text-slate-300" />
+                </button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem' }}>
+                <div style={{ fontSize: '0.6rem', color: '#94a3b8' }}>Found</div>
+                <div style={{ fontSize: '0.6rem', color: '#60a5fa', fontWeight: 700, textAlign: 'right' }}>{stats?.errors_found ?? 0}</div>
+                <div style={{ fontSize: '0.6rem', color: '#94a3b8' }}>Documented</div>
+                <div style={{ fontSize: '0.6rem', color: '#c084fc', fontWeight: 700, textAlign: 'right' }}>{stats?.errors_documented ?? 0}</div>
+                <div style={{ fontSize: '0.6rem', color: '#94a3b8' }}>Fixes</div>
+                <div style={{ fontSize: '0.6rem', color: '#4ade80', fontWeight: 700, textAlign: 'right' }}>{stats?.fixes_proposed ?? 0}</div>
+                <div style={{ fontSize: '0.6rem', color: '#94a3b8' }}>Bounties</div>
+                <div style={{ fontSize: '0.6rem', color: '#22d3ee', fontWeight: 700, textAlign: 'right' }}>{(stats?.bounties_created ?? 0) + (stats?.bounties_fulfilled ?? 0)}</div>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setTrackerExpanded(true)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.5rem',
+                padding: '0.4rem 0.75rem',
+                background: 'rgba(15, 23, 42, 0.95)',
+                border: '1px solid rgba(245, 158, 11, 0.35)',
+                borderRadius: '9999px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
+              }}
+            >
+              <Coins style={{ width: 14, height: 14, color: '#fbbf24' }} />
+              <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#fbbf24' }}>
+                {stats?.marks_earned ?? 0}M today
+              </span>
+              <span style={{ fontSize: '0.65rem', color: '#fb923c', fontWeight: 600 }}>
+                | <Flame style={{ width: 12, height: 12, display: 'inline', verticalAlign: 'middle' }} /> {stats?.streak_days ?? 0} days
+              </span>
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Click-away backdrop when a card is expanded */}
       {expandedId && (

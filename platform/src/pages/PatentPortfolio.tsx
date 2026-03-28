@@ -262,7 +262,7 @@ const NINE_LAWS = [
     name: 'Forex-Differential Absorption', 
     crown: false,
     description: 'Captures value from currency exchange differentials and routes it to platform stability rather than speculation.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/nine-economic-laws/',
+    academicLink: '/cephas/under-the-hood/nine-economic-laws',
     technicalLink: '/economics'
   },
   { 
@@ -270,7 +270,7 @@ const NINE_LAWS = [
     name: 'Ratchet Value Accumulation (HIVI)', 
     crown: true,
     description: 'One-way value ratchet ensures platform credits can only increase in value over time. The HIVI mechanism prevents deflation.',
-    academicLink: 'https://cephas.lianabanyan.com/academic/hivi-tldr/',
+    academicLink: '/cephas/academic/hivi-tldr',
     technicalLink: '/economics'
   },
   { 
@@ -278,7 +278,7 @@ const NINE_LAWS = [
     name: 'Quality-Volume Alignment (Cost+20%)', 
     crown: true,
     description: 'The revolutionary pricing model where creators and workers keep 83.3% and platform operates at transparent Cost+20% margin.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/',
+    academicLink: '/cephas/under-the-hood/cost-plus-twenty',
     technicalLink: '/economics'
   },
   { 
@@ -286,7 +286,7 @@ const NINE_LAWS = [
     name: 'One-Way Valve Decoupling', 
     crown: false,
     description: 'Prevents reverse flow of value that would enable speculation. Credits flow in one direction through the system.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/nine-economic-laws/',
+    academicLink: '/cephas/under-the-hood/nine-economic-laws',
     technicalLink: undefined
   },
   { 
@@ -294,7 +294,7 @@ const NINE_LAWS = [
     name: 'Structural Gleaning (3.3%)', 
     crown: false,
     description: 'The Boaz Principle applied to platform economics: 3.3% of transactions support community welfare automatically.',
-    academicLink: 'https://cephas.lianabanyan.com/academic/boaz-principle-tldr/',
+    academicLink: '/cephas/academic/boaz-principle-tldr',
     technicalLink: '/economics'
   },
   { 
@@ -302,7 +302,7 @@ const NINE_LAWS = [
     name: 'Generosity for Potential (Boaz)', 
     crown: false,
     description: 'Leave the corners of your field for those who need it. Built-in generosity mechanisms that strengthen the whole.',
-    academicLink: 'https://cephas.lianabanyan.com/academic/boaz-generosity-potential/',
+    academicLink: '/cephas/academic/boaz-generosity-potential',
     technicalLink: undefined
   },
   { 
@@ -310,7 +310,7 @@ const NINE_LAWS = [
     name: 'Inception Principle', 
     crown: false,
     description: 'Value creation begins at the moment of inception, not at the point of sale. Recognizes contribution before monetization.',
-    academicLink: 'https://cephas.lianabanyan.com/academic/inception-principle/',
+    academicLink: '/cephas/academic/inception-principle',
     technicalLink: undefined
   },
   { 
@@ -318,7 +318,7 @@ const NINE_LAWS = [
     name: 'Simultaneous Pricing Paradox', 
     crown: true,
     description: 'Resolves the paradox of pricing goods simultaneously across different markets with different purchasing powers.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/nine-economic-laws/',
+    academicLink: '/cephas/under-the-hood/nine-economic-laws',
     technicalLink: '/economics'
   },
   { 
@@ -326,7 +326,7 @@ const NINE_LAWS = [
     name: 'Jeep of Theseus (Cold Start)', 
     crown: false,
     description: 'How to bootstrap a cooperative economy from nothing. The cold start problem solved through incremental value building.',
-    academicLink: 'https://cephas.lianabanyan.com/academic/cold-start-theseus/',
+    academicLink: '/cephas/academic/cold-start-theseus',
     technicalLink: '/build-a-business'
   },
 ];
@@ -337,42 +337,42 @@ const HEXISLE_INNOVATIONS = [
     name: 'Golden Lotus Configuration', 
     crown: true,
     description: 'Optimal hexagonal tile arrangement that maximizes hydraulic efficiency while maintaining structural integrity.',
-    academicLink: 'https://cephas.lianabanyan.com/initiatives/hexisle/',
+    academicLink: '/cephas/initiatives/hexisle',
     technicalLink: '/hall-of-innovations'
   },
   { 
     name: 'AC Phase Unidirectional Rotation', 
     crown: true,
     description: 'Novel mechanism for converting alternating current into unidirectional mechanical rotation without traditional rectification.',
-    academicLink: 'https://cephas.lianabanyan.com/initiatives/hexisle/',
+    academicLink: '/cephas/initiatives/hexisle',
     technicalLink: '/hall-of-innovations'
   },
   { 
     name: 'HoFund Reversible Valve', 
     crown: true,
     description: 'Bidirectional valve system that enables complex fluid routing in modular game terrain with minimal pressure loss.',
-    academicLink: 'https://cephas.lianabanyan.com/initiatives/hexisle/',
+    academicLink: '/cephas/initiatives/hexisle',
     technicalLink: '/hall-of-innovations'
   },
   { 
     name: '469-Hexel System Validation', 
     crown: false,
     description: 'Proven system architecture supporting 469 interconnected hexagonal tiles with centralized hydraulic control.',
-    academicLink: 'https://cephas.lianabanyan.com/initiatives/hexisle/',
+    academicLink: '/cephas/initiatives/hexisle',
     technicalLink: undefined
   },
   { 
     name: 'Swan Neck Inverse Coupling', 
     crown: false,
     description: 'Flexible coupling mechanism that allows tiles to connect at various angles while maintaining fluid seal.',
-    academicLink: 'https://cephas.lianabanyan.com/initiatives/hexisle/',
+    academicLink: '/cephas/initiatives/hexisle',
     technicalLink: undefined
   },
   { 
     name: 'WaterCap Universal Connector', 
     crown: false,
     description: 'Standardized quick-connect system for modular hydraulic components with tool-free assembly.',
-    academicLink: 'https://cephas.lianabanyan.com/initiatives/hexisle/',
+    academicLink: '/cephas/initiatives/hexisle',
     technicalLink: undefined
   },
 ];
@@ -383,7 +383,7 @@ const CROWN_JEWELS = [
     category: 'Economics', 
     status: 'Filed',
     description: 'Revolutionary pricing model where creators and workers keep 83.3% while platform operates at transparent Cost+20% margin. Eliminates hidden fees and algorithmic manipulation.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/',
+    academicLink: '/cephas/under-the-hood/cost-plus-twenty',
     technicalLink: '/economics'
   },
   { 
@@ -391,15 +391,15 @@ const CROWN_JEWELS = [
     category: 'Currency', 
     status: 'Filed',
     description: 'Interlocking currency gears (Credits, Golden Keys, Cascade Pool) that enable value flow without speculation. Each gear serves a distinct purpose in the ecosystem.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/three-gear-currency/',
-    technicalLink: 'https://cephas.lianabanyan.com/architecture/three-gear-currency/'
+    academicLink: '/cephas/under-the-hood/three-gear-currency',
+    technicalLink: '/cephas/architecture/three-gear-currency'
   },
   { 
     name: 'IP Load Balancing', 
     category: 'Intellectual Property', 
     status: 'Filed',
     description: 'Novel approach to distributing intellectual property value across the platform. Ensures fair compensation while maintaining collective benefit.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/ip-load-balancing-ledger/',
+    academicLink: '/cephas/under-the-hood/ip-load-balancing-ledger',
     technicalLink: '/hall-of-innovations'
   },
   { 
@@ -407,7 +407,7 @@ const CROWN_JEWELS = [
     category: 'Governance', 
     status: 'Filed',
     description: 'Four-directional governance model (North/South/East/West) that balances stakeholder interests and prevents capture by any single group.',
-    academicLink: 'https://cephas.lianabanyan.com/architecture/voting-mechanics/',
+    academicLink: '/cephas/architecture/voting-mechanics',
     technicalLink: '/governance'
   },
   { 
@@ -415,7 +415,7 @@ const CROWN_JEWELS = [
     category: 'Quality', 
     status: 'Filed',
     description: 'Distributed quality assurance system where community members verify and validate content, products, and services through structured review processes.',
-    academicLink: 'https://cephas.lianabanyan.com/initiatives/harper-guild/',
+    academicLink: '/cephas/initiatives/harper-guild',
     technicalLink: undefined
   },
   { 
@@ -423,7 +423,7 @@ const CROWN_JEWELS = [
     category: 'Privacy', 
     status: 'Filed',
     description: 'Privacy-first architecture that operates without collecting personally identifiable information. Proves you can build functional systems without surveillance.',
-    academicLink: 'https://cephas.lianabanyan.com/legal/privacy-policy/',
+    academicLink: '/cephas/legal/privacy-policy',
     technicalLink: undefined
   },
   { 
@@ -431,7 +431,7 @@ const CROWN_JEWELS = [
     category: 'Governance', 
     status: 'Filed',
     description: 'Mathematical voting system where vote cost increases quadratically, preventing plutocratic capture while allowing intensity of preference expression.',
-    academicLink: 'https://cephas.lianabanyan.com/architecture/voting-mechanics/',
+    academicLink: '/cephas/architecture/voting-mechanics',
     technicalLink: '/governance'
   },
   { 
@@ -439,7 +439,7 @@ const CROWN_JEWELS = [
     category: 'Currency', 
     status: 'Filed',
     description: 'One-way value ratchet that absorbs forex differentials to increase platform credit value over time. Credits can only go up, never down.',
-    academicLink: 'https://cephas.lianabanyan.com/under-the-hood/forex-ratchet-valuation/',
+    academicLink: '/cephas/under-the-hood/forex-ratchet-valuation',
     technicalLink: '/economics'
   },
 ];
@@ -464,7 +464,7 @@ export default function PatentPortfolio() {
             Patent Portfolio
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            1,754 documented innovations across economics, governance, privacy,
+            2,007 documented innovations across economics, governance, privacy,
             IP management, and cooperative business systems.
           </p>
         </motion.div>

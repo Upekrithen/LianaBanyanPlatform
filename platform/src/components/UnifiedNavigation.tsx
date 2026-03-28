@@ -1,4 +1,4 @@
-import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket, TrendingUp, Scale, User, CreditCard, Repeat, Truck } from "lucide-react";
+import { Home, Users, Briefcase, ShoppingBag, Building2, FileText, Settings, LayoutDashboard, Package, DollarSign, UserPlus, BadgeCheck, Network, BarChart3, Code, Palette, Wallet, Award, Users2, Layers, UserCheck, Shield, FileSignature, Library, Wrench, Target, Factory, Eye, Map, Megaphone, TreePine, Tv, Rocket, TrendingUp, Scale, User, CreditCard, Repeat, Truck, Hammer, Crown, Handshake, Download, Link2, Trophy, Coins, Anchor, Plug, PenTool, Store, Utensils, BookOpen } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -31,17 +31,25 @@ interface NavItem {
 const allNavItems: NavItem[] = [
   // Marketplace (.com)
   { title: "Home", url: "/", icon: Home, portal: "marketplace" },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, portal: "marketplace" },
   { title: "Browse", url: "/marketplace", icon: ShoppingBag, portal: "marketplace" },
+  { title: "Products", url: "/products", icon: Package, portal: "marketplace" },
+  { title: "Makers", url: "/makers", icon: Hammer, portal: "marketplace" },
   { title: "Creators", url: "/creators", icon: User, portal: "marketplace" },
   { title: "Projects", url: "/projects", icon: Briefcase, portal: "marketplace" },
   { title: "Production Queue", url: "/production-queue", icon: BarChart3, portal: "marketplace" },
   { title: "Guilds", url: "/guilds", icon: Users2, portal: "marketplace" },
   { title: "BandWagon", url: "/guilds/hub?tab=bandwagon", icon: TrendingUp, portal: "marketplace" },
   { title: "Subscriptions", url: "/subscriptions", icon: Repeat, portal: "marketplace" },
+  { title: "Subscribe", url: "/subscribe", icon: Crown, portal: "marketplace" },
+  { title: "Coalitions", url: "/coalitions", icon: Handshake, portal: "marketplace" },
   { title: "Storefront Builder", url: "/tools/storefront-builder", icon: Building2, portal: "marketplace" },
   { title: "Provider Dashboard", url: "/dashboard/provider", icon: Package, portal: "marketplace" },
   { title: "Runner Dashboard", url: "/dashboard/runner", icon: Truck, portal: "marketplace" },
   { title: "Passive Income", url: "/dashboard/onboarder", icon: DollarSign, portal: "marketplace" },
+  { title: "Membership", url: "/dashboard/membership", icon: Crown, portal: "marketplace" },
+  { title: "Buy Credits", url: "/buy-credits", icon: Coins, portal: "marketplace" },
+  { title: "Earnings", url: "/dashboard/earnings", icon: DollarSign, portal: "marketplace" },
   { title: "Cue Card Generator", url: "/tools/cue-card-generator", icon: CreditCard, portal: "marketplace" },
   { title: "Treasure Maps", url: "/treasure-maps", icon: Map, portal: "marketplace" },
   { title: "Steward", url: "/steward", icon: Shield, portal: "marketplace" },
@@ -53,6 +61,7 @@ const allNavItems: NavItem[] = [
   { title: "Asset Library", url: "/asset-library", icon: Library, portal: "marketplace" },
   { title: "Pre-Beta Recruits", url: "/pre-beta-recruits", icon: Target, portal: "marketplace", requiresAdmin: true },
   { title: "Manufacturing", url: "/manufacturing", icon: Factory, portal: "marketplace" },
+  { title: "Canister System", url: "/factory/canister", icon: Wrench, portal: "marketplace" },
   { title: "Crew Call", url: "/crew-call", icon: Wrench, portal: "marketplace" },
   { title: "Cue Cards", url: "/cue-cards", icon: CreditCard, portal: "marketplace" },
   { title: "Cephas", url: "/cephas", icon: FileText, portal: "marketplace" },
@@ -61,7 +70,18 @@ const allNavItems: NavItem[] = [
   { title: "Looking Glass", url: "/looking-glass", icon: Eye, portal: "marketplace" },
   { title: "52-Card Hunt", url: "/treasure-map-game", icon: Map, portal: "marketplace" },
   { title: "Hofund Studio", url: "/hofund", icon: Tv, portal: "marketplace" },
-  { title: "Start a Project", url: "/start", icon: Rocket, portal: "marketplace" },
+  { title: "Start a Project", url: "/cue-cards/campaigns", icon: Rocket, portal: "marketplace" },
+  { title: "Captain's Deck", url: "/captain", icon: Anchor, portal: "marketplace" },
+  { title: "Become Captain", url: "/captain/become", icon: Anchor, portal: "marketplace" },
+  { title: "The 300", url: "/the300", icon: Shield, portal: "marketplace" },
+  { title: "Find Your Path", url: "/start", icon: Map, portal: "marketplace" },
+  { title: "Import a Product", url: "/import", icon: Download, portal: "marketplace" },
+  { title: "Connected Services", url: "/dashboard/bridges", icon: Link2, portal: "marketplace" },
+  { title: "Contests", url: "/contests", icon: Trophy, portal: "marketplace" },
+  { title: "Theme Gallery", url: "/design/themes", icon: Palette, portal: "marketplace" },
+  { title: "Local Campaigns", url: "/campaigns", icon: Store, portal: "marketplace" },
+  { title: "Family Table", url: "/family-table", icon: Utensils, portal: "marketplace" },
+  { title: "Cookbook", url: "/cookbook", icon: BookOpen, portal: "marketplace" },
   // "Investment Guide" removed — SEC compliance (no investment language)
   // "Blockchain" removed — not functional, confusing for users
   { title: "My Portfolio", url: "/portfolio", icon: LayoutDashboard, portal: "marketplace" },
@@ -74,13 +94,14 @@ const allNavItems: NavItem[] = [
   { title: "The Kaleidoscope", url: "/kaleidoscope", icon: Map, portal: "business" },
   { title: "StoreFront Aggregation", url: "/storefront-aggregation", icon: ShoppingBag, portal: "business" },
   { title: "The Furnace", url: "/the-furnace", icon: Shield, portal: "business" },
+  { title: "Maker Dashboard", url: "/dashboard/maker", icon: Hammer, portal: "business" },
   { title: "Position Categories", url: "/position-categories", icon: Layers, portal: "business" },
   { title: "LB Internal Hiring", url: "/lb-positions", icon: UserCheck, portal: "business", requiresAdmin: true },
   { title: "Contract Positions", url: "/positions", icon: Users, portal: "business" },
   { title: "Manage Positions", url: "/manage-positions", icon: UserPlus, portal: "business", requiresOwner: true },
   { title: "Task List", url: "/task-list", icon: FileText, portal: "business", requiresAdmin: true },
   { title: "Task Log", url: "/task-log", icon: BarChart3, portal: "business", requiresAdmin: true },
-  { title: "Create Project", url: "/admin/project/create", icon: Package, portal: "business", requiresOwner: true },
+  { title: "Create Project", url: "/create-project", icon: Package, portal: "business", requiresOwner: true },
   { title: "Subdomain Manager", url: "/subdomain-manager", icon: Network, portal: "business", requiresAdmin: true },
   { title: "Credentials", url: "/credential-management", icon: BadgeCheck, portal: "business", requiresAdmin: true },
   { title: "Client API", url: "/client-api-manager", icon: Code, portal: "business", requiresAdmin: true },
@@ -94,11 +115,16 @@ const allNavItems: NavItem[] = [
   { title: "Gas Tracking", url: "/gas-tracking", icon: BadgeCheck, portal: "nonprofit", requiresAdmin: true },
   { title: "Member Benefits", url: "/member-resources", icon: FileText, portal: "nonprofit" },
   
-  // Network (.net)
+  // Network (.net) — organized around Deck Card categories
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, portal: "network" },
-  { title: "Industry Pricing", url: "/admin/industry-pricing", icon: DollarSign, portal: "network" },
+  { title: "Guilds", url: "/guilds", icon: Shield, portal: "network" },
+  { title: "Tribes", url: "/tribes", icon: Users2, portal: "network" },
+  { title: "B2B Contracts", url: "/b2b-contracts", icon: FileSignature, portal: "network" },
+  { title: "Supply Chain", url: "/supply-chain", icon: Truck, portal: "network" },
+  { title: "Production Schedules", url: "/production-schedules", icon: Factory, portal: "network" },
+  { title: "Manifests", url: "/manifests", icon: Truck, portal: "network" },
+  { title: "Industry Pricing", url: "/industry-pricing", icon: DollarSign, portal: "network" },
   { title: "Client API", url: "/client-api-manager", icon: Code, portal: "network", requiresOwner: true },
-  { title: "Project Costs", url: "/project-costs", icon: BarChart3, portal: "network", requiresAdmin: true },
   { title: "Production Simulator", url: "/simulator", icon: Settings, portal: "network" },
 ];
 

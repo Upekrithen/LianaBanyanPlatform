@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
+import { detectPortal } from '@/utils/portalDetector';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,18 +32,20 @@ export default function Auth() {
     return null;
   };
 
+  const portal = detectPortal();
+  const defaultPostAuth = portal === 'upekrithen' ? '/' : '/dashboard';
+
   useEffect(() => {
-    // Check if user is already logged in — redirect away from auth page
     let cancelled = false;
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (cancelled) return;
       if (session) {
         const returnPath = getReturnPath();
-        navigate(returnPath || '/dashboard', { replace: true });
+        navigate(returnPath || defaultPostAuth, { replace: true });
       }
     });
     return () => { cancelled = true; };
-  }, [navigate]);
+  }, [navigate, defaultPostAuth]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,11 +87,12 @@ export default function Auth() {
     } else {
       toast.success(t('auth.success.signUp'));
 
-      // Return to where they came from, or domain-specific routing
       const returnPath = getReturnPath();
       setTimeout(() => {
         if (returnPath) {
           navigate(returnPath, { replace: true });
+        } else if (portal === 'upekrithen') {
+          navigate('/', { replace: true });
         } else {
           const domain = email.split('@')[1]?.toLowerCase();
           if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {
@@ -132,10 +136,11 @@ export default function Auth() {
     } else {
       toast.success(t('auth.success.signIn'));
 
-      // Return to where they came from, or domain-specific routing
       const returnPath = getReturnPath();
       if (returnPath) {
         navigate(returnPath, { replace: true });
+      } else if (portal === 'upekrithen') {
+        navigate('/', { replace: true });
       } else {
         const domain = email.split('@')[1]?.toLowerCase();
         if (domain === 'stanford.edu' || domain === 'harvard.edu' || domain === 'mit.edu') {

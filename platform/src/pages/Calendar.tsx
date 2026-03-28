@@ -1,6 +1,9 @@
 /**
- * LB Calendar — FullCalendar-powered personal/business/family calendar.
- * Uses calendar_events table with toggleable calendar types.
+ * LB Calendar — K115 D2
+ * FullCalendar-powered unified calendar with Calendar Plug Interface.
+ * Sources toggle in sidebar. Role-based default activation.
+ * All users see platform events; members see coalition/crew;
+ * storefront owners see storefront events; runners see route events.
  */
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
@@ -16,26 +19,34 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar as CalIcon, Plus, Trash2, ChevronLeft, ChevronRight, Eye, EyeOff } from 'lucide-react';
+import { Calendar as CalIcon, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
 import {
   fetchEvents,
   createEvent,
   updateEvent,
   deleteEvent,
-  CALENDAR_TYPE_CONFIG,
   type CalendarType,
   type CalendarEvent,
 } from '@/lib/calendarService';
 import { runCalendarSync } from '@/lib/calendarSync';
+import { CALENDAR_PLUGS, PLUG_MAP } from '@/lib/calendarPlugs';
+import {
+  useCalendarSources,
+  CALENDAR_SOURCE_REGISTRY,
+  SOURCE_MAP,
+  type CalendarSourceType,
+  type CalendarPlugEvent,
+} from '@/hooks/useCalendarSources';
 
-const ALL_TYPES: CalendarType[] = ['personal', 'family', 'business', 'coalition', 'route', 'defense', 'education'];
+const LEGACY_PLUGS = CALENDAR_PLUGS.filter(p =>
+  !['platform', 'crew'].includes(p.id)
+);
 
 interface EventForm {
   title: string;
@@ -57,7 +68,7 @@ const emptyForm = (): EventForm => ({
   end_time: '',
   all_day: false,
   location: '',
-  color: CALENDAR_TYPE_CONFIG.personal.color,
+  color: PLUG_MAP.personal.color,
   is_private: false,
 });
 
@@ -67,7 +78,9 @@ export default function CalendarPage() {
   const queryClient = useQueryClient();
   const calendarRef = useRef<FullCalendar>(null);
 
-  const [enabledTypes, setEnabledTypes] = useState<Set<CalendarType>>(new Set(['personal', 'family', 'business']));
+  const [enabledLegacy, setEnabledLegacy] = useState<Set<CalendarType>>(new Set(['personal', 'family', 'business']));
+  const [enabledSources, setEnabledSources] = useState<Set<CalendarSourceType>>(new Set(['platform']));
+  const [sourcesInit, setSourcesInit] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<EventForm>(emptyForm());
@@ -78,6 +91,17 @@ export default function CalendarPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [synced, setSynced] = useState(false);
 
+  const { events: plugEvents, isLoading: plugLoading, defaultSources } = useCalendarSources({
+    enabledSources,
+    dateRange,
+  });
+
+  useEffect(() => {
+    if (sourcesInit || defaultSources.size === 0) return;
+    setEnabledSources(defaultSources);
+    setSourcesInit(true);
+  }, [defaultSources, sourcesInit]);
+
   useEffect(() => {
     if (!user || synced) return;
     runCalendarSync(user.id).then(() => {
@@ -86,25 +110,39 @@ export default function CalendarPage() {
     });
   }, [user, synced, queryClient]);
 
-  const { data: events = [], isLoading } = useQuery({
-    queryKey: ['calendar-events', user?.id, [...enabledTypes].sort().join(','), dateRange.start.toISOString()],
-    queryFn: () => fetchEvents(user!.id, [...enabledTypes], dateRange.start, dateRange.end),
-    enabled: !!user && enabledTypes.size > 0,
+  const { data: legacyEvents = [] } = useQuery({
+    queryKey: ['calendar-events', user?.id, [...enabledLegacy].sort().join(','), dateRange.start.toISOString()],
+    queryFn: () => fetchEvents(user!.id, [...enabledLegacy] as CalendarType[], dateRange.start, dateRange.end),
+    enabled: !!user && enabledLegacy.size > 0,
   });
 
-  const fcEvents = useMemo(() =>
-    events.map(e => ({
+  const fcEvents = useMemo(() => {
+    const legacy = (legacyEvents as CalendarEvent[]).map(e => ({
       id: e.id,
       title: e.title,
       start: e.start_time,
       end: e.end_time || undefined,
       allDay: e.all_day,
-      color: e.color || CALENDAR_TYPE_CONFIG[e.calendar_type as CalendarType]?.color || '#3b82f6',
-      extendedProps: { event: e },
+      color: e.color || PLUG_MAP[e.calendar_type]?.color || '#3b82f6',
+      extendedProps: { event: e, source: 'legacy' },
       ...(e.recurrence_rule ? { rrule: e.recurrence_rule } : {}),
-    })),
-    [events]
-  );
+    }));
+
+    const fromPlugs = plugEvents.map((pe: CalendarPlugEvent) => ({
+      id: pe.id,
+      title: pe.title,
+      start: pe.start,
+      end: pe.end || undefined,
+      allDay: false,
+      color: SOURCE_MAP[pe.sourceType]?.color || '#6366f1',
+      extendedProps: { plugEvent: pe, source: 'plug' },
+    }));
+
+    const seenIds = new Set(legacy.map(e => e.id));
+    const deduped = fromPlugs.filter(e => !seenIds.has(e.id));
+
+    return [...legacy, ...deduped];
+  }, [legacyEvents, plugEvents]);
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -135,7 +173,7 @@ export default function CalendarPage() {
           all_day: form.all_day,
           recurrence_rule: null,
           location: form.location || null,
-          color: form.color || CALENDAR_TYPE_CONFIG[form.calendar_type]?.color || null,
+          color: form.color || PLUG_MAP[form.calendar_type]?.color || null,
           source_type: 'manual',
           source_id: null,
           is_private: form.is_private,
@@ -146,6 +184,7 @@ export default function CalendarPage() {
     onSuccess: () => {
       toast({ title: editingId ? 'Event updated' : 'Event created' });
       queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
+      queryClient.invalidateQueries({ queryKey: ['calendar-plug-events'] });
       setDialogOpen(false);
       setEditingId(null);
       setForm(emptyForm());
@@ -158,6 +197,7 @@ export default function CalendarPage() {
     onSuccess: () => {
       toast({ title: 'Event deleted' });
       queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
+      queryClient.invalidateQueries({ queryKey: ['calendar-plug-events'] });
       setDialogOpen(false);
       setEditingId(null);
     },
@@ -172,8 +212,10 @@ export default function CalendarPage() {
     setDialogOpen(true);
   }, []);
 
-  const handleEventClick = useCallback((arg: { event: { id: string; extendedProps: { event: CalendarEvent } } }) => {
-    const e = arg.event.extendedProps.event;
+  const handleEventClick = useCallback((arg: { event: { id: string; extendedProps: any } }) => {
+    if (arg.event.extendedProps.source === 'plug') return;
+    const e = arg.event.extendedProps.event as CalendarEvent;
+    if (!e) return;
     setForm({
       title: e.title,
       description: e.description || '',
@@ -202,11 +244,18 @@ export default function CalendarPage() {
     }).then(() => queryClient.invalidateQueries({ queryKey: ['calendar-events'] }));
   }, [queryClient]);
 
-  const toggleType = (type: CalendarType) => {
-    setEnabledTypes(prev => {
+  const toggleLegacy = (type: CalendarType) => {
+    setEnabledLegacy(prev => {
       const next = new Set(prev);
-      if (next.has(type)) next.delete(type);
-      else next.add(type);
+      if (next.has(type)) next.delete(type); else next.add(type);
+      return next;
+    });
+  };
+
+  const toggleSource = (type: CalendarSourceType) => {
+    setEnabledSources(prev => {
+      const next = new Set(prev);
+      if (next.has(type)) next.delete(type); else next.add(type);
       return next;
     });
   };
@@ -236,25 +285,38 @@ export default function CalendarPage() {
                     <EyeOff className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                {ALL_TYPES.map(type => {
-                  const cfg = CALENDAR_TYPE_CONFIG[type];
-                  const enabled = enabledTypes.has(type);
+
+                {/* Legacy plugs (personal, family, business, etc.) */}
+                {LEGACY_PLUGS.map(plug => {
+                  const enabled = enabledLegacy.has(plug.id as CalendarType);
                   return (
-                    <label key={type} className="flex items-center gap-2 cursor-pointer group">
-                      <Checkbox
-                        checked={enabled}
-                        onCheckedChange={() => toggleType(type)}
-                      />
-                      <span
-                        className="w-3 h-3 rounded-full shrink-0"
-                        style={{ backgroundColor: cfg.color, opacity: enabled ? 1 : 0.3 }}
-                      />
+                    <label key={plug.id} className="flex items-center gap-2 cursor-pointer group" title={plug.description}>
+                      <Checkbox checked={enabled} onCheckedChange={() => toggleLegacy(plug.id as CalendarType)} />
+                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: plug.color, opacity: enabled ? 1 : 0.3 }} />
                       <span className={`text-sm ${enabled ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        {cfg.emoji} {cfg.label}
+                        {plug.emoji} {plug.label}
                       </span>
                     </label>
                   );
                 })}
+
+                <hr className="border-border" />
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Sources</p>
+
+                {/* K115 plug sources */}
+                {CALENDAR_SOURCE_REGISTRY.map(src => {
+                  const enabled = enabledSources.has(src.type);
+                  return (
+                    <label key={src.type} className="flex items-center gap-2 cursor-pointer group" title={src.description}>
+                      <Checkbox checked={enabled} onCheckedChange={() => toggleSource(src.type)} />
+                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: src.color, opacity: enabled ? 1 : 0.3 }} />
+                      <span className={`text-sm ${enabled ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        {src.emoji} {src.label}
+                      </span>
+                    </label>
+                  );
+                })}
+
                 <Button size="sm" variant="outline" className="w-full mt-2 text-xs" onClick={() => { setForm(emptyForm()); setEditingId(null); setDialogOpen(true); }}>
                   <Plus className="w-3 h-3 mr-1" /> Add Event
                 </Button>
@@ -297,7 +359,7 @@ export default function CalendarPage() {
               height="auto"
               dayMaxEvents={3}
               nowIndicator
-              loading={(loading) => {}}
+              loading={() => {}}
             />
           </div>
         </div>
@@ -317,11 +379,11 @@ export default function CalendarPage() {
 
             <div>
               <Label htmlFor="evt-type">Calendar</Label>
-              <Select value={form.calendar_type} onValueChange={(v: CalendarType) => setForm(f => ({ ...f, calendar_type: v, color: CALENDAR_TYPE_CONFIG[v]?.color || f.color }))}>
+              <Select value={form.calendar_type} onValueChange={(v: CalendarType) => setForm(f => ({ ...f, calendar_type: v, color: PLUG_MAP[v]?.color || f.color }))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {ALL_TYPES.map(t => (
-                    <SelectItem key={t} value={t}>{CALENDAR_TYPE_CONFIG[t].emoji} {CALENDAR_TYPE_CONFIG[t].label}</SelectItem>
+                  {CALENDAR_PLUGS.filter(p => p.editable).map(p => (
+                    <SelectItem key={p.id} value={p.id}>{p.emoji} {p.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

@@ -186,7 +186,7 @@ const GETTING_STARTED_ITEMS: CrowsNestItem[] = [
     relatedItemIds: ["how-it-works", "three-currencies", "c-plus-20"],
     toGoItems: [
       { label: "Browse the platform homepage", type: "try", route: "/", estimatedMinutes: 3 },
-      { label: "Read the 300 Framework paper", type: "read", externalUrl: "https://cephas.lianabanyan.com/academic/300-framework-tldr/", estimatedMinutes: 10 },
+      { label: "Read the 300 Framework paper", type: "read", route: "/cephas/academic/300-framework-tldr", estimatedMinutes: 10 },
     ],
   },
   {
@@ -303,7 +303,7 @@ const SWEET_SIXTEEN_ITEMS: CrowsNestItem[] = [
     relatedItemIds: ["three-currencies", "brewster-bonus"],
     toGoItems: [
       { label: "Try the C+20 Calculator", type: "try", route: "/c20", estimatedMinutes: 5 },
-      { label: "Read the Cost+20% paper", type: "read", externalUrl: "https://cephas.lianabanyan.com/academic/cost-plus-20/", estimatedMinutes: 10 },
+      { label: "Read the Cost+20% paper", type: "read", route: "/cephas/academic/cost-plus-20", estimatedMinutes: 10 },
     ],
   },
   {
@@ -673,7 +673,7 @@ const PLATFORM_MECHANICS_ITEMS: CrowsNestItem[] = [
     relatedItemIds: ["c-plus-20", "marks-differential", "brewster-bonus"],
     toGoItems: [
       { label: "Read the three-currency deep dive", type: "read", route: "/learn/currencies", estimatedMinutes: 5 },
-      { label: "Read the academic paper on currency design", type: "read", externalUrl: "https://cephas.lianabanyan.com/academic/three-currency-system/", estimatedMinutes: 15 },
+      { label: "Read the academic paper on currency design", type: "read", route: "/cephas/academic/three-currency-system", estimatedMinutes: 15 },
     ],
   },
   {
@@ -724,7 +724,7 @@ const PLATFORM_MECHANICS_ITEMS: CrowsNestItem[] = [
     tags: ["governance", "capacity", "allocation", "voting", "framework"],
     relatedItemIds: ["court-of-justice", "rally-group", "as-you-wish"],
     toGoItems: [
-      { label: "Read the 300 Framework paper", type: "read", externalUrl: "https://cephas.lianabanyan.com/academic/300-framework-tldr/", estimatedMinutes: 10 },
+      { label: "Read the 300 Framework paper", type: "read", route: "/cephas/academic/300-framework-tldr", estimatedMinutes: 10 },
     ],
   },
   {
@@ -846,11 +846,11 @@ const BUILD_TOOLS_ITEMS: CrowsNestItem[] = [
     peek:
       "The Hexel CAD system defines a 27-piece mechanical grammar for hexagonal physical products. Each piece (ChannelLock, HollowLog, Clamshell, GoldenLotus, Rotor, and more) has precise engineering specifications. The definitive stack order defines how pieces assemble. 60mm flat-to-flat dimensions. Fusion 360 integration. Patent-pending mechanical designs across multiple provisional applications.",
     tellMeMore:
-      "Hexel CAD is where the virtual world meets physical manufacturing. The 27-piece grammar defines every mechanical component that can exist in the hexagonal product line: from the ChannelLock base (water management) through the HollowLog shell and Clamshell housing, up through the GoldenLotus aesthetic piece, the Rotor and Ouralis mechanical components, planetary gears, the SawtoothCoral timing mechanism, and the Capstone and SlottedTop crown pieces. The Cradle piece has a flip mechanism — the entire assembly goes up/down AND flips, allowing the system to function as both a water trap and a land trap. All pieces are 60mm flat-to-flat (upgraded from the original 42mm). The system has tools for Fusion 360 extraction (Python), grammar validation (TypeScript), and component mapping (47+ piece-to-part mappings). Patent claims span 1,401 across eight provisional applications.",
+      "Hexel CAD is where the virtual world meets physical manufacturing. The 27-piece grammar defines every mechanical component that can exist in the hexagonal product line: from the ChannelLock base (water management) through the HollowLog shell and Clamshell housing, up through the GoldenLotus aesthetic piece, the Rotor and Ouralis mechanical components, planetary gears, the SawtoothCoral timing mechanism, and the Capstone and SlottedTop crown pieces. The Cradle piece has a flip mechanism — the entire assembly goes up/down AND flips, allowing the system to function as both a water trap and a land trap. All pieces are 60mm flat-to-flat (upgraded from the original 42mm). The system has tools for Fusion 360 extraction (Python), grammar validation (TypeScript), and component mapping (47+ piece-to-part mappings). Patent claims span 1,511 across ten provisional applications.",
     tags: ["cad", "engineering", "hexagonal", "mechanical", "manufacturing", "patents"],
     relatedItemIds: ["hexisle", "patent-system"],
     toGoItems: [
-      { label: "Read about piece engineering", type: "read", externalUrl: "https://cephas.lianabanyan.com/hexel/piece-grammar/", estimatedMinutes: 10 },
+      { label: "Read about piece engineering", type: "read", route: "/cephas/hexel/piece-grammar", estimatedMinutes: 10 },
     ],
   },
   {
@@ -859,9 +859,9 @@ const BUILD_TOOLS_ITEMS: CrowsNestItem[] = [
     icon: "FileCheck",
     title: "Patent System",
     glimpse:
-      "1,401 claims across 8 provisional applications. Micro-entity filing at $65 each. Innovation catalog of 1,754 items.",
+      "1,511 claims across 10 provisional applications. Micro-entity filing at $65 each. Innovation catalog of 2,007 items.",
     peek:
-      "The platform's patent portfolio spans 1,401 claims across eight provisional patent applications, filed as micro-entity ($65 each). The innovation catalog tracks 1,754 distinct innovations (Session 17: delegation, XP, trickle onboarding, STAMP). Patent Buckets organize innovations into themed bags (7 bags + 2 showcase pedestals with 408 claims in the codebase). Fractional IP participation lets sponsors contribute to patents and share in licensing revenue.",
+      "The platform's patent portfolio spans 1,511 claims across ten provisional patent applications, filed as micro-entity ($65 each). The innovation catalog tracks 2,007 distinct innovations (Session 17: delegation, XP, trickle onboarding, STAMP). Patent Buckets organize innovations into themed bags (7 bags + 2 showcase pedestals with 408 claims in the codebase). Fractional IP participation lets sponsors contribute to patents and share in licensing revenue.",
     tellMeMore:
       "The patent system is one of LB's most ambitious features. Every innovation — from the three-currency system to the Brewster Bonus to the hexagonal CAD grammar — is cataloged, numbered, and (where applicable) included in provisional patent applications. The micro-entity designation means each filing costs $65 instead of thousands. Patent Buckets organize related innovations into themed bags for filing. The Sponsor Portal lets members contribute to patent development and earn fractional IP participation in licensing revenue. This is NOT a security (the Howey defense depends on this distinction) — it is service-based participation in patent licensing outcomes. The Hall of Innovations displays the full catalog, and each innovation links to its patent bucket, cue card, and Cephas knowledge base entry.",
     sampleRoute: "/sponsor",
@@ -901,11 +901,11 @@ const BUILD_TOOLS_ITEMS: CrowsNestItem[] = [
       "Cephas is LB's knowledge base — academic papers, technical documentation, and deep-dive articles on every aspect of the cooperative. Named from the word meaning 'rock' (foundation). Crow Feathers track your reading progress. Papers cover the 300 Framework, Cost+20% economics, currency design, the Howey defense, and more. All publicly accessible.",
     tellMeMore:
       "Cephas is the intellectual backbone of the cooperative. Every major design decision, economic model, and governance structure has a corresponding academic paper or technical document. The 300 Framework paper explains capacity allocation. The Cost+20% paper derives the pricing math. The three-currency paper models the economic dynamics. The Howey defense paper explains why the cooperative's instruments are not securities. Reading progress is tracked through Crow Feathers — visual indicators that fill as you scroll through articles, showing exactly how much of each document you have read. Cephas is publicly accessible because transparency is a core value: anyone should be able to understand exactly how the cooperative works before joining.",
-    externalUrl: "https://cephas.lianabanyan.com",
+    sampleRoute: "/cephas",
     tags: ["knowledge", "documentation", "papers", "academic", "reading"],
     relatedItemIds: ["the-300-framework", "c-plus-20", "three-currencies"],
     toGoItems: [
-      { label: "Browse Cephas articles", type: "read", externalUrl: "https://cephas.lianabanyan.com", estimatedMinutes: 10 },
+      { label: "Browse Cephas articles", type: "read", route: "/cephas", estimatedMinutes: 10 },
     ],
   },
 ];

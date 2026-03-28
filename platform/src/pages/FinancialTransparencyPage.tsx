@@ -27,8 +27,18 @@ import {
   Users,
   Heart,
   Building2,
+  BarChart3,
 } from "lucide-react";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
+
+type LedgerPatronageRow = {
+  fiscal_year: number;
+  is_patronage: boolean;
+  ledger_category: string;
+  transaction_count: number;
+  total_cents: number;
+  total_dollars: number;
+};
 
 export function FinancialTransparencyPage() {
   const [activeTab, setActiveTab] = useState("ledgers");
@@ -48,7 +58,29 @@ export function FinancialTransparencyPage() {
     },
   });
 
-  // Fetch platform stats
+  const { data: ledgerSummary } = useQuery({
+    queryKey: ["ledger-patronage-summary"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("ledger_patronage_summary" as never)
+        .select("*")
+        .order("fiscal_year" as never, { ascending: false });
+      if (error) return [];
+      return (data || []) as LedgerPatronageRow[];
+    },
+  });
+
+  const patronageTotal = ledgerSummary
+    ?.filter((r) => r.is_patronage)
+    .reduce((s, r) => s + (r.total_cents ?? 0), 0) ?? 0;
+  const nonPatronageTotal = ledgerSummary
+    ?.filter((r) => !r.is_patronage)
+    .reduce((s, r) => s + (r.total_cents ?? 0), 0) ?? 0;
+  const combinedTotal = patronageTotal + nonPatronageTotal;
+  const nonPatronagePct = combinedTotal > 0
+    ? ((nonPatronageTotal / combinedTotal) * 100).toFixed(1)
+    : "0.0";
+
   const { data: platformStats } = useQuery({
     queryKey: ["platform-financial-stats"],
     queryFn: async () => {
@@ -237,10 +269,14 @@ export function FinancialTransparencyPage() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3 mb-6">
+        <TabsList className="grid w-full grid-cols-4 mb-6">
           <TabsTrigger value="ledgers">
             <Coins className="w-4 h-4 mr-2" />
             Financial Ledgers
+          </TabsTrigger>
+          <TabsTrigger value="transaction-ledger">
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Transaction Ledger
           </TabsTrigger>
           <TabsTrigger value="dna">
             <Lock className="w-4 h-4 mr-2" />
@@ -254,6 +290,100 @@ export function FinancialTransparencyPage() {
 
         <TabsContent value="ledgers">
           <MultiLedgerView />
+        </TabsContent>
+
+        <TabsContent value="transaction-ledger">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5" />
+                Subchapter T Compliance Dashboard
+              </CardTitle>
+              <CardDescription>
+                Patronage vs non-patronage income classification. All transactions are categorized
+                at the webhook level — no reconciliation required.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
+                  <p className="text-xs font-medium uppercase tracking-wide text-green-600 dark:text-green-400">
+                    Patronage Income
+                  </p>
+                  <p className="mt-1 text-2xl font-bold text-green-700 dark:text-green-300">
+                    ${(patronageTotal / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+                <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800">
+                  <p className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-400">
+                    Non-Patronage Income
+                  </p>
+                  <p className="mt-1 text-2xl font-bold text-amber-700 dark:text-amber-300">
+                    ${(nonPatronageTotal / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </p>
+                  <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                    {nonPatronagePct}% of total {Number(nonPatronagePct) < 50 ? "(below 50% threshold ✓)" : "(⚠ above 50% threshold)"}
+                  </p>
+                </div>
+                <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-xs font-medium uppercase tracking-wide text-blue-600 dark:text-blue-400">
+                    Total Classified
+                  </p>
+                  <p className="mt-1 text-2xl font-bold text-blue-700 dark:text-blue-300">
+                    ${(combinedTotal / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+              </div>
+
+              {(!ledgerSummary || ledgerSummary.length === 0) ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <BarChart3 className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p className="text-lg font-medium mb-2">No transactions yet</p>
+                  <p className="max-w-md mx-auto text-sm">
+                    When payments are processed through the webhook system, categories and
+                    patronage classification will appear here automatically.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto rounded-xl border bg-card">
+                  <table className="w-full min-w-[600px] text-left text-sm">
+                    <thead className="border-b bg-muted/50">
+                      <tr>
+                        <th className="px-4 py-3 font-medium">Category</th>
+                        <th className="px-4 py-3 font-medium">Type</th>
+                        <th className="px-4 py-3 font-medium text-right">Transactions</th>
+                        <th className="px-4 py-3 font-medium text-right">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ledgerSummary.map((row, i) => (
+                        <tr key={`${row.ledger_category}-${row.is_patronage}-${i}`} className="border-b last:border-0">
+                          <td className="px-4 py-3 font-mono text-xs">
+                            {row.ledger_category.replace(/_/g, " ")}
+                          </td>
+                          <td className="px-4 py-3">
+                            <Badge
+                              variant="outline"
+                              className={row.is_patronage
+                                ? "border-green-500/40 text-green-700 dark:text-green-300"
+                                : "border-amber-500/40 text-amber-700 dark:text-amber-300"
+                              }
+                            >
+                              {row.is_patronage ? "Patronage" : "Non-Patronage"}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-3 text-right tabular-nums">{row.transaction_count}</td>
+                          <td className="px-4 py-3 text-right font-semibold tabular-nums">
+                            ${row.total_dollars?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "0.00"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="dna">

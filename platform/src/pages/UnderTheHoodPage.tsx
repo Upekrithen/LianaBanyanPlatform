@@ -1,36 +1,69 @@
 /**
- * Under the Hood — Technical transparency index (Session 19)
+ * Under the Hood — Technical transparency index (Session 19, fixed B037)
  * Lists Cephas documents with technical summary. Links to cephas.lianabanyan.com or registry detail.
+ * Uses direct fetch to bypass Supabase JS client issues with unauthenticated users.
  */
 
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Wrench, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { Wrench } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
-const CEPHAS_BASE = "https://cephas.lianabanyan.com";
+// All links stay in-platform. Cephas Hugo site is a future SEO mirror, not the source of truth.
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+interface RegistryItem {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  technical_summary: string | null;
+  implementation_status: string | null;
+  source_path: string;
+}
 
 export default function UnderTheHoodPage() {
   const [search, setSearch] = useState("");
+  const [items, setItems] = useState<RegistryItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  const { data: items, isLoading, isError } = useQuery({
-    queryKey: ["cephas-under-the-hood"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("cephas_content_registry")
-        .select("id, slug, title, category, technical_summary, implementation_status, source_path")
-        .order("title");
-      if (error) throw error;
-      return data || [];
-    },
-    retry: false,
-  });
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/cephas_content_registry?select=id,slug,title,category,technical_summary,implementation_status,source_path&order=title`,
+          {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+            },
+          }
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data: RegistryItem[] = await res.json();
+        if (!cancelled) {
+          setItems(data);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        console.warn("[UnderTheHood] fetch error:", err);
+        if (!cancelled) {
+          setIsError(true);
+          setIsLoading(false);
+        }
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, []);
 
-  const filtered = (items || []).filter(
+  const filtered = items.filter(
     (i) =>
       !search ||
       (i.title || "").toLowerCase().includes(search.toLowerCase()) ||
@@ -58,52 +91,32 @@ export default function UnderTheHoodPage() {
       />
 
       {isLoading ? (
-        <div className="text-muted-foreground">Loading…</div>
+        <div className="text-muted-foreground animate-pulse">Loading registry…</div>
       ) : isError ? (
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
-            <p>Registry not available. Run migration 000020 and the Cephas ingestion script to populate.</p>
-            <a
-              href={`${CEPHAS_BASE}/under-the-hood/`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline inline-flex items-center gap-1 mt-4"
-            >
-              Open Cephas Under the Hood
-              <ExternalLink className="w-4 h-4" />
-            </a>
+            <p>Registry not available. Please try again later.</p>
           </CardContent>
         </Card>
       ) : filtered.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
-            <p>No registry entries yet. Run the Cephas ingestion script to populate from source documents.</p>
-            <a
-              href={`${CEPHAS_BASE}/under-the-hood/`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline inline-flex items-center gap-1 mt-4"
-            >
-              Open Cephas Under the Hood
-              <ExternalLink className="w-4 h-4" />
-            </a>
+            <p>{search ? "No documents match your search." : "No registry entries yet."}</p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">{filtered.length} document{filtered.length !== 1 ? 's' : ''}</p>
           {filtered.map((row) => (
             <Card key={row.id}>
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between gap-2">
                   <CardTitle className="text-lg">
                     <a
-                      href={`${CEPHAS_BASE}/under-the-hood/${row.slug}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:underline flex items-center gap-1"
+                      href={`/cephas/${row.category}/${row.slug}`}
+                      className="hover:underline"
                     >
                       {row.title}
-                      <ExternalLink className="w-4 h-4 shrink-0" />
                     </a>
                   </CardTitle>
                   <Badge variant="secondary">{row.implementation_status || "planned"}</Badge>

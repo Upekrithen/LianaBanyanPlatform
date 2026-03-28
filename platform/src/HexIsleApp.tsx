@@ -16,6 +16,7 @@ import { RecordingProvider } from "@/contexts/RecordingContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import { CrossPortalNav } from "@/components/CrossPortalNav";
 
 // Lazy-load all HexIsle pages for code splitting
 const HexIsle = lazy(() => import("./pages/HexIsle"));
@@ -37,6 +38,8 @@ const IslandWorldMap = lazy(() => import("./pages/IslandWorldMap"));
 const KeepsLobby = lazy(() => import("./pages/cue-cards/KeepsLobby"));
 const HexIsleWorldCard = lazy(() => import("./pages/cue-cards/HexIsleWorldCard"));
 const HexIsleShowcase = lazy(() => import("./components/hexisle/HexIsleShowcase").then(m => ({ default: m.HexIsleShowcase })));
+const HexIsleCampaignsPage = lazy(() => import("./pages/HexIsleCampaignsPage"));
+const KickstarterCampaignPage = lazy(() => import("./pages/KickstarterCampaignPage"));
 
 const queryClient = new QueryClient();
 
@@ -87,6 +90,7 @@ const HexIsleApp = () => {
             <RecordingProvider>
               <Toaster />
               <Sonner />
+              <CrossPortalNav />
               <Suspense fallback={<HexIsleLoadingFallback />}>
                 <Routes>
                   {/* Subdomain-based routing */}
@@ -132,6 +136,10 @@ const HexIsleApp = () => {
                       <Route path="/creator" element={<IslandCreator />} />
                       <Route path="/portfolio" element={<IslandDesignPortfolio />} />
                       <Route path="/dashboard" element={<HexisleDashboard />} />
+
+                      {/* Campaigns (K146) */}
+                      <Route path="/campaigns" element={<HexIsleCampaignsPage />} />
+                      <Route path="/campaign/:slug" element={<KickstarterCampaignPage />} />
 
                       {/* Keeps & Cue Cards */}
                       <Route path="/keeps" element={<KeepsLobby />} />

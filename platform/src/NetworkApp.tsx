@@ -11,6 +11,10 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UnifiedNavigation } from "@/components/UnifiedNavigation";
 import { SyncStatusIndicator } from "@/components/SyncStatusIndicator";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { CrossPortalNav } from "@/components/CrossPortalNav";
+
+// Network Portal Landing (public entry page)
+import NetworkLanding from "./pages/NetworkLanding";
 
 // Network Portal Pages (.net)
 import ClientAPIManager from "@/pages/ClientAPIManager";
@@ -21,8 +25,45 @@ import Auth from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
 import AdminProject from "@/pages/AdminProject";
 import NotFound from "@/pages/NotFound";
+import { lazy, Suspense, type ReactNode } from "react";
+const NetworkManifest = lazy(() => import("./pages/NetworkManifest"));
+const ProductionSchedules = lazy(() => import("./pages/ProductionSchedules"));
+const B2BContracts = lazy(() => import("./pages/B2BContracts"));
+const SupplyChain = lazy(() => import("./pages/SupplyChain"));
+const Guilds = lazy(() => import("./pages/Guilds"));
+const Tribes = lazy(() => import("./pages/Tribes"));
+const Simulator = lazy(() => import("./pages/Simulator"));
 
 const queryClient = new QueryClient();
+
+function NetworkShell({ children }: { children: ReactNode }) {
+  return (
+    <SidebarProvider defaultOpen={true}>
+      <div className="min-h-screen flex w-full bg-background">
+        <UnifiedNavigation />
+        <div className="flex-1 flex flex-col">
+          <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger />
+              <h1 className="text-lg font-semibold">Liana Banyan Business Network Portal</h1>
+              <a
+                href="https://lianabanyan.com"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                → Marketplace
+              </a>
+            </div>
+            <SyncStatusIndicator />
+          </header>
+          <CrossPortalNav />
+          <main className="flex-1 overflow-auto p-6">
+            {children}
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+}
 
 const NetworkApp = () => {
   return (
@@ -32,33 +73,21 @@ const NetworkApp = () => {
           <AuthProvider>
             <RecordingProvider>
               <SubdomainRouter>
-                <SidebarProvider defaultOpen={true}>
-                  <Toaster />
-                  <Sonner />
-                  <div className="min-h-screen flex w-full bg-background">
-                    <UnifiedNavigation />
-                    <div className="flex-1 flex flex-col">
-                      <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-                        <div className="flex items-center gap-4">
-                          <SidebarTrigger />
-                          <h1 className="text-lg font-semibold">Liana Banyan Business Network Portal</h1>
-                          <a 
-                            href="https://lianabanyan.com" 
-                            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                          >
-                            → Marketplace
-                          </a>
-                        </div>
-                        <SyncStatusIndicator />
-                      </header>
-                      <main className="flex-1 overflow-auto p-6">
-                        <Routes>
-                          {/* Public Routes */}
-                          <Route path="/auth" element={<Auth />} />
+                <Toaster />
+                <Sonner />
+                <Routes>
+                  {/* Full-bleed public landing — no sidebar chrome */}
+                  <Route path="/" element={<NetworkLanding />} />
+                  <Route path="/auth" element={<Auth />} />
+
+                  {/* All other routes get the sidebar shell */}
+                  <Route path="/*" element={
+                    <NetworkShell>
+                      <Routes>
 
                           {/* Protected Network Portal Routes */}
                           <Route
-                            path="/"
+                            path="/dashboard"
                             element={
                               <ProtectedRoute>
                                 <Dashboard />
@@ -70,12 +99,9 @@ const NetworkApp = () => {
                             path="/production-schedules"
                             element={
                               <ProtectedRoute>
-                                <div className="container mx-auto p-8">
-                                  <h1 className="text-3xl font-bold mb-4">Production Schedules</h1>
-                                  <p className="text-muted-foreground">
-                                    B2B production schedule coordination coming soon...
-                                  </p>
-                                </div>
+                                <Suspense fallback={<div className="flex justify-center py-16">Loading...</div>}>
+                                  <ProductionSchedules />
+                                </Suspense>
                               </ProtectedRoute>
                             }
                           />
@@ -84,12 +110,9 @@ const NetworkApp = () => {
                             path="/b2b-contracts"
                             element={
                               <ProtectedRoute>
-                                <div className="container mx-auto p-8">
-                                  <h1 className="text-3xl font-bold mb-4">B2B Contracts</h1>
-                                  <p className="text-muted-foreground">
-                                    Inter-business contract management coming soon...
-                                  </p>
-                                </div>
+                                <Suspense fallback={<div className="flex justify-center py-16">Loading...</div>}>
+                                  <B2BContracts />
+                                </Suspense>
                               </ProtectedRoute>
                             }
                           />
@@ -98,12 +121,9 @@ const NetworkApp = () => {
                             path="/supply-chain"
                             element={
                               <ProtectedRoute>
-                                <div className="container mx-auto p-8">
-                                  <h1 className="text-3xl font-bold mb-4">Supply Chain</h1>
-                                  <p className="text-muted-foreground">
-                                    Supply chain coordination coming soon...
-                                  </p>
-                                </div>
+                                <Suspense fallback={<div className="flex justify-center py-16">Loading...</div>}>
+                                  <SupplyChain />
+                                </Suspense>
                               </ProtectedRoute>
                             }
                           />
@@ -112,12 +132,9 @@ const NetworkApp = () => {
                             path="/manifests"
                             element={
                               <ProtectedRoute>
-                                <div className="container mx-auto p-8">
-                                  <h1 className="text-3xl font-bold mb-4">Production Manifests</h1>
-                                  <p className="text-muted-foreground">
-                                    Manifest management coming soon...
-                                  </p>
-                                </div>
+                                <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+                                  <NetworkManifest />
+                                </Suspense>
                               </ProtectedRoute>
                             }
                           />
@@ -190,6 +207,10 @@ const NetworkApp = () => {
                             }
                           />
 
+                          <Route path="/guilds" element={<ProtectedRoute><Suspense fallback={<div className="flex justify-center py-16">Loading...</div>}><Guilds /></Suspense></ProtectedRoute>} />
+                          <Route path="/tribes" element={<ProtectedRoute><Suspense fallback={<div className="flex justify-center py-16">Loading...</div>}><Tribes /></Suspense></ProtectedRoute>} />
+                          <Route path="/simulator" element={<ProtectedRoute><Suspense fallback={<div className="flex justify-center py-16">Loading...</div>}><Simulator /></Suspense></ProtectedRoute>} />
+
                           {/* Redirect to other portals */}
                           <Route
                             path="/marketplace"
@@ -208,14 +229,12 @@ const NetworkApp = () => {
                             element={<Navigate to="https://lianabanyan.org/funding-pool" replace />}
                           />
 
-                          {/* 404 */}
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
-                      </main>
-                    </div>
-                  </div>
-                  <PWAInstallPrompt />
-                </SidebarProvider>
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </NetworkShell>
+                  } />
+                </Routes>
+                <PWAInstallPrompt />
               </SubdomainRouter>
             </RecordingProvider>
           </AuthProvider>

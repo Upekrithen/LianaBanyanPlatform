@@ -1,198 +1,196 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { GuildCreationDialog } from '@/components/GuildCreationDialog';
-import { Plus, Users, Search, Network } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { useGuilds, useMyGuilds, type Guild } from "@/hooks/useGuilds";
+import { Plus, Search, Users, Network, ArrowRight } from "lucide-react";
+
+const TYPE_LABELS: Record<string, string> = {
+  makers: "Makers",
+  designers: "Designers",
+  farmers: "Farmers",
+  drivers: "Drivers",
+  tutors: "Tutors",
+  captains: "Captains",
+  developers: "Developers",
+  artists: "Artists",
+  other: "Other",
+};
 
 export default function Guilds() {
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const { data: guilds, isLoading } = useGuilds(search || undefined);
+  const { data: myGuilds } = useMyGuilds();
 
-  const { data: guilds, isLoading } = useQuery({
-    queryKey: ['guilds', searchQuery],
-    queryFn: async () => {
-      // Real: guilds (id, name, slug, description, tagline, guild_type, specialty, member_count, max_members, membership_type, guild_master_id, ...)
-      let query = supabase
-        .from('guilds')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,display_name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
-    }
-  });
-
-  const { data: myGuilds } = useQuery({
-    queryKey: ['my-guilds'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return [];
-
-      // Real: guild_members (id, guild_id, user_id, role, rank, experience_points, status, joined_at, ...)
-      const { data, error } = await supabase
-        .from('guild_members')
-        .select(`
-          *,
-          guild:guilds(*)
-        `)
-        .eq('user_id', user.id)
-        .eq('status', 'active');
-
-      if (error) throw error;
-      return data;
-    }
-  });
-
-  const divisions = guilds?.filter(g => g.guild_type === 'division') || [];
-  const industries = guilds?.filter(g => g.guild_type === 'industry') || [];
-  const skills = guilds?.filter(g => g.guild_type === 'skill') || [];
+  const guildsByType = (type: string) =>
+    guilds?.filter((g) => g.guild_type === type) ?? [];
+  const types = [...new Set(guilds?.map((g) => g.guild_type) ?? [])];
 
   return (
-    <PortalPageLayout>
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Network className="h-8 w-8" />
-            Guilds & Collectives
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Join or create guilds, clans, tribes, families, and other collectives in the Liana Banyan network
-          </p>
+    <PortalPageLayout maxWidth="xl" xrayId="guilds-directory">
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Network className="h-8 w-8 text-purple-600" />
+              Guilds
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Professional groups. Join many — you can be a designer AND a farmer.
+            </p>
+          </div>
+          <Button
+            onClick={() => navigate("/guilds/create")}
+            className="bg-purple-600 hover:bg-purple-700"
+          >
+            <Plus className="h-4 w-4 mr-2" /> Forge a Guild
+          </Button>
         </div>
-        <Button onClick={() => setShowCreateDialog(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Guild
-        </Button>
-      </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search guilds..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
-        />
-      </div>
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search guilds..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10"
+          />
+        </div>
 
-      {/* My Guilds */}
-      {myGuilds && myGuilds.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>My Guilds</CardTitle>
-            <CardDescription>Guilds you are a member of</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {myGuilds.map((membership) => (
-                <Card key={membership.id}>
-                  <CardHeader>
-                    <CardTitle className="text-base flex items-center justify-between">
-                      {membership.guild.display_name}
-                      <Badge variant="outline">{membership.guild.custom_name}</Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">{membership.guild.description}</p>
-                  </CardContent>
-                </Card>
+        {/* My Guilds */}
+        {myGuilds && myGuilds.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold mb-3">My Guilds</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {myGuilds.map((m) => (
+                <GuildCard
+                  key={m.id}
+                  guild={m.guild!}
+                  isMember
+                  onClick={() => navigate(`/guilds/${m.guild?.slug}`)}
+                />
               ))}
             </div>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        )}
 
-      {/* Guild Browser */}
-      <Tabs defaultValue="all" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="all">All Guilds</TabsTrigger>
-          <TabsTrigger value="divisions">Divisions</TabsTrigger>
-          <TabsTrigger value="industries">Industries</TabsTrigger>
-          <TabsTrigger value="skills">Skills</TabsTrigger>
-        </TabsList>
+        {/* All Guilds */}
+        <Tabs defaultValue="all">
+          <TabsList>
+            <TabsTrigger value="all">All ({guilds?.length ?? 0})</TabsTrigger>
+            {types.map((t) => (
+              <TabsTrigger key={t} value={t}>
+                {TYPE_LABELS[t] || t} ({guildsByType(t).length})
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-        <TabsContent value="all" className="space-y-4">
-          <GuildGrid guilds={guilds} isLoading={isLoading} />
-        </TabsContent>
-
-        <TabsContent value="divisions" className="space-y-4">
-          <GuildGrid guilds={divisions} isLoading={isLoading} />
-        </TabsContent>
-
-        <TabsContent value="industries" className="space-y-4">
-          <GuildGrid guilds={industries} isLoading={isLoading} />
-        </TabsContent>
-
-        <TabsContent value="skills" className="space-y-4">
-          <GuildGrid guilds={skills} isLoading={isLoading} />
-        </TabsContent>
-      </Tabs>
-
-      <GuildCreationDialog open={showCreateDialog} onOpenChange={setShowCreateDialog} />
+          <TabsContent value="all" className="mt-4">
+            <GuildGrid guilds={guilds} isLoading={isLoading} />
+          </TabsContent>
+          {types.map((t) => (
+            <TabsContent key={t} value={t} className="mt-4">
+              <GuildGrid guilds={guildsByType(t)} isLoading={isLoading} />
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
     </PortalPageLayout>
   );
 }
 
-function GuildGrid({ guilds, isLoading }: { guilds: any[] | undefined; isLoading: boolean }) {
+function GuildCard({
+  guild,
+  isMember,
+  onClick,
+}: {
+  guild: Guild;
+  isMember?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <Card
+      className="cursor-pointer hover:shadow-lg transition-all group border-l-4"
+      style={{ borderLeftColor: guild.color_primary || "#7c3aed" }}
+      onClick={onClick}
+    >
+      {guild.banner_image_url && (
+        <div className="h-24 overflow-hidden rounded-t-lg">
+          <img
+            src={guild.banner_image_url}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+      <CardHeader className="pb-2">
+        <div className="flex items-start justify-between">
+          <CardTitle className="text-base">{guild.name}</CardTitle>
+          <div className="flex gap-1">
+            {isMember && <Badge className="bg-purple-100 text-purple-700">Member</Badge>}
+            <Badge variant="outline" className="text-xs">
+              {TYPE_LABELS[guild.guild_type] || guild.guild_type}
+            </Badge>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+          {guild.description || "No description yet."}
+        </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Users className="h-4 w-4" />
+            {guild.member_count} members
+          </div>
+          <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-purple-600 transition-colors" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function GuildGrid({
+  guilds,
+  isLoading,
+}: {
+  guilds: Guild[] | undefined;
+  isLoading: boolean;
+}) {
+  const navigate = useNavigate();
+
   if (isLoading) {
-    return <div className="text-center py-8 text-muted-foreground">Loading guilds...</div>;
+    return (
+      <div className="text-center py-12 text-muted-foreground">
+        Loading guilds...
+      </div>
+    );
   }
 
   if (!guilds || guilds.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-12 text-center text-muted-foreground">
-          No guilds found. Be the first to create one!
-        </CardContent>
-      </Card>
+      <div className="text-center py-12 text-muted-foreground">
+        No guilds found. Be the first to forge one!
+      </div>
     );
   }
 
   return (
-    <PortalPageLayout>
-      {guilds.map((guild) => (
-        <Card key={guild.id} className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <CardTitle className="text-base">{guild.display_name}</CardTitle>
-                <CardDescription className="flex items-center gap-2 mt-1">
-                  <Badge variant="outline" className="text-xs">{guild.custom_name}</Badge>
-                  <Badge variant="secondary" className="text-xs">{guild.guild_type}</Badge>
-                </CardDescription>
-              </div>
-              {guild.is_official && (
-                <Badge variant="default" className="ml-2">Official</Badge>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-sm text-muted-foreground line-clamp-3">
-              {guild.description || 'No description provided'}
-            </p>
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Users className="h-4 w-4" />
-                <span>{guild.member_count?.[0]?.count || 0} members</span>
-              </div>
-              <Button variant="outline" size="sm">Join Guild</Button>
-            </div>
-          </CardContent>
-        </Card>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {guilds.map((g) => (
+        <GuildCard
+          key={g.id}
+          guild={g}
+          onClick={() => navigate(`/guilds/${g.slug}`)}
+        />
       ))}
-    </PortalPageLayout>
+    </div>
   );
 }

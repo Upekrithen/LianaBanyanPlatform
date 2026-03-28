@@ -169,7 +169,7 @@ export default function Marketplace() {
                 <div className="flex-1">
                   <h3 className="font-bold text-lg">Own the Patents</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    1,401 patent claims. Sponsor the platform and own a piece of the IP.
+                    1,511 patent claims. Sponsor the platform and own a piece of the IP.
                   </p>
                   <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                     <div className="text-center p-2 rounded bg-background/50">
@@ -223,7 +223,7 @@ export default function Marketplace() {
           <Card>
             <CardContent className="pt-4 text-center">
               <Shield className="h-6 w-6 mx-auto text-purple-500 mb-1" />
-              <p className="text-2xl font-bold">1,401</p>
+              <p className="text-2xl font-bold">1,511</p>
               <p className="text-xs text-muted-foreground">Patent Claims</p>
             </CardContent>
           </Card>
@@ -267,7 +267,8 @@ export default function Marketplace() {
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
                 <Sparkles className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                <p>No new projects in this time range. Try a wider filter.</p>
+                <p className="mb-3">No new projects in this time range. Try a wider filter.</p>
+                <a href="/projects/create" className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Start a Project</a>
               </CardContent>
             </Card>
           )}
@@ -311,7 +312,8 @@ export default function Marketplace() {
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
                 <TrendingUp className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                <p>No trending projects yet. Create one and get the first votes!</p>
+                <p className="mb-3">No trending projects yet. Create one and get the first votes!</p>
+                <a href="/projects" className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md border hover:bg-muted transition-colors">Browse All Projects</a>
               </CardContent>
             </Card>
           )}
@@ -339,7 +341,8 @@ export default function Marketplace() {
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
                 <DollarSign className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                <p>No backed projects yet. Browse new projects and sponsor what inspires you.</p>
+                <p className="mb-3">No backed projects yet. Browse new projects and sponsor what inspires you.</p>
+                <a href="/projects" className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Browse Projects</a>
               </CardContent>
             </Card>
           )}

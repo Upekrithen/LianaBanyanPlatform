@@ -30,6 +30,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 5. [RADAR Competitive Intelligence System](#radar-competitive-intelligence)
 6. [Free Rider Problem Solution](#free-rider-problem-solution)
 7. [Credit-Based Intermarket Currency](#credit-based-intermarket-currency)
+8. [Multi-Agent AI Infrastructure & Self-Built Institutional Memory](#8-multi-agent-ai-infrastructure)
 
 ---
 
@@ -1165,7 +1166,103 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 ---
 
-## 10. HIVI (Historical Influence Value Index) and Sponsorship Cascade
+## 10. Multi-Agent AI Infrastructure & Self-Built Institutional Memory {#8-multi-agent-ai-infrastructure}
+
+### Theoretical Framework
+
+**Core Hypothesis**: When multiple specialized AI agents coordinate through file-based asynchronous protocols with constitutional constraints and a human "AI Tuner," innovation velocity follows a compounding curve — and when those agents build their own persistent knowledge infrastructure (the Librarian), the compounding accelerates because the innovation process itself is innovated.
+
+**Theoretical Basis**:
+- Multi-agent systems (MAS) literature (Wooldridge, 2009; Shoham & Leyton-Brown, 2009)
+- Organizational memory theory (Walsh & Ungson, 1991; Stein, 1995)
+- Constraint-based creativity (Boden, 2004)
+- Conway's Law and organizational design (Conway, 1968)
+- Knowledge management in distributed teams (Nonaka & Takeuchi, 1995)
+
+**Novel Contribution**: The Librarian MCP represents what we believe is the first documented instance of AI agents constructing their own institutional memory system — not by updating model weights, but by indexing their own output into a queryable knowledge base that persists across sessions, agents, and context windows. This bridges MAS literature (which assumes fixed agent capabilities) with organizational learning theory (which assumes human participants).
+
+### Research Questions
+
+**RQ1: Innovation Velocity Under Multi-Agent AI Coordination**
+- Does role-specialized multi-agent coordination (Bishop designs, Knight builds, Pawn researches, Rook verifies) produce higher innovation output than single-agent approaches?
+- What is the optimal agent count and specialization split?
+- Does the "separation of design from implementation" principle apply to AI-assisted development as it does to human teams?
+
+**Hypothesis**: Specialized roles with strict separation produce measurably higher output (innovations per session) AND higher structural innovation density (Crown Jewel %) than generalist approaches.
+
+**Empirical Test**:
+- Compare innovation velocity across 103+ Knight sessions and 30+ Bishop sessions
+- Measure Crown Jewel density over time (expect compounding: 10% early → 60% recent)
+- Track session-over-session acceleration against handoff quality metrics
+
+**RQ2: Self-Built Knowledge Infrastructure**
+- Can AI agents effectively design and consume their own knowledge management tools?
+- Does the Librarian (11 parsers, 13 indexes, 22 domains, 20 tools) reduce measurable coordination overhead?
+- What is the ROI of automated context packaging (brief_me) vs. manual context loading?
+
+**Hypothesis**: Context reconstruction time drops from 15-20 minutes to under 30 seconds with Librarian; pre-implementation consistency checking (moneypenny_checklist) prevents 80%+ of architectural violations that would otherwise reach deployment.
+
+**Empirical Test**:
+- Measure context loading time pre-Librarian vs. post-Librarian across agent sessions
+- Track architectural violation rates pre/post moneypenny_checklist deployment
+- Analyze session productivity (innovations per hour) before and after Librarian deployment
+
+**RQ3: Constitutional Constraints and AI Output Quality**
+- Do immutable rules (Cost+20%, three-currency parity, HEOHO) improve or limit AI creative output?
+- How do constraints interact with compounding innovation?
+
+**Hypothesis**: Tighter constraints produce better solutions by eliminating unproductive exploration space — consistent with constraint satisfaction literature and confirmed empirically by 300-800x cost advantage over traditional development.
+
+**RQ4: The AI Tuner as a New Job Category**
+- What human skills predict success as an "AI Tuner" directing multi-agent teams?
+- Is domain expertise or prompt engineering the binding constraint?
+- Can the AI Tuner model be taught, or is it a personality trait?
+
+**Hypothesis**: Domain expertise is the binding constraint, not prompt quality. The correction mechanism (ratchet) suggests that AI amplifies existing knowledge multiplicatively.
+
+### Empirical Opportunities
+
+**Longitudinal Case Study**:
+- The Liana Banyan project provides 5+ months of documented multi-agent AI collaboration
+- 103+ Knight sessions, 30+ Bishop sessions, 14 Pawn batches — all with structured handoffs
+- Innovation log from #1 through #1,938 with timestamps, categories, and agent attribution
+- Pre/post Librarian comparison window (sessions 1-28 without, 29+ with)
+
+**Comparative Analysis**:
+- Compare LB's multi-agent approach to published single-agent development case studies
+- Benchmark innovation velocity against traditional startup development timelines
+- Analyze cost efficiency ($2,500 total vs. $750K-$2M industry benchmarks)
+
+**Natural Experiment**:
+- Librarian deployment creates a natural experiment: same agents, same Founder, same project, with/without institutional memory infrastructure
+- Pre-deployment sessions rely on manual handoffs; post-deployment sessions use automated brief_me
+- Measurable outcomes: context loading time, architectural violations, innovation per session
+
+### Expected Contributions
+
+**To Multi-Agent Systems**:
+- First documented case of AI agents building their own coordination infrastructure
+- Empirical evidence for role specialization benefits in AI teams
+- Constitutional constraint design patterns for multi-agent architectures
+
+**To Organizational Learning**:
+- Extension of institutional memory theory to non-human agents
+- Self-constructing knowledge bases as an organizational design pattern
+- File-based asynchronous coordination as an alternative to API-chained agents
+
+**To Platform Cooperativism**:
+- Demonstration that cooperative enterprises can leverage multi-agent AI at $500/month
+- 300-800x cost advantage as a cooperative competitive edge
+- AI Tuner model as an accessible entry point for solo cooperative founders
+
+**To Innovation Studies**:
+- Empirical validation of compounding innovation thesis
+- Crown Jewel density as a leading indicator of innovation acceleration
+- Named-concept indexing as a mechanism for cross-domain innovation transfer
+
+---
+
+## 11. HIVI (Historical Influence Value Index) and Sponsorship Cascade
 
 ### Theoretical Framework
 

@@ -37,7 +37,7 @@ export const GET_A_JOB_RUN: WildfireRun = {
       description: "Little Red Hen — why we built this",
       route: "/get-a-job",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/little-red-hen/",
+      learningLink: "/cephas/under-the-hood/little-red-hen",
       goldenKeysReward: 5,
     },
     {
@@ -63,7 +63,7 @@ export const GET_A_JOB_RUN: WildfireRun = {
       description: "Three-gear currency system",
       route: "/economics",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/three-gear-currency/",
+      learningLink: "/cephas/under-the-hood/three-gear-currency",
       goldenKeysReward: 5,
     },
     {
@@ -112,7 +112,7 @@ export const BUILD_A_BUSINESS_RUN: WildfireRun = {
       description: "Why creators keep 83.3%",
       route: "/economics",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/",
+      learningLink: "/cephas/under-the-hood/cost-plus-twenty",
       goldenKeysReward: 5,
     },
     {
@@ -130,7 +130,7 @@ export const BUILD_A_BUSINESS_RUN: WildfireRun = {
       description: "$5 business simulator → real incubator",
       route: "/initiatives/bread",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/initiatives/lets-make-bread/",
+      learningLink: "/cephas/initiatives/lets-make-bread",
       goldenKeysReward: 5,
     },
     {
@@ -187,7 +187,7 @@ export const PLANT_SEEDS_RUN: WildfireRun = {
       description: "1,244 innovations across 7 applications",
       route: "/patent-portfolio",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/patent-portfolio/",
+      learningLink: "/cephas/under-the-hood/patent-portfolio",
       goldenKeysReward: 5,
     },
     {
@@ -205,7 +205,7 @@ export const PLANT_SEEDS_RUN: WildfireRun = {
       description: "60/10/20/10 allocation",
       route: "/sponsor",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/sponsorship-model/",
+      learningLink: "/cephas/under-the-hood/sponsorship-model",
       goldenKeysReward: 5,
     },
     {
@@ -250,7 +250,7 @@ export const BUSINESS_EXISTING_RUN: WildfireRun = {
       description: "Understand the Cost+20% model",
       route: "/help-each-other",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/",
+      learningLink: "/cephas/under-the-hood/cost-plus-twenty",
       goldenKeysReward: 5,
     },
     {
@@ -260,7 +260,7 @@ export const BUSINESS_EXISTING_RUN: WildfireRun = {
       description: "See how 83.3% creator share works",
       route: "/economics",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/economic-laws/",
+      learningLink: "/cephas/under-the-hood/economic-laws",
       goldenKeysReward: 5,
     },
     {
@@ -270,7 +270,7 @@ export const BUSINESS_EXISTING_RUN: WildfireRun = {
       description: "Choose your starting point",
       route: "/business-pathway",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/business-pathway/",
+      learningLink: "/cephas/under-the-hood/business-pathway",
       goldenKeysReward: 5,
     },
     {
@@ -351,7 +351,7 @@ export const BUSINESS_IDEA_RUN: WildfireRun = {
       description: "The business incubator initiative",
       route: "/initiatives/lets-make-bread",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/initiatives/lets-make-bread/",
+      learningLink: "/cephas/initiatives/lets-make-bread",
       goldenKeysReward: 5,
     },
     {
@@ -523,7 +523,7 @@ export const INITIATIVES_FOOD_RUN: WildfireRun = {
       description: "Neighbors feeding neighbors",
       route: "/initiatives/lets-make-dinner",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/initiatives/lets-make-dinner/",
+      learningLink: "/cephas/initiatives/lets-make-dinner",
       goldenKeysReward: 5,
     },
     {
@@ -580,7 +580,7 @@ export const INITIATIVES_HEALTH_RUN: WildfireRun = {
       description: "Affordable medications at Cost+20%",
       route: "/initiatives/tatiana-schlossburg-health-accords",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/initiatives/tatiana-schlossburg-health-accords/",
+      learningLink: "/cephas/initiatives/tatiana-schlossburg-health-accords",
       goldenKeysReward: 5,
     },
     {
@@ -672,7 +672,7 @@ export const ONBOARDING_QUICK_RUN: WildfireRun = {
       description: "Our philosophy",
       route: "/help-each-other",
       duration: 5,
-      learningLink: "https://cephas.lianabanyan.com/under-the-hood/golden-key/",
+      learningLink: "/cephas/under-the-hood/golden-key",
       goldenKeysReward: 5,
     },
     {

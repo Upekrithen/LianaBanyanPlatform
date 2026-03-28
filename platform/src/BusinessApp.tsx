@@ -11,6 +11,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UnifiedNavigation } from "@/components/UnifiedNavigation";
 import { SyncStatusIndicator } from "@/components/SyncStatusIndicator";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { CrossPortalNav } from "@/components/CrossPortalNav";
 import { GlobalBreadcrumbs } from "@/components/GlobalBreadcrumbs";
 
 // Auth
@@ -38,11 +39,16 @@ import Briefcase from "./pages/Briefcase";
 import ProjectView from "./pages/ProjectView";
 import NotFound from "./pages/NotFound";
 
+// Business Portal Landing (public entry page)
+import BusinessLanding from "./pages/BusinessLanding";
+
 // Business Portal — shared pages (also available on marketplace)
 import { lazy, Suspense } from "react";
 const BizKaleidoscope = lazy(() => import("./pages/BizKaleidoscope"));
 const StoreFrontAggregation = lazy(() => import("./pages/StoreFrontAggregation"));
 const TheFurnace = lazy(() => import("./pages/TheFurnace"));
+const MakerDashboard = lazy(() => import("./pages/MakerDashboard"));
+const OrderManifestPage = lazy(() => import("./pages/OrderManifestPage"));
 
 const queryClient = new QueryClient();
 
@@ -67,21 +73,17 @@ const BusinessApp = () => {
                         </div>
                         <SyncStatusIndicator />
                       </header>
+                      <CrossPortalNav />
                       <main className="flex-1 overflow-auto p-6">
                         <Routes>
                           {/* Public Routes */}
                           <Route path="/auth" element={<Auth />} />
                           <Route path="/browse" element={<BrowseBusiness />} />
                           
+          {/* Public landing for unauthenticated visitors */}
+          <Route path="/" element={<BusinessLanding />} />
+
           {/* Protected Business Routes */}
-          <Route 
-            path="/" 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
           <Route 
             path="/dashboard" 
             element={
@@ -259,6 +261,12 @@ const BusinessApp = () => {
                           <Route path="/biz-aggregation" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><StoreFrontAggregation /></Suspense>} />
                           <Route path="/the-furnace" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TheFurnace /></Suspense>} />
                           <Route path="/furnace" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><TheFurnace /></Suspense>} />
+
+                          {/* K109: Maker Dashboard */}
+                          <Route path="/dashboard/maker" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><MakerDashboard /></Suspense></ProtectedRoute>} />
+
+                          {/* K130: Order Manifest — Restaurant pre-order view */}
+                          <Route path="/orders" element={<ProtectedRoute><Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><OrderManifestPage /></Suspense></ProtectedRoute>} />
 
                           {/* 404 */}
                           <Route path="*" element={<NotFound />} />

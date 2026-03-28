@@ -12,3 +12,6 @@ export { InnovationClaimList } from "./InnovationClaimList";
 export { VersionToggle } from "./VersionToggle";
 export type { PaperVersion } from "./VersionToggle";
 export { InnovationPedestal } from "./InnovationPedestal";
+export { CephasResourcePanel } from "./CephasResourcePanel";
+export { KnowledgeGraphNav } from "./KnowledgeGraphNav";
+export { LearnMoreBadge } from "./LearnMoreBadge";

@@ -140,8 +140,9 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
         <StatCard label="Spec-Expanded" value={stats.specExpanded} icon={Shield} sub="Full patent-quality specs" />
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard label="Domains" value={stats.domains} icon={Users} />
+        <StatCard label="Production Systems" value={stats.productionSystems} icon={Shield} sub="Active subsystems" />
         <StatCard label="Initiatives" value={stats.initiatives} icon={Users} sub="The Sweet Sixteen" />
         <StatCard label="Creator Keeps" value={`${stats.creatorKeepsPct}%`} icon={Lock} sub="On every transaction" />
       </div>
@@ -198,7 +199,7 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
               <tr className="border-b border-border"><td className="py-2 font-mono">63/989,913</td><td>Feb 24, 2026</td><td className="text-right">408</td><td>LEVIATHAN PLUS</td></tr>
               <tr className="border-b border-border"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right">464</td><td>Full Specs (#1001–#1662)</td></tr>
               <tr className="border-b border-border"><td className="py-2 font-mono">64/009,803</td><td>Mar 18, 2026</td><td className="text-right">89</td><td>Six Degrees + Game Mechanics + Demand Signaling (#1663–#1751)</td></tr>
-              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,401+</td><td>8 provisional applications filed</td></tr>
+              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">1,511+</td><td>10 provisional applications filed</td></tr>
             </tbody>
           </table>
         </div>

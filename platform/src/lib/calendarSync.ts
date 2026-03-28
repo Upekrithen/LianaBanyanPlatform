@@ -3,7 +3,10 @@
  * from storefronts, subscriptions, and delivery routes.
  *
  * Phase 1: runs when Calendar page loads; checks for missing auto-events.
- * Phase 2: edge function triggered by storefront/order changes.
+ * Phase 2: This will be fully replaced by calendar-sync-commerce edge function
+ *   which creates events in real-time from stripe-webhook and
+ *   distribute-order-earnings. This client-side sync remains as a
+ *   fallback for any events missed by the edge function.
  */
 
 import { supabase } from '@/integrations/supabase/client';
@@ -157,10 +160,23 @@ export async function syncDeliveryRouteEvents(userId: string): Promise<number> {
   return error ? 0 : toInsert.length;
 }
 
+const SYNC_KEY = 'lb_calendar_last_synced_at';
+
 export async function runCalendarSync(userId: string): Promise<{ storefrontEvents: number; routeEvents: number }> {
+  // Skip if synced recently (within the last 5 minutes)
+  const lastSynced = localStorage.getItem(SYNC_KEY);
+  if (lastSynced) {
+    const elapsed = Date.now() - new Date(lastSynced).getTime();
+    if (elapsed < 5 * 60_000) {
+      return { storefrontEvents: 0, routeEvents: 0 };
+    }
+  }
+
   const [storefrontEvents, routeEvents] = await Promise.all([
     syncStorefrontEvents(userId),
     syncDeliveryRouteEvents(userId),
   ]);
+
+  localStorage.setItem(SYNC_KEY, new Date().toISOString());
   return { storefrontEvents, routeEvents };
 }

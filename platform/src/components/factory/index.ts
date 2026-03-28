@@ -7,3 +7,4 @@
 export { FactoryPipeline } from "./FactoryPipeline";
 export { ProductionLevelThermometer } from "./ProductionLevelThermometer";
 export { PioneerNodeRegistry } from "./PioneerNodeRegistry";
+export { CanisterStackDiagram } from "./CanisterStackDiagram";

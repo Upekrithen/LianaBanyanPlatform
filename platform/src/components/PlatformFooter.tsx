@@ -66,24 +66,24 @@ export function PlatformFooter() {
               <h3 className="font-bold text-sm tracking-wide uppercase text-foreground">
                 Platform
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 <li>
-                  <Link to="/economics" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/economics" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Economic Model
                   </Link>
                 </li>
                 <li>
-                  <Link to="/patent-portfolio" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/patent-portfolio" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Patent Portfolio
                   </Link>
                 </li>
                 <li>
-                  <Link to="/fly-on-the-wall" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/fly-on-the-wall" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Transparency Dashboard
                   </Link>
                 </li>
                 <li>
-                  <Link to="/crows-nest" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/crows-nest" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     The Crow's Nest
                   </Link>
                 </li>
@@ -95,30 +95,28 @@ export function PlatformFooter() {
               <h3 className="font-bold text-sm tracking-wide uppercase text-foreground">
                 Legal
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 <li>
-                  <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Terms of Service
                   </Link>
                 </li>
                 <li>
-                  <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
                   <a
-                    href="https://cephas.lianabanyan.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                    href="/cephas"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1 py-2 touch-manipulation"
                   >
                     Cephas Archive
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </li>
                 <li>
-                  <Link to="/governance" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/governance" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Governance (The 300)
                   </Link>
                 </li>
@@ -130,30 +128,35 @@ export function PlatformFooter() {
               <h3 className="font-bold text-sm tracking-wide uppercase text-foreground">
                 Community
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 <li>
-                  <Link to="/help-wanted" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/help-wanted" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Help Wanted (Bounties)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/arena" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to="/arena" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
                     Design Arena
                   </Link>
                 </li>
                 <li>
                   <button
                     onClick={() => setFeedbackOpen(true)}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 py-2 touch-manipulation"
                   >
                     <MessageSquarePlus className="h-3.5 w-3.5" />
                     Suggestion Box
                   </button>
                 </li>
                 <li>
-                  <Link to="/developers" className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5">
+                  <Link to="/developers" className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 py-2 touch-manipulation">
                     <Code2 className="h-3.5 w-3.5" />
                     Developers
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-2 touch-manipulation">
+                    Contact Us
                   </Link>
                 </li>
               </ul>
@@ -161,17 +164,17 @@ export function PlatformFooter() {
           </div>
 
           {/* Divider */}
-          <div className="border-t mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Shield className="h-3.5 w-3.5" />
-              <span>{canonical.patentClaims.toLocaleString()} patent claims · {canonical.innovationCount.toLocaleString()} innovations · Service sponsorship, not securities</span>
+          <div className="border-t mt-8 pt-6 flex flex-col items-center gap-3 text-center sm:text-left sm:flex-row sm:justify-between sm:gap-4">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground max-w-full">
+              <Shield className="h-3.5 w-3.5 shrink-0" />
+              <span className="break-words">{canonical.patentClaims.toLocaleString()} patent claims · {canonical.innovationCount.toLocaleString()} innovations</span>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Service sponsorship, not securities
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>&copy; {currentYear} Liana Banyan Corporation. All rights reserved.</span>
-              <Heart className="h-3 w-3 text-red-400" />
-            </div>
-            <div className="text-xs text-muted-foreground mt-1 sm:mt-0">
-              Powered by NotCents&trade;
+              <span>&copy; {currentYear} Liana Banyan Corporation</span>
+              <Heart className="h-3 w-3 text-red-400 shrink-0" />
             </div>
           </div>
         </div>

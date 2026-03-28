@@ -19,7 +19,7 @@ import {
 // ── Constants ──────────────────────────────────────────────────────────────
 
 const FABLE_FRAME_COUNT = 30;
-const FABLE_MS_BASE = 1500; // ~1.5s per frame at 1×
+const FABLE_MS_BASE = 4500; // ~4.5s per frame — enough time to read subtitles
 
 const FABLE_SUBTITLES: Record<number, string> = {
   1: "The Little Red Hen found some seeds.",
@@ -260,7 +260,7 @@ export function WelcomeGate({ children }: { children: React.ReactNode }) {
                 >
                   <p
                     className="text-center italic leading-snug text-sm"
-                    style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", fontWeight: 600, transition: 'opacity 0.3s ease', textWrap: 'balance', color: '#faf5eb' }}
+                    style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", fontWeight: 600, transition: 'opacity 0.3s ease', textWrap: 'balance', color: '#1a1a2e' }}
                   >
                     {subtitle || "\u00A0"}
                   </p>

@@ -69,6 +69,9 @@ export default function DesignBattleArena() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("active");
 
+  // STAMP review rating per submission
+  const [reviewRating, setReviewRating] = useState<Record<string, number>>({});
+
   // Submit Design form state
   const [submitTitle, setSubmitTitle] = useState("");
   const [submitDescription, setSubmitDescription] = useState("");
@@ -201,10 +204,116 @@ export default function DesignBattleArena() {
     },
   });
 
+  // Battle auto-trigger: check if 2+ approved submissions exist in same category within 7 days
+  async function tryAutoTriggerBattle(category: string) {
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const { data: recent } = await supabase
+      .from("arena_submissions" as never)
+      .select("id, creator_id, title")
+      .eq("category", category)
+      .eq("status", "approved")
+      .gte("created_at", sevenDaysAgo) as { data: { id: string; creator_id: string; title: string }[] | null };
+
+    if (!recent || recent.length < 2) return;
+
+    const { data: existingBattle } = await supabase
+      .from("design_battles")
+      .select("id")
+      .eq("category", category)
+      .in("status", ["pending", "active", "voting"])
+      .limit(1);
+
+    if (existingBattle && existingBattle.length > 0) {
+      // Add new submissions to existing battle
+      const battleId = existingBattle[0].id;
+      for (const sub of recent) {
+        await supabase.from("arena_submissions" as never).update({
+          battle_id: battleId, status: "in_battle"
+        } as never).eq("id", sub.id as never).eq("status", "approved" as never);
+      }
+      toast({ title: "Added to Battle", description: `Submissions joined the active ${category.replace(/_/g, " ")} battle!` });
+    } else {
+      // Create a new battle
+      const endsAt = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString();
+      const { data: newBattle } = await supabase.from("design_battles").insert({
+        title: `${category.replace(/_/g, " ")} Battle — ${new Date().toLocaleDateString()}`,
+        category,
+        status: "voting",
+        total_pot: 0,
+        ends_at: endsAt,
+      }).select("id").single();
+
+      if (newBattle) {
+        for (const sub of recent) {
+          await supabase.from("arena_submissions" as never).update({
+            battle_id: newBattle.id, status: "in_battle"
+          } as never).eq("id", sub.id as never);
+          await supabase.from("design_battle_participants").insert({
+            battle_id: newBattle.id,
+            user_id: sub.creator_id,
+            display_name: sub.title,
+            submission_url: "",
+          }).select().maybeSingle();
+        }
+        toast({ title: "Battle Auto-Triggered!", description: `${recent.length} designs in ${category.replace(/_/g, " ")} — voting now open!` });
+      }
+    }
+  }
+
+  // Battle resolution: on page load, check for expired voting battles
+  const { data: expiredBattles } = useQuery({
+    queryKey: ["expired-battles"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("design_battles")
+        .select("id, category")
+        .eq("status", "voting")
+        .lt("ends_at", new Date().toISOString());
+      return data || [];
+    },
+    refetchInterval: 60_000,
+  });
+
+  async function resolveBattle(battleId: string) {
+    const { data: participants } = await supabase
+      .from("design_battle_participants")
+      .select("id, user_id, vote_count")
+      .eq("battle_id", battleId)
+      .order("vote_count", { ascending: false });
+
+    if (!participants || participants.length === 0) return;
+
+    // Winner = highest votes
+    const winnerId = participants[0].user_id;
+    await supabase.from("design_battle_participants").update({
+      crow_feather_earned: true,
+    }).eq("id", participants[0].id);
+
+    // Winner's submission → in_emporium
+    await supabase.from("arena_submissions" as never).update({
+      status: "in_emporium"
+    } as never).eq("battle_id", battleId as never).eq("creator_id", winnerId as never);
+
+    // Non-winners → back to approved (YOU DIDN'T LOSE)
+    for (const p of participants.slice(1)) {
+      await supabase.from("arena_submissions" as never).update({
+        status: "approved"
+      } as never).eq("battle_id", battleId as never).eq("creator_id", p.user_id as never);
+    }
+
+    await supabase.from("design_battles").update({ status: "completed" }).eq("id", battleId);
+  }
+
+  // Auto-resolve expired battles
+  if (expiredBattles && expiredBattles.length > 0) {
+    expiredBattles.forEach(b => resolveBattle(b.id));
+  }
+
   // STAMP review mutation
   const reviewMutation = useMutation({
     mutationFn: async ({ id, approved, rating }: { id: string; approved: boolean; rating: number }) => {
       if (!user) throw new Error("Must be logged in");
+      const sub = pendingReview?.find(s => s.id === id);
       const { error } = await supabase.from("arena_submissions" as never).update({
         status: approved ? "approved" : "rejected",
         stamp_reviewer_id: user.id,
@@ -212,10 +321,54 @@ export default function DesignBattleArena() {
         stamp_date: new Date().toISOString(),
       } as never).eq("id", id as never);
       if (error) throw error;
+
+      if (approved && sub) {
+        await tryAutoTriggerBattle(sub.category);
+
+        // Slingshot: auto-create slot for design-category approvals
+        const slingshotCategories = ['cue_card_template', 'logo', 'menu_template', 'business_card_template'];
+        if (slingshotCategories.includes(sub.category)) {
+          const categoryToService: Record<string, string> = {
+            cue_card_template: 'cue_card',
+            logo: 'logo',
+            menu_template: 'menu_template',
+            business_card_template: 'branding',
+          };
+          // Find the creator's storefront to set as origin_business_id
+          const { data: creatorStorefronts } = await supabase
+            .from("storefronts" as never)
+            .select("id")
+            .eq("owner_id", sub.creator_id)
+            .limit(1) as { data: { id: string }[] | null };
+
+          const originBizId = creatorStorefronts?.[0]?.id;
+          if (originBizId) {
+            const { data: existing } = await supabase
+              .from("slingshot_slots" as never)
+              .select("id")
+              .eq("shepherd_id", sub.creator_id)
+              .eq("origin_business_id", originBizId)
+              .eq("service_type", categoryToService[sub.category] || 'general')
+              .maybeSingle() as { data: { id: string } | null };
+
+            if (!existing) {
+              await supabase.from("slingshot_slots" as never).insert({
+                shepherd_id: sub.creator_id,
+                origin_business_id: originBizId,
+                origin_submission_id: sub.id,
+                service_type: categoryToService[sub.category] || 'general',
+                generation: 1,
+                is_active: true,
+              } as never);
+            }
+          }
+        }
+      }
     },
     onSuccess: () => {
       toast({ title: "Review Complete" });
       queryClient.invalidateQueries({ queryKey: ["arena-submissions"] });
+      queryClient.invalidateQueries({ queryKey: ["design-battles"] });
     },
   });
 
@@ -440,29 +593,42 @@ export default function DesignBattleArena() {
                       </CardHeader>
                       <CardContent className="space-y-2">
                         {mySubmissions.map((sub) => (
-                          <div key={sub.id} className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
-                            <img
-                              src={sub.image_url}
-                              alt={sub.title}
-                              className="w-12 h-12 rounded object-cover"
-                              onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
-                            />
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium text-sm truncate">{sub.title}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {DESIGN_CATEGORIES.find(c => c.value === sub.category)?.label || sub.category}
-                              </p>
+                          <div key={sub.id} className="space-y-1">
+                            <div className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
+                              <img
+                                src={sub.image_url}
+                                alt={sub.title}
+                                className="w-12 h-12 rounded object-cover"
+                                onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm truncate">{sub.title}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {DESIGN_CATEGORIES.find(c => c.value === sub.category)?.label || sub.category}
+                                </p>
+                              </div>
+                              <Badge variant={
+                                sub.status === "approved" ? "default" :
+                                sub.status === "in_emporium" ? "default" :
+                                sub.status === "in_battle" ? "secondary" :
+                                sub.status === "rejected" ? "destructive" : "outline"
+                              }>
+                                {sub.status.replace("_", " ")}
+                              </Badge>
+                              {sub.royalty_uses > 0 && (
+                                <span className="text-xs text-emerald-400">{sub.royalty_uses} uses</span>
+                              )}
                             </div>
-                            <Badge variant={
-                              sub.status === "approved" ? "default" :
-                              sub.status === "in_emporium" ? "default" :
-                              sub.status === "in_battle" ? "secondary" :
-                              sub.status === "rejected" ? "destructive" : "outline"
-                            }>
-                              {sub.status.replace("_", " ")}
-                            </Badge>
-                            {sub.royalty_uses > 0 && (
-                              <span className="text-xs text-emerald-400">{sub.royalty_uses} uses</span>
+                            {/* "You Didn't Lose" — approved after battle means work is still in Emporium */}
+                            {sub.battle_id && sub.status === "approved" && (
+                              <div className="ml-14 p-2 rounded bg-emerald-500/10 border border-emerald-500/20 text-xs">
+                                <p className="text-emerald-300 font-medium">Your design is still available in the Emporium.</p>
+                                <p className="text-muted-foreground mt-0.5">Businesses can browse and commission you anytime.</p>
+                                <div className="flex gap-2 mt-1">
+                                  <a href="/emporium" className="text-emerald-400 hover:underline text-[11px]">View in Emporium</a>
+                                  <a href={`/emporium?search=${encodeURIComponent(sub.title)}`} className="text-emerald-400 hover:underline text-[11px]">Share Portfolio Link</a>
+                                </div>
+                              </div>
                             )}
                           </div>
                         ))}
@@ -518,18 +684,29 @@ export default function DesignBattleArena() {
                           )}
                         </div>
                       </div>
-                      <div className="flex gap-2 mt-4 justify-end">
+                        <div className="flex items-center gap-2 mt-4 justify-end">
+                        <div className="flex items-center gap-1 mr-2">
+                          {[1,2,3,4,5].map(s => (
+                            <button
+                              key={s}
+                              onClick={() => setReviewRating(prev => ({ ...prev, [sub.id]: s }))}
+                              className="focus:outline-none"
+                            >
+                              <Star className={`h-4 w-4 ${(reviewRating[sub.id] || 0) >= s ? "text-amber-400 fill-amber-400" : "text-muted-foreground"}`} />
+                            </button>
+                          ))}
+                        </div>
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => reviewMutation.mutate({ id: sub.id, approved: false, rating: 0 })}
+                          onClick={() => reviewMutation.mutate({ id: sub.id, approved: false, rating: reviewRating[sub.id] || 0 })}
                           disabled={reviewMutation.isPending}
                         >
                           <XCircle className="h-4 w-4 mr-1" /> Reject
                         </Button>
                         <Button
                           size="sm"
-                          onClick={() => reviewMutation.mutate({ id: sub.id, approved: true, rating: 4.0 })}
+                          onClick={() => reviewMutation.mutate({ id: sub.id, approved: true, rating: reviewRating[sub.id] || 4.0 })}
                           disabled={reviewMutation.isPending}
                           className="bg-emerald-600 hover:bg-emerald-700"
                         >

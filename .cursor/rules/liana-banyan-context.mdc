@@ -4,24 +4,37 @@ globs:
 alwaysApply: true
 ---
 
-# Liana Banyan Platform â€” AI Context Rules
+# Liana Banyan Platform -- AI Context Rules
 
-## MANDATORY: Context Loading
+## MANDATORY: Context Loading (MoneyPenny / Librarian MCP)
 
-At the start of EVERY session, read these files in order:
-1. `CONTEXT_MANAGEMENT/01_MASTER_CONTEXT.md` â€” THE source of truth
-2. `CONTEXT_MANAGEMENT/04_UNIFIED_AGENT_SYNC.md` â€” Current state
-3. `CONTEXT_MANAGEMENT/LETTER_SYNC_PROTOCOL.md` â€” Letter sync requirements
-4. `CONTEXT_MANAGEMENT/SOCIAL_MEDIA_POSTING_SYSTEM.md` â€” Social media setup & status
+At the start of EVERY session, call **one tool**:
+1. Call `brief_me(task)` with a description of what you're working on -- returns canonical numbers, matched domains (tables, functions, pages), related concepts, applicable rules, and past work in ~600 words.
+
+That single call replaces the need for `get_system_overview` + `query_domain` + `get_architecture` + `check_consistency`.
+
+### Optional Follow-ups
+- Call `moneypenny_checklist(task)` before implementing -- pre-flight validation + prerequisites
+- Call `moneypenny_debrief(session_id, summary, ...)` at session end -- logs session + generates handoff
+- Call `get_architecture(concept, brief=false)` only when you need the full content of an architectural document
+- Call individual tools (`get_schema`, `get_component`, `search_knowledge`, etc.) for deep dives
+
+### Rebuilding the Librarian Index
+If data seems stale, run: `cd librarian-mcp; npm run rebuild`
+
+### Fallback
+If the Librarian is unavailable, fall back to reading `CONTEXT_MANAGEMENT/MILESTONE_HANDOFF_MARCH_2026.md`.
 
 ## Critical Numbers (Memorize)
 
 - **Creator keeps:** 83.3% (never round to 83%)
 - **Platform margin:** Cost + 20%
 - **On $500 transaction:** Creator or Worker gets $416.67
-- **Innovations:** 1,754 (through #1754; DB canonical: 1,751; 8 provisionals filed through Mar 17, 2026)
-- **Formal claims:** 1,401 across 8 provisional applications
-- **Crown Jewels:** 123 (filed across 8 provisionals)
+- **Innovations:** 1,979 (through provisional #9; filed Mar 25, 2026)
+- **Patent applications:** 10 provisional applications
+- **Formal claims:** ~1,511 across 10 provisional applications
+- **Crown Jewels:** 127 (filed across 10 provisionals)
+- **Production systems:** 21
 - **Membership:** $5/year
 
 ## The Sweet Sixteen Initiatives
@@ -66,48 +79,59 @@ At the start of EVERY session, read these files in order:
 | **Show Me & Help System** | `CONTEXT_MANAGEMENT/SHOW_ME_HELP_SYSTEM.md` |
 | All Letters | `letters/` |
 | Launch Documents | `LAUNCH_DOCUMENTS_MASTER/` |
-| **DSS the2ndsecond** | `dss-the2ndsecond/` (Show Me & Help reference impl) |
+| **DSS the2ndsecond** | Portal: `platform/src/DSSApp.tsx` / Images: `platform/public/dss/` |
 | KNIGHT tasks | `KNIGHT_DROPZONE/` |
 | BISHOP tasks | `BISHOP_DROPZONE/` |
 | ROOK tasks | `ROOK_DROPZONE/` |
 | PAWN tasks | `PAWN_DROPZONE/` |
 | **API Keys (SENSITIVE)** | `Asteroid-ProofVault/LockBox/DOUBLESECRET.env` |
+| **Librarian MCP** | `librarian-mcp/` |
 
 ## CRITICAL: Deployment Commands (MEMORIZE THIS!)
 
 ### Full Deploy (All Sites)
 ```powershell
-# One command to deploy everything:
-cd "C:\Users\Administrator\Documents\LianaBanyanPlatform\platform"; npm run build; firebase deploy --only hosting:main -P default; cd "..\Cephas\cephas-hugo"; hugo --minify; firebase deploy; cd "..\business-trunk"; firebase deploy --only hosting:biz
+# Build platform SPA (serves all portals via hostname detection):
+cd "C:\Users\Administrator\Documents\LianaBanyanPlatform\platform"; npm run build; firebase deploy --only hosting:main,hosting:dotcom,hosting:biz,hosting:org,hosting:net,hosting:the2ndsecond,hosting:hexisle,hosting:upekrithen -P default; cd "..\Cephas\cephas-hugo"; hugo --minify; firebase deploy
 ```
 
 ### Individual Site Deployments
 
+All portal domains deploy from `platform/dist/` — one build, many targets.
+
 | Site | Command |
 |------|---------|
-| **lianabanyan.com** (main platform) | `cd platform; npm run build; firebase deploy --only hosting:main -P default` |
+| **lianabanyan.com** (main marketplace) | `cd platform; npm run build; firebase deploy --only hosting:main -P default` |
 | **cephas.lianabanyan.com** (docs) | `cd Cephas/cephas-hugo; hugo --minify; firebase deploy` |
-| **lianabanyan.biz** (business) | `cd business-trunk; firebase deploy --only hosting:biz` |
-| **the2ndsecond.com** (DSS explanation) | `cd dss-the2ndsecond; npm run build; firebase deploy --only hosting:2ndsecond -P default` |
+| **lianabanyan.biz** (business portal) | `cd platform; npm run build; firebase deploy --only hosting:biz -P default` |
+| **the2ndsecond.com** (DSS / Maker) | `cd platform; npm run build; firebase deploy --only hosting:the2ndsecond -P default` |
+| **hexisle.lianabanyan.com** (HexIsle) | `cd platform; npm run build; firebase deploy --only hosting:hexisle -P default` |
+| **upekrithen.lianabanyan.com** (Admin) | `cd platform; npm run build; firebase deploy --only hosting:upekrithen -P default` |
 
 ### Firebase Project Mapping
 
-| Domain | Project | Hosting Target | Source Folder |
-|--------|---------|----------------|---------------|
-| lianabanyan.com | lianabanyan-403dc | `hosting:main` â†’ lianabanyan-main | `platform/` |
-| cephas.lianabanyan.com | lianabanyan-403dc | (default) | `Cephas/cephas-hugo/` |
-| lianabanyan.biz | lianabanyan-403dc | `hosting:biz` â†’ lianabanyan-biz-trunk | `business-trunk/` |
-| lianabanyan.org | lianabanyan-403dc | `hosting:org` â†’ lianabanyan-org-trunk | TBD |
-| lianabanyan.net | lianabanyan-403dc | `hosting:net` â†’ lianabanyan-net-trunk | TBD |
-| **the2ndsecond.com** | **lianabanyan-403dc** | `hosting:2ndsecond` â†’ the2ndsecond-trunk | `dss-the2ndsecond/` |
+All portal domains serve `platform/dist/` — the SPA detects hostname and renders the correct portal.
+
+| Domain | Project | Hosting Target | Source |
+|--------|---------|----------------|--------|
+| lianabanyan.com | lianabanyan-403dc | `hosting:main` -> lianabanyan-main | `platform/dist/` |
+| cephas.lianabanyan.com | lianabanyan-403dc | (default) | `Cephas/cephas-hugo/public/` |
+| lianabanyan.biz | lianabanyan-403dc | `hosting:biz` -> lianabanyan-biz-trunk | `platform/dist/` |
+| lianabanyan.org | lianabanyan-403dc | `hosting:org` -> lianabanyan-org-trunk | `platform/dist/` |
+| lianabanyan.net | lianabanyan-403dc | `hosting:net` -> lianabanyan-net-trunk | `platform/dist/` |
+| **the2ndsecond.com** | lianabanyan-403dc | `hosting:the2ndsecond` -> the2ndsecond-trunk | `platform/dist/` |
+| hexisle.lianabanyan.com | lianabanyan-403dc | `hosting:hexisle` -> hexisle | `platform/dist/` |
+| upekrithen.lianabanyan.com | lianabanyan-403dc | `hosting:upekrithen` -> lianabanyan-upekrithen | `platform/dist/` |
 
 ### WARNINGS
 - **lianabanyan.com** uses `hosting:main`, NOT `hosting:dotcom`
-- **the2ndsecond.com** uses `hosting:2ndsecond` â†’ the2ndsecond-trunk on **lianabanyan-403dc**
-- **mroz-74540** is STAGING only â€” never deploy production there
+- **the2ndsecond.com** uses `hosting:the2ndsecond` -> the2ndsecond-trunk — deployed from `platform/dist/`, NOT from `dss-the2ndsecond/`
+- **dss-the2ndsecond/** is a legacy breadcrumb folder — the DSS portal runs from `platform/src/DSSApp.tsx` via hostname detection
+- **All portal domains** share one build (`npm run build` in `platform/`) — only Cephas has a separate build step (`hugo --minify`)
+- **mroz-74540** is STAGING only -- never deploy production there
 - **PowerShell** uses `;` not `&&` to chain commands
-- Always run `npm run build` before deploying platform
-- Always run `hugo --minify` before deploying Cephas
+- Always run `npm run build` in `platform/` before deploying ANY hosting target
+- Always run `hugo --minify` in `Cephas/cephas-hugo/` before deploying Cephas
 
 ### If Reauth Needed
 ```powershell
@@ -120,20 +144,20 @@ firebase login --reauth
 2. **Use Edit, not Write, for files over 200 lines.** Surgical edits preserve context. Full file rewrites burn tokens and hit output limits.
 3. **Read MILESTONE_HANDOFF_MARCH_2026.md at session start** to know the current state (latest commit, migration number, what's done, what's next).
 4. **Check BISHOP_DROPZONE/ for task prompts** before asking what to do.
-5. **At session end:** Update `CONTEXT_MANAGEMENT/MILESTONE_HANDOFF_MARCH_2026.md` with a Session End / Handoff summary: what was built or threshed, latest commit(s), current innovation count, and any pending steps (e.g. `supabase db push`). See the HANDOFF PROTOCOL section in that file.
+5. **At session end:** Call Librarian `update_session` tool with summary of what was built, files changed, and pending work. Also update `CONTEXT_MANAGEMENT/MILESTONE_HANDOFF_MARCH_2026.md` as an audit trail.
 
 ## Behavioral Rules
 
-1. **Never guess numbers** â€” read Master Context or ask
+1. **Never guess numbers** -- read Master Context or call Librarian `get_canonical_numbers`
 2. **Use "may earn"** not "will earn" for income discussions
-3. **Note system interconnections** â€” initiatives are integrated
+3. **Note system interconnections** -- initiatives are integrated
 4. **Update sync file** after significant accomplishments
 5. **Check Recent Corrections** before writing content
 6. **Sign off with "FOR THE KEEP!"** on major completions
-7. **File references as clickable links** â€” When referencing files for the user to open, use backtick paths like \`platform/src/App.tsx\` so they're clickable in Cursor. NEVER dump entire file contents when the user just needs to open it â€” give them a clickable link instead.
-8. **Query before assuming database state** â€” Before writing SQL fixes for migration errors, FIRST query Supabase to see what columns/tables actually exist. Do NOT guess â€” guessing costs the user money. Run `SELECT column_name FROM information_schema.columns WHERE table_name = 'tablename';` to know the actual state, THEN write the fix correctly the first time.
-9. **LETTER SYNC IS MANDATORY** â€” When ANY letter is updated in `LAUNCH_DOCUMENTS_MASTER/letters/`, the corresponding Cephas letter MUST be updated immediately. Cephas is the public mirror. See `CONTEXT_MANAGEMENT/LETTER_SYNC_PROTOCOL.md` for full mapping. Include Red Carpet CTA in all Cephas letters.
-10. **WildFire Tours vs Real Data** â€” When building UI, mock data (like a $4,250 MSA balance) should ONLY be shown when a "WildFire Tour" mode is active (for onboarding/demonstration). The default "Real Data" state for a new user must always be empty/zeroed out until they have actual participation.
+7. **File references as clickable links** -- When referencing files for the user to open, use backtick paths like `platform/src/App.tsx` so they're clickable in Cursor. NEVER dump entire file contents when the user just needs to open it -- give them a clickable link instead.
+8. **Query before assuming database state** -- Before writing SQL fixes for migration errors, FIRST query Supabase to see what columns/tables actually exist. Do NOT guess -- guessing costs the user money. Run `SELECT column_name FROM information_schema.columns WHERE table_name = 'tablename';` to know the actual state, THEN write the fix correctly the first time.
+9. **LETTER SYNC IS MANDATORY** -- When ANY letter is updated in `LAUNCH_DOCUMENTS_MASTER/letters/`, the corresponding Cephas letter MUST be updated immediately. Cephas is the public mirror. See `CONTEXT_MANAGEMENT/LETTER_SYNC_PROTOCOL.md` for full mapping. Include Red Carpet CTA in all Cephas letters.
+10. **WildFire Tours vs Real Data** -- When building UI, mock data (like a $4,250 MSA balance) should ONLY be shown when a "WildFire Tour" mode is active (for onboarding/demonstration). The default "Real Data" state for a new user must always be empty/zeroed out until they have actual participation.
 
 ## Agent Roles
 

@@ -107,7 +107,7 @@ export default function LetsMakeBreadPage() {
               <p className="text-muted-foreground mb-6">
                 Look at the Founder's chess stats: a rating hovering in the 2080s (top 0.4% globally), maintained over years. But look closer: <strong>he loses more than half the time</strong>. 13,010 losses to 12,085 wins. You don't get to the top by never losing. You get there by losing, learning, and playing the next game. That is what Let's Make Bread teaches.
               </p>
-              <Button variant="outline" onClick={() => window.open('https://cephas.lianabanyan.com/founder-proof', '_blank', 'noopener,noreferrer')}>
+              <Button variant="outline" onClick={() => navigate('/cephas/founder-proof')}>
                 Read the Founder's Writings on Losing
               </Button>
             </div>

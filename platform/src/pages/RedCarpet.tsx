@@ -1068,7 +1068,15 @@ export default function RedCarpet() {
                     />
 
                     {verificationError && (
-                      <p className="text-sm text-destructive text-center">{verificationError}</p>
+                      <div className="text-center space-y-1">
+                        <p className="text-sm text-destructive">{verificationError}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Need help? Contact{" "}
+                          <a href="mailto:Founder@LianaBanyan.com" className="underline">Founder@LianaBanyan.com</a>
+                          {" "}or call{" "}
+                          <a href="tel:+14065781232" className="underline">406-578-1232</a>
+                        </p>
+                      </div>
                     )}
 
                     {devCode && (
@@ -1467,7 +1475,7 @@ export default function RedCarpet() {
                     <div className="text-2xl mb-3">??</div>
                     <h3 className="font-bold text-lg mb-2">Drop Beacons</h3>
                     <p className="text-sm text-muted-foreground">
-                      As you explore the 1,754+ innovations and 16 initiatives, drop beacons to mark your place. Like fireflies in the forest, they guide your way back.
+                      As you explore the 2,007+ innovations and 16 initiatives, drop beacons to mark your place. Like fireflies in the forest, they guide your way back.
                     </p>
                   </div>
                   <div className="p-6 bg-card rounded-xl border border-border">
@@ -1643,9 +1651,7 @@ export default function RedCarpet() {
                   <div className="p-4 rounded-lg bg-background border border-border text-center">
                     <div className="text-sm text-muted-foreground mb-2">Full Documentation</div>
                     <a
-                      href="https://cephas.lianabanyan.com/under-the-hood/"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="/cephas/under-the-hood"
                       className="text-primary hover:underline flex items-center gap-1 justify-center"
                     >
                       Cephas � Under the Hood

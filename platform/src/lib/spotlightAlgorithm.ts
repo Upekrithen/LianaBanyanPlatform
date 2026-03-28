@@ -87,10 +87,10 @@ export const SEED_CARDS: SpotlightCard[] = [
     id: 'built-to-last',
     category: 'featured',
     title: 'Built to Last',
-    bodyPreview: '8 Patent Applications · 1,754 Innovations · 47 Creators Identified',
+    bodyPreview: '10 Patent Applications · 2,007 Innovations · 47 Creators Identified',
     stats: [
       { label: 'Patents', value: '8', color: '#38a169' },
-      { label: 'Innovations', value: '1,754', color: '#38a169' },
+      { label: 'Innovations', value: '2,007', color: '#38a169' },
       { label: 'Creators', value: '47', color: '#38a169' },
     ],
     ctaLabel: 'View Portfolio',

@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDiscovery } from '@/hooks/useDiscovery';
 import { DeckCardFrame } from '@/components/DeckCardFrame';
@@ -457,11 +457,12 @@ const Index = () => {
   const [showWelcomeChoice, setShowWelcomeChoice] = useState<boolean | null>(null);
   const [userChoice, setUserChoice] = useState<'keep' | 'explore' | null>(null);
 
-  // Logged-in users always land on the normal page — no modal needed.
-  // Everyone explores as ghost by default. Member events just work when authenticated.
+  // Logged-in users see KeepView as their default homepage.
+  // The welcome choice dialog is available but defaults to 'keep'.
   useEffect(() => {
     if (user) {
-      setUserChoice('explore');
+      const saved = sessionStorage.getItem('lb_landing_choice') as 'keep' | 'explore' | null;
+      setUserChoice(saved || 'keep');
       setShowWelcomeChoice(false);
     }
   }, [user]);
@@ -534,10 +535,9 @@ const Index = () => {
       );
     }
 
-    // User chose to go to Keep — redirect to Dashboard
+    // User chose to go to Keep — show KeepView as the authenticated homepage
     if (userChoice === 'keep') {
-      navigate('/dashboard');
-      return null;
+      return <KeepView navigate={navigate} discoveries={discoveries} discoveryLevel={discoveryLevel} />;
     }
 
     // User chose to explore — show public landing
@@ -1828,6 +1828,76 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 padding: '2.5rem 2.5rem 2rem',
               } : undefined}
             >
+              {/* ═══ MISSION ONE BANNER — draped over top-left corner like a real pennant ═══ */}
+              <Link
+                to="/mission-one"
+                style={{
+                  position: 'absolute',
+                  top: '-12px',
+                  left: '-28px',
+                  zIndex: 30,
+                  transform: 'rotate(-8deg)',
+                  transformOrigin: 'top left',
+                  filter: 'drop-shadow(2px 4px 8px rgba(0,0,0,0.4))',
+                  pointerEvents: 'auto',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Banner shape — pennant/ribbon */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #b91c1c 0%, #dc2626 40%, #991b1b 100%)',
+                  color: '#fef2f2',
+                  padding: '0.6rem 1.2rem 0.7rem 0.9rem',
+                  borderRadius: '4px 8px 8px 2px',
+                  fontFamily: "'Source Sans 3', system-ui, sans-serif",
+                  lineHeight: 1.3,
+                  maxWidth: '220px',
+                  position: 'relative',
+                  borderBottom: '2px solid #7f1d1d',
+                  textAlign: 'center',
+                  transition: 'transform 0.15s ease',
+                }}>
+                  <div style={{
+                    fontSize: '1.35rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    marginBottom: '2px',
+                  }}>MISSION ONE</div>
+                  <div style={{
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.02em',
+                    marginBottom: '4px',
+                  }}>EVERYONE Eats Tonight</div>
+                  <div style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    background: '#16a34a',
+                    color: '#fff',
+                    fontSize: '0.6rem',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    letterSpacing: '0.03em',
+                  }}>Find Out How <span style={{ fontSize: '0.7rem' }}>&rarr;</span></div>
+                  {/* Pennant tail */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '-8px',
+                    left: '10px',
+                    width: 0,
+                    height: 0,
+                    borderLeft: '8px solid transparent',
+                    borderRight: '8px solid transparent',
+                    borderTop: '8px solid #991b1b',
+                  }} />
+                </div>
+              </Link>
+
               {/* Logo at top (professional mode has no logo here - it's inside the Hero Card) */}
               {!isProfessionalTheme && (
                 <img src="/logo.png" alt="Liana Banyan" className="logo" style={{ marginBottom: '1.5rem' }} />
@@ -1960,11 +2030,11 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                             </h2>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
-                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>8</div>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>10</div>
                                 <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Patent Applications</div>
                               </div>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
-                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>1,754</div>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>2,007</div>
                                 <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Innovations</div>
                               </div>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
@@ -2002,12 +2072,20 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                                 <div style={{ color: 'rgba(250,245,235,0.8)', fontSize: '0.9rem' }}>$5/year. Explore everything. No risk. Cancel anytime.</div>
                               </div>
                             </div>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); navigate('/RedCarpet'); }}
-                              style={{ background: '#38a169', color: '#fff', border: 'none', borderRadius: '0.5rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer' }}
-                            >
-                              Join for $5/year →
-                            </button>
+                            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); navigate('/benefits'); }}
+                                style={{ background: 'rgba(250,245,235,0.15)', color: '#faf5eb', border: '1px solid rgba(250,245,235,0.3)', borderRadius: '0.5rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer' }}
+                              >
+                                See All Benefits →
+                              </button>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); navigate('/RedCarpet'); }}
+                                style={{ background: '#38a169', color: '#fff', border: 'none', borderRadius: '0.5rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer' }}
+                              >
+                                Join for $5/year →
+                              </button>
+                            </div>
                           </>
                         )}
                         {spotlightCard === 'know-maker' && (
@@ -2267,10 +2345,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               Many time-specific Codes can be found within Cephas documents. Like the story of John Aaron — 
                               the engineer who saved Apollo 12 because he was always curious about things outside his immediate concerns.
                             </p>
-                            <a 
-                              href="https://cephas.lianabanyan.com/articles/sce-to-aux-apollo-12/"
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <a
+                              href="/cephas/articles/sce-to-aux-apollo-12"
                               style={{
                                 fontSize: '0.8rem',
                                 color: '#8b5cf6',
@@ -2620,13 +2696,9 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               />
                             </div>
                             <div style={{ flexShrink: 0, textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
-                              {/* Rhyme — italic, slightly larger */}
-                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.4rem 1rem', borderRadius: '0.35rem 0.35rem 0 0', fontSize: 'clamp(0.7rem, 1.5vw, 0.85rem)', fontFamily: "'Crimson Pro', Georgia, serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.45, fontWeight: 400, fontStyle: 'italic', whiteSpace: 'pre-line', minHeight: 'calc(1.45em * 2 + 0.8rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {/* Single rhyme caption */}
+                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.7rem, 1.5vw, 0.85rem)', fontFamily: "'Crimson Pro', Georgia, serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.45, fontWeight: 400, fontStyle: 'italic', whiteSpace: 'pre-line', minHeight: 'calc(1.45em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 {LEMONADE_SCENES[lemonadeFrame].rhyme || '\u00A0'}
-                              </p>
-                              {/* Kid subtitle — plain, smaller */}
-                              <p style={{ background: 'rgba(240, 235, 225, 0.9)', color: '#4a5568', padding: '0.3rem 1rem', borderRadius: '0 0 0.35rem 0.35rem', fontSize: 'clamp(0.65rem, 1.3vw, 0.78rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.35, fontWeight: 500, whiteSpace: 'pre-line', minHeight: 'calc(1.35em * 2 + 0.6rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                {LEMONADE_SCENES[lemonadeFrame].caption || '\u00A0'}
                               </p>
                             </div>
                           </div>
@@ -2680,7 +2752,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               </div>
                               <div style={{ background: 'rgba(34, 197, 94, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
                                 <p style={{ color: '#86efac', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>Patent-Backed Bootstrap</p>
-                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>8 provisionals, 1,754 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="https://cephas.lianabanyan.com/articles/one-of-us-building-trust-through-shared-economics/" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>10 provisionals, 2,007 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="/cephas/articles/one-of-us-building-trust-through-shared-economics" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
                               </div>
                               <div style={{ background: 'rgba(139, 92, 246, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
                                 <p style={{ color: '#c4b5fd', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>The Math</p>
@@ -2741,6 +2813,38 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                   }}
                 >
                   ENTER
+                </button>
+
+                {/* STEP BY STEP — Front Door funnel entry (K91) */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate('/welcome'); }}
+                  style={{
+                    cursor: 'pointer',
+                    padding: '0.875rem 2.5rem',
+                    fontSize: '1rem',
+                    fontWeight: 700,
+                    fontFamily: "'Source Sans 3', system-ui, sans-serif",
+                    color: '#0a1628',
+                    background: '#faf5eb',
+                    border: '2px solid #faf5eb',
+                    borderRadius: '0.5rem',
+                    transition: 'all 0.3s ease',
+                    letterSpacing: '0.1em',
+                    minWidth: '180px',
+                    textAlign: 'center' as const
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = '#38a169';
+                    e.currentTarget.style.color = '#faf5eb';
+                    e.currentTarget.style.borderColor = '#38a169';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = '#faf5eb';
+                    e.currentTarget.style.color = '#0a1628';
+                    e.currentTarget.style.borderColor = '#faf5eb';
+                  }}
+                >
+                  STEP BY STEP
                 </button>
 
                 {/* WATCH dropdown button */}
@@ -2921,10 +3025,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                         You either get a good deal, or a better one.
                       </p>
                       <div style={{ marginTop: 'auto', textAlign: 'center' }}>
-                        <a 
-                          href="https://cephas.lianabanyan.com/under-the-hood/cost-plus-twenty/"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <a
+                          href="/cephas/under-the-hood/cost-plus-twenty"
                           onClick={(e) => e.stopPropagation()}
                           style={{
                             padding: '0.75rem 1.5rem',
@@ -3059,10 +3161,8 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                             <span style={{ fontSize: '0.8rem', opacity: 0.85, textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}>
                               {(init as any).hasSwitzerlandLink ? (
                                 <>
-                                  <a 
-                                    href="https://cephas.lianabanyan.com/under-the-hood/switzerland-protocol/" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
+                                  <a
+                                    href="/cephas/under-the-hood/switzerland-protocol"
                                     onClick={(e) => e.stopPropagation()}
                                     style={{ color: '#38a169', textDecoration: 'underline' }}
                                   >
@@ -3743,7 +3843,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                 category={spotlightCategory}
                 categories={SPOTLIGHT_CATEGORIES}
                 onCategoryChange={setSpotlightCategory}
-                onCardClick={(card) => { setSpotlightCard(card.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                onCardClick={(card) => { setSpotlightCard(card.id); setActiveSlideshow(null); setFableIsPlaying(false); setOriginIsPlaying(false); setLemonadeIsPlaying(false); setHeroFlipped(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 activeCardId={spotlightCard}
               />
 
@@ -3947,6 +4047,7 @@ export function KeepView({
   discoveries: Set<string>;
   discoveryLevel: number;
 }) {
+  const levelGatedNavigate = useLevelGatedNavigate();
   // Get discovered items (max 3 shown)
   const discoveredItems = Array.from(discoveries).slice(0, 3);
   

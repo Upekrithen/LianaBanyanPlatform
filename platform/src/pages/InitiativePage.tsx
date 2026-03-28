@@ -18,12 +18,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Music, BookOpen, Banknote, Scale, Hammer, Home,
   Users, Briefcase, Heart, ArrowRight, ArrowLeft, Star, DollarSign,
-  UtensilsCrossed, ShoppingCart, ShoppingBag, Pill, Shield, Zap,
+  UtensilsCrossed, ShoppingCart, ShoppingBag, Pill, Shield, Zap, Snowflake,
 } from "lucide-react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 interface InitiativeConfig {
   slug: string;
+  title: string;
   icon: React.ElementType;
   color: string;
   features: { title: string; items: string[] }[];
@@ -32,6 +33,7 @@ interface InitiativeConfig {
 const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   jukebox: {
     slug: "jukebox",
+    title: "Jukebox",
     icon: Music,
     color: "from-pink-500/5 to-rose-500/10 border-pink-500/20",
     features: [
@@ -41,6 +43,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   didasko: {
     slug: "didasko",
+    title: "Didasko",
     icon: BookOpen,
     color: "from-sky-500/5 to-blue-500/10 border-sky-500/20",
     features: [
@@ -50,6 +53,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   vsl: {
     slug: "vsl",
+    title: "VSL — Voucher Short Loans",
     icon: Banknote,
     color: "from-emerald-500/5 to-green-500/10 border-emerald-500/20",
     features: [
@@ -59,6 +63,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "harper-guild": {
     slug: "harper-guild",
+    title: "Harper Guild",
     icon: Scale,
     color: "from-indigo-500/5 to-violet-500/10 border-indigo-500/20",
     features: [
@@ -68,6 +73,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "lets-make-bread": {
     slug: "lets-make-bread",
+    title: "Let's Make Bread",
     icon: Briefcase,
     color: "from-amber-500/5 to-yellow-500/10 border-amber-500/20",
     features: [
@@ -77,6 +83,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "family-table": {
     slug: "family-table",
+    title: "Family Table",
     icon: Heart,
     color: "from-red-500/5 to-pink-500/10 border-red-500/20",
     features: [
@@ -86,6 +93,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "rally-group": {
     slug: "rally-group",
+    title: "Rally Group",
     icon: Users,
     color: "from-red-500/5 to-orange-500/10 border-red-500/20",
     features: [
@@ -95,6 +103,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "household-concierge": {
     slug: "household-concierge",
+    title: "Household Concierge",
     icon: Home,
     color: "from-teal-500/5 to-cyan-500/10 border-teal-500/20",
     features: [
@@ -104,6 +113,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "brass-tacks": {
     slug: "brass-tacks",
+    title: "Brass Tacks",
     icon: Briefcase,
     color: "from-gray-500/5 to-slate-500/10 border-gray-500/20",
     features: [
@@ -113,6 +123,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "lets-make-dinner": {
     slug: "lets-make-dinner",
+    title: "Let's Make Dinner",
     icon: UtensilsCrossed,
     color: "from-orange-500/5 to-red-500/10 border-orange-500/20",
     features: [
@@ -122,6 +133,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "lets-get-groceries": {
     slug: "lets-get-groceries",
+    title: "Let's Get Groceries",
     icon: ShoppingCart,
     color: "from-green-500/5 to-emerald-500/10 border-green-500/20",
     features: [
@@ -131,6 +143,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "lets-go-shopping": {
     slug: "lets-go-shopping",
+    title: "Let's Go Shopping",
     icon: ShoppingBag,
     color: "from-purple-500/5 to-fuchsia-500/10 border-purple-500/20",
     features: [
@@ -140,6 +153,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "tatiana-schlossburg-health-accords": {
     slug: "tatiana-schlossburg-health-accords",
+    title: "Tatiana Schlossburg Health Accords",
     icon: Pill,
     color: "from-blue-500/5 to-cyan-500/10 border-blue-500/20",
     features: [
@@ -149,6 +163,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   msa: {
     slug: "msa",
+    title: "Medical Savings Accounts",
     icon: Shield,
     color: "from-slate-500/5 to-zinc-500/10 border-slate-500/20",
     features: [
@@ -158,6 +173,7 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "defense-klaus": {
     slug: "defense-klaus",
+    title: "Defense Klaus",
     icon: Shield,
     color: "from-amber-500/5 to-yellow-500/10 border-amber-500/20",
     features: [
@@ -167,11 +183,45 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   "power-to-the-people": {
     slug: "power-to-the-people",
+    title: "Power to the People",
     icon: Zap,
     color: "from-yellow-500/5 to-amber-500/10 border-yellow-500/20",
     features: [
       { title: "Political Expedition", items: ["Civic engagement and voter education", "Community organizing for democratic participation", "Non-partisan — focused on empowering people", "Tools for understanding policy impacts"] },
       { title: "Getting Involved", items: ["Register to vote through the platform", "Join local civic engagement groups", "Access voter guides and education", "Participate in community policy discussions"] },
+    ],
+  },
+  dinner: {
+    slug: "dinner",
+    title: "Let's Make Dinner",
+    icon: UtensilsCrossed,
+    color: "from-orange-500/5 to-red-500/10 border-orange-500/20",
+    features: [
+      { title: "La Capital Market Direct", items: ["Cooperative grocery delivery direct from farms", "Cost+20% pricing — no hidden markups", "Members pool purchasing power for wholesale prices", "Community-run delivery routes by real neighbors"] },
+      { title: "Three Ways to Eat", items: ["DIY with Grocery Boxes — curated ingredients + recipes", "Group Cook — neighbors cooking together", "Chef Prepared — hire certified member chefs", "Meal chains: one box feeds multiple dinners"] },
+      { title: "The Economics", items: ["Creators and Workers keep 83.3% of every transaction", "Kindling partners donate to food initiatives", "Reviewed by real neighbors — transparent and fair", "No middlemen, no extraction, just food"] },
+    ],
+  },
+  groceries: {
+    slug: "groceries",
+    title: "Let's Get Groceries",
+    icon: ShoppingCart,
+    color: "from-green-500/5 to-emerald-500/10 border-green-500/20",
+    features: [
+      { title: "La Capital Grocery & Garden", items: ["Neighborhood grocery nodes owned by the community", "Community gardens — grow it, stock it, share it", "Local farmer supply chains for fresh produce", "Cost+20% pricing on all grocery items"] },
+      { title: "How It Works", items: ["Order through the platform or visit your local node", "Pick up at neighborhood nodes or get delivery", "Volume discounts passed directly to members", "Support local farmers and producers cooperatively"] },
+      { title: "Garden Network", items: ["Community garden plots in every neighborhood", "Seed libraries and shared growing knowledge", "Surplus goes to Cold Start families first", "Seasonal harvest events bring neighbors together"] },
+    ],
+  },
+  "cold-start": {
+    slug: "cold-start",
+    title: "Cold Start Program",
+    icon: Snowflake,
+    color: "from-blue-500/5 to-cyan-500/10 border-blue-500/20",
+    features: [
+      { title: "Immediate Access", items: ["Earmarked credits for food — no waiting period", "Charity Medallion donations from members", "Bridge funding from day one of membership", "No means-testing, no qualifying — if you're hungry, you eat"] },
+      { title: "How It Works", items: ["New members receive starter food credits immediately", "Charity Medallions convert donations into meal access", "Bridge funding covers the gap while nodes scale up", "Every member who joins makes food cheaper for everyone"] },
+      { title: "The Bishop Myriel Principle", items: ["Food security is unconditional", "No one waits for the system to reach full capacity", "Community-funded safety net for every member", "When everyone eats tonight, everything else becomes possible"] },
     ],
   },
 };
@@ -229,12 +279,12 @@ export default function InitiativePage() {
   const progressPercent = goalAmount > 0 ? (totalRaised / goalAmount) * 100 : 0;
 
   return (
-    <PortalPageLayout maxWidth="xl" xrayId="initiative-page"><div className="space-y-6">
+    <PortalPageLayout maxWidth="xl" xrayId="initiative-page" variant="stage"><div className="space-y-6">
       {/* Back to Initiatives button */}
       <Button 
         variant="ghost" 
         size="sm" 
-        onClick={() => navigate('/?view=initiatives')}
+        onClick={() => navigate('/initiatives')}
         className="gap-2 -ml-2"
       >
         <ArrowLeft className="h-4 w-4" />
@@ -244,7 +294,7 @@ export default function InitiativePage() {
       <div className="flex items-center gap-3">
         <Icon className="h-8 w-8 text-primary" />
         <div>
-          <h1 className="text-3xl font-bold">{initiative?.name || slug}</h1>
+          <h1 className="text-3xl font-bold">{config.title}</h1>
           <p className="text-muted-foreground">{initiative?.tagline || ""}</p>
         </div>
       </div>

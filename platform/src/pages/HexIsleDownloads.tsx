@@ -4,24 +4,19 @@
  * /hexisle/downloads — Browse, download, and submit improvements
  * for all 27 canonical Hexel pieces.
  *
- * Tier system (Tereno Compatibility):
- *   🥇 Tereno Certified (Gold)
- *   🥈 Tereno Approved (Silver)
- *   🔵 HexIsle Official (Blue)
- *   🟢 HexIsle Compatible (Green)
- *   🟡 HexIsle Adaptable (Yellow)
- *   ⚪ HexIsle Inspired (White)
- *
- * Bishop Session 011 / Knight Session 29
+ * K144 — Supabase-wired with access control.
+ * $5+ backers or $5/year members can download.
  */
 
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Download, Search, Hexagon, ChevronRight, ArrowLeft,
-  Upload, Filter, Wrench, Hash, Award, ExternalLink,
+  Upload, Filter, Wrench, Hash, Award, ExternalLink, Lock,
 } from 'lucide-react';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { useHexIsleDownloads } from '@/hooks/useChainDashboard';
+import { useMembershipStatus } from '@/hooks/useMembershipStatus';
 
 // ─── TYPES ───
 
@@ -88,6 +83,23 @@ const HexIsleDownloads: React.FC = () => {
   const [search, setSearch] = useState('');
   const [tierFilter, setTierFilter] = useState<TierLevel | 'all'>('all');
   const [showSubmitForm, setShowSubmitForm] = useState(false);
+  const { downloads: dbDownloads, incrementDownload } = useHexIsleDownloads();
+  const { isGated } = useMembershipStatus();
+
+  const canDownload = !isGated;
+
+  const dbBySlug = useMemo(() => {
+    const map: Record<string, typeof dbDownloads[number]> = {};
+    for (const d of dbDownloads) map[d.piece_slug] = d;
+    return map;
+  }, [dbDownloads]);
+
+  const handleDownload = async (pieceId: string) => {
+    const dbEntry = dbBySlug[pieceId];
+    if (!dbEntry?.stl_url) return;
+    if (dbEntry.id) await incrementDownload(dbEntry.id);
+    window.open(dbEntry.stl_url, '_blank');
+  };
 
   const filtered = useMemo(() => {
     return PIECES.filter(p => {
@@ -267,10 +279,19 @@ const HexIsleDownloads: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  {piece.stlAvailable ? (
-                    <button className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
-                      <Download className="w-3.5 h-3.5" /> STL
-                    </button>
+                  {(piece.stlAvailable || dbBySlug[piece.id]?.stl_url) ? (
+                    canDownload ? (
+                      <button
+                        onClick={() => handleDownload(piece.id)}
+                        className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                      >
+                        <Download className="w-3.5 h-3.5" /> STL
+                      </button>
+                    ) : (
+                      <Link to="/membership" className="flex items-center gap-1 bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                        <Lock className="w-3.5 h-3.5" /> Join to Download
+                      </Link>
+                    )
                   ) : (
                     <span className="text-[10px] text-slate-600 bg-slate-800/60 px-2 py-1 rounded-full">Coming Soon</span>
                   )}

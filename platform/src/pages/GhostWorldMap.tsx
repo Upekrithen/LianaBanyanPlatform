@@ -1,10 +1,11 @@
 /**
- * Ghost World Map — Visual storefront discovery layer.
- * SVG hex grid with clickable islands and building popups.
- * Public page — non-members can browse, members get full features.
+ * Ghost World Map — K115 D1
+ * Storefronts rendered as hex tiles on a flat grid.
+ * Category-coloured hexes, click→storefront, unclaimed slots with CTA.
+ * Queries the storefronts table directly — no island/building hierarchy.
  */
 
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -13,399 +14,390 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { BeaconDropButton } from '@/components/BeaconDropButton';
 import {
-  Search, ZoomIn, ZoomOut, Maximize2, X, MapPin, Store, Star, Package,
-  Paintbrush, BookOpen, Wrench, ShoppingCart, Globe,
+  Search, ZoomIn, ZoomOut, Maximize2, X, Globe, Plus, Store,
 } from 'lucide-react';
 
-interface Island {
+interface Storefront {
   id: string;
   name: string;
-  description: string | null;
-  hex_q: number;
-  hex_r: number;
-  member_count: number;
-  theme_color: string;
+  slug: string;
+  category: string;
+  is_open: boolean;
+  logo_url: string | null;
+  user_id: string;
+  business_name?: string;
 }
 
-interface Building {
-  id: string;
-  island_id: string;
-  storefront_id: string;
-  building_slot: number;
-  building_size: string;
-  is_popup: boolean;
-  popup_expires_at: string | null;
-  storefront?: {
-    id: string;
-    business_name: string;
-    slug: string;
-    business_category: string;
-    is_open: boolean;
+const CATEGORY_PALETTE: Record<string, { color: string; emoji: string; label: string }> = {
+  food: { color: '#f59e0b', emoji: '🍩', label: 'Food' },
+  food_drink: { color: '#f59e0b', emoji: '🍩', label: 'Food' },
+  service: { color: '#3b82f6', emoji: '🔧', label: 'Service' },
+  services: { color: '#3b82f6', emoji: '🔧', label: 'Services' },
+  retail: { color: '#10b981', emoji: '🛒', label: 'Retail' },
+  creative: { color: '#ec4899', emoji: '🎨', label: 'Creative' },
+  crafts_making: { color: '#ec4899', emoji: '🎨', label: 'Crafts' },
+  maker: { color: '#a855f7', emoji: '⚙️', label: 'Maker' },
+  digital: { color: '#06b6d4', emoji: '💻', label: 'Digital' },
+  education: { color: '#8b5cf6', emoji: '📚', label: 'Education' },
+  home_garden: { color: '#22c55e', emoji: '🏡', label: 'Home' },
+  health: { color: '#14b8a6', emoji: '💚', label: 'Health' },
+  general: { color: '#64748b', emoji: '🏪', label: 'General' },
+};
+
+const DEFAULT_PAL = { color: '#64748b', emoji: '🏪', label: 'General' };
+const FILTER_CATS = ['all', 'food', 'service', 'retail', 'creative', 'maker', 'digital', 'education'];
+
+const HEX_SIZE = 44;
+const SQRT3 = Math.sqrt(3);
+
+function hexToPixel(q: number, r: number): { x: number; y: number } {
+  return {
+    x: HEX_SIZE * (3 / 2) * q,
+    y: HEX_SIZE * (SQRT3 / 2 * q + SQRT3 * r),
   };
 }
 
-const HEX_SIZE = 50;
-const HEX_W = HEX_SIZE * 2;
-const HEX_H = Math.sqrt(3) * HEX_SIZE;
-
-const CATEGORY_CONFIG: Record<string, { icon: typeof Store; color: string; label: string }> = {
-  food: { icon: Store, color: '#f59e0b', label: 'Food' },
-  service: { icon: Wrench, color: '#3b82f6', label: 'Service' },
-  retail: { icon: ShoppingCart, color: '#10b981', label: 'Retail' },
-  creative: { icon: Paintbrush, color: '#ec4899', label: 'Creative' },
-  education: { icon: BookOpen, color: '#8b5cf6', label: 'Education' },
-};
-
-function hexToPixel(q: number, r: number): { x: number; y: number } {
-  const x = HEX_SIZE * (3 / 2) * q;
-  const y = HEX_SIZE * (Math.sqrt(3) / 2 * q + Math.sqrt(3) * r);
-  return { x, y };
-}
-
-function hexPoints(cx: number, cy: number, size: number): string {
+function hexCorners(cx: number, cy: number, size: number): string {
   const pts: string[] = [];
   for (let i = 0; i < 6; i++) {
-    const angle = (Math.PI / 180) * (60 * i - 30);
+    const angle = (Math.PI / 3) * i;
     pts.push(`${cx + size * Math.cos(angle)},${cy + size * Math.sin(angle)}`);
   }
   return pts.join(' ');
 }
 
-const SLOT_OFFSETS = [
-  { q: 0, r: -1 }, { q: 1, r: -1 }, { q: 1, r: 0 },
-  { q: 0, r: 1 }, { q: -1, r: 1 }, { q: -1, r: 0 },
-];
+function spiralCoords(count: number): { q: number; r: number }[] {
+  const out: { q: number; r: number }[] = [{ q: 0, r: 0 }];
+  if (count <= 1) return out.slice(0, count);
 
-const SIZE_SCALE: Record<string, number> = { small: 0.55, medium: 0.7, large: 0.85 };
-const CATEGORIES = ['all', 'food', 'service', 'retail', 'creative', 'education'];
+  const dirs = [
+    { q: 1, r: 0 }, { q: 0, r: 1 }, { q: -1, r: 1 },
+    { q: -1, r: 0 }, { q: 0, r: -1 }, { q: 1, r: -1 },
+  ];
+
+  let q = 0, r = 0;
+  for (let ring = 1; out.length < count; ring++) {
+    q += 1; r -= 1;
+    for (let d = 0; d < 6 && out.length < count; d++) {
+      const steps = d === 0 ? ring - 1 : ring;
+      for (let s = 0; s < steps && out.length < count; s++) {
+        q += dirs[d].q;
+        r += dirs[d].r;
+        out.push({ q, r });
+      }
+    }
+  }
+  return out;
+}
 
 export default function GhostWorldMap() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const svgRef = useRef<SVGSVGElement>(null);
 
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [dragging, setDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [search, setSearch] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
+  const [catFilter, setCatFilter] = useState('all');
+  const [selected, setSelected] = useState<Storefront | null>(null);
 
-  const { data: islands = [] } = useQuery({
-    queryKey: ['ghost-world-islands'],
+  const [viewBox, setViewBox] = useState({ x: -500, y: -400, w: 1000, h: 800 });
+  const [dragging, setDragging] = useState(false);
+  const dragOrigin = useRef({ cx: 0, cy: 0, vx: 0, vy: 0 });
+
+  const { data: storefronts = [], isLoading } = useQuery({
+    queryKey: ['gw-storefronts'],
     queryFn: async () => {
       const { data } = await supabase
-        .from('ghost_world_islands')
-        .select('*')
-        .eq('is_active', true);
-      return (data || []) as Island[];
+        .from('storefronts')
+        .select('id, name, slug, category, is_open, logo_url, user_id, business_name')
+        .eq('is_active', true)
+        .order('created_at', { ascending: true });
+      return (data || []) as Storefront[];
     },
   });
 
-  const { data: buildings = [] } = useQuery({
-    queryKey: ['ghost-world-buildings'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('ghost_world_buildings')
-        .select('*, storefront:storefront_id(id, business_name, slug, business_category, is_open)')
-        .order('building_slot');
-      return (data || []) as Building[];
-    },
-  });
-
-  const buildingsByIsland = useMemo(() => {
-    const map = new Map<string, Building[]>();
-    for (const b of buildings) {
-      const list = map.get(b.island_id) || [];
-      list.push(b);
-      map.set(b.island_id, list);
+  const filtered = useMemo(() => {
+    let list = storefronts;
+    if (catFilter !== 'all') {
+      list = list.filter(s => {
+        const cat = (s.category || 'general').toLowerCase();
+        return cat === catFilter || cat.startsWith(catFilter);
+      });
     }
-    return map;
-  }, [buildings]);
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter(s =>
+        (s.name || s.business_name || '').toLowerCase().includes(q) ||
+        (s.slug || '').toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [storefronts, catFilter, search]);
 
-  const filteredIslands = useMemo(() => {
-    if (!search && categoryFilter === 'all') return islands;
-    return islands.filter(island => {
-      const blds = buildingsByIsland.get(island.id) || [];
-      if (search) {
-        const q = search.toLowerCase();
-        const nameMatch = island.name.toLowerCase().includes(q);
-        const bldMatch = blds.some(b => b.storefront?.business_name?.toLowerCase().includes(q));
-        if (!nameMatch && !bldMatch) return false;
-      }
-      if (categoryFilter !== 'all') {
-        const catMatch = blds.some(b => b.storefront?.business_category === categoryFilter);
-        if (!catMatch) return false;
-      }
-      return true;
-    });
-  }, [islands, buildings, search, categoryFilter, buildingsByIsland]);
+  const UNCLAIMED_COUNT = 12;
+  const totalHexes = filtered.length + UNCLAIMED_COUNT;
+  const coords = useMemo(() => spiralCoords(totalHexes), [totalHexes]);
+
+  const clampZoom = useCallback((vb: typeof viewBox, factor: number, cx: number, cy: number) => {
+    const minW = 250, maxW = 3000;
+    const newW = Math.min(maxW, Math.max(minW, vb.w * factor));
+    const newH = Math.min(maxW * 0.75, Math.max(minW * 0.75, vb.h * factor));
+    const rx = (cx - vb.x) / vb.w;
+    const ry = (cy - vb.y) / vb.h;
+    return { x: cx - rx * newW, y: cy - ry * newH, w: newW, h: newH };
+  }, []);
 
   const handleWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
-    setZoom(z => Math.min(3, Math.max(0.3, z - e.deltaY * 0.001)));
-  }, []);
+    const factor = e.deltaY > 0 ? 1.1 : 0.9;
+    const svg = svgRef.current;
+    if (!svg) return;
+    const rect = svg.getBoundingClientRect();
+    const mx = viewBox.x + ((e.clientX - rect.left) / rect.width) * viewBox.w;
+    const my = viewBox.y + ((e.clientY - rect.top) / rect.height) * viewBox.h;
+    setViewBox(vb => clampZoom(vb, factor, mx, my));
+  }, [viewBox, clampZoom]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (e.button !== 0) return;
     setDragging(true);
-    setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
-  }, [pan]);
+    dragOrigin.current = { cx: e.clientX, cy: e.clientY, vx: viewBox.x, vy: viewBox.y };
+  }, [viewBox]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!dragging) return;
-    setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
-  }, [dragging, dragStart]);
+    const svg = svgRef.current;
+    if (!svg) return;
+    const rect = svg.getBoundingClientRect();
+    const dx = (e.clientX - dragOrigin.current.cx) / rect.width * viewBox.w;
+    const dy = (e.clientY - dragOrigin.current.cy) / rect.height * viewBox.h;
+    setViewBox(vb => ({ ...vb, x: dragOrigin.current.vx - dx, y: dragOrigin.current.vy - dy }));
+  }, [dragging, viewBox.w, viewBox.h]);
 
   const handleMouseUp = useCallback(() => setDragging(false), []);
 
   const fitAll = useCallback(() => {
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
-  }, []);
+    if (coords.length === 0) return;
+    const pixels = coords.map(c => hexToPixel(c.q, c.r));
+    const pad = HEX_SIZE * 2.5;
+    const minX = Math.min(...pixels.map(p => p.x)) - pad;
+    const maxX = Math.max(...pixels.map(p => p.x)) + pad;
+    const minY = Math.min(...pixels.map(p => p.y)) - pad;
+    const maxY = Math.max(...pixels.map(p => p.y)) + pad;
+    setViewBox({ x: minX, y: minY, w: maxX - minX, h: maxY - minY });
+  }, [coords]);
+
+  const pal = (cat: string) => CATEGORY_PALETTE[(cat || 'general').toLowerCase()] || DEFAULT_PAL;
 
   return (
-    <div className="h-screen w-screen bg-slate-950 relative overflow-hidden select-none">
-      {/* Top bar */}
-      <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-2 p-3 bg-gradient-to-b from-slate-950 via-slate-950/90 to-transparent">
-        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="text-slate-400 hover:text-white">
-          ← Back
-        </Button>
-        <div className="flex-1 flex items-center gap-2 max-w-md mx-auto">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <Input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search businesses..."
-              className="pl-9 bg-slate-900/80 border-slate-700 text-sm h-9"
-            />
-          </div>
-        </div>
+    <div className="h-[calc(100vh-4rem)] w-full bg-slate-950 relative overflow-hidden select-none" data-xray-id="ghost-world-map-k115">
+      {/* Title overlay */}
+      <div className="absolute top-3 left-3 z-20 flex items-center gap-2">
         <Globe className="w-5 h-5 text-amber-500" />
-        <span className="text-sm font-semibold text-amber-400">Ghost World</span>
+        <div>
+          <h1 className="text-sm font-bold text-amber-400 leading-none">Ghost World</h1>
+          <p className="text-[10px] text-slate-500">Storefront Discovery Map</p>
+        </div>
       </div>
 
-      {/* Category filter */}
-      <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setCategoryFilter(cat)}
-            className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
-              categoryFilter === cat
-                ? 'bg-amber-600 text-white'
-                : 'bg-slate-800/80 text-slate-400 hover:bg-slate-700'
-            }`}
-          >
-            {cat === 'all' ? 'All' : CATEGORY_CONFIG[cat]?.label || cat}
-          </button>
-        ))}
+      {/* Search + category */}
+      <div className="absolute top-3 right-3 z-20 flex flex-col gap-2 items-end">
+        <div className="relative w-52">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
+          <Input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search storefronts..."
+            className="pl-8 h-8 text-xs bg-slate-900/80 border-slate-700 text-slate-200 placeholder:text-slate-500"
+          />
+        </div>
+        <div className="flex flex-wrap gap-1 justify-end">
+          {FILTER_CATS.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setCatFilter(cat)}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-colors ${
+                catFilter === cat ? 'bg-amber-600 text-white' : 'bg-slate-800/80 text-slate-400 hover:bg-slate-700'
+              }`}
+            >
+              {cat === 'all' ? 'All' : (CATEGORY_PALETTE[cat]?.label || cat)}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Zoom controls */}
-      <div className="absolute bottom-6 left-6 z-20 flex flex-col gap-1.5">
-        <Button size="icon" variant="outline" className="h-8 w-8 bg-slate-900/80 border-slate-700" onClick={() => setZoom(z => Math.min(3, z + 0.2))}>
+      <div className="absolute bottom-6 left-4 z-20 flex flex-col gap-1.5">
+        <Button size="icon" variant="outline" className="h-8 w-8 bg-slate-900/80 border-slate-700 text-slate-300"
+          onClick={() => setViewBox(vb => clampZoom(vb, 0.8, vb.x + vb.w / 2, vb.y + vb.h / 2))}>
           <ZoomIn className="w-4 h-4" />
         </Button>
-        <Button size="icon" variant="outline" className="h-8 w-8 bg-slate-900/80 border-slate-700" onClick={() => setZoom(z => Math.max(0.3, z - 0.2))}>
+        <Button size="icon" variant="outline" className="h-8 w-8 bg-slate-900/80 border-slate-700 text-slate-300"
+          onClick={() => setViewBox(vb => clampZoom(vb, 1.25, vb.x + vb.w / 2, vb.y + vb.h / 2))}>
           <ZoomOut className="w-4 h-4" />
         </Button>
-        <Button size="icon" variant="outline" className="h-8 w-8 bg-slate-900/80 border-slate-700" onClick={fitAll}>
+        <Button size="icon" variant="outline" className="h-8 w-8 bg-slate-900/80 border-slate-700 text-slate-300" onClick={fitAll}>
           <Maximize2 className="w-4 h-4" />
         </Button>
       </div>
 
-      {/* SVG Map */}
-      <svg
-        ref={svgRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing"
-        onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
-        <defs>
-          <filter id="island-glow">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+      {/* Loading */}
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="flex flex-col items-center gap-3">
+            <div className="grid grid-cols-3 gap-2">
+              {[...Array(7)].map((_, i) => (
+                <div key={i} className="w-10 h-12 rounded bg-slate-800 animate-pulse" style={{ clipPath: 'polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)' }} />
+              ))}
+            </div>
+            <p className="text-xs text-slate-500">Loading storefronts...</p>
+          </div>
+        </div>
+      )}
 
-        <g transform={`translate(${pan.x + (typeof window !== 'undefined' ? window.innerWidth / 2 : 500)}, ${pan.y + (typeof window !== 'undefined' ? window.innerHeight / 2 : 400)}) scale(${zoom})`}>
-          {/* Grid watermark */}
-          {Array.from({ length: 7 }, (_, qi) => qi - 3).map(q =>
-            Array.from({ length: 7 }, (_, ri) => ri - 3).map(r => {
-              const { x, y } = hexToPixel(q, r);
-              return (
-                <polygon
-                  key={`grid-${q}-${r}`}
-                  points={hexPoints(x, y, HEX_SIZE * 0.98)}
-                  fill="none"
-                  stroke="#1e293b"
-                  strokeWidth="0.5"
-                  opacity="0.3"
-                />
-              );
-            })
-          )}
+      {/* SVG hex grid */}
+      {!isLoading && (
+        <svg
+          ref={svgRef}
+          className="w-full h-full cursor-grab active:cursor-grabbing touch-none"
+          viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          <defs>
+            <filter id="hex-glow">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
 
-          {/* Islands */}
-          {filteredIslands.map(island => {
-            const { x, y } = hexToPixel(island.hex_q, island.hex_r);
-            const blds = buildingsByIsland.get(island.id) || [];
-
+          {/* Storefront hexes */}
+          {filtered.map((sf, idx) => {
+            const coord = coords[idx];
+            if (!coord) return null;
+            const { x, y } = hexToPixel(coord.q, coord.r);
+            const p = pal(sf.category);
             return (
-              <g key={island.id} filter="url(#island-glow)">
-                {/* Center hex — island info */}
+              <g
+                key={sf.id}
+                className="cursor-pointer"
+                onClick={() => setSelected(sf)}
+              >
                 <polygon
-                  points={hexPoints(x, y, HEX_SIZE * 0.95)}
-                  fill={`${island.theme_color}20`}
-                  stroke={island.theme_color}
-                  strokeWidth="2"
-                  className="transition-all hover:brightness-125"
+                  points={hexCorners(x, y, HEX_SIZE * 0.92)}
+                  fill={`${p.color}18`}
+                  stroke={p.color}
+                  strokeWidth="1.8"
+                  filter="url(#hex-glow)"
+                  className="transition-all hover:brightness-150"
                 />
-                <text x={x} y={y - 8} textAnchor="middle" fill={island.theme_color} fontSize="10" fontWeight="bold">
-                  {island.name}
+                <text x={x} y={y - 4} textAnchor="middle" fontSize="16" dominantBaseline="central">
+                  {p.emoji}
                 </text>
-                <text x={x} y={y + 6} textAnchor="middle" fill="#94a3b8" fontSize="8">
-                  {blds.length} business{blds.length !== 1 ? 'es' : ''}
+                <text x={x} y={y + 14} textAnchor="middle" fill="#e2e8f0" fontSize="7" fontWeight="600">
+                  {(sf.name || sf.business_name || '').slice(0, 14)}
                 </text>
-                <text x={x} y={y + 18} textAnchor="middle" fill="#64748b" fontSize="7">
-                  {island.member_count} members
-                </text>
-
-                {/* Building hexes */}
-                {blds.map((bld, i) => {
-                  const slot = SLOT_OFFSETS[bld.building_slot - 1] || SLOT_OFFSETS[i % 6];
-                  const bldPixel = hexToPixel(island.hex_q + slot.q * 0.6, island.hex_r + slot.r * 0.6);
-                  const bx = bldPixel.x;
-                  const by = bldPixel.y;
-                  const scale = SIZE_SCALE[bld.building_size] || 0.55;
-                  const cat = bld.storefront?.business_category || 'food';
-                  const cfg = CATEGORY_CONFIG[cat] || CATEGORY_CONFIG.food;
-
-                  return (
-                    <g
-                      key={bld.id}
-                      className="cursor-pointer transition-transform hover:scale-110"
-                      onClick={(e) => { e.stopPropagation(); setSelectedBuilding(bld); }}
-                    >
-                      <polygon
-                        points={hexPoints(bx, by, HEX_SIZE * scale)}
-                        fill={`${cfg.color}30`}
-                        stroke={cfg.color}
-                        strokeWidth="1.5"
-                        strokeDasharray={bld.is_popup ? '4,2' : 'none'}
-                      />
-                      <text x={bx} y={by - 2} textAnchor="middle" fontSize="12">
-                        {cat === 'food' ? '🍩' : cat === 'service' ? '🔧' : cat === 'retail' ? '🛒' : cat === 'creative' ? '🎨' : '📚'}
-                      </text>
-                      <text x={bx} y={by + 10} textAnchor="middle" fill="#e2e8f0" fontSize="6" fontWeight="500">
-                        {(bld.storefront?.business_name || '').slice(0, 12)}
-                      </text>
-                      {bld.is_popup && (
-                        <text x={bx} y={by + 18} textAnchor="middle" fill="#a855f7" fontSize="5">Pop-Up</text>
-                      )}
-                    </g>
-                  );
-                })}
-
-                {/* Empty slots */}
-                {Array.from({ length: Math.max(0, 6 - blds.length) }, (_, i) => {
-                  const slotIdx = blds.length + i;
-                  const slot = SLOT_OFFSETS[slotIdx % 6];
-                  const ep = hexToPixel(island.hex_q + slot.q * 0.6, island.hex_r + slot.r * 0.6);
-                  return (
-                    <polygon
-                      key={`empty-${island.id}-${slotIdx}`}
-                      points={hexPoints(ep.x, ep.y, HEX_SIZE * 0.4)}
-                      fill="none"
-                      stroke="#334155"
-                      strokeWidth="0.5"
-                      strokeDasharray="3,3"
-                      opacity="0.3"
-                    />
-                  );
-                })}
+                {!sf.is_open && (
+                  <text x={x} y={y + 22} textAnchor="middle" fill="#ef4444" fontSize="5.5" fontWeight="500">CLOSED</text>
+                )}
               </g>
             );
           })}
-        </g>
-      </svg>
 
-      {/* Building popup */}
-      {selectedBuilding && (
-        <div className="absolute bottom-6 right-24 z-30 w-72 animate-in slide-in-from-bottom-4 duration-200">
-          <Card className="bg-slate-900/95 border-slate-700 backdrop-blur-sm">
-            <CardContent className="p-4">
-              <button
-                className="absolute top-2 right-2 text-slate-500 hover:text-white"
-                onClick={() => setSelectedBuilding(null)}
+          {/* Unclaimed hexes */}
+          {Array.from({ length: UNCLAIMED_COUNT }, (_, i) => {
+            const idx = filtered.length + i;
+            const coord = coords[idx];
+            if (!coord) return null;
+            const { x, y } = hexToPixel(coord.q, coord.r);
+            return (
+              <g
+                key={`unclaimed-${i}`}
+                className="cursor-pointer"
+                onClick={() => navigate(user ? '/tools/storefront-builder' : '/auth')}
               >
+                <polygon
+                  points={hexCorners(x, y, HEX_SIZE * 0.92)}
+                  fill="none"
+                  stroke="#334155"
+                  strokeWidth="0.8"
+                  strokeDasharray="6,4"
+                  opacity="0.5"
+                  className="transition-all hover:stroke-emerald-500 hover:opacity-100"
+                />
+                <text x={x} y={y - 2} textAnchor="middle" fill="#475569" fontSize="12" dominantBaseline="central">
+                  +
+                </text>
+                <text x={x} y={y + 12} textAnchor="middle" fill="#475569" fontSize="5.5">
+                  Start Yours
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      )}
+
+      {/* Empty state */}
+      {!isLoading && storefronts.length === 0 && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="text-center pointer-events-auto">
+            <Globe className="w-16 h-16 mx-auto mb-4 text-slate-700" />
+            <p className="text-xl font-bold text-slate-500">Ghost World is waking up...</p>
+            <p className="text-sm text-slate-600 mt-2 mb-4">Be the first to claim your hex.</p>
+            <Button className="bg-amber-600 hover:bg-amber-500" onClick={() => navigate(user ? '/tools/storefront-builder' : '/auth')}>
+              <Store className="w-4 h-4 mr-2" /> Start Your Storefront
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Selected storefront popup */}
+      {selected && (
+        <div className="absolute bottom-6 right-6 z-30 w-72 animate-in slide-in-from-bottom-4 duration-200">
+          <Card className="bg-slate-900/95 border-slate-700 backdrop-blur-sm shadow-2xl">
+            <CardContent className="p-4">
+              <button className="absolute top-2 right-2 text-slate-500 hover:text-white" onClick={() => setSelected(null)}>
                 <X className="w-4 h-4" />
               </button>
 
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-amber-600/20 flex items-center justify-center text-lg">
-                  {(() => {
-                    const cat = selectedBuilding.storefront?.business_category || 'food';
-                    return cat === 'food' ? '🍩' : cat === 'service' ? '🔧' : cat === 'retail' ? '🛒' : cat === 'creative' ? '🎨' : '📚';
-                  })()}
-                </div>
-                <div>
-                  <p className="font-semibold text-white">
-                    {selectedBuilding.storefront?.business_name || 'Unknown Business'}
-                  </p>
-                  <p className="text-xs text-slate-400">
-                    {islands.find(i => i.id === selectedBuilding.island_id)?.name || 'Island'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 text-xs text-slate-400 mb-3">
-                <Badge variant={selectedBuilding.storefront?.is_open ? 'default' : 'secondary'} className="text-[10px]">
-                  {selectedBuilding.storefront?.is_open ? 'Open' : 'Closed'}
-                </Badge>
-                <span className="capitalize">{selectedBuilding.storefront?.business_category}</span>
-                {selectedBuilding.is_popup && (
-                  <Badge variant="outline" className="text-purple-400 border-purple-500/30 text-[10px]">Pop-Up</Badge>
+                {selected.logo_url ? (
+                  <img src={selected.logo_url} alt="" className="w-11 h-11 rounded-lg object-cover" />
+                ) : (
+                  <div className="w-11 h-11 rounded-lg bg-amber-600/20 flex items-center justify-center text-xl">
+                    {pal(selected.category).emoji}
+                  </div>
                 )}
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-white truncate">{selected.name || selected.business_name}</p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <Badge
+                      variant={selected.is_open ? 'default' : 'secondary'}
+                      className="text-[10px]"
+                    >
+                      {selected.is_open ? 'Open' : 'Closed'}
+                    </Badge>
+                    <Badge variant="outline" className="text-[10px]" style={{ color: pal(selected.category).color, borderColor: `${pal(selected.category).color}40` }}>
+                      {pal(selected.category).label}
+                    </Badge>
+                  </div>
+                </div>
               </div>
 
               <div className="flex gap-2">
                 <Button
                   size="sm"
                   className="flex-1 bg-amber-600 hover:bg-amber-500 text-xs"
-                  onClick={() => {
-                    setSelectedBuilding(null);
-                    navigate(`/menu/${selectedBuilding.storefront?.slug}`);
-                  }}
+                  onClick={() => { setSelected(null); navigate(`/menu/${selected.slug}`); }}
                 >
-                  View Menu
+                  <Store className="w-3.5 h-3.5 mr-1" /> Visit Storefront
                 </Button>
-                {user && <BeaconDropButton compact className="shrink-0" />}
               </div>
             </CardContent>
           </Card>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {islands.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <Globe className="w-16 h-16 mx-auto mb-4 text-slate-700" />
-            <p className="text-xl font-bold text-slate-500">Ghost World is waking up...</p>
-            <p className="text-sm text-slate-600 mt-2">Islands appear when storefronts are placed by Node Captains.</p>
-          </div>
         </div>
       )}
     </div>

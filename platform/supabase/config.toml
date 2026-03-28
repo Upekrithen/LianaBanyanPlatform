@@ -77,6 +77,9 @@ verify_jwt = false
 [functions.vault-unlock]
 verify_jwt = false
 
+[functions.moneypenny-ai-draft]
+verify_jwt = false
+
 [functions.moneypenny-auto-post]
 verify_jwt = false
 # schedule = "*/5 * * * *"  -- set in Dashboard
@@ -89,6 +92,12 @@ verify_jwt = false
 # schedule = "0 8 * * *"  -- set in Dashboard
 
 [functions.moneypenny-signal]
+verify_jwt = false
+
+[functions.moneypenny-sms]
+verify_jwt = false
+
+[functions.gatekeeper-triage]
 verify_jwt = false
 
 [functions.refresh-social-tokens]
@@ -105,3 +114,52 @@ verify_jwt = true
 verify_jwt = false
 # Gmail Push sends Pub/Sub notifications — no JWT
 # Cron for watch renewal: 0 0 * * 0 (weekly Sunday midnight)
+
+# LB Card (Stripe Issuing) — manual Bearer JWT validation in handler
+[functions.create-lb-cardholder]
+verify_jwt = false
+
+[functions.create-lb-card]
+verify_jwt = false
+
+[functions.get-lb-card-details]
+verify_jwt = false
+
+[functions.update-lb-card-controls]
+verify_jwt = false
+
+[functions.lb-card-webhook]
+verify_jwt = false
+
+[functions.fund-lb-card]
+verify_jwt = false
+
+[functions.create-funding-schedule]
+verify_jwt = false
+
+[functions.process-scheduled-funding]
+verify_jwt = false
+
+[functions.war-chest-substitute]
+verify_jwt = false
+
+[functions.war-chest-sponsor]
+verify_jwt = false
+
+[functions.war-chest-commission]
+verify_jwt = false
+
+[functions.calendar-sync-commerce]
+verify_jwt = false
+
+[functions.housing-manage]
+verify_jwt = false
+
+[functions.treasure-map-progress]
+verify_jwt = false
+
+[functions.crew-manage]
+verify_jwt = false
+
+[functions.beacon-track]
+verify_jwt = false

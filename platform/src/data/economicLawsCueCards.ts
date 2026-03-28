@@ -20,7 +20,7 @@ Not ideology. Math.
 
 The badge proves you're one of us.
 
-cephas.lianabanyan.com/articles/one-of-us`,
+/cephas/articles/one-of-us`,
     back: `What Makes "One of Us"?
 
 TRIBAL ECONOMICS LAW:
@@ -44,7 +44,7 @@ Become one of us.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['c20', 'trust', 'tribal', 'certification', 'one-of-us'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/one-of-us-building-trust-through-shared-economics/',
+    endpoint: 'https:///cephas/articles/one-of-us-building-trust-through-shared-economics/',
   },
   {
     id: 'ten-laws-overview',
@@ -63,7 +63,7 @@ Help Each Other Help Ourselves.`,
 9. Loss Aversion Conversion
 10. Path-Based Enforcement
 
-cephas.lianabanyan.com/articles/ten-economic-laws`,
+/cephas/articles/ten-economic-laws`,
     back: `The Meta-Law
 
 Radical transparency, enforced by
@@ -84,7 +84,7 @@ Together: the economic constitution.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['laws', 'economics', 'foundation', 'constitution'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'c20-law',
@@ -121,7 +121,7 @@ The badge is the contract.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['c20', 'margin', 'transparency', 'pricing'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'ladder-law',
@@ -162,7 +162,7 @@ Every rung unlocks more.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['ladder', 'inclusion', 'badges', 'progression'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'ratchet-law',
@@ -203,7 +203,7 @@ Your gains are permanent.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['ratchet', 'joules', 'forex', 'appreciation'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'ip-distribution-law',
@@ -247,7 +247,7 @@ Auto-split keeps entry accessible.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['ip', 'patents', 'distribution', 'anti-concentration'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'tribal-economics-law',
@@ -289,7 +289,7 @@ The badge is priceless.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['tribal', 'identity', 'costly-signaling', 'trust'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'loss-aversion-law',
@@ -335,7 +335,7 @@ Don't lose it.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['loss-aversion', 'ghost-mode', 'conversion', 'psychology'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'reciprocity-law',
@@ -379,7 +379,7 @@ C+20 purchasing power.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['reciprocity', 'c20', 'purchasing-power', 'toe-dipping'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
   {
     id: 'toe-dipping',
@@ -424,7 +424,7 @@ No hidden surprises.
 Help Each Other Help Ourselves.`,
     category: 'economics',
     tags: ['toe-dipping', 'onboarding', 'c20', 'safety'],
-    endpoint: 'https://cephas.lianabanyan.com/articles/ten-economic-laws-of-the-keep/',
+    endpoint: 'https:///cephas/articles/ten-economic-laws-of-the-keep/',
   },
 ] as const;
 

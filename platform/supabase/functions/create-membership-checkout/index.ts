@@ -23,7 +23,6 @@ Deno.serve(async (req) => {
   log("Request received");
 
   try {
-    // Accept token from Authorization header OR query param (for redirect flow)
     const url = new URL(req.url);
     const queryToken = url.searchParams.get("token");
     const authHeader = req.headers.get("Authorization");
@@ -32,6 +31,16 @@ Deno.serve(async (req) => {
 
     if (!token) {
       return jsonResponse({ error: "No authorization" }, 401);
+    }
+
+    let inviteCode = "";
+    let isRenewal = false;
+    if (req.method === "POST") {
+      try {
+        const body = await req.json();
+        inviteCode = body.inviteCode || "";
+        isRenewal = body.isRenewal || false;
+      } catch { /* no body is ok */ }
     }
 
     log("Creating Supabase client");
@@ -60,7 +69,7 @@ Deno.serve(async (req) => {
       .eq("user_id", user.id)
       .maybeSingle();
 
-    if (credits?.membership_stake_paid) {
+    if (credits?.membership_stake_paid && !isRenewal) {
       if (isRedirectMode) {
         return Response.redirect("https://lianabanyan.com/dashboard?already_paid=true", 302);
       }
@@ -80,25 +89,34 @@ Deno.serve(async (req) => {
 
     log(`Step 3: Stripe API (origin: ${origin})`);
 
+    const stripeParams: Record<string, string> = {
+      "customer_email": user.email,
+      "line_items[0][price_data][currency]": "usd",
+      "line_items[0][price_data][product_data][name]": "Liana Banyan Access Key",
+      "line_items[0][price_data][product_data][description]": "Annual cooperative membership — $5/year",
+      "line_items[0][price_data][unit_amount]": "500",
+      "line_items[0][quantity]": "1",
+      "mode": "payment",
+      "success_url": `${origin}/membership-success?session_id={CHECKOUT_SESSION_ID}`,
+      "cancel_url": `${origin}/join?membership=cancelled`,
+      "client_reference_id": user.id,
+      "metadata[user_id]": user.id,
+      "metadata[payment_type]": "lb_membership_stake",
+      "metadata[type]": "membership",
+      "metadata[is_renewal]": isRenewal ? "true" : "false",
+    };
+
+    if (inviteCode) {
+      stripeParams["metadata[invite_code]"] = inviteCode;
+    }
+
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
       headers: {
         "Authorization": `Basic ${btoa(stripeKey + ":")}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: new URLSearchParams({
-        "customer_email": user.email,
-        "line_items[0][price_data][currency]": "usd",
-        "line_items[0][price_data][product_data][name]": "Liana Banyan Cooperative Membership",
-        "line_items[0][price_data][product_data][description]": "Annual membership stake — $5/year",
-        "line_items[0][price_data][unit_amount]": "500",
-        "line_items[0][quantity]": "1",
-        "mode": "payment",
-        "success_url": `${origin}/membership-success?session_id={CHECKOUT_SESSION_ID}`,
-        "cancel_url": `${origin}/dashboard`,
-        "metadata[user_id]": user.id,
-        "metadata[payment_type]": "lb_membership_stake",
-      }),
+      body: new URLSearchParams(stripeParams),
     });
 
     log(`Stripe HTTP: ${stripeResponse.status}`);
@@ -114,6 +132,22 @@ Deno.serve(async (req) => {
     }
 
     log(`Session created: ${stripeData.id}`);
+
+    // Record pending payment in membership_payments
+    const adminClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
+    await adminClient.from("membership_payments").insert({
+      member_id: user.id,
+      amount: 5.00,
+      stripe_session_id: stripeData.id,
+      status: "pending",
+      is_renewal: isRenewal,
+    });
+
+    log("Pending payment recorded");
 
     if (isRedirectMode) {
       return Response.redirect(stripeData.url, 302);

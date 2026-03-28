@@ -210,7 +210,9 @@ export function LemonadeStandFlipbook({
               <div className="w-full flex-1 flex items-center justify-center bg-gradient-to-b from-sky-100 to-green-100 rounded-md mb-2 relative overflow-hidden">
                 <img src={`/images/Lemonade Stand/goat (${scene.id}).png`} alt={scene.alt} className="w-full h-full object-contain" />
               </div>
-              <p className="text-xs text-amber-800 text-center font-serif italic">{scene.subtitle}</p>
+              <p className="text-xs text-amber-800 text-center font-serif italic">
+                {scene.isMoral ? scene.rhyme : `"${scene.rhyme}"`}
+              </p>
             </motion.div>
           </AnimatePresence>
 
@@ -255,20 +257,6 @@ export function LemonadeStandFlipbook({
   return (
     <div className={`relative ${className}`}>
       <div className="relative max-w-2xl mx-auto">
-        {/* Rhyme caption - above the frame */}
-        <motion.div
-          key={`rhyme-${currentIndex}`}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-4 text-center text-amber-300 font-serif text-lg italic px-4"
-        >
-          {scene.isMoral ? (
-            <span className="text-xl font-bold not-italic">{scene.rhyme}</span>
-          ) : (
-            `"${scene.rhyme}"`
-          )}
-        </motion.div>
-
         {/* Book pages - single frame */}
         <div
           className="relative aspect-[4/3] bg-amber-50 rounded-lg overflow-hidden shadow-2xl border-8 border-amber-800"
@@ -293,10 +281,12 @@ export function LemonadeStandFlipbook({
                 />
               </div>
 
-              {/* Kid subtitle at bottom */}
-              {scene.subtitle && (
+              {/* Rhyme caption moved inside frame at bottom */}
+              {scene.rhyme && (
                 <div className="bg-amber-100 border-t-2 border-amber-300 px-4 py-3 text-center">
-                  <p className="text-amber-900 font-medium text-sm font-serif">{scene.subtitle}</p>
+                  <p className="text-amber-900 font-medium text-sm font-serif italic">
+                    {scene.isMoral ? scene.rhyme : `"${scene.rhyme}"`}
+                  </p>
                 </div>
               )}
             </motion.div>

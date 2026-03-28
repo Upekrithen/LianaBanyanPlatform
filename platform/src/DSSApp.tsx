@@ -16,9 +16,33 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { RecordingProvider } from "@/contexts/RecordingContext";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import { CrossPortalNav } from "@/components/CrossPortalNav";
 
 // Maker Portal (primary experience for the2ndsecond.com)
 const The2ndSecondPortal = lazy(() => import("./pages/The2ndSecondPortal"));
+
+// K108: DSS Portal pages
+const STLVault = lazy(() => import("./pages/STLVault"));
+const SlottedTopShowcase = lazy(() => import("./pages/SlottedTopShowcase"));
+const TestPilotDashboard = lazy(() => import("./pages/TestPilotDashboard"));
+const MakerDirectory = lazy(() => import("./pages/MakerDirectory"));
+const MakerRegistration = lazy(() => import("./pages/MakerRegistration"));
+const MakerProfile = lazy(() => import("./pages/MakerProfile"));
+const ProductCatalog = lazy(() => import("./pages/ProductCatalog"));
+const CatalogProductDetail = lazy(() => import("./pages/CatalogProductDetail"));
+
+// K113: Decentralized Factory Node (Innovation #1939)
+const FactoryNodePage = lazy(() => import("./pages/FactoryNodePage"));
+const ProductionPathways = lazy(() => import("./pages/ProductionPathways"));
+const ColdStartCalculator = lazy(() => import("./pages/ColdStartCalculator"));
+
+// K139: Canister System Configurator (Innovation #2022)
+const CanisterConfigurator = lazy(() => import("./pages/CanisterConfigurator"));
+const CanisterProductCatalog = lazy(() => import("./pages/CanisterProductCatalog"));
+const CanisterBOMPage = lazy(() => import("./pages/CanisterBOMPage"));
+
+// K143: 2nd Second Landing (Manufacturing Escalation Ladder)
+const SecondSecondLanding = lazy(() => import("./pages/SecondSecondLanding"));
 
 // Original "Get Hired" experience (preserved at /get-hired)
 const GetHiredLanding = lazy(() => import("./DSSGetHiredApp"));
@@ -71,6 +95,7 @@ const DSSApp = () => {
             <RecordingProvider>
               <Toaster />
               <Sonner />
+              <CrossPortalNav />
               <Suspense fallback={<DSSLoadingFallback />}>
                 <Routes>
                   {subdomain === 'showcase' ? (
@@ -80,9 +105,31 @@ const DSSApp = () => {
                     </>
                   ) : (
                     <>
-                      {/* Root: Maker Portal (STL Vault, Prototyper Guild, Test & Report) */}
-                      <Route path="/" element={<The2ndSecondPortal />} />
+                      {/* Root: 2nd Second Landing (K143 Manufacturing Escalation Ladder) */}
+                      <Route path="/" element={<SecondSecondLanding />} />
+                      {/* Maker Portal — original hub */}
+                      <Route path="/maker-portal" element={<The2ndSecondPortal />} />
                       <Route path="/auth" element={<Auth />} />
+
+                      {/* K108: DSS Portal pages */}
+                      <Route path="/stl-vault" element={<STLVault />} />
+                      <Route path="/slottedtop" element={<SlottedTopShowcase />} />
+                      <Route path="/test-pilot" element={<TestPilotDashboard />} />
+                      <Route path="/makers" element={<MakerDirectory />} />
+                      <Route path="/makers/:slug" element={<MakerProfile />} />
+                      <Route path="/register-maker" element={<MakerRegistration />} />
+                      <Route path="/products" element={<ProductCatalog />} />
+                      <Route path="/products/:slug" element={<CatalogProductDetail />} />
+
+                      {/* K113: Decentralized Factory Node (Innovation #1939) */}
+                      <Route path="/factory-node" element={<FactoryNodePage />} />
+                      <Route path="/production-pathways" element={<ProductionPathways />} />
+                      <Route path="/cold-start-calculator" element={<ColdStartCalculator />} />
+
+                      {/* K139: Canister System Configurator (Innovation #2022) */}
+                      <Route path="/factory/canister" element={<CanisterConfigurator />} />
+                      <Route path="/factory/canister/shop" element={<CanisterProductCatalog />} />
+                      <Route path="/canister/bom" element={<CanisterBOMPage />} />
 
                       {/* Original "Get Hired" experience — preserved intact */}
                       <Route path="/get-hired" element={<GetHiredLanding />} />

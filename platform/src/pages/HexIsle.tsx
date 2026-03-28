@@ -561,13 +561,13 @@ export default function HexIsle() {
         <CardContent className="space-y-2">
           <p className="text-muted-foreground text-sm leading-relaxed">
             HexIsle uses a 27-piece mechanical taxonomy called the Hexel Piece Grammar.
-            Each piece — from the ChannelLock base to the Capstone crown — is designed to snap-fit together without glue or fasteners.
+            Each piece — from the ChannelLock base to the Capstone crown — assembles with a 60-degree rotation from the top. No glue, no fasteners — just turn to lock, turn to release.
           </p>
           <p className="text-muted-foreground text-sm leading-relaxed">
             The Definitive Stack: ChannelLock → HollowLog → Clamshell → GoldenLotus → Rotor → Ouralis → PGears×3 → SawtoothCoral+TimingBelt → MainGear → Cradle+Football → Capstone → SlottedTop
           </p>
           <Button variant="link" className="px-0 h-auto text-primary" asChild>
-            <a href="https://cephas.lianabanyan.com/hexisle/" target="_blank" rel="noopener noreferrer">
+            <a href="/cephas/hexisle">
               See the full piece grammar →
             </a>
           </Button>

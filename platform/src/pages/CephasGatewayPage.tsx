@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Wrench, Eye, ExternalLink, FileText, Search, Megaphone, Lightbulb } from "lucide-react";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
 
-const CEPHAS_BASE = "https://cephas.lianabanyan.com";
+const CEPHAS_BASE = "/cephas";
 
 const CATEGORIES: { path: string; label: string }[] = [
   { path: "papers", label: "Academic Papers" },
@@ -90,11 +90,11 @@ export default function CephasGatewayPage() {
             <BookOpen className="w-5 h-5" />
             Full Cephas site
           </CardTitle>
-          <CardDescription>Academic papers (clean prose), crown letters, initiatives, and more at cephas.lianabanyan.com.</CardDescription>
+          <CardDescription>Academic papers (clean prose), crown letters, initiatives, and more at /cephas.</CardDescription>
         </CardHeader>
         <CardContent>
           <Button asChild className="w-full sm:w-auto">
-            <a href={CEPHAS_BASE} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+            <a href={CEPHAS_BASE} className="inline-flex items-center gap-2">
               Open Cephas
               <ExternalLink className="w-4 h-4" />
             </a>

@@ -1,245 +1,193 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ClanCreationDialog } from '@/components/ClanCreationDialog';
-import { ClanCharterManager } from '@/components/ClanCharterManager';
-import { ClanAgreementManager } from '@/components/ClanAgreementManager';
-import { Users, Search, Shield, FileText } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useNavigate } from 'react-router-dom';
-import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { useTribes, useMyTribes, type Tribe } from "@/hooks/useTribes";
+import { Plus, Search, Users, Flame, ArrowRight } from "lucide-react";
 
-export default function Clans() {
-  const { user } = useAuth();
+const TYPE_LABELS: Record<string, string> = {
+  family: "Family",
+  neighborhood: "Neighborhood",
+  interest: "Interest",
+  cultural: "Cultural",
+  hybrid: "Hybrid",
+};
+
+export default function Tribes() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedClanId, setSelectedClanId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const { data: tribes, isLoading } = useTribes(search || undefined);
+  const { data: myTribes } = useMyTribes();
 
-  // Tribes = small guilds (guild_type='tribe' or similar)
-  // Real table: guilds (no separate clans table)
-  const { data: allClans, isLoading: allClansLoading } = useQuery({
-    queryKey: ['tribes', searchQuery],
-    queryFn: async () => {
-      let query = supabase
-        .from('guilds')
-        .select('*')
-        .eq('status', 'active');
-
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-      return data || [];
-    },
-  });
-
-  // Fetch user's guild memberships (tribes are small guilds)
-  const { data: myClans, isLoading: myClansLoading } = useQuery({
-    queryKey: ['my-tribes', user?.id],
-    queryFn: async () => {
-      if (!user) return [];
-      
-      // Real: guild_members (no clan_members table)
-      const { data, error } = await supabase
-        .from('guild_members')
-        .select(`
-          *,
-          guild:guilds(*)
-        `)
-        .eq('user_id', user.id)
-        .eq('status', 'active');
-
-      if (error) throw error;
-      return data || [];
-    },
-    enabled: !!user,
-  });
-
-  const handleJoinClan = async (clanId: string) => {
-    if (!user) return;
-
-    const { error } = await supabase
-      .from('guild_members')
-      .insert({
-        guild_id: clanId,
-        user_id: user.id,
-        status: 'active',
-        role: 'member',
-        rank: 1,
-        experience_points: 0,
-        projects_completed: 0,
-        mentees_count: 0,
-      });
-
-    if (error) {
-      console.error('Error joining clan:', error);
-    }
-  };
+  const tribesByType = (type: string) =>
+    tribes?.filter((t) => t.tribe_type === type) ?? [];
+  const types = [...new Set(tribes?.map((t) => t.tribe_type).filter(Boolean) ?? [])];
 
   return (
-    <PortalPageLayout maxWidth="xl" xrayId="tribes">
+    <PortalPageLayout maxWidth="xl" xrayId="tribes-directory">
       <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Shield className="w-8 h-8" />
-            Clans
-          </h1>
-          <p className="text-muted-foreground">
-            Chosen family networks across guilds and lone wolves
-          </p>
-        </div>
-        <ClanCreationDialog />
-      </div>
-
-      <div className="relative">
-        <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-        <Input
-          placeholder="Search clans..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
-        />
-      </div>
-
-      {myClans && myClans.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">My Clans</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {myClans.map((membership) => (
-              <Card key={membership.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader onClick={() => setSelectedClanId(membership.clans.id)}>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    {membership.clans.display_name || membership.clans.name}
-                  </CardTitle>
-                  <CardDescription>
-                    {membership.clans.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-muted-foreground">
-                      {membership.clans.clan_members?.[0]?.count || 0} members
-                    </div>
-                    <Button 
-                      size="sm" 
-                      variant="ghost"
-                      onClick={() => setSelectedClanId(membership.clans.id)}
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Manage
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Flame className="h-8 w-8 text-amber-600" />
+              Tribes
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Personal groups. Family, neighborhoods, interests — join as many as you like.
+            </p>
           </div>
-        </div>
-      )}
-
-      {selectedClanId && (
-        <div className="space-y-6">
-          <Button variant="outline" onClick={() => setSelectedClanId(null)}>
-            ← Back to All Clans
+          <Button
+            onClick={() => navigate("/tribes/create")}
+            className="bg-amber-600 hover:bg-amber-700"
+          >
+            <Plus className="h-4 w-4 mr-2" /> Gather a Tribe
           </Button>
-          <div className="grid gap-6">
-            <ClanCharterManager clanId={selectedClanId} />
-            <ClanAgreementManager clanId={selectedClanId} />
-          </div>
         </div>
-      )}
 
-      <Tabs defaultValue="all" className="w-full">
-        <TabsList>
-          <TabsTrigger value="all">All Clans</TabsTrigger>
-        </TabsList>
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search tribes..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10"
+          />
+        </div>
 
-        <TabsContent value="all" className="space-y-4">
-          <ClanGrid clans={allClans} isLoading={allClansLoading} onJoin={handleJoinClan} />
-        </TabsContent>
-      </Tabs>
+        {/* My Tribes */}
+        {myTribes && myTribes.length > 0 && (
+          <div>
+            <h2 className="text-lg font-semibold mb-3">My Tribes</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {myTribes.map((m) => (
+                <TribeCard
+                  key={m.id}
+                  tribe={m.tribe!}
+                  isMember
+                  onClick={() => navigate(`/tribes/${m.tribe?.slug}`)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All Tribes */}
+        <Tabs defaultValue="all">
+          <TabsList>
+            <TabsTrigger value="all">All ({tribes?.length ?? 0})</TabsTrigger>
+            {types.map((t) => (
+              <TabsTrigger key={t} value={t}>
+                {TYPE_LABELS[t] || t} ({tribesByType(t).length})
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <TabsContent value="all" className="mt-4">
+            <TribeGrid tribes={tribes} isLoading={isLoading} />
+          </TabsContent>
+          {types.map((t) => (
+            <TabsContent key={t} value={t} className="mt-4">
+              <TribeGrid tribes={tribesByType(t)} isLoading={isLoading} />
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
     </PortalPageLayout>
   );
 }
 
-function ClanGrid({ 
-  clans, 
-  isLoading,
-  onJoin 
-}: { 
-  clans: any[] | undefined;
-  isLoading: boolean;
-  onJoin: (clanId: string) => void;
+function TribeCard({
+  tribe,
+  isMember,
+  onClick,
+}: {
+  tribe: Tribe;
+  isMember?: boolean;
+  onClick: () => void;
 }) {
+  return (
+    <Card
+      className="cursor-pointer hover:shadow-lg transition-all group border-l-4"
+      style={{ borderLeftColor: tribe.color_primary || "#d97706" }}
+      onClick={onClick}
+    >
+      {tribe.banner_url && (
+        <div className="h-24 overflow-hidden rounded-t-lg">
+          <img
+            src={tribe.banner_url}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+      <CardHeader className="pb-2">
+        <div className="flex items-start justify-between">
+          <CardTitle className="text-base">{tribe.name}</CardTitle>
+          <div className="flex gap-1">
+            {isMember && <Badge className="bg-amber-100 text-amber-700">Member</Badge>}
+            {tribe.tribe_type && (
+              <Badge variant="outline" className="text-xs">
+                {TYPE_LABELS[tribe.tribe_type] || tribe.tribe_type}
+              </Badge>
+            )}
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+          {tribe.description || "No description yet."}
+        </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Users className="h-4 w-4" />
+            {tribe.member_count} members
+          </div>
+          <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-amber-600 transition-colors" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function TribeGrid({
+  tribes,
+  isLoading,
+}: {
+  tribes: Tribe[] | undefined;
+  isLoading: boolean;
+}) {
+  const navigate = useNavigate();
+
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <Card key={i}>
-            <CardHeader>
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-4 w-full mt-2" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-4 w-1/2" />
-            </CardContent>
-          </Card>
-        ))}
+      <div className="text-center py-12 text-muted-foreground">
+        Loading tribes...
       </div>
     );
   }
 
-  if (!clans || clans.length === 0) {
+  if (!tribes || tribes.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
-        No clans found. Be the first to create one!
+        No tribes found. Be the first to gather one!
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {clans.map((clan) => (
-        <Card key={clan.id} className="hover:shadow-lg transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              {clan.display_name || clan.name}
-            </CardTitle>
-            <CardDescription>
-              {clan.description}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-muted-foreground">
-                {clan.clan_members?.[0]?.count || 0} members
-              </span>
-              <span className="text-muted-foreground">
-                Stake: ${clan.stake_amount}
-              </span>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Created by {clan.profiles?.full_name || clan.profiles?.email}
-            </div>
-            <Button 
-              onClick={() => onJoin(clan.id)}
-              className="w-full"
-              size="sm"
-            >
-              Join Clan
-            </Button>
-          </CardContent>
-        </Card>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {tribes.map((t) => (
+        <TribeCard
+          key={t.id}
+          tribe={t}
+          onClick={() => navigate(`/tribes/${t.slug}`)}
+        />
       ))}
     </div>
   );

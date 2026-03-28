@@ -109,7 +109,82 @@ Innovation count stays at 1,896 until Session B when it bumps to 1,897.
 
 ---
 
-## RUNWAY / SESSION STOP (current) — Knight Sessions 71-74 (March 22, 2026)
+## RUNWAY / SESSION STOP (current) — Knight Session 95 (March 23, 2026)
+
+**Latest deploy:** build succeeded — pending `firebase deploy`
+**Innovation count:** 1,938
+**DB migration created:** `20260323000027_multiendpoint_lb_card.sql` — pending `supabase db push`
+**Edge function updated:** `verify-membership-payment` — ledger entry added
+
+### What Was Done (Session 95 — Knight)
+
+All tasks from `BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_95_MULTIENDPOINT_LB_CARD.md`.
+
+| Task | Files | Summary |
+|------|-------|---------|
+| **Task 1: Migration 000027** | `supabase/migrations/20260323000027_multiendpoint_lb_card.sql` | `transaction_ledger` table (16 ledger categories, patronage classification, blockchain anchor, idempotency via `stripe_event_id`). Two views: `ledger_patronage_summary` (Subchapter T annual), `member_patronage_summary` (per-member allocation). ALTER existing LB Card tables for provider-agnostic columns (`provider`, `provider_cardholder_id`, `is_frozen`, `kyc_status`, `provider_card_id`, `provider_authorization_id`, `decline_reason`, `ledger_entry_id`). Feature flags `lb_card_enabled` and `lb_card_provider` seeded. |
+| **Task 2: Shared Ledger Writer** | `supabase/functions/_shared/ledgerWriter.ts` | Idempotent `writeLedgerEntry()` utility — checks `stripe_event_id` before inserting. `verifyStripeSignature()` helper. All webhook handlers import from this shared module. |
+| **Task 3: Verify-Membership-Payment** | `supabase/functions/verify-membership-payment/index.ts` | Added ledger entry write ($5 membership → `membership` category, `is_patronage: true`, `patronage_type: 'purchase'`). Non-fatal — failure doesn't break payment verification. |
+| **Task 4: LB Card Feature Flag Gate** | `src/pages/LBCardPage.tsx` | Queries `founder_feature_flags` for `lb_card_enabled`. When false → shows navy/gold "Coming Soon" card visual. When true → shows full existing card UI (cardholder setup, card issuance, reveal, freeze, settings, transactions, funding). |
+| **Task 5: WarChestPage** | No changes needed | Already wired to `war_chest_summary` view, `mark_work_records`, `war_chest_allocations`, and `founder_feature_flags`. Substitution, Sponsorship, Commission deployment paths all functional. |
+| **Task 6: Sidebar + Routes** | `src/components/AppSidebar.tsx` | Added LB Card (`CreditCard` icon), War Chest (`Shield` icon), Finances (`DollarSign` icon) to marketplace nav. Routes already exist in App.tsx. |
+| **Task 7: Financial Transparency** | `src/pages/FinancialTransparencyPage.tsx` | Added "Transaction Ledger" tab (4th tab). Queries `ledger_patronage_summary` view. Shows patronage vs non-patronage totals, 50% threshold check, per-category breakdown table. Admin-facing Subchapter T compliance dashboard. |
+| **Innovation Count** | Already at 1,938 | No change this session (infrastructure). |
+
+### Pending Steps
+
+1. `cd platform; npx supabase db push --linked` — push migration 000027
+2. `npx supabase functions deploy verify-membership-payment --project-ref ruuxzilgmuwddcofqecc` — deploy updated edge function
+3. `npm run build; firebase deploy --only hosting:main -P default` — deploy platform
+4. **Future K96+**: Commerce webhook (`stripe-webhook`) does not exist yet — create it with ledger entries for storefront splits (creator 83.3%, platform 13.3%, Gleaner's 3.3%)
+5. **Future K97**: Card provider integration (Stripe Issuing, Unit, or Lithic) — flip `lb_card_enabled` flag when connected
+
+---
+
+## PREVIOUS: Knight Session 86 (March 22, 2026)
+
+**Latest deploy:** lianabanyan.com — 688 files, all live
+**Innovation count:** 1,935
+**DB migrations pushed:** political_expedition (rep_cache, member_reps, tracked_bills, member_bill_tracking, rep_letter_templates)
+**Edge function deployed:** rep-lookup (Google Civic API → rep_cache)
+
+### What Was Done (Session 86 — Knight)
+
+All tasks from `BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_86_POLITICAL_EXPEDITION.md` completed and deployed.
+
+| Task | Files | Summary |
+|------|-------|---------|
+| **Task 1: Database Tables** | migration `20260322000017` | 5 tables: `rep_cache`, `member_reps`, `tracked_bills`, `member_bill_tracking`, `rep_letter_templates`. Full RLS. 5 letter templates seeded (cooperative, food, housing, small business, transportation). 7 bills seeded with LB relevance notes. |
+| **Task 2: Rep Lookup Edge Function** | `supabase/functions/rep-lookup/index.ts` | Google Civic Information API integration. Address → officials parsing → rep_cache upsert. Fallback to cached state-level data. CORS enabled. |
+| **Task 3: Political Expedition Page** | `PoliticalExpedition.tsx`, `App.tsx` | Full page at `/political-expedition` with 4 Supabase-wired sections: (1) Find Your Representatives (address lookup → rep cards), (2) Your Representatives (saved reps with Call/Website/Write actions), (3) Bills That Matter (expandable bill cards with track/untrack, status badges, LB relevance), (4) Write Your Rep (template selector, auto-fill with member/rep/district, copy-to-clipboard + mailto). Switzerland Protocol non-partisan banner. |
+| **Innovation Count** | `useCanonicalStats.ts`, `CephasPressJunketPage.tsx` | 1,929 → 1,935 |
+
+**Navigation:** Political Expedition already in sidebar (Flag icon, `/political-expedition`).
+
+---
+
+## PREVIOUS: Knight Session 77 (March 22, 2026)
+
+**Latest deploy:** lianabanyan.com — 679 files, all live
+**Innovation count:** 1,929
+**DB migrations pushed:** helm_actions, oob_plugs, round_table_messages (+ lb_card_and_war_chest from Session 76)
+
+### What Was Done (Session 77 — Knight)
+
+All 3 tasks from `BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_77_HELM_OOB_ROUNDTABLE.md` completed and deployed.
+
+| Task | Files | Summary |
+|------|-------|---------|
+| **Task 1: Helm Actions** | `HelmActionsPage.tsx`, migration `20260323000011` | `helm_actions` table with RLS. Full page at `/dashboard/helm`: list view with type badges, detail view with tabbed sections (script/FAQ/checklist/document), full-screen mobile mode, swipeable sections, tappable checklist items that persist to JSONB. La Capital del Sabor pitch seeded with all 5 sections (30-second pitch, FAQ, leave-behind, prep checklist, after-visit checklist). |
+| **Task 2: Out of Bounds Phase 1** | `OutOfBoundsPage.tsx`, migration `20260323000012` | `oob_plugs` + `oob_posts` tables with RLS. Full page at `/dashboard/oob`: 3-tab interface (Compose/Posts/Plugs). Compose with markdown body + plug targeting. Save as draft, copy-to-clipboard for manual posting, "Mark as Posted" flow. Plug manager supports Reddit/Discord/Pnyx/Substack configs. Phase 2 (API-driven posting) ready for future session. |
+| **Task 3: Round Table Text** | `RoundTableChat.tsx`, migration `20260323000013` | `round_table_messages` table with member-only RLS + Supabase Realtime publication. Chat component integrated into RoundTableHall with scrollable message list, system message styling, own-message alignment, real-time subscription via `postgres_changes`, polling fallback at 5s. |
+| **Innovation Count** | `useCanonicalStats.ts`, `CephasPressJunketPage.tsx` | 1,910 → 1,929 |
+
+**Navigation:** "Helm Actions" (Compass icon) and "Out of Bounds" (Megaphone icon) added to marketplace sidebar.
+
+---
+
+## PREVIOUS: Knight Sessions 71-74 (March 22, 2026)
 
 **Latest commit:** `c3803bc` — Session D (74): Onboarding credit redesign + Treasure Map guides
 **Commit chain:** `c3803bc` (D) → `6b77e66` (C: Ghost World) → `98a697e` (B: Beacons + Calendar) → `99502b0` (A: Quick wins + foundation) → `3892874` (70c: color sweep)
@@ -2801,6 +2876,150 @@ The full "scan QR → order → pay → aggregate → deliver → earn passive i
 
 ---
 
+### Session 84 Build — MoneyPenny AI Intelligence Layer (March 22, 2026)
+**Innovation Count: 1,935 (unchanged — wiring session)**
+
+#### What Was Built:
+1. **moneypenny-ai-draft Edge Function** (`supabase/functions/moneypenny-ai-draft/index.ts`) — NEW central AI brain. Accepts 5 task types (draft_qa_response, draft_social_response, classify_message, generate_briefing, summarize_inbox). Uses Claude ↔ Perplexity mutual fallback pattern from Star Chamber K80. SEC-safe system prompt prevents compliance violations.
+2. **Q&A AI Auto-Drafting** (`MoneyPennyQA.tsx` + `moneyPennyQAService.ts`) — New `requestAIDraft()` function calls edge function, stores draft in `answer_text` with `ai_responder: 'moneypenny_[engine]'`, sets status to `draft`. "Draft AI Response" button on each pending entry. "Draft All Pending" bulk action (up to 10 sequential).
+3. **Social AI Drafting** (`MoneyPennySocial.tsx` + `socialMediaService.ts`) — New `requestSocialAIDraft()` function. "Draft Response" button per interaction (no existing draft). "Draft All Pending" bulk button processes up to 10 items. Drafts stored with `response_status: 'ai_drafted'`.
+4. **Smart Email Classification** (`moneypenny-intake/index.ts`) — AI second-pass for P3/P4 emails. Calls Claude (fallback Perplexity) with subject + body snippet. ADDITIVE only — never downgrades priority, only upgrades. Returns sentiment and suggested_action.
+5. **AI Morning Briefing** (`MoneypennyBriefing.tsx` + `moneypenny-daily-digest/index.ts`) — Digest edge function now generates AI narrative from collected stats. Briefing page shows a gradient-styled AI card at top with "Generate Briefing" button that calls moneypenny-ai-draft with platform context.
+
+#### Key Files:
+| File | Change |
+|------|--------|
+| `supabase/functions/moneypenny-ai-draft/index.ts` | NEW — Central AI brain with Claude ↔ Perplexity fallback |
+| `src/pages/MoneyPennyQA.tsx` | Added AI draft button per entry + Draft All Pending |
+| `src/lib/moneyPennyQAService.ts` | Added `requestAIDraft()` |
+| `src/pages/MoneyPennySocial.tsx` | Added AI draft per interaction + Draft All Pending |
+| `src/lib/socialMediaService.ts` | Added `requestSocialAIDraft()` |
+| `supabase/functions/moneypenny-intake/index.ts` | Added `aiClassifySecondPass()` for P3/P4 emails |
+| `supabase/functions/moneypenny-daily-digest/index.ts` | Added AI narrative generation |
+| `src/pages/MoneypennyBriefing.tsx` | Added AI briefing card at top |
+| `supabase/config.toml` | Added `[functions.moneypenny-ai-draft]` |
+
+#### Deployed:
+- `moneypenny-ai-draft` edge function deployed to Supabase
+- `moneypenny-intake` edge function redeployed with AI second-pass
+- `moneypenny-daily-digest` edge function redeployed with AI briefing
+- Platform deployed to Firebase `lianabanyan-main`
+
+---
+
+### Session 83 Build — Crew Call Real Dispatch + Bounty Backend (March 22, 2026)
+**Innovation Count: 1,935 (unchanged — wiring session)**
+
+#### What Was Built:
+1. **Bounty Backend** (`supabase/migrations/20260322000015_bounties_and_coverage_minutes.sql`) — `bounties` table + `bounty_claims` table with RLS, indexes, and seed data for all 7 HexIsle Engineering bounties. STAMP criteria stored as JSONB.
+2. **CrewCallPage DB-Wired Bounties** (`platform/src/pages/CrewCallPage.tsx`) — Replaced 170-line hardcoded `HEXISLE_BOUNTIES` array with live DB queries. Added claim button (auto-assigns primary/secondary/backup based on slot), submission form (URL + notes), and admin review section with STAMP 1-5 rating + approve/reject.
+3. **Crew → OOB Auto-Dispatch** (`platform/src/components/crew/CrewCreationWizard.tsx`) — After crew INSERT, auto-creates `outbound_dispatch` row with type `crew_call`, status `stamped`, channels `['reddit','discord']`. Feeds into existing pg_cron social post job.
+4. **Coverage Minutes DB Service** (`platform/src/lib/discourse/coverageMinutesDB.ts`) — New service layer bridging the pure computation `coverageMinutes.ts` to the existing `coverage_minutes` Supabase table. Functions: `fetchCoverageAccount`, `ensureCoverageAccount`, `spendCoverageMinutes`, `earnCoverageMinutes`.
+5. **Design Battle Vote Deduction** (`platform/src/components/DesignBattleCard.tsx`) — Vote mutation now calls `spendCoverageMinutes(userId, 1, 'spent_voting', ...)` before inserting vote. Rejects with toast if balance < 1 minute.
+
+#### Key Files:
+| File | Change |
+|------|--------|
+| `supabase/migrations/20260322000015_bounties_and_coverage_minutes.sql` | NEW — bounties + bounty_claims tables + 7 HexIsle seed rows |
+| `src/pages/CrewCallPage.tsx` | Replaced hardcoded bounties → DB queries, added claim/submit/review UI |
+| `src/components/crew/CrewCreationWizard.tsx` | Added OOB auto-dispatch on crew creation |
+| `src/lib/discourse/coverageMinutesDB.ts` | NEW — Coverage Minutes DB service layer |
+| `src/components/DesignBattleCard.tsx` | Added 1 Coverage Minute deduction per vote |
+
+#### Deployed:
+- Migration pushed to Supabase (ruuxzilgmuwddcofqecc)
+- Platform deployed to Firebase `lianabanyan-main`
+
+---
+
+### Session 82 Build — Beacon + Calendar Wiring (March 22, 2026)
+**Innovation Count: 1,935 (unchanged — wiring session)**
+
+#### What Was Built:
+1. **Calendar Plug Registry** (`platform/src/lib/calendarPlugs.ts`) — 7 calendar types with auto-sources, colors, emojis, editability. Calendar.tsx sidebar + type picker now render from registry instead of hardcoded `CALENDAR_TYPE_CONFIG`.
+2. **Beacon → Calendar Events** — `beaconPoints.ts` creates a green personal calendar event on every beacon completion. Chain-complete milestone creates a gold event for Teleportation Deck Card unlock.
+3. **Wildfire Tour → Calendar Events** — `WildfireBeaconRun.tsx` creates a personal calendar event on tour start, updates it with end_time on tour completion. Logged-in users only.
+4. **Commerce → Calendar Edge Function** — New `calendar-sync-commerce` edge function handles `order_placed`, `order_paid`, `delivery_scheduled`, `earnings_distributed` events with dedup by source_type + source_id. Wired into `stripe-webhook` (after order_paid) and `distribute-order-earnings` (after splits).
+5. **Star Chamber → Defense Calendar** — `starChamberService.ts` creates private defense calendar events when a case is filed (for both participants) and updates with verdict when `setFinalAction` is called.
+6. **Helm "Today's Schedule" Card** — `TheHelm.tsx` shows today's calendar events (max 5, compact list with time/emoji/title, "View All →" to /calendar). Empty state: "Nothing scheduled."
+7. **Calendar Sync Phase 2 Prep** — `calendarSync.ts` now has a 5-minute `last_synced_at` throttle via localStorage, plus Phase 2 comment documenting the edge function replacement path.
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `platform/src/lib/calendarPlugs.ts` | Calendar plug registry (NEW) |
+| `platform/src/pages/Calendar.tsx` | Uses plug registry for sidebar + type picker |
+| `platform/src/lib/beaconPoints.ts` | Beacon completion → personal calendar event |
+| `platform/src/components/WildfireBeaconRun.tsx` | Tour start/complete → calendar events |
+| `platform/supabase/functions/calendar-sync-commerce/index.ts` | Commerce → calendar sync edge function (NEW) |
+| `platform/supabase/functions/stripe-webhook/index.ts` | Calls calendar-sync-commerce after order_paid |
+| `platform/supabase/functions/distribute-order-earnings/index.ts` | Calls calendar-sync-commerce after earnings split |
+| `platform/src/lib/starChamberService.ts` | Case filed + verdict → defense calendar events |
+| `platform/src/pages/TheHelm.tsx` | "Today's Schedule" card |
+| `platform/src/lib/calendarSync.ts` | 5-minute throttle + Phase 2 comment |
+
+**Deployed:** lianabanyan.com (hosting:main) ✓ | Edge functions: calendar-sync-commerce, stripe-webhook, distribute-order-earnings ✓
+
+---
+
+### Session 87 Build — Design Pipeline: Arena → Emporium → Crew Tables (March 22, 2026)
+**Innovation Count: 1,935 (unchanged — wiring session)**
+
+#### What Was Built:
+1. **Migration `20260322000018_design_pipeline.sql`** — `arena_submissions` (idempotent, policies refreshed), `crew_tables` (3-stage JSONB checklists, template types, activation threshold), `crew_table_seats` (role slots with join mechanics). All RLS policies in place.
+2. **Battle Auto-Trigger** — STAMP review handler in `DesignBattleArena.tsx` now checks for 2+ approved submissions in the same category within 7 days. If found, auto-creates a Design Battle with 48-hour voting period, or adds to existing active battle. Star rating selector (1-5) added to review UI.
+3. **Battle Resolution** — Expired voting battles auto-resolve on page load (60s refetch). Winner → `in_emporium` status + Crow Feather. Non-winners → back to `approved` (the "You Didn't Lose" mechanic). Submissions display the YDL card with Emporium/portfolio links.
+4. **Emporium Detail Modal + Purchase Flow** — Click any design card → full-size preview dialog with designer info, rating, usage stats, battle winner badge. "Use This Template" charges Credits with 83.3% to designer, 16.7% to platform. Commission button for bounty submissions. URL params supported (`?category=logo`, `?search=...`).
+5. **Crew Tables Page** (`/crew-tables`) — Browse open tables, create from 3 presets (New Business Starter, Coalition Brand, Event Launch) or custom roles. Join open seats. Tables auto-activate when minimum seats filled. Active tables show 3-stage checklist tracker (PREP/BUILD/DELIVER) with auto-advance. "My Tables" tab for personal tracking.
+6. **Storefront → Emporium Wiring** — Storefront Builder success screen "Create Crew Table" button now links to `/crew-tables?template=new_business_starter&title=...` with business name pre-filled. Emporium links already use correct `?category=` params.
+7. **Sidebar Navigation** — Added "Crew Tables" and "Design Emporium" to AppSidebar.tsx.
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `platform/supabase/migrations/20260322000018_design_pipeline.sql` | arena_submissions + crew_tables + crew_table_seats (idempotent) |
+| `platform/src/pages/DesignBattleArena.tsx` | Battle auto-trigger, resolution, STAMP star rating, YDL card |
+| `platform/src/pages/EmporiumTemplates.tsx` | Detail modal, purchase flow (83.3%), URL params |
+| `platform/src/pages/CrewTables.tsx` | NEW — browse, create, join, 3-stage tracker |
+| `platform/src/pages/tools/StorefrontBuilder.tsx` | Crew Table link updated from /bandwagon to /crew-tables |
+| `platform/src/App.tsx` | Added /crew-tables route |
+| `platform/src/components/AppSidebar.tsx` | Added Crew Tables + Design Emporium nav items |
+
+**Deployed:** lianabanyan.com (hosting:main) ✓ | Migration `20260322000018` pushed to Supabase ✓
+
+---
+
+### Session 88 Build — Ghost World: HexIsle Storefronts (March 23, 2026)
+**Innovation Count: 1,935 (unchanged — wiring session)**
+
+#### What Was Built:
+1. **Migration `20260323000019_ghost_world_hexisle.sql`** — Added `category` and `max_slots` columns to `ghost_world_islands`, `placed_by` and `placed_at` to `ghost_world_buildings`. Member self-place RLS policy. Seeded 4 starter islands (Founders Row, Maker Marina, Food Court, Service Harbor) via upsert.
+2. **HexGrid.tsx** (`src/components/ghost-world/`) — Full SVG hex renderer with axial coordinates, flat-top hexagons, 12-slot flower layout per island, building icons sized by order count (small/medium/large), empty slot dashed outlines, pop-up kiosk pulsing animation, React.memo on BuildingHex + IslandCluster, mouse pan/zoom + mobile pinch-to-zoom + swipe-to-pan via touch events, auto-fit-all on mount.
+3. **BuildingCard.tsx** — Slide-up popup on building click: storefront logo + name, island badge, size badge, star rating from menu_orders average, recent activity (last 3 anonymized orders), "Browse Menu" and "Drop Beacon" buttons (sign-in prompt for anon), click-outside-to-close.
+4. **IslandPanel.tsx** — Right-side panel (mobile: bottom sheet) on island background click: island name + description, slot progress bar, category breakdown, building mini-card list with click-through, "Place Your Storefront" button (visible for members with unplaced storefronts), "Create a Storefront First" fallback.
+5. **MapControls.tsx** — Floating top-right panel: zoom +/−, fit-all, search input (client-side filter with dimming + highlight), category dropdown (All/General/Maker/Food/Service), semi-transparent dark backdrop-blur styling, mobile collapse to hamburger.
+6. **GhostWorld.tsx REWRITE** — Full immersive hex map replaces old onboarding page. Dark slate-950 background, full viewport, "Ghost World — Explore the Islands" title overlay, hex skeleton loading animation, placement mode banner, AlertDialog confirm flow.
+7. **Place Storefront Flow** — URL `?place=true` auto-enters placement mode; green slot highlights on target island; click slot → confirm dialog → insert → toast → animate; edge cases handled (no storefront, already placed).
+8. **Navigation Wiring** — Sidebar "Ghost World" link updated to `/ghost-world`; StorefrontBuilder success screen gains "Place on Ghost World" card with `/ghost-world?place=true` link.
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `platform/supabase/migrations/20260323000019_ghost_world_hexisle.sql` | ALTER + seed + RLS |
+| `platform/src/pages/GhostWorld.tsx` | Immersive hex map page (REWRITTEN) |
+| `platform/src/components/ghost-world/HexGrid.tsx` | SVG hex renderer with pan/zoom/touch |
+| `platform/src/components/ghost-world/BuildingCard.tsx` | Building popup card |
+| `platform/src/components/ghost-world/IslandPanel.tsx` | Island detail panel (side/bottom) |
+| `platform/src/components/ghost-world/MapControls.tsx` | Floating zoom/search/filter controls |
+| `platform/src/components/AppSidebar.tsx` | Sidebar link → /ghost-world |
+| `platform/src/pages/tools/StorefrontBuilder.tsx` | "Place on Ghost World" CTA added |
+
+**Build:** Clean ✓ (zero errors)
+**Deployed:** PENDING — Firebase reauth needed (`firebase login --reauth`) then `firebase deploy --only hosting:main -P default`
+**Migration:** PENDING — `npx supabase db push --linked`
+
+---
+
 ## PENDING WORK (Next Session Priority Order)
 
 | # | Priority | Item | Notes |
@@ -2852,9 +3071,118 @@ The full "scan QR → order → pay → aggregate → deliver → earn passive i
 
 ---
 
+### Session 91 Build — The Front Door: Onboarding + Profile + Notifications (March 23, 2026)
+**Innovation Count: 1,936 (#1936: Margin Economics as SEC Defense)**
+
+8 tasks completed:
+
+1. **Migration 20260323000023** — `member_profiles` table (username, display_name, avatar, bio, location, tags, attribution, is_public) with RLS (public view, own-profile manage, admin). `notifications` table (type, title, body, link, read_at) with RLS + indexes. Username generation function. Auto-update trigger on `member_profiles.updated_at`.
+2. **Guided Discovery Wizard** (`/welcome`) — 4-screen card-based onboarding: interest selection (7 categories, multi-select), attribution tracking, personalized Treasure Map recommendations based on tag mapping, $5 membership pitch with dynamic innovation count. All selections persisted in `lb_discovery_state` localStorage.
+3. **$5 Membership Gate** (`/join`) — Focused payment page with benefits checklist, Stripe Checkout integration via existing `create-membership-checkout` edge function. Pre-redirect state marker for post-payment processing. Auth redirect if not logged in.
+4. **First Steps Dashboard** (`/first-steps`) — Post-signup guided view: assigned Treasure Maps with "Begin" buttons, member card preview with QR placeholder, context-aware quick actions (Storefront shown only for business/maker tags). Auto-redirect to `/dashboard` after 3 visits.
+5. **Member Profile Page** (`/member/:username`) — Public profile with avatar, display name, @username, location, member-since date, bio, colored tag badges. Tabbed activity sections: Treasure Maps (progress), Design Arena (submissions), Crew Tables (seats). Edit mode for own profile (inline fields + save). Empty sections hidden.
+6. **Notification Spine** — `NotificationBell` component (unread count badge, 60s polling, click-outside close). `NotificationPanel` dropdown (type-mapped icons with 9 notification types, relative timestamps, mark-as-read on click, mark-all-read button, empty state). `create-notification` edge function (system key auth, type validation, insert + return ID).
+7. **Funnel Wiring** — `/welcome` → `/join` → `/first-steps` → `/dashboard` linear flow. "GET STARTED" CTA button on Index.tsx landing. `/start`, `/begin`, `/onboarding` all redirect to `/welcome`. `/discover` redirects to `/welcome`. `/join` now routes to MembershipGate (was redirect to `/auth`).
+8. **Nav Updates** — NotificationBell in top utility bar (authenticated users, non-homepage). "My Profile" link added to sidebar. "Complete Your Profile" card on Dashboard (shows when profile incomplete, dismissible). Innovation count updated to 1,936.
+
+**Key Files:**
+
+| File | What |
+|------|------|
+| `platform/supabase/migrations/20260323000023_front_door.sql` | member_profiles + notifications + RLS |
+| `platform/src/pages/GuidedDiscovery.tsx` | 4-screen onboarding wizard |
+| `platform/src/pages/MembershipGate.tsx` | $5 Access Key payment page |
+| `platform/src/pages/FirstSteps.tsx` | Post-signup guided dashboard |
+| `platform/src/pages/MemberProfile.tsx` | Public profile + edit mode |
+| `platform/src/components/notifications/NotificationBell.tsx` | Bell icon + unread badge |
+| `platform/src/components/notifications/NotificationPanel.tsx` | Notification dropdown list |
+| `platform/supabase/functions/create-notification/index.ts` | Notification creation edge function |
+| `platform/src/App.tsx` | Routes + NotificationBell in AppShell |
+| `platform/src/pages/Index.tsx` | "GET STARTED" CTA button |
+| `platform/src/components/AppSidebar.tsx` | "My Profile" link |
+| `platform/src/pages/Dashboard.tsx` | "Complete Your Profile" card |
+| `platform/src/hooks/useCanonicalStats.ts` | Innovation count → 1,936 |
+
+**Build:** Clean ✓ (zero errors)
+**Deployed:** PENDING — `firebase deploy --only hosting:main -P default`
+**Migrations:** PENDING — `npx supabase db push --linked` (for 000023)
+**Edge Function:** PENDING — `npx supabase functions deploy create-notification`
+
+---
+
+### Session 90 Build — Congress.gov API: Live Bill Tracking (March 23, 2026)
+**Innovation Count: 1,935 (unchanged — wiring session)**
+
+8 tasks completed:
+
+1. **Migration 20260323000021** — Added `congress`, `bill_type`, `congress_url`, `sponsor_bioguide`, `policy_area`, `cosponsors_count`, `actions` JSONB, `last_synced_at`, `is_live` to `tracked_bills`. Created `bill_cosponsors` table with RLS. Added `terms`, `leadership` JSONB to `rep_cache`. Marked existing seeded bills as `is_live = false`.
+2. **Edge Function congress-api-sync** — 4 modes: `bills` (refresh tracked live bills), `members` (sync saved reps' sponsored/cosponsored legislation), `actions` (deep action timeline pull), `search` (on-demand Congress.gov search). Rate limit handling, partial error recovery.
+3. **pg_cron Jobs (migration 000022)** — Bills refresh every 6 hours, member bills sync daily 3 AM, action pull daily 2 AM.
+4. **"Your Reps' Bills" Section** — Joins through `bill_cosponsors` + `sponsor_bioguide` to show which bills the user's saved reps are sponsoring/cosponsoring, with role labels.
+5. **BillDetailDrawer.tsx** — Slide-out panel: full title, sponsor photo+info, cosponsors list, policy area, CRS summary, action timeline (vertical), Congress.gov link, track/untrack, "Write Your Rep About This" action.
+6. **BillSearch.tsx** — Debounced live search (300ms) calls edge function search mode. Results as cards with "Track This Bill" button (inserts into `tracked_bills` + `member_bill_tracking`).
+7. **Admin Sync Controls** — Admins see sync panel: "Sync Bills", "Sync Member Bills", "Sync Actions" buttons. Live/manual bill counts. Last sync timestamp.
+8. **Bill Number Normalizer** — `congressApi.ts` utility: `normalizeBillNumber("HR-2024")` → `{ congress: 119, billType: "hr", billNumber: 2024, display: "HR-2024" }`.
+
+**Key Files:**
+
+| File | What |
+|------|------|
+| `platform/supabase/migrations/20260323000021_congress_api.sql` | Schema additions + bill_cosponsors |
+| `platform/supabase/migrations/20260323000022_congress_cron.sql` | 3 pg_cron jobs |
+| `platform/supabase/functions/congress-api-sync/index.ts` | Edge function (4 modes) |
+| `platform/src/lib/congressApi.ts` | Bill number normalizer |
+| `platform/src/components/political/BillDetailDrawer.tsx` | Detail slide-out |
+| `platform/src/components/political/BillSearch.tsx` | Live search |
+| `platform/src/pages/PoliticalExpedition.tsx` | Reps' bills, drawer, search, admin wired in |
+
+**Build:** Clean ✓ (zero errors)
+**Deployed:** PENDING — `firebase deploy --only hosting:main -P default`
+**Migrations:** PENDING — `npx supabase db push --linked` (for 000021 + 000022)
+**Edge Function:** PENDING — `npx supabase functions deploy congress-api-sync`
+
+### Session 89 Build — Housing: Mission TWO (March 23, 2026)
+**Innovation Count: 1,935 (unchanged — wiring session)**
+
+8 tasks completed:
+
+1. **Migration 20260323000020** — 6 tables: `housing_properties`, `housing_contributions`, `housing_occupancy`, `housing_waterwheel`, `vacation_listings`, `vacation_bookings`. Full RLS. 3 seed properties, 1 vacation listing, 1 WaterWheel projection.
+2. **PropertyCard.tsx** — Type gradients (residential/commercial/vacation/garage), status badges (proposed/acquiring/owned/leased/listed), dual-use display, occupancy progress, WaterWheel multiplier badge, contribute CTA.
+3. **ContributionForm.tsx** — 4-step flow: type selection (6 types) → amount + currency + target property → review + WaterWheel impact estimate (×2.23) + terms → success celebration.
+4. **WaterWheelDashboard.tsx** — Animated revenue flow diagram (30/40/15/15 split), per-property stats with stacked bars, aggregate dashboard (4 stat cards), growth projection chart (recharts ComposedChart).
+5. **VacationNetwork.tsx** — Listing cards with amenities, priority tier badges, booking modal with date validation + conflict check + cost calculation.
+6. **Housing.tsx** — 4-tab page: Properties (filter/sort/search) | My Housing | Contribute | Housing Fund. Mission TWO banner with pill sequence: ONE ✅ → TWO ← → THREE ✅.
+7. **Nav Wiring** — Route `/housing` + aliases `/shelter`, `/mission-two`. Sidebar "Housing" link with Home icon.
+8. **Helm My Progress** — Treasure map progression card on TheHelm: active maps with level labels (Starter/Apprentice/Journeyman/Network), progress bars, continue links. K81 gap fix.
+
+**Key Files:**
+
+| File | What |
+|------|------|
+| `platform/supabase/migrations/20260323000020_housing.sql` | 6 tables + RLS + seed |
+| `platform/src/pages/Housing.tsx` | 4-tab housing hub |
+| `platform/src/components/housing/PropertyCard.tsx` | Property card |
+| `platform/src/components/housing/ContributionForm.tsx` | Contribution flow |
+| `platform/src/components/housing/WaterWheelDashboard.tsx` | WaterWheel viz |
+| `platform/src/components/housing/VacationNetwork.tsx` | Vacation network |
+| `platform/src/pages/TheHelm.tsx` | My Progress card added |
+| `platform/src/App.tsx` | /housing route + aliases |
+
+---
+
 ## LATEST COMMITS
 
 ```
+PENDING  Session 91: The Front Door — Guided Discovery wizard, $5 Membership Gate, First Steps dashboard, Member Profile page, Notification spine (bell+panel+edge fn), funnel wiring, nav updates, innovation count 1936
+PENDING  Session 90: Congress API — Live bill tracking, edge function (4 modes), 3 pg_cron jobs, BillDetailDrawer, BillSearch, admin sync, reps' bills section, bill normalizer
+PENDING  Session 89: Housing Mission TWO — 6 tables, Housing hub (4 tabs), PropertyCard, ContributionForm, WaterWheelDashboard, VacationNetwork, Helm My Progress
+PENDING  Session 88: Ghost World HexIsle — SVG hex map, 4 components (HexGrid, BuildingCard, IslandPanel, MapControls), place flow, migration 000019
+PENDING  Session 87: Design Pipeline — Arena battle auto-trigger, Emporium detail+purchase, Crew Tables page, Storefront wiring, migration 000018
+PENDING  Session 84: MoneyPenny AI Intelligence Layer — moneypenny-ai-draft edge function, Q&A AI drafting, Social AI drafting + bulk, intake AI classification, AI briefing narrative
+PENDING  Session 83: Crew Call real dispatch + bounty backend — bounties table, bounty claims, Coverage Minutes DB wiring, crew→OOB auto-dispatch, Design Battle vote deduction
+PENDING  Session 82: Beacon + Calendar wiring — calendarPlugs registry, beacon→calendar, wildfire→calendar, commerce→calendar edge function, Star Chamber→defense calendar, Helm Today's Schedule card
+PENDING  Session 81: Treasure Map progression funnel — DB tables, 55 quiz questions, phase tracker, knowledge quiz, Helm progress, first-store detection
+PENDING  Session 80: Commerce earn loop + Star Chamber mutual LLM fallback (Claude <-> Perplexity)
 b7e133c Commerce Engine Phase 1: Storefront Builder, Menu Page with cart + Stripe checkout, innovation count 1856
 402968a Knight 67: SEC language cleanup (15 fixes across 10 files), RLS hardening (18 tables), stale 1810 to 1828
 0dd0221 Knight 66: Subscriptions page, coalition system, innovation count 1828, Cephas deploy
@@ -2946,13 +3274,1426 @@ firebase login --reauth
 
 ## SESSION START CHECKLIST (for next Knight)
 
-1. Read this file (`CONTEXT_MANAGEMENT/MILESTONE_HANDOFF_MARCH_2026.md`)
-2. Read `CONTEXT_MANAGEMENT/01_MASTER_CONTEXT.md`
-3. Read `CONTEXT_MANAGEMENT/04_UNIFIED_AGENT_SYNC.md`
-4. Run `firebase login --reauth` then deploy both sites (see Deployment Commands)
-5. Check `BISHOP_DROPZONE/` for any new task prompts
-6. Check if Bishop completed the full-spec provisional PDF for USPTO filing
-7. Resume from the Pending Work table above
+**NEW PROTOCOL -- Use MoneyPenny / Librarian MCP:**
+
+1. Call `brief_me("description of this session's work")` -- returns everything you need in ~600 words
+2. Call `moneypenny_checklist("specific task")` -- validates against architectural rules
+3. Check the KNIGHT_DROPZONE for task prompts (K101, K102, K103 are queued)
+4. Do the work (max 3 features per session)
+5. Call `moneypenny_debrief(session_id, summary, ...)` at session end
+
+**Fallback** (if Librarian unavailable): Read this file + `01_MASTER_CONTEXT.md` + `04_UNIFIED_AGENT_SYNC.md`
+
+To rebuild the Librarian index: `cd librarian-mcp; npm run rebuild`
+
+---
+
+## SESSION END / HANDOFF: Knight Session 97-100 (MoneyPenny / Librarian Build)
+
+**Date:** March 25, 2026
+**Agent:** Knight (Claude Opus 4.6 in Cursor)
+**Session Scope:** Built the Librarian MCP server and MoneyPenny Smart Router
+
+### What Was Built
+
+**The Librarian MCP Server** (`librarian-mcp/`)
+- 11 parsers indexing the entire platform:
+  - SQL migrations (446 tables, 412 migrations)
+  - Edge functions (119 functions)
+  - React pages (348 pages)
+  - React components/hooks/libs (713 total)
+  - Cephas content (419 entries across 44 sections)
+  - Full-content concepts (369 concepts, 466K words, 970 keywords)
+  - Context management (18 sessions)
+  - BISHOP chats (.md + .docx + .rtf) (130 chats, 7.8M words)
+  - Dropzones KNIGHT/BISHOP/ROOK/PAWN (662 tasks, 1.9M words)
+  - Cursor agent transcripts (66 sessions, 8K+ messages)
+  - Domain mapping (22 domains)
+- 20 MCP tools including:
+  - `brief_me(task)` -- MoneyPenny Smart Router, returns task-scoped context in ~600 words
+  - `moneypenny_checklist(task)` -- pre-implementation validation
+  - `moneypenny_debrief(session_id, ...)` -- session logging + handoff
+  - `get_architecture(concept)` -- deep Cephas content retrieval (brief/full modes)
+  - `check_consistency(proposal)` -- 20 architectural rules checked
+  - `search_knowledge(query)` -- full-text search across all 13 indexes
+  - Plus: get_system_overview, query_domain, get_schema, list_edge_functions, get_page_info, get_canonical_numbers, get_initiative, get_session_context, get_deploy_state, update_session, get_bishop_chat, get_dropzone_task, get_transcript, get_component
+- MCP configuration: `.cursor/mcp.json` connects Cursor to the Librarian
+- Budget enforcement: brief mode on get_architecture, capped search results, list truncation
+
+### Files Created/Modified
+- `librarian-mcp/` -- entire directory (package.json, tsconfig.json, src/, index/)
+- `.cursor/mcp.json` -- MCP server configuration
+- `.cursor/rules/liana-banyan-context.mdc` -- updated to use MoneyPenny as primary context loader
+
+### The Grand Audit Plan (Queued)
+
+Based on Librarian audit findings, 6 task prompts have been queued:
+
+| Prompt | Agent | Purpose |
+|--------|-------|---------|
+| `KNIGHT_DROPZONE/PROMPT_KNIGHT_SESSION_101_PORTAL_SPLIT.md` | Knight | Create Upekrithen portal, portal-specific landings, fix authenticated homepage |
+| `KNIGHT_DROPZONE/PROMPT_KNIGHT_SESSION_102_ONBOARDING_FIXES.md` | Knight | Wire FirstSteps, fix duplicate routes, chain WildFire, per-portal onboarding |
+| `KNIGHT_DROPZONE/PROMPT_KNIGHT_SESSION_103_DOMAIN_GAPS.md` | Knight | Close implementation gaps (housing/beacon/crew edges, notification UI) |
+| `BISHOP_DROPZONE/PROMPT_BISHOP_POLLINATE_1_PATENT_THRESH.md` | Bishop | Thresh all new innovations for provisional patent filing |
+| `BISHOP_DROPZONE/PROMPT_BISHOP_POLLINATE_2_PORTAL_CONTENT.md` | Bishop | Portal-specific marketing copy + Cephas documentation |
+| `PAWN_DROPZONE/PROMPT_PAWN_RESEARCH_1_UX_AUDIT.md` | Pawn | UX audit + competitive analysis for portal onboarding |
+
+### Key Findings from Librarian Audit
+
+- 22 domains mapped with uneven maturity (6 strong, 8 moderate, 8 thin)
+- 6 portals exist via detectPortal() but 5 are thin shells
+- Index.tsx is 4000+ lines, serves same page to auth/unauth users
+- FirstSteps exists but is not wired into post-checkout flow
+- /treasure-map registered twice in App.tsx
+- WildFire tours exist but aren't chained into onboarding
+- Innovation count: 1,938 (Librarian + MoneyPenny innovations not yet counted)
+
+### Pending Work
+- ~~K101: Portal split + Upekrithen~~ DONE (deployed Mar 25 2026)
+- ~~K102: Onboarding flow fixes~~ DONE (deployed Mar 25 2026)
+- ~~K103: Domain gap closure~~ DONE (deployed Mar 25 2026)
+- B-P1: Patent pollination
+- B-P2: Portal content
+- P-R1: UX research
+
+---
+
+## Mar 25, 2026 — K101/K102/K103 Completion + DSS Cleanup
+
+### What Was Built (K101–K103)
+- **K101 Portal Split:** Created Upekrithen portal (7th portal), portal-specific landing pages for Business/Nonprofit/Network, fixed authenticated homepage to show KeepView by default, added all 8 Firebase hosting targets.
+- **K102 Onboarding Fixes:** Wired GuidedDiscovery → FirstSteps data flow, integrated WildFire tours into onboarding, added per-portal interest card filtering, fixed WildFire completion redirect to /join.
+- **K103 Domain Gaps:** Created 4 Supabase Edge Functions (housing-manage, treasure-map-progress, crew-manage, beacon-track), confirmed notifications already wired in AppShell.
+- All deployed to production (8 hosting targets + 4 edge functions + Cephas).
+
+### DSS / the2ndsecond Cleanup
+- **`dss-the2ndsecond/`** folder cleaned: removed dead `node_modules/`, `dist/`, `.firebase/` (no source code existed — legacy artifact from before portal architecture).
+- Preserved `FullSteamAhead2.png` and `FullSteamDeckCard.png` → moved to `platform/public/dss/`.
+- **the2ndsecond.com** runs entirely from the platform SPA via `DSSApp.tsx` portal detection. Deployed from `platform/dist/` to `hosting:the2ndsecond` target.
+- Updated `.cursor/rules/liana-banyan-context.mdc`: fixed all deploy commands, Firebase Project Mapping table now shows all 8 portal targets with correct source folders, warnings section clarified.
+- Added `dss-the2ndsecond/README.md` documenting the legacy status and future Manufacturing/Factory Portal vision.
+
+### Files Modified
+- `.cursor/rules/liana-banyan-context.mdc` — deploy commands, file locations table, project mapping, warnings
+- `dss-the2ndsecond/README.md` — created (architecture documentation)
+- `platform/public/dss/FullSteamAhead2.png` — preserved from legacy folder
+- `platform/public/dss/FullSteamDeckCard.png` — preserved from legacy folder
+
+### Next Up
+- ~~B-P1: Patent pollination (Bishop)~~ DONE (Bishop Librarian session, Mar 25 2026)
+- B-P2: Portal content (Bishop)
+- P-R1: UX research (Pawn)
+- DSS → Manufacturing/Factory Portal evolution (future Knight session — will include HexIsle physical pieces, product photography, maker resources)
+
+---
+
+## Mar 25, 2026 — K104: Post-Pollinate Wiring
+
+### What Was Done
+- **Canonical stats verified:** `useCanonicalStats.ts` already had `innovationCount: 1979`, `patentApplications: 9`, `crownJewels: 127`, `patentClaims: 1456` (Bishop updated during pollination session).
+- **Production systems added:** New `productionSystems: 21` field added to `CanonicalStats` interface, DEFAULTS, and KEY_MAP in `useCanonicalStats.ts`. Wired into `IPPortfolioPage.tsx` stat grid.
+- **Cursor rules updated:** Critical Numbers section now reflects post-provisional-#9 counts (1,979 innovations, 9 provisionals, 1,456 claims, 127 Crown Jewels, 21 production systems).
+- **Platform deployed:** All 8 hosting targets (main, dotcom, biz, org, net, the2ndsecond, hexisle, upekrithen) — 707 files each.
+- **Cephas deployed:** Bishop's `architecture/librarian-mcp.md` page now live at cephas.lianabanyan.com — 1,874 files, 1,287 pages.
+- **PayoutsPage verified:** `/dashboard/payouts` correctly gate-keeps behind `ProtectedRoute` (redirects to `/auth`). Stripe Connect flow intact — no regressions from K101-K103.
+
+### Files Modified
+- `platform/src/hooks/useCanonicalStats.ts` — added `productionSystems` field (interface, DEFAULTS, KEY_MAP)
+- `platform/src/pages/IPPortfolioPage.tsx` — added Production Systems stat card
+- `.cursor/rules/liana-banyan-context.mdc` — updated Critical Numbers section
+
+---
+
+## Mar 25, 2026 — K105: Helm Command Buttons
+
+### What Was Built
+- **Crown Jewels Audit Panel:** Button on Upekrithen dashboard that queries `innovation_log` live — shows total innovations/claims/provisionals, breakdown by category (GROUP BY), breakdown by patent bag (GROUP BY), and lists all flagship innovations from Bags 1 & 2 (Core Platform). Crown Jewels count (127) pulled from `useCanonicalStats`.
+- **Patent Portfolio Valuation Panel:** Calculates portfolio value using industry benchmarks ($450/claim conservative, $80,000/claim high). Shows total claims (1,456), filing cost ($65 × 9 apps = $585), personal investment ($525,000 over 9 years), ROI multiples (conservative ~1.2×, high ~221×), and per-application breakdown with value ranges.
+- **Patent Bags Summary Panel:** Visual display of all 9 filed provisional applications — application number, filing date, innovation range, claim count. Numbered bag icons with the "balanced pouches" metaphor.
+- **Platform Stats live-wired:** Upekrithen dashboard stats card now reads from `useCanonicalStats` hook instead of hardcoded values (1,979 innovations, 16 initiatives, $5/yr).
+
+All three panels are inline-expanding on the Upekrithen dashboard — tap button, see results. No navigation away.
+
+### Files Modified
+- `platform/src/pages/UpekrithenLanding.tsx` — added Helm Command Center section with 3 sub-components (CrownJewelsPanel, PortfolioValuationPanel, PatentBagsPanel), live canonical stats, toggle-expand UX
+
+### Deployed
+All 8 hosting targets updated.
+
+---
+
+## Mar 25, 2026 — K106: Calendar/Beacon/Commerce Infrastructure Enhancements
+
+### What Was Built
+
+**D1: Live Countdown Timer on MenuPage**
+- Added `useCountdown` hook that computes real-time countdown to storefront's `order_cutoff_time`
+- Countdown displayed inline next to cutoff time in menu header (e.g. "Order by Midnight (3h 42m)")
+- Prominent amber banner appears when within 60 minutes of cutoff: "Order cutoff in Xm Xs for tomorrow's delivery"
+
+**D2: Enhanced BeaconBiteNudge — Interactive Denken Tutorial**
+- Rebuilt `BeaconBiteNudge` from simple speech bubble into 5-step interactive tutorial:
+  - Step 0 (peek): Denken avatar appears with "Want to save this? Drop a beacon."
+  - Step 1 (dropped): User taps golden beacon → card slides toward Denken → Denken glows gold
+  - Step 2 (try-it): "Now you try! Click Denken to retrieve."
+  - Step 3 (retrieved): Card slides back, "Perfect!"
+  - Step 4 (done): [OK Let's Roll] / [Show Me Again]
+- Golden glow ring animation around Denken during beacon interaction
+- Clickable overlay on Denken FAB during try-it step
+
+**D3: Treasure Maps — Per-Card Beacon + Demand Signal**
+- Added `BeaconDropButton` (compact) to each individual treasure map card CTA row
+- Added `useDemandSignals` hook that queries `earmarked_credits` table (gracefully returns nothing when table doesn't exist yet)
+- Demand signal display: "$X in earmarked Credits waiting for the first [category] in your area" — only shows when data exists
+
+**D4: Auto-Qualification Database Trigger for Onboarding Credits**
+- Created migration `20260325000001_onboarding_credit_auto_qualify.sql`
+- Trigger `trg_onboarding_credit_order_tick` fires on `menu_orders` INSERT/UPDATE of `stripe_payment_status`
+- When payment becomes 'paid': sets `first_order_date` if null, increments `orders_count`
+- Auto-qualifies when `orders_count >= 10` AND `(CURRENT_DATE - first_order_date) >= 30`
+- Migration pushed to production Supabase
+
+### Files Modified
+- `platform/src/pages/MenuPage.tsx` — added `useCountdown` hook, countdown display, urgency banner
+- `platform/src/components/BeaconBiteNudge.tsx` — full rewrite: 5-step interactive Denken tutorial
+- `platform/src/pages/TreasureMaps.tsx` — per-card BeaconDropButton, `useDemandSignals` hook, demand signal display
+- `platform/supabase/migrations/20260325000001_onboarding_credit_auto_qualify.sql` — auto-qualification trigger
+
+### Deployed
+- All 8 hosting targets: 707 files each
+- Supabase migration: `20260325000001_onboarding_credit_auto_qualify.sql` applied
+
+### Canonical Stats (unchanged)
+1,979 innovations | 1,456 claims | 9 provisionals | 127 Crown Jewels | 21 production systems
+
+### Next Up
+- ~~K107: Product Showcase + SlottedTop + Kickstarter Pipeline~~ DONE (Mar 26 2026)
+- ~~K108: DSS Portal: The Forge + STL Vault + SlottedTop Showcase~~ DONE (Mar 26 2026)
+- ~~K109: Cross-Portal Commerce Loop + .biz Bounties~~ DONE (Mar 26 2026)
+- K110: .org Charitable Features + Mission ONE
+- K111: .net Network Features + Supply Chain
+- K112: Wildfire Beacon Tours + Polish + Final Deploy
+
+---
+
+## Mar 26, 2026 — K107/K108/K109 Sprint: All Portals Operational
+
+### What Was Built
+
+**K107: Product Catalog + Makers + Production Pipeline**
+- Migration `20260326000001_product_catalog.sql`: 4 new tables (`catalog_products`, `catalog_product_backers`, `makers`, `production_orders`) with full RLS
+- 13 seed products (SlottedTop + 12 Kickstarter HexIsle items)
+- 6 new pages: `ProductCatalog.tsx` (`/products`), `CatalogProductDetail.tsx` (`/products/:slug`), `MakerDirectory.tsx` (`/makers`), `MakerProfile.tsx` (`/makers/:slug`), `MakerRegistration.tsx` (`/register-maker`), `ProductionOrderFlow.tsx` (`/production/new`)
+- Navigation: "Products" and "Makers" added to marketplace sidebar in `UnifiedNavigation.tsx`
+
+**K108: DSS Portal — The Forge + STL Vault + SlottedTop + Test Pilot**
+- Migration `20260326000002_stl_vault.sql`: 2 new tables (`stl_files`, `test_reports`) with full RLS
+- 3 new pages: `STLVault.tsx` (`/stl-vault`), `SlottedTopShowcase.tsx` (`/slottedtop`), `TestPilotDashboard.tsx` (`/test-pilot`)
+- `DSSApp.tsx` updated: 8 new routes (STL Vault, SlottedTop, Test Pilot, Products, Makers on DSS portal)
+- `The2ndSecondPortal.tsx`: "Register My Printer" now navigates to real `MakerRegistration`, "Submit Report" goes to `TestPilotDashboard`
+
+**K109: Cross-Portal Commerce Loop**
+- `CrossPortalNav.tsx`: Portal switcher bar (Marketplace / Forge / Business / Network / Non-Profit) — shows for authenticated users
+- `MakerDashboard.tsx` (`/dashboard/maker` on .biz): Incoming orders, active production, completed orders, earnings — full Accept/Decline/Advance workflow
+- `NetworkManifest.tsx` (`/manifests` on .net): Replaced "coming soon" placeholder with real production order manifest view
+- `UnifiedNavigation.tsx`: Added "Maker Dashboard" to business portal, "Manifests" to network portal
+
+### Cross-Portal Commerce Flow (now operational)
+```
+lianabanyan.com/products → browse product catalog
+  → /products/:slug → "Hire a Maker" → /production/new
+    → selects maker → creates production_order
+      → lianabanyan.biz/dashboard/maker → maker accepts/declines
+        → maker advances: accepted → printing → QC → shipped
+          → lianabanyan.net/manifests → shipping manifest tracks delivery
+```
+
+### Files Created
+- `platform/supabase/migrations/20260326000001_product_catalog.sql`
+- `platform/supabase/migrations/20260326000002_stl_vault.sql`
+- `platform/src/pages/ProductCatalog.tsx`
+- `platform/src/pages/CatalogProductDetail.tsx`
+- `platform/src/pages/MakerDirectory.tsx`
+- `platform/src/pages/MakerProfile.tsx`
+- `platform/src/pages/MakerRegistration.tsx`
+- `platform/src/pages/ProductionOrderFlow.tsx`
+- `platform/src/pages/STLVault.tsx`
+- `platform/src/pages/SlottedTopShowcase.tsx`
+- `platform/src/pages/TestPilotDashboard.tsx`
+- `platform/src/pages/MakerDashboard.tsx`
+- `platform/src/pages/NetworkManifest.tsx`
+- `platform/src/components/CrossPortalNav.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — 6 new lazy imports + 6 routes
+- `platform/src/DSSApp.tsx` — 8 new lazy imports + 8 routes
+- `platform/src/BusinessApp.tsx` — MakerDashboard lazy import + route
+- `platform/src/NetworkApp.tsx` — NetworkManifest lazy import, replaced placeholder
+- `platform/src/components/UnifiedNavigation.tsx` — Products, Makers, Maker Dashboard, Manifests nav items + Hammer icon import
+- `platform/src/pages/The2ndSecondPortal.tsx` — wired register/report buttons to real pages
+
+### Deployed
+All 8 hosting targets: 718 files each. Both migrations applied to production Supabase.
+
+### Canonical Stats
+1,979 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 21 production systems
+
+### Database Tables Added This Sprint
+| Table | Columns | Purpose |
+|-------|---------|---------|
+| catalog_products | 28 | Product catalog with crowdfunding + production tracking |
+| catalog_product_backers | 7 | Crowdfunding pledge records |
+| makers | 18 | Maker directory with capabilities + equipment |
+| production_orders | 11 | Creator→Maker production pipeline |
+| stl_files | 17 | CAD file vault with versioning |
+| test_reports | 13 | Print test results with quorum aggregation |
+
+---
+
+## Mar 26, 2026 — K114: Subscription Engine + Coalition Formation + Hybrid Discount
+
+### What Was Built
+
+**Deliverable 1: Subscription Plans Page (`/subscribe`)**
+- Migration `20260326000005_subscriptions_engine.sql`: `platform_tier_subscriptions` table with RLS
+- `SubscribePage.tsx`: Three-tier subscription system (Explorer free / Member $10/mo / Builder $25/mo)
+- Feature comparison grid, upgrade/downgrade flow, economic explainer
+- Stripe integration deferred — plan selection is recorded immediately
+
+**Deliverable 2: Coalition Formation + Directory**
+- Migration `20260326000006_coalitions_engine.sql`: `buying_coalitions` + `buying_coalition_members` tables with RLS + auto-stats trigger
+- `CoalitionDirectory.tsx` (`/coalitions`): Searchable, filterable card grid with discount scale display
+- `CoalitionCreate.tsx` (`/coalitions/create`): Builder-tier gated creation form with slug auto-generation
+- `CoalitionDetail.tsx` (`/coalitions/:slug`): Member list, discount progress visualization, join/leave actions, treasury display
+
+**Deliverable 3: Hybrid Discount Display**
+- `useCoalitionDiscount.ts` hook: Checks user's coalition memberships, returns highest applicable discount
+- `ProductCatalog.tsx`: Green "Coalition: Save X%" badge on product cards for qualifying users
+- `CatalogProductDetail.tsx`: Discount badge + tooltip explaining coalition economics on product detail page
+- Discount calculated from platform margin (Cost+20%), creator always gets full price
+
+### Discount Tier Scale
+| Coalition Members | Discount |
+|-------------------|----------|
+| 5-9               | 5%       |
+| 10-24             | 10%      |
+| 25-49             | 15%      |
+| 50+               | 20% (cap)|
+
+### Files Created
+- `platform/supabase/migrations/20260326000005_subscriptions_engine.sql`
+- `platform/supabase/migrations/20260326000006_coalitions_engine.sql`
+- `platform/src/pages/SubscribePage.tsx`
+- `platform/src/pages/CoalitionDirectory.tsx`
+- `platform/src/pages/CoalitionCreate.tsx`
+- `platform/src/pages/CoalitionDetail.tsx`
+- `platform/src/hooks/useCoalitionDiscount.ts`
+
+### Files Modified
+- `platform/src/App.tsx` — 4 new lazy imports + 4 routes (/subscribe, /coalitions, /coalitions/create, /coalitions/:slug)
+- `platform/src/pages/ProductCatalog.tsx` — coalition discount badge on product cards
+- `platform/src/pages/CatalogProductDetail.tsx` — coalition discount badge + tooltip on detail page
+- `platform/src/components/UnifiedNavigation.tsx` — "Subscribe" + "Coalitions" nav items added to marketplace portal
+
+### Database Tables Added
+| Table | Purpose |
+|-------|---------|
+| platform_tier_subscriptions | Platform membership tiers (Explorer/Member/Builder) |
+| buying_coalitions | Cooperative buying groups with auto-discount tiers |
+| buying_coalition_members | Coalition membership with auto-stats trigger |
+
+### Deployed
+All 8 hosting targets: 729 files each. Both migrations applied to production Supabase.
+
+### Canonical Stats
+1,979 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 21 production systems
+
+---
+
+## Mar 26, 2026 — K115: Ghost World Storefront Map + Calendar Infrastructure
+
+### What Was Built
+
+**Deliverable 1: Ghost World Map Page (`/ghost-world`)**
+- Rewrote `GhostWorldMap.tsx`: storefronts rendered as hex tiles on a flat grid
+- Queries `storefronts` table directly — each storefront gets its own hex tile
+- Category-coloured hexes with emoji icons (food, service, retail, creative, maker, digital, education)
+- Click hex → popup card → "Visit Storefront" navigates to `/menu/{slug}`
+- Unclaimed hexes (12) surround claimed ones with "Start Yours" CTA
+- Spiral hex placement algorithm for natural expanding layout
+- Pan/zoom with mouse wheel + drag, fit-all button, search + category filter
+- `/ghost-world` route now points to GhostWorldMap (islands/buildings version stays at `/free-explore`)
+
+**Deliverable 2: Calendar Page Enhancement (`/calendar`)**
+- Added `platform` and `crew` plug types to `calendarPlugs.ts` and `calendarService.ts`
+- Calendar sidebar now shows two sections: "Calendars" (legacy personal/family/business/etc.) and "Sources" (K115 plug types)
+- Role-based default source activation: all users see Platform; storefront owners see Storefront; coalition/crew members see those sources
+- FullCalendar renders events from both legacy calendar types and new plug sources
+- Deduplication: events appearing in both legacy and plug queries shown once
+
+**Deliverable 3: Calendar Plug Interface (Innovation #1868)**
+- `useCalendarSources` hook in `platform/src/hooks/useCalendarSources.ts`
+- `CalendarSourceType` enum: `'storefront' | 'coalition' | 'platform' | 'route' | 'crew'`
+- `CalendarPlugEvent` standard schema: `{ id, title, start, end, sourceType, sourceId, metadata }`
+- `CALENDAR_SOURCE_REGISTRY` array with full descriptors (label, emoji, color, description, editable, defaultForRoles)
+- `SOURCE_MAP` lookup for O(1) source descriptor access
+- Role detection via `detectUserRoles()` — checks storefronts, coalition memberships, crew memberships
+- Per-source fetchers hit `calendar_events` table filtered by `calendar_type` matching the source
+- `defaultSources` computed from user roles for automatic sidebar activation
+
+### Files Created
+- `platform/src/hooks/useCalendarSources.ts`
+
+### Files Modified
+- `platform/src/pages/GhostWorldMap.tsx` — full rewrite (storefront-as-hexes model)
+- `platform/src/pages/Calendar.tsx` — integrated plug interface, role-based defaults, dual sidebar sections
+- `platform/src/lib/calendarPlugs.ts` — added `platform` + `crew` plug types
+- `platform/src/lib/calendarService.ts` — extended `CalendarType` with `platform`, `crew`, `storefront`
+- `platform/src/App.tsx` — `/ghost-world` route now uses GhostWorldMap
+
+### Deployed
+All 8 hosting targets: 729 files each.
+
+### Canonical Stats
+1,979 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 21 production systems
+
+---
+
+## K119: One-Click Social Import + Bridge-to-Local (March 26, 2026)
+
+**Session:** KNIGHT 119 | **Innovations:** #1944 One-Click Social Import, #1947 Bridge-to-Local
+
+### What Was Built
+
+**Deliverable 1: Social Import Data Model**
+- Migration `20260326000014_social_import.sql` — creates `social_imports` and `creator_bridges` tables
+- `social_imports`: tracks URL imports from Reddit/Etsy/Instagram/Discord/Twitter/TikTok/website with status lifecycle (imported → draft → converted)
+- `creator_bridges`: external service connections (Etsy, Shopify, Square, Stripe, PayPal, website, Instagram Shop, Facebook Marketplace) with UNIQUE per user+service
+- RLS: users manage own records, bridges publicly visible
+
+**Deliverable 2: Social Import Flow**
+- `SocialImportPage` at `/import` — paste URL, auto-extract via Edge Function, convert to Turn-Key project
+- `ImportPreview` — shows extracted title/description/images with platform badge and source link
+- `ImportToProjectWizard` — 2-step wizard: confirm details → set category/slots/backing → launch project
+- `BookmarkletInstructions` — draggable bookmarklet for one-click import from any browser page
+- `useExtractFromUrl` / `useCreateImport` / `useConvertImport` / `useMyImports` hooks
+- Edge Function `extract-url-metadata` — fetches URL, extracts OpenGraph/meta tags, detects platform
+
+**Deliverable 3: Bridge-to-Local Setup**
+- `ConnectedServices` dashboard panel at `/dashboard/bridges` — manage external service connections
+- `AddBridgeModal` — create/edit service connections with type, URL, display name, primary toggle
+- `BridgeLinks` — display component for project pages showing "Also available on: Etsy | Website | Square"
+- `useCreatorBridges(userId)` / `useManageBridge()` hooks with full CRUD + verify
+
+**Deliverable 4: Integration Points**
+- `BridgeLinks` added to `TurnKeyProjectDetail.tsx` below project description — outbound links to creator's other shops
+- `/import?url=` query param auto-extracts on page load (bookmarklet flow)
+- Wizard pre-fills from extracted metadata and creates both import record + Turn-Key project
+
+**Deliverable 5: Navigation + Wiring**
+- Lazy imports in `App.tsx`: `SocialImportPage`, `ConnectedServicesPage`
+- Routes: `/import` (ProtectedRoute), `/dashboard/bridges` (ProtectedRoute)
+- `UnifiedNavigation`: "Import a Product" (Download icon) + "Connected Services" (Link2 icon) in marketplace nav
+
+### Files Created
+- `platform/supabase/migrations/20260326000014_social_import.sql`
+- `platform/supabase/functions/extract-url-metadata/index.ts`
+- `platform/src/hooks/useSocialImport.ts`
+- `platform/src/hooks/useCreatorBridges.ts`
+- `platform/src/components/social-import/ImportPreview.tsx`
+- `platform/src/components/social-import/ImportToProjectWizard.tsx`
+- `platform/src/components/social-import/BookmarkletInstructions.tsx`
+- `platform/src/components/social-import/index.ts`
+- `platform/src/components/bridge/ConnectedServices.tsx`
+- `platform/src/components/bridge/AddBridgeModal.tsx`
+- `platform/src/components/bridge/BridgeLinks.tsx`
+- `platform/src/components/bridge/index.ts`
+- `platform/src/pages/SocialImportPage.tsx`
+- `platform/src/pages/ConnectedServicesPage.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — K119 lazy imports + routes
+- `platform/src/components/UnifiedNavigation.tsx` — 2 new nav items (Download, Link2 icons)
+- `platform/src/components/turnkey/TurnKeyProjectDetail.tsx` — BridgeLinks integration
+
+### Deployed
+- All 8 Firebase hosting targets: 748 files each
+- Edge Function `extract-url-metadata` deployed to Supabase
+- Migration `20260326000014_social_import.sql` applied to remote
+
+### Canonical Stats
+1,989 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 22 production systems
+
+---
+
+## K120: Capstone Contest Infrastructure + Stripe Connect Foundation
+**Date:** March 26, 2026
+**Session:** KNIGHT 120
+
+### What Was Built
+
+**Deliverable 1: Contest Infrastructure**
+- Migration `20260326000015_contests.sql`: `platform_contests`, `contest_entries`, `contest_votes` tables with RLS + seeded Capstone Terrain Design Contest
+- Hooks: `useContests()`, `useContest(slug)`, `useContestEntries()`, `useUserContestVotes()`, `useVoteEntry()`, `useSubmitEntry()`, `getContestPhase()`
+- Components (6): `ContestCard`, `ContestTimeline`, `ContestVoteButton`, `ContestEntryGallery`, `ContestLeaderboard`, `ContestEntryForm`
+- Pages (3): `ContestDirectory` (/contests), `ContestDetailPage` (/contests/:slug), `ContestEntryPage` (/contests/:slug/enter)
+- Contest entries ARE Turn-Key projects; votes ARE demand signals; every contestant is onboarded
+
+**Deliverable 2: Stripe Connect Foundation**
+- Migration `20260326000016_credit_purchases.sql`: `credit_purchases` table for tracking purchases
+- Note: `member_connect_accounts` and `member_payouts` already existed from K98
+- Edge Functions (4): `create-connect-account`, `connect-onboarding-refresh`, `request-payout`, `stripe-webhook`
+- Stripe webhook handles: `account.updated`, `payment_intent.succeeded`, `transfer.created`, `payout.paid`
+- Hooks: `useCreditBalance()`, `usePurchaseHistory()`, `useBuyCredits()`
+- Page: `BuyCreditsPage` (/buy-credits) — three credit packages ($10/50/100) with purchase history
+- `/dashboard/payments` routes to existing PayoutsPage (Stripe Connect onboarding + cash out)
+
+**Deliverable 3: Navigation + Wiring**
+- `App.tsx`: Lazy imports + 5 new routes (contests, contest detail, contest entry, buy-credits, dashboard/payments)
+- `UnifiedNavigation`: "Contests" (Trophy icon) + "Buy Credits" (Coins icon) in marketplace nav
+- Canonical stats already at target: 2,000 innovations | 130 Crown Jewels | 22 production systems
+
+### Files Created
+- `platform/supabase/migrations/20260326000015_contests.sql`
+- `platform/supabase/migrations/20260326000016_credit_purchases.sql`
+- `platform/src/hooks/useContests.ts`
+- `platform/src/hooks/useBuyCredits.ts`
+- `platform/src/components/contest/ContestCard.tsx`
+- `platform/src/components/contest/ContestTimeline.tsx`
+- `platform/src/components/contest/ContestVoteButton.tsx`
+- `platform/src/components/contest/ContestEntryGallery.tsx`
+- `platform/src/components/contest/ContestLeaderboard.tsx`
+- `platform/src/components/contest/ContestEntryForm.tsx`
+- `platform/src/components/contest/index.ts`
+- `platform/src/pages/ContestDirectory.tsx`
+- `platform/src/pages/ContestDetailPage.tsx`
+- `platform/src/pages/ContestEntryPage.tsx`
+- `platform/src/pages/BuyCreditsPage.tsx`
+- `platform/supabase/functions/create-connect-account/index.ts`
+- `platform/supabase/functions/connect-onboarding-refresh/index.ts`
+- `platform/supabase/functions/request-payout/index.ts`
+- `platform/supabase/functions/stripe-webhook/index.ts`
+
+### Files Modified
+- `platform/src/App.tsx` — K120 lazy imports + 5 routes
+- `platform/src/components/UnifiedNavigation.tsx` — 2 new nav items + Trophy/Coins icons
+
+### Deployed
+- All 8 Firebase hosting targets: 755 files each
+- Cephas: 1887 files
+
+### Canonical Stats
+2,000 innovations | 1,511 claims | 10 provisionals | 130 Crown Jewels | 22 production systems
+
+### Pending
+- Apply migrations `20260326000015` and `20260326000016` to remote Supabase: `supabase db push`
+- Deploy edge functions to Supabase: `create-connect-account`, `connect-onboarding-refresh`, `request-payout`, `stripe-webhook`
+- Enable `connect_payouts_enabled` feature flag when ready to test real payouts
+- Stripe webhook endpoint needs to be registered in Stripe Dashboard for production events
+
+---
+
+## K122: WildFire Verification Tour + Platform Polish (March 26, 2026)
+**Session:** KNIGHT 122 | **Type:** Polish/Verification — no new features
+
+### What Was Fixed
+
+**Deliverable 1: CrossPortalNav Consistency**
+- Added HexIsle portal entry (`Hexagon` icon) to `CrossPortalNav.tsx` — was missing from the 6-portal nav bar
+- Wired `CrossPortalNav` into `DSSApp.tsx` (the2ndsecond.com) — previously had no cross-portal navigation
+- Wired `CrossPortalNav` into `HexIsleApp.tsx` (hexisle.com) — previously had no cross-portal navigation
+- All 7 portals now have cross-portal navigation (Upekrithen excluded by design — founder-only)
+
+**Deliverable 2: Empty State Enhancement**
+- `CueCardCampaignGrid`: Added full empty state (Rocket icon + message + "Start a Project" CTA) — was previously a blank grid
+- `ContestDirectory`: Upgraded empty state with heading, descriptive message, and "Browse Projects Instead" CTA button
+- `ProductCatalog`: Added "Register as a Maker" and "Browse Makers" CTA buttons to empty state
+- `Marketplace`: Added CTA buttons to all 3 section empty states (New Projects, Trending, Funded)
+
+**Deliverable 3: Navigation Cleanup**
+- Removed duplicate "Buy Credits" entry in `UnifiedNavigation.tsx` (appeared at line 50 and 76)
+- Updated canonical stat defaults in `useCanonicalStats.ts`: innovationCount 2015→2000, productionSystems 23→22
+
+### Verification Results
+- Build: Clean pass (0 errors, 0 TypeScript issues, all lazy imports resolve)
+- All 7 portal apps load correctly (marketplace, business, nonprofit, network, dss, hexisle, upekrithen)
+- All empty states now follow the pattern: Icon + Message + CTA
+- CrossPortalNav renders on all portals with correct active state detection
+
+### Files Modified
+- `platform/src/components/CrossPortalNav.tsx` — added HexIsle portal + Hexagon icon import
+- `platform/src/DSSApp.tsx` — imported and rendered CrossPortalNav
+- `platform/src/HexIsleApp.tsx` — imported and rendered CrossPortalNav
+- `platform/src/components/cue-cards/CueCardCampaignGrid.tsx` — added empty state with CTA
+- `platform/src/pages/ContestDirectory.tsx` — enhanced empty state with CTA
+- `platform/src/pages/ProductCatalog.tsx` — added CTA buttons to empty state
+- `platform/src/pages/Marketplace.tsx` — added CTAs to 3 section empty states
+- `platform/src/components/UnifiedNavigation.tsx` — removed duplicate "Buy Credits"
+- `platform/src/hooks/useCanonicalStats.ts` — corrected default fallback values
+
+### Deployed
+- All 8 Firebase hosting targets: 759 files each
+- Cephas: 1,887 files
+
+### Canonical Stats
+2,000 innovations | 1,511 claims | 10 provisionals | 130 Crown Jewels | 22 production systems
+
+### Pending (carried from K120)
+- Apply migrations `20260326000015` and `20260326000016` to remote Supabase: `supabase db push`
+- Deploy edge functions to Supabase: `create-connect-account`, `connect-onboarding-refresh`, `request-payout`, `stripe-webhook`
+- Stripe webhook endpoint needs to be registered in Stripe Dashboard for production events
+
+---
+
+## K123: Portal Identity Landing Pages + Flipping Deck Card Navigation (March 26, 2026)
+**Session:** KNIGHT 123 | **Type:** Feature — Portal personality + navigation
+
+### What Was Built
+
+**Deliverable 1: PortalDeckCard + PortalDeckCardGrid Components**
+- `PortalDeckCard.tsx` — Reusable 3D CSS flip card with perspective animation (0.4s ease-in-out rotateY)
+- Front face: icon + title with accent-colored bottom bar
+- Back face: description + "Visit →" link, accent-colored
+- Mobile: first tap flips, second tap navigates. Desktop: hover to flip
+- `PortalDeckCardGrid.tsx` — Responsive 6-card grid (3×2 desktop, 2×3 tablet, 6×1 mobile)
+
+**Deliverable 2: .NET Portal Landing — "ONE / Of Us / Discover Your Crew"**
+- Full-bleed landing at lianabanyan.net root (bypasses sidebar chrome)
+- Warm amber/gold campfire palette with gradient background
+- Typography: "ONE" (text-8xl bold) / "Of Us" (text-6xl medium) / "Discover Your Crew" (text-xl subtitle)
+- 6 Deck Cards: Guilds, Tribes, Social Plugs, Project Bounties, Post, Find a Maker
+- Refactored `NetworkApp.tsx` — landing renders outside sidebar shell; protected routes inside `NetworkShell` wrapper
+
+**Deliverable 3: Captain Landing — "Welcome / Captain / Your Ship, Your Rules"**
+- New page at `/captain` on lianabanyan.com
+- Deep navy/steel blue bridge palette
+- Typography: "Welcome" (text-6xl light) / "Captain" (text-9xl black) / "Your Ship, Your Rules" (text-xl italic)
+- 6 Deck Cards: Cold Start, Turn-Key Business, Treasure Maps, What Will You Make?, Who's Waiting?, The Numbers
+
+**Deliverable 4: Navigation Wiring**
+- `App.tsx` — Added `/captain` route (lazy loaded)
+- `CrossPortalNav.tsx` — Added "Captain" link with Anchor icon (blue accent, visible on all portals)
+- `UnifiedNavigation.tsx` — Added "Captain's Deck" to marketplace nav; reorganized .NET sidebar around 6 Deck Card categories (Guilds, Tribes, Social Plugs, Bounties, Post, Find a Maker)
+
+### Files Created
+- `platform/src/components/PortalDeckCard.tsx`
+- `platform/src/components/PortalDeckCardGrid.tsx`
+- `platform/src/pages/CaptainLanding.tsx`
+
+### Files Modified
+- `platform/src/pages/NetworkLanding.tsx` — complete rewrite with identity design + Deck Cards
+- `platform/src/NetworkApp.tsx` — extracted `NetworkShell`, landing renders outside sidebar
+- `platform/src/App.tsx` — added lazy CaptainLanding import + /captain route
+- `platform/src/components/CrossPortalNav.tsx` — added Captain link with Anchor icon
+- `platform/src/components/UnifiedNavigation.tsx` — added Captain's Deck + .NET Deck Card categories
+
+### Deployed
+- All 8 Firebase hosting targets: 759 files each
+- Cephas: 1,887 files
+
+### Canonical Stats
+2,003 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 22 production systems
+
+### Pending (carried from K122)
+- Apply migrations `20260326000015` and `20260326000016` to remote Supabase: `supabase db push`
+- Deploy edge functions to Supabase: `create-connect-account`, `connect-onboarding-refresh`, `request-payout`, `stripe-webhook`
+- Stripe webhook endpoint needs to be registered in Stripe Dashboard for production events
+
+---
+
+## K124: Captain Onboarding System + Leadership Pedestals + The 300 Integration (March 26, 2026)
+**Session:** KNIGHT 124 | **Type:** Feature — Governance onramp, Moses model, The 300
+
+### What Was Built
+
+**Deliverable 1: Captain System Data Model**
+- Migration `20260326000018_captain_system.sql` — 5 new tables:
+  - `captains` — Captain profiles with level (10/50/100/1000), marks staked, joules backing, orders managed/fulfilled, fulfillment rate, reputation score, region/city, status, medallion
+  - `captain_level_requirements` — Threshold table for Moses model progression (seeded with 4 levels)
+  - `captain_order_assignments` — Batch order management with staking, delivery tracking, 1/3 confirmation rule
+  - `delivery_confirmations` — Per-recipient delivery confirmation with issue reporting
+  - `leadership_pedestals` — Crown/Board/Advisory/Ambassador/Captain_Regional seats with tier (shield/spear/phalanx), circle, support count, status
+  - `pedestal_support_signals` — Community support signals (analogous to Red Carpet demand)
+- RLS enabled on all 5 tables with appropriate policies
+- Seeded 12 initial Crown Pedestals from The 300 (José Andrés, Maneet Chauhan, Ruth Glenn, etc.)
+
+**Deliverable 2: Captain Onboarding Flow**
+- `CaptainOnboardingPage.tsx` — Full page at `/captain/become` with hero, requirements checklist, tagline, level cards, stake form
+- `CaptainDashboardPage.tsx` — Captain's operational dashboard at `/captain/dashboard` with stats, level progression, ship medallion, active orders
+- `ShipMedallionPage.tsx` — Medallion display at `/captain/medallion` with QR code and quote
+- `CaptainLevelCards.tsx` — Visual 4-card progression (10 → 50 → 100 → 1000) with met/unmet indicators
+- `CaptainStakeForm.tsx` — Mark staking form with Joule backing display, region/city selection, compliance disclaimer
+- `ShipMedallionCard.tsx` — Medallion card with stats grid and "Produce Your First Medallion" CTA
+- Hooks: `useCaptain()`, `useBecomeCaptain()`, `useCaptainOrders()`, `useConfirmDelivery()`
+
+**Deliverable 3: Leadership Pedestals / The 300 Page**
+- `The300Page.tsx` — Enhanced `/the300` page replacing old Governance component, with hero, progress bar, pedestal grid, captain CTA
+- `PedestalDetailPage.tsx` — Full detail view at `/the300/:pedestalId` with letter summary, support signals, comments, captain CTA
+- `PedestalCard.tsx` — Seat card with icon, name, status badge, support count, detail + support buttons
+- `PedestalGrid.tsx` — Tabbed grid (All/Crown/Board/Advisory/Ambassador/Regional Captain)
+- `The300Progress.tsx` — Progress bar showing identified/300 target with shield/spear/phalanx tier breakdown
+- `SupportButton.tsx` — "Support This Appointment" mutation button
+- Hooks: `usePedestals()`, `usePedestal(id)`, `usePedestalSignals()`, `useSupportPedestal()`
+
+**Deliverable 4: Captain + Pedestal Integration**
+- Every PedestalDetailPage shows "Or become a Captain in your region" CTA at bottom
+- CaptainDashboardPage links to The 300
+- The300Page links to Captain onboarding
+
+**Deliverable 5: Navigation + Wiring**
+- App.tsx: 5 new routes (`/captain/become`, `/captain/dashboard`, `/captain/medallion`, `/the300` enhanced, `/the300/:pedestalId`)
+- UnifiedNavigation: Added "Become Captain" and "The 300" nav items to marketplace portal
+
+### Files Created
+- `platform/supabase/migrations/20260326000018_captain_system.sql`
+- `platform/src/hooks/useCaptain.ts`
+- `platform/src/hooks/useBecomeCaptain.ts`
+- `platform/src/hooks/useCaptainOrders.ts`
+- `platform/src/hooks/useConfirmDelivery.ts`
+- `platform/src/hooks/usePedestals.ts`
+- `platform/src/components/captain/CaptainLevelCards.tsx`
+- `platform/src/components/captain/CaptainStakeForm.tsx`
+- `platform/src/components/captain/ShipMedallionCard.tsx`
+- `platform/src/components/captain/index.ts`
+- `platform/src/components/the300/PedestalCard.tsx`
+- `platform/src/components/the300/PedestalGrid.tsx`
+- `platform/src/components/the300/The300Progress.tsx`
+- `platform/src/components/the300/SupportButton.tsx`
+- `platform/src/components/the300/index.ts`
+- `platform/src/pages/CaptainOnboardingPage.tsx`
+- `platform/src/pages/CaptainDashboardPage.tsx`
+- `platform/src/pages/ShipMedallionPage.tsx`
+- `platform/src/pages/The300Page.tsx`
+- `platform/src/pages/PedestalDetailPage.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — 5 new lazy imports + 5 new routes
+- `platform/src/components/UnifiedNavigation.tsx` — 2 new nav items (Become Captain, The 300)
+
+### Deployed
+- All 8 Firebase hosting targets: 768 files each
+
+### Canonical Stats
+2,007 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 23 production systems
+
+### Pending
+- Apply migration `20260326000018` to remote Supabase: `supabase db push`
+- Prior pending: migrations `20260326000015`–`20260326000017`, edge functions, Stripe webhook
+
+### Critical Rule Followed
+- No securities language. Captains are operational leaders, not investors. Stake is "operational collateral" not "investment."
+
+---
+
+## K125: Global Stats Cleanup + Email Notifications + Legal Pages (March 26, 2026)
+**Session:** KNIGHT 125 | **Type:** Infrastructure hardening — stats, email, legal
+
+### What Was Built
+
+**Deliverable 1: Stats Cleanup — 44 Files Updated**
+- Updated `useCanonicalStats.ts` defaults: innovationCount 2000→2007, crownJewels 130→127, productionSystems 22→23
+- Replaced all stale hardcoded stats across 44 files:
+  - "1,938" → "2,007" (innovations) in 31 files
+  - "1,401" → "1,511" (patent claims) in 27 files
+  - "8 provisional" → "10 provisional" in 18 files
+- Files span pages, components, data files, lib modules, scripts, and the nervous-system
+- Exception honored: `src/data/crown-letters/` untouched per Bishop protocol
+
+**Deliverable 2: Email Notification System — 5 New Templates**
+- Existing `send-transactional-email` edge function enhanced with 5 new templates:
+  - `project_claimed` — Creator claims Red Carpet showcase (green card with backer stats)
+  - `delivery_confirmation_request` — Captain ships order, needs recipient confirmation (blue card + CTA button)
+  - `contest_entry_received` — Contest submission confirmed (purple card)
+  - `membership_confirmed` — $5/year membership activated (green card with unlock list)
+  - `payout_sent` — Creator payout processed (green card with 83.3% footer)
+- Fixed stale outreach email footer: "1,754 innovations. 8 USPTO" → "2,007 innovations. 10 USPTO"
+- Created `useSendEmail()` hook (`platform/src/hooks/useSendEmail.ts`) with typed EmailType union
+- Total templates now: 11 (welcome, pledge_confirmation, credit_purchase, pledge_cancellation, milestone_update, project_claimed, delivery_confirmation_request, contest_entry_received, membership_confirmed, payout_sent, outreach)
+
+**Deliverable 3: Legal Pages Enhanced**
+- Both `/terms` and `/privacy` already existed — enhanced with K125 spec additions
+- TermsOfService: Added amber "under legal review" banner, 3 new sections (Creator Responsibilities §9, Captain Responsibilities §10, The 20% Margin §11), renumbered remaining §12-§21
+- PrivacyPolicy: Added amber "under legal review" banner, updated date to March 26
+- Both pages already routed at `/terms` and `/privacy` in App.tsx
+
+**Deliverable 4: Canonical Stats Migration**
+- Created migration `20260326000019_platform_canonical.sql`
+- Creates `platform_canonical` table with RLS (public read, service_role write)
+- Seeds all 15 canonical values with UPSERT (won't fail if table exists)
+
+### Files Created
+- `platform/src/hooks/useSendEmail.ts`
+- `platform/supabase/migrations/20260326000019_platform_canonical.sql`
+
+### Files Modified
+- `platform/src/hooks/useCanonicalStats.ts` — defaults updated to K125 canonical
+- `platform/supabase/functions/send-transactional-email/index.ts` — 5 new templates + stats fix
+- `platform/src/pages/TermsOfService.tsx` — banner + 3 new sections + renumbered
+- `platform/src/pages/PrivacyPolicy.tsx` — banner + date update
+- 44 files across pages/components/data/lib/scripts — stats pollination
+
+### Deployed
+- All 8 Firebase hosting targets: 768 files each
+- Cephas: 1,887 files
+
+### Canonical Stats
+2,007 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 23 production systems
+
+### Pending
+- Apply migration `20260326000019` to remote Supabase: `supabase db push`
+- Prior pending: migrations `20260326000015`–`20260326000018`, edge functions, Stripe webhook
+- Wire `useSendEmail()` into integration points (ShowcaseClaimPage, BackerPledgeEscrow, ContestEntryPage, auth flow)
+- Deploy updated `send-transactional-email` edge function to Supabase
+
+---
+
+## K127: Universal Business Onboarding Campaign System (March 26, 2026)
+**Session:** KNIGHT 127 | **Type:** Feature — Innovation #1972 (Crown Jewel), business cold-start engine
+
+### What Was Built
+
+**Deliverable 1: Business Campaign Data Model**
+- Migration `20260326000020_business_campaigns.sql` — 3 new tables:
+  - `business_campaigns` — Business nominations with type enum (25 categories), slug, demand signals (pledge_count, pledge_total_credits), status lifecycle (gathering → threshold_met → pitched → accepted → active → declined/expired), captain assignment, 90-day expiration
+  - `campaign_pledges` — Per-user pledge signals with type (advance_order, recurring, marks_seed), credit amounts, unique per campaign+user
+  - `pitch_packets` — Captain-generated pitch documents with snapshot data, QR code URL
+- RLS enabled on all 3 tables with appropriate policies
+- Seeded first campaign: La Capital del Sabor (restaurant, San Antonio, TX, Bandera Road — featured on mysanantonio.com/food)
+
+**Deliverable 2: Campaign Pages**
+- `BusinessCampaignDirectory.tsx` — `/campaigns` directory with filter groups (All/Restaurants/Services/Retail), campaign cards with progress bars, pledge counts, status badges, "+ Nominate a Business" CTA, empty state with CTA
+- `BusinessCampaignDetail.tsx` — `/campaigns/:slug` detail page with demand signal card (3-column: pledges/committed/avg order), progress bar, pledge list, pledge form ($X + note), share button (Web Share API with clipboard fallback), Captain's Corner (claim, generate packet), auth gate for non-logged-in users
+- `NominateBusinessPage.tsx` — `/campaigns/nominate` (protected) form with all fields: name, type (25-option dropdown), city/state, address, website/phone, nomination reason, proposed discount %, initial seed pledge
+- `PitchPacketPage.tsx` — `/campaigns/:slug/pitch-packet` (protected) printable one-page packet: LIANA BANYAN header, business info grid, "YOUR CUSTOMERS ARE WAITING" demand section, "THE DEAL" section, QR code placeholder, John A. Shedd quote, footer with canonical stats. Print button with `window.print()` + print-specific CSS
+
+**Deliverable 3: Hooks**
+- `useBusinessCampaigns(filter?)` — list campaigns with client-side filter group matching
+- `useBusinessCampaign(slug)` — single campaign by slug
+- `useCampaignPledges(campaignId)` — pledges for a campaign
+- `usePledgeCampaign()` — mutation to upsert pledge + update campaign aggregates + auto-threshold detection
+- `useNominateBusiness()` — mutation to create campaign + slug generation + optional seed pledge
+- `useGeneratePitchPacket()` — mutation to snapshot campaign data into pitch_packets
+- `usePitchPacket(campaignId)` — query latest packet for current captain
+- `useClaimCaptain()` — mutation to claim unclaimed campaign (null-check on captain_id)
+
+**Deliverable 4: Navigation + Routes**
+- `App.tsx` — 4 lazy imports + 4 routes: `/campaigns`, `/campaigns/nominate` (protected), `/campaigns/:slug`, `/campaigns/:slug/pitch-packet` (protected)
+- `UnifiedNavigation.tsx` — Added "Local Campaigns" (Store icon) in marketplace nav
+
+**Deliverable 5: Canonical Stats**
+- Updated `useCanonicalStats.ts` defaults: innovationCount 2007 → 2015
+
+### Files Created
+- `platform/supabase/migrations/20260326000020_business_campaigns.sql`
+- `platform/src/hooks/useBusinessCampaigns.ts`
+- `platform/src/pages/BusinessCampaignDirectory.tsx`
+- `platform/src/pages/BusinessCampaignDetail.tsx`
+- `platform/src/pages/NominateBusinessPage.tsx`
+- `platform/src/pages/PitchPacketPage.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — K127 lazy imports + 4 routes
+- `platform/src/components/UnifiedNavigation.tsx` — "Local Campaigns" nav item + Store icon import
+- `platform/src/hooks/useCanonicalStats.ts` — innovationCount 2007 → 2015
+
+### Deployed
+- All 8 Firebase hosting targets: 773 files each
+- Cephas: 1,887 files
+
+### Canonical Stats
+2,015 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 23 production systems
+
+### Pending
+- Apply migration `20260326000020` to remote Supabase: `supabase db push`
+- Prior pending: migrations `20260326000015`–`20260326000019`, edge functions, Stripe webhook
+- QR code generation integration (currently shows placeholder icon — needs actual QR library like `qrcode.react`)
+
+### Critical Rules Followed
+- No securities language. Credits cannot be cashed out to fiat. One-way valve. Irrevocable.
+- LB Card is funded separately (direct deposit/bank transfer), NOT from Credits.
+
+---
+
+## K130: Family Table Cookbook — Recipe/Menu Catalog + Scheduled Meal Pipeline (March 26, 2026)
+**Session:** KNIGHT 130 | **Type:** Feature — Family Table meal planning hub, restaurant cookbook, pre-order system
+
+### What Was Built
+
+**Deliverable 1: Database Schema (5 New Tables)**
+- Migration `20260326000022_family_table_cookbook.sql`:
+  - `restaurant_listings` — Restaurant profiles with partnership tier (none/cookbook/c90/c60/c40/c20), discount %, cuisine, hours, delivery options, captain assignment
+  - `menu_items` — Individual dishes with retail price, LB member price, dietary tags, availability schedule
+  - `meal_plans` — Weekly meal planner per user with JSONB meal slots, estimated costs, savings tracking
+  - `scheduled_orders` — Pre-orders generated from meal plans with status lifecycle (scheduled → confirmed → preparing → ready → picked_up)
+  - `daily_manifests` — Aggregated order summaries for restaurant prep (item totals, pickup windows, revenue)
+- RLS on all 5 tables with appropriate policies (public read restaurants/menus, user-owned plans/orders, captain-managed restaurants)
+- Seeded 2 restaurants: La Capital del Sabor (C+90 partner, 10% off, 5 menu items) and Lupita's Bakery (cookbook listing, full price, 4 items)
+- Indexes on city, tier, restaurant FK, user+week, restaurant+date
+
+**Deliverable 2: Family Table Hub (`/family-table`)**
+- `FamilyTableHub.tsx` — Main hub with 3 tabs:
+  - **This Week** — 7-day weekly grid showing planned meals (color-coded: green=home, orange=restaurant, blue=grocery), weekly spend total, savings display, Submit Orders CTA, stat cards (restaurant/home/pre-order counts)
+  - **Cookbook** — Quick restaurant preview cards with tier badges, View Menu + Add to Plan buttons, link to full Cookbook
+  - **My Lists** — Shopping list placeholder (auto-generates from meal plan recipes)
+- Empty state CTAs guide users to either build a plan or browse the cookbook
+
+**Deliverable 3: Cookbook Page (`/cookbook`)**
+- `CookbookPage.tsx` — Full restaurant directory with:
+  - Search bar (restaurants, dishes, cuisines)
+  - Filter buttons: All / Partners / Best Deals (C+20) / Tier 3/2/1 / Cookbook Only
+  - Restaurant cards with tier badges, cuisine tags, discount %, scheduling availability
+  - "How it works" explainer (Browse & Add → Schedule & Save → Submit & Pickup)
+  - Empty state with Nominate a Restaurant CTA linking to /campaigns/nominate
+
+**Deliverable 4: Restaurant Detail Page (`/cookbook/:restaurantId`)**
+- `RestaurantDetailPage.tsx` — Full restaurant profile with:
+  - Header: name, address, phone, website, cuisine tags, price range
+  - Partnership tier card (discount % display for partners, "Listed — Full Price" for cookbook)
+  - Menu organized by category with tier pricing block per item:
+    - Retail price (struck through for partners)
+    - LB Card price with savings badge
+    - Hypothetical "If they were C+40/C+20" pricing to educate members and pressure restaurants toward deeper commitment
+  - Quantity selector per item with floating cart bar
+  - Dietary tags, availability schedule (days + hours) per item
+
+**Deliverable 5: Meal Plan Builder (`/family-table/meal-plan`)**
+- `MealPlanBuilder.tsx` — Weekly grid editor:
+  - 7-column × 3-row grid (Mon-Sun × Breakfast/Lunch/Dinner)
+  - Click empty slots to add meals via dialog (source: home/restaurant/grocery, name, cost, servings)
+  - Color-coded filled slots with hover-to-remove
+  - Summary bar: weekly total, meal counts by source, submitted status
+  - Save + Submit Orders actions
+  - Links to Cookbook for restaurant meal discovery
+
+**Deliverable 6: Order Manifest Page (`/business/orders` + `/orders` on .biz)**
+- `OrderManifestPage.tsx` — Restaurant owner's daily prep view:
+  - Date selector for any day
+  - Summary cards: total orders, revenue, advance paid, unique items
+  - Items to Prep list (aggregated quantities sorted by demand)
+  - Pickup Windows breakdown
+  - Individual order cards with status badges, item details, Confirm All / Flag Issue actions
+  - Print button for kitchen use
+
+**Deliverable 7: Hooks (3 New Hook Files)**
+- `useRestaurants.ts` — `useRestaurants(filter?)`, `useRestaurant(id)`, `useMenuItems(restaurantId)`, `tierLabel()`, `tierDiscount()` utilities
+- `useMealPlan.ts` — `useMealPlan(weekStart?)`, `useSaveMealPlan()`, `useSubmitMealPlan()`, `getWeekStart()`, day/meal type constants
+- `useScheduledOrders.ts` — `useScheduledOrders(filters?)`, `useRestaurantOrders(restaurantId, date?)`, `useDailyManifest(restaurantId, date?)`, `useCancelOrder()`, `useConfirmOrderReady()`
+
+**Deliverable 8: Navigation + Routes**
+- `App.tsx` — 5 lazy imports + 5 routes (`/family-table` hub, `/family-table/meal-plan`, `/cookbook`, `/cookbook/:restaurantId`, `/business/orders`)
+- `BusinessApp.tsx` — 1 lazy import + `/orders` route for restaurant owners
+- `UnifiedNavigation.tsx` — Added "Family Table" (Utensils icon) and "Cookbook" (BookOpen icon) to marketplace nav
+- Changed `/family-table` from redirect to initiative page → now points to actual FamilyTableHub
+
+### Files Created
+- `platform/supabase/migrations/20260326000022_family_table_cookbook.sql`
+- `platform/src/hooks/useRestaurants.ts`
+- `platform/src/hooks/useMealPlan.ts`
+- `platform/src/hooks/useScheduledOrders.ts`
+- `platform/src/pages/FamilyTableHub.tsx`
+- `platform/src/pages/CookbookPage.tsx`
+- `platform/src/pages/RestaurantDetailPage.tsx`
+- `platform/src/pages/MealPlanBuilder.tsx`
+- `platform/src/pages/OrderManifestPage.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — K130 lazy imports + 5 new routes
+- `platform/src/BusinessApp.tsx` — K130 lazy import + /orders route
+- `platform/src/components/UnifiedNavigation.tsx` — 2 new nav items (Family Table, Cookbook) + Utensils/BookOpen icon imports
+- `platform/src/hooks/useCanonicalStats.ts` — innovationCount 2015 → 2025
+
+### Deployed
+- All 8 Firebase hosting targets: 784 files each
+- Cephas: 1,887 files
+
+### Canonical Stats
+2,025 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 23 production systems
+
+### Pending
+- Apply migration `20260326000022` to remote Supabase: `supabase db push`
+- Prior pending: migrations `20260326000015`–`20260326000021`, edge functions, Stripe webhook
+- Wire FamilyTableHub → real Supabase queries (currently reads from DB via hooks, tables need migration push)
+- Integrate restaurant selection in MealPlanBuilder with actual Cookbook menu items
+- Build grocery list auto-generation from home-cook recipe ingredients
+
+### Critical Rules Followed
+- No securities language. Credits cannot be cashed out to fiat. One-way valve. Irrevocable.
+- Prices shown as C+X% are ILLUSTRATIVE — actual prices set by restaurant.
+- The 20% margin is CONSTITUTIONAL — C+20 is the absolute floor.
+- Mock data only in WildFire Tour mode — empty/zeroed state for real users.
+
+---
+
+## K131: Programmable Card — Durin's Door Routing + Sponsored Cards + Brand Bounties + Designer Marketplace (March 27, 2026)
+**Session:** KNIGHT 131 | **Type:** Feature — Viral growth engine with conditional QR routing, pre-funded cards, brand bounty marketplace
+
+### What Was Built
+
+**Deliverable 1: Database Schema (6 New Tables)**
+- Migration `20260327000001_programmable_card.sql`:
+  - `durins_door_configs` — Per-member conditional routing configurations with time windows
+  - `durins_door_rules` — Phrase/email/code → experience mapping (each rule = one door)
+  - `sponsored_cards` — Pre-funded onboarding cards with activation codes (physical/digital/both)
+  - `sponsorship_attributions` — ONE LEVEL ONLY attribution tracking (NOT MLM)
+  - `brand_bounties` — Design work requests with 6-tier rush pricing
+  - `designer_profiles` — Cooperative designer marketplace with XP rating system
+- RLS on all 6 tables with appropriate policies
+- Indexes on all key lookup columns
+
+**Deliverable 2: Data Hooks (4 New Hook Files)**
+- `useDurinsDoor.ts` — `useDurinsDoorForMedallion(id)`, `useMyDoorConfigs()`, `useCreateDoorConfig()`, `useCreateDoorRule()`, `evaluateDoorRule()`, `isDoorConfigActive()`
+- `useSponsoredCards.ts` — `useMySponsoredCards()`, `useCreateSponsoredCard()`, `useActivateCard()`, `useSponsorCardByCode()`
+- `useBrandBounties.ts` — `useOpenBounties()`, `useMyBounties()`, `useCreateBounty()`, `useClaimBounty()`, `useDeliverBounty()`, `RUSH_TIERS`, `BOUNTY_PRICING`
+- `useDesignerProfile.ts` — `useMyDesignerProfile()`, `useDesignerDirectory()`, `useRegisterAsDesigner()`, `xpStars()`, `isTryoutMode()`, `PRICING_TIERS`
+
+**Deliverable 3: Welcome Gate Page (`/w/:medallionId`)**
+- `WelcomeGatePage.tsx` — Universal QR scan entry point (public):
+  - Loads door config for medallion ID
+  - Shows DurinsDoorGate if rules configured (phrase/email/code input)
+  - Routes to matched RedCarpet experience or default welcome
+  - Handles expired cards, invalid links, loading states
+  - Sponsor name resolution via profiles table
+
+**Deliverable 4: Durin's Door Gate Component**
+- `DurinsDoorGate.tsx` — "Speak, Friend, and Enter" passphrase input:
+  - Evaluates input against door rules (case-insensitive by default)
+  - Shake animation on wrong guess
+  - Hint after 3 failed attempts
+  - Skip button for default experience
+
+**Deliverable 5: Red Carpet Experience System (6 Components)**
+- `RedCarpetRenderer.tsx` — Template router (lazy-loads per template type)
+- `red-carpet/RedCarpetShell.tsx` — Universal wrapper (sponsor attribution, pre-funded badge, signup CTA)
+- `red-carpet/BusinessPitchRedCarpet.tsx` — 4-tier pricing chart, transparency pitch, C+20 floor
+- `red-carpet/MemberInviteRedCarpet.tsx` — 4 pillars (Shop, Family Table, Defense Klaus, Learn & Earn)
+- `red-carpet/FamilyInviteRedCarpet.tsx` — Warm family messaging, "Given With Love" card
+- `red-carpet/DriverRecruitRedCarpet.tsx` — 83.3% keep, pre-planned routes, platform comparison
+- `red-carpet/GenericWelcomeRedCarpet.tsx` — 4 cooperative pillars, universal fallback
+
+**Deliverable 6: Brand Bounty Panel**
+- `BrandBountyPanel.tsx` — Post-signup bounty selection:
+  - 3 bounty types (Logo, Domain+Email, Designed Card) with checkbox selection
+  - 6-tier rush pricing (T1 Today → T6 Whenever)
+  - Marks vs Credits payment (Credits = queue priority bump)
+  - Dynamic pricing based on type × tier
+  - "Remind Me Later" option
+
+**Deliverable 7: Enhanced Cue Card Generator V2 (`/tools/card-generator`)**
+- `CueCardGeneratorV2.tsx` — 7-step card creation wizard:
+  - Step 1: Audience (person / business / general)
+  - Step 2: Template selection (5 templates)
+  - Step 3: Personalization (name, business, message)
+  - Step 4: Durin's Door phrases (add/remove door rules with template routing)
+  - Step 5: Funding ($0-$100+ pre-load, membership inclusion)
+  - Step 6: Delivery method (digital / physical / both)
+  - Step 7: Expiration (never / 30d / 90d)
+  - Generates activation code + QR code on completion
+
+**Deliverable 8: Designer Marketplace (`/crew/design`)**
+- `DesignCrewPage.tsx` — Designer marketplace with:
+  - Designer profile card (services, tiers, pricing, XP rating, completion stats)
+  - Registration form (service selection, tier availability, pricing tier)
+  - Open bounties list with tier badges, deadline, credit priority indicator
+  - Claim button for registered designers
+  - Tryout mode badge (first 2 deliveries before XP counts)
+
+**Deliverable 9: Navigation + Routes**
+- `App.tsx` — 3 lazy imports + 3 routes:
+  - `/w/:medallionId` — Welcome Gate (public)
+  - `/tools/card-generator` — Enhanced card creator (protected)
+  - `/crew/design` — Designer marketplace (public)
+
+### Files Created
+- `platform/supabase/migrations/20260327000001_programmable_card.sql`
+- `platform/src/hooks/useDurinsDoor.ts`
+- `platform/src/hooks/useSponsoredCards.ts`
+- `platform/src/hooks/useBrandBounties.ts`
+- `platform/src/hooks/useDesignerProfile.ts`
+- `platform/src/pages/WelcomeGatePage.tsx`
+- `platform/src/components/DurinsDoorGate.tsx`
+- `platform/src/components/RedCarpetRenderer.tsx`
+- `platform/src/components/red-carpet/RedCarpetShell.tsx`
+- `platform/src/components/red-carpet/BusinessPitchRedCarpet.tsx`
+- `platform/src/components/red-carpet/MemberInviteRedCarpet.tsx`
+- `platform/src/components/red-carpet/FamilyInviteRedCarpet.tsx`
+- `platform/src/components/red-carpet/DriverRecruitRedCarpet.tsx`
+- `platform/src/components/red-carpet/GenericWelcomeRedCarpet.tsx`
+- `platform/src/components/BrandBountyPanel.tsx`
+- `platform/src/pages/tools/CueCardGeneratorV2.tsx`
+- `platform/src/pages/DesignCrewPage.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — K131 lazy imports + 3 new routes
+- `platform/src/hooks/useCanonicalStats.ts` — innovationCount 2025 → 2033
+
+### Deployed
+- Build succeeded (42s)
+- **Firebase deploy pending** — needs `firebase login --reauth` first
+
+### Canonical Stats
+2,033 innovations | 1,511 claims | 10 provisionals | 127 Crown Jewels | 24 production systems
+
+### Pending
+- `firebase login --reauth` then deploy all 8 hosting targets
+- Apply migration `20260327000001` to remote Supabase: `supabase db push`
+- Prior pending migrations: `20260326000015`–`20260326000022`
+- Wire BrandBountyPanel into RedCarpet post-signup flow
+- QR code physical card print integration (currently digital only)
+- Dashboard cards view (`/dashboard/cards`) — list of created/distributed cards
+- Dashboard bounties view (`/dashboard/bounties`) — requester's bounty tracker
+
+### Critical Rules Followed
+- Credits NEVER cash out to fiat. One-way valve. Irrevocable.
+- LB Card funded separately (direct deposit/bank transfer), NOT from Credits.
+- Sponsorship attribution: ONE LEVEL ONLY. NOT MLM.
+- No securities language anywhere.
+- C+20 is the constitutional floor.
+- Designers need 2 approved completions for XP to count (tryout mode).
+- Mock data only in WildFire Tour mode — empty/zeroed state for real users.
+
+---
+
+## K134: MoneyPenny Gatekeeper — AI Receptionist for Inbound Contact Screening (March 27, 2026)
+**Session:** KNIGHT 134 | **Type:** Feature — AI-powered contact screening with 4-tier triage, SMS alerts, auto-responses
+
+### What Was Built
+
+**Deliverable 1: Database Schema (3 New Tables)**
+- Migration `20260327000005_gatekeeper.sql`:
+  - `gatekeeper_contacts` — Every inbound message, AI-triaged with tier/relevance/category
+  - `gatekeeper_lists` — Whitelist / blacklist / priority keywords
+  - `gatekeeper_templates` — Auto-response email templates per tier
+- RLS on all 3 tables (admin-only + service role bypass)
+- Indexes on tier/status/email/list_type
+- Seeded whitelist with 27 Crown Letter recipients
+- Seeded priority keywords (patent, investment, press, partnership, collaboration, media, government)
+- Seeded auto-response templates for Tier 2 (priority flagged) and Tier 3 (received and queued)
+
+**Deliverable 2: Edge Function — gatekeeper-triage**
+- `supabase/functions/gatekeeper-triage/index.ts` — Public contact form handler:
+  - Rate limiting: 3/hour per IP (in-memory per instance)
+  - Whitelist check → Tier 1 (instant)
+  - Blacklist check → Tier 4 (silent log)
+  - Claude API analysis (claude-sonnet-4-6, 200 tokens): public figure detection, intent summary, category, relevance score
+  - Categories: partnership | press | member_issue | collaboration | investment_inquiry | spam | other
+  - Investment inquiries flagged but noted: "LB is a member-owned cooperative. We do not accept outside investment."
+  - Tier 1+2: SMS alert to Founder via moneypenny_sms_queue
+  - Tier 2+3: Auto-response email via Resend
+  - Tier 1: Creates moneypenny_actions entry (urgent)
+  - Tier 4: Logged silently
+- Added to `config.toml` with `verify_jwt = false`
+
+**Deliverable 3: Contact Form + Page**
+- `ContactForm.tsx` — Name, Email, Organization, Phone, Subject, Message → "Send to MoneyPenny"
+  - Success state with green confirmation card
+  - Error handling with toast notifications
+- `ContactPage.tsx` — `/contact` — Form + sidebar:
+  - Tier explanation cards (VIP → Standard → Blocked)
+  - Response time expectations
+  - Privacy notice (cooperative, no data selling)
+- Added "Contact Us" link to PlatformFooter
+
+**Deliverable 4: Gatekeeper Inbox (Admin)**
+- `components/helm/GatekeeperInbox.tsx` — Full admin inbox:
+  - 4 tabs: Priority (Tier 1+2) | Relevant (Tier 3) | Blocked (Tier 4) | Reviewed
+  - Contact cards: sender info, tier badge, public figure badge, SMS sent indicator
+  - Claude summary + category + relevance score display
+  - Expandable detail: full message body, founder notes textarea
+  - Actions: Respond, Archive, Block (adds to blacklist), Whitelist (adds to whitelist)
+  - Real-time counts in tab labels
+- `GatekeeperInboxPage.tsx` — `/dashboard/gatekeeper` (protected route)
+
+**Deliverable 5: Daily Digest Integration**
+- `supabase/functions/moneypenny-daily-digest/index.ts` — Morning briefing:
+  - Gatekeeper summary: "Yesterday: X priority, Y flagged, Z standard, W blocked"
+  - Lists Tier 1+2 contacts with summaries (up to 5)
+  - MoneyPenny inbox count, pending actions, social drafts
+  - Sends SMS via moneypenny_sms_queue
+  - Stores digest in social_daily_digests
+
+### Files Created
+- `platform/supabase/migrations/20260327000005_gatekeeper.sql`
+- `platform/supabase/functions/gatekeeper-triage/index.ts`
+- `platform/supabase/functions/moneypenny-daily-digest/index.ts`
+- `platform/src/components/ContactForm.tsx`
+- `platform/src/pages/ContactPage.tsx`
+- `platform/src/components/helm/GatekeeperInbox.tsx`
+- `platform/src/pages/GatekeeperInboxPage.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — K134 lazy imports + 2 new routes (`/contact`, `/dashboard/gatekeeper`)
+- `platform/src/components/PlatformFooter.tsx` — Added "Contact Us" link
+- `platform/src/hooks/useCanonicalStats.ts` — productionSystems 25 → 26
+- `platform/supabase/config.toml` — Added `[functions.gatekeeper-triage]`
+
+### Deployed
+- Build succeeded (40s)
+- **Firebase deploy pending** — deploy when ready
+
+### Canonical Stats
+2,045 innovations | 1,511 claims | 10 provisionals | 137 Crown Jewels | 26 production systems
+
+### Pending
+- Apply migration `20260327000005` to remote Supabase: `supabase db push`
+- Prior pending migrations: `20260326000015`–`20260327000004`
+- Deploy edge functions: `supabase functions deploy gatekeeper-triage` and `supabase functions deploy moneypenny-daily-digest`
+- Set FOUNDER_PHONE env var in Supabase Dashboard for SMS delivery
+- Set up daily digest cron schedule in Supabase Dashboard (0 8 * * *)
+- Firebase deploy all hosting targets
+
+### SEC Rules Followed
+- Auto-responses NEVER use "investment" or "returns"
+- Investment inquiries: "LB is a member-owned cooperative. We don't accept outside investment."
+- No securities language anywhere in templates or responses
+
+### Critical Rules Followed
+- Credits NEVER cash out to fiat. One-way valve. Irrevocable.
+- No securities language. SEC-safe throughout.
+- Mock data only in WildFire Tour mode.
+- Rate limiting on public endpoint (3/hour per IP).
+
+---
+
+## Session — KNIGHT 136: Scheduled LB Card Funding (March 27, 2026)
+
+**Innovations:** #2008 (Scheduled LB Card Funding via Stripe), #2009 (Community-Supported Card Funding)
+**Bishop:** 035
+
+### What Was Built
+
+**Deliverable 1: Migration (pre-existing)**
+- `20260327000007_scheduled_lb_card_funding.sql` — 3 tables: `lb_card_funding_schedules`, `lb_card_funding_transactions`, `lb_card_funding_sources` with full RLS + indexes
+
+**Deliverable 2: Edge Function — create-funding-schedule**
+- `platform/supabase/functions/create-funding-schedule/index.ts`
+- Authenticates funder, verifies recipient authorization, creates Stripe Billing subscription, stores schedule in DB
+- Supports daily/weekly/biweekly/monthly frequencies, $1-$10,000 amount range, purpose tags
+
+**Deliverable 3: Edge Function — process-scheduled-funding**
+- `platform/supabase/functions/process-scheduled-funding/index.ts`
+- Triggered by Stripe webhook (`invoice.payment_succeeded`)
+- Looks up schedule by subscription ID, calls existing `fund-lb-card` to top up recipient card
+- Records transaction, updates schedule totals + next funding date
+
+**Deliverable 4: Hooks — useLBCardFunding.ts**
+- `platform/src/hooks/useLBCardFunding.ts`
+- 9 hooks: `useFundingSchedules`, `useFundingSchedule`, `useCreateFundingSchedule`, `usePauseFundingSchedule`, `useCancelFundingSchedule`, `useFundingTransactions`, `useAuthorizedFunders`, `useAuthorizeFunder`, `useRevokeFunder`
+
+**Deliverable 5: FundMyCard Page**
+- `platform/src/pages/FundMyCard.tsx` at `/dashboard/fund-card`
+- Two tabs: "Fund Someone" (create recurring funding) | "My Card Funding" (incoming, authorize/revoke funders, transaction history)
+- Monthly summary cards (incoming/outgoing/active schedules)
+- Recipient search by name/email, purpose selector, frequency picker
+
+**Deliverable 6: FundingWidget**
+- `platform/src/components/helm/FundingWidget.tsx`
+- Compact dashboard card: monthly in/out, active schedule count, next funding date
+- Wired into CreatorDashboard
+
+**Deliverable 7: Routes + Navigation**
+- `/dashboard/fund-card` route added to `App.tsx` (ProtectedRoute + lazy)
+- "Card Funding" added to `AppSidebar.tsx` nav (CreditCard icon)
+- Config.toml entries for both new edge functions
+
+### Files Created
+- `platform/supabase/functions/create-funding-schedule/index.ts`
+- `platform/supabase/functions/process-scheduled-funding/index.ts`
+- `platform/src/hooks/useLBCardFunding.ts`
+- `platform/src/pages/FundMyCard.tsx`
+- `platform/src/components/helm/FundingWidget.tsx`
+
+### Files Modified
+- `platform/src/App.tsx` — lazy import FundMyCard + route at `/dashboard/fund-card`
+- `platform/src/components/AppSidebar.tsx` — "Card Funding" nav entry
+- `platform/src/pages/CreatorDashboard.tsx` — FundingWidget wired in
+- `platform/supabase/config.toml` — `[functions.create-funding-schedule]` + `[functions.process-scheduled-funding]`
+
+### Deployed
+- Build succeeded (40s)
+- Firebase deploy complete — all 8 hosting targets live
+
+### Canonical Stats
+- No innovation count change (implementing existing #2008-#2009)
+- productionSystems stays at 27
+
+### Pending
+- Apply migration `20260327000007` to remote Supabase: `supabase db push`
+- Deploy edge functions: `supabase functions deploy create-funding-schedule` and `supabase functions deploy process-scheduled-funding`
+- Configure Stripe webhook endpoint for `invoice.payment_succeeded` → `process-scheduled-funding`
+- Set `STRIPE_FUNDING_WEBHOOK_SECRET` env var in Supabase Dashboard
+
+### Critical Rules Followed
+- LB Card funded with REAL MONEY via Stripe Issuing. NOT from Credits.
+- Credits NEVER cash out to fiat. One-way valve. Irrevocable.
+- No securities language.
+- C+20 constitutional floor.
+- Mock data only in WildFire Tour mode.
+
+---
+
+## Session — KNIGHT 137: Cephas Bidirectional Knowledge Graph (March 27, 2026)
+
+**Innovations:** #2005 (Community-Curated Resource Linking), #2006 (Bidirectional Knowledge Graph)
+**Bishop:** 035
+
+### What Was Built
+
+**Deliverable 1: Migration (pre-existing)**
+- `20260327000008_cephas_knowledge_graph.sql` — 3 tables: `cephas_resource_links`, `cephas_resource_votes`, `knowledge_graph_edges` with full RLS + indexes + 6 seed edges connecting platform features to Cephas article slugs
+
+**Deliverable 2: Hooks — useCephasKnowledge.ts**
+- `platform/src/hooks/useCephasKnowledge.ts`
+- 6 hooks: `useResourceLinks`, `useSubmitResource`, `useVoteOnResource`, `useKnowledgeLinks`, `useRelatedFeatures`, `useRelatedArticles`
+- Auto-promotion logic: vote → recalculate upvotes/downvotes/flags → update status (3→community, 10→recommended, 25+0flags→featured, 3flags→hidden)
+
+**Deliverable 3: CephasResourcePanel Component**
+- `platform/src/components/cephas/CephasResourcePanel.tsx`
+- Community resources grouped by status (Featured → Recommended → Community)
+- Submit resource form (URL + title + description + type selector)
+- Upvote/downvote/flag buttons with real-time counts + contributor credit
+
+**Deliverable 4: KnowledgeGraphNav Component**
+- `platform/src/components/cephas/KnowledgeGraphNav.tsx`
+- "Related Features" section with "Try it now" CTAs linking to platform pages
+- "Related Articles" section with "Learn more" CTAs linking to Cephas
+
+**Deliverable 5: LearnMoreBadge Component**
+- `platform/src/components/cephas/LearnMoreBadge.tsx`
+- Small "?" badge (icon/badge/text variants) placed on feature pages
+- Popover showing related Cephas articles via knowledge graph edges
+- Wired into 3 pages: BeaconRunCreator, FamilyTableHub, BusinessCampaignDirectory
+
+**Deliverable 6: Routes + Integration**
+- `/knowledge/:slug` route added to `App.tsx` (ExplorerRoute + lazy KnowledgeViewer)
+- `platform/src/pages/KnowledgeViewer.tsx` — standalone resource viewer with KnowledgeGraphNav + CephasResourcePanel
+- `platform/src/components/cephas/index.ts` — barrel exports updated with 3 new components
+- `PortalPageLayout` title prop widened from `string` to `React.ReactNode`
+
+### Files Created
+- `platform/src/hooks/useCephasKnowledge.ts`
+- `platform/src/components/cephas/CephasResourcePanel.tsx`
+- `platform/src/components/cephas/KnowledgeGraphNav.tsx`
+- `platform/src/components/cephas/LearnMoreBadge.tsx`
+- `platform/src/pages/KnowledgeViewer.tsx`
+
+### Files Modified
+- `platform/src/components/cephas/index.ts` — 3 new exports
+- `platform/src/components/PortalPageLayout.tsx` — title prop: `string` → `React.ReactNode`
+- `platform/src/App.tsx` — lazy import KnowledgeViewer + `/knowledge/:slug` route
+- `platform/src/pages/BeaconRunCreator.tsx` — LearnMoreBadge on header
+- `platform/src/pages/FamilyTableHub.tsx` — LearnMoreBadge on header
+- `platform/src/pages/BusinessCampaignDirectory.tsx` — LearnMoreBadge on title
+
+### Deployed
+- Build succeeded (41s)
+- Firebase deploy complete — all 8 hosting targets live
+
+### Canonical Stats
+- No innovation count change (implementing existing #2005-#2006)
+- productionSystems stays at 27
+
+### Pending
+- Apply migration `20260327000008` to remote Supabase: `supabase db push`
+- Seed edges will auto-insert on migration; additional edges can be added via the UI or direct insert
+
+### Critical Rules Followed
+- Credits NEVER cash out. No securities language.
+- C+20 constitutional floor.
+- One vote per user per resource (UNIQUE constraint enforced).
+- Auto-promotion thresholds: 3→community, 10→recommended, 25+0flags→featured.
+- Mock data only in WildFire Tour mode — empty states shown for real users.
+
+---
+
+## Session — KNIGHT 148-prep: Launch Readiness Audit + Batch 1 Fixes (March 28, 2026)
+
+**Bishop:** 037 (running in parallel — Claude Code)
+**Session type:** Comprehensive platform audit + surgical fixes for launch
+
+### Canonical Stats (CURRENT)
+- **Innovations:** 2,078 (through provisional #10, filed March 25, 2026)
+- **Crown Jewels:** 146 (filed across 10 provisionals)
+- **Production Systems:** 28 LIVE
+- **Patent Claims:** ~1,511 across 10 provisional applications
+- **Membership:** $5/year
+
+### What Was Built This Session
+
+**K-1: Membership Payment Redirect Fix**
+- `platform/supabase/functions/create-membership-checkout/index.ts` — `success_url` changed from `/first-steps?membership=success` to `/membership-success?session_id={CHECKOUT_SESSION_ID}`
+- Edge function redeployed to Supabase
+
+**K-2: AppSidebar Wired into Marketplace Portal**
+- `platform/src/App.tsx` — Added `SidebarProvider`, `SidebarTrigger`, and `AppSidebar` imports; wrapped AppShell layout with SidebarProvider; sidebar renders for authenticated users on non-landing pages; hamburger trigger in top bar
+- Sidebar starts collapsed (`defaultOpen={false}`)
+
+**K-3: 404 Page Contact Fallback**
+- `platform/src/pages/NotFound.tsx` — Added Founder email (Founder@LianaBanyan.com), phone (406-578-1232), and home link
+
+**K-4: Signed-In Indicator**
+- `platform/src/App.tsx` — Top utility bar now shows "Signed in as {username}" for authenticated users
+
+**K-5: Portal Nav Dead Link Fixes**
+- `platform/src/components/UnifiedNavigation.tsx`:
+  - Business: `/admin/project/create` → `/create-project`
+  - Network: Removed 4 dead nav items (`/network/guilds`, `/network/tribes`, `/network/social-plugs`, `/network/factory-nodes`, `/projects?filter=bounties`, `/projects/create`, `/captain`, `/project-costs`), replaced with actual routes (`/guilds`, `/tribes`, `/b2b-contracts`, `/supply-chain`, `/production-schedules`, `/industry-pricing`, `/simulator`)
+- `platform/src/NetworkApp.tsx` — Added lazy imports + routes for Guilds, Tribes, Simulator
+
+**K-6: Stripe Checkout Verification**
+- Confirmed `create-credit-checkout` already fully wired with real Stripe Price IDs (`price_1SIXin...`, `price_1SIXio...`, `price_1SIXip...`)
+- No code change needed — Bishop handling Stripe product catalog verification (B-1)
+
+**K-7: Red Carpet Error Fallback**
+- `platform/src/pages/RedCarpet.tsx` — Verification error state now shows Founder contact (email + phone)
+
+**K-8: HexIsle Download Purchase Flow**
+- `platform/src/pages/HexIsleDownloads.tsx` — Download button now calls `incrementDownload(id)` from hook + opens `stl_url` from DB; merges hardcoded PIECES data with live `hexisle_downloads` table
+
+**K-9: Cue Card Sharing with Real Links**
+- `platform/src/components/cue-cards/CueCardDeck.tsx` — Uses `navigator.share()` (Web Share API) on mobile with clipboard fallback on desktop; letter cue cards now route through `/RedCarpet?cue={cardId}&sharer={userId}` for tracking; all share URLs are absolute (`https://lianabanyan.com/...`)
+
+**K-10: Build + Deploy**
+- All 8 Firebase hosting targets deployed (main, default/cephas, biz, org, net, the2ndsecond, hexisle, upekrithen)
+- `create-membership-checkout` edge function redeployed
+
+### Prior Session Fixes (B037 — Bishop, same day)
+- White screen fix: XRayOverlay/LarkSidePanel/CoinFlipAnimation moved inside AuthProvider+BrowserRouter in App.tsx
+- K147 Piggyback Improvement Pipeline: 5 new files + 2 modified + migration deployed
+- 13 missing database tables: idempotent migration `20260328000001_missing_tables_launch_fix.sql`
+- Cephas content registry seeded: 21 documents in `cephas_content_registry`
+- UnderTheHoodPage fixed: Supabase JS client replaced with direct REST fetch for anon users
+- 267+ external Cephas URLs converted to in-platform `/cephas/` routes across 33+ files
+- Librarian MCP fixed: `parseContext.ts` now reads ALL canonical numbers from `useCanonicalStats.ts`; index rebuilt
+- `useCanonicalStats.ts` updated to 2,078/146/28
+
+### Files Modified This Session (Knight 148-prep)
+1. `platform/supabase/functions/create-membership-checkout/index.ts`
+2. `platform/src/App.tsx`
+3. `platform/src/pages/NotFound.tsx`
+4. `platform/src/components/UnifiedNavigation.tsx`
+5. `platform/src/NetworkApp.tsx`
+6. `platform/src/pages/RedCarpet.tsx`
+7. `platform/src/pages/HexIsleDownloads.tsx`
+8. `platform/src/components/cue-cards/CueCardDeck.tsx`
+
+### NEXT SESSION: K148 — App.tsx Architectural Refactor
+
+**The big one.** App.tsx is 1,400+ lines with 591 routes, 8 levels of provider nesting, and no route isolation by portal. This is not sustainable for the long haul.
+
+**Plan:**
+1. Split routes into a `routes/` directory with index files per domain group
+2. Create `AppRouter.tsx` — clean router importing route groups
+3. Create `AppShell.tsx` — layout component (sidebar + topbar + footer + overlays)
+4. Create `AppProviders.tsx` — provider hierarchy in one place
+5. Gate routes by portal type at router level (not just sidebar visibility)
+6. App.tsx becomes ~100 lines: providers + shell + router
+7. Full deploy + verification
+
+**Also pending:**
+- Bishop B-2 through B-8 (Stripe products, STL seed, MoneyPenny digest, webhook, smoke test, content seed, stats sync)
+- Pawn Batch 25 (pledge disclosure copy, beta banner text, Red Carpet error message)
+- A2P 10DLC SMS campaign (~April 8-15 approval window)
+- Herjavec letter: attorney review MANDATORY before sending (2 amber SEC flags)
 
 ---
 

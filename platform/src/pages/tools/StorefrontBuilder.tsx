@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Store, Plus, Trash2, Clock, Truck, Image, ChevronRight, ChevronLeft, Eye, Check, Paintbrush, CreditCard, FileImage, Package, Sparkles, Users } from 'lucide-react';
+import { ArrowLeft, Store, Plus, Trash2, Clock, Truck, Image, ChevronRight, ChevronLeft, Eye, Check, Paintbrush, CreditCard, FileImage, Package, Sparkles, Users, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -134,6 +134,37 @@ export default function StorefrontBuilder() {
         .insert(itemRows as never);
 
       if (itemErr) throw new Error('Failed to add menu items');
+
+      // Auto-complete treasure map step if user has active progress
+      try {
+        const { data: mapProgress } = await supabase
+          .from('treasure_map_progress' as any)
+          .select('id, phase_data, current_phase')
+          .eq('user_id', user.id)
+          .limit(1)
+          .maybeSingle();
+
+        if (mapProgress) {
+          const pd = (mapProgress as any).phase_data || {};
+          const scoutSteps = { ...(pd.scout || {}) };
+          const storeStepIdx = Object.keys(scoutSteps).length > 0
+            ? String(Math.max(...Object.keys(scoutSteps).map(Number)) + 1)
+            : '2';
+          if (!Object.values(scoutSteps).some(Boolean)) {
+            scoutSteps[storeStepIdx] = true;
+          }
+          await supabase
+            .from('treasure_map_progress' as any)
+            .update({
+              phase_data: { ...pd, scout: scoutSteps },
+              last_activity_at: new Date().toISOString(),
+            } as any)
+            .eq('id', (mapProgress as any).id);
+          toast.info('Treasure Map step completed! Check your progress.');
+        }
+      } catch {
+        // Non-critical — don't block storefront creation
+      }
 
       toast.success('Storefront published!');
       setPublishedSlug(slug);
@@ -351,6 +382,27 @@ export default function StorefrontBuilder() {
             </CardContent>
           </Card>
 
+          <Card className="border-cyan-500/20 bg-gradient-to-br from-slate-900/50 to-cyan-900/10">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center shrink-0">
+                  <Globe className="w-5 h-5 text-cyan-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium">Place on Ghost World</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Put your storefront on the hex map so everyone can discover it while exploring the islands.
+                  </p>
+                  <Link to="/ghost-world?place=true">
+                    <Button size="sm" className="mt-3 gap-1 bg-cyan-600 hover:bg-cyan-700">
+                      <Globe className="w-3 h-3" /> Place on Map
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card className="border-amber-500/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -417,7 +469,7 @@ export default function StorefrontBuilder() {
                       Get everything at once — assemble a Crew Table with a designer, photographer, writer, and printer.
                       Your team builds your brand together.
                     </p>
-                    <Link to="/bandwagon">
+                    <Link to={`/crew-tables?template=new_business_starter&title=${encodeURIComponent(businessName + " Brand Team")}`}>
                       <Button size="sm" className="mt-3 gap-1 bg-purple-600 hover:bg-purple-700">
                         <Users className="w-3 h-3" /> Create Crew Table
                       </Button>

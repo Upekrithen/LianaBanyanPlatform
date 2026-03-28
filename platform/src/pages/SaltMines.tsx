@@ -450,15 +450,15 @@ export default function SaltMines() {
         <ProgressiveSection
           id="patent-showcase"
           title="Patent Showcase"
-          subtitle="1,754 innovations. 8 Crown Jewels. Your competitive moat."
+          subtitle="2,007 innovations. 8 Crown Jewels. Your competitive moat."
           sectionNumber={3}
           totalSections={totalSections}
-          benefit={{ id: 'patent-access', text: 'Access to 1,754 documented innovations', category: 'job' }}
+          benefit={{ id: 'patent-access', text: 'Access to 2,007 documented innovations', category: 'job' }}
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Crown Jewels Showcase', href: 'https://cephas.lianabanyan.com/verification/crown-jewels-showcase' },
-            { label: 'Patent Portfolio', href: 'https://cephas.lianabanyan.com/under-the-hood/patent-portfolio' },
+            { label: 'Crown Jewels Showcase', href: '/cephas/verification/crown-jewels-showcase' },
+            { label: 'Patent Portfolio', href: '/cephas/under-the-hood/patent-portfolio' },
           ]}
         >
           <div className="mb-8">
@@ -506,7 +506,7 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Blockchain IP Comparison', href: 'https://cephas.lianabanyan.com/under-the-hood/blockchain-ip-comparison' },
+            { label: 'Blockchain IP Comparison', href: '/cephas/under-the-hood/blockchain-ip-comparison' },
           ]}
         >
           <div className="p-6 rounded-xl bg-slate-800/50 border border-white/10">
@@ -534,7 +534,7 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Derivatives & Collaboration', href: 'https://cephas.lianabanyan.com/under-the-hood/derivatives-collaboration' },
+            { label: 'Derivatives & Collaboration', href: '/cephas/under-the-hood/derivatives-collaboration' },
           ]}
         >
           <div className="overflow-x-auto">
@@ -585,7 +585,7 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Three-Gear Currency', href: 'https://cephas.lianabanyan.com/under-the-hood/three-gear-currency' },
+            { label: 'Three-Gear Currency', href: '/cephas/under-the-hood/three-gear-currency' },
           ]}
         >
           <div className="grid md:grid-cols-2 gap-6">
@@ -655,8 +655,8 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Golden Key Puzzle', href: 'https://cephas.lianabanyan.com/under-the-hood/golden-key-puzzle' },
-            { label: 'Ghost World Half-Life', href: 'https://cephas.lianabanyan.com/under-the-hood/ghost-world-half-life' },
+            { label: 'Golden Key Puzzle', href: '/cephas/under-the-hood/golden-key-puzzle' },
+            { label: 'Ghost World Half-Life', href: '/cephas/under-the-hood/ghost-world-half-life' },
           ]}
         >
           <div className="grid md:grid-cols-3 gap-4">
@@ -700,7 +700,7 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Sharing Cue Cards', href: 'https://cephas.lianabanyan.com/under-the-hood/sharing-cue-cards' },
+            { label: 'Sharing Cue Cards', href: '/cephas/under-the-hood/sharing-cue-cards' },
           ]}
         >
           <div className="space-y-4">
@@ -755,7 +755,7 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Sponsor to Own', href: 'https://cephas.lianabanyan.com/under-the-hood/sponsor-to-own' },
+            { label: 'Sponsor to Own', href: '/cephas/under-the-hood/sponsor-to-own' },
           ]}
         >
           <div className="grid md:grid-cols-3 gap-4 mb-8">
@@ -798,7 +798,7 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Forex Ratchet Valuation', href: 'https://cephas.lianabanyan.com/under-the-hood/forex-ratchet-valuation' },
+            { label: 'Forex Ratchet Valuation', href: '/cephas/under-the-hood/forex-ratchet-valuation' },
           ]}
         >
           <div className="grid md:grid-cols-2 gap-6">
@@ -840,8 +840,8 @@ export default function SaltMines() {
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'IP Load Balancing Academic', href: 'https://cephas.lianabanyan.com/academic/ip-load-balancing-academic' },
-            { label: 'Aircraft Carrier IP Funding', href: 'https://cephas.lianabanyan.com/articles/aircraft-carrier-ip-funding' },
+            { label: 'IP Load Balancing Academic', href: '/cephas/academic/ip-load-balancing-academic' },
+            { label: 'Aircraft Carrier IP Funding', href: '/cephas/articles/aircraft-carrier-ip-funding' },
           ]}
         >
           <div className="overflow-x-auto mb-6">

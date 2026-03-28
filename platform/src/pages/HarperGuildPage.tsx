@@ -110,7 +110,7 @@ export default function HarperGuildPage() {
           <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
             Every humanitarian feature in this platform exists because the Founder or someone he knew needed it and it didn't exist. The Harper Guild isn't abstract corporate theory—it's built from the lived reality of watching systems fail in slow motion, and designing the exact safety net that would have caught the people who fell through the cracks.
           </p>
-          <Button variant="outline" onClick={() => window.open('https://cephas.lianabanyan.com/founder-proof', '_blank', 'noopener,noreferrer')}>
+          <Button variant="outline" onClick={() => navigate('/cephas/founder-proof')}>
             Read the Founder's Anecdotes
           </Button>
         </div>

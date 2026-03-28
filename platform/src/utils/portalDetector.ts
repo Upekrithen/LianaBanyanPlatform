@@ -17,11 +17,12 @@
  * - lianabanyan.net / localhost:5176 → Business Network Portal (B2B)
  * - the2ndsecond.com / localhost:5177 → DSS Portal (Maker, Prototyper Guild)
  * - hexisle.com / localhost:5178 → HexIsle Portal (7-island simulator)
+ * - upekrithen.lianabanyan.com / localhost:5179 → Upekrithen Portal (MoneyPenny admin, founder-only)
  * - *.hexisle.com → HexIsle Portal (subdomain-routed views)
  * - *.the2ndsecond.com → DSS Portal (subdomain-routed views)
  */
 
-export type PortalType = 'marketplace' | 'business' | 'nonprofit' | 'network' | 'dss' | 'hexisle';
+export type PortalType = 'marketplace' | 'business' | 'nonprofit' | 'network' | 'dss' | 'hexisle' | 'upekrithen';
 
 /**
  * Extracts the root domain from a hostname
@@ -48,6 +49,11 @@ export const detectPortal = (): PortalType => {
   if (isBusinessRoute(path)) return 'business';
   if (isNonprofitRoute(path)) return 'nonprofit';
   if (isNetworkRoute(path)) return 'network';
+
+  // Upekrithen portal — founder-only MoneyPenny admin
+  if (rootDomain === 'upekrithen.lianabanyan.com' || hostname === 'upekrithen.lianabanyan.com' || hostname === 'lianabanyan-upekrithen.web.app' || port === '5179') {
+    return 'upekrithen';
+  }
 
   // HexIsle portal — hexisle.com AND all subdomains (*.hexisle.com)
   if (rootDomain === 'hexisle.com' || hostname === 'hexislo.com' || port === '5178') {
@@ -91,7 +97,8 @@ export const getPortalBaseUrl = (): string => {
       nonprofit: 'http://localhost:5175',
       network: 'http://localhost:5176',
       dss: 'http://localhost:5177',
-      hexisle: 'http://localhost:5178'
+      hexisle: 'http://localhost:5178',
+      upekrithen: 'http://localhost:5179'
     };
     return portMap[portal];
   }
@@ -102,7 +109,8 @@ export const getPortalBaseUrl = (): string => {
     nonprofit: 'https://lianabanyan.org',
     network: 'https://lianabanyan.net',
     dss: 'https://the2ndsecond.com',
-    hexisle: 'https://hexisle.com'
+    hexisle: 'https://hexisle.com',
+    upekrithen: 'https://upekrithen.lianabanyan.com'
   };
   return domainMap[portal];
 };
@@ -118,7 +126,8 @@ export const getPortalUrl = (portal: PortalType, path: string = '/'): string => 
       nonprofit: '5175',
       network: '5176',
       dss: '5177',
-      hexisle: '5178'
+      hexisle: '5178',
+      upekrithen: '5179'
     };
     return `http://localhost:${portMap[portal]}${path}`;
   }
@@ -129,7 +138,8 @@ export const getPortalUrl = (portal: PortalType, path: string = '/'): string => 
     nonprofit: 'lianabanyan.org',
     network: 'lianabanyan.net',
     dss: 'the2ndsecond.com',
-    hexisle: 'hexisle.com'
+    hexisle: 'hexisle.com',
+    upekrithen: 'upekrithen.lianabanyan.com'
   };
   return `https://${domainMap[portal]}${path}`;
 };

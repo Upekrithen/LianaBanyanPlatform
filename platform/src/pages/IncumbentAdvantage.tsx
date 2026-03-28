@@ -106,7 +106,7 @@ export default function IncumbentAdvantage() {
               <p className="text-sm text-slate-600">
                 This hand-drawn sketch currently holds the Incumbent position for the Founder Avatar. If an illustrator creates a polished vector version that gets accepted, the original uploader (the Founder) retains the historical Trailblazer credit and any associated bounty splits.
               </p>
-              <Button variant="outline" className="w-full" onClick={() => window.open('https://cephas.lianabanyan.com/founder-proof', '_blank', 'noopener,noreferrer')}>
+              <Button variant="outline" className="w-full" onClick={() => window.location.href = '/cephas/founder-proof'}>
                 View Founder Proof on Cephas
               </Button>
             </CardContent>

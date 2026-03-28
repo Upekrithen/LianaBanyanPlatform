@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 
 interface TreasureMapIntroProps {
   onStart: () => void;
+  onSkip: () => void;
 }
 
-export function TreasureMapIntro({ onStart }: TreasureMapIntroProps) {
+export function TreasureMapIntro({ onStart, onSkip }: TreasureMapIntroProps) {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-6 md:p-12">
       <div className="max-w-xl mx-auto text-center space-y-8">
@@ -29,6 +30,15 @@ export function TreasureMapIntro({ onStart }: TreasureMapIntroProps) {
         >
           Start the Map
         </Button>
+        <div>
+          <button
+            type="button"
+            className="text-muted-foreground hover:text-foreground text-sm underline underline-offset-4 transition-colors"
+            onClick={onSkip}
+          >
+            Skip → Show me everything
+          </button>
+        </div>
       </div>
     </div>
   );

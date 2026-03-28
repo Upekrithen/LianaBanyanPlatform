@@ -38,18 +38,32 @@ export function CueCardDeck() {
 
   const getShareUrl = (cardId: string) => {
     const path = cardId === "invite-creator" ? "/join/creator" : cardId === "we-need-you" ? "/crew-call" : "/";
-    return `${baseUrl}${path}?ref=${encodeURIComponent(refName)}`;
+    const sharerId = user?.id ? `&sharer=${user.id}` : "";
+    return `https://lianabanyan.com${path}?ref=${encodeURIComponent(refName)}${sharerId}`;
   };
 
-  const handleShare = (cardId: string) => {
-    const url = getShareUrl(cardId);
+  const doShare = async (url: string, title: string, cardId: string) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text: title, url });
+        setSharedId(cardId);
+        setTimeout(() => setSharedId(null), 2000);
+        return;
+      } catch { /* user cancelled — fall through to clipboard */ }
+    }
     if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(url);
       setSharedId(cardId);
       setTimeout(() => setSharedId(null), 2000);
     } else {
       window.open(url, "_blank");
     }
+  };
+
+  const handleShare = (cardId: string) => {
+    const url = getShareUrl(cardId);
+    const card = DECK_CARDS.find(c => c.id === cardId);
+    doShare(url, card?.label || "Liana Banyan", cardId);
   };
 
   const [letterFilter, setLetterFilter] = useState<string>("all");
@@ -61,12 +75,9 @@ export function CueCardDeck() {
     : LETTER_CUE_CARDS.filter(c => c.category === letterFilter);
 
   const handleShareLetter = (card: typeof LETTER_CUE_CARDS[number]) => {
-    const url = `${baseUrl}/cue/${card.id}?ref=${encodeURIComponent(refName)}`;
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(url);
-      setSharedId(card.id);
-      setTimeout(() => setSharedId(null), 2000);
-    }
+    const sharerId = user?.id ? `&sharer=${user.id}` : "";
+    const url = `https://lianabanyan.com/RedCarpet?cue=${card.id}&ref=${encodeURIComponent(refName)}${sharerId}`;
+    doShare(url, card.title, card.id);
   };
 
   const toggleFlip = (id: string) => {

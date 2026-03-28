@@ -15,9 +15,13 @@
  * what you share, and navigate your entire digital presence.
  */
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fetchEvents, type CalendarType } from "@/lib/calendarService";
+import { PLUG_MAP } from "@/lib/calendarPlugs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -709,6 +713,156 @@ function HelmRemoteControl({
 }
 
 // ─────────────────────────────────────────────────────────
+// MY PROGRESS CARD (K81 gap fix — K89)
+// ─────────────────────────────────────────────────────────
+
+const LEVEL_LABELS: Record<number, string> = { 1: 'Starter', 2: 'Apprentice', 3: 'Journeyman', 4: 'Network' };
+const LEVEL_COLORS: Record<number, string> = { 1: 'text-slate-400', 2: 'text-blue-400', 3: 'text-amber-400', 4: 'text-emerald-400' };
+
+function HelmMyProgress({ userId }: { userId?: string }) {
+  const navigate = useNavigate();
+
+  const { data: maps = [] } = useQuery({
+    queryKey: ['helm-my-progress', userId],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('treasure_map_progress')
+        .select('*')
+        .eq('user_id', userId!)
+        .is('completed_at', null)
+        .order('last_activity_at', { ascending: false });
+      return data || [];
+    },
+    enabled: !!userId,
+    staleTime: 60_000,
+  });
+
+  const levelPercent = (level: number) => Math.min(100, (level / 4) * 100);
+
+  return (
+    <Card className="mt-4 bg-zinc-900/50 border-zinc-800">
+      <CardContent className="py-4">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">My Progress</p>
+          <button onClick={() => navigate('/treasure-maps')} className="text-xs text-amber-500 hover:text-amber-400 transition-colors">
+            All Maps →
+          </button>
+        </div>
+        {maps.length === 0 ? (
+          <div className="text-center py-3">
+            <p className="text-xs text-zinc-500">No treasure maps started yet.</p>
+            <button onClick={() => navigate('/treasure-maps')} className="text-xs text-amber-500 hover:text-amber-400 mt-1">
+              Begin your journey →
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {maps.slice(0, 4).map((m: any) => (
+              <div key={m.id} className="flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs font-medium text-zinc-200 truncate capitalize">{m.map_id.replace(/_/g, ' ')}</p>
+                    <span className={`text-[10px] font-semibold ${LEVEL_COLORS[m.current_level] || 'text-slate-400'}`}>
+                      {LEVEL_LABELS[m.current_level] || `Lv ${m.current_level}`}
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-zinc-800 mt-1">
+                    <div
+                      className="h-full rounded-full bg-amber-600 transition-all"
+                      style={{ width: `${levelPercent(m.current_level)}%` }}
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate(`/treasure-maps?map=${m.map_id}`)}
+                  className="text-[10px] text-amber-500 hover:text-amber-400 shrink-0"
+                >
+                  Continue →
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// TODAY'S SCHEDULE CARD
+// ─────────────────────────────────────────────────────────
+
+function HelmTodaySchedule({ userId }: { userId?: string }) {
+  const navigate = useNavigate();
+
+  const todayStart = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+  const todayEnd = useMemo(() => {
+    const d = new Date();
+    d.setHours(23, 59, 59, 999);
+    return d;
+  }, []);
+
+  const allTypes: CalendarType[] = ['personal', 'family', 'business', 'coalition', 'route', 'defense', 'education'];
+
+  const { data: events = [] } = useQuery({
+    queryKey: ['helm-today-schedule', userId],
+    queryFn: () => fetchEvents(userId!, allTypes, todayStart, todayEnd),
+    enabled: !!userId,
+    staleTime: 60_000,
+  });
+
+  const displayEvents = events.slice(0, 5);
+
+  const formatTime = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  };
+
+  return (
+    <Card className="mt-6 bg-zinc-900/50 border-zinc-800">
+      <CardContent className="py-4">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Today's Schedule</p>
+          <button
+            onClick={() => navigate('/calendar')}
+            className="text-xs text-amber-500 hover:text-amber-400 transition-colors"
+          >
+            View All →
+          </button>
+        </div>
+        {displayEvents.length === 0 ? (
+          <p className="text-sm text-zinc-500">Nothing scheduled. Drop a beacon to start exploring.</p>
+        ) : (
+          <div className="space-y-2">
+            {displayEvents.map(evt => {
+              const plug = PLUG_MAP[evt.calendar_type];
+              return (
+                <div key={evt.id} className="flex items-center gap-2 text-sm">
+                  <span className="text-xs text-zinc-500 w-14 shrink-0 text-right">{formatTime(evt.start_time)}</span>
+                  <span
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{ backgroundColor: plug?.color || evt.color || '#3b82f6' }}
+                  />
+                  <span className="shrink-0">{plug?.emoji || '📅'}</span>
+                  <span className="text-zinc-200 truncate">{evt.title}</span>
+                </div>
+              );
+            })}
+            {events.length > 5 && (
+              <p className="text-xs text-zinc-500">+{events.length - 5} more</p>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
 // MAIN HELM PAGE
 // ─────────────────────────────────────────────────────────
 
@@ -1091,6 +1245,12 @@ export default function TheHelm() {
             />
           </div>
         </div>
+
+        {/* Today's Schedule */}
+        <HelmTodaySchedule userId={user?.id} />
+
+        {/* My Progress */}
+        <HelmMyProgress userId={user?.id} />
 
         {/* Instructions */}
         <Card className="mt-6 bg-zinc-900/50 border-zinc-800">

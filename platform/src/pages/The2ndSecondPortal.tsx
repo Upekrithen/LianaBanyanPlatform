@@ -68,7 +68,7 @@ const VALUE_PROP_TOPICS: FlipTopic[] = [
     title: "Getting Funded",
     icon: DollarSign,
     quickFacts:
-      "The platform uses a patent sponsorship model — not venture capital. Your product is backed by the IP portfolio (1,401 patent claims). Sponsors contribute to pools, not to your company. You keep full control. The Cost+20% pricing model means you keep 83.3% of every sale.",
+      "The platform uses a patent sponsorship model — not venture capital. Your product is backed by the IP portfolio (1,511 patent claims). Sponsors contribute to pools, not to your company. You keep full control. The Cost+20% pricing model means you keep 83.3% of every sale.",
     intermediate:
       "Two sponsorship mechanisms: (1) Global Sponsor Pool — diversified across all platform projects, balanced quarterly. (2) Patent Buckets — concentrated funding for specific innovations. The 60/20/20 split: 60% platform operations, 20% creator allocation, 20% external capital pool. All stakes are capped at $10M with splitting for accessibility. This is service sponsorship — sponsors receive platform benefits, not securities.",
     deepLink: {
@@ -133,7 +133,7 @@ const HEXISLE_TEMPLATE_TOPICS: FlipTopic[] = [
     quickFacts:
       "Maximum control, traditional IP protection. Your designs stay private and are produced only through authorized channels. Lower community multiplier but highest per-unit creator allocation. Best for products where design secrecy is critical.",
     intermediate:
-      "Closed engagement uses the platform for distribution, payment processing, and the three-currency system, but keeps your designs fully proprietary. You still benefit from the patent portfolio protection (your IP is shielded alongside 1,401 claims), but you handle your own manufacturing. Community testing is opt-in via NDA-protected NOID contracts.",
+      "Closed engagement uses the platform for distribution, payment processing, and the three-currency system, but keeps your designs fully proprietary. You still benefit from the patent portfolio protection (your IP is shielded alongside 1,511 claims), but you handle your own manufacturing. Community testing is opt-in via NDA-protected NOID contracts.",
     deepLink: {
       label: "Read About IP Protection",
       route: "/crows-nest",
@@ -189,26 +189,13 @@ export default function The2ndSecondPortal() {
   const [isUploading, setIsUploading] = useState(false);
 
   const handleJoinGuild = () => {
-    setIsJoined(true);
-    toast({
-      title: "Welcome to the Prototyper Guild!",
-      description: "You now have access to the Master STL Vault.",
-    });
+    navigate('/register-maker');
   };
 
   const handleUploadReport = () => {
-    setIsUploading(true);
-    setTimeout(() => {
-      setIsUploading(false);
-      toast({
-        title: "Test Report Submitted",
-        description:
-          "Your data has entered Quorum Aggregation. You will receive Marks once verified!",
-      });
-    }, 1500);
+    navigate('/test-pilot');
   };
 
-  // Shared "Register My Printer" button for back footer
   const registerButton = (
     <Button
       size="lg"
@@ -813,7 +800,15 @@ export default function The2ndSecondPortal() {
         <p className="text-sm text-muted-foreground text-center mb-6">
           Not ready to register? No problem. Browse at your own pace.
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-4xl mx-auto">
+          <Button
+            variant="outline"
+            className="h-auto py-3 flex flex-col items-center gap-1.5 text-xs"
+            onClick={() => navigate("/factory-node")}
+          >
+            <Factory className="h-5 w-5 text-orange-500" />
+            Factory Node
+          </Button>
           <Button
             variant="outline"
             className="h-auto py-3 flex flex-col items-center gap-1.5 text-xs"

@@ -42,6 +42,8 @@ import { toast } from "sonner";
 import { generateShareId, getClickCount } from "@/lib/cueCardClickTracking";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
+import { useShareChain } from "@/hooks/useShareChain";
+import { ShareChainIndicator } from "@/components/beacon/ShareChainIndicator";
 
 interface BeaconRun {
   id: string;
@@ -72,6 +74,7 @@ export function BeaconRunCueCard({
   onShare,
 }: BeaconRunCueCardProps) {
   const { user } = useAuth();
+  const { recordShare, streak, bonusPct, isSustained, isAlive } = useShareChain();
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -104,6 +107,7 @@ export function BeaconRunCueCard({
   const shareToTwitter = () => {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(url, "_blank", "width=600,height=400");
+    recordShare().catch(() => {});
     onShare?.();
   };
 
@@ -111,6 +115,7 @@ export function BeaconRunCueCard({
     // TikTok doesn't have a direct share URL, so copy link and open TikTok
     copyToClipboard();
     toast.info("Link copied! Paste it in your TikTok caption.");
+    recordShare().catch(() => {});
     onShare?.();
   };
 
@@ -260,6 +265,11 @@ export function BeaconRunCueCard({
                   : `${clicksToNextLock} more clicks to unlock next frame`}
               </div>
             </div>
+          )}
+
+          {/* Share Chain Streak */}
+          {user && streak > 0 && (
+            <ShareChainIndicator streak={streak} bonusPct={bonusPct} isSustained={isSustained} isAlive={isAlive} hoursRemaining={0} />
           )}
 
           {/* Play Stats */}

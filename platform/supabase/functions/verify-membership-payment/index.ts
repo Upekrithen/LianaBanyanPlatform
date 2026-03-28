@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { writeLedgerEntry } from "../_shared/ledgerWriter.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -72,7 +73,44 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log(`[Verify] Success — user ${userId} marked as paid`);
+    // Also activate membership in member_profiles + update membership_payments
+    const oneYear = new Date();
+    oneYear.setFullYear(oneYear.getFullYear() + 1);
+
+    await adminClient
+      .from("member_profiles")
+      .update({
+        membership_status: "active",
+        membership_expires_at: oneYear.toISOString().split("T")[0],
+      })
+      .eq("user_id", userId);
+
+    if (sessionId) {
+      await adminClient
+        .from("membership_payments")
+        .update({ status: "completed", completed_at: new Date().toISOString() })
+        .eq("stripe_session_id", sessionId)
+        .eq("status", "pending");
+    }
+
+    // Write to transaction_ledger for Subchapter T classification
+    try {
+      await writeLedgerEntry({
+        stripe_event_id: sessionId ? `membership_${sessionId}` : `membership_${userId}_${Date.now()}`,
+        stripe_session_id: sessionId || undefined,
+        ledger_category: 'membership',
+        amount_cents: 500,
+        payer_id: userId,
+        is_patronage: true,
+        patronage_type: 'purchase',
+        description: 'Access Key — annual membership',
+        webhook_source: 'verify-membership-payment',
+      });
+    } catch (ledgerErr) {
+      console.error("[Verify] Ledger write failed (non-fatal):", ledgerErr);
+    }
+
+    console.log(`[Verify] Success — user ${userId} marked as paid + membership activated`);
 
     return new Response(
       JSON.stringify({ verified: true, status: "paid" }),

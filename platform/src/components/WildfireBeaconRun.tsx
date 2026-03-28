@@ -21,6 +21,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useMockData } from "@/contexts/MockDataProvider";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { createEvent, updateEvent } from "@/lib/calendarService";
+import { extendScenarioPersistence } from "@/lib/beaconPoints";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -222,6 +224,7 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
   const goldenKeys = useGoldenKeys();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const countdownRef = useRef<NodeJS.Timeout | null>(null);
+  const calendarEventIdRef = useRef<string | null>(null);
 
   // Mock Data (Contingency Operators integration)
   const mockData = useMockData();
@@ -332,11 +335,29 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
   // Advance to next node
   const advanceToNextNode = useCallback(() => {
     if (state.currentNodeIndex >= run.totalNodes - 1) {
-      // Run complete!
       setState(prev => ({ ...prev, isRunning: false }));
       setShowEndChoices(true);
       onComplete?.(state.elapsedSeconds);
       toast.success(`🎉 Wildfire Run Complete! Time: ${formatTime(state.elapsedSeconds)}`);
+
+      // Extend ghost scenario persistence on run completion
+      if (user) {
+        extendScenarioPersistence(user.id)
+          .then(({ extended, hoursAdded }) => {
+            if (extended > 0) {
+              toast.info(`📊 ${extended} saved scenario${extended > 1 ? 's' : ''} extended by ${hoursAdded}h`);
+            }
+          })
+          .catch(() => {});
+      }
+
+      // Update the start calendar event with end_time + stats
+      if (user && calendarEventIdRef.current) {
+        updateEvent(calendarEventIdRef.current, {
+          end_time: new Date().toISOString(),
+        }).catch(() => {});
+        calendarEventIdRef.current = null;
+      }
       return;
     }
 
@@ -351,20 +372,41 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
 
   // Start the run
   const startRun = () => {
-    // Load mock data if an interest key is configured
     if (run.interestKey) {
       mockData.loadMockData(run.interestKey, run.name);
     }
 
+    const startedAt = new Date().toISOString();
     setState(prev => ({
       ...prev,
       isRunning: true,
       isPaused: false,
-      startedAt: new Date().toISOString(),
+      startedAt,
     }));
     setShowEndChoices(false);
     navigateToNode(0);
     toast.success(`🔥 Wildfire Run Started: ${run.name}`);
+
+    // Calendar event for logged-in users only
+    if (user) {
+      createEvent({
+        owner_id: user.id,
+        calendar_type: 'personal',
+        title: `Wildfire Tour: ${run.name}`,
+        description: `${run.category} tour — ${run.totalNodes} stops`,
+        start_time: startedAt,
+        end_time: null,
+        all_day: false,
+        recurrence_rule: null,
+        location: null,
+        color: '#f97316',
+        source_type: 'beacon',
+        source_id: `wildfire_${run.id || run.name}`,
+        is_private: false,
+        metadata: { run_name: run.name, mode: state.stopMode, total_nodes: run.totalNodes },
+      }).then(evt => { calendarEventIdRef.current = evt.id; })
+        .catch(() => { /* non-critical */ });
+    }
   };
 
   // Pause/Resume
@@ -650,7 +692,7 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
                   variant="outline"
                   className="w-full justify-start gap-2"
                   onClick={() => {
-                    window.open("https://cephas.lianabanyan.com/", "_blank");
+                    navigate("/cephas");
                     setShowUnlockDialog(false);
                   }}
                 >

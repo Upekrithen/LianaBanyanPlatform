@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { createEvent, updateEvent } from "@/lib/calendarService";
 
 // ============================================================================
 // TYPES
@@ -145,9 +146,9 @@ export async function fetchCases(): Promise<StarChamberCase[]> {
       .from("star_chamber_cases")
       .select("*")
       .order("created_at", { ascending: false });
-    if (error || !data?.length) return SAMPLE_CASES;
-    return data.map(mapCase);
-  } catch { return SAMPLE_CASES; }
+    if (error) { console.error("Star Chamber fetch error:", error); return []; }
+    return (data || []).map(mapCase);
+  } catch { return []; }
 }
 
 export async function fetchUserCases(userId: string): Promise<StarChamberCase[]> {
@@ -157,9 +158,9 @@ export async function fetchUserCases(userId: string): Promise<StarChamberCase[]>
       .select("*")
       .or(`complainant_user_id.eq.${userId},respondent_user_id.eq.${userId}`)
       .order("created_at", { ascending: false });
-    if (error || !data?.length) return SAMPLE_CASES;
-    return data.map(mapCase);
-  } catch { return SAMPLE_CASES; }
+    if (error) { console.error("Star Chamber user-cases error:", error); return []; }
+    return (data || []).map(mapCase);
+  } catch { return []; }
 }
 
 // ============================================================================
@@ -181,7 +182,31 @@ export async function createCase(caseData: {
       evidence: caseData.evidence || [],
     }).select().single();
     if (error || !data) return null;
-    return mapCase(data);
+
+    const sc = mapCase(data);
+
+    // Create defense calendar events for case participants
+    const participants = [sc.complainantUserId, sc.respondentUserId].filter(Boolean) as string[];
+    for (const userId of participants) {
+      createEvent({
+        owner_id: userId,
+        calendar_type: 'defense',
+        title: `Star Chamber Case Filed: ${sc.caseType}`,
+        description: sc.title,
+        start_time: new Date().toISOString(),
+        end_time: null,
+        all_day: false,
+        recurrence_rule: null,
+        location: null,
+        color: '#ef4444',
+        source_type: 'star_chamber',
+        source_id: sc.id,
+        is_private: true,
+        metadata: { case_id: sc.id, case_type: sc.caseType, severity: sc.severity },
+      }).catch(() => {});
+    }
+
+    return sc;
   } catch { return null; }
 }
 
@@ -220,12 +245,30 @@ export async function setRecommendedAction(caseId: string, action: string): Prom
 
 export async function setFinalAction(caseId: string, action: string): Promise<boolean> {
   try {
+    const now = new Date().toISOString();
     const { error } = await supabase.from("star_chamber_cases").update({
       final_action: action,
       status: "verdict_reached",
-      resolved_at: new Date().toISOString(),
+      resolved_at: now,
     }).eq("id", caseId);
-    return !error;
+    if (error) return false;
+
+    // Update the defense calendar event with verdict
+    try {
+      const { data: events } = await supabase
+        .from("calendar_events" as never)
+        .select("id")
+        .eq("source_type", "star_chamber")
+        .eq("source_id", caseId);
+      for (const evt of (events || []) as { id: string }[]) {
+        updateEvent(evt.id, {
+          title: `Star Chamber Verdict: ${action.slice(0, 60)}`,
+          end_time: now,
+        }).catch(() => {});
+      }
+    } catch { /* non-critical */ }
+
+    return true;
   } catch { return false; }
 }
 
@@ -249,7 +292,7 @@ export async function fetchChamberStats(): Promise<{
   try {
     const { data, error } = await supabase.from("star_chamber_cases").select("status, founder_override");
     if (error || !data?.length) {
-      return { total: SAMPLE_CASES.length, open: 1, resolved: 2, overrideRate: 20 };
+      return { total: 0, open: 0, resolved: 0, overrideRate: 0 };
     }
     const resolved = data.filter(c => c.status === "closed" || c.status === "verdict_reached").length;
     const overrides = data.filter(c => c.founder_override).length;
@@ -260,7 +303,7 @@ export async function fetchChamberStats(): Promise<{
       overrideRate: data.length > 0 ? Math.round((overrides / data.length) * 100) : 0,
     };
   } catch {
-    return { total: SAMPLE_CASES.length, open: 1, resolved: 2, overrideRate: 20 };
+    return { total: 0, open: 0, resolved: 0, overrideRate: 0 };
   }
 }
 

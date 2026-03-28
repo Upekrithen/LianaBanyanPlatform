@@ -32,6 +32,8 @@ import {
   Lightbulb,
   Target,
   Zap,
+  Briefcase,
+  Rocket,
 } from "lucide-react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
@@ -226,6 +228,60 @@ export default function HelpEachOtherPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+
+        <Separator className="my-12" />
+
+        {/* Business Owners, Not Employees */}
+        <div className="space-y-8">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center p-3 bg-amber-500/10 rounded-full mb-4">
+              <Briefcase className="h-8 w-8 text-amber-500" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4">Business Owners, Not Employees</h2>
+          </div>
+
+          <Card className="border-amber-500/20 bg-amber-500/5">
+            <CardContent className="p-8 space-y-6 text-lg leading-relaxed">
+              <p className="font-semibold text-xl">
+                Every member who starts a project becomes a business owner.
+              </p>
+              <p className="text-muted-foreground">
+                Not a gig worker. Not a contractor waiting for assignments. A business owner — with
+                their own entity, their own products, their own customers, and their own revenue.
+              </p>
+              <p className="text-2xl font-bold text-primary">
+                We don't give people jobs. We give them businesses.
+              </p>
+              <p className="text-muted-foreground">
+                The cooperative provides the infrastructure: marketplace, payment rails, quality
+                standards, equipment co-funding, patent protection. You provide the work.
+              </p>
+              <div className="bg-background/50 rounded-lg p-4 space-y-2 text-base text-muted-foreground border border-border/50">
+                <p><span className="font-semibold text-foreground">Sole proprietorship</span> to start.</p>
+                <p><span className="font-semibold text-foreground">LLC</span> when you're ready.</p>
+                <p><span className="font-semibold text-foreground">Factory Node</span> when you've earned it.</p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-border/50">
+                <div className="text-center sm:text-left">
+                  <p className="font-bold text-lg">10,000 Business Starter Kits. $100 each.</p>
+                  <p className="text-muted-foreground text-sm">Backed by our patent portfolio. Every kit turns a person into a business owner on the spot.</p>
+                </div>
+                <Button
+                  className="gap-2 shrink-0"
+                  onClick={() => navigate("/starter-kit")}
+                >
+                  <Rocket className="h-4 w-4" /> Get a Starter Kit
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="text-center">
+            <Button size="lg" className="gap-2" onClick={() => navigate("/production")}>
+              Start Your Business <ArrowRight className="h-5 w-5" />
+            </Button>
           </div>
         </div>
 

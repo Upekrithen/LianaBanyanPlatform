@@ -31,9 +31,16 @@ export default function TermsOfService() {
 
         <article className="prose prose-neutral dark:prose-invert max-w-none">
           <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
-          <p className="text-muted-foreground text-sm mb-8">
-            Last updated: March 20, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
+          <p className="text-muted-foreground text-sm mb-4">
+            Last updated: March 26, 2026 &nbsp;|&nbsp; Effective: March 8, 2026
           </p>
+
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700 rounded-lg p-4 mb-8">
+            <p className="text-amber-800 dark:text-amber-200 text-sm font-medium m-0">
+              These terms are under legal review and subject to change. A licensed attorney
+              review is pending before final publication.
+            </p>
+          </div>
 
           <section className="space-y-4">
             <h2>1. Acceptance of Terms</h2>
@@ -102,7 +109,7 @@ export default function TermsOfService() {
             <p>
               Account creation is available through email/password registration or through
               third-party authentication providers (see Section 10 for details on
-              third-party integrations).
+              third-party integrations). The Platform enforces annual membership at $5/year — a Structural Bylaw.
             </p>
           </section>
 
@@ -196,7 +203,65 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>9. Marketplace and Seller Terms</h2>
+            <h2>9. Creator Responsibilities</h2>
+            <p>
+              Creators who list projects, products, or services on the Platform agree to:
+            </p>
+            <ul>
+              <li>Provide accurate descriptions, pricing, and delivery timelines</li>
+              <li>Fulfill orders within stated timeframes or communicate delays promptly</li>
+              <li>Maintain quality standards consistent with their listings</li>
+              <li>Respond to buyer inquiries within reasonable timeframes</li>
+              <li>Accept that creators keep 83.3% of every transaction — the remaining 16.7% funds platform operations and the 16 charitable initiatives</li>
+            </ul>
+            <p>
+              Repeated failure to fulfill obligations may result in listing suspension,
+              reputation penalties, or account restrictions.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2>10. Captain Responsibilities</h2>
+            <p>
+              Captains are operational leaders who manage batch fulfillment within their
+              regions. Captains are NOT investors — their stake is operational collateral,
+              not an investment. Captain responsibilities include:
+            </p>
+            <ul>
+              <li>Staking Marks as operational collateral per their level (10/50/100/1000)</li>
+              <li>Managing batch order fulfillment within their region</li>
+              <li>Confirming deliveries through the 1/3 confirmation rule</li>
+              <li>Maintaining a fulfillment rate above 90% to retain Captain status</li>
+              <li>Operating within their designated region and level capacity</li>
+            </ul>
+            <p>
+              Captains who fail to fulfill assigned orders forfeit their staked Marks
+              for the affected batch. Sustained poor performance results in demotion
+              or removal.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2>11. The 20% Margin — Structural Bylaw</h2>
+            <p>
+              All Platform pricing operates on a Cost+20% model. This is a Structural
+              Bylaw that cannot be changed by normal governance vote — it requires
+              Founder approval. The 20% margin funds:
+            </p>
+            <ul>
+              <li>Platform operations and infrastructure</li>
+              <li>16 charitable initiatives (Let&apos;s Make Dinner, Rally Group, VSL, etc.)</li>
+              <li>Technology development and maintenance</li>
+              <li>Community programs and support</li>
+            </ul>
+            <p>
+              On every transaction, the creator or worker keeps exactly 83.3% — not 83%,
+              not 84%. On a $500 transaction, the creator receives $416.67.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2>12. Marketplace and Seller Terms</h2>
             <p>
               Sellers on the Platform are independent operators. The Company does not
               guarantee the quality, safety, or legality of goods or services offered.
@@ -211,7 +276,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>10. Third-Party Integrations</h2>
+            <h2>13. Third-Party Integrations</h2>
             <p>
               The Platform integrates with third-party services to enhance user experience.
               Each integration accesses only the minimum data required:
@@ -248,7 +313,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>11. SMS Program Terms</h2>
+            <h2>14. SMS Program Terms</h2>
             <p>
               The Platform offers an SMS-based assistant service (&quot;Moneypenny&quot;)
               for account management and platform interaction.
@@ -294,7 +359,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>12. Intellectual Property Contribution</h2>
+            <h2>15. Intellectual Property Contribution</h2>
             <p>
               Members who develop innovations, tools, processes, or improvements
               while using Platform resources contribute those innovations to the
@@ -306,7 +371,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>13. Disclaimers</h2>
+            <h2>16. Disclaimers</h2>
             <p>
               The Platform is provided &quot;as is&quot; and &quot;as available&quot; without
               warranties of any kind. We do not guarantee uninterrupted access,
@@ -321,7 +386,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>14. Limitation of Liability</h2>
+            <h2>17. Limitation of Liability</h2>
             <p>
               To the maximum extent permitted by law, Liana Banyan Corporation shall not
               be liable for any indirect, incidental, special, consequential, or punitive
@@ -330,7 +395,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>15. Dispute Resolution — Star Chamber Governance</h2>
+            <h2>18. Dispute Resolution — Star Chamber Governance</h2>
             <p>
               Disputes between members, or between members and the Platform, are
               resolved through the Star Chamber — the Platform&apos;s internal
@@ -346,7 +411,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>16. Modifications</h2>
+            <h2>19. Modifications</h2>
             <p>
               We may update these Terms at any time. Material changes will be communicated
               through the Platform. Continued use after changes constitutes acceptance of
@@ -355,7 +420,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>17. Governing Law</h2>
+            <h2>20. Governing Law</h2>
             <p>
               These Terms are governed by the laws of the State of Wyoming, United States
               of America, where Liana Banyan Corporation is incorporated. Any disputes
@@ -365,7 +430,7 @@ export default function TermsOfService() {
           </section>
 
           <section className="space-y-4">
-            <h2>18. Contact</h2>
+            <h2>21. Contact</h2>
             <p>
               For questions about these Terms, contact us at:
               <br />

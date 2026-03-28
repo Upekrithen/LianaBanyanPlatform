@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/opendyslexic');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -742,9 +744,7 @@ html.lb-inverted [data-no-invert] {
   filter: invert(1) hue-rotate(180deg);
 }
 
-/* Dyslexia-Friendly Font — OpenDyslexic loaded from CDN */
-@import url('https://fonts.cdnfonts.com/css/opendyslexic');
-
+/* Dyslexia-Friendly Font — OpenDyslexic (imported at top of file) */
 html.lb-dyslexia-font,
 html.lb-dyslexia-font * {
   font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;

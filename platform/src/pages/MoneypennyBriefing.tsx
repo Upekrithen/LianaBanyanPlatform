@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Bot, Mail, CheckSquare, Megaphone, Lightbulb, Calendar, ArrowLeft, Plus,
-  Send, Copy, Trash2, Check, Clock, AlertCircle, ChevronRight, RefreshCw
+  Send, Copy, Trash2, Check, Clock, AlertCircle, ChevronRight, RefreshCw, Sparkles
 } from 'lucide-react';
 
 interface InboxItem {
@@ -93,6 +93,8 @@ export default function MoneypennyBriefing() {
   const [ideas, setIdeas] = useState<IdeaItem[]>([]);
   const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [aiBriefing, setAiBriefing] = useState('');
+  const [briefingLoading, setBriefingLoading] = useState(false);
   const [newAction, setNewAction] = useState('');
   const [newIdea, setNewIdea] = useState('');
   const [ideaRelay, setIdeaRelay] = useState('bishop');
@@ -118,6 +120,30 @@ export default function MoneypennyBriefing() {
   };
 
   useEffect(() => { fetchAll(); }, []);
+
+  const fetchAIBriefing = async () => {
+    setBriefingLoading(true);
+    try {
+      const context = [
+        `Date: ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}`,
+        `Pending inbox items: ${inbox.filter(i => i.status === 'new' || i.status === 'needs-action').length}`,
+        `Pending action items: ${actions.filter(a => a.status === 'pending').length}`,
+        `Social drafts to review: ${drafts.length}`,
+        `Schedule items: ${schedule.length}`,
+        `Overdue items: ${schedule.filter(s => s.due_date < new Date().toISOString().split('T')[0] && s.status !== 'done').length}`,
+      ].join('\n');
+
+      const { data, error } = await supabase.functions.invoke('moneypenny-ai-draft', {
+        body: { task_type: 'generate_briefing', context },
+      });
+      if (!error && data?.result) {
+        setAiBriefing(data.result);
+      }
+    } catch (err) {
+      console.warn('AI briefing failed:', err);
+    }
+    setBriefingLoading(false);
+  };
 
   const markActionDone = async (id: string) => {
     await supabase.from('moneypenny_actions').update({ status: 'done', completed_at: new Date().toISOString() }).eq('id', id);
@@ -196,6 +222,28 @@ export default function MoneypennyBriefing() {
             <RefreshCw className="h-3.5 w-3.5" /> Refresh
           </Button>
         </div>
+
+        {/* AI Narrative Briefing */}
+        {!loading && (
+          <Card className="mb-6 bg-gradient-to-r from-violet-950/40 to-indigo-950/40 border-violet-500/20">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-violet-400" />
+                  MoneyPenny AI Briefing
+                </CardTitle>
+                <Button size="sm" variant="ghost" onClick={fetchAIBriefing} disabled={briefingLoading} className="text-violet-400 hover:text-violet-300">
+                  {briefingLoading ? 'Thinking...' : aiBriefing ? 'Refresh' : 'Generate Briefing'}
+                </Button>
+              </div>
+            </CardHeader>
+            {aiBriefing && (
+              <CardContent>
+                <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">{aiBriefing}</p>
+              </CardContent>
+            )}
+          </Card>
+        )}
 
         {loading ? (
           <div className="text-center py-20 text-slate-400">Loading briefing...</div>

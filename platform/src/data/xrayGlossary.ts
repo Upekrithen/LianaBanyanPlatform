@@ -38,7 +38,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "The main hero card. HEOHO — Help Each Other Help Ourselves. This is the first thing visitors see.",
     connectedTo: "Leads to Ghost World (explore freely) or Real World (join for $5/year). Feeds into the Welcome Fable for first-time visitors.",
     why: "Every visitor should immediately understand what this platform is about — interdependence, not charity. The hero sets the tone for everything that follows.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/about",
+    learnMoreUrl: "/cephas/about",
     learnMoreLabel: "About Liana Banyan",
   },
   "hero-card": {
@@ -50,7 +50,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "The main hero card. HEOHO — Help Each Other Help Ourselves. This is the first thing visitors see.",
     connectedTo: "Leads to Ghost World (explore freely) or Real World (join for $5/year). Feeds into the Welcome Fable for first-time visitors.",
     why: "Every visitor should immediately understand what this platform is about — interdependence, not charity. The hero sets the tone for everything that follows.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/about",
+    learnMoreUrl: "/cephas/about",
     learnMoreLabel: "About Liana Banyan",
   },
   "hero-flip-card": {
@@ -67,21 +67,21 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "The 'Cooperative Commerce' header — this platform is a worker-owned cooperative, not a corporation extracting value. Cost+20% pricing, member-governed.",
     connectedTo: "Ties directly to the C+20 economic model, Fly on the Wall transparency ledger, and the 16 initiatives funded by the 20% margin.",
     why: "Naming what we are up front. Not 'social enterprise' or 'marketplace' — cooperative commerce. The words matter because the structure matters.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/economic-model",
+    learnMoreUrl: "/cephas/under-the-hood/economic-model",
     learnMoreLabel: "Economic Model",
   },
   "heoho-headline": {
     explanation: "Help Each Other, Help Ourselves — the foundational principle. Interdependence, not collectivism. Each person maintains individual agency.",
     connectedTo: "This philosophy powers every system: Cost+20% pricing, Marks from differential, BandWagon earned authority, and the Three-Currency economy.",
     why: "Interdependence preserves individual agency while creating collective benefit. Collectivism subordinates the individual — we don't do that. (1 Corinthians 12:21-26)",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/heoho",
+    learnMoreUrl: "/cephas/under-the-hood/heoho",
     learnMoreLabel: "The HEOHO Philosophy",
   },
   "heoho-title": {
     explanation: "Help Each Other, Help Ourselves — the foundational principle. Interdependence, not collectivism. Each person maintains individual agency.",
     connectedTo: "This philosophy powers every system: Cost+20% pricing, Marks from differential, BandWagon earned authority, and the Three-Currency economy.",
     why: "Interdependence preserves individual agency while creating collective benefit. Collectivism subordinates the individual — we don't do that. (1 Corinthians 12:21-26)",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/heoho",
+    learnMoreUrl: "/cephas/under-the-hood/heoho",
     learnMoreLabel: "The HEOHO Philosophy",
   },
   "enter-watch-buttons": {
@@ -98,7 +98,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── WELCOME GATE / FABLE ───
   "welcomegate-fable": {
     explanation: "The Welcome Fable — a short animated story that introduces the platform's purpose. Plays once for first-time visitors.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/about/origin-story",
+    learnMoreUrl: "/cephas/about/origin-story",
     learnMoreLabel: "The Origin Story",
   },
   "welcomegate-tabs": {
@@ -108,12 +108,12 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── NAVIGATION & STRUCTURE ───
   "crows-nest": {
     explanation: "The Crow's Nest — a discovery flyover of the entire platform. Peek at any feature before diving in. Three depth levels: Glimpse, Peek, Tell Me More.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/crows-nest",
+    learnMoreUrl: "/cephas/under-the-hood/crows-nest",
     learnMoreLabel: "Crow's Nest Guide",
   },
   "patent-portfolio": {
     explanation: "The patent portfolio ticker. Shows the estimated value of the cooperative's IP holdings — 60% of Founder patents go to the platform.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/ip-portfolio",
+    learnMoreUrl: "/cephas/under-the-hood/ip-portfolio",
     learnMoreLabel: "IP Portfolio Details",
   },
   "alpha-badge": {
@@ -125,7 +125,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "Credits — purchased with fiat ($1 = 1 Credit). Universal use, closed-loop (no cash-out). The everyday spending currency.",
     connectedTo: "Used to buy goods in the Mall, back Production Runs, purchase Cue Card decks, and pay for services. Feeds into Bounty payouts and Lark rewards.",
     why: "Closed-loop prevents extraction. Your dollar stays in the ecosystem working for everyone, not flowing out to shareholders. 1 Credit = 1 Mark = 1 Joule in value.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/three-currencies",
+    learnMoreUrl: "/cephas/under-the-hood/three-currencies",
     learnMoreLabel: "Three-Currency System",
     faqAnchorId: "three-currencies",
   },
@@ -133,7 +133,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "Marks — effort-debt currency earned through participation. Restricted to essentials (food, medical). Cleared by contributing to the cooperative.",
     connectedTo: "Earned from Bounties, Larks, and participation. Used for BandWagon project backing (earn SAA), Pledged Mark Voting, and Steward escrow. Backed Marks fund projects.",
     why: "Marks emerge from differential ONLY — never granted as gifts. This ensures every Mark represents real contribution. When you earn Marks, you've actually done something.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/three-currencies",
+    learnMoreUrl: "/cephas/under-the-hood/three-currencies",
     learnMoreLabel: "How Marks Work",
     faqAnchorId: "how-marks-work",
   },
@@ -141,7 +141,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "Joules — surplus storage with 'forever stamp' mechanic. Locks your exchange rate at purchase time. LB owns the Joules; you earn authority to direct them.",
     connectedTo: "Earned through Production Run backing (5x Pre-Mint multiplier). Powers governance weight and Service Allocation Authority. Not ownership — earned direction authority.",
     why: "The 'forever stamp' protects early supporters. If you buy Joules at today's rate, that rate is locked forever — like buying a stamp before the price goes up.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/three-currencies",
+    learnMoreUrl: "/cephas/under-the-hood/three-currencies",
     learnMoreLabel: "Joules Explained",
     faqAnchorId: "joules-forever-stamp",
   },
@@ -151,7 +151,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "Babylon Candles — one-use invitation tokens that transport someone directly into the platform. Like a teleportation spell from Stardust. Give one to someone you want to invite.",
     connectedTo: "Feeds the TasteMaker Trust Chain (attribution daisy chain, max 5 links). Your candle recipient becomes part of your referral network, earning you Pioneer-tier referral Marks.",
     why: "Personal invitation > mass marketing. When YOU give someone a candle, they arrive knowing someone real brought them here. That trust compounds through the attribution chain.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/babylon-candles",
+    learnMoreUrl: "/cephas/under-the-hood/babylon-candles",
     learnMoreLabel: "Babylon Candle System",
     faqAnchorId: "babylon-candles",
   },
@@ -159,7 +159,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "Each candle is personalized with your name as the inviter. When someone lights it (uses the link), they arrive with your attribution permanently recorded.",
     connectedTo: "Links to Six-Tier Referral Rewards (Pioneer 10 Marks → Ambassador 1 Mark) and the Vouched By / Recommended By delegation system.",
     why: "Attribution matters. The person who planted the seed should always get credit. Timestamp-verified: the cue card must be sent BEFORE the person signs up.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/babylon-candles",
+    learnMoreUrl: "/cephas/under-the-hood/babylon-candles",
     learnMoreLabel: "How Candles Work",
     faqAnchorId: "babylon-candles",
   },
@@ -167,7 +167,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── CUE CARDS ───
   "cue-card": {
     explanation: "Cue Cards — shareable recruitment cards included with your $5/year membership. Each card is both a benefit communication and a recruitment tool with your attribution code.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/cue-cards",
+    learnMoreUrl: "/cephas/under-the-hood/cue-cards",
     learnMoreLabel: "Cue Card System",
     faqAnchorId: "cue-cards",
   },
@@ -203,7 +203,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "BandWagon — back projects with Marks. If the project succeeds, you earn increased Service Allocation Authority. Not investment return — earned authority to allocate cooperative resources.",
     connectedTo: "Drives Production Runs (Fantasy Draft). Feeds TasteMaker Trust Chain and Taste Ranger progression (Scout → Luminary). Powers Backed Marks and Business Swoop mechanics.",
     why: "This is NOT an investment return. This is earned authority to allocate cooperative resources based on demonstrated judgment. Your track record of picking winners = your allocation budget.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/bandwagon",
+    learnMoreUrl: "/cephas/under-the-hood/bandwagon",
     learnMoreLabel: "BandWagon Deep Dive",
     faqAnchorId: "bandwagon",
   },
@@ -211,7 +211,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "BandWagon backing card. Shows project status, backers, and your potential SAA increase if the project succeeds.",
     connectedTo: "First 100 backers share influence proportionally (First-100 Rule). Links to Fantasy League prediction accuracy → unlocks real Backed Marks allocation.",
     why: "Positive-only QA — promotes, doesn't ding. Absence of backing is sufficient signal. No downvotes needed when attention is the currency.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/bandwagon",
+    learnMoreUrl: "/cephas/under-the-hood/bandwagon",
   },
 
   // ─── PRODUCTION RUNS ───
@@ -233,14 +233,14 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── COLD START ───
   "cold-start-cards": {
     explanation: "Cold Start Recipe Cards — step-by-step playbooks for launching your node or project. Pick a strategy, follow the steps, scale when ready.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/cold-start",
+    learnMoreUrl: "/cephas/under-the-hood/cold-start",
     learnMoreLabel: "Cold Start Strategies",
   },
 
   // ─── STEWARDS ───
   "steward-card": {
     explanation: "Steward system — project managers who pledge their own Marks (skin in the game). Pledged Marks are escrowed per-project. Released on success, absorbed on failure.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/stewards",
+    learnMoreUrl: "/cephas/under-the-hood/stewards",
     learnMoreLabel: "Steward System",
     faqAnchorId: "stewards",
   },
@@ -263,7 +263,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── XP & REPUTATION ───
   "xp-score": {
     explanation: "XP Score — multiplicative accomplishment metric. XP = Accomplishment Score × Bounty Points. Aggregate and cumulative — never decreases.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/xp-system",
+    learnMoreUrl: "/cephas/under-the-hood/xp-system",
     learnMoreLabel: "XP Score System",
     faqAnchorId: "xp-score",
   },
@@ -271,7 +271,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── COVERAGE MINUTES ───
   "coverage-minutes": {
     explanation: "Coverage Minutes / The Muffled Rule — speaking time is gated by listening time. 3-minute chunks, 180-minute cap, 90-day expiry. Earn the right to speak by listening first.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/muffled-rule",
+    learnMoreUrl: "/cephas/under-the-hood/muffled-rule",
     learnMoreLabel: "The Muffled Rule",
     faqAnchorId: "coverage-minutes",
   },
@@ -303,7 +303,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   },
   "cost-plus-20": {
     explanation: "Cost + 20% — the platform's pricing model. Sellers set prices. Market discovery. 20% floor ensures sustainability without extraction. Creator keeps 83.3%.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/economic-model",
+    learnMoreUrl: "/cephas/under-the-hood/economic-model",
     learnMoreLabel: "Economic Model",
     faqAnchorId: "cost-plus-20",
   },
@@ -336,7 +336,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // ─── FOOTER ───
   "platform-footer": {
-    explanation: "Platform footer — links to legal, community, and platform tools. 1,401 patent claims, 1,754 innovations. Service sponsorship, not securities.",
+    explanation: "Platform footer — links to legal, community, and platform tools. 1,511 patent claims, 2,007 innovations. Service sponsorship, not securities.",
   },
 
   // ─── SIX DEGREES ───
@@ -372,7 +372,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     explanation: "Star Chamber — multi-AI governance verification. Seven specialized AI agents (Knight, Bishop, Rook, Pawn, Queen, King, Jester) evaluate platform decisions. 5 of 7 must agree before any system-level action proceeds. Dissenting opinions are recorded and published.",
     connectedTo: "Feeds into Fly on the Wall transparency ledger. Each Star Chamber ruling is timestamped and publicly auditable. Connects to the STAMP verification system for bounty/quality assurance.",
     why: "No single AI — and no single human — should have unchecked authority over community decisions. Seven diverse agents with different optimization functions (legal, technical, ethical, financial, creative, strategic, adversarial) catch blind spots that any one perspective would miss.",
-    learnMoreUrl: "https://cephas.lianabanyan.com/under-the-hood/star-chamber",
+    learnMoreUrl: "/cephas/under-the-hood/star-chamber",
     learnMoreLabel: "Star Chamber Governance",
     faqAnchorId: "star-chamber",
   },
@@ -387,7 +387,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   // ─── WHY NO ADS / WHY NO VC ───
   "why-no-ads-vc": {
     explanation: "Why No Ads and Why No V.C. — two philosophy pages explaining the platform's funding model. No external advertising (growth is word-of-mouth via Heralds). No venture capital (funded by patents and grit, 100% member-owned). Every dollar that would go to Big Tech or investors goes to the community instead.",
-    connectedTo: "Ties to the Herald system (referral bonuses replace ad spend), the patent portfolio (8 provisionals with 1,754 innovations replace VC runway), and the Joules system (early supporters get forever-stamp rates instead of dilution).",
+    connectedTo: "Ties to the Herald system (referral bonuses replace ad spend), the patent portfolio (10 provisionals with 2,007 innovations replace VC runway), and the Joules system (early supporters get forever-stamp rates instead of dilution).",
     why: "If you take ad money, users become the product. If you take VC money, the exit becomes the product. We took neither, so the cooperative stays the product — owned by and for its members.",
     learnMoreUrl: "/why-no-ads",
     learnMoreLabel: "Why No Ads?",

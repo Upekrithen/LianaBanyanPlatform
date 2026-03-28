@@ -16,6 +16,7 @@ import {
   rejectResponse,
   fetchMilestoneReports,
   awardFollowUpBonus,
+  requestAIDraft,
   CLASSIFICATION_CONFIG,
   CHANNEL_CONFIG,
   AI_RESPONDER_CONFIG,
@@ -81,11 +82,13 @@ function StatusBadge({ status }: { status: QAEntry['status'] }) {
 
 // ─── QA Entry Card ────────────────────────────────────────────────────
 
-function QAEntryCard({ entry, onApprove, onReject, onAwardBonus }: {
+function QAEntryCard({ entry, onApprove, onReject, onAwardBonus, onDraft, drafting }: {
   entry: QAEntry;
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
   onAwardBonus: (id: string) => void;
+  onDraft: (id: string, question: string) => void;
+  drafting?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -187,7 +190,12 @@ function QAEntryCard({ entry, onApprove, onReject, onAwardBonus }: {
 
         {/* Actions */}
         <div className="flex flex-wrap gap-2 pt-2 border-t border-border/40">
-          {entry.status === 'pending_review' && (
+          {(entry.status === 'pending_review' || entry.status === 'pending') && !entry.answerText && (
+            <Button size="sm" onClick={() => onDraft(entry.id, entry.questionText)} disabled={drafting} className="bg-violet-600 hover:bg-violet-700 text-white">
+              <Sparkles className="h-3.5 w-3.5 mr-1" /> {drafting ? 'Drafting...' : 'Draft AI Response'}
+            </Button>
+          )}
+          {(entry.status === 'pending_review' || entry.status === 'draft') && (
             <>
               <Button size="sm" onClick={() => onApprove(entry.id)} className="bg-emerald-600 hover:bg-emerald-700 text-white">
                 <Check className="h-3.5 w-3.5 mr-1" /> Approve & Send
@@ -366,6 +374,8 @@ export default function MoneyPennyQA() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showMilestones, setShowMilestones] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [draftingId, setDraftingId] = useState<string | null>(null);
+  const [draftingAll, setDraftingAll] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -420,6 +430,24 @@ export default function MoneyPennyQA() {
     await loadData();
   }
 
+  async function handleDraft(id: string, question: string) {
+    setDraftingId(id);
+    await requestAIDraft(id, question);
+    setDraftingId(null);
+    await loadData();
+  }
+
+  async function handleDraftAllPending() {
+    const pending = entries.filter(e => (e.status === 'pending_review' || e.status === 'pending') && !e.answerText);
+    if (pending.length === 0) return;
+    setDraftingAll(true);
+    for (const entry of pending.slice(0, 10)) {
+      await requestAIDraft(entry.id, entry.questionText);
+    }
+    setDraftingAll(false);
+    await loadData();
+  }
+
   if (loading || !stats) {
     return (
       <PortalPageLayout variant="stage" maxWidth="xl" xrayId="moneypenny-qa">
@@ -448,6 +476,11 @@ export default function MoneyPennyQA() {
                 <MessageCircle className="h-5 w-5 text-fuchsia-400" />
               </h1>
               <p className="text-sm text-muted-foreground">Every question is a gift. The good ones earn Marks.</p>
+            </div>
+            <div className="ml-auto">
+              <Button size="sm" onClick={handleDraftAllPending} disabled={draftingAll} className="bg-violet-600 hover:bg-violet-700 text-white gap-1">
+                <Sparkles className="h-3.5 w-3.5" /> {draftingAll ? 'Drafting...' : 'Draft All Pending'}
+              </Button>
             </div>
           </div>
         </div>
@@ -530,6 +563,8 @@ export default function MoneyPennyQA() {
                     onApprove={handleApprove}
                     onReject={handleReject}
                     onAwardBonus={handleAwardBonus}
+                    onDraft={handleDraft}
+                    drafting={draftingId === entry.id}
                   />
                 ))
               )}

@@ -731,7 +731,7 @@ export default function HallOfInnovations() {
                 Deep dive into IP Load Balancing, patent economics, and the Three-Tier framework
               </p>
             </div>
-            <Button variant="outline" onClick={() => window.open("https://cephas.lianabanyan.com/under-the-hood/patent-economics-one-pager/", "_blank")}>
+            <Button variant="outline" onClick={() => navigate("/cephas/under-the-hood/patent-economics-one-pager")}>
               Read on Cephas
               <ChevronRight className="w-4 h-4 ml-2" />
             </Button>

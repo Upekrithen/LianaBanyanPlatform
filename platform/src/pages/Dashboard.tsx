@@ -60,7 +60,7 @@ import { CrowFeather } from '@/lib/crowFeatherService';
 import { 
   Palette, Users, ExternalLink, Rocket, Award, Utensils, Scale,
   ShoppingBag, ShoppingCart, Briefcase, Mic2, BookOpen, Globe, Wrench,
-  ChefHat, Shield, Flame
+  ChefHat, Shield, Flame, UserCircle, X as XIcon
 } from 'lucide-react';
 
 export default function Dashboard() {
@@ -74,6 +74,8 @@ export default function Dashboard() {
   const [membershipPaid, setMembershipPaid] = useState<boolean>(false);
   const [showChaseLauncher, setShowChaseLauncher] = useState(false);
   const [crowFeatherEarned, setCrowFeatherEarned] = useState<CrowFeather | null>(null);
+  const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
+  const [profileDismissed, setProfileDismissed] = useState(() => localStorage.getItem('lb_profile_card_dismissed') === 'true');
 
   useEffect(() => {
     loadUserData();
@@ -115,6 +117,13 @@ export default function Dashboard() {
       }
 
       setIsProjectOwner(ownedProjects && ownedProjects.length > 0);
+
+      const { data: profileData } = await supabase
+        .from('member_profiles' as never)
+        .select('display_name, bio')
+        .eq('user_id', user.id)
+        .maybeSingle() as { data: { display_name: string | null; bio: string | null } | null };
+      setProfileComplete(!!profileData?.display_name && !!profileData?.bio);
     } catch (err) {
       console.error('Dashboard data load failed:', err);
     }
@@ -178,6 +187,26 @@ export default function Dashboard() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
+            {/* Complete Your Profile nudge — hidden when complete or dismissed */}
+            {profileComplete === false && !profileDismissed && (
+              <Card className="border-primary/30 bg-primary/5">
+                <CardContent className="flex items-center gap-4 p-4">
+                  <UserCircle className="h-8 w-8 text-primary shrink-0" />
+                  <div className="flex-1">
+                    <p className="font-medium">Your profile is incomplete</p>
+                    <p className="text-xs text-muted-foreground">A complete profile helps your community find you.</p>
+                  </div>
+                  <Button size="sm" onClick={() => navigate('/member/me?edit=true')}>Complete Profile</Button>
+                  <button
+                    className="text-muted-foreground hover:text-foreground p-1"
+                    onClick={() => { setProfileDismissed(true); localStorage.setItem('lb_profile_card_dismissed', 'true'); }}
+                    aria-label="Dismiss"
+                  >
+                    <XIcon className="h-4 w-4" />
+                  </button>
+                </CardContent>
+              </Card>
+            )}
             <MoneyPennyWidget />
 
             {/* ════════════════════════════════════════════════════════════════

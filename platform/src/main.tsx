@@ -9,6 +9,7 @@ import NonprofitApp from "./NonprofitApp.tsx";
 import NetworkApp from "./NetworkApp.tsx";
 import DSSApp from "./DSSApp.tsx";
 import HexIsleApp from "./HexIsleApp.tsx";
+import UpekrithenApp from "./UpekrithenApp.tsx";
 import "./i18n"; // Full react-i18next with 58-language HttpBackend (Option B)
 import "./index.css";
 
@@ -24,6 +25,7 @@ const AppMap = {
   network: NetworkApp,
   dss: DSSApp,
   hexisle: HexIsleApp,
+  upekrithen: UpekrithenApp,
 };
 const AppComponent = AppMap[portal];
 

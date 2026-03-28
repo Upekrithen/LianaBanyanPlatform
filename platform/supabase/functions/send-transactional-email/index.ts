@@ -7,6 +7,11 @@
  *   - credit_purchase: Credit purchase confirmation
  *   - pledge_cancellation: Pledge cancellation/refund confirmation
  *   - milestone_update: Project milestone notification
+ *   - project_claimed: Creator claims a Red Carpet showcase
+ *   - delivery_confirmation_request: Captain ships order, needs confirmation
+ *   - contest_entry_received: Contest submission confirmed
+ *   - membership_confirmed: $5/year membership activated
+ *   - payout_sent: Creator payout processed
  *
  * SEC-safe: All language uses "sponsorship", "backing", "service credits".
  * Never "investment", "returns", "equity", or "profit".
@@ -218,6 +223,169 @@ function milestoneUpdateEmail(
   );
 }
 
+function projectClaimedEmail(
+  creatorName: string,
+  projectName: string,
+  backerCount: number,
+  totalPledged: number
+): string {
+  return baseTemplate(
+    'Your Project Has Been Claimed!',
+    `
+      <p style="font-size: 15px; line-height: 1.6;">
+        ${creatorName ? `Congratulations ${creatorName}!` : 'Congratulations!'} Your Red Carpet showcase
+        has been claimed and is now live on the marketplace.
+      </p>
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 6px 0; color: #666;">Project</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;">${projectName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #666;">Current Backers</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;">${backerCount}</td>
+          </tr>
+          <tr style="border-top: 1px solid #d1fae5;">
+            <td style="padding: 8px 0; color: #666;">Total Pledged</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${totalPledged.toLocaleString()} Credits</td>
+          </tr>
+        </table>
+      </div>
+      <p style="font-size: 14px; color: #666; line-height: 1.6;">
+        As the creator, you keep 83.3% of all sponsorship. Visit your dashboard
+        to manage your project and communicate with backers.
+      </p>
+    `
+  );
+}
+
+function deliveryConfirmationRequestEmail(
+  recipientName: string,
+  captainName: string,
+  orderSummary: string,
+  confirmUrl: string
+): string {
+  return baseTemplate(
+    'Delivery Confirmation Needed',
+    `
+      <p style="font-size: 15px; line-height: 1.6;">
+        ${recipientName ? `Hello ${recipientName},` : 'Hello,'} Captain ${captainName || 'your Captain'}
+        has marked your order as shipped.
+      </p>
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <p style="font-weight: 600; margin: 0 0 8px 0;">Order Details</p>
+        <p style="font-size: 14px; color: #666; margin: 0;">${orderSummary}</p>
+      </div>
+      <p style="font-size: 15px; line-height: 1.6;">
+        Please confirm receipt once your order arrives:
+      </p>
+      <div style="text-align: center; margin: 24px 0;">
+        <a href="${confirmUrl}" style="display: inline-block; background: #16a34a; color: white; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+          Confirm Delivery
+        </a>
+      </div>
+      <p style="font-size: 13px; color: #999;">
+        If you have not received your order or there is an issue, you can report
+        it from your dashboard.
+      </p>
+    `
+  );
+}
+
+function contestEntryReceivedEmail(
+  name: string,
+  contestName: string,
+  entryTitle: string
+): string {
+  return baseTemplate(
+    'Contest Entry Received',
+    `
+      <p style="font-size: 15px; line-height: 1.6;">
+        ${name ? `${name}, your` : 'Your'} contest submission has been received!
+      </p>
+      <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 6px 0; color: #666;">Contest</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;">${contestName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #666;">Your Entry</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;">${entryTitle}</td>
+          </tr>
+        </table>
+      </div>
+      <p style="font-size: 14px; color: #666; line-height: 1.6;">
+        Your entry is now in the running! Community voting determines winners.
+        Share your entry to rally support.
+      </p>
+    `
+  );
+}
+
+function membershipConfirmedEmail(name: string): string {
+  return baseTemplate(
+    'Membership Confirmed &mdash; Welcome Aboard',
+    `
+      <p style="font-size: 15px; line-height: 1.6;">
+        ${name ? `${name}, your` : 'Your'} $5/year membership is now active.
+      </p>
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <p style="font-weight: 600; margin: 0 0 12px 0;">Your membership unlocks:</p>
+        <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8;">
+          <li>Full marketplace access — buy, sell, and back projects</li>
+          <li>Guild membership and collaboration tools</li>
+          <li>Voting rights on platform governance</li>
+          <li>Access to all 16 charitable initiatives</li>
+          <li>Three-currency economy participation</li>
+        </ul>
+      </div>
+      <p style="font-size: 14px; color: #666; line-height: 1.6;">
+        Your membership renews annually at $5. This is a Structural Bylaw —
+        it cannot be raised without supermajority governance approval.
+      </p>
+    `
+  );
+}
+
+function payoutSentEmail(
+  name: string,
+  amount: string,
+  method: string,
+  projectName: string
+): string {
+  return baseTemplate(
+    'Payout Sent',
+    `
+      <p style="font-size: 15px; line-height: 1.6;">
+        ${name ? `${name}, your` : 'Your'} payout has been processed.
+      </p>
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+        <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 6px 0; color: #666;">Project</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600;">${projectName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 6px 0; color: #666;">Amount</td>
+            <td style="padding: 6px 0; text-align: right; font-weight: 600; color: #16a34a;">$${amount}</td>
+          </tr>
+          <tr style="border-top: 1px solid #d1fae5;">
+            <td style="padding: 8px 0; color: #666;">Method</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 600;">${method}</td>
+          </tr>
+        </table>
+      </div>
+      <p style="font-size: 14px; color: #666; line-height: 1.6;">
+        Funds typically arrive within 2-3 business days depending on your payment
+        method. You can view your full payout history on your dashboard.
+      </p>
+    `,
+    `<p style="color: #999; font-size: 11px;">Creator payout: 83.3% of transaction value.</p>`
+  );
+}
+
 function outreachEmail(
   recipientName: string,
   senderName: string,
@@ -262,7 +430,7 @@ function outreachEmail(
 
       <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; font-size: 12px; color: #999;">
         <p>Liana Banyan Corporation &mdash; A worker-owned cooperative</p>
-        <p>1,754 innovations. 8 USPTO provisional applications. One cooperative.</p>
+        <p>2,007 innovations. 10 USPTO provisional applications. One cooperative.</p>
         <p><a href="https://lianabanyan.com" style="color: #e94560;">lianabanyan.com</a></p>
       </div>
     </div>
@@ -342,6 +510,50 @@ Deno.serve(async (req) => {
           data?.projectName || 'Unknown Project',
           data?.milestoneName || 'New Milestone',
           data?.description || ''
+        );
+        break;
+
+      case 'project_claimed':
+        subject = `Your project "${data?.projectName || 'project'}" has been claimed!`;
+        html = projectClaimedEmail(
+          data?.creatorName || '',
+          data?.projectName || 'Unknown Project',
+          data?.backerCount || 0,
+          data?.totalPledged || 0
+        );
+        break;
+
+      case 'delivery_confirmation_request':
+        subject = 'Please confirm your delivery';
+        html = deliveryConfirmationRequestEmail(
+          data?.recipientName || '',
+          data?.captainName || '',
+          data?.orderSummary || '',
+          data?.confirmUrl || 'https://lianabanyan.com/dashboard'
+        );
+        break;
+
+      case 'contest_entry_received':
+        subject = `Entry received: ${data?.contestName || 'Contest'}`;
+        html = contestEntryReceivedEmail(
+          data?.name || '',
+          data?.contestName || 'Unknown Contest',
+          data?.entryTitle || 'Your Entry'
+        );
+        break;
+
+      case 'membership_confirmed':
+        subject = 'Welcome — Your $5/year membership is active';
+        html = membershipConfirmedEmail(data?.name || '');
+        break;
+
+      case 'payout_sent':
+        subject = `Payout sent: $${data?.amount || '0'}`;
+        html = payoutSentEmail(
+          data?.name || '',
+          data?.amount || '0',
+          data?.method || 'Stripe Connect',
+          data?.projectName || ''
         );
         break;
 

@@ -29,7 +29,7 @@ I've attached a technical paper — "Blockchain Without Coin or Speculation" —
 
 ## The Research You Can Verify
 
-Before building any of this, we ran 130 prior art queries across 12 innovation categories using Perplexity AI's patent search, reviewing 330+ existing patents against our portfolio of 1,754 documented innovations. Eight innovations survived with no prior art found — we call them the Crown Jewels. The full research — every query, every result, every search log, every dual-AI valuation assessment — is published at Cephas.LianaBanyan.org in the "Under the Hood" section until peer-reviewed. Nothing is behind an NDA or a paywall. I am inviting you to verify every claim against the source material.
+Before building any of this, we ran 130 prior art queries across 12 innovation categories using Perplexity AI's patent search, reviewing 330+ existing patents against our portfolio of 1,938 documented innovations. Eight innovations survived with no prior art found — we call them the Crown Jewels. The full research — every query, every result, every search log, every dual-AI valuation assessment — is published at Cephas.LianaBanyan.org in the "Under the Hood" section until peer-reviewed. Nothing is behind an NDA or a paywall. I am inviting you to verify every claim against the source material.
 
 This is standard procedure for what we call the Press Junket: a standing invitation for domain-verified professionals to evaluate our work publicly. The feedback tool at Cephas.LianaBanyan.org is exclusively for credentialed reviewers — we have a slot reserved specifically for you that accepts submission from your @simoninvestigations.com or @alumni.clemson.edu domain email. No contact is made between us before or during your review — this preserves the empirical value of an independent expert assessment. You publish what you find, in your own words, with no editorial input from us. What happens after is entirely up to you. We welcome professional evaluation precisely because we want to do it *right*. An uncoached critique from a 26-year FBI forensic accountant is worth more to our members than anything we could write about ourselves.
 
@@ -59,7 +59,7 @@ If none of the above fits, I have two simpler asks. First: review the attached t
 
 ## Who I Am
 
-I'm a 53-year-old ARNG veteran of no particular note — Infantry (11B) and Aviation (15A), enlisted at 16, FAA Commercial Rotary Wing IFR-rated helicopter pilot. Father of eight. Twenty-one years in IT development. The patent portfolio behind this platform includes 1,754 documented innovations and 1,401 patent claims filed across eight provisional applications — 99% utility patents, not design — eight of which survived a 130-query deep dive against the U.S. patent office with no prior art found.
+I'm a 53-year-old ARNG veteran of no particular note — Infantry (11B) and Aviation (15A), enlisted at 16, FAA Commercial Rotary Wing IFR-rated helicopter pilot. Father of eight. Twenty-one years in IT development. The patent portfolio behind this platform includes 1,938 documented innovations and 1,401 patent claims filed across eight provisional applications — 99% utility patents, not design — eight of which survived a 130-query deep dive against the U.S. patent office with no prior art found.
 
 I've also written to Michael Seibel about the CEO seat, MacKenzie Scott about Board Chair, Sal Khan about our education initiative, and José Andrés about food security. The ecosystem is forming. It needs a CFO who can keep everyone honest.
 

@@ -90,6 +90,33 @@ export function CrewCreationWizard() {
         return;
       }
 
+      // Auto-create OOB dispatch for "help wanted" broadcast
+      try {
+        const location = [form.city, form.state].filter(Boolean).join(", ");
+        const focusLabel = FOCUS_OPTIONS.find(o => o.id === form.focus)?.label || form.focus;
+        await supabase.from("outbound_dispatch" as never).insert({
+          title: `Crew Forming: ${form.name.trim()} — ${focusLabel}`,
+          type: "crew_call",
+          status: "stamped",
+          priority: "normal",
+          content_body: [
+            `🤝 Crew Forming: ${form.name.trim()}`,
+            location ? `📍 ${location}` : null,
+            `🎯 ${focusLabel}`,
+            `👥 1/12 members — 11 slots remaining`,
+            ``,
+            `Join: lianabanyan.com/crew/${crew.id}/invite`,
+          ].filter(Boolean).join("\n"),
+          content_summary: `New crew "${form.name.trim()}" is forming for ${focusLabel}${location ? ` in ${location}` : ""}. 11 slots open.`,
+          channels: ["reddit", "discord"],
+          created_by: "system",
+          tags: ["crew_call", "help_wanted", form.focus],
+          metadata: { crew_id: crew.id, focus: form.focus, city: form.city, state: form.state },
+        });
+      } catch (_dispatchErr) {
+        // Non-critical — crew is still created successfully
+      }
+
       toast.success("Crew created. Share your invite link to fill the Crew.");
       navigate(`/crew/${crew.id}`);
     } catch (e) {

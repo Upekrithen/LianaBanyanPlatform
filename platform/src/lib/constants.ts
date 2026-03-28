@@ -11,7 +11,7 @@
 /**
  * Cephas Documentation Site
  */
-export const CEPHAS_URL = 'https://cephas.lianabanyan.com';
+export const CEPHAS_URL = '/cephas';
 
 /**
  * Helper to build Cephas URLs

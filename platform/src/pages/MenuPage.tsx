@@ -44,6 +44,37 @@ function formatTime(t: string | null): string {
   return `${hr}:${String(m).padStart(2, '0')} ${ampm}`;
 }
 
+function useCountdown(cutoffTime: string | null): string | null {
+  const [label, setLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!cutoffTime) return;
+    const tick = () => {
+      const now = new Date();
+      const [ch, cm] = (cutoffTime || '00:00:00').split(':').map(Number);
+      const target = new Date(now);
+      target.setHours(ch, cm, 0, 0);
+      if (target <= now) target.setDate(target.getDate() + 1);
+
+      const diff = target.getTime() - now.getTime();
+      if (diff <= 0) { setLabel(null); return; }
+
+      const hours = Math.floor(diff / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+
+      if (hours > 0) setLabel(`${hours}h ${mins}m`);
+      else if (mins > 0) setLabel(`${mins}m ${secs}s`);
+      else setLabel(`${secs}s`);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [cutoffTime]);
+
+  return label;
+}
+
 export default function MenuPage() {
   const { slug } = useParams<{ slug: string }>();
   const [storefront, setStorefront] = useState<StorefrontData | null>(null);
@@ -54,6 +85,7 @@ export default function MenuPage() {
   const [showCart, setShowCart] = useState(false);
   const [customerEmail, setCustomerEmail] = useState('');
   const [customerName, setCustomerName] = useState('');
+  const countdown = useCountdown(storefront?.order_cutoff_time ?? null);
 
   useEffect(() => {
     if (!slug) return;
@@ -201,6 +233,9 @@ export default function MenuPage() {
                 )}
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3" /> Order by {storefront.order_cutoff_time === '00:00:00' ? 'Midnight' : formatTime(storefront.order_cutoff_time)}
+                  {countdown && (
+                    <span className="ml-1 text-amber-400 font-semibold">({countdown})</span>
+                  )}
                 </span>
                 <span className="flex items-center gap-1">
                   <Truck className="w-3 h-3" /> {formatTime(storefront.delivery_window_start)}–{formatTime(storefront.delivery_window_end)}
@@ -210,6 +245,18 @@ export default function MenuPage() {
           </div>
         </div>
       </div>
+
+      {/* Cutoff countdown banner — prominent when close to deadline */}
+      {countdown && !countdown.includes('h') && (
+        <div className="bg-amber-500/10 border-b border-amber-500/30">
+          <div className="max-w-2xl mx-auto px-4 py-2 flex items-center justify-center gap-2 text-sm">
+            <Clock className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span className="text-amber-300 font-medium">
+              Order cutoff in <strong className="text-amber-400">{countdown}</strong> for tomorrow's delivery
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Menu */}
       <div className="max-w-2xl mx-auto px-4 py-6">

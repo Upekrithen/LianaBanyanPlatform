@@ -31,7 +31,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-type SocialPlatform = 'twitter' | 'linkedin' | 'facebook' | 'bluesky' | 'threads' | 'instagram' | 'tiktok';
+type SocialPlatform = 'twitter' | 'linkedin' | 'facebook' | 'bluesky' | 'threads' | 'instagram' | 'tiktok' | 'reddit' | 'discord';
 
 interface PostRequest {
   accountId?: string;  // Specific account ID (multi-account support)
@@ -225,6 +225,19 @@ Deno.serve(async (req) => {
         result = await postToThreads(
           socialAccount.access_token,
           socialAccount.platform_user_id,
+          text
+        );
+        break;
+      case 'reddit':
+        result = await postToReddit(
+          socialAccount.access_token,
+          socialAccount.platform_config,
+          text
+        );
+        break;
+      case 'discord':
+        result = await postToDiscord(
+          socialAccount.access_token,
           text
         );
         break;
@@ -750,5 +763,106 @@ async function postToThreads(
     return { success: true, postUrl, postId: publishData.id };
   } catch (err) {
     return { success: false, error: `Threads error: ${err.message}` };
+  }
+}
+
+/**
+ * Post to Reddit via OAuth API
+ * access_token from member_social_accounts, subreddit from platform_config or OOB plug config
+ */
+async function postToReddit(
+  accessToken: string,
+  platformConfig: Record<string, any> | null,
+  text: string
+): Promise<PostResponse> {
+  try {
+    const subreddit = platformConfig?.subreddit || platformConfig?.subreddits;
+    if (!subreddit) {
+      return { success: false, error: 'No subreddit configured. Add a subreddit to your Reddit account settings.' };
+    }
+
+    const lines = text.split('\n');
+    const title = lines[0].substring(0, 300);
+    const body = lines.slice(1).join('\n').trim();
+
+    const params = new URLSearchParams({
+      kind: 'self',
+      sr: subreddit,
+      title,
+      text: body || title,
+    });
+
+    const response = await fetch('https://oauth.reddit.com/api/submit', {
+      method: 'POST',
+      headers: {
+        'Authorization': `bearer ${accessToken}`,
+        'User-Agent': 'LianaBanyan/1.0',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: params.toString(),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Reddit API response:', errorText);
+
+      if (response.status === 401) {
+        return { success: false, error: 'Reddit token expired. Please reconnect your account.' };
+      }
+
+      return { success: false, error: `Reddit API error: ${response.status}` };
+    }
+
+    const data = await response.json();
+
+    if (data.json?.errors?.length > 0) {
+      return { success: false, error: `Reddit: ${data.json.errors.map((e: any) => e[1]).join(', ')}` };
+    }
+
+    const postUrl = data.json?.data?.url;
+    const postId = data.json?.data?.name;
+
+    return { success: true, postUrl, postId };
+  } catch (err) {
+    return { success: false, error: `Reddit error: ${err.message}` };
+  }
+}
+
+/**
+ * Post to Discord via webhook URL
+ * The access_token field stores the webhook URL for Discord accounts
+ */
+async function postToDiscord(
+  webhookUrl: string,
+  text: string
+): Promise<PostResponse> {
+  try {
+    if (!webhookUrl || !webhookUrl.startsWith('https://discord.com/api/webhooks/')) {
+      return { success: false, error: 'Invalid Discord webhook URL. Please update your Discord connection.' };
+    }
+
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        content: text,
+        username: 'Liana Banyan',
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Discord webhook response:', errorText);
+
+      if (response.status === 404) {
+        return { success: false, error: 'Discord webhook not found. The channel may have been deleted.' };
+      }
+
+      return { success: false, error: `Discord webhook error: ${response.status}` };
+    }
+
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: `Discord error: ${err.message}` };
   }
 }

@@ -1,11 +1,13 @@
-import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart, Sprout, Link2, Crosshair, Gift, Anchor, Scale, Factory, Repeat, Package, Truck, CreditCard, CalendarDays } from "lucide-react";
+import { Home, FolderKanban, ShoppingBag, Briefcase, Settings, FileCode, FlaskConical, ScrollText, FileX, PlusCircle, ListChecks, Globe, TrendingUp, Plug, Code, BookOpen, Award, Users, AlertTriangle, DollarSign, BarChart3, ShieldCheck, UserPlus, Wrench, Swords, Shield, HandshakeIcon, Map, Store, Newspaper, Send, Flag, Rocket, Trophy, Brain, Palette, Radio, Ghost, FileSignature, Star, Hammer, UserCheck, Timer, Heart, Sprout, Link2, Crosshair, Gift, Anchor, Scale, Factory, Repeat, Package, Truck, CreditCard, CalendarDays, Compass, Megaphone, User, GitBranch, Handshake, Banknote, Gavel, Crown, Download } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";
 import { detectPortal } from "@/utils/portalDetector";
+import { MembershipBadge } from "@/components/MembershipBadge";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -19,20 +21,26 @@ import {
 const marketplaceMainItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "Dashboard", url: "/dashboard", icon: Home },
+  { title: "My Profile", url: "/member/me", icon: User },
   { title: "Projects", url: "/projects", icon: FolderKanban },
+  { title: "Production", url: "/production", icon: Factory },
   { title: "Marketplace", url: "/marketplace", icon: ShoppingBag },
   { title: "Main Square", url: "/main-square", icon: Store },
   { title: "Portfolio", url: "/portfolio", icon: Briefcase },
   { title: "Medallions", url: "/medallions", icon: Award },
   { title: "HexIsle", url: "/hexisle-dashboard", icon: Map },
+  { title: "My Chain", url: "/chain", icon: Link2 },
+  { title: "Campaigns", url: "/hexisle/campaigns", icon: Rocket },
+  { title: "HexIsle Downloads", url: "/hexisle/downloads", icon: Download },
   { title: "Guilds", url: "/guilds", icon: Swords },
   { title: "Clans", url: "/clans", icon: Shield },
   { title: "Peer Contracts", url: "/peer-contracts", icon: HandshakeIcon },
   { title: "Daily News", url: "/daily-news", icon: Newspaper },
   { title: "BandWagon", url: "/bandwagon", icon: Rocket },
   { title: "Subscriptions", url: "/subscriptions", icon: Repeat },
+  { title: "Coalitions", url: "/coalitions", icon: Handshake },
   { title: "Calendar", url: "/calendar", icon: CalendarDays },
-  { title: "Ghost World Map", url: "/ghost-world/map", icon: Globe },
+  { title: "Ghost World", url: "/ghost-world", icon: Globe },
   { title: "Storefront Builder", url: "/tools/storefront-builder", icon: Store },
   { title: "Provider Dashboard", url: "/dashboard/provider", icon: Package },
   { title: "Runner Dashboard", url: "/dashboard/runner", icon: Truck },
@@ -47,6 +55,8 @@ const marketplaceMainItems = [
   { title: "Ghost World Mall", url: "/ghost-world/mall", icon: Ghost },
   { title: "Creator Draft Pick", url: "/creator-draft-pick", icon: UserPlus },
   { title: "Crew Call", url: "/crew-call", icon: Hammer },
+  { title: "Crew Tables", url: "/crew-tables", icon: Users },
+  { title: "Design Emporium", url: "/emporium", icon: Palette },
   { title: "Vouch & Recommend", url: "/vouch", icon: Heart },
   { title: "Chain Voting", url: "/chain-voting", icon: Link2 },
   { title: "Coverage Minutes", url: "/coverage-minutes", icon: Timer },
@@ -65,6 +75,23 @@ const marketplaceMainItems = [
   { title: "Proteus Anchor", url: "/proteus-anchor", icon: Anchor },
   { title: "Maker Spotlight", url: "/maker-spotlight", icon: Star },
   { title: "Designed to Be Broken", url: "/designed-to-be-broken", icon: Hammer },
+  { title: "Housing", url: "/housing", icon: Home },
+  { title: "Helm Actions", url: "/dashboard/helm", icon: Compass },
+  { title: "Out of Bounds", url: "/dashboard/oob", icon: Megaphone },
+  { title: "LB Card", url: "/dashboard/lb-card", icon: CreditCard },
+  { title: "Card Funding", url: "/dashboard/fund-card", icon: CreditCard },
+  { title: "War Chest", url: "/dashboard/war-chest", icon: Shield },
+  { title: "Payouts", url: "/dashboard/payouts", icon: Banknote },
+  { title: "Earnings", url: "/dashboard/earnings", icon: DollarSign },
+  { title: "Membership", url: "/dashboard/membership", icon: Crown },
+  { title: "Buy Credits", url: "/buy-credits", icon: CreditCard },
+  { title: "Finances", url: "/finances", icon: DollarSign },
+  { title: "ADAPT Score", url: "/adapt-score", icon: BarChart3 },
+  { title: "Bounty Arena", url: "/dashboard/bounty-arena", icon: Trophy },
+  { title: "Design Auction", url: "/auction", icon: Gavel },
+  { title: "Invite Someone", url: "/invite", icon: UserPlus },
+  { title: "My Pipeline", url: "/pipeline", icon: GitBranch },
+  { title: "My Improvements", url: "/dashboard/my-improvements", icon: Wrench },
 ];
 
 const marketplaceAdminItems = [
@@ -79,6 +106,7 @@ const marketplaceAdminItems = [
   { title: "Q&A Intelligence", url: "/moneypenny/qa", icon: Brain, requiresAdmin: true },
   { title: "Social Command", url: "/moneypenny/social", icon: Radio, requiresAdmin: true },
   { title: "Circle Testing", url: "/testing/circles", icon: Crosshair, requiresAdmin: true },
+  { title: "Piggyback Review", url: "/dashboard/piggyback-review", icon: Wrench, requiresAdmin: true },
 ];
 
 // Business Portal Navigation
@@ -129,7 +157,8 @@ export function AppSidebar() {
 
   const getNavCls = (path: string) => {
     const isActive = location.pathname === path || 
-                     (path === "/projects" && location.pathname.startsWith("/project/"));
+                     (path === "/projects" && location.pathname.startsWith("/project/")) ||
+                     (path === "/production" && location.pathname.startsWith("/production/"));
     return isActive 
       ? "bg-primary/10 text-primary font-medium" 
       : "hover:bg-muted/50";
@@ -212,6 +241,11 @@ export function AppSidebar() {
           </SidebarGroup>
         )}
       </SidebarContent>
+      {state !== "collapsed" && (
+        <SidebarFooter className="p-3">
+          <MembershipBadge compact={false} />
+        </SidebarFooter>
+      )}
     </Sidebar>
   );
 }

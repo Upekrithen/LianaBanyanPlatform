@@ -92,7 +92,7 @@ const CONTRIBUTION_PATHS = [
   {
     icon: Lightbulb,
     title: "Innovation Submissions",
-    description: "Proposed innovations go through the THRESHING process for extraction and the Hall of Innovations for documentation. 1,754 and counting.",
+    description: "Proposed innovations go through the THRESHING process for extraction and the Hall of Innovations for documentation. 2,007 and counting.",
     route: "/hall-of-innovations",
     cta: "Hall of Innovations",
   },
