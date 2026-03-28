@@ -4699,17 +4699,84 @@ All 8 hosting targets: 729 files each.
 
 **Files created:** AppProviders.tsx, AppShell.tsx, AppRouter.tsx, routes/LazyPage.tsx, routes/public.tsx, routes/onboarding.tsx, routes/dashboard.tsx, routes/production.tsx, routes/initiatives.tsx, routes/hexisle.tsx, routes/social.tsx, routes/commerce.tsx, routes/cephas.tsx, routes/tools.tsx, routes/admin.tsx, routes/captain.tsx, routes/defense.tsx, routes/misc.tsx, routes/index.ts
 **Files modified:** App.tsx (1,401 → 30 lines)
-**Latest commit:** pending (not yet committed)
+**Commit 1:** `977dafb` — K148: App.tsx architectural refactor — 1,401 lines to 20 modular files
+**Commit 2:** `dc27c2f` — K148 Phase 2: Portal route gating — portals serve only their routes
+**Commit 3:** `901756b` — NotFound page: replace static contact info with X-Ray Goggles trigger
 
-**Phase 2 (Portal Route Gating) — NOT YET DONE:**
-- Add portal-aware route gating so .biz/.org/.net portals only serve their relevant routes
-- PortalGate component + PORTAL_ROUTES config in routes/LazyPage.tsx
+### K148 Phase 2 — Portal Route Gating — COMPLETED (Mar 28, 2026)
 
-**Also pending:**
-- Bishop B-2 through B-8 (Stripe products, STL seed, MoneyPenny digest, webhook, smoke test, content seed, stats sync)
-- Pawn Batch 25 (pledge disclosure copy, beta banner text, Red Carpet error message)
+**What was done:**
+1. Created `routes/portalConfig.ts` — defines `PORTAL_ROUTE_ACCESS` mapping each `PortalType` to allowed route groups
+2. Created `routes/PortalGate.tsx` — fine-grained component wrapper for individual routes; shows friendly redirect to correct portal domain
+3. Modified `AppRouter.tsx` — conditionally includes route groups based on detected portal
+4. Universal groups (public, onboarding, misc) render on every portal
+5. Marketplace (.com) gets `'*'` (everything); other portals get curated subsets
+6. Upekrithen (admin) gets near-full access for founder tooling
+7. All 8 hosting targets deployed
+
+**Portal access map:**
+- marketplace: `*` (everything)
+- business (.biz): dashboard, production, commerce, social, tools, admin, cephas
+- nonprofit (.org): dashboard, commerce, social, defense, initiatives, cephas
+- network (.net): dashboard, production, commerce, social, tools, cephas
+- dss (the2ndsecond): dashboard, production, tools, commerce, cephas
+- hexisle: dashboard, hexisle, social, commerce, cephas
+- upekrithen: dashboard, admin, captain, tools, production, initiatives, social, commerce, hexisle, defense, cephas
+
+**Files created:** routes/portalConfig.ts, routes/PortalGate.tsx
+**Files modified:** AppRouter.tsx, routes/index.ts
+
+### NotFound X-Ray Fix — COMPLETED (Mar 28, 2026)
+
+- Replaced static Founder email/phone on 404 page with X-Ray Goggles trigger button
+- Users can now screenshot, draw annotations, and submit feedback through the integrated overlay pipeline
+- All 8 targets deployed
+
+**Files modified:** pages/NotFound.tsx
+
+### Bishop Session B037 — Completed Items (confirmed by Knight)
+- B-1: Stripe products — already existed with real price IDs (no action needed)
+- B-2: SlottedTop download URL — seeded `/models/slottedTop_v1.obj`
+- B-3: MoneyPenny digest — edge function deployed (`moneypenny-daily-digest`)
+- B-4: Threshold webhook — `project_pledge` handler added to `stripe-webhook` + deployed
+- B-5: Portal smoke test — all 8 portals passed
+- B-6: Red Carpet — BookOpen import fix + FadeInSection opacity override for slug entries
+- B-8: All 8 hosting targets deployed
+
+### Pawn Batch 25 — DELIVERED (copy approved, integration pending)
+1. **Pledge disclosure (FTC-compliant):** "Your pledge will be charged today and held by our independent payment processor until it is released to this project under our program terms. While your pledge is held, funds are not available for us to spend and may be returned or adjusted if the transaction cannot be completed. By confirming, you authorize this charge and acknowledge that the payment processor, not our company, holds the funds during this period."
+2. **Beta preview banner:** "You're exploring a preview, some features are coming soon, and your feedback shapes what we build."
+3. **Red Carpet fallback:** "We're expecting you — please email Founder@LianaBanyan.com or call 406-578-1232 and we'll get you in personally."
+
+### Pawn B26 — Level 2 Machine Research COMPLETE
+- APSX-PIM V3: $13,500, in stock, best ROI (8-day payback on financed 1/3)
+- Babyplast 6/12T: ~$30K-$40K (pending ALBA Enterprises quote)
+- MicroMolder Evo: ~$6K-$10K (out of stock through mid-2026, watch item)
+- 1/3 funding model math complete for all Level 2 + Level 3 machines
+- BOM frameworks for 5,000 Canister Kits + 15,000 SlottedTops — pending Founder input
+
+### NEW CONCEPT: Seeder/Presenter Bounty System (designed K148, implementation pending)
+
+**Three-role referral chain:**
+- **Seeder**: Finds a business, inputs info, auto-generates Red Carpet + mini-business plan from LB boilerplate. Can be done ONLINE (connects to "Become an Influencer" / Influencer & Creator category in HexIsle). Earns Seeder credential + one-off XP/Marks + slot as potential partial Steward.
+- **Presenter**: Claims prepped package, delivers LB card to business (in person). Earns delivery reward + Reputation boost.
+- **Steward conversion**: Either Seeder or Presenter (or both, if same person) can become partial Steward for that business — one of their ten directs via Concentric Circles.
+- **Guild/Tribe cascade**: If business joins their Steward's Guild, additional consistent value flows.
+
+**Connects to existing systems:** AmbassadorChainPage, AmbassadorMiniBusinessPlan, BusinessCampaignDetail, NominateBusinessPage, RedCarpet, StewardDashboard, ConcentricCircles, ColdStartHub, TreasureMapGuide, InfluencerChallengeManager, IslandMarketplaceListings (Influencer & Creator category)
+
+**Bishop task:** Create Seeder/Presenter Treasure Map at `/treasure-maps/seeder-presenter`
+**Knight task (future session):** Seeder submission form, Presenter claim board, dual-credit reward webhook, Steward conversion trigger, Influencer-to-Seeder pathway wiring
+
+### Remaining Pending
+- Bishop B-7: La Capital del Sabor campaign seed (deferred — SQL Editor friction)
+- Bishop: Integrate Pawn B25 copy (pledge disclosure into checkout, beta banner component, Red Carpet fallback message)
+- Bishop: Create Seeder/Presenter Treasure Map (new task)
+- Pawn: Backer-facing receipt version of pledge disclosure (shorter, ~1 sentence)
+- Pawn: One-page decision form for Founder (Canister System components, SlottedTop specs, screw-press handle) — due March 30
 - A2P 10DLC SMS campaign (~April 8-15 approval window)
 - Herjavec letter: attorney review MANDATORY before sending (2 amber SEC flags)
+- B26 BOM deadline: April 7 — component lists from Founder needed by March 30
 
 ---
 
