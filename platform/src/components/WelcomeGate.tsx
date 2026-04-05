@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { RotatingQuotes } from "@/components/RotatingQuotes";
 import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import {
