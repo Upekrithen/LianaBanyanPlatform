@@ -43,7 +43,7 @@ export const miscRoutes = (
     <Route path="/create-project" element={<Navigate to="/admin/project/create" replace />} />
     <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
     <Route path="/admin/project" element={<Navigate to="/admin-project" replace />} />
-    <Route path="/public-ledger" element={<Navigate to="/transparent-ledger" replace />} />
+    <Route path="/public-ledger" element={<Navigate to="/ledger" replace />} />
     <Route path="/opportunities" element={<Navigate to="/positions/browse" replace />} />
     <Route path="/heroes" element={<Navigate to="/browse/marketplace" replace />} />
     <Route path="/the-bridge" element={<Navigate to="/durins-door" replace />} />

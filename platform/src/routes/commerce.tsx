@@ -8,7 +8,6 @@ const BrowseMarketplace = lazy(() => import("@/pages/BrowseMarketplace"));
 const BrowseBusiness = lazy(() => import("@/pages/BrowseBusiness"));
 const BrowseNonprofit = lazy(() => import("@/pages/BrowseNonprofit"));
 const BrowseNetwork = lazy(() => import("@/pages/BrowseNetwork"));
-const TransparentLedger = lazy(() => import("@/pages/TransparentLedger"));
 const MedallionSwap = lazy(() => import("@/pages/MedallionSwap"));
 const MedallionManagement = lazy(() => import("@/pages/MedallionManagement"));
 const The2ndSecondPortal = lazy(() => import("@/pages/The2ndSecondPortal"));
@@ -69,8 +68,9 @@ export const commerceRoutes = (
     <Route path="/browse/business" element={<ProtectedRoute><LazyPage><BrowseBusiness /></LazyPage></ProtectedRoute>} />
     <Route path="/browse/nonprofit" element={<ProtectedRoute><LazyPage><BrowseNonprofit /></LazyPage></ProtectedRoute>} />
     <Route path="/browse/network" element={<ProtectedRoute><LazyPage><BrowseNetwork /></LazyPage></ProtectedRoute>} />
-    <Route path="/ledger" element={<ExplorerRoute><LazyPage><TransparentLedger /></LazyPage></ExplorerRoute>} />
-    <Route path="/transparent-ledger" element={<ExplorerRoute><LazyPage><TransparentLedger /></LazyPage></ExplorerRoute>} />
+    <Route path="/ledger" element={<ExplorerRoute><LazyPage><FinancialTransparencyPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/transparency" element={<ExplorerRoute><LazyPage><FinancialTransparencyPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/transparent-ledger" element={<Navigate to="/ledger" replace />} />
     <Route path="/medallion-swap" element={<ExplorerRoute><LazyPage><MedallionSwap /></LazyPage></ExplorerRoute>} />
     <Route path="/senior-pics" element={<ExplorerRoute><LazyPage><MedallionSwap /></LazyPage></ExplorerRoute>} />
     <Route path="/medallion-management" element={<ProtectedRoute><LazyPage><MedallionManagement /></LazyPage></ProtectedRoute>} />

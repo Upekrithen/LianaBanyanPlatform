@@ -48,7 +48,7 @@ export const cephasRoutes = (
     <Route path="/economics" element={<LazyPage><EconomicLaws /></LazyPage>} />
     <Route path="/economics/:paperId" element={<LazyPage><PaperPage /></LazyPage>} />
     <Route path="/fly-on-the-wall" element={<LazyPage><FlyOnTheWall /></LazyPage>} />
-    <Route path="/transparency" element={<LazyPage><FlyOnTheWall /></LazyPage>} />
+    <Route path="/transparency" element={<Navigate to="/ledger" replace />} />
     <Route path="/learn/brewster-bonus" element={<ExplorerRoute><LazyPage><BrewsterBonusPage /></LazyPage></ExplorerRoute>} />
     <Route path="/learn" element={<ExplorerRoute><LazyPage><div className="container mx-auto p-6 max-w-4xl"><AlcoveHallway /></div></LazyPage></ExplorerRoute>} />
     <Route path="/academy" element={<ExplorerRoute><LazyPage><Academy /></LazyPage></ExplorerRoute>} />

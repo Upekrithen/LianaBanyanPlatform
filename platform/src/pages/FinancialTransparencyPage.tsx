@@ -1,576 +1,152 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { MultiLedgerView } from "@/components/MultiLedgerView";
-import { ExpandableBlock, DataVizBar } from "@/components/pudding";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import { FocusShell } from "@/components/shells";
+import { StickyMobileCTA } from "@/components/v2";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Shield,
-  Scale,
-  FileText,
-  Download,
-  ExternalLink,
-  CheckCircle,
-  Lock,
-  Eye,
-  Coins,
-  TrendingUp,
-  Users,
-  Heart,
-  Building2,
-  BarChart3,
-} from "lucide-react";
-import { PortalPageLayout } from "@/components/PortalPageLayout";
+  LedgerHero,
+  MoneySnapshot,
+  CostPlusWorkedExample,
+  RevenueExpenseTimeline,
+  CategoryBreakdowns,
+  GovernanceNote,
+  ExportHistory,
+} from "@/components/v2/transparency";
+import { useTourTarget } from "@/hooks/useTourTarget";
 
-type LedgerPatronageRow = {
-  fiscal_year: number;
-  is_patronage: boolean;
-  ledger_category: string;
-  transaction_count: number;
-  total_cents: number;
-  total_dollars: number;
-};
+const EMPTY_TIMELINE = [
+  {
+    id: "current",
+    period: "Current period",
+    note: "No posted entries yet. This row will annotate the first revenue and expense movements as they are recorded.",
+    revenueLabel: "$0.00",
+    expenseLabel: "$0.00",
+  },
+];
+
+const EMPTY_CATEGORIES = [
+  {
+    id: "ops",
+    label: "Platform operations",
+    amountCents: 0,
+    narrative: "Covers hosting, payments, support systems, and reliability essentials.",
+  },
+  {
+    id: "member-services",
+    label: "Member services",
+    amountCents: 0,
+    narrative: "Supports moderation, help pathways, and member-facing tools.",
+  },
+  {
+    id: "stewardship",
+    label: "Stewardship and governance",
+    amountCents: 0,
+    narrative: "Supports policy maintenance, audits, and long-horizon governance stewardship.",
+  },
+];
+
+const EMPTY_EXPORTS = [] as Array<{ id: string; label: string; period: string; state: "ready" | "pending" }>;
+
+const WILDFIRE_TIMELINE = [
+  {
+    id: "wf-q1",
+    period: "Q1 snapshot",
+    note: "Revenue lift followed onboarding completion while costs stayed centered on platform reliability.",
+    revenueLabel: "$18,750.00",
+    expenseLabel: "$12,430.00",
+  },
+  {
+    id: "wf-q2",
+    period: "Q2 snapshot",
+    note: "Member service costs rose with support volume during launch, then stabilized with process updates.",
+    revenueLabel: "$22,180.00",
+    expenseLabel: "$14,090.00",
+  },
+];
+
+const WILDFIRE_CATEGORIES = [
+  {
+    id: "wf-ops",
+    label: "Platform operations",
+    amountCents: 769000,
+    narrative: "Reliability spend on hosting, payments, and security uptime.",
+  },
+  {
+    id: "wf-member-services",
+    label: "Member services",
+    amountCents: 418000,
+    narrative: "Member response and onboarding support during active growth windows.",
+  },
+  {
+    id: "wf-stewardship",
+    label: "Stewardship and governance",
+    amountCents: 221000,
+    narrative: "Process oversight, legal hygiene, and reporting discipline.",
+  },
+];
+
+const WILDFIRE_EXPORTS = [
+  { id: "wf-1", label: "Monthly ledger export", period: "March 2026", state: "ready" as const },
+  { id: "wf-2", label: "Quarterly revision digest", period: "Q1 2026", state: "pending" as const },
+];
 
 export function FinancialTransparencyPage() {
-  const [activeTab, setActiveTab] = useState("ledgers");
+  const [params] = useSearchParams();
+  const tourAnchor = useTourTarget("transparency");
+  const wildfireTourMode = params.get("tour") === "wildfire" || params.get("wildfire") === "1";
 
-  // Fetch DNA Lock parameters related to finances
-  const { data: dnaParams } = useQuery({
-    queryKey: ["dna-financial-params"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("dna_lock")
-        .select("*")
-        .in("category", ["economics", "operations"])
-        .order("parameter_key");
+  const snapshot = useMemo(
+    () =>
+      wildfireTourMode
+        ? { revenueCents: 4093000, expensesCents: 2652000, balanceCents: 1441000 }
+        : { revenueCents: 0, expensesCents: 0, balanceCents: 0 },
+    [wildfireTourMode],
+  );
 
-      if (error) throw error;
-      return data;
-    },
-  });
+  const timeline = wildfireTourMode ? WILDFIRE_TIMELINE : EMPTY_TIMELINE;
+  const categories = wildfireTourMode ? WILDFIRE_CATEGORIES : EMPTY_CATEGORIES;
+  const exportHistory = wildfireTourMode ? WILDFIRE_EXPORTS : EMPTY_EXPORTS;
 
-  const { data: ledgerSummary } = useQuery({
-    queryKey: ["ledger-patronage-summary"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("ledger_patronage_summary" as never)
-        .select("*")
-        .order("fiscal_year" as never, { ascending: false });
-      if (error) return [];
-      return (data || []) as LedgerPatronageRow[];
-    },
-  });
+  const scrollToCurrentLedger = () => {
+    document.getElementById("ledger-current")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-  const patronageTotal = ledgerSummary
-    ?.filter((r) => r.is_patronage)
-    .reduce((s, r) => s + (r.total_cents ?? 0), 0) ?? 0;
-  const nonPatronageTotal = ledgerSummary
-    ?.filter((r) => !r.is_patronage)
-    .reduce((s, r) => s + (r.total_cents ?? 0), 0) ?? 0;
-  const combinedTotal = patronageTotal + nonPatronageTotal;
-  const nonPatronagePct = combinedTotal > 0
-    ? ((nonPatronageTotal / combinedTotal) * 100).toFixed(1)
-    : "0.0";
-
-  const { data: platformStats } = useQuery({
-    queryKey: ["platform-financial-stats"],
-    queryFn: async () => {
-      // Get member count
-      const { count: memberCount } = await supabase
-        .from("profiles")
-        .select("*", { count: "exact", head: true });
-
-      // Get Swoop stats
-      const { data: swoopProjects } = await supabase
-        .from("swoop_projects")
-        .select("goal_amount, current_amount, status");
-
-      const totalSwoopGoal = swoopProjects?.reduce((sum, p) => sum + (p.goal_amount || 0), 0) || 0;
-      const totalSwoopRaised = swoopProjects?.reduce((sum, p) => sum + (p.current_amount || 0), 0) || 0;
-      const activeProjects = swoopProjects?.filter(p => p.status === "active").length || 0;
-
-      return {
-        memberCount: memberCount || 0,
-        totalSwoopGoal,
-        totalSwoopRaised,
-        activeProjects,
-        platformFeePercent: 0,
-        creatorRetention: 83.3,
-      };
-    },
-  });
-
-  const commitments = [
-    {
-      icon: Lock,
-      title: "Immutable Parameters",
-      description: "Core economic rules are locked in DNA Lock and cannot be changed without member vote",
-    },
-    {
-      icon: Eye,
-      title: "Full Visibility",
-      description: "Every transaction is visible to members. No hidden fees, no surprises.",
-    },
-    {
-      icon: Scale,
-      title: "Separate Ledgers",
-      description: "Platform operations, Swoop funds, and MSA accounts are never commingled.",
-    },
-    {
-      icon: Shield,
-      title: "Verified Projects",
-      description: "All Swoop projects are verified before funds can be disbursed.",
-    },
-  ];
+  const scrollToCostPlus = () => {
+    document.getElementById("ledger-cost-plus")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
-    <PortalPageLayout maxWidth="xl" xrayId="financial-transparency-page">
-      {/* Hero Section */}
-      <div className="text-center mb-8">
-        <Badge className="mb-4 bg-green-100 text-green-800">
-          <Shield className="w-3 h-3 mr-1" />
-          Full Financial Transparency
-        </Badge>
-        <h1 className="text-4xl font-bold mb-4">
-          Every Dollar, Fully Transparent
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          At Liana Banyan, we believe you have the right to see exactly where every
-          dollar goes. No hidden fees, no surprises, no commingled funds.
-        </p>
-      </div>
-
-      {/* Key Stats with DataVizBar */}
-      <DataVizBar
-        title="Platform Economics at a Glance"
-        subtitle="Core financial metrics"
-        data={[
-          { label: 'Creator Retention', value: platformStats?.creatorRetention || 83.3, color: '#22c55e', icon: '💰' },
-          { label: 'Platform Margin', value: 16.7, color: '#f97316', icon: '🏛️' },
-        ]}
-        maxValue={100}
-        showPercentages={true}
-        height={28}
-      />
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-4">
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl font-bold text-green-600">
-              {platformStats?.creatorRetention}%
-            </div>
-            <p className="text-sm text-muted-foreground">Creator Retention</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl font-bold text-blue-600">
-              {platformStats?.platformFeePercent}%
-            </div>
-            <p className="text-sm text-muted-foreground">Swoop Platform Fee</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl font-bold text-purple-600">
-              {platformStats?.memberCount?.toLocaleString() || 0}
-            </div>
-            <p className="text-sm text-muted-foreground">Members</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl font-bold text-rose-600">
-              {platformStats?.activeProjects || 0}
-            </div>
-            <p className="text-sm text-muted-foreground">Active Swoop Projects</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Commitments — Progressive Disclosure */}
-      <div className="space-y-3 mb-8">
-        <h2 className="text-xl font-semibold text-center mb-4">Our Commitments</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <ExpandableBlock
-            title="🔒 Immutable Parameters"
-            subtitle="Core economic rules locked in DNA Lock"
-            preview="Cannot be changed without member vote..."
-            accentColor="#8b5cf6"
-            defaultExpanded={false}
-          >
-            <div className="flex items-start gap-3">
-              <Lock className="w-6 h-6 text-purple-500 flex-shrink-0 mt-1" />
-              <p className="text-sm text-muted-foreground">
-                Core economic rules are locked in DNA Lock and cannot be changed without member vote. 
-                This includes the 83.3% creator/worker retention rate and the Cost + 20% platform margin.
-              </p>
-            </div>
-          </ExpandableBlock>
-
-          <ExpandableBlock
-            title="👁️ Full Visibility"
-            subtitle="Every transaction visible to members"
-            preview="No hidden fees, no surprises..."
-            accentColor="#22c55e"
-            defaultExpanded={false}
-          >
-            <div className="flex items-start gap-3">
-              <Eye className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-              <p className="text-sm text-muted-foreground">
-                Every transaction is visible to members. No hidden fees, no surprises. 
-                You can see exactly where every dollar goes through our multi-ledger system.
-              </p>
-            </div>
-          </ExpandableBlock>
-
-          <ExpandableBlock
-            title="⚖️ Separate Ledgers"
-            subtitle="Funds are never commingled"
-            preview="Platform, Swoop, and MSA accounts separate..."
-            accentColor="#3b82f6"
-            defaultExpanded={false}
-          >
-            <div className="flex items-start gap-3">
-              <Scale className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
-              <p className="text-sm text-muted-foreground">
-                Platform operations, Swoop funds, and MSA accounts are never commingled. 
-                Each fund type has its own ledger with full audit trail.
-              </p>
-            </div>
-          </ExpandableBlock>
-
-          <ExpandableBlock
-            title="🛡️ Verified Projects"
-            subtitle="All Swoop projects verified before disbursement"
-            preview="Funds protected until verification complete..."
-            accentColor="#f59e0b"
-            defaultExpanded={false}
-          >
-            <div className="flex items-start gap-3">
-              <Shield className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
-              <p className="text-sm text-muted-foreground">
-                All Swoop projects are verified before funds can be disbursed. 
-                This protects both donors and recipients from fraud.
-              </p>
-            </div>
-          </ExpandableBlock>
-        </div>
-      </div>
-
-      {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4 mb-6">
-          <TabsTrigger value="ledgers">
-            <Coins className="w-4 h-4 mr-2" />
-            Financial Ledgers
-          </TabsTrigger>
-          <TabsTrigger value="transaction-ledger">
-            <BarChart3 className="w-4 h-4 mr-2" />
-            Transaction Ledger
-          </TabsTrigger>
-          <TabsTrigger value="dna">
-            <Lock className="w-4 h-4 mr-2" />
-            DNA Lock Parameters
-          </TabsTrigger>
-          <TabsTrigger value="reports">
-            <FileText className="w-4 h-4 mr-2" />
-            Reports & Audits
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="ledgers">
-          <MultiLedgerView />
-        </TabsContent>
-
-        <TabsContent value="transaction-ledger">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5" />
-                Subchapter T Compliance Dashboard
-              </CardTitle>
-              <CardDescription>
-                Patronage vs non-patronage income classification. All transactions are categorized
-                at the webhook level — no reconciliation required.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
-                  <p className="text-xs font-medium uppercase tracking-wide text-green-600 dark:text-green-400">
-                    Patronage Income
-                  </p>
-                  <p className="mt-1 text-2xl font-bold text-green-700 dark:text-green-300">
-                    ${(patronageTotal / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                  </p>
-                </div>
-                <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs font-medium uppercase tracking-wide text-amber-600 dark:text-amber-400">
-                    Non-Patronage Income
-                  </p>
-                  <p className="mt-1 text-2xl font-bold text-amber-700 dark:text-amber-300">
-                    ${(nonPatronageTotal / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                  </p>
-                  <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
-                    {nonPatronagePct}% of total {Number(nonPatronagePct) < 50 ? "(below 50% threshold ✓)" : "(⚠ above 50% threshold)"}
-                  </p>
-                </div>
-                <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs font-medium uppercase tracking-wide text-blue-600 dark:text-blue-400">
-                    Total Classified
-                  </p>
-                  <p className="mt-1 text-2xl font-bold text-blue-700 dark:text-blue-300">
-                    ${(combinedTotal / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                  </p>
-                </div>
-              </div>
-
-              {(!ledgerSummary || ledgerSummary.length === 0) ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  <BarChart3 className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p className="text-lg font-medium mb-2">No transactions yet</p>
-                  <p className="max-w-md mx-auto text-sm">
-                    When payments are processed through the webhook system, categories and
-                    patronage classification will appear here automatically.
-                  </p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto rounded-xl border bg-card">
-                  <table className="w-full min-w-[600px] text-left text-sm">
-                    <thead className="border-b bg-muted/50">
-                      <tr>
-                        <th className="px-4 py-3 font-medium">Category</th>
-                        <th className="px-4 py-3 font-medium">Type</th>
-                        <th className="px-4 py-3 font-medium text-right">Transactions</th>
-                        <th className="px-4 py-3 font-medium text-right">Total</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {ledgerSummary.map((row, i) => (
-                        <tr key={`${row.ledger_category}-${row.is_patronage}-${i}`} className="border-b last:border-0">
-                          <td className="px-4 py-3 font-mono text-xs">
-                            {row.ledger_category.replace(/_/g, " ")}
-                          </td>
-                          <td className="px-4 py-3">
-                            <Badge
-                              variant="outline"
-                              className={row.is_patronage
-                                ? "border-green-500/40 text-green-700 dark:text-green-300"
-                                : "border-amber-500/40 text-amber-700 dark:text-amber-300"
-                              }
-                            >
-                              {row.is_patronage ? "Patronage" : "Non-Patronage"}
-                            </Badge>
-                          </td>
-                          <td className="px-4 py-3 text-right tabular-nums">{row.transaction_count}</td>
-                          <td className="px-4 py-3 text-right font-semibold tabular-nums">
-                            ${row.total_dollars?.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? "0.00"}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="dna">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lock className="w-5 h-5" />
-                DNA Lock: Immutable Economic Parameters
-              </CardTitle>
-              <CardDescription>
-                These parameters are locked into the platform's constitution and cannot be
-                changed without a formal member vote. They define the core economic rules
-                that protect both creators and members.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {dnaParams?.map((param) => (
-                  <div
-                    key={param.id}
-                    className="flex items-center justify-between p-4 bg-muted rounded-lg"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm bg-muted px-2 py-1 rounded">
-                          {param.parameter_key}
-                        </span>
-                        <Badge variant="outline" className="text-xs">
-                          {param.category}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {param.description}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold">
-                        {param.data_type === "numeric" && param.parameter_key.includes("percent")
-                          ? `${param.parameter_value}%`
-                          : param.parameter_value}
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-green-600">
-                        <Lock className="w-3 h-3" />
-                        Locked
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {(!dnaParams || dnaParams.length === 0) && (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Lock className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>DNA Lock parameters will appear here</p>
-                  </div>
-                )}
-
-                {/* Hardcoded Critical Parameters */}
-                <div className="border-t pt-4 mt-4">
-                  <h4 className="font-medium mb-4">Core Constitutional Parameters</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Creator Retention</span>
-                        <span className="text-2xl font-bold text-green-700">83.3%</span>
-                      </div>
-                      <p className="text-sm text-green-600 mt-1">
-                        Creators and Workers keep 83.3% of every transaction
-                      </p>
-                    </div>
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Platform Margin</span>
-                        <span className="text-2xl font-bold text-blue-700">Cost + 20%</span>
-                      </div>
-                      <p className="text-sm text-blue-600 mt-1">
-                        Platform only charges cost plus 20% margin
-                      </p>
-                    </div>
-                    <div className="p-4 bg-rose-50 rounded-lg border border-rose-200">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Swoop Platform Fee</span>
-                        <span className="text-2xl font-bold text-rose-700">0%</span>
-                      </div>
-                      <p className="text-sm text-rose-600 mt-1">
-                        100% of Swoop donations go to recipients
-                      </p>
-                    </div>
-                    <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Annual Membership</span>
-                        <span className="text-2xl font-bold text-purple-700">$5</span>
-                      </div>
-                      <p className="text-sm text-purple-600 mt-1">
-                        Full platform access for $5/year
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="reports">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="w-5 h-5" />
-                Financial Reports & Audits
-              </CardTitle>
-              <CardDescription>
-                Regular financial reports and third-party audits to ensure accountability
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {/* Placeholder for future reports */}
-                <div className="text-center py-12 text-muted-foreground">
-                  <FileText className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                  <h3 className="text-lg font-medium mb-2">Reports Coming Soon</h3>
-                  <p className="max-w-md mx-auto">
-                    As the platform grows, we'll publish regular financial reports
-                    and undergo third-party audits. All reports will be available
-                    here for member review.
-                  </p>
-                </div>
-
-                {/* What Will Be Included */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp className="w-5 h-5 text-blue-500" />
-                        <h4 className="font-medium">Quarterly Reports</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Revenue, expenses, and platform growth metrics
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Heart className="w-5 h-5 text-rose-500" />
-                        <h4 className="font-medium">Swoop Impact Reports</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Families helped, funds disbursed, success stories
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Shield className="w-5 h-5 text-green-500" />
-                        <h4 className="font-medium">Annual Audits</h4>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Third-party verification of all financial claims
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      {/* Bottom CTA */}
-      <Card className="mt-8 bg-primary text-primary-foreground">
-        <CardContent className="py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-bold mb-2">Questions About Our Finances?</h3>
-              <p className="text-primary-foreground/70">
-                We're committed to answering any questions about how funds are managed.
-              </p>
-            </div>
-            <Button variant="secondary" size="lg">
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Contact Us
-            </Button>
+    <FocusShell
+      seo={{
+        title: "Transparency Ledger | Liana Banyan",
+        description:
+          "Plain-language financial transparency showing revenue, expenses, corporate balance, and the Cost+20% model.",
+      }}
+      hero={
+        <>
+          <StickyMobileCTA
+            primary={{ label: "View current ledger", onClick: scrollToCurrentLedger }}
+            secondary={{ label: "How Cost+20% works", onClick: scrollToCostPlus }}
+          />
+          <div {...tourAnchor}>
+            <LedgerHero onViewCurrentLedger={scrollToCurrentLedger} onHowCostPlusWorks={scrollToCostPlus} />
           </div>
-        </CardContent>
-      </Card>
-    </PortalPageLayout>
+        </>
+      }
+      className="bg-background"
+    >
+      <div className="space-y-6 pb-20">
+        <MoneySnapshot
+          revenueCents={snapshot.revenueCents}
+          expensesCents={snapshot.expensesCents}
+          balanceCents={snapshot.balanceCents}
+        />
+        <CostPlusWorkedExample />
+        <RevenueExpenseTimeline points={timeline} />
+        <CategoryBreakdowns categories={categories} />
+        <GovernanceNote />
+        <ExportHistory exports={exportHistory} />
+      </div>
+    </FocusShell>
   );
 }
 
