@@ -2,8 +2,10 @@ import { lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
+import { RedCarpetErrorBoundary } from "@/components/RedCarpetFallback";
 
 const GuidedDiscovery = lazy(() => import("@/pages/GuidedDiscovery"));
+const WelcomeV2Page = lazy(() => import("@/pages/WelcomeV2Page"));
 const FirstSteps = lazy(() => import("@/pages/FirstSteps"));
 const InviteGenerator = lazy(() => import("@/pages/InviteGenerator"));
 const PipelinePage = lazy(() => import("@/pages/PipelinePage"));
@@ -22,6 +24,7 @@ const ManufacturingNodeCueCard = lazy(() => import("@/pages/ManufacturingNodeCue
 const ServiceNodeCueCard = lazy(() => import("@/pages/ServiceNodeCueCard"));
 const LocalBusinessNodeCueCard = lazy(() => import("@/pages/LocalBusinessNodeCueCard"));
 const WelcomeGatePage = lazy(() => import("@/pages/WelcomeGatePage"));
+const RedCarpetLandingV2Page = lazy(() => import("@/pages/RedCarpetLandingV2Page"));
 const BusinessPathway = lazy(() => import("@/pages/BusinessPathway"));
 const SaltMines = lazy(() => import("@/pages/SaltMines"));
 const BuildBusiness = lazy(() => import("@/pages/BuildBusiness"));
@@ -31,23 +34,27 @@ const AgentOnboarding = lazy(() => import("@/pages/AgentOnboarding"));
 const ATTILanding = lazy(() => import("@/pages/ATTILanding"));
 const OnboardingStart = lazy(() => import("@/pages/OnboardingStart"));
 const CrewCallPage = lazy(() => import("@/pages/CrewCallPage"));
+const InviteCodeRedirect = lazy(() => import("@/pages/InviteCodeRedirect"));
 
 export const onboardingRoutes = (
   <>
-    <Route path="/welcome" element={<LazyPage><GuidedDiscovery /></LazyPage>} />
+    <Route path="/welcome" element={<LazyPage><WelcomeV2Page /></LazyPage>} />
+    <Route path="/guided-discovery" element={<LazyPage><GuidedDiscovery /></LazyPage>} />
     <Route path="/discover" element={<Navigate to="/welcome" replace />} />
     <Route path="/first-steps" element={<ProtectedRoute><LazyPage><FirstSteps /></LazyPage></ProtectedRoute>} />
     <Route path="/invite" element={<ProtectedRoute><LazyPage><InviteGenerator /></LazyPage></ProtectedRoute>} />
     <Route path="/pipeline" element={<ProtectedRoute><LazyPage><PipelinePage /></LazyPage></ProtectedRoute>} />
     <Route path="/join" element={<LazyPage><MembershipGate /></LazyPage>} />
+    <Route path="/membership/gate" element={<Navigate to="/join" replace />} />
     <Route path="/join/creator" element={<ExplorerRoute><LazyPage><CreatorPitchPage /></LazyPage></ExplorerRoute>} />
     <Route path="/creators" element={<ExplorerRoute><LazyPage><CreatorShowcasePage /></LazyPage></ExplorerRoute>} />
     <Route path="/creators/:creatorId" element={<ExplorerRoute><LazyPage><CreatorProfilePage /></LazyPage></ExplorerRoute>} />
     <Route path="/onboarding/status" element={<ProtectedRoute><LazyPage><OnboardingStatusPage /></LazyPage></ProtectedRoute>} />
-    <Route path="/RedCarpet" element={<LazyPage><RedCarpet /></LazyPage>} />
-    <Route path="/RedCarpet/:slug" element={<LazyPage><RedCarpet /></LazyPage>} />
-    <Route path="/redcarpet" element={<LazyPage><RedCarpet /></LazyPage>} />
-    <Route path="/redcarpet/:slug" element={<LazyPage><RedCarpet /></LazyPage>} />
+    <Route path="/RedCarpet" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
+    <Route path="/RedCarpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
+    <Route path="/red-carpet" element={<LazyPage><RedCarpetLandingV2Page /></LazyPage>} />
+    <Route path="/redcarpet" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
+    <Route path="/redcarpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/launch" element={<LazyPage><LaunchHub /></LazyPage>} />
     <Route path="/launch/run-a-node" element={<LazyPage><RunANode /></LazyPage>} />
     <Route path="/start" element={<LazyPage><WhatDoYouWantFlow /></LazyPage>} />
@@ -66,6 +73,8 @@ export const onboardingRoutes = (
     <Route path="/onboarding/trickle" element={<ProtectedRoute><LazyPage><TrickleOnboarding /></LazyPage></ProtectedRoute>} />
     <Route path="/agent-onboarding" element={<ProtectedRoute><LazyPage><AgentOnboarding /></LazyPage></ProtectedRoute>} />
     <Route path="/atti" element={<LazyPage><ATTILanding /></LazyPage>} />
-    <Route path="/crew-call" element={<ProtectedRoute><LazyPage><CrewCallPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/crew-call" element={<ExplorerRoute><LazyPage><CrewCallPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/welcome/:code" element={<LazyPage><InviteCodeRedirect /></LazyPage>} />
+    <Route path="/welcome/sponsor/:code" element={<LazyPage><InviteCodeRedirect /></LazyPage>} />
   </>
 );

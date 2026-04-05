@@ -38,7 +38,6 @@ export const miscRoutes = (
     <Route path="/my-reputation" element={<Navigate to="/dashboard" replace />} />
     <Route path="/start-a-project" element={<Navigate to="/start" replace />} />
     <Route path="/52-card-hunt" element={<Navigate to="/treasure-map-game" replace />} />
-    <Route path="/red-carpet" element={<Navigate to="/redcarpet" replace />} />
     <Route path="/contract-positions" element={<Navigate to="/positions/browse" replace />} />
     <Route path="/business-builder" element={<Navigate to="/build-a-business" replace />} />
     <Route path="/create-project" element={<Navigate to="/admin/project/create" replace />} />
@@ -90,6 +89,7 @@ export const miscRoutes = (
 
     {/* Legal pages */}
     <Route path="/terms" element={<LazyPage><TermsOfService /></LazyPage>} />
+    <Route path="/terms/membership" element={<Navigate to="/member-agreement" replace />} />
     <Route path="/privacy" element={<LazyPage><PrivacyPolicy /></LazyPage>} />
     <Route path="/member-agreement" element={<LazyPage><MemberAgreement /></LazyPage>} />
 
