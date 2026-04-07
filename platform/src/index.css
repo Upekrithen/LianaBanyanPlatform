@@ -1,4 +1,5 @@
 @import url('https://fonts.cdnfonts.com/css/opendyslexic');
+@import "./styles/v2-tokens.css";
 
 @tailwind base;
 @tailwind components;
@@ -751,6 +752,63 @@ html.lb-dyslexia-font * {
   letter-spacing: 0.05em;
   word-spacing: 0.15em;
   line-height: 1.8;
+}
+
+/* ─── X-RAY DARK MODE — chalk-on-blackboard inversion ─── */
+html.xray-dark-mode body {
+  background-color: hsl(222 47% 6%) !important;
+  color: hsl(210 40% 90%) !important;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+html.xray-dark-mode .bg-card,
+html.xray-dark-mode .bg-background,
+html.xray-dark-mode [class*="bg-white"] {
+  background-color: hsl(222 47% 10%) !important;
+  color: hsl(210 40% 88%) !important;
+}
+html.xray-dark-mode .border,
+html.xray-dark-mode [class*="border-border"] {
+  border-color: rgba(34, 211, 238, 0.15) !important;
+}
+html.xray-dark-mode h1, html.xray-dark-mode h2, html.xray-dark-mode h3,
+html.xray-dark-mode .text-foreground {
+  color: hsl(210 40% 92%) !important;
+}
+html.xray-dark-mode .text-muted-foreground {
+  color: hsl(215 20% 60%) !important;
+}
+html.xray-dark-mode [data-sidebar] {
+  background-color: hsl(222 47% 5%) !important;
+  border-color: rgba(34, 211, 238, 0.12) !important;
+}
+html.xray-dark-mode input, html.xray-dark-mode textarea, html.xray-dark-mode select {
+  background-color: hsl(222 47% 8%) !important;
+  color: hsl(210 40% 88%) !important;
+  border-color: rgba(34, 211, 238, 0.2) !important;
+}
+html.xray-dark-mode nav {
+  background-color: hsl(222 47% 7%) !important;
+}
+
+/* Platform Rules Badge — un-hideable by custom CSS */
+.lb-platform-rules-badge {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  pointer-events: auto !important;
+  height: auto !important;
+  width: auto !important;
+  overflow: visible !important;
+  clip: auto !important;
+  max-height: none !important;
+  transform: none !important;
+}
+
+/* Neighborhood custom CSS scope — all user CSS sandboxed here */
+.neighborhood-custom-scope {
+  all: initial;
+  display: block;
 }
 
 /* Reduced Motion — disable all animations and transitions */
