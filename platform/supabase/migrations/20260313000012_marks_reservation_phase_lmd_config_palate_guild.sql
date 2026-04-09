@@ -1,5 +1,5 @@
 -- Session 11B: reservation_phase, LMD dna_lock config, Palate Guild seed
--- See BISHOP_DROPZONE/PROMPT_KNIGHT_SESSION_11B.md, LMD_STRATEGY_DECISIONS_SESSION_11B.md
+-- See BISHOP_DROPZONE/01_KnightPrompts/PROMPT_KNIGHT_SESSION_11B.md, LMD_STRATEGY_DECISIONS_SESSION_11B.md
 
 -- TASK 2: Marks reservation phase (two-step conversion)
 ALTER TABLE public.marks_reservation

@@ -25,10 +25,19 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // Test mode: log only, never actually post
+    let testMode = false;
+    try {
+      const body = await req.json();
+      testMode = body?.test_mode === true;
+    } catch { /* no body or not JSON — normal cron invocation */ }
+
     const now = new Date().toISOString();
     let successCount = 0;
     let failCount = 0;
+    let deadLetterCount = 0;
     const details: Array<{ source: string; id: string; platform: string; status: string }> = [];
+    const MAX_RETRIES = 3;
 
     // ─── 1. Process modern member_scheduled_posts ────────────────────
 
@@ -46,6 +55,18 @@ Deno.serve(async (req) => {
 
     for (const post of (memberPosts ?? [])) {
       try {
+        const hasBatteryDispatchAccess = await getBatteryDispatchAccessForUser(supabase, post.user_id);
+        if (!hasBatteryDispatchAccess) {
+          await supabase
+            .from('member_scheduled_posts')
+            .update({ status: 'suspended' })
+            .eq('id', post.id);
+
+          details.push({ source: 'member', id: post.id, platform: post.platform, status: 'suspended: access_required' });
+          console.warn(`⚠️ [member] Suspended ${post.platform} post for user ${post.user_id} due to missing Battery Dispatch access`);
+          continue;
+        }
+
         await supabase
           .from('member_scheduled_posts')
           .update({ status: 'posting' })
@@ -55,11 +76,24 @@ Deno.serve(async (req) => {
         if (!account) throw new Error(`No active ${post.platform} account found`);
 
         const content = buildPostContent(post.content, post.hashtags, post.link_url);
+
+        if (testMode) {
+          // Test mode: log but never post
+          await supabase
+            .from('member_scheduled_posts')
+            .update({ status: 'scheduled', updated_at: new Date().toISOString() })
+            .eq('id', post.id);
+          successCount++;
+          details.push({ source: 'member', id: post.id, platform: post.platform, status: 'test_logged' });
+          console.log(`🧪 [member][test] Would post to ${post.platform} for user ${post.user_id}: ${content.slice(0, 80)}...`);
+          continue;
+        }
+
         const postUrl = await postToPlatform(account, post.platform, content);
 
         await supabase
           .from('member_scheduled_posts')
-          .update({ status: 'posted', posted_at: new Date().toISOString() })
+          .update({ status: 'posted', posted_at: new Date().toISOString(), platform_post_url: postUrl, updated_at: new Date().toISOString() })
           .eq('id', post.id);
 
         await supabase
@@ -67,20 +101,67 @@ Deno.serve(async (req) => {
           .update({ last_used_at: new Date().toISOString() })
           .eq('id', account.id);
 
+        await supabase
+          .from('dispatch_audit_log')
+          .insert({
+            user_id: post.user_id,
+            batch_id: post.dispatch_batch_id || post.id,
+            dispatch_mode: post.dispatch_mode || 'scheduled',
+            platform_count: 1,
+            platforms: [post.platform],
+            base_content: post.content?.slice(0, 500),
+          })
+          .then(({ error: auditErr }) => {
+            if (auditErr) console.error('Audit log write failed:', auditErr);
+          });
+
         successCount++;
         details.push({ source: 'member', id: post.id, platform: post.platform, status: 'posted' });
         console.log(`✅ [member] Posted to ${post.platform} for user ${post.user_id}`);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown error';
-        await supabase
-          .from('member_scheduled_posts')
-          .update({ status: 'failed' })
-          .eq('id', post.id);
+        const retryCount = (post.retry_count || 0) + 1;
 
-        failCount++;
-        details.push({ source: 'member', id: post.id, platform: post.platform, status: `failed: ${message}` });
-        console.error(`❌ [member] Failed ${post.platform}: ${message}`);
-      }
+        if (retryCount >= MAX_RETRIES) {
+          // Move to dead letter queue after 3 failures
+          await supabase
+            .from('member_scheduled_posts')
+            .update({ status: 'dead_letter', error_message: message, retry_count: retryCount, updated_at: new Date().toISOString() })
+            .eq('id', post.id);
+
+          await supabase
+            .from('dispatch_dead_letters')
+            .insert({
+              original_post_id: post.id,
+              source_table: 'member_scheduled_posts',
+              platform: post.platform,
+              error_message: message,
+              payload: { content: post.content, hashtags: post.hashtags, link_url: post.link_url, user_id: post.user_id },
+              attempt_count: retryCount,
+              first_failed_at: post.updated_at || new Date().toISOString(),
+              last_failed_at: new Date().toISOString(),
+            });
+
+          deadLetterCount++;
+          details.push({ source: 'member', id: post.id, platform: post.platform, status: `dead_letter: ${message}` });
+          console.error(`💀 [member] Dead-lettered ${post.platform} after ${retryCount} failures: ${message}`);
+        } else {
+          // Retry: reschedule for 15 min later
+          await supabase
+            .from('member_scheduled_posts')
+            .update({
+              status: 'scheduled',
+              error_message: message,
+              retry_count: retryCount,
+              scheduled_for: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', post.id);
+
+          failCount++;
+          details.push({ source: 'member', id: post.id, platform: post.platform, status: `retry_${retryCount}: ${message}` });
+          console.error(`⚠️ [member] Retry ${retryCount}/${MAX_RETRIES} for ${post.platform}: ${message}`);
+        }
     }
 
     // ─── 2. Process legacy scheduled_posts (backward compat) ─────────
@@ -126,6 +207,17 @@ Deno.serve(async (req) => {
 
         if (!account) throw new Error(`No connected ${post.platform} account`);
 
+        if (testMode) {
+          await supabase
+            .from('scheduled_posts')
+            .update({ status: 'scheduled', updated_at: new Date().toISOString() })
+            .eq('id', post.id);
+          successCount++;
+          details.push({ source: 'legacy', id: post.id, platform: post.platform, status: 'test_logged' });
+          console.log(`🧪 [legacy][test] Would post to ${post.platform}: ${post.post_text?.slice(0, 80)}...`);
+          continue;
+        }
+
         const postUrl = await postToPlatform(account, post.platform, post.post_text);
 
         await supabase
@@ -151,22 +243,44 @@ Deno.serve(async (req) => {
         const message = err instanceof Error ? err.message : 'Unknown error';
         const retryCount = (post.retry_count || 0) + 1;
 
-        await supabase
-          .from('scheduled_posts')
-          .update({
-            status: retryCount >= 3 ? 'failed' : 'scheduled',
-            error_message: message,
-            retry_count: retryCount,
-            scheduled_for: retryCount < 3
-              ? new Date(Date.now() + 15 * 60 * 1000).toISOString()
-              : post.scheduled_for,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', post.id);
+        if (retryCount >= MAX_RETRIES) {
+          await supabase
+            .from('scheduled_posts')
+            .update({ status: 'failed', error_message: message, retry_count: retryCount, updated_at: new Date().toISOString() })
+            .eq('id', post.id);
 
-        failCount++;
-        details.push({ source: 'legacy', id: post.id, platform: post.platform, status: `failed: ${message}` });
-        console.error(`❌ [legacy] Failed ${post.platform}: ${message}`);
+          await supabase
+            .from('dispatch_dead_letters')
+            .insert({
+              original_post_id: post.id,
+              source_table: 'scheduled_posts',
+              platform: post.platform,
+              error_message: message,
+              payload: { post_text: post.post_text, user_id: post.user_id, herald_post_id: post.herald_post_id },
+              attempt_count: retryCount,
+              first_failed_at: post.updated_at || new Date().toISOString(),
+              last_failed_at: new Date().toISOString(),
+            });
+
+          deadLetterCount++;
+          details.push({ source: 'legacy', id: post.id, platform: post.platform, status: `dead_letter: ${message}` });
+          console.error(`💀 [legacy] Dead-lettered ${post.platform} after ${retryCount} failures: ${message}`);
+        } else {
+          await supabase
+            .from('scheduled_posts')
+            .update({
+              status: 'scheduled',
+              error_message: message,
+              retry_count: retryCount,
+              scheduled_for: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', post.id);
+
+          failCount++;
+          details.push({ source: 'legacy', id: post.id, platform: post.platform, status: `retry_${retryCount}: ${message}` });
+          console.error(`⚠️ [legacy] Retry ${retryCount}/${MAX_RETRIES} for ${post.platform}: ${message}`);
+        }
       }
     }
 
@@ -175,6 +289,8 @@ Deno.serve(async (req) => {
         processed: (memberPosts?.length ?? 0) + (legacyPosts?.length ?? 0),
         success: successCount,
         failed: failCount,
+        dead_letters: deadLetterCount,
+        test_mode: testMode,
         details,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -213,6 +329,22 @@ async function getAccountForPost(
     if (data) return data;
   }
   return getAccountForUser(supabase, userId, platform);
+}
+
+async function getBatteryDispatchAccessForUser(supabase: any, userId: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('battery_dispatch_access_status')
+    .select('has_access')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    // Keep scheduler resilient before/without access migration.
+    console.warn(`Battery dispatch access check unavailable; allowing post for ${userId}: ${error.message}`);
+    return true;
+  }
+
+  return !!data?.has_access;
 }
 
 async function getAccountForUser(

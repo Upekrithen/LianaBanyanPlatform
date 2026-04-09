@@ -14,34 +14,32 @@ WHERE piece_slug = 'slotted-top';
 -- ─── B-7: La Capital del Sabor — real campaign data ─────────────────────────
 -- Seed as a real business campaign using Pawn B21 research
 INSERT INTO public.business_campaigns (
-  slug, name, description, business_type, location_city, location_state,
-  status, captain_pitch_ready, created_at
+  slug, business_name, description, business_type, business_city, business_state,
+  nominated_by, status, created_at
 ) VALUES (
   'la-capital-del-sabor',
   'La Capital del Sabor',
   'Authentic Mexican restaurant — the first Captain Pitch target. Family-owned, community-rooted. Testing the full Captain System: Walking Billboard, Tiered Commitment (C+20 through C+90), Family Table Cookbook integration, and Delivery Driver Discovery Funnel.',
   'restaurant',
-  'Billings',
-  'MT',
+  'San Antonio',
+  'TX',
+  '330eafae-4dfe-4e01-941f-47e7df55b7b5',
   'active',
-  true,
   now()
 ) ON CONFLICT (slug) DO UPDATE SET
-  name = EXCLUDED.name,
+  business_name = EXCLUDED.business_name,
   description = EXCLUDED.description,
-  status = EXCLUDED.status,
-  captain_pitch_ready = EXCLUDED.captain_pitch_ready,
-  updated_at = now();
+  status = EXCLUDED.status;
 
 -- ─── B-8: Stats sync ────────────────────────────────────────────────────────
--- Update platform_canonical to match Bishop 037 counts
-UPDATE public.platform_canonical
-SET innovation_count = 2078,
-    production_systems = 28,
-    crown_jewels = 146
-WHERE id = (SELECT id FROM public.platform_canonical LIMIT 1);
-
--- If no row exists, insert one
-INSERT INTO public.platform_canonical (innovation_count, production_systems, crown_jewels)
-SELECT 2078, 28, 146
-WHERE NOT EXISTS (SELECT 1 FROM public.platform_canonical LIMIT 1);
+-- Update platform_canonical key-value pairs to match Bishop 037 counts
+INSERT INTO public.platform_canonical (key, value, description, last_updated_by, updated_at)
+VALUES
+  ('innovation_count', 2078, 'Total documented innovations', 'K148+', now()),
+  ('production_systems', 28, 'Production systems count', 'K148+', now()),
+  ('crown_jewels', 146, 'Crown Jewels filed across provisionals', 'K148+', now())
+ON CONFLICT (key) DO UPDATE SET
+  value = EXCLUDED.value,
+  description = EXCLUDED.description,
+  last_updated_by = EXCLUDED.last_updated_by,
+  updated_at = now();

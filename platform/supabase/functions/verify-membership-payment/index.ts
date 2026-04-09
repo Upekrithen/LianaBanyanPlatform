@@ -110,10 +110,43 @@ Deno.serve(async (req) => {
       console.error("[Verify] Ledger write failed (non-fatal):", ledgerErr);
     }
 
+    // Convert guest wallet if one exists for this user's email
+    let guestWalletResult = null;
+    try {
+      const { data: profile } = await adminClient
+        .from("member_profiles")
+        .select("email")
+        .eq("user_id", userId)
+        .single();
+
+      const memberEmail = profile?.email;
+      if (memberEmail) {
+        const convertRes = await fetch(
+          `${Deno.env.get("SUPABASE_URL")}/functions/v1/convert-guest-wallet`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            },
+            body: JSON.stringify({ member_id: userId, email: memberEmail }),
+          }
+        );
+        guestWalletResult = await convertRes.json();
+        console.log(`[Verify] Guest wallet check:`, JSON.stringify(guestWalletResult));
+      }
+    } catch (walletErr) {
+      console.error("[Verify] Guest wallet conversion (non-fatal):", walletErr);
+    }
+
     console.log(`[Verify] Success — user ${userId} marked as paid + membership activated`);
 
     return new Response(
-      JSON.stringify({ verified: true, status: "paid" }),
+      JSON.stringify({
+        verified: true,
+        status: "paid",
+        guest_wallet: guestWalletResult,
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
     );
   } catch (error) {
