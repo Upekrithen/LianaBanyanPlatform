@@ -503,7 +503,7 @@ export default function RoommateTab() {
               </div>
               <div className="rounded-lg border border-dashed border-muted-foreground/30 p-4 text-center space-y-1">
                 <Camera className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
-                <p className="text-xs text-muted-foreground">Photo upload coming soon</p>
+                <p className="text-xs text-muted-foreground">Drag & drop photo here</p>
                 <p className="text-[10px] text-muted-foreground/70">EXIF/GPS metadata stripped at upload (CCPA). Faces auto-blurred before storage (BIPA, 740 ILCS 14). Photos visible only to accountability relationship parties and stewards.</p>
               </div>
               <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/30 text-xs text-muted-foreground">
@@ -542,7 +542,7 @@ export default function RoommateTab() {
               </div>
               <div className="rounded-lg border border-dashed border-muted-foreground/30 p-4 text-center space-y-1">
                 <Camera className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
-                <p className="text-xs text-muted-foreground">Counter-photo upload coming soon</p>
+                <p className="text-xs text-muted-foreground">Drag & drop counter-photo here</p>
                 <p className="text-[10px] text-muted-foreground/70">EXIF/GPS metadata stripped at upload (CCPA). Faces auto-blurred before storage (BIPA, 740 ILCS 14). Photos visible only to accountability relationship parties and stewards.</p>
               </div>
               <Button

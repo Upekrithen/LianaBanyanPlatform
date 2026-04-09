@@ -295,7 +295,7 @@ export default function CoalitionDetail() {
         <Card className="bg-muted/20">
           <CardContent className="p-5 text-center">
             <BarChart3 className="w-8 h-8 mx-auto text-muted-foreground/30 mb-2" />
-            <p className="text-sm text-muted-foreground">Activity feed coming soon</p>
+            <p className="text-sm text-muted-foreground">No activity yet</p>
             <p className="text-xs text-muted-foreground/60">Member joins, treasury changes, and milestone events will appear here.</p>
           </CardContent>
         </Card>

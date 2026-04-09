@@ -107,7 +107,7 @@ const DISPATCH_CHANNELS: DispatchChannel[] = [
     id: 'podcast',
     name: 'Podcast',
     icon: <Podcast className="w-5 h-5" />,
-    description: 'Subscribe to audio updates (coming soon)',
+    description: 'Subscribe to audio updates (in development)',
     connected: false,
     color: '#9333EA'
   },

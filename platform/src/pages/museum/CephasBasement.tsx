@@ -5,10 +5,11 @@
  * The underground complex beneath the museum.
  */
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { motion } from "framer-motion";
-import { BookOpen, Search, Compass, Grid3X3, ArrowLeft } from "lucide-react";
+import { BookOpen, Search, Compass, Grid3X3, ArrowLeft, Globe, ExternalLink } from "lucide-react";
+import { FRIEND_WORDS } from "@/data/friendWords";
 
 type Depth = "stones" | "wading" | "deep";
 
@@ -51,6 +52,10 @@ const depthMap: Record<string, Depth> = { stones: "stones", wading: "wading", de
 const CephasBasement = () => {
   const { depth: urlDepth } = useParams<{ depth?: string }>();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const langCode = params.get("lang");
+  const langInfo = langCode ? FRIEND_WORDS.find((fw) => fw.langCode === langCode) : null;
+  const showLangBanner = langCode && langCode !== "en" && langInfo;
   const [selectedDepth, setSelectedDepth] = useState<Depth | null>(
     urlDepth ? depthMap[urlDepth] || null : null
   );
@@ -126,6 +131,36 @@ const CephasBasement = () => {
   return (
     <MuseumShell>
       <div className="min-h-screen flex flex-col px-4 py-6 pb-24 max-w-md mx-auto">
+        {/* Language banner from Mirror Mirror */}
+        {showLangBanner && (
+          <motion.div
+            className="mb-4 p-3 rounded-xl flex items-center gap-3"
+            style={{ background: "rgba(56, 161, 105, 0.08)", border: "1px solid rgba(56, 161, 105, 0.25)" }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Globe className="w-5 h-5 text-emerald-400 shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-white font-medium">
+                Viewing in {langInfo.language}
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Most content is in English. Help us bring it to {langInfo.nativeName}.
+              </p>
+            </div>
+            <a
+              href={`https://translate.google.com/translate?sl=en&tl=${langCode}&u=${encodeURIComponent(window.location.href)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors"
+              style={{ background: "rgba(59, 130, 246, 0.15)", color: "#60a5fa" }}
+            >
+              <ExternalLink className="w-3 h-3" />
+              Translate
+            </a>
+          </motion.div>
+        )}
+
         {/* Header */}
         <motion.div
           className="text-center mb-6"

@@ -154,7 +154,7 @@ export default function ProteusAnchorPage() {
               <div className="text-center text-slate-600">
                 <Anchor className="w-8 h-8 mx-auto mb-2 opacity-40" />
                 <p className="text-sm">Next Proteus Anchor</p>
-                <p className="text-xs mt-1">Coming soon</p>
+                <p className="text-xs mt-1">In development</p>
               </div>
             </Card>
           </div>

@@ -184,7 +184,7 @@ function FlippableBountyCard({ category, delay }: { category: BountyCategory; de
           </div>
           <p className="text-white/60 text-sm mb-3">{category.description}</p>
           <div className="flex justify-between text-sm">
-            <span className="text-white/60">{category.bounties > 0 ? `${category.bounties} open bounties` : 'Coming soon'}</span>
+            <span className="text-white/60">{category.bounties > 0 ? `${category.bounties} open bounties` : 'No bounties yet'}</span>
             <span className="text-primary font-medium">{category.credits} Credits</span>
           </div>
           <div className="absolute bottom-2 right-2 text-white/20 text-xs flex items-center gap-1">

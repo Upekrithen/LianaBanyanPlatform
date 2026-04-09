@@ -263,7 +263,7 @@ export function ShoppingListGenerator({
       
       // Handle fulfillment method
       if (fulfillmentMethod === 'external_api') {
-        toast.info(`Ready to send to ${EXTERNAL_APIS.find(a => a.id === externalApi)?.label}. Integration coming soon!`);
+        toast.info(`Ready to send to ${EXTERNAL_APIS.find(a => a.id === externalApi)?.label}. Integration pending — check back shortly.`);
       } else if (fulfillmentMethod === 'lets_get_groceries') {
         toast.info('Adding to Let\'s Get Groceries aggregate order...');
       } else if (fulfillmentMethod === 'lets_go_shopping') {

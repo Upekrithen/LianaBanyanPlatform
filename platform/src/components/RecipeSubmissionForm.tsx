@@ -328,7 +328,7 @@ export function RecipeSubmissionForm({
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Paste an image URL or upload coming soon
+                Paste an image URL or drag to upload
               </p>
             </div>
           </div>

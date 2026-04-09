@@ -812,7 +812,7 @@ export default function TreasureMapCreator() {
                 <Badge variant="outline">{draft.visibility}</Badge>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={() => toast.info("Preview coming soon!")}>
+            <Button variant="outline" size="sm" onClick={() => toast.info("Preview is being prepared.")}>
               <Eye className="w-4 h-4 mr-1" />
               Preview
             </Button>

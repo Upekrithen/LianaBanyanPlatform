@@ -271,7 +271,7 @@ export default function CrowdfundingIntegration() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">
-                Platform connection UI coming soon. Contact admin to configure API credentials.
+                Platform connection UI in development. Contact admin to configure API credentials.
               </p>
             </CardContent>
           </Card>
@@ -335,7 +335,7 @@ export default function CrowdfundingIntegration() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Manual import tool coming soon. For now, contact support to bulk import pledge data.
+                Manual import tool in development. Contact support to bulk import pledge data.
               </p>
             </CardContent>
           </Card>

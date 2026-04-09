@@ -284,7 +284,7 @@ function ScrollContent({
     default:
       return (
         <div className="text-center py-8 text-muted-foreground">
-          <p>Coming soon...</p>
+          <p>No items to display yet.</p>
         </div>
       );
   }

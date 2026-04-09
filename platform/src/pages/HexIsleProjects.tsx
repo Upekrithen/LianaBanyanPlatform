@@ -413,7 +413,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
                   toast({
                     title: `${project.name}`,
                     description: project.status === 'coming_soon'
-                      ? 'Coming soon! Join the waitlist by backing on Kickstarter.'
+                      ? 'Join the waitlist by backing on Kickstarter.'
                       : 'Pre-orders open during the Kickstarter campaign. Stay tuned!',
                   });
                 }

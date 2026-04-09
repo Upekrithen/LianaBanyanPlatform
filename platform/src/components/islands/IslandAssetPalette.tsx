@@ -105,7 +105,7 @@ export const IslandAssetPalette = ({ selectedAsset, onSelectAsset }: IslandAsset
             ))
           ) : (
             <div className="text-sm text-muted-foreground text-center py-8">
-              No assets found. Assets coming soon!
+              No assets available yet.
             </div>
           )}
         </div>

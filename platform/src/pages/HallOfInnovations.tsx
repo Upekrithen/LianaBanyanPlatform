@@ -790,7 +790,7 @@ export default function HallOfInnovations() {
           <div className="space-y-4">
             <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/20">
               <p className="text-sm">
-                Sponsor tiers coming soon. For now, contact <strong>Founder@LianaBanyan.com</strong> to discuss sponsorship opportunities.
+                Sponsor tiers in development. Contact <strong>Founder@LianaBanyan.com</strong> to discuss sponsorship opportunities.
               </p>
             </div>
             <Button className="w-full" onClick={() => setShowSponsorDialog(false)}>

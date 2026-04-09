@@ -48,6 +48,15 @@ import {
   scheduleGrassrootsIntelligencePosts,
   type GrassrootsPost
 } from '@/scripts/scheduleGrassrootsIntelligencePosts';
+import {
+  getSalvoPosts,
+  getSalvoStreams,
+  getSalvoStats,
+  scheduleOpeningGambitSalvo,
+  STREAM_META,
+  type SalvoPost,
+  type SalvoStream,
+} from '@/scripts/scheduleOpeningGambitSalvo';
 import { SchedulingEntryBox } from '@/components/scheduling/SchedulingEntryBox';
 import { toLocalDateTimeInput, tomorrowAtNineLocal } from '@/components/scheduling/dateUtils';
 
@@ -63,11 +72,12 @@ const PLATFORMS = [
 ];
 
 type BatteryStatus = 'SAFE' | 'ARMED' | 'FIRING' | 'COMPLETE';
-type CampaignType = 'little-red-hen' | 'opening-gambit' | 'grassroots-intelligence';
+type CampaignType = 'little-red-hen' | 'opening-gambit' | 'grassroots-intelligence' | 'opening-gambit-salvo';
 
 const CAMPAIGNS = [
   { id: 'little-red-hen' as CampaignType, name: 'Little Red Hen Story', posts: 25, description: '25-post story across 3 acts. Cumulative images build the narrative.' },
   { id: 'opening-gambit' as CampaignType, name: 'Opening Gambit', posts: 18, description: '7-day launch sequence. Pain → Vision → Proof → People → Architecture → Consolidation.' },
+  { id: 'opening-gambit-salvo' as CampaignType, name: 'Opening Gambit Salvo', posts: 57, description: '14-day, 5-stream concurrent campaign. Platform Identity + Cue Cards + Academic Tags + Medium Articles + LinkedIn Deep.' },
   { id: 'grassroots-intelligence' as CampaignType, name: 'Grassroots Intelligence', posts: 15, description: '5-day civic engagement campaign. Broken Petitions → Effort Democracy → Zero Demographics → Muffled Rule → Join.' },
 ];
 
@@ -82,13 +92,27 @@ export function TheBattery() {
   const [showConfirm, setShowConfirm] = useState(false);
   const confirmPhrase = useConfirmationPhrase();
 
+  const [salvoStreamFilter, setSalvoStreamFilter] = useState<Set<SalvoStream>>(new Set(getSalvoStreams()));
+
   const henPosts = previewPosts();
   const gambitPosts = previewGambitPosts();
   const grassrootsPosts = previewGrassrootsPosts();
+  const salvoPosts = getSalvoPosts();
+  const salvoStats = getSalvoStats();
+  const filteredSalvoPosts = salvoPosts.filter(p => salvoStreamFilter.has(p.stream));
   const activeCampaign = CAMPAIGNS.find(c => c.id === selectedCampaign)!;
   const totalPosts = selectedCampaign === 'little-red-hen' ? henPosts.length
     : selectedCampaign === 'grassroots-intelligence' ? grassrootsPosts.length
+    : selectedCampaign === 'opening-gambit-salvo' ? filteredSalvoPosts.length
     : gambitPosts.length;
+
+  const toggleSalvoStream = (stream: SalvoStream) => {
+    setSalvoStreamFilter(prev => {
+      const next = new Set(prev);
+      if (next.has(stream)) next.delete(stream); else next.add(stream);
+      return next;
+    });
+  };
 
   const togglePlatform = (platformId: string) => {
     setSelectedPlatforms(prev =>
@@ -137,6 +161,12 @@ export function TheBattery() {
       } else if (selectedCampaign === 'grassroots-intelligence') {
         result = await scheduleGrassrootsIntelligencePosts({
           launchDate: new Date(startDate),
+        });
+      } else if (selectedCampaign === 'opening-gambit-salvo') {
+        const activeStreams = [...salvoStreamFilter] as SalvoStream[];
+        result = await scheduleOpeningGambitSalvo({
+          launchDate: new Date(startDate),
+          streams: activeStreams.length < 5 ? activeStreams : undefined,
         });
       } else {
         result = await scheduleOpeningGambitPosts({
@@ -310,7 +340,7 @@ export function TheBattery() {
               </div>
               <div>
                 <div className="text-muted-foreground">Targets</div>
-                <div className="text-xl font-bold">{selectedCampaign === 'opening-gambit' ? getGambitPlatforms().length : selectedCampaign === 'grassroots-intelligence' ? getGrassrootsPlatforms().length : selectedPlatforms.length}</div>
+                <div className="text-xl font-bold">{selectedCampaign === 'opening-gambit' ? getGambitPlatforms().length : selectedCampaign === 'grassroots-intelligence' ? getGrassrootsPlatforms().length : selectedCampaign === 'opening-gambit-salvo' ? salvoStreamFilter.size + ' streams' : selectedPlatforms.length}</div>
               </div>
               <div>
                 <div className="text-muted-foreground">Total Rounds</div>
@@ -318,7 +348,7 @@ export function TheBattery() {
               </div>
               <div>
                 <div className="text-muted-foreground">Campaign Duration</div>
-                <div className="text-xl font-bold">{selectedCampaign === 'opening-gambit' ? '7d' : selectedCampaign === 'grassroots-intelligence' ? '5d' : `${Math.round(totalPosts * intervalHours / 24)}d`}</div>
+                <div className="text-xl font-bold">{selectedCampaign === 'opening-gambit' ? '7d' : selectedCampaign === 'opening-gambit-salvo' ? '14d' : selectedCampaign === 'grassroots-intelligence' ? '5d' : `${Math.round(totalPosts * intervalHours / 24)}d`}</div>
               </div>
             </div>
           </div>
@@ -372,6 +402,46 @@ export function TheBattery() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Salvo Stream Filters + Calendar */}
+            {selectedCampaign === 'opening-gambit-salvo' && (
+              <div className="space-y-4 mb-4">
+                <div>
+                  <Label className="text-sm font-semibold mb-2 block">Stream Filter ({salvoStreamFilter.size}/5 active)</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {(Object.entries(STREAM_META) as [SalvoStream, typeof STREAM_META[SalvoStream]][]).map(([key, meta]) => (
+                      <Badge
+                        key={key}
+                        variant={salvoStreamFilter.has(key) ? 'default' : 'outline'}
+                        className={`cursor-pointer transition-colors ${salvoStreamFilter.has(key) ? meta.color + ' text-white' : ''}`}
+                        onClick={() => toggleSalvoStream(key)}
+                      >
+                        {meta.label} ({salvoStats.byStream[key]})
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold mb-2 block">14-Day Calendar</Label>
+                  <div className="grid grid-cols-7 gap-1">
+                    {Array.from({ length: 14 }, (_, i) => i + 1).map(day => {
+                      const dayPosts = filteredSalvoPosts.filter(p => p.day === day);
+                      return (
+                        <div key={day} className={`rounded border p-1.5 text-center ${dayPosts.length > 0 ? 'bg-muted/50' : 'bg-muted/10 opacity-50'}`}>
+                          <p className="text-xs font-bold">Day {day}</p>
+                          <p className="text-lg font-bold">{dayPosts.length}</p>
+                          <div className="flex flex-wrap gap-0.5 justify-center mt-0.5">
+                            {dayPosts.map(p => (
+                              <span key={p.postNumber} className={`w-1.5 h-1.5 rounded-full ${STREAM_META[p.stream].color}`} />
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <Separator />
+              </div>
+            )}
             <div className="space-y-4 max-h-[600px] overflow-y-auto">
               {selectedCampaign === 'little-red-hen' ? (
                 henPosts.map((post, idx) => (
@@ -398,6 +468,33 @@ export function TheBattery() {
                         </div>
                       )}
                     </div>
+                  </div>
+                ))
+              ) : selectedCampaign === 'opening-gambit-salvo' ? (
+                filteredSalvoPosts.map((post, idx) => (
+                  <div key={idx} className="bg-muted/30 rounded-lg p-4 border">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <Badge variant="outline">#{post.postNumber}</Badge>
+                      <Badge className={STREAM_META[post.stream].color + ' text-white'}>
+                        {STREAM_META[post.stream].label}
+                      </Badge>
+                      <Badge variant="secondary">Day {post.day}</Badge>
+                      <Badge variant="outline">{post.platform}</Badge>
+                      <Badge variant={post.priority === 'critical' ? 'destructive' : 'outline'}>
+                        {post.priority}
+                      </Badge>
+                    </div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">
+                      {post.title} — {post.scheduledTime}
+                    </div>
+                    <p className="text-sm whitespace-pre-wrap text-foreground/80 line-clamp-6">{post.content}</p>
+                    {post.hashtags.length > 0 && (
+                      <div className="flex gap-1 mt-2 flex-wrap">
+                        {post.hashtags.map((tag, i) => (
+                          <span key={i} className="text-xs text-blue-400">{tag}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (
@@ -455,9 +552,9 @@ export function TheBattery() {
         details={[
           { label: "Campaign", value: activeCampaign.name },
           { label: "Volleys", value: `${totalPosts} posts` },
-          { label: "Targets", value: selectedCampaign === 'opening-gambit' ? `${getGambitPlatforms().length} platforms` : selectedCampaign === 'grassroots-intelligence' ? `${getGrassrootsPlatforms().length} platforms` : `${selectedPlatforms.length} platforms` },
+          { label: "Targets", value: selectedCampaign === 'opening-gambit' ? `${getGambitPlatforms().length} platforms` : selectedCampaign === 'opening-gambit-salvo' ? `${salvoStreamFilter.size} streams` : selectedCampaign === 'grassroots-intelligence' ? `${getGrassrootsPlatforms().length} platforms` : `${selectedPlatforms.length} platforms` },
           { label: "First Volley", value: new Date(startDate).toLocaleString() },
-          { label: "Campaign Duration", value: selectedCampaign === 'opening-gambit' ? '7 days' : selectedCampaign === 'grassroots-intelligence' ? '5 days' : `${Math.round(totalPosts * intervalHours / 24)} days` },
+          { label: "Campaign Duration", value: selectedCampaign === 'opening-gambit' ? '7 days' : selectedCampaign === 'opening-gambit-salvo' ? '14 days' : selectedCampaign === 'grassroots-intelligence' ? '5 days' : `${Math.round(totalPosts * intervalHours / 24)} days` },
         ]}
         onConfirm={handleFire}
         onCancel={() => setShowConfirm(false)}

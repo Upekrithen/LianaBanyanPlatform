@@ -174,7 +174,7 @@ export default function STLVault() {
             <Box className="w-16 h-16 mx-auto text-gray-700" />
             <h3 className="text-lg font-medium text-gray-300">The Vault is being loaded</h3>
             <p className="text-sm text-gray-500 max-w-sm mx-auto">
-              STL design files are coming soon. Register as a maker to be first to upload.
+              No STL design files uploaded yet. Register as a maker to be the first.
             </p>
             <Button variant="outline" className="border-cyan-700 text-cyan-400" onClick={() => navigate('/register-maker')}>
               Register as Maker

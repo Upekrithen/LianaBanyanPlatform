@@ -745,7 +745,7 @@ export default function GoldenKeyQuest() {
             </Card>
 
             <Card className="cursor-pointer hover:bg-amber-500/5 transition-all" onClick={() => {
-              toast.info("Cue Card generator coming soon!");
+              toast.info("Cue Card generator is being prepared.");
             }}>
               <CardContent className="pt-4 text-center">
                 <Key className="w-6 h-6 mx-auto mb-2 text-amber-500" />

@@ -43,7 +43,7 @@ const SAMPLE_STORIES: SuccessStory[] = [
     metricValue: "500",
     icon: "🌿",
     makerHandle: "@forgecoreco",
-    dateCompleted: "Coming soon",
+    dateCompleted: "Pending",
     isAnonymous: false,
   },
   {
@@ -55,7 +55,7 @@ const SAMPLE_STORIES: SuccessStory[] = [
     metricValue: "80+",
     icon: "🍳",
     location: "Phoenix, AZ",
-    dateCompleted: "Coming soon",
+    dateCompleted: "Pending",
     sharedByName: "Captain Maria",
     isAnonymous: false,
   },
@@ -68,7 +68,7 @@ const SAMPLE_STORIES: SuccessStory[] = [
     metricValue: "25%",
     icon: "🛒",
     location: "Surprise, AZ",
-    dateCompleted: "Coming soon",
+    dateCompleted: "Pending",
     isAnonymous: true,
   },
   {
@@ -80,7 +80,7 @@ const SAMPLE_STORIES: SuccessStory[] = [
     metricValue: "8",
     icon: "🐱",
     makerHandle: "@krakdrag3d",
-    dateCompleted: "Coming soon",
+    dateCompleted: "Pending",
     isAnonymous: false,
   },
   {
@@ -92,7 +92,7 @@ const SAMPLE_STORIES: SuccessStory[] = [
     metricValue: "12",
     icon: "☕",
     makerHandle: "@hammerlyceramics",
-    dateCompleted: "Coming soon",
+    dateCompleted: "Pending",
     isAnonymous: false,
   },
 ];

@@ -99,7 +99,7 @@ export default function ContestDirectory() {
                 <Trophy className="mx-auto mb-3 h-12 w-12 text-muted-foreground/40" />
                 <h3 className="text-lg font-medium mb-1">No contests yet</h3>
                 <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-4">
-                  Design contests are how makers compete for production runs. The first contest is coming soon!
+                  Design contests are how makers compete for production runs. Submit a project to launch the first one.
                 </p>
                 <Button size="sm" variant="outline" onClick={() => window.location.href = '/projects'}>
                   Browse Projects Instead

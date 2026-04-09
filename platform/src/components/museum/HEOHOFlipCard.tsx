@@ -19,6 +19,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useXRay } from "./XRayContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { FRIEND_WORDS_MAP, type FriendWord } from "@/data/friendWords";
 
 // ═══ QUOTES (Yvaine at position 3, no HEOHO quote) ═══
 const QUOTES: Array<{ text: string; author: string; isYvaine?: boolean }> = [
@@ -47,17 +48,7 @@ const QUOTES: Array<{ text: string; author: string; isYvaine?: boolean }> = [
   { text: "It ain't about how hard you hit; it's about how hard you can get hit and keep moving forward.", author: "Rocky Balboa" },
 ];
 
-// ═══ FRIEND TRANSLATIONS ═══
-const FRIEND_WORDS: Record<string, string> = {
-  friend: "English", amigo: "Español", ami: "Français", freund: "Deutsch",
-  "朋友": "中文", "友達": "日本語", tomodachi: "日本語", amico: "Italiano",
-  "друг": "Русский", "친구": "한국어", chingu: "한국어", rafiki: "Kiswahili",
-  vriend: "Nederlands", przyjaciel: "Polski", arkadas: "Türkçe", kawan: "Bahasa",
-  kaibigan: "Filipino", mellon: "Sindarin (Elvish)", jup: "Klingon",
-  raqiros: "High Valyrian", amicus: "Latin", amiko: "Esperanto",
-  vän: "Svenska", ven: "Dansk/Norsk", ban: "Tiếng Việt",
-  dost: "हिंदी", mitra: "हिंदी", sadiq: "العربية",
-};
+// ═══ FRIEND TRANSLATIONS — now 110+ languages in @/data/friendWords ═══
 
 /** Hex SVG background */
 const hexBg = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`;
@@ -82,7 +73,7 @@ export function HEOHOFlipCard() {
   const [keyholeActive, setKeyholeActive] = useState(false);
   const [friendInput, setFriendInput] = useState(false);
   const [friendText, setFriendText] = useState("");
-  const [friendMatch, setFriendMatch] = useState<string | null>(null);
+  const [friendMatch, setFriendMatch] = useState<FriendWord | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
@@ -179,12 +170,13 @@ export function HEOHOFlipCard() {
     };
   }, [quoteIndex, clearTimers]);
 
-  // Friend word check — navigates to /mirror instead of flipping
+  // Friend word check — navigates to /mirror with detected language
   useEffect(() => {
     const lower = friendText.toLowerCase().trim();
-    if (lower.length > 0 && FRIEND_WORDS[lower]) {
-      setFriendMatch(FRIEND_WORDS[lower]);
-      const t = setTimeout(() => navigate("/mirror"), 800);
+    const match = lower.length > 0 ? FRIEND_WORDS_MAP[lower] : undefined;
+    if (match) {
+      setFriendMatch(match);
+      const t = setTimeout(() => navigate(`/mirror?lang=${match.langCode}&word=${encodeURIComponent(match.word)}`), 800);
       return () => clearTimeout(t);
     } else {
       setFriendMatch(null);
@@ -344,7 +336,7 @@ export function HEOHOFlipCard() {
                       />
                       {friendMatch && (
                         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "#38a169", marginTop: "0.4rem", fontStyle: "normal", fontWeight: 400 }}>
-                          ✓ {friendMatch} — welcome, friend.
+                          ✓ {friendMatch.nativeName} — welcome, friend.
                         </motion.p>
                       )}
                     </div>

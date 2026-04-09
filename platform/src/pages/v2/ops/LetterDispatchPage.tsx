@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import {
   Lock, Unlock, Send, Mail, Eye, Clock, CheckCircle2, XCircle,
   AlertTriangle, MessageSquare, MailOpen, ArrowRight, Users,
-  Calendar, Filter, RefreshCw,
+  Calendar, Filter, RefreshCw, FileText, Edit3,
 } from "lucide-react";
 
 type DispatchStatus = "draft" | "locked" | "queued" | "sent" | "delivered" | "bounced" | "responded";
@@ -69,6 +69,22 @@ const STATUS_CONFIG: Record<DispatchStatus, { label: string; variant: "default" 
   responded: { label: "Responded", variant: "default", icon: MessageSquare, className: "bg-purple-100 text-purple-800 border-purple-300" },
 };
 
+const PLACEHOLDER_PREFIX = "[CONTENT PENDING";
+
+function hasLetterContent(body: string | null): boolean {
+  return !!body && !body.startsWith(PLACEHOLDER_PREFIX);
+}
+
+function ContentDot({ body }: { body: string | null }) {
+  const loaded = hasLetterContent(body);
+  return (
+    <span
+      className={`inline-block h-2.5 w-2.5 rounded-full shrink-0 ${loaded ? "bg-green-500" : "bg-red-500"}`}
+      title={loaded ? "Letter content loaded" : "No letter content"}
+    />
+  );
+}
+
 function StatusBadge({ status }: { status: DispatchStatus }) {
   const cfg = STATUS_CONFIG[status];
   const Icon = cfg.icon;
@@ -101,6 +117,7 @@ function LetterCard({
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-1">
+              <ContentDot body={letter.letter_body} />
               <p className="font-semibold text-sm truncate">{letter.recipient_name}</p>
               <StatusBadge status={letter.status as DispatchStatus} />
             </div>
@@ -283,6 +300,11 @@ export default function LetterDispatchPage() {
     return s;
   }, [letters]);
 
+  const contentStats = useMemo(() => {
+    const loaded = letters.filter((l) => hasLetterContent(l.letter_body)).length;
+    return { loaded, total: letters.length };
+  }, [letters]);
+
   const handleLock = (id: string) => {
     updateStatus.mutate({ id, updates: { status: "locked", locked_at: new Date().toISOString(), locked_by: user?.id } });
     toast.success("Letter locked for send");
@@ -320,7 +342,7 @@ export default function LetterDispatchPage() {
     <AppShell title="Letter Dispatch" subtitle="Opening Gambit — 4-Phase Compressed Wave">
       <div className="space-y-6">
         {/* Stats Strip */}
-        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+        <div className="grid grid-cols-4 sm:grid-cols-9 gap-2">
           {(["total", "draft", "locked", "queued", "sent", "delivered", "bounced", "responded"] as const).map((key) => (
             <Card key={key} className="text-center">
               <CardContent className="p-2">
@@ -329,6 +351,19 @@ export default function LetterDispatchPage() {
               </CardContent>
             </Card>
           ))}
+          <Card className={`text-center ${contentStats.loaded === contentStats.total ? "border-green-300 bg-green-50/50" : "border-amber-300 bg-amber-50/50"}`}>
+            <CardContent className="p-2">
+              <p className="text-2xl font-bold">
+                <span className={contentStats.loaded === contentStats.total ? "text-green-700" : "text-amber-700"}>
+                  {contentStats.loaded}
+                </span>
+                <span className="text-sm text-muted-foreground">/{contentStats.total}</span>
+              </p>
+              <p className="text-[10px] text-muted-foreground flex items-center justify-center gap-1">
+                <FileText className="h-2.5 w-2.5" /> Letters Loaded
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Batch Actions */}
@@ -623,13 +658,13 @@ export default function LetterDispatchPage() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-xs font-medium">Subject Line:</p>
-                  {previewLetter.status === "draft" && !editingBody && (
-                    <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => {
+                  {!editingBody && (
+                    <Button variant="outline" size="sm" className="h-6 text-xs gap-1" onClick={() => {
                       setEditingBody(true);
                       setEditBody(previewLetter.letter_body ?? "");
                       setEditSubject(previewLetter.subject_line ?? "");
                     }}>
-                      Edit
+                      <Edit3 className="h-3 w-3" /> Edit Letter
                     </Button>
                   )}
                 </div>
@@ -653,18 +688,38 @@ export default function LetterDispatchPage() {
               )}
 
               <div>
-                <p className="text-xs font-medium mb-1">Letter Body:</p>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-xs font-medium flex items-center gap-1.5">
+                    Letter Body
+                    <ContentDot body={previewLetter.letter_body} />
+                  </p>
+                  {!editingBody && previewLetter.letter_body && (
+                    <span className="text-[10px] text-muted-foreground">
+                      {previewLetter.letter_body.trim().split(/\s+/).length} words
+                    </span>
+                  )}
+                </div>
                 {editingBody ? (
-                  <Textarea
-                    value={editBody}
-                    onChange={(e) => setEditBody(e.target.value)}
-                    className="text-sm min-h-[200px] font-mono"
-                    rows={12}
-                  />
+                  <>
+                    <Textarea
+                      value={editBody}
+                      onChange={(e) => setEditBody(e.target.value)}
+                      className="text-sm min-h-[200px] font-mono"
+                      rows={12}
+                    />
+                    <p className="text-[10px] text-muted-foreground mt-1 text-right">
+                      {editBody.trim().split(/\s+/).filter(Boolean).length} words
+                    </p>
+                  </>
                 ) : (
                   <div className="text-sm bg-white p-3 rounded border max-h-64 overflow-y-auto whitespace-pre-wrap">
                     {previewLetter.letter_body || <span className="text-muted-foreground italic">No letter body loaded yet</span>}
                   </div>
+                )}
+                {previewLetter.updated_at && !editingBody && (
+                  <p className="text-[10px] text-muted-foreground mt-1">
+                    Last edited: {new Date(previewLetter.updated_at).toLocaleString()}
+                  </p>
                 )}
               </div>
 
@@ -682,11 +737,12 @@ export default function LetterDispatchPage() {
                 <Button variant="outline" onClick={() => setEditingBody(false)}>Cancel Edit</Button>
                 <Button onClick={() => {
                   if (previewLetter) {
+                    const now = new Date().toISOString();
                     updateStatus.mutate({
                       id: previewLetter.id,
-                      updates: { letter_body: editBody, subject_line: editSubject, updated_at: new Date().toISOString() },
+                      updates: { letter_body: editBody, subject_line: editSubject, updated_at: now },
                     });
-                    setPreviewLetter({ ...previewLetter, letter_body: editBody, subject_line: editSubject });
+                    setPreviewLetter({ ...previewLetter, letter_body: editBody, subject_line: editSubject, updated_at: now });
                     setEditingBody(false);
                     toast.success("Letter saved");
                   }
@@ -695,7 +751,7 @@ export default function LetterDispatchPage() {
                 </Button>
               </>
             )}
-            {!editingBody && previewLetter?.status === "draft" && (
+            {!editingBody && previewLetter?.status === "draft" && hasLetterContent(previewLetter.letter_body) && (
               <Button variant="secondary" onClick={() => { handleLock(previewLetter.id); setPreviewLetter(null); }}>
                 <Lock className="h-3 w-3 mr-1" /> Lock for Send
               </Button>

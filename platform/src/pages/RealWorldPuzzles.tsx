@@ -351,7 +351,7 @@ export default function RealWorldPuzzles() {
               </ul>
             </div>
             <p className="text-sm text-slate-400 text-center">
-              Full puzzle editor coming soon. For now, contact the Founder.
+              Full puzzle editor in development. Contact the Founder to discuss.
             </p>
           </div>
           <DialogFooter>

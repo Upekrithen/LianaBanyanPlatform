@@ -71,7 +71,7 @@ export function CrewCompletionCard({
             </Button>
           )}
           <Button variant="outline" disabled data-xray-id="crew-start-run-2-btn">
-            Start Run #2 — Coming soon
+            Start Run #2
           </Button>
         </div>
       </CardContent>

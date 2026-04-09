@@ -189,7 +189,7 @@ function FlippableButton({
                 )
               )}
               {!academicLink && !technicalLink && (
-                <span className="text-xs text-muted-foreground/60 italic">Specs coming soon</span>
+                <span className="text-xs text-muted-foreground/60 italic">Specs in progress</span>
               )}
             </div>
             <div className="absolute bottom-1 right-2 text-muted-foreground/30 text-[10px] flex items-center gap-1">
