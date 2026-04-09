@@ -15,6 +15,7 @@ import { RecordingProvider } from "@/contexts/RecordingContext";
 import { supabase } from "@/integrations/supabase/client";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import { CrossPortalNav } from "@/components/CrossPortalNav";
 
 const UpekrithenLanding = lazy(() => import("./pages/UpekrithenLanding"));
 const MoneyPenny = lazy(() => import("./pages/MoneyPenny"));
@@ -106,6 +107,7 @@ const UpekrithenApp = () => {
             <RecordingProvider>
               <Toaster />
               <Sonner />
+              <CrossPortalNav />
               <Suspense fallback={<UpekrithenLoadingFallback />}>
                 <Routes>
                   <Route path="/auth" element={<Auth />} />

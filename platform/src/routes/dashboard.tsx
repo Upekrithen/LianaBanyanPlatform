@@ -73,6 +73,7 @@ const TrunkMirrorReviewPage = lazy(() => import("@/pages/TrunkMirrorReviewPage")
 const DispatchHealthPage = lazy(() => import("@/pages/v2/ops/DispatchHealthPage"));
 const HarperReviewDashboardPage = lazy(() => import("@/pages/v2/governance/HarperReviewDashboardPage"));
 const ContentShieldAdminPage = lazy(() => import("@/pages/v2/ops/ContentShieldAdminPage"));
+const LetterDispatchPage = lazy(() => import("@/pages/v2/ops/LetterDispatchPage"));
 const VehicleWheelsV2Page = lazy(() => import("@/pages/v2/vehicle/WheelsV2Page"));
 const RideshareRoutesV2 = lazy(() => import("@/pages/v2/vehicle/RideshareRoutesV2"));
 const RouteDetailPage = lazy(() => import("@/pages/v2/vehicle/RouteDetailPage"));
@@ -161,6 +162,7 @@ export const dashboardRoutes = (
     <Route path="/v2/ops/dispatch-health" element={<ProtectedRoute><LazyPage><DispatchHealthPage /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/governance/harper-review" element={<ProtectedRoute><LazyPage><HarperReviewDashboardPage /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/ops/content-shield" element={<ProtectedRoute><LazyPage><ContentShieldAdminPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/v2/ops/letter-dispatch" element={<ProtectedRoute><LazyPage><LetterDispatchPage /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/wheels" element={<ProtectedRoute><LazyPage><VehicleWheelsV2Page /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/rideshare" element={<ProtectedRoute><LazyPage><RideshareRoutesV2 /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/rideshare/:routeId" element={<ProtectedRoute><LazyPage><RouteDetailPage /></LazyPage></ProtectedRoute>} />

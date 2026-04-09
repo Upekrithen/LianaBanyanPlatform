@@ -151,7 +151,7 @@ Create JSON metadata files for each tier at your `baseURI`:
 ```json
 {
   "name": "LianaBanyan Medallion - Seed Funding",
-  "description": "Genesis tier medallion representing early project backing and maximum equity stake.",
+  "description": "Genesis tier medallion representing early project backing and maximum participation stake.",
   "image": "https://yourdomain.com/images/medallion-seed.png",
   "attributes": [
     {
@@ -167,7 +167,7 @@ Create JSON metadata files for each tier at your `baseURI`:
       "value": "$5.00"
     },
     {
-      "trait_type": "Equity Potential",
+      "trait_type": "Participation Potential",
       "value": "Highest"
     }
   ]

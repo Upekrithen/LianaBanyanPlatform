@@ -44,7 +44,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 2. **Empirical Testing of Credit-Based Intermarket Currency**
    - Measure credit velocity and cross-project transfers
-   - Analyze equity conversion impacts on member retention
+   - Analyze participation conversion impacts on member retention
    - Compare to fiat and cryptocurrency alternatives
    - Track liquidity mechanisms and external market integration
 
@@ -73,7 +73,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 ### Real-Time Data Collection
 - **Medallion Wave Pricing Results** (Q3-Q4 2025): Test wave-based funding vs. traditional crowdfunding
 - **Guild Progression Metrics** (2026+): Track advancement rates, retention, income growth
-- **Credit Velocity & Equity Conversion** (2027+): Monitor intermarket transfers and liquidity
+- **Credit Velocity & Participation Conversion** (2027+): Monitor intermarket transfers and liquidity
 - **RADAR Competitive Reports** (ongoing): Continuous threat assessment and opportunity identification
 - **External Arbitrage Tracking** (2025+): Measure 20% participation compliance and ecosystem benefit
 
@@ -215,7 +215,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 ### Theoretical Framework
 
-**Core Hypothesis**: Offering creators tiered IP control options (with corresponding equity splits) maximizes total ecosystem IP value by enabling self-selection based on creator preferences and IP characteristics.
+**Core Hypothesis**: Offering creators tiered IP control options (with corresponding participation splits) maximizes total ecosystem IP value by enabling self-selection based on creator preferences and IP characteristics.
 
 **Academic Foundations**:
 - **Mechanism Design Theory** (Hurwicz, Myerson): Optimal contract menus elicit true preferences
@@ -276,7 +276,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 **RQ4: Price Discrimination Effects**
 - Should LianaBanyan charge different platform fees per tier?
-- How price-sensitive are creators to equity splits?
+- How price-sensitive are creators to participation splits?
 - What fee structure maximizes total platform revenue?
 
 **RQ5: Downgrade Protection Value**
@@ -297,7 +297,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 - Compare early IP registrations (fewer options) to later ones
 
 **A/B Testing**:
-- Vary equity split offers within tiers
+- Vary participation split offers within tiers
 - Test different category restriction list presentations (Tier B)
 - Experiment with arbitration fee structures
 
@@ -361,7 +361,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 **RQ2: Progression Incentive Design**
 - What stake amounts optimally balance access and commitment?
 - How do progressive stakes affect member retention vs. advancement?
-- Do equity bonuses (profit sharing) drive quality improvement?
+- Do participation bonuses (profit sharing) drive quality improvement?
 
 **Hypothesis**: Steep progression stakes ($500 → $67,500) filter for commitment without excluding talented low-income members if earning opportunities scale faster.
 
@@ -420,7 +420,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 **Data Collection**:
 - Skill assessments (island scores, guild tier)
 - Project outcomes (client satisfaction, quality ratings, on-time delivery)
-- Financial data (earnings, stakes paid, equity accumulated)
+- Financial data (earnings, stakes paid, participation accumulated)
 - Member surveys (motivation, satisfaction, perceived value)
 
 ### Expected Contributions
@@ -488,7 +488,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 ---
 
-**RQ3: Capital Efficiency vs. Equity Dilution**
+**RQ3: Capital Efficiency vs. Participation Dilution**
 - How much external capital does wave pricing eliminate?
 - What project funding success rate justifies eliminating VC/debt?
 - Does wave funding reduce financial stress for project owners?
@@ -663,7 +663,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 **To Cooperative Economics**:
 - How blockchain reduces trust requirements in cooperatives
-- Automated dividend distribution via smart contracts
+- Automated distribution distribution via smart contracts
 - Transparent financial management without central authority
 
 **To Platform Economics**:
@@ -706,7 +706,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 **RQ2: Member Retention & Lifetime Value**
 - How does member-ownership affect retention vs. platform workers?
-- Do equity stakes increase member loyalty?
+- Do participation stakes increase member loyalty?
 - What's the lifetime value difference: member-owner vs. platform worker?
 
 **Hypothesis**: Member-owners exhibit 2-3x higher retention and 1.5-2x lifetime value vs. comparable gig platform workers.
@@ -748,7 +748,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 **RQ6: Hybrid Models**
 - Should cooperatives accept limited outside investment?
-- What equity caps (49%? 30%?) preserve cooperative character?
+- What participation caps (49%? 30%?) preserve cooperative character?
 - How do hybrid structures affect member trust and alignment?
 
 ### Empirical Opportunities
@@ -785,7 +785,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 **To Platform Economics**:
 - Alternative to extractive platform models
 - How ownership structure affects platform dynamics
-- Network effects in member-owned vs. investor-owned platforms
+- Network effects in member-owned vs. backer-owned platforms
 
 **To Policy**:
 - Cooperative alternatives to gig economy precarity
@@ -849,7 +849,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 **Empirical Test**:
 - A/B test business plans with vs. without RADAR sections
-- Measure funding success rates and investor feedback
+- Measure funding success rates and backer feedback
 - Track academic publication timeliness on competitive topics
 - Correlate RADAR usage with valuation accuracy
 
@@ -886,7 +886,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 **Data Collection**:
 - RADAR usage logs (scans performed, reports generated, sharing patterns)
-- Business plan outcomes (funding success, investor feedback)
+- Business plan outcomes (funding success, backer feedback)
 - Member surveys (perceived value, usage barriers, feature requests)
 - Guild interviews (collective purchasing decisions, internal distribution)
 
@@ -1050,7 +1050,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 ### Theoretical Framework
 
-**Core Hypothesis**: A labor-backed credit currency (hours × skill rate → equity credits) achieves better alignment of incentives, transparency, and liquidity than fiat payment systems in cooperative networks, while avoiding speculative volatility of cryptocurrencies.
+**Core Hypothesis**: A labor-backed credit currency (hours × skill rate → participation credits) achieves better alignment of incentives, transparency, and liquidity than fiat payment systems in cooperative networks, while avoiding speculative volatility of cryptocurrencies.
 
 **Academic Foundations**:
 - **Monetary Economics**: Alternative currency design, medium of exchange properties
@@ -1071,23 +1071,23 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 
 **Empirical Test**:
 - Track credit generation (work completed → credits earned)
-- Measure credit spending patterns (credits → goods/services/equity)
-- Identify credit "sinks" (equity conversion, external withdrawals)
+- Measure credit spending patterns (credits → goods/services/participation)
+- Identify credit "sinks" (participation conversion, external withdrawals)
 - Compare to traditional payment systems (published velocity data)
 
 ---
 
-**RQ2: Equity Conversion Impact on Retention**
-- Do credits → equity conversion incentivize long-term commitment?
+**RQ2: Participation Conversion Impact on Retention**
+- Do credits → participation conversion incentivize long-term commitment?
 - What conversion timeline optimizes member loyalty vs. liquidity needs?
-- How does equity accumulation affect member satisfaction?
+- How does participation accumulation affect member satisfaction?
 
-**Hypothesis**: Members converting >30% of credits to equity exhibit 2x retention vs. those converting <10%; optimal conversion timeline is 90-180 days.
+**Hypothesis**: Members converting >30% of credits to participation exhibit 2x retention vs. those converting <10%; optimal conversion timeline is 90-180 days.
 
 **Empirical Test**:
-- Track member retention by equity conversion rate
+- Track member retention by participation conversion rate
 - Survey motivations for credit usage (spend vs. convert decisions)
-- Measure satisfaction with equity accumulation vs. cash payout
+- Measure satisfaction with participation accumulation vs. cash payout
 - Test different conversion timelines (30, 90, 180 days)
 
 ---
@@ -1112,7 +1112,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 **RQ4: Credit vs. Fiat Mental Accounting**
 - Do members treat credits differently than cash (mental accounting effects)?
 - Does credit label (project credits vs. LB credits) affect usage?
-- How does equity conversion option affect spending behavior?
+- How does participation conversion option affect spending behavior?
 
 **RQ5: External Liquidity Mechanisms**
 - Should credits be exchangeable for fiat? At what rate?
@@ -1122,7 +1122,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 **RQ6: Inflation/Deflation Dynamics**
 - How should credit supply adjust to ecosystem growth?
 - What mechanisms prevent credit inflation or deflation?
-- Should credit-to-equity conversion rates be dynamic?
+- Should credit-to-participation conversion rates be dynamic?
 
 ### Empirical Opportunities
 
@@ -1160,7 +1160,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 - Intermarket liquidity mechanisms
 
 **To Cooperative Economics**:
-- Equity distribution via credit conversion
+- Participation distribution via credit conversion
 - Incentive alignment through labor-based valuation
 - Cross-cooperative credit standards
 
@@ -1198,7 +1198,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 **RQ2: Self-Built Knowledge Infrastructure**
 - Can AI agents effectively design and consume their own knowledge management tools?
 - Does the Librarian (11 parsers, 13 indexes, 22 domains, 20 tools) reduce measurable coordination overhead?
-- What is the ROI of automated context packaging (brief_me) vs. manual context loading?
+- What is the contribution impact of automated context packaging (brief_me) vs. manual context loading?
 
 **Hypothesis**: Context reconstruction time drops from 15-20 minutes to under 30 seconds with Librarian; pre-implementation consistency checking (moneypenny_checklist) prevents 80%+ of architectural violations that would otherwise reach deployment.
 
@@ -1271,7 +1271,7 @@ Worker-owned cooperative networks operating on standardized 20% margins, coordin
 **Academic Foundations**:
 - **Monetary Economics**: Alternative to speculation-based valuation
 - **Forex Economics**: One-way valve capture of external value signals
-- **Cooperative Economics**: Shared infrastructure vs. shared investment vehicle
+- **Cooperative Economics**: Shared infrastructure vs. shared participation vehicle
 - **Securities Law**: Closed-loop prepaid access as non-security
 
 ### Key HIVI Components
@@ -1315,7 +1315,7 @@ External valuation signals (Forex rates) are captured at transaction time and st
 
 When a Member "plants seeds" by sponsoring others, they are temporarily allocating their current HIVI‑denominated service capacity so another Member can move a project forward. Over time, the sponsoring Member may earn back equivalent service capacity to apply to their own, separate goals.
 
-**Key Legal Distinction**: At no point does a Member acquire a claim on Liana Banyan corporate profits, equity, or residual value merely by holding or reallocating Credits, Marks, Joules, or Cloth Pouches; all such instruments represent only prepaid or earned access to HIVI‑priced services within a closed-loop system.
+**Key Legal Distinction**: At no point does a Member acquire a claim on Liana Banyan corporate profits, participation, or residual value merely by holding or reallocating Credits, Marks, Joules, or Cloth Pouches; all such instruments represent only prepaid or earned access to HIVI‑priced services within a closed-loop system.
 
 ### Cloth Pouch (Forever Stamp) Mechanism
 
@@ -1358,7 +1358,7 @@ Cloth Pouches are defined and honored exclusively in terms of HIVI‑measured se
 
 **To Cooperative Economics**:
 - Sponsorship cascade as community-building mechanism
-- HIVI as cross-border equity enabler
+- HIVI as cross-border participation enabler
 - Three-Gear Differential for currency zone participation
 
 ### Related Documents
@@ -1594,7 +1594,7 @@ Cloth Pouches are defined and honored exclusively in terms of HIVI‑measured se
 - **Professional Services Tooling**: Member infrastructure for external relationship management
 
 **Implementation**:
-1. **Document Aggregation**: Related documents grouped by stakeholder purpose (lawyer, investor, contractor)
+1. **Document Aggregation**: Related documents grouped by stakeholder purpose (lawyer, backer, contractor)
 2. **Actionable Guidance**: Not just documents, but preparation checklists and decision frameworks
 3. **External Resources**: Direct integration with service providers (insurance, legal services)
 4. **Critical Highlights**: Key discussion points and decision items surfaced
@@ -1606,13 +1606,13 @@ Cloth Pouches are defined and honored exclusively in terms of HIVI‑measured se
 
 **Empirical Opportunities**:
 - Track legal formation success rates with/without comprehensive document packages
-- Measure time-to-decision for external stakeholders (lawyers, investors)
+- Measure time-to-decision for external stakeholders (lawyers, backers)
 - Survey member confidence levels before/after briefcase preparation
 - A/B test document package formats (comprehensive vs. minimal)
 
 **Pattern Generalization**:
 Future briefcase applications:
-- **Investor Package**: Financial projections, cap table, pitch deck, due diligence checklist
+- **Backer Package**: Financial projections, cap table, pitch deck, due diligence checklist
 - **Contractor Onboarding**: Hybrid compensation agreements, IP forms, NDAs, payment schedules
 - **Compliance Audit**: RLS policies, security scans, data privacy, access logs
 
@@ -1742,7 +1742,7 @@ Future briefcase applications:
 
 **Academic Foundations**:
 - **Behavioral Economics** (Thaler): Mental accounting, commitment devices, sunk cost effects
-- **Vesting Economics** (startup equity literature): Graduated reward release as commitment signal
+- **Vesting Economics** (startup participation literature): Graduated reward release as commitment signal
 - **Crowdsourced Quality Assessment**: Peer validation as filtering mechanism
 - **Gamification Research**: Speculative rewards and loss aversion
 
@@ -1993,7 +1993,7 @@ Future briefcase applications:
 - Analysis of framing effects on regulatory classification
 
 **To Cooperative Economics**:
-- Alternative to equity-based member rewards
+- Alternative to participation-based member rewards
 - Efficiency rebate mechanisms for production cooperatives
 - Internal currency design without financialization
 

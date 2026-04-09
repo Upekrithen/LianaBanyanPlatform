@@ -15,7 +15,7 @@ Liana Banyan is a collaborative network built on principles of ethical innovatio
 
 ### 2. Collaborative Growth Model
 - Members rise together through guild and clan systems
-- Success is shared through transparent equity and credit mechanisms
+- Success is shared through transparent participation and credit mechanisms
 - Individual achievement strengthens the entire network
 
 ### 3. Transparent Governance
@@ -62,7 +62,7 @@ Liana Banyan is a collaborative network built on principles of ethical innovatio
 
 ## Intellectual Property Framework
 
-LB's IP framework operates on three tiers (A, B, C) with varying levels of creator control and LB equity stakes. See [IP_CONTROL_FRAMEWORK.md](./IP_CONTROL_FRAMEWORK.md) for full details.
+LB's IP framework operates on three tiers (A, B, C) with varying levels of creator control and LB participation stakes. See [IP_CONTROL_FRAMEWORK.md](./IP_CONTROL_FRAMEWORK.md) for full details.
 
 **Key Principle**: IP utilization is balanced between maximizing community benefit and protecting creator interests through transparent veto rights and ethical guardrails.
 

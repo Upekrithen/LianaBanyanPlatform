@@ -23,7 +23,7 @@ export const defenseRoutes = (
     <Route path="/initiatives/tatiana-schlossburg-health-accords" element={<ExplorerRoute><LazyPage><LifeLineMedicationsPage /></LazyPage></ExplorerRoute>} />
     <Route path="/defense-klaus" element={<LazyPage><DefenseKlausSubmarineDoor /></LazyPage>} />
     <Route path="/defense-klaus/gift/:referralCode" element={<LazyPage><DefenseKlausSubmarineDoor /></LazyPage>} />
-    <Route path="/housing" element={<ExplorerRoute><LazyPage><HousingPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/housing/legacy" element={<ExplorerRoute><LazyPage><HousingPage /></LazyPage></ExplorerRoute>} />
     <Route path="/shelter" element={<Navigate to="/housing" replace />} />
     <Route path="/mission-two" element={<Navigate to="/housing" replace />} />
   </>

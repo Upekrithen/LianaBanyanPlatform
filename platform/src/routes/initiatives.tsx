@@ -14,7 +14,7 @@ const ServiceNodeRegistration = lazy(() => import("@/pages/ServiceNodeRegistrati
 const PantryPage = lazy(() => import("@/pages/PantryPage"));
 const FamilyTablePage = lazy(() => import("@/pages/FamilyTablePage"));
 const GroupCookPage = lazy(() => import("@/pages/GroupCookPage"));
-const FamilyTableHub = lazy(() => import("@/pages/FamilyTableHub"));
+const FamilyTableHubV2Page = lazy(() => import("@/pages/FamilyTableHubV2Page"));
 const CookbookPage = lazy(() => import("@/pages/CookbookPage"));
 const RestaurantDetailPage = lazy(() => import("@/pages/RestaurantDetailPage"));
 const MealPlanBuilder = lazy(() => import("@/pages/MealPlanBuilder"));
@@ -38,6 +38,12 @@ const LemonLot = lazy(() => import("@/pages/LemonLot"));
 const LocalWheels = lazy(() => import("@/pages/LocalWheels"));
 const RideshareRoutesPage = lazy(() => import("@/pages/RideshareRoutes"));
 const FarmerSupplyChainPage = lazy(() => import("@/pages/FarmerSupplyChainPage"));
+const ClassroomPage = lazy(() => import("@/pages/ClassroomPage"));
+const TeacherSetupPage = lazy(() => import("@/pages/TeacherSetupPage"));
+const PioneerShowcasePage = lazy(() => import("@/pages/PioneerShowcasePage"));
+const PioneerProfilePage = lazy(() => import("@/pages/PioneerProfilePage"));
+const FreezerNodesPage = lazy(() => import("@/pages/FreezerNodesPage"));
+const FreezerNodeSetup = lazy(() => import("@/pages/FreezerNodeSetup"));
 
 export const initiativeRoutes = (
   <>
@@ -54,11 +60,12 @@ export const initiativeRoutes = (
     <Route path="/initiatives/lets-make-dinner/register-kitchen" element={<Navigate to="/initiatives/lets-make-dinner/start-node" replace />} />
     <Route path="/service-node/register" element={<ExplorerRoute><LazyPage><ServiceNodeRegistration /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/the-pantry" element={<ExplorerRoute><LazyPage><PantryPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/the-family-table" element={<Navigate to="/initiatives/family-table" replace />} />
     <Route path="/initiatives/family-table" element={<ExplorerRoute><LazyPage><FamilyTablePage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/family-table/sessions" element={<ExplorerRoute><LazyPage><GroupCookPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/family-table/host-session" element={<Navigate to="/initiatives/family-table/sessions" replace />} />
     <Route path="/initiatives/family-table/start-pod" element={<Navigate to="/initiatives/family-table" replace />} />
-    <Route path="/family-table" element={<ExplorerRoute><LazyPage><FamilyTableHub /></LazyPage></ExplorerRoute>} />
+    <Route path="/family-table" element={<ProtectedRoute><LazyPage><FamilyTableHubV2Page /></LazyPage></ProtectedRoute>} />
     <Route path="/family-table/meal-plan" element={<ProtectedRoute><LazyPage><MealPlanBuilder /></LazyPage></ProtectedRoute>} />
     <Route path="/cookbook" element={<ExplorerRoute><LazyPage><CookbookPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cookbook/:restaurantId" element={<ExplorerRoute><LazyPage><RestaurantDetailPage /></LazyPage></ExplorerRoute>} />
@@ -66,8 +73,15 @@ export const initiativeRoutes = (
     <Route path="/initiatives/jukebox" element={<ExplorerRoute><LazyPage><JukeboxInitiative /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/harper-guild" element={<ExplorerRoute><LazyPage><HarperGuildPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/vsl" element={<ExplorerRoute><LazyPage><VSLPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/lets-make-bread" element={<Navigate to="/initiatives/bread" replace />} />
     <Route path="/initiatives/bread" element={<ExplorerRoute><LazyPage><LetsMakeBreadPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/didasko" element={<ExplorerRoute><LazyPage><DidaskoPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/classroom" element={<ExplorerRoute><LazyPage><ClassroomPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/classroom/setup" element={<ProtectedRoute><LazyPage><TeacherSetupPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/pioneers/legacy" element={<ExplorerRoute><LazyPage><PioneerShowcasePage /></LazyPage></ExplorerRoute>} />
+    <Route path="/pioneers/:role/:number" element={<ExplorerRoute><LazyPage><PioneerProfilePage /></LazyPage></ExplorerRoute>} />
+    <Route path="/freezer-nodes" element={<ExplorerRoute><LazyPage><FreezerNodesPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/freezer-nodes/setup" element={<ProtectedRoute><LazyPage><FreezerNodeSetup /></LazyPage></ProtectedRoute>} />
     <Route path="/initiatives/power-to-the-people" element={<ExplorerRoute><LazyPage><PowerToThePeoplePage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/brass-tacks" element={<ExplorerRoute><LazyPage><BrassTacksPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/lets-go-shopping" element={<ExplorerRoute><LazyPage><LetsGoShoppingPage /></LazyPage></ExplorerRoute>} />

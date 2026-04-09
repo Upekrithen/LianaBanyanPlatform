@@ -38,7 +38,7 @@ Universal "work when you want, as much as you want" system for flexible employme
 - Full-time Steward - 100% commitment (40hrs/week)
 
 **Benefits**:
-- Proportional equity/cash compensation
+- Proportional participation/cash compensation
 - Scalable benefits (health, retirement)
 - Guild access at 25%+ commitment
 - Path to full-time
@@ -214,7 +214,7 @@ SideQuestsBoard.tsx
 SideQuestCard.tsx
 ├── Quest title and description
 ├── Commitment badge (10%, 25%, 50%, 100%)
-├── Reward display (credits, cash, equity)
+├── Reward display (credits, cash, participation)
 ├── Success criteria (for marketing)
 ├── Deadline countdown
 └── Claim button (if open)
@@ -249,7 +249,7 @@ CreateSideQuestDialog.tsx
 ├── Reward configuration
 │   ├── Credits slider
 │   ├── Cash input (optional)
-│   └── Equity percentage (position quests)
+│   └── Participation percentage (position quests)
 ├── Success criteria builder (marketing)
 ├── Time flexibility options
 └── Publish button
@@ -382,7 +382,7 @@ const calculatePayment = (quest: SideQuest, claim: SideQuestClaim) => {
 
 4. **Position System**:
    - Position-type quests can convert to full contracts
-   - Equity from quests tracked in project_member_contracts
+   - Participation from quests tracked in project_member_contracts
 
 5. **Reputation System**:
    - Quality ratings feed into user_reputation_ratings

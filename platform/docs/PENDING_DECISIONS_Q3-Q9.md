@@ -21,7 +21,7 @@
 - [ ] **Custom Model**: _________________________________
 
 **Your Decision**:
-Tiered system based on contribution level that sets percentage of total royalty equity share with duration-based progression. Starting first year: 70/30 (Master/Apprentice) to incentivize masters to want to take on apprentices.
+Tiered system based on contribution level that sets percentage of total royalty participation share with duration-based progression. Starting first year: 70/30 (Master/Apprentice) to incentivize masters to want to take on apprentices.
 
 **Rationale**:
 Incentivizes Masters to invest in training apprentices while providing clear progression path that increases Apprentice share over time as their skills and contributions grow.

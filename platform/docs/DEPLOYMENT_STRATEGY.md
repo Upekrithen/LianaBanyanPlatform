@@ -192,7 +192,7 @@ CNAME   nonprofit     [Firebase deployment]       3600
    - Phase 1: Core marketplace & business features (launched)
    - Phase 2: HexIsle gamification (casual mode)
    - Phase 3: Advanced guild features & staking
-   - Phase 4: Full IP equity integration
+   - Phase 4: Full IP participation integration
 
 **Scaling Plan**:
 - Auto-scaling enabled for edge functions

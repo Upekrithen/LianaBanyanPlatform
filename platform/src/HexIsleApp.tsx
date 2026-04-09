@@ -87,6 +87,7 @@ const HexIsleApp = () => {
       <TooltipProvider>
         <BrowserRouter>
           <AuthProvider>
+            <ThemeProvider>
             <RecordingProvider>
               <Toaster />
               <Sonner />
@@ -155,6 +156,7 @@ const HexIsleApp = () => {
                 </Routes>
               </Suspense>
             </RecordingProvider>
+            </ThemeProvider>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

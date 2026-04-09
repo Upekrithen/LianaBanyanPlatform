@@ -11,6 +11,7 @@ import { MockDataProvider } from "@/contexts/MockDataProvider";
 import { PathwayProgressProvider } from "@/contexts/PathwayProgressContext";
 import { CrowsNestProvider } from "@/contexts/CrowsNestContext";
 import { RecordingProvider } from "@/contexts/RecordingContext";
+import { NotesOverlayProvider } from "@/contexts/NotesOverlayContext";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { BuilderModeProvider } from "@/components/builder/BuilderModeContext";
 
@@ -32,9 +33,11 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
                       <PathwayProgressProvider>
                         <CrowsNestProvider>
                           <RecordingProvider>
-                            <SubdomainRouter>
-                              {children}
-                            </SubdomainRouter>
+                            <NotesOverlayProvider>
+                              <SubdomainRouter>
+                                {children}
+                              </SubdomainRouter>
+                            </NotesOverlayProvider>
                           </RecordingProvider>
                         </CrowsNestProvider>
                       </PathwayProgressProvider>

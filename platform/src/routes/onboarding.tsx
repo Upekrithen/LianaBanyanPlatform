@@ -34,6 +34,7 @@ const AgentOnboarding = lazy(() => import("@/pages/AgentOnboarding"));
 const ATTILanding = lazy(() => import("@/pages/ATTILanding"));
 const OnboardingStart = lazy(() => import("@/pages/OnboardingStart"));
 const CrewCallPage = lazy(() => import("@/pages/CrewCallPage"));
+const CrewCallBoardV2Page = lazy(() => import("@/pages/CrewCallBoardV2Page"));
 const InviteCodeRedirect = lazy(() => import("@/pages/InviteCodeRedirect"));
 
 export const onboardingRoutes = (
@@ -73,7 +74,8 @@ export const onboardingRoutes = (
     <Route path="/onboarding/trickle" element={<ProtectedRoute><LazyPage><TrickleOnboarding /></LazyPage></ProtectedRoute>} />
     <Route path="/agent-onboarding" element={<ProtectedRoute><LazyPage><AgentOnboarding /></LazyPage></ProtectedRoute>} />
     <Route path="/atti" element={<LazyPage><ATTILanding /></LazyPage>} />
-    <Route path="/crew-call" element={<ExplorerRoute><LazyPage><CrewCallPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/crew-call" element={<ExplorerRoute><LazyPage><CrewCallBoardV2Page /></LazyPage></ExplorerRoute>} />
+    <Route path="/crew-call/legacy" element={<ExplorerRoute><LazyPage><CrewCallPage /></LazyPage></ExplorerRoute>} />
     <Route path="/welcome/:code" element={<LazyPage><InviteCodeRedirect /></LazyPage>} />
     <Route path="/welcome/sponsor/:code" element={<LazyPage><InviteCodeRedirect /></LazyPage>} />
   </>

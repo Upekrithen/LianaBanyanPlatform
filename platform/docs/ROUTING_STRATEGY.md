@@ -74,7 +74,7 @@ createRoot(document.getElementById("root")!).render(
   <Route path="/project/:id" element={<ProjectView />} />
   <Route path="/product/:id" element={<ProductDetail />} />
   
-  {/* Protected Investor Routes */}
+  {/* Protected Backer Routes */}
   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
   <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
   <Route path="/blockchain-explorer" element={<ProtectedRoute><BlockchainExplorer /></ProtectedRoute>} />

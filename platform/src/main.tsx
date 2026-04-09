@@ -10,10 +10,15 @@ import NetworkApp from "./NetworkApp.tsx";
 import DSSApp from "./DSSApp.tsx";
 import HexIsleApp from "./HexIsleApp.tsx";
 import UpekrithenApp from "./UpekrithenApp.tsx";
+import MuseumApp from "./MuseumApp.tsx";
+import { consumeAuthRelay } from "./utils/crossDomainAuth";
 import "./i18n"; // Full react-i18next with 58-language HttpBackend (Option B)
 import "./index.css";
 
-// Load the correct PWA manifest for this portal
+// Consume cross-domain auth relay before anything renders
+consumeAuthRelay();
+
+// Load the correct PWA manifest + branding for this portal
 loadPortalManifest();
 
 // Detect which portal to load based on hostname
@@ -26,6 +31,7 @@ const AppMap = {
   dss: DSSApp,
   hexisle: HexIsleApp,
   upekrithen: UpekrithenApp,
+  museum: MuseumApp,
 };
 const AppComponent = AppMap[portal];
 

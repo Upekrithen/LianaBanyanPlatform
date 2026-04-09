@@ -43,7 +43,7 @@
 **Motion Graphics**:
 - **Card 1**: Person working → project complete checkmark → credits added
 - **Card 2**: Shopping cart → purchase → bonus credits sparkle effect
-- **Card 3**: Handshake → EOI badge → future equity icon
+- **Card 3**: Handshake → EOI badge → future participation icon
 - Each card has distinct icon and animation style
 
 ---
@@ -79,14 +79,14 @@
 ---
 
 ## SCENE 6: EOI CONVERSION (1:35-1:50)
-**Visual**: Timeline animation showing EOI credits maturing into equity.
+**Visual**: Timeline animation showing EOI credits maturing into participation.
 
 **Narration**:
-> "Expression of Interest credits are special. Hold them, and after 12 months, they can convert to actual equity in Liana Banyan projects—giving you ownership in what you helped build."
+> "Expression of Interest credits are special. Hold them, and after 12 months, they can convert to actual participation in Liana Banyan projects—giving you ownership in what you helped build."
 
 **Motion Graphics**:
 - Timeline: Day 1 → 12 months → Conversion event
-- EOI badge morphs into equity certificate
+- EOI badge morphs into participation certificate
 - Percentage ownership visualization
 - Growth chart trending upward
 

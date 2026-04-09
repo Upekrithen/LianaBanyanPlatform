@@ -203,7 +203,7 @@
 ### Guild Staking
 - [ ] **Stake payment**: Select stake tier ($50, $100, $250, $500, $1000)
 - [ ] **Stake confirmation**: Stripe payment, stake recorded, membership activated
-- [ ] **Stake benefits**: Access to guild features, voting rights, IP equity
+- [ ] **Stake benefits**: Access to guild features, voting rights, IP participation
 - [ ] **Stake expiration**: Reminders sent, auto-deactivate if not renewed
 
 ### Clan System

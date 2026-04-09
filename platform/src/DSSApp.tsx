@@ -36,13 +36,18 @@ const FactoryNodePage = lazy(() => import("./pages/FactoryNodePage"));
 const ProductionPathways = lazy(() => import("./pages/ProductionPathways"));
 const ColdStartCalculator = lazy(() => import("./pages/ColdStartCalculator"));
 
-// K139: Canister System Configurator (Innovation #2022)
+// K139: Canister System Configurator (Innovation #2040, renumbered from #2022)
 const CanisterConfigurator = lazy(() => import("./pages/CanisterConfigurator"));
 const CanisterProductCatalog = lazy(() => import("./pages/CanisterProductCatalog"));
 const CanisterBOMPage = lazy(() => import("./pages/CanisterBOMPage"));
 
 // K143: 2nd Second Landing (Manufacturing Escalation Ladder)
 const SecondSecondLanding = lazy(() => import("./pages/SecondSecondLanding"));
+
+// B088: Routes referenced from SecondSecondLanding stat cards
+const CodeBreakersHub = lazy(() => import("./pages/cue-cards/CodeBreakersHub"));
+const CrankIt = lazy(() => import("./pages/CrankIt"));
+const FinancialTransparencyPage = lazy(() => import("./pages/FinancialTransparencyPage"));
 
 // Original "Get Hired" experience (preserved at /get-hired)
 const GetHiredLanding = lazy(() => import("./DSSGetHiredApp"));
@@ -126,10 +131,18 @@ const DSSApp = () => {
                       <Route path="/production-pathways" element={<ProductionPathways />} />
                       <Route path="/cold-start-calculator" element={<ColdStartCalculator />} />
 
-                      {/* K139: Canister System Configurator (Innovation #2022) */}
+                      {/* K139: Canister System Configurator (Innovation #2040) */}
                       <Route path="/factory/canister" element={<CanisterConfigurator />} />
                       <Route path="/factory/canister/shop" element={<CanisterProductCatalog />} />
                       <Route path="/canister/bom" element={<CanisterBOMPage />} />
+
+                      {/* /production — hero CTA target (B054 fix) */}
+                      <Route path="/production" element={<ProductionPathways />} />
+
+                      {/* B088: Routes referenced from SecondSecondLanding stat cards */}
+                      <Route path="/bounties" element={<Suspense fallback={<DSSLoadingFallback />}><CodeBreakersHub /></Suspense>} />
+                      <Route path="/cold-start" element={<Suspense fallback={<DSSLoadingFallback />}><CrankIt /></Suspense>} />
+                      <Route path="/ledger" element={<Suspense fallback={<DSSLoadingFallback />}><FinancialTransparencyPage /></Suspense>} />
 
                       {/* Original "Get Hired" experience — preserved intact */}
                       <Route path="/get-hired" element={<GetHiredLanding />} />

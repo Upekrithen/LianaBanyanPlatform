@@ -42,6 +42,8 @@ const LaunchTracker = lazy(() => import("@/pages/LaunchTracker"));
 const TerenoCertificationPage = lazy(() => import("@/pages/TerenoCertification"));
 const ContractScaleManager = lazy(() => import("@/pages/ContractScaleManager"));
 const CoasterMedallionProject = lazy(() => import("@/pages/CoasterMedallionProject"));
+const RecipePotPage = lazy(() => import("@/pages/RecipePotPage"));
+const CanisterConfiguratorV2 = lazy(() => import("@/pages/tools/CanisterConfiguratorV2"));
 
 export const productionRoutes = (
   <>
@@ -71,6 +73,7 @@ export const productionRoutes = (
     <Route path="/factory/register" element={<ProtectedRoute><LazyPage><NodeRegistration /></LazyPage></ProtectedRoute>} />
     <Route path="/factory/bounties" element={<ProtectedRoute><LazyPage><ManufacturingStore /></LazyPage></ProtectedRoute>} />
     <Route path="/factory/canister" element={<ExplorerRoute><LazyPage><CanisterConfigurator /></LazyPage></ExplorerRoute>} />
+    <Route path="/canister/configurator" element={<ProtectedRoute><LazyPage><CanisterConfiguratorV2 /></LazyPage></ProtectedRoute>} />
     <Route path="/factory/canister/shop" element={<ExplorerRoute><LazyPage><CanisterProductCatalog /></LazyPage></ExplorerRoute>} />
     <Route path="/canister/bom" element={<ExplorerRoute><LazyPage><CanisterBOMPage /></LazyPage></ExplorerRoute>} />
     <Route path="/2nd-second" element={<ExplorerRoute><LazyPage><SecondSecondLanding /></LazyPage></ExplorerRoute>} />
@@ -88,5 +91,6 @@ export const productionRoutes = (
     <Route path="/create" element={<LazyPage><CreateProject /></LazyPage>} />
     <Route path="/tereno-certification" element={<ExplorerRoute><LazyPage><TerenoCertificationPage /></LazyPage></ExplorerRoute>} />
     <Route path="/coaster-medallion" element={<ExplorerRoute><LazyPage><CoasterMedallionProject /></LazyPage></ExplorerRoute>} />
+    <Route path="/bridge/recipe" element={<ProtectedRoute><LazyPage><RecipePotPage /></LazyPage></ProtectedRoute>} />
   </>
 );

@@ -3,7 +3,7 @@ import { Route, Navigate } from "react-router-dom";
 import { ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 
-const CephasGatewayPage = lazy(() => import("@/pages/CephasGatewayPage"));
+const CephasGatewayPage = lazy(() => import("@/pages/CephasGatewayV2Page"));
 const UnderTheHoodPage = lazy(() => import("@/pages/UnderTheHoodPage"));
 const FlyOnTheWallRegistryPage = lazy(() => import("@/pages/FlyOnTheWallPage"));
 const CephasCategoryListingPage = lazy(() => import("@/pages/CephasCategoryListingPage"));
@@ -11,6 +11,7 @@ const CephasContentDetailPage = lazy(() => import("@/pages/CephasContentDetailPa
 const CephasSearchPage = lazy(() => import("@/pages/CephasSearchPage"));
 const CephasPressJunketPage = lazy(() => import("@/pages/CephasPressJunketPage"));
 const CephasInnovationPedestalsPage = lazy(() => import("@/pages/CephasInnovationPedestalsPage"));
+const AllThePuddingPage = lazy(() => import("@/pages/AllThePuddingPage"));
 const CrownLetterUpdate = lazy(() => import("@/pages/CrownLetterUpdate"));
 const CrownLettersPage = lazy(() => import("@/pages/CrownLettersPage"));
 const BenefitsPage = lazy(() => import("@/pages/BenefitsPage"));
@@ -22,9 +23,17 @@ const IPPortfolioPage = lazy(() => import("@/pages/IPPortfolioPage"));
 const EconomicLaws = lazy(() => import("@/pages/EconomicLaws"));
 const PaperPage = lazy(() => import("@/pages/PaperPage"));
 const FlyOnTheWall = lazy(() => import("@/pages/FlyOnTheWall"));
-const BrewsterBonusPage = lazy(() => import("@/pages/BrewsterBonusPage"));
-const AlcoveHallway = lazy(() => import("@/components/AlcoveHallway").then(m => ({ default: m.AlcoveHallway })));
+const AlcoveHallwayPage = lazy(() => import("@/pages/AlcoveHallwayPage"));
+const AlcoveStopPage = lazy(() => import("@/pages/AlcoveStopPage"));
 const Academy = lazy(() => import("@/pages/Academy"));
+const GuidedTourPage = lazy(() => import("@/pages/GuidedTourPage"));
+const TourGalleryPage = lazy(() => import("@/pages/TourGalleryPage"));
+const PublicationsIndex = lazy(() => import("@/pages/PublicationsIndex"));
+const ArchiveIndex = lazy(() => import("@/pages/ArchiveIndex"));
+const ArchiveDocumentReader = lazy(() => import("@/pages/ArchiveDocumentReader"));
+const NorthernProvinceLanding = lazy(() => import("@/pages/NorthernProvinceLanding"));
+const NorthernProvinceSectionPage = lazy(() => import("@/pages/NorthernProvinceSectionPage"));
+const NorthernNoidTierPage = lazy(() => import("@/pages/NorthernNoidTierPage"));
 
 export const cephasRoutes = (
   <>
@@ -32,10 +41,21 @@ export const cephasRoutes = (
     <Route path="/cephas/search" element={<ExplorerRoute><LazyPage><CephasSearchPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/press-junket" element={<ExplorerRoute><LazyPage><CephasPressJunketPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/innovation-pedestals" element={<ExplorerRoute><LazyPage><CephasInnovationPedestalsPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/cephas/all-the-pudding" element={<ExplorerRoute><LazyPage><AllThePuddingPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/under-the-hood" element={<ExplorerRoute><LazyPage><UnderTheHoodPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/fly-on-the-wall" element={<ExplorerRoute><LazyPage><FlyOnTheWallRegistryPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/cephas/archive" element={<ExplorerRoute><LazyPage><ArchiveIndex /></LazyPage></ExplorerRoute>} />
+    <Route path="/cephas/archive/:slug" element={<ExplorerRoute><LazyPage><ArchiveDocumentReader /></LazyPage></ExplorerRoute>} />
+    <Route path="/northern" element={<ExplorerRoute><LazyPage><NorthernProvinceLanding /></LazyPage></ExplorerRoute>} />
+    <Route path="/northern/noid/:tier" element={<ExplorerRoute><LazyPage><NorthernNoidTierPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/northern/:section" element={<ExplorerRoute><LazyPage><NorthernProvinceSectionPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/cephas/northern" element={<ExplorerRoute><LazyPage><NorthernProvinceLanding /></LazyPage></ExplorerRoute>} />
+    <Route path="/cephas/northern/noid/:tier" element={<ExplorerRoute><LazyPage><NorthernNoidTierPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/cephas/northern/:section" element={<ExplorerRoute><LazyPage><NorthernProvinceSectionPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/:category/:slug" element={<ExplorerRoute><LazyPage><CephasContentDetailPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/:category" element={<ExplorerRoute><LazyPage><CephasCategoryListingPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/business-plan" element={<Navigate to="/cephas/business-plan/six-easy-steps" replace />} />
+    <Route path="/six-easy-steps" element={<Navigate to="/cephas/business-plan/six-easy-steps" replace />} />
     <Route path="/under-the-hood/*" element={<Navigate to="/cephas/under-the-hood" replace />} />
     <Route path="/crown-letters" element={<LazyPage><CrownLettersPage /></LazyPage>} />
     <Route path="/updates/crown/:slug" element={<LazyPage><CrownLetterUpdate /></LazyPage>} />
@@ -49,8 +69,11 @@ export const cephasRoutes = (
     <Route path="/economics/:paperId" element={<LazyPage><PaperPage /></LazyPage>} />
     <Route path="/fly-on-the-wall" element={<LazyPage><FlyOnTheWall /></LazyPage>} />
     <Route path="/transparency" element={<Navigate to="/ledger" replace />} />
-    <Route path="/learn/brewster-bonus" element={<ExplorerRoute><LazyPage><BrewsterBonusPage /></LazyPage></ExplorerRoute>} />
-    <Route path="/learn" element={<ExplorerRoute><LazyPage><div className="container mx-auto p-6 max-w-4xl"><AlcoveHallway /></div></LazyPage></ExplorerRoute>} />
+    <Route path="/learn" element={<ExplorerRoute><LazyPage><AlcoveHallwayPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/learn/:stopSlug" element={<ExplorerRoute><LazyPage><AlcoveStopPage /></LazyPage></ExplorerRoute>} />
     <Route path="/academy" element={<ExplorerRoute><LazyPage><Academy /></LazyPage></ExplorerRoute>} />
+    <Route path="/publications" element={<LazyPage><PublicationsIndex /></LazyPage>} />
+    <Route path="/tour" element={<LazyPage><GuidedTourPage /></LazyPage>} />
+    <Route path="/tour/packages" element={<LazyPage><TourGalleryPage /></LazyPage>} />
   </>
 );

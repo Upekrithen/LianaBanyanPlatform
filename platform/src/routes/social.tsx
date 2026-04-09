@@ -1,9 +1,10 @@
 import { lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
-import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
+import { ProtectedRoute, ExplorerRoute, CaptainRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 
 const Guilds = lazy(() => import("@/pages/Guilds"));
+const GuildDirectoryV2Page = lazy(() => import("@/pages/GuildDirectoryV2Page"));
 const GuildHub = lazy(() => import("@/pages/GuildHub"));
 const GuildDetail = lazy(() => import("@/pages/GuildDetail"));
 const GuildFormationWizard = lazy(() => import("@/components/GuildFormationWizard"));
@@ -24,6 +25,7 @@ const ReviewerApplication = lazy(() => import("@/pages/ReviewerApplication"));
 const ReviewerDashboard = lazy(() => import("@/pages/ReviewerDashboard"));
 const ReviewQueueItemPage = lazy(() => import("@/pages/ReviewQueueItemPage"));
 const CoalitionDirectory = lazy(() => import("@/pages/CoalitionDirectory"));
+const CoalitionManagementV2Page = lazy(() => import("@/pages/CoalitionManagementV2Page"));
 const CoalitionCreate = lazy(() => import("@/pages/CoalitionCreate"));
 const CoalitionDetail = lazy(() => import("@/pages/CoalitionDetail"));
 const CoalitionsPage = lazy(() => import("@/pages/Coalitions"));
@@ -33,6 +35,7 @@ const VouchSystem = lazy(() => import("@/pages/VouchSystem"));
 const SocialImportPage = lazy(() => import("@/pages/SocialImportPage"));
 const FamilyPage = lazy(() => import("@/pages/FamilyPage"));
 const FamilyDetailPage = lazy(() => import("@/pages/FamilyDetailPage"));
+const TribeDirectoryV2Page = lazy(() => import("@/pages/TribeDirectoryV2Page"));
 const DesignCrewPage = lazy(() => import("@/pages/DesignCrewPage"));
 const CrewTablesPage = lazy(() => import("@/pages/CrewTables"));
 const RoundTableHall = lazy(() => import("@/pages/RoundTableHall"));
@@ -42,14 +45,17 @@ const PhaseMimicTrunkManager = lazy(() => import("@/pages/PhaseMimicTrunkManager
 const RealWorldPuzzles = lazy(() => import("@/pages/RealWorldPuzzles"));
 const GuildPhaseManager = lazy(() => import("@/pages/GuildPhaseManager"));
 const ConcentricCircles = lazy(() => import("@/pages/ConcentricCircles"));
+const CrewmanDashboardPage = lazy(() => import("@/pages/CrewmanDashboardPage"));
 
 export const socialRoutes = (
   <>
-    <Route path="/guilds" element={<ExplorerRoute><LazyPage><Guilds /></LazyPage></ExplorerRoute>} />
+    <Route path="/guilds" element={<ProtectedRoute><LazyPage><GuildDirectoryV2Page /></LazyPage></ProtectedRoute>} />
+    <Route path="/guilds/legacy" element={<ProtectedRoute><LazyPage><Guilds /></LazyPage></ProtectedRoute>} />
     <Route path="/guilds/create" element={<ProtectedRoute><LazyPage><GuildFormationWizard /></LazyPage></ProtectedRoute>} />
     <Route path="/guilds/hub" element={<ExplorerRoute><LazyPage><GuildHub /></LazyPage></ExplorerRoute>} />
     <Route path="/guilds/:slug" element={<ExplorerRoute><LazyPage><GuildDetail /></LazyPage></ExplorerRoute>} />
-    <Route path="/tribes" element={<ExplorerRoute><LazyPage><Tribes /></LazyPage></ExplorerRoute>} />
+    <Route path="/tribes" element={<ProtectedRoute><LazyPage><TribeDirectoryV2Page /></LazyPage></ProtectedRoute>} />
+    <Route path="/tribes/legacy" element={<ProtectedRoute><LazyPage><Tribes /></LazyPage></ProtectedRoute>} />
     <Route path="/tribes/create" element={<ProtectedRoute><LazyPage><TribeFormationWizard /></LazyPage></ProtectedRoute>} />
     <Route path="/tribes/:slug" element={<ExplorerRoute><LazyPage><TribeDetail /></LazyPage></ExplorerRoute>} />
     <Route path="/clans" element={<ProtectedRoute><LazyPage><Tribes /></LazyPage></ProtectedRoute>} />
@@ -67,7 +73,8 @@ export const socialRoutes = (
     <Route path="/reviewer/apply" element={<ProtectedRoute><LazyPage><ReviewerApplication /></LazyPage></ProtectedRoute>} />
     <Route path="/reviewer/dashboard" element={<ProtectedRoute><LazyPage><ReviewerDashboard /></LazyPage></ProtectedRoute>} />
     <Route path="/reviewer/queue/:id" element={<ProtectedRoute><LazyPage><ReviewQueueItemPage /></LazyPage></ProtectedRoute>} />
-    <Route path="/coalitions" element={<ExplorerRoute><LazyPage><CoalitionDirectory /></LazyPage></ExplorerRoute>} />
+    <Route path="/coalitions" element={<CaptainRoute><LazyPage><CoalitionManagementV2Page /></LazyPage></CaptainRoute>} />
+    <Route path="/coalitions/legacy" element={<ExplorerRoute><LazyPage><CoalitionDirectory /></LazyPage></ExplorerRoute>} />
     <Route path="/coalitions/create" element={<ProtectedRoute><LazyPage><CoalitionCreate /></LazyPage></ProtectedRoute>} />
     <Route path="/coalitions/:slug" element={<ExplorerRoute><LazyPage><CoalitionDetail /></LazyPage></ExplorerRoute>} />
     <Route path="/chain" element={<ExplorerRoute><LazyPage><ChainDashboard /></LazyPage></ExplorerRoute>} />
@@ -86,5 +93,6 @@ export const socialRoutes = (
     <Route path="/real-world-puzzles" element={<LazyPage><RealWorldPuzzles /></LazyPage>} />
     <Route path="/guild-phases" element={<LazyPage><GuildPhaseManager /></LazyPage>} />
     <Route path="/testing/circles" element={<ProtectedRoute><LazyPage><ConcentricCircles /></LazyPage></ProtectedRoute>} />
+    <Route path="/crewman/dashboard" element={<ProtectedRoute><LazyPage><CrewmanDashboardPage /></LazyPage></ProtectedRoute>} />
   </>
 );

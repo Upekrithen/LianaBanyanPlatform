@@ -25,7 +25,7 @@
 
 ## The Opportunity
 
-The global manufacturing and creative services industries face a fundamental inefficiency: skilled workers bear all the risk of project-based work while venture-backed platforms capture all the equity upside. Liana Banyan (LB) fundamentally restructures this dynamic by creating a worker-owned cooperative where contribution directly translates to ownership.
+The global manufacturing and creative services industries face a fundamental inefficiency: skilled workers bear all the risk of project-based work while venture-backed platforms capture all the participation upside. Liana Banyan (LB) fundamentally restructures this dynamic by creating a worker-owned cooperative where contribution directly translates to ownership.
 
 ## Our Solution
 
@@ -39,7 +39,7 @@ Liana Banyan is a four-portal ecosystem that connects:
 
 1. **Wave-Based Pricing**: Multi-tier pricing system where "impatience tax" from early buyers funds production capacity expansion without diluting equity
 2. **HexIsle Skills Platform**: Gamified skill verification system mapping real-world project experience to 7 core competencies
-3. **Credit Economy**: Universal currency serving as wages, equity, and internal marketplace tender
+3. **Credit Economy**: Universal currency serving as wages, participation, and internal marketplace tender
 4. **Three-Tier IP Framework**: Flexible intellectual property control allowing creators to balance autonomy with commercialization scale
 
 ## Financial Highlights
@@ -57,7 +57,7 @@ Liana Banyan is a four-portal ecosystem that connects:
 
 - **Target Market Size**: $2.3 trillion global manufacturing market + $1.1 trillion creative services
 - **Addressable Segment**: Independent contractors, maker communities, technical guilds (estimated 15M professionals in US alone)
-- **Competitive Advantage**: Only platform offering equity participation + skill verification + flexible IP control
+- **Competitive Advantage**: Only platform offering participation participation + skill verification + flexible IP control
 
 ## Traction & Status
 
@@ -83,7 +83,7 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 
 **Type**: Worker-Owned Cooperative / Platform Cooperative  
 **Governance Model**: Democratic voting weighted by contribution (guild tier + reputation score)  
-**Equity Distribution**: Credits serve as universal unit for wages, equity, and governance rights
+**Participation Distribution**: Credits serve as universal unit for wages, participation, and governance rights
 
 ## Core Values (Charter-Defined)
 
@@ -94,7 +94,7 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 
 ### 2. Collaborative Growth Model
 - Members rise together through guild and clan systems
-- Success is shared through transparent equity and credit mechanisms
+- Success is shared through transparent participation and credit mechanisms
 - Individual achievement strengthens entire network
 
 ### 3. Human-First Creative Standard
@@ -106,7 +106,7 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 
 ### Marketplace Portal (lianabanyan.com)
 **Purpose**: Public discovery and customer engagement  
-**Users**: General public, investors, product backers  
+**Users**: General public, backers, product backers  
 **Key Features**:
 - Browse projects by category (Tabletop Gaming, Cosplay, Collectibles, Functional Products)
 - Wave-based pricing selection
@@ -138,7 +138,7 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 **Users**: Fund administrators, members accessing benefits  
 **Access**: Requires $5 membership stake  
 **Key Features**:
-- EOI (Equity of Interest) vesting dashboards
+- EOI (Participation of Interest) vesting dashboards
 - Guild investment fund transparency
 - Gas cost tracking for blockchain operations
 - Member benefit programs
@@ -176,7 +176,7 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
   - No equity participation in successful projects
   - Difficulty monetizing intellectual property
   - Lack of skill verification systems
-- **Our Solution**: Guild progression system, credit economy, IP equity participation
+- **Our Solution**: Guild progression system, credit economy, IP participation participation
 
 ### Secondary: Small Manufacturing Businesses
 - **Size**: 300K businesses in US with <50 employees
@@ -211,7 +211,7 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 **Upwork**
 - Strengths: Large talent pool, established reputation system
 - Weaknesses: High platform fees (20%), no equity participation, commoditized pricing
-- Our Advantage: Lower long-term costs (invest in equity), guild progression creates career path
+- Our Advantage: Lower long-term costs (invest in participation), guild progression creates career path
 
 ### Indirect Competitors
 
@@ -323,7 +323,7 @@ Voting Weight = Guild Tier Multiplier × Reputation Score × Credits Earned
 **Financial Sustainability**:
 - Fund only collects, minimal distributions
 - Perpetually solvent design
-- Members retain voting equity regardless of stake status
+- Members retain voting participation regardless of stake status
 
 ## Reputation System
 
@@ -406,7 +406,7 @@ Example: "Gold Tier - A+ (★★★★★)"
 ### 2. Platform Services
 
 #### For Creators
-- **IP Registration**: Three-tier framework (Tier A: 49%, Tier B: 60%, Tier C: 75% creator equity)
+- **IP Registration**: Three-tier framework (Tier A: 49%, Tier B: 60%, Tier C: 75% creator participation)
 - **Asset Locking**: Google Doc import for authoritative content control
 - **Campaign Management**: Wave-based pricing configuration
 - **Production Coordination**: Node network access
@@ -417,7 +417,7 @@ Example: "Gold Tier - A+ (★★★★★)"
 - **Guild Progression Tracking**: Visual skill tier advancement
 - **Contract Management**: Peer-to-peer agreement templates
 - **Reputation Dashboard**: Real-time skill scores and endorsements
-- **Credit Wallet**: Universal currency for wages, equity, purchases
+- **Credit Wallet**: Universal currency for wages, participation, purchases
 
 #### For Businesses (B2B)
 - **API Access**: Programmatic project management
@@ -488,10 +488,10 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Blockchain verification for provenance and milestones
 
 ### For Workers/Members
-**Message**: "Your Work = Your Equity"  
+**Message**: "Your Work = Your Participation"  
 - Guild progression creates career path, not gig trap
 - Reputation system rewards quality over volume
-- Credit economy: wages + equity + governance rights
+- Credit economy: wages + participation + governance rights
 - Skills verification opens higher-tier opportunities
 
 ### For Buyers
@@ -741,13 +741,13 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Reserve for reputation restoration
 - Physical badge production
 - Platform infrastructure upgrades
-- Member dividend distributions (vote-based)
+- Member distribution distributions (vote-based)
 
 ### Credit Economy Circulation
 **Credits Earned** (Year 1): 10M credits (member wages)  
 **Credits Spent** (Year 1): 7M credits (platform purchases, 70% recirculation)  
 **Credits Converted** (Year 1): 2M credits (withdrawals, 20%)  
-**Credits Saved** (Year 1): 1M credits (equity holding, 10%)
+**Credits Saved** (Year 1): 1M credits (participation holding, 10%)
 
 **Circulation Velocity**: 0.7 (healthy internal economy)
 
@@ -968,12 +968,12 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Arbitration panel for edge cases
 - Tier C is invitation-only (pre-screened creators)
 
-### Risk 4: Regulatory Changes (Tax, Securities)
+### Risk 4: Regulatory Changes (Tax, Membership rights)
 **Mitigation**:
 - Credits explicitly NOT securities (utility token for services)
 - Legal counsel on retainer
 - Quarterly compliance reviews
-- Adaptable equity structure (can pivot if regulations change)
+- Adaptable participation structure (can pivot if regulations change)
 
 ### Risk 5: Blockchain Gas Costs Spike
 **Mitigation**:
@@ -986,12 +986,12 @@ Example: "Gold Tier - A+ (★★★★★)"
 
 # Conclusion
 
-Liana Banyan represents a fundamental restructuring of the relationship between workers, creators, and the platforms that connect them. By putting ownership, governance, and equity in the hands of those who create value, we eliminate the extractive dynamics of venture-backed platforms while creating a sustainable, self-funding ecosystem.
+Liana Banyan represents a fundamental restructuring of the relationship between workers, creators, and the platforms that connect them. By putting ownership, governance, and participation in the hands of those who create value, we eliminate the extractive dynamics of venture-backed platforms while creating a sustainable, self-funding ecosystem.
 
 **Our competitive advantages are structural**:
 - Wave pricing eliminates need for external capital
 - Guild stakes create perpetually solvent investment fund
-- Credit economy aligns incentives (wages = equity = governance)
+- Credit economy aligns incentives (wages = participation = governance)
 - Three-tier IP framework captures creators across risk/control spectrum
 - Reputation system creates quality differentiation impossible on commoditized platforms
 

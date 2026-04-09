@@ -10,7 +10,7 @@ This document outlines the strategic separation of LianaBanyan into two distinct
 ### 1. **Public Marketplace Portal** (Current Site + Project Modules)
 **Domain:** `[project-sku].lianabanyan.com` (subdomains) + main marketplace
 **Purpose:** Customer-facing discovery, investment, and project engagement
-**Target Users:** General public, investors, customers, project backers
+**Target Users:** General public, backers, customers, project backers
 
 #### Features:
 - **Project Discovery:**
@@ -27,11 +27,11 @@ This document outlines the strategic separation of LianaBanyan into two distinct
 - **Public Information:**
   - Project timelines and milestones
   - Blockchain verification badges
-  - Public ROI calculators
+  - Public contribution impact calculators
   - Investment explainer content
 
 - **User Actions:**
-  - Create accounts (investors/backers)
+  - Create accounts (backers/backers)
   - Make pledges/investments
   - Vote on production levels
   - Track portfolio
@@ -75,7 +75,7 @@ This document outlines the strategic separation of LianaBanyan into two distinct
 
 - **Member Dashboard:**
   - Active contracts and positions
-  - Credits and equity tracking
+  - Credits and participation tracking
   - Task assignments
   - Project participation history
 
@@ -137,7 +137,7 @@ This document outlines the strategic separation of LianaBanyan into two distinct
 │   ├── Own applications
 │   ├── Own contracts
 │   ├── Own assignments
-│   └── Own credits/equity
+│   └── Own credits/participation
 │
 ├── HR/Steward READ/WRITE:
 │   ├── Applications (review/manage)
@@ -277,7 +277,7 @@ This document outlines the strategic separation of LianaBanyan into two distinct
 - [ ] Should business portal have its own visual theme?
 - [ ] What features (if any) need to be accessible from both portals?
 - [ ] Should we maintain a unified header/navigation or separate?
-- [ ] How do we handle users who are both investors AND contractors?
+- [ ] How do we handle users who are both backers AND contractors?
 - [ ] What's the initial rollout strategy (big bang vs. gradual)?
 
 ---

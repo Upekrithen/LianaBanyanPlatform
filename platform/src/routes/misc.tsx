@@ -53,11 +53,11 @@ export const miscRoutes = (
     <Route path="/hofund-studio" element={<Navigate to="/hofund" replace />} />
     <Route path="/tasks" element={<Navigate to="/task-list" replace />} />
     <Route path="/alliances" element={<Navigate to="/coalitions" replace />} />
-    <Route path="/rideshare" element={<Navigate to="/rideshare-routes" replace />} />
-    <Route path="/fleet" element={<Navigate to="/local-wheels" replace />} />
-    <Route path="/vehicle-sharing" element={<Navigate to="/lemon-lot" replace />} />
-    <Route path="/adapt" element={<Navigate to="/adapt-score" replace />} />
-    <Route path="/effectiveness" element={<Navigate to="/adapt-score" replace />} />
+    <Route path="/rideshare" element={<Navigate to="/wheels" replace />} />
+    <Route path="/fleet" element={<Navigate to="/wheels" replace />} />
+    <Route path="/vehicle-sharing" element={<Navigate to="/wheels" replace />} />
+    <Route path="/adapt-score-v1" element={<Navigate to="/adapt-score" replace />} />
+    <Route path="/effectiveness" element={<Navigate to="/adapt" replace />} />
 
     {/* HexIsle alias redirects */}
     <Route path="/harvest-island" element={<Navigate to="/hexisle/harvest" replace />} />
@@ -86,6 +86,12 @@ export const miscRoutes = (
     <Route path="/lets-go-shopping" element={<Navigate to="/initiatives/lets-go-shopping" replace />} />
     <Route path="/lets-get-groceries" element={<Navigate to="/initiatives/lets-get-groceries" replace />} />
     <Route path="/lifeline-medications" element={<Navigate to="/initiatives/lifeline-medications" replace />} />
+
+    {/* Letter URL safety-net redirects (B088 Red Carpet Audit) */}
+    <Route path="/vip" element={<Navigate to="/RedCarpet" replace />} />
+    <Route path="/proof" element={<Navigate to="/cephas/under-the-hood" replace />} />
+    <Route path="/santa/transparency" element={<Navigate to="/ledger" replace />} />
+    <Route path="/santa/volunteer" element={<Navigate to="/help-wanted" replace />} />
 
     {/* Legal pages */}
     <Route path="/terms" element={<LazyPage><TermsOfService /></LazyPage>} />

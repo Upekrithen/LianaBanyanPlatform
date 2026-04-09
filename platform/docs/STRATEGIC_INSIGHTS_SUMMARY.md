@@ -1,7 +1,7 @@
 # Strategic Insights Summary
 ## Economic Principles & Efficiency Wins in Liana Banyan Architecture
 
-> **Purpose**: This document catalogs strategic design decisions that leverage economic principles, game theory, and system efficiency gains. Use this as reference material for business planning and investor communications.
+> **Purpose**: This document catalogs strategic design decisions that leverage economic principles, game theory, and system efficiency gains. Use this as reference material for business planning and backer communications.
 
 **Document Version**: 2.0 (Comprehensive Foundation + Implementation)  
 **Last Updated**: 2025-10-17  
@@ -114,8 +114,8 @@ These are the core economic and strategic principles that were identified and im
 *(Classic money functions)*
 
 **The Win**:
-- Credits serve as wages, equity, and marketplace tender simultaneously
-- **EOI (Equity of Interest)** vesting converts future equity into immediate liquidity
+- Credits serve as wages, participation, and marketplace tender simultaneously
+- **EOI (Participation of Interest)** vesting converts future participation into immediate liquidity
 - Withdrawal fees (5-15%) create friction on cashing out, encouraging reinvestment
 - Volume discount integration ties credits directly to production pricing
 
@@ -308,12 +308,12 @@ These are the core economic and strategic principles that were identified and im
 
 ---
 
-### VI. Equity & Compensation Design
+### VI. Participation & Compensation Design
 
-#### Time Commitment → Equity/Cash Ratio
+#### Time Commitment → Participation/Cash Ratio
 **Principle Applied**: Alignment of incentives with commitment duration
-- **Power move**: Longer commitment = higher equity ratio = better alignment with project success
-- **Economic win**: Self-selects for committed members on equity-heavy contracts
+- **Power move**: Longer commitment = higher participation ratio = better alignment with project success
+- **Economic win**: Self-selects for committed members on participation-heavy contracts
 - **Flexibility**: Allows members to optimize personal cash flow vs. long-term upside
 
 #### Volume Discount Pricing Integration
@@ -329,9 +329,9 @@ These are the core economic and strategic principles that were identified and im
 **Principle Applied**: Rights gradation matching creator needs
 - **Power move**: Allows creators to choose control vs. accessibility tradeoffs
 - **Economic win**: 
-  - Tier A (49% creator equity): Attracts protective creators
-  - Tier B (60% creator equity): Enables derivative innovation
-  - Tier C (75% creator equity): Maximizes member adoption
+  - Tier A (49% creator participation): Attracts protective creators
+  - Tier B (60% creator participation): Enables derivative innovation
+  - Tier C (75% creator participation): Maximizes member adoption
 - **Long-tail brilliance**: Personal use "free" drives adoption, commercial derivatives generate royalties
 
 ---
@@ -388,7 +388,7 @@ These are the core economic and strategic principles that were identified and im
 ### Recording Strategy (Maintained Continuously)
 
 **Principle**: All strategic decisions, architectural choices, and implementation details are documented in this living document to ensure:
-1. **Investor Communication**: Quick reference for pitch decks and due diligence
+1. **Backer Communication**: Quick reference for pitch decks and due diligence
 2. **Team Onboarding**: New members understand "why" behind decisions
 3. **Strategic Consistency**: Prevents backtracking on proven economic principles
 4. **Pattern Recognition**: Identifies when new problems match solved patterns
@@ -406,7 +406,7 @@ These are the core economic and strategic principles that were identified and im
 ### External Platform Coexistence Model (Integration Architecture)
 
 **Strategic Principle**: "Competitors" are actually complementary channels in LB's ecosystem
-- **LB Core Value**: Production orchestration, IP tracking, equity participation, quality control
+- **LB Core Value**: Production orchestration, IP tracking, participation participation, quality control
 - **External Platform Value**: Retail distribution, existing customer bases, payment processing
 
 **Model 1: Retail Channel Integration (Etsy, Shopify)**
@@ -435,25 +435,25 @@ These are the core economic and strategic principles that were identified and im
 **Implementation**:
 - LB partners with external manufacturers as production capacity providers
 - Referral tracking via UTM codes and platform integration
-- Equity-based compensation tied to clickthrough → conversion → revenue metrics
+- Participation-based compensation tied to clickthrough → conversion → revenue metrics
 - Vesting schedule (12-24 months) aligns long-term partnership incentives
 
 **Compensation Structure**:
-- **Equity percentage**: 0.5-2% per manufacturing partner (based on volume)
+- **Participation percentage**: 0.5-2% per manufacturing partner (based on volume)
 - **Metric basis**: Clickthroughs → signups → project pledges → production runs
 - **Minimum monthly referrals**: 10-50 (varies by partner size)
 - **Profit share alternative**: 3-5% of revenue generated through their referrals
 
 **Example: Slant3D Partnership**
 - Slant3D sends 100 clickthroughs/month → 20 signups → 5 projects → $50K production revenue
-- **Equity vesting**: 1.5% LB equity over 24 months (0.0625% per month)
-- **Profit share**: $50K × 4% = $2,000/month OR equity vesting (their choice)
+- **Participation vesting**: 1.5% LB participation over 24 months (0.0625% per month)
+- **Profit share**: $50K × 4% = $2,000/month OR participation vesting (their choice)
 - **LB benefit**: Pre-qualified manufacturing capacity + marketing reach
-- **Slant3D benefit**: Equity upside + steady production pipeline
+- **Slant3D benefit**: Participation upside + steady production pipeline
 
-**Why Equity > Discount Codes**:
+**Why Participation > Discount Codes**:
 - Discount codes leak value (anyone can share)
-- Equity aligns incentives (partners want LB to succeed long-term)
+- Participation aligns incentives (partners want LB to succeed long-term)
 - Performance-based vesting rewards actual conversions, not just links
 - No race-to-the-bottom pricing wars
 
@@ -464,14 +464,14 @@ These are the core economic and strategic principles that were identified and im
 **Implementation**:
 - Content creators act as "Scions" (thought leaders seeding community)
 - HexIsle challenge sponsorships (entrance fees fund prize pools)
-- Referral equity: 0.25-0.75% based on audience conversion rates
-- Dual revenue: Sponsorship fees + equity vesting
+- Referral participation: 0.25-0.75% based on audience conversion rates
+- Dual revenue: Sponsorship fees + participation vesting
 
 **Compensation Example**:
 - CNC Kitchen sponsors HexIsle "Engineer Island" challenge
 - Sponsorship fee: $500-$2,000 (covers prize pool contribution)
 - Referral tracking: 1,000 viewers → 50 signups → 10 projects
-- **Equity grant**: 0.5% LB equity (vests over 12 months)
+- **Participation grant**: 0.5% LB participation (vests over 12 months)
 - **Content rights**: CNC Kitchen can monetize challenge videos (LB doesn't own)
 
 **Strategic Win**: Marketing spend becomes member income + creator equity, not ad waste.
@@ -515,7 +515,7 @@ These are the core economic and strategic principles that were identified and im
 
 **For Business Planning**:
 - Reference Part I for foundational competitive advantages
-- Use Part IV moats in investor pitches
+- Use Part IV moats in backer pitches
 - Cite specific economic principles to demonstrate thought leadership
 
 **For Implementation**:

@@ -98,11 +98,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <div className="flex-1">{children}</div>
                   <PlatformFooter />
                 </main>
-                {showChrome && (
-                  <aside className="hidden xl:block w-64 border-l bg-card/30 overflow-y-auto shrink-0">
-                    <DiscoveryBookshelf />
-                  </aside>
-                )}
+                {/* Bookshelf removed from always-on rail — Discovery is accessible via Crow's Nest */}
               </div>
             </div>
           </div>

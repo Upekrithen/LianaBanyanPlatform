@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { Route } from "react-router-dom";
-import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
+import { ProtectedRoute, ExplorerRoute, CaptainRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 
 const CaptainLanding = lazy(() => import("@/pages/CaptainLanding"));
@@ -9,6 +9,7 @@ const CaptainDashboardPage = lazy(() => import("@/pages/CaptainDashboardPage"));
 const ShipMedallionPage = lazy(() => import("@/pages/ShipMedallionPage"));
 const NodeCaptainPage = lazy(() => import("@/pages/NodeCaptain"));
 const StarChamber = lazy(() => import("@/pages/StarChamber"));
+const StarChamberV2Page = lazy(() => import("@/pages/StarChamberV2Page"));
 const Castle = lazy(() => import("@/pages/Castle"));
 const Governance = lazy(() => import("@/pages/Governance"));
 const ProposalsListing = lazy(() => import("@/pages/ProposalsListing"));
@@ -22,6 +23,7 @@ const StewardApply = lazy(() => import("@/pages/StewardApply"));
 const StewardLegalDashboard = lazy(() => import("@/pages/StewardLegalDashboard"));
 const Petitions = lazy(() => import("@/pages/Petitions"));
 const PoliticalExpeditionPage = lazy(() => import("@/pages/PoliticalExpedition"));
+const PoliticalExpeditionV2Page = lazy(() => import("@/pages/PoliticalExpeditionV2Page"));
 const ColdStartDashboard = lazy(() => import("@/pages/ColdStartDashboard"));
 const BecomeCaptain = lazy(() => import("@/pages/BecomeCaptain"));
 const TreasureMapBuilder = lazy(() => import("@/pages/TreasureMapBuilder"));
@@ -29,12 +31,14 @@ const IncumbentAdvantage = lazy(() => import("@/pages/IncumbentAdvantage"));
 
 export const captainRoutes = (
   <>
-    <Route path="/captain" element={<LazyPage><CaptainLanding /></LazyPage>} />
+    <Route path="/captain" element={<CaptainRoute><LazyPage><CaptainDashboardPage /></LazyPage></CaptainRoute>} />
+    <Route path="/captain/landing" element={<LazyPage><CaptainLanding /></LazyPage>} />
     <Route path="/captain/become" element={<ProtectedRoute><LazyPage><CaptainOnboardingPage /></LazyPage></ProtectedRoute>} />
-    <Route path="/captain/dashboard" element={<ProtectedRoute><LazyPage><CaptainDashboardPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/captain/dashboard" element={<CaptainRoute><LazyPage><CaptainDashboardPage /></LazyPage></CaptainRoute>} />
     <Route path="/captain/medallion" element={<LazyPage><ShipMedallionPage /></LazyPage>} />
     <Route path="/node-captain" element={<ProtectedRoute><LazyPage><NodeCaptainPage /></LazyPage></ProtectedRoute>} />
-    <Route path="/star-chamber" element={<ProtectedRoute><LazyPage><StarChamber /></LazyPage></ProtectedRoute>} />
+    <Route path="/star-chamber" element={<ProtectedRoute><LazyPage><StarChamberV2Page /></LazyPage></ProtectedRoute>} />
+    <Route path="/star-chamber/legacy" element={<ProtectedRoute><LazyPage><StarChamber /></LazyPage></ProtectedRoute>} />
     <Route path="/castle" element={<LazyPage><Castle /></LazyPage>} />
     <Route path="/governance" element={<LazyPage><Governance /></LazyPage>} />
     <Route path="/governance/proposals" element={<ExplorerRoute><LazyPage><ProposalsListing /></LazyPage></ExplorerRoute>} />
@@ -56,7 +60,8 @@ export const captainRoutes = (
     <Route path="/steward/apply" element={<ProtectedRoute><LazyPage><StewardApply /></LazyPage></ProtectedRoute>} />
     <Route path="/steward/legal-formations" element={<ProtectedRoute><LazyPage><StewardLegalDashboard /></LazyPage></ProtectedRoute>} />
     <Route path="/petitions" element={<LazyPage><Petitions /></LazyPage>} />
-    <Route path="/political-expedition" element={<ExplorerRoute><LazyPage><PoliticalExpeditionPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/political-expedition" element={<ProtectedRoute><LazyPage><PoliticalExpeditionV2Page /></LazyPage></ProtectedRoute>} />
+    <Route path="/political-expedition/legacy" element={<ExplorerRoute><LazyPage><PoliticalExpeditionPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cold-start-dashboard" element={<LazyPage><ColdStartDashboard /></LazyPage>} />
     <Route path="/become-captain/:initiativeId" element={<LazyPage><BecomeCaptain /></LazyPage>} />
     <Route path="/cold-start/:initiativeId" element={<LazyPage><ColdStartDashboard /></LazyPage>} />

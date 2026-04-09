@@ -36,32 +36,32 @@ Shows detailed position specifications for LB's own needs:
 #### Critical Priority:
 - **Certified Public Accountant (CPA)**
   - Category: `accounting_services`
-  - Compensation: $75-150/hr or 0.5-2% equity
+  - Compensation: $75-150/hr or 0.5-2% participation
   - Responsibilities: Books, tax filings, compliance, tax strategy
   - Required: Active CPA license, multi-entity experience, tax expertise
 
 - **General Counsel**
   - Category: `legal_services`
-  - Compensation: $150-300/hr or 1-4% equity
+  - Compensation: $150-300/hr or 1-4% participation
   - Responsibilities: Contracts, IP, securities compliance, governance
-  - Required: Licensed attorney, business law, securities knowledge
+  - Required: Licensed attorney, business law, membership rights knowledge
 
 #### High Priority:
 - **Chief Financial Officer (CFO)**
   - Category: `accounting_services`
-  - Compensation: $100-200/hr or 2-5% equity
+  - Compensation: $100-200/hr or 2-5% participation
   - Responsibilities: Financial strategy, forecasting, capital management
   - Required: CFO experience, financial modeling, capital markets
 
 - **Director of People Operations**
   - Category: `hr_staffing`
-  - Compensation: $75-125/hr or 1-3% equity
-  - Responsibilities: HR strategy, contract management, equity allocation
-  - Required: HR leadership, contract management, equity comp expertise
+  - Compensation: $75-125/hr or 1-3% participation
+  - Responsibilities: HR strategy, contract management, participation allocation
+  - Required: HR leadership, contract management, participation comp expertise
 
 - **Executive Steward (Board Member)**
   - Category: `steward_owner`
-  - Compensation: Board stipend + 0.5-2% equity
+  - Compensation: Board stipend + 0.5-2% participation
   - Responsibilities: Strategic direction, oversight, governance
   - Required: Board/executive experience, governance expertise, 4.5+ reputation
 
@@ -76,7 +76,7 @@ Shows detailed position specifications for LB's own needs:
 3. Fill in:
    - Position title
    - Description
-   - Compensation type (equity, cash, or hybrid)
+   - Compensation type (participation, cash, or hybrid)
    - Time commitment options (30-365 days)
    - Requirements (skills, reputation minimum, guild membership)
    - Project lifecycle stage requirement (optional)
@@ -88,7 +88,7 @@ Shows detailed position specifications for LB's own needs:
 - They apply with:
   - Resume/portfolio
   - Cover letter
-  - Preferred time commitment (affects equity/cash ratio)
+  - Preferred time commitment (affects participation/cash ratio)
   - Application questionnaire responses
 
 ### 3. Review Applications
@@ -124,7 +124,7 @@ All pertinent information is automatically available:
 
 1. Select approved applicant
 2. Adjust compensation if needed:
-   - Original equity % → Adjusted equity %
+   - Original participation % → Adjusted participation %
    - Original cash amount → Adjusted cash amount
    - Original credits → Adjusted credits
 3. Set duty percentage (full or partial)
@@ -140,7 +140,7 @@ During the contract:
 
 After completion:
 - Contract completion recorded
-- Equity/credits awarded
+- Participation/credits awarded
 - Medallion updated (if applicable)
 - Available for rehire with proven track record
 
@@ -221,7 +221,7 @@ All of this data is tracked in LB's system and can be exported for CPA review.
 
 - ✅ Reputation-based vetting (no fake resumes)
 - ✅ Verified work history (all on-platform)
-- ✅ Flexible compensation (equity/cash/hybrid)
+- ✅ Flexible compensation (participation/cash/hybrid)
 - ✅ Guild peer validation
 - ✅ Automated data compilation
 - ✅ Fair dispute resolution (committee-based)

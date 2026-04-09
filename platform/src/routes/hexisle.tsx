@@ -4,6 +4,7 @@ import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 
 const HexIsle = lazy(() => import("@/pages/HexIsle"));
+const HexIsleLandingV2Page = lazy(() => import("@/pages/HexIsleLandingV2Page"));
 const HexIsleProjects = lazy(() => import("@/pages/HexIsleProjects"));
 const CompanyIsland = lazy(() => import("@/pages/CompanyIsland"));
 const HarvestIsland = lazy(() => import("@/pages/HarvestIsland"));
@@ -35,7 +36,7 @@ const HexIsleWorldCard = lazy(() => import("@/pages/cue-cards/HexIsleWorldCard")
 
 export const hexisleRoutes = (
   <>
-    <Route path="/hexisle" element={<LazyPage><HexIsle /></LazyPage>} />
+    <Route path="/hexisle" element={<LazyPage><HexIsleLandingV2Page /></LazyPage>} />
     <Route path="/hexisle-game" element={<LazyPage><HexIsle /></LazyPage>} />
     <Route path="/hexisle/projects" element={<LazyPage><HexIsleProjects /></LazyPage>} />
     <Route path="/projects/hexisle" element={<LazyPage><HexIsleProjects /></LazyPage>} />

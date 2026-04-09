@@ -3,7 +3,7 @@ import { Route, Navigate } from "react-router-dom";
 import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 
-const Marketplace = lazy(() => import("@/pages/Marketplace"));
+const Marketplace = lazy(() => import("@/pages/MarketplaceV2Page"));
 const BrowseMarketplace = lazy(() => import("@/pages/BrowseMarketplace"));
 const BrowseBusiness = lazy(() => import("@/pages/BrowseBusiness"));
 const BrowseNonprofit = lazy(() => import("@/pages/BrowseNonprofit"));
@@ -58,8 +58,18 @@ const BusinessCampaignDetail = lazy(() => import("@/pages/BusinessCampaignDetail
 const NominateBusinessPage = lazy(() => import("@/pages/NominateBusinessPage"));
 const PitchPacketPage = lazy(() => import("@/pages/PitchPacketPage"));
 const DesignAuctionPage = lazy(() => import("@/pages/DesignAuctionPage"));
+const StorefrontDetailPage = lazy(() => import("@/pages/StorefrontDetailPage"));
+const NeighborhoodBrowserPage = lazy(() => import("@/pages/NeighborhoodBrowserPage"));
+const NeighborhoodDetailPage = lazy(() => import("@/pages/NeighborhoodDetailPage"));
+const NeighborhoodBuilderPage = lazy(() => import("@/pages/NeighborhoodBuilderPage"));
+const TrunkMirrorPage = lazy(() => import("@/pages/TrunkMirrorPage"));
+const CityAggregationPage = lazy(() => import("@/pages/CityAggregationPage"));
+const CityDirectoryPage = lazy(() => import("@/pages/CityAggregationPage").then(m => ({ default: m.CityDirectoryPage })));
 const Arenas = lazy(() => import("@/pages/Arenas"));
 const IPRegistration = lazy(() => import("@/pages/IPRegistration"));
+const SubscriptionChannelsPage = lazy(() => import("@/pages/SubscriptionChannelsPage"));
+const CreateSubscriptionChannelPage = lazy(() => import("@/pages/CreateSubscriptionChannelPage"));
+const SubscriptionChannelV2Page = lazy(() => import("@/pages/SubscriptionChannelV2Page"));
 
 export const commerceRoutes = (
   <>
@@ -81,6 +91,16 @@ export const commerceRoutes = (
     <Route path="/furnace" element={<LazyPage><TheFurnace /></LazyPage>} />
     <Route path="/storefront-aggregation" element={<LazyPage><StoreFrontAggregation /></LazyPage>} />
     <Route path="/biz-aggregation" element={<LazyPage><StoreFrontAggregation /></LazyPage>} />
+    <Route path="/storefront/:id" element={<ExplorerRoute><LazyPage><StorefrontDetailPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/neighborhoods" element={<ExplorerRoute><LazyPage><NeighborhoodBrowserPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/neighborhoods/builder" element={<ProtectedRoute><LazyPage><NeighborhoodBuilderPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/neighborhoods/trunk-mirror" element={<ProtectedRoute><LazyPage><TrunkMirrorPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/neighborhoods/:slug" element={<ExplorerRoute><LazyPage><NeighborhoodDetailPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/marketplace/neighborhoods" element={<ExplorerRoute><LazyPage><NeighborhoodBrowserPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/cities" element={<ExplorerRoute><LazyPage><CityDirectoryPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/cities/:city" element={<ExplorerRoute><LazyPage><CityAggregationPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/marketplace/cities" element={<ExplorerRoute><LazyPage><CityDirectoryPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/marketplace/cities/:city" element={<ExplorerRoute><LazyPage><CityAggregationPage /></LazyPage></ExplorerRoute>} />
     <Route path="/main-square" element={<LazyPage><MainSquare /></LazyPage>} />
     <Route path="/kaleidoscope" element={<LazyPage><BizKaleidoscope /></LazyPage>} />
     <Route path="/biz-directory" element={<LazyPage><BizKaleidoscope /></LazyPage>} />
@@ -144,5 +164,8 @@ export const commerceRoutes = (
     <Route path="/funding-pool" element={<ProtectedRoute><LazyPage><BrowseNonprofit /></LazyPage></ProtectedRoute>} />
     <Route path="/project-costs" element={<ProtectedRoute><LazyPage><BrowseNetwork /></LazyPage></ProtectedRoute>} />
     <Route path="/ip/register" element={<ProtectedRoute><LazyPage><IPRegistration /></LazyPage></ProtectedRoute>} />
+    <Route path="/subscription-channels" element={<LazyPage><SubscriptionChannelsPage /></LazyPage>} />
+    <Route path="/subscription-channels/create" element={<ProtectedRoute><LazyPage><CreateSubscriptionChannelPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/subscription-channel/:slug" element={<LazyPage><SubscriptionChannelV2Page /></LazyPage>} />
   </>
 );

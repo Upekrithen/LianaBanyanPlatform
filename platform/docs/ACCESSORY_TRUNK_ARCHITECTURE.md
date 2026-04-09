@@ -58,7 +58,7 @@ ALTER TABLE projects ADD COLUMNS:
 
 **Accessory Trunk (Full Fork)**
 - Can modify: Features, UX, branding, membership rules
-- Cannot modify: IP control tiers, contract templates, equity structures
+- Cannot modify: IP control tiers, contract templates, participation structures
 - Royalty: 15-25% of net revenue
 - Use case: Regional adaptations, industry specializations
 
@@ -74,7 +74,7 @@ ALTER TABLE projects ADD COLUMNS:
 interface IPComplianceRules {
   enforce_tier_model: boolean; // MUST be true
   allowed_tier_modifications: string[]; // e.g., ["tier_b_categories"]
-  parent_equity_share: number; // % of project equity reserved for parent
+  parent_equity_share: number; // % of project participation reserved for parent
   contract_template_source: "parent" | "custom"; // Must use parent templates
   dispute_resolution: "parent_arbiter" | "joint_committee";
   revenue_share_percentage: number;
@@ -88,7 +88,7 @@ interface IPComplianceRules {
 Revenue Flow:
 1. Accessory Trunk earns $10,000 from contract
 2. 20% ($2,000) auto-flows to LB Primary Trunk
-3. LB distributes per normal equity/profit share rules
+3. LB distributes per normal participation/profit share rules
 4. Blockchain verifies and records transaction
 5. Both trunks' members see transparent accounting
 ```
@@ -131,7 +131,7 @@ Revenue Flow:
 ### Indirect Revenue
 - **Membership Demand**: Must be LB member to create trunk
 - **IP Ecosystem Growth**: More derivatives = more IP value
-- **Brand Equity**: Successful trunks enhance LB reputation
+- **Brand Participation**: Successful trunks enhance LB reputation
 
 ## Competitive Moat
 

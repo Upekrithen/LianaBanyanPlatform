@@ -43,7 +43,7 @@ LianaBanyan provides turnkey legal services to help all Members transition from 
 ### Recommendation: C-Corporation
 **Rationale**:
 1. **Scale**: Multi-portal, multi-entity structure requires corporate flexibility
-2. **Investment**: Easier for equity rounds and investor management
+2. **Investment**: Easier for participation rounds and backer management
 3. **Liability**: Maximum protection for complex operations
 4. **Tax**: Better for retained earnings and growth
 5. **Governance**: Board structure supports Banyan Council model

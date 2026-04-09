@@ -6,7 +6,7 @@ LianaBanyan operates as a **four-portal ecosystem**, each serving distinct user 
 
 | Portal | Domain | Dev Port | Purpose | Primary Users |
 |--------|--------|----------|---------|---------------|
-| **Marketplace** | lianabanyan.com | 5173 | Public discovery & investment | General public, investors, customers |
+| **Marketplace** | lianabanyan.com | 5173 | Public discovery & investment | General public, backers, customers |
 | **Business** | lianabanyan.biz | 5174 | HR & project operations | Project owners, members, HR, stewards |
 | **Non-Profit** | lianabanyan.org | 5175 | Financial services & benefits | All LianaBanyan members |
 | **Business Network** | lianabanyan.net | 5176 | B2B production & contracts | Member businesses, partners |

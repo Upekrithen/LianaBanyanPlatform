@@ -73,7 +73,7 @@ Both extremes create suboptimal outcomes:
 
 ### **Tier A: Ethical Guardrails Only** (Recommended Default)
 
-**Equity Split**: 49% Creator / 51% LianaBanyan (LB)
+**Participation Split**: 49% Creator / 51% LianaBanyan (LB)
 
 **Creator Veto Rights**:
 - Human rights violations (forced labor, weapons for authoritarian regimes)
@@ -84,7 +84,7 @@ Both extremes create suboptimal outcomes:
 - Maximizes IP utilization (LB can move fast)
 - Protects creator from extreme reputational harm
 - Prevents "frivolous blocking" (must cite specific violation)
-- **Economic Outcome**: Smaller equity % but MUCH larger absolute value
+- **Economic Outcome**: Smaller participation % but MUCH larger absolute value
 
 **Ideal For**:
 - Creators who prioritize impact/scale over control
@@ -107,7 +107,7 @@ Both extremes create suboptimal outcomes:
 
 ### **Tier B: Category Restrictions** (Recommended for Most Creators)
 
-**Equity Split**: 60% Creator / 40% LB
+**Participation Split**: 60% Creator / 40% LB
 
 **Creator Control**:
 - Pre-select up to **5 prohibited use categories**
@@ -124,7 +124,7 @@ Both extremes create suboptimal outcomes:
 - Predictable restrictions (LB knows constraints upfront)
 - Reduces case-by-case negotiation overhead
 - Still allows 80%+ of potential applications
-- **Economic Outcome**: Moderate equity but still significant scale
+- **Economic Outcome**: Moderate participation but still significant scale
 
 **Ideal For**:
 - Creators with specific value-based concerns
@@ -134,7 +134,7 @@ Both extremes create suboptimal outcomes:
 **Frivolous Block Protection**:
 - If creator blocks a use OUTSIDE their 5 categories, arbitration can override
 - Mediation process available for borderline cases
-- **Penalty**: If >3 blocks are overruled in 1 year, creator pays arbitration costs + forfeits 5% equity
+- **Penalty**: If >3 blocks are overruled in 1 year, creator pays arbitration costs + forfeits 5% participation
 
 **Example Implementation** (Stakeholder):
 - **Pre-Declined Categories**: None (creator trusts LB charter + isn't concerned about specific uses)
@@ -144,7 +144,7 @@ Both extremes create suboptimal outcomes:
 
 ### **Tier C: Case-by-Case Approval** (Invitation-Only)
 
-**Equity Split**: 75% Creator / 25% LB
+**Participation Split**: 75% Creator / 25% LB
 
 **Creator Control**:
 - Must approve **every significant commercialization use**
@@ -190,7 +190,7 @@ LB offers Tier C **only to select creators** where the IP's strategic value outw
 **Ideal For**:
 - High-profile creators with massive reputational value
 - Truly irreplaceable IP (no substitutes in market)
-- IP so valuable that 25% equity still = huge absolute dollars
+- IP so valuable that 25% participation still = huge absolute dollars
 
 **Frivolous Block Protection** (Same as Tier B):
 - Mediation for disputed blocks
@@ -326,7 +326,7 @@ CREATE TABLE public.ip_arbitration_cases (
   ruling TEXT CHECK (ruling IN ('creator_upheld', 'lb_upheld', 'compromise')),
   ruling_rationale TEXT,
   financial_penalty NUMERIC, -- Arbitration costs awarded
-  equity_adjustment NUMERIC, -- Penalty equity forfeiture if applicable
+  equity_adjustment NUMERIC, -- Penalty participation forfeiture if applicable
   
   filed_at TIMESTAMPTZ DEFAULT NOW(),
   resolved_at TIMESTAMPTZ
@@ -351,8 +351,8 @@ CREATE TABLE public.ip_arbitration_cases (
 - Binding decision issued
 
 #### **Step 3: Penalties for Frivolous Actions**
-- **If Creator loses**: Pay arbitration costs ($500-$2000) + 5% equity forfeit if >3 overruled blocks/year
-- **If LB loses**: Pay arbitration costs + creator gets 10% bonus equity for that specific use case
+- **If Creator loses**: Pay arbitration costs ($500-$2000) + 5% participation forfeit if >3 overruled blocks/year
+- **If LB loses**: Pay arbitration costs + creator gets 10% bonus participation for that specific use case
 
 ### Tier C Downgrade Protection
 - If creator is ruled against in **2+ arbitration cases within 1 year** for discriminatory/anti-competitive blocking
@@ -401,13 +401,13 @@ CREATE TABLE public.ip_arbitration_cases (
 - High commercialization rate (85%+ utilization)
 - Multiple derivative products across guilds
 - Faster time-to-market vs. Tier C approval delays
-- Higher absolute equity value despite lower %
+- Higher absolute participation value despite lower %
 
 ---
 
 ## Business Plan Presentation Summary
 
-### Investor Pitch
+### Backer Pitch
 
 **"LianaBanyan's Three-Tier IP Model solves the creator control paradox"**
 
@@ -417,9 +417,9 @@ CREATE TABLE public.ip_arbitration_cases (
 - $billions in IP value trapped by incompatible governance
 
 **Our Solution**:
-- Tier A: 95% utilization, maximum scale (51% LB equity)
-- Tier B: Predictable restrictions, 75% utilization (40% LB equity)
-- Tier C: Strategic IP only, case-by-case (25% LB equity)
+- Tier A: 95% utilization, maximum scale (51% LB participation)
+- Tier B: Predictable restrictions, 75% utilization (40% LB participation)
+- Tier C: Strategic IP only, case-by-case (25% LB participation)
 
 **Why It Works**:
 - Self-selection reduces conflict
@@ -519,7 +519,7 @@ When multiple members collaborate on IP within Liana Banyan:
 1. **Tier C Screening**: Quantitative rubric for invitation decisions
 2. **Arbitration Panel Composition**: Expertise requirements for mediators
 3. **Category Taxonomy**: Standard list of prohibited categories for Tier B
-4. **Equity Adjustment Formulas**: Penalties for downgrade scenarios
+4. **Participation Adjustment Formulas**: Penalties for downgrade scenarios
 5. **Creator Education**: How to help creators choose optimal tier
 
 ---

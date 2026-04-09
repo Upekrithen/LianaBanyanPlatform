@@ -68,6 +68,34 @@ verify_jwt = false
 verify_jwt = false
 # schedule = "*/5 * * * *"  -- set in Dashboard
 
+[functions.webhook-x-engagement]
+verify_jwt = false
+
+[functions.webhook-threads-engagement]
+verify_jwt = false
+
+[functions.webhook-linkedin-engagement]
+verify_jwt = false
+
+[functions.webhook-meta-engagement]
+verify_jwt = false
+
+[functions.poll-x-engagement]
+verify_jwt = false
+# schedule = "*/15 * * * *" -- set in migration + Dashboard
+
+[functions.poll-threads-engagement]
+verify_jwt = false
+# schedule = "*/30 * * * *" -- set in migration + Dashboard
+
+[functions.poll-linkedin-engagement]
+verify_jwt = false
+# schedule = "0 * * * *" -- set in migration + Dashboard
+
+[functions.poll-meta-engagement]
+verify_jwt = false
+# schedule = "*/30 * * * *" -- set in migration + Dashboard
+
 [functions.social-post]
 verify_jwt = false
 
@@ -152,6 +180,15 @@ verify_jwt = false
 [functions.calendar-sync-commerce]
 verify_jwt = false
 
+[functions.google-calendar-oauth-start]
+verify_jwt = false
+
+[functions.google-calendar-oauth-callback]
+verify_jwt = false
+
+[functions.sync-google-calendar]
+verify_jwt = false
+
 [functions.housing-manage]
 verify_jwt = false
 
@@ -161,5 +198,31 @@ verify_jwt = false
 [functions.crew-manage]
 verify_jwt = false
 
+[functions.schedule-distribution-grid]
+verify_jwt = false
+
+[functions.generate-cross-references]
+verify_jwt = false
+
 [functions.beacon-track]
+verify_jwt = false
+
+[functions.rep-lookup]
+verify_jwt = false
+
+[functions.congress-api-sync]
+verify_jwt = false
+
+# K186: Stripe Recurring Subscription Webhooks
+[functions.handle-subscription-webhook]
+verify_jwt = false
+
+[functions.create-subscription-product]
+verify_jwt = false
+
+[functions.create-subscription-checkout]
+verify_jwt = false
+
+# K189: Pioneer Bonus Disbursement
+[functions.disburse-pioneer-bonuses]
 verify_jwt = false

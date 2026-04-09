@@ -1,7 +1,6 @@
 import { lazy } from "react";
-import { Route } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 import { ExplorerRoute } from "@/components/ProtectedRoute";
-import { WelcomeGate } from "@/components/WelcomeGate";
 import { useAuth } from "@/contexts/AuthContext";
 import { LazyPage } from "./LazyPage";
 import Index from "@/pages/Index";
@@ -9,6 +8,7 @@ import Index from "@/pages/Index";
 const Auth = lazy(() => import("@/pages/Auth"));
 const TikTokCallback = lazy(() => import("@/pages/TikTokCallback"));
 const GhostWorld = lazy(() => import("@/pages/GhostWorld"));
+const GhostBrowseV2Page = lazy(() => import("@/pages/GhostBrowseV2Page"));
 const GhostWorldMap = lazy(() => import("@/pages/GhostWorldMap"));
 const MemberProfile = lazy(() => import("@/pages/MemberProfile"));
 const PortalGateway = lazy(() => import("@/pages/PortalGateway"));
@@ -33,6 +33,11 @@ const ReputationProfile = lazy(() => import("@/pages/ReputationProfile"));
 const WhyNoAds = lazy(() => import("@/pages/WhyNoAds"));
 const WhyNoVC = lazy(() => import("@/pages/WhyNoVC"));
 const FAQ = lazy(() => import("@/pages/FAQ"));
+const CreatorRedCarpet = lazy(() => import("@/pages/CreatorRedCarpet"));
+const PressJunket = lazy(() => import("@/pages/PressJunket"));
+const ReadLandingPage = lazy(() => import("@/pages/ReadLandingPage"));
+const ViewingSchedulePage = lazy(() => import("@/pages/ViewingSchedulePage"));
+const WildfireTourEntry = lazy(() => import("@/pages/WildfireTourEntry"));
 
 function HomepageGateway() {
   const { user, loading } = useAuth();
@@ -43,11 +48,8 @@ function HomepageGateway() {
       </div>
     );
   }
-  return (
-    <WelcomeGate>
-      <Index />
-    </WelcomeGate>
-  );
+  if (!user) return <Navigate to="/welcome" replace />;
+  return <Index />;
 }
 
 export const publicRoutes = (
@@ -57,6 +59,7 @@ export const publicRoutes = (
     <Route path="/auth" element={<LazyPage><Auth /></LazyPage>} />
     <Route path="/auth/tiktok/callback" element={<LazyPage><TikTokCallback /></LazyPage>} />
     <Route path="/ghost" element={<LazyPage><GhostWorld /></LazyPage>} />
+    <Route path="/ghost-browse" element={<LazyPage><GhostBrowseV2Page /></LazyPage>} />
     <Route path="/ghost-world" element={<LazyPage><GhostWorldMap /></LazyPage>} />
     <Route path="/explore" element={<LazyPage><GhostWorld /></LazyPage>} />
     <Route path="/free-explore" element={<LazyPage><GhostWorld /></LazyPage>} />
@@ -90,5 +93,11 @@ export const publicRoutes = (
     <Route path="/why-no-ads" element={<ExplorerRoute><LazyPage><WhyNoAds /></LazyPage></ExplorerRoute>} />
     <Route path="/why-no-vc" element={<ExplorerRoute><LazyPage><WhyNoVC /></LazyPage></ExplorerRoute>} />
     <Route path="/faq" element={<LazyPage><FAQ /></LazyPage>} />
+    <Route path="/welcome/creator/:handle" element={<LazyPage><CreatorRedCarpet /></LazyPage>} />
+    <Route path="/press" element={<LazyPage><PressJunket /></LazyPage>} />
+    <Route path="/read/:paperKey" element={<LazyPage><ReadLandingPage /></LazyPage>} />
+    <Route path="/watch" element={<LazyPage><ViewingSchedulePage /></LazyPage>} />
+    <Route path="/viewing-schedule" element={<LazyPage><ViewingSchedulePage /></LazyPage>} />
+    <Route path="/wildfire-tour" element={<LazyPage><WildfireTourEntry /></LazyPage>} />
   </>
 );

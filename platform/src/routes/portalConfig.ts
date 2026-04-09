@@ -87,6 +87,10 @@ export const PORTAL_ROUTE_ACCESS: Record<PortalType, RouteGroup[] | "*"> = {
     "defense",
     "cephas",
   ],
+  museum: [
+    "public",
+    "cephas",
+  ],
 };
 
 export function isGroupAllowed(
