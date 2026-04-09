@@ -1,0 +1,31 @@
+{
+  "innovationCount": 2224,
+  "crownJewelCount": 202,
+  "formalClaimsCount": 2393,
+  "provisionalApps": 12,
+  "initiativeCount": 16,
+  "tableCount": 580,
+  "edgeFunctionCount": 139,
+  "pageCount": 470,
+  "cephasPageCount": 455,
+  "migrationCount": 511,
+  "conceptCount": 401,
+  "dropzoneCount": 1269,
+  "transcriptCount": 186,
+  "componentCount": 897,
+  "bishopChatCount": 225,
+  "membershipCost": "$5/year",
+  "creatorKeeps": "83.3%",
+  "platformMargin": "Cost + 20%",
+  "lastSession": "B091",
+  "pendingWork": [
+    "K366 gap: wire letter content to dispatch contacts",
+    "K367 gap: expand to 14-day/57-post/5-stream salvo + 3 Medium articles",
+    "K358: WildFire Tour Mode integration",
+    "Mirror Mirror multilingual Deck Card system (110 languages)",
+    "X-Ray Phase 4 Conversation UI (future design only)",
+    "Founder: connect social OAuth tokens to activate Battery Dispatch",
+    "Founder: signal Opening Gambit GO"
+  ],
+  "timestamp": "2026-04-09T18:15:00.000Z"
+}
