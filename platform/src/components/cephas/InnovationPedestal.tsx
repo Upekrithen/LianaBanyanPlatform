@@ -6,7 +6,8 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, ChevronRight, Lightbulb } from "lucide-react";
+import { ChevronRight, Lightbulb } from "lucide-react";
+import { InnovationSourceLinks } from "@/components/cephas/InnovationSourceLinks";
 
 type ReadingLevel = "glance" | "more" | "full";
 
@@ -92,6 +93,8 @@ export function InnovationPedestal({
           {level === "more" && <p>{generateMoreInfo(fullSpec)}</p>}
           {level === "full" && <p className="text-sm leading-relaxed">{fullSpec}</p>}
         </div>
+
+        {level === "full" ? <InnovationSourceLinks innovationNumber={innovationNumber} enabled /> : null}
 
         {relatedIds.length > 0 && (
           <div className="pt-2 border-t">

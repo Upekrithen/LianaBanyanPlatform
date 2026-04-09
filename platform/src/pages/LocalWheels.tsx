@@ -9,7 +9,87 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Truck, TrendingUp, DollarSign, User, Calendar, Shield, CheckCircle2, Clock } from "lucide-react";
+import { Truck, TrendingUp, DollarSign, User, Calendar, Shield, CheckCircle2, Clock, ShieldCheck, ShieldAlert, PlayCircle, StopCircle } from "lucide-react";
+import { useSafetyLedger } from "@/hooks/useSafetyLedger";
+
+function FleetEarningsCard({ vehicle: v }: { vehicle: any }) {
+  const paidOff = v.purchase_price > 0 ? ((v.total_earn_down / v.purchase_price) * 100) : 0;
+  const { activeEntry, startTrip, endTrip, isTripActive } = useSafetyLedger("local_wheels", v.id);
+
+  const handleStartTrip = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => startTrip.mutate({ tripType: "local_wheels", tripId: v.id, lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => startTrip.mutate({ tripType: "local_wheels", tripId: v.id }),
+      );
+    } else {
+      startTrip.mutate({ tripType: "local_wheels", tripId: v.id });
+    }
+  };
+
+  const handleEndTrip = () => {
+    if (!activeEntry) return;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => endTrip.mutate({ ledgerEntryId: (activeEntry as any).id, lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => endTrip.mutate({ ledgerEntryId: (activeEntry as any).id }),
+      );
+    } else {
+      endTrip.mutate({ ledgerEntryId: (activeEntry as any).id });
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>{v.year} {v.make} {v.model}</CardTitle>
+            <CardDescription>Your assigned fleet vehicle</CardDescription>
+          </div>
+          {isTripActive ? (
+            <Button size="sm" variant="destructive" onClick={handleEndTrip} disabled={endTrip.isPending}>
+              <StopCircle className="h-4 w-4 mr-1" /> End Trip
+            </Button>
+          ) : (
+            <Button size="sm" onClick={handleStartTrip} disabled={startTrip.isPending}>
+              <PlayCircle className="h-4 w-4 mr-1" /> Start Trip
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg text-center">
+            <DollarSign className="h-6 w-6 mx-auto text-green-600 mb-1" />
+            <p className="text-2xl font-bold text-green-700 dark:text-green-400">${v.total_earned?.toLocaleString()}</p>
+            <p className="text-xs text-muted-foreground">Total Earned</p>
+          </div>
+          <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg text-center">
+            <TrendingUp className="h-6 w-6 mx-auto text-amber-600 mb-1" />
+            <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">${v.total_earn_down?.toLocaleString()}</p>
+            <p className="text-xs text-muted-foreground">Applied to Payoff ({v.earn_down_percentage}%)</p>
+          </div>
+          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg text-center">
+            <Clock className="h-6 w-6 mx-auto text-blue-600 mb-1" />
+            <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">${v.remaining_balance?.toLocaleString()}</p>
+            <p className="text-xs text-muted-foreground">Remaining Balance</p>
+          </div>
+        </div>
+        <div>
+          <div className="flex justify-between text-sm mb-1">
+            <span>Ownership Progress</span>
+            <span className="font-semibold">{paidOff.toFixed(1)}%</span>
+          </div>
+          <Progress value={Math.min(100, paidOff)} className="h-3" />
+        </div>
+        {v.payoff_date && (
+          <p className="text-sm text-muted-foreground">Projected payoff date: <strong>{new Date(v.payoff_date).toLocaleDateString()}</strong></p>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 function LocalWheels() {
   const { user } = useAuth();
@@ -136,6 +216,14 @@ function LocalWheels() {
                             {v.assigned_driver_id ? "Driver assigned" : "Needs a driver"}
                           </div>
 
+                          <div className="flex items-center gap-1.5 text-xs">
+                            {v.insurance_verified ? (
+                              <span className="flex items-center gap-1 text-green-700 dark:text-green-400"><ShieldCheck className="h-3.5 w-3.5" /> Insured</span>
+                            ) : (
+                              <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400"><ShieldAlert className="h-3.5 w-3.5" /> Insurance pending</span>
+                            )}
+                          </div>
+
                           {v.payoff_date && (
                             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                               <Calendar className="h-3.5 w-3.5" /> Est. payoff: {new Date(v.payoff_date).toLocaleDateString()}
@@ -166,46 +254,7 @@ function LocalWheels() {
                   </CardContent>
                 </Card>
               ) : (
-                myAssigned.map((v: any) => {
-                  const paidOff = v.purchase_price > 0 ? ((v.total_earn_down / v.purchase_price) * 100) : 0;
-                  return (
-                    <Card key={v.id}>
-                      <CardHeader>
-                        <CardTitle>{v.year} {v.make} {v.model}</CardTitle>
-                        <CardDescription>Your assigned fleet vehicle</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg text-center">
-                            <DollarSign className="h-6 w-6 mx-auto text-green-600 mb-1" />
-                            <p className="text-2xl font-bold text-green-700 dark:text-green-400">${v.total_earned?.toLocaleString()}</p>
-                            <p className="text-xs text-muted-foreground">Total Earned</p>
-                          </div>
-                          <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-lg text-center">
-                            <TrendingUp className="h-6 w-6 mx-auto text-amber-600 mb-1" />
-                            <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">${v.total_earn_down?.toLocaleString()}</p>
-                            <p className="text-xs text-muted-foreground">Applied to Payoff</p>
-                          </div>
-                          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg text-center">
-                            <Clock className="h-6 w-6 mx-auto text-blue-600 mb-1" />
-                            <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">${v.remaining_balance?.toLocaleString()}</p>
-                            <p className="text-xs text-muted-foreground">Remaining Balance</p>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span>Ownership Progress</span>
-                            <span className="font-semibold">{paidOff.toFixed(1)}%</span>
-                          </div>
-                          <Progress value={Math.min(100, paidOff)} className="h-3" />
-                        </div>
-                        {v.payoff_date && (
-                          <p className="text-sm text-muted-foreground">Projected payoff date: <strong>{new Date(v.payoff_date).toLocaleDateString()}</strong></p>
-                        )}
-                      </CardContent>
-                    </Card>
-                  );
-                })
+                myAssigned.map((v: any) => <FleetEarningsCard key={v.id} vehicle={v} />)
               )}
             </div>
           )}

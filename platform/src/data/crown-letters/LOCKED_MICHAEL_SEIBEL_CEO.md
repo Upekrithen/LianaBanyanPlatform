@@ -82,9 +82,8 @@ Founder@LianaBanyan.com
 
 **LINKS:**
 - Platform: https://lianabanyan.com
-- Vision/Docs: https://the2ndsecond.com
-- Proof (Economics): https://the2ndsecond.com/proof
-- The 300: https://the2ndsecond.com/the300
+- Proof (Economics): https://lianabanyan.com/cephas/under-the-hood
+- The 300: https://lianabanyan.com/the300
 - HexIsle Kickstarter: [launching late January — Formlabs dependent]
 
 ---

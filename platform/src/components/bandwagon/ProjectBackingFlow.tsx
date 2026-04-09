@@ -1,6 +1,6 @@
 /**
  * Project Backing Flow — Back This Project with Backed Marks (BandWagon)
- * SEC language: sponsor/back, allocation budget, no investment/return
+ * SEC language: sponsor/back, allocation budget, no speculative-return framing
  * data-xray-id: project-backing-flow
  */
 

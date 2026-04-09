@@ -18,7 +18,16 @@ import { Wrench, ChevronDown, ChevronUp, Hexagon, Zap, Award, AlertTriangle, Tar
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { ProcessModuleCard } from "@/components/manufacturing/ProcessModuleCard";
 import { InviteCreatorCard } from "@/components/cue-cards/InviteCreatorCard";
+import { BountyPaymentToggle, type PaymentMethod } from "@/components/BountyPaymentToggle";
+import { useCreateSponsorship } from "@/hooks/useBountySponsorship";
+import { MembershipGateModal, useGateAction } from "@/components/MembershipGateModal";
 import { toast } from "sonner";
+import { getSpiceMeta } from "@/lib/spiceRack";
+import { useWildfireRun } from "@/contexts/WildfireRunContext";
+import { TourModeBanner } from "@/components/wildfire/TourModeBanner";
+import { TOUR_CREW } from "@/data/tourMockData";
+import { ArrowRight, Users as UsersIcon, MessageSquare, Briefcase } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface DBBounty {
   id: string;
@@ -66,6 +75,9 @@ const MAX_SECONDARY = 5;
 export default function CrewCallPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { gate, gateProps, GateModal } = useGateAction();
+  const { isTourMode } = useWildfireRun();
+  const tourNavigate = useNavigate();
 
   const { data: modules, isLoading } = useQuery({
     queryKey: ["manufacturing-process-modules"],
@@ -142,6 +154,29 @@ export default function CrewCallPage() {
       } catch {
         return new Set<string>();
       }
+    },
+  });
+
+  const { data: recipeNeeds = [] } = useQuery({
+    queryKey: ["recipe-pot-open-needs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("recipe_spice_slots" as never)
+        .select("id, spice, recipe_id, project_recipes!inner(project_name, project_id)" as never)
+        .eq("status", "open");
+      if (error) {
+        console.error("Recipe needs fetch:", error);
+        return [];
+      }
+      return (data || []) as Array<{
+        id: string;
+        spice: string;
+        recipe_id: string;
+        project_recipes: {
+          project_name: string;
+          project_id: string;
+        };
+      }>;
     },
   });
 
@@ -222,21 +257,79 @@ export default function CrewCallPage() {
     rosterByProcess[a.process_module_id].push({ role: a.role_level, name });
   });
 
-  if (!user) {
-    return (
-      <PortalPageLayout maxWidth="lg" xrayId="crew-call-page">
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            Sign in to join the crew.
-          </CardContent>
-        </Card>
-      </PortalPageLayout>
-    );
-  }
-
   return (
     <PortalPageLayout maxWidth="lg" xrayId="crew-call-page">
-      <div className="space-y-8">
+      <GateModal {...gateProps} />
+      <TourModeBanner pageName="crew-call" />
+
+      {isTourMode && (
+        <div className="space-y-8 mb-8">
+          <header className="text-center">
+            <h1 className="text-4xl font-bold">Crew Call</h1>
+            <p className="text-xl text-muted-foreground mt-2">We need you to do what you&apos;re already good at.</p>
+          </header>
+
+          <Card className="border-orange-200 dark:border-orange-800">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold flex items-center gap-2"><UsersIcon className="w-5 h-5 text-orange-500" /> {TOUR_CREW.name}</h2>
+                  <p className="text-sm text-muted-foreground mt-1">{TOUR_CREW.activeProject} · {TOUR_CREW.projectTimeline}</p>
+                </div>
+                <Badge className="bg-green-100 text-green-700 border-green-200">{TOUR_CREW.memberCount} members</Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <h3 className="text-sm font-semibold mb-2">Crew Roster</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {TOUR_CREW.members.map((m) => (
+                    <div key={m.name} className="p-2 rounded bg-muted/50 text-center">
+                      <p className="text-xl">{m.avatar}</p>
+                      <p className="text-sm font-medium">{m.name}</p>
+                      <Badge variant="outline" className="text-[10px] capitalize">{m.role.replace("_", " ")}</Badge>
+                      <p className="text-[10px] text-muted-foreground mt-1">{m.specialty}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold mb-2 flex items-center gap-1"><Briefcase className="w-3.5 h-3.5" /> Open Positions</h3>
+                <div className="grid gap-2 md:grid-cols-2">
+                  {TOUR_CREW.openPositions.map((pos) => (
+                    <Card key={pos.title} className="border-dashed border-orange-200">
+                      <CardContent className="py-3 space-y-1">
+                        <p className="font-medium text-sm">{pos.title}</p>
+                        <p className="text-xs text-muted-foreground">{pos.description}</p>
+                        <Badge variant="secondary" className="text-[10px]">{pos.reward}</Badge>
+                        <Button size="sm" className="w-full mt-2 bg-orange-600 hover:bg-orange-700" onClick={() => tourNavigate("/membership")}>
+                          Join for $5/year to apply <ArrowRight className="w-3 h-3 ml-1" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold mb-2 flex items-center gap-1"><MessageSquare className="w-3.5 h-3.5" /> Crew Chat Preview</h3>
+                <div className="space-y-2 p-3 rounded bg-muted/30 border">
+                  {TOUR_CREW.chatPreview.map((msg, i) => (
+                    <div key={i} className="flex gap-2 text-sm">
+                      <span className="font-medium shrink-0">{msg.author}:</span>
+                      <span className="text-muted-foreground flex-1">{msg.text}</span>
+                      <span className="text-[10px] text-muted-foreground shrink-0">{msg.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {!isTourMode && (<div className="space-y-8">
         <header className="text-center">
           <h1 className="text-4xl font-bold">Crew Call</h1>
           <p className="text-xl text-muted-foreground mt-2">
@@ -267,6 +360,22 @@ export default function CrewCallPage() {
               const primaryOpen = counts.primary < MAX_PRIMARY;
               const secondaryOpen = counts.secondary < MAX_SECONDARY;
               const isFirstPrimary = counts.primary === 0;
+              const modName = mod.process_name.toLowerCase();
+              const seekingSpices = recipeNeeds
+                .filter((need) => {
+                  const projectName = need.project_recipes?.project_name?.toLowerCase() ?? "";
+                  if (!projectName) return false;
+                  return projectName.includes(modName) || modName.includes(projectName);
+                })
+                .slice(0, 3)
+                .map((need) => {
+                  const meta = getSpiceMeta(need.spice);
+                  return {
+                    emoji: meta?.emoji ?? "•",
+                    label: meta?.displayName ?? need.spice,
+                    domain: meta?.skillDomain ?? "Unknown",
+                  };
+                });
               return (
                 <ProcessModuleCard
                   key={mod.id}
@@ -283,22 +392,23 @@ export default function CrewCallPage() {
                   maxSecondary={MAX_SECONDARY}
                   hasPioneer={pioneers?.has(mod.id) ?? false}
                   crewNames={rosterByProcess[mod.id] || []}
-                  canClaim={!!user}
-                  onClaimPrimary={primaryOpen ? () => claimMutation.mutate({
+                  seekingSpices={seekingSpices}
+                  canClaim={true}
+                  onClaimPrimary={primaryOpen ? () => gate('accept-crew-call', () => claimMutation.mutate({
                     processModuleId: mod.id,
                     roleLevel: "primary",
                     isPioneer: isFirstPrimary,
-                  }) : undefined}
-                  onClaimSecondary={secondaryOpen ? () => claimMutation.mutate({
+                  })) : undefined}
+                  onClaimSecondary={secondaryOpen ? () => gate('accept-crew-call', () => claimMutation.mutate({
                     processModuleId: mod.id,
                     roleLevel: "secondary",
                     isPioneer: false,
-                  }) : undefined}
-                  onClaimBackup={() => claimMutation.mutate({
+                  })) : undefined}
+                  onClaimBackup={() => gate('accept-crew-call', () => claimMutation.mutate({
                     processModuleId: mod.id,
                     roleLevel: "backup",
                     isPioneer: false,
-                  })}
+                  }))}
                 />
               );
             })}
@@ -306,7 +416,7 @@ export default function CrewCallPage() {
         )}
 
         {/* ── HexIsle Engineering Bounties ── */}
-        <HexIsleBountyBoard bounties={bounties} claims={bountyClaims} userId={user?.id} />
+        <HexIsleBountyBoard bounties={bounties} claims={bountyClaims} userId={user?.id} gate={gate} />
 
         <section className="pt-8 border-t">
           <p className="text-sm text-muted-foreground mb-4">
@@ -314,17 +424,20 @@ export default function CrewCallPage() {
           </p>
           <InviteCreatorCard />
         </section>
-      </div>
+      </div>)}
     </PortalPageLayout>
   );
 }
 
-function BountyCard({ bounty, claims, userId }: { bounty: DBBounty; claims: DBBountyClaim[]; userId?: string }) {
+function BountyCard({ bounty, claims, userId, gate }: { bounty: DBBounty; claims: DBBountyClaim[]; userId?: string; gate?: (action: string, fn: () => void) => void }) {
   const [expanded, setExpanded] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [submitNotes, setSubmitNotes] = useState("");
   const [submitUrl, setSubmitUrl] = useState("");
+  const [showPaymentToggle, setShowPaymentToggle] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("marks");
   const queryClient = useQueryClient();
+  const createSponsorship = useCreateSponsorship();
 
   const myClaim = claims.find(c => c.user_id === userId);
   const claimCount = claims.length;
@@ -341,8 +454,16 @@ function BountyCard({ bounty, claims, userId }: { bounty: DBBounty; claims: DBBo
         status: "claimed",
       });
       if (error) throw error;
+      const sponsorMethod = paymentMethod === "fiat" ? "fiat_stripe" as const : "credits" as const;
+      await createSponsorship.mutateAsync({
+        bounty_type: "hexisle_engineering",
+        bounty_id: bounty.id,
+        amount_credits: bounty.reward_credits,
+        amount_marks_equivalent: bounty.reward_marks,
+        payment_method: sponsorMethod,
+      });
     },
-    onSuccess: () => { toast.success("Bounty claimed!"); queryClient.invalidateQueries({ queryKey: ["bounty-claims"] }); },
+    onSuccess: () => { toast.success("Bounty claimed!"); setShowPaymentToggle(false); queryClient.invalidateQueries({ queryKey: ["bounty-claims"] }); },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Claim failed"),
   });
 
@@ -393,12 +514,34 @@ function BountyCard({ bounty, claims, userId }: { bounty: DBBounty; claims: DBBo
           ))}
         </div>
 
-        {/* Claim / Submit actions */}
+        {/* Payment toggle + Claim / Submit actions */}
+        {!myClaim && claimCount < bounty.max_claimants && userId && showPaymentToggle && (
+          <div className="space-y-2">
+            <BountyPaymentToggle
+              priceMarks={bounty.reward_marks}
+              onPaymentChange={setPaymentMethod}
+              showFiatOption={true}
+              compact
+            />
+          </div>
+        )}
         <div className="flex gap-2 flex-wrap">
-          {!myClaim && claimCount < bounty.max_claimants && userId && (
-            <Button size="sm" onClick={() => claimMut.mutate()} disabled={claimMut.isPending}>
-              {claimMut.isPending ? "Claiming..." : "Claim Bounty"}
-            </Button>
+          {!myClaim && claimCount < bounty.max_claimants && (
+            showPaymentToggle ? (
+              <Button size="sm" onClick={() => claimMut.mutate()} disabled={claimMut.isPending}>
+                {claimMut.isPending ? "Claiming..." : "Confirm & Claim"}
+              </Button>
+            ) : (
+              <Button size="sm" onClick={() => {
+                if (gate && !userId) {
+                  gate('claim-bounty', () => setShowPaymentToggle(true));
+                } else {
+                  setShowPaymentToggle(true);
+                }
+              }}>
+                Claim Bounty
+              </Button>
+            )
           )}
           {myClaim && myClaim.status === "claimed" && (
             <Button size="sm" variant="outline" onClick={() => setSubmitOpen(!submitOpen)}>
@@ -512,7 +655,7 @@ function BountyReviewCard({ claim, bounty }: { claim: DBBountyClaim; bounty: DBB
   );
 }
 
-function HexIsleBountyBoard({ bounties, claims, userId }: { bounties: DBBounty[]; claims: DBBountyClaim[]; userId?: string }) {
+function HexIsleBountyBoard({ bounties, claims, userId, gate }: { bounties: DBBounty[]; claims: DBBountyClaim[]; userId?: string; gate?: (action: string, fn: () => void) => void }) {
   const totalCredits = bounties.reduce((s, b) => s + b.reward_credits, 0);
   const totalMarks = bounties.reduce((s, b) => s + b.reward_marks, 0);
   const totalXP = bounties.reduce((s, b) => s + b.reward_xp, 0);
@@ -538,7 +681,7 @@ function HexIsleBountyBoard({ bounties, claims, userId }: { bounties: DBBounty[]
           <span className="text-sm text-slate-500">{bounties.length} bounties</span>
         </div>
         <p className="text-xs text-slate-500 mt-2">
-          All compensation is deferred payment for services rendered — not investment, not equity.
+          All compensation is deferred payment for services rendered — not speculation, not ownership.
         </p>
       </div>
 
@@ -555,7 +698,7 @@ function HexIsleBountyBoard({ bounties, claims, userId }: { bounties: DBBounty[]
 
       <div className="grid gap-6 sm:grid-cols-2">
         {bounties.map((b) => (
-          <BountyCard key={b.id} bounty={b} claims={claims.filter(c => c.bounty_id === b.id)} userId={userId} />
+          <BountyCard key={b.id} bounty={b} claims={claims.filter(c => c.bounty_id === b.id)} userId={userId} gate={gate} />
         ))}
       </div>
 

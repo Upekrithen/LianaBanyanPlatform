@@ -1,209 +1,118 @@
-import { PortalPageLayout } from "@/components/PortalPageLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FocusShell } from "@/components/shells";
+import { Hero, StickyMobileCTA } from "@/components/v2";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Check, Key, Loader2, Crown, Star, Sparkles } from "lucide-react";
-import { useMembership, useCreateCheckout, type MembershipTier } from "@/hooks/useMembership";
-import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-
-interface TierDef {
-  key: MembershipTier;
-  name: string;
-  price: string;
-  priceNote: string;
-  icon: typeof Key;
-  features: string[];
-  highlight?: boolean;
-}
-
-const tiers: TierDef[] = [
-  {
-    key: "free",
-    name: "Explorer",
-    price: "FREE",
-    priceNote: "Browse & buy",
-    icon: Key,
-    features: [
-      "Browse marketplace",
-      "Buy products",
-      "Back projects",
-      "Join community",
-    ],
-  },
-  {
-    key: "member",
-    name: "Member",
-    price: "$5",
-    priceNote: "per year",
-    icon: Star,
-    highlight: true,
-    features: [
-      "Everything in Explorer",
-      "Sell on marketplace",
-      "Create Cue Cards",
-      "Turn-Key project access",
-      "Full calendar & plugs",
-      "Ghost World island",
-      "5 starter Credits",
-    ],
-  },
-  {
-    key: "builder",
-    name: "Builder",
-    price: "$10",
-    priceNote: "per year",
-    icon: Crown,
-    features: [
-      "Everything in Member",
-      "Priority queue placement",
-      "Builder badge",
-      "Extended support",
-      "Production pipeline access",
-    ],
-  },
-  {
-    key: "patron",
-    name: "Patron",
-    price: "$25",
-    priceNote: "per year",
-    icon: Sparkles,
-    features: [
-      "Everything in Builder",
-      "Patron badge",
-      "Crown Letter access",
-      "Founding member recognition",
-      "Direct feedback channel",
-    ],
-  },
-];
+import { useMembership } from "@/hooks/useMembership";
+import { useNavigate } from "react-router-dom";
+import { useTourTarget } from "@/hooks/useTourTarget";
+import {
+  CreatorEconomicsExample,
+  MembershipCapabilities,
+  MembershipFAQ,
+} from "@/components/v2/membership";
 
 export default function MembershipPage() {
-  const { user } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { data: membership, isLoading } = useMembership();
-  const checkout = useCreateCheckout();
-
-  const canceled = searchParams.get("canceled") === "true";
-
-  const handleJoin = async (tier: MembershipTier) => {
-    if (!user) {
-      navigate(`/auth?redirect=/membership`);
-      return;
-    }
-    if (tier === "free") return;
-
-    try {
-      await checkout.mutateAsync({ type: "membership", tier });
-    } catch (e: any) {
-      toast.error(e.message || "Failed to start checkout");
-    }
-  };
-
-  const currentTier = membership?.tier || "free";
+  const { data: membership } = useMembership();
+  const tourAnchor = useTourTarget("membership");
   const isActive = membership?.status === "active";
 
+  const handleJoin = () => {
+    if (isActive) {
+      navigate("/dashboard/membership");
+      return;
+    }
+    navigate("/join");
+  };
+
   return (
-    <PortalPageLayout
-      title="Choose Your Membership"
-      subtitle="Your Access Key to the cooperative. Every dollar stays in the system."
-      maxWidth="2xl"
-      xrayId="membership-page"
+    <FocusShell
+      xrayBase="membership"
+      seo={{
+        title: "Membership | Liana Banyan",
+        description: "One offer, one price, one promise for platform participation.",
+      }}
+      hero={
+        <>
+          {!isActive ? (
+            <StickyMobileCTA
+              primary={{ label: "Join for $5/year", onClick: handleJoin }}
+              secondary={{ label: "Preview membership terms.", href: "/terms/membership" }}
+            />
+          ) : null}
+          <div {...tourAnchor}>
+            <Hero
+              variant="focus"
+              eyebrow="Membership for builders, creators, and operators."
+              headline="Join the platform for $5 a year."
+              body="Become a member of Liana Banyan CORPORATION and move from watching to participating across commerce, creation, and cooperative tools."
+              primaryCTA={{
+                label: isActive ? "Go to your membership dashboard." : "Join for $5/year.",
+                onClick: handleJoin,
+              }}
+              secondaryCTA={{ label: "Preview membership terms.", href: "/terms/membership" }}
+              proofStrip={[
+                "$5/year membership",
+                "83.3% creator keeps",
+                "No demographic data required",
+                "Founder terms aligned.",
+              ]}
+            />
+          </div>
+        </>
+      }
     >
-      <div className="space-y-8 pb-12">
-        {canceled && (
-          <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-center text-sm text-amber-800 dark:text-amber-300">
-            Checkout was canceled. No charges were made.
+      <div data-xray-id="membership-page" className="space-y-10 pb-16">
+        <MembershipCapabilities />
+
+        <section className="space-y-3">
+          <h2 className="text-2xl font-semibold tracking-tight">Why $5 matters</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Membership is designed as a single, low-friction decision with structural legitimacy. One
+            offer, one price, and one promise keeps the page focused on participation instead of
+            shopping between plans.
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            The bylaw protects continuity across time, so members are entering a stable operating
+            covenant rather than a temporary promotion.
+          </p>
+        </section>
+
+        <CreatorEconomicsExample />
+
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold tracking-tight">Terms and trust</h2>
+          <div className="rounded-xl border bg-card p-5">
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Membership is plain-language and structural: Liana Banyan CORPORATION, founder terms
+              aligned economics, and a stable governance bylaw.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Trust anchor: the annual membership bylaw remains <span className="font-medium text-foreground">$5/year</span>.
+            </p>
+            <div className="mt-4">
+              <Button variant="outline" asChild>
+                <a href="/terms/membership">Read membership terms</a>
+              </Button>
+            </div>
           </div>
-        )}
+        </section>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {tiers.map((tier) => {
-            const isCurrent = currentTier === tier.key && isActive;
-            const isUpgrade = isActive && tierRank(tier.key) > tierRank(currentTier);
+        <MembershipFAQ />
 
-            return (
-              <Card
-                key={tier.key}
-                className={cn(
-                  "relative flex flex-col overflow-hidden transition-shadow hover:shadow-lg",
-                  tier.highlight && "ring-2 ring-primary shadow-lg",
-                  isCurrent && "ring-2 ring-emerald-500"
-                )}
-              >
-                {tier.highlight && (
-                  <div className="absolute top-0 left-0 right-0 bg-primary py-1 text-center text-xs font-semibold text-primary-foreground">
-                    Most Popular
-                  </div>
-                )}
-                <CardHeader className={cn("text-center", tier.highlight && "pt-8")}>
-                  <tier.icon className="mx-auto mb-2 h-8 w-8 text-primary" />
-                  <CardTitle className="text-lg">{tier.name}</CardTitle>
-                  <div className="mt-2">
-                    <span className="text-3xl font-bold">{tier.price}</span>
-                    {tier.priceNote !== "Browse & buy" && (
-                      <span className="text-sm text-muted-foreground ml-1">/{tier.priceNote}</span>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="flex flex-1 flex-col justify-between space-y-4">
-                  <ul className="space-y-2">
-                    {tier.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="pt-4">
-                    {isCurrent ? (
-                      <Badge variant="outline" className="w-full justify-center py-2 border-emerald-500 text-emerald-700 dark:text-emerald-400">
-                        Current Plan
-                      </Badge>
-                    ) : tier.key === "free" ? (
-                      <Badge variant="outline" className="w-full justify-center py-2">
-                        {isActive ? "Included" : "Default"}
-                      </Badge>
-                    ) : (
-                      <Button
-                        className="w-full"
-                        variant={tier.highlight ? "default" : "outline"}
-                        onClick={() => handleJoin(tier.key)}
-                        disabled={checkout.isPending || isLoading}
-                      >
-                        {checkout.isPending ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : null}
-                        {isUpgrade ? "Upgrade" : "Join"}
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {isActive && (
-          <div className="text-center">
-            <Button variant="link" onClick={() => navigate("/dashboard/membership")}>
-              Manage your subscription →
-            </Button>
-          </div>
-        )}
-
-        <div className="text-center text-sm text-muted-foreground space-y-1">
-          <p>Membership is $5/year — a Structural Bylaw that cannot be changed by normal vote.</p>
-          <p>Credits are prepaid store credit ($1 = 1 Credit). Not securities. Not investment.</p>
-        </div>
+        {!isActive ? (
+          <section className="rounded-xl border bg-muted/20 p-6 text-center">
+            <h3 className="text-xl font-semibold tracking-tight">Ready to participate?</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              One offer, one price, one promise.
+            </p>
+            <div className="mt-4 flex justify-center">
+              <Button size="lg" onClick={handleJoin}>
+                Join for $5/year.
+              </Button>
+            </div>
+          </section>
+        ) : null}
       </div>
-    </PortalPageLayout>
+    </FocusShell>
   );
-}
-
-function tierRank(tier: MembershipTier): number {
-  return { free: 0, member: 1, builder: 2, patron: 3 }[tier] ?? 0;
 }

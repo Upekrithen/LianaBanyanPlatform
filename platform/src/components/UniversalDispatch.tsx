@@ -38,6 +38,7 @@ import {
   CreditCard, QrCode, Megaphone, ArrowRight, Plus, Copy
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { SchedulingEntryBox } from '@/components/scheduling/SchedulingEntryBox';
 
 // ============================================================================
 // DISPATCH TARGET DEFINITIONS
@@ -332,16 +333,33 @@ export function UniversalDispatch({
         <CardContent className="pt-6 space-y-4">
           <div className="flex gap-4 items-end">
             <div className="flex-1">
-              <Label htmlFor="schedule-time" className="flex items-center gap-2 mb-2">
+              <Label className="flex items-center gap-2 mb-2">
                 <Calendar className="w-4 h-4" />
                 Schedule (optional)
               </Label>
-              <Input
-                id="schedule-time"
-                type="datetime-local"
-                value={scheduledFor}
-                onChange={(e) => setScheduledFor(e.target.value)}
-              />
+              <div className="flex items-center gap-2">
+                <SchedulingEntryBox
+                  contentType="cue_card"
+                  contentId={title.trim() ? title.trim().toLowerCase().replace(/\s+/g, '-') : 'universal-dispatch'}
+                  contentTitle={title.trim() || 'Universal Dispatch'}
+                  target="cue-card-dispatch"
+                  triggerLabel={scheduledFor ? 'Reschedule Dispatch' : 'Set Schedule'}
+                  buttonVariant="outline"
+                  onSubmitEntry={async (entry) => {
+                    setScheduledFor(entry.scheduledAt.toISOString());
+                  }}
+                />
+                {scheduledFor ? (
+                  <Button variant="ghost" size="sm" onClick={() => setScheduledFor('')}>
+                    Clear
+                  </Button>
+                ) : null}
+              </div>
+              {scheduledFor ? (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Scheduled for {new Date(scheduledFor).toLocaleString()}
+                </p>
+              ) : null}
             </div>
             <div className="text-sm text-muted-foreground">
               or dispatch immediately

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
+import { ForRentCard } from "@/components/v2/marketplace/ForRentCard";
 
 // ============================================================================
 // TYPES
@@ -115,123 +116,33 @@ const CATEGORIES: StoreCategory[] = [
 
 const SAMPLE_STORES: Storefront[] = [
   {
-    id: "bbc-001",
-    name: "Boise Business Cards",
-    ownerName: "Captain Mike",
+    id: "lb-cards-001",
+    name: "Liana Banyan Cue Cards",
+    ownerName: "Liana Banyan Corporation",
     category: "Crafts & Making",
-    xp: 14200,
-    memberSince: "2026-01-15",
+    xp: 0,
+    memberSince: "2026-04-07",
     isOpen: true,
-    description: "Custom letterpress business cards and stationery for the discerning professional.",
+    description: "Custom business cards featuring your Deck Card design, QR code to your Cue Card share page, and Cost+20% pricing.",
     featuredProducts: [
-      { name: "Letterpress Cards (100)", price: 45 },
-      { name: "Foil Stamped Set", price: 72 },
-      { name: "Logo Design Package", price: 120 },
+      { name: "Standard Business Cards (100)", price: 15 },
+      { name: "Premium Business Cards (100)", price: 25 },
+      { name: "QR Code Stickers (20)", price: 5 },
     ],
   },
   {
-    id: "ss-002",
-    name: "Sarah's Sourdough",
-    ownerName: "Sarah Chen",
-    category: "Food & Drink",
-    xp: 8750,
-    memberSince: "2026-02-01",
-    isOpen: true,
-    description: "Artisan sourdough bread baked fresh daily with heritage grain flour.",
-    featuredProducts: [
-      { name: "Classic Sourdough Loaf", price: 8 },
-      { name: "Olive Rosemary Boule", price: 12 },
-      { name: "Starter Kit", price: 25 },
-    ],
-  },
-  {
-    id: "cf-003",
-    name: "CodeForge Tools",
-    ownerName: "DevGuild",
-    category: "Digital",
-    xp: 45000,
-    memberSince: "2025-11-20",
-    isOpen: true,
-    description: "Developer productivity tools and custom integrations for cooperative teams.",
-    featuredProducts: [
-      { name: "CI Pipeline Template", price: 30 },
-      { name: "API Monitoring Suite", price: 85 },
-      { name: "Code Review Bot", price: 50 },
-    ],
-  },
-  {
-    id: "gtg-004",
-    name: "Green Thumb Gardens",
-    ownerName: "Maria Lopez",
-    category: "Home & Garden",
-    xp: 3200,
-    memberSince: "2026-03-01",
-    isOpen: false,
-    description: "Heirloom seeds, starter kits, and garden planning for every climate zone.",
-    featuredProducts: [
-      { name: "Heirloom Tomato Seeds", price: 6 },
-      { name: "Raised Bed Kit", price: 95 },
-      { name: "Garden Plan Consult", price: 35 },
-    ],
-  },
-  {
-    id: "hh-005",
-    name: "Healthy Habits MSA",
-    ownerName: "Dr. Kim",
-    category: "Health",
-    xp: 22100,
-    memberSince: "2025-12-10",
-    isOpen: true,
-    description: "Preventive wellness programs and Medical Savings Account consultation.",
-    featuredProducts: [
-      { name: "Wellness Assessment", price: 40 },
-      { name: "Nutrition Plan (4 wk)", price: 60 },
-      { name: "MSA Setup Guide", price: 15 },
-    ],
-  },
-  {
-    id: "dt-006",
-    name: "Didasko Tutoring",
-    ownerName: "Academy Guild",
-    category: "Education",
-    xp: 67800,
-    memberSince: "2025-10-05",
-    isOpen: true,
-    description: "Peer-to-peer tutoring and skill mentoring across all Academy disciplines.",
-    featuredProducts: [
-      { name: "1-on-1 Session (1 hr)", price: 20 },
-      { name: "Group Workshop", price: 35 },
-      { name: "Study Plan Bundle", price: 50 },
-    ],
-  },
-  {
-    id: "hw-007",
-    name: "Harbor Woodworks",
-    ownerName: "Jake Morrison",
+    id: "montana-001",
+    name: "Montana Makers Collective",
+    ownerName: "Montana Makers Collective",
     category: "Crafts & Making",
-    xp: 31500,
-    memberSince: "2025-11-12",
+    xp: 0,
+    memberSince: "2026-04-07",
     isOpen: true,
-    description: "Hand-crafted hardwood furniture and custom cabinetry from reclaimed timber.",
+    description: "A demonstration storefront showing how an established artisan collective integrates with Liana Banyan. Handcrafted goods, leatherwork, woodworking.",
     featuredProducts: [
-      { name: "Cutting Board (Walnut)", price: 55 },
-      { name: "Floating Shelf Set", price: 130 },
-      { name: "Custom Quote Request", price: 0 },
-    ],
-  },
-  {
-    id: "mvm-008",
-    name: "Mountain View Meals",
-    ownerName: "Fresh Crew",
-    category: "Food & Drink",
-    xp: 5600,
-    memberSince: "2026-02-20",
-    isOpen: false,
-    description: "Farm-to-table meal kits featuring seasonal ingredients from local growers.",
-    featuredProducts: [
-      { name: "Weekly Meal Kit (2)", price: 48 },
-      { name: "Family Box (4)", price: 85 },
-      { name: "Snack Sampler", price: 22 },
+      { name: "Hand-Tooled Leather Journal", price: 65 },
+      { name: "Reclaimed Timber Cutting Board", price: 55 },
+      { name: "Copper Canyon Lamp", price: 120 },
     ],
   },
 ];
@@ -358,14 +269,16 @@ function StorefrontCard({ store }: { store: Storefront }) {
           <Clock className="w-3 h-3" />
           Member since {memberDate}
         </span>
-        <Button
-          size="sm"
-          variant="outline"
-          className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
-        >
-          <ShoppingBag className="w-3.5 h-3.5 mr-1.5" />
-          Visit Store
-        </Button>
+        <Link to={`/storefront/${store.id}`}>
+          <Button
+            size="sm"
+            variant="outline"
+            className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+          >
+            <ShoppingBag className="w-3.5 h-3.5 mr-1.5" />
+            Visit Store
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
@@ -562,16 +475,15 @@ export default function MainSquare() {
             <p className="text-muted-foreground">Loading storefronts...</p>
           </div>
         ) : isEmpty ? (
-          <div className="text-center py-20">
-            <Sparkles className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-slate-300 mb-2">
-              The Square is quiet... for now.
-            </h2>
-            <p className="text-muted-foreground mb-6">Be the first to open shop.</p>
-            <Button className="bg-amber-600 hover:bg-amber-700 text-white">
-              <Store className="w-4 h-4 mr-2" />
-              Open Your Store
-            </Button>
+          <div className="space-y-6 py-8">
+            <div className="text-center">
+              <Sparkles className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+              <h2 className="text-2xl font-semibold text-slate-300 mb-2">
+                The Square is quiet... for now.
+              </h2>
+              <p className="text-muted-foreground mb-6">Be the first to open shop.</p>
+            </div>
+            <ForRentCard variant="banner" />
           </div>
         ) : filteredStores.length === 0 ? (
           <div className="text-center py-16">
@@ -585,6 +497,7 @@ export default function MainSquare() {
             {filteredStores.map((store) => (
               <StorefrontCard key={store.id} store={store} />
             ))}
+            <ForRentCard category={selectedCategory !== "All" ? selectedCategory.toLowerCase().replace(/ & /g, "_") : undefined} />
           </div>
         )}
     </PortalPageLayout>

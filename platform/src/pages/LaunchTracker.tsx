@@ -229,7 +229,7 @@ export default function LaunchTracker() {
         {/* SEC disclosure */}
         <p className="text-center text-xs text-muted-foreground/70 mt-8 max-w-xl mx-auto">
           Progress indicators reflect community participation milestones, not financial returns.
-          Participation in Liana Banyan does not constitute an investment and carries no guarantee of income.
+          Participation in Liana Banyan does not constitute a speculative instrument and carries no guarantee of income.
         </p>
     </PortalPageLayout>
   );

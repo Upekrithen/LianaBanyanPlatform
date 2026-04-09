@@ -14,7 +14,7 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function MSAPage() {
   const navigate = useNavigate();
-  const [isWildFireTour, setIsWildFireTour] = useState(true);
+  const [isWildFireTour, setIsWildFireTour] = useState(false);
 
   return (
     <LaunchConditionOverlay initiativeSlug="msa" initiativeName="MSA (Medical Savings Accounts)">

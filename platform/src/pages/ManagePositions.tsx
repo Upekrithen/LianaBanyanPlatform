@@ -25,7 +25,7 @@ const CATEGORIES = [
   { value: 'research_development', label: 'R&D' },
   { value: 'prototype', label: 'Prototype' },
   { value: 'legal_services', label: 'Legal' },
-  { value: 'logistics_blockchain', label: 'Logistics & Blockchain' },
+  { value: 'logistics_blockchain', label: 'Logistics & Supply Chain' },
   { value: 'steward_owner', label: 'Steward/Owner' },
   { value: 'marketing_services', label: 'Marketing' },
   { value: 'accounting_services', label: 'Accounting' },

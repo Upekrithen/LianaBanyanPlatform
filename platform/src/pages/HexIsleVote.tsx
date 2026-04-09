@@ -417,7 +417,7 @@ export default function HexIsleVote() {
 
         {/* SEC Disclosure */}
         <p className="text-[10px] text-slate-600 text-center mt-6 max-w-lg mx-auto">
-          Pledged Marks are not securities, equity, or investment instruments. They represent
+          Pledged Marks are not securities, ownership claims, or speculative instruments. They represent
           commitment-weighted preference signaling within the cooperative. No financial return
           is promised or implied. This is earned authority to allocate cooperative resources
           based on demonstrated judgment.

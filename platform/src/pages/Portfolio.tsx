@@ -264,7 +264,7 @@ export default function Portfolio() {
                               variant="outline"
                             >
                               <Shield className="h-4 w-4 mr-2" />
-                              View Blockchain
+                              View Ledger
                             </Button>
                             <Button
                               onClick={() => downloadProjectModule(sub.projects.id, sub.projects.name)}

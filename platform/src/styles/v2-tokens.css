@@ -1,0 +1,64 @@
+@layer base {
+  :root {
+    --currency-credits: 208 100% 46%;
+    --currency-marks: 271 85% 62%;
+    --currency-joules: 41 95% 52%;
+
+    --state-overdue: 38 92% 50%;
+    --state-leading: 158 74% 38%;
+    --state-room-to-grow: 214 80% 58%;
+
+    --space-gutter-mobile: 1rem;
+    --space-gutter-desktop: 1.5rem;
+    --space-gutter-wide: 2rem;
+  }
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-currency-credits {
+    color: hsl(var(--currency-credits));
+  }
+
+  .text-currency-marks {
+    color: hsl(var(--currency-marks));
+  }
+
+  .text-currency-joules {
+    color: hsl(var(--currency-joules));
+  }
+}
+
+@media (min-width: 768px) {
+  .v2-gutter {
+    padding-left: var(--space-gutter-desktop);
+    padding-right: var(--space-gutter-desktop);
+  }
+}
+
+@media (min-width: 1280px) {
+  .v2-gutter {
+    padding-left: var(--space-gutter-wide);
+    padding-right: var(--space-gutter-wide);
+  }
+}
+
+@media (max-width: 767px) {
+  .v2-gutter {
+    padding-left: var(--space-gutter-mobile);
+    padding-right: var(--space-gutter-mobile);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-animated,
+  .v2-animated::before,
+  .v2-animated::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

@@ -26,7 +26,7 @@ export const TIMELINE = [
   { year: 2020, event: "First provisional patent filed" },
   { year: 2023, event: "8 utility patents filed; Hexel mechanical taxonomy defined" },
   { year: 2024, event: "Platform architecture begins; AI team formed (Rook, Knight, Bishop, Pawn)" },
-  { year: 2025, event: "2,007 innovations cataloged; 1,511 patent claims across 10 provisional applications" },
+  { year: 2025, event: "2,128 innovations cataloged; 2,097 patent claims across 11 provisional applications" },
   { year: 2026, event: "Public launch — 16 initiatives, 14 domains, full multi-portal architecture" },
 ] as const;
 
@@ -56,9 +56,9 @@ export const SACRIFICE_PRINCIPLE = {
     "Through military service (Infantry 11B, Aviation 15A)",
     "Through raising eight children — four grown, four still at home",
     "Through building 8 utility patents worth $630K declared — $116M pessimist's floor",
-    "$525,000 of personal investment over 9 years into patent portfolio",
-    "2,007 innovations cataloged and documented",
-    "1,511 patent claims across 10 provisional applications",
+    "$525,000 of personal commitment over 9 years into patent portfolio",
+    "2,128 innovations cataloged and documented",
+    "2,097 patent claims across 11 provisional applications",
     "The platform exists because someone was willing to do what others wouldn't",
   ],
 } as const;
@@ -81,9 +81,9 @@ export const PRINCIPLES = {
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 1752,         // +1 for NotCents Economy brand (Innovation #1752)
-  patentClaims: 1511,           // Across 10 provisional applications (10th filed March 25, 2026)
-  utilityPatents: 10,
+  canonicalCount: 2128,         // Current canonical innovation count
+  patentClaims: 2097,           // Across 11 provisional applications
+  utilityPatents: 11,
   patentPortfolioValue: { low: 116_000_000, high: 15_740_000_000 },
   personalInvestment: 525_000,  // Over 9 years
   investmentYears: 9,

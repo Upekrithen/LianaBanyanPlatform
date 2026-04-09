@@ -129,7 +129,7 @@ export default function SponsorPortal() {
                 </li>
                 <li className="flex items-start gap-2">
                   <Briefcase className="h-5 w-5 text-blue-500 shrink-0" />
-                  <span><strong>Immutable Provenance:</strong> Participation is recorded on our Test-Net blockchain ledger. This is not a speculative crypto token; it is a legally binding receipt of IP participation.</span>
+                  <span><strong>Immutable Provenance:</strong> Participation is recorded on our verified ledger. This is not a speculative token; it is a legally binding receipt of IP participation.</span>
                 </li>
               </ul>
               <Button className="w-full bg-blue-600 hover:bg-blue-500 text-white">

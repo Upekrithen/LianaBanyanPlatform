@@ -122,6 +122,7 @@ export default function RedCarpetLandingV2Page() {
 
   return (
     <FocusShell
+      xrayBase="red-carpet"
       seo={{
         title: "Red Carpet Landing | Liana Banyan",
         description: "Invitation landing page to claim and launch a pre-populated storefront.",

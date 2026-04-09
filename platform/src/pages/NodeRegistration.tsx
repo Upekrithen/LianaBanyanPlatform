@@ -454,7 +454,7 @@ export default function NodeRegistration() {
                     </p>
                     <Button variant="outline" className="mt-3" disabled>
                       <Camera className="mr-2 h-4 w-4" />
-                      Upload Photos (Coming Soon)
+                      Upload Photos
                     </Button>
                   </div>
                 </div>

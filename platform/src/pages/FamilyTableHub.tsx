@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Utensils, CalendarDays, BookOpen, ShoppingBasket, ChefHat, Home,
-  ArrowRight, Plus, DollarSign, TrendingDown, Clock, Send,
+  ArrowRight, Plus, DollarSign, TrendingDown, Clock, Send, Snowflake, Leaf,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,12 +48,57 @@ function EmptySlot({ day, onClick }: { day: DayOfWeek; onClick: () => void }) {
   );
 }
 
+interface FreezerMealRow {
+  id: string;
+  node_id: string;
+  meal_name: string;
+  description: string | null;
+  portions_available: number;
+  price_per_portion: number;
+  dietary_tags: string[];
+  frozen_date: string;
+  expiry_date: string;
+  freezer_nodes: { id: string; name: string; address: string | null; active: boolean };
+}
+
+function freezerFreshnessColor(frozenDate: string): { color: string; label: string } {
+  const days = Math.floor((Date.now() - new Date(frozenDate).getTime()) / 86400000);
+  if (days < 30) return { color: "text-green-600", label: "Fresh" };
+  if (days < 60) return { color: "text-yellow-600", label: "Good" };
+  return { color: "text-red-600", label: "Use Soon" };
+}
+
+const DIETARY_BADGE_COLORS: Record<string, string> = {
+  vegetarian: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+  vegan: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200",
+  "gluten-free": "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  halal: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+  kosher: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
+  "dairy-free": "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+  "nut-free": "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+};
+
 export default function FamilyTableHub() {
   const navigate = useNavigate();
   const weekStart = getWeekStart();
   const { data: mealPlan } = useMealPlan(weekStart);
   const { data: restaurants } = useRestaurants();
   const [activeTab, setActiveTab] = useState("week");
+
+  const { data: freezerMeals } = useQuery({
+    queryKey: ["freezer-meals-family-table"],
+    queryFn: async () => {
+      const { data: inv, error: invErr } = await supabase
+        .from("freezer_inventory" as never)
+        .select("*, freezer_nodes!inner(id, name, address, active)")
+        .eq("status", "available")
+        .gt("portions_available", 0)
+        .order("frozen_date", { ascending: false })
+        .limit(8);
+      if (invErr) return [];
+      return (inv ?? []) as FreezerMealRow[];
+    },
+  });
 
   const mealsByDay = useMemo(() => {
     const map: Record<DayOfWeek, MealSlot[]> = { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] };
@@ -193,6 +240,81 @@ export default function FamilyTableHub() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Available from Freezer Nodes */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-xl flex items-center gap-2">
+                <Snowflake className="w-5 h-5 text-cyan-500" />
+                Available from Freezer Nodes
+              </CardTitle>
+              <CardDescription>
+                Batch-cooked frozen meals from neighborhood operators — Cost + 20%
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {freezerMeals && freezerMeals.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {freezerMeals.map((meal) => {
+                    const freshness = freezerFreshnessColor(meal.frozen_date);
+                    return (
+                      <Card key={meal.id} className="border hover:shadow-sm transition-shadow">
+                        <CardContent className="pt-4 space-y-2">
+                          <div className="flex items-start justify-between gap-1">
+                            <h4 className="font-medium text-sm line-clamp-1">{meal.meal_name}</h4>
+                            <span className="font-bold text-sm whitespace-nowrap">${meal.price_per_portion.toFixed(2)}</span>
+                          </div>
+                          {meal.description && (
+                            <p className="text-xs text-muted-foreground line-clamp-2">{meal.description}</p>
+                          )}
+                          <div className="flex flex-wrap gap-1">
+                            {(meal.dietary_tags ?? []).map((tag) => (
+                              <Badge
+                                key={tag}
+                                variant="secondary"
+                                className={`text-[10px] ${DIETARY_BADGE_COLORS[tag] ?? ""}`}
+                              >
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Snowflake className="w-3 h-3" />
+                              {meal.freezer_nodes.name}
+                            </span>
+                            <span className={freshness.color}>{freshness.label}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                            <span>{meal.portions_available} portions left</span>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full h-7 text-xs"
+                            onClick={() => navigate(`/freezer-nodes`)}
+                          >
+                            Order
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Snowflake className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                  <p className="text-muted-foreground font-medium mb-1">No Freezer Nodes in your area yet</p>
+                  <p className="text-sm text-muted-foreground/70 mb-4">
+                    Freezer Node operators batch-cook meals and sell them to neighbors at Cost + 20%.
+                  </p>
+                  <Button variant="outline" onClick={() => navigate("/freezer-nodes/setup")}>
+                    <ChefHat className="w-4 h-4 mr-1" /> Become a Freezer Node operator
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* COOKBOOK */}

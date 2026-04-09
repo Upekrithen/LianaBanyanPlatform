@@ -82,7 +82,7 @@ const SAMPLE_COMPAT: ManufacturingCompat[] = [
   { id: "c2", proteusId: "proto-hexisle", moduleType: "sla", compatibilityLevel: "full", notes: "High-detail prototyping. Excellent for master molds.", verifiedAt: "2026-03-19T00:00:00Z" },
   { id: "c3", proteusId: "proto-hexisle", moduleType: "sls", compatibilityLevel: "full", notes: "Nylon variants for outdoor/travel sets.", verifiedAt: "2026-03-19T00:00:00Z" },
   { id: "c4", proteusId: "proto-hexisle", moduleType: "desktop_extrusion", compatibilityLevel: "partial", notes: "PLA/PETG variants. Layer lines visible but functional.", verifiedAt: "2026-03-19T00:00:00Z" },
-  { id: "c5", proteusId: "proto-hexisle", moduleType: "injection_mold", compatibilityLevel: "experimental", notes: "High-volume future path. Requires tooling investment.", verifiedAt: null },
+  { id: "c5", proteusId: "proto-hexisle", moduleType: "injection_mold", compatibilityLevel: "experimental", notes: "High-volume future path. Requires tooling commitment.", verifiedAt: null },
   { id: "c6", proteusId: "proto-hexisle", moduleType: "cnc", compatibilityLevel: "experimental", notes: "Wood/metal luxury editions. Not yet prototyped.", verifiedAt: null },
 ];
 

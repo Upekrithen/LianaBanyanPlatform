@@ -184,7 +184,7 @@ export const SAMPLE_QA_ENTRIES: QAEntry[] = [
   {
     id: 'qa-006',
     questionText: 'What is the BandWagon system and how does backing projects work?',
-    answerText: 'BandWagon lets you back projects with your Marks. When a project succeeds, you earn increased Service Allocation Authority (SAA), which gives you a larger budget to back future projects. This is NOT investment return — it is earned authority to allocate cooperative resources based on demonstrated judgment.',
+    answerText: 'BandWagon lets you back projects with your Marks. When a project succeeds, you earn increased Service Allocation Authority (SAA), which gives you a larger budget to back future projects. This is NOT speculative return — it is earned authority to allocate cooperative resources based on demonstrated judgment.',
     askerName: 'Diana Reeves',
     askerEmail: 'diana.r@example.com',
     channel: 'email',

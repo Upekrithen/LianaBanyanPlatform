@@ -17,14 +17,22 @@ export interface CanonicalStats {
   personalInvestment: number;
   investmentYears: number;
   productionSystems: number;
+  charitableInitiatives: number;
+  founderAge: number;
+  dirtyDozenGreen: number;
+  puddingArticles: number;
+  academicPapers: number;
+  knightSessions: number;
+  bishopSessions: number;
+  pawnBatches: number;
 }
 
 const DEFAULTS: CanonicalStats = {
-  innovationCount: 2078,
-  crownJewels: 146,
-  patentApplications: 10,
-  patentClaims: 1511,
-  domains: 14,
+  innovationCount: 2224,
+  crownJewels: 202,
+  patentApplications: 12,
+  patentClaims: 2199,
+  domains: 29,
   initiatives: 16,
   membershipCost: 5,
   creatorKeepsPct: 83.3,
@@ -34,7 +42,15 @@ const DEFAULTS: CanonicalStats = {
   portfolioValueHigh: 116_000_000,
   personalInvestment: 525_000,
   investmentYears: 9,
-  productionSystems: 28,
+  productionSystems: 35,
+  charitableInitiatives: 16,
+  founderAge: 53,
+  dirtyDozenGreen: 11,
+  puddingArticles: 187,
+  academicPapers: 38,
+  knightSessions: 355,
+  bishopSessions: 86,
+  pawnBatches: 56,
 };
 
 const KEY_MAP: Record<string, keyof CanonicalStats> = {
@@ -53,6 +69,14 @@ const KEY_MAP: Record<string, keyof CanonicalStats> = {
   personal_investment: 'personalInvestment',
   investment_years: 'investmentYears',
   production_systems: 'productionSystems',
+  charitable_initiatives: 'charitableInitiatives',
+  founder_age: 'founderAge',
+  dirty_dozen_green: 'dirtyDozenGreen',
+  pudding_articles: 'puddingArticles',
+  academic_papers: 'academicPapers',
+  knight_sessions: 'knightSessions',
+  bishop_sessions: 'bishopSessions',
+  pawn_batches: 'pawnBatches',
 };
 
 interface CanonicalRow {

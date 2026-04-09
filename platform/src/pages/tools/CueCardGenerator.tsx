@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, CreditCard, Download, Store, QrCode, Palette, Eye } from 'lucide-react';
+import { ArrowLeft, CreditCard, Download, Store, QrCode, Palette, Eye, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { QRCodeCanvas } from 'qrcode.react';
 import { jsPDF } from 'jspdf';
+import { PrintableCueCard } from '@/components/cue-cards/PrintableCueCard';
 
 interface StorefrontRow {
   id: string;
@@ -47,6 +48,8 @@ export default function CueCardGenerator() {
   const [tagline, setTagline] = useState('Pre-order tonight. Pickup tomorrow.');
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [recruitBiz, setRecruitBiz] = useState('');
+  const [recruitContact, setRecruitContact] = useState('');
   const frontCanvasRef = useRef<HTMLDivElement>(null);
   const qrRef = useRef<HTMLCanvasElement>(null);
 
@@ -268,6 +271,46 @@ export default function CueCardGenerator() {
           </div>
         </div>
       )}
+
+      {/* ── Recruitment Business Card ── */}
+      <div className="mt-12 pt-8 border-t border-slate-700">
+        <div className="text-center mb-6">
+          <Users className="w-10 h-10 mx-auto mb-2 text-emerald-400" />
+          <h2 className="text-xl font-bold mb-1" data-xray-id="recruit-business-card">Recruitment Business Card</h2>
+          <p className="text-sm text-slate-400">
+            Print cards to hand to businesses you want to recruit. Scan leads to their Red Carpet.
+          </p>
+        </div>
+        <div className="max-w-md mx-auto space-y-4 mb-6">
+          <div>
+            <Label>Business Name</Label>
+            <Input
+              value={recruitBiz}
+              onChange={e => setRecruitBiz(e.target.value)}
+              placeholder="e.g. Main Street Bakery"
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label>Your Contact Info (optional)</Label>
+            <Input
+              value={recruitContact}
+              onChange={e => setRecruitContact(e.target.value)}
+              placeholder="Phone or email"
+              className="mt-1"
+            />
+          </div>
+        </div>
+        {recruitBiz.trim() && user && (
+          <PrintableCueCard
+            businessName={recruitBiz}
+            businessSlug={recruitBiz.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}
+            memberName={user.user_metadata?.full_name || user.email?.split('@')[0] || 'Member'}
+            memberSlug={user.id}
+            memberContact={recruitContact || undefined}
+          />
+        )}
+      </div>
 
       {/* Hidden QR for PDF generation */}
       <div id="qr-hidden" className="hidden">

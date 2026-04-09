@@ -1,7 +1,7 @@
 /**
  * Housing — Mission TWO: "Everyone Has Shelter"
- * Cooperative housing hub with 4 tabs:
- * Available Properties | My Housing | Contribute | Housing Fund
+ * Cooperative housing hub with 5 tabs:
+ * Available Properties | My Housing | Contribute | Housing Fund | Roommate
  */
 
 import { useState, useMemo } from 'react';
@@ -15,12 +15,13 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
-import { Home, Search, DollarSign, Building2, Zap, Check, ArrowRight, Calendar, MapPin } from 'lucide-react';
+import { Home, Search, DollarSign, Building2, Zap, Check, ArrowRight, Calendar, MapPin, Shield } from 'lucide-react';
 
 import PropertyCard, { type HousingProperty } from '@/components/housing/PropertyCard';
 import ContributionForm from '@/components/housing/ContributionForm';
 import WaterWheelDashboard from '@/components/housing/WaterWheelDashboard';
 import VacationNetwork from '@/components/housing/VacationNetwork';
+import RoommateTab from '@/components/housing/RoommateTab';
 
 const MISSION_PILLS = [
   { num: 'ONE', label: 'Food', done: true },
@@ -161,11 +162,14 @@ export default function Housing() {
 
       {/* Tabs */}
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="grid w-full grid-cols-4 mb-6">
+        <TabsList className="grid w-full grid-cols-5 mb-6">
           <TabsTrigger value="available">Properties</TabsTrigger>
           <TabsTrigger value="my-housing">My Housing</TabsTrigger>
           <TabsTrigger value="contribute">Contribute</TabsTrigger>
           <TabsTrigger value="fund">Housing Fund</TabsTrigger>
+          <TabsTrigger value="roommate" className="flex items-center gap-1">
+            <Shield className="w-3.5 h-3.5" /> Roommate
+          </TabsTrigger>
         </TabsList>
 
         {/* Tab 1: Available Properties */}
@@ -393,6 +397,11 @@ export default function Housing() {
               <VacationNetwork />
             </div>
           </div>
+        </TabsContent>
+
+        {/* Tab 5: Roommate Accountability */}
+        <TabsContent value="roommate">
+          <RoommateTab />
         </TabsContent>
       </Tabs>
     </PortalPageLayout>

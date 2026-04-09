@@ -1,4 +1,5 @@
-import { Check, Lock, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { Check, Lock, ChevronRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LadderLevel {
@@ -8,13 +9,38 @@ interface LadderLevel {
   detail: string;
   marksRequired: number;
   tierLabel: string;
+  expandedInfo: string[];
 }
 
 const LEVELS: LadderLevel[] = [
-  { level: 4, name: 'FACTORY', equipment: 'Industrial Press', detail: '50K+ parts/yr', marksRequired: 5000, tierLabel: 'Senior Partner (5,000+ Marks)' },
-  { level: 3, name: 'SHOP', equipment: 'SLS Machine', detail: 'Custom orders', marksRequired: 2000, tierLabel: 'Partner (2,000+ Marks)' },
-  { level: 2, name: 'BENCH', equipment: 'Desktop Molder (Babyplast)', detail: 'Small-batch production', marksRequired: 500, tierLabel: 'Partner (2,000+ Marks)' },
-  { level: 1, name: 'KIT', equipment: 'Canister System', detail: '$250–400', marksRequired: 0, tierLabel: 'Anyone can start' },
+  { level: 4, name: 'FACTORY', equipment: 'Industrial Press', detail: '50K+ parts/yr', marksRequired: 5000, tierLabel: 'Senior Partner (5,000+ Marks)', expandedInfo: [
+    'Full industrial injection molding press',
+    'High-volume production: 50,000+ parts per year',
+    'Factory Node status — become a cooperative production hub',
+    'Revenue share on all production runs through your facility',
+    'Requires 5,000+ Marks earned through verified work',
+  ]},
+  { level: 3, name: 'SHOP', equipment: 'SLS Machine', detail: 'Custom orders', marksRequired: 2000, tierLabel: 'Partner (2,000+ Marks)', expandedInfo: [
+    'Selective Laser Sintering machine for custom parts',
+    'Take custom orders from the cooperative marketplace',
+    'Higher-margin specialty production',
+    'Train and mentor Kit/Bench members in your area',
+    'Requires 2,000+ Marks earned through verified work',
+  ]},
+  { level: 2, name: 'BENCH', equipment: 'Desktop Molder (Babyplast)', detail: 'Small-batch production', marksRequired: 500, tierLabel: 'Partner (500+ Marks)', expandedInfo: [
+    'Babyplast desktop injection molder — professional quality',
+    'Small-batch production runs (100–5,000 parts)',
+    'Fill cooperative orders assigned to your region',
+    'Earn Marks faster with higher-volume output',
+    'Requires 500+ Marks earned through Kit-level work',
+  ]},
+  { level: 1, name: 'KIT', equipment: 'Canister System', detail: '$250–400', marksRequired: 0, tierLabel: 'Anyone can start', expandedInfo: [
+    'The Canister System — screw-press injection molder you build yourself',
+    '$250–400 for the complete kit, assembled at your kitchen table',
+    'Make keychains, phone cases, game tokens, small enclosures',
+    'Thermoplastics: LDPE, PP, HDPE at ~5,207 PSI with 8" handle',
+    'No experience needed — earn your first Marks immediately',
+  ]},
 ];
 
 type LevelState = 'completed' | 'current' | 'approaching' | 'locked';
@@ -73,6 +99,8 @@ interface ManufacturingLadderProps {
 }
 
 export function ManufacturingLadder({ currentMarks, compact = false, showDescriptions = true }: ManufacturingLadderProps) {
+  const [expandedLevel, setExpandedLevel] = useState<number | null>(null);
+
   return (
     <div className={cn('flex flex-col gap-0', compact ? 'max-w-xs' : 'max-w-lg w-full')} data-xray-id="manufacturing-ladder">
       {LEVELS.map((level, idx) => {
@@ -89,8 +117,10 @@ export function ManufacturingLadder({ currentMarks, compact = false, showDescrip
               <div className="absolute left-5 top-full w-0.5 h-3 bg-zinc-700/50 z-0" />
             )}
 
-            <div className={cn(
-              'relative z-10 flex items-start gap-3 rounded-lg border p-3 transition-all',
+            <div
+              onClick={() => setExpandedLevel(expandedLevel === level.level ? null : level.level)}
+              className={cn(
+              'relative z-10 flex items-start gap-3 rounded-lg border p-3 transition-all cursor-pointer hover:brightness-110',
               styles.border,
               styles.bg,
               compact && 'p-2 gap-2',
@@ -138,10 +168,22 @@ export function ManufacturingLadder({ currentMarks, compact = false, showDescrip
                 )}
               </div>
 
-              {state !== 'locked' && state !== 'approaching' && (
-                <ChevronRight className={cn('w-4 h-4 mt-1 flex-shrink-0', styles.text, 'opacity-40')} />
-              )}
+              {expandedLevel === level.level
+                ? <ChevronDown className={cn('w-4 h-4 mt-1 flex-shrink-0', styles.text)} />
+                : <ChevronRight className={cn('w-4 h-4 mt-1 flex-shrink-0', styles.text, 'opacity-40')} />
+              }
             </div>
+
+            {expandedLevel === level.level && (
+              <div className={cn('relative z-10 mt-1 rounded-lg border p-4 space-y-1.5', styles.border, 'bg-zinc-900/60')}>
+                {level.expandedInfo.map((info, j) => (
+                  <p key={j} className="text-xs text-zinc-300 flex items-start gap-2">
+                    <span className="text-amber-400 mt-0.5">•</span>
+                    {info}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
         );
       })}

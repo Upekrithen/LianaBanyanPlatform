@@ -11,48 +11,57 @@ interface AuthContextType {
   signOut: () => Promise<void>;
 }
 
+const AUTH_STORAGE_KEY = 'sb-ruuxzilgmuwddcofqecc-auth-token';
+
+function bootstrapSessionFromStorage(): { user: User; session: Session } | null {
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed.access_token || !parsed.user) return null;
+    const expiresAt = parsed.expires_at ?? 0;
+    if (expiresAt * 1000 < Date.now()) return null;
+    return { user: parsed.user as User, session: parsed as Session };
+  } catch {
+    return null;
+  }
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const bootstrapped = bootstrapSessionFromStorage();
+  const [user, setUser] = useState<User | null>(bootstrapped?.user ?? null);
+  const [session, setSession] = useState<Session | null>(bootstrapped?.session ?? null);
+  const [loading, setLoading] = useState(!bootstrapped);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Safety timeout — if Supabase is unreachable, don't show "Loading..." forever.
-    // After 5 seconds, assume unauthenticated and let the user see the site.
     const safetyTimer = setTimeout(() => {
       setLoading(false);
     }, 5000);
 
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (event, currentSession) => {
         clearTimeout(safetyTimer);
-        setSession(session);
-        setUser(session?.user ?? null);
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
         setLoading(false);
 
-        // On first sign-in, run onboarding (stamps, feather conversion, QR medallion)
-        if (event === 'SIGNED_IN' && session?.user) {
-          // Run async but don't block auth flow
-          setTimeout(() => onboardNewMember(session.user), 0);
+        if (event === 'SIGNED_IN' && currentSession?.user) {
+          if (!localStorage.getItem('lb_login_timestamp')) {
+            localStorage.setItem('lb_login_timestamp', new Date().toISOString());
+          }
+          setTimeout(() => onboardNewMember(currentSession.user), 0);
+        }
+
+        if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setSession(null);
+          localStorage.removeItem('lb_login_timestamp');
         }
       }
     );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      clearTimeout(safetyTimer);
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    }).catch(() => {
-      // Supabase unreachable — let user through as unauthenticated
-      clearTimeout(safetyTimer);
-      setLoading(false);
-    });
 
     return () => {
       clearTimeout(safetyTimer);
@@ -61,7 +70,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    localStorage.removeItem('lb_login_timestamp');
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+    setUser(null);
+    setSession(null);
+    try { await supabase.auth.signOut(); } catch {}
     navigate('/auth');
   };
 

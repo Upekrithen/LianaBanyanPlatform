@@ -8,7 +8,7 @@
  * Pages needing no footer (e.g., full-screen games) can
  * conditionally hide it via the `hideFooter` prop.
  *
- * SEC-safe: No investment/equity/ROI language.
+ * SEC-safe: No speculative-finance or ownership-claim language.
  */
 
 import React, { useState } from "react";

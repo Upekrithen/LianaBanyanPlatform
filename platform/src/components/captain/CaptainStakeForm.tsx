@@ -91,7 +91,7 @@ export function CaptainStakeForm({ onSuccess }: { onSuccess?: () => void }) {
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-xs text-amber-400/80">
           Your stake is operational collateral — it ensures you have skin in the game.
           Captains who fulfill orders earn reputation and can graduate to higher levels.
-          This is <strong>not</strong> an investment. You are a leader, not a shareholder.
+          This is <strong>not</strong> a speculative instrument. You are a leader, not an outside owner.
         </div>
 
         <Button

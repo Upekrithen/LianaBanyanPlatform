@@ -567,7 +567,7 @@ export default function HexIsle() {
             The Definitive Stack: ChannelLock → HollowLog → Clamshell → GoldenLotus → Rotor → Ouralis → PGears×3 → SawtoothCoral+TimingBelt → MainGear → Cradle+Football → Capstone → SlottedTop
           </p>
           <Button variant="link" className="px-0 h-auto text-primary" asChild>
-            <a href="/cephas/hexisle">
+            <a href="https://lianabanyan.com/cephas">
               See the full piece grammar →
             </a>
           </Button>

@@ -371,7 +371,7 @@
     "tags": [
       "business-plan",
       "executive-summary",
-      "investment",
+      "funding",
       "funding"
     ]
   },
@@ -449,12 +449,12 @@
     "id": "articles-patent-economics-one-pager-md",
     "title": "Liana Banyan Patent Economics: Fair Upside, No Feudalism",
     "category": "Article",
-    "description": "One-page investor summary of how patent economics work on Liana Banyan: 60/20/20 split, sponsor pools, caps, and fairness through rebalancing.",
+    "description": "One-page sponsor-facing summary of how patent economics work on Liana Banyan: 60/20/20 split, sponsor pools, caps, and fairness through rebalancing.",
     "url": "/cephas/articles/patent-economics-one-pager",
     "tags": [
       "patents",
       "economics",
-      "investment",
+      "funding",
       "sponsorship",
       "cooperative"
     ]
@@ -624,7 +624,7 @@
     "id": "founder-welcome-md",
     "title": "Welcome from the Founder",
     "category": "Document",
-    "description": "A personal welcome from Denken, founder of Liana Banyan",
+    "description": "A personal welcome from the founder mascot of Liana Banyan",
     "url": "/cephas/founder-welcome",
     "tags": []
   },
@@ -1122,7 +1122,7 @@
     "description": "",
     "url": "/cephas/letters/circle-1-investors/warren-buffett",
     "tags": [
-      "investor",
+      "sponsor",
       "philanthropy",
       "giving-pledge",
       "infrastructure"
@@ -2615,7 +2615,7 @@
       "patents",
       "IP",
       "credibility",
-      "investment",
+      "funding",
       "sponsor"
     ]
   },
@@ -2844,7 +2844,7 @@
   },
   {
     "id": "under-the-hood-sponsor-joule-offering-md",
-    "title": "5K Sponsor Offering: Joules + IP License (No Equity)",
+    "title": "5K Sponsor Offering: Joules + IP License (No Ownership Claims)",
     "category": "Architecture",
     "description": "How to offer real value through Joules and IP licensing without SEC issues",
     "url": "/cephas/under-the-hood/sponsor-joule-offering",
@@ -3149,7 +3149,7 @@
     "id": "verification-crown-jewels-showcase-md",
     "title": "🏆 Crown Jewels Patent Portfolio",
     "category": "Document",
-    "description": "8 Crown Jewel innovations with NO PRIOR ART — The foundation of Liana Banyan IP",
+    "description": "167 Crown Jewel innovations with NO PRIOR ART — The foundation of Liana Banyan IP",
     "url": "/cephas/verification/crown-jewels-showcase",
     "tags": [
       "patents",

@@ -8,8 +8,8 @@ import { FileText, Download, Send, Lock, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
 
-const INNOVATION_COUNT = "2,007";
-const PATENT_CLAIMS = "1,511";
+const INNOVATION_COUNT = "2,128";
+const PATENT_CLAIMS = "2,097";
 const PROVISIONAL_APPS = "10";
 
 export default function CephasPressJunketPage() {

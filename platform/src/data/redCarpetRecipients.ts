@@ -9,7 +9,12 @@
  *
  * IMPORTANT: This is NOT authentication. It's recognition.
  * Anyone can still see general content; recognized recipients see THEIR content.
+ *
+ * K202 (B053): Added findRecipientByEmailAsync — queries red_carpet_access
+ * table first, falls back to static array if DB unavailable.
  */
+
+import { supabase } from "@/integrations/supabase/client";
 
 export type RecipientCategory =
   | "crown"
@@ -20,7 +25,8 @@ export type RecipientCategory =
   | "outreach"
   | "blessing"
   | "media-pitch"
-  | "professional";
+  | "professional"
+  | "family";
 
 export interface RecipientInitiative {
   name: string;
@@ -53,6 +59,10 @@ export interface Recipient {
   launchFlag: string;
   /** Icon/emoji for display */
   icon: string;
+  /** Optional cover note shown after email recognition, before walkthrough */
+  coverNote?: string;
+  /** Optional CTA link paired with cover note */
+  coverNoteCta?: { label: string; href: string };
 }
 
 // ─────────────────────────────────────────────────────────
@@ -172,7 +182,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Former CEO of Y Combinator, launched Twitch",
     purpose: "CEO of Liana Banyan Corporation",
     whyYou:
-      "You've spent your career finding founders who see what others miss. This platform was built by an engineer over 37 years — not a pitch deck founder. It has 2,007 documented innovations — 99% utility patents, not design — protected by 1,511 formal claims across 10 provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art found. Economics constitutionally locked against extraction. The CEO seat was designed for a professional, not the founder's ego. You're the one we built it for.",
+      "You've spent your career finding founders who see what others miss. This platform was built by an engineer over 37 years — not a pitch deck founder. It has 2,128 documented innovations — 99% utility patents, not design — protected by 2,097 formal claims across 11 provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art found. Economics constitutionally locked against extraction. The CEO seat was designed for a professional, not the founder's ego. You're the one we built it for.",
     category: "crown",
     categoryLabel: "Crown Leadership",
     crownTitle: "Chief Executive Officer",
@@ -180,6 +190,8 @@ export const RECIPIENTS: Recipient[] = [
     emailDomains: ["ycombinator.com", "yc.com"],
     launchFlag: "AA",
     icon: "👑",
+    coverNote: `### Welcome, Michael.\n\nYou're reading this because you opened a letter from a stranger who wants you to run a company you've never heard of. That takes either curiosity or patience. I'm grateful for both.\n\nBefore the walkthrough shows you the platform, I want you to read the business plan. Not a pitch deck — a business plan. It has three levels.\n\n**Level 1** is the story. Six steps. Feed people. Make things. Serve each other. Build businesses. Organize. Belong. Read it in 10 minutes. You'll understand what we built and why.\n\n**Level 2** is the machinery. Every mechanism has an innovation number. Every number maps to a formal Acknowledgment & Assignment in our records. You'll see how each system works — Cue Cards, Treasure Maps, the Captain System, the three-currency economy, the ADAPT Score. This is where the innovations live.\n\n**Level 3** is the reasoning. Why this design and not another. What was tried and rejected. What the patent protects. What makes each mechanism novel. This is where a CEO does due diligence.\n\nRead as deep as you want. Every claim is verifiable. The math is published. Scrutiny is invited.\n\nThen walk through the platform. See the production systems. See the Crown Jewels. See the seat that's waiting.\n\nThe letter explains what we're asking. The business plan explains what we built. The Red Carpet shows you it's real.`,
+    coverNoteCta: { label: "Read the Business Plan →", href: "/business-plan" },
   },
   {
     id: "sal-khan",
@@ -523,7 +535,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Writes Platformer newsletter, top tech platform critic",
     purpose: "Coverage — he covers exactly what we're disrupting",
     whyYou:
-      "You write about platform power every day. What happens when a platform constitutionally locks its margin at Cost+20%, gives creators 83.3%, and makes the economics impossible to change? That's not a thought experiment. We built it. Backed by 2,007 innovations and 1,511 formal claims across 10 provisional applications — 8 definite with 9 more from the first 130 survived a deep dive with no prior art.",
+      "You write about platform power every day. What happens when a platform constitutionally locks its margin at Cost+20%, gives creators 83.3%, and makes the economics impossible to change? That's not a thought experiment. We built it. Backed by 2,128 innovations and 2,097 formal claims across 11 provisional applications — 8 definite with 9 more from the first 130 survived a deep dive with no prior art.",
     category: "journalist",
     categoryLabel: "Press & Media",
     emailDomains: ["platformer.news"],
@@ -536,7 +548,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Coined 'enshittification,' novelist, digital rights champion",
     purpose: "Coverage — his thesis IS our business model",
     whyYou:
-      "You named the disease. We built the cure. 'Enshittification' describes what happens when platforms extract from users to please investors. This platform has a DNA Lock — constitutional economics that literally cannot change. Cost+20%. 83.3% to creators. Locked. Forever. You coined the word for what we're fighting. Come see what happens when someone actually fixes it.",
+      "You named the disease. We built the cure. 'Enshittification' describes what happens when platforms extract from users to please backers. This platform has a DNA Lock — constitutional economics that literally cannot change. Cost+20%. 83.3% to creators. Locked. Forever. You coined the word for what we're fighting. Come see what happens when someone actually fixes it.",
     category: "journalist",
     categoryLabel: "Press & Media",
     emailDomains: ["craphound.com", "pluralistic.net"],
@@ -618,7 +630,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "The New School — coined 'platform cooperativism'",
     purpose: "Academic ally — literally named what we're building",
     whyYou:
-      "You coined 'platform cooperativism.' We built it. 2,007 innovations — 99% utility patents — protected by 1,511 formal claims across 10 provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art. This isn't a theory anymore — it's a cooperative with 16 charitable initiatives and a patent portfolio worth $630K declared — $116M pessimist's floor.",
+      "You coined 'platform cooperativism.' We built it. 2,128 innovations — 99% utility patents — protected by 2,097 formal claims across 11 provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art. This isn't a theory anymore — it's a cooperative with 16 charitable initiatives and a patent portfolio worth $630K declared — $116M pessimist's floor.",
     category: "academic",
     categoryLabel: "Academic Partnership",
     emailDomains: ["newschool.edu"],
@@ -670,7 +682,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Harvard Law — peer production & commons theory",
     purpose: "Academic ally — his theory of commons IS our platform",
     whyYou:
-      "You theorized peer production and the networked commons. We built the commercial infrastructure for it — a platform where commons-based production meets constitutional economics. Your theory. Our implementation. 2,007 innovations — 1,511 formal claims across 10 provisional applications — proving it works.",
+      "You theorized peer production and the networked commons. We built the commercial infrastructure for it — a platform where commons-based production meets constitutional economics. Your theory. Our implementation. 2,128 innovations — 2,097 formal claims across 11 provisional applications — proving it works.",
     category: "academic",
     categoryLabel: "Academic Partnership",
     emailDomains: ["law.harvard.edu", "harvard.edu"],
@@ -988,6 +1000,51 @@ export const RECIPIENTS: Recipient[] = [
     launchFlag: "T",
     icon: "🎵",
   },
+  // ═══════════════════════════════════════════════════════
+  // FAMILY / CUE CARD RECIPIENTS
+  // ═══════════════════════════════════════════════════════
+  {
+    id: "amarissa-jones",
+    name: "Amarissa Jones",
+    bio: "LB's first paid Influencer",
+    purpose: "Content Creator / Influencer / Pearl Diver / TasteMaker",
+    whyYou:
+      "You're creative, you're fast, and you already know how to make content people watch. $5,500 worth of work across 9 categories — pick what you want, skip what you don't. Your phone is your office.",
+    category: "family",
+    categoryLabel: "Family / Pioneer",
+    emailDomains: [],
+    knownEmails: ["amarissa.vigil.111@gmail.com"],
+    launchFlag: "F",
+    icon: "🎬",
+  },
+  {
+    id: "diana-jones",
+    name: "Diana Jones",
+    bio: "Photographer + Pearl Diver",
+    purpose: "Business Photographer / Resource Intelligence Scout",
+    whyYou:
+      "You already see what others miss. You already know which thrift store has 50% off on Tuesdays. Now it counts. Now it earns Marks.",
+    category: "family",
+    categoryLabel: "Family / Pioneer",
+    emailDomains: ["houseviridis.com"],
+    knownEmails: ["vigilfenix@gmail.com", "diana@houseviridis.com"],
+    launchFlag: "F",
+    icon: "📸",
+  },
+  {
+    id: "alford-hunter",
+    name: "Alford Hunter",
+    bio: "Godfather — Charitable Steward & Platform Explorer",
+    purpose: "Guided Tour → Charitable Focus → Self-Funding Model",
+    whyYou:
+      "You've always seen what I was trying to do. Now you can see it. Over two decades of building — live software, filed patents, a cooperative about to launch.",
+    category: "family",
+    categoryLabel: "Family / Pioneer",
+    emailDomains: [],
+    knownEmails: ["bachelorsalad@gmail.com"],
+    launchFlag: "F",
+    icon: "🌳",
+  },
 ];
 
 // ═══════════════════════════════════════════════════════
@@ -1005,7 +1062,7 @@ export interface PressOutlet {
 export const PRESS_OUTLETS: PressOutlet[] = [
   { id: "hackernews", name: "Hacker News", tagline: "Show HN: A cooperative commerce platform with constitutionally locked economics", angle: "Builder community — stress-test the model, read the patents, fork the philosophy", launchFlag: "AA" },
   { id: "producthunt", name: "Product Hunt", tagline: "Liana Banyan — Cooperative commerce where creators keep 83.3%", angle: "Product launch — see the economics, try the platform, join for $5/year", launchFlag: "AA" },
-  { id: "techcrunch", name: "TechCrunch", tagline: "Startup disrupts platform economics with constitutional margins", angle: "Startup launch story — 2,007 innovations, 1,511 claims across 10 provisional applications, $5/year membership", launchFlag: "AB" },
+  { id: "techcrunch", name: "TechCrunch", tagline: "Startup disrupts platform economics with constitutional margins", angle: "Startup launch story — 2,128 innovations, 2,097 claims across 11 provisional applications, $5/year membership", launchFlag: "AB" },
   { id: "theverge", name: "The Verge", tagline: "The platform that constitutionally locked its margins against extraction", angle: "Platform policy — what happens when enshittification is architecturally impossible?", launchFlag: "AB" },
   { id: "arstechnica", name: "Ars Technica", tagline: "Inside the 1,200-innovation patent portfolio of a cooperative commerce platform", angle: "Deep tech dive — patent architecture, DNA Lock, three-gear currency system", launchFlag: "AC" },
   { id: "shareable", name: "Shareable", tagline: "A cooperative platform with 16 charitable initiatives funded by commerce", angle: "Cooperative economy — this is your audience, this is your story", launchFlag: "BA" },
@@ -1017,6 +1074,24 @@ export const PRESS_OUTLETS: PressOutlet[] = [
   { id: "investopedia", name: "Investopedia", tagline: "Understanding cooperative economics: the Cost+20% model explained", angle: "Financial literacy — how constitutional margins create predictable service value", launchFlag: "T" },
   { id: "wsj", name: "Wall Street Journal", tagline: "From 1,200 innovations to 8 patents: inside a cooperative commerce portfolio", angle: "Business feature — patent portfolio, cooperative economics, value contribution alignment", launchFlag: "T" },
 ];
+
+// ═══════════════════════════════════════════════════════
+// FAMILY TEST ENTRIES (Wave 0)
+// ═══════════════════════════════════════════════════════
+
+RECIPIENTS.push({
+  id: "jones-family",
+  name: "Jones Family",
+  bio: "The Founder's family — first testers, first believers",
+  purpose: "Family testing and feedback",
+  whyYou:
+    "Welcome home. Dad built this for us. All 16 initiatives, all the tools, all the economics — this is what 37 years of work looks like. Help me test it. Break it. Tell me what you think.",
+  category: "family",
+  categoryLabel: "Family",
+  emailDomains: ["family"],
+  launchFlag: "F",
+  icon: "🏠",
+});
 
 /**
  * Find a press outlet by slug.
@@ -1093,14 +1168,127 @@ export function getRecipientsByCategory(
   return RECIPIENTS.filter((r) => r.category === category);
 }
 
+// ─────────────────────────────────────────────────────────
+// DATABASE-FIRST LOOKUP (K202 — B053)
+// ─────────────────────────────────────────────────────────
+
+const CATEGORY_LABELS: Record<string, string> = {
+  crown: "Crown Leadership",
+  "high-value": "Strategic Partnership",
+  journalist: "Press & Media",
+  academic: "Academic Partnership",
+  "thought-leader": "Thought Leadership",
+  outreach: "Strategic Outreach",
+  blessing: "Cultural Blessing",
+  "media-pitch": "Media Pitch",
+  professional: "Professional",
+  family: "Family / Pioneer",
+};
+
+const CATEGORY_ICONS: Record<string, string> = {
+  crown: "👑",
+  "high-value": "💎",
+  journalist: "📰",
+  academic: "🎓",
+  "thought-leader": "🧠",
+  outreach: "📢",
+  blessing: "🎵",
+  family: "🏠",
+};
+
+/**
+ * Maps a red_carpet_registry DB row to the Recipient interface.
+ */
+function mapDbRowToRecipient(row: Record<string, unknown>): Recipient {
+  const cat = ((row.categories as string[])?.[0] || "outreach") as RecipientCategory;
+  return {
+    id: row.slug as string,
+    name: row.name as string,
+    bio: (row.bio as string) || "",
+    purpose: (row.purpose as string) || "",
+    whyYou: (row.why_you as string) || "",
+    category: cat,
+    categoryLabel: (row.category_label as string) || CATEGORY_LABELS[cat] || "Outreach",
+    crownTitle: (row.title as string) || undefined,
+    emailDomains: (row.email_domains as string[]) || [],
+    knownEmails: (row.known_emails as string[]) || [],
+    launchFlag: (row.launch_flag as string) || "DB",
+    icon: (row.icon as string) || CATEGORY_ICONS[cat] || "🎪",
+    initiative: undefined,
+    coverNote: (row.cover_note as string) || (row.walkthrough_config as Record<string, unknown>)?.coverNote as string | undefined,
+  };
+}
+
+/**
+ * Database-first recipient lookup by email.
+ * Queries red_carpet_registry table first, falls back to static array if DB unavailable.
+ */
+export async function findRecipientByEmailAsync(email: string): Promise<Recipient | null> {
+  const normalized = email.toLowerCase().trim();
+  const domain = normalized.split("@")[1];
+  if (!domain) return null;
+
+  try {
+    // 1. Try exact email match in DB
+    const { data: exactMatch } = await supabase
+      .from("red_carpet_registry")
+      .select("*")
+      .filter("known_emails", "cs", `{${normalized}}`)
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+
+    if (exactMatch) return mapDbRowToRecipient(exactMatch);
+
+    // 2. Try domain match in DB
+    const { data: domainMatch } = await supabase
+      .from("red_carpet_registry")
+      .select("*")
+      .filter("email_domains", "cs", `{${domain}}`)
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+
+    if (domainMatch) return mapDbRowToRecipient(domainMatch);
+
+    // 3. Fallback to static array
+    return findRecipientByEmail(normalized);
+  } catch {
+    // DB unavailable — use static fallback
+    return findRecipientByEmail(normalized);
+  }
+}
+
+/**
+ * Database-first recipient lookup by slug.
+ */
+export async function findRecipientBySlugAsync(slug: string): Promise<Recipient | null> {
+  const normalized = slug.toLowerCase().trim();
+  try {
+    const { data } = await supabase
+      .from("red_carpet_registry")
+      .select("*")
+      .eq("slug", normalized)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (data) return mapDbRowToRecipient(data);
+    return findRecipientBySlug(normalized);
+  } catch {
+    return findRecipientBySlug(normalized);
+  }
+}
+
 /**
  * Get the platform stats for display.
  */
 export const PLATFORM_STATS = {
-  innovations: "2,007",
-  formalClaims: 1511,
-  filedApplications: 10,
-  crownJewels: 8,
+  innovations: "2,128",
+  formalClaims: 2097,
+  filedApplications: 11,
+  crownJewels: 167,
+  plannedFilings: 11,
+  productionSystems: 35,
   possibleMore: 9,
   patentQueries: 130,
   priorArtPatentsReviewed: "330+",
@@ -1110,5 +1298,6 @@ export const PLATFORM_STATS = {
   membership: "$5/year",
   initiatives: 16,
   innovationsSurvivingDeepDive: 8,
+  zeroPriorArt: 8,
   founderYearsDeveloping: 37,
 };

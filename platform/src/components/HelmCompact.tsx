@@ -112,7 +112,7 @@ export function HelmCompact() {
         />
       )}
       
-      <div className="fixed bottom-20 right-4 z-50">
+      <div className="fixed bottom-24 right-20 z-50">
         {/* Collapsed: just the Helm icon */}
         {!expanded && (
           <button
@@ -206,6 +206,7 @@ export function HelmCompact() {
                 <Flame className="w-3 h-3 text-orange-500" />
                 Wildfire Runs
               </Button>
+              {/* B088: Lantern Mode hidden until feature is ready
               <Button
                 variant={showLantern ? "secondary" : "ghost"}
                 size="sm"
@@ -216,6 +217,7 @@ export function HelmCompact() {
                 Lantern Mode
                 {showLantern && <Badge variant="outline" className="ml-auto text-[8px] h-4">ON</Badge>}
               </Button>
+              */}
               <Button
                 variant="ghost"
                 size="sm"

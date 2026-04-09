@@ -131,7 +131,7 @@ export function ReferralManager() {
             Medallion Eligibility
           </CardTitle>
           <CardDescription>
-            Reach $1,000 in contributions to earn a blockchain-tracked medallion
+            Reach $1,000 in contributions to earn a verified ledger-tracked medallion
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -270,7 +270,7 @@ export function ReferralManager() {
           <p>1. Share any amount over $10 with up to 9 friends (perfect tribe size: 2-10 members)</p>
           <p>2. When they use your code and pledge, their amount is matched (up to your shared amount)</p>
           <p>3. Both you and your friend receive matched credits toward medallion eligibility</p>
-          <p>4. Reach $1,000 total to earn a blockchain-tracked medallion NFT</p>
+          <p>4. Reach $1,000 total to earn a verified ledger-tracked medallion</p>
           <p className="pt-2 font-medium">💡 Tip: Once you've shared with 9 people, consider forming a tribe together for 25% resource discounts!</p>
         </CardContent>
       </Card>

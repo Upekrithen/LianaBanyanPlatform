@@ -198,7 +198,7 @@ export function MealOrderDialog({
             {bulkCalc.savings > 0 && ` (Saved $${bulkCalc.savings.toFixed(2)}!)`}
             <br />
             <span className="text-muted-foreground text-sm mt-2 block">
-              Remember to review this meal within 72 hours to earn 5 Marks (service value for participation, not investment return).{" "}
+              Remember to review this meal within 72 hours to earn 5 Marks (service value for participation, not a speculative return).{" "}
               <a href={`/initiatives/lets-make-dinner/review/${reviewMealId}?orderId=${orderId}`} className="underline text-primary">Review now</a>
             </span>
           </span>

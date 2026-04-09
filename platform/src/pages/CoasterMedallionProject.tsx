@@ -105,7 +105,7 @@ const MEDALLION_FEATURES = [
     icon: Crown,
   },
   {
-    title: 'Blockchain Serial',
+    title: 'Verified Serial',
     description: 'Each medallion\'s serial number matches its NFT on Base if the project elects to mint on-chain.',
     icon: Shield,
   },

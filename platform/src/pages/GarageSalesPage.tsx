@@ -137,10 +137,10 @@ export default function GarageSalesPage() {
                 <Card className="border-2 border-dashed border-amber-200 dark:border-amber-800">
                   <CardContent className="py-12 text-center">
                     <MapIcon className="h-10 w-10 mx-auto mb-4 text-amber-400/40" />
-                    <h3 className="font-semibold text-lg mb-2">Neighborhood Market Coming Soon</h3>
+                    <h3 className="font-semibold text-lg mb-2">Neighborhood Market</h3>
                     <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                      List garage sales, local businesses, items for sale, free stuff, and services.
-                      Pay with Marks to keep value circulating in your community. The listing system is being built.
+                      No listings yet. List garage sales, local businesses, items for sale, free stuff, and services.
+                      Pay with Marks to keep value circulating in your community.
                     </p>
                     <div className="flex flex-wrap gap-2 justify-center mt-4">
                       <Badge variant="outline"><Store className="h-3 w-3 mr-1" /> Local Business</Badge>

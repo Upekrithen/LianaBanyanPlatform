@@ -273,7 +273,7 @@ export default function ContributionForm({ preselectedProperty }: ContributionFo
               className="mt-1 rounded border-border"
             />
             <span className="text-xs text-muted-foreground">
-              This is a housing access deposit, NOT an investment. I receive priority housing access, not financial returns.
+              This is a housing access deposit, NOT a speculative instrument. I receive priority housing access, not financial returns.
             </span>
           </label>
 

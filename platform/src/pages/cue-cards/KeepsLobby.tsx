@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { LarkWrapper } from '@/components/builder/LarkWrapper';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { SnowGateDeckCard } from '@/components/cue-cards/SnowGateDeckCard';
 
 export default function KeepsLobby() {
   const navigate = useNavigate();
@@ -173,9 +174,19 @@ export default function KeepsLobby() {
                   Shimmer: #b8d4e3
                 </Badge>
               </div>
+              <div className="mt-4">
+                <Button
+                  variant="outline"
+                  className="border-sky-400/40 text-sky-300 hover:bg-sky-950"
+                  onClick={() => navigate('/northern')}
+                >
+                  Northern Province Preview <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
+        <SnowGateDeckCard />
 
         {/* DM Game Night Treasure Map Builder Teaser */}
         <Card className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border-purple-500/30">

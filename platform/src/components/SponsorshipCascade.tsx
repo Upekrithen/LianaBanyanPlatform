@@ -369,7 +369,7 @@ export function SponsorshipCascade({ className }: CascadeProps) {
                     <strong>What this is:</strong> Prepaid service access — like buying stamps in bulk.
                   </p>
                   <p className="text-sm mt-2 text-muted-foreground">
-                    <strong>What this is NOT:</strong> An investment, inflation hedge, or tradeable asset.
+                    <strong>What this is NOT:</strong> A speculative instrument, inflation hedge, or tradeable asset.
                   </p>
                 </div>
                 <div className="space-y-2">

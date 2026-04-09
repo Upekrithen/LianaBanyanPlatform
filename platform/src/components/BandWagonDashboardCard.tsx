@@ -1,7 +1,7 @@
 /**
  * BandWagon summary card for member dashboard.
  * No profile: invite to become Taste Ranger. Has profile: compact stat + link.
- * SEC language: Earn Service Allocation Authority; no investment/return.
+ * SEC language: Earn Service Allocation Authority; no speculative-return framing.
  * data-xray-id: bandwagon-dashboard-card
  */
 

@@ -21,7 +21,7 @@ export interface FounderKeepDef {
   cornerLocks: number;                        // 6
   sideLocks: number;                          // 6
   totalLocks: number;                         // 12
-  denkenFaceCard: string;                     // Reference to Denken brand face card
+  mascotFaceCard: string;                     // Reference to mascot brand face card
   shimmerColor: string;
   loreBlurb: string;
 }
@@ -41,9 +41,9 @@ export const FOUNDERS_KEEP: FounderKeepDef = {
   cornerLocks: 6,
   sideLocks: 6,
   totalLocks: 12,
-  denkenFaceCard: "denken-founder-brand",
+  mascotFaceCard: "mascot-founder-brand",
   shimmerColor: FOUNDER_SHIMMER_COLOR,
-  loreBlurb: "In the North, behind the Snow Gate, the Founder's Keep shimmers like winter breath. Only those who have mastered all six islands and solved all twelve locks may enter. The Denken awaits within.",
+  loreBlurb: "In the North, behind the Snow Gate, the Founder's Keep shimmers like winter breath. Only those who have mastered all six islands and solved all twelve locks may enter. The mascot awaits within.",
 };
 
 /** Check if a player can access the Founder's Keep */

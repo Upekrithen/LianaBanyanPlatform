@@ -348,3 +348,67 @@ export function calculateEscapeVelocityProgress(currentVotes: number): {
     reached: currentVotes >= ESCAPE_VELOCITY.threshold,
   };
 }
+
+// ─── Data Bounty System ───
+// Generalised reward tiers for any user-populatable data (directories, cue cards, storefronts, etc.)
+
+export type DataFillLevel = 'empty' | 'sparse' | 'growing' | 'established' | 'full';
+
+export interface DataBountyCategory {
+  table: string;
+  scopeField: string;
+  scopeValue: string;
+}
+
+export interface DataBountyTier {
+  originatorReward: number;
+  confirmerReward: number;
+  updaterReward: number;
+  tierName: DataFillLevel;
+  label: string;
+}
+
+const DATA_BOUNTY_TIER_MAP: Record<DataFillLevel, Omit<DataBountyTier, 'tierName'>> = {
+  empty:       { originatorReward: 50, confirmerReward: 0,  updaterReward: 0,  label: 'Be the FIRST!' },
+  sparse:      { originatorReward: 30, confirmerReward: 15, updaterReward: 25, label: 'Help fill this out' },
+  growing:     { originatorReward: 15, confirmerReward: 8,  updaterReward: 15, label: 'Almost there' },
+  established: { originatorReward: 5,  confirmerReward: 3,  updaterReward: 5,  label: 'Confirm what\'s here' },
+  full:        { originatorReward: 0,  confirmerReward: 1,  updaterReward: 3,  label: 'Shelf is full' },
+};
+
+export function getDataFillLevel(entryCount: number): DataFillLevel {
+  if (entryCount === 0) return 'empty';
+  if (entryCount < 5) return 'sparse';
+  if (entryCount < 10) return 'growing';
+  if (entryCount < 20) return 'established';
+  return 'full';
+}
+
+export function getDataBountyTier(entryCount: number): DataBountyTier {
+  const tierName = getDataFillLevel(entryCount);
+  return { tierName, ...DATA_BOUNTY_TIER_MAP[tierName] };
+}
+
+export async function recordDataContribution(
+  tableName: string,
+  recordId: string,
+  contributionType: 'originate' | 'confirm' | 'update',
+): Promise<{ marks_awarded: number }> {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Must be logged in');
+
+  const { data, error } = await supabase
+    .from('data_contributions' as any)
+    .insert({
+      contributor_id: user.id,
+      table_name: tableName,
+      record_id: recordId,
+      contribution_type: contributionType,
+      marks_awarded: 0,
+    })
+    .select('marks_awarded')
+    .single();
+
+  if (error) throw error;
+  return { marks_awarded: (data as any)?.marks_awarded || 0 };
+}

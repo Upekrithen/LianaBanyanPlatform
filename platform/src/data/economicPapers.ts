@@ -140,13 +140,13 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     metrics: [
       { label: 'Currencies', value: 3, unit: 'gears' },
       { label: 'Exchange Rate', value: '1:1:1', unit: 'always' },
-      { label: 'Global Equity', value: 'Yes', unit: '' },
+      { label: 'Global Fairness', value: 'Yes', unit: '' },
     ],
     academicSource: 'KNIGHT_DROPZONE/ACADEMIC_PAPER_THREE_GEAR_CURRENCY.md',
     tldrSource: 'EMPEROR_VERIFICATION_PACKAGE_V3/Academic_Papers/three-gear-currency-tldr.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/THREE_GEAR_CURRENCY_6TH_GRADE.md',
     relatedPapers: ['hivi', 'one-way-valve', 'joules-explained'],
-    tags: ['currency', 'global', 'equity', 'forex'],
+    tags: ['currency', 'global', 'fairness', 'forex'],
   },
   {
     id: 'hivi',

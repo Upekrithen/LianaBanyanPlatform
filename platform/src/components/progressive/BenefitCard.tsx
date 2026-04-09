@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Gift, Sparkles, Lock, Unlock } from 'lucide-react';
+import { useWildfireRunSafe } from '@/contexts/WildfireRunContext';
 
 export interface BenefitItem {
   id: string;
@@ -40,8 +41,12 @@ export function BenefitCard({
   isExpanded = false,
   onToggleExpand,
 }: BenefitCardProps) {
+  const wildfireState = useWildfireRunSafe();
   const [showAll, setShowAll] = useState(false);
   const progress = Math.min((currentSection / totalSections) * 100, 100);
+
+  // Hide during active Wildfire Tours or Spotlight Tours
+  if (wildfireState?.isRunning || wildfireState?.spotlight?.isActive) return null;
   
   const visibleBenefits = showAll ? benefits : benefits.slice(-3);
   
@@ -54,7 +59,12 @@ export function BenefitCard({
   return (
     <motion.div
       layout
-      className={`fixed bottom-4 right-4 z-50 w-80 rounded-xl border border-white/20 bg-slate-900/95 backdrop-blur-xl shadow-2xl overflow-hidden ${
+      drag
+      dragMomentum={false}
+      dragElastic={0.1}
+      dragConstraints={{ top: -500, left: -500, right: 500, bottom: 100 }}
+      whileDrag={{ scale: 1.02, cursor: 'grabbing' }}
+      className={`fixed bottom-4 left-4 z-50 w-80 rounded-xl border border-white/20 bg-slate-900/95 backdrop-blur-xl shadow-2xl overflow-hidden cursor-grab ${
         isExpanded ? 'max-h-[80vh]' : 'max-h-48'
       }`}
       initial={{ y: 100, opacity: 0 }}

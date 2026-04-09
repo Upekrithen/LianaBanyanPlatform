@@ -1,10 +1,10 @@
 /**
  * Beacon Bite 1 — Interactive first-encounter tutorial.
  * Multi-step animated flow:
- *  Step 0: Denken peeks with speech bubble "Want to save this for later? Drop a beacon."
- *  Step 1: User taps golden beacon → card slides right toward Denken → Denken glows gold
+ *  Step 0: Speech bubble "Want to save this for later? Drop a beacon."
+ *  Step 1: User taps golden beacon → card slides right → glows gold
  *  Step 2: "Got it. Click me anytime." → "Now you try" prompt
- *  Step 3: User clicks Denken → card slides back → complete
+ *  Step 3: User clicks avatar → card slides back → complete
  *  Final: [OK Let's Roll] / [Show Me Again]
  */
 
@@ -50,7 +50,7 @@ export function BeaconBiteNudge() {
     setTimeout(() => setStep('try-it'), 1800);
   }, []);
 
-  const handleDenkenClick = useCallback(() => {
+  const handleMascotClick = useCallback(() => {
     if (step === 'try-it') {
       setStep('retrieved');
       setTimeout(() => setStep('done'), 1200);
@@ -64,22 +64,22 @@ export function BeaconBiteNudge() {
   if (!visible) return null;
 
   const isSlid = step === 'dropped' || step === 'try-it';
-  const denkenGlow = step === 'dropped' || step === 'try-it';
+  const mascotGlow = step === 'dropped' || step === 'try-it';
 
   return (
     <>
-      {/* Denken clickable overlay during "try-it" step */}
+      {/* Mascot clickable overlay during "try-it" step */}
       {step === 'try-it' && (
         <button
-          onClick={handleDenkenClick}
+          onClick={handleMascotClick}
           className="fixed bottom-6 right-6 z-[60] w-16 h-16 rounded-full"
-          aria-label="Click Denken to retrieve your beacon"
+          aria-label="Click to retrieve your beacon"
           style={{ background: 'transparent' }}
         />
       )}
 
-      {/* Denken glow ring during beacon interaction */}
-      {denkenGlow && (
+      {/* Mascot glow ring during beacon interaction */}
+      {mascotGlow && (
         <div
           className="fixed bottom-4 right-4 z-[55] w-20 h-20 rounded-full pointer-events-none"
           style={{
@@ -107,7 +107,7 @@ export function BeaconBiteNudge() {
           {step === 'peek' && (
             <div className="flex gap-3">
               <div className="shrink-0 w-10 h-10 rounded-full bg-amber-600/20 flex items-center justify-center">
-                <img src="/images/founderDenken.png" alt="Denken" className="w-10 h-10 rounded-full object-cover" />
+                <MapPin className="w-5 h-5 text-amber-400" />
               </div>
               <div>
                 <p className="text-sm font-medium mb-1">Want to save this for later?</p>
@@ -133,7 +133,7 @@ export function BeaconBiteNudge() {
               <div>
                 <p className="text-sm font-medium text-amber-400">Got it!</p>
                 <p className="text-xs text-muted-foreground">
-                  Sliding over to Denken for safekeeping...
+                  Saved! Your beacon is locked in.
                 </p>
               </div>
             </div>
@@ -142,12 +142,12 @@ export function BeaconBiteNudge() {
           {step === 'try-it' && (
             <div className="flex gap-3 items-center">
               <div className="shrink-0 w-10 h-10 rounded-full bg-amber-600/20 flex items-center justify-center">
-                <img src="/images/founderDenken.png" alt="Denken" className="w-10 h-10 rounded-full object-cover" />
+                <MapPin className="w-5 h-5 text-amber-400" />
               </div>
               <div>
                 <p className="text-sm font-medium text-amber-400">Now you try!</p>
                 <p className="text-xs text-muted-foreground">
-                  Click Denken (bottom-right) to retrieve your beacon.
+                  Click the menu (bottom-right) to retrieve your beacon.
                 </p>
               </div>
             </div>
@@ -161,7 +161,7 @@ export function BeaconBiteNudge() {
               <div>
                 <p className="text-sm font-medium text-emerald-400">Perfect!</p>
                 <p className="text-xs text-muted-foreground">
-                  You'll find your beacons in Denken's menu anytime.
+                  You'll find your beacons in the menu anytime.
                 </p>
               </div>
             </div>
@@ -170,12 +170,12 @@ export function BeaconBiteNudge() {
           {step === 'done' && (
             <div className="flex gap-3">
               <div className="shrink-0 w-10 h-10 rounded-full bg-amber-600/20 flex items-center justify-center">
-                <img src="/images/founderDenken.png" alt="Denken" className="w-10 h-10 rounded-full object-cover" />
+                <MapPin className="w-5 h-5 text-amber-400" />
               </div>
               <div>
                 <p className="text-sm font-medium mb-1">You're all set!</p>
                 <p className="text-xs text-muted-foreground mb-3">
-                  Drop beacons on any page to remember them. Click Denken anytime to see your saved spots.
+                  Drop beacons on any page to remember them. Check your menu anytime to see your saved spots.
                 </p>
                 <div className="flex gap-2">
                   <Button size="sm" className="bg-amber-600 hover:bg-amber-500 text-xs h-7" onClick={complete}>

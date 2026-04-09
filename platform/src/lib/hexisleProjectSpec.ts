@@ -230,9 +230,9 @@ export interface HexIsleCharacter {
 }
 
 export const CHARACTERS: HexIsleCharacter[] = [
-  { name: 'Kai',    title: 'The Navigator',   trait: 'Master of currents and tides',       scale: '28mm', preOrderCount: 47,  price: 12 },
-  { name: 'Mira',   title: 'The Engineer',    trait: 'Builder of bridges and dams',        scale: '28mm', preOrderCount: 38,  price: 12 },
-  { name: 'Zephyr', title: 'The Wind Rider',  trait: 'Scout of the upper currents',        scale: '28mm', preOrderCount: 31,  price: 12 },
+  { name: 'Navigator', title: 'Frame', trait: 'Current-route specialist', scale: '28mm', preOrderCount: 47, price: 12 },
+  { name: 'Engineer',  title: 'Frame', trait: 'Bridge and dam systems specialist', scale: '28mm', preOrderCount: 38, price: 12 },
+  { name: 'Tidecaller', title: 'Frame', trait: 'Upper-current scouting specialist', scale: '28mm', preOrderCount: 31, price: 12 },
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════

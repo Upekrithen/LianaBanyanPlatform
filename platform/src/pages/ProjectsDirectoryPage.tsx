@@ -87,9 +87,15 @@ export default function ProjectsDirectoryPage() {
             <div className="animate-pulse text-muted-foreground">Loading projects…</div>
           </div>
         ) : sorted.length === 0 ? (
-          <div className="text-center py-20 text-muted-foreground">
+          <div className="text-center py-20 text-muted-foreground space-y-4">
             <Factory className="h-12 w-12 mx-auto mb-3 opacity-40" />
-            <p>No production projects yet.</p>
+            <p className="text-lg font-medium">No production projects yet.</p>
+            <p className="text-sm max-w-md mx-auto">Start with the Canister System — the first manufacturing pipeline in the cooperative.</p>
+            <Link to="/manufacturing">
+              <Button variant="outline" size="sm" className="gap-2 mt-2">
+                Explore Manufacturing <ChevronRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">

@@ -1,6 +1,6 @@
 /**
  * Taste Ranger Dashboard — BandWagon SAA, tier, allocation budget, backings
- * SEC language: earned allocation authority, allocation budget (no investment/return)
+ * SEC language: earned allocation authority, allocation budget (no speculative-return framing)
  * data-xray-id: taste-ranger-dashboard
  */
 

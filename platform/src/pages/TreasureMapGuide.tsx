@@ -437,8 +437,8 @@ export default function TreasureMapGuide() {
 
       {/* SEC disclaimer */}
       <p className="text-[10px] text-muted-foreground/60 text-center">
-        Earnings represent service compensation. Backed Marks represent cooperative governance authority, not investment returns.
-        Actual results depend on effort, market conditions, and business participation. This is not an investment opportunity.
+        Earnings represent service compensation. Backed Marks represent cooperative governance authority, not speculative returns.
+        Actual results depend on effort, market conditions, and business participation. This is not a speculative opportunity.
       </p>
     </PortalPageLayout>
   );

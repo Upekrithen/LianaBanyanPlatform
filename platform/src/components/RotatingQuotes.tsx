@@ -15,6 +15,7 @@ interface Quote {
   text: string;
   author: string;
   link?: string;
+  isYvaine?: boolean;
 }
 
 const QUOTES: Quote[] = [
@@ -29,7 +30,13 @@ const QUOTES: Quote[] = [
     text: "The time to hesitate is through.",
     author: "The Doors, 'Light My Fire'",
   },
-  // 3. Empire Records
+  // 3. Great-Aunt Yvaine (Stardust) — triggers star effect
+  {
+    text: "In the darkest moments, when all seems lost, remember what my Great-Aunt Yvaine, Queen of Stormhold, said: 'What do stars do? They SHINE.'",
+    author: "The Founder, Liana Banyan",
+    isYvaine: true,
+  },
+  // 4. Empire Records
   {
     text: "I am guided by a force much greater than luck.",
     author: "Lucas, Empire Records (1995)",
@@ -131,10 +138,10 @@ const QUOTES: Quote[] = [
     text: "If you have ever seen African army ants cross a river, it's an inspiring spectacle. They link together and BECOME the bridge: an Unstoppable Force.",
     author: "The Founder",
   },
-  // 32. Denken
+  // 32. Mentor
   {
     text: "Meals are a time of joy, not stress, and we're all here for the same reason.",
-    author: "Denken, Frieren: Beyond Journey's End",
+    author: "Mentor, Frieren: Beyond Journey's End",
   },
   // 23. Sitting Bull
   {
@@ -187,23 +194,38 @@ interface RotatingQuotesProps {
   intervalMs?: number;
   className?: string;
   style?: React.CSSProperties;
+  isActive?: boolean;
 }
 
 export function RotatingQuotes({ 
   intervalMs = 8000, 
   className = "",
-  style = {}
+  style = {},
+  isActive = true,
 }: RotatingQuotesProps) {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    if (!isActive) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % QUOTES.length);
     }, intervalMs);
 
     return () => clearInterval(timer);
-  }, [intervalMs]);
+  }, [intervalMs, isActive]);
+
+  useEffect(() => {
+    if (!isActive) return;
+    if (!QUOTES[currentIndex]?.isYvaine) return;
+
+    // Delay slightly so the quote is readable before the shine sequence starts.
+    const timer = window.setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('yvaine-shine'));
+    }, 1500);
+
+    return () => window.clearTimeout(timer);
+  }, [currentIndex, isActive]);
 
   const currentQuote = QUOTES[currentIndex];
 

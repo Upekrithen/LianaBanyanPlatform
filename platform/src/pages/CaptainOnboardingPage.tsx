@@ -45,7 +45,7 @@ export default function CaptainOnboardingPage() {
           </p>
           <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Captains are local operational leaders who manage production, fulfillment,
-            and community in their area. No one is asking you to invest — we're asking
+            and community in their area. No one is asking you to speculate — we're asking
             you to lead.
           </p>
         </div>

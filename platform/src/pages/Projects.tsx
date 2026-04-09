@@ -4,7 +4,7 @@
  * Innovation #1549: Flagship Project Seeding (Session 8B)
  * Session 28: Added initiative filter bar, search, category toggle
  *
- * SEC-safe: No investment, equity, or returns language.
+ * SEC-safe: No speculative-finance or ownership-claim language.
  * All transactions are Credits -> utility, not securities.
  */
 

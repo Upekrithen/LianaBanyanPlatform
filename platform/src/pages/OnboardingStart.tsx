@@ -490,7 +490,7 @@ export default function OnboardingStart() {
                 HIVI: How We Price Services
               </CardTitle>
               <CardDescription>
-                All platform services are priced using HIVI — an internal metric, not an investment.
+                All platform services are priced using HIVI — an internal metric, not a speculative instrument.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -566,7 +566,7 @@ export default function OnboardingStart() {
             It's in the operating agreement.
           </p>
           <p>
-            16 initiatives • 2,007 innovations • Built in public • Designed to be copied
+            16 initiatives • 2,128 innovations • Built in public • Designed to be copied
           </p>
         </div>
       </div>

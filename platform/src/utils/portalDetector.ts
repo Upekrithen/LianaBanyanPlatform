@@ -18,11 +18,12 @@
  * - the2ndsecond.com / localhost:5177 → DSS Portal (Maker, Prototyper Guild)
  * - hexisle.com / localhost:5178 → HexIsle Portal (7-island simulator)
  * - upekrithen.lianabanyan.com / localhost:5179 → Upekrithen Portal (MoneyPenny admin, founder-only)
+ * - museum.lianabanyan.com / localhost:5180 → Museum Portal (new visitor 3-door experience)
  * - *.hexisle.com → HexIsle Portal (subdomain-routed views)
  * - *.the2ndsecond.com → DSS Portal (subdomain-routed views)
  */
 
-export type PortalType = 'marketplace' | 'business' | 'nonprofit' | 'network' | 'dss' | 'hexisle' | 'upekrithen';
+export type PortalType = 'marketplace' | 'business' | 'nonprofit' | 'network' | 'dss' | 'hexisle' | 'upekrithen' | 'museum';
 
 /**
  * Extracts the root domain from a hostname
@@ -50,13 +51,18 @@ export const detectPortal = (): PortalType => {
   if (isNonprofitRoute(path)) return 'nonprofit';
   if (isNetworkRoute(path)) return 'network';
 
+  // Museum portal — clean 3-door new visitor experience
+  if (hostname === 'museum.lianabanyan.com' || hostname === 'lianabanyan-museum.web.app' || port === '5180') {
+    return 'museum';
+  }
+
   // Upekrithen portal — founder-only MoneyPenny admin
-  if (rootDomain === 'upekrithen.lianabanyan.com' || hostname === 'upekrithen.lianabanyan.com' || hostname === 'lianabanyan-upekrithen.web.app' || port === '5179') {
+  if (rootDomain === 'upekrithen.lianabanyan.com' || hostname === 'upekrithen.lianabanyan.com' || hostname === 'upekrithen.com' || hostname === 'www.upekrithen.com' || hostname === 'lianabanyan-upekrithen.web.app' || port === '5179') {
     return 'upekrithen';
   }
 
-  // HexIsle portal — hexisle.com AND all subdomains (*.hexisle.com)
-  if (rootDomain === 'hexisle.com' || hostname === 'hexislo.com' || port === '5178') {
+  // HexIsle portal — hexisle.com, hexisle.lianabanyan.com, AND all subdomains
+  if (rootDomain === 'hexisle.com' || hostname === 'hexislo.com' || hostname === 'hexisle.lianabanyan.com' || port === '5178') {
     return 'hexisle';
   }
 
@@ -98,11 +104,12 @@ export const getPortalBaseUrl = (): string => {
       network: 'http://localhost:5176',
       dss: 'http://localhost:5177',
       hexisle: 'http://localhost:5178',
-      upekrithen: 'http://localhost:5179'
+      upekrithen: 'http://localhost:5179',
+      museum: 'http://localhost:5180'
     };
     return portMap[portal];
   }
-  
+
   const domainMap = {
     marketplace: 'https://lianabanyan.com',
     business: 'https://lianabanyan.biz',
@@ -110,7 +117,8 @@ export const getPortalBaseUrl = (): string => {
     network: 'https://lianabanyan.net',
     dss: 'https://the2ndsecond.com',
     hexisle: 'https://hexisle.com',
-    upekrithen: 'https://upekrithen.lianabanyan.com'
+    upekrithen: 'https://upekrithen.lianabanyan.com',
+    museum: 'https://museum.lianabanyan.com'
   };
   return domainMap[portal];
 };
@@ -127,11 +135,12 @@ export const getPortalUrl = (portal: PortalType, path: string = '/'): string => 
       network: '5176',
       dss: '5177',
       hexisle: '5178',
-      upekrithen: '5179'
+      upekrithen: '5179',
+      museum: '5180'
     };
     return `http://localhost:${portMap[portal]}${path}`;
   }
-  
+
   const domainMap = {
     marketplace: 'lianabanyan.com',
     business: 'lianabanyan.biz',
@@ -139,7 +148,8 @@ export const getPortalUrl = (portal: PortalType, path: string = '/'): string => 
     network: 'lianabanyan.net',
     dss: 'the2ndsecond.com',
     hexisle: 'hexisle.com',
-    upekrithen: 'upekrithen.lianabanyan.com'
+    upekrithen: 'upekrithen.lianabanyan.com',
+    museum: 'museum.lianabanyan.com'
   };
   return `https://${domainMap[portal]}${path}`;
 };

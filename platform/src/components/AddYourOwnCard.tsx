@@ -179,7 +179,7 @@ export function AddYourOwnCard({
               </Button>
               
               <p className="text-xs text-center text-muted-foreground">
-                IP protected via blockchain timestamp
+                IP protected via verified timestamp
               </p>
             </div>
           </CardContent>
@@ -197,7 +197,7 @@ export function AddYourOwnCard({
  *   title="Add Your Recipe"
  *   tagline="Share your culinary creation"
  *   description="Upload your recipe to Let's Make Dinner. If the community loves it, earn 83.3% every time someone orders."
- *   backDetails="Submit your recipe with photos and instructions. Community votes determine what gets featured. Your IP is timestamped on the blockchain."
+ *   backDetails="Submit your recipe with photos and instructions. Community votes determine what gets featured. Your IP is timestamped on the verified ledger."
  *   specs={["Photo + instructions", "Community voting", "IP protection", "83.3% per order"]}
  *   features={["Any cuisine", "Any skill level"]}
  *   ctaText="Submit Recipe"

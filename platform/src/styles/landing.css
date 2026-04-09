@@ -70,6 +70,13 @@
   animation: crawl-line 100s linear infinite;
 }
 
+/* Yvaine SHINE sequence: push star-field text bright for the wash moment */
+.landing-bg-text.shining .line {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 40px rgba(255, 255, 255, 0.7), 0 0 80px rgba(255, 255, 255, 0.35);
+  transition: color 1s ease-in, text-shadow 1s ease-in;
+}
+
 /* 18 lines: BIG, small, MEDIUM, small, BIG, small, MEDIUM... pattern for depth */
 /* BIG lines: 80-100px, MEDIUM lines: 56-72px, small lines: 32-40px (3x more visible now) */
 .landing-bg-text .line:nth-child(1)  { font-size: 88px;  animation-duration: 200s; margin-top: 0; }
@@ -94,6 +101,74 @@
 @keyframes crawl-line {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+/* Yvaine SHINE wash overlay */
+.yvaine-wash {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 8;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.yvaine-wash.active {
+  opacity: 0.7;
+}
+
+/* Persistent stars: right side easter egg after SHINE sequence */
+.persistent-stars {
+  position: fixed;
+  right: clamp(2rem, 8vw, 9rem);
+  top: 26%;
+  z-index: 14;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.6rem;
+}
+
+.persistent-star {
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.72);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
+  animation: star-twinkle 3s ease-in-out infinite;
+  user-select: none;
+}
+
+.persistent-star.second-star {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.3);
+  animation: star-twinkle 2.5s ease-in-out infinite 0.5s;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: 100px;
+  transition: text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* "Second star to the right" hover pulse */
+.persistent-star.second-star:hover {
+  text-shadow: 0 0 25px #ffffff, 0 0 50px #ffffff, 0 0 80px rgba(255, 255, 255, 0.5);
+  transform: scale(1.3);
+}
+
+/* "your" glow payoff line after wash sequence */
+.your-shine {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
+  animation: your-pulse 2s ease-in-out infinite;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes your-pulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.3); }
+  50% { text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 0.5); }
 }
 
 .landing-page > .container {

@@ -58,7 +58,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   press: "Press",
   member_issue: "Member Issue",
   collaboration: "Collaboration",
-  investment_inquiry: "Investment Inquiry",
+  investment_inquiry: "Funding Inquiry",
   spam: "Spam",
   other: "Other",
 };

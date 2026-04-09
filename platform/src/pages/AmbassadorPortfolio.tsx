@@ -112,7 +112,7 @@ export default function AmbassadorPortfolio() {
       <PortalPageLayout maxWidth="sm" xrayId="ambassador-portfolio">
         <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
           <p className="text-muted-foreground">Ambassador not found.</p>
-          <Button variant="outline" onClick={() => navigate("/portal")}>Portal</Button>
+          <Button variant="outline" onClick={() => navigate("/portal")}>Action Portal</Button>
         </div>
       </PortalPageLayout>
     );

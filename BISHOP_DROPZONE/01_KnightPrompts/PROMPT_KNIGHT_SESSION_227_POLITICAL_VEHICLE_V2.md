@@ -1,0 +1,123 @@
+# KNIGHT SESSION 227 — POLITICAL + VEHICLE V2 DOMAIN MIGRATION
+
+## Priority: HIGH (completes substantive domain migrations — effective 21/23)
+## Estimated time: 60-90 minutes
+## Domains: political, vehicle
+
+---
+
+## CONTEXT
+
+Final 2 substantive domains. After this session, all meaningful v1 domains are migrated to v2. Admin (cross-cutting tools) and initiatives (empty) are non-standard — may not need domain folders.
+
+Pawn has page design specs for both:
+- **Vehicle/Local Wheels**: Pawn B35 (Phase 3A) — includes Lemon Lot, Rideshare Routes, Local Wheels
+- **Coalition Management**: Pawn B37 (Phase 3C) — includes Political Expedition, Coalitions
+
+Follow the same v2 domain structure as K219-K226.
+
+---
+
+## DOMAIN 1: POLITICAL (Political Expedition + Coalitions)
+
+### V1 Assets
+- **1 table**: bill_cosponsors (FK to tracked_bills)
+- **1 edge function**: congress-api-sync
+- **3 v1 pages**: PowerToThePeoplePage, PoliticalExpedition, Coalitions
+- **4 Cephas sections**: political-religious-arenas, no-religion-no-politics-linkage, no-religion-no-politics policy, of-the-people index
+- **1 migration**: congress_api.sql
+
+### Design Reference
+- Pawn B37 Coalition Management spec: action-first layout, coalition creation flow, membership voting, bill tracking dashboard
+- Cephas content: CRITICAL — the No Religion/No Politics policy is a platform guardrail. The political domain is about CIVIC engagement and BILL TRACKING, not partisan politics. Make this prominent.
+
+### What to Build
+
+**Lib files:**
+- `politicalTypes.ts` — Bill, Cosponsor, Coalition, CoalitionVote types
+- `politicalRules.ts` — Constants (coalition size limits, voting thresholds, sync intervals)
+
+**Hooks:**
+- `usePoliticalExpedition.ts` — Bill tracking, cosponsor data, congress API sync
+- `useCoalitions.ts` — Coalition CRUD, membership, voting
+
+**Components:**
+- `BillTracker.tsx` — Track bills with cosponsor counts, status
+- `CoalitionCard.tsx` — Coalition display with member count, active bills
+- `CoalitionCreateForm.tsx` — Create new coalition
+- `CivicEngagementGuard.tsx` — Displays No Religion/No Politics policy disclaimer
+- `CongressSyncStatus.tsx` — API sync status indicator
+
+**Pages:**
+- `PoliticalExpeditionPage.tsx` — Bill tracking dashboard (AppShell)
+- `CoalitionsPage.tsx` — Coalition directory + management (AppShell)
+- `CoalitionDetailPage.tsx` — Single coalition with bills, members, votes (AppShell)
+- `PowerToThePeoplePage.tsx` — Public explainer of civic engagement model (FocusShell)
+
+**Routes:** 4 routes (1 FocusShell, 3 AppShell)
+**Barrel:** Full index.ts exports
+
+---
+
+## DOMAIN 2: VEHICLE (Rideshare + Lemon Lot + Local Wheels)
+
+### V1 Assets
+- **2 tables**: rideshare_routes (20 cols), rideshare_matches (10 cols)
+- **0 edge functions**
+- **3 v1 pages**: RideshareRoutes, LocalWheels, LemonLot
+- **1 migration**: vehicle_systems.sql
+
+### Design Reference
+- Pawn B35 Vehicle/Local Wheels spec: three-tab layout (Rideshare Routes, Local Wheels marketplace, Lemon Lot listings), map integration for routes, vehicle cards with condition ratings
+
+### What to Build
+
+**Lib files:**
+- `vehicleTypes.ts` — RideshareRoute, RideshareMatch, VehicleListing, LocalWheelsListing types
+- `vehicleRules.ts` — Constants (max route distance, match radius, listing duration, condition ratings)
+
+**Hooks:**
+- `useRideshareRoutes.ts` — Route CRUD, match finding, active route tracking
+- `useVehicleListings.ts` — Lemon Lot + Local Wheels listings CRUD
+
+**Components:**
+- `RideshareRouteCard.tsx` — Route display with origin/destination, schedule
+- `RideshareMatchCard.tsx` — Match display with driver/rider info
+- `RouteCreateForm.tsx` — Create/edit rideshare route
+- `VehicleListingCard.tsx` — Vehicle for sale/rent display
+- `VehicleConditionBadge.tsx` — Condition rating display
+- `LocalWheelsMap.tsx` — Map view of nearby vehicle services (placeholder)
+
+**Pages:**
+- `RideshareRoutesPage.tsx` — Route listing + creation (AppShell)
+- `LocalWheelsPage.tsx` — Local vehicle services directory (AppShell)
+- `LemonLotPage.tsx` — Vehicle marketplace listings (AppShell)
+- `VehicleHubPage.tsx` — Three-tab hub combining all vehicle features (FocusShell, public-facing)
+
+**Routes:** 4 routes (1 FocusShell, 3 AppShell)
+**Barrel:** Full index.ts exports
+
+---
+
+## VERIFICATION
+
+After building both domains:
+1. Run `npx tsc` — zero errors
+2. Verify routes integrate with AppRouter
+3. Rebuild Librarian index
+4. Confirm v2-migration.json shows political + vehicle as `migrated`
+
+---
+
+## POST-SESSION: MIGRATION LANDSCAPE
+
+After K226 + K227:
+- **Migrated**: 21 of 23 domain slots
+- **Remaining**: admin (cross-cutting, no pages — may fold into shared), initiatives (empty — may not need a domain folder)
+- **Gaming**: migrated but Sessions 2-8 still needed for full wiring
+
+Bishop will assess whether admin and initiatives need formal v2 domain folders or can be handled differently.
+
+---
+
+*Generated by Bishop B061. FOR THE KEEP!*

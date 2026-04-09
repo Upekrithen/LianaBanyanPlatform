@@ -81,7 +81,7 @@ export default function MedallionViewer() {
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right text-sm text-muted-foreground mr-3">
-                <p className="font-medium">Connect wallet to view on blockchain</p>
+                <p className="font-medium">Connect wallet to view on verified ledger</p>
               </div>
               <WalletConnectButton />
             </div>
@@ -91,7 +91,7 @@ export default function MedallionViewer() {
           <Alert className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
             <Wallet className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-blue-900 dark:text-blue-100">
-              Your medallions are secured on the Base blockchain. Connect your wallet to view them in blockchain explorers or transfer them.
+              Your medallions are secured on the verified ledger. Connect your wallet to view them in ledger explorers or transfer them.
             </AlertDescription>
           </Alert>
         </CardContent>

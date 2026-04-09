@@ -464,7 +464,7 @@ export default function PatentPortfolio() {
             Patent Portfolio
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            2,007 documented innovations across economics, governance, privacy,
+            2,224 documented innovations across economics, governance, privacy,
             IP management, and cooperative business systems.
           </p>
         </motion.div>
@@ -606,7 +606,7 @@ export default function PatentPortfolio() {
                 
                 <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
                   <p className="text-xs text-amber-200">
-                    <strong>SEC Compliance:</strong> These are potential pathways, not investment promises. 
+                    <strong>SEC Compliance:</strong> These are potential pathways, not speculative-finance promises. 
                     Platform credits are prepaid service units, not securities. No expectation of profit 
                     from the efforts of others.
                   </p>

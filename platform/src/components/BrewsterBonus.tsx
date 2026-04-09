@@ -156,7 +156,7 @@ export function BrewsterBonus({
           {/* Key Quote */}
           <div className="border-l-4 border-indigo-500 pl-4 py-2 bg-indigo-500/5 rounded-r-lg">
             <p className="text-sm italic text-muted-foreground">
-              "This is not an investment return. It's a loyalty-driven volume discount
+              "This is not a speculative return. It's a loyalty-driven volume discount
               passed back as platform currency."
             </p>
           </div>
@@ -282,7 +282,7 @@ export function BrewsterBonus({
                 What It Is NOT
               </h4>
               <ul className="text-xs text-muted-foreground mt-2 space-y-1">
-                <li>• Not an investment return</li>
+                <li>• Not a speculative return</li>
                 <li>• Not speculative appreciation</li>
                 <li>• Not funded by new members' money</li>
                 <li>• Not redeemable for cash</li>
@@ -368,7 +368,7 @@ function CueCardView({ result, className }: {
       <Separator />
 
       <div className="text-center text-xs text-muted-foreground italic">
-        "Not an investment return. A loyalty-driven
+        "Not a speculative return. A loyalty-driven
         volume discount passed back as platform currency."
       </div>
 
@@ -410,7 +410,7 @@ function ExplainerCard({ className }: { className?: string }) {
 
         <div className="border-l-4 border-amber-500 pl-3 py-2">
           <p className="text-xs italic text-muted-foreground">
-            "This is not an investment return. It's a loyalty-driven volume
+            "This is not a speculative return. It's a loyalty-driven volume
             discount passed back as platform currency."
           </p>
         </div>

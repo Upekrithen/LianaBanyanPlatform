@@ -158,7 +158,7 @@ export default function SanAntonioLanding() {
         {/* Trust & compliance */}
         <section className="mb-12 space-y-2 text-sm text-slate-600">
           <p>• Texas cottage-food compliant; we follow the state's list of allowed foods and labeling rules.</p>
-          <p>• This is not an investment. You're backing real products and services from real people.</p>
+          <p>• This is not a speculative instrument. You're backing real products and services from real people.</p>
           <p>• Transparent 20% platform margin funds charitable initiatives and keeps Liana Banyan running.</p>
         </section>
 

@@ -2,7 +2,7 @@
  * BandWagon Service — Project Backing System
  * ============================================
  * Members back projects with Marks to earn Service Allocation Authority (SAA).
- * "This is not an investment return. This is earned authority to allocate
+ * "This is not a speculative return. This is earned authority to allocate
  *  cooperative resources based on demonstrated judgment."
  *
  * Core mechanics:

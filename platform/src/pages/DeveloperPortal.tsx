@@ -43,7 +43,7 @@ const DEVELOPER_SECTIONS = [
     icon: Puzzle,
     title: "Platform Add-ons",
     description: "Build add-ons that integrate with the Liana Banyan ecosystem. Project templates, custom workflows, and data connectors.",
-    status: "Coming Soon",
+    status: "Beta",
     statusColor: "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300",
     links: [],
   },
@@ -92,7 +92,7 @@ const CONTRIBUTION_PATHS = [
   {
     icon: Lightbulb,
     title: "Innovation Submissions",
-    description: "Proposed innovations go through the THRESHING process for extraction and the Hall of Innovations for documentation. 2,007 and counting.",
+    description: "Proposed innovations go through the THRESHING process for extraction and the Hall of Innovations for documentation. 2,128 and counting.",
     route: "/hall-of-innovations",
     cta: "Hall of Innovations",
   },

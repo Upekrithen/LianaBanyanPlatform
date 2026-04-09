@@ -10,8 +10,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { DollarSign, Clock, Zap, History } from 'lucide-react';
+import { DollarSign, Clock, Zap, History, ExternalLink } from 'lucide-react';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { useNavigate } from 'react-router-dom';
 
 type WithdrawalType = 'contribution' | 'earned_instant' | 'earned_vested';
 
@@ -19,6 +20,7 @@ export default function Withdraw() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   
   const [amount, setAmount] = useState('');
   const [withdrawalType, setWithdrawalType] = useState<WithdrawalType>('contribution');
@@ -53,6 +55,23 @@ export default function Withdraw() {
     : null;
   
   const isMedallionLocked = medallionUnlockDate && medallionUnlockDate > new Date();
+
+  // Check if user has a Connect account for real payouts
+  const { data: connectAcct } = useQuery({
+    queryKey: ['withdraw-connect-account', user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('member_connect_accounts' as any)
+        .select('id, payouts_enabled, onboarding_status')
+        .eq('user_id', user!.id)
+        .maybeSingle();
+      if (error && error.code !== 'PGRST116') throw error;
+      return data as { id: string; payouts_enabled: boolean; onboarding_status: string } | null;
+    },
+    enabled: !!user,
+  });
+
+  const hasConnectPayout = connectAcct?.payouts_enabled === true;
 
   // Fetch withdrawal config
   const { data: config } = useQuery({
@@ -166,6 +185,19 @@ export default function Withdraw() {
     <PortalPageLayout>
       <h1 className="text-3xl font-bold mb-6">Cash Out Credits</h1>
 
+      {/* Connect account banner */}
+      {!hasConnectPayout && (
+        <Alert className="mb-6 border-amber-500/40 bg-amber-500/10">
+          <ExternalLink className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Set up direct deposit first.</strong> Link your bank account or debit card so we can send your money.{' '}
+            <Button variant="link" className="h-auto p-0 text-amber-700 dark:text-amber-400" onClick={() => navigate('/dashboard/payouts')}>
+              Go to Payouts setup
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Balance Cards */}
       <div className="grid md:grid-cols-2 gap-4 mb-6">
         <Card>
@@ -255,7 +287,7 @@ export default function Withdraw() {
                     Earned Credits - Vested <Clock className="h-4 w-4 text-blue-500" />
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    100-day vesting • No fee (Coming Soon)
+                    100-day vesting • No fee
                   </div>
                 </Label>
               </div>

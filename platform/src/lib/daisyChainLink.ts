@@ -260,9 +260,9 @@ export const HEXISLE_PROJECT = {
     characters: {
       name: 'Character Miniatures',
       roster: [
-        { name: 'Kai, The Navigator',    trait: 'Master of currents and tides',       scale: '28mm' },
-        { name: 'Mira, The Engineer',     trait: 'Builder of bridges and dams',        scale: '28mm' },
-        { name: 'Zephyr, The Wind Rider', trait: 'Scout of the upper currents',        scale: '28mm' },
+        { name: 'Navigator Frame', trait: 'Current-route specialist', scale: '28mm' },
+        { name: 'Engineer Frame',  trait: 'Bridge and dam systems specialist', scale: '28mm' },
+        { name: 'Tidecaller Frame', trait: 'Upper-current scouting specialist', scale: '28mm' },
       ],
       addYourOwn: true, // "Add Your Own" is ALWAYS the first card
       creatorRoyalty: 0.833,

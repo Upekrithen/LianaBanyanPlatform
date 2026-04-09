@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { ShoppingBag, Calendar, TrendingDown } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,10 +11,7 @@ import LaunchConditionOverlay from '@/components/LaunchConditionOverlay';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function LetsGetGroceriesPage() {
-  const { data: { user } } = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => await supabase.auth.getUser(),
-  });
+  const { user } = useAuth();
 
   const { data: myOrders, isLoading } = useQuery({
     queryKey: ["my-grocery-orders", user?.id],

@@ -28,7 +28,7 @@ import { LarkWrapper } from '@/components/builder/LarkWrapper';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const PRODUCTION_LEVELS_BACKER = [
-  { level: 1, state: 'Pre-Mint', joules: '5x', description: 'Highest risk, highest reward', color: 'text-red-400' },
+  { level: 1, state: 'Pre-Mint', joules: '5x', description: 'Earliest commitment, most service credit', color: 'text-red-400' },
   { level: 2, state: 'Minted', joules: '3x', description: 'Proof of concept validated', color: 'text-orange-400' },
   { level: 3, state: 'Production', joules: '2x', description: 'Manufacturing underway', color: 'text-yellow-400' },
   { level: 4, state: 'Distribution', joules: '1.5x', description: 'Shipping to backers', color: 'text-emerald-400' },
@@ -67,10 +67,11 @@ export default function PlantSeeds() {
 
   return (
     <PortalPageLayout>
+      <div className="bg-slate-950 text-white min-h-screen" data-theme="dark" style={{ colorScheme: 'dark' }}>
       {/* Breadcrumb */}
       <nav className="px-6 pt-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Link to="/portal" className="hover:text-slate-300 transition-colors">Portal</Link>
+          <Link to="/portal" className="hover:text-slate-300 transition-colors">Action Portal</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-slate-300">Plant Seeds</span>
         </div>
@@ -97,14 +98,14 @@ export default function PlantSeeds() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-bold text-white mb-6"
           >
-            Back Early. <span className="text-primary">Earn More.</span>
+            Back Early. <span className="text-primary">Get More.</span>
           </motion.h1>
           
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-xl text-white/70 mb-8 max-w-2xl mx-auto"
+            className="text-xl text-white mb-8 max-w-2xl mx-auto"
           >
             Support projects early and receive 5× the Joules. More collateral, 
             more governance weight. 
@@ -119,14 +120,14 @@ export default function PlantSeeds() {
                   What does this actually mean? When you plant seeds (sponsor a project), you aren't just donating. You are acquiring <strong>Joules</strong> (Platform Service Vouchers) and fractional IP participation in the Liana Banyan ecosystem.
                 </p>
                 <div className="bg-slate-900/80 p-4 rounded-lg border border-border/50">
-                  <p className="text-xs text-muted-foreground mb-3">
-                    <strong>The Medallion System:</strong> Every contribution is tracked on our immutable ledger. We call this "Test-Net By Design." You can view the actual bank transactions proving this system works on our <a href="/public-ledger" className="text-violet-400 hover:underline">"Fly on the Wall" Public Ledger</a>. 
+                  <p className="text-sm text-slate-200 mb-3">
+                    <strong className="text-white">The Medallion System:</strong> Every contribution is tracked on our immutable ledger. We call this "Test-Net By Design." You can view the actual bank transactions proving this system works on our <a href="/public-ledger" className="text-violet-400 hover:underline">"Fly on the Wall" Public Ledger</a>.
                   </p>
-                  <p className="text-xs text-muted-foreground mb-3">
-                    <strong>Predicting the Market:</strong> We don't guess the market. We pre-order everything. With 50% machine capacity and after-the-fact Cost+20% pricing, the only thing that can disrupt us is an "Act of God". In an era of tariff wars and supply chain gaffes, our decentralized local manufacturing network solves the crisis.
+                  <p className="text-sm text-slate-200 mb-3">
+                    <strong className="text-white">Predicting the Market:</strong> We don't guess the market. We pre-order everything. With 50% machine capacity and after-the-fact Cost+20% pricing, the only thing that can disrupt us is an "Act of God". In an era of tariff wars and supply chain gaffes, our decentralized local manufacturing network solves the crisis.
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    <strong>SEC Compliance & Crowdfunding:</strong> When we use third-party sites like Kickstarter, we are offering <em>Rewards</em> (Joules/Utility Vouchers). Kickstarter strictly prohibits offering equity or fractional IP ownership. To legally offer fractional IP ownership under Regulation Crowdfunding (Reg CF) of the JOBS Act, we must use registered equity portals (like Wefunder or Republic) who handle the SEC Form C filings, or manage it internally through our compliant cooperative revenue-share structure.
+                  <p className="text-sm text-slate-200">
+                    <strong className="text-white">SEC Compliance & Crowdfunding:</strong> When we use third-party sites like Kickstarter, we are offering <em>Rewards</em> (Joules/Utility Vouchers). Kickstarter strictly prohibits offering equity or fractional IP ownership. To legally offer fractional IP ownership under Regulation Crowdfunding (Reg CF) of the JOBS Act, we must use registered equity portals (like Wefunder or Republic) who handle the SEC Form C filings, or manage it internally through our compliant cooperative revenue-share structure.
                   </p>
                 </div>
               </div>
@@ -181,7 +182,7 @@ export default function PlantSeeds() {
             <div className="p-6 rounded-xl bg-white/5 border border-white/10">
               <Vote className="w-10 h-10 text-violet-400 mb-4" />
               <h4 className="text-xl font-semibold text-white mb-3">How It Works</h4>
-              <ul className="space-y-3 text-white/70">
+              <ul className="space-y-3 text-white/85">
                 <li className="flex items-start gap-3">
                   <span className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center text-xs text-violet-300 flex-shrink-0">1</span>
                   <span>Browse projects at various production levels</span>
@@ -210,7 +211,7 @@ export default function PlantSeeds() {
                   </div>
                   <div>
                     <div className="font-medium text-white">Pre-Mint Multiplier</div>
-                    <div className="text-sm text-white/60">Highest risk = highest reward</div>
+                    <div className="text-sm text-slate-200">Earliest commitment = most service credit</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -219,7 +220,7 @@ export default function PlantSeeds() {
                   </div>
                   <div>
                     <div className="font-medium text-white">Fractional IP Participation</div>
-                    <div className="text-sm text-white/60">Participate in what you help build</div>
+                    <div className="text-sm text-slate-200">Participate in what you help build</div>
                   </div>
                 </div>
               </div>
@@ -258,17 +259,17 @@ export default function PlantSeeds() {
                   {item.icon}
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">{item.fraction}</div>
-                <div className="text-sm text-white/60">{item.label}</div>
+                <div className="text-sm text-slate-200">{item.label}</div>
               </motion.div>
             ))}
           </div>
           
           <div className="p-6 rounded-xl bg-card/50 border border-white/10">
             <h4 className="font-semibold text-white mb-3">Key Message</h4>
-            <p className="text-lg text-white/80 italic">
+            <p className="text-lg text-slate-200 italic">
               "When you help someone else succeed, you participate in that success."
             </p>
-            <p className="mt-4 text-white/60">
+            <p className="mt-4 text-slate-200">
               Your contribution is recorded on the immutable IP ledger. As the project grows, 
               your fractional participation grows with it.
             </p>
@@ -282,7 +283,7 @@ export default function PlantSeeds() {
           subtitle="From backer perspective"
           sectionNumber={3}
           totalSections={totalSections}
-          benefit={{ id: 'multipliers-reward', text: 'Multipliers reward early believers', category: 'seeds' }}
+          benefit={{ id: 'multipliers-reward', text: 'Multipliers reward early participation', category: 'seeds' }}
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
@@ -304,7 +305,7 @@ export default function PlantSeeds() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-white">{level.state}</h4>
-                    <p className="text-sm text-white/60">{level.description}</p>
+                    <p className="text-sm text-slate-200">{level.description}</p>
                   </div>
                 </div>
                 <div className={`text-2xl font-bold ${level.color}`}>
@@ -316,8 +317,8 @@ export default function PlantSeeds() {
           
           <div className="mt-6 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
             <p className="text-violet-200">
-              <strong>The Earlier You Believe, The More You Earn.</strong> Pre-Mint backers 
-              take the biggest risk — and get the biggest reward when the project succeeds.
+              <strong>Pre-order early, receive more service credit.</strong> Pre-Mint participants
+              commit before production begins — and receive the highest Joule multiplier as a service voucher for their early commitment.
             </p>
           </div>
         </ProgressiveSection>
@@ -337,9 +338,9 @@ export default function PlantSeeds() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th className="text-left py-3 px-4 text-white/60 font-medium">Type</th>
-                  <th className="text-left py-3 px-4 text-white/60 font-medium">Range</th>
-                  <th className="text-left py-3 px-4 text-white/60 font-medium">Based On</th>
+                  <th className="text-left py-3 px-4 text-slate-200 font-medium">Type</th>
+                  <th className="text-left py-3 px-4 text-slate-200 font-medium">Range</th>
+                  <th className="text-left py-3 px-4 text-slate-200 font-medium">Based On</th>
                 </tr>
               </thead>
               <tbody>
@@ -358,7 +359,7 @@ export default function PlantSeeds() {
                       </div>
                     </td>
                     <td className="py-3 px-4 text-primary font-bold">{mult.range}</td>
-                    <td className="py-3 px-4 text-white/70">{mult.basedOn}</td>
+                    <td className="py-3 px-4 text-white/85">{mult.basedOn}</td>
                   </motion.tr>
                 ))}
               </tbody>
@@ -369,11 +370,11 @@ export default function PlantSeeds() {
             <h4 className="font-semibold text-white mb-4">Example Stack</h4>
             <div className="flex flex-wrap items-center gap-2 text-lg">
               <span className="px-3 py-1 rounded-full bg-red-500/20 text-red-300">Pre-Mint (5x)</span>
-              <span className="text-white/40">×</span>
+              <span className="text-white/60">×</span>
               <span className="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-300">Mark Level (1.5x)</span>
-              <span className="text-white/40">×</span>
+              <span className="text-white/60">×</span>
               <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300">First 100 (2x)</span>
-              <span className="text-white/40">=</span>
+              <span className="text-white/60">=</span>
               <span className="px-4 py-2 rounded-full bg-primary text-white font-bold text-xl">15x multiplier</span>
             </div>
           </div>
@@ -394,7 +395,7 @@ export default function PlantSeeds() {
               <div className="text-center mb-8">
                 <span className="text-6xl mb-4 block">🌱</span>
                 <h3 className="text-3xl font-bold text-white mb-2">Plant Your Seeds</h3>
-                <p className="text-white/60">Watch them grow into forests</p>
+                <p className="text-slate-200">Watch them grow into forests</p>
               </div>
               
               <div className="space-y-3 mb-8">
@@ -404,7 +405,7 @@ export default function PlantSeeds() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="flex items-start gap-3 text-white/80"
+                    className="flex items-start gap-3 text-slate-200"
                   >
                     <Sparkles className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
                     <span>{benefit.text}</span>
@@ -415,15 +416,15 @@ export default function PlantSeeds() {
               <div className="grid grid-cols-3 gap-4 mb-8">
                 <div className="text-center p-4 rounded-xl bg-white/5">
                   <div className="text-2xl font-bold text-primary">5x</div>
-                  <div className="text-xs text-white/50">Pre-Mint bonus</div>
+                  <div className="text-xs text-slate-300">Pre-Mint bonus</div>
                 </div>
                 <div className="text-center p-4 rounded-xl bg-white/5">
                   <div className="text-2xl font-bold text-primary">15x</div>
-                  <div className="text-xs text-white/50">Max multiplier</div>
+                  <div className="text-xs text-slate-300">Max multiplier</div>
                 </div>
                 <div className="text-center p-4 rounded-xl bg-white/5">
                   <div className="text-2xl font-bold text-primary">1/3</div>
-                  <div className="text-xs text-white/50">IP participation</div>
+                  <div className="text-xs text-slate-300">IP participation</div>
                 </div>
               </div>
               
@@ -463,6 +464,7 @@ export default function PlantSeeds() {
         onToggleExpand={() => setBenefitCardExpanded(!benefitCardExpanded)}
         onJoinClick={() => openOnboard({ reason: "back projects and earn service credits", actionLabel: "Join", membershipIncluded: true })}
       />
+      </div>
     </PortalPageLayout>
   );
 }

@@ -139,7 +139,7 @@ export default function BuildBusiness() {
       {/* Breadcrumb */}
       <nav className="px-6 pt-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Link to="/portal" className="hover:text-slate-300 transition-colors">Portal</Link>
+          <Link to="/portal" className="hover:text-slate-300 transition-colors">Action Portal</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-slate-300">Build a Business</span>
         </div>

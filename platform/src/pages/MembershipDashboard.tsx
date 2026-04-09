@@ -2,6 +2,7 @@ import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   Crown,
   Calendar,
@@ -10,10 +11,18 @@ import {
   ArrowUpRight,
   Loader2,
   AlertCircle,
+  Sparkles,
+  Target,
+  Gift,
 } from "lucide-react";
 import { useMembership, useManageSubscription, useCreateCheckout } from "@/hooks/useMembership";
 import { useCreditTransactions } from "@/hooks/useCreditWallet";
-import { useNavigate } from "react-router-dom";
+import { useMarksPaybackProgress } from "@/hooks/useMarksPaybackProgress";
+import { ProjectSponsorCard } from "@/components/ProjectSponsorCard";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 function tierLabel(tier: string): string {
@@ -31,10 +40,25 @@ function tierColor(tier: string): string {
 
 export default function MembershipDashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { data: membership, isLoading } = useMembership();
   const portal = useManageSubscription();
   const upgrade = useCreateCheckout();
   const { data: transactions } = useCreditTransactions(10);
+  const { data: paybackProgress } = useMarksPaybackProgress();
+
+  const { data: backerElection } = useQuery({
+    queryKey: ["backer-election", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("backer_elections" as never)
+        .select("*")
+        .eq("member_id", user!.id)
+        .maybeSingle();
+      return data as { id: string; election_type: string } | null;
+    },
+  });
 
   const handlePortal = async () => {
     try {
@@ -145,6 +169,72 @@ export default function MembershipDashboard() {
             )}
           </CardContent>
         </Card>
+
+        {/* Marks Payback Progress — K151 */}
+        {tier !== "free" && paybackProgress && (
+          <Card className="border-amber-500/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Target className="h-5 w-5 text-amber-500" />
+                Marks Payback
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">
+                  {paybackProgress.marksEarned} / 100 Marks this year
+                </span>
+                {paybackProgress.qualifies ? (
+                  <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
+                    <Sparkles className="w-3 h-3 mr-1" /> Qualified!
+                  </Badge>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    {100 - paybackProgress.marksEarned} more for earned renewal
+                  </span>
+                )}
+              </div>
+              <Progress
+                value={Math.min(paybackProgress.marksEarned, 100)}
+                className="h-2"
+              />
+              <p className="text-xs text-muted-foreground">
+                {paybackProgress.qualifies
+                  ? "Your next renewal may be covered by 5 Credits from your earned balance — $0 out of pocket."
+                  : "Earn 100+ Marks before your renewal date and your membership may pay for itself through participation."}
+              </p>
+              <p className="text-[10px] text-muted-foreground/60">
+                Liana Banyan does not use blockchain technology. Dispatch records are maintained in a standard verified database ledger.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Backer Election — K156 */}
+        {tier !== "free" && !backerElection && (
+          <Card className="border-amber-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-4">
+                <Gift className="w-8 h-8 text-amber-500 shrink-0" />
+                <div className="flex-1">
+                  <h3 className="font-semibold">Backer Election Available</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    As a pre-launch supporter, choose how your contribution is treated:
+                    Gift Receipt, Credits Election, or Community Fund.
+                  </p>
+                  <Link to="/backer-election">
+                    <Button size="sm" className="mt-3">
+                      <ArrowUpRight className="w-4 h-4 mr-1" /> Make Your Election
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Project Sponsorships — K154 */}
+        {tier !== "free" && <ProjectSponsorCard />}
 
         {/* Transaction History */}
         <Card>

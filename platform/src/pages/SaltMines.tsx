@@ -265,12 +265,9 @@ export default function SaltMines() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             src="/images/salt-mines-entrance.png"
-            alt="Salt Mines Entrance - Artwork by the Founder's Son"
+            alt="Salt Mines Entrance"
             className="w-full h-auto"
           />
-          <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm rounded-lg px-3 py-1.5">
-            <p className="text-xs text-amber-300">Artwork by the Founder's Son</p>
-          </div>
         </div>
       </section>
 
@@ -450,10 +447,10 @@ export default function SaltMines() {
         <ProgressiveSection
           id="patent-showcase"
           title="Patent Showcase"
-          subtitle="2,007 innovations. 8 Crown Jewels. Your competitive moat."
+          subtitle="2,128 innovations. 167 Crown Jewels. Your competitive moat."
           sectionNumber={3}
           totalSections={totalSections}
-          benefit={{ id: 'patent-access', text: 'Access to 2,007 documented innovations', category: 'job' }}
+          benefit={{ id: 'patent-access', text: 'Access to 2,128 documented innovations', category: 'job' }}
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
@@ -473,7 +470,7 @@ export default function SaltMines() {
             </div>
           </div>
 
-          <h4 className="text-lg font-semibold text-white mb-4">The Crown Jewels (Top 8)</h4>
+          <h4 className="text-lg font-semibold text-white mb-4">The Crown Jewels (167)</h4>
           <div className="grid md:grid-cols-2 gap-3">
             {CROWN_JEWELS.map((jewel, idx) => (
               <motion.div
@@ -499,21 +496,21 @@ export default function SaltMines() {
         <ProgressiveSection
           id="testnet-design"
           title="Test-Net By Design"
-          subtitle="Blockchain for provenance, not speculation"
+          subtitle="Verified ledger for provenance, not speculation"
           sectionNumber={4}
           totalSections={totalSections}
           benefit={{ id: 'permanent-record', text: 'Your contributions are permanently recorded', category: 'job' }}
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[
-            { label: 'Blockchain IP Comparison', href: '/cephas/under-the-hood/blockchain-ip-comparison' },
+            { label: 'Verified IP Comparison', href: '/cephas/under-the-hood/verified-ip-comparison' },
           ]}
         >
           <div className="p-6 rounded-xl bg-slate-800/50 border border-white/10">
             <Database className="w-10 h-10 text-blue-400 mb-4" />
             <blockquote className="text-lg text-white/80 italic mb-4">
-              "We use blockchain strictly as an immutable ledger — for intellectual property 
-              provenance, transaction audit trails, and internal valuation markers. Not on a 
+              "We use a verified ledger strictly as an immutable record — for intellectual property
+              provenance, transaction audit trails, and internal valuation markers. Not on a
               public mainnet. Not tradeable. Not redeemable for cash."
             </blockquote>
             <p className="text-white/60">
@@ -832,7 +829,7 @@ export default function SaltMines() {
         {/* Section 11: NOT SEC Explainer */}
         <ProgressiveSection
           id="not-sec"
-          title="Why This Isn't Securities"
+          title="Why This Isn't Membership rights"
           subtitle="The Howey Test, explained"
           sectionNumber={11}
           totalSections={totalSections}

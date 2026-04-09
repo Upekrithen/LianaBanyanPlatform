@@ -165,7 +165,7 @@ export default function CatalogProductDetail() {
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
                   <Package className="w-20 h-20 text-muted-foreground/30" />
-                  <span className="text-sm text-muted-foreground/50 mt-2">Render Coming Soon</span>
+                  <span className="text-sm text-muted-foreground/50 mt-2">3D Preview in Development</span>
                 </div>
               )}
             </div>
@@ -264,7 +264,7 @@ export default function CatalogProductDetail() {
                 </Button>
               ) : (
                 <Button variant="outline" className="flex-1" size="lg" disabled>
-                  Coming Soon
+                  In Development
                 </Button>
               )}
             </div>

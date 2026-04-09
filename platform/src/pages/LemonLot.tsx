@@ -10,13 +10,65 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Car, Star, MapPin, DollarSign, Plus, ArrowLeft, Shield, Calendar, CheckCircle2 } from "lucide-react";
+import { Car, Star, MapPin, DollarSign, Plus, ArrowLeft, Shield, Calendar, CheckCircle2, PlayCircle, StopCircle } from "lucide-react";
+import { useSafetyLedger } from "@/hooks/useSafetyLedger";
 
 type Tab = "browse" | "list" | "detail" | "my-vehicles";
 
 const FEATURE_OPTIONS = ["AC", "Bluetooth", "4WD", "GPS", "Backup Camera", "Heated Seats", "Sunroof", "Tow Hitch", "Roof Rack", "Child Seat Anchors"];
 
 const COST_PLUS_20_FLOOR = 15; // minimum $15/day to cover Cost+20% baseline
+
+function LemonRentalSafetyRow({ rental }: { rental: any }) {
+  const { activeEntry, startTrip, endTrip, isTripActive } = useSafetyLedger("lemon_lot", rental.id);
+  const start = new Date(rental.start_date);
+  const end = new Date(rental.end_date);
+  const now = new Date();
+  start.setHours(0, 0, 0, 0);
+  end.setHours(23, 59, 59, 999);
+  const inWindow = now >= start && now <= end;
+  const terminal = rental.status === "completed" || rental.status === "cancelled";
+  if (terminal || !inWindow) return null;
+
+  const handleStartTrip = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => startTrip.mutate({ tripType: "lemon_lot", tripId: rental.id, lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => startTrip.mutate({ tripType: "lemon_lot", tripId: rental.id }),
+      );
+    } else {
+      startTrip.mutate({ tripType: "lemon_lot", tripId: rental.id });
+    }
+  };
+
+  const handleEndTrip = () => {
+    if (!activeEntry) return;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => endTrip.mutate({ ledgerEntryId: (activeEntry as any).id, lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => endTrip.mutate({ ledgerEntryId: (activeEntry as any).id }),
+      );
+    } else {
+      endTrip.mutate({ ledgerEntryId: (activeEntry as any).id });
+    }
+  };
+
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-2 rounded-md border bg-blue-50/80 dark:bg-blue-950/20 p-2 text-xs">
+      <Shield className="h-3.5 w-3.5 shrink-0 text-blue-600" />
+      <span className="text-muted-foreground">Rental period — log trip start/end for the safety ledger.</span>
+      {isTripActive ? (
+        <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={handleEndTrip} disabled={endTrip.isPending}>
+          <StopCircle className="h-3 w-3 mr-1" /> End trip
+        </Button>
+      ) : (
+        <Button size="sm" className="h-7 text-xs" onClick={handleStartTrip} disabled={startTrip.isPending}>
+          <PlayCircle className="h-3 w-3 mr-1" /> Start trip
+        </Button>
+      )}
+    </div>
+  );
+}
 
 function LemonLot() {
   const { user } = useAuth();
@@ -395,6 +447,7 @@ function LemonLot() {
                             </div>
                             <Badge variant={r.status === "completed" ? "default" : "secondary"}>{r.status}</Badge>
                           </div>
+                          <LemonRentalSafetyRow rental={r} />
                         </CardContent>
                       </Card>
                     ))}

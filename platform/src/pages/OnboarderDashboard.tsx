@@ -422,8 +422,8 @@ export default function OnboarderDashboard() {
       </Card>
 
       <p className="text-[10px] text-slate-600 text-center mt-6">
-        Income shown represents direct service compensation. Backed Marks represent cooperative governance authority, not investment returns.
-        Actual earnings may vary. This is not an investment.
+        Income shown represents direct service compensation. Backed Marks represent cooperative governance authority, not speculative returns.
+        Actual earnings may vary. This is not a speculative instrument.
       </p>
     </PortalPageLayout>
   );

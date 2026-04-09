@@ -31,7 +31,7 @@ const serviceCategories = [
   },
   {
     title: "XML Lockbox API",
-    description: "Blockchain-verified data exchange",
+    description: "Verified data exchange",
     icon: <FileCode className="h-8 w-8" />,
     providers: 12,
     categories: ["API Access", "Data Security", "Cost Attribution", "Usage Tracking"]

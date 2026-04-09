@@ -52,6 +52,23 @@ const USD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD",
 
 /* ─── Crown Jewels Audit Panel ─── */
 function CrownJewelsPanel({ stats }: { stats: ReturnType<typeof useCanonicalStats> }) {
+  const [showAll, setShowAll] = useState(false);
+
+  const { data: crownJewelRows, isLoading: jewelsLoading } = useQuery({
+    queryKey: ["crown-audit-jewels"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("innovation_log" as never)
+        .select("innovation_number, title, category, patent_bag, is_crown_jewel")
+        .eq("is_crown_jewel", true)
+        .order("innovation_number", { ascending: true }) as {
+        data: { innovation_number: number; title: string; category: string | null; patent_bag: string | null; is_crown_jewel: boolean }[] | null;
+      };
+      return data || [];
+    },
+    staleTime: 5 * 60_000,
+  });
+
   const { data: catBreakdown, isLoading: catLoading } = useQuery({
     queryKey: ["crown-audit-categories"],
     queryFn: async () => {
@@ -90,21 +107,9 @@ function CrownJewelsPanel({ stats }: { stats: ReturnType<typeof useCanonicalStat
     staleTime: 5 * 60_000,
   });
 
-  const { data: flagshipRows } = useQuery({
-    queryKey: ["crown-audit-flagship"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("innovation_log" as never)
-        .select("innovation_number, title, category, patent_bag")
-        .in("patent_bag", ["Bag 1", "Bag 2"])
-        .order("innovation_number", { ascending: true })
-        .limit(40) as { data: { innovation_number: number; title: string; category: string; patent_bag: string }[] | null };
-      return data || [];
-    },
-    staleTime: 5 * 60_000,
-  });
-
-  const loading = catLoading || bagLoading;
+  const loading = jewelsLoading || catLoading || bagLoading;
+  const liveCount = crownJewelRows?.length ?? 0;
+  const visibleJewels = showAll ? crownJewelRows : crownJewelRows?.slice(0, 30);
 
   return (
     <div className="space-y-6 p-4 bg-zinc-900/70 rounded-xl border border-amber-900/30">
@@ -113,7 +118,7 @@ function CrownJewelsPanel({ stats }: { stats: ReturnType<typeof useCanonicalStat
           <Crown className="w-5 h-5" /> Crown Jewels Audit
         </h3>
         <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/40 text-lg px-3">
-          {FMT.format(stats.crownJewels)} Crown Jewels
+          {FMT.format(liveCount || stats.crownJewels)} Crown Jewels (live)
         </Badge>
       </div>
 
@@ -135,52 +140,66 @@ function CrownJewelsPanel({ stats }: { stats: ReturnType<typeof useCanonicalStat
       {loading ? (
         <div className="flex items-center gap-2 text-zinc-500"><Loader2 className="w-4 h-4 animate-spin" /> Querying innovation_log…</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* By Category */}
-          <div>
-            <h4 className="text-sm font-semibold text-zinc-400 mb-2">By Category</h4>
-            <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
-              {catBreakdown?.slice(0, 20).map((r) => (
-                <div key={r.cat} className="flex items-center justify-between text-sm py-1 border-b border-zinc-800/50">
-                  <span className="text-zinc-300 truncate max-w-[180px]">{r.cat}</span>
-                  <span className="font-mono text-amber-400">{r.count}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* By Patent Bag */}
-          <div>
-            <h4 className="text-sm font-semibold text-zinc-400 mb-2">By Patent Bag</h4>
-            <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
-              {bagBreakdown?.slice(0, 20).map((r) => (
-                <div key={r.bag} className="flex items-center justify-between text-sm py-1 border-b border-zinc-800/50">
-                  <span className="text-zinc-300 truncate max-w-[180px]">{r.bag}</span>
-                  <span className="font-mono text-amber-400">{r.count}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Flagship innovations (Bag 1 + 2 — Core Platform) */}
-      {flagshipRows && flagshipRows.length > 0 && (
-        <div>
-          <h4 className="text-sm font-semibold text-zinc-400 mb-2">
-            Flagship Innovations (Core Platform — Bags 1 & 2)
-          </h4>
-          <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
-            {flagshipRows.map((r) => (
-              <div key={r.innovation_number} className="flex items-center gap-2 text-sm py-1 border-b border-zinc-800/50">
-                <span className="font-mono text-amber-500 w-10 text-right shrink-0">#{r.innovation_number}</span>
-                <span className="text-zinc-300 truncate">{r.title}</span>
-                <Badge variant="outline" className="ml-auto text-[10px] shrink-0 border-zinc-700 text-zinc-500">
-                  {r.patent_bag}
-                </Badge>
+        <>
+          {/* Crown Jewels List */}
+          {visibleJewels && visibleJewels.length > 0 && (
+            <div>
+              <h4 className="text-sm font-semibold text-amber-400 mb-2 flex items-center gap-2">
+                <Gem className="w-4 h-4" /> Crown Jewels ({liveCount})
+              </h4>
+              <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
+                {visibleJewels.map((r) => (
+                  <div key={r.innovation_number} className="flex items-center gap-2 text-sm py-1 border-b border-amber-900/20">
+                    <span className="font-mono text-amber-500 w-12 text-right shrink-0">#{r.innovation_number}</span>
+                    <span className="text-zinc-300 truncate">{r.title}</span>
+                    {r.category && (
+                      <Badge variant="outline" className="ml-auto text-[10px] shrink-0 border-zinc-700 text-zinc-500">
+                        {r.category}
+                      </Badge>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
+              {!showAll && liveCount > 30 && (
+                <Button variant="ghost" size="sm" className="mt-2 text-amber-400" onClick={() => setShowAll(true)}>
+                  Show all {liveCount} Crown Jewels
+                </Button>
+              )}
+              {showAll && liveCount > 30 && (
+                <Button variant="ghost" size="sm" className="mt-2 text-zinc-500" onClick={() => setShowAll(false)}>
+                  Collapse
+                </Button>
+              )}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* By Category */}
+            <div>
+              <h4 className="text-sm font-semibold text-zinc-400 mb-2">By Category</h4>
+              <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
+                {catBreakdown?.slice(0, 20).map((r) => (
+                  <div key={r.cat} className="flex items-center justify-between text-sm py-1 border-b border-zinc-800/50">
+                    <span className="text-zinc-300 truncate max-w-[180px]">{r.cat}</span>
+                    <span className="font-mono text-amber-400">{r.count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* By Patent Bag */}
+            <div>
+              <h4 className="text-sm font-semibold text-zinc-400 mb-2">By Patent Bag</h4>
+              <div className="space-y-1 max-h-64 overflow-y-auto pr-1">
+                {bagBreakdown?.slice(0, 20).map((r) => (
+                  <div key={r.bag} className="flex items-center justify-between text-sm py-1 border-b border-zinc-800/50">
+                    <span className="text-zinc-300 truncate max-w-[180px]">{r.bag}</span>
+                    <span className="font-mono text-amber-400">{r.count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
@@ -236,7 +255,7 @@ function PortfolioValuationPanel({ stats }: { stats: ReturnType<typeof useCanoni
         </div>
         <div className="bg-zinc-800/50 rounded-lg p-3">
           <p className="text-xl font-mono text-zinc-200">{USD.format(stats.personalInvestment)}</p>
-          <p className="text-[10px] text-zinc-500">Personal Investment ({stats.investmentYears} yrs)</p>
+          <p className="text-[10px] text-zinc-500">Personal Commitment ({stats.investmentYears} yrs)</p>
         </div>
       </div>
 

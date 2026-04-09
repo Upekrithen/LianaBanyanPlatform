@@ -163,7 +163,7 @@ export function MedallionQRVerification() {
 
                       {verificationResult.data.mint_transaction_hash && (
                         <div>
-                          <span className="font-medium">Blockchain:</span>{' '}
+                          <span className="font-medium">Verified Ledger:</span>{' '}
                           <a
                             href={getBlockchainExplorerUrl(verificationResult.data.mint_transaction_hash)}
                             target="_blank"
@@ -195,7 +195,7 @@ export function MedallionQRVerification() {
                       <span className="font-semibold">Medallion Record Found</span>
                     </div>
                     <p className="text-sm">
-                      This medallion exists in the system but has not been minted to the blockchain yet.
+                      This medallion exists in the system but has not been minted to the verified ledger yet.
                       {!verificationResult.data.is_eligible && ' User may not be eligible.'}
                     </p>
                   </div>

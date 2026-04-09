@@ -1,7 +1,7 @@
 /**
  * StarterKitPage — $100 Business Starter Kit
  * 10,000 kits target. Sponsor or claim.
- * Innovation #2037
+ * Innovation #2056 (renumbered from #2037 in B044 reconciliation)
  */
 
 import { useState } from "react";
@@ -38,7 +38,7 @@ const KIT_COMPONENTS = [
     icon: CreditCard,
     title: "LB Card with $50 Preloaded",
     value: "$50 value",
-    description: "A programmable card with $50 cash ready to spend or invest in your first project.",
+    description: "A programmable card with $50 cash ready to spend or back your first project.",
     color: "text-emerald-500",
     bg: "bg-emerald-500/10",
   },
@@ -82,7 +82,7 @@ export default function StarterKitPage() {
 
         {/* Hero */}
         <div className="text-center space-y-6 py-8">
-          <Badge variant="outline" className="text-sm px-4 py-1">Innovation #2037</Badge>
+          <Badge variant="outline" className="text-sm px-4 py-1">Innovation #2056</Badge>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
             The <span className="text-emerald-500">$100</span> Business Starter Kit
           </h1>
@@ -127,7 +127,7 @@ export default function StarterKitPage() {
               <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full space-y-3">
                 <Gift className="h-10 w-10 text-emerald-500" />
                 <p className="text-4xl font-black text-emerald-500">$100</p>
-                <p className="text-sm text-muted-foreground">Total kit value — backed by 10 provisional patents and 1,511 formal claims</p>
+                <p className="text-sm text-muted-foreground">Total kit value — backed by 11 provisional patents and 2,097 formal claims</p>
               </CardContent>
             </Card>
           </div>
@@ -145,7 +145,7 @@ export default function StarterKitPage() {
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <p className="text-sm text-muted-foreground">
-              Backed by our patent portfolio: 10 provisionals, 1,511 formal claims.
+              Backed by our patent portfolio: 11 provisionals, 2,097 formal claims.
             </p>
             <Button size="lg" className="gap-2">
               <Gift className="h-5 w-5" /> Sponsor a Kit — $100

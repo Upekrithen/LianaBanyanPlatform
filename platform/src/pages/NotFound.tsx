@@ -1,12 +1,12 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
-import { useBuilderMode } from '@/components/builder/BuilderModeContext';
+import { useBuilderModeSafe } from '@/components/builder/BuilderModeContext';
 import { Glasses } from 'lucide-react';
 
 const NotFound = () => {
   const location = useLocation();
-  const { toggleBuilderMode, isBuilderModeActive } = useBuilderMode();
+  const { toggleBuilderMode, isBuilderModeActive } = useBuilderModeSafe();
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);

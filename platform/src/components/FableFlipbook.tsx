@@ -184,7 +184,7 @@ export function FableFlipbook({
           key={`caption-${currentIndex}`}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 text-center text-amber-300 font-serif text-lg italic px-4"
+          className="mb-4 text-center text-amber-100 font-serif text-lg italic px-4 drop-shadow-md"
         >
           {FABLE_IMAGES[currentIndex].caption}
         </motion.div>

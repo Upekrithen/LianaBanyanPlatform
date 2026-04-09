@@ -74,7 +74,7 @@ export function BrewsterBonusPage() {
       <Card className="border-2 border-indigo-500/30 bg-indigo-500/5">
         <CardContent className="py-8 text-center">
           <blockquote className="text-lg font-medium italic max-w-xl mx-auto">
-            "This is not an investment return. It is a loyalty-driven volume
+            "This is not a speculative return. It is a loyalty-driven volume
             discount passed back as platform currency."
           </blockquote>
           <div className="mt-4 flex justify-center gap-3 flex-wrap">
@@ -130,7 +130,7 @@ export function BrewsterBonusPage() {
             />
           </div>
           <p className="text-xs text-muted-foreground mt-4 text-center">
-            None of these are securities. Neither is the Brewster Bonus.
+            None of these are membership rights. Neither is the Brewster Bonus.
           </p>
         </CardContent>
       </Card>
@@ -173,7 +173,7 @@ export function BrewsterBonusPage() {
                 <li>• Unbounded growth</li>
                 <li>• Rewards accumulation</li>
                 <li>• Rich get richer</li>
-                <li>• Securities risk</li>
+                <li>• Membership rights risk</li>
               </ul>
             </div>
             <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
@@ -205,7 +205,7 @@ export function BrewsterBonusPage() {
             id="q1"
             type="Basic"
             reward={2}
-            question="Is the Brewster Bonus an investment return?"
+            question="Is the Brewster Bonus a speculative return?"
             options={['Yes', 'No']}
             correct="No"
             answer={answers['q1']}
@@ -278,8 +278,8 @@ export function BrewsterBonusPage() {
               a="Decaying rates prevent wealth concentration and ensure the system rewards breadth of participation. A participant clearing 50 Marks gets 10%. One clearing 500,000 gets 1%. Everyone benefits, nobody dominates."
             />
             <FAQItem
-              q="Doesn't this sound like an investment?"
-              a="No. Investments involve money, common enterprises, profit expectations, and reliance on others' efforts (the Howey Test). The Brewster Bonus fails ALL FOUR prongs. It's funded by real volume savings, paid in non-transferable currency, requires your own effort, and has no common pool."
+              q="Doesn't this sound like speculation?"
+              a="No. Speculative instruments involve money, common enterprises, profit expectations, and reliance on others' efforts (the Howey Test). The Brewster Bonus fails ALL FOUR prongs. It's funded by real volume savings, paid in non-transferable currency, requires your own effort, and has no common pool."
             />
             <FAQItem
               q="What's stopping the platform from changing the rates?"

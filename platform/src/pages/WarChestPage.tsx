@@ -652,7 +652,7 @@ export default function WarChestPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {!commissionFlag && (
-                  <p className="text-sm text-muted-foreground">Coming Soon — Pending Tax Counsel</p>
+                  <p className="text-sm text-muted-foreground">Pending Tax Counsel Review</p>
                 )}
                 {commissionFlag && (
                   <p className="text-sm text-muted-foreground">

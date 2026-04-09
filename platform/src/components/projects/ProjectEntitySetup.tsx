@@ -1,7 +1,7 @@
 /**
  * ProjectEntitySetup — Entity formation step in the project creation flow.
  * Collects business entity type, details, and confirmation before project launch.
- * Innovation #2035
+ * Innovation #2054 (renumbered from #2035 in B044 reconciliation)
  */
 
 import { useState } from "react";

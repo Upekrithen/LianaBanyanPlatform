@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Globe } from 'lucide-react';
+import { Globe, Eye } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,6 +42,7 @@ export default function GhostWorld() {
   const [selectedIsland, setSelectedIsland] = useState<GWIsland | null>(null);
   const [placementMode, setPlacementMode] = useState<{ islandId: string } | null>(null);
   const [confirmSlot, setConfirmSlot] = useState<{ island: GWIsland; slotIndex: number } | null>(null);
+  const [isPopupPlacement, setIsPopupPlacement] = useState(false);
 
   // --- Data queries ---
 
@@ -158,6 +159,12 @@ export default function GhostWorld() {
   }, []);
 
   const handleEmptySlotClick = useCallback((island: GWIsland, slotIndex: number) => {
+    if (!user) {
+      toast.info('Members can respond, launch, and transact here.', {
+        action: { label: 'Join for $5/year', onClick: () => navigate('/membership') },
+      });
+      return;
+    }
     if (!userStorefront) {
       toast.error('Create a Storefront First', {
         action: { label: 'Go', onClick: () => navigate('/tools/storefront-builder') },
@@ -165,24 +172,32 @@ export default function GhostWorld() {
       return;
     }
     setConfirmSlot({ island, slotIndex });
-  }, [userStorefront, navigate]);
+  }, [user, userStorefront, navigate]);
 
   const handleEnterPlacementMode = useCallback(() => {
     if (!selectedIsland) return;
-    if (!user) { navigate('/auth'); return; }
+    if (!user) {
+      toast.info('Members can respond, launch, and transact here.', {
+        action: { label: 'Join for $5/year', onClick: () => navigate('/membership') },
+      });
+      return;
+    }
     if (!userStorefront) {
       toast.info('Create a Storefront First', {
         action: { label: 'Go', onClick: () => navigate('/tools/storefront-builder') },
       });
       return;
     }
-    // Check if user's storefront is already placed
-    const alreadyPlaced = buildings.find(b => b.storefront_id === userStorefront.id);
+    const alreadyPlaced = buildings.find(b => b.storefront_id === userStorefront.id && !b.is_popup);
     if (alreadyPlaced) {
       const homeIsland = islands.find(i => i.id === alreadyPlaced.island_id);
-      toast.info(`Your storefront is already on ${homeIsland?.name || 'an island'}. Pop-Up Kiosks coming soon!`);
+      toast.info(`Main storefront on ${homeIsland?.name || 'an island'}. Placing a Pop-Up Kiosk.`);
+      setIsPopupPlacement(true);
+      setPlacementMode({ islandId: selectedIsland.id });
+      setSelectedIsland(null);
       return;
     }
+    setIsPopupPlacement(false);
     setPlacementMode({ islandId: selectedIsland.id });
     setSelectedIsland(null);
   }, [selectedIsland, user, userStorefront, buildings, islands, navigate]);
@@ -196,9 +211,15 @@ export default function GhostWorld() {
         building_slot: confirmSlot.slotIndex,
         building_size: 'small',
         placed_by: user.id,
+        ...(isPopupPlacement ? {
+          is_popup: true,
+          popup_expires_at: new Date(Date.now() + 7 * 86400000).toISOString(),
+        } : {}),
       });
       if (error) throw error;
-      toast.success(`Your storefront is now on ${confirmSlot.island.name}!`);
+      toast.success(isPopupPlacement
+        ? `Pop-Up Kiosk placed on ${confirmSlot.island.name}! Active for 7 days.`
+        : `Your storefront is now on ${confirmSlot.island.name}!`);
       queryClient.invalidateQueries({ queryKey: ['gw-buildings'] });
       queryClient.invalidateQueries({ queryKey: ['gw-user-storefront'] });
     } catch (err: any) {
@@ -206,6 +227,7 @@ export default function GhostWorld() {
     }
     setConfirmSlot(null);
     setPlacementMode(null);
+    setIsPopupPlacement(false);
   };
 
   const isLoading = islandsLoading || buildingsLoading;
@@ -221,11 +243,19 @@ export default function GhostWorld() {
         </div>
       </div>
 
+      {/* Preview mode pill (doctrine: persistent indicator for non-members) */}
+      {!user && (
+        <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/90 border border-white/10 text-xs text-slate-400 backdrop-blur">
+          <Eye className="w-3.5 h-3.5" />
+          Preview mode
+        </div>
+      )}
+
       {/* Placement mode banner */}
       {placementMode && (
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-full bg-emerald-900/90 border border-emerald-500/30 text-emerald-300 text-xs font-medium flex items-center gap-2 backdrop-blur">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          Click a green slot to place "{userStorefront?.name}"
+          Click a green slot to place {isPopupPlacement ? 'a Pop-Up for' : ''} "{userStorefront?.name}"
           <button className="ml-2 text-emerald-500 hover:text-white text-xs underline" onClick={() => setPlacementMode(null)}>
             Cancel
           </button>
@@ -305,9 +335,9 @@ export default function GhostWorld() {
       <AlertDialog open={!!confirmSlot} onOpenChange={(open) => { if (!open) setConfirmSlot(null); }}>
         <AlertDialogContent className="bg-slate-900 border-slate-700">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-white">Place Your Storefront</AlertDialogTitle>
+            <AlertDialogTitle className="text-white">{isPopupPlacement ? 'Place Pop-Up Kiosk' : 'Place Your Storefront'}</AlertDialogTitle>
             <AlertDialogDescription className="text-slate-400">
-              Place <span className="text-amber-400 font-medium">{userStorefront?.name}</span> at{' '}
+              Place {isPopupPlacement ? 'a Pop-Up Kiosk for ' : ''}<span className="text-amber-400 font-medium">{userStorefront?.name}</span> at{' '}
               <span className="font-medium" style={{ color: confirmSlot?.island.theme_color }}>
                 {confirmSlot?.island.name}
               </span>

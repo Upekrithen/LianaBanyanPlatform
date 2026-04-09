@@ -13,7 +13,6 @@ interface OriginStoryFlipbookProps {
   compact?: boolean;
 }
 
-// 12 scenes: Stick figure has an idea → seed → plant → banyan → fruit → wheelbarrow → forest → abundance
 const SCENES = [
   {
     img: 'concept_01_idea.jpg',
@@ -23,57 +22,57 @@ const SCENES = [
   {
     img: 'concept_02_planting.jpg',
     caption: 'They plant it. Just one seed, in one spot of dirt.',
-    alt: 'Stick figure planting a seed in a small mound of earth.',
+    alt: 'Stick figure pressing a seed into a mound of earth, clouds in the sky.',
   },
   {
     img: 'concept_03_growing.jpg',
-    caption: 'It grows. Slowly at first — a sprout reaching for light.',
-    alt: 'A small sprout growing from the planted seed, with the wheelbarrow nearby.',
+    caption: 'They get to work. Hands in the dirt, wheelbarrow ready.',
+    alt: 'Stick figure kneeling beside a wheelbarrow, working the soil into a mound.',
   },
   {
     img: 'concept_04_banyan.jpg',
-    caption: 'Water it. Feed it. The seed becomes a sapling.',
-    alt: 'Watering can pouring water on a growing seedling beside a wheelbarrow.',
+    caption: 'They water it. Tend it. Nurture it.',
+    alt: 'A watering can pours over a tiny sprout in a mound of dirt, wheelbarrow nearby.',
   },
   {
     img: 'concept_05_figs.jpg',
-    caption: 'The sapling becomes a tree. And the tree bears fruit.',
-    alt: 'A tree with fruit hanging from its branches, wheelbarrow nearby.',
+    caption: 'The seed becomes a tree. Tall trunk, wide branches, deep roots.',
+    alt: 'A full-sized tree with a thick canopy stands next to an empty wheelbarrow.',
   },
   {
     img: 'concept_06_harvest.jpg',
-    caption: 'The fruit fills a wheelbarrow. One person\'s idea — harvested.',
-    alt: 'Fruit being collected into a wheelbarrow beneath a fruitful tree.',
+    caption: 'The roots go deeper. The canopy spreads wider.',
+    alt: 'A large tree with extensive branches, visible roots, and a wheelbarrow at its base.',
   },
   {
     img: 'concept_07_more_growth.jpg',
-    caption: 'But a banyan doesn\'t stop at one trunk. It sends down roots that become new trunks.',
-    alt: 'A banyan tree spreading with aerial roots becoming new trunks, multiple wheelbarrows.',
+    caption: 'The first harvest arrives. Wheelbarrows fill at the base of one tree.',
+    alt: 'A single large tree with multiple wheelbarrows full of fruit around its trunk.',
   },
   {
     img: 'concept_08_expansion.jpg',
-    caption: 'One tree becomes two. Two become four. A forest from a single seed.',
-    alt: 'Multiple banyan trees growing from the original, expanding into a grove.',
+    caption: 'The branches fill with fruit. More than one person could ever carry.',
+    alt: 'A tree laden with round fruit hanging from every branch, wheelbarrow waiting below.',
   },
   {
     img: 'concept_09_more_harvest.jpg',
-    caption: 'More trees, more fruit. More wheelbarrows. More people harvesting.',
-    alt: 'Many trees bearing fruit with multiple wheelbarrows being filled by many people.',
+    caption: 'One wheelbarrow fills to the brim.',
+    alt: 'A tree with a wheelbarrow overflowing with harvested fruit beneath it.',
   },
   {
     img: 'concept_10_abundance.jpg',
-    caption: 'The forest feeds everyone who helped it grow.',
-    alt: 'An abundant forest with many wheelbarrows full of fruit, people everywhere.',
+    caption: 'The banyan sends down new roots. New trunks form beside the first.',
+    alt: 'A banyan tree with aerial roots descending to become secondary trunks, fruit throughout.',
   },
   {
     img: 'concept_11_ecosystem.jpg',
-    caption: 'It becomes an ecosystem. Self-sustaining. Self-expanding. Alive.',
-    alt: 'A thriving ecosystem of interconnected banyan trees, a complete forest canopy.',
+    caption: 'A forest grows from that one seed. Fruit enough for everyone.',
+    alt: 'A vast banyan forest of interconnected trees with fruit, aerial roots forming a dense canopy.',
   },
   {
     img: 'concept_12_legacy.jpg',
-    caption: 'And it all started with one person, one idea, one seed.',
-    alt: 'A single seedling growing beside a wheelbarrow — the cycle begins again.',
+    caption: 'And it all started with one person, one idea, one seed. YOU.',
+    alt: 'A small seedling growing from a mound of earth beside a wheelbarrow — the cycle begins again.',
   },
 ];
 

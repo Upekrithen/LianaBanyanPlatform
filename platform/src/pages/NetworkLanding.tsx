@@ -18,7 +18,7 @@ const DECK_CARDS: PortalDeckCardConfig[] = [
     title: "Guilds",
     description:
       "Join a craft-based guild. Leatherworkers, Terrain Builders, Jewelers, Woodworkers — find your people and share your craft.",
-    href: "/network/guilds",
+    href: "/guilds",
     accentColor: AMBER,
   },
   {
@@ -26,7 +26,7 @@ const DECK_CARDS: PortalDeckCardConfig[] = [
     title: "Tribes",
     description:
       "Local and interest-based communities. Find makers near you or connect with people who share your passion.",
-    href: "/network/tribes",
+    href: "/tribes",
     accentColor: AMBER,
   },
   {
@@ -34,7 +34,7 @@ const DECK_CARDS: PortalDeckCardConfig[] = [
     title: "Social Plugs",
     description:
       "Connect your Reddit, Discord, Instagram — bring your existing community with you. Your audience follows you here.",
-    href: "/network/social-plugs",
+    href: "/import",
     accentColor: AMBER,
   },
   {
@@ -58,7 +58,7 @@ const DECK_CARDS: PortalDeckCardConfig[] = [
     title: "Find a Maker",
     description:
       "Who can produce your design? Browse makers with the machines, skills, and capacity you need. Connect and build together.",
-    href: "/network/factory-nodes",
+    href: "/factory/nodes",
     accentColor: AMBER,
   },
   {

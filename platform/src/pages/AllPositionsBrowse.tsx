@@ -44,7 +44,7 @@ const POSITION_CATEGORIES = [
   },
   {
     value: "logistics_blockchain" as const,
-    label: "Logistics & Blockchain",
+    label: "Logistics & Supply Chain",
     icon: Building,
   },
   {

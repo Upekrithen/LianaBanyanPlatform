@@ -26,10 +26,18 @@ import {
   QrCode,
   Share2,
   BookOpen,
+  KeyRound,
+  Link2,
+  Map,
+  Ghost,
+  Unlock,
+  MapPin as MapPinIcon,
 } from "lucide-react";
 import {
   findRecipientByEmail,
+  findRecipientByEmailAsync,
   findRecipientBySlug,
+  findRecipientBySlugAsync,
   findPressOutlet,
   getRecipientDomainHints,
   PLATFORM_STATS,
@@ -45,9 +53,11 @@ import {
 } from "@/lib/cueCardDestinationService";
 
 import { LockedCrownLetterView } from "@/components/LockedCrownLetterView";
+import { RedCarpetFallback } from "@/components/RedCarpetFallback";
+import { RedCarpetWalkthrough } from "@/components/RedCarpetWalkthrough";
 
 // ---------------------------------------------------------
-// ENTRY MODES � How someone arrived at RedCarpet
+// ENTRY MODES — How someone arrived at RedCarpet
 // ---------------------------------------------------------
 
 type EntryMode =
@@ -208,7 +218,7 @@ function HeraldBanner({ herald }: { herald: HeraldInfo }) {
                 </h3>
                 <p className="text-muted-foreground mt-1">
                   Member since {herald.memberSince}
-                  {herald.message && ` � "${herald.message}"`}
+                  {herald.message && ` — "${herald.message}"`}
                 </p>
               </div>
               <div className="ml-auto flex-shrink-0">
@@ -414,7 +424,7 @@ function PressBanner({ outlet }: { outlet: PressOutlet }) {
 }
 
 // ---------------------------------------------------------
-// CUE CARD CLICK BANNER � Shows click tracking progress
+// CUE CARD CLICK BANNER — Shows click tracking progress
 // ---------------------------------------------------------
 
 function CueCardClickBanner({ info }: { info: CueCardClickInfo }) {
@@ -458,13 +468,13 @@ function CueCardClickBanner({ info }: { info: CueCardClickInfo }) {
                               : 'bg-muted/50 text-muted-foreground'
                           }`}
                         >
-                          {i < info.locksUnlocked ? '??' : '??'}
+                          {i < info.locksUnlocked ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
                         </div>
                       ))}
                     </div>
                     <div className="text-sm text-muted-foreground">
                       {info.clicksRecorded} click{info.clicksRecorded !== 1 ? 's' : ''} recorded
-                      {!info.isFullyUnlocked && ` � ${clicksToNextLock} more to unlock next`}
+                      {!info.isFullyUnlocked && ` — ${clicksToNextLock} more to unlock next`}
                     </div>
                   </div>
                   
@@ -472,7 +482,7 @@ function CueCardClickBanner({ info }: { info: CueCardClickInfo }) {
                     <div className="mt-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
                       <p className="text-sm text-green-600 font-medium flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {info.sharerName} earned a Candle Burst reward thanks to shares like yours!
+                        {info.sharerName} earned a Candle Burst reward thanks to support like yours!
                       </p>
                     </div>
                   )}
@@ -518,7 +528,7 @@ function MedallionScanBanner({ cardId }: { cardId: string }) {
                   You scanned an authentic Liana Banyan Medallion
                 </h3>
                 <p className="text-muted-foreground mt-1">
-                  Card ID: <code className="font-mono bg-muted px-2 py-0.5 rounded text-sm">{cardId}</code> � This cue card was shared by a verified member.
+                  Card ID: <code className="font-mono bg-muted px-2 py-0.5 rounded text-sm">{cardId}</code> — This cue card was shared by a verified member.
                 </p>
               </div>
             </CardContent>
@@ -530,7 +540,7 @@ function MedallionScanBanner({ cardId }: { cardId: string }) {
 }
 
 // ---------------------------------------------------------
-// MAIN RED CARPET PAGE � UNIVERSAL FRONT DOOR
+// MAIN RED CARPET PAGE — UNIVERSAL FRONT DOOR
 // ---------------------------------------------------------
 
 export default function RedCarpet() {
@@ -582,19 +592,21 @@ export default function RedCarpet() {
 
   // --- DETECT ENTRY MODE ON MOUNT ---
   useEffect(() => {
-    // Priority 1: URL slug ? direct recipient link (TRUSTED � log silently)
+    // Priority 1: URL slug → direct recipient link (TRUSTED — log silently)
     if (slug) {
-      const found = findRecipientBySlug(slug);
-      if (found) {
-        setRecipient(found);
-        setEntryMode("slug");
-        setShowContent(true);
-        logPageView("slug", found);
-        return;
-      }
+      // DB-first async lookup (K202/B053)
+      findRecipientBySlugAsync(slug).then((found) => {
+        if (found) {
+          setRecipient(found);
+          setEntryMode("slug");
+          setShowContent(true);
+          logPageView("slug", found);
+        }
+      });
+      return;
     }
 
-    // Priority 2: ?press=outlet ? press junket
+    // Priority 2: ?press=outlet → press junket
     const pressParam = searchParams.get("press");
     if (pressParam) {
       const outlet = findPressOutlet(pressParam);
@@ -633,10 +645,10 @@ export default function RedCarpet() {
     if (heraldParam) {
       setEntryMode("herald");
       if (ctxParam) {
-        // Contextual routing � load destination-specific content
+        // Contextual routing — load destination-specific content
         loadContextualContent(heraldParam, ctxParam);
       } else {
-        // Legacy � show full portfolio
+        // Legacy — show full portfolio
         loadHeraldInfo(heraldParam);
       }
       setShowContent(true);
@@ -848,13 +860,17 @@ export default function RedCarpet() {
     setIsSearching(true);
     setVerificationError(null);
 
-    // Check for domain match
-    const found = findRecipientByEmail(email);
+    // Check for domain match (DB-first, static fallback — K202/B053)
+    const found = await findRecipientByEmailAsync(email);
 
     if (found) {
-      // DOMAIN MATCHED � Send verification code
+      // DOMAIN MATCHED — Send verification code
       setRecipient(found);
       setDomainMatched(true);
+
+      // Track visit in red_carpet_recipients table (fire and forget)
+      const matchedDomain = email.toLowerCase().split("@")[1];
+      supabase.rpc("track_red_carpet_visit", { p_domain: matchedDomain }).catch(() => {});
 
       try {
         const domain = email.toLowerCase().split("@")[1];
@@ -887,7 +903,7 @@ export default function RedCarpet() {
         logPageView("email", found, { email: email.toLowerCase(), domain: email.split("@")[1] });
       }
     } else {
-      // NO DOMAIN MATCH � General visitor, show content immediately
+      // NO DOMAIN MATCH — General visitor, show content immediately
       setEntryMode("unknown");
       setShowContent(true);
       logPageView("unknown", null, { email: email.toLowerCase(), domain: email.split("@")[1] });
@@ -952,7 +968,7 @@ export default function RedCarpet() {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* --------------------------------------------------- */}
-      {/* HERO SECTION � THE ENTRANCE                        */}
+      {/* HERO SECTION — THE ENTRANCE                        */}
       {/* --------------------------------------------------- */}
       {showHero && (
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
@@ -986,7 +1002,7 @@ export default function RedCarpet() {
               </p>
             </div>
 
-            {/* Email input � Step 1: Enter email */}
+            {/* Email input — Step 1: Enter email */}
             {showEmailForm && verificationStep === "email" && (
               <form onSubmit={handleEmailSubmit} className="max-w-md mx-auto space-y-4">
                 <div className="relative">
@@ -1002,7 +1018,7 @@ export default function RedCarpet() {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full h-14 text-lg rounded-xl gap-2"
+                  className="w-full h-14 text-lg rounded-xl gap-2 bg-green-600 hover:bg-green-700 text-white disabled:bg-green-600/60 disabled:text-white/80"
                   disabled={isSearching || !email.trim()}
                 >
                   {isSearching ? (
@@ -1023,7 +1039,7 @@ export default function RedCarpet() {
               </form>
             )}
 
-            {/* Verification code � Step 2: Domain matched, enter code */}
+            {/* Verification code — Step 2: Domain matched, enter code */}
             {verificationStep === "code" && domainMatched && (
               <div className="max-w-md mx-auto space-y-6">
                 <div className="p-6 rounded-xl bg-card/80 backdrop-blur border-2 border-primary/20">
@@ -1069,20 +1085,21 @@ export default function RedCarpet() {
                     />
 
                     {verificationError && (
-                      <div className="text-center space-y-1">
+                      <div className="text-center space-y-2">
                         <p className="text-sm text-destructive">{verificationError}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Need help? Contact{" "}
+                        <p className="text-sm text-muted-foreground">
+                          We're expecting you — please email{" "}
                           <a href="mailto:Founder@LianaBanyan.com" className="underline">Founder@LianaBanyan.com</a>
                           {" "}or call{" "}
                           <a href="tel:+14065781232" className="underline">406-578-1232</a>
+                          {" "}and we'll get you in personally.
                         </p>
                       </div>
                     )}
 
                     {devCode && (
                       <p className="text-xs text-amber-500 text-center bg-amber-500/10 rounded-lg p-2">
-                        Dev mode � code: <span className="font-mono font-bold">{devCode}</span>
+                        Dev mode — code: <span className="font-mono font-bold">{devCode}</span>
                       </p>
                     )}
 
@@ -1141,9 +1158,14 @@ export default function RedCarpet() {
       )}
 
       {/* --------------------------------------------------- */}
-      {/* CONTEXTUAL BANNERS � Based on entry mode            */}
+      {/* CONTEXTUAL BANNERS — Based on entry mode            */}
       {/* --------------------------------------------------- */}
-      {showContent && (
+      {/* FALLBACK: Unrecognized email gets bulletproof fallback (DD-7) */}
+      {showContent && entryMode === "unknown" && !recipient && (
+        <RedCarpetFallback email={email} />
+      )}
+
+      {showContent && entryMode !== "unknown" && (
         <div ref={contentRef} className="pb-24">
 
           {/* Cue Card click tracking banner */}
@@ -1199,7 +1221,7 @@ export default function RedCarpet() {
                       </h2>
                       {recipient.crownTitle && (
                         <p className="text-xl text-primary font-medium mb-4">
-                          {recipient.crownTitle} � {recipient.initiative?.name}
+                          {recipient.crownTitle} — {recipient.initiative?.name}
                         </p>
                       )}
                       <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -1225,10 +1247,22 @@ export default function RedCarpet() {
                         {entryMode === "herald"
                           ? "A Liana Banyan member shared this with you because they think you'd value what we're building. Here's what it is and why it matters."
                           : entryMode === "referral"
-                          ? `Someone shared credits with you � real value on a cooperative platform. Join, use the code, and you'll both earn toward a medallion. Here's what you're joining.`
+                          ? `Someone shared credits with you — real value on a cooperative platform. Join, use the code, and you'll both earn toward a medallion. Here's what you're joining.`
                           : entryMode === "card"
                           ? "You scanned a real Liana Banyan medallion. That means someone in your world is already part of this. Here's what they're part of."
-                          : "We don't recognize that email yet � but that doesn't mean you're not important. Here's what we're building and why it matters."}
+                          : "We don't recognize that email yet — but that doesn't mean you're not important. Here's what we're building and why it matters."}
+                      </p>
+                      {(entryMode === "herald" || entryMode === "card" || entryMode === "default") && (
+                        <p className="mt-4 text-sm text-primary/70 italic max-w-2xl mx-auto">
+                          You received this invitation because someone believes in what we're building.
+                        </p>
+                      )}
+                      <p className="mt-4 text-sm text-muted-foreground/80 max-w-lg mx-auto">
+                        We're expecting you — please email{" "}
+                        <a href="mailto:Founder@LianaBanyan.com" className="text-primary underline">Founder@LianaBanyan.com</a>
+                        {" "}or call{" "}
+                        <a href="tel:+14065781232" className="text-primary underline">406-578-1232</a>
+                        {" "}and we'll get you in personally.
                       </p>
                     </>
                   )}
@@ -1264,7 +1298,7 @@ export default function RedCarpet() {
                         <div className="mt-6 p-4 rounded-lg bg-background/50 border border-border">
                           <p className="text-sm text-muted-foreground">
                             <span className="font-semibold text-foreground">Your role:</span>{" "}
-                            As {recipient.crownTitle}, you would lead this initiative �
+                            As {recipient.crownTitle}, you would lead this initiative —
                             setting vision, guiding strategy, and ensuring it serves the
                             community it was built for. One Crown, One Offer, One Leader.
                           </p>
@@ -1275,6 +1309,11 @@ export default function RedCarpet() {
                 </div>
               </section>
             </FadeInSection>
+          )}
+
+          {/* --- PERSONALIZED WALKTHROUGH SECTIONS (DD-7) --- */}
+          {recipient && (
+            <RedCarpetWalkthrough recipient={recipient} />
           )}
 
           {/* --- THE LITTLE RED HEN (Press/Red Carpet Metaphor) --- */}
@@ -1325,7 +1364,7 @@ export default function RedCarpet() {
                     The Economics That Cannot Change
                   </h3>
                   <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                    These numbers are constitutionally locked by DNA Lock � no vote, no board, no CEO can ever alter them.
+                    These numbers are constitutionally locked by DNA Lock — no vote, no board, no CEO can ever alter them.
                   </p>
                 </div>
 
@@ -1333,10 +1372,10 @@ export default function RedCarpet() {
                 <div className="mb-8">
                   <DataVizBar
                     title="Revenue Distribution"
-                    subtitle="How every dollar is split � locked forever"
+                    subtitle="How every dollar is split — locked forever"
                     data={[
-                      { label: 'creator/worker keeps', value: 83.3, color: '#22c55e', icon: '??' },
-                      { label: 'Platform margin', value: 16.7, color: '#f97316', icon: '???' }
+                      { label: 'creator/worker keeps', value: 83.3, color: '#22c55e' },
+                      { label: 'Platform margin', value: 16.7, color: '#f97316' }
                     ]}
                     maxValue={100}
                     showPercentages={true}
@@ -1373,7 +1412,7 @@ export default function RedCarpet() {
                     </div>
                   </div>
                   <p className="mt-4 text-sm text-muted-foreground">
-                    This split is protected by <strong>DNA Lock</strong> � a constitutional mechanism that makes these percentages 
+                    This split is protected by <strong>DNA Lock</strong> — a constitutional mechanism that makes these percentages 
                     immutable. No vote, no board decision, no CEO can ever change them.
                   </p>
                 </ExpandableBlock>
@@ -1396,26 +1435,26 @@ export default function RedCarpet() {
 
                 <div className="space-y-4">
                   <ExpandableBlock
-                    title="?? LianaBanyan.com � The Marketplace"
+                    title="LianaBanyan.com — The Marketplace"
                     subtitle="Creators sell, members buy. 83.3% to creators and workers, always."
                     preview="Click to learn about the cooperative marketplace..."
                     accentColor="#22c55e"
                   >
                     <p className="text-muted-foreground mb-4">
                       The main platform where creators list products and services at Cost + 20%. Every transaction 
-                      guarantees 83.3% goes directly to the creator � no hidden fees, no surprise deductions.
+                      guarantees 83.3% goes directly to the creator — no hidden fees, no surprise deductions.
                     </p>
                     <ul className="list-disc list-inside text-muted-foreground space-y-1 text-sm">
                       <li>Physical products, digital goods, and services</li>
                       <li>Transparent pricing on every listing</li>
                       <li>Built-in reputation and medallion system</li>
-                      <li>Cooperative membership � members participate in the platform</li>
+                      <li>Cooperative membership — members participate in the platform</li>
                     </ul>
                   </ExpandableBlock>
 
                   <ExpandableBlock
-                    title="?? LianaBanyan.net � The Network"
-                    subtitle="People and portfolios connecting � like LinkedIn, but cooperative."
+                    title="LianaBanyan.net — The Network"
+                    subtitle="People and portfolios connecting — like LinkedIn, but cooperative."
                     preview="Click to learn about the professional network..."
                     accentColor="#3b82f6"
                   >
@@ -1426,13 +1465,13 @@ export default function RedCarpet() {
                     <ul className="list-disc list-inside text-muted-foreground space-y-1 text-sm">
                       <li>Portable reputation across the platform</li>
                       <li>No algorithmic manipulation of your feed</li>
-                      <li>Your data stays yours � export anytime</li>
+                      <li>Your data stays yours — export anytime</li>
                       <li>Guild and tribe connections</li>
                     </ul>
                   </ExpandableBlock>
 
                   <ExpandableBlock
-                    title="?? LianaBanyan.biz � The Business Portal"
+                    title="LianaBanyan.biz — The Business Portal"
                     subtitle="Organizations connecting with cooperative infrastructure."
                     preview="Click to learn about business integration..."
                     accentColor="#8b5cf6"
@@ -1452,7 +1491,7 @@ export default function RedCarpet() {
 
                 <div className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/20 text-center">
                   <p className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-primary">+ LianaBanyan.org</span> � The charitable portal. 
+                    <span className="font-semibold text-primary">+ LianaBanyan.org</span> — The charitable portal. 
                     Where the 20% margin goes to work across 16 initiatives.
                   </p>
                 </div>
@@ -1473,14 +1512,14 @@ export default function RedCarpet() {
                 </p>
                 <div className="grid md:grid-cols-3 gap-6 text-left">
                   <div className="p-6 bg-card rounded-xl border border-border">
-                    <div className="text-2xl mb-3">??</div>
+                    <MapPinIcon className="w-7 h-7 text-amber-400 mb-3" />
                     <h3 className="font-bold text-lg mb-2">Drop Beacons</h3>
                     <p className="text-sm text-muted-foreground">
-                      As you explore the 2,007+ innovations and 16 initiatives, drop beacons to mark your place. Like fireflies in the forest, they guide your way back.
+                      As you explore the 2,128+ innovations and 16 initiatives, drop beacons to mark your place. Like fireflies in the forest, they guide your way back.
                     </p>
                   </div>
                   <div className="p-6 bg-card rounded-xl border border-border">
-                    <div className="text-2xl mb-3">??</div>
+                    <Link2 className="w-7 h-7 text-amber-400 mb-3" />
                     <h3 className="font-bold text-lg mb-2">Link Implementations</h3>
                     <p className="text-sm text-muted-foreground mb-4">
                       Every academic paper, patent claim, and UI component is linked. Follow the breadcrumbs from the theoretical architecture directly to the working code.
@@ -1491,7 +1530,7 @@ export default function RedCarpet() {
                     </Button>
                   </div>
                   <div className="p-6 bg-card rounded-xl border border-border">
-                    <div className="text-2xl mb-3">???</div>
+                    <Map className="w-7 h-7 text-amber-400 mb-3" />
                     <h3 className="font-bold text-lg mb-2">Share Your Map</h3>
                     <p className="text-sm text-muted-foreground">
                       Publish your beacon trail. Let your readers, students, or colleagues follow your exact path through the Yggdrasil architecture.
@@ -1519,20 +1558,20 @@ export default function RedCarpet() {
                 <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                   <StatCard icon={Lightbulb} value={PLATFORM_STATS.innovations} label="Total innovations" />
                   <StatCard icon={Shield} value={String(PLATFORM_STATS.crownJewels)} label="Crown Jewels" highlight />
-                  <StatCard icon={FileText} value={String(PLATFORM_STATS.plannedFilings)} label="Planned filings" />
+                  <StatCard icon={FileText} value={String(PLATFORM_STATS.plannedFilings)} label="Patent applications" />
                   <StatCard icon={Award} value={PLATFORM_STATS.portfolioValue} label="Portfolio value" />
                 </div>
 
                 {/* Crown Jewels as expandable blocks */}
                 <ExpandableBlock
-                  title="?? The 8 Crown Jewel Patents"
-                  subtitle="Zero prior art found � completely novel innovations"
-                  preview="PPP/Economic Equity Differential, Seedling Guarantee, Tereno Hydraulic, The 300 Framework..."
+                  title="The 167 Crown Jewel Innovations"
+                  subtitle="Zero prior art found — completely novel innovations"
+                  preview="PPP/Economic Opportunity Differential, Seedling Guarantee, Tereno Hydraulic, The 300 Framework..."
                   accentColor="#eab308"
                   defaultExpanded={false}
                 >
                   <div className="grid md:grid-cols-2 gap-4">
-                    <CrownJewelCard number={1} name="PPP / Economic Equity Differential" description="Three-tier currency with global purchasing power parity adjustment. No existing system combines these." />
+                    <CrownJewelCard number={1} name="PPP / Economic Opportunity Differential" description="Three-tier currency with global purchasing power parity adjustment. No existing system combines these." />
                     <CrownJewelCard number={2} name="Seedling Guarantee" description="Crowdfunding with guarantee protection and cascade attribution. No platform offers this." />
                     <CrownJewelCard number={3} name="Tereno Hydraulic" description="Water-powered physical computing platform with digital state sync. Physics and imagination." />
                     <CrownJewelCard number={4} name="The 300 Framework" description="Hard-coded organization size limits with overflow mechanics. Governance by design, not policy." />
@@ -1543,7 +1582,7 @@ export default function RedCarpet() {
                   </div>
                   <div className="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
                     <p className="text-sm text-muted-foreground">
-                      <strong className="text-yellow-600">Why "Crown Jewels"?</strong> These 8 innovations had zero relevant prior art 
+                      <strong className="text-yellow-600">Why "Crown Jewels"?</strong> These 167 innovations had zero relevant prior art 
                       in USPTO searches. They represent genuinely novel approaches that no one has patented before.
                     </p>
                   </div>
@@ -1556,13 +1595,13 @@ export default function RedCarpet() {
           <FadeInSection delay={100}>
             <section className="py-16 px-6">
               <div className="max-w-3xl mx-auto text-center">
-                <div className="text-5xl mb-6">???</div>
+                <KeyRound className="w-12 h-12 text-amber-500 mx-auto mb-6" />
                 <h3 className="text-3xl font-bold text-foreground mb-4">The Golden Key</h3>
                 <blockquote className="text-2xl md:text-3xl text-foreground font-light italic leading-relaxed mb-6">
                   "Help each other help ourselves."
                 </blockquote>
                 <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-                  Every decision � Cost+20%, 83.3% to creators and workers, DNA Lock, The 300, all 16 initiatives � flows from this single principle. It's not a slogan. It's the architectural specification.
+                  Every decision — Cost+20%, 83.3% to creators and workers, DNA Lock, The 300, all 16 initiatives — flows from this single principle. It's not a slogan. It's the architectural specification.
                 </p>
               </div>
             </section>
@@ -1576,13 +1615,13 @@ export default function RedCarpet() {
                   <h3 className="text-3xl font-bold text-foreground mb-4">37 Years in the Making</h3>
                   <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
                     Built by a 53-year-old ARNG veteran (Infantry + Aviation), father of eight, with 21 years in IT development. 
-                    This system has been in development since 1989 � not as software, but as a philosophy.
+                    This system has been in development since 1989 — not as software, but as a philosophy.
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   <ExpandableBlock
-                    title="??? The Founder's Background"
+                    title="The Founder's Background"
                     subtitle="ARNG veteran, pilot, developer, father of eight"
                     preview="FAA Commercial Rotary Wing IFR rating, Chess top 0.4% globally..."
                     accentColor="#22c55e"
@@ -1591,17 +1630,17 @@ export default function RedCarpet() {
                       <div>
                         <h4 className="font-semibold text-foreground mb-2">Military & Aviation</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
-                          <li>� U.S. Army Infantry (11B)</li>
-                          <li>� U.S. Army Aviation (15A)</li>
-                          <li>� FAA Commercial Rotary Wing IFR</li>
+                          <li>U.S. Army Infantry (11B)</li>
+                          <li>U.S. Army Aviation (15A)</li>
+                          <li>FAA Commercial Rotary Wing IFR</li>
                         </ul>
                       </div>
                       <div>
                         <h4 className="font-semibold text-foreground mb-2">Professional</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
-                          <li>� 21 years IT development</li>
-                          <li>� Chess: top 0.4% globally (2080s rating)</li>
-                          <li>� Father of eight children</li>
+                          <li>21 years IT development</li>
+                          <li>Chess: top 0.4% globally (2080s rating)</li>
+                          <li>Father of eight children</li>
                         </ul>
                       </div>
                     </div>
@@ -1612,9 +1651,9 @@ export default function RedCarpet() {
                   </ExpandableBlock>
 
                   <ExpandableBlock
-                    title="??? Legal Entity & Structure"
+                    title="Legal Entity & Structure"
                     subtitle="Corporation with constitutional protections"
-                    preview="LIANA BANYAN CORPORATION � Legal structure details..."
+                    preview="LIANA BANYAN CORPORATION — Legal structure details..."
                     accentColor="#3b82f6"
                   >
                     <div className="p-4 rounded-lg bg-background border border-border mb-4">
@@ -1629,7 +1668,7 @@ export default function RedCarpet() {
                   </ExpandableBlock>
 
                   <ExpandableBlock
-                    title="?? The Sweet Sixteen Initiatives"
+                    title="The Sweet Sixteen Initiatives"
                     subtitle="16 charitable initiatives funded by the 20% margin"
                     preview="Let's Make Dinner, Let's Get Groceries, Defense Klaus, Rally Group..."
                     accentColor="#8b5cf6"
@@ -1655,7 +1694,7 @@ export default function RedCarpet() {
                       href="/cephas/under-the-hood"
                       className="text-primary hover:underline flex items-center gap-1 justify-center"
                     >
-                      Cephas � Under the Hood
+                      Cephas — Under the Hood
                       <ExternalLink className="w-3 h-3" />
                     </a>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -1667,7 +1706,7 @@ export default function RedCarpet() {
             </section>
           </FadeInSection>
 
-          {/* --- CALL TO ACTION � Context-sensitive --- */}
+          {/* --- CALL TO ACTION — Context-sensitive --- */}
           <FadeInSection delay={100}>
             <section className="py-20 px-6">
               <div className="max-w-4xl mx-auto">
@@ -1680,7 +1719,7 @@ export default function RedCarpet() {
                     </h3>
                     <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
                       {recipient.category === "journalist"
-                        ? "This is the platform story you've been waiting to write. Reply to the letter and we'll give you everything � numbers, patents, architecture, the founder's story. On the record."
+                        ? "This is the platform story you've been waiting to write. Reply to the letter and we'll give you everything — numbers, patents, architecture, the founder's story. On the record."
                         : recipient.category === "academic"
                         ? "Your research validates what we've built. Reply to the letter and we'll share our academic papers, patent research, and full data set. Peer review welcome."
                         : recipient.category === "blessing"
@@ -1714,7 +1753,7 @@ export default function RedCarpet() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <Button size="lg" className="gap-2 h-14 px-8 text-lg rounded-xl"
                         onClick={() => navigate("/ghost")}>
-                        ?? Explore First
+                        <Ghost className="w-5 h-5" /> Explore First
                       </Button>
                       <Button size="lg" variant="outline" className="gap-2 h-14 px-8 text-lg rounded-xl"
                         onClick={() => openOnboard({ reason: "join Liana Banyan", actionLabel: "Join", membershipIncluded: true })}>
@@ -1736,8 +1775,8 @@ export default function RedCarpet() {
             <div className="max-w-4xl mx-auto text-center text-sm text-muted-foreground">
               <p className="mb-2">LIANA BANYAN CORPORATION</p>
               <p>
-                {PLATFORM_STATS.innovations} innovations � {PLATFORM_STATS.crownJewels} Crown Jewel patents �{" "}
-                {PLATFORM_STATS.initiatives} charitable initiatives � {PLATFORM_STATS.creatorKeeps} to creators and workers
+                {PLATFORM_STATS.innovations} innovations — {PLATFORM_STATS.crownJewels} Crown Jewel patents —{" "}
+                {PLATFORM_STATS.initiatives} charitable initiatives — {PLATFORM_STATS.creatorKeeps} to creators and workers
               </p>
               <p className="mt-4 text-xs text-muted-foreground/60">"Help each other help ourselves."</p>
             </div>

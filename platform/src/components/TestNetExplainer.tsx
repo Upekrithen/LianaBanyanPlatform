@@ -17,7 +17,7 @@ export const TestNetExplainer: React.FC = () => {
         </div>
         <CardDescription className="text-base font-medium text-foreground mt-2">
           We use Platform Service Units (Credits, Marks, and Joules). 
-          <strong> They are not investments. They are not securities. They are not crypto.</strong>
+          <strong> They are not investments. They are not securities. They are not speculative tokens.</strong>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-4">
@@ -52,7 +52,7 @@ export const TestNetExplainer: React.FC = () => {
             <div>
               <h4 className="font-semibold text-base mb-1">What is "Test-Net By Design"?</h4>
               <p className="text-sm text-muted-foreground mb-2">
-                We use blockchain technology solely as an immutable, transparent ledger to track who created what (provenance) and who helped fund it. 
+                We use a verified, tamper-proof ledger to track who created what (provenance) and who helped fund it. Liana Banyan does not use blockchain technology.
               </p>
               <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
                 <li>We do not use Mainnet Ethereum.</li>

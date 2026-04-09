@@ -113,8 +113,8 @@ const HEXISLE_FEATURES = [
   },
   {
     icon: <FileText className="h-6 w-6" />,
-    title: '2,007 Documented Innovations',
-    desc: '10 provisional patent applications. 1,511+ formal claims. Micro-entity filing cost: $0.34 per claim.',
+    title: '2,128 Documented Innovations',
+    desc: '11 provisional patent applications. 2,097+ formal claims. Micro-entity filing cost: $0.34 per claim.',
     innovations: 'Full portfolio',
     link: '/patent-portfolio',
   },
@@ -159,7 +159,7 @@ export default function LikeWhatPage() {
             </h1>
           </div>
           <p className="text-xl text-white/60 max-w-3xl mx-auto">
-            2,007 innovations sounds impossible. Here's what they look like — and the language we invented to build them.
+            2,128 innovations sounds impossible. Here's what they look like — and the language we invented to build them.
           </p>
           <p className="text-sm text-white/40 mt-2">
             This page exists so you can say "Okay... maybe this is real" without reading everything.

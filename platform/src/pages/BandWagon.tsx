@@ -405,7 +405,7 @@ function HowItWorks() {
       <Card className="bg-card border-border">
         <CardContent className="p-6">
           <p className="text-sm text-primary font-medium mb-4">
-            This is not an investment return. This is earned authority to allocate cooperative
+            This is not a speculative return. This is earned authority to allocate cooperative
             resources based on demonstrated judgment.
           </p>
           <Accordion type="single" collapsible className="w-full">

@@ -272,7 +272,7 @@ export default function TheFurnace() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p>
-                  For researchers and academics reviewing the <strong>9 Economic Laws</strong> or platform mechanics, The Furnace provides cryptographic proof of all claims.
+                  For researchers and academics reviewing the <strong>9 Economic Laws</strong> or platform mechanics, The Furnace provides tamper-proof verification of all claims.
                 </p>
                 <ul className="list-disc pl-5 space-y-2 text-slate-600 dark:text-slate-400">
                   <li>Verify the mathematical distribution of the 83.3% Creator/Worker Share.</li>

@@ -227,8 +227,8 @@ export default function HarvestIsland() {
       <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 flex items-center justify-center p-4">
         <Card className="max-w-lg w-full bg-slate-900 border-amber-500/50">
           <CardHeader>
-            <CardTitle className="text-amber-400">Guided Path Coming Soon</CardTitle>
-            <CardDescription>The White Rabbit is preparing this path.</CardDescription>
+            <CardTitle className="text-amber-400">Guided Path</CardTitle>
+            <CardDescription>Explore freely for now — the White Rabbit is preparing this path.</CardDescription>
           </CardHeader>
           <CardContent>
             <Button onClick={handleGuidedPathCancel} className="w-full">Return to Harvest Island</Button>

@@ -263,7 +263,7 @@ const ChainDashboard: React.FC = () => {
                     Back on Kickstarter <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 ) : (
-                  <span className="text-xs text-muted-foreground/50 bg-muted px-3 py-2 rounded-lg">Coming Soon</span>
+                  <span className="text-xs text-muted-foreground/50 bg-muted px-3 py-2 rounded-lg">No campaign link yet</span>
                 )}
               </div>
             </div>

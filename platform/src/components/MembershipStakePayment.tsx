@@ -97,6 +97,9 @@ export const MembershipStakePayment = ({ hasPaid, onPaymentSuccess }: Membership
           )}
         </Button>
 
+        <p className="text-xs text-muted-foreground text-center leading-relaxed">
+          Your pledge will be charged today and held by our independent payment processor until it is released to this project under our program terms. While your pledge is held, funds are not available for us to spend and may be returned or adjusted if the transaction cannot be completed. By confirming, you authorize this charge and acknowledge that the payment processor, not our company, holds the funds during this period.
+        </p>
         <p className="text-xs text-muted-foreground text-center">
           Secure payment via Stripe • Non-refundable • One-time payment
         </p>

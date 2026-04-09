@@ -1,7 +1,7 @@
 /**
  * PLEDGE FLOW — Steward pledges Marks to a project (Tri-Source Funding)
  * Shows funding needed, current breakdown, pledge amount (capped by capacity), confirmation.
- * SEC: pledge Marks, service value; no investment/return.
+ * SEC: pledge Marks, service value; no speculative-return framing.
  * data-xray-id: pledge-flow
  */
 

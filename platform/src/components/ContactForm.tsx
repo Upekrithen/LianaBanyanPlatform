@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { CheckCircle, Loader2, Send, ShieldCheck } from "lucide-react";
+import { CheckCircle, Loader2, Send, ShieldCheck, UserCheck } from "lucide-react";
 import { toast } from "sonner";
 
 interface FormState {
@@ -27,9 +28,21 @@ const INITIAL: FormState = {
 };
 
 export function ContactForm() {
+  const { user } = useAuth();
   const [form, setForm] = useState<FormState>(INITIAL);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    const email = user.email || "";
+    const name = user.user_metadata?.full_name || user.user_metadata?.name || "";
+    setForm(prev => ({
+      ...prev,
+      sender_name: prev.sender_name || name,
+      sender_email: prev.sender_email || email,
+    }));
+  }, [user]);
 
   const update = (field: keyof FormState) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -45,7 +58,7 @@ export function ContactForm() {
     setSending(true);
     try {
       const { data, error } = await supabase.functions.invoke("gatekeeper-triage", {
-        body: form,
+        body: { ...form, member_id: user?.id ?? null },
       });
 
       if (error) throw error;
@@ -90,6 +103,12 @@ export function ContactForm() {
         <CardDescription>
           MoneyPenny screens all inbound messages and routes them appropriately.
         </CardDescription>
+        {user && (
+          <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 mt-1">
+            <UserCheck className="w-3.5 h-3.5" />
+            Signed in — your message will be fast-tracked as a known member.
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

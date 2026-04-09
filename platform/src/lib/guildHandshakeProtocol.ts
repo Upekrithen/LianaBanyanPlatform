@@ -5,8 +5,9 @@
  * the 30-day mutual exploration protocol used to evaluate fit between
  * the Founder and prospective Guild Founding Partners and Reference Experts.
  *
- * All language is SEC-safe. No references to equity, investment, returns,
- * shares, dividends, or profit. Marks are contribution records — nothing more.
+ * All language is SEC-safe. No references to ownership claims, speculative
+ * finance, passive returns, or profit promises. Marks are contribution
+ * records — nothing more.
  *
  * Liana Banyan Platform
  */
@@ -84,8 +85,8 @@ export const HANDSHAKE_DOCUMENT: HandshakeDocument = {
         "to real information so you can make a real decision.",
       bullets: [
         "Full transparency into the platform's current state, challenges, and trajectory",
-        "Access to the patent portfolio (1,511 claims across 10 provisional applications)",
-        "Access to the innovation log (2,007 canonical innovations)",
+        "Access to the patent portfolio (2,097 claims across 11 provisional applications)",
+        "Access to the innovation log (2,128 canonical innovations)",
         "Marks compensation starting from conversation 1 — your time has value from day one",
         "Guild standing regardless of outcome — you belong here even if the timing is not right",
         "Honest answers to hard questions, including 'I do not know yet'",

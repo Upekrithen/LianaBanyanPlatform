@@ -135,7 +135,7 @@ export default function TreasureIsland() {
               </div>
               <div>
                 <p className="font-semibold">Secure</p>
-                <p className="text-xs text-muted-foreground">Blockchain backed</p>
+                <p className="text-xs text-muted-foreground">Verified ledger backed</p>
               </div>
             </div>
           </CardContent>

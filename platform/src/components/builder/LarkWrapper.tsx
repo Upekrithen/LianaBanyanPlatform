@@ -1,5 +1,5 @@
 import React from 'react';
-import { useBuilderMode } from './BuilderModeContext';
+import { useBuilderModeSafe } from './BuilderModeContext';
 import { Hammer, Coins, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -16,7 +16,7 @@ export const LarkWrapper: React.FC<LarkWrapperProps> = ({
   children,
   className = ""
 }) => {
-  const { isBuilderModeActive, openLarkPanel } = useBuilderMode();
+  const { isBuilderModeActive, openLarkPanel } = useBuilderModeSafe();
 
   if (!isBuilderModeActive) {
     return <div className={className}>{children}</div>;

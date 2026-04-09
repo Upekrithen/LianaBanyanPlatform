@@ -1,6 +1,6 @@
 /**
  * Fantasy Bridge — Prediction accuracy → unlock real Backed Marks allocation
- * SEC language: earned allocation authority, no investment/return
+ * SEC language: earned allocation authority, no speculative-return framing
  * data-xray-id: fantasy-bridge
  */
 

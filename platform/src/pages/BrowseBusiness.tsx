@@ -80,7 +80,7 @@ export default function BrowseBusiness() {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">
-                    {t('browseBusiness.avgEquity')}: {category.avgParticipation}
+                    {t('browseBusiness.avgParticipation')}: {category.avgParticipation}
                   </span>
                   <Button
                     size="sm"

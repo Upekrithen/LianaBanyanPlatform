@@ -1,7 +1,7 @@
 /**
  * THE BREWSTER BONUS — Loyalty-Driven Volume Discount Rewards
  * =============================================================
- * "This is not an investment return. It's a loyalty-driven volume
+ * "This is not a speculative return. It's a loyalty-driven volume
  * discount passed back as platform currency."
  *
  * When a participant fully deploys and clears their Marks, they

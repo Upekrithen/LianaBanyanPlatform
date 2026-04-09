@@ -78,7 +78,7 @@ const PATHWAY_B = {
     "Building a home-based manufacturing business",
     "Long-term cost optimization",
   ],
-  pros: ["Dramatically lower unit cost", "Local control", "Home-based operation", "Build equity in equipment"],
+  pros: ["Dramatically lower unit cost", "Local control", "Home-based operation", "Build ownership in equipment"],
   cons: ["~$25K startup for full node", "Learning curve", "Requires physical space"],
 };
 

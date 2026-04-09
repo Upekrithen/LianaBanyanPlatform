@@ -182,7 +182,7 @@ export default function WhyNoVC() {
               <Crown className="h-6 w-6 text-primary mb-2" />
               <h3 className="font-semibold text-foreground">Patent Portfolio</h3>
               <p className="text-sm text-muted-foreground">
-                <strong className="text-primary">10 provisional applications</strong> with 2,007 documented innovations.
+                <strong className="text-primary">11 provisional applications</strong> with 2,128 documented innovations.
                 This is our "runway."
               </p>
             </div>
@@ -197,7 +197,7 @@ export default function WhyNoVC() {
           </div>
           <div className="p-4 bg-muted rounded-lg space-y-3">
             <p className="text-sm text-muted-foreground">
-              Our <strong className="text-primary">127 Crown Jewel patents</strong> out of 2,007 documented innovations
+              Our <strong className="text-primary">127 Crown Jewel patents</strong> out of 2,128 documented innovations
               have an independent valuation of <strong className="text-green-600 dark:text-green-400">$116 Million</strong> — but
               we only claim <strong className="text-primary">$630,000</strong>.
             </p>
@@ -575,7 +575,7 @@ export default function WhyNoVC() {
             <p className="text-xs text-muted-foreground text-center">
               <strong className="text-foreground">{4 + POLITICAL_EXPEDITION_CROWNS.length + INITIATIVE_CROWNS.length} Crown Letters</strong> written
               {' '}— requesting leaders for every initiative plus executive positions.
-              Plus letters to investors, media, academics, and blessing givers.
+              Plus letters to backers, media, academics, and blessing givers.
             </p>
           </div>
         </CardContent>

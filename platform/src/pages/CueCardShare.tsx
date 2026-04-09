@@ -62,7 +62,7 @@ const CARD_CONTENT: Record<string, CardContent> = {
   revolution: {
     frontTitle: "Join the Revolution.",
     frontSub: "Plant Businesses for Work.",
-    backCopy: "10 business seed cards, each loaded • Hand them to people who'll do the work • Split, spend, or invest • Build your local economy one card at a time • You're the first domino",
+    backCopy: "10 business seed cards, each loaded • Hand them to people who'll do the work • Split, spend, or back • Build your local economy one card at a time • You're the first domino",
   },
 
   // --- COMMERCE & MARKETPLACE ---
@@ -89,7 +89,7 @@ const CARD_CONTENT: Record<string, CardContent> = {
   sponsor: {
     frontTitle: "Sponsor Something Real.",
     frontSub: "Your name on work that matters.",
-    backCopy: "60/10/20/10 cascade model • Cloth Pouches (Forever Stamp value) • 5K Sponsor Badge • $10M cap with reset • Not charity — investment in community",
+    backCopy: "60/10/20/10 cascade model • Cloth Pouches (Forever Stamp value) • 5K Sponsor Badge • $10M cap with reset • Not charity — direct community support",
   },
 
   // --- SWEET SIXTEEN INITIATIVES ---
@@ -276,7 +276,7 @@ const CARD_CONTENT: Record<string, CardContent> = {
   "constitutional": {
     frontTitle: "Constitutionally Locked.",
     frontSub: "The economics can't change.",
-    backCopy: "Cost+20% margin locked by DNA Lock • 83.3% to creators, forever • No vote can change it • No CEO can override it • No investor can demand it • This is architecture, not policy",
+    backCopy: "Cost+20% margin locked by DNA Lock • 83.3% to creators, forever • No vote can change it • No CEO can override it • No outside financier can demand it • This is architecture, not policy",
   },
 };
 

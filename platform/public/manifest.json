@@ -1,7 +1,7 @@
 {
-  "name": "Liana Banyan IP Blockchain Ledger",
+  "name": "Liana Banyan — Help Each Other Help Ourselves",
   "short_name": "Liana Banyan",
-  "description": "Manufacturing crowdfunding platform with blockchain IP ledger and medallion NFTs",
+  "description": "Cooperative platform for creators, workers, and communities. $5/year membership. 83.3% to creators.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -40,7 +40,7 @@
     {
       "name": "Dashboard",
       "short_name": "Dashboard",
-      "description": "View your investment dashboard",
+      "description": "View your dashboard",
       "url": "/dashboard",
       "icons": [{ "src": "/LianaBanyanLogo.png", "sizes": "96x96" }]
     },

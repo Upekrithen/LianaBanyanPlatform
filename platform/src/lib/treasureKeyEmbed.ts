@@ -101,41 +101,41 @@ const CONTENT_KEY_MAP: Record<string, KeyPlacement[]> = {
   '/hexisle/overworld': [
     { keyWord: 'WARPPIPE', method: 'embedded', position: 'middle' },
   ],
-  // ─── Circle 1: Investors ──────────────────────────────────────────
-  '/letters/circle-1-investors/craig-newmark': [
+  // ─── Circle 1: Backers ──────────────────────────────────────────
+  '/letters/circle-1-backers/craig-newmark': [
     { keyWord: 'PUBLICINTEREST', method: 'embedded', position: 'middle' },
   ],
-  '/letters/circle-1-investors/mackenzie-scott': [
+  '/letters/circle-1-backers/mackenzie-scott': [
     { keyWord: 'DAYONEFUND', method: 'hidden_text', position: 'end' },
   ],
-  '/letters/circle-1-investors/mackenzie-scott-cardboard-boots': [
+  '/letters/circle-1-backers/mackenzie-scott-cardboard-boots': [
     { keyWord: 'CARDBOARD', method: 'embedded', position: 'middle' },
   ],
-  '/letters/circle-1-investors/warren-buffett': [
+  '/letters/circle-1-backers/warren-buffett': [
     { keyWord: 'COMPOUNDING', method: 'cipher', position: 'middle' },
   ],
-  '/letters/circle-1-investors/michael-seibel': [
+  '/letters/circle-1-backers/michael-seibel': [
     { keyWord: 'BATCHMODE', method: 'hidden_text', position: 'end' },
   ],
-  '/letters/circle-1-investors/tom-simon': [
+  '/letters/circle-1-backers/tom-simon': [
     { keyWord: 'FIDUCIARY', method: 'embedded', position: 'middle' },
   ],
-  '/letters/circle-1-investors/melinda-french-gates': [
+  '/letters/circle-1-backers/melinda-french-gates': [
     { keyWord: 'PIVOTALVENTURES', method: 'hidden_text', position: 'end' },
   ],
-  '/letters/circle-1-investors/anand-giridharadas': [
+  '/letters/circle-1-backers/anand-giridharadas': [
     { keyWord: 'WINNERSTAKEALL', method: 'embedded', position: 'middle' },
   ],
-  '/letters/circle-1-investors/howard-marks': [
+  '/letters/circle-1-backers/howard-marks': [
     { keyWord: 'SECONDLEVEL', method: 'hidden_text', position: 'end' },
   ],
-  '/letters/circle-1-investors/li-jin': [
+  '/letters/circle-1-backers/li-jin': [
     { keyWord: 'PASSIONECONOMY', method: 'cipher', position: 'middle' },
   ],
-  '/letters/circle-1-investors/majora-carter': [
+  '/letters/circle-1-backers/majora-carter': [
     { keyWord: 'GREENHOOD', method: 'embedded', position: 'middle' },
   ],
-  '/letters/circle-1-investors/seth-godin': [
+  '/letters/circle-1-backers/seth-godin': [
     { keyWord: 'PURPLECOW', method: 'hidden_text', position: 'end' },
   ],
   // ─── Circle 2: Media ──────────────────────────────────────────────
@@ -350,8 +350,8 @@ const CONTENT_KEY_MAP: Record<string, KeyPlacement[]> = {
   '/letters/pitches/wsj-feature-611-patents': [
     { keyWord: 'SIXELEVENPATENTS', method: 'embedded', position: 'middle' },
   ],
-  '/letters/pitches/wsj-oped-roi-predictability': [
-    { keyWord: 'PREDICTABLEROI', method: 'hidden_text', position: 'end' },
+  '/letters/pitches/wsj-oped-contribution-impact': [
+    { keyWord: 'PREDICTABLEIMPACT', method: 'hidden_text', position: 'end' },
   ],
   '/letters/pitches/yes-magazine': [
     { keyWord: 'POSITIVECHANGE', method: 'embedded', position: 'middle' },

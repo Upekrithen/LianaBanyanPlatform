@@ -1715,10 +1715,10 @@ export const patentBuckets: Bucket[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // BUCKET P: PEDESTAL VOTING SYSTEM (#1330)
+  // BUCKET PEDESTAL: PEDESTAL VOTING SYSTEM (#1330)
   // ═══════════════════════════════════════════════════════════════════════════
   {
-    id: "P",
+    id: "PEDESTAL",
     slug: "pedestal-voting",
     name: "Pedestal Voting System",
     tagline: "The meta-innovation: interactive pedestal cards for patent portfolio voting.",
@@ -1745,6 +1745,951 @@ export const patentBuckets: Bucket[] = [
     },
     stats: { innovationsCount: 1, claimsCount: 5 },
     voting: { targetAmount: 10_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET P: AI AGENT INFRASTRUCTURE (#2131, #2132, #2166, #2167, #2168)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "P",
+    slug: "ai-agent-infrastructure",
+    name: "AI Agent Infrastructure",
+    tagline: "AI agent context systems, personal assistants, and self-evolving workspaces.",
+    icon: "🤖",
+    innovations: [
+      {
+        id: 2131,
+        code: "AI-MNEMONIC-LOAD",
+        name: "The Mnemonic Load",
+        shortDescription: "Formalized AI agent pre-mission context loading from Armory of Information.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2132,
+        code: "AI-FINGERTIPS-SYSTEM",
+        name: "Fingertips System",
+        shortDescription: "Indexed retrieval system for instant AI context assembly across domains.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2166,
+        code: "AI-RED-QUEEN-PROTOCOL",
+        name: "Red Queen Protocol Personal AI",
+        shortDescription: "Per-member AI assistant for Helm operations distinct from Star Chamber.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2167,
+        code: "AI-LIVING-CASTLE",
+        name: "Living Castle Self-Evolving Workspace",
+        shortDescription: "Helm learns from behavior and auto-upgrades layout and tools.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2168,
+        code: "AI-CASTLE-MARKETPLACE",
+        name: "Castle Marketplace Configuration Commerce",
+        shortDescription: "Buy, sell, and share Helm environment configurations as marketplace items.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 425_000, moderate: 850_000, aggressive: 1_700_000 },
+      tenYear: { conservative: 1_900_000, moderate: 4_250_000, aggressive: 8_500_000 },
+    },
+    stats: { innovationsCount: 5, claimsCount: 20 },
+    voting: { targetAmount: 30_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET Q: COOPERATIVE UX ARCHITECTURE (#2152-#2156, #2160, #2161, #2200-#2203)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "Q",
+    slug: "cooperative-ux-architecture",
+    name: "Cooperative UX Architecture",
+    tagline: "Design doctrine, informative locks, character primitives, and growth visualizations.",
+    icon: "🎨",
+    innovations: [
+      {
+        id: 2152,
+        code: "UX-DESIGN-DOCTRINE",
+        name: "Design Doctrine Codified Architecture",
+        shortDescription: "Formalized cooperative design principles embedded in component library.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 60_000, moderate: 120_000, aggressive: 240_000 },
+          tenYear: { conservative: 250_000, moderate: 600_000, aggressive: 1_200_000 },
+        },
+      },
+      {
+        id: 2153,
+        code: "UX-INFORMATIVE-LOCK",
+        name: "Informative Lock Component",
+        shortDescription: "Lock states that explain what you need to do to unlock, not just that it's locked.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2154,
+        code: "UX-XRAY-INSTRUMENTATION",
+        name: "X-Ray Instrumentation System",
+        shortDescription: "Transparent platform instrumentation showing users what the system sees.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2156,
+        code: "UX-CHARACTER-BUBBLE",
+        name: "Character Bubble Primitive",
+        shortDescription: "Reusable character-voiced speech bubble for platform personality and guidance.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2160,
+        code: "UX-JUDGE-REASONING",
+        name: "Judge Reasoning Matrix",
+        shortDescription: "Multi-agent arbitration visualization showing reasoning transparency.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2161,
+        code: "UX-FAMILY-WARM-WORKSPACE",
+        name: "Family Warm Workspace",
+        shortDescription: "Age-appropriate cooperative economic participation interface.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 60_000, moderate: 120_000, aggressive: 240_000 },
+          tenYear: { conservative: 250_000, moderate: 600_000, aggressive: 1_200_000 },
+        },
+      },
+      {
+        id: 2200,
+        code: "UX-SKITTLES-SPELL",
+        name: "Skittles Spell Position Visualization",
+        shortDescription: "Colored skill slots that combine to unlock capabilities.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2201,
+        code: "UX-BANYAN-SPORE",
+        name: "Banyan Spore-to-Forest Growth Visualization",
+        shortDescription: "Staged botanical growth sequence as dashboard UI metaphor.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2202,
+        code: "UX-AMBASSADOR-QR",
+        name: "Ambassador Attribution QR System",
+        shortDescription: "Per-ambassador QR with threshold-based rewards, not MLM.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2203,
+        code: "UX-MEDALLION-CASCADE",
+        name: "Medallion Cascade Production Level Unlock",
+        shortDescription: "Parent campaign thresholds activate subsidiary campaigns.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 620_000, moderate: 1_240_000, aggressive: 2_480_000 },
+      tenYear: { conservative: 2_500_000, moderate: 5_600_000, aggressive: 11_400_000 },
+    },
+    stats: { innovationsCount: 10, claimsCount: 40 },
+    voting: { targetAmount: 45_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET R: DEVELOPER ECOSYSTEM (#2164, #2165, #2169-#2172, #2190, #2199, #2205)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "R",
+    slug: "developer-ecosystem",
+    name: "Developer Ecosystem",
+    tagline: "Guild tokens, gamified IDE, code challenges, team debugging, and developer sandboxes.",
+    icon: "💻",
+    innovations: [
+      {
+        id: 2164,
+        code: "DEV-GUILD-TOKENS",
+        name: "Guild Tokens",
+        shortDescription: "Guild-specific internal accounting units convertible to Credits.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2165,
+        code: "DEV-BOARD-GAME-LOBBY",
+        name: "Board Game Lobby Auto-Team Formation",
+        shortDescription: "Project auto-launches when team threshold met.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2169,
+        code: "DEV-POLKA-DOT-METATAG",
+        name: "Polka-Dot Metatag Tracking",
+        shortDescription: "Steganographic document watermarking for IP leak detection.",
+        category: "Security",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2170,
+        code: "DEV-GAMIFIED-IDE",
+        name: "Gamified IDE Labyrinth Overlay",
+        shortDescription: "Development environment with game overlay for coding.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2171,
+        code: "DEV-DAILY-CODE-CHALLENGES",
+        name: "Daily Code Challenges with Credit Rewards",
+        shortDescription: "Daily algorithmic puzzles with leaderboard and tiered rewards.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2172,
+        code: "DEV-TEAM-DEBUGGING-RAIDS",
+        name: "Team Debugging Raids",
+        shortDescription: "Cooperative bug-hunting as weekly game mode.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2190,
+        code: "DEV-CASTLE-CREDIT-POOL",
+        name: "Castle Developer Ecosystem Credit-Pool",
+        shortDescription: "Turnkey development infrastructure metered via credit pools.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2199,
+        code: "DEV-CASTLE-FLOOR-EXPANSION",
+        name: "Castle Floor Expansion System",
+        shortDescription: "12 tapestry doorways expandable to 6 floors via contribution.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2205,
+        code: "DEV-TRUNK-MIRROR-SANDBOX",
+        name: "Trunk Mirror Developer Sandbox",
+        shortDescription: "Replicated trunk server for experiments with protocol constraints.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 600_000, moderate: 1_200_000, aggressive: 2_400_000 },
+      tenYear: { conservative: 2_500_000, moderate: 5_500_000, aggressive: 11_000_000 },
+    },
+    stats: { innovationsCount: 9, claimsCount: 36 },
+    voting: { targetAmount: 40_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET S: TEMPORAL CONTENT (#2145-#2148)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "S",
+    slug: "temporal-content",
+    name: "Temporal Content",
+    tagline: "Time-locked, time-released, and time-decaying content architecture.",
+    icon: "⏳",
+    innovations: [
+      {
+        id: 2145,
+        code: "TEMP-TIME-LOCKED-CONTENT",
+        name: "Time-Locked Content Architecture",
+        shortDescription: "Content containers with cryptographic time-lock mechanisms.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2146,
+        code: "TEMP-TIME-RELEASED-CONTENT",
+        name: "Time-Released Content Scheduling",
+        shortDescription: "Scheduled content release with subscriber notification hooks.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2147,
+        code: "TEMP-TIME-DECAYING-CONTENT",
+        name: "Time-Decaying Content Value",
+        shortDescription: "Content whose credit value decreases over time, incentivizing early engagement.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2148,
+        code: "TEMP-TEMPORAL-BUNDLE",
+        name: "Temporal Content Bundle System",
+        shortDescription: "Aggregated time-aware content packages with lifecycle management.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 275_000, moderate: 550_000, aggressive: 1_100_000 },
+      tenYear: { conservative: 1_100_000, moderate: 2_750_000, aggressive: 5_500_000 },
+    },
+    stats: { innovationsCount: 4, claimsCount: 16 },
+    voting: { targetAmount: 20_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET T: TRUST & GOVERNANCE EXTENSIONS (#2149, #2150, #2173, #2174, #2180, #2181, #2221, #2222)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "T",
+    slug: "trust-governance-extensions",
+    name: "Trust & Governance Extensions",
+    tagline: "Trust graphs, WhatIf commissions, realm registries, Imperial Senate, and the Flywheel.",
+    icon: "🏛️",
+    innovations: [
+      {
+        id: 2149,
+        code: "GOV-FAMILY-TRUST-GRAPH",
+        name: "Family Table Trust Graph",
+        shortDescription: "Six-degrees trust graph infrastructure for family network verification.",
+        category: "Governance",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2150,
+        code: "GOV-WHATIF-COMMISSIONS",
+        name: "WhatIf Commissions",
+        shortDescription: "Pre-authored commission deployment with conditional activation.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2173,
+        code: "GOV-REALM-REGISTRY",
+        name: "Realm Registry Universal Project Inception",
+        shortDescription: "Single registration for all project types across the platform.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2174,
+        code: "GOV-CHRONICLE-KEEPER",
+        name: "Chronicle Keeper Creator Role",
+        shortDescription: "Paid game master whose campaigns become commerce.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2180,
+        code: "GOV-THREE-REALMS",
+        name: "Three Realms Cross-Effect System",
+        shortDescription: "Actions in Material, HexIsle, and Ghost realms affect each other.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2181,
+        code: "GOV-IMPERIAL-SENATE",
+        name: "Imperial Senate Company-Level Governance",
+        shortDescription: "Governance layer above the 300 for guild representatives.",
+        category: "Governance",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2221,
+        code: "GOV-FLYWHEEL-LOOP",
+        name: "The Flywheel Loop Formal System Dynamics",
+        shortDescription: "Documented feedback loop model of platform growth.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2222,
+        code: "GOV-BANDWAGON",
+        name: "BandWagon Taste-Prediction Authority",
+        shortDescription: "Demonstrated judgment earns larger cooperative allocation budgets.",
+        category: "Economics",
+        isCrownJewel: true,
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 150_000, moderate: 300_000, aggressive: 600_000 },
+          tenYear: { conservative: 750_000, moderate: 1_500_000, aggressive: 3_000_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 725_000, moderate: 1_450_000, aggressive: 2_900_000 },
+      tenYear: { conservative: 3_350_000, moderate: 7_250_000, aggressive: 14_500_000 },
+    },
+    stats: { innovationsCount: 8, claimsCount: 32 },
+    voting: { targetAmount: 50_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET U: SAFETY & DEFENSE (#2185, #2186, #2187, #2211, #2224)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "U",
+    slug: "safety-defense",
+    name: "Safety & Defense",
+    tagline: "Defense Klaus alert network, behavioral anomaly detection, blast door architecture, and content shields.",
+    icon: "🛡️",
+    innovations: [
+      {
+        id: 2185,
+        code: "DEF-DEFENSE-KLAUS",
+        name: "Defense Klaus Community Alert Network",
+        shortDescription: "Volunteer proximity response system for safety.",
+        category: "Platform",
+        isCrownJewel: true,
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 200_000, moderate: 400_000, aggressive: 800_000 },
+          tenYear: { conservative: 1_000_000, moderate: 2_500_000, aggressive: 5_000_000 },
+        },
+      },
+      {
+        id: 2186,
+        code: "DEF-BEHAVIORAL-ANOMALY",
+        name: "Passive Behavioral Anomaly Detection",
+        shortDescription: "Family safety via usage pattern change detection.",
+        category: "Security",
+        isCrownJewel: true,
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 200_000, moderate: 400_000, aggressive: 800_000 },
+          tenYear: { conservative: 1_000_000, moderate: 2_500_000, aggressive: 5_000_000 },
+        },
+      },
+      {
+        id: 2187,
+        code: "DEF-BLAST-DOOR",
+        name: "Submarine Blast Door Architecture",
+        shortDescription: "Charter-based subsystem isolation with graceful degradation.",
+        category: "Platform",
+        isCrownJewel: true,
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 200_000, moderate: 400_000, aggressive: 800_000 },
+          tenYear: { conservative: 1_000_000, moderate: 2_500_000, aggressive: 5_000_000 },
+        },
+      },
+      {
+        id: 2211,
+        code: "DEF-SILENT-REGISTRATION",
+        name: "Silent Registration Safety Bracelet",
+        shortDescription: "$6 convertible bracelet with silent DV registration.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2224,
+        code: "DEF-CONTENT-SHIELD",
+        name: "Neighborhood Content Shield",
+        shortDescription: "5-layer defense preventing neighborhoods from circumventing platform rules.",
+        category: "Security",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 800_000, moderate: 1_600_000, aggressive: 3_200_000 },
+      tenYear: { conservative: 4_000_000, moderate: 9_500_000, aggressive: 19_000_000 },
+    },
+    stats: { innovationsCount: 5, claimsCount: 20 },
+    voting: { targetAmount: 55_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET V: PLATFORM-AS-A-SERVICE (#2176, #2189, #2194)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "V",
+    slug: "platform-as-a-service",
+    name: "Platform-as-a-Service",
+    tagline: "Star Chamber as external API, steward director system, and Boaz rewards tiers.",
+    icon: "☁️",
+    innovations: [
+      {
+        id: 2176,
+        code: "PAAS-SCAAS",
+        name: "SCaaS — Star Chamber as a Service",
+        shortDescription: "Star Chamber verification as external B2B API product.",
+        category: "Platform",
+        isCrownJewel: true,
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 250_000, moderate: 500_000, aggressive: 1_000_000 },
+          tenYear: { conservative: 1_500_000, moderate: 3_000_000, aggressive: 6_000_000 },
+        },
+      },
+      {
+        id: 2189,
+        code: "PAAS-STEWARD-DIRECTOR",
+        name: "Steward Director System",
+        shortDescription: "Deferred-payment business setup for new members.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2194,
+        code: "PAAS-BOAZ-REWARDS",
+        name: "Boaz Rewards Tiers Generosity Multipliers",
+        shortDescription: "Bronze, Silver, Gold tiers with governance weight multipliers.",
+        category: "Governance",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 425_000, moderate: 850_000, aggressive: 1_700_000 },
+      tenYear: { conservative: 2_300_000, moderate: 4_750_000, aggressive: 9_500_000 },
+    },
+    stats: { innovationsCount: 3, claimsCount: 12 },
+    voting: { targetAmount: 30_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET W: COOPERATIVE FINANCE (#2179, #2191-#2193, #2196, #2198, #2206-#2209, #2212)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "W",
+    slug: "cooperative-finance",
+    name: "Cooperative Finance",
+    tagline: "Birthright mechanics, custom tokens, tab trading, insurance, wave pricing, and payment rewards.",
+    icon: "💰",
+    innovations: [
+      {
+        id: 2179,
+        code: "FIN-BIRTHRIGHT-MECHANIC",
+        name: "Birthright Mechanic Marks Redemption Window",
+        shortDescription: "One-year window to redeem Marks for enhanced platform benefits.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2191,
+        code: "FIN-CUSTOM-TOKENS",
+        name: "Custom Member Tokens Guild-Scoped",
+        shortDescription: "Guild-created tokens convertible to Credits at platform rates.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2192,
+        code: "FIN-UNIVERSAL-CIRCUIT",
+        name: "Universal Circuit Redundancy",
+        shortDescription: "Paid Primary/Secondary/Backup tiers across all services.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2193,
+        code: "FIN-REALM-NIGHT",
+        name: "Realm Night Scheduling System",
+        shortDescription: "Formalized recurring collaborative session scheduling.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2196,
+        code: "FIN-OMNIBUS-LAUNCH",
+        name: "Omnibus Launch Strategy Universal Manifest",
+        shortDescription: "Single data entry auto-formats for multi-platform launch.",
+        category: "UX",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2198,
+        code: "FIN-PROGRESSIVE-PRICING",
+        name: "Progressive Pricing Credit Voucher Refund",
+        shortDescription: "Subscription drops as membership grows with difference refunded.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2206,
+        code: "FIN-TAB-AGING",
+        name: "Tab Aging Priority Mechanism",
+        shortDescription: "Older tabs get weighted payment priority multipliers.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2207,
+        code: "FIN-TAB-TRADING",
+        name: "Tab Trading Marketplace Platform Market-Maker",
+        shortDescription: "Secondary market for deferred contribution receipts.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2208,
+        code: "FIN-TAB-INSURANCE",
+        name: "Tab Insurance Fund",
+        shortDescription: "1% transaction-funded pool covering hardship up to 50%.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2209,
+        code: "FIN-GOLDEN-PAYER",
+        name: "Tab Payment Rewards Golden Payer Status",
+        shortDescription: "On-time payment streaks earn bonus credits and fee discounts.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 50_000, moderate: 100_000, aggressive: 200_000 },
+          tenYear: { conservative: 200_000, moderate: 500_000, aggressive: 1_000_000 },
+        },
+      },
+      {
+        id: 2212,
+        code: "FIN-WAVE-PRICING",
+        name: "Wave-Based Pricing Mechanisms Impatience Tax",
+        shortDescription: "Multi-tier wave pricing funds production without external capital.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 850_000, moderate: 1_700_000, aggressive: 3_400_000 },
+      tenYear: { conservative: 3_800_000, moderate: 8_450_000, aggressive: 16_800_000 },
+    },
+    stats: { innovationsCount: 11, claimsCount: 44 },
+    voting: { targetAmount: 60_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET X: MANUFACTURING & RESOURCES (#2197, #2204, #2210)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "X",
+    slug: "manufacturing-resources",
+    name: "Manufacturing & Resources",
+    tagline: "Multi-vendor food cooperatives, named manufacturing hubs, and well-type resource allocation.",
+    icon: "🏭",
+    innovations: [
+      {
+        id: 2197,
+        code: "MFG-FOOD-COOPERATIVE",
+        name: "Multi-Vendor Food Cooperative Network",
+        shortDescription: "Food trucks, restaurants, and home cooks in buffet collective.",
+        category: "Platform",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 100_000, moderate: 200_000, aggressive: 400_000 },
+          tenYear: { conservative: 500_000, moderate: 1_000_000, aggressive: 2_000_000 },
+        },
+      },
+      {
+        id: 2204,
+        code: "MFG-NAMED-HUBS",
+        name: "Named Manufacturing Hub Types",
+        shortDescription: "Forge, WaterWorks, BicyclePump, Pipeworks themed hubs.",
+        category: "Manufacturing",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2210,
+        code: "MFG-WELL-TYPES",
+        name: "Well Type Resource Allocation System",
+        shortDescription: "Four well types mapped to work funding models.",
+        category: "Economics",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 250_000, moderate: 500_000, aggressive: 1_000_000 },
+      tenYear: { conservative: 1_100_000, moderate: 2_500_000, aggressive: 5_000_000 },
+    },
+    stats: { innovationsCount: 3, claimsCount: 12 },
+    voting: { targetAmount: 18_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
+    ownershipRules: standardOwnershipRules,
+    stakePolicy: standardStakePolicy,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BUCKET Y: ISLAND & NEIGHBORHOOD (#2218, #2219)
+  // ═══════════════════════════════════════════════════════════════════════════
+  {
+    id: "Y",
+    slug: "island-neighborhood",
+    name: "Island & Neighborhood",
+    tagline: "Island ownership models and formal governance standards for micro-communities.",
+    icon: "🏝️",
+    innovations: [
+      {
+        id: 2218,
+        code: "ISL-OWNERSHIP-MODELS",
+        name: "Island Ownership Models Four Types",
+        shortDescription: "Solo, Guild, Project-Sponsored, and Rogue with distinct governance.",
+        category: "Governance",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+      {
+        id: 2219,
+        code: "ISL-GOVERNANCE-STANDARDS",
+        name: "Island Governance Standards",
+        shortDescription: "Formal amendment process with tiered democracy at micro-community scale.",
+        category: "Governance",
+        valuations: {
+          oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+          fiveYear: { conservative: 75_000, moderate: 150_000, aggressive: 300_000 },
+          tenYear: { conservative: 300_000, moderate: 750_000, aggressive: 1_500_000 },
+        },
+      },
+    ],
+    totals: {
+      oneYear: { conservative: 0, moderate: 0, aggressive: 0 },
+      fiveYear: { conservative: 150_000, moderate: 300_000, aggressive: 600_000 },
+      tenYear: { conservative: 600_000, moderate: 1_500_000, aggressive: 3_000_000 },
+    },
+    stats: { innovationsCount: 2, claimsCount: 8 },
+    voting: { targetAmount: 12_000, currentAmount: 0, backerCount: 0, percentFunded: 0 },
     ownershipRules: standardOwnershipRules,
     stakePolicy: standardStakePolicy,
   },
@@ -2131,8 +3076,8 @@ export function getRegularBuckets() {
   return patentBuckets.filter(b => !b.isShowcase);
 }
 
-// Crown jewels for quick reference
-export const crownJewels = [1228, 1233, 1239, 1245, 1261];
+// Crown jewels: query DB with is_crown_jewel=true for full list (202 total)
+export const crownJewelCount = 202;
 
 // Showcase crown jewels (Nine Laws + HexIsle)
 export const showcaseCrownJewels = {

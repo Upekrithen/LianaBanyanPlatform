@@ -1,8 +1,8 @@
 /**
- * HEXISLE PROJECTS — Character & Product Marketplace
+ * HEXISLE PROJECTS — Figure & Product Marketplace
  * ===================================================
  * Multiple sub-projects within the HexIsle universe:
- * - Character miniatures (Kai, Mira, Zephyr, + Make Your Own)
+ * - Figure miniatures (Navigator, Engineer, Tidecaller, + Make Your Own)
  * - Terrain tiles
  * - Accessories
  * 
@@ -54,7 +54,7 @@ interface ProjectCard {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DATA — Characters
+// DATA — Figures
 // The "Add Your Own" card is ALWAYS first in every collection
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -63,26 +63,26 @@ const CHARACTER_PROJECTS: ProjectCard[] = [
   {
     id: "add-your-own-character",
     name: "Design Your Own",
-    tagline: "Your character, your rules, your royalties",
-    description: "Upload your character design to the HexIsle universe. Get it manufactured, sold in the marketplace, and earn 83.3% of every sale.",
+    tagline: "Your figure, your rules, your royalties",
+    description: "Upload your figure design to the HexIsle universe. Get it manufactured, sold in the marketplace, and earn 83.3% of every sale.",
     icon: Plus,
     iconColor: "text-primary",
     status: "add_your_own",
     category: "custom",
     features: ["Upload CAD or sketch", "Community voting", "Factory pipeline", "83.3% royalties"],
     backContent: {
-      details: "Submit your character design through the Factory pipeline. If the community votes it in, we'll prototype, manufacture, and sell it — with you keeping 83.3% of every sale. Your IP, timestamped on the blockchain.",
+      details: "Submit your figure design through the Factory pipeline. If the community votes it in, we'll prototype, manufacture, and sell it — with you keeping 83.3% of every sale. Your IP, timestamped on the verified ledger.",
       specs: ["Any scale (28mm-75mm)", "STL, OBJ, or sketch accepted", "IP protected via Medallion"],
       cta: "Start Designing →",
       ctaLink: "/factory",
     },
   },
-  // Kai — The Navigator
+  // Navigator Frame
   {
-    id: "kai-navigator",
-    name: "Kai, The Navigator",
-    tagline: "Master of currents and tides",
-    description: "Born on the floating markets of Aquilae, Kai reads water like others read maps. His compass always points toward opportunity.",
+    id: "navigator-frame",
+    name: "Navigator Frame",
+    tagline: "Current-reader archetype",
+    description: "A navigation-focused figure platform tuned for route planning, current tracking, and map-led scenarios.",
     icon: Compass,
     iconColor: "text-cyan-500",
     status: "available",
@@ -92,18 +92,18 @@ const CHARACTER_PROJECTS: ProjectCard[] = [
     creator: "Liana Banyan Studio",
     features: ["28mm scale", "Water-effect base", "Compass accessory", "Detailed cape"],
     backContent: {
-      details: "Kai's miniature features a dynamic pose with flowing cape and water-effect transparent base. Compatible with all HexIsle terrain tiles.",
+      details: "This figure includes a dynamic stance, transparent water-effect base, and modular compatibility across HexIsle terrain tiles.",
       specs: ["28mm heroic scale", "Multi-part assembly", "Resin (SLS printed)", "Includes stat card"],
-      cta: "Pre-Order Kai →",
+      cta: "Pre-Order Navigator Frame →",
       ctaLink: "/hexisle/projects",
     },
   },
-  // Mira — The Engineer
+  // Engineer Frame
   {
-    id: "mira-engineer",
-    name: "Mira, The Engineer",
-    tagline: "Builder of impossible machines",
-    description: "Mira's hydraulic inventions power half the cities in the archipelago. She sees gears and channels where others see only water.",
+    id: "engineer-frame",
+    name: "Engineer Frame",
+    tagline: "Mechanism-builder archetype",
+    description: "A systems-focused figure platform built for hydraulic planning, tool-routing interactions, and build-heavy campaigns.",
     icon: Hammer,
     iconColor: "text-amber-500",
     status: "available",
@@ -113,18 +113,18 @@ const CHARACTER_PROJECTS: ProjectCard[] = [
     creator: "Liana Banyan Studio",
     features: ["28mm scale", "Tool belt detail", "Gear accessories", "Workshop base"],
     backContent: {
-      details: "Mira comes with interchangeable tool accessories and a detailed workshop base featuring miniature hydraulic components.",
+      details: "Includes interchangeable tool accessories and a workshop base with miniature hydraulic components.",
       specs: ["28mm heroic scale", "Modular tools", "Resin (SLS printed)", "Includes stat card"],
-      cta: "Pre-Order Mira →",
+      cta: "Pre-Order Engineer Frame →",
       ctaLink: "/hexisle/projects",
     },
   },
-  // Zephyr — The Mage
+  // Tidecaller Frame
   {
-    id: "zephyr-mage",
-    name: "Zephyr, The Tidecaller",
-    tagline: "Where water flows, magic follows",
-    description: "Zephyr doesn't control water — she converses with it. The tides whisper secrets, and she translates them into power.",
+    id: "tidecaller-frame",
+    name: "Tidecaller Frame",
+    tagline: "Flow-channel archetype",
+    description: "A wave-and-channel figure platform for pressure timing, flow control, and hybrid mechanical-magical encounters.",
     icon: Wand2,
     iconColor: "text-purple-500",
     status: "coming_soon",
@@ -134,7 +134,7 @@ const CHARACTER_PROJECTS: ProjectCard[] = [
     creator: "Liana Banyan Studio",
     features: ["28mm scale", "Magic effect parts", "Crystal staff", "Wave base"],
     backContent: {
-      details: "Zephyr's miniature includes translucent magic effect parts and a dynamic wave base. Her crystal staff is a separate piece for customization.",
+      details: "Includes translucent effect parts and a dynamic wave base. The crystal staff is a separate piece for customization.",
       specs: ["28mm heroic scale", "Clear effect parts", "Resin (SLS printed)", "Includes spell cards"],
       cta: "Join Waitlist →",
       ctaLink: "/hexisle/projects",
@@ -300,7 +300,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
   
   const statusBadge = {
     available: { label: "Available", className: "bg-green-500/10 text-green-600 border-green-500/20" },
-    coming_soon: { label: "Coming Soon", className: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+    coming_soon: { label: "Planned", className: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
     in_production: { label: "In Production", className: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
     add_your_own: { label: "Your Design Here", className: "bg-primary/10 text-primary border-primary/20" },
   }[project.status];
@@ -453,7 +453,7 @@ export default function HexIsleProjects() {
           <h1 className="text-4xl font-bold">HexIsle Projects</h1>
         </div>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Characters, terrain, and accessories for the water-powered gaming universe.
+          Figures, terrain, and accessories for the water-powered gaming universe.
           <br />
           <span className="text-primary font-medium">Design your own — earn 83.3%</span>
         </p>
@@ -501,7 +501,7 @@ export default function HexIsleProjects() {
       <Tabs defaultValue="characters" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="characters" className="flex items-center gap-2">
-            <Sword className="h-4 w-4" /> Characters ({CHARACTER_PROJECTS.length})
+            <Sword className="h-4 w-4" /> Figures ({CHARACTER_PROJECTS.length})
           </TabsTrigger>
           <TabsTrigger value="terrain" className="flex items-center gap-2">
             <Compass className="h-4 w-4" /> Terrain ({TERRAIN_PROJECTS.length})
@@ -511,12 +511,12 @@ export default function HexIsleProjects() {
           </TabsTrigger>
         </TabsList>
 
-        {/* Characters Tab */}
+        {/* Figures Tab */}
         <TabsContent value="characters" className="space-y-6 mt-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold">Character Miniatures</h2>
-              <p className="text-muted-foreground">Heroes of the HexIsle archipelago</p>
+              <h2 className="text-2xl font-bold">Figure Miniatures</h2>
+              <p className="text-muted-foreground">Archetypes of the HexIsle archipelago</p>
             </div>
             <Button variant="outline" onClick={() => navigate("/factory")}>
               <Plus className="h-4 w-4 mr-2" /> Submit Your Design

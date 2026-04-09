@@ -122,7 +122,7 @@ export const RootLockDemo: React.FC = () => {
           </p>
           <ul className="list-disc list-inside space-y-2 ml-2">
             <li><strong>Hexels & The Tereno Platform:</strong> The game board is a hydraulically powered mechanical system of pneumatics that enable physical computing. The terrain is built using "Hexels" (hexagonal tiles) that contain these specific socket configurations.</li>
-            <li><strong>Biome Boots:</strong> Character miniatures and buildings have specific "Biome Boots" (the roots). A character with a "Twin" boot can physically only be placed into a "Navigate" or "Seek" Hexel.</li>
+            <li><strong>Biome Boots:</strong> Figure miniatures and buildings have specific "Biome Boots" (the roots). A figure with a "Twin" boot can physically only be placed into a "Navigate" or "Seek" Hexel.</li>
             <li><strong>Self-Validating:</strong> "If it fits, it sits." If a player tries to put an industrial building (Quad root) into a farming tile (Single socket), it physically will not fit. The game engine is the plastic itself.</li>
           </ul>
         </div>

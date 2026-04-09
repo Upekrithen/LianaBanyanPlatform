@@ -1,6 +1,6 @@
 /**
  * Cue card: Become a Steward — pledge Marks, manage campaigns, Pizza Oven.
- * SEC language: pledge Marks, operational surplus; no investment/return.
+ * SEC language: pledge Marks, operational surplus; no speculative-return framing.
  * data-xray-id: become-a-steward-card
  */
 

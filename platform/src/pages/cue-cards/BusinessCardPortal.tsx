@@ -24,7 +24,7 @@ export default function BusinessCardPortal() {
             The Cooperative Business Card
           </h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            You can design and order business cards anywhere. But if you do it here, you unlock volume discounts, blockchain provenance, and guaranteed fulfillment.
+            You can design and order business cards anywhere. But if you do it here, you unlock volume discounts, verified provenance, and guaranteed fulfillment.
           </p>
         </div>
 

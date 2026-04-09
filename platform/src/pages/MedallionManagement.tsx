@@ -122,7 +122,7 @@ export default function MedallionManagement() {
           ) : (
             <Alert>
               <AlertDescription>
-                Only project owners can mint medallions to the blockchain.
+                Only project owners can mint medallions to the verified ledger.
               </AlertDescription>
             </Alert>
           )}

@@ -72,7 +72,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
         id: 'what-is-lb',
         question: 'What is Liana Banyan?',
         answer: "A cooperative platform where everyone benefits. Not a corporation extracting value — a cooperative where members own the platform, govern it together, and share in its success.",
-        detail: "Liana Banyan is the world's first cooperative platform designed so that the more people participate, the more everyone benefits. Traditional platforms extract value from users and send it to shareholders. We do the opposite: 83.3% of every transaction goes to the creator, 16.7% funds the cooperative's 16 initiatives, and 0% goes to outside investors.",
+        detail: "Liana Banyan is the world's first cooperative platform designed so that the more people participate, the more everyone benefits. Traditional platforms extract value from users and route it to outside owners. We do the opposite: 83.3% of every transaction goes to the creator, 16.7% funds the cooperative's 16 initiatives, and 0% goes to outside financiers.",
         learnMoreUrl: '/learn/what-is-lb',
         learnMoreLabel: 'Alcove: What Is Liana Banyan?',
         relatedEntries: ['cost-plus-20', 'sweet-sixteen', 'vernacular-heoho'],
@@ -186,7 +186,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'no-vc',
         question: 'Why no venture capital?',
-        answer: "V.C. money comes with strings: 10x return demands force unsustainable growth, exit pressure means selling you in 5-7 years, and each funding round dilutes everyone. We're funded by 10 provisional patents with 2,007 innovations and started with $1,000. No burn rate. We own 100% — forever.",
+        answer: "V.C. money comes with strings: 10x return demands force unsustainable growth, exit pressure means selling you in 5-7 years, and each funding round dilutes everyone. We're funded by 11 provisional patents with 2,128 innovations and started with $1,000. No burn rate. We own 100% — forever.",
         detail: "The math: At Year 10, if we're worth $500M with VC money, we'd own ~$25M. Growing organically, even at half that valuation ($250M), we own ALL of it. Our patent portfolio IS our runway. Micro-entity filing at $65 per provisional. Your early contribution = permanent credit via Ghost Attribution. The 300 founding members get Joules — no VC means no dilution of YOUR stake.",
         learnMoreUrl: '/why-no-vc',
         learnMoreLabel: 'Full Explanation: Why No V.C.',
@@ -284,7 +284,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'bandwagon',
         question: 'What is BandWagon?',
-        answer: "Back projects with Marks. If the project succeeds, you earn increased Service Allocation Authority (SAA) — the ability to direct more cooperative resources. This is NOT an investment return. This is earned authority based on demonstrated judgment.",
+        answer: "Back projects with Marks. If the project succeeds, you earn increased Service Allocation Authority (SAA) — the ability to direct more cooperative resources. This is NOT a speculative return. This is earned authority based on demonstrated judgment.",
         learnMoreUrl: '/cephas/under-the-hood/bandwagon',
         learnMoreLabel: 'BandWagon Deep Dive',
         relatedEntries: ['stewards', 'production-runs', 'hexisle-deterministic-chance'],
@@ -303,7 +303,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'the-300',
         question: 'What are "The 300"?',
-        answer: "The first 300 founding members shape the cooperative's constitution. Every voice matters. They receive Joules (equity-like authority tokens) and permanent Founding Status. No VC means no dilution of their stake.",
+        answer: "The first 300 founding members shape the cooperative's constitution. Every voice matters. They receive Joules (benefit-like authority tokens) and permanent Founding Status. No VC means no dilution of their stake.",
         learnMoreUrl: '/learn/the-300',
         learnMoreLabel: 'Alcove: The 300',
         relatedEntries: ['coverage-minutes', 'star-chamber', 'howey-defense'],
@@ -348,7 +348,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'patent-portfolio',
         question: 'What is the patent portfolio?',
-        answer: "10 provisional applications filed as a micro-entity ($65 each). 2,007 innovations documented. This is the cooperative's runway — IP as a shared asset instead of venture capital debt. 60% of Founder patents go to the platform.",
+        answer: "11 provisional applications filed as a micro-entity ($65 each). 2,128 innovations documented. This is the cooperative's runway — IP as a shared asset instead of venture capital debt. 60% of Founder patents go to the platform.",
         learnMoreUrl: '/learn/patents',
         learnMoreLabel: 'Alcove: Patent Portfolio',
         relatedEntries: ['vernacular-silver-candlesticks', 'cost-plus-20', 'howey-defense'],
@@ -754,7 +754,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'hexisle-deterministic-chance',
         question: 'Why does HexIsle have no dice?',
-        answer: "Because 'chance' is not random — it's the aggregate consequence of every prior decision by every player. Dice erase that history by substituting a fresh random number. HexIsle preserves it. The attack wheel's position reflects every attack ever fired. The coin economy reflects every investment ever made. The terrain reflects every modification ever built. Outcomes FEEL uncertain because the aggregate is too complex to track — but they are fully determined by the history of play.",
+        answer: "Because 'chance' is not random — it's the aggregate consequence of every prior decision by every player. Dice erase that history by substituting a fresh random number. HexIsle preserves it. The attack wheel's position reflects every attack ever fired. The coin economy reflects every contribution ever made. The terrain reflects every modification ever built. Outcomes FEEL uncertain because the aggregate is too complex to track — but they are fully determined by the history of play.",
         detail: "This is Paper 8 in the Liana Banyan Academic Series: 'Deterministic Chance.' The same principle applies beyond the game table. In cooperative economics, the 'luck' of market outcomes is the materialized aggregate of every participant's prior decisions. Your XP Score is your attack wheel. Practice (failed projects, apprenticeship) is shooting arrows at trees. Pledged Marks are coins in boots. BandWagon backing is a cairn alliance. It is better to practice shooting arrows at trees so that when battle comes, you hit.",
         innovations: [1745, 1747],
         learnMoreUrl: '/hexisle/battle-philosophy',
@@ -801,7 +801,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'ip-load-balance',
         question: 'What is IP Load Balancing?',
-        answer: "The mechanism that distributes crystallized Shadow Marks proportionally across the patent portfolio. When your Shadow Marks crystallize into real Marks, their value is backed by a proportional slice of the cooperative's 2,007 innovations. This creates a direct link between member demand signaling and IP asset allocation — the portfolio funds what people actually want built.",
+        answer: "The mechanism that distributes crystallized Shadow Marks proportionally across the patent portfolio. When your Shadow Marks crystallize into real Marks, their value is backed by a proportional slice of the cooperative's 2,128 innovations. This creates a direct link between member demand signaling and IP asset allocation — the portfolio funds what people actually want built.",
         relatedEntries: ['shadow-marks', 'crystallization', 'patent-portfolio'],
         tags: ['ip-load-balance', 'patents', 'demand', 'allocation', 'portfolio'],
       },
@@ -884,7 +884,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'vernacular-pollination',
         question: 'What does "Pollination" mean?',
-        answer: "Propagating a canonical number or fact across every file that references it. When the innovation count changes from 1,938 to 2,007, Pollination means finding and updating every source file — stats hooks, blueprints, metrics, landing pages, FAQ entries, press pages — so the entire platform shows one consistent truth. Named for how bees carry pollen between flowers: one source of truth, distributed everywhere.",
+        answer: "Propagating a canonical number or fact across every file that references it. When the innovation count changes from 1,938 to 2,128, Pollination means finding and updating every source file — stats hooks, blueprints, metrics, landing pages, FAQ entries, press pages — so the entire platform shows one consistent truth. Named for how bees carry pollen between flowers: one source of truth, distributed everywhere.",
         relatedEntries: ['vernacular-threshing', 'vernacular-grafting-cycle'],
         tags: ['pollination', 'vernacular', 'process', 'consistency', 'canonical'],
       },
@@ -940,7 +940,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'vernacular-silver-candlesticks',
         question: 'What are the "Silver Candlesticks"?',
-        answer: "The Founder's metaphor for the patent portfolio donation. In Les Misérables, the Bishop gives Valjean his silver candlesticks — not because they were owed, but because giving them redirected a life. The Founder valued 2,007 patents at $630K (Cost+20%) instead of $116M+ (market value) and gave away 80%. 'I'm not trying to be Valjean. I'm trying to be the Bishop — one of many — and these patents are my silver candlesticks. I don't have any silver spoons.'",
+        answer: "The Founder's metaphor for the patent portfolio donation. In Les Misérables, the Bishop gives Valjean his silver candlesticks — not because they were owed, but because giving them redirected a life. The Founder valued 2,128 patents at $630K (Cost+20%) instead of $116M+ (market value) and gave away 80%. 'I'm not trying to be Valjean. I'm trying to be the Bishop — one of many — and these patents are my silver candlesticks. I don't have any silver spoons.'",
         relatedEntries: ['cost-plus-20', 'vernacular-no-spoon'],
         tags: ['silver-candlesticks', 'vernacular', 'patents', 'giving', 'valjean', 'bishop'],
       },

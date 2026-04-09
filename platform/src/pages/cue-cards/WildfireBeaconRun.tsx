@@ -7,7 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function WildfireBeaconRun() {
-  const [isTourActive, setIsTourActive] = useState(true);
+  const [isTourActive, setIsTourActive] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(0);
   const { toast } = useToast();
 
@@ -81,7 +82,25 @@ export default function WildfireBeaconRun() {
         {/* The "Viewport" of the Tour */}
         <Card className={`border-2 transition-all duration-500 ${isTourActive ? 'border-slate-800 bg-slate-900' : 'border-purple-500/50 bg-purple-950/20 shadow-[0_0_50px_rgba(168,85,247,0.15)]'}`}>
           <CardContent className="p-12 min-h-[400px] flex flex-col items-center justify-center text-center space-y-6">
-            
+
+            {!hasStarted ? (
+              <>
+                <Flame className="w-16 h-16 text-amber-400 animate-pulse" />
+                <h2 className="text-4xl font-bold text-white">The Beacon Run</h2>
+                <p className="text-xl text-slate-400 max-w-2xl">
+                  Walk through 4 locations that show how the platform works — from launching a business to claiming bounties.
+                </p>
+                <Button
+                  size="lg"
+                  className="mt-4 bg-amber-500 hover:bg-amber-600 text-black font-semibold gap-2"
+                  onClick={() => { setHasStarted(true); setIsTourActive(true); }}
+                >
+                  <Play className="w-5 h-5" /> Start the Tour
+                </Button>
+                <p className="text-sm text-slate-500">Takes about 2 minutes</p>
+              </>
+            ) : (
+            <>
             {!isTourActive && (
               <Badge className="absolute top-4 left-4 bg-purple-500/20 text-purple-300 border-purple-500/50">
                 <Ghost className="w-3 h-3 mr-1" /> Ghost World Active
@@ -111,6 +130,8 @@ export default function WildfireBeaconRun() {
                   <span>Create Treasure Map</span>
                 </Button>
               </div>
+            )}
+            </>
             )}
 
           </CardContent>

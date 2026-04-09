@@ -457,12 +457,12 @@ const Index = () => {
   const [showWelcomeChoice, setShowWelcomeChoice] = useState<boolean | null>(null);
   const [userChoice, setUserChoice] = useState<'keep' | 'explore' | null>(null);
 
-  // Logged-in users see KeepView as their default homepage.
-  // The welcome choice dialog is available but defaults to 'keep'.
+  // Logged-in users see the public landing by default (Founder directive B052).
+  // KeepView accessible via /helm or sidebar. Landing is the landing.
   useEffect(() => {
     if (user) {
       const saved = sessionStorage.getItem('lb_landing_choice') as 'keep' | 'explore' | null;
-      setUserChoice(saved || 'keep');
+      setUserChoice(saved || 'explore');
       setShowWelcomeChoice(false);
     }
   }, [user]);
@@ -542,7 +542,7 @@ const Index = () => {
 
     // User chose to explore — show public landing
     if (userChoice === 'explore') {
-      return <PublicLandingView navigate={navigate} />;
+      return <PublicLandingView navigate={navigate} user={user} />;
     }
 
     // Still loading choice
@@ -552,13 +552,13 @@ const Index = () => {
   // ─── NOT AUTHENTICATED: Original HEOHO Landing with Hero flip + Fable ───
   // Session 25: Restored per Founder directive — returning visitors see the real landing.
   // PortalGatewayPage only accessible to authenticated users via /portal route.
-  return <PublicLandingView navigate={navigate} />;
+  return <PublicLandingView navigate={navigate} user={user} />;
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PUBLIC LANDING VIEW — Matches landing.html exactly
 // ═══════════════════════════════════════════════════════════════════════════
-function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
+function PublicLandingView({ navigate, user }: { navigate: (path: string) => void, user: any }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [heroFlipped, setHeroFlipped] = useState(false);      // HEOHO card flip
 
@@ -610,7 +610,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         }
         return prev + 1;
       });
-    }, 1200);
+    }, 2000);
     return () => clearInterval(timer);
   }, [fableIsPlaying]);
 
@@ -621,7 +621,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         if (prev >= ORIGIN_SCENES.length - 1) { setOriginIsPlaying(false); return prev; }
         return prev + 1;
       });
-    }, 3500);
+    }, 2000);
     return () => clearInterval(timer);
   }, [originIsPlaying]);
 
@@ -632,7 +632,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         if (prev >= LEMONADE_SCENES.length - 1) { setLemonadeIsPlaying(false); return prev; }
         return prev + 1;
       });
-    }, 4000);
+    }, 2000);
     return () => clearInterval(timer);
   }, [lemonadeIsPlaying]);
   const [mainCardFlipped, setMainCardFlipped] = useState(false); // Main card (logo + G&G) flip
@@ -657,6 +657,16 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
   const [expandedWorldPortal, setExpandedWorldPortal] = useState<'ghost' | 'real' | null>(null);  // Which world portal is expanded on Choose Card back
   const [activeSlideshow, setActiveSlideshow] = useState<string | null>(null);  // Which content is showing: 'fable' | 'lemonade' | 'origin' | 'noads' | 'novc' | null
   const [watchDropdownOpen, setWatchDropdownOpen] = useState(false);  // WATCH button dropdown menu
+  const [isShining, setIsShining] = useState(false);
+  const [showPersistentStars, setShowPersistentStars] = useState(false);
+  const [yourGlowing, setYourGlowing] = useState(false);
+  const shineEndTimerRef = React.useRef<number | null>(null);
+  const glowEndTimerRef = React.useRef<number | null>(null);
+  // HOFUND state + heroFrontFacing — must be declared before any useEffect that references them
+  const [hofundCodeEntry, setHofundCodeEntry] = useState(false);
+  const [hofundCode, setHofundCode] = useState('');
+  const [hofundAccessGranted, setHofundAccessGranted] = useState(false);
+  const heroFrontFacing = !heroFlipped && !hofundAccessGranted;
 
   // Close WATCH dropdown when clicking anywhere else
   useEffect(() => {
@@ -665,6 +675,42 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     const timer = setTimeout(() => document.addEventListener('click', handleClickAway), 0);
     return () => { clearTimeout(timer); document.removeEventListener('click', handleClickAway); };
   }, [watchDropdownOpen]);
+
+  useEffect(() => {
+    const clearShineTimers = () => {
+      if (shineEndTimerRef.current) {
+        window.clearTimeout(shineEndTimerRef.current);
+        shineEndTimerRef.current = null;
+      }
+      if (glowEndTimerRef.current) {
+        window.clearTimeout(glowEndTimerRef.current);
+        glowEndTimerRef.current = null;
+      }
+    };
+
+    const handleYvaineShine = () => {
+      // Keep quote/star timing aligned with visible Hero front content only.
+      if (!heroFrontFacing) return;
+      clearShineTimers();
+      setIsShining(true);
+
+      shineEndTimerRef.current = window.setTimeout(() => {
+        setIsShining(false);
+        setShowPersistentStars(true);
+        setYourGlowing(true);
+      }, 4000);
+
+      glowEndTimerRef.current = window.setTimeout(() => {
+        setYourGlowing(false);
+      }, 14000);
+    };
+
+    window.addEventListener('yvaine-shine', handleYvaineShine);
+    return () => {
+      window.removeEventListener('yvaine-shine', handleYvaineShine);
+      clearShineTimers();
+    };
+  }, [heroFrontFacing]);
   
   // Level-gated navigation
   const levelGatedNavigate = useLevelGatedNavigate();
@@ -677,9 +723,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
   };
   
   // HOFUND Secret Entry System - Easter egg access via hand icon
-  const [hofundCodeEntry, setHofundCodeEntry] = useState(false);  // Show code entry popup
-  const [hofundCode, setHofundCode] = useState('');  // Code being entered
-  const [hofundAccessGranted, setHofundAccessGranted] = useState(false);  // Valid code entered, show ship's wheel
+  // Note: hofundCodeEntry, hofundCode, hofundAccessGranted, heroFrontFacing declared above (line ~665) to avoid TDZ
   const [hofundCoordinates, setHofundCoordinates] = useState('');  // Coordinates being entered
   const [hofundWrongCodeMessage, setHofundWrongCodeMessage] = useState(false);  // Show explanation when wrong code entered
   const [foundationQuizIndex, setFoundationQuizIndex] = useState(() => Math.floor(Math.random() * 5));  // Random quiz question
@@ -1150,7 +1194,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
     >
       {/* Animated Background Text — 18 lines (hidden for professional mode which uses static gradient) */}
       {!isProfessionalTheme && (
-        <div className="landing-bg-text" aria-hidden="true">
+        <div className={`landing-bg-text ${isShining ? 'shining' : ''}`} aria-hidden="true">
           {isHeohoMode ? (
             // HEOHO mode: alternating line-a and line-b patterns
             <>
@@ -1181,6 +1225,24 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               </span>
             ))
           )}
+        </div>
+      )}
+
+      {/* Yvaine quote effect overlay (above background, below primary content) */}
+      <div className={`yvaine-wash ${isShining && heroFrontFacing ? 'active' : ''}`} aria-hidden="true" />
+
+      {/* Persistent stars after Yvaine shine */}
+      {showPersistentStars && heroFrontFacing && (
+        <div className="persistent-stars" aria-hidden="true">
+          <span className="persistent-star">✦</span>
+          <a
+            href="https://the2ndsecond.com"
+            className="persistent-star second-star"
+            title="Second star to the right..."
+            aria-label="Second star to the right"
+          >
+            ✦
+          </a>
         </div>
       )}
       
@@ -1809,7 +1871,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
         }}
       />
 
-      <div className="container" style={isProfessionalTheme ? { maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', width: '100%', position: 'relative', zIndex: 1, minHeight: '100vh', boxSizing: 'border-box' } : undefined}>
+      <div className="container" style={isProfessionalTheme ? { maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '2rem', paddingTop: '4rem', width: '100%', position: 'relative', zIndex: 1, boxSizing: 'border-box' } : undefined}>
         {/* ═══════════════════════════════════════════════════════════════════
             MAIN CARD (larger) — Contains Logo + Hero Card slot + G&G Button
             Flips independently to show "How It Works"
@@ -2028,14 +2090,18 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                             <h2 style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 'clamp(1.8rem, 5vw, 2.8rem)', fontWeight: 700, color: '#faf5eb', marginBottom: '1.5rem' }}>
                               Built to Last
                             </h2>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
-                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>10</div>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>12</div>
                                 <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Patent Applications</div>
                               </div>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
-                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>2,007</div>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>2,144</div>
                                 <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Innovations</div>
+                              </div>
+                              <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
+                                <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>182</div>
+                                <div style={{ fontSize: '0.8rem', color: 'rgba(250,245,235,0.7)' }}>Crown Jewels</div>
                               </div>
                               <div style={{ background: 'rgba(56,161,105,0.1)', border: '1px solid rgba(56,161,105,0.3)', borderRadius: '0.75rem', padding: '1rem' }}>
                                 <div style={{ fontSize: '2rem', fontWeight: 700, color: '#38a169' }}>47</div>
@@ -2151,7 +2217,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       <>
                         {/* Rotating Quotes — inside Hero Card, flips with it */}
                         <div data-xray-id="rotating-quotes" style={{ marginBottom: '1rem', width: '100%', maxWidth: '500px', minHeight: '60px' }}>
-                          <RotatingQuotes intervalMs={8000} />
+                          <RotatingQuotes intervalMs={8000} isActive={heroFrontFacing} />
                         </div>
                         {/* COOPERATIVE COMMERCE eyebrow — with No Ads / No V.C. flanking */}
                         <span className="cooperative-header" data-xray-id="cooperative-commerce-header" style={{
@@ -2274,7 +2340,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                           textAlign: 'center',
                           fontWeight: 600
                         }}>
-                          Own your Work. Member-Governed.
+                          Own <span className={yourGlowing ? 'your-shine' : ''}>your</span> Work. Member-Governed.
                         </p>
                         <p style={{ 
                           fontSize: 'clamp(0.85rem, 1.8vw, 1rem)',
@@ -2284,7 +2350,9 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                           lineHeight: 1.7,
                           textAlign: 'center'
                         }}>
-                          <span style={{ display: 'block' }}>Your ideas/services/products</span>
+                          <span style={{ display: 'block' }}>
+                            <span className={yourGlowing ? 'your-shine' : ''}>Your</span> ideas/services/products
+                          </span>
                           <span style={{ display: 'block' }}>Preorder-Funded &amp; Made by Members</span>
                         </p>
                         <p style={{ 
@@ -2626,7 +2694,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               <img src={`/images/fable/${fableFrame}.png`} alt={`Fable Frame ${fableFrame}`} style={{ maxWidth: '90%', maxHeight: '100%', objectFit: 'contain' }} />
                             </div>
                             <div style={{ flexShrink: 0, textAlign: 'center', padding: '0.25rem 1rem 0.5rem', minHeight: '3.5rem' }}>
-                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line', height: 'calc(1.4em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <p style={{ background: 'rgba(10, 22, 40, 0.92)', color: '#faf5eb', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.8rem, 1.7vw, 0.95rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.45, fontWeight: 600, whiteSpace: 'pre-line', height: 'calc(1.45em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
                                 {FABLE_SUBTITLES[fableFrame] || '\u00A0'}
                               </p>
                             </div>
@@ -2659,7 +2727,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               <img src={`/origin-story/${ORIGIN_SCENES[originFrame].img}`} alt={`Origin Story ${originFrame + 1}`} style={{ maxWidth: '90%', maxHeight: '100%', objectFit: 'contain' }} />
                             </div>
                             <div style={{ flexShrink: 0, textAlign: 'center', padding: '0.25rem 1rem 0.5rem', minHeight: '3.5rem' }}>
-                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.4, fontWeight: 500, whiteSpace: 'pre-line', height: 'calc(1.4em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <p style={{ background: 'rgba(10, 22, 40, 0.92)', color: '#faf5eb', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.8rem, 1.7vw, 0.95rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.45, fontWeight: 600, whiteSpace: 'pre-line', height: 'calc(1.45em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
                                 {ORIGIN_SCENES[originFrame].caption}
                               </p>
                             </div>
@@ -2696,9 +2764,9 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               />
                             </div>
                             <div style={{ flexShrink: 0, textAlign: 'center', padding: '0.25rem 1rem 0.5rem' }}>
-                              {/* Single rhyme caption */}
-                              <p style={{ background: 'rgba(255, 255, 255, 0.85)', color: '#0a1628', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.7rem, 1.5vw, 0.85rem)', fontFamily: "'Crimson Pro', Georgia, serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.45, fontWeight: 400, fontStyle: 'italic', whiteSpace: 'pre-line', minHeight: 'calc(1.45em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                {LEMONADE_SCENES[lemonadeFrame].rhyme || '\u00A0'}
+                              {/* Kid-friendly caption (B053 fix — was showing rhyme instead) */}
+                              <p style={{ background: 'rgba(10, 22, 40, 0.92)', color: '#faf5eb', padding: '0.5rem 1rem', borderRadius: '0.35rem', fontSize: 'clamp(0.75rem, 1.6vw, 0.9rem)', fontFamily: "'Source Sans 3', system-ui, sans-serif", maxWidth: '95%', margin: '0 auto', lineHeight: 1.45, fontWeight: 600, whiteSpace: 'pre-line', minHeight: 'calc(1.45em * 2 + 1rem)', display: 'flex', alignItems: 'center', justifyContent: 'center', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                                {LEMONADE_SCENES[lemonadeFrame].caption || '\u00A0'}
                               </p>
                             </div>
                           </div>
@@ -2752,7 +2820,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                               </div>
                               <div style={{ background: 'rgba(34, 197, 94, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
                                 <p style={{ color: '#86efac', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>Patent-Backed Bootstrap</p>
-                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>10 provisionals, 2,007 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="/cephas/articles/one-of-us-building-trust-through-shared-economics" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>12 provisionals, 2,144 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="/cephas/articles/one-of-us-building-trust-through-shared-economics" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
                               </div>
                               <div style={{ background: 'rgba(139, 92, 246, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
                                 <p style={{ color: '#c4b5fd', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>The Math</p>
@@ -2785,7 +2853,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
               {/* ENTER + WATCH buttons + No Ads / No VC pills */}
               <div data-xray-id="enter-watch-buttons" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
                 <button
-                  onClick={(e) => { e.stopPropagation(); navigate('/portal'); }}
+                  onClick={(e) => { e.stopPropagation(); navigate(user ? '/helm' : '/portal'); }}
                   style={{
                     cursor: 'pointer',
                     padding: '0.875rem 2.5rem',
@@ -3066,7 +3134,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🔒 Permanent 20% Cap</h4>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         The 20% margin is <strong>hardcoded into our bylaws</strong>. It cannot be increased by management, 
-                        investors, or even a majority vote.
+                        backers, or even a majority vote.
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         Why? Because we've seen what happens when platforms grow: fees creep up, terms change, 

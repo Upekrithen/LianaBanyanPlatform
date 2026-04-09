@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Palette, Globe, CreditCard, Clock, Coins, Banknote, ArrowRight } from 'lucide-react';
+import { Palette, Globe, CreditCard, Clock, ArrowRight } from 'lucide-react';
 import { useCreateBounty, RUSH_TIERS, BOUNTY_PRICING } from '@/hooks/useBrandBounties';
+import { useCreateSponsorship } from '@/hooks/useBountySponsorship';
+import { BountyPaymentToggle, type PaymentMethod } from '@/components/BountyPaymentToggle';
 import { toast } from 'sonner';
 
 interface BrandBountyPanelProps {
@@ -19,9 +21,11 @@ const BOUNTY_TYPES = [
 export function BrandBountyPanel({ onRemindLater }: BrandBountyPanelProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [rushTier, setRushTier] = useState(6);
-  const [payCredits, setPayCredits] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("marks");
+  const [ownershipTransfer, setOwnershipTransfer] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const createBounty = useCreateBounty();
+  const createSponsorship = useCreateSponsorship();
 
   const toggle = (id: string) => {
     setSelected((prev) => {
@@ -41,10 +45,22 @@ export function BrandBountyPanel({ onRemindLater }: BrandBountyPanelProps) {
     setSubmitting(true);
     try {
       for (const type of selected) {
-        await createBounty.mutateAsync({
+        const price = BOUNTY_PRICING[type]?.[rushTier] || 0;
+        const bounty = await createBounty.mutateAsync({
           bounty_type: type as 'logo' | 'domain_email' | 'designed_card',
           rush_tier: rushTier,
-          paid_in_credits: payCredits,
+          paid_in_credits: paymentMethod === "credits",
+        });
+        const sponsorPaymentMethod = paymentMethod === "fiat" ? "fiat_stripe" as const
+          : paymentMethod === "credits" ? "credits" as const
+          : "credits" as const;
+        await createSponsorship.mutateAsync({
+          bounty_type: "brand_bounty",
+          bounty_id: (bounty as { id: string }).id,
+          amount_credits: price,
+          amount_marks_equivalent: price,
+          payment_method: sponsorPaymentMethod,
+          ownership_transfer: ownershipTransfer,
         });
       }
       toast.success(`${selected.size} bounties posted!`);
@@ -125,36 +141,20 @@ export function BrandBountyPanel({ onRemindLater }: BrandBountyPanelProps) {
           </div>
         </div>
 
-        {/* Payment method */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => setPayCredits(false)}
-            className={`flex-1 p-2.5 rounded-lg border text-sm flex items-center justify-center gap-1.5 transition-colors ${
-              !payCredits ? 'bg-amber-900/30 border-amber-600/50 text-amber-300' : 'border-white/10 text-white/40'
-            }`}
-          >
-            <Coins className="w-4 h-4" /> Marks
-          </button>
-          <button
-            onClick={() => setPayCredits(true)}
-            className={`flex-1 p-2.5 rounded-lg border text-sm flex items-center justify-center gap-1.5 transition-colors ${
-              payCredits ? 'bg-emerald-900/30 border-emerald-600/50 text-emerald-300' : 'border-white/10 text-white/40'
-            }`}
-          >
-            <Banknote className="w-4 h-4" /> Credits (priority)
-          </button>
-        </div>
-        {payCredits && (
-          <p className="text-emerald-400/60 text-xs text-center">
-            Paying in Credits bumps you up one tier in the designer queue.
-          </p>
-        )}
+        {/* Payment method — BountyPaymentToggle (K151) */}
+        <BountyPaymentToggle
+          priceMarks={totalMarks}
+          onPaymentChange={setPaymentMethod}
+          onOwnershipChange={setOwnershipTransfer}
+          showFiatOption={true}
+          compact
+        />
 
         {/* Summary + submit */}
         {selected.size > 0 && (
           <div className="bg-white/5 rounded-lg p-3 text-center">
             <p className="text-white text-sm font-medium">
-              {selected.size} {selected.size === 1 ? 'bounty' : 'bounties'} — {totalMarks} {payCredits ? 'Credits' : 'Marks'}
+              {selected.size} {selected.size === 1 ? 'bounty' : 'bounties'} — {totalMarks} {paymentMethod === "fiat" ? `($${totalMarks})` : paymentMethod === "credits" ? "Credits" : "Marks"}
             </p>
           </div>
         )}

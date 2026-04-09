@@ -32,6 +32,7 @@ export interface ProcessModuleCardProps {
   onClaimSecondary?: () => void;
   onClaimBackup?: () => void;
   canClaim?: boolean;
+  seekingSpices?: Array<{ emoji: string; label: string; domain: string }>;
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -61,6 +62,7 @@ export function ProcessModuleCard({
   onClaimSecondary,
   onClaimBackup,
   canClaim = true,
+  seekingSpices = [],
 }: ProcessModuleCardProps) {
   const [equipmentOpen, setEquipmentOpen] = useState(false);
 
@@ -96,6 +98,20 @@ export function ProcessModuleCard({
       </CardHeader>
       <CardContent className="space-y-3">
         {description && <p className="text-sm text-muted-foreground">{description}</p>}
+
+        {seekingSpices.length > 0 && (
+          <p className="text-sm text-muted-foreground">
+            Seeking{" "}
+            {seekingSpices.map((spice, index) => (
+              <span key={`${spice.label}-${index}`}>
+                {index > 0 ? index === seekingSpices.length - 1 ? " and " : ", " : ""}
+                <span className="font-medium text-foreground">{spice.emoji} {spice.label}</span>
+                <span className="text-xs"> ({spice.domain})</span>
+              </span>
+            ))}
+            .
+          </p>
+        )}
 
         {equipment_needed && equipment_needed.length > 0 && (
           <Collapsible open={equipmentOpen} onOpenChange={setEquipmentOpen}>

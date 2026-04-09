@@ -37,7 +37,7 @@ const PATHS = [
     color: 'emerald',
     tagline: 'Launch for $5/year. Scale without extraction.',
     benefits: [
-      { text: 'Launch your business for $5/year', detail: 'Full platform access. No equity given up. No investors to answer to.' },
+      { text: 'Launch your business for $5/year', detail: 'Full platform access. No ownership surrendered. No outside financiers to answer to.' },
       { text: 'Community buying power', detail: 'Your customers pool purchasing — bulk discounts without bulk corporate extraction.' },
       { text: 'Preorder-funded production', detail: 'Customers fund your production runs. No inventory risk. No debt.' },
       { text: 'Surplus returns as Forever Stamps (Joules)', detail: 'When prices drop below what customers paid, the difference becomes Joules — locked-rate service credits.' },
@@ -71,7 +71,7 @@ const UNIVERSAL = [
   { icon: Crown, text: 'Member-governed platform', detail: 'You vote on how this grows. Joules = governance weight.' },
   { icon: Heart, text: '20% margin funds 16 charitable initiatives', detail: 'Your membership directly funds food, housing, health, education, and more.' },
   { icon: Globe, text: 'Works in 58 languages, 195 countries', detail: 'PPP-adjusted pricing. Same DNA, calibrated for local purchasing power.' },
-  { icon: Zap, text: '2,007 documented innovations', detail: '10 provisional patents. 1,511 formal claims. 99% utility, not design.' },
+  { icon: Zap, text: '2,128 documented innovations', detail: '11 provisional patents. 2,097 formal claims. 99% utility, not design.' },
 ];
 
 export default function BenefitsPage() {

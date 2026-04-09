@@ -253,7 +253,7 @@ export default function ATTILanding() {
                   <div className="text-xs text-muted-foreground">Annual Membership</div>
                 </div>
                 <div className="p-4 bg-white/5 rounded-xl text-center">
-                  <div className="text-2xl font-bold text-amber-400">2,007</div>
+                  <div className="text-2xl font-bold text-amber-400">2,128</div>
                   <div className="text-xs text-muted-foreground">Innovations</div>
                 </div>
               </div>
@@ -307,7 +307,7 @@ export default function ATTILanding() {
             Walk the Red Carpet — $5/year
           </Button>
           <p className="text-[10px] text-muted-foreground">
-            No financial speculation. No equity. Just services. All That That Implies.
+            No financial speculation. No ownership claims. Just services. All That That Implies.
           </p>
           <SocialShareBar
             moment="general"

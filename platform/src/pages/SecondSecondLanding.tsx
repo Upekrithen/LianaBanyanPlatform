@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -39,6 +39,104 @@ function useLiveStats() {
     },
     staleTime: 60_000,
   });
+}
+
+const HOW_IT_WORKS = [
+  {
+    icon: Package,
+    title: 'Buy the Kit',
+    body: 'Canister System, $250–400. Start making injection-molded parts from your kitchen table today.',
+    expanded: 'The Canister System is a screw-press injection molder you assemble yourself. It handles thermoplastics (LDPE, PP, HDPE) at ~5,207 PSI with an 8" handle. Make keychains, phone cases, game tokens, small enclosures — no experience needed. Your first Marks come from your first parts.',
+    color: 'text-amber-400 bg-amber-500/10',
+    borderColor: 'border-amber-500/40',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Earn Your Way Up',
+    body: 'Complete bounties, accumulate Marks, unlock bigger equipment. No resume required — the ledger IS your resume.',
+    expanded: 'Every part you make, every bounty you fill, every quality check you pass — it all goes on your permanent ledger. At 500 Marks, you qualify for Bench level (Babyplast desktop molder). At 2,000 Marks, Shop level (SLS machine). At 5,000, Factory Node status. The cooperative funds your upgrades because your track record proves you deliver.',
+    color: 'text-blue-400 bg-blue-500/10',
+    borderColor: 'border-blue-500/40',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Own What You Build',
+    body: 'Revenue share, Factory Node, cooperative membership. Your contribution IS your contract.',
+    expanded: 'This is not gig work. You keep 83.3% of every transaction. The 20% margin funds cooperative infrastructure and 16 charitable initiatives — not outside owners. Your Marks are permanent proof of contribution. Your Factory Node is yours. The economics are locked in the operating agreement and cannot be changed.',
+    color: 'text-emerald-400 bg-emerald-500/10',
+    borderColor: 'border-emerald-500/40',
+  },
+];
+
+function HowItWorksCards() {
+  const [flipped, setFlipped] = useState<Set<number>>(new Set());
+
+  const toggle = (i: number) => {
+    setFlipped(prev => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i); else next.add(i);
+      return next;
+    });
+  };
+
+  return (
+    <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      {HOW_IT_WORKS.map((card, i) => {
+        const isFlipped = flipped.has(i);
+        return (
+          <div
+            key={i}
+            className="cursor-pointer"
+            style={{ perspective: '1200px', minHeight: '320px' }}
+            onClick={() => toggle(i)}
+          >
+            <div
+              className="relative w-full h-full transition-transform duration-700 ease-in-out"
+              style={{
+                transformStyle: 'preserve-3d',
+                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                minHeight: '320px',
+              }}
+            >
+              {/* FRONT */}
+              <div
+                className={`absolute inset-0 rounded-xl bg-zinc-900/60 border border-zinc-800 overflow-hidden hover:border-zinc-600 transition-colors ${isFlipped ? '' : card.borderColor}`}
+                style={{ backfaceVisibility: 'hidden' }}
+              >
+                <div className="flex flex-col items-center justify-center h-full px-6 py-8 text-center">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${card.color}`}>
+                    <card.icon className="w-7 h-7" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">{card.title}</h3>
+                  <p className="text-sm text-zinc-400 leading-relaxed">{card.body}</p>
+                  <p className="text-[10px] text-zinc-600 mt-4">Tap to flip</p>
+                </div>
+              </div>
+
+              {/* BACK */}
+              <div
+                className={`absolute inset-0 rounded-xl bg-zinc-900/80 border ${card.borderColor} overflow-hidden`}
+                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+              >
+                <div className="flex flex-col h-full px-6 py-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${card.color}`}>
+                      <card.icon className="w-4 h-4" />
+                    </div>
+                    <h3 className="font-bold">{card.title}</h3>
+                  </div>
+                  <p className="text-sm text-zinc-300 leading-relaxed flex-1">
+                    {card.expanded}
+                  </p>
+                  <p className="text-[10px] text-zinc-600 mt-3 text-center">Tap to flip back</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 export default function SecondSecondLanding() {
@@ -90,9 +188,9 @@ export default function SecondSecondLanding() {
           />
         </div>
         {!user && (
-          <p className="text-center text-xs text-zinc-500 mt-4">
+          <Link to="/auth" className="block text-center text-xs text-amber-400 hover:text-amber-300 underline underline-offset-2 mt-4">
             Sign in to see your position on the ladder.
-          </p>
+          </Link>
         )}
       </section>
 
@@ -100,18 +198,20 @@ export default function SecondSecondLanding() {
       <section className="py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
           {[
-            { label: 'Production Projects', value: stats?.projectCount ?? '—', icon: Factory, color: 'text-amber-400' },
-            { label: 'Open Bounties', value: stats?.openBounties ?? '—', icon: Target, color: 'text-blue-400' },
-            { label: 'Total Marks Earned', value: '—', icon: Sparkles, color: 'text-violet-400' },
-            { label: 'Active Nodes', value: 'Coming Soon', icon: Zap, color: 'text-emerald-400' },
+            { label: 'Production Projects', value: stats?.projectCount ?? '—', icon: Factory, color: 'text-amber-400', href: '/production' },
+            { label: 'Open Bounties', value: stats?.openBounties ?? '—', icon: Target, color: 'text-blue-400', href: '/bounties' },
+            { label: 'Total Marks Earned', value: '—', icon: Sparkles, color: 'text-violet-400', href: '/ledger' },
+            { label: 'Active Nodes', value: '0', icon: Zap, color: 'text-emerald-400', href: '/launch/run-a-node' },
           ].map((s, i) => (
-            <Card key={i} className="bg-zinc-900/60 border-zinc-800 text-center">
-              <CardContent className="pt-6 pb-4">
-                <s.icon className={`w-6 h-6 mx-auto mb-2 ${s.color}`} />
-                <p className="text-2xl font-bold">{typeof s.value === 'number' ? s.value.toLocaleString() : s.value}</p>
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-1">{s.label}</p>
-              </CardContent>
-            </Card>
+            <Link key={i} to={s.href}>
+              <Card className="bg-zinc-900/60 border-zinc-800 text-center hover:border-zinc-600 transition-colors cursor-pointer">
+                <CardContent className="pt-6 pb-4">
+                  <s.icon className={`w-6 h-6 mx-auto mb-2 ${s.color}`} />
+                  <p className="text-2xl font-bold">{typeof s.value === 'number' ? s.value.toLocaleString() : s.value}</p>
+                  <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-1">{s.label}</p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </section>
@@ -119,40 +219,9 @@ export default function SecondSecondLanding() {
       {/* ── How It Works ── */}
       <section className="py-12 md:py-16">
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">How It Works</h2>
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {[
-            {
-              icon: Package,
-              title: 'Buy the Kit',
-              body: 'Canister System, $250–400. Start making injection-molded parts from your kitchen table today.',
-              color: 'text-amber-400 bg-amber-500/10',
-            },
-            {
-              icon: TrendingUp,
-              title: 'Earn Your Way Up',
-              body: 'Complete bounties, accumulate Marks, unlock bigger equipment. No resume required — the ledger IS your resume.',
-              color: 'text-blue-400 bg-blue-500/10',
-            },
-            {
-              icon: ShieldCheck,
-              title: 'Own What You Build',
-              body: 'Revenue share, Factory Node, cooperative membership. Your contribution IS your contract.',
-              color: 'text-emerald-400 bg-emerald-500/10',
-            },
-          ].map((card, i) => (
-            <Card key={i} className="bg-zinc-900/60 border-zinc-800 overflow-hidden">
-              <CardContent className="pt-8 pb-6 px-6 text-center">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${card.color}`}>
-                  <card.icon className="w-7 h-7" />
-                </div>
-                <h3 className="font-bold text-lg mb-2">{card.title}</h3>
-                <p className="text-sm text-zinc-400 leading-relaxed">{card.body}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <HowItWorksCards />
         <div className="text-center mt-8">
-          <Link to="/starter-kit" className="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-medium text-sm transition-colors">
+          <Link to="/cold-start" className="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-medium text-sm transition-colors">
             Or start with a $100 Business Starter Kit →
           </Link>
         </div>

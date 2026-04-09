@@ -115,7 +115,7 @@ function FeatureRow({ text, included }: { text: string; included: boolean }) {
       ) : (
         <X className="w-4 h-4 text-muted-foreground/40 shrink-0 mt-0.5" />
       )}
-      <span className={included ? 'text-slate-200' : 'text-muted-foreground/50'}>{text}</span>
+      <span className={included ? 'text-slate-700' : 'text-slate-400'}>{text}</span>
     </li>
   );
 }
@@ -162,6 +162,18 @@ export default function SubscribePage() {
           } as never) as { error: unknown };
         if (error) throw error;
       }
+      if (tier !== 'explorer') {
+        let token: string | null = null;
+        try {
+          const raw = localStorage.getItem("sb-ruuxzilgmuwddcofqecc-auth-token");
+          if (raw) token = JSON.parse(raw)?.access_token ?? null;
+        } catch { /* parse failed */ }
+        if (token) {
+          const url = `https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1/create-membership-checkout?token=${encodeURIComponent(token)}&tier=${tier}`;
+          window.open(url, "_self");
+          return;
+        }
+      }
     },
     onSuccess: (_, tier) => {
       toast({ title: 'Plan Updated!', description: `You're now on the ${tier.charAt(0).toUpperCase() + tier.slice(1)} plan.` });
@@ -179,7 +191,7 @@ export default function SubscribePage() {
       <div className="space-y-10">
         {/* Hero */}
         <div className="text-center max-w-2xl mx-auto">
-          <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 mb-3">
+          <Badge className="bg-amber-500/20 text-amber-900 border-amber-500/40 mb-3">
             <Crown className="w-3 h-3 mr-1" /> Membership Tiers
           </Badge>
           <h1 className="text-3xl font-bold mb-2">Unlock the Cooperative Economy</h1>
@@ -275,7 +287,7 @@ export default function SubscribePage() {
               <tbody>
                 {TIERS[0].features.map((f, idx) => (
                   <tr key={idx} className="border-b border-border/50">
-                    <td className="py-2.5 px-4 text-slate-300">{f.text}</td>
+                    <td className="py-2.5 px-4 text-slate-600">{f.text}</td>
                     {TIERS.map(t => (
                       <td key={t.id} className="text-center py-2.5 px-4">
                         {t.features[idx].included ? (
@@ -319,7 +331,7 @@ export default function SubscribePage() {
         {/* FAQ Callout */}
         <div className="text-center pb-4">
           <p className="text-muted-foreground text-sm">
-            Stripe billing integration coming soon. Plan selection is recorded immediately.
+            Your plan selection is recorded immediately. Paid tiers are processed securely via Stripe.
           </p>
         </div>
       </div>

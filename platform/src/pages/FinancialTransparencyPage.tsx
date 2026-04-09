@@ -116,6 +116,7 @@ export function FinancialTransparencyPage() {
 
   return (
     <FocusShell
+      xrayBase="ledger"
       seo={{
         title: "Transparency Ledger | Liana Banyan",
         description:

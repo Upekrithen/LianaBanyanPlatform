@@ -224,8 +224,8 @@ export default function TermsOfService() {
             <h2>10. Captain Responsibilities</h2>
             <p>
               Captains are operational leaders who manage batch fulfillment within their
-              regions. Captains are NOT investors — their stake is operational collateral,
-              not an investment. Captain responsibilities include:
+              regions. Captains are NOT speculators — their stake is operational collateral,
+              not a speculative instrument. Captain responsibilities include:
             </p>
             <ul>
               <li>Staking Marks as operational collateral per their level (10/50/100/1000)</li>

@@ -48,8 +48,8 @@ export default function GleanersCorner() {
   const fmt = (cents: number) => `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
-      <div>
+    <div className="space-y-8 max-w-4xl mx-auto" data-xray-id="gleaners-corner-page">
+      <div data-xray-id="gleaners-corner-hero">
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Wheat className="w-7 h-7 text-amber-400" />
           Gleaner's Corner
@@ -91,11 +91,11 @@ export default function GleanersCorner() {
           </div>
 
           {/* How 3.3% Works */}
-          <Card className="bg-zinc-900/60 border-zinc-800">
+          <Card className="bg-zinc-900 border-zinc-800" data-xray-id="gleaners-corner-explanation">
             <CardHeader>
-              <CardTitle className="text-base">How Gleaner's Corner Works</CardTitle>
+              <CardTitle className="text-base text-zinc-100">How Gleaner's Corner Works</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm text-zinc-400">
+            <CardContent className="space-y-3 text-sm text-zinc-200">
               <p>
                 Every paid transaction on the platform automatically allocates 3.3% to Gleaner's Corner.
                 This isn't a fee on top — it's built into the platform's Cost+20% margin. The creator
@@ -110,7 +110,7 @@ export default function GleanersCorner() {
           </Card>
 
           {/* Fund by Initiative */}
-          <Card>
+          <Card data-xray-id="gleaners-corner-fund-distribution">
             <CardHeader>
               <CardTitle className="text-base">Fund Distribution by Initiative</CardTitle>
             </CardHeader>
@@ -139,7 +139,7 @@ export default function GleanersCorner() {
 
           {/* CTA */}
           <div className="text-center">
-            <Link to="/earmark">
+            <Link to="/subscribe">
               <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
                 <Target className="w-4 h-4 mr-2" />
                 Earmark Your Credits

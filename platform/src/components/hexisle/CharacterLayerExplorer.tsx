@@ -16,7 +16,7 @@ interface CharacterLayer {
 }
 
 const SWORD_PATH: CharacterLayer[] = [
-  { id: 'base-body', name: 'Base Body', description: 'Universal humanoid base — same for ALL characters', color: '#78716c', icon: '🧍', isBase: true, path: 'shared' },
+  { id: 'base-body', name: 'Base Body', description: 'Universal humanoid base — same for ALL figure shells', color: '#78716c', icon: '🧍', isBase: true, path: 'shared' },
   { id: 'boot-base', name: 'Boot Base', description: 'Hitbase counter + coin loading recess + root lock protrusions', color: '#92400e', icon: '🥾', isBase: true, path: 'shared' },
   { id: 'rucksack', name: 'Rucksack Overlay', description: 'Twist-lock bayonet mount — displays Roman numeral level on all 6 faces', color: '#b45309', icon: '🎒', isBase: false, path: 'shared' },
   { id: 'peasant', name: 'Peasant', description: 'Starting form. No added layers. The base body IS the Peasant.', color: '#a8a29e', icon: '👤', isBase: false, path: 'sword', campaign: 'Campaign 1' },
@@ -26,7 +26,7 @@ const SWORD_PATH: CharacterLayer[] = [
 ];
 
 const CROWN_PATH: CharacterLayer[] = [
-  { id: 'base-body', name: 'Base Body', description: 'Universal humanoid base — same for ALL characters', color: '#78716c', icon: '🧍', isBase: true, path: 'shared' },
+  { id: 'base-body', name: 'Base Body', description: 'Universal humanoid base — same for ALL figure shells', color: '#78716c', icon: '🧍', isBase: true, path: 'shared' },
   { id: 'boot-base', name: 'Boot Base', description: 'Hitbase counter + coin loading recess + root lock protrusions', color: '#92400e', icon: '🥾', isBase: true, path: 'shared' },
   { id: 'rucksack', name: 'Rucksack Overlay', description: 'Twist-lock bayonet mount — displays Roman numeral level on all 6 faces', color: '#b45309', icon: '🎒', isBase: false, path: 'shared' },
   { id: 'merchant', name: 'Merchant', description: 'Cloak overlay draped over base body. Trade goods pouches.', color: '#7c3aed', icon: '🧥', isBase: false, path: 'crown', campaign: 'Campaign 5' },
@@ -85,11 +85,11 @@ export default function CharacterLayerExplorer() {
       <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <Layers className="h-5 w-5 text-indigo-600" />
-          Character Layer Explorer
+          Figure Layer Explorer
           <Badge variant="outline" className="ml-auto text-[10px]">Snap-On Progression</Badge>
         </CardTitle>
         <p className="text-xs text-muted-foreground">
-          Every character is the SAME base body. What changes is what's on it.
+          Every figure shell uses the SAME base body. What changes is what's on it.
         </p>
       </CardHeader>
       <CardContent className="p-4 space-y-4">

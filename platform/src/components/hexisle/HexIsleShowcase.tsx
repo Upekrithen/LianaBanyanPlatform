@@ -73,7 +73,7 @@ export const HexIsleShowcase: React.FC = () => {
                     <Sparkles className="w-4 h-4" /> The Chain Voting Advantage
                   </h4>
                   <p className="text-sm text-blue-200/80">
-                    Pre-order multiple items in a product line (like Character A, then B, then C) and earn a stacking 5% Joule bonus for each subsequent item. It stacks up to 100%, then sustains at 20%. This bonus even cross-applies to other creators' projects if they've swapped Medallions (Senior Pics) with this project! Both creators receive the bonus amount in Joule Pouches as a reward for cross-pollinating the community.
+                    Pre-order multiple items in a product line (like Figure A, then B, then C) and earn a stacking 5% Joule bonus for each subsequent item. It stacks up to 100%, then sustains at 20%. This bonus even cross-applies to other creators' projects if they've swapped Medallions (Senior Pics) with this project! Both creators receive the bonus amount in Joule Pouches as a reward for cross-pollinating the community.
                   </p>
                 </div>
                 <ChainVotingVisualizer />
@@ -189,7 +189,7 @@ export const HexIsleShowcase: React.FC = () => {
               <Lock className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
               <div className="space-y-2">
                 <p className="text-xs text-muted-foreground">
-                  <strong>Why do we do this?</strong> By backing this project, you are helping us reach the volume needed for Cost+20% manufacturing. The Joules you earn are vouchers you can use to hire artists, buy other games, or launch your own project on this platform. They are not an investment or security, but stored potential for your own ideas.
+                  <strong>Why do we do this?</strong> By backing this project, you are helping us reach the volume needed for Cost+20% manufacturing. The Joules you earn are vouchers you can use to hire artists, buy other games, or launch your own project on this platform. They are not financial instruments, but stored potential for your own ideas.
                 </p>
                 <p className="text-xs text-muted-foreground">
                   <strong>Distributed Node Scheduled Runs:</strong> Pre-orders are allocated to local manufacturing nodes to provide 6 months of committed, pre-sold revenue. You can view these allocations on the Transparent Ledger for this project.

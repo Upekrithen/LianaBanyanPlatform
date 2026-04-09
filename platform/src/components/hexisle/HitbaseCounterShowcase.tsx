@@ -63,7 +63,7 @@ export default function HitbaseCounterShowcase() {
 
       const remaining = newCoins.filter(c => c.active);
       if (remaining.length === 0) {
-        log += ' → CHARACTER DOWN (supine-lock)';
+        log += ' → FIGURE DOWN (supine-lock)';
         setIsSupine(true);
       }
     }
@@ -100,16 +100,16 @@ export default function HitbaseCounterShowcase() {
           <Badge variant="outline" className="ml-auto text-[10px]">Patent Innovation #1579</Badge>
         </CardTitle>
         <p className="text-xs text-muted-foreground">
-          Push a character — physics tracks the damage. No dice. No apps. Just coins and gravity.
+          Push a figure token — physics tracks the damage. No dice. No apps. Just coins and gravity.
         </p>
       </CardHeader>
       <CardContent className="p-4 space-y-4">
-        {/* Character Visual */}
+        {/* Figure Visual */}
         <div className="flex items-center gap-6">
           {/* Boot Base + Coin Stack */}
           <div className="flex flex-col items-center">
             <div className={`relative transition-transform duration-300 ${isSupine ? 'rotate-90 opacity-50' : ''}`}>
-              {/* Character silhouette */}
+              {/* Figure silhouette */}
               <div className="w-16 h-24 bg-gradient-to-b from-slate-600 to-slate-800 rounded-t-full mx-auto relative">
                 <div className="absolute inset-x-2 top-2 bottom-0 bg-gradient-to-b from-slate-500 to-slate-700 rounded-t-full" />
                 {isSupine && (
@@ -276,7 +276,7 @@ export default function HitbaseCounterShowcase() {
             <p><strong>Denomination:</strong> A 6-coin seats deepest (allows 6 total stacked above). A 1-coin seats at top (allows only 3 total). Higher denomination = more HP capacity.</p>
             <p><strong>Terrain Types:</strong> Middle hole shape (●○△□) determines terrain compatibility. Circle fits triangle terrain but not square. Physical shape-fitting replaces rules.</p>
             <p><strong>Sliding Tab:</strong> 3 positions — HP only, HP+Mana simultaneous, Mana only. Controls which counter(s) advance when pushed.</p>
-            <p><strong>Supine Lock:</strong> When all coins eject, the character falls and stays down. No coins = no counter rotation = permanent stop until resupplied.</p>
+            <p><strong>Supine Lock:</strong> When all coins eject, the figure falls and stays down. No coins = no counter rotation = permanent stop until resupplied.</p>
           </div>
         )}
       </CardContent>

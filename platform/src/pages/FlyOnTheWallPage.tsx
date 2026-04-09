@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Eye, ExternalLink, History } from "lucide-react";
+import { Eye, ExternalLink, History, Radio } from "lucide-react";
 import { useState } from "react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
@@ -16,6 +16,20 @@ const CEPHAS_BASE = "/cephas";
 
 export default function FlyOnTheWallPage() {
   const [search, setSearch] = useState("");
+
+  const { data: sessionUpdates = [] } = useQuery({
+    queryKey: ["cephas-fotw-session-updates"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("cephas_content_registry")
+        .select("id, slug, title, content_markdown, creation_context, bishop_session, knight_session, created_at")
+        .eq("category", "fly_on_the_wall")
+        .order("created_at", { ascending: false });
+      if (error) return [];
+      return data || [];
+    },
+    retry: false,
+  });
 
   const { data: items, isLoading, isError } = useQuery({
     queryKey: ["cephas-fly-on-the-wall"],
@@ -49,6 +63,48 @@ export default function FlyOnTheWallPage() {
           Public observation log — how decisions were made. Creation context and revision history for each document.
         </p>
       </div>
+
+      {/* Session Updates from auto-wire pipeline */}
+      <Card className="border-primary/20 bg-primary/5">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Radio className="w-5 h-5 text-primary" />
+            Session Updates
+          </CardTitle>
+          <CardDescription>Live session progress from the auto-wire pipeline</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {sessionUpdates.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4">
+              Session updates will appear here once the auto-wire pipeline publishes its first Fly on the Wall entry.
+            </p>
+          ) : (
+            <div className="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-px before:bg-border">
+              {sessionUpdates.map(update => (
+                <div key={update.id} className="pl-8 relative">
+                  <div className="absolute left-1.5 top-1.5 w-3 h-3 rounded-full bg-primary border-2 border-background" />
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-medium">{update.title}</span>
+                      {update.bishop_session && <Badge variant="outline" className="text-xs">Bishop {update.bishop_session}</Badge>}
+                      {update.knight_session && <Badge variant="outline" className="text-xs">Knight {update.knight_session}</Badge>}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(update.created_at).toLocaleString()}
+                      {update.creation_context && ` — ${update.creation_context}`}
+                    </p>
+                    {update.content_markdown && (
+                      <div className="text-xs text-muted-foreground mt-1 p-2 bg-muted/50 rounded max-h-24 overflow-y-auto whitespace-pre-wrap">
+                        {update.content_markdown.slice(0, 600)}{update.content_markdown.length > 600 ? '…' : ''}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Input
         placeholder="Search by title or creation context..."

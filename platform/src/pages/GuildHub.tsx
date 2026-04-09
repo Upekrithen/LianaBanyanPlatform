@@ -528,7 +528,7 @@ export default function GuildHub() {
         {/* ─── BANDWAGON TAB ─── */}
         <TabsContent value="bandwagon" className="space-y-6">
           <p className="text-sm text-muted-foreground">
-            Earn allocation authority by identifying and sponsoring high-quality projects. Service Allocation Authority (SAA) and Backed Marks — no investment, no return; you direct cooperative resources.
+            Earn allocation authority by identifying and sponsoring high-quality projects. Service Allocation Authority (SAA) and Backed Marks — no speculation, no passive return; you direct cooperative resources.
           </p>
           <TasteRangerDashboard />
           <FantasyBridge />

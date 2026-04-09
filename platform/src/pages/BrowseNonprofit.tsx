@@ -28,7 +28,7 @@ const benefitCategories = [
   },
   {
     title: "Medallion Rewards",
-    description: "Blockchain-verified membership tokens",
+    description: "Verified membership records",
     icon: <Shield className="h-8 w-8" />,
     details: ["NFT medallions", "Voting power", "Exclusive access"]
   },

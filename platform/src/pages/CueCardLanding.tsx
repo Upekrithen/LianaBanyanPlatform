@@ -9,8 +9,9 @@
  * 4. Tracks referral source for Credit rewards
  */
 
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight, Share2, QrCode, Calendar, Gift,
   Building2, Key, Stamp, Sparkles, ExternalLink, Palette, CheckCircle,
@@ -139,6 +140,48 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+
+  const stepDetails = [
+    {
+      emoji: '1️⃣',
+      title: 'Join for $5/year',
+      description:
+        'Membership gives you full platform access - submit work, earn Credits and Marks, and build your portable reputation. One price. No tiers. No hidden fees.',
+      actionLabel: 'Join Now',
+      action: () => {
+        if (!user) {
+          openOnboard({ reason: 'join membership', actionLabel: 'Join Now', membershipIncluded: true });
+          return;
+        }
+        navigate('/join');
+      },
+    },
+    {
+      emoji: '2️⃣',
+      title: 'Create your artwork',
+      description:
+        'Design a cue card using the provided dimensions (3.5" x 2"). Follow brand guidelines for colors, typography, and layout. Your name stays on every card printed.',
+      actionLabel: 'View Guidelines',
+      action: () => navigate('/salt-mines'),
+    },
+    {
+      emoji: '3️⃣',
+      title: 'Submit via Salt Mines',
+      description:
+        'Post your completed design as a bounty fulfillment in the Salt Mines. The review team verifies dimensions, brand compliance, and print readiness.',
+      actionLabel: 'Go to Salt Mines',
+      action: () => navigate('/salt-mines'),
+    },
+    {
+      emoji: '4️⃣',
+      title: 'Get paid + credited',
+      description:
+        'Approved designs earn Credits at the posted bounty rate. Your name is permanently credited on the card. Every print run pays you again.',
+      actionLabel: 'Learn More',
+      action: () => navigate('/benefits'),
+    },
+  ];
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -211,25 +254,59 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
         </motion.div>
 
         {/* Requirements Section */}
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="p-6 rounded-2xl bg-white/5 border border-white/10 mb-8"
-        >
-          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 text-green-400" />
-            Requirements
-          </h2>
-          <div className="space-y-2">
-            {bounty.requirements.map((req, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-white/70">
-                <span className="text-amber-400 mt-1">•</span>
-                <span>{req}</span>
+        <AnimatePresence mode="wait" initial={false}>
+          {activeStep === null ? (
+            <motion.div
+              key="requirements-list"
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ rotateY: -90, opacity: 0 }}
+              transition={{ delay: 0.2, duration: 0.3 }}
+              className="p-6 rounded-2xl bg-white/5 border border-white/10 mb-8"
+            >
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                Requirements
+              </h2>
+              <div className="space-y-2">
+                {bounty.requirements.map((req, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-white/70">
+                    <span className="text-amber-400 mt-1">•</span>
+                    <span>{req}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={`step-${activeStep}`}
+              initial={{ rotateY: 90, opacity: 0 }}
+              animate={{ rotateY: 0, opacity: 1 }}
+              exit={{ rotateY: -90, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="p-6 rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-white/10 mb-8"
+            >
+              <button
+                onClick={() => setActiveStep(null)}
+                className="text-white/50 hover:text-white/70 text-sm mb-4 flex items-center gap-1"
+              >
+                ← Requirements
+              </button>
+              <h2 className="text-xl font-semibold text-white mb-2">
+                Step {activeStep + 1}: {stepDetails[activeStep].title}
+              </h2>
+              <p className="text-white/70 mb-6 leading-relaxed">
+                {stepDetails[activeStep].description}
+              </p>
+              <button
+                onClick={stepDetails[activeStep].action}
+                className="px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold transition-colors"
+              >
+                {stepDetails[activeStep].actionLabel}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* How It Works */}
         <motion.div
@@ -242,22 +319,20 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
             How to Submit
           </h2>
           <div className="grid md:grid-cols-4 gap-4 text-center">
-            <div className="p-4 rounded-xl bg-white/5">
-              <div className="text-2xl mb-2">1️⃣</div>
-              <div className="text-sm text-white/60">Join for $5/year</div>
-            </div>
-            <div className="p-4 rounded-xl bg-white/5">
-              <div className="text-2xl mb-2">2️⃣</div>
-              <div className="text-sm text-white/60">Create your artwork</div>
-            </div>
-            <div className="p-4 rounded-xl bg-white/5">
-              <div className="text-2xl mb-2">3️⃣</div>
-              <div className="text-sm text-white/60">Submit via Salt Mines</div>
-            </div>
-            <div className="p-4 rounded-xl bg-white/5">
-              <div className="text-2xl mb-2">4️⃣</div>
-              <div className="text-sm text-white/60">Get paid + credited</div>
-            </div>
+            {stepDetails.map((step, index) => (
+              <button
+                key={step.title}
+                onClick={() => setActiveStep(index)}
+                className={`p-4 rounded-xl transition-all cursor-pointer ${
+                  activeStep === index
+                    ? 'bg-amber-500/20 border border-amber-500/50 scale-105'
+                    : 'bg-white/5 hover:bg-white/10 border border-transparent'
+                }`}
+              >
+                <div className="text-2xl mb-2">{step.emoji}</div>
+                <div className="text-sm text-white/60">{step.title}</div>
+              </button>
+            ))}
           </div>
         </motion.div>
 

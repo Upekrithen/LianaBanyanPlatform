@@ -13,7 +13,7 @@
  *   - 1 Reference Expert recruiting cue card (shared across guilds)
  *   - 1 Deck Card with The Handshake on the back
  *
- * All SEC-safe language. No "equity," "invest," "returns," "shares."
+ * All SEC-safe language. No speculative-finance or ownership-claim terms.
  */
 
 import { DeckCardData } from '@/components/DeckCard';
@@ -277,7 +277,7 @@ WHAT YOU GET:
   Expert, or No Fit (no hard feelings)
 
 THE CROW'S NEST FOCUS:
-Innovation pipeline, 1,511 patent claims,
+Innovation pipeline, 2,097 patent claims,
 academic paper publication, IP protection,
 Alchemist's Lab prototyping.
 
@@ -576,14 +576,14 @@ export const GUILD_LANDING_CARDS: Record<string, {
     id: 'guild-crows-nest',
     title: "The Crow's Nest — Research & Development",
     tagline: 'See further. Build the impossible.',
-    content: "The Crow's Nest guild runs the innovation pipeline — 1,511 patent claims, academic publications, and the Alchemist's Lab. Seeking a Lead R&D Partner through The Handshake.",
+    content: "The Crow's Nest guild runs the innovation pipeline — 2,097 patent claims, academic publications, and the Alchemist's Lab. Seeking a Lead R&D Partner through The Handshake.",
     destination: '/guilds/hub',
     destinationLabel: 'Meet The Guilds',
     color: 'from-sky-500/30 to-cyan-500/20',
     iconEmoji: '🔭',
     benefits: [
       '100 Marks for completing The Handshake',
-      'Lead the 1,511 patent claim pipeline',
+      'Lead the 2,097 patent claim pipeline',
       'Academic paper publication channel',
       'Founding Partner or Reference Expert path',
     ],

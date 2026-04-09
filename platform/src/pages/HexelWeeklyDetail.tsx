@@ -42,7 +42,7 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 const STATUS_STYLES: Record<string, { bg: string; text: string; label: string }> = {
   released: { bg: "bg-green-500/20", text: "text-green-400", label: "Released" },
-  upcoming: { bg: "bg-amber-500/15", text: "text-amber-300", label: "Coming Soon" },
+  upcoming: { bg: "bg-amber-500/15", text: "text-amber-300", label: "Upcoming" },
   planned: { bg: "bg-white/10", text: "text-white/60", label: "Planned" },
 };
 
@@ -214,7 +214,7 @@ export default function HexelWeeklyDetail() {
         </Card>
       )}
 
-      {/* Coming Soon / Full Details Card */}
+      {/* Upcoming / Full Details Card */}
       {current.status !== "released" && (
         <Card className={`border-${teaser?.accentColor ?? "slate"}-500/20`}>
           <CardContent className="py-12 text-center">

@@ -601,7 +601,7 @@
       "description": "Adquisición de talento y operaciones de personal"
     },
     "openings": "vacantes",
-    "avgEquity": "Participación Promedio",
+    "avgParticipation": "Participación Promedio",
     "viewPositions": "Ver Posiciones"
   },
   "browseMarketplace": {

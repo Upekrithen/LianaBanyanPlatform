@@ -30,19 +30,19 @@ export type SyncStatus = 'synced' | 'pending' | 'outdated' | 'conflict' | 'new';
  * Covers all 94+ letters across 9 categories.
  */
 export const LETTER_SYNC_MAP: Record<string, string> = {
-  // ─── Circle 1: Investors (11 letters) ──────────────────────────
-  'LETTER-CRAIG-NEWMARK': 'letters/circle-1-investors/craig-newmark.md',
-  'LETTER-MACKENZIE-SCOTT': 'letters/circle-1-investors/mackenzie-scott.md',
-  'LETTER-MACKENZIE-SCOTT-CARDBOARD-BOOTS': 'letters/circle-1-investors/mackenzie-scott-cardboard-boots.md',
-  'LETTER-WARREN-BUFFETT': 'letters/circle-1-investors/warren-buffett.md',
-  'LETTER-MICHAEL-SEIBEL': 'letters/circle-1-investors/michael-seibel.md',
-  'LETTER-TOM-SIMON': 'letters/circle-1-investors/tom-simon.md',
-  'LETTER-MELINDA-FRENCH-GATES': 'letters/circle-1-investors/melinda-french-gates.md',
-  'LETTER-ANAND-GIRIDHARADAS': 'letters/circle-1-investors/anand-giridharadas.md',
-  'LETTER-HOWARD-MARKS': 'letters/circle-1-investors/howard-marks.md',
-  'LETTER-LI-JIN': 'letters/circle-1-investors/li-jin.md',
-  'LETTER-MAJORA-CARTER': 'letters/circle-1-investors/majora-carter.md',
-  'LETTER-SETH-GODIN': 'letters/circle-1-investors/seth-godin.md',
+  // ─── Circle 1: Backers (11 letters) ──────────────────────────
+  'LETTER-CRAIG-NEWMARK': 'letters/circle-1-backers/craig-newmark.md',
+  'LETTER-MACKENZIE-SCOTT': 'letters/circle-1-backers/mackenzie-scott.md',
+  'LETTER-MACKENZIE-SCOTT-CARDBOARD-BOOTS': 'letters/circle-1-backers/mackenzie-scott-cardboard-boots.md',
+  'LETTER-WARREN-BUFFETT': 'letters/circle-1-backers/warren-buffett.md',
+  'LETTER-MICHAEL-SEIBEL': 'letters/circle-1-backers/michael-seibel.md',
+  'LETTER-TOM-SIMON': 'letters/circle-1-backers/tom-simon.md',
+  'LETTER-MELINDA-FRENCH-GATES': 'letters/circle-1-backers/melinda-french-gates.md',
+  'LETTER-ANAND-GIRIDHARADAS': 'letters/circle-1-backers/anand-giridharadas.md',
+  'LETTER-HOWARD-MARKS': 'letters/circle-1-backers/howard-marks.md',
+  'LETTER-LI-JIN': 'letters/circle-1-backers/li-jin.md',
+  'LETTER-MAJORA-CARTER': 'letters/circle-1-backers/majora-carter.md',
+  'LETTER-SETH-GODIN': 'letters/circle-1-backers/seth-godin.md',
 
   // ─── Circle 2: Media (14 letters) ─────────────────────────────
   'LETTER-CASEY-NEWTON': 'letters/circle-2-media/casey-newton.md',
@@ -122,7 +122,7 @@ export const LETTER_SYNC_MAP: Record<string, string> = {
   'PITCH-TECHCRUNCH': 'letters/pitches/techcrunch.md',
   'PITCH-THE-VERGE': 'letters/pitches/the-verge.md',
   'PITCH-WSJ-FEATURE': 'letters/pitches/wsj-feature-611-patents.md',
-  'PITCH-WSJ-OPED': 'letters/pitches/wsj-oped-roi-predictability.md',
+  'PITCH-WSJ-OPED-IMPACT': 'letters/pitches/wsj-oped-contribution-impact.md',
   'PITCH-YES-MAGAZINE': 'letters/pitches/yes-magazine.md',
 
   // ─── Partnerships (5 letters) ─────────────────────────────────

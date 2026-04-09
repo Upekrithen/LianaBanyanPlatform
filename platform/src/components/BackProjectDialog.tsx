@@ -5,7 +5,7 @@
  * Shows project info, pledge amount input, credit balance,
  * wave selection (if applicable), and the "As You Wish" confirmation.
  *
- * SEC-safe: No mention of investment, returns, equity, or profit.
+ * SEC-safe: No speculative-finance, ownership-claim, or profit-promissory language.
  * Users are "sponsoring" or "backing" — receiving service credits and
  * participation, never financial returns.
  *

@@ -449,7 +449,7 @@ export function MSADashboard() {
           <CardContent>
             <Button variant="outline" className="w-full" disabled>
               <ArrowDownLeft className="w-4 h-4 mr-2" />
-              Withdraw (Coming Soon)
+              Withdraw
             </Button>
             <p className="text-xs text-muted-foreground mt-2 text-center">
               Withdrawals require receipt upload for medical expenses

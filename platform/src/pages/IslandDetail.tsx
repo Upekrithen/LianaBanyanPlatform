@@ -278,11 +278,10 @@ const IslandDetail = () => {
             </div>
           </div>
 
-          {/* Coming Soon Section */}
           <Card className="p-6 bg-muted">
-            <h3 className="text-lg font-semibold mb-2">Coming Soon</h3>
+            <h3 className="text-lg font-semibold mb-2">More Features Arriving</h3>
             <p className="text-muted-foreground">
-              More island features, projects, and interactive elements will be added here.
+              Additional island features, projects, and interactive elements are being built.
             </p>
           </Card>
         </div>

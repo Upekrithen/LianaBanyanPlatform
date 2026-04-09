@@ -762,7 +762,7 @@ export default function VideoScripts() {
               <h3>Closing Message</h3>
               <blockquote>
                 "Capitalism isn't inherently good or evil—it's a tool. The question is: can we evolve it? 
-                Can we keep the innovation and efficiency while building in equity and collaboration? 
+                Can we keep the innovation and efficiency while building in fairness and collaboration? 
                 At Liana Banyan, we believe the answer is yes. Not revolution—evolution."
               </blockquote>
             </CardContent>

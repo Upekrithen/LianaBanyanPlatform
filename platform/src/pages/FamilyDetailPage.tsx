@@ -283,7 +283,7 @@ export default function FamilyDetailPage() {
           <TabsContent value="gifts" className="mt-6">
             <div className="trunk-info text-center py-8">
               <Gift className="h-12 w-12 mx-auto mb-4 opacity-40" />
-              <h3 className="font-semibold mb-2">Gift Lists Coming Soon</h3>
+              <h3 className="font-semibold mb-2">Gift Lists</h3>
               <p className="text-sm text-muted-foreground max-w-md mx-auto">
                 Create wishlists for birthdays and holidays. Family members can claim items — 
                 but the recipient won't see who claimed what!

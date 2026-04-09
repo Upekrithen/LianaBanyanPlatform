@@ -7,7 +7,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Wrench } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Wrench, ChevronDown, ChevronUp, Cpu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
@@ -26,29 +27,46 @@ interface RegistryItem {
   source_path: string;
 }
 
+interface SystemSnapshot {
+  id: string;
+  slug: string;
+  title: string;
+  content_markdown: string | null;
+  technical_summary: string | null;
+  creation_context: string | null;
+  bishop_session: string | null;
+  knight_session: string | null;
+  created_at: string;
+}
+
 export default function UnderTheHoodPage() {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState<RegistryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [snapshots, setSnapshots] = useState<SystemSnapshot[]>([]);
+  const [expandedSnapshot, setExpandedSnapshot] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
       try {
-        const res = await fetch(
-          `${SUPABASE_URL}/rest/v1/cephas_content_registry?select=id,slug,title,category,technical_summary,implementation_status,source_path&order=title`,
-          {
-            headers: {
-              'apikey': SUPABASE_KEY,
-              'Authorization': `Bearer ${SUPABASE_KEY}`,
-            },
-          }
-        );
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data: RegistryItem[] = await res.json();
+        const [regRes, snapRes] = await Promise.all([
+          fetch(
+            `${SUPABASE_URL}/rest/v1/cephas_content_registry?select=id,slug,title,category,technical_summary,implementation_status,source_path&order=title`,
+            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+          ),
+          fetch(
+            `${SUPABASE_URL}/rest/v1/cephas_content_registry?select=id,slug,title,content_markdown,technical_summary,creation_context,bishop_session,knight_session,created_at&category=eq.under_the_hood&order=created_at.desc&limit=10`,
+            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+          ),
+        ]);
+        if (!regRes.ok) throw new Error(`HTTP ${regRes.status}`);
+        const data: RegistryItem[] = await regRes.json();
+        const snapData: SystemSnapshot[] = snapRes.ok ? await snapRes.json() : [];
         if (!cancelled) {
           setItems(data);
+          setSnapshots(snapData);
           setIsLoading(false);
         }
       } catch (err) {
@@ -82,6 +100,79 @@ export default function UnderTheHoodPage() {
           Technical transparency — how things work. Every Cephas document has an entry here.
         </p>
       </div>
+
+      {/* System Snapshots from auto-wire pipeline */}
+      <Card className="border-primary/20 bg-primary/5">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Cpu className="w-5 h-5 text-primary" />
+            System Snapshots
+          </CardTitle>
+          <CardDescription>Automated technical snapshots from the build pipeline</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {snapshots.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4">
+              System snapshots will appear here once the auto-wire pipeline publishes its first Under the Hood entry.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {/* Latest snapshot — full display */}
+              <Card className="border-primary/30">
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <CardTitle className="text-base">{snapshots[0].title}</CardTitle>
+                    <div className="flex gap-1 shrink-0">
+                      {snapshots[0].bishop_session && <Badge variant="outline" className="text-xs">Bishop {snapshots[0].bishop_session}</Badge>}
+                      {snapshots[0].knight_session && <Badge variant="outline" className="text-xs">Knight {snapshots[0].knight_session}</Badge>}
+                    </div>
+                  </div>
+                  <CardDescription className="text-xs">
+                    {new Date(snapshots[0].created_at).toLocaleString()}
+                    {snapshots[0].creation_context && ` — ${snapshots[0].creation_context}`}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  {snapshots[0].content_markdown ? (
+                    <div className="text-sm whitespace-pre-wrap max-h-64 overflow-y-auto p-3 bg-muted/50 rounded-lg">
+                      {snapshots[0].content_markdown}
+                    </div>
+                  ) : snapshots[0].technical_summary ? (
+                    <p className="text-sm text-muted-foreground">{snapshots[0].technical_summary}</p>
+                  ) : null}
+                </CardContent>
+              </Card>
+
+              {/* Historical snapshots — expandable */}
+              {snapshots.length > 1 && (
+                <div className="space-y-1">
+                  <p className="text-xs font-medium text-muted-foreground">Previous Snapshots</p>
+                  {snapshots.slice(1).map(snap => (
+                    <div key={snap.id}>
+                      <Button
+                        variant="ghost" size="sm"
+                        className="w-full justify-between text-xs h-8"
+                        onClick={() => setExpandedSnapshot(expandedSnapshot === snap.id ? null : snap.id)}
+                      >
+                        <span className="truncate">{snap.title}</span>
+                        <span className="flex items-center gap-2 shrink-0">
+                          <span className="text-muted-foreground">{new Date(snap.created_at).toLocaleDateString()}</span>
+                          {expandedSnapshot === snap.id ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </span>
+                      </Button>
+                      {expandedSnapshot === snap.id && (
+                        <div className="ml-2 pl-3 border-l border-border text-xs text-muted-foreground whitespace-pre-wrap max-h-40 overflow-y-auto p-2">
+                          {snap.content_markdown || snap.technical_summary || 'No content available'}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Input
         placeholder="Search by title or technical summary..."

@@ -48,6 +48,8 @@ import {
   scheduleGrassrootsIntelligencePosts,
   type GrassrootsPost
 } from '@/scripts/scheduleGrassrootsIntelligencePosts';
+import { SchedulingEntryBox } from '@/components/scheduling/SchedulingEntryBox';
+import { toLocalDateTimeInput, tomorrowAtNineLocal } from '@/components/scheduling/dateUtils';
 
 const PLATFORMS = [
   { id: 'twitter', name: 'Twitter/X', icon: '𝕏', maxChars: 280 },
@@ -73,12 +75,7 @@ export function TheBattery() {
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignType>('opening-gambit');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['twitter', 'linkedin', 'bluesky']);
   const [intervalHours, setIntervalHours] = useState(24);
-  const [startDate, setStartDate] = useState(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(9, 0, 0, 0);
-    return tomorrow.toISOString().slice(0, 16);
-  });
+  const [startDate, setStartDate] = useState(() => toLocalDateTimeInput(tomorrowAtNineLocal()));
   const [isScheduling, setIsScheduling] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [batteryStatus, setBatteryStatus] = useState<BatteryStatus>('SAFE');
@@ -266,12 +263,21 @@ export function TheBattery() {
                 <Calendar className="w-4 h-4" />
                 Fire Date & Time
               </Label>
-              <Input
-                id="startDate"
-                type="datetime-local"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
+              <div className="space-y-2">
+                <Input id="startDate" type="datetime-local" value={startDate} readOnly />
+                <SchedulingEntryBox
+                  contentType="cue_card"
+                  contentId={`battery-${selectedCampaign}`}
+                  contentTitle={`${activeCampaign.name} Dispatch Window`}
+                  target="cue-card-dispatch"
+                  defaultDate={new Date(startDate)}
+                  triggerLabel="Adjust Schedule"
+                  buttonVariant="outline"
+                  onSubmitEntry={async (entry) => {
+                    setStartDate(toLocalDateTimeInput(entry.scheduledAt));
+                  }}
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="interval" className="flex items-center gap-2 mb-2">

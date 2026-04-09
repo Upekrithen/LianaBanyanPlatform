@@ -135,7 +135,7 @@ export default function RunANode() {
                   <h3 className="text-xl font-bold">{node.name}</h3>
                   {!isOpen && (
                     <span className="flex items-center gap-1 text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
-                      <Clock className="w-3 h-3" /> Coming Soon
+                      <Clock className="w-3 h-3" /> Launching
                     </span>
                   )}
                 </div>

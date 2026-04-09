@@ -96,12 +96,12 @@ export default function IncumbentAdvantage() {
           
           <Card>
             <CardHeader>
-              <CardTitle>The Founder Denken Sketch</CardTitle>
+              <CardTitle>The Founder Mascot Sketch</CardTitle>
               <CardDescription>Currently Incumbent on Cephas</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="aspect-video bg-slate-100 rounded-md flex items-center justify-center overflow-hidden border border-slate-200">
-                <img src="/images/founderDenken.png" alt="Founder Denken Sketch" className="object-contain h-full w-full opacity-80" />
+                <img src="/images/founder-mascot.png" alt="Founder Mascot Sketch" className="object-contain h-full w-full opacity-80" />
               </div>
               <p className="text-sm text-slate-600">
                 This hand-drawn sketch currently holds the Incumbent position for the Founder Avatar. If an illustrator creates a polished vector version that gets accepted, the original uploader (the Founder) retains the historical Trailblazer credit and any associated bounty splits.

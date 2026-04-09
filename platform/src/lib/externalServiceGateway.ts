@@ -27,6 +27,13 @@ export type CampaignType =
   | 'participation' // Cooperative participation (Wefunder integration)
   | 'recurring';   // Ongoing support (Patreon, GiveButter)
 
+// Legacy value kept for compatibility with older records.
+type LegacyCampaignType = 'participation';
+
+function normalizeCampaignType(type: CampaignType | LegacyCampaignType): CampaignType {
+  return type === 'participation' ? 'participation' : type;
+}
+
 export type CampaignStatus = 
   | 'draft'
   | 'pending_approval'
@@ -147,7 +154,7 @@ export const PLATFORM_CONFIG: Record<FundingPlatform, {
     displayName: 'Wefunder',
     logoUrl: '/images/platforms/wefunder.svg',
     baseUrl: 'https://wefunder.com',
-    supportedTypes: ['equity'],
+    supportedTypes: ['participation'],
     hasAPI: true,
     canCreateCampaign: false, // Requires approval process
     canSyncProgress: true,
@@ -216,7 +223,7 @@ export const INITIATIVE_PLATFORM_MAP: Record<string, {
   'brass-tacks': {
     primary: 'wefunder',
     fallback: ['givebutter'],
-    campaignType: 'equity'
+    campaignType: 'participation'
   },
   'jukebox': {
     primary: 'patreon',
@@ -249,14 +256,16 @@ export class ExternalServiceGateway {
    * Get the best platform for a given campaign type
    */
   selectPlatform(
-    type: CampaignType, 
+    type: CampaignType | LegacyCampaignType,
     initiativeSlug?: string,
     preferredPlatform?: FundingPlatform
   ): FundingPlatform {
+    const normalizedType = normalizeCampaignType(type);
+
     // If preferred and supports type, use it
     if (preferredPlatform) {
       const config = PLATFORM_CONFIG[preferredPlatform];
-      if (config.supportedTypes.includes(type)) {
+      if (config.supportedTypes.includes(normalizedType)) {
         return preferredPlatform;
       }
     }
@@ -268,7 +277,7 @@ export class ExternalServiceGateway {
     
     // Otherwise, find best platform for type
     const platforms = Object.entries(PLATFORM_CONFIG)
-      .filter(([_, config]) => config.supportedTypes.includes(type))
+      .filter(([_, config]) => config.supportedTypes.includes(normalizedType))
       .sort((a, b) => {
         // Prefer platforms with APIs
         if (a[1].hasAPI && !b[1].hasAPI) return -1;
@@ -284,7 +293,7 @@ export class ExternalServiceGateway {
    */
   async createCampaignLink(
     projectId: string,
-    type: CampaignType,
+    type: CampaignType | LegacyCampaignType,
     data: CampaignData,
     preferredPlatform?: FundingPlatform
   ): Promise<CampaignLink | { platform: FundingPlatform; instructions: string }> {
@@ -426,8 +435,9 @@ export class ExternalServiceGateway {
    * Get all platforms that support a given type
    */
   getPlatformsForType(type: CampaignType): FundingPlatform[] {
+    const normalizedType = normalizeCampaignType(type);
     return Object.entries(PLATFORM_CONFIG)
-      .filter(([_, config]) => config.supportedTypes.includes(type))
+      .filter(([_, config]) => config.supportedTypes.includes(normalizedType))
       .map(([platform]) => platform as FundingPlatform);
   }
   
@@ -467,7 +477,7 @@ CREATE TABLE external_campaigns (
   external_url TEXT NOT NULL,
   
   -- Campaign type
-  campaign_type TEXT NOT NULL, -- 'product', 'medical', 'donation', 'equity', 'recurring'
+  campaign_type TEXT NOT NULL, -- 'product', 'medical', 'donation', 'participation', 'recurring' (legacy 'participation' maps to 'participation')
   
   -- Synced data
   title TEXT,

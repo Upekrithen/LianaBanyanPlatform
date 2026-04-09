@@ -22,7 +22,7 @@ const categories = [
   { id: 'research_development', label: 'R&D', icon: FlaskConical, color: 'text-purple-500' },
   { id: 'prototype', label: 'Prototype', icon: Box, color: 'text-orange-500' },
   { id: 'legal_services', label: 'Legal', icon: Scale, color: 'text-gray-600' },
-  { id: 'logistics_blockchain', label: 'Logistics & Blockchain', icon: LinkIcon, color: 'text-cyan-500' },
+  { id: 'logistics_blockchain', label: 'Logistics & Supply Chain', icon: LinkIcon, color: 'text-cyan-500' },
   { id: 'steward_owner', label: 'Steward/Owner', icon: Crown, color: 'text-amber-500' },
   { id: 'marketing_services', label: 'Marketing', icon: Megaphone, color: 'text-pink-500' },
   { id: 'accounting_services', label: 'Accounting', icon: Calculator, color: 'text-green-600' },

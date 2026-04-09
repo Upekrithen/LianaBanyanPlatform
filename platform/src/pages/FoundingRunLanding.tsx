@@ -29,7 +29,7 @@ const MOCK_ITEMS = [
   {
     id: "starter-set",
     name: "Starter Set — 6 Miniatures",
-    description: "The core HexIsle character collection: Kai, Mira, Zephyr, Flint, Coral, and Sage. Unpainted, high-detail resin.",
+    description: "The core HexIsle figure collection: Navigator, Engineer, Tidecaller, Flint, Coral, and Sage. Unpainted, high-detail resin.",
     price: 35,
     image: "/images/hexisle/starter-set.png",
   },

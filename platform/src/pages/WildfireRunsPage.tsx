@@ -48,6 +48,7 @@ import {
 } from "lucide-react";
 import { WildfireRun } from "@/components/WildfireBeaconRun";
 import { ALL_WILDFIRE_RUNS, RUNS_BY_CATEGORY, getRunBySlug, LEVEL_1_RUNS, LEVEL_2_RUNS, LEVEL_3_RUNS } from "@/data/wildfireRuns";
+import { getSpotlightTour } from "@/data/spotlightTours";
 import { useWildfireRun } from "@/contexts/WildfireRunContext";
 import { PathwayProgressCard } from "@/components/PathwayProgressCard";
 import { usePathwayProgress } from "@/contexts/PathwayProgressContext";
@@ -222,7 +223,7 @@ export default function WildfireRunsPage() {
   const { slug } = useParams<{ slug?: string }>();
   const { user } = useAuth();
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const { startRun, isRunning } = useWildfireRun();
+  const { startRun, isRunning, tourMode, startSpotlightTour } = useWildfireRun();
 
   // Fetch user's golden keys
   const { data: goldenKeys = 0 } = useQuery({
@@ -263,8 +264,15 @@ export default function WildfireRunsPage() {
     : RUNS_BY_CATEGORY[activeCategory as keyof typeof RUNS_BY_CATEGORY] || [];
 
   const handleStartRun = (run: WildfireRun) => {
+    const spotlightTour = getSpotlightTour(run.slug);
+    if (spotlightTour && tourMode === 'spotlight') {
+      startSpotlightTour(spotlightTour.name, spotlightTour.stops);
+      if (spotlightTour.stops[0]?.route) {
+        navigate(spotlightTour.stops[0].route);
+      }
+      return;
+    }
     startRun(run);
-    // Navigate to first node
     navigate(run.nodes[0].route);
   };
 

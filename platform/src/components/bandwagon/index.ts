@@ -1,6 +1,6 @@
 /**
  * BandWagon — Taste-prediction influence system
- * SEC language: earned allocation authority, allocation budget, sponsor/back (no investment/return)
+ * SEC language: earned allocation authority, allocation budget, sponsor/back (no speculative-return framing)
  */
 
 export { TasteRangerDashboard } from "./TasteRangerDashboard";

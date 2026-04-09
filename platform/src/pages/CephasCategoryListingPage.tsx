@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { FileText, Mail, Wrench, Lightbulb, BookOpen, FolderArchive, Newspaper } from "lucide-react";
+import { FileText, Mail, Wrench, Lightbulb, BookOpen, FolderArchive, Newspaper, User, Megaphone } from "lucide-react";
 import { useState } from "react";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
 
@@ -19,6 +19,10 @@ const CATEGORY_META: Record<string, { title: string; icon: React.ElementType; re
   innovations: { title: "Innovation Registry", icon: BookOpen, registryCategories: ["innovation"] },
   articles: { title: "Articles & Thought Leadership", icon: Newspaper, registryCategories: ["article"] },
   vault: { title: "Vault Archives", icon: FolderArchive, registryCategories: ["vault_archive"] },
+  founder: { title: "The Founder: Verified Anecdotes", icon: User, registryCategories: ["founder"] },
+  "founder-proof": { title: "The Founder: Verified Anecdotes", icon: User, registryCategories: ["founder"] },
+  pitches: { title: "Publication Pitches", icon: Megaphone, registryCategories: ["pitch"] },
+  "business-plan": { title: "Business Plan", icon: FileText, registryCategories: ["business-plan"] },
 };
 
 export default function CephasCategoryListingPage() {
@@ -75,6 +79,7 @@ export default function CephasCategoryListingPage() {
           {category === "innovations" && "Searchable innovation registry with patent links."}
           {category === "articles" && "Articles and thought leadership. Pudding styling."}
           {category === "vault" && "Vault and archive documents."}
+          {category === "pitches" && "Media and publication pitches. Outreach to press and platforms."}
         </p>
       </div>
 

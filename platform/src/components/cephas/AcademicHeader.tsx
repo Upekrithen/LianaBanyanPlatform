@@ -13,7 +13,7 @@ interface AcademicHeaderProps {
 export function AcademicHeader({ title, author, date, innovationIds = [] }: AcademicHeaderProps) {
   return (
     <header className="cephas-academic-header mb-6">
-      <h1 className="text-2xl font-bold">{title}</h1>
+      <h1 className="text-2xl font-bold text-foreground">{title}</h1>
       {(author || date) && (
         <p className="text-sm text-muted-foreground mt-1">
           {author}

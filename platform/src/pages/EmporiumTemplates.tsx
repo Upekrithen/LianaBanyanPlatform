@@ -467,7 +467,7 @@ export default function EmporiumTemplates() {
 
       <p className="text-[10px] text-muted-foreground text-center mt-6 max-w-lg mx-auto">
         Revenue estimates are illustrative only. Designer royalties come from
-        the platform's operational share. Creator keeps 83.3%. This is not an investment.
+        the platform's operational share. Creator keeps 83.3%. This is not a speculative instrument.
       </p>
     </PortalPageLayout>
   );

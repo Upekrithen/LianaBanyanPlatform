@@ -57,7 +57,7 @@ export default function NoAtomo() {
               { title: "No Algorithmic Manipulation", detail: "No engagement traps, no dark patterns, no infinite scroll. Your attention is yours." },
               { title: "No Hidden Fees", detail: "Cost+20%. That's it. The 20% split is public: 83.3% creator, 13.3% platform, 3.3% Gleaner's Corner." },
               { title: "No Data Harvesting", detail: "We don't sell your data. We don't profile you for advertisers. We don't track you across the web." },
-              { title: "No Enshittification", detail: "The margin is locked in our operating agreement. No board can change it. No investor can override it." },
+              { title: "No Enshittification", detail: "The margin is locked in our operating agreement. No board can change it. No outside financier can override it." },
               { title: "No Concentration", detail: "Marks emerge from differential only. The currency itself prevents wealth concentration by design." },
             ].map((item, idx) => (
               <Card key={idx} className="bg-slate-900/60 border-red-900/20">

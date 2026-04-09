@@ -1,6 +1,6 @@
 /**
  * LMD Recipe Iteration Review Form — taste, flavor, spice, mouthfeel (1–5)
- * SEC language: Marks for timely review (service value / allocation), no investment/return.
+ * SEC language: Marks for timely review (service value / allocation), no speculative-return framing.
  * data-xray-id: lmd-review-form
  */
 
@@ -144,7 +144,7 @@ export function LMDReviewForm({
             <div>
               <p className="font-medium">Time-bound service value</p>
               <p className="text-muted-foreground">
-                Submit within {config.windowHours} hours of delivery to earn {config.marks} Marks (one-serving equivalent). This is service value for participation, not investment return.
+                Submit within {config.windowHours} hours of delivery to earn {config.marks} Marks (one-serving equivalent). This is service value for participation, not a speculative return.
               </p>
               {orderOrDeliveryAt && (
                 <p className="text-xs mt-1">

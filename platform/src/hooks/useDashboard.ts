@@ -47,6 +47,13 @@ export interface CaptainSummary {
   fulfillment_rate: number;
 }
 
+export interface CurrencySummary {
+  credits: number;
+  marksEarned: number;
+  marksBacked: number;
+  joules: number;
+}
+
 export interface DashboardData {
   projects: DashboardProject[];
   totalEarnings: number;
@@ -57,6 +64,7 @@ export interface DashboardData {
   treasureMapProgress: DashboardTreasureMapProgress | null;
   cueCards: DashboardCueCard[];
   captain: CaptainSummary | null;
+  currencies: CurrencySummary;
 }
 
 export function useDashboard() {
@@ -77,6 +85,8 @@ export function useDashboard() {
         mapsRes,
         cueCardsRes,
         reputationRes,
+        marksRes,
+        joulesRes,
       ] = await Promise.all([
         supabase
           .from('turnkey_projects' as never)
@@ -134,6 +144,17 @@ export function useDashboard() {
           .select('reputation_score')
           .eq('user_id', user.id)
           .maybeSingle() as { data: { reputation_score: number } | null; error: any },
+
+        supabase
+          .from('shadow_marks_ledger' as never)
+          .select('amount, mark_type')
+          .eq('user_id', user.id) as { data: { amount: number; mark_type: string }[] | null; error: any },
+
+        supabase
+          .from('joule_balances' as never)
+          .select('balance')
+          .eq('user_id', user.id)
+          .maybeSingle() as { data: { balance: number } | null; error: any },
       ]);
 
       const projects: DashboardProject[] = (projectsRes.data || []).map((p: any) => ({
@@ -171,6 +192,14 @@ export function useDashboard() {
         }
       }
 
+      const marksEntries = marksRes.data || [];
+      const marksEarned = marksEntries
+        .filter((m: any) => m.amount > 0)
+        .reduce((sum: number, m: any) => sum + m.amount, 0);
+      const marksBacked = marksEntries
+        .filter((m: any) => m.mark_type === 'backed')
+        .reduce((sum: number, m: any) => sum + Math.abs(m.amount), 0);
+
       return {
         projects,
         totalEarnings: earningsRes.data?.lifetime_earned || 0,
@@ -179,6 +208,12 @@ export function useDashboard() {
         reputationScore: reputationRes.data?.reputation_score || 0,
         notifications: notificationsRes.data || [],
         treasureMapProgress,
+        currencies: {
+          credits: earningsRes.data?.lifetime_earned || 0,
+          marksEarned,
+          marksBacked,
+          joules: joulesRes.data?.balance || 0,
+        },
         cueCards: (cueCardsRes.data || []).map((c: any) => ({
           id: c.id,
           title: c.title,

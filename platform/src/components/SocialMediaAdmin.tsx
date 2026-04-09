@@ -13,6 +13,7 @@ import {
   PLATFORM_IMAGE_LIMITS,
   type ScheduleOptions 
 } from '@/scripts/scheduleLittleRedHenPosts';
+import { toLocalDateTimeInput, tomorrowAtNineLocal } from '@/components/scheduling/dateUtils';
 
 const PLATFORMS = [
   { id: 'twitter', name: 'Twitter/X', icon: '𝕏' },
@@ -29,12 +30,7 @@ const PLATFORMS = [
 export function SocialMediaAdmin() {
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['twitter', 'linkedin', 'bluesky']);
   const [intervalHours, setIntervalHours] = useState(24);
-  const [startDate, setStartDate] = useState(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(9, 0, 0, 0);
-    return tomorrow.toISOString().slice(0, 16);
-  });
+  const [startDate, setStartDate] = useState(() => toLocalDateTimeInput(tomorrowAtNineLocal()));
   const [isScheduling, setIsScheduling] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   

@@ -238,7 +238,7 @@ export const ProjectTestingTab = ({ projectId }: ProjectTestingTabProps) => {
         <TabsList>
           <TabsTrigger value="suites">Test Suites</TabsTrigger>
           <TabsTrigger value="results">Recent Results</TabsTrigger>
-          <TabsTrigger value="pathways">Pathways (Coming Soon)</TabsTrigger>
+          <TabsTrigger value="pathways">Pathways (Beta)</TabsTrigger>
         </TabsList>
 
         <TabsContent value="suites" className="space-y-6">
@@ -465,7 +465,7 @@ export const ProjectTestingTab = ({ projectId }: ProjectTestingTabProps) => {
             <CardHeader>
               <CardTitle>User Pathways & Decision Nodes</CardTitle>
               <CardDescription>
-                Visual pathway testing with decision node validation (Coming Soon)
+                Visual pathway testing with decision node validation (Beta)
               </CardDescription>
             </CardHeader>
             <CardContent>

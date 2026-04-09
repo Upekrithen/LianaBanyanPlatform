@@ -5,7 +5,7 @@
  * cancel if needed ("I've Changed My Mind"), and track fulfillment.
  *
  * SEC-safe: All language uses "sponsorship", "backing", "service credits".
- * No investment, equity, ROI, or profit language.
+ * No speculative-finance, ownership-claim, or profit-promissory language.
  *
  * Innovation #1544 — My Pledges Dashboard (Session 8A)
  */

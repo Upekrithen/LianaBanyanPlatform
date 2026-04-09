@@ -94,6 +94,9 @@ export default function BuyCreditsPage() {
             <Gift className="h-3.5 w-3.5" />
             Early members may receive bonus credits based on participation tier.
           </p>
+          <p className="mt-2 text-xs text-muted-foreground/70 max-w-md">
+            Your payment is processed and held by our payment processor (Stripe) until applied to your account or a project reaches its production threshold. If conditions are not met, your payment is automatically refunded.
+          </p>
         </div>
 
         {/* Purchase history */}

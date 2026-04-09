@@ -20,7 +20,7 @@ const POSITION_CATEGORIES = [
   { value: "research_development" as const, label: "Research & Development" },
   { value: "prototype" as const, label: "Prototyping & Engineering" },
   { value: "legal_services" as const, label: "Legal Services" },
-  { value: "logistics_blockchain" as const, label: "Logistics & Blockchain" },
+  { value: "logistics_blockchain" as const, label: "Logistics & Supply Chain" },
   { value: "steward_owner" as const, label: "Stewardship & Leadership" },
   { value: "marketing_services" as const, label: "Marketing & Sales" },
   { value: "accounting_services" as const, label: "Accounting & Finance" },

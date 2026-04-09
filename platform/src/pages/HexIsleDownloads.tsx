@@ -293,7 +293,7 @@ const HexIsleDownloads: React.FC = () => {
                       </Link>
                     )
                   ) : (
-                    <span className="text-[10px] text-slate-600 bg-slate-800/60 px-2 py-1 rounded-full">Coming Soon</span>
+                    <span className="text-[10px] text-slate-600 bg-slate-800/60 px-2 py-1 rounded-full">Available Soon</span>
                   )}
                 </div>
               </div>

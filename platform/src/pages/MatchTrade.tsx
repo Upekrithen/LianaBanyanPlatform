@@ -28,6 +28,8 @@ import {
 import { toast } from "sonner";
 import { calculateMatchTradeCacheRequired, MATCHTRADE_BOUNTY_COST } from "@/lib/currencyService";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { BountyPaymentToggle, type PaymentMethod } from "@/components/BountyPaymentToggle";
+import { useCreateSponsorship } from "@/hooks/useBountySponsorship";
 
 const CATEGORIES = [
   "Design", "Development", "Writing", "Marketing", "Accounting",
@@ -43,6 +45,8 @@ export default function MatchTrade() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [offerPaymentMethod, setOfferPaymentMethod] = useState<PaymentMethod>("marks");
+  const createSponsorship = useCreateSponsorship();
 
   // Open offers
   const { data: offers, isLoading } = useQuery({
@@ -111,7 +115,7 @@ export default function MatchTrade() {
       const marksPrice = Number(formData.get("marks_price"));
       const creditsNeeded = calculateMatchTradeCacheRequired(marksPrice);
 
-      const { error } = await supabase.from("matchtrade_offers").insert({
+      const { data, error } = await supabase.from("matchtrade_offers").insert({
         offerer_id: user.id,
         service_title: formData.get("title") as string,
         service_description: formData.get("description") as string,
@@ -122,12 +126,23 @@ export default function MatchTrade() {
         seeking_category: formData.get("seeking_category") as string || null,
         seeking_description: formData.get("seeking") as string || null,
         status: "open",
-      });
+      }).select().single();
       if (error) throw error;
+      if (data && offerPaymentMethod !== "marks") {
+        const sponsorMethod = offerPaymentMethod === "fiat" ? "fiat_stripe" as const : "credits" as const;
+        await createSponsorship.mutateAsync({
+          bounty_type: "matchtrade",
+          bounty_id: (data as { id: string }).id,
+          amount_credits: creditsNeeded,
+          amount_marks_equivalent: marksPrice,
+          payment_method: sponsorMethod,
+        });
+      }
     },
     onSuccess: () => {
       toast.success("MatchTrade offer created!");
       setShowCreateDialog(false);
+      setOfferPaymentMethod("marks");
       queryClient.invalidateQueries({ queryKey: ["matchtrade-offers"] });
       queryClient.invalidateQueries({ queryKey: ["my-matchtrade-offers"] });
     },
@@ -206,6 +221,15 @@ export default function MatchTrade() {
                     {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                   <Textarea name="seeking" placeholder="Describe what service you need in return..." rows={2} />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Payment Method</label>
+                  <BountyPaymentToggle
+                    priceMarks={0}
+                    onPaymentChange={setOfferPaymentMethod}
+                    showFiatOption={false}
+                    compact
+                  />
                 </div>
                 <Button type="submit" className="w-full" disabled={createOffer.isPending}>
                   {createOffer.isPending ? "Creating..." : "Post MatchTrade Offer"}

@@ -623,7 +623,7 @@ export default function StarChamber() {
         {/* SCaaS Teaser */}
         <Card className="bg-gradient-to-r from-amber-950/40 to-slate-900/60 border-amber-800/30">
           <CardContent className="py-6 text-center">
-            <h3 className="text-lg font-bold text-amber-400 mb-2">Coming Soon: Star Chamber as a Service</h3>
+            <h3 className="text-lg font-bold text-amber-400 mb-2">Star Chamber as a Service — Preview</h3>
             <p className="text-sm text-slate-400 mb-3">Bring AI-powered governance to your cooperative, HOA, or organization.</p>
             <p className="text-xs text-slate-500 mb-4">Pricing: $5/mo (community) to $500/mo (enterprise)</p>
             <Button variant="outline" size="sm" disabled>Join the Waitlist</Button>

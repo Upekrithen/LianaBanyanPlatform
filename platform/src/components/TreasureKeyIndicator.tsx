@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { getActiveKeysForDocument, hasKeys } from "@/lib/treasureKeyEmbed";
+import { useNotesOverlay } from "@/contexts/NotesOverlayContext";
 
 interface TreasureKeyIndicatorProps {
   documentPath: string;
@@ -52,6 +53,7 @@ export function TreasureKeyIndicator({
 }: TreasureKeyIndicatorProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { openCodebreaker } = useNotesOverlay();
   const [isExpanded, setIsExpanded] = useState(false);
   const [keyAnswer, setKeyAnswer] = useState("");
 
@@ -138,10 +140,15 @@ export function TreasureKeyIndicator({
 
         {isExpanded && (
           <div className="mt-3 space-y-3">
-            {keys.map((key, idx) => (
+            {keys.map((key) => (
               <div
                 key={key.id}
-                className={`flex items-start gap-2 p-2 rounded-md ${tierBg[key.tier] || ""}`}
+                className={`flex items-start gap-2 p-2 rounded-md ${tierBg[key.tier] || ""} ${!key.found_by ? 'cursor-pointer hover:ring-1 hover:ring-amber-400/40 transition-all' : ''}`}
+                onClick={() => {
+                  if (!key.found_by) {
+                    openCodebreaker(key.id, key.hint, documentPath);
+                  }
+                }}
               >
                 {key.found_by ? (
                   <Unlock className="w-4 h-4 text-green-400 mt-0.5" />
@@ -156,6 +163,9 @@ export function TreasureKeyIndicator({
                     <span className="text-xs text-white/50">+{key.feathers} feathers</span>
                   </div>
                   <p className="text-xs text-white/70 mt-1">{key.hint}</p>
+                  {!key.found_by && (
+                    <p className="text-[10px] text-amber-400/60 mt-0.5">Click to open Codebreaker</p>
+                  )}
                 </div>
               </div>
             ))}
@@ -230,7 +240,12 @@ export function TreasureKeyIndicator({
             {keys.map((key) => (
               <div
                 key={key.id}
-                className={`p-2 rounded-lg ${tierBg[key.tier] || ""}`}
+                className={`p-2 rounded-lg ${tierBg[key.tier] || ""} ${!key.found_by ? 'cursor-pointer hover:ring-1 hover:ring-amber-400/40 transition-all' : ''}`}
+                onClick={() => {
+                  if (!key.found_by) {
+                    openCodebreaker(key.id, key.hint, documentPath);
+                  }
+                }}
               >
                 <div className="flex items-center gap-2">
                   {key.found_by ? (
@@ -244,6 +259,9 @@ export function TreasureKeyIndicator({
                   <span className="text-xs text-white/40">+{key.feathers}</span>
                 </div>
                 <p className="text-xs text-white/60 mt-1">{key.hint}</p>
+                {!key.found_by && (
+                  <p className="text-[10px] text-amber-400/50 mt-0.5">Click to open Codebreaker</p>
+                )}
               </div>
             ))}
           </div>

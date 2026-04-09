@@ -10,7 +10,7 @@
  *   - Pre-operational feature thermometer data
  *
  * SEC-safe: effort-earned currency backed by patent portfolio,
- * not investment. Fails all 4 Howey prongs.
+ * not speculative finance. Fails all 4 Howey prongs.
  */
 
 // ─── Area Allocation Configuration ───

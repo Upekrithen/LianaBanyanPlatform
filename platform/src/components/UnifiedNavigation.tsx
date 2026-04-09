@@ -82,7 +82,7 @@ const allNavItems: NavItem[] = [
   { title: "Local Campaigns", url: "/campaigns", icon: Store, portal: "marketplace" },
   { title: "Family Table", url: "/family-table", icon: Utensils, portal: "marketplace" },
   { title: "Cookbook", url: "/cookbook", icon: BookOpen, portal: "marketplace" },
-  // "Investment Guide" removed — SEC compliance (no investment language)
+  // "Funding Guide" removed — SEC compliance (no speculative-finance language)
   // "Blockchain" removed — not functional, confusing for users
   { title: "My Portfolio", url: "/portfolio", icon: LayoutDashboard, portal: "marketplace" },
   { title: "My Reputation", url: "/reputation", icon: Award, portal: "marketplace" }, // Will be made dynamic

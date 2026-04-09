@@ -164,7 +164,7 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-              <span><strong>Verifiable Proof:</strong> Your medallion is secured by blockchain technology</span>
+              <span><strong>Verifiable Proof:</strong> Your medallion is secured by verified ledger technology</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
@@ -173,14 +173,14 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
           </ul>
         </div>
 
-        {/* Blockchain verification and explorer links */}
+        {/* Ledger verification and explorer links */}
         {isMinted && contractAddress && (
           <>
             <Separator />
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-semibold text-sm mb-1">Blockchain Verified</p>
+                  <p className="font-semibold text-sm mb-1">Ledger Verified</p>
                   <p className="text-xs text-muted-foreground">
                     Secured on Base Network
                   </p>
@@ -196,7 +196,7 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
                     <DialogHeader>
                       <DialogTitle>{projectName} Medallion</DialogTitle>
                       <DialogDescription>
-                        Scan this QR code to view your medallion on the blockchain
+                        Scan this QR code to view your medallion on the verified ledger
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col items-center gap-4 p-6">

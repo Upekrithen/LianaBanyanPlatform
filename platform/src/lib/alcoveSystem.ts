@@ -257,11 +257,11 @@ export const ALCOVES: Alcove[] = [
       {
         id: 'q7-1',
         type: 'basic',
-        question: 'Is the Brewster Bonus an investment return?',
+        question: 'Is the Brewster Bonus a speculative return?',
         isYesNo: true,
         correctAnswer: 'no',
         reward: 2,
-        explanation: 'It\'s a loyalty-driven volume discount passed back as platform currency — not an investment return.',
+        explanation: 'It\'s a loyalty-driven volume discount passed back as platform currency — not a speculative return.',
       },
       {
         id: 'q7-2',
@@ -417,7 +417,7 @@ export const ALCOVES: Alcove[] = [
     subtitle: 'Why this is NOT a security',
     icon: '⚖️',
     route: '/learn/howey',
-    preview: 'Four-prong analysis proving Credits, Marks, and Joules fail every test for securities classification.',
+    preview: 'Four-prong analysis proving Credits, Marks, and Joules fail every test for membership rights classification.',
     innovations: [1424],
     documentSlug: 'PAPER_BREWSTER_BONUS_MECHANIC',
     questions: [
@@ -437,10 +437,10 @@ export const ALCOVES: Alcove[] = [
     position: 14,
     tier: 3,
     title: 'The Patent Portfolio',
-    subtitle: '1,511 claims, $65 each',
+    subtitle: '2,097 claims, $65 each',
     icon: '📜',
     route: '/learn/patents',
-    preview: 'Micro-entity filing at $65 per provisional. 1,511 claims across 10 provisional applications. IP as cooperative asset.',
+    preview: 'Micro-entity filing at $65 per provisional. 2,097 claims across 11 provisional applications. IP as cooperative asset.',
     innovations: [],
     questions: [
       {

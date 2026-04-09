@@ -151,7 +151,7 @@ export default function SponsorshipPage() {
                   <div>
                     <h4 className="font-medium">Founder Reserve</h4>
                     <p className="text-sm text-muted-foreground">
-                      Reserved for the founder who developed 2,007 innovations over 37 years.
+                      Reserved for the founder who developed 2,128 innovations over 37 years.
                     </p>
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export default function SponsorshipPage() {
                   <div>
                     <h4 className="font-medium">What it is NOT</h4>
                     <p className="text-sm text-muted-foreground">
-                      Not an investment. Not an inflation hedge. Not tradeable.
+                      Not a speculative instrument. Not an inflation hedge. Not tradeable.
                       This is prepaid service access, nothing more.
                     </p>
                   </div>

@@ -90,7 +90,7 @@ export function MedallionFundingExplainer() {
                     </p>
                     <ul className="list-disc list-inside text-sm text-muted-foreground mt-2 space-y-1 ml-4">
                       <li>EOI (Expression of Interest) credit conversions for early supporters</li>
-                      <li>Gas fees for blockchain Medallion NFT minting (~1% of pool)</li>
+                      <li>Gas fees for verified Medallion minting (~1% of pool)</li>
                       <li>Operational costs for project growth</li>
                     </ul>
                   </div>
@@ -283,10 +283,10 @@ export function MedallionFundingExplainer() {
                 <div className="flex gap-4">
                   <Shield className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-semibold mb-2">Blockchain Verification</h4>
+                    <h4 className="font-semibold mb-2">Ledger Verification</h4>
                     <p className="text-sm text-muted-foreground">
-                      Your Medallion is minted as an ERC-1155 NFT on Base L2, creating an immutable record of your 
-                      membership and contribution. The blockchain ledger ensures transparency and prevents tampering.
+                      Your Medallion is minted as an ERC-1155 token on Base L2, creating an immutable record of your
+                      membership and contribution. The verified ledger ensures transparency and prevents tampering.
                     </p>
                   </div>
                 </div>
@@ -416,7 +416,7 @@ export function MedallionFundingExplainer() {
                 </p>
                 <ul className="list-disc list-inside text-sm text-muted-foreground mt-2 space-y-1 ml-4">
                   <li>Account authentication (email/password or social login)</li>
-                  <li>Blockchain wallet connection (for NFT minting)</li>
+                  <li>Wallet connection (for verified minting)</li>
                   <li>Database row-level security policies</li>
                   <li>Encrypted credential storage</li>
                 </ul>

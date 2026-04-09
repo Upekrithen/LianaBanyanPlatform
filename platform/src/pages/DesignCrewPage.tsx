@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Palette, Star, Clock, Shield, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Palette, Star, Clock, Shield, CheckCircle2, AlertCircle, DollarSign, CreditCard as CreditCardIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -60,8 +60,12 @@ function BountyCard({ bounty, onClaim, claiming }: { bounty: BrandBounty; onClai
         <div className="flex items-center gap-2 text-xs text-white/40">
           <Clock className="w-3 h-3" />
           Due: {new Date(bounty.deadline).toLocaleDateString()}
-          {bounty.paid_in_credits && (
-            <Badge variant="outline" className="border-emerald-600/50 text-emerald-400 text-[10px]">Credits (priority)</Badge>
+          {bounty.paid_in_credits ? (
+            <Badge variant="outline" className="border-emerald-600/50 text-emerald-400 text-[10px] gap-1">
+              <CreditCardIcon className="w-2.5 h-2.5" /> Credits (priority)
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="border-amber-600/50 text-amber-400 text-[10px]">Marks</Badge>
           )}
         </div>
         <Button size="sm" onClick={onClaim} disabled={claiming} className="bg-emerald-600 hover:bg-emerald-500 text-xs h-7">

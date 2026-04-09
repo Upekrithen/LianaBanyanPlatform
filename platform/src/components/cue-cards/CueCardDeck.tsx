@@ -15,7 +15,7 @@ import {
   Flame, ShoppingBag, Shield, Music, GraduationCap, Vote, Coins,
   Wheat, Store, Landmark, Factory, Hexagon, Swords, Users, MapPin,
   Map, Key, Navigation, UtensilsCrossed, ChefHat, Ghost, Glasses,
-  DollarSign, Zap, Ban, Package, Sprout,
+  DollarSign, Zap, Ban, Package, Sprout, Anchor,
 } from "lucide-react";
 import { LETTER_CUE_CARDS } from "@/data/letterCueCards";
 
@@ -77,12 +77,14 @@ const DECK_CARDS = [
   { id: "no-ads", title: "No Ads. Ever.", icon: Ban, href: "/cue-cards/no-ads", description: "We mean it. Zero advertising. Zero data selling." },
   { id: "hexisle-game", title: "HexIsle", icon: Hexagon, href: "/cue-cards/hexisle", description: "Build the Game. Own the Story. 27-piece hexel." },
   { id: "ambassador-card", title: "Become an Ambassador", icon: Zap, href: "/cue-cards/ambassador", description: "Earn rewards tied to our patent portfolio." },
+  { id: "pathfinder", title: "PathFinder", icon: Navigation, href: "/pathfinder", description: "Not sure what to do? Log experiences, discover patterns, find your path." },
+  { id: "pearl-diver", title: "Pearl Diver", icon: Anchor, href: "/resource-board", description: "Find deals others miss. Get paid for what you already know." },
 ] as const;
 
 const CATEGORY_LABELS: Record<string, string> = {
   'crown-letter': 'Crown Letters',
   'crown-initiative': 'Crown Initiative',
-  'circle-1-investors': 'Circle 1: Investors',
+  'circle-1-backers': 'Circle 1: Backers',
   'circle-2-media': 'Circle 2: Media',
   'circle-3-academics': 'Circle 3: Academics',
   'blessing': 'Blessings',

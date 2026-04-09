@@ -1,7 +1,7 @@
 /**
  * LMD Reviewer Dashboard — recipe iteration reviews (taste/flavor/spice/mouthfeel)
  * Shows reviewer tier (Palate progression), incentive message, and queue of meals to review.
- * SEC language: Marks = service value for participation; no investment/return.
+ * SEC language: Marks = service value for participation; no speculative-return framing.
  * data-xray-id: lmd-reviewer-dashboard
  */
 
@@ -150,7 +150,7 @@ export default function LMDReviewerDashboard() {
               <div>
                 <p className="font-medium">Time-bound service value</p>
                 <p className="text-muted-foreground">
-                  Submit a review within <strong>{config.windowHours} hours</strong> of delivery to earn <strong>{config.marks} Marks</strong> (one-serving equivalent). This is service value for participation, not investment return.
+                  Submit a review within <strong>{config.windowHours} hours</strong> of delivery to earn <strong>{config.marks} Marks</strong> (one-serving equivalent). This is service value for participation, not a speculative return.
                 </p>
               </div>
             </div>

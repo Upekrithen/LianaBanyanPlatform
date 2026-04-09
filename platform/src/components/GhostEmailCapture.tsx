@@ -2,7 +2,7 @@
  * GhostEmailCapture.tsx
  * 
  * Dialog that captures ghost user emails when they want to share cue cards.
- * - Explains that their shares will earn rewards
+ * - Explains that their shares may earn rewards
  * - Stores email with tracking token
  * - Returns personalized QR URL for their shares
  * 

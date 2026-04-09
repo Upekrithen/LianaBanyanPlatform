@@ -44,7 +44,7 @@ const SAMPLE_ITEMS: PreOrderItem[] = [
   {
     id: "starter-set",
     name: "Starter Set — 6 Miniatures",
-    description: "Kai, Mira, Zephyr, Flint, Coral, Sage. Unpainted resin.",
+    description: "Navigator, Engineer, Tidecaller, Flint, Coral, Sage. Unpainted resin.",
     unitCost: 35,
     costBreakdown: { materials: 15.75, production: 7, shipping: 5.25, platform: 7 },
   },

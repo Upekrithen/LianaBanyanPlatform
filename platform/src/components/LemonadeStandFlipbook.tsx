@@ -13,8 +13,17 @@ interface LemonadeStandFlipbookProps {
   compact?: boolean;
 }
 
-// 8 scenes: 7 story + 1 moral
-const SCENES = [
+interface Scene {
+  id: number;
+  rhyme: string;
+  subtitle: string;
+  alt: string;
+  isMoral?: boolean;
+  isEpilogue?: boolean;
+  image?: string;
+}
+
+const SCENES: Scene[] = [
   {
     id: 1,
     rhyme: "The goat has a dream and a big, brave plan, but wood, nails, and tools cost more than he can.",
@@ -63,6 +72,54 @@ const SCENES = [
     subtitle: "",
     alt: "All seven characters stand together with the lemonade stand, pizza oven, and woodworking shop behind them. Everyone smiles.",
     isMoral: true,
+  },
+  {
+    id: 9,
+    rhyme: "And so the seeds were planted.",
+    subtitle: "",
+    alt: "Seeds planted in rows, tiny sprouts emerging from the soil.",
+    isEpilogue: true,
+    image: "/images/stage1.png",
+  },
+  {
+    id: 10,
+    rhyme: "One by one, they grew.",
+    subtitle: "",
+    alt: "Small saplings growing steadily from the ground.",
+    isEpilogue: true,
+    image: "/images/stage2.png",
+  },
+  {
+    id: 11,
+    rhyme: "Each one reaching for light.",
+    subtitle: "",
+    alt: "Taller saplings with branches stretching upward.",
+    isEpilogue: true,
+    image: "/images/stage3.png",
+  },
+  {
+    id: 12,
+    rhyme: "The first trees sheltered the next.",
+    subtitle: "",
+    alt: "Mature trees with canopy, new saplings growing underneath.",
+    isEpilogue: true,
+    image: "/images/stage4.png",
+  },
+  {
+    id: 13,
+    rhyme: "Roots became trunks. Trunks became forest.",
+    subtitle: "",
+    alt: "Banyan spreading, aerial roots becoming new trunks.",
+    isEpilogue: true,
+    image: "/images/stage5.png",
+  },
+  {
+    id: 14,
+    rhyme: "One seed. One forest. Everyone fed.",
+    subtitle: "",
+    alt: "Full banyan forest in bloom, covering the landscape.",
+    isEpilogue: true,
+    image: "/images/stage6.png",
   },
 ];
 
@@ -207,11 +264,17 @@ export function LemonadeStandFlipbook({
               exit="exit"
               transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
-              <div className="w-full flex-1 flex items-center justify-center bg-gradient-to-b from-sky-100 to-green-100 rounded-md mb-2 relative overflow-hidden">
-                <img src={`/images/Lemonade Stand/goat (${scene.id}).png`} alt={scene.alt} className="w-full h-full object-contain" />
+              <div className={`w-full flex-1 flex items-center justify-center rounded-md mb-2 relative overflow-hidden ${
+                scene.isEpilogue ? 'bg-gradient-to-b from-emerald-100 to-amber-100' : 'bg-gradient-to-b from-sky-100 to-green-100'
+              }`}>
+                <img
+                  src={scene.image ?? `/images/Lemonade Stand/goat (${scene.id}).png`}
+                  alt={scene.alt}
+                  className="w-full h-full object-contain"
+                />
               </div>
-              <p className="text-xs text-amber-800 text-center font-serif italic">
-                {scene.isMoral ? scene.rhyme : `"${scene.rhyme}"`}
+              <p className={`text-xs text-center font-serif italic ${scene.isEpilogue ? 'text-emerald-800' : 'text-amber-800'}`}>
+                {scene.isMoral || scene.isEpilogue ? scene.rhyme : `"${scene.rhyme}"`}
               </p>
             </motion.div>
           </AnimatePresence>
@@ -273,19 +336,26 @@ export function LemonadeStandFlipbook({
               exit="exit"
               transition={{ duration: 0.5, ease: 'easeInOut' }}
             >
-              <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-sky-100 to-green-100 relative overflow-hidden">
+              <div className={`flex-1 flex items-center justify-center relative overflow-hidden ${
+                scene.isEpilogue ? 'bg-gradient-to-b from-emerald-100 to-amber-100' : 'bg-gradient-to-b from-sky-100 to-green-100'
+              }`}>
                 <img
-                  src={`/images/Lemonade Stand/goat (${scene.id}).png`}
+                  src={scene.image ?? `/images/Lemonade Stand/goat (${scene.id}).png`}
                   alt={scene.alt}
                   className="w-full h-full object-contain"
                 />
               </div>
 
-              {/* Rhyme caption moved inside frame at bottom */}
               {scene.rhyme && (
-                <div className="bg-amber-100 border-t-2 border-amber-300 px-4 py-3 text-center">
-                  <p className="text-amber-900 font-medium text-sm font-serif italic">
-                    {scene.isMoral ? scene.rhyme : `"${scene.rhyme}"`}
+                <div className={`border-t-2 px-4 py-3 text-center ${
+                  scene.isEpilogue
+                    ? 'bg-emerald-50 border-emerald-300'
+                    : 'bg-amber-100 border-amber-300'
+                }`}>
+                  <p className={`font-medium text-sm font-serif italic ${
+                    scene.isEpilogue ? 'text-emerald-900' : 'text-amber-900'
+                  }`}>
+                    {scene.isMoral || scene.isEpilogue ? scene.rhyme : `"${scene.rhyme}"`}
                   </p>
                 </div>
               )}

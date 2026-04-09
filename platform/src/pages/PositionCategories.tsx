@@ -81,12 +81,12 @@ const positionCategories: PositionCategory[] = [
   },
   {
     id: 'logistics_blockchain',
-    name: 'Logistics & Blockchain',
-    description: 'Supply chain management and blockchain integration',
+    name: 'Logistics & Supply Chain',
+    description: 'Supply chain management and verified ledger integration',
     icon: Package,
-    typicalRoles: ['Logistics Coordinator', 'Blockchain Developer', 'Supply Chain Manager'],
-    keySkills: ['Supply Chain', 'Blockchain', 'Smart Contracts'],
-    examplePositions: ['Blockchain Integration Specialist', 'Supply Chain Analyst', 'Logistics Manager']
+    typicalRoles: ['Logistics Coordinator', 'Ledger Systems Developer', 'Supply Chain Manager'],
+    keySkills: ['Supply Chain', 'Verified Ledger', 'Process Automation'],
+    examplePositions: ['Ledger Integration Specialist', 'Supply Chain Analyst', 'Logistics Manager']
   },
   {
     id: 'steward_owner',

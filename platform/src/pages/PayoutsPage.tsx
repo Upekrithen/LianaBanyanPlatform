@@ -52,6 +52,11 @@ type CardholderRow = {
   payout_preference: string | null;
 };
 
+type CreditWalletRow = {
+  balance: number;
+  lifetime_earned: number;
+};
+
 type FeatureFlagRow = {
   feature_key: string;
   is_enabled: boolean | null;
@@ -132,6 +137,21 @@ export default function PayoutsPage() {
     enabled: !!authUser?.id,
   });
 
+  const { data: creditWallet } = useQuery({
+    queryKey: ["payouts-credit-wallet", authUser?.id],
+    queryFn: async () => {
+      if (!authUser?.id) return null;
+      const { data, error } = await supabase
+        .from("credit_wallets" as any)
+        .select("balance, lifetime_earned")
+        .eq("user_id", authUser.id)
+        .maybeSingle();
+      if (error && error.code !== "PGRST116") throw error;
+      return data as CreditWalletRow | null;
+    },
+    enabled: !!authUser?.id,
+  });
+
   const { data: payouts, isLoading: payoutsLoading } = useQuery({
     queryKey: ["member-payouts", authUser?.id],
     queryFn: async () => {
@@ -148,14 +168,18 @@ export default function PayoutsPage() {
     enabled: !!authUser?.id,
   });
 
-  const balanceCents = cardholder?.card_balance_cents ?? 0;
-  const currentPref = cardholder?.payout_preference ?? "lb_card";
+  const cardBalanceCents = cardholder?.card_balance_cents ?? 0;
+  const earnedCredits = creditWallet?.lifetime_earned ?? 0;
+  const earnedCents = Math.round(earnedCredits * 100); // 1 credit = $1
+  const totalAvailableCents = cardBalanceCents + earnedCents;
+  const currentPref = cardholder?.payout_preference ?? "connect_standard";
   const connectReady = connectAcct?.onboarding_status === "complete" && connectAcct?.payouts_enabled;
   const connectPending = connectAcct && connectAcct.onboarding_status !== "complete";
 
   async function invalidateAll() {
     await queryClient.invalidateQueries({ queryKey: ["connect-account"] });
     await queryClient.invalidateQueries({ queryKey: ["payouts-cardholder"] });
+    await queryClient.invalidateQueries({ queryKey: ["payouts-credit-wallet"] });
     await queryClient.invalidateQueries({ queryKey: ["member-payouts"] });
   }
 
@@ -224,24 +248,50 @@ export default function PayoutsPage() {
       return;
     }
     const amountCents = Math.round(dollars * 100);
-    if (amountCents > balanceCents) {
+    if (amountCents > totalAvailableCents) {
       setPageError("Insufficient balance");
       return;
     }
 
     setActionBusy("cashout");
     try {
-      const { data, error } = await supabase.functions.invoke("request-payout", {
-        body: { amount_cents: amountCents, payout_speed: cashOutSpeed },
-      });
-      if (error) throw error;
-      const body = data as { error?: string; success?: boolean; payout?: PayoutRow };
-      if (body?.error) throw new Error(body.error);
+      // Route: earned credits first (via stripe-connect-payout),
+      // then LB Card balance (via request-payout) for any remainder
+      let remaining = amountCents;
+      const results: string[] = [];
+
+      // Draw from earned credits first
+      if (remaining > 0 && earnedCents > 0) {
+        const fromEarned = Math.min(remaining, earnedCents);
+        const earnedCredits = fromEarned / 100; // cents -> credits (1:1)
+        const { data, error } = await supabase.functions.invoke("stripe-connect-payout", {
+          body: { amount: earnedCredits },
+        });
+        if (error) throw error;
+        const body = data as { error?: string; success?: boolean };
+        if (body?.error) throw new Error(body.error);
+        remaining -= fromEarned;
+        results.push(`$${(fromEarned / 100).toFixed(2)} from earned credits`);
+      }
+
+      // Draw from LB Card balance for any remainder
+      if (remaining > 0 && cardBalanceCents > 0) {
+        const fromCard = Math.min(remaining, cardBalanceCents);
+        const { data, error } = await supabase.functions.invoke("request-payout", {
+          body: { amount_cents: fromCard, payout_speed: cashOutSpeed },
+        });
+        if (error) throw error;
+        const body = data as { error?: string; success?: boolean };
+        if (body?.error) throw new Error(body.error);
+        remaining -= fromCard;
+        results.push(`$${(fromCard / 100).toFixed(2)} from LB Card`);
+      }
+
       setCashOutAmount("");
       setSuccessMsg(
         cashOutSpeed === "instant"
-          ? "Instant payout initiated — funds arrive in minutes."
-          : "Standard payout initiated — funds arrive in 1-2 business days."
+          ? `Payout initiated (${results.join(" + ")}) — funds arrive in minutes.`
+          : `Payout initiated (${results.join(" + ")}) — funds arrive in 1-2 business days.`
       );
       await invalidateAll();
     } catch (err) {
@@ -267,13 +317,13 @@ export default function PayoutsPage() {
           <div className="relative mx-auto mb-8 max-w-lg rounded-2xl p-[1px] shadow-2xl bg-gradient-to-br from-emerald-500/50 via-slate-800/80 to-slate-900">
             <div className="rounded-2xl bg-slate-900 px-8 py-10 text-emerald-400">
               <Banknote className="mx-auto mt-2 h-16 w-16 opacity-60" />
-              <h2 className="mt-4 text-2xl font-bold text-white">Payouts — Coming Soon</h2>
+              <h2 className="mt-4 text-2xl font-bold text-white">Payouts</h2>
               <p className="mt-3 max-w-sm text-sm text-slate-300">
                 Cash out your cooperative earnings directly to your bank account or debit card.
                 Standard payouts are free. Instant payouts arrive in minutes.
               </p>
               <p className="mt-4 text-sm text-emerald-400/80">
-                Your balance is accumulating. Direct deposit will be available soon.
+                Connect your Stripe account to begin receiving payouts.
               </p>
             </div>
           </div>
@@ -406,13 +456,28 @@ export default function PayoutsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <ArrowDownRight className="h-5 w-5" />
-                Cash Out
+                Cash Out to Your Bank / Card
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
-              <div className="flex items-center justify-between rounded-lg border bg-muted/30 px-4 py-3">
-                <span className="text-sm font-medium text-muted-foreground">Available Balance</span>
-                <span className="text-2xl font-bold tabular-nums">{formatUsd(balanceCents)}</span>
+              {/* Balance breakdown */}
+              <div className="space-y-2">
+                {earnedCents > 0 && (
+                  <div className="flex items-center justify-between rounded-lg border bg-emerald-500/5 px-4 py-3">
+                    <span className="text-sm font-medium text-muted-foreground">Earned Credits</span>
+                    <span className="text-xl font-bold tabular-nums text-emerald-700 dark:text-emerald-400">{formatUsd(earnedCents)}</span>
+                  </div>
+                )}
+                {cardBalanceCents > 0 && (
+                  <div className="flex items-center justify-between rounded-lg border bg-[#D4A843]/5 px-4 py-3">
+                    <span className="text-sm font-medium text-muted-foreground">LB Card Balance</span>
+                    <span className="text-xl font-bold tabular-nums text-[#D4A843]">{formatUsd(cardBalanceCents)}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between rounded-lg border bg-muted/30 px-4 py-3">
+                  <span className="text-sm font-medium text-muted-foreground">Total Available</span>
+                  <span className="text-2xl font-bold tabular-nums">{formatUsd(totalAvailableCents)}</span>
+                </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">

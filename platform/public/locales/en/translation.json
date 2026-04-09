@@ -678,7 +678,7 @@
       "description": "Talent acquisition and people operations"
     },
     "openings": "openings",
-    "avgEquity": "Avg Participation",
+    "avgParticipation": "Avg Participation",
     "viewPositions": "View Positions"
   },
   "browseMarketplace": {

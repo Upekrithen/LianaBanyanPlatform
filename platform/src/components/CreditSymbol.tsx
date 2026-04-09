@@ -84,25 +84,24 @@ export function Anvil({
       role="img"
       aria-label="Anvil — Liana Banyan currency"
     >
-      {/* Backwards C (opening faces LEFT) */}
+      {/* Backwards C (opening faces LEFT) — centered in viewBox */}
       <path
-        d="M16 5.5C14.5 4 12.5 3 10.2 3C5.7 3 2 6.7 2 12s3.7 9 8.2 9c2.3 0 4.3-1 5.8-2.5"
+        d="M17 5C15.3 3.3 13 2.5 10.5 2.5C5.8 2.5 2 6.5 2 12s3.8 9.5 8.5 9.5c2.5 0 4.8-0.8 6.5-2.5"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"
       />
-      {/* First vertical bar */}
+      {/* Two vertical bars THROUGH the backwards C (like $ but with Ↄ) */}
       <line
-        x1="11" y1="1" x2="11" y2="23"
+        x1="9" y1="1" x2="9" y2="23"
         stroke={color}
         strokeWidth={strokeWidth * 0.75}
         strokeLinecap="round"
       />
-      {/* Second vertical bar */}
       <line
-        x1="14" y1="1" x2="14" y2="23"
+        x1="12" y1="1" x2="12" y2="23"
         stroke={color}
         strokeWidth={strokeWidth * 0.75}
         strokeLinecap="round"
@@ -254,14 +253,14 @@ export function CurrencyGlyph({
       {showAnvil && (
         <g transform={`translate(${cx - 4}, ${cy - 3.5}) scale(0.35)`}>
           <path
-            d="M16 5.5C14.5 4 12.5 3 10.2 3C5.7 3 2 6.7 2 12s3.7 9 8.2 9c2.3 0 4.3-1 5.8-2.5"
+            d="M17 5C15.3 3.3 13 2.5 10.5 2.5C5.8 2.5 2 6.5 2 12s3.8 9.5 8.5 9.5c2.5 0 4.8-0.8 6.5-2.5"
             stroke={displayColor}
             strokeWidth={3}
             strokeLinecap="round"
             fill="none"
           />
-          <line x1="11" y1="1" x2="11" y2="23" stroke={displayColor} strokeWidth={2} strokeLinecap="round" />
-          <line x1="14" y1="1" x2="14" y2="23" stroke={displayColor} strokeWidth={2} strokeLinecap="round" />
+          <line x1="9" y1="1" x2="9" y2="23" stroke={displayColor} strokeWidth={2} strokeLinecap="round" />
+          <line x1="12" y1="1" x2="12" y2="23" stroke={displayColor} strokeWidth={2} strokeLinecap="round" />
         </g>
       )}
     </svg>

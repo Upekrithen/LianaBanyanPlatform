@@ -228,7 +228,7 @@ export const THREE_PACKS: PathwayThreePack[] = [
     description: 'Learn to sell and grow',
   },
   {
-    id: 'starter-pack-investor',
+    id: 'starter-pack-sponsor',
     name: 'Sponsor Starter Pack',
     level: 1,
     pathwayIds: ['plant-seeds', 'real-world', 'help-each-other'],

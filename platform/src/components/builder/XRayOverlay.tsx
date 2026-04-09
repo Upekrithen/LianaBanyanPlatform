@@ -16,6 +16,7 @@ import { createPortal } from 'react-dom';
 import { useBuilderMode } from './BuilderModeContext';
 import { Hammer, MessageSquare, X, Glasses, ExternalLink, Link2, Send, FileQuestion, Download, Wrench, Hash, GripHorizontal, Lightbulb, Paintbrush, Palette, AlertTriangle, FileText, Eye, Coins, Flame, Target } from 'lucide-react';
 import { getXRayExplanation } from '@/data/xrayGlossary';
+import { ElbowGreaseBadge } from '@/components/effort/ElbowGreaseBadge';
 import { FeedbackCategoryDropdown } from './FeedbackCategoryDropdown';
 import { XRayBountyFlip } from './XRayBountyFlip';
 import { OverlayTrigger } from '@/components/xray/OverlayTrigger';
@@ -43,12 +44,22 @@ interface PanelPosition {
   y: number;
 }
 
+/**
+ * Thin wrapper: only mounts the heavy XRayOverlayInner when builder mode is active.
+ * This prevents 1100+ lines of hooks from running (and potentially looping) when X-Ray is off.
+ */
 export const XRayOverlay: React.FC = () => {
+  const { isBuilderModeActive } = useBuilderMode();
+  if (!isBuilderModeActive) return null;
+  return <XRayOverlayInner />;
+};
+
+const XRayOverlayInner: React.FC = () => {
   const { isBuilderModeActive, openLarkPanel } = useBuilderMode();
   const [targets, setTargets] = useState<XRayTarget[]>([]);
   const [overlayTargets, setOverlayTargets] = useState<OverlayTarget[]>([]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showExplainer, setShowExplainer] = useState(true);
   const [quickNote, setQuickNote] = useState('');
   const [panelPositions, setPanelPositions] = useState<Record<string, PanelPosition>>({});
@@ -70,17 +81,24 @@ export const XRayOverlay: React.FC = () => {
   const [trackerExpanded, setTrackerExpanded] = useState(false);
   const [reportingElement, setReportingElement] = useState<string | null>(null);
 
-  // Reset state when toggled on
+  // Reset state when toggled on + apply dark mode inversion
   useEffect(() => {
     if (isBuilderModeActive) {
       setShowExplainer(true);
-      setExpandedId(null);
+      setExpandedIds(new Set());
       setQuickNote('');
       setFeedbackCategory(null);
       setPanelPositions({});
       setDesignModeActive(false);
       setActiveOverlayEditor(null);
+      // X-ray dark mode: invert the page to chalk-on-blackboard
+      document.documentElement.classList.add('xray-dark-mode');
+    } else {
+      document.documentElement.classList.remove('xray-dark-mode');
     }
+    return () => {
+      document.documentElement.classList.remove('xray-dark-mode');
+    };
   }, [isBuilderModeActive]);
 
   const scanDOM = useCallback(() => {
@@ -189,11 +207,11 @@ export const XRayOverlay: React.FC = () => {
     id.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
   const handleToggleExpand = (id: string, targetRect: DOMRect) => {
-    if (expandedId === id) {
-      setExpandedId(null);
+    if (expandedIds.has(id)) {
+      setExpandedIds(prev => { const next = new Set(prev); next.delete(id); return next; });
       setQuickNote('');
     } else {
-      setExpandedId(id);
+      setExpandedIds(prev => new Set(prev).add(id));
       setQuickNote('');
       // Position panel to the RIGHT of the element, or LEFT if too close to right edge
       if (!panelPositions[id]) {
@@ -235,7 +253,7 @@ export const XRayOverlay: React.FC = () => {
     if (quickNote.trim()) {
       openLarkPanel(id);
       setQuickNote('');
-      setExpandedId(null);
+      setExpandedIds(new Set());
     }
   };
 
@@ -295,8 +313,8 @@ export const XRayOverlay: React.FC = () => {
             <polygon points="0 0, 8 3, 0 6" fill="rgba(34, 211, 238, 0.6)" />
           </marker>
         </defs>
-        {expandedId && targets.map((target) => {
-          if (target.id !== expandedId) return null;
+        {expandedIds.size > 0 && targets.map((target) => {
+          if (!expandedIds.has(target.id)) return null;
           const pts = getConnectorPoints(target);
           if (!pts) return null;
 
@@ -332,30 +350,111 @@ export const XRayOverlay: React.FC = () => {
               backdropFilter: 'blur(12px)',
             }}
           >
-            <div className="flex items-start gap-3">
-              <Glasses className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-0.5" strokeWidth={2} />
-              <div className="flex-1">
-                <h3 className="text-cyan-300 font-bold text-sm mb-1">X-Ray Goggles Active</h3>
-                <p className="text-slate-300 text-xs leading-relaxed mb-2">
-                  You can see the bones of the platform. Every element outlined in
-                  <span className="text-cyan-400"> cyan</span> has an explanation waiting.
-                </p>
-                <p className="text-slate-400 text-xs leading-relaxed mb-2">
-                  <span className="text-cyan-400 font-medium">Click any badge</span> to open its info panel to the side.
-                  Panels are <span className="text-cyan-400 font-medium">draggable</span> — arrange them however you like.
-                </p>
-                <p className="text-slate-500 text-[10px]">
-                  {targets.length} annotatable element{targets.length !== 1 ? 's' : ''} on this page
-                </p>
-              </div>
-              <button
-                onClick={() => setShowExplainer(false)}
-                className="text-slate-500 hover:text-cyan-400 transition-colors flex-shrink-0"
-                style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '2px' }}
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+            {/* Flip card: front = LRH intro, back = explanation */}
+            {(() => {
+              const [flipped, setFlipped] = React.useState(false);
+              return (
+                <div style={{ perspective: '800px' }}>
+                  <div style={{
+                    transformStyle: 'preserve-3d',
+                    transition: 'transform 0.5s ease',
+                    transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)',
+                  }}>
+                    {/* FRONT — LRH intro */}
+                    <div style={{ backfaceVisibility: 'hidden' }}>
+                      <div className="flex justify-center mb-3">
+                        <img
+                          src="/images/mascot-lrh-xray-on.png"
+                          alt="The Little Red Hen"
+                          className="w-16 h-16 rounded-full border-2 border-cyan-400/50"
+                          style={{ filter: 'drop-shadow(0 0 8px rgba(34,211,238,0.4))' }}
+                        />
+                      </div>
+                      <h3 className="text-cyan-300 font-bold text-sm mb-1 text-center">The Little Red Hen sees everything with her X-Ray Goggles.</h3>
+                      <p className="text-slate-300 text-xs leading-relaxed mb-2 text-center">
+                        Every element outlined in <span className="text-cyan-400">chalk</span> has an explanation.
+                        Click any badge and she'll tell you what it does.
+                      </p>
+                      <p className="text-slate-500 text-[10px] text-center mb-3">
+                        {targets.length} element{targets.length !== 1 ? 's' : ''} on this page
+                      </p>
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => {
+                            setShowExplainer(false);
+                            // Auto-open the first element's panel
+                            if (targets.length > 0) {
+                              const first = targets[0];
+                              setExpandedIds(new Set([first.id]));
+                              if (!panelPositions[first.id]) {
+                                const panelWidth = 340;
+                                const margin = 24;
+                                const x = first.rect.right + margin + panelWidth < window.innerWidth
+                                  ? first.rect.right + margin
+                                  : Math.max(8, first.rect.left - panelWidth - margin);
+                                const y = Math.max(8, Math.min(first.rect.top, window.innerHeight - 400));
+                                setPanelPositions(prev => ({ ...prev, [first.id]: { x, y } }));
+                              }
+                            }
+                          }}
+                          className="px-5 py-2 rounded-lg font-semibold text-xs uppercase tracking-wide transition-all hover:scale-105"
+                          style={{
+                            background: 'linear-gradient(135deg, rgba(34,211,238,0.3), rgba(34,211,238,0.15))',
+                            border: '1px solid rgba(34,211,238,0.5)',
+                            color: '#67e8f9',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Ok, show me
+                        </button>
+                        <button
+                          onClick={() => setFlipped(true)}
+                          className="px-4 py-2 rounded-lg font-semibold text-xs transition-all hover:scale-105"
+                          style={{
+                            background: 'rgba(34,211,238,0.08)',
+                            border: '1px solid rgba(34,211,238,0.25)',
+                            color: '#94a3b8',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Find out more
+                        </button>
+                      </div>
+                    </div>
+                    {/* BACK — explanation (click anywhere to flip back) */}
+                    <div
+                      onClick={() => setFlipped(false)}
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        transform: 'rotateY(180deg)',
+                        position: 'absolute',
+                        inset: 0,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        padding: '0.5rem',
+                      }}
+                    >
+                      <h3 className="text-cyan-300 font-bold text-sm mb-2 text-center">How X-Ray Goggles Work</h3>
+                      <p className="text-slate-300 text-xs leading-relaxed mb-2">
+                        Every page on the platform is annotated. The Little Red Hen reads each element and explains
+                        what it does, why it exists, and how it connects to the rest of the system.
+                      </p>
+                      <p className="text-slate-300 text-xs leading-relaxed mb-2">
+                        This is how we <span className="text-cyan-400">get feedback</span>,{' '}
+                        <span className="text-amber-400">improve the platform</span>, and{' '}
+                        <span className="text-emerald-400">explain everything</span> — all at the same time.
+                        You can report errors, propose fixes, and earn Marks for helping.
+                      </p>
+                      <p className="text-slate-500 text-[10px] text-center mt-2">
+                        Tap anywhere on this card to flip back and try it out.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}
@@ -363,7 +462,7 @@ export const XRayOverlay: React.FC = () => {
       {/* ── Element outlines + badge pills ── */}
       {targets.map((target) => {
         const isHovered = hoveredId === target.id;
-        const isExpanded = expandedId === target.id;
+        const isExpanded = expandedIds.has(target.id);
 
         return (
           <React.Fragment key={target.id}>
@@ -444,8 +543,8 @@ export const XRayOverlay: React.FC = () => {
       })}
 
       {/* ── Draggable side panels (rendered separately, not inside badge) ── */}
-      {expandedId && targets.map((target) => {
-        if (target.id !== expandedId) return null;
+      {expandedIds.size > 0 && targets.map((target) => {
+        if (!expandedIds.has(target.id)) return null;
         const glossary = getXRayExplanation(target.id);
         const pos = panelPositions[target.id];
         if (!pos) return null;
@@ -486,7 +585,11 @@ export const XRayOverlay: React.FC = () => {
                 onMouseDown={(e) => handleStartDrag(target.id, e)}
               >
                 <GripHorizontal className="w-4 h-4 text-cyan-500/50 flex-shrink-0" />
-                <Glasses className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" strokeWidth={2} />
+                <img
+                  src="/images/mascot-lrh-xray-on.png"
+                  alt="LRH"
+                  style={{ width: '20px', height: '20px', borderRadius: '50%', border: '1px solid rgba(34,211,238,0.4)', flexShrink: 0 }}
+                />
                 <span
                   className="text-cyan-300 font-semibold flex-1"
                   style={{ fontSize: '0.75rem', letterSpacing: '0.02em' }}
@@ -494,7 +597,7 @@ export const XRayOverlay: React.FC = () => {
                   {formatLabel(target.id)}
                 </span>
                 <button
-                  onClick={() => { setExpandedId(null); setHoveredId(null); setQuickNote(''); }}
+                  onClick={() => { setExpandedIds(prev => { const next = new Set(prev); next.delete(target.id); return next; }); setQuickNote(''); }}
                   className="text-slate-500 hover:text-cyan-400 transition-colors flex-shrink-0"
                   style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '2px' }}
                 >
@@ -610,6 +713,25 @@ export const XRayOverlay: React.FC = () => {
                             {glossary.innovationNumber}
                           </span>
                         )}
+                      </div>
+                    )}
+
+                    {/* ── Elbow Grease effort badge ── */}
+                    {glossary.elbowGreaseLevel && (
+                      <div
+                        style={{
+                          background: 'rgba(251, 191, 36, 0.06)',
+                          border: '1px solid rgba(251, 191, 36, 0.15)',
+                          borderRadius: '0.5rem',
+                          padding: '0.5rem',
+                        }}
+                      >
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                          <span className="text-amber-400 text-[10px] font-bold uppercase tracking-wider">
+                            Effort Level
+                          </span>
+                        </div>
+                        <ElbowGreaseBadge level={glossary.elbowGreaseLevel} size="md" showLabel />
                       </div>
                     )}
 
@@ -1017,11 +1139,11 @@ export const XRayOverlay: React.FC = () => {
         />
       ))}
 
-      {/* ── Floating Daily Tracker (bottom-right) ── */}
+      {/* ── Floating Daily Tracker (left of mascot) ── */}
       {user && (
         <div
           className="pointer-events-auto fixed"
-          style={{ bottom: 20, right: 20, zIndex: 10004 }}
+          style={{ bottom: 24, right: 90, zIndex: 10004 }}
         >
           {trackerExpanded ? (
             <div
@@ -1080,13 +1202,7 @@ export const XRayOverlay: React.FC = () => {
       )}
 
       {/* Click-away backdrop when a card is expanded */}
-      {expandedId && (
-        <div
-          className="pointer-events-auto fixed inset-0"
-          style={{ zIndex: 9998 }}
-          onClick={() => { setExpandedId(null); setHoveredId(null); setQuickNote(''); }}
-        />
-      )}
+      {/* No click-away backdrop — multiple panels can be open simultaneously */}
     </div>,
     document.body
   );

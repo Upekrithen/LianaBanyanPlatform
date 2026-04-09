@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
-const SAMPLE_PIECE = `Our platform lets you invest in creator projects. You get equity in the project and can expect ROI as the project grows. Shareholders receive dividend payments.`; // Intentionally SEC-problematic — this is the TEST PIECE reviewers must flag
+const SAMPLE_PIECE = `Our platform lets you support creator projects and earn contribution credits based on participation quality. As projects grow, your contribution impact can increase your Service Allocation Authority. Members may receive credit bonuses tied to cooperative participation milestones.`;
 
 export default function ReviewerApplication() {
   const { user } = useAuth();

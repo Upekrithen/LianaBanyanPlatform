@@ -1931,7 +1931,7 @@ function PublicLandingView({ navigate }: { navigate: (path: string) => void }) {
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🔒 Permanent 20% Cap</h4>
                       <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
                         The 20% margin is <strong>hardcoded into our bylaws</strong>. It cannot be increased by management, 
-                        investors, or even a majority vote.
+                        backers, or even a majority vote.
                       </p>
                       <p style={{ fontSize: '1.1rem', lineHeight: 1.7, margin: 0 }}>
                         Why? Because we've seen what happens when platforms grow: fees creep up, terms change, 
