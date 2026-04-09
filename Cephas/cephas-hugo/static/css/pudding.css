@@ -168,6 +168,54 @@
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+/* ============================================================================
+   K346 Cross-Link Blocks (Pudding + Papers)
+   ============================================================================ */
+
+.pudding-crosslinks {
+  margin: 2rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.pudding-crosslinks h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+.pudding-crosslinks ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pudding-crosslinks li {
+  margin: 0;
+}
+
+.pudding-crosslinks a {
+  display: inline-block;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  text-decoration: none;
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.pudding-crosslinks a:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #fbbf24;
+}
+
 .pudding-stat__number {
   font-size: 4rem;
   font-weight: 900;
@@ -692,5 +740,108 @@
   .flipblock__title,
   .flipblock__body {
     color: #1e293b !important;
+  }
+}
+
+/* ============================================================================
+   OPS DOCUMENT TABLES — XLSX export views
+   ============================================================================ */
+
+.ops-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.ops-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ops-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #1e293b;
+  color: #f8fafc;
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.45);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ops-table tbody td {
+  padding: 0.58rem 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  vertical-align: top;
+}
+
+.ops-table tbody tr:nth-child(odd) {
+  background: rgba(30, 41, 59, 0.45);
+}
+
+.ops-table tbody tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.2);
+}
+
+.ops-table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+@media (max-width: 900px) {
+  .ops-table-wrap {
+    margin-left: -0.2rem;
+    margin-right: -0.2rem;
+  }
+
+  .ops-table {
+    min-width: 620px;
+    font-size: 0.9rem;
+  }
+
+  .ops-table thead th,
+  .ops-table tbody td {
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+@media print {
+  .ops-table-wrap {
+    overflow: visible !important;
+    border: 1px solid #cbd5e1;
+    background: #ffffff !important;
+  }
+
+  .ops-table {
+    min-width: 0;
+    width: 100%;
+    color: #111827 !important;
+    font-size: 9pt;
+  }
+
+  .ops-table thead th {
+    position: static;
+    color: #111827 !important;
+    background: #e2e8f0 !important;
+    border-bottom: 1px solid #94a3b8;
+  }
+
+  .ops-table tbody td {
+    border-bottom: 1px solid #e2e8f0;
+    color: #111827 !important;
+    background: #ffffff !important;
+  }
+
+  .ops-table tbody tr:nth-child(odd),
+  .ops-table tbody tr:nth-child(even),
+  .ops-table tbody tr:hover {
+    background: #ffffff !important;
   }
 }

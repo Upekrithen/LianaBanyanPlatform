@@ -126,7 +126,7 @@ As Crown Holder of The Rally Group, you would receive:
 |---------|-------------|
 | **First Seat** | Leader of the Rally Group Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Responder General Kimberly A. Williams, Lady Banyan of the Lifeline |
 | **Crown Medallion** | Physical medallion, serial CROWN-RALLY-001 |
 | **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |

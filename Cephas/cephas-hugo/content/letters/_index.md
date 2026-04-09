@@ -1,10 +1,10 @@
 ---
 title: "Letters"
-description: "94 letters across 9 categories — Crown invitations, investor outreach, media pitches, academic engagement, and more"
+description: "94 letters across 9 categories — Crown invitations, backer outreach, media pitches, academic engagement, and more"
 layout: "list"
 ---
 
-Liana Banyan's letter archive documents every outreach effort — from Crown invitations to lead the Sweet Sixteen Initiatives, to investor conversations, media pitches, and academic partnerships. Each letter is a real document sent (or prepared to send) to a real person.
+Liana Banyan's letter archive documents every outreach effort — from Crown invitations to lead the Sweet Sixteen Initiatives, to backer conversations, media pitches, and academic partnerships. Each letter is a real document sent (or prepared to send) to a real person.
 
 ---
 
@@ -16,8 +16,8 @@ One-to-one invitations to lead the Sweet Sixteen Initiatives. Each Crown is the 
 ### Crown Letters (At-Large) — 4 letters
 Crown-level letters to public figures whose influence spans multiple initiatives: [AOC](/letters/crown-letter-aoc/), [Keanu Reeves](/letters/crown-letter-keanu-reeves/), [Sandra Bullock](/letters/crown-letter-sandra-bullock/), [Arnold Schwarzenegger](/letters/crown-letter-schwarzenegger/).
 
-### [Circle 1: Investors](/letters/circle-1-investors/) — 11 letters
-Outreach to investors, philanthropists, and economic thinkers who understand cooperative models and patient capital.
+### [Circle 1: Backers](/letters/circle-1-backers/) — 11 letters
+Outreach to backers, philanthropists, and economic thinkers who understand cooperative models and patient capital.
 
 ### [Circle 2: Media](/letters/circle-2-media/) — 14 letters
 Letters to journalists, commentators, and cultural voices — from Kara Swisher to Taylor Swift — who shape public understanding of technology and economics.

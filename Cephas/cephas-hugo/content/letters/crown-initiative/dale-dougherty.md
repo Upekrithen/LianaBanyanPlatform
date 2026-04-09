@@ -48,7 +48,7 @@ That's exactly what I believe. And that's why I've spent nearly a decade buildin
 
 Liana Banyan is a cooperative platform in which three commercial divisions — .com, .biz, and .net — drive sustained funding for the .org charitable initiatives. All the time, by design, sustainable beyond our lifetimes because of the infrastructure we build that operates far beyond us.
 
-{{< pudding-compare before-title="Traditional Platforms" before-value="30-50% platform take" after-title="Liana Banyan" after-value="16.7% — creators keep 83.3%" >}}
+{{< pudding-compare before-title="Traditional Platforms" before-value="30-50% platform take" after-title="Liana Banyan" after-value="16.7% — creators keep 83.3%" />}}
 
 The economic principle is simple: **Cost + 20%**. Creators keep 83.3% of every transaction. The platform takes 16.7% to fund operations, and 100% of charitable funds go directly to the people doing the work. Helping each other help ourselves. Of the people, by the people, and for the people.
 
@@ -107,7 +107,7 @@ You've already built Maker Faire — a showcase. Let's Make Bread is the next st
 |---------|-------------|
 | **First Seat** | Leader of the Let's Make Bread Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Industry Chancellor Dale Dougherty, Lord Banyan of the Forge |
 | **Crown Medallion** | Physical medallion, serial CROWN-BREAD-001 |
 | **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |

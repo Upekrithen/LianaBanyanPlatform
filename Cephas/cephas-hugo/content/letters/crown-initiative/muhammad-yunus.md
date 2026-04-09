@@ -119,7 +119,7 @@ Every initiative in Liana Banyan operates as a council. The Crown is the First S
 |---------|-------------|
 | **First Seat** | Leader of the International Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — initially, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Commerce Secretary Muhammad Yunus, Lord Banyan of the World |
 | **Crown Medallion** | Physical medallion, serial CROWN-INTL-001 |
 | **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |
@@ -133,7 +133,7 @@ Every initiative in Liana Banyan operates as a council. The Crown is the First S
 
 You've distinguished social business from charity and from traditional business:
 - **Charity:** Gives away resources; requires continuous fundraising
-- **Traditional business:** Maximizes profit for shareholders
+- **Traditional business:** Maximizes profit for stakeholders
 - **Social business:** Uses commerce to solve problems; reinvests profits in the mission
 
 Liana Banyan is a social business by your definition:

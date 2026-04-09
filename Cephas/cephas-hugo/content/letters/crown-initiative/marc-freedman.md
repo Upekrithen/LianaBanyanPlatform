@@ -34,7 +34,7 @@ The Family Table creates infrastructure for intergenerational connection:
 - **Story preservation** — Digital tools to capture family histories before they're lost
 - **Encore integration** — Connecting retired professionals with families who need their expertise
 
-You coined "experience dividends" — the idea that accumulated wisdom should generate returns for everyone, not depreciate like old equipment. The Family Table is built on that principle.
+You coined "experience distributions" — the idea that accumulated wisdom should generate returns for everyone, not depreciate like old equipment. The Family Table is built on that principle.
 
 When a 75-year-old teaches a 15-year-old how to change a tire, something happens that benefits both of them. When a retired nurse helps a young mother navigate a health scare, isolation retreats on both sides. When wisdom flows across generations instead of dying with them, everyone wins.
 
@@ -106,14 +106,14 @@ Merry Late Christmas.
 **Initiative:** #15 — The Family Table
 **Responsibilities:**
 - Design intergenerational matching systems
-- Champion "experience dividend" economics
+- Champion "experience distribution" economics
 - Guide elder engagement strategies
 - Represent cross-generational interests on advisory board
 
 **Benefits:**
 - Seat on Liana Banyan advisory board
 - Governance rights over Family Table direction
-- Platform equity through Crown medallion
+- Platform participation through Crown medallion
 - Public platform to advance intergenerational connection
 
 ---

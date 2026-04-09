@@ -93,7 +93,7 @@ As Crown Holder of JukeBox, you would receive:
 |---------|-------------|
 | **First Seat** | Leader of the JukeBox Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Maestro Mentor Taylor Swift, Lady Banyan of the Stage |
 | **Additional Titles** | First Voice of the JukeBox |
 | **Crown Medallion** | Physical medallion, serial CROWN-JUKEBOX-001 |

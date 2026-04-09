@@ -56,7 +56,7 @@ Three commercial divisions generate revenue that permanently funds fourteen char
 | **Platform Currency** | Three-gear system: Credits (spending), Marks (trading), Joules (ownership) |
 | **Internal Transfers** | Instant transfers between members, no external processing fees |
 | **Unbanked Access** | Full participation without traditional bank account |
-| **Member Dividends** | Activity-based profit sharing (not investment-based) |
+| **Member Distributions** | Activity-based profit sharing (not investment-based) |
 | **Micro-Grants** | Community-voted small grants ($50-$500) |
 | **Emergency Fund** | Automatic pooling for member emergencies |
 
@@ -111,7 +111,7 @@ Every initiative in Liana Banyan operates as a council. The Crown is the First S
 |---------|-------------|
 | **First Seat** | Leader of the MSA Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — initially, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Treasury Mentor Sallie Krawcheck, Lady Banyan of the Vault |
 | **Crown Medallion** | Physical medallion, serial CROWN-MSA-001 |
 | **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |

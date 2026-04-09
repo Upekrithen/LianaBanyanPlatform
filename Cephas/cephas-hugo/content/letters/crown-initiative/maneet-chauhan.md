@@ -67,7 +67,7 @@ Here's how it works:
 - 100% of all monies from charitable initiative funds go to members providing the services — whether cooking, funding, or driving
 - Separate, transparent accounting
 - Cost+20% model: creators keep 100% of their costs, 20% covers platform operations
-- Investors can fund meals in return for platform credits (as Joules — eventual benefit, not immediate cash)
+- Backers can fund meals in return for platform credits (as Joules — eventual benefit, not immediate cash)
 
 **The Community:**
 - Weekly, monthly, and yearly cooking competitions
@@ -108,7 +108,7 @@ As Crown Holder of Let's Make Dinner, you would receive:
 |---------|-------------|
 | **First Seat** | Leader of the Let's Make Dinner Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Grand Chef Mentor Maneet Chauhan, Lady Banyan of the Table |
 | **Additional Titles** | Spice Queen • Empress of Cuisine |
 | **Crown Medallion** | Physical medallion, serial CROWN-LMD-001 |

@@ -119,7 +119,7 @@ You wouldn't be leading an isolated project — you'd be part of an ecosystem of
 |---------|-------------|
 | **First Seat** | Leader of the Shield Table, with tie-breaker authority |
 | **Board Representation** | The Shield Table elects its representative to the Board — in the early days, likely you |
-| **Founder's Reserve Stake** | Equity in Liana Banyan |
+| **Founder's Reserve Stake** | Participation in Liana Banyan |
 | **Title** | First Shield Mentor Ruth M. Glenn, Lady Banyan of Protection, Guardian of the Shield Table |
 | **Shield Medallion** | Serial SHIELD-US-001 |
 | **Ceremonial Shield** | Designed by community votes for you to choose from and keep |

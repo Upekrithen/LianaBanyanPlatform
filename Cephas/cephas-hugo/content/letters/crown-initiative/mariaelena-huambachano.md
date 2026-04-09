@@ -27,7 +27,7 @@ Our design is simple:
 
 - Creators and communities own their own IP.
 - Pricing is transparent and fair (cost + a capped margin).
-- Value created on the platform flows back in credits and dividends to the people doing the work.
+- Value created on the platform flows back in credits and distributions to the people doing the work.
 
 We're pairing that economic design with a symbolic governance structure we call the Dual-Crown:
 

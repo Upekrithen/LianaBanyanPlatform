@@ -1,17 +1,29 @@
 {{/* pudding-compare: Side-by-side comparison boxes
-     Usage: {{< pudding-compare before-title="Traditional" before-value="50-70% platform take" after-title="Liana Banyan" after-value="16.7% platform take" >}}
+     Param mode A: before-title/before-value + after-title/after-value
+     Param mode B: left_title/left_items + right_title/right_items (semicolon-separated)
+     Inner mode:   paired tags with markdown content
 */}}
-{{ $bt := .Get "before-title" }}
-{{ $bv := .Get "before-value" }}
-{{ $at := .Get "after-title" }}
-{{ $av := .Get "after-value" }}
-<div class="pudding-compare pudding-reveal">
-  <div class="pudding-compare__box pudding-compare__box--before">
-    <div class="pudding-compare__title">{{ $bt }}</div>
-    <div class="pudding-compare__value">{{ $bv }}</div>
+{{ if or (.Get "before-title") (.Get "left_title") }}
+  {{ $lt := or (.Get "before-title") (.Get "left_title") }}
+  {{ $rt := or (.Get "after-title") (.Get "right_title") }}
+  <div class="pudding-compare pudding-reveal">
+    <div class="pudding-compare__box pudding-compare__box--before">
+      <div class="pudding-compare__title">{{ $lt }}</div>
+      {{ with .Get "before-value" }}<div class="pudding-compare__value">{{ . }}</div>{{ end }}
+      {{ with .Get "left_items" }}
+        <ul>{{ range split . ";" }}<li>{{ . }}</li>{{ end }}</ul>
+      {{ end }}
+    </div>
+    <div class="pudding-compare__box pudding-compare__box--after">
+      <div class="pudding-compare__title">{{ $rt }}</div>
+      {{ with .Get "after-value" }}<div class="pudding-compare__value">{{ . }}</div>{{ end }}
+      {{ with .Get "right_items" }}
+        <ul>{{ range split . ";" }}<li>{{ . }}</li>{{ end }}</ul>
+      {{ end }}
+    </div>
   </div>
-  <div class="pudding-compare__box pudding-compare__box--after">
-    <div class="pudding-compare__title">{{ $at }}</div>
-    <div class="pudding-compare__value">{{ $av }}</div>
+{{ else }}
+  <div class="pudding-compare pudding-reveal">
+    {{ .Inner }}
   </div>
-</div>
+{{ end }}

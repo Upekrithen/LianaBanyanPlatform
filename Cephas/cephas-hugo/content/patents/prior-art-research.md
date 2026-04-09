@@ -32,7 +32,7 @@ weight: 2
 | #1611 | Charitable Buffer Top-Up for Preorder Shortfalls | NOVEL | Nobody uses a capped, time-bounded cooperative pool to fill internal-currency shortfalls on meals |
 | #1612 | Dual-Use Fulfilled Order Data (leaderboard + load balance) | NOT TAUGHT | Load-balancing art is infrastructure-level; nobody dual-purposes fulfilled orders for popularity + initiative balancing |
 | #1613 | Visual Pipeline with Claimable Bounty Slots | NOT IN ART | Supply chain visualization and self-organizing freelancers exist separately; nobody combines them |
-| #1614 | Directed Thought ROI in Human-AI Collaboration | DISTINCT | ROI-of-AI-vs-human exists; nobody measures prevented-wrong-implementation cost as directed thought ROI |
+| #1614 | Directed Thought contribution impact in Human-AI Collaboration | DISTINCT | contribution impact-of-AI-vs-human exists; nobody measures prevented-wrong-implementation cost as directed thought contribution impact |
 | #1623 | AI Tuner Role for Multi-Agent Team | NOT IN ART | Multi-agent orchestration exists; nobody defines a first-class human role designation with governance authority |
 
 ---
@@ -220,16 +220,16 @@ weight: 2
 
 ---
 
-### #1614 — Directed Thought ROI
+### #1614 — Directed Thought contribution impact
 
 **Concept:** Strategic human prompt cost compared to prevented wrong implementation cost in human-AI collaboration.
 
 **Nearest Art:**
-- US 2025-0321798 A1 — ROI estimations using prompt processing units (PPUs)
-- US 2017-0060108 A1 — ROI-based automation recommendation
+- US 2025-0321798 A1 — contribution impact estimations using prompt processing units (PPUs)
+- US 2017-0060108 A1 — contribution impact-based automation recommendation
 - Prompt management patents (WO 2024-186549, US 2024-0320476, US 2025-0384330)
 
-**Gap:** PPU art measures ROI of running model vs. human doing the whole task. Nobody computes a per-prompt "avoided wrong-implementation cost" versus human cognitive cost as a directed thought ROI metric.
+**Gap:** PPU art measures contribution impact of running model vs. human doing the whole task. Nobody computes a per-prompt "avoided wrong-implementation cost" versus human cognitive cost as a directed thought contribution impact metric.
 
 ---
 

@@ -90,7 +90,7 @@ You've built trust with 25 million REI members. Let's Go Shopping is the infrast
 |---------|-------------|
 | **First Seat** | Leader of the Let's Go Shopping Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Merchant Mentor Mary Beth Laughton, Lady Banyan of the Marketplace |
 | **Crown Medallion** | Physical medallion, serial CROWN-SHOP-001 |
 | **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |

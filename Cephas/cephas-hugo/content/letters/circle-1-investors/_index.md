@@ -1,9 +1,9 @@
 ---
-title: "Circle 1: Investors & Philanthropists"
-description: "Letters to impact investors and philanthropists"
+title: "Circle 1: Backers & Philanthropists"
+description: "Letters to impact backers and philanthropists"
 ---
 
-# Circle 1: Investors & Philanthropists
+# Circle 1: Backers & Philanthropists
 
 Letters to those who can fund the revolution.
 

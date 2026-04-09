@@ -90,7 +90,7 @@ You've built trust with 500+ credit unions serving 20 million people. MSA is the
 |---------|-------------|
 | **First Seat** | Leader of the MSA Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Treasury Mentor Cathie Mahon, Lady Banyan of the Vault |
 | **Crown Medallion** | Physical medallion, serial CROWN-MSA-001 |
 | **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |

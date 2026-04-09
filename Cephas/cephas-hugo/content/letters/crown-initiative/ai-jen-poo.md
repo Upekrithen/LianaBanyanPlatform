@@ -111,7 +111,7 @@ Merry Late Christmas.
 **Benefits:**
 - Seat on Liana Banyan advisory board
 - Governance rights over Family Table direction
-- Platform equity through Crown medallion
+- Platform participation through Crown medallion
 - Public platform to advance care economy principles
 
 ---

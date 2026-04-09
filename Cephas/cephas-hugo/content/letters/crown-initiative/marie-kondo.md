@@ -90,7 +90,7 @@ Every initiative in Liana Banyan operates as a council. The Crown is the First S
 |---------|-------------|
 | **First Seat** | Leader of the Home Logistics Council, with tie-breaker authority |
 | **Board Representation** | The Council elects its representative to the Board — initially, likely you |
-| **Founder's Reserve Stake** | Significant equity stake in Liana Banyan |
+| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Steward Mentor Marie Kondo, Lady Banyan of the Homestead |
 | **Crown Medallion** | Physical medallion, serial CROWN-HOME-001 |
 | **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |

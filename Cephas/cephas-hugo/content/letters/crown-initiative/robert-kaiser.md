@@ -115,7 +115,7 @@ You wouldn't be leading an isolated project — you'd be part of an ecosystem of
 |---------|-------------|
 | **Shield Table Seat** | Full voting rights at the Table |
 | **Board Representation** | The Shield Table elects its representative to the Board |
-| **Founder's Reserve Stake** | Equity in Liana Banyan — equal to the First Seat |
+| **Founder's Reserve Stake** | Participation in Liana Banyan — equal to the First Seat |
 | **Title** | First Shield Knight Robert Kaiser, Lord Banyan of the Watch, Guardian of the United Kingdom |
 | **Shield Medallion** | Serial SHIELD-UK-001 |
 | **Ceremonial Shield** | Designed by community votes for you to choose from and keep |
