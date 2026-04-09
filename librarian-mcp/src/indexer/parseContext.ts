@@ -46,35 +46,59 @@ function extractSessions(handoff: string): SessionEntry[] {
   return sessions;
 }
 
+function loadSessionsFromIndex(workspaceRoot: string): SessionEntry[] {
+  const sessionsPath = `${workspaceRoot}/librarian-mcp/index/sessions.json`;
+  if (!existsSync(sessionsPath)) return [];
+  try {
+    const raw = readFileSync(sessionsPath, "utf-8");
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((entry): entry is SessionEntry => Boolean(entry && typeof entry.id === "string" && typeof entry.summary === "string"))
+      .map((entry) => ({
+        id: entry.id,
+        date: entry.date,
+        summary: entry.summary,
+        filesChanged: Array.isArray(entry.filesChanged) ? entry.filesChanged : [],
+        migrationsCreated: Array.isArray(entry.migrationsCreated) ? entry.migrationsCreated : [],
+        functionsCreated: Array.isArray(entry.functionsCreated) ? entry.functionsCreated : [],
+        pagesCreated: Array.isArray(entry.pagesCreated) ? entry.pagesCreated : [],
+        pendingWork: Array.isArray(entry.pendingWork) ? entry.pendingWork : [],
+      }));
+  } catch {
+    return [];
+  }
+}
+
 function extractCanonicalNumbers(handoff: string, rules: string, workspaceRoot?: string): Record<string, string | number> {
   const canonical: Record<string, string | number> = {};
 
   // Primary source of truth: useCanonicalStats.ts in the platform codebase
-  let innovationCount = 1938;
-  let crownJewelCount = 123;
-  let productionSystems = 27;
-  let patentClaims = 1401;
+  let innovationCount = 2130;
+  let crownJewelCount = 168;
+  let productionSystems = 35;
+  let patentClaims = 2103;
+  let patentApps = 11;
   if (workspaceRoot) {
     try {
       const statsFile = readFileSync(`${workspaceRoot}/platform/src/hooks/useCanonicalStats.ts`, "utf-8");
-      const innovMatch = statsFile.match(/innovationCount:\s*(\d+)/);
-      if (innovMatch) innovationCount = parseInt(innovMatch[1]);
-      const crownMatch = statsFile.match(/crownJewels:\s*(\d+)/);
-      if (crownMatch) crownJewelCount = parseInt(crownMatch[1]);
-      const prodMatch = statsFile.match(/productionSystems:\s*(\d+)/);
-      if (prodMatch) productionSystems = parseInt(prodMatch[1]);
-      const claimsMatch = statsFile.match(/patentClaims:\s*(\d+)/);
-      if (claimsMatch) patentClaims = parseInt(claimsMatch[1]);
+      const innovMatch = statsFile.match(/innovationCount:\s*(\d[\d_]+)/);
+      if (innovMatch) innovationCount = parseInt(innovMatch[1].replace(/_/g, ""));
+      const crownMatch = statsFile.match(/crownJewels:\s*(\d[\d_]+)/);
+      if (crownMatch) crownJewelCount = parseInt(crownMatch[1].replace(/_/g, ""));
+      const prodMatch = statsFile.match(/productionSystems:\s*(\d[\d_]+)/);
+      if (prodMatch) productionSystems = parseInt(prodMatch[1].replace(/_/g, ""));
+      const claimsMatch = statsFile.match(/patentClaims:\s*(\d[\d_]+)/);
+      if (claimsMatch) patentClaims = parseInt(claimsMatch[1].replace(/_/g, ""));
+      const appsMatch = statsFile.match(/patentApplications:\s*(\d[\d_]+)/);
+      if (appsMatch) patentApps = parseInt(appsMatch[1].replace(/_/g, ""));
     } catch { /* file may not exist */ }
   }
   canonical.innovationCount = innovationCount;
   canonical.crownJewelCount = crownJewelCount;
   canonical.productionSystems = productionSystems;
-
   canonical.formalClaimsCount = patentClaims;
-
-  const provisionalMatch = rules.match(/(\d+)\s*provisionals?\s*(?:filed|applications)/i);
-  canonical.provisionalApps = provisionalMatch ? parseInt(provisionalMatch[1]) : 10;
+  canonical.provisionalApps = patentApps;
 
   canonical.creatorKeeps = "83.3%";
   canonical.platformMargin = "Cost + 20%";
@@ -124,7 +148,9 @@ export async function parseContext(workspaceRoot: string): Promise<ContextIndex>
   const handoff = existsSync(handoffPath) ? readFileSync(handoffPath, "utf-8") : "";
   const rules = existsSync(rulesPath) ? readFileSync(rulesPath, "utf-8") : "";
 
-  const sessions = extractSessions(handoff);
+  const handoffSessions = extractSessions(handoff);
+  const indexedSessions = loadSessionsFromIndex(workspaceRoot);
+  const sessions = handoffSessions.length > 0 ? handoffSessions : indexedSessions;
   const canonicalNumbers = extractCanonicalNumbers(handoff, rules, workspaceRoot);
   const pendingWork = extractPendingWork(handoff);
   const rulesMap = extractRules(rules);

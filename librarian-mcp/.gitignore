@@ -2,3 +2,5 @@ node_modules/
 dist/
 index/*.json
 !index/canonical.json
+stitchpunks/.env
+stitchpunks/data/*.json

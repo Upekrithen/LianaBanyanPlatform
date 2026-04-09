@@ -391,11 +391,26 @@ export function buildDebrief(
   if (!existsSync(indexDir)) mkdirSync(indexDir, { recursive: true });
   writeFileSync(sessionsPath, JSON.stringify(sessions, null, 2), "utf-8");
 
-  if (overview) {
+  // Update overview.json by merging — preserve index counts from last rebuild,
+  // only update session tracking fields
+  const overviewPath = resolve(indexDir, "overview.json");
+  if (existsSync(overviewPath)) {
+    const current = JSON.parse(readFileSync(overviewPath, "utf-8"));
+    current.lastSession = sessionId;
+    current.pendingWork = pendingWork;
+    current.timestamp = new Date().toISOString();
+    writeFileSync(overviewPath, JSON.stringify(current, null, 2), "utf-8");
+    // Also update the in-memory overview if it exists
+    if (overview) {
+      overview.lastSession = sessionId;
+      overview.pendingWork = pendingWork;
+      overview.timestamp = current.timestamp;
+    }
+  } else if (overview) {
     overview.lastSession = sessionId;
     overview.pendingWork = pendingWork;
     overview.timestamp = new Date().toISOString();
-    writeFileSync(resolve(indexDir, "overview.json"), JSON.stringify(overview, null, 2), "utf-8");
+    writeFileSync(overviewPath, JSON.stringify(overview, null, 2), "utf-8");
   }
 
   // Quick consistency check on summary

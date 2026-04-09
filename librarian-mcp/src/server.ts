@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from "fs";
+import { execSync } from "child_process";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { z } from "zod";
@@ -9,6 +10,7 @@ import type {
   CephasIndex, ContextIndex, BishopIndex, DomainIndex,
   ConceptsIndex, SessionEntry, ArchitecturalRule,
   DropzoneIndex, TranscriptIndex, ComponentIndex,
+  V2MigrationIndex, LetterIndex,
 } from "./types.js";
 import { buildBriefing, buildChecklist, buildDebrief } from "./router/moneyPennyRouter.js";
 import { budgetEnforce, BUDGETS, truncateList, truncateToWords } from "./router/budgets.js";
@@ -16,6 +18,42 @@ import { budgetEnforce, BUDGETS, truncateList, truncateToWords } from "./router/
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
+
+type PaginationOptions = {
+  offset?: number;
+  limit?: number;
+};
+
+function normalizePagination(
+  options: PaginationOptions | undefined,
+  defaultLimit: number,
+  maxLimit = 200,
+) {
+  const offset = Math.max(0, options?.offset ?? 0);
+  const limitRaw = options?.limit ?? defaultLimit;
+  const limit = Math.max(1, Math.min(maxLimit, limitRaw));
+  return { offset, limit };
+}
+
+function paginateResults<T>(
+  items: T[],
+  options: PaginationOptions | undefined,
+  defaultLimit: number,
+) {
+  const { offset, limit } = normalizePagination(options, defaultLimit);
+  const total_count = items.length;
+  const results = items.slice(offset, offset + limit);
+  const has_more = offset + results.length < total_count;
+  return { results, total_count, offset, limit, has_more };
+}
+
+function globPatternToRegex(pattern: string): RegExp {
+  const escaped = pattern
+    .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+    .replace(/\*/g, ".*")
+    .replace(/\?/g, ".");
+  return new RegExp(`^${escaped}$`, "i");
+}
 
 function loadIndex<T>(name: string): T | null {
   const path = resolve(INDEX_DIR, `${name}.json`);
@@ -35,6 +73,8 @@ let concepts = loadIndex<ConceptsIndex>("concepts");
 let dropzones = loadIndex<DropzoneIndex>("dropzones");
 let transcripts = loadIndex<TranscriptIndex>("transcripts");
 let components = loadIndex<ComponentIndex>("components");
+let v2Migration = loadIndex<V2MigrationIndex>("v2-migration");
+let letters = loadIndex<LetterIndex>("letters");
 
 function reloadAll() {
   overview = loadIndex<SystemOverview>("overview");
@@ -49,6 +89,8 @@ function reloadAll() {
   dropzones = loadIndex<DropzoneIndex>("dropzones");
   transcripts = loadIndex<TranscriptIndex>("transcripts");
   components = loadIndex<ComponentIndex>("components");
+  v2Migration = loadIndex<V2MigrationIndex>("v2-migration");
+  letters = loadIndex<LetterIndex>("letters");
 }
 
 const server = new McpServer({
@@ -234,17 +276,18 @@ server.tool(
 
 server.tool(
   "get_canonical_numbers",
-  "Returns all canonical numbers: innovations, crown jewels, patents, membership cost, creator keeps %, etc.",
+  "Returns all canonical numbers: innovations, crown jewels, patents, membership cost, creator keeps %, etc. Always reads fresh from disk.",
   {},
   async () => {
+    const fresh = loadIndex<Record<string, unknown>>("canonical");
     if (!context) reloadAll();
-    const canonical = context?.canonicalNumbers || {};
+    const canonical = fresh || context?.canonicalNumbers || {};
 
-    const hardcoded = {
-      innovationCount: canonical.innovationCount || 1938,
-      crownJewelCount: canonical.crownJewelCount || 123,
-      formalClaimsCount: canonical.formalClaimsCount || 1401,
-      provisionalApps: canonical.provisionalApps || 8,
+    const result = {
+      innovationCount: (canonical as Record<string, unknown>).innovationCount || 2078,
+      crownJewelCount: (canonical as Record<string, unknown>).crownJewelCount || 146,
+      formalClaimsCount: (canonical as Record<string, unknown>).formalClaimsCount || 1511,
+      provisionalApps: (canonical as Record<string, unknown>).provisionalApps || 10,
       creatorKeeps: "83.3%",
       platformMargin: "Cost + 20%",
       on500Transaction: "$416.67",
@@ -255,7 +298,7 @@ server.tool(
       state: "Wyoming C-Corp",
     };
 
-    return { content: [{ type: "text", text: JSON.stringify(hardcoded, null, 2) }] };
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   }
 );
 
@@ -324,7 +367,9 @@ server.tool(
   "Returns what was built in a session: files changed, commits, pending work. Without session_id returns the latest.",
   { session_id: z.string().optional().describe("Session ID (e.g. 'A', 'C', '98') or omit for latest") },
   async ({ session_id }) => {
-    if (!context) reloadAll();
+    // Sessions can be updated by hooks or rebuilds while server stays hot.
+    // Reload index snapshots so this tool does not serve stale empty context.
+    reloadAll();
     if (!context || !context.sessions.length) {
       return { content: [{ type: "text", text: "No session data available." }] };
     }
@@ -352,8 +397,14 @@ server.tool(
 server.tool(
   "search_knowledge",
   "Text search across all index files. Returns top matches with context.",
-  { query: z.string().describe("Search query") },
-  async ({ query }) => {
+  {
+    query: z.string().describe("Search query"),
+    options: z.object({
+      offset: z.number().int().min(0).optional(),
+      limit: z.number().int().min(1).max(200).optional(),
+    }).optional().describe("Pagination options"),
+  },
+  async ({ query, options }) => {
     reloadAll();
     const results: { source: string; key: string; snippet: string }[] = [];
     const lower = query.toLowerCase();
@@ -500,18 +551,17 @@ server.tool(
       }
     }
 
-    const cap = BUDGETS.searchDefault;
-    const top = results.slice(0, cap);
-    if (top.length === 0) {
+    const paginated = paginateResults(results, options, 20);
+    if (paginated.results.length === 0) {
       return { content: [{ type: "text", text: `No results for '${query}'.` }] };
     }
-
-    const formatted = top.map(r => `[${r.source}] ${r.key}: ${r.snippet}`).join("\n");
-    const extra = results.length > cap ? `\n\n... and ${results.length - cap} more results` : "";
     return {
       content: [{
         type: "text",
-        text: `${results.length} results for '${query}' (showing top ${top.length}):\n\n${formatted}${extra}`,
+        text: JSON.stringify({
+          query,
+          ...paginated,
+        }, null, 2),
       }],
     };
   }
@@ -973,35 +1023,93 @@ server.tool(
 server.tool(
   "get_dropzone_task",
   "Returns task prompts from KNIGHT/BISHOP/ROOK/PAWN dropzones. Pass agent name for that agent's tasks, a filename for details, or 'list' for all.",
-  { query: z.string().describe("Agent name (KNIGHT/BISHOP/ROOK/PAWN), filename, or 'list'") },
-  async ({ query }) => {
+  {
+    query: z.string().describe("Agent name (KNIGHT/BISHOP/ROOK/PAWN), filename, or 'list'"),
+    options: z.object({
+      offset: z.number().int().min(0).optional(),
+      limit: z.number().int().min(1).max(200).optional(),
+      session: z.string().optional(),
+      pattern: z.string().optional(),
+      sort: z.enum(["name", "date", "size"]).optional(),
+    }).optional().describe("Pagination and filtering options"),
+  },
+  async ({ query, options }) => {
     if (!dropzones) reloadAll();
     if (!dropzones) {
       return { content: [{ type: "text", text: "Dropzone index not built." }] };
     }
 
+    const allEntries = Object.values(dropzones.entries);
     const upper = query.toUpperCase();
+    const applyFilters = (entries: typeof allEntries) => {
+      let filtered = entries;
+      if (options?.session) {
+        const sessionNeedle = options.session.toUpperCase();
+        filtered = filtered.filter((entry) =>
+          entry.filename.toUpperCase().includes(sessionNeedle),
+        );
+      }
+      if (options?.pattern) {
+        const regex = globPatternToRegex(options.pattern);
+        filtered = filtered.filter((entry) =>
+          regex.test(entry.filename) || regex.test(entry.title),
+        );
+      }
+      const sortBy = options?.sort ?? "name";
+      if (sortBy === "size") {
+        filtered = [...filtered].sort((a, b) => b.wordCount - a.wordCount);
+      } else if (sortBy === "date") {
+        filtered = [...filtered].sort((a, b) => b.filename.localeCompare(a.filename));
+      } else {
+        filtered = [...filtered].sort((a, b) => a.filename.localeCompare(b.filename));
+      }
+      return filtered;
+    };
+
+    const summarizeDropzone = (entry: typeof allEntries[number]) => ({
+      filename: entry.filename,
+      agent: entry.agent,
+      sessionId: entry.sessionId,
+      title: entry.title,
+      tags: entry.tags.slice(0, 5),
+      wordCount: entry.wordCount,
+      path: entry.path,
+    });
+
     if (query === "list") {
-      const summary = Object.entries(dropzones.byAgent).map(([agent, keys]) =>
-        `${agent}: ${keys.length} tasks`
-      );
+      const filtered = applyFilters(allEntries);
+      const paginated = paginateResults(filtered, options, 50);
       return {
         content: [{
           type: "text",
-          text: `${dropzones.count} total dropzone tasks:\n${summary.join("\n")}\n\nCall with agent name (e.g. 'KNIGHT') to see that agent's tasks.`,
+          text: JSON.stringify({
+            results: paginated.results.map(summarizeDropzone),
+            total_count: paginated.total_count,
+            offset: paginated.offset,
+            limit: paginated.limit,
+            has_more: paginated.has_more,
+          }, null, 2),
         }],
       };
     }
 
     if (dropzones.byAgent[upper]) {
-      const tasks = dropzones.byAgent[upper].map(key => {
-        const e = dropzones!.entries[key];
-        return `${e.filename} | ${e.title.slice(0, 80)} | ${e.tags.slice(0, 5).join(", ")}`;
-      });
+      const tasks = dropzones.byAgent[upper]
+        .map(key => dropzones!.entries[key])
+        .filter(Boolean);
+      const filtered = applyFilters(tasks);
+      const paginated = paginateResults(filtered, options, 50);
       return {
         content: [{
           type: "text",
-          text: `${upper} dropzone (${tasks.length} tasks):\n\n${tasks.join("\n")}`,
+          text: JSON.stringify({
+            agent: upper,
+            results: paginated.results.map(summarizeDropzone),
+            total_count: paginated.total_count,
+            offset: paginated.offset,
+            limit: paginated.limit,
+            has_more: paginated.has_more,
+          }, null, 2),
         }],
       };
     }
@@ -1064,34 +1172,99 @@ server.tool(
 server.tool(
   "get_component",
   "Returns exports, imports, Supabase queries, and props for React components, hooks, or libs. Pass name for details or 'list' for all.",
-  { query: z.string().describe("Component/hook/lib name, or 'list'/'hooks'/'libs' to browse") },
-  async ({ query }) => {
+  {
+    query: z.string().describe("Component/hook/lib name, or 'list'/'hooks'/'libs' to browse"),
+    options: z.object({
+      offset: z.number().int().min(0).optional(),
+      limit: z.number().int().min(1).max(200).optional(),
+      type: z.enum(["component", "hook", "lib"]).optional(),
+    }).optional().describe("Pagination and type filter options"),
+  },
+  async ({ query, options }) => {
     if (!components) reloadAll();
     if (!components) {
       return { content: [{ type: "text", text: "Component index not built." }] };
     }
 
+    const allComponents = [
+      ...Object.values(components.components),
+      ...Object.values(components.hooks),
+      ...Object.values(components.libs),
+    ];
+
+    const summarizeComponent = (entry: typeof allComponents[number]) => ({
+      name: entry.name,
+      type: entry.type,
+      path: entry.path,
+      exports: entry.exports.slice(0, 8),
+      supabaseQueries: entry.supabaseQueries,
+    });
+
+    const applyTypeFilter = (entries: typeof allComponents) => {
+      if (!options?.type) return entries;
+      return entries.filter((entry) => entry.type === options.type);
+    };
+
     if (query === "list") {
+      const filtered = applyTypeFilter(allComponents)
+        .sort((a, b) => a.name.localeCompare(b.name));
+      const paginated = paginateResults(filtered, options, 50);
       return {
         content: [{
           type: "text",
-          text: `${components.count} total:\n  ${Object.keys(components.components).length} components\n  ${Object.keys(components.hooks).length} hooks\n  ${Object.keys(components.libs).length} libs\n\nUse 'hooks' or 'libs' for those lists, or a name for details.`,
+          text: JSON.stringify({
+            counts: {
+              total: components.count,
+              components: Object.keys(components.components).length,
+              hooks: Object.keys(components.hooks).length,
+              libs: Object.keys(components.libs).length,
+            },
+            results: paginated.results.map(summarizeComponent),
+            total_count: paginated.total_count,
+            offset: paginated.offset,
+            limit: paginated.limit,
+            has_more: paginated.has_more,
+          }, null, 2),
         }],
       };
     }
 
     if (query === "hooks") {
-      const lines = Object.values(components.hooks).map(h =>
-        `${h.name} | exports: ${h.exports.join(", ")} | queries: ${h.supabaseQueries.join(", ") || "none"}`
-      );
-      return { content: [{ type: "text", text: `${lines.length} hooks:\n\n${lines.join("\n")}` }] };
+      const filtered = applyTypeFilter(Object.values(components.hooks))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      const paginated = paginateResults(filtered, options, 50);
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            type: "hook",
+            results: paginated.results.map(summarizeComponent),
+            total_count: paginated.total_count,
+            offset: paginated.offset,
+            limit: paginated.limit,
+            has_more: paginated.has_more,
+          }, null, 2),
+        }],
+      };
     }
 
     if (query === "libs") {
-      const lines = Object.values(components.libs).map(l =>
-        `${l.name} | exports: ${l.exports.slice(0, 5).join(", ")} | queries: ${l.supabaseQueries.join(", ") || "none"}`
-      );
-      return { content: [{ type: "text", text: `${lines.length} libs:\n\n${lines.join("\n")}` }] };
+      const filtered = applyTypeFilter(Object.values(components.libs))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      const paginated = paginateResults(filtered, options, 50);
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            type: "lib",
+            results: paginated.results.map(summarizeComponent),
+            total_count: paginated.total_count,
+            offset: paginated.offset,
+            limit: paginated.limit,
+            has_more: paginated.has_more,
+          }, null, 2),
+        }],
+      };
     }
 
     const lower = query.toLowerCase();
@@ -1225,6 +1398,14 @@ server.tool(
       }
     }
 
+    // Auto-wire: trigger Stitchpunk Corps session_start in background
+    try {
+      const startOutput = runStitchpunkHook("session_start.py", ["AUTO", "MP_CHECK", task]);
+      sections.push(`\n### Corps Session Start (auto-triggered)`);
+      const lastLine = startOutput.trim().split("\n").pop() || "";
+      sections.push(`- ${lastLine}`);
+    } catch { /* non-fatal */ }
+
     const output = budgetEnforce(sections.join("\n"), BUDGETS.checklist);
     return { content: [{ type: "text", text: output }] };
   }
@@ -1272,7 +1453,277 @@ server.tool(
       sections.push(`- ${n}`);
     }
 
+    // Auto-wire: trigger Stitchpunk Corps session_end (SP-3 + SP-8 + SP-10 pipeline bridge)
+    try {
+      const endOutput = runStitchpunkHook("session_end.py", [
+        session_id.startsWith("K") ? "KNIGHT" : session_id.startsWith("B") ? "BISHOP" : "AUTO",
+        session_id,
+        summary,
+      ]);
+      sections.push(`\n### Corps Session End (auto-triggered)`);
+      const lines = endOutput.trim().split("\n");
+      const summaryLines = lines.filter(l => l.includes("COMPLETE") || l.includes("bridged") || l.includes("New files"));
+      for (const sl of summaryLines) sections.push(`- ${sl.trim()}`);
+    } catch { /* non-fatal */ }
+
     const output = budgetEnforce(sections.join("\n"), BUDGETS.debrief);
+    return { content: [{ type: "text", text: output }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// TOOL 21: get_migration_status
+// ═══════════════════════════════════════════
+
+server.tool(
+  "get_migration_status",
+  "Returns v1→v2 domain migration tracker. Shows which domains are audited, migrated, or verified. Pass 'list' for overview or a domain name for details.",
+  { query: z.string().describe("Domain name or 'list' for overview") },
+  async ({ query }) => {
+    if (!v2Migration) reloadAll();
+    if (!v2Migration) {
+      return { content: [{ type: "text", text: "v2-migration index not built yet. Run: cd librarian-mcp && npm run rebuild" }] };
+    }
+
+    if (query === "list") {
+      const lines: string[] = [];
+      lines.push(`## v2 Migration Status\n`);
+      lines.push(`Overall: ${v2Migration.overallProgress}`);
+      lines.push(`v2 Total Files: ${v2Migration.v2TotalFiles} | Shared UI Components: ${v2Migration.v2SharedComponents}`);
+      lines.push(`App Files: ${v2Migration.v2AppFiles.length}\n`);
+      lines.push(`| Domain | v1 Tables | v1 Pages | v1 Funcs | v2 Pages | v2 Comps | Status |`);
+      lines.push(`|--------|-----------|----------|----------|----------|----------|--------|`);
+
+      for (const d of Object.values(v2Migration.domains)) {
+        lines.push(`| ${d.domain} | ${d.v1Tables} | ${d.v1Pages} | ${d.v1Functions} | ${d.v2Pages} | ${d.v2Components} | ${d.auditStatus} |`);
+      }
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    }
+
+    const domain = v2Migration.domains[query];
+    if (!domain) {
+      const available = Object.keys(v2Migration.domains).join(", ");
+      return { content: [{ type: "text", text: `Domain '${query}' not found. Available: ${available}` }] };
+    }
+
+    const detail = [
+      `## ${domain.domain} — Migration Status: ${domain.auditStatus}`,
+      ``,
+      `### v1 Assets`,
+      `- Tables: ${domain.v1Tables}`,
+      `- Pages: ${domain.v1Pages}`,
+      `- Edge Functions: ${domain.v1Functions}`,
+      ``,
+      `### v2 Assets`,
+      `- Pages: ${domain.v2Pages}`,
+      `- Components: ${domain.v2Components}`,
+      `- Hooks: ${domain.v2Hooks}`,
+      `- Libs: ${domain.v2Libs}`,
+    ];
+    if (domain.auditSession) detail.push(`\nAudit Session: ${domain.auditSession}`);
+    if (domain.notes) detail.push(`Notes: ${domain.notes}`);
+
+    return { content: [{ type: "text", text: detail.join("\n") }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// TOOL 22: get_letter_status
+// ═══════════════════════════════════════════
+
+server.tool(
+  "get_letter_status",
+  "Returns letter tracking status. Pass 'list' for overview, 'crown'/'media'/'political' for category, 'draft'/'locked'/'sent' for status, or a recipient name for details.",
+  { query: z.string().describe("'list', category name, status name, or recipient name") },
+  async ({ query }) => {
+    if (!letters) reloadAll();
+    if (!letters) {
+      return { content: [{ type: "text", text: "Letters index not built yet. Run: cd librarian-mcp && npm run rebuild" }] };
+    }
+
+    if (query === "list") {
+      const lines: string[] = [];
+      lines.push(`## Letter Status Dashboard\n`);
+      lines.push(`Total: ${letters.count} letters\n`);
+      lines.push(`### By Category`);
+      for (const [cat, files] of Object.entries(letters.byCategory)) {
+        lines.push(`- **${cat}**: ${files.length}`);
+      }
+      lines.push(`\n### By Status`);
+      for (const [status, files] of Object.entries(letters.byStatus)) {
+        lines.push(`- **${status}**: ${files.length}`);
+      }
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    }
+
+    // Check if query matches a category
+    if (letters.byCategory[query]) {
+      const files = letters.byCategory[query];
+      const lines = [`## ${query} Letters (${files.length})\n`];
+      for (const f of files) {
+        const entry = letters.letters[f];
+        if (entry) {
+          lines.push(`- **${entry.recipient}** — ${entry.status} (${entry.wordCount} words)`);
+        }
+      }
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    }
+
+    // Check if query matches a status
+    if (letters.byStatus[query]) {
+      const files = letters.byStatus[query];
+      const lines = [`## ${query} Letters (${files.length})\n`];
+      for (const f of files) {
+        const entry = letters.letters[f];
+        if (entry) {
+          lines.push(`- **${entry.recipient}** [${entry.category}] (${entry.wordCount} words)`);
+        }
+      }
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    }
+
+    // Search by recipient name
+    const matches = Object.values(letters.letters).filter(l =>
+      l.recipient.toLowerCase().includes(query.toLowerCase()) ||
+      l.filename.toLowerCase().includes(query.toLowerCase())
+    );
+
+    if (matches.length === 0) {
+      return { content: [{ type: "text", text: `No letters found matching '${query}'. Try 'list' to see all.` }] };
+    }
+
+    const lines: string[] = [];
+    for (const m of matches) {
+      lines.push(`## ${m.recipient}`);
+      lines.push(`- File: ${m.filename}`);
+      lines.push(`- Path: ${m.path}`);
+      lines.push(`- Category: ${m.category}`);
+      lines.push(`- Status: ${m.status}`);
+      lines.push(`- Words: ${m.wordCount}`);
+      lines.push(`- Last Modified: ${m.lastModified}`);
+      lines.push(``);
+    }
+    return { content: [{ type: "text", text: lines.join("\n") }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// TOOL 23: get_diff_since_session
+// ═══════════════════════════════════════════
+
+server.tool(
+  "get_diff_since_session",
+  "Returns what changed since a given session. Compares current session list against a baseline session ID. Shows new sessions, files changed, migrations, and functions since then.",
+  { session_id: z.string().describe("Baseline session ID (e.g. 'K200', 'B054'). Shows everything after this session.") },
+  async ({ session_id }) => {
+    if (!context) reloadAll();
+    if (!context) {
+      return { content: [{ type: "text", text: "Context index not built." }] };
+    }
+
+    const sessions = context.sessions;
+    const baseIdx = sessions.findIndex(s => s.id === session_id);
+
+    if (baseIdx === -1) {
+      const recent = sessions.slice(-10).map(s => s.id).join(", ");
+      return { content: [{ type: "text", text: `Session '${session_id}' not found. Recent: ${recent}` }] };
+    }
+
+    const newSessions = sessions.slice(baseIdx + 1);
+    if (newSessions.length === 0) {
+      return { content: [{ type: "text", text: `No sessions recorded after ${session_id}.` }] };
+    }
+
+    const allFiles = new Set<string>();
+    const allMigrations = new Set<string>();
+    const allFunctions = new Set<string>();
+    const allPages = new Set<string>();
+
+    for (const s of newSessions) {
+      for (const f of s.filesChanged) allFiles.add(f);
+      for (const m of s.migrationsCreated) allMigrations.add(m);
+      for (const fn of s.functionsCreated) allFunctions.add(fn);
+      for (const p of s.pagesCreated) allPages.add(p);
+    }
+
+    const lines: string[] = [];
+    lines.push(`## Changes Since ${session_id}\n`);
+    lines.push(`Sessions: ${newSessions.length} (${newSessions[0].id} through ${newSessions[newSessions.length - 1].id})`);
+    lines.push(`Files Changed: ${allFiles.size}`);
+    lines.push(`Migrations: ${allMigrations.size}`);
+    lines.push(`Functions: ${allFunctions.size}`);
+    lines.push(`Pages: ${allPages.size}\n`);
+
+    lines.push(`### Sessions`);
+    for (const s of newSessions) {
+      lines.push(`- **${s.id}**${s.date ? ` (${s.date})` : ""}: ${s.summary}`);
+    }
+
+    if (allMigrations.size > 0) {
+      lines.push(`\n### New Migrations`);
+      for (const m of allMigrations) lines.push(`- ${m}`);
+    }
+
+    if (allFunctions.size > 0) {
+      lines.push(`\n### New Functions`);
+      for (const fn of allFunctions) lines.push(`- ${fn}`);
+    }
+
+    if (allPages.size > 0) {
+      lines.push(`\n### New Pages`);
+      for (const p of allPages) lines.push(`- ${p}`);
+    }
+
+    return { content: [{ type: "text", text: budgetEnforce(lines.join("\n"), 600) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// STITCHPUNK CORPS — Auto-Wire Tools
+// ═══════════════════════════════════════════
+
+const STITCHPUNK_DIR = resolve(__dirname, "..", "stitchpunks");
+
+function runStitchpunkHook(script: string, args: string[]): string {
+  const cmd = `python "${resolve(STITCHPUNK_DIR, script)}" ${args.map(a => `"${a.replace(/"/g, '\\"')}"`).join(" ")}`;
+  try {
+    const output = execSync(cmd, {
+      cwd: STITCHPUNK_DIR,
+      timeout: 120_000,
+      encoding: "utf-8",
+      env: { ...process.env, PYTHONIOENCODING: "utf-8" },
+    });
+    return output;
+  } catch (err: unknown) {
+    const e = err as { stdout?: string; stderr?: string; message?: string };
+    return `ERROR running ${script}:\n${e.stdout || ""}\n${e.stderr || e.message || "Unknown error"}`;
+  }
+}
+
+server.tool(
+  "run_session_start",
+  "Runs the Stitchpunk Corps session start hook (SP-6 Scribe, SP-1 Cartographer, SP-5 Sentinel, SP-7 Courier). Call at the beginning of any agent session.",
+  {
+    agent: z.string().describe("Agent type: BISHOP, KNIGHT, ROOK, or PAWN"),
+    session_id: z.string().describe("Session identifier (e.g. 'B064', 'K231')"),
+    task: z.string().optional().describe("Task description for this session"),
+  },
+  async ({ agent, session_id, task }) => {
+    const output = runStitchpunkHook("session_start.py", [agent, session_id, task || ""]);
+    return { content: [{ type: "text", text: output }] };
+  }
+);
+
+server.tool(
+  "run_session_end",
+  "Runs the Stitchpunk Corps session end hook (SP-6 Scribe, SP-1 Cartographer, SP-3 Classifier, SP-8 Herald, SP-10 Pipeline Bridge). Call at the end of any agent session. This auto-wires content to the Staff of Librarians.",
+  {
+    agent: z.string().describe("Agent type: BISHOP, KNIGHT, ROOK, or PAWN"),
+    session_id: z.string().describe("Session identifier (e.g. 'B064', 'K231')"),
+    summary: z.string().describe("What was built/accomplished this session"),
+  },
+  async ({ agent, session_id, summary }) => {
+    const output = runStitchpunkHook("session_end.py", [agent, session_id, summary]);
     return { content: [{ type: "text", text: output }] };
   }
 );

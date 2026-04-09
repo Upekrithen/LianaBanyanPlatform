@@ -140,6 +140,48 @@ const DOMAIN_PATTERNS: Record<string, {
     pagePatterns: [/Notification/i],
     cephasPatterns: [/notification/i],
   },
+  governance: {
+    tablePatterns: [/^the_300|^star_chamber|^round_table|^voting|^senate/],
+    functionPatterns: [/chamber|round[-_]table|vote|governance/],
+    pagePatterns: [/StarChamber|RoundTable|The300|Senate|Voting/i],
+    cephasPatterns: [/governance|star.chamber|round.table|the.300/i],
+  },
+  content: {
+    tablePatterns: [/^cephas|^publication|^pudding|^article|^paper/],
+    functionPatterns: [/publish|cephas|content[-_]render|guided[-_]tour/],
+    pagePatterns: [/Cephas|Publication|Pudding|GuidedTour|ContentLibrary|ContentCommand/i],
+    cephasPatterns: [/cephas|publication|pudding|article/i],
+  },
+  outreach: {
+    tablePatterns: [/^letter|^cue_card|^red_carpet|^battery_dispatch|^crown_letter/],
+    functionPatterns: [/letter|cue[-_]card|red[-_]carpet|battery[-_]dispatch|send[-_]transactional/],
+    pagePatterns: [/Letter|CueCard|RedCarpet|BatteryDispatch|ContentCommand/i],
+    cephasPatterns: [/letter|outreach|cue.card|red.carpet/i],
+  },
+  manufacturing: {
+    tablePatterns: [/^canister|^design_democracy|^factory|^product_/],
+    functionPatterns: [/canister|factory|manufacturing|printful/],
+    pagePatterns: [/Canister|DesignDemocracy|Factory|Manufacturing/i],
+    cephasPatterns: [/canister|factory|manufacturing|design.democracy/i],
+  },
+  defense: {
+    tablePatterns: [/^defense|^rally_group|^shield/],
+    functionPatterns: [/defense|rally|shield|klaus/],
+    pagePatterns: [/Defense|RallyGroup|Shield|Klaus/i],
+    cephasPatterns: [/defense|rally|shield|klaus/i],
+  },
+  helm: {
+    tablePatterns: [/^helm|^bookshelf|^trail_map/],
+    functionPatterns: [/helm|bookshelf|trail[-_]map/],
+    pagePatterns: [/Helm|Bookshelf|TrailMap|Dashboard/i],
+    cephasPatterns: [/helm|bookshelf|trail.map/i],
+  },
+  currency: {
+    tablePatterns: [/^credit|^mark_|^joule|^escrow|^medallion/],
+    functionPatterns: [/credit|mark|joule|escrow|medallion|mint/],
+    pagePatterns: [/Credit|Mark|Joule|Escrow|Medallion|WarChest/i],
+    cephasPatterns: [/credit|mark|joule|escrow|medallion|currency/i],
+  },
 };
 
 export function buildDomainIndex(

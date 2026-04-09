@@ -293,6 +293,50 @@ export interface DebriefResult {
   handoffNotes: string[];
 }
 
+// V2 Migration Tracking
+export interface V2DomainStatus {
+  domain: string;
+  v1Tables: number;
+  v1Pages: number;
+  v1Functions: number;
+  v2Pages: number;
+  v2Components: number;
+  v2Hooks: number;
+  v2Libs: number;
+  auditStatus: "not_started" | "audited" | "migrated" | "verified";
+  auditSession?: string;
+  notes?: string;
+}
+
+export interface V2MigrationIndex {
+  domains: Record<string, V2DomainStatus>;
+  v2AppFiles: string[];
+  v2SharedComponents: number;
+  v2TotalFiles: number;
+  overallProgress: string;
+  timestamp: string;
+}
+
+// Letter Tracking
+export interface LetterEntry {
+  filename: string;
+  path: string;
+  recipient: string;
+  category: "crown" | "circle4" | "media" | "partnership" | "political" | "other";
+  status: "draft" | "template" | "locked" | "reviewed" | "sent" | "responded";
+  letterType?: string;
+  wordCount: number;
+  lastModified: string;
+}
+
+export interface LetterIndex {
+  letters: Record<string, LetterEntry>;
+  byCategory: Record<string, string[]>;
+  byStatus: Record<string, string[]>;
+  count: number;
+  totalWords: number;
+}
+
 export interface FullIndex {
   overview: SystemOverview;
   schemas: SchemaIndex;
