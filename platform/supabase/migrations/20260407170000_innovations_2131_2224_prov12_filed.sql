@@ -39,8 +39,7 @@ VALUES
   (2161, 'Family Warm Workspace', 'Age-appropriate cooperative economic participation interface', 'UX', 'Prov 12 Filed', 'documented', 'B082')
 ON CONFLICT (innovation_number) DO UPDATE SET
   patent_bag = 'Prov 12 Filed',
-  status = 'documented',
-  updated_at = now();
+  status = 'documented';
 
 -- Wave 2: #2162-#2196 (35 innovations from B083)
 INSERT INTO innovation_log (innovation_number, title, description, category, patent_bag, status, session_tag)
@@ -82,8 +81,7 @@ VALUES
   (2196, 'Omnibus Launch Strategy Universal Manifest', 'Single data entry auto-formats for multi-platform launch', 'UX', 'Prov 12 Filed', 'documented', 'B083')
 ON CONFLICT (innovation_number) DO UPDATE SET
   patent_bag = 'Prov 12 Filed',
-  status = 'documented',
-  updated_at = now();
+  status = 'documented';
 
 -- Wave 3: #2197-#2222 (26 innovations from B083)
 INSERT INTO innovation_log (innovation_number, title, description, category, patent_bag, status, session_tag)
@@ -116,8 +114,7 @@ VALUES
   (2222, 'BandWagon Taste-Prediction Authority', 'Demonstrated judgment earns larger cooperative allocation budgets', 'Economics', 'Prov 12 Filed', 'documented', 'B083')
 ON CONFLICT (innovation_number) DO UPDATE SET
   patent_bag = 'Prov 12 Filed',
-  status = 'documented',
-  updated_at = now();
+  status = 'documented';
 
 -- Wave 4: #2223-#2224 (2 innovations from B085-B086)
 INSERT INTO innovation_log (innovation_number, title, description, category, patent_bag, status, session_tag)
@@ -126,8 +123,7 @@ VALUES
   (2224, 'Neighborhood Content Shield', '5-layer defense preventing neighborhoods from circumventing platform rules via content injection', 'Platform Architecture', 'Prov 12 Filed', 'documented', 'B086')
 ON CONFLICT (innovation_number) DO UPDATE SET
   patent_bag = 'Prov 12 Filed',
-  status = 'documented',
-  updated_at = now();
+  status = 'documented';
 
 -- Crown Jewel flags for 7 innovations (per prompt — #2223 is CJ candidate, NOT flagged yet)
 UPDATE innovation_log SET is_crown_jewel = true

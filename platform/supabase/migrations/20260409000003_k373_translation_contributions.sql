@@ -38,17 +38,19 @@ CREATE INDEX IF NOT EXISTS idx_translation_page
   ON translation_contributions(page_route, target_lang);
 
 -- ═══ Mirror Mirror Deck Card ═══
-INSERT INTO deck_cards (card_key, title, description, icon, card_type, rarity, destination_route, unlock_cost_type, unlock_cost_amount)
+INSERT INTO deck_cards (card_code, name, front_title, back_title, back_instructions, description, front_icon, card_type, rarity, deep_link_url, credit_cost)
 VALUES (
   'mirror-mirror-translate',
   'Mirror Mirror — The Translation Card',
+  'Mirror Mirror',
+  'The Translation Card',
+  'Unlocked by speaking friend in any language. Every language matters.',
   'Unlocked by speaking friend in any language. Every language matters.',
   '💎',
-  'museum',
+  'secret',
   'uncommon',
   '/mirror',
-  'free',
   0
-) ON CONFLICT (card_key) DO NOTHING;
+) ON CONFLICT (card_code) DO NOTHING;
 
 COMMIT;

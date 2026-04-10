@@ -86,7 +86,7 @@ const MirrorMirror = () => {
         {/* Description */}
         <p style={{ color: "#faf5eb", fontSize: "0.8rem", lineHeight: 1.7, maxWidth: "300px" }}>
           {isEnglish
-            ? "You found a keyhole. Hidden doors are scattered throughout — each one unlocks something different. This one opens Mirror Mirror, which translates the entire site into 110+ languages. Fair means everyone can read it."
+            ? "You found a keyhole. Hidden doors are scattered throughout — each one unlocks something different. This one opens Mirror Mirror, which translates the entire site into 110+ languages. Fairest means everyone can read it."
             : description}
         </p>
 

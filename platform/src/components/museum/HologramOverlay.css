@@ -1,0 +1,279 @@
+/**
+ * HOLOGRAM CHARACTER OVERLAY — CRT Screen Disruption Effect
+ * ==========================================================
+ * Creates the illusion that characters are holograms that must
+ * continually refresh like a monitor. A brief horizontal scan-line
+ * disruption fires periodically — frequency scaled by knowledge tier.
+ *
+ * Tier system (Founder directive B093):
+ *   "Physics is harder than Math, but Economics is more than both,
+ *    because it combines many disciplines."
+ *
+ *   Tier 1 — Arts/Creative (stable projection)      → every ~8s
+ *   Tier 2 — Math/Logic (mild flicker)               → every ~6s
+ *   Tier 3 — Physics/Engineering (noticeable glitch)  → every ~4s
+ *   Tier 4 — Economics/Interdisciplinary (complex)    → every ~3s
+ *
+ * The harder the knowledge, the harder the hologram works to
+ * maintain coherence — more refresh artifacts visible.
+ *
+ * Usage: wrap any character <img> in a .hologram-character container
+ * and add the tier class (.hologram-tier-1 through .hologram-tier-4).
+ * The scan-line overlay and opacity dip are purely CSS, no JS needed.
+ *
+ * NOTE: Mana suppression text and percentage readouts are EXCLUSIVE
+ * to Denken (Northern Province). This overlay has NO text elements.
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE CONTAINER
+   ═══════════════════════════════════════════════════════════════ */
+
+.hologram-character {
+  position: relative;
+  overflow: hidden;
+  /* Inherit shape from parent (circle for avatars, rect for cards) */
+}
+
+/* The scan-line overlay — a thin horizontal band that sweeps top-to-bottom */
+.hologram-character::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6%;
+  top: -10%;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(180, 240, 255, 0.06) 15%,
+    rgba(180, 240, 255, 0.18) 40%,
+    rgba(255, 255, 255, 0.30) 50%,
+    rgba(180, 240, 255, 0.18) 60%,
+    rgba(180, 240, 255, 0.06) 85%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+}
+
+/* Faint persistent scan-lines (like a CRT monitor) */
+.hologram-character::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(180, 240, 255, 0.015) 3px,
+    rgba(180, 240, 255, 0.015) 4px
+  );
+  opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TIER 1 — ARTS / CREATIVE
+   Stable hologram, gentle disruption every ~8 seconds
+   ═══════════════════════════════════════════════════════════════ */
+
+.hologram-tier-1::after {
+  animation: hologramScan 8s ease-in-out infinite;
+}
+
+.hologram-tier-1 > img,
+.hologram-tier-1 > .hologram-target {
+  animation: hologramFlicker1 8s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TIER 2 — MATH / LOGIC
+   Mild flicker, disruption every ~6 seconds
+   ═══════════════════════════════════════════════════════════════ */
+
+.hologram-tier-2::after {
+  animation: hologramScan 6s ease-in-out infinite;
+}
+
+.hologram-tier-2 > img,
+.hologram-tier-2 > .hologram-target {
+  animation: hologramFlicker2 6s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TIER 3 — PHYSICS / ENGINEERING
+   Noticeable glitch, disruption every ~4 seconds, double scan
+   ═══════════════════════════════════════════════════════════════ */
+
+.hologram-tier-3::after {
+  animation: hologramScanDouble 4s ease-in-out infinite;
+}
+
+.hologram-tier-3 > img,
+.hologram-tier-3 > .hologram-target {
+  animation: hologramFlicker3 4s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TIER 4 — ECONOMICS / INTERDISCIPLINARY
+   Complex disruption every ~3 seconds, double scan + color shift
+   The hologram strains to project this much combined knowledge
+   ═══════════════════════════════════════════════════════════════ */
+
+.hologram-tier-4::after {
+  animation: hologramScanDouble 3s ease-in-out infinite;
+}
+
+.hologram-tier-4 > img,
+.hologram-tier-4 > .hologram-target {
+  animation: hologramFlicker4 3s ease-in-out infinite;
+}
+
+/* Color-shift halo — only on Tier 4 (knowledge is spilling out) */
+.hologram-tier-4::before {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba(180, 240, 255, 0.02) 3px,
+      rgba(180, 240, 255, 0.02) 4px
+    );
+  animation: hologramHueShift 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KEYFRAMES — SCAN LINE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Single scan: band sweeps top→bottom in ~200ms window */
+@keyframes hologramScan {
+  0%, 94% {
+    top: -10%;
+    opacity: 0;
+  }
+  95% {
+    opacity: 1;
+  }
+  97.5% {
+    top: 50%;
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+/* Double scan: two passes (mimics interlaced refresh) */
+@keyframes hologramScanDouble {
+  0%, 88% {
+    top: -10%;
+    opacity: 0;
+  }
+  89% {
+    opacity: 1;
+  }
+  92% {
+    top: 110%;
+    opacity: 0;
+  }
+  93% {
+    top: -10%;
+    opacity: 0;
+  }
+  94% {
+    opacity: 0.7;
+  }
+  97% {
+    top: 110%;
+    opacity: 0;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KEYFRAMES — IMAGE FLICKER (opacity dip during scan)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tier 1: barely perceptible dip */
+@keyframes hologramFlicker1 {
+  0%, 93%, 100% { opacity: 1; filter: none; }
+  95% { opacity: 0.92; filter: brightness(1.04); }
+  96% { opacity: 0.96; }
+  97% { opacity: 1; }
+}
+
+/* Tier 2: mild dip */
+@keyframes hologramFlicker2 {
+  0%, 92%, 100% { opacity: 1; filter: none; }
+  94% { opacity: 0.88; filter: brightness(1.06); }
+  95% { opacity: 0.94; }
+  96% { opacity: 0.90; }
+  97% { opacity: 1; }
+}
+
+/* Tier 3: noticeable dip + slight horizontal jitter */
+@keyframes hologramFlicker3 {
+  0%, 88%, 100% { opacity: 1; filter: none; transform: translateX(0); }
+  90% { opacity: 0.82; filter: brightness(1.08); transform: translateX(1px); }
+  91% { opacity: 0.90; transform: translateX(-0.5px); }
+  93% { opacity: 0.85; filter: brightness(1.05); transform: translateX(0.5px); }
+  95% { opacity: 1; transform: translateX(0); }
+}
+
+/* Tier 4: complex — double dip + jitter + color fringe */
+@keyframes hologramFlicker4 {
+  0%, 85%, 100% { opacity: 1; filter: none; transform: translateX(0); }
+  87% { opacity: 0.78; filter: brightness(1.1) saturate(1.2); transform: translateX(1.5px); }
+  88% { opacity: 0.88; transform: translateX(-1px); }
+  89% { opacity: 0.82; filter: brightness(1.06) hue-rotate(3deg); transform: translateX(0.5px); }
+  91% { opacity: 0.75; filter: brightness(1.12) hue-rotate(-2deg); transform: translateX(-0.5px); }
+  93% { opacity: 0.92; filter: brightness(1.03); transform: translateX(0); }
+  95% { opacity: 1; transform: translateX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KEYFRAMES — TIER 4 HUE SHIFT (knowledge spilling)
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes hologramHueShift {
+  0%, 85%, 100% { filter: none; }
+  89% { filter: hue-rotate(5deg); }
+  92% { filter: hue-rotate(-3deg); }
+  95% { filter: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RANDOMIZED DELAY CLASSES
+   Apply these to stagger multiple characters so they don't
+   all glitch at the same instant.
+   ═══════════════════════════════════════════════════════════════ */
+
+.hologram-delay-0 { }
+.hologram-delay-1::after, .hologram-delay-1 > img, .hologram-delay-1 > .hologram-target { animation-delay: 0.7s !important; }
+.hologram-delay-2::after, .hologram-delay-2 > img, .hologram-delay-2 > .hologram-target { animation-delay: 1.4s !important; }
+.hologram-delay-3::after, .hologram-delay-3 > img, .hologram-delay-3 > .hologram-target { animation-delay: 2.1s !important; }
+.hologram-delay-4::after, .hologram-delay-4 > img, .hologram-delay-4 > .hologram-target { animation-delay: 2.8s !important; }
+.hologram-delay-5::after, .hologram-delay-5 > img, .hologram-delay-5 > .hologram-target { animation-delay: 3.5s !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY — RESPECT prefers-reduced-motion
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hologram-character::after,
+  .hologram-character::before,
+  .hologram-character > img,
+  .hologram-character > .hologram-target {
+    animation: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}

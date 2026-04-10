@@ -5,7 +5,7 @@
  * Strings:
  *   greeting: "You said '{word}' — welcome, {nativeName} speaker!"
  *   description: "Liana Banyan isn't fully translated into {language} yet..."
- *   cta: "Every language matters. Fair means everyone can read it."
+ *   cta: "Every language matters. Fairest means everyone can read it."
  *   goldenKey: "Collect golden keys to unlock Easter Egg Knowledge"
  */
 
@@ -19,7 +19,7 @@ export interface MirrorStrings {
 const FALLBACK: MirrorStrings = {
   greeting: "You said '{word}' — welcome, {nativeName} speaker!",
   description: "Liana Banyan isn't fully translated into {language} yet. But it will be — because you can help. Translate or confirm translations on any page and earn Marks for your contribution.",
-  cta: "Every language matters. Fair means everyone can read it.",
+  cta: "Every language matters. Fairest means everyone can read it.",
   goldenKey: "Collect golden keys to unlock Easter Egg Knowledge",
 };
 

@@ -2,11 +2,17 @@
  * Cephas Basement — Always-accessible library.
  * Three depth choices (Skipping Stones / Wading In / Deep Dive).
  * Search, Guided Tour, Browse by Topic.
- * The underground complex beneath the museum.
+ *
+ * Landing page renders as a DECK CARD styled as a wooden iron-bound door.
+ * Sturdy and welcoming — dark wood grain, iron brackets, rivets, ring handle.
+ * Wrapped in DeckCardShell for card format + ornate corners + X-Ray support.
+ * Depth-selected pages stay in MuseumShell for full-bleed layout.
  */
 import { useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { MuseumShell } from "@/components/museum/MuseumShell";
+import { DeckCardShell } from "@/components/museum/DeckCardShell";
+import { useXRay } from "@/components/museum/XRayContext";
 import { motion } from "framer-motion";
 import { BookOpen, Search, Compass, Grid3X3, ArrowLeft, Globe, ExternalLink } from "lucide-react";
 import { FRIEND_WORDS } from "@/data/friendWords";
@@ -49,6 +55,9 @@ const depths: Array<{
 
 const depthMap: Record<string, Depth> = { stones: "stones", wading: "wading", deep: "deep" };
 
+/** Warm wood-grain SVG pattern (dark browns, subtle) */
+const woodGrainBg = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='6'%3E%3Crect fill='%23231610' width='200' height='6'/%3E%3Crect fill='%23281a12' x='0' y='0' width='200' height='1' opacity='0.3'/%3E%3Crect fill='%231e0e08' x='0' y='2' width='200' height='1' opacity='0.2'/%3E%3Crect fill='%23301e14' x='0' y='4' width='200' height='1' opacity='0.15'/%3E%3C/svg%3E")`;
+
 const CephasBasement = () => {
   const { depth: urlDepth } = useParams<{ depth?: string }>();
   const navigate = useNavigate();
@@ -71,6 +80,7 @@ const CephasBasement = () => {
     window.history.replaceState(null, "", "/library");
   };
 
+  /* ── Depth-selected sub-page (stays MuseumShell for full bleed) ── */
   if (selectedDepth) {
     const depthInfo = depths.find((d) => d.id === selectedDepth)!;
     return (
@@ -91,7 +101,6 @@ const CephasBasement = () => {
             </div>
           </div>
 
-          {/* Search within depth */}
           <div className="relative mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input
@@ -103,7 +112,6 @@ const CephasBasement = () => {
             />
           </div>
 
-          {/* Placeholder content grid */}
           <div className="space-y-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <motion.div
@@ -128,110 +136,354 @@ const CephasBasement = () => {
     );
   }
 
+  /* ── Landing page — Deck Card styled as wooden iron-bound door ── */
   return (
-    <MuseumShell>
-      <div className="min-h-screen flex flex-col px-4 py-6 pb-24 max-w-md mx-auto">
-        {/* Language banner from Mirror Mirror */}
-        {showLangBanner && (
-          <motion.div
-            className="mb-4 p-3 rounded-xl flex items-center gap-3"
-            style={{ background: "rgba(56, 161, 105, 0.08)", border: "1px solid rgba(56, 161, 105, 0.25)" }}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Globe className="w-5 h-5 text-emerald-400 shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-white font-medium">
-                Viewing in {langInfo.language}
-              </p>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Most content is in English. Help us bring it to {langInfo.nativeName}.
-              </p>
-            </div>
-            <a
-              href={`https://translate.google.com/translate?sl=en&tl=${langCode}&u=${encodeURIComponent(window.location.href)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors"
-              style={{ background: "rgba(59, 130, 246, 0.15)", color: "#60a5fa" }}
-            >
-              <ExternalLink className="w-3 h-3" />
-              Translate
-            </a>
-          </motion.div>
-        )}
-
-        {/* Header */}
-        <motion.div
-          className="text-center mb-6"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <div className="inline-flex items-center gap-2 mb-3">
-            <BookOpen className="w-5 h-5 text-indigo-400" />
-            <h1 className="text-xl font-bold text-white">Cephas Library</h1>
-          </div>
-          <p className="text-slate-400 text-sm">455+ publications</p>
-          <p className="text-slate-500 text-sm mt-1">How deep do you want to go?</p>
-        </motion.div>
-
-        {/* Three depth cards */}
-        <div className="flex flex-col gap-3 mb-8">
-          {depths.map((d, i) => (
-            <motion.button
-              key={d.id}
-              onClick={() => handleSelectDepth(d.id)}
-              className="w-full text-left p-5 rounded-xl border border-slate-700/60 bg-slate-900/80 hover:bg-slate-800/80 transition-colors active:scale-[0.98]"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 + i * 0.08 }}
-            >
-              <div className="flex items-center gap-4">
-                <span className="text-2xl">{d.icon}</span>
-                <div className="flex-1">
-                  <div className="text-white font-semibold">{d.label}</div>
-                  <div className="text-slate-400 text-sm">{d.sublabel}</div>
-                </div>
-                <span className="text-slate-600">→</span>
-              </div>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Utility links */}
-        <div className="flex flex-col gap-2">
-          <UtilityLink icon={Search} label="Search" onClick={() => handleSelectDepth("stones")} />
-          <UtilityLink icon={Compass} label="Guided Tour" subtitle="252-item curated path" onClick={() => {}} />
-          <UtilityLink icon={Grid3X3} label="Browse by topic" onClick={() => {}} />
-        </div>
-
-        {/* Back to museum */}
-        <button
-          onClick={() => navigate("/")}
-          className="mt-8 text-sm text-slate-500 hover:text-slate-300 transition-colors text-center"
-        >
-          ← Back to the Museum
-        </button>
-      </div>
-    </MuseumShell>
+    <DeckCardShell>
+      <DoorContent
+        showLangBanner={showLangBanner}
+        langInfo={langInfo}
+        langCode={langCode}
+        onSelectDepth={handleSelectDepth}
+        onNavigate={navigate}
+      />
+    </DeckCardShell>
   );
 };
 
-function UtilityLink({ icon: Icon, label, subtitle, onClick }: {
+/** Door interior content — all the wooden door elements */
+function DoorContent({
+  showLangBanner,
+  langInfo,
+  langCode,
+  onSelectDepth,
+  onNavigate,
+}: {
+  showLangBanner: any;
+  langInfo: any;
+  langCode: string | null;
+  onSelectDepth: (d: Depth) => void;
+  onNavigate: (path: string) => void;
+}) {
+  const { xrayOn } = useXRay();
+  const accentColor = xrayOn ? "#22d3ee" : "#c9a96e";
+  const ironColor = xrayOn ? "rgba(34,211,238,0.3)" : "rgba(139,119,90,0.4)";
+  const ironHighlight = xrayOn ? "rgba(34,211,238,0.15)" : "rgba(201,169,110,0.08)";
+  const textColor = xrayOn ? "rgba(34,211,238,0.9)" : "#c9a96e";
+  const textFaint = xrayOn ? "rgba(34,211,238,0.5)" : "rgba(201,169,110,0.5)";
+  const rivetColor = xrayOn ? "rgba(34,211,238,0.25)" : "rgba(139,119,90,0.35)";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="flex-1 flex flex-col items-center justify-between text-center relative"
+      style={{ overflow: "hidden" }}
+    >
+      {/* Wood grain texture overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: woodGrainBg,
+          backgroundRepeat: "repeat",
+          opacity: xrayOn ? 0.04 : 0.15,
+          mixBlendMode: "overlay",
+          transition: "opacity 0.5s ease",
+        }}
+      />
+
+      {/* Iron band — top horizontal */}
+      <div
+        className="absolute top-12 left-4 right-4 pointer-events-none"
+        style={{
+          height: "2px",
+          background: `linear-gradient(90deg, transparent, ${ironColor}, ${ironColor}, transparent)`,
+          transition: "background 0.5s ease",
+        }}
+      />
+
+      {/* Iron band — bottom horizontal */}
+      <div
+        className="absolute bottom-12 left-4 right-4 pointer-events-none"
+        style={{
+          height: "2px",
+          background: `linear-gradient(90deg, transparent, ${ironColor}, ${ironColor}, transparent)`,
+          transition: "background 0.5s ease",
+        }}
+      />
+
+      {/* Iron rivets — top band */}
+      <IronRivet style={{ position: "absolute", top: "44px", left: "20px" }} color={rivetColor} />
+      <IronRivet style={{ position: "absolute", top: "44px", right: "20px" }} color={rivetColor} />
+
+      {/* Iron rivets — bottom band */}
+      <IronRivet style={{ position: "absolute", bottom: "44px", left: "20px" }} color={rivetColor} />
+      <IronRivet style={{ position: "absolute", bottom: "44px", right: "20px" }} color={rivetColor} />
+
+      {/* ── Top: Iteration badge + language banner ── */}
+      <div className="w-full relative z-10 pt-1">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <span
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: textFaint,
+              transition: "color 0.5s ease",
+            }}
+          >
+            Deck Card &middot; Iteration {showLangBanner ? langInfo.langCode.toUpperCase() : "EN"}
+          </span>
+        </div>
+
+        {showLangBanner && (
+          <motion.div
+            className="flex items-center justify-center gap-1.5 mb-2 px-3 py-1 rounded-full mx-auto w-fit"
+            style={{
+              background: ironHighlight,
+              border: `1px solid ${ironColor}`,
+              transition: "all 0.5s ease",
+            }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <Globe className="w-3 h-3" style={{ color: accentColor, transition: "color 0.5s ease" }} />
+            <span
+              style={{
+                color: accentColor,
+                fontSize: "0.65rem",
+                fontWeight: 600,
+                fontFamily: "'JetBrains Mono', monospace",
+                transition: "color 0.5s ease",
+              }}
+            >
+              {langInfo.nativeName}
+            </span>
+          </motion.div>
+        )}
+      </div>
+
+      {/* ── Center: Door ring handle + Library header ── */}
+      <div className="flex flex-col items-center relative z-10">
+        {/* Iron ring handle */}
+        <div
+          style={{
+            width: "36px",
+            height: "36px",
+            borderRadius: "50%",
+            border: `2.5px solid ${ironColor}`,
+            marginBottom: "0.5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: `0 2px 6px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.05)`,
+            transition: "border-color 0.5s ease",
+          }}
+        >
+          <BookOpen className="w-4 h-4" style={{ color: accentColor, transition: "color 0.5s ease" }} />
+        </div>
+
+        <h1
+          style={{
+            fontFamily: "'Crimson Pro', Georgia, serif",
+            fontSize: "clamp(1.3rem, 5vw, 1.7rem)",
+            fontWeight: 700,
+            color: textColor,
+            marginBottom: "0.25rem",
+            lineHeight: 1.2,
+            transition: "color 0.5s ease",
+          }}
+        >
+          Cephas Library
+        </h1>
+        <p
+          style={{
+            color: "#faf5eb",
+            fontSize: "0.8rem",
+            fontWeight: 600,
+            opacity: 0.9,
+            marginBottom: "0.15rem",
+          }}
+        >
+          455+ publications
+        </p>
+        <p
+          style={{
+            color: "rgba(250, 245, 235, 0.4)",
+            fontSize: "0.7rem",
+            fontStyle: "italic",
+            letterSpacing: "0.02em",
+          }}
+        >
+          How deep do you want to go?
+        </p>
+      </div>
+
+      {/* ── Three depth rows — iron-banded planks ── */}
+      <div className="w-full flex flex-col gap-2 relative z-10">
+        {depths.map((d, i) => (
+          <motion.button
+            key={d.id}
+            onClick={() => onSelectDepth(d.id)}
+            className="w-full text-left rounded-lg active:scale-[0.98]"
+            style={{
+              padding: "0.65rem 0.85rem",
+              background: ironHighlight,
+              border: `1px solid ${ironColor}`,
+              transition: "all 0.3s ease",
+              position: "relative",
+              overflow: "hidden",
+            }}
+            whileHover={{
+              borderColor: d.color,
+            }}
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 + i * 0.1 }}
+          >
+            {/* Subtle wood grain on each plank */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage: woodGrainBg,
+                backgroundRepeat: "repeat",
+                opacity: xrayOn ? 0.02 : 0.08,
+                transition: "opacity 0.5s ease",
+              }}
+            />
+            <div className="flex items-center gap-3 relative">
+              <span className="text-xl">{d.icon}</span>
+              <div className="flex-1 min-w-0">
+                <div
+                  style={{
+                    color: "#faf5eb",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    fontFamily: "'Crimson Pro', Georgia, serif",
+                  }}
+                >
+                  {d.label}
+                </div>
+                <div style={{ color: "rgba(250,245,235,0.4)", fontSize: "0.65rem" }}>
+                  {d.sublabel}
+                </div>
+              </div>
+              <span style={{ color: d.color, fontSize: "0.9rem", opacity: 0.6 }}>→</span>
+            </div>
+
+            {/* Iron rivet on each plank row */}
+            <IronRivet
+              style={{ position: "absolute", top: "50%", right: "10px", transform: "translateY(-50%)" }}
+              color={rivetColor}
+              size={4}
+            />
+          </motion.button>
+        ))}
+      </div>
+
+      {/* ── Utility links ── */}
+      <div className="w-full flex flex-col gap-0.5 relative z-10">
+        <CardUtilityLink icon={Search} label="Search" accentColor={textFaint} onClick={() => onSelectDepth("stones")} />
+        <CardUtilityLink icon={Compass} label="Guided Tour" subtitle="252-item curated path" accentColor={textFaint} onClick={() => {}} />
+        <CardUtilityLink icon={Grid3X3} label="Browse by topic" accentColor={textFaint} onClick={() => {}} />
+      </div>
+
+      {/* ── WildFire Tour CTA ── */}
+      <button
+        onClick={() => onNavigate("/tour")}
+        className="flex items-center gap-1.5 text-xs font-medium transition-all relative z-10"
+        style={{ color: "#f97316" }}
+        onMouseOver={(e) => (e.currentTarget.style.textShadow = "0 0 8px rgba(249,115,22,0.4)")}
+        onMouseOut={(e) => (e.currentTarget.style.textShadow = "none")}
+      >
+        <span>🔥</span> Take the WildFire Tour
+      </button>
+
+      {/* ── Back to Museum ── */}
+      <button
+        onClick={() => onNavigate("/")}
+        style={{
+          color: "rgba(250,245,235,0.25)",
+          fontSize: "0.7rem",
+          letterSpacing: "0.04em",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          transition: "color 0.2s",
+          fontFamily: "'JetBrains Mono', monospace",
+          position: "relative",
+          zIndex: 10,
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.color = "rgba(250,245,235,0.6)")}
+        onMouseOut={(e) => (e.currentTarget.style.color = "rgba(250,245,235,0.25)")}
+      >
+        ← Back to the Museum
+      </button>
+    </motion.div>
+  );
+}
+
+/** Iron rivet — small decorative circle */
+function IronRivet({
+  style,
+  color,
+  size = 6,
+}: {
+  style?: React.CSSProperties;
+  color: string;
+  size?: number;
+}) {
+  return (
+    <div
+      className="pointer-events-none"
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        borderRadius: "50%",
+        background: `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.15), ${color}, rgba(0,0,0,0.2))`,
+        boxShadow: "0 1px 2px rgba(0,0,0,0.3), inset 0 0.5px 1px rgba(255,255,255,0.1)",
+        transition: "background 0.5s ease",
+        ...style,
+      }}
+    />
+  );
+}
+
+/** Compact utility link styled for inside the door card */
+function CardUtilityLink({
+  icon: Icon,
+  label,
+  subtitle,
+  accentColor,
+  onClick,
+}: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   subtitle?: string;
+  accentColor: string;
   onClick: () => void;
 }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800/50 transition-colors text-left"
+      className="flex items-center gap-2.5 rounded-md text-left"
+      style={{
+        padding: "0.4rem 0.6rem",
+        background: "transparent",
+        border: "none",
+        cursor: "pointer",
+        transition: "background 0.2s",
+      }}
+      onMouseOver={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
+      onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
     >
-      <Icon className="w-4 h-4 text-slate-500" />
-      <div>
-        <span className="text-sm text-slate-300">{label}</span>
-        {subtitle && <span className="text-xs text-slate-500 ml-2">{subtitle}</span>}
+      <Icon className="w-3.5 h-3.5" style={{ color: accentColor, transition: "color 0.5s ease" }} />
+      <div className="flex items-baseline gap-1.5">
+        <span style={{ color: "rgba(250,245,235,0.6)", fontSize: "0.75rem" }}>{label}</span>
+        {subtitle && (
+          <span style={{ color: "rgba(250,245,235,0.25)", fontSize: "0.6rem" }}>{subtitle}</span>
+        )}
       </div>
     </button>
   );

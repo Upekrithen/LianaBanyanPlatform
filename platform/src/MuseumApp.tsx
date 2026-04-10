@@ -18,6 +18,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import NotFound from "./pages/NotFound";
 import { XRayProvider } from "./components/museum/XRayContext";
+import { ArchipelagoTourProvider } from "./contexts/ArchipelagoTourContext";
+import { TourBanner } from "./components/wildfire/TourBanner";
+import { TourCompletionModal } from "./components/wildfire/TourCompletionModal";
 
 const HomeScreen = lazy(() => import("./pages/museum/HomeScreen"));
 const EnterDoors = lazy(() => import("./pages/museum/EnterDoors"));
@@ -33,6 +36,14 @@ const Door3Join = lazy(() => import("./pages/museum/Door3Join"));
 const QREntry = lazy(() => import("./pages/museum/QREntry"));
 const CephasBasement = lazy(() => import("./pages/museum/CephasBasement"));
 const StewardsPage = lazy(() => import("./pages/museum/StewardsPage"));
+const Archipelago = lazy(() => import("./pages/museum/Archipelago"));
+const IslandCard = lazy(() => import("./pages/museum/IslandCard"));
+const DistrictCard = lazy(() => import("./pages/museum/DistrictCard"));
+const TreasureMapScroll = lazy(() => import("./components/museum/TreasureMapScroll"));
+const TourEntry = lazy(() => import("./pages/museum/TourEntry"));
+const CampaignForge = lazy(() => import("./pages/museum/CampaignForge"));
+const WardrobeDepartment = lazy(() => import("./pages/museum/WardrobeDepartment"));
+const SubmissionsPedestal = lazy(() => import("./pages/museum/SubmissionsPedestal"));
 
 const queryClient = new QueryClient();
 
@@ -56,11 +67,14 @@ const MuseumApp = () => {
         <BrowserRouter>
           <AuthProvider>
             <XRayProvider>
+            <ArchipelagoTourProvider>
             <Toaster />
             <Sonner />
             <Suspense fallback={<MuseumLoadingFallback />}>
               <Routes>
                 <Route path="/" element={<HomeScreen />} />
+                {/* WildFire Tour entry */}
+                <Route path="/tour" element={<TourEntry />} />
                 {/* Submarine doors — each card back is its own route */}
                 <Route path="/enter" element={<EnterDoors />} />
                 <Route path="/watch" element={<WatchFable />} />
@@ -82,9 +96,20 @@ const MuseumApp = () => {
                 <Route path="/qr/:cardId" element={<QREntry />} />
                 <Route path="/library" element={<CephasBasement />} />
                 <Route path="/library/:depth" element={<CephasBasement />} />
+                {/* HexIsle Archipelago — 7 islands, Deck Card tree */}
+                <Route path="/hexisle" element={<Archipelago />} />
+                <Route path="/hexisle/scroll" element={<TreasureMapScroll />} />
+                <Route path="/hexisle/forge" element={<CampaignForge />} />
+                <Route path="/hexisle/wardrobe" element={<WardrobeDepartment />} />
+                <Route path="/hexisle/submissions" element={<SubmissionsPedestal />} />
+                <Route path="/hexisle/:island" element={<IslandCard />} />
+                <Route path="/hexisle/:island/:district" element={<DistrictCard />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
+            <TourBanner />
+            <TourCompletionModal />
+            </ArchipelagoTourProvider>
             </XRayProvider>
           </AuthProvider>
         </BrowserRouter>

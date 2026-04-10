@@ -4,12 +4,16 @@
  *   1. Default: glasses down (lrh-default.png)
  *   2. Hover: binoculars up (lrh-hover.png)
  *   3. Clicked / X-ray ON: thermal vision (lrh-xray.png)
+ *
+ * K378: Hologram shimmer integration — FAB image wrapped in hologram
+ * tier-4 container (LRH = Economics/Interdisciplinary).
  */
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MascotBubble } from "@/components/v2/mascot/MascotBubble";
 import { motion, AnimatePresence } from "framer-motion";
 import { useXRay } from "./XRayContext";
+import "./HologramOverlay.css";
 
 const contextMessages: Record<string, { title: string; message: string }> = {
   "/": {
@@ -122,17 +126,21 @@ export function LRHGuide() {
               ↩
             </motion.span>
           ) : (
-            <motion.img
+            <motion.div
               key="lrh"
-              src={imgSrc}
-              alt="Little Red Hen"
-              className="w-11 h-11 object-contain"
-              style={{ marginTop: "2px" }}
+              className="hologram-character hologram-tier-4 hologram-delay-2"
+              style={{ borderRadius: "50%", width: 44, height: 44, marginTop: 2 }}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.3 }}
-            />
+            >
+              <img
+                src={imgSrc}
+                alt="Little Red Hen"
+                className="w-11 h-11 object-contain hologram-target"
+              />
+            </motion.div>
           )}
         </AnimatePresence>
       </button>

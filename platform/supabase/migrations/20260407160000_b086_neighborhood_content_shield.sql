@@ -21,9 +21,9 @@ ALTER TABLE neighborhood_prohibited_patterns ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY npp_read ON neighborhood_prohibited_patterns FOR SELECT USING (true);
 CREATE POLICY npp_admin_insert ON neighborhood_prohibited_patterns FOR INSERT
-  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'owner')));
+  WITH CHECK (public.is_admin());
 CREATE POLICY npp_admin_update ON neighborhood_prohibited_patterns FOR UPDATE
-  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'owner')));
+  USING (public.is_admin());
 
 -- 2. Content shield audit log
 CREATE TABLE IF NOT EXISTS neighborhood_content_shield_log (
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS neighborhood_content_shield_log (
 ALTER TABLE neighborhood_content_shield_log ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY ncsl_admin_read ON neighborhood_content_shield_log FOR SELECT
-  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND (role IN ('admin', 'owner') OR harper_guild_member = true)));
+  USING (public.is_admin());
 CREATE POLICY ncsl_insert ON neighborhood_content_shield_log FOR INSERT
   WITH CHECK (true);
 
@@ -227,9 +227,7 @@ DO $$ BEGIN
     WHERE tablename = 'trunk_mirror_submissions' AND policyname = 'tms_reviewer_update'
   ) THEN
     CREATE POLICY tms_reviewer_update ON trunk_mirror_submissions
-      FOR UPDATE USING (
-        EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND harper_guild_member = true)
-      );
+      FOR UPDATE USING (public.is_admin());
   END IF;
 END $$;
 

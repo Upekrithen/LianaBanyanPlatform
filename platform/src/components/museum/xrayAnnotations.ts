@@ -44,9 +44,9 @@ export const MUSEUM_HOME_ANNOTATIONS: XRayAnnotation[] = [
     id: "lrh-guide",
     title: "Your Guide",
     explanation:
-      "That's me — the Little Red Hen. I change based on context. " +
-      "Default: glasses down. Hover: binoculars up. X-Ray mode: thermal vision. " +
-      "Click me on any page for context-aware help. I know where you are.",
+      "That's me — the Little Red Hen, in thermal vision X-Ray Mode. " +
+      "I appear where you click to explain things. " +
+      "Click me on any page for context-aware help.",
     character: "lrh",
     targetSelector: "[aria-label='Toggle X-Ray Goggles']",
     initialOffset: { x: -300, y: -160 },

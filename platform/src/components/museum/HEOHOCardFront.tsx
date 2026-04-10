@@ -3,6 +3,8 @@
  *
  * Rotating quotes, Yvaine SHINE sequence, HEOHO title with keyhole,
  * "Speak Friend" input, Enter/Watch buttons.
+ * Ornate corner art with Frame Lock keyholes.
+ * X-Ray thermal scan effects on card body.
  *
  * All back-face content has been extracted to submarine door pages:
  *   /enter, /watch, /why-no-ads, /why-no-vc, /mirror, /yvaine
@@ -79,6 +81,10 @@ export function HEOHOCardFront() {
     timerRef.current.forEach(clearTimeout);
     timerRef.current = [];
   }, []);
+
+  // X-Ray aware colors
+  const accentColor = xrayOn ? "#22d3ee" : "#38a169";
+  const accentColorFaded = xrayOn ? "rgba(34,211,238,0.5)" : "rgba(250, 245, 235, 0.5)";
 
   // Quote rotation
   useEffect(() => {
@@ -234,9 +240,39 @@ export function HEOHOCardFront() {
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        style={{ background: cardBg, aspectRatio: "5/7" }}
+        style={{
+          background: cardBg,
+          aspectRatio: "5/7",
+          border: xrayOn
+            ? "1px solid rgba(34, 211, 238, 0.25)"
+            : "1px solid transparent",
+          boxShadow: xrayOn
+            ? "0 0 24px rgba(34, 211, 238, 0.08), inset 0 0 40px rgba(34, 211, 238, 0.03)"
+            : "none",
+          transition: "border-color 0.5s ease, box-shadow 0.5s ease",
+        }}
       >
-        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: hexBg, backgroundRepeat: "repeat", opacity: 0.03 }} />
+        {/* Hex pattern — brightens in X-Ray */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: hexBg,
+            backgroundRepeat: "repeat",
+            opacity: xrayOn ? 0.10 : 0.03,
+            transition: "opacity 0.5s ease",
+          }}
+        />
+
+        {/* X-Ray scan-line overlay */}
+        {xrayOn && (
+          <div
+            className="absolute inset-0 pointer-events-none z-[15]"
+            style={{
+              background:
+                "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(34,211,238,0.015) 3px, rgba(34,211,238,0.015) 4px)",
+            }}
+          />
+        )}
 
         {/* Whiteout overlay */}
         <div className="absolute inset-0 pointer-events-none rounded-2xl z-20" style={{ background: "#fff", opacity: whiteout * 0.85 }} />
@@ -290,18 +326,18 @@ export function HEOHOCardFront() {
                   style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(0.55rem, 2vw, 0.7rem)", letterSpacing: "0.15em", textTransform: "uppercase" }}>
                   <span
                     onClick={(e) => { e.stopPropagation(); navigate("/why-no-ads"); }}
-                    style={{ color: "rgba(250, 245, 235, 0.5)", cursor: "pointer", transition: "color 0.2s" }}
+                    style={{ color: accentColorFaded, cursor: "pointer", transition: "color 0.2s" }}
                     onMouseOver={(e) => (e.currentTarget.style.color = "#faf5eb")}
-                    onMouseOut={(e) => (e.currentTarget.style.color = "rgba(250, 245, 235, 0.5)")}
+                    onMouseOut={(e) => (e.currentTarget.style.color = accentColorFaded)}
                   >No Ads</span>
                   <span style={{ color: "rgba(250, 245, 235, 0.25)" }}>&middot;</span>
-                  <span style={{ color: "#d69e2e" }}>COOPERATIVE COMMERCE</span>
+                  <span style={{ color: "#d69e2e", transition: "color 0.5s ease" }}>COOPERATIVE COMMERCE</span>
                   <span style={{ color: "rgba(250, 245, 235, 0.25)" }}>&middot;</span>
                   <span
                     onClick={(e) => { e.stopPropagation(); navigate("/why-no-vc"); }}
-                    style={{ color: "rgba(250, 245, 235, 0.5)", cursor: "pointer", transition: "color 0.2s" }}
+                    style={{ color: accentColorFaded, cursor: "pointer", transition: "color 0.2s" }}
                     onMouseOver={(e) => (e.currentTarget.style.color = "#faf5eb")}
-                    onMouseOut={(e) => (e.currentTarget.style.color = "rgba(250, 245, 235, 0.5)")}
+                    onMouseOut={(e) => (e.currentTarget.style.color = accentColorFaded)}
                   >No V.C.</span>
                 </div>
                 <div className="flex-1" />
@@ -325,7 +361,7 @@ export function HEOHOCardFront() {
                         style={{ width: "100%", background: "rgba(139, 92, 246, 0.15)", border: "1px solid rgba(139, 92, 246, 0.4)", borderRadius: "0.5rem", padding: "0.5rem 0.75rem", color: "#faf5eb", fontSize: "0.85rem", fontFamily: "inherit", fontStyle: "normal", fontWeight: 400, outline: "none" }}
                       />
                       {friendMatch && (
-                        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "#38a169", marginTop: "0.4rem", fontStyle: "normal", fontWeight: 400 }}>
+                        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: accentColor, marginTop: "0.4rem", fontStyle: "normal", fontWeight: 400, transition: "color 0.5s ease" }}>
                           ✓ {friendMatch} — welcome, friend.
                         </motion.p>
                       )}
@@ -335,7 +371,7 @@ export function HEOHOCardFront() {
               </AnimatePresence>
 
               {/* Help Ourselves with keyhole */}
-              <span style={{ color: "#38a169", display: "block" }}>
+              <span style={{ color: accentColor, display: "block", transition: "color 0.5s ease" }}>
                 Help{" "}
                 <span style={{ position: "relative", display: "inline" }}>
                   <span style={{ position: "relative", display: "inline-block", cursor: keyholeShown ? "pointer" : "default" }}
@@ -369,7 +405,7 @@ export function HEOHOCardFront() {
             {/* LIANA BANYAN */}
             <div className="text-xs tracking-[0.3em] uppercase mt-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               <span style={{ color: "#faf5eb" }}>Liana </span>
-              <span style={{ color: "#38a169" }}>Banyan</span>
+              <span style={{ color: accentColor, transition: "color 0.5s ease" }}>Banyan</span>
             </div>
 
             {/* Taglines + buttons */}
@@ -393,7 +429,7 @@ export function HEOHOCardFront() {
                   <button
                     onClick={(e) => { e.stopPropagation(); navigate("/enter"); }}
                     className="py-2.5 px-6 rounded-lg text-sm font-medium transition-colors"
-                    style={{ background: "#38a169", color: "#fff" }}
+                    style={{ background: accentColor, color: "#fff", transition: "background 0.5s ease" }}
                   >
                     Enter
                   </button>
@@ -405,48 +441,172 @@ export function HEOHOCardFront() {
                     Watch
                   </button>
                 </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate("/tour"); }}
+                  className="mt-2.5 text-xs font-medium transition-all flex items-center gap-1.5"
+                  style={{ color: "#f97316", letterSpacing: "0.03em" }}
+                  onMouseOver={(e) => (e.currentTarget.style.textShadow = "0 0 8px rgba(249,115,22,0.4)")}
+                  onMouseOut={(e) => (e.currentTarget.style.textShadow = "none")}
+                >
+                  <span>🔥</span> Take the WildFire Tour
+                </button>
               </>
             )}
           </div>
         </div>
 
-        {/* Corner art */}
-        <CornerArt xrayOn={xrayOn} />
+        {/* Ornate corner art — z-20 renders ABOVE content */}
+        <OrnateCornerArt xrayOn={xrayOn} />
       </motion.div>
     </div>
   );
 }
 
-/** CornerArt — LB filigree with Frame Lock keyholes */
-function CornerArt({ xrayOn }: { xrayOn: boolean }) {
+/** OrnateCornerArt — Iron-bound filigree with LB monogram + Frame Lock keyholes */
+function OrnateCornerArt({ xrayOn }: { xrayOn: boolean }) {
   const corners: Array<{
     pos: string;
-    rotate: string;
+    rotate: number;
     level: number;
     shape: "circle" | "square" | "triangle";
   }> = [
-    { pos: "top-2 left-2", rotate: "0", level: 1, shape: "circle" },
-    { pos: "top-2 right-2", rotate: "90", level: 2, shape: "square" },
-    { pos: "bottom-2 left-2", rotate: "270", level: 3, shape: "triangle" },
-    { pos: "bottom-2 right-2", rotate: "180", level: 4, shape: "circle" },
+    { pos: "top-1 left-1", rotate: 0, level: 1, shape: "circle" },
+    { pos: "top-1 right-1", rotate: 90, level: 2, shape: "square" },
+    { pos: "bottom-1 left-1", rotate: 270, level: 3, shape: "triangle" },
+    { pos: "bottom-1 right-1", rotate: 180, level: 4, shape: "circle" },
   ];
+
+  const strokeColor = xrayOn ? "#22d3ee" : "#38a169";
+  const strokeColorFaint = xrayOn ? "rgba(34,211,238,0.4)" : "rgba(56,161,105,0.35)";
+  const keyholeStroke = xrayOn ? "#d69e2e" : "#0a1628";
+  const keyholeFill = xrayOn ? "rgba(214,158,46,0.3)" : "none";
+  const monoColor = xrayOn ? "rgba(34,211,238,0.6)" : "rgba(56,161,105,0.45)";
+  const dotColor = xrayOn ? "rgba(34,211,238,0.35)" : "rgba(56,161,105,0.2)";
 
   return (
     <>
       {corners.map((c) => (
         <div
           key={c.pos}
-          className={`absolute ${c.pos} pointer-events-auto`}
-          style={{ width: "36px", height: "36px", cursor: `url('/cursors/key-${c.level}.png') 4 0, pointer` }}
+          className={`absolute ${c.pos} z-20 pointer-events-auto`}
+          style={{
+            width: "52px",
+            height: "52px",
+            cursor: `url('/cursors/key-${c.level}.png') 4 0, pointer`,
+          }}
           title={`Frame Lock — Level ${c.level}`}
         >
-          <svg viewBox="0 0 60 60" style={{ width: "100%", height: "100%", transform: `rotate(${c.rotate}deg)`, opacity: xrayOn ? 0.7 : 0.25, transition: "opacity 0.5s ease" }}>
-            <path d="M2 2 C2 2, 2 20, 8 28 C12 33, 18 35, 28 35 M2 2 C2 2, 20 2, 28 8 C33 12, 35 18, 35 28" fill="none" stroke="#38a169" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M6 6 C6 6, 6 14, 10 18 C13 21, 16 22, 22 22 M6 6 C6 6, 14 6, 18 10 C21 13, 22 16, 22 22" fill="none" stroke="#38a169" strokeWidth="1" strokeLinecap="round" opacity="0.6" />
-            <text x="10" y="16" fill="#38a169" fontSize="7" fontFamily="'JetBrains Mono', monospace" fontWeight="700" opacity="0.5">LB</text>
-            {c.shape === "circle" && <circle cx="22" cy="22" r="3" fill={xrayOn ? "rgba(214,158,46,0.3)" : "none"} stroke={xrayOn ? "#d69e2e" : "#0a1628"} strokeWidth="1" opacity="0.8" style={{ transition: "all 0.5s ease" }} />}
-            {c.shape === "square" && <rect x="19" y="19" width="6" height="6" fill={xrayOn ? "rgba(214,158,46,0.3)" : "none"} stroke={xrayOn ? "#d69e2e" : "#0a1628"} strokeWidth="1" opacity="0.8" style={{ transition: "all 0.5s ease" }} />}
-            {c.shape === "triangle" && <polygon points="22,18 18.5,25 25.5,25" fill={xrayOn ? "rgba(214,158,46,0.3)" : "none"} stroke={xrayOn ? "#d69e2e" : "#0a1628"} strokeWidth="1" opacity="0.8" style={{ transition: "all 0.5s ease" }} />}
+          <svg
+            viewBox="0 0 80 80"
+            style={{
+              width: "100%",
+              height: "100%",
+              transform: `rotate(${c.rotate}deg)`,
+              opacity: xrayOn ? 0.85 : 0.4,
+              transition: "opacity 0.5s ease",
+            }}
+          >
+            {/* Iron bracket L-shape */}
+            <path
+              d="M4 4 L4 32 Q4 36, 8 38 L16 40"
+              fill="none"
+              stroke={strokeColor}
+              strokeWidth="2"
+              strokeLinecap="round"
+              style={{ transition: "stroke 0.5s ease" }}
+            />
+            <path
+              d="M4 4 L32 4 Q36 4, 38 8 L40 16"
+              fill="none"
+              stroke={strokeColor}
+              strokeWidth="2"
+              strokeLinecap="round"
+              style={{ transition: "stroke 0.5s ease" }}
+            />
+
+            {/* Inner filigree curves */}
+            <path
+              d="M8 8 C8 8, 8 20, 14 26 C18 30, 24 32, 34 34"
+              fill="none"
+              stroke={strokeColorFaint}
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              style={{ transition: "stroke 0.5s ease" }}
+            />
+            <path
+              d="M8 8 C8 8, 20 8, 26 14 C30 18, 32 24, 34 34"
+              fill="none"
+              stroke={strokeColorFaint}
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              style={{ transition: "stroke 0.5s ease" }}
+            />
+
+            {/* Decorative scroll curves */}
+            <path
+              d="M6 18 Q10 22, 16 20 Q20 18, 18 14"
+              fill="none"
+              stroke={strokeColorFaint}
+              strokeWidth="0.8"
+              strokeLinecap="round"
+              style={{ transition: "stroke 0.5s ease" }}
+            />
+            <path
+              d="M18 6 Q22 10, 20 16 Q18 20, 14 18"
+              fill="none"
+              stroke={strokeColorFaint}
+              strokeWidth="0.8"
+              strokeLinecap="round"
+              style={{ transition: "stroke 0.5s ease" }}
+            />
+
+            {/* Decorative dots along bracket */}
+            <circle cx="4" cy="4" r="2" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
+            <circle cx="4" cy="18" r="1.2" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
+            <circle cx="18" cy="4" r="1.2" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
+            <circle cx="12" cy="12" r="1" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
+
+            {/* LB monogram */}
+            <text
+              x="14"
+              y="24"
+              fill={monoColor}
+              fontSize="10"
+              fontFamily="'Crimson Pro', Georgia, serif"
+              fontWeight="700"
+              style={{ transition: "fill 0.5s ease" }}
+            >
+              LB
+            </text>
+
+            {/* Keyhole shape at junction */}
+            {c.shape === "circle" && (
+              <circle
+                cx="34" cy="34" r="4"
+                fill={keyholeFill}
+                stroke={keyholeStroke}
+                strokeWidth="1.2"
+                style={{ transition: "all 0.5s ease" }}
+              />
+            )}
+            {c.shape === "square" && (
+              <rect
+                x="30" y="30" width="8" height="8" rx="1"
+                fill={keyholeFill}
+                stroke={keyholeStroke}
+                strokeWidth="1.2"
+                style={{ transition: "all 0.5s ease" }}
+              />
+            )}
+            {c.shape === "triangle" && (
+              <polygon
+                points="34,28 28,38 40,38"
+                fill={keyholeFill}
+                stroke={keyholeStroke}
+                strokeWidth="1.2"
+                style={{ transition: "all 0.5s ease" }}
+              />
+            )}
           </svg>
         </div>
       ))}

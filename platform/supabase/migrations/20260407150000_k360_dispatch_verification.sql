@@ -218,7 +218,7 @@ $$;
 -- If pg_cron is available and entries are missing, they get created.
 -- Safe to re-run: uses cron.schedule which upserts by job name.
 
-DO $$
+DO $outer$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
     -- process-scheduled-posts: every 15 min
@@ -258,4 +258,4 @@ BEGIN
   ELSE
     RAISE NOTICE 'pg_cron extension not available — cron jobs must be configured in Supabase Dashboard';
   END IF;
-END $$;
+END $outer$;

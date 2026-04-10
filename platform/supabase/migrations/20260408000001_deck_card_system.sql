@@ -44,28 +44,35 @@ ALTER TABLE member_deck ENABLE ROW LEVEL SECURITY;
 ALTER TABLE deck_recipes ENABLE ROW LEVEL SECURITY;
 
 -- golden_keys: members read/update their own
+DROP POLICY IF EXISTS "golden_keys_own_read" ON golden_keys;
 CREATE POLICY "golden_keys_own_read" ON golden_keys FOR SELECT USING (auth.uid() = member_id);
+DROP POLICY IF EXISTS "golden_keys_own_insert" ON golden_keys;
 CREATE POLICY "golden_keys_own_insert" ON golden_keys FOR INSERT WITH CHECK (auth.uid() = member_id);
+DROP POLICY IF EXISTS "golden_keys_own_update" ON golden_keys;
 CREATE POLICY "golden_keys_own_update" ON golden_keys FOR UPDATE USING (auth.uid() = member_id);
 
 -- member_deck: members read their own, insert when unlocking
+DROP POLICY IF EXISTS "member_deck_own_read" ON member_deck;
 CREATE POLICY "member_deck_own_read" ON member_deck FOR SELECT USING (auth.uid() = member_id);
+DROP POLICY IF EXISTS "member_deck_own_insert" ON member_deck;
 CREATE POLICY "member_deck_own_insert" ON member_deck FOR INSERT WITH CHECK (auth.uid() = member_id);
 
 -- deck_recipes: public read
+DROP POLICY IF EXISTS "deck_recipes_public_read" ON deck_recipes;
 CREATE POLICY "deck_recipes_public_read" ON deck_recipes FOR SELECT USING (true);
 
--- Seed: HEOHO Museum Card
-INSERT INTO deck_cards (card_key, title, description, icon, card_type, rarity, level, destination_route, unlock_cost_type, unlock_cost_amount)
+-- Seed: HEOHO Museum Card (mapped to actual deck_cards schema)
+INSERT INTO deck_cards (card_code, name, front_title, back_title, back_instructions, description, front_icon, card_type, rarity, deep_link_url, credit_cost)
 VALUES (
   'heoho-museum-first',
   'HEOHO — The First Card',
-  'The Museum entrance card. Help Each Other Help Ourselves. This is your first Deck Card. It proves you found the Museum and explored it.',
+  'HEOHO — The First Card',
+  'Welcome to the Museum',
+  'Help Each Other Help Ourselves. This is your first Deck Card. It proves you found the Museum and explored it.',
+  'The Museum entrance card.',
   '🏛️',
-  'museum',
+  'access',
   'common',
-  1,
   '/enter',
-  'free',
   0
-) ON CONFLICT DO NOTHING;
+) ON CONFLICT (card_code) DO NOTHING;

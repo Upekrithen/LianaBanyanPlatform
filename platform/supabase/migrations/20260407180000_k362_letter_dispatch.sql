@@ -50,9 +50,7 @@ CREATE INDEX idx_ldq_recipient_slug ON letter_dispatch_queue(recipient_slug);
 ALTER TABLE letter_dispatch_queue ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY ldq_admin_all ON letter_dispatch_queue
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'owner'))
-  );
+  FOR ALL USING (public.is_admin());
 
 CREATE OR REPLACE FUNCTION update_ldq_timestamp()
 RETURNS trigger LANGUAGE plpgsql AS $$
@@ -79,9 +77,7 @@ CREATE TABLE IF NOT EXISTS letter_send_log (
 ALTER TABLE letter_send_log ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY lsl_admin_all ON letter_send_log
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'owner'))
-  );
+  FOR ALL USING (public.is_admin());
 
 -- Seed from red_carpet_registry: map categories to phases
 -- Phase 1: Crown + Academics (first wave — people who already know the vision)
