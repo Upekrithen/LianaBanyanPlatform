@@ -37,7 +37,6 @@ const MirrorMirror = () => {
   const isEnglish = langCode === "en";
 
   const vars = { word: displayWord, nativeName, language };
-  const greeting = interpolate(strings.greeting, vars);
   const description = interpolate(strings.description, vars);
 
   const googleTranslateUrl = `https://translate.google.com/translate?sl=en&tl=${langCode}&u=https://museum.lianabanyan.com`;
@@ -47,9 +46,9 @@ const MirrorMirror = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex-1 flex flex-col items-center justify-center text-center px-2"
+        className="flex-1 flex flex-col items-center justify-start text-center px-2 pt-2"
       >
-        <div className="text-4xl mb-2">💎</div>
+        <div className="text-4xl mb-1">💎</div>
 
         <h2
           style={{
@@ -57,11 +56,33 @@ const MirrorMirror = () => {
             fontSize: "clamp(1.3rem, 5vw, 1.8rem)",
             fontWeight: 700,
             color: "#38a169",
-            marginBottom: "0.5rem",
+            marginBottom: "0.15rem",
+            lineHeight: 1.1,
           }}
         >
           Mirror Mirror
         </h2>
+
+        {/* Reflection: "Mirror" in the user's language, directly under the English title.
+            Gated on isTranslated so untranslated languages don't render "Mirror Mirror / Mirror". */}
+        {!isEnglish && isTranslated && (
+          <div
+            style={{
+              fontFamily: "'Crimson Pro', Georgia, serif",
+              fontSize: "clamp(1.05rem, 4vw, 1.45rem)",
+              fontWeight: 700,
+              color: "#38a169",
+              opacity: 0.75,
+              marginBottom: "0.5rem",
+              lineHeight: 1.1,
+              transform: "scaleY(0.92)",
+              letterSpacing: "0.01em",
+            }}
+            aria-label={`${strings.mirrorWord} ${strings.mirrorWord}`}
+          >
+            {strings.mirrorWord} {strings.mirrorWord}
+          </div>
+        )}
 
         {/* Language indicator */}
         {!isEnglish && (
@@ -76,19 +97,67 @@ const MirrorMirror = () => {
           </div>
         )}
 
-        {/* Greeting */}
-        {!isEnglish && (
-          <p style={{ color: "#d69e2e", fontSize: "0.8rem", lineHeight: 1.6, maxWidth: "300px", marginBottom: "0.5rem", fontWeight: 500 }}>
-            {greeting}
-          </p>
-        )}
-
         {/* Description */}
         <p style={{ color: "#faf5eb", fontSize: "0.8rem", lineHeight: 1.7, maxWidth: "300px" }}>
           {isEnglish
             ? "You found a keyhole. Hidden doors are scattered throughout — each one unlocks something different. This one opens Mirror Mirror, which translates the entire site into 110+ languages. Fairest means everyone can read it."
             : description}
         </p>
+
+        {/* Welcome + translate ask — English muted on top, native bold below (Option B).
+            Only shown for top-20 translated languages (we have the native string). */}
+        {!isEnglish && isTranslated && (
+          <div className="mt-3" style={{ maxWidth: "300px" }}>
+            <p
+              style={{
+                color: "rgba(250,245,235,0.45)",
+                fontSize: "0.7rem",
+                lineHeight: 1.4,
+                fontStyle: "italic",
+                marginBottom: "0.25rem",
+              }}
+            >
+              Welcome! We need you! Can you help us translate?
+            </p>
+            <p
+              style={{
+                color: "#faf5eb",
+                fontSize: "0.9rem",
+                lineHeight: 1.45,
+                fontWeight: 700,
+              }}
+            >
+              {strings.welcomeHelp}
+            </p>
+          </div>
+        )}
+
+        {/* Long-tail English-only ask — for the 90+ untranslated languages.
+            These speakers are EXACTLY the people we need to help us translate. */}
+        {!isEnglish && !isTranslated && (
+          <div className="mt-3" style={{ maxWidth: "300px" }}>
+            <p
+              style={{
+                color: "#faf5eb",
+                fontSize: "0.9rem",
+                lineHeight: 1.45,
+                fontWeight: 700,
+              }}
+            >
+              Welcome! We need you! Can you help us translate Liana Banyan into {language}?
+            </p>
+            <p
+              style={{
+                color: "rgba(250,245,235,0.55)",
+                fontSize: "0.72rem",
+                lineHeight: 1.4,
+                marginTop: "0.3rem",
+              }}
+            >
+              You're one of the first {nativeName} speakers here. Every phrase you translate earns Marks — and opens the door for everyone who comes after you.
+            </p>
+          </div>
+        )}
 
         {/* Google Translate link for untranslated languages */}
         {!isEnglish && !isTranslated && (
@@ -131,14 +200,6 @@ const MirrorMirror = () => {
             </span>
           </p>
         </div>
-
-        {/* CTA tagline */}
-        <p
-          className="mt-3"
-          style={{ color: "rgba(56, 161, 105, 0.7)", fontSize: "0.7rem", fontStyle: "italic", fontFamily: "'Crimson Pro', Georgia, serif" }}
-        >
-          {strings.cta}
-        </p>
 
         {/* Navigation */}
         <div className="flex gap-3 mt-4">
