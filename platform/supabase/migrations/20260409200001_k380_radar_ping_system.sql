@@ -29,8 +29,7 @@ CREATE INDEX IF NOT EXISTS idx_radar_pings_sender ON radar_pings (sender_id);
 CREATE INDEX IF NOT EXISTS idx_radar_pings_target ON radar_pings (target_id);
 CREATE INDEX IF NOT EXISTS idx_radar_pings_type ON radar_pings (ping_type);
 CREATE INDEX IF NOT EXISTS idx_radar_pings_island ON radar_pings (island_slug);
-CREATE INDEX IF NOT EXISTS idx_radar_pings_expires ON radar_pings (expires_at)
-  WHERE expires_at > now();
+CREATE INDEX IF NOT EXISTS idx_radar_pings_expires ON radar_pings (expires_at);
 
 -- ═══ RADAR Ping Subscriptions ═══
 -- Members opt in to receive pings per island/campaign
@@ -85,7 +84,7 @@ VALUES (
   'Unlocked when you send your first ping on any island. Pings let you signal allies, summon your crew, or mark waypoints on the map.',
   'Signal your crew across the Archipelago.',
   '📡',
-  'utility',
+  'access',
   'uncommon',
   '/hexisle',
   0

@@ -1,12 +1,15 @@
 {
-  "innovationCount": 2224,
-  "crownJewelCount": 202,
+  "innovationCount": 2238,
+  "crownJewelCount": 211,
   "productionSystems": 35,
   "formalClaimsCount": 2393,
   "provisionalApps": 12,
+  "papersCount": 39,
   "creatorKeeps": "83.3%",
   "platformMargin": "Cost + 20%",
   "on500Transaction": "$416.67",
   "membershipCost": "$5/year",
-  "initiativeCount": 16
+  "initiativeCount": 16,
+  "lastReconciliation": "B094 (K399 sweep, reconciled through B093)",
+  "lastReconciliationDate": "2026-04-10"
 }

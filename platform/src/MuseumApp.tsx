@@ -19,11 +19,13 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import NotFound from "./pages/NotFound";
 import { XRayProvider } from "./components/museum/XRayContext";
 import { ArchipelagoTourProvider } from "./contexts/ArchipelagoTourContext";
-import { TourBanner } from "./components/wildfire/TourBanner";
+// TourBanner removed from global layout B093 — now only shows on HEOHO card
+// import { TourBanner } from "./components/wildfire/TourBanner";
 import { TourCompletionModal } from "./components/wildfire/TourCompletionModal";
 import { SummonFloatingAlert } from "./components/museum/DMSummonPanel";
 
 const HomeScreen = lazy(() => import("./pages/museum/HomeScreen"));
+const HelmPage = lazy(() => import("./pages/museum/HelmPage"));
 const EnterDoors = lazy(() => import("./pages/museum/EnterDoors"));
 const WatchFable = lazy(() => import("./pages/museum/WatchFable"));
 const WhyNoAds = lazy(() => import("./pages/museum/WhyNoAds"));
@@ -46,6 +48,13 @@ const CampaignForge = lazy(() => import("./pages/museum/CampaignForge"));
 const CampaignMapEditor = lazy(() => import("./pages/museum/CampaignMapEditor"));
 const WardrobeDepartment = lazy(() => import("./pages/museum/WardrobeDepartment"));
 const SubmissionsPedestal = lazy(() => import("./pages/museum/SubmissionsPedestal"));
+const CatapultDashboard = lazy(() => import("./pages/museum/CatapultDashboard"));
+const MissionBriefingsPage = lazy(() => import("./pages/museum/MissionBriefingsPage"));
+const DeckCardStudio = lazy(() => import("./pages/DeckCardStudio"));
+const PrintStudioPage = lazy(() => import("./pages/museum/PrintStudioPage"));
+const PrintApprovalPage = lazy(() => import("./pages/museum/PrintApprovalPage"));
+const ProducerSignupPage = lazy(() => import("./pages/museum/ProducerSignupPage"));
+const ProducerBoardPage = lazy(() => import("./pages/museum/ProducerBoardPage"));
 
 const queryClient = new QueryClient();
 
@@ -75,6 +84,7 @@ const MuseumApp = () => {
             <Suspense fallback={<MuseumLoadingFallback />}>
               <Routes>
                 <Route path="/" element={<HomeScreen />} />
+                <Route path="/helm" element={<HelmPage />} />
                 {/* WildFire Tour entry */}
                 <Route path="/tour" element={<TourEntry />} />
                 {/* Submarine doors — each card back is its own route */}
@@ -105,12 +115,23 @@ const MuseumApp = () => {
                 <Route path="/hexisle/forge/:campaignId/map" element={<CampaignMapEditor />} />
                 <Route path="/hexisle/wardrobe" element={<WardrobeDepartment />} />
                 <Route path="/hexisle/submissions" element={<SubmissionsPedestal />} />
+                {/* Catapult Power + Mission Briefings (K391/K392) */}
+                <Route path="/catapult" element={<CatapultDashboard />} />
+                <Route path="/briefings" element={<MissionBriefingsPage />} />
                 <Route path="/hexisle/:island" element={<IslandCard />} />
                 <Route path="/hexisle/:island/:district" element={<DistrictCard />} />
+                {/* Deck Card Studio (K394) */}
+                <Route path="/studio" element={<DeckCardStudio />} />
+                {/* Print Pipeline (K396) */}
+                <Route path="/print-studio" element={<PrintStudioPage />} />
+                <Route path="/print-approval" element={<PrintApprovalPage />} />
+                {/* Producer Onboarding (K397) */}
+                <Route path="/become-a-producer" element={<ProducerSignupPage />} />
+                <Route path="/producer-board" element={<ProducerBoardPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
-            <TourBanner />
+            {/* TourBanner moved to HEOHOCardFront — only shows on the Deck Card, not globally */}
             <TourCompletionModal />
             <SummonFloatingAlert />
             </ArchipelagoTourProvider>

@@ -19,7 +19,7 @@ import { useCrowsNest } from '@/contexts/CrowsNestContext';
 import { useWildfireRunSafe } from '@/contexts/WildfireRunContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Telescope, Glasses, Sprout, Building2, Compass, Zap, MapPin, ChevronRight, Trash2, X, MessageSquare } from 'lucide-react';
+import { Telescope, Glasses, Sprout, Building2, Compass, Zap, MapPin, ChevronRight, Trash2, X, MessageSquare, Home } from 'lucide-react';
 import { BEACON_COLORS } from '@/components/BeaconDropButton';
 
 interface StoredBeacon {
@@ -142,6 +142,12 @@ export const MascotMenu: React.FC = () => {
   }, [openOverlay]);
 
   const menuItems: MenuItem[] = [
+    {
+      id: 'helm',
+      icon: <Home className="h-4 w-4" />,
+      label: 'My Helm',
+      onClick: () => { navigate('/helm'); setIsMenuOpen(false); },
+    },
     {
       id: 'beacons',
       icon: <MapPin className="h-4 w-4" />,

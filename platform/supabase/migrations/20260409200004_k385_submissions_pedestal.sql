@@ -83,7 +83,7 @@ VALUES (
   'Unlocked when your first submission is approved. Your work lives in the Archipelago forever.',
   'Submit your creations to the Archipelago.',
   '🏆',
-  'achievement',
+  'access',
   'rare',
   '/hexisle/submissions',
   0

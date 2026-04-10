@@ -16,7 +16,7 @@ export const MUSEUM_HOME_ANNOTATIONS: XRayAnnotation[] = [
       "It's the basement of the Museum — always accessible from any page.",
     character: "profcat",
     targetSelector: "[aria-label='Open Cephas Library']",
-    initialOffset: { x: 70, y: -160 },
+    initialOffset: { x: -280, y: -200 },
   },
   {
     id: "heoho-card",
@@ -26,8 +26,8 @@ export const MUSEUM_HOME_ANNOTATIONS: XRayAnnotation[] = [
       "Find more throughout the platform. Flip it, explore the doors, watch the fable. " +
       "The card IS the experience.",
     character: "lrh",
-    targetSelector: ".max-w-sm",
-    initialOffset: { x: -300, y: -40 },
+    targetSelector: "[data-heoho-card]",
+    initialOffset: { x: -360, y: -40 },
   },
   {
     id: "frame-locks",
@@ -38,7 +38,7 @@ export const MUSEUM_HOME_ANNOTATIONS: XRayAnnotation[] = [
       "They're scattered throughout the platform. Start with 'Speak Friend' in the O.",
     character: "lrh",
     targetSelector: "[title='Frame Lock — Level 1']",
-    initialOffset: { x: 50, y: 60 },
+    initialOffset: { x: 20, y: 100 },
   },
   {
     id: "lrh-guide",
@@ -48,7 +48,7 @@ export const MUSEUM_HOME_ANNOTATIONS: XRayAnnotation[] = [
       "I appear where you click to explain things. " +
       "Click me on any page for context-aware help.",
     character: "lrh",
-    targetSelector: "[aria-label='Toggle X-Ray Goggles']",
-    initialOffset: { x: -300, y: -160 },
+    targetSelector: "[aria-label='Little Red Hen — click for X-Ray Goggles']",
+    initialOffset: { x: -340, y: -160 },
   },
 ];

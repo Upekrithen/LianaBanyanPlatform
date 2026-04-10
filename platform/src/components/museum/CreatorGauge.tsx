@@ -13,9 +13,11 @@ interface CreatorGaugeProps {
   min?: number;
   /** Max price on slider. */
   max?: number;
+  /** Callback when price changes */
+  onPriceChange?: (price: number) => void;
 }
 
-export function CreatorGauge({ initialPrice = 500, min = 10, max = 2000 }: CreatorGaugeProps) {
+export function CreatorGauge({ initialPrice = 500, min = 10, max = 3000, onPriceChange }: CreatorGaugeProps) {
   const [price, setPrice] = useState(initialPrice);
 
   const creatorKeeps = price * (5 / 6); // 83.333...%
@@ -37,7 +39,7 @@ export function CreatorGauge({ initialPrice = 500, min = 10, max = 2000 }: Creat
 
       <Slider
         value={[price]}
-        onValueChange={([v]) => setPrice(v)}
+        onValueChange={([v]) => { setPrice(v); onPriceChange?.(v); }}
         min={min}
         max={max}
         step={10}
@@ -47,7 +49,7 @@ export function CreatorGauge({ initialPrice = 500, min = 10, max = 2000 }: Creat
       <div className="flex items-baseline justify-between mb-2">
         <span className="text-slate-400 text-sm">You keep:</span>
         <span className="text-emerald-400 text-2xl font-bold tabular-nums">
-          ${creatorKeeps.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          ${Math.round(creatorKeeps).toLocaleString()}
         </span>
       </div>
 
@@ -62,7 +64,7 @@ export function CreatorGauge({ initialPrice = 500, min = 10, max = 2000 }: Creat
       <div className="flex justify-between text-xs text-slate-500">
         <span>{percentage}% yours</span>
         <span>
-          ${platformTakes.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} platform (Cost + 20%)
+          ${Math.round(platformTakes).toLocaleString()} platform (Cost + 20%)
         </span>
       </div>
     </div>

@@ -8,14 +8,15 @@
  * Wrapped in DeckCardShell for card format + ornate corners + X-Ray support.
  * Depth-selected pages stay in MuseumShell for full-bleed layout.
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { DeckCardShell } from "@/components/museum/DeckCardShell";
 import { useXRay } from "@/components/museum/XRayContext";
 import { motion } from "framer-motion";
-import { BookOpen, Search, Compass, Grid3X3, ArrowLeft, Globe, ExternalLink } from "lucide-react";
+import { BookOpen, Search, Compass, Grid3X3, ArrowLeft, Globe, ExternalLink, Loader2 } from "lucide-react";
 import { FRIEND_WORDS } from "@/data/friendWords";
+import { useCephasMuseum, useCephasDepthCount } from "@/hooks/useCephasMuseum";
 
 type Depth = "stones" | "wading" | "deep";
 
@@ -69,6 +70,26 @@ const CephasBasement = () => {
     urlDepth ? depthMap[urlDepth] || null : null
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const { data: articles, isLoading, isError } = useCephasMuseum(
+    selectedDepth ?? undefined,
+    debouncedSearch
+  );
+
+  const { data: stonesCount } = useCephasDepthCount("stones");
+  const { data: wadingCount } = useCephasDepthCount("wading");
+  const { data: deepCount } = useCephasDepthCount("deep");
+  const depthCounts: Record<string, number> = {
+    stones: stonesCount ?? 0,
+    wading: wadingCount ?? 0,
+    deep: deepCount ?? 0,
+  };
 
   const handleSelectDepth = (d: Depth) => {
     setSelectedDepth(d);
@@ -112,25 +133,83 @@ const CephasBasement = () => {
             />
           </div>
 
-          <div className="space-y-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="p-4 rounded-xl border border-slate-700/40 bg-slate-900/50"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <div className="h-3 w-2/3 rounded bg-slate-700/50 mb-2" />
-                <div className="h-2 w-full rounded bg-slate-800/50 mb-1" />
-                <div className="h-2 w-4/5 rounded bg-slate-800/50" />
-              </motion.div>
-            ))}
-          </div>
+          {langCode && langCode !== "en" && (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-900/20 border border-blue-800/30 mb-4">
+              <Globe className="w-3.5 h-3.5 text-blue-400" />
+              <span className="text-blue-300 text-xs">
+                Content is currently English-only. Translation contributions earn Marks.
+              </span>
+            </div>
+          )}
 
-          <p className="text-slate-500 text-xs text-center mt-6">
-            Content loads from Cephas when connected to Supabase.
-          </p>
+          {isLoading && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
+              <span className="ml-2 text-slate-400 text-sm">Loading content...</span>
+            </div>
+          )}
+
+          {isError && (
+            <div className="text-center py-12">
+              <p className="text-red-400 text-sm">Could not load content. Please try again.</p>
+            </div>
+          )}
+
+          {!isLoading && !isError && articles?.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-slate-400 text-sm">No content found at this depth. Try a different search or depth level.</p>
+            </div>
+          )}
+
+          {!isLoading && !isError && articles && articles.length > 0 && (
+            <div className="space-y-3">
+              {articles.map((item: any, i: number) => (
+                <motion.div
+                  key={item.id}
+                  className="p-4 rounded-xl border border-slate-700/40 bg-[#0a1628] hover:border-slate-600 transition-all cursor-pointer group"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(i * 0.03, 0.3) }}
+                  whileHover={{ scale: 1.01 }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className="text-[0.6rem] uppercase tracking-wider font-mono px-2 py-0.5 rounded-full"
+                      style={{
+                        color: depthInfo.color,
+                        background: `${depthInfo.color}15`,
+                        border: `1px solid ${depthInfo.color}30`,
+                      }}
+                    >
+                      {(item.category || item.style || "article").replace(/_/g, " ")}
+                    </span>
+                    {item.paper_number && (
+                      <span className="text-[0.6rem] text-slate-500 font-mono">#{item.paper_number}</span>
+                    )}
+                  </div>
+
+                  <h3 className="text-white text-sm font-semibold leading-snug mb-1 group-hover:text-blue-300 transition-colors">
+                    {item.title}
+                  </h3>
+
+                  {(item.technical_summary || item.abstract) && (
+                    <p className="text-slate-400 text-xs leading-relaxed line-clamp-2">
+                      {item.technical_summary || item.abstract}
+                    </p>
+                  )}
+
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="text-slate-500 text-[0.6rem] font-mono">
+                      {item.updated_at ? new Date(item.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : ""}
+                    </span>
+                    <span className="text-xs font-medium" style={{ color: depthInfo.color }}>
+                      Read →
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </MuseumShell>
     );
@@ -145,6 +224,7 @@ const CephasBasement = () => {
         langCode={langCode}
         onSelectDepth={handleSelectDepth}
         onNavigate={navigate}
+        depthCounts={depthCounts}
       />
     </DeckCardShell>
   );
@@ -157,12 +237,14 @@ function DoorContent({
   langCode,
   onSelectDepth,
   onNavigate,
+  depthCounts,
 }: {
   showLangBanner: any;
   langInfo: any;
   langCode: string | null;
   onSelectDepth: (d: Depth) => void;
   onNavigate: (path: string) => void;
+  depthCounts: Record<string, number>;
 }) {
   const { xrayOn } = useXRay();
   const accentColor = xrayOn ? "#22d3ee" : "#c9a96e";
@@ -306,7 +388,9 @@ function DoorContent({
             marginBottom: "0.15rem",
           }}
         >
-          455+ publications
+          {(depthCounts.stones + depthCounts.wading + depthCounts.deep) > 0
+            ? `${depthCounts.stones + depthCounts.wading + depthCounts.deep}+ publications`
+            : "455+ publications"}
         </p>
         <p
           style={{
@@ -367,6 +451,11 @@ function DoorContent({
                 </div>
                 <div style={{ color: "rgba(250,245,235,0.4)", fontSize: "0.65rem" }}>
                   {d.sublabel}
+                  {depthCounts[d.id] > 0 && (
+                    <span style={{ marginLeft: "6px", color: d.color, fontWeight: 600, opacity: 0.7 }}>
+                      ({depthCounts[d.id]})
+                    </span>
+                  )}
                 </div>
               </div>
               <span style={{ color: d.color, fontSize: "0.9rem", opacity: 0.6 }}>→</span>

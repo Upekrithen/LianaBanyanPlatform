@@ -47,6 +47,8 @@ const GuildPhaseManager = lazy(() => import("@/pages/GuildPhaseManager"));
 const ConcentricCircles = lazy(() => import("@/pages/ConcentricCircles"));
 const CrewmanDashboardPage = lazy(() => import("@/pages/CrewmanDashboardPage"));
 const RolodexPage = lazy(() => import("@/pages/RolodexPage"));
+const AffiliationBadgesPage = lazy(() => import("@/pages/AffiliationBadgesPage"));
+const PioneerProposalsPage = lazy(() => import("@/pages/PioneerProposalsPage"));
 
 export const socialRoutes = (
   <>
@@ -96,5 +98,7 @@ export const socialRoutes = (
     <Route path="/testing/circles" element={<ProtectedRoute><LazyPage><ConcentricCircles /></LazyPage></ProtectedRoute>} />
     <Route path="/crewman/dashboard" element={<ProtectedRoute><LazyPage><CrewmanDashboardPage /></LazyPage></ProtectedRoute>} />
     <Route path="/rolodex" element={<ProtectedRoute><LazyPage><RolodexPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/badges" element={<ProtectedRoute><LazyPage><AffiliationBadgesPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/pioneer" element={<ProtectedRoute><LazyPage><PioneerProposalsPage /></LazyPage></ProtectedRoute>} />
   </>
 );

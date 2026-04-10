@@ -35,14 +35,15 @@
   /* Inherit shape from parent (circle for avatars, rect for cards) */
 }
 
-/* The scan-line overlay — a thin horizontal band that sweeps top-to-bottom */
+/* The scan-line overlay — a thin horizontal band that rides bottom-to-top
+   like a spectrometer or old TV interference line. Slow, steady, visible. */
 .hologram-character::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   height: 6%;
-  top: -10%;
+  bottom: -10%;
   pointer-events: none;
   z-index: 2;
   background: linear-gradient(
@@ -147,96 +148,122 @@
 
 /* ═══════════════════════════════════════════════════════════════
    KEYFRAMES — SCAN LINE
+   Spectrometer / old TV interference style: a line of interference
+   rides slowly from bottom to top on a regular cycle.
+   The sweep takes ~40-50% of the total animation duration so it's
+   clearly visible — not a flash, but a steady rise.
    ═══════════════════════════════════════════════════════════════ */
 
-/* Single scan: band sweeps top→bottom in ~200ms window */
+/* Single scan: band rides bottom→top over ~40% of cycle, then pauses */
 @keyframes hologramScan {
-  0%, 94% {
-    top: -10%;
+  0% {
+    bottom: -10%;
     opacity: 0;
   }
-  95% {
-    opacity: 1;
+  5% {
+    bottom: -5%;
+    opacity: 0.8;
   }
-  97.5% {
-    top: 50%;
-    opacity: 1;
+  45% {
+    bottom: 105%;
+    opacity: 0.8;
+  }
+  50% {
+    bottom: 110%;
+    opacity: 0;
   }
   100% {
-    top: 110%;
+    bottom: 110%;
     opacity: 0;
   }
 }
 
-/* Double scan: two passes (mimics interlaced refresh) */
+/* Double scan: first sweep rides up over ~35%, brief pause, second sweep ~25% */
 @keyframes hologramScanDouble {
-  0%, 88% {
-    top: -10%;
+  0% {
+    bottom: -10%;
     opacity: 0;
   }
-  89% {
-    opacity: 1;
+  3% {
+    bottom: -5%;
+    opacity: 0.8;
   }
-  92% {
-    top: 110%;
+  35% {
+    bottom: 105%;
+    opacity: 0.8;
+  }
+  38% {
+    bottom: 110%;
     opacity: 0;
   }
-  93% {
-    top: -10%;
+  42% {
+    bottom: -10%;
     opacity: 0;
   }
-  94% {
-    opacity: 0.7;
+  45% {
+    bottom: -5%;
+    opacity: 0.6;
   }
-  97% {
-    top: 110%;
+  70% {
+    bottom: 105%;
+    opacity: 0.6;
+  }
+  73% {
+    bottom: 110%;
     opacity: 0;
   }
   100% {
-    top: 110%;
+    bottom: 110%;
     opacity: 0;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   KEYFRAMES — IMAGE FLICKER (opacity dip during scan)
+   KEYFRAMES — IMAGE FLICKER (subtle dip as scan line passes)
+   These are gentler now — the slow sweep is the main visual,
+   the flicker is just a soft accompaniment.
    ═══════════════════════════════════════════════════════════════ */
 
-/* Tier 1: barely perceptible dip */
+/* Tier 1: barely perceptible — gentle brightness lift during sweep */
 @keyframes hologramFlicker1 {
-  0%, 93%, 100% { opacity: 1; filter: none; }
-  95% { opacity: 0.92; filter: brightness(1.04); }
-  96% { opacity: 0.96; }
-  97% { opacity: 1; }
+  0%, 100% { opacity: 1; filter: none; }
+  5% { opacity: 0.96; filter: brightness(1.02); }
+  25% { opacity: 0.94; filter: brightness(1.03); }
+  45% { opacity: 0.96; filter: brightness(1.02); }
+  50% { opacity: 1; filter: none; }
 }
 
-/* Tier 2: mild dip */
+/* Tier 2: mild — slightly deeper dip */
 @keyframes hologramFlicker2 {
-  0%, 92%, 100% { opacity: 1; filter: none; }
-  94% { opacity: 0.88; filter: brightness(1.06); }
-  95% { opacity: 0.94; }
-  96% { opacity: 0.90; }
-  97% { opacity: 1; }
+  0%, 100% { opacity: 1; filter: none; }
+  5% { opacity: 0.94; filter: brightness(1.03); }
+  25% { opacity: 0.90; filter: brightness(1.05); }
+  45% { opacity: 0.94; filter: brightness(1.03); }
+  50% { opacity: 1; filter: none; }
 }
 
-/* Tier 3: noticeable dip + slight horizontal jitter */
+/* Tier 3: noticeable — dip + very slight horizontal jitter at midpoint */
 @keyframes hologramFlicker3 {
-  0%, 88%, 100% { opacity: 1; filter: none; transform: translateX(0); }
-  90% { opacity: 0.82; filter: brightness(1.08); transform: translateX(1px); }
-  91% { opacity: 0.90; transform: translateX(-0.5px); }
-  93% { opacity: 0.85; filter: brightness(1.05); transform: translateX(0.5px); }
-  95% { opacity: 1; transform: translateX(0); }
+  0%, 100% { opacity: 1; filter: none; transform: translateX(0); }
+  5% { opacity: 0.92; filter: brightness(1.04); }
+  20% { opacity: 0.88; filter: brightness(1.06); transform: translateX(0.5px); }
+  25% { opacity: 0.85; filter: brightness(1.07); transform: translateX(-0.5px); }
+  30% { opacity: 0.88; filter: brightness(1.05); transform: translateX(0); }
+  45% { opacity: 0.92; filter: brightness(1.03); }
+  50% { opacity: 1; filter: none; transform: translateX(0); }
 }
 
-/* Tier 4: complex — double dip + jitter + color fringe */
+/* Tier 4: complex — double sweep means double dip + jitter + color fringe */
 @keyframes hologramFlicker4 {
-  0%, 85%, 100% { opacity: 1; filter: none; transform: translateX(0); }
-  87% { opacity: 0.78; filter: brightness(1.1) saturate(1.2); transform: translateX(1.5px); }
-  88% { opacity: 0.88; transform: translateX(-1px); }
-  89% { opacity: 0.82; filter: brightness(1.06) hue-rotate(3deg); transform: translateX(0.5px); }
-  91% { opacity: 0.75; filter: brightness(1.12) hue-rotate(-2deg); transform: translateX(-0.5px); }
-  93% { opacity: 0.92; filter: brightness(1.03); transform: translateX(0); }
-  95% { opacity: 1; transform: translateX(0); }
+  0%, 100% { opacity: 1; filter: none; transform: translateX(0); }
+  5% { opacity: 0.90; filter: brightness(1.05) saturate(1.1); }
+  18% { opacity: 0.84; filter: brightness(1.08) hue-rotate(2deg); transform: translateX(1px); }
+  25% { opacity: 0.80; filter: brightness(1.10) hue-rotate(-2deg); transform: translateX(-0.5px); }
+  35% { opacity: 0.88; filter: brightness(1.04); transform: translateX(0); }
+  45% { opacity: 0.84; filter: brightness(1.06) hue-rotate(1deg); transform: translateX(0.5px); }
+  60% { opacity: 0.82; filter: brightness(1.08) hue-rotate(-1deg); transform: translateX(-0.5px); }
+  70% { opacity: 0.90; filter: brightness(1.03); transform: translateX(0); }
+  75% { opacity: 1; filter: none; transform: translateX(0); }
 }
 
 /* ═══════════════════════════════════════════════════════════════

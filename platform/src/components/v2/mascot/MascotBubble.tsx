@@ -27,6 +27,10 @@ export interface MascotBubbleProps {
   maxWidth?: number;
   /** Optional className for outer wrapper positioning. */
   className?: string;
+  /** Override border color (default: cyan X-Ray). */
+  borderColor?: string;
+  /** Override title color (default: cyan-300). */
+  titleColor?: string;
   /** Children render after the message block (for CTAs, inputs, etc.). */
   children?: React.ReactNode;
 }
@@ -39,6 +43,8 @@ export const MascotBubble: React.FC<MascotBubbleProps> = ({
   tail = false,
   maxWidth = 320,
   className,
+  borderColor,
+  titleColor,
   children,
 }) => {
   return (
@@ -47,7 +53,7 @@ export const MascotBubble: React.FC<MascotBubbleProps> = ({
         className="relative px-4 py-3 rounded-xl text-xs leading-relaxed"
         style={{
           background: 'rgba(15, 23, 42, 0.97)',
-          border: '1.5px solid rgba(34, 211, 238, 0.45)',
+          border: `1.5px solid ${borderColor || 'rgba(34, 211, 238, 0.45)'}`,
           color: '#e2e8f0',
           boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
         }}
@@ -55,13 +61,13 @@ export const MascotBubble: React.FC<MascotBubbleProps> = ({
         {showIcon && title && (
           <div className="flex items-center gap-2 mb-1.5">
             <Glasses className="h-4 w-4 text-cyan-400 shrink-0" />
-            <span className="font-bold text-cyan-300 text-[13px]">{title}</span>
+            <span className="font-bold text-[13px]" style={{ color: titleColor || '#67e8f9' }}>{title}</span>
           </div>
         )}
         {!showIcon && title && (
-          <div className="font-bold text-cyan-300 text-[13px] mb-1.5">{title}</div>
+          <div className="font-bold text-[13px] mb-1.5" style={{ color: titleColor || '#67e8f9' }}>{title}</div>
         )}
-        <div className="text-slate-300 text-[12px] leading-snug">{message}</div>
+        <div className="text-slate-300 text-[12px] leading-snug" style={{ minHeight: '3.6em' }}>{message}</div>
         {helperMessage && (
           <div className="text-slate-400 text-[11px] leading-snug mt-1.5">
             {helperMessage}
@@ -73,8 +79,8 @@ export const MascotBubble: React.FC<MascotBubbleProps> = ({
             className="absolute -bottom-1.5 right-6 w-3 h-3 rotate-45"
             style={{
               background: 'rgba(15, 23, 42, 0.97)',
-              borderRight: '1.5px solid rgba(34, 211, 238, 0.45)',
-              borderBottom: '1.5px solid rgba(34, 211, 238, 0.45)',
+              borderRight: `1.5px solid ${borderColor || 'rgba(34, 211, 238, 0.45)'}`,
+              borderBottom: `1.5px solid ${borderColor || 'rgba(34, 211, 238, 0.45)'}`,
             }}
           />
         )}

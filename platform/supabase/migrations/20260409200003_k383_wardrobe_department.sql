@@ -80,7 +80,7 @@ VALUES (
   'Unlocked when you equip your first wardrobe item. Express yourself across the Archipelago.',
   'Customize your character appearance.',
   '👔',
-  'utility',
+  'access',
   'uncommon',
   '/hexisle/wardrobe',
   0

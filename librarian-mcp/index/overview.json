@@ -17,10 +17,10 @@
   "membershipCost": "$5/year",
   "creatorKeeps": "83.3%",
   "platformMargin": "Cost + 20%",
-  "lastSession": "K378-K385-session",
+  "lastSession": "K401",
   "pendingWork": [
-    "K382: Campaign Map Editor (drag-drop) - depends on K381 Campaign Forge, now ready",
-    "K384: DM Summoning Protocol - depends on K381 + K380, both now ready"
+    "Apply K401 to Supabase via db push",
+    "Verify post-apply: Brynjolfsson letter no longer contains '2,000 formal', now contains '{{patentClaims}}' template"
   ],
-  "timestamp": "2026-04-09T23:48:19.372Z"
+  "timestamp": "2026-04-10T17:34:16.518Z"
 }

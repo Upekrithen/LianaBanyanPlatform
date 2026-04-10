@@ -11,6 +11,7 @@ import { DeckCardShell } from "@/components/museum/DeckCardShell";
 import { useXRay } from "@/components/museum/XRayContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, RotateCcw } from "lucide-react";
+import { DeckCardActions } from "@/components/museum/DeckCardActions";
 
 const TreasureMapScroll = () => {
   const navigate = useNavigate();
@@ -226,6 +227,7 @@ const TreasureMapScroll = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <DeckCardActions cardKey="treasure-scroll" cardTitle="Treasure Map Scroll" />
     </DeckCardShell>
   );
 };

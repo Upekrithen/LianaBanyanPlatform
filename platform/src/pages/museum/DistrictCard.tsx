@@ -15,6 +15,7 @@ import { useXRay } from "@/components/museum/XRayContext";
 import { useArchipelagoTourSafe } from "@/contexts/ArchipelagoTourContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, RotateCcw, CheckCircle, ExternalLink } from "lucide-react";
+import { DeckCardActions } from "@/components/museum/DeckCardActions";
 
 /** District data for Harvest Island / Verdana */
 const DISTRICT_DATA: Record<string, {
@@ -416,6 +417,7 @@ const DistrictCard = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <DeckCardActions cardKey={`${island}-${district}`} cardTitle={data?.name} />
     </DeckCardShell>
   );
 };

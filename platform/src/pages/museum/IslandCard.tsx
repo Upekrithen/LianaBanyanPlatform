@@ -17,6 +17,7 @@ import { useXRay } from "@/components/museum/XRayContext";
 import { useArchipelagoTourSafe } from "@/contexts/ArchipelagoTourContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ChevronLeft, ChevronRight, RotateCcw, ExternalLink } from "lucide-react";
+import { DeckCardActions } from "@/components/museum/DeckCardActions";
 import "@/components/museum/HologramOverlay.css";
 
 /** Tour link per island — shown on Real World back in tour mode */
@@ -500,6 +501,7 @@ const IslandCard = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <DeckCardActions cardKey={island ?? "unknown"} cardTitle={data?.name} />
     </DeckCardShell>
   );
 };
