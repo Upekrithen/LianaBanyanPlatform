@@ -16,6 +16,7 @@ import {
   interpolate,
   hasTranslation,
 } from "@/data/mirrorTranslations";
+import { SummonMascot } from "@/components/museum/SummonMascot";
 
 function findByLangCode(langCode: string) {
   return FRIEND_WORDS.find((fw) => fw.langCode === langCode);
@@ -171,6 +172,28 @@ const MirrorMirror = () => {
             <ExternalLink className="w-3 h-3" />
             Translate with Google Translate
           </a>
+        )}
+
+        {/* Mascot demo — Brick Pig explains Mark-earning for translators.
+            Starts closed (LRH pill only) to keep the card tidy. Click to summon. */}
+        {!isEnglish && (
+          <div className="mt-4" style={{ maxWidth: "320px" }}>
+            <SummonMascot
+              mascotId="pig"
+              topic="How much you earn for translating"
+              startClosed
+              message={
+                <>
+                  Every phrase you translate or confirm earns{" "}
+                  <strong>Marks</strong>. Marks are effort-differential —
+                  they track <em>who did the work</em>. When other members
+                  read the {language} version, you earned that. Over time,
+                  translators who get here first earn the most. The platform
+                  literally pays attention to who showed up.
+                </>
+              }
+            />
+          </div>
         )}
 
         {/* Golden Key box */}

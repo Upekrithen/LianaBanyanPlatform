@@ -55,6 +55,7 @@ const PrintStudioPage = lazy(() => import("./pages/museum/PrintStudioPage"));
 const PrintApprovalPage = lazy(() => import("./pages/museum/PrintApprovalPage"));
 const ProducerSignupPage = lazy(() => import("./pages/museum/ProducerSignupPage"));
 const ProducerBoardPage = lazy(() => import("./pages/museum/ProducerBoardPage"));
+const Cast = lazy(() => import("./pages/museum/Cast"));
 
 const queryClient = new QueryClient();
 
@@ -96,6 +97,7 @@ const MuseumApp = () => {
                 <Route path="/why-no-vc" element={<WhyNoVC />} />
                 <Route path="/why-no-vc/:section" element={<WhyNoVC />} />
                 <Route path="/mirror" element={<MirrorMirror />} />
+                <Route path="/cast" element={<Cast />} />
                 <Route path="/yvaine" element={<YvaineClip />} />
                 <Route path="/stewards" element={<StewardsPage />} />
                 {/* Original 3-door destinations */}
