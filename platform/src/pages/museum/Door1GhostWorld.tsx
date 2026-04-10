@@ -5,6 +5,7 @@
  * NO signup wall. They can stay here forever.
  */
 import { MuseumShell } from "@/components/museum/MuseumShell";
+import { SummonMascot } from "@/components/museum/SummonMascot";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Ghost, ShoppingBag, Users, Lightbulb, Compass, Home } from "lucide-react";
@@ -41,10 +42,36 @@ const Door1GhostWorld = () => {
         </motion.div>
 
         {/* Ghost Credit balance */}
-        <div className="flex items-center justify-center gap-2 mb-6 p-3 rounded-xl bg-slate-900/60 border border-purple-500/20">
+        <div className="flex items-center justify-center gap-2 mb-3 p-3 rounded-xl bg-slate-900/60 border border-purple-500/20">
           <Ghost className="w-5 h-5 text-purple-400" />
           <span className="text-purple-300 text-lg font-bold tabular-nums">100</span>
           <span className="text-purple-400/60 text-sm">Ghost Credits</span>
+        </div>
+
+        {/* Ghost Cat (special) — the only character who shows up in Ghost World */}
+        <div className="mb-6">
+          <SummonMascot
+            mascotId="catsp"
+            topic="What's real and what isn't in Ghost World"
+            startClosed
+            message={
+              <>
+                Ghost Credits are fake. You can spend them on anything,
+                but nothing ships and nobody gets paid. Ghost World exists
+                so you can touch every button, try every pathway, join
+                any Guild, watch how a transaction would actually run —
+                without committing to anything. When you join for $5 the
+                ghost evaporates and your experience becomes real.
+                Everything you explored carries over.
+              </>
+            }
+            helperMessage={
+              <>
+                This is the only place in the platform where I show up.
+                When you cross over, the Little Red Hen takes the host chair.
+              </>
+            }
+          />
         </div>
 
         {/* Browse areas grid */}

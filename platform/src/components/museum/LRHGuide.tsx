@@ -1,24 +1,32 @@
 /**
- * LRHGuide — Floating Action Button for the Little Red Hen mascot.
- * Bottom-RIGHT corner. Three visual states:
- *   1. Default: glasses down (lrh-default.png)
- *   2. Hover: binoculars up (lrh-hover.png)
- *   3. Clicked / X-ray ON: thermal vision (lrh-xray.png)
+ * LRHGuide — Floating Action Button for the current host mascot.
+ * Bottom-RIGHT corner. Three visual states (managed by Mascot):
+ *   1. Default: glasses down
+ *   2. Hover: binoculars up
+ *   3. Clicked / X-ray ON: thermal vision
  *
- * K378: Hologram shimmer integration — FAB image wrapped in hologram
- * tier-4 container (LRH = Economics/Interdisciplinary).
+ * K378: Hologram shimmer — handled inside the Mascot component.
+ * B095: Refactored to render via the generalized Mascot component,
+ *       which resolves to LRH or Denken based on active province.
+ *       Previously hardcoded /images/lrh-*.png paths.
  */
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MascotBubble } from "@/components/v2/mascot/MascotBubble";
 import { motion, AnimatePresence } from "framer-motion";
 import { useXRay } from "./XRayContext";
+import { Mascot } from "./Mascot";
+import { useHost } from "./useHost";
 import "./HologramOverlay.css";
 
+/**
+ * Context messages keyed by base path. Use {host} placeholder in the
+ * message string to get the current host's name substituted in.
+ */
 const contextMessages: Record<string, { title: string; message: string }> = {
   "/": {
     title: "Welcome!",
-    message: "I'm the Little Red Hen. Tap any door to start your journey. Not sure? Start with \"What is this?\" — I'll walk you through it.",
+    message: "I'm {host}. Tap any door to start your journey. Not sure? Start with \"What is this?\" — I'll walk you through it.",
   },
   "/explore": {
     title: "The Tour",
@@ -44,22 +52,19 @@ const contextMessages: Record<string, { title: string; message: string }> = {
 
 export function LRHGuide() {
   const [open, setOpen] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const { xrayOn, toggleXray, activePanel, setActivePanel } = useXRay();
   const location = useLocation();
   const navigate = useNavigate();
+  const host = useHost();
 
   const characterTeleported = xrayOn && activePanel !== null;
 
   const basePath = "/" + (location.pathname.split("/")[1] || "");
-  const ctx = contextMessages[basePath] || contextMessages["/"];
-
-  // Three states: default → hover → xray
-  const imgSrc = xrayOn
-    ? "/images/lrh-xray.png"
-    : hovered
-      ? "/images/lrh-hover.png"
-      : "/images/lrh-default.png";
+  const rawCtx = contextMessages[basePath] || contextMessages["/"];
+  const ctx = {
+    title: rawCtx.title,
+    message: rawCtx.message.replaceAll("{host}", host.name),
+  };
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
@@ -98,8 +103,6 @@ export function LRHGuide() {
             setOpen(!open);
           }
         }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all active:scale-95 overflow-hidden"
         style={{
           background: characterTeleported
@@ -110,8 +113,8 @@ export function LRHGuide() {
             : "0 4px 15px rgba(214, 158, 46, 0.25)",
           border: characterTeleported ? "2px dashed rgba(34, 211, 238, 0.4)" : "none",
         }}
-        aria-label={characterTeleported ? "Recall Little Red Hen" : "Toggle X-Ray Goggles"}
-        title={characterTeleported ? "Click to recall LRH" : undefined}
+        aria-label={characterTeleported ? `Recall ${host.name}` : "Toggle X-Ray Goggles"}
+        title={characterTeleported ? `Click to recall ${host.name}` : undefined}
       >
         <AnimatePresence mode="wait">
           {characterTeleported ? (
@@ -127,18 +130,17 @@ export function LRHGuide() {
             </motion.span>
           ) : (
             <motion.div
-              key="lrh"
-              className="hologram-character hologram-tier-4 hologram-delay-2"
+              key="host"
               style={{ borderRadius: "50%", width: 44, height: 44, marginTop: 2 }}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.3 }}
             >
-              <img
-                src={imgSrc}
-                alt="Little Red Hen"
-                className="w-11 h-11 object-contain hologram-target"
+              <Mascot
+                id={host.id}
+                size={44}
+                hologramDelay={2}
               />
             </motion.div>
           )}

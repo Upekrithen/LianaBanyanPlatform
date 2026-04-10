@@ -174,22 +174,93 @@ const MirrorMirror = () => {
           </a>
         )}
 
-        {/* Mascot demo — Brick Pig explains Mark-earning for translators.
-            Starts closed (LRH pill only) to keep the card tidy. Click to summon. */}
+        {/* Three specialist summons — only shown on translated-language view.
+            All three start closed (LRH pill) so the card stays tidy and the
+            user opens only what they care about. Owl for WHY fairness,
+            Banker Pig for MATH, Maker Fox for CRAFT of translation. */}
         {!isEnglish && (
-          <div className="mt-4" style={{ maxWidth: "320px" }}>
+          <div className="mt-4 flex flex-col gap-2" style={{ maxWidth: "320px" }}>
+            {/* WHY — Owl on the "fairest" philosophical core */}
             <SummonMascot
-              mascotId="pig"
-              topic="How much you earn for translating"
+              mascotId="owl"
+              topic="Why 'fairest' isn't about beauty"
               startClosed
               message={
                 <>
-                  Every phrase you translate or confirm earns{" "}
-                  <strong>Marks</strong>. Marks are effort-differential —
-                  they track <em>who did the work</em>. When other members
-                  read the {language} version, you earned that. Over time,
-                  translators who get here first earn the most. The platform
-                  literally pays attention to who showed up.
+                  The Mirror Mirror name is from the old fairy-tale question
+                  — "mirror, mirror, on the wall, who's the fairest of them
+                  all?" — but here <em>fairest</em> doesn't mean <em>prettiest</em>.
+                  It means <strong>most fair</strong>. If the site only exists
+                  in English, then only English speakers get to participate
+                  as equals. That's not fair. So Mirror Mirror translates the
+                  entire site into every language a member speaks — and
+                  every member who helps translate becomes part of making it
+                  fair. Fairness isn't the goal the platform marches toward.
+                  It's the <em>mechanism</em> the platform runs on.
+                </>
+              }
+              helperMessage={
+                <>
+                  This is also why Cost+20% is locked forever, and why
+                  creators keep 83.3%. Same principle: make the fair thing
+                  the only thing that's possible.
+                </>
+              }
+            />
+
+            {/* MATH — Banker Pig on concrete Mark-earning */}
+            <SummonMascot
+              mascotId="pig"
+              topic="What you actually earn for translating"
+              startClosed
+              message={
+                <>
+                  Every phrase you translate into {language} earns you{" "}
+                  <strong>Marks</strong>. Marks are effort-differential
+                  currency — they track <em>who did the work</em>, not who
+                  paid for the work. When a {nativeName} speaker reads
+                  your translation, you earned that Mark. When a
+                  second-wave translator <em>confirms</em> your translation
+                  is accurate, you both earn a smaller Mark on the same
+                  phrase. First translators earn the most. Confirmers earn
+                  steady-drip returns. Wrong translations lose Marks when
+                  corrected — which is the system keeping itself honest.
+                </>
+              }
+              helperMessage={
+                <>
+                  Translator Marks are redeemable like any other Mark:
+                  toward membership, toward Joule conversions, toward
+                  platform services. You are paid in the same currency
+                  the Founder is paid in.
+                </>
+              }
+            />
+
+            {/* CRAFT — Maker Fox on the actual workflow */}
+            <SummonMascot
+              mascotId="fox"
+              topic="How you actually translate"
+              startClosed
+              message={
+                <>
+                  You don't need to translate the whole site. You translate{" "}
+                  <em>one phrase at a time</em>, on any page, whenever the
+                  mood strikes. Hover any piece of text, click the small
+                  translate icon that appears, type the {nativeName}{" "}
+                  version, submit. The phrase is live for other {language}{" "}
+                  speakers as soon as you save it. Other members can confirm
+                  it (small Mark reward for you), refine it (small Mark
+                  reward for them, you keep the original credit), or flag it
+                  if it's wrong (no penalty unless a majority confirms the
+                  flag).
+                </>
+              }
+              helperMessage={
+                <>
+                  There is no gatekeeper. There is no "official translator."
+                  The first member to translate a phrase owns it — until
+                  someone translates it better and the community agrees.
                 </>
               }
             />

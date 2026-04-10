@@ -4,11 +4,14 @@
  * Each mascot has a stable `domain` (type of explanation) and a
  * 3-state visual system (default / hover / xray) matching LRH.
  *
- * ARCHITECTURE (B095, the 16-character decision):
+ * ARCHITECTURE (B095):
  * ─────────────────────────────────────────────────────────────
- * - LRH is the HOST. She is always on-screen (FAB corner) and
- *   summons guest characters inline when a topic needs deeper
- *   explanation.
+ * - TWO HOSTS: Little Red Hen (Southern Province) and Denken
+ *   (Northern Province, Founder persona). They are peers — each
+ *   one appears based on the active province (see
+ *   BuilderModeContext). Only ONE host is on-screen at a time.
+ * - The active host is always in the FAB corner and summons
+ *   guest characters inline when a topic needs deeper explanation.
  * - Guest characters are DOMAIN-OF-KNOWLEDGE specialists, not
  *   platform-role specialists. "The Great Owl" explains WHY
  *   (logic) across every pipeline. "Brick Pig" explains MATH
@@ -31,7 +34,7 @@
  *   overwrite the files in `public/images/mascots/{slug}/` —
  *   no code changes needed.
  *
- * 12 RECURRING DOMAINS + 4 SPECIALS = 16 TOTAL CHARACTERS.
+ * 2 HOSTS + 12 RECURRING DOMAINS + 3 SPECIALS = 17 TOTAL.
  */
 
 import type { HologramTier } from "@/components/museum/LRHCharacter";
@@ -41,7 +44,7 @@ import type { HologramTier } from "@/components/museum/LRHCharacter";
  * A domain is a stable axis of knowledge — not a platform role.
  */
 export type MascotDomain =
-  | "host"         // LRH only — the one who summons the others
+  | "host"         // LRH + Denken — the province hosts who summon the others
   | "why"          // The logic, reasoning, "why this rule exists"
   | "math"         // Numbers, percentages, splits, arithmetic
   | "mechanics"    // How things work — plumbing, pipelines, systems
@@ -56,7 +59,6 @@ export type MascotDomain =
   | "learning"     // Tours, onboarding, tutorials, pedagogy
   // Specials — rare appearances, high impact moments
   | "ghost"        // Ghost World / un-membered state
-  | "founder"      // Very first onboarding, Founder voice
   | "historian"    // Museum / archive content
   | "critic";      // Devil's advocate / counter-argument slot
 
@@ -89,22 +91,25 @@ export interface MascotDefinition {
   /** Image paths (default / hover / xray). */
   visual: MascotVisual;
   /**
-   * What LRH says when summoning this character inline.
+   * What the active host says when summoning this character inline.
    * Should end in "…" or ":". Leave the guest's message to the
-   * SummonMascot caller (per-topic).
+   * SummonMascot caller (per-topic). Hosts don't summon themselves
+   * so their lrhIntro is empty.
    */
   lrhIntro: string;
   /**
    * What this character says when their explanation is done and
-   * LRH takes back over. Should feel like an exit line.
+   * the host takes back over. Should feel like an exit line.
    */
   exitLine: string;
   /** Longer bio for the Cast gallery — who they are and why they exist. */
   bio: string;
   /** Is the visual art final or a placeholder sketch? */
   artStatus: "final" | "placeholder";
-  /** True for the 4 "special appearance" characters. */
+  /** True for the "special appearance" characters. */
   special?: boolean;
+  /** For host characters: which province they host. */
+  province?: "southern" | "northern";
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -121,13 +126,13 @@ const visual = (slug: string): MascotVisual => ({
 // ════════════════════════════════════════════════════════════════
 export const MASCOTS: Record<string, MascotDefinition> = {
   // ───────────────────────────────────────────────────────────
-  // HOST
+  // HOSTS (2) — one per province
   // ───────────────────────────────────────────────────────────
   lrh: {
     id: "lrh",
     name: "Little Red Hen",
-    title: "The Host",
-    oneLiner: "Your guide through everything. She summons the others.",
+    title: "Host of the Southern Province",
+    oneLiner: "Your guide in the south. She summons the specialists.",
     domain: "host",
     kind: "host",
     hologramTier: 4,
@@ -138,10 +143,27 @@ export const MASCOTS: Record<string, MascotDefinition> = {
       hover: "/images/lrh-hover.png",
       xray: "/images/lrh-xray.png",
     },
-    lrhIntro: "", // LRH doesn't summon herself
+    lrhIntro: "", // hosts don't summon themselves
     exitLine: "Back to you.",
-    bio: "The Little Red Hen from the fable. She does the work, invites everyone to help, and keeps an honest accounting of who did what. She is the persistent host — always in the corner, always watching. When you need a deeper explanation on anything, she brings in the right specialist.",
+    bio: "The Little Red Hen from the fable. She does the work, invites everyone to help, and keeps an honest accounting of who did what. She is the persistent host of the Southern Province — always in the corner, always watching. When you need a deeper explanation on anything, she brings in the right specialist.",
     artStatus: "final",
+    province: "southern",
+  },
+
+  denken: {
+    id: "denken",
+    name: "Denken",
+    title: "Host of the Northern Province",
+    oneLiner: "Your guide in the north. The Founder persona made flesh.",
+    domain: "host",
+    kind: "host",
+    hologramTier: 4,
+    visual: visual("denken"),
+    lrhIntro: "", // hosts don't summon themselves
+    exitLine: "Back to you.",
+    bio: "Denken is the Northern Province counterpart to the Little Red Hen — the Founder persona as a living character. Red beard, cool glasses, eyes that can see through things when the x-ray goggles come on. Where LRH is folksy and fable-warm, Denken is direct, thoughtful, and carries the weight of having built this place. When you're in the Northern Province, he sits in the corner. He summons the same specialists LRH does — the characters don't change, only the host does.",
+    artStatus: "final",
+    province: "northern",
   },
 
   // ───────────────────────────────────────────────────────────
@@ -164,16 +186,16 @@ export const MASCOTS: Record<string, MascotDefinition> = {
 
   pig: {
     id: "pig",
-    name: "Brick Pig",
-    title: "The Banker",
+    name: "Banker Pig",
+    title: "The Brick-Builder",
     oneLiner: "Explains the numbers. Splits, percentages, your share.",
     domain: "math",
     kind: "specialist",
     hologramTier: 2,
     visual: visual("pig"),
-    lrhIntro: "Here's Brick Pig to run the numbers for you…",
-    exitLine: "The math works out. Back to the Hen.",
-    bio: "The third of the Three Little Pigs — the one who built with bricks. A banker by trade. He explains anything that involves arithmetic: the 83.3% / 16.67% split, how Cost+20% actually computes on a $500 transaction, how Joules and Marks and Credits relate to dollars, how much YOU get when someone buys your thing. If there is a number on the screen, Brick Pig can explain it.",
+    lrhIntro: "Here's Banker Pig to run the numbers for you…",
+    exitLine: "The math works out. Back to the host.",
+    bio: "The third of the Three Little Pigs — the one who built with bricks because he planned for the future. A banker by trade. He explains anything that involves arithmetic: the 83.3% / 16.67% split, how Cost+20% actually computes on a $500 transaction, how Joules and Marks and Credits relate to dollars, how much YOU get when someone buys your thing. If there is a number on the screen, Banker Pig can explain it.",
     artStatus: "final",
   },
 
@@ -187,7 +209,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 3,
     visual: visual("rabbit"),
     lrhIntro: "Engineer Rabbit can show you exactly how this works…",
-    exitLine: "That's the mechanism. Hen will take it from here.",
+    exitLine: "That's the mechanism. The host will take it from here.",
     bio: "A tinker, a maker, a pipeline whisperer. Engineer Rabbit explains mechanics — how the Battery dispatches posts at staggered intervals, how the Furnace melts raw content into posts, how the Treasure Map recomputes when you move, how the Cue Card printer actually prints. When you need the plumbing explained, Rabbit shows up with tools in hand.",
     artStatus: "placeholder",
   },
@@ -202,7 +224,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 1,
     visual: visual("turtle"),
     lrhIntro: "Tortoise Elder remembers. Let him tell you the story…",
-    exitLine: "That's how we got here. Back to the Hen.",
+    exitLine: "That's how we got here. Back to the host.",
     bio: "Slow, old, patient. The Tortoise has been around since before the Corporation had an EIN. He holds the origin stories: why the Founder enlisted at 16, why the first Pudding was called Pudding, why Joules were invented and what went wrong in the drafts before. When you want context — not mechanics, not math, but STORY — he is the one who shows up.",
     artStatus: "placeholder",
   },
@@ -217,7 +239,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 4,
     visual: visual("cat"),
     lrhIntro: "Judge Cat knows the rules. Hear him out…",
-    exitLine: "Rules are rules. Back to the Hen.",
+    exitLine: "Rules are rules. Back to the host.",
     bio: "Solemn, formal, seated upright. Judge Cat owns the governance layer: Star Chamber procedures, election mechanics, voting rules, penalties, the bylaws, what's allowed and what isn't. He is not the WHY — that's the Owl. He is the WHAT: what the rule says, what its edges are, what happens when you break it.",
     artStatus: "placeholder",
   },
@@ -232,7 +254,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 1,
     visual: visual("fox"),
     lrhIntro: "Maker Fox is good with her hands. She'll show you…",
-    exitLine: "Make something beautiful. Back to the Hen.",
+    exitLine: "Make something beautiful. Back to the host.",
     bio: "Clever, curious, always has sawdust on her paws. Maker Fox owns the Craft domain: the Wardrobe, the Spice Rack, theme-building, how to style your Helm, how to compose a Cue Card that actually sings. She is hands-on, aesthetic, and impatient with anything purely theoretical.",
     artStatus: "placeholder",
   },
@@ -247,7 +269,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 1,
     visual: visual("bear"),
     lrhIntro: "Den Bear keeps the table warm. Let him explain…",
-    exitLine: "You've got people now. Back to the Hen.",
+    exitLine: "You've got people now. Back to the host.",
     bio: "Large, warm, always brewing something. Den Bear owns the Community domain: Tribes (your personal people), Guilds (your professional people), the Family Table, the Crew, how to find your people and how to invite them in. He is the opposite of transactional — he explains things in terms of who you're doing them WITH.",
     artStatus: "placeholder",
   },
@@ -262,7 +284,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 3,
     visual: visual("dog"),
     lrhIntro: "The Sheepdog guards the gate. She'll explain…",
-    exitLine: "You're protected. Back to the Hen.",
+    exitLine: "You're protected. Back to the host.",
     bio: "Watchful, loyal, always one eye open. The Sheepdog owns Trust & Safety: Content Shield moderation, X-Ray Goggles transparency, the SEC language rules, what gets blocked and what gets through. She is not a judge — that's Cat — she is the PROTECTOR, and she explains what's between you and anything that could hurt you.",
     artStatus: "placeholder",
   },
@@ -277,7 +299,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 1,
     visual: visual("otter"),
     lrhIntro: "Otter loves to teach. Let her walk you through…",
-    exitLine: "You've got it now. Back to the Hen.",
+    exitLine: "You've got it now. Back to the host.",
     bio: "Playful, never bored, never in a rush. Otter Tutor owns the Learning domain: the 90-second Grand Tour, onboarding sequences, BST episodes, step-by-step tutorials, 'let me show you.' She never lectures — she demonstrates, hands you the thing, lets you try.",
     artStatus: "placeholder",
   },
@@ -292,7 +314,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 3,
     visual: visual("mouse"),
     lrhIntro: "Scout Mouse knows every corner. She'll help you find…",
-    exitLine: "Now you can find it anywhere. Back to the Hen.",
+    exitLine: "Now you can find it anywhere. Back to the host.",
     bio: "Small, fast, has been everywhere twice. Scout Mouse owns Discovery: Treasure Maps, Beacons, search, the Helm navigator, how to find a project, how to find a person, how to find yourself when you're lost in the platform. If you're looking for something, she's already halfway there.",
     artStatus: "placeholder",
   },
@@ -307,7 +329,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 4,
     visual: visual("fennec"),
     lrhIntro: "The Treasurer handles real money. Listen up…",
-    exitLine: "Your money is safe. Back to the Hen.",
+    exitLine: "Your money is safe. Back to the host.",
     bio: "Meticulous, honest, incorruptible. The Treasurer owns the Money domain: the LB Card, Stripe payouts, dollar conversions, Joule escrow, how to get paid, how banking actually connects to the inside of Liana Banyan. She is NOT Brick Pig — Pig explains internal splits. The Treasurer explains the external world's money flowing in and out.",
     artStatus: "placeholder",
   },
@@ -322,7 +344,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 4,
     visual: visual("deer"),
     lrhIntro: "Prophet Deer sees where this ends up. Let him tell you…",
-    exitLine: "That's where we're going. Back to the Hen.",
+    exitLine: "That's where we're going. Back to the host.",
     bio: "Quiet, antlered, eyes on the horizon. Prophet Deer owns the Future domain: the roadmap, the Upekrithen vision, long arcs, 'here's where this goes in three years.' He doesn't hype — he connects dots, draws the trajectory, and lets you decide if you want to be on it.",
     artStatus: "placeholder",
   },
@@ -340,27 +362,15 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 2,
     visual: visual("catsp"),
     lrhIntro: "You're in Ghost World. Ghost Cat can explain what that means…",
-    exitLine: "When you're ready, the door is $5 a year. Back to the Hen.",
+    exitLine: "When you're ready, the door is $5 a year. Back to the host.",
     bio: "Translucent, soft-spoken, only visible when you're browsing without a membership. Ghost Cat owns the Ghost World experience: what Ghost Credits do, what you can see vs. what's real, how the $5/year door works, and what happens when you walk through it. She never pressures — she just explains the difference between watching and joining.",
     artStatus: "placeholder",
     special: true,
   },
 
-  hedgehog: {
-    id: "hedgehog",
-    name: "The Founder",
-    title: "First Voice",
-    oneLiner: "Appears only during first-time onboarding. The Founder's voice.",
-    domain: "founder",
-    kind: "special",
-    hologramTier: 4,
-    visual: visual("hedgehog"),
-    lrhIntro: "Before you start, here's the Founder himself…",
-    exitLine: "Now you know where this came from. Go meet the Hen.",
-    bio: "A stand-in for the Founder's own voice during the very first onboarding moment. Appears once — when a brand-new visitor crosses the threshold — and never again on that same device unless explicitly summoned from the Cast gallery. Explains the original promise: Help Each Other, Help Ourselves. Then hands off to LRH forever after.",
-    artStatus: "placeholder",
-    special: true,
-  },
+  // NOTE (B095): The former "hedgehog / The Founder" special slot was
+  // removed. Denken (added as host #2 above) IS the Founder persona,
+  // so there is no need for a separate first-onboarding special.
 
   bird: {
     id: "bird",
@@ -372,7 +382,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 1,
     visual: visual("bird"),
     lrhIntro: "Archive Crow lives in the Museum. Ask him anything…",
-    exitLine: "The past stays remembered. Back to the Hen.",
+    exitLine: "The past stays remembered. Back to the host.",
     bio: "Dusty, scholarly, smells faintly of old paper. Archive Crow appears in the Museum portal to explain archived content: old letters, old versions, deprecated systems, things that used to be called something else. He is not Tortoise Elder — Tortoise tells the WHY of origin stories; Crow tells the WHAT of specific archived items.",
     artStatus: "placeholder",
     special: true,
@@ -391,7 +401,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     hologramTier: 2,
     visual: visual("catsp"), // reuse until a dedicated sketch exists
     lrhIntro: "The Skeptic is going to push back on this. Listen carefully…",
-    exitLine: "That's the best counter-argument. Now decide. Back to the Hen.",
+    exitLine: "That's the best counter-argument. Now decide. Back to the host.",
     bio: "Rare, contrarian, never mean. The Skeptic exists to keep the platform honest: when a decision sounds too clean, he shows up to make the counter-argument out loud so users can see both sides. He is not anti-Liana Banyan — he is PRO-user-making-informed-choices. Appears on major commitment moments: membership purchase, first post, first real-money transaction, governance votes.",
     artStatus: "placeholder",
     special: true,
@@ -433,4 +443,23 @@ export function listSpecialists(): MascotDefinition[] {
 /** All special-appearance characters. */
 export function listSpecials(): MascotDefinition[] {
   return Object.values(MASCOTS).filter((m) => m.kind === "special");
+}
+
+/** All hosts (LRH + Denken). */
+export function listHosts(): MascotDefinition[] {
+  return Object.values(MASCOTS).filter((m) => m.kind === "host");
+}
+
+/**
+ * Get the host mascot for a province. Defaults to LRH (southern) if
+ * an unknown province is passed.
+ */
+export function getHostForProvince(
+  province: "southern" | "northern"
+): MascotDefinition {
+  return (
+    Object.values(MASCOTS).find(
+      (m) => m.kind === "host" && m.province === province
+    ) ?? MASCOTS.lrh
+  );
 }

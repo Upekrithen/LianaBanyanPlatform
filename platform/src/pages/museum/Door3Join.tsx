@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { MascotBubble } from "@/components/v2/mascot/MascotBubble";
 import { LRHCharacter } from "@/components/museum/LRHCharacter";
+import { SummonMascot } from "@/components/museum/SummonMascot";
 import { motion } from "framer-motion";
 import { Check, LogIn } from "lucide-react";
 
@@ -59,6 +60,43 @@ const Door3Join = () => {
                 <span className="text-slate-200 text-sm">{b}</span>
               </motion.div>
             ))}
+          </div>
+
+          {/* Specialist summons for the two benefits that need numbers/logic.
+              Both start closed — pills only — so the page stays clean. */}
+          <div className="flex flex-col gap-2 mb-6">
+            <SummonMascot
+              mascotId="pig"
+              topic="Where the 83.3% comes from"
+              startClosed
+              message={
+                <>
+                  Every transaction runs on <strong>Cost+20%</strong>. On a
+                  $500 sale, the creator's real cost rides through, and
+                  20% platform margin is added on top of that. The creator
+                  keeps <strong>$416.67</strong>, the platform keeps{" "}
+                  <strong>$83.33</strong>. That 83.3% isn't marketing — it's
+                  the arithmetic of the DNA lock. It can't change, because
+                  the formula is constitutional.
+                </>
+              }
+            />
+            <SummonMascot
+              mascotId="cat"
+              topic="What 'vote on how it runs' actually means"
+              startClosed
+              message={
+                <>
+                  Every member gets a vote in the <strong>Star Chamber</strong>
+                  — the governance layer that sets platform rules. Votes
+                  happen on real things: adding a new production system,
+                  changing a domain's parameters, penalizing a bad actor.
+                  Your vote weight starts equal to every other member's
+                  and scales with long-term participation, never with
+                  money spent. No board, no shareholders, no founder veto.
+                </>
+              }
+            />
           </div>
 
           {/* Trust line */}
@@ -143,6 +181,28 @@ function HelmFirstVisit() {
               <CurrencyPill label="Marks" value="0" color="#8b5cf6" />
               <CurrencyPill label="Joules" value="0" color="#eab308" />
             </div>
+          </div>
+
+          {/* Banker Pig, returning — explains the currency triangle */}
+          <div className="mt-3">
+            <SummonMascot
+              mascotId="pig"
+              topic="How Credits, Marks, and Joules relate"
+              startClosed
+              message={
+                <>
+                  All three are worth the same dollar value. The difference
+                  is what they <em>track</em>.{" "}
+                  <strong>Credits</strong> are dollars you put in.{" "}
+                  <strong>Marks</strong> are what you earned doing work —
+                  the effort-differential. <strong>Joules</strong> are your
+                  surplus, stored forever like a stamp that never expires.
+                  You start with 5 Credits because you paid $5 for
+                  membership. Marks and Joules are zero until you do
+                  something.
+                </>
+              }
+            />
           </div>
         </motion.div>
       </div>

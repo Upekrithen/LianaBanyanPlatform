@@ -11,6 +11,7 @@ import { CreatorGauge } from "@/components/museum/CreatorGauge";
 import { ProductionBars } from "@/components/museum/ProductionBars";
 import { MascotBubble } from "@/components/v2/mascot/MascotBubble";
 import { LRHCharacter } from "@/components/museum/LRHCharacter";
+import { SummonMascot } from "@/components/museum/SummonMascot";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 
@@ -121,6 +122,28 @@ const Door2Pathways = () => {
                   maxWidth={280}
                 />
               </div>
+
+              {/* Otter Tutor explains what pathways actually mean */}
+              <div className="mt-4">
+                <SummonMascot
+                  mascotId="otter"
+                  topic="What pathways actually are"
+                  startClosed
+                  message={
+                    <>
+                      A pathway is a <em>starting shape</em> for how you'll
+                      contribute. Food means you make meals. Manufacturing
+                      means you make things out of materials. Service means
+                      you sell your skills. And so on. Every pathway gets
+                      the same platform tools — Marks, Credits, the 83.3%
+                      keep, governance votes — but the <em>tools inside the
+                      pathway</em> are tuned for what that kind of work
+                      actually needs. Pick the one that fits you today.
+                      You're not locked in.
+                    </>
+                  }
+                />
+              </div>
             </motion.div>
           ) : (
             /* Pathway Detail */
@@ -150,6 +173,27 @@ const Door2Pathways = () => {
               <div className="mt-6 p-4 rounded-xl border border-slate-700/50 bg-slate-900/60">
                 <div className="text-xs text-slate-400 mb-3">What's needed to launch:</div>
                 <ProductionBars bars={detail?.bars || []} />
+              </div>
+
+              {/* Engineer Rabbit on how the bars actually work */}
+              <div className="mt-3">
+                <SummonMascot
+                  mascotId="rabbit"
+                  topic="How the bars fill up"
+                  startClosed
+                  message={
+                    <>
+                      Each bar is a real requirement that has to hit its
+                      target before this pathway goes live. <em>Funding</em>{" "}
+                      fills when people pledge Credits. <em>Leadership</em>{" "}
+                      fills when a member volunteers to run it and gets
+                      voted in. <em>Community</em> fills when enough members
+                      declare they'll participate. When every bar hits 100%,
+                      the pathway activates automatically — no approval
+                      needed, no committee, just the numbers.
+                    </>
+                  }
+                />
               </div>
 
               {/* CTAs */}

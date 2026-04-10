@@ -1,25 +1,38 @@
 /**
- * LRHCharacter — The Little Red Hen character image with 3 interactive states.
- * Default: glasses down. Hover: binoculars up. Click: toggles X-ray mode (thermal vision).
- * Used everywhere the character appears — FAB, tours, inline bubbles.
+ * LRHCharacter — Host character image with 3 interactive states.
+ * ======================================================================
+ * REFACTORED B095: This is now a thin wrapper around the generalized
+ * `Mascot` component. Previously had its own 3-state image logic
+ * duplicated from the Mascot component — now delegates.
  *
- * HOLOGRAM EFFECT (B093): Characters render as holograms that periodically "refresh"
- * with a CRT-style scan-line disruption. LRH is Tier 4 (Economics/Interdisciplinary) —
- * she encompasses the entire platform, so her hologram works hardest to maintain coherence.
- * Mana suppression text and percentages are EXCLUSIVE to Denken — not shown here.
+ * PROVINCE AWARENESS: The component name is historical ("LRH" = Little
+ * Red Hen), but it now renders whichever HOST is active for the
+ * current province — LRH in the Southern Province, Denken in the
+ * Northern Province. Prefer `<HostCharacter>` (exported below) in new
+ * code for semantic clarity. Existing `<LRHCharacter>` call sites
+ * keep working with no changes.
+ *
+ * States (inherited from the Mascot component):
+ *   1. Default: glasses/goggles down (resting)
+ *   2. Hover: binoculars up (engaged)
+ *   3. Clicked / X-ray ON: thermal vision (via XRayContext)
+ *
+ * HOLOGRAM: Hosts are Tier 4 (Economics/Interdisciplinary) by
+ * registry — their hologram refresh is stronger than specialists.
  *
  * Knowledge tiers (Founder directive):
  *   Tier 1 — Arts/Creative (stable, ~8s)
  *   Tier 2 — Math/Logic (~6s)
  *   Tier 3 — Physics/Engineering (~4s)
- *   Tier 4 — Economics/Interdisciplinary (~3s) ← LRH
+ *   Tier 4 — Economics/Interdisciplinary (~3s) ← hosts
  */
-import { useState } from "react";
+import { Mascot } from "./Mascot";
+import { useHost } from "./useHost";
 import { useXRay } from "./XRayContext";
-import "./HologramOverlay.css";
 
 /** Knowledge tier determines hologram refresh frequency.
- *  Higher tier = more complex knowledge = more visible refresh artifacts. */
+ *  Higher tier = more complex knowledge = more visible refresh artifacts.
+ *  Exported here for backwards compatibility — mascots.ts imports it. */
 export type HologramTier = 1 | 2 | 3 | 4;
 
 interface LRHCharacterProps {
@@ -29,7 +42,10 @@ interface LRHCharacterProps {
   clickable?: boolean;
   /** Additional className */
   className?: string;
-  /** Hologram knowledge tier (1-4). Default 4 for LRH (interdisciplinary). */
+  /**
+   * @deprecated Hologram tier is now read from the mascot registry.
+   * This prop is accepted for backwards compatibility but ignored.
+   */
   hologramTier?: HologramTier;
   /** Stagger delay (0-5) so multiple characters don't glitch at the same instant. */
   hologramDelay?: 0 | 1 | 2 | 3 | 4 | 5;
@@ -37,42 +53,39 @@ interface LRHCharacterProps {
   hologram?: boolean;
 }
 
+/**
+ * The active host character (LRH in Southern, Denken in Northern).
+ * Backwards-compatible name — existing imports of `LRHCharacter` keep
+ * working. New code should prefer the `HostCharacter` alias exported
+ * below.
+ */
 export function LRHCharacter({
   size = 48,
   clickable = true,
   className = "",
-  hologramTier = 4,
   hologramDelay = 0,
   hologram = true,
 }: LRHCharacterProps) {
-  const [hovered, setHovered] = useState(false);
-  const { xrayOn, toggleXray } = useXRay();
-
-  const imgSrc = xrayOn
-    ? "/images/lrh-xray.png"
-    : hovered
-      ? "/images/lrh-hover.png"
-      : "/images/lrh-default.png";
-
-  const hologramClasses = hologram
-    ? `hologram-character hologram-tier-${hologramTier} hologram-delay-${hologramDelay}`
-    : "";
+  const host = useHost();
+  const { toggleXray } = useXRay();
 
   return (
-    <div
-      className={`inline-block ${hologramClasses} ${clickable ? "cursor-pointer" : ""} ${className}`}
-      style={{ width: size, height: size, borderRadius: "50%" }}
-    >
-      <img
-        src={imgSrc}
-        alt="Little Red Hen"
-        className="object-contain shrink-0 w-full h-full"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={clickable ? (e) => { e.stopPropagation(); toggleXray(); } : undefined}
-      />
-    </div>
+    <Mascot
+      id={host.id}
+      size={size}
+      className={className}
+      hologram={hologram}
+      hologramDelay={hologramDelay}
+      onClick={clickable ? () => toggleXray() : undefined}
+    />
   );
 }
+
+/**
+ * HostCharacter — Alias for `LRHCharacter` with a clearer name.
+ * Use this in new code. Renders whoever the current province's host
+ * mascot is (LRH or Denken), honoring the same prop interface.
+ */
+export const HostCharacter = LRHCharacter;
 
 export default LRHCharacter;
