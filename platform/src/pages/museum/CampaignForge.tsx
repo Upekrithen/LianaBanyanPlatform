@@ -23,13 +23,52 @@ const CAMPAIGN_TYPES = [
 
 type ForgeView = "list" | "create";
 
+interface LocalCampaign {
+  id: string;
+  title: string;
+  type: string;
+  createdAt: string;
+}
+
+function getLocalCampaigns(): LocalCampaign[] {
+  try {
+    const raw = localStorage.getItem("hexisle_campaigns");
+    if (raw) return JSON.parse(raw);
+  } catch { /* ignore */ }
+  return [];
+}
+
+function createLocalCampaign(type: string): LocalCampaign {
+  const id = Math.random().toString(36).slice(2, 10);
+  const typeLabel = CAMPAIGN_TYPES.find((ct) => ct.id === type)?.label || "Campaign";
+  const campaign: LocalCampaign = {
+    id,
+    title: `${typeLabel} Campaign`,
+    type,
+    createdAt: new Date().toISOString(),
+  };
+  const campaigns = getLocalCampaigns();
+  campaigns.push(campaign);
+  localStorage.setItem("hexisle_campaigns", JSON.stringify(campaigns));
+  localStorage.setItem(`campaign_${id}`, JSON.stringify(campaign));
+  return campaign;
+}
+
 const CampaignForge = () => {
   const navigate = useNavigate();
   const { xrayOn } = useXRay();
   const [view, setView] = useState<ForgeView>("list");
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [campaigns, setCampaigns] = useState<LocalCampaign[]>(getLocalCampaigns);
 
   const accentColor = xrayOn ? "#22d3ee" : "#c9a96e";
+
+  const handleForge = () => {
+    if (!selectedType) return;
+    const campaign = createLocalCampaign(selectedType);
+    setCampaigns(getLocalCampaigns());
+    navigate(`/hexisle/forge/${campaign.id}/map`);
+  };
 
   return (
     <DeckCardShell>
@@ -85,20 +124,63 @@ const CampaignForge = () => {
               </p>
             </div>
 
-            {/* Empty state — no campaigns yet */}
-            <div className="flex-1 flex flex-col items-center justify-center">
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center mb-3"
-                style={{
-                  background: `${accentColor}10`,
-                  border: `2px dashed ${accentColor}30`,
-                }}
-              >
-                <Settings className="w-7 h-7" style={{ color: `${accentColor}60` }} />
-              </div>
-              <p style={{ color: "rgba(250,245,235,0.4)", fontSize: "0.75rem", textAlign: "center", maxWidth: "85%", lineHeight: 1.6 }}>
-                No campaigns yet. Create your first campaign to become a Dungeon Master.
-              </p>
+            {/* Campaign list or empty state */}
+            <div className="flex-1 flex flex-col overflow-y-auto">
+              {campaigns.length === 0 ? (
+                <div className="flex-1 flex flex-col items-center justify-center">
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center mb-3"
+                    style={{
+                      background: `${accentColor}10`,
+                      border: `2px dashed ${accentColor}30`,
+                    }}
+                  >
+                    <Settings className="w-7 h-7" style={{ color: `${accentColor}60` }} />
+                  </div>
+                  <p style={{ color: "rgba(250,245,235,0.4)", fontSize: "0.75rem", textAlign: "center", maxWidth: "85%", lineHeight: 1.6 }}>
+                    No campaigns yet. Create your first campaign to become a Dungeon Master.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {campaigns.map((c) => {
+                    const ct = CAMPAIGN_TYPES.find((t) => t.id === c.type);
+                    const Icon = ct?.icon || Settings;
+                    return (
+                      <motion.button
+                        key={c.id}
+                        onClick={() => navigate(`/hexisle/forge/${c.id}/map`)}
+                        className="flex items-center gap-3 p-3 rounded-lg text-left"
+                        style={{
+                          background: "rgba(255,255,255,0.02)",
+                          border: `1px solid ${ct?.color || accentColor}20`,
+                          transition: "all 0.2s ease",
+                        }}
+                        whileHover={{ scale: 1.02, borderColor: `${ct?.color || accentColor}50` }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                          style={{
+                            background: `${ct?.color || accentColor}15`,
+                            border: `1px solid ${ct?.color || accentColor}30`,
+                          }}
+                        >
+                          <Icon className="w-4 h-4" style={{ color: ct?.color || accentColor }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div style={{ fontSize: "0.7rem", fontWeight: 600, color: "rgba(250,245,235,0.7)" }}>
+                            {c.title}
+                          </div>
+                          <div style={{ fontSize: "0.55rem", color: "rgba(250,245,235,0.3)", fontFamily: "'JetBrains Mono', monospace" }}>
+                            {ct?.label || c.type} · {new Date(c.createdAt).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Create button */}
@@ -195,8 +277,9 @@ const CampaignForge = () => {
               })}
             </div>
 
-            {/* Forge button (Phase 2 wiring — currently shows placeholder) */}
+            {/* Forge button — creates campaign + opens map editor */}
             <motion.button
+              onClick={handleForge}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-lg mt-3"
               style={{
                 background: selectedType ? `${accentColor}15` : "rgba(255,255,255,0.02)",

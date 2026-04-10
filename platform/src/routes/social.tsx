@@ -46,6 +46,7 @@ const RealWorldPuzzles = lazy(() => import("@/pages/RealWorldPuzzles"));
 const GuildPhaseManager = lazy(() => import("@/pages/GuildPhaseManager"));
 const ConcentricCircles = lazy(() => import("@/pages/ConcentricCircles"));
 const CrewmanDashboardPage = lazy(() => import("@/pages/CrewmanDashboardPage"));
+const RolodexPage = lazy(() => import("@/pages/RolodexPage"));
 
 export const socialRoutes = (
   <>
@@ -94,5 +95,6 @@ export const socialRoutes = (
     <Route path="/guild-phases" element={<LazyPage><GuildPhaseManager /></LazyPage>} />
     <Route path="/testing/circles" element={<ProtectedRoute><LazyPage><ConcentricCircles /></LazyPage></ProtectedRoute>} />
     <Route path="/crewman/dashboard" element={<ProtectedRoute><LazyPage><CrewmanDashboardPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/rolodex" element={<ProtectedRoute><LazyPage><RolodexPage /></LazyPage></ProtectedRoute>} />
   </>
 );

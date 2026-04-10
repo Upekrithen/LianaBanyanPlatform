@@ -21,6 +21,7 @@ import { XRayProvider } from "./components/museum/XRayContext";
 import { ArchipelagoTourProvider } from "./contexts/ArchipelagoTourContext";
 import { TourBanner } from "./components/wildfire/TourBanner";
 import { TourCompletionModal } from "./components/wildfire/TourCompletionModal";
+import { SummonFloatingAlert } from "./components/museum/DMSummonPanel";
 
 const HomeScreen = lazy(() => import("./pages/museum/HomeScreen"));
 const EnterDoors = lazy(() => import("./pages/museum/EnterDoors"));
@@ -42,6 +43,7 @@ const DistrictCard = lazy(() => import("./pages/museum/DistrictCard"));
 const TreasureMapScroll = lazy(() => import("./components/museum/TreasureMapScroll"));
 const TourEntry = lazy(() => import("./pages/museum/TourEntry"));
 const CampaignForge = lazy(() => import("./pages/museum/CampaignForge"));
+const CampaignMapEditor = lazy(() => import("./pages/museum/CampaignMapEditor"));
 const WardrobeDepartment = lazy(() => import("./pages/museum/WardrobeDepartment"));
 const SubmissionsPedestal = lazy(() => import("./pages/museum/SubmissionsPedestal"));
 
@@ -100,6 +102,7 @@ const MuseumApp = () => {
                 <Route path="/hexisle" element={<Archipelago />} />
                 <Route path="/hexisle/scroll" element={<TreasureMapScroll />} />
                 <Route path="/hexisle/forge" element={<CampaignForge />} />
+                <Route path="/hexisle/forge/:campaignId/map" element={<CampaignMapEditor />} />
                 <Route path="/hexisle/wardrobe" element={<WardrobeDepartment />} />
                 <Route path="/hexisle/submissions" element={<SubmissionsPedestal />} />
                 <Route path="/hexisle/:island" element={<IslandCard />} />
@@ -109,6 +112,7 @@ const MuseumApp = () => {
             </Suspense>
             <TourBanner />
             <TourCompletionModal />
+            <SummonFloatingAlert />
             </ArchipelagoTourProvider>
             </XRayProvider>
           </AuthProvider>
