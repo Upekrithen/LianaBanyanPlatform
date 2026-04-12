@@ -15,10 +15,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight, Share2, QrCode, Calendar, Gift,
   Building2, Key, Stamp, Sparkles, ExternalLink, Palette, CheckCircle,
-  Megaphone
+  Megaphone, Footprints, Theater, HandHelping
 } from 'lucide-react';
 import { getGateBountyById, type GateArtworkBounty } from '@/data/gateArtworkBounties';
 import { GUILD_LANDING_CARDS } from '@/data/guildRecruitingCards';
+import { OPEN_WATER_CUE_CARDS } from '@/data/openWaterCueCards';
 import { TreasureKeyIndicator } from '@/components/TreasureKeyIndicator';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
@@ -114,6 +115,55 @@ const CUE_CARDS: Record<string, CueCardData> = {
       'Coverage Minutes prove you read the issue',
       'Politicians see effort-backed petitions',
       'Non-partisan civic engagement for all',
+    ],
+  },
+  // Open Water cue cards — K408 / B097
+  'we-need-what-youre-good-at': {
+    id: 'we-need-what-youre-good-at',
+    title: OPEN_WATER_CUE_CARDS['we-need-what-youre-good-at'].title,
+    tagline: OPEN_WATER_CUE_CARDS['we-need-what-youre-good-at'].tagline,
+    content: OPEN_WATER_CUE_CARDS['we-need-what-youre-good-at'].bodyText,
+    destination: '/openwater/patrons',
+    destinationLabel: 'Patron Directory',
+    color: 'from-teal-500/30 to-cyan-500/20',
+    icon: <HandHelping className="w-12 h-12 text-teal-400" />,
+    benefits: [
+      'Lived competence, not credentials',
+      'Billions of people qualify',
+      'One step ahead is all it takes',
+      'Volunteer freely — earn SAA through results',
+    ],
+  },
+  'you-have-a-play-i-have-a-stage': {
+    id: 'you-have-a-play-i-have-a-stage',
+    title: OPEN_WATER_CUE_CARDS['you-have-a-play-i-have-a-stage'].title,
+    tagline: OPEN_WATER_CUE_CARDS['you-have-a-play-i-have-a-stage'].tagline,
+    content: OPEN_WATER_CUE_CARDS['you-have-a-play-i-have-a-stage'].bodyText,
+    destination: '/openwater/publish',
+    destinationLabel: 'Publish a Brief',
+    color: 'from-amber-500/30 to-yellow-500/20',
+    icon: <Theater className="w-12 h-12 text-amber-400" />,
+    benefits: [
+      'Patrons, Ripples, Vouchers — the full infrastructure',
+      'Cold Start systems for Level 0',
+      'Keep 83.3% of everything you earn',
+      '$5/year membership — same terms as the Founder',
+    ],
+  },
+  'doing-something-is-what-it-takes-to-start': {
+    id: 'doing-something-is-what-it-takes-to-start',
+    title: OPEN_WATER_CUE_CARDS['doing-something-is-what-it-takes-to-start'].title,
+    tagline: OPEN_WATER_CUE_CARDS['doing-something-is-what-it-takes-to-start'].tagline,
+    content: OPEN_WATER_CUE_CARDS['doing-something-is-what-it-takes-to-start'].bodyText,
+    destination: '/openwater/publish',
+    destinationLabel: 'Publish Your First Brief',
+    color: 'from-emerald-500/30 to-lime-500/20',
+    icon: <Footprints className="w-12 h-12 text-emerald-400" />,
+    benefits: [
+      'Zero to one is the hardest transition',
+      'The first action is often incidental',
+      'Doing something makes the next step visible',
+      'Get a DBA. Make a call. Take the first dollar.',
     ],
   },
   // Guild recruiting cards — dynamically merged from guildRecruitingCards.ts

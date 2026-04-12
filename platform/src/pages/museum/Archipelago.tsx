@@ -16,6 +16,7 @@ import { MuseumShell } from "@/components/museum/MuseumShell";
 import { useXRay } from "@/components/museum/XRayContext";
 import { useArchipelagoTourSafe, DIALOGUE_TEXT } from "@/contexts/ArchipelagoTourContext";
 import { MascotBubble } from "@/components/v2/mascot/MascotBubble";
+import { SummonMascot } from "@/components/museum/SummonMascot";
 import { motion, AnimatePresence } from "framer-motion";
 import { Map, Scroll, Lock } from "lucide-react";
 import "@/components/museum/HologramOverlay.css";
@@ -208,6 +209,30 @@ const Archipelago = () => {
             {xrayOn ? "7 Islands · 7 Business Skills · Your Journey" : "7 Islands · 7 Trials · One Way Home"}
           </p>
         </motion.div>
+
+        {/* Mouse: how the 7 islands connect */}
+        <div className="relative z-10 mb-2 max-w-md">
+          <SummonMascot
+            mascotId="mouse"
+            topic="How the 7 islands connect"
+            startClosed
+            message={
+              <>
+                Each island is a distinct part of the platform — HexIsle is the decentralized factory,
+                the Marketplace is the commerce layer, the Agora is where governance happens, and so on.
+                The pathways between them are real. Stuff made on one island can ship through another.
+                You can walk, sail, or portal between them depending on what you're carrying.
+              </>
+            }
+            helperMessage={
+              <>
+                The order you visit them in is up to you. Most people start where their first skill lives
+                and only later discover they needed a detour through an island they never thought was theirs.
+                The map is the same; the route is yours.
+              </>
+            }
+          />
+        </div>
 
         {/* Map area — tall vertical layout filling viewport */}
         <div

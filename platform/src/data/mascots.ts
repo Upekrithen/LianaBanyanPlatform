@@ -334,18 +334,18 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     artStatus: "placeholder",
   },
 
-  deer: {
-    id: "deer",
-    name: "Prophet Deer",
-    title: "The Seer",
-    oneLiner: "Explains the roadmap, Upekrithen, where this is all going.",
+  stag: {
+    id: "stag",
+    name: "The Great Stag",
+    title: "The Long View",
+    oneLiner: "Carries ambition — the ladder, the capability at the top, where this all ends up.",
     domain: "future",
     kind: "specialist",
     hologramTier: 4,
-    visual: visual("deer"),
-    lrhIntro: "Prophet Deer sees where this ends up. Let him tell you…",
+    visual: visual("stag"),
+    lrhIntro: "The Great Stag sees where this ends up. Let him tell you…",
     exitLine: "That's where we're going. Back to the host.",
-    bio: "Quiet, antlered, eyes on the horizon. Prophet Deer owns the Future domain: the roadmap, the Upekrithen vision, long arcs, 'here's where this goes in three years.' He doesn't hype — he connects dots, draws the trajectory, and lets you decide if you want to be on it.",
+    bio: "Measured, unhurried, nine-point antlers in the Northern count — nine tines on one side, which Southerners would call an eighteen-pointer but the North speaks plainly. The Great Stag owns the Future domain: the roadmap, the Upekrithen vision, the Triple Double ladder, the long arcs, 'here's where this goes in three years.' He doesn't hype — he connects dots, draws the trajectory, remembers what you said you wanted three months ago, and lets you decide if you want to be on it. ART NOTE: 9-point stag, Northern count (one side, not both sides totaled), horns prominent and proud.",
     artStatus: "placeholder",
   },
 

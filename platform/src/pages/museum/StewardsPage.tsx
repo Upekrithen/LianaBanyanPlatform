@@ -9,6 +9,7 @@ import { StewardCard } from "@/components/museum/StewardCard";
 import { RecipeSlot, NotCentsLegend } from "@/components/museum/RecipeSlot";
 import { LRHCharacter } from "@/components/museum/LRHCharacter";
 import { MascotBubble } from "@/components/v2/mascot/MascotBubble";
+import { SummonMascot } from "@/components/museum/SummonMascot";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 
@@ -97,6 +98,30 @@ const StewardsPage = () => {
           <p className="text-slate-400 text-sm mb-6">
             Each pathway needs a Steward — someone to turn the key and bring it to life.
           </p>
+
+          {/* Judge Cat: what Stewards do and don't do */}
+          <div className="mb-6">
+            <SummonMascot
+              mascotId="cat"
+              topic="What Stewards do and don't do"
+              startClosed
+              message={
+                <>
+                  Stewards hold <strong>turn-keys</strong> for specific decisions — they don't run the
+                  platform, they run the specific moment that needs a turnkey. Every Steward-held key
+                  has a matching <em>Frame Lock</em> that prevents unilateral moves. A Steward can start
+                  something. A Steward cannot extract from it.
+                </>
+              }
+              helperMessage={
+                <>
+                  This is the difference between a Steward and a CEO. A CEO can redirect the ship.
+                  A Steward can open a door the ship needs to go through. The ship still belongs to
+                  everyone on board.
+                </>
+              }
+            />
+          </div>
 
           {/* Steward Card Grid */}
           <div className="grid grid-cols-2 gap-4 mb-8">

@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { MascotBubble } from "@/components/v2/mascot/MascotBubble";
+import { SummonMascot } from "@/components/museum/SummonMascot";
 import { CreatorGauge } from "@/components/museum/CreatorGauge";
 import { LRHCharacter } from "@/components/museum/LRHCharacter";
 import { useXRay } from "@/components/museum/XRayContext";
@@ -106,6 +107,30 @@ function Stop1Content({
 
   return (
     <div className="space-y-4">
+      {/* Great Owl: why we built it this way */}
+      <div className="max-w-sm mx-auto">
+        <SummonMascot
+          mascotId="owl"
+          topic="Why we built Liana Banyan this way"
+          startClosed
+          message={
+            <>
+              The short version: every existing platform eventually extracts from the people
+              who built it. We wrote the rules so that <em>can't</em> happen here. Not
+              "won't" — <strong>can't</strong>. The DNA lock is in the bylaws. Cost+20% is
+              a cap, not a target. $5/year is a floor, not a landing page.
+            </>
+          }
+          helperMessage={
+            <>
+              You don't have to trust us. You have to read the bylaws and confirm the math.
+              Everyone who works on this platform is subject to the same rules you are —
+              the Founder included. The lock is structural, not aspirational.
+            </>
+          }
+        />
+      </div>
+
       <CreatorGauge onPriceChange={setTourPrice} />
 
       <div className="max-w-sm mx-auto space-y-2">
@@ -185,6 +210,31 @@ function Stop2Content({
 
   return (
     <div className="space-y-5">
+      {/* Banker Pig: Cost+20% on a $500 sale */}
+      <div className="max-w-sm mx-auto">
+        <SummonMascot
+          mascotId="pig"
+          topic="Cost+20% on a $500 sale"
+          startClosed
+          message={
+            <>
+              Your real cost rides through at actual. The platform adds 20% on top. On a $500
+              sale that's <strong>$416.67 to you</strong> and <strong>$83.33 to the platform</strong>.
+              The lock means that split cannot widen — even if the platform becomes worth a
+              billion dollars, the 83.3% / 16.7% split stays exactly where it is.
+            </>
+          }
+          helperMessage={
+            <>
+              The 16.7% is what funds the 16 initiatives you're seeing to the left — roughly
+              a sixth of each transaction. That's the whole budget: no VC infusions, no
+              advertising revenue, no data sales. Just the math, divided evenly across the
+              work that serves you.
+            </>
+          }
+        />
+      </div>
+
       <div className="grid grid-cols-4 gap-2 max-w-sm mx-auto">
         {INITIATIVES.map((item) => {
           const emoji = item.split(" ")[0];

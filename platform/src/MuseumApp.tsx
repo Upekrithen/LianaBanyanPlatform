@@ -56,6 +56,12 @@ const PrintApprovalPage = lazy(() => import("./pages/museum/PrintApprovalPage"))
 const ProducerSignupPage = lazy(() => import("./pages/museum/ProducerSignupPage"));
 const ProducerBoardPage = lazy(() => import("./pages/museum/ProducerBoardPage"));
 const Cast = lazy(() => import("./pages/museum/Cast"));
+const FounderStory = lazy(() => import("./pages/museum/FounderStory"));
+const BriefDirectoryPage = lazy(() => import("./pages/openwater/BriefDirectoryPage"));
+const PublishBriefPage = lazy(() => import("./pages/openwater/PublishBriefPage"));
+const PatronDirectoryPage = lazy(() => import("./pages/openwater/PatronDirectoryPage"));
+const MyEngagementsPage = lazy(() => import("./pages/openwater/MyEngagementsPage"));
+const MySaaPage = lazy(() => import("./pages/openwater/MySaaPage"));
 
 const queryClient = new QueryClient();
 
@@ -130,6 +136,14 @@ const MuseumApp = () => {
                 {/* Producer Onboarding (K397) */}
                 <Route path="/become-a-producer" element={<ProducerSignupPage />} />
                 <Route path="/producer-board" element={<ProducerBoardPage />} />
+                {/* Founder's Story — Anecdote Mapping (K404) */}
+                <Route path="/founder/story" element={<FounderStory />} />
+                {/* Open Water — Growth-Stage Advisory (K404-OW) */}
+                <Route path="/openwater/briefs" element={<BriefDirectoryPage />} />
+                <Route path="/openwater/publish" element={<PublishBriefPage />} />
+                <Route path="/openwater/patrons" element={<PatronDirectoryPage />} />
+                <Route path="/openwater/my-engagements" element={<MyEngagementsPage />} />
+                <Route path="/openwater/my-saa" element={<MySaaPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

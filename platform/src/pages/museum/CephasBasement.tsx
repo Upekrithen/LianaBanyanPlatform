@@ -13,10 +13,18 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { DeckCardShell } from "@/components/museum/DeckCardShell";
 import { useXRay } from "@/components/museum/XRayContext";
+import { SummonMascot } from "@/components/museum/SummonMascot";
+import { CephasFilterBar } from "@/components/museum/CephasFilterBar";
 import { motion } from "framer-motion";
-import { BookOpen, Search, Compass, Grid3X3, ArrowLeft, Globe, ExternalLink, Loader2 } from "lucide-react";
+import { BookOpen, Search, Compass, Grid3X3, ArrowLeft, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import { FRIEND_WORDS } from "@/data/friendWords";
-import { useCephasMuseum, useCephasDepthCount } from "@/hooks/useCephasMuseum";
+import {
+  useCephasMuseum,
+  useCephasDepthCount,
+  useCephasDomains,
+  type ContentType,
+  type RenderMode,
+} from "@/hooks/useCephasMuseum";
 
 type Depth = "stones" | "wading" | "deep";
 
@@ -56,8 +64,25 @@ const depths: Array<{
 
 const depthMap: Record<string, Depth> = { stones: "stones", wading: "wading", deep: "deep" };
 
+const DEPTH_LABELS: Record<Depth, string> = {
+  stones: "Puddings & Spoonfuls",
+  wading: "Articles",
+  deep: "Academic Papers",
+};
+
 /** Warm wood-grain SVG pattern (dark browns, subtle) */
 const woodGrainBg = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='6'%3E%3Crect fill='%23231610' width='200' height='6'/%3E%3Crect fill='%23281a12' x='0' y='0' width='200' height='1' opacity='0.3'/%3E%3Crect fill='%231e0e08' x='0' y='2' width='200' height='1' opacity='0.2'/%3E%3Crect fill='%23301e14' x='0' y='4' width='200' height='1' opacity='0.15'/%3E%3C/svg%3E")`;
+
+/* ── Depth-link mapping for three-depth navigation (Innovation #2139) ── */
+const DEPTH_LINK_MAP: Record<string, { nextDepth?: Depth; nextLabel?: string; prevDepth?: Depth; prevLabel?: string }> = {
+  pudding: { nextDepth: "deep", nextLabel: "Read the full paper", prevDepth: undefined, prevLabel: undefined },
+  spoonful: { nextDepth: "stones", nextLabel: "Read the full Pudding", prevDepth: undefined, prevLabel: undefined },
+  skipping_stone: { nextDepth: "stones", nextLabel: "Read the full Pudding", prevDepth: undefined, prevLabel: undefined },
+  article: { nextDepth: "deep", nextLabel: "Read the research paper", prevDepth: "stones", prevLabel: "See the Spoonful" },
+  cephas_article: { nextDepth: "deep", nextLabel: "Read the research paper", prevDepth: "stones", prevLabel: "See the Spoonful" },
+  academic_paper: { prevDepth: "wading", prevLabel: "Read the article version" },
+  paper: { prevDepth: "wading", prevLabel: "Read the article version" },
+};
 
 const CephasBasement = () => {
   const { depth: urlDepth } = useParams<{ depth?: string }>();
@@ -71,16 +96,30 @@ const CephasBasement = () => {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [contentType, setContentType] = useState<ContentType>("all");
+  const [domain, setDomain] = useState("all");
+  const [page, setPage] = useState(0);
+  const [_renderMode] = useState<RenderMode>("member");
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchQuery), 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  const { data: articles, isLoading, isError } = useCephasMuseum(
-    selectedDepth ?? undefined,
-    debouncedSearch
-  );
+  useEffect(() => { setPage(0); }, [selectedDepth, contentType, domain, debouncedSearch]);
+
+  const { data: result, isLoading, isError, isFetching } = useCephasMuseum({
+    depth: selectedDepth ?? undefined,
+    contentType,
+    domain,
+    search: debouncedSearch,
+    page,
+    renderMode: _renderMode,
+  });
+
+  const articles = result?.articles ?? [];
+  const totalPages = result?.totalPages ?? 0;
+  const totalCount = result?.totalCount ?? 0;
 
   const { data: stonesCount } = useCephasDepthCount("stones");
   const { data: wadingCount } = useCephasDepthCount("wading");
@@ -91,13 +130,23 @@ const CephasBasement = () => {
     deep: deepCount ?? 0,
   };
 
+  const { data: domainList } = useCephasDomains();
+
   const handleSelectDepth = (d: Depth) => {
     setSelectedDepth(d);
+    setPage(0);
+    setContentType("all");
+    setDomain("all");
+    setSearchQuery("");
     window.history.replaceState(null, "", `/library/${d}`);
   };
 
   const handleBack = () => {
     setSelectedDepth(null);
+    setPage(0);
+    setContentType("all");
+    setDomain("all");
+    setSearchQuery("");
     window.history.replaceState(null, "", "/library");
   };
 
@@ -114,24 +163,48 @@ const CephasBasement = () => {
             <ArrowLeft className="w-4 h-4" /> Cephas Library
           </button>
 
+          {/* Mascot: Turtle — Library entry point */}
+          <SummonMascot
+            mascotId="turtle"
+            topic="What Cephas is and why it exists"
+            startClosed
+            message={
+              <>
+                Cephas is the platform's library — academic papers, Puddings, Spoonfuls, letters,
+                everything the platform has published. Three depths: skim the stones (Spoonfuls),
+                wade through Puddings, or dive into full papers. You'll earn Marks reading at any depth.
+              </>
+            }
+            className="mb-4"
+          />
+
           <div className="flex items-center gap-3 mb-4">
             <span className="text-3xl">{depthInfo.icon}</span>
             <div>
               <h1 className="text-xl font-bold text-white">{depthInfo.label}</h1>
-              <p className="text-slate-400 text-sm">{depthInfo.description}</p>
+              <p className="text-slate-400 text-sm">
+                {depthInfo.description}
+                {totalCount > 0 && (
+                  <span className="ml-1 font-mono text-xs" style={{ color: depthInfo.color }}>
+                    ({totalCount})
+                  </span>
+                )}
+              </p>
             </div>
           </div>
 
-          <div className="relative mb-6">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <input
-              type="text"
-              placeholder={`Search ${depthInfo.label.toLowerCase()}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/50 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-slate-500"
-            />
-          </div>
+          {/* Filter bar with search, type chips, domain */}
+          <CephasFilterBar
+            search={searchQuery}
+            onSearchChange={setSearchQuery}
+            contentType={contentType}
+            onContentTypeChange={setContentType}
+            domain={domain}
+            onDomainChange={setDomain}
+            domains={domainList ?? []}
+            depthLabel={DEPTH_LABELS[selectedDepth]}
+            depthColor={depthInfo.color}
+          />
 
           {langCode && langCode !== "en" && (
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-900/20 border border-blue-800/30 mb-4">
@@ -142,12 +215,8 @@ const CephasBasement = () => {
             </div>
           )}
 
-          {isLoading && (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
-              <span className="ml-2 text-slate-400 text-sm">Loading content...</span>
-            </div>
-          )}
+          {/* Skeleton loader */}
+          {isLoading && <SkeletonList />}
 
           {isError && (
             <div className="text-center py-12">
@@ -155,60 +224,131 @@ const CephasBasement = () => {
             </div>
           )}
 
-          {!isLoading && !isError && articles?.length === 0 && (
+          {!isLoading && !isError && articles.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-slate-400 text-sm">No content found at this depth. Try a different search or depth level.</p>
+              <p className="text-slate-400 text-sm">No content found. Try a different search or filter.</p>
             </div>
           )}
 
-          {!isLoading && !isError && articles && articles.length > 0 && (
-            <div className="space-y-3">
-              {articles.map((item: any, i: number) => (
-                <motion.div
-                  key={item.id}
-                  className="p-4 rounded-xl border border-slate-700/40 bg-[#0a1628] hover:border-slate-600 transition-all cursor-pointer group"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i * 0.03, 0.3) }}
-                  whileHover={{ scale: 1.01 }}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span
-                      className="text-[0.6rem] uppercase tracking-wider font-mono px-2 py-0.5 rounded-full"
-                      style={{
-                        color: depthInfo.color,
-                        background: `${depthInfo.color}15`,
-                        border: `1px solid ${depthInfo.color}30`,
-                      }}
+          {!isLoading && !isError && articles.length > 0 && (
+            <>
+              <div className="space-y-3 relative">
+                {isFetching && !isLoading && (
+                  <div className="absolute inset-0 bg-slate-900/30 rounded-xl z-10 pointer-events-none" />
+                )}
+                {articles.map((item, i) => {
+                  const depthLinks = DEPTH_LINK_MAP[item.category] ?? {};
+                  return (
+                    <motion.div
+                      key={item.id}
+                      className="p-4 rounded-xl border border-slate-700/40 bg-[#0a1628] hover:border-slate-600 transition-all cursor-pointer group"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(i * 0.03, 0.3) }}
+                      whileHover={{ scale: 1.01 }}
                     >
-                      {(item.category || item.style || "article").replace(/_/g, " ")}
-                    </span>
-                    {item.paper_number && (
-                      <span className="text-[0.6rem] text-slate-500 font-mono">#{item.paper_number}</span>
-                    )}
-                  </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span
+                          className="text-[0.6rem] uppercase tracking-wider font-mono px-2 py-0.5 rounded-full"
+                          style={{
+                            color: depthInfo.color,
+                            background: `${depthInfo.color}15`,
+                            border: `1px solid ${depthInfo.color}30`,
+                          }}
+                        >
+                          {(item.category || item.style || "article").replace(/_/g, " ")}
+                        </span>
+                        {item.paper_number && (
+                          <span className="text-[0.6rem] text-slate-500 font-mono">#{item.paper_number}</span>
+                        )}
+                      </div>
 
-                  <h3 className="text-white text-sm font-semibold leading-snug mb-1 group-hover:text-blue-300 transition-colors">
-                    {item.title}
-                  </h3>
+                      <h3 className="text-white text-sm font-semibold leading-snug mb-1 group-hover:text-blue-300 transition-colors">
+                        {item.title}
+                      </h3>
 
-                  {(item.technical_summary || item.abstract) && (
-                    <p className="text-slate-400 text-xs leading-relaxed line-clamp-2">
-                      {item.technical_summary || item.abstract}
-                    </p>
-                  )}
+                      {(item.technical_summary || item.abstract) && (
+                        <p className="text-slate-400 text-xs leading-relaxed line-clamp-2">
+                          {item.technical_summary || item.abstract}
+                        </p>
+                      )}
 
-                  <div className="flex items-center justify-between mt-3">
-                    <span className="text-slate-500 text-[0.6rem] font-mono">
-                      {item.updated_at ? new Date(item.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : ""}
-                    </span>
-                    <span className="text-xs font-medium" style={{ color: depthInfo.color }}>
-                      Read →
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                      {/* Three-depth navigation links (Innovation #2139) */}
+                      <div className="flex items-center justify-between mt-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-slate-500 text-[0.6rem] font-mono">
+                            {item.updated_at
+                              ? new Date(item.updated_at).toLocaleDateString("en-US", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })
+                              : ""}
+                          </span>
+                          {depthLinks.prevDepth && depthLinks.prevLabel && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectDepth(depthLinks.prevDepth!);
+                              }}
+                              className="text-[0.6rem] font-medium hover:underline"
+                              style={{ color: depths.find((d) => d.id === depthLinks.prevDepth)?.color ?? "#94a3b8" }}
+                            >
+                              ← {depthLinks.prevLabel}
+                            </button>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-3">
+                          {depthLinks.nextDepth && depthLinks.nextLabel && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectDepth(depthLinks.nextDepth!);
+                              }}
+                              className="text-[0.6rem] font-medium hover:underline"
+                              style={{ color: depths.find((d) => d.id === depthLinks.nextDepth)?.color ?? "#94a3b8" }}
+                            >
+                              {depthLinks.nextLabel} →
+                            </button>
+                          )}
+                          <span className="text-xs font-medium" style={{ color: depthInfo.color }}>
+                            Read →
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <PaginationBar
+                  page={page}
+                  totalPages={totalPages}
+                  totalCount={totalCount}
+                  onPageChange={setPage}
+                  accentColor={depthInfo.color}
+                />
+              )}
+            </>
+          )}
+
+          {/* Mascot: Archive Crow — bottom of the list */}
+          {!isLoading && articles.length > 0 && (
+            <SummonMascot
+              mascotId="bird"
+              topic="Why we keep everything"
+              startClosed
+              message={
+                <>
+                  The Archive Crow keeps every version of every thing. Deprecated systems, old letters,
+                  the three drafts before a paper landed. Nothing vanishes. If you need to see how
+                  Liana Banyan looked last March, it's in here.
+                </>
+              }
+              className="mt-6"
+            />
           )}
         </div>
       </MuseumShell>
@@ -229,6 +369,70 @@ const CephasBasement = () => {
     </DeckCardShell>
   );
 };
+
+/* ── Skeleton loader for loading state ── */
+function SkeletonList() {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="p-4 rounded-xl border border-slate-700/20 bg-[#0a1628] animate-pulse">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="h-4 w-16 rounded-full bg-slate-700/40" />
+            <div className="h-3 w-8 rounded bg-slate-700/30 ml-auto" />
+          </div>
+          <div className="h-4 w-3/4 rounded bg-slate-700/40 mb-2" />
+          <div className="h-3 w-full rounded bg-slate-700/25 mb-1" />
+          <div className="h-3 w-2/3 rounded bg-slate-700/20" />
+          <div className="flex justify-between mt-3">
+            <div className="h-3 w-20 rounded bg-slate-700/20" />
+            <div className="h-3 w-12 rounded bg-slate-700/30" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── Pagination controls ── */
+function PaginationBar({
+  page,
+  totalPages,
+  totalCount,
+  onPageChange,
+  accentColor,
+}: {
+  page: number;
+  totalPages: number;
+  totalCount: number;
+  onPageChange: (p: number) => void;
+  accentColor: string;
+}) {
+  return (
+    <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-700/30">
+      <button
+        onClick={() => onPageChange(Math.max(0, page - 1))}
+        disabled={page === 0}
+        className="flex items-center gap-1 text-xs font-medium transition-all disabled:opacity-30"
+        style={{ color: accentColor }}
+      >
+        <ChevronLeft className="w-3.5 h-3.5" /> Prev
+      </button>
+
+      <span className="text-slate-500 text-[0.65rem] font-mono">
+        Page {page + 1} of {totalPages} · {totalCount.toLocaleString()} items
+      </span>
+
+      <button
+        onClick={() => onPageChange(Math.min(totalPages - 1, page + 1))}
+        disabled={page >= totalPages - 1}
+        className="flex items-center gap-1 text-xs font-medium transition-all disabled:opacity-30"
+        style={{ color: accentColor }}
+      >
+        Next <ChevronRight className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  );
+}
 
 /** Door interior content — all the wooden door elements */
 function DoorContent({

@@ -38,6 +38,8 @@ const FailureQueueDashboard = lazy(() =>
 const SocialMediaAdmin = lazy(() => import("@/components/SocialMediaAdmin"));
 const TheBattery = lazy(() => import("@/components/TheBattery"));
 const UniversalDispatch = lazy(() => import("@/components/UniversalDispatch"));
+const ResponseLoggingPage = lazy(() => import("@/pages/admin/ResponseLoggingPage"));
+const ResponseDashboardPage = lazy(() => import("@/pages/admin/ResponseDashboardPage"));
 
 export const adminRoutes = (
   <>
@@ -74,5 +76,7 @@ export const adminRoutes = (
     <Route path="/social-admin" element={<ProtectedRoute><LazyPage><div className="container mx-auto p-6 max-w-4xl"><SocialMediaAdmin /></div></LazyPage></ProtectedRoute>} />
     <Route path="/the-battery" element={<ProtectedRoute><LazyPage><div className="container mx-auto p-6 max-w-4xl"><TheBattery /></div></LazyPage></ProtectedRoute>} />
     <Route path="/dispatch" element={<ProtectedRoute><LazyPage><div className="container mx-auto p-6 max-w-4xl"><UniversalDispatch /></div></LazyPage></ProtectedRoute>} />
+    <Route path="/admin/response-log" element={<ProtectedRoute><LazyPage><ResponseLoggingPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/admin/response-dashboard" element={<ProtectedRoute><LazyPage><ResponseDashboardPage /></LazyPage></ProtectedRoute>} />
   </>
 );

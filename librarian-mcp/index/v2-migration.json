@@ -14,7 +14,7 @@
     "beacon": {
       "domain": "beacon",
       "v1Tables": 6,
-      "v1Pages": 6,
+      "v1Pages": 7,
       "v1Functions": 4,
       "v2Pages": 8,
       "v2Components": 10,
@@ -46,9 +46,9 @@
     },
     "commerce": {
       "domain": "commerce",
-      "v1Tables": 6,
-      "v1Pages": 3,
-      "v1Functions": 2,
+      "v1Tables": 8,
+      "v1Pages": 4,
+      "v1Functions": 3,
       "v2Pages": 11,
       "v2Components": 16,
       "v2Hooks": 5,
@@ -58,8 +58,8 @@
     "content": {
       "domain": "content",
       "v1Tables": 8,
-      "v1Pages": 12,
-      "v1Functions": 2,
+      "v1Pages": 13,
+      "v1Functions": 3,
       "v2Pages": 9,
       "v2Components": 10,
       "v2Hooks": 5,
@@ -68,9 +68,9 @@
     },
     "currency": {
       "domain": "currency",
-      "v1Tables": 10,
-      "v1Pages": 50,
-      "v1Functions": 28,
+      "v1Tables": 11,
+      "v1Pages": 53,
+      "v1Functions": 30,
       "v2Pages": 11,
       "v2Components": 10,
       "v2Hooks": 8,
@@ -80,7 +80,7 @@
     "defense": {
       "domain": "defense",
       "v1Tables": 0,
-      "v1Pages": 5,
+      "v1Pages": 6,
       "v1Functions": 2,
       "v2Pages": 4,
       "v2Components": 6,
@@ -91,8 +91,8 @@
     "financial": {
       "domain": "financial",
       "v1Tables": 1,
-      "v1Pages": 34,
-      "v1Functions": 16,
+      "v1Pages": 37,
+      "v1Functions": 17,
       "v2Pages": 6,
       "v2Components": 12,
       "v2Hooks": 5,
@@ -102,8 +102,8 @@
     },
     "gaming": {
       "domain": "gaming",
-      "v1Tables": 9,
-      "v1Pages": 17,
+      "v1Tables": 11,
+      "v1Pages": 18,
       "v1Functions": 0,
       "v2Pages": 6,
       "v2Components": 0,
@@ -135,8 +135,8 @@
     },
     "helm": {
       "domain": "helm",
-      "v1Tables": 2,
-      "v1Pages": 36,
+      "v1Tables": 3,
+      "v1Pages": 39,
       "v1Functions": 0,
       "v2Pages": 4,
       "v2Components": 7,
@@ -179,8 +179,8 @@
     },
     "membership": {
       "domain": "membership",
-      "v1Tables": 20,
-      "v1Pages": 12,
+      "v1Tables": 22,
+      "v1Pages": 13,
       "v1Functions": 7,
       "v2Pages": 6,
       "v2Components": 5,
@@ -203,9 +203,9 @@
     },
     "outreach": {
       "domain": "outreach",
-      "v1Tables": 9,
-      "v1Pages": 22,
-      "v1Functions": 2,
+      "v1Tables": 11,
+      "v1Pages": 23,
+      "v1Functions": 4,
       "v2Pages": 8,
       "v2Components": 16,
       "v2Hooks": 4,
@@ -248,13 +248,13 @@
     "vehicle": {
       "domain": "vehicle",
       "v1Tables": 2,
-      "v1Pages": 3,
+      "v1Pages": 6,
       "v1Functions": 0,
-      "v2Pages": 5,
-      "v2Components": 5,
+      "v2Pages": 0,
+      "v2Components": 0,
       "v2Hooks": 0,
       "v2Libs": 0,
-      "auditStatus": "migrated"
+      "auditStatus": "not_started"
     }
   },
   "v2AppFiles": [
@@ -271,5 +271,5 @@
   "v2SharedComponents": 48,
   "v2TotalFiles": 605,
   "overallProgress": "22/23 audited, 22/23 migrated, 605 total v2 files",
-  "timestamp": "2026-04-06T02:21:15.993Z"
+  "timestamp": "2026-04-12T00:05:23.880Z"
 }

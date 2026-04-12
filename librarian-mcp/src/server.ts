@@ -14,6 +14,7 @@ import type {
 } from "./types.js";
 import { buildBriefing, buildChecklist, buildDebrief } from "./router/moneyPennyRouter.js";
 import { budgetEnforce, BUDGETS, truncateList, truncateToWords } from "./router/budgets.js";
+import { canonicalValueMatches, loadCanonicalFlat } from "./predicates/canonical_value_matches.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -276,29 +277,53 @@ server.tool(
 
 server.tool(
   "get_canonical_numbers",
-  "Returns all canonical numbers: innovations, crown jewels, patents, membership cost, creator keeps %, etc. Always reads fresh from disk.",
+  "Returns all canonical numbers from canonical_values.yaml (single source of truth): innovations, crown jewels, patents, membership cost, creator keeps %, etc. Always reads fresh from disk.",
   {},
   async () => {
-    const fresh = loadIndex<Record<string, unknown>>("canonical");
-    if (!context) reloadAll();
-    const canonical = fresh || context?.canonicalNumbers || {};
-
-    const result = {
-      innovationCount: (canonical as Record<string, unknown>).innovationCount || 2078,
-      crownJewelCount: (canonical as Record<string, unknown>).crownJewelCount || 146,
-      formalClaimsCount: (canonical as Record<string, unknown>).formalClaimsCount || 1511,
-      provisionalApps: (canonical as Record<string, unknown>).provisionalApps || 10,
-      creatorKeeps: "83.3%",
-      platformMargin: "Cost + 20%",
-      on500Transaction: "$416.67",
-      membershipCost: "$5/year",
-      initiativeCount: 16,
-      legalEntity: "LIANA BANYAN CORPORATION",
-      ein: "41-2797446",
-      state: "Wyoming C-Corp",
-    };
-
-    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    try {
+      const flat = loadCanonicalFlat();
+      const result = {
+        innovationCount: flat["stats.innovation_count"],
+        crownJewelCount: flat["stats.crown_jewels"],
+        formalClaimsCount: flat["stats.formal_claims_approximate"],
+        provisionalApps: flat["stats.patent_provisionals_filed"],
+        productionSystems: flat["stats.production_systems"],
+        puddings: flat["stats.puddings"],
+        papers: flat["stats.papers"],
+        lettersInQueue: flat["stats.letters_in_dispatch_queue"],
+        creatorKeeps: `${flat["economics.creator_keeps_percentage"]}%`,
+        platformMargin: flat["economics.platform_margin"],
+        on500Transaction: "$416.67",
+        membershipCost: `$${flat["economics.membership_cost_usd_per_year"]}/year`,
+        initiativeCount: 16,
+        legalEntity: flat["entity.legal_name"],
+        ein: flat["entity.ein"],
+        entityType: flat["entity.entity_type"],
+        source: "canonical_values.yaml",
+      };
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    } catch {
+      // Fallback if YAML not found
+      const fresh = loadIndex<Record<string, unknown>>("canonical");
+      if (!context) reloadAll();
+      const canonical = fresh || context?.canonicalNumbers || {};
+      const result = {
+        innovationCount: (canonical as Record<string, unknown>).innovationCount || 2078,
+        crownJewelCount: (canonical as Record<string, unknown>).crownJewelCount || 146,
+        formalClaimsCount: (canonical as Record<string, unknown>).formalClaimsCount || 1511,
+        provisionalApps: (canonical as Record<string, unknown>).provisionalApps || 10,
+        creatorKeeps: "83.3%",
+        platformMargin: "Cost + 20%",
+        on500Transaction: "$416.67",
+        membershipCost: "$5/year",
+        initiativeCount: 16,
+        legalEntity: "LIANA BANYAN CORPORATION",
+        ein: "41-2797446",
+        state: "Wyoming C-Corp",
+        source: "fallback (canonical_values.yaml not found)",
+      };
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    }
   }
 );
 
@@ -1017,6 +1042,50 @@ server.tool(
 );
 
 // ═══════════════════════════════════════════
+// TOOL 14b: canonical_value_matches (K406)
+// ═══════════════════════════════════════════
+
+server.tool(
+  "canonical_value_matches",
+  "Verify a document's canonical values against the Liana Banyan source of truth (canonical_values.yaml). Finds stale numbers, wrong percentages, and unverified claims.",
+  {
+    document_path: z.string().describe("Relative path from repo root"),
+    check_all: z.boolean().optional().describe("If true (default), check all canonical keys; if false, provide expected_values"),
+    expected_values: z.record(z.union([z.string(), z.number()])).optional().describe("Optional specific key-value pairs to check"),
+  },
+  async ({ document_path, check_all, expected_values }) => {
+    try {
+      const checkValues = (check_all !== false && !expected_values) ? undefined : expected_values;
+      const result = await canonicalValueMatches(document_path, checkValues);
+
+      const lines: string[] = [];
+      lines.push(`## Canonical Value Check: ${document_path}\n`);
+      lines.push(`Status: **${result.passed ? "PASSED" : "STALE VALUES FOUND"}**`);
+      lines.push(`Values checked: ${result.values_checked} | Confirmed: ${result.values_confirmed}\n`);
+
+      if (result.stale_findings.length > 0) {
+        lines.push(`### Stale Findings (${result.stale_findings.length})`);
+        for (const f of result.stale_findings) {
+          lines.push(`- **${f.key}**: expected \`${f.expected}\`, found \`${f.found}\` (line ${f.line_number})`);
+          lines.push(`  > ${f.context}`);
+        }
+      }
+
+      if (result.unverified_claims.length > 0) {
+        lines.push(`\n### Unverified Claims (${result.unverified_claims.length})`);
+        for (const c of result.unverified_claims) {
+          lines.push(`- ${c.key}: ${c.context}`);
+        }
+      }
+
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    } catch (err) {
+      return { content: [{ type: "text", text: `Error: ${(err as Error).message}` }] };
+    }
+  }
+);
+
+// ═══════════════════════════════════════════
 // TOOL 15: get_dropzone_task
 // ═══════════════════════════════════════════
 
@@ -1709,8 +1778,42 @@ server.tool(
     task: z.string().optional().describe("Task description for this session"),
   },
   async ({ agent, session_id, task }) => {
+    const sections: string[] = [];
+
+    // Canonical values health check at session start
+    try {
+      const flat = loadCanonicalFlat();
+      const overviewPath = resolve(INDEX_DIR, "overview.json");
+      if (existsSync(overviewPath)) {
+        const ov = JSON.parse(readFileSync(overviewPath, "utf-8"));
+        const drifts: string[] = [];
+        if (ov.innovationCount !== undefined && ov.innovationCount !== flat["stats.innovation_count"]) {
+          drifts.push(`innovationCount: overview=${ov.innovationCount}, canonical=${flat["stats.innovation_count"]}`);
+        }
+        if (ov.crownJewelCount !== undefined && ov.crownJewelCount !== flat["stats.crown_jewels"]) {
+          drifts.push(`crownJewelCount: overview=${ov.crownJewelCount}, canonical=${flat["stats.crown_jewels"]}`);
+        }
+        if (ov.formalClaimsCount !== undefined && ov.formalClaimsCount !== flat["stats.formal_claims_approximate"]) {
+          drifts.push(`formalClaimsCount: overview=${ov.formalClaimsCount}, canonical=${flat["stats.formal_claims_approximate"]}`);
+        }
+        if (ov.provisionalApps !== undefined && ov.provisionalApps !== flat["stats.patent_provisionals_filed"]) {
+          drifts.push(`provisionalApps: overview=${ov.provisionalApps}, canonical=${flat["stats.patent_provisionals_filed"]}`);
+        }
+        if (drifts.length > 0) {
+          sections.push("⚠️  CANONICAL DRIFT DETECTED — overview.json disagrees with canonical_values.yaml:");
+          for (const d of drifts) sections.push(`  - ${d}`);
+          sections.push("  Action: run 'cd librarian-mcp && npm run rebuild' to resync, or update canonical_values.yaml if values changed.");
+        } else {
+          sections.push("✅ Canonical values: overview.json matches canonical_values.yaml");
+        }
+      }
+    } catch (err) {
+      sections.push(`⚠️  Canonical check skipped: ${(err as Error).message}`);
+    }
+
     const output = runStitchpunkHook("session_start.py", [agent, session_id, task || ""]);
-    return { content: [{ type: "text", text: output }] };
+    sections.push(output);
+    return { content: [{ type: "text", text: sections.join("\n") }] };
   }
 );
 
@@ -1725,6 +1828,324 @@ server.tool(
   async ({ agent, session_id, summary }) => {
     const output = runStitchpunkHook("session_end.py", [agent, session_id, summary]);
     return { content: [{ type: "text", text: output }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// TOUCHSTONE — Deterministic Coordinator Tools
+// ═══════════════════════════════════════════
+
+const TOUCHSTONE_DIR = resolve(__dirname, "..", "touchstone");
+
+function runTouchstone(script: string, args: string[]): string {
+  const cmd = `python "${resolve(TOUCHSTONE_DIR, script)}" ${args.map(a => `"${a.replace(/"/g, '\\"')}"`).join(" ")}`;
+  try {
+    return execSync(cmd, {
+      cwd: TOUCHSTONE_DIR,
+      timeout: 60_000,
+      encoding: "utf-8",
+      env: { ...process.env, PYTHONIOENCODING: "utf-8" },
+    });
+  } catch (err: unknown) {
+    const e = err as { stdout?: string; stderr?: string; message?: string };
+    return `ERROR: ${e.stdout || ""}${e.stderr || e.message || "Unknown error"}`;
+  }
+}
+
+function loadTouchstoneManifest(): any {
+  const mp = resolve(TOUCHSTONE_DIR, "manifest.json");
+  if (!existsSync(mp)) return { deliverables: [] };
+  return JSON.parse(readFileSync(mp, "utf-8"));
+}
+
+function saveTouchstoneManifest(manifest: any): void {
+  manifest.updated_at = new Date().toISOString();
+  const mp = resolve(TOUCHSTONE_DIR, "manifest.json");
+  writeFileSync(mp, JSON.stringify(manifest, null, 2) + "\n", "utf-8");
+}
+
+server.tool(
+  "touchstone_list",
+  "Lists all deliverables in the TouchStone manifest, optionally filtered by owner or status.",
+  {
+    owner: z.string().optional().describe("Filter by owner: bishop, knight, rook, pawn, founder"),
+    status: z.string().optional().describe("Filter by status: pending, in_progress, completed, blocked, failed"),
+  },
+  async ({ owner, status }) => {
+    const manifest = loadTouchstoneManifest();
+    let deliverables = manifest.deliverables || [];
+
+    if (owner) deliverables = deliverables.filter((d: any) => d.owner === owner);
+    if (status) deliverables = deliverables.filter((d: any) => d.status === status);
+
+    const summary = deliverables.map((d: any) => ({
+      id: d.id,
+      title: d.title,
+      owner: d.owner,
+      status: d.status,
+      depends_on: d.depends_on,
+      notes: d.notes,
+    }));
+
+    const counts: Record<string, number> = {};
+    for (const d of deliverables) {
+      counts[d.status] = (counts[d.status] || 0) + 1;
+    }
+
+    return {
+      content: [{
+        type: "text",
+        text: `TouchStone Manifest: ${deliverables.length} deliverables\n` +
+          `Status: ${Object.entries(counts).map(([k, v]) => `${k}=${v}`).join(", ")}\n\n` +
+          JSON.stringify(summary, null, 2),
+      }],
+    };
+  }
+);
+
+server.tool(
+  "touchstone_verify",
+  "Runs verification predicates on a specific deliverable or all deliverables. Returns pass/fail with reasons.",
+  {
+    deliverable_id: z.string().optional().describe("Specific deliverable ID to verify. Omit to verify all."),
+  },
+  async ({ deliverable_id }) => {
+    const args = deliverable_id ? [deliverable_id] : [];
+    const output = runTouchstone("verify.py", args);
+
+    try {
+      const result = JSON.parse(output);
+      if (deliverable_id) {
+        const passStr = result.passed ? "PASSED" : "FAILED";
+        const details = (result.predicate_results || []).map((pr: any) =>
+          `  ${pr.passed ? "✅" : "❌"} ${pr.predicate}: ${pr.message}`
+        ).join("\n");
+        return {
+          content: [{ type: "text", text: `${passStr}: ${deliverable_id}\n${details}` }],
+        };
+      } else {
+        return {
+          content: [{
+            type: "text",
+            text: `TouchStone Report (${result.verified_at || "now"}):\n` +
+              `Total: ${result.total} | Passed: ${result.passed} | Failed: ${result.failed} | Pending: ${result.pending} | Blocked: ${result.blocked}\n\n` +
+              `By owner:\n${Object.entries(result.by_owner || {}).map(([o, s]: [string, any]) =>
+                `  ${o}: ${s.passed}/${s.total} passed`).join("\n")}\n\n` +
+              `Details:\n${(result.results || []).map((r: any) =>
+                `  ${r.passed ? "✅" : "⬜"} [${r.status}] ${r.title || r.deliverable_id}`
+              ).join("\n")}`,
+          }],
+        };
+      }
+    } catch {
+      return { content: [{ type: "text", text: output }] };
+    }
+  }
+);
+
+server.tool(
+  "touchstone_claim",
+  "Claims a pending deliverable for the calling agent, setting it to in_progress.",
+  {
+    deliverable_id: z.string().describe("The deliverable ID to claim"),
+    agent: z.string().describe("The agent claiming: bishop, knight, rook, pawn"),
+  },
+  async ({ deliverable_id, agent }) => {
+    const manifest = loadTouchstoneManifest();
+    const d = (manifest.deliverables || []).find((dd: any) => dd.id === deliverable_id);
+
+    if (!d) {
+      return { content: [{ type: "text", text: `Deliverable '${deliverable_id}' not found.` }] };
+    }
+    if (d.status !== "pending") {
+      return { content: [{ type: "text", text: `Cannot claim: status is '${d.status}', not 'pending'.` }] };
+    }
+    if (d.owner !== agent) {
+      return { content: [{ type: "text", text: `Cannot claim: owned by '${d.owner}', not '${agent}'.` }] };
+    }
+
+    d.status = "in_progress";
+    saveTouchstoneManifest(manifest);
+
+    // Log to ledger
+    runTouchstone("ledger.py", ["started", deliverable_id, JSON.stringify({ agent })]);
+
+    return {
+      content: [{ type: "text", text: `✅ Claimed: ${d.title} (${deliverable_id}) → in_progress` }],
+    };
+  }
+);
+
+server.tool(
+  "touchstone_complete",
+  "Submits completion for a deliverable. Runs all predicates. If ALL pass, marks completed. If any fail, rejects with reasons.",
+  {
+    deliverable_id: z.string().describe("The deliverable ID to mark complete"),
+    agent: z.string().describe("The agent completing: bishop, knight, rook, pawn"),
+  },
+  async ({ deliverable_id, agent }) => {
+    const manifest = loadTouchstoneManifest();
+    const d = (manifest.deliverables || []).find((dd: any) => dd.id === deliverable_id);
+
+    if (!d) {
+      return { content: [{ type: "text", text: `Deliverable '${deliverable_id}' not found.` }] };
+    }
+
+    // Run verification
+    const output = runTouchstone("verify.py", [deliverable_id]);
+    let result: any;
+    try {
+      result = JSON.parse(output);
+    } catch {
+      return { content: [{ type: "text", text: `Verification error: ${output}` }] };
+    }
+
+    if (result.passed) {
+      d.status = "completed";
+      d.completed_at = new Date().toISOString();
+      saveTouchstoneManifest(manifest);
+
+      runTouchstone("ledger.py", ["completed", deliverable_id, JSON.stringify({ agent, predicate_count: (result.predicate_results || []).length })]);
+
+      return {
+        content: [{ type: "text", text: `✅ COMPLETED: ${d.title}\nAll ${(result.predicate_results || []).length} predicates passed.` }],
+      };
+    } else {
+      runTouchstone("ledger.py", ["failed", deliverable_id, JSON.stringify({ agent, failures: result.blocking_failures })]);
+
+      const failDetails = (result.blocking_failures || []).map((f: string) => `  ❌ ${f}`).join("\n");
+      return {
+        content: [{ type: "text", text: `REJECTED: ${d.title}\nPredicates failed:\n${failDetails}` }],
+      };
+    }
+  }
+);
+
+// ═══════════════════════════════════════════
+// SCRAMBLER — Chessboard Phase 2 Sync Tools (K407)
+// ═══════════════════════════════════════════
+
+const SCRAMBLER_DIR = resolve(__dirname, "..", "scrambler");
+
+function runScrambler(script: string, args: string[]): string {
+  const cmd = `python "${resolve(SCRAMBLER_DIR, script)}" ${args.map(a => `"${a.replace(/"/g, '\\"')}"`).join(" ")}`;
+  try {
+    return execSync(cmd, {
+      cwd: SCRAMBLER_DIR,
+      timeout: 60_000,
+      encoding: "utf-8",
+      env: { ...process.env, PYTHONIOENCODING: "utf-8" },
+    });
+  } catch (err: unknown) {
+    const e = err as { stdout?: string; stderr?: string; message?: string };
+    return `ERROR: ${e.stdout || ""}${e.stderr || e.message || "Unknown error"}`;
+  }
+}
+
+server.tool(
+  "scrambler_session_start",
+  "Scrambler Chessboard Phase 2: generates a session start brief from the canonical state. Flags drift, conflicts, and pending handoffs. Returns a structured brief the agent ingests as first context.",
+  {
+    agent: z.string().describe("Agent type: bishop, knight, rook, pawn"),
+    session_id: z.string().describe("Session identifier (e.g. 'B098', 'K407')"),
+  },
+  async ({ agent, session_id }) => {
+    const output = runScrambler("session_brief.py", [agent, session_id]);
+
+    try {
+      const brief = JSON.parse(output);
+      const lines: string[] = [];
+      lines.push(`## Scrambler Session Brief: ${session_id}\n`);
+      lines.push(`Agent: **${brief.agent}** | Started: ${brief.started_at}`);
+      lines.push(`Snapshot: ${brief.canonical_state_snapshot_id}`);
+      lines.push(`Ready to proceed: **${brief.ready_to_proceed ? "YES" : "NO"}**\n`);
+
+      if (brief.block_reason && brief.block_reason.length > 0) {
+        lines.push(`### BLOCKED`);
+        for (const r of brief.block_reason) lines.push(`- ${r}`);
+      }
+
+      if (brief.drift_warnings && brief.drift_warnings.length > 0) {
+        lines.push(`\n### Drift Warnings (${brief.drift_warnings.length})`);
+        for (const d of brief.drift_warnings) {
+          lines.push(`- [${d.severity}] ${d.message}`);
+        }
+      }
+
+      if (brief.canonical_conflicts && brief.canonical_conflicts.length > 0) {
+        lines.push(`\n### Canonical Conflicts (${brief.canonical_conflicts.length})`);
+        for (const c of brief.canonical_conflicts) {
+          lines.push(`- ${c.key}: ${c.reason || c.message}`);
+        }
+      }
+
+      const cs = brief.canonical_state || {};
+      if (cs.stats) {
+        lines.push(`\n### Canonical Numbers`);
+        lines.push(`Innovations: ${cs.stats.innovation_count} | CJs: ${cs.stats.crown_jewels} | Claims: ${cs.stats.formal_claims_approximate}`);
+      }
+
+      if (brief.prior_session_summary) {
+        const ps = brief.prior_session_summary;
+        const lastKey = Object.keys(ps).find(k => k.startsWith("last_"));
+        if (lastKey) {
+          lines.push(`\n### Prior Session`);
+          lines.push(`${lastKey}: ${ps[lastKey]}`);
+        }
+      }
+
+      const promptsKey = Object.keys(brief).find(k => k.endsWith("_prompts") && k.startsWith("active_"));
+      if (promptsKey && brief[promptsKey]?.length > 0) {
+        lines.push(`\n### Active Prompts`);
+        for (const p of brief[promptsKey]) lines.push(`- ${p}`);
+      }
+
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    } catch {
+      return { content: [{ type: "text", text: output }] };
+    }
+  }
+);
+
+server.tool(
+  "scrambler_session_closeout",
+  "Scrambler Chessboard Phase 2: reconciles session work against canonical state at session end. Checks for unreconciled conflicts, applies approved changes to canonical_values.yaml, saves snapshot.",
+  {
+    agent: z.string().describe("Agent type: bishop, knight, rook, pawn"),
+    session_id: z.string().describe("Session identifier (e.g. 'B098', 'K407')"),
+    summary: z.string().describe("What was built/accomplished this session"),
+  },
+  async ({ agent, session_id, summary }) => {
+    const output = runScrambler("session_closeout.py", [agent, session_id, summary]);
+
+    try {
+      const result = JSON.parse(output);
+      const lines: string[] = [];
+      lines.push(`## Scrambler Session Closeout: ${session_id}\n`);
+      lines.push(`Agent: **${result.agent}** | Completed: ${result.completed_at}`);
+      lines.push(`Git commits: ${result.git_commits_in_session} | Ledger entries: ${result.ledger_entries_in_session}`);
+      lines.push(`Drift detected: ${result.drift_detected} | Conflicts: ${result.conflicts_total}`);
+      lines.push(`YAML updated: ${result.yaml_updated ? "YES" : "NO"}`);
+      lines.push(`Ready for next session: **${result.ready_for_next_session ? "YES" : "NO"}**\n`);
+
+      if (Object.keys(result.approved_changes || {}).length > 0) {
+        lines.push(`### Approved Changes`);
+        for (const [key, val] of Object.entries(result.approved_changes)) {
+          lines.push(`- ${key}: ${val}`);
+        }
+      }
+
+      if (result.unreconciled_conflicts && result.unreconciled_conflicts.length > 0) {
+        lines.push(`\n### Unreconciled Conflicts (${result.unreconciled_conflicts.length})`);
+        for (const c of result.unreconciled_conflicts) {
+          lines.push(`- [${c.severity}] ${c.key}: ${c.reason || c.message}`);
+        }
+      }
+
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    } catch {
+      return { content: [{ type: "text", text: output }] };
+    }
   }
 );
 

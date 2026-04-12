@@ -16,6 +16,7 @@ import {
   BUDGETS, truncateToWords, compactTable, compactFunction,
   compactPage, compactConcept, budgetEnforce, countWords,
 } from "./budgets.js";
+import { loadCanonicalFlat } from "../predicates/canonical_value_matches.js";
 
 // ─── Keyword Extraction ─────────────────────────────────────────
 
@@ -219,14 +220,24 @@ export function buildBriefing(
     }
   }
 
-  // 5. Canonical reminders
-  const canonicalReminders: Record<string, string | number> = {
+  // 5. Canonical reminders — read from YAML source of truth
+  let canonicalReminders: Record<string, string | number> = {
     creatorKeeps: "83.3%",
     platformMargin: "Cost + 20%",
     membershipCost: "$5/year",
     innovationCount: overview?.innovationCount || 1938,
     initiativeCount: 16,
   };
+  try {
+    const flat = loadCanonicalFlat();
+    canonicalReminders = {
+      creatorKeeps: `${flat["economics.creator_keeps_percentage"]}%`,
+      platformMargin: String(flat["economics.platform_margin"]),
+      membershipCost: `$${flat["economics.membership_cost_usd_per_year"]}/year`,
+      innovationCount: flat["stats.innovation_count"] ?? canonicalReminders.innovationCount,
+      initiativeCount: 16,
+    };
+  } catch { /* YAML not available, use fallback */ }
 
   const pkg: BriefingPackage = {
     task,
@@ -392,15 +403,37 @@ export function buildDebrief(
   writeFileSync(sessionsPath, JSON.stringify(sessions, null, 2), "utf-8");
 
   // Update overview.json by merging — preserve index counts from last rebuild,
-  // only update session tracking fields
+  // only update session tracking fields. Canonical numbers come from YAML, not session context.
   const overviewPath = resolve(indexDir, "overview.json");
+  const canonicalDrifts: string[] = [];
+
   if (existsSync(overviewPath)) {
     const current = JSON.parse(readFileSync(overviewPath, "utf-8"));
     current.lastSession = sessionId;
     current.pendingWork = pendingWork;
     current.timestamp = new Date().toISOString();
+
+    // K406 fix: reconcile canonical numbers from YAML source of truth
+    try {
+      const flat = loadCanonicalFlat();
+      const mapping: [string, string][] = [
+        ["innovationCount", "stats.innovation_count"],
+        ["crownJewelCount", "stats.crown_jewels"],
+        ["formalClaimsCount", "stats.formal_claims_approximate"],
+        ["provisionalApps", "stats.patent_provisionals_filed"],
+      ];
+      for (const [ovKey, yamlKey] of mapping) {
+        const yamlVal = flat[yamlKey];
+        if (yamlVal !== undefined && current[ovKey] !== yamlVal) {
+          canonicalDrifts.push(`${ovKey}: overview had ${current[ovKey]}, YAML says ${yamlVal} — corrected`);
+          current[ovKey] = yamlVal;
+        }
+      }
+    } catch {
+      canonicalDrifts.push("canonical_values.yaml not readable — canonical numbers NOT reconciled");
+    }
+
     writeFileSync(overviewPath, JSON.stringify(current, null, 2), "utf-8");
-    // Also update the in-memory overview if it exists
     if (overview) {
       overview.lastSession = sessionId;
       overview.pendingWork = pendingWork;
@@ -421,6 +454,12 @@ export function buildDebrief(
 
   // Sync reminders
   const syncReminders: string[] = [];
+
+  // Surface canonical drift corrections from YAML reconciliation
+  for (const drift of canonicalDrifts) {
+    syncReminders.push(`Canonical reconciliation: ${drift}`);
+  }
+
   const touchesCephas = filesChanged.some(f => f.toLowerCase().includes("cephas"));
   const touchesLetters = filesChanged.some(f => f.toLowerCase().includes("letter"));
   if (touchesCephas || touchesLetters) {

@@ -1,0 +1,62 @@
+---
+# Liana Banyan Canonical Values Registry
+# Updated: B097 April 2026
+# Single source of truth. Any document containing these keys should match these values.
+# When Bishop or Knight updates a canonical value, update this file FIRST, then run the linter.
+
+stats:
+  innovation_count: 2250
+  crown_jewels: 216
+  production_systems: 35
+  patent_provisionals_filed: 12
+  formal_claims_approximate: 2405
+  puddings: 184
+  papers: 41
+  letters_in_dispatch_queue: 92
+  vessel_tiers: 7
+  cold_start_pathways: 6
+
+economics:
+  creator_keeps_percentage: 83.3
+  platform_margin: "Cost+20%"
+  membership_cost_usd_per_year: 5
+  per_person_credit_cap: 5000
+  per_stake_payout_cap_usd: 10000000
+  saa_influence_cap_usd: 10000000
+
+ip_allocation:
+  patent_buckets_percentage: 60
+  founder_creator_percentage: 20
+  global_sponsor_pool_percentage: 10
+  individual_patent_pedestals_percentage: 10
+  herjavec_rpa_source: "founder_creator_slice"
+  herjavec_rpa_percentage_of_source: 50
+  herjavec_rpa_equivalent_total_percentage: 10
+  herjavec_rpa_window_years: 20
+
+entity:
+  legal_name: "Liana Banyan Corporation"
+  entity_type: "Wyoming C-Corporation"
+  ein: "41-2797446"
+  filed_date: "2025-11-21"
+  holding_company: "Upekrithen, LLC"
+  holding_company_jurisdiction: "Wyoming"
+  holding_company_owner_percentage: 100
+
+patents:
+  most_recent_prov_number: 12
+  most_recent_prov_application: "64/031,531"
+  most_recent_prov_filed: "2026-04-07"
+  next_prov_number: 13
+  next_prov_status: "thresh"
+  conversion_deadline_first_prov: "2026-11-26"
+
+hosting:
+  firebase_targets: 9
+  portal_surfaces: 10
+
+people:
+  founder_children_count: 8
+  founder_rank_military: "SSG before OCS, commissioned Aviation 15A IFR-rated Troop Leader"
+  crown_holders_dirty_dozen_green: 11
+  dirty_dozen_total: 12

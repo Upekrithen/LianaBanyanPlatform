@@ -16,6 +16,7 @@ import {
   Wheat, Store, Landmark, Factory, Hexagon, Swords, Users, MapPin,
   Map, Key, Navigation, UtensilsCrossed, ChefHat, Ghost, Glasses,
   DollarSign, Zap, Ban, Package, Sprout, Anchor,
+  HandHelping, Theater, Footprints,
 } from "lucide-react";
 import { LETTER_CUE_CARDS } from "@/data/letterCueCards";
 
@@ -79,6 +80,11 @@ const DECK_CARDS = [
   { id: "ambassador-card", title: "Become an Ambassador", icon: Zap, href: "/cue-cards/ambassador", description: "Earn rewards tied to our patent portfolio." },
   { id: "pathfinder", title: "PathFinder", icon: Navigation, href: "/pathfinder", description: "Not sure what to do? Log experiences, discover patterns, find your path." },
   { id: "pearl-diver", title: "Pearl Diver", icon: Anchor, href: "/resource-board", description: "Find deals others miss. Get paid for what you already know." },
+
+  // Open Water cue cards — K408
+  { id: "we-need-what-youre-good-at", title: "We Need What You're Good At", icon: HandHelping, href: "/cue/we-need-what-youre-good-at", description: "Lived competence, not credentials. One step ahead is all it takes to be a Patron." },
+  { id: "you-have-a-play-i-have-a-stage", title: "You Have a Play, I Have a Stage", icon: Theater, href: "/cue/you-have-a-play-i-have-a-stage", description: "Bring what you want to do. The cooperative provides the stage." },
+  { id: "doing-something-is-what-it-takes", title: "Doing Something is What It Takes", icon: Footprints, href: "/cue/doing-something-is-what-it-takes-to-start", description: "Zero to one. The next step reveals itself once you move." },
 ] as const;
 
 const CATEGORY_LABELS: Record<string, string> = {
