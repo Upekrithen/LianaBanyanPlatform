@@ -1,0 +1,6 @@
+{"timestamp": "2026-04-12T18:39:22.005153+00:00", "session_id": "B101", "key": "stats.puddings", "previous": 189, "current": 184, "reason": "Summary claims stats.puddings=184 but no evidence found"}
+{"timestamp": "2026-04-12T20:16:36.270435+00:00", "session_id": "K420", "key": "stats.innovation_count", "previous": 2263, "current": 2262, "reason": "Summary claims stats.innovation_count=2262 but no evidence found"}
+{"timestamp": "2026-04-12T20:16:36.270467+00:00", "session_id": "K420", "key": "stats.crown_jewels", "previous": 222, "current": 221, "reason": "Summary claims stats.crown_jewels=221 but no evidence found"}
+{"timestamp": "2026-04-12T20:16:36.270476+00:00", "session_id": "K420", "key": "stats.puddings", "previous": 189, "current": 183, "reason": "Summary claims stats.puddings=183 but no evidence found"}
+{"timestamp": "2026-04-12T20:16:36.270481+00:00", "session_id": "K420", "key": "stats.papers", "previous": 41, "current": 1, "reason": "Summary claims stats.papers=1 but no evidence found"}
+{"timestamp": "2026-04-12T21:28:25.199123+00:00", "session_id": "K421", "key": "stats.puddings", "previous": 189, "current": 182, "reason": "Summary claims stats.puddings=182 but no evidence found"}

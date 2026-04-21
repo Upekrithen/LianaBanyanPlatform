@@ -1,0 +1,4 @@
+{"timestamp": "2026-04-12T18:38:28.838289+00:00", "event_type": "failed", "deliverable_id": "B096-canonical-stats-update", "details": {"agent": "bishop", "failures": ["Predicate raised exception: 'NoneType' object has no attribute 'strip'"]}}
+{"timestamp": "2026-04-12T18:38:29.089474+00:00", "event_type": "failed", "deliverable_id": "B096-librarian-index-rebuild", "details": {"agent": "bishop", "failures": ["Substring 'B096' not found in overview"]}}
+{"timestamp": "2026-04-12T21:28:08.657921+00:00", "event_type": "completed", "deliverable_id": "B096-deck-card-auto-shop", "details": {"agent": "knight", "predicate_count": 1}}
+{"timestamp": "2026-04-12T21:28:09.868567+00:00", "event_type": "completed", "deliverable_id": "B096-deck-card-triple-double", "details": {"agent": "knight", "predicate_count": 1}}
