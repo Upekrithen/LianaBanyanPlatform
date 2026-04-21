@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  GitBranch, 
-  Play, 
-  Pause, 
-  RotateCcw, 
+import {
+  GitBranch,
+  Play,
+  Pause,
+  RotateCcw,
   Save,
   Trash2,
   ChevronRight,
@@ -161,11 +161,11 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
     const monthlyRevenue = monthlyOrders * avgOrderValue;
     const creatorEarnings = monthlyRevenue * creatorCut;
     const platformMargin = monthlyRevenue * (1 - creatorCut);
-    
+
     let totalRevenue = 0;
     let totalCreatorEarnings = 0;
     let finalMonthlyOrders = monthlyOrders;
-    
+
     for (let month = 0; month < timeHorizon; month++) {
       const monthOrders = monthlyOrders * Math.pow(1 + growthRate, month);
       const monthRevenue = monthOrders * avgOrderValue;
@@ -229,7 +229,7 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
   };
 
   const updateVariable = (id: string, value: number | boolean | string) => {
-    setVariables(prev => prev.map(v => 
+    setVariables(prev => prev.map(v =>
       v.id === id ? { ...v, value } : v
     ));
   };
@@ -332,7 +332,7 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
                 <Zap className="w-5 h-5 text-purple-400" />
                 Variables
               </h3>
-              
+
               <div className="space-y-4">
                 {variables.map(variable => (
                   <div key={variable.id} className="p-4 bg-white/5 rounded-xl border border-white/10">
@@ -345,7 +345,7 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
                         {variable.type === 'percentage' ? `${variable.value}%` : variable.value}
                       </span>
                     </div>
-                    
+
                     {variable.type === 'select' ? (
                       <select
                         value={variable.value as string}
@@ -360,8 +360,8 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
                       <button
                         onClick={() => updateVariable(variable.id, !variable.value)}
                         className={`w-full py-2 rounded-lg text-sm transition-colors ${
-                          variable.value 
-                            ? 'bg-purple-500 text-white' 
+                          variable.value
+                            ? 'bg-purple-500 text-white'
                             : 'bg-white/10 text-white/60'
                         }`}
                       >
@@ -381,7 +381,7 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
                   </div>
                 ))}
               </div>
-              
+
               {/* Saved Scenarios */}
               {savedScenarios.length > 0 && (
                 <div className="mt-6">
@@ -420,7 +420,7 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
                 <TrendingUp className="w-5 h-5 text-emerald-400" />
                 Projected Outcomes
               </h3>
-              
+
               <div className="space-y-3">
                 {outcomes.map(outcome => (
                   <motion.div
@@ -459,7 +459,7 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
                   </motion.div>
                 ))}
               </div>
-              
+
               {/* Disclaimer */}
               <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
                 <div className="flex items-start gap-2">
@@ -467,7 +467,7 @@ export const ContingencyOperators: React.FC<ContingencyOperatorsProps> = ({
                   <div>
                     <p className="text-sm text-yellow-200 font-medium">Simulation Only</p>
                     <p className="text-xs text-yellow-200/70 mt-1">
-                      These projections are hypothetical. Actual results may vary based on 
+                      These projections are hypothetical. Actual results may vary based on
                       market conditions, effort, and other factors. This is not financial advice.
                     </p>
                   </div>

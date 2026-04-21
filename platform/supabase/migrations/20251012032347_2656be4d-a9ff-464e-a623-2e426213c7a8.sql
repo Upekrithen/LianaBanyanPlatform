@@ -8,11 +8,11 @@ CREATE TABLE public.position_assignments (
   position_id UUID NOT NULL REFERENCES public.contract_position_templates(id) ON DELETE CASCADE,
   applicant_id UUID NOT NULL REFERENCES auth.users(id),
   project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
-  
+
   -- Assignment details
   assignment_type assignment_type NOT NULL,
   assignment_status assignment_status NOT NULL DEFAULT 'pending',
-  
+
   -- Compensation adjustments for Secondary/Backup
   original_equity_percentage NUMERIC,
   adjusted_equity_percentage NUMERIC,
@@ -20,17 +20,17 @@ CREATE TABLE public.position_assignments (
   adjusted_cash_amount NUMERIC,
   original_credits NUMERIC,
   adjusted_credits NUMERIC,
-  
+
   -- Duty reduction
   duty_percentage NUMERIC NOT NULL DEFAULT 100, -- 100% for primary, reduced for secondary/backup
   duty_description TEXT,
-  
+
   -- Assignment metadata
   assigned_by UUID REFERENCES auth.users(id),
   assigned_at TIMESTAMPTZ DEFAULT now(),
   start_date TIMESTAMPTZ,
   end_date TIMESTAMPTZ,
-  
+
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
@@ -97,17 +97,17 @@ CREATE TABLE public.application_reviews (
   application_id UUID NOT NULL REFERENCES public.position_applications(id) ON DELETE CASCADE,
   reviewer_id UUID NOT NULL REFERENCES auth.users(id),
   reviewer_email TEXT NOT NULL,
-  
+
   -- Review details
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
   strengths TEXT,
   weaknesses TEXT,
   recommendation TEXT CHECK (recommendation IN ('hire_primary', 'hire_secondary', 'hire_backup', 'reject', 'pending')),
-  
+
   -- Review metadata
   reviewed_at TIMESTAMPTZ DEFAULT now(),
   notes TEXT,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -188,7 +188,7 @@ BEGIN
       )
     );
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

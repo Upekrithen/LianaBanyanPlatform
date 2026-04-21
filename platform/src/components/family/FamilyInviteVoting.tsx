@@ -218,7 +218,7 @@ export function FamilyInviteVoting({
             <AlertDialogDescription>
               If you reject this invitation, {rejectDialog?.invitee_name} will not be added to the {familyDisplayName.toLowerCase()}.
               <br /><br />
-              <strong>This is a final decision</strong> — the invitation cannot be reopened. 
+              <strong>This is a final decision</strong> — the invitation cannot be reopened.
               A new invitation would need to be sent.
             </AlertDialogDescription>
           </AlertDialogHeader>

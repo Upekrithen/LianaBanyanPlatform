@@ -1,6 +1,6 @@
 /**
  * Quest Card Gallery
- * 
+ *
  * Displays quest deck cards with level indicators and lock states.
  * Cards above user's current level are shown but locked.
  */

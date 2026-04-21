@@ -164,14 +164,14 @@ export function ServiceViolationDashboard() {
               </Badge>
             </div>
             <div className="w-full bg-muted rounded-full h-3">
-              <div 
+              <div
                 className="bg-success h-3 rounded-full transition-all"
                 style={{ width: `${(stats.compliant / stats.total) * 100}%` }}
               />
             </div>
             <p className="text-xs text-muted-foreground mt-2">
-              {stats.violations === 0 
-                ? "Perfect compliance! Keep it up!" 
+              {stats.violations === 0
+                ? "Perfect compliance! Keep it up!"
                 : `${stats.violations} violation${stats.violations > 1 ? 's' : ''} recorded. Review below.`
               }
             </p>
@@ -194,7 +194,7 @@ export function ServiceViolationDashboard() {
           <CardContent>
             <div className="space-y-4">
               {violations.map((log) => (
-                <div 
+                <div
                   key={log.id}
                   className={`p-4 rounded-lg border ${!log.rate_compliant ? 'border-destructive bg-destructive/5' : 'border-border'}`}
                 >
@@ -240,7 +240,7 @@ export function ServiceViolationDashboard() {
                   {!log.rate_compliant && (
                     <Alert variant="destructive" className="mt-3">
                       <AlertDescription className="text-xs">
-                        This contract violated LB rate minimums. Future violations may result in 
+                        This contract violated LB rate minimums. Future violations may result in
                         suspension or removal from the platform.
                       </AlertDescription>
                     </Alert>

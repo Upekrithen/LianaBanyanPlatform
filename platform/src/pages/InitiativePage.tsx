@@ -236,12 +236,12 @@ export default function InitiativePage() {
   const { slug } = useParams<{ slug: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
-  
+
   // Redirect to dedicated page if one exists
   if (slug && DEDICATED_PAGES[slug]) {
     return <Navigate to={DEDICATED_PAGES[slug]} replace />;
   }
-  
+
   const config = INITIATIVE_CONFIGS[slug || ""] || null;
 
   // Fetch initiative data
@@ -281,16 +281,16 @@ export default function InitiativePage() {
   return (
     <PortalPageLayout maxWidth="xl" xrayId="initiative-page" variant="stage"><div className="space-y-6">
       {/* Back to Initiatives button */}
-      <Button 
-        variant="ghost" 
-        size="sm" 
+      <Button
+        variant="ghost"
+        size="sm"
         onClick={() => navigate('/initiatives')}
         className="gap-2 -ml-2"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to 16 Initiatives
       </Button>
-      
+
       <div className="flex items-center gap-3">
         <Icon className="h-8 w-8 text-primary" />
         <div>

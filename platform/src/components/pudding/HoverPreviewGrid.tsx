@@ -41,8 +41,8 @@ export function HoverPreviewGrid({
     return matchesSearch && matchesFilter;
   });
 
-  const uniqueCategories = categories.length > 0 
-    ? categories 
+  const uniqueCategories = categories.length > 0
+    ? categories
     : [...new Set(items.map(i => i.category).filter(Boolean))];
 
   const handleItemClick = (item: GridItem) => {
@@ -74,7 +74,7 @@ export function HoverPreviewGrid({
               className="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           )}
-          
+
           {filterable && uniqueCategories.length > 0 && (
             <div className="flex flex-wrap gap-2">
               <button
@@ -119,7 +119,7 @@ export function HoverPreviewGrid({
         </span>
       </div>
 
-      <div 
+      <div
         className="grid gap-2"
         style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
       >
@@ -262,7 +262,7 @@ export function HoverPreviewGrid({
                 className={`absolute inset-0 rounded-2xl shadow-2xl overflow-hidden bg-white dark:bg-gray-800 ${
                   isFlipped ? 'opacity-100' : 'opacity-0'
                 }`}
-                style={{ 
+                style={{
                   backfaceVisibility: 'hidden',
                   transform: 'rotateY(180deg)'
                 }}

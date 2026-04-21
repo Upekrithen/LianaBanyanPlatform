@@ -141,7 +141,7 @@ export const IslandWorldMap = () => {
     const type = normalizeToLoreKey(island?.island_name || "");
     const themeConfig = (island as any)?.theme_config as { color_palette?: string[] } | null;
     const primaryColor = themeConfig?.color_palette?.[0] || "#8b5cf6";
-    
+
     // Icon mapping based on island type
     const iconMap: Record<string, any> = {
       harvest: Anchor,
@@ -153,9 +153,9 @@ export const IslandWorldMap = () => {
       train: Sparkles,
       treasure: Star,
     };
-    
-    return { 
-      color: primaryColor, 
+
+    return {
+      color: primaryColor,
       icon: iconMap[type] || Crown,
       gradient: themeConfig?.color_palette || [primaryColor, primaryColor]
     };
@@ -226,7 +226,7 @@ export const IslandWorldMap = () => {
         `,
         backgroundSize: "20px 20px"
       }} />
-      
+
       {/* Aged paper texture */}
       <div className="absolute inset-0 opacity-10" style={{
         backgroundImage: `radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
@@ -262,7 +262,7 @@ export const IslandWorldMap = () => {
           const pos = getIslandPosition(index, island.island_name || `Island ${index + 1}`);
           // Draw connections
           return pos.connections?.map((connName) => {
-            const connIsland = displayIslands.find((i: any) => 
+            const connIsland = displayIslands.find((i: any) =>
               normalizeToLoreKey(i.island_name || "") === connName.toLowerCase()
             );
             if (!connIsland) return null;
@@ -313,17 +313,17 @@ export const IslandWorldMap = () => {
                 }}
                 onClick={() => {
                   const loreKey = normalizeToLoreKey(island.island_name || "");
-                  
+
                   // Special routing for Harvest Island - has its own dedicated page
                   if (loreKey === "harvest") {
                     navigate("/harvest-island");
                     return;
                   }
-                  
+
                   const generatedImage = getIslandImage(island.island_name || "");
                   const mapData = island.island_map_data as { thumbnail_image?: string; full_image?: string } | null;
                   const imageUrl = generatedImage || mapData?.full_image;
-                  
+
                   if (imageUrl) {
                     setLightboxImage({
                       url: imageUrl,
@@ -339,7 +339,7 @@ export const IslandWorldMap = () => {
                   const generatedImage = getIslandImage(island.island_name || "");
                   const mapData = island.island_map_data as { thumbnail_image?: string } | null;
                   const imageUrl = generatedImage || mapData?.thumbnail_image;
-                  
+
                   const sizeStyle = (() => {
                     const nameKey = (island.island_name || "").toLowerCase();
                     if (nameKey.includes("harvest") || nameKey.includes("navigate") || nameKey.includes("engineer")) {
@@ -350,11 +350,11 @@ export const IslandWorldMap = () => {
                     }
                     return { width: "160px", height: "auto" };
                   })();
-                  
+
                   if (imageUrl) {
                     return (
-                      <img 
-                        src={imageUrl} 
+                      <img
+                        src={imageUrl}
                         alt={island.island_name || "Island"}
                         className="rounded-lg shadow-2xl hover:shadow-3xl transition-shadow"
                         style={sizeStyle}
@@ -370,9 +370,9 @@ export const IslandWorldMap = () => {
             {/* Island name tooltip */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
-              animate={{ 
-                opacity: isHovered ? 1 : 0, 
-                y: isHovered ? 0 : 10 
+              animate={{
+                opacity: isHovered ? 1 : 0,
+                y: isHovered ? 0 : 10
               }}
               className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap"
             >
@@ -391,7 +391,7 @@ export const IslandWorldMap = () => {
 
       {/* Map title */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center">
-        <motion.h1 
+        <motion.h1
           className="text-5xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -441,7 +441,7 @@ export const IslandWorldMap = () => {
 
       {/* Generate Images Button */}
       <Card className="absolute bottom-8 right-8 p-4 bg-white/95">
-        <Button 
+        <Button
           onClick={generateAllIslandImages}
           disabled={isGenerating}
           className="gap-2"

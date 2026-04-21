@@ -58,7 +58,7 @@ export default function CompanyIndependenceManager() {
         .from('projects')
         .update(updateData)
         .eq('id', selectedProjectId);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {

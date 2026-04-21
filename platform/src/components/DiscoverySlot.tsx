@@ -4,7 +4,7 @@
  * Wraps content in a discovery-aware container.
  * If undiscovered: shows a chalk-line placeholder box with optional hint.
  * If discovered: shows the actual content.
- * 
+ *
  * Used for progressive disclosure on Dashboard and other pages.
  */
 
@@ -89,7 +89,7 @@ export function DiscoverySlot({
   };
 
   return (
-    <Card 
+    <Card
       className={cn(
         "relative overflow-hidden transition-all duration-500 cursor-pointer group",
         "border-2 border-dashed border-muted-foreground/30 hover:border-primary/50",
@@ -104,7 +104,7 @@ export function DiscoverySlot({
       <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-dashed border-muted-foreground/40" />
       <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-dashed border-muted-foreground/40" />
 
-      <div 
+      <div
         className={cn(
           "transition-all duration-500 preserve-3d",
           isFlipped && "rotate-y-180"
@@ -112,7 +112,7 @@ export function DiscoverySlot({
         style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Front: Chalk outline */}
-        <CardHeader 
+        <CardHeader
           className={cn(
             "backface-hidden",
             isFlipped && "invisible"
@@ -135,8 +135,8 @@ export function DiscoverySlot({
               {hint}
             </CardDescription>
             {discoveryRoute && (
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -158,18 +158,18 @@ export function DiscoverySlot({
  * Simple wrapper that only shows children if the item is discovered.
  * No placeholder - just conditional rendering.
  */
-export function DiscoveryGated({ 
-  slug, 
+export function DiscoveryGated({
+  slug,
   children,
   fallback = null,
-}: { 
-  slug: string; 
+}: {
+  slug: string;
   children: ReactNode;
   fallback?: ReactNode;
 }) {
   const { isDiscovered, isLoading } = useDiscovery();
-  
+
   if (isLoading) return null;
-  
+
   return isDiscovered(slug) ? <>{children}</> : <>{fallback}</>;
 }

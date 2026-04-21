@@ -233,11 +233,11 @@ export function WillOWispJourney({ onClose, onComplete }: { onClose?: () => void
 
   const handleNext = () => {
     const nextBeacon = currentBeacon + 1;
-    
+
     if (chaseMode) {
       setChaseScore(prev => prev + 10);
     }
-    
+
     if (nextBeacon > WISP_JOURNEY.length) {
       setShowCandle(true);
       if (chaseMode) {
@@ -252,14 +252,14 @@ export function WillOWispJourney({ onClose, onComplete }: { onClose?: () => void
 
   const handleCandleClaimed = () => {
     updateState.mutate({ candleClaimed: true });
-    
+
     // Add candle to Ghost Session if they are a ghost
     if (!user) {
       const ghostId = localStorage.getItem("lb_ghost_id") || "anonymous_ghost";
       const { session } = getOrCreateGhostSession(ghostId);
       addCandle(session, 1);
     }
-    
+
     toast.success("Journey complete! Your candle awaits in your satchel.");
     onComplete?.();
     onClose?.();
@@ -346,15 +346,15 @@ export function WillOWispJourney({ onClose, onComplete }: { onClose?: () => void
               </div>
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-cyan-300 rounded-full animate-ping" />
             </div>
-            
+
             <h3 className="text-lg font-semibold text-cyan-800 mb-2">
               Follow the Wisp
             </h3>
             <p className="text-cyan-700 mb-4">
-              I'll guide you through the key parts of the platform. 
+              I'll guide you through the key parts of the platform.
               At the end, you'll receive your first candle.
             </p>
-            
+
             <div className="flex items-center justify-center gap-2 text-sm text-cyan-600 mb-4">
               <Flame className="w-4 h-4 text-amber-500" />
               <span>Earn 1 Candle upon completion</span>
@@ -400,7 +400,7 @@ export function WillOWispJourney({ onClose, onComplete }: { onClose?: () => void
           </div>
         </div>
       )}
-      
+
       <DialogHeader>
         <div className="flex items-center justify-between">
           <DialogTitle className="flex items-center gap-2 text-cyan-600">
@@ -553,7 +553,7 @@ export function WillOWisp({
       if (!open) handleClose();
     }}>
       <DialogContent className="sm:max-w-lg">
-        <WillOWispJourney 
+        <WillOWispJourney
           onClose={handleClose}
           onComplete={handleComplete}
         />

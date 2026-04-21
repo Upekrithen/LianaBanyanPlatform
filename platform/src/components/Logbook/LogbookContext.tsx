@@ -135,7 +135,7 @@ export function LogbookProvider({ children }: { children: React.ReactNode }) {
         try {
           const parsed = JSON.parse(stored);
           const wasHalfLifeApplied = localStorage.getItem(HALF_LIFE_KEY);
-          
+
           if (!isMember && !wasHalfLifeApplied) {
             const decayed: SessionData = {
               ...parsed,

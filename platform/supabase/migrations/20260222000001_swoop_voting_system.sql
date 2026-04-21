@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS swoop_votes (
     display_name TEXT NOT NULL,
     vote_status TEXT NOT NULL DEFAULT 'pledged' CHECK (vote_status IN ('pledged', 'activated', 'returned', 'cancelled')),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     UNIQUE(initiative_id, user_id)
 );
 
@@ -83,33 +83,33 @@ BEGIN
     SELECT * INTO v_initiative
     FROM swoop_initiatives
     WHERE id = NEW.initiative_id;
-    
+
     -- Calculate new total
     v_new_total := v_initiative.current_votes + NEW.credit_amount;
-    
+
     -- Update initiative total
     UPDATE swoop_initiatives
-    SET 
+    SET
         current_votes = v_new_total,
         updated_at = NOW()
     WHERE id = NEW.initiative_id;
-    
+
     -- Check if threshold reached
     IF v_new_total >= v_initiative.threshold AND v_initiative.status = 'waiting' THEN
         -- Activate the initiative
         UPDATE swoop_initiatives
-        SET 
+        SET
             status = 'active',
             activation_date = NOW(),
             updated_at = NOW()
         WHERE id = NEW.initiative_id;
-        
+
         -- Update all votes to 'activated'
         UPDATE swoop_votes
         SET vote_status = 'activated'
         WHERE initiative_id = NEW.initiative_id
         AND vote_status = 'pledged';
-        
+
         -- Log activation
         INSERT INTO swoop_activation_log (
             initiative_id,
@@ -124,10 +124,10 @@ BEGIN
             v_new_total,
             'Threshold reached via vote'
         );
-        
+
         RAISE NOTICE 'Initiative % activated with % votes', v_initiative.initiative_name, v_new_total;
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -150,7 +150,7 @@ DECLARE
     v_vote RECORD;
 BEGIN
     -- Update all pledged votes to returned
-    FOR v_vote IN 
+    FOR v_vote IN
         SELECT * FROM swoop_votes
         WHERE initiative_id = p_initiative_id
         AND vote_status = 'pledged'
@@ -160,17 +160,17 @@ BEGIN
         UPDATE swoop_votes
         SET vote_status = 'returned'
         WHERE id = v_vote.id;
-        
+
         v_returned_count := v_returned_count + 1;
     END LOOP;
-    
+
     -- Update initiative status
     UPDATE swoop_initiatives
-    SET 
+    SET
         status = 'cancelled',
         updated_at = NOW()
     WHERE id = p_initiative_id;
-    
+
     -- Log cancellation
     INSERT INTO swoop_activation_log (
         initiative_id,
@@ -183,7 +183,7 @@ BEGIN
         (SELECT current_votes FROM swoop_initiatives WHERE id = p_initiative_id),
         'Initiative cancelled, pledges returned'
     );
-    
+
     RETURN v_returned_count;
 END;
 $$ LANGUAGE plpgsql;
@@ -231,7 +231,7 @@ CREATE POLICY "Anyone can view activation log"
 -- ============================================================================
 
 INSERT INTO swoop_initiatives (initiative_slug, initiative_name, description, threshold, status)
-VALUES 
+VALUES
     ('msa', 'Medical Savings Account', 'Healthcare savings with LB matching contributions', 500, 'waiting'),
     ('lifeline-medications', 'LifeLine Medications', 'Cooperative prescription drug purchasing for better prices', 500, 'waiting'),
     ('lets-make-dinner', 'Let''s Make Dinner', 'Community meal preparation and delivery service', 500, 'waiting'),

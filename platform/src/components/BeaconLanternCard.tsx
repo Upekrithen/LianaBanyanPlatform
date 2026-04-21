@@ -2,10 +2,10 @@
  * BEACON LANTERN CARD
  * ====================
  * A draggable Deck Card for quick beacon color selection.
- * 
+ *
  * Front: Compact color selector with 6 beacon colors
  * Back: Full explanation of the beacon system + share as Cue Card
- * 
+ *
  * Features:
  * - Draggable positioning (saved to localStorage)
  * - Click to flip for explanation
@@ -18,13 +18,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  MapPin, 
-  X, 
-  Minimize2, 
-  Maximize2, 
-  Share2, 
-  Navigation, 
+import {
+  MapPin,
+  X,
+  Minimize2,
+  Maximize2,
+  Share2,
+  Navigation,
   Sparkles,
   QrCode,
   ArrowRight,
@@ -62,10 +62,10 @@ const getBeaconEmoji = (color: BeaconColor): string => {
   return emojis[color];
 };
 
-export function BeaconLanternCard({ 
-  onSelectColor, 
+export function BeaconLanternCard({
+  onSelectColor,
   onClose,
-  initialVisible = true 
+  initialVisible = true
 }: BeaconLanternCardProps) {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -193,8 +193,8 @@ export function BeaconLanternCard({
     <div
       ref={cardRef}
       className="fixed z-50"
-      style={{ 
-        left: position.x, 
+      style={{
+        left: position.x,
         top: position.y,
         perspective: '1000px',
       }}
@@ -254,8 +254,8 @@ export function BeaconLanternCard({
                   className={`
                     w-9 h-9 rounded-full flex items-center justify-center text-lg
                     transition-all hover:scale-110
-                    ${selectedColor === color 
-                      ? 'ring-2 ring-offset-2 ring-amber-500 scale-110' 
+                    ${selectedColor === color
+                      ? 'ring-2 ring-offset-2 ring-amber-500 scale-110'
                       : 'opacity-70 hover:opacity-100'
                     }
                   `}
@@ -267,7 +267,7 @@ export function BeaconLanternCard({
             </div>
 
             {/* Selected color info */}
-            <div 
+            <div
               className="p-2 rounded-lg text-center"
               style={{ backgroundColor: `${BEACON_COLORS[selectedColor].color}15` }}
             >
@@ -323,7 +323,7 @@ export function BeaconLanternCard({
           {/* Explanation content */}
           <div className="p-3 space-y-3 max-h-80 overflow-y-auto">
             <p className="text-xs text-muted-foreground">
-              Beacons are personal navigation markers. Drop them on pages you want to remember, 
+              Beacons are personal navigation markers. Drop them on pages you want to remember,
               and return anytime via the Helm.
             </p>
 

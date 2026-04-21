@@ -19,9 +19,9 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 10 }: 
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    
+
     if (files.length === 0) return;
-    
+
     if (images.length + files.length > maxImages) {
       toast.error(`Maximum ${maxImages} images allowed`);
       return;
@@ -34,7 +34,7 @@ export default function ImageUpload({ images, onImagesChange, maxImages = 10 }: 
         files.map(async (file) => {
           const fileExt = file.name.split('.').pop();
           const fileName = `${user?.id}/${crypto.randomUUID()}.${fileExt}`;
-          
+
           const { error: uploadError, data } = await supabase.storage
             .from('project-images')
             .upload(fileName, file);

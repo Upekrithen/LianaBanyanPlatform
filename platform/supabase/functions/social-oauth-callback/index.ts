@@ -3,7 +3,7 @@
  * ======================
  * Handles OAuth callback redirects from social platforms.
  * Exchanges authorization code for access token and stores it.
- * 
+ *
  * Flow:
  *   1. User clicks "Connect Twitter" → redirected to Twitter auth
  *   2. User authorizes → Twitter redirects here with code
@@ -112,7 +112,7 @@ Deno.serve(async (req) => {
     }
 
     // Calculate token expiration
-    const expiresAt = tokenData.expiresIn 
+    const expiresAt = tokenData.expiresIn
       ? new Date(Date.now() + tokenData.expiresIn * 1000).toISOString()
       : null;
 
@@ -129,7 +129,7 @@ Deno.serve(async (req) => {
         account_handle: tokenData.username,
         is_active: true,
         updated_at: new Date().toISOString(),
-      }, { 
+      }, {
         onConflict: 'user_id,platform',
         ignoreDuplicates: false,
       });
@@ -634,8 +634,8 @@ function createSuccessPage(platform: string): Response {
   <script>
     // Notify parent window and close
     if (window.opener) {
-      window.opener.dispatchEvent(new CustomEvent('social-oauth-complete', { 
-        detail: { platform: '${platform}', success: true } 
+      window.opener.dispatchEvent(new CustomEvent('social-oauth-complete', {
+        detail: { platform: '${platform}', success: true }
       }));
     }
     setTimeout(() => window.close(), 2000);

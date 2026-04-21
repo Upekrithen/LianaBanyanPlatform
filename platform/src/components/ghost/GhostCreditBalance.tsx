@@ -159,7 +159,7 @@ export function GhostCreditBalance({ compact = false }: { compact?: boolean }) {
               ) : (
                 <>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full bg-purple-500 transition-all"
                       style={{ width: `${percentFull}%` }}
                     />
@@ -221,7 +221,7 @@ export function GhostCreditBalance({ compact = false }: { compact?: boolean }) {
               </TooltipTrigger>
               <TooltipContent>
                 <p className="max-w-xs text-xs">
-                  Ghost Credits are for practice mode only. They have no cash value 
+                  Ghost Credits are for practice mode only. They have no cash value
                   and cannot be converted to money.
                 </p>
               </TooltipContent>
@@ -240,7 +240,7 @@ export function GhostCreditBalance({ compact = false }: { compact?: boolean }) {
                   <div>
                     <p className="font-medium text-amber-800">Terms Required</p>
                     <p className="text-sm text-amber-700 mb-3">
-                      Accept the Ghost Credit terms to receive your initial 200 credits 
+                      Accept the Ghost Credit terms to receive your initial 200 credits
                       and start exploring Ghost World!
                     </p>
                     <Button onClick={() => setTermsModalOpen(true)}>
@@ -266,7 +266,7 @@ export function GhostCreditBalance({ compact = false }: { compact?: boolean }) {
               {/* Progress Bar */}
               <div className="space-y-1">
                 <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-r from-purple-400 to-purple-600 transition-all"
                     style={{ width: `${percentFull}%` }}
                   />
@@ -289,8 +289,8 @@ export function GhostCreditBalance({ compact = false }: { compact?: boolean }) {
                       const typeConfig = TRANSACTION_TYPE_LABELS[txn.transaction_type];
                       const Icon = typeConfig?.icon || Info;
                       return (
-                        <div 
-                          key={txn.id} 
+                        <div
+                          key={txn.id}
                           className="flex items-center justify-between py-1 px-2 rounded bg-muted/50"
                         >
                           <span className="flex items-center gap-2 text-sm">
@@ -313,7 +313,7 @@ export function GhostCreditBalance({ compact = false }: { compact?: boolean }) {
               <Card className="bg-muted/50">
                 <CardContent className="pt-3">
                   <p className="text-xs text-muted-foreground">
-                    <strong>Weekly Refresh:</strong> Ghost Credits are topped off weekly up to {maxBalance}. 
+                    <strong>Weekly Refresh:</strong> Ghost Credits are topped off weekly up to {maxBalance}.
                     Use them to explore Ghost World and practice platform features without financial commitment.
                   </p>
                 </CardContent>

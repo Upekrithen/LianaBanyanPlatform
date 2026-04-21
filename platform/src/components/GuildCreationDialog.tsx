@@ -31,7 +31,7 @@ export function GuildCreationDialog({ open, onOpenChange, parentGuildId }: Guild
         .select('*')
         .eq('is_active', true)
         .order('name_type');
-      
+
       if (error) throw error;
       return data;
     }
@@ -186,7 +186,7 @@ export function GuildCreationDialog({ open, onOpenChange, parentGuildId }: Guild
           <div className="p-3 bg-muted rounded-lg text-sm">
             <div className="font-medium mb-1">Become a Trunk in the Liana Banyan</div>
             <div className="text-muted-foreground">
-              Your {customName} can grow into a full trunk with branches connecting to all other parts of the network. 
+              Your {customName} can grow into a full trunk with branches connecting to all other parts of the network.
               Create a charter to pool resources, establish B2B contracts, or form affiliated businesses.
             </div>
           </div>

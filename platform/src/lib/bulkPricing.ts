@@ -1,6 +1,6 @@
 /**
  * Bulk Pricing Utility for Packed Lunches and Baked Goods
- * 
+ *
  * Handles:
  * - Volume discount tiers (5+ = 5%, 10+ = 10%, 20+ = 15%, 40+ = 20%)
  * - Increment ordering (order in multiples of 5 for packed lunches)
@@ -64,23 +64,23 @@ export interface BulkOrderCalculation {
   quantity: number;
   unitPrice: number;
   baseTotal: number;
-  
+
   // Bulk portion
   bulkUnits: number;
   bulkUnitPrice: number;
   bulkDiscount: number;
   bulkTotal: number;
-  
+
   // Individual portion (for mixed orders)
   individualUnits: number;
   individualUnitPrice: number;
   individualTotal: number;
-  
+
   // Final totals
   discountAmount: number;
   discountPercent: number;
   finalTotal: number;
-  
+
   // Savings info
   savings: number;
   savingsPercent: number;
@@ -95,19 +95,19 @@ export function getDiscountTier(
 ): VolumeDiscountTier | null {
   // Sort tiers by min_qty descending to find highest applicable
   const sortedTiers = [...tiers].sort((a, b) => b.min_qty - a.min_qty);
-  
+
   for (const tier of sortedTiers) {
     if (quantity >= tier.min_qty) {
       return tier;
     }
   }
-  
+
   return null;
 }
 
 /**
  * Calculate bulk order pricing with mixed order support
- * 
+ *
  * Example: 43 packed lunches
  * - 40 at 20% discount (bulk)
  * - 3 at full price (individual)
@@ -120,10 +120,10 @@ export function calculateBulkOrder(
 ): BulkOrderCalculation {
   const tiers = customTiers || DEFAULT_VOLUME_TIERS;
   const baseTotal = quantity * unitPrice;
-  
+
   // Find the highest tier that applies
   const discountTier = getDiscountTier(quantity, tiers);
-  
+
   if (!discountTier) {
     // No discount applies
     return {
@@ -144,24 +144,24 @@ export function calculateBulkOrder(
       savingsPercent: 0,
     };
   }
-  
+
   // For mixed orders: bulk portion gets discount, remainder is full price
   const bulkUnits = Math.floor(quantity / discountTier.min_qty) * discountTier.min_qty;
   const individualUnits = quantity - bulkUnits;
-  
+
   // Calculate bulk portion
   const discountMultiplier = 1 - (discountTier.discount_percent / 100);
   const bulkUnitPrice = unitPrice * discountMultiplier;
   const bulkTotal = bulkUnits * bulkUnitPrice;
-  
+
   // Calculate individual portion (full price)
   const individualTotal = individualUnits * unitPrice;
-  
+
   // Final calculation
   const finalTotal = bulkTotal + individualTotal;
   const discountAmount = baseTotal - finalTotal;
   const discountPercent = (discountAmount / baseTotal) * 100;
-  
+
   return {
     quantity,
     unitPrice,
@@ -199,9 +199,9 @@ export function calculateSimpleBulkDiscount(
 } {
   const tiers = customTiers || DEFAULT_VOLUME_TIERS;
   const discountTier = getDiscountTier(quantity, tiers);
-  
+
   const baseTotal = quantity * unitPrice;
-  
+
   if (!discountTier) {
     return {
       quantity,
@@ -213,11 +213,11 @@ export function calculateSimpleBulkDiscount(
       savings: 0,
     };
   }
-  
+
   const discountMultiplier = 1 - (discountTier.discount_percent / 100);
   const discountedUnitPrice = unitPrice * discountMultiplier;
   const finalTotal = quantity * discountedUnitPrice;
-  
+
   return {
     quantity,
     unitPrice,
@@ -236,24 +236,24 @@ export function formatBulkPricing(calc: BulkOrderCalculation): string {
   if (calc.bulkUnits === 0) {
     return `${calc.quantity} × $${calc.unitPrice.toFixed(2)} = $${calc.finalTotal.toFixed(2)}`;
   }
-  
+
   let result = '';
-  
+
   if (calc.bulkUnits > 0) {
     result += `${calc.bulkUnits} × $${calc.bulkUnitPrice.toFixed(2)} (${calc.bulkDiscount}% off)`;
   }
-  
+
   if (calc.individualUnits > 0) {
     if (result) result += ' + ';
     result += `${calc.individualUnits} × $${calc.unitPrice.toFixed(2)}`;
   }
-  
+
   result += ` = $${calc.finalTotal.toFixed(2)}`;
-  
+
   if (calc.savings > 0) {
     result += ` (Save $${calc.savings.toFixed(2)})`;
   }
-  
+
   return result;
 }
 
@@ -272,23 +272,23 @@ export function getNextTierSuggestion(
   nextTierTotal: number;
 } | null {
   const sortedTiers = [...tiers].sort((a, b) => a.min_qty - b.min_qty);
-  
+
   // Find the next tier above current quantity
   const nextTier = sortedTiers.find(t => t.min_qty > currentQuantity);
-  
+
   if (!nextTier) return null;
-  
+
   const additionalNeeded = nextTier.min_qty - currentQuantity;
   const currentCalc = calculateSimpleBulkDiscount(currentQuantity, unitPrice, tiers);
   const nextTierCalc = calculateSimpleBulkDiscount(nextTier.min_qty, unitPrice, tiers);
-  
+
   // Calculate savings per unit at next tier
   const currentPerUnit = currentCalc.finalTotal / currentQuantity;
   const nextPerUnit = nextTierCalc.finalTotal / nextTier.min_qty;
-  
+
   // Potential savings if they had ordered at next tier quantity
   const potentialSavings = (currentPerUnit - nextPerUnit) * nextTier.min_qty;
-  
+
   return {
     additionalNeeded,
     nextTier,
@@ -308,13 +308,13 @@ export function roundToIncrement(
 ): number {
   const increment = BULK_INCREMENTS[offeringType];
   const minimum = BULK_MINIMUMS[offeringType];
-  
+
   if (increment === 1) return Math.max(minimum, quantity);
-  
+
   const rounded = roundUp
     ? Math.ceil(quantity / increment) * increment
     : Math.floor(quantity / increment) * increment;
-  
+
   return Math.max(minimum, rounded);
 }
 
@@ -327,10 +327,10 @@ export function getSuggestedQuantities(
 ): number[] {
   const increment = BULK_INCREMENTS[offeringType];
   const tierQuantities = tiers.map(t => t.min_qty);
-  
+
   // Standard suggestions based on type
   const baseQuantities: number[] = [1];
-  
+
   if (offeringType === 'packed_lunch') {
     baseQuantities.push(5, 10, 20, 25, 40, 50);
   } else if (offeringType === 'baked_goods') {
@@ -340,7 +340,7 @@ export function getSuggestedQuantities(
   } else {
     baseQuantities.push(2, 5, 10, 20);
   }
-  
+
   // Combine and dedupe
   const allQuantities = [...new Set([...baseQuantities, ...tierQuantities])];
   return allQuantities.sort((a, b) => a - b);
@@ -376,7 +376,7 @@ export function calculateMakerEarnings(
 } {
   const makerEarnings = totalAmount * (creatorPercent / 100);
   const lbMargin = totalAmount - makerEarnings;
-  
+
   return {
     makerEarnings: Math.round(makerEarnings * 100) / 100,
     lbMargin: Math.round(lbMargin * 100) / 100,

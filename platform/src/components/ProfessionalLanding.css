@@ -1,7 +1,7 @@
 /**
  * PROFESSIONAL LANDING CSS
  * Wife's Favorite Layout - December 2025 Static Page Aesthetic
- * 
+ *
  * Colors from original:
  * --color-deep: #0a1628 (background)
  * --color-ocean: #1a365d (accent blue)
@@ -10,7 +10,7 @@
  * --color-gold: #d69e2e (highlights)
  * --color-cream: #faf5eb (text)
  * --color-mist: #e2e8f0 (secondary text)
- * 
+ *
  * Fonts: Crimson Pro (display), Source Sans 3 (body), JetBrains Mono (mono)
  */
 
@@ -24,11 +24,11 @@
   --color-cream: #faf5eb;
   --color-bark: #744210;
   --color-mist: #e2e8f0;
-  
+
   --font-display: 'Crimson Pro', Georgia, serif;
   --font-body: 'Source Sans 3', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  
+
   /* Layout */
   min-height: 100vh;
   background: var(--color-deep);
@@ -196,7 +196,7 @@
   text-align: center;
   padding: 2rem;
   position: relative;
-  background: 
+  background:
     radial-gradient(ellipse at 20% 80%, rgba(45, 80, 22, 0.3) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(26, 54, 93, 0.4) 0%, transparent 50%),
     var(--color-deep);
@@ -251,7 +251,7 @@
 .professional-hero-front {
   background: transparent;
   border: 3px dashed rgba(250, 245, 235, 0.3);
-  box-shadow: 
+  box-shadow:
     0 0 30px rgba(250, 245, 235, 0.1),
     inset 0 0 50px rgba(250, 245, 235, 0.02);
   animation: professional-chalk-glow 4s ease-in-out infinite;
@@ -802,16 +802,16 @@
   .professional-nav-links {
     display: none;
   }
-  
+
   .professional-portal-row {
     flex-direction: column;
   }
-  
+
   .professional-origin {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .professional-hero-flip {
     height: 320px;
   }

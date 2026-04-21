@@ -41,7 +41,7 @@ export default function BrassTacksPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              
+
               <div className="flex gap-4 items-start bg-white dark:bg-slate-900 p-5 rounded-xl border shadow-sm">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-900/50 flex items-center justify-center text-zinc-600 font-bold text-lg">1</div>
                 <div>

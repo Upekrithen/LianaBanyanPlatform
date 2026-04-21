@@ -80,11 +80,11 @@ export default function ProjectCostDashboard({ projectId }: { projectId: string 
 
       // Load API logs using RPC function
       const { data: logs, error: logsError } = await supabase
-        .rpc('get_project_api_logs', { 
+        .rpc('get_project_api_logs', {
           _project_id: projectId,
-          _limit: 100 
+          _limit: 100
         });
-      
+
       if (logsError) {
         console.error('Error loading API logs:', logsError);
       }

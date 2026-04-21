@@ -230,7 +230,7 @@ CREATE INDEX idx_ghost_pouch_unclaimed ON public.ghost_pouch(ghost_id) WHERE cla
 -- RLS
 -- ═══════════════════════════════════════════════════════════════
 
-DO $$ 
+DO $$
 DECLARE tbl TEXT;
 BEGIN
   FOR tbl IN SELECT unnest(ARRAY[
@@ -262,7 +262,7 @@ ALTER TABLE public.treasure_maps ADD COLUMN IF NOT EXISTS
 
 ALTER TABLE public.map_progress ADD COLUMN IF NOT EXISTS
   marks_earned NUMERIC DEFAULT 0;
-ALTER TABLE public.map_progress ADD COLUMN IF NOT EXISTS  
+ALTER TABLE public.map_progress ADD COLUMN IF NOT EXISTS
   end_question_answered BOOLEAN DEFAULT false;
 ALTER TABLE public.map_progress ADD COLUMN IF NOT EXISTS
   end_question_correct BOOLEAN DEFAULT false;
@@ -308,37 +308,37 @@ ALTER TABLE public.deck_card_collection ADD COLUMN IF NOT EXISTS
 CREATE TABLE IF NOT EXISTS public.looking_glass (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- 5 facets (configurable)
   facet_1_type    TEXT DEFAULT 'bridge',
   facet_1_label   TEXT DEFAULT 'The Bridge',
   facet_1_destination TEXT DEFAULT '/dashboard',
-  
+
   facet_2_type    TEXT DEFAULT 'helm',
   facet_2_label   TEXT DEFAULT 'The Helm',
   facet_2_destination TEXT DEFAULT '/the-helm',
-  
+
   facet_3_type    TEXT DEFAULT 'deck',
   facet_3_label   TEXT DEFAULT 'My Deck',
   facet_3_destination TEXT DEFAULT '/deck',
-  
+
   facet_4_type    TEXT DEFAULT 'hofund',
   facet_4_label   TEXT DEFAULT 'Hofund',
   facet_4_destination TEXT DEFAULT '/hofund',
-  
+
   facet_5_type    TEXT DEFAULT 'door',
   facet_5_label   TEXT DEFAULT 'Durin''s Door',
   facet_5_destination TEXT DEFAULT '/durins-door',
-  
+
   -- Portal cards placed on the glass (disappear on use unless in keep)
   active_portal_card_id UUID REFERENCES public.deck_card_collection(id),
-  
+
   -- Language (set by Durin's Door)
   display_language TEXT DEFAULT 'english',
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id)
 );
 

@@ -3,7 +3,7 @@
  * ==========================================
  * Uses chalk-line placeholders for undiscovered features.
  * Features are revealed as users explore the platform.
- * 
+ *
  * Discovery Categories:
  * - essentials: Always visible (membership, guild stake)
  * - initiatives: Let's Make Dinner, Defense Klaus, etc.
@@ -57,7 +57,7 @@ import { CrowFeatherNotification } from '@/components/CrowFeatherNotification';
 import { CrowFeather } from '@/lib/crowFeatherService';
 
 // Icons
-import { 
+import {
   Palette, Users, ExternalLink, Rocket, Award, Utensils, Scale,
   ShoppingBag, ShoppingCart, Briefcase, Mic2, BookOpen, Globe, Wrench,
   ChefHat, Shield, Flame, UserCircle, X as XIcon
@@ -68,7 +68,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { discoveryLevel, isLoading: discoveryLoading } = useDiscovery();
-  
+
   const [credits, setCredits] = useState<any>(null);
   const [isProjectOwner, setIsProjectOwner] = useState(false);
   const [membershipPaid, setMembershipPaid] = useState<boolean>(false);
@@ -145,10 +145,10 @@ export default function Dashboard() {
           <div className="flex gap-2 items-center">
             {/* Crow Feather Badge */}
             {user && <CrowFeatherBadge userId={user.id} />}
-            
+
             {/* Will-o'-Wisp Chase Mode */}
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={() => setShowChaseLauncher(true)}
               className="touch-manipulation text-amber-500 hover:text-amber-400 hover:bg-amber-500/10"
@@ -158,8 +158,8 @@ export default function Dashboard() {
               <span className="hidden sm:inline">Chase</span>
             </Button>
             <FreshStartDialog />
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={() => navigate('/themes')}
               className="touch-manipulation"
@@ -167,8 +167,8 @@ export default function Dashboard() {
             >
               <Palette className="h-4 w-4" />
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={signOut}
               className="touch-manipulation"
               size="sm"
@@ -178,7 +178,7 @@ export default function Dashboard() {
           </div>
         </div>
       </header>
-      
+
       <main className="container mx-auto px-4 py-4 md:py-8">
         <Tabs defaultValue="overview" className="space-y-4 md:space-y-6">
           <TabsList className="w-full sm:w-auto grid grid-cols-2 h-auto">
@@ -217,22 +217,22 @@ export default function Dashboard() {
                 <span className="w-2 h-2 rounded-full bg-green-500" />
                 Essentials
               </h2>
-              
-              <MembershipStakePayment 
-                hasPaid={membershipPaid} 
+
+              <MembershipStakePayment
+                hasPaid={membershipPaid}
                 onPaymentSuccess={() => {
                   setMembershipPaid(true);
                   loadUserData();
                 }}
               />
-              
+
               <MembershipStatusCard />
-              
+
               {/* C+20 Reciprocity Balance - for business owners */}
               <C20BalanceDisplay variant="full" />
-              
+
               {membershipPaid && <GuildStakeProgression />}
-              
+
               {/* Core Navigation */}
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <BandWagonDashboardCard />
@@ -240,7 +240,7 @@ export default function Dashboard() {
                 <InviteCreatorCard />
                 <WeNeedYouCard />
                 <NavigateToGuilds />
-                
+
                 <DiscoverySlot
                   slug="crowdfunding-hub"
                   title="Crowdfunding Hub"
@@ -248,7 +248,7 @@ export default function Dashboard() {
                   discoveryRoute="/crowdfunding"
                   icon={<Rocket className="h-5 w-5" />}
                 >
-                  <Card 
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow border-primary/20 bg-gradient-to-br from-green-500/5 to-emerald-500/10"
                     onClick={() => navigate('/crowdfunding')}
                   >
@@ -263,10 +263,10 @@ export default function Dashboard() {
                     </CardHeader>
                   </Card>
                 </DiscoverySlot>
-                
+
                 <DiscoveryGated slug="medallion-management">
                   {isProjectOwner && (
-                    <Card 
+                    <Card
                       className="cursor-pointer hover:shadow-lg transition-shadow border-primary/20 bg-gradient-to-br from-amber-500/5 to-yellow-500/10"
                       onClick={() => navigate('/medallion-management')}
                     >
@@ -293,7 +293,7 @@ export default function Dashboard() {
                 <span className="w-2 h-2 rounded-full bg-blue-500" />
                 Initiatives
               </h2>
-              
+
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <DiscoverySlot
                   slug="lets-make-dinner"
@@ -302,7 +302,7 @@ export default function Dashboard() {
                   discoveryRoute="/initiatives/lets-make-dinner"
                   icon={<Utensils className="h-5 w-5" />}
                 >
-                  <Card 
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow border-primary/20 bg-gradient-to-br from-orange-500/5 to-amber-500/10"
                     onClick={() => navigate('/initiatives/lets-make-dinner')}
                   >
@@ -317,7 +317,7 @@ export default function Dashboard() {
                     </CardHeader>
                   </Card>
                 </DiscoverySlot>
-                
+
                 <DiscoverySlot
                   slug="defense-klaus"
                   title="Defense Klaus™"
@@ -325,7 +325,7 @@ export default function Dashboard() {
                   discoveryRoute="/initiatives/defense-klaus"
                   icon={<Shield className="h-5 w-5" />}
                 >
-                  <Card 
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow border-primary/20 bg-gradient-to-br from-purple-500/5 to-pink-500/10"
                     onClick={() => navigate('/initiatives/defense-klaus')}
                   >
@@ -340,7 +340,7 @@ export default function Dashboard() {
                     </CardHeader>
                   </Card>
                 </DiscoverySlot>
-                
+
                 <DiscoverySlot
                   slug="lets-get-groceries"
                   title="Let's Get Groceries"
@@ -348,7 +348,7 @@ export default function Dashboard() {
                   discoveryRoute="/initiatives/lets-get-groceries"
                   icon={<ShoppingCart className="h-5 w-5" />}
                 >
-                  <Card 
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow border-primary/20 bg-gradient-to-br from-green-500/5 to-teal-500/10"
                     onClick={() => navigate('/initiatives/lets-get-groceries')}
                   >
@@ -363,7 +363,7 @@ export default function Dashboard() {
                     </CardHeader>
                   </Card>
                 </DiscoverySlot>
-                
+
                 <DiscoverySlot
                   slug="lets-go-shopping"
                   title="Let's Go Shopping"
@@ -371,7 +371,7 @@ export default function Dashboard() {
                   discoveryRoute="/initiatives/lets-go-shopping"
                   icon={<ShoppingBag className="h-5 w-5" />}
                 >
-                  <Card 
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow border-primary/20 bg-gradient-to-br from-pink-500/5 to-rose-500/10"
                     onClick={() => navigate('/initiatives/lets-go-shopping')}
                   >
@@ -387,11 +387,11 @@ export default function Dashboard() {
                   </Card>
                 </DiscoverySlot>
               </div>
-              
+
               {/* More initiatives - only show if discovery level is higher */}
               <DiscoveryGated slug="harper-guild">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                  <Card 
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow"
                     onClick={() => navigate('/initiatives/harper-guild')}
                   >
@@ -403,8 +403,8 @@ export default function Dashboard() {
                       <CardDescription>Publishing cooperative</CardDescription>
                     </CardHeader>
                   </Card>
-                  
-                  <Card 
+
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow"
                     onClick={() => navigate('/initiatives/jukebox')}
                   >
@@ -416,8 +416,8 @@ export default function Dashboard() {
                       <CardDescription>Music distribution platform</CardDescription>
                     </CardHeader>
                   </Card>
-                  
-                  <Card 
+
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow"
                     onClick={() => navigate('/initiatives/didasko')}
                   >
@@ -429,8 +429,8 @@ export default function Dashboard() {
                       <CardDescription>Academic learning platform</CardDescription>
                     </CardHeader>
                   </Card>
-                  
-                  <Card 
+
+                  <Card
                     className="cursor-pointer hover:shadow-lg transition-shadow"
                     onClick={() => navigate('/initiatives/international')}
                   >
@@ -454,7 +454,7 @@ export default function Dashboard() {
                 <span className="w-2 h-2 rounded-full bg-amber-500" />
                 Governance
               </h2>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 <DiscoverySlot
                   slug="legal-formation"
@@ -465,7 +465,7 @@ export default function Dashboard() {
                 >
                   <LegalFormationStatus />
                 </DiscoverySlot>
-                
+
                 <DiscoverySlot
                   slug="charitable-loan"
                   title="Charitable Loans"
@@ -486,7 +486,7 @@ export default function Dashboard() {
                 <span className="w-2 h-2 rounded-full bg-purple-500" />
                 Economy
               </h2>
-              
+
               <DiscoverySlot
                 slug="eoi-dashboard"
                 title="Expression of Interest"
@@ -500,7 +500,7 @@ export default function Dashboard() {
                   <EOIDashboard />
                 </div>
               </DiscoverySlot>
-              
+
               <DiscoverySlot
                 slug="contribution-timeline"
                 title="Contribution Analytics"
@@ -531,7 +531,7 @@ export default function Dashboard() {
                   </div>
                 </div>
               </DiscoverySlot>
-              
+
               {/* Credits summary - always visible if user has credits */}
               {credits && (
                 <Card>
@@ -604,7 +604,7 @@ export default function Dashboard() {
                 <span className="w-2 h-2 rounded-full bg-slate-500" />
                 Tools
               </h2>
-              
+
               <DiscoverySlot
                 slug="physical-badge"
                 title="Physical Badge"
@@ -614,7 +614,7 @@ export default function Dashboard() {
               >
                 <PhysicalBadgeReminder />
               </DiscoverySlot>
-              
+
               {/* Quick navigation */}
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/marketplace')}>
@@ -630,14 +630,14 @@ export default function Dashboard() {
                     <CardDescription className="text-xs">{t('dashboard.viewAllProjects')}</CardDescription>
                   </CardHeader>
                 </Card>
-                
+
                 <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/portfolio')}>
                   <CardHeader>
                     <CardTitle className="text-sm">{t('dashboard.myPortfolio')}</CardTitle>
                     <CardDescription className="text-xs">{t('dashboard.trackContributions')}</CardDescription>
                   </CardHeader>
                 </Card>
-                
+
                 <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/medallions')}>
                   <CardHeader>
                     <CardTitle className="text-sm">{t('dashboard.myMedallions')}</CardTitle>
@@ -659,7 +659,7 @@ export default function Dashboard() {
                   </CardHeader>
                 </Card>
               </div>
-              
+
               {/* Admin buttons */}
               <div className="flex flex-wrap gap-3">
                 <DiscoveryGated slug="admin-roles">
@@ -673,7 +673,7 @@ export default function Dashboard() {
                     </Button>
                   )}
                 </DiscoveryGated>
-                
+
                 <Button
                   variant="outline"
                   onClick={() => navigate("/external-services")}
@@ -681,7 +681,7 @@ export default function Dashboard() {
                   <ExternalLink className="h-4 w-4 mr-2" />
                   {t('dashboard.externalServices')}
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   onClick={() => navigate("/workshop")}
@@ -706,7 +706,7 @@ export default function Dashboard() {
           </TabsContent>
         </Tabs>
       </main>
-      
+
       {/* ═══ FOUNDER CONSOLE — only visible to founder role ═══ */}
       <FounderConsole userId={user?.id} />
 
@@ -716,9 +716,9 @@ export default function Dashboard() {
         onClose={() => setShowChaseLauncher(false)}
         onCrowFeatherEarned={(feather) => setCrowFeatherEarned(feather)}
       />
-      
+
       {/* Crow Feather Notification (shows when a feather is earned) */}
-      <CrowFeatherNotification 
+      <CrowFeatherNotification
         feather={crowFeatherEarned}
         onDismiss={() => setCrowFeatherEarned(null)}
       />

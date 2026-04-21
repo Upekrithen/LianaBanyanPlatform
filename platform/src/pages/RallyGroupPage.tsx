@@ -24,28 +24,28 @@ export default function RallyGroupPage() {
             Rally Group
           </h1>
           <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
-            Community action, "In My Backyard" neighborhood support, The Swoop, and the Underground Railroad. 
+            Community action, "In My Backyard" neighborhood support, The Swoop, and the Underground Railroad.
             When disaster strikes or a neighbor needs help, the Rally Group moves.
           </p>
         </div>
 
         {/* Interactive Dashboard Tabs */}
         <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <Button 
+          <Button
             variant={activeTab === 'chalkboard' ? 'default' : 'outline'}
             onClick={() => setActiveTab('chalkboard')}
             className={activeTab === 'chalkboard' ? 'bg-purple-600' : ''}
           >
             <MessageSquare className="mr-2 h-4 w-4" /> Community Chalkboard
           </Button>
-          <Button 
+          <Button
             variant={activeTab === 'swoop' ? 'default' : 'outline'}
             onClick={() => setActiveTab('swoop')}
             className={activeTab === 'swoop' ? 'bg-purple-600' : ''}
           >
             <HeartHandshake className="mr-2 h-4 w-4" /> The Swoop
           </Button>
-          <Button 
+          <Button
             variant={activeTab === 'railroad' ? 'default' : 'outline'}
             onClick={() => setActiveTab('railroad')}
             className={activeTab === 'railroad' ? 'bg-purple-600' : ''}
@@ -56,7 +56,7 @@ export default function RallyGroupPage() {
 
         {/* Tab Content */}
         <div className="bg-white rounded-xl shadow-sm border border-border p-8 mb-16 min-h-[500px]">
-          
+
           {activeTab === 'chalkboard' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex items-center gap-3 mb-6">
@@ -68,7 +68,7 @@ export default function RallyGroupPage() {
                   <p className="text-muted-foreground">The 3-Step Spark to Wildfire progression for local resource sharing.</p>
                 </div>
               </div>
-              
+
               <div className="space-y-6">
                 <Card className="border-l-4 border-l-amber-400">
                   <CardHeader>
@@ -78,8 +78,8 @@ export default function RallyGroupPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
-                    Neighbors log into the local portal and simply list "Haves" and "Wants" without forcing immediate transactions. 
-                    <em>"I have a pickup truck," "I have extra lemons," "I need a lawnmower for Saturday."</em> 
+                    Neighbors log into the local portal and simply list "Haves" and "Wants" without forcing immediate transactions.
+                    <em>"I have a pickup truck," "I have extra lemons," "I need a lawnmower for Saturday."</em>
                     Once a neighborhood hits 50 active Haves/Wants, the Spark is lit.
                   </CardContent>
                 </Card>
@@ -92,7 +92,7 @@ export default function RallyGroupPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
-                    A local Captain steps up and organizes a physical weekend event—an aggregated neighborhood Garage Sale + Tool Swap + Potluck. 
+                    A local Captain steps up and organizes a physical weekend event—an aggregated neighborhood Garage Sale + Tool Swap + Potluck.
                     Neighbors meet face-to-face to fulfill the "Haves/Wants" they saw on the digital chalkboard.
                   </CardContent>
                 </Card>
@@ -105,7 +105,7 @@ export default function RallyGroupPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
-                    The exchange becomes a self-sustaining continuous marketplace. The Captain acts as the local escrow. 
+                    The exchange becomes a self-sustaining continuous marketplace. The Captain acts as the local escrow.
                     If someone needs to lend a tool, they drop it at the Captain's porch (the "Local Larder") for asynchronous pickup.
                   </CardContent>
                 </Card>

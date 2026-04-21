@@ -441,7 +441,7 @@ export function getOneOfUsCueCard() {
  * Get all cue cards for the Ten Economic Laws.
  */
 export function getTenLawsCueCards() {
-  return ECONOMIC_LAWS_CUE_CARDS.filter(card => 
+  return ECONOMIC_LAWS_CUE_CARDS.filter(card =>
     card.tags.includes('laws') || card.endpoint?.includes('ten-economic-laws')
   );
 }

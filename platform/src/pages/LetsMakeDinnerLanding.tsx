@@ -2,12 +2,12 @@
  * LET'S MAKE DINNER — Progressive Disclosure Landing Page
  * ========================================================
  * 4-Layer reveal system for the meal ecosystem.
- * 
+ *
  * Layer 1: Hero — What is this?
  * Layer 2: How It Works — Three ways to eat
  * Layer 3: Grocery Boxes — The core innovation
  * Layer 4: Join the Network — Producer pathways
- * 
+ *
  * Benefits accumulate as user scrolls, building the value proposition.
  */
 
@@ -64,7 +64,7 @@ const LAYER_BENEFITS: Record<number, BenefitItem[]> = {
 
 function PriceTimeline() {
   const [activeIndex, setActiveIndex] = useState(0);
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex(prev => (prev + 1) % 3);
@@ -92,8 +92,8 @@ function PriceTimeline() {
             }}
             className={cn(
               "px-4 py-3 rounded-xl border-2 transition-all cursor-pointer",
-              isActive 
-                ? `bg-${tier.color}-500/20 border-${tier.color}-500/60` 
+              isActive
+                ? `bg-${tier.color}-500/20 border-${tier.color}-500/60`
                 : "bg-card border-border"
             )}
             onClick={() => setActiveIndex(idx)}
@@ -103,9 +103,9 @@ function PriceTimeline() {
             }}
           >
             <div className="flex items-center gap-2 mb-1">
-              <Icon className={cn("h-4 w-4", isActive && "animate-pulse")} 
+              <Icon className={cn("h-4 w-4", isActive && "animate-pulse")}
                 style={{ color: tier.color === 'emerald' ? '#34d399' : tier.color === 'amber' ? '#fbbf24' : '#f43f5e' }} />
-              <span className="text-2xl font-bold" 
+              <span className="text-2xl font-bold"
                 style={{ color: tier.color === 'emerald' ? '#34d399' : tier.color === 'amber' ? '#fbbf24' : '#f43f5e' }}>
                 {tier.price}
               </span>
@@ -121,7 +121,7 @@ function PriceTimeline() {
 
 function MealChainAnimation() {
   const [step, setStep] = useState(0);
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setStep(prev => (prev + 1) % 4);
@@ -753,7 +753,7 @@ export default function LetsMakeDinnerLanding() {
                 <div>
                   <h4 className="text-lg font-bold text-foreground mb-1">Potluck & Prep (The First Meeting)</h4>
                   <p className="text-sm text-muted-foreground">
-                    Meet at a communal kitchen. Share a potluck meal. Afterward, everyone preps one meal together to take home. 
+                    Meet at a communal kitchen. Share a potluck meal. Afterward, everyone preps one meal together to take home.
                     <strong> Costs are prepaid and shared.</strong> You just eat, chop veggies, and leave with tomorrow's dinner.
                   </p>
                 </div>
@@ -764,7 +764,7 @@ export default function LetsMakeDinnerLanding() {
                 <div>
                   <h4 className="text-lg font-bold text-foreground mb-1">Ramp Up (3-6 Meals a Week)</h4>
                   <p className="text-sm text-muted-foreground">
-                    Once the weekly day is set, get ambitious. Spend 2 hours together and prep 3 to 6 meals for every family to take home. 
+                    Once the weekly day is set, get ambitious. Spend 2 hours together and prep 3 to 6 meals for every family to take home.
                     Take turns leading the Chef Circle. No one is selling anything yet—just sharing costs and results.
                   </p>
                 </div>
@@ -775,7 +775,7 @@ export default function LetsMakeDinnerLanding() {
                 <div>
                   <h4 className="text-lg font-bold text-foreground mb-1">The Business (Selling to the Neighborhood)</h4>
                   <p className="text-sm text-muted-foreground">
-                    Turn your group's efficiency into a business. Sell advance subscriptions to neighbors: 
+                    Turn your group's efficiency into a business. Sell advance subscriptions to neighbors:
                     <em> "Next week we make Mack's HotHouse Burgers with 3 sides. $5/serving if you subscribe for 4 weeks, or $10/serving one-off."</em>
                   </p>
                 </div>

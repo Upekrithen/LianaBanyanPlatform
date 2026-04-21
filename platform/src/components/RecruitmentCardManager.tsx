@@ -40,7 +40,7 @@ export function RecruitmentCardManager({ projectId }: RecruitmentCardManagerProp
         .select("*")
         .eq("project_id", projectId)
         .order("display_order");
-      
+
       if (error) throw error;
       return data as any[];
     },
@@ -57,7 +57,7 @@ export function RecruitmentCardManager({ projectId }: RecruitmentCardManagerProp
           project_id: projectId,
           created_by: (await supabase.auth.getUser()).data.user?.id,
         });
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -77,7 +77,7 @@ export function RecruitmentCardManager({ projectId }: RecruitmentCardManagerProp
         .from("project_recruitment_cards" as any)
         .update(data)
         .eq("id", id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -95,7 +95,7 @@ export function RecruitmentCardManager({ projectId }: RecruitmentCardManagerProp
         .from("project_recruitment_cards" as any)
         .delete()
         .eq("id", id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -185,7 +185,7 @@ export function RecruitmentCardManager({ projectId }: RecruitmentCardManagerProp
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="headline">Headline</Label>
                 <Input
@@ -278,7 +278,7 @@ export function RecruitmentCardManager({ projectId }: RecruitmentCardManagerProp
               <div className="flex justify-center p-4 bg-white rounded">
                 <QRCodeSVG value={getCardUrl(card.card_slug)} size={120} />
               </div>
-              
+
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-1">
                   <Eye className="h-4 w-4" />
@@ -302,9 +302,9 @@ export function RecruitmentCardManager({ projectId }: RecruitmentCardManagerProp
                   <Button size="sm" variant="outline" onClick={() => handleEdit(card)}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button 
-                    size="sm" 
-                    variant="destructive" 
+                  <Button
+                    size="sm"
+                    variant="destructive"
                     onClick={() => deleteMutation.mutate(card.id)}
                     disabled={deleteMutation.isPending}
                   >

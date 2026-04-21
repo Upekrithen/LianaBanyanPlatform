@@ -2,13 +2,13 @@
  * HALL OF INNOVATIONS — Patent Registry & IP Load Balancing
  * ==========================================================
  * The patent voting and IP management center within The Hexagon.
- * 
+ *
  * Features:
  * - Bucket pedestals for patent voting
  * - IP Load Balancing explanation (60/20/20 model)
  * - Global Sponsor Pool vs Patent Buckets
  * - Sponsor benefits and stake mechanics
- * 
+ *
  * Innovation #1229: Patent Bucket Voting System
  */
 
@@ -278,8 +278,8 @@ export default function HallOfInnovations() {
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800">
       {/* Entrance Gate - Placeholder for Artist Bounty */}
       <div className="bg-gradient-to-b from-slate-900 to-slate-800 py-8">
-        <PlaceholderGate 
-          hallName="Hall of Innovations" 
+        <PlaceholderGate
+          hallName="Hall of Innovations"
           bountyId="gate-hall-of-innovations"
           color="#eab308"
         />
@@ -296,7 +296,7 @@ export default function HallOfInnovations() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to The Hexagon
           </Button>
-          
+
           <div className="flex items-center gap-4">
             <div className="p-4 bg-white/20 rounded-xl">
               <Lightbulb className="w-10 h-10" />
@@ -357,7 +357,7 @@ export default function HallOfInnovations() {
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {SHOWCASE_PEDESTALS.map((showcase) => (
-              <Card 
+              <Card
                 key={showcase.id}
                 className={`cursor-pointer transition-all hover:shadow-xl border-2 hover:border-purple-400 overflow-hidden`}
                 onClick={() => setSelectedShowcase(showcase)}
@@ -422,7 +422,7 @@ export default function HallOfInnovations() {
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {PATENT_BUCKETS.map((bucket) => (
-                    <Card 
+                    <Card
                       key={bucket.id}
                       className={`cursor-pointer transition-all hover:shadow-lg ${
                         bucket.status === "funded" ? "border-emerald-500" :
@@ -469,8 +469,8 @@ export default function HallOfInnovations() {
                             <div className="h-2 bg-slate-200 rounded-full" />
                           )}
                         </div>
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           className="w-full"
                           variant={bucket.status === "open" ? "default" : "secondary"}
                         >
@@ -668,8 +668,8 @@ export default function HallOfInnovations() {
                   </div>
                 </div>
 
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="w-full bg-emerald-600 hover:bg-emerald-700"
                   onClick={handleBecomeSponsor}
                 >
@@ -814,7 +814,7 @@ export default function HallOfInnovations() {
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">{selectedShowcase?.description}</p>
-            
+
             {/* Valuation Summary */}
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
@@ -830,7 +830,7 @@ export default function HallOfInnovations() {
                 <div className="text-xs text-muted-foreground">Year 10</div>
               </div>
             </div>
-            
+
             {/* Innovations List */}
             <div className="p-4 rounded-lg bg-muted">
               <h4 className="font-medium mb-3">Innovations in this Collection</h4>
@@ -851,7 +851,7 @@ export default function HallOfInnovations() {
                 ))}
               </div>
             </div>
-            
+
             {/* Linked Buckets */}
             <div className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
               <h4 className="font-medium mb-2 flex items-center gap-2">
@@ -865,7 +865,7 @@ export default function HallOfInnovations() {
                 {selectedShowcase?.linkedBuckets.map((bucketId) => {
                   const bucket = PATENT_BUCKETS.find(b => b.id === bucketId);
                   return bucket ? (
-                    <Button 
+                    <Button
                       key={bucketId}
                       variant="outline"
                       size="sm"
@@ -880,9 +880,9 @@ export default function HallOfInnovations() {
                 })}
               </div>
             </div>
-            
+
             <div className="flex gap-2">
-              <Button 
+              <Button
                 className="flex-1"
                 onClick={() => {
                   if (isGhost) {

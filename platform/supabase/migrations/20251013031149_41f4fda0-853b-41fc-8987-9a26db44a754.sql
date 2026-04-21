@@ -19,7 +19,7 @@ INSERT INTO public.medallion_eligibility (
   '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb7' -- Test wallet address
 )
 ON CONFLICT (user_id, project_id) DO UPDATE
-SET 
+SET
   total_direct_pledges = 50.00,
   total_matched_credits = 10.00,
   token_id = 3,

@@ -38,7 +38,7 @@ export function ResourceAllocation({ projectId }: ResourceAllocationProps) {
 
     if (products && products.length > 0) {
       const productIds = products.map(p => p.id);
-      
+
       const { data: levels } = await supabase
         .from('production_levels')
         .select('current_votes')
@@ -80,7 +80,7 @@ export function ResourceAllocation({ projectId }: ResourceAllocationProps) {
     // Calculate if within the 1/3 allocation
     const allocationLimit = totalFunds / 3;
     const currentScheduled = resources.reduce((sum, r) => sum + Number(r.cost), 0);
-    
+
     if (currentScheduled + costAmount > allocationLimit) {
       toast.error(`This exceeds the 1/3 allocation limit of $${allocationLimit.toFixed(2)}`);
       return;
@@ -174,8 +174,8 @@ export function ResourceAllocation({ projectId }: ResourceAllocationProps) {
 
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
             <p className="text-sm">
-              <strong>Total Raised:</strong> ${totalFunds.toFixed(2)} • 
-              <strong className="ml-2">The Banyan Model:</strong> Your project is a Liana vine supported by the Banyan trunk, 
+              <strong>Total Raised:</strong> ${totalFunds.toFixed(2)} •
+              <strong className="ml-2">The Banyan Model:</strong> Your project is a Liana vine supported by the Banyan trunk,
               while simultaneously supporting other Lianas through shared resources.
             </p>
           </div>

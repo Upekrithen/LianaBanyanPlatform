@@ -8,13 +8,13 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 /**
  * The Sweet Sixteen Initiatives — Deck Card Edition
- * 
+ *
  * Each initiative is a swivel Deck Card with 4 corner locks.
  * Priority initiatives (the ones we're doing first) are FREE to unlock.
  * Other initiatives cost 1 Mark per lock to unlock.
- * 
+ *
  * Users get 30 Marks (non-persistent, session only) to experiment.
- * 
+ *
  * Currency: MARKS (not Candles - Candles are for navigation)
  * Real Marks are earned by completing tasks. These are test Marks.
  */
@@ -22,9 +22,9 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 // The CORRECT Sweet Sixteen — in priority order, then category order
 const SWEET_SIXTEEN = [
   // PRIORITY TIER — Free to unlock (doing these first)
-  { 
-    id: "lets-make-dinner", 
-    name: "Let's Make Dinner", 
+  {
+    id: "lets-make-dinner",
+    name: "Let's Make Dinner",
     emoji: "🍽️",
     tagline: "Neighbors Paid to Feed Neighbors",
     description: "Home cooks earn 83.3% preparing meals for busy neighbors. Volume purchasing, shared kitchens, community connection.",
@@ -32,9 +32,9 @@ const SWEET_SIXTEEN = [
     priority: true,
     category: "food"
   },
-  { 
-    id: "lets-get-groceries", 
-    name: "Let's Get Groceries", 
+  {
+    id: "lets-get-groceries",
+    name: "Let's Get Groceries",
     emoji: "🛒",
     tagline: "Volume Discount Grocery Runs",
     description: "Aggregate neighborhood grocery orders for wholesale pricing. Delivery by members, savings for everyone.",
@@ -42,9 +42,9 @@ const SWEET_SIXTEEN = [
     priority: true,
     category: "food"
   },
-  { 
-    id: "lets-make-bread", 
-    name: "Let's Make Bread", 
+  {
+    id: "lets-make-bread",
+    name: "Let's Make Bread",
     emoji: "🍞",
     tagline: "$5 Business Simulator → Real Business",
     description: "Start with a $5 simulation. Learn business fundamentals. Graduate to real operations when ready.",
@@ -52,9 +52,9 @@ const SWEET_SIXTEEN = [
     priority: true,
     category: "business"
   },
-  { 
-    id: "defense-klaus", 
-    name: "Defense Klaus", 
+  {
+    id: "defense-klaus",
+    name: "Defense Klaus",
     emoji: "🛡️",
     tagline: "For Someone You Love",
     description: "$6 safety bracelet with pull-up palm claws + GPS broadcast monitoring. 100% of proceeds fund pooled legal defense for all members. Physical protection AND legal protection in one.",
@@ -62,9 +62,9 @@ const SWEET_SIXTEEN = [
     priority: true,
     category: "safety"
   },
-  { 
-    id: "didasko", 
-    name: "Didasko (Academic)", 
+  {
+    id: "didasko",
+    name: "Didasko (Academic)",
     emoji: "🎓",
     tagline: "College of Hard Knocks",
     description: "K-12 curriculum. Skills training. Tutoring. Mentoring. Education as cooperative enterprise.",
@@ -72,11 +72,11 @@ const SWEET_SIXTEEN = [
     priority: true,
     category: "education"
   },
-  
+
   // STANDARD TIER — 1 Mark per lock (4 total)
-  { 
-    id: "lets-go-shopping", 
-    name: "Let's Go Shopping", 
+  {
+    id: "lets-go-shopping",
+    name: "Let's Go Shopping",
     emoji: "🛍️",
     tagline: "Volume Discount Product Purchases",
     description: "Holiday specials, bulk buying, member discounts. Shopping together saves everyone money.",
@@ -84,9 +84,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "commerce"
   },
-  { 
-    id: "household-concierge", 
-    name: "Household Concierge", 
+  {
+    id: "household-concierge",
+    name: "Household Concierge",
     emoji: "🏠",
     tagline: "Home Services by Vetted Members",
     description: "Maintenance, repairs, scheduling — all by trusted community members at Cost+20%.",
@@ -94,9 +94,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "services"
   },
-  { 
-    id: "family-table", 
-    name: "Family Table", 
+  {
+    id: "family-table",
+    name: "Family Table",
     emoji: "👨‍👩‍👧‍👦",
     tagline: "Meal Planning & Connected Portfolios",
     description: "Shared schedules, gift lists, family portfolios. Keep your tribe connected.",
@@ -104,9 +104,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "family"
   },
-  { 
-    id: "tatiana-schlossburg-health-accords", 
-    name: "Tatiana Schlossburg Health Accords", 
+  {
+    id: "tatiana-schlossburg-health-accords",
+    name: "Tatiana Schlossburg Health Accords",
     emoji: "💊",
     tagline: "Cost+20% Prescriptions & Supplies",
     description: "Medications at cost plus 20%. No insurance games. No surprise bills.",
@@ -114,9 +114,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "health"
   },
-  { 
-    id: "msa", 
-    name: "MSA", 
+  {
+    id: "msa",
+    name: "MSA",
     emoji: "🏥",
     tagline: "Member Savings Accounts for Healthcare",
     description: "Pre-tax healthcare savings. Community-pooled for emergencies. Your health, your money.",
@@ -124,9 +124,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "health"
   },
-  { 
-    id: "rally-group", 
-    name: "Rally Group", 
+  {
+    id: "rally-group",
+    name: "Rally Group",
     emoji: "📢",
     tagline: "Crisis Response & Community Mobilization",
     description: "When disaster strikes, Rally Group coordinates response. Neighbors helping neighbors, fast.",
@@ -134,9 +134,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "community"
   },
-  { 
-    id: "vsl", 
-    name: "VSL", 
+  {
+    id: "vsl",
+    name: "VSL",
     emoji: "💳",
     tagline: "Voucher Short Loans 0-5%",
     description: "No-collateral member-to-member loans. 0-5% interest. Because banks shouldn't own your future.",
@@ -144,9 +144,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "finance"
   },
-  { 
-    id: "harper-guild", 
-    name: "Harper Guild", 
+  {
+    id: "harper-guild",
+    name: "Harper Guild",
     emoji: "⚖️",
     tagline: "HR & Ethics for Small Businesses",
     description: "Fair employment practices. Skills training. Career development. Ethics support.",
@@ -154,9 +154,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "business"
   },
-  { 
-    id: "jukebox", 
-    name: "JukeBox", 
+  {
+    id: "jukebox",
+    name: "JukeBox",
     emoji: "🎵",
     tagline: "Artist-Controlled Royalties",
     description: "Cooperative music licensing. Artists keep 83.3%. Transparent royalty distribution.",
@@ -164,9 +164,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "creative"
   },
-  { 
-    id: "brass-tacks", 
-    name: "Brass Tacks", 
+  {
+    id: "brass-tacks",
+    name: "Brass Tacks",
     emoji: "🔩",
     tagline: "Manufacturing & Makers",
     description: "Tooling, mechanics, physical products. The maker economy at Cost+20%.",
@@ -174,9 +174,9 @@ const SWEET_SIXTEEN = [
     priority: false,
     category: "manufacturing"
   },
-  { 
-    id: "power-to-the-people", 
-    name: "Power to the People", 
+  {
+    id: "power-to-the-people",
+    name: "Power to the People",
     emoji: "⚡",
     tagline: "Citizen Advocacy & Cooperative Energy",
     description: "Congressional tracking. Cooperative energy purchasing. Per the Switzerland Protocol.",
@@ -202,10 +202,10 @@ interface InitiativeCardState {
 export default function InitiativeProjectsPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   // Session-only Marks (non-persistent) for testing
   const [sessionMarks, setSessionMarks] = useState(30);
-  
+
   // Card states for all initiatives
   const [cardStates, setCardStates] = useState<Record<string, InitiativeCardState>>(() => {
     const initial: Record<string, InitiativeCardState> = {};
@@ -230,12 +230,12 @@ export default function InitiativeProjectsPage() {
   const handleLockClick = (initId: string, position: keyof LockState) => {
     const initiative = SWEET_SIXTEEN.find(i => i.id === initId);
     const state = cardStates[initId];
-    
+
     if (!initiative || !state || state.isCollected || !state.locks[position]) return;
 
     // Priority initiatives are free, others cost 1 Mark per lock
     const costPerLock = initiative.priority ? 0 : 1;
-    
+
     if (costPerLock > 0 && sessionMarks < costPerLock) {
       toast({
         title: "Not Enough Marks",
@@ -274,7 +274,7 @@ export default function InitiativeProjectsPage() {
   const handleCardClick = (initId: string) => {
     const state = cardStates[initId];
     if (!state?.isCollected) return;
-    
+
     setCardStates(prev => ({
       ...prev,
       [initId]: {
@@ -300,7 +300,7 @@ export default function InitiativeProjectsPage() {
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Back to Main</span>
           </button>
-          
+
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-amber-500/20 px-3 py-1.5 rounded-full border border-amber-500/30">
               <Coins className="h-4 w-4 text-amber-400" />
@@ -319,7 +319,7 @@ export default function InitiativeProjectsPage() {
             <h1 className="text-4xl font-bold">The Sweet Sixteen</h1>
           </div>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            16 charitable initiatives funded by the Cost+20% margin. 
+            16 charitable initiatives funded by the Cost+20% margin.
             Click the side locks to unlock each card. Priority initiatives are <span className="text-green-400 font-semibold">FREE</span>!
           </p>
         </div>
@@ -331,12 +331,12 @@ export default function InitiativeProjectsPage() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>
-              Three commercial websites (LianaBanyan.com, .biz, .net) sustainably fund 
+              Three commercial websites (LianaBanyan.com, .biz, .net) sustainably fund
               sixteen charitable initiatives through a baked-in 20% "Cost of Doing Good" margin.
               No donations required. Commerce funds community.
             </p>
             <p>
-              <strong className="text-foreground">Creators and Workers keep 83.3%</strong> of every transaction. The remaining margin 
+              <strong className="text-foreground">Creators and Workers keep 83.3%</strong> of every transaction. The remaining margin
               funds these initiatives — constitutionally locked by DNA Lock.
             </p>
           </CardContent>
@@ -367,8 +367,8 @@ export default function InitiativeProjectsPage() {
                   {/* FRONT of card */}
                   <div
                     className={`relative bg-gradient-to-br ${
-                      initiative.priority 
-                        ? 'from-green-500/20 to-emerald-500/30 border-green-500/30' 
+                      initiative.priority
+                        ? 'from-green-500/20 to-emerald-500/30 border-green-500/30'
                         : 'bg-card border-border'
                     } backdrop-blur-sm rounded-xl p-6 border-2 min-h-[220px] cursor-pointer transition-all hover:shadow-lg ${
                       state.isCollected ? 'hover:scale-[1.02]' : ''
@@ -386,8 +386,8 @@ export default function InitiativeProjectsPage() {
                     {/* 4 Corner Locks */}
                     <button
                       className={`absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
-                        state.locks.top 
-                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
+                        state.locks.top
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer'
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'top'); }}
@@ -398,8 +398,8 @@ export default function InitiativeProjectsPage() {
                     </button>
                     <button
                       className={`absolute top-1/2 -right-2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
-                        state.locks.right 
-                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
+                        state.locks.right
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer'
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'right'); }}
@@ -409,8 +409,8 @@ export default function InitiativeProjectsPage() {
                     </button>
                     <button
                       className={`absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
-                        state.locks.bottom 
-                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
+                        state.locks.bottom
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer'
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'bottom'); }}
@@ -420,8 +420,8 @@ export default function InitiativeProjectsPage() {
                     </button>
                     <button
                       className={`absolute top-1/2 -left-2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg transition-all ${
-                        state.locks.left 
-                          ? 'bg-muted hover:bg-muted/80 cursor-pointer' 
+                        state.locks.left
+                          ? 'bg-muted hover:bg-muted/80 cursor-pointer'
                           : 'bg-green-600/50 cursor-default'
                       }`}
                       onClick={(e) => { e.stopPropagation(); handleLockClick(initiative.id, 'left'); }}
@@ -462,7 +462,7 @@ export default function InitiativeProjectsPage() {
                   {/* BACK of card */}
                   <div
                     className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-indigo-500/30 backdrop-blur-sm rounded-xl p-6 border-2 border-purple-500/30 min-h-[220px]"
-                    style={{ 
+                    style={{
                       backfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
                     }}
@@ -473,7 +473,7 @@ export default function InitiativeProjectsPage() {
                         <span className="text-2xl">{initiative.emoji}</span>
                         <h3 className="text-lg font-bold text-foreground">{initiative.name}</h3>
                       </div>
-                      
+
                       <p className="text-sm text-muted-foreground flex-1">
                         {initiative.description}
                       </p>
@@ -500,7 +500,7 @@ export default function InitiativeProjectsPage() {
         <Card className="bg-amber-500/10 border-amber-500/20">
           <CardContent className="py-4 text-center text-sm text-amber-200/80">
             <Coins className="h-5 w-5 inline-block mr-2 text-amber-400" />
-            You have <strong>{sessionMarks} Marks</strong> for this session. 
+            You have <strong>{sessionMarks} Marks</strong> for this session.
             Priority initiatives are FREE. Others cost 1 Mark per lock (4 total to unlock).
             Real Marks are earned by completing tasks — these are test Marks.
           </CardContent>

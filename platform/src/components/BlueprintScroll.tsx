@@ -2,7 +2,7 @@
  * BLUEPRINT SCROLL — Treasure Map Style Product Journey
  * ======================================================
  * Visual representation of a product's manufacturing journey.
- * 
+ *
  * Features:
  * - Scroll unfurl animation on open
  * - Dashed line path to destination (X marks the spot)
@@ -27,7 +27,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { 
+import {
   Scroll, MapPin, AlertTriangle, Diamond, Star, X,
   CheckCircle, Circle, ChevronRight
 } from "lucide-react";
@@ -82,19 +82,19 @@ export function BlueprintScroll({
       // Animate the path drawing
       const duration = 1500; // 1.5 seconds
       const startTime = Date.now();
-      
+
       const animate = () => {
         const elapsed = Date.now() - startTime;
         const animProgress = Math.min(elapsed / duration, 1);
         setPathProgress(animProgress * progress);
-        
+
         if (animProgress < 1) {
           requestAnimationFrame(animate);
         } else {
           setIsAnimating(false);
         }
       };
-      
+
       requestAnimationFrame(animate);
     }
   }, [isOpen, progress]);
@@ -111,7 +111,7 @@ export function BlueprintScroll({
     <div className={`blueprint-scroll-container ${className}`}>
       {/* Rolled up scroll (closed state) */}
       {!isOpen && (
-        <Card 
+        <Card
           className="blueprint-scroll-rolled cursor-pointer hover:shadow-lg transition-all"
           onClick={toggleScroll}
         >
@@ -151,7 +151,7 @@ export function BlueprintScroll({
               <p className="text-sm text-muted-foreground">{description}</p>
             )}
           </CardHeader>
-          
+
           <CardContent className="blueprint-scroll-content">
             {/* Progress bar */}
             <div className="mb-4">
@@ -160,7 +160,7 @@ export function BlueprintScroll({
                 <span>{Math.round(progress)}%</span>
               </div>
               <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div 
+                <div
                   className="h-full bg-primary transition-all duration-500"
                   style={{ width: `${pathProgress}%` }}
                 />
@@ -170,7 +170,7 @@ export function BlueprintScroll({
             {/* Treasure Map Path */}
             <div className="blueprint-map">
               {/* SVG Path */}
-              <svg 
+              <svg
                 className="blueprint-path-svg"
                 viewBox="0 0 800 200"
                 preserveAspectRatio="xMidYMid meet"
@@ -184,7 +184,7 @@ export function BlueprintScroll({
                   strokeDasharray="10 5"
                   className="blueprint-path-bg"
                 />
-                
+
                 {/* Progress path (animated) */}
                 <path
                   d="M 50 100 Q 200 50, 350 100 T 650 100 L 750 100"
@@ -218,7 +218,7 @@ export function BlueprintScroll({
                     const config = MARKER_ICONS[marker.type];
                     const Icon = config.icon;
                     const isReached = pathProgress >= marker.position;
-                    
+
                     return (
                       <Tooltip key={marker.id}>
                         <TooltipTrigger asChild>
@@ -267,9 +267,9 @@ export function BlueprintScroll({
               {sortedMarkers.map((marker) => {
                 const config = MARKER_ICONS[marker.type];
                 const isReached = pathProgress >= marker.position;
-                
+
                 return (
-                  <div 
+                  <div
                     key={marker.id}
                     className={`flex items-center gap-3 p-2 rounded-lg border transition-colors ${
                       marker.completed ? 'bg-green-500/5 border-green-500/20' :
@@ -327,7 +327,7 @@ export const BLUEPRINT_TEMPLATES = {
     { id: "ship", type: "checkpoint" as const, title: "Shipping", description: "Prototype shipped", position: 90 },
     { id: "complete", type: "destination" as const, title: "Delivered!", description: "Prototype in hand", position: 100 },
   ],
-  
+
   smallBatch: [
     { id: "design", type: "checkpoint" as const, title: "Design Finalized", description: "Production-ready CAD", position: 8 },
     { id: "ip", type: "resource" as const, title: "IP Protection", description: "Patent application filed", position: 15 },
@@ -339,7 +339,7 @@ export const BLUEPRINT_TEMPLATES = {
     { id: "fulfillment", type: "checkpoint" as const, title: "Fulfillment", description: "Packaging and shipping", position: 88 },
     { id: "complete", type: "destination" as const, title: "Delivered!", description: "All orders shipped", position: 100 },
   ],
-  
+
   mediumRun: [
     { id: "design", type: "checkpoint" as const, title: "Design Locked", description: "No more changes", position: 5 },
     { id: "mold-design", type: "checkpoint" as const, title: "Mold Design", description: "Injection mold CAD", position: 12 },

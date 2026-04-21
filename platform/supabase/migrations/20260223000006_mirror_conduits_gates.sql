@@ -71,7 +71,7 @@ CREATE INDEX idx_gate_passages_gate ON gate_passages(gate_id, passed_at DESC);
 
 -- View for lintel display (last 3 per gate)
 CREATE OR REPLACE VIEW gate_lintels AS
-SELECT 
+SELECT
   gate_id,
   array_agg(friend_word ORDER BY passed_at DESC) AS recent_words,
   array_agg(language ORDER BY passed_at DESC) AS recent_languages
@@ -176,7 +176,7 @@ DECLARE
   v_new_amount DECIMAL;
 BEGIN
   SELECT * INTO v_candles FROM user_candles WHERE user_id = p_user_id;
-  
+
   IF v_candles IS NULL THEN
     INSERT INTO user_candles (user_id, standard_amount) VALUES (p_user_id, 0.1)
     RETURNING standard_amount INTO v_new_amount;
@@ -196,7 +196,7 @@ BEGIN
 
   IF v_can_regenerate THEN
     UPDATE user_candles
-    SET 
+    SET
       standard_amount = LEAST(standard_amount + 0.1, 10.0),
       last_regeneration = NOW(),
       regeneration_count = regeneration_count + 1
@@ -219,7 +219,7 @@ DECLARE
   v_candles RECORD;
 BEGIN
   SELECT * INTO v_candles FROM user_candles WHERE user_id = p_user_id;
-  
+
   IF v_candles IS NULL THEN
     RETURN FALSE;
   END IF;
@@ -262,7 +262,7 @@ CREATE TRIGGER babylon_unlock_trigger
 
 -- Seed some initial mirror conduits
 INSERT INTO mirror_conduits (mirror_a_location, mirror_b_location, difficulty_level, riddle_clue)
-VALUES 
+VALUES
   ('index:choose-path:left', 'index:choose-path:right', 1, NULL),
   ('landing:hero:mirror', 'initiatives:overview:mirror', 2, NULL),
   ('senate:hall:entrance', 'labyrinth:center:exit', 3, 'Where all guilds meet, beneath the tower'),
@@ -272,7 +272,7 @@ ON CONFLICT DO NOTHING;
 
 -- Seed rating descriptions into DNA lock
 INSERT INTO dna_lock (key, value, data_type, is_locked, locked_by, description, category)
-VALUES 
+VALUES
   ('content_rating_ST', 'Shirley Temple - All ages, completely wholesome', 'text', true, 'CONSTITUTIONAL_FOUNDING', 'Content rating description', 'ratings'),
   ('content_rating_GA', 'General - General audiences', 'text', true, 'CONSTITUTIONAL_FOUNDING', 'Content rating description', 'ratings'),
   ('content_rating_UV', 'Ultra-Violet - Strictly age-gated explicit content', 'text', true, 'CONSTITUTIONAL_FOUNDING', 'Content rating description', 'ratings')

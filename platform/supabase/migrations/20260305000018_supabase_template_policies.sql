@@ -8,15 +8,15 @@ DECLARE
     t record;
     p record;
 BEGIN
-    FOR t IN 
-        SELECT tablename 
-        FROM pg_tables 
+    FOR t IN
+        SELECT tablename
+        FROM pg_tables
         WHERE schemaname = 'public'
     LOOP
         -- 1. Drop EVERYTHING
-        FOR p IN 
-            SELECT policyname 
-            FROM pg_policies 
+        FOR p IN
+            SELECT policyname
+            FROM pg_policies
             WHERE schemaname = 'public' AND tablename = t.tablename
         LOOP
             EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I;', p.policyname, t.tablename);
@@ -39,7 +39,7 @@ BEGIN
             TO authenticated
             WITH CHECK (true);
         ', t.tablename);
-        
+
         -- 4. Create the exact "Enable update for authenticated users only" template
         EXECUTE format('
             CREATE POLICY "Enable update for authenticated users only" ON public.%I
@@ -48,7 +48,7 @@ BEGIN
             USING (true)
             WITH CHECK (true);
         ', t.tablename);
-        
+
         -- 5. Create the exact "Enable delete for authenticated users only" template
         EXECUTE format('
             CREATE POLICY "Enable delete for authenticated users only" ON public.%I

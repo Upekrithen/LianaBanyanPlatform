@@ -1,6 +1,6 @@
 /**
  * PathwayProgressCard
- * 
+ *
  * Displays user's pathway progress with level, completed pathways,
  * and three-pack progress toward next level.
  */
@@ -11,21 +11,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { 
-  Star, 
-  Trophy, 
-  Lock, 
-  Unlock, 
-  ChevronRight, 
+import {
+  Star,
+  Trophy,
+  Lock,
+  Unlock,
+  ChevronRight,
   Compass,
   CheckCircle2,
   Circle,
   Flame
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { 
-  PathwayLevel, 
-  ALL_PATHWAYS, 
+import {
+  PathwayLevel,
+  ALL_PATHWAYS,
   THREE_PACKS,
   getPathwayById,
 } from '@/lib/pathwayLevels';
@@ -54,10 +54,10 @@ export function PathwayProgressCard({
   showWildfireRuns = true,
   className = '',
 }: PathwayProgressCardProps) {
-  const { 
-    progress, 
-    isLoading, 
-    getCompletedCount, 
+  const {
+    progress,
+    isLoading,
+    getCompletedCount,
     getNextThreePack,
     completePathway,
     toggleLevelGating,
@@ -82,17 +82,17 @@ export function PathwayProgressCard({
   const colors = LEVEL_COLORS[progress.currentLevel];
   const nextPackId = getNextThreePack();
   const nextPack = THREE_PACKS.find(p => p.id === nextPackId);
-  
+
   // Calculate three-pack progress
-  const packPathwaysComplete = nextPack 
+  const packPathwaysComplete = nextPack
     ? nextPack.pathwayIds.filter(id => progress.completedPathways.includes(id)).length
     : 0;
   const packProgress = nextPack ? (packPathwaysComplete / 3) * 100 : 0;
 
   // Get available wildfire runs for current level
-  const availableRuns = progress.currentLevel === 1 
-    ? LEVEL_1_RUNS 
-    : progress.currentLevel === 2 
+  const availableRuns = progress.currentLevel === 1
+    ? LEVEL_1_RUNS
+    : progress.currentLevel === 2
       ? [...LEVEL_1_RUNS, ...LEVEL_2_RUNS]
       : [...LEVEL_1_RUNS, ...LEVEL_2_RUNS, ...LEVEL_3_RUNS];
 
@@ -123,7 +123,7 @@ export function PathwayProgressCard({
             </div>
             <span className="text-sm text-white/60">{getCompletedCount()} done</span>
           </div>
-          
+
           {nextPack && (
             <div className="space-y-1">
               <div className="flex justify-between text-xs">
@@ -161,9 +161,9 @@ export function PathwayProgressCard({
               {getCompletedCount()} / {ALL_PATHWAYS.length}
             </span>
           </div>
-          <Progress 
-            value={(getCompletedCount() / ALL_PATHWAYS.length) * 100} 
-            className="h-2" 
+          <Progress
+            value={(getCompletedCount() / ALL_PATHWAYS.length) * 100}
+            className="h-2"
           />
         </div>
 
@@ -177,15 +177,15 @@ export function PathwayProgressCard({
               </Badge>
             </div>
             <p className="text-sm text-white/60 mb-3">{nextPack.description}</p>
-            
+
             {/* Three-pack pathways */}
             <div className="space-y-2">
               {nextPack.pathwayIds.map(pathwayId => {
                 const pathway = getPathwayById(pathwayId);
                 const isComplete = progress.completedPathways.includes(pathwayId);
-                
+
                 return (
-                  <div 
+                  <div
                     key={pathwayId}
                     className={`flex items-center gap-3 p-2 rounded ${
                       isComplete ? 'bg-green-500/10' : 'bg-white/5'
@@ -200,7 +200,7 @@ export function PathwayProgressCard({
                       {pathway?.icon} {pathway?.name || pathwayId}
                     </span>
                     {!isComplete && pathway && (
-                      <Link 
+                      <Link
                         to={pathway.route}
                         className="ml-auto text-xs text-primary hover:underline"
                       >
@@ -211,7 +211,7 @@ export function PathwayProgressCard({
                 );
               })}
             </div>
-            
+
             <div className="mt-3">
               <Progress value={packProgress} className="h-2" />
               <p className="text-xs text-white/50 mt-1 text-center">
@@ -278,7 +278,7 @@ export function PathwayProgressCard({
             ))}
           </div>
           <span className="text-xs text-white/50">
-            {progress.currentLevel < 3 
+            {progress.currentLevel < 3
               ? `Complete a three-pack to unlock Level ${progress.currentLevel + 1}`
               : 'All levels unlocked!'
             }
@@ -302,8 +302,8 @@ export function PathwayProgressCard({
               variant="outline"
               size="sm"
               onClick={toggleLevelGating}
-              className={isLevelGatingEnabled() 
-                ? 'border-amber-500/50 text-amber-400 hover:bg-amber-500/10' 
+              className={isLevelGatingEnabled()
+                ? 'border-amber-500/50 text-amber-400 hover:bg-amber-500/10'
                 : 'border-green-500/50 text-green-400 hover:bg-green-500/10'
               }
             >

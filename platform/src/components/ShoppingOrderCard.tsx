@@ -110,7 +110,7 @@ export function ShoppingOrderCard({ order, onJoin }: ShoppingOrderCardProps) {
         {order.product_image_url && (
           <img src={order.product_image_url} alt={order.product_name} className="w-full h-48 object-cover rounded-md" />
         )}
-        
+
         <p className="text-sm text-muted-foreground">{order.product_description}</p>
 
         <div className="space-y-2">

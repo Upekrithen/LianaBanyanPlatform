@@ -15,42 +15,42 @@ CREATE TABLE IF NOT EXISTS donation_commitments (
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Commitment Type
   type TEXT NOT NULL CHECK (type IN ('lump_sum', 'recurring', 'pool', 'percentage')),
-  
+
   -- Amount (interpretation depends on type)
   -- lump_sum: total donation amount
   -- recurring: amount per period
   -- pool: total pool amount
   -- percentage: percentage value (e.g., 5 for 5%)
   amount DECIMAL(10,2) NOT NULL,
-  
+
   -- Recurring specific
   frequency TEXT CHECK (frequency IN ('weekly', 'biweekly', 'monthly', 'quarterly')),
   next_charge_date TIMESTAMPTZ,
   alert_before_charge BOOLEAN DEFAULT true,
-  
+
   -- Pool specific
   remaining_pool DECIMAL(10,2),
-  
+
   -- Percentage specific
   percentage_amount DECIMAL(5,2),
-  
+
   -- Target
   target_type TEXT NOT NULL CHECK (target_type IN ('specific_project', 'general_fund', 'category')),
   target_id UUID, -- Project ID if specific_project
   target_name TEXT, -- Cached name for display
   category TEXT CHECK (category IN ('medical', 'housing', 'utilities', 'food', 'education', 'any')),
-  
+
   -- Status
   status TEXT DEFAULT 'active' CHECK (status IN ('active', 'paused', 'exhausted', 'cancelled', 'completed')),
-  
+
   -- Tracking
   total_donated DECIMAL(10,2) DEFAULT 0,
   donation_count INTEGER DEFAULT 0,
   last_donation_date TIMESTAMPTZ,
-  
+
   -- Stripe
   stripe_subscription_id TEXT,
   stripe_payment_method_id TEXT
@@ -61,20 +61,20 @@ CREATE TABLE IF NOT EXISTS donation_commitment_transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   commitment_id UUID REFERENCES donation_commitments(id) ON DELETE CASCADE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   amount DECIMAL(10,2) NOT NULL,
-  
+
   -- Where it went (no FK to allow flexible ordering of migrations)
   project_id UUID,
   project_name TEXT,
-  
+
   -- Status
   status TEXT DEFAULT 'completed' CHECK (status IN ('pending', 'completed', 'failed', 'refunded')),
-  
+
   -- Stripe
   stripe_payment_intent_id TEXT,
   stripe_charge_id TEXT,
-  
+
   -- Notes
   notes TEXT
 );
@@ -86,11 +86,11 @@ DECLARE
   commitment RECORD;
 BEGIN
   SELECT * INTO commitment FROM donation_commitments WHERE id = commitment_id;
-  
+
   IF commitment.status != 'active' OR commitment.type != 'recurring' THEN
     RETURN FALSE;
   END IF;
-  
+
   -- Update next charge date based on frequency
   UPDATE donation_commitments
   SET next_charge_date = CASE commitment.frequency
@@ -104,7 +104,7 @@ BEGIN
   last_donation_date = NOW(),
   updated_at = NOW()
   WHERE id = commitment_id;
-  
+
   RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
@@ -116,15 +116,15 @@ DECLARE
   commitment RECORD;
 BEGIN
   SELECT * INTO commitment FROM donation_commitments WHERE id = commitment_id;
-  
+
   IF commitment.status != 'active' OR commitment.type != 'pool' THEN
     RETURN FALSE;
   END IF;
-  
+
   IF commitment.remaining_pool < draw_amount THEN
     RETURN FALSE;
   END IF;
-  
+
   UPDATE donation_commitments
   SET remaining_pool = remaining_pool - draw_amount,
       total_donated = total_donated + draw_amount,
@@ -133,14 +133,14 @@ BEGIN
       status = CASE WHEN remaining_pool - draw_amount <= 0 THEN 'exhausted' ELSE 'active' END,
       updated_at = NOW()
   WHERE id = commitment_id;
-  
+
   RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
 
 -- View for active commitments summary
 CREATE OR REPLACE VIEW v_donation_commitments_summary AS
-SELECT 
+SELECT
   dc.id,
   dc.user_id,
   dc.type,
@@ -160,7 +160,7 @@ WHERE dc.status != 'cancelled';
 
 -- View for user giving summary
 CREATE OR REPLACE VIEW v_user_giving_summary AS
-SELECT 
+SELECT
   user_id,
   COUNT(*) FILTER (WHERE status = 'active') as active_commitments,
   COUNT(*) FILTER (WHERE type = 'recurring' AND status = 'active') as active_recurring,

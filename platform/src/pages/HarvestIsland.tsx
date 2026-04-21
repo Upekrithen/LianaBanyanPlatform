@@ -6,7 +6,7 @@
  * Each option includes a "Through the Looking Glass" practice mode.
  * The Mirror is your first portal — step through to practice before
  * committing real stakes. This is where you start building your Bridge.
- * 
+ *
  * Click the White Rabbit 🐰⏱️ to follow curated paths with Ghost Credits.
  * "The White Rabbit waits for no one" — rewards decay over time.
  */
@@ -17,8 +17,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { 
-  Briefcase, Store, Sprout, Ghost, X, 
+import {
+  Briefcase, Store, Sprout, Ghost, X,
   Sparkles, Map, ArrowRight, HelpCircle,
   Compass, Shield, Users, Lightbulb, Clock
 } from 'lucide-react';
@@ -71,15 +71,15 @@ function PracticeMirror({ isVisible, onClose, onEnterPractice, onStartGuidedPath
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <Card className="max-w-lg w-full bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 border-purple-500/50 shadow-[0_0_50px_rgba(139,92,246,0.3)]">
         <CardHeader className="relative">
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             className="absolute top-2 right-2 text-gray-400 hover:text-white"
             onClick={onClose}
           >
             <X className="h-5 w-5" />
           </Button>
-          
+
           <div className="flex items-center gap-3 mb-2">
             <div className="p-3 bg-purple-500/20 rounded-xl">
               <Ghost className="h-8 w-8 text-purple-400" />
@@ -91,15 +91,15 @@ function PracticeMirror({ isVisible, onClose, onEnterPractice, onStartGuidedPath
               <CardTitle className="text-white">{content.title}</CardTitle>
             </div>
           </div>
-          
+
           <CardDescription className="text-purple-200/80">
             {content.description}
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {/* White Rabbit Guided Path Option */}
-          <div 
+          <div
             className="p-4 bg-gradient-to-r from-amber-900/30 to-orange-900/30 rounded-lg border border-amber-500/40 cursor-pointer hover:border-amber-400/60 transition-all"
             onClick={onStartGuidedPath}
           >
@@ -124,8 +124,8 @@ function PracticeMirror({ isVisible, onClose, onEnterPractice, onStartGuidedPath
           {/* Practice Features */}
           <div className="grid grid-cols-2 gap-2">
             {content.features.map((feature, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className="flex items-center gap-2 text-sm text-purple-200/70 bg-purple-500/10 rounded-lg p-2"
               >
                 <Sparkles className="h-3 w-3 text-purple-400 flex-shrink-0" />
@@ -146,8 +146,8 @@ function PracticeMirror({ isVisible, onClose, onEnterPractice, onStartGuidedPath
 
           {/* Actions */}
           <div className="flex gap-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex-1 border-purple-500/50 text-purple-300 hover:bg-purple-500/20"
               onClick={onClose}
             >
@@ -322,9 +322,9 @@ export default function HarvestIsland() {
                 </p>
               </div>
             </div>
-            
-            <Button 
-              variant="outline" 
+
+            <Button
+              variant="outline"
               className="border-green-500/50 text-green-300"
               onClick={() => navigate('/island-world-map')}
             >
@@ -354,9 +354,9 @@ export default function HarvestIsland() {
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {options.map((option) => {
             const Icon = option.icon;
-            
+
             return (
-              <Card 
+              <Card
                 key={option.id}
                 className={cn(
                   "relative overflow-hidden cursor-pointer transition-all duration-300",
@@ -373,13 +373,13 @@ export default function HarvestIsland() {
                   option.bgGradient
                 )}>
                   <Icon className="h-16 w-16 text-white/90" />
-                  
+
                   {/* White Rabbit Guided Path Indicator */}
                   <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 bg-amber-500/30 rounded-full border border-amber-400/50">
                     <span className="text-sm">🐰</span>
                     <Clock className="h-3 w-3 text-amber-300" />
                   </div>
-                  
+
                   {/* Practice Mode Indicator (The Mirror) */}
                   <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 bg-purple-500/30 rounded-full border border-purple-400/50">
                     <Ghost className="h-3 w-3 text-purple-300" />
@@ -413,13 +413,13 @@ export default function HarvestIsland() {
                   </div>
 
                   {/* CTA Button */}
-                  <Button 
+                  <Button
                     className={cn(
                       "w-full mt-4",
                       `bg-${option.color}-600 hover:bg-${option.color}-500`
                     )}
                     style={{
-                      backgroundColor: option.id === 'job' ? '#16a34a' : 
+                      backgroundColor: option.id === 'job' ? '#16a34a' :
                                        option.id === 'business' ? '#2563eb' : '#d97706'
                     }}
                   >
@@ -441,18 +441,18 @@ export default function HarvestIsland() {
             </div>
             <AlertTitle className="text-amber-200">Follow the White Rabbit</AlertTitle>
             <AlertDescription className="text-amber-300/80">
-              Each path has a <strong>guided journey</strong> with Ghost Credits. Click any card, then 
-              choose "Follow the White Rabbit" for step-by-step guidance. Earn real rewards at 
+              Each path has a <strong>guided journey</strong> with Ghost Credits. Click any card, then
+              choose "Follow the White Rabbit" for step-by-step guidance. Earn real rewards at
               the end — but claim them quickly! <em>The White Rabbit waits for no one.</em>
             </AlertDescription>
           </Alert>
-          
+
           <Alert className="bg-purple-950/50 border-purple-500/30">
             <Ghost className="h-5 w-5 text-purple-400" />
             <AlertTitle className="text-purple-200">Through the Looking Glass</AlertTitle>
             <AlertDescription className="text-purple-300/80">
-              Prefer to explore freely? Each option also has <strong>Free Exploration</strong> mode — 
-              practice at your own pace, collect Cards for your Bridge, and learn the ropes with 
+              Prefer to explore freely? Each option also has <strong>Free Exploration</strong> mode —
+              practice at your own pace, collect Cards for your Bridge, and learn the ropes with
               zero risk before committing real Credits.
             </AlertDescription>
           </Alert>
@@ -460,8 +460,8 @@ export default function HarvestIsland() {
 
         {/* Cephas Help Link */}
         <div className="mt-8 text-center">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="text-green-400 hover:text-green-300"
             onClick={() => navigate('/cephas')}
           >

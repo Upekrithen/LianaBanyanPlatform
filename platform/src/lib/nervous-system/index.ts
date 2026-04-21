@@ -1,9 +1,9 @@
 /**
  * Nervous System
- * 
+ *
  * Central monitoring and synchronization layer for the Liana Banyan platform.
  * Tracks changes, maintains version history, and ensures all systems stay in sync.
- * 
+ *
  * Components:
  * - IP Ledger: Immutable, hash-chained records for critical data
  * - Content Versioning: Full version history for all documents
@@ -60,7 +60,7 @@ export async function getNervousSystemStatus(): Promise<{
   const ledgerIntegrity = await verifyLedgerIntegrity();
 
   let overallHealth: 'healthy' | 'warning' | 'critical' = 'healthy';
-  
+
   if (!ledgerIntegrity.valid) {
     overallHealth = 'critical';
   } else if (syncSummary.outdated > 5 || syncSummary.pending > 10) {

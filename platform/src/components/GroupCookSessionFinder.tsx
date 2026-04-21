@@ -2,7 +2,7 @@
  * GROUP COOK SESSION FINDER
  * ==========================
  * Find and join group cooking sessions at community kitchens.
- * 
+ *
  * Features:
  * - Map view of nearby sessions
  * - Schedule/calendar view

@@ -1,5 +1,5 @@
 -- Add project_type to projects table
-ALTER TABLE public.projects 
+ALTER TABLE public.projects
   ADD COLUMN project_type TEXT DEFAULT 'default';
 
 -- Update existing projects to categorize them

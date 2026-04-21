@@ -135,7 +135,7 @@ export function ProfileVisibilitySettings() {
 
         <div className="space-y-4">
           <h3 className="font-semibold">Public Profile Settings</h3>
-          
+
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Show Real Name</Label>

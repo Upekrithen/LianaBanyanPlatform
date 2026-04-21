@@ -70,7 +70,7 @@ export function ThemeUploader({ projectId, portalType = 'marketplace', onThemeUp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user || !themeName || !cssContent) {
       toast.error('Please provide theme name and CSS content');
       return;
@@ -85,7 +85,7 @@ export function ThemeUploader({ projectId, portalType = 'marketplace', onThemeUp
       if (previewImage) {
         const fileExt = previewImage.name.split('.').pop();
         const fileName = `${projectId}/${Date.now()}.${fileExt}`;
-        
+
         const { error: uploadError, data } = await supabase.storage
           .from('theme-previews')
           .upload(fileName, previewImage);
@@ -153,7 +153,7 @@ export function ThemeUploader({ projectId, portalType = 'marketplace', onThemeUp
               Upload a CSS stylesheet to customize your project's appearance
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="theme-name">Theme Name</Label>

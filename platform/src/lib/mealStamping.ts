@@ -1,6 +1,6 @@
 /**
  * Meal Stamping Service
- * 
+ *
  * Every meal/baked good is stamped by the maker when made.
  * This enables:
  * - Food safety tracking
@@ -57,7 +57,7 @@ export async function hashIngredients(ingredients: string[]): Promise<string> {
     .map(i => i.toLowerCase().trim())
     .sort()
     .join('|');
-  
+
   const encoder = new TextEncoder();
   const data = encoder.encode(normalized);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -87,13 +87,13 @@ export async function createMealStamps(
     const now = new Date();
     const shelfLife = input.shelf_life_hours || 24;
     const bestBy = calculateBestBy(now, shelfLife);
-    
+
     // Calculate ingredients hash if provided
     let ingredientsHash: string | undefined;
     if (input.ingredients_list && input.ingredients_list.length > 0) {
       ingredientsHash = await hashIngredients(input.ingredients_list);
     }
-    
+
     // Create stamp records for each item in batch
     const stamps: Partial<MealStamp>[] = [];
     for (let i = 1; i <= input.items_count; i++) {
@@ -114,7 +114,7 @@ export async function createMealStamps(
         permit_number: input.permit_number,
       });
     }
-    
+
     // Generate stamp codes and insert into Supabase
     const stampRecords = stamps.map((s) => ({
       ...s,
@@ -241,12 +241,12 @@ export function isValidStampCode(code: string): boolean {
  */
 export function getDateFromStampCode(code: string): Date | null {
   if (!isValidStampCode(code)) return null;
-  
+
   const datePart = code.slice(3, 11);
   const year = parseInt(datePart.slice(0, 4));
   const month = parseInt(datePart.slice(4, 6)) - 1;
   const day = parseInt(datePart.slice(6, 8));
-  
+
   return new Date(year, month, day);
 }
 
@@ -263,10 +263,10 @@ export function isWithinShelfLife(stamp: MealStamp): boolean {
  */
 export function formatStampLabel(stamp: MealStamp): string {
   const madeDate = new Date(stamp.made_at).toLocaleDateString();
-  const bestBy = stamp.best_by 
+  const bestBy = stamp.best_by
     ? new Date(stamp.best_by).toLocaleDateString()
     : 'N/A';
-  
+
   return `
 LIANA BANYAN CERTIFIED
 ━━━━━━━━━━━━━━━━━━━━━

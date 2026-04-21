@@ -26,7 +26,7 @@ export function ThemeSuggestionForm({ projectId, onSuccess }: ThemeSuggestionFor
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
       toast.error('You must be logged in to suggest themes');
       return;
@@ -58,7 +58,7 @@ export function ThemeSuggestionForm({ projectId, onSuccess }: ThemeSuggestionFor
       if (error) throw error;
 
       toast.success('Theme suggestion submitted! It will be reviewed by the project team.');
-      
+
       // Reset form
       setThemeName('');
       setDescription('');
@@ -66,7 +66,7 @@ export function ThemeSuggestionForm({ projectId, onSuccess }: ThemeSuggestionFor
       setSecondaryColor('#8b5cf6');
       setBackgroundColor('#ffffff');
       setAccentColor('#f59e0b');
-      
+
       onSuccess?.();
     } catch (error) {
       console.error('Error submitting theme:', error);
@@ -188,35 +188,35 @@ export function ThemeSuggestionForm({ projectId, onSuccess }: ThemeSuggestionFor
           {/* Color Preview */}
           <div className="space-y-2">
             <Label>Preview</Label>
-            <div 
+            <div
               className="p-6 rounded-lg border-2"
-              style={{ 
+              style={{
                 backgroundColor: backgroundColor,
-                borderColor: primaryColor 
+                borderColor: primaryColor
               }}
             >
               <div className="space-y-2">
-                <div 
+                <div
                   className="px-4 py-2 rounded font-semibold"
-                  style={{ 
+                  style={{
                     backgroundColor: primaryColor,
                     color: '#ffffff'
                   }}
                 >
                   Primary Button
                 </div>
-                <div 
+                <div
                   className="px-4 py-2 rounded font-semibold"
-                  style={{ 
+                  style={{
                     backgroundColor: secondaryColor,
                     color: '#ffffff'
                   }}
                 >
                   Secondary Button
                 </div>
-                <div 
+                <div
                   className="px-4 py-2 rounded font-semibold"
-                  style={{ 
+                  style={{
                     backgroundColor: accentColor,
                     color: '#ffffff'
                   }}

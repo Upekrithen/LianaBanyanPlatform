@@ -1,19 +1,19 @@
 /**
  * IPFS SERVICE — Immutable Metadata Storage
  * ==========================================
- * 
+ *
  * Per "Blockchain Without Coin or Speculation" paper:
- * "The metadata itself is stored on IPFS, where content addressing 
+ * "The metadata itself is stored on IPFS, where content addressing
  * ensures it cannot be modified without changing the hash."
- * 
+ *
  * This service handles:
  * 1. Uploading innovation metadata to IPFS
  * 2. Generating content-addressed URIs (CIDs)
  * 3. Verifying metadata integrity
- * 
+ *
  * The proof chain:
  * USPTO Filing → Blockchain Hash → IPFS Metadata → Innovation Token
- * 
+ *
  * Innovation #1226: Recipe IP Ledger Hash (SHA-256 stamp)
  */
 
@@ -42,24 +42,24 @@ export interface InnovationMetadata {
   title: string;
   description: string;
   category: string;
-  
+
   // Provenance
   created_at: string;           // ISO timestamp
   creator_id?: string;          // Member UUID (hashed for privacy)
   contributors?: string[];      // Array of contributor hashes
-  
+
   // Patent linkage
   patent_application?: string;  // e.g., "63/925,672"
   patent_status?: 'provisional' | 'filed' | 'pending' | 'granted';
-  
+
   // Platform context
   initiative?: string;          // Which of the Sweet Sixteen
   bag_number?: number;          // Patent bag grouping
-  
+
   // Valuation (internal, non-speculative)
   internal_valuation_credits?: number;
   valuation_date?: string;
-  
+
   // Verification
   content_hash?: string;        // SHA-256 of core content
   previous_version_cid?: string; // For version chains
@@ -70,19 +70,19 @@ export interface MedallionMetadata {
   name: string;
   description: string;
   image: string;                // IPFS URI or URL
-  
+
   // Custom attributes (OpenSea compatible)
   attributes: Array<{
     trait_type: string;
     value: string | number;
     display_type?: 'number' | 'date' | 'boost_number' | 'boost_percentage';
   }>;
-  
+
   // Liana Banyan specific
   medallion_tier: 'seed' | 'early_supporter' | 'community_builder' | 'project_champion';
   project_id: string;
   innovation_references?: number[];  // Innovation numbers this medallion relates to
-  
+
   // Non-transferable notice
   transfer_restriction: 'non-transferable';
   restriction_reason: string;
@@ -126,7 +126,7 @@ export async function verifyContentHash(content: string, expectedHash: string): 
 
 /**
  * Upload JSON metadata to IPFS via Pinata Edge Function
- * 
+ *
  * Routes through supabase.functions.invoke('ipfs-pin') so the Pinata
  * secret key is NEVER exposed in the browser bundle. Falls back to
  * mock CIDs only if the edge function is unreachable (dev/offline).
@@ -182,7 +182,7 @@ function generateMockIPFSResult(
   // Generate a deterministic mock CID based on content
   const content = JSON.stringify(metadata);
   const mockCid = `bafybeig${btoa(content.slice(0, 32)).replace(/[^a-z0-9]/gi, '').slice(0, 52).toLowerCase()}`;
-  
+
   return {
     cid: mockCid,
     uri: `ipfs://${mockCid}`,
@@ -198,13 +198,13 @@ function generateMockIPFSResult(
 export async function fetchFromIPFS<T>(cid: string): Promise<T> {
   // Try multiple gateways in case one is down
   const gateways = Object.values(IPFS_GATEWAYS);
-  
+
   for (const gateway of gateways) {
     try {
       const response = await fetch(`${gateway}${cid}`, {
         headers: { 'Accept': 'application/json' },
       });
-      
+
       if (response.ok) {
         return await response.json();
       }
@@ -212,7 +212,7 @@ export async function fetchFromIPFS<T>(cid: string): Promise<T> {
       console.warn(`IPFS gateway ${gateway} failed, trying next...`);
     }
   }
-  
+
   throw new Error(`Failed to fetch from IPFS: ${cid}`);
 }
 
@@ -251,7 +251,7 @@ export function createInnovationMetadata(
     created_at: new Date().toISOString(),
     ...options,
   };
-  
+
   return metadata;
 }
 
@@ -272,7 +272,7 @@ export function createMedallionMetadata(
     community_builder: { rarity: 'Rare', level: 3 },
     project_champion: { rarity: 'Legendary', level: 4 },
   };
-  
+
   return {
     name,
     description,
@@ -316,19 +316,19 @@ export async function createIPLedgerEntry(
 ): Promise<IPLedgerEntry> {
   // Generate content hash
   const contentHash = await generateContentHash(JSON.stringify(metadata));
-  
+
   // Add hash to metadata
   const metadataWithHash: InnovationMetadata = {
     ...metadata,
     content_hash: contentHash,
   };
-  
+
   // Upload to IPFS
   const ipfsResult = await uploadToIPFS(
     metadataWithHash,
     `innovation-${metadata.innovation_number}`
   );
-  
+
   return {
     innovation_number: metadata.innovation_number,
     content_hash: contentHash,

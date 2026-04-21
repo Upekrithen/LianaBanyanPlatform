@@ -203,7 +203,7 @@ Fund Split:
 Members can transition fluidly between provider and consumer roles across all initiatives. This creates sustainable, self-reinforcing service ecosystems where:
 
 - **Today's meal provider** is tomorrow's meal recipient
-- **This week's shopper** becomes next week's bulk order organizer  
+- **This week's shopper** becomes next week's bulk order organizer
 - **Current grocery orderer** may deliver for others later
 - **MSA contributor** can access fund when needed
 - **Defense Claws subscriber** might volunteer as advocate
@@ -229,7 +229,7 @@ Each initiative generates revenue to fund itself and expand, creating opportunit
 
 #### Let's Make Dinner
 - **High Demand Area**: 5-mile radius, daily delivery, 50+ providers
-- **Medium Demand**: 2-mile radius, 3x/week delivery, 20+ providers  
+- **Medium Demand**: 2-mile radius, 3x/week delivery, 20+ providers
 - **Emerging Area**: Pickup-only at Node until critical mass
 
 #### Let's Go Shopping / Let's Get Groceries

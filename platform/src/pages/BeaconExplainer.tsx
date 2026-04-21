@@ -10,11 +10,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  MapPin, 
-  ArrowLeft, 
-  Navigation, 
-  Compass, 
+import {
+  MapPin,
+  ArrowLeft,
+  Navigation,
+  Compass,
   ArrowRight,
   Sparkles,
   Users,
@@ -83,7 +83,7 @@ export default function BeaconExplainer() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              Beacons are colored markers you can drop on any page. Unlike bookmarks, 
+              Beacons are colored markers you can drop on any page. Unlike bookmarks,
               each color carries meaning — telling your future self <em>why</em> you marked this spot.
             </p>
             <div className="p-4 rounded-lg bg-muted/50 border">
@@ -116,7 +116,7 @@ export default function BeaconExplainer() {
                       className="flex items-center gap-4 p-4 rounded-lg border transition-colors hover:bg-muted/50"
                       style={{ borderColor: `${config.color}30` }}
                     >
-                      <div 
+                      <div
                         className="w-12 h-12 rounded-full flex items-center justify-center text-2xl shrink-0"
                         style={{ backgroundColor: `${config.color}15` }}
                       >

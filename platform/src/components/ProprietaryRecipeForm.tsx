@@ -97,7 +97,7 @@ export function ProprietaryRecipeForm({ open, onOpenChange, onSuccess }: Proprie
             Add Secret Recipe
           </DialogTitle>
           <DialogDescription>
-            This recipe stays private in your portfolio. You can graduate it to the public Pantry 
+            This recipe stays private in your portfolio. You can graduate it to the public Pantry
             once it has 25+ orders and a 4.0+ rating.
           </DialogDescription>
         </DialogHeader>
@@ -111,10 +111,10 @@ export function ProprietaryRecipeForm({ open, onOpenChange, onSuccess }: Proprie
             </div>
             <div className="col-span-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea 
-                id="description" 
-                name="description" 
-                placeholder="What makes this recipe special?" 
+              <Textarea
+                id="description"
+                name="description"
+                placeholder="What makes this recipe special?"
                 rows={2}
               />
             </div>
@@ -235,19 +235,19 @@ export function ProprietaryRecipeForm({ open, onOpenChange, onSuccess }: Proprie
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="dietary_tags">Dietary Tags</Label>
-              <Input 
-                id="dietary_tags" 
-                name="dietary_tags" 
-                placeholder="vegetarian, gluten-free, keto..." 
+              <Input
+                id="dietary_tags"
+                name="dietary_tags"
+                placeholder="vegetarian, gluten-free, keto..."
               />
               <p className="text-xs text-muted-foreground mt-1">Comma-separated</p>
             </div>
             <div>
               <Label htmlFor="allergens">Allergens</Label>
-              <Input 
-                id="allergens" 
-                name="allergens" 
-                placeholder="dairy, nuts, gluten..." 
+              <Input
+                id="allergens"
+                name="allergens"
+                placeholder="dairy, nuts, gluten..."
               />
               <p className="text-xs text-muted-foreground mt-1">Comma-separated</p>
             </div>
@@ -260,7 +260,7 @@ export function ProprietaryRecipeForm({ open, onOpenChange, onSuccess }: Proprie
               Privacy Guaranteed
             </div>
             <p className="text-muted-foreground mt-1">
-              Your recipe details (ingredients, instructions) remain private forever. 
+              Your recipe details (ingredients, instructions) remain private forever.
               Even if you graduate to the Pantry, only the name, description, and photo are shared.
             </p>
           </div>

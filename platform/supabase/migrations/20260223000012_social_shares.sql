@@ -80,41 +80,41 @@ DECLARE
   v_result JSONB;
 BEGIN
   -- Find referrer by code (first 8 chars of user_id)
-  SELECT id INTO v_referrer_id 
-  FROM auth.users 
+  SELECT id INTO v_referrer_id
+  FROM auth.users
   WHERE UPPER(LEFT(id::text, 8)) = UPPER(p_referrer_code)
   LIMIT 1;
-  
+
   IF v_referrer_id IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Invalid referral code');
   END IF;
-  
+
   -- Don't allow self-referral
   IF v_referrer_id = p_referred_user_id THEN
     RETURN jsonb_build_object('success', false, 'error', 'Cannot refer yourself');
   END IF;
-  
+
   -- Check if already referred
   IF EXISTS (SELECT 1 FROM public.referral_tracking WHERE referred_user_id = p_referred_user_id) THEN
     RETURN jsonb_build_object('success', false, 'error', 'User already referred');
   END IF;
-  
+
   -- Insert referral record
   INSERT INTO public.referral_tracking (
-    referrer_id, referrer_code, referred_user_id, 
+    referrer_id, referrer_code, referred_user_id,
     source_platform, source_content, bonus_awarded, bonus_feathers
   ) VALUES (
     v_referrer_id, p_referrer_code, p_referred_user_id,
     p_source_platform, p_source_content, true, v_bonus_feathers
   );
-  
+
   -- Award feathers to referrer (if user_feathers table exists)
-  UPDATE public.user_feathers 
+  UPDATE public.user_feathers
   SET total_feathers = total_feathers + v_bonus_feathers
   WHERE user_email = (SELECT email FROM auth.users WHERE id = v_referrer_id);
-  
+
   RETURN jsonb_build_object(
-    'success', true, 
+    'success', true,
     'referrer_id', v_referrer_id,
     'bonus_feathers', v_bonus_feathers
   );

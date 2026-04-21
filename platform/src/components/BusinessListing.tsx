@@ -124,8 +124,8 @@ export function BusinessListing({
               variant={showC20Only ? "default" : "outline"}
               onClick={() => setShowC20Only(!showC20Only)}
               className={cn(
-                showC20Only 
-                  ? "bg-emerald-600 hover:bg-emerald-500" 
+                showC20Only
+                  ? "bg-emerald-600 hover:bg-emerald-500"
                   : "border-slate-600"
               )}
             >
@@ -145,8 +145,8 @@ export function BusinessListing({
           <Store className="w-12 h-12 text-slate-600 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-slate-300 mb-2">No Businesses Found</h3>
           <p className="text-slate-500">
-            {showC20Only 
-              ? "No C+20 certified businesses yet. Be the first!" 
+            {showC20Only
+              ? "No C+20 certified businesses yet. Be the first!"
               : "No businesses match your search."}
           </p>
         </div>
@@ -180,8 +180,8 @@ function BusinessCard({ business }: { business: Anchor }) {
   return (
     <Card className={cn(
       "overflow-hidden transition-all hover:shadow-lg",
-      hasC20 
-        ? "bg-slate-900/50 border-emerald-500/30 hover:border-emerald-500/50" 
+      hasC20
+        ? "bg-slate-900/50 border-emerald-500/30 hover:border-emerald-500/50"
         : "bg-slate-900/50 border-slate-700 hover:border-slate-600"
     )}>
       <CardHeader className="pb-2">
@@ -211,7 +211,7 @@ function BusinessCard({ business }: { business: Anchor }) {
         {business.description && (
           <p className="text-sm text-slate-400 line-clamp-2">{business.description}</p>
         )}
-        
+
         <div className="flex items-center justify-between">
           <CostPlusBadge anchor={business} size="sm" />
           <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
@@ -231,8 +231,8 @@ function BusinessRow({ business }: { business: Anchor }) {
   return (
     <div className={cn(
       "flex items-center gap-4 p-4 rounded-lg border transition-all hover:bg-slate-800/50",
-      hasC20 
-        ? "bg-slate-900/30 border-emerald-500/20 hover:border-emerald-500/40" 
+      hasC20
+        ? "bg-slate-900/30 border-emerald-500/20 hover:border-emerald-500/40"
         : "bg-slate-900/30 border-slate-700 hover:border-slate-600"
     )}>
       <div className={cn(
@@ -244,7 +244,7 @@ function BusinessRow({ business }: { business: Anchor }) {
           hasC20 ? "text-emerald-400" : "text-slate-400"
         )} />
       </div>
-      
+
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <h4 className="font-medium text-white truncate">{business.name}</h4>
@@ -260,7 +260,7 @@ function BusinessRow({ business }: { business: Anchor }) {
       </div>
 
       <CostPlusBadge anchor={business} size="sm" />
-      
+
       <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white flex-shrink-0">
         <ArrowRight className="w-4 h-4" />
       </Button>
@@ -298,14 +298,14 @@ export function HallOfBusinesses() {
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Hall of Businesses</h2>
         <p className="text-slate-400">
-          Member businesses in the cooperative ecosystem. 
-          Look for the <span className="text-emerald-400 font-medium">C+20</span> badge 
+          Member businesses in the cooperative ecosystem.
+          Look for the <span className="text-emerald-400 font-medium">C+20</span> badge
           for transparent pricing.
         </p>
       </div>
-      
+
       <BusinessListing variant="grid" showFilters={true} limit={50} />
-      
+
       <div className="text-center pt-4">
         <Link to="/c20/leaderboard">
           <Button variant="outline" className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10">

@@ -105,7 +105,7 @@ export const HexisleCampaignManager = () => {
       } else if (selectedImages[stage.id] === "uploaded") {
         imageUrl = uploadedImages[stage.id] || stage.aiImage;
       }
-      
+
       return {
         stage: stage.id,
         title: stage.title,
@@ -181,7 +181,7 @@ export const HexisleCampaignManager = () => {
                 {/* Image Selection */}
                 <div className="space-y-4">
                   <h3 className="font-semibold">Stage Artwork - Compare & Select</h3>
-                  
+
                   <div className="grid md:grid-cols-3 gap-4">
                     {/* AI Generated */}
                     <div className="space-y-2">
@@ -196,8 +196,8 @@ export const HexisleCampaignManager = () => {
                         </Button>
                       </div>
                       <div className="relative aspect-video rounded-lg overflow-hidden border-2 border-muted">
-                        <img 
-                          src={stage.aiImage} 
+                        <img
+                          src={stage.aiImage}
                           alt={`${stage.title} - AI Generated`}
                           className="w-full h-full object-cover"
                         />
@@ -218,8 +218,8 @@ export const HexisleCampaignManager = () => {
                         </Button>
                       </div>
                       <div className="relative aspect-video rounded-lg overflow-hidden border-2 border-muted">
-                        <img 
-                          src={stage.originalImage} 
+                        <img
+                          src={stage.originalImage}
                           alt={`${stage.title} - Google Doc`}
                           className="w-full h-full object-cover"
                         />
@@ -243,8 +243,8 @@ export const HexisleCampaignManager = () => {
                       </div>
                       {uploadedImages[stage.id] ? (
                         <div className="relative aspect-video rounded-lg overflow-hidden border-2 border-primary">
-                          <img 
-                            src={uploadedImages[stage.id]} 
+                          <img
+                            src={uploadedImages[stage.id]}
                             alt={`${stage.title} - Custom`}
                             className="w-full h-full object-cover"
                           />

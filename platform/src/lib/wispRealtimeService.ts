@@ -3,9 +3,9 @@
  * ======================
  * Handles Supabase Realtime subscriptions for live Will-o'-Wisp Chase Mode.
  * Enables true multiplayer by syncing participant progress in real-time.
- * 
+ *
  * Uses Supabase Realtime Broadcast and Presence channels.
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  */
 
@@ -264,7 +264,7 @@ export class WispRealtimeManager {
 
     this.participants.set(payload.userId, existing);
     this.notifyParticipantsUpdate();
-    
+
     if (this.onChaseEvent) {
       this.onChaseEvent(payload);
     }
@@ -292,7 +292,7 @@ export class WispRealtimeManager {
     for (const [userId, presences] of Object.entries(state)) {
       if (presences.length === 0) continue;
       const presence = presences[0];
-      
+
       if (!this.participants.has(userId)) {
         this.participants.set(userId, {
           odivId: userId,

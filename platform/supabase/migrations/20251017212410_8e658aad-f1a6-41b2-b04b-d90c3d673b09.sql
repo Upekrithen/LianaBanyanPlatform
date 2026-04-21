@@ -129,8 +129,8 @@ CREATE POLICY "Users can create downloads"
 CREATE POLICY "Creators can view asset downloads"
   ON asset_downloads FOR SELECT
   USING (EXISTS (
-    SELECT 1 FROM lb_asset_library 
-    WHERE lb_asset_library.id = asset_downloads.asset_id 
+    SELECT 1 FROM lb_asset_library
+    WHERE lb_asset_library.id = asset_downloads.asset_id
     AND lb_asset_library.creator_id = auth.uid()
   ));
 

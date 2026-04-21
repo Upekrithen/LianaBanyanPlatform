@@ -7,11 +7,11 @@
 
 CREATE TABLE IF NOT EXISTS public.red_carpet_access (
   id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Who accessed
   email             TEXT,                           -- verified email (null for slug/herald/press)
   domain            TEXT,                           -- extracted domain from email
-  
+
   -- What they were shown
   recipient_id      TEXT,                           -- matched recipient slug (e.g. 'michael-seibel')
   recipient_name    TEXT,                           -- denormalized for Founder dashboard
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.red_carpet_access (
   herald_member_id  UUID REFERENCES auth.users(id), -- if entry_mode = 'herald'
   referral_code     TEXT,                           -- if entry_mode = 'referral'
   medallion_card_id TEXT,                           -- if entry_mode = 'card'
-  
+
   -- Entry mode
   entry_mode        TEXT NOT NULL DEFAULT 'unknown',
     -- 'slug'              = direct link from letter (trusted, no verification)
@@ -31,17 +31,17 @@ CREATE TABLE IF NOT EXISTS public.red_carpet_access (
     -- 'press'             = press junket landing
     -- 'card'              = QR medallion scan
     -- 'unknown'           = general visitor
-  
+
   -- Verification (only for domain-verified flow)
   verification_code TEXT,                           -- 6-digit code sent to email
   code_expires_at   TIMESTAMPTZ,                    -- code expiration (15 minutes)
   verified_at       TIMESTAMPTZ,                    -- when code was confirmed
   verification_attempts INTEGER DEFAULT 0,          -- anti-brute-force
-  
+
   -- Timestamps
   created_at        TIMESTAMPTZ DEFAULT NOW(),
   updated_at        TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Metadata
   user_agent        TEXT,
   referrer_url      TEXT
@@ -85,7 +85,7 @@ CREATE POLICY "Authenticated can read" ON public.red_carpet_access
 -- ═══════════════════════════════════════════════════════════════
 
 CREATE OR REPLACE VIEW public.red_carpet_dashboard AS
-SELECT 
+SELECT
   recipient_id,
   recipient_name,
   category,

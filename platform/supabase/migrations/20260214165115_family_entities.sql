@@ -128,7 +128,7 @@ CREATE POLICY "Users can view families they belong to"
     ON families FOR SELECT
     USING (
         id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -138,7 +138,7 @@ CREATE POLICY "Founders can update their families"
     ON families FOR UPDATE
     USING (
         id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND role = 'founder' AND is_active = true
         )
     );
@@ -153,7 +153,7 @@ CREATE POLICY "Members can view family members"
     ON family_members FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -173,7 +173,7 @@ CREATE POLICY "Members can view family invites"
     ON family_invites FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -183,7 +183,7 @@ CREATE POLICY "Members can create invites"
     ON family_invites FOR INSERT
     WITH CHECK (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -214,7 +214,7 @@ CREATE POLICY "Members can view relationships"
     ON member_relationships FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -224,7 +224,7 @@ CREATE POLICY "Members can manage their relationships"
     ON member_relationships FOR ALL
     USING (
         from_member IN (
-            SELECT id FROM family_members 
+            SELECT id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -244,12 +244,12 @@ BEGIN
     SELECT COALESCE(is_connected, true) INTO a_to_b
     FROM member_relationships
     WHERE from_member = member_a AND to_member = member_b;
-    
+
     -- Check if B has disconnected from A
     SELECT COALESCE(is_connected, true) INTO b_to_a
     FROM member_relationships
     WHERE from_member = member_b AND to_member = member_a;
-    
+
     -- Both must be connected for the relationship to be active
     RETURN COALESCE(a_to_b, true) AND COALESCE(b_to_a, true);
 END;
@@ -279,30 +279,30 @@ DECLARE
 BEGIN
     -- Get the invite
     SELECT * INTO invite_record FROM family_invites WHERE id = NEW.invite_id;
-    
+
     -- Count votes
     SELECT COUNT(*), COUNT(*) FILTER (WHERE vote = true)
     INTO total_votes, approve_votes
     FROM family_invite_votes
     WHERE invite_id = NEW.invite_id;
-    
+
     -- Update votes_received
-    UPDATE family_invites 
+    UPDATE family_invites
     SET votes_received = approve_votes
     WHERE id = NEW.invite_id;
-    
+
     -- If anyone rejects, the invite is rejected
     IF NEW.vote = false THEN
-        UPDATE family_invites 
+        UPDATE family_invites
         SET status = 'rejected', resolved_at = NOW()
         WHERE id = NEW.invite_id;
     -- If all have approved (unanimous), approve the invite
     ELSIF approve_votes >= invite_record.votes_needed THEN
-        UPDATE family_invites 
+        UPDATE family_invites
         SET status = 'approved', resolved_at = NOW()
         WHERE id = NEW.invite_id;
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

@@ -36,8 +36,8 @@ export const JesperDashboard: React.FC = () => {
   const handleApprove = (id: string) => {
     // Generate a random 4 digit handshake code
     const code = Math.floor(1000 + Math.random() * 9000).toString();
-    
-    setNominations(prev => prev.map(n => 
+
+    setNominations(prev => prev.map(n =>
       n.id === id ? { ...n, status: 'assigned', handshake_code: code } : n
     ));
 
@@ -48,7 +48,7 @@ export const JesperDashboard: React.FC = () => {
   };
 
   const handleFlag = (id: string) => {
-    setNominations(prev => prev.map(n => 
+    setNominations(prev => prev.map(n =>
       n.id === id ? { ...n, status: 'flagged' } : n
     ));
     toast({
@@ -60,7 +60,7 @@ export const JesperDashboard: React.FC = () => {
 
   const handleConfirmDelivery = (id: string, expectedCode: string) => {
     if (deliveryCode === expectedCode) {
-      setNominations(prev => prev.map(n => 
+      setNominations(prev => prev.map(n =>
         n.id === id ? { ...n, status: 'delivered' } : n
       ));
       setDeliveryCode('');
@@ -103,7 +103,7 @@ export const JesperDashboard: React.FC = () => {
         </div>
       </CardHeader>
       <CardContent className="pt-6">
-        
+
         <Tabs defaultValue="pending" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="pending">Pending Review</TabsTrigger>
@@ -124,11 +124,11 @@ export const JesperDashboard: React.FC = () => {
                     </div>
                     <Badge variant="secondary">Review Required</Badge>
                   </div>
-                  
+
                   <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-md text-sm italic border-l-4 border-rose-400">
                     "{nom.reason_card}"
                   </div>
-                  
+
                   <div className="text-xs text-slate-500">
                     Funded by: {nom.purchaser}
                   </div>
@@ -164,12 +164,12 @@ export const JesperDashboard: React.FC = () => {
                       </Badge>
                     </div>
                   </div>
-                  
+
                   <div className="pt-4 border-t border-blue-100 dark:border-blue-900">
                     <p className="text-sm font-medium mb-2">Confirm Delivery</p>
                     <div className="flex gap-2">
-                      <Input 
-                        placeholder="Enter code from recipient..." 
+                      <Input
+                        placeholder="Enter code from recipient..."
                         value={deliveryCode}
                         onChange={(e) => setDeliveryCode(e.target.value)}
                         className="font-mono text-center tracking-widest"

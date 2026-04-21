@@ -1,6 +1,6 @@
 /**
  * The Salt Mines - Fulfill a Bounty Progressive Disclosure
- * 
+ *
  * One of the six halls in the Hexagon Senate.
  * Progressive disclosure from bounties → patent ownership → $5 membership
  */
@@ -8,7 +8,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
+import {
   Briefcase, Shield, Database, Palette, Key,
   Share2, Users, Stamp, Scale, Gift, ArrowRight,
   ExternalLink, Sparkles, Lock, Unlock, ChevronDown,
@@ -17,12 +17,12 @@ import {
 import { FableFlipbook } from '@/components/FableFlipbook';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
-import { 
-  BenefitCard, 
-  useBenefitAccumulator, 
+import {
+  BenefitCard,
+  useBenefitAccumulator,
   ProgressiveSection,
   ProgressiveContainer,
-  type BenefitItem 
+  type BenefitItem
 } from '@/components/progressive';
 import { saveGhostBeacon, emailBeacon } from '@/lib/beacons';
 import { BeaconDropButton } from '@/components/BeaconDropButton';
@@ -30,91 +30,91 @@ import { PathwayNavigator } from '@/components/PathwayNavigator';
 import { usePathwayProgress } from '@/contexts/PathwayProgressContext';
 
 const BOUNTY_CATEGORIES = [
-  { 
-    name: 'Design', 
-    icon: '🎨', 
+  {
+    name: 'Design',
+    icon: '🎨',
     lucideIcon: Palette,
-    credits: '500-2000', 
+    credits: '500-2000',
     bounties: 0,
     description: 'UI/UX, graphics, branding, illustrations',
     examples: ['Landing page mockups', 'Logo design', 'Icon sets', 'Marketing materials'],
     link: '/help-wanted'
   },
-  { 
-    name: 'Development', 
-    icon: '💻', 
+  {
+    name: 'Development',
+    icon: '💻',
     lucideIcon: Code,
-    credits: '1000-5000', 
+    credits: '1000-5000',
     bounties: 0,
     description: 'Web, mobile, backend, integrations',
     examples: ['React components', 'API integrations', 'Bug fixes', 'Feature builds'],
     link: '/help-wanted'
   },
-  { 
-    name: 'Writing', 
-    icon: '✍️', 
+  {
+    name: 'Writing',
+    icon: '✍️',
     lucideIcon: PenTool,
-    credits: '200-1000', 
+    credits: '200-1000',
     bounties: 0,
     description: 'Content, copy, documentation, scripts',
     examples: ['Blog posts', 'Documentation', 'Video scripts', 'Email sequences'],
     link: '/help-wanted'
   },
-  { 
-    name: 'Local Expert', 
-    icon: '🗺️', 
+  {
+    name: 'Local Expert',
+    icon: '🗺️',
     lucideIcon: MapPin,
-    credits: '50-500', 
+    credits: '50-500',
     bounties: 24,
     description: 'Gather local pricing data to enable Volume Dumps',
     examples: ['Price check local print shops', 'Find communal kitchens', 'Verify local business hours'],
     link: '/salt-mines'
   },
-  { 
-    name: 'Local Fulfillment', 
-    icon: '🖨️', 
+  {
+    name: 'Local Fulfillment',
+    icon: '🖨️',
     lucideIcon: Box,
-    credits: '100-1500', 
+    credits: '100-1500',
     bounties: 14,
     description: '3D Printing, QR Deck Cards, Local Delivery',
     examples: ['Print 500 QR Cards', '3D Print HexIsle Medallions', 'Local Delivery Setup'],
     link: '/salt-mines'
   },
-  { 
-    name: 'Video', 
-    icon: '🎬', 
+  {
+    name: 'Video',
+    icon: '🎬',
     lucideIcon: Video,
-    credits: '500-3000', 
+    credits: '500-3000',
     bounties: 0,
     description: 'Editing, motion graphics, tutorials',
     examples: ['Explainer videos', 'Social clips', 'Tutorials', 'Animations'],
     link: '/help-wanted'
   },
-  { 
-    name: 'Audio', 
-    icon: '🎵', 
+  {
+    name: 'Audio',
+    icon: '🎵',
     lucideIcon: Music,
-    credits: '300-1500', 
+    credits: '300-1500',
     bounties: 0,
     description: 'Music, podcasts, voiceover, sound design',
     examples: ['Podcast editing', 'Jingles', 'Voiceover', 'Sound effects'],
     link: '/help-wanted'
   },
-  { 
-    name: '3D/CAD', 
-    icon: '📐', 
+  {
+    name: '3D/CAD',
+    icon: '📐',
     lucideIcon: Box,
-    credits: '800-4000', 
+    credits: '800-4000',
     bounties: 0,
     description: 'Modeling, rendering, product design',
     examples: ['Product renders', '3D printing files', 'Architectural viz', 'Game assets'],
     link: '/help-wanted'
   },
-  { 
-    name: 'Physical Printing', 
-    icon: '🖨️', 
+  {
+    name: 'Physical Printing',
+    icon: '🖨️',
     lucideIcon: Box,
-    credits: '1000-5000', 
+    credits: '1000-5000',
     bounties: 0,
     description: 'Volume dump print bounties for QR Cue Cards',
     examples: ['Business cards', 'NFC plastic cards', 'Metal cards', 'Stickers'],
@@ -243,7 +243,7 @@ export default function SaltMines() {
       pageUrl: window.location.href,
       note,
     });
-    
+
     // Optionally email
     if (user?.email) {
       emailBeacon(beacon, user.email);
@@ -274,7 +274,7 @@ export default function SaltMines() {
       {/* Hero Section */}
       <section className="relative min-h-[40vh] flex items-center justify-center px-6 py-12">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent" />
-        
+
         <div className="relative z-10 text-center max-w-4xl">
           <motion.div
             initial={{ scale: 0 }}
@@ -285,7 +285,7 @@ export default function SaltMines() {
             <Briefcase className="w-5 h-5 text-amber-400" />
             <span className="text-amber-300 font-medium">The Salt Mines</span>
           </motion.div>
-          
+
           <motion.h1
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -294,14 +294,14 @@ export default function SaltMines() {
           >
             Fulfill a Bounty. Keep <span className="text-primary">83.3%</span>.
           </motion.h1>
-          
+
           <motion.p
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-xl text-white/70 mb-8 max-w-2xl mx-auto"
           >
-            Real work. Real pay. No middleman taking half. Browse bounties, 
+            Real work. Real pay. No middleman taking half. Browse bounties,
             post your own, and discover why this platform exists. You are an independent participant. The platform does not dictate your hours, methods, or guarantee bounty acceptance.
           </motion.p>
 
@@ -350,7 +350,7 @@ export default function SaltMines() {
           className="bg-gradient-to-b from-transparent to-amber-500/5"
         >
           <div className="max-w-3xl mx-auto">
-            <FableFlipbook 
+            <FableFlipbook
               autoPlay={false}
               interval={4000}
               showControls={true}
@@ -358,7 +358,7 @@ export default function SaltMines() {
                 document.getElementById('bounty-board')?.scrollIntoView({ behavior: 'smooth' });
               }}
             />
-            
+
             <div className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center">
               <p className="text-amber-200">
                 <strong>The moral:</strong> When we work together, everyone gets bread.<br />
@@ -408,7 +408,7 @@ export default function SaltMines() {
               <h3 className="text-2xl font-bold text-amber-500">Captain's Collateral & Print Bounties</h3>
             </div>
             <p className="text-slate-300 mb-6">
-              Captains lock their own Marks as collateral to back local print runs (QR Deck Cards, Medallions, etc.). 
+              Captains lock their own Marks as collateral to back local print runs (QR Deck Cards, Medallions, etc.).
               <strong> This is real money purchased.</strong> It acts exactly like a Bond to guarantee payment upon delivery, but without the expensive legal overhead that normally prevents small communities from organizing.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
@@ -434,10 +434,10 @@ export default function SaltMines() {
               </div>
             </div>
           </div>
-          
+
           <div className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
             <p className="text-amber-200 text-center">
-              <strong>500-2000 Credits = $500-$2000</strong> in real value. 
+              <strong>500-2000 Credits = $500-$2000</strong> in real value.
               You keep 83.3% of everything you earn.
             </p>
           </div>
@@ -562,10 +562,10 @@ export default function SaltMines() {
               </tbody>
             </table>
           </div>
-          
+
           <div className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
             <p className="text-emerald-200">
-              <strong>Key Insight:</strong> More control = smaller pie. Less control = bigger pie. 
+              <strong>Key Insight:</strong> More control = smaller pie. Less control = bigger pie.
               Tier A earns MORE absolute dollars despite lower percentage.
             </p>
           </div>
@@ -595,7 +595,7 @@ export default function SaltMines() {
                 <li>• Platform Credits work on THIS platform</li>
               </ul>
             </div>
-            
+
             <div className="p-6 rounded-xl bg-primary/10 border border-primary/20">
               <Sparkles className="w-8 h-8 text-primary mb-4" />
               <h4 className="font-semibold text-white mb-2">The Point</h4>
@@ -661,25 +661,25 @@ export default function SaltMines() {
               <Key className="w-8 h-8 text-amber-400 mb-3" />
               <h4 className="font-semibold text-white mb-2">Golden Keys Hunt</h4>
               <p className="text-sm text-white/60">
-                Hidden throughout platform documentation. Solve the "Help Each Other Help Ourselves" 
+                Hidden throughout platform documentation. Solve the "Help Each Other Help Ourselves"
                 puzzle. Earn Marks for discovery.
               </p>
             </div>
-            
+
             <div className="p-5 rounded-xl bg-blue-500/10 border border-blue-500/20">
               <Share2 className="w-8 h-8 text-blue-400 mb-3" />
               <h4 className="font-semibold text-white mb-2">Media Blitz</h4>
               <p className="text-sm text-white/60">
-                Published strategy anyone can follow. Cue Card triggers at milestones. 
+                Published strategy anyone can follow. Cue Card triggers at milestones.
                 Transparency as competitive advantage.
               </p>
             </div>
-            
+
             <div className="p-5 rounded-xl bg-violet-500/10 border border-violet-500/20">
               <span className="text-3xl mb-3 block">🪶</span>
               <h4 className="font-semibold text-white mb-2">Ghost World Speedruns</h4>
               <p className="text-sm text-white/60">
-                Crow Feathers (permanent achievements). Half-Life decay creates urgency. 
+                Crow Feathers (permanent achievements). Half-Life decay creates urgency.
                 "The crow remembers what the ghost forgets."
               </p>
             </div>
@@ -730,7 +730,7 @@ export default function SaltMines() {
               </motion.div>
             ))}
           </div>
-          
+
           <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-medium text-white mb-2">Member Benefits:</h4>
             <ul className="space-y-1 text-sm text-white/70">
@@ -770,7 +770,7 @@ export default function SaltMines() {
               </div>
             ))}
           </div>
-          
+
           <div className="p-6 rounded-xl bg-gradient-to-r from-primary/20 to-purple-500/20 border border-primary/30">
             <h4 className="font-semibold text-white mb-2">5K SPONSOR Project</h4>
             <ul className="space-y-2 text-white/80">
@@ -803,24 +803,24 @@ export default function SaltMines() {
               <Stamp className="w-8 h-8 text-amber-400 mb-4" />
               <h4 className="font-semibold text-white mb-2">Service Coupon Framing</h4>
               <p className="text-white/70">
-                "Your Joules today will still buy X hours of platform services in 10 years, 
+                "Your Joules today will still buy X hours of platform services in 10 years,
                 even if prices rise. Like Forever Stamps — always valid for one first-class letter."
               </p>
             </div>
-            
+
             <div className="p-6 rounded-xl bg-white/5 border border-white/10">
               <span className="text-3xl mb-4 block">📈</span>
               <h4 className="font-semibold text-white mb-2">Historical Example</h4>
               <p className="text-white/70">
-                "If the platform had existed 10 years ago, here's what early Joules would be 
+                "If the platform had existed 10 years ago, here's what early Joules would be
                 worth TODAY based on platform growth."
               </p>
             </div>
           </div>
-          
+
           <div className="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
             <p className="text-red-200 text-sm">
-              <strong>NOT A GUARANTEE.</strong> Joules are platform service units, not investments. 
+              <strong>NOT A GUARANTEE.</strong> Joules are platform service units, not investments.
               Past performance does not predict future results.
             </p>
           </div>
@@ -870,7 +870,7 @@ export default function SaltMines() {
               </tbody>
             </table>
           </div>
-          
+
           <div className="p-6 rounded-xl bg-slate-800/50 border border-white/10">
             <Scale className="w-8 h-8 text-blue-400 mb-4" />
             <h4 className="font-semibold text-white mb-3">Key Points</h4>
@@ -899,7 +899,7 @@ export default function SaltMines() {
                 <span className="text-6xl mb-4 block">🎁</span>
                 <h3 className="text-3xl font-bold text-white mb-2">For $5/year, you get:</h3>
               </div>
-              
+
               <div className="space-y-3 mb-8">
                 {benefits.map((benefit, idx) => (
                   <motion.div
@@ -914,7 +914,7 @@ export default function SaltMines() {
                   </motion.div>
                 ))}
               </div>
-              
+
               <div className="p-4 rounded-xl bg-white/10 border border-white/20 mb-6">
                 <p className="text-white text-center">
                   <strong>PLUS:</strong> I'm personally offering you part of MY patents.<br />
@@ -922,7 +922,7 @@ export default function SaltMines() {
                   You become a member. You get usage rights to that 60%.
                 </p>
               </div>
-              
+
               <blockquote className="text-white/70 italic text-center mb-4">
                 "I spent 37 years building this. I could have kept 100% of the patents.
                 Instead, I'm giving 60% to the platform — which means to YOU, the members.
@@ -932,7 +932,7 @@ export default function SaltMines() {
               <p className="text-white/40 text-sm text-center italic mb-8">
                 "Muzzle not the ox that treadeth out the corn, for the laborer is worthy of his hire."
               </p>
-              
+
               <button
                 onClick={() => openOnboard({ reason: "find work and earn", actionLabel: "Join", membershipIncluded: true })}
                 className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 text-white text-xl font-bold flex items-center justify-center gap-3 transition-all"

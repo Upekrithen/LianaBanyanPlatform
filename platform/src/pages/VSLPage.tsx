@@ -38,7 +38,7 @@ export default function VSLPage() {
               "I thank God, truthfully and with respect, for USAA, because when I had at least one dollar in my checking account, I could go to the gas pump and fill up in order to drive and pick up the kids from school, and USAA would pay it, and charge my account no fee if I paid it back within a day... A little generosity, just a tiny little bit, made ALL the difference in my life, and my wife and children's lives."
             </p>
             <p>
-              That is the core of VSL. The difference between "structurally undercapitalized" and "thriving" is often absurdly small—if someone would just trust you with it. 
+              That is the core of VSL. The difference between "structurally undercapitalized" and "thriving" is often absurdly small—if someone would just trust you with it.
             </p>
             <p>
               VSL scales the <strong>USAA Principle</strong> through community accountability instead of institutional generosity. It is not a bank. It is not "village savings." It is <em>Vouched</em>.

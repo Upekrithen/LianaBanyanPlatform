@@ -1,6 +1,6 @@
 /**
  * IP Ledger Service
- * 
+ *
  * Immutable, hash-chained records for critical platform data.
  * Every innovation, medallion mint, and governance decision is logged
  * with cryptographic integrity.
@@ -18,7 +18,7 @@ export interface IPLedgerEntry {
   created_at: string;
 }
 
-export type IPLedgerEntryType = 
+export type IPLedgerEntryType =
   | 'innovation.registered'
   | 'medallion.minted'
   | 'governance.decision'
@@ -128,12 +128,12 @@ export async function verifyLedgerIntegrity(): Promise<{
 
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i] as IPLedgerEntry;
-    
+
     if (i === 0 && entry.previous_hash !== null) {
-      return { 
-        valid: false, 
+      return {
+        valid: false,
         brokenAt: entry.sequence_number,
-        message: 'First entry should have null previous_hash' 
+        message: 'First entry should have null previous_hash'
       };
     }
 
@@ -149,9 +149,9 @@ export async function verifyLedgerIntegrity(): Promise<{
     }
   }
 
-  return { 
-    valid: true, 
-    message: `Ledger verified: ${entries.length} entries, chain intact` 
+  return {
+    valid: true,
+    message: `Ledger verified: ${entries.length} entries, chain intact`
   };
 }
 

@@ -1,5 +1,5 @@
 -- Add detailed description field to projects
-ALTER TABLE public.projects 
+ALTER TABLE public.projects
 ADD COLUMN IF NOT EXISTS detailed_description text;
 
 -- Create table for expandable project sections

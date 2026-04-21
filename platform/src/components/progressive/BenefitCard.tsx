@@ -47,9 +47,9 @@ export function BenefitCard({
 
   // Hide during active Wildfire Tours or Spotlight Tours
   if (wildfireState?.isRunning || wildfireState?.spotlight?.isActive) return null;
-  
+
   const visibleBenefits = showAll ? benefits : benefits.slice(-3);
-  
+
   const groupedBenefits = benefits.reduce((acc, benefit) => {
     if (!acc[benefit.category]) acc[benefit.category] = [];
     acc[benefit.category].push(benefit);
@@ -72,7 +72,7 @@ export function BenefitCard({
       transition={{ type: 'spring', damping: 20 }}
     >
       {/* Header */}
-      <div 
+      <div
         className="p-3 bg-gradient-to-r from-primary/30 to-purple-500/30 cursor-pointer flex items-center justify-between"
         onClick={onToggleExpand}
       >
@@ -145,7 +145,7 @@ export function BenefitCard({
             ))
           )}
         </AnimatePresence>
-        
+
         {!isExpanded && benefits.length > 3 && (
           <button
             onClick={(e) => { e.stopPropagation(); onToggleExpand?.(); }}
@@ -176,14 +176,14 @@ export function BenefitCard({
 
 export function useBenefitAccumulator() {
   const [benefits, setBenefits] = useState<BenefitItem[]>([]);
-  
+
   const addBenefit = (benefit: BenefitItem) => {
     setBenefits(prev => {
       if (prev.some(b => b.id === benefit.id)) return prev;
       return [...prev, benefit];
     });
   };
-  
+
   const addBenefits = (newBenefits: BenefitItem[]) => {
     setBenefits(prev => {
       const existingIds = new Set(prev.map(b => b.id));
@@ -191,8 +191,8 @@ export function useBenefitAccumulator() {
       return [...prev, ...uniqueNew];
     });
   };
-  
+
   const clearBenefits = () => setBenefits([]);
-  
+
   return { benefits, addBenefit, addBenefits, clearBenefits };
 }

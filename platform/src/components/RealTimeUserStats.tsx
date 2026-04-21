@@ -20,7 +20,7 @@ export function RealTimeUserStats() {
         </span>
       );
     }
-    
+
     switch (userStaleness.level) {
       case 'fresh':
         return (
@@ -101,22 +101,22 @@ export function RealTimeUserStats() {
             </AlertDescription>
           </Alert>
         )}
-        
+
         {userStaleness.level === 'stale' && realtimeConnected && (
           <Alert>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              Data may be outdated ({userStaleness.secondsSinceUpdate}s since last update). 
+              Data may be outdated ({userStaleness.secondsSinceUpdate}s since last update).
               Click refresh to update manually.
             </AlertDescription>
           </Alert>
         )}
-        
+
         {userStaleness.level === 'critical' && realtimeConnected && (
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              Data is stale ({Math.floor(userStaleness.secondsSinceUpdate / 60)}m since last update). 
+              Data is stale ({Math.floor(userStaleness.secondsSinceUpdate / 60)}m since last update).
               <Button variant="link" onClick={refetch} className="h-auto p-0 ml-1">
                 Refresh now
               </Button>

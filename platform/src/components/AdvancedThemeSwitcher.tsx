@@ -151,9 +151,9 @@ interface AdvancedThemeSwitcherProps {
   variant?: 'select' | 'grid';
 }
 
-export function AdvancedThemeSwitcher({ 
-  className, 
-  variant = 'select' 
+export function AdvancedThemeSwitcher({
+  className,
+  variant = 'select'
 }: AdvancedThemeSwitcherProps) {
   const { currentTheme, setTheme } = useTheme();
 
@@ -183,19 +183,19 @@ export function AdvancedThemeSwitcher({
                   <Check className="h-5 w-5 text-primary flex-shrink-0 ml-2" />
                 )}
               </div>
-              
+
               <div className="flex gap-2 mt-3">
-                <div 
+                <div
                   className="h-8 flex-1 rounded border"
                   style={{ backgroundColor: theme.preview.primary }}
                   title="Primary"
                 />
-                <div 
+                <div
                   className="h-8 flex-1 rounded border"
                   style={{ backgroundColor: theme.preview.secondary }}
                   title="Secondary"
                 />
-                <div 
+                <div
                   className="h-8 flex-1 rounded border"
                   style={{ backgroundColor: theme.preview.accent }}
                   title="Accent"
@@ -220,11 +220,11 @@ export function AdvancedThemeSwitcher({
             <SelectItem key={theme.id} value={theme.id}>
               <div className="flex items-center gap-2">
                 <div className="flex gap-1">
-                  <div 
+                  <div
                     className="w-3 h-3 rounded-full border"
                     style={{ backgroundColor: theme.preview.primary }}
                   />
-                  <div 
+                  <div
                     className="w-3 h-3 rounded-full border"
                     style={{ backgroundColor: theme.preview.secondary }}
                   />

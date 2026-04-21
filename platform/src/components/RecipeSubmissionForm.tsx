@@ -3,7 +3,7 @@
  * ======================
  * For adding recipes to The Pantry.
  * Requires: photo, title, ingredients, steps
- * 
+ *
  * Now includes Shadow Marks bounty preview based on category selection!
  */
 
@@ -74,7 +74,7 @@ const DIFFICULTIES = [
 ];
 
 const DIETARY_TAGS = [
-  'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Keto', 
+  'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Keto',
   'Low-Carb', 'Paleo', 'Whole30', 'Nut-Free', 'Kosher', 'Halal'
 ];
 
@@ -83,11 +83,11 @@ const ALLERGENS = [
   'Wheat', 'Soy', 'Sesame'
 ];
 
-export function RecipeSubmissionForm({ 
-  open, 
+export function RecipeSubmissionForm({
+  open,
   onOpenChange,
   preselectedCuisine,
-  preselectedMealType, 
+  preselectedMealType,
 }: RecipeSubmissionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photoUrl, setPhotoUrl] = useState("");
@@ -112,21 +112,21 @@ export function RecipeSubmissionForm({
   // Find matching bounty for selected cuisine/meal type
   const matchingBounty = useMemo(() => {
     if (!bounties || !selectedCuisine || !selectedMealType) return null;
-    
+
     // Try exact match first
-    let match = bounties.find(b => 
+    let match = bounties.find(b =>
       b.cuisine.toLowerCase() === selectedCuisine.toLowerCase() &&
       b.mealType.toLowerCase() === selectedMealType.toLowerCase()
     );
-    
+
     // Fall back to "Any" cuisine match
     if (!match) {
-      match = bounties.find(b => 
+      match = bounties.find(b =>
         b.cuisine === 'Any' &&
         b.mealType.toLowerCase() === selectedMealType.toLowerCase()
       );
     }
-    
+
     return match;
   }, [bounties, selectedCuisine, selectedMealType]);
 
@@ -266,7 +266,7 @@ export function RecipeSubmissionForm({
       toast.success('Recipe submitted! It will appear after approval.');
       queryClient.invalidateQueries({ queryKey: ['pantry-recipes'] });
       onOpenChange(false);
-      
+
       // Reset form
       setPhotoUrl('');
       setIngredients([{ name: '', quantity: '', unit: 'cup' }]);
@@ -317,11 +317,11 @@ export function RecipeSubmissionForm({
             <div>
               <Label htmlFor="photo_url">Photo URL</Label>
               <div className="flex gap-2">
-                <Input 
-                  id="photo_url" 
+                <Input
+                  id="photo_url"
                   value={photoUrl}
                   onChange={(e) => setPhotoUrl(e.target.value)}
-                  placeholder="https://example.com/photo.jpg" 
+                  placeholder="https://example.com/photo.jpg"
                 />
                 <Button type="button" variant="outline" size="icon" aria-label="Upload photo">
                   <Camera className="h-4 w-4" />
@@ -367,8 +367,8 @@ export function RecipeSubmissionForm({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="cuisine">Cuisine</Label>
-                <Select 
-                  name="cuisine" 
+                <Select
+                  name="cuisine"
                   value={selectedCuisine}
                   onValueChange={setSelectedCuisine}
                 >
@@ -384,7 +384,7 @@ export function RecipeSubmissionForm({
               </div>
               <div>
                 <Label htmlFor="meal_type">Meal Type</Label>
-                <Select 
+                <Select
                   name="meal_type"
                   value={selectedMealType}
                   onValueChange={setSelectedMealType}
@@ -437,7 +437,7 @@ export function RecipeSubmissionForm({
               <div className="p-3 rounded-lg bg-muted/30 border border-muted text-sm text-muted-foreground">
                 <span className="flex items-center gap-2">
                   <Info className="h-4 w-4" />
-                  This category is well-stocked ({matchingBounty.recipeCount} recipes). 
+                  This category is well-stocked ({matchingBounty.recipeCount} recipes).
                   No bonus Shadow Marks, but you'll still earn credits per use!
                 </span>
               </div>
@@ -504,8 +504,8 @@ export function RecipeSubmissionForm({
                     onChange={(e) => updateIngredient(index, 'quantity', e.target.value)}
                     className="w-20"
                   />
-                  <Select 
-                    value={ing.unit} 
+                  <Select
+                    value={ing.unit}
                     onValueChange={(val) => updateIngredient(index, 'unit', val)}
                   >
                     <SelectTrigger className="w-24">

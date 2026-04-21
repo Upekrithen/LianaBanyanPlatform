@@ -81,7 +81,7 @@ export function ExternalServiceLinksManager() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
@@ -156,7 +156,7 @@ export function ExternalServiceLinksManager() {
       <Alert className="border-primary">
         <Shield className="h-4 w-4" />
         <AlertDescription>
-          <strong>Rate Compliance Notice:</strong> When working with other LB members through external 
+          <strong>Rate Compliance Notice:</strong> When working with other LB members through external
           platforms, you must honor LB scale rates. Violations may result in reputation penalties.
         </AlertDescription>
       </Alert>
@@ -284,9 +284,9 @@ export function ExternalServiceLinksManager() {
           ) : (
             <div className="space-y-4">
               {links.map((link) => (
-                <ServiceLinkCard 
-                  key={link.id} 
-                  link={link} 
+                <ServiceLinkCard
+                  key={link.id}
+                  link={link}
                   onDelete={handleDelete}
                   lbScaleRate={link.advertised_rate_min ? link.advertised_rate_min * 1.2 : null}
                 />

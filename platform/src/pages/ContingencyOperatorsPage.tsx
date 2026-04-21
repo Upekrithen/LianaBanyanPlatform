@@ -1,7 +1,7 @@
 /**
  * Contingency Operators — Thought Experiment System
  * Innovation #1188
- * 
+ *
  * Non-destructive what-if scenario sandboxes for testing platform changes
  * before committing to REALITY.
  */
@@ -21,11 +21,11 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
-import { 
-  FlaskConical, 
-  GitBranch, 
-  TrendingUp, 
-  TrendingDown, 
+import {
+  FlaskConical,
+  GitBranch,
+  TrendingUp,
+  TrendingDown,
   Minus,
   Play,
   Pause,
@@ -86,7 +86,7 @@ export default function ContingencyOperatorsPage() {
   const [templates, setTemplates] = useState<FactorTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  
+
   // New experiment form state
   const [newExperiment, setNewExperiment] = useState({
     name: '',
@@ -111,7 +111,7 @@ export default function ContingencyOperatorsPage() {
         .from('thought_experiments')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       setExperiments((data as unknown as ThoughtExperiment[]) || []);
     } catch (err) {
@@ -127,7 +127,7 @@ export default function ContingencyOperatorsPage() {
         .from('co_factor_templates')
         .select('*')
         .order('is_default', { ascending: false });
-      
+
       if (error) throw error;
       setTemplates((data as unknown as FactorTemplate[]) || []);
     } catch (err) {
@@ -137,7 +137,7 @@ export default function ContingencyOperatorsPage() {
 
   const createExperiment = async () => {
     if (!user) return;
-    
+
     try {
       const { error } = await supabase
         .from('thought_experiments')
@@ -153,9 +153,9 @@ export default function ContingencyOperatorsPage() {
           max_extensions: newExperiment.max_extensions,
           created_by: user.id,
         });
-      
+
       if (error) throw error;
-      
+
       setCreateDialogOpen(false);
       setNewExperiment({
         name: '',
@@ -180,7 +180,7 @@ export default function ContingencyOperatorsPage() {
         .from('thought_experiments')
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', id);
-      
+
       if (error) throw error;
       loadExperiments();
     } catch (err) {
@@ -224,7 +224,7 @@ export default function ContingencyOperatorsPage() {
             Non-destructive what-if sandboxes • Innovation #1188
           </p>
         </div>
-        
+
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
@@ -242,7 +242,7 @@ export default function ContingencyOperatorsPage() {
                 Fork from REALITY with a single-point change. Test the cascade effects without risk.
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="space-y-6 pt-4">
               {/* Name */}
               <div className="space-y-2">
@@ -254,7 +254,7 @@ export default function ContingencyOperatorsPage() {
                   onChange={(e) => setNewExperiment(prev => ({ ...prev, name: e.target.value }))}
                 />
               </div>
-              
+
               {/* Delta Type */}
               <div className="space-y-2">
                 <Label>Delta Type</Label>
@@ -277,7 +277,7 @@ export default function ContingencyOperatorsPage() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               {/* Delta Description (The What-If) */}
               <div className="space-y-2">
                 <Label htmlFor="delta">What If... (The Delta)</Label>
@@ -289,7 +289,7 @@ export default function ContingencyOperatorsPage() {
                   rows={2}
                 />
               </div>
-              
+
               {/* Description */}
               <div className="space-y-2">
                 <Label htmlFor="description">Hypothesis / Notes</Label>
@@ -301,7 +301,7 @@ export default function ContingencyOperatorsPage() {
                   rows={2}
                 />
               </div>
-              
+
               {/* Factor Template */}
               <div className="space-y-2">
                 <Label>Factor Template</Label>
@@ -324,7 +324,7 @@ export default function ContingencyOperatorsPage() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               {/* Selected Factors Preview */}
               {newExperiment.factors.length > 0 && (
                 <div className="space-y-2">
@@ -338,7 +338,7 @@ export default function ContingencyOperatorsPage() {
                   </div>
                 </div>
               )}
-              
+
               {/* Chain Depth */}
               <div className="space-y-2">
                 <Label>Chain Depth: {newExperiment.chain_depth}</Label>
@@ -351,7 +351,7 @@ export default function ContingencyOperatorsPage() {
                 />
                 <p className="text-xs text-gray-500">How many downstream effects to trace</p>
               </div>
-              
+
               {/* Extension Threshold */}
               <div className="space-y-2">
                 <Label>Extension Threshold: +{Math.round(newExperiment.extension_threshold * 100)}%</Label>
@@ -364,7 +364,7 @@ export default function ContingencyOperatorsPage() {
                 />
                 <p className="text-xs text-gray-500">Net score needed to spawn extension sandbox</p>
               </div>
-              
+
               {/* Max Extensions */}
               <div className="space-y-2">
                 <Label>Max Extensions: {newExperiment.max_extensions}</Label>
@@ -376,10 +376,10 @@ export default function ContingencyOperatorsPage() {
                   step={1}
                 />
               </div>
-              
+
               {/* Create Button */}
-              <Button 
-                onClick={createExperiment} 
+              <Button
+                onClick={createExperiment}
                 className="w-full"
                 disabled={!newExperiment.name || !newExperiment.delta_description}
               >
@@ -390,7 +390,7 @@ export default function ContingencyOperatorsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      
+
       {/* Info Section — Progressive Disclosure */}
       <div className="space-y-3 mb-8">
         <ExpandableBlock
@@ -402,7 +402,7 @@ export default function ContingencyOperatorsPage() {
         >
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              Each sandbox forks from REALITY with a single-point change (the Delta). 
+              Each sandbox forks from REALITY with a single-point change (the Delta).
               The system tracks how that change would cascade through your chosen Factors.
               When results exceed your Extension Threshold, a secondary sandbox spawns to explore further.
             </p>
@@ -421,7 +421,7 @@ export default function ContingencyOperatorsPage() {
             defaultExpanded={false}
           >
             <p className="text-sm text-muted-foreground">
-              The Delta is the one thing you change from reality. Examples: "What if rush pricing was removed?" 
+              The Delta is the one thing you change from reality. Examples: "What if rush pricing was removed?"
               or "What if membership was $10/year?" Keep it to ONE change to isolate effects.
             </p>
           </ExpandableBlock>
@@ -434,7 +434,7 @@ export default function ContingencyOperatorsPage() {
             defaultExpanded={false}
           >
             <p className="text-sm text-muted-foreground">
-              Factors are the metrics you track to see if the change is positive or negative. 
+              Factors are the metrics you track to see if the change is positive or negative.
               Choose from templates or create custom factors weighted by importance.
             </p>
           </ExpandableBlock>
@@ -447,13 +447,13 @@ export default function ContingencyOperatorsPage() {
             defaultExpanded={false}
           >
             <p className="text-sm text-muted-foreground">
-              When an experiment's net score exceeds your Extension Threshold, the system automatically 
+              When an experiment's net score exceeds your Extension Threshold, the system automatically
               spawns a secondary sandbox to explore further. This creates a tree of possibilities.
             </p>
           </ExpandableBlock>
         </div>
       </div>
-      
+
       {/* Experiments Tabs */}
       <Tabs defaultValue="active" className="space-y-4">
         <TabsList>
@@ -461,7 +461,7 @@ export default function ContingencyOperatorsPage() {
           <TabsTrigger value="variants">Variants ({experiments.filter(e => e.status === 'variant').length})</TabsTrigger>
           <TabsTrigger value="archived">Archived ({experiments.filter(e => ['adopted', 'discarded'].includes(e.status)).length})</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="active" className="space-y-4">
           {loading ? (
             <p className="text-gray-500">Loading experiments...</p>
@@ -475,8 +475,8 @@ export default function ContingencyOperatorsPage() {
             experiments
               .filter(e => ['running', 'paused'].includes(e.status))
               .map(experiment => (
-                <ExperimentCard 
-                  key={experiment.id} 
+                <ExperimentCard
+                  key={experiment.id}
                   experiment={experiment}
                   onStatusChange={updateExperimentStatus}
                   getScoreColor={getScoreColor}
@@ -485,7 +485,7 @@ export default function ContingencyOperatorsPage() {
               ))
           )}
         </TabsContent>
-        
+
         <TabsContent value="variants" className="space-y-4">
           {experiments.filter(e => e.status === 'variant').length === 0 ? (
             <Card>
@@ -497,8 +497,8 @@ export default function ContingencyOperatorsPage() {
             experiments
               .filter(e => e.status === 'variant')
               .map(experiment => (
-                <ExperimentCard 
-                  key={experiment.id} 
+                <ExperimentCard
+                  key={experiment.id}
                   experiment={experiment}
                   onStatusChange={updateExperimentStatus}
                   getScoreColor={getScoreColor}
@@ -507,7 +507,7 @@ export default function ContingencyOperatorsPage() {
               ))
           )}
         </TabsContent>
-        
+
         <TabsContent value="archived" className="space-y-4">
           {experiments.filter(e => ['adopted', 'discarded'].includes(e.status)).length === 0 ? (
             <Card>
@@ -519,8 +519,8 @@ export default function ContingencyOperatorsPage() {
             experiments
               .filter(e => ['adopted', 'discarded'].includes(e.status))
               .map(experiment => (
-                <ExperimentCard 
-                  key={experiment.id} 
+                <ExperimentCard
+                  key={experiment.id}
                   experiment={experiment}
                   onStatusChange={updateExperimentStatus}
                   getScoreColor={getScoreColor}
@@ -535,19 +535,19 @@ export default function ContingencyOperatorsPage() {
 }
 
 // Experiment Card Component
-function ExperimentCard({ 
-  experiment, 
+function ExperimentCard({
+  experiment,
   onStatusChange,
   getScoreColor,
-  getScoreIcon 
-}: { 
+  getScoreIcon
+}: {
   experiment: ThoughtExperiment;
   onStatusChange: (id: string, status: string) => void;
   getScoreColor: (score: number) => string;
   getScoreIcon: (score: number) => React.ReactNode;
 }) {
   const statusConfig = STATUS_CONFIG[experiment.status];
-  
+
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -582,27 +582,27 @@ function ExperimentCard({
             </span>
             <span className="text-gray-500 text-sm">net score</span>
           </div>
-          
+
           {/* Config Pills */}
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Badge variant="outline">Chain: {experiment.chain_depth}</Badge>
             <Badge variant="outline">{experiment.factors?.length || 0} factors</Badge>
             <Badge variant="outline">Ext: {experiment.max_extensions}</Badge>
           </div>
-          
+
           {/* Actions */}
           <div className="flex gap-2">
             {experiment.status === 'running' && (
               <>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   onClick={() => onStatusChange(experiment.id, 'paused')}
                 >
                   <Pause className="w-3 h-3 mr-1" /> Pause
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   className="text-green-600 border-green-300"
                   onClick={() => onStatusChange(experiment.id, 'variant')}
@@ -612,8 +612,8 @@ function ExperimentCard({
               </>
             )}
             {experiment.status === 'paused' && (
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 variant="outline"
                 onClick={() => onStatusChange(experiment.id, 'running')}
               >
@@ -622,16 +622,16 @@ function ExperimentCard({
             )}
             {experiment.status === 'variant' && (
               <>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   className="text-purple-600 border-purple-300"
                   onClick={() => onStatusChange(experiment.id, 'adopted')}
                 >
                   <ArrowRight className="w-3 h-3 mr-1" /> Adopt
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   className="text-gray-600"
                   onClick={() => onStatusChange(experiment.id, 'discarded')}
@@ -642,7 +642,7 @@ function ExperimentCard({
             )}
           </div>
         </div>
-        
+
         {/* Description */}
         {experiment.description && (
           <p className="text-sm text-gray-600 mt-3 border-t pt-3">

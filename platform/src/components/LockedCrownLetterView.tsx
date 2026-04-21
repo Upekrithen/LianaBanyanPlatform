@@ -38,10 +38,10 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
 
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Simple domain check for demonstration (in a real app, this would use the backend verification)
     const domain = email.split('@')[1]?.toLowerCase();
-    
+
     if (recipient.emailDomains.includes(domain) || recipient.knownEmails?.includes(email.toLowerCase())) {
       setIsUnlocked(true);
       setError('');
@@ -73,9 +73,9 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
               <label className="text-sm font-medium text-slate-400 mb-1 block">Verify Identity</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <Input 
-                  type="email" 
-                  placeholder="Enter your official email address" 
+                <Input
+                  type="email"
+                  placeholder="Enter your official email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 bg-slate-950 border-slate-700 h-12"
@@ -88,7 +88,7 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
               Unlock Letter
             </Button>
           </form>
-          
+
           <p className="text-xs text-center text-slate-500">
             This is a secure communication. Access is restricted to recognized domains.
           </p>
@@ -119,7 +119,7 @@ export function LockedCrownLetterView({ recipientId }: LockedCrownLetterViewProp
             {letterContent}
           </ReactMarkdown>
         </div>
-        
+
         <div className="mt-12 pt-8 border-t border-slate-200 space-y-6">
           <div className="flex justify-center">
             <Button

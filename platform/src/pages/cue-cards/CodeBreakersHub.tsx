@@ -14,7 +14,7 @@ export default function CodeBreakersHub() {
   return (
     <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="space-y-6 border-b border-emerald-900/50 pb-12">
           <div className="flex items-center gap-3">
@@ -59,7 +59,7 @@ export default function CodeBreakersHub() {
                   <li>Earn Credits (backed by our IP) when your Lark is merged.</li>
                 </ol>
               </div>
-              <Button 
+              <Button
                 className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold"
                 onClick={() => navigate('/salt-mines')}
               >

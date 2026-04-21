@@ -57,8 +57,8 @@ CREATE POLICY "Project owners can update suggestions"
   ON theme_suggestions FOR UPDATE
   USING (
     EXISTS (
-      SELECT 1 FROM projects 
-      WHERE projects.id = theme_suggestions.project_id 
+      SELECT 1 FROM projects
+      WHERE projects.id = theme_suggestions.project_id
       AND projects.owner_id = auth.uid()
     )
   );
@@ -74,8 +74,8 @@ CREATE POLICY "Project owners can manage theme managers"
   ON project_theme_managers FOR ALL
   USING (
     EXISTS (
-      SELECT 1 FROM projects 
-      WHERE projects.id = project_theme_managers.project_id 
+      SELECT 1 FROM projects
+      WHERE projects.id = project_theme_managers.project_id
       AND projects.owner_id = auth.uid()
     )
   );
@@ -94,7 +94,7 @@ BEGIN
   SELECT * INTO _manager_record
   FROM project_theme_managers
   WHERE project_id = NEW.project_id;
-  
+
   -- Assign based on hierarchy: theme_manager → steward → owner
   IF _manager_record.theme_manager_id IS NOT NULL THEN
     NEW.assigned_to := _manager_record.theme_manager_id;
@@ -106,7 +106,7 @@ BEGIN
       SELECT owner_id FROM projects WHERE id = NEW.project_id
     );
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

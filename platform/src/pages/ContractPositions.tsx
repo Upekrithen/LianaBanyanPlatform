@@ -106,7 +106,7 @@ export default function ContractPositions() {
     : positions;
 
   const getCategoryLabel = (category: string) => {
-    return category.split('_').map(word => 
+    return category.split('_').map(word =>
       word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
   };
@@ -140,8 +140,8 @@ export default function ContractPositions() {
               <h1 className="text-lg md:text-2xl font-bold truncate">{project.name}</h1>
               <p className="text-xs md:text-sm text-muted-foreground">Contract Positions</p>
             </div>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => navigate(`/project/${projectId}`)}
               className="touch-manipulation flex-shrink-0"
               size="sm"
@@ -165,12 +165,12 @@ export default function ContractPositions() {
         <Card>
           <CardHeader>
             <CardTitle>
-              {selectedCategory 
-                ? `${getCategoryLabel(selectedCategory)} Positions` 
+              {selectedCategory
+                ? `${getCategoryLabel(selectedCategory)} Positions`
                 : 'All Open Positions'}
             </CardTitle>
             <CardDescription>
-              {selectedCategory 
+              {selectedCategory
                 ? 'Click a different category above to see other positions, or clear the filter'
                 : 'Click a category above to filter positions'}
             </CardDescription>
@@ -241,7 +241,7 @@ export default function ContractPositions() {
                         )}
                       </TableCell>
                       <TableCell>
-                        <Button 
+                        <Button
                           size="sm"
                           variant="outline"
                           onClick={() => handleSimulatorClick(position)}
@@ -251,7 +251,7 @@ export default function ContractPositions() {
                         </Button>
                       </TableCell>
                       <TableCell>
-                        <Button 
+                        <Button
                           size="sm"
                           onClick={() => handleApplyClick(position)}
                           className="touch-manipulation w-full sm:w-auto"

@@ -144,7 +144,7 @@ function CandleSatchelContent() {
           </span>
           <span className="font-mono font-bold">{standardDisplay.toFixed(1)}</span>
         </div>
-        
+
         <div className="flex gap-1">
           {Array.from({ length: fullCandles }).map((_, i) => (
             <div key={i} className="w-4 h-8 bg-amber-400 rounded-t-sm border border-amber-500 relative">
@@ -153,7 +153,7 @@ function CandleSatchelContent() {
           ))}
           {partialCandle > 0 && (
             <div className="w-4 h-8 bg-muted rounded-t-sm border border-muted-foreground/30 relative overflow-hidden">
-              <div 
+              <div
                 className="absolute bottom-0 left-0 right-0 bg-amber-400"
                 style={{ height: `${partialCandle * 100}%` }}
               />
@@ -176,7 +176,7 @@ function CandleSatchelContent() {
             </span>
             <span className="font-mono font-bold text-purple-600">{babylonCount}</span>
           </div>
-          
+
           <div className="flex gap-1">
             {Array.from({ length: babylonCount }).map((_, i) => (
               <div key={i} className="w-4 h-8 bg-purple-900 rounded-t-sm border border-purple-500 relative">
@@ -196,8 +196,8 @@ function CandleSatchelContent() {
             <Lock className="w-4 h-4" />
             <span className="text-sm">Black Babylon Candle</span>
           </div>
-          <Progress 
-            value={(candleState.standardCandles / BABYLON_THRESHOLD) * 100} 
+          <Progress
+            value={(candleState.standardCandles / BABYLON_THRESHOLD) * 100}
             className="h-2 mt-2"
           />
           <p className="text-xs text-muted-foreground mt-1">
@@ -227,12 +227,12 @@ function CandleSatchelContent() {
   );
 }
 
-export function CandleNavigator({ 
-  destination, 
+export function CandleNavigator({
+  destination,
   destinationName,
   requiresBabylon = false,
-  onNavigate 
-}: { 
+  onNavigate
+}: {
   destination: string;
   destinationName: string;
   requiresBabylon?: boolean;
@@ -329,11 +329,11 @@ export function CandleNavigator({
   );
 }
 
-export function CandleReward({ 
-  amount = 1.0, 
+export function CandleReward({
+  amount = 1.0,
   reason,
-  onClaim 
-}: { 
+  onClaim
+}: {
   amount?: number;
   reason: string;
   onClaim?: () => void;
@@ -366,10 +366,10 @@ export function CandleReward({
     onSuccess: (newState) => {
       setClaimed(true);
       queryClient.invalidateQueries({ queryKey: ["candle-state"] });
-      
+
       const wasUnderThreshold = candleState.standardCandles < BABYLON_THRESHOLD;
       const nowOverThreshold = newState.standardCandles >= BABYLON_THRESHOLD;
-      
+
       if (wasUnderThreshold && nowOverThreshold) {
         toast.success("🖤✨ Black Babylon Candle Unlocked!", {
           description: "You can now travel anywhere — even places you can see but can't reach!",
@@ -379,7 +379,7 @@ export function CandleReward({
           description: reason,
         });
       }
-      
+
       onClaim?.();
     },
     onError: (error) => {

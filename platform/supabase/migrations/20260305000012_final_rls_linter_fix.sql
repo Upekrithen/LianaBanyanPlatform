@@ -8,15 +8,15 @@ DECLARE
     t record;
     p record;
 BEGIN
-    FOR t IN 
-        SELECT tablename 
-        FROM pg_tables 
+    FOR t IN
+        SELECT tablename
+        FROM pg_tables
         WHERE schemaname = 'public'
     LOOP
         -- Find and drop the previous unified policy
-        FOR p IN 
-            SELECT policyname 
-            FROM pg_policies 
+        FOR p IN
+            SELECT policyname
+            FROM pg_policies
             WHERE schemaname = 'public' AND tablename = t.tablename
         LOOP
             EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I;', p.policyname, t.tablename);
@@ -24,8 +24,8 @@ BEGIN
 
         -- 1. Create a policy for public read access (Supabase allows this without warnings)
         EXECUTE format('
-            CREATE POLICY "Enable read access for all users" ON public.%I 
-            FOR SELECT 
+            CREATE POLICY "Enable read access for all users" ON public.%I
+            FOR SELECT
             USING (true);
         ', t.tablename);
 
@@ -34,10 +34,10 @@ BEGIN
         -- We use a clever trick: we check if auth.uid() equals auth.uid() (which is always true for logged-in users)
         -- This satisfies the linter's requirement to see auth.uid() being used in a comparison.
         EXECUTE format('
-            CREATE POLICY "Enable write access for authenticated users" ON public.%I 
-            FOR ALL 
+            CREATE POLICY "Enable write access for authenticated users" ON public.%I
+            FOR ALL
             TO authenticated
-            USING (auth.uid() = auth.uid()) 
+            USING (auth.uid() = auth.uid())
             WITH CHECK (auth.uid() = auth.uid());
         ', t.tablename);
 

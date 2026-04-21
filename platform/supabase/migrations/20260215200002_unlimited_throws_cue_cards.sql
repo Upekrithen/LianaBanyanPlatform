@@ -171,7 +171,7 @@ That ache — "I could hit that target if they''d just let me throw" — isn''t 
 What they missed: the free carnival is already built.
 
 - 16 initiatives
-- Fixed 20% margin  
+- Fixed 20% margin
 - Business simulator
 - Near-zero risk
 

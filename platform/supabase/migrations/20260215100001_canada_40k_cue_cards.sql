@@ -5,8 +5,8 @@
 
 -- Main Rescue Fleet appeal card
 INSERT INTO public.cue_card_templates (template_type, initiative_slug, title, subtitle, body_text, hashtags, card_style, twitter_text, linkedin_text, facebook_text) VALUES
-('letter', 'international', 
- 'The Rose Was Empty. We Have A Play.', 
+('letter', 'international',
+ 'The Rose Was Empty. We Have A Play.',
  'To the 40,000 stranded Canadian founders',
  'Canada canceled 40,000 startup visas. That''s 40,000 founders with skills, ideas, and nowhere to go. We have a platform with 16 initiatives, 928 innovations, and no one to operate it. You clearly need us. We clearly need you. Let''s go.',
  ARRAY['Canada40K', 'RescueFleet', 'LianaBanyan', 'StartupVisa', 'Founders'],
@@ -37,7 +37,7 @@ INSERT INTO public.cue_card_templates (template_type, initiative_slug, title, su
  NULL,
  NULL),
 
--- Boaz Principle card  
+-- Boaz Principle card
 ('letter', 'international',
  'The Boaz Principle',
  'Not charity. Deliberately easier paths.',

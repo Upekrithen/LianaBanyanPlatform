@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Shield, Calendar, Image as ImageIcon, HeartHandshake, ArrowRight, Users, 
+import {
+  Shield, Calendar, Image as ImageIcon, HeartHandshake, ArrowRight, Users,
   Lock, Star, Clock, Utensils, ShieldAlert, ShoppingCart, Plus, CheckCircle2,
   FileText, Activity, AlertCircle
 } from 'lucide-react';
@@ -298,7 +298,7 @@ export default function FamilyTablePage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-4">
                     <h3 className="font-semibold text-foreground">Silent Financial Support</h3>
                     <div className="p-4 bg-white rounded-xl border shadow-sm flex flex-col justify-center items-center text-center h-[180px]">

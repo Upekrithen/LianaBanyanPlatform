@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Sword, Shield, Heart, Zap, Target, Brain, 
+import {
+  Sword, Shield, Heart, Zap, Target, Brain,
   Flame, Snowflake, Wind, Droplets, RefreshCcw,
   Trophy, Star, AlertTriangle, CheckCircle2
 } from 'lucide-react';
@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 /**
  * DICELESS COMBAT SYSTEM
  * Patent Innovations #133-140 (HexIsle Combat - Bag #6)
- * 
+ *
  * Features:
  * - No randomness - pure strategy and resource management
  * - Linked Mana-HP "Danger Tab" system
@@ -212,30 +212,30 @@ export function DicelessCombatSystem() {
   const calculateDamage = (attacker: CombatUnit, defender: CombatUnit, ability: CombatAbility): number => {
     // Base damage from ability
     let damage = ability.damage;
-    
+
     // Add attack stat
     damage += attacker.attack;
-    
+
     // Subtract defense
     damage -= defender.defense;
-    
+
     // Element advantage (50% bonus)
     if (ELEMENT_ADVANTAGES[ability.element] === defender.element) {
       damage = Math.floor(damage * 1.5);
     }
-    
+
     // Element disadvantage (50% reduction)
     if (ELEMENT_ADVANTAGES[defender.element] === ability.element) {
       damage = Math.floor(damage * 0.5);
     }
-    
+
     // Minimum damage is 1
     return Math.max(1, damage);
   };
 
   const executeAbility = useCallback((
-    attacker: CombatUnit, 
-    ability: CombatAbility, 
+    attacker: CombatUnit,
+    ability: CombatAbility,
     target: CombatUnit
   ) => {
     // Check mana cost
@@ -265,20 +265,20 @@ export function DicelessCombatSystem() {
     if (ability.effect === 'damage') {
       const damage = calculateDamage(attacker, target, ability);
       const newTargetHp = Math.max(0, target.hp - damage);
-      
+
       logEntry += ` → ${target.name} takes ${damage} damage`;
-      
+
       if (ability.hpCost > 0) {
         logEntry += ` (Danger Tab: ${attacker.name} loses ${ability.hpCost} HP)`;
       }
 
       // Update target HP
       if (target.isPlayer) {
-        setPlayerUnits(prev => prev.map(u => 
+        setPlayerUnits(prev => prev.map(u =>
           u.id === target.id ? { ...u, hp: newTargetHp } : u
         ));
       } else {
-        setEnemyUnits(prev => prev.map(u => 
+        setEnemyUnits(prev => prev.map(u =>
           u.id === target.id ? { ...u, hp: newTargetHp } : u
         ));
       }
@@ -290,15 +290,15 @@ export function DicelessCombatSystem() {
     } else if (ability.effect === 'heal') {
       const healAmount = ability.healing;
       const newTargetHp = Math.min(target.maxHp, target.hp + healAmount);
-      
+
       logEntry += ` → ${target.name} heals ${healAmount} HP`;
 
       if (target.isPlayer) {
-        setPlayerUnits(prev => prev.map(u => 
+        setPlayerUnits(prev => prev.map(u =>
           u.id === target.id ? { ...u, hp: newTargetHp } : u
         ));
       } else {
-        setEnemyUnits(prev => prev.map(u => 
+        setEnemyUnits(prev => prev.map(u =>
           u.id === target.id ? { ...u, hp: newTargetHp } : u
         ));
       }
@@ -306,11 +306,11 @@ export function DicelessCombatSystem() {
 
     // Update attacker resources
     if (attacker.isPlayer) {
-      setPlayerUnits(prev => prev.map(u => 
+      setPlayerUnits(prev => prev.map(u =>
         u.id === attacker.id ? { ...u, mana: newAttackerMana, hp: newAttackerHp } : u
       ));
     } else {
-      setEnemyUnits(prev => prev.map(u => 
+      setEnemyUnits(prev => prev.map(u =>
         u.id === attacker.id ? { ...u, mana: newAttackerMana, hp: newAttackerHp } : u
       ));
     }
@@ -352,11 +352,11 @@ export function DicelessCombatSystem() {
 
     // AI takes actions
     enemyUnits.filter(e => e.hp > 0).forEach(enemy => {
-      const ability = enemy.abilities.find(a => 
+      const ability = enemy.abilities.find(a =>
         a.currentCooldown === 0 && enemy.mana >= a.manaCost
       );
       if (ability) {
-        const target = ability.effect === 'heal' 
+        const target = ability.effect === 'heal'
           ? enemyUnits.find(e => e.hp > 0 && e.hp < e.maxHp) || enemy
           : playerUnits.find(p => p.hp > 0);
         if (target) {
@@ -399,7 +399,7 @@ export function DicelessCombatSystem() {
             <Alert className="max-w-md">
               <Brain className="h-4 w-4" />
               <AlertDescription>
-                <strong>Danger Tab:</strong> Some abilities cost HP in addition to Mana. 
+                <strong>Danger Tab:</strong> Some abilities cost HP in addition to Mana.
                 Using magic depletes your life force!
               </AlertDescription>
             </Alert>
@@ -418,7 +418,7 @@ export function DicelessCombatSystem() {
           </CardHeader>
           <CardContent className="space-y-4">
             {playerUnits.map(unit => (
-              <div 
+              <div
                 key={unit.id}
                 className={cn(
                   "p-3 border rounded-lg cursor-pointer transition-all",
@@ -437,7 +437,7 @@ export function DicelessCombatSystem() {
                   </div>
                   <Badge variant="outline">{unit.type}</Badge>
                 </div>
-                
+
                 {/* HP Bar (Danger Tab visual) */}
                 <div className="space-y-1 mb-2">
                   <div className="flex justify-between text-xs">
@@ -446,7 +446,7 @@ export function DicelessCombatSystem() {
                   </div>
                   <Progress value={(unit.hp / unit.maxHp) * 100} className="h-2 bg-red-100" />
                 </div>
-                
+
                 {/* Mana Bar */}
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs">
@@ -481,10 +481,10 @@ export function DicelessCombatSystem() {
                 <p className="text-sm text-muted-foreground">
                   Select an ability for <strong>{activeUnit.name}</strong>:
                 </p>
-                
+
                 <div className="space-y-2">
                   {activeUnit.abilities.map(ability => {
-                    const canUse = activeUnit.mana >= ability.manaCost && 
+                    const canUse = activeUnit.mana >= ability.manaCost &&
                                    activeUnit.hp > ability.hpCost &&
                                    ability.currentCooldown === 0;
                     return (
@@ -550,7 +550,7 @@ export function DicelessCombatSystem() {
           </CardHeader>
           <CardContent className="space-y-4">
             {enemyUnits.map(unit => (
-              <div 
+              <div
                 key={unit.id}
                 className={cn(
                   "p-3 border rounded-lg transition-all",
@@ -569,7 +569,7 @@ export function DicelessCombatSystem() {
                   </div>
                   {unit.hp === 0 && <Badge variant="destructive">Defeated</Badge>}
                 </div>
-                
+
                 {/* HP Bar */}
                 <div className="space-y-1 mb-2">
                   <div className="flex justify-between text-xs">
@@ -578,7 +578,7 @@ export function DicelessCombatSystem() {
                   </div>
                   <Progress value={(unit.hp / unit.maxHp) * 100} className="h-2 bg-red-100" />
                 </div>
-                
+
                 {/* Mana Bar */}
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs">
@@ -618,7 +618,7 @@ export function DicelessCombatSystem() {
           </AlertDescription>
         </Alert>
       )}
-      
+
       {enemyUnits.every(u => u.hp === 0) && (
         <Alert className="bg-green-50 border-green-200">
           <Trophy className="h-4 w-4 text-green-600" />

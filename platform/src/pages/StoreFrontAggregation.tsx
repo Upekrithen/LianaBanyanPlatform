@@ -55,7 +55,7 @@ export default function StoreFrontAggregation() {
             <CardHeader>
               <CardTitle>Connect Your Existing Stores (Rent-Free)</CardTitle>
               <CardDescription>
-                Don't rebuild from scratch. Link ALL your disparate storefronts in one place, rent-free. Paste your Shopify, Etsy, Fiverr, or custom URLs below. 
+                Don't rebuild from scratch. Link ALL your disparate storefronts in one place, rent-free. Paste your Shopify, Etsy, Fiverr, or custom URLs below.
                 We'll automatically pull in up to 20 of your top items (even if you only have one!) using our "Cold Start C20" protocol.
               </CardDescription>
             </CardHeader>
@@ -63,8 +63,8 @@ export default function StoreFrontAggregation() {
               <div className="flex gap-3">
                 <div className="relative flex-1">
                   <LinkIcon className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                  <Input 
-                    placeholder="https://your-store.myshopify.com" 
+                  <Input
+                    placeholder="https://your-store.myshopify.com"
                     className="pl-10"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
@@ -72,15 +72,15 @@ export default function StoreFrontAggregation() {
                 </div>
                 <div className="relative w-48">
                   <MapPin className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                  <Input 
-                    placeholder="Zip or City" 
+                  <Input
+                    placeholder="Zip or City"
                     className="pl-10"
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value)}
                   />
                 </div>
-                <Button 
-                  onClick={handleConnect} 
+                <Button
+                  onClick={handleConnect}
                   disabled={isConnecting}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
@@ -104,7 +104,7 @@ export default function StoreFrontAggregation() {
               <TabsTrigger value="synced">Synced Items (C20)</TabsTrigger>
               <TabsTrigger value="b2b">B2B Business Plans</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="synced" className="space-y-4">
               {[1, 2, 3].map((item) => (
                 <Card key={item} className="overflow-hidden">
@@ -133,7 +133,7 @@ export default function StoreFrontAggregation() {
                 </Card>
               ))}
             </TabsContent>
-            
+
             <TabsContent value="b2b">
               <Card>
                 <CardContent className="py-8 text-center text-slate-500">

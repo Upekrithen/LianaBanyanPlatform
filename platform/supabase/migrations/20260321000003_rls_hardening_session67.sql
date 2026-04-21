@@ -91,13 +91,13 @@ CREATE POLICY "admin_insert_invitations" ON crown_letter_invitations
 -- Moneypenny tables: Scope write to admin only
 -- (Read remains open to authenticated users)
 -- =============================================
-DO $$ 
+DO $$
 DECLARE
   tbl TEXT;
 BEGIN
   FOR tbl IN SELECT unnest(ARRAY[
     'moneypenny_inbox',
-    'moneypenny_actions', 
+    'moneypenny_actions',
     'moneypenny_social_drafts',
     'moneypenny_ideas',
     'moneypenny_schedule',
@@ -106,7 +106,7 @@ BEGIN
   LOOP
     EXECUTE format('DROP POLICY IF EXISTS "Authenticated full access" ON %I', tbl);
     EXECUTE format('DROP POLICY IF EXISTS "auth_full_access" ON %I', tbl);
-    
+
     EXECUTE format(
       'CREATE POLICY "authenticated_read" ON %I FOR SELECT USING (auth.role() = ''authenticated'')',
       tbl

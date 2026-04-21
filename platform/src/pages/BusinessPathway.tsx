@@ -5,7 +5,7 @@
  * 1. Existing Business → Incremental C+20 adoption
  * 2. Have an Idea → Cold start that idea
  * 3. Looking for Work → Cold start finding work
- * 
+ *
  * Each pathway shows gradual steps to get started.
  */
 
@@ -237,8 +237,8 @@ export default function BusinessPathway() {
   };
 
   const toggleStepComplete = (stepNum: number) => {
-    setCompletedSteps(prev => 
-      prev.includes(stepNum) 
+    setCompletedSteps(prev =>
+      prev.includes(stepNum)
         ? prev.filter(s => s !== stepNum)
         : [...prev, stepNum]
     );
@@ -267,22 +267,22 @@ export default function BusinessPathway() {
         {/* Tab Selection */}
         <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setCompletedSteps([]); }} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3 h-auto p-1 bg-white/5">
-            <TabsTrigger 
-              value="existing" 
+            <TabsTrigger
+              value="existing"
               className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-green-500/20"
             >
               <Building2 className="w-5 h-5" />
               <span className="text-xs">Existing Business</span>
             </TabsTrigger>
-            <TabsTrigger 
-              value="idea" 
+            <TabsTrigger
+              value="idea"
               className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-amber-500/20"
             >
               <Lightbulb className="w-5 h-5" />
               <span className="text-xs">Have an Idea</span>
             </TabsTrigger>
-            <TabsTrigger 
-              value="work" 
+            <TabsTrigger
+              value="work"
               className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-blue-500/20"
             >
               <Briefcase className="w-5 h-5" />
@@ -318,7 +318,7 @@ export default function BusinessPathway() {
             {steps.map((step) => {
               const Icon = step.icon;
               const isCompleted = completedSteps.includes(step.step);
-              
+
               return (
                 <ExpandableBlock
                   key={step.step}
@@ -339,10 +339,10 @@ export default function BusinessPathway() {
                         <p className="text-sm text-muted-foreground">{step.action}</p>
                       </div>
                     </div>
-                    
-                    <div className="p-3 rounded-lg border" style={{ 
-                      backgroundColor: 'rgba(245, 158, 11, 0.1)', 
-                      borderColor: 'rgba(245, 158, 11, 0.2)' 
+
+                    <div className="p-3 rounded-lg border" style={{
+                      backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                      borderColor: 'rgba(245, 158, 11, 0.2)'
                     }}>
                       <p className="text-sm font-medium text-amber-500">💡 Tip:</p>
                       <p className="text-sm text-muted-foreground">{step.tip}</p>
@@ -367,7 +367,7 @@ export default function BusinessPathway() {
                           "Mark as Complete"
                         )}
                       </Button>
-                      
+
                       {/* @ts-ignore */}
                       {step.link && (
                         <Button
@@ -401,13 +401,13 @@ export default function BusinessPathway() {
                 </p>
               </div>
               <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => navigate("/help-each-other")}
                 >
                   Learn More
                 </Button>
-                <Button 
+                <Button
                   className="bg-green-600 hover:bg-green-700"
                   onClick={() => navigate("/RedCarpet")}
                 >

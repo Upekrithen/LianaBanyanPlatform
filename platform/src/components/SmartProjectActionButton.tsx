@@ -12,17 +12,17 @@ interface SmartProjectActionButtonProps {
   className?: string;
 }
 
-type UserProjectRelationship = 
-  | "owner" 
-  | "member" 
-  | "applicant" 
+type UserProjectRelationship =
+  | "owner"
+  | "member"
+  | "applicant"
   | "interested"
   | "none";
 
-export function SmartProjectActionButton({ 
-  projectId, 
+export function SmartProjectActionButton({
+  projectId,
   projectName,
-  className 
+  className
 }: SmartProjectActionButtonProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ export function SmartProjectActionButton({
 
       if (projectData?.owner_id === user.id) {
         setRelationship("owner");
-        
+
         // Get owner's workstation for this project
         const { data: workstation } = await supabase
           .from('workstations')
@@ -64,11 +64,11 @@ export function SmartProjectActionButton({
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
-        
+
         if (workstation) {
           setWorkstationId(workstation.id);
         }
-        
+
         setLoading(false);
         return;
       }
@@ -84,7 +84,7 @@ export function SmartProjectActionButton({
 
       if (memberData) {
         setRelationship("member");
-        
+
         // Get member's workstation for this project
         const { data: workstation } = await supabase
           .from('workstations')
@@ -94,11 +94,11 @@ export function SmartProjectActionButton({
           .order('created_at', { ascending: false })
           .limit(1)
           .maybeSingle();
-        
+
         if (workstation) {
           setWorkstationId(workstation.id);
         }
-        
+
         setLoading(false);
         return;
       }
@@ -175,7 +175,7 @@ export function SmartProjectActionButton({
 
   const getButtonText = () => {
     if (!user) return "Get Started";
-    
+
     switch (relationship) {
       case "owner":
         return "Manage Project";
@@ -193,7 +193,7 @@ export function SmartProjectActionButton({
 
   const getButtonIcon = () => {
     if (!user) return LogIn;
-    
+
     switch (relationship) {
       case "owner":
         return Wrench;
@@ -220,7 +220,7 @@ export function SmartProjectActionButton({
   const Icon = getButtonIcon();
 
   return (
-    <Button 
+    <Button
       onClick={handleClick}
       className={className}
       size="lg"

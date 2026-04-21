@@ -101,7 +101,7 @@ export function CandidateProfilePreview({}: CandidateProfilePreviewProps) {
             </CardHeader>
             <CardContent className="space-y-4">
               <ReputationDisplay {...mockCandidate.reputation} size="lg" />
-              
+
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Quality:</span>
@@ -214,7 +214,7 @@ export function CandidateProfilePreview({}: CandidateProfilePreviewProps) {
       <Card>
         <CardContent className="py-6">
           <div className="text-sm text-center text-muted-foreground">
-            All of this information is automatically compiled from the LB system - no manual resume review needed. 
+            All of this information is automatically compiled from the LB system - no manual resume review needed.
             You can focus your interview on culture fit, specific scenarios, and strategic alignment.
           </div>
         </CardContent>

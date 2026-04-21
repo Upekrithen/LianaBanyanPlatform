@@ -3,7 +3,7 @@
  * =======================================================
  * Creates an event on a family calendar with optional attendees,
  * recurrence, and reminders.
- * 
+ *
  * POST body:
  *   - calendarId: UUID (optional - uses family default if not provided)
  *   - familyId: UUID (required if calendarId not provided)
@@ -52,7 +52,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),

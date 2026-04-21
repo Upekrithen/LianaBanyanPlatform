@@ -38,16 +38,16 @@ export default function BizKaleidoscope() {
             The Kaleidoscope
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">
-            The only form of advertising we allow. A utilitarian, reference-based directory of local businesses, entirely under your control. 
+            The only form of advertising we allow. A utilitarian, reference-based directory of local businesses, entirely under your control.
             <a href="/garage-sales" className="text-blue-600 hover:underline ml-2">View on Local Map →</a>
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border">
           <div className="relative w-40">
             <MapPin className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-            <Input 
-              placeholder="Zip Code" 
+            <Input
+              placeholder="Zip Code"
               className="pl-10 bg-white dark:bg-slate-900"
               value={zipFilter}
               onChange={(e) => setZipFilter(e.target.value)}
@@ -87,7 +87,7 @@ export default function BizKaleidoscope() {
                     <QrCode className="h-8 w-8" />
                   </div>
                 </div>
-                
+
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-tight mb-1">
                     {card.name}
@@ -98,10 +98,10 @@ export default function BizKaleidoscope() {
                     </span>
                     <span className="flex items-center gap-1">
                       <Flame className={`h-3 w-3 ${
-                        card.tier === 'Inferno' ? 'text-red-600' : 
-                        card.tier === 'Blaze' ? 'text-orange-600' : 
+                        card.tier === 'Inferno' ? 'text-red-600' :
+                        card.tier === 'Blaze' ? 'text-orange-600' :
                         card.tier === 'Flame' ? 'text-orange-500' : 'text-orange-400'
-                      }`} /> 
+                      }`} />
                       {card.tier}
                     </span>
                   </div>
@@ -121,7 +121,7 @@ export default function BizKaleidoscope() {
             )}
           </Card>
         ))}
-        
+
         {filteredCards.length === 0 && (
           <div className="col-span-full py-12 text-center text-slate-500">
             <Search className="h-12 w-12 mx-auto mb-4 opacity-20" />

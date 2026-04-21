@@ -3,7 +3,7 @@
  * ==========================
  * Animated celebration when a user earns a Crow Feather.
  * Shows a dramatic reveal with the feather number and achievement details.
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  */
 
@@ -46,15 +46,15 @@ export const CrowFeatherNotification: React.FC<CrowFeatherNotificationProps> = (
     if (feather) {
       setVisible(true);
       setStage('entering');
-      
+
       // Transition to showing after entrance animation
       const showTimer = setTimeout(() => setStage('showing'), 600);
-      
+
       // Auto-dismiss after 6 seconds
       const dismissTimer = setTimeout(() => {
         handleDismiss();
       }, 6000);
-      
+
       return () => {
         clearTimeout(showTimer);
         clearTimeout(dismissTimer);
@@ -77,13 +77,13 @@ export const CrowFeatherNotification: React.FC<CrowFeatherNotificationProps> = (
   return (
     <div className={`crow-feather-notification ${stage}`} onClick={handleDismiss} onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter') handleDismiss(); }} role="button" tabIndex={0} aria-label="Dismiss notification">
       <div className="cfn-backdrop" />
-      
+
       <div className="cfn-content">
         {/* Particle effects */}
         <div className="cfn-particles">
           {Array.from({ length: 20 }).map((_, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="cfn-particle"
               style={{
                 '--delay': `${Math.random() * 0.5}s`,
@@ -94,21 +94,21 @@ export const CrowFeatherNotification: React.FC<CrowFeatherNotificationProps> = (
             />
           ))}
         </div>
-        
+
         {/* Main feather icon */}
         <div className="cfn-feather-icon">
           <Feather className="w-16 h-16" />
         </div>
-        
+
         {/* Title */}
         <h2 className="cfn-title">CROW FEATHER EARNED!</h2>
-        
+
         {/* Feather number - the globally unique badge */}
         <div className="cfn-number">
           <span className="cfn-hash">#</span>
           <span className="cfn-digits">{feather.featherNumber}</span>
         </div>
-        
+
         {/* Achievement details */}
         <div className="cfn-details">
           <div className="cfn-category">{categoryInfo.name}</div>
@@ -119,10 +119,10 @@ export const CrowFeatherNotification: React.FC<CrowFeatherNotificationProps> = (
             </p>
           )}
         </div>
-        
+
         {/* Close hint */}
         <p className="cfn-dismiss">Click anywhere to close</p>
-        
+
         {/* Close button */}
         <button className="cfn-close" onClick={handleDismiss}>
           <X className="w-5 h-5" />

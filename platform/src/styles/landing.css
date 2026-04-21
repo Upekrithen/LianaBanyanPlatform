@@ -1069,7 +1069,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    PROFESSIONAL MODE — Chalk outlines appear ONLY on hover
    All cards have same rounded corners and seamless background
-   
+
    LOGIC: When hovering a CHILD card, PARENT card chalk lines disappear.
    Uses CSS :has() selector for nested hover detection.
 ═══════════════════════════════════════════════════════════════════════════ */
@@ -1622,49 +1622,49 @@
   .explainer-front, .explainer-back {
     padding: 1rem;
   }
-  
+
   /* Fixed card height on mobile */
   .landing-page.professional-mode .hero-flip-inner {
     height: 380px;
     min-height: 0;
   }
-  
+
   /* Ensure cards don't overflow viewport */
   .landing-page.professional-mode .hero-flip {
     max-width: 95vw;
     margin: 0 auto;
   }
-  
+
   .landing-page.professional-mode .main-card-flip,
   .landing-page.professional-mode .explainer-flip,
   .landing-page.professional-mode .paths-section-flip {
     max-width: 95vw;
     margin: 0 auto;
   }
-  
+
   /* Smaller fonts for card headers */
   .hero-front h2 {
     font-size: clamp(1.2rem, 6vw, 2rem);
   }
-  
+
   /* Compact Cooperative Commerce header */
   .landing-page.professional-mode .hero-front .cooperative-header {
     font-size: clamp(0.65rem, 2.5vw, 0.85rem);
     letter-spacing: 0.15em;
     margin-bottom: 0.75rem;
   }
-  
+
   /* Smaller subtitle text */
   .landing-page.professional-mode .hero-front p {
     font-size: clamp(0.75rem, 3vw, 0.95rem);
     line-height: 1.5;
   }
-  
+
   /* Adjust card grid spacing */
   .landing-page .path-grid {
     gap: 0.5rem;
   }
-  
+
   /* Stack columns on very narrow screens */
   .landing-page .hero-back {
     flex-direction: column;
@@ -1678,12 +1678,12 @@
   .explainer-front, .explainer-back {
     padding: 0.75rem;
   }
-  
+
   .landing-page.professional-mode .hero-flip-inner {
     height: 320px;
     min-height: 0;
   }
-  
+
   /* Even smaller heading */
   .hero-front h2 {
     font-size: clamp(1rem, 5vw, 1.5rem);
@@ -1703,7 +1703,7 @@
     bottom: 0.75rem !important;
     right: 50% !important;
     transform: translateX(50%);
-    
+
     /* Compact horizontal layout */
     gap: 1rem !important;
     padding: 0.5rem 1rem;
@@ -1713,13 +1713,13 @@
     border-radius: 2rem;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
   }
-  
+
   /* Smaller nav link text on mobile */
   .landing-page.professional-mode .professional-nav a {
     font-size: 0.75rem !important;
     letter-spacing: 0.03em !important;
   }
-  
+
   /* Dropdown menus open UPWARD on mobile */
   .landing-page.professional-mode .professional-nav > div > div[style*="position: absolute"] {
     top: auto !important;
@@ -1736,21 +1736,21 @@
     padding: 0.4rem 0.75rem;
     font-size: 0.7rem;
   }
-  
+
   .landing-page.professional-mode .professional-nav a {
     font-size: 0.65rem !important;
   }
-  
+
   /* Show line breaks on mobile for COOPERATIVE COMMERCE and Worker-Owned */
   .mobile-break {
     display: block !important;
   }
-  
+
   /* Cooperative Commerce: stack on two lines */
   .landing-page.professional-mode .cooperative-header .coop-line {
     display: block;
   }
-  
+
   /* Worker-Owned heading: reduce font size further on tiny screens */
   .landing-page.professional-mode .worker-owned-heading {
     font-size: 1rem !important;

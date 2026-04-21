@@ -92,7 +92,7 @@ export default function BlockchainExplorer() {
       if (error) throw error;
 
       setVerificationResults(data || []);
-      
+
       const allValid = data?.every((r: VerificationResult) => r.is_valid) ?? false;
       setOverallValid(allValid);
 

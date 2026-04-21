@@ -3,7 +3,7 @@
  * =====================================================
  * POST: Store a new game score
  * GET: Retrieve leaderboard for a vault
- * 
+ *
  * POST body: { player: "diana", vaultOwner: "diana", score: 850, moves: 12 }
  * GET: /memory-score?vault=diana
  */
@@ -141,7 +141,7 @@ Deno.serve(async (req) => {
           isNewHighScore,
           score: newScore,
           failedAttempts: failedAttempts || 0,
-          message: isNewHighScore 
+          message: isNewHighScore
             ? '👑 New high score! You have seized the throne!'
             : `Your attempt has been recorded. ${failedAttempts} unsuccessful attempts to seize the throne.`,
         }),

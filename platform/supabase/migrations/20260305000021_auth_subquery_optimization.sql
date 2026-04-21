@@ -8,15 +8,15 @@ DECLARE
     t record;
     p record;
 BEGIN
-    FOR t IN 
-        SELECT tablename 
-        FROM pg_tables 
+    FOR t IN
+        SELECT tablename
+        FROM pg_tables
         WHERE schemaname = 'public'
     LOOP
         -- 1. Drop EVERYTHING
-        FOR p IN 
-            SELECT policyname 
-            FROM pg_policies 
+        FOR p IN
+            SELECT policyname
+            FROM pg_policies
             WHERE schemaname = 'public' AND tablename = t.tablename
         LOOP
             EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I;', p.policyname, t.tablename);

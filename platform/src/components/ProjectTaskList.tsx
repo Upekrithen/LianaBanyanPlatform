@@ -151,10 +151,10 @@ export function ProjectTaskList({ projectId }: ProjectTaskListProps) {
       completed: { label: 'Completed', variant: 'default' as const, icon: CheckCircle2 },
       blocked: { label: 'Blocked', variant: 'destructive' as const, icon: Circle },
     };
-    
+
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
     const Icon = config.icon;
-    
+
     return (
       <Badge variant={config.variant} className={status === 'completed' ? 'bg-green-600' : ''}>
         <Icon className="h-3 w-3 mr-1" />
@@ -170,7 +170,7 @@ export function ProjectTaskList({ projectId }: ProjectTaskListProps) {
       high: 'bg-orange-100 text-orange-800',
       critical: 'bg-red-100 text-red-800',
     };
-    
+
     return (
       <Badge variant="outline" className={colors[priority as keyof typeof colors]}>
         {priority.toUpperCase()}
@@ -182,8 +182,8 @@ export function ProjectTaskList({ projectId }: ProjectTaskListProps) {
     return <div className="text-center p-4">Loading tasks...</div>;
   }
 
-  const filteredTasks = stageFilter === 'all' 
-    ? tasks 
+  const filteredTasks = stageFilter === 'all'
+    ? tasks
     : tasks.filter(task => task.stage === stageFilter);
 
   return (
@@ -327,7 +327,7 @@ export function ProjectTaskList({ projectId }: ProjectTaskListProps) {
         <CardContent>
           {filteredTasks.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
-              {stageFilter === 'all' 
+              {stageFilter === 'all'
                 ? 'No tasks yet. Add your first task to get started.'
                 : `No ${stageFilter === 'stage_1' ? 'Stage 1' : 'Stage 2'} tasks yet.`
               }
@@ -373,8 +373,8 @@ export function ProjectTaskList({ projectId }: ProjectTaskListProps) {
                     <TableCell>{getPriorityBadge(task.priority)}</TableCell>
                     <TableCell>{getStatusBadge(task.status)}</TableCell>
                     <TableCell>
-                      {task.due_date 
-                        ? new Date(task.due_date).toLocaleDateString() 
+                      {task.due_date
+                        ? new Date(task.due_date).toLocaleDateString()
                         : '-'}
                     </TableCell>
                     <TableCell>

@@ -1,11 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { 
-  Home, 
-  LayoutDashboard, 
-  FolderKanban, 
-  ShoppingCart, 
+import {
+  Home,
+  LayoutDashboard,
+  FolderKanban,
+  ShoppingCart,
   Briefcase,
   Users,
   Target,
@@ -51,12 +51,12 @@ export function NavigationMap() {
     { id: 'guilds', title: 'Guilds', path: '/guilds', icon: Users, category: 'marketplace', description: 'Browse and join guilds' },
     { id: 'production-queue', title: 'Production Queue', path: '/production-queue', icon: Workflow, category: 'marketplace', description: 'View production queue and voting' },
     { id: 'reputation', title: 'Reputation Profile', path: '/reputation/:userId', icon: Award, category: 'marketplace', description: 'User reputation and ratings' },
-    
+
     // Network Portal
     { id: 'ip-register', title: 'IP Registration', path: '/ip/register', icon: Shield, category: 'network', description: 'Register intellectual property', connections: ['guilds'] },
     { id: 'position-categories', title: 'Position Categories', path: '/position-categories', icon: Target, category: 'network', description: 'Browse position categories' },
     { id: 'lb-positions', title: 'LB Positions', path: '/lb-positions', icon: Building2, category: 'network', description: 'Liana Banyan internal positions' },
-    
+
     // Business Portal (.biz routes)
     { id: 'agent-onboarding', title: 'Agent Onboarding', path: '/agent-onboarding', icon: UserPlus, category: 'business', description: 'Onboard new agents with Keirsey assessment', connections: ['manage-positions'] },
     { id: 'manage-positions', title: 'Manage Positions', path: '/manage-positions', icon: Settings, category: 'business', description: 'Create and manage positions' },
@@ -67,12 +67,12 @@ export function NavigationMap() {
     { id: 'client-api', title: 'Client API', path: '/client-api-manager', icon: Code, category: 'business', description: 'API key management' },
     { id: 'credentials', title: 'Credentials', path: '/credential-management', icon: Shield, category: 'business', description: 'Credential management' },
     { id: 'member-resources', title: 'Member Resources', path: '/member-resources', icon: FileText, category: 'business', description: 'Member documentation' },
-    
+
     // Admin Routes
     { id: 'create-project', title: 'Create Project', path: '/admin/project/create', icon: FolderKanban, category: 'admin', description: 'Create new project' },
     { id: 'industry-pricing', title: 'Industry Pricing', path: '/admin/industry-pricing', icon: Database, category: 'admin', description: 'Manage industry pricing data' },
     { id: 'template-setup', title: 'Template Setup', path: '/template-setup', icon: Settings, category: 'admin', description: 'Configure templates' },
-    
+
     // Dev Tools
     { id: 'simulator', title: 'Simulator', path: '/simulator', icon: TestTube, category: 'dev', description: 'Production simulator' },
     { id: 'task-log', title: 'Task Log', path: '/task-log', icon: FileText, category: 'dev', description: 'View task logs' },
@@ -116,16 +116,16 @@ export function NavigationMap() {
         {locations.map((location) => {
           const Icon = location.icon;
           const categoryColor = categories[location.category].color;
-          
+
           return (
-            <Card 
-              key={location.id} 
+            <Card
+              key={location.id}
               className="relative overflow-hidden hover:shadow-lg transition-shadow"
               style={{ borderLeft: `4px solid ${categoryColor}` }}
             >
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
-                  <div 
+                  <div
                     className="p-2 rounded-lg shrink-0"
                     style={{ backgroundColor: `${categoryColor}20` }}
                   >
@@ -139,9 +139,9 @@ export function NavigationMap() {
                     <code className="text-xs bg-muted px-1.5 py-0.5 rounded block truncate mb-3">
                       {location.path}
                     </code>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
+                    <Button
+                      size="sm"
+                      variant="outline"
                       className="w-full"
                       onClick={() => handleNavigate(location.path)}
                     >
@@ -149,7 +149,7 @@ export function NavigationMap() {
                     </Button>
                   </div>
                 </div>
-                
+
                 {location.connections && location.connections.length > 0 && (
                   <div className="mt-3 pt-3 border-t">
                     <p className="text-xs text-muted-foreground mb-1.5">Connected to:</p>
@@ -157,7 +157,7 @@ export function NavigationMap() {
                       {location.connections.map((connId) => {
                         const connLocation = locations.find(l => l.id === connId);
                         return connLocation ? (
-                          <span 
+                          <span
                             key={connId}
                             className="text-xs bg-secondary px-2 py-0.5 rounded cursor-pointer hover:bg-secondary/80"
                             onClick={() => handleNavigate(connLocation.path)}

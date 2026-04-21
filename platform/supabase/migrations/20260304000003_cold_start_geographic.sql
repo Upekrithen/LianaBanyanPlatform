@@ -2,7 +2,7 @@
 -- Date: 2026-03-04
 -- Description: Adds geographic targeting for The 300 (Naval Fleet / Captains) and localized progress tracking
 -- Milestone 2: The Cold Start & Stewardship System
--- 
+--
 -- NAVAL RANK PROGRESSION:
 -- - Captain: 1 ship (your own) - Local leader for ONE initiative in ONE city
 -- - Commodore: 3+ ships - Leader of 3+ initiatives OR 1 initiative across 3+ cities
@@ -12,7 +12,7 @@
 -- - Fleet Admiral / Crown: The public figure who sets national vision
 
 -- 1. Add geographic columns to stewardship_applications
-ALTER TABLE public.stewardship_applications 
+ALTER TABLE public.stewardship_applications
 ADD COLUMN IF NOT EXISTS zip_code TEXT,
 ADD COLUMN IF NOT EXISTS city TEXT,
 ADD COLUMN IF NOT EXISTS state TEXT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS public.cold_start_thresholds (
 
 -- 4. Create geographic progress tracking view
 CREATE OR REPLACE VIEW public.geographic_cold_start_progress AS
-SELECT 
+SELECT
     gds.initiative_id,
     gds.zip_code,
     gds.city,
@@ -58,13 +58,13 @@ SELECT
     COUNT(DISTINCT gds.user_id) as interested_families,
     COUNT(DISTINCT CASE WHEN gds.signal_type = 'hard_pledge' THEN gds.user_id END) as committed_families,
     COALESCE(SUM(gds.pledge_amount), 0) as total_pledged,
-    (SELECT COUNT(*) FROM public.stewardship_applications sa 
-     WHERE sa.initiative_id = gds.initiative_id 
-     AND sa.city = gds.city 
-     AND sa.state = gds.state 
+    (SELECT COUNT(*) FROM public.stewardship_applications sa
+     WHERE sa.initiative_id = gds.initiative_id
+     AND sa.city = gds.city
+     AND sa.state = gds.state
      AND sa.status = 'approved'
      AND sa.region_type = 'city') as active_captains, -- Naval rank: Captain = local leader
-    CASE 
+    CASE
         WHEN COUNT(DISTINCT gds.user_id) >= 500 THEN 'WILDFIRE'
         WHEN COUNT(DISTINCT gds.user_id) >= 250 THEN 'INFERNO'
         WHEN COUNT(DISTINCT gds.user_id) >= 150 THEN 'BLAZE'
@@ -78,7 +78,7 @@ GROUP BY gds.initiative_id, gds.zip_code, gds.city, gds.state, gds.country;
 
 -- 5. Seed default cold start thresholds for all initiatives
 INSERT INTO public.cold_start_thresholds (initiative_id, tier, families_required, captains_required, description)
-VALUES 
+VALUES
     -- Let's Make Dinner
     ('lets_make_dinner', 'SPARK', 1, 0, 'Gathering interest'),
     ('lets_make_dinner', 'EMBER', 50, 1, 'Need 50 families and 1 Captain to launch'),
@@ -87,7 +87,7 @@ VALUES
     ('lets_make_dinner', 'BLAZE', 150, 3, 'Expanding reach'),
     ('lets_make_dinner', 'INFERNO', 250, 4, 'Regional impact'),
     ('lets_make_dinner', 'WILDFIRE', 500, 5, 'Full deployment'),
-    
+
     -- Defense Klaus
     ('defense_klaus', 'SPARK', 1, 0, 'Gathering interest'),
     ('defense_klaus', 'EMBER', 100, 1, 'Need 100 families and 1 Captain to launch'),
@@ -96,7 +96,7 @@ VALUES
     ('defense_klaus', 'BLAZE', 1000, 4, 'Regional coverage'),
     ('defense_klaus', 'INFERNO', 2500, 5, 'Major metro coverage'),
     ('defense_klaus', 'WILDFIRE', 5000, 6, 'Full deployment'),
-    
+
     -- Let's Get Groceries
     ('lets_get_groceries', 'SPARK', 1, 0, 'Gathering interest'),
     ('lets_get_groceries', 'EMBER', 25, 1, 'Need 25 families and 1 Captain to launch'),
@@ -105,7 +105,7 @@ VALUES
     ('lets_get_groceries', 'BLAZE', 200, 3, 'Major discounts unlocked'),
     ('lets_get_groceries', 'INFERNO', 500, 4, 'Regional buying power'),
     ('lets_get_groceries', 'WILDFIRE', 1000, 5, 'Full deployment'),
-    
+
     -- Family Table
     ('family_table', 'SPARK', 1, 0, 'Gathering interest'),
     ('family_table', 'EMBER', 10, 1, 'Need 10 families and 1 Captain to launch'),
@@ -121,16 +121,16 @@ ALTER TABLE public.geographic_demand_signals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cold_start_thresholds ENABLE ROW LEVEL SECURITY;
 
 -- Anyone can view thresholds and aggregated progress
-CREATE POLICY "Public can view cold start thresholds" 
+CREATE POLICY "Public can view cold start thresholds"
     ON public.cold_start_thresholds FOR SELECT USING (true);
 
 -- Users can create and view their own demand signals
-CREATE POLICY "Users can create demand signals" 
-    ON public.geographic_demand_signals FOR INSERT 
+CREATE POLICY "Users can create demand signals"
+    ON public.geographic_demand_signals FOR INSERT
     WITH CHECK (auth.uid() = user_id OR user_id IS NULL);
 
-CREATE POLICY "Users can view own demand signals" 
-    ON public.geographic_demand_signals FOR SELECT 
+CREATE POLICY "Users can view own demand signals"
+    ON public.geographic_demand_signals FOR SELECT
     USING (auth.uid() = user_id OR user_id IS NULL);
 
 -- 7. Function to get progress for a specific city
@@ -158,12 +158,12 @@ DECLARE
     v_captains BIGINT;
 BEGIN
     -- Get current counts
-    SELECT 
+    SELECT
         COUNT(DISTINCT gds.user_id),
-        (SELECT COUNT(*) FROM public.stewardship_applications sa 
-         WHERE sa.initiative_id = p_initiative_id 
-         AND sa.city = p_city 
-         AND sa.state = p_state 
+        (SELECT COUNT(*) FROM public.stewardship_applications sa
+         WHERE sa.initiative_id = p_initiative_id
+         AND sa.city = p_city
+         AND sa.state = p_state
          AND sa.status = 'approved'
          AND sa.region_type = 'city')
     INTO v_families, v_captains
@@ -174,22 +174,22 @@ BEGIN
 
     RETURN QUERY
     WITH current_progress AS (
-        SELECT 
+        SELECT
             p_initiative_id as initiative_id,
             p_city as city,
             p_state as state,
             COALESCE(v_families, 0) as interested_families,
-            (SELECT COUNT(DISTINCT user_id) FROM public.geographic_demand_signals 
-             WHERE initiative_id = p_initiative_id AND city = p_city AND state = p_state 
+            (SELECT COUNT(DISTINCT user_id) FROM public.geographic_demand_signals
+             WHERE initiative_id = p_initiative_id AND city = p_city AND state = p_state
              AND signal_type = 'hard_pledge') as committed_families,
-            COALESCE((SELECT SUM(pledge_amount) FROM public.geographic_demand_signals 
+            COALESCE((SELECT SUM(pledge_amount) FROM public.geographic_demand_signals
              WHERE initiative_id = p_initiative_id AND city = p_city AND state = p_state), 0) as total_pledged,
             COALESCE(v_captains, 0) as active_captains
     ),
     tier_calc AS (
-        SELECT 
+        SELECT
             cp.*,
-            CASE 
+            CASE
                 WHEN cp.interested_families >= 500 THEN 'WILDFIRE'
                 WHEN cp.interested_families >= 250 THEN 'INFERNO'
                 WHEN cp.interested_families >= 150 THEN 'BLAZE'
@@ -201,7 +201,7 @@ BEGIN
         FROM current_progress cp
     ),
     next_tier_info AS (
-        SELECT 
+        SELECT
             tc.*,
             CASE tc.current_tier
                 WHEN 'SPARK' THEN 'EMBER'
@@ -214,7 +214,7 @@ BEGIN
             END as next_tier
         FROM tier_calc tc
     )
-    SELECT 
+    SELECT
         nti.initiative_id,
         nti.city,
         nti.state,
@@ -227,8 +227,8 @@ BEGIN
         GREATEST(0, cst.families_required - nti.interested_families::INTEGER) as families_to_next_tier,
         GREATEST(0, cst.captains_required - nti.active_captains::INTEGER) as captains_to_next_tier
     FROM next_tier_info nti
-    LEFT JOIN public.cold_start_thresholds cst 
-        ON cst.initiative_id = nti.initiative_id 
+    LEFT JOIN public.cold_start_thresholds cst
+        ON cst.initiative_id = nti.initiative_id
         AND cst.tier = nti.next_tier;
 END;
 $$ LANGUAGE plpgsql;

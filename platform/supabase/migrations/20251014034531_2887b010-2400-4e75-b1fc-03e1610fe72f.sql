@@ -61,7 +61,7 @@ USING (
 );
 
 -- Add portal_type column to themes for portal-specific theming
-ALTER TABLE public.project_themes 
+ALTER TABLE public.project_themes
 ADD COLUMN IF NOT EXISTS portal_type TEXT DEFAULT 'marketplace';
 
 -- Add index for portal filtering

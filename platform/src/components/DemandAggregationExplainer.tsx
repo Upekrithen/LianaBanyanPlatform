@@ -3,7 +3,7 @@
  * ============================
  * Educational dialog explaining how the food ecosystem's
  * demand aggregation system works.
- * 
+ *
  * Used in:
  * - Let's Make Dinner page
  * - Family Table page
@@ -15,12 +15,12 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { 
-  PlayCircle, 
-  ShoppingCart, 
-  Users, 
-  Truck, 
-  DollarSign, 
+import {
+  PlayCircle,
+  ShoppingCart,
+  Users,
+  Truck,
+  DollarSign,
   ChefHat,
   Sparkles,
   CheckCircle2,
@@ -37,11 +37,11 @@ interface DemandAggregationExplainerProps {
   autoExpandSection?: 'flow' | 'discounts' | 'taste-tester' | 'icing';
 }
 
-export function DemandAggregationExplainer({ 
-  open, 
-  onOpenChange, 
+export function DemandAggregationExplainer({
+  open,
+  onOpenChange,
   onUnderstood,
-  autoExpandSection 
+  autoExpandSection
 }: DemandAggregationExplainerProps) {
   const [videoWatched, setVideoWatched] = useState(false);
 
@@ -54,7 +54,7 @@ export function DemandAggregationExplainer({
             How Demand Aggregation Works
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           {/* Video Section */}
           <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
@@ -63,8 +63,8 @@ export function DemandAggregationExplainer({
               <p className="text-sm text-muted-foreground">
                 Video: The Food Ecosystem — From Order to Delivery
               </p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setVideoWatched(true)}
               >
                 {videoWatched ? 'Video Watched ✓' : 'Play Video'}
@@ -104,9 +104,9 @@ export function DemandAggregationExplainer({
           </div>
 
           {/* Accordion Explanation */}
-          <Accordion 
-            type="single" 
-            collapsible 
+          <Accordion
+            type="single"
+            collapsible
             className="w-full"
             defaultValue={autoExpandSection}
           >
@@ -241,7 +241,7 @@ export function DemandAggregationExplainer({
                 <div className="border-l-4 border-primary pl-4 py-2">
                   <p className="font-medium">Master Taster Status</p>
                   <p className="text-sm text-muted-foreground">
-                    When 10+ recipes you tested all reach 5,000 orders, you become a <strong>Master Taster</strong>. 
+                    When 10+ recipes you tested all reach 5,000 orders, you become a <strong>Master Taster</strong>.
                     All your accumulated Marks convert to Credits!
                   </p>
                 </div>
@@ -308,7 +308,7 @@ export function DemandAggregationExplainer({
                   </li>
                 </ul>
                 <p className="text-xs text-muted-foreground">
-                  Self-fulfilling still contributes to community data (what people need, when they need it) — 
+                  Self-fulfilling still contributes to community data (what people need, when they need it) —
                   just without the delivery portion.
                 </p>
               </AccordionContent>
@@ -316,14 +316,14 @@ export function DemandAggregationExplainer({
           </Accordion>
 
           <div className="flex gap-3 pt-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex-1"
               onClick={() => onOpenChange(false)}
             >
               I'll Review Later
             </Button>
-            <Button 
+            <Button
               className="flex-1"
               onClick={() => {
                 onUnderstood?.();

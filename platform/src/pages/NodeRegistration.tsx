@@ -2,7 +2,7 @@
  * NODE REGISTRATION — Manufacturing Node Signup
  * ==============================================
  * Register as a manufacturing node in the decentralized factory network.
- * 
+ *
  * Node Types:
  * - Prototype: Consumer 3D printer (FDM/SLA)
  * - Small Batch: Formlabs SLS
@@ -138,7 +138,7 @@ export default function NodeRegistration() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  
+
   const [formData, setFormData] = useState<NodeFormData>({
     equipmentTypes: [],
     equipmentDetails: "",
@@ -171,7 +171,7 @@ export default function NodeRegistration() {
   const submitRegistration = useMutation({
     mutationFn: async () => {
       if (!user) throw new Error("Must be logged in");
-      
+
       // In production, this would insert into production_nodes table
       const { error } = await supabase.from("production_nodes").insert({
         user_id: user.id,
@@ -326,7 +326,7 @@ export default function NodeRegistration() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="equipment-details">Equipment Details</Label>
                 <Textarea

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   Shield, Heart, Radio, Scale, BellRing, MapPin, Users,
   AlertTriangle, ShieldCheck, Gift, ArrowRight, CheckCircle2
 } from 'lucide-react';
@@ -111,7 +111,7 @@ export default function DefenseKlausPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2 space-y-6">
                 <h2 className="text-2xl font-bold text-foreground">Protected Loved Ones</h2>
-                
+
                 <Card className="border-l-4 border-l-emerald-500">
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">

@@ -2,7 +2,7 @@
  * FACTORY PIPELINE — Decentralized Manufacturing
  * ===============================================
  * Idea → Prototype → Vote → Produce → Ship
- * 
+ *
  * The full manufacturing pipeline visualization with:
  * - Stage progression
  * - Production levels (6 tiers)
@@ -13,8 +13,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Lightbulb, Wrench, Vote, Factory, Truck, 
+import {
+  Lightbulb, Wrench, Vote, Factory, Truck,
   ChevronRight, Users, Trophy, Clock, Zap,
   Scroll, Map, Star, Shield, Crown
 } from "lucide-react";
@@ -26,42 +26,42 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Pipeline stages
 const PIPELINE_STAGES = [
-  { 
-    id: "idea", 
-    name: "Idea", 
-    icon: Lightbulb, 
+  {
+    id: "idea",
+    name: "Idea",
+    icon: Lightbulb,
     color: "text-yellow-500",
     bgColor: "bg-yellow-500/10",
     description: "Submit your product concept"
   },
-  { 
-    id: "prototype", 
-    name: "Prototype", 
-    icon: Wrench, 
+  {
+    id: "prototype",
+    name: "Prototype",
+    icon: Wrench,
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
     description: "Design Battle or bounty creation"
   },
-  { 
-    id: "vote", 
-    name: "Vote", 
-    icon: Vote, 
+  {
+    id: "vote",
+    name: "Vote",
+    icon: Vote,
     color: "text-purple-500",
     bgColor: "bg-purple-500/10",
     description: "Community validates demand"
   },
-  { 
-    id: "produce", 
-    name: "Produce", 
-    icon: Factory, 
+  {
+    id: "produce",
+    name: "Produce",
+    icon: Factory,
     color: "text-green-500",
     bgColor: "bg-green-500/10",
     description: "Distributed manufacturing"
   },
-  { 
-    id: "ship", 
-    name: "Ship", 
-    icon: Truck, 
+  {
+    id: "ship",
+    name: "Ship",
+    icon: Truck,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
     description: "Delivery to members"
@@ -104,10 +104,10 @@ interface FactoryPipelineProps {
   userIsPioneer?: boolean;
 }
 
-export function FactoryPipeline({ 
-  items = [], 
+export function FactoryPipeline({
+  items = [],
   pioneerCount = 47,
-  userIsPioneer = false 
+  userIsPioneer = false
 }: FactoryPipelineProps) {
   const [selectedStage, setSelectedStage] = useState<string | null>(null);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
@@ -136,20 +136,20 @@ export function FactoryPipeline({
       <div className="relative">
         {/* Connection Line */}
         <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-yellow-500 via-purple-500 to-orange-500 -translate-y-1/2 hidden md:block" />
-        
+
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 relative">
           {PIPELINE_STAGES.map((stage, index) => {
             const StageIcon = stage.icon;
             const stageItems = itemsByStage[stage.id] || [];
             const isSelected = selectedStage === stage.id;
-            
+
             return (
               <motion.div
                 key={stage.id}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Card 
+                <Card
                   className={`cursor-pointer transition-all ${
                     isSelected ? 'ring-2 ring-primary shadow-lg' : 'hover:shadow-md'
                   } ${stage.bgColor}`}
@@ -200,7 +200,7 @@ export function FactoryPipeline({
                 {itemsByStage[selectedStage]?.length > 0 ? (
                   <div className="space-y-3">
                     {itemsByStage[selectedStage].map(item => (
-                      <div 
+                      <div
                         key={item.id}
                         className="p-4 rounded-lg border hover:bg-muted/50 cursor-pointer"
                         onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}
@@ -225,8 +225,8 @@ export function FactoryPipeline({
                             animate={{ opacity: 1 }}
                             className="mt-4 pt-4 border-t"
                           >
-                            <Progress 
-                              value={(item.currentVotes / item.votesNeeded) * 100} 
+                            <Progress
+                              value={(item.currentVotes / item.votesNeeded) * 100}
                               className="h-2"
                             />
                             <div className="flex justify-between text-xs text-muted-foreground mt-2">
@@ -266,7 +266,7 @@ export function FactoryPipeline({
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {PRODUCTION_LEVELS.map((level) => (
-              <div 
+              <div
                 key={level.level}
                 className="text-center p-4 rounded-lg border hover:shadow-md transition-shadow"
               >
@@ -306,7 +306,7 @@ export function FactoryPipeline({
               {pioneerCount}/100 Pioneer slots claimed
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {PIONEER_BENEFITS.map((benefit, index) => {
               const Icon = benefit.icon;
@@ -358,7 +358,7 @@ export function FactoryPipeline({
                 strokeWidth="2"
               />
             </svg>
-            
+
             <div className="relative flex justify-between items-center px-8">
               {PIPELINE_STAGES.map((stage, index) => {
                 const Icon = stage.icon;
@@ -373,7 +373,7 @@ export function FactoryPipeline({
               })}
             </div>
           </div>
-          
+
           <div className="text-center">
             <Button variant="outline" className="gap-2">
               <Scroll className="h-4 w-4" />

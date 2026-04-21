@@ -112,7 +112,7 @@ export function ProductionQueueDisplay() {
             Live Production Queue
           </CardTitle>
           <CardDescription>
-            Real-time transparent scoring based on demand, availability, and priority. 
+            Real-time transparent scoring based on demand, availability, and priority.
             Want to move your favorite product up? Place an order and watch it climb!
           </CardDescription>
         </CardHeader>

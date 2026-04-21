@@ -108,13 +108,13 @@ export function ProductionLevelThermometer({
               animate={{ width: `${fillPercent}%` }}
               transition={{ duration: 1.5, ease: "easeOut" }}
             />
-            
+
             {/* Level markers */}
             {levels.map((level, index) => {
               const position = (level.votesNeeded / maxVotes) * 100;
               const Icon = LEVEL_ICONS[index];
               const isUnlocked = level.unlocked;
-              
+
               return (
                 <div
                   key={level.level}
@@ -142,7 +142,7 @@ export function ProductionLevelThermometer({
             const Icon = LEVEL_ICONS[index];
             const isUnlocked = level.unlocked;
             const isCurrent = level.level === currentLevel;
-            
+
             return (
               <div
                 key={level.level}

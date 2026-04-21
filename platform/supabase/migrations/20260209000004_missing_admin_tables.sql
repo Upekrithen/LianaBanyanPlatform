@@ -288,7 +288,7 @@ CREATE TABLE IF NOT EXISTS public.profile_visibility_settings (
 -- RLS — Basic policies for all new tables
 -- ═══════════════════════════════════════════════════════════════
 
-DO $$ 
+DO $$
 DECLARE
   tbl TEXT;
 BEGIN

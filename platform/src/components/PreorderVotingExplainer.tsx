@@ -19,7 +19,7 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
         <DialogHeader>
           <DialogTitle className="text-2xl">How Preordering Works</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           {/* Video Section */}
           <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
@@ -28,8 +28,8 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
               <p className="text-sm text-muted-foreground">
                 Video: Understanding Volume Production & Pricing
               </p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setVideoWatched(true)}
               >
                 {videoWatched ? 'Video Watched ✓' : 'Play Video'}
@@ -48,7 +48,7 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
               </AccordionTrigger>
               <AccordionContent className="space-y-3">
                 <p>
-                  Your preorder is actually a <strong>vote</strong> to get this product manufactured at scale. 
+                  Your preorder is actually a <strong>vote</strong> to get this product manufactured at scale.
                   The more people vote, the larger the production run, and the lower the per-unit cost.
                 </p>
                 <div className="bg-muted/50 p-4 rounded-lg">
@@ -71,7 +71,7 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
               </AccordionTrigger>
               <AccordionContent className="space-y-3">
                 <p>
-                  Each product has multiple production levels (tiers). As more people vote, 
+                  Each product has multiple production levels (tiers). As more people vote,
                   we unlock better pricing at higher volume levels.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -103,7 +103,7 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
               </AccordionTrigger>
               <AccordionContent className="space-y-3">
                 <p>
-                  When you vote, you choose how long you're willing to wait for production. 
+                  When you vote, you choose how long you're willing to wait for production.
                   <strong> Longer commitment = more participation in the project.</strong>
                 </p>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-2">
@@ -135,7 +135,7 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
               </AccordionTrigger>
               <AccordionContent className="space-y-3">
                 <p>
-                  Once a product successfully completes its first production round, subsequent rounds 
+                  Once a product successfully completes its first production round, subsequent rounds
                   operate on <strong>Node Cycles</strong> - recurring production runs based on demand.
                 </p>
                 <ul className="space-y-2 text-sm">
@@ -149,14 +149,14 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
           </Accordion>
 
           <div className="flex gap-3 pt-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex-1"
               onClick={() => onOpenChange(false)}
             >
               I'll Review Later
             </Button>
-            <Button 
+            <Button
               className="flex-1"
               onClick={() => {
                 onUnderstood();

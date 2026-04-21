@@ -23,7 +23,7 @@ BEGIN
     'The Medallion is your proof of membership and stake in this project. It serves as a physical token that connects to the blockchain ledger via QR code, tracking your equity, credits, and voting power. This must be funded first before the project can proceed to other products.'
   )
   RETURNING id INTO _medallion_id;
-  
+
   -- Create default production levels for the Medallion (votes_needed is now generated)
   INSERT INTO public.production_levels (
     product_id,
@@ -36,7 +36,7 @@ BEGIN
     (_medallion_id, 2, 'Early Supporter', 250, 4.50),
     (_medallion_id, 3, 'Community Builder', 500, 4.00),
     (_medallion_id, 4, 'Project Champion', 1000, 3.50);
-  
+
   RETURN NEW;
 END;
 $function$;
@@ -60,7 +60,7 @@ BEGIN
   SELECT COUNT(*) INTO _project_count
   FROM projects
   WHERE owner_id = NEW.owner_id;
-  
+
   -- Update milestone tracking
   INSERT INTO member_project_milestones (user_id, project_count, first_10_completed)
   VALUES (
@@ -78,13 +78,13 @@ BEGIN
       ELSE member_project_milestones.physical_badge_reminder_sent
     END,
     updated_at = now();
-  
+
   RETURN NEW;
 END;
 $function$;
 
 -- Update GimmeFive to Let's Make Dinner
-UPDATE projects 
+UPDATE projects
 SET name = 'Let''s Make Dinner'
 WHERE id = '7c39f3af-d076-4dd7-a622-7bc30c7f11ca';
 

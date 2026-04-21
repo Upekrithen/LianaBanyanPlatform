@@ -88,7 +88,7 @@ export const DashboardPortalSwitcher = () => {
 
   const handleRequestAccess = async (portal: string) => {
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       openOnboard({ reason: "request access", actionLabel: "Join", membershipIncluded: true });
       return;

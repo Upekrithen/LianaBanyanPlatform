@@ -61,13 +61,13 @@ export function ThemeCarousel({ projectId, onThemeChange }: ThemeCarouselProps) 
 
   const applyTheme = (cssContent: string) => {
     let styleElement = document.getElementById('project-theme-style') as HTMLStyleElement;
-    
+
     if (!styleElement) {
       styleElement = document.createElement('style');
       styleElement.id = 'project-theme-style';
       document.head.appendChild(styleElement);
     }
-    
+
     styleElement.textContent = cssContent;
   };
 
@@ -75,18 +75,18 @@ export function ThemeCarousel({ projectId, onThemeChange }: ThemeCarouselProps) 
     setSelectedTheme(theme.id);
     applyTheme(theme.css_content);
     localStorage.setItem(`project-theme-${projectId}`, theme.id);
-    
+
     // Update is_default in database
     await supabase
       .from('project_themes')
       .update({ is_default: false })
       .eq('project_id', projectId);
-    
+
     await supabase
       .from('project_themes')
       .update({ is_default: true })
       .eq('id', theme.id);
-    
+
     toast.success(`Theme "${theme.theme_name}" applied`);
     onThemeChange?.();
     loadThemes();

@@ -5,7 +5,7 @@
  * - $5/serving — Preorder (48+ hours in advance)
  * - $10/serving — Day Before (6-48 hours)
  * - $15/serving — Rush (under 6 hours / prep time)
- * 
+ *
  * Chefs keep 83.3% — locked forever.
  */
 
@@ -22,28 +22,28 @@ export interface PriceTierInfo {
 }
 
 export const LMD_PRICING = {
-  PREORDER: { 
-    price: 5, 
-    minHours: 48, 
-    label: 'Preorder', 
+  PREORDER: {
+    price: 5,
+    minHours: 48,
+    label: 'Preorder',
     color: 'text-emerald-500',
     bgColor: 'bg-emerald-500/10',
     borderColor: 'border-emerald-500/30',
     description: 'Order 48+ hours ahead'
   },
-  DAY_BEFORE: { 
-    price: 10, 
-    minHours: 6, 
-    label: 'Day Before', 
+  DAY_BEFORE: {
+    price: 10,
+    minHours: 6,
+    label: 'Day Before',
     color: 'text-amber-500',
     bgColor: 'bg-amber-500/10',
     borderColor: 'border-amber-500/30',
     description: 'Order 6-48 hours ahead'
   },
-  RUSH: { 
-    price: 15, 
-    minHours: 0, 
-    label: 'Rush', 
+  RUSH: {
+    price: 15,
+    minHours: 0,
+    label: 'Rush',
     color: 'text-rose-500',
     bgColor: 'bg-rose-500/10',
     borderColor: 'border-rose-500/30',
@@ -76,15 +76,15 @@ export function calculateMealPrice(
   }
 
   const now = new Date();
-  
+
   // Combine date and time
   const timeStr = pickupTime || '23:59';
   const [hours, minutes] = timeStr.split(':').map(Number);
   const pickupDateTime = new Date(pickupDate);
   pickupDateTime.setHours(hours, minutes, 0, 0);
-  
+
   const hoursOut = (pickupDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
-  
+
   if (hoursOut >= 48) {
     return {
       price: LMD_PRICING.PREORDER.price,
@@ -96,7 +96,7 @@ export function calculateMealPrice(
       description: LMD_PRICING.PREORDER.description
     };
   }
-  
+
   if (hoursOut >= 6) {
     return {
       price: LMD_PRICING.DAY_BEFORE.price,
@@ -108,7 +108,7 @@ export function calculateMealPrice(
       description: LMD_PRICING.DAY_BEFORE.description
     };
   }
-  
+
   return {
     price: LMD_PRICING.RUSH.price,
     tier: 'rush',
@@ -137,8 +137,8 @@ export function formatHoursUntilPickup(hoursOut: number): string {
  * Get the next tier's price and time remaining
  * Useful for showing "Order within X hours to save $Y"
  */
-export function getNextTierInfo(hoursOut: number): { 
-  currentPrice: number; 
+export function getNextTierInfo(hoursOut: number): {
+  currentPrice: number;
   nextPrice: number;
   hoursUntilNextTier: number;
   message: string;
@@ -151,7 +151,7 @@ export function getNextTierInfo(hoursOut: number): {
       message: `Order now for $5 (${formatHoursUntilPickup(hoursOut - 48)} until price increases)`
     };
   }
-  
+
   if (hoursOut >= 6) {
     return {
       currentPrice: 10,
@@ -160,7 +160,7 @@ export function getNextTierInfo(hoursOut: number): {
       message: `$10 now (${formatHoursUntilPickup(hoursOut - 6)} until rush pricing)`
     };
   }
-  
+
   return null; // Already at rush pricing
 }
 

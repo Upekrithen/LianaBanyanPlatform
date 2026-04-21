@@ -3,7 +3,7 @@
  * ===================
  * Service layer for Will-o'-Wisp Chase Mode operations.
  * Handles database interactions, ante payments, payout calculations.
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  */
 
@@ -181,8 +181,8 @@ export async function getChase(chaseId: string): Promise<WispChase | null> {
 /**
  * Join a chase (pays the ante)
  */
-export async function joinChase(chaseId: string): Promise<{ 
-  success: boolean; 
+export async function joinChase(chaseId: string): Promise<{
+  success: boolean;
   error?: string;
   participant?: ChaseParticipant;
 }> {
@@ -382,10 +382,10 @@ export async function checkUnlockStatus(): Promise<{
     .single();
 
   if (stats?.unlocked_chase_mode) {
-    return { 
-      unlocked: true, 
+    return {
+      unlocked: true,
       reason: stats.unlock_reason,
-      canSkipAhead: false 
+      canSkipAhead: false
     };
   }
 
@@ -473,38 +473,38 @@ async function unlockChaseMode(userId: string, reason: 'reputation' | 'leaderboa
  */
 export function calculatePayouts(chase: WispChase, participants: ChaseParticipant[]): Map<string, number> {
   const payouts = new Map<string, number>();
-  
+
   const finishers = participants
     .filter(p => p.status === 'finished')
     .sort((a, b) => (a.finishPosition || 999) - (b.finishPosition || 999));
-  
+
   if (finishers.length === 0) {
     return payouts;
   }
 
   // Calculate winner pot (after platform cut)
   const winnerPot = Math.floor(chase.totalPot * (1 - chase.platformCut));
-  
+
   // Top half are winners
   const numWinners = Math.ceil(participants.length / 2);
   const winners = finishers.slice(0, numWinners);
-  
+
   // Tiered distribution: position 1 gets more than 2, etc.
   // Formula: share = (numWinners - position + 1) / sum(1..numWinners)
   const sumOfPositions = (numWinners * (numWinners + 1)) / 2;
-  
+
   winners.forEach((winner, index) => {
     const position = index + 1;
     const share = (numWinners - position + 1) / sumOfPositions;
     const payout = Math.floor(winnerPot * share);
     payouts.set(winner.userId, payout);
   });
-  
+
   // Losers get nothing
   finishers.slice(numWinners).forEach(loser => {
     payouts.set(loser.userId, 0);
   });
-  
+
   return payouts;
 }
 

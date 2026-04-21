@@ -13,30 +13,30 @@
 -- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS gift_shopping_aggregations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    
+
     -- Link to gift item (optional - can be standalone)
     gift_item_id UUID REFERENCES gift_list_items(id) ON DELETE SET NULL,
     family_id UUID REFERENCES families(id) ON DELETE CASCADE,
-    
+
     -- Shopping details
     product_name TEXT NOT NULL,
     product_url TEXT,
     product_price DECIMAL(10,2),
     quantity_needed INT DEFAULT 1,
-    
+
     -- Cold start window
     shopping_date DATE NOT NULL,
     shopping_time TIME,
     window_closes_at TIMESTAMPTZ NOT NULL,
-    
+
     -- Aggregation status
     status TEXT DEFAULT 'open' CHECK (status IN ('open', 'closed', 'purchased', 'cancelled')),
     min_participants INT DEFAULT 2,
     current_participants INT DEFAULT 1,
-    
+
     -- Discount tiers
     discount_tier INT DEFAULT 0, -- 0=none, 1=10%, 2=15%, 3=20%
-    
+
     -- Creator
     created_by UUID REFERENCES family_members(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -77,7 +77,7 @@ CREATE POLICY "Members can view shopping aggregations"
     ON gift_shopping_aggregations FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -87,7 +87,7 @@ CREATE POLICY "Members can create aggregations"
     ON gift_shopping_aggregations FOR INSERT
     WITH CHECK (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -148,7 +148,7 @@ BEGIN
     IF TG_OP = 'INSERT' THEN
         UPDATE gift_shopping_aggregations
         SET current_participants = current_participants + 1,
-            discount_tier = CASE 
+            discount_tier = CASE
                 WHEN current_participants + 1 >= 10 THEN 3
                 WHEN current_participants + 1 >= 5 THEN 2
                 WHEN current_participants + 1 >= 2 THEN 1
@@ -160,7 +160,7 @@ BEGIN
     ELSIF TG_OP = 'DELETE' THEN
         UPDATE gift_shopping_aggregations
         SET current_participants = GREATEST(0, current_participants - 1),
-            discount_tier = CASE 
+            discount_tier = CASE
                 WHEN current_participants - 1 >= 10 THEN 3
                 WHEN current_participants - 1 >= 5 THEN 2
                 WHEN current_participants - 1 >= 2 THEN 1
@@ -200,10 +200,10 @@ BEGIN
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Gift item not found';
     END IF;
-    
+
     -- Get the list for family_id
     SELECT * INTO v_list FROM family_gift_lists WHERE id = v_item.list_id;
-    
+
     -- Create the aggregation
     INSERT INTO gift_shopping_aggregations (
         gift_item_id,
@@ -228,14 +228,14 @@ BEGIN
         (p_shopping_date::timestamp + COALESCE(p_shopping_time, '12:00'::time) - INTERVAL '2 hours')::timestamptz,
         p_family_member_id
     ) RETURNING id INTO v_agg_id;
-    
+
     -- Add creator as first participant
     INSERT INTO gift_shopping_participants (aggregation_id, family_member_id, for_gift_item_id)
     VALUES (v_agg_id, p_family_member_id, p_gift_item_id);
-    
+
     -- Create calendar event
     PERFORM create_shopping_calendar_event(v_agg_id);
-    
+
     RETURN v_agg_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -255,17 +255,17 @@ BEGIN
     IF NOT FOUND THEN
         RETURN NULL;
     END IF;
-    
+
     -- Get default family calendar
     SELECT id INTO v_calendar_id
     FROM family_calendars
     WHERE family_id = v_agg.family_id AND is_default = true
     LIMIT 1;
-    
+
     IF v_calendar_id IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Create the event
     INSERT INTO family_events (
         calendar_id,
@@ -288,7 +288,7 @@ BEGIN
         p_aggregation_id,
         v_agg.created_by
     ) RETURNING id INTO v_event_id;
-    
+
     RETURN v_event_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

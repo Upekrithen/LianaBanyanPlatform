@@ -58,8 +58,8 @@ export default function DefenseClawsCoverageCheck() {
 
         {coverage && (
           <div className={`p-4 rounded-md border ${
-            coverage.covered 
-              ? "bg-green-500/10 border-green-500/20" 
+            coverage.covered
+              ? "bg-green-500/10 border-green-500/20"
               : "bg-red-500/10 border-red-500/20"
           }`}>
             {coverage.covered ? (
@@ -88,7 +88,7 @@ export default function DefenseClawsCoverageCheck() {
 
         <div className="pt-4 border-t text-xs text-muted-foreground">
           <p className="font-semibold">For Legal Assistance:</p>
-          <p className="mt-1">File a report through the LB portal or call our volunteer line. 
+          <p className="mt-1">File a report through the LB portal or call our volunteer line.
           We will check coverage and connect you with legal services immediately if covered.</p>
         </div>
       </CardContent>

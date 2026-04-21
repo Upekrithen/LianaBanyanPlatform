@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Lightbulb, FileText, FlaskConical, Box, Scale, 
-  Link as LinkIcon, Crown, Megaphone, Calculator, 
-  Users, Package, Wrench, Rocket, Monitor, Truck 
+import {
+  Lightbulb, FileText, FlaskConical, Box, Scale,
+  Link as LinkIcon, Crown, Megaphone, Calculator,
+  Users, Package, Wrench, Rocket, Monitor, Truck
 } from 'lucide-react';
 
 interface CircularCategoriesProps {
@@ -34,9 +34,9 @@ const categories = [
   { id: 'delivery', label: 'Delivery', icon: Truck, color: 'text-teal-500' },
 ];
 
-export function CircularCategories({ 
-  projectName, 
-  ownerName, 
+export function CircularCategories({
+  projectName,
+  ownerName,
   stewardName,
   onCategoryClick,
   activeCounts = {}
@@ -55,7 +55,7 @@ export function CircularCategories({
       <CardContent>
         <div className="relative" style={{ width: '800px', height: '800px', margin: '0 auto' }}>
           {/* Center - Project Name, Owner, and Steward */}
-          <div 
+          <div
             className="absolute bg-card border-2 border-primary rounded-lg p-6 shadow-lg"
             style={{
               left: `${centerX - 100}px`,
@@ -107,17 +107,17 @@ export function CircularCategories({
                   <Icon className={`h-5 w-5 ${category.color}`} />
                   <span className="text-xs text-center leading-tight">{category.label}</span>
                   {count > 0 && (
-                    <Badge 
-                      variant="secondary" 
+                    <Badge
+                      variant="secondary"
                       className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
                     >
                       {count}
                     </Badge>
                   )}
                 </Button>
-                
+
                 {/* Connection line to center */}
-                <svg 
+                <svg
                   className="absolute pointer-events-none opacity-20"
                   style={{
                     left: '50%',

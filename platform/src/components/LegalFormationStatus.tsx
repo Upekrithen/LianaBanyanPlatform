@@ -12,13 +12,13 @@ export function LegalFormationStatus() {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
-      
+
       const { data, error } = await supabase
         .from('legal_formation_tracking')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
-      
+
       if (error) throw error;
       return data;
     }
@@ -39,8 +39,8 @@ export function LegalFormationStatus() {
   };
 
   const statusBadge = formation ? getStatusBadge(formation.current_status) : null;
-  const paymentProgress = formation 
-    ? (formation.amount_paid / Math.max(formation.formation_cost_usd, 1)) * 100 
+  const paymentProgress = formation
+    ? (formation.amount_paid / Math.max(formation.formation_cost_usd, 1)) * 100
     : 0;
 
   return (

@@ -97,11 +97,11 @@ BEGIN
   INSERT INTO profile_visibility_settings (user_id)
   VALUES (NEW.id)
   ON CONFLICT (user_id) DO NOTHING;
-  
+
   INSERT INTO member_project_milestones (user_id)
   VALUES (NEW.id)
   ON CONFLICT (user_id) DO NOTHING;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
@@ -121,7 +121,7 @@ BEGIN
   SELECT COUNT(*) INTO _project_count
   FROM projects
   WHERE owner_id = NEW.owner_id;
-  
+
   -- Update milestone tracking
   INSERT INTO member_project_milestones (user_id, project_count, first_10_completed)
   VALUES (
@@ -139,7 +139,7 @@ BEGIN
       ELSE member_project_milestones.physical_badge_reminder_sent
     END,
     updated_at = now();
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;

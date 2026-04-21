@@ -8,10 +8,10 @@ import { Badge } from "@/components/ui/badge";
 
 function HexelModel() {
   const obj = useLoader(OBJLoader, "/models/slottedTop_v1.obj");
-  
+
   return (
-    <primitive 
-      object={obj} 
+    <primitive
+      object={obj}
       scale={0.5}
       rotation={[Math.PI / 6, 0, 0]}
     />
@@ -43,10 +43,10 @@ export const HexelViewer3D = () => {
               <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
               <directionalLight position={[-10, -10, -5]} intensity={0.3} />
               <pointLight position={[0, 5, 0]} intensity={0.5} />
-              
+
               <HexelModel />
-              
-              <OrbitControls 
+
+              <OrbitControls
                 enableZoom={true}
                 enablePan={true}
                 minDistance={2}
@@ -54,7 +54,7 @@ export const HexelViewer3D = () => {
                 autoRotate
                 autoRotateSpeed={0.5}
               />
-              
+
               <Environment preset="studio" />
               <gridHelper args={[10, 10]} />
             </Suspense>

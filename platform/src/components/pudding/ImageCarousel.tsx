@@ -87,23 +87,23 @@ export function ImageCarousel({
                   </span>
                 </div>
               )}
-              
+
               {currentItem.tag && (
                 <span className="px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full mb-2">
                   {currentItem.tag}
                 </span>
               )}
-              
+
               <h4 className="text-lg font-bold text-gray-900 dark:text-white text-center">
                 {currentItem.title}
               </h4>
-              
+
               {currentItem.description && (
                 <p className="text-gray-600 dark:text-gray-300 text-sm text-center mt-2 max-w-md">
                   {currentItem.description}
                 </p>
               )}
-              
+
               {currentItem.caption && (
                 <p className="text-gray-500 dark:text-gray-400 text-xs italic text-center mt-2">
                   {currentItem.caption}

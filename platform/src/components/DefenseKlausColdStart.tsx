@@ -1,16 +1,16 @@
 /**
  * Defense Klaus Cold Start Plan 001
- * 
+ *
  * First 5,000 signups get:
  * - Free bracelet preorder voucher (6 credits value)
  * - Free Legal Defense Fund registration
  * - Free complimentary membership ($5 value)
- * 
+ *
  * Email-only registration (no PII):
  * - Proxy identifiers: DF-0000001, DF-0000002, etc.
  * - One per email address
  * - QR-code locked to email
- * 
+ *
  * 20% of signups are platform-donated (for those who can't afford)
  * Members can donate vouchers to others
  * Live ticker shows signup progress
@@ -80,12 +80,12 @@ export function DefenseKlausColdStart() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
+
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDonateDialog, setShowDonateDialog] = useState(false);
   const [donateEmail, setDonateEmail] = useState("");
-  
+
   // Fetch cold start stats
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["defense-klaus-cold-start-stats"],
@@ -95,7 +95,7 @@ export function DefenseKlausColdStart() {
         .from("defense_klaus_vouchers")
         .select("id, is_donated")
         .limit(COLD_START_LIMIT);
-      
+
       if (error || !data) {
         // Fallback for demo - use localStorage
         const stored = localStorage.getItem("dk_cold_start_stats");
@@ -109,12 +109,12 @@ export function DefenseKlausColdStart() {
           percentComplete: 0,
         };
       }
-      
+
       const totalSignups = data.length;
       const freeSignups = data.filter(v => v.is_donated).length;
       const paidSignups = totalSignups - freeSignups;
       const maxFreeSlots = Math.floor(COLD_START_LIMIT * FREE_PERCENTAGE);
-      
+
       return {
         totalSignups,
         freeSignups,
@@ -213,7 +213,7 @@ export function DefenseKlausColdStart() {
         };
         stored.push(newVoucher);
         localStorage.setItem("dk_vouchers", JSON.stringify(stored));
-        
+
         // Update stats
         const currentStats = stats || {
           totalSignups: 0,
@@ -232,7 +232,7 @@ export function DefenseKlausColdStart() {
           percentComplete: ((currentStats.totalSignups + 1) / COLD_START_LIMIT) * 100,
         };
         localStorage.setItem("dk_cold_start_stats", JSON.stringify(newStats));
-        
+
         return newVoucher;
       }
 
@@ -416,7 +416,7 @@ export function DefenseKlausColdStart() {
               <span>Complimentary $5/year membership</span>
             </li>
           </ul>
-          
+
           <div className="bg-amber-500/20 border border-amber-500/30 rounded-lg p-3 text-sm text-amber-200">
             <AlertCircle className="h-4 w-4 inline mr-2" />
             <strong>{FREE_PERCENTAGE * 100}% of slots</strong> are platform-donated for those who can't afford it.
@@ -437,9 +437,9 @@ export function DefenseKlausColdStart() {
               {currentStats.totalSignups.toLocaleString()} / {COLD_START_LIMIT.toLocaleString()}
             </Badge>
           </div>
-          
+
           <Progress value={currentStats.percentComplete} className="h-3 mb-4" />
-          
+
           <div className="grid grid-cols-3 gap-4 text-center text-sm">
             <div>
               <div className="text-2xl font-bold text-green-400">{currentStats.freeSignups}</div>
@@ -480,7 +480,7 @@ export function DefenseKlausColdStart() {
               disabled={registerFree.isPending || currentStats.remainingFreeSlots <= 0}
             />
           </div>
-          
+
           {currentStats.remainingFreeSlots > 0 ? (
             <Button
               onClick={handleFreeRegistration}
@@ -502,7 +502,7 @@ export function DefenseKlausColdStart() {
               Free Slots Filled — Purchase Available
             </Button>
           )}
-          
+
           <p className="text-xs text-white/50 text-center">
             By registering, you'll receive a QR-coded voucher locked to your email.
             No personal information is stored — only a hashed identifier.

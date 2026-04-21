@@ -40,8 +40,8 @@ serve(async (req) => {
       console.log(`Successfully reverted ${revertedVotes?.length || 0} expired votes`);
     }
 
-    return new Response(JSON.stringify({ 
-      success: true, 
+    return new Response(JSON.stringify({
+      success: true,
       message: 'Expired votes processed successfully',
       reverted_count: revertedVotes?.length || 0
     }), {
@@ -51,9 +51,9 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in process-expired-votes:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       success: false,
-      error: errorMessage 
+      error: errorMessage
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

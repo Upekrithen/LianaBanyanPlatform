@@ -10,7 +10,7 @@ DECLARE
   project_data RECORD;
 BEGIN
   -- Get comprehensive project data
-  SELECT 
+  SELECT
     p.id,
     p.project_sku,
     p.name,
@@ -45,7 +45,7 @@ BEGIN
   LEFT JOIN public.products prod ON prod.project_id = p.id
   WHERE p.id = p_project_id
   GROUP BY p.id;
-  
+
   -- Build XML structure
   xml_output := '<?xml version="1.0" encoding="UTF-8"?>' || chr(10);
   xml_output := xml_output || '<ProjectModule>' || chr(10);
@@ -56,7 +56,7 @@ BEGIN
   xml_output := xml_output || '  <CreatedAt>' || project_data.created_at::text || '</CreatedAt>' || chr(10);
   xml_output := xml_output || '  <Products>' || COALESCE(project_data.products::text, '[]') || '</Products>' || chr(10);
   xml_output := xml_output || '</ProjectModule>';
-  
+
   RETURN xml_output;
 END;
 $$;

@@ -85,7 +85,7 @@ export default function SampleDataXML() {
   const generateMedallionXML = () => {
     const projectData = sampleProjectData;
     const medallionProduct = projectData.products[0];
-    
+
     // Sample data for member tracking
     const sampleAcceptedDate = new Date('2025-01-01');
     const currentDate = new Date();
@@ -94,13 +94,13 @@ export default function SampleDataXML() {
     const participationPercentage = Math.max(0, 100 - daysSinceAcceptance);
     const cashPercentage = Math.min(100, daysSinceAcceptance);
     const isCashOutEligible = daysSinceAcceptance >= 90;
-    
+
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<MedallionModule>\n';
     xml += `  <ProjectID>${projectData.id}</ProjectID>\n`;
     xml += `  <ProjectName>${escapeXml(projectData.name)}</ProjectName>\n`;
     xml += `  <ProjectSKU>${projectData.project_sku || 'PENDING'}</ProjectSKU>\n`;
-    
+
     // Member Credit & Participation Tracking
     xml += '  <MemberTracking>\n';
     xml += '    <InvitationDetails>\n';
@@ -168,7 +168,7 @@ export default function SampleDataXML() {
     xml += '      </AcceptedInvitations>\n';
     xml += '    </Invitations>\n';
     xml += '  </MemberTracking>\n';
-    
+
     // Product Details
     xml += '  <Product>\n';
     xml += `    <ProductID>${medallionProduct.id}</ProductID>\n`;
@@ -177,18 +177,18 @@ export default function SampleDataXML() {
     xml += `    <Description>${escapeXml(medallionProduct.description || '')}</Description>\n`;
     xml += '    <QRCodeEnabled>true</QRCodeEnabled>\n';
     xml += '    <TracksKickstarterPledges>true</TracksKickstarterPledges>\n';
-    
+
     if (medallionProduct.production_levels && medallionProduct.production_levels.length > 0) {
       xml += '    <ProductionLevels>\n';
       medallionProduct.production_levels
         .sort((a: any, b: any) => a.level_number - b.level_number)
         .forEach((level: any) => {
           const totalValue = Number(level.unit_price) * Number(level.units_count);
-          const fundingPercentage = level.votes_needed > 0 
+          const fundingPercentage = level.votes_needed > 0
             ? Math.min(100, (Number(level.current_votes || 0) / Number(level.votes_needed)) * 100).toFixed(2)
             : '0.00';
           const isFullyFunded = Number(level.current_votes || 0) >= Number(level.votes_needed || 0);
-          
+
           xml += '      <Level>\n';
           xml += `        <LevelNumber>${level.level_number}</LevelNumber>\n`;
           xml += `        <LevelName>${escapeXml(level.level_name)}</LevelName>\n`;
@@ -201,7 +201,7 @@ export default function SampleDataXML() {
           xml += `        <FundingPercentage>${fundingPercentage}</FundingPercentage>\n`;
           xml += `        <IsFullyFunded>${isFullyFunded}</IsFullyFunded>\n`;
           xml += `        <TotalValue>${totalValue}</TotalValue>\n`;
-          
+
           // Special tracking for Prototype level (first level)
           if (level.level_number === 1) {
             xml += '        <SpecialTracking>\n';
@@ -211,15 +211,15 @@ export default function SampleDataXML() {
             xml += '          <AutoSubscribesOnPreorder>true</AutoSubscribesOnPreorder>\n';
             xml += '        </SpecialTracking>\n';
           }
-          
+
           xml += '      </Level>\n';
         });
       xml += '    </ProductionLevels>\n';
     }
-    
+
     xml += '  </Product>\n';
     xml += '</MedallionModule>';
-    
+
     return xml;
   };
 
@@ -233,13 +233,13 @@ export default function SampleDataXML() {
     xml += `  <ProjectSKU>${projectData.project_sku || 'PENDING'}</ProjectSKU>\n`;
     xml += `  <Description>${escapeXml(projectData.description || '')}</Description>\n`;
     xml += '  <Products>\n';
-    
+
     projectData.products.forEach((product: any) => {
       xml += '    <Product>\n';
       xml += `      <ProductID>${product.id}</ProductID>\n`;
       xml += `      <ProductName>${escapeXml(product.name)}</ProductName>\n`;
       xml += `      <ProductSKU>${product.product_sku || 'PENDING'}</ProductSKU>\n`;
-      
+
       if (product.production_levels && product.production_levels.length > 0) {
         xml += '      <ProductionLevels>\n';
         product.production_levels
@@ -256,13 +256,13 @@ export default function SampleDataXML() {
           });
         xml += '      </ProductionLevels>\n';
       }
-      
+
       xml += '    </Product>\n';
     });
-    
+
     xml += '  </Products>\n';
     xml += '</ProjectModule>';
-    
+
     return xml;
   };
 
@@ -315,14 +315,14 @@ export default function SampleDataXML() {
           </div>
         </div>
       </header>
-      
+
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="medallion" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="medallion">Medallion Product XML</TabsTrigger>
               <TabsTrigger value="full">Full Project XML</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="medallion">
               <Card>
                 <CardHeader>
@@ -354,7 +354,7 @@ export default function SampleDataXML() {
                 </CardContent>
               </Card>
             </TabsContent>
-            
+
             <TabsContent value="full">
               <Card>
                 <CardHeader>

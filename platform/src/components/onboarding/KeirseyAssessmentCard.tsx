@@ -20,8 +20,8 @@ export function KeirseyAssessmentCard() {
         {/* Overview */}
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            The Keirsey Temperament Sorter is a widely-used personality assessment that categorizes individuals 
-            into four temperaments and 16 variants. This helps LianaBanyan understand how to best support your 
+            The Keirsey Temperament Sorter is a widely-used personality assessment that categorizes individuals
+            into four temperaments and 16 variants. This helps LianaBanyan understand how to best support your
             work style, communication preferences, and team dynamics.
           </p>
         </div>
@@ -37,7 +37,7 @@ export function KeirseyAssessmentCard() {
               </div>
               <p className="text-xs text-muted-foreground">Responsible, organized, traditional</p>
             </div>
-            
+
             <div className="p-3 rounded-lg border bg-card">
               <div className="flex items-center gap-2 mb-1">
                 <Cog className="h-4 w-4 text-amber-600" />
@@ -45,7 +45,7 @@ export function KeirseyAssessmentCard() {
               </div>
               <p className="text-xs text-muted-foreground">Practical, spontaneous, adaptable</p>
             </div>
-            
+
             <div className="p-3 rounded-lg border bg-card">
               <div className="flex items-center gap-2 mb-1">
                 <Lightbulb className="h-4 w-4 text-green-600" />
@@ -53,7 +53,7 @@ export function KeirseyAssessmentCard() {
               </div>
               <p className="text-xs text-muted-foreground">Empathetic, imaginative, authentic</p>
             </div>
-            
+
             <div className="p-3 rounded-lg border bg-card">
               <div className="flex items-center gap-2 mb-1">
                 <Brain className="h-4 w-4 text-purple-600" />
@@ -78,28 +78,28 @@ export function KeirseyAssessmentCard() {
         <div className="space-y-3">
           <h4 className="font-semibold text-sm">Take the Assessment:</h4>
           <div className="flex flex-col gap-2">
-            <Button 
-              asChild 
+            <Button
+              asChild
               className="w-full justify-between"
             >
-              <a 
-                href="https://www.keirsey.com/temperament-assessment/" 
-                target="_blank" 
+              <a
+                href="https://www.keirsey.com/temperament-assessment/"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <span>Official Keirsey.com Assessment</span>
                 <ExternalLink className="h-4 w-4 ml-2" />
               </a>
             </Button>
-            
-            <Button 
-              asChild 
-              variant="outline" 
+
+            <Button
+              asChild
+              variant="outline"
               className="w-full justify-between"
             >
-              <a 
-                href="https://www.16personalities.com/" 
-                target="_blank" 
+              <a
+                href="https://www.16personalities.com/"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <span>Alternative: 16Personalities (MBTI-based)</span>
@@ -108,7 +108,7 @@ export function KeirseyAssessmentCard() {
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Note: While we primarily use Keirsey, the 16Personalities test is also accepted as it 
+            Note: While we primarily use Keirsey, the 16Personalities test is also accepted as it
             uses similar MBTI-based typing that can be mapped to Keirsey temperaments.
           </p>
         </div>

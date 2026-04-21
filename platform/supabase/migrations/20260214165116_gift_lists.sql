@@ -109,7 +109,7 @@ CREATE POLICY "Members can view family gift lists"
     ON family_gift_lists FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -119,7 +119,7 @@ CREATE POLICY "Members can create gift lists"
     ON family_gift_lists FOR INSERT
     WITH CHECK (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -129,7 +129,7 @@ CREATE POLICY "Owners can update their lists"
     ON family_gift_lists FOR UPDATE
     USING (
         owner_id IN (
-            SELECT id FROM family_members 
+            SELECT id FROM family_members
             WHERE user_id = auth.uid()
         )
     );
@@ -139,7 +139,7 @@ CREATE POLICY "Owners can delete their lists"
     ON family_gift_lists FOR DELETE
     USING (
         owner_id IN (
-            SELECT id FROM family_members 
+            SELECT id FROM family_members
             WHERE user_id = auth.uid()
         )
     );
@@ -222,7 +222,7 @@ CREATE POLICY "Members can insert claim history"
 -- They can see all item details EXCEPT who claimed them.
 -- ─────────────────────────────────────────────────────────────────────────────
 CREATE OR REPLACE VIEW gift_list_items_for_owner AS
-SELECT 
+SELECT
     gi.id,
     gi.list_id,
     gi.name,
@@ -249,7 +249,7 @@ WHERE fm.user_id = auth.uid();
 -- VIEW: Gift Items for Family (Shows claimed_by for non-owners)
 -- ─────────────────────────────────────────────────────────────────────────────
 CREATE OR REPLACE VIEW gift_list_items_for_family AS
-SELECT 
+SELECT
     gi.*,
     fm_claimer.nickname AS claimed_by_name,
     fm_claimer.symbol AS claimed_by_symbol
@@ -257,7 +257,7 @@ FROM gift_list_items gi
 JOIN family_gift_lists gl ON gi.list_id = gl.id
 JOIN family_members fm ON gl.family_id = fm.family_id
 LEFT JOIN family_members fm_claimer ON gi.claimed_by = fm_claimer.id
-WHERE fm.user_id = auth.uid() 
+WHERE fm.user_id = auth.uid()
   AND fm.is_active = true
   -- Only show full details if user is NOT the owner
   AND gl.owner_id NOT IN (
@@ -284,26 +284,26 @@ BEGIN
     IF NOT FOUND THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item not found');
     END IF;
-    
+
     -- Check if already claimed
     IF v_item.claimed_by IS NOT NULL THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item already claimed');
     END IF;
-    
+
     -- Get the list
     SELECT * INTO v_list FROM family_gift_lists WHERE id = v_item.list_id;
-    
+
     -- Check if claimer is the owner (can't claim your own items!)
     SELECT EXISTS(
         SELECT 1 FROM family_members fm
-        WHERE fm.id = p_member_id 
+        WHERE fm.id = p_member_id
         AND fm.id = v_list.owner_id
     ) INTO v_is_owner;
-    
+
     IF v_is_owner THEN
         RETURN jsonb_build_object('success', false, 'error', 'Cannot claim your own items');
     END IF;
-    
+
     -- Claim the item
     UPDATE gift_list_items
     SET claimed_by = p_member_id,
@@ -311,11 +311,11 @@ BEGIN
         quantity_claimed = quantity_claimed + 1,
         updated_at = NOW()
     WHERE id = p_item_id;
-    
+
     -- Record in history
     INSERT INTO gift_claim_history (item_id, member_id, action)
     VALUES (p_item_id, p_member_id, 'claim');
-    
+
     RETURN jsonb_build_object('success', true, 'message', 'Item claimed successfully');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -334,12 +334,12 @@ BEGIN
     IF NOT FOUND THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item not found');
     END IF;
-    
+
     -- Check if this member claimed it
     IF v_item.claimed_by != p_member_id THEN
         RETURN jsonb_build_object('success', false, 'error', 'You did not claim this item');
     END IF;
-    
+
     -- Unclaim the item
     UPDATE gift_list_items
     SET claimed_by = NULL,
@@ -347,11 +347,11 @@ BEGIN
         quantity_claimed = GREATEST(0, quantity_claimed - 1),
         updated_at = NOW()
     WHERE id = p_item_id;
-    
+
     -- Record in history
     INSERT INTO gift_claim_history (item_id, member_id, action)
     VALUES (p_item_id, p_member_id, 'unclaim');
-    
+
     RETURN jsonb_build_object('success', true, 'message', 'Item unclaimed');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -370,12 +370,12 @@ BEGIN
     IF NOT FOUND THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item not found');
     END IF;
-    
+
     -- Check if this member claimed it
     IF v_item.claimed_by != p_member_id THEN
         RETURN jsonb_build_object('success', false, 'error', 'You must claim an item before marking it purchased');
     END IF;
-    
+
     -- Mark as purchased
     UPDATE gift_list_items
     SET purchased = true,
@@ -383,11 +383,11 @@ BEGIN
         purchased_at = NOW(),
         updated_at = NOW()
     WHERE id = p_item_id;
-    
+
     -- Record in history
     INSERT INTO gift_claim_history (item_id, member_id, action)
     VALUES (p_item_id, p_member_id, 'purchase');
-    
+
     RETURN jsonb_build_object('success', true, 'message', 'Item marked as purchased');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

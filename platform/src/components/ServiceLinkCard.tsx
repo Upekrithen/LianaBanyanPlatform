@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  ExternalLink, 
-  Trash2, 
-  AlertTriangle, 
-  CheckCircle, 
+import {
+  ExternalLink,
+  Trash2,
+  AlertTriangle,
+  CheckCircle,
   Clock,
   TrendingDown,
   TrendingUp,
@@ -53,9 +53,9 @@ export function ServiceLinkCard({ link, onDelete, lbScaleRate }: ServiceLinkCard
 
   const getRateComplianceStatus = () => {
     if (!lbScaleRate || !link.advertised_rate_min) return null;
-    
+
     const differential = ((link.advertised_rate_min - lbScaleRate) / lbScaleRate) * 100;
-    
+
     if (differential < -10) {
       return {
         status: "below",
@@ -82,8 +82,8 @@ export function ServiceLinkCard({ link, onDelete, lbScaleRate }: ServiceLinkCard
 
   const rateCompliance = getRateComplianceStatus();
   const totalContracts = link.lb_contracts_completed + link.external_contracts_completed;
-  const lbContractRatio = totalContracts > 0 
-    ? ((link.lb_contracts_completed / totalContracts) * 100).toFixed(0) 
+  const lbContractRatio = totalContracts > 0
+    ? ((link.lb_contracts_completed / totalContracts) * 100).toFixed(0)
     : "0";
 
   return (
@@ -96,18 +96,18 @@ export function ServiceLinkCard({ link, onDelete, lbScaleRate }: ServiceLinkCard
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-semibold capitalize">{link.service_platform}</h3>
                 {getVerificationIcon()}
-                
+
                 <Badge variant={link.is_active ? "default" : "secondary"}>
                   {link.verification_status}
                 </Badge>
-                
+
                 {link.rate_differential_flagged && (
                   <Badge variant="destructive" className="gap-1">
                     <AlertTriangle className="h-3 w-3" />
                     Rate Flagged
                   </Badge>
                 )}
-                
+
                 {link.violations_count > 0 && (
                   <Badge variant="destructive" className="gap-1">
                     <Shield className="h-3 w-3" />
@@ -152,7 +152,7 @@ export function ServiceLinkCard({ link, onDelete, lbScaleRate }: ServiceLinkCard
                     <p className="text-xs text-muted-foreground">Category: {link.lb_rate_category}</p>
                   )}
                 </div>
-                
+
                 {rateCompliance && (
                   <Badge variant={rateCompliance.variant} className="gap-1">
                     {rateCompliance.icon}
@@ -190,8 +190,8 @@ export function ServiceLinkCard({ link, onDelete, lbScaleRate }: ServiceLinkCard
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                <strong>Rate Compliance Issue:</strong> Your advertised rates are significantly below 
-                LB scale rates. This may result in violations if you accept work from LB members 
+                <strong>Rate Compliance Issue:</strong> Your advertised rates are significantly below
+                LB scale rates. This may result in violations if you accept work from LB members
                 at these rates. Please update your platform rates or contact support.
               </AlertDescription>
             </Alert>

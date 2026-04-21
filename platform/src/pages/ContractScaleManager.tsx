@@ -15,7 +15,7 @@ export default function ContractScaleManager() {
         .select("*")
         .eq("id", projectId)
         .single();
-      
+
       if (error) throw error;
       return data;
     },

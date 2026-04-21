@@ -38,12 +38,12 @@ export const ChainVotingVisualizer: React.FC = () => {
                 <div className={`text-xs font-bold ${node.active ? 'text-blue-400' : 'text-slate-500'}`}>
                   {node.bonus}
                 </div>
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0.8 }}
                   animate={{ scale: node.active ? 1.1 : 1 }}
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    node.active 
-                      ? 'bg-blue-950 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]' 
+                    node.active
+                      ? 'bg-blue-950 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]'
                       : 'bg-slate-900 border-slate-700'
                   }`}
                 >

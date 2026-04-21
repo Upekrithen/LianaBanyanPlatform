@@ -39,10 +39,10 @@ serve(async (req) => {
     }
 
     const voteData: VoteRequest = await req.json();
-    
+
     // Generate idempotency key (user_id + production_level + timestamp hash)
     const idempotencyKey = `vote_${user.id}_${voteData.production_level_id}_${Date.now()}`;
-    
+
     // Check if already processed (prevent duplicate votes)
     const { data: existingOp } = await supabaseClient.rpc('is_operation_processed', {
       _idempotency_key: idempotencyKey
@@ -50,10 +50,10 @@ serve(async (req) => {
 
     if (existingOp && existingOp[0]?.processed) {
       return new Response(
-        JSON.stringify({ 
-          success: true, 
+        JSON.stringify({
+          success: true,
           message: 'Vote already processed',
-          result: existingOp[0].response 
+          result: existingOp[0].response
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -79,8 +79,8 @@ serve(async (req) => {
       });
 
       return new Response(
-        JSON.stringify({ 
-          success: false, 
+        JSON.stringify({
+          success: false,
           message: 'System busy - vote queued for processing',
           retry: true
         }),
@@ -157,8 +157,8 @@ serve(async (req) => {
       });
 
       return new Response(
-        JSON.stringify({ 
-          success: true, 
+        JSON.stringify({
+          success: true,
           message: 'Vote processed successfully',
           vote_id: voteResult.id
         }),
@@ -203,11 +203,11 @@ serve(async (req) => {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error processing vote:', error);
     return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: errorMessage 
+      JSON.stringify({
+        success: false,
+        error: errorMessage
       }),
-      { 
+      {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500
       }

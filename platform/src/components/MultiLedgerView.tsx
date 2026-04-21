@@ -433,7 +433,7 @@ export function MultiLedgerView() {
                       {txn.counterparty || "—"}
                     </TableCell>
                     <TableCell className={`text-right font-medium ${
-                      txn.type === "credit" ? "text-green-600" : 
+                      txn.type === "credit" ? "text-green-600" :
                       txn.type === "debit" ? "text-red-600" : ""
                     }`}>
                       {txn.type === "credit" ? "+" : txn.type === "debit" ? "-" : ""}

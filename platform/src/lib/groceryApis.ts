@@ -2,7 +2,7 @@
  * Grocery Store API Integration
  * ==============================
  * Connects shopping lists to external grocery store APIs.
- * 
+ *
  * Supported stores:
  * - HEB (Texas) - Partner API
  * - Kroger (National) - API
@@ -84,12 +84,12 @@ export const GROCERY_STORES: GroceryStore[] = [
 abstract class GroceryApiClient {
   protected apiKey?: string;
   protected baseUrl: string;
-  
+
   constructor(baseUrl: string, apiKey?: string) {
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
   }
-  
+
   abstract searchProducts(query: string): Promise<any[]>;
   abstract addToCart(items: GroceryItem[]): Promise<CartResult>;
   abstract getCartUrl(): Promise<string>;
@@ -103,10 +103,10 @@ export class HEBApiClient extends GroceryApiClient {
   constructor(apiKey?: string) {
     super('https://api.heb.com/v1', apiKey);
   }
-  
+
   async searchProducts(query: string): Promise<any[]> {
     // INFRASTRUCTURE NOTE: This needs real HEB API integration when API key is available
-    
+
     // Simulated response
     return [{
       id: `heb-${Date.now()}`,
@@ -115,14 +115,14 @@ export class HEBApiClient extends GroceryApiClient {
       available: true,
     }];
   }
-  
+
   async addToCart(items: GroceryItem[]): Promise<CartResult> {
     // INFRASTRUCTURE NOTE: This needs real HEB API authentication and cart integration
     const notFound: string[] = [];
-    
+
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     return {
       success: true,
       cartUrl: 'https://www.heb.com/cart',
@@ -131,7 +131,7 @@ export class HEBApiClient extends GroceryApiClient {
       itemsNotFound: notFound,
     };
   }
-  
+
   async getCartUrl(): Promise<string> {
     return 'https://www.heb.com/cart';
   }
@@ -145,10 +145,10 @@ export class KrogerApiClient extends GroceryApiClient {
   constructor(apiKey?: string) {
     super('https://api.kroger.com/v1', apiKey);
   }
-  
+
   async searchProducts(query: string): Promise<any[]> {
     // INFRASTRUCTURE NOTE: This needs real Kroger API integration
-    
+
     return [{
       id: `kroger-${Date.now()}`,
       name: query,
@@ -156,12 +156,12 @@ export class KrogerApiClient extends GroceryApiClient {
       available: true,
     }];
   }
-  
+
   async addToCart(items: GroceryItem[]): Promise<CartResult> {
     // INFRASTRUCTURE NOTE: This needs real Kroger API cart integration
-    
+
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     return {
       success: true,
       cartUrl: 'https://www.kroger.com/cart',
@@ -170,7 +170,7 @@ export class KrogerApiClient extends GroceryApiClient {
       itemsNotFound: [],
     };
   }
-  
+
   async getCartUrl(): Promise<string> {
     return 'https://www.kroger.com/cart';
   }
@@ -184,10 +184,10 @@ export class InstacartApiClient extends GroceryApiClient {
   constructor(apiKey?: string) {
     super('https://connect.instacart.com/v1', apiKey);
   }
-  
+
   async searchProducts(query: string): Promise<any[]> {
     // INFRASTRUCTURE NOTE: This needs real Instacart Connect API integration
-    
+
     return [{
       id: `ic-${Date.now()}`,
       name: query,
@@ -195,12 +195,12 @@ export class InstacartApiClient extends GroceryApiClient {
       available: true,
     }];
   }
-  
+
   async addToCart(items: GroceryItem[]): Promise<CartResult> {
     // INFRASTRUCTURE NOTE: This needs real Instacart cart integration
-    
+
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     return {
       success: true,
       cartUrl: 'https://www.instacart.com/store/checkout',
@@ -209,7 +209,7 @@ export class InstacartApiClient extends GroceryApiClient {
       itemsNotFound: [],
     };
   }
-  
+
   async getCartUrl(): Promise<string> {
     return 'https://www.instacart.com/store/checkout';
   }
@@ -222,10 +222,10 @@ export class AmazonFreshApiClient extends GroceryApiClient {
   constructor(apiKey?: string) {
     super('https://api.amazon.com/fresh/v1', apiKey);
   }
-  
+
   async searchProducts(query: string): Promise<any[]> {
     // INFRASTRUCTURE NOTE: This needs real Amazon Fresh API integration
-    
+
     return [{
       id: `amz-${Date.now()}`,
       name: query,
@@ -233,12 +233,12 @@ export class AmazonFreshApiClient extends GroceryApiClient {
       available: true,
     }];
   }
-  
+
   async addToCart(items: GroceryItem[]): Promise<CartResult> {
     // INFRASTRUCTURE NOTE: This needs real Amazon Fresh cart integration
-    
+
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     return {
       success: true,
       cartUrl: 'https://www.amazon.com/alm/storefront',
@@ -247,7 +247,7 @@ export class AmazonFreshApiClient extends GroceryApiClient {
       itemsNotFound: [],
     };
   }
-  
+
   async getCartUrl(): Promise<string> {
     return 'https://www.amazon.com/alm/storefront';
   }
@@ -259,7 +259,7 @@ export class AmazonFreshApiClient extends GroceryApiClient {
 export function getGroceryApiClient(storeId: string): GroceryApiClient | null {
   // In production, API keys would come from environment variables
   const apiKey = undefined;
-  
+
   switch (storeId) {
     case 'heb':
       return new HEBApiClient(apiKey);
@@ -278,11 +278,11 @@ export function getGroceryApiClient(storeId: string): GroceryApiClient | null {
  * Send shopping list to external store
  */
 export async function sendToStore(
-  storeId: string, 
+  storeId: string,
   items: GroceryItem[]
 ): Promise<CartResult> {
   const client = getGroceryApiClient(storeId);
-  
+
   if (!client) {
     return {
       success: false,
@@ -291,7 +291,7 @@ export async function sendToStore(
       error: `Store ${storeId} is not supported`,
     };
   }
-  
+
   try {
     return await client.addToCart(items);
   } catch (error: any) {
@@ -316,13 +316,13 @@ export function generateShareableListUrl(listId: string): string {
  */
 export function exportListAsText(items: GroceryItem[]): string {
   const lines: string[] = ['Shopping List', '=============', ''];
-  
+
   items.forEach(item => {
     const qty = item.quantity || 1;
     const unit = item.unit || '';
     lines.push(`☐ ${qty} ${unit} ${item.name}`.trim());
   });
-  
+
   return lines.join('\n');
 }
 

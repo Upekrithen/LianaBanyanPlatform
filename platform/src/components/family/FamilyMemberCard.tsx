@@ -56,7 +56,7 @@ export function FamilyMemberCard({
   const { session } = useAuth();
   const queryClient = useQueryClient();
   const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
-  
+
   const isSelf = member.id === currentMemberId;
   const isPending = !member.joined_at;
 
@@ -105,9 +105,9 @@ export function FamilyMemberCard({
       <div
         className={`
           relative rounded-xl p-4 transition-all
-          ${isSelf 
-            ? 'bg-purple-500/10 border border-purple-500/30' 
-            : isConnected 
+          ${isSelf
+            ? 'bg-purple-500/10 border border-purple-500/30'
+            : isConnected
               ? 'bg-white/5 border border-white/10 hover:border-white/20'
               : 'bg-red-500/5 border border-red-500/20 opacity-60'
           }
@@ -139,7 +139,7 @@ export function FamilyMemberCard({
                 {isSelf && <span className="text-xs text-muted-foreground ml-1">(you)</span>}
               </h3>
             </div>
-            
+
             {isPending ? (
               <Badge variant="outline" className="mt-1 text-xs bg-amber-500/10 text-amber-400 border-amber-500/30">
                 Pending Invite
@@ -190,7 +190,7 @@ export function FamilyMemberCard({
           <AlertDialogHeader>
             <AlertDialogTitle>Disconnect from {member.nickname}?</AlertDialogTitle>
             <AlertDialogDescription>
-              You will no longer share content with {member.nickname} and they won't see your shared content. 
+              You will no longer share content with {member.nickname} and they won't see your shared content.
               This doesn't remove them from the family - just your individual connection.
               <br /><br />
               You can reconnect at any time.

@@ -3,7 +3,7 @@
 -- ============================================================================
 -- Innovation #1355-#1362: Contextual Cue Card Routing
 -- Your stamp, your identity — but configurable destination context
--- 
+--
 -- Integrates with:
 -- - Slingshot Pass-Through (#1244-#1252) — Gravity well routing
 -- - The Furnace (#1253-#1260) — Verification registry
@@ -16,10 +16,10 @@
 CREATE TABLE IF NOT EXISTS cue_card_destinations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Which Cue Card template this destination applies to (NULL = default for all)
   cue_card_template_id UUID REFERENCES cue_card_templates(id),
-  
+
   -- Destination configuration
   destination_type TEXT NOT NULL CHECK (destination_type IN (
     'single_project',   -- Route to exactly one project
@@ -27,38 +27,38 @@ CREATE TABLE IF NOT EXISTS cue_card_destinations (
     'category',         -- Show all projects in a category
     'portfolio'         -- Show full portfolio (default behavior)
   )),
-  
+
   -- For single_project or multi_project: which project(s)
   project_ids UUID[] DEFAULT '{}',
-  
+
   -- For category: which category and filter
   category_slug TEXT,
   include_owned_only BOOLEAN DEFAULT false,  -- Only MY projects in category?
-  
+
   -- For portfolio: optional filter
   portfolio_filter TEXT,
-  
+
   -- Attribution tracking
   is_own_project BOOLEAN DEFAULT true,       -- Do I own these projects?
   promotion_credit_rate NUMERIC(5,2) DEFAULT 0,  -- % credit for promoting others
-  
+
   -- Display metadata
   display_name TEXT,  -- "My Food Projects", "HexIsle Launch", etc.
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Each user can have one destination config per template
   UNIQUE(user_id, cue_card_template_id)
 );
 
 -- Index for fast lookup by context ID (used in RedCarpet routing)
-CREATE INDEX IF NOT EXISTS idx_cue_card_destinations_lookup 
+CREATE INDEX IF NOT EXISTS idx_cue_card_destinations_lookup
   ON cue_card_destinations(id, user_id);
 
 -- Index for user's destinations
-CREATE INDEX IF NOT EXISTS idx_cue_card_destinations_user 
+CREATE INDEX IF NOT EXISTS idx_cue_card_destinations_user
   ON cue_card_destinations(user_id);
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -68,40 +68,40 @@ CREATE INDEX IF NOT EXISTS idx_cue_card_destinations_user
 
 CREATE TABLE IF NOT EXISTS promotion_attributions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Who promoted
   promoter_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- What was promoted
   project_id UUID NOT NULL,
   destination_id UUID REFERENCES cue_card_destinations(id),
-  
+
   -- Who clicked
   clicker_id UUID REFERENCES auth.users(id),
   clicker_ghost_id TEXT,  -- For ghost users
-  
+
   -- Attribution details
   click_source TEXT,  -- 'qr_scan', 'social_share', 'direct_link'
   platform TEXT,      -- 'tiktok', 'twitter', 'linkedin', etc.
-  
+
   -- Credit awarded
   marks_awarded NUMERIC(10,2) DEFAULT 0,
-  
+
   -- Conversion tracking
   converted_to_signup BOOLEAN DEFAULT false,
   converted_to_backer BOOLEAN DEFAULT false,
   conversion_value NUMERIC(12,2) DEFAULT 0,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Index for promoter's attributions
-CREATE INDEX IF NOT EXISTS idx_promotion_attributions_promoter 
+CREATE INDEX IF NOT EXISTS idx_promotion_attributions_promoter
   ON promotion_attributions(promoter_id);
 
 -- Index for project attributions
-CREATE INDEX IF NOT EXISTS idx_promotion_attributions_project 
+CREATE INDEX IF NOT EXISTS idx_promotion_attributions_project
   ON promotion_attributions(project_id);
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -111,42 +111,42 @@ CREATE INDEX IF NOT EXISTS idx_promotion_attributions_project
 
 CREATE TABLE IF NOT EXISTS leviathan_cue_cards (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Card identification
   card_code TEXT UNIQUE NOT NULL,  -- e.g., "CC-2026-03-01-X9F2"
-  
+
   -- Ownership
   stamp_owner_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Destination binding
   destination_id UUID REFERENCES cue_card_destinations(id),
   destination_type TEXT,
   bound_project_ids UUID[],
-  
+
   -- Security
   payload_hash TEXT NOT NULL,  -- SHA-256 of signed payload
   signature TEXT NOT NULL,     -- HMAC signature for verification
-  
+
   -- Verification status
   verification_status TEXT DEFAULT 'verified' CHECK (verification_status IN (
     'verified', 'pending', 'suspicious', 'blocked'
   )),
   trust_score INTEGER DEFAULT 100 CHECK (trust_score >= 0 AND trust_score <= 100),
-  
+
   -- Usage statistics
   total_scans INTEGER DEFAULT 0,
   last_scan_at TIMESTAMPTZ,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Index for verification lookups
-CREATE INDEX IF NOT EXISTS idx_leviathan_cue_cards_code 
+CREATE INDEX IF NOT EXISTS idx_leviathan_cue_cards_code
   ON leviathan_cue_cards(card_code);
 
-CREATE INDEX IF NOT EXISTS idx_leviathan_cue_cards_hash 
+CREATE INDEX IF NOT EXISTS idx_leviathan_cue_cards_hash
   ON leviathan_cue_cards(payload_hash);
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -154,7 +154,7 @@ CREATE INDEX IF NOT EXISTS idx_leviathan_cue_cards_hash
 -- ─────────────────────────────────────────────────────────────────────────────
 
 INSERT INTO dna_lock (parameter_key, parameter_value, data_type, is_locked, locked_by, description, category)
-VALUES 
+VALUES
   ('promotion_click_marks', '1', 'numeric', true, 'SYSTEM', 'MARKS earned per click when promoting others projects', 'economics'),
   ('promotion_signup_marks', '5', 'numeric', true, 'SYSTEM', 'MARKS earned when promotion leads to signup', 'economics'),
   ('promotion_conversion_rate', '0.10', 'numeric', true, 'SYSTEM', 'Percentage of MARKS reward for backer conversion (10%)', 'economics'),
@@ -210,11 +210,11 @@ DECLARE
   exists_check BOOLEAN;
 BEGIN
   LOOP
-    code := 'CC-' || TO_CHAR(NOW(), 'YYYY-MM-DD') || '-' || 
+    code := 'CC-' || TO_CHAR(NOW(), 'YYYY-MM-DD') || '-' ||
             UPPER(SUBSTRING(MD5(RANDOM()::TEXT) FROM 1 FOR 4));
-    
+
     SELECT EXISTS(SELECT 1 FROM leviathan_cue_cards WHERE card_code = code) INTO exists_check;
-    
+
     IF NOT exists_check THEN
       RETURN code;
     END IF;
@@ -251,7 +251,7 @@ BEGIN
     p_project_ids, p_category_slug, p_include_owned_only,
     p_is_own_project, p_display_name
   )
-  ON CONFLICT (user_id, cue_card_template_id) 
+  ON CONFLICT (user_id, cue_card_template_id)
   DO UPDATE SET
     destination_type = EXCLUDED.destination_type,
     project_ids = EXCLUDED.project_ids,
@@ -261,17 +261,17 @@ BEGIN
     display_name = EXCLUDED.display_name,
     updated_at = NOW()
   RETURNING id INTO v_destination_id;
-  
+
   -- Generate card code
   v_card_code := generate_cue_card_code();
-  
+
   -- Create payload for hashing
   v_payload := p_user_id::TEXT || ':' || v_destination_id::TEXT || ':' || EXTRACT(EPOCH FROM NOW())::TEXT;
   v_payload_hash := ENCODE(SHA256(v_payload::BYTEA), 'hex');
-  
+
   -- Simple signature (in production, use proper HMAC with secret)
   v_signature := ENCODE(SHA256((v_payload || ':secret')::BYTEA), 'hex');
-  
+
   -- Register in Leviathan
   INSERT INTO leviathan_cue_cards (
     card_code, stamp_owner_id, destination_id, destination_type,
@@ -281,7 +281,7 @@ BEGIN
     p_project_ids, v_payload_hash, v_signature
   )
   ON CONFLICT DO NOTHING;
-  
+
   RETURN JSON_BUILD_OBJECT(
     'destination_id', v_destination_id,
     'card_code', v_card_code,
@@ -306,24 +306,24 @@ BEGIN
   SELECT * INTO v_destination
   FROM cue_card_destinations
   WHERE id = p_context_id AND user_id = p_herald_id;
-  
+
   IF NOT FOUND THEN
     RETURN JSON_BUILD_OBJECT(
       'valid', false,
       'error', 'Destination not found or does not belong to herald'
     );
   END IF;
-  
+
   -- Fetch Leviathan record
   SELECT * INTO v_leviathan
   FROM leviathan_cue_cards
   WHERE destination_id = p_context_id;
-  
+
   -- Fetch owner info
   SELECT display_name, full_name INTO v_owner
   FROM profiles
   WHERE id = p_herald_id;
-  
+
   -- Fetch bound projects
   IF v_destination.destination_type IN ('single_project', 'multi_project') THEN
     SELECT JSON_AGG(JSON_BUILD_OBJECT('id', p.id, 'name', p.name))
@@ -331,12 +331,12 @@ BEGIN
     FROM projects p
     WHERE p.id = ANY(v_destination.project_ids);
   END IF;
-  
+
   -- Increment scan count
   UPDATE leviathan_cue_cards
   SET total_scans = total_scans + 1, last_scan_at = NOW()
   WHERE destination_id = p_context_id;
-  
+
   RETURN JSON_BUILD_OBJECT(
     'valid', true,
     'verification_status', COALESCE(v_leviathan.verification_status, 'verified'),
@@ -371,7 +371,7 @@ BEGIN
   -- Get marks per click from DNA Lock
   SELECT COALESCE(param_value::NUMERIC, 1) INTO v_marks
   FROM dna_lock WHERE param_key = 'promotion_click_marks';
-  
+
   -- Insert attribution
   INSERT INTO promotion_attributions (
     promoter_id, project_id, destination_id,
@@ -383,12 +383,12 @@ BEGIN
     p_click_source, p_platform, v_marks
   )
   RETURNING id INTO v_attribution_id;
-  
+
   -- Award marks to promoter
   UPDATE user_marks
   SET total_marks = total_marks + v_marks
   WHERE user_id = p_promoter_id;
-  
+
   RETURN JSON_BUILD_OBJECT(
     'attribution_id', v_attribution_id,
     'marks_awarded', v_marks
@@ -402,7 +402,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- User's destinations with project names
 CREATE OR REPLACE VIEW v_user_cue_card_destinations AS
-SELECT 
+SELECT
   d.*,
   t.title AS template_title,
   (
@@ -415,7 +415,7 @@ LEFT JOIN cue_card_templates t ON t.id = d.cue_card_template_id;
 
 -- Promotion leaderboard
 CREATE OR REPLACE VIEW v_promotion_leaderboard AS
-SELECT 
+SELECT
   promoter_id,
   COUNT(*) AS total_clicks,
   SUM(marks_awarded) AS total_marks_earned,

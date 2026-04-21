@@ -22,8 +22,8 @@ The medallions are minted. The platform is built. The first fifty members are re
 
 With shared purpose,
 
-**Jonathan Jones**  
-Founder & General Manager, Liana Banyan Corporation  
+**Jonathan Jones**
+Founder & General Manager, Liana Banyan Corporation
 *(And yes, I know what happened to Paul Mantz. That's why I'm asking.)*
 
 406-578-1232 | Founder@LianaBanyan.com

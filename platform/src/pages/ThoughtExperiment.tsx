@@ -2,16 +2,16 @@
  * THOUGHT EXPERIMENT — "What If" Page
  * ====================================
  * Main simulation page where users run business "what-if" scenarios.
- * 
+ *
  * Flow:
  * 1. CRANK IT (cold start) → "What If?" button → Here
  * 2. Ghost World → "Test a Business Idea" card → BusinessSimulator modal
  * 3. Dashboard → Portfolio → Saved simulations
- * 
+ *
  * Pricing:
  * - First 100 FREE (Ghosts and Members)
  * - $5 per 100 additional (same as membership — by design)
- * 
+ *
  * Member: Results auto-save to portfolio (persists forever)
  * Ghost: Results in localStorage (does NOT persist across devices)
  */
@@ -55,7 +55,7 @@ export default function ThoughtExperiment() {
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
   const { toast } = useToast();
-  
+
   const [activeTab, setActiveTab] = useState('simulate');
   const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([]);
   const [attemptCount, setAttemptCount] = useState(0);
@@ -88,7 +88,7 @@ export default function ThoughtExperiment() {
     const newCount = attemptCount + 1;
     setAttemptCount(newCount);
     localStorage.setItem('lb_thought_experiment_attempts', newCount.toString());
-    
+
     // Check if approaching limit
     if (newCount === FREE_TIER_LIMIT - 10) {
       toast({
@@ -96,7 +96,7 @@ export default function ThoughtExperiment() {
         description: "After that, it's $5 per 100 — same as membership.",
       });
     }
-    
+
     if (newCount >= FREE_TIER_LIMIT) {
       const paidBatches = parseInt(localStorage.getItem('lb_thought_experiment_batches') || '0');
       const paidAttempts = paidBatches * 100;
@@ -108,17 +108,17 @@ export default function ThoughtExperiment() {
 
   const handleSimulationComplete = (scenario: BusinessScenario, projections: BusinessProjections) => {
     incrementAttemptCount();
-    
+
     // Save to localStorage for Ghosts
     const newSim: SavedSimulation = {
       scenario: { ...scenario, projections },
       projections,
       savedAt: new Date().toISOString(),
     };
-    
+
     const updated = [...savedSimulations, newSim];
     setSavedSimulations(updated);
-    
+
     // Persist to localStorage
     const forStorage = updated.map(s => ({
       ...s.scenario,
@@ -126,7 +126,7 @@ export default function ThoughtExperiment() {
       savedAt: s.savedAt,
     }));
     localStorage.setItem('lb_ghost_simulations', JSON.stringify(forStorage));
-    
+
     toast({
       title: "Simulation complete!",
       description: `Net score: ${(projections.netScore * 100).toFixed(0)}%${isGhost ? ' — Saved to browser' : ''}`,
@@ -142,8 +142,8 @@ export default function ThoughtExperiment() {
       openOnboard({ reason: "save your simulations", actionLabel: "Join", membershipIncluded: true });
     } else {
       // Navigate to initiative enrollment with pre-filled data
-      navigate(`/initiatives/${scenario.initiativeId}`, { 
-        state: { adoptedScenario: scenario } 
+      navigate(`/initiatives/${scenario.initiativeId}`, {
+        state: { adoptedScenario: scenario }
       });
     }
   };
@@ -191,7 +191,7 @@ export default function ThoughtExperiment() {
               Total run: <strong>{attemptCount}</strong>
             </span>
           </div>
-          
+
           {isGhost && (
             <Button variant="outline" size="sm" onClick={() => openOnboard({ reason: "save your simulations", actionLabel: "Join", membershipIncluded: true })} className="gap-1">
               <Sparkles className="w-3 h-3" />
@@ -275,7 +275,7 @@ export default function ThoughtExperiment() {
                 <div className="flex-1">
                   <h3 className="font-semibold">Your simulations are stored locally</h3>
                   <p className="text-sm text-muted-foreground">
-                    Clear your browser and they're gone. Join for $5/year to save permanently, 
+                    Clear your browser and they're gone. Join for $5/year to save permanently,
                     adopt your best ideas, and start your business.
                   </p>
                 </div>

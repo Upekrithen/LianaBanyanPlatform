@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS public.charitable_business_tiers (
   created_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
-INSERT INTO public.charitable_business_tiers 
+INSERT INTO public.charitable_business_tiers
   (tier_name, tier_level, display_name, icon, badge_color, description, min_donation_percent, max_donation_percent, trust_score_bonus, featured_placement, matching_eligible, matching_cap_percent)
 VALUES
   ('ember', 1, 'Ember Partner', '🔥', 'orange-300', 'Entry-level charitable partnership', 1.00, 2.99, 5, false, false, NULL),
@@ -116,9 +116,9 @@ CREATE TABLE IF NOT EXISTS public.cue_card_registry (
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-    AND table_name = 'cue_card_registry' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'cue_card_registry'
     AND column_name = 'stamp_id'
   ) THEN
     ALTER TABLE public.cue_card_registry ADD COLUMN stamp_id UUID REFERENCES public.stamps(id);
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS public.badge_types (
   created_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
-INSERT INTO public.badge_types 
+INSERT INTO public.badge_types
   (badge_code, badge_category, display_name, description, icon, badge_color, requirement_type, requirement_value, tier_level, tier_name, trust_score_bonus)
 VALUES
   ('sponsor_seedling', 'sponsorship', 'Seedling Sponsor', 'Sponsored 25+ Credits', '🌱', 'green-300', 'credits_sponsored', 25, 1, 'seedling', 2),
@@ -386,16 +386,16 @@ DECLARE
   v_stamp_code TEXT;
 BEGIN
   v_stamp_code := 'ST-' || TO_CHAR(NOW(), 'YYMM') || '-' || UPPER(SUBSTR(gen_random_uuid()::text, 1, 4));
-  
+
   INSERT INTO public.stamps (user_id, stamp_code)
   VALUES (p_user_id, v_stamp_code)
   ON CONFLICT (user_id) DO NOTHING
   RETURNING id INTO v_stamp_id;
-  
+
   IF v_stamp_id IS NULL THEN
     SELECT id INTO v_stamp_id FROM public.stamps WHERE user_id = p_user_id;
   END IF;
-  
+
   RETURN v_stamp_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -413,7 +413,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     (ccr.security_state = 'valid') AS is_valid,
     ccr.trust_score,
     a.display_name AS business_name,
@@ -445,7 +445,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     bt.badge_code,
     bt.display_name,
     bt.description,

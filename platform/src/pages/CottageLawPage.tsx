@@ -2,7 +2,7 @@
  * Cottage Law Compliance Page
  * ============================
  * Helps makers understand and comply with cottage food laws by state.
- * 
+ *
  * Features:
  * - State-specific rules lookup
  * - Community-contributed guides
@@ -22,12 +22,12 @@ import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Home, 
-  MapPin, 
-  FileText, 
-  AlertTriangle, 
-  CheckCircle2, 
+import {
+  Home,
+  MapPin,
+  FileText,
+  AlertTriangle,
+  CheckCircle2,
   XCircle,
   ExternalLink,
   BookOpen,
@@ -38,8 +38,8 @@ import {
   Clock,
   Users
 } from 'lucide-react';
-import { 
-  getStateCottageLawRules, 
+import {
+  getStateCottageLawRules,
   checkPermitRequirement,
   getComplianceChecklist,
   generateLabelContent,
@@ -82,7 +82,7 @@ export default function CottageLawPage() {
     enabled: !!selectedState,
   });
 
-  const permitCheck = rules 
+  const permitCheck = rules
     ? checkPermitRequirement(rules, weeklyOutput, 0, annualRevenue)
     : null;
 
@@ -144,7 +144,7 @@ export default function CottageLawPage() {
                   {rules.state_name} Cottage Food Laws
                 </CardTitle>
                 <CardDescription>
-                  {rules.is_allowed 
+                  {rules.is_allowed
                     ? 'Cottage food operations are allowed in this state!'
                     : 'Cottage food sales may be restricted in this state.'
                   }
@@ -334,7 +334,7 @@ export default function CottageLawPage() {
                             <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                           )}
                           <span className="font-medium">
-                            {permitCheck.required 
+                            {permitCheck.required
                               ? 'Permit may be required'
                               : permitCheck.urgency === 'approaching'
                                 ? 'Approaching limit'
@@ -356,9 +356,9 @@ export default function CottageLawPage() {
                           <span>Annual Revenue Limit</span>
                           <span>${annualRevenue.toLocaleString()} / ${rules.annual_revenue_limit.toLocaleString()}</span>
                         </div>
-                        <Progress 
-                          value={(annualRevenue / rules.annual_revenue_limit) * 100} 
-                          className="h-2" 
+                        <Progress
+                          value={(annualRevenue / rules.annual_revenue_limit) * 100}
+                          className="h-2"
                         />
                       </div>
                     )}
@@ -402,7 +402,7 @@ export default function CottageLawPage() {
               <MapPin className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
               <h2 className="text-xl font-bold mb-2">Select Your State</h2>
               <p className="text-muted-foreground max-w-md mx-auto">
-                Each state has different cottage food laws. Select your state above to see 
+                Each state has different cottage food laws. Select your state above to see
                 what's allowed, what permits you need, and how to stay compliant.
               </p>
             </CardContent>

@@ -145,7 +145,7 @@ serve(async (req) => {
 
     // Log API usage in background (non-blocking)
     const responseTimeMs = Date.now() - metrics.startTime;
-    
+
     // Fire and forget - don't await
     supabase.rpc('log_api_usage', {
       _project_id: project.id,
@@ -191,11 +191,11 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Network lockbox error:', error);
-    
+
     const responseTimeMs = Date.now() - metrics.startTime;
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     const errorBody = JSON.stringify({ error: errorMessage });
-    
+
     return new Response(errorBody, {
       status: 500,
       headers: {

@@ -45,7 +45,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
         .eq('user_id', user.id)
         .eq('is_active', true)
         .single();
-      
+
       setIsTribeMember(!!tribeMembership);
 
       // Check guild memberships
@@ -55,7 +55,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
         .eq('user_id', user.id)
         .eq('is_active', true)
         .limit(1);
-      
+
       setHasGuildMemberships(!!guildMemberships && guildMemberships.length > 0);
     };
 
@@ -100,7 +100,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
         {/* Community Preferences */}
         <div className="space-y-3">
           <label className="text-sm font-medium">Community Memberships</label>
-          
+
           {/* Tribe Status */}
           <div className="space-y-2">
             <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -114,7 +114,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {isTribeMember 
+                    {isTribeMember
                       ? "Share resources with up to 9 members"
                       : "Join or create a tribe to unlock benefits"}
                   </p>
@@ -139,7 +139,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {hasGuildMemberships 
+                    {hasGuildMemberships
                       ? "Professional networks and opportunities"
                       : "Join guilds for industry recognition"}
                   </p>
@@ -163,7 +163,7 @@ export function UnifiedPreferences({ className }: UnifiedPreferencesProps) {
           </div>
           <AdvancedThemeSwitcher variant="grid" />
         </div>
-        
+
         <div className="space-y-2">
           <label className="text-sm font-medium">
             {t('preferences.language', 'Language')}

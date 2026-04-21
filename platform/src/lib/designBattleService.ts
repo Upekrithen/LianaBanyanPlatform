@@ -2,7 +2,7 @@
  * DESIGN BATTLE SERVICE
  * =====================
  * Competitive bounty system where 2+ participants compete for the same work.
- * 
+ *
  * Key Mechanics:
  * - Auto-triggers when 2+ people sign up for the same bounty
  * - Mixed currency ante (Credits, Marks, Joules)
@@ -26,14 +26,14 @@ import { JOULE_MULTIPLIERS, type JoulesBacking } from "./currencyService";
 // TYPES
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type BattleStatus = 
+export type BattleStatus =
   | "pending"      // Waiting for more participants
   | "active"       // Contest in progress
   | "voting"       // Submissions in, community voting
   | "completed"    // Winner declared, payouts distributed
   | "cancelled";   // Not enough participants or other issue
 
-export type SkillTier = 
+export type SkillTier =
   | "novice"       // New to this type of work
   | "apprentice"   // Some experience
   | "journeyman"   // Solid experience
@@ -41,7 +41,7 @@ export type SkillTier =
   | "master"       // Top tier
   | "grandmaster"; // Elite
 
-export type BattleTimeframe = 
+export type BattleTimeframe =
   | "1hour"
   | "4hours"
   | "1day"
@@ -151,7 +151,7 @@ export const TIMEFRAME_MS: Record<BattleTimeframe, number> = {
 /**
  * Get current GAP (Global Appreciation Pool) rate.
  * This determines how Joules convert to credit-equivalent.
- * 
+ *
  * GAP rate reflects platform growth and locked value appreciation.
  * Early backers get higher multipliers (5x premint → 1x established).
  */
@@ -170,7 +170,7 @@ export async function getCurrentGapRate(): Promise<number> {
 
 /**
  * Convert a mixed currency ante to credit-equivalent.
- * 
+ *
  * Conversion rules:
  * - Credits: 1:1 (1 Credit = 1 credit-equivalent)
  * - Marks: 1:1 (1 Mark = 1 credit-equivalent for ante purposes)
@@ -178,10 +178,10 @@ export async function getCurrentGapRate(): Promise<number> {
  */
 export async function convertAnteToCredits(ante: CurrencyAnte): Promise<AnteEquivalent> {
   const gapRate = await getCurrentGapRate();
-  
-  const creditEquivalent = 
-    ante.credits + 
-    ante.marks + 
+
+  const creditEquivalent =
+    ante.credits +
+    ante.marks +
     (ante.joules * gapRate);
 
   return {
@@ -194,7 +194,7 @@ export async function convertAnteToCredits(ante: CurrencyAnte): Promise<AnteEqui
 
 /**
  * Convert credit-equivalent back to mixed currency for payout.
- * 
+ *
  * Payout preference order:
  * 1. Credits (most liquid)
  * 2. Marks (if pot contained Marks)
@@ -206,7 +206,7 @@ export function calculatePayoutMix(
   gapRate: number
 ): CurrencyAnte {
   const totalPot = potComposition.totalCredits + potComposition.totalMarks + (potComposition.totalJoules * gapRate);
-  
+
   if (totalPot === 0) {
     return { credits: creditEquivalent, marks: 0, joules: 0 };
   }
@@ -229,7 +229,7 @@ export function calculatePayoutMix(
 
 /**
  * Calculate the full pot breakdown for a Design Battle.
- * 
+ *
  * Example from Founder:
  * Joe: 10 Joules @ 2x GAP = 20 credit-equiv
  * Me: 1 Mark = 1 credit-equiv
@@ -246,7 +246,7 @@ export async function calculatePot(
 ): Promise<PotCalculation> {
   // Sum all antes
   const totalAnte = participants.reduce(
-    (sum, p) => sum + p.ante.creditEquivalent, 
+    (sum, p) => sum + p.ante.creditEquivalent,
     0
   );
 
@@ -531,7 +531,7 @@ export async function completeBattle(battleId: string): Promise<{
 
   // Winner is participant with most votes
   const winner = participants[0];
-  
+
   // Calculate final pot
   const participantAntes = participants.map(p => ({
     id: p.id,
@@ -756,23 +756,23 @@ export default {
   getCurrentGapRate,
   convertAnteToCredits,
   calculatePayoutMix,
-  
+
   // Pot Calculation
   calculatePot,
   calculateWinnerPayout,
-  
+
   // Battle Management
   createDesignBattle,
   joinDesignBattle,
   submitBattleEntry,
   voteForSubmission,
   completeBattle,
-  
+
   // Queries
   getActiveBattles,
   getBattleWithParticipants,
   getUserBattleHistory,
-  
+
   // Constants
   MIN_ANTE_BY_TIER,
   TIMEFRAME_MS,

@@ -153,37 +153,37 @@ DECLARE
   v_locks_to_unlock INTEGER;
 BEGIN
   SELECT * INTO v_template FROM cue_card_templates WHERE id = p_template_id;
-  
+
   IF v_template IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Template not found');
   END IF;
-  
+
   INSERT INTO cue_card_share_clicks (share_id, template_id, sharer_id, clicker_id, clicker_ghost_id, platform)
   VALUES (p_share_id, p_template_id, p_sharer_id, p_clicker_id, p_clicker_ghost_id, p_platform)
   ON CONFLICT DO NOTHING
   RETURNING id INTO v_click_id;
-  
+
   IF v_click_id IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Duplicate click');
   END IF;
-  
+
   SELECT COUNT(*) INTO v_click_count
   FROM cue_card_share_clicks
   WHERE sharer_id = p_sharer_id AND template_id = p_template_id;
-  
+
   IF v_template.linked_deck_card_id IS NOT NULL THEN
     INSERT INTO social_frame_locks (deck_card_id, user_id, cue_card_template_id, clicks_per_lock)
     VALUES (v_template.linked_deck_card_id, p_sharer_id, p_template_id, COALESCE(v_template.clicks_per_frame_unlock, 5))
     ON CONFLICT DO NOTHING;
-    
-    SELECT * INTO v_frame_lock FROM social_frame_locks 
+
+    SELECT * INTO v_frame_lock FROM social_frame_locks
     WHERE deck_card_id = v_template.linked_deck_card_id AND user_id = p_sharer_id;
-    
+
     IF v_frame_lock IS NOT NULL THEN
       v_locks_to_unlock := LEAST(4, v_click_count / COALESCE(v_template.clicks_per_frame_unlock, 5));
-      
+
       UPDATE social_frame_locks
-      SET 
+      SET
         total_clicks = v_click_count,
         lock_top = CASE WHEN v_locks_to_unlock >= 1 THEN false ELSE lock_top END,
         lock_right = CASE WHEN v_locks_to_unlock >= 2 THEN false ELSE lock_right END,
@@ -198,11 +198,11 @@ BEGIN
   ELSE
     v_locks_to_unlock := 0;
   END IF;
-  
+
   UPDATE cue_card_share_clicks
   SET frame_unlock_awarded = true, awarded_at = NOW()
   WHERE id = v_click_id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'click_id', v_click_id,
@@ -327,9 +327,9 @@ CREATE TABLE IF NOT EXISTS social_plug_features (
 
 -- Seed initial platforms
 INSERT INTO social_plug_features (platform, display_name, icon, color, features, is_available, approval_status)
-VALUES 
-  ('tiktok', 'TikTok', '♪', 'bg-pink-500', 
-   '{"login": true, "share": true, "mini_game": false}', 
+VALUES
+  ('tiktok', 'TikTok', '♪', 'bg-pink-500',
+   '{"login": true, "share": true, "mini_game": false}',
    true, 'pending'),
   ('facebook', 'Facebook', 'f', 'bg-blue-500',
    '{"login": true, "share": true, "pages": true}',
@@ -373,30 +373,30 @@ ALTER TABLE social_plug_features ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS view_own_plugs ON user_social_plugs;
 DROP POLICY IF EXISTS manage_own_plugs ON user_social_plugs;
-CREATE POLICY view_own_plugs ON user_social_plugs FOR SELECT 
+CREATE POLICY view_own_plugs ON user_social_plugs FOR SELECT
   USING (auth.uid() = user_id);
-CREATE POLICY manage_own_plugs ON user_social_plugs FOR ALL 
+CREATE POLICY manage_own_plugs ON user_social_plugs FOR ALL
   USING (auth.uid() = user_id);
 
 DROP POLICY IF EXISTS view_own_pairs ON candle_burst_pairs;
 DROP POLICY IF EXISTS manage_own_pairs ON candle_burst_pairs;
 DROP POLICY IF EXISTS join_pairs ON candle_burst_pairs;
-CREATE POLICY view_own_pairs ON candle_burst_pairs FOR SELECT 
+CREATE POLICY view_own_pairs ON candle_burst_pairs FOR SELECT
   USING (auth.uid() = user_a_id OR auth.uid() = user_b_id);
-CREATE POLICY manage_own_pairs ON candle_burst_pairs FOR ALL 
+CREATE POLICY manage_own_pairs ON candle_burst_pairs FOR ALL
   USING (auth.uid() = user_a_id);
-CREATE POLICY join_pairs ON candle_burst_pairs FOR UPDATE 
+CREATE POLICY join_pairs ON candle_burst_pairs FOR UPDATE
   USING (user_b_id IS NULL AND status = 'pending');
 
 DROP POLICY IF EXISTS view_own_shares ON social_shares;
 DROP POLICY IF EXISTS manage_own_shares ON social_shares;
-CREATE POLICY view_own_shares ON social_shares FOR SELECT 
+CREATE POLICY view_own_shares ON social_shares FOR SELECT
   USING (auth.uid() = user_id);
-CREATE POLICY manage_own_shares ON social_shares FOR ALL 
+CREATE POLICY manage_own_shares ON social_shares FOR ALL
   USING (auth.uid() = user_id);
 
 DROP POLICY IF EXISTS view_plug_features ON social_plug_features;
-CREATE POLICY view_plug_features ON social_plug_features FOR SELECT 
+CREATE POLICY view_plug_features ON social_plug_features FOR SELECT
   USING (true);
 
 -- PART 6: HELPER FUNCTIONS
@@ -409,7 +409,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     up.platform,
     up.is_enabled,
     up.platform_username,
@@ -429,7 +429,7 @@ BEGIN
   UPDATE user_social_plugs
   SET is_enabled = p_enabled, updated_at = NOW()
   WHERE user_id = p_user_id AND platform = p_platform;
-  
+
   RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -442,26 +442,26 @@ DECLARE
   v_pair RECORD;
 BEGIN
   SELECT * INTO v_pair FROM candle_burst_pairs WHERE pair_code = p_pair_code;
-  
+
   IF v_pair IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Invalid pair code');
   END IF;
-  
+
   IF v_pair.user_b_id IS NOT NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Pair code already used');
   END IF;
-  
+
   IF v_pair.user_a_id = p_user_id THEN
     RETURN jsonb_build_object('success', false, 'error', 'Cannot pair with yourself');
   END IF;
-  
+
   UPDATE candle_burst_pairs
-  SET 
+  SET
     user_b_id = p_user_id,
     status = 'paired',
     paired_at = NOW()
   WHERE id = v_pair.id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'pair_id', v_pair.id,
@@ -486,41 +486,41 @@ CREATE TABLE IF NOT EXISTS transparency_metrics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   period_start TIMESTAMPTZ NOT NULL,
   period_end TIMESTAMPTZ NOT NULL,
-  
+
   -- Member metrics
   total_members INTEGER DEFAULT 0,
   active_members_30_day INTEGER DEFAULT 0,
   newcomers_this_period INTEGER DEFAULT 0,
-  
+
   -- Transaction metrics
   total_transactions INTEGER DEFAULT 0,
   total_transaction_volume NUMERIC(15,2) DEFAULT 0,
   avg_transaction_value NUMERIC(10,2) DEFAULT 0,
-  
+
   -- Financial metrics
   treasury_balance NUMERIC(15,2) DEFAULT 0,
   charitable_fund_balance NUMERIC(15,2) DEFAULT 0,
   creator_payout_total NUMERIC(15,2) DEFAULT 0,
   platform_margin_total NUMERIC(15,2) DEFAULT 0,
-  
+
   -- Newcomer health (Boaz Principle)
   avg_time_to_first_transaction_hours NUMERIC(10,2),
   newcomer_30_day_retention NUMERIC(5,4),
   active_gleaners_count INTEGER DEFAULT 0,
   gleaning_credits_distributed NUMERIC(15,2) DEFAULT 0,
-  
+
   -- Ghost economy
   ghost_credits_total_distributed NUMERIC(15,2) DEFAULT 0,
   ghost_credits_total_used NUMERIC(15,2) DEFAULT 0,
   ghost_credits_conversion_rate NUMERIC(5,4),
   ghost_to_member_conversion_count INTEGER DEFAULT 0,
-  
+
   -- Industry comparison
   our_time_to_first_transaction_days NUMERIC(10,2),
   etsy_avg_time_to_first_sale_days NUMERIC(10,2) DEFAULT 30,
   our_project_success_rate NUMERIC(5,4),
   kickstarter_avg_project_success_rate NUMERIC(5,4) DEFAULT 0.38,
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   calculated_at TIMESTAMPTZ DEFAULT NOW()
@@ -573,21 +573,21 @@ DECLARE
   v_treasury NUMERIC;
 BEGIN
   SELECT COUNT(*) INTO v_total_members FROM profiles WHERE is_active = true;
-  
-  SELECT COUNT(*) INTO v_active_30d 
-  FROM profiles 
+
+  SELECT COUNT(*) INTO v_active_30d
+  FROM profiles
   WHERE last_login_at > NOW() - INTERVAL '30 days';
-  
+
   BEGIN
     SELECT COUNT(*) INTO v_total_transactions FROM transactions;
   EXCEPTION WHEN undefined_table THEN
     v_total_transactions := 0;
   END;
-  
-  SELECT metric_value INTO v_treasury 
-  FROM current_metrics 
+
+  SELECT metric_value INTO v_treasury
+  FROM current_metrics
   WHERE metric_key = 'treasury_balance';
-  
+
   INSERT INTO transparency_metrics (
     period_start,
     period_end,
@@ -618,7 +618,7 @@ CREATE TABLE IF NOT EXISTS current_metrics (
 
 -- Now insert key values
 INSERT INTO current_metrics (metric_key, metric_value, metric_label)
-VALUES 
+VALUES
   ('innovation_count', 1244, 'Total documented innovations'),
   ('crown_jewel_patents', 8, 'Patents with no prior art found'),
   ('charitable_initiatives', 16, 'Sweet Sixteen initiatives'),

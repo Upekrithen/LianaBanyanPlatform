@@ -54,15 +54,15 @@ export interface CommandPath {
 }
 
 // AI Advisor Profiles for the Stewardship System
-export type AIAdvisorProfile = 
-  | 'Red Queen' 
-  | 'Judge Dredd' 
-  | 'The Oracle' 
-  | 'Morpheus' 
-  | 'MirrorMirror' 
-  | 'Moneypenny' 
-  | 'Jarvis' 
-  | 'HAL' 
+export type AIAdvisorProfile =
+  | 'Red Queen'
+  | 'Judge Dredd'
+  | 'The Oracle'
+  | 'Morpheus'
+  | 'MirrorMirror'
+  | 'Moneypenny'
+  | 'Jarvis'
+  | 'HAL'
   | 'Daneel';
 
 export interface AIAdvisorRecommendation {

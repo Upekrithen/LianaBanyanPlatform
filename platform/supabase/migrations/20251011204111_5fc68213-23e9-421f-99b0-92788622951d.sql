@@ -227,7 +227,7 @@ BEGIN
     run_end_date = EXCLUDED.run_end_date,
     last_sync_at = now()
   RETURNING id INTO _pricing_id;
-  
+
   RETURN _pricing_id;
 END;
 $$;
@@ -249,18 +249,18 @@ BEGIN
   SELECT * INTO project_data
   FROM public.projects
   WHERE id = _project_id;
-  
+
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Project not found';
   END IF;
-  
+
   -- Build XML header
   xml_output := '<?xml version="1.0" encoding="UTF-8"?>' || chr(10);
   xml_output := xml_output || '<LockboxModule>' || chr(10);
   xml_output := xml_output || '  <ProjectSKU>' || COALESCE(project_data.project_sku, 'PENDING') || '</ProjectSKU>' || chr(10);
   xml_output := xml_output || '  <ProjectName>' || xmlescape(project_data.name) || '</ProjectName>' || chr(10);
   xml_output := xml_output || '  <Products>' || chr(10);
-  
+
   -- Loop through products
   FOR product_record IN
     SELECT * FROM public.products WHERE project_id = _project_id
@@ -269,12 +269,12 @@ BEGIN
     xml_output := xml_output || '      <ProductSKU>' || COALESCE(product_record.product_sku, 'PENDING') || '</ProductSKU>' || chr(10);
     xml_output := xml_output || '      <Name>' || xmlescape(product_record.name) || '</Name>' || chr(10);
     xml_output := xml_output || '      <Description>' || xmlescape(COALESCE(product_record.description, '')) || '</Description>' || chr(10);
-    
+
     -- Add industry pricing data if available
     xml_output := xml_output || '      <IndustryPricing>' || chr(10);
     FOR pricing_record IN
-      SELECT * FROM public.industry_pricing_data 
-      WHERE product_id = product_record.id 
+      SELECT * FROM public.industry_pricing_data
+      WHERE product_id = product_record.id
       ORDER BY created_at DESC
       LIMIT 5
     LOOP
@@ -286,13 +286,13 @@ BEGIN
       xml_output := xml_output || '        </PricingRun>' || chr(10);
     END LOOP;
     xml_output := xml_output || '      </IndustryPricing>' || chr(10);
-    
+
     xml_output := xml_output || '    </Product>' || chr(10);
   END LOOP;
-  
+
   xml_output := xml_output || '  </Products>' || chr(10);
   xml_output := xml_output || '</LockboxModule>';
-  
+
   RETURN xml_output;
 END;
 $$;
@@ -310,11 +310,11 @@ DECLARE
 BEGIN
   -- Get project name for subdomain
   SELECT name INTO _project_name FROM public.projects WHERE id = _project_id;
-  
+
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Project not found';
   END IF;
-  
+
   -- Create lockbox config
   INSERT INTO public.subdomain_lockbox_configs (
     project_id,
@@ -334,7 +334,7 @@ BEGIN
   ON CONFLICT (project_id) DO UPDATE
   SET updated_at = now()
   RETURNING id INTO _lockbox_id;
-  
+
   RETURN _lockbox_id;
 END;
 $$;
@@ -385,7 +385,7 @@ FOR EACH ROW EXECUTE FUNCTION public.auto_initialize_lockbox();
 
 -- Insert initial portal configurations
 INSERT INTO public.portal_configs (portal_domain, portal_type, metadata)
-VALUES 
+VALUES
   ('lianabanyan.com', 'marketplace', '{"description": "Main Marketplace Portal", "subdomains": ["projects", "industry"]}'::jsonb),
   ('lianabanyan.biz', 'member_services', '{"description": "Member Services Portal"}'::jsonb),
   ('lianabanyan.org', 'nonprofit', '{"description": "Non-Profit Division Portal"}'::jsonb)

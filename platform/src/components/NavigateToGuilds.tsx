@@ -18,7 +18,7 @@ export default function NavigateToGuilds() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Button 
+        <Button
           onClick={() => navigate('/guilds')}
           className="w-full"
           size="lg"

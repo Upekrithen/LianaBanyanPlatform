@@ -1,8 +1,8 @@
 /**
  * Icing Pool Service
- * 
+ *
  * Manages the bonus pool distributed to makers of popular recipes.
- * 
+ *
  * The "Icing" system:
  * - Funded from 20% of LB's 16.7% margin on VOLUME INCREASES
  * - Only applies to recipes with 5,000+ orders (vetted)
@@ -77,7 +77,7 @@ export function calculateIcingPool(
   const volumeIncrease = Math.max(0, currentVolume - previousVolume);
   const marginFromIncrease = volumeIncrease * LB_MARGIN_RATE;
   const icingPool = marginFromIncrease * ICING_RATE;
-  
+
   return {
     volumeIncrease: Math.round(volumeIncrease * 100) / 100,
     marginFromIncrease: Math.round(marginFromIncrease * 100) / 100,
@@ -99,10 +99,10 @@ export function calculateMakerIcingShare(
   if (totalRecipeOrders === 0) {
     return { sharePercentage: 0, icingAmount: 0 };
   }
-  
+
   const sharePercentage = (makerOrders / totalRecipeOrders) * 100;
   const icingAmount = (makerOrders / totalRecipeOrders) * recipeIcingAllocation;
-  
+
   return {
     sharePercentage: Math.round(sharePercentage * 100) / 100,
     icingAmount: Math.round(icingAmount * 100) / 100,
@@ -118,7 +118,7 @@ export function calculateRecipeIcingAllocation(
   totalIcingPool: number
 ): number {
   if (totalVolumeIncrease === 0) return 0;
-  
+
   const share = (recipeVolumeIncrease / totalVolumeIncrease) * totalIcingPool;
   return Math.round(share * 100) / 100;
 }
@@ -196,7 +196,7 @@ export function formatIcingAmount(amount: number): string {
 export function formatIcingPeriod(pool: IcingPool): string {
   const start = new Date(pool.period_start);
   const end = new Date(pool.period_end);
-  
+
   if (pool.period_type === 'monthly') {
     return start.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   } else if (pool.period_type === 'weekly') {
@@ -217,7 +217,7 @@ export function projectRecipeIcing(
 ): number {
   const increase = Math.max(0, currentOrders - previousOrders);
   if (estimatedTotalIncrease === 0) return 0;
-  
+
   const share = (increase / estimatedTotalIncrease) * estimatedTotalPool;
   return Math.round(share * 100) / 100;
 }
@@ -246,9 +246,9 @@ export function getIcingEligibilityExplanation(totalOrders: number): string {
   if (totalOrders >= VETTING_THRESHOLD) {
     return `This recipe is Icing-eligible with ${totalOrders.toLocaleString()} orders! Makers earn bonus Icing from volume growth.`;
   }
-  
+
   const remaining = VETTING_THRESHOLD - totalOrders;
   const percentage = Math.round((totalOrders / VETTING_THRESHOLD) * 100);
-  
+
   return `${remaining.toLocaleString()} more orders needed for Icing eligibility (${percentage}% there). Currently in Taste Tester phase.`;
 }

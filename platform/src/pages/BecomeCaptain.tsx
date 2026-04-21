@@ -2,10 +2,10 @@
  * BECOME CAPTAIN PAGE
  * ===================
  * Milestone 2: The Cold Start & Stewardship System
- * 
+ *
  * Landing page for users to become a Captain for a specific initiative in their city.
  * URL: /become-captain/:initiativeId?city=Phoenix&state=AZ
- * 
+ *
  * NAVAL RANK PROGRESSION:
  * - Captain: 1 ship (your own) - Local leader for ONE initiative in ONE city
  * - Commodore: 3+ ships - Leader of 3+ initiatives OR 1 initiative across 3+ cities
@@ -46,7 +46,7 @@ const BecomeCaptain: React.FC = () => {
   const { initiativeId } = useParams<{ initiativeId: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  
+
   const city = searchParams.get('city') || '';
   const state = searchParams.get('state') || '';
   const initiativeName = INITIATIVE_NAMES[initiativeId || ''] || initiativeId || 'Unknown Initiative';
@@ -74,15 +74,15 @@ const BecomeCaptain: React.FC = () => {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={() => navigate(`/cold-start-dashboard?city=${city}&state=${state}`)}
             className="mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to {city}, {state}
           </Button>
-          
+
           <div className="text-center">
             <Badge variant="outline" className="mb-4">
               <Ship className="w-3 h-3 mr-1 text-blue-500" />

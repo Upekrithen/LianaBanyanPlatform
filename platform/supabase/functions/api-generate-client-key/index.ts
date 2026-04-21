@@ -24,7 +24,7 @@ serve(async (req) => {
 
     // Verify user is authenticated
     const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-    
+
     if (userError || !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
@@ -83,7 +83,7 @@ serve(async (req) => {
 
     if (credError) throw credError;
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       api_key: credential.api_key,
       credential_id: credential.id,
       message: 'Client API key generated successfully'

@@ -24,7 +24,7 @@
 
 All OAuth credentials are set in Supabase Edge Function secrets:
 - `TWITTER_CLIENT_ID` ✅
-- `TWITTER_CLIENT_SECRET` ✅  
+- `TWITTER_CLIENT_SECRET` ✅
 - `LINKEDIN_CLIENT_ID` ✅
 - `LINKEDIN_CLIENT_SECRET` ✅
 - `FACEBOOK_APP_ID` ✅
@@ -60,7 +60,7 @@ URL: https://developer.twitter.com/en/portal/dashboard
    - Request email from users
 4. Enable OAuth 2.0
 
-### LinkedIn Developer Portal  
+### LinkedIn Developer Portal
 URL: https://www.linkedin.com/developers/apps
 
 1. Go to Auth settings
@@ -145,7 +145,7 @@ Bluesky uses App Passwords instead of OAuth. Users enter their handle and app pa
 
 ### Manual Test (requires login to lianabanyan.com)
 1. Go to https://lianabanyan.com/HofundStudio
-2. Click "Connect Twitter" 
+2. Click "Connect Twitter"
 3. Authorize the app
 4. Compose a test post
 5. Click "Post"

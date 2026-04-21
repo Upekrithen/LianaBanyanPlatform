@@ -69,10 +69,10 @@ export function VotingDialog({
 
         if (config) {
           // Parse time_commitment_options from JSONB
-          const parsedOptions = Array.isArray(config.time_commitment_options) 
-            ? config.time_commitment_options 
+          const parsedOptions = Array.isArray(config.time_commitment_options)
+            ? config.time_commitment_options
             : JSON.parse(config.time_commitment_options as string);
-          
+
           setVotingConfig({
             ...config,
             time_commitment_options: parsedOptions
@@ -224,13 +224,13 @@ export function VotingDialog({
           <div className="flex justify-center py-8">Loading voting options...</div>
         ) : (
           <div className="space-y-4 mt-4">
-          <ReferralCodeInput 
+          <ReferralCodeInput
             onCodeApplied={setReferralCode}
             disabled={Object.keys(votes).length > 0}
           />
           <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
             <p className="text-xs">
-              <strong>The Banyan Model:</strong> Every dollar you pledge helps jumpstart multiple projects. 
+              <strong>The Banyan Model:</strong> Every dollar you pledge helps jumpstart multiple projects.
               This project is a Liana supported by the Banyan trunk, while supporting other Lianas through shared resources.
             </p>
           </div>
@@ -248,7 +248,7 @@ export function VotingDialog({
             const displayPrice = level.level_number === 1 ? 1000.00 : Number(level.unit_price);
             const currentRatios = participationRatios[level.id];
             const selectedCommitment = timeCommitments[level.id];
-            
+
             return (
               <div key={level.id} className="space-y-3 p-4 border rounded-lg">
                 <div className="flex justify-between items-start">
@@ -262,14 +262,14 @@ export function VotingDialog({
                     ${Number(level.current_votes || 0).toFixed(0)} / ${Number(level.votes_needed || 0).toFixed(0)}
                   </span>
                 </div>
-                <Progress 
+                <Progress
                   value={
-                    level.votes_needed > 0 
-                      ? (Number(level.current_votes || 0) / Number(level.votes_needed)) * 100 
+                    level.votes_needed > 0
+                      ? (Number(level.current_votes || 0) / Number(level.votes_needed)) * 100
                       : 0
-                  } 
+                  }
                 />
-                
+
                 {/* Time Commitment Selection */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium flex items-center gap-2">
@@ -328,11 +328,11 @@ export function VotingDialog({
                     value={votes[level.id] || ''}
                     onChange={(e) => handleVoteChange(level.id, e.target.value)}
                   />
-                  <Button 
+                  <Button
                     onClick={() => handleSubmitVote(level.id)}
                     disabled={
-                      !votes[level.id] || 
-                      parseFloat(votes[level.id]) <= 0 || 
+                      !votes[level.id] ||
+                      parseFloat(votes[level.id]) <= 0 ||
                       !timeCommitments[level.id]
                     }
                   >

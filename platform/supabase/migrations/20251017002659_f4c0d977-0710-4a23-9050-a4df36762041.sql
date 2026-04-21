@@ -46,7 +46,7 @@ CREATE POLICY "Authorized members can view test suites"
       WHERE project_member_contracts.project_id = project_test_suites.project_id
       AND project_member_contracts.member_id = auth.uid()
       AND project_member_contracts.status = 'active'
-      AND (LOWER(project_member_contracts.contract_title) = 'steward' 
+      AND (LOWER(project_member_contracts.contract_title) = 'steward'
            OR LOWER(project_member_contracts.contract_title) = 'hr')
     )
   );
@@ -71,7 +71,7 @@ CREATE POLICY "Authorized members can manage test suites"
       WHERE project_member_contracts.project_id = project_test_suites.project_id
       AND project_member_contracts.member_id = auth.uid()
       AND project_member_contracts.status = 'active'
-      AND (LOWER(project_member_contracts.contract_title) = 'steward' 
+      AND (LOWER(project_member_contracts.contract_title) = 'steward'
            OR LOWER(project_member_contracts.contract_title) = 'hr')
     )
   );
@@ -97,7 +97,7 @@ CREATE POLICY "Authorized members can view test results"
       WHERE project_member_contracts.project_id = project_test_results.project_id
       AND project_member_contracts.member_id = auth.uid()
       AND project_member_contracts.status = 'active'
-      AND (LOWER(project_member_contracts.contract_title) = 'steward' 
+      AND (LOWER(project_member_contracts.contract_title) = 'steward'
            OR LOWER(project_member_contracts.contract_title) = 'hr')
     )
   );

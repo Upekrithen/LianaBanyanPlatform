@@ -2,12 +2,12 @@
  * RESEARCH TOGGLE COMPONENT
  * =========================
  * Pre-decision commitment system for reciprocal research sharing.
- * 
+ *
  * Key Innovation: Commitment Lock
  * - Users decide to share data BEFORE launching campaigns
  * - If they access research but don't send, toggle stays ON
  * - Prevents "peek and retreat" behavior
- * 
+ *
  * Flow:
  * 1. User sees Research Toggle before creating campaign
  * 2. If ON: User commits to share their campaign data
@@ -18,8 +18,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FlaskConical, Lock, Unlock, Eye, EyeOff, 
+import {
+  FlaskConical, Lock, Unlock, Eye, EyeOff,
   Clock, CheckCircle2, AlertTriangle, TrendingUp,
   BarChart3, Users, Sparkles, ChevronDown, ChevronUp,
   Info, Lightbulb
@@ -104,14 +104,14 @@ export function ResearchToggle({
   const loadInitialState = async () => {
     if (!user) return;
     setIsLoading(true);
-    
+
     try {
       // Check for active commitment lock
       const { data: lockData } = await supabase
         .rpc('has_active_commitment_lock', { p_user_id: user.id });
-      
+
       setHasActiveLock(!!lockData);
-      
+
       if (lockData) {
         // Get lock details
         const { data: locks } = await supabase
@@ -121,20 +121,20 @@ export function ResearchToggle({
           .eq('is_active', true)
           .order('locked_at', { ascending: false })
           .limit(1);
-        
+
         if (locks && locks.length > 0) {
           setActiveLock(locks[0] as CommitmentLock);
           setIsCommitted(true);
           onCommitmentChange(true);
         }
       }
-      
+
       // Load expiration presets
       const { data: presets } = await supabase
         .from('expiration_presets')
         .select('*')
         .eq('is_active', true);
-      
+
       if (presets) {
         setExpirationPresets(presets as ExpirationPreset[]);
         const defaultPreset = presets.find(p => p.benefit_type === 'pass_through');
@@ -191,7 +191,7 @@ export function ResearchToggle({
     try {
       // Create commitment lock
       const { data: lockId, error: lockError } = await supabase
-        .rpc('create_commitment_lock', { 
+        .rpc('create_commitment_lock', {
           p_user_id: user.id,
           p_project_id: null
         });
@@ -250,10 +250,10 @@ export function ResearchToggle({
   return (
     <div className="space-y-4">
       {/* Main Toggle Card */}
-      <motion.div 
+      <motion.div
         className={`p-4 rounded-xl border transition-all ${
-          isCommitted 
-            ? 'bg-emerald-500/10 border-emerald-500/30' 
+          isCommitted
+            ? 'bg-emerald-500/10 border-emerald-500/30'
             : 'bg-white/5 border-white/10'
         }`}
         layout
@@ -278,14 +278,14 @@ export function ResearchToggle({
               </p>
             </div>
           </div>
-          
+
           {/* Toggle Switch */}
           <button
             onClick={handleToggleCommitment}
             disabled={hasActiveLock}
             className={`relative w-14 h-7 rounded-full transition-all ${
-              isCommitted 
-                ? 'bg-emerald-500' 
+              isCommitted
+                ? 'bg-emerald-500'
                 : 'bg-white/20'
             } ${hasActiveLock ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}
           >
@@ -520,7 +520,7 @@ export function ResearchToggle({
                     Top Performing Configurations
                   </h5>
                   {filteredResearch.slice(0, 5).map((r, idx) => (
-                    <div 
+                    <div
                       key={idx}
                       className="flex items-center justify-between p-2 rounded-lg bg-white/5"
                     >
@@ -552,8 +552,8 @@ export function ResearchToggle({
                   <div className="flex items-start gap-2">
                     <Info className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                     <div className="text-xs text-white/60">
-                      <strong className="text-white/80">Insight:</strong> Campaigns with 24-48h expiration 
-                      windows show 23% higher conversion rates than longer windows. 
+                      <strong className="text-white/80">Insight:</strong> Campaigns with 24-48h expiration
+                      windows show 23% higher conversion rates than longer windows.
                       Urgency drives action.
                     </div>
                   </div>

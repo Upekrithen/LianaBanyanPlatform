@@ -90,9 +90,9 @@ CREATE TABLE IF NOT EXISTS social_plug_features (
 
 -- Seed initial platforms
 INSERT INTO social_plug_features (platform, display_name, icon, color, features, is_available, approval_status)
-VALUES 
-  ('tiktok', 'TikTok', '♪', 'bg-pink-500', 
-   '{"login": true, "share": true, "mini_game": false}', 
+VALUES
+  ('tiktok', 'TikTok', '♪', 'bg-pink-500',
+   '{"login": true, "share": true, "mini_game": false}',
    true, 'pending'),
   ('facebook', 'Facebook', 'f', 'bg-blue-500',
    '{"login": true, "share": true, "pages": true}',
@@ -137,33 +137,33 @@ ALTER TABLE social_plug_features ENABLE ROW LEVEL SECURITY;
 -- Policies for user_social_plugs
 DROP POLICY IF EXISTS view_own_plugs ON user_social_plugs;
 DROP POLICY IF EXISTS manage_own_plugs ON user_social_plugs;
-CREATE POLICY view_own_plugs ON user_social_plugs FOR SELECT 
+CREATE POLICY view_own_plugs ON user_social_plugs FOR SELECT
   USING (auth.uid() = user_id);
-CREATE POLICY manage_own_plugs ON user_social_plugs FOR ALL 
+CREATE POLICY manage_own_plugs ON user_social_plugs FOR ALL
   USING (auth.uid() = user_id);
 
 -- Policies for candle_burst_pairs
 DROP POLICY IF EXISTS view_own_pairs ON candle_burst_pairs;
 DROP POLICY IF EXISTS manage_own_pairs ON candle_burst_pairs;
 DROP POLICY IF EXISTS join_pairs ON candle_burst_pairs;
-CREATE POLICY view_own_pairs ON candle_burst_pairs FOR SELECT 
+CREATE POLICY view_own_pairs ON candle_burst_pairs FOR SELECT
   USING (auth.uid() = user_a_id OR auth.uid() = user_b_id);
-CREATE POLICY manage_own_pairs ON candle_burst_pairs FOR ALL 
+CREATE POLICY manage_own_pairs ON candle_burst_pairs FOR ALL
   USING (auth.uid() = user_a_id);
-CREATE POLICY join_pairs ON candle_burst_pairs FOR UPDATE 
+CREATE POLICY join_pairs ON candle_burst_pairs FOR UPDATE
   USING (user_b_id IS NULL AND status = 'pending');
 
 -- Policies for social_shares
 DROP POLICY IF EXISTS view_own_shares ON social_shares;
 DROP POLICY IF EXISTS manage_own_shares ON social_shares;
-CREATE POLICY view_own_shares ON social_shares FOR SELECT 
+CREATE POLICY view_own_shares ON social_shares FOR SELECT
   USING (auth.uid() = user_id);
-CREATE POLICY manage_own_shares ON social_shares FOR ALL 
+CREATE POLICY manage_own_shares ON social_shares FOR ALL
   USING (auth.uid() = user_id);
 
 -- Policies for social_plug_features (public read)
 DROP POLICY IF EXISTS view_plug_features ON social_plug_features;
-CREATE POLICY view_plug_features ON social_plug_features FOR SELECT 
+CREATE POLICY view_plug_features ON social_plug_features FOR SELECT
   USING (true);
 
 -- PART 6: HELPER FUNCTIONS
@@ -178,7 +178,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     up.platform,
     up.is_enabled,
     up.platform_username,
@@ -199,7 +199,7 @@ BEGIN
   UPDATE user_social_plugs
   SET is_enabled = p_enabled, updated_at = NOW()
   WHERE user_id = p_user_id AND platform = p_platform;
-  
+
   RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -213,26 +213,26 @@ DECLARE
   v_pair RECORD;
 BEGIN
   SELECT * INTO v_pair FROM candle_burst_pairs WHERE pair_code = p_pair_code;
-  
+
   IF v_pair IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Invalid pair code');
   END IF;
-  
+
   IF v_pair.user_b_id IS NOT NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Pair code already used');
   END IF;
-  
+
   IF v_pair.user_a_id = p_user_id THEN
     RETURN jsonb_build_object('success', false, 'error', 'Cannot pair with yourself');
   END IF;
-  
+
   UPDATE candle_burst_pairs
-  SET 
+  SET
     user_b_id = p_user_id,
     status = 'paired',
     paired_at = NOW()
   WHERE id = v_pair.id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'pair_id', v_pair.id,

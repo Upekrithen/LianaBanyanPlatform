@@ -3,7 +3,7 @@
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- Pre-decision commitment system for reciprocal research sharing.
 -- Users decide to share data BEFORE launching campaigns, not after.
--- 
+--
 -- Key Innovation: Commitment Lock
 -- - If you access research but don't send a campaign, toggle stays ON
 -- - Prevents "peek and retreat" behavior
@@ -16,20 +16,20 @@ CREATE TABLE IF NOT EXISTS public.research_commitment_locks (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   project_id UUID REFERENCES public.projects(id),
-  
+
   -- Lock state
   locked_at TIMESTAMPTZ DEFAULT NOW(),
   satisfied_at TIMESTAMPTZ,
   expires_at TIMESTAMPTZ DEFAULT NOW() + INTERVAL '72 hours',
-  
+
   -- What triggered the lock
   reason TEXT DEFAULT 'accessed_research_without_sending',
   research_accessed_at TIMESTAMPTZ DEFAULT NOW(),
   campaign_sent_at TIMESTAMPTZ,
-  
+
   -- Status
   is_active BOOLEAN DEFAULT true,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -43,12 +43,12 @@ CREATE TABLE IF NOT EXISTS public.cue_card_campaigns (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   project_id UUID REFERENCES public.projects(id),
-  
+
   -- Campaign details
   name TEXT NOT NULL,
   description TEXT,
   template_ids UUID[] DEFAULT '{}',  -- Which templates are in this campaign
-  
+
   -- Research commitment (THE KEY INNOVATION)
   research_commitment BOOLEAN DEFAULT false,
   research_commitment_set_at TIMESTAMPTZ,
@@ -56,23 +56,23 @@ CREATE TABLE IF NOT EXISTS public.cue_card_campaigns (
   research_pool_accessed_at TIMESTAMPTZ,
   commitment_satisfied BOOLEAN DEFAULT false,
   commitment_satisfied_at TIMESTAMPTZ,
-  
+
   -- Expiration settings (project owner controlled)
   default_expiration_hours INTEGER DEFAULT 24,
   expiration_type TEXT DEFAULT 'pass_through',  -- pass_through | first_time | referral | campaign
-  
+
   -- Campaign status
   status TEXT DEFAULT 'draft',  -- draft | scheduled | active | completed | cancelled
   scheduled_at TIMESTAMPTZ,
   launched_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
-  
+
   -- Performance metrics (shared if research_commitment = true)
   cards_sent INTEGER DEFAULT 0,
   total_clicks INTEGER DEFAULT 0,
   total_conversions INTEGER DEFAULT 0,
   conversion_rate DECIMAL(5,4) DEFAULT 0,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -88,23 +88,23 @@ CREATE INDEX idx_campaigns_status ON public.cue_card_campaigns(status);
 
 CREATE TABLE IF NOT EXISTS public.template_attribution (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- The template and its creator
   template_id UUID NOT NULL REFERENCES public.cue_card_templates(id),
   creator_id UUID NOT NULL REFERENCES auth.users(id),
-  
+
   -- Who used it
   user_id UUID NOT NULL REFERENCES auth.users(id),
   campaign_id UUID REFERENCES public.cue_card_campaigns(id),
-  
+
   -- Attribution events
   selected_at TIMESTAMPTZ DEFAULT NOW(),
   sent_at TIMESTAMPTZ,
-  
+
   -- Performance (for Marks calculation)
   clicks_generated INTEGER DEFAULT 0,
   conversions_generated INTEGER DEFAULT 0,
-  
+
   -- Marks awarded
   marks_for_selection INTEGER DEFAULT 1,
   marks_for_send INTEGER DEFAULT 0,
@@ -113,10 +113,10 @@ CREATE TABLE IF NOT EXISTS public.template_attribution (
   marks_for_derivative INTEGER DEFAULT 0,
   total_marks_awarded DECIMAL(10,2) DEFAULT 1,
   marks_paid_at TIMESTAMPTZ,
-  
+
   -- Was this a derivative (copied and modified)?
   is_derivative BOOLEAN DEFAULT false,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -131,28 +131,28 @@ CREATE INDEX idx_attribution_campaign ON public.template_attribution(campaign_id
 
 CREATE TABLE IF NOT EXISTS public.research_pool_aggregates (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Grouping dimensions
   template_type TEXT,
   initiative_slug TEXT,
   expiration_hours INTEGER,
   day_of_week INTEGER,  -- 0-6
   hour_of_day INTEGER,  -- 0-23
-  
+
   -- Aggregated metrics (no individual identification)
   campaign_count INTEGER DEFAULT 0,
   total_cards_sent INTEGER DEFAULT 0,
   total_clicks INTEGER DEFAULT 0,
   total_conversions INTEGER DEFAULT 0,
   avg_conversion_rate DECIMAL(5,4) DEFAULT 0,
-  
+
   -- Time frame effectiveness
   avg_time_to_first_click_minutes INTEGER,
   avg_time_to_conversion_minutes INTEGER,
-  
+
   -- Last updated
   computed_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(template_type, initiative_slug, expiration_hours, day_of_week, hour_of_day)
 );
 
@@ -165,19 +165,19 @@ CREATE INDEX idx_research_pool_initiative ON public.research_pool_aggregates(ini
 CREATE TABLE IF NOT EXISTS public.comparison_frame_slots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Slot position (1-6)
   slot_number INTEGER NOT NULL CHECK (slot_number BETWEEN 1 AND 6),
-  
+
   -- What's in the slot
   template_id UUID REFERENCES public.cue_card_templates(id),
-  
+
   -- Notes
   user_notes TEXT,
-  
+
   -- Timestamps
   added_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, slot_number)
 );
 
@@ -188,26 +188,26 @@ CREATE INDEX idx_comparison_user ON public.comparison_frame_slots(user_id);
 
 CREATE TABLE IF NOT EXISTS public.expiration_presets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   benefit_type TEXT NOT NULL UNIQUE,  -- pass_through | first_time | referral | campaign
   display_name TEXT NOT NULL,
-  
+
   -- Allowed range
   min_hours INTEGER NOT NULL,
   max_hours INTEGER NOT NULL,
   default_hours INTEGER NOT NULL,
-  
+
   -- Description
   description TEXT,
   urgency_note TEXT,
-  
+
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Seed default presets
 INSERT INTO public.expiration_presets (benefit_type, display_name, min_hours, max_hours, default_hours, description, urgency_note)
-VALUES 
+VALUES
   ('pass_through', 'Pass-Through Discount', 1, 72, 24, 'Discount for customers coming through your cue card', 'Creates urgency for immediate action'),
   ('first_time', 'First-Time Bonus', 24, 168, 48, 'Special offer for new users', 'Gives newcomers time to explore'),
   ('referral', 'Referral Credit', 24, 720, 168, 'Credit for bringing in new members', 'Allows relationship building'),
@@ -256,12 +256,12 @@ BEGIN
     LIMIT 1;
     RETURN v_lock_id;
   END IF;
-  
+
   -- Create new lock
   INSERT INTO public.research_commitment_locks (user_id, project_id)
   VALUES (p_user_id, p_project_id)
   RETURNING id INTO v_lock_id;
-  
+
   RETURN v_lock_id;
 END;
 $$;
@@ -278,21 +278,21 @@ AS $$
 BEGIN
   -- Mark lock as satisfied
   UPDATE public.research_commitment_locks
-  SET 
+  SET
     satisfied_at = NOW(),
     campaign_sent_at = NOW(),
     is_active = false
   WHERE user_id = p_user_id
     AND is_active = true
     AND satisfied_at IS NULL;
-  
+
   -- Mark campaign commitment as satisfied
   UPDATE public.cue_card_campaigns
-  SET 
+  SET
     commitment_satisfied = true,
     commitment_satisfied_at = NOW()
   WHERE id = p_campaign_id;
-  
+
   RETURN true;
 END;
 $$;
@@ -313,28 +313,28 @@ BEGIN
   SELECT * INTO v_attribution
   FROM public.template_attribution
   WHERE id = p_attribution_id;
-  
+
   IF NOT FOUND THEN
     RETURN 0;
   END IF;
-  
+
   -- Calculate marks
   v_total_marks := v_attribution.marks_for_selection;  -- 1 mark for selection
-  
+
   IF v_attribution.sent_at IS NOT NULL THEN
     v_total_marks := v_total_marks + 2;  -- 2 marks for send
   END IF;
-  
+
   v_total_marks := v_total_marks + (v_attribution.clicks_generated * 0.1);  -- 0.1 per click
   v_total_marks := v_total_marks + v_attribution.conversions_generated;  -- 1 per conversion
-  
+
   IF v_attribution.is_derivative THEN
     v_total_marks := v_total_marks + 5;  -- 5 marks for derivative (highest honor)
   END IF;
-  
+
   -- Update attribution record
   UPDATE public.template_attribution
-  SET 
+  SET
     marks_for_send = CASE WHEN sent_at IS NOT NULL THEN 2 ELSE 0 END,
     marks_for_clicks = clicks_generated * 0.1,
     marks_for_conversions = conversions_generated,
@@ -343,12 +343,12 @@ BEGIN
     marks_paid_at = NOW(),
     updated_at = NOW()
   WHERE id = p_attribution_id;
-  
+
   -- Award marks to creator (add to their marks balance)
   UPDATE public.member_profiles
   SET marks = COALESCE(marks, 0) + v_total_marks
   WHERE user_id = v_attribution.creator_id;
-  
+
   RETURN v_total_marks;
 END;
 $$;
@@ -362,7 +362,7 @@ AS $$
 BEGIN
   -- Clear and rebuild aggregates from committed campaigns
   DELETE FROM public.research_pool_aggregates;
-  
+
   INSERT INTO public.research_pool_aggregates (
     template_type,
     initiative_slug,
@@ -376,7 +376,7 @@ BEGIN
     avg_conversion_rate,
     computed_at
   )
-  SELECT 
+  SELECT
     t.template_type,
     t.initiative_slug,
     c.default_expiration_hours,
@@ -386,10 +386,10 @@ BEGIN
     SUM(c.cards_sent),
     SUM(c.total_clicks),
     SUM(c.total_conversions),
-    CASE 
-      WHEN SUM(c.total_clicks) > 0 
+    CASE
+      WHEN SUM(c.total_clicks) > 0
       THEN SUM(c.total_conversions)::DECIMAL / SUM(c.total_clicks)
-      ELSE 0 
+      ELSE 0
     END,
     NOW()
   FROM public.cue_card_campaigns c
@@ -397,7 +397,7 @@ BEGIN
   WHERE c.research_commitment = true
     AND c.commitment_satisfied = true
     AND c.status = 'completed'
-  GROUP BY 
+  GROUP BY
     t.template_type,
     t.initiative_slug,
     c.default_expiration_hours,
@@ -427,7 +427,7 @@ CREATE POLICY "Users manage own campaigns" ON public.cue_card_campaigns
 
 -- Attribution: creators can see their earnings, users can see their usage
 CREATE POLICY "Users view own attribution" ON public.template_attribution
-  FOR SELECT TO authenticated 
+  FOR SELECT TO authenticated
   USING (auth.uid() = user_id OR auth.uid() = creator_id);
 
 -- Research pool: only accessible to those with commitment
@@ -477,23 +477,23 @@ CREATE TRIGGER update_attribution_timestamp
 -- COMMENTS
 -- ═══════════════════════════════════════════════════════════════════════════════
 
-COMMENT ON TABLE public.research_commitment_locks IS 
+COMMENT ON TABLE public.research_commitment_locks IS
 'Tracks when users access research pool and whether they fulfilled commitment by sending a campaign';
 
-COMMENT ON TABLE public.cue_card_campaigns IS 
+COMMENT ON TABLE public.cue_card_campaigns IS
 'Cue card campaigns with research commitment toggle - the key innovation is pre-decision commitment';
 
-COMMENT ON TABLE public.template_attribution IS 
+COMMENT ON TABLE public.template_attribution IS
 'Tracks template usage and awards Marks to creators - minor but meaningful attribution';
 
-COMMENT ON TABLE public.research_pool_aggregates IS 
+COMMENT ON TABLE public.research_pool_aggregates IS
 'Anonymized aggregates for research pool - only accessible to committed contributors';
 
-COMMENT ON FUNCTION public.has_active_commitment_lock IS 
+COMMENT ON FUNCTION public.has_active_commitment_lock IS
 'Check if user has outstanding commitment to share data';
 
-COMMENT ON FUNCTION public.create_commitment_lock IS 
+COMMENT ON FUNCTION public.create_commitment_lock IS
 'Creates lock when user accesses research - must send campaign to satisfy';
 
-COMMENT ON FUNCTION public.satisfy_commitment_lock IS 
+COMMENT ON FUNCTION public.satisfy_commitment_lock IS
 'Marks commitment as satisfied when campaign is actually sent';

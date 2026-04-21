@@ -58,12 +58,12 @@ export default function LetsMakeBreadPage() {
           <Badge className="bg-orange-500 text-white mb-4">The Proof of Concept</Badge>
           <h2 className="text-3xl font-bold mb-4">HexIsle & The Tereno Platform</h2>
           <p className="text-muted-foreground text-lg mb-6 max-w-3xl">
-            HexIsle proves that a single person with an SLA 3D printer, molding materials, or desktop extruders can produce precision components at <strong>95% less cost</strong> than traditional manufacturing. 
+            HexIsle proves that a single person with an SLA 3D printer, molding materials, or desktop extruders can produce precision components at <strong>95% less cost</strong> than traditional manufacturing.
           </p>
           <p className="text-muted-foreground text-lg mb-6 max-w-3xl">
             Modular design means the exact same product can be made in a garage in Texas or an apartment in Tokyo. But HexIsle is just one product. Let's Make Bread is the system that helps other makers do exactly what the Founder did.
           </p>
-          <Button 
+          <Button
             className="bg-orange-600 hover:bg-orange-700 text-white"
             onClick={() => navigate('/initiatives/hexisle')}
           >

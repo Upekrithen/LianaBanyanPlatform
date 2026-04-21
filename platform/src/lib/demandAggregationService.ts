@@ -3,7 +3,7 @@
  * ==========================
  * Auto-propagates demand from meal orders to ingredient requirements,
  * aggregates across micro-local areas, and creates delivery jobs.
- * 
+ *
  * Flow:
  * 1. Meal order → auto-generates ingredient demand entries (via DB trigger)
  * 2. Demand aggregates by ingredient + area + time window
@@ -152,7 +152,7 @@ export async function getMyAggregationWindows(): Promise<{
     if (partError || !participants) return [];
 
     const windowIds = participants.map(p => p.aggregation_window_id);
-    
+
     const { data: windows, error: winError } = await supabase
       .from('demand_aggregation_windows')
       .select('*')
@@ -389,8 +389,8 @@ export function getThresholdProgress(window: AggregationWindow): {
   const participantProgress = Math.min(100, (window.participant_count / window.min_participants) * 100);
   const valueProgress = Math.min(100, (window.total_estimated_value / window.min_value) * 100);
   const overallProgress = Math.min(participantProgress, valueProgress);
-  
-  const thresholdMet = 
+
+  const thresholdMet =
     window.participant_count >= window.min_participants &&
     window.total_estimated_value >= window.min_value;
 
@@ -416,14 +416,14 @@ export function getTimeRemaining(windowCloses: string): {
   const closes = new Date(windowCloses);
   const now = new Date();
   const diffMs = closes.getTime() - now.getTime();
-  
+
   if (diffMs <= 0) {
     return { hours: 0, minutes: 0, expired: true, formatted: 'Closed' };
   }
-  
+
   const hours = Math.floor(diffMs / (1000 * 60 * 60));
   const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-  
+
   let formatted: string;
   if (hours > 24) {
     const days = Math.floor(hours / 24);
@@ -433,6 +433,6 @@ export function getTimeRemaining(windowCloses: string): {
   } else {
     formatted = `${minutes} minutes left`;
   }
-  
+
   return { hours, minutes, expired: false, formatted };
 }

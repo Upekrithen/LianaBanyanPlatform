@@ -16,13 +16,13 @@ export const SantaNominationForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Mock submission
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
         title: path === 'self' ? "Request Submitted" : "Nomination Submitted",
-        description: path === 'self' 
+        description: path === 'self'
           ? "Your request has been sent to a Trusted Node for verification."
           : "Your nomination is secure. A Jesper will review it shortly.",
       });
@@ -37,11 +37,11 @@ export const SantaNominationForm: React.FC = () => {
           Santa Ever After
         </CardTitle>
         <CardDescription>
-          Volume pricing for all holidays and events. 
+          Volume pricing for all holidays and events.
           <strong> The Golden Rule:</strong> If you pay, you can't deliver. If you deliver, you can't pay.
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="pt-6">
         <div className="mb-6">
           <Label className="text-base font-semibold mb-3 block">Choose Your Path</Label>
@@ -70,7 +70,7 @@ export const SantaNominationForm: React.FC = () => {
                 <Label>Who are you nominating?</Label>
                 <Input required placeholder="e.g., The Martinez Family" />
               </div>
-              
+
               <div className="space-y-2">
                 <Label>Your Relationship to Them</Label>
                 <Input required placeholder="e.g., Neighbor for 3 years" />
@@ -81,10 +81,10 @@ export const SantaNominationForm: React.FC = () => {
                   <Label>The "Why They Deserve This" Card</Label>
                   <span className="text-xs text-muted-foreground">Required for Jesper Verification</span>
                 </div>
-                <Textarea 
-                  required 
+                <Textarea
+                  required
                   className="min-h-[120px]"
-                  placeholder="Tell us their story. Why do they need a little magic right now? (This will be read by the assigned Jesper to verify legitimacy)." 
+                  placeholder="Tell us their story. Why do they need a little magic right now? (This will be read by the assigned Jesper to verify legitimacy)."
                 />
               </div>
 
@@ -98,7 +98,7 @@ export const SantaNominationForm: React.FC = () => {
                   <Truck className="h-4 w-4" /> Secure Delivery Routing
                 </h4>
                 <p className="text-xs text-muted-foreground">
-                  To prevent fraud, you cannot deliver this gift yourself. Please provide their address below. 
+                  To prevent fraud, you cannot deliver this gift yourself. Please provide their address below.
                   <strong> It will ONLY be shown to the assigned Jesper.</strong>
                 </p>
                 <Input required placeholder="Full Delivery Address" />
@@ -112,7 +112,7 @@ export const SantaNominationForm: React.FC = () => {
                   <ShieldAlert className="h-4 w-4" /> Trusted Node Verification Required
                 </h4>
                 <p className="text-xs text-amber-700/80 dark:text-amber-500/80">
-                  Self-requests must be vouched for by a Trusted Node (school, church, social worker, or Rally Group member). 
+                  Self-requests must be vouched for by a Trusted Node (school, church, social worker, or Rally Group member).
                   Your request will appear anonymized to donors (e.g., "Family #47, Phoenix AZ").
                 </p>
               </div>
@@ -129,10 +129,10 @@ export const SantaNominationForm: React.FC = () => {
 
               <div className="space-y-2">
                 <Label>Pre-Written Thank You Card</Label>
-                <Textarea 
-                  required 
+                <Textarea
+                  required
                   className="min-h-[100px]"
-                  placeholder="Write your thank you card now. If funded, this will be sent to your donor. If not funded, it will not be sent." 
+                  placeholder="Write your thank you card now. If funded, this will be sent to your donor. If not funded, it will not be sent."
                 />
               </div>
             </>

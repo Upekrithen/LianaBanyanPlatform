@@ -14,7 +14,7 @@ export default function BusinessCardPortal() {
   return (
     <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="text-center space-y-6 border-b border-slate-300 pb-12">
           <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/30 mb-4">
@@ -43,7 +43,7 @@ export default function BusinessCardPortal() {
               </CardHeader>
               <CardContent className="space-y-4 text-slate-600">
                 <p>
-                  When you place an order for physical QR Medallion Brand Deck Cards, you set your timeframe. 
+                  When you place an order for physical QR Medallion Brand Deck Cards, you set your timeframe.
                   You can actively see how many other orders are in the pipeline.
                 </p>
                 <ul className="space-y-2 text-sm">
@@ -82,8 +82,8 @@ export default function BusinessCardPortal() {
                 <div className="p-4 bg-blue-950/50 rounded-lg border border-blue-900/50">
                   <h4 className="font-semibold text-blue-400 mb-2">The Collateral Lock</h4>
                   <p className="text-sm">
-                    The Captain must put up their own Marks (backed by Joules) equal to the total order value. 
-                    If the order is not delivered and confirmed by the recipients in the specified timeframe, 
+                    The Captain must put up their own Marks (backed by Joules) equal to the total order value.
+                    If the order is not delivered and confirmed by the recipients in the specified timeframe,
                     the Captain's backing Joules are forfeited to the buyers.
                   </p>
                 </div>
@@ -101,7 +101,7 @@ export default function BusinessCardPortal() {
             <div className="flex-1 space-y-2">
               <h3 className="text-2xl font-bold text-slate-900">More Than Just Paper</h3>
               <p className="text-slate-600">
-                Your physical card features your QR Medallion. When scanned, it links directly to your 
+                Your physical card features your QR Medallion. When scanned, it links directly to your
                 Liana Banyan Portfolio — a mini-site included in your $5/year membership.
               </p>
               <div className="flex items-center gap-4 pt-2">

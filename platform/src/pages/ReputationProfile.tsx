@@ -24,7 +24,7 @@ export default function ReputationProfile() {
         .select('*')
         .eq('id', userId)
         .single();
-      
+
       if (error) throw error;
       return data;
     }
@@ -38,7 +38,7 @@ export default function ReputationProfile() {
         .select('*')
         .eq('user_id', userId)
         .single();
-      
+
       if (error) throw error;
       return data;
     }
@@ -58,7 +58,7 @@ export default function ReputationProfile() {
         .lte('visible_at', new Date().toISOString())
         .order('created_at', { ascending: false })
         .limit(50);
-      
+
       if (error) throw error;
       return data;
     }
@@ -75,7 +75,7 @@ export default function ReputationProfile() {
         `)
         .eq('user_id', userId)
         .eq('is_active', true);
-      
+
       if (error) throw error;
       return data;
     }
@@ -110,12 +110,12 @@ export default function ReputationProfile() {
     { name: 'Standards', score: reputation.criteria_standards_score }
   ];
 
-  const displayName = (visibility?.show_full_name || isOwnProfile) 
+  const displayName = (visibility?.show_full_name || isOwnProfile)
     ? (profile.full_name || profile.email)
     : (profile.display_moniker || 'Anonymous Member');
 
-  const displayEmail = (visibility?.show_email || isOwnProfile) 
-    ? profile.email 
+  const displayEmail = (visibility?.show_email || isOwnProfile)
+    ? profile.email
     : null;
 
   return (
@@ -213,7 +213,7 @@ export default function ReputationProfile() {
               {reputation.eligible_for_committee ? 'Eligible' : 'Not Eligible'}
             </div>
             <p className="text-xs text-muted-foreground">
-              {reputation.eligible_for_committee 
+              {reputation.eligible_for_committee
                 ? `Since ${new Date(reputation.committee_eligible_since!).toLocaleDateString()}`
                 : 'Need 100+ interactions and 4.0+ score'}
             </p>

@@ -1,6 +1,6 @@
 /**
  * Content Versioning Service
- * 
+ *
  * Tracks all document, configuration, and data changes with full version history.
  * Part of the Nervous System for platform-wide synchronization.
  */
@@ -18,7 +18,7 @@ export interface ContentVersion {
   created_at: string;
 }
 
-export type ContentType = 
+export type ContentType =
   | 'letter'
   | 'article'
   | 'initiative'

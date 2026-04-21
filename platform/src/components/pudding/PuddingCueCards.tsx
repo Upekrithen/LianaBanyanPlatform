@@ -6,13 +6,13 @@
  * - Click to expand as full card
  * - Click again to flip (3D)
  * - Back has details + voting + action buttons
- * 
+ *
  * Inspired by: https://pudding.cool/2025/07/kids-books/
  */
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   QrCode, Check, Plus, X, Vote, ThumbsUp, ThumbsDown,
   ChevronLeft, ChevronRight, Share2, Download, Calendar
 } from 'lucide-react';
@@ -103,21 +103,21 @@ export function PuddingCueCards({
   const handleVote = (templateId: string, vote: 'support' | 'oppose') => {
     const currentVote = userVotes[templateId];
     const availableBalance = voteStakeType === 'credits' ? userCredits : userMarks;
-    
+
     if (currentVote?.vote === vote) {
       setUserVotes(prev => ({ ...prev, [templateId]: null }));
       return;
     }
-    
+
     if (voteStakeAmount > availableBalance && !isGhost) {
       return;
     }
-    
-    setUserVotes(prev => ({ 
-      ...prev, 
+
+    setUserVotes(prev => ({
+      ...prev,
       [templateId]: { vote, stake: voteStakeAmount, type: voteStakeType }
     }));
-    
+
     if (onVoteWithStake) {
       onVoteWithStake(templateId, vote, voteStakeType, voteStakeAmount);
     } else {
@@ -164,7 +164,7 @@ export function PuddingCueCards({
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 min-w-[200px]"
         />
-        
+
         {categories.length > 0 && (
           <div className="flex flex-wrap gap-2">
             <Button
@@ -207,7 +207,7 @@ export function PuddingCueCards({
       <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2">
         {filteredTemplates.map((template) => {
           const isStamped = !!stampedCards[template.id];
-          
+
           return (
             <motion.button
               key={template.id}
@@ -215,8 +215,8 @@ export function PuddingCueCards({
               onMouseLeave={() => setHoveredItem(null)}
               onClick={() => handleCardClick(template)}
               className={`relative aspect-square rounded-lg overflow-hidden transition-all border-2 ${
-                isStamped 
-                  ? 'border-green-500 shadow-green-500/30 shadow-md' 
+                isStamped
+                  ? 'border-green-500 shadow-green-500/30 shadow-md'
                   : 'border-transparent hover:border-primary/50'
               }`}
               style={{ background: getCardBackground(template) }}
@@ -248,7 +248,7 @@ export function PuddingCueCards({
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className="fixed left-8 top-1/2 -translate-y-1/2 z-50 pointer-events-none w-[280px] h-[400px]"
           >
-            <div 
+            <div
               className="w-full h-full rounded-2xl shadow-2xl border-2 border-primary/50 overflow-hidden flex flex-col"
               style={{ background: getCardBackground(hoveredItem) }}
             >
@@ -259,7 +259,7 @@ export function PuddingCueCards({
                     {getInitiativeIcon(hoveredItem.initiative_slug)}
                   </span>
                 </div>
-                
+
                 {/* Content */}
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-white drop-shadow-lg leading-tight">
@@ -272,7 +272,7 @@ export function PuddingCueCards({
                     {hoveredItem.body_text}
                   </p>
                 </div>
-                
+
                 {/* Status badge */}
                 <div className="mt-4 flex items-center justify-between">
                   {stampedCards[hoveredItem.id] ? (
@@ -289,9 +289,9 @@ export function PuddingCueCards({
                 </div>
               </div>
             </div>
-            
+
             {/* Card shadow/glow effect */}
-            <div 
+            <div
               className="absolute inset-0 -z-10 rounded-2xl blur-xl opacity-50"
               style={{ background: getCardBackground(hoveredItem) }}
             />
@@ -326,7 +326,7 @@ export function PuddingCueCards({
                 className={`absolute inset-0 rounded-2xl shadow-2xl overflow-hidden border-2 ${
                   stampedCards[selectedCard.id] ? 'border-green-500' : 'border-white/20'
                 }`}
-                style={{ 
+                style={{
                   backfaceVisibility: 'hidden',
                   background: getCardBackground(selectedCard)
                 }}
@@ -378,7 +378,7 @@ export function PuddingCueCards({
               {/* BACK — Details + Actions */}
               <div
                 className="absolute inset-0 rounded-2xl shadow-2xl overflow-hidden bg-card border-2 border-primary/30"
-                style={{ 
+                style={{
                   backfaceVisibility: 'hidden',
                   transform: 'rotateY(180deg)'
                 }}
@@ -413,9 +413,9 @@ export function PuddingCueCards({
                         <div className="h-3 bg-muted rounded-full overflow-hidden mb-3 relative">
                           <motion.div
                             className="h-full bg-green-500"
-                            animate={{ 
-                              width: `${(currentVotes[selectedCard.id].up / 
-                                (currentVotes[selectedCard.id].up + currentVotes[selectedCard.id].down || 1)) * 100}%` 
+                            animate={{
+                              width: `${(currentVotes[selectedCard.id].up /
+                                (currentVotes[selectedCard.id].up + currentVotes[selectedCard.id].down || 1)) * 100}%`
                             }}
                           />
                           <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-foreground/80">
@@ -436,8 +436,8 @@ export function PuddingCueCards({
                                 setVoteStakeAmount(amount);
                               }}
                               className={`flex-1 py-1 text-xs rounded transition-colors ${
-                                voteStakeAmount === amount 
-                                  ? 'bg-primary text-primary-foreground' 
+                                voteStakeAmount === amount
+                                  ? 'bg-primary text-primary-foreground'
                                   : 'bg-muted hover:bg-muted/80'
                               }`}
                             >
@@ -496,10 +496,10 @@ export function PuddingCueCards({
                           Oppose ({voteStakeAmount})
                         </Button>
                       </div>
-                      
+
                       <p className="text-[10px] text-muted-foreground mt-2 text-center">
-                        {isGhost 
-                          ? 'Ghost votes help us learn your preferences' 
+                        {isGhost
+                          ? 'Ghost votes help us learn your preferences'
                           : 'Your stake is held until voting closes'}
                       </p>
                     </div>

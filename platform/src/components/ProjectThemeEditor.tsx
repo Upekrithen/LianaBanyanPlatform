@@ -38,7 +38,7 @@ export function ProjectThemeEditor({ projectId }: ProjectThemeEditorProps) {
         .select("*")
         .eq("project_id", projectId)
         .maybeSingle();
-      
+
       if (error && error.code !== "PGRST116") throw error;
       if (data) {
         setFormData({
@@ -69,7 +69,7 @@ export function ProjectThemeEditor({ projectId }: ProjectThemeEditorProps) {
         : await supabase
             .from("project_themes")
             .insert({ ...data, project_id: projectId });
-      
+
       if (error) throw error;
     },
     onSuccess: () => {

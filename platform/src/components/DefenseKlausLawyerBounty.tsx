@@ -1,6 +1,6 @@
 /**
  * Defense Klaus Lawyer Bounty Board
- * 
+ *
  * Bounty for lawyers interested in joining the Legal Defense Fund
  * Contract terms and application process
  */
@@ -59,7 +59,7 @@ export function DefenseKlausLawyerBounty() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
+
   const [showApplyDialog, setShowApplyDialog] = useState(false);
   const [selectedBounty, setSelectedBounty] = useState<LawyerBounty | null>(null);
   const [form, setForm] = useState<ApplicationForm>({
@@ -190,8 +190,8 @@ export function DefenseKlausLawyerBounty() {
         </CardHeader>
         <CardContent>
           <p className="text-white/80">
-            We're building a network of attorneys committed to providing affordable legal defense 
-            to our members. The pooled fund model ensures sustainable compensation while keeping 
+            We're building a network of attorneys committed to providing affordable legal defense
+            to our members. The pooled fund model ensures sustainable compensation while keeping
             legal services accessible.
           </p>
         </CardContent>
@@ -232,12 +232,12 @@ export function DefenseKlausLawyerBounty() {
               </ul>
             </div>
           </div>
-          
+
           <div className="bg-white/5 rounded-lg p-4 text-sm">
             <h4 className="font-semibold text-white mb-2">Cost+20% Commitment</h4>
             <p className="text-white/70">
-              All participating attorneys agree to the platform's Cost+20% pricing model. 
-              This means transparent billing where the attorney's actual costs plus a 20% margin 
+              All participating attorneys agree to the platform's Cost+20% pricing model.
+              This means transparent billing where the attorney's actual costs plus a 20% margin
               are charged to the fund. This ensures fair compensation while maintaining affordability.
             </p>
           </div>
@@ -302,7 +302,7 @@ export function DefenseKlausLawyerBounty() {
             </div>
 
             {/* Apply Button */}
-            <Button 
+            <Button
               onClick={() => handleApply(bounty)}
               className="w-full bg-amber-600 hover:bg-amber-700"
             >
@@ -332,7 +332,7 @@ export function DefenseKlausLawyerBounty() {
                 onChange={(e) => setForm({ ...form, bar_number: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="jurisdictions">Jurisdictions * (comma-separated)</Label>
               <Input
@@ -342,7 +342,7 @@ export function DefenseKlausLawyerBounty() {
                 onChange={(e) => setForm({ ...form, jurisdictions: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="experience">Years of Experience</Label>
               <Input
@@ -353,7 +353,7 @@ export function DefenseKlausLawyerBounty() {
                 onChange={(e) => setForm({ ...form, experience_years: parseInt(e.target.value) || 0 })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="statement">Personal Statement *</Label>
               <Textarea
@@ -364,7 +364,7 @@ export function DefenseKlausLawyerBounty() {
                 onChange={(e) => setForm({ ...form, statement: e.target.value })}
               />
             </div>
-            
+
             <Button
               onClick={() => selectedBounty && submitApplication.mutate(selectedBounty.id)}
               disabled={submitApplication.isPending}

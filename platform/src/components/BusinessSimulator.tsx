@@ -1,9 +1,9 @@
 /**
  * Business Simulator Component
- * 
+ *
  * Allows users (including Ghosts) to run "what-if" business simulations
  * using platform economics defaults before committing real resources.
- * 
+ *
  * Innovation #1188: Contingency Operators
  */
 
@@ -18,14 +18,14 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Calculator, 
-  Play, 
-  RefreshCcw, 
-  TrendingUp, 
-  Clock, 
-  DollarSign, 
-  Users, 
+import {
+  Calculator,
+  Play,
+  RefreshCcw,
+  TrendingUp,
+  Clock,
+  DollarSign,
+  Users,
   Target,
   Lightbulb,
   Save,
@@ -69,14 +69,14 @@ const CATEGORY_COLORS: Record<string, string> = {
   growth: 'bg-amber-100 text-amber-800',
 };
 
-export function BusinessSimulator({ 
-  onSimulationComplete, 
+export function BusinessSimulator({
+  onSimulationComplete,
   onAdopt,
-  isGhostMode = false 
+  isGhostMode = false
 }: BusinessSimulatorProps) {
   const { toast } = useToast();
   const { user } = useAuth();
-  
+
   // State
   const [selectedInitiative, setSelectedInitiative] = useState<string>('');
   const [assumptions, setAssumptions] = useState<BusinessAssumptions | null>(null);
@@ -85,7 +85,7 @@ export function BusinessSimulator({
   const [isRunning, setIsRunning] = useState(false);
   const [hasRun, setHasRun] = useState(false);
   const [scenarioName, setScenarioName] = useState('');
-  
+
   // Grouped initiatives
   const initiativesByCategory = useMemo(() => getInitiativesByCategory(), []);
   const selectedTemplate = useMemo(
@@ -114,27 +114,27 @@ export function BusinessSimulator({
   // Run simulation
   const runSimulation = async () => {
     if (!selectedInitiative || !assumptions) return;
-    
+
     setIsRunning(true);
-    
+
     // Simulate processing delay for UX
     await new Promise(resolve => setTimeout(resolve, 800));
-    
+
     const newScenario = createBusinessScenario(selectedInitiative, assumptions);
     newScenario.name = scenarioName || `${selectedTemplate?.name} Simulation`;
-    
+
     const newProjections = calculateProjectedOutcomes(assumptions);
-    
+
     newScenario.projections = newProjections;
     newScenario.status = 'completed';
-    
+
     setScenario(newScenario);
     setProjections(newProjections);
     setHasRun(true);
     setIsRunning(false);
-    
+
     onSimulationComplete?.(newScenario, newProjections);
-    
+
     toast({
       title: "Simulation Complete",
       description: `Net score: ${(newProjections.netScore * 100).toFixed(0)}%`,
@@ -151,7 +151,7 @@ export function BusinessSimulator({
       });
       return;
     }
-    
+
     const result = await createThoughtExperiment(scenario, user.id);
     if (result) {
       toast({
@@ -237,7 +237,7 @@ export function BusinessSimulator({
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label>Scenario Name</Label>
               <Input
@@ -247,7 +247,7 @@ export function BusinessSimulator({
               />
             </div>
           </div>
-          
+
           {selectedTemplate && (
             <div className="mt-4 p-3 bg-muted rounded-lg">
               <div className="flex items-center gap-2 mb-2">
@@ -280,7 +280,7 @@ export function BusinessSimulator({
                 <TabsTrigger value="costs">Costs</TabsTrigger>
                 <TabsTrigger value="capacity">Capacity</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="revenue" className="space-y-6 pt-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -295,7 +295,7 @@ export function BusinessSimulator({
                     step={5}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <Label>Orders Per Week</Label>
@@ -309,7 +309,7 @@ export function BusinessSimulator({
                     step={1}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <Label>Customer Retention Rate</Label>
@@ -323,7 +323,7 @@ export function BusinessSimulator({
                     step={5}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <Label>Monthly Growth Rate</Label>
@@ -338,7 +338,7 @@ export function BusinessSimulator({
                   />
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="costs" className="space-y-6 pt-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -353,7 +353,7 @@ export function BusinessSimulator({
                     step={5}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <Label>Platform Fee (Cost + 20%)</Label>
@@ -366,7 +366,7 @@ export function BusinessSimulator({
                     You keep 83.3% of revenue. This cannot be changed.
                   </p>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <Label>Customer Acquisition Cost</Label>
@@ -381,7 +381,7 @@ export function BusinessSimulator({
                   />
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="capacity" className="space-y-6 pt-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -396,7 +396,7 @@ export function BusinessSimulator({
                     step={1}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <Label>Capacity Utilization</Label>
@@ -466,7 +466,7 @@ export function BusinessSimulator({
                   </p>
                 </CardContent>
               </Card>
-              
+
               {/* Monthly Profit */}
               <Card>
                 <CardContent className="pt-4">
@@ -479,7 +479,7 @@ export function BusinessSimulator({
                   </p>
                 </CardContent>
               </Card>
-              
+
               {/* Break-even */}
               <Card>
                 <CardContent className="pt-4">
@@ -492,7 +492,7 @@ export function BusinessSimulator({
                   </p>
                 </CardContent>
               </Card>
-              
+
               {/* Hourly Rate */}
               <Card>
                 <CardContent className="pt-4">
@@ -506,13 +506,13 @@ export function BusinessSimulator({
                 </CardContent>
               </Card>
             </div>
-            
+
             <Separator className="my-6" />
-            
+
             {/* Detailed Metrics */}
             <div className="space-y-4">
               <h4 className="font-semibold">Detailed Analysis</h4>
-              
+
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
@@ -528,7 +528,7 @@ export function BusinessSimulator({
                     <span className="font-medium">{(projections.profitMargin * 100).toFixed(1)}%</span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Orders to Break Even</span>
@@ -544,7 +544,7 @@ export function BusinessSimulator({
                   </div>
                 </div>
               </div>
-              
+
               {/* Net Score Breakdown */}
               <div className="mt-4 p-4 bg-muted rounded-lg">
                 <div className="flex items-center justify-between mb-2">
@@ -553,8 +553,8 @@ export function BusinessSimulator({
                     {(projections.netScore * 100).toFixed(0)}%
                   </span>
                 </div>
-                <Progress 
-                  value={projections.netScore * 100} 
+                <Progress
+                  value={projections.netScore * 100}
                   className="h-3"
                 />
                 <p className="text-xs text-muted-foreground mt-2">

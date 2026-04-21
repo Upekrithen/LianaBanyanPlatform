@@ -41,7 +41,7 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ credits, lifetimeP
               The mess isn't waste. The mess is planting.
             </CardDescription>
           </div>
-          
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -52,8 +52,8 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ credits, lifetimeP
               <TooltipContent className="max-w-xs">
                 <p><strong>Credits vs. Speckles</strong></p>
                 <p className="text-xs mt-1">
-                  "Credits" are the technical financial unit of the Three-Gear Currency system. 
-                  "Speckles" are how we visualize them. When you earn credits, you <em>grow</em> Speckles. 
+                  "Credits" are the technical financial unit of the Three-Gear Currency system.
+                  "Speckles" are how we visualize them. When you earn credits, you <em>grow</em> Speckles.
                   When you spend or share them, you <em>plant</em> Speckles, generating value for others.
                 </p>
               </TooltipContent>
@@ -61,7 +61,7 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ credits, lifetimeP
           </TooltipProvider>
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-green-900/10 p-4 rounded-xl border border-green-900/20 text-center">
@@ -72,7 +72,7 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ credits, lifetimeP
             </div>
             <p className="text-xs text-muted-foreground mt-1">(Financial Ledger: {credits.toLocaleString()} Credits)</p>
           </div>
-          
+
           <div className="bg-amber-900/10 p-4 rounded-xl border border-amber-900/20 text-center">
             <p className="text-sm font-medium text-amber-800 dark:text-amber-400 mb-1">Lifetime Planted</p>
             <div className="flex items-baseline justify-center gap-1">
@@ -98,11 +98,11 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ credits, lifetimeP
                   key={plant.id}
                   initial={{ scale: 0, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
-                  transition={{ 
-                    type: "spring", 
-                    stiffness: 260, 
-                    damping: 20, 
-                    delay: plant.id * 0.05 
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                    delay: plant.id * 0.05
                   }}
                   className="absolute text-green-600 dark:text-green-500"
                   style={{ left: `${plant.x}%`, bottom: `${plant.y}%` }}
@@ -114,11 +114,11 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ credits, lifetimeP
               ))}
             </AnimatePresence>
           )}
-          
+
           {/* Ground line */}
           <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-green-900/20 to-transparent" />
         </div>
-        
+
         <div className="text-center">
           <p className="text-sm font-medium italic text-muted-foreground">
             "One True Act of Kindness ALWAYS Sparks Another."

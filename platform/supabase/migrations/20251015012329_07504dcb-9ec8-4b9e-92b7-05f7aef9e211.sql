@@ -18,38 +18,38 @@ DECLARE
 BEGIN
   -- Get the current user
   _user_id := auth.uid();
-  
+
   -- Get invitation details
   SELECT * INTO _invitation
   FROM public.project_invitations
   WHERE id = _invitation_id
     AND status = 'pending'
     AND email = (SELECT email FROM public.profiles WHERE id = _user_id);
-  
+
   IF NOT FOUND THEN
     RETURN jsonb_build_object('success', false, 'error', 'Invalid or expired invitation');
   END IF;
-  
+
   -- Verify QR code email match
   IF _invitation.email != _qr_scan_email THEN
     RETURN jsonb_build_object('success', false, 'error', 'Email does not match QR scan entry');
   END IF;
-  
+
   -- Get project funding
   SELECT * INTO _funding
   FROM public.project_funding
   WHERE project_id = _invitation.project_id;
-  
+
   IF NOT FOUND OR _funding.available_pot < _invitation.credits_allocated THEN
     RETURN jsonb_build_object('success', false, 'error', 'Insufficient funds in project pot');
   END IF;
-  
+
   -- Update invitation status
   UPDATE public.project_invitations
   SET status = 'accepted',
       accepted_at = now()
   WHERE id = _invitation_id;
-  
+
   -- Allocate credits to user - if from medallion credit, set the lock
   IF _invitation.is_medallion_credit THEN
     UPDATE public.user_credits
@@ -68,13 +68,13 @@ BEGIN
         updated_at = now()
     WHERE user_id = _user_id;
   END IF;
-  
+
   -- Update project funding
   UPDATE public.project_funding
   SET allocated_credits = allocated_credits + _invitation.credits_allocated,
       updated_at = now()
   WHERE project_id = _invitation.project_id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'credits_allocated', _invitation.credits_allocated,
@@ -102,14 +102,14 @@ DECLARE
 BEGIN
   -- Get current credits
   SELECT * INTO _credits FROM public.user_credits WHERE user_id = _user_id;
-  
+
   IF NOT FOUND THEN
     RAISE EXCEPTION 'User credits not found';
   END IF;
-  
+
   -- Calculate available non-medallion credits
   _available_non_medallion := _credits.contribution_credits - COALESCE(_credits.initial_medallion_credit, 0);
-  
+
   -- If forcing medallion deduction OR insufficient non-medallion credits
   IF _deduct_from_medallion OR _available_non_medallion < _amount THEN
     -- Deduct from non-medallion first, then from medallion if needed
@@ -122,10 +122,10 @@ BEGIN
   ELSE
     _deduct_from_total := _amount;
   END IF;
-  
+
   -- Update credits
   UPDATE public.user_credits
-  SET 
+  SET
     contribution_credits = contribution_credits - _deduct_from_total,
     used_credits = used_credits + _deduct_from_total,
     initial_medallion_credit = GREATEST(0, initial_medallion_credit - _deduct_from_medallion_credit),

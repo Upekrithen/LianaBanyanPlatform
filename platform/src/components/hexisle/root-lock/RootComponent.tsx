@@ -10,9 +10,9 @@ interface RootComponentProps {
   isValidLocation?: boolean;
 }
 
-export const RootComponent: React.FC<RootComponentProps> = ({ 
-  type, 
-  position, 
+export const RootComponent: React.FC<RootComponentProps> = ({
+  type,
+  position,
   isDragging = false,
   isValidLocation = false
 }) => {
@@ -49,7 +49,7 @@ export const RootComponent: React.FC<RootComponentProps> = ({
         const angle = (i / config.pinCount) * Math.PI * 2;
         const x = Math.cos(angle) * config.radius;
         const z = Math.sin(angle) * config.radius;
-        
+
         pins.push(
           <mesh key={`pin-${i}`} position={[x, -0.5, z]}>
             <cylinderGeometry args={[0.1, 0.1, 1, 16]} />
@@ -69,7 +69,7 @@ export const RootComponent: React.FC<RootComponentProps> = ({
         <boxGeometry args={[1.5, 0.5, 1.5]} />
         <meshStandardMaterial color="#64748b" transparent opacity={isDragging ? 0.8 : 1} />
       </mesh>
-      
+
       {/* The roots (the part that goes into the socket) */}
       {renderPins()}
     </group>

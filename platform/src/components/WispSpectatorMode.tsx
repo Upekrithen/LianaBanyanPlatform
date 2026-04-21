@@ -3,7 +3,7 @@
  * ====================
  * Watch ongoing Will-o'-Wisp chases without participating.
  * Live position tracking of all participants.
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  */
 
@@ -54,21 +54,21 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
   useEffect(() => {
     async function loadChase() {
       if (!chaseId) return;
-      
+
       setLoading(true);
-      
+
       const { data: chaseData, error } = await supabase
         .from('wisp_chases')
         .select('*')
         .eq('id', chaseId)
         .single();
-      
+
       if (error || !chaseData) {
         console.error('Failed to load chase:', error);
         setLoading(false);
         return;
       }
-      
+
       setChase({
         id: chaseData.id,
         createdAt: new Date(chaseData.created_at),
@@ -89,10 +89,10 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
         title: chaseData.title,
         description: chaseData.description,
       });
-      
+
       setLoading(false);
     }
-    
+
     if (isOpen && chaseId) {
       loadChase();
     }
@@ -101,10 +101,10 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
   // Subscribe to real-time participant updates
   useEffect(() => {
     if (!isOpen || !chaseId) return;
-    
+
     // Load initial participants
     loadParticipants();
-    
+
     // Subscribe to changes
     const channel = supabase
       .channel(`spectator-${chaseId}`)
@@ -121,7 +121,7 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
         }
       )
       .subscribe();
-    
+
     return () => {
       supabase.removeChannel(channel);
     };
@@ -130,11 +130,11 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
   // Timer for elapsed time
   useEffect(() => {
     if (!isOpen || !chase?.startedAt || chase.status !== 'active') return;
-    
+
     const interval = setInterval(() => {
       setTimeElapsed(Date.now() - chase.startedAt!.getTime());
     }, 100);
-    
+
     return () => clearInterval(interval);
   }, [isOpen, chase]);
 
@@ -151,12 +151,12 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
       `)
       .eq('chase_id', chaseId)
       .order('current_mirror_index', { ascending: false });
-    
+
     if (error || !data) {
       console.error('Failed to load participants:', error);
       return;
     }
-    
+
     setParticipants(data.map((p: any) => ({
       userId: p.user_id,
       displayName: p.profiles?.display_name || 'Anonymous',
@@ -195,9 +195,9 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
             <Eye className="w-5 h-5 text-blue-400" />
             <span>Spectator Mode</span>
             {chase && (
-              <span 
+              <span
                 className="text-sm ml-2 px-2 py-0.5 rounded"
-                style={{ 
+                style={{
                   backgroundColor: `${getDifficultyColor(chase.difficulty)}20`,
                   color: getDifficultyColor(chase.difficulty)
                 }}
@@ -247,10 +247,10 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
                   const participantsHere = participants.filter(
                     p => p.currentMirrorIndex === index && p.status === 'chasing'
                   );
-                  
+
                   return (
                     <div key={index} className="path-node-wrapper">
-                      <div 
+                      <div
                         className={`path-node ${participantsHere.length > 0 ? 'has-players' : ''}`}
                         title={mirror?.name || mirrorId}
                       >
@@ -286,8 +286,8 @@ export const WispSpectatorMode: React.FC<WispSpectatorModeProps> = ({
                     return b.currentMirrorIndex - a.currentMirrorIndex;
                   })
                   .map((p, idx) => (
-                    <div 
-                      key={p.userId} 
+                    <div
+                      key={p.userId}
                       className={`leaderboard-entry ${p.status === 'finished' ? 'finished' : ''} ${p.status === 'quit' ? 'quit' : ''}`}
                     >
                       <span className="entry-position">
@@ -338,7 +338,7 @@ export const ActiveChasesList: React.FC<ActiveChasesListProps> = ({ onSelectChas
 
   useEffect(() => {
     loadActiveChases();
-    
+
     // Subscribe to new chases
     const channel = supabase
       .channel('active-chases')
@@ -353,7 +353,7 @@ export const ActiveChasesList: React.FC<ActiveChasesListProps> = ({ onSelectChas
         () => loadActiveChases()
       )
       .subscribe();
-    
+
     return () => {
       supabase.removeChannel(channel);
     };
@@ -367,7 +367,7 @@ export const ActiveChasesList: React.FC<ActiveChasesListProps> = ({ onSelectChas
       .eq('status', 'active')
       .order('started_at', { ascending: false })
       .limit(10);
-    
+
     if (!error && data) {
       setChases(data);
     }
@@ -400,10 +400,10 @@ export const ActiveChasesList: React.FC<ActiveChasesListProps> = ({ onSelectChas
           <div className="chase-item-header">
             <span className="text-lg">🕯️</span>
             <span className="font-medium">{chase.title || `${chase.difficulty} Chase`}</span>
-            <span 
+            <span
               className="difficulty-badge"
-              style={{ 
-                color: chase.difficulty === 'legendary' ? '#ef4444' : 
+              style={{
+                color: chase.difficulty === 'legendary' ? '#ef4444' :
                        chase.difficulty === 'expert' ? '#f59e0b' :
                        chase.difficulty === 'journeyman' ? '#60a5fa' : '#34d399'
               }}

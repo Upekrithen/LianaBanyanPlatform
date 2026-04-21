@@ -75,7 +75,7 @@ export default function ProductDetail() {
 
   const loadUserPreferences = async () => {
     if (!user) return;
-    
+
     const { data } = await supabase
       .from('user_preferences')
       .select('marketplace_backer_track')
@@ -85,7 +85,7 @@ export default function ProductDetail() {
     if (data?.marketplace_backer_track) {
       setBackerTrack(data.marketplace_backer_track as 'product_only' | 'backer');
     }
-    
+
     // Check if user has seen explainer
     const hasVoted = await supabase
       .from('user_votes')
@@ -93,20 +93,20 @@ export default function ProductDetail() {
       .eq('user_id', user.id)
       .limit(1)
       .maybeSingle();
-    
+
     setExplainerUnderstood(!!hasVoted.data);
   };
 
   const handleTrackSelection = async (track: 'product_only' | 'backer') => {
     if (!user) return;
-    
+
     await supabase
       .from('user_preferences')
       .upsert({
         user_id: user.id,
         marketplace_backer_track: track
       });
-    
+
     setBackerTrack(track);
     toast.success(`Switched to ${track === 'backer' ? 'Backer' : 'Product-Only'} Track`);
   };
@@ -156,9 +156,9 @@ export default function ProductDetail() {
       productionLevels: productData.production_levels || [],
       images: productData.product_images || []
     };
-    
+
     setProduct(formattedProduct);
-    
+
     // Set project slug from project name
     if (productData.projects?.name) {
       setProjectSlug(productData.projects.name.toLowerCase());
@@ -173,10 +173,10 @@ export default function ProductDetail() {
 
     if (config) {
       // Parse time_commitment_options from JSONB
-      const parsedOptions = Array.isArray(config.time_commitment_options) 
-        ? config.time_commitment_options 
+      const parsedOptions = Array.isArray(config.time_commitment_options)
+        ? config.time_commitment_options
         : JSON.parse(config.time_commitment_options as string);
-      
+
       setVotingConfig({
         ...config,
         time_commitment_options: parsedOptions
@@ -197,7 +197,7 @@ export default function ProductDetail() {
         ]
       });
     }
-    
+
     setLoading(false);
   };
 
@@ -326,7 +326,7 @@ export default function ProductDetail() {
       <main className="container mx-auto px-4 py-8 space-y-8">
         {/* Backer Track Selection */}
         {user && <BackerTrackPrompt onSelectTrack={handleTrackSelection} currentTrack={backerTrack || undefined} />}
-        
+
         {/* Product Details */}
         <div className="grid gap-8 md:grid-cols-2">
           {product.images.length > 0 && (
@@ -340,11 +340,11 @@ export default function ProductDetail() {
               </div>
             </div>
           )}
-          
+
           <div className="space-y-4">
             {/* Real-Time Product Stats */}
             <RealTimeProductStats productId={productId!} />
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Product Details</CardTitle>
@@ -387,7 +387,7 @@ export default function ProductDetail() {
               const displayPrice = level.level_number === 1 ? 1000.00 : Number(level.unit_price);
               const currentRatios = participationRatios[level.id];
               const selectedCommitment = timeCommitments[level.id];
-              
+
               return (
                 <div key={level.id} className="space-y-3 p-4 border rounded-lg">
                   <div className="flex justify-between items-start">
@@ -401,14 +401,14 @@ export default function ProductDetail() {
                       ${Number(level.current_votes || 0).toFixed(0)} / ${Number(level.votes_needed || 0).toFixed(0)}
                     </span>
                   </div>
-                  <Progress 
+                  <Progress
                     value={
-                      level.votes_needed > 0 
-                        ? (Number(level.current_votes || 0) / Number(level.votes_needed)) * 100 
+                      level.votes_needed > 0
+                        ? (Number(level.current_votes || 0) / Number(level.votes_needed)) * 100
                         : 0
-                    } 
+                    }
                   />
-                  
+
                   {/* Time Commitment Selection */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium flex items-center gap-2">
@@ -467,11 +467,11 @@ export default function ProductDetail() {
                       value={votes[level.id] || ''}
                       onChange={(e) => handleVoteChange(level.id, e.target.value)}
                     />
-                    <Button 
+                    <Button
                       onClick={() => handleSubmitVote(level.id)}
                       disabled={
-                        !votes[level.id] || 
-                        parseFloat(votes[level.id]) <= 0 || 
+                        !votes[level.id] ||
+                        parseFloat(votes[level.id]) <= 0 ||
                         !timeCommitments[level.id]
                       }
                     >
@@ -485,7 +485,7 @@ export default function ProductDetail() {
         </Card>
 
         {/* Preorder/Voting Explainer Dialog */}
-        <PreorderVotingExplainer 
+        <PreorderVotingExplainer
           open={showExplainer}
           onOpenChange={setShowExplainer}
           onUnderstood={() => setExplainerUnderstood(true)}

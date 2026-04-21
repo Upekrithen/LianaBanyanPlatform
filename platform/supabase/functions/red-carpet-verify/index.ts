@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
       // ─── SEND EMAIL ───
       // Try Resend if API key is configured
       const resendKey = Deno.env.get('RESEND_API_KEY');
-      
+
       if (resendKey) {
         try {
           const emailResponse = await fetch('https://api.resend.com/emails', {
@@ -87,18 +87,18 @@ Deno.serve(async (req) => {
                 <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
                   <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 8px;">Liana Banyan</h1>
                   <p style="color: #666; margin-bottom: 32px;">Red Carpet Verification</p>
-                  
+
                   <div style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 24px;">
                     <p style="color: #666; font-size: 14px; margin-bottom: 8px;">Your verification code</p>
                     <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px; font-family: monospace;">${code}</div>
                     <p style="color: #999; font-size: 12px; margin-top: 12px;">Expires in 15 minutes</p>
                   </div>
-                  
+
                   <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                    We recognized your organization and have prepared a personalized walkthrough for you. 
+                    We recognized your organization and have prepared a personalized walkthrough for you.
                     Enter this code to continue.
                   </p>
-                  
+
                   <p style="color: #999; font-size: 12px; margin-top: 32px;">
                     If you didn't request this code, you can safely ignore this email.<br>
                     LIANA BANYAN CORPORATION — Wyoming C-Corp

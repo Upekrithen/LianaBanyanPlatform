@@ -9,7 +9,7 @@ export default function IncumbentAdvantage() {
   return (
     <PortalPageLayout>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header Section */}
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4 text-amber-600 border-amber-600">The Salt Mines & X-Ray Goggles</Badge>
@@ -93,7 +93,7 @@ export default function IncumbentAdvantage() {
         {/* Examples Section */}
         <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Real Platform Examples</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
+
           <Card>
             <CardHeader>
               <CardTitle>The Founder Mascot Sketch</CardTitle>

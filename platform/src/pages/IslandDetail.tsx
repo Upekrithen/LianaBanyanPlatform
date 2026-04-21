@@ -157,7 +157,7 @@ const IslandDetail = () => {
                   3D Preview
                 </TabsTrigger>
               </TabsList>
-              
+
               {/* Export Buttons */}
               <div className="flex gap-2">
                 <Button
@@ -251,9 +251,9 @@ const IslandDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Pricing Card - 1 column */}
             <div>
-              <IslandPricingCard 
-                islandId={island.id} 
-                monthlyVisitors={metrics?.monthly_visitors || 0} 
+              <IslandPricingCard
+                islandId={island.id}
+                monthlyVisitors={metrics?.monthly_visitors || 0}
               />
             </div>
 
@@ -268,9 +268,9 @@ const IslandDetail = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <CreateIslandListing islandId={island.id} />
-                
+
                 <div className="mt-6">
                   <IslandMarketplaceListings islandId={island.id} />
                 </div>

@@ -404,23 +404,23 @@
     grid-template-columns: 50px 1fr auto;
     gap: 0.75rem;
   }
-  
+
   .beacon-run-list .crow-feather-card {
     grid-template-columns: 50px 30px 1fr auto;
   }
-  
+
   .feather-date {
     display: none;
   }
-  
+
   .new-feather-card {
     padding: 2rem 1.5rem;
   }
-  
+
   .feather-burst {
     font-size: 4rem;
   }
-  
+
   .feather-icon {
     font-size: 1.2rem;
   }

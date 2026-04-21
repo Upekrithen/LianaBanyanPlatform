@@ -2,7 +2,7 @@
  * GOLDEN KEYS SOCIAL — Phase 6
  * =============================
  * Cross-platform sharing for Golden Key achievements.
- * 
+ *
  * Features:
  * - Share key discoveries to social platforms
  * - Generate shareable achievement cards
@@ -51,23 +51,23 @@ interface ShareConfig {
 function generateShareText(achievement: Achievement, referralCode?: string): string {
   const baseUrl = 'https://lianabanyan.com/golden-key-quest';
   const refParam = referralCode ? `?ref=${referralCode}` : '';
-  
+
   switch (achievement.type) {
     case 'key_found':
       return `🔑 I just found a ${achievement.tier || 'hidden'} Golden Key in the Liana Banyan treasure hunt!\n\n${achievement.value} feathers earned. Can you find the next one?\n\n${baseUrl}${refParam}`;
-    
+
     case 'circle_complete':
       return `🎯 Circle ${achievement.value} COMPLETE!\n\nI've unlocked all the Golden Keys in this circle. The treasure hunt continues...\n\n${baseUrl}${refParam}`;
-    
+
     case 'ticket_won':
       return `🎫✨ GOLDEN TICKET WINNER!\n\nI solved the puzzle and won ${achievement.description}!\n\nJoin the hunt: ${baseUrl}${refParam}`;
-    
+
     case 'multiplier_reached':
       return `⚡ ${achievement.value}x MULTIPLIER UNLOCKED!\n\nMy Golden Key rewards are now multiplied. The streak continues!\n\n${baseUrl}${refParam}`;
-    
+
     case 'leaderboard_rank':
       return `🏆 Ranked #${achievement.value} on the Golden Key Leaderboard!\n\nHelp each other help ourselves.\n\n${baseUrl}${refParam}`;
-    
+
     default:
       return `🔑 Join me on the Golden Key Quest at Liana Banyan!\n\n${baseUrl}${refParam}`;
   }
@@ -119,7 +119,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
   };
 
   const colors = tierColors[achievement.tier || 'common'];
-  
+
   const icons: Record<string, React.ReactNode> = {
     key_found: <Key className="h-8 w-8" />,
     circle_complete: <Trophy className="h-8 w-8" />,
@@ -148,7 +148,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
               {achievement.type === 'leaderboard_rank' ? `#${achievement.value}` : achievement.value}
             </div>
             <div className="text-xs text-white/50">
-              {achievement.type === 'key_found' ? 'feathers' : 
+              {achievement.type === 'key_found' ? 'feathers' :
                achievement.type === 'multiplier_reached' ? 'multiplier' : ''}
             </div>
           </div>
@@ -195,7 +195,7 @@ function ShareButton({
 
 function DaisyChainInfo({ referralCode, referralCount }: { referralCode: string; referralCount: number }) {
   const [copied, setCopied] = useState(false);
-  
+
   const handleCopy = async () => {
     await copyToClipboard(`https://lianabanyan.com/golden-key-quest?ref=${referralCode}`);
     setCopied(true);

@@ -146,16 +146,16 @@ export default function SubdomainManager() {
     try {
       setLoading(true);
       toast.info(`Checking DNS for ${domain}...`);
-      
+
       // Use a DNS-over-HTTPS service to check DNS records
       const response = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
       const data = await response.json();
-      
+
       if (data.Answer && data.Answer.length > 0) {
-        const hasCorrectIP = data.Answer.some((record: any) => 
+        const hasCorrectIP = data.Answer.some((record: any) =>
           record.data === '185.158.133.1' // Replace with your actual IP
         );
-        
+
         if (hasCorrectIP) {
           toast.success('DNS correctly configured!');
         } else {

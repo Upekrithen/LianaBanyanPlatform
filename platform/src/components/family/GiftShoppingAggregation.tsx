@@ -11,7 +11,7 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  ShoppingCart, Calendar, Clock, Users, DollarSign, 
+  ShoppingCart, Calendar, Clock, Users, DollarSign,
   TrendingUp, CheckCircle2, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export function GiftShoppingAggregation({
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [showDialog, setShowDialog] = useState(false);
-  
+
   // Form state
   const [productName, setProductName] = useState(giftItemName || "");
   const [productUrl, setProductUrl] = useState(giftItemUrl || "");
@@ -198,7 +198,7 @@ export function GiftShoppingAggregation({
               Start a Shopping Aggregation
             </DialogTitle>
             <DialogDescription>
-              Let family members know when you're buying something. 
+              Let family members know when you're buying something.
               Others can join for volume discounts!
             </DialogDescription>
           </DialogHeader>
@@ -316,7 +316,7 @@ export function GiftShoppingAggregation({
             <Users className="h-4 w-4" />
             Active Shopping Trips
           </h3>
-          
+
           {aggregations.map((agg) => {
             const participantCount = agg.gift_shopping_participants?.length || 1;
             const discountInfo = getDiscountTier(participantCount);

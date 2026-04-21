@@ -29,18 +29,18 @@ interface WaveSelectionCardProps {
   isFcfsSlot?: boolean;
 }
 
-export const WaveSelectionCard = ({ 
-  wave, 
-  basePrice, 
-  onSelect, 
+export const WaveSelectionCard = ({
+  wave,
+  basePrice,
+  onSelect,
   isSelected = false,
   isFcfsSlot = false
 }: WaveSelectionCardProps) => {
   // Apply surge pricing for waves 1-3 if surge is active
-  const surgeMultiplier = wave.surge_active && wave.wave_number <= 3 && !isFcfsSlot 
-    ? (wave.surge_multiplier || 1.5) 
+  const surgeMultiplier = wave.surge_active && wave.wave_number <= 3 && !isFcfsSlot
+    ? (wave.surge_multiplier || 1.5)
     : 1.0;
-  
+
   const effectiveMultiplier = wave.base_price_multiplier * surgeMultiplier;
   const wavePrice = isFcfsSlot ? basePrice : basePrice * effectiveMultiplier;
   const premiumAmount = wavePrice - basePrice;
@@ -54,7 +54,7 @@ export const WaveSelectionCard = ({
   const isSurgeActive = wave.surge_active && wave.wave_number <= 3;
 
   return (
-    <Card 
+    <Card
       className={`cursor-pointer transition-all hover:shadow-lg ${
         isSelected ? 'ring-2 ring-primary' : ''
       }`}
@@ -195,8 +195,8 @@ export const WaveSelectionCard = ({
         )}
 
         {/* Action */}
-        <Button 
-          className="w-full" 
+        <Button
+          className="w-full"
           variant={isSelected ? "default" : "outline"}
           onClick={() => onSelect(wave.id)}
         >

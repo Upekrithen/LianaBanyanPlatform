@@ -2,12 +2,12 @@
  * FOUNDING TRANSACTIONS
  * =====================
  * Historical ledger entries representing the founding period (2017-2026).
- * 
+ *
  * These transactions accurately reflect:
  * - $525,000 in R&D funding from founding sponsors ("Godfathers")
  * - $525,000 spent on research and development over 9 years
  * - Net result: $0 available (all funds deployed)
- * 
+ *
  * Identity of sponsors kept private per their request.
  * Individual transactions aggregated for ledger clarity.
  */
@@ -74,7 +74,7 @@ export const FOUNDING_LEDGER_SUMMARY = {
   patentApplicationsFiled: 11,
   formalClaims: 2097,
   crownJewels: 167,
-  
+
   // Breakdown by category (approximate)
   expenditureBreakdown: {
     systemArchitecture: 157500, // 30%
@@ -85,7 +85,7 @@ export const FOUNDING_LEDGER_SUMMARY = {
     research: 52500,            // 10%
     miscellaneous: 26250,       // 5%
   },
-  
+
   // Key milestones funded
   milestones: [
     { year: 2017, description: 'Initial system architecture and economic model design' },
@@ -124,6 +124,6 @@ export function formatFoundingTransaction(tx: FoundingTransaction): string {
     style: 'currency',
     currency: 'USD',
   }).format(tx.amount);
-  
+
   return `${sign}${amount} — ${tx.description}`;
 }

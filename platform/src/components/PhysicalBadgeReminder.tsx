@@ -78,14 +78,14 @@ export function PhysicalBadgeReminder() {
           <div className="p-3 bg-amber-100 dark:bg-amber-900 rounded-lg">
             <Award className="w-6 h-6 text-amber-600 dark:text-amber-400" />
           </div>
-          
+
           <div className="flex-1 space-y-3">
             <div>
               <h3 className="font-semibold text-amber-900 dark:text-amber-100">
                 Create Your Physical Member Badge
               </h3>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                Recommended within your first 10 projects. Physical badges feature a QR code linking 
+                Recommended within your first 10 projects. Physical badges feature a QR code linking
                 to your public profile, showcasing your achievements and credentials.
               </p>
             </div>

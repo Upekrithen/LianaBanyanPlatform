@@ -3,7 +3,7 @@
 ## Overview
 Universal "work when you want, as much as you want" system for flexible employment across ALL projects in the Liana Banyan ecosystem.
 
-**Key Differentiator**: 
+**Key Differentiator**:
 - **Initiatives** = LB-owned community service projects
 - **Side Quests** = Flexible work opportunities on ANY member project
 
@@ -34,7 +34,7 @@ Universal "work when you want, as much as you want" system for flexible employme
 #### 2. Position Fulfillment
 **Variable Commitment Contracts**
 - HR Assistant - 25% commitment (10hrs/week)
-- Marketing Coordinator - 50% commitment (20hrs/week)  
+- Marketing Coordinator - 50% commitment (20hrs/week)
 - Full-time Steward - 100% commitment (40hrs/week)
 
 **Benefits**:
@@ -62,38 +62,38 @@ CREATE TABLE side_quests (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID REFERENCES projects(id) NOT NULL,
   created_by UUID REFERENCES profiles(id) NOT NULL,
-  
+
   -- Quest metadata
   quest_type TEXT NOT NULL CHECK (quest_type IN ('marketing', 'position', 'service', 'contract')),
   title TEXT NOT NULL,
   description TEXT NOT NULL,
   requirements JSONB DEFAULT '[]',
-  
+
   -- Commitment structure
   commitment_percentage INTEGER CHECK (commitment_percentage IN (10, 25, 50, 100)),
   time_flexibility TEXT CHECK (time_flexibility IN ('anytime', 'scheduled', 'deadline', 'recurring')),
   estimated_hours_per_week INTEGER,
   duration_weeks INTEGER,
-  
+
   -- Compensation
   reward_credits NUMERIC NOT NULL DEFAULT 0,
   reward_cash NUMERIC DEFAULT 0,
   equity_percentage NUMERIC DEFAULT 0,
   bonus_structure JSONB DEFAULT '{}',
-  
+
   -- Outcome tracking (for marketing quests)
   outcome_metrics JSONB DEFAULT '{}', -- {type: 'signups', target: 50, current: 0}
   success_criteria TEXT,
-  
+
   -- Status
   status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'claimed', 'in_progress', 'completed', 'cancelled')),
   max_claimants INTEGER DEFAULT 1,
   current_claimants INTEGER DEFAULT 0,
-  
+
   -- Scheduling
   start_date TIMESTAMPTZ,
   deadline TIMESTAMPTZ,
-  
+
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -103,23 +103,23 @@ CREATE TABLE side_quest_claims (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   quest_id UUID REFERENCES side_quests(id) NOT NULL,
   user_id UUID REFERENCES profiles(id) NOT NULL,
-  
+
   -- Claim details
   claimed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   started_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
-  
+
   -- Progress tracking
   progress_percentage INTEGER DEFAULT 0 CHECK (progress_percentage >= 0 AND progress_percentage <= 100),
   hours_logged NUMERIC DEFAULT 0,
   deliverables_submitted JSONB DEFAULT '[]',
-  
+
   -- Outcome achievement (marketing quests)
   outcome_achieved JSONB DEFAULT '{}', -- {signups: 52, views: 1200}
   outcome_verified BOOLEAN DEFAULT FALSE,
   verified_by UUID REFERENCES profiles(id),
   verified_at TIMESTAMPTZ,
-  
+
   -- Payment
   payment_status TEXT DEFAULT 'pending' CHECK (payment_status IN ('pending', 'approved', 'paid', 'disputed')),
   credits_awarded NUMERIC DEFAULT 0,
@@ -127,14 +127,14 @@ CREATE TABLE side_quest_claims (
   equity_awarded NUMERIC DEFAULT 0,
   bonus_awarded NUMERIC DEFAULT 0,
   paid_at TIMESTAMPTZ,
-  
+
   -- Performance
   quality_rating INTEGER CHECK (quality_rating >= 1 AND quality_rating <= 5),
   feedback TEXT,
-  
+
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  
+
   UNIQUE(quest_id, user_id)
 );
 
@@ -143,25 +143,25 @@ CREATE TABLE side_quest_benefits (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   claim_id UUID REFERENCES side_quest_claims(id) NOT NULL,
   user_id UUID REFERENCES profiles(id) NOT NULL,
-  
+
   -- Benefit eligibility based on commitment
   commitment_percentage INTEGER NOT NULL,
   health_benefits_eligible BOOLEAN DEFAULT FALSE,
   retirement_eligible BOOLEAN DEFAULT FALSE,
   guild_access_eligible BOOLEAN DEFAULT FALSE,
-  
+
   -- Proportional calculations
   base_compensation NUMERIC NOT NULL,
   proportional_compensation NUMERIC NOT NULL,
   benefits_value_monthly NUMERIC DEFAULT 0,
-  
+
   -- Benefit details
   health_contribution_monthly NUMERIC DEFAULT 0,
   retirement_contribution_percentage NUMERIC DEFAULT 0,
-  
+
   effective_from TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   effective_until TIMESTAMPTZ,
-  
+
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -170,21 +170,21 @@ CREATE TABLE side_quest_benefits (
 CREATE TABLE quest_deliverables (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   claim_id UUID REFERENCES side_quest_claims(id) NOT NULL,
-  
+
   deliverable_type TEXT NOT NULL CHECK (deliverable_type IN ('file', 'link', 'metrics', 'report')),
   title TEXT NOT NULL,
   description TEXT,
-  
+
   -- Content
   file_url TEXT,
   external_url TEXT,
   metrics_data JSONB,
-  
+
   submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   reviewed_at TIMESTAMPTZ,
   approved BOOLEAN,
   reviewer_notes TEXT,
-  
+
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 ```
@@ -341,23 +341,23 @@ const validateOutcome = (outcome: MarketingOutcome): boolean => {
 ```typescript
 const calculatePayment = (quest: SideQuest, claim: SideQuestClaim) => {
   let total = quest.reward_credits;
-  
+
   // Bonus for exceeding targets
   if (quest.quest_type === 'marketing' && claim.outcome_achieved) {
-    const overPerformance = 
-      (claim.outcome_achieved.current - quest.outcome_metrics.target) / 
+    const overPerformance =
+      (claim.outcome_achieved.current - quest.outcome_metrics.target) /
       quest.outcome_metrics.target;
-    
+
     if (overPerformance > 0) {
       total += quest.bonus_structure.over_target_percentage * overPerformance;
     }
   }
-  
+
   // Quality bonus
   if (claim.quality_rating >= 4) {
     total += quest.bonus_structure.quality_bonus || 0;
   }
-  
+
   return total;
 };
 ```

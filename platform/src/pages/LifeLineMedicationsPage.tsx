@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Pill, Factory, Heart, ShieldCheck, FileText, Stethoscope, 
-  ArrowRight, Search, Activity, AlertCircle, Plus, CheckCircle2 
+import {
+  Pill, Factory, Heart, ShieldCheck, FileText, Stethoscope,
+  ArrowRight, Search, Activity, AlertCircle, Plus, CheckCircle2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -72,8 +72,8 @@ export default function LifeLineMedicationsPage() {
           <TabsContent value="pharmacy" className="space-y-6">
             <div className="relative mb-8">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input 
-                placeholder="Search for medications (e.g., Insulin, Albuterol, Lisinopril)..." 
+              <Input
+                placeholder="Search for medications (e.g., Insulin, Albuterol, Lisinopril)..."
                 className="pl-12 h-14 text-lg bg-white border-border shadow-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

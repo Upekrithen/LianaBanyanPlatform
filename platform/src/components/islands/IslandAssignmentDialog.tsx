@@ -25,7 +25,7 @@ export const IslandAssignmentDialog = ({
 }: IslandAssignmentDialogProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
+
   const [formData, setFormData] = useState({
     title: `Island Design: ${islandName}`,
     description: "",

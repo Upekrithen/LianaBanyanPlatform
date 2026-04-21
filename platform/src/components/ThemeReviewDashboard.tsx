@@ -57,7 +57,7 @@ export function ThemeReviewDashboard() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      
+
       // Fetch suggester emails separately
       const suggestionsWithEmails = await Promise.all(
         (data || []).map(async (suggestion) => {
@@ -66,14 +66,14 @@ export function ThemeReviewDashboard() {
             .select('email')
             .eq('id', suggestion.suggested_by)
             .single();
-          
+
           return {
             ...suggestion,
             profiles: { email: profile?.email || 'Unknown' }
           };
         })
       );
-      
+
       return suggestionsWithEmails as ThemeSuggestion[];
     },
     enabled: !!user,
@@ -137,9 +137,9 @@ export function ThemeReviewDashboard() {
 
   const handleRejectConfirm = () => {
     if (selectedTheme && rejectionReason.trim()) {
-      rejectMutation.mutate({ 
-        themeId: selectedTheme.id, 
-        reason: rejectionReason 
+      rejectMutation.mutate({
+        themeId: selectedTheme.id,
+        reason: rejectionReason
       });
     } else {
       toast.error('Please provide a rejection reason');
@@ -199,34 +199,34 @@ export function ThemeReviewDashboard() {
                     )}
 
                     {/* Color Preview */}
-                    <div 
+                    <div
                       className="p-4 rounded-lg border-2 space-y-2"
-                      style={{ 
+                      style={{
                         backgroundColor: suggestion.color_scheme.background,
-                        borderColor: suggestion.color_scheme.primary 
+                        borderColor: suggestion.color_scheme.primary
                       }}
                     >
-                      <div 
+                      <div
                         className="px-3 py-2 rounded font-semibold text-center"
-                        style={{ 
+                        style={{
                           backgroundColor: suggestion.color_scheme.primary,
                           color: '#ffffff'
                         }}
                       >
                         Primary
                       </div>
-                      <div 
+                      <div
                         className="px-3 py-2 rounded font-semibold text-center"
-                        style={{ 
+                        style={{
                           backgroundColor: suggestion.color_scheme.secondary,
                           color: '#ffffff'
                         }}
                       >
                         Secondary
                       </div>
-                      <div 
+                      <div
                         className="px-3 py-2 rounded font-semibold text-center"
-                        style={{ 
+                        style={{
                           backgroundColor: suggestion.color_scheme.accent,
                           color: '#ffffff'
                         }}

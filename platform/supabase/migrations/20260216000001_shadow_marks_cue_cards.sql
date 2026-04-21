@@ -70,12 +70,12 @@ INSERT INTO public.cue_card_templates (
 ) ON CONFLICT DO NOTHING;
 
 -- Add Twitter/LinkedIn/Facebook text variants for each card
-UPDATE public.cue_card_templates 
-SET 
+UPDATE public.cue_card_templates
+SET
   twitter_text = body_text || E'\n\n#LianaBanyan #WorkerOwned',
   linkedin_text = E'Exciting innovation in cooperative economics:\n\n' || body_text,
   facebook_text = body_text
-WHERE initiative_slug = 'pantry' 
+WHERE initiative_slug = 'pantry'
   AND title IN ('Shadow Marks', 'Escape Velocity', 'Makers & Tasters', 'Fill the Shelves', 'Vesting & Decay', 'How Money Flows')
   AND twitter_text IS NULL;
 

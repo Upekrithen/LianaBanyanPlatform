@@ -635,7 +635,7 @@ export default function LBInternalPositions() {
         `)
         .is('project_id', null) // LB internal positions
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data;
     }
@@ -838,8 +838,8 @@ function PositionCards({ positions }: { positions: LBPosition[] }) {
               </div>
             </div>
 
-            <Button 
-              className="w-full" 
+            <Button
+              className="w-full"
               onClick={() => navigate(`/manage-positions?category=${position.category}&title=${encodeURIComponent(position.title)}`)}
             >
               <Plus className="h-4 w-4 mr-2" />

@@ -36,7 +36,7 @@ CREATE TRIGGER update_reference_tasks_updated_at
 
 -- Insert existing static data
 INSERT INTO public.reference_tasks (category, status, completed_date, priority, dependencies, description, items, sort_order) VALUES
-('5. BLOCKCHAIN INFRASTRUCTURE 🔥', 'completed', '2025-10-13', 'Critical', 'None - Foundation layer', 
+('5. BLOCKCHAIN INFRASTRUCTURE 🔥', 'completed', '2025-10-13', 'Critical', 'None - Foundation layer',
  'Core blockchain integration for medallion process, intellectual property protection, and share ownership. Must be implemented first as it underpins the entire token/equity system.',
  '[
    {"id": "5.3", "title": "Wallet Connection", "desc": "RainbowKit multi-wallet integration (MetaMask, Coinbase, etc.) with Base/Base Sepolia support", "completed": true},

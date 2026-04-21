@@ -78,16 +78,16 @@ export default function TheFurnace() {
               <div className="flex gap-3">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                  <Input 
-                    placeholder="Enter Cue Card hash, URL, or business name..." 
+                  <Input
+                    placeholder="Enter Cue Card hash, URL, or business name..."
                     className="pl-10"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
                   />
                 </div>
-                <Button 
-                  onClick={handleVerify} 
+                <Button
+                  onClick={handleVerify}
                   disabled={isVerifying}
                   className="bg-orange-600 hover:bg-orange-700 text-white"
                 >
@@ -97,8 +97,8 @@ export default function TheFurnace() {
 
               {verificationResult && (
                 <div className={`mt-6 p-6 rounded-lg border ${
-                  verificationResult.status === 'verified' 
-                    ? 'bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-900' 
+                  verificationResult.status === 'verified'
+                    ? 'bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-900'
                     : 'bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-900'
                 }`}>
                   <div className="flex items-start gap-4">
@@ -107,7 +107,7 @@ export default function TheFurnace() {
                     ) : (
                       <AlertTriangle className="h-8 w-8 text-red-600 mt-1" />
                     )}
-                    
+
                     <div className="flex-1">
                       <h3 className={`text-xl font-bold ${
                         verificationResult.status === 'verified' ? 'text-green-800 dark:text-green-400' : 'text-red-800 dark:text-red-400'
@@ -117,7 +117,7 @@ export default function TheFurnace() {
                       <p className="text-slate-700 dark:text-slate-300 mt-1">
                         {verificationResult.message}
                       </p>
-                      
+
                       {verificationResult.status === 'verified' && (
                         <div className="mt-4 grid grid-cols-2 gap-4">
                           <div className="bg-white dark:bg-slate-800 p-3 rounded shadow-sm border border-slate-100 dark:border-slate-700">
@@ -263,7 +263,7 @@ export default function TheFurnace() {
               <span>Consumers</span>
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="academia" className="mt-6">
             <Card>
               <CardHeader>

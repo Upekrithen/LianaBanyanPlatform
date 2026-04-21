@@ -43,11 +43,11 @@ export function ScrollySection({
           {stickyContent}
         </div>
       )}
-      
+
       <div className={stickyContent ? 'w-1/2 py-24 px-8' : 'py-24 px-8'}>
         {children}
       </div>
-      
+
       <div className="clear-both" />
     </div>
   );
@@ -125,7 +125,7 @@ export function ProgressIndicator({
             style={{ height: `${progress * 100}%` }}
           />
         </div>
-        
+
         {steps.length > 0 && (
           <div className="absolute top-0 left-4 h-48 flex flex-col justify-between">
             {steps.map((step, index) => (

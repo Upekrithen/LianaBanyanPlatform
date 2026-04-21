@@ -14,10 +14,10 @@ interface StewardshipApplicationFormProps {
   userId: string;
 }
 
-export const StewardshipApplicationForm: React.FC<StewardshipApplicationFormProps> = ({ 
-  initiativeId, 
+export const StewardshipApplicationForm: React.FC<StewardshipApplicationFormProps> = ({
+  initiativeId,
   initiativeName,
-  userId 
+  userId
 }) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,7 +72,7 @@ export const StewardshipApplicationForm: React.FC<StewardshipApplicationFormProp
           Stewardship Application
         </CardTitle>
         <CardDescription>
-          Apply to become the Human Steward for <strong>{initiativeName}</strong>. 
+          Apply to become the Human Steward for <strong>{initiativeName}</strong>.
           This role requires Six-Person Verification and a financial backing pledge.
         </CardDescription>
       </CardHeader>
@@ -80,9 +80,9 @@ export const StewardshipApplicationForm: React.FC<StewardshipApplicationFormProp
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="legalName">Full Legal Name</Label>
-            <Input 
-              id="legalName" 
-              required 
+            <Input
+              id="legalName"
+              required
               placeholder="As it appears on your government ID"
               value={formData.legalName}
               onChange={(e) => setFormData({...formData, legalName: e.target.value})}
@@ -94,9 +94,9 @@ export const StewardshipApplicationForm: React.FC<StewardshipApplicationFormProp
 
           <div className="space-y-2">
             <Label htmlFor="background">Professional Background & Why You Want This Role</Label>
-            <Textarea 
-              id="background" 
-              required 
+            <Textarea
+              id="background"
+              required
               className="min-h-[100px]"
               placeholder="Tell us about your experience and why you are drawn to this initiative..."
               value={formData.backgroundSummary}
@@ -109,12 +109,12 @@ export const StewardshipApplicationForm: React.FC<StewardshipApplicationFormProp
             <p className="text-xs text-muted-foreground mb-2">
               Your AI Advisor will assist you, but you must make the final call. How would you handle these situations?
             </p>
-            
+
             <div className="space-y-2">
               <Label htmlFor="scenarioFraud" className="text-sm">Scenario 1: You suspect a recipient is submitting fraudulent requests.</Label>
-              <Textarea 
-                id="scenarioFraud" 
-                required 
+              <Textarea
+                id="scenarioFraud"
+                required
                 placeholder="Your response..."
                 value={formData.scenarioFraud}
                 onChange={(e) => setFormData({...formData, scenarioFraud: e.target.value})}
@@ -123,9 +123,9 @@ export const StewardshipApplicationForm: React.FC<StewardshipApplicationFormProp
 
             <div className="space-y-2">
               <Label htmlFor="scenarioConflict" className="text-sm">Scenario 2: The AI Advisor strongly recommends denying a request, but your human intuition says otherwise.</Label>
-              <Textarea 
-                id="scenarioConflict" 
-                required 
+              <Textarea
+                id="scenarioConflict"
+                required
                 placeholder="Your response..."
                 value={formData.scenarioConflict}
                 onChange={(e) => setFormData({...formData, scenarioConflict: e.target.value})}

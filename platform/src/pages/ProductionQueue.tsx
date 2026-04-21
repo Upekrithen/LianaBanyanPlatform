@@ -14,9 +14,9 @@ export default function ProductionQueue() {
     setCalculating(true);
     try {
       const { data, error } = await supabase.functions.invoke('calculate-value-ratings');
-      
+
       if (error) throw error;
-      
+
       toast({
         title: "Queue Updated!",
         description: `Recalculated ${data.ratings_calculated} product ratings`,
@@ -42,8 +42,8 @@ export default function ProductionQueue() {
             Transparent, AI-optimized scheduling based on real demand
           </p>
         </div>
-        <Button 
-          onClick={handleRecalculate} 
+        <Button
+          onClick={handleRecalculate}
           disabled={calculating}
           className="gap-2"
         >

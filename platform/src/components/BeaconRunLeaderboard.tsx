@@ -38,10 +38,10 @@ interface GlobalStats {
 
 /**
  * Beacon Run Leaderboard
- * 
+ *
  * Displays rankings for Beacon Run completions.
  * "Not in normal mode. You'd have to go Ghost."
- * 
+ *
  * Features:
  * - Per-run leaderboard (fastest completions)
  * - Global leaderboard (all-time bests)
@@ -170,14 +170,14 @@ export const BeaconRunLeaderboard: React.FC<BeaconRunLeaderboardProps> = ({
 
         <Tabs defaultValue="speed" className="w-full">
           <TabsList className="w-full justify-start rounded-none border-b border-orange-500/10 bg-transparent p-0">
-            <TabsTrigger 
-              value="speed" 
+            <TabsTrigger
+              value="speed"
               className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-400 data-[state=active]:bg-transparent"
             >
               <Clock className="w-4 h-4 mr-1" />
               Fastest Times
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="feathers"
               className="rounded-none border-b-2 border-transparent data-[state=active]:border-orange-400 data-[state=active]:bg-transparent"
             >
@@ -197,7 +197,7 @@ export const BeaconRunLeaderboard: React.FC<BeaconRunLeaderboardProps> = ({
             ) : (
               <div className="divide-y divide-orange-500/10">
                 {leaderboard.map((entry, index) => (
-                  <div 
+                  <div
                     key={entry.id}
                     className={`flex items-center gap-4 p-4 transition-colors hover:bg-orange-500/5 ${
                       index < 3 ? 'bg-orange-500/5' : ''
@@ -206,7 +206,7 @@ export const BeaconRunLeaderboard: React.FC<BeaconRunLeaderboardProps> = ({
                     <div className="w-8 text-center font-bold">
                       {getRankBadge(index + 1)}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="font-medium truncate">
                         {entry.profiles?.display_name || 'Anonymous Ghost'}
@@ -250,7 +250,7 @@ export const BeaconRunLeaderboard: React.FC<BeaconRunLeaderboardProps> = ({
             ) : (
               <div className="divide-y divide-orange-500/10">
                 {crowFeathers.map((feather) => (
-                  <div 
+                  <div
                     key={feather.id}
                     className="flex items-center gap-4 p-4 transition-colors hover:bg-orange-500/5"
                   >
@@ -263,7 +263,7 @@ export const BeaconRunLeaderboard: React.FC<BeaconRunLeaderboardProps> = ({
                     </div>
                     <div className="text-right">
                       <div className="font-mono font-bold text-orange-400">
-                        {feather.category === 'beacon_run_speed' 
+                        {feather.category === 'beacon_run_speed'
                           ? formatCompletionTime(feather.recordValue * 1000)
                           : feather.recordValue}
                       </div>

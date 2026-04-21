@@ -50,7 +50,7 @@ export default function ProjectLanding() {
       const totalLevels = data.length;
       const fundedLevels = data.filter(l => l.current_votes >= l.votes_needed).length;
       const currentLevel = data.find(l => l.current_votes < l.votes_needed) || data[data.length - 1];
-      
+
       return {
         totalLevels,
         fundedLevels,
@@ -89,14 +89,14 @@ export default function ProjectLanding() {
     );
   }
 
-  const valueProps = Array.isArray(landingPage.value_propositions) 
-    ? landingPage.value_propositions 
+  const valueProps = Array.isArray(landingPage.value_propositions)
+    ? landingPage.value_propositions
     : [];
-  const features = Array.isArray(landingPage.key_features) 
-    ? landingPage.key_features 
+  const features = Array.isArray(landingPage.key_features)
+    ? landingPage.key_features
     : [];
-  const testimonials = Array.isArray(landingPage.testimonials) 
-    ? landingPage.testimonials 
+  const testimonials = Array.isArray(landingPage.testimonials)
+    ? landingPage.testimonials
     : [];
 
   return (
@@ -117,7 +117,7 @@ export default function ProjectLanding() {
                   {landingPage.hero_subtitle}
                 </p>
               )}
-              
+
               {/* Voting Progress */}
               {votingStatus && (
                 <Card className="bg-background/80 backdrop-blur">
@@ -130,7 +130,7 @@ export default function ProjectLanding() {
                         </span>
                       </div>
                       <div className="h-3 bg-muted rounded-full overflow-hidden">
-                        <div 
+                        <div
                           className="h-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-500"
                           style={{ width: `${votingStatus.progressPercentage}%` }}
                         />
@@ -150,18 +150,18 @@ export default function ProjectLanding() {
                   </CardContent>
                 </Card>
               )}
-              
+
               <Button size="lg" onClick={handleCTA} className="group">
                 {landingPage.call_to_action_text}
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
-            
+
             {landingPage.hero_image_url && (
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-2xl blur-3xl" />
-                <img 
-                  src={landingPage.hero_image_url} 
+                <img
+                  src={landingPage.hero_image_url}
                   alt={landingPage.hero_title}
                   className="relative rounded-2xl shadow-2xl w-full h-auto"
                 />

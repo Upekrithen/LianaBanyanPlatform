@@ -34,7 +34,7 @@ export const PositionAssignmentDialog = ({
   const [dutyDescription, setDutyDescription] = useState("");
   const [notes, setNotes] = useState("");
   const [startDate, setStartDate] = useState("");
-  
+
   // Compensation adjustments
   const [originalParticipation, setOriginalParticipation] = useState(0);
   const [adjustedParticipation, setAdjustedParticipation] = useState(0);

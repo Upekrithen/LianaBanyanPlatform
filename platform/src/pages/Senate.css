@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
-  box-shadow: 
+  box-shadow:
     0 0 20px hsl(var(--primary) / 0.1),
     inset 0 0 20px hsl(var(--primary) / 0.05);
 }
@@ -177,27 +177,27 @@
     width: 320px;
     height: 320px;
   }
-  
+
   .senate-center {
     width: 80px;
     height: 80px;
   }
-  
+
   .senate-hall-icon {
     width: 48px;
     height: 48px;
   }
-  
+
   .senate-hall-name {
     font-size: 0.65rem;
     max-width: 60px;
   }
-  
+
   .senate-hexagon-hub::before {
     width: 220px;
     height: 220px;
   }
-  
+
   .senate-hexagon-hub::after {
     width: 160px;
     height: 160px;

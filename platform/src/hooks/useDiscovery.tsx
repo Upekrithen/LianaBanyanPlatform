@@ -14,29 +14,29 @@ export const DASHBOARD_DISCOVERY_MAP = {
   // Essential (always visible after signup)
   'membership-status': 'essentials',
   'guild-stake': 'essentials',
-  
+
   // Initiatives (discovered via navigation)
   'lets-make-dinner': 'initiatives',
   'defense-klaus': 'initiatives',
   'lets-get-groceries': 'initiatives',
   'lets-go-shopping': 'initiatives',
-  
+
   // Exploration (discovered via navigation)
   'crowdfunding-hub': 'exploration',
   'medallion-management': 'exploration',
   'hofund-studio': 'exploration',
   'herald-subscription': 'exploration',
-  
+
   // Economy (discovered via navigation)
   'eoi-dashboard': 'economy',
   'project-preferences': 'economy',
   'participation-breakdown': 'economy',
   'contribution-timeline': 'economy',
-  
+
   // Governance (discovered via navigation)
   'legal-formation': 'governance',
   'charitable-loan': 'governance',
-  
+
   // Tools
   'referral-manager': 'tools',
   'physical-badge': 'tools',
@@ -69,7 +69,7 @@ export function DiscoveryProvider({ children }: { children: ReactNode }) {
 
   const loadDiscoveries = async () => {
     setIsLoading(true);
-    
+
     if (user) {
       // Load from database
       const { data } = await supabase
@@ -80,12 +80,12 @@ export function DiscoveryProvider({ children }: { children: ReactNode }) {
       if (data) {
         const cards = new Set(data.filter(d => d.card_slug).map(d => d.card_slug as string));
         const categories = new Set(data.map(d => d.category_slug));
-        
+
         // Auto-discover essentials for all authenticated users
         cards.add('membership-status');
         cards.add('guild-stake');
         categories.add('essentials');
-        
+
         setDiscoveries(cards);
         setCategoryDiscoveries(categories);
       } else {
@@ -110,7 +110,7 @@ export function DiscoveryProvider({ children }: { children: ReactNode }) {
         setCategoryDiscoveries(new Set());
       }
     }
-    
+
     setIsLoading(false);
   };
 

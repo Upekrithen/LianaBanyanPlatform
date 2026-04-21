@@ -92,13 +92,13 @@ export default function Projects() {
   const loadProjects = async () => {
     setLoading(true);
     const { data, error } = await centralApi.listProjects();
-    
+
     if (error) {
       setError(error);
     } else if (data) {
       setProjects(data.projects || []);
     }
-    
+
     setLoading(false);
   };
 
@@ -137,7 +137,7 @@ export default function Projects() {
               <CardDescription>{project.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button 
+              <Button
                 onClick={() => navigate(\`/project/\${project.id}\`)}
                 className="w-full"
               >
@@ -177,28 +177,28 @@ export default function ProjectDetail() {
   const loadProject = async () => {
     setLoading(true);
     const { data, error } = await centralApi.getProject(projectId!);
-    
+
     if (error) {
       toast.error(error);
     } else if (data) {
       setProject(data.project);
     }
-    
+
     setLoading(false);
   };
 
   const handleVote = async (productionLevelId: string) => {
     const amount = parseFloat(voteAmounts[productionLevelId] || '0');
-    
+
     if (amount <= 0) {
       toast.error('Please enter a valid amount');
       return;
     }
 
     setSubmitting({ ...submitting, [productionLevelId]: true });
-    
+
     const { data, error } = await centralApi.submitVote(productionLevelId, amount);
-    
+
     if (error) {
       toast.error(error);
     } else {
@@ -206,7 +206,7 @@ export default function ProjectDetail() {
       setVoteAmounts({ ...voteAmounts, [productionLevelId]: '' });
       loadProject(); // Reload to get updated vote counts
     }
-    
+
     setSubmitting({ ...submitting, [productionLevelId]: false });
   };
 
@@ -262,7 +262,7 @@ export default function ProjectDetail() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex gap-2 mt-4">
                       <Input
                         type="number"

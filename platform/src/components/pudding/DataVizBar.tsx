@@ -68,8 +68,8 @@ export function DataVizBar({
                   </span>
                 )}
               </div>
-              
-              <div 
+
+              <div
                 className="w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
                 style={{ height }}
               >
@@ -78,8 +78,8 @@ export function DataVizBar({
                   style={{ backgroundColor: item.color || '#f97316' }}
                   initial={animated ? { width: 0 } : undefined}
                   animate={{ width: `${(item.value / max) * 100}%` }}
-                  transition={{ 
-                    duration: 0.8, 
+                  transition={{
+                    duration: 0.8,
                     delay: animated ? index * 0.1 : 0,
                     ease: 'easeOut'
                   }}
@@ -113,8 +113,8 @@ export function DataVizBar({
               style={{ backgroundColor: item.color || '#f97316' }}
               initial={animated ? { height: 0 } : undefined}
               animate={{ height: `${(item.value / max) * 100}%` }}
-              transition={{ 
-                duration: 0.8, 
+              transition={{
+                duration: 0.8,
                 delay: animated ? index * 0.1 : 0,
                 ease: 'easeOut'
               }}
@@ -166,12 +166,12 @@ export function ComparisonBar({
           {title}
         </h4>
       )}
-      
+
       <div className="flex justify-between text-sm mb-1">
         <span style={{ color: leftColor }}>{leftLabel}</span>
         <span style={{ color: rightColor }}>{rightLabel}</span>
       </div>
-      
+
       <div className="h-8 rounded-full overflow-hidden flex">
         <motion.div
           className="h-full flex items-center justify-center text-white text-xs font-bold"
@@ -192,7 +192,7 @@ export function ComparisonBar({
           {(100 - leftPercent) > 15 && `${(100 - leftPercent).toFixed(0)}%`}
         </motion.div>
       </div>
-      
+
       <div className="flex justify-between text-xs text-gray-500 mt-1">
         <span>{leftValue.toLocaleString()}</span>
         <span>{rightValue.toLocaleString()}</span>

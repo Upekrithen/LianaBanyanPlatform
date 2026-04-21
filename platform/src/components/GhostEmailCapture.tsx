@@ -1,11 +1,11 @@
 /**
  * GhostEmailCapture.tsx
- * 
+ *
  * Dialog that captures ghost user emails when they want to share cue cards.
  * - Explains that their shares may earn rewards
  * - Stores email with tracking token
  * - Returns personalized QR URL for their shares
- * 
+ *
  * Rewards are applied when they eventually sign up as members.
  */
 
@@ -22,11 +22,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Mail, 
-  Gift, 
-  Share2, 
-  Sparkles, 
+import {
+  Mail,
+  Gift,
+  Share2,
+  Sparkles,
   Check,
   ArrowRight,
   Users,
@@ -86,7 +86,7 @@ export function GhostEmailCapture({
       if (existing) {
         // Use existing token
         trackingToken = existing.tracking_token;
-        
+
         // Increment share count
         await supabase.rpc("increment_ghost_share", { p_token: trackingToken });
       } else {
@@ -143,7 +143,7 @@ export function GhostEmailCapture({
             Earn Rewards for Sharing
           </DialogTitle>
           <DialogDescription>
-            Enter your email to track your shares. When you sign up later, 
+            Enter your email to track your shares. When you sign up later,
             your rewards will be waiting!
           </DialogDescription>
         </DialogHeader>
@@ -228,8 +228,8 @@ export function GhostEmailCapture({
           <Button variant="ghost" onClick={onClose}>
             Skip for now
           </Button>
-          <Button 
-            onClick={handleSubmit} 
+          <Button
+            onClick={handleSubmit}
             disabled={isSubmitting || !email}
             className="gap-2"
           >

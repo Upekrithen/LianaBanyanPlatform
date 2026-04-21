@@ -7,7 +7,7 @@
 -- ════════════════════════════════════════════════════════════════════════════
 -- GHOST WORLD & HALF-LIFE LEADERBOARDS
 -- ════════════════════════════════════════════════════════════════════════════
--- 
+--
 -- "Not in normal mode. You'd have to go Ghost."
 -- "The crow remembers what the ghost forgets."
 --
@@ -155,27 +155,27 @@ CREATE TABLE IF NOT EXISTS treasure_maps (
   title TEXT NOT NULL,
   description TEXT,
   difficulty_level INTEGER NOT NULL DEFAULT 1 CHECK (difficulty_level BETWEEN 1 AND 5),
-  
+
   -- Route data
   beacons JSONB NOT NULL DEFAULT '[]',
   starting_location TEXT NOT NULL,
   ending_location TEXT NOT NULL,
   estimated_time_minutes INTEGER,
-  
+
   -- Requirements
   required_candles INTEGER DEFAULT 0,
   required_equipment JSONB DEFAULT '[]',
-  
+
   -- Economics
   ante_price DECIMAL(6,2) DEFAULT 0,
   creator_earnings DECIMAL(12,2) DEFAULT 0,
   total_runs INTEGER DEFAULT 0,
-  
+
   -- Records
   best_time_seconds INTEGER,
   best_time_user_id UUID REFERENCES auth.users(id),
   best_time_at TIMESTAMPTZ,
-  
+
   -- Status
   is_published BOOLEAN DEFAULT FALSE,
   published_at TIMESTAMPTZ,
@@ -264,22 +264,22 @@ CREATE TABLE IF NOT EXISTS fray_leagues (
   description TEXT,
   map_id UUID REFERENCES treasure_maps(id),
   discord_channel_id TEXT,
-  
+
   -- Schedule
   starts_at TIMESTAMPTZ NOT NULL,
   ends_at TIMESTAMPTZ NOT NULL,
   registration_deadline TIMESTAMPTZ,
-  
+
   -- Economics
   entry_ante DECIMAL(6,2) DEFAULT 0,
   prize_pool DECIMAL(12,2) DEFAULT 0,
   platform_cut_percent DECIMAL(4,2) DEFAULT 20,
-  
+
   -- Status
   status TEXT DEFAULT 'upcoming' CHECK (status IN (
     'upcoming', 'registration_open', 'in_progress', 'completed', 'cancelled'
   )),
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -289,13 +289,13 @@ CREATE TABLE IF NOT EXISTS fray_entries (
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   registered_at TIMESTAMPTZ DEFAULT NOW(),
   ante_paid DECIMAL(6,2),
-  
+
   -- Results
   best_run_id UUID REFERENCES treasure_map_runs(id),
   best_time_seconds INTEGER,
   final_rank INTEGER,
   prize_earned DECIMAL(6,2),
-  
+
   UNIQUE(league_id, user_id)
 );
 
@@ -1048,18 +1048,18 @@ CREATE TABLE IF NOT EXISTS fresh_start_log (
   reset_number INTEGER NOT NULL DEFAULT 1,
   reset_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   marks_spent INTEGER NOT NULL DEFAULT 1,
-  
+
   -- Snapshot of what was reset (for transparency)
   previous_reputation_score NUMERIC,
   previous_guild_level INTEGER,
   previous_discovery_count INTEGER,
   previous_completed_bounties INTEGER,
-  
+
   -- What they kept
   kept_portfolio_value NUMERIC,
   kept_collected_cards INTEGER,
   kept_ip_stakes INTEGER,
-  
+
   CONSTRAINT max_resets CHECK (reset_number <= 490)
 );
 
@@ -1136,7 +1136,7 @@ BEGIN
   END IF;
 
   -- Capture current state for the log
-  SELECT 
+  SELECT
     COALESCE(reputation_score, 0),
     COALESCE(guild_level, 1),
     (SELECT COUNT(*) FROM user_discovered_cards WHERE user_id = p_user_id),
@@ -1147,10 +1147,10 @@ BEGIN
   -- Capture what they keep
   SELECT COALESCE(SUM(current_value), 0) INTO v_portfolio_value
   FROM user_portfolio WHERE user_id = p_user_id;
-  
+
   SELECT COUNT(*) INTO v_cards_count
   FROM user_collected_cards WHERE user_id = p_user_id;
-  
+
   SELECT COUNT(*) INTO v_ip_count
   FROM sponsor_pool_shares WHERE user_id = p_user_id;
 
@@ -1244,7 +1244,7 @@ SELECT
   ROUND(EXTRACT(DAY FROM (now() - p.created_at))::numeric / (COALESCE(p.fresh_start_count, 0) + 1), 2) AS stability_score
 FROM profiles p;
 
-COMMENT ON VIEW member_reputation_stability IS 
+COMMENT ON VIEW member_reputation_stability IS
 'Shows the value of consistent reputation vs frequent resets. High stability_score = trustworthy long-term member.';
 
 -- Grant access
@@ -1260,9 +1260,9 @@ GRANT SELECT ON member_reputation_stability TO authenticated;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-    AND table_name = 'innovation_log' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'innovation_log'
     AND column_name = 'description'
   ) THEN
     ALTER TABLE public.innovation_log ADD COLUMN description text;
@@ -1274,9 +1274,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-    AND table_name = 'innovation_log' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'innovation_log'
     AND column_name = 'category'
   ) THEN
     ALTER TABLE public.innovation_log ADD COLUMN category text;
@@ -1288,9 +1288,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-    AND table_name = 'innovation_log' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'innovation_log'
     AND column_name = 'patent_bag'
   ) THEN
     ALTER TABLE public.innovation_log ADD COLUMN patent_bag text;
@@ -1302,9 +1302,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-    AND table_name = 'innovation_log' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'innovation_log'
     AND column_name = 'status'
   ) THEN
     ALTER TABLE public.innovation_log ADD COLUMN status text DEFAULT 'documented';
@@ -1324,14 +1324,14 @@ CREATE TABLE IF NOT EXISTS public.current_metrics (
 );
 
 -- Verify innovation_log columns
-SELECT column_name, data_type 
-FROM information_schema.columns 
+SELECT column_name, data_type
+FROM information_schema.columns
 WHERE table_schema = 'public' AND table_name = 'innovation_log'
 ORDER BY ordinal_position;
 
 -- Verify current_metrics exists
-SELECT column_name, data_type 
-FROM information_schema.columns 
+SELECT column_name, data_type
+FROM information_schema.columns
 WHERE table_schema = 'public' AND table_name = 'current_metrics'
 ORDER BY ordinal_position;
 
@@ -1447,7 +1447,7 @@ CREATE POLICY "Members can view family gift lists"
     ON family_gift_lists FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -1457,7 +1457,7 @@ CREATE POLICY "Members can create gift lists"
     ON family_gift_lists FOR INSERT
     WITH CHECK (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -1467,7 +1467,7 @@ CREATE POLICY "Owners can update their lists"
     ON family_gift_lists FOR UPDATE
     USING (
         owner_id IN (
-            SELECT id FROM family_members 
+            SELECT id FROM family_members
             WHERE user_id = auth.uid()
         )
     );
@@ -1477,7 +1477,7 @@ CREATE POLICY "Owners can delete their lists"
     ON family_gift_lists FOR DELETE
     USING (
         owner_id IN (
-            SELECT id FROM family_members 
+            SELECT id FROM family_members
             WHERE user_id = auth.uid()
         )
     );
@@ -1561,7 +1561,7 @@ CREATE POLICY "Members can insert claim history"
 -- ─────────────────────────────────────────────────────────────────────────────
 DROP VIEW IF EXISTS gift_list_items_for_owner;
 CREATE OR REPLACE VIEW gift_list_items_for_owner AS
-SELECT 
+SELECT
     gi.id,
     gi.list_id,
     gi.name,
@@ -1589,7 +1589,7 @@ WHERE fm.user_id = auth.uid();
 -- ─────────────────────────────────────────────────────────────────────────────
 DROP VIEW IF EXISTS gift_list_items_for_family;
 CREATE OR REPLACE VIEW gift_list_items_for_family AS
-SELECT 
+SELECT
     gi.*,
     fm_claimer.nickname AS claimed_by_name,
     fm_claimer.symbol AS claimed_by_symbol
@@ -1597,7 +1597,7 @@ FROM gift_list_items gi
 JOIN family_gift_lists gl ON gi.list_id = gl.id
 JOIN family_members fm ON gl.family_id = fm.family_id
 LEFT JOIN family_members fm_claimer ON gi.claimed_by = fm_claimer.id
-WHERE fm.user_id = auth.uid() 
+WHERE fm.user_id = auth.uid()
   AND fm.is_active = true
   -- Only show full details if user is NOT the owner
   AND gl.owner_id NOT IN (
@@ -1624,26 +1624,26 @@ BEGIN
     IF NOT FOUND THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item not found');
     END IF;
-    
+
     -- Check if already claimed
     IF v_item.claimed_by IS NOT NULL THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item already claimed');
     END IF;
-    
+
     -- Get the list
     SELECT * INTO v_list FROM family_gift_lists WHERE id = v_item.list_id;
-    
+
     -- Check if claimer is the owner (can't claim your own items!)
     SELECT EXISTS(
         SELECT 1 FROM family_members fm
-        WHERE fm.id = p_member_id 
+        WHERE fm.id = p_member_id
         AND fm.id = v_list.owner_id
     ) INTO v_is_owner;
-    
+
     IF v_is_owner THEN
         RETURN jsonb_build_object('success', false, 'error', 'Cannot claim your own items');
     END IF;
-    
+
     -- Claim the item
     UPDATE gift_list_items
     SET claimed_by = p_member_id,
@@ -1651,11 +1651,11 @@ BEGIN
         quantity_claimed = quantity_claimed + 1,
         updated_at = NOW()
     WHERE id = p_item_id;
-    
+
     -- Record in history
     INSERT INTO gift_claim_history (item_id, member_id, action)
     VALUES (p_item_id, p_member_id, 'claim');
-    
+
     RETURN jsonb_build_object('success', true, 'message', 'Item claimed successfully');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -1674,12 +1674,12 @@ BEGIN
     IF NOT FOUND THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item not found');
     END IF;
-    
+
     -- Check if this member claimed it
     IF v_item.claimed_by != p_member_id THEN
         RETURN jsonb_build_object('success', false, 'error', 'You did not claim this item');
     END IF;
-    
+
     -- Unclaim the item
     UPDATE gift_list_items
     SET claimed_by = NULL,
@@ -1687,11 +1687,11 @@ BEGIN
         quantity_claimed = GREATEST(0, quantity_claimed - 1),
         updated_at = NOW()
     WHERE id = p_item_id;
-    
+
     -- Record in history
     INSERT INTO gift_claim_history (item_id, member_id, action)
     VALUES (p_item_id, p_member_id, 'unclaim');
-    
+
     RETURN jsonb_build_object('success', true, 'message', 'Item unclaimed');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -1710,12 +1710,12 @@ BEGIN
     IF NOT FOUND THEN
         RETURN jsonb_build_object('success', false, 'error', 'Item not found');
     END IF;
-    
+
     -- Check if this member claimed it
     IF v_item.claimed_by != p_member_id THEN
         RETURN jsonb_build_object('success', false, 'error', 'You must claim an item before marking it purchased');
     END IF;
-    
+
     -- Mark as purchased
     UPDATE gift_list_items
     SET purchased = true,
@@ -1723,11 +1723,11 @@ BEGIN
         purchased_at = NOW(),
         updated_at = NOW()
     WHERE id = p_item_id;
-    
+
     -- Record in history
     INSERT INTO gift_claim_history (item_id, member_id, action)
     VALUES (p_item_id, p_member_id, 'purchase');
-    
+
     RETURN jsonb_build_object('success', true, 'message', 'Item marked as purchased');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -1769,7 +1769,7 @@ CREATE TABLE IF NOT EXISTS family_calendars (
     description TEXT,
     color TEXT DEFAULT '#3B82F6', -- Hex color for display
     is_default BOOLEAN DEFAULT false, -- Main family calendar
-    
+
     -- Google Calendar Integration
     google_calendar_id TEXT, -- Google Calendar ID for sync
     google_account_email TEXT, -- Which Google account owns this
@@ -1777,11 +1777,11 @@ CREATE TABLE IF NOT EXISTS family_calendars (
     sync_direction TEXT DEFAULT 'both' CHECK (sync_direction IN ('pull', 'push', 'both')),
     last_sync_at TIMESTAMPTZ,
     sync_token TEXT, -- For incremental sync
-    
+
     -- Settings
     default_reminder_minutes INT DEFAULT 30,
     timezone TEXT DEFAULT 'America/Chicago',
-    
+
     created_by UUID REFERENCES family_members(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -1797,44 +1797,44 @@ CREATE INDEX IF NOT EXISTS idx_family_calendars_google ON family_calendars(googl
 CREATE TABLE IF NOT EXISTS family_events (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     calendar_id UUID NOT NULL REFERENCES family_calendars(id) ON DELETE CASCADE,
-    
+
     -- Event Details
     title TEXT NOT NULL,
     description TEXT,
     location TEXT,
     event_type TEXT DEFAULT 'custom' CHECK (event_type IN (
         'birthday', 'holiday', 'anniversary',
-        'appointment', 'medical', 
+        'appointment', 'medical',
         'meal', 'shopping',
         'sports', 'school', 'work',
         'reminder', 'custom'
     )),
-    
+
     -- Timing
     start_time TIMESTAMPTZ NOT NULL,
     end_time TIMESTAMPTZ,
     all_day BOOLEAN DEFAULT false,
     timezone TEXT,
-    
+
     -- Recurrence (RRULE format: "FREQ=WEEKLY;BYDAY=MO,WE,FR")
     recurrence_rule TEXT,
     recurrence_end DATE,
     is_recurring BOOLEAN DEFAULT false,
     parent_event_id UUID REFERENCES family_events(id) ON DELETE CASCADE, -- For recurrence exceptions
-    
+
     -- Attendees (family members)
     attendees UUID[] DEFAULT '{}', -- Array of family_member IDs
-    
+
     -- Integration Links
     google_event_id TEXT, -- For Google Calendar sync
     source TEXT DEFAULT 'manual' CHECK (source IN (
         'manual', 'google', 'meal_plan', 'shopping', 'gift_occasion', 'recurring'
     )),
     source_id UUID, -- Link to meal_plan, shopping_order, gift_list, etc.
-    
+
     -- Reminders
     reminder_minutes INT[], -- Array of reminder times (e.g., [30, 60, 1440])
-    
+
     -- Metadata
     color TEXT, -- Override calendar color
     is_private BOOLEAN DEFAULT false, -- Only show to attendees
@@ -1903,7 +1903,7 @@ CREATE POLICY "Members can view family calendars"
     ON family_calendars FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -1913,7 +1913,7 @@ CREATE POLICY "Members can create calendars"
     ON family_calendars FOR INSERT
     WITH CHECK (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -1926,7 +1926,7 @@ CREATE POLICY "Creators can update calendars"
             SELECT id FROM family_members WHERE user_id = auth.uid()
         )
         OR family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND role = 'founder'
         )
     );
@@ -1942,7 +1942,7 @@ CREATE POLICY "Members can view family events"
         )
         AND (
             -- Public events or user is attendee
-            is_private = false 
+            is_private = false
             OR created_by IN (SELECT id FROM family_members WHERE user_id = auth.uid())
             OR (SELECT id FROM family_members WHERE user_id = auth.uid()) = ANY(attendees)
         )
@@ -2030,7 +2030,7 @@ BEGIN
     FROM family_calendars
     WHERE family_id = p_family_id AND is_default = true
     LIMIT 1;
-    
+
     -- If no default, get first calendar
     IF v_calendar_id IS NULL THEN
         SELECT id INTO v_calendar_id
@@ -2038,12 +2038,12 @@ BEGIN
         WHERE family_id = p_family_id
         LIMIT 1;
     END IF;
-    
+
     -- If still no calendar, can't create event
     IF v_calendar_id IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Determine start time based on slot
     v_start_time := p_meal_date::timestamp + CASE p_meal_slot
         WHEN 'breakfast' THEN INTERVAL '8 hours'
@@ -2051,7 +2051,7 @@ BEGIN
         WHEN 'dinner' THEN INTERVAL '18 hours'
         ELSE INTERVAL '12 hours'
     END;
-    
+
     -- Create the event
     INSERT INTO family_events (
         calendar_id, title, event_type, start_time, end_time,
@@ -2065,7 +2065,7 @@ BEGIN
         'meal_plan',
         p_meal_plan_id
     ) RETURNING id INTO v_event_id;
-    
+
     RETURN v_event_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -2086,29 +2086,29 @@ BEGIN
     FROM family_gift_lists gl
     JOIN family_members fm ON gl.owner_id = fm.id
     WHERE gl.id = p_gift_list_id;
-    
+
     IF v_list.occasion_date IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Get default family calendar
     SELECT id INTO v_calendar_id
     FROM family_calendars
     WHERE family_id = v_list.family_id AND is_default = true
     LIMIT 1;
-    
+
     IF v_calendar_id IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Create the event
     INSERT INTO family_events (
-        calendar_id, 
-        title, 
-        event_type, 
-        start_time, 
+        calendar_id,
+        title,
+        event_type,
+        start_time,
         all_day,
-        source, 
+        source,
         source_id
     ) VALUES (
         v_calendar_id,
@@ -2124,7 +2124,7 @@ BEGIN
         'gift_occasion',
         p_gift_list_id
     ) RETURNING id INTO v_event_id;
-    
+
     RETURN v_event_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -2185,30 +2185,30 @@ CREATE TRIGGER trigger_create_default_calendar
 -- ─────────────────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS gift_shopping_aggregations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    
+
     -- Link to gift item (optional - can be standalone)
     gift_item_id UUID REFERENCES gift_list_items(id) ON DELETE SET NULL,
     family_id UUID REFERENCES families(id) ON DELETE CASCADE,
-    
+
     -- Shopping details
     product_name TEXT NOT NULL,
     product_url TEXT,
     product_price DECIMAL(10,2),
     quantity_needed INT DEFAULT 1,
-    
+
     -- Cold start window
     shopping_date DATE NOT NULL,
     shopping_time TIME,
     window_closes_at TIMESTAMPTZ NOT NULL,
-    
+
     -- Aggregation status
     status TEXT DEFAULT 'open' CHECK (status IN ('open', 'closed', 'purchased', 'cancelled')),
     min_participants INT DEFAULT 2,
     current_participants INT DEFAULT 1,
-    
+
     -- Discount tiers
     discount_tier INT DEFAULT 0, -- 0=none, 1=10%, 2=15%, 3=20%
-    
+
     -- Creator
     created_by UUID REFERENCES family_members(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -2249,7 +2249,7 @@ CREATE POLICY "Members can view shopping aggregations"
     ON gift_shopping_aggregations FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -2259,7 +2259,7 @@ CREATE POLICY "Members can create aggregations"
     ON gift_shopping_aggregations FOR INSERT
     WITH CHECK (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -2320,7 +2320,7 @@ BEGIN
     IF TG_OP = 'INSERT' THEN
         UPDATE gift_shopping_aggregations
         SET current_participants = current_participants + 1,
-            discount_tier = CASE 
+            discount_tier = CASE
                 WHEN current_participants + 1 >= 10 THEN 3
                 WHEN current_participants + 1 >= 5 THEN 2
                 WHEN current_participants + 1 >= 2 THEN 1
@@ -2332,7 +2332,7 @@ BEGIN
     ELSIF TG_OP = 'DELETE' THEN
         UPDATE gift_shopping_aggregations
         SET current_participants = GREATEST(0, current_participants - 1),
-            discount_tier = CASE 
+            discount_tier = CASE
                 WHEN current_participants - 1 >= 10 THEN 3
                 WHEN current_participants - 1 >= 5 THEN 2
                 WHEN current_participants - 1 >= 2 THEN 1
@@ -2372,10 +2372,10 @@ BEGIN
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Gift item not found';
     END IF;
-    
+
     -- Get the list for family_id
     SELECT * INTO v_list FROM family_gift_lists WHERE id = v_item.list_id;
-    
+
     -- Create the aggregation
     INSERT INTO gift_shopping_aggregations (
         gift_item_id,
@@ -2400,14 +2400,14 @@ BEGIN
         (p_shopping_date::timestamp + COALESCE(p_shopping_time, '12:00'::time) - INTERVAL '2 hours')::timestamptz,
         p_family_member_id
     ) RETURNING id INTO v_agg_id;
-    
+
     -- Add creator as first participant
     INSERT INTO gift_shopping_participants (aggregation_id, family_member_id, for_gift_item_id)
     VALUES (v_agg_id, p_family_member_id, p_gift_item_id);
-    
+
     -- Create calendar event
     PERFORM create_shopping_calendar_event(v_agg_id);
-    
+
     RETURN v_agg_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -2427,17 +2427,17 @@ BEGIN
     IF NOT FOUND THEN
         RETURN NULL;
     END IF;
-    
+
     -- Get default family calendar
     SELECT id INTO v_calendar_id
     FROM family_calendars
     WHERE family_id = v_agg.family_id AND is_default = true
     LIMIT 1;
-    
+
     IF v_calendar_id IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Create the event
     INSERT INTO family_events (
         calendar_id,
@@ -2460,7 +2460,7 @@ BEGIN
         p_aggregation_id,
         v_agg.created_by
     ) RETURNING id INTO v_event_id;
-    
+
     RETURN v_event_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -2474,35 +2474,35 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TABLE IF NOT EXISTS lmd_meal_requests (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   requester_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  
+
   -- What meal
   meal_name TEXT NOT NULL,
   pantry_recipe_id UUID REFERENCES pantry_recipes(id) ON DELETE SET NULL,
-  
+
   -- Request type
   request_type TEXT NOT NULL CHECK (request_type IN ('general', 'specific')),
-  
+
   -- Marks commitment (backed 1:1 by Joules)
   marks_committed INTEGER NOT NULL CHECK (marks_committed >= 5),
-  
+
   -- For GENERAL requests
   duration_days INTEGER CHECK (duration_days IS NULL OR (duration_days >= 1 AND duration_days <= 7)),
-  
+
   -- For SPECIFIC requests
   specific_date DATE,
   portion_count INTEGER CHECK (portion_count IS NULL OR portion_count >= 1),
-  
+
   -- Location filter
   postal_code TEXT,
-  
+
   -- Status tracking
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'fulfilled', 'expired', 'withdrawn', 'forfeited')),
   expires_at DATE NOT NULL,
-  
+
   -- If fulfilled, link to the meal/order
   fulfilled_by_meal_id UUID REFERENCES lmd_meals(id) ON DELETE SET NULL,
   fulfilled_at TIMESTAMPTZ,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -2554,7 +2554,7 @@ $$;
 -- Aggregated demand view for chefs
 DROP VIEW IF EXISTS lmd_demand_summary;
 CREATE OR REPLACE VIEW lmd_demand_summary AS
-SELECT 
+SELECT
   meal_name,
   pantry_recipe_id,
   postal_code,
@@ -2604,23 +2604,23 @@ CREATE TABLE IF NOT EXISTS design_battles (
     timeframe TEXT NOT NULL DEFAULT '1week' CHECK (timeframe IN ('1hour', '4hours', '1day', '3days', '1week', '2weeks', '1month', '3months')),
     starts_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     ends_at TIMESTAMPTZ NOT NULL,
-    
+
     -- Minimum ante requirements
     min_ante_credits DECIMAL(12,2) NOT NULL DEFAULT 1,
     min_ante_marks DECIMAL(12,2) NOT NULL DEFAULT 0,
     min_ante_joules DECIMAL(12,2) NOT NULL DEFAULT 0,
-    
+
     -- Pot calculations
     total_pot DECIMAL(12,2) NOT NULL DEFAULT 0,
     platform_cut DECIMAL(12,2) NOT NULL DEFAULT 0,
     net_pot DECIMAL(12,2) NOT NULL DEFAULT 0,
     winner_payout DECIMAL(12,2) NOT NULL DEFAULT 0,
     community_votes INTEGER NOT NULL DEFAULT 0,
-    
+
     -- Participants
     participant_count INTEGER NOT NULL DEFAULT 0,
     winner_id UUID REFERENCES auth.users(id),
-    
+
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -2639,27 +2639,27 @@ CREATE TABLE IF NOT EXISTS design_battle_participants (
     battle_id UUID NOT NULL REFERENCES design_battles(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES auth.users(id),
     display_name TEXT NOT NULL,
-    
+
     -- Ante details
     ante_original JSONB NOT NULL DEFAULT '{"credits": 0, "marks": 0, "joules": 0}',
     ante_credit_equivalent DECIMAL(12,2) NOT NULL DEFAULT 0,
     gap_rate_used DECIMAL(6,2) NOT NULL DEFAULT 1,
     converted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     -- Submission
     submission_url TEXT,
     submitted_at TIMESTAMPTZ,
-    
+
     -- Voting
     vote_count INTEGER NOT NULL DEFAULT 0,
-    
+
     -- Results
     rank INTEGER,
     payout DECIMAL(12,2),
     crow_feather_earned BOOLEAN DEFAULT FALSE,
-    
+
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     UNIQUE(battle_id, user_id)
 );
 
@@ -2678,7 +2678,7 @@ CREATE TABLE IF NOT EXISTS design_battle_votes (
     voter_id UUID NOT NULL REFERENCES auth.users(id),
     vote_credits INTEGER NOT NULL DEFAULT 1,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     UNIQUE(battle_id, voter_id) -- One vote per battle per user
 );
 
@@ -2697,7 +2697,7 @@ CREATE TABLE IF NOT EXISTS bounty_signups (
     end_date TIMESTAMPTZ,
     status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'withdrawn', 'converted_to_battle')),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     UNIQUE(bounty_id, user_id)
 );
 
@@ -2721,14 +2721,14 @@ BEGIN
     FROM bounty_signups
     WHERE bounty_id = NEW.bounty_id
     AND status = 'active';
-    
+
     -- If 2+ signups, check if battle already exists
     IF signup_count >= 2 THEN
         SELECT id INTO existing_battle
         FROM design_battles
         WHERE bounty_id = NEW.bounty_id
         AND status IN ('pending', 'active');
-        
+
         -- If no battle exists, create one
         IF existing_battle IS NULL THEN
             -- Get bounty details (assumes bounties table exists)
@@ -2742,7 +2742,7 @@ BEGIN
                 bounty_record.skill_tier := 'journeyman';
                 bounty_record.timeframe := '1week';
             END;
-            
+
             -- Create the Design Battle
             INSERT INTO design_battles (
                 bounty_id,
@@ -2762,19 +2762,19 @@ BEGIN
                 NOW() + INTERVAL '1 week' -- Default, will be updated based on timeframe
             )
             RETURNING id INTO new_battle_id;
-            
+
             -- Update all active signups to converted_to_battle
             UPDATE bounty_signups
             SET status = 'converted_to_battle'
             WHERE bounty_id = NEW.bounty_id
             AND status = 'active';
-            
+
             -- Log the auto-creation
-            RAISE NOTICE 'Design Battle % created for bounty % with % participants', 
+            RAISE NOTICE 'Design Battle % created for bounty % with % participants',
                 new_battle_id, NEW.bounty_id, signup_count;
         END IF;
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -2830,42 +2830,42 @@ BEGIN
     WHERE battle_id = p_battle_id
     ORDER BY vote_count DESC
     LIMIT 1;
-    
+
     IF v_winner IS NULL THEN
         RETURN;
     END IF;
-    
+
     -- Calculate pot
-    SELECT 
+    SELECT
         COALESCE(SUM(ante_credit_equivalent), 0),
         COUNT(*)
     INTO v_total_ante, v_participant_count
     FROM design_battle_participants
     WHERE battle_id = p_battle_id;
-    
+
     SELECT community_votes INTO v_community_votes
     FROM design_battles
     WHERE id = p_battle_id;
-    
+
     v_gross_pot := v_total_ante + COALESCE(v_community_votes, 0);
     v_platform_cut := ROUND(v_gross_pot * 0.167, 2);
     v_net_pot := v_gross_pot - v_platform_cut;
     v_winner_share := ROUND(v_net_pot * 0.50, 2);
     v_runner_up_share := ROUND((v_net_pot - v_winner_share) / GREATEST(v_participant_count - 1, 1), 2);
-    
+
     -- Update winner
     UPDATE design_battle_participants
     SET rank = 1, payout = v_winner_share, crow_feather_earned = TRUE
     WHERE id = v_winner.id;
-    
+
     -- Update runner-ups
     UPDATE design_battle_participants
     SET rank = 2, payout = v_runner_up_share, crow_feather_earned = FALSE
     WHERE battle_id = p_battle_id AND id != v_winner.id;
-    
+
     -- Update battle
     UPDATE design_battles
-    SET 
+    SET
         status = 'completed',
         winner_id = v_winner.user_id,
         total_pot = v_gross_pot,
@@ -2874,7 +2874,7 @@ BEGIN
         winner_payout = v_winner_share,
         updated_at = NOW()
     WHERE id = p_battle_id;
-    
+
     -- Award crow feather
     INSERT INTO crow_feathers (user_id, category, record_value, metadata)
     VALUES (
@@ -2883,7 +2883,7 @@ BEGIN
         v_winner_share,
         jsonb_build_object('battle_id', p_battle_id)
     );
-    
+
     RETURN QUERY SELECT v_winner.user_id, v_winner_share, TRUE;
 END;
 $$ LANGUAGE plpgsql;
@@ -2990,7 +2990,7 @@ ALTER TABLE public.beacons ADD COLUMN IF NOT EXISTS
 -- Orange Protocol fields
 ALTER TABLE public.beacons ADD COLUMN IF NOT EXISTS
   orange_subtype TEXT CHECK (orange_subtype IS NULL OR orange_subtype IN (
-    'game_marker', 'share_person', 'social_cue', 'gift', 
+    'game_marker', 'share_person', 'social_cue', 'gift',
     'treasure', 'learning', 'trade_route', 'custom'
   ));
 
@@ -3005,27 +3005,27 @@ CREATE TABLE IF NOT EXISTS public.beacon_runs (
   creator_id      UUID REFERENCES auth.users(id),
   name            TEXT NOT NULL,
   description     TEXT,
-  
+
   -- Route data
   beacon_ids      UUID[] NOT NULL DEFAULT '{}',
   total_beacons   INTEGER NOT NULL DEFAULT 0,
   estimated_minutes INTEGER,
-  
+
   -- Competition settings
   ante_credits    INTEGER DEFAULT 0,
   prize_pool_credits INTEGER DEFAULT 0,
-  
+
   -- Stats
   times_started   INTEGER DEFAULT 0,
   times_completed INTEGER DEFAULT 0,
   best_time_seconds INTEGER,
   best_time_user_id UUID REFERENCES auth.users(id),
-  
+
   -- Metadata
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   published_at    TIMESTAMPTZ,
   is_featured     BOOLEAN DEFAULT FALSE,
-  
+
   -- Ghost Mode requirement (always true for Beacon Runs)
   requires_ghost_mode BOOLEAN DEFAULT TRUE
 );
@@ -3041,19 +3041,19 @@ CREATE TABLE IF NOT EXISTS public.beacon_run_progress (
   user_id         UUID REFERENCES auth.users(id),
   ghost_id        UUID REFERENCES public.ghost_profiles(id),
   run_id          UUID NOT NULL REFERENCES public.beacon_runs(id) ON DELETE CASCADE,
-  
+
   -- Progress
   beacons_reached UUID[] DEFAULT '{}',
   current_beacon_index INTEGER DEFAULT 0,
   started_at      TIMESTAMPTZ DEFAULT NOW(),
   completed_at    TIMESTAMPTZ,
-  
+
   -- Time tracking
   elapsed_seconds INTEGER DEFAULT 0,
-  
+
   -- Ghost Mode verification
   ghost_session_id UUID,
-  
+
   -- Crow Feather earned (if record set)
   crow_feather_id INTEGER REFERENCES public.crow_feathers(id)
 );
@@ -3077,10 +3077,10 @@ CREATE TABLE IF NOT EXISTS public.crow_feathers (
   earned_at       TIMESTAMPTZ DEFAULT NOW(),
   feather_number  INTEGER NOT NULL,
   superseded_by   INTEGER REFERENCES public.crow_feathers(id),
-  
+
   -- Beacon Run specific
   beacon_run_id   UUID REFERENCES public.beacon_runs(id),
-  
+
   UNIQUE(feather_number)
 );
 
@@ -3092,20 +3092,20 @@ CREATE INDEX IF NOT EXISTS idx_crow_feathers_category ON public.crow_feathers(ca
 CREATE TABLE IF NOT EXISTS public.ghost_mode_sessions (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id),
-  
+
   -- Session tracking
   started_at      TIMESTAMPTZ DEFAULT NOW(),
   ended_at        TIMESTAMPTZ,
   duration_minutes INTEGER,
-  
+
   -- What they did in Ghost Mode
   beacons_dropped INTEGER DEFAULT 0,
   beacon_runs_created INTEGER DEFAULT 0,
   beacon_runs_played INTEGER DEFAULT 0,
-  
+
   -- Crow Feathers earned
   crow_feathers_earned INTEGER DEFAULT 0,
-  
+
   -- Equipment brought from Portfolio
   equipment_brought JSONB DEFAULT '[]'
 );
@@ -3123,25 +3123,25 @@ ALTER TABLE public.beacon_run_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ghost_mode_sessions ENABLE ROW LEVEL SECURITY;
 
 -- Beacon Runs: creators can manage, all can view published
-CREATE POLICY "beacon_runs_select" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_select" ON public.beacon_runs
   FOR SELECT USING (published_at IS NOT NULL OR creator_id = auth.uid());
-CREATE POLICY "beacon_runs_insert" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_insert" ON public.beacon_runs
   FOR INSERT WITH CHECK (auth.uid() = creator_id);
-CREATE POLICY "beacon_runs_update" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_update" ON public.beacon_runs
   FOR UPDATE USING (auth.uid() = creator_id);
-CREATE POLICY "beacon_runs_delete" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_delete" ON public.beacon_runs
   FOR DELETE USING (auth.uid() = creator_id);
 
 -- Beacon Run Progress: users can manage their own
-CREATE POLICY "beacon_run_progress_select" ON public.beacon_run_progress 
+CREATE POLICY "beacon_run_progress_select" ON public.beacon_run_progress
   FOR SELECT USING (user_id = auth.uid() OR ghost_id IS NOT NULL);
-CREATE POLICY "beacon_run_progress_insert" ON public.beacon_run_progress 
+CREATE POLICY "beacon_run_progress_insert" ON public.beacon_run_progress
   FOR INSERT WITH CHECK (user_id = auth.uid() OR ghost_id IS NOT NULL);
-CREATE POLICY "beacon_run_progress_update" ON public.beacon_run_progress 
+CREATE POLICY "beacon_run_progress_update" ON public.beacon_run_progress
   FOR UPDATE USING (user_id = auth.uid());
 
 -- Ghost Mode Sessions: users can manage their own
-CREATE POLICY "ghost_mode_sessions_all" ON public.ghost_mode_sessions 
+CREATE POLICY "ghost_mode_sessions_all" ON public.ghost_mode_sessions
   FOR ALL USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Crow Feathers: public read, authenticated insert
@@ -3216,36 +3216,36 @@ CREATE TRIGGER beacon_number_trigger
 CREATE TABLE IF NOT EXISTS public.campaign_plans (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   creator_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Plan details
   title TEXT NOT NULL,
   description TEXT,
   category TEXT DEFAULT 'general', -- e.g., 'launch', 'awareness', 'holiday', 'engagement'
   tags TEXT[] DEFAULT '{}',
-  
+
   -- Plan content (JSON array of scheduled cards)
   plan_data JSONB NOT NULL DEFAULT '[]',
   -- Structure: [{ day: 1, hour: 9, template_id: 'uuid', custom_text: '...', platforms: ['twitter', 'linkedin'] }, ...]
-  
+
   -- Duration and scheduling
   duration_days INTEGER NOT NULL DEFAULT 7,
   posts_per_day INTEGER DEFAULT 3,
   total_posts INTEGER GENERATED ALWAYS AS (
     COALESCE(jsonb_array_length(plan_data), 0)
   ) STORED,
-  
+
   -- Marketplace listing
   is_public BOOLEAN DEFAULT false,
   price_credits INTEGER DEFAULT 0, -- 0 = free
-  
+
   -- Stats
   times_purchased INTEGER DEFAULT 0,
   times_used INTEGER DEFAULT 0,
   avg_rating DECIMAL(3,2) DEFAULT 0,
-  
+
   -- Shirley Temple categories
   content_categories TEXT[] DEFAULT ARRAY['family_safe'],
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
@@ -3256,19 +3256,19 @@ CREATE TABLE IF NOT EXISTS public.campaign_plan_purchases (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   plan_id UUID REFERENCES public.campaign_plans(id) ON DELETE CASCADE,
   buyer_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Purchase details
   price_paid INTEGER NOT NULL DEFAULT 0,
   purchased_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Usage tracking
   times_deployed INTEGER DEFAULT 0,
   last_deployed_at TIMESTAMPTZ,
-  
+
   -- Rating
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
   review TEXT,
-  
+
   UNIQUE(plan_id, buyer_id)
 );
 
@@ -3341,7 +3341,7 @@ CREATE OR REPLACE FUNCTION update_plan_purchase_stats()
 RETURNS TRIGGER AS $$
 BEGIN
   UPDATE public.campaign_plans
-  SET 
+  SET
     times_purchased = times_purchased + 1,
     updated_at = now()
   WHERE id = NEW.plan_id;
@@ -3361,7 +3361,7 @@ CREATE OR REPLACE FUNCTION update_plan_rating()
 RETURNS TRIGGER AS $$
 BEGIN
   UPDATE public.campaign_plans
-  SET 
+  SET
     avg_rating = (
       SELECT COALESCE(AVG(rating), 0)
       FROM public.campaign_plan_purchases
@@ -3394,35 +3394,35 @@ COMMENT ON COLUMN public.campaign_plans.content_categories IS 'Shirley Temple co
 -- Table to track ghost shares before they become members
 CREATE TABLE IF NOT EXISTS public.ghost_share_tracking (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Ghost identification
   email TEXT NOT NULL,
   tracking_token UUID DEFAULT gen_random_uuid() UNIQUE,
-  
+
   -- What they shared
   template_id UUID REFERENCES public.cue_card_templates(id) ON DELETE SET NULL,
   share_type TEXT DEFAULT 'cue_card', -- cue_card, beacon, referral
-  
+
   -- Tracking metrics
   share_count INTEGER DEFAULT 1,
   click_count INTEGER DEFAULT 0,
   conversion_count INTEGER DEFAULT 0, -- people who signed up from their shares
-  
+
   -- Reward accumulation (applied when they become member)
   pending_credits INTEGER DEFAULT 0,
   pending_marks INTEGER DEFAULT 0,
-  
+
   -- Status
   status TEXT DEFAULT 'active', -- active, converted, expired
   converted_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   converted_at TIMESTAMPTZ,
-  
+
   -- Metadata
   first_share_at TIMESTAMPTZ DEFAULT now(),
   last_share_at TIMESTAMPTZ DEFAULT now(),
   ip_hash TEXT, -- hashed for privacy, used for fraud prevention
   user_agent TEXT,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -3461,7 +3461,7 @@ CREATE OR REPLACE FUNCTION increment_ghost_share(p_token UUID)
 RETURNS void AS $$
 BEGIN
   UPDATE public.ghost_share_tracking
-  SET 
+  SET
     share_count = share_count + 1,
     last_share_at = now(),
     updated_at = now()
@@ -3474,7 +3474,7 @@ CREATE OR REPLACE FUNCTION increment_ghost_click(p_token UUID)
 RETURNS void AS $$
 BEGIN
   UPDATE public.ghost_share_tracking
-  SET 
+  SET
     click_count = click_count + 1,
     updated_at = now()
   WHERE tracking_token = p_token;
@@ -3498,23 +3498,23 @@ BEGIN
   WHERE email = p_email AND status = 'active'
   ORDER BY created_at DESC
   LIMIT 1;
-  
+
   IF v_record IS NULL THEN
     RETURN QUERY SELECT 0, 0, 0, 0;
     RETURN;
   END IF;
-  
+
   -- Mark as converted
   UPDATE public.ghost_share_tracking
-  SET 
+  SET
     status = 'converted',
     converted_user_id = p_user_id,
     converted_at = now(),
     updated_at = now()
   WHERE id = v_record.id;
-  
+
   -- Return the rewards to apply
-  RETURN QUERY SELECT 
+  RETURN QUERY SELECT
     v_record.pending_credits,
     v_record.pending_marks,
     v_record.share_count,
@@ -3541,7 +3541,7 @@ CREATE OR REPLACE FUNCTION reward_ghost_for_conversion(p_token UUID)
 RETURNS void AS $$
 BEGIN
   UPDATE public.ghost_share_tracking
-  SET 
+  SET
     conversion_count = conversion_count + 1,
     pending_credits = pending_credits + 50, -- 50 credits per conversion
     pending_marks = pending_marks + 10,     -- 10 marks per conversion
@@ -3555,7 +3555,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- RESEARCH ACCESS SUBSCRIPTIONS
 -- The Lemonade Stand Model — Real data, real users, minimal cost to fail
 -- ============================================================================
--- 
+--
 -- Researchers can subscribe to run longitudinal studies using real platform
 -- data at $5/month. They get:
 -- - Access to Contingency Operators for their experiments
@@ -3571,39 +3571,39 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TABLE IF NOT EXISTS public.research_subscriptions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Subscription details
   tier TEXT NOT NULL DEFAULT 'basic' CHECK (tier IN ('basic', 'standard', 'premium', 'institutional')),
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'paused', 'cancelled', 'expired')),
-  
+
   -- Pricing (in Credits or USD cents)
   monthly_rate_credits INTEGER DEFAULT 500, -- 500 Credits = ~$5
   monthly_rate_cents INTEGER DEFAULT 500,   -- $5.00
-  
+
   -- Report configuration
   report_frequency TEXT DEFAULT 'weekly' CHECK (report_frequency IN ('daily', 'weekly', 'biweekly', 'monthly')),
   max_stored_reports INTEGER DEFAULT 12,    -- Rolling window
   report_format TEXT DEFAULT 'json' CHECK (report_format IN ('json', 'csv', 'pdf', 'all')),
-  
+
   -- Experiment limits
   max_active_experiments INTEGER DEFAULT 3,
   max_chain_depth INTEGER DEFAULT 5,
   max_factors_per_experiment INTEGER DEFAULT 8,
-  
+
   -- Storage allocation (in MB)
   storage_quota_mb INTEGER DEFAULT 100,
   storage_used_mb INTEGER DEFAULT 0,
-  
+
   -- Research metadata (optional, for institutional tracking)
   institution_name TEXT,
   research_purpose TEXT,
   irb_approval_number TEXT, -- Institutional Review Board
-  
+
   -- Billing
   current_period_start TIMESTAMPTZ DEFAULT now(),
   current_period_end TIMESTAMPTZ DEFAULT (now() + INTERVAL '1 month'),
   stripe_subscription_id TEXT,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -3613,29 +3613,29 @@ CREATE TABLE IF NOT EXISTS public.research_reports (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   subscription_id UUID NOT NULL REFERENCES public.research_subscriptions(id) ON DELETE CASCADE,
   experiment_id UUID REFERENCES public.thought_experiments(id) ON DELETE SET NULL,
-  
+
   -- Report content
   report_type TEXT NOT NULL DEFAULT 'snapshot' CHECK (report_type IN ('snapshot', 'comparison', 'longitudinal', 'summary')),
   report_title TEXT,
   report_data JSONB NOT NULL DEFAULT '{}'::jsonb,
-  
+
   -- Metrics captured
   factors_measured JSONB DEFAULT '[]'::jsonb,
   net_score_at_generation NUMERIC,
   data_points_count INTEGER DEFAULT 0,
-  
+
   -- Period covered
   period_start TIMESTAMPTZ,
   period_end TIMESTAMPTZ,
-  
+
   -- Storage management
   size_bytes INTEGER DEFAULT 0,
   is_archived BOOLEAN DEFAULT false,
   archive_url TEXT, -- If moved to cold storage
-  
+
   -- Retention
   retain_until TIMESTAMPTZ, -- NULL = keep forever, date = auto-delete after
-  
+
   generated_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -3644,19 +3644,19 @@ CREATE TABLE IF NOT EXISTS public.research_access_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   subscription_id UUID REFERENCES public.research_subscriptions(id) ON DELETE SET NULL,
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-  
+
   -- Action tracking
   action_type TEXT NOT NULL, -- 'experiment_created', 'report_generated', 'data_exported', etc.
   action_details JSONB DEFAULT '{}'::jsonb,
-  
+
   -- Data accessed (for audit trail)
   data_scope TEXT, -- 'aggregate_only', 'anonymized', 'none'
   records_accessed INTEGER DEFAULT 0,
-  
+
   -- Zero Demographics compliance
   demographics_accessed BOOLEAN DEFAULT false, -- Should ALWAYS be false
   pii_accessed BOOLEAN DEFAULT false,          -- Should ALWAYS be false
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -3679,7 +3679,7 @@ CREATE POLICY "research_subs_own" ON public.research_subscriptions
 CREATE POLICY "research_reports_own" ON public.research_reports
   FOR ALL USING (
     EXISTS (
-      SELECT 1 FROM public.research_subscriptions 
+      SELECT 1 FROM public.research_subscriptions
       WHERE id = subscription_id AND user_id = auth.uid()
     )
   );
@@ -3702,23 +3702,23 @@ BEGIN
   SELECT * INTO v_subscription
   FROM public.research_subscriptions
   WHERE id = NEW.subscription_id;
-  
+
   IF NOT FOUND THEN
     RAISE EXCEPTION 'Subscription not found';
   END IF;
-  
+
   -- Calculate total storage used
   SELECT COALESCE(SUM(size_bytes), 0) / (1024 * 1024) INTO v_total_used
   FROM public.research_reports
   WHERE subscription_id = NEW.subscription_id
     AND NOT is_archived;
-  
+
   -- Check quota
   IF v_total_used + (NEW.size_bytes / (1024 * 1024)) > v_subscription.storage_quota_mb THEN
-    RAISE EXCEPTION 'Storage quota exceeded. Used: % MB, Quota: % MB', 
+    RAISE EXCEPTION 'Storage quota exceeded. Used: % MB, Quota: % MB',
       v_total_used, v_subscription.storage_quota_mb;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -3738,11 +3738,11 @@ BEGIN
   SELECT * INTO v_subscription
   FROM public.research_subscriptions
   WHERE id = p_subscription_id;
-  
+
   IF NOT FOUND THEN
     RETURN 0;
   END IF;
-  
+
   -- Delete oldest reports beyond max_stored_reports
   WITH to_delete AS (
     SELECT id
@@ -3754,7 +3754,7 @@ BEGIN
   )
   DELETE FROM public.research_reports
   WHERE id IN (SELECT id FROM to_delete);
-  
+
   GET DIAGNOSTICS v_deleted = ROW_COUNT;
   RETURN v_deleted;
 END;
@@ -3765,18 +3765,18 @@ CREATE TABLE IF NOT EXISTS public.research_tier_definitions (
   tier TEXT PRIMARY KEY,
   display_name TEXT NOT NULL,
   description TEXT,
-  
+
   -- Pricing
   monthly_credits INTEGER NOT NULL,
   monthly_usd_cents INTEGER NOT NULL,
-  
+
   -- Limits
   max_experiments INTEGER NOT NULL,
   max_chain_depth INTEGER NOT NULL,
   max_factors INTEGER NOT NULL,
   storage_mb INTEGER NOT NULL,
   max_reports INTEGER NOT NULL,
-  
+
   -- Features
   report_frequencies TEXT[] NOT NULL,
   export_formats TEXT[] NOT NULL,
@@ -3785,26 +3785,26 @@ CREATE TABLE IF NOT EXISTS public.research_tier_definitions (
 );
 
 -- Seed tier definitions
-INSERT INTO public.research_tier_definitions 
-  (tier, display_name, description, monthly_credits, monthly_usd_cents, 
+INSERT INTO public.research_tier_definitions
+  (tier, display_name, description, monthly_credits, monthly_usd_cents,
    max_experiments, max_chain_depth, max_factors, storage_mb, max_reports,
    report_frequencies, export_formats, api_access, priority_support)
 VALUES
-  ('basic', 'Lemonade Stand', 
+  ('basic', 'Lemonade Stand',
    'Perfect for individual researchers and students. Test your hypotheses with real data.',
    500, 500, 3, 5, 8, 100, 12,
    ARRAY['weekly', 'monthly'], ARRAY['json', 'csv'], false, false),
-  
+
   ('standard', 'Research Lab',
    'For serious research projects. More experiments, deeper analysis.',
    1500, 1500, 10, 10, 15, 500, 52,
    ARRAY['daily', 'weekly', 'biweekly', 'monthly'], ARRAY['json', 'csv', 'pdf'], true, false),
-  
+
   ('premium', 'Research Institute',
    'Full research capabilities. Ideal for PhD programs and research teams.',
    5000, 5000, 25, 15, 25, 2000, 365,
    ARRAY['daily', 'weekly', 'biweekly', 'monthly'], ARRAY['json', 'csv', 'pdf', 'all'], true, true),
-  
+
   ('institutional', 'University Partnership',
    'Custom pricing for academic institutions. Contact for details.',
    0, 0, 100, 20, 50, 10000, 1000,
@@ -3824,9 +3824,9 @@ COMMENT ON COLUMN public.research_access_log.pii_accessed IS 'Zero Demographics:
 -- COLD START THESEUS: Service Node System
 -- =========================================
 -- Economic Law #9: Pre-ordered capacity scheduling eliminates startup risk
--- 
+--
 -- Core Principle: Risk = 0 when Demand(pre-sold) ≥ Capacity(scheduled) × 0.5
--- 
+--
 -- Node Types:
 -- - Church kitchens (unused weekdays)
 -- - Food truck operators (provide license)
@@ -3852,7 +3852,7 @@ CREATE TABLE IF NOT EXISTS service_nodes (
     node_type_id UUID REFERENCES service_node_types(id),
     name TEXT NOT NULL,
     description TEXT,
-    
+
     -- Location
     zip_code TEXT,
     city TEXT,
@@ -3861,16 +3861,16 @@ CREATE TABLE IF NOT EXISTS service_nodes (
     address TEXT,
     geo_lat DECIMAL(10, 8),
     geo_lng DECIMAL(11, 8),
-    
+
     -- Infrastructure
     infrastructure_type TEXT NOT NULL, -- 'church_kitchen', 'food_truck', 'restaurant', 'home_kitchen', 'shared_facility'
     infrastructure_details JSONB DEFAULT '{}',
-    
+
     -- Capacity
     weekly_capacity INTEGER NOT NULL DEFAULT 100, -- e.g., 100 meals/week
     presold_capacity INTEGER DEFAULT 0,
     reserved_capacity INTEGER DEFAULT 0, -- 50% for surge/redundancy
-    
+
     -- Status
     status TEXT NOT NULL DEFAULT 'pending_activation',
     -- pending_activation: Collecting demand
@@ -3878,18 +3878,18 @@ CREATE TABLE IF NOT EXISTS service_nodes (
     -- active: Operating
     -- paused: Temporarily inactive
     -- closed: Permanently closed
-    
+
     activation_threshold INTEGER, -- Auto-calculated: weekly_capacity * 0.5
     activation_date DATE,
-    
+
     -- Ownership
     owner_id UUID REFERENCES auth.users(id),
     captain_id UUID REFERENCES auth.users(id), -- License holder
-    
+
     -- Economics
     platform_fee_percent DECIMAL(5, 2) DEFAULT 20.00, -- Cost + 20%
     creator_share_percent DECIMAL(5, 2) DEFAULT 83.33,
-    
+
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -3900,21 +3900,21 @@ CREATE TABLE IF NOT EXISTS node_leadership (
     node_id UUID REFERENCES service_nodes(id) ON DELETE CASCADE,
     user_id UUID REFERENCES auth.users(id),
     role TEXT NOT NULL, -- 'captain', 'xo', 'guild_member', 'volunteer'
-    
+
     -- License info (for Captains)
     license_type TEXT, -- 'food_truck', 'commercial_kitchen', 'cottage_food', 'restaurant'
     license_number TEXT,
     license_expiry DATE,
     license_verified BOOLEAN DEFAULT FALSE,
-    
+
     -- Rotation
     rotation_order INTEGER,
     is_active BOOLEAN DEFAULT TRUE,
-    
+
     -- Compensation clarity
     is_platform_employee BOOLEAN DEFAULT FALSE, -- Always false per patent
     owns_project BOOLEAN DEFAULT TRUE, -- They own their project
-    
+
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -3923,31 +3923,31 @@ CREATE TABLE IF NOT EXISTS node_preorders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     node_id UUID REFERENCES service_nodes(id) ON DELETE CASCADE,
     user_id UUID REFERENCES auth.users(id),
-    
+
     -- Order details
     service_type TEXT, -- 'meal', 'delivery', 'catering', etc.
     quantity INTEGER NOT NULL DEFAULT 1,
     unit_price DECIMAL(10, 2) NOT NULL,
     total_price DECIMAL(10, 2) NOT NULL,
-    
+
     -- Commitment phase
     phase TEXT NOT NULL DEFAULT 'ghost',
     -- ghost: Interest signal (fake credits)
     -- soft_pledge: Committed, refundable
     -- hard_order: Non-refundable, 50% paid
-    
+
     -- Payment
     upfront_amount DECIMAL(10, 2) DEFAULT 0, -- 50% at hard_order
     completion_amount DECIMAL(10, 2) DEFAULT 0, -- 50% on delivery
     upfront_paid BOOLEAN DEFAULT FALSE,
     completion_paid BOOLEAN DEFAULT FALSE,
-    
+
     -- Scheduling
     requested_date DATE,
     requested_time TIME,
     scheduled_date DATE,
     scheduled_time TIME,
-    
+
     -- Status
     status TEXT NOT NULL DEFAULT 'pending',
     -- pending: Awaiting node activation
@@ -3956,7 +3956,7 @@ CREATE TABLE IF NOT EXISTS node_preorders (
     -- ready: Ready for pickup/delivery
     -- completed: Delivered, completion payment collected
     -- cancelled: Cancelled (refund if soft_pledge)
-    
+
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -3967,21 +3967,21 @@ CREATE TABLE IF NOT EXISTS demand_signals (
     zip_code TEXT NOT NULL,
     service_type TEXT NOT NULL, -- 'meal_delivery', 'catering', 'baked_goods', etc.
     user_id UUID REFERENCES auth.users(id),
-    
+
     -- Ghost credits used
     ghost_credits_spent INTEGER DEFAULT 0,
     marks_pledged DECIMAL(10, 2) DEFAULT 0,
-    
+
     -- Demand details
     requested_frequency TEXT, -- 'daily', 'weekly', 'monthly', 'one_time'
     max_price_willing DECIMAL(10, 2),
     dietary_requirements TEXT[],
     notes TEXT,
-    
+
     -- Aggregation
     is_aggregated BOOLEAN DEFAULT FALSE,
     aggregated_into_node_id UUID REFERENCES service_nodes(id),
-    
+
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -3989,24 +3989,24 @@ CREATE TABLE IF NOT EXISTS demand_signals (
 CREATE TABLE IF NOT EXISTS node_activation_log (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     node_id UUID REFERENCES service_nodes(id) ON DELETE CASCADE,
-    
+
     -- Metrics at activation
     presold_count INTEGER NOT NULL,
     presold_percent DECIMAL(5, 2) NOT NULL,
     total_demand_signals INTEGER,
     upfront_revenue DECIMAL(10, 2),
-    
+
     -- The moment
     activation_timestamp TIMESTAMPTZ DEFAULT NOW(),
     activated_by UUID REFERENCES auth.users(id),
-    
+
     -- Notes
     notes TEXT
 );
 
 -- Seed service node types for Let's Make Dinner
 INSERT INTO service_node_types (code, name, description, capacity_unit, min_presale_percent)
-VALUES 
+VALUES
     ('lmd_kitchen', 'Let''s Make Dinner Kitchen', 'Community kitchen node for meal preparation', 'meals', 50),
     ('lmd_delivery', 'Let''s Make Dinner Delivery', 'Delivery node for meal distribution', 'deliveries', 50),
     ('lmb_bakery', 'Let''s Make Bread Bakery', 'Community bakery node for baked goods', 'items', 50),
@@ -4041,19 +4041,19 @@ DECLARE
 BEGIN
     -- Get the node
     SELECT * INTO node_record FROM service_nodes WHERE id = NEW.node_id;
-    
+
     -- Only check if node is pending activation
     IF node_record.status != 'pending_activation' THEN
         RETURN NEW;
     END IF;
-    
+
     -- Count hard orders for this node
     SELECT COUNT(*) INTO presold_count
     FROM node_preorders
     WHERE node_id = NEW.node_id
     AND phase = 'hard_order'
     AND status = 'pending';
-    
+
     -- Check if threshold reached
     IF presold_count >= node_record.activation_threshold THEN
         -- Activate the node!
@@ -4063,7 +4063,7 @@ BEGIN
             activation_date = CURRENT_DATE,
             updated_at = NOW()
         WHERE id = NEW.node_id;
-        
+
         -- Log the activation
         INSERT INTO node_activation_log (
             node_id,
@@ -4072,7 +4072,7 @@ BEGIN
             upfront_revenue,
             notes
         )
-        SELECT 
+        SELECT
             NEW.node_id,
             presold_count,
             (presold_count::DECIMAL / node_record.activation_threshold) * 100,
@@ -4082,7 +4082,7 @@ BEGIN
         WHERE node_id = NEW.node_id
         AND phase = 'hard_order';
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -4098,7 +4098,7 @@ CREATE TRIGGER check_activation_on_preorder
 -- View for node status dashboard
 DROP VIEW IF EXISTS node_status_dashboard;
 CREATE OR REPLACE VIEW node_status_dashboard AS
-SELECT 
+SELECT
     sn.id,
     sn.name,
     sn.zip_code,
@@ -4110,33 +4110,33 @@ SELECT
     sn.status,
     snt.name as node_type_name,
     snt.capacity_unit,
-    
+
     -- Demand metrics
     (SELECT COUNT(*) FROM demand_signals ds WHERE ds.zip_code = sn.zip_code AND NOT ds.is_aggregated) as pending_demand_signals,
-    
+
     -- Pre-order metrics
     (SELECT COUNT(*) FROM node_preorders np WHERE np.node_id = sn.id AND np.phase = 'ghost') as ghost_interest,
     (SELECT COUNT(*) FROM node_preorders np WHERE np.node_id = sn.id AND np.phase = 'soft_pledge') as soft_pledges,
     (SELECT COUNT(*) FROM node_preorders np WHERE np.node_id = sn.id AND np.phase = 'hard_order') as hard_orders,
-    
+
     -- Progress to activation
-    CASE 
+    CASE
         WHEN sn.activation_threshold > 0 THEN
             ROUND(
-                (SELECT COUNT(*)::DECIMAL FROM node_preorders np 
-                 WHERE np.node_id = sn.id AND np.phase = 'hard_order') 
+                (SELECT COUNT(*)::DECIMAL FROM node_preorders np
+                 WHERE np.node_id = sn.id AND np.phase = 'hard_order')
                 / sn.activation_threshold * 100, 1
             )
         ELSE 0
     END as activation_progress_percent,
-    
+
     -- Revenue metrics
-    (SELECT COALESCE(SUM(upfront_amount), 0) FROM node_preorders np 
+    (SELECT COALESCE(SUM(upfront_amount), 0) FROM node_preorders np
      WHERE np.node_id = sn.id AND np.upfront_paid = TRUE) as collected_upfront,
-    
+
     -- Leadership
-    (SELECT display_name FROM profiles p 
-     JOIN node_leadership nl ON nl.user_id = p.id 
+    (SELECT display_name FROM profiles p
+     JOIN node_leadership nl ON nl.user_id = p.id
      WHERE nl.node_id = sn.id AND nl.role = 'captain' AND nl.is_active = TRUE
      LIMIT 1) as captain_name
 
@@ -4158,12 +4158,12 @@ CREATE POLICY "Anyone can view active nodes"
 CREATE POLICY "Owners and captains can update nodes"
     ON service_nodes FOR UPDATE
     USING (
-        auth.uid() = owner_id 
+        auth.uid() = owner_id
         OR auth.uid() = captain_id
         OR EXISTS (
-            SELECT 1 FROM node_leadership nl 
-            WHERE nl.node_id = id 
-            AND nl.user_id = auth.uid() 
+            SELECT 1 FROM node_leadership nl
+            WHERE nl.node_id = id
+            AND nl.user_id = auth.uid()
             AND nl.role IN ('captain', 'xo')
         )
     );
@@ -4188,8 +4188,8 @@ CREATE POLICY "Leadership visible to members"
     ON node_leadership FOR SELECT
     USING (
         EXISTS (
-            SELECT 1 FROM service_nodes sn 
-            WHERE sn.id = node_id 
+            SELECT 1 FROM service_nodes sn
+            WHERE sn.id = node_id
             AND (sn.owner_id = auth.uid() OR sn.captain_id = auth.uid())
         )
         OR user_id = auth.uid()
@@ -4203,7 +4203,7 @@ COMMENT ON TABLE demand_signals IS 'Ghost Credits demand aggregation before node
 -- SPONSORSHIP CASCADE SYSTEM
 -- ===========================
 -- 60/10/20/10 Patent Allocation with Cascade Sponsorship
--- 
+--
 -- Allocation:
 -- - 60% Platform & Sponsors (primes the well)
 -- - 10% Patent Buckets (member voting, 5K max per person)
@@ -4223,22 +4223,22 @@ CREATE TABLE IF NOT EXISTS patent_allocation_pools (
     pool_name TEXT NOT NULL,
     allocation_percent DECIMAL(5, 2) NOT NULL,
     description TEXT,
-    
+
     -- Pool limits
     cap_amount DECIMAL(15, 2), -- $10M for platform pool
     current_allocated DECIMAL(15, 2) DEFAULT 0,
-    
+
     -- Status
     is_active BOOLEAN DEFAULT TRUE,
     cycle_number INTEGER DEFAULT 1, -- Increments at cap reset
-    
+
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Seed the four allocation pools
 INSERT INTO patent_allocation_pools (pool_code, pool_name, allocation_percent, description, cap_amount)
-VALUES 
+VALUES
     ('platform_sponsors', 'Platform & Sponsors', 60.00, 'Operations + Cascade Pool (primes the well)', 10000000),
     ('patent_buckets', 'Patent Buckets', 10.00, 'Member voting, 5K max per person', NULL),
     ('founder_reserve', 'Founder Reserve', 20.00, 'Development reserve, emergency protection', NULL),
@@ -4248,31 +4248,31 @@ ON CONFLICT (pool_code) DO NOTHING;
 -- Sponsorship Records
 CREATE TABLE IF NOT EXISTS sponsorships (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    
+
     -- Sponsor info
     sponsor_id UUID REFERENCES auth.users(id),
     sponsor_type TEXT NOT NULL DEFAULT 'member', -- 'founder', 'member', 'cascade'
-    
+
     -- Recipient info
     recipient_id UUID REFERENCES auth.users(id),
     recipient_email TEXT, -- For pending invitations
-    
+
     -- Amount
     credit_amount DECIMAL(10, 2) NOT NULL,
     joule_equivalent DECIMAL(10, 2),
-    
+
     -- Source tracking
     source_sponsorship_id UUID REFERENCES sponsorships(id), -- For cascade tracking
     pool_id UUID REFERENCES patent_allocation_pools(id),
     cycle_number INTEGER DEFAULT 1,
-    
+
     -- Status
     status TEXT NOT NULL DEFAULT 'pending',
     -- pending: Awaiting recipient claim
     -- active: Recipient has claimed
     -- split: Recipient has split to others
     -- expired: Unclaimed after timeout
-    
+
     -- Timestamps
     created_at TIMESTAMPTZ DEFAULT NOW(),
     claimed_at TIMESTAMPTZ,
@@ -4293,15 +4293,15 @@ CREATE TABLE IF NOT EXISTS sponsor_badges (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id) UNIQUE,
     badge_type TEXT NOT NULL DEFAULT 'community_seeder',
-    
+
     -- Metrics
     total_sponsored DECIMAL(10, 2) NOT NULL,
     people_sponsored INTEGER NOT NULL,
     cascade_depth INTEGER DEFAULT 0, -- How many levels deep their sponsorships went
-    
+
     -- Badge earned
     earned_at TIMESTAMPTZ DEFAULT NOW(),
-    
+
     -- Display
     is_visible BOOLEAN DEFAULT TRUE
 );
@@ -4311,19 +4311,19 @@ CREATE TABLE IF NOT EXISTS patent_bucket_allocations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id),
     bucket_id TEXT NOT NULL, -- 'crown_jewels', 'platform_tech', 'game_systems', etc.
-    
+
     -- Allocation
     joule_amount DECIMAL(10, 2) NOT NULL,
     credit_equivalent DECIMAL(10, 2) NOT NULL,
-    
+
     -- Voting
     vote_weight DECIMAL(10, 4), -- Proportional to contribution
-    
+
     -- Status
     status TEXT NOT NULL DEFAULT 'active',
-    
+
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    
+
     -- Constraint: 5K max per person across all buckets
     CONSTRAINT max_5k_per_person CHECK (credit_equivalent <= 5000)
 );
@@ -4332,28 +4332,28 @@ CREATE TABLE IF NOT EXISTS patent_bucket_allocations (
 CREATE TABLE IF NOT EXISTS cloth_pouches (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id),
-    
+
     -- Creation
     credit_amount DECIMAL(10, 2) NOT NULL, -- Credits committed
     service_units DECIMAL(10, 2) NOT NULL, -- Service amount locked in
     creation_rate DECIMAL(10, 4) NOT NULL, -- Rate at creation time
-    
+
     -- Purpose
     purpose TEXT NOT NULL, -- 'patent_purchase', 'sponsorship', 'service_prepay'
     target_id UUID, -- What this pouch is for (patent, bucket, etc.)
-    
+
     -- Status
     status TEXT NOT NULL DEFAULT 'active',
     -- active: Can be invoked
     -- invoked: Has been used
     -- expired: Cancelled/expired
-    
+
     -- Invocation
     invoked_at TIMESTAMPTZ,
     invoked_for TEXT, -- Description of what it was used for
-    
+
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    
+
     -- Constraint: Non-transferable (enforced by user_id)
     CONSTRAINT non_transferable CHECK (user_id IS NOT NULL)
 );
@@ -4363,7 +4363,7 @@ DROP VIEW IF EXISTS sponsorship_cascade_view;
 CREATE OR REPLACE VIEW sponsorship_cascade_view AS
 WITH RECURSIVE cascade AS (
     -- Base case: direct sponsorships from founder/platform
-    SELECT 
+    SELECT
         s.id,
         s.sponsor_id,
         s.recipient_id,
@@ -4373,11 +4373,11 @@ WITH RECURSIVE cascade AS (
         ARRAY[s.id] as path
     FROM sponsorships s
     WHERE s.source_sponsorship_id IS NULL
-    
+
     UNION ALL
-    
+
     -- Recursive case: sponsorships that came from other sponsorships
-    SELECT 
+    SELECT
         s.id,
         s.sponsor_id,
         s.recipient_id,
@@ -4389,7 +4389,7 @@ WITH RECURSIVE cascade AS (
     JOIN cascade c ON s.source_sponsorship_id = c.id
     WHERE NOT s.id = ANY(c.path) -- Prevent cycles
 )
-SELECT 
+SELECT
     c.*,
     p_sponsor.display_name as sponsor_name,
     p_recipient.display_name as recipient_name
@@ -4407,7 +4407,7 @@ BEGIN
     SELECT COALESCE(credits, 0) INTO user_credits
     FROM user_balances
     WHERE user_id = p_user_id;
-    
+
     -- Must have at least 25 credits AND the amount they want to sponsor
     RETURN user_credits >= 25 AND user_credits >= p_amount;
 END;
@@ -4429,10 +4429,10 @@ BEGIN
     IF NOT can_sponsor(p_sponsor_id, p_amount) THEN
         RAISE EXCEPTION 'Insufficient credits or below 25 credit minimum';
     END IF;
-    
+
     -- Get platform pool ID
     SELECT id INTO pool_id FROM patent_allocation_pools WHERE pool_code = 'platform_sponsors';
-    
+
     -- Create the sponsorship
     INSERT INTO sponsorships (
         sponsor_id,
@@ -4451,22 +4451,22 @@ BEGIN
         CASE WHEN p_source_sponsorship_id IS NOT NULL THEN 'cascade' ELSE 'member' END
     )
     RETURNING id INTO new_sponsorship_id;
-    
+
     -- Deduct from sponsor's balance
     UPDATE user_balances
     SET credits = credits - p_amount,
         updated_at = NOW()
     WHERE user_id = p_sponsor_id;
-    
+
     -- Update pool allocation
     UPDATE patent_allocation_pools
     SET current_allocated = current_allocated + p_amount,
         updated_at = NOW()
     WHERE id = pool_id;
-    
+
     -- Check for 5K badge
     PERFORM check_sponsor_badge(p_sponsor_id);
-    
+
     RETURN new_sponsorship_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -4480,19 +4480,19 @@ DECLARE
     max_depth INTEGER;
 BEGIN
     -- Calculate total sponsored
-    SELECT 
+    SELECT
         COALESCE(SUM(credit_amount), 0),
         COUNT(DISTINCT recipient_id)
     INTO total_sponsored, people_count
     FROM sponsorships
     WHERE sponsor_id = p_user_id
     AND status IN ('active', 'split');
-    
+
     -- Calculate cascade depth
     SELECT COALESCE(MAX(depth), 0) INTO max_depth
     FROM sponsorship_cascade_view
     WHERE sponsor_id = p_user_id;
-    
+
     -- Award badge if >= 5000
     IF total_sponsored >= 5000 THEN
         INSERT INTO sponsor_badges (user_id, total_sponsored, people_sponsored, cascade_depth)
@@ -4535,7 +4535,7 @@ BEGIN
         p_target_id
     )
     RETURNING id INTO new_pouch_id;
-    
+
     RETURN new_pouch_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -4557,24 +4557,24 @@ BEGIN
     AND user_id = p_user_id
     AND status = 'active'
     FOR UPDATE;
-    
+
     IF NOT FOUND THEN
         RETURN FALSE;
     END IF;
-    
+
     -- Mark as invoked
     UPDATE cloth_pouches
     SET status = 'invoked',
         invoked_at = NOW(),
         invoked_for = p_description
     WHERE id = p_pouch_id;
-    
+
     -- Add the service units to user's balance as Joules
     UPDATE user_balances
     SET joules = COALESCE(joules, 0) + pouch_record.service_units,
         updated_at = NOW()
     WHERE user_id = p_user_id;
-    
+
     RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
@@ -4589,11 +4589,11 @@ BEGIN
         NEW.current_allocated := 0;
         NEW.cycle_number := NEW.cycle_number + 1;
         NEW.updated_at := NOW();
-        
+
         -- Log the reset
         RAISE NOTICE 'Platform pool reached $10M cap. Resetting to cycle %', NEW.cycle_number;
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -4656,7 +4656,7 @@ CREATE TABLE IF NOT EXISTS public.defense_klaus_vouchers (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   redeemed_at TIMESTAMPTZ,
   qr_code_data TEXT NOT NULL,
-  
+
   -- Prevent duplicate emails
   CONSTRAINT unique_email_hash UNIQUE (email_hash)
 );
@@ -4685,7 +4685,7 @@ CREATE INDEX IF NOT EXISTS idx_ledger_type ON public.ledger_transactions(transac
 -- View for cold start stats
 DROP VIEW IF EXISTS public.defense_klaus_cold_start_stats;
 CREATE OR REPLACE VIEW public.defense_klaus_cold_start_stats AS
-SELECT 
+SELECT
   COUNT(*) as total_signups,
   COUNT(*) FILTER (WHERE is_donated = true) as free_signups,
   COUNT(*) FILTER (WHERE is_donated = false) as paid_signups,
@@ -4727,7 +4727,7 @@ BEGIN
   SELECT COALESCE(MAX(CAST(SUBSTRING(proxy_id FROM 4) AS INTEGER)), 0) + 1
   INTO next_num
   FROM public.defense_klaus_vouchers;
-  
+
   RETURN 'DF-' || LPAD(next_num::TEXT, 7, '0');
 END;
 $$ LANGUAGE plpgsql;
@@ -4795,7 +4795,7 @@ CREATE TABLE IF NOT EXISTS public.defense_klaus_referrals (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   accepted_at TIMESTAMPTZ,
   expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days'),
-  
+
   -- Each referrer can only use each slot once
   CONSTRAINT unique_referrer_slot UNIQUE (referrer_proxy_id, slot_number)
 );
@@ -4816,13 +4816,13 @@ CREATE POLICY "Anyone can update referral status" ON public.defense_klaus_referr
 -- View for daisy chain stats
 DROP VIEW IF EXISTS public.defense_klaus_daisy_chain_stats;
 CREATE OR REPLACE VIEW public.defense_klaus_daisy_chain_stats AS
-SELECT 
+SELECT
   COUNT(*) as total_referrals,
   COUNT(*) FILTER (WHERE status = 'pending') as pending_referrals,
   COUNT(*) FILTER (WHERE status = 'accepted') as accepted_referrals,
   COUNT(DISTINCT referrer_proxy_id) as unique_referrers,
   ROUND(
-    (COUNT(*) FILTER (WHERE status = 'accepted')::numeric / NULLIF(COUNT(*), 0)) * 100, 
+    (COUNT(*) FILTER (WHERE status = 'accepted')::numeric / NULLIF(COUNT(*), 0)) * 100,
     2
   ) as acceptance_rate
 FROM public.defense_klaus_referrals;
@@ -4839,28 +4839,28 @@ COMMENT ON TABLE public.defense_klaus_referrals IS 'Defense Klaus Daisy Chain - 
 CREATE TABLE IF NOT EXISTS beacons (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  
+
   -- Beacon identification
   beacon_color TEXT NOT NULL CHECK (beacon_color IN ('green', 'blue', 'yellow', 'red', 'purple', 'orange')),
   beacon_number INTEGER, -- Sequential per user (auto-assigned)
-  
+
   -- Location
   path TEXT NOT NULL, -- URL path where beacon was dropped
   page_title TEXT, -- Human-readable page title
-  
+
   -- Content
   note TEXT, -- User's note about why they marked this
-  
+
   -- Orange Protocol (custom beacons)
   orange_subtype TEXT CHECK (orange_subtype IN (
     'game_marker', 'share_person', 'social_cue', 'gift',
     'treasure', 'learning', 'trade_route', 'custom'
   )),
   orange_payload JSONB, -- Custom data for orange beacons
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Indexes
   CONSTRAINT valid_orange CHECK (
     (beacon_color = 'orange' AND orange_subtype IS NOT NULL) OR
@@ -4905,36 +4905,36 @@ CREATE INDEX idx_beacons_created ON beacons(created_at DESC);
 CREATE TABLE IF NOT EXISTS beacon_runs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   creator_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   -- Course info
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   description TEXT,
   difficulty TEXT CHECK (difficulty IN ('easy', 'medium', 'hard', 'expert')),
-  
+
   -- Route data
   beacon_ids UUID[] NOT NULL, -- Ordered array of beacon IDs
   total_beacons INTEGER NOT NULL,
   estimated_minutes INTEGER,
-  
+
   -- Competition settings
   ante_credits INTEGER DEFAULT 0, -- Entry fee
   prize_pool_credits INTEGER DEFAULT 0,
-  
+
   -- Stats
   times_started INTEGER DEFAULT 0,
   times_completed INTEGER DEFAULT 0,
   best_time_seconds INTEGER,
   best_time_user_id UUID REFERENCES profiles(id),
-  
+
   -- Publication
   is_published BOOLEAN DEFAULT FALSE,
   published_at TIMESTAMPTZ,
   is_featured BOOLEAN DEFAULT FALSE,
-  
+
   -- Ghost Mode requirement (always true for Beacon Runs)
   requires_ghost_mode BOOLEAN DEFAULT TRUE,
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -4945,7 +4945,7 @@ CREATE OR REPLACE FUNCTION generate_beacon_run_slug()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.slug IS NULL THEN
-    NEW.slug := LOWER(REGEXP_REPLACE(NEW.name, '[^a-zA-Z0-9]+', '-', 'g')) || '-' || 
+    NEW.slug := LOWER(REGEXP_REPLACE(NEW.name, '[^a-zA-Z0-9]+', '-', 'g')) || '-' ||
                 SUBSTRING(NEW.id::TEXT, 1, 8);
   END IF;
   RETURN NEW;
@@ -4963,22 +4963,22 @@ CREATE TABLE IF NOT EXISTS beacon_run_progress (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id),
   run_id UUID NOT NULL REFERENCES beacon_runs(id),
-  
+
   -- Progress tracking
   beacons_reached UUID[] DEFAULT '{}',
   current_beacon_index INTEGER DEFAULT 0,
-  
+
   -- Timing
   started_at TIMESTAMPTZ DEFAULT NOW(),
   completed_at TIMESTAMPTZ,
   elapsed_seconds INTEGER DEFAULT 0,
-  
+
   -- Ghost Mode verification
   ghost_session_id UUID, -- Links to ghost session for validation
-  
+
   -- Status
   status TEXT DEFAULT 'in_progress' CHECK (status IN ('in_progress', 'completed', 'abandoned')),
-  
+
   UNIQUE(user_id, run_id, started_at)
 );
 
@@ -4987,17 +4987,17 @@ CREATE TABLE IF NOT EXISTS beacon_run_leaderboard (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   run_id UUID NOT NULL REFERENCES beacon_runs(id),
   user_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   -- Performance
   completion_time_seconds INTEGER NOT NULL,
   completed_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Ranking
   rank INTEGER,
-  
+
   -- Crow Feathers earned
   crow_feathers_earned INTEGER DEFAULT 0,
-  
+
   UNIQUE(run_id, user_id, completed_at)
 );
 
@@ -5008,28 +5008,28 @@ CREATE TABLE IF NOT EXISTS beacon_run_leaderboard (
 CREATE TABLE IF NOT EXISTS treasure_maps (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   creator_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   -- Map info
   name TEXT NOT NULL,
   description TEXT,
   map_type TEXT CHECK (map_type IN (
-    'pathway_guide', 'completionist', 'speedrun', 
+    'pathway_guide', 'completionist', 'speedrun',
     'hidden_path', 'beacon_run_course'
   )),
-  
+
   -- Content
   beacon_ids UUID[] NOT NULL, -- Beacons included in this map
   route_data JSONB, -- Additional route information
-  
+
   -- Trading
   price_marks INTEGER DEFAULT 0, -- Price in Marks
   is_for_sale BOOLEAN DEFAULT FALSE,
   times_sold INTEGER DEFAULT 0,
-  
+
   -- Stats
   rating_sum INTEGER DEFAULT 0,
   rating_count INTEGER DEFAULT 0,
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   published_at TIMESTAMPTZ
@@ -5041,10 +5041,10 @@ CREATE TABLE IF NOT EXISTS treasure_map_purchases (
   map_id UUID NOT NULL REFERENCES treasure_maps(id),
   buyer_id UUID NOT NULL REFERENCES profiles(id),
   seller_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   price_paid INTEGER NOT NULL,
   purchased_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(map_id, buyer_id)
 );
 
@@ -5121,25 +5121,25 @@ BEGIN
   IF NEW.status = 'completed' AND OLD.status = 'in_progress' THEN
     -- Update run stats
     UPDATE beacon_runs
-    SET 
+    SET
       times_completed = times_completed + 1,
-      best_time_seconds = CASE 
-        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds 
-        THEN NEW.elapsed_seconds 
-        ELSE best_time_seconds 
+      best_time_seconds = CASE
+        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds
+        THEN NEW.elapsed_seconds
+        ELSE best_time_seconds
       END,
-      best_time_user_id = CASE 
-        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds 
-        THEN NEW.user_id 
-        ELSE best_time_user_id 
+      best_time_user_id = CASE
+        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds
+        THEN NEW.user_id
+        ELSE best_time_user_id
       END
     WHERE id = NEW.run_id;
-    
+
     -- Insert leaderboard entry
     INSERT INTO beacon_run_leaderboard (run_id, user_id, completion_time_seconds)
     VALUES (NEW.run_id, NEW.user_id, NEW.elapsed_seconds);
   END IF;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -5453,10 +5453,10 @@ BEGIN
   WHERE category = p_category AND time_bracket = p_time_bracket;
 
   -- For labyrinth_speed, lower is better; for everything else, higher is better
-  IF v_existing_record IS NULL OR 
+  IF v_existing_record IS NULL OR
      (p_category = 'labyrinth_speed' AND p_record_value < v_existing_record.record_value) OR
      (p_category != 'labyrinth_speed' AND p_record_value > v_existing_record.record_value) THEN
-    
+
     -- Award new crow feather
     INSERT INTO crow_feathers (user_id, category, record_value, session_duration_minutes, time_bracket)
     VALUES (p_user_id, p_category, p_record_value, p_session_duration_minutes, p_time_bracket)
@@ -5617,7 +5617,7 @@ CREATE INDEX idx_gate_passages_gate ON gate_passages(gate_id, passed_at DESC);
 -- View for lintel display (last 3 per gate)
 DROP VIEW IF EXISTS gate_lintels;
 CREATE OR REPLACE VIEW gate_lintels AS
-SELECT 
+SELECT
   gate_id,
   array_agg(friend_word ORDER BY passed_at DESC) AS recent_words,
   array_agg(language ORDER BY passed_at DESC) AS recent_languages
@@ -5722,7 +5722,7 @@ DECLARE
   v_new_amount DECIMAL;
 BEGIN
   SELECT * INTO v_candles FROM user_candles WHERE user_id = p_user_id;
-  
+
   IF v_candles IS NULL THEN
     INSERT INTO user_candles (user_id, standard_amount) VALUES (p_user_id, 0.1)
     RETURNING standard_amount INTO v_new_amount;
@@ -5742,7 +5742,7 @@ BEGIN
 
   IF v_can_regenerate THEN
     UPDATE user_candles
-    SET 
+    SET
       standard_amount = LEAST(standard_amount + 0.1, 10.0),
       last_regeneration = NOW(),
       regeneration_count = regeneration_count + 1
@@ -5765,7 +5765,7 @@ DECLARE
   v_candles RECORD;
 BEGIN
   SELECT * INTO v_candles FROM user_candles WHERE user_id = p_user_id;
-  
+
   IF v_candles IS NULL THEN
     RETURN FALSE;
   END IF;
@@ -5808,7 +5808,7 @@ CREATE TRIGGER babylon_unlock_trigger
 
 -- Seed some initial mirror conduits
 INSERT INTO mirror_conduits (mirror_a_location, mirror_b_location, difficulty_level, riddle_clue)
-VALUES 
+VALUES
   ('index:choose-path:left', 'index:choose-path:right', 1, NULL),
   ('landing:hero:mirror', 'initiatives:overview:mirror', 2, NULL),
   ('senate:hall:entrance', 'labyrinth:center:exit', 3, 'Where all guilds meet, beneath the tower'),
@@ -5921,9 +5921,9 @@ CREATE TABLE IF NOT EXISTS social_plug_features (
 
 -- Seed initial platforms
 INSERT INTO social_plug_features (platform, display_name, icon, color, features, is_available, approval_status)
-VALUES 
-  ('tiktok', 'TikTok', '♪', 'bg-pink-500', 
-   '{"login": true, "share": true, "mini_game": false}', 
+VALUES
+  ('tiktok', 'TikTok', '♪', 'bg-pink-500',
+   '{"login": true, "share": true, "mini_game": false}',
    true, 'pending'),
   ('facebook', 'Facebook', 'f', 'bg-blue-500',
    '{"login": true, "share": true, "pages": true}',
@@ -5968,33 +5968,33 @@ ALTER TABLE social_plug_features ENABLE ROW LEVEL SECURITY;
 -- Policies for user_social_plugs
 DROP POLICY IF EXISTS view_own_plugs ON user_social_plugs;
 DROP POLICY IF EXISTS manage_own_plugs ON user_social_plugs;
-CREATE POLICY view_own_plugs ON user_social_plugs FOR SELECT 
+CREATE POLICY view_own_plugs ON user_social_plugs FOR SELECT
   USING (auth.uid() = user_id);
-CREATE POLICY manage_own_plugs ON user_social_plugs FOR ALL 
+CREATE POLICY manage_own_plugs ON user_social_plugs FOR ALL
   USING (auth.uid() = user_id);
 
 -- Policies for candle_burst_pairs
 DROP POLICY IF EXISTS view_own_pairs ON candle_burst_pairs;
 DROP POLICY IF EXISTS manage_own_pairs ON candle_burst_pairs;
 DROP POLICY IF EXISTS join_pairs ON candle_burst_pairs;
-CREATE POLICY view_own_pairs ON candle_burst_pairs FOR SELECT 
+CREATE POLICY view_own_pairs ON candle_burst_pairs FOR SELECT
   USING (auth.uid() = user_a_id OR auth.uid() = user_b_id);
-CREATE POLICY manage_own_pairs ON candle_burst_pairs FOR ALL 
+CREATE POLICY manage_own_pairs ON candle_burst_pairs FOR ALL
   USING (auth.uid() = user_a_id);
-CREATE POLICY join_pairs ON candle_burst_pairs FOR UPDATE 
+CREATE POLICY join_pairs ON candle_burst_pairs FOR UPDATE
   USING (user_b_id IS NULL AND status = 'pending');
 
 -- Policies for social_shares
 DROP POLICY IF EXISTS view_own_shares ON social_shares;
 DROP POLICY IF EXISTS manage_own_shares ON social_shares;
-CREATE POLICY view_own_shares ON social_shares FOR SELECT 
+CREATE POLICY view_own_shares ON social_shares FOR SELECT
   USING (auth.uid() = user_id);
-CREATE POLICY manage_own_shares ON social_shares FOR ALL 
+CREATE POLICY manage_own_shares ON social_shares FOR ALL
   USING (auth.uid() = user_id);
 
 -- Policies for social_plug_features (public read)
 DROP POLICY IF EXISTS view_plug_features ON social_plug_features;
-CREATE POLICY view_plug_features ON social_plug_features FOR SELECT 
+CREATE POLICY view_plug_features ON social_plug_features FOR SELECT
   USING (true);
 
 -- PART 6: HELPER FUNCTIONS
@@ -6009,7 +6009,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     up.platform,
     up.is_enabled,
     up.platform_username,
@@ -6030,7 +6030,7 @@ BEGIN
   UPDATE user_social_plugs
   SET is_enabled = p_enabled, updated_at = NOW()
   WHERE user_id = p_user_id AND platform = p_platform;
-  
+
   RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -6044,26 +6044,26 @@ DECLARE
   v_pair RECORD;
 BEGIN
   SELECT * INTO v_pair FROM candle_burst_pairs WHERE pair_code = p_pair_code;
-  
+
   IF v_pair IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Invalid pair code');
   END IF;
-  
+
   IF v_pair.user_b_id IS NOT NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Pair code already used');
   END IF;
-  
+
   IF v_pair.user_a_id = p_user_id THEN
     RETURN jsonb_build_object('success', false, 'error', 'Cannot pair with yourself');
   END IF;
-  
+
   UPDATE candle_burst_pairs
-  SET 
+  SET
     user_b_id = p_user_id,
     status = 'paired',
     paired_at = NOW()
   WHERE id = v_pair.id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'pair_id', v_pair.id,
@@ -6159,41 +6159,41 @@ DECLARE
   v_result JSONB;
 BEGIN
   -- Find referrer by code (first 8 chars of user_id)
-  SELECT id INTO v_referrer_id 
-  FROM auth.users 
+  SELECT id INTO v_referrer_id
+  FROM auth.users
   WHERE UPPER(LEFT(id::text, 8)) = UPPER(p_referrer_code)
   LIMIT 1;
-  
+
   IF v_referrer_id IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Invalid referral code');
   END IF;
-  
+
   -- Don't allow self-referral
   IF v_referrer_id = p_referred_user_id THEN
     RETURN jsonb_build_object('success', false, 'error', 'Cannot refer yourself');
   END IF;
-  
+
   -- Check if already referred
   IF EXISTS (SELECT 1 FROM public.referral_tracking WHERE referred_user_id = p_referred_user_id) THEN
     RETURN jsonb_build_object('success', false, 'error', 'User already referred');
   END IF;
-  
+
   -- Insert referral record
   INSERT INTO public.referral_tracking (
-    referrer_id, referrer_code, referred_user_id, 
+    referrer_id, referrer_code, referred_user_id,
     source_platform, source_content, bonus_awarded, bonus_feathers
   ) VALUES (
     v_referrer_id, p_referrer_code, p_referred_user_id,
     p_source_platform, p_source_content, true, v_bonus_feathers
   );
-  
+
   -- Award feathers to referrer (if user_feathers table exists)
-  UPDATE public.user_feathers 
+  UPDATE public.user_feathers
   SET total_feathers = total_feathers + v_bonus_feathers
   WHERE user_email = (SELECT email FROM auth.users WHERE id = v_referrer_id);
-  
+
   RETURN jsonb_build_object(
-    'success', true, 
+    'success', true,
     'referrer_id', v_referrer_id,
     'bonus_feathers', v_bonus_feathers
   );
@@ -6214,8 +6214,8 @@ COMMENT ON TABLE public.referral_tracking IS 'Tracks Daisy Chain referrals from 
 -- Add C+20 certification fields to existing anchors table.
 
 ALTER TABLE public.anchors
-ADD COLUMN IF NOT EXISTS pricing_policy TEXT 
-  CHECK (pricing_policy IN ('C_PLUS_20', 'OPAQUE', 'OTHER')) 
+ADD COLUMN IF NOT EXISTS pricing_policy TEXT
+  CHECK (pricing_policy IN ('C_PLUS_20', 'OPAQUE', 'OTHER'))
   DEFAULT 'OPAQUE',
 ADD COLUMN IF NOT EXISTS verified_cost_plus BOOLEAN DEFAULT false,
 ADD COLUMN IF NOT EXISTS cost_plus_verified_at TIMESTAMPTZ,
@@ -6231,11 +6231,11 @@ ADD COLUMN IF NOT EXISTS c20_total_margin_contributed NUMERIC(14,2) DEFAULT 0.00
 ADD COLUMN IF NOT EXISTS c20_total_balance_spent NUMERIC(14,2) DEFAULT 0.00;
 
 -- Index for finding certified anchors
-CREATE INDEX IF NOT EXISTS idx_anchors_cost_plus_certified 
-  ON public.anchors(verified_cost_plus) 
+CREATE INDEX IF NOT EXISTS idx_anchors_cost_plus_certified
+  ON public.anchors(verified_cost_plus)
   WHERE verified_cost_plus = true;
 
-CREATE INDEX IF NOT EXISTS idx_anchors_pricing_policy 
+CREATE INDEX IF NOT EXISTS idx_anchors_pricing_policy
   ON public.anchors(pricing_policy);
 
 -- ─── C+20 CERTIFICATION AUDITS ───
@@ -6244,27 +6244,27 @@ CREATE INDEX IF NOT EXISTS idx_anchors_pricing_policy
 CREATE TABLE IF NOT EXISTS public.cost_plus_audits (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   anchor_id           UUID NOT NULL REFERENCES public.anchors(id) ON DELETE CASCADE,
-  
+
   -- Request info
   requested_by        UUID NOT NULL REFERENCES auth.users(id),
   request_type        TEXT NOT NULL CHECK (request_type IN ('certification', 'renewal', 'appeal')),
-  
+
   -- Evidence (private, not published)
   evidence_url        TEXT,
   evidence_notes      TEXT,
   cost_breakdown      JSONB,  -- { "cogs": 100, "labor": 50, "fees": 20, "margin": 34 }
-  
+
   -- Review
   reviewed_by         UUID REFERENCES auth.users(id),
-  status              TEXT DEFAULT 'pending' 
+  status              TEXT DEFAULT 'pending'
     CHECK (status IN ('pending', 'approved', 'rejected', 'revoked', 'expired')),
   review_notes        TEXT,
   reviewed_at         TIMESTAMPTZ,
-  
+
   -- Validity period
   valid_from          TIMESTAMPTZ,
   valid_until         TIMESTAMPTZ,
-  
+
   -- Timestamps
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW()
@@ -6278,7 +6278,7 @@ CREATE INDEX idx_cost_plus_audits_requested_by ON public.cost_plus_audits(reques
 -- Extend user_coupons to track C+20 enforcement on platform-routed transactions.
 
 ALTER TABLE public.user_coupons
-ADD COLUMN IF NOT EXISTS discount_type TEXT 
+ADD COLUMN IF NOT EXISTS discount_type TEXT
   CHECK (discount_type IN ('cost_plus_20', 'percentage', 'fixed', 'free_shipping', 'other'))
   DEFAULT 'other',
 ADD COLUMN IF NOT EXISTS enforces_cost_plus BOOLEAN DEFAULT false;
@@ -6288,25 +6288,25 @@ ADD COLUMN IF NOT EXISTS enforces_cost_plus BOOLEAN DEFAULT false;
 
 CREATE TABLE IF NOT EXISTS public.cost_plus_economics (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Policy name
   policy_name         TEXT NOT NULL UNIQUE,
-  
+
   -- Multipliers for certified anchors
   certified_joule_multiplier    DECIMAL(4,2) DEFAULT 1.00,
   certified_marks_multiplier    DECIMAL(4,2) DEFAULT 1.00,
   certified_ip_stake_eligible   BOOLEAN DEFAULT true,
   certified_reciprocal_tier_max INTEGER DEFAULT 3,
-  
+
   -- Multipliers for non-certified anchors
   uncertified_joule_multiplier  DECIMAL(4,2) DEFAULT 0.25,
   uncertified_marks_multiplier  DECIMAL(4,2) DEFAULT 0.50,
   uncertified_ip_stake_eligible BOOLEAN DEFAULT false,
   uncertified_reciprocal_tier_max INTEGER DEFAULT 1,
-  
+
   -- Description
   description         TEXT,
-  
+
   -- Timestamps
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW()
@@ -6392,15 +6392,15 @@ DECLARE
   v_ratio NUMERIC(4,3);
   v_verified BOOLEAN;
 BEGIN
-  SELECT cost_plus_compliance_ratio, verified_cost_plus 
+  SELECT cost_plus_compliance_ratio, verified_cost_plus
   INTO v_ratio, v_verified
-  FROM public.anchors 
+  FROM public.anchors
   WHERE id = p_anchor_id;
-  
+
   IF v_ratio IS NULL THEN
     RETURN 'NONE';
   END IF;
-  
+
   -- Full badge requires both high ratio AND verification
   IF v_ratio >= 0.95 AND v_verified = true THEN
     RETURN 'FULL';
@@ -6425,17 +6425,17 @@ CREATE OR REPLACE FUNCTION public.update_cost_plus_compliance(
 RETURNS VOID AS $$
 BEGIN
   UPDATE public.anchors
-  SET 
+  SET
     cost_plus_total_gmv = cost_plus_total_gmv + p_transaction_amount,
-    cost_plus_compliant_gmv = CASE 
-      WHEN p_is_compliant THEN cost_plus_compliant_gmv + p_transaction_amount 
-      ELSE cost_plus_compliant_gmv 
+    cost_plus_compliant_gmv = CASE
+      WHEN p_is_compliant THEN cost_plus_compliant_gmv + p_transaction_amount
+      ELSE cost_plus_compliant_gmv
     END,
-    cost_plus_compliance_ratio = CASE 
-      WHEN (cost_plus_total_gmv + p_transaction_amount) > 0 
-      THEN (cost_plus_compliant_gmv + CASE WHEN p_is_compliant THEN p_transaction_amount ELSE 0 END) 
+    cost_plus_compliance_ratio = CASE
+      WHEN (cost_plus_total_gmv + p_transaction_amount) > 0
+      THEN (cost_plus_compliant_gmv + CASE WHEN p_is_compliant THEN p_transaction_amount ELSE 0 END)
            / (cost_plus_total_gmv + p_transaction_amount)
-      ELSE 0 
+      ELSE 0
     END,
     updated_at = NOW()
   WHERE id = p_anchor_id;
@@ -6459,7 +6459,7 @@ BEGIN
   IF v_owner_id != auth.uid() THEN
     RAISE EXCEPTION 'You do not own this anchor';
   END IF;
-  
+
   -- Check for existing pending request
   IF EXISTS (
     SELECT 1 FROM public.cost_plus_audits
@@ -6467,7 +6467,7 @@ BEGIN
   ) THEN
     RAISE EXCEPTION 'A pending certification request already exists for this anchor';
   END IF;
-  
+
   -- Create audit request
   INSERT INTO public.cost_plus_audits (
     anchor_id,
@@ -6484,13 +6484,13 @@ BEGIN
     p_evidence_notes,
     p_cost_breakdown
   ) RETURNING id INTO v_audit_id;
-  
+
   -- Update anchor to show pending
   UPDATE public.anchors
   SET pricing_policy = 'C_PLUS_20',
       updated_at = NOW()
   WHERE id = p_anchor_id;
-  
+
   RETURN v_audit_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -6507,11 +6507,11 @@ DECLARE
 BEGIN
   -- Get anchor ID from audit
   SELECT anchor_id INTO v_anchor_id FROM public.cost_plus_audits WHERE id = p_audit_id;
-  
+
   IF v_anchor_id IS NULL THEN
     RAISE EXCEPTION 'Audit request not found';
   END IF;
-  
+
   -- Update audit record
   UPDATE public.cost_plus_audits
   SET status = 'approved',
@@ -6522,7 +6522,7 @@ BEGIN
       valid_until = NOW() + (p_validity_days || ' days')::INTERVAL,
       updated_at = NOW()
   WHERE id = p_audit_id;
-  
+
   -- Update anchor
   UPDATE public.anchors
   SET verified_cost_plus = true,
@@ -6533,7 +6533,7 @@ BEGIN
       cost_plus_revoked_reason = NULL,
       updated_at = NOW()
   WHERE id = v_anchor_id;
-  
+
   RETURN true;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -6552,7 +6552,7 @@ BEGIN
       cost_plus_revoked_reason = p_reason,
       updated_at = NOW()
   WHERE id = p_anchor_id;
-  
+
   -- Create revocation audit record
   INSERT INTO public.cost_plus_audits (
     anchor_id,
@@ -6571,7 +6571,7 @@ BEGIN
     p_reason,
     NOW()
   );
-  
+
   RETURN true;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -6591,19 +6591,19 @@ DECLARE
 BEGIN
   -- Check certification status
   v_is_certified := public.is_cost_plus_certified(p_anchor_id);
-  
+
   -- Get default policy
   SELECT * INTO v_policy FROM public.cost_plus_economics WHERE policy_name = 'default';
-  
+
   IF v_is_certified THEN
-    RETURN QUERY SELECT 
+    RETURN QUERY SELECT
       v_policy.certified_joule_multiplier,
       v_policy.certified_marks_multiplier,
       v_policy.certified_ip_stake_eligible,
       v_policy.certified_reciprocal_tier_max,
       true;
   ELSE
-    RETURN QUERY SELECT 
+    RETURN QUERY SELECT
       v_policy.uncertified_joule_multiplier,
       v_policy.uncertified_marks_multiplier,
       v_policy.uncertified_ip_stake_eligible,
@@ -6620,7 +6620,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- View of all C+20 certified anchors (for public display)
 DROP VIEW IF EXISTS public.v_certified_anchors;
 CREATE OR REPLACE VIEW public.v_certified_anchors AS
-SELECT 
+SELECT
   a.id,
   a.display_name,
   a.destination_url,
@@ -6655,8 +6655,8 @@ COMMENT ON VIEW public.v_certified_anchors IS 'Public view of all C+20 certified
 -- C+20 RECIPROCITY SYSTEM
 -- ============================================================================
 -- Innovation #1347: C+20 Reciprocity Law
--- "For every dollar of margin a business voluntarily gives up by adopting 
--- Cost + 20% pricing, the system grants that business one dollar of C+20 
+-- "For every dollar of margin a business voluntarily gives up by adopting
+-- Cost + 20% pricing, the system grants that business one dollar of C+20
 -- purchasing power inside the ecosystem."
 -- ============================================================================
 
@@ -6670,31 +6670,31 @@ CREATE TABLE IF NOT EXISTS public.c20_product_config (
   anchor_id UUID NOT NULL REFERENCES public.anchors(id) ON DELETE CASCADE,
   product_sku TEXT NOT NULL,
   product_name TEXT NOT NULL,
-  
+
   -- Pricing configuration
   reference_price NUMERIC(10,2) NOT NULL,      -- Normal retail price (e.g., $100)
   cost_basis NUMERIC(10,2) NOT NULL,           -- True cost (e.g., $40)
   c20_price NUMERIC(10,2) GENERATED ALWAYS AS (cost_basis * 1.20) STORED,
   margin_at_reference NUMERIC(10,2) GENERATED ALWAYS AS (reference_price - cost_basis) STORED,
   margin_at_c20 NUMERIC(10,2) GENERATED ALWAYS AS (cost_basis * 0.20) STORED,
-  margin_sacrificed_per_unit NUMERIC(10,2) GENERATED ALWAYS AS 
+  margin_sacrificed_per_unit NUMERIC(10,2) GENERATED ALWAYS AS
     ((reference_price - cost_basis) - (cost_basis * 0.20)) STORED,
-  
+
   -- C+20 limits (toe-dipping)
   c20_enabled BOOLEAN DEFAULT true,
   c20_max_units INTEGER,                       -- NULL = unlimited, e.g., 50
   c20_units_sold INTEGER DEFAULT 0,
   c20_auto_revert BOOLEAN DEFAULT true,        -- Revert to reference price when max hit
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(anchor_id, product_sku)
 );
 
 -- Index for quick lookups
-CREATE INDEX IF NOT EXISTS idx_c20_product_config_anchor 
+CREATE INDEX IF NOT EXISTS idx_c20_product_config_anchor
   ON public.c20_product_config(anchor_id);
 
 -- ----------------------------------------------------------------------------
@@ -6705,7 +6705,7 @@ CREATE INDEX IF NOT EXISTS idx_c20_product_config_anchor
 CREATE TABLE IF NOT EXISTS public.c20_reciprocity_ledger (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   anchor_id UUID NOT NULL REFERENCES public.anchors(id) ON DELETE CASCADE,
-  
+
   -- Transaction type
   transaction_type TEXT NOT NULL CHECK (transaction_type IN (
     'MARGIN_CONTRIBUTION',    -- Sold at C+20, earned reciprocity balance
@@ -6713,18 +6713,18 @@ CREATE TABLE IF NOT EXISTS public.c20_reciprocity_ledger (
     'JOULE_CONVERSION',       -- Converted Joules to extend C+20 purchasing power
     'BALANCE_ADJUSTMENT'      -- Manual adjustment (admin)
   )),
-  
+
   -- Amounts
   amount NUMERIC(14,2) NOT NULL,               -- Positive for contributions, negative for spends
   balance_before NUMERIC(14,2) NOT NULL,
   balance_after NUMERIC(14,2) NOT NULL,
-  
+
   -- Reference data
   product_config_id UUID REFERENCES public.c20_product_config(id),
   order_id UUID,                               -- If tied to a specific order
   joule_amount NUMERIC(14,2),                  -- If JOULE_CONVERSION
   joule_rate NUMERIC(10,6),                    -- Forex rate at conversion
-  
+
   -- Metadata
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -6732,9 +6732,9 @@ CREATE TABLE IF NOT EXISTS public.c20_reciprocity_ledger (
 );
 
 -- Indexes
-CREATE INDEX IF NOT EXISTS idx_c20_reciprocity_ledger_anchor 
+CREATE INDEX IF NOT EXISTS idx_c20_reciprocity_ledger_anchor
   ON public.c20_reciprocity_ledger(anchor_id);
-CREATE INDEX IF NOT EXISTS idx_c20_reciprocity_ledger_type 
+CREATE INDEX IF NOT EXISTS idx_c20_reciprocity_ledger_type
   ON public.c20_reciprocity_ledger(transaction_type);
 
 -- ----------------------------------------------------------------------------
@@ -6771,42 +6771,42 @@ BEGIN
   SELECT margin_sacrificed_per_unit INTO v_margin_per_unit
   FROM public.c20_product_config
   WHERE id = p_product_config_id;
-  
+
   IF v_margin_per_unit IS NULL THEN
     RAISE EXCEPTION 'Product config not found';
   END IF;
-  
+
   -- Calculate total margin contributed
   v_total_margin := v_margin_per_unit * p_units_sold;
-  
+
   -- Get reciprocity rate from DNA lock
   SELECT COALESCE(parameter_value::NUMERIC, 1.0) INTO v_reciprocity_rate
   FROM public.dna_lock WHERE parameter_key = 'c20_reciprocity_rate';
-  
+
   -- Get current balance
   SELECT c20_reciprocity_balance INTO v_balance_before
   FROM public.anchors WHERE id = p_anchor_id;
-  
+
   v_balance_after := v_balance_before + (v_total_margin * v_reciprocity_rate);
-  
+
   -- Update anchor balances
   UPDATE public.anchors
-  SET 
+  SET
     c20_reciprocity_balance = v_balance_after,
     c20_total_margin_contributed = c20_total_margin_contributed + v_total_margin,
     updated_at = NOW()
   WHERE id = p_anchor_id;
-  
+
   -- Update product config units sold
   UPDATE public.c20_product_config
-  SET 
+  SET
     c20_units_sold = c20_units_sold + p_units_sold,
     updated_at = NOW()
   WHERE id = p_product_config_id;
-  
+
   -- Record in ledger
   INSERT INTO public.c20_reciprocity_ledger (
-    anchor_id, transaction_type, amount, 
+    anchor_id, transaction_type, amount,
     balance_before, balance_after,
     product_config_id, order_id, notes
   ) VALUES (
@@ -6815,7 +6815,7 @@ BEGIN
     p_product_config_id, p_order_id,
     format('Sold %s units, margin sacrificed: $%s each', p_units_sold, v_margin_per_unit)
   );
-  
+
   RETURN v_total_margin * v_reciprocity_rate;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -6841,7 +6841,7 @@ BEGIN
   -- Get current balance
   SELECT c20_reciprocity_balance INTO v_current_balance
   FROM public.anchors WHERE id = p_anchor_id;
-  
+
   -- Calculate how much balance to use vs Joules needed
   IF v_current_balance >= p_amount THEN
     v_balance_to_use := p_amount;
@@ -6850,17 +6850,17 @@ BEGIN
     v_balance_to_use := v_current_balance;
     v_joules_needed := p_amount - v_current_balance;
   END IF;
-  
+
   v_balance_after := v_current_balance - v_balance_to_use;
-  
+
   -- Update anchor balance
   UPDATE public.anchors
-  SET 
+  SET
     c20_reciprocity_balance = v_balance_after,
     c20_total_balance_spent = c20_total_balance_spent + v_balance_to_use,
     updated_at = NOW()
   WHERE id = p_anchor_id;
-  
+
   -- Record in ledger
   IF v_balance_to_use > 0 THEN
     INSERT INTO public.c20_reciprocity_ledger (
@@ -6873,7 +6873,7 @@ BEGIN
       p_order_id, COALESCE(p_notes, 'C+20 purchase')
     );
   END IF;
-  
+
   RETURN QUERY SELECT v_balance_to_use, v_joules_needed, v_balance_after;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -6894,22 +6894,22 @@ BEGIN
   -- Get conversion rate from DNA lock
   SELECT COALESCE(parameter_value::NUMERIC, 1.0) INTO v_conversion_rate
   FROM public.dna_lock WHERE parameter_key = 'c20_joule_conversion_rate';
-  
+
   v_c20_amount := p_joule_amount * v_conversion_rate;
-  
+
   -- Get current balance
   SELECT c20_reciprocity_balance INTO v_balance_before
   FROM public.anchors WHERE id = p_anchor_id;
-  
+
   v_balance_after := v_balance_before + v_c20_amount;
-  
+
   -- Update anchor balance
   UPDATE public.anchors
-  SET 
+  SET
     c20_reciprocity_balance = v_balance_after,
     updated_at = NOW()
   WHERE id = p_anchor_id;
-  
+
   -- Record in ledger
   INSERT INTO public.c20_reciprocity_ledger (
     anchor_id, transaction_type, amount,
@@ -6921,7 +6921,7 @@ BEGIN
     p_joule_amount, v_conversion_rate,
     COALESCE(p_notes, format('Converted %s Joules at rate %s', p_joule_amount, v_conversion_rate))
   );
-  
+
   RETURN v_c20_amount;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -6939,16 +6939,16 @@ BEGIN
   INTO v_enabled, v_max_units, v_units_sold, v_auto_revert
   FROM public.c20_product_config
   WHERE id = p_product_config_id;
-  
+
   IF NOT v_enabled THEN
     RETURN false;
   END IF;
-  
+
   -- If no max set, always available
   IF v_max_units IS NULL THEN
     RETURN true;
   END IF;
-  
+
   -- Check if under limit
   RETURN v_units_sold < v_max_units;
 END;
@@ -6967,7 +6967,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     a.c20_reciprocity_balance,
     a.c20_total_margin_contributed,
     a.c20_total_balance_spent,
@@ -6975,10 +6975,10 @@ BEGIN
     COUNT(pc.id)::INTEGER,
     COALESCE(SUM(pc.c20_units_sold), 0)::INTEGER,
     COALESCE(SUM(
-      CASE 
-        WHEN pc.c20_max_units IS NOT NULL 
+      CASE
+        WHEN pc.c20_max_units IS NOT NULL
         THEN GREATEST(0, pc.c20_max_units - pc.c20_units_sold)
-        ELSE 0 
+        ELSE 0
       END
     ), 0)::INTEGER
   FROM public.anchors a
@@ -7023,7 +7023,7 @@ CREATE POLICY "Public can view product configs"
 
 DROP VIEW IF EXISTS public.v_c20_reciprocity_leaderboard;
 CREATE OR REPLACE VIEW public.v_c20_reciprocity_leaderboard AS
-SELECT 
+SELECT
   a.id AS anchor_id,
   a.display_name,
   a.c20_total_margin_contributed AS total_contributed,
@@ -7120,7 +7120,7 @@ CREATE POLICY "Users can view own pledges" ON public.stewardship_backers FOR SEL
 -- Date: 2026-03-04
 -- Description: Adds geographic targeting for The 300 (Naval Fleet / Captains) and localized progress tracking
 -- Milestone 2: The Cold Start & Stewardship System
--- 
+--
 -- NAVAL RANK PROGRESSION:
 -- - Captain: 1 ship (your own) - Local leader for ONE initiative in ONE city
 -- - Commodore: 3+ ships - Leader of 3+ initiatives OR 1 initiative across 3+ cities
@@ -7130,7 +7130,7 @@ CREATE POLICY "Users can view own pledges" ON public.stewardship_backers FOR SEL
 -- - Fleet Admiral / Crown: The public figure who sets national vision
 
 -- 1. Add geographic columns to stewardship_applications
-ALTER TABLE public.stewardship_applications 
+ALTER TABLE public.stewardship_applications
 ADD COLUMN IF NOT EXISTS zip_code TEXT,
 ADD COLUMN IF NOT EXISTS city TEXT,
 ADD COLUMN IF NOT EXISTS state TEXT,
@@ -7168,7 +7168,7 @@ CREATE TABLE IF NOT EXISTS public.cold_start_thresholds (
 -- 4. Create geographic progress tracking view
 DROP VIEW IF EXISTS public.geographic_cold_start_progress;
 CREATE OR REPLACE VIEW public.geographic_cold_start_progress AS
-SELECT 
+SELECT
     gds.initiative_id,
     gds.zip_code,
     gds.city,
@@ -7177,13 +7177,13 @@ SELECT
     COUNT(DISTINCT gds.user_id) as interested_families,
     COUNT(DISTINCT CASE WHEN gds.signal_type = 'hard_pledge' THEN gds.user_id END) as committed_families,
     COALESCE(SUM(gds.pledge_amount), 0) as total_pledged,
-    (SELECT COUNT(*) FROM public.stewardship_applications sa 
-     WHERE sa.initiative_id = gds.initiative_id 
-     AND sa.city = gds.city 
-     AND sa.state = gds.state 
+    (SELECT COUNT(*) FROM public.stewardship_applications sa
+     WHERE sa.initiative_id = gds.initiative_id
+     AND sa.city = gds.city
+     AND sa.state = gds.state
      AND sa.status = 'approved'
      AND sa.region_type = 'city') as active_captains, -- Naval rank: Captain = local leader
-    CASE 
+    CASE
         WHEN COUNT(DISTINCT gds.user_id) >= 500 THEN 'WILDFIRE'
         WHEN COUNT(DISTINCT gds.user_id) >= 250 THEN 'INFERNO'
         WHEN COUNT(DISTINCT gds.user_id) >= 150 THEN 'BLAZE'
@@ -7197,7 +7197,7 @@ GROUP BY gds.initiative_id, gds.zip_code, gds.city, gds.state, gds.country;
 
 -- 5. Seed default cold start thresholds for all initiatives
 INSERT INTO public.cold_start_thresholds (initiative_id, tier, families_required, captains_required, description)
-VALUES 
+VALUES
     -- Let's Make Dinner
     ('lets_make_dinner', 'SPARK', 1, 0, 'Gathering interest'),
     ('lets_make_dinner', 'EMBER', 50, 1, 'Need 50 families and 1 Captain to launch'),
@@ -7206,7 +7206,7 @@ VALUES
     ('lets_make_dinner', 'BLAZE', 150, 3, 'Expanding reach'),
     ('lets_make_dinner', 'INFERNO', 250, 4, 'Regional impact'),
     ('lets_make_dinner', 'WILDFIRE', 500, 5, 'Full deployment'),
-    
+
     -- Defense Klaus
     ('defense_klaus', 'SPARK', 1, 0, 'Gathering interest'),
     ('defense_klaus', 'EMBER', 100, 1, 'Need 100 families and 1 Captain to launch'),
@@ -7215,7 +7215,7 @@ VALUES
     ('defense_klaus', 'BLAZE', 1000, 4, 'Regional coverage'),
     ('defense_klaus', 'INFERNO', 2500, 5, 'Major metro coverage'),
     ('defense_klaus', 'WILDFIRE', 5000, 6, 'Full deployment'),
-    
+
     -- Let's Get Groceries
     ('lets_get_groceries', 'SPARK', 1, 0, 'Gathering interest'),
     ('lets_get_groceries', 'EMBER', 25, 1, 'Need 25 families and 1 Captain to launch'),
@@ -7224,7 +7224,7 @@ VALUES
     ('lets_get_groceries', 'BLAZE', 200, 3, 'Major discounts unlocked'),
     ('lets_get_groceries', 'INFERNO', 500, 4, 'Regional buying power'),
     ('lets_get_groceries', 'WILDFIRE', 1000, 5, 'Full deployment'),
-    
+
     -- Family Table
     ('family_table', 'SPARK', 1, 0, 'Gathering interest'),
     ('family_table', 'EMBER', 10, 1, 'Need 10 families and 1 Captain to launch'),
@@ -7240,16 +7240,16 @@ ALTER TABLE public.geographic_demand_signals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cold_start_thresholds ENABLE ROW LEVEL SECURITY;
 
 -- Anyone can view thresholds and aggregated progress
-CREATE POLICY "Public can view cold start thresholds" 
+CREATE POLICY "Public can view cold start thresholds"
     ON public.cold_start_thresholds FOR SELECT USING (true);
 
 -- Users can create and view their own demand signals
-CREATE POLICY "Users can create demand signals" 
-    ON public.geographic_demand_signals FOR INSERT 
+CREATE POLICY "Users can create demand signals"
+    ON public.geographic_demand_signals FOR INSERT
     WITH CHECK (auth.uid() = user_id OR user_id IS NULL);
 
-CREATE POLICY "Users can view own demand signals" 
-    ON public.geographic_demand_signals FOR SELECT 
+CREATE POLICY "Users can view own demand signals"
+    ON public.geographic_demand_signals FOR SELECT
     USING (auth.uid() = user_id OR user_id IS NULL);
 
 -- 7. Function to get progress for a specific city
@@ -7277,12 +7277,12 @@ DECLARE
     v_captains BIGINT;
 BEGIN
     -- Get current counts
-    SELECT 
+    SELECT
         COUNT(DISTINCT gds.user_id),
-        (SELECT COUNT(*) FROM public.stewardship_applications sa 
-         WHERE sa.initiative_id = p_initiative_id 
-         AND sa.city = p_city 
-         AND sa.state = p_state 
+        (SELECT COUNT(*) FROM public.stewardship_applications sa
+         WHERE sa.initiative_id = p_initiative_id
+         AND sa.city = p_city
+         AND sa.state = p_state
          AND sa.status = 'approved'
          AND sa.region_type = 'city')
     INTO v_families, v_captains
@@ -7293,22 +7293,22 @@ BEGIN
 
     RETURN QUERY
     WITH current_progress AS (
-        SELECT 
+        SELECT
             p_initiative_id as initiative_id,
             p_city as city,
             p_state as state,
             COALESCE(v_families, 0) as interested_families,
-            (SELECT COUNT(DISTINCT user_id) FROM public.geographic_demand_signals 
-             WHERE initiative_id = p_initiative_id AND city = p_city AND state = p_state 
+            (SELECT COUNT(DISTINCT user_id) FROM public.geographic_demand_signals
+             WHERE initiative_id = p_initiative_id AND city = p_city AND state = p_state
              AND signal_type = 'hard_pledge') as committed_families,
-            COALESCE((SELECT SUM(pledge_amount) FROM public.geographic_demand_signals 
+            COALESCE((SELECT SUM(pledge_amount) FROM public.geographic_demand_signals
              WHERE initiative_id = p_initiative_id AND city = p_city AND state = p_state), 0) as total_pledged,
             COALESCE(v_captains, 0) as active_captains
     ),
     tier_calc AS (
-        SELECT 
+        SELECT
             cp.*,
-            CASE 
+            CASE
                 WHEN cp.interested_families >= 500 THEN 'WILDFIRE'
                 WHEN cp.interested_families >= 250 THEN 'INFERNO'
                 WHEN cp.interested_families >= 150 THEN 'BLAZE'
@@ -7320,7 +7320,7 @@ BEGIN
         FROM current_progress cp
     ),
     next_tier_info AS (
-        SELECT 
+        SELECT
             tc.*,
             CASE tc.current_tier
                 WHEN 'SPARK' THEN 'EMBER'
@@ -7333,7 +7333,7 @@ BEGIN
             END as next_tier
         FROM tier_calc tc
     )
-    SELECT 
+    SELECT
         nti.initiative_id,
         nti.city,
         nti.state,
@@ -7346,8 +7346,8 @@ BEGIN
         GREATEST(0, cst.families_required - nti.interested_families::INTEGER) as families_to_next_tier,
         GREATEST(0, cst.captains_required - nti.active_captains::INTEGER) as captains_to_next_tier
     FROM next_tier_info nti
-    LEFT JOIN public.cold_start_thresholds cst 
-        ON cst.initiative_id = nti.initiative_id 
+    LEFT JOIN public.cold_start_thresholds cst
+        ON cst.initiative_id = nti.initiative_id
         AND cst.tier = nti.next_tier;
 END;
 $$ LANGUAGE plpgsql;
@@ -7362,7 +7362,7 @@ COMMENT ON VIEW public.geographic_cold_start_progress IS 'Cold Start Milestone 2
 -- ═══════════════════════════════════════════════════════════════
 
 -- ─── BIZ STOREFRONTS (Aggregated Items) ───
--- Allows external businesses (Etsy, Shopify, etc.) to list a few 
+-- Allows external businesses (Etsy, Shopify, etc.) to list a few
 -- items on the .biz portal without full duplicate data entry.
 -- Tied to the "Cold Start C20" philosophy.
 
@@ -7370,7 +7370,7 @@ CREATE TABLE IF NOT EXISTS public.biz_storefront_items (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   anchor_id           UUID NOT NULL REFERENCES public.anchors(id) ON DELETE CASCADE,
   owner_id            UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Item details
   external_item_id    TEXT, -- ID from Shopify, Etsy, etc.
   title               TEXT NOT NULL,
@@ -7379,14 +7379,14 @@ CREATE TABLE IF NOT EXISTS public.biz_storefront_items (
   currency            TEXT DEFAULT 'USD',
   image_url           TEXT,
   external_url        TEXT NOT NULL, -- Direct link to buy on their actual store
-  
+
   -- C20 / Platform integration
   is_c20_eligible     BOOLEAN DEFAULT false,
   platform_margin_cents INTEGER DEFAULT 0, -- If sold through us, what is the margin?
-  
+
   -- Status
   status              TEXT DEFAULT 'active', -- active, paused, out_of_stock
-  
+
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW()
 );
@@ -7402,22 +7402,22 @@ CREATE TABLE IF NOT EXISTS public.qr_print_bounties (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   cue_card_id         UUID NOT NULL REFERENCES public.cue_card_registry(id),
   requester_id        UUID NOT NULL REFERENCES auth.users(id),
-  
+
   -- Order details
   quantity            INTEGER NOT NULL DEFAULT 250,
   material_type       TEXT DEFAULT 'standard_cardstock', -- standard_cardstock, nfc_plastic, metal
   shipping_address    JSONB NOT NULL,
-  
+
   -- Financials (Volume Dump Mechanics)
   total_cost_cents    INTEGER NOT NULL,
   platform_margin_cents INTEGER NOT NULL, -- Cost + 20%
   ip_backing_joules   INTEGER DEFAULT 0, -- Joules backing this physical run
-  
+
   -- Bounty Status (Salt Mines)
   bounty_status       TEXT DEFAULT 'open', -- open, claimed, printing, shipped, delivered
   claimed_by          UUID REFERENCES auth.users(id), -- The Maker/Printer in the Salt Mines
   claimed_at          TIMESTAMPTZ,
-  
+
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW()
 );
@@ -7455,7 +7455,7 @@ CREATE POLICY "Claimers can update their claimed bounties" ON public.qr_print_bo
 
 -- 1. Add Locality to Anchors (Businesses)
 -- Allows filtering storefronts and businesses by zip, city, or lat/long
-ALTER TABLE public.anchors 
+ALTER TABLE public.anchors
 ADD COLUMN IF NOT EXISTS latitude DECIMAL(10, 8),
 ADD COLUMN IF NOT EXISTS longitude DECIMAL(11, 8),
 ADD COLUMN IF NOT EXISTS city TEXT,
@@ -7472,29 +7472,29 @@ CREATE INDEX IF NOT EXISTS idx_anchors_city ON public.anchors(city);
 CREATE TABLE IF NOT EXISTS public.family_garage_sales (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   host_id             UUID NOT NULL REFERENCES auth.users(id),
-  
+
   -- Details
   title               TEXT NOT NULL,
   description         TEXT,
-  
+
   -- Locality
   latitude            DECIMAL(10, 8),
   longitude           DECIMAL(11, 8),
   address_text        TEXT NOT NULL,
   city                TEXT,
   postal_code         TEXT,
-  
+
   -- Schedule
   start_time          TIMESTAMPTZ NOT NULL,
   end_time            TIMESTAMPTZ NOT NULL,
-  
+
   -- Status
   status              TEXT DEFAULT 'scheduled', -- scheduled, active, completed, canceled
-  
+
   -- Liana Banyan Integration
   accepts_marks       BOOLEAN DEFAULT true,
   marks_discount_pct  INTEGER DEFAULT 10, -- Discount if paying in Marks
-  
+
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW()
 );
@@ -7522,16 +7522,16 @@ CREATE TABLE IF NOT EXISTS public.biz_storefront_sync_jobs (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   anchor_id           UUID NOT NULL REFERENCES public.anchors(id) ON DELETE CASCADE,
   owner_id            UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Sync Details
   platform_type       TEXT NOT NULL, -- 'shopify', 'etsy', 'fiverr', 'custom'
   source_url          TEXT NOT NULL,
-  
+
   -- Status
   status              TEXT DEFAULT 'pending', -- pending, processing, completed, failed
   items_synced        INTEGER DEFAULT 0,
   error_message       TEXT,
-  
+
   -- Timestamps
   started_at          TIMESTAMPTZ DEFAULT NOW(),
   completed_at        TIMESTAMPTZ,
@@ -7545,32 +7545,32 @@ CREATE INDEX idx_sync_jobs_status ON public.biz_storefront_sync_jobs(status);
 -- Pre-defined templates for common business needs
 CREATE TABLE IF NOT EXISTS public.ready_made_bounty_templates (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Template Details
   title               TEXT NOT NULL UNIQUE,
   category            TEXT NOT NULL, -- 'design', 'development', 'syncing'
   short_description   TEXT NOT NULL,
   full_description    TEXT NOT NULL,
-  
+
   -- Economics
   suggested_credits_min INTEGER NOT NULL,
   suggested_credits_max INTEGER NOT NULL,
-  
+
   -- Tools/Platforms
   target_platforms    TEXT[], -- e.g., ['Google Sites', 'Squarespace', 'Wix']
-  
+
   is_active           BOOLEAN DEFAULT true,
   created_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Seed the Ready-Made Bounties
-INSERT INTO public.ready_made_bounty_templates 
+INSERT INTO public.ready_made_bounty_templates
   (title, category, short_description, full_description, suggested_credits_min, suggested_credits_max, target_platforms)
 VALUES
   ('WYSIWYG Website Setup', 'design', 'Basic website setup using drag-and-drop builders.', 'Need a simple web presence? A Maker will set up a clean, professional 3-page site using your preferred WYSIWYG builder. Includes linking your custom domain and setting up basic contact forms.', 500, 1500, ARRAY['Google Sites', 'Squarespace', 'Wix']),
-  
+
   ('AI App Generation', 'development', 'Rapid prototyping using AI generation tools.', 'Have an idea for a simple web app or internal tool? A Maker will use modern AI generation tools to build a functional prototype based on your prompt.', 1000, 3000, ARRAY['Lovable', 'v0', 'Cursor']),
-  
+
   ('StoreFront Syncing', 'syncing', 'Help linking external stores to the Liana Banyan .biz portal.', 'Need help getting your existing products into the Cold Start C20 system? A Maker will manually extract up to 20 of your best items and format them perfectly for your .biz Kaleidoscope listing.', 300, 800, ARRAY['Etsy', 'Shopify', 'Fiverr'])
 ON CONFLICT (title) DO NOTHING;
 
@@ -7579,20 +7579,20 @@ ON CONFLICT (title) DO NOTHING;
 CREATE TABLE IF NOT EXISTS public.kaleidoscope_placements (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   anchor_id           UUID NOT NULL REFERENCES public.anchors(id) ON DELETE CASCADE,
-  
+
   -- Placement Details
   placement_type      TEXT DEFAULT 'organic', -- organic, featured (based on charitable tier)
   postal_code         TEXT NOT NULL,
   category            TEXT NOT NULL,
-  
+
   -- Metrics
   impressions         INTEGER DEFAULT 0,
   clicks              INTEGER DEFAULT 0,
-  
+
   -- Validity
   is_active           BOOLEAN DEFAULT true,
   last_verified_at    TIMESTAMPTZ DEFAULT NOW(),
-  
+
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW()
 );
@@ -7622,7 +7622,7 @@ CREATE POLICY "Anyone can view active kaleidoscope placements" ON public.kaleido
 -- Description: Adds geolocation (lat/long) to businesses and garage sales, and creates schema for QR Cue Card print bounties.
 
 -- 1. Add Locality (Lat/Long) to existing geographic tables
-ALTER TABLE public.stewardship_applications 
+ALTER TABLE public.stewardship_applications
 ADD COLUMN IF NOT EXISTS latitude DECIMAL(10, 8),
 ADD COLUMN IF NOT EXISTS longitude DECIMAL(11, 8);
 
@@ -7793,33 +7793,33 @@ CREATE TABLE IF NOT EXISTS public.santa_nominations (
 ALTER TABLE public.santa_nominations ENABLE ROW LEVEL SECURITY;
 
 -- Nominators can see the nominations they submitted (but they won't see the Jesper's identity)
-CREATE POLICY "santa_nominations_select_nominator" 
-ON public.santa_nominations FOR SELECT 
+CREATE POLICY "santa_nominations_select_nominator"
+ON public.santa_nominations FOR SELECT
 USING (nominator_id = (SELECT auth.uid()));
 
 -- Jespers can see nominations assigned to them
-CREATE POLICY "santa_nominations_select_jesper" 
-ON public.santa_nominations FOR SELECT 
+CREATE POLICY "santa_nominations_select_jesper"
+ON public.santa_nominations FOR SELECT
 USING (jesper_id = (SELECT auth.uid()));
 
 -- Admins can see all
-CREATE POLICY "santa_nominations_select_admin" 
-ON public.santa_nominations FOR SELECT 
+CREATE POLICY "santa_nominations_select_admin"
+ON public.santa_nominations FOR SELECT
 USING ( (SELECT auth.uid()) IN (SELECT user_id FROM public.user_roles WHERE role = 'admin') );
 
 -- Anyone authenticated can insert a nomination
-CREATE POLICY "santa_nominations_insert" 
-ON public.santa_nominations FOR INSERT 
+CREATE POLICY "santa_nominations_insert"
+ON public.santa_nominations FOR INSERT
 WITH CHECK ( auth.uid() IS NOT NULL );
 
 -- Jespers can update status of their assigned deliveries
-CREATE POLICY "santa_nominations_update_jesper" 
-ON public.santa_nominations FOR UPDATE 
+CREATE POLICY "santa_nominations_update_jesper"
+ON public.santa_nominations FOR UPDATE
 USING (jesper_id = (SELECT auth.uid()));
 
 -- Admins can update any nomination
-CREATE POLICY "santa_nominations_update_admin" 
-ON public.santa_nominations FOR UPDATE 
+CREATE POLICY "santa_nominations_update_admin"
+ON public.santa_nominations FOR UPDATE
 USING ( (SELECT auth.uid()) IN (SELECT user_id FROM public.user_roles WHERE role = 'admin') );
 
 -- ========== FROM: 20260306000000_farmer_supply_chain.sql ==========

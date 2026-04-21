@@ -31,7 +31,7 @@ export default function Simulator() {
   const [scenarioName, setScenarioName] = useState("");
   const [scenarios, setScenarios] = useState<any[]>([]);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(null);
-  
+
   const [data, setData] = useState<ScenarioData>({
     projectName: "Sample Project",
     productName: "Sample Product",
@@ -61,7 +61,7 @@ export default function Simulator() {
 
   const loadScenarios = async () => {
     if (!user) return;
-    
+
     const { data: scenariosData, error } = await supabase
       .from("test_scenarios")
       .select("*")
@@ -168,16 +168,16 @@ export default function Simulator() {
 
   const downloadPDF = () => {
     const doc = new jsPDF();
-    
+
     doc.setFontSize(18);
     doc.text("Project Scenario Analysis", 20, 20);
-    
+
     doc.setFontSize(12);
     doc.text(`Scenario: ${scenarioName || "Untitled"}`, 20, 35);
-    
+
     doc.setFontSize(10);
     let y = 50;
-    
+
     doc.text("Project Parameters:", 20, y);
     y += 10;
     doc.text(`Project Name: ${data.projectName}`, 25, y);
@@ -191,14 +191,14 @@ export default function Simulator() {
     doc.text(`Volume Discount: ${data.volumeDiscount}%`, 25, y);
     y += 7;
     doc.text(`Votes Needed: ${data.votesNeeded}`, 25, y);
-    
+
     y += 15;
     doc.text("Funding Split:", 20, y);
     y += 10;
     doc.text(`Participation: ${data.participationPercentage}%`, 25, y);
     y += 7;
     doc.text(`Cash: ${data.cashPercentage}%`, 25, y);
-    
+
     y += 15;
     doc.text("Calculated Results:", 20, y);
     y += 10;
@@ -211,7 +211,7 @@ export default function Simulator() {
     doc.text(`Participation Value: $${results.participationValue.toFixed(2)}`, 25, y);
     y += 7;
     doc.text(`Cash Value: $${results.cashValue.toFixed(2)}`, 25, y);
-    
+
     doc.save(`scenario-${scenarioName || "untitled"}.pdf`);
     toast({ title: "PDF downloaded successfully" });
   };
@@ -336,10 +336,10 @@ export default function Simulator() {
               <Slider
                 value={[data.participationPercentage]}
                 onValueChange={([value]) => {
-                  setData({ 
-                    ...data, 
+                  setData({
+                    ...data,
                     participationPercentage: value,
-                    cashPercentage: 100 - value 
+                    cashPercentage: 100 - value
                   });
                 }}
                 max={100}

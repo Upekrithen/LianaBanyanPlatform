@@ -2,7 +2,7 @@
  * MEAL REQUEST DIALOG — Mark-Backed Bounty System
  * ================================================
  * Members can request meals they want to see offered.
- * 
+ *
  * Two modes:
  * 1. GENERAL REQUEST — "I'd like burgers this week in my area"
  *    - Browse The Pantry for recipes, vote with Marks
@@ -10,12 +10,12 @@
  *    - If meal is offered and you decline: Marks returned (no penalty)
  *    - Early withdrawal: 10% penalty per day early
  *    - Full return after timeframe expires
- * 
+ *
  * 2. SPECIFIC REQUEST — "I want 10 burgers delivered Thursday"
  *    - Commit to buying if offered
  *    - If meal is offered and you don't buy: LOSE the Marks
  *    - Higher signal to chefs = higher priority
- * 
+ *
  * Minimum: 5 Marks for any request
  * Must have Joules backing in Stake Account
  */
@@ -79,7 +79,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
   const queryClient = useQueryClient();
-  
+
   // State
   const [requestType, setRequestType] = useState<"general" | "specific">("general");
   const [searchQuery, setSearchQuery] = useState("");
@@ -90,46 +90,46 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
   const [specificDate, setSpecificDate] = useState<Date>(preselectedDate || addDays(new Date(), 1));
   const [portionCount, setPortionCount] = useState(1);
   const [postalCode, setPostalCode] = useState("");
-  
+
   // Fetch member currency (to check available Marks/Joules)
   const { data: currency, isLoading: currencyLoading } = useQuery({
     queryKey: ['member-currency'],
     queryFn: getMemberCurrency,
     enabled: !!user,
   });
-  
+
   // Search Pantry recipes
   const { data: recipes, isLoading: recipesLoading } = useQuery({
     queryKey: ['pantry-search', searchQuery],
     queryFn: async () => {
       if (!searchQuery || searchQuery.length < 2) return [];
-      
+
       const { data, error } = await supabase
         .from('pantry_recipes')
         .select('id, title, cuisine, meal_type, total_time_minutes, photo_url')
         .or(`title.ilike.%${searchQuery}%,cuisine.ilike.%${searchQuery}%`)
         .limit(10);
-      
+
       if (error) throw error;
       return data as PantryRecipe[];
     },
     enabled: searchQuery.length >= 2,
   });
-  
+
   // Submit request mutation
   const submitRequest = useMutation({
     mutationFn: async () => {
       if (!user) throw new Error("Must be logged in");
       if (!currency) throw new Error("Currency data not loaded");
-      
+
       const mealName = selectedRecipe?.title || customMealName;
       if (!mealName) throw new Error("Please select or enter a meal name");
-      
+
       // Verify sufficient Marks backed by Joules
       if (marksAmount > currency.joules) {
         throw new Error(`You need ${marksAmount} Joules in your Stake Account to back this request. You have ${currency.joules}.`);
       }
-      
+
       // Create the request
       const { error } = await supabase
         .from('lmd_meal_requests')
@@ -145,15 +145,15 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
           postal_code: postalCode || null,
           status: 'active',
           expires_at: format(
-            requestType === 'general' 
-              ? addDays(new Date(), durationDays) 
+            requestType === 'general'
+              ? addDays(new Date(), durationDays)
               : specificDate,
             'yyyy-MM-dd'
           ),
         });
-      
+
       if (error) throw error;
-      
+
       // Lock the Marks (create transaction)
       const { error: txError } = await supabase
         .from('marks_transactions')
@@ -163,7 +163,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
           reason: `Meal request: ${mealName}`,
           reason_type: 'meal_request_lock',
         });
-      
+
       if (txError) throw txError;
     },
     onSuccess: () => {
@@ -176,14 +176,14 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
       toast.error(error.message);
     },
   });
-  
+
   // Calculate early withdrawal penalty
   const calculateWithdrawalPenalty = (daysRemaining: number, totalDays: number) => {
     const daysEarly = totalDays - daysRemaining;
     const penalty = Math.min(daysEarly * EARLY_WITHDRAWAL_PENALTY_PER_DAY, 1);
     return Math.round(marksAmount * penalty);
   };
-  
+
   if (!user) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -207,9 +207,9 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
       </Dialog>
     );
   }
-  
+
   const hasEnoughJoules = currency && marksAmount <= currency.joules;
-  
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -222,7 +222,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
             Put Marks behind your request. Chefs see demand and know it's real.
           </DialogDescription>
         </DialogHeader>
-        
+
         {/* Currency Status */}
         <div className="flex gap-4 p-3 rounded-lg bg-muted/50 border border-border">
           <div className="flex items-center gap-2">
@@ -237,7 +237,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
             </span>
           </div>
         </div>
-        
+
         {/* Request Type Tabs */}
         <Tabs value={requestType} onValueChange={(v) => setRequestType(v as "general" | "specific")}>
           <TabsList className="grid w-full grid-cols-2">
@@ -250,14 +250,14 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
               Specific Order
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="general" className="space-y-4 mt-4">
             <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30 text-sm">
               <Info className="h-4 w-4 inline mr-2 text-blue-400" />
               <strong>General Vote:</strong> Show chefs what you want. Marks locked for your timeframe.
               If a chef offers the meal, you can buy with Credits or pass — no penalty for passing.
             </div>
-            
+
             {/* Duration Selector */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
@@ -282,14 +282,14 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
               </p>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="specific" className="space-y-4 mt-4">
             <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-sm">
               <AlertTriangle className="h-4 w-4 inline mr-2 text-amber-400" />
               <strong>Specific Order:</strong> Commit to buying. If a chef offers this meal on your date
               and you don't purchase it, you <strong>lose your Marks</strong>.
             </div>
-            
+
             {/* Specific Date */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
@@ -303,7 +303,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
                 min={format(addDays(new Date(), 1), 'yyyy-MM-dd')}
               />
             </div>
-            
+
             {/* Portion Count */}
             <div className="space-y-2">
               <Label>How many portions?</Label>
@@ -323,14 +323,14 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
             </div>
           </TabsContent>
         </Tabs>
-        
+
         {/* Meal Selection */}
         <div className="space-y-3">
           <Label className="flex items-center gap-2">
             <ChefHat className="h-4 w-4" />
             What meal do you want?
           </Label>
-          
+
           {/* Search The Pantry */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -341,7 +341,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
               className="pl-10"
             />
           </div>
-          
+
           {/* Search Results */}
           {recipes && recipes.length > 0 && (
             <div className="border rounded-lg divide-y max-h-48 overflow-y-auto">
@@ -374,7 +374,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
               ))}
             </div>
           )}
-          
+
           {/* Selected Recipe Display */}
           {selectedRecipe && (
             <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 flex items-center gap-3">
@@ -394,7 +394,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
               </Button>
             </div>
           )}
-          
+
           {/* Or custom meal name */}
           {!selectedRecipe && (
             <div className="space-y-2">
@@ -407,7 +407,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
             </div>
           )}
         </div>
-        
+
         {/* Location */}
         <div className="space-y-2">
           <Label className="flex items-center gap-2">
@@ -424,14 +424,14 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
             Helps match you with nearby chefs
           </p>
         </div>
-        
+
         {/* Marks Commitment */}
         <div className="space-y-3 p-4 rounded-lg border-2 border-dashed border-amber-500/30 bg-amber-500/5">
           <Label className="flex items-center gap-2 text-amber-200">
             <Coins className="h-4 w-4 text-amber-400" />
             How many Marks to commit?
           </Label>
-          
+
           <div className="flex items-center gap-4">
             <Slider
               value={[marksAmount]}
@@ -441,28 +441,28 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
               step={1}
               className="flex-1"
             />
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className={`min-w-[100px] justify-center ${!hasEnoughJoules ? 'border-red-500 text-red-400' : 'border-amber-500 text-amber-400'}`}
             >
               {marksAmount} Marks
             </Badge>
           </div>
-          
+
           {!hasEnoughJoules && (
             <p className="text-xs text-red-400 flex items-center gap-1">
               <AlertTriangle className="h-3 w-3" />
               Not enough Joules in Stake Account. You have {currency?.joules || 0}.
             </p>
           )}
-          
+
           <p className="text-xs text-muted-foreground">
             Higher Marks = higher priority for chefs. Minimum: {MIN_MARKS} Marks.
             <br />
             Your Marks are backed 1:1 by Joules in your Stake Account.
           </p>
         </div>
-        
+
         {/* Summary */}
         <div className="p-4 rounded-lg bg-muted/50 space-y-2 text-sm">
           <div className="font-medium">Summary</div>
@@ -496,7 +496,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
               </div>
             </>
           )}
-          
+
           {requestType === 'specific' && (
             <div className="mt-2 p-2 rounded bg-amber-500/10 border border-amber-500/30 text-xs">
               <AlertTriangle className="h-3 w-3 inline mr-1 text-amber-400" />
@@ -504,7 +504,7 @@ export function MealRequestDialog({ open, onOpenChange, preselectedDate }: MealR
             </div>
           )}
         </div>
-        
+
         {/* Submit */}
         <div className="flex gap-3">
           <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1">

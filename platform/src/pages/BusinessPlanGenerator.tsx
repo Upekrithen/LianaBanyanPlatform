@@ -65,10 +65,10 @@ const BusinessPlanGenerator = () => {
 
   const generateAllSections = async () => {
     const sectionsList = [
-      'executive_summary', 
-      'market_analysis', 
-      'financial_projections', 
-      'marketing_strategy', 
+      'executive_summary',
+      'market_analysis',
+      'financial_projections',
+      'marketing_strategy',
       'operations_plan',
       'portal_architecture',
       'service_delivery_model',
@@ -116,7 +116,7 @@ const BusinessPlanGenerator = () => {
     const content = Object.entries(sections)
       .map(([key, value]) => `# ${getSectionTitle(key)}\n\n${value}\n\n`)
       .join('\n');
-    
+
     const blob = new Blob([content], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -189,8 +189,8 @@ const BusinessPlanGenerator = () => {
           </div>
 
           <div className="flex gap-2">
-            <Button 
-              onClick={generateAllSections} 
+            <Button
+              onClick={generateAllSections}
               disabled={loading !== null}
               className="flex-1"
             >

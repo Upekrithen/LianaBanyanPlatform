@@ -350,7 +350,7 @@ export function DiscoveryGate({
               </Button>
             )}
           </div>
-          
+
           {/* Blurred preview */}
           <div className="discovery-gate__preview">
             {children}

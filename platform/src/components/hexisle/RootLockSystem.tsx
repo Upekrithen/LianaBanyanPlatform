@@ -18,11 +18,11 @@ interface RootLockProps {
  * RootLockPiece: A game piece that requires a matching socket to stand upright.
  * "If it fits, it sits."
  */
-export const RootLockPiece: React.FC<RootLockProps> = ({ 
-  position, 
-  rootType, 
+export const RootLockPiece: React.FC<RootLockProps> = ({
+  position,
+  rootType,
   biomeCompatibility,
-  color = "#4ade80" 
+  color = "#4ade80"
 }) => {
   const pieceRef = useRef<any>(null);
   const [isValid, setIsValid] = useState(false);
@@ -40,12 +40,12 @@ export const RootLockPiece: React.FC<RootLockProps> = ({
   };
 
   return (
-    <RigidBody 
+    <RigidBody
       ref={pieceRef}
       position={position}
       colliders="hull"
       // If it's not in a valid socket, its center of mass makes it fall over
-      centerOfMass={isValid ? [0, 0, 0] : [0, 1, 0]} 
+      centerOfMass={isValid ? [0, 0, 0] : [0, 1, 0]}
       onCollisionEnter={(e) => {
         // In a full implementation, we'd check if the collided object is a matching socket
         // For this conceptual component, we'll mock the validation

@@ -2,7 +2,7 @@
  * Documentation Marketplace Page
  * ===============================
  * Marketplace for community-contributed hints, walkthroughs, and guides.
- * 
+ *
  * Contributors earn:
  * - Reputation from helpful votes
  * - Icing (70%) from purchases
@@ -18,11 +18,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  BookOpen, 
-  Lightbulb, 
-  ListOrdered, 
-  FileText, 
+import {
+  BookOpen,
+  Lightbulb,
+  ListOrdered,
+  FileText,
   HelpCircle,
   Search,
   Star,
@@ -214,8 +214,8 @@ export default function DocumentationMarketplacePage() {
               className="pl-10"
             />
           </div>
-          <Select 
-            value={selectedType} 
+          <Select
+            value={selectedType}
             onValueChange={(v) => setSelectedType(v as DocType | 'all')}
           >
             <SelectTrigger className="w-[180px]">
@@ -228,7 +228,7 @@ export default function DocumentationMarketplacePage() {
               ))}
             </SelectContent>
           </Select>
-          <Button 
+          <Button
             variant={showFreeOnly ? 'default' : 'outline'}
             onClick={() => setShowFreeOnly(!showFreeOnly)}
           >
@@ -360,7 +360,7 @@ function DocCard({ item, featured = false }: { item: DocumentationItem; featured
             {item.times_viewed}
           </div>
         </div>
-        
+
         <div className="flex flex-wrap gap-1 mt-3">
           {item.tags.slice(0, 3).map(tag => (
             <Badge key={tag} variant="secondary" className="text-xs">

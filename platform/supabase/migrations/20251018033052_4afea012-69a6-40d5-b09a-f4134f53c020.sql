@@ -1,7 +1,7 @@
 -- Guild Re-Entry Cost Structure
 -- Add fields to track previous membership and re-entry debt
 
-ALTER TABLE user_guild_progression 
+ALTER TABLE user_guild_progression
 ADD COLUMN IF NOT EXISTS previous_stake_paid NUMERIC DEFAULT 0,
 ADD COLUMN IF NOT EXISTS reentry_debt NUMERIC DEFAULT 0,
 ADD COLUMN IF NOT EXISTS reentry_terms JSONB DEFAULT NULL,
@@ -40,7 +40,7 @@ WITH CHECK (true);
 -- Accessory Trunk (Derivative Projects) Architecture
 -- Add parent-child project relationships and IP compliance
 
-ALTER TABLE projects 
+ALTER TABLE projects
 ADD COLUMN IF NOT EXISTS parent_project_id UUID REFERENCES projects(id) ON DELETE SET NULL,
 ADD COLUMN IF NOT EXISTS derivative_type TEXT CHECK (derivative_type IN ('accessory_trunk', 'licensed_variant')),
 ADD COLUMN IF NOT EXISTS ip_compliance_rules JSONB DEFAULT NULL,
@@ -76,7 +76,7 @@ CREATE POLICY "Project owners can view derivative royalties"
 ON derivative_royalties FOR SELECT
 USING (
   EXISTS (
-    SELECT 1 FROM projects 
+    SELECT 1 FROM projects
     WHERE (projects.id = derivative_royalties.parent_project_id OR projects.id = derivative_royalties.derivative_project_id)
     AND projects.owner_id = auth.uid()
   )
@@ -105,7 +105,7 @@ CREATE POLICY "Project owners can view compliance audits"
 ON derivative_compliance_audits FOR SELECT
 USING (
   EXISTS (
-    SELECT 1 FROM projects 
+    SELECT 1 FROM projects
     WHERE projects.id = derivative_compliance_audits.derivative_project_id
     AND projects.owner_id = auth.uid()
   )
@@ -136,15 +136,15 @@ BEGIN
   SELECT * INTO _progression
   FROM user_guild_progression
   WHERE user_id = _user_id;
-  
+
   IF NOT FOUND THEN
     RETURN jsonb_build_object('error', 'User progression not found');
   END IF;
-  
+
   -- Get required stake for target tier/class (from STAKE_INFO)
   -- This would reference your existing stake structure
   _required_stake := 100; -- Placeholder, should query your stake structure
-  
+
   -- Calculate re-entry cost
   IF _progression.previous_stake_paid >= _required_stake THEN
     -- Already paid enough, but may have penalty for time lost
@@ -158,7 +158,7 @@ BEGIN
     -- Need to pay difference
     _upfront_amount := (_required_stake - _progression.previous_stake_paid) * 0.333;
     _deferred_amount := (_required_stake - _progression.previous_stake_paid) * 0.667;
-    
+
     RETURN jsonb_build_object(
       'reentry_cost', _required_stake - _progression.previous_stake_paid,
       'upfront_payment', _upfront_amount,
@@ -190,16 +190,16 @@ BEGIN
   SELECT * INTO _project
   FROM projects
   WHERE id = _derivative_project_id;
-  
+
   IF NOT FOUND OR _project.parent_project_id IS NULL THEN
     RETURN jsonb_build_object('error', 'Not a derivative project');
   END IF;
-  
+
   -- Get parent project
   SELECT * INTO _parent
   FROM projects
   WHERE id = _project.parent_project_id;
-  
+
   -- Check IP compliance rules
   IF _project.ip_compliance_rules IS NULL THEN
     _violations := array_append(_violations, 'IP compliance rules not defined');
@@ -208,13 +208,13 @@ BEGIN
     IF NOT (_project.ip_compliance_rules->>'enforce_tier_model')::boolean THEN
       _violations := array_append(_violations, '3-Tier IP model must be enforced');
     END IF;
-    
+
     -- Check royalty percentage is set
     IF _project.royalty_percentage = 0 THEN
       _warnings := array_append(_warnings, 'Royalty percentage is 0%');
     END IF;
   END IF;
-  
+
   -- Return compliance status
   RETURN jsonb_build_object(
     'compliant', array_length(_violations, 1) IS NULL,

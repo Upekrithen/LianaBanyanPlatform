@@ -86,8 +86,8 @@ export default function PuddingDemo() {
             accentColor="#f97316"
           >
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              <strong>Cost + 20%</strong> is the pricing model that powers Liana Banyan. 
-              Instead of taking 30-50% like traditional platforms, we only add a 20% margin 
+              <strong>Cost + 20%</strong> is the pricing model that powers Liana Banyan.
+              Instead of taking 30-50% like traditional platforms, we only add a 20% margin
               on top of the creator's costs.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -106,13 +106,13 @@ export default function PuddingDemo() {
             accentColor="#3b82f6"
           >
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              The system uses three interlocking currencies — <strong>Credits</strong>, 
-              <strong>Marks</strong>, and <strong>Joules</strong> — that function like 
+              The system uses three interlocking currencies — <strong>Credits</strong>,
+              <strong>Marks</strong>, and <strong>Joules</strong> — that function like
               an automotive differential.
             </p>
             <p className="text-gray-700 dark:text-gray-300">
-              External currencies turn at different speeds (exchange rates), but the 
-              internal platform economy maintains stability. Bob in Greece and Mary in 
+              External currencies turn at different speeds (exchange rates), but the
+              internal platform economy maintains stability. Bob in Greece and Mary in
               Switzerland both get exactly 1 Credit worth of value.
             </p>
           </ExpandableBlock>
@@ -134,7 +134,7 @@ export default function PuddingDemo() {
             3. Hover Preview Grid
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Hover to preview, click to expand as a card, click again to flip. 
+            Hover to preview, click to expand as a card, click again to flip.
             Searchable and filterable.
           </p>
 
@@ -160,8 +160,8 @@ export default function PuddingDemo() {
             title="Proposal: Community Garden Initiative"
             summary={
               <p>
-                A member has proposed using $2,500 from the general fund to establish 
-                a community garden in the downtown area. The garden would provide fresh 
+                A member has proposed using $2,500 from the general fund to establish
+                a community garden in the downtown area. The garden would provide fresh
                 produce to local families and serve as an educational space.
               </p>
             }

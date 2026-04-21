@@ -114,7 +114,7 @@ const BEACON_TYPES: BeaconType[] = [
   },
 ];
 
-type OrangeSubtype = 
+type OrangeSubtype =
   | "game_marker"
   | "share_person"
   | "social_cue"

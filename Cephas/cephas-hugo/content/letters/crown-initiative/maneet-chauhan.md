@@ -26,11 +26,11 @@ Not a metaphorical crown — a real one. A founding leadership position in **Let
 
 ## WHY YOU
 
-My wife and I discovered you from the latest season of *Master of Cue*, and rabbit-holed from there. 
+My wife and I discovered you from the latest season of *Master of Cue*, and rabbit-holed from there.
 
 You are empathetic, highly intelligent, and skilled — including the nuance which is showcased in your food and interpersonal interactions. These are precisely the traits I hope to enlist for a greater purpose.
 
-My own forte is strategy (chess, engineering, military) and being poor — which quickly teaches survival. Most Americans don't know what living in another country, especially living among the poor in other countries, is like. 
+My own forte is strategy (chess, engineering, military) and being poor — which quickly teaches survival. Most Americans don't know what living in another country, especially living among the poor in other countries, is like.
 
 When I was young, my parents were missionaries in Tanzania, East Africa. I served in the U.S. Army (National Guard) from 1989 through 2004. I know what the America I believe in can offer the world — and receive so much more in return.
 

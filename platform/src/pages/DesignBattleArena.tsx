@@ -89,7 +89,7 @@ export default function DesignBattleArena() {
         .select("*")
         .in("status", ["pending", "active", "voting"])
         .order("ends_at", { ascending: true });
-      
+
       if (error) throw error;
       return data || [];
     },
@@ -105,7 +105,7 @@ export default function DesignBattleArena() {
         .eq("status", "completed")
         .order("updated_at", { ascending: false })
         .limit(20);
-      
+
       if (error) throw error;
       return data || [];
     },
@@ -122,7 +122,7 @@ export default function DesignBattleArena() {
         .eq("user_id", user.id)
         .eq("category", "design_battle")
         .order("created_at", { ascending: false });
-      
+
       if (error) throw error;
       return data || [];
     },
@@ -139,7 +139,7 @@ export default function DesignBattleArena() {
         .eq("crow_feather_earned", true)
         .order("payout", { ascending: false })
         .limit(10);
-      
+
       if (error) throw error;
       return data || [];
     },

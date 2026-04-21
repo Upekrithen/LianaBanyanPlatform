@@ -116,7 +116,7 @@ export default function ManagePositions() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.category || !formData.position_title) {
       toast.error('Please fill in required fields');
       return;
@@ -158,7 +158,7 @@ export default function ManagePositions() {
           project_id: projectId,
           created_by: user?.id,
         };
-        
+
         const { error } = await supabase
           .from('contract_position_templates')
           .insert(insertData);

@@ -10,7 +10,7 @@ export default function TowerOfPeace() {
   return (
     <PortalPageLayout>
       <div className="max-w-4xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="text-center space-y-6 border-b border-slate-300 pb-12">
           <Landmark className="w-16 h-16 mx-auto text-slate-700" />

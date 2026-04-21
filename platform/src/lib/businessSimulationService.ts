@@ -1,9 +1,9 @@
 /**
  * Business Simulation Service
- * 
+ *
  * Integrates Contingency Operators with Ghost World to let users
  * run "what-if" business simulations using platform economics defaults.
- * 
+ *
  * Innovation #1188: Contingency Operators
  */
 
@@ -30,19 +30,19 @@ export interface BusinessAssumptions {
   averageOrderValue: number;
   ordersPerWeek: number;
   customerRetentionRate: number;
-  
+
   // Cost assumptions
   costOfGoodsSoldPercent: number;
   platformFeePercent: number;  // Always 16.67% (Cost+20% = creator keeps 83.3%)
-  
+
   // Capacity assumptions
   hoursPerWeek: number;
   productionCapacityUtilization: number;
-  
+
   // Growth assumptions
   monthlyGrowthRate: number;
   customerAcquisitionCost: number;
-  
+
   // Custom overrides
   customFactors: Record<string, number>;
 }
@@ -52,19 +52,19 @@ export interface BusinessProjections {
   monthlyRevenue: number;
   monthlyExpenses: number;
   monthlyProfit: number;
-  
+
   // Annual projections
   annualRevenue: number;
   annualProfit: number;
-  
+
   // Break-even analysis
   breakEvenMonths: number;
   breakEvenOrders: number;
-  
+
   // Metrics
   profitMargin: number;
   returnOnTime: number;  // $/hour worked
-  
+
   // Scenario score (from CO)
   netScore: number;
   confidence: number;  // Based on real data availability
@@ -520,11 +520,11 @@ export function createBusinessScenario(
   initiativeId: string,
   customConfig?: Partial<BusinessAssumptions>
 ): BusinessScenario {
-  const template = INITIATIVE_TEMPLATES.find(t => t.id === initiativeId) 
+  const template = INITIATIVE_TEMPLATES.find(t => t.id === initiativeId)
     || INITIATIVE_TEMPLATES.find(t => t.id === 'custom')!;
-  
+
   const defaultAssumptions = getDefaultAssumptions(initiativeId);
-  
+
   return {
     name: `${template.name} Simulation`,
     initiativeId,
@@ -545,7 +545,7 @@ export function createBusinessScenario(
 export function getDefaultAssumptions(initiativeId: string): BusinessAssumptions {
   const template = INITIATIVE_TEMPLATES.find(t => t.id === initiativeId)
     || INITIATIVE_TEMPLATES.find(t => t.id === 'custom')!;
-  
+
   return {
     averageOrderValue: template.defaultAssumptions.averageOrderValue || 50,
     ordersPerWeek: template.defaultAssumptions.ordersPerWeek || 5,
@@ -572,12 +572,12 @@ export function calculateProjectedOutcomes(
   const weeklyCOGS = weeklyRevenue * assumptions.costOfGoodsSoldPercent;
   const weeklyPlatformFee = weeklyRevenue * assumptions.platformFeePercent;
   const weeklyProfit = weeklyRevenue - weeklyCOGS - weeklyPlatformFee;
-  
+
   // Monthly (4.33 weeks/month)
   const monthlyRevenue = weeklyRevenue * 4.33;
   const monthlyProfit = weeklyProfit * 4.33;
   const monthlyExpenses = (weeklyCOGS + weeklyPlatformFee) * 4.33;
-  
+
   // Apply growth over projection period
   let cumulativeRevenue = 0;
   let currentMonthlyRevenue = monthlyRevenue;
@@ -587,24 +587,24 @@ export function calculateProjectedOutcomes(
   }
   const annualRevenue = cumulativeRevenue;
   const annualProfit = annualRevenue * (weeklyProfit / weeklyRevenue);
-  
+
   // Break-even analysis (simplified)
   const fixedCosts = assumptions.customerAcquisitionCost * 10;  // Assume 10 initial customers
-  const profitPerOrder = (assumptions.averageOrderValue * PLATFORM_ECONOMICS.CREATOR_SHARE) 
+  const profitPerOrder = (assumptions.averageOrderValue * PLATFORM_ECONOMICS.CREATOR_SHARE)
     - (assumptions.averageOrderValue * assumptions.costOfGoodsSoldPercent);
   const breakEvenOrders = fixedCosts > 0 ? Math.ceil(fixedCosts / profitPerOrder) : 0;
   const breakEvenMonths = Math.ceil(breakEvenOrders / (assumptions.ordersPerWeek * 4.33));
-  
+
   // Metrics
   const profitMargin = weeklyRevenue > 0 ? weeklyProfit / weeklyRevenue : 0;
   const returnOnTime = assumptions.hoursPerWeek > 0 ? weeklyProfit / assumptions.hoursPerWeek : 0;
-  
+
   // Net score (0-1 scale based on profitability and sustainability)
   const profitabilityScore = Math.min(1, Math.max(0, profitMargin * 2));
   const sustainabilityScore = Math.min(1, assumptions.customerRetentionRate);
   const utilizationScore = assumptions.productionCapacityUtilization;
   const netScore = (profitabilityScore * 0.4) + (sustainabilityScore * 0.35) + (utilizationScore * 0.25);
-  
+
   return {
     monthlyRevenue,
     monthlyExpenses,
@@ -629,9 +629,9 @@ export async function createThoughtExperiment(
 ): Promise<{ id: string } | null> {
   const template = INITIATIVE_TEMPLATES.find(t => t.id === scenario.initiativeId);
   if (!template) return null;
-  
+
   const projections = calculateProjectedOutcomes(scenario.assumptions);
-  
+
   try {
     const { data, error } = await supabase
       .from('thought_experiments')
@@ -654,7 +654,7 @@ export async function createThoughtExperiment(
       })
       .select('id')
       .single();
-    
+
     if (error) throw error;
     return data;
   } catch (err) {

@@ -495,7 +495,7 @@ export default function HexIsle() {
         {/* BUILDINGS */}
         <TabsContent value="buildings" className="space-y-6">
           <RootLockDemo />
-          
+
           {buildings && buildings.length > 0 ? (
             <div className="grid md:grid-cols-3 gap-4">
               {buildings.map((b) => (

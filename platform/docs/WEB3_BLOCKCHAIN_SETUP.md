@@ -196,11 +196,11 @@ const gasRecordId = await supabase.rpc('allocate_gas_from_pool', {
 
 ### IPFS Metadata Upload
 ```typescript
-import { 
-  createInnovationMetadata, 
-  uploadToIPFS, 
+import {
+  createInnovationMetadata,
+  uploadToIPFS,
   createIPLedgerEntry,
-  PATENT_PORTFOLIO_STATS 
+  PATENT_PORTFOLIO_STATS
 } from '@/lib/ipfsService';
 
 // Create innovation metadata

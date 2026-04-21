@@ -17,20 +17,20 @@ CREATE TABLE IF NOT EXISTS swoop_projects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Project Identity
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   description TEXT NOT NULL,
   short_description TEXT, -- For cue cards
-  
+
   -- Recipient Info (verified)
   recipient_name TEXT NOT NULL,
   recipient_relationship TEXT, -- "self", "spouse", "parent", "child", "friend", "neighbor"
   recipient_location TEXT, -- City, State (no full address)
   medical_situation TEXT NOT NULL,
   monthly_needs JSONB DEFAULT '{}', -- {"rent": 1200, "utilities": 300, "food": 400}
-  
+
   -- Verification
   verification_status TEXT DEFAULT 'pending' CHECK (verification_status IN ('pending', 'in_review', 'verified', 'rejected')),
   verification_date TIMESTAMPTZ,
@@ -39,26 +39,26 @@ CREATE TABLE IF NOT EXISTS swoop_projects (
   verification_contact_name TEXT,
   verification_contact_relationship TEXT,
   verification_contact_reached BOOLEAN DEFAULT false,
-  
+
   -- Project Lead (NOT LB - critical for legal protection)
   project_lead_id UUID REFERENCES auth.users(id) NOT NULL,
   project_lead_name TEXT NOT NULL,
   project_lead_email TEXT,
-  
+
   -- Nominator (may be same as project lead)
   nominator_id UUID REFERENCES auth.users(id) NOT NULL,
   nominator_name TEXT NOT NULL,
-  
+
   -- Financial
   goal_amount DECIMAL(10,2) NOT NULL,
   current_amount DECIMAL(10,2) DEFAULT 0,
   disbursed_amount DECIMAL(10,2) DEFAULT 0,
-  
+
   -- Stripe Connect (per-project account)
   stripe_account_id TEXT,
   stripe_account_status TEXT DEFAULT 'pending' CHECK (stripe_account_status IN ('pending', 'onboarding', 'active', 'restricted', 'closed')),
   stripe_account_created_at TIMESTAMPTZ,
-  
+
   -- Status & Voting
   status TEXT DEFAULT 'nomination' CHECK (status IN ('nomination', 'voting', 'pending_verification', 'active', 'funded', 'closed', 'cancelled')),
   vote_count INTEGER DEFAULT 0,
@@ -68,16 +68,16 @@ CREATE TABLE IF NOT EXISTS swoop_projects (
   funded_date TIMESTAMPTZ,
   closed_date TIMESTAMPTZ,
   closed_reason TEXT,
-  
+
   -- Transparency
   public_updates JSONB DEFAULT '[]', -- Array of {date, message, author}
   last_update TIMESTAMPTZ,
-  
+
   -- Social/Sharing
   share_image_url TEXT,
   featured BOOLEAN DEFAULT false,
   featured_order INTEGER,
-  
+
   -- Categories
   category TEXT DEFAULT 'medical' CHECK (category IN ('medical', 'housing', 'utilities', 'food', 'transportation', 'other'))
 );
@@ -91,14 +91,14 @@ CREATE TABLE IF NOT EXISTS swoop_project_votes (
   project_id UUID REFERENCES swoop_projects(id) ON DELETE CASCADE NOT NULL,
   voter_id UUID REFERENCES auth.users(id) NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Vote weight (based on member Credits)
   credit_weight INTEGER DEFAULT 1,
-  
+
   -- Display
   display_name TEXT,
   show_support BOOLEAN DEFAULT true, -- Show in "supporters" list
-  
+
   UNIQUE(project_id, voter_id)
 );
 
@@ -111,36 +111,36 @@ CREATE TABLE IF NOT EXISTS swoop_transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID REFERENCES swoop_projects(id) ON DELETE CASCADE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Transaction Type
   type TEXT NOT NULL CHECK (type IN ('donation', 'disbursement', 'refund', 'transfer_in', 'transfer_out')),
-  
+
   -- FROM (donor for donations, project for disbursements)
   from_type TEXT NOT NULL, -- "member", "anonymous", "project_fund", "master_fund"
   from_id UUID, -- User ID if member
   from_name TEXT NOT NULL, -- Display name or "Anonymous"
   from_anonymous BOOLEAN DEFAULT false,
-  
+
   -- TO (project for donations, vendor for disbursements)
   to_type TEXT NOT NULL, -- "project_fund", "utility", "landlord", "grocery", "medical", "other"
   to_name TEXT NOT NULL, -- "Duke Energy", "ABC Apartments", etc.
   to_account_info TEXT, -- Masked account number if applicable
-  
+
   -- WHAT
   amount DECIMAL(10,2) NOT NULL,
   purpose TEXT NOT NULL, -- "Electric bill - January 2026"
   notes TEXT,
-  
+
   -- WHEN
   processed_at TIMESTAMPTZ,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed', 'refunded')),
-  
+
   -- Stripe
   stripe_payment_intent_id TEXT,
   stripe_transfer_id TEXT,
   stripe_payout_id TEXT,
   stripe_fee DECIMAL(10,2),
-  
+
   -- Receipt
   receipt_url TEXT,
   receipt_uploaded_at TIMESTAMPTZ
@@ -174,18 +174,18 @@ CREATE TABLE IF NOT EXISTS swoop_project_updates (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID REFERENCES swoop_projects(id) ON DELETE CASCADE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   author_id UUID REFERENCES auth.users(id) NOT NULL,
   author_name TEXT NOT NULL,
   author_role TEXT DEFAULT 'project_lead' CHECK (author_role IN ('project_lead', 'recipient', 'lb_admin')),
-  
+
   update_type TEXT DEFAULT 'general' CHECK (update_type IN ('general', 'milestone', 'disbursement', 'thank_you', 'closure')),
   title TEXT,
   content TEXT NOT NULL,
-  
+
   -- Attachments
   image_url TEXT,
-  
+
   -- Visibility
   is_public BOOLEAN DEFAULT true
 );
@@ -200,20 +200,20 @@ CREATE TABLE IF NOT EXISTS msa_accounts (
   member_id UUID REFERENCES auth.users(id) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Balance
   balance DECIMAL(10,2) DEFAULT 0,
   total_contributed DECIMAL(10,2) DEFAULT 0,
   total_withdrawn DECIMAL(10,2) DEFAULT 0,
   total_platform_match DECIMAL(10,2) DEFAULT 0,
-  
+
   -- Stripe
   stripe_customer_id TEXT,
-  
+
   -- Settings
   auto_contribute_percent DECIMAL(5,2) DEFAULT 0, -- % of earnings to auto-deposit
   platform_match_eligible BOOLEAN DEFAULT true,
-  
+
   -- Status
   status TEXT DEFAULT 'active' CHECK (status IN ('active', 'frozen', 'closed'))
 );
@@ -222,19 +222,19 @@ CREATE TABLE IF NOT EXISTS msa_transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   account_id UUID REFERENCES msa_accounts(id) ON DELETE CASCADE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   type TEXT NOT NULL CHECK (type IN ('deposit', 'withdrawal', 'platform_match', 'auto_contribute', 'refund')),
   amount DECIMAL(10,2) NOT NULL,
   description TEXT,
-  
+
   -- Source/Destination
   source_type TEXT, -- "bank", "earnings", "platform"
   destination_type TEXT, -- "bank", "medical_provider"
-  
+
   -- Stripe
   stripe_payment_intent_id TEXT,
   stripe_transfer_id TEXT,
-  
+
   status TEXT DEFAULT 'completed' CHECK (status IN ('pending', 'completed', 'failed', 'refunded'))
 );
 
@@ -255,7 +255,7 @@ BEGIN
   ),
   updated_at = NOW()
   WHERE id = NEW.project_id;
-  
+
   -- Check if threshold reached and project is in voting status
   UPDATE swoop_projects
   SET status = 'pending_verification',
@@ -263,7 +263,7 @@ BEGIN
   WHERE id = NEW.project_id
     AND status = 'voting'
     AND vote_count >= vote_threshold;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -290,7 +290,7 @@ BEGIN
         updated_at = NOW()
     WHERE id = NEW.project_id;
   END IF;
-  
+
   -- Check if goal reached
   UPDATE swoop_projects
   SET status = 'funded',
@@ -298,7 +298,7 @@ BEGIN
   WHERE id = NEW.project_id
     AND status = 'active'
     AND current_amount >= goal_amount;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -320,7 +320,7 @@ BEGIN
       updated_at = NOW()
   WHERE id = project_id
     AND status = 'nomination';
-  
+
   RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
@@ -336,7 +336,7 @@ BEGIN
   WHERE id = project_id
     AND status = 'pending_verification'
     AND verification_status = 'verified';
-  
+
   RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
@@ -347,7 +347,7 @@ $$ LANGUAGE plpgsql;
 
 -- Active projects view
 CREATE OR REPLACE VIEW v_swoop_active_projects AS
-SELECT 
+SELECT
   p.*,
   (SELECT COUNT(*) FROM swoop_project_votes WHERE project_id = p.id) as supporter_count,
   (SELECT COUNT(*) FROM swoop_transactions WHERE project_id = p.id AND type = 'donation' AND status = 'completed') as donation_count,
@@ -358,7 +358,7 @@ ORDER BY p.featured DESC, p.vote_count DESC;
 
 -- Project transparency view
 CREATE OR REPLACE VIEW v_swoop_project_transparency AS
-SELECT 
+SELECT
   t.id,
   t.project_id,
   t.created_at,
@@ -380,7 +380,7 @@ ORDER BY t.created_at DESC;
 
 -- MSA summary view
 CREATE OR REPLACE VIEW v_msa_account_summary AS
-SELECT 
+SELECT
   a.id,
   a.member_id,
   a.balance,
@@ -495,7 +495,7 @@ CREATE INDEX IF NOT EXISTS idx_msa_transactions_account ON msa_transactions(acco
 -- =====================================================
 
 INSERT INTO dna_lock (parameter_key, parameter_value, data_type, description, category)
-VALUES 
+VALUES
   ('swoop_vote_threshold', '500', 'numeric', 'Votes required to activate a Swoop project', 'operations'),
   ('swoop_platform_fee_percent', '0', 'numeric', 'Platform fee on Swoop donations (0% = all goes to recipient)', 'economics'),
   ('msa_platform_match_percent', '5', 'numeric', 'Platform match percentage for MSA contributions', 'economics'),

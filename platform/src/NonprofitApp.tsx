@@ -54,8 +54,8 @@ const NonprofitApp = () => {
                         <div className="flex items-center gap-4">
                           <SidebarTrigger />
                           <h1 className="text-lg font-semibold">Liana Banyan Non-Profit Portal</h1>
-                          <a 
-                            href="https://lianabanyan.com" 
+                          <a
+                            href="https://lianabanyan.com"
                             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                           >
                             → Marketplace
@@ -68,7 +68,7 @@ const NonprofitApp = () => {
                         <Routes>
                           {/* Public Routes */}
                           <Route path="/auth" element={<Auth />} />
-                          
+
                           {/* Public landing for unauthenticated visitors */}
                           <Route path="/" element={<NonprofitLanding />} />
 
@@ -79,18 +79,18 @@ const NonprofitApp = () => {
                           <Route path="/subscribe-to-feed" element={<Suspense fallback={<div className="flex justify-center py-16"><span className="animate-spin">Loading...</span></div>}><CharitableSubscription /></Suspense>} />
 
                           {/* Protected Non-Profit Routes */}
-                          <Route 
-                            path="/dashboard" 
+                          <Route
+                            path="/dashboard"
                             element={
                               <ProtectedRoute>
                                 <Dashboard />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          
+
                           {/* Fund Administration Routes */}
-                          <Route 
-                            path="/funding-pool" 
+                          <Route
+                            path="/funding-pool"
                             element={
                               <ProtectedRoute>
                                 <div className="container mx-auto p-6">
@@ -98,10 +98,10 @@ const NonprofitApp = () => {
                                   <LBFundingPoolDisplay />
                                 </div>
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/eoi-vesting" 
+                          <Route
+                            path="/eoi-vesting"
                             element={
                               <ProtectedRoute>
                                 <div className="container mx-auto p-6">
@@ -109,10 +109,10 @@ const NonprofitApp = () => {
                                   <EOIMilestoneDashboard />
                                 </div>
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/gas-tracking" 
+                          <Route
+                            path="/gas-tracking"
                             element={
                               <ProtectedRoute>
                                 <div className="container mx-auto p-6">
@@ -120,27 +120,27 @@ const NonprofitApp = () => {
                                   <BlockchainGasDashboard />
                                 </div>
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/member-benefits" 
+                          <Route
+                            path="/member-benefits"
                             element={
                               <ProtectedRoute>
                                 <MemberResources />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          
+
                           {/* Redirect other portal routes */}
-                          <Route 
-                            path="/marketplace" 
-                            element={<Navigate to="https://lianabanyan.com/marketplace" replace />} 
+                          <Route
+                            path="/marketplace"
+                            element={<Navigate to="https://lianabanyan.com/marketplace" replace />}
                           />
-                          <Route 
-                            path="/projects" 
-                            element={<Navigate to="https://lianabanyan.com/projects" replace />} 
+                          <Route
+                            path="/projects"
+                            element={<Navigate to="https://lianabanyan.com/projects" replace />}
                           />
-                          
+
                           {/* 404 */}
                           <Route path="*" element={<NotFound />} />
                         </Routes>

@@ -2,13 +2,13 @@
  * CUE CARD DESTINATION SERVICE
  * ============================
  * Innovation #1355-#1362: Contextual Cue Card Routing
- * 
+ *
  * Your stamp, your identity — but configurable destination context.
- * 
+ *
  * Integrates with:
  * - Slingshot Pass-Through (#1244-#1252) — Gravity well routing
  * - The Furnace (#1253-#1260) — Verification registry
- * 
+ *
  * Use Cases:
  * 1. Single Project: "Back HexIsle" → shows only HexIsle
  * 2. Multi Project: "See My Work" → chooser with 3 projects
@@ -309,7 +309,7 @@ export function parseContextUrl(url: string): { heraldId: string; contextId: str
     const urlObj = new URL(url);
     const heraldId = urlObj.searchParams.get('herald');
     const contextId = urlObj.searchParams.get('ctx');
-    
+
     if (heraldId && contextId) {
       return { heraldId, contextId };
     }
@@ -373,13 +373,13 @@ export async function resolveRedCarpetContext(
 
   // Verify and fetch destination
   const verification = await verifyCueCard(heraldId, contextId);
-  
+
   if (!verification.valid) {
     return null;
   }
 
   const destination = await getDestination(contextId);
-  
+
   if (!destination) {
     return null;
   }

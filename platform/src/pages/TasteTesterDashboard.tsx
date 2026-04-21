@@ -2,13 +2,13 @@
  * Taste Tester Dashboard
  * ======================
  * Track progress towards Master Taster status.
- * 
+ *
  * Rewards:
  * - First 100 orders: 5 Marks + 10 Rep
  * - 101-500 orders: 3 Marks + 5 Rep
  * - 501-2000 orders: 2 Marks + 3 Rep
  * - 2001-5000 orders: 1 Mark + 1 Rep
- * 
+ *
  * Master Taster: 10+ recipes you tested hit 5K orders
  * Benefit: All Marks convert to Credits!
  */
@@ -21,11 +21,11 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Utensils, 
-  Award, 
-  TrendingUp, 
-  Star, 
+import {
+  Utensils,
+  Award,
+  TrendingUp,
+  Star,
   Coins,
   Trophy,
   Sparkles,
@@ -97,7 +97,7 @@ export default function TasteTesterDashboard() {
     enabled: !!user,
   });
 
-  const masterTasterProgress = stats 
+  const masterTasterProgress = stats
     ? calculateMasterTasterProgress(stats.recipes_reached_5k)
     : { current: 0, required: 10, percentage: 0, remaining: 10 };
 
@@ -208,7 +208,7 @@ export default function TasteTesterDashboard() {
               Master Taster Progress
             </CardTitle>
             <CardDescription>
-              {stats?.is_master_taster 
+              {stats?.is_master_taster
                 ? "Congratulations! You've achieved Master Taster status!"
                 : `Test recipes that reach ${VETTING_THRESHOLD.toLocaleString()} orders. ${MASTER_TASTER_THRESHOLD} successes = Master Taster!`
               }
@@ -239,7 +239,7 @@ export default function TasteTesterDashboard() {
                   Master Taster Benefit
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  When you reach Master Taster, all your accumulated Marks ({stats?.current_marks_balance || 0}) 
+                  When you reach Master Taster, all your accumulated Marks ({stats?.current_marks_balance || 0})
                   will convert to Credits!
                 </p>
               </div>
@@ -263,8 +263,8 @@ export default function TasteTesterDashboard() {
               {TASTE_TESTER_TIERS.map((tier, idx) => {
                 const prevMax = idx === 0 ? 0 : TASTE_TESTER_TIERS[idx - 1].maxOrder;
                 return (
-                  <div 
-                    key={tier.maxOrder} 
+                  <div
+                    key={tier.maxOrder}
                     className={`p-4 rounded-lg border ${
                       idx === 0 ? 'bg-emerald-500/10 border-emerald-500/30' :
                       idx === 1 ? 'bg-blue-500/10 border-blue-500/30' :
@@ -317,12 +317,12 @@ export default function TasteTesterDashboard() {
             ) : (
               <div className="space-y-3">
                 {history.map(record => (
-                  <div 
+                  <div
                     key={record.id}
                     className="flex items-center gap-4 p-3 rounded-lg border"
                   >
                     {record.recipe_photo && (
-                      <div 
+                      <div
                         className="w-12 h-12 rounded bg-cover bg-center"
                         style={{ backgroundImage: `url(${record.recipe_photo})` }}
                       />

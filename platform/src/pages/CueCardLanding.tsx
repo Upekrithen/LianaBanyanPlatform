@@ -1,6 +1,6 @@
 /**
  * Cue Card Landing Page
- * 
+ *
  * Dynamic landing page for Cue Card → Hofund routing
  * Each Cue Card gets a dedicated landing page that:
  * 1. Shows the Cue Card content
@@ -232,7 +232,7 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
       action: () => navigate('/benefits'),
     },
   ];
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       <div className="max-w-4xl mx-auto px-6 py-20">
@@ -247,7 +247,7 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
               {bounty.status === 'open' ? '🎨 Open Bounty' : bounty.status}
             </span>
           </div>
-          
+
           <div className="flex items-start gap-6 mb-6">
             <div className="p-4 rounded-2xl bg-white/10">
               <Palette className="w-12 h-12" style={{ color: bounty.color }} />
@@ -259,11 +259,11 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
               <p className="text-lg text-white/60">{bounty.subtitle}</p>
             </div>
           </div>
-          
+
           <p className="text-xl text-white/80 leading-relaxed mb-8">
             {bounty.description}
           </p>
-          
+
           {/* Reward Display */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">
             <div className="p-4 rounded-xl bg-white/5 text-center">
@@ -279,7 +279,7 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
               <div className="text-sm text-white/60">{bounty.reward.bonus}</div>
             </div>
           </div>
-          
+
           <div className="flex flex-wrap gap-4">
             <button
               onClick={() => {
@@ -404,15 +404,15 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
 export default function CueCardLanding() {
   const { cardId } = useParams<{ cardId: string }>();
   const navigate = useNavigate();
-  
+
   // Check if this is a gate bounty card
   const gateBounty = cardId ? getGateBountyById(cardId) : null;
   if (gateBounty) {
     return <GateBountyCard bounty={gateBounty} />;
   }
-  
+
   const card = cardId ? CUE_CARDS[cardId] : null;
-  
+
   if (!card) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -470,7 +470,7 @@ export default function CueCardLanding() {
               <Calendar className="w-5 h-5 text-white/70" />
             </button>
           </div>
-          
+
           <div className="flex items-start gap-6 mb-6">
             <div className="p-4 rounded-2xl bg-white/10">
               {card.icon}
@@ -482,11 +482,11 @@ export default function CueCardLanding() {
               <p className="text-lg text-white/60">{card.tagline}</p>
             </div>
           </div>
-          
+
           <p className="text-xl text-white/80 leading-relaxed mb-8">
             {card.content}
           </p>
-          
+
           <div className="flex flex-wrap gap-4">
             <button
               onClick={() => navigate(card.destination)}

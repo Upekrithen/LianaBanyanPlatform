@@ -52,7 +52,7 @@ export function LetsMakeDinnerTable() {
         .eq('status', 'available')
         .eq('pickup_date', dateStr)
         .order('pickup_time', { ascending: true });
-      
+
       if (error) throw error;
       return data as LmdMeal[];
     }
@@ -102,8 +102,8 @@ export function LetsMakeDinnerTable() {
           <ScrollArea className="w-full whitespace-nowrap">
             <div className="flex gap-4 pb-4">
               {meals.map((meal) => (
-                <Card 
-                  key={meal.id} 
+                <Card
+                  key={meal.id}
                   className={cn(
                     "flex-shrink-0 w-[280px] overflow-hidden transition-all hover:shadow-lg",
                     "border-2 hover:border-primary/50",
@@ -136,7 +136,7 @@ export function LetsMakeDinnerTable() {
                         {meal.description || meal.cuisine || "Homemade meal"}
                       </p>
                     </div>
-                    
+
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <ChefHat className="h-4 w-4" />

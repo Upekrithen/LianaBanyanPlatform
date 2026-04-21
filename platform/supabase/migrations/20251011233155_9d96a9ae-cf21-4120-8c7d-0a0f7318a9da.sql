@@ -7,7 +7,7 @@ SET search_path = public
 AS $$
 BEGIN
   UPDATE public.xml_access_credentials
-  SET 
+  SET
     usage_count = usage_count + 1,
     last_used_at = now()
   WHERE id = credential_id;

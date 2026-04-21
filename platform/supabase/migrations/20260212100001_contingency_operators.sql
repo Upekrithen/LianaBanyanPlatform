@@ -3,7 +3,7 @@
 -- Innovation #1188
 -- ============================================================================
 -- STATUS: READY TO DEPLOY (Additive Only - Fully Reversible)
--- 
+--
 -- This migration creates the Contingency Operators system for non-destructive
 -- what-if scenario testing. All tables are NEW - no existing tables modified.
 --
@@ -17,31 +17,31 @@ CREATE TABLE IF NOT EXISTS public.thought_experiments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   description text,
-  
+
   -- The Delta (single-point change being tested)
   delta_type text NOT NULL,  -- 'pricing', 'threshold', 'currency', 'policy', etc.
   delta_config jsonb NOT NULL,  -- Specific change parameters
   delta_description text NOT NULL,  -- Human-readable "What if..."
-  
+
   -- C.O. Parameters
   chain_depth integer DEFAULT 3 CHECK (chain_depth >= 1 AND chain_depth <= 20),
   factors jsonb NOT NULL DEFAULT '[]'::jsonb,  -- Array of {name, weight}
   extension_threshold numeric DEFAULT 0.10 CHECK (extension_threshold >= 0 AND extension_threshold <= 1),
   max_extensions integer DEFAULT 3 CHECK (max_extensions >= 0 AND max_extensions <= 10),
-  
+
   -- State
   status text DEFAULT 'running' CHECK (status IN ('running', 'paused', 'variant', 'adopted', 'discarded')),
   forked_at timestamptz DEFAULT now(),
   forked_from_reality_snapshot_id uuid,  -- Optional reference to a REALITY snapshot
-  
+
   -- Hierarchy
   parent_experiment_id uuid REFERENCES public.thought_experiments(id),
   extension_number integer DEFAULT 0,
-  
+
   -- Results
   current_net_score numeric DEFAULT 0,
   last_computed_at timestamptz,
-  
+
   -- Ownership
   created_by uuid REFERENCES auth.users(id),
   created_at timestamptz DEFAULT now(),
@@ -49,13 +49,13 @@ CREATE TABLE IF NOT EXISTS public.thought_experiments (
 );
 
 -- Index for querying active experiments
-CREATE INDEX IF NOT EXISTS idx_thought_experiments_status 
+CREATE INDEX IF NOT EXISTS idx_thought_experiments_status
   ON public.thought_experiments(status);
 
-CREATE INDEX IF NOT EXISTS idx_thought_experiments_created_by 
+CREATE INDEX IF NOT EXISTS idx_thought_experiments_created_by
   ON public.thought_experiments(created_by);
 
-CREATE INDEX IF NOT EXISTS idx_thought_experiments_parent 
+CREATE INDEX IF NOT EXISTS idx_thought_experiments_parent
   ON public.thought_experiments(parent_experiment_id);
 
 -- ============================================================================
@@ -64,32 +64,32 @@ CREATE INDEX IF NOT EXISTS idx_thought_experiments_parent
 CREATE TABLE IF NOT EXISTS public.vector_change_effects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   experiment_id uuid NOT NULL REFERENCES public.thought_experiments(id) ON DELETE CASCADE,
-  
+
   -- Factor being measured
   factor_name text NOT NULL,
   factor_weight numeric DEFAULT 1.0,
-  
+
   -- Measurements
   reality_value numeric,
   sandbox_value numeric,
   delta_percent numeric,
   direction text CHECK (direction IN ('positive', 'negative', 'neutral')),
-  
+
   -- Confidence and context
   confidence numeric DEFAULT 0.5 CHECK (confidence >= 0 AND confidence <= 1),
   chain_depth integer DEFAULT 1,
   data_points_count integer DEFAULT 0,
-  
+
   -- Timing
   period_start timestamptz,
   period_end timestamptz,
   computed_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_vector_effects_experiment 
+CREATE INDEX IF NOT EXISTS idx_vector_effects_experiment
   ON public.vector_change_effects(experiment_id);
 
-CREATE INDEX IF NOT EXISTS idx_vector_effects_factor 
+CREATE INDEX IF NOT EXISTS idx_vector_effects_factor
   ON public.vector_change_effects(factor_name);
 
 -- ============================================================================
@@ -98,25 +98,25 @@ CREATE INDEX IF NOT EXISTS idx_vector_effects_factor
 CREATE TABLE IF NOT EXISTS public.experiment_snapshots (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   experiment_id uuid NOT NULL REFERENCES public.thought_experiments(id) ON DELETE CASCADE,
-  
+
   -- Snapshot data
   snapshot_data jsonb NOT NULL DEFAULT '{}'::jsonb,
   vector_effects_summary jsonb DEFAULT '[]'::jsonb,
   net_score numeric,
-  
+
   -- Context
   snapshot_number integer NOT NULL,
   notes text,
-  
+
   -- Timing
   snapshot_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_experiment_snapshots_experiment 
+CREATE INDEX IF NOT EXISTS idx_experiment_snapshots_experiment
   ON public.experiment_snapshots(experiment_id);
 
 -- Ensure snapshot numbers are sequential per experiment
-CREATE UNIQUE INDEX IF NOT EXISTS idx_experiment_snapshots_unique_number 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_experiment_snapshots_unique_number
   ON public.experiment_snapshots(experiment_id, snapshot_number);
 
 -- ============================================================================
@@ -126,18 +126,18 @@ CREATE TABLE IF NOT EXISTS public.experiment_extensions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   parent_id uuid NOT NULL REFERENCES public.thought_experiments(id) ON DELETE CASCADE,
   child_id uuid NOT NULL REFERENCES public.thought_experiments(id) ON DELETE CASCADE,
-  
+
   extension_number integer NOT NULL,
   spawn_trigger_score numeric,  -- Net score that triggered spawn
   spawn_reason text,
-  
+
   spawned_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_extensions_parent 
+CREATE INDEX IF NOT EXISTS idx_extensions_parent
   ON public.experiment_extensions(parent_id);
 
-CREATE INDEX IF NOT EXISTS idx_extensions_child 
+CREATE INDEX IF NOT EXISTS idx_extensions_child
   ON public.experiment_extensions(child_id);
 
 -- ============================================================================
@@ -145,17 +145,17 @@ CREATE INDEX IF NOT EXISTS idx_extensions_child
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS public.reality_snapshots (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Snapshot identification
   name text,
   description text,
-  
+
   -- Aggregated platform state at snapshot time
   member_count integer,
   active_orders_count integer,
   total_revenue numeric,
   metrics_snapshot jsonb DEFAULT '{}'::jsonb,
-  
+
   -- Source
   snapshot_at timestamptz DEFAULT now(),
   created_by uuid REFERENCES auth.users(id)
@@ -168,21 +168,21 @@ CREATE TABLE IF NOT EXISTS public.co_factor_templates (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   description text,
-  
+
   -- Factor definitions
   factors jsonb NOT NULL DEFAULT '[]'::jsonb,  -- Array of {name, weight, description}
-  
+
   -- Categorization
   category text,  -- 'economic', 'engagement', 'growth', etc.
   is_default boolean DEFAULT false,
-  
+
   created_by uuid REFERENCES auth.users(id),
   created_at timestamptz DEFAULT now()
 );
 
 -- Seed some default factor templates
 INSERT INTO public.co_factor_templates (name, description, factors, category, is_default)
-VALUES 
+VALUES
   (
     'Economic Health',
     'Core economic metrics for platform sustainability',
@@ -237,27 +237,27 @@ DECLARE
   v_net_score numeric := 0;
   v_effect RECORD;
 BEGIN
-  FOR v_effect IN 
-    SELECT 
+  FOR v_effect IN
+    SELECT
       factor_weight,
       delta_percent,
       confidence
     FROM public.vector_change_effects
     WHERE experiment_id = p_experiment_id
       AND computed_at = (
-        SELECT MAX(computed_at) 
-        FROM public.vector_change_effects 
+        SELECT MAX(computed_at)
+        FROM public.vector_change_effects
         WHERE experiment_id = p_experiment_id
       )
   LOOP
     -- Weighted contribution: delta * weight * confidence
     v_net_score := v_net_score + (
-      COALESCE(v_effect.delta_percent, 0) * 
-      COALESCE(v_effect.factor_weight, 1) * 
+      COALESCE(v_effect.delta_percent, 0) *
+      COALESCE(v_effect.factor_weight, 1) *
       COALESCE(v_effect.confidence, 0.5)
     );
   END LOOP;
-  
+
   RETURN v_net_score;
 END;
 $$;
@@ -276,24 +276,24 @@ BEGIN
   SELECT * INTO v_experiment
   FROM public.thought_experiments
   WHERE id = p_experiment_id;
-  
+
   IF NOT FOUND THEN
     RETURN false;
   END IF;
-  
+
   -- Count existing extensions
   SELECT COUNT(*) INTO v_current_extensions
   FROM public.experiment_extensions
   WHERE parent_id = p_experiment_id;
-  
+
   -- Check if at max
   IF v_current_extensions >= v_experiment.max_extensions THEN
     RETURN false;
   END IF;
-  
+
   -- Calculate current net score
   v_net_score := public.calculate_experiment_net_score(p_experiment_id);
-  
+
   -- Check threshold
   RETURN v_net_score >= v_experiment.extension_threshold;
 END;
@@ -317,10 +317,10 @@ BEGIN
   SELECT COALESCE(MAX(snapshot_number), 0) + 1 INTO v_snapshot_number
   FROM public.experiment_snapshots
   WHERE experiment_id = p_experiment_id;
-  
+
   -- Calculate current net score
   v_net_score := public.calculate_experiment_net_score(p_experiment_id);
-  
+
   -- Get effects summary
   SELECT jsonb_agg(
     jsonb_build_object(
@@ -333,11 +333,11 @@ BEGIN
   FROM public.vector_change_effects
   WHERE experiment_id = p_experiment_id
     AND computed_at = (
-      SELECT MAX(computed_at) 
-      FROM public.vector_change_effects 
+      SELECT MAX(computed_at)
+      FROM public.vector_change_effects
       WHERE experiment_id = p_experiment_id
     );
-  
+
   -- Create snapshot
   INSERT INTO public.experiment_snapshots (
     experiment_id,
@@ -354,15 +354,15 @@ BEGIN
     p_notes
   )
   RETURNING id INTO v_snapshot_id;
-  
+
   -- Update experiment current score
   UPDATE public.thought_experiments
-  SET 
+  SET
     current_net_score = v_net_score,
     last_computed_at = now(),
     updated_at = now()
   WHERE id = p_experiment_id;
-  
+
   RETURN v_snapshot_id;
 END;
 $$;
@@ -412,7 +412,7 @@ CREATE POLICY "effects_select" ON public.vector_change_effects
 CREATE POLICY "effects_insert" ON public.vector_change_effects
   FOR INSERT WITH CHECK (
     EXISTS (
-      SELECT 1 FROM public.thought_experiments 
+      SELECT 1 FROM public.thought_experiments
       WHERE id = experiment_id AND created_by = auth.uid()
     )
   );
@@ -424,7 +424,7 @@ CREATE POLICY "snapshots_select" ON public.experiment_snapshots
 CREATE POLICY "snapshots_insert" ON public.experiment_snapshots
   FOR INSERT WITH CHECK (
     EXISTS (
-      SELECT 1 FROM public.thought_experiments 
+      SELECT 1 FROM public.thought_experiments
       WHERE id = experiment_id AND created_by = auth.uid()
     )
   );
@@ -436,7 +436,7 @@ CREATE POLICY "extensions_select" ON public.experiment_extensions
 CREATE POLICY "extensions_insert" ON public.experiment_extensions
   FOR INSERT WITH CHECK (
     EXISTS (
-      SELECT 1 FROM public.thought_experiments 
+      SELECT 1 FROM public.thought_experiments
       WHERE id = parent_id AND created_by = auth.uid()
     )
   );

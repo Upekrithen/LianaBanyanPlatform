@@ -135,10 +135,10 @@ export function FableFlipbook({
               transition={{ duration: 0.4, ease: 'easeInOut' }}
             />
           </AnimatePresence>
-          
+
           {/* Page flip corners */}
           <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-amber-300 to-transparent opacity-50" />
-          
+
           {/* Navigation arrows */}
           <button
             onClick={goToPrev}
@@ -155,7 +155,7 @@ export function FableFlipbook({
             <ChevronRight className="w-4 h-4 text-amber-800" />
           </button>
         </div>
-        
+
         {/* Progress dots */}
         <div className="flex justify-center gap-1 mt-2">
           {FABLE_IMAGES.map((_, i) => (
@@ -188,7 +188,7 @@ export function FableFlipbook({
         >
           {FABLE_IMAGES[currentIndex].caption}
         </motion.div>
-        
+
         {/* Book pages - single frame, clickable left/right */}
         <div className="relative aspect-[4/3] bg-amber-50 rounded-lg overflow-hidden shadow-2xl border-8 border-amber-800"
              style={{ perspective: '1000px' }}>
@@ -211,7 +211,7 @@ export function FableFlipbook({
               />
             </motion.div>
           </AnimatePresence>
-          
+
           {/* Clickable left half - go back */}
           <button
             onClick={goToPrev}
@@ -219,7 +219,7 @@ export function FableFlipbook({
             className="absolute left-0 top-0 w-1/2 h-full cursor-pointer z-20 hover:bg-black/5 transition-colors disabled:cursor-default disabled:hover:bg-transparent"
             aria-label="Previous page"
           />
-          
+
           {/* Clickable right half - go forward */}
           <button
             onClick={goToNext}
@@ -227,17 +227,17 @@ export function FableFlipbook({
             className="absolute right-0 top-0 w-1/2 h-full cursor-pointer z-20 hover:bg-black/5 transition-colors disabled:cursor-default disabled:hover:bg-transparent"
             aria-label="Next page"
           />
-          
+
           {/* Page number */}
           <div className="absolute bottom-2 right-4 text-amber-600 font-serif text-sm z-10">
             {currentIndex + 1} / {FABLE_IMAGES.length}
           </div>
-          
+
           {/* Page flip corner */}
           <div className="absolute bottom-0 right-0 w-12 h-12 bg-gradient-to-tl from-amber-200 to-transparent z-10" />
         </div>
       </div>
-      
+
       {/* Controls */}
       {showControls && (
         <div className="flex items-center justify-center gap-4 mt-6">
@@ -248,7 +248,7 @@ export function FableFlipbook({
           >
             <SkipBack className="w-5 h-5 text-amber-800" />
           </button>
-          
+
           <button
             onClick={goToPrev}
             disabled={currentIndex === 0}
@@ -257,7 +257,7 @@ export function FableFlipbook({
           >
             <ChevronLeft className="w-5 h-5 text-amber-800" />
           </button>
-          
+
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             className="p-3 rounded-full bg-amber-600 hover:bg-amber-700 transition-colors text-white"
@@ -269,7 +269,7 @@ export function FableFlipbook({
               <Play className="w-6 h-6 ml-0.5" />
             )}
           </button>
-          
+
           <button
             onClick={goToNext}
             disabled={currentIndex === FABLE_IMAGES.length - 1}
@@ -306,7 +306,7 @@ export function FableFlipbook({
           </div>
         </div>
       )}
-      
+
       {/* Progress bar */}
       <div className="mt-4 max-w-md mx-auto">
         <div className="h-2 bg-amber-100 rounded-full overflow-hidden">

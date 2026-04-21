@@ -1,8 +1,8 @@
 /**
  * Documentation Marketplace Service
- * 
+ *
  * Marketplace for community-contributed hints, walkthroughs, and step-by-step guides.
- * 
+ *
  * Contributors earn:
  * - Reputation from helpful votes
  * - Icing from purchases (70% to contributor, 30% to LB)
@@ -202,7 +202,7 @@ export async function userOwnsDocument(
   try {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData.user) return false;
-    
+
     // In production, check documentation_purchases
     return false;
   } catch (error) {
@@ -222,7 +222,7 @@ export async function purchaseDocumentation(
     if (userError || !userData.user) {
       return { success: false, error: 'Not authenticated' };
     }
-    
+
     // INFRASTRUCTURE NOTE: This function needs real purchase flow:
     // 1. Get document price from documentation_items table
     // 2. Check user has enough credits via currencyService
@@ -280,20 +280,20 @@ export async function submitDocumentation(
     if (userError || !userData.user) {
       return { error: 'Not authenticated' };
     }
-    
+
     // Validate content
     if (!doc.title || doc.title.length < 5) {
       return { error: 'Title must be at least 5 characters' };
     }
-    
+
     if (!doc.content || doc.content.length < 50) {
       return { error: 'Content must be at least 50 characters' };
     }
-    
+
     // INFRASTRUCTURE NOTE: This function needs to insert into documentation_items table
     // with status 'review' and contributor_id = userData.user.id
     const docId = `doc-${Date.now()}`;
-    
+
     return { docId };
   } catch (error) {
     console.error('Error submitting documentation:', error);
@@ -313,7 +313,7 @@ export async function updateDocumentation(
     if (userError || !userData.user) {
       return { success: false, error: 'Not authenticated' };
     }
-    
+
     // INFRASTRUCTURE NOTE: This function needs to verify user is the contributor,
     // then update the documentation_items table with the provided updates
     return { success: true };
@@ -333,7 +333,7 @@ export async function getContributorStats(
     const { data: userData, error: userError } = await supabase.auth.getUser();
     const targetUserId = userId || userData?.user?.id;
     if (!targetUserId) return null;
-    
+
     // In production, query documentation_contributor_stats
     return null;
   } catch (error) {
@@ -352,7 +352,7 @@ export async function getMyPurchasedDocumentation(): Promise<{
   try {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData.user) return [];
-    
+
     // In production, join documentation_purchases with documentation_items
     return [];
   } catch (error) {
@@ -368,7 +368,7 @@ export async function getMyContributedDocumentation(): Promise<DocumentationItem
   try {
     const { data: userData, error: userError } = await supabase.auth.getUser();
     if (userError || !userData.user) return [];
-    
+
     // In production, query documentation_items where contributor_id = user
     return [];
   } catch (error) {

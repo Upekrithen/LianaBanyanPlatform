@@ -28,10 +28,10 @@ interface CreateDerivativeProjectDialogProps {
   children?: React.ReactNode;
 }
 
-export const CreateDerivativeProjectDialog = ({ 
-  parentProjectId, 
+export const CreateDerivativeProjectDialog = ({
+  parentProjectId,
   parentProjectName,
-  children 
+  children
 }: CreateDerivativeProjectDialogProps) => {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -185,8 +185,8 @@ export const CreateDerivativeProjectDialog = ({
                   <FormLabel>Royalty Percentage</FormLabel>
                   <FormControl>
                     <div className="flex items-center gap-2">
-                      <Input 
-                        type="number" 
+                      <Input
+                        type="number"
                         min={derivativeType === 'accessory_trunk' ? 15 : 5}
                         max={derivativeType === 'accessory_trunk' ? 25 : 10}
                         {...field}
@@ -231,7 +231,7 @@ export const CreateDerivativeProjectDialog = ({
                 <FormItem>
                   <FormLabel>Planned Modifications</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="Describe features you plan to add/modify..."
                       className="min-h-[100px]"
                       {...field}
@@ -253,7 +253,7 @@ export const CreateDerivativeProjectDialog = ({
                 <FormItem>
                   <FormLabel>Project Description</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="Describe your derivative project..."
                       className="min-h-[100px]"
                       {...field}

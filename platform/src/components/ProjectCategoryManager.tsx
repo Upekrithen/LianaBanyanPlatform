@@ -60,7 +60,7 @@ export const ProjectCategoryManager = ({ projectId }: ProjectCategoryManagerProp
           .single();
 
         if (aggregateError && aggregateError.code !== 'PGRST116') throw aggregateError;
-        
+
         if (aggregateData) {
           setAggregateData(aggregateData);
         }

@@ -3,7 +3,7 @@
  * =========================
  * When a user earns a Candle Burst (from social unlocks, beacon runs, etc.),
  * they choose how to use it:
- * 
+ *
  * A. Short Burst - 3 candle uses immediately
  * B. Store for Babylon - Accumulate 3 bursts → 1 Mini Black Babylon
  * C. Pair Bonus - Share code with friend, both get 9 uses, then 10, then 2x
@@ -11,8 +11,8 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Flame, Battery, Users, Copy, Check, X, 
+import {
+  Flame, Battery, Users, Copy, Check, X,
   Sparkles, ArrowRight, Gift
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -50,17 +50,17 @@ export function CandleBurstReward({
 
   const handleChoiceSelect = async (choice: RewardChoice) => {
     setSelectedChoice(choice);
-    
+
     if (choice === 'pair') {
       setShowPairCode(true);
       return;
     }
 
     setIsProcessing(true);
-    
+
     try {
       const result = await claimCandleBurstReward(rewardId, choice);
-      
+
       if (result.success) {
         if (choice === 'burst') {
           toast.success(`🕯️ +3 Candle Uses! Explore freely.`);
@@ -89,10 +89,10 @@ export function CandleBurstReward({
 
   const handleConfirmPair = async () => {
     setIsProcessing(true);
-    
+
     try {
       const result = await claimCandleBurstReward(rewardId, 'pair');
-      
+
       if (result.success) {
         toast.success(`🤝 Pair code active! Share it with a friend.`);
         onRewardClaimed?.('pair', { ...result, pairCode });
@@ -113,10 +113,10 @@ export function CandleBurstReward({
     }
 
     setIsProcessing(true);
-    
+
     try {
       const result = await joinPair(joinCode.trim(), rewardId);
-      
+
       if (result.success) {
         toast.success(`🎉 Paired! You both get ${result.candleUsesEach} candle uses!`);
         onRewardClaimed?.('pair', result);
@@ -157,12 +157,12 @@ export function CandleBurstReward({
                 <motion.div
                   key={i}
                   className="absolute w-1 h-1 bg-white rounded-full"
-                  initial={{ 
-                    x: Math.random() * 400, 
+                  initial={{
+                    x: Math.random() * 400,
                     y: Math.random() * 100,
-                    opacity: 0 
+                    opacity: 0
                   }}
-                  animate={{ 
+                  animate={{
                     y: -20,
                     opacity: [0, 1, 0]
                   }}
@@ -174,7 +174,7 @@ export function CandleBurstReward({
                 />
               ))}
             </div>
-            
+
             <div className="relative">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
@@ -191,7 +191,7 @@ export function CandleBurstReward({
                 </div>
               </div>
             </div>
-            
+
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-1 rounded-full hover:bg-white/20 transition-colors"
@@ -214,8 +214,8 @@ export function CandleBurstReward({
                     onClick={() => handleChoiceSelect('burst')}
                     disabled={isProcessing}
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                      selectedChoice === 'burst' 
-                        ? 'border-amber-500 bg-amber-500/10' 
+                      selectedChoice === 'burst'
+                        ? 'border-amber-500 bg-amber-500/10'
                         : 'border-border hover:border-amber-500/50 hover:bg-muted/50'
                     }`}
                   >
@@ -241,8 +241,8 @@ export function CandleBurstReward({
                     onClick={() => handleChoiceSelect('store')}
                     disabled={isProcessing}
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                      selectedChoice === 'store' 
-                        ? 'border-purple-500 bg-purple-500/10' 
+                      selectedChoice === 'store'
+                        ? 'border-purple-500 bg-purple-500/10'
                         : 'border-border hover:border-purple-500/50 hover:bg-muted/50'
                     }`}
                   >
@@ -268,8 +268,8 @@ export function CandleBurstReward({
                     onClick={() => handleChoiceSelect('pair')}
                     disabled={isProcessing}
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                      selectedChoice === 'pair' 
-                        ? 'border-green-500 bg-green-500/10' 
+                      selectedChoice === 'pair'
+                        ? 'border-green-500 bg-green-500/10'
                         : 'border-border hover:border-green-500/50 hover:bg-muted/50'
                     }`}
                   >
@@ -299,7 +299,7 @@ export function CandleBurstReward({
                   >
                     Have a pair code? Click to join
                   </button>
-                  
+
                   {joinMode && (
                     <div className="mt-3 flex gap-2">
                       <Input
@@ -324,7 +324,7 @@ export function CandleBurstReward({
                 <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                   <Users className="w-8 h-8 text-green-500" />
                 </div>
-                
+
                 <h3 className="text-lg font-semibold mb-2">Your Pair Code</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Share this code with a friend. When they join, you both get 9 candle uses!

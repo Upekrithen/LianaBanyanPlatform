@@ -3,17 +3,17 @@
  * ====================
  * Shows category bounty opportunities to encourage recipe contributions.
  * Highlights empty/sparse categories with Shadow Marks rewards.
- * 
+ *
  * "Be the FIRST to add a French Elegant Dinner! Earn 50 Shadow Marks"
  */
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { 
-  getTopBounties, 
-  BOUNTY_TIERS, 
-  type CategoryBounty 
+import {
+  getTopBounties,
+  BOUNTY_TIERS,
+  type CategoryBounty
 } from "@/lib/shadowMarksService";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,10 +25,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { 
-  Sparkles, 
-  ChefHat, 
-  HelpCircle, 
+import {
+  Sparkles,
+  ChefHat,
+  HelpCircle,
   ArrowRight,
   Clock,
   Users,
@@ -44,23 +44,23 @@ interface RecipeBountyBannerProps {
 export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBountyBannerProps) {
   const navigate = useNavigate();
   const [showExplainer, setShowExplainer] = useState(false);
-  
+
   const { data: bounties, isLoading } = useQuery({
     queryKey: ['top-bounties'],
     queryFn: () => getTopBounties(5),
   });
-  
+
   if (isLoading || !bounties || bounties.length === 0) {
     return null;
   }
-  
+
   // Find the best opportunity
   const bestBounty = bounties[0];
   const tierInfo = BOUNTY_TIERS[bestBounty.shelfStatus];
-  
+
   if (compact) {
     return (
-      <div 
+      <div
         className={cn(
           "flex items-center gap-3 p-3 rounded-lg border cursor-pointer hover:border-amber-500/50 transition-colors",
           tierInfo.bg,
@@ -82,24 +82,24 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
       </div>
     );
   }
-  
+
   return (
     <div className="relative overflow-hidden rounded-xl border-2 border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-4">
       {/* Sparkle decoration */}
       <Sparkles className="absolute top-2 right-2 h-5 w-5 text-amber-400/30" />
-      
+
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
         <ChefHat className="h-5 w-5 text-amber-400" />
         <h3 className="font-semibold text-amber-200">Recipe Bounties</h3>
-        <button 
+        <button
           onClick={() => setShowExplainer(true)}
           className="p-1 rounded-full hover:bg-white/10 transition-colors"
         >
           <HelpCircle className="h-4 w-4 text-muted-foreground" />
         </button>
       </div>
-      
+
       {/* Best opportunity highlight */}
       <div className={cn(
         "p-4 rounded-lg mb-3",
@@ -121,15 +121,15 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
             </p>
           </div>
         </div>
-        
-        <Button 
+
+        <Button
           onClick={() => onAddRecipe?.(bestBounty.cuisine, bestBounty.mealType)}
           className="w-full mt-3 bg-amber-600 hover:bg-amber-700 gap-2"
         >
           Add a Recipe <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
-      
+
       {/* Other opportunities */}
       {bounties.length > 1 && (
         <div className="space-y-2">
@@ -157,7 +157,7 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
           </div>
         </div>
       )}
-      
+
       {/* Vesting Explainer Dialog */}
       <Dialog open={showExplainer} onOpenChange={setShowExplainer}>
         <DialogContent className="max-w-lg">
@@ -170,39 +170,39 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
               Think of them as seeds waiting to grow into real Marks.
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-4">
             {/* The "Water Salt" educational story */}
             <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
               <p className="text-sm leading-relaxed mb-3">
-                Think of Shadow Marks like <strong>seeds you plant</strong>. They need sunlight 
-                (community votes) to grow into real plants (real Marks). Without sunlight, they wither. 
+                Think of Shadow Marks like <strong>seeds you plant</strong>. They need sunlight
+                (community votes) to grow into real plants (real Marks). Without sunlight, they wither.
                 But once they're grown, they're yours forever.
               </p>
               <div className="p-3 rounded bg-black/20 border border-white/10 text-sm italic">
-                <span className="not-italic font-semibold text-amber-300">Example:</span> Your recipe 
-                "Water Salt" earned 50 Shadow Marks for being a French Elegant Dinner recipe. 
-                If 10 people vote for it within 7 days, those 50 Shadow Marks become 50 real MARKS — 
+                <span className="not-italic font-semibold text-amber-300">Example:</span> Your recipe
+                "Water Salt" earned 50 Shadow Marks for being a French Elegant Dinner recipe.
+                If 10 people vote for it within 7 days, those 50 Shadow Marks become 50 real MARKS —
                 permanently yours. But if nobody votes for "Water Salt"... well, it withers. 🥀
               </div>
             </div>
-            
+
             {/* Equal opportunity note */}
             <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
               <p className="text-sm">
-                <strong className="text-emerald-400">Fair for everyone:</strong> Every person who posts 
-                in the same category tier gets the same Shadow Marks. If 3 people all post to an empty 
+                <strong className="text-emerald-400">Fair for everyone:</strong> Every person who posts
+                in the same category tier gets the same Shadow Marks. If 3 people all post to an empty
                 category, all 3 get 50 Shadow Marks. The bounty only drops when the shelf fills up.
               </p>
             </div>
-            
+
             {/* How it works */}
             <div className="space-y-3">
               <h4 className="font-semibold flex items-center gap-2">
                 <Clock className="h-4 w-4 text-blue-400" />
                 How Vesting Works
               </h4>
-              
+
               <div className="grid gap-2 text-sm">
                 <div className="flex items-start gap-3 p-2 rounded bg-muted/30">
                   <span className="text-lg">🌱</span>
@@ -230,14 +230,14 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
                 </div>
               </div>
             </div>
-            
+
             {/* Bounty tiers */}
             <div className="space-y-3">
               <h4 className="font-semibold flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-emerald-400" />
                 Bounty Tiers
               </h4>
-              
+
               <div className="grid gap-1 text-sm">
                 {Object.entries(BOUNTY_TIERS).map(([status, tier]) => (
                   tier.marks > 0 && (
@@ -251,7 +251,7 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
                 ))}
               </div>
             </div>
-            
+
             {/* The why */}
             <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
               <h4 className="font-semibold flex items-center gap-2 mb-2">
@@ -259,9 +259,9 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
                 Why This System?
               </h4>
               <p className="text-sm text-muted-foreground">
-                We want to reward pioneers who fill empty shelves. But we also need quality — 
+                We want to reward pioneers who fill empty shelves. But we also need quality —
                 so your reward depends on the community actually wanting your recipe.
-                Good recipes earn their full reward. "Water Salt" recipes? They wither. 
+                Good recipes earn their full reward. "Water Salt" recipes? They wither.
                 The community decides what's worth keeping.
               </p>
             </div>
@@ -272,7 +272,7 @@ export function RecipeBountyBanner({ onAddRecipe, compact = false }: RecipeBount
                 🚀 Escape Velocity: IP Ledger Protection
               </h4>
               <p className="text-sm text-muted-foreground mb-3">
-                When your recipe reaches <strong className="text-rose-300">100 votes</strong>, 
+                When your recipe reaches <strong className="text-rose-300">100 votes</strong>,
                 it achieves "escape velocity" and earns permanent protection:
               </p>
               <ul className="text-sm space-y-1.5 text-muted-foreground">

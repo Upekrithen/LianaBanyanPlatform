@@ -18,7 +18,7 @@ ALTER TABLE public.beacons ADD COLUMN IF NOT EXISTS
 -- Orange Protocol fields
 ALTER TABLE public.beacons ADD COLUMN IF NOT EXISTS
   orange_subtype TEXT CHECK (orange_subtype IS NULL OR orange_subtype IN (
-    'game_marker', 'share_person', 'social_cue', 'gift', 
+    'game_marker', 'share_person', 'social_cue', 'gift',
     'treasure', 'learning', 'trade_route', 'custom'
   ));
 
@@ -33,27 +33,27 @@ CREATE TABLE IF NOT EXISTS public.beacon_runs (
   creator_id      UUID REFERENCES auth.users(id),
   name            TEXT NOT NULL,
   description     TEXT,
-  
+
   -- Route data
   beacon_ids      UUID[] NOT NULL DEFAULT '{}',
   total_beacons   INTEGER NOT NULL DEFAULT 0,
   estimated_minutes INTEGER,
-  
+
   -- Competition settings
   ante_credits    INTEGER DEFAULT 0,
   prize_pool_credits INTEGER DEFAULT 0,
-  
+
   -- Stats
   times_started   INTEGER DEFAULT 0,
   times_completed INTEGER DEFAULT 0,
   best_time_seconds INTEGER,
   best_time_user_id UUID REFERENCES auth.users(id),
-  
+
   -- Metadata
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   published_at    TIMESTAMPTZ,
   is_featured     BOOLEAN DEFAULT FALSE,
-  
+
   -- Ghost Mode requirement (always true for Beacon Runs)
   requires_ghost_mode BOOLEAN DEFAULT TRUE
 );
@@ -67,19 +67,19 @@ CREATE TABLE IF NOT EXISTS public.beacon_run_progress (
   user_id         UUID REFERENCES auth.users(id),
   ghost_id        UUID REFERENCES public.ghost_profiles(id),
   run_id          UUID NOT NULL REFERENCES public.beacon_runs(id) ON DELETE CASCADE,
-  
+
   -- Progress
   beacons_reached UUID[] DEFAULT '{}',
   current_beacon_index INTEGER DEFAULT 0,
   started_at      TIMESTAMPTZ DEFAULT NOW(),
   completed_at    TIMESTAMPTZ,
-  
+
   -- Time tracking
   elapsed_seconds INTEGER DEFAULT 0,
-  
+
   -- Ghost Mode verification
   ghost_session_id UUID,
-  
+
   -- Crow Feather earned (if record set)
   crow_feather_id INTEGER REFERENCES public.crow_feathers(id)
 );
@@ -101,10 +101,10 @@ CREATE TABLE IF NOT EXISTS public.crow_feathers (
   earned_at       TIMESTAMPTZ DEFAULT NOW(),
   feather_number  INTEGER NOT NULL,
   superseded_by   INTEGER REFERENCES public.crow_feathers(id),
-  
+
   -- Beacon Run specific
   beacon_run_id   UUID REFERENCES public.beacon_runs(id),
-  
+
   UNIQUE(feather_number)
 );
 
@@ -116,20 +116,20 @@ CREATE INDEX IF NOT EXISTS idx_crow_feathers_category ON public.crow_feathers(ca
 CREATE TABLE IF NOT EXISTS public.ghost_mode_sessions (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id),
-  
+
   -- Session tracking
   started_at      TIMESTAMPTZ DEFAULT NOW(),
   ended_at        TIMESTAMPTZ,
   duration_minutes INTEGER,
-  
+
   -- What they did in Ghost Mode
   beacons_dropped INTEGER DEFAULT 0,
   beacon_runs_created INTEGER DEFAULT 0,
   beacon_runs_played INTEGER DEFAULT 0,
-  
+
   -- Crow Feathers earned
   crow_feathers_earned INTEGER DEFAULT 0,
-  
+
   -- Equipment brought from Portfolio
   equipment_brought JSONB DEFAULT '[]'
 );
@@ -143,25 +143,25 @@ ALTER TABLE public.beacon_run_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ghost_mode_sessions ENABLE ROW LEVEL SECURITY;
 
 -- Beacon Runs: creators can manage, all can view published
-CREATE POLICY "beacon_runs_select" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_select" ON public.beacon_runs
   FOR SELECT USING (published_at IS NOT NULL OR creator_id = auth.uid());
-CREATE POLICY "beacon_runs_insert" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_insert" ON public.beacon_runs
   FOR INSERT WITH CHECK (auth.uid() = creator_id);
-CREATE POLICY "beacon_runs_update" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_update" ON public.beacon_runs
   FOR UPDATE USING (auth.uid() = creator_id);
-CREATE POLICY "beacon_runs_delete" ON public.beacon_runs 
+CREATE POLICY "beacon_runs_delete" ON public.beacon_runs
   FOR DELETE USING (auth.uid() = creator_id);
 
 -- Beacon Run Progress: users can manage their own
-CREATE POLICY "beacon_run_progress_select" ON public.beacon_run_progress 
+CREATE POLICY "beacon_run_progress_select" ON public.beacon_run_progress
   FOR SELECT USING (user_id = auth.uid() OR ghost_id IS NOT NULL);
-CREATE POLICY "beacon_run_progress_insert" ON public.beacon_run_progress 
+CREATE POLICY "beacon_run_progress_insert" ON public.beacon_run_progress
   FOR INSERT WITH CHECK (user_id = auth.uid() OR ghost_id IS NOT NULL);
-CREATE POLICY "beacon_run_progress_update" ON public.beacon_run_progress 
+CREATE POLICY "beacon_run_progress_update" ON public.beacon_run_progress
   FOR UPDATE USING (user_id = auth.uid());
 
 -- Ghost Mode Sessions: users can manage their own
-CREATE POLICY "ghost_mode_sessions_all" ON public.ghost_mode_sessions 
+CREATE POLICY "ghost_mode_sessions_all" ON public.ghost_mode_sessions
   FOR ALL USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Crow Feathers: public read, authenticated insert

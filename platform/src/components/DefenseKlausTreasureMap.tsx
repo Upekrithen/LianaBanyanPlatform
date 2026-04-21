@@ -1,9 +1,9 @@
 /**
  * Defense Klaus Treasure Map
- * 
+ *
  * Special Deck Card accessible from Defense Klaus for first 5,000 signups
  * Demonstrates the corner lock system with practice currencies
- * 
+ *
  * Gives:
  * - Practice Joules (SESSION ONLY) for Silver Corner locks (12 each)
  * - Practice Credits (SESSION ONLY) for regular frame locks (6 each)
@@ -47,12 +47,12 @@ const SIDE_LOCK_COST = 6; // Credits per side
 
 export function DefenseKlausTreasureMap({ onClaimVoucher }: TreasureMapProps) {
   const { toast } = useToast();
-  
+
   // Session-only practice currencies
   const [practiceJoules, setPracticeJoules] = useState(0);
   const [practiceCredits, setPracticeCredits] = useState(0);
   const [hasClaimed, setHasClaimed] = useState(false);
-  
+
   // Lock states for demo card
   const [cornerLocks, setCornerLocks] = useState([true, true, true, true]); // Silver corners
   const [sideLocks, setSideLocks] = useState([true, true, true, true]); // Regular sides
@@ -105,7 +105,7 @@ export function DefenseKlausTreasureMap({ onClaimVoucher }: TreasureMapProps) {
 
   const handleCornerLockClick = (index: number) => {
     if (!cornerLocks[index]) return; // Already unlocked
-    
+
     if (practiceJoules < SILVER_CORNER_COST) {
       toast({
         title: "Not Enough Practice Joules",
@@ -130,7 +130,7 @@ export function DefenseKlausTreasureMap({ onClaimVoucher }: TreasureMapProps) {
 
   const handleSideLockClick = (index: number) => {
     if (!sideLocks[index]) return; // Already unlocked
-    
+
     if (practiceCredits < SIDE_LOCK_COST) {
       toast({
         title: "Not Enough Practice Credits",
@@ -190,11 +190,11 @@ export function DefenseKlausTreasureMap({ onClaimVoucher }: TreasureMapProps) {
                 <h3 className="font-bold text-lg text-amber-200">Claim Your Practice Currencies</h3>
                 <p className="text-sm text-amber-300/70 mt-2">
                   Receive <strong>{PRACTICE_JOULES_GRANT} Practice Joules</strong> and{" "}
-                  <strong>{PRACTICE_CREDITS_GRANT} Practice Credits</strong> to learn how 
+                  <strong>{PRACTICE_CREDITS_GRANT} Practice Credits</strong> to learn how
                   the lock system works. These are SESSION ONLY — they disappear when you leave.
                 </p>
               </div>
-              <Button 
+              <Button
                 onClick={handleClaimTreasure}
                 className="bg-amber-600 hover:bg-amber-700 text-white"
                 size="lg"
@@ -216,7 +216,7 @@ export function DefenseKlausTreasureMap({ onClaimVoucher }: TreasureMapProps) {
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   {/* Front */}
-                  <div 
+                  <div
                     className="absolute inset-0 flex flex-col items-center justify-center p-6 backface-hidden"
                     style={{ backfaceVisibility: "hidden" }}
                   >
@@ -229,9 +229,9 @@ export function DefenseKlausTreasureMap({ onClaimVoucher }: TreasureMapProps) {
                       {allUnlocked ? "Click to flip!" : "Unlock all locks to reveal"}
                     </Badge>
                   </div>
-                  
+
                   {/* Back */}
-                  <div 
+                  <div
                     className="absolute inset-0 flex flex-col items-center justify-center p-6"
                     style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                   >
@@ -348,16 +348,16 @@ export function DefenseKlausTreasureMap({ onClaimVoucher }: TreasureMapProps) {
       <Card className="border-white/10">
         <CardContent className="pt-6 text-sm text-white/70 space-y-3">
           <p>
-            <strong className="text-white">Corner Locks</strong> are reserved for the most rare 
-            and valuable cards. They are only revealed when that type of card is discovered through 
-            gameplay. Even if traded, such cards cannot be activated unless you complete the 
+            <strong className="text-white">Corner Locks</strong> are reserved for the most rare
+            and valuable cards. They are only revealed when that type of card is discovered through
+            gameplay. Even if traded, such cards cannot be activated unless you complete the
             <strong className="text-purple-400"> Harrow</strong> assigned to it.
           </p>
           <p className="text-amber-300/80 italic">
             "Earned. Not given."
           </p>
           <p>
-            This Treasure Map is an exception — a demonstration of the system for the first 5,000 
+            This Treasure Map is an exception — a demonstration of the system for the first 5,000
             Defense Klaus signups. The practice currencies are session-only and cannot be transferred.
           </p>
         </CardContent>

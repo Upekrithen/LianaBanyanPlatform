@@ -133,15 +133,15 @@ BEGIN
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name')
   );
-  
+
   -- Create initial credit entry with 0 credits (will be allocated via invitation)
   INSERT INTO public.user_credits (user_id, total_credits, used_credits, initial_credit_accepted)
   VALUES (NEW.id, 0, 0, false);
-  
+
   -- Assign default 'user' role
   INSERT INTO public.user_roles (user_id, role)
   VALUES (NEW.id, 'user');
-  
+
   RETURN NEW;
 END;
 $$;
@@ -164,51 +164,51 @@ DECLARE
 BEGIN
   -- Get the current user
   _user_id := auth.uid();
-  
+
   -- Get invitation details
   SELECT * INTO _invitation
   FROM public.project_invitations
   WHERE id = _invitation_id
     AND status = 'pending'
     AND email = (SELECT email FROM public.profiles WHERE id = _user_id);
-  
+
   IF NOT FOUND THEN
     RETURN jsonb_build_object('success', false, 'error', 'Invalid or expired invitation');
   END IF;
-  
+
   -- Verify QR code email match
   IF _invitation.email != _qr_scan_email THEN
     RETURN jsonb_build_object('success', false, 'error', 'Email does not match QR scan entry');
   END IF;
-  
+
   -- Get project funding
   SELECT * INTO _funding
   FROM public.project_funding
   WHERE project_id = _invitation.project_id;
-  
+
   IF NOT FOUND OR _funding.available_pot < _invitation.credits_allocated THEN
     RETURN jsonb_build_object('success', false, 'error', 'Insufficient funds in project pot');
   END IF;
-  
+
   -- Update invitation status
   UPDATE public.project_invitations
   SET status = 'accepted',
       accepted_at = now()
   WHERE id = _invitation_id;
-  
+
   -- Allocate credits to user
   UPDATE public.user_credits
   SET total_credits = total_credits + _invitation.credits_allocated,
       initial_credit_accepted = true,
       updated_at = now()
   WHERE user_id = _user_id;
-  
+
   -- Update project funding
   UPDATE public.project_funding
   SET allocated_credits = allocated_credits + _invitation.credits_allocated,
       updated_at = now()
   WHERE project_id = _invitation.project_id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'credits_allocated', _invitation.credits_allocated,

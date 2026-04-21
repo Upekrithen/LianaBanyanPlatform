@@ -14,7 +14,7 @@ export default function MainlandHub() {
   return (
     <PortalPageLayout>
       <div className="max-w-6xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="text-center space-y-6 border-b border-slate-800 pb-12">
           <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 mb-4">
@@ -30,7 +30,7 @@ export default function MainlandHub() {
 
         {/* The Core Hubs */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
+
           <LarkWrapper componentId="mainland-tower-of-peace" bountyCredits={100}>
             <Card className="bg-slate-900 border-slate-800 hover:border-amber-500/50 transition-all h-full flex flex-col cursor-pointer" onClick={() => navigate('/tower-of-peace')}>
               <CardHeader>

@@ -4,7 +4,7 @@
 -- ═══════════════════════════════════════════════════════════════════════════
 
 -- STEP 1: Add missing columns
-ALTER TABLE public.member_social_accounts 
+ALTER TABLE public.member_social_accounts
   ADD COLUMN IF NOT EXISTS platform_user_id TEXT,
   ADD COLUMN IF NOT EXISTS account_nickname TEXT,
   ADD COLUMN IF NOT EXISTS is_default BOOLEAN DEFAULT false,
@@ -16,7 +16,7 @@ SET is_default = true
 WHERE is_active = true
   AND id = (
     SELECT id FROM public.member_social_accounts sub
-    WHERE sub.user_id = msa.user_id 
+    WHERE sub.user_id = msa.user_id
       AND sub.platform = msa.platform
       AND sub.is_active = true
     ORDER BY sub.created_at ASC
@@ -27,9 +27,9 @@ WHERE is_active = true
 CREATE OR REPLACE FUNCTION check_social_account_limit()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF (SELECT COUNT(*) FROM public.member_social_accounts 
-      WHERE user_id = NEW.user_id 
-        AND platform = NEW.platform 
+  IF (SELECT COUNT(*) FROM public.member_social_accounts
+      WHERE user_id = NEW.user_id
+        AND platform = NEW.platform
         AND is_active = true
         AND id != COALESCE(NEW.id, '00000000-0000-0000-0000-000000000000'::uuid)
      ) >= 6 THEN
@@ -72,18 +72,18 @@ CREATE TRIGGER enforce_single_default_account
   EXECUTE FUNCTION ensure_single_default_account();
 
 -- STEP 7: Add indexes for performance
-CREATE INDEX IF NOT EXISTS idx_social_accounts_user_platform 
+CREATE INDEX IF NOT EXISTS idx_social_accounts_user_platform
   ON public.member_social_accounts(user_id, platform);
-CREATE INDEX IF NOT EXISTS idx_social_accounts_default 
-  ON public.member_social_accounts(user_id, platform, is_default) 
+CREATE INDEX IF NOT EXISTS idx_social_accounts_default
+  ON public.member_social_accounts(user_id, platform, is_default)
   WHERE is_default = true;
 
 -- STEP 8: Add comments
-COMMENT ON COLUMN public.member_social_accounts.platform_user_id IS 
+COMMENT ON COLUMN public.member_social_accounts.platform_user_id IS
   'Unique ID from the platform (e.g., Twitter user ID) to prevent duplicate connections';
-COMMENT ON COLUMN public.member_social_accounts.account_nickname IS 
+COMMENT ON COLUMN public.member_social_accounts.account_nickname IS
   'User-friendly name for the account (e.g., "Official", "Personal", "Silly")';
-COMMENT ON COLUMN public.member_social_accounts.is_default IS 
+COMMENT ON COLUMN public.member_social_accounts.is_default IS
   'If true, this is the default account for this platform when posting';
-COMMENT ON COLUMN public.member_social_accounts.display_order IS 
+COMMENT ON COLUMN public.member_social_accounts.display_order IS
   'Order in which accounts appear in the UI (0 = first)';

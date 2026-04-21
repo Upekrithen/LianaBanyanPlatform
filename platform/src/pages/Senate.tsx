@@ -2,7 +2,7 @@
  * SENATE — Governance Navigation Hub
  * ===================================
  * MYST-style navigation through the governance halls.
- * 
+ *
  * Structure:
  * - Hexagon Hub (center) — Main navigation
  * - Six Corridors:
@@ -189,14 +189,14 @@ function HexagonHub({ onHallSelect, selectedHall }: HexagonHubProps) {
           <span className="text-xs font-medium mt-1">Senate</span>
         </div>
       </div>
-      
+
       {/* Six halls arranged in hexagon */}
       {HALLS.map((hall, index) => {
         const angle = (index * 60 - 90) * (Math.PI / 180); // Start from top
         const radius = 140; // Distance from center
         const x = Math.cos(angle) * radius;
         const y = Math.sin(angle) * radius;
-        
+
         return (
           <button
             key={hall.id}
@@ -233,15 +233,15 @@ function TowerOfPeace({ onRoomSelect, onBack }: TowerOfPeaceProps) {
         <Home className="h-4 w-4 mr-2" />
         Back to Senate
       </Button>
-      
+
       <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
         <Building2 className="h-6 w-6" />
         Tower of Peace
       </h2>
-      
+
       <div className="tower-structure">
         {TOWER_ROOMS.map((room, index) => (
-          <Card 
+          <Card
             key={room.level}
             className={`tower-room tower-room-${room.level} cursor-pointer hover:shadow-lg transition-all`}
             onClick={() => onRoomSelect(room)}
@@ -265,7 +265,7 @@ function TowerOfPeace({ onRoomSelect, onBack }: TowerOfPeaceProps) {
           </Card>
         ))}
       </div>
-      
+
       {/* Switzerland Protocol Notice */}
       <Card className="mt-6 border-amber-500/30 bg-amber-500/5">
         <CardContent className="pt-4">
@@ -274,8 +274,8 @@ function TowerOfPeace({ onRoomSelect, onBack }: TowerOfPeaceProps) {
             <div>
               <h4 className="font-bold text-amber-700">Switzerland Protocol</h4>
               <p className="text-sm text-muted-foreground">
-                The Tower of Peace operates OUTSIDE the main platform. Political discussions 
-                happen here, not inside Liana Banyan proper. Use the Shirley Temple Protocol — 
+                The Tower of Peace operates OUTSIDE the main platform. Political discussions
+                happen here, not inside Liana Banyan proper. Use the Shirley Temple Protocol —
                 represent yourself, not the platform.
               </p>
               <div className="mt-4 pt-4 border-t border-amber-200/50">
@@ -329,7 +329,7 @@ interface HallDetailProps {
 
 function HallDetail({ hall, open, onClose, onEnter }: HallDetailProps) {
   if (!hall) return null;
-  
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
@@ -340,10 +340,10 @@ function HallDetail({ hall, open, onClose, onEnter }: HallDetailProps) {
           </DialogTitle>
           <DialogDescription>{hall.subtitle}</DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <p>{hall.description}</p>
-          
+
           <div>
             <h4 className="font-medium mb-2">What You'll Find</h4>
             <div className="flex flex-wrap gap-2">
@@ -352,7 +352,7 @@ function HallDetail({ hall, open, onClose, onEnter }: HallDetailProps) {
               ))}
             </div>
           </div>
-          
+
           {hall.name === "Tower of Peace" && (
             <div className="mt-4 p-4 bg-muted/50 rounded-lg border border-border">
               <p className="text-sm italic text-muted-foreground leading-relaxed">
@@ -385,7 +385,7 @@ function HallDetail({ hall, open, onClose, onEnter }: HallDetailProps) {
               </p>
             </div>
           )}
-          
+
           <Button onClick={onEnter} className="w-full gap-2">
             Enter {hall.name}
             <ArrowRight className="h-4 w-4" />
@@ -448,7 +448,7 @@ export default function Senate() {
 
       {/* Main Content */}
       {showTower ? (
-        <TowerOfPeace 
+        <TowerOfPeace
           onRoomSelect={handleRoomSelect}
           onBack={() => setShowTower(false)}
         />
@@ -456,7 +456,7 @@ export default function Senate() {
         <>
           {/* Hexagon Navigation */}
           <div className="flex justify-center mb-8">
-            <HexagonHub 
+            <HexagonHub
               onHallSelect={handleHallSelect}
               selectedHall={selectedHall}
             />
@@ -465,7 +465,7 @@ export default function Senate() {
           {/* Hall Cards (alternative navigation) */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             {HALLS.map(hall => (
-              <Card 
+              <Card
                 key={hall.id}
                 className={`cursor-pointer hover:shadow-lg transition-all bg-gradient-to-br ${hall.color}`}
                 onClick={() => handleHallSelect(hall)}

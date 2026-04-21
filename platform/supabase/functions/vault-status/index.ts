@@ -3,7 +3,7 @@
  * ===========================================================
  * Returns whether a person has unlocked their vault and if their
  * paired family members have also unlocked.
- * 
+ *
  * GET /vault-status?person=diana
  * Returns: { unlocked: true, unlockedAt: "...", unlockedPersons: [...] }
  */

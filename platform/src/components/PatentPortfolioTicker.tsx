@@ -5,11 +5,11 @@
  * - $116M equivalent (pessimist's floor, 4% utilization)
  * - 60% available = $69.6M equivalent for platform operations
  * - Countdown as allocations are made
- * 
+ *
  * Two display modes:
  * 1. Compact: Small ticker for bottom-left corner of every page
  * 2. Full: Detailed view for the Patent Portfolio page
- * 
+ *
  * Quote: "For I will not offer that which costs me nothing."
  */
 
@@ -50,10 +50,10 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
   const location = useLocation();
 
   if (location.pathname === '/' && mode === 'compact') return null;
-  
+
   const remaining = AVAILABLE_BASE - totalAllocated;
   const percentRemaining = (remaining / AVAILABLE_BASE) * 100;
-  
+
   if (mode === 'compact') {
     return (
       <motion.div
@@ -61,7 +61,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
         animate={{ opacity: 1, y: 0 }}
         className={`fixed bottom-4 left-4 z-50 ${className}`}
       >
-        <Link 
+        <Link
           to="/patent-portfolio"
           className="group flex items-center gap-2 px-3 py-2 bg-slate-900/95 backdrop-blur-sm border border-amber-500/30 rounded-lg hover:border-amber-500/60 transition-all shadow-lg"
         >
@@ -77,7 +77,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
           </div>
           <ExternalLink className="w-3 h-3 text-white/40 group-hover:text-amber-400 transition-colors" />
         </Link>
-        
+
         <div className="mt-1 h-1 bg-slate-800 rounded-full overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
@@ -89,7 +89,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
       </motion.div>
     );
   }
-  
+
   return (
     <div className={`bg-slate-900 border border-amber-500/20 rounded-xl p-6 ${className}`}>
       <div className="flex items-start justify-between mb-6">
@@ -110,7 +110,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
           <p className="text-sm text-white/50">Total Portfolio Value</p>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-slate-800/50 rounded-lg p-4">
           <div className="text-sm text-white/60 mb-1">Platform (60%)</div>
@@ -120,7 +120,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
           </div>
           <p className="text-xs text-white/40 mt-1">Available for operations, bounties, rewards</p>
         </div>
-        
+
         <div className="bg-slate-800/50 rounded-lg p-4">
           <div className="text-sm text-white/60 mb-1">Sponsor Pool (10%)</div>
           <div className="text-xl font-mono font-bold text-amber-400">
@@ -129,7 +129,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
           </div>
           <p className="text-xs text-white/40 mt-1">Reserved for 5,000 sponsors @ $1K each</p>
         </div>
-        
+
         <div className="bg-slate-800/50 rounded-lg p-4">
           <div className="text-sm text-white/60 mb-1">Patent Buckets (10%)</div>
           <div className="text-xl font-mono font-bold text-blue-400">
@@ -139,7 +139,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
           <p className="text-xs text-white/40 mt-1">Member voting on prosecution priorities</p>
         </div>
       </div>
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm text-white/70">Platform Allocation Remaining</span>
@@ -160,7 +160,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
           <span>{percentRemaining.toFixed(1)}% remaining</span>
         </div>
       </div>
-      
+
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="flex items-center gap-2 text-sm text-amber-400 hover:text-amber-300 transition-colors"
@@ -168,7 +168,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         {isExpanded ? 'Hide' : 'Show'} Allocation Breakdown
       </button>
-      
+
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -181,7 +181,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
               {ALLOCATION_CATEGORIES.map((category) => (
                 <div key={category.name} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div 
+                    <div
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: category.color }}
                     />
@@ -193,7 +193,7 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
               <p className="text-sm text-amber-200 italic text-center">
                 "For I will not offer that which costs me nothing."
@@ -202,13 +202,13 @@ export function PatentPortfolioTicker({ mode = 'compact', className = '' }: Pate
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       <div className="mt-6 pt-4 border-t border-slate-700">
         <h3 className="text-sm font-semibold text-white/80 mb-3">Why "Equivalent"?</h3>
         <p className="text-sm text-white/60 leading-relaxed">
-          All dollar amounts represent platform service unit value, not cash. 
-          Platform credits are "future service coupons" — prepaid access to platform services at Cost+20%. 
-          <strong className="text-amber-400"> Test-Net By Design</strong> means no trading, no speculation, no cashing out. 
+          All dollar amounts represent platform service unit value, not cash.
+          Platform credits are "future service coupons" — prepaid access to platform services at Cost+20%.
+          <strong className="text-amber-400"> Test-Net By Design</strong> means no trading, no speculation, no cashing out.
           This is a feature, not a limitation.
         </p>
       </div>

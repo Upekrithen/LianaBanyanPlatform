@@ -23,7 +23,7 @@ export function LBFundingPoolDisplay() {
 
   useEffect(() => {
     loadPoolData();
-    
+
     // Refresh every 30 seconds
     const interval = setInterval(loadPoolData, 30000);
     return () => clearInterval(interval);

@@ -13,7 +13,7 @@ export default function SponsorPortal() {
   return (
     <PortalPageLayout maxWidth="xl" xrayId="sponsor-portal">
       <div className="space-y-6">
-        
+
         {/* Header */}
         <div className="space-y-4">
           <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
@@ -36,11 +36,11 @@ export default function SponsorPortal() {
                 The 60% Sponsor Incentive Structure
               </CardTitle>
               <CardDescription className="text-zinc-400 text-base mt-2">
-                We don't just ask for funding; we offer a mathematically sound, legally compliant "Balanced Bag" of fractional IP participation. 
+                We don't just ask for funding; we offer a mathematically sound, legally compliant "Balanced Bag" of fractional IP participation.
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 grid md:grid-cols-3 gap-6">
-              
+
               <div className="space-y-3">
                 <div className="text-3xl font-bold text-emerald-500">20%</div>
                 <h4 className="font-semibold text-zinc-200">Seed Funding (The Balanced Bag)</h4>
@@ -78,7 +78,7 @@ export default function SponsorPortal() {
         </LarkWrapper>
 
         <div className="grid md:grid-cols-2 gap-8">
-          
+
           {/* The $5K Sponsor Path */}
           <LarkWrapper componentId="sponsor-path-card" bountyCredits={200}>
             <Card className="bg-zinc-900 border-zinc-800 hover:border-emerald-500/50 transition-colors h-full">

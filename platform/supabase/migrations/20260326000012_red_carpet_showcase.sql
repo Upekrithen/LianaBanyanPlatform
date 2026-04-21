@@ -2,13 +2,13 @@
 
 -- Add 'showcased' to turnkey_projects status check
 ALTER TABLE turnkey_projects DROP CONSTRAINT IF EXISTS turnkey_projects_status_check;
-ALTER TABLE turnkey_projects ADD CONSTRAINT turnkey_projects_status_check 
+ALTER TABLE turnkey_projects ADD CONSTRAINT turnkey_projects_status_check
   CHECK (status IN ('draft', 'showcased', 'active', 'funded', 'producing', 'complete', 'paused'));
 
 -- Add showcase-specific fields
 ALTER TABLE turnkey_projects ADD COLUMN IF NOT EXISTS is_showcased BOOLEAN DEFAULT false;
 ALTER TABLE turnkey_projects ADD COLUMN IF NOT EXISTS showcase_source_url TEXT;
-ALTER TABLE turnkey_projects ADD COLUMN IF NOT EXISTS showcase_source_platform TEXT 
+ALTER TABLE turnkey_projects ADD COLUMN IF NOT EXISTS showcase_source_platform TEXT
   CHECK (showcase_source_platform IN ('reddit', 'etsy', 'instagram', 'discord', 'twitter', 'tiktok', 'website', 'manual'));
 ALTER TABLE turnkey_projects ADD COLUMN IF NOT EXISTS showcase_created_by UUID REFERENCES auth.users(id);
 ALTER TABLE turnkey_projects ADD COLUMN IF NOT EXISTS showcase_expires_at TIMESTAMPTZ;
@@ -49,5 +49,5 @@ CREATE POLICY "Users manage own escrow" ON showcase_pledge_escrow FOR ALL USING 
 
 -- Update RLS on turnkey_projects to allow viewing showcased projects
 DROP POLICY IF EXISTS "Anyone can view active projects" ON turnkey_projects;
-CREATE POLICY "Anyone can view published projects" ON turnkey_projects 
+CREATE POLICY "Anyone can view published projects" ON turnkey_projects
   FOR SELECT USING (status IN ('showcased', 'active', 'funded', 'producing', 'complete') OR auth.uid() = creator_id);

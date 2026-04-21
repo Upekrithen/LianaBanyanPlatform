@@ -1,9 +1,9 @@
 /**
  * Help Each Other Help Ourselves - Philosophy & Action Page
- * 
+ *
  * Linked from "Help Each Other Help Ourselves" text throughout the site.
  * Describes all the ways we implement this philosophy and what YOU can do NOW.
- * 
+ *
  * Features the Audrey Hepburn quote as a Cue Card.
  */
 
@@ -124,7 +124,7 @@ export default function HelpEachOtherPage() {
   return (
     <PortalPageLayout>
       <div className="container mx-auto px-4 py-16 max-w-5xl space-y-16">
-        
+
         {/* Hero Section */}
         <div className="text-center space-y-6 py-8">
           <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
@@ -140,24 +140,24 @@ export default function HelpEachOtherPage() {
         </div>
 
         {/* Audrey Hepburn Quote Card - Flippable Cue Card */}
-        <div 
+        <div
           className="relative mx-auto cursor-pointer perspective-1000"
           style={{ maxWidth: 600, height: 320 }}
           onClick={() => setQuoteFlipped(!quoteFlipped)}
         >
-          <div 
+          <div
             className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${quoteFlipped ? 'rotate-y-180' : ''}`}
             style={{ transformStyle: 'preserve-3d' }}
           >
             {/* Front - Audrey Hepburn Image with Quote */}
-            <Card 
+            <Card
               className="absolute inset-0 bg-stone-100 dark:bg-stone-900 border-stone-200 dark:border-stone-800 backface-hidden overflow-hidden shadow-lg"
               style={{ backfaceVisibility: 'hidden' }}
             >
               <CardContent className="h-full flex flex-col items-center justify-center p-8 text-center relative">
-                <img 
-                  src="/images/Audrey_Hepburn.avif" 
-                  alt="Audrey Hepburn" 
+                <img
+                  src="/images/Audrey_Hepburn.avif"
+                  alt="Audrey Hepburn"
                   className="absolute inset-0 w-full h-full object-cover opacity-10 dark:opacity-20 grayscale mix-blend-multiply"
                 />
                 <div className="relative z-10">
@@ -174,7 +174,7 @@ export default function HelpEachOtherPage() {
             </Card>
 
             {/* Back - Source & Context */}
-            <Card 
+            <Card
               className="absolute inset-0 bg-primary/5 border-primary/20 rotate-y-180 shadow-lg"
               style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
             >
@@ -182,13 +182,13 @@ export default function HelpEachOtherPage() {
                 <Heart className="h-10 w-10 text-primary mb-6" />
                 <h3 className="text-2xl font-bold mb-4">The Two Hands Philosophy</h3>
                 <p className="text-muted-foreground text-base leading-relaxed mb-6 max-w-md">
-                  Audrey Hepburn lived this philosophy. After decades of film stardom, 
+                  Audrey Hepburn lived this philosophy. After decades of film stardom,
                   she dedicated her later years to UNICEF, helping children in need around the world.
                 </p>
                 <p className="text-primary text-lg font-semibold mb-8">
                   One hand builds. One hand gives. Both are needed.
                 </p>
-                <a 
+                <a
                   href="https://economictimes.indiatimes.com/news/international/us/quote-of-the-day-february-24-quote-of-the-day-by-audrey-hepburn-as-you-grow-older-you-will-discover-that-you-have-two-hands-one-for-helping/articleshow/128747800.cms"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -211,7 +211,7 @@ export default function HelpEachOtherPage() {
               How we put "Help Each Other Help Ourselves" into practice
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             {philosophyPillars.map((pillar, idx) => (
               <Card key={idx} className="border-border/50 hover:border-primary/30 transition-colors">
@@ -309,8 +309,8 @@ export default function HelpEachOtherPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="mt-auto pt-4">
-                  <Button 
-                    className="w-full gap-2" 
+                  <Button
+                    className="w-full gap-2"
                     variant="outline"
                     onClick={() => navigate(item.route)}
                   >
@@ -321,7 +321,7 @@ export default function HelpEachOtherPage() {
             ))}
           </div>
         </div>
-        
+
       </div>
     </PortalPageLayout>
   );

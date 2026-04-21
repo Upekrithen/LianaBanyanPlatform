@@ -14,7 +14,7 @@ export function ContributionReportExporter() {
 
   const exportToPDF = async () => {
     if (!user) return;
-    
+
     setExporting(true);
     try {
       // Fetch all contribution data
@@ -82,7 +82,7 @@ export function ContributionReportExporter() {
       doc.text('Voting History', 20, yPos);
       yPos += 8;
       doc.setFontSize(10);
-      
+
       if (votes.length === 0) {
         doc.text('No votes recorded', 20, yPos);
         yPos += 10;

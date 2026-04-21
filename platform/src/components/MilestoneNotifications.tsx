@@ -24,7 +24,7 @@ export function MilestoneNotifications() {
   useEffect(() => {
     if (user) {
       loadNotifications();
-      
+
       // Subscribe to real-time updates
       const channel = supabase
         .channel('notifications')

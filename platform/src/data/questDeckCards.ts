@@ -1,6 +1,6 @@
 /**
  * Quest Deck Cards
- * 
+ *
  * Special deck cards for platform quests and challenges:
  * - Ghost World Speedruns: Timed qualification challenges
  * - Media Blitz: Coordinated social media campaigns
@@ -23,7 +23,7 @@ export const GHOST_WORLD_SPEEDRUN_CARD: DeckCardData = {
 
 • Practice Mode: No time limit, learn the ropes
 • Bronze: Complete in under 10 minutes
-• Silver: Complete in under 5 minutes  
+• Silver: Complete in under 5 minutes
 • Gold: Complete in under 2 minutes
 
 Rewards scale with your qualifying time. All progress saves to your Member Portfolio.`,

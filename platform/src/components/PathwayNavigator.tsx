@@ -1,6 +1,6 @@
 /**
  * PathwayNavigator
- * 
+ *
  * Shows available paths from current page with progressive disclosure.
  * Maximum 2 paths at user's level, remaining shown as locked.
  */
@@ -11,9 +11,9 @@ import { PathwayLink } from '@/components/PathwayLink';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  PathwayLevel, 
-  ALL_PATHWAYS, 
+import {
+  PathwayLevel,
+  ALL_PATHWAYS,
   THREE_PACKS,
   getPathwaysByLevel,
 } from '@/lib/pathwayLevels';
@@ -45,8 +45,8 @@ export function PathwayNavigator({
   const { progress, canAccessLevel, getCompletedCount, getNextThreePack } = usePathwayProgress();
 
   // Find current pathway based on route
-  const currentPathway = ALL_PATHWAYS.find(p => 
-    location.pathname === p.route || 
+  const currentPathway = ALL_PATHWAYS.find(p =>
+    location.pathname === p.route ||
     location.pathname.startsWith(p.route + '/')
   );
 
@@ -63,7 +63,7 @@ export function PathwayNavigator({
   // Get current three-pack progress
   const nextPackId = getNextThreePack();
   const nextPack = THREE_PACKS.find(p => p.id === nextPackId);
-  const packProgress = nextPack 
+  const packProgress = nextPack
     ? (nextPack.pathwayIds.filter(id => progress.completedPathways.includes(id)).length / 3) * 100
     : 0;
 

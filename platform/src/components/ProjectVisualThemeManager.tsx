@@ -52,7 +52,7 @@ export function ProjectVisualThemeManager({ projectId }: ProjectVisualThemeManag
   const loadThemeData = async () => {
     try {
       setLoading(true);
-      
+
       // Load custom stage icons
       const { data: iconData } = await supabase
         .from('project_lifecycle_theme_icons')
@@ -89,7 +89,7 @@ export function ProjectVisualThemeManager({ projectId }: ProjectVisualThemeManag
   };
 
   const handleIconUpload = async (stage: string, url: string) => {
-    setStageIcons(prev => prev.map(s => 
+    setStageIcons(prev => prev.map(s =>
       s.stage === stage ? { ...s, icon_url: url } : s
     ));
   };
@@ -181,7 +181,7 @@ export function ProjectVisualThemeManager({ projectId }: ProjectVisualThemeManag
       <CardHeader>
         <CardTitle>Visual Theme Customization</CardTitle>
         <CardDescription>
-          Customize the icons, colors, and visual elements for this project. 
+          Customize the icons, colors, and visual elements for this project.
           Upload custom line drawings (like Banyan tree stages) to replace default icons.
         </CardDescription>
       </CardHeader>
@@ -202,8 +202,8 @@ export function ProjectVisualThemeManager({ projectId }: ProjectVisualThemeManag
                   <CardContent className="space-y-4">
                     {stage.icon_url ? (
                       <div className="aspect-square rounded-lg border bg-muted flex items-center justify-center overflow-hidden">
-                        <img 
-                          src={stage.icon_url} 
+                        <img
+                          src={stage.icon_url}
                           alt={stage.display_name}
                           className="max-h-full max-w-full object-contain"
                         />

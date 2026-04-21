@@ -3,21 +3,21 @@
  * ================================================
  * Posts immediately to a connected social media platform.
  * Used by the Hofund Studio, Family Table, and Cue Card Dispatch features.
- * 
+ *
  * MULTI-ACCOUNT SUPPORT (Feb 2026):
  * - Members can connect up to 6 accounts per platform
  * - Use accountId to post to a specific account
  * - Use platform to post to the default account (legacy)
- * 
+ *
  * Supports: Twitter/X, LinkedIn, Facebook, Bluesky, TikTok, Instagram, Threads
- * 
+ *
  * Request body:
  *   - accountId?: string (specific account ID - preferred for multi-account)
  *   - platform?: string (fallback: uses default account for platform)
  *   - text: string (the post content)
  *   - imageUrl?: string (optional image to attach)
  *   - videoUrl?: string (required for TikTok)
- * 
+ *
  * Returns:
  *   - success: boolean
  *   - postUrl?: string (URL to the created post)
@@ -111,7 +111,7 @@ Deno.serve(async (req) => {
     if (accountId) {
       // Multi-account mode: fetch specific account by ID
       console.log(`📤 Posting to account ${accountId} for user ${user.id}`);
-      
+
       const result = await supabaseAdmin
         .from('member_social_accounts')
         .select('*')
@@ -119,13 +119,13 @@ Deno.serve(async (req) => {
         .eq('user_id', user.id)  // Security: ensure user owns this account
         .eq('is_active', true)
         .single();
-      
+
       socialAccount = result.data;
       accountError = result.error;
     } else {
       // Legacy mode: fetch default account for platform
       console.log(`📤 Posting to ${platform} (default) for user ${user.id}`);
-      
+
       // First try to get the default account
       let result = await supabaseAdmin
         .from('member_social_accounts')
@@ -135,7 +135,7 @@ Deno.serve(async (req) => {
         .eq('is_active', true)
         .eq('is_default', true)
         .single();
-      
+
       // If no default, get the first active account
       if (result.error || !result.data) {
         result = await supabaseAdmin
@@ -148,7 +148,7 @@ Deno.serve(async (req) => {
           .limit(1)
           .single();
       }
-      
+
       socialAccount = result.data;
       accountError = result.error;
     }
@@ -157,11 +157,11 @@ Deno.serve(async (req) => {
 
     if (accountError || !socialAccount) {
       return new Response(
-        JSON.stringify({ 
-          success: false, 
-          error: accountId 
+        JSON.stringify({
+          success: false,
+          error: accountId
             ? `Account not found or not active.`
-            : `No connected ${platform} account. Please connect your account first.` 
+            : `No connected ${platform} account. Please connect your account first.`
         }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -169,9 +169,9 @@ Deno.serve(async (req) => {
 
     if (!socialAccount.access_token) {
       return new Response(
-        JSON.stringify({ 
-          success: false, 
-          error: `${effectivePlatform} access token expired. Please reconnect your account.` 
+        JSON.stringify({
+          success: false,
+          error: `${effectivePlatform} access token expired. Please reconnect your account.`
         }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -186,7 +186,7 @@ Deno.serve(async (req) => {
         break;
       case 'linkedin':
         result = await postToLinkedIn(
-          socialAccount.access_token, 
+          socialAccount.access_token,
           socialAccount.platform_user_id,
           text
         );
@@ -249,7 +249,7 @@ Deno.serve(async (req) => {
     if (result.success) {
       await supabaseAdmin
         .from('member_social_accounts')
-        .update({ 
+        .update({
           last_used_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })
@@ -262,9 +262,9 @@ Deno.serve(async (req) => {
 
     return new Response(
       JSON.stringify(result),
-      { 
-        status: result.success ? 200 : 400, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      {
+        status: result.success ? 200 : 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
 
@@ -283,13 +283,13 @@ Deno.serve(async (req) => {
  * Post to Twitter/X using OAuth 2.0
  */
 async function postToTwitter(
-  accessToken: string, 
+  accessToken: string,
   text: string,
   imageUrl?: string
 ): Promise<PostResponse> {
   try {
     let mediaId: string | undefined;
-    
+
     // Handle image upload if imageUrl provided
     // Twitter requires uploading media separately first
     if (imageUrl) {
@@ -300,7 +300,7 @@ async function postToTwitter(
           const imageBlob = await imageRes.blob();
           const formData = new FormData();
           formData.append('media', imageBlob);
-          
+
           // Upload to Twitter
           const uploadRes = await fetch('https://upload.twitter.com/1.1/media/upload.json', {
             method: 'POST',
@@ -309,7 +309,7 @@ async function postToTwitter(
             },
             body: formData,
           });
-          
+
           if (uploadRes.ok) {
             const uploadData = await uploadRes.json();
             mediaId = uploadData.media_id_string;
@@ -321,7 +321,7 @@ async function postToTwitter(
         console.error('Error uploading media to Twitter:', mediaErr);
       }
     }
-    
+
     const tweetPayload: any = { text };
     if (mediaId) {
       tweetPayload.media = { media_ids: [mediaId] };
@@ -339,7 +339,7 @@ async function postToTwitter(
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Twitter API response:', errorText);
-      
+
       // Check for specific errors
       if (response.status === 401) {
         return { success: false, error: 'Twitter token expired. Please reconnect your account.' };
@@ -347,13 +347,13 @@ async function postToTwitter(
       if (response.status === 403) {
         return { success: false, error: 'Twitter rejected the post. Check your app permissions.' };
       }
-      
+
       return { success: false, error: `Twitter API error: ${response.status}` };
     }
 
     const data = await response.json();
     const postUrl = `https://twitter.com/i/web/status/${data.data.id}`;
-    
+
     return { success: true, postUrl, postId: data.data.id };
   } catch (err) {
     return { success: false, error: `Twitter error: ${err.message}` };
@@ -398,17 +398,17 @@ async function postToLinkedIn(
     if (!response.ok) {
       const errorText = await response.text();
       console.error('LinkedIn API response:', errorText);
-      
+
       if (response.status === 401) {
         return { success: false, error: 'LinkedIn token expired. Please reconnect your account.' };
       }
-      
+
       return { success: false, error: `LinkedIn API error: ${response.status}` };
     }
 
     // LinkedIn returns the post URN in the header
     const postUrn = response.headers.get('x-restli-id');
-    
+
     return { success: true, postId: postUrn || undefined };
   } catch (err) {
     return { success: false, error: `LinkedIn error: ${err.message}` };
@@ -425,7 +425,7 @@ async function postToFacebook(
 ): Promise<PostResponse> {
   try {
     const targetId = pageId || 'me';
-    
+
     const response = await fetch(
       `https://graph.facebook.com/v18.0/${targetId}/feed`,
       {
@@ -441,17 +441,17 @@ async function postToFacebook(
     if (!response.ok) {
       const errorData = await response.json();
       console.error('Facebook API response:', errorData);
-      
+
       if (errorData.error?.code === 190) {
         return { success: false, error: 'Facebook token expired. Please reconnect your account.' };
       }
-      
+
       return { success: false, error: `Facebook API error: ${errorData.error?.message || response.status}` };
     }
 
     const data = await response.json();
     const postUrl = `https://facebook.com/${data.id}`;
-    
+
     return { success: true, postUrl, postId: data.id };
   } catch (err) {
     return { success: false, error: `Facebook error: ${err.message}` };
@@ -468,7 +468,7 @@ async function postToBluesky(
 ): Promise<PostResponse> {
   try {
     const service = Deno.env.get('BLUESKY_SERVICE') || 'https://bsky.social';
-    
+
     // Create a post record
     const response = await fetch(`${service}/xrpc/com.atproto.repo.createRecord`, {
       method: 'POST',
@@ -490,11 +490,11 @@ async function postToBluesky(
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Bluesky API response:', errorText);
-      
+
       if (response.status === 401) {
         return { success: false, error: 'Bluesky session expired. Please reconnect your account.' };
       }
-      
+
       return { success: false, error: `Bluesky API error: ${response.status}` };
     }
 
@@ -503,7 +503,7 @@ async function postToBluesky(
     // URI format: at://did:plc:xxx/app.bsky.feed.post/xxx
     const rkey = data.uri.split('/').pop();
     const postUrl = `https://bsky.app/profile/${handle}/post/${rkey}`;
-    
+
     return { success: true, postUrl, postId: data.uri };
   } catch (err) {
     return { success: false, error: `Bluesky error: ${err.message}` };
@@ -523,9 +523,9 @@ async function postToTikTok(
 ): Promise<PostResponse> {
   try {
     if (!videoUrl) {
-      return { 
-        success: false, 
-        error: 'TikTok requires a video URL. Text-only posts are not supported.' 
+      return {
+        success: false,
+        error: 'TikTok requires a video URL. Text-only posts are not supported.'
       };
     }
 
@@ -563,18 +563,18 @@ async function postToTikTok(
         return { success: false, error: 'TikTok token expired. Please reconnect your account.' };
       }
 
-      return { 
-        success: false, 
-        error: `TikTok API error: ${errorData.error?.message || initResponse.status}` 
+      return {
+        success: false,
+        error: `TikTok API error: ${errorData.error?.message || initResponse.status}`
       };
     }
 
     const initData = await initResponse.json();
-    
+
     // TikTok returns a publish_id for tracking
     // The actual post URL won't be available until processing completes
-    return { 
-      success: true, 
+    return {
+      success: true,
       postId: initData.data?.publish_id,
       // TikTok doesn't give us a direct URL immediately - video is processing
     };
@@ -596,9 +596,9 @@ async function postToInstagram(
 ): Promise<PostResponse> {
   try {
     if (!imageUrl) {
-      return { 
-        success: false, 
-        error: 'Instagram requires an image URL. Text-only posts are not supported.' 
+      return {
+        success: false,
+        error: 'Instagram requires an image URL. Text-only posts are not supported.'
       };
     }
 
@@ -628,9 +628,9 @@ async function postToInstagram(
         return { success: false, error: 'Instagram token expired. Please reconnect your account.' };
       }
 
-      return { 
-        success: false, 
-        error: `Instagram API error: ${errorData.error?.message || containerResponse.status}` 
+      return {
+        success: false,
+        error: `Instagram API error: ${errorData.error?.message || containerResponse.status}`
       };
     }
 
@@ -654,14 +654,14 @@ async function postToInstagram(
       const errorData = await publishResponse.json();
       console.error('Instagram publish response:', errorData);
 
-      return { 
-        success: false, 
-        error: `Instagram publish error: ${errorData.error?.message || publishResponse.status}` 
+      return {
+        success: false,
+        error: `Instagram publish error: ${errorData.error?.message || publishResponse.status}`
       };
     }
 
     const publishData = await publishResponse.json();
-    
+
     // Get the post permalink
     const mediaResponse = await fetch(
       `https://graph.facebook.com/v18.0/${publishData.id}?fields=permalink&access_token=${accessToken}`
@@ -715,9 +715,9 @@ async function postToThreads(
         return { success: false, error: 'Threads token expired. Please reconnect your account.' };
       }
 
-      return { 
-        success: false, 
-        error: `Threads API error: ${errorData.error?.message || containerResponse.status}` 
+      return {
+        success: false,
+        error: `Threads API error: ${errorData.error?.message || containerResponse.status}`
       };
     }
 
@@ -741,14 +741,14 @@ async function postToThreads(
       const errorData = await publishResponse.json();
       console.error('Threads publish response:', errorData);
 
-      return { 
-        success: false, 
-        error: `Threads publish error: ${errorData.error?.message || publishResponse.status}` 
+      return {
+        success: false,
+        error: `Threads publish error: ${errorData.error?.message || publishResponse.status}`
       };
     }
 
     const publishData = await publishResponse.json();
-    
+
     // Get the post permalink
     const mediaResponse = await fetch(
       `https://graph.threads.net/v1.0/${publishData.id}?fields=permalink&access_token=${accessToken}`

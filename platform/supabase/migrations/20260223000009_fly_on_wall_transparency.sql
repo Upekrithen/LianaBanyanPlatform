@@ -8,41 +8,41 @@ CREATE TABLE IF NOT EXISTS transparency_metrics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   period_start TIMESTAMPTZ NOT NULL,
   period_end TIMESTAMPTZ NOT NULL,
-  
+
   -- Member metrics
   total_members INTEGER DEFAULT 0,
   active_members_30_day INTEGER DEFAULT 0,
   newcomers_this_period INTEGER DEFAULT 0,
-  
+
   -- Transaction metrics
   total_transactions INTEGER DEFAULT 0,
   total_transaction_volume NUMERIC(15,2) DEFAULT 0,
   avg_transaction_value NUMERIC(10,2) DEFAULT 0,
-  
+
   -- Financial metrics
   treasury_balance NUMERIC(15,2) DEFAULT 0,
   charitable_fund_balance NUMERIC(15,2) DEFAULT 0,
   creator_payout_total NUMERIC(15,2) DEFAULT 0,
   platform_margin_total NUMERIC(15,2) DEFAULT 0,
-  
+
   -- Newcomer health (Boaz Principle)
   avg_time_to_first_transaction_hours NUMERIC(10,2),
   newcomer_30_day_retention NUMERIC(5,4),
   active_gleaners_count INTEGER DEFAULT 0,
   gleaning_credits_distributed NUMERIC(15,2) DEFAULT 0,
-  
+
   -- Ghost economy
   ghost_credits_total_distributed NUMERIC(15,2) DEFAULT 0,
   ghost_credits_total_used NUMERIC(15,2) DEFAULT 0,
   ghost_credits_conversion_rate NUMERIC(5,4),
   ghost_to_member_conversion_count INTEGER DEFAULT 0,
-  
+
   -- Industry comparison
   our_time_to_first_transaction_days NUMERIC(10,2),
   etsy_avg_time_to_first_sale_days NUMERIC(10,2) DEFAULT 30,
   our_project_success_rate NUMERIC(5,4),
   kickstarter_avg_project_success_rate NUMERIC(5,4) DEFAULT 0.38,
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   calculated_at TIMESTAMPTZ DEFAULT NOW()
@@ -98,24 +98,24 @@ DECLARE
 BEGIN
   -- Count members
   SELECT COUNT(*) INTO v_total_members FROM profiles WHERE is_active = true;
-  
+
   -- Count active members (last 30 days)
-  SELECT COUNT(*) INTO v_active_30d 
-  FROM profiles 
+  SELECT COUNT(*) INTO v_active_30d
+  FROM profiles
   WHERE last_login_at > NOW() - INTERVAL '30 days';
-  
+
   -- Count transactions (if table exists)
   BEGIN
     SELECT COUNT(*) INTO v_total_transactions FROM transactions;
   EXCEPTION WHEN undefined_table THEN
     v_total_transactions := 0;
   END;
-  
+
   -- Get treasury balance from current_metrics if available
-  SELECT metric_value INTO v_treasury 
-  FROM current_metrics 
+  SELECT metric_value INTO v_treasury
+  FROM current_metrics
   WHERE metric_key = 'treasury_balance';
-  
+
   -- Insert new snapshot
   INSERT INTO transparency_metrics (
     period_start,
@@ -137,7 +137,7 @@ $$ LANGUAGE plpgsql;
 
 -- PART 5: ENSURE CURRENT_METRICS HAS KEY VALUES
 INSERT INTO current_metrics (metric_key, metric_value, description, category)
-VALUES 
+VALUES
   ('innovation_count', 1244, 'Total documented innovations', 'platform'),
   ('crown_jewel_patents', 8, 'Patents with no prior art found', 'ip'),
   ('charitable_initiatives', 16, 'Sweet Sixteen initiatives', 'social'),

@@ -142,8 +142,8 @@ export function KeirseyResultsForm({ onboardingId, onCancel, onSuccess }: Keirse
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Variant Type</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
+                  <Select
+                    onValueChange={field.onChange}
                     defaultValue={field.value}
                     disabled={!selectedTemperament}
                   >
@@ -176,9 +176,9 @@ export function KeirseyResultsForm({ onboardingId, onCancel, onSuccess }: Keirse
                 <FormItem>
                   <FormLabel>Assessment Results URL (Optional)</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="https://keirsey.com/results/..." 
-                      {...field} 
+                    <Input
+                      placeholder="https://keirsey.com/results/..."
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription>
@@ -197,10 +197,10 @@ export function KeirseyResultsForm({ onboardingId, onCancel, onSuccess }: Keirse
                 <FormItem>
                   <FormLabel>Additional Notes (Optional)</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="Any additional insights or score details from your assessment..."
                       className="min-h-[100px]"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription>

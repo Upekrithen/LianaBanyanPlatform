@@ -222,13 +222,13 @@ export default function CharacterLayerExplorer() {
             {/* Design Principle */}
             {activePath === 'crown' && activeLayerIdx >= 5 && (
               <div className="text-xs p-2 bg-purple-50 dark:bg-purple-950/20 rounded border border-purple-200 dark:border-purple-800">
-                <strong>Subtraction as Progression:</strong> The Assassin removes the Merchant's cloak — revealing what was hidden underneath. 
+                <strong>Subtraction as Progression:</strong> The Assassin removes the Merchant's cloak — revealing what was hidden underneath.
                 Not every evolution adds. Sometimes growth means shedding.
               </div>
             )}
             {activePath === 'sword' && activeLayerIdx >= 6 && (
               <div className="text-xs p-2 bg-amber-50 dark:bg-amber-950/20 rounded border border-amber-200 dark:border-amber-800">
-                <strong>Same Body, Different Destiny:</strong> The King's body IS the Peasant's body. 
+                <strong>Same Body, Different Destiny:</strong> The King's body IS the Peasant's body.
                 Every layer snaps on — remove the crown and armor, and the Peasant remains.
               </div>
             )}

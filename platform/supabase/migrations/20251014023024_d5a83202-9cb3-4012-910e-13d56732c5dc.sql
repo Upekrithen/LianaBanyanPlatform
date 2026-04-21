@@ -22,7 +22,7 @@ SET search_path = network, public
 AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     al.id,
     al.project_id,
     al.credential_id,

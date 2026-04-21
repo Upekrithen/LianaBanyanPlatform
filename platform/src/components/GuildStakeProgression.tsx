@@ -121,7 +121,7 @@ export const GuildStakeProgression = () => {
     if (!user || !progression) return;
     const confirmed = window.confirm('Leave guild? You\'ll keep stake as credits but lose guild benefits.');
     if (!confirmed) return;
-    
+
     try {
       await supabase.from('guild_membership_history').insert({
         user_id: user.id, action: 'left', stake_at_action: progression.total_stake_paid
@@ -155,12 +155,12 @@ export const GuildStakeProgression = () => {
   const currentInfo = STAKE_INFO[currentTier]?.[currentClass];
 
   const nextClass = currentClass < 6 ? currentClass + 1 : null;
-  const nextTier = currentClass === 6 && currentTier === "apprentice" ? "journeyman" : 
+  const nextTier = currentClass === 6 && currentTier === "apprentice" ? "journeyman" :
                    currentClass === 6 && currentTier === "journeyman" ? "master" : null;
-  
-  const nextPayment = nextClass 
+
+  const nextPayment = nextClass
     ? STAKE_INFO[currentTier][nextClass]
-    : nextTier 
+    : nextTier
     ? STAKE_INFO[nextTier][1]
     : null;
 
@@ -217,12 +217,12 @@ export const GuildStakeProgression = () => {
                   Next: {nextTier ? `${nextTier.charAt(0).toUpperCase() + nextTier.slice(1)} Class 1` : `Class ${nextClass}`}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Stake: ${nextPayment.amount.toLocaleString()} • 
+                  Stake: ${nextPayment.amount.toLocaleString()} •
                   Platform Benefit: {nextPayment.benefitPercent}% •
                   Total: ${nextPayment.cumulative.toLocaleString()}
                 </p>
               </div>
-              <Button 
+              <Button
                 onClick={() => handlePayStake(nextTier || currentTier, nextClass || 1)}
                 disabled={paying}
                 size="sm"

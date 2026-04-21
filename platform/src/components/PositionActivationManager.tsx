@@ -58,7 +58,7 @@ export const PositionActivationManager = ({ projectId }: PositionActivationManag
     try {
       const { error } = await supabase
         .from('contract_position_templates')
-        .update({ 
+        .update({
           is_active: !currentStatus,
           updated_at: new Date().toISOString()
         })
@@ -67,7 +67,7 @@ export const PositionActivationManager = ({ projectId }: PositionActivationManag
       if (error) throw error;
 
       // Update local state
-      setPositions(positions.map(pos => 
+      setPositions(positions.map(pos =>
         pos.id === positionId ? { ...pos, is_active: !currentStatus } : pos
       ));
 

@@ -113,7 +113,7 @@ export function ReferralManager() {
     toast.success('Referral code copied!');
   };
 
-  const availableCredits = credits 
+  const availableCredits = credits
     ? Number(credits.total_credits) - Number(credits.used_credits)
     : 0;
 
@@ -144,7 +144,7 @@ export function ReferralManager() {
             </div>
             <Progress value={Math.min(medallionProgress, 100)} />
           </div>
-          
+
           {medallionEligibility && (
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>

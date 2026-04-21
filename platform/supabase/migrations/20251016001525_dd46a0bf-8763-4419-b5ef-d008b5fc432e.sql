@@ -2,7 +2,7 @@
 -- Anyone can sign up without credit card, inactive after 30 days unless confirmed
 
 -- Add membership tracking columns to profiles
-ALTER TABLE profiles 
+ALTER TABLE profiles
 ADD COLUMN IF NOT EXISTS membership_status text DEFAULT 'inactive',
 ADD COLUMN IF NOT EXISTS membership_activated_at timestamptz,
 ADD COLUMN IF NOT EXISTS membership_expires_at timestamptz,
@@ -22,7 +22,7 @@ SET search_path TO 'public'
 AS $$
 BEGIN
   UPDATE profiles
-  SET 
+  SET
     membership_status = 'active',
     membership_activated_at = now(),
     membership_expires_at = now() + interval '30 days',
@@ -47,22 +47,22 @@ BEGIN
   FROM profiles
   WHERE membership_confirmation_token = _confirmation_token
     AND membership_status = 'active';
-  
+
   IF NOT FOUND THEN
     RETURN jsonb_build_object(
       'success', false,
       'error', 'Invalid or expired confirmation token'
     );
   END IF;
-  
+
   -- Extend membership by 30 days from current expiration
   UPDATE profiles
-  SET 
+  SET
     membership_expires_at = membership_expires_at + interval '30 days',
     membership_reminder_sent_at = NULL,
     membership_confirmation_token = encode(gen_random_bytes(32), 'hex')
   WHERE id = _profile.id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'new_expiration', (membership_expires_at + interval '30 days')::text
@@ -99,7 +99,7 @@ SET search_path TO 'public'
 AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     p.id,
     p.email,
     p.membership_expires_at,
@@ -108,7 +108,7 @@ BEGIN
   WHERE p.membership_status = 'active'
     AND p.membership_expires_at <= (now() + interval '7 days')
     AND p.membership_expires_at > now()
-    AND (p.membership_reminder_sent_at IS NULL 
+    AND (p.membership_reminder_sent_at IS NULL
          OR p.membership_reminder_sent_at < (now() - interval '6 days'));
 END;
 $$;
@@ -142,7 +142,7 @@ BEGIN
     NEW.membership_expires_at := now() + interval '30 days';
     NEW.membership_confirmation_token := encode(gen_random_bytes(32), 'hex');
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

@@ -82,7 +82,7 @@ export default function ClientAPIManager() {
   const generateKeyMutation = useMutation({
     mutationFn: async () => {
       const { data: sessionData } = await supabase.auth.getSession();
-      
+
       const response = await supabase.functions.invoke("api-generate-client-key", {
         body: {
           project_id: selectedProjectId,

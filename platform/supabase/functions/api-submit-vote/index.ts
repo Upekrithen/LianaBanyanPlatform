@@ -18,7 +18,7 @@ serve(async (req) => {
     );
 
     const apiKey = req.headers.get('x-api-key');
-    
+
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'API key required' }), {
         status: 401,
@@ -41,9 +41,9 @@ serve(async (req) => {
       });
     }
 
-    const { 
-      production_level_id, 
-      user_email, 
+    const {
+      production_level_id,
+      user_email,
       vote_amount,
       time_commitment_days,
       equity_ratio,
@@ -91,9 +91,9 @@ serve(async (req) => {
         .from('pledges')
         .select('amount')
         .eq('production_level_id', production_level_id);
-      
+
       const totalVotes = pledgeSum?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
-      
+
       await supabase
         .from('production_levels')
         .update({ current_votes: totalVotes })
@@ -111,10 +111,10 @@ serve(async (req) => {
         user_agent: req.headers.get('user-agent') || 'unknown'
       });
 
-    return new Response(JSON.stringify({ 
-      success: true, 
+    return new Response(JSON.stringify({
+      success: true,
       pledge_id: pledge.id,
-      message: 'Vote submitted successfully' 
+      message: 'Vote submitted successfully'
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

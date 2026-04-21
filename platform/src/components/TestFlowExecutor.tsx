@@ -76,7 +76,7 @@ export const TestFlowExecutor = ({ flowId, onBack }: TestFlowExecutorProps) => {
 
       if (error) throw error;
       setSteps(data || []);
-      
+
       // Initialize step statuses
       setStepStatuses((data || []).map(step => ({
         stepId: step.id,
@@ -106,7 +106,7 @@ export const TestFlowExecutor = ({ flowId, onBack }: TestFlowExecutorProps) => {
         .single();
 
       if (error) throw error;
-      
+
       setExecutionId(data.id);
       setStartTime(new Date());
       setOverallStatus('in_progress');
@@ -117,7 +117,7 @@ export const TestFlowExecutor = ({ flowId, onBack }: TestFlowExecutorProps) => {
   };
 
   const updateStepStatus = (stepId: string, status: StepStatus['status'], notes: string = '') => {
-    setStepStatuses(prev => 
+    setStepStatuses(prev =>
       prev.map(s => s.stepId === stepId ? { ...s, status, notes } : s)
     );
   };
@@ -149,10 +149,10 @@ export const TestFlowExecutor = ({ flowId, onBack }: TestFlowExecutorProps) => {
         .eq('id', executionId);
 
       if (error) throw error;
-      
+
       setOverallStatus(finalStatus);
       toast.success(`Test execution completed: ${finalStatus.toUpperCase()}`);
-      
+
       // Reset after short delay
       setTimeout(() => {
         onBack();
@@ -190,7 +190,7 @@ export const TestFlowExecutor = ({ flowId, onBack }: TestFlowExecutorProps) => {
           <div className="flex-1">
             <CardTitle>Execute Test Flow: {flowName}</CardTitle>
             <CardDescription>
-              {overallStatus === 'not_started' 
+              {overallStatus === 'not_started'
                 ? 'Click Start to begin the test execution'
                 : `Test Status: ${overallStatus.toUpperCase()}`}
             </CardDescription>

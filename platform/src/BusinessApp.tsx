@@ -79,181 +79,181 @@ const BusinessApp = () => {
                           {/* Public Routes */}
                           <Route path="/auth" element={<Auth />} />
                           <Route path="/browse" element={<BrowseBusiness />} />
-                          
+
           {/* Public landing for unauthenticated visitors */}
           <Route path="/" element={<BusinessLanding />} />
 
           {/* Protected Business Routes */}
-          <Route 
-            path="/dashboard" 
+          <Route
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-                          
+
                           {/* Member Routes */}
-                          <Route 
-                            path="/positions" 
+                          <Route
+                            path="/positions"
                             element={
                               <ProtectedRoute>
                                 <ContractPositions />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/member-resources" 
+                          <Route
+                            path="/member-resources"
                             element={
                               <ProtectedRoute>
                                 <MemberResources />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/workshop" 
+                          <Route
+                            path="/workshop"
                             element={
                               <ProtectedRoute>
                                 <Workshop />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/campaign-production/:workstationId" 
+                          <Route
+                            path="/campaign-production/:workstationId"
                             element={
                               <ProtectedRoute>
                                 <CampaignProduction />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-          <Route 
-            path="/briefcase" 
+          <Route
+            path="/briefcase"
             element={
               <ProtectedRoute>
                 <Briefcase />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/project/:slug" 
+          <Route
+            path="/project/:slug"
             element={
               <ProtectedRoute>
                 <ProjectView />
               </ProtectedRoute>
-            } 
+            }
           />
-                          
+
           {/* HR/Management Routes */}
-          <Route 
-            path="/manage-positions" 
+          <Route
+            path="/manage-positions"
             element={
               <ProtectedRoute>
                 <ManagePositions />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/lb-positions" 
+          <Route
+            path="/lb-positions"
             element={
               <ProtectedRoute>
                 <LBInternalPositions />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/position-categories" 
+          <Route
+            path="/position-categories"
             element={
               <ProtectedRoute>
                 <PositionCategories />
               </ProtectedRoute>
-            } 
+            }
           />
-                          
+
                           {/* Steward/Admin Routes */}
-                          <Route 
-                            path="/admin-project/:id" 
+                          <Route
+                            path="/admin-project/:id"
                             element={
                               <ProtectedRoute>
                                 <AdminProject />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/create-project" 
+                          <Route
+                            path="/create-project"
                             element={
                               <ProtectedRoute>
                                 <CreateProject />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/task-list" 
+                          <Route
+                            path="/task-list"
                             element={
                               <ProtectedRoute>
                                 <TaskList />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
                           {/* Redirect /tasklist and /tasks to /task-list */}
                           <Route path="/tasklist" element={<Navigate to="/task-list" replace />} />
                           <Route path="/tasks" element={<Navigate to="/task-list" replace />} />
-                          <Route 
-                            path="/task-log" 
+                          <Route
+                            path="/task-log"
                             element={
                               <ProtectedRoute>
                                 <TaskLog />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
                           {/* Redirect /tasklog to /task-log */}
                           <Route path="/tasklog" element={<Navigate to="/task-log" replace />} />
-                          <Route 
-                            path="/subdomain-manager" 
+                          <Route
+                            path="/subdomain-manager"
                             element={
                               <ProtectedRoute>
                                 <SubdomainManager />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/client-api-manager" 
+                          <Route
+                            path="/client-api-manager"
                             element={
                               <ProtectedRoute>
                                 <ClientAPIManager />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/credential-management" 
+                          <Route
+                            path="/credential-management"
                             element={
                               <ProtectedRoute>
                                 <CredentialManagement />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          <Route 
-                            path="/themes" 
+                          <Route
+                            path="/themes"
                             element={
                               <ProtectedRoute>
                                 <ThemeManagement />
                               </ProtectedRoute>
-                            } 
+                            }
                           />
-                          
+
                           {/* Redirect marketplace routes to marketplace portal */}
-                          <Route 
-                            path="/marketplace" 
-                            element={<Navigate to="https://lianabanyan.com/marketplace" replace />} 
+                          <Route
+                            path="/marketplace"
+                            element={<Navigate to="https://lianabanyan.com/marketplace" replace />}
                           />
-                          <Route 
-                            path="/projects" 
-                            element={<Navigate to="https://lianabanyan.com/projects" replace />} 
+                          <Route
+                            path="/projects"
+                            element={<Navigate to="https://lianabanyan.com/projects" replace />}
                           />
-                          <Route 
-                            path="/portfolio" 
-                            element={<Navigate to="https://lianabanyan.com/portfolio" replace />} 
+                          <Route
+                            path="/portfolio"
+                            element={<Navigate to="https://lianabanyan.com/portfolio" replace />}
                           />
-                          
+
                           {/* Business Portal shared pages */}
                           <Route path="/kaleidoscope" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BizKaleidoscope /></Suspense>} />
                           <Route path="/biz-directory" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><BizKaleidoscope /></Suspense>} />

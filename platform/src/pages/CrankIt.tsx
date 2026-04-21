@@ -3,12 +3,12 @@
  * ==========================
  * The entry point for new users who want to test a business idea.
  * Like a 1978 CJ-7 Jeep — try again as many times as you want.
- * 
+ *
  * "I was left on the side of the road 22 times, essentially replacing ¾ of the Jeep.
  *  The radio always worked. I learned most of what I know about cars from taking
  *  that thing apart and rebuilding it because I didn't have money to pay someone else.
  *  That's what Thought Experiment is for your pet project."
- * 
+ *
  * First 100 simulations FREE. Then $5 per 100 attempts.
  * Same price as annual membership — by design.
  */
@@ -67,11 +67,11 @@ export default function CrankIt() {
     // For ghosts, we load from localStorage
     const ghostAttempts = parseInt(localStorage.getItem('lb_thought_experiment_attempts') || '0');
     const paidBatches = parseInt(localStorage.getItem('lb_thought_experiment_batches') || '0');
-    
+
     const totalAllowed = FREE_TIER_LIMIT + (paidBatches * BATCH_SIZE);
     const used = ghostAttempts;
     const freeRemaining = Math.max(0, FREE_TIER_LIMIT - used);
-    
+
     setUsageStats({
       totalAttempts: used,
       freeRemaining,
@@ -108,19 +108,19 @@ export default function CrankIt() {
           </CardHeader>
           <CardContent>
             <blockquote className="border-l-4 border-amber-500 pl-4 italic text-muted-foreground">
-              "I had a 1978 CJ-7 Jeep I bought for $2K. I was left on the side of the road 22 times, 
-              essentially replacing ¾ of the Jeep. The radio always worked. I learned most of what 
-              I know about cars from taking that thing apart and rebuilding it because I didn't have 
+              "I had a 1978 CJ-7 Jeep I bought for $2K. I was left on the side of the road 22 times,
+              essentially replacing ¾ of the Jeep. The radio always worked. I learned most of what
+              I know about cars from taking that thing apart and rebuilding it because I didn't have
               money to pay someone else."
             </blockquote>
             <blockquote className="border-l-4 border-amber-500 pl-4 italic text-muted-foreground mt-4">
-              "I learned to love stick shift cars, because when the battery died I could start it 
-              by rolling down an incline and shifting into gear. <strong>That is a worthwhile lesson 
+              "I learned to love stick shift cars, because when the battery died I could start it
+              by rolling down an incline and shifting into gear. <strong>That is a worthwhile lesson
               that automation does not teach.</strong>"
             </blockquote>
             <p className="mt-4 text-sm">
-              <strong>That's what Thought Experiment is for your pet project</strong> — try again, 
-              as many times as you want. Break it. Learn from it. Rebuild it. Understand the mechanics 
+              <strong>That's what Thought Experiment is for your pet project</strong> — try again,
+              as many times as you want. Break it. Learn from it. Rebuild it. Understand the mechanics
               deeply enough that when something breaks, you know how to fix it yourself.
             </p>
           </CardContent>
@@ -146,18 +146,18 @@ export default function CrankIt() {
                   </span>
                 )}
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Free attempts remaining</span>
                   <span className="font-bold">{usageStats.freeRemaining} / {FREE_TIER_LIMIT}</span>
                 </div>
-                <Progress 
-                  value={(usageStats.freeRemaining / FREE_TIER_LIMIT) * 100} 
+                <Progress
+                  value={(usageStats.freeRemaining / FREE_TIER_LIMIT) * 100}
                   className="h-2"
                 />
               </div>
-              
+
               <div className="mt-4 pt-4 border-t text-sm text-muted-foreground">
                 Total simulations run: <strong>{usageStats.totalAttempts}</strong>
               </div>
@@ -183,7 +183,7 @@ export default function CrankIt() {
                 </div>
               </div>
               <p className="mt-4 text-xs text-muted-foreground">
-                Same as annual membership. The lowest incubator cost in history — 
+                Same as annual membership. The lowest incubator cost in history —
                 $5 per 100 attempts to find your business's sweet spot.
               </p>
             </CardContent>
@@ -202,8 +202,8 @@ export default function CrankIt() {
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="h-14 px-8 text-lg gap-2"
               onClick={() => navigate('/thought-experiment')}
               disabled={!hasFreeTierRemaining && usageStats.paidBatches === 0}
@@ -212,10 +212,10 @@ export default function CrankIt() {
               "What If?"
               <ArrowRight className="w-5 h-5" />
             </Button>
-            
+
             {!hasFreeTierRemaining && usageStats.paidBatches === 0 && (
               <p className="mt-4 text-sm text-muted-foreground">
-                You've used all free attempts. 
+                You've used all free attempts.
                 <Button variant="link" className="px-1" onClick={() => navigate('/herald')}>
                   Get 100 more for $5
                 </Button>
@@ -243,7 +243,7 @@ export default function CrankIt() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
                 <Target className="w-5 h-5 text-green-500 mt-0.5" />
                 <div>
@@ -253,7 +253,7 @@ export default function CrankIt() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
                 <RefreshCcw className="w-5 h-5 text-blue-500 mt-0.5" />
                 <div>
@@ -263,7 +263,7 @@ export default function CrankIt() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
                 <Sparkles className="w-5 h-5 text-purple-500 mt-0.5" />
                 <div>
@@ -274,7 +274,7 @@ export default function CrankIt() {
                 </div>
               </div>
             </div>
-            
+
             <div className="mt-6 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
               <p className="text-center text-sm">
                 <Key className="inline w-4 h-4 mr-1" />
@@ -292,7 +292,7 @@ export default function CrankIt() {
                 <div className="flex-1">
                   <h3 className="font-semibold">Save Your Simulations Forever</h3>
                   <p className="text-sm text-muted-foreground">
-                    As a Ghost, your simulations are stored in your browser only. 
+                    As a Ghost, your simulations are stored in your browser only.
                     Join for $5/year to save them permanently and adopt your best ideas.
                   </p>
                 </div>

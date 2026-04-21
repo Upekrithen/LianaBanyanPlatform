@@ -31,8 +31,8 @@ serve(async (req) => {
 
     if (!failures || failures.length === 0) {
       return new Response(
-        JSON.stringify({ 
-          success: true, 
+        JSON.stringify({
+          success: true,
           message: 'No pending failures to process',
           processed: 0
         }),
@@ -53,7 +53,7 @@ serve(async (req) => {
         // Mark as retrying
         await supabaseClient
           .from('operation_failures')
-          .update({ 
+          .update({
             status: 'retrying',
             last_retry_at: new Date().toISOString()
           })
@@ -85,12 +85,12 @@ serve(async (req) => {
           // Mark as resolved
           await supabaseClient
             .from('operation_failures')
-            .update({ 
+            .update({
               status: 'resolved',
               resolved_at: new Date().toISOString()
             })
             .eq('id', failure.id);
-          
+
           results.succeeded++;
         } else {
           // Increment attempt count
@@ -99,7 +99,7 @@ serve(async (req) => {
 
           await supabaseClient
             .from('operation_failures')
-            .update({ 
+            .update({
               attempt_count: newAttemptCount,
               status: newStatus,
               requires_admin: newAttemptCount >= 3
@@ -108,7 +108,7 @@ serve(async (req) => {
 
           if (newStatus === 'manual_review') {
             results.manual_review++;
-            
+
             // Send notification to admins
             console.log(`Operation ${failure.id} requires manual review after ${newAttemptCount} attempts`);
             const resendApiKey = Deno.env.get('RESEND_API_KEY');
@@ -148,8 +148,8 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         ...results,
         message: `Processed ${results.processed} failures. ${results.succeeded} succeeded, ${results.failed} failed, ${results.manual_review} require manual review.`
       }),
@@ -160,11 +160,11 @@ serve(async (req) => {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error processing failure queue:', error);
     return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: errorMessage 
+      JSON.stringify({
+        success: false,
+        error: errorMessage
       }),
-      { 
+      {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500
       }
@@ -176,7 +176,7 @@ serve(async (req) => {
 async function retryVote(supabase: any, failure: any): Promise<boolean> {
   try {
     const voteData = failure.operation_data;
-    
+
     // Re-validate and process vote
     const { error } = await supabase
       .from('user_votes')

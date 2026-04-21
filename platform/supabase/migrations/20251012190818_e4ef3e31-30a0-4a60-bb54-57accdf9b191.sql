@@ -111,14 +111,14 @@ BEGIN
   FROM public.production_levels pl
   JOIN public.products p ON p.id = pl.product_id
   WHERE pl.id = NEW.production_level_id;
-  
+
   -- Only track for external_client pledges (votes from clients)
   IF NEW.source = 'external_client' THEN
     -- Get user_id if this pledge is associated with a user
     -- For now, we'll need to add user tracking to pledges
     RETURN NEW;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

@@ -36,12 +36,12 @@ export function IslandChallengeBoard({ projectId }: IslandChallengeBoardProps) {
     queryKey: ['user-hexisle-progress', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data, error } = await supabase
         .from('user_hexisle_skills')
         .select('*')
         .eq('user_id', user.id);
-      
+
       if (error) throw error;
       return data;
     },
@@ -92,12 +92,12 @@ export function IslandChallengeBoard({ projectId }: IslandChallengeBoardProps) {
     queryKey: ['user-challenge-submissions', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
-      
+
       const { data, error } = await supabase
         .from('challenge_submissions')
         .select('challenge_id, placement, final_score')
         .eq('user_id', user.id);
-      
+
       if (error) throw error;
       return data;
     },
@@ -107,14 +107,14 @@ export function IslandChallengeBoard({ projectId }: IslandChallengeBoardProps) {
   // Check if challenge is unlocked for user
   const isChallengeUnlocked = (challengeId: string) => {
     const prereqs = allPrerequisites?.filter((p: any) => p.challenge_id === challengeId);
-    
+
     if (!user?.id || !prereqs || prereqs.length === 0) {
       return true; // No prerequisites means unlocked
     }
 
     return prereqs.every((prereq: any) => {
       if (prereq.prerequisite_type === 'challenge_completion') {
-        return submissions?.some(s => 
+        return submissions?.some(s =>
           s.challenge_id === prereq.prerequisite_challenge_id && s.placement
         );
       }
@@ -238,7 +238,7 @@ export function IslandChallengeBoard({ projectId }: IslandChallengeBoardProps) {
                           <div className="font-medium">Prerequisites:</div>
                           {prereqs.map((prereq: any, idx: number) => (
                             <div key={idx} className="ml-2">
-                              • {prereq.prerequisite_type === 'challenge_completion' 
+                              • {prereq.prerequisite_type === 'challenge_completion'
                                 ? 'Complete prerequisite challenge'
                                 : `${prereq.required_island}: Level ${prereq.required_level || prereq.required_xp + ' XP'}`
                               }
@@ -262,7 +262,7 @@ export function IslandChallengeBoard({ projectId }: IslandChallengeBoardProps) {
       </Tabs>
 
       {/* Challenge Submission Dialog */}
-      <ChallengeSubmissionDialog 
+      <ChallengeSubmissionDialog
         open={submissionDialog.open}
         onOpenChange={(open) => setSubmissionDialog({ open, challenge: null })}
         challenge={submissionDialog.challenge}

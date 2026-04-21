@@ -16,29 +16,29 @@ interface CreditPurchaseModalProps {
 }
 
 const CREDIT_PACKAGES = [
-  { 
-    id: "small", 
-    credits: 10, 
-    price: "$10", 
+  {
+    id: "small",
+    credits: 10,
+    price: "$10",
     priceValue: 10,
     description: "Perfect for membership stake",
-    popular: false 
+    popular: false
   },
-  { 
-    id: "medium", 
-    credits: 50, 
-    price: "$50", 
+  {
+    id: "medium",
+    credits: 50,
+    price: "$50",
     priceValue: 50,
     description: "Great for guild progression",
-    popular: true 
+    popular: true
   },
-  { 
-    id: "large", 
-    credits: 100, 
-    price: "$100", 
+  {
+    id: "large",
+    credits: 100,
+    price: "$100",
     priceValue: 100,
     description: "Best value for projects",
-    popular: false 
+    popular: false
   },
 ];
 
@@ -80,7 +80,7 @@ export const CreditPurchaseModal = ({ open, onOpenChange, onPurchaseComplete }: 
   const handlePurchase = async (packageSize: string) => {
     setIsProcessing(true);
     setSelectedPackage(packageSize);
-    
+
     try {
       const { data, error } = await supabase.functions.invoke("create-credit-checkout", {
         body: { package_size: packageSize },
@@ -162,9 +162,9 @@ export const CreditPurchaseModal = ({ open, onOpenChange, onPurchaseComplete }: 
           {CREDIT_PACKAGES.map((pkg) => {
             const totalCredits = calculateBonusCredits(pkg.credits);
             const bonusCredits = totalCredits - pkg.credits;
-            
+
             return (
-              <Card 
+              <Card
                 key={pkg.id}
                 className={`relative ${pkg.popular ? 'border-primary shadow-lg' : ''}`}
               >

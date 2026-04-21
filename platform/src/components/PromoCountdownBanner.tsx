@@ -10,12 +10,12 @@ interface PromoCountdownBannerProps {
   onDismiss?: () => void;
 }
 
-export function PromoCountdownBanner({ 
-  message, 
-  ctaText = "Learn More", 
+export function PromoCountdownBanner({
+  message,
+  ctaText = "Learn More",
   ctaLink = "#",
   endDate,
-  onDismiss 
+  onDismiss
 }: PromoCountdownBannerProps) {
   const [timeLeft, setTimeLeft] = useState<{
     days: number;
@@ -28,7 +28,7 @@ export function PromoCountdownBanner({
   useEffect(() => {
     const calculateTimeLeft = () => {
       const difference = endDate.getTime() - new Date().getTime();
-      
+
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -59,7 +59,7 @@ export function PromoCountdownBanner({
       <div className="container mx-auto flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4 flex-1">
           <span className="font-semibold text-lg">{message}</span>
-          
+
           <div className="flex items-center gap-2 text-sm font-mono">
             <div className="flex flex-col items-center bg-background/10 rounded px-2 py-1">
               <span className="text-xl font-bold">{timeLeft.days}</span>
@@ -85,7 +85,7 @@ export function PromoCountdownBanner({
 
         <div className="flex items-center gap-2">
           {ctaLink && (
-            <Button 
+            <Button
               asChild
               variant="secondary"
               className="bg-background text-foreground hover:bg-background/90"
@@ -93,7 +93,7 @@ export function PromoCountdownBanner({
               <a href={ctaLink}>{ctaText}</a>
             </Button>
           )}
-          
+
           <Button
             variant="ghost"
             size="icon"

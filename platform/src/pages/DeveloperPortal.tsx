@@ -179,7 +179,7 @@ export default function DeveloperPortal() {
                 Innovation #1560: Connect external talent pools directly to Liana Banyan projects. Build plugins that sync our internal bounty system with external marketplaces.
               </p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { name: "Indeed Integration", status: "Bounty Open", reward: "500 Marks", icon: Briefcase },

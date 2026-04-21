@@ -15,10 +15,10 @@ serve(async (req) => {
 
   try {
     const mercuryApiKey = Deno.env.get("MERCURY_API_KEY");
-    
+
     if (!mercuryApiKey) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: "Mercury API not configured",
           message: "Bank balance integration pending setup",
           mercury: null
@@ -33,17 +33,17 @@ serve(async (req) => {
     // Mercury's API documentation shows the endpoint and auth format
     // For tokens starting with mercury_production_ or mercury_sandbox_
     // Use Bearer token authentication
-    
+
     const apiUrl = "https://api.mercury.com/api/v1/accounts";
-    
+
     console.log("Making request to:", apiUrl);
     console.log("Using Bearer token auth");
-    
+
     // Create the request with explicit headers
     const headers = new Headers();
     headers.set("Authorization", `Bearer ${mercuryApiKey}`);
     headers.set("Accept", "application/json");
-    
+
     console.log("Headers being sent:", {
       "Authorization": `Bearer ${mercuryApiKey.substring(0, 20)}...`,
       "Accept": "application/json"
@@ -69,7 +69,7 @@ serve(async (req) => {
       }
 
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: `Mercury API error: ${accountsResponse.status}`,
           details: errorInfo,
           tokenInfo: {
@@ -97,7 +97,7 @@ serve(async (req) => {
       accountsData = JSON.parse(responseText);
     } catch (e) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: "Failed to parse Mercury response",
           raw: responseText.substring(0, 500),
           mercury: null
@@ -107,13 +107,13 @@ serve(async (req) => {
     }
 
     console.log("Accounts data keys:", Object.keys(accountsData));
-    
+
     const accounts = accountsData.accounts || [];
     console.log("Number of accounts:", accounts.length);
 
     if (accounts.length === 0) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           message: "No Mercury accounts found",
           mercury: {
             totalBalance: 0,
@@ -129,18 +129,18 @@ serve(async (req) => {
     const accountBalances = [];
     for (const account of accounts) {
       console.log("Processing account:", account.id);
-      
+
       let transactions = [];
       try {
         const txHeaders = new Headers();
         txHeaders.set("Authorization", `Bearer ${mercuryApiKey}`);
         txHeaders.set("Accept", "application/json");
-        
+
         const txResponse = await fetch(
           `https://api.mercury.com/api/v1/account/${account.id}/transactions?limit=10`,
           { method: "GET", headers: txHeaders }
         );
-        
+
         if (txResponse.ok) {
           const txData = await txResponse.json();
           transactions = txData.transactions || [];
@@ -160,7 +160,7 @@ serve(async (req) => {
           // Show transaction type but hide personal account details
           let safeDescription = "Transaction";
           const amount = tx.amount || 0;
-          
+
           if (amount > 0) {
             // Incoming money - categorize by type
             if (tx.kind === 'externalTransfer' || tx.description?.toLowerCase().includes('transfer')) {
@@ -182,7 +182,7 @@ serve(async (req) => {
               safeDescription = "Expense";
             }
           }
-          
+
           return {
             id: tx.id,
             date: tx.postedAt || tx.createdAt,
@@ -213,10 +213,10 @@ serve(async (req) => {
   } catch (error) {
     console.error("Mercury function error:", error);
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: error.message,
         stack: error.stack,
-        mercury: null 
+        mercury: null
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

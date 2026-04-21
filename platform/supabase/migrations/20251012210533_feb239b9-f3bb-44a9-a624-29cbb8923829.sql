@@ -1,5 +1,5 @@
 -- Add EOI (Expression of Interest) tracking to user_credits
-ALTER TABLE public.user_credits 
+ALTER TABLE public.user_credits
 ADD COLUMN eoi_credits NUMERIC DEFAULT 0,
 ADD COLUMN eoi_used_credits NUMERIC DEFAULT 0,
 ADD COLUMN eoi_conversion_rate NUMERIC DEFAULT 0.01,
@@ -55,17 +55,17 @@ DECLARE
   _conversion_amount NUMERIC;
 BEGIN
   -- Loop through users with EOI credits
-  FOR _user IN 
+  FOR _user IN
     SELECT user_id, eoi_credits, eoi_conversion_rate
     FROM public.user_credits
     WHERE eoi_credits > 0
   LOOP
     -- Calculate 1% (or custom rate) conversion
     _conversion_amount := _user.eoi_credits * _user.eoi_conversion_rate;
-    
+
     -- Update credits
     UPDATE public.user_credits
-    SET 
+    SET
       eoi_credits = eoi_credits - _conversion_amount,
       total_credits = total_credits + _conversion_amount,
       eoi_last_conversion_at = now(),
@@ -84,7 +84,7 @@ SET search_path = public
 AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     uc.user_id,
     p.email,
     uc.eoi_credits,
@@ -94,7 +94,7 @@ BEGIN
   JOIN public.user_preferences up ON up.user_id = uc.user_id
   WHERE uc.eoi_credits > 0
     AND up.eoi_daily_reminders = true
-    AND (uc.eoi_reminder_sent_at IS NULL 
+    AND (uc.eoi_reminder_sent_at IS NULL
          OR uc.eoi_reminder_sent_at < now() - interval '1 day');
 END;
 $$;
@@ -111,7 +111,7 @@ SET search_path = public
 AS $$
 BEGIN
   UPDATE public.pledges
-  SET 
+  SET
     eoi_conversion_percentage = _conversion_percentage,
     updated_at = now()
   WHERE id = _pledge_id

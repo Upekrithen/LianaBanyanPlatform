@@ -49,7 +49,7 @@ export const AIAdvisorCard: React.FC<AIAdvisorCardProps> = ({ advisor, initiativ
             ))}
           </ul>
         </div>
-        
+
         <div className="pt-2 border-t text-xs text-muted-foreground text-center">
           <p><strong>Core Principle:</strong> AI advises, humans decide, humans are accountable. Always.</p>
         </div>

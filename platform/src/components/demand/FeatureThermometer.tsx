@@ -246,7 +246,7 @@ export function FeatureThermometer({
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-2 pt-2 text-xs text-slate-400">
             <p>
-              <strong className="text-white">Shadow Marks:</strong> Free allocation when you enter this area. 
+              <strong className="text-white">Shadow Marks:</strong> Free allocation when you enter this area.
               Distribute across features to show what you want built. Persists at {beaconTier ? `${(beaconTier.carryForwardRate * 100).toFixed(0)}%` : '50%'}/day.
               Crystallizes into real Marks after {beaconTier?.crystallizationDays ?? 3} days of consistent allocation.
             </p>

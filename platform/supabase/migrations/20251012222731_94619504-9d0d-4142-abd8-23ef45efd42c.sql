@@ -53,11 +53,11 @@ BEGIN
   INTO _available_gas_budget
   FROM public.lb_funding_pool
   LIMIT 1;
-  
+
   IF _available_gas_budget < _gas_cost_usd THEN
     RAISE EXCEPTION 'Insufficient gas budget. Available: %, Requested: %', _available_gas_budget, _gas_cost_usd;
   END IF;
-  
+
   -- Record gas cost
   INSERT INTO public.blockchain_gas_costs (
     project_id,
@@ -75,13 +75,13 @@ BEGIN
     _notes
   )
   RETURNING id INTO _gas_record_id;
-  
+
   -- Update pool allocation
   UPDATE public.lb_funding_pool
-  SET 
+  SET
     allocated_to_gas = allocated_to_gas + _gas_cost_usd,
     updated_at = now();
-  
+
   RETURN _gas_record_id;
 END;
 $$;

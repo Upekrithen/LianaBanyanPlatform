@@ -62,10 +62,10 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
       }}
     >
       {/* Photo */}
-      <div 
+      <div
         style={{
           height: '160px',
-          background: recipe.photo_url 
+          background: recipe.photo_url
             ? `url(${recipe.photo_url}) center/cover`
             : 'linear-gradient(135deg, rgba(167,139,250,0.2), rgba(52,211,153,0.2))',
           display: 'flex',
@@ -76,7 +76,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
         {!recipe.photo_url && (
           <ChefHat className="h-12 w-12 opacity-30" />
         )}
-        
+
         {/* Badges overlay */}
         <div className="absolute top-2 right-2 flex gap-1">
           {recipe.vote_count > 0 && (
@@ -97,9 +97,9 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
       {/* Content */}
       <div style={{ padding: '1rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {/* Title */}
-        <h3 style={{ 
-          fontSize: '1.1rem', 
-          fontWeight: 600, 
+        <h3 style={{
+          fontSize: '1.1rem',
+          fontWeight: 600,
           lineHeight: 1.2,
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -112,9 +112,9 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
 
         {/* Description */}
         {recipe.description && (
-          <p style={{ 
-            fontSize: '0.85rem', 
-            opacity: 0.7, 
+          <p style={{
+            fontSize: '0.85rem',
+            opacity: 0.7,
             lineHeight: 1.4,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -127,8 +127,8 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
         )}
 
         {/* Meta info */}
-        <div style={{ 
-          display: 'flex', 
+        <div style={{
+          display: 'flex',
           gap: '1rem',
           fontSize: '0.8rem',
           opacity: 0.6,
@@ -176,7 +176,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
               </span>
             )}
             {recipe.dietary_tags.slice(0, 2).map(tag => (
-              <span 
+              <span
                 key={tag}
                 style={{
                   padding: '0.15rem 0.5rem',
@@ -203,9 +203,9 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
 
         {/* Makers count */}
         {recipe.make_count > 0 && (
-          <div style={{ 
-            fontSize: '0.75rem', 
-            opacity: 0.5, 
+          <div style={{
+            fontSize: '0.75rem',
+            opacity: 0.5,
             textAlign: 'center',
             paddingTop: '0.5rem',
             borderTop: '1px solid rgba(255,255,255,0.1)'

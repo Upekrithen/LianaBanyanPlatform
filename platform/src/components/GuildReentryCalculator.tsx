@@ -131,7 +131,7 @@ export const GuildReentryCalculator = ({ targetTier, targetClass, onProceed }: G
         )}
 
         {onProceed && (
-          <Button 
+          <Button
             onClick={() => onProceed(reentryCost?.upfront_payment || 0)}
             className="w-full"
             size="lg"

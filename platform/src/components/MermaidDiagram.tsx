@@ -29,8 +29,8 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
   }, [chart]);
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="mermaid bg-white dark:bg-gray-900 p-6 rounded-lg overflow-x-auto"
     />
   );

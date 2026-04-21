@@ -1,15 +1,15 @@
 /**
  * Defense Klaus Submarine Door
- * 
+ *
  * Ultra-simple email capture page for DefenseKlaus.net
  * "Someone has given you Defense Klaus"
- * 
+ *
  * Flow:
  * 1. User arrives via referral link
  * 2. Enters email
  * 3. Gets confirmation message
  * 4. Page closes or shows "remember DefenseKlaus.net"
- * 
+ *
  * No names, no demographics, just an email.
  * They can invoke protection by remembering the domain.
  */
@@ -29,7 +29,7 @@ export default function DefenseKlausSubmarineDoor() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -59,7 +59,7 @@ export default function DefenseKlausSubmarineDoor() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !email.includes("@")) {
       toast({
         title: "Invalid Email",
@@ -118,7 +118,7 @@ export default function DefenseKlausSubmarineDoor() {
 
       setProxyId(newProxyId);
       setIsComplete(true);
-      
+
     } catch (err) {
       toast({
         title: "Error",
@@ -138,7 +138,7 @@ export default function DefenseKlausSubmarineDoor() {
             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto">
               <Check className="h-10 w-10 text-green-400" />
             </div>
-            
+
             <div className="space-y-2">
               <h1 className="text-2xl font-bold text-white">You're Protected</h1>
               <p className="text-white/60">
@@ -197,7 +197,7 @@ export default function DefenseKlausSubmarineDoor() {
               alt="Defense Klaus Shield"
               className="h-[200px] w-auto mx-auto drop-shadow-xl"
             />
-            
+
             <div className="space-y-2">
               <h1 className="text-2xl font-bold text-white">
                 Someone has given you

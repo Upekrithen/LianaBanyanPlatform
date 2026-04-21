@@ -50,10 +50,10 @@ export function VotingConfigManager({ projectId }: VotingConfigManagerProps) {
       setProductLeadTimeDays(data.product_lead_time_days);
       setMinParticipationRatio(Number(data.min_participation_ratio));
       setMaxParticipationRatio(Number(data.max_participation_ratio));
-      
+
       // Parse time_commitment_options from JSONB
-      const parsedOptions = Array.isArray(data.time_commitment_options) 
-        ? data.time_commitment_options 
+      const parsedOptions = Array.isArray(data.time_commitment_options)
+        ? data.time_commitment_options
         : JSON.parse(data.time_commitment_options as string);
       setTimeOptions(parsedOptions as TimeCommitmentOption[]);
     }

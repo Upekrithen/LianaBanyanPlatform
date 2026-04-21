@@ -6,7 +6,7 @@
 -- This is additive only - does not modify existing data
 -- Total innovations seeded: 405+
 -- Last updated: Feb 11, 2026 (COMPLETE EXTRACTION)
--- 
+--
 -- SOURCES VERIFIED:
 -- - Original 53 (Behemoth/Picasso Letters) #1-#53
 -- - Bag 5-10 (Hydraulic, Tereno, Defense Klaus, LMD, etc.) #55-#150
@@ -820,7 +820,7 @@ WHERE metric_key = 'innovation_count';
 -- If the metric doesn't exist, insert it
 INSERT INTO public.current_metrics (metric_key, metric_value, metric_label)
 VALUES ('innovation_count', (SELECT COUNT(*) FROM public.innovation_log), 'Total Innovations')
-ON CONFLICT (metric_key) DO UPDATE SET 
+ON CONFLICT (metric_key) DO UPDATE SET
   metric_value = EXCLUDED.metric_value,
   updated_at = now();
 

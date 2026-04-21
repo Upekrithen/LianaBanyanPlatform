@@ -46,7 +46,7 @@ export function ClanCharterManager({ clanId }: ClanCharterManagerProps) {
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
-      
+
       if (charterError) throw charterError;
       if (!charterData) return null;
 
@@ -58,9 +58,9 @@ export function ClanCharterManager({ clanId }: ClanCharterManagerProps) {
           profiles:user_id (full_name, email)
         `)
         .eq('charter_id', charterData.id);
-      
+
       if (sigError) throw sigError;
-      
+
       return {
         ...charterData,
         charter_signatories: signatures || []
@@ -217,7 +217,7 @@ export function ClanCharterManager({ clanId }: ClanCharterManagerProps) {
                 <PenTool className="w-4 h-4" />
                 Signatures ({charter.charter_signatories?.length || 0} / {clan?.charter_required_signatures})
               </h4>
-              
+
               {charter.charter_signatories?.map((sig: any) => (
                 <div key={sig.id} className="flex items-center gap-2 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-green-600" />

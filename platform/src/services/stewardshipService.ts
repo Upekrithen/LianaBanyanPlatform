@@ -10,7 +10,7 @@ export class StewardshipService {
     application: Partial<StewardshipApplication>,
     advisorProfile: AIAdvisorProfile
   ): Promise<AIAdvisorRecommendation> {
-    
+
     // In a real implementation, this would call an LLM endpoint (e.g., OpenAI/Anthropic)
     // with the specific system prompt for the chosen advisor profile.
     // For now, we simulate the personality responses based on the profile.
@@ -26,7 +26,7 @@ export class StewardshipService {
         reasoning = "Statistical analysis indicates a 14.3% probability of localized failure based on the applicant's scenario responses. The human element introduces unacceptable variance. I recommend strict probation and increased collateral.";
         confidence_score = 0.92;
         break;
-      
+
       case 'Morpheus':
         // Philosophical, looks for belief and commitment, willing to take leaps of faith
         recommendation = 'approve';

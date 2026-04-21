@@ -10,20 +10,20 @@ export function CharitableLoanAccount() {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
-      
+
       const { data, error } = await supabase
         .from('lmd_charity_accounts')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
-      
+
       if (error && error.code !== 'PGRST116') throw error;
-      
+
       // Create account if it doesn't exist
       if (!data) {
         const { data: newAccount, error: createError } = await supabase
           .from('lmd_charity_accounts')
-          .insert({ 
+          .insert({
             user_id: user.id,
             balance: 0,
             total_received: 0,
@@ -32,11 +32,11 @@ export function CharitableLoanAccount() {
           })
           .select()
           .single();
-        
+
         if (createError) throw createError;
         return newAccount;
       }
-      
+
       return data;
     }
   });
@@ -97,10 +97,10 @@ export function CharitableLoanAccount() {
               Auto-repay: {account.auto_repay_percentage || 5}%
             </Badge>
           </div>
-          
+
           <div className="text-sm text-muted-foreground space-y-2">
             <p>
-              <strong>How it works:</strong> If you can't afford a meal, it can be put on your charitable loan account. 
+              <strong>How it works:</strong> If you can't afford a meal, it can be put on your charitable loan account.
               You won't get to choose the specific meal (first-come-first-serve), but dietary restrictions and allergies are honored.
             </p>
             <p>

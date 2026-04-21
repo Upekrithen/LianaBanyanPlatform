@@ -6,13 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Package, 
-  Truck, 
-  CheckCircle2, 
-  Clock, 
+import {
+  Package,
+  Truck,
+  CheckCircle2,
+  Clock,
   AlertTriangle,
-  FileText 
+  FileText
 } from 'lucide-react';
 
 interface MedallionProductionTrackerProps {

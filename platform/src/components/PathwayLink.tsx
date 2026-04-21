@@ -1,6 +1,6 @@
 /**
  * PathwayLink — Navigation link with level indicator
- * 
+ *
  * Shows level badge and handles locked state for progressive disclosure.
  * Links above user's current level are shown but disabled with lock icon.
  */
@@ -26,21 +26,21 @@ interface PathwayLinkProps {
 }
 
 const LEVEL_COLORS: Record<PathwayLevel, { bg: string; text: string; border: string; glow: string }> = {
-  1: { 
-    bg: 'bg-green-500/20', 
-    text: 'text-green-400', 
+  1: {
+    bg: 'bg-green-500/20',
+    text: 'text-green-400',
     border: 'border-green-500/30',
     glow: 'hover:shadow-green-500/20'
   },
-  2: { 
-    bg: 'bg-blue-500/20', 
-    text: 'text-blue-400', 
+  2: {
+    bg: 'bg-blue-500/20',
+    text: 'text-blue-400',
     border: 'border-blue-500/30',
     glow: 'hover:shadow-blue-500/20'
   },
-  3: { 
-    bg: 'bg-purple-500/20', 
-    text: 'text-purple-400', 
+  3: {
+    bg: 'bg-purple-500/20',
+    text: 'text-purple-400',
     border: 'border-purple-500/30',
     glow: 'hover:shadow-purple-500/20'
   },
@@ -48,7 +48,7 @@ const LEVEL_COLORS: Record<PathwayLevel, { bg: string; text: string; border: str
 
 const LEVEL_LABELS: Record<PathwayLevel, string> = {
   1: 'Starter',
-  2: 'Intermediate', 
+  2: 'Intermediate',
   3: 'Advanced',
 };
 

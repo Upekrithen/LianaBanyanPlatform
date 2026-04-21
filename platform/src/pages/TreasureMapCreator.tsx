@@ -3,7 +3,7 @@
  * ====================
  * Tool for creating custom treasure maps with waypoints/beacons.
  * Maps can be ordered (linear), unordered (any order), or branching (multiple paths).
- * 
+ *
  * Features:
  * - Add beacons with locations, tasks, and hints
  * - Set rewards (credits, MARKS, badges, deck cards)
@@ -131,7 +131,7 @@ export default function TreasureMapCreator() {
   const { openOnboard } = useSeamlessOnboard();
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  
+
   const [draft, setDraft] = useState<TreasureMapDraft>({
     name: "",
     description: "",
@@ -144,7 +144,7 @@ export default function TreasureMapCreator() {
     end_questions: [],
     beacons: [createEmptyBeacon(1)],
   });
-  
+
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [deckCards, setDeckCards] = useState<Array<{ id: string; name: string }>>([]);
@@ -158,7 +158,7 @@ export default function TreasureMapCreator() {
       const { data: { user: authUser } } = await supabase.auth.getUser();
       setUser(authUser);
       setAuthLoading(false);
-      
+
       // Load deck cards
       const { data } = await supabase
         .from("deck_cards")
@@ -326,14 +326,14 @@ export default function TreasureMapCreator() {
     setPublishing(true);
     try {
       await saveDraft();
-      
+
       const { error } = await supabase
         .from("treasure_maps")
         .update({ published_at: new Date().toISOString() })
         .eq("id", draft.id);
-      
+
       if (error) throw error;
-      
+
       toast.success("Treasure map published!");
       navigate(`/treasure-map/${draft.id}`);
     } catch (err: any) {
@@ -723,7 +723,7 @@ export default function TreasureMapCreator() {
                 </Button>
               </CardTitle>
               <CardDescription>
-                Optional final questions with answers that rotate by hour. 
+                Optional final questions with answers that rotate by hour.
                 Add up to 12 answers; specify which is correct for each hour of the day.
               </CardDescription>
             </CardHeader>
@@ -772,7 +772,7 @@ export default function TreasureMapCreator() {
 
                   <div className="text-xs text-muted-foreground">
                     <p>
-                      Time-rotating: Configure which answer is correct for each hour (0-23) 
+                      Time-rotating: Configure which answer is correct for each hour (0-23)
                       in advanced settings. Default: Answer 1 is always correct.
                     </p>
                   </div>

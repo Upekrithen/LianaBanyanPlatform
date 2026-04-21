@@ -282,6 +282,6 @@ This document outlines the strategic separation of LianaBanyan into two distinct
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** 2025-01-14  
+**Document Version:** 1.0
+**Last Updated:** 2025-01-14
 **Status:** Planning Phase

@@ -62,13 +62,13 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
       <CardHeader>
         <div className="flex items-center gap-3">
           <div className={`p-3 rounded-full ${
-            isMinted 
-              ? 'bg-green-100 dark:bg-green-900/30' 
+            isMinted
+              ? 'bg-green-100 dark:bg-green-900/30'
               : 'bg-amber-100 dark:bg-amber-900/30'
           }`}>
             <Award className={`w-8 h-8 ${
-              isMinted 
-                ? 'text-green-600 dark:text-green-400' 
+              isMinted
+                ? 'text-green-600 dark:text-green-400'
                 : 'text-amber-600 dark:text-amber-400'
             }`} />
           </div>
@@ -95,8 +95,8 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
             What is a Medallion?
           </h3>
           <p className="text-muted-foreground">
-            A medallion is your permanent digital badge of honor for supporting this project early. 
-            Think of it like a collectible coin that proves you were here from the beginning and 
+            A medallion is your permanent digital badge of honor for supporting this project early.
+            Think of it like a collectible coin that proves you were here from the beginning and
             believed in this project's success.
           </p>
         </div>
@@ -113,14 +113,14 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
             )}
             Your Status
           </h3>
-          
+
           {isMinted ? (
             <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
               <p className="font-medium text-green-900 dark:text-green-100">
                 🎉 Congratulations! You've earned your medallion
               </p>
               <p className="text-sm text-green-700 dark:text-green-300 mt-2">
-                Your contribution of ${totalContribution.toFixed(2)} has been permanently recorded. 
+                Your contribution of ${totalContribution.toFixed(2)} has been permanently recorded.
                 This medallion is yours forever and recognizes your early support.
               </p>
             </div>
@@ -130,8 +130,8 @@ export function MedallionUserCard({ projectId, userId }: MedallionUserCardProps)
                 🎯 You're eligible for a medallion!
               </p>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-2">
-                Your contribution of ${totalContribution.toFixed(2)} qualifies you for a medallion. 
-                It will be created and assigned to you automatically when the project reaches its 
+                Your contribution of ${totalContribution.toFixed(2)} qualifies you for a medallion.
+                It will be created and assigned to you automatically when the project reaches its
                 production milestone.
               </p>
             </div>

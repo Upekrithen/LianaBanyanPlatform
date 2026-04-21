@@ -3,7 +3,7 @@
  * =========================
  * Browse and start wildfire beacon runs through the platform.
  * Each run is a guided tour through decision points.
- * 
+ *
  * Features:
  * - Browse runs by category
  * - See Golden Key requirements
@@ -133,7 +133,7 @@ function RunCard({ run, goldenKeys, isRedCarpetRider, onStart }: RunCardProps) {
   const categoryConfig = CATEGORY_CONFIG[run.category];
   const difficultyConfig = DIFFICULTY_CONFIG[run.difficulty];
   const CategoryIcon = categoryConfig.icon;
-  
+
   const canUnlockMagicCarpet = goldenKeys >= run.goldenKeysRequired || isRedCarpetRider;
   const keysProgress = Math.min(100, (goldenKeys / run.goldenKeysRequired) * 100);
 
@@ -152,7 +152,7 @@ function RunCard({ run, goldenKeys, isRedCarpetRider, onStart }: RunCardProps) {
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Stats Row */}
         <div className="flex flex-wrap gap-2">
@@ -202,7 +202,7 @@ function RunCard({ run, goldenKeys, isRedCarpetRider, onStart }: RunCardProps) {
       </CardContent>
 
       <CardFooter className="pt-0">
-        <Button 
+        <Button
           className="w-full gap-2 bg-orange-500 hover:bg-orange-600"
           onClick={() => onStart(run)}
         >
@@ -259,8 +259,8 @@ export default function WildfireRunsPage() {
   const specificRun = slug ? getRunBySlug(slug) : null;
 
   // Filter runs by category
-  const displayRuns = activeCategory === "all" 
-    ? ALL_WILDFIRE_RUNS 
+  const displayRuns = activeCategory === "all"
+    ? ALL_WILDFIRE_RUNS
     : RUNS_BY_CATEGORY[activeCategory as keyof typeof RUNS_BY_CATEGORY] || [];
 
   const handleStartRun = (run: WildfireRun) => {
@@ -281,15 +281,15 @@ export default function WildfireRunsPage() {
     return (
       <PortalPageLayout>
         <div className="space-y-6">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={() => navigate("/wildfire-runs")}
             className="gap-2"
           >
             ← Back to All Runs
           </Button>
-          
-          <RunCard 
+
+          <RunCard
             run={specificRun}
             goldenKeys={goldenKeys}
             isRedCarpetRider={isRedCarpetRider}
@@ -310,7 +310,7 @@ export default function WildfireRunsPage() {
             <CardContent>
               <div className="space-y-2">
                 {specificRun.nodes.map((node, index) => (
-                  <div 
+                  <div
                     key={node.id}
                     className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
                   >
@@ -378,8 +378,8 @@ export default function WildfireRunsPage() {
                 </Badge>
               ) : null}
             </div>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               onClick={() => navigate("/golden-key")}
               className="gap-2"
@@ -403,7 +403,7 @@ export default function WildfireRunsPage() {
             Wildfire Beacon Runs automatically navigate you through key platform features.
             Each run has multiple stops (decision points) that you'll visit in sequence.
           </p>
-          
+
           <DataVizBar
             title="Stop Modes"
             subtitle="Different ways to experience runs"
@@ -498,7 +498,7 @@ export default function WildfireRunsPage() {
                 Start with the Quick Platform Tour to get oriented.
               </p>
             </div>
-            <Button 
+            <Button
               className="gap-2 bg-orange-500 hover:bg-orange-600"
               onClick={() => {
                 const quickTour = getRunBySlug("onboarding-quick");

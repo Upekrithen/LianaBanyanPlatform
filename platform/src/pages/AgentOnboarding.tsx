@@ -188,7 +188,7 @@ export default function AgentOnboarding() {
           {!onboardingRecord?.keirsey_completed ? (
             <>
               <KeirseyAssessmentCard />
-              
+
               {!showResultsForm ? (
                 <Card className="border-2 border-dashed">
                   <CardContent className="py-8">
@@ -226,12 +226,12 @@ export default function AgentOnboarding() {
                     <div className="space-y-1 text-sm text-muted-foreground">
                       <p>
                         <span className="font-medium text-foreground">Temperament:</span>{" "}
-                        {onboardingRecord.keirsey_temperament?.charAt(0).toUpperCase() + 
+                        {onboardingRecord.keirsey_temperament?.charAt(0).toUpperCase() +
                          onboardingRecord.keirsey_temperament?.slice(1)}
                       </p>
                       <p>
                         <span className="font-medium text-foreground">Variant:</span>{" "}
-                        {onboardingRecord.keirsey_variant?.split("").map((c, i) => 
+                        {onboardingRecord.keirsey_variant?.split("").map((c, i) =>
                           i === 0 ? c.toUpperCase() : c
                         ).join("")}
                       </p>
@@ -248,7 +248,7 @@ export default function AgentOnboarding() {
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              <strong>What's Next:</strong> Once you've completed the Keirsey assessment, HR will review your 
+              <strong>What's Next:</strong> Once you've completed the Keirsey assessment, HR will review your
               onboarding package. You'll receive an email notification when your agent account is activated.
             </AlertDescription>
           </Alert>

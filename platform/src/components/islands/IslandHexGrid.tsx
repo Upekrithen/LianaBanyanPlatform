@@ -52,7 +52,7 @@ export const IslandHexGrid = ({
   // Calculate viewBox to center the hexes
   const calculateViewBox = () => {
     if (hexPattern.length === 0) return "0 0 400 400";
-    
+
     let minX = Infinity, maxX = -Infinity;
     let minY = Infinity, maxY = -Infinity;
 
@@ -107,7 +107,7 @@ export const IslandHexGrid = ({
                     }
                   }}
                 />
-                
+
                 {hasBuilding && (
                   <>
                     <path

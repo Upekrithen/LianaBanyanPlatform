@@ -1,11 +1,11 @@
 /**
  * Pathway Level System
- * 
+ *
  * Progressive disclosure through leveled navigation:
  * - Level 1: Entry points (Get a Job, Build a Business, Plant Seeds, Ghost World, Real World, Main Card boxes)
  * - Level 2: Requires completion of any Level 1 three-pack
  * - Level 3: Complex topics requiring Level 2 prerequisite knowledge
- * 
+ *
  * Rules:
  * - Maximum 2 paths available per page at your current level
  * - Higher level content is visible but locked until prerequisites met
@@ -276,17 +276,17 @@ export function canAccessPathway(
 ): boolean {
   // Level 1 is always accessible
   if (pathway.level === 1) return true;
-  
+
   // Check if user has reached this level
   if (userProgress.currentLevel < pathway.level) return false;
-  
+
   // Check prerequisites if any
   if (pathway.prerequisitePathways) {
     return pathway.prerequisitePathways.every(
       prereq => userProgress.completedPathways.includes(prereq)
     );
   }
-  
+
   return true;
 }
 
@@ -298,12 +298,12 @@ export function getAvailablePathsFromPage(
   // Find current pathway
   const currentPathway = ALL_PATHWAYS.find(p => p.route === currentRoute);
   if (!currentPathway?.childPaths) return [];
-  
+
   // Get child pathways user can access
   const accessiblePaths = currentPathway.childPaths
     .map(id => getPathwayById(id))
     .filter((p): p is PathwayNode => p !== undefined && canAccessPathway(p, userProgress));
-  
+
   // Return up to maxPaths
   return accessiblePaths.slice(0, maxPaths);
 }
@@ -314,7 +314,7 @@ export function getLockedPathsFromPage(
 ): PathwayNode[] {
   const currentPathway = ALL_PATHWAYS.find(p => p.route === currentRoute);
   if (!currentPathway?.childPaths) return [];
-  
+
   return currentPathway.childPaths
     .map(id => getPathwayById(id))
     .filter((p): p is PathwayNode => p !== undefined && !canAccessPathway(p, userProgress));
@@ -326,7 +326,7 @@ export function checkThreePackCompletion(
 ): boolean {
   const pack = THREE_PACKS.find(p => p.id === packId);
   if (!pack) return false;
-  
+
   return pack.pathwayIds.every(id => completedPathways.includes(id));
 }
 
@@ -336,13 +336,13 @@ export function getUnlockedLevel(completedPathways: string[]): PathwayLevel {
   if (level2Packs.some(pack => checkThreePackCompletion(pack.id, completedPathways))) {
     return 3;
   }
-  
+
   // Check if any Level 1 three-pack is complete (unlocks Level 2)
   const level1Packs = THREE_PACKS.filter(p => p.level === 1);
   if (level1Packs.some(pack => checkThreePackCompletion(pack.id, completedPathways))) {
     return 2;
   }
-  
+
   return 1;
 }
 

@@ -2,7 +2,7 @@
  * TREASURY DIALOG — RPG-Style Currency Display
  * =============================================
  * Shows the user's currency holdings in both Ordinary World (real) and Ghost World (practice).
- * 
+ *
  * Features:
  * - Chest colors by value tier (Wood → Diamond)
  * - Ordinary World vs Ghost World tabs
@@ -89,9 +89,9 @@ interface CurrencyChestProps {
 
 function CurrencyChest({ label, value, icon, description, trend, onClick }: CurrencyChestProps) {
   const tier = getChestTier(value);
-  
+
   return (
-    <Card 
+    <Card
       className={`${tier.bgColor} ${tier.borderColor} border-2 cursor-pointer hover:shadow-md transition-all`}
       onClick={onClick}
     >
@@ -108,7 +108,7 @@ function CurrencyChest({ label, value, icon, description, trend, onClick }: Curr
             {value.toLocaleString()}
           </span>
           {trend && trend !== "neutral" && (
-            trend === "up" 
+            trend === "up"
               ? <TrendingUp className="h-4 w-4 text-green-500" />
               : <TrendingDown className="h-4 w-4 text-red-500" />
           )}

@@ -42,7 +42,7 @@ export default function HarperGuildPage() {
           </CardHeader>
           <CardContent className="text-lg text-muted-foreground space-y-4">
             <p>
-              Traditional HR works for the company, not the employee. The Harper Guild flips this. 
+              Traditional HR works for the company, not the employee. The Harper Guild flips this.
               Harpers are care coordinators embedded in every initiative, but they are <strong>paid by the platform, not by the businesses they serve</strong>.
             </p>
             <p>
@@ -84,7 +84,7 @@ export default function HarperGuildPage() {
             <p className="text-muted-foreground">
               One of the most critical innovations in the Harper Guild is the <strong>"Oops" Code System</strong>. We generate automatic false-positive check-ins—fake wellness alerts that activate the exact same response protocols as real ones. Harpers cannot tell the difference until the check-in is complete.
             </p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-amber-50 p-5 rounded-lg border border-amber-100">
                 <h4 className="font-bold text-amber-900 mb-2">Why We Do It:</h4>

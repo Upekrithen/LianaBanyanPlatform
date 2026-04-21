@@ -1146,7 +1146,7 @@ export function getRecipientDomainHints(recipient: Recipient): string {
  */
 export function findRecipientByName(name: string): Recipient | null {
   const normalizedName = name.toLowerCase().trim();
-  return RECIPIENTS.find((r) => 
+  return RECIPIENTS.find((r) =>
     r.name.toLowerCase().includes(normalizedName) ||
     r.id.toLowerCase() === normalizedName
   ) || null;

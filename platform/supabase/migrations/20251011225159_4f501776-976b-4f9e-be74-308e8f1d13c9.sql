@@ -1,5 +1,5 @@
 -- Add preview image support to project_themes
-ALTER TABLE project_themes 
+ALTER TABLE project_themes
 ADD COLUMN IF NOT EXISTS preview_image_url TEXT;
 
 -- Create a table for storing theme preview images in storage

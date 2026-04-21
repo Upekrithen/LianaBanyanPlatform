@@ -1,12 +1,12 @@
 /**
  * Real Data Feed
- * 
+ *
  * Progressive enhancement for Business Simulator.
  * Queries actual platform metrics when available,
  * falls back to defaults when no data exists.
- * 
+ *
  * Weights: 100% defaults initially, gradually shifts to real data as volume increases.
- * 
+ *
  * Innovation #1188: Contingency Operators
  */
 
@@ -22,15 +22,15 @@ export interface RealDataMetrics {
   actualAverageOrderValue?: number;
   actualOrdersPerDay?: number;
   actualCustomerRetentionRate?: number;
-  
+
   // Cost metrics
   actualCostOfGoodsSoldPercent?: number;
   actualDeliverySuccessRate?: number;
-  
+
   // Capacity metrics
   actualActiveCreators?: number;
   actualOrderFulfillmentRate?: number;
-  
+
   // Confidence
   dataConfidence: number;  // 0-1 based on data volume
   dataPointCount: number;
@@ -156,7 +156,7 @@ export async function getInitiativeRealData(initiativeId: string): Promise<RealD
 
     // Calculate confidence based on data volume
     const weight = calculateDataWeight(totalDataPoints);
-    
+
     return {
       ...metrics,
       dataConfidence: weight.realWeight,
@@ -178,17 +178,17 @@ export function blendWithRealData<T extends Record<string, number>>(
   dataWeight: DataWeight
 ): T {
   const blended = { ...defaults };
-  
+
   for (const key of Object.keys(realData) as (keyof T)[]) {
     const realValue = realData[key];
     if (typeof realValue === 'number' && typeof defaults[key] === 'number') {
       blended[key] = (
-        (defaults[key] as number) * dataWeight.defaultWeight + 
+        (defaults[key] as number) * dataWeight.defaultWeight +
         realValue * dataWeight.realWeight
       ) as T[keyof T];
     }
   }
-  
+
   return blended;
 }
 

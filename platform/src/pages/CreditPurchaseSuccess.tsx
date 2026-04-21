@@ -15,7 +15,7 @@ export default function CreditPurchaseSuccess() {
 
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
-    
+
     if (!sessionId) {
       setVerificationStatus("error");
       return;
@@ -77,8 +77,8 @@ export default function CreditPurchaseSuccess() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button 
-            onClick={() => navigate("/dashboard")} 
+          <Button
+            onClick={() => navigate("/dashboard")}
             className="w-full"
             disabled={verificationStatus === "verifying"}
           >

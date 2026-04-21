@@ -1,9 +1,9 @@
 /**
  * Rotating Quotes Component
- * 
+ *
  * Displays inspirational quotes that rotate automatically.
  * Includes the original "Ideas are Free" quotes plus Audrey Hepburn.
- * 
+ *
  * Used at the top of the landing page.
  */
 
@@ -197,8 +197,8 @@ interface RotatingQuotesProps {
   isActive?: boolean;
 }
 
-export function RotatingQuotes({ 
-  intervalMs = 8000, 
+export function RotatingQuotes({
+  intervalMs = 8000,
   className = "",
   style = {},
   isActive = true,
@@ -236,7 +236,7 @@ export function RotatingQuotes({
   };
 
   return (
-    <div 
+    <div
       className={`text-center ${className}`}
       style={{
         minHeight: '90px',
@@ -258,7 +258,7 @@ export function RotatingQuotes({
           onClick={handleClick}
           style={{ cursor: currentQuote.link ? 'pointer' : 'default' }}
         >
-          <p 
+          <p
             className="text-white/80 italic"
             style={{
               fontFamily: "'Crimson Pro', Georgia, serif",
@@ -272,7 +272,7 @@ export function RotatingQuotes({
           >
             "{currentQuote.text}"
           </p>
-          <p 
+          <p
             className={`mt-2 text-sm ${currentQuote.link ? 'text-green-400 hover:text-green-300' : 'text-white/50'}`}
             style={{ transition: 'color 0.2s ease' }}
           >
@@ -283,7 +283,7 @@ export function RotatingQuotes({
           </p>
         </motion.div>
       </AnimatePresence>
-      
+
       {/* Progress dots */}
       <div className="flex gap-1.5 mt-3">
         {QUOTES.map((_, i) => (
@@ -291,8 +291,8 @@ export function RotatingQuotes({
             key={i}
             onClick={() => setCurrentIndex(i)}
             className={`w-1.5 h-1.5 rounded-full transition-all ${
-              i === currentIndex 
-                ? 'bg-green-400 w-4' 
+              i === currentIndex
+                ? 'bg-green-400 w-4'
                 : 'bg-white/20 hover:bg-white/40'
             }`}
             aria-label={`Go to quote ${i + 1}`}

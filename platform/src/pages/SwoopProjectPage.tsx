@@ -146,7 +146,7 @@ export default function SwoopProjectPage() {
   const handleShare = async () => {
     const url = window.location.href;
     const text = `Help support ${project?.recipient_name}: ${project?.title}`;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({ title: project?.title, text, url });
@@ -186,8 +186,8 @@ export default function SwoopProjectPage() {
     );
   }
 
-  const percentFunded = project.goal_amount > 0 
-    ? (project.current_amount / project.goal_amount) * 100 
+  const percentFunded = project.goal_amount > 0
+    ? (project.current_amount / project.goal_amount) * 100
     : 0;
   const voteProgress = (project.vote_count / project.vote_threshold) * 100;
 
@@ -361,7 +361,7 @@ export default function SwoopProjectPage() {
                                 {tx.type === "donation" ? "IN" : "OUT"}: ${tx.amount.toLocaleString()}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                {tx.type === "donation" 
+                                {tx.type === "donation"
                                   ? `From: ${tx.from_anonymous ? "Anonymous" : tx.from_name}`
                                   : `To: ${tx.to_name}`}
                               </p>
@@ -463,7 +463,7 @@ export default function SwoopProjectPage() {
                   Vote to Activate
                 </Button>
               )}
-              
+
               {(project.status === "active" || project.status === "funded") && (
                 <Button className="w-full bg-green-600 hover:bg-green-700" size="lg">
                   <Heart className="w-5 h-5 mr-2" />
@@ -512,8 +512,8 @@ export default function SwoopProjectPage() {
                 <div className="text-xs text-amber-800">
                   <p className="font-medium mb-1">Legal Notice</p>
                   <p>
-                    Liana Banyan Corporation acts solely as a payment processor. 
-                    All funds are held in project-specific accounts controlled by {project.project_lead_name} (Project Lead). 
+                    Liana Banyan Corporation acts solely as a payment processor.
+                    All funds are held in project-specific accounts controlled by {project.project_lead_name} (Project Lead).
                     LB does not own, manage, or make decisions about fund allocation.
                   </p>
                 </div>

@@ -2,7 +2,7 @@
  * GROCERY BOX CONFIGURATOR
  * =========================
  * Visual tool for selecting box size and previewing meal chains.
- * 
+ *
  * Features:
  * - Size selector with visual representation
  * - Meal chain preview showing ingredient flow
@@ -612,7 +612,7 @@ export function GroceryBoxConfigurator({ onComplete, className }: GroceryBoxConf
               All boxes fit standard refrigerator shelves
             </p>
             <BoxSizeSelector selected={selectedSize} onSelect={setSelectedSize} />
-            
+
             {selectedSize && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -693,7 +693,7 @@ export function GroceryBoxConfigurator({ onComplete, className }: GroceryBoxConf
               Select any that apply (optional)
             </p>
             <DietaryFilter selected={dietaryPrefs} onToggle={toggleDietary} />
-            
+
             <div className="mt-8">
               <h3 className="text-lg font-semibold text-white mb-4">
                 How would you like to receive your box?

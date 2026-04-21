@@ -3,9 +3,9 @@
 -- ============================================================================
 -- Allows family members (Loteria members) to authorize their personal vault
 -- content to be accessible by other family members, even when offline.
--- 
+--
 -- Authorization persists until the authorizing member revokes it.
--- 
+--
 -- Key concepts:
 -- - SHARE AUTHORIZATION: A member authorizes their content to be shared
 -- - SHARE SCOPE: Who can see (specific member, or all family)
@@ -21,30 +21,30 @@
 
 CREATE TABLE IF NOT EXISTS vault_sharing_authorizations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    
+
     -- Who is granting access
     granter_member_id UUID NOT NULL REFERENCES family_members(id) ON DELETE CASCADE,
     granter_user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    
+
     -- The family this belongs to
     family_id UUID NOT NULL REFERENCES families(id) ON DELETE CASCADE,
-    
+
     -- Who receives access (NULL = all family members)
     shared_with_member_id UUID REFERENCES family_members(id) ON DELETE CASCADE,
-    
+
     -- What content is shared
     content_scope TEXT NOT NULL DEFAULT 'all', -- 'all', 'photos', 'memories', 'messages'
-    
+
     -- Authorization status
     is_active BOOLEAN DEFAULT true,
     authorized_at TIMESTAMPTZ DEFAULT NOW(),
     revoked_at TIMESTAMPTZ,
     revoked_reason TEXT,
-    
+
     -- Metadata
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    
+
     -- Prevent duplicate authorizations for the same recipient
     UNIQUE(granter_member_id, family_id, shared_with_member_id, content_scope)
 );
@@ -66,30 +66,30 @@ ALTER TABLE vault_sharing_authorizations ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE IF NOT EXISTS vault_shared_content (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    
+
     -- Link to the authorization
     authorization_id UUID NOT NULL REFERENCES vault_sharing_authorizations(id) ON DELETE CASCADE,
-    
+
     -- Content details
     content_type TEXT NOT NULL, -- 'photo', 'memory', 'message', 'document'
     title TEXT,
     description TEXT,
-    
+
     -- For photos/documents
     file_url TEXT,
     thumbnail_url TEXT,
-    
+
     -- For text content
     content_text TEXT,
-    
+
     -- For memories (can have multiple photos)
     photo_urls TEXT[],
-    
+
     -- Metadata
     original_date TIMESTAMPTZ, -- When the memory/photo was originally from
     location TEXT,
     tags TEXT[],
-    
+
     -- Audit
     created_at TIMESTAMPTZ DEFAULT NOW(),
     created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL
@@ -134,7 +134,7 @@ CREATE POLICY "Recipients can view shared authorizations"
             OR (
                 shared_with_member_id IS NULL
                 AND family_id IN (
-                    SELECT family_id FROM family_members 
+                    SELECT family_id FROM family_members
                     WHERE user_id = auth.uid() AND is_active = true
                 )
             )
@@ -159,7 +159,7 @@ CREATE POLICY "View shared content with active authorization"
                 OR (
                     vsa.shared_with_member_id IS NULL
                     AND vsa.family_id IN (
-                        SELECT family_id FROM family_members 
+                        SELECT family_id FROM family_members
                         WHERE user_id = auth.uid() AND is_active = true
                     )
                 )
@@ -202,11 +202,11 @@ BEGIN
     SELECT id INTO v_granter_member_id
     FROM family_members
     WHERE user_id = auth.uid() AND family_id = p_family_id AND is_active = true;
-    
+
     IF v_granter_member_id IS NULL THEN
         RETURN jsonb_build_object('success', false, 'error', 'You are not a member of this family');
     END IF;
-    
+
     -- Create or reactivate authorization
     INSERT INTO vault_sharing_authorizations (
         granter_member_id,
@@ -233,7 +233,7 @@ BEGIN
         revoked_reason = NULL,
         updated_at = NOW()
     RETURNING id INTO v_auth_id;
-    
+
     RETURN jsonb_build_object(
         'success', true,
         'authorization_id', v_auth_id,
@@ -251,18 +251,18 @@ CREATE OR REPLACE FUNCTION revoke_vault_sharing(
 RETURNS JSONB AS $$
 BEGIN
     UPDATE vault_sharing_authorizations
-    SET 
+    SET
         is_active = false,
         revoked_at = NOW(),
         revoked_reason = p_reason,
         updated_at = NOW()
     WHERE id = p_authorization_id
     AND granter_user_id = auth.uid();
-    
+
     IF NOT FOUND THEN
         RETURN jsonb_build_object('success', false, 'error', 'Authorization not found or not yours');
     END IF;
-    
+
     RETURN jsonb_build_object('success', true, 'revoked', true);
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -289,7 +289,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT 
+    SELECT
         vsc.id AS content_id,
         vsc.content_type,
         vsc.title,
@@ -345,7 +345,7 @@ BEGIN
     ) THEN
         RETURN jsonb_build_object('success', false, 'error', 'Authorization not found or not yours');
     END IF;
-    
+
     INSERT INTO vault_shared_content (
         authorization_id,
         content_type,
@@ -372,7 +372,7 @@ BEGIN
         auth.uid()
     )
     RETURNING id INTO v_content_id;
-    
+
     RETURN jsonb_build_object('success', true, 'content_id', v_content_id);
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -383,14 +383,14 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Shows who has authorized sharing in a family
 
 CREATE OR REPLACE VIEW vault_family_sharing_status AS
-SELECT 
+SELECT
     vsa.family_id,
     vsa.granter_member_id,
     fm.nickname AS granter_name,
     fm.symbol AS loteria_symbol,
     vsa.content_scope,
     vsa.shared_with_member_id,
-    CASE 
+    CASE
         WHEN vsa.shared_with_member_id IS NULL THEN 'All Family'
         ELSE (SELECT nickname FROM family_members WHERE id = vsa.shared_with_member_id)
     END AS shared_with_name,
@@ -405,17 +405,17 @@ WHERE vsa.is_active = true;
 -- COMMENTS
 -- ─────────────────────────────────────────────────────────────────────────────
 
-COMMENT ON TABLE vault_sharing_authorizations IS 
+COMMENT ON TABLE vault_sharing_authorizations IS
 'Tracks which family members have authorized their vault content to be shared with others, even when offline.';
 
-COMMENT ON TABLE vault_shared_content IS 
+COMMENT ON TABLE vault_shared_content IS
 'Content that has been explicitly shared under a vault sharing authorization.';
 
-COMMENT ON FUNCTION authorize_vault_sharing IS 
+COMMENT ON FUNCTION authorize_vault_sharing IS
 'Authorize your vault content to be shared with a specific member or all family. Returns authorization_id.';
 
-COMMENT ON FUNCTION revoke_vault_sharing IS 
+COMMENT ON FUNCTION revoke_vault_sharing IS
 'Revoke a previously granted vault sharing authorization. Content becomes inaccessible.';
 
-COMMENT ON FUNCTION get_shared_vault_content IS 
+COMMENT ON FUNCTION get_shared_vault_content IS
 'Get all vault content that has been shared with the current user in a family.';

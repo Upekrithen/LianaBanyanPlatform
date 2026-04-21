@@ -24,26 +24,26 @@ CREATE TABLE public.ip_assets (
   asset_description TEXT,
   asset_type ip_asset_type NOT NULL,
   control_tier ip_control_tier NOT NULL DEFAULT 'tier_a',
-  
+
   -- Equity splits
   equity_split_creator NUMERIC NOT NULL CHECK (equity_split_creator IN (49, 60, 75)),
   equity_split_lb NUMERIC NOT NULL CHECK (equity_split_lb IN (51, 40, 25)),
-  
+
   -- Tier B: Prohibited categories (up to 5)
   prohibited_categories TEXT[] CHECK (array_length(prohibited_categories, 1) <= 5),
   category_lock_date TIMESTAMPTZ, -- Can only modify categories once per year
-  
+
   -- Metadata
   patent_number TEXT,
   filing_date DATE,
   grant_date DATE,
   expiration_date DATE,
   jurisdiction TEXT,
-  
+
   -- Status tracking
   is_active BOOLEAN DEFAULT true,
   tier_c_invitation_id UUID, -- References tier_c_invitations table
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -54,24 +54,24 @@ CREATE TABLE public.ip_assets (
 CREATE TABLE public.ip_creator_controls (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   ip_asset_id UUID NOT NULL REFERENCES public.ip_assets(id) ON DELETE CASCADE,
-  
+
   -- Veto powers
   has_veto_power BOOLEAN DEFAULT true,
   requires_creator_approval_for TEXT[] DEFAULT ARRAY['shelving', 'external_licensing', 'strategic_pivot'],
-  
+
   -- Commercialization requirements
   min_commercialization_timeline INTEGER DEFAULT 18, -- months
   max_dormancy_days INTEGER DEFAULT 365,
-  
+
   -- Reversion clause
   reversion_clause BOOLEAN DEFAULT true,
   reversion_conditions JSONB DEFAULT '{"dormancy_days": 365, "equity_shift": "60/40"}',
-  
+
   -- Governance rights
   voting_weight_in_lb NUMERIC DEFAULT 2.0,
   can_propose_uses BOOLEAN DEFAULT true,
   quarterly_report_required BOOLEAN DEFAULT true,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -82,13 +82,13 @@ CREATE TABLE public.ip_creator_controls (
 CREATE TABLE public.patent_pool_usage_rights (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   ip_asset_id UUID NOT NULL REFERENCES public.ip_assets(id) ON DELETE CASCADE,
-  
+
   -- Unlimited Internal Use
   unlimited_internal_use BOOLEAN DEFAULT true,
   can_derive BOOLEAN DEFAULT true,
   can_modify BOOLEAN DEFAULT true,
   can_combine_with_other_pool_ip BOOLEAN DEFAULT true,
-  
+
   -- Authorization Model
   authorization_model TEXT DEFAULT 'dibs_with_premium' CHECK (authorization_model IN ('dibs_with_premium', 'protest_premium', 'first_come')),
   dibs_holder_id UUID REFERENCES auth.users(id),
@@ -96,14 +96,14 @@ CREATE TABLE public.patent_pool_usage_rights (
   dibs_profit_share NUMERIC DEFAULT 5.0, -- Extra % for dibs holder
   unauthorized_use_premium NUMERIC DEFAULT 15.0, -- Higher % if used without approval
   protest_offset_penalty NUMERIC DEFAULT 5.0, -- Penalty to discourage frivolous protests
-  
+
   -- Revenue Sharing (Tier B: Only applies to LB-connected products)
   applies_to_lb_products_only BOOLEAN DEFAULT true,
   base_revenue_share NUMERIC DEFAULT 10.0,
   with_authorization_share NUMERIC DEFAULT 10.0,
   without_authorization_share NUMERIC DEFAULT 25.0, -- If used over objection (after arbitration)
   external_license_revenue_share NUMERIC DEFAULT 50.0, -- % of revenue from licensing to non-LB entities
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -118,13 +118,13 @@ CREATE TABLE public.ip_use_proposals (
   proposal_description TEXT NOT NULL,
   proposed_use_category TEXT,
   target_product_id UUID REFERENCES public.products(id),
-  
+
   -- Status and timeline
   status ip_proposal_status DEFAULT 'pending',
   creator_response_deadline TIMESTAMPTZ,
   creator_denial_reason TEXT,
   arbitration_ruling TEXT,
-  
+
   -- Tracking
   auto_approved_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -139,22 +139,22 @@ CREATE TABLE public.ip_arbitration_cases (
   proposal_id UUID NOT NULL REFERENCES public.ip_use_proposals(id) ON DELETE CASCADE,
   creator_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   filed_by UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Case details
   case_type TEXT CHECK (case_type IN ('frivolous_block', 'unauthorized_use', 'category_dispute', 'shelving_complaint')),
   evidence JSONB,
   mediator_id UUID REFERENCES auth.users(id),
-  
+
   -- Ruling
   ruling arbitration_ruling,
   ruling_rationale TEXT,
   financial_penalty NUMERIC DEFAULT 0, -- Arbitration costs awarded
   equity_adjustment NUMERIC DEFAULT 0, -- Penalty equity forfeiture if applicable
-  
+
   -- Tier C downgrade tracking
   triggers_tier_downgrade BOOLEAN DEFAULT false,
   downgrade_duration_months INTEGER,
-  
+
   filed_at TIMESTAMPTZ DEFAULT NOW(),
   resolved_at TIMESTAMPTZ
 );
@@ -166,7 +166,7 @@ CREATE TABLE public.tier_c_invitations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   creator_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   ip_asset_id UUID REFERENCES public.ip_assets(id),
-  
+
   -- Strategic justification
   invitation_reason TEXT NOT NULL CHECK (invitation_reason IN (
     'exceptionally_rare_ip',
@@ -177,28 +177,28 @@ CREATE TABLE public.tier_c_invitations (
   )),
   justification_details TEXT NOT NULL,
   estimated_value_usd NUMERIC,
-  
+
   -- C-Suite/Division Director authorization
   initiated_by UUID NOT NULL REFERENCES auth.users(id), -- Must be C-suite or Division Director
-  
+
   -- Two additional approvals required
   approver_1_id UUID REFERENCES auth.users(id),
   approver_1_role TEXT,
   approver_1_approved_at TIMESTAMPTZ,
-  
+
   approver_2_id UUID REFERENCES auth.users(id),
   approver_2_role TEXT,
   approver_2_approved_at TIMESTAMPTZ,
-  
+
   -- Status
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'expired')),
   expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days'),
-  
+
   -- Final decision
   final_decision_by UUID REFERENCES auth.users(id),
   final_decision_at TIMESTAMPTZ,
   rejection_reason TEXT,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -210,23 +210,23 @@ CREATE TABLE public.ip_tier_downgrade_history (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   ip_asset_id UUID NOT NULL REFERENCES public.ip_assets(id) ON DELETE CASCADE,
   creator_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Downgrade details
   original_tier ip_control_tier NOT NULL,
   downgraded_to ip_control_tier NOT NULL,
   reason TEXT NOT NULL,
   related_arbitration_case_id UUID REFERENCES public.ip_arbitration_cases(id),
-  
+
   -- Duration
   downgrade_duration_months INTEGER,
   downgrade_start_date TIMESTAMPTZ DEFAULT NOW(),
   downgrade_end_date TIMESTAMPTZ,
   is_permanent BOOLEAN DEFAULT false,
-  
+
   -- Restoration
   restored_at TIMESTAMPTZ,
   restored_by UUID REFERENCES auth.users(id),
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -407,12 +407,12 @@ BEGIN
     INSERT INTO public.ip_creator_controls (ip_asset_id)
     VALUES (NEW.id);
   END IF;
-  
+
   IF NEW.control_tier = 'tier_b' THEN
     INSERT INTO public.patent_pool_usage_rights (ip_asset_id)
     VALUES (NEW.id);
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

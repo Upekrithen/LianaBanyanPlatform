@@ -22,7 +22,7 @@ export function RealTimeProductStats({ productId }: RealTimeProductStatsProps) {
         </span>
       );
     }
-    
+
     switch (productStaleness.level) {
       case 'fresh':
         return (
@@ -101,22 +101,22 @@ export function RealTimeProductStats({ productId }: RealTimeProductStatsProps) {
             </AlertDescription>
           </Alert>
         )}
-        
+
         {productStaleness.level === 'stale' && realtimeConnected && (
           <Alert>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              Data may be outdated ({productStaleness.secondsSinceUpdate}s since last update). 
+              Data may be outdated ({productStaleness.secondsSinceUpdate}s since last update).
               Click refresh to update manually.
             </AlertDescription>
           </Alert>
         )}
-        
+
         {productStaleness.level === 'critical' && realtimeConnected && (
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              Data is stale ({Math.floor(productStaleness.secondsSinceUpdate / 60)}m since last update). 
+              Data is stale ({Math.floor(productStaleness.secondsSinceUpdate / 60)}m since last update).
               <Button variant="link" onClick={refetch} className="h-auto p-0 ml-1">
                 Refresh now
               </Button>

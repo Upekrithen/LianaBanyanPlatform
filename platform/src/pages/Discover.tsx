@@ -23,13 +23,13 @@ import { useDiscovery } from "@/hooks/useDiscovery";
  * MIRROR CONNECTION MAP
  * =====================
  * Mirrors connect pages in a triangular pattern for Spotlight Ranger exploration.
- * 
+ *
  * Level 2 (Primary paths: work, build, sponsor):
  *   work.leftMirror → build.rightMirror
  *   work.rightMirror → sponsor.leftMirror
  *   build.leftMirror → sponsor.rightMirror
  *   (Creates a triangle: work ↔ build ↔ sponsor ↔ work)
- * 
+ *
  * Level 3 (Secondary paths: learn, governance, initiatives):
  *   Same triangle pattern PLUS a non-interactive loop preview (5→7 and back)
  *   showing the full world without allowing interaction.
@@ -314,7 +314,7 @@ export default function Discover() {
   const path = PATHS[currentArea] || PATHS.work;
   const spotlight = SPOTLIGHT_CONTENT[currentArea] || SPOTLIGHT_CONTENT.work;
   const mirrorConnections = MIRROR_CONNECTIONS[currentArea] || MIRROR_CONNECTIONS.work;
-  
+
   // Extract destination areas from mirror paths
   const leftDestArea = mirrorConnections.left.split('/').pop() || 'work';
   const rightDestArea = mirrorConnections.right.split('/').pop() || 'build';
@@ -343,7 +343,7 @@ export default function Discover() {
       localStorage.setItem(`spotlight_never_${currentArea}`, "true");
     }
   };
-  
+
   // Check if user has permanently disabled spotlight for this page
   useEffect(() => {
     const neverShow = localStorage.getItem(`spotlight_never_${currentArea}`);
@@ -379,7 +379,7 @@ export default function Discover() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-2 flex items-center justify-center gap-4">
             {/* Left Mirror — connects to another path */}
-            <button 
+            <button
               onClick={() => navigate(mirrorConnections.left)}
               className="group flex flex-col items-center gap-1 hover:scale-110 transition-transform"
               title={`🪞 Travel to ${leftLabel.name}`}
@@ -390,11 +390,11 @@ export default function Discover() {
                 → {leftLabel.emoji} {leftLabel.name}
               </span>
             </button>
-            
+
             <span>{path.title}</span>
-            
+
             {/* Right Mirror — connects to another path */}
-            <button 
+            <button
               onClick={() => navigate(mirrorConnections.right)}
               className="group flex flex-col items-center gap-1 hover:scale-110 transition-transform"
               title={`🪞 Travel to ${rightLabel.name}`}
@@ -406,22 +406,22 @@ export default function Discover() {
               </span>
             </button>
           </h1>
-          
+
           {/* Spotlight Ranger trigger */}
-          <button 
+          <button
             onClick={() => setShowSpotlight(true)}
             className="text-sm text-muted-foreground/70 hover:text-foreground/80 transition-colors mt-1"
             style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
           >
             🔦 Spotlight Ranger Explainer
           </button>
-          
+
           <p className="text-xl text-foreground/80 mb-4 mt-2">{path.subtitle}</p>
           <p className="text-muted-foreground max-w-2xl mx-auto">{path.description}</p>
-          
+
           {/* Loop Preview button for Level 3 paths */}
           {mirrorConnections.loopPreview && (
-            <button 
+            <button
               onClick={() => setShowLoopPreview(true)}
               className="mt-4 px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg text-sm transition-colors"
             >
@@ -439,8 +439,8 @@ export default function Discover() {
             return (
               <div
                 key={card.name}
-                style={{ 
-                  opacity: isRevealed ? 1 : 0, 
+                style={{
+                  opacity: isRevealed ? 1 : 0,
                   transition: "opacity 0.5s ease",
                   animation: isRevealed ? "chalkReveal 1s ease-out forwards" : "none",
                 }}
@@ -462,7 +462,7 @@ export default function Discover() {
                   />
                 ) : (
                   /* Chalk outline placeholder before reveal */
-                  <div 
+                  <div
                     className="rounded-xl flex flex-col items-center justify-center text-center p-6 aspect-[3/4]"
                     style={{
                       border: "2px dashed rgba(255,255,255,0.2)",
@@ -476,7 +476,7 @@ export default function Discover() {
               </div>
             );
           })}
-          
+
           {/* +1 Chalk Outline — the Rule of 3+1 */}
           <div style={{
             opacity: revealedCards >= path.cards.length ? 1 : 0,
@@ -516,12 +516,12 @@ export default function Discover() {
 
       {/* Loop Preview Modal — Non-interactive world tour */}
       {showLoopPreview && mirrorConnections.loopPreview && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center"
           style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)' }}
           onClick={() => setShowLoopPreview(false)}
         >
-          <div 
+          <div
             className="relative max-w-4xl mx-4 p-8 rounded-2xl"
             style={{
               background: 'linear-gradient(135deg, rgba(30,41,59,0.95) 0%, rgba(15,23,42,0.95) 100%)',
@@ -547,7 +547,7 @@ export default function Discover() {
             {/* Animated path loop visualization */}
             <div className="flex items-center justify-center gap-4 flex-wrap mb-6">
               {/* Current path */}
-              <div 
+              <div
                 className="px-4 py-3 rounded-xl text-center"
                 style={{ background: 'rgba(168, 85, 247, 0.3)', border: '2px solid rgba(168, 85, 247, 0.5)' }}
               >
@@ -564,10 +564,10 @@ export default function Discover() {
                 const label = PATH_LABELS[loopArea] || { emoji: '❓', name: 'Unknown' };
                 return (
                   <div key={i} className="flex items-center gap-4">
-                    <div 
+                    <div
                       className="px-4 py-3 rounded-xl text-center opacity-60"
-                      style={{ 
-                        background: 'rgba(255,255,255,0.05)', 
+                      style={{
+                        background: 'rgba(255,255,255,0.05)',
                         border: '2px dashed rgba(255,255,255,0.2)',
                         animation: `pulse ${2 + i * 0.3}s ease-in-out infinite`
                       }}
@@ -586,7 +586,7 @@ export default function Discover() {
               <span className="text-2xl opacity-50">→</span>
 
               {/* Back to current */}
-              <div 
+              <div
                 className="px-4 py-3 rounded-xl text-center"
                 style={{ background: 'rgba(52, 211, 153, 0.2)', border: '2px solid rgba(52, 211, 153, 0.4)' }}
               >
@@ -596,7 +596,7 @@ export default function Discover() {
               </div>
             </div>
 
-            <div 
+            <div
               className="p-4 rounded-lg text-center"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)' }}
             >
@@ -621,12 +621,12 @@ export default function Discover() {
 
       {/* Spotlight Ranger Explainer Modal */}
       {showSpotlight && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center"
           style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
           onClick={() => dismissSpotlight(false)}
         >
-          <div 
+          <div
             className="relative max-w-lg mx-4 p-6 rounded-2xl"
             style={{
               background: 'linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%)',
@@ -662,7 +662,7 @@ export default function Discover() {
             </ul>
 
             {/* Tip box */}
-            <div 
+            <div
               className="p-3 rounded-lg mb-4"
               style={{ background: 'rgba(255,255,255,0.1)', border: '1px dashed rgba(255,255,255,0.3)' }}
             >

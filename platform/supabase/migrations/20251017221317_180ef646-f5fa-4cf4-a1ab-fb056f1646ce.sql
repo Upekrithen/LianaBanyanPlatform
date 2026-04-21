@@ -6,23 +6,23 @@ CREATE TABLE IF NOT EXISTS public.backup_position_slas (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   position_id UUID NOT NULL REFERENCES public.contract_position_templates(id),
   project_id UUID NOT NULL REFERENCES public.projects(id),
-  
+
   -- SLA Parameters
   response_time_hours INTEGER NOT NULL DEFAULT 24, -- 24 hours standard response
   activation_notice_hours INTEGER NOT NULL DEFAULT 48, -- 48 hours notice before activation
   max_activation_delay_hours INTEGER NOT NULL DEFAULT 6, -- 6 hours max delay after activation
-  
+
   -- Penalty Structure (percentage of contract value)
   late_response_penalty_pct NUMERIC NOT NULL DEFAULT 5.0, -- 5% penalty for late response
   failed_activation_penalty_pct NUMERIC NOT NULL DEFAULT 15.0, -- 15% penalty for failed activation
   reputation_hit_per_violation INTEGER NOT NULL DEFAULT 10, -- 10 point reputation hit per violation
-  
+
   -- Tracking
   total_activations INTEGER DEFAULT 0,
   successful_activations INTEGER DEFAULT 0,
   failed_activations INTEGER DEFAULT 0,
   average_response_time_hours NUMERIC,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -36,39 +36,39 @@ CREATE INDEX idx_backup_slas_project ON public.backup_position_slas(project_id);
 
 CREATE TABLE IF NOT EXISTS public.guild_sponsorship_records (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Parties
   sponsor_id UUID NOT NULL, -- Higher guild member
   mentee_id UUID NOT NULL, -- Junior guild member
   contract_id UUID NOT NULL REFERENCES public.contract_position_templates(id),
   project_id UUID NOT NULL REFERENCES public.projects(id),
-  
+
   -- Guild Levels
   sponsor_tier TEXT NOT NULL, -- 'apprentice', 'journeyman', 'master'
   sponsor_class INTEGER NOT NULL CHECK (sponsor_class BETWEEN 1 AND 6),
   mentee_tier TEXT NOT NULL,
   mentee_class INTEGER NOT NULL CHECK (mentee_class BETWEEN 1 AND 6),
-  
+
   -- Level Difference (for percentage calculation)
   tier_difference INTEGER NOT NULL, -- 0=same tier, 1=one tier apart, 2=two tiers apart
   class_difference INTEGER NOT NULL, -- difference in classes
-  
+
   -- Financial Terms
   access_fee_percentage NUMERIC NOT NULL, -- Fee sponsor receives (5-15% based on difference)
   contract_value NUMERIC NOT NULL,
   sponsor_earnings NUMERIC, -- Calculated: contract_value * (access_fee_percentage / 100)
-  
+
   -- Reputation Risk
   reputation_risk_percentage NUMERIC NOT NULL, -- How much sponsor risks (5-35% based on proximity)
   sponsor_reputation_at_signing NUMERIC NOT NULL, -- Snapshot of sponsor's reputation
   mentee_reputation_at_signing NUMERIC NOT NULL,
-  
+
   -- Status & Performance
   status TEXT NOT NULL DEFAULT 'active', -- 'active', 'completed', 'failed', 'disputed'
   contract_completed_successfully BOOLEAN,
   reputation_penalty_applied NUMERIC DEFAULT 0, -- Actual penalty if mentee failed
   reputation_penalty_date TIMESTAMPTZ,
-  
+
   -- Timestamps
   signed_at TIMESTAMPTZ DEFAULT now(),
   completed_at TIMESTAMPTZ,
@@ -87,47 +87,47 @@ CREATE INDEX idx_guild_sponsorship_status ON public.guild_sponsorship_records(st
 
 CREATE TABLE IF NOT EXISTS public.clan_resource_sharing (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Clan & Projects
   clan_id UUID NOT NULL REFERENCES public.clans(id),
   owner_project_id UUID NOT NULL REFERENCES public.projects(id), -- Project that owns the resource
   borrower_project_id UUID NOT NULL REFERENCES public.projects(id), -- Project borrowing the resource
-  
+
   -- Resource Details
   resource_type TEXT NOT NULL, -- 'equipment', 'supplies', 'tools', 'materials'
   resource_name TEXT NOT NULL,
   resource_description TEXT,
-  
+
   -- Financial Benefits
   standard_rental_rate NUMERIC NOT NULL, -- Market rate per day/unit
   clan_discount_percentage NUMERIC NOT NULL DEFAULT 25.0, -- 25% discount for clan members
   discounted_rate NUMERIC NOT NULL, -- Calculated: standard_rate * (1 - discount_pct / 100)
-  
+
   -- Usage Tracking
   reserved_from TIMESTAMPTZ NOT NULL,
   reserved_until TIMESTAMPTZ NOT NULL,
   actual_return_date TIMESTAMPTZ,
   condition_at_loan TEXT, -- 'excellent', 'good', 'fair', 'poor'
   condition_at_return TEXT,
-  
+
   -- Financial Settlement
   total_cost NUMERIC, -- Calculated based on duration and discounted_rate
   paid BOOLEAN DEFAULT false,
   payment_date TIMESTAMPTZ,
-  
+
   -- Vouching & Reputation
   vouched_by UUID, -- Clan member who vouched for borrower
   voucher_reputation_risk NUMERIC DEFAULT 5.0, -- Reputation at stake if damaged/not returned
   damage_reported BOOLEAN DEFAULT false,
   damage_description TEXT,
   reputation_penalty_applied NUMERIC DEFAULT 0,
-  
+
   -- Status
   status TEXT NOT NULL DEFAULT 'pending', -- 'pending', 'active', 'returned', 'damaged', 'lost'
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   CONSTRAINT different_projects CHECK (owner_project_id != borrower_project_id)
 );
 
@@ -167,15 +167,15 @@ BEGIN
   -- Convert tiers to numbers
   _sponsor_tier_num := (_tier_map->>_sponsor_tier)::INTEGER;
   _mentee_tier_num := (_tier_map->>_mentee_tier)::INTEGER;
-  
+
   -- Calculate differences
   _tier_diff := _sponsor_tier_num - _mentee_tier_num;
   _class_diff := (_sponsor_tier_num * 6 + _sponsor_class) - (_mentee_tier_num * 6 + _mentee_class);
   _total_level_diff := _class_diff;
-  
+
   -- Access fee: 5-15% based on level difference (more difference = higher fee)
   _access_fee_pct := LEAST(15.0, GREATEST(5.0, 5.0 + (_total_level_diff * 0.5)));
-  
+
   -- Reputation risk: 5-35% inversely based on level difference (closer = higher risk)
   -- Apprentice-Apprentice or close levels = HIGH risk
   -- Master-Apprentice = LOW risk (master should know what they're doing)
@@ -189,7 +189,7 @@ BEGIN
     -- Two tiers apart (Master-Apprentice)
     _reputation_risk_pct := GREATEST(5.0, 10.0 - (_class_diff * 0.5));
   END IF;
-  
+
   RETURN jsonb_build_object(
     'access_fee_percentage', _access_fee_pct,
     'sponsor_earnings', _contract_value * (_access_fee_pct / 100.0),

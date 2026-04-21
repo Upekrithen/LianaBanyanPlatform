@@ -2,7 +2,7 @@
  * COMPARISON FRAME COMPONENT
  * ==========================
  * 6-slot drag-and-drop frame for comparing Cue Card templates.
- * 
+ *
  * Features:
  * - Drag templates from gallery into slots
  * - Side-by-side comparison of performance
@@ -12,8 +12,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
-import { 
-  Layers, X, Plus, Copy, TrendingUp, Eye, 
+import {
+  Layers, X, Plus, Copy, TrendingUp, Eye,
   MousePointer2, Target, Clock, Sparkles,
   GripVertical, ChevronDown, ChevronUp, Award
 } from 'lucide-react';
@@ -72,7 +72,7 @@ export function ComparisonFrame({
   availableTemplates
 }: ComparisonFrameProps) {
   const { user } = useAuth();
-  
+
   // State
   const [slots, setSlots] = useState<ComparisonSlot[]>([
     { slot_number: 1, template: null, performance: null, user_notes: '' },
@@ -95,7 +95,7 @@ export function ComparisonFrame({
 
   const loadSavedSlots = async () => {
     if (!user) return;
-    
+
     try {
       const { data: savedSlots, error } = await supabase
         .from('comparison_frame_slots')
@@ -128,7 +128,7 @@ export function ComparisonFrame({
             if (!saved?.template_id) return slot;
 
             const template = templates?.find(t => t.id === saved.template_id);
-            const perf = performance?.find(p => 
+            const perf = performance?.find(p =>
               p.template_type === template?.template_type &&
               p.initiative_slug === template?.initiative_slug
             );
@@ -180,7 +180,7 @@ export function ComparisonFrame({
   // ─── Handle drop ───
   const handleDrop = useCallback(async (slotNumber: number, template: CueCardTemplate) => {
     setDragOverSlot(null);
-    
+
     // Check if already in a slot
     const existingSlot = slots.find(s => s.template?.id === template.id);
     if (existingSlot) {
@@ -213,8 +213,8 @@ export function ComparisonFrame({
     }
 
     // Update slot
-    const newSlots = slots.map(slot => 
-      slot.slot_number === slotNumber 
+    const newSlots = slots.map(slot =>
+      slot.slot_number === slotNumber
         ? { ...slot, template, performance }
         : slot
     );
@@ -262,7 +262,7 @@ export function ComparisonFrame({
   // ─── Copy template (derivative) ───
   const handleCopyTemplate = async (template: CueCardTemplate) => {
     onCopyTemplate(template);
-    
+
     // Award derivative marks to creator
     if (user && template.creator_id) {
       try {
@@ -275,7 +275,7 @@ export function ComparisonFrame({
             is_derivative: true,
             marks_for_derivative: 5
           });
-        
+
         toast.success(`Copied "${template.title}" - creator awarded 5 Marks!`);
       } catch (err) {
         console.error('Error creating derivative attribution:', err);
@@ -391,7 +391,7 @@ export function ComparisonFrame({
                       </div>
 
                       {/* Template Preview */}
-                      <div 
+                      <div
                         className="flex-1 rounded-lg overflow-hidden mb-2"
                         style={{
                           background: slot.template.background_type === 'gradient'
@@ -484,7 +484,7 @@ export function ComparisonFrame({
                     <div className="text-lg font-bold text-emerald-400">
                       {(slots
                         .filter(s => s.performance)
-                        .reduce((sum, s) => sum + (s.performance?.avg_conversion_rate || 0), 0) 
+                        .reduce((sum, s) => sum + (s.performance?.avg_conversion_rate || 0), 0)
                         / filledSlots * 100).toFixed(1)}%
                     </div>
                     <div className="text-xs text-white/50">Avg Conversion</div>
@@ -512,12 +512,12 @@ export function ComparisonFrame({
                 {(() => {
                   const best = slots
                     .filter(s => s.performance)
-                    .sort((a, b) => 
+                    .sort((a, b) =>
                       (b.performance?.avg_conversion_rate || 0) - (a.performance?.avg_conversion_rate || 0)
                     )[0];
-                  
+
                   if (!best?.template) return null;
-                  
+
                   return (
                     <div className="mt-3 p-2 rounded-lg bg-white/5 flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -541,7 +541,7 @@ export function ComparisonFrame({
             {/* Instructions */}
             <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10">
               <p className="text-xs text-white/50">
-                <strong className="text-white/70">How to use:</strong> Drag templates from the gallery 
+                <strong className="text-white/70">How to use:</strong> Drag templates from the gallery
                 into slots above. Compare performance metrics and use the best one for your campaign.
                 Copying a template awards 5 Marks to its creator.
               </p>

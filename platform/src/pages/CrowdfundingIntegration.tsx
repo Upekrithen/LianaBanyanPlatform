@@ -8,11 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Rocket, 
-  Link as LinkIcon, 
-  RefreshCw, 
-  CheckCircle, 
+import {
+  Rocket,
+  Link as LinkIcon,
+  RefreshCw,
+  CheckCircle,
   AlertCircle,
   TrendingUp,
   Users,
@@ -31,7 +31,7 @@ export default function CrowdfundingIntegration() {
         .from('crowdfunding_platform_connections')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data;
     }
@@ -45,7 +45,7 @@ export default function CrowdfundingIntegration() {
         .select('*')
         .order('started_at', { ascending: false })
         .limit(10);
-      
+
       if (error) throw error;
       return data;
     }
@@ -58,7 +58,7 @@ export default function CrowdfundingIntegration() {
         .from('crowdfunding_pledges')
         .select('platform, pledge_amount, is_processed')
         .order('pledge_date', { ascending: false });
-      
+
       if (error) throw error;
 
       // Calculate statistics

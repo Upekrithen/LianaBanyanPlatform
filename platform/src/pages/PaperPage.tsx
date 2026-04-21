@@ -8,12 +8,12 @@
 import React, { useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  BookOpen, 
-  GraduationCap, 
-  Baby, 
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  GraduationCap,
+  Baby,
   Scale,
   FileText,
   Lightbulb,
@@ -22,12 +22,12 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
-import { 
-  getPaperById, 
-  getRelatedPapers, 
+import {
+  getPaperById,
+  getRelatedPapers,
   getLawByNumber,
   FIVE_ECONOMIC_LAWS,
-  type EconomicPaper 
+  type EconomicPaper
 } from '@/data/economicPapers';
 import {
   ExpandableBlock,
@@ -48,11 +48,11 @@ const READING_LEVELS = [
   { id: 'academic' as const, label: 'Full Detail', icon: GraduationCap, description: 'Complete version with citations' },
 ];
 
-function ReadingLevelSelector({ 
-  selected, 
-  onChange 
-}: { 
-  selected: ReadingLevel; 
+function ReadingLevelSelector({
+  selected,
+  onChange
+}: {
+  selected: ReadingLevel;
   onChange: (level: ReadingLevel) => void;
 }) {
   return (
@@ -65,8 +65,8 @@ function ReadingLevelSelector({
             key={level.id}
             onClick={() => onChange(level.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-              isSelected 
-                ? 'bg-blue-500 text-white' 
+              isSelected
+                ? 'bg-blue-500 text-white'
                 : 'bg-slate-800 text-white/70 hover:bg-slate-700 hover:text-white'
             }`}
           >
@@ -86,7 +86,7 @@ function RelatedPaperCard({ paper }: { paper: EconomicPaper }) {
       className="block bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:border-slate-500 transition-all group"
     >
       <div className="flex items-center gap-3">
-        <div 
+        <div
           className="w-10 h-10 rounded-lg flex items-center justify-center text-xl"
           style={{ backgroundColor: paper.color + '20' }}
         >
@@ -106,7 +106,7 @@ function RelatedPaperCard({ paper }: { paper: EconomicPaper }) {
 
 function MetricsDisplay({ metrics }: { metrics: EconomicPaper['metrics'] }) {
   if (!metrics || metrics.length === 0) return null;
-  
+
   return (
     <div className="grid grid-cols-3 gap-4">
       {metrics.map((metric, i) => (
@@ -126,13 +126,13 @@ export default function PaperPage() {
   const { paperId } = useParams<{ paperId: string }>();
   const [readingLevel, setReadingLevel] = useState<ReadingLevel>('sixth-grade');
   const [showProblem, setShowProblem] = useState(false);
-  
+
   const paper = paperId ? getPaperById(paperId) : undefined;
-  
+
   if (!paper) {
     return <Navigate to="/economics" replace />;
   }
-  
+
   const relatedPapers = getRelatedPapers(paper.id);
   const law = paper.lawNumber ? getLawByNumber(paper.lawNumber) : undefined;
   const lawColor = paper.lawNumber ? LAW_COLORS[paper.lawNumber - 1] : paper.color;
@@ -141,7 +141,7 @@ export default function PaperPage() {
     <PortalPageLayout>
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Back Link */}
-        <Link 
+        <Link
           to="/economics"
           className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
         >
@@ -157,7 +157,7 @@ export default function PaperPage() {
         >
           {/* Law Badge */}
           {paper.lawNumber && law && (
-            <div 
+            <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-4"
               style={{ backgroundColor: lawColor + '20', borderColor: lawColor, borderWidth: 1 }}
             >
@@ -184,7 +184,7 @@ export default function PaperPage() {
 
           {/* Title */}
           <div className="flex items-start gap-4 mb-4">
-            <div 
+            <div
               className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl shrink-0"
               style={{ backgroundColor: paper.color + '20' }}
             >
@@ -214,7 +214,7 @@ export default function PaperPage() {
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
-          <div 
+          <div
             className="border-l-4 rounded-r-lg p-6"
             style={{ borderColor: paper.color, backgroundColor: paper.color + '10' }}
           >
@@ -335,7 +335,7 @@ export default function PaperPage() {
             className="mb-8"
           >
             <h2 className="text-xl font-bold text-white mb-4">The Law</h2>
-            <div 
+            <div
               className="border rounded-xl p-6 text-center"
               style={{ borderColor: lawColor + '50', backgroundColor: lawColor + '10' }}
             >
@@ -359,7 +359,7 @@ export default function PaperPage() {
         >
           <div className="flex flex-wrap gap-2">
             {paper.tags.map((tag) => (
-              <span 
+              <span
                 key={tag}
                 className="bg-slate-800 text-white/70 px-3 py-1 rounded-full text-sm"
               >

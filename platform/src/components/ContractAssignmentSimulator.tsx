@@ -18,15 +18,15 @@ interface TimeCommitmentOption {
   label: string;
 }
 
-export const ContractAssignmentSimulator = ({ 
-  projectId, 
+export const ContractAssignmentSimulator = ({
+  projectId,
   positionTitle = "Contract Position",
   baseCompensation = 5000
 }: ContractAssignmentSimulatorProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [selectedTimeCommitment, setSelectedTimeCommitment] = useState<number>(90);
-  
+
   const [config, setConfig] = useState<{
     assignment_lead_time_days: number;
     min_participation_ratio: number;
@@ -84,13 +84,13 @@ export const ContractAssignmentSimulator = ({
   const calculateRatios = () => {
     if (!config) return;
 
-    const ratioFactor = Math.min(1.0, Math.max(0.0, 
+    const ratioFactor = Math.min(1.0, Math.max(0.0,
       selectedTimeCommitment / config.assignment_lead_time_days
     ));
 
-    const calculatedParticipationRatio = config.min_participation_ratio + 
+    const calculatedParticipationRatio = config.min_participation_ratio +
       (ratioFactor * (config.max_participation_ratio - config.min_participation_ratio));
-    
+
     setEquityRatio(calculatedParticipationRatio);
     setCashRatio(1 - calculatedParticipationRatio);
   };

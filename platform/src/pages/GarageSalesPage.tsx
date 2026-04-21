@@ -22,8 +22,8 @@ export default function GarageSalesPage() {
 
   return (
     <PortalPageLayout maxWidth="xl" xrayId="garage-sales">
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         onClick={() => navigate('/initiatives/the-family-table')}
         className="mb-4"
       >
@@ -53,8 +53,8 @@ export default function GarageSalesPage() {
             <CardContent className="space-y-4">
               <div className="relative">
                 <MapPin className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                <Input 
-                  placeholder="Enter Zip Code or City" 
+                <Input
+                  placeholder="Enter Zip Code or City"
                   className="pl-10"
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
@@ -90,7 +90,7 @@ export default function GarageSalesPage() {
               <MapIcon className="h-12 w-12 text-slate-400 mb-2 z-10" />
               <p className="text-slate-500 font-medium z-10">Interactive Map View</p>
               <p className="text-sm text-slate-400 z-10">Showing {filteredListings.length} listings in your area</p>
-              
+
               {/* Mock Pins */}
               <div className="absolute top-1/4 left-1/4 p-2 bg-white rounded-full shadow-lg animate-bounce"><Store className="h-4 w-4 text-blue-500" /></div>
               <div className="absolute top-1/2 right-1/3 p-2 bg-white rounded-full shadow-lg"><MapPin className="h-4 w-4 text-amber-500" /></div>
@@ -108,7 +108,7 @@ export default function GarageSalesPage() {
               <TabsTrigger value="free" className="py-2">Free</TabsTrigger>
               <TabsTrigger value="service" className="py-2">Services</TabsTrigger>
             </TabsList>
-            
+
             <div className="space-y-4 mt-4">
               {filteredListings.length > 0 ? (
                 filteredListings.map((listing: any) => (

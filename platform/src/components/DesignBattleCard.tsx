@@ -192,7 +192,7 @@ function ParticipantRow({ participant, isVoting, hasVoted, onVote }: Participant
           />
         </div>
       </div>
-      
+
       <div className="flex items-center gap-2">
         {participant.submission_url ? (
           <Tooltip>
@@ -208,7 +208,7 @@ function ParticipantRow({ participant, isVoting, hasVoted, onVote }: Participant
         ) : (
           <Badge variant="outline" className="text-xs">Pending</Badge>
         )}
-        
+
         {participant.crow_feather_earned && (
           <Tooltip>
             <TooltipTrigger>
@@ -217,14 +217,14 @@ function ParticipantRow({ participant, isVoting, hasVoted, onVote }: Participant
             <TooltipContent>Crow Feather Earned!</TooltipContent>
           </Tooltip>
         )}
-        
+
         {isVoting && !hasVoted && (
           <Button size="sm" variant="outline" onClick={() => onVote(participant.id)}>
             <Vote className="h-4 w-4 mr-1" />
             Vote
           </Button>
         )}
-        
+
         <div className="text-right min-w-[60px]">
           <p className="font-bold">{participant.vote_count}</p>
           <p className="text-xs text-muted-foreground">votes</p>
@@ -263,7 +263,7 @@ function JoinBattleDialog({ battle, onJoin }: JoinBattleDialogProps) {
             Set your ante to join {battle.bounty_title}
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div>
             <Label className="flex items-center gap-2">
@@ -277,7 +277,7 @@ function JoinBattleDialog({ battle, onJoin }: JoinBattleDialogProps) {
               onChange={(e) => setCredits(Number(e.target.value))}
             />
           </div>
-          
+
           <div>
             <Label className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-purple-600" />
@@ -290,7 +290,7 @@ function JoinBattleDialog({ battle, onJoin }: JoinBattleDialogProps) {
               onChange={(e) => setMarks(Number(e.target.value))}
             />
           </div>
-          
+
           <div>
             <Label className="flex items-center gap-2">
               <Zap className="h-4 w-4 text-blue-600" />
@@ -303,7 +303,7 @@ function JoinBattleDialog({ battle, onJoin }: JoinBattleDialogProps) {
               onChange={(e) => setJoules(Number(e.target.value))}
             />
           </div>
-          
+
           <div className="p-3 rounded-lg bg-muted">
             <p className="text-sm font-medium">Pot Distribution</p>
             <ul className="text-xs text-muted-foreground mt-1 space-y-1">
@@ -313,7 +313,7 @@ function JoinBattleDialog({ battle, onJoin }: JoinBattleDialogProps) {
             </ul>
           </div>
         </div>
-        
+
         <DialogFooter>
           <Button onClick={() => onJoin({ credits, marks, joules })} className="gap-2">
             <Flame className="h-4 w-4" />
@@ -349,7 +349,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
         .select("*")
         .eq("battle_id", battle.id)
         .order("vote_count", { ascending: false });
-      
+
       if (error) throw error;
       return data as Participant[];
     },
@@ -376,7 +376,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
   const joinMutation = useMutation({
     mutationFn: async (ante: { credits: number; marks: number; joules: number }) => {
       if (!user) throw new Error("Must be logged in");
-      
+
       const { error } = await supabase.from("design_battle_participants").insert({
         battle_id: battle.id,
         user_id: user.id,
@@ -385,7 +385,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
         ante_credit_equivalent: ante.credits + ante.marks * 0.5 + ante.joules * 2,
         gap_rate_used: 1.0,
       });
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -411,16 +411,16 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
       if (!spent) {
         throw new Error("Not enough Coverage Minutes to vote (1 required)");
       }
-      
+
       const { error } = await supabase.from("design_battle_votes").insert({
         battle_id: battle.id,
         participant_id: participantId,
         voter_id: user.id,
         vote_credits: 1,
       });
-      
+
       if (error) throw error;
-      
+
       await supabase.rpc("increment_battle_votes", {
         p_participant_id: participantId,
         p_vote_count: 1,
@@ -458,7 +458,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
               </Badge>
             </CardDescription>
           </div>
-          
+
           <div className="text-right">
             <div className="flex items-center gap-1 text-sm font-medium">
               <Clock className="h-4 w-4" />
@@ -468,7 +468,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Pot Display */}
         <div className="grid grid-cols-3 gap-2 text-center">
@@ -485,7 +485,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
             <p className="text-xs text-muted-foreground">Winner Gets</p>
           </div>
         </div>
-        
+
         {/* Participant Count */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -497,7 +497,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
             <span className="text-sm">{battle.community_votes} community votes</span>
           </div>
         </div>
-        
+
         {/* Expanded Participants */}
         {expanded && participants && (
           <div className="space-y-2 pt-2 border-t">
@@ -516,7 +516,7 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
             ))}
           </div>
         )}
-        
+
         {/* Winner Display */}
         {battle.status === "completed" && battle.winner_id && participants && (
           <div className="p-3 rounded-lg bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/30">
@@ -532,12 +532,12 @@ export function DesignBattleCard({ battle, showDetails = false }: DesignBattleCa
           </div>
         )}
       </CardContent>
-      
+
       <CardFooter className="flex justify-between">
         <Button variant="ghost" size="sm" onClick={() => setExpanded(!expanded)}>
           {expanded ? "Show Less" : "Show Details"}
         </Button>
-        
+
         {isActive && user && (
           <JoinBattleDialog battle={battle} onJoin={(ante) => joinMutation.mutate(ante)} />
         )}

@@ -2,9 +2,9 @@
  * C+20 RECIPROCITY SERVICE
  * ========================
  * Innovation #1347: C+20 Reciprocity Law
- * 
- * "For every dollar of margin a business voluntarily gives up by adopting 
- * Cost + 20% pricing, the system grants that business one dollar of C+20 
+ *
+ * "For every dollar of margin a business voluntarily gives up by adopting
+ * Cost + 20% pricing, the system grants that business one dollar of C+20
  * purchasing power inside the ecosystem."
  */
 
@@ -71,10 +71,10 @@ export interface C20SpendResult {
 export const C20_RECIPROCITY_CONSTANTS = {
   // 1:1 reciprocity rate (1 dollar margin = 1 dollar purchasing power)
   RECIPROCITY_RATE: 1.0,
-  
+
   // Joule conversion rate (at parity)
   JOULE_CONVERSION_RATE: 1.0,
-  
+
   // Recommended toe-dipping defaults
   RECOMMENDED_MIN_PRODUCTS: 3,
   RECOMMENDED_MAX_PRODUCTS: 10,
@@ -345,8 +345,8 @@ export function calculateMarginSacrificed(
   const marginAtReference = referencePrice - costBasis;
   const marginAtC20 = costBasis * 0.20;
   const marginSacrificed = marginAtReference - marginAtC20;
-  const percentSacrificed = marginAtReference > 0 
-    ? (marginSacrificed / marginAtReference) * 100 
+  const percentSacrificed = marginAtReference > 0
+    ? (marginSacrificed / marginAtReference) * 100
     : 0;
 
   return {
@@ -425,7 +425,7 @@ export function generateToeDippingRecommendation(
 
   // Recommend 25-50 units based on volume
   const avgVolume = products.reduce((sum, p) => sum + p.monthlyVolume, 0) / products.length;
-  const recommendedUnitsEach = avgVolume > 100 
+  const recommendedUnitsEach = avgVolume > 100
     ? C20_RECIPROCITY_CONSTANTS.RECOMMENDED_MAX_UNITS_PER_PRODUCT
     : C20_RECIPROCITY_CONSTANTS.RECOMMENDED_UNITS_PER_PRODUCT;
 
@@ -442,8 +442,8 @@ export function generateToeDippingRecommendation(
   // Assess risk level based on percentage of total revenue
   const totalMonthlyRevenue = products.reduce((sum, p) => sum + (p.referencePrice * p.monthlyVolume), 0);
   const impactPercentage = (totalMarginSacrificed / totalMonthlyRevenue) * 100;
-  
-  const riskLevel: 'low' | 'medium' | 'high' = 
+
+  const riskLevel: 'low' | 'medium' | 'high' =
     impactPercentage < 5 ? 'low' :
     impactPercentage < 15 ? 'medium' : 'high';
 

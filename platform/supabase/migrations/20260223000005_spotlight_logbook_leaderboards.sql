@@ -246,10 +246,10 @@ BEGIN
   WHERE category = p_category AND time_bracket = p_time_bracket;
 
   -- For labyrinth_speed, lower is better; for everything else, higher is better
-  IF v_existing_record IS NULL OR 
+  IF v_existing_record IS NULL OR
      (p_category = 'labyrinth_speed' AND p_record_value < v_existing_record.record_value) OR
      (p_category != 'labyrinth_speed' AND p_record_value > v_existing_record.record_value) THEN
-    
+
     -- Award new crow feather
     INSERT INTO crow_feathers (user_id, category, record_value, session_duration_minutes, time_bracket)
     VALUES (p_user_id, p_category, p_record_value, p_session_duration_minutes, p_time_bracket)
@@ -322,7 +322,7 @@ CREATE TRIGGER create_portfolio_on_membership
 
 -- Insert some initial leaderboard categories into DNA lock for configuration
 INSERT INTO dna_lock (key, value, data_type, is_locked, locked_by, description, category)
-VALUES 
+VALUES
   ('ghost_leaderboard_categories', 'golden_keys,areas_discovered,labyrinth_speed,conduit_jumps,friend_words,candles_earned,deck_cards_viewed,beacon_journeys', 'text', true, 'CONSTITUTIONAL_FOUNDING', 'Valid categories for Ghost World leaderboards', 'leaderboards'),
   ('real_leaderboard_categories', 'five_star_deliveries,on_time_rate,gratitude_received,collaboration_score,consistency_streak,guild_ranking', 'text', true, 'CONSTITUTIONAL_FOUNDING', 'Valid categories for Real World leaderboards', 'leaderboards'),
   ('session_purchase_prices', '0.50,1.00,1.50,2.50', 'text', true, 'CONSTITUTIONAL_FOUNDING', 'Session purchase prices by duration tier', 'pricing')

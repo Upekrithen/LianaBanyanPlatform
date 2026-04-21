@@ -1,6 +1,6 @@
 /**
  * TikTok OAuth Helper Functions
- * 
+ *
  * Handles the client-side OAuth flow for TikTok Login Kit.
  */
 
@@ -83,7 +83,7 @@ export async function initiateTikTokOAuth(options?: { popup?: boolean }): Promis
     const height = 700;
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2;
-    
+
     window.open(
       authUrl,
       'tiktok_oauth',

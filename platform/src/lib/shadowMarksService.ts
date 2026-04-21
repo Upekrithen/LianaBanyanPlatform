@@ -3,9 +3,9 @@
  * ====================
  * Shadow Marks are speculative reputation that "crystallize" into real Marks
  * through community validation (votes/orders).
- * 
+ *
  * Educational metaphor: Seeds that need sunlight (votes) to grow into plants (real Marks)
- * 
+ *
  * Key concepts:
  * - Category-based bounties reward filling empty/sparse shelves
  * - Shadow Marks decay over time if not validated
@@ -89,9 +89,9 @@ export async function getCategoryBounties(): Promise<CategoryBounty[]> {
   const { data, error } = await supabase
     .from('pantry_bounty_opportunities')
     .select('*');
-  
+
   if (error) throw error;
-  
+
   return (data || []).map(d => ({
     id: d.id,
     cuisine: d.cuisine,
@@ -116,7 +116,7 @@ export async function getFilteredBounties(filters: {
   mealType?: string;
 }): Promise<CategoryBounty[]> {
   const all = await getCategoryBounties();
-  
+
   return all.filter(b => {
     if (filters.minBounty && b.shadowMarksAvailable < filters.minBounty) return false;
     if (filters.cuisine && b.cuisine !== filters.cuisine && b.cuisine !== 'Any') return false;
@@ -141,15 +141,15 @@ export async function getTopBounties(limit = 5): Promise<CategoryBounty[]> {
 export async function getUserShadowMarks(): Promise<ShadowMark[]> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return [];
-  
+
   const { data, error } = await supabase
     .from('shadow_marks')
     .select('*')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false });
-  
+
   if (error) throw error;
-  
+
   return (data || []).map(d => ({
     id: d.id,
     sourceType: d.source_type,
@@ -171,15 +171,15 @@ export async function getUserShadowMarks(): Promise<ShadowMark[]> {
 export async function getShadowMarksSummary(): Promise<ShadowMarksSummary | null> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
-  
+
   const { data, error } = await supabase
     .from('user_shadow_marks_summary')
     .select('*')
     .eq('user_id', user.id)
     .single();
-  
+
   if (error && error.code !== 'PGRST116') throw error;
-  
+
   if (!data) {
     return {
       vestingCount: 0,
@@ -188,7 +188,7 @@ export async function getShadowMarksSummary(): Promise<ShadowMarksSummary | null
       totalExpired: 0,
     };
   }
-  
+
   return {
     vestingCount: data.milestone_completion_count || 0,
     totalShadow: data.total_shadow || 0,
@@ -206,20 +206,20 @@ export async function voteForRecipe(recipeId: string, marksToCommit: number): Pr
 }> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Must be logged in to vote');
-  
+
   if (marksToCommit < 1) throw new Error('Must commit at least 1 Mark');
-  
+
   const { data, error } = await supabase
     .rpc('process_recipe_vote', {
       p_recipe_id: recipeId,
       p_voter_id: user.id,
       p_marks_committed: marksToCommit,
     });
-  
+
   if (error) throw error;
-  
+
   const result = data?.[0] || { vote_recorded: false, shadow_marks_crystallized: 0 };
-  
+
   return {
     voteRecorded: result.vote_recorded,
     shadowMarksCrystallized: result.shadow_marks_crystallized || 0,
@@ -247,7 +247,7 @@ export function estimateCrystallization(
 export function getDaysUntilDecay(createdAt: string, lastDecayAt: string | null): number {
   const created = new Date(createdAt);
   const now = new Date();
-  
+
   if (!lastDecayAt) {
     // First decay happens after decay_start_days
     const firstDecay = new Date(created);
@@ -255,7 +255,7 @@ export function getDaysUntilDecay(createdAt: string, lastDecayAt: string | null)
     const diff = Math.ceil((firstDecay.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     return Math.max(0, diff);
   }
-  
+
   // Subsequent decays
   const lastDecay = new Date(lastDecayAt);
   const nextDecay = new Date(lastDecay);
@@ -317,9 +317,9 @@ export async function getEscapeVelocityRecipes(): Promise<EscapeVelocityRecipe[]
   const { data, error } = await supabase
     .from('pantry_escape_velocity_recipes')
     .select('*');
-  
+
   if (error) throw error;
-  
+
   return (data || []).map(r => ({
     id: r.id,
     title: r.title,

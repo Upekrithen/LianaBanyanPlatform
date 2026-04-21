@@ -12,7 +12,7 @@ BEGIN
   WHERE role = 'admin'
   ORDER BY id
   LIMIT 1;
-  
+
   IF _owner_id IS NULL THEN
     -- Fallback to first profile
     SELECT id INTO _owner_id
@@ -20,7 +20,7 @@ BEGIN
     ORDER BY created_at
     LIMIT 1;
   END IF;
-  
+
   -- Only proceed if we have an owner
   IF _owner_id IS NOT NULL THEN
     -- Create Liana Banyan project
@@ -40,7 +40,7 @@ BEGIN
       now()
     )
     RETURNING id INTO _project_id;
-    
+
     -- Create Campaign Production workstation
     INSERT INTO public.workstations (
       project_id,
@@ -56,7 +56,7 @@ BEGIN
       _owner_id
     )
     RETURNING id INTO _workstation_id;
-    
+
     -- Enable Business Plan Generator feature
     INSERT INTO public.project_features (
       project_id,
@@ -71,7 +71,7 @@ BEGIN
       now(),
       _owner_id
     );
-    
+
     RAISE NOTICE 'Created Liana Banyan project with ID: %, workstation ID: %', _project_id, _workstation_id;
   ELSE
     RAISE NOTICE 'No users found - Liana Banyan project will be created when first user signs up';

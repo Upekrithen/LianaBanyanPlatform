@@ -6,7 +6,7 @@ export const systemAnalysisTemplate = `
 ### For Consumers
 **Pros:**
 - **Transparent Choice:** Price vs. time tradeoff is clear and upfront
-- **Premium Option:** Those who value speed can pay for early delivery  
+- **Premium Option:** Those who value speed can pay for early delivery
 - **Value Option:** Patient customers get better prices in later waves
 - **Fair Protection:** 1/3 FCFS slots at base price protect early supporters from surge
 

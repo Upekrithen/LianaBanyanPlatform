@@ -46,7 +46,7 @@ export function ThemeSwitcher({ projectId, portalType = 'marketplace' }: ThemeSw
 
     if (!error && data) {
       setThemes(data);
-      
+
       // Check for user preference first
       if (user) {
         const { data: prefData } = await supabase
@@ -56,7 +56,7 @@ export function ThemeSwitcher({ projectId, portalType = 'marketplace' }: ThemeSw
           .eq('project_id', projectId)
           .eq('portal_type', portalType)
           .single();
-        
+
         if (prefData?.theme_id) {
           const preferredTheme = data.find(t => t.id === prefData.theme_id);
           if (preferredTheme) {
@@ -67,7 +67,7 @@ export function ThemeSwitcher({ projectId, portalType = 'marketplace' }: ThemeSw
           }
         }
       }
-      
+
       // Fall back to default theme
       const defaultTheme = data.find(t => t.is_default);
       if (defaultTheme) {
@@ -80,13 +80,13 @@ export function ThemeSwitcher({ projectId, portalType = 'marketplace' }: ThemeSw
 
   const applyTheme = (cssContent: string) => {
     let styleElement = document.getElementById('project-theme-style') as HTMLStyleElement;
-    
+
     if (!styleElement) {
       styleElement = document.createElement('style');
       styleElement.id = 'project-theme-style';
       document.head.appendChild(styleElement);
     }
-    
+
     styleElement.textContent = cssContent;
   };
 
@@ -95,7 +95,7 @@ export function ThemeSwitcher({ projectId, portalType = 'marketplace' }: ThemeSw
     const theme = themes.find(t => t.id === themeId);
     if (theme) {
       applyTheme(theme.css_content);
-      
+
       // Save user preference to database
       if (user) {
         const { error } = await supabase
@@ -108,7 +108,7 @@ export function ThemeSwitcher({ projectId, portalType = 'marketplace' }: ThemeSw
           }, {
             onConflict: 'user_id,project_id,portal_type'
           });
-        
+
         if (error) {
           console.error('Error saving theme preference:', error);
           toast.error('Failed to save theme preference');

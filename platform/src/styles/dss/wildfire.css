@@ -590,39 +590,39 @@
   .showme-content {
     flex-direction: column;
   }
-  
+
   .showme-sidebar {
     width: 100%;
     max-height: 200px;
     border-right: none;
     border-bottom: 1px solid rgba(233, 69, 96, 0.3);
   }
-  
+
   .showme-nav-items {
     flex-direction: row;
     overflow-x: auto;
     gap: 0.5rem;
     padding-bottom: 0.5rem;
   }
-  
+
   .showme-nav-item {
     flex-shrink: 0;
     padding: 0.75rem;
   }
-  
+
   .showme-nav-subtitle {
     display: none;
   }
-  
+
   .welcome-layout {
     flex-direction: column;
   }
-  
+
   .deck-card-frame {
     width: 140px;
     min-height: 200px;
   }
-  
+
   .railroad-image {
     max-width: 200px;
   }
@@ -1798,7 +1798,7 @@
   .showme-help-footer-center {
     display: none;
   }
-  
+
   .showme-help-footer-left,
   .showme-help-footer-right {
     min-width: auto;
@@ -1809,7 +1809,7 @@
   .showme-help-content {
     flex-direction: column;
   }
-  
+
   .showme-help-sidebar {
     width: 100%;
     max-height: 150px;
@@ -1818,21 +1818,21 @@
     border-right: none;
     border-bottom: 1px solid rgba(233, 69, 96, 0.2);
   }
-  
+
   .showme-help-sidebar-item {
     flex-shrink: 0;
     padding: 0.5rem 0.75rem;
   }
-  
+
   .showme-help-item-text {
     display: none;
   }
-  
+
   .showme-help-card {
     width: 95%;
     padding: 1.25rem;
   }
-  
+
   .showme-help-nav-label {
     display: none;
   }

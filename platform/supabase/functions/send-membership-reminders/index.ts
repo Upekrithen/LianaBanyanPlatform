@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
     for (const candidate of candidates || []) {
       try {
         const confirmUrl = `${req.headers.get('origin') || 'https://yourdomain.com'}/membership/confirm?token=${candidate.confirmation_token}`;
-        
+
         // In production, you would send actual emails here
         // For now, we'll just log and mark as sent
         console.log(`Would send reminder to ${candidate.email}:`, {

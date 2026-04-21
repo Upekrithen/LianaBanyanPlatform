@@ -35,7 +35,7 @@ export default function TransparentLedger() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              
+
               <div className="text-center p-6 bg-white dark:bg-slate-900 rounded-xl border shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
                 <p className="text-sm text-slate-500 mb-1">Current Active Bonus</p>
@@ -45,7 +45,7 @@ export default function TransparentLedger() {
 
               <div className="space-y-3">
                 <h4 className="font-bold text-sm uppercase tracking-wider text-slate-500">Active Chains</h4>
-                
+
                 {/* Chain 1 */}
                 <div className="p-3 border rounded-lg bg-white dark:bg-slate-900">
                   <div className="flex justify-between items-start mb-2">
@@ -175,7 +175,7 @@ export default function TransparentLedger() {
                       6-Month Pre-Sold Revenue
                     </h4>
                     <p className="text-sm text-blue-900/80 dark:text-blue-300/80">
-                      Pre-orders are allocated to local manufacturing nodes (Makers in the Salt Mines) to provide maximum stability. 
+                      Pre-orders are allocated to local manufacturing nodes (Makers in the Salt Mines) to provide maximum stability.
                       Nodes can count on this scheduled run for the next 6 months.
                     </p>
                   </div>

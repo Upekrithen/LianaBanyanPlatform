@@ -72,7 +72,7 @@ export default function IslandCharterEditor({ islandId, charter, canEdit }: Isla
 
   const addRule = (section: string, rule: string) => {
     if (!rule.trim()) return;
-    
+
     setCharterData(prev => ({
       ...prev,
       island_specific_rules: {
@@ -303,8 +303,8 @@ export default function IslandCharterEditor({ islandId, charter, canEdit }: Isla
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  The Enforcer walks with ultimate power but uses it sparingly. 
-                  Like a village elder who hands out cookies and makes flowers grow, 
+                  The Enforcer walks with ultimate power but uses it sparingly.
+                  Like a village elder who hands out cookies and makes flowers grow,
                   but can banish those who violate safety or privacy.
                 </p>
               </div>

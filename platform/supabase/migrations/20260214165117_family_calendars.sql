@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS family_calendars (
     description TEXT,
     color TEXT DEFAULT '#3B82F6', -- Hex color for display
     is_default BOOLEAN DEFAULT false, -- Main family calendar
-    
+
     -- Google Calendar Integration
     google_calendar_id TEXT, -- Google Calendar ID for sync
     google_account_email TEXT, -- Which Google account owns this
@@ -26,11 +26,11 @@ CREATE TABLE IF NOT EXISTS family_calendars (
     sync_direction TEXT DEFAULT 'both' CHECK (sync_direction IN ('pull', 'push', 'both')),
     last_sync_at TIMESTAMPTZ,
     sync_token TEXT, -- For incremental sync
-    
+
     -- Settings
     default_reminder_minutes INT DEFAULT 30,
     timezone TEXT DEFAULT 'America/Chicago',
-    
+
     created_by UUID REFERENCES family_members(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -46,44 +46,44 @@ CREATE INDEX IF NOT EXISTS idx_family_calendars_google ON family_calendars(googl
 CREATE TABLE IF NOT EXISTS family_events (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     calendar_id UUID NOT NULL REFERENCES family_calendars(id) ON DELETE CASCADE,
-    
+
     -- Event Details
     title TEXT NOT NULL,
     description TEXT,
     location TEXT,
     event_type TEXT DEFAULT 'custom' CHECK (event_type IN (
         'birthday', 'holiday', 'anniversary',
-        'appointment', 'medical', 
+        'appointment', 'medical',
         'meal', 'shopping',
         'sports', 'school', 'work',
         'reminder', 'custom'
     )),
-    
+
     -- Timing
     start_time TIMESTAMPTZ NOT NULL,
     end_time TIMESTAMPTZ,
     all_day BOOLEAN DEFAULT false,
     timezone TEXT,
-    
+
     -- Recurrence (RRULE format: "FREQ=WEEKLY;BYDAY=MO,WE,FR")
     recurrence_rule TEXT,
     recurrence_end DATE,
     is_recurring BOOLEAN DEFAULT false,
     parent_event_id UUID REFERENCES family_events(id) ON DELETE CASCADE, -- For recurrence exceptions
-    
+
     -- Attendees (family members)
     attendees UUID[] DEFAULT '{}', -- Array of family_member IDs
-    
+
     -- Integration Links
     google_event_id TEXT, -- For Google Calendar sync
     source TEXT DEFAULT 'manual' CHECK (source IN (
         'manual', 'google', 'meal_plan', 'shopping', 'gift_occasion', 'recurring'
     )),
     source_id UUID, -- Link to meal_plan, shopping_order, gift_list, etc.
-    
+
     -- Reminders
     reminder_minutes INT[], -- Array of reminder times (e.g., [30, 60, 1440])
-    
+
     -- Metadata
     color TEXT, -- Override calendar color
     is_private BOOLEAN DEFAULT false, -- Only show to attendees
@@ -152,7 +152,7 @@ CREATE POLICY "Members can view family calendars"
     ON family_calendars FOR SELECT
     USING (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -162,7 +162,7 @@ CREATE POLICY "Members can create calendars"
     ON family_calendars FOR INSERT
     WITH CHECK (
         family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND is_active = true
         )
     );
@@ -175,7 +175,7 @@ CREATE POLICY "Creators can update calendars"
             SELECT id FROM family_members WHERE user_id = auth.uid()
         )
         OR family_id IN (
-            SELECT family_id FROM family_members 
+            SELECT family_id FROM family_members
             WHERE user_id = auth.uid() AND role = 'founder'
         )
     );
@@ -191,7 +191,7 @@ CREATE POLICY "Members can view family events"
         )
         AND (
             -- Public events or user is attendee
-            is_private = false 
+            is_private = false
             OR created_by IN (SELECT id FROM family_members WHERE user_id = auth.uid())
             OR (SELECT id FROM family_members WHERE user_id = auth.uid()) = ANY(attendees)
         )
@@ -279,7 +279,7 @@ BEGIN
     FROM family_calendars
     WHERE family_id = p_family_id AND is_default = true
     LIMIT 1;
-    
+
     -- If no default, get first calendar
     IF v_calendar_id IS NULL THEN
         SELECT id INTO v_calendar_id
@@ -287,12 +287,12 @@ BEGIN
         WHERE family_id = p_family_id
         LIMIT 1;
     END IF;
-    
+
     -- If still no calendar, can't create event
     IF v_calendar_id IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Determine start time based on slot
     v_start_time := p_meal_date::timestamp + CASE p_meal_slot
         WHEN 'breakfast' THEN INTERVAL '8 hours'
@@ -300,7 +300,7 @@ BEGIN
         WHEN 'dinner' THEN INTERVAL '18 hours'
         ELSE INTERVAL '12 hours'
     END;
-    
+
     -- Create the event
     INSERT INTO family_events (
         calendar_id, title, event_type, start_time, end_time,
@@ -314,7 +314,7 @@ BEGIN
         'meal_plan',
         p_meal_plan_id
     ) RETURNING id INTO v_event_id;
-    
+
     RETURN v_event_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -335,29 +335,29 @@ BEGIN
     FROM family_gift_lists gl
     JOIN family_members fm ON gl.owner_id = fm.id
     WHERE gl.id = p_gift_list_id;
-    
+
     IF v_list.occasion_date IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Get default family calendar
     SELECT id INTO v_calendar_id
     FROM family_calendars
     WHERE family_id = v_list.family_id AND is_default = true
     LIMIT 1;
-    
+
     IF v_calendar_id IS NULL THEN
         RETURN NULL;
     END IF;
-    
+
     -- Create the event
     INSERT INTO family_events (
-        calendar_id, 
-        title, 
-        event_type, 
-        start_time, 
+        calendar_id,
+        title,
+        event_type,
+        start_time,
         all_day,
-        source, 
+        source,
         source_id
     ) VALUES (
         v_calendar_id,
@@ -373,7 +373,7 @@ BEGIN
         'gift_occasion',
         p_gift_list_id
     ) RETURNING id INTO v_event_id;
-    
+
     RETURN v_event_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

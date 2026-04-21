@@ -53,7 +53,7 @@ CREATE TABLE public.clan_member_agreements (
 
 -- Add foreign key for charter_id in clans table
 ALTER TABLE public.clans
-ADD CONSTRAINT fk_clan_charter 
+ADD CONSTRAINT fk_clan_charter
 FOREIGN KEY (charter_id) REFERENCES public.clan_charters(id);
 
 -- Enable RLS

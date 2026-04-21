@@ -3,7 +3,7 @@
  * =========================================================
  * Imports items from a Notion database into a gift list.
  * Supports bidirectional sync - claims can be written back to Notion.
- * 
+ *
  * POST body:
  *   - listId: UUID (the gift list to sync)
  *   - notionDatabaseId: string (Notion database ID)
@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),
@@ -140,7 +140,7 @@ Deno.serve(async (req) => {
           const name = page.properties.Name?.title?.[0]?.plain_text ||
                        page.properties.Title?.title?.[0]?.plain_text ||
                        'Unnamed Item';
-          
+
           const description = page.properties.Description?.rich_text?.[0]?.plain_text || null;
           const url = page.properties.URL?.url || page.properties.Link?.url || null;
           const price = page.properties.Price?.number || null;

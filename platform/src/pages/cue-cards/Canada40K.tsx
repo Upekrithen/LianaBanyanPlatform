@@ -9,7 +9,7 @@ export default function Canada40K() {
   return (
     <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="space-y-6">
           <Badge className="bg-red-500/10 text-red-600 border-red-500/20">

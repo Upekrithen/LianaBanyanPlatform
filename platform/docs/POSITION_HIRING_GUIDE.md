@@ -1,12 +1,12 @@
 # LB Position Hiring System Guide
 
-**Last Updated:** 2025-01-15  
+**Last Updated:** 2025-01-15
 **For:** CPA, CFO, and Agent Hiring
 
 ## Quick Navigation
 
 ### 📋 View the 15 Position Categories
-**Route:** `/position-categories`  
+**Route:** `/position-categories`
 **Navigation:** Business Portal → Position Categories
 
 This page shows all 15 core position categories that LB uses for hiring:
@@ -28,7 +28,7 @@ This page shows all 15 core position categories that LB uses for hiring:
 15. **Delivery & Fulfillment** - Order fulfillment
 
 ### 💼 LB Internal Positions (Pre-configured for hiring)
-**Route:** `/lb-positions`  
+**Route:** `/lb-positions`
 **Navigation:** Business Portal → LB Internal Hiring (Admin only)
 
 Shows detailed position specifications for LB's own needs:
@@ -68,7 +68,7 @@ Shows detailed position specifications for LB's own needs:
 ## How the Hiring Process Works
 
 ### 1. Create Position Template
-**Route:** `/manage-positions`  
+**Route:** `/manage-positions`
 **Navigation:** Business Portal → Manage Positions
 
 1. Click "Create Position"
@@ -229,5 +229,5 @@ All of this data is tracked in LB's system and can be exported for CPA review.
 
 ---
 
-**Questions?** All features are in Business Portal (.biz domain)  
+**Questions?** All features are in Business Portal (.biz domain)
 **Access:** Admin or Project Owner role required for hiring

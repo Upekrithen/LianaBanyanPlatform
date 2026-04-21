@@ -2,7 +2,7 @@
  * FAMILY-CREATE — Create a new family group
  * ==========================================
  * Creates a family (or Crew, Troupe, etc.) and adds the creator as founder.
- * 
+ *
  * POST body:
  *   - name: string (e.g., "The Vigil Family")
  *   - displayName: string (what members call it: "Family", "Crew", "Troupe")
@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
     // Get user from token
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),

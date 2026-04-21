@@ -2,16 +2,16 @@
  * SERVICE NODE REGISTRATION — Cold Start Theseus Implementation
  * =============================================================
  * Economic Law #9: Pre-ordered capacity scheduling eliminates startup risk
- * 
+ *
  * "Risk = 0 when Demand(pre-sold) ≥ Capacity(scheduled) × 0.5"
- * 
+ *
  * Node Types:
  * - Church kitchens (unused weekdays)
  * - Food truck operators (provide license as Captain)
  * - Closed restaurants (off-hours rental)
  * - Home kitchens (cottage food laws)
  * - Shared facilities (pooled resources)
- * 
+ *
  * Key Principle: Node Operators and Captains are NOT employees.
  * It's THEIR project. Platform provides tools at cost + 20%.
  */
@@ -111,26 +111,26 @@ interface NodeFormData {
   infrastructureType: string;
   facilityName: string;
   facilityDescription: string;
-  
+
   // Location
   address: string;
   city: string;
   state: string;
   country: string;
   zipCode: string;
-  
+
   // Capacity
   weeklyCapacity: number;
   availableDays: string[];
   availableHours: string;
-  
+
   // Leadership
   isCaptain: boolean;
   captainName: string;
   captainEmail: string;
   licenseType: string;
   licenseNumber: string;
-  
+
   // Commitment
   understandsOwnership: boolean;
   understandsPlatformRole: boolean;
@@ -143,7 +143,7 @@ export default function ServiceNodeRegistration() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  
+
   const [formData, setFormData] = useState<NodeFormData>({
     infrastructureType: "",
     facilityName: "",
@@ -172,13 +172,13 @@ export default function ServiceNodeRegistration() {
     queryKey: ["demand-signals", formData.zipCode],
     queryFn: async () => {
       if (!formData.zipCode || formData.zipCode.length < 5) return null;
-      
+
       const { data, error } = await supabase
         .from("demand_signals")
         .select("*")
         .eq("zip_code", formData.zipCode)
         .eq("is_aggregated", false);
-      
+
       if (error) return null;
       return data;
     },
@@ -188,14 +188,14 @@ export default function ServiceNodeRegistration() {
   const submitRegistration = useMutation({
     mutationFn: async () => {
       if (!user) throw new Error("Must be logged in");
-      
+
       // Get node type ID for LMD kitchen
       const { data: nodeType } = await supabase
         .from("service_node_types")
         .select("id")
         .eq("code", "lmd_kitchen")
         .single();
-      
+
       // Create the service node
       const { data: node, error: nodeError } = await supabase
         .from("service_nodes")
@@ -280,7 +280,7 @@ export default function ServiceNodeRegistration() {
         return formData.weeklyCapacity > 0 && formData.availableDays.length > 0;
       case 4:
         if (selectedInfra?.licenseRequired) {
-          return formData.isCaptain 
+          return formData.isCaptain
             ? formData.licenseType !== ""
             : formData.captainName !== "";
         }
@@ -313,7 +313,7 @@ export default function ServiceNodeRegistration() {
             <div>
               <p className="font-bold text-emerald-700">The 50% Rule</p>
               <p className="text-sm text-muted-foreground">
-                Your node activates when 50% of weekly capacity is pre-ordered. 
+                Your node activates when 50% of weekly capacity is pre-ordered.
                 You'll have committed customers and pre-sold orders before you start.
                 <span className="block mt-1 font-medium text-emerald-600">
                   We don't predict the market — we already sold it.
@@ -576,7 +576,7 @@ export default function ServiceNodeRegistration() {
                       <p className="font-bold text-amber-700">Important: This is YOUR Project</p>
                       <p className="text-sm text-muted-foreground">
                         Node Operators and Captains are <strong>not</strong> employees of Liana Banyan.
-                        You own your project. The platform provides tools, personnel coordination, 
+                        You own your project. The platform provides tools, personnel coordination,
                         and supplies at volume cost + 20% — as a facilitator, not an employer.
                       </p>
                     </div>

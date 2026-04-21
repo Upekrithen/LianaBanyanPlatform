@@ -45,7 +45,7 @@ export function ExternalPlatformManager({ projectId }: ExternalPlatformManagerPr
         .select("*")
         .eq("project_id", projectId)
         .order("display_order");
-      
+
       if (error) throw error;
       return data as any[];
     },
@@ -60,7 +60,7 @@ export function ExternalPlatformManager({ projectId }: ExternalPlatformManagerPr
           project_id: projectId,
           created_by: (await supabase.auth.getUser()).data.user?.id,
         });
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -80,7 +80,7 @@ export function ExternalPlatformManager({ projectId }: ExternalPlatformManagerPr
         .from("project_external_platforms" as any)
         .update(data)
         .eq("id", id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -98,7 +98,7 @@ export function ExternalPlatformManager({ projectId }: ExternalPlatformManagerPr
         .from("project_external_platforms" as any)
         .delete()
         .eq("id", id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -271,9 +271,9 @@ export function ExternalPlatformManager({ projectId }: ExternalPlatformManagerPr
                       <Button size="sm" variant="outline" onClick={() => handleEdit(platform)}>
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
+                      <Button
+                        size="sm"
+                        variant="destructive"
                         onClick={() => deleteMutation.mutate(platform.id)}
                         disabled={deleteMutation.isPending}
                       >

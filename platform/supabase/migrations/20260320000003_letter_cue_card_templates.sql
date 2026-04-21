@@ -901,7 +901,7 @@ lianabanyan.com/RedCarpet',
   'gradient', 'from-rose-900/80 to-pink-800/80', 'bold',
   E'📬 Letter to Ezra
 
-You''ve spent years trying to understand why good policy fails, why institutions decay, and why problems that seem solvable persist decade after decade. Your conclusion, as near as 
+You''ve spent years trying to understand why good policy fails, why institutions decay, and why problems that seem solvable persist decade after decade. Your conclusion, as near as
 
 Cost + 20%. Creators keep 83.3%. $5/year.
 
@@ -2341,7 +2341,7 @@ lianabanyan.com/RedCarpet',
   'gradient', 'from-rose-900/80 to-pink-800/80', 'bold',
   E'📬 Crown Letter: Kondo
 
-You taught the world that tidying is not about getting rid of things — it''s about choosing what to keep. About surrounding yourself with what sparks joy and releasing what doesn''t 
+You taught the world that tidying is not about getting rid of things — it''s about choosing what to keep. About surrounding yourself with what sparks joy and releasing what doesn''t
 
 Cost + 20%. Creators keep 83.3%. $5/year.
 

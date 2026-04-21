@@ -1,7 +1,7 @@
 # Liana Banyan Platform Participation & Investment Structure
 
-**Document Version**: 1.0  
-**Last Updated**: October 2025  
+**Document Version**: 1.0
+**Last Updated**: October 2025
 **Status**: Active Investment Terms
 
 ---
@@ -146,7 +146,7 @@ This ensures:
 ## Suggested Improvements to Your Model
 
 ### **1. Add Vesting for Founding Team Participation**
-**Recommendation**: 
+**Recommendation**:
 - Founders (you + any co-founders) should have participation vest over 4 years with 1-year cliff
 - This is standard practice and shows backers you're committed long-term
 
@@ -187,7 +187,7 @@ Since this is a cooperative, backers likely won't get liquidity via acquisition.
 - Weighted average is fair to both sides
 
 ### **5. Establish a Secondary Market (Long-Term)**
-**Recommendation**: 
+**Recommendation**:
 - After 3 years, create limited secondary market for backer shares
 - Allows early investors to get partial liquidity without harming company
 - Structure: Quarterly tender offers up to 10% of outstanding units

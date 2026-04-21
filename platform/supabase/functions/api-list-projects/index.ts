@@ -18,7 +18,7 @@ serve(async (req) => {
     );
 
     const apiKey = req.headers.get('x-api-key');
-    
+
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'API key required' }), {
         status: 401,

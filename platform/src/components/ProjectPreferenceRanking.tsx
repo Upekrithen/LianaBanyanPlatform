@@ -31,7 +31,7 @@ export function ProjectPreferenceRanking() {
 
   const loadPreferences = async () => {
     if (!user) return;
-    
+
     const { data, error } = await supabase
       .from("user_project_preferences")
       .select("*")

@@ -108,11 +108,11 @@ export default function Portfolio() {
           </Button>
         </div>
       </header>
-      
+
       <main className="container mx-auto px-4 py-8 space-y-8">
         {/* Category 2: Speckle Garden Gamification */}
-        <SpeckleGarden 
-          availableCredits={profile?.credits_balance || 0} 
+        <SpeckleGarden
+          availableCredits={profile?.credits_balance || 0}
           lifetimePlanted={1250} // In a real app, this would be fetched from a 'lifetime_spent' or 'speckles_planted' column
         />
 
@@ -171,7 +171,7 @@ export default function Portfolio() {
                           <Badge variant="outline">
                             SKU: {sub.projects.project_sku || 'Pending'}
                           </Badge>
-                          <BlockchainVerificationBadge 
+                          <BlockchainVerificationBadge
                             projectId={sub.projects.id}
                             projectSku={sub.projects.project_sku}
                             size="sm"
@@ -194,18 +194,18 @@ export default function Portfolio() {
                                     </p>
                                   </div>
                                 </div>
-                                
+
                                 {product.production_levels && product.production_levels.length > 0 && (
                                   <div className="space-y-4 pl-4">
                                     {product.production_levels
                                       .sort((a: any, b: any) => a.level_number - b.level_number)
                                       .map((level: any) => {
-                                        const progress = level.votes_needed > 0 
-                                          ? (Number(level.current_votes) / Number(level.votes_needed)) * 100 
+                                        const progress = level.votes_needed > 0
+                                          ? (Number(level.current_votes) / Number(level.votes_needed)) * 100
                                           : 0;
                                         const isFunded = progress >= 100;
                                         const totalValue = Number(level.unit_price) * Number(level.units_count);
-                                        
+
                                         return (
                                           <div key={level.id} className="space-y-2 p-3 rounded-lg border bg-card">
                                             <div className="flex items-center justify-between">
@@ -224,15 +224,15 @@ export default function Portfolio() {
                                                 </p>
                                               </div>
                                             </div>
-                                            
-                                            <Progress 
-                                              value={Math.min(progress, 100)} 
+
+                                            <Progress
+                                              value={Math.min(progress, 100)}
                                               className={cn(
                                                 "h-3",
                                                 isFunded && "[&>div]:bg-green-500"
                                               )}
                                             />
-                                            
+
                                             <div className="flex items-center justify-between text-xs">
                                               <span className="text-muted-foreground">
                                                 {Number(level.current_votes).toLocaleString()} / {Number(level.votes_needed).toLocaleString()} votes
@@ -288,8 +288,8 @@ export default function Portfolio() {
                   <p className="text-muted-foreground">
                     No project subscriptions yet. Vote on projects to see them here!
                   </p>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="mt-4"
                     onClick={() => navigate('/marketplace')}
                   >

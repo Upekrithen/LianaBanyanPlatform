@@ -15,7 +15,7 @@ export default function KeepsLobby() {
   return (
     <PortalPageLayout>
       <div className="max-w-5xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="text-center space-y-6 border-b border-slate-800 pb-12">
           <Badge className="bg-primary/20 text-primary border-primary/30 mb-4">
@@ -25,7 +25,7 @@ export default function KeepsLobby() {
             The Keeps
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            The Main Campaign is written by the Founder's son. But the world belongs to you. 
+            The Main Campaign is written by the Founder's son. But the world belongs to you.
             Build a Keep to host your own Tabletop RPG campaigns, custom rulesets, and game nights.
           </p>
         </div>
@@ -44,7 +44,7 @@ export default function KeepsLobby() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <p className="text-slate-300">
-                  A Keep is your hub in the Ghost World. Here, you can use the Deck Card Studio to print custom rules, 
+                  A Keep is your hub in the Ghost World. Here, you can use the Deck Card Studio to print custom rules,
                   design custom characters, and map out your own campaigns using our modular Hex tiles.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4">

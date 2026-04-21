@@ -44,11 +44,11 @@ serve(async (req) => {
     console.log(`Reverted ${revertedCount} votes totaling $${revertedAmount.toFixed(2)}`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         reverted_count: revertedCount,
         reverted_amount: revertedAmount,
-        message: 'Vote reversion completed successfully' 
+        message: 'Vote reversion completed successfully'
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

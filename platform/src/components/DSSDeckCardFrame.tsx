@@ -1,6 +1,6 @@
 /**
  * DeckCardFrame — Museum-style picture frame with 4 corner locks
- * 
+ *
  * Features:
  * - Wide ornate gold/bronze frame border like museum paintings
  * - Plaque underneath with card title
@@ -36,37 +36,37 @@ interface DeckCardFrameProps {
 }
 
 const RARITY_COLORS = {
-  common: { 
+  common: {
     frame: 'linear-gradient(135deg, #6b7280 0%, #4b5563 50%, #374151 100%)',
     inner: '#1f2937',
     glow: 'rgba(107, 114, 128, 0.3)',
     plaque: '#4b5563'
   },
-  uncommon: { 
+  uncommon: {
     frame: 'linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%)',
     inner: '#064e3b',
     glow: 'rgba(5, 150, 105, 0.3)',
     plaque: '#047857'
   },
-  rare: { 
+  rare: {
     frame: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%)',
     inner: '#1e3a8a',
     glow: 'rgba(59, 130, 246, 0.3)',
     plaque: '#2563eb'
   },
-  epic: { 
+  epic: {
     frame: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%)',
     inner: '#4c1d95',
     glow: 'rgba(139, 92, 246, 0.4)',
     plaque: '#7c3aed'
   },
-  legendary: { 
+  legendary: {
     frame: 'linear-gradient(145deg, #fcd34d 0%, #f59e0b 20%, #d97706 40%, #b45309 60%, #d97706 80%, #f59e0b 100%)',
     inner: '#78350f',
     glow: 'rgba(245, 158, 11, 0.5)',
     plaque: '#b45309'
   },
-  mythic: { 
+  mythic: {
     frame: 'linear-gradient(145deg, #fca5a5 0%, #ef4444 20%, #dc2626 40%, #b91c1c 60%, #dc2626 80%, #ef4444 100%)',
     inner: '#7f1d1d',
     glow: 'rgba(239, 68, 68, 0.6)',
@@ -121,7 +121,7 @@ export function DeckCardFrame({ cardData, initialUnlocked = false, onCardClick, 
         doUnlock(position);
         return;
       }
-      
+
       const positionName = position.charAt(0).toUpperCase() + position.slice(1);
       onHelpClick(
         `${positionName} Lock`,
@@ -140,7 +140,7 @@ export function DeckCardFrame({ cardData, initialUnlocked = false, onCardClick, 
     // If help mode is on, ALWAYS show help dialog - even if not fully unlocked
     if (helpMode && onHelpClick) {
       const locksRemaining = Object.values(locks).filter(Boolean).length;
-      
+
       if (locksRemaining > 0) {
         // Card is still locked - use custom content if provided
         if (helpContent?.locked) {
@@ -191,7 +191,7 @@ export function DeckCardFrame({ cardData, initialUnlocked = false, onCardClick, 
       }
       return;
     }
-    
+
     // Normal mode - only trigger if unlocked and has action
     if (isCollected && onCardClick) {
       onCardClick();
@@ -212,7 +212,7 @@ export function DeckCardFrame({ cardData, initialUnlocked = false, onCardClick, 
       width: `${CARD_WIDTH}px`, // Fixed width for container
     }}>
       {/* The Frame - square outside corners */}
-      <div 
+      <div
         onClick={handleCardClick}
         style={{
           position: 'relative',
@@ -272,9 +272,9 @@ export function DeckCardFrame({ cardData, initialUnlocked = false, onCardClick, 
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                <img 
-                  src={cardData.image} 
-                  alt={cardData.plaqueTitle || 'Card image'} 
+                <img
+                  src={cardData.image}
+                  alt={cardData.plaqueTitle || 'Card image'}
                   style={{
                     maxWidth: '100%',
                     maxHeight: '100%',
@@ -300,7 +300,7 @@ export function DeckCardFrame({ cardData, initialUnlocked = false, onCardClick, 
                 )}
 
                 {/* Icon */}
-                <div style={{ 
+                <div style={{
                   fontSize: '4.5rem',
                   lineHeight: 1,
                 }}>

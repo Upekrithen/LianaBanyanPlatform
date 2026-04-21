@@ -11,12 +11,12 @@ interface ClanGuildPromptProps {
   hasGuildMemberships?: boolean;
 }
 
-export function ClanGuildContextualPrompt({ 
-  context, 
+export function ClanGuildContextualPrompt({
+  context,
   isClanMember = false,
-  hasGuildMemberships = false 
+  hasGuildMemberships = false
 }: ClanGuildPromptProps) {
-  
+
   const getContextMessage = () => {
     switch (context) {
       case 'service_signup':
@@ -76,8 +76,8 @@ export function ClanGuildContextualPrompt({
         <div className="space-y-3">
           {/* Tribe Section */}
           {!isClanMember && (
-            <CollapsibleSection 
-              title="Join or Create a Tribe" 
+            <CollapsibleSection
+              title="Join or Create a Tribe"
               defaultExpanded={false}
               variant="card"
             >
@@ -87,7 +87,7 @@ export function ClanGuildContextualPrompt({
                   <div className="flex-1">
                     <p className="text-sm font-medium mb-1">What are Tribes?</p>
                     <p className="text-xs text-muted-foreground">
-                      Small teams (2-10 members) who share resources, split rewards, and build together. 
+                      Small teams (2-10 members) who share resources, split rewards, and build together.
                       Use the medallion referral system to share credits with up to 9 others and form your tribe.
                     </p>
                   </div>
@@ -131,8 +131,8 @@ export function ClanGuildContextualPrompt({
 
           {/* Guild Section */}
           {!hasGuildMemberships && (
-            <CollapsibleSection 
-              title="Join Professional Guilds" 
+            <CollapsibleSection
+              title="Join Professional Guilds"
               defaultExpanded={false}
               variant="card"
             >
@@ -142,7 +142,7 @@ export function ClanGuildContextualPrompt({
                   <div className="flex-1">
                     <p className="text-sm font-medium mb-1">What are Guilds?</p>
                     <p className="text-xs text-muted-foreground">
-                      Industry-specific or skill-based networks that provide professional recognition, 
+                      Industry-specific or skill-based networks that provide professional recognition,
                       standards, and opportunities. Choose from Divisions, Industries, or Skills.
                     </p>
                   </div>

@@ -1,6 +1,6 @@
 /**
  * Nervous System Monitor
- * 
+ *
  * Dashboard component for monitoring platform health, sync status,
  * and critical metrics across the Liana Banyan ecosystem.
  */
@@ -9,16 +9,16 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  getNervousSystemStatus, 
+import {
+  getNervousSystemStatus,
   CRITICAL_NUMBERS,
   getSyncStatusSummary,
   getLettersNeedingSync
 } from '@/lib/nervous-system';
-import { 
-  Activity, 
-  CheckCircle, 
-  AlertTriangle, 
+import {
+  Activity,
+  CheckCircle,
+  AlertTriangle,
   XCircle,
   RefreshCw,
   FileText,

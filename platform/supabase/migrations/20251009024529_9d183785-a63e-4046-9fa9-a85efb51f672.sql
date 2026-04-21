@@ -98,7 +98,7 @@ BEGIN
     WHERE production_level_id = NEW.production_level_id
   )
   WHERE id = NEW.production_level_id;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;

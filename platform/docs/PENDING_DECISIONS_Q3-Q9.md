@@ -1,7 +1,7 @@
 # Pending Strategic Decisions (Q3-Q9)
 
-**Status**: Awaiting Stakeholder Input  
-**Date Prepared**: 2025-01-15  
+**Status**: Awaiting Stakeholder Input
+**Date Prepared**: 2025-01-15
 **Reference**: TASKS.md Lines 134-267
 
 ---
@@ -59,7 +59,7 @@ Hybrid leadership model with three distinct roles:
 
 ## Q5: Node Operator Revenue Share (2-Day Personal Use)
 
-**Context**: 
+**Context**:
 - ✅ LB gets 3 days/week priority
 - ✅ Node Operator gets 2 days/week for own projects
 - ✅ Operator MUST use LB portals for tracking/cuts
@@ -119,7 +119,7 @@ Mixed Model - Consumables at cost plus markup percentage, while maintenance is c
 
 ## Q7: Node Captain Career Progression
 
-**Context**: 
+**Context**:
 - ✅ Node Captain is statutory employee managing operations
 - ✅ Can have separate business AND be Node Captain
 
@@ -248,7 +248,7 @@ Degree-Style System with Concentrations:
 
 ### 7. Thresholds for Privileges - What score unlocks what?
 
-**Decision**: Yes, thresholds will be implemented. 
+**Decision**: Yes, thresholds will be implemented.
 
 **STATUS**: Requires more detailed questions to determine specific threshold values for each privilege level.
 
@@ -284,7 +284,7 @@ Provisional Score of 100 - Everyone Starts at the Top
 
 ## Q9: Video Production Timeline
 
-**Context**: 
+**Context**:
 - ✅ AI creates framework (scripts, storyboards, voiceover guidance) for 3 fables
 - ✅ You produce videos later with Runway/Kling AI tools
 

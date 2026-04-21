@@ -64,7 +64,7 @@ function PathCard({
         >
           <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
           <p className="text-white/80 text-sm mb-4">{description}</p>
-          
+
           <div className="flex-1 space-y-2">
             {benefits.map((benefit, idx) => (
               <div key={idx} className="flex items-start gap-2 text-sm">
@@ -84,7 +84,7 @@ function PathCard({
             {cta}
             <ArrowRight className="w-4 h-4" />
           </button>
-          
+
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -170,7 +170,7 @@ export function PathSelector() {
           Choose Your Path
         </h2>
         <p className="text-lg text-white/60 max-w-2xl mx-auto">
-          Three ways in. Same destination. All paths lead to the $5 membership 
+          Three ways in. Same destination. All paths lead to the $5 membership
           with access to 1,244 innovations and fractional patent participation.
         </p>
       </div>

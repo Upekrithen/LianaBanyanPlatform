@@ -108,7 +108,7 @@ export default function CampaignProduction() {
       </div>
 
       {workstation?.project_id && (
-        <GoogleDocImporter 
+        <GoogleDocImporter
           projectId={workstation.project_id}
           workstationId={workstationId}
           onImportComplete={() => {
@@ -148,8 +148,8 @@ export default function CampaignProduction() {
                         <Printer className="mr-2 h-4 w-4" />
                         Print
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => handleDownload(document.getElementById('system-analysis-content')?.innerText || '', 'LB-System-Analysis.md')}
                       >
@@ -162,7 +162,7 @@ export default function CampaignProduction() {
                 <CardContent id="system-analysis-content" className="prose dark:prose-invert max-w-none space-y-6">
                   <div className="space-y-4">
                     <h2 className="text-2xl font-bold">Wave-Based Pricing System (Grade: A-)</h2>
-                    
+
                     <h3 className="text-xl font-semibold">For Consumers</h3>
                     <div className="space-y-2">
                       <p><strong>Pros:</strong></p>
@@ -213,7 +213,7 @@ export default function CampaignProduction() {
 
                   <div className="space-y-4 border-t pt-6">
                     <h2 className="text-2xl font-bold">HexIsle Integration (Grade: A)</h2>
-                    
+
                     <h3 className="text-xl font-semibold">Genius Elements</h3>
                     <div className="space-y-2">
                       <p><strong>Team-Based Skill Development:</strong></p>
@@ -255,7 +255,7 @@ export default function CampaignProduction() {
 
                   <div className="space-y-4 border-t pt-6">
                     <h2 className="text-2xl font-bold">IP Participation + Common Currency (Grade: B+)</h2>
-                    
+
                     <h3 className="text-xl font-semibold">Brilliant Aspects</h3>
                     <div className="space-y-2">
                       <p><strong>Universal Unit:</strong></p>
@@ -333,13 +333,13 @@ export default function CampaignProduction() {
                   <div className="space-y-4 border-t pt-6 bg-primary/5 p-4 rounded-lg">
                     <h2 className="text-2xl font-bold">Bottom Line</h2>
                     <p className="text-lg">
-                      This is an <strong>ambitious, potentially revolutionary system</strong> that could genuinely create 
-                      a fairer alternative to traditional venture-backed startups. The integration of pricing mechanism, 
+                      This is an <strong>ambitious, potentially revolutionary system</strong> that could genuinely create
+                      a fairer alternative to traditional venture-backed startups. The integration of pricing mechanism,
                       skill development, and participation distribution is theoretically sound.
                     </p>
                     <p className="text-lg">
-                      <strong>However</strong>, the complexity is the biggest enemy. Success requires ruthless simplification, 
-                      phased rollout, and unwavering transparency. If executed well, this could be the operating system 
+                      <strong>However</strong>, the complexity is the biggest enemy. Success requires ruthless simplification,
+                      phased rollout, and unwavering transparency. If executed well, this could be the operating system
                       for the next generation of worker-owned cooperatives and project-based organizations.
                     </p>
                   </div>
@@ -358,8 +358,8 @@ export default function CampaignProduction() {
                         <Printer className="mr-2 h-4 w-4" />
                         Print
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         onClick={() => handleDownload(document.getElementById('strategic-insights-content')?.innerText || '', 'Strategic-Insights-Summary.md')}
                       >
@@ -377,7 +377,7 @@ export default function CampaignProduction() {
                     </div>
 
                     <h2 className="text-2xl font-bold border-b pb-2">Part I: Foundational Strategic Wins</h2>
-                    
+
                     <div className="space-y-4">
                       <h3 className="text-xl font-semibold">1. Self-Funding Guild Contribution Model</h3>
                       <p className="text-sm font-medium text-primary">Economic Principle: Reverse Risk Pool</p>
@@ -498,7 +498,7 @@ export default function CampaignProduction() {
                     <div className="space-y-4">
                       <h3 className="text-xl font-semibold">Complementary Integration Model</h3>
                       <p className="text-sm font-medium text-primary">LB as Production Engine, External Platforms as Retail Channels</p>
-                      
+
                       <div className="bg-muted/30 p-4 rounded-lg space-y-3">
                         <h4 className="font-semibold">Model 1: Etsy Shop Integration</h4>
                         <ul className="list-disc list-inside space-y-1 ml-4 text-sm">
@@ -539,13 +539,13 @@ export default function CampaignProduction() {
                     <div className="space-y-4 border-t pt-6 bg-primary/5 p-4 rounded-lg">
                       <h2 className="text-2xl font-bold">Bottom Line</h2>
                       <p className="text-lg">
-                        Liana Banyan is designed to <strong>coexist with</strong> rather than compete against existing platforms. 
-                        External services become complementary channels that expand our reach while maintaining our core value 
+                        Liana Banyan is designed to <strong>coexist with</strong> rather than compete against existing platforms.
+                        External services become complementary channels that expand our reach while maintaining our core value
                         propositions: IP tracking, production coordination, and member participation.
                       </p>
                       <p className="text-lg mt-2">
-                        <strong>Key insight:</strong> We don't need to own the entire value chain. We own the IP ledger, 
-                        quality standards, and community coordination—letting external partners handle fulfillment creates 
+                        <strong>Key insight:</strong> We don't need to own the entire value chain. We own the IP ledger,
+                        quality standards, and community coordination—letting external partners handle fulfillment creates
                         a more resilient and scalable ecosystem.
                       </p>
                     </div>
@@ -556,7 +556,7 @@ export default function CampaignProduction() {
               <div className="space-y-6">
                 <HexisleCampaignManager />
                 <HexelViewer3D />
-                
+
                   {/* Brainstorm: HexIsle as Life Improvement Game */}
                   <Collapsible>
                     <Card>
@@ -585,7 +585,7 @@ export default function CampaignProduction() {
 Tabletop terrain is fragmented. You have beautiful 3D printed hexes, but they slide around the table. Magnets are expensive and tedious to install. OpenLock clips are permanent and break easily. You want a modular battlefield that stays together during play but packs away flat.
 
 ### The Solution (The SlottedTop)
-Enter the **SlottedTop** (Patent Innovation #1552). Using lithographic compliant pincers, it snaps onto ANY flat hex terrain tile in the 32-35mm range. 
+Enter the **SlottedTop** (Patent Innovation #1552). Using lithographic compliant pincers, it snaps onto ANY flat hex terrain tile in the 32-35mm range.
 *   **Universal:** Works with existing BattleTech terrain, Open WarHex, and custom STLs.
 *   **Mechanical:** Uses a 6A- torque safety margin. Twist-lock couplers and compliant seals mean it holds tight but releases with a simple twist.
 *   **The First of Many:** This is Component #1 of the HexIsle system—a 60mm flat-to-flat hexagonal terrain platform that serves as the physical engine for the Liana Banyan cooperative economy.
@@ -663,8 +663,8 @@ We aren't just selling a piece of plastic. We are proving a distributed manufact
                         <div className="space-y-3">
                           <h3 className="text-lg font-semibold">HexIsle Narrative: Visual Concept</h3>
                           <div className="bg-muted/30 p-4 rounded-lg">
-                            <img 
-                              src={hexisleHarvestConcept} 
+                            <img
+                              src={hexisleHarvestConcept}
                               alt="HexIsle Harvest Island Concept - Floating island with monument, tree, water channels, and surrounding ocean"
                               className="w-full h-auto rounded-lg shadow-lg"
                             />
@@ -674,8 +674,8 @@ We aren't just selling a piece of plastic. We are proving a distributed manufact
                           </div>
                           <div className="text-xs text-muted-foreground pl-4">
                             <p>
-                              <strong>Visual Elements:</strong> Monument/tower (landmark), green tree (resource), water channels (navigation), 
-                              dome structure (base/settlement), red markers (objectives), surrounding waters with threats (sharks), 
+                              <strong>Visual Elements:</strong> Monument/tower (landmark), green tree (resource), water channels (navigation),
+                              dome structure (base/settlement), red markers (objectives), surrounding waters with threats (sharks),
                               floating island terrain representing isolation and the journey ahead.
                             </p>
                           </div>
@@ -686,7 +686,7 @@ We aren't just selling a piece of plastic. We are proving a distributed manufact
                           <h3 className="text-lg font-semibold">System Architecture Concept</h3>
                           <div className="space-y-2 text-sm">
                             <p>
-                              <strong>Core Idea:</strong> HexIsle as a Life Improvement Game where metaphors to real life are strong. 
+                              <strong>Core Idea:</strong> HexIsle as a Life Improvement Game where metaphors to real life are strong.
                               Tasks require skill development, gaining knowledge, cooperating, and competing. Each project needs a team.
                             </p>
                             <div className="bg-muted/50 p-4 rounded-lg space-y-2">
@@ -752,9 +752,9 @@ We aren't just selling a piece of plastic. We are proving a distributed manufact
                             <div className="border-l-4 border-primary p-4">
                               <p className="font-medium mb-2">Bottom Line:</p>
                               <p>
-                                This is a sophisticated gamification of organizational development that could genuinely bridge the gap between 
-                                education and experience. The key is ensuring the "game" challenges are isomorphic to real business challenges - 
-                                not simplified analogies, but actual scaled versions of the problems CFOs/COOs/CTOs face. If you can nail that 
+                                This is a sophisticated gamification of organizational development that could genuinely bridge the gap between
+                                education and experience. The key is ensuring the "game" challenges are isomorphic to real business challenges -
+                                not simplified analogies, but actual scaled versions of the problems CFOs/COOs/CTOs face. If you can nail that
                                 authenticity while maintaining the engagement of a game, you've created something truly valuable.
                               </p>
                             </div>

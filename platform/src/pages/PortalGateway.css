@@ -19,11 +19,11 @@
 }
 
 @keyframes chalk-draw {
-  0% { 
+  0% {
     stroke-dashoffset: 1000;
     opacity: 0.3;
   }
-  100% { 
+  100% {
     stroke-dashoffset: 0;
     opacity: 1;
   }
@@ -150,7 +150,7 @@
 .ghost-portal .portal-card-front {
   background: transparent;
   border: 2px dashed rgba(139, 92, 246, 0.5);
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(139, 92, 246, 0.15),
     inset 0 0 40px rgba(139, 92, 246, 0.03);
   animation: chalk-glow 3s ease-in-out infinite;
@@ -166,7 +166,7 @@
 .real-portal .portal-card-front {
   background: transparent;
   border: 2px dashed rgba(52, 211, 153, 0.5);
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(52, 211, 153, 0.15),
     inset 0 0 40px rgba(52, 211, 153, 0.03);
   animation: chalk-glow 3s ease-in-out infinite;
@@ -384,23 +384,23 @@
   .portal-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .portal-card {
     height: auto;
     min-height: 420px;
   }
-  
+
   .portal-card-front,
   .portal-card-back {
     position: relative;
     height: auto;
     min-height: 420px;
   }
-  
+
   .portal-card.flipped .portal-card-front {
     display: none;
   }
-  
+
   .portal-card.flipped .portal-card-back {
     position: relative;
     transform: none;

@@ -40,7 +40,7 @@ export function ProjectIslandMapper({ projectId }: ProjectIslandMapperProps) {
         .select('*')
         .eq('project_id', projectId)
         .maybeSingle();
-      
+
       if (error) throw error;
       return data;
     },

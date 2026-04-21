@@ -3,9 +3,9 @@
  * =====================
  * Crow Feathers are permanent achievements earned by setting records.
  * They're the ONLY thing that persists in Ghost World.
- * 
+ *
  * "The only persistent thing for ghosts." — Founder
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  * @see DESIGN_DOCS/HALF_LIFE_LEADERBOARDS.md
  */
@@ -16,7 +16,7 @@ import { supabase } from '@/integrations/supabase/client';
 // TYPES
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type FeatherCategory = 
+export type FeatherCategory =
   | 'chase_speed'      // Fastest chase completion
   | 'chase_streak'     // Longest win streak
   | 'chase_earnings'   // Most Marks earned in a single chase
@@ -72,7 +72,7 @@ export async function checkForCrowFeather(
     .single();
 
   // For speed records, lower is better
-  const isNewRecord = category.includes('speed') 
+  const isNewRecord = category.includes('speed')
     ? !currentRecord || value < currentRecord.finish_time_ms
     : !currentRecord || value > currentRecord.finish_time_ms;
 
@@ -82,8 +82,8 @@ export async function checkForCrowFeather(
 
   // Award the Crow Feather
   const feather = await awardCrowFeather(
-    userId, 
-    category, 
+    userId,
+    category,
     value,
     currentRecord?.finish_time_ms,
     currentRecord?.user_id,
@@ -110,7 +110,7 @@ async function awardCrowFeather(
   const { data: countData } = await supabase
     .from('crow_feathers')
     .select('id', { count: 'exact' });
-  
+
   const featherNumber = (countData?.length || 0) + 1;
 
   const { data: feather, error } = await supabase
@@ -284,13 +284,13 @@ export async function getEarningsLeaderboard(limit: number = 10): Promise<Leader
 // HALF-LIFE LEADERBOARDS (Time-Bracketed)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type TimeBracket = 
-  | '15min' 
-  | '30min' 
-  | '1hour' 
-  | '2hours' 
-  | '4hours' 
-  | '8hours' 
+export type TimeBracket =
+  | '15min'
+  | '30min'
+  | '1hour'
+  | '2hours'
+  | '4hours'
+  | '8hours'
   | '12hours';
 
 const TIME_BRACKET_MS: Record<TimeBracket, number> = {
@@ -342,7 +342,7 @@ export async function processChaseCompletion(
     difficulty,
     { chaseId, finishPosition }
   );
-  
+
   if (speedCheck.earned && speedCheck.feather) {
     feathersEarned.push(speedCheck.feather);
   }
@@ -356,7 +356,7 @@ export async function processChaseCompletion(
       difficulty,
       { chaseId }
     );
-    
+
     if (earningsCheck.earned && earningsCheck.feather) {
       feathersEarned.push(earningsCheck.feather);
     }
@@ -390,7 +390,7 @@ export async function processChaseCompletion(
         undefined,
         { chaseId }
       );
-      
+
       if (streakCheck.earned && streakCheck.feather) {
         feathersEarned.push(streakCheck.feather);
       }

@@ -2,14 +2,14 @@
  * TEMPLATE ATTRIBUTION SERVICE
  * ============================
  * Tracks when templates are used and awards Marks to creators.
- * 
+ *
  * Marks Earned:
  * - Template selected: 1 Mark
  * - Campaign sent: 2 Marks
  * - Click generated: 0.1 Marks per click
  * - Conversion generated: 1 Mark per conversion
  * - Template copied (derivative): 5 Marks (highest honor)
- * 
+ *
  * Attribution Duration:
  * - Marks accrue for the duration of the campaign (typically 24-72 hours)
  * - After campaign ends, final tally is calculated
@@ -278,7 +278,7 @@ export async function getCreatorAttributionSummary(
     attributions.forEach(attr => {
       const templateId = attr.template_id;
       const template = attr.cue_card_templates as { id: string; title: string } | null;
-      
+
       if (!templateStats[templateId]) {
         templateStats[templateId] = {
           template_id: templateId,

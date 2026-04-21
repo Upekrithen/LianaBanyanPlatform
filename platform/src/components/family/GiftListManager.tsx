@@ -8,8 +8,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
-  Gift, Plus, Calendar, Link, ExternalLink, 
+import {
+  Gift, Plus, Calendar, Link, ExternalLink,
   DollarSign, Star, Trash2, Edit2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -253,8 +253,8 @@ export function GiftListManager({
                   key={item.id}
                   className={`
                     p-3 rounded-lg border transition-all
-                    ${item.is_claimed 
-                      ? 'bg-emerald-500/10 border-emerald-500/30' 
+                    ${item.is_claimed
+                      ? 'bg-emerald-500/10 border-emerald-500/30'
                       : 'bg-white/5 border-white/10'
                     }
                   `}
@@ -287,9 +287,9 @@ export function GiftListManager({
                           </span>
                         )}
                         {item.url && (
-                          <a 
-                            href={item.url} 
-                            target="_blank" 
+                          <a
+                            href={item.url}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-1 hover:text-purple-400"
                           >
@@ -386,8 +386,8 @@ export function GiftListManager({
 
             <div className="space-y-2">
               <Label>Priority</Label>
-              <Select 
-                value={String(itemPriority)} 
+              <Select
+                value={String(itemPriority)}
                 onValueChange={(v) => setItemPriority(Number(v))}
               >
                 <SelectTrigger>

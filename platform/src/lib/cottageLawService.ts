@@ -1,8 +1,8 @@
 /**
  * Cottage Law Compliance Service
- * 
+ *
  * Helps makers understand and comply with cottage food laws by state.
- * 
+ *
  * Features:
  * - State-specific rules lookup
  * - Community-contributed guides
@@ -195,10 +195,10 @@ export async function getStateCottageLawRules(
         online_sales_allowed: false,
       },
     };
-    
+
     const stateRules = sampleRules[stateCode.toUpperCase()];
     if (!stateRules) return null;
-    
+
     return {
       id: `rule-${stateCode}`,
       state_code: stateCode.toUpperCase(),
@@ -262,7 +262,7 @@ export function checkPermitRequirement(
       urgency: 'exceeded',
     };
   }
-  
+
   // Check revenue limits
   if (rules.annual_revenue_limit && annualRevenue >= rules.annual_revenue_limit) {
     return {
@@ -271,7 +271,7 @@ export function checkPermitRequirement(
       urgency: 'exceeded',
     };
   }
-  
+
   // Check if approaching limits (80% threshold for warning)
   if (rules.permit_threshold_weekly) {
     const weeklyPct = weeklyOutput / rules.permit_threshold_weekly;
@@ -283,7 +283,7 @@ export function checkPermitRequirement(
       };
     }
   }
-  
+
   if (rules.annual_revenue_limit) {
     const annualPct = annualRevenue / rules.annual_revenue_limit;
     if (annualPct >= 0.8) {
@@ -294,7 +294,7 @@ export function checkPermitRequirement(
       };
     }
   }
-  
+
   return { required: rules.permit_required, urgency: 'none' };
 }
 
@@ -322,22 +322,22 @@ export function isFoodTypeAllowed(
   rules: CottageLawRule
 ): { allowed: boolean; reason?: string } {
   const normalizedType = foodType.toLowerCase().replace(/\s+/g, '_');
-  
+
   if (rules.prohibited_food_types.includes(normalizedType)) {
     return {
       allowed: false,
       reason: `${foodType} is not allowed under ${rules.state_name} cottage food law`,
     };
   }
-  
-  if (rules.allowed_food_types.length > 0 && 
+
+  if (rules.allowed_food_types.length > 0 &&
       !rules.allowed_food_types.includes(normalizedType)) {
     return {
       allowed: false,
       reason: `${foodType} is not on the approved list for ${rules.state_name}`,
     };
   }
-  
+
   return { allowed: true };
 }
 
@@ -360,19 +360,19 @@ export function generateLabelContent(
     '',
     `Ingredients: ${ingredients.join(', ')}`,
   ];
-  
+
   if (allergens.length > 0) {
     lines.push(`Contains: ${allergens.join(', ')}`);
   }
-  
+
   if (netWeight) {
     lines.push(`Net Wt: ${netWeight}`);
   }
-  
+
   lines.push('');
   lines.push('MADE IN A HOME KITCHEN');
   lines.push('NOT INSPECTED BY THE STATE');
-  
+
   return lines.join('\n');
 }
 
@@ -414,7 +414,7 @@ export function getComplianceChecklist(rules: CottageLawRule): {
       required: !!rules.annual_revenue_limit || !!rules.weekly_limit,
     },
   ];
-  
+
   return checklist.filter(item => item.required);
 }
 
@@ -429,7 +429,7 @@ export async function purchaseGuide(
     if (userError || !userData.user) {
       return { success: false, error: 'Not authenticated' };
     }
-    
+
     // INFRASTRUCTURE NOTE: This function needs real purchase flow:
     // 1. Check if user has enough credits
     // 2. Deduct credits via currencyService
@@ -473,11 +473,11 @@ export async function submitGuide(
     if (userError || !userData.user) {
       return { error: 'Not authenticated' };
     }
-    
+
     // INFRASTRUCTURE NOTE: This function needs to insert into cottage_law_guides table
     // with status 'review' and contributor_id = userData.user.id
     const guideId = `guide-${Date.now()}`;
-    
+
     return { guideId };
   } catch (error) {
     console.error('Error submitting guide:', error);

@@ -16,9 +16,9 @@ interface ProductionWaveManagerProps {
   productionLevelId: string;
 }
 
-export const ProductionWaveManager = ({ 
-  productId, 
-  productionLevelId 
+export const ProductionWaveManager = ({
+  productId,
+  productionLevelId
 }: ProductionWaveManagerProps) => {
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
@@ -43,7 +43,7 @@ export const ProductionWaveManager = ({
         .eq('product_id', productId)
         .eq('production_level_id', productionLevelId)
         .order('wave_number', { ascending: true });
-      
+
       if (error) throw error;
       return data;
     },
@@ -57,7 +57,7 @@ export const ProductionWaveManager = ({
         .from('production_nodes')
         .select('*')
         .eq('is_active', true);
-      
+
       if (error) throw error;
       return data;
     },
@@ -72,7 +72,7 @@ export const ProductionWaveManager = ({
         .select('*')
         .eq('product_id', productId)
         .single();
-      
+
       if (error && error.code !== 'PGRST116') throw error;
       return data;
     },
@@ -82,13 +82,13 @@ export const ProductionWaveManager = ({
   const createWaveMutation = useMutation({
     mutationFn: async () => {
       const totalCapacity = newWave.max_units_per_node * newWave.total_nodes;
-      
+
       // Calculate decreasing price multiplier: Wave 1 = 1.5x, Wave 2 = 1.3x, Wave 3 = 1.2x, Wave 4+ = 1.0x - (0.05 * (wave - 4))
       let calculatedMultiplier = newWave.base_price_multiplier;
       if (newWave.wave_number === 2) calculatedMultiplier = 1.3;
       else if (newWave.wave_number === 3) calculatedMultiplier = 1.2;
       else if (newWave.wave_number >= 4) calculatedMultiplier = Math.max(0.7, 1.0 - (0.05 * (newWave.wave_number - 4)));
-      
+
       const { data, error } = await supabase
         .from('production_waves')
         .insert({

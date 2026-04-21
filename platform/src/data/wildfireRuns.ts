@@ -3,7 +3,7 @@
  * =================================================
  * Each run takes users through a specific pathway with decision points.
  * Golden Keys required = 5 × number of stops
- * 
+ *
  * Categories:
  * - business: Business pathway runs (existing, idea, work)
  * - initiatives: Tour the 16 initiatives

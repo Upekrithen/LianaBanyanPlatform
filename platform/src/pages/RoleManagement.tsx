@@ -106,7 +106,7 @@ export default function RoleManagement() {
     return null;
   }
 
-  const filteredUsers = users?.filter(u => 
+  const filteredUsers = users?.filter(u =>
     !searchEmail || u.email.toLowerCase().includes(searchEmail.toLowerCase())
   );
 

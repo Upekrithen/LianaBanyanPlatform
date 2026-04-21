@@ -3,17 +3,17 @@
  * ============================================================
  * Called when a family member successfully enters their Loteria card name
  * at the Durin's Door gate.
- * 
+ *
  * Actions:
  *   1. Validates the card name matches the person
  *   2. Sends personalized email via Resend
  *   3. Sends personalized SMS via Twilio
  *   4. Returns success with vault content URL
- * 
+ *
  * Request body:
  *   - person: string (diana, ben, noah, ama, isa, ylona)
  *   - cardName: string (la luna, la calavera, etc.)
- * 
+ *
  * Environment variables needed:
  *   - RESEND_API_KEY (already configured)
  *   - TWILIO_ACCOUNT_SID
@@ -154,15 +154,15 @@ Deno.serve(async (req) => {
 
     // Check if card name matches
     const validNames = [member.cardName, ...member.cardNameAlt];
-    const isValid = validNames.some(name => 
+    const isValid = validNames.some(name =>
       name.toLowerCase().replace(/\s+/g, ' ') === enteredCard ||
       enteredCard.includes(name.toLowerCase())
     );
 
     if (!isValid) {
       return new Response(
-        JSON.stringify({ 
-          success: false, 
+        JSON.stringify({
+          success: false,
           error: 'Incorrect card name',
           hint: `Hint: Your card has a ${member.symbol} on it...`
         }),
@@ -218,18 +218,18 @@ Deno.serve(async (req) => {
                   <h1 style="font-size: 28px; font-weight: bold; margin: 16px 0 8px;">Welcome to Your Vault</h1>
                   <p style="color: #666; font-size: 16px;">${member.cardName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</p>
                 </div>
-                
+
                 <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 16px; padding: 24px; margin-bottom: 24px;">
                   <p style="font-size: 18px; line-height: 1.6; color: #78350f; margin: 0; font-style: italic;">
                     "${member.personalMessage}"
                   </p>
                 </div>
-                
+
                 <p style="color: #666; font-size: 16px; line-height: 1.6; text-align: center;">
                   This space belongs to you and Dad together.<br>
                   A place to store memories, share moments, and stay connected.
                 </p>
-                
+
                 ${member.song ? `
                 <div style="background: #f3f4f6; border-radius: 12px; padding: 16px; margin-top: 24px; text-align: center;">
                   <p style="color: #374151; font-size: 14px; margin: 0;">
@@ -237,7 +237,7 @@ Deno.serve(async (req) => {
                   </p>
                 </div>
                 ` : ''}
-                
+
                 <p style="color: #9ca3af; font-size: 12px; text-align: center; margin-top: 32px;">
                   Happy Valentine's Day 2026<br>
                   With all my love — Dad

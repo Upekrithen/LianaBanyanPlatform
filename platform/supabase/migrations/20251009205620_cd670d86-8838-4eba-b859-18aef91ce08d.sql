@@ -15,12 +15,12 @@ BEGIN
   FROM public.production_levels
   JOIN public.products ON products.id = production_levels.product_id
   WHERE production_levels.id = NEW.production_level_id;
-  
+
   -- Insert subscription if not exists
   INSERT INTO public.user_project_subscriptions (user_id, project_id)
   VALUES (NEW.user_id, _project_id)
   ON CONFLICT (user_id, project_id) DO NOTHING;
-  
+
   RETURN NEW;
 END;
 $$;
@@ -41,7 +41,7 @@ BEGIN
   ),
   updated_at = now()
   WHERE user_id = NEW.user_id;
-  
+
   RETURN NEW;
 END;
 $$;
@@ -60,7 +60,7 @@ BEGIN
     WHERE production_level_id = NEW.production_level_id
   )
   WHERE id = NEW.production_level_id;
-  
+
   RETURN NEW;
 END;
 $$;
@@ -78,15 +78,15 @@ BEGIN
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name')
   );
-  
+
   -- Create initial credit entry with 0 credits
   INSERT INTO public.user_credits (user_id, total_credits, used_credits, initial_credit_accepted)
   VALUES (NEW.id, 0, 0, false);
-  
+
   -- Assign default 'user' role
   INSERT INTO public.user_roles (user_id, role)
   VALUES (NEW.id, 'user');
-  
+
   RETURN NEW;
 END;
 $$;

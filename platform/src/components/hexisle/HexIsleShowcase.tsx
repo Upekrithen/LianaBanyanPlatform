@@ -25,7 +25,7 @@ export const HexIsleShowcase: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
-      
+
       {/* Hero Section */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold">HexIsle: The Tereno Water Table</h1>
@@ -35,7 +35,7 @@ export const HexIsleShowcase: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {/* Left Column: The Product & The Maker Pivot */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="border-2 border-primary/20 overflow-hidden">
@@ -62,7 +62,7 @@ export const HexIsleShowcase: React.FC = () => {
             <CardContent className="p-6">
               <h3 className="text-2xl font-bold mb-4">The Manufacturing Volume Discount</h3>
               <p className="text-muted-foreground mb-6">
-                We don't guess demand. We prove it. As more people back the project, we unlock cheaper manufacturing methods. 
+                We don't guess demand. We prove it. As more people back the project, we unlock cheaper manufacturing methods.
                 If you back early at a higher price, and we reach a lower price tier, <strong>you get the difference back as Platform Service Vouchers (Joules).</strong>
               </p>
 
@@ -82,8 +82,8 @@ export const HexIsleShowcase: React.FC = () => {
               {/* The 6 Levels */}
               <div className="space-y-3">
                 {levels.map((lvl) => (
-                  <div 
-                    key={lvl.level} 
+                  <div
+                    key={lvl.level}
                     className={`flex items-center justify-between p-3 rounded-lg border ${
                       lvl.active ? 'bg-primary/10 border-primary' : 'bg-card border-border'
                     }`}
@@ -131,10 +131,10 @@ export const HexIsleShowcase: React.FC = () => {
               <CardDescription>Secure your set and earn Joules.</CardDescription>
             </CardHeader>
             <CardContent className="p-6 space-y-6">
-              
+
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  We use Kickstarter to process payments securely and handle compliance. 
+                  We use Kickstarter to process payments securely and handle compliance.
                 </p>
                 <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => window.open('https://kickstarter.com', '_blank')}>
                   Back on Kickstarter <ExternalLink className="w-4 h-4 ml-2" />

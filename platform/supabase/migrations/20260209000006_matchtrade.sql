@@ -7,29 +7,29 @@
 CREATE TABLE IF NOT EXISTS public.matchtrade_offers (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   offerer_id      UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- What I'm offering
   service_title   TEXT NOT NULL,
   service_description TEXT,
   category        TEXT NOT NULL,
   marks_price     NUMERIC NOT NULL CHECK (marks_price > 0),
-  
+
   -- Joules collateral (from Bond Account — per Cephas spec)
   joules_collateral NUMERIC NOT NULL DEFAULT 0,
   collateral_locked BOOLEAN DEFAULT false,
-  
+
   -- Geographic filter
   postal_code     TEXT,
   radius_miles    INTEGER DEFAULT 25,
-  
+
   -- What I want in return
   seeking_category TEXT,
   seeking_description TEXT,
-  
+
   -- Status
   status          TEXT DEFAULT 'open' CHECK (status IN ('open','matched','in_progress','delivered','disputed','cancelled','completed')),
   matched_with_offer_id UUID REFERENCES public.matchtrade_offers(id),
-  
+
   -- Timestamps
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   matched_at      TIMESTAMPTZ,
@@ -47,26 +47,26 @@ CREATE TABLE IF NOT EXISTS public.matchtrade_matches (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   offer_a_id      UUID NOT NULL REFERENCES public.matchtrade_offers(id),
   offer_b_id      UUID NOT NULL REFERENCES public.matchtrade_offers(id),
-  
+
   status          TEXT DEFAULT 'active' CHECK (status IN ('active','a_delivered','b_delivered','completed','disputed')),
-  
+
   -- Delivery tracking
   a_delivered_at  TIMESTAMPTZ,
   b_delivered_at  TIMESTAMPTZ,
   a_confirmed_by_b BOOLEAN DEFAULT false,
   b_confirmed_by_a BOOLEAN DEFAULT false,
-  
+
   -- Completion
   completed_at    TIMESTAMPTZ,
   marks_transferred_a NUMERIC DEFAULT 0,
   marks_transferred_b NUMERIC DEFAULT 0,
-  
+
   -- Dispute
   disputed_at     TIMESTAMPTZ,
   dispute_reason  TEXT,
   dispute_resolved_at TIMESTAMPTZ,
   dispute_resolution TEXT,
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW()
 );
 

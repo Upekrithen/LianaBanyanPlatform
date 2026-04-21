@@ -13,11 +13,11 @@ interface RequireCreditsProps {
   children: (props: { onClick: () => void; disabled: boolean }) => React.ReactNode;
 }
 
-export const RequireCredits = ({ 
-  requiredCredits, 
-  actionName, 
-  onSuccess, 
-  children 
+export const RequireCredits = ({
+  requiredCredits,
+  actionName,
+  onSuccess,
+  children
 }: RequireCreditsProps) => {
   const [currentCredits, setCurrentCredits] = useState<number>(0);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
@@ -70,7 +70,7 @@ export const RequireCredits = ({
     await loadCredits();
     toast.success("Credits added! You can now proceed.");
     setShowInsufficientAlert(false);
-    
+
     // Auto-complete the action if we now have enough credits
     if (currentCredits >= requiredCredits) {
       setTimeout(() => handleClick(), 1000);
@@ -86,8 +86,8 @@ export const RequireCredits = ({
             <span>
               You need {requiredCredits} credits for {actionName}. You have {currentCredits} credits.
             </span>
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               variant="outline"
               onClick={() => setShowPurchaseModal(true)}
               className="ml-2"
@@ -99,9 +99,9 @@ export const RequireCredits = ({
         </Alert>
       )}
 
-      {children({ 
-        onClick: handleClick, 
-        disabled: isLoading 
+      {children({
+        onClick: handleClick,
+        disabled: isLoading
       })}
 
       <CreditPurchaseModal

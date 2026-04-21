@@ -1,5 +1,5 @@
 -- Add surge pricing fields to production_waves
-ALTER TABLE production_waves 
+ALTER TABLE production_waves
 ADD COLUMN IF NOT EXISTS surge_enabled boolean DEFAULT false,
 ADD COLUMN IF NOT EXISTS surge_threshold numeric DEFAULT 0.7,
 ADD COLUMN IF NOT EXISTS surge_multiplier numeric DEFAULT 1.5,
@@ -17,7 +17,7 @@ BEGIN
     AND wave_number <= 3
     AND (units_allocated::numeric / NULLIF(total_wave_capacity, 0)) >= surge_threshold
     AND surge_active = false;
-  
+
   -- Deactivate surge if capacity drops below threshold (e.g., cancellations)
   UPDATE production_waves
   SET surge_active = false

@@ -37,7 +37,7 @@ Liana Banyan is a collaborative network built on principles of ethical innovatio
 
 **Exceptions** (AI-generated content is permitted for production):
 - **Charts & Graphs**: Data visualizations, analytics displays, statistical representations
-- **Icons**: Functional interface icons, navigation elements, system indicators  
+- **Icons**: Functional interface icons, navigation elements, system indicators
 - **Functional Applications**: UI/UX elements that serve utility purposes (buttons, backgrounds, patterns)
 - **Procedural Content**: Algorithm-generated designs that follow human-defined parameters
 
@@ -82,12 +82,12 @@ This charter may be amended through:
 
 Charter violations are addressed through:
 - Mediation for minor infractions
-- Arbitration for major disputes  
+- Arbitration for major disputes
 - Community review for systemic issues
 - Potential sanctions: warnings, temporary suspension, or permanent removal
 
 ---
 
-**Version**: 1.0  
-**Effective Date**: 2025  
+**Version**: 1.0
+**Effective Date**: 2025
 **Last Updated**: January 2025

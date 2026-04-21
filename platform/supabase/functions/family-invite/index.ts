@@ -3,7 +3,7 @@
  * ==================================================
  * Creates an invitation that requires unanimous approval from all current members.
  * Sends notification email to existing members to vote.
- * 
+ *
  * POST body:
  *   - familyId: UUID
  *   - inviteeEmail: string
@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),
@@ -218,7 +218,7 @@ Deno.serve(async (req) => {
         success: true,
         invite,
         votesNeeded,
-        message: votesNeeded === 1 
+        message: votesNeeded === 1
           ? `${inviteeName} has been added to the family!`
           : `Invitation sent! Waiting for ${votesNeeded - 1} more vote(s) for unanimous approval.`,
       }),

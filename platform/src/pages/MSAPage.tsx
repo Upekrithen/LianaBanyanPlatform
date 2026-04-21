@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  PiggyBank, HeartPulse, Users, ShieldCheck, ArrowRight, 
+import {
+  PiggyBank, HeartPulse, Users, ShieldCheck, ArrowRight,
   Plus, Activity, Wallet, Receipt, TrendingUp, Landmark
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
@@ -34,7 +34,7 @@ export default function MSAPage() {
           <div className="flex flex-col gap-2 items-end">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-sm font-medium text-muted-foreground">WildFire Tour Mode:</span>
-              <button 
+              <button
                 onClick={() => setIsWildFireTour(!isWildFireTour)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isWildFireTour ? 'bg-orange-500' : 'bg-muted'}`}
               >
@@ -84,7 +84,7 @@ export default function MSAPage() {
                       {isWildFireTour ? 'Active' : 'Pending Deposit'}
                     </Badge>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4 border-t pt-6">
                     <div>
                       <p className="text-sm text-muted-foreground mb-1">Monthly Auto-Deposit</p>
@@ -218,7 +218,7 @@ export default function MSAPage() {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-100 flex flex-col justify-center">
                     <PiggyBank className="w-12 h-12 text-indigo-400 mb-4" />
                     <h3 className="font-bold text-indigo-900 mb-2">Why Pool Funds?</h3>

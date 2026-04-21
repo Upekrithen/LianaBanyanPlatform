@@ -58,7 +58,7 @@ export function ExternalCollaboratorManager() {
         .from("external_collaborator_agreements" as any)
         .select("*")
         .order("created_at", { ascending: false });
-      
+
       if (error) throw error;
       return data as any[];
     },
@@ -69,7 +69,7 @@ export function ExternalCollaboratorManager() {
       const { error } = await supabase
         .from("external_collaborator_agreements" as any)
         .insert(data);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -89,7 +89,7 @@ export function ExternalCollaboratorManager() {
         .from("external_collaborator_agreements" as any)
         .update(data)
         .eq("id", id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -107,7 +107,7 @@ export function ExternalCollaboratorManager() {
         .from("external_collaborator_agreements" as any)
         .delete()
         .eq("id", id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -426,9 +426,9 @@ export function ExternalCollaboratorManager() {
                       <Button size="sm" variant="outline" onClick={() => handleEdit(collab)}>
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
+                      <Button
+                        size="sm"
+                        variant="destructive"
                         onClick={() => deleteMutation.mutate(collab.id)}
                         disabled={deleteMutation.isPending}
                       >
@@ -475,9 +475,9 @@ export function ExternalCollaboratorManager() {
                       <Button size="sm" variant="outline" onClick={() => handleEdit(collab)}>
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
+                      <Button
+                        size="sm"
+                        variant="destructive"
                         onClick={() => deleteMutation.mutate(collab.id)}
                         disabled={deleteMutation.isPending}
                       >

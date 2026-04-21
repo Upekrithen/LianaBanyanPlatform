@@ -1,8 +1,8 @@
 # IP Control Framework - Academic & Business Rationale
 
-**Document Type**: Ph.D. Research Documentation & Business Plan Strategy  
-**Date Prepared**: 2025-10-15  
-**Author**: Jarvis (AI Assistant)  
+**Document Type**: Ph.D. Research Documentation & Business Plan Strategy
+**Date Prepared**: 2025-10-15
+**Author**: Jarvis (AI Assistant)
 **Subject**: Three-Tier Intellectual Property Control Model for LianaBanyan Ecosystem
 
 ---
@@ -264,13 +264,13 @@ CREATE TABLE public.ip_creator_controls (
 CREATE TABLE public.patent_pool_usage_rights (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   ip_asset_id UUID NOT NULL REFERENCES public.ip_assets(id),
-  
+
   -- Unlimited Internal Use
   unlimited_internal_use BOOLEAN DEFAULT true,
   can_derive BOOLEAN DEFAULT true,
   can_modify BOOLEAN DEFAULT true,
   can_combine_with_other_pool_ip BOOLEAN DEFAULT true,
-  
+
   -- Authorization Model
   authorization_model TEXT CHECK (authorization_model IN ('dibs_with_premium', 'protest_premium', 'first_come')),
   dibs_holder_id UUID REFERENCES auth.users(id),
@@ -278,14 +278,14 @@ CREATE TABLE public.patent_pool_usage_rights (
   dibs_profit_share NUMERIC, -- Extra % for dibs holder
   unauthorized_use_premium NUMERIC, -- Higher % if used without approval
   protest_offset_penalty NUMERIC, -- Penalty to discourage frivolous protests
-  
+
   -- Revenue Sharing (Tier B: Only applies to LB-connected products)
   applies_to_lb_products_only BOOLEAN DEFAULT true,
   base_revenue_share NUMERIC, -- Standard %
   with_authorization_share NUMERIC, -- If creator approves
   without_authorization_share NUMERIC, -- If used over objection (after arbitration)
   external_license_revenue_share NUMERIC, -- % of revenue from licensing to non-LB entities
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -300,12 +300,12 @@ CREATE TABLE public.ip_use_proposals (
   proposal_description TEXT NOT NULL,
   proposed_use_category TEXT,
   target_product_id UUID REFERENCES public.products(id),
-  
+
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'auto_approved', 'creator_approved', 'creator_denied', 'arbitration', 'approved_by_arbitration')),
   creator_response_deadline TIMESTAMPTZ,
   creator_denial_reason TEXT,
   arbitration_ruling TEXT,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   responded_at TIMESTAMPTZ
 );
@@ -318,16 +318,16 @@ CREATE TABLE public.ip_arbitration_cases (
   proposal_id UUID NOT NULL REFERENCES public.ip_use_proposals(id),
   creator_id UUID NOT NULL REFERENCES auth.users(id),
   filed_by UUID NOT NULL REFERENCES auth.users(id),
-  
+
   case_type TEXT CHECK (case_type IN ('frivolous_block', 'unauthorized_use', 'category_dispute')),
   evidence JSONB,
   mediator_id UUID REFERENCES auth.users(id),
-  
+
   ruling TEXT CHECK (ruling IN ('creator_upheld', 'lb_upheld', 'compromise')),
   ruling_rationale TEXT,
   financial_penalty NUMERIC, -- Arbitration costs awarded
   equity_adjustment NUMERIC, -- Penalty participation forfeiture if applicable
-  
+
   filed_at TIMESTAMPTZ DEFAULT NOW(),
   resolved_at TIMESTAMPTZ
 );
@@ -443,7 +443,7 @@ CREATE TABLE public.ip_arbitration_cases (
 
 ### Background IP Retention
 
-Each party retains all right, title, and interest in and to its pre-existing intellectual property and any intellectual property developed independently of this Agreement ("Background IP"). 
+Each party retains all right, title, and interest in and to its pre-existing intellectual property and any intellectual property developed independently of this Agreement ("Background IP").
 
 **Key Principles:**
 

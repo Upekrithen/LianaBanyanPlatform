@@ -144,7 +144,7 @@ export const RosettaKeyboard: React.FC<RosettaKeyboardProps> = ({ onCharacter, o
     <div className="rosetta-overlay" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={0} aria-label="Close keyboard">
       <div className="rosetta-panel" onClick={(e) => e.stopPropagation()}>
         <button className="rosetta-close" onClick={onClose}>×</button>
-        
+
         <h3>🗿 Rosetta Stones</h3>
         <p className="rosetta-hint">Select a language family to reveal the Ghost Keyboard</p>
 
@@ -176,7 +176,7 @@ export const RosettaKeyboard: React.FC<RosettaKeyboardProps> = ({ onCharacter, o
                 >
                   <span className="lang-native">{lang.native}</span>
                   <span className="lang-word">"{lang.word}"</span>
-                  <button 
+                  <button
                     className="quick-insert"
                     onClick={(e) => { e.stopPropagation(); handleQuickWord(lang.word); }}
                     title="Insert this word"
@@ -205,7 +205,7 @@ export const RosettaKeyboard: React.FC<RosettaKeyboardProps> = ({ onCharacter, o
                 </button>
               ))}
             </div>
-            <button 
+            <button
               className="insert-word-btn"
               onClick={() => handleQuickWord(language.word)}
             >
@@ -216,7 +216,7 @@ export const RosettaKeyboard: React.FC<RosettaKeyboardProps> = ({ onCharacter, o
 
         {!selectedFamily && (
           <p className="rosetta-lore">
-            <em>These stones were found in the labyrinth beneath the Main Guild Tower. 
+            <em>These stones were found in the labyrinth beneath the Main Guild Tower.
             Each bears the marks of an ancient script family. Touch one to reveal its secrets.</em>
           </p>
         )}

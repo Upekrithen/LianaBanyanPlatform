@@ -1,6 +1,6 @@
 /**
  * Platform Metrics Service
- * 
+ *
  * Real-time health and performance tracking for the Nervous System.
  * Records and analyzes platform-wide metrics.
  */
@@ -16,7 +16,7 @@ export interface PlatformMetric {
   recorded_at: string;
 }
 
-export type MetricName = 
+export type MetricName =
   | 'innovation_count'
   | 'patent_claims'
   | 'active_members'
@@ -109,15 +109,15 @@ export async function getMetricHistory(
  */
 export async function calculateInnovationVelocity(days = 7): Promise<number> {
   const history = await getMetricHistory('innovation_count', days * 24);
-  
+
   if (history.length < 2) return 0;
-  
+
   const oldest = history[0];
   const newest = history[history.length - 1];
   const valueDiff = newest.metric_value - oldest.metric_value;
   const timeDiffMs = new Date(newest.recorded_at).getTime() - new Date(oldest.recorded_at).getTime();
   const timeDiffDays = timeDiffMs / (1000 * 60 * 60 * 24);
-  
+
   return timeDiffDays > 0 ? valueDiff / timeDiffDays : 0;
 }
 
@@ -133,23 +133,23 @@ export async function detectWorkBursts(
   peak_value: number;
 }>> {
   const history = await getMetricHistory(metricName, 168); // 7 days
-  
+
   if (history.length < 10) return [];
-  
+
   const values = history.map(m => m.metric_value);
   const avg = values.reduce((a, b) => a + b, 0) / values.length;
   const threshold = avg * thresholdMultiplier;
-  
+
   const bursts: Array<{
     burst_start: string;
     burst_end: string;
     peak_value: number;
   }> = [];
-  
+
   let inBurst = false;
   let burstStart = '';
   let peakValue = 0;
-  
+
   for (const metric of history) {
     if (metric.metric_value > threshold) {
       if (!inBurst) {
@@ -168,7 +168,7 @@ export async function detectWorkBursts(
       inBurst = false;
     }
   }
-  
+
   return bursts;
 }
 

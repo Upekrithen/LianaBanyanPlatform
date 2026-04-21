@@ -2,7 +2,7 @@
  * The Pantry — Recipe Credit System
  * ==================================
  * Recipe creators earn credits from LB's 20% margin when their recipes are used.
- * 
+ *
  * Credit Model:
  * - Base rate: $0.05 per use (from LB's 16.7% margin)
  * - Vote multiplier: Popular recipes earn more (up to 5x)
@@ -41,7 +41,7 @@ export const CREDIT_CONSTANTS = {
 /**
  * Calculate the vote multiplier based on vote count
  * Uses logarithmic scaling: min(5, 1 + log10(votes + 1))
- * 
+ *
  * Examples:
  * - 0 votes → 1x
  * - 9 votes → 2x
@@ -52,7 +52,7 @@ export const CREDIT_CONSTANTS = {
 export function calculateVoteMultiplier(voteCount: number): number {
   if (voteCount <= 0) return 1;
   return Math.min(
-    CREDIT_CONSTANTS.MAX_VOTE_MULTIPLIER, 
+    CREDIT_CONSTANTS.MAX_VOTE_MULTIPLIER,
     1 + Math.log10(voteCount + 1)
   );
 }
@@ -60,7 +60,7 @@ export function calculateVoteMultiplier(voteCount: number): number {
 /**
  * Calculate the diminishing factor based on total uses
  * Uses linear scaling: max(0.1, 1 - (uses / 10000))
- * 
+ *
  * Examples:
  * - 0 uses → 100%
  * - 2500 uses → 75%
@@ -83,7 +83,7 @@ export function calculateDiminishingFactor(totalUses: number): number {
  */
 export function calculateRecipeCredit(stats: RecipeStats): CreditCalculation {
   const { voteCount, totalUses, totalCreditsEarned, isCapped } = stats;
-  
+
   // If already capped, no more credits
   if (isCapped || totalCreditsEarned >= CREDIT_CONSTANTS.LIFETIME_CAP) {
     return {
@@ -96,26 +96,26 @@ export function calculateRecipeCredit(stats: RecipeStats): CreditCalculation {
       creditsRemaining: 0
     };
   }
-  
+
   // Calculate multipliers
   const voteMultiplier = calculateVoteMultiplier(voteCount);
   const diminishingFactor = calculateDiminishingFactor(totalUses);
-  
+
   // Calculate raw credits
   let credits = CREDIT_CONSTANTS.BASE_RATE * voteMultiplier * diminishingFactor;
-  
+
   // Round to 4 decimal places
   credits = Math.round(credits * 10000) / 10000;
-  
+
   // Check if this use would exceed the cap
   const creditsRemaining = CREDIT_CONSTANTS.LIFETIME_CAP - totalCreditsEarned;
   const willBeCapped = credits >= creditsRemaining;
-  
+
   // Cap credits if needed
   if (willBeCapped) {
     credits = creditsRemaining;
   }
-  
+
   return {
     credits,
     baseRate: CREDIT_CONSTANTS.BASE_RATE,
@@ -150,10 +150,10 @@ export function projectRecipeEarnings(
   currentCredits: number = 0
 ): number {
   let total = currentCredits;
-  
+
   for (let i = 0; i < projectedUses; i++) {
     if (total >= CREDIT_CONSTANTS.LIFETIME_CAP) break;
-    
+
     const calc = calculateRecipeCredit({
       voteCount,
       makeCount: 0, // Not used in calculation
@@ -161,10 +161,10 @@ export function projectRecipeEarnings(
       totalCreditsEarned: total,
       isCapped: false
     });
-    
+
     total += calc.credits;
   }
-  
+
   return Math.min(total, CREDIT_CONSTANTS.LIFETIME_CAP);
 }
 
@@ -204,7 +204,7 @@ export function calculateCookingSpoonLevel(
     const qualifyingRecipes = recipesWithMakes.filter(
       r => r.makeCount >= threshold.makes
     ).length;
-    
+
     if (qualifyingRecipes >= threshold.recipes) {
       return threshold.level;
     }
@@ -233,7 +233,7 @@ export function calculateBadgeEligibility(
   recipesWithMakes: { makeCount: number; totalUses: number }[]
 ): BadgeEligibility {
   const maxUses = Math.max(0, ...recipesWithMakes.map(r => r.totalUses));
-  
+
   return {
     cookingSpoon: calculateCookingSpoonLevel(recipesWithMakes),
     hotPepper: calculateHotPepperLevel(maxUses)
@@ -244,10 +244,10 @@ export function calculateBadgeEligibility(
  * Generate a description of how credits work for UI
  */
 export function getCreditExplanation(): string {
-  return `Recipe creators earn credits when their recipes are used. 
-  Base rate: ${formatCredits(CREDIT_CONSTANTS.BASE_RATE)} per use. 
-  Popular recipes with more votes earn up to ${CREDIT_CONSTANTS.MAX_VOTE_MULTIPLIER}x more. 
-  Credits decrease gradually after many uses. 
-  Lifetime cap: ${formatCredits(CREDIT_CONSTANTS.LIFETIME_CAP)} per recipe. 
+  return `Recipe creators earn credits when their recipes are used.
+  Base rate: ${formatCredits(CREDIT_CONSTANTS.BASE_RATE)} per use.
+  Popular recipes with more votes earn up to ${CREDIT_CONSTANTS.MAX_VOTE_MULTIPLIER}x more.
+  Credits decrease gradually after many uses.
+  Lifetime cap: ${formatCredits(CREDIT_CONSTANTS.LIFETIME_CAP)} per recipe.
   After the cap, Cooking Spoon badges are awarded instead.`;
 }

@@ -41,11 +41,11 @@ export const RootLockDemo: React.FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-6">
-        
+
         {/* Controls */}
         <div className="flex flex-wrap gap-2 mb-6">
           {(['single', 'twin', 'tri', 'quad', 'ring'] as RootType[]).map(type => (
-            <Button 
+            <Button
               key={type}
               variant={selectedRoot === type ? "default" : "outline"}
               onClick={() => setSelectedRoot(type)}
@@ -61,12 +61,12 @@ export const RootLockDemo: React.FC = () => {
 
         {/* 3D Canvas */}
         <div className="w-full h-[400px] bg-slate-900 rounded-xl overflow-hidden relative border border-slate-700">
-          
+
           {/* UI Overlay */}
           <div className="absolute top-4 right-4 z-10 pointer-events-none">
             {hoveredSocket && activeSocket && (
-              <Badge 
-                variant="default" 
+              <Badge
+                variant="default"
                 className={`text-sm px-3 py-1 ${isValidHover ? 'bg-emerald-500' : 'bg-red-500'}`}
               >
                 {isValidHover ? 'Valid Placement' : 'Does Not Fit'}
@@ -78,32 +78,32 @@ export const RootLockDemo: React.FC = () => {
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} intensity={1} />
             <Environment preset="city" />
-            
+
             <Grid infiniteGrid fadeDistance={20} sectionColor="#334155" cellColor="#1e293b" />
 
             {/* Render Sockets */}
             {sockets.map(socket => (
               <group key={socket.id} onClick={() => handleSocketClick(socket)}>
-                <SocketComponent 
-                  config={socket} 
+                <SocketComponent
+                  config={socket}
                   onHover={setHoveredSocket}
                   onHoverOut={() => setHoveredSocket(null)}
                   isTargeted={hoveredSocket === socket.id}
                 />
-                
+
                 {/* Render placed roots */}
                 {placedRoots[socket.id] && (
-                  <RootComponent 
-                    type={placedRoots[socket.id]} 
-                    position={[socket.position[0], 0, socket.position[2]]} 
+                  <RootComponent
+                    type={placedRoots[socket.id]}
+                    position={[socket.position[0], 0, socket.position[2]]}
                   />
                 )}
 
                 {/* Render ghost/preview root when hovering */}
                 {hoveredSocket === socket.id && !placedRoots[socket.id] && (
-                  <RootComponent 
-                    type={selectedRoot} 
-                    position={[socket.position[0], 0.5, socket.position[2]]} 
+                  <RootComponent
+                    type={selectedRoot}
+                    position={[socket.position[0], 0.5, socket.position[2]]}
                     isDragging={true}
                     isValidLocation={isValidHover}
                   />

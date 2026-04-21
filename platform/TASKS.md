@@ -47,7 +47,7 @@
 **Tier Structure with Stake Requirements**:
 - **Apprentice**: Classes 1-6 (no stake required, entry level)
   - Auto-assigned on first position signup for ANY role
-  
+
 - **Journeyman**: Classes 1-6 (progressive stakes)
   - Class 1: $500 stake (promoted from Apprentice Class 6)
   - Class 2: +$750 additional ($1,250 total)
@@ -55,7 +55,7 @@
   - Class 4: +$1,250 additional ($3,500 total)
   - Class 5: +$1,500 additional ($5,000 total)
   - Class 6: +$2,000 additional ($7,000 total)
-  
+
 - **Master**: Classes 1-6 (higher stakes)
   - Class 1: $10,000 stake (promoted from Journeyman Class 6)
   - Class 2: +$5,000 additional ($15,000 total)
@@ -63,7 +63,7 @@
   - Class 4: +$10,000 additional ($32,500 total)
   - Class 5: +$15,000 additional ($47,500 total)
   - Class 6: +$20,000 additional ($67,500 total)
-  
+
 - **Captain of Industry**: Special badge for Project Owners producing 10,000+ credits
   - No additional stake (already proven via production)
   - Physical badge mailed
@@ -291,7 +291,7 @@
 
 **What it unlocks**:
 - Access to Business Portal (.biz) - Position management & HR
-- Access to Network Portal (.net) - B2B production & contracts  
+- Access to Network Portal (.net) - B2B production & contracts
 - Access to Non-Profit Portal (.org) - Fund admin & member benefits
 - Eligibility to join guilds and progress through tiers
 - Voting rights in LB governance
@@ -325,9 +325,9 @@
 - ✅ Dashboard integration - Shows progression card after membership stake paid
 
 ## ✅ Task 24: Comprehensive Translation Expansion - 100% COMPLETE ✨
-**Status**: ✅ COMPLETED  
-**Started**: 2025-01-16  
-**Completed**: 2025-01-16  
+**Status**: ✅ COMPLETED
+**Started**: 2025-01-16
+**Completed**: 2025-01-16
 **Total Translation Keys**: 750+ (EN, ES, FR)
 
 **All Sections Completed**:
@@ -537,7 +537,7 @@
   - **Business Portal** (.biz / :5174) - HR, positions, project management
   - **Non-Profit Portal** (.org / :5175) - Fund admin, loans, member benefits
   - **Business Network Portal** (.net / :5176) - B2B production, contracts, XML lockbox
-  
+
   - [x] Updated `portalDetector.ts` for 4-portal detection ✅ 2025-01-15
   - [x] Created `BusinessApp.tsx` for business routes ✅ 2025-01-15
   - [x] Updated `main.tsx` to load correct portal ✅ 2025-01-15
@@ -963,7 +963,7 @@
 **Tasks**:
 - [x] Install and configure dependencies ✅
   - wagmi for Web3 hooks
-  - viem for Ethereum interactions  
+  - viem for Ethereum interactions
   - @rainbow-me/rainbowkit for wallet UI
   - Configure Base network settings
 - [x] WalletConnect Configuration ✅
@@ -1018,7 +1018,7 @@
   - Implemented BaseScan explorer links for contracts, tokens, and transactions
   - Added blockchain verification badges and metadata display
 
-**Documentation**: 
+**Documentation**:
 - 📚 `docs/WEB3_BLOCKCHAIN_SETUP.md` - General setup guide
 - 📜 `docs/MEDALLION_CONTRACT.sol` - Smart contract code
 - 🚀 `docs/MEDALLION_DEPLOYMENT_GUIDE.md` - Step-by-step deployment
@@ -1240,7 +1240,7 @@ CREATE TABLE project_theme_managers (
 -- Extend role system for project-specific roles
 CREATE TYPE project_role AS ENUM (
   'project_owner',
-  'project_manager', 
+  'project_manager',
   'steward',
   'hr_manager',
   'theme_manager',
@@ -1337,20 +1337,20 @@ CREATE TABLE project_independence_status (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id uuid REFERENCES projects(id) UNIQUE,
   status text DEFAULT 'lb_project', -- lb_project, transitioning, independent_company
-  
+
   -- Independence details
   company_name text,
   ein text, -- Employer Identification Number
   state_of_incorporation text,
   incorporation_date timestamptz,
   business_entity_type text, -- LLC, C-Corp, S-Corp, etc.
-  
+
   -- LB relationship terms
   lb_equity_bonus_percentage numeric DEFAULT 0, -- 5-10% bonus
   autonomy_level text DEFAULT 'standard', -- standard, enhanced, full
   lb_rate_contract_signed boolean DEFAULT false,
   lb_rate_contract_date timestamptz,
-  
+
   -- Tracking
   transitioned_at timestamptz,
   transitioned_by uuid REFERENCES auth.users(id),
@@ -1454,18 +1454,18 @@ CREATE TABLE project_rate_bonuses (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id uuid REFERENCES projects(id),
   bonus_type text NOT NULL, -- 'flat_percentage', 'performance_pool', 'profit_share'
-  
+
   -- Flat percentage bonuses
   flat_bonus_percentage numeric, -- e.g., +15% on all contracts
-  
+
   -- Performance pool
   pool_fund_source text, -- 'off_lb_schedule', 'sigma_six_bonus', 'profit_margin'
   pool_distribution_method text, -- 'equal', 'weighted_by_hours', 'performance_based'
-  
+
   -- Profit sharing
   profit_share_percentage numeric,
   profit_calculation_method text,
-  
+
   is_active boolean DEFAULT true,
   created_by uuid REFERENCES auth.users(id),
   created_at timestamptz DEFAULT now()
@@ -1477,11 +1477,11 @@ CREATE TABLE guild_rate_bonuses (
   guild_id uuid REFERENCES guilds(id),
   bonus_description text NOT NULL,
   bonus_type text NOT NULL, -- 'sigma_six_pooled', 'off_schedule_work', 'high_performer_incentive'
-  
+
   -- Bonus calculation
   calculation_method jsonb, -- Flexible structure for different methods
   eligible_tier text[], -- Which tiers qualify
-  
+
   is_active boolean DEFAULT true,
   created_by uuid REFERENCES auth.users(id),
   created_at timestamptz DEFAULT now()
@@ -1566,19 +1566,19 @@ CREATE TABLE member_service_links (
   platform_profile_url text NOT NULL,
   platform_username text,
   verification_status text DEFAULT 'pending', -- pending, verified, flagged
-  
+
   -- Rate monitoring
   advertised_rate_min numeric,
   advertised_rate_max numeric,
   lb_rate_category text, -- Links to scale_rates
   rate_differential_flagged boolean DEFAULT false,
-  
+
   -- Compliance tracking
   lb_contracts_completed integer DEFAULT 0,
   external_contracts_completed integer DEFAULT 0,
   violations_count integer DEFAULT 0,
   last_violation_date timestamptz,
-  
+
   is_active boolean DEFAULT true,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
@@ -1590,16 +1590,16 @@ CREATE TABLE lb_member_hiring_log (
   hiring_member_id uuid REFERENCES auth.users(id),
   hired_member_id uuid REFERENCES auth.users(id),
   service_link_id uuid REFERENCES member_service_links(id),
-  
+
   -- Contract details
   agreed_rate numeric NOT NULL,
   lb_scale_rate numeric NOT NULL,
   rate_compliant boolean NOT NULL,
-  
+
   -- If non-compliant
   violation_severity text, -- 'minor', 'major', 'severe'
   reputation_penalty integer,
-  
+
   contract_id uuid REFERENCES project_member_contracts(id),
   created_at timestamptz DEFAULT now()
 );
@@ -1890,7 +1890,7 @@ const { t } = useTranslation();
 
 ## ✅ TASK 26: CROWDFUNDING PLATFORM INTEGRATION - COMPLETE
 
-**Status**: ✅ Complete | **Priority**: HIGH | **Dependencies**: Credit System ✅, Pledge System ✅  
+**Status**: ✅ Complete | **Priority**: HIGH | **Dependencies**: Credit System ✅, Pledge System ✅
 **Completed**: 2025-01-16
 
 **Objective**: Complete integration with Kickstarter and add connections to other major crowdfunding platforms
@@ -1907,19 +1907,19 @@ const { t } = useTranslation();
    - ✅ Webhook endpoint configured
    - ✅ Sync functions operational
    - Need: Production credentials and testing
-   
+
 2. ✅ **Indiegogo** (Infrastructure Ready)
    - ✅ Database schema supports
    - Ready for: API integration and webhooks
-   
+
 3. ✅ **GoFundMe** (Infrastructure Ready)
    - ✅ Database schema supports
    - Ready for: Manual or API import
-   
+
 4. ✅ **Patreon** (Infrastructure Ready - recurring pledges)
    - ✅ Database schema supports
    - Ready for: OAuth integration and monthly sync
-   
+
 5. ✅ **BackerKit** (Infrastructure Ready)
    - ✅ Database schema supports
    - Ready for: Post-campaign fulfillment integration
@@ -1976,18 +1976,18 @@ const { t } = useTranslation();
    - Configure webhook URL in Kickstarter dashboard
    - Test pledge sync flow end-to-end
    - Document setup process
-   
+
 2. **Indiegogo Integration**:
    - Research API capabilities
    - Create webhook endpoint
    - Build sync function
    - Add database tables
-   
+
 3. **Patreon Integration**:
    - OAuth flow for creator accounts
    - Monthly sync schedule
    - Tier-to-benefit mapping
-   
+
 4. **Universal Pledge Processor**:
    - Standardize pledge data format
    - Unified user creation/linking
@@ -2001,28 +2001,28 @@ CREATE TABLE crowdfunding_pledges (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   platform text NOT NULL, -- 'kickstarter', 'indiegogo', 'gofundme', 'patreon'
   platform_pledge_id text NOT NULL,
-  
+
   -- Backer info
   backer_email text NOT NULL,
   backer_name text,
   user_id uuid REFERENCES auth.users(id), -- Linked LB user
-  
+
   -- Pledge details
   pledge_amount numeric NOT NULL,
   pledge_currency text DEFAULT 'USD',
   pledge_date timestamptz NOT NULL,
   reward_tier text,
-  
+
   -- LB integration
   product_id uuid REFERENCES products(id),
   is_processed boolean DEFAULT false,
   processed_at timestamptz,
   credits_allocated numeric,
-  
+
   -- Sync tracking
   synced_at timestamptz DEFAULT now(),
   last_updated timestamptz DEFAULT now(),
-  
+
   UNIQUE(platform, platform_pledge_id)
 );
 
@@ -2030,21 +2030,21 @@ CREATE TABLE crowdfunding_pledges (
 CREATE TABLE crowdfunding_platform_connections (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id uuid REFERENCES projects(id),
-  
+
   platform text NOT NULL,
   api_key_encrypted text, -- Encrypted API credentials
   oauth_token_encrypted text,
   oauth_refresh_token_encrypted text,
-  
+
   webhook_url text,
   webhook_secret text,
-  
+
   is_active boolean DEFAULT true,
   last_sync_at timestamptz,
-  
+
   created_by uuid REFERENCES auth.users(id),
   created_at timestamptz DEFAULT now(),
-  
+
   UNIQUE(project_id, platform)
 );
 
@@ -2053,14 +2053,14 @@ CREATE TABLE crowdfunding_sync_log (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   platform text NOT NULL,
   project_id uuid REFERENCES projects(id),
-  
+
   sync_type text, -- 'webhook', 'scheduled', 'manual'
   status text, -- 'success', 'partial', 'failed'
-  
+
   pledges_synced integer DEFAULT 0,
   errors_count integer DEFAULT 0,
   error_details jsonb,
-  
+
   started_at timestamptz DEFAULT now(),
   completed_at timestamptz
 );
@@ -2180,13 +2180,13 @@ CREATE TABLE crowdfunding_sync_log (
    - Style: Animated nature documentary
    - Key concepts: Symbiosis, mutual benefit, interconnected growth
    - Voiceover: Professional, warm, David Attenborough style
-   
+
 2. **"How Credits Work"** - System Explainer
    - Length: 1.5-2 minutes
    - Style: Motion graphics with icons
    - Key concepts: EOI credits, contribution credits, equity conversion
    - Voiceover: Clear, educational, friendly
-   
+
 3. **"Guild Progression Journey"** - Membership Path
    - Length: 2-3 minutes
    - Style: Character animation journey
@@ -2204,28 +2204,28 @@ CREATE TABLE crowdfunding_sync_log (
    - Review and polish existing scripts
    - Timing marks for voiceover
    - Scene descriptions for AI prompts
-   
+
 2. **Storyboard Finalization** (2 hours)
    - Key frame illustrations
    - Transition planning
    - Visual style guide
-   
+
 3. **Voiceover Generation** (2 hours)
    - ElevenLabs voice selection
    - Multiple takes and variations
    - Timing adjustments
-   
+
 4. **AI Video Generation** (8-12 hours)
    - Runway/Kling prompt engineering
    - Multiple generations per scene
    - Quality selection
-   
+
 5. **Editing & Compositing** (6-8 hours)
    - Scene assembly
    - Transitions and effects
    - Music and sound design
    - Color grading
-   
+
 6. **Review & Revision** (2-4 hours)
    - Stakeholder feedback
    - Adjustments and re-renders
@@ -2415,7 +2415,7 @@ CREATE TABLE crowdfunding_sync_log (
   - Investor leaderboard (top investors by share count)
   - Real-time valuation updates
   - Dividend payout history
-  
+
 - [ ] **Investor Portal** (`src/pages/InvestorPortal.tsx`):
   - Personal investment summary (shares owned, % of company)
   - Dividend payment tracking
@@ -2452,7 +2452,7 @@ CREATE TABLE crowdfunding_sync_log (
   - Live ownership breakdown
   - Dilution calculator
   - Export to Excel for legal filings
-  
+
 - [ ] **Investor Relations Tools**:
   - Email blast system for investor updates
   - Quarterly report generator
@@ -2473,7 +2473,7 @@ CREATE TABLE crowdfunding_sync_log (
 
 **Status**: ⏸️ BLOCKED - Pending Supabase Type Regeneration | **Priority**: High - Member Services | **Dependencies**: Migration approval
 
-**Current Blocker**: 
+**Current Blocker**:
 - ✅ Migration approved and created (initiative projects tables: meal_offerings, shopping_orders, grocery_schedules, etc.)
 - ⏸️ Supabase types not yet regenerated - causing 100+ TypeScript build errors
 - ⏸️ Cannot proceed with code until types.ts updates automatically
@@ -2488,13 +2488,13 @@ CREATE TABLE crowdfunding_sync_log (
    - [ ] Add meal_type enum (breakfast, lunch, dinner, snacks, dessert)
    - [ ] Update meal_offerings table with meal_type column
    - [ ] Add filter by meal type in UI
-   
+
 2. **Hourly Scheduling System**:
    - [ ] Add precise pickup_time (not just date)
    - [ ] Time slot selection UI (hourly increments)
    - [ ] Delivery window coordination
    - [ ] Calendar view of meal schedule
-   
+
 3. **Public-Facing Marketing Pages**:
    - [ ] Landing page for non-members (/public/lets-make-dinner)
    - [ ] SEO-optimized content

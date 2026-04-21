@@ -1,12 +1,12 @@
 /**
  * 70 TIMES 7 — Fresh Start Dialog
- * 
+ *
  * Allows members to reset their reputation counters while keeping:
  * - Portfolio items
- * - Collected cards  
+ * - Collected cards
  * - IP stakes
  * - Credits & Joules balances
- * 
+ *
  * Cost: 1 Mark per reset
  * Limit: 490 total resets (70 × 7)
  */
@@ -54,7 +54,7 @@ export function FreshStartDialog() {
       .select('fresh_start_count, marks_balance, reputation_score, guild_level, account_age_days')
       .eq('id', user?.id)
       .single();
-    
+
     if (data) {
       setStats(data as FreshStartStats);
     }
@@ -81,7 +81,7 @@ export function FreshStartDialog() {
       if (error) throw error;
 
       const result = data as any;
-      
+
       if (result.success) {
         toast({
           title: "Fresh Start Complete 🌱",
@@ -200,7 +200,7 @@ export function FreshStartDialog() {
           {remainingResets === 0 && (
             <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
               <p className="text-sm text-purple-700">
-                You've used all 490 resets (70 × 7). Your journey of forgiveness is complete. 
+                You've used all 490 resets (70 × 7). Your journey of forgiveness is complete.
                 Build from here.
               </p>
             </div>
@@ -211,7 +211,7 @@ export function FreshStartDialog() {
           <Button variant="outline" onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={performFreshStart}
             disabled={!canReset || confirmText !== 'FRESH START' || isLoading}
             className="bg-yellow-600 hover:bg-yellow-700"

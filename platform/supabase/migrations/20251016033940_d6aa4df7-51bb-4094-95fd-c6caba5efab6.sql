@@ -27,7 +27,7 @@ BEGIN
   SET overall_reputation_score = GREATEST(0, overall_reputation_score - penalty),
       updated_at = now()
   WHERE user_id = apply_reputation_penalty.user_id;
-  
+
   -- If user doesn't have a reputation record yet, create one
   INSERT INTO public.user_reputation (user_id, overall_reputation_score, provisional_period)
   VALUES (apply_reputation_penalty.user_id, GREATEST(0, 100 - penalty), true)

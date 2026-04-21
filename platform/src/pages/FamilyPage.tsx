@@ -11,8 +11,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeamlessOnboard } from "@/components/SeamlessOnboardDialog";
-import { 
-  Users, Plus, ArrowLeft, Heart, Calendar, Gift, 
+import {
+  Users, Plus, ArrowLeft, Heart, Calendar, Gift,
   Settings, ChevronRight, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -104,7 +104,7 @@ export default function FamilyPage() {
       </div>
 
       {/* Back button - goes to initiatives list on main page */}
-      <button 
+      <button
         onClick={() => navigate('/?view=initiatives')}
         className="ghost-toggle"
         style={{ left: 20 }}
@@ -123,7 +123,7 @@ export default function FamilyPage() {
             The Family Table
           </h1>
           <p style={{ opacity: 0.8, maxWidth: 500, margin: '0 auto' }}>
-            Your families, crews, and chosen circles. Share calendars, coordinate gifts, 
+            Your families, crews, and chosen circles. Share calendars, coordinate gifts,
             and stay connected with the people who matter most.
           </p>
         </header>
@@ -150,7 +150,7 @@ export default function FamilyPage() {
             <div className="trunk-info" style={{ marginTop: '2rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h2 style={{ color: '#c4b5fd' }}>Your Families</h2>
-                <Button 
+                <Button
                   onClick={() => setShowCreateDialog(true)}
                   size="sm"
                   className="bg-purple-600 hover:bg-purple-700"
@@ -162,7 +162,7 @@ export default function FamilyPage() {
 
               <div className="space-y-3">
                 {families.map((family) => (
-                  <Card 
+                  <Card
                     key={family.id}
                     className="bg-white/5 border-white/10 hover:border-purple-500/50 transition-all cursor-pointer"
                     onClick={() => navigate(`/family/${family.id}`)}
@@ -208,10 +208,10 @@ export default function FamilyPage() {
             <Sparkles className="h-16 w-16 mx-auto mb-4 text-purple-400 opacity-60" />
             <h2 style={{ marginBottom: '0.5rem' }}>No families yet</h2>
             <p style={{ opacity: 0.6, marginBottom: '1.5rem', maxWidth: 400, margin: '0 auto 1.5rem' }}>
-              Create your first family to start sharing calendars, 
+              Create your first family to start sharing calendars,
               coordinating gift lists, and staying connected.
             </p>
-            <Button 
+            <Button
               onClick={() => setShowCreateDialog(true)}
               className="bg-purple-600 hover:bg-purple-700"
             >
@@ -226,9 +226,9 @@ export default function FamilyPage() {
           <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#c4b5fd' }}>
             What You Can Do
           </h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '1.5rem'
           }}>
             <div className="text-center p-4 rounded-lg bg-white/5">
@@ -257,7 +257,7 @@ export default function FamilyPage() {
       </div>
 
       {/* Create Family Dialog */}
-      <CreateFamilyDialog 
+      <CreateFamilyDialog
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
         onSuccess={handleFamilyCreated}

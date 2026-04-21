@@ -3,11 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  AlertTriangle, 
-  CheckCircle2, 
-  Clock, 
-  RefreshCw, 
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Clock,
+  RefreshCw,
   XCircle,
   Eye,
   PlayCircle
@@ -31,7 +31,7 @@ export function FailureQueueDashboard() {
         .order('priority', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(100);
-      
+
       if (error) throw error;
       return data;
     },
@@ -56,7 +56,7 @@ export function FailureQueueDashboard() {
   const resolveFailureMutation = useMutation({
     mutationFn: async ({ id, notes }: { id: string; notes: string }) => {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       const { error } = await (supabase as any)
         .from('operation_failures')
         .update({
@@ -66,7 +66,7 @@ export function FailureQueueDashboard() {
           resolution_notes: notes
         })
         .eq('id', id);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -116,7 +116,7 @@ export function FailureQueueDashboard() {
             Monitor and resolve failed operations
           </p>
         </div>
-        <Button 
+        <Button
           onClick={() => retryQueueMutation.mutate()}
           disabled={retryQueueMutation.isPending}
         >
@@ -198,8 +198,8 @@ export function FailureQueueDashboard() {
 
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => setSelectedFailure(failure)}
                         >

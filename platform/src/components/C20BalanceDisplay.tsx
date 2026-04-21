@@ -2,7 +2,7 @@
  * C+20 BALANCE DISPLAY
  * ====================
  * Innovation #1347: C+20 Reciprocity Balance System
- * 
+ *
  * Displays the user's C+20 reciprocity balance in various contexts:
  * - Header/navbar compact view
  * - Wallet expanded view
@@ -146,7 +146,7 @@ export function C20BalanceDisplay({ variant = 'compact', className }: C20Balance
                 <RefreshCw className={cn("w-3 h-3", loading && "animate-spin")} />
               </Button>
             </div>
-            
+
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 rounded-lg p-4 border border-emerald-500/30">
               <p className="text-3xl font-bold text-emerald-400">{formatCurrency(c20Balance)}</p>
               <p className="text-xs text-emerald-300/60 mt-1">Available to spend on C+20 products</p>

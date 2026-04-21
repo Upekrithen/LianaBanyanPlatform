@@ -3,14 +3,14 @@
  * ==================================================================
  * Bidirectional sync between family calendars and Google Calendar.
  * Supports pull (import from Google), push (export to Google), or both.
- * 
+ *
  * POST body:
  *   - calendarId: UUID (family calendar)
  *   - direction: string ('pull', 'push', 'both')
- * 
+ *
  * GET params:
  *   - calendarId: UUID (get sync status)
- * 
+ *
  * Requires Google OAuth token stored in google_calendar_tokens
  */
 
@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),
@@ -140,7 +140,7 @@ Deno.serve(async (req) => {
 
     if (!googleToken) {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: 'Google Calendar not connected',
           needsAuth: true,
           authUrl: '/api/auth/google-calendar', // Placeholder
@@ -175,7 +175,7 @@ Deno.serve(async (req) => {
         });
 
         const refreshData = await refreshResponse.json();
-        
+
         if (refreshData.error) {
           console.error('Token refresh error:', refreshData);
           return new Response(
@@ -185,7 +185,7 @@ Deno.serve(async (req) => {
         }
 
         accessToken = refreshData.access_token;
-        
+
         // Update stored token
         await supabase
           .from('google_calendar_tokens')

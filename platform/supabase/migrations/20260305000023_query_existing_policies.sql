@@ -1,13 +1,13 @@
 -- Query to get the exact policies currently on the tables
-SELECT 
-    schemaname, 
-    tablename, 
-    policyname, 
-    permissive, 
-    roles, 
-    cmd, 
-    qual, 
-    with_check 
-FROM pg_policies 
-WHERE schemaname = 'public' 
+SELECT
+    schemaname,
+    tablename,
+    policyname,
+    permissive,
+    roles,
+    cmd,
+    qual,
+    with_check
+FROM pg_policies
+WHERE schemaname = 'public'
 ORDER BY tablename, policyname;

@@ -1,18 +1,18 @@
 /**
  * ADD YOUR OWN CARD — Universal Participatory Marketplace Pattern
  * ================================================================
- * 
+ *
  * CRITICAL DESIGN PRINCIPLE:
  * This card should ALWAYS be the FIRST card in any collection.
  * It establishes that this is a participatory marketplace, not just a catalog.
- * 
+ *
  * Usage:
  * - Recipe collections: "Add Your Recipe"
  * - Product listings: "Design Your Own"
  * - Character galleries: "Create Your Character"
  * - Terrain tiles: "Design Your Terrain"
  * - Any marketplace category
- * 
+ *
  * The message: "This is what's available, but YOU can add to it."
  */
 
@@ -80,14 +80,14 @@ export function AddYourOwnCard({
       tabIndex={0}
       aria-label="Flip card to see details"
     >
-      <div 
+      <div
         className={`relative w-full h-full transition-transform duration-500 ${
           isFlipped ? "rotate-y-180" : ""
         }`}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* FRONT */}
-        <Card 
+        <Card
           className="absolute w-full h-full backface-hidden border-2 border-dashed border-primary/50 bg-gradient-to-br from-primary/5 to-primary/10 add-your-own-card"
           style={{ backfaceVisibility: "hidden" }}
         >
@@ -110,7 +110,7 @@ export function AddYourOwnCard({
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground">{description}</p>
-            
+
             {features && features.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {features.map((f) => (
@@ -118,14 +118,14 @@ export function AddYourOwnCard({
                 ))}
               </div>
             )}
-            
+
             {showRoyalty && (
               <div className="flex items-center gap-2 text-sm text-primary font-medium pt-2">
                 <Coins className="h-4 w-4" />
                 {royaltyText}
               </div>
             )}
-            
+
             <p className="text-xs text-muted-foreground text-right pt-2">
               tap to learn more →
             </p>
@@ -133,7 +133,7 @@ export function AddYourOwnCard({
         </Card>
 
         {/* BACK */}
-        <Card 
+        <Card
           className="absolute w-full h-full backface-hidden bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
@@ -150,7 +150,7 @@ export function AddYourOwnCard({
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm">{backDetails}</p>
-            
+
             {specs && specs.length > 0 && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-muted-foreground">What you get:</p>
@@ -164,9 +164,9 @@ export function AddYourOwnCard({
                 </ul>
               </div>
             )}
-            
+
             <div className="pt-2 space-y-2">
-              <Button 
+              <Button
                 className="w-full"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -177,7 +177,7 @@ export function AddYourOwnCard({
                 {ctaText}
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
-              
+
               <p className="text-xs text-center text-muted-foreground">
                 IP protected via verified timestamp
               </p>
@@ -191,7 +191,7 @@ export function AddYourOwnCard({
 
 /**
  * USAGE EXAMPLES:
- * 
+ *
  * Recipe Collection:
  * <AddYourOwnCard
  *   title="Add Your Recipe"
@@ -204,7 +204,7 @@ export function AddYourOwnCard({
  *   ctaLink="/lets-make-dinner/submit"
  *   categoryBadge="Let's Make Dinner"
  * />
- * 
+ *
  * Product Design:
  * <AddYourOwnCard
  *   title="Design Your Own"

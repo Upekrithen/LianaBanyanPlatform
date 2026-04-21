@@ -8,9 +8,9 @@ interface SocketComponentProps {
   isTargeted?: boolean;
 }
 
-export const SocketComponent: React.FC<SocketComponentProps> = ({ 
-  config, 
-  onHover, 
+export const SocketComponent: React.FC<SocketComponentProps> = ({
+  config,
+  onHover,
   onHoverOut,
   isTargeted = false
 }) => {
@@ -47,7 +47,7 @@ export const SocketComponent: React.FC<SocketComponentProps> = ({
         const angle = (i / rootConfig.pinCount) * Math.PI * 2;
         const x = Math.cos(angle) * rootConfig.radius;
         const z = Math.sin(angle) * rootConfig.radius;
-        
+
         holes.push(
           <mesh key={`hole-${i}`} position={[x, -0.01, z]} rotation={[Math.PI / 2, 0, 0]}>
             <circleGeometry args={[0.12, 16]} />
@@ -61,7 +61,7 @@ export const SocketComponent: React.FC<SocketComponentProps> = ({
   };
 
   return (
-    <group 
+    <group
       position={config.position}
       onPointerOver={(e) => {
         e.stopPropagation();
@@ -77,10 +77,10 @@ export const SocketComponent: React.FC<SocketComponentProps> = ({
       {/* The Socket Base (Hexagon or Circle indicating the spot) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[1.2, 6]} />
-        <meshStandardMaterial 
-          color={getBiomeColor()} 
-          transparent 
-          opacity={isTargeted ? 0.8 : 0.4} 
+        <meshStandardMaterial
+          color={getBiomeColor()}
+          transparent
+          opacity={isTargeted ? 0.8 : 0.4}
         />
       </mesh>
 

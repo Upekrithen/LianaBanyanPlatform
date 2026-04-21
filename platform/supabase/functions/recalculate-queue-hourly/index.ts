@@ -24,10 +24,10 @@ serve(async (req) => {
     if (currentHour < 9 || currentHour >= 21) {
       console.log(`⏸️ Outside operating hours (current: ${currentHour}:00). Skipping recalculation.`);
       return new Response(
-        JSON.stringify({ 
-          success: true, 
+        JSON.stringify({
+          success: true,
           message: 'Outside operating hours (9am-9pm)',
-          current_hour: currentHour 
+          current_hour: currentHour
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
@@ -45,7 +45,7 @@ serve(async (req) => {
 
     // Call the calculate-value-ratings function
     const { data, error } = await supabase.functions.invoke('calculate-value-ratings');
-    
+
     if (error) {
       console.error('❌ Error calculating ratings:', error);
       throw error;
@@ -68,13 +68,13 @@ serve(async (req) => {
 
     // Find products that jumped up significantly (5+ positions)
     const notifications: any[] = [];
-    
+
     for (const current of updatedQueue || []) {
       const previousPos = previousPositions.get(current.product_id);
-      
+
       if (previousPos && previousPos > current.queue_position) {
         const jump = previousPos - current.queue_position;
-        
+
         // Only notify for jumps of 5+ positions
         if (jump >= 5) {
           const product = Array.isArray(current.products) ? current.products[0] : current.products;
@@ -93,7 +93,7 @@ serve(async (req) => {
     // Get users who backed these products and have notifications enabled
     if (notifications.length > 0) {
       const productIds = notifications.map(n => n.product_id);
-      
+
       const { data: usersToNotify } = await supabase
         .from('user_votes')
         .select(`
@@ -115,7 +115,7 @@ serve(async (req) => {
       const notificationUserIds = new Set(preferences?.map(p => p.user_id) || []);
 
       console.log(`📬 ${notifications.length} products jumped queue, notifying ${notificationUserIds.size} users`);
-      
+
       // Log notifications (you can implement actual notification sending here)
       for (const notif of notifications) {
         console.log(`  📈 ${notif.product_name}: #${notif.old_position} → #${notif.new_position} (+${notif.position_jump})`);
@@ -123,7 +123,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: true,
         timestamp: new Date().toISOString(),
         hour: currentHour,
@@ -138,7 +138,7 @@ serve(async (req) => {
     console.error('❌ Hourly recalculation error:', error);
     return new Response(
       JSON.stringify({ error: error?.message || 'Unknown error' }),
-      { 
+      {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }

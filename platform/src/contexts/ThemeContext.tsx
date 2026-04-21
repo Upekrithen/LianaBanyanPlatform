@@ -33,17 +33,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // Get current user and load their preferences
     const loadUserPreferences = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (user) {
         setUserId(user.id);
-        
+
         // Load theme from database
         const { data, error } = await supabase
           .from('user_preferences')
           .select('preferred_theme')
           .eq('user_id', user.id)
           .maybeSingle();
-        
+
         if (data && !error) {
           const theme = data.preferred_theme || 'default';
           setCurrentTheme(theme);
@@ -81,7 +81,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const applyThemeToDOM = (themeId: string) => {
     const root = document.documentElement;
-    
+
     if (themeId === 'default') {
       root.removeAttribute('data-theme');
     } else {

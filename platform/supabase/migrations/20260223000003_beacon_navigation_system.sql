@@ -7,28 +7,28 @@
 CREATE TABLE IF NOT EXISTS beacons (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  
+
   -- Beacon identification
   beacon_color TEXT NOT NULL CHECK (beacon_color IN ('green', 'blue', 'yellow', 'red', 'purple', 'orange')),
   beacon_number INTEGER, -- Sequential per user (auto-assigned)
-  
+
   -- Location
   path TEXT NOT NULL, -- URL path where beacon was dropped
   page_title TEXT, -- Human-readable page title
-  
+
   -- Content
   note TEXT, -- User's note about why they marked this
-  
+
   -- Orange Protocol (custom beacons)
   orange_subtype TEXT CHECK (orange_subtype IN (
     'game_marker', 'share_person', 'social_cue', 'gift',
     'treasure', 'learning', 'trade_route', 'custom'
   )),
   orange_payload JSONB, -- Custom data for orange beacons
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Indexes
   CONSTRAINT valid_orange CHECK (
     (beacon_color = 'orange' AND orange_subtype IS NOT NULL) OR
@@ -73,36 +73,36 @@ CREATE INDEX idx_beacons_created ON beacons(created_at DESC);
 CREATE TABLE IF NOT EXISTS beacon_runs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   creator_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   -- Course info
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   description TEXT,
   difficulty TEXT CHECK (difficulty IN ('easy', 'medium', 'hard', 'expert')),
-  
+
   -- Route data
   beacon_ids UUID[] NOT NULL, -- Ordered array of beacon IDs
   total_beacons INTEGER NOT NULL,
   estimated_minutes INTEGER,
-  
+
   -- Competition settings
   ante_credits INTEGER DEFAULT 0, -- Entry fee
   prize_pool_credits INTEGER DEFAULT 0,
-  
+
   -- Stats
   times_started INTEGER DEFAULT 0,
   times_completed INTEGER DEFAULT 0,
   best_time_seconds INTEGER,
   best_time_user_id UUID REFERENCES profiles(id),
-  
+
   -- Publication
   is_published BOOLEAN DEFAULT FALSE,
   published_at TIMESTAMPTZ,
   is_featured BOOLEAN DEFAULT FALSE,
-  
+
   -- Ghost Mode requirement (always true for Beacon Runs)
   requires_ghost_mode BOOLEAN DEFAULT TRUE,
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -113,7 +113,7 @@ CREATE OR REPLACE FUNCTION generate_beacon_run_slug()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.slug IS NULL THEN
-    NEW.slug := LOWER(REGEXP_REPLACE(NEW.name, '[^a-zA-Z0-9]+', '-', 'g')) || '-' || 
+    NEW.slug := LOWER(REGEXP_REPLACE(NEW.name, '[^a-zA-Z0-9]+', '-', 'g')) || '-' ||
                 SUBSTRING(NEW.id::TEXT, 1, 8);
   END IF;
   RETURN NEW;
@@ -131,22 +131,22 @@ CREATE TABLE IF NOT EXISTS beacon_run_progress (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id),
   run_id UUID NOT NULL REFERENCES beacon_runs(id),
-  
+
   -- Progress tracking
   beacons_reached UUID[] DEFAULT '{}',
   current_beacon_index INTEGER DEFAULT 0,
-  
+
   -- Timing
   started_at TIMESTAMPTZ DEFAULT NOW(),
   completed_at TIMESTAMPTZ,
   elapsed_seconds INTEGER DEFAULT 0,
-  
+
   -- Ghost Mode verification
   ghost_session_id UUID, -- Links to ghost session for validation
-  
+
   -- Status
   status TEXT DEFAULT 'in_progress' CHECK (status IN ('in_progress', 'completed', 'abandoned')),
-  
+
   UNIQUE(user_id, run_id, started_at)
 );
 
@@ -155,17 +155,17 @@ CREATE TABLE IF NOT EXISTS beacon_run_leaderboard (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   run_id UUID NOT NULL REFERENCES beacon_runs(id),
   user_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   -- Performance
   completion_time_seconds INTEGER NOT NULL,
   completed_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Ranking
   rank INTEGER,
-  
+
   -- Crow Feathers earned
   crow_feathers_earned INTEGER DEFAULT 0,
-  
+
   UNIQUE(run_id, user_id, completed_at)
 );
 
@@ -176,28 +176,28 @@ CREATE TABLE IF NOT EXISTS beacon_run_leaderboard (
 CREATE TABLE IF NOT EXISTS treasure_maps (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   creator_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   -- Map info
   name TEXT NOT NULL,
   description TEXT,
   map_type TEXT CHECK (map_type IN (
-    'pathway_guide', 'completionist', 'speedrun', 
+    'pathway_guide', 'completionist', 'speedrun',
     'hidden_path', 'beacon_run_course'
   )),
-  
+
   -- Content
   beacon_ids UUID[] NOT NULL, -- Beacons included in this map
   route_data JSONB, -- Additional route information
-  
+
   -- Trading
   price_marks INTEGER DEFAULT 0, -- Price in Marks
   is_for_sale BOOLEAN DEFAULT FALSE,
   times_sold INTEGER DEFAULT 0,
-  
+
   -- Stats
   rating_sum INTEGER DEFAULT 0,
   rating_count INTEGER DEFAULT 0,
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   published_at TIMESTAMPTZ
@@ -209,10 +209,10 @@ CREATE TABLE IF NOT EXISTS treasure_map_purchases (
   map_id UUID NOT NULL REFERENCES treasure_maps(id),
   buyer_id UUID NOT NULL REFERENCES profiles(id),
   seller_id UUID NOT NULL REFERENCES profiles(id),
-  
+
   price_paid INTEGER NOT NULL,
   purchased_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(map_id, buyer_id)
 );
 
@@ -289,25 +289,25 @@ BEGIN
   IF NEW.status = 'completed' AND OLD.status = 'in_progress' THEN
     -- Update run stats
     UPDATE beacon_runs
-    SET 
+    SET
       times_completed = times_completed + 1,
-      best_time_seconds = CASE 
-        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds 
-        THEN NEW.elapsed_seconds 
-        ELSE best_time_seconds 
+      best_time_seconds = CASE
+        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds
+        THEN NEW.elapsed_seconds
+        ELSE best_time_seconds
       END,
-      best_time_user_id = CASE 
-        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds 
-        THEN NEW.user_id 
-        ELSE best_time_user_id 
+      best_time_user_id = CASE
+        WHEN best_time_seconds IS NULL OR NEW.elapsed_seconds < best_time_seconds
+        THEN NEW.user_id
+        ELSE best_time_user_id
       END
     WHERE id = NEW.run_id;
-    
+
     -- Insert leaderboard entry
     INSERT INTO beacon_run_leaderboard (run_id, user_id, completion_time_seconds)
     VALUES (NEW.run_id, NEW.user_id, NEW.elapsed_seconds);
   END IF;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

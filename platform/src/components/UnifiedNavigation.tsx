@@ -88,7 +88,7 @@ const allNavItems: NavItem[] = [
   { title: "My Reputation", url: "/reputation", icon: Award, portal: "marketplace" }, // Will be made dynamic
   { title: "Profile Settings", url: "/profile-settings", icon: Settings, portal: "marketplace" },
   // "Cash Out" removed for SEC compliance — credits are not redeemable for cash
-  
+
   // Business (.biz)
   { title: "Dashboard", url: "/", icon: LayoutDashboard, portal: "business" },
   { title: "The Kaleidoscope", url: "/kaleidoscope", icon: Map, portal: "business" },
@@ -107,14 +107,14 @@ const allNavItems: NavItem[] = [
   { title: "Client API", url: "/client-api-manager", icon: Code, portal: "business", requiresAdmin: true },
   { title: "Member Resources", url: "/member-resources", icon: FileText, portal: "business" },
   { title: "Theme Management", url: "/themes", icon: Palette, portal: "business", requiresOwner: true },
-  
+
   // Nonprofit (.org)
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, portal: "nonprofit" },
   { title: "Funding Pool", url: "/funding-pool", icon: DollarSign, portal: "nonprofit", requiresAdmin: true },
   { title: "EOI Vesting", url: "/eoi-vesting", icon: BarChart3, portal: "nonprofit" },
   { title: "Gas Tracking", url: "/gas-tracking", icon: BadgeCheck, portal: "nonprofit", requiresAdmin: true },
   { title: "Member Benefits", url: "/member-resources", icon: FileText, portal: "nonprofit" },
-  
+
   // Network (.net) — organized around Deck Card categories
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, portal: "network" },
   { title: "Guilds", url: "/guilds", icon: Shield, portal: "network" },
@@ -197,7 +197,7 @@ export function UnifiedNavigation() {
       nonprofit: window.location.origin.replace(/\.(com|biz|net)/, '.org'),
       network: window.location.origin.replace(/\.(com|biz|org)/, '.net'),
     };
-    
+
     window.location.href = domains[portal as keyof typeof domains] + '/dashboard';
   };
 
@@ -230,7 +230,7 @@ export function UnifiedNavigation() {
 
         {Object.entries(portalGroups).map(([portal, items]) => {
           if (items.length === 0 || portal !== currentPortal) return null;
-          
+
           return (
             <SidebarGroup key={portal}>
               {!collapsed && (
@@ -241,7 +241,7 @@ export function UnifiedNavigation() {
                   {items.map((item) => {
                     // Make reputation URL dynamic with user ID
                     const itemUrl = item.url === '/reputation' && user ? `/reputation/${user.id}` : item.url;
-                    
+
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>

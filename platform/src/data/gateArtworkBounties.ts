@@ -2,7 +2,7 @@
  * GATE ARTWORK BOUNTIES
  * =====================
  * Bounty Cue Cards for hall entrance artwork.
- * 
+ *
  * Each hall in the Hexagon Senate needs custom entrance artwork.
  * These bounties invite artists to create gate designs.
  */

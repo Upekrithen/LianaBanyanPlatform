@@ -14,7 +14,7 @@ export function EOIToggle() {
 
   useEffect(() => {
     if (!user) return;
-    
+
     const loadPreferences = async () => {
       const { data, error } = await supabase
         .from("user_preferences")
@@ -37,7 +37,7 @@ export function EOIToggle() {
     if (!user) return;
 
     setShowEOI(checked);
-    
+
     const { error } = await supabase
       .from("user_preferences")
       .upsert({

@@ -39,7 +39,7 @@ export default function DurinsDoor() {
           <p className="text-xl text-slate-300">
             You have bypassed the standard onboarding. Welcome to the international staging ground and the immutable ledger.
           </p>
-          
+
           <div className="grid md:grid-cols-2 gap-6 mt-12 text-left">
             <Card className="bg-slate-900 border-slate-800">
               <CardHeader>
@@ -50,7 +50,7 @@ export default function DurinsDoor() {
               </CardHeader>
               <CardContent className="text-slate-300 text-sm space-y-4">
                 <p>
-                  Liana Banyan is designed to cross borders without friction. The 12 Cities are global. 
+                  Liana Banyan is designed to cross borders without friction. The 12 Cities are global.
                 </p>
                 <Button variant="outline" className="w-full border-blue-500/50 text-blue-400 hover:bg-blue-950">
                   Select Language / Region
@@ -84,9 +84,9 @@ export default function DurinsDoor() {
     <PortalPageLayout maxWidth="xl" xrayId="durins-door">
       <div className="bg-black text-slate-50 flex flex-col items-center justify-center py-12 rounded-lg">
       <div className="max-w-md w-full space-y-8 text-center">
-        
+
         <Lock className="w-16 h-16 mx-auto text-slate-700" />
-        
+
         <div className="space-y-2">
           <h1 className="text-3xl font-serif tracking-widest text-slate-400">
             DURIN'S DOOR
@@ -97,7 +97,7 @@ export default function DurinsDoor() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 pt-8">
-          <Input 
+          <Input
             type="password"
             placeholder="Enter the word..."
             value={password}

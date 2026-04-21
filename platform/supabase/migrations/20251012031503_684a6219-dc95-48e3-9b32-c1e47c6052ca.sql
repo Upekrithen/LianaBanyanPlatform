@@ -2,18 +2,18 @@
 CREATE TABLE public.contract_assignment_configs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
-  
+
   -- Equity/Cash ratios
   min_equity_ratio NUMERIC NOT NULL DEFAULT 0.1 CHECK (min_equity_ratio >= 0 AND min_equity_ratio <= 1),
   max_equity_ratio NUMERIC NOT NULL DEFAULT 0.9 CHECK (max_equity_ratio >= 0 AND max_equity_ratio <= 1),
-  
+
   -- Assignment lead time in days
   assignment_lead_time_days INTEGER NOT NULL DEFAULT 90,
-  
+
   -- Prerequisites and requirements
   prerequisites JSONB DEFAULT '[]'::jsonb,
   requirements JSONB DEFAULT '[]'::jsonb,
-  
+
   -- Time commitment options for equipment scheduling
   time_commitment_options JSONB NOT NULL DEFAULT '[
     {"days": 30, "label": "1 Month"},
@@ -22,10 +22,10 @@ CREATE TABLE public.contract_assignment_configs (
     {"days": 180, "label": "6 Months"},
     {"days": 365, "label": "1 Year"}
   ]'::jsonb,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   UNIQUE(project_id)
 );
 
@@ -100,7 +100,7 @@ CREATE TRIGGER auto_create_contract_assignment_config
 
 -- Create configs for existing projects
 INSERT INTO public.contract_assignment_configs (project_id)
-SELECT p.id 
+SELECT p.id
 FROM public.projects p
 LEFT JOIN public.contract_assignment_configs cac ON cac.project_id = p.id
 WHERE cac.id IS NULL

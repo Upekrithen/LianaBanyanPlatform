@@ -19,8 +19,8 @@ export default function VideoScripts() {
         <div className="mt-3 p-3 bg-muted/50 rounded-md border">
           <p className="text-sm text-muted-foreground">
             <strong>Note:</strong> All AI-generated content in these scripts follows the{" "}
-            <a 
-              href="/docs/LIANA_BANYAN_CHARTER.md" 
+            <a
+              href="/docs/LIANA_BANYAN_CHARTER.md"
               target="_blank"
               className="underline hover:text-primary"
             >
@@ -104,16 +104,16 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                A cinematic journey through a tropical Indian forest, revealing the Banyan tree's remarkable life cycle. 
-                Starting as a tiny seed deposited by a bird, the strangler fig grows aerial roots that descend from branches, 
-                eventually forming new trunks. These prop roots create an ever-expanding network—a single tree becoming 
-                a forest unto itself. The Liana metaphor represents the flexible, interconnected growth that enables 
+                A cinematic journey through a tropical Indian forest, revealing the Banyan tree's remarkable life cycle.
+                Starting as a tiny seed deposited by a bird, the strangler fig grows aerial roots that descend from branches,
+                eventually forming new trunks. These prop roots create an ever-expanding network—a single tree becoming
+                a forest unto itself. The Liana metaphor represents the flexible, interconnected growth that enables
                 the Banyan's magnificent canopy. Together, they illustrate collaborative expansion and mutual support.
               </p>
 
               <h3>Source Reference</h3>
               <p className="text-sm text-muted-foreground italic">
-                Scientific and cultural information sourced from: "The Banyan Tree: A World Of Its Own" 
+                Scientific and cultural information sourced from: "The Banyan Tree: A World Of Its Own"
                 by Parul Jauhari, Rachnakar.com (2021)
               </p>
 
@@ -139,31 +139,31 @@ export default function VideoScripts() {
 
               <h3>Opening Narration</h3>
               <blockquote>
-                "Deep in the tropical forests of India, there exists a remarkable partnership—one that thrives 
-                and recreates itself over and over. This is the story of the Liana and the Banyan tree. 
-                Not a partnership between two separate organisms, but a metaphor for how interconnected growth 
-                creates something magnificent. The Banyan, known scientifically as Ficus benghalensis, begins 
-                as a tiny seed—carried by a bird, deposited in the crevice of a host tree. From this humble 
+                "Deep in the tropical forests of India, there exists a remarkable partnership—one that thrives
+                and recreates itself over and over. This is the story of the Liana and the Banyan tree.
+                Not a partnership between two separate organisms, but a metaphor for how interconnected growth
+                creates something magnificent. The Banyan, known scientifically as Ficus benghalensis, begins
+                as a tiny seed—carried by a bird, deposited in the crevice of a host tree. From this humble
                 beginning, it will become a world of its own."
               </blockquote>
 
               <h3>Core Narration (Mid-Section)</h3>
               <blockquote>
-                "Watch as aerial roots descend from branches like living ropes, reaching for the earth below. 
-                These prop roots—what we call the Lianas—provide structural support, enabling the canopy to 
-                expand infinitely. When they touch the ground, they thicken and transform, becoming new trunks 
-                indistinguishable from the original. One tree becomes many. One trunk becomes a forest. 
-                This is collaborative growth in its purest form—each new root strengthening the whole, 
+                "Watch as aerial roots descend from branches like living ropes, reaching for the earth below.
+                These prop roots—what we call the Lianas—provide structural support, enabling the canopy to
+                expand infinitely. When they touch the ground, they thicken and transform, becoming new trunks
+                indistinguishable from the original. One tree becomes many. One trunk becomes a forest.
+                This is collaborative growth in its purest form—each new root strengthening the whole,
                 each branch reaching higher because of the support below."
               </blockquote>
 
               <h3>Closing Narration</h3>
               <blockquote>
-                "The Banyan tree is called 'A World Of Its Own' because beneath its canopy, entire ecosystems 
-                flourish. Birds nest in its branches. Insects pollinate its figs. Life thrives in the shelter 
-                it provides. In Indian philosophy, the Banyan represents immortality and permanence—a cosmic 
-                tree whose roots reach toward the sky, carrying divine blessings to Earth. Join us. Whether 
-                you're a Banyan seeking new heights, or a Liana ready to support—together, we'll build 
+                "The Banyan tree is called 'A World Of Its Own' because beneath its canopy, entire ecosystems
+                flourish. Birds nest in its branches. Insects pollinate its figs. Life thrives in the shelter
+                it provides. In Indian philosophy, the Banyan represents immortality and permanence—a cosmic
+                tree whose roots reach toward the sky, carrying divine blessings to Earth. Join us. Whether
+                you're a Banyan seeking new heights, or a Liana ready to support—together, we'll build
                 something extraordinary. Welcome to the Liana Banyan network."
               </blockquote>
             </CardContent>
@@ -199,7 +199,7 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                Fast-paced motion graphics explainer showing how the three-credit system works: 
+                Fast-paced motion graphics explainer showing how the three-credit system works:
                 Contribution Credits (purchased), Earned Credits (work), and EOI Credits (participation of interest).
                 Emphasizes simplicity and fairness.
               </p>
@@ -227,7 +227,7 @@ export default function VideoScripts() {
 
               <h3>Opening Narration</h3>
               <blockquote>
-                "Traditional payment systems are slow, expensive, and complicated. Banks charge fees. 
+                "Traditional payment systems are slow, expensive, and complicated. Banks charge fees.
                 Wire transfers take days. Payment processors take their cut. There has to be a better way."
               </blockquote>
 
@@ -269,7 +269,7 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                Follow a character's journey from Apprentice to Master through the 18-tier guild system. 
+                Follow a character's journey from Apprentice to Master through the 18-tier guild system.
                 Shows increasing contribution, responsibility, and influence. Emphasizes community support
                 and mentorship at every level.
               </p>
@@ -297,13 +297,13 @@ export default function VideoScripts() {
 
               <h3>Opening Narration</h3>
               <blockquote>
-                "Every master was once a beginner. Every expert started with a single step. 
+                "Every master was once a beginner. Every expert started with a single step.
                 This is your journey—from apprentice to master, in the guild system that grows with you."
               </blockquote>
 
               <h3>Core Message</h3>
               <blockquote>
-                "In our guilds, we don't climb alone. When one member rises, we all rise. 
+                "In our guilds, we don't climb alone. When one member rises, we all rise.
                 When one member succeeds, the entire guild celebrates. This is collaborative growth."
               </blockquote>
 
@@ -346,8 +346,8 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                High-energy campaign video showcasing Hexisle as a strategic territory-building game 
-                where players expand hexagonal islands, manage resources, and collaborate or compete. 
+                High-energy campaign video showcasing Hexisle as a strategic territory-building game
+                where players expand hexagonal islands, manage resources, and collaborate or compete.
                 Emphasizes the Kickstarter opportunity to join early and shape the game's future.
               </p>
 
@@ -372,7 +372,7 @@ export default function VideoScripts() {
 
               <h3>Opening Hook</h3>
               <blockquote>
-                "What if you could build an empire, one hex at a time? Welcome to Hexisle—where strategy 
+                "What if you could build an empire, one hex at a time? Welcome to Hexisle—where strategy
                 meets creativity, and every decision shapes your world."
               </blockquote>
             </CardContent>
@@ -408,8 +408,8 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                Architectural showcase of the Tereno Hexel Platform—a modular hexagonal space framework 
-                that adapts to diverse needs. Shows how hexagonal tiles create flexible, scalable environments 
+                Architectural showcase of the Tereno Hexel Platform—a modular hexagonal space framework
+                that adapts to diverse needs. Shows how hexagonal tiles create flexible, scalable environments
                 for work, living, and community spaces.
               </p>
 
@@ -434,7 +434,7 @@ export default function VideoScripts() {
 
               <h3>Core Message</h3>
               <blockquote>
-                "Space should adapt to you, not the other way around. The Tereno Hexel Platform 
+                "Space should adapt to you, not the other way around. The Tereno Hexel Platform
                 brings modular flexibility to every environment—one hexagon at a time."
               </blockquote>
             </CardContent>
@@ -470,8 +470,8 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                Technical explainer showcasing The Hot Water Company's Stirling cycle engine innovation 
-                for sustainable water stations. Focuses on the Tereno Water Table concept, physics principles 
+                Technical explainer showcasing The Hot Water Company's Stirling cycle engine innovation
+                for sustainable water stations. Focuses on the Tereno Water Table concept, physics principles
                 (hydraulics, pneumatics, temperature differential), and real-world humanitarian impact.
               </p>
 
@@ -496,8 +496,8 @@ export default function VideoScripts() {
 
               <h3>Core Message</h3>
               <blockquote>
-                "Clean water shouldn't be a luxury. With the Stirling cycle, hydraulics, and temperature 
-                differential physics, The Hot Water Company is bringing sustainable, fresh water solutions 
+                "Clean water shouldn't be a luxury. With the Stirling cycle, hydraulics, and temperature
+                differential physics, The Hot Water Company is bringing sustainable, fresh water solutions
                 to communities that need them most—powered by nature itself."
               </blockquote>
             </CardContent>
@@ -533,8 +533,8 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                Classic tale reimagined: The Little Red Hen asks "Who will help me make this bread?" 
-                but this time, the story shows the value of contribution and shared rewards in a 
+                Classic tale reimagined: The Little Red Hen asks "Who will help me make this bread?"
+                but this time, the story shows the value of contribution and shared rewards in a
                 collaborative economy. Bridges traditional fable wisdom with modern teamwork principles.
               </p>
 
@@ -595,8 +595,8 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                The classic Stone Soup (or Axe/Nail Soup) tale showing how collective small contributions 
-                create abundance. A traveler arrives with nothing but a stone/axe, and through community 
+                The classic Stone Soup (or Axe/Nail Soup) tale showing how collective small contributions
+                create abundance. A traveler arrives with nothing but a stone/axe, and through community
                 participation, creates a feast. Perfect metaphor for collaborative resource pooling.
               </p>
 
@@ -621,7 +621,7 @@ export default function VideoScripts() {
 
               <h3>The Message</h3>
               <blockquote>
-                "When everyone brings a little, everyone gains a lot. Stone Soup isn't magic—it's the power 
+                "When everyone brings a little, everyone gains a lot. Stone Soup isn't magic—it's the power
                 of collective contribution. That's the Liana Banyan way: small contributions from many create
                 abundance for all."
               </blockquote>
@@ -658,8 +658,8 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                Inspired by Flick's iconic "Pretend this is a seed" speech from A Bug's Life. Focus on 
-                the inventor mindset, collective strength ("we're all ants!"), and how small things grow 
+                Inspired by Flick's iconic "Pretend this is a seed" speech from A Bug's Life. Focus on
+                the inventor mindset, collective strength ("we're all ants!"), and how small things grow
                 into mighty trees. Metaphor: ants cultivating the Banyan tree, Lianas becoming trunks—
                 collective growth through innovation and unity.
               </p>
@@ -686,10 +686,10 @@ export default function VideoScripts() {
 
               <h3>The Speech</h3>
               <blockquote>
-                "Pretend—pretend this is a seed. A tiny seed. But when we work together, when we all 
-                contribute, that seed becomes a sapling. That sapling becomes a mighty tree. And we? 
-                We're the ants who cultivate the forest. At Liana Banyan, we don't just climb—we grow 
-                together. Each member a Liana, each contribution building the trunk. United, we become 
+                "Pretend—pretend this is a seed. A tiny seed. But when we work together, when we all
+                contribute, that seed becomes a sapling. That sapling becomes a mighty tree. And we?
+                We're the ants who cultivate the forest. At Liana Banyan, we don't just climb—we grow
+                together. Each member a Liana, each contribution building the trunk. United, we become
                 the Banyan—unshakeable, interconnected, thriving."
               </blockquote>
             </CardContent>
@@ -725,9 +725,9 @@ export default function VideoScripts() {
 
               <h3>Concept</h3>
               <p>
-                Balanced educational video explaining capitalism's mechanisms: private ownership, profit 
-                motive, market competition, capital accumulation. Covers both strengths (innovation, 
-                efficiency) and criticisms (inequality, externalities). Positions collaborative models 
+                Balanced educational video explaining capitalism's mechanisms: private ownership, profit
+                motive, market competition, capital accumulation. Covers both strengths (innovation,
+                efficiency) and criticisms (inequality, externalities). Positions collaborative models
                 like LB as evolution, not rejection.
               </p>
 
@@ -754,15 +754,15 @@ export default function VideoScripts() {
 
               <h3>Opening Frame</h3>
               <blockquote>
-                "Capitalism. It's been praised as the engine of prosperity and criticized as the root of 
-                inequality. But what is it, really? Let's break it down without the ideology—just the 
+                "Capitalism. It's been praised as the engine of prosperity and criticized as the root of
+                inequality. But what is it, really? Let's break it down without the ideology—just the
                 mechanics, the outcomes, and what comes next."
               </blockquote>
 
               <h3>Closing Message</h3>
               <blockquote>
-                "Capitalism isn't inherently good or evil—it's a tool. The question is: can we evolve it? 
-                Can we keep the innovation and efficiency while building in fairness and collaboration? 
+                "Capitalism isn't inherently good or evil—it's a tool. The question is: can we evolve it?
+                Can we keep the innovation and efficiency while building in fairness and collaboration?
                 At Liana Banyan, we believe the answer is yes. Not revolution—evolution."
               </blockquote>
             </CardContent>

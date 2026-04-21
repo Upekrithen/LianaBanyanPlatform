@@ -12,22 +12,22 @@ CREATE TABLE IF NOT EXISTS public.hofund_channels (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   medallion_id    TEXT,                              -- blockchain token ID (nullable for default)
-  
+
   -- Channel configuration
   channel_number  INTEGER NOT NULL DEFAULT 1,        -- 1-10 dial position
   channel_name    TEXT NOT NULL,                      -- display name
   channel_type    TEXT NOT NULL DEFAULT 'platform',   -- platform | project | custom | social
   destination_url TEXT,                               -- where QR routes to
   project_id      UUID REFERENCES public.projects(id), -- if channel_type = 'project'
-  
+
   -- Display
   icon            TEXT DEFAULT '📺',                  -- emoji icon for dial
   is_active       BOOLEAN DEFAULT true,
-  
+
   -- Timestamps
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, medallion_id, channel_number)
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS public.hofund_dial_position (
   medallion_id    TEXT,                              -- which medallion (null = default)
   current_channel INTEGER NOT NULL DEFAULT 4,        -- current dial position
   updated_at      TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, medallion_id)
 );
 
@@ -62,33 +62,33 @@ CREATE INDEX idx_hofund_dial_user ON public.hofund_dial_position(user_id);
 
 CREATE TABLE IF NOT EXISTS public.cue_card_templates (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- What this template is for
   project_id      UUID REFERENCES public.projects(id),
   initiative_slug TEXT,                              -- e.g. 'lets-make-dinner'
   template_type   TEXT NOT NULL DEFAULT 'general',   -- general | project | initiative | letter | innovation
-  
+
   -- Content
   title           TEXT NOT NULL,
   subtitle        TEXT,
   body_text       TEXT NOT NULL,                     -- pre-written social post text
   hashtags        TEXT[] DEFAULT '{}',               -- array of hashtags
-  
+
   -- Visual design
   background_type TEXT DEFAULT 'gradient',           -- gradient | image | solid
   background_value TEXT DEFAULT 'from-primary/20 to-secondary/20',
   accent_color    TEXT DEFAULT 'primary',
   card_style      TEXT DEFAULT 'standard',           -- standard | bold | minimal | quote
-  
+
   -- QR stamp zone (where the member's QR gets placed)
   qr_position     TEXT DEFAULT 'bottom-right',       -- bottom-right | bottom-left | center | top-right
   qr_size         INTEGER DEFAULT 120,               -- pixels
-  
+
   -- Platform-specific variants
   twitter_text    TEXT,                               -- character-limited version
   linkedin_text   TEXT,                               -- professional version
   facebook_text   TEXT,
-  
+
   -- Metadata
   is_active       BOOLEAN DEFAULT true,
   sort_order      INTEGER DEFAULT 0,
@@ -109,22 +109,22 @@ CREATE TABLE IF NOT EXISTS public.stamped_cue_cards (
   user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   template_id     UUID NOT NULL REFERENCES public.cue_card_templates(id),
   medallion_id    TEXT,                              -- which medallion's QR was stamped
-  
+
   -- The stamped card
   qr_data_url     TEXT,                              -- the QR code data (RedCarpet link)
   card_image_url  TEXT,                              -- generated card image URL (if stored)
   custom_text     TEXT,                              -- member's edits to body text
-  
+
   -- Distribution tracking
   share_count     INTEGER DEFAULT 0,
   click_count     INTEGER DEFAULT 0,                 -- tracked via RedCarpet views
   conversion_count INTEGER DEFAULT 0,                -- resulted in signup
-  
+
   -- Social media posts
   shared_platforms TEXT[] DEFAULT '{}',               -- which platforms shared to
   scheduled_at    TIMESTAMPTZ,                        -- if scheduled for future
   published_at    TIMESTAMPTZ,                        -- when actually posted
-  
+
   -- Timestamps
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW()
@@ -139,27 +139,27 @@ CREATE INDEX idx_stamped_cards_template ON public.stamped_cue_cards(template_id)
 CREATE TABLE IF NOT EXISTS public.social_media_plugs (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Platform connection
   platform        TEXT NOT NULL,                      -- twitter | linkedin | facebook | instagram | tiktok | mastodon
   platform_user_id TEXT,                              -- their ID on that platform
   platform_username TEXT,                             -- display name
   account_type    TEXT DEFAULT 'personal',            -- personal | business | creator
-  
+
   -- OAuth tokens (encrypted in practice)
   access_token    TEXT,
   refresh_token   TEXT,
   token_expires_at TIMESTAMPTZ,
-  
+
   -- Status
   is_connected    BOOLEAN DEFAULT false,
   last_posted_at  TIMESTAMPTZ,
   post_count      INTEGER DEFAULT 0,
-  
+
   -- Timestamps
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, platform, platform_user_id)
 );
 

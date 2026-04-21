@@ -14,24 +14,24 @@ CREATE TABLE contract_scale_negotiations (
   organization_id uuid NOT NULL,
   negotiated_by uuid REFERENCES profiles(id) NOT NULL,
   approved_by uuid REFERENCES profiles(id),
-  
+
   -- Negotiated terms
   discount_percentage numeric DEFAULT 0 CHECK (discount_percentage >= 0 AND discount_percentage <= 100),
   bulk_commitment_positions integer DEFAULT 0,
   minimum_positions_required integer DEFAULT 1,
-  
+
   -- Status
   status text DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'active', 'expired', 'rejected')),
   valid_from timestamptz DEFAULT now(),
   valid_until timestamptz,
-  
+
   -- Metadata
   terms jsonb DEFAULT '{}'::jsonb,
   notes text,
-  
+
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
-  
+
   UNIQUE (project_id, organization_type, organization_id, status)
 );
 
@@ -96,11 +96,11 @@ BEGIN
   SELECT * INTO _position
   FROM contract_position_templates
   WHERE id = _position_id;
-  
+
   IF NOT FOUND THEN
     RETURN jsonb_build_object('error', 'Position not found');
   END IF;
-  
+
   -- Check for negotiated rate
   IF _position.scale_rate_type = 'negotiated' AND _position.negotiated_scale_id IS NOT NULL THEN
     SELECT * INTO _negotiation
@@ -108,12 +108,12 @@ BEGIN
     WHERE id = _position.negotiated_scale_id
     AND status = 'active'
     AND (valid_until IS NULL OR valid_until > now());
-    
+
     IF FOUND THEN
       _discount := _negotiation.discount_percentage;
     END IF;
   END IF;
-  
+
   -- Check for applicable organization negotiation
   IF _organization_type IS NOT NULL AND _organization_id IS NOT NULL THEN
     SELECT * INTO _negotiation
@@ -125,16 +125,16 @@ BEGIN
     AND (valid_until IS NULL OR valid_until > now())
     ORDER BY discount_percentage DESC
     LIMIT 1;
-    
+
     IF FOUND AND _negotiation.discount_percentage > _discount THEN
       _discount := _negotiation.discount_percentage;
     END IF;
   END IF;
-  
+
   -- Calculate effective compensation
   _effective_cash := COALESCE(_position.cash_amount, 0) * (1 - _discount / 100.0);
   _effective_equity := COALESCE(_position.equity_percentage, 0);
-  
+
   RETURN jsonb_build_object(
     'base_cash', COALESCE(_position.cash_amount, 0),
     'base_equity', COALESCE(_position.equity_percentage, 0),

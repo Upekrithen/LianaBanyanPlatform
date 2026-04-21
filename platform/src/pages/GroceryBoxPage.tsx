@@ -22,7 +22,7 @@ export default function GroceryBoxPage() {
       title: "Box Added to Cart!",
       description: `${config.size.name} box with ${config.chain.name} chain`,
     });
-    
+
     setTimeout(() => {
       navigate('/initiatives/lets-get-groceries');
     }, 2000);

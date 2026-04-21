@@ -218,7 +218,7 @@ export function AggregationDashboard({ zipCode }: AggregationDashboardProps) {
             </div>
             <div>
               <div className="text-2xl font-bold">
-                {windowsData.length > 0 
+                {windowsData.length > 0
                   ? Math.max(...windowsData.map(w => w.window.volume_discount_percent))
                   : 0}%
               </div>
@@ -474,7 +474,7 @@ function AggregationWindowCard({
               </span>
             </div>
             <Progress value={progress.overallProgress} className="h-2" />
-            
+
             {!timeLeft.expired && (
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 <Clock className="h-3 w-3" />
@@ -495,15 +495,15 @@ function AggregationWindowCard({
           <Button variant="outline" className="flex-1" onClick={onViewDetails}>
             View Items
           </Button>
-          
+
           {participation.status === 'auto_included' && (
             <>
               <Button className="flex-1" onClick={onOptIn}>
                 <CheckCircle2 className="h-4 w-4 mr-1" />
                 Confirm
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 onClick={onOptOut}
                 disabled={isOptingOut}
               >
@@ -529,10 +529,10 @@ function AggregationWindowCard({
         {/* Threshold message */}
         {window.status === 'collecting' && !progress.thresholdMet && (
           <p className="text-xs text-muted-foreground">
-            {progress.neededParticipants > 0 
+            {progress.neededParticipants > 0
               ? `Need ${progress.neededParticipants} more household${progress.neededParticipants > 1 ? 's' : ''} `
               : ''}
-            {progress.neededValue > 0 
+            {progress.neededValue > 0
               ? `${progress.neededParticipants > 0 ? 'or ' : 'Need '}$${progress.neededValue.toFixed(0)} more in orders `
               : ''}
             to unlock delivery

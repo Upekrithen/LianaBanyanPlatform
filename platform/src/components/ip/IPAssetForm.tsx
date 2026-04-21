@@ -89,7 +89,7 @@ export function IPAssetForm({ selectedTier }: IPAssetFormProps) {
     setIsSubmitting(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         toast({
           title: "Authentication required",

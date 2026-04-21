@@ -46,10 +46,10 @@ import {
 } from "@/data/redCarpetRecipients";
 import { supabase } from "@/integrations/supabase/client";
 import { recordClick, recordGhostClick, generateShareId } from "@/lib/cueCardClickTracking";
-import { 
-  resolveRedCarpetContext, 
+import {
+  resolveRedCarpetContext,
   recordPromotionClick,
-  type RedCarpetContext 
+  type RedCarpetContext
 } from "@/lib/cueCardDestinationService";
 
 import { LockedCrownLetterView } from "@/components/LockedCrownLetterView";
@@ -431,7 +431,7 @@ function CueCardClickBanner({ info }: { info: CueCardClickInfo }) {
   const locksRemaining = 4 - info.locksUnlocked;
   const clicksPerLock = 5;
   const clicksToNextLock = clicksPerLock - (info.clicksRecorded % clicksPerLock);
-  
+
   return (
     <FadeInSection>
       <section className="py-12 px-6">
@@ -450,21 +450,21 @@ function CueCardClickBanner({ info }: { info: CueCardClickInfo }) {
                     {info.templateTitle}
                   </h3>
                   <p className="text-muted-foreground">
-                    Your click helps unlock a Deck Card! 
-                    {info.isFullyUnlocked 
-                      ? " The card is now fully unlocked!" 
+                    Your click helps unlock a Deck Card!
+                    {info.isFullyUnlocked
+                      ? " The card is now fully unlocked!"
                       : ` ${locksRemaining} lock${locksRemaining !== 1 ? 's' : ''} remaining.`}
                   </p>
-                  
+
                   {/* Progress visualization */}
                   <div className="mt-4 flex items-center gap-3">
                     <div className="flex gap-2">
                       {[0, 1, 2, 3].map((i) => (
-                        <div 
+                        <div
                           key={i}
                           className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg transition-all ${
-                            i < info.locksUnlocked 
-                              ? 'bg-purple-500/20 text-purple-500' 
+                            i < info.locksUnlocked
+                              ? 'bg-purple-500/20 text-purple-500'
                               : 'bg-muted/50 text-muted-foreground'
                           }`}
                         >
@@ -477,7 +477,7 @@ function CueCardClickBanner({ info }: { info: CueCardClickInfo }) {
                       {!info.isFullyUnlocked && ` — ${clicksToNextLock} more to unlock next`}
                     </div>
                   </div>
-                  
+
                   {info.isFullyUnlocked && (
                     <div className="mt-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
                       <p className="text-sm text-green-600 font-medium flex items-center gap-2">
@@ -488,11 +488,11 @@ function CueCardClickBanner({ info }: { info: CueCardClickInfo }) {
                   )}
                 </div>
               </div>
-              
+
               {/* Platform badge */}
               <div className="mt-4 flex justify-end">
                 <Badge variant="outline" className="border-purple-500/30 text-purple-600">
-                  via {info.platform === 'tiktok' ? 'TikTok' : 
+                  via {info.platform === 'tiktok' ? 'TikTok' :
                        info.platform === 'facebook' ? 'Facebook' :
                        info.platform === 'twitter' ? 'Twitter' :
                        info.platform === 'linkedin' ? 'LinkedIn' : 'Direct Link'}
@@ -561,7 +561,7 @@ export default function RedCarpet() {
   const [showContent, setShowContent] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   // Contextual routing state (Innovation #1355-#1362)
   const [contextualContent, setContextualContent] = useState<RedCarpetContext | null>(null);
 
@@ -624,14 +624,14 @@ export default function RedCarpet() {
     const templateParam = searchParams.get("template");
     const sharerParam = searchParams.get("sharer");
     const platformParam = searchParams.get("platform") || "direct";
-    
+
     if (cueParam && templateParam && sharerParam) {
       setEntryMode("cuecard");
       processCueCardClick(cueParam, templateParam, sharerParam, platformParam);
       setShowContent(true);
-      logPageView("cuecard", null, { 
-        share_id: cueParam, 
-        template_id: templateParam, 
+      logPageView("cuecard", null, {
+        share_id: cueParam,
+        template_id: templateParam,
         sharer_id: sharerParam,
         platform: platformParam
       } as any);
@@ -652,7 +652,7 @@ export default function RedCarpet() {
         loadHeraldInfo(heraldParam);
       }
       setShowContent(true);
-      logPageView("herald", null, { 
+      logPageView("herald", null, {
         herald_member_id: heraldParam,
         context_id: ctxParam || undefined
       } as any);
@@ -685,8 +685,8 @@ export default function RedCarpet() {
 
   // --- PROCESS CUE CARD CLICK ---
   const processCueCardClick = async (
-    shareId: string, 
-    templateId: string, 
+    shareId: string,
+    templateId: string,
     sharerId: string,
     platform: string
   ) => {
@@ -778,14 +778,14 @@ export default function RedCarpet() {
   const loadContextualContent = async (heraldId: string, contextId: string) => {
     try {
       const context = await resolveRedCarpetContext(heraldId, contextId);
-      
+
       if (context) {
         setContextualContent(context);
         setHeraldInfo({
           memberName: context.heraldName,
           memberSince: "Member", // Could fetch actual date if needed
         });
-        
+
         // Record promotion attribution if not own project
         if (!context.isOwnProject && context.destination?.project_ids?.length) {
           const { data: { user } } = await supabase.auth.getUser();
@@ -1182,7 +1182,7 @@ export default function RedCarpet() {
           {entryMode === "herald" && heraldInfo && !contextualContent && (
             <HeraldBanner herald={heraldInfo} />
           )}
-          
+
           {/* Also show herald banner for cuecard mode if we have the info */}
           {entryMode === "cuecard" && heraldInfo && !cueCardClickInfo && (
             <HeraldBanner herald={heraldInfo} />
@@ -1334,11 +1334,11 @@ export default function RedCarpet() {
                           "Who will help me plant the seed? Who will help me harvest the wheat? Who will help me bake the bread?"
                         </p>
                         <p className="text-muted-foreground">
-                          In the old story, the hen does all the work while the others watch, but they all want to eat the bread. 
+                          In the old story, the hen does all the work while the others watch, but they all want to eat the bread.
                           On this platform, the rules are different. <strong>If you help bake the bread, you get to eat the bread.</strong>
                         </p>
                         <p className="text-muted-foreground">
-                          That is why the creator/worker keeps <strong>83.3%</strong>. That is why the platform margin is locked at <strong>Cost + 20%</strong>. 
+                          That is why the creator/worker keeps <strong>83.3%</strong>. That is why the platform margin is locked at <strong>Cost + 20%</strong>.
                           We built an economic engine that structurally prevents extraction and rewards the people actually doing the work.
                         </p>
                       </div>
@@ -1412,7 +1412,7 @@ export default function RedCarpet() {
                     </div>
                   </div>
                   <p className="mt-4 text-sm text-muted-foreground">
-                    This split is protected by <strong>DNA Lock</strong> — a constitutional mechanism that makes these percentages 
+                    This split is protected by <strong>DNA Lock</strong> — a constitutional mechanism that makes these percentages
                     immutable. No vote, no board decision, no CEO can ever change them.
                   </p>
                 </ExpandableBlock>
@@ -1441,7 +1441,7 @@ export default function RedCarpet() {
                     accentColor="#22c55e"
                   >
                     <p className="text-muted-foreground mb-4">
-                      The main platform where creators list products and services at Cost + 20%. Every transaction 
+                      The main platform where creators list products and services at Cost + 20%. Every transaction
                       guarantees 83.3% goes directly to the creator — no hidden fees, no surprise deductions.
                     </p>
                     <ul className="list-disc list-inside text-muted-foreground space-y-1 text-sm">
@@ -1459,7 +1459,7 @@ export default function RedCarpet() {
                     accentColor="#3b82f6"
                   >
                     <p className="text-muted-foreground mb-4">
-                      A professional network where your reputation is portable and your data belongs to you. 
+                      A professional network where your reputation is portable and your data belongs to you.
                       Connect with other members, showcase your work, and find opportunities.
                     </p>
                     <ul className="list-disc list-inside text-muted-foreground space-y-1 text-sm">
@@ -1477,7 +1477,7 @@ export default function RedCarpet() {
                     accentColor="#8b5cf6"
                   >
                     <p className="text-muted-foreground mb-4">
-                      For businesses that want to participate in the cooperative economy. Access wholesale 
+                      For businesses that want to participate in the cooperative economy. Access wholesale
                       pricing, connect with suppliers, and integrate with the platform's infrastructure.
                     </p>
                     <ul className="list-disc list-inside text-muted-foreground space-y-1 text-sm">
@@ -1491,7 +1491,7 @@ export default function RedCarpet() {
 
                 <div className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/20 text-center">
                   <p className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-primary">+ LianaBanyan.org</span> — The charitable portal. 
+                    <span className="font-semibold text-primary">+ LianaBanyan.org</span> — The charitable portal.
                     Where the 20% margin goes to work across 16 initiatives.
                   </p>
                 </div>
@@ -1582,7 +1582,7 @@ export default function RedCarpet() {
                   </div>
                   <div className="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
                     <p className="text-sm text-muted-foreground">
-                      <strong className="text-yellow-600">Why "Crown Jewels"?</strong> These 167 innovations had zero relevant prior art 
+                      <strong className="text-yellow-600">Why "Crown Jewels"?</strong> These 167 innovations had zero relevant prior art
                       in USPTO searches. They represent genuinely novel approaches that no one has patented before.
                     </p>
                   </div>
@@ -1614,7 +1614,7 @@ export default function RedCarpet() {
                 <div className="text-center mb-8">
                   <h3 className="text-3xl font-bold text-foreground mb-4">37 Years in the Making</h3>
                   <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                    Built by a 53-year-old ARNG veteran (Infantry + Aviation), father of eight, with 21 years in IT development. 
+                    Built by a 53-year-old ARNG veteran (Infantry + Aviation), father of eight, with 21 years in IT development.
                     This system has been in development since 1989 — not as software, but as a philosophy.
                   </p>
                 </div>
@@ -1645,7 +1645,7 @@ export default function RedCarpet() {
                       </div>
                     </div>
                     <p className="mt-4 text-sm text-muted-foreground">
-                      Funded with half a family's emergency savings. No VC. No angels. No strings. 
+                      Funded with half a family's emergency savings. No VC. No angels. No strings.
                       Just a man who prays for potatoes at the end of a hoe handle.
                     </p>
                   </ExpandableBlock>
@@ -1662,7 +1662,7 @@ export default function RedCarpet() {
                       <div className="text-sm text-muted-foreground">Cooperative Commerce Corporation</div>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Wyoming was chosen for its strong corporate privacy protections and business-friendly environment. 
+                      Wyoming was chosen for its strong corporate privacy protections and business-friendly environment.
                       The C-Corp structure allows for future cooperative conversion while maintaining constitutional protections.
                     </p>
                   </ExpandableBlock>

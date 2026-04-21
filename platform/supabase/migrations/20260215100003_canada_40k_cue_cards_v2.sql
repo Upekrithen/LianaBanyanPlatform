@@ -10,8 +10,8 @@
 INSERT INTO public.cue_card_templates (template_type, initiative_slug, title, subtitle, body_text, hashtags, card_style, twitter_text, linkedin_text, facebook_text) VALUES
 
 -- Primary Twitter card (280 chars)
-('letter', 'international', 
- 'You Have A Play. I Have A Stage.', 
+('letter', 'international',
+ 'You Have A Play. I Have A Stage.',
  'To the 40,000 stranded Canadian founders',
  'Canada canceled 40,000 startup visas. 43,200 vetted entrepreneurs — with plans, skills, and courage — stranded. You have a play. I have a stage. Your dream didn''t get cancelled. Come build.',
  ARRAY['Canada40K', 'RescueFleet', 'LianaBanyan', 'StartupVisa', 'CooperativeEconomy'],
@@ -79,7 +79,7 @@ To 40,000 stranded founders: Your visa got cancelled. Your dream didn''t.',
  '9 years of building. What we have:
 
 • 1,200+ CAD diagrams
-• 1,000+ documented innovations  
+• 1,000+ documented innovations
 • Patent claims across 6 applications
 • 8 definite utility patents (9 more possible)
 • 16 charitable initiatives ready to launch

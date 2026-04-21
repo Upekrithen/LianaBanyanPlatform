@@ -115,26 +115,26 @@ BEGIN
   WHERE api_key = _api_key
     AND is_active = true
     AND (expires_at IS NULL OR expires_at > now());
-  
+
   IF NOT FOUND THEN
     RETURN QUERY SELECT false, NULL::UUID, NULL::UUID;
     RETURN;
   END IF;
-  
+
   -- Check origin if specified
-  IF _credential.allowed_origins IS NOT NULL 
-     AND array_length(_credential.allowed_origins, 1) > 0 
+  IF _credential.allowed_origins IS NOT NULL
+     AND array_length(_credential.allowed_origins, 1) > 0
      AND NOT (_origin = ANY(_credential.allowed_origins)) THEN
     RETURN QUERY SELECT false, NULL::UUID, NULL::UUID;
     RETURN;
   END IF;
-  
+
   -- Update usage stats
   UPDATE public.xml_access_credentials
   SET usage_count = usage_count + 1,
       last_used_at = now()
   WHERE id = _credential.id;
-  
+
   RETURN QUERY SELECT true, _credential.project_id, _credential.id;
 END;
 $$;
@@ -154,7 +154,7 @@ ON CONFLICT (id) DO NOTHING;
 CREATE POLICY "Authenticated users can upload XML"
   ON storage.objects FOR INSERT
   WITH CHECK (
-    bucket_id = 'xml-modules' 
+    bucket_id = 'xml-modules'
     AND auth.role() = 'authenticated'
   );
 

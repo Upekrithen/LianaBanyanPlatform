@@ -40,7 +40,7 @@ export default function IndustryPricing() {
   const [selectedProduct, setSelectedProduct] = useState('');
   const [pricingData, setPricingData] = useState<PricingData[]>([]);
   const [loading, setLoading] = useState(false);
-  
+
   // Form state
   const [runId, setRunId] = useState('');
   const [units, setUnits] = useState('');
@@ -131,7 +131,7 @@ export default function IndustryPricing() {
       }
 
       toast.success('Pricing data synced successfully');
-      
+
       // Clear form
       setRunId('');
       setUnits('');
@@ -139,7 +139,7 @@ export default function IndustryPricing() {
       setUnitPrice('');
       setStartDate('');
       setEndDate('');
-      
+
       // Reload data
       loadPricingData();
     } catch (error) {
@@ -310,7 +310,7 @@ export default function IndustryPricing() {
                         <div className="space-y-1">
                           <div className="font-medium">{pricing.production_run_id}</div>
                           <div className="text-sm text-muted-foreground">
-                            {pricing.units_in_run} units @ ${pricing.calculated_unit_price} 
+                            {pricing.units_in_run} units @ ${pricing.calculated_unit_price}
                             ({pricing.volume_discount_percentage}% discount)
                           </div>
                           {pricing.run_start_date && pricing.run_end_date && (

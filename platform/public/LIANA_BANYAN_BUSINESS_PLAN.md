@@ -1,9 +1,9 @@
 # Liana Banyan Business Plan
 ## A Worker-Owned Innovation Ecosystem
 
-**Document Version**: 1.0  
-**Date Prepared**: October 2025  
-**Document Type**: Complete Business Plan  
+**Document Version**: 1.0
+**Date Prepared**: October 2025
+**Document Type**: Complete Business Plan
 **Status**: Ready for Implementation
 
 ---
@@ -31,7 +31,7 @@ The global manufacturing and creative services industries face a fundamental ine
 
 Liana Banyan is a four-portal ecosystem that connects:
 - **Creators & Inventors** seeking to commercialize intellectual property
-- **Skilled Craftspeople** delivering manufacturing and creative services  
+- **Skilled Craftspeople** delivering manufacturing and creative services
 - **Project Backers** funding innovative products through wave-based pricing
 - **Non-Profit Initiatives** leveraging member resources for social impact
 
@@ -47,7 +47,7 @@ Liana Banyan is a four-portal ecosystem that connects:
 - **Self-Funding Model**: Guild stake payments ($500 - $67,500 progressive) create perpetually solvent investment fund
 - **Zero External Debt**: Wave pricing eliminates need for venture capital or traditional financing
 - **Lean Gas Costs**: Blockchain medallion minting costs ~$10-30 annually per project (1% of funding pool)
-- **Revenue Streams**: 
+- **Revenue Streams**:
   - Marketplace commissions (20% platform fee)
   - Guild progression stakes ($7,000 cumulative for Journeyman tier)
   - Node operator revenue shares (20% on all projects)
@@ -81,8 +81,8 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 
 ## Legal Structure
 
-**Type**: Worker-Owned Cooperative / Platform Cooperative  
-**Governance Model**: Democratic voting weighted by contribution (guild tier + reputation score)  
+**Type**: Worker-Owned Cooperative / Platform Cooperative
+**Governance Model**: Democratic voting weighted by contribution (guild tier + reputation score)
 **Equity Distribution**: Credits serve as universal unit for wages, equity, and governance rights
 
 ## Core Values (Charter-Defined)
@@ -105,8 +105,8 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 ## Four-Portal Architecture
 
 ### Marketplace Portal (lianabanyan.com)
-**Purpose**: Public discovery and customer engagement  
-**Users**: General public, investors, product backers  
+**Purpose**: Public discovery and customer engagement
+**Users**: General public, investors, product backers
 **Key Features**:
 - Browse projects by category (Tabletop Gaming, Cosplay, Collectibles, Functional Products)
 - Wave-based pricing selection
@@ -114,9 +114,9 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 - Public project showcases
 
 ### Business Portal (lianabanyan.biz)
-**Purpose**: Internal operations and member services  
-**Users**: Project owners, members, contractors, HR stewards  
-**Access**: Requires $5 membership stake  
+**Purpose**: Internal operations and member services
+**Users**: Project owners, members, contractors, HR stewards
+**Access**: Requires $5 membership stake
 **Key Features**:
 - Position management and applications
 - Project administration dashboards
@@ -124,9 +124,9 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 - HR and steward functions
 
 ### Network Portal (lianabanyan.net)
-**Purpose**: B2B execution and professional services  
-**Users**: Business clients, API consumers, node operators  
-**Access**: Requires $5 membership stake  
+**Purpose**: B2B execution and professional services
+**Users**: Business clients, API consumers, node operators
+**Access**: Requires $5 membership stake
 **Key Features**:
 - B2B contract management
 - XML lockbox for secure data exchange
@@ -134,9 +134,9 @@ Liana Banyan exists to create a fair, transparent, and sustainable alternative t
 - Production network management
 
 ### Non-Profit Portal (lianabanyan.org)
-**Purpose**: Fund administration and member benefits  
-**Users**: Fund administrators, members accessing benefits  
-**Access**: Requires $5 membership stake  
+**Purpose**: Fund administration and member benefits
+**Users**: Fund administrators, members accessing benefits
+**Access**: Requires $5 membership stake
 **Key Features**:
 - EOI (Equity of Interest) vesting dashboards
 - Guild investment fund transparency
@@ -270,13 +270,13 @@ Voting Weight = Guild Tier Multiplier × Reputation Score × Credits Earned
 ### Leadership Roles
 
 #### Guild Leadership (Per Guild)
-**Guild Leader**: Operational oversight, member coordination, project allocation  
-**Council of Masters**: Collective governance for strategic guild decisions  
+**Guild Leader**: Operational oversight, member coordination, project allocation
+**Council of Masters**: Collective governance for strategic guild decisions
 **Master Specialists**: Domain-specific expertise (e.g., "Advanced Fabrication", "Sustainable Design")
 
 #### Platform Administration
-**Stewards**: HR functions, dispute mediation, reputation monitoring  
-**Project Captains**: Lead complex multi-guild projects  
+**Stewards**: HR functions, dispute mediation, reputation monitoring
+**Project Captains**: Lead complex multi-guild projects
 **Node Operators**: Manage physical production facilities
 
 ## Guild Progression System
@@ -341,16 +341,16 @@ Voting Weight = Guild Tier Multiplier × Reputation Score × Credits Earned
 10. Safety record (for physical production)
 
 ### Display System
-**Format**: "Tier - Grade (Stars)"  
+**Format**: "Tier - Grade (Stars)"
 Example: "Gold Tier - A+ (★★★★★)"
 
-**Tiers**: Bronze → Silver → Gold → Platinum (score range-based)  
-**Grades**: A+ through F (auto-calculated)  
+**Tiers**: Bronze → Silver → Gold → Platinum (score range-based)
+**Grades**: A+ through F (auto-calculated)
 **Stars**: 1-5 stars that change with tier
 
 ### Decay & Recovery
-**Monthly Decay**: Reputation decreases with inactivity  
-**Weighted Recent Activity**: Last 12 months counts more heavily  
+**Monthly Decay**: Reputation decreases with inactivity
+**Weighted Recent Activity**: Last 12 months counts more heavily
 **Redemption Paths**:
 - Time-based recovery (longest, passive)
 - Probationary period with supervision
@@ -382,7 +382,7 @@ Example: "Gold Tier - A+ (★★★★★)"
 #### Tabletop Gaming
 - Fantasy Miniatures (28mm-32mm scale)
 - Sci-Fi Miniatures
-- Historical Miniatures  
+- Historical Miniatures
 - Terrain & Scenery
 - Game-Compatible Collections (Grimdark/OPR-compatible)
 
@@ -461,12 +461,12 @@ Example: "Gold Tier - A+ (★★★★★)"
 
 #### Dual Mode System
 
-**Casual Mode**: Pure game enjoyment, no stakes  
+**Casual Mode**: Pure game enjoyment, no stakes
 - Play for fun, experiment with strategies
 - No verification required
 - Builds familiarity with skill categories
 
-**Real Stakes Mode**: Verified skill development  
+**Real Stakes Mode**: Verified skill development
 - Projects map to specific islands
 - Successful project completion = XP earned
 - Verified achievements visible on profile
@@ -481,28 +481,28 @@ Example: "Gold Tier - A+ (★★★★★)"
 ## Value Proposition by Audience
 
 ### For Creators
-**Message**: "Own Your IP, Scale Your Impact"  
+**Message**: "Own Your IP, Scale Your Impact"
 - Flexible IP control (choose your tier)
 - Production network eliminates fulfillment headaches
 - Wave pricing funds expansion without diluting equity
 - Blockchain verification for provenance and milestones
 
 ### For Workers/Members
-**Message**: "Your Work = Your Equity"  
+**Message**: "Your Work = Your Equity"
 - Guild progression creates career path, not gig trap
 - Reputation system rewards quality over volume
 - Credit economy: wages + equity + governance rights
 - Skills verification opens higher-tier opportunities
 
 ### For Buyers
-**Message**: "Transparent Pricing, Fair Production"  
+**Message**: "Transparent Pricing, Fair Production"
 - Wave pricing: choose speed vs. value
 - Worker-owned means your purchase funds people, not VCs
 - Quality differentiation via guild tiers
 - Medallion verification for authenticity
 
 ### For Businesses
-**Message**: "Scalable Manufacturing, Ethical Sourcing"  
+**Message**: "Scalable Manufacturing, Ethical Sourcing"
 - Flexible capacity without fixed overhead
 - Skill-verified workforce
 - Transparent cost structure
@@ -595,9 +595,9 @@ Example: "Gold Tier - A+ (★★★★★)"
 - **Outside Orders**: Minimum 2x price per unit (no discount)
 
 ### Wave Pricing (Example)
-**Base Production**: $10/unit (1,000 unit capacity)  
-**Wave 1 (Premium)**: $15/unit (1/3 slots, 333 units)  
-**Wave 2 (Standard)**: $12/unit (1/3 slots, 333 units)  
+**Base Production**: $10/unit (1,000 unit capacity)
+**Wave 1 (Premium)**: $15/unit (1/3 slots, 333 units)
+**Wave 2 (Standard)**: $12/unit (1/3 slots, 333 units)
 **Wave 3 (Value)**: $10/unit (1/3 slots, 333 units)
 
 **Revenue Impact**:
@@ -612,8 +612,8 @@ Example: "Gold Tier - A+ (★★★★★)"
 ## Revenue Streams (5-Year Projection)
 
 ### Year 1: Foundation Phase
-**Active Members**: 1,000  
-**Projects Launched**: 50  
+**Active Members**: 1,000
+**Projects Launched**: 50
 **Average Project Value**: $50,000
 
 **Revenue Sources**:
@@ -631,12 +631,12 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Admin & Support: $75,000
 **Total Costs**: $385,000
 
-**Net Income Year 1**: $420,000  
+**Net Income Year 1**: $420,000
 **Margin**: 52%
 
 ### Year 2: Growth Phase
-**Active Members**: 5,000  
-**Projects Launched**: 200  
+**Active Members**: 5,000
+**Projects Launched**: 200
 **Average Project Value**: $75,000
 
 **Revenue Sources**:
@@ -655,12 +655,12 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Admin & Support: $250,000
 **Total Costs**: $1,200,000
 
-**Net Income Year 2**: $5,720,000  
+**Net Income Year 2**: $5,720,000
 **Margin**: 83%
 
 ### Year 3: Scale Phase
-**Active Members**: 10,000  
-**Projects Launched**: 500  
+**Active Members**: 10,000
+**Projects Launched**: 500
 **Average Project Value**: $100,000
 
 **Revenue Sources**:
@@ -679,28 +679,28 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Admin & Support: $750,000
 **Total Costs**: $3,100,000
 
-**Net Income Year 3**: $21,425,000  
+**Net Income Year 3**: $21,425,000
 **Margin**: 87%
 
 ### Years 4-5: Maturity Phase
-**Year 4 Revenue**: $60M (Net: $52M, 87% margin)  
+**Year 4 Revenue**: $60M (Net: $52M, 87% margin)
 **Year 5 Revenue**: $120M (Net: $104M, 87% margin)
 
 ## Unit Economics
 
 ### Per Member (Lifetime Value)
-**Membership Stake**: $5 (one-time)  
-**Guild Stakes**: $7,000 avg (Journeyman full progression)  
-**Project Participation**: 20 projects × $50k avg × 20% commission = $200,000  
+**Membership Stake**: $5 (one-time)
+**Guild Stakes**: $7,000 avg (Journeyman full progression)
+**Project Participation**: 20 projects × $50k avg × 20% commission = $200,000
 **Total LTV**: $207,005
 
-**Acquisition Cost**: $50 (organic community building)  
+**Acquisition Cost**: $50 (organic community building)
 **LTV:CAC Ratio**: 4,140:1
 
 ### Per Project
-**Average Project Value**: $75,000  
-**Platform Commission**: $15,000 (20%)  
-**Payment Processing**: -$2,250 (3%)  
+**Average Project Value**: $75,000
+**Platform Commission**: $15,000 (20%)
+**Payment Processing**: -$2,250 (3%)
 **Net Revenue**: $12,750
 
 **Platform Costs**:
@@ -729,12 +729,12 @@ Example: "Gold Tier - A+ (★★★★★)"
 ## Financial Sustainability Mechanisms
 
 ### Guild Investment Fund
-**Inflows**: All guild stake payments ($500 - $67,500 per member)  
-**Outflows**: 1% gas costs, infrastructure maintenance, emergency support  
+**Inflows**: All guild stake payments ($500 - $67,500 per member)
+**Outflows**: 1% gas costs, infrastructure maintenance, emergency support
 **Balance**: Always positive (inflows >> outflows)
 
-**Year 1 Fund Balance**: $100,000 (200 members × $500 avg)  
-**Year 2 Fund Balance**: $1,900,000 (+$1,800,000)  
+**Year 1 Fund Balance**: $100,000 (200 members × $500 avg)
+**Year 2 Fund Balance**: $1,900,000 (+$1,800,000)
 **Year 3 Fund Balance**: $9,400,000 (+$7,500,000)
 
 **Use of Excess Funds**:
@@ -744,9 +744,9 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Member dividend distributions (vote-based)
 
 ### Credit Economy Circulation
-**Credits Earned** (Year 1): 10M credits (member wages)  
-**Credits Spent** (Year 1): 7M credits (platform purchases, 70% recirculation)  
-**Credits Converted** (Year 1): 2M credits (withdrawals, 20%)  
+**Credits Earned** (Year 1): 10M credits (member wages)
+**Credits Spent** (Year 1): 7M credits (platform purchases, 70% recirculation)
+**Credits Converted** (Year 1): 2M credits (withdrawals, 20%)
 **Credits Saved** (Year 1): 1M credits (equity holding, 10%)
 
 **Circulation Velocity**: 0.7 (healthy internal economy)
@@ -783,8 +783,8 @@ Example: "Gold Tier - A+ (★★★★★)"
 ## Phase 2: Private Beta (Months 4-6)
 
 ### Beta Cohort
-**Target**: 100 founding members  
-**Recruitment**: Personal network, maker communities, early supporters  
+**Target**: 100 founding members
+**Recruitment**: Personal network, maker communities, early supporters
 **Benefits**: Founder medallions, reduced guild stakes (50% off), governance input
 
 ### Testing Focus
@@ -836,30 +836,30 @@ Example: "Gold Tier - A+ (★★★★★)"
 - 10 nodes operational
 
 ### Marketing Spend
-**Month 7**: $10k (launch ads, influencer partnerships)  
-**Month 8**: $15k (retargeting, content production)  
-**Month 9**: $20k (scaling winners, community events)  
+**Month 7**: $10k (launch ads, influencer partnerships)
+**Month 8**: $15k (retargeting, content production)
+**Month 9**: $20k (scaling winners, community events)
 **Months 10-12**: $15k/month (sustained growth, optimization)
 
 ## Phase 4: Category Expansion (Months 13-24)
 
 ### New Categories
-**Q2 (Months 13-15)**: Functional Products  
+**Q2 (Months 13-15)**: Functional Products
 - Home/office organizers
 - Gaming accessories
 - Tool holders
 
-**Q3 (Months 16-18)**: Collectibles & Display  
+**Q3 (Months 16-18)**: Collectibles & Display
 - Character busts (75mm scale)
 - Dioramas
 - Display bases
 
-**Q4 (Months 19-21)**: Custom Services  
+**Q4 (Months 19-21)**: Custom Services
 - Commissioned artwork
 - Bespoke manufacturing
 - Design consultation
 
-**Q1 Year 2 (Months 22-24)**: B2B Integration  
+**Q1 Year 2 (Months 22-24)**: B2B Integration
 - API access (public beta)
 - White-label instances
 - Enterprise contracts
@@ -898,7 +898,7 @@ Example: "Gold Tier - A+ (★★★★★)"
 ## Phase 6: International Expansion (Year 4+)
 
 ### Localization
-**Markets**: EU, UK, Canada, Australia (English-speaking first)  
+**Markets**: EU, UK, Canada, Australia (English-speaking first)
 **Adaptations**:
 - Currency support (EUR, GBP, CAD, AUD)
 - Regional node networks
@@ -906,7 +906,7 @@ Example: "Gold Tier - A+ (★★★★★)"
 - Compliance with local regulations (GDPR, etc.)
 
 ### Global Network
-**Goal**: 50,000 members across 20 countries by Year 5  
+**Goal**: 50,000 members across 20 countries by Year 5
 **Strategy**: Franchise model for regional nodes, local guild leadership
 
 ---
@@ -915,11 +915,11 @@ Example: "Gold Tier - A+ (★★★★★)"
 
 ## Appendix A: Technology Stack
 
-**Frontend**: React, Vite, TypeScript, Tailwind CSS  
-**Backend**: Supabase (PostgreSQL, Auth, Storage, Edge Functions)  
-**Payments**: Stripe (membership stakes, guild stakes, marketplace)  
-**Blockchain**: Base L2 (Ethereum), ERC-1155 (medallion NFTs), wagmi, viem, RainbowKit  
-**Hosting**: Firebase (8 targets) + Supabase  
+**Frontend**: React, Vite, TypeScript, Tailwind CSS
+**Backend**: Supabase (PostgreSQL, Auth, Storage, Edge Functions)
+**Payments**: Stripe (membership stakes, guild stakes, marketplace)
+**Blockchain**: Base L2 (Ethereum), ERC-1155 (medallion NFTs), wagmi, viem, RainbowKit
+**Hosting**: Firebase (8 targets) + Supabase
 **Domains**: .com (marketplace), .biz (business), .net (network), .org (nonprofit)
 
 ## Appendix B: Key Metrics Dashboard

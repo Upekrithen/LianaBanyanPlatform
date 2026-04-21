@@ -1,6 +1,6 @@
 /**
  * LevelGatedLink - Site-wide level-gated navigation
- * 
+ *
  * Wraps navigation to enforce pathway level requirements.
  * When level gating is enabled and user hasn't reached required level,
  * shows a locked state instead of navigating.
@@ -27,7 +27,7 @@ const ROUTE_LEVELS: Record<string, PathwayLevel> = {
   '/help-wanted': 1,
   '/RedCarpet': 1,
   '/business-pathway': 1,
-  
+
   // Level 2 - Requires Level 1 three-pack
   '/economics': 2,
   '/patent-portfolio': 2,
@@ -49,7 +49,7 @@ const ROUTE_LEVELS: Record<string, PathwayLevel> = {
   '/fly-on-the-wall': 2,
   '/the-helm': 2,
   '/the-bridge': 2,
-  
+
   // Level 3 - Advanced features
   '/portfolio': 3,
   '/social-admin': 3,
@@ -66,18 +66,18 @@ export function getRouteLevel(route: string): PathwayLevel {
   if (ROUTE_LEVELS[route]) {
     return ROUTE_LEVELS[route];
   }
-  
+
   // Check if it's an initiative route
   if (route.startsWith('/initiatives/')) {
     return INITIATIVE_LEVEL;
   }
-  
+
   // Check pathway definitions
   const pathway = ALL_PATHWAYS.find(p => p.route === route);
   if (pathway) {
     return pathway.level;
   }
-  
+
   // Default to Level 1 for unknown routes
   return 1;
 }
@@ -107,10 +107,10 @@ export function LevelGatedLink({
 }: LevelGatedLinkProps) {
   const { progress, isLevelGatingEnabled } = usePathwayProgress();
   const navigate = useNavigate();
-  
+
   const requiredLevel = getRouteLevel(to);
   const isLocked = isLevelGatingEnabled() && requiredLevel > progress.currentLevel;
-  
+
   const handleClick = (e: React.MouseEvent) => {
     if (isLocked) {
       e.preventDefault();
@@ -121,12 +121,12 @@ export function LevelGatedLink({
       });
       return;
     }
-    
+
     if (onClick) {
       onClick(e);
     }
   };
-  
+
   if (isLocked) {
     return (
       <span
@@ -149,7 +149,7 @@ export function LevelGatedLink({
       </span>
     );
   }
-  
+
   return (
     <Link
       to={to}
@@ -173,11 +173,11 @@ export function LevelGatedLink({
 export function useLevelGatedNavigate() {
   const { progress, isLevelGatingEnabled } = usePathwayProgress();
   const navigate = useNavigate();
-  
+
   return (to: string, options?: { replace?: boolean }) => {
     const requiredLevel = getRouteLevel(to);
     const isLocked = isLevelGatingEnabled() && requiredLevel > progress.currentLevel;
-    
+
     if (isLocked) {
       toast.info(`🔒 Level ${requiredLevel} Required`, {
         description: `Complete a Level ${requiredLevel - 1} three-pack to unlock this area.`,
@@ -185,7 +185,7 @@ export function useLevelGatedNavigate() {
       });
       return false;
     }
-    
+
     navigate(to, options);
     return true;
   };

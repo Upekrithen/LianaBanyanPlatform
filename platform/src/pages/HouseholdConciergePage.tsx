@@ -55,7 +55,7 @@ export default function HouseholdConciergePage() {
               {/* Active Subscriptions */}
               <div className="md:col-span-2 space-y-6">
                 <h2 className="text-2xl font-bold text-foreground">Active Services</h2>
-                
+
                 <Card className="border-l-4 border-l-blue-500">
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">

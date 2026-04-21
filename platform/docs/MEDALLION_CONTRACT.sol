@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 /**
  * @title LianaBanyanMedallion
  * @dev ERC-1155 Token for LianaBanyan Project Medallions
- * 
+ *
  * Token IDs:
  * 1 = Seed Funding (100 max supply, $5.00 each)
  * 2 = Early Supporter (250 max supply, $4.50 each)
@@ -20,17 +20,17 @@ contract LianaBanyanMedallion is ERC1155, Ownable, ERC1155Burnable, ERC1155Suppl
     // Token tier names
     string public name = "LianaBanyan Medallion";
     string public symbol = "LBM";
-    
+
     // Maximum supply per tier
     mapping(uint256 => uint256) public maxSupply;
-    
+
     // Base URI for token metadata
     string private _baseURI;
-    
+
     // Project-specific info
     string public projectName;
     string public projectSKU;
-    
+
     constructor(
         string memory baseURI,
         string memory _projectName,
@@ -40,14 +40,14 @@ contract LianaBanyanMedallion is ERC1155, Ownable, ERC1155Burnable, ERC1155Suppl
         _baseURI = baseURI;
         projectName = _projectName;
         projectSKU = _projectSKU;
-        
+
         // Set max supplies for each tier
         maxSupply[1] = 100;   // Seed Funding
         maxSupply[2] = 250;   // Early Supporter
         maxSupply[3] = 500;   // Community Builder
         maxSupply[4] = 1000;  // Project Champion
     }
-    
+
     /**
      * @dev Sets a new base URI for all token types
      */
@@ -55,14 +55,14 @@ contract LianaBanyanMedallion is ERC1155, Ownable, ERC1155Burnable, ERC1155Suppl
         _baseURI = newuri;
         _setURI(newuri);
     }
-    
+
     /**
      * @dev Returns the URI for a specific token ID
      */
     function uri(uint256 tokenId) public view override returns (string memory) {
         return string(abi.encodePacked(_baseURI, Strings.toString(tokenId), ".json"));
     }
-    
+
     /**
      * @dev Mint a single medallion to an address
      * @param account The address to mint to
@@ -77,7 +77,7 @@ contract LianaBanyanMedallion is ERC1155, Ownable, ERC1155Burnable, ERC1155Suppl
         require(totalSupply(id) + amount <= maxSupply[id], "Exceeds max supply");
         _mint(account, id, amount, data);
     }
-    
+
     /**
      * @dev Batch mint medallions to multiple addresses
      * @param to Array of recipient addresses
@@ -91,14 +91,14 @@ contract LianaBanyanMedallion is ERC1155, Ownable, ERC1155Burnable, ERC1155Suppl
         bytes memory data
     ) public onlyOwner {
         require(to.length == ids.length && ids.length == amounts.length, "Array length mismatch");
-        
+
         for (uint256 i = 0; i < to.length; i++) {
             require(ids[i] >= 1 && ids[i] <= 4, "Invalid token ID");
             require(totalSupply(ids[i]) + amounts[i] <= maxSupply[ids[i]], "Exceeds max supply");
             _mint(to[i], ids[i], amounts[i], data);
         }
     }
-    
+
     /**
      * @dev Get remaining supply for a tier
      */
@@ -106,14 +106,14 @@ contract LianaBanyanMedallion is ERC1155, Ownable, ERC1155Burnable, ERC1155Suppl
         require(id >= 1 && id <= 4, "Invalid token ID");
         return maxSupply[id] - totalSupply(id);
     }
-    
+
     /**
      * @dev Check if an address holds a specific medallion tier
      */
     function hasMedallion(address account, uint256 id) public view returns (bool) {
         return balanceOf(account, id) > 0;
     }
-    
+
     /**
      * @dev Get all medallion balances for an address
      */
@@ -125,7 +125,7 @@ contract LianaBanyanMedallion is ERC1155, Ownable, ERC1155Burnable, ERC1155Suppl
             balanceOf(account, 4)
         ];
     }
-    
+
     // Required overrides
     function _update(address from, address to, uint256[] memory ids, uint256[] memory values)
         internal

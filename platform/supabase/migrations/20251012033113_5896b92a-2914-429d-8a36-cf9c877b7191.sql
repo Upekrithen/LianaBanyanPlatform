@@ -1,7 +1,7 @@
 -- Create enum for user test roles
 CREATE TYPE public.test_user_role AS ENUM (
   'new_user',
-  'authenticated_user', 
+  'authenticated_user',
   'member',
   'project_owner',
   'project_manager',

@@ -238,7 +238,7 @@ Configure allowed origins when generating client keys:
 ### Access Logs
 View client API usage in `xml_access_logs` table:
 ```sql
-SELECT 
+SELECT
   credential_name,
   COUNT(*) as request_count,
   MAX(accessed_at) as last_access

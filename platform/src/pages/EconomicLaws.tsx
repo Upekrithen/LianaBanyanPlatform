@@ -10,12 +10,12 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { ArrowLeft, ArrowRight, BookOpen, Lightbulb, Scale, FileText, ExternalLink } from 'lucide-react';
-import { 
-  NINE_ECONOMIC_LAWS, 
-  ECONOMIC_PAPERS, 
+import {
+  NINE_ECONOMIC_LAWS,
+  ECONOMIC_PAPERS,
   getPapersByCategory,
   getPaperById,
-  type EconomicPaper 
+  type EconomicPaper
 } from '@/data/economicPapers';
 import { DataVizBar, ExpandableBlock } from '@/components/pudding';
 
@@ -23,7 +23,7 @@ const LAW_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e', '#ef4444', '#f59e0b', '#10b
 
 function LawCard({ law, index }: { law: typeof NINE_ECONOMIC_LAWS[0]; index: number }) {
   const paper = getPaperById(law.paperId);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -39,7 +39,7 @@ function LawCard({ law, index }: { law: typeof NINE_ECONOMIC_LAWS[0]; index: num
       >
         <div className="space-y-4">
           <div className="flex items-start gap-4">
-            <div 
+            <div
               className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold text-foreground shrink-0"
               style={{ backgroundColor: LAW_COLORS[index] + '30', borderColor: LAW_COLORS[index], borderWidth: 2 }}
             >
@@ -56,7 +56,7 @@ function LawCard({ law, index }: { law: typeof NINE_ECONOMIC_LAWS[0]; index: num
               )}
             </div>
           </div>
-          
+
           {/* Additional context for each law */}
           <div className="p-3 rounded-lg bg-muted border border-border">
             <p className="text-xs text-foreground/50 mb-2">
@@ -74,9 +74,9 @@ function LawCard({ law, index }: { law: typeof NINE_ECONOMIC_LAWS[0]; index: num
               {law.number === 9 && "Complex systems can be built from simple, replaceable parts."}
             </p>
           </div>
-          
+
           {paper && (
-            <Link 
+            <Link
               to={`/economics/${paper.id}`}
               className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-lg transition-colors"
               style={{ backgroundColor: LAW_COLORS[index] + '20', color: LAW_COLORS[index] }}
@@ -103,7 +103,7 @@ function PaperCard({ paper, index }: { paper: EconomicPaper; index: number }) {
         className="block bg-card border border-border rounded-lg p-4 hover:border-muted-foreground/50 hover:bg-muted transition-all group h-full"
       >
         <div className="flex items-start gap-3">
-          <div 
+          <div
             className="w-10 h-10 rounded-lg flex items-center justify-center text-xl shrink-0"
             style={{ backgroundColor: paper.color + '20' }}
           >
@@ -115,7 +115,7 @@ function PaperCard({ paper, index }: { paper: EconomicPaper; index: number }) {
                 {paper.title}
               </h4>
               {paper.lawNumber && (
-                <span 
+                <span
                   className="text-xs px-2 py-0.5 rounded-full shrink-0"
                   style={{ backgroundColor: LAW_COLORS[paper.lawNumber - 1] + '30', color: LAW_COLORS[paper.lawNumber - 1] }}
                 >
@@ -133,16 +133,16 @@ function PaperCard({ paper, index }: { paper: EconomicPaper; index: number }) {
   );
 }
 
-function CategorySection({ 
-  title, 
-  description, 
-  papers, 
+function CategorySection({
+  title,
+  description,
+  papers,
   icon: Icon,
   accentColor = '#3b82f6'
-}: { 
-  title: string; 
-  description: string; 
-  papers: EconomicPaper[]; 
+}: {
+  title: string;
+  description: string;
+  papers: EconomicPaper[];
   icon: React.ElementType;
   accentColor?: string;
 }) {
@@ -173,7 +173,7 @@ export default function EconomicLaws() {
   return (
     <PortalPageLayout maxWidth="xl" xrayId="economic-laws">
         {/* Back Link */}
-        <Link 
+        <Link
           to="/"
           className="inline-flex items-center gap-2 text-foreground/60 hover:text-foreground mb-8 transition-colors"
         >
@@ -191,15 +191,15 @@ export default function EconomicLaws() {
             <Scale className="w-4 h-4 text-primary" />
             <span className="text-primary text-sm font-medium">New Economic Theory</span>
           </div>
-          
+
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
             Nine Economic Laws
           </h1>
           <p className="text-xl text-foreground/70 max-w-3xl mx-auto mb-8">
-            We're not just building a platform — we're testing nine new economic laws. 
+            We're not just building a platform — we're testing nine new economic laws.
             Each law has a full academic paper, a college-freshman explainer, and a 6th-grade summary.
           </p>
-          
+
           {/* Stats Bar */}
           <div className="flex flex-wrap justify-center gap-8 text-center">
             <div>
@@ -232,7 +232,7 @@ export default function EconomicLaws() {
             <Lightbulb className="w-6 h-6 text-primary" />
             The Nine Economic Laws
           </h2>
-          
+
           <div className="space-y-4">
             {NINE_ECONOMIC_LAWS.map((law, index) => (
               <LawCard key={law.number} law={law} index={index} />
@@ -251,7 +251,7 @@ export default function EconomicLaws() {
           <p className="text-foreground/70 mb-6">
             Every transaction follows the same formula: Cost + 20%. Creator/Worker keeps 83.3%.
           </p>
-          <DataVizBar 
+          <DataVizBar
             data={[
               { label: 'Creator keeps', value: 83.3, color: '#22c55e', icon: '💰' },
               { label: 'Platform operations', value: 13.3, color: '#3b82f6', icon: '🏛️' },

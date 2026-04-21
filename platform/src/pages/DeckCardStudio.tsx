@@ -167,13 +167,13 @@ export default function DeckCardStudio() {
             <CardContent className="space-y-4">
               <div>
                 <label className="text-sm font-medium mb-1 block">Card Title / Project Name</label>
-                <Input 
+                <Input
                   value={cardTitle}
                   onChange={(e) => setCardTitle(e.target.value)}
                   placeholder="e.g., Sarah's Artisan Bakery"
                 />
               </div>
-              
+
               {!hasDigitalCard ? (
                 <div className="h-64 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center text-slate-400">
                   <QrCode className="h-12 w-12 mb-2 opacity-50" />
@@ -194,7 +194,7 @@ export default function DeckCardStudio() {
                 </div>
               )}
 
-              <Button 
+              <Button
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
                 onClick={handleGenerate}
                 disabled={isGenerating || hasDigitalCard}
@@ -270,12 +270,12 @@ export default function DeckCardStudio() {
                 2. Physical Print Run (Volume Dump)
               </CardTitle>
               <CardDescription>
-                Turn your digital card into physical business cards or 3D Medallions. 
+                Turn your digital card into physical business cards or 3D Medallions.
                 We batch orders locally to hit the 6 Production Levels for massive discounts.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              
+
               <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border">
                 <div className="flex justify-between items-end mb-2">
                   <div>
@@ -286,7 +286,7 @@ export default function DeckCardStudio() {
                     Cost+20% Active
                   </Badge>
                 </div>
-                
+
                 <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2.5 mt-4">
                   <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: '65%' }}></div>
                 </div>

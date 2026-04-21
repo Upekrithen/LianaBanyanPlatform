@@ -6,20 +6,20 @@ DO $$
 DECLARE
     v record;
 BEGIN
-    FOR v IN 
-        SELECT viewname 
-        FROM pg_views 
+    FOR v IN
+        SELECT viewname
+        FROM pg_views
         WHERE schemaname = 'public'
     LOOP
         -- Re-create the view with SECURITY INVOKER
-        -- Note: We can't directly alter a view to be SECURITY INVOKER, 
+        -- Note: We can't directly alter a view to be SECURITY INVOKER,
         -- but we can alter the underlying function if it's a materialized view,
         -- or we can just ensure the view itself doesn't have security_barrier set.
-        
+
         -- For standard views, they are SECURITY INVOKER by default unless specified otherwise.
         -- If Supabase is flagging them, it might be because they access tables without RLS,
         -- or they were created with a specific security context.
-        
+
         -- Let's try to alter the view to set security_invoker = true
         BEGIN
             EXECUTE format('ALTER VIEW public.%I SET (security_invoker = true);', v.viewname);

@@ -3,7 +3,7 @@
  * =================
  * Orders meals with dynamic pricing based on lead time.
  * Price is calculated at order time, not stored in the meal.
- * 
+ *
  * Supports bulk ordering with volume discounts for:
  * - Packed Lunches (order in 5s)
  * - Baked Goods (order by the dozen)
@@ -30,9 +30,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import { ShoppingCart, Heart, Clock, Info, Package, Minus, Plus as PlusIcon, Percent } from "lucide-react";
 import { calculateMealPrice, calculateChefEarnings, formatHoursUntilPickup, type PriceTierInfo } from "@/lib/lmdPricing";
-import { 
-  calculateBulkOrder, 
-  getNextTierSuggestion, 
+import {
+  calculateBulkOrder,
+  getNextTierSuggestion,
   formatBulkPricing,
   type OfferingType,
   type VolumeDiscountTier,
@@ -56,10 +56,10 @@ interface MealOrderDialogProps {
   volumeDiscountTiers?: VolumeDiscountTier[];
 }
 
-export function MealOrderDialog({ 
-  mealId, 
-  mealName, 
-  mealPrice, 
+export function MealOrderDialog({
+  mealId,
+  mealName,
+  mealPrice,
   providerId,
   pickupDate,
   pickupTime,
@@ -80,20 +80,20 @@ export function MealOrderDialog({
   const isBulkOrder = offeringType !== 'standard';
 
   // Recalculate price at dialog open to ensure freshness
-  const currentPricing: PriceTierInfo = pickupDate 
+  const currentPricing: PriceTierInfo = pickupDate
     ? calculateMealPrice(pickupDate, pickupTime, isCharity)
     : { price: mealPrice, tier: isCharity ? 'charity' : 'rush', label: isCharity ? 'Charity' : 'Current', hoursOut: 0, color: '', bgColor: '', description: '' };
 
   const unitPrice = currentPricing.price;
-  
+
   // Calculate bulk order pricing
-  const bulkCalc = useMemo(() => 
+  const bulkCalc = useMemo(() =>
     calculateBulkOrder(quantity, unitPrice, offeringType, volumeDiscountTiers),
     [quantity, unitPrice, offeringType, volumeDiscountTiers]
   );
-  
+
   // Get suggestion for next discount tier
-  const nextTierSuggestion = useMemo(() => 
+  const nextTierSuggestion = useMemo(() =>
     getNextTierSuggestion(quantity, unitPrice, volumeDiscountTiers),
     [quantity, unitPrice, volumeDiscountTiers]
   );
@@ -106,7 +106,7 @@ export function MealOrderDialog({
     const next = quantity + bulkIncrement;
     if (next <= portionsAvailable) setQuantity(next);
   };
-  
+
   const decrementQuantity = () => {
     const next = quantity - bulkIncrement;
     if (next >= bulkMinimum) setQuantity(next);
@@ -147,13 +147,13 @@ export function MealOrderDialog({
       // Update portions claimed (by quantity, not just 1)
       const { error: updateError } = await supabase
         .rpc('increment_portions_claimed', { meal_id: mealId, amount: quantity });
-      
+
       // Fallback if RPC doesn't exist or doesn't support amount param
       if (updateError) {
         await supabase
           .from('lmd_meals')
-          .update({ 
-            portions_claimed: supabase.sql`portions_claimed + ${quantity}` 
+          .update({
+            portions_claimed: supabase.sql`portions_claimed + ${quantity}`
           })
           .eq('id', mealId);
       }
@@ -167,7 +167,7 @@ export function MealOrderDialog({
             total_borrowed: actualPrice,
             current_balance: actualPrice,
             repayment_percentage: profitPercentage,
-          }, { 
+          }, {
             onConflict: 'user_id',
             // If exists, increment instead
           });
@@ -221,8 +221,8 @@ export function MealOrderDialog({
 
   if (!user) {
     return (
-      <Button 
-        variant="outline" 
+      <Button
+        variant="outline"
         className="w-full"
         onClick={() => toast({ title: "Please sign in to order meals" })}
       >
@@ -253,7 +253,7 @@ export function MealOrderDialog({
         <DialogHeader>
           <DialogTitle>Order {mealName}</DialogTitle>
           <DialogDescription>
-            {isCharity 
+            {isCharity
               ? "This is a charity meal — free for those who need it."
               : `${currentPricing.label} pricing: $${actualPrice} per portion`
             }
@@ -299,7 +299,7 @@ export function MealOrderDialog({
               >
                 <PlusIcon className="h-4 w-4" />
               </Button>
-              
+
               {/* Quick quantity buttons */}
               <div className="flex gap-1 ml-2">
                 {[5, 10, 20, 40].filter(q => q <= portionsAvailable).map(q => (
@@ -316,7 +316,7 @@ export function MealOrderDialog({
                 ))}
               </div>
             </div>
-            
+
             {/* Volume discount applied */}
             {bulkCalc.discountPercent > 0 && (
               <div className="flex items-center gap-2 text-emerald-600 bg-emerald-500/10 rounded-lg p-2">
@@ -326,7 +326,7 @@ export function MealOrderDialog({
                 </span>
               </div>
             )}
-            
+
             {/* Next tier suggestion */}
             {nextTierSuggestion && bulkCalc.discountPercent < 20 && (
               <div className="text-xs text-muted-foreground bg-muted/50 rounded p-2">
@@ -350,7 +350,7 @@ export function MealOrderDialog({
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span className="text-sm">
-                  {currentPricing.hoursOut > 0 
+                  {currentPricing.hoursOut > 0
                     ? `Pickup in ${formatHoursUntilPickup(currentPricing.hoursOut)}`
                     : "Pickup time passed"
                   }
@@ -360,7 +360,7 @@ export function MealOrderDialog({
                 ${unitPrice}/ea
               </span>
             </div>
-            
+
             {/* Bulk pricing breakdown */}
             {isBulkOrder && quantity > 1 && (
               <div className="mt-2 pt-2 border-t border-current/10 space-y-1">
@@ -382,7 +382,7 @@ export function MealOrderDialog({
                 </div>
               </div>
             )}
-            
+
             <div className="text-xs text-muted-foreground mt-1">
               {currentPricing.description} • Chef earns ${chefEarnings.toFixed(2)}
             </div>
@@ -480,13 +480,13 @@ export function MealOrderDialog({
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button 
-            onClick={() => orderMealMutation.mutate()} 
+          <Button
+            onClick={() => orderMealMutation.mutate()}
             disabled={orderMealMutation.isPending}
           >
-            {orderMealMutation.isPending 
-              ? "Placing Order..." 
-              : isCharity 
+            {orderMealMutation.isPending
+              ? "Placing Order..."
+              : isCharity
                 ? "Reserve Meal"
                 : `Pay $${actualPrice.toFixed(2)}${quantity > 1 ? ` for ${quantity}` : ''}`
             }

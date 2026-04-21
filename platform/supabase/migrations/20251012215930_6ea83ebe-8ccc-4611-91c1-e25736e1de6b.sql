@@ -117,8 +117,8 @@ INSERT INTO public.service_categories (category_type, category_name, category_de
   ('consulting', 'Consulting Services', 'Business strategy and advisory services');
 
 -- Seed service providers
-INSERT INTO public.service_providers (category_id, provider_name, provider_description, website_url) 
-SELECT 
+INSERT INTO public.service_providers (category_id, provider_name, provider_description, website_url)
+SELECT
   sc.id,
   'LaunchBoom',
   'Crowdfunding campaign launch service specializing in Kickstarter and Indiegogo campaigns. Provides end-to-end campaign management, marketing, and optimization.',
@@ -126,14 +126,14 @@ SELECT
 FROM public.service_categories sc WHERE sc.category_type = 'crowdfunding_launch';
 
 INSERT INTO public.service_providers (category_id, provider_name, provider_description, website_url)
-SELECT 
+SELECT
   sc.id,
   provider_name,
   provider_description,
   website_url
 FROM public.service_categories sc
 CROSS JOIN (
-  VALUES 
+  VALUES
     ('Kickstarter', 'Rewards-based crowdfunding platform for creative projects', 'https://kickstarter.com'),
     ('Indiegogo', 'Global crowdfunding platform for innovative products and causes', 'https://indiegogo.com'),
     ('Gamefound', 'Crowdfunding platform focused on tabletop games', 'https://gamefound.com'),
@@ -142,14 +142,14 @@ CROSS JOIN (
 WHERE sc.category_type = 'crowdfunding_platform';
 
 INSERT INTO public.service_providers (category_id, provider_name, provider_description, website_url)
-SELECT 
+SELECT
   sc.id,
   provider_name,
   provider_description,
   website_url
 FROM public.service_categories sc
 CROSS JOIN (
-  VALUES 
+  VALUES
     ('Wefunder', 'Equity crowdfunding platform for startups', 'https://wefunder.com'),
     ('Republic', 'Investment platform for startups and growth companies', 'https://republic.com'),
     ('StartEngine', 'Equity crowdfunding and securities platform', 'https://startengine.com')
@@ -157,7 +157,7 @@ CROSS JOIN (
 WHERE sc.category_type = 'equity_crowdfunding';
 
 INSERT INTO public.service_providers (category_id, provider_name, provider_description, website_url)
-SELECT 
+SELECT
   sc.id,
   'LianaBanyan Manufacturing Platform',
   'Our manufacturing-focused crowdfunding platform with equity, credit, and time-commitment options',

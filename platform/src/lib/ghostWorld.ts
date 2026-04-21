@@ -1,10 +1,10 @@
 /**
  * Ghost World & Half-Life System
- * 
+ *
  * Core mechanics for the ephemeral gameplay experience where non-members
  * compete for Crow Feathers (permanent achievements) while their loot
  * decays by half each time they return.
- * 
+ *
  * Canonical Quote: "Not in normal mode. You'd have to go Ghost."
  */
 
@@ -20,14 +20,14 @@ export interface GhostSession {
   isPaused: boolean;
   pausedAt?: Date;
   persistenceTier: PersistenceTier;
-  
+
   // Session loot (subject to Half-Life decay)
   loot: SessionLoot;
-  
+
   // Saved loot (paid to bank)
   savedLoot?: SessionLoot;
   savedAt?: Date;
-  
+
   // Free cue card for this session
   freeCueCardId?: string;
   freeCueCardSelectedAt?: Date;
@@ -75,7 +75,7 @@ export interface LeaderboardEntry {
   crowFeatherId: number;
 }
 
-export type LeaderboardCategory = 
+export type LeaderboardCategory =
   | 'golden_keys'
   | 'areas_discovered'
   | 'labyrinth_speed'
@@ -165,7 +165,7 @@ const STORAGE_KEYS = {
 export function upgradePersistence(session: GhostSession, tier: PersistenceTier): GhostSession {
   const currentDuration = PERSISTENCE_DURATIONS[session.persistenceTier];
   const newDuration = PERSISTENCE_DURATIONS[tier];
-  
+
   // Only upgrade if the new tier is longer
   if (newDuration > currentDuration) {
     session.persistenceTier = tier;
@@ -173,7 +173,7 @@ export function upgradePersistence(session: GhostSession, tier: PersistenceTier)
     session.expiresAt = new Date(now.getTime() + newDuration * 60 * 60 * 1000);
     saveSession(session);
   }
-  
+
   return session;
 }
 
@@ -191,7 +191,7 @@ export function createGhostSession(userId: string): GhostSession {
     persistenceTier: 'default',
     loot: createEmptyLoot(),
   };
-  
+
   saveSession(session);
   return session;
 }
@@ -201,43 +201,43 @@ export function createGhostSession(userId: string): GhostSession {
  */
 export function getOrCreateGhostSession(userId: string): { session: GhostSession; decayed: boolean; previousLoot?: SessionLoot } {
   const stored = localStorage.getItem(STORAGE_KEYS.currentSession);
-  
+
   if (stored) {
     const session = JSON.parse(stored) as GhostSession;
-    
+
     // Check if session expired
     if (new Date(session.expiresAt) < new Date()) {
       // Session expired - apply Half-Life decay
       const previousLoot = session.loot;
       const decayedLoot = applyHalfLifeDecay(previousLoot);
-      
+
       // Store the decayed loot for the new session
       const newSession = createGhostSession(userId);
       newSession.loot = decayedLoot;
       saveSession(newSession);
-      
+
       return { session: newSession, decayed: true, previousLoot };
     }
-    
+
     return { session, decayed: false };
   }
-  
+
   // Check for previous loot that needs decay
   const previousLootStr = localStorage.getItem(STORAGE_KEYS.previousLoot);
   if (previousLootStr) {
     const previousLoot = JSON.parse(previousLootStr) as SessionLoot;
     const decayedLoot = applyHalfLifeDecay(previousLoot);
-    
+
     const newSession = createGhostSession(userId);
     newSession.loot = decayedLoot;
     saveSession(newSession);
-    
+
     // Clear previous loot
     localStorage.removeItem(STORAGE_KEYS.previousLoot);
-    
+
     return { session: newSession, decayed: true, previousLoot };
   }
-  
+
   // Fresh start
   return { session: createGhostSession(userId), decayed: false };
 }
@@ -248,16 +248,16 @@ export function getOrCreateGhostSession(userId: string): { session: GhostSession
  */
 export function saveSessionLoot(session: GhostSession, isMember: boolean): GhostSession {
   const now = new Date();
-  
+
   // Bank current loot
   session.savedLoot = { ...session.loot };
   session.savedAt = now;
-  
+
   // Reset timer
   session.expiresAt = new Date(now.getTime() + MAX_SESSION_HOURS * 60 * 60 * 1000);
-  
+
   saveSession(session);
-  
+
   return session;
 }
 
@@ -267,7 +267,7 @@ export function saveSessionLoot(session: GhostSession, isMember: boolean): Ghost
 export function endGhostSession(session: GhostSession, purchaseKeep: boolean): { keptLoot: SessionLoot; lostLoot: SessionLoot } {
   const keptLoot = createEmptyLoot();
   const lostLoot = createEmptyLoot();
-  
+
   if (purchaseKeep) {
     // Purchased - keep everything
     Object.assign(keptLoot, session.loot);
@@ -280,15 +280,15 @@ export function endGhostSession(session: GhostSession, purchaseKeep: boolean): {
     if (session.savedLoot) {
       mergeLoot(totalLoot, session.savedLoot);
     }
-    
+
     // Store for decay
     localStorage.setItem(STORAGE_KEYS.previousLoot, JSON.stringify(totalLoot));
     Object.assign(lostLoot, totalLoot);
   }
-  
+
   // Clear current session
   localStorage.removeItem(STORAGE_KEYS.currentSession);
-  
+
   return { keptLoot, lostLoot };
 }
 
@@ -335,7 +335,7 @@ export function checkForRecords(session: GhostSession): CrowFeather[] {
   );
   const timeBracket = getTimeBracket(sessionMinutes);
   const newFeathers: CrowFeather[] = [];
-  
+
   // Check each category
   const categories: { category: LeaderboardCategory; value: number }[] = [
     { category: 'golden_keys', value: session.loot.goldenKeys },
@@ -346,7 +346,7 @@ export function checkForRecords(session: GhostSession): CrowFeather[] {
     { category: 'deck_cards_viewed', value: session.loot.deckCardsViewed.length },
     { category: 'beacon_journeys', value: session.loot.beaconsCompleted.length },
   ];
-  
+
   for (const { category, value } of categories) {
     if (value > 0 && isNewRecord(category, timeBracket, value)) {
       const feather = createCrowFeather(
@@ -359,7 +359,7 @@ export function checkForRecords(session: GhostSession): CrowFeather[] {
       newFeathers.push(feather);
     }
   }
-  
+
   return newFeathers;
 }
 
@@ -384,7 +384,7 @@ function isNewRecord(category: LeaderboardCategory, bracket: TimeBracket, value:
   const leaderboard = getLocalLeaderboard();
   const key = `${category}_${bracket}`;
   const currentRecord = leaderboard[key];
-  
+
   return !currentRecord || value > currentRecord.recordValue;
 }
 
@@ -400,7 +400,7 @@ function createCrowFeather(
 ): CrowFeather {
   const feathers = getCrowFeathers();
   const nextId = feathers.length > 0 ? Math.max(...feathers.map(f => f.id)) + 1 : 1;
-  
+
   const feather: CrowFeather = {
     id: nextId,
     category,
@@ -411,14 +411,14 @@ function createCrowFeather(
     userId,
     username: 'You',  // Would come from auth in production
   };
-  
+
   // Save to local storage
   feathers.push(feather);
   localStorage.setItem(STORAGE_KEYS.crowFeathers, JSON.stringify(feathers));
-  
+
   // Update leaderboard
   updateLocalLeaderboard(category, timeBracket, feather);
-  
+
   return feather;
 }
 
@@ -446,7 +446,7 @@ function getLocalLeaderboard(): LocalLeaderboard {
 function updateLocalLeaderboard(category: LeaderboardCategory, bracket: TimeBracket, feather: CrowFeather): void {
   const leaderboard = getLocalLeaderboard();
   const key = `${category}_${bracket}`;
-  
+
   leaderboard[key] = {
     category,
     timeBracket: bracket,
@@ -457,7 +457,7 @@ function updateLocalLeaderboard(category: LeaderboardCategory, bracket: TimeBrac
     achievedAt: feather.earnedAt,
     crowFeatherId: feather.id,
   };
-  
+
   localStorage.setItem('ghost_world_leaderboard', JSON.stringify(leaderboard));
 }
 
@@ -560,11 +560,11 @@ export function formatSessionDuration(session: GhostSession): string {
   const minutes = Math.floor(
     (new Date().getTime() - new Date(session.startedAt).getTime()) / 60000
   );
-  
+
   if (minutes < 60) {
     return `${minutes}m`;
   }
-  
+
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
   return `${hours}h ${remainingMinutes}m`;
@@ -572,15 +572,15 @@ export function formatSessionDuration(session: GhostSession): string {
 
 export function getSessionTimeRemaining(session: GhostSession): string {
   const remaining = new Date(session.expiresAt).getTime() - new Date().getTime();
-  
+
   if (remaining <= 0) {
     return 'Expired';
   }
-  
+
   const minutes = Math.floor(remaining / 60000);
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
-  
+
   return `${hours}h ${remainingMinutes}m remaining`;
 }
 
@@ -588,13 +588,13 @@ export function getSessionPurchasePrice(session: GhostSession): number {
   const minutes = Math.floor(
     (new Date().getTime() - new Date(session.startedAt).getTime()) / 60000
   );
-  
+
   for (const tier of SESSION_PURCHASE_TIERS) {
     if (minutes <= tier.maxMinutes) {
       return tier.price;
     }
   }
-  
+
   return SESSION_PURCHASE_TIERS[SESSION_PURCHASE_TIERS.length - 1].price;
 }
 
@@ -687,10 +687,10 @@ export function updateGhostChaseStats(
   status: 'finished' | 'quit' | 'lost'
 ): GhostChaseStats {
   const stats = getGhostChaseStats();
-  
+
   stats.totalChases++;
   stats.totalAnteSpent += anteAmount;
-  
+
   if (status === 'quit') {
     stats.quits++;
     stats.currentStreak = 0;
@@ -701,24 +701,24 @@ export function updateGhostChaseStats(
     stats.wins++;
     stats.totalWinnings += payout;
     stats.currentStreak++;
-    
+
     if (stats.currentStreak > stats.bestStreak) {
       stats.bestStreak = stats.currentStreak;
     }
-    
+
     if (position < stats.bestFinish) {
       stats.bestFinish = position;
     }
   }
-  
+
   if (finishTimeMs < stats.bestTimeMs && status === 'finished') {
     stats.bestTimeMs = finishTimeMs;
   }
-  
+
   stats.netProfit = stats.totalWinnings - stats.totalAnteSpent;
-  
+
   localStorage.setItem(GHOST_CHASE_STORAGE_KEY, JSON.stringify(stats));
-  
+
   return stats;
 }
 
@@ -726,7 +726,7 @@ export function updateGhostChaseStats(
  * Check if Ghost can afford to ante (using session marks)
  */
 export function canGhostAffordAnte(session: GhostSession, anteAmount: number): boolean {
-  // Ghosts use their session Marks (stored as 'goldenKeys' for simplicity, 
+  // Ghosts use their session Marks (stored as 'goldenKeys' for simplicity,
   // or we could add a separate 'sessionMarks' field)
   // For now, Ghosts play with their candles as "marks" equivalent
   return session.loot.candles >= anteAmount;
@@ -808,8 +808,8 @@ const BEACON_RUN_STORAGE_KEY = 'ghost_world_beacon_runs';
  * Start a Beacon Run attempt (Ghost Mode only)
  */
 export function startBeaconRun(
-  runId: string, 
-  totalWaypoints: number, 
+  runId: string,
+  totalWaypoints: number,
   userId: string
 ): BeaconRunProgress {
   const progress: BeaconRunProgress = {
@@ -821,12 +821,12 @@ export function startBeaconRun(
     elapsedMs: 0,
     status: 'in_progress',
   };
-  
+
   const stored = localStorage.getItem(BEACON_RUN_STORAGE_KEY);
   const runs = stored ? JSON.parse(stored) : {};
   runs[runId] = progress;
   localStorage.setItem(BEACON_RUN_STORAGE_KEY, JSON.stringify(runs));
-  
+
   return progress;
 }
 
@@ -839,14 +839,14 @@ export function updateBeaconRunProgress(
 ): BeaconRunProgress | null {
   const stored = localStorage.getItem(BEACON_RUN_STORAGE_KEY);
   if (!stored) return null;
-  
+
   const runs = JSON.parse(stored);
   const progress = runs[runId] as BeaconRunProgress;
   if (!progress) return null;
-  
+
   progress.currentWaypointIndex = waypointIndex;
   progress.elapsedMs = new Date().getTime() - new Date(progress.startedAt).getTime();
-  
+
   localStorage.setItem(BEACON_RUN_STORAGE_KEY, JSON.stringify(runs));
   return progress;
 }
@@ -860,27 +860,27 @@ export function completeBeaconRun(
 ): { progress: BeaconRunProgress; crowFeather?: CrowFeather } {
   const stored = localStorage.getItem(BEACON_RUN_STORAGE_KEY);
   if (!stored) throw new Error('No beacon run in progress');
-  
+
   const runs = JSON.parse(stored);
   const progress = runs[runId] as BeaconRunProgress;
   if (!progress) throw new Error('Beacon run not found');
-  
+
   progress.completedAt = new Date();
   progress.elapsedMs = progress.completedAt.getTime() - new Date(progress.startedAt).getTime();
   progress.status = 'completed';
-  
+
   localStorage.setItem(BEACON_RUN_STORAGE_KEY, JSON.stringify(runs));
-  
+
   // Add to session loot
   addBeaconCompleted(session, runId);
-  
+
   // Check for speed record (Crow Feather)
   let crowFeather: CrowFeather | undefined;
   const sessionMinutes = Math.floor(
     (new Date().getTime() - new Date(session.startedAt).getTime()) / 60000
   );
   const timeBracket = getTimeBracket(sessionMinutes);
-  
+
   // Speed is measured in seconds (lower is better)
   const completionSeconds = Math.floor(progress.elapsedMs / 1000);
   if (isNewSpeedRecord('beacon_run_speed', timeBracket, completionSeconds, runId)) {
@@ -894,7 +894,7 @@ export function completeBeaconRun(
     );
     progress.crowFeatherEarned = crowFeather.id;
   }
-  
+
   return { progress, crowFeather };
 }
 
@@ -904,7 +904,7 @@ export function completeBeaconRun(
 export function abandonBeaconRun(runId: string): void {
   const stored = localStorage.getItem(BEACON_RUN_STORAGE_KEY);
   if (!stored) return;
-  
+
   const runs = JSON.parse(stored);
   if (runs[runId]) {
     runs[runId].status = 'abandoned';
@@ -916,15 +916,15 @@ export function abandonBeaconRun(runId: string): void {
  * Check if a completion time is a new speed record for a specific Beacon Run
  */
 function isNewSpeedRecord(
-  category: LeaderboardCategory, 
-  bracket: TimeBracket, 
+  category: LeaderboardCategory,
+  bracket: TimeBracket,
   seconds: number,
   runId: string
 ): boolean {
   const leaderboard = getLocalLeaderboard();
   const key = `${category}_${bracket}_${runId}`;
   const currentRecord = leaderboard[key];
-  
+
   // For speed, lower is better
   return !currentRecord || seconds < currentRecord.recordValue;
 }
@@ -942,7 +942,7 @@ function createBeaconRunCrowFeather(
 ): CrowFeather {
   const feathers = getCrowFeathers();
   const nextId = feathers.length > 0 ? Math.max(...feathers.map(f => f.id)) + 1 : 1;
-  
+
   const feather: CrowFeather = {
     id: nextId,
     category,
@@ -953,10 +953,10 @@ function createBeaconRunCrowFeather(
     userId,
     username: 'You',
   };
-  
+
   feathers.push(feather);
   localStorage.setItem(STORAGE_KEYS.crowFeathers, JSON.stringify(feathers));
-  
+
   // Update run-specific leaderboard
   const leaderboard = getLocalLeaderboard();
   const key = `${category}_${timeBracket}_${runId}`;
@@ -971,7 +971,7 @@ function createBeaconRunCrowFeather(
     crowFeatherId: feather.id,
   };
   localStorage.setItem('ghost_world_leaderboard', JSON.stringify(leaderboard));
-  
+
   return feather;
 }
 
@@ -981,7 +981,7 @@ function createBeaconRunCrowFeather(
 export function getBeaconRunLeaderboard(runId: string): BeaconRunLeaderboardEntry[] {
   const leaderboard = getLocalLeaderboard();
   const entries: BeaconRunLeaderboardEntry[] = [];
-  
+
   for (const [key, entry] of Object.entries(leaderboard)) {
     if (key.includes(`beacon_run_speed`) && key.includes(runId)) {
       entries.push({
@@ -996,13 +996,13 @@ export function getBeaconRunLeaderboard(runId: string): BeaconRunLeaderboardEntr
       });
     }
   }
-  
+
   // Sort by completion time and assign ranks
   entries.sort((a, b) => a.completionTimeMs - b.completionTimeMs);
   entries.forEach((entry, index) => {
     entry.rank = index + 1;
   });
-  
+
   return entries;
 }
 
@@ -1010,8 +1010,8 @@ export function getBeaconRunLeaderboard(runId: string): BeaconRunLeaderboardEntr
  * Get all Crow Feathers earned from Beacon Runs
  */
 export function getBeaconRunCrowFeathers(): CrowFeather[] {
-  return getCrowFeathers().filter(f => 
-    f.category === 'beacon_run_speed' || 
+  return getCrowFeathers().filter(f =>
+    f.category === 'beacon_run_speed' ||
     f.category === 'beacons_dropped' ||
     f.category === 'beacon_runs_created'
   );
@@ -1024,10 +1024,10 @@ export function formatCompletionTime(ms: number): string {
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
-  
+
   if (minutes === 0) {
     return `${seconds}s`;
   }
-  
+
   return `${minutes}m ${remainingSeconds}s`;
 }

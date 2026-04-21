@@ -1,8 +1,8 @@
 /**
  * Taste Tester Service
- * 
+ *
  * Manages the early adopter reward system for trying new/experimental recipes.
- * 
+ *
  * Rules:
  * - First 5,000 orders of a recipe qualify for Taste Tester rewards
  * - Rewards: Marks + Reputation Points (diminishing scale)
@@ -65,13 +65,13 @@ export function calculateTasteTesterReward(orderNumber: number): TasteTesterRewa
   if (orderNumber > VETTING_THRESHOLD) {
     return { marks: 0, reputation: 0 };
   }
-  
+
   for (const tier of TASTE_TESTER_TIERS) {
     if (orderNumber <= tier.maxOrder) {
       return { marks: tier.marks, reputation: tier.reputation };
     }
   }
-  
+
   return { marks: 0, reputation: 0 };
 }
 
@@ -115,11 +115,11 @@ export async function recordTasteTest(
     }
 
     const reward = calculateTasteTesterReward(orderNumber);
-    
+
     if (reward.marks === 0 && reward.reputation === 0) {
       return { error: 'Recipe no longer in testing phase' };
     }
-    
+
     const record: TasteTesterRecord = {
       id: `tt-${Date.now()}`,
       user_id: userData.user.id,
@@ -134,10 +134,10 @@ export async function recordTasteTest(
       converted_to_credits: false,
       credits_received: 0,
     };
-    
+
     // INFRASTRUCTURE NOTE: This function needs to insert the taste test record
     // into the taste_test_records table in Supabase
-    
+
     return { record };
   } catch (error) {
     console.error('Error recording taste test:', error);
@@ -154,7 +154,7 @@ export async function checkMasterTasterEligibility(
   try {
     // In production, query actual count from database
     const recipesReached5k = 0;
-    
+
     return {
       eligible: recipesReached5k >= MASTER_TASTER_THRESHOLD,
       recipesReached5k,
@@ -173,18 +173,18 @@ export async function convertMarksToCredits(
 ): Promise<{ credits: number; error?: string }> {
   try {
     const { eligible } = await checkMasterTasterEligibility(userId);
-    
+
     if (!eligible) {
       return { credits: 0, error: 'Not eligible for Master Taster status' };
     }
-    
+
     // In production:
     // 1. Get current marks balance
     // 2. Convert to credits (1:1 ratio)
     // 3. Update user's credits
     // 4. Reset marks balance
     // 5. Set Master Taster status
-    
+
     return { credits: 0 }; // Placeholder
   } catch (error) {
     console.error('Error converting marks to credits:', error);
@@ -248,11 +248,11 @@ export function formatTasteTesterReward(reward: TasteTesterReward): string {
   if (reward.marks === 0 && reward.reputation === 0) {
     return 'No reward (recipe already vetted)';
   }
-  
+
   const parts: string[] = [];
   if (reward.marks > 0) parts.push(`${reward.marks} Marks`);
   if (reward.reputation > 0) parts.push(`${reward.reputation} Rep`);
-  
+
   return parts.join(' + ');
 }
 

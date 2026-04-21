@@ -95,16 +95,16 @@ export const TestFlowSteps = ({ flowId, onBack }: TestFlowStepsProps) => {
         if (error) throw error;
         toast.success('Step updated successfully');
       } else {
-        const nextStepNumber = steps.length > 0 
-          ? Math.max(...steps.map(s => s.step_number)) + 1 
+        const nextStepNumber = steps.length > 0
+          ? Math.max(...steps.map(s => s.step_number)) + 1
           : 1;
 
         const { error } = await supabase
           .from('test_flow_steps')
-          .insert([{ 
-            ...formData, 
+          .insert([{
+            ...formData,
             flow_id: flowId,
-            step_number: nextStepNumber 
+            step_number: nextStepNumber
           }]);
 
         if (error) throw error;
@@ -151,7 +151,7 @@ export const TestFlowSteps = ({ flowId, onBack }: TestFlowStepsProps) => {
   const handleReorder = async (stepId: string, direction: 'up' | 'down') => {
     const currentIndex = steps.findIndex(s => s.id === stepId);
     if (currentIndex === -1) return;
-    
+
     const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
     if (targetIndex < 0 || targetIndex >= steps.length) return;
 

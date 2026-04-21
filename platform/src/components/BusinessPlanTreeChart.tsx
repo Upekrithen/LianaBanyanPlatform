@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { 
-  CheckCircle2, 
-  Circle, 
-  Clock, 
-  XCircle, 
-  ChevronDown, 
+import {
+  CheckCircle2,
+  Circle,
+  Clock,
+  XCircle,
+  ChevronDown,
   ChevronRight,
   Plus,
   Edit
@@ -140,7 +140,7 @@ export function BusinessPlanTreeChart({ projectId }: BusinessPlanTreeChartProps)
 
   const getBlockingTasks = (task: Task): Task[] => {
     if (!task.prerequisite_task_ids) return [];
-    return tasks.filter(t => 
+    return tasks.filter(t =>
       task.prerequisite_task_ids.includes(t.id) && t.status !== 'completed'
     );
   };
@@ -194,7 +194,7 @@ export function BusinessPlanTreeChart({ projectId }: BusinessPlanTreeChartProps)
 
       {categories.map(category => (
         <Card key={category}>
-          <CardHeader 
+          <CardHeader
             className="cursor-pointer hover:bg-muted/50 transition-colors"
             onClick={() => toggleCategory(category)}
           >
@@ -217,8 +217,8 @@ export function BusinessPlanTreeChart({ projectId }: BusinessPlanTreeChartProps)
                 const blockingTasks = getBlockingTasks(task);
 
                 return (
-                  <div 
-                    key={task.id} 
+                  <div
+                    key={task.id}
                     className={`p-4 border rounded-lg ${blocked ? 'border-orange-300 bg-orange-50 dark:bg-orange-950' : ''}`}
                   >
                     <div className="flex items-start gap-3">
@@ -285,11 +285,11 @@ export function BusinessPlanTreeChart({ projectId }: BusinessPlanTreeChartProps)
                         </div>
 
                         <div className="flex gap-2">
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             variant="outline"
                             onClick={() => {
-                              const newStatus = task.status === 'completed' ? 'not_started' : 
+                              const newStatus = task.status === 'completed' ? 'not_started' :
                                               task.status === 'not_started' ? 'in_progress' :
                                               task.status === 'in_progress' ? 'completed' : 'not_started';
                               handleUpdateTask(task.id, 'status', newStatus);
@@ -298,8 +298,8 @@ export function BusinessPlanTreeChart({ projectId }: BusinessPlanTreeChartProps)
                             Update Status
                           </Button>
                           {task.status !== 'moot' && (
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="outline"
                               onClick={() => {
                                 const reason = prompt('Why is this task no longer needed?');

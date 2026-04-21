@@ -2,10 +2,10 @@
  * CLAIM YOUR SHIP (Captain Application)
  * =====================================
  * Milestone 2: The Cold Start & Stewardship System
- * 
+ *
  * Application flow for users to become a Captain (The 300)
  * for a specific initiative in their city.
- * 
+ *
  * NAVAL RANK PROGRESSION:
  * - Captain: 1 ship (your own) - Local leader for ONE initiative in ONE city
  * - Commodore: 3+ ships - Leader of 3+ initiatives OR 1 initiative across 3+ cities
@@ -26,8 +26,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
-  Crown, MapPin, Users, Shield, AlertTriangle, 
+import {
+  Crown, MapPin, Users, Shield, AlertTriangle,
   CheckCircle, ArrowRight, Coins, FileText, Anchor, Ship, Compass
 } from "lucide-react";
 
@@ -131,7 +131,7 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
       case 2:
         return formData.backgroundSummary && formData.localKnowledge;
       case 3:
-        return formData.scenarioFraud && formData.scenarioConflict && 
+        return formData.scenarioFraud && formData.scenarioConflict &&
                formData.acceptTerms && formData.acceptSixPerson;
       default:
         return false;
@@ -167,8 +167,8 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
                 What is a Captain?
               </h4>
               <p className="text-sm text-muted-foreground">
-                Captains are the commanders of their own ship — local leaders in "The 300" who execute 
-                initiatives in their cities. While the <strong>Fleet Admiral</strong> (like Maneet Chauhan 
+                Captains are the commanders of their own ship — local leaders in "The 300" who execute
+                initiatives in their cities. While the <strong>Fleet Admiral</strong> (like Maneet Chauhan
                 for Let's Make Dinner) sets the national vision, <strong>Captains</strong> make it happen locally.
               </p>
               <div className="mt-3 mb-3 text-sm text-muted-foreground border-t border-b py-3 border-primary/10">
@@ -188,9 +188,9 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="legalName">Full Legal Name *</Label>
-                <Input 
-                  id="legalName" 
-                  required 
+                <Input
+                  id="legalName"
+                  required
                   placeholder="As it appears on your government ID"
                   value={formData.legalName}
                   onChange={(e) => setFormData({...formData, legalName: e.target.value})}
@@ -202,9 +202,9 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
 
               <div className="space-y-2">
                 <Label htmlFor="zipCode">Your Zip Code *</Label>
-                <Input 
-                  id="zipCode" 
-                  required 
+                <Input
+                  id="zipCode"
+                  required
                   placeholder="e.g., 85001"
                   value={formData.zipCode}
                   onChange={(e) => setFormData({...formData, zipCode: e.target.value})}
@@ -222,9 +222,9 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
           <div className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="background">Professional Background & Why You Want This Role *</Label>
-              <Textarea 
-                id="background" 
-                required 
+              <Textarea
+                id="background"
+                required
                 className="min-h-[100px]"
                 placeholder="Tell us about your experience and why you are drawn to this initiative..."
                 value={formData.backgroundSummary}
@@ -234,9 +234,9 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
 
             <div className="space-y-2">
               <Label htmlFor="localKnowledge">Your Knowledge of {city} *</Label>
-              <Textarea 
-                id="localKnowledge" 
-                required 
+              <Textarea
+                id="localKnowledge"
+                required
                 className="min-h-[100px]"
                 placeholder={`What do you know about ${city} that would help you lead ${initiativeName} here? Local connections, community knowledge, etc.`}
                 value={formData.localKnowledge}
@@ -256,14 +256,14 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
               <p className="text-xs text-muted-foreground mb-2">
                 Your AI Advisor will assist you, but you must make the final call. How would you handle these situations?
               </p>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="scenarioFraud" className="text-sm">
                   Scenario 1: You suspect a recipient is submitting fraudulent requests.
                 </Label>
-                <Textarea 
-                  id="scenarioFraud" 
-                  required 
+                <Textarea
+                  id="scenarioFraud"
+                  required
                   placeholder="Your response..."
                   value={formData.scenarioFraud}
                   onChange={(e) => setFormData({...formData, scenarioFraud: e.target.value})}
@@ -274,9 +274,9 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
                 <Label htmlFor="scenarioConflict" className="text-sm">
                   Scenario 2: The AI Advisor strongly recommends denying a request, but your human intuition says otherwise.
                 </Label>
-                <Textarea 
-                  id="scenarioConflict" 
-                  required 
+                <Textarea
+                  id="scenarioConflict"
+                  required
                   placeholder="Your response..."
                   value={formData.scenarioConflict}
                   onChange={(e) => setFormData({...formData, scenarioConflict: e.target.value})}
@@ -295,8 +295,8 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
               </p>
               <div className="flex items-center gap-4">
                 <Label htmlFor="pledgeAmount">Pledge Amount (Credits)</Label>
-                <Input 
-                  id="pledgeAmount" 
+                <Input
+                  id="pledgeAmount"
                   type="number"
                   min={100}
                   className="w-32"
@@ -311,25 +311,25 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
 
             <div className="space-y-3">
               <div className="flex items-start space-x-2">
-                <Checkbox 
+                <Checkbox
                   id="acceptTerms"
                   checked={formData.acceptTerms}
                   onCheckedChange={(checked) => setFormData({...formData, acceptTerms: checked as boolean})}
                 />
                 <label htmlFor="acceptTerms" className="text-sm leading-tight">
-                  I understand that as a Captain, I am responsible for local operations and will be held 
+                  I understand that as a Captain, I am responsible for local operations and will be held
                   accountable by the community. My pledge will be escrowed until my probation period ends.
                 </label>
               </div>
 
               <div className="flex items-start space-x-2">
-                <Checkbox 
+                <Checkbox
                   id="acceptSixPerson"
                   checked={formData.acceptSixPerson}
                   onCheckedChange={(checked) => setFormData({...formData, acceptSixPerson: checked as boolean})}
                 />
                 <label htmlFor="acceptSixPerson" className="text-sm leading-tight">
-                  I agree to the <strong>Six-Person Verification</strong> process: 3 people who know me 
+                  I agree to the <strong>Six-Person Verification</strong> process: 3 people who know me
                   and 3 random community members must verify my identity and pledge backing credits.
                 </label>
               </div>
@@ -343,13 +343,13 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
               <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
               <h3 className="text-xl font-bold">Application Submitted!</h3>
               <p className="text-muted-foreground">
-                Your Captain application for <strong>{initiativeName}</strong> in <strong>{city}, {state}</strong> 
+                Your Captain application for <strong>{initiativeName}</strong> in <strong>{city}, {state}</strong>
                 is now pending verification and escrow.
               </p>
             </div>
 
             <SixPersonVerification applicationId="demo-app-id" />
-            
+
             <BackerPledgeEscrow applicationId="demo-app-id" pledgeAmount={formData.pledgeAmount} />
           </div>
         )}
@@ -364,7 +364,7 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
           ) : (
             <div />
           )}
-          
+
           {step < 3 ? (
             <Button onClick={() => setStep(step + 1)} disabled={!canProceed()}>
               Continue
@@ -384,8 +384,8 @@ export const ClaimCaptainForm: React.FC<ClaimCaptainFormProps> = ({
           <Ship className="h-4 w-4 text-blue-500" /> The 300: The Fleet
         </div>
         <p>
-          Captains are part of "The 300" — the decentralized fleet that ensures 
-          every community has local commanders accountable to their neighbors. The Fleet Admiral sets vision; 
+          Captains are part of "The 300" — the decentralized fleet that ensures
+          every community has local commanders accountable to their neighbors. The Fleet Admiral sets vision;
           Captains execute locally. Prove yourself and rise through the ranks: Commodore, Admiral, and beyond.
         </p>
       </CardFooter>

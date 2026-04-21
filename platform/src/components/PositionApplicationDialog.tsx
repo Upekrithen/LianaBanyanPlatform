@@ -36,10 +36,10 @@ interface PositionApplicationDialogProps {
   position: Position | null;
 }
 
-export function PositionApplicationDialog({ 
-  open, 
-  onOpenChange, 
-  position 
+export function PositionApplicationDialog({
+  open,
+  onOpenChange,
+  position
 }: PositionApplicationDialogProps) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ export function PositionApplicationDialog({
         .eq('user_id', user.id)
         .eq('is_active', true)
         .maybeSingle();
-      
+
       setIsClanMember(!!clanData);
 
       // Check guild membership
@@ -75,7 +75,7 @@ export function PositionApplicationDialog({
         .eq('user_id', user.id)
         .limit(1)
         .maybeSingle();
-      
+
       setHasGuildMemberships(!!guildData);
     };
 
@@ -150,7 +150,7 @@ export function PositionApplicationDialog({
           <div className="bg-muted p-4 rounded-lg space-y-2">
             <h3 className="font-semibold">Position Details</h3>
             <p className="text-sm text-muted-foreground">{position.position_description}</p>
-            
+
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <p className="text-xs text-muted-foreground">Compensation Type</p>
@@ -216,7 +216,7 @@ export function PositionApplicationDialog({
           </div>
 
           {/* Clan & Guild Contextual Prompt */}
-          <ClanGuildContextualPrompt 
+          <ClanGuildContextualPrompt
             context="service_signup"
             isClanMember={isClanMember}
             hasGuildMemberships={hasGuildMemberships}

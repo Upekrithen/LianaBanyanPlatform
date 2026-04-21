@@ -21,9 +21,9 @@ BEGIN
   -- Combine all immutable data and hash it
   RETURN encode(
     digest(
-      _project_id::text || 
-      _module_version::text || 
-      COALESCE(_previous_hash, 'GENESIS') || 
+      _project_id::text ||
+      _module_version::text ||
+      COALESCE(_previous_hash, 'GENESIS') ||
       _xml_data,
       'sha256'
     ),
@@ -62,7 +62,7 @@ BEGIN
       _module.module_version,
       _module.project_id
     );
-    
+
     -- Check if it matches
     IF _module.current_hash = _expected_hash THEN
       RETURN QUERY SELECT
@@ -100,10 +100,10 @@ BEGIN
   FROM public.project_modules
   WHERE project_id = NEW.project_id
     AND module_version = NEW.module_version - 1;
-  
+
   -- Set previous_hash
   NEW.previous_hash := _prev_hash;
-  
+
   -- Generate current hash
   NEW.current_hash := public.generate_module_hash(
     NEW.xml_data,
@@ -111,12 +111,12 @@ BEGIN
     NEW.module_version,
     NEW.project_id
   );
-  
+
   -- Mark as verified
   NEW.is_verified := true;
   NEW.signed_at := now();
   NEW.tamper_detected := false;
-  
+
   RETURN NEW;
 END;
 $$;
@@ -184,7 +184,7 @@ BEGIN
     _verification_result,
     _notes
   RETURNING id INTO _log_id;
-  
+
   RETURN _log_id;
 END;
 $$;
@@ -207,19 +207,19 @@ BEGIN
   SELECT id INTO _project_id
   FROM public.projects
   WHERE project_sku = _project_sku;
-  
+
   IF NOT FOUND THEN
     RETURN jsonb_build_object(
       'success', false,
       'error', 'Project not found'
     );
   END IF;
-  
+
   -- Get module count
   SELECT COUNT(*) INTO _module_count
   FROM public.project_modules
   WHERE project_id = _project_id;
-  
+
   -- Get verification results
   SELECT jsonb_agg(
     jsonb_build_object(
@@ -229,14 +229,14 @@ BEGIN
     )
   ) INTO _result
   FROM public.verify_module_chain(_project_id) v;
-  
+
   -- Count invalid modules
   SELECT COUNT(*) INTO _invalid_count
   FROM public.verify_module_chain(_project_id)
   WHERE is_valid = false;
-  
+
   _is_valid := (_invalid_count = 0);
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'project_sku', _project_sku,

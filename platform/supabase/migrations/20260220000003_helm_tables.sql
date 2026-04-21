@@ -8,26 +8,26 @@
 CREATE TABLE IF NOT EXISTS public.helm_card_slots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Slot position (1-12, like a clock face)
   slot_position INTEGER NOT NULL CHECK (slot_position BETWEEN 1 AND 12),
-  
+
   -- What's in this slot
   deck_card_id UUID, -- Reference to deck_cards table if using a deck card
   slot_name TEXT NOT NULL DEFAULT 'Empty',
   slot_icon TEXT NOT NULL DEFAULT '➕',
   destination_url TEXT,
   destination_type TEXT NOT NULL DEFAULT 'empty' CHECK (destination_type IN ('platform', 'external', 'custom', 'empty')),
-  
+
   -- Lock mechanics
   is_locked BOOLEAN DEFAULT false,
   lock_type TEXT CHECK (lock_type IN ('onboarding', 'achievement', 'beacon', NULL)),
   required_beacon_color TEXT, -- For special unlock requirements (e.g., 'purple', 'gold')
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- One slot per position per user
   UNIQUE(user_id, slot_position)
 );
@@ -37,24 +37,24 @@ CREATE TABLE IF NOT EXISTS public.helm_card_slots (
 CREATE TABLE IF NOT EXISTS public.helm_input_preferences (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Which INPUT mode
   input_mode TEXT NOT NULL CHECK (input_mode IN (
-    'my_stuff', 'create', 'browse', 'play', 
+    'my_stuff', 'create', 'browse', 'play',
     'community', 'govern', 'initiatives', 'settings'
   )),
-  
+
   -- User's position within this mode
   sub_channel INTEGER DEFAULT 0,
   last_accessed_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Custom ordering of items within this mode
   custom_order JSONB DEFAULT '[]',
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- One preference per mode per user
   UNIQUE(user_id, input_mode)
 );
@@ -132,7 +132,7 @@ BEGIN
     (NEW.id, 10, 'Empty', '➕', NULL, 'empty', false, NULL),
     (NEW.id, 11, 'Empty', '➕', NULL, 'empty', false, NULL)
   ON CONFLICT (user_id, slot_position) DO NOTHING;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

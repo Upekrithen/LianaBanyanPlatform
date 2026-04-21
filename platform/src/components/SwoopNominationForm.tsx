@@ -116,7 +116,7 @@ export function SwoopNominationForm() {
       if (!user) throw new Error("Must be logged in to nominate");
 
       const slug = generateSlug(data.title);
-      
+
       const { data: project, error } = await supabase
         .from("swoop_projects")
         .insert({
@@ -288,8 +288,8 @@ export function SwoopNominationForm() {
               <Label htmlFor="relationship">Your Relationship to Recipient *</Label>
               <Select
                 value={formData.recipientRelationship}
-                onValueChange={(value) => setFormData({ 
-                  ...formData, 
+                onValueChange={(value) => setFormData({
+                  ...formData,
                   recipientRelationship: value,
                   isSelfNomination: value === "self"
                 })}
@@ -544,7 +544,7 @@ export function SwoopNominationForm() {
               <p className="text-sm text-muted-foreground mb-4">
                 The project lead manages fund disbursement. This can be you or someone else.
               </p>
-              
+
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="projectLeadName">Project Lead Name</Label>
@@ -606,8 +606,8 @@ export function SwoopNominationForm() {
                   <div className="text-sm">
                     <p className="font-medium text-amber-800">Legal Notice</p>
                     <p className="text-amber-700 mt-1">
-                      Liana Banyan Corporation acts solely as a payment processor for Do The Swoop projects. 
-                      All funds are held in project-specific accounts controlled by the designated Project Lead. 
+                      Liana Banyan Corporation acts solely as a payment processor for Do The Swoop projects.
+                      All funds are held in project-specific accounts controlled by the designated Project Lead.
                       LB does not own, manage, or make decisions about fund allocation.
                     </p>
                   </div>
@@ -619,7 +619,7 @@ export function SwoopNominationForm() {
               <Checkbox
                 id="acknowledgeLegalTerms"
                 checked={formData.acknowledgeLegalTerms}
-                onCheckedChange={(checked) => 
+                onCheckedChange={(checked) =>
                   setFormData({ ...formData, acknowledgeLegalTerms: checked as boolean })
                 }
               />
@@ -627,8 +627,8 @@ export function SwoopNominationForm() {
                 htmlFor="acknowledgeLegalTerms"
                 className="text-sm leading-tight cursor-pointer"
               >
-                I understand that this nomination will be reviewed before voting begins, 
-                and that verification is required before any funds can be disbursed. 
+                I understand that this nomination will be reviewed before voting begins,
+                and that verification is required before any funds can be disbursed.
                 I confirm that the information provided is accurate to the best of my knowledge.
               </label>
             </div>
@@ -644,7 +644,7 @@ export function SwoopNominationForm() {
           >
             Back
           </Button>
-          
+
           {step < 5 ? (
             <Button
               onClick={() => setStep(step + 1)}

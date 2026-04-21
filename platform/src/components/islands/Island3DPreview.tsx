@@ -19,7 +19,7 @@ interface Island3DPreviewProps {
 }
 
 function IslandTerrain({ shape, size }: { shape: string; size: number }) {
-  const geometry = shape === 'hexagon' 
+  const geometry = shape === 'hexagon'
     ? new THREE.CylinderGeometry(size, size, 2, 6)
     : new THREE.CylinderGeometry(size, size, 2, 32);
 
@@ -57,14 +57,14 @@ export function Island3DPreview({ islandData }: Island3DPreviewProps) {
       <Canvas shadows>
         <Suspense fallback={null}>
           <PerspectiveCamera makeDefault position={[15, 12, 15]} />
-          <OrbitControls 
+          <OrbitControls
             enablePan={true}
             enableZoom={true}
             enableRotate={true}
             minDistance={10}
             maxDistance={50}
           />
-          
+
           {/* Lighting */}
           <ambientLight intensity={0.5} />
           <directionalLight
@@ -74,13 +74,13 @@ export function Island3DPreview({ islandData }: Island3DPreviewProps) {
             shadow-mapSize={[2048, 2048]}
           />
           <pointLight position={[-10, 10, -10]} intensity={0.5} />
-          
+
           {/* Environment */}
           <Environment preset="sunset" />
-          
+
           {/* Island Terrain */}
           <IslandTerrain shape={terrain.shape} size={terrain.size} />
-          
+
           {/* Buildings */}
           {islandData.buildings.map((building, index) => (
             <Building
@@ -91,13 +91,13 @@ export function Island3DPreview({ islandData }: Island3DPreviewProps) {
               size={building.size}
             />
           ))}
-          
+
           {/* Water plane */}
           <mesh position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <planeGeometry args={[100, 100]} />
-            <meshStandardMaterial 
-              color="#0ea5e9" 
-              transparent 
+            <meshStandardMaterial
+              color="#0ea5e9"
+              transparent
               opacity={0.6}
               roughness={0.1}
             />

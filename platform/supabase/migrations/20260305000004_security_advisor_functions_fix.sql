@@ -6,7 +6,7 @@ DO $$
 DECLARE
     f record;
 BEGIN
-    FOR f IN 
+    FOR f IN
         SELECT p.proname, pg_get_function_identity_arguments(p.oid) as args
         FROM pg_proc p
         JOIN pg_namespace n ON p.pronamespace = n.oid

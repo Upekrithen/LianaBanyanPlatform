@@ -1,9 +1,9 @@
 /**
  * External Service Gateway
- * 
+ *
  * Unified interface for connecting to external funding platforms.
  * LB is the coordination layer - these platforms handle the money.
- * 
+ *
  * "Platform, not a fund"
  */
 
@@ -11,16 +11,16 @@
 // TYPES
 // =============================================================================
 
-export type FundingPlatform = 
-  | 'kickstarter' 
-  | 'gofundme' 
-  | 'givebutter' 
-  | 'wefunder' 
+export type FundingPlatform =
+  | 'kickstarter'
+  | 'gofundme'
+  | 'givebutter'
+  | 'wefunder'
   | 'givesendgo'
   | 'indiegogo'
   | 'patreon';
 
-export type CampaignType = 
+export type CampaignType =
   | 'product'      // Physical products, manufacturing (Kickstarter, Indiegogo)
   | 'medical'      // Medical/crisis support (GoFundMe, GiveSendGo)
   | 'donation'     // General charitable (GiveButter)
@@ -34,7 +34,7 @@ function normalizeCampaignType(type: CampaignType | LegacyCampaignType): Campaig
   return type === 'participation' ? 'participation' : type;
 }
 
-export type CampaignStatus = 
+export type CampaignStatus =
   | 'draft'
   | 'pending_approval'
   | 'active'
@@ -82,20 +82,20 @@ export interface ExternalFundingAdapter {
   platform: FundingPlatform;
   displayName: string;
   logoUrl: string;
-  
+
   // What this platform supports
   supportedTypes: CampaignType[];
-  
+
   // API capabilities
   hasAPI: boolean;
   canCreateCampaign: boolean;  // Some only allow linking existing
   canSyncProgress: boolean;
-  
+
   // Core operations
   createCampaignLink(projectId: string, data: CampaignData): Promise<CampaignLink>;
   getCampaignStatus(externalId: string): Promise<CampaignStatus>;
   syncProgress(externalId: string): Promise<FundingProgress>;
-  
+
   // Optional operations
   getEmbedCode?(externalId: string): string;
   validateUrl?(url: string): boolean;
@@ -243,15 +243,15 @@ export const INITIATIVE_PLATFORM_MAP: Record<string, {
 
 export class ExternalServiceGateway {
   private adapters: Map<FundingPlatform, ExternalFundingAdapter> = new Map();
-  
+
   constructor() {
     // Adapters are registered at runtime
   }
-  
+
   registerAdapter(adapter: ExternalFundingAdapter): void {
     this.adapters.set(adapter.platform, adapter);
   }
-  
+
   /**
    * Get the best platform for a given campaign type
    */
@@ -269,12 +269,12 @@ export class ExternalServiceGateway {
         return preferredPlatform;
       }
     }
-    
+
     // If initiative has a mapping, use it
     if (initiativeSlug && INITIATIVE_PLATFORM_MAP[initiativeSlug]) {
       return INITIATIVE_PLATFORM_MAP[initiativeSlug].primary;
     }
-    
+
     // Otherwise, find best platform for type
     const platforms = Object.entries(PLATFORM_CONFIG)
       .filter(([_, config]) => config.supportedTypes.includes(normalizedType))
@@ -284,10 +284,10 @@ export class ExternalServiceGateway {
         if (!a[1].hasAPI && b[1].hasAPI) return 1;
         return 0;
       });
-    
+
     return platforms[0]?.[0] as FundingPlatform || 'gofundme';
   }
-  
+
   /**
    * Create a campaign link (or instructions to create one)
    */
@@ -300,19 +300,19 @@ export class ExternalServiceGateway {
     const platform = this.selectPlatform(type, undefined, preferredPlatform);
     const config = PLATFORM_CONFIG[platform];
     const adapter = this.adapters.get(platform);
-    
+
     // If we can create via API, do it
     if (adapter && config.canCreateCampaign) {
       return adapter.createCampaignLink(projectId, data);
     }
-    
+
     // Otherwise, return instructions
     return {
       platform,
       instructions: this.getCreationInstructions(platform, type, data)
     };
   }
-  
+
   /**
    * Link an existing external campaign to an LB project
    */
@@ -322,14 +322,14 @@ export class ExternalServiceGateway {
     externalUrl: string
   ): Promise<CampaignLink> {
     const adapter = this.adapters.get(platform);
-    
+
     // Extract ID from URL
     let externalId = externalUrl;
     if (adapter?.extractIdFromUrl) {
       const extracted = adapter.extractIdFromUrl(externalUrl);
       if (extracted) externalId = extracted;
     }
-    
+
     return {
       platform,
       externalId,
@@ -337,7 +337,7 @@ export class ExternalServiceGateway {
       createdAt: new Date()
     };
   }
-  
+
   /**
    * Sync funding progress from external platform
    */
@@ -347,14 +347,14 @@ export class ExternalServiceGateway {
   ): Promise<FundingProgress | null> {
     const adapter = this.adapters.get(platform);
     const config = PLATFORM_CONFIG[platform];
-    
+
     if (!adapter || !config.canSyncProgress) {
       return null;
     }
-    
+
     return adapter.syncProgress(externalId);
   }
-  
+
   /**
    * Get instructions for creating a campaign on a platform
    */
@@ -364,7 +364,7 @@ export class ExternalServiceGateway {
     data: CampaignData
   ): string {
     const config = PLATFORM_CONFIG[platform];
-    
+
     const instructions: Record<FundingPlatform, string> = {
       kickstarter: `
 1. Go to ${config.baseUrl}/create
@@ -374,7 +374,7 @@ export class ExternalServiceGateway {
 5. Complete their approval process
 6. Once live, come back and paste your campaign URL here
       `.trim(),
-      
+
       gofundme: `
 1. Go to ${config.baseUrl}/create
 2. Select "Medical" or appropriate category
@@ -383,7 +383,7 @@ export class ExternalServiceGateway {
 5. Add your story and photos
 6. Once live, come back and paste your campaign URL here
       `.trim(),
-      
+
       givebutter: `
 1. Go to ${config.baseUrl}
 2. Click "Start Fundraising"
@@ -391,7 +391,7 @@ export class ExternalServiceGateway {
 4. Set goal: $${data.goalAmount}
 5. Once live, come back and paste your campaign URL here
       `.trim(),
-      
+
       wefunder: `
 1. Go to ${config.baseUrl}/raise
 2. Apply for a campaign (requires approval)
@@ -400,7 +400,7 @@ export class ExternalServiceGateway {
 5. Complete their due diligence process
 6. Once approved and live, paste your campaign URL here
       `.trim(),
-      
+
       givesendgo: `
 1. Go to ${config.baseUrl}/create
 2. Select appropriate category
@@ -409,7 +409,7 @@ export class ExternalServiceGateway {
 5. Add your story
 6. Once live, come back and paste your campaign URL here
       `.trim(),
-      
+
       indiegogo: `
 1. Go to ${config.baseUrl}/create
 2. Select "Start a Campaign"
@@ -418,7 +418,7 @@ export class ExternalServiceGateway {
 5. Choose Fixed or Flexible funding
 6. Once live, come back and paste your campaign URL here
       `.trim(),
-      
+
       patreon: `
 1. Go to ${config.baseUrl}/create
 2. Set up your creator page
@@ -427,10 +427,10 @@ export class ExternalServiceGateway {
 5. Once live, come back and paste your page URL here
       `.trim()
     };
-    
+
     return instructions[platform] || 'Visit the platform website to create your campaign.';
   }
-  
+
   /**
    * Get all platforms that support a given type
    */
@@ -440,7 +440,7 @@ export class ExternalServiceGateway {
       .filter(([_, config]) => config.supportedTypes.includes(normalizedType))
       .map(([platform]) => platform as FundingPlatform);
   }
-  
+
   /**
    * Get platform info for display
    */
@@ -466,19 +466,19 @@ CREATE TABLE external_campaigns (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   -- Link to LB project
   project_id UUID REFERENCES projects(id),
   initiative_slug TEXT,
-  
+
   -- External platform info
   platform TEXT NOT NULL,
   external_id TEXT NOT NULL,
   external_url TEXT NOT NULL,
-  
+
   -- Campaign type
   campaign_type TEXT NOT NULL, -- 'product', 'medical', 'donation', 'participation', 'recurring' (legacy 'participation' maps to 'participation')
-  
+
   -- Synced data
   title TEXT,
   goal_amount DECIMAL(10,2),
@@ -486,14 +486,14 @@ CREATE TABLE external_campaigns (
   donor_count INTEGER DEFAULT 0,
   percent_funded DECIMAL(5,2) DEFAULT 0,
   status TEXT DEFAULT 'active',
-  
+
   -- Sync tracking
   last_synced TIMESTAMPTZ,
   sync_enabled BOOLEAN DEFAULT true,
-  
+
   -- Metadata
   embed_code TEXT,
-  
+
   UNIQUE(platform, external_id)
 );
 

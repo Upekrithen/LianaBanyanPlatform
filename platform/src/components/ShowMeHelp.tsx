@@ -1,12 +1,12 @@
 /**
  * ShowMeHelp — Transparent overlay frame for contextual help
- * 
+ *
  * When OPEN:
  * - Header bar (top), Sidebar (left), Footer bar (bottom) frame the page
  * - Clicking ANY interactive element shows a help dialog FIRST
  * - Dialog has "Go Back" (dismiss) or "Proceed" (do the action)
  * - The actual page content remains visible and the help system intercepts clicks
- * 
+ *
  * Features:
  * - "Don't show again" checkbox for repetitive dialog types (e.g., locks)
  * - Context-aware category switching based on current page
@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 
 const DISMISSED_STORAGE_KEY = 'showme-dismissed-help-types';
 
-export type HelpDialogType = 
+export type HelpDialogType =
   | 'lock'           // Lock explanations
   | 'deck-card'      // Deck card explanations
   | 'button'         // Button explanations
@@ -141,7 +141,7 @@ export interface HelpDialogData {
 }
 
 // Context types for automatic category switching
-export type HelpContext = 
+export type HelpContext =
   | 'start-page'      // Main landing page
   | 'action-options'  // Choose your path page
   | 'get-job'         // Get a job section
@@ -296,7 +296,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
         <header className="showme-help-header">
           <div className="showme-help-header-left">
             <Flame className="showme-help-flame" />
-            <div 
+            <div
               className="showme-help-category-dropdown"
               onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
             >
@@ -307,7 +307,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
             {categoryDropdownOpen && (
               <div className="showme-help-category-menu">
                 {CATEGORIES.map((cat) => (
-                  <div 
+                  <div
                     key={cat.id}
                     className={`showme-help-category-item ${activeCategory === cat.id ? 'active' : ''}`}
                     onClick={() => handleCategoryChange(cat.id)}
@@ -319,11 +319,11 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
               </div>
             )}
           </div>
-          
+
           <div className="showme-help-header-center">
             <span className="showme-help-counter">{topicIndex + 1} of {totalTopics}</span>
           </div>
-          
+
           <button className="showme-help-exit" onClick={onRequestClose}>
             <X className="w-4 h-4" />
             Exit
@@ -371,7 +371,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
                 <span className="showme-help-action-label">{btn.label}</span>
               </button>
             ))}
-            
+
             {/* Settings Menu */}
             {showSettingsMenu && (
               <div className="showme-settings-menu">
@@ -384,7 +384,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
                     <span className="showme-settings-item-title">Dismissed Reminders</span>
                     <span className="showme-settings-item-count">{dismissedCount} type{dismissedCount !== 1 ? 's' : ''} hidden</span>
                   </div>
-                  <button 
+                  <button
                     className="showme-settings-reset-btn"
                     onClick={handleResetDismissed}
                     disabled={dismissedCount === 0}
@@ -404,7 +404,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
             <span className="showme-help-nav-label">
               {nextTopic ? nextTopic.title : ''}
             </span>
-            <button 
+            <button
               className="showme-help-nav-btn next"
               disabled={!nextTopic}
               onClick={handleNext}
@@ -423,7 +423,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
             <div className="showme-help-dialog-content">
               {renderContent(helpDialog.content)}
             </div>
-            
+
             {/* "Don't show again" checkbox - only for typed dialogs */}
             {helpDialog.dialogType && (
               <label className="showme-help-dismiss-checkbox">
@@ -435,16 +435,16 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
                 <span>Don't show {helpDialog.dialogType === 'lock' ? 'lock reminders' : 'this type'} again</span>
               </label>
             )}
-            
+
             <div className="showme-help-dialog-buttons">
-              <button 
+              <button
                 className="showme-help-dialog-btn secondary"
                 onClick={handleCloseWithDismiss}
               >
                 Go Back
               </button>
               {helpDialog.actionLabel && helpDialog.onProceed && (
-                <button 
+                <button
                   className="showme-help-dialog-btn primary"
                   onClick={handleProceedWithDismiss}
                 >
@@ -465,7 +465,7 @@ export function ShowMeHelp({ isOpen, onRequestClose, helpDialog, onCloseHelpDial
               {renderContent(topicDialog.content)}
             </div>
             <div className="showme-help-dialog-buttons">
-              <button 
+              <button
                 className="showme-help-dialog-btn primary"
                 onClick={() => setTopicDialog(null)}
               >

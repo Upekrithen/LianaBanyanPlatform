@@ -279,7 +279,7 @@ export async function fetchShowcasePromotions(date: Date): Promise<ShowcasePromo
 }
 
 export async function fetchMilestones(_date: Date): Promise<MilestoneEntry[]> {
-  // Milestones come from a different source (member achievements) — 
+  // Milestones come from a different source (member achievements) —
   // no dedicated table yet. Return sample data for now.
   return SAMPLE_MILESTONES;
 }

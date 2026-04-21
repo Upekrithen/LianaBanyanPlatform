@@ -130,9 +130,9 @@ export default function GuildStakeSuccess() {
                 <Button onClick={() => navigate("/dashboard")} className="w-full" size="lg">
                   View Dashboard
                 </Button>
-                <Button 
-                  onClick={() => navigate("/guilds")} 
-                  variant="outline" 
+                <Button
+                  onClick={() => navigate("/guilds")}
+                  variant="outline"
                   className="w-full"
                 >
                   Explore Guilds

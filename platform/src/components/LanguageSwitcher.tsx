@@ -38,14 +38,14 @@ export function LanguageSwitcher() {
 
   useEffect(() => {
     setCurrentLang(getLanguagePreference());
-    
+
     // Check page tools visibility setting (default to hidden)
     const checkPageTools = () => {
       const stored = localStorage.getItem('lb_show_page_tools');
       setShowPageTools(stored === 'true'); // Only show if explicitly set to 'true'
     };
     checkPageTools();
-    
+
     // Listen for storage changes (when user toggles in Index.tsx)
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'lb_show_page_tools') {
@@ -53,11 +53,11 @@ export function LanguageSwitcher() {
       }
     };
     window.addEventListener('storage', handleStorage);
-    
+
     // Also listen for custom event for same-tab updates
     const handleCustomEvent = () => checkPageTools();
     window.addEventListener('lb_page_tools_changed', handleCustomEvent);
-    
+
     return () => {
       window.removeEventListener('storage', handleStorage);
       window.removeEventListener('lb_page_tools_changed', handleCustomEvent);

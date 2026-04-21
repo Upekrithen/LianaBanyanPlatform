@@ -10,9 +10,9 @@ interface LarkWrapperProps {
   className?: string;
 }
 
-export const LarkWrapper: React.FC<LarkWrapperProps> = ({ 
-  componentId, 
-  bountyCredits, 
+export const LarkWrapper: React.FC<LarkWrapperProps> = ({
+  componentId,
+  bountyCredits,
   children,
   className = ""
 }) => {
@@ -26,10 +26,10 @@ export const LarkWrapper: React.FC<LarkWrapperProps> = ({
     <div className={`relative group ${className}`}>
       {/* The Matrix Reveal styling */}
       <div className="absolute inset-0 border-2 border-dashed border-cyan-500/50 bg-cyan-500/5 pointer-events-none group-hover:border-cyan-400 group-hover:bg-cyan-500/10 transition-all z-10" />
-      
+
       {/* The Contextual Hover Badge */}
       <div className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-opacity z-20 flex items-center gap-2">
-        <button 
+        <button
           onClick={() => openLarkPanel(componentId)}
           className="bg-slate-900 border border-cyan-500 text-cyan-400 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 hover:bg-cyan-950 transition-colors"
         >

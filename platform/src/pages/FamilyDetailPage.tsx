@@ -66,7 +66,7 @@ export default function FamilyDetailPage() {
 
       // Get current user's member ID
       const currentMember = memberData?.find(m => m.user_id === user.id);
-      
+
       // Get relationship statuses if we have a current member
       let relationshipMap: Record<string, boolean> = {};
       if (currentMember) {
@@ -183,7 +183,7 @@ export default function FamilyDetailPage() {
       </div>
 
       {/* Back button */}
-      <button 
+      <button
         onClick={() => navigate('/family')}
         className="ghost-toggle"
         style={{ left: 20 }}
@@ -261,8 +261,8 @@ export default function FamilyDetailPage() {
                     familyId={familyId!}
                     currentMemberId={currentMember.id}
                     isConnected={
-                      member.id === currentMember.id 
-                        ? true 
+                      member.id === currentMember.id
+                        ? true
                         : relationships[member.id] !== false
                     }
                     showConnectionToggle={member.id !== currentMember.id}
@@ -273,7 +273,7 @@ export default function FamilyDetailPage() {
               {/* Connection Info */}
               <div className="mt-4 p-3 rounded-lg bg-white/5 text-sm text-muted-foreground">
                 <Link2 className="h-4 w-4 inline mr-2" />
-                <strong>Connections:</strong> You can disconnect from individual members to stop 
+                <strong>Connections:</strong> You can disconnect from individual members to stop
                 sharing content with them, without leaving the {family.display_name.toLowerCase()}.
               </div>
             </div>
@@ -285,11 +285,11 @@ export default function FamilyDetailPage() {
               <Gift className="h-12 w-12 mx-auto mb-4 opacity-40" />
               <h3 className="font-semibold mb-2">Gift Lists</h3>
               <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Create wishlists for birthdays and holidays. Family members can claim items — 
+                Create wishlists for birthdays and holidays. Family members can claim items —
                 but the recipient won't see who claimed what!
               </p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="mt-4"
                 onClick={() => navigate(`/family/${familyId}/gifts`)}
               >
@@ -305,11 +305,11 @@ export default function FamilyDetailPage() {
               <Calendar className="h-12 w-12 mx-auto mb-4 opacity-40" />
               <h3 className="font-semibold mb-2">Family Calendar</h3>
               <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Shared calendar with birthdays, holidays, and events. 
+                Shared calendar with birthdays, holidays, and events.
                 Sync with Google Calendar for seamless integration.
               </p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="mt-4"
                 onClick={() => navigate(`/family/${familyId}/calendar`)}
               >

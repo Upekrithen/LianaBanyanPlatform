@@ -25,13 +25,13 @@ ALTER TABLE challenge_submissions
   DROP CONSTRAINT IF EXISTS contest_submissions_contest_id_fkey;
 
 ALTER TABLE challenge_submissions
-  ADD CONSTRAINT challenge_submissions_challenge_id_fkey 
-  FOREIGN KEY (challenge_id) 
-  REFERENCES influencer_challenge_config(id) 
+  ADD CONSTRAINT challenge_submissions_challenge_id_fkey
+  FOREIGN KEY (challenge_id)
+  REFERENCES influencer_challenge_config(id)
   ON DELETE CASCADE;
 
 -- Create index for concurrent challenge queries
-CREATE INDEX IF NOT EXISTS idx_challenge_config_arena_category 
+CREATE INDEX IF NOT EXISTS idx_challenge_config_arena_category
   ON influencer_challenge_config(challenge_arena, submission_categories);
 
 -- Update RLS policies

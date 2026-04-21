@@ -3,13 +3,13 @@
  * ========================
  * Complete map of all mirror connections across the platform.
  * Used by Will-o'-Wisp Chase Mode for path generation.
- * 
+ *
  * Mirrors are bi-directional portals that connect different areas.
  * The graph is designed for:
  * 1. Path generation (random walks for Chase Mode)
  * 2. Shortest path finding (for pickle detection)
  * 3. Difficulty scaling (longer paths = harder chases)
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  */
 
@@ -29,7 +29,7 @@ export interface MirrorNode {
   description?: string;
 }
 
-export type MirrorArea = 
+export type MirrorArea =
   | 'landing'
   | 'work'
   | 'build'
@@ -419,19 +419,19 @@ export function getConnectedMirrors(mirrorId: string): MirrorNode[] {
  */
 export function findShortestPath(startId: string, endId: string): string[] | null {
   if (startId === endId) return [startId];
-  
+
   const visited = new Set<string>();
   const queue: { id: string; path: string[] }[] = [{ id: startId, path: [startId] }];
-  
+
   while (queue.length > 0) {
     const { id, path } = queue.shift()!;
-    
+
     if (visited.has(id)) continue;
     visited.add(id);
-    
+
     const node = MIRROR_GRAPH[id];
     if (!node) continue;
-    
+
     for (const nextId of node.connections) {
       if (nextId === endId) {
         return [...path, nextId];
@@ -441,7 +441,7 @@ export function findShortestPath(startId: string, endId: string): string[] | nul
       }
     }
   }
-  
+
   return null; // No path found
 }
 
@@ -499,29 +499,29 @@ export function generateChasePath(
   seed?: string
 ): MirrorPath {
   const settings = DIFFICULTY_SETTINGS[difficulty];
-  
+
   // Seeded random for deterministic paths
   const random = seededRandom(seed || Math.random().toString());
-  
+
   // Determine path length
   const pathLength = Math.floor(
     random() * (settings.maxLength - settings.minLength + 1) + settings.minLength
   );
-  
+
   // Start from a random tier 2 node (discovery pages)
   const tier2Nodes = getMirrorsByTier(2);
   const startNode = tier2Nodes[Math.floor(random() * tier2Nodes.length)];
-  
+
   const path: string[] = [startNode.id];
   const visited = new Set<string>([startNode.id]);
   let pickleRisk = 0;
-  
+
   // Random walk to build path
   let currentId = startNode.id;
   while (path.length < pathLength) {
     const current = MIRROR_GRAPH[currentId];
     if (!current) break;
-    
+
     // Filter valid next steps
     const validNext = current.connections.filter(id => {
       const node = MIRROR_GRAPH[id];
@@ -531,28 +531,28 @@ export function generateChasePath(
       if (!settings.allowPickleZones && node.isPickleZone) return false;
       return true;
     });
-    
+
     if (validNext.length === 0) {
       // Dead end - backtrack or end path
       break;
     }
-    
+
     // Pick random next node
     const nextId = validNext[Math.floor(random() * validNext.length)];
     const nextNode = MIRROR_GRAPH[nextId];
-    
+
     path.push(nextId);
     visited.add(nextId);
     currentId = nextId;
-    
+
     if (nextNode?.isPickleZone) {
       pickleRisk += 0.15;
     }
   }
-  
+
   // Calculate estimated time
   const estimatedTimeMs = path.length * settings.baseTimeMs;
-  
+
   return {
     nodes: path,
     difficulty,
@@ -582,10 +582,10 @@ export function getNextSteps(currentId: string, targetPath: string[], currentInd
 } {
   const current = MIRROR_GRAPH[currentId];
   if (!current) return { correct: null, alternatives: [] };
-  
+
   const correctNext = targetPath[currentIndex + 1] || null;
   const alternatives = current.connections.filter(id => id !== correctNext);
-  
+
   return { correct: correctNext, alternatives };
 }
 
@@ -607,18 +607,18 @@ export function isInPickle(
   if (!current) {
     return { isPickle: true, severity: 1, hint: "You've wandered off the map!" };
   }
-  
+
   // Check if way behind on time
   const timeRatio = timeSpentMs / expectedTimeMs;
   if (timeRatio > 2) {
     return { isPickle: true, severity: 0.8, hint: "Time's slipping away..." };
   }
-  
+
   // Check if in a pickle zone
   if (current.isPickleZone) {
     return { isPickle: true, severity: 0.5, hint: "This is tricky territory!" };
   }
-  
+
   // Check if lost (not on the expected path)
   const expectedNext = targetPath[currentIndex + 1];
   if (expectedNext && !current.connections.includes(expectedNext)) {
@@ -631,7 +631,7 @@ export function isInPickle(
       return { isPickle: true, severity: 0.6, hint: "You've strayed from the path" };
     }
   }
-  
+
   return { isPickle: false, severity: 0 };
 }
 
@@ -647,7 +647,7 @@ function seededRandom(seed: string): () => number {
   for (let i = 0; i < seed.length; i++) {
     h = Math.imul(31, h) + seed.charCodeAt(i) | 0;
   }
-  
+
   return function() {
     h = Math.imul(h ^ (h >>> 15), h | 1);
     h ^= h + Math.imul(h ^ (h >>> 7), h | 61);

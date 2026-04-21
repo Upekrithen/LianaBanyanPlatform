@@ -9,11 +9,11 @@ CREATE TABLE IF NOT EXISTS social_imports (
   source_title TEXT,
   source_description TEXT,
   source_images JSONB DEFAULT '[]',
-  
+
   status TEXT DEFAULT 'imported' CHECK (status IN ('imported', 'draft', 'converted')),
-  
+
   project_id UUID REFERENCES turnkey_projects(id),
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS creator_bridges (
   display_name TEXT,
   is_primary BOOLEAN DEFAULT false,
   verified BOOLEAN DEFAULT false,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(user_id, service_type)
 );

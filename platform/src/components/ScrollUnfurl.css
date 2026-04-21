@@ -61,7 +61,7 @@
   box-shadow:
     0 4px 6px var(--scroll-shadow),
     inset 0 0 20px rgba(139, 90, 43, 0.1);
-  
+
   /* Initial state: rolled up */
   max-height: 0;
   overflow: hidden;

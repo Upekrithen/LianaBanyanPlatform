@@ -1,14 +1,14 @@
 /**
  * PathwayProgressContext
- * 
+ *
  * Manages user's pathway progress across the application.
  * Persists to localStorage for guests, syncs with Supabase for members.
  */
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { 
-  UserPathwayProgress, 
+import {
+  UserPathwayProgress,
   DEFAULT_USER_PROGRESS,
   PathwayLevel,
   getUnlockedLevel,
@@ -48,7 +48,7 @@ export function PathwayProgressProvider({ children }: { children: ReactNode }) {
 
       // Check if user is logged in
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (user) {
         setUserId(user.id);
         // Try to load from database
@@ -205,7 +205,7 @@ export function PathwayProgressProvider({ children }: { children: ReactNode }) {
   const getNextThreePack = useCallback(() => {
     // Find a three-pack at current level that isn't complete
     const availablePacks = THREE_PACKS.filter(
-      pack => pack.level === progress.currentLevel && 
+      pack => pack.level === progress.currentLevel &&
               !progress.unlockedThreePacks.includes(pack.id)
     );
     return availablePacks[0]?.id || null;
@@ -217,7 +217,7 @@ export function PathwayProgressProvider({ children }: { children: ReactNode }) {
 
   const toggleLevelGating = useCallback(() => {
     if (!canToggleLevelGating()) return;
-    
+
     setProgress(prev => ({
       ...prev,
       levelGatingEnabled: !prev.levelGatingEnabled,

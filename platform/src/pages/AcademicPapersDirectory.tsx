@@ -24,7 +24,7 @@ export default function AcademicPapersDirectory() {
   const categories = Array.from(new Set(cephasData.map(p => p.category))).sort();
 
   const filteredPapers = cephasData.filter(paper => {
-    const matchesSearch = paper.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch = paper.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           paper.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           (paper.tags && paper.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase())));
     const matchesCategory = selectedCategory ? paper.category === selectedCategory : true;
@@ -48,15 +48,15 @@ export default function AcademicPapersDirectory() {
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input 
-            placeholder="Search papers, concepts, or tags (e.g., 'Theseus', 'Boaz', 'Economics')..." 
+          <Input
+            placeholder="Search papers, concepts, or tags (e.g., 'Theseus', 'Boaz', 'Economics')..."
             className="pl-10 h-12 text-lg"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-          <Button 
+          <Button
             variant={selectedCategory === null ? "default" : "outline"}
             onClick={() => setSelectedCategory(null)}
             className="whitespace-nowrap"
@@ -64,7 +64,7 @@ export default function AcademicPapersDirectory() {
             All
           </Button>
           {categories.map(cat => (
-            <Button 
+            <Button
               key={cat}
               variant={selectedCategory === cat ? "default" : "outline"}
               onClick={() => setSelectedCategory(cat)}

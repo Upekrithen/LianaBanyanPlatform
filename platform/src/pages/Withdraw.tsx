@@ -21,7 +21,7 @@ export default function Withdraw() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  
+
   const [amount, setAmount] = useState('');
   const [withdrawalType, setWithdrawalType] = useState<WithdrawalType>('contribution');
   const [calculation, setCalculation] = useState<any>(null);
@@ -36,7 +36,7 @@ export default function Withdraw() {
         .select('eoi_credits, eoi_used_credits, gleaning_credits_received, gleaning_credits_earned, is_gleaner, first_transaction_at')
         .eq('user_id', user!.id)
         .single();
-      
+
       if (error) throw error;
       // Map to what UI expects
       return {
@@ -50,10 +50,10 @@ export default function Withdraw() {
   });
 
   // Calculate medallion unlock date
-  const medallionUnlockDate = credits?.initial_medallion_granted_at 
+  const medallionUnlockDate = credits?.initial_medallion_granted_at
     ? new Date(new Date(credits.initial_medallion_granted_at).getTime() + 100 * 24 * 60 * 60 * 1000)
     : null;
-  
+
   const isMedallionLocked = medallionUnlockDate && medallionUnlockDate > new Date();
 
   // Check if user has a Connect account for real payouts
@@ -81,7 +81,7 @@ export default function Withdraw() {
         .from('withdrawal_configs')
         .select('*')
         .single();
-      
+
       if (error) throw error;
       return data;
     },
@@ -97,7 +97,7 @@ export default function Withdraw() {
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false })
         .limit(10);
-      
+
       if (error) throw error;
       return data;
     },
@@ -112,7 +112,7 @@ export default function Withdraw() {
         _amount: params.amount,
         _withdrawal_type: params.type,
       });
-      
+
       if (error) throw error;
       return data[0];
     },
@@ -134,14 +134,14 @@ export default function Withdraw() {
   const submitMutation = useMutation({
     mutationFn: async () => {
       if (!calculation) throw new Error('No calculation available');
-      
+
       const { data, error } = await supabase.functions.invoke('process-withdrawal', {
         body: {
           amount: parseFloat(amount),
           withdrawal_type: withdrawalType,
         },
       });
-      
+
       if (error) throw error;
       return data;
     },
@@ -312,8 +312,8 @@ export default function Withdraw() {
           </div>
 
           {/* Calculate Button */}
-          <Button 
-            onClick={handleCalculate} 
+          <Button
+            onClick={handleCalculate}
             disabled={!amount || calculateMutation.isPending}
             className="w-full"
           >
@@ -343,8 +343,8 @@ export default function Withdraw() {
 
           {/* Submit Button */}
           {calculation && (
-            <Button 
-              onClick={() => submitMutation.mutate()} 
+            <Button
+              onClick={() => submitMutation.mutate()}
               disabled={submitMutation.isPending}
               className="w-full"
               size="lg"

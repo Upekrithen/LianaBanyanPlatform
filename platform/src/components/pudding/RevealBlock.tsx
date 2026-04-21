@@ -42,7 +42,7 @@ export function RevealBlock({
         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
           {title}
         </h3>
-        
+
         <div className="prose dark:prose-invert max-w-none">
           {summary}
         </div>
@@ -50,7 +50,7 @@ export function RevealBlock({
         <motion.button
           onClick={() => setIsRevealed(!isRevealed)}
           className="mt-6 w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold transition-colors"
-          style={{ 
+          style={{
             backgroundColor: isRevealed ? '#e5e7eb' : accentColor,
             color: isRevealed ? '#374151' : 'white'
           }}
@@ -80,7 +80,7 @@ export function RevealBlock({
             transition={{ duration: 0.4, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div 
+            <div
               className="p-6 border-t border-gray-200 dark:border-gray-700"
               style={{ backgroundColor: `${accentColor}10` }}
             >

@@ -7,36 +7,36 @@
 CREATE TABLE IF NOT EXISTS public.campaign_plans (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   creator_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Plan details
   title TEXT NOT NULL,
   description TEXT,
   category TEXT DEFAULT 'general', -- e.g., 'launch', 'awareness', 'holiday', 'engagement'
   tags TEXT[] DEFAULT '{}',
-  
+
   -- Plan content (JSON array of scheduled cards)
   plan_data JSONB NOT NULL DEFAULT '[]',
   -- Structure: [{ day: 1, hour: 9, template_id: 'uuid', custom_text: '...', platforms: ['twitter', 'linkedin'] }, ...]
-  
+
   -- Duration and scheduling
   duration_days INTEGER NOT NULL DEFAULT 7,
   posts_per_day INTEGER DEFAULT 3,
   total_posts INTEGER GENERATED ALWAYS AS (
     COALESCE(jsonb_array_length(plan_data), 0)
   ) STORED,
-  
+
   -- Marketplace listing
   is_public BOOLEAN DEFAULT false,
   price_credits INTEGER DEFAULT 0, -- 0 = free
-  
+
   -- Stats
   times_purchased INTEGER DEFAULT 0,
   times_used INTEGER DEFAULT 0,
   avg_rating DECIMAL(3,2) DEFAULT 0,
-  
+
   -- Shirley Temple categories
   content_categories TEXT[] DEFAULT ARRAY['family_safe'],
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
@@ -47,19 +47,19 @@ CREATE TABLE IF NOT EXISTS public.campaign_plan_purchases (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   plan_id UUID REFERENCES public.campaign_plans(id) ON DELETE CASCADE,
   buyer_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Purchase details
   price_paid INTEGER NOT NULL DEFAULT 0,
   purchased_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Usage tracking
   times_deployed INTEGER DEFAULT 0,
   last_deployed_at TIMESTAMPTZ,
-  
+
   -- Rating
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
   review TEXT,
-  
+
   UNIQUE(plan_id, buyer_id)
 );
 
@@ -132,7 +132,7 @@ CREATE OR REPLACE FUNCTION update_plan_purchase_stats()
 RETURNS TRIGGER AS $$
 BEGIN
   UPDATE public.campaign_plans
-  SET 
+  SET
     times_purchased = times_purchased + 1,
     updated_at = now()
   WHERE id = NEW.plan_id;
@@ -152,7 +152,7 @@ CREATE OR REPLACE FUNCTION update_plan_rating()
 RETURNS TRIGGER AS $$
 BEGIN
   UPDATE public.campaign_plans
-  SET 
+  SET
     avg_rating = (
       SELECT COALESCE(AVG(rating), 0)
       FROM public.campaign_plan_purchases

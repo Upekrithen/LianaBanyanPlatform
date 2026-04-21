@@ -28,7 +28,7 @@ export default function JukeboxInitiative() {
             JukeBox
           </h1>
           <p className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto">
-            Fair music licensing where artists keep 83.3%. One contract for all. 
+            Fair music licensing where artists keep 83.3%. One contract for all.
             The end of impossible individual negotiations.
           </p>
         </div>
@@ -43,10 +43,10 @@ export default function JukeboxInitiative() {
           </CardHeader>
           <CardContent className="text-lg text-muted-foreground space-y-4">
             <p>
-              Creators want to use great songs in their work (commercials, movies, crowdfund campaigns, rallies), but they don't own the rights, don't know how to get them, and don't have the money for traditional licensing. 
+              Creators want to use great songs in their work (commercials, movies, crowdfund campaigns, rallies), but they don't own the rights, don't know how to get them, and don't have the money for traditional licensing.
             </p>
             <p>
-              <strong>The JukeBox solves this.</strong> Instead of an artist having to negotiate 1,000 individual contracts with 1,000 different creators, the artist signs <em>one</em> Moonshot Contract tailored exactly to their wishes. They can set different conditions for different uses: a 30-second clip for YouTube, a full song for a podcast, or a special rate exclusively for startups. 
+              <strong>The JukeBox solves this.</strong> Instead of an artist having to negotiate 1,000 individual contracts with 1,000 different creators, the artist signs <em>one</em> Moonshot Contract tailored exactly to their wishes. They can set different conditions for different uses: a 30-second clip for YouTube, a full song for a podcast, or a special rate exclusively for startups.
             </p>
             <p>
               Creators can then instantly license the music based on those exact terms, and the artist gets paid immediately.
@@ -63,7 +63,7 @@ export default function JukeboxInitiative() {
             <Badge className="bg-pink-500 text-white mb-4">The Crown: Maestro Mentor</Badge>
             <h2 className="text-3xl font-bold mb-4">Why We Wrote to Taylor Swift</h2>
             <p className="text-muted-foreground text-lg mb-6 max-w-3xl">
-              She spent a decade proving that artists can own their art and still succeed—if they have enough leverage. But leverage comes from being Taylor Swift. Most musicians will never have it. 
+              She spent a decade proving that artists can own their art and still succeed—if they have enough leverage. But leverage comes from being Taylor Swift. Most musicians will never have it.
             </p>
             <p className="text-muted-foreground text-lg mb-6 max-w-3xl">
               The kid uploading to SoundCloud. The cover band licensing songs for a local commercial. The indie artist whose song gets used in a YouTube video. They're stuck choosing between exposure (no payment) and obscurity (no audience). The system gives them nothing because they have no leverage to demand anything.
@@ -102,13 +102,13 @@ export default function JukeboxInitiative() {
               <div className="text-sm text-muted-foreground">Founder's Circle membership participation</div>
             </div>
           </div>
-          
+
           <div className="bg-card p-6 rounded-lg flex items-center justify-between">
             <div>
               <h3 className="font-bold text-xl mb-1">Listen to "Moonshot" by Bruck'lyn</h3>
               <p className="text-muted-foreground/70 text-sm">The song that started it all.</p>
             </div>
-            <Button 
+            <Button
               className="bg-pink-600 hover:bg-pink-700 text-white"
               onClick={() => window.open('https://www.youtube.com/results?search_query=Brucklyn+Moonshot', '_blank')}
             >
@@ -119,21 +119,21 @@ export default function JukeboxInitiative() {
 
         {/* Interactive Dashboard Tabs */}
         <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <Button 
+          <Button
             variant={activeTab === 'lobbying' ? 'default' : 'outline'}
             onClick={() => setActiveTab('lobbying')}
             className={activeTab === 'lobbying' ? 'bg-pink-600' : ''}
           >
             <Users className="mr-2 h-4 w-4" /> Active Lobbying (One Take Wonders)
           </Button>
-          <Button 
+          <Button
             variant={activeTab === 'artists' ? 'default' : 'outline'}
             onClick={() => setActiveTab('artists')}
             className={activeTab === 'artists' ? 'bg-pink-600' : ''}
           >
             <Music className="mr-2 h-4 w-4" /> For Artists
           </Button>
-          <Button 
+          <Button
             variant={activeTab === 'creators' ? 'default' : 'outline'}
             onClick={() => setActiveTab('creators')}
             className={activeTab === 'creators' ? 'bg-pink-600' : ''}
@@ -144,7 +144,7 @@ export default function JukeboxInitiative() {
 
         {/* Tab Content */}
         <div className="bg-card rounded-xl shadow-sm border border-border p-8 mb-16 min-h-[500px]">
-          
+
           {activeTab === 'lobbying' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex items-center gap-3 mb-6">
@@ -171,7 +171,7 @@ export default function JukeboxInitiative() {
               <p className="text-muted-foreground mb-6">
                 Anyone can add their Spotify, YouTube, or Apple Music playlists to their portfolio. We are actively lobbying these artists to join the JukeBox using the Moonshot Contract. Here is the Founder's initial curated seed list:
               </p>
-              
+
               <div className="bg-card rounded-lg p-4 mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="bg-green-500 rounded-full p-2">
@@ -182,7 +182,7 @@ export default function JukeboxInitiative() {
                     <p className="text-muted-foreground/70 text-sm">Listen on Spotify</p>
                   </div>
                 </div>
-                <Button 
+                <Button
                   className="bg-green-500 hover:bg-green-600 text-white"
                   onClick={() => window.open('https://open.spotify.com/playlist/0yyJMjb6QZTcPbkE1eJDNv?si=c68cdffb7deb4684', '_blank')}
                 >
@@ -292,7 +292,7 @@ export default function JukeboxInitiative() {
                     <Button>License Now</Button>
                   </div>
                 </div>
-                
+
                 <div className="bg-muted p-4 rounded-lg border border-border flex items-center justify-between opacity-50">
                   <div>
                     <h4 className="font-bold text-foreground">"9 to 5"</h4>
@@ -313,7 +313,7 @@ export default function JukeboxInitiative() {
           <Badge className="bg-emerald-500 text-white mb-4">Just Like The Founder</Badge>
           <h2 className="text-3xl font-bold mb-4">Platform Headquarters Costs & C20</h2>
           <p className="text-muted-foreground text-lg mb-6 max-w-3xl mx-auto">
-            Liana Banyan takes Cost + 20% (C20). What is "Cost"? Just like the Founder, it's the actual overhead. The Founder has a YouTube channel for Liana Banyan. When it monetizes, that money pays for the platform headquarters (the Founder's garage, electric, internet, Supabase storage/usage fees, and subscriptions). 
+            Liana Banyan takes Cost + 20% (C20). What is "Cost"? Just like the Founder, it's the actual overhead. The Founder has a YouTube channel for Liana Banyan. When it monetizes, that money pays for the platform headquarters (the Founder's garage, electric, internet, Supabase storage/usage fees, and subscriptions).
           </p>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
             This is the exact same model businesses use for themselves when determining their own costs for C20. Total transparency.

@@ -23,7 +23,7 @@ BEGIN
     'The Medallion is your proof of membership and stake in this project. It serves as a physical token that connects to the blockchain ledger via QR code, tracking your equity, credits, and voting power. This must be funded first before the project can proceed to other products.'
   )
   RETURNING id INTO _medallion_id;
-  
+
   -- Create default production levels for the Medallion
   INSERT INTO public.production_levels (
     product_id,
@@ -37,7 +37,7 @@ BEGIN
     (_medallion_id, 2, 'Early Supporter', 250, 4.50, 1125),
     (_medallion_id, 3, 'Community Builder', 500, 4.00, 2000),
     (_medallion_id, 4, 'Project Champion', 1000, 3.50, 3500);
-  
+
   RETURN NEW;
 END;
 $$;
@@ -85,7 +85,7 @@ BEGIN
   SELECT p.project_id INTO _project_id
   FROM public.products p
   WHERE p.id = NEW.product_id;
-  
+
   -- Check if this is a Medallion product
   IF EXISTS (
     SELECT 1 FROM public.products
@@ -97,7 +97,7 @@ BEGIN
     SET medallion_funded = public.check_medallion_funded(_project_id)
     WHERE id = _project_id;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

@@ -2,7 +2,7 @@
  * C+20 RECIPROCITY LEADERBOARD
  * ============================
  * Innovation #1350: Reciprocity Ledger & Transparency
- * 
+ *
  * Public view showing top C+20 contributors - businesses that have
  * sacrificed the most margin for the community.
  */
@@ -110,8 +110,8 @@ export default function C20Leaderboard() {
               Businesses Building the Community
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              These businesses have committed to Cost + 20% pricing, sacrificing margin to build 
-              a transparent, cooperative economy. Every dollar they give up earns them purchasing 
+              These businesses have committed to Cost + 20% pricing, sacrificing margin to build
+              a transparent, cooperative economy. Every dollar they give up earns them purchasing
               power within the ecosystem.
             </p>
           </div>
@@ -194,7 +194,7 @@ export default function C20Leaderboard() {
                 <Heart className="w-12 h-12 text-slate-600 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-slate-300 mb-2">Be the First!</h3>
                 <p className="text-muted-foreground mb-4 max-w-md mx-auto">
-                  No businesses have joined the C+20 program yet. Be a pioneer and start 
+                  No businesses have joined the C+20 program yet. Be a pioneer and start
                   building the cooperative economy.
                 </p>
                 <Link to="/c20">
@@ -276,8 +276,8 @@ function LeaderboardRow({
       {/* Rank */}
       <div className={cn(
         "w-10 h-10 rounded-full flex items-center justify-center font-bold border",
-        isTopThree 
-          ? rankColors[rank as 1 | 2 | 3] 
+        isTopThree
+          ? rankColors[rank as 1 | 2 | 3]
           : "text-muted-foreground bg-card/50 border-border"
       )}>
         {rank}

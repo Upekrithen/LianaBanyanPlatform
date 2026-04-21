@@ -43,7 +43,7 @@ export const ClanCreationDialog = () => {
     setLoading(true);
 
     try {
-      const displayName = formData.customName 
+      const displayName = formData.customName
         ? `${formData.customName} ${formData.nameType}`
         : formData.nameType;
 

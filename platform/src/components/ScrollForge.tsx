@@ -3,7 +3,7 @@
  * =============================================
  * "The scroll is the journey. The Deck Card is the destination.
  *  But you can't arrive without traveling."
- * 
+ *
  * UI for:
  * - Viewing available scrolls
  * - Sealing scrolls (100% read + Of Value note)
@@ -86,7 +86,7 @@ interface ScrollCardProps {
 function ScrollCard({ scroll, onSeal, onSelect, isSelected, showActions = true }: ScrollCardProps) {
   const { canSeal, reason } = canSealScroll(scroll);
   const value = calculateScrollValue(scroll);
-  
+
   // Get dominant color
   const colorCounts = scroll.anchors.reduce((acc, anchor) => {
     acc[anchor.color] = (acc[anchor.color] || 0) + 1;
@@ -94,13 +94,13 @@ function ScrollCard({ scroll, onSeal, onSelect, isSelected, showActions = true }
   }, {} as Record<string, number>);
   const dominantColor = Object.entries(colorCounts)
     .sort((a, b) => b[1] - a[1])[0]?.[0] as BeaconColor || 'blue';
-  
+
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      <Card 
+      <Card
         className={`cursor-pointer transition-all ${
           isSelected ? 'ring-2 ring-primary' : ''
         } ${scroll.isSealed ? 'bg-amber-500/5 border-amber-500/30' : ''}`}
@@ -127,13 +127,13 @@ function ScrollCard({ scroll, onSeal, onSelect, isSelected, showActions = true }
           {/* Color breakdown */}
           <div className="flex flex-wrap gap-1">
             {Object.entries(colorCounts).map(([color, count]) => (
-              <Badge 
-                key={color} 
-                variant="outline" 
+              <Badge
+                key={color}
+                variant="outline"
                 className="text-xs"
                 style={{ borderColor: BEACON_COLORS[color as BeaconColor]?.hex }}
               >
-                <span 
+                <span
                   className="w-2 h-2 rounded-full mr-1"
                   style={{ backgroundColor: BEACON_COLORS[color as BeaconColor]?.hex }}
                 />
@@ -141,7 +141,7 @@ function ScrollCard({ scroll, onSeal, onSelect, isSelected, showActions = true }
               </Badge>
             ))}
           </div>
-          
+
           {/* Read progress */}
           <div className="space-y-1">
             <div className="flex justify-between text-xs">
@@ -152,7 +152,7 @@ function ScrollCard({ scroll, onSeal, onSelect, isSelected, showActions = true }
             </div>
             <Progress value={scroll.readProgress} className="h-1.5" />
           </div>
-          
+
           {/* Value */}
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Scroll Value</span>
@@ -161,7 +161,7 @@ function ScrollCard({ scroll, onSeal, onSelect, isSelected, showActions = true }
               {value}
             </span>
           </div>
-          
+
           {/* Actions */}
           {showActions && !scroll.isSealed && (
             <div className="pt-2">
@@ -203,7 +203,7 @@ interface ForgeProgressProps {
 
 function ForgeProgress({ forge, onUnlockFrame }: ForgeProgressProps) {
   const progress = getForgeProgress(forge);
-  
+
   return (
     <Card className={forge.isComplete ? 'border-amber-500 bg-amber-500/5' : ''}>
       <CardHeader>
@@ -225,19 +225,19 @@ function ForgeProgress({ forge, onUnlockFrame }: ForgeProgressProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <Progress value={progress.percentComplete} className="h-2" />
-        
+
         <div className="grid grid-cols-2 gap-3">
           {(['front', 'back', 'left', 'right'] as FrameSide[]).map(side => {
             const frame = forge.frames[side];
             const colorInfo = BEACON_COLORS[frame.scrollColorRequired];
             const frameInfo = FRAME_LABELS[side];
-            
+
             return (
               <div
                 key={side}
                 className={`p-3 rounded-lg border transition-all ${
-                  frame.isUnlocked 
-                    ? 'bg-green-500/10 border-green-500/30' 
+                  frame.isUnlocked
+                    ? 'bg-green-500/10 border-green-500/30'
                     : 'hover:border-primary cursor-pointer'
                 }`}
                 onClick={() => !frame.isUnlocked && onUnlockFrame(side)}
@@ -252,7 +252,7 @@ function ForgeProgress({ forge, onUnlockFrame }: ForgeProgressProps) {
                 </div>
                 <p className="text-xs text-muted-foreground mb-2">{frameInfo.description}</p>
                 <div className="flex items-center gap-1">
-                  <span 
+                  <span
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: colorInfo.hex }}
                   />
@@ -282,13 +282,13 @@ export function ScrollForge() {
   const [selectedScrolls, setSelectedScrolls] = useState<string[]>([]);
   const [forgeDialogOpen, setForgeDialogOpen] = useState(false);
   const [targetFrame, setTargetFrame] = useState<{ cardId: string; side: FrameSide } | null>(null);
-  
+
   // Load data
   useEffect(() => {
     setScrolls(getScrolls());
     setForges(getForges());
   }, []);
-  
+
   const handleSealScroll = (scrollId: string) => {
     const sealed = sealScroll(scrollId);
     if (sealed) {
@@ -296,42 +296,42 @@ export function ScrollForge() {
       setScrolls(getScrolls());
     }
   };
-  
+
   const toggleScrollSelection = (scrollId: string) => {
-    setSelectedScrolls(prev => 
-      prev.includes(scrollId) 
+    setSelectedScrolls(prev =>
+      prev.includes(scrollId)
         ? prev.filter(id => id !== scrollId)
         : [...prev, scrollId]
     );
   };
-  
+
   const handleOpenForgeDialog = (side: FrameSide, cardId: string = 'new-card') => {
     setTargetFrame({ cardId, side });
     setSelectedScrolls([]);
     setForgeDialogOpen(true);
   };
-  
+
   const handleForge = () => {
     if (!targetFrame || selectedScrolls.length === 0) return;
-    
+
     // Determine tier based on selected scrolls
-    const sealedCount = selectedScrolls.filter(id => 
+    const sealedCount = selectedScrolls.filter(id =>
       scrolls.find(s => s.id === id)?.isSealed
     ).length;
-    
+
     let tier: FrameTier = 'basic';
     if (selectedScrolls.length >= 9 && sealedCount >= 3) {
       tier = 'master';
     } else if (selectedScrolls.length >= 5 && sealedCount >= 1) {
       tier = 'enhanced';
     }
-    
+
     // Get or create forge
     const forge = getOrCreateForge(targetFrame.cardId, 'Custom Deck Card');
-    
+
     // Attempt to unlock frame
     const result = unlockFrame(targetFrame.cardId, targetFrame.side, tier, selectedScrolls);
-    
+
     if (result) {
       toast.success(`${FRAME_LABELS[targetFrame.side].label} unlocked at ${tier} tier!`);
       setForges(getForges());
@@ -342,11 +342,11 @@ export function ScrollForge() {
       toast.error('Could not unlock frame. Check scroll requirements.');
     }
   };
-  
+
   const recommendations = getRecommendedCards(scrolls);
   const availableScrolls = scrolls.filter(s => !s.usedInForge);
   const usedScrolls = scrolls.filter(s => s.usedInForge);
-  
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -359,7 +359,7 @@ export function ScrollForge() {
           </p>
         </div>
       </div>
-      
+
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
@@ -391,7 +391,7 @@ export function ScrollForge() {
           </CardContent>
         </Card>
       </div>
-      
+
       {/* Recommendations */}
       {recommendations.some(r => r.canUnlockBasic) && (
         <Card className="border-amber-500/30 bg-amber-500/5">
@@ -413,7 +413,7 @@ export function ScrollForge() {
                   className="gap-2"
                   onClick={() => handleOpenForgeDialog(rec.side)}
                 >
-                  <span 
+                  <span
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: BEACON_COLORS[rec.color].hex }}
                   />
@@ -427,7 +427,7 @@ export function ScrollForge() {
           </CardContent>
         </Card>
       )}
-      
+
       <Tabs defaultValue="scrolls" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="scrolls">
@@ -440,7 +440,7 @@ export function ScrollForge() {
             Used Scrolls ({usedScrolls.length})
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="scrolls">
           {availableScrolls.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -461,7 +461,7 @@ export function ScrollForge() {
             </Card>
           )}
         </TabsContent>
-        
+
         <TabsContent value="forges">
           {forges.length > 0 ? (
             <div className="grid md:grid-cols-2 gap-4">
@@ -478,8 +478,8 @@ export function ScrollForge() {
               <CardContent className="py-12 text-center text-muted-foreground">
                 <Hammer className="w-12 h-12 mx-auto mb-4 opacity-20" />
                 <p>No active forges. Collect scrolls and start forging Deck Cards!</p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="mt-4"
                   onClick={() => handleOpenForgeDialog('front')}
                 >
@@ -489,7 +489,7 @@ export function ScrollForge() {
             </Card>
           )}
         </TabsContent>
-        
+
         <TabsContent value="used">
           {usedScrolls.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -511,7 +511,7 @@ export function ScrollForge() {
           )}
         </TabsContent>
       </Tabs>
-      
+
       {/* Forge Dialog */}
       <Dialog open={forgeDialogOpen} onOpenChange={setForgeDialogOpen}>
         <DialogContent className="sm:max-w-2xl">
@@ -521,7 +521,7 @@ export function ScrollForge() {
               Forge {targetFrame ? FRAME_LABELS[targetFrame.side].label : 'Frame'}
             </DialogTitle>
             <DialogDescription>
-              Select scrolls to forge into this frame. 
+              Select scrolls to forge into this frame.
               {targetFrame && (
                 <span className="block mt-1">
                   Requires <strong>{BEACON_COLORS[FRAME_COLOR_REQUIREMENTS[targetFrame.side]].name}</strong> scrolls.
@@ -529,7 +529,7 @@ export function ScrollForge() {
               )}
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {/* Tier requirements */}
             <div className="grid grid-cols-3 gap-2 text-center text-sm">
@@ -546,11 +546,11 @@ export function ScrollForge() {
                 <p className="text-xs text-muted-foreground">9 scrolls + 3 sealed</p>
               </div>
             </div>
-            
+
             {/* Scroll selection */}
             <div className="grid grid-cols-2 gap-3">
               {availableScrolls
-                .filter(s => targetFrame && s.anchors.some(a => 
+                .filter(s => targetFrame && s.anchors.some(a =>
                   a.color === FRAME_COLOR_REQUIREMENTS[targetFrame.side]
                 ))
                 .map(scroll => (
@@ -563,8 +563,8 @@ export function ScrollForge() {
                   />
                 ))}
             </div>
-            
-            {availableScrolls.filter(s => targetFrame && s.anchors.some(a => 
+
+            {availableScrolls.filter(s => targetFrame && s.anchors.some(a =>
               a.color === FRAME_COLOR_REQUIREMENTS[targetFrame.side]
             )).length === 0 && (
               <p className="text-center text-muted-foreground py-8">
@@ -574,7 +574,7 @@ export function ScrollForge() {
               </p>
             )}
           </div>
-          
+
           <DialogFooter>
             <div className="flex items-center justify-between w-full">
               <span className="text-sm text-muted-foreground">

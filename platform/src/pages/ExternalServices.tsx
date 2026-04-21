@@ -6,7 +6,7 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function ExternalServices() {
   const { t } = useTranslation();
-  
+
   return (
     <PortalPageLayout maxWidth="xl" xrayId="external-services">
       <div className="mb-8">

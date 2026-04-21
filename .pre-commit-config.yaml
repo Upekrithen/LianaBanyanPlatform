@@ -1,0 +1,108 @@
+# .pre-commit-config.yaml — hooks that run before every `git commit`
+# B111, April 20, 2026 — secret scanning + basic hygiene
+# See AGENTS.md at workspace root for the behavioral rules this config enforces at commit-time.
+#
+# INSTALL:
+#   pip install pre-commit
+#   pre-commit install
+#   pre-commit install --hook-type commit-msg
+#
+# FIRST RUN (scans entire repo, not just staged):
+#   pre-commit run --all-files
+#
+# DAILY USE:
+#   Runs automatically on every `git commit`. Failures block the commit.
+
+repos:
+
+  # ──────────────────────────────────────────────────
+  # SECRET SCANNING — gitleaks (primary)
+  # ──────────────────────────────────────────────────
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.0
+    hooks:
+      - id: gitleaks
+        name: gitleaks — scan staged files for secrets
+        description: Detects API keys, tokens, passwords, and credential patterns in the staged diff.
+        stages: [pre-commit]
+
+  # ──────────────────────────────────────────────────
+  # SECRET SCANNING — detect-secrets (belt-and-suspenders)
+  # Temporarily commented out B111 — enable after running:
+  #   python -m detect_secrets scan > .secrets.baseline
+  #   git add .secrets.baseline && git commit -m "seed: detect-secrets baseline"
+  # Then uncomment this block and restore the --baseline arg.
+  # gitleaks above already provides primary secret scanning.
+  # ──────────────────────────────────────────────────
+  # - repo: https://github.com/Yelp/detect-secrets
+  #   rev: v1.5.0
+  #   hooks:
+  #     - id: detect-secrets
+  #       name: detect-secrets — pattern-based secret detection
+  #       description: High-entropy string detection; catches formats gitleaks might miss.
+  #       args: ['--baseline', '.secrets.baseline']
+  #       exclude: |
+  #         (?x)^(
+  #             .*\.lock$|
+  #             .*\.min\.js$|
+  #             .*\.map$|
+  #             BISHOP_DROPZONE/04_Compiled/SESSION_TRANSCRIPTS/.*
+  #         )$
+
+  # ──────────────────────────────────────────────────
+  # FILE-HYGIENE basics
+  # ──────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        name: block files >1MB from being committed
+        args: ['--maxkb=1024']
+      - id: check-merge-conflict
+        name: block commits containing merge-conflict markers
+      - id: detect-private-key
+        name: block commits containing private-key files
+      - id: check-case-conflict
+        name: block case-insensitive filename conflicts
+      - id: check-yaml
+        name: validate YAML syntax
+        exclude: ^BISHOP_DROPZONE/  # Dropzone may contain Founder drafts with intentional syntax
+      - id: check-json
+        name: validate JSON syntax
+        exclude: |
+          (?x)^(
+              .*/tsconfig\..*\.json$|
+              .*/tsconfig\.json$|
+              \.vscode/.*\.json$|
+              \.cursor/.*\.json$
+          )$  # TypeScript configs use JSONC (with comments); VS Code/Cursor configs often do too
+      - id: trailing-whitespace
+        name: trim trailing whitespace
+        exclude: ^BISHOP_DROPZONE/  # Founder prose sometimes uses trailing spaces as soft-break
+      - id: end-of-file-fixer
+        name: ensure files end with newline
+        exclude: ^BISHOP_DROPZONE/
+
+  # ──────────────────────────────────────────────────
+  # OPTIONAL: local Python linting (if editing platform/ backend code)
+  # ──────────────────────────────────────────────────
+  # Uncomment when the Python codebase stabilizes (post-K424):
+  # - repo: https://github.com/astral-sh/ruff-pre-commit
+  #   rev: v0.8.0
+  #   hooks:
+  #     - id: ruff
+  #       args: [--fix]
+  #     - id: ruff-format
+
+# ═══════════════════════════════════════════════════════
+# EXCLUDED from ALL hooks globally
+# ═══════════════════════════════════════════════════════
+
+exclude: |
+  (?x)^(
+      Asteroid-ProofVault/.*|
+      .*/Asteroid-ProofVault/.*|
+      .*/node_modules/.*|
+      node_modules/.*|
+      \.git/.*
+  )$

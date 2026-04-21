@@ -86,7 +86,7 @@ function ProgressRing({ progress, size = 120, strokeWidth = 8 }: ProgressRingPro
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (progress / 100) * circumference;
-  
+
   const getColor = () => {
     if (progress >= 100) return "#22c55e"; // green
     if (progress >= 75) return "#eab308"; // yellow

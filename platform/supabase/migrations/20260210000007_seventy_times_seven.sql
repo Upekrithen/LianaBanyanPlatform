@@ -19,18 +19,18 @@ CREATE TABLE IF NOT EXISTS fresh_start_log (
   reset_number INTEGER NOT NULL DEFAULT 1,
   reset_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   marks_spent INTEGER NOT NULL DEFAULT 1,
-  
+
   -- Snapshot of what was reset (for transparency)
   previous_reputation_score NUMERIC,
   previous_guild_level INTEGER,
   previous_discovery_count INTEGER,
   previous_completed_bounties INTEGER,
-  
+
   -- What they kept
   kept_portfolio_value NUMERIC,
   kept_collected_cards INTEGER,
   kept_ip_stakes INTEGER,
-  
+
   CONSTRAINT max_resets CHECK (reset_number <= 490)
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS fresh_start_log (
 CREATE INDEX IF NOT EXISTS idx_fresh_start_user ON fresh_start_log(user_id);
 
 -- Add columns to profiles to track fresh start state
-ALTER TABLE profiles 
+ALTER TABLE profiles
 ADD COLUMN IF NOT EXISTS fresh_start_count INTEGER DEFAULT 0,
 ADD COLUMN IF NOT EXISTS last_fresh_start TIMESTAMPTZ,
 ADD COLUMN IF NOT EXISTS account_age_days INTEGER GENERATED ALWAYS AS (
@@ -102,7 +102,7 @@ BEGIN
   END IF;
 
   -- Capture current state for the log
-  SELECT 
+  SELECT
     COALESCE(reputation_score, 0),
     COALESCE(guild_level, 1),
     (SELECT COUNT(*) FROM user_discovered_cards WHERE user_id = p_user_id),
@@ -113,10 +113,10 @@ BEGIN
   -- Capture what they keep
   SELECT COALESCE(SUM(current_value), 0) INTO v_portfolio_value
   FROM user_portfolio WHERE user_id = p_user_id;
-  
+
   SELECT COUNT(*) INTO v_cards_count
   FROM user_collected_cards WHERE user_id = p_user_id;
-  
+
   SELECT COUNT(*) INTO v_ip_count
   FROM sponsor_pool_shares WHERE user_id = p_user_id;
 
@@ -192,13 +192,13 @@ $$;
 -- ============================================================================
 -- This reveals the value of a stable reputation over time
 CREATE OR REPLACE VIEW member_reputation_stability AS
-SELECT 
+SELECT
   p.id,
   p.display_name,
   p.created_at AS member_since,
   p.account_age_days,
   COALESCE(p.fresh_start_count, 0) AS total_resets,
-  CASE 
+  CASE
     WHEN p.account_age_days > 365 AND COALESCE(p.fresh_start_count, 0) = 0 THEN 'Bedrock'
     WHEN p.account_age_days > 365 AND COALESCE(p.fresh_start_count, 0) <= 3 THEN 'Established'
     WHEN p.account_age_days > 180 THEN 'Growing'
@@ -212,7 +212,7 @@ SELECT
 FROM profiles p
 WHERE p.role = 'member';
 
-COMMENT ON VIEW member_reputation_stability IS 
+COMMENT ON VIEW member_reputation_stability IS
 'Shows the value of consistent reputation vs frequent resets. High stability_score = trustworthy long-term member.';
 
 -- Grant access

@@ -6,18 +6,18 @@ const migrationsDir = path.join(__dirname, '../../platform/supabase/migrations')
 
 function main() {
     const extracted = new Map();
-    
+
     const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql'));
-    
+
     for (const file of files) {
         const content = fs.readFileSync(path.join(migrationsDir, file), 'utf-8');
-        
+
         // Regex 1: 6 values (innovation_number, title, description, category, patent_bag, status)
         const regex6 = /\(\s*(\d+)\s*,\s*'((?:[^']|'')*)'\s*,\s*'((?:[^']|'')*)'\s*,\s*'((?:[^']|'')*)'\s*,\s*'((?:[^']|'')*)'\s*,\s*'((?:[^']|'')*)'\s*\)/g;
-        
+
         // Regex 2: 5 values (innovation_number, title, description, category, session_tag)
         const regex5 = /\(\s*(\d+)\s*,\s*'((?:[^']|'')*)'\s*,\s*'((?:[^']|'')*)'\s*,\s*'((?:[^']|'')*)'\s*,\s*'((?:[^']|'')*)'\s*\)/g;
-        
+
         let match;
         while ((match = regex6.exec(content)) !== null) {
             const num = parseInt(match[1], 10);
@@ -35,7 +35,7 @@ function main() {
                 }
             }
         }
-        
+
         while ((match = regex5.exec(content)) !== null) {
             const num = parseInt(match[1], 10);
             if (num >= 601 && num <= 1560) {
@@ -53,7 +53,7 @@ function main() {
             }
         }
     }
-    
+
     const threshingFile = path.join(__dirname, '../../BISHOP_DROPZONE/THRESHING_SESSION_8J.md');
     if (fs.existsSync(threshingFile)) {
         const threshingContent = fs.readFileSync(threshingFile, 'utf-8');
@@ -74,9 +74,9 @@ function main() {
             }
         }
     }
-    
+
     const results = Array.from(extracted.values()).sort((a, b) => a.innovation_number - b.innovation_number);
-    
+
     fs.writeFileSync(outputFile, JSON.stringify(results, null, 2));
     console.log(`Extracted ${results.length} innovations (601-1560) to ${outputFile}`);
 }

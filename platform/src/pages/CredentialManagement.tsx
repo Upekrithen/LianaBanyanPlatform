@@ -25,12 +25,12 @@ const CredentialManagement = () => {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
-      
+
       const { data, error } = await supabase
         .from('projects')
         .select('id, name, project_sku')
         .eq('owner_id', user.id);
-      
+
       if (error) throw error;
       return data;
     },
@@ -135,7 +135,7 @@ const CredentialManagement = () => {
           <h1 className="text-3xl font-bold">XML Access Credentials</h1>
           <p className="text-muted-foreground">Manage API keys for external site access to your project XML modules</p>
         </div>
-        
+
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -185,8 +185,8 @@ const CredentialManagement = () => {
                   Leave empty to allow all origins
                 </p>
               </div>
-              <Button 
-                onClick={() => createCredential.mutate()} 
+              <Button
+                onClick={() => createCredential.mutate()}
                 disabled={!newCredential.name || !newCredential.projectId}
                 className="w-full"
               >

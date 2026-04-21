@@ -65,16 +65,16 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      
+
       if (productStaleness.lastUpdate) {
         const seconds = Math.floor((now.getTime() - productStaleness.lastUpdate.getTime()) / 1000);
         const config = STALENESS_CONFIG.product;
-        
+
         let level: StalenessStatus['level'] = 'fresh';
         if (seconds > config.criticalThreshold) level = 'critical';
         else if (seconds > config.staleThreshold) level = 'stale';
         else if (seconds > config.warningThreshold) level = 'warning';
-        
+
         setProductStaleness(prev => ({
           ...prev,
           isStale: seconds > config.warningThreshold,
@@ -82,16 +82,16 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
           secondsSinceUpdate: seconds,
         }));
       }
-      
+
       if (userStaleness.lastUpdate) {
         const seconds = Math.floor((now.getTime() - userStaleness.lastUpdate.getTime()) / 1000);
         const config = STALENESS_CONFIG.user;
-        
+
         let level: StalenessStatus['level'] = 'fresh';
         if (seconds > config.criticalThreshold) level = 'critical';
         else if (seconds > config.staleThreshold) level = 'stale';
         else if (seconds > config.warningThreshold) level = 'warning';
-        
+
         setUserStaleness(prev => ({
           ...prev,
           isStale: seconds > config.warningThreshold,
@@ -100,14 +100,14 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
         }));
       }
     }, 1000);
-    
+
     return () => clearInterval(interval);
   }, [productStaleness.lastUpdate, userStaleness.lastUpdate]);
 
   useEffect(() => {
     if (productId) {
       loadProductCalculations();
-      
+
       // Set up real-time subscription for critical data (votes, pledges)
       const channel = supabase
         .channel(`product-${productId}-updates`)
@@ -279,7 +279,7 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
       // Calculate total units from all votes
       let totalUnitsPreordered = 0;
       let currentLevel = null;
-      
+
       for (const level of levels || []) {
         if (level.current_votes >= level.votes_needed) {
           totalUnitsPreordered += level.units_count;
@@ -300,12 +300,12 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
         .maybeSingle();
 
       const currentVolumeDiscount = pricingData?.volume_discount_percentage || 0;
-      const currentUnitPrice = pricingData?.calculated_unit_price || 
-                               currentLevel?.unit_price || 
+      const currentUnitPrice = pricingData?.calculated_unit_price ||
+                               currentLevel?.unit_price ||
                                0;
 
-      const productionRunEndDate = pricingData?.run_end_date 
-        ? new Date(pricingData.run_end_date) 
+      const productionRunEndDate = pricingData?.run_end_date
+        ? new Date(pricingData.run_end_date)
         : null;
 
       setProductCalcs({
@@ -313,11 +313,11 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
         totalUnitsPreordered,
         currentUnitPrice,
         productionRunEndDate,
-        timeRemaining: productionRunEndDate 
-          ? calculateTimeRemaining(productionRunEndDate) 
+        timeRemaining: productionRunEndDate
+          ? calculateTimeRemaining(productionRunEndDate)
           : null,
       });
-      
+
       // Update staleness status
       setProductStaleness({
         isStale: false,
@@ -383,7 +383,7 @@ export function useRealTimeCalculations(productId?: string, userId?: string) {
         participationPercentages,
         votingPower: totalVotingPower,
       });
-      
+
       // Update staleness status
       setUserStaleness({
         isStale: false,

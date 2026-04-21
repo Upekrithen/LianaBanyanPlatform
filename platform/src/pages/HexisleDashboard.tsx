@@ -7,9 +7,9 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { 
-  Sparkles, Compass, Wrench, Swords, Search, 
-  Wand2, GraduationCap, Trophy, Users, Lock 
+import {
+  Sparkles, Compass, Wrench, Swords, Search,
+  Wand2, GraduationCap, Trophy, Users, Lock
 } from "lucide-react";
 import { toast } from "sonner";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
@@ -84,7 +84,7 @@ export default function HexisleDashboard() {
         .from('user_hexisle_skills')
         .select('*')
         .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
-      
+
       if (error) throw error;
       return data;
     },
@@ -100,7 +100,7 @@ export default function HexisleDashboard() {
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
-      
+
       if (error) throw error;
       return data;
     },
@@ -113,7 +113,7 @@ export default function HexisleDashboard() {
       const { data, error } = await supabase
         .from('team_skill_profiles')
         .select('*');
-      
+
       if (error) throw error;
       return data;
     },
@@ -121,7 +121,7 @@ export default function HexisleDashboard() {
 
   const handleModeToggle = async (realStakesEnabled: boolean) => {
     const userId = (await supabase.auth.getUser()).data.user?.id;
-    
+
     const { error } = await supabase
       .from('user_hexisle_preferences')
       .upsert({
@@ -133,8 +133,8 @@ export default function HexisleDashboard() {
     if (error) {
       toast.error("Failed to update mode");
     } else {
-      toast.success(realStakesEnabled 
-        ? "Real Stakes mode enabled - Your project work will count!" 
+      toast.success(realStakesEnabled
+        ? "Real Stakes mode enabled - Your project work will count!"
         : "Casual mode enabled - Play for fun!");
       setShowRealStakes(realStakesEnabled);
     }
@@ -170,7 +170,7 @@ export default function HexisleDashboard() {
             Your journey across the 7 skill islands
           </p>
         </div>
-        
+
         {/* Mode Toggle */}
         <Card className="p-4">
           <div className="flex items-center space-x-3">
@@ -182,8 +182,8 @@ export default function HexisleDashboard() {
             />
           </div>
           <p className="text-xs text-muted-foreground mt-2">
-            {preferences?.real_stakes_enabled 
-              ? "Project work counts as verified progress" 
+            {preferences?.real_stakes_enabled
+              ? "Project work counts as verified progress"
               : "Playing casually for fun"}
           </p>
         </Card>
@@ -199,7 +199,7 @@ export default function HexisleDashboard() {
             <div className="text-3xl font-bold">{averageLevel}</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">Islands Unlocked</CardTitle>
@@ -208,7 +208,7 @@ export default function HexisleDashboard() {
             <div className="text-3xl font-bold">{unlockedIslands} / 7</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">Total XP</CardTitle>
@@ -219,7 +219,7 @@ export default function HexisleDashboard() {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm">Mode</CardTitle>
@@ -246,7 +246,7 @@ export default function HexisleDashboard() {
               const skillData = getSkillData(key);
               const Icon = config.icon;
               const progress = (skillData.xp_earned / skillData.xp_to_next_level) * 100;
-              
+
               return (
                 <Card key={key} className={skillData.island_unlocked ? '' : 'opacity-50'}>
                   <CardHeader>
@@ -267,7 +267,7 @@ export default function HexisleDashboard() {
                       )}
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent className="space-y-3">
                     <div className="flex items-center justify-between text-sm">
                       <span className="font-medium">Level {skillData.skill_level}</span>
@@ -276,7 +276,7 @@ export default function HexisleDashboard() {
                       </span>
                     </div>
                     <Progress value={progress} className="h-2" />
-                    
+
                     {preferences?.real_stakes_enabled && (
                       <div className="flex gap-2 text-xs">
                         <div className="flex-1 p-2 bg-primary/5 rounded">
@@ -289,7 +289,7 @@ export default function HexisleDashboard() {
                         </div>
                       </div>
                     )}
-                    
+
                     <div className="flex flex-wrap gap-1">
                       {config.skills.map((skill) => (
                         <Badge key={skill} variant="outline" className="text-xs">
@@ -334,7 +334,7 @@ export default function HexisleDashboard() {
                       {Object.entries(ISLAND_CONFIG).map(([key, config]) => {
                         const coverage = team.skill_coverage?.[key];
                         const Icon = config.icon;
-                        
+
                         return (
                           <div key={key} className="text-center">
                             <div className={`p-2 rounded-lg ${config.bgColor} mb-2`}>
@@ -350,7 +350,7 @@ export default function HexisleDashboard() {
                         );
                       })}
                     </div>
-                    
+
                     {team.skill_gaps && team.skill_gaps.length > 0 && (
                       <div className="mt-4 p-3 bg-destructive/5 rounded-lg">
                         <p className="text-sm font-medium">Skill Gaps:</p>

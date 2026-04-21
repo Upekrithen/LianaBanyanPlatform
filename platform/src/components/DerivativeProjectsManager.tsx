@@ -36,7 +36,7 @@ export const DerivativeProjectsManager = ({ projectId, projectName }: Derivative
         .single();
 
       if (error) throw error;
-      
+
       // Get parent name separately
       if (data?.parent_project_id) {
         const { data: parentData } = await supabase
@@ -44,10 +44,10 @@ export const DerivativeProjectsManager = ({ projectId, projectName }: Derivative
           .select('name')
           .eq('id', data.parent_project_id)
           .single();
-        
+
         return { ...data, parent_name: parentData?.name };
       }
-      
+
       return data;
     }
   });
@@ -113,8 +113,8 @@ export const DerivativeProjectsManager = ({ projectId, projectName }: Derivative
           Accessory Trunk Ecosystem
         </CardTitle>
         <CardDescription>
-          {isDerivative 
-            ? `This is a derivative of ${(parentProject as any).parent_name}` 
+          {isDerivative
+            ? `This is a derivative of ${(parentProject as any).parent_name}`
             : 'Manage derivative projects based on this trunk'}
         </CardDescription>
       </CardHeader>
@@ -160,11 +160,11 @@ export const DerivativeProjectsManager = ({ projectId, projectName }: Derivative
             {!isDerivative && (
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
-                  {hasDerivatives 
-                    ? 'Projects derived from this trunk:' 
+                  {hasDerivatives
+                    ? 'Projects derived from this trunk:'
                     : 'No derivative projects yet'}
                 </p>
-                <CreateDerivativeProjectDialog 
+                <CreateDerivativeProjectDialog
                   parentProjectId={projectId}
                   parentProjectName={projectName}
                 />

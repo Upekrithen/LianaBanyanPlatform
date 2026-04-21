@@ -32,12 +32,12 @@ async function verifyWebhookSignature(payload: string, signature: string): Promi
   const expectedSignature = Array.from(new Uint8Array(signatureBuffer))
     .map(b => b.toString(16).padStart(2, '0'))
     .join('');
-  
-  console.log('Verifying signature:', { 
-    received: signature, 
-    expected: expectedSignature 
+
+  console.log('Verifying signature:', {
+    received: signature,
+    expected: expectedSignature
   });
-  
+
   return signature === expectedSignature;
 }
 
@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
   try {
     const signature = req.headers.get('x-kickstarter-signature');
     const rawBody = await req.text();
-    
+
     // Verify webhook signature
     if (!signature || !(await verifyWebhookSignature(rawBody, signature))) {
       console.error('Invalid webhook signature');
@@ -68,21 +68,21 @@ Deno.serve(async (req) => {
 
     // Handle different webhook events
     const eventType = webhookData.event_type;
-    
+
     if (eventType === 'pledge.create' || eventType === 'pledge.update') {
       const pledge = webhookData.pledge;
-      
+
       // Find or create user by email
       let userId = null;
       const backerEmail = pledge.backer?.email;
-      
+
       if (backerEmail) {
         const { data: profile } = await supabase
           .from('profiles')
           .select('id')
           .eq('email', backerEmail)
           .maybeSingle();
-        
+
         userId = profile?.id || null;
       }
 
@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
         .from('products')
         .select('id, project_id')
         .limit(1);
-      
+
       const productId = products?.[0]?.id || null;
 
       // Store the pledge

@@ -3,29 +3,29 @@
  * =====================
  * Displays a user's Crow Feathers - permanent achievements earned by setting records.
  * These are the ONLY thing that persists in Ghost World.
- * 
+ *
  * "The only persistent thing for ghosts." — Founder
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  */
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Feather, 
-  Trophy, 
-  Clock, 
-  Zap, 
+import {
+  Feather,
+  Trophy,
+  Clock,
+  Zap,
   Sparkles,
   Crown,
   Star
 } from 'lucide-react';
-import { 
-  getUserCrowFeathers, 
+import {
+  getUserCrowFeathers,
   getCrowFeatherCount,
   CrowFeather,
-  FeatherCategory 
+  FeatherCategory
 } from '@/lib/crowFeatherService';
-import { 
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -113,9 +113,9 @@ const FeatherBadge: React.FC<{ feather: CrowFeather; showTooltip?: boolean }> = 
   showTooltip = true,
 }) => {
   const info = CATEGORY_INFO[feather.category];
-  
+
   const badge = (
-    <div 
+    <div
       className="crow-feather-badge"
       style={{ borderColor: info.color, boxShadow: `0 0 10px ${info.color}40` }}
     >
@@ -193,18 +193,18 @@ export const CrowFeatherDisplay: React.FC<CrowFeatherDisplayProps> = ({
         setLoading(false);
         return;
       }
-      
+
       setLoading(true);
       const [userFeathers, count] = await Promise.all([
         getUserCrowFeathers(userId),
         getCrowFeatherCount(userId),
       ]);
-      
+
       setFeathers(userFeathers);
       setTotalCount(count);
       setLoading(false);
     }
-    
+
     loadFeathers();
   }, [userId]);
 
@@ -246,7 +246,7 @@ export const CrowFeatherDisplay: React.FC<CrowFeatherDisplayProps> = ({
   if (variant === 'inline') {
     const visibleFeathers = feathers.slice(0, maxVisible);
     const remaining = feathers.length - maxVisible;
-    
+
     return (
       <div className={`crow-feather-display inline ${className}`}>
         <div className="feather-row">
@@ -269,12 +269,12 @@ export const CrowFeatherDisplay: React.FC<CrowFeatherDisplayProps> = ({
         <h3>Crow Feathers</h3>
         <span className="total-count">{totalCount}</span>
       </div>
-      
+
       <div className="feather-grid">
         {feathers.map((feather) => {
           const info = CATEGORY_INFO[feather.category];
           return (
-            <div 
+            <div
               key={feather.id}
               className="feather-card"
               style={{ borderColor: info.color }}
@@ -284,7 +284,7 @@ export const CrowFeatherDisplay: React.FC<CrowFeatherDisplayProps> = ({
                 <span className="feather-name">{info.name}</span>
                 <span className="feather-number">#{feather.featherNumber}</span>
               </div>
-              
+
               <div className="feather-card-body">
                 <p className="feather-description">{info.description}</p>
                 <p className="feather-record">
@@ -294,7 +294,7 @@ export const CrowFeatherDisplay: React.FC<CrowFeatherDisplayProps> = ({
                   <p className="feather-difficulty">Difficulty: {feather.difficulty}</p>
                 )}
               </div>
-              
+
               <div className="feather-card-footer">
                 <span className="feather-date">
                   {new Date(feather.achievedAt).toLocaleDateString()}
@@ -304,7 +304,7 @@ export const CrowFeatherDisplay: React.FC<CrowFeatherDisplayProps> = ({
           );
         })}
       </div>
-      
+
       {showDetails && feathers.length > 0 && (
         <div className="feather-stats">
           <p className="text-sm text-slate-400">

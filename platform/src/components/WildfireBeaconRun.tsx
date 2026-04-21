@@ -2,7 +2,7 @@
  * WILDFIRE BEACON RUN SYSTEM
  * ==========================
  * Auto-navigating beacon runs that take users through platform pathways.
- * 
+ *
  * Features:
  * - Wildfire Mode: Auto-navigate through nodes with configurable timing
  * - Tourist Stop (30 seconds): Pause at each node to explore
@@ -10,7 +10,7 @@
  * - Magic Carpet Rides: Unlock with Golden Keys (5 per stop)
  * - Red Carpet Rider: Full access to all stop modes
  * - Power User: Mix/match stop modes per node
- * 
+ *
  * Each pathway has decision point nodes (e.g., Business = 9 nodes)
  * To unlock Magic Carpet for a 9-stop run = 45 Golden Keys required
  */
@@ -163,7 +163,7 @@ const STOP_MODE_CONFIG = {
 
 function useRedCarpetStatus() {
   const { user } = useAuth();
-  
+
   const { data: isRedCarpetRider } = useQuery({
     queryKey: ["red-carpet-status", user?.id],
     queryFn: async () => {
@@ -184,7 +184,7 @@ function useRedCarpetStatus() {
 
 function useGoldenKeys() {
   const { user } = useAuth();
-  
+
   const { data: goldenKeys } = useQuery({
     queryKey: ["golden-keys", user?.id],
     queryFn: async () => {
@@ -249,7 +249,7 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
 
   const currentNode = run.nodes[state.currentNodeIndex];
   const progress = ((state.currentNodeIndex + 1) / run.totalNodes) * 100;
-  
+
   // Access tier checks
   const isPowerUser = goldenKeys >= POWER_USER_KEYS_THRESHOLD;
   const canUsePremiumModes = isRedCarpetRider || goldenKeys >= run.goldenKeysRequired;
@@ -261,11 +261,11 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
   // Get duration for current node based on mode
   const getNodeDuration = useCallback((nodeIndex: number): number => {
     const nodeConfig = state.nodeConfigs.find(c => c.nodeId === run.nodes[nodeIndex]?.id);
-    
+
     if (nodeConfig?.mode === "custom" && nodeConfig.customDuration) {
       return nodeConfig.customDuration;
     }
-    
+
     switch (state.stopMode) {
       case "wildfire":
         return run.nodes[nodeIndex]?.duration ?? DEFAULT_WILDFIRE_DURATION;
@@ -287,7 +287,7 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
 
     onNodeVisit?.(node, nodeIndex);
     navigate(node.route);
-    
+
     const duration = getNodeDuration(nodeIndex);
     setNodeCountdown(duration === Infinity ? 0 : duration);
   }, [run.nodes, navigate, onNodeVisit, getNodeDuration]);
@@ -452,19 +452,19 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
   // Change stop mode
   const setStopMode = (mode: StopMode) => {
     const config = STOP_MODE_CONFIG[mode];
-    
+
     // Power User mode requires 50+ Golden Keys or Red Carpet Rider
     if ((config as any).requiresPowerUser && !canUsePowerUserMode) {
       setShowUnlockDialog(true);
       return;
     }
-    
+
     // Other premium modes require run-specific Golden Keys or Red Carpet Rider
     if (config.requiresAccess && !canUsePremiumModes) {
       setShowUnlockDialog(true);
       return;
     }
-    
+
     setState(prev => ({ ...prev, stopMode: mode }));
     setShowModeSelector(false);
   };
@@ -500,13 +500,13 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
                     <SelectContent>
                       {Object.entries(STOP_MODE_CONFIG).map(([key, config]) => {
                         const isPowerUserMode = (config as any).requiresPowerUser;
-                        const isLocked = isPowerUserMode 
-                          ? !canUsePowerUserMode 
+                        const isLocked = isPowerUserMode
+                          ? !canUsePowerUserMode
                           : (config.requiresAccess && !canUsePremiumModes);
-                        
+
                         return (
-                          <SelectItem 
-                            key={key} 
+                          <SelectItem
+                            key={key}
                             value={key}
                             disabled={isLocked}
                           >
@@ -531,9 +531,9 @@ export function WildfireBeaconRun({ run, onComplete, onNodeVisit, onPickNewInter
                     <span className="text-muted-foreground">
                       {goldenKeys}/{run.goldenKeysRequired} keys for Magic Carpet
                     </span>
-                    <Button 
-                      variant="link" 
-                      size="sm" 
+                    <Button
+                      variant="link"
+                      size="sm"
                       className="p-0 h-auto text-amber-500"
                       onClick={() => setShowUnlockDialog(true)}
                     >

@@ -96,7 +96,7 @@ export const PortalAccessCard = ({
         )}
 
         <div className="flex gap-2">
-          <Button 
+          <Button
             onClick={handleClick}
             variant={config.buttonVariant}
             className="flex-1"
@@ -104,9 +104,9 @@ export const PortalAccessCard = ({
             {config.buttonText}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
-          
+
           {accessLevel === 'locked' && onRequestAccess && (
-            <Button 
+            <Button
               onClick={onRequestAccess}
               variant="default"
               size="sm"

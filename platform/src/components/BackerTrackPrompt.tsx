@@ -112,8 +112,8 @@ export function BackerTrackPrompt({ onSelectTrack, currentTrack }: BackerTrackPr
               </ul>
             </div>
           </div>
-          <Button 
-            className="w-full" 
+          <Button
+            className="w-full"
             variant="outline"
             onClick={() => onSelectTrack('product_only')}
           >
@@ -157,7 +157,7 @@ export function BackerTrackPrompt({ onSelectTrack, currentTrack }: BackerTrackPr
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3 space-y-2 text-xs text-muted-foreground">
             <p>
-              <strong>You can change your track anytime.</strong> Your choice determines what information 
+              <strong>You can change your track anytime.</strong> Your choice determines what information
               and options we show you in the marketplace.
             </p>
             <p>
@@ -165,7 +165,7 @@ export function BackerTrackPrompt({ onSelectTrack, currentTrack }: BackerTrackPr
               time commitments, and portfolio management tools.
             </p>
             <p>
-              Both tracks support the same projects - you're just choosing how you want to participate and 
+              Both tracks support the same projects - you're just choosing how you want to participate and
               what level of detail you want to see.
             </p>
           </CollapsibleContent>

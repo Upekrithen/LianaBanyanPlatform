@@ -67,13 +67,13 @@ Deno.serve(async (req) => {
 
     const from = FAMILY_MEMBERS[fromPerson];
     const to = FAMILY_MEMBERS[toPerson];
-    
+
     // In test mode, all emails go to test email
     const targetEmail = TEST_MODE ? TEST_EMAIL : to.email;
 
     // Send email via Resend
     const resendKey = Deno.env.get('RESEND_API_KEY');
-    
+
     if (!resendKey) {
       console.error('RESEND_API_KEY not configured');
       return new Response(
@@ -95,28 +95,28 @@ Deno.serve(async (req) => {
         html: `
           <div style="font-family: Georgia, serif; max-width: 500px; margin: 0 auto; padding: 2rem; background: linear-gradient(135deg, #1a1a2e, #16213e); color: #e8d5b7; border-radius: 16px;">
             <h1 style="color: #ffd700; text-align: center;">${from.symbol} A Call to Gather ${to.symbol}</h1>
-            
+
             <p style="font-size: 1.2rem; text-align: center; margin: 1.5rem 0;">
               <strong>${from.card}</strong> has knocked at the Family Vaults<br>
               and is waiting for <strong>${to.card}</strong> to join!
             </p>
-            
+
             <p style="text-align: center; font-style: italic; color: #8a8aaa;">
               "Alone we can do so little; together we can do so much."<br>
               – Helen Keller
             </p>
-            
+
             <div style="text-align: center; margin: 2rem 0;">
-              <a href="https://upekrithen.web.app/fenix" 
+              <a href="https://upekrithen.web.app/fenix"
                  style="display: inline-block; padding: 1rem 2rem; background: #ffd700; color: #1a1a2e; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem;">
                 🏰 Enter the Vaults
               </a>
             </div>
-            
+
             <p style="text-align: center; color: #ff6b6b; font-size: 0.9rem;">
               ⏱ Hurry! Knocks expire after 5 minutes...
             </p>
-            
+
             <p style="text-align: center; margin-top: 2rem; font-size: 0.8rem; color: #6a6a8a;">
               — The Family Table —
             </p>

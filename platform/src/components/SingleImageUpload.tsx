@@ -14,8 +14,8 @@ interface SingleImageUploadProps {
   currentImageUrl?: string;
 }
 
-export default function SingleImageUpload({ 
-  onUpload, 
+export default function SingleImageUpload({
+  onUpload,
   label = "Upload Image",
   description,
   currentImageUrl
@@ -25,7 +25,7 @@ export default function SingleImageUpload({
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    
+
     if (!file) return;
 
     setUploading(true);
@@ -33,7 +33,7 @@ export default function SingleImageUpload({
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `${user?.id}/${crypto.randomUUID()}.${fileExt}`;
-      
+
       const { error: uploadError } = await supabase.storage
         .from('project-images')
         .upload(fileName, file);

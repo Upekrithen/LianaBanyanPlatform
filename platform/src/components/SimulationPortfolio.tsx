@@ -54,7 +54,7 @@ export function SimulationPortfolio({
   onAdopt,
   onDelete,
 }: SimulationPortfolioProps) {
-  
+
   const getScoreColor = (score: number) => {
     if (score >= 0.7) return 'text-green-600';
     if (score >= 0.5) return 'text-amber-600';
@@ -165,8 +165,8 @@ export function SimulationPortfolio({
                           {sim.scenario.name || sim.scenario.initiativeName}
                         </h4>
                         <div className="flex items-center gap-2 mt-1">
-                          <Badge 
-                            variant="outline" 
+                          <Badge
+                            variant="outline"
                             className={CATEGORY_COLORS[sim.scenario.category] || 'bg-muted'}
                           >
                             {sim.scenario.initiativeName}
@@ -229,8 +229,8 @@ export function SimulationPortfolio({
                         </Button>
                       )}
                       {onAdopt && sim.projections.netScore >= 0.5 && (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           className="bg-green-600 hover:bg-green-700"
                           onClick={() => onAdopt(sim)}
                         >
@@ -239,9 +239,9 @@ export function SimulationPortfolio({
                         </Button>
                       )}
                       {onDelete && (
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           className="ml-auto text-muted-foreground hover:text-destructive"
                           onClick={() => onDelete(sim)}
                         >

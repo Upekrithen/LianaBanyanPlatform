@@ -236,32 +236,32 @@ INSERT INTO public.lifecycle_stage_tasks (stage, task_title, task_description, s
   ('germination', 'Document Initial Idea', 'Create initial project concept documentation', 1),
   ('germination', 'Define Target Market', 'Research and define target audience', 2),
   ('germination', 'Initial Feasibility Study', 'Assess technical and financial feasibility', 3),
-  
+
   -- Seed stage (Design phase)
   ('seed', 'Create Design Specifications', 'Develop detailed design requirements', 1),
   ('seed', 'Wireframe/Mockup Creation', 'Create visual representations of the product', 2),
   ('seed', 'Technical Architecture Planning', 'Plan technical implementation approach', 3),
-  
+
   -- Sprout stage (Illustration and Description)
   ('sprout', 'Product Photography/Illustration', 'Create high-quality product visuals', 1),
   ('sprout', 'Write Marketing Copy', 'Develop compelling product descriptions', 2),
   ('sprout', 'Create Brand Guidelines', 'Establish visual and messaging standards', 3),
-  
+
   -- Seedling stage (Prototype)
   ('seedling', 'Build Prototype', 'Create working prototype of the product', 1),
   ('seedling', 'User Testing', 'Conduct testing with target users', 2),
   ('seedling', 'Iterate Based on Feedback', 'Refine prototype based on test results', 3),
-  
+
   -- Plant (no flowers) stage (Marketing)
   ('plant_no_flowers', 'Develop Marketing Strategy', 'Create comprehensive marketing plan', 1),
   ('plant_no_flowers', 'Build Marketing Materials', 'Create promotional content and assets', 2),
   ('plant_no_flowers', 'Launch Pre-sales Campaign', 'Begin accepting pre-orders', 3),
-  
+
   -- Plant (with flowers) stage (Sales/Manufacturing)
   ('plant_with_flowers', 'Finalize Manufacturing Partner', 'Contract with production facility', 1),
   ('plant_with_flowers', 'Begin Production', 'Start manufacturing process', 2),
   ('plant_with_flowers', 'Quality Control', 'Ensure product meets standards', 3),
-  
+
   -- Plant (with fruit) stage (Packaging/Delivery)
   ('plant_with_fruit', 'Package Products', 'Prepare products for shipment', 1),
   ('plant_with_fruit', 'Arrange Fulfillment', 'Set up delivery logistics', 2),

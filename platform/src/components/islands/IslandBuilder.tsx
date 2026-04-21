@@ -85,7 +85,7 @@ export const IslandBuilder = () => {
   const saveBuildingsMutation = useMutation({
     mutationFn: async (buildingsToSave: Building[]) => {
       if (!islandId) throw new Error("No island ID");
-      
+
       // Delete existing buildings
       await supabase
         .from("island_buildings" as any)
@@ -118,10 +118,10 @@ export const IslandBuilder = () => {
       toast({ title: "Island saved!", description: "Your layout has been saved." });
     },
     onError: (error: any) => {
-      toast({ 
-        title: "Failed to save", 
+      toast({
+        title: "Failed to save",
         description: error.message,
-        variant: "destructive" 
+        variant: "destructive"
       });
     }
   });

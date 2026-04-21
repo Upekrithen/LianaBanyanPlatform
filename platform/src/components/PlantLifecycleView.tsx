@@ -235,10 +235,10 @@ export function PlantLifecycleView({ projectId, isOwner = false, isSteward = fal
                   }`}
                 >
                   {customTimelineIcon ? (
-                    <img 
-                      src={customTimelineIcon} 
-                      alt={stageNames[stage]} 
-                      className={`h-6 w-6 object-contain ${isActive ? 'scale-125' : ''}`} 
+                    <img
+                      src={customTimelineIcon}
+                      alt={stageNames[stage]}
+                      className={`h-6 w-6 object-contain ${isActive ? 'scale-125' : ''}`}
                     />
                   ) : (
                     <Icon className={`h-6 w-6 ${isActive ? 'scale-125' : ''}`} />

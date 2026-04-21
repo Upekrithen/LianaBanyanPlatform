@@ -1,18 +1,18 @@
 /**
  * Cost + 20% Certification Request Form
- * 
+ *
  * Allows anchor owners to request C+20 certification by providing
  * evidence of their cost structure and commitment to the model.
  */
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  CheckCircle, 
-  Upload, 
-  FileText, 
-  DollarSign, 
-  Shield, 
+import {
+  CheckCircle,
+  Upload,
+  FileText,
+  DollarSign,
+  Shield,
   ArrowRight,
   Info,
   AlertTriangle
@@ -33,15 +33,15 @@ interface CostPlusCertificationFormProps {
   onCancel?: () => void;
 }
 
-export function CostPlusCertificationForm({ 
-  anchor, 
-  onSuccess, 
-  onCancel 
+export function CostPlusCertificationForm({
+  anchor,
+  onSuccess,
+  onCancel
 }: CostPlusCertificationFormProps) {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Form state
   const [evidenceUrl, setEvidenceUrl] = useState('');
   const [evidenceNotes, setEvidenceNotes] = useState('');
@@ -63,25 +63,25 @@ export function CostPlusCertificationForm({
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
-    
+
     setIsSubmitting(true);
-    
+
     const breakdown = {
       cogs: costBreakdown.cogs ? parseFloat(costBreakdown.cogs) : undefined,
       labor: costBreakdown.labor ? parseFloat(costBreakdown.labor) : undefined,
       fees: costBreakdown.fees ? parseFloat(costBreakdown.fees) : undefined,
       margin: costBreakdown.margin ? parseFloat(costBreakdown.margin) : undefined,
     };
-    
+
     const result = await requestCertification(
       anchor.id,
       evidenceUrl || undefined,
       evidenceNotes || undefined,
       Object.values(breakdown).some(v => v !== undefined) ? breakdown : undefined
     );
-    
+
     setIsSubmitting(false);
-    
+
     if (result.success) {
       toast({
         title: 'Certification Requested',
@@ -111,10 +111,10 @@ export function CostPlusCertificationForm({
 
       {/* Preview of what they'll get */}
       <div className="flex justify-center">
-        <CostPlusBadge 
-          anchor={{ ...anchor, verified_cost_plus: true, pricing_policy: 'C_PLUS_20' }} 
-          size="lg" 
-          showDetails 
+        <CostPlusBadge
+          anchor={{ ...anchor, verified_cost_plus: true, pricing_policy: 'C_PLUS_20' }}
+          size="lg"
+          showDetails
         />
       </div>
 
@@ -156,9 +156,9 @@ export function CostPlusCertificationForm({
               <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
                 <h4 className="font-semibold text-emerald-300 mb-2">What is Cost + 20%?</h4>
                 <p className="text-sm text-slate-300">
-                  You charge enough to cover your true cost of goods, fees, and labor, 
-                  then add a 20% margin for yourself. Creators and Workers keep <strong>83.3%</strong> of 
-                  every transaction. The platform's economics (Credits, Marks, Joules) are 
+                  You charge enough to cover your true cost of goods, fees, and labor,
+                  then add a 20% margin for yourself. Creators and Workers keep <strong>83.3%</strong> of
+                  every transaction. The platform's economics (Credits, Marks, Joules) are
                   layered on top, not carved out of your margin.
                 </p>
               </div>
@@ -168,12 +168,12 @@ export function CostPlusCertificationForm({
                   <Checkbox
                     id="honorCostPlus"
                     checked={agreements.honorCostPlus}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setAgreements(prev => ({ ...prev, honorCostPlus: checked as boolean }))
                     }
                   />
                   <Label htmlFor="honorCostPlus" className="text-sm text-slate-300 cursor-pointer">
-                    I commit to honoring <strong>Cost + 20% pricing</strong> for all customers 
+                    I commit to honoring <strong>Cost + 20% pricing</strong> for all customers
                     routed through Liana Banyan (via Cue Cards, Slingshot, or direct links).
                   </Label>
                 </div>
@@ -182,12 +182,12 @@ export function CostPlusCertificationForm({
                   <Checkbox
                     id="allowVerification"
                     checked={agreements.allowVerification}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setAgreements(prev => ({ ...prev, allowVerification: checked as boolean }))
                     }
                   />
                   <Label htmlFor="allowVerification" className="text-sm text-slate-300 cursor-pointer">
-                    I understand that the platform may request verification of my cost structure 
+                    I understand that the platform may request verification of my cost structure
                     (kept private) and may audit featured or high-volume anchors.
                   </Label>
                 </div>
@@ -196,12 +196,12 @@ export function CostPlusCertificationForm({
                   <Checkbox
                     id="understandRevocation"
                     checked={agreements.understandRevocation}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={(checked) =>
                       setAgreements(prev => ({ ...prev, understandRevocation: checked as boolean }))
                     }
                   />
                   <Label htmlFor="understandRevocation" className="text-sm text-slate-300 cursor-pointer">
-                    I understand that if I change my pricing in a way that breaks the C+20 
+                    I understand that if I change my pricing in a way that breaks the C+20
                     commitment, my certification badge may be revoked until I realign.
                   </Label>
                 </div>
@@ -242,7 +242,7 @@ export function CostPlusCertificationForm({
                 <div className="flex items-start gap-2">
                   <Info className="w-5 h-5 text-amber-400 mt-0.5" />
                   <p className="text-sm text-slate-300">
-                    This information is <strong>private</strong> and only visible to the review team. 
+                    This information is <strong>private</strong> and only visible to the review team.
                     It will not be published or shared. You can skip this step for basic certification.
                   </p>
                 </div>

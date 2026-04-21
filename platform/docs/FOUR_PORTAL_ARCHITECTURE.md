@@ -174,7 +174,7 @@ Each portal includes navigation to other portals based on user authentication:
 export const detectPortal = (): PortalType => {
   const hostname = window.location.hostname;
   const port = window.location.port;
-  
+
   if (hostname.includes('lianabanyan.org') || port === '5175') return 'nonprofit';
   if (hostname.includes('lianabanyan.net') || port === '5176') return 'network';
   if (hostname.includes('lianabanyan.biz') || port === '5174') return 'business';

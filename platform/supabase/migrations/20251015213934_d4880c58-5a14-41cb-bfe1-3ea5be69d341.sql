@@ -16,12 +16,12 @@ CREATE TABLE public.agent_onboarding (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   position_application_id UUID REFERENCES public.position_applications(id),
-  
+
   -- Onboarding status
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'assessment_complete', 'approved', 'rejected')),
   started_at TIMESTAMPTZ DEFAULT NOW(),
   completed_at TIMESTAMPTZ,
-  
+
   -- Keirsey Assessment
   keirsey_completed BOOLEAN DEFAULT false,
   keirsey_completed_at TIMESTAMPTZ,
@@ -29,16 +29,16 @@ CREATE TABLE public.agent_onboarding (
   keirsey_variant keirsey_variant,
   keirsey_assessment_url TEXT, -- Link to full results
   keirsey_score_summary JSONB, -- Detailed scores if provided
-  
+
   -- HR Processing
   reviewed_by UUID REFERENCES auth.users(id),
   reviewed_at TIMESTAMPTZ,
   hr_notes TEXT,
   approval_status TEXT CHECK (approval_status IN ('pending', 'approved', 'rejected', 'needs_review')),
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, position_application_id)
 );
 
@@ -47,13 +47,13 @@ CREATE TABLE public.agent_assessment_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   onboarding_id UUID NOT NULL REFERENCES public.agent_onboarding(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   document_type TEXT NOT NULL CHECK (document_type IN ('keirsey_results', 'keirsey_certificate', 'other_assessment')),
   file_name TEXT NOT NULL,
   file_path TEXT NOT NULL, -- Supabase storage path
   file_size BIGINT,
   mime_type TEXT,
-  
+
   uploaded_at TIMESTAMPTZ DEFAULT NOW(),
   verified_by UUID REFERENCES auth.users(id),
   verified_at TIMESTAMPTZ
@@ -136,13 +136,13 @@ BEGIN
   IF NEW.keirsey_temperament IS NOT NULL AND NEW.keirsey_variant IS NOT NULL THEN
     NEW.keirsey_completed := true;
     NEW.keirsey_completed_at := COALESCE(NEW.keirsey_completed_at, NOW());
-    
+
     -- Update overall status
     IF NEW.status = 'pending' OR NEW.status = 'in_progress' THEN
       NEW.status := 'assessment_complete';
     END IF;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

@@ -46,7 +46,7 @@ export function ContractScaleNegotiationManager({ projectId }: ContractScaleNego
         `)
         .eq("project_id", projectId)
         .order("created_at", { ascending: false });
-      
+
       if (error) throw error;
       return data;
     }
@@ -306,7 +306,7 @@ export function ContractScaleNegotiationManager({ projectId }: ContractScaleNego
                       </Badge>
                       <span className="font-semibold">{negotiation.discount_percentage}% Discount</span>
                     </div>
-                    
+
                     <div className="text-sm text-muted-foreground space-y-1">
                       <p>Bulk commitment: {negotiation.bulk_commitment_positions} positions</p>
                       <p>Minimum required: {negotiation.minimum_positions_required} positions</p>
@@ -339,7 +339,7 @@ export function ContractScaleNegotiationManager({ projectId }: ContractScaleNego
                       </Button>
                     </div>
                   )}
-                  
+
                   {negotiation.status === "approved" && (
                     <Button
                       size="sm"

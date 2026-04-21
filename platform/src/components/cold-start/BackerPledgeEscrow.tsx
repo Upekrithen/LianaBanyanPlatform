@@ -11,8 +11,8 @@ interface BackerPledgeEscrowProps {
   initialStatus?: 'pledged' | 'escrowed' | 'released' | 'forfeited';
 }
 
-export const BackerPledgeEscrow: React.FC<BackerPledgeEscrowProps> = ({ 
-  applicationId, 
+export const BackerPledgeEscrow: React.FC<BackerPledgeEscrowProps> = ({
+  applicationId,
   pledgeAmount,
   initialStatus = 'pledged'
 }) => {
@@ -46,7 +46,7 @@ export const BackerPledgeEscrow: React.FC<BackerPledgeEscrowProps> = ({
               Skin in the game. Collateral for community trust.
             </CardDescription>
           </div>
-          <Badge 
+          <Badge
             variant={status === 'escrowed' ? "default" : "outline"}
             className={status === 'escrowed' ? "bg-amber-500 hover:bg-amber-600" : ""}
           >
@@ -55,7 +55,7 @@ export const BackerPledgeEscrow: React.FC<BackerPledgeEscrowProps> = ({
         </div>
       </CardHeader>
       <CardContent className="pt-6 space-y-6">
-        
+
         <div className="flex items-center justify-between p-4 bg-amber-50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-900">
           <div>
             <p className="text-sm text-amber-800 dark:text-amber-400 font-medium">Pledge Amount</p>
@@ -83,8 +83,8 @@ export const BackerPledgeEscrow: React.FC<BackerPledgeEscrowProps> = ({
       </CardContent>
       <CardFooter className="bg-slate-50 dark:bg-slate-900 border-t p-4">
         {status === 'pledged' ? (
-          <Button 
-            className="w-full bg-amber-500 hover:bg-amber-600 text-white" 
+          <Button
+            className="w-full bg-amber-500 hover:bg-amber-600 text-white"
             onClick={handleFundEscrow}
             disabled={isProcessing}
           >

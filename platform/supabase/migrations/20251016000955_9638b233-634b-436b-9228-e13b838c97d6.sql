@@ -1,7 +1,7 @@
 -- Task 18: Domain-Based Language Defaults
 -- Add domain and default language tracking to projects
 
-ALTER TABLE projects 
+ALTER TABLE projects
 ADD COLUMN IF NOT EXISTS primary_domain text,
 ADD COLUMN IF NOT EXISTS default_language text DEFAULT 'en';
 

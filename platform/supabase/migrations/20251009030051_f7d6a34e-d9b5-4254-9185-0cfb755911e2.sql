@@ -125,11 +125,11 @@ BEGIN
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name')
   );
-  
+
   -- Create initial credit entry
   INSERT INTO public.user_credits (user_id, total_credits, used_credits, initial_credit_accepted)
   VALUES (NEW.id, 100.00, 0, false);
-  
+
   RETURN NEW;
 END;
 $$;
@@ -157,7 +157,7 @@ BEGIN
   ),
   updated_at = now()
   WHERE user_id = NEW.user_id;
-  
+
   RETURN NEW;
 END;
 $$;

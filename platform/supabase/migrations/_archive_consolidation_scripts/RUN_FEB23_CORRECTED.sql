@@ -1,7 +1,7 @@
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- CORRECTED MIGRATIONS — February 23, 2026
 -- ═══════════════════════════════════════════════════════════════════════════════
--- 
+--
 -- LESSON LEARNED: The `stamps` table already exists for Cue Card QR authentication.
 -- Renaming achievement stamps to `achievement_badges` to avoid collision.
 --
@@ -19,18 +19,18 @@ CREATE TABLE IF NOT EXISTS public.furnace_anchors (
   anchor_type TEXT NOT NULL DEFAULT 'product',
   owner_id UUID REFERENCES auth.users(id),
   business_id UUID,
-  
+
   product_name TEXT,
   product_description TEXT,
   product_category TEXT,
-  
+
   verification_status TEXT DEFAULT 'pending',
   verified_at TIMESTAMPTZ,
   verified_by UUID,
-  
+
   scan_count INTEGER DEFAULT 0,
   last_scanned_at TIMESTAMPTZ,
-  
+
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -45,13 +45,13 @@ CREATE TABLE IF NOT EXISTS public.furnace_scans (
   anchor_id UUID REFERENCES public.furnace_anchors(id),
   scanner_id UUID REFERENCES auth.users(id),
   scanner_ghost_id TEXT,
-  
+
   scan_location JSONB,
   scan_context TEXT,
-  
+
   is_authentic BOOLEAN,
   confidence_score DECIMAL(5,4),
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -65,23 +65,23 @@ CREATE TABLE IF NOT EXISTS public.kindling_tiers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tier_name TEXT NOT NULL UNIQUE,
   tier_level INTEGER NOT NULL,
-  
+
   monthly_fee DECIMAL(10,2) DEFAULT 0,
   revenue_share_percent DECIMAL(5,2) DEFAULT 0,
-  
+
   max_cue_cards INTEGER,
   max_products INTEGER,
-  
+
   features JSONB DEFAULT '[]',
   charitable_allocation_percent DECIMAL(5,2) DEFAULT 10,
-  
+
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Seed tiers (only if table was just created)
 INSERT INTO public.kindling_tiers (tier_name, tier_level, monthly_fee, revenue_share_percent, max_cue_cards, max_products, charitable_allocation_percent, features)
-VALUES 
+VALUES
   ('Spark', 1, 0, 5, 3, 10, 10, '["basic_qr", "furnace_verification"]'),
   ('Ember', 2, 29, 3, 10, 50, 10, '["custom_branding", "analytics", "priority_support"]'),
   ('Flame', 3, 99, 2, 50, 250, 10, '["white_label", "api_access", "dedicated_support"]'),
@@ -93,13 +93,13 @@ CREATE TABLE IF NOT EXISTS public.kindling_subscriptions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   business_id UUID NOT NULL,
   tier_id UUID REFERENCES public.kindling_tiers(id),
-  
+
   status TEXT DEFAULT 'active',
   started_at TIMESTAMPTZ DEFAULT NOW(),
   expires_at TIMESTAMPTZ,
-  
+
   charitable_pool_contributions DECIMAL(12,2) DEFAULT 0,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -113,23 +113,23 @@ CREATE TABLE IF NOT EXISTS public.achievement_badge_definitions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   badge_type TEXT UNIQUE NOT NULL,
   category TEXT NOT NULL,
-  
+
   name TEXT NOT NULL,
   description TEXT,
   icon TEXT DEFAULT '🏅',
-  
+
   rarity TEXT DEFAULT 'common',
   points INTEGER DEFAULT 10,
-  
+
   unlock_criteria JSONB DEFAULT '{}',
   is_active BOOLEAN DEFAULT true,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Seed badge definitions
 INSERT INTO public.achievement_badge_definitions (badge_type, category, name, description, icon, rarity, points)
-VALUES 
+VALUES
   ('first_share', 'social', 'First Share', 'Shared your first Cue Card', '📤', 'common', 10),
   ('viral_card', 'social', 'Viral Card', 'Cue Card reached 100+ clicks', '🔥', 'rare', 50),
   ('first_sale', 'commerce', 'First Sale', 'Made your first sale', '💰', 'common', 25),
@@ -144,20 +144,20 @@ CREATE TABLE IF NOT EXISTS public.user_achievement_badges (
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   badge_type TEXT NOT NULL,
   badge_category TEXT DEFAULT 'achievement',
-  
+
   name TEXT NOT NULL,
   description TEXT,
   icon TEXT DEFAULT '🏅',
-  
+
   earned_at TIMESTAMPTZ DEFAULT NOW(),
   earned_context JSONB DEFAULT '{}',
-  
+
   rarity TEXT DEFAULT 'common',
   points INTEGER DEFAULT 10,
-  
+
   is_displayed BOOLEAN DEFAULT true,
   display_order INTEGER DEFAULT 0,
-  
+
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -173,22 +173,22 @@ CREATE TABLE IF NOT EXISTS public.social_shares (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id),
   ghost_id TEXT,
-  
+
   share_type TEXT NOT NULL,
   platform TEXT NOT NULL,
-  
+
   content_id UUID,
   content_type TEXT,
-  
+
   share_url TEXT,
   post_id TEXT,
-  
+
   clicks INTEGER DEFAULT 0,
   conversions INTEGER DEFAULT 0,
-  
+
   shared_at TIMESTAMPTZ DEFAULT NOW(),
   expires_at TIMESTAMPTZ,
-  
+
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -205,15 +205,15 @@ CREATE TABLE IF NOT EXISTS public.research_commitment_locks (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   project_id UUID,
-  
+
   locked_at TIMESTAMPTZ DEFAULT NOW(),
   satisfied_at TIMESTAMPTZ,
   expires_at TIMESTAMPTZ DEFAULT NOW() + INTERVAL '72 hours',
-  
+
   reason TEXT DEFAULT 'accessed_research_without_sending',
   research_accessed_at TIMESTAMPTZ DEFAULT NOW(),
   campaign_sent_at TIMESTAMPTZ,
-  
+
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -225,31 +225,31 @@ CREATE TABLE IF NOT EXISTS public.cue_card_campaigns (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   project_id UUID,
-  
+
   name TEXT NOT NULL,
   description TEXT,
   template_ids UUID[] DEFAULT '{}',
-  
+
   research_commitment BOOLEAN DEFAULT false,
   research_commitment_set_at TIMESTAMPTZ,
   research_pool_accessed BOOLEAN DEFAULT false,
   research_pool_accessed_at TIMESTAMPTZ,
   commitment_satisfied BOOLEAN DEFAULT false,
   commitment_satisfied_at TIMESTAMPTZ,
-  
+
   default_expiration_hours INTEGER DEFAULT 24,
   expiration_type TEXT DEFAULT 'pass_through',
-  
+
   status TEXT DEFAULT 'draft',
   scheduled_at TIMESTAMPTZ,
   launched_at TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
-  
+
   cards_sent INTEGER DEFAULT 0,
   total_clicks INTEGER DEFAULT 0,
   total_conversions INTEGER DEFAULT 0,
   conversion_rate DECIMAL(5,4) DEFAULT 0,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -260,18 +260,18 @@ CREATE INDEX IF NOT EXISTS idx_campaigns_status ON public.cue_card_campaigns(sta
 -- Template attribution (Marks for creators)
 CREATE TABLE IF NOT EXISTS public.template_attribution (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   template_id UUID,
   creator_id UUID NOT NULL REFERENCES auth.users(id),
   user_id UUID NOT NULL REFERENCES auth.users(id),
   campaign_id UUID,
-  
+
   selected_at TIMESTAMPTZ DEFAULT NOW(),
   sent_at TIMESTAMPTZ,
-  
+
   clicks_generated INTEGER DEFAULT 0,
   conversions_generated INTEGER DEFAULT 0,
-  
+
   marks_for_selection INTEGER DEFAULT 1,
   marks_for_send INTEGER DEFAULT 0,
   marks_for_clicks DECIMAL(10,2) DEFAULT 0,
@@ -279,9 +279,9 @@ CREATE TABLE IF NOT EXISTS public.template_attribution (
   marks_for_derivative INTEGER DEFAULT 0,
   total_marks_awarded DECIMAL(10,2) DEFAULT 1,
   marks_paid_at TIMESTAMPTZ,
-  
+
   is_derivative BOOLEAN DEFAULT false,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -292,24 +292,24 @@ CREATE INDEX IF NOT EXISTS idx_attribution_user ON public.template_attribution(u
 -- Research pool aggregates (anonymized)
 CREATE TABLE IF NOT EXISTS public.research_pool_aggregates (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   template_type TEXT,
   initiative_slug TEXT,
   expiration_hours INTEGER,
   day_of_week INTEGER,
   hour_of_day INTEGER,
-  
+
   campaign_count INTEGER DEFAULT 0,
   total_cards_sent INTEGER DEFAULT 0,
   total_clicks INTEGER DEFAULT 0,
   total_conversions INTEGER DEFAULT 0,
   avg_conversion_rate DECIMAL(5,4) DEFAULT 0,
-  
+
   avg_time_to_first_click_minutes INTEGER,
   avg_time_to_conversion_minutes INTEGER,
-  
+
   computed_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(template_type, initiative_slug, expiration_hours, day_of_week, hour_of_day)
 );
 
@@ -317,13 +317,13 @@ CREATE TABLE IF NOT EXISTS public.research_pool_aggregates (
 CREATE TABLE IF NOT EXISTS public.comparison_frame_slots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   slot_number INTEGER NOT NULL CHECK (slot_number BETWEEN 1 AND 6),
   template_id UUID,
   user_notes TEXT,
-  
+
   added_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, slot_number)
 );
 
@@ -332,23 +332,23 @@ CREATE INDEX IF NOT EXISTS idx_comparison_user ON public.comparison_frame_slots(
 -- Expiration presets
 CREATE TABLE IF NOT EXISTS public.expiration_presets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   benefit_type TEXT NOT NULL UNIQUE,
   display_name TEXT NOT NULL,
-  
+
   min_hours INTEGER NOT NULL,
   max_hours INTEGER NOT NULL,
   default_hours INTEGER NOT NULL,
-  
+
   description TEXT,
   urgency_note TEXT,
-  
+
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 INSERT INTO public.expiration_presets (benefit_type, display_name, min_hours, max_hours, default_hours, description, urgency_note)
-VALUES 
+VALUES
   ('pass_through', 'Pass-Through Discount', 1, 72, 24, 'Discount for customers coming through your cue card', 'Creates urgency for immediate action'),
   ('first_time', 'First-Time Bonus', 24, 168, 48, 'Special offer for new users', 'Gives newcomers time to explore'),
   ('referral', 'Referral Credit', 24, 720, 168, 'Credit for bringing in new members', 'Allows relationship building'),
@@ -395,11 +395,11 @@ BEGIN
     LIMIT 1;
     RETURN v_lock_id;
   END IF;
-  
+
   INSERT INTO public.research_commitment_locks (user_id, project_id)
   VALUES (p_user_id, p_project_id)
   RETURNING id INTO v_lock_id;
-  
+
   RETURN v_lock_id;
 END;
 $$;
@@ -415,20 +415,20 @@ SECURITY DEFINER
 AS $$
 BEGIN
   UPDATE public.research_commitment_locks
-  SET 
+  SET
     satisfied_at = NOW(),
     campaign_sent_at = NOW(),
     is_active = false
   WHERE user_id = p_user_id
     AND is_active = true
     AND satisfied_at IS NULL;
-  
+
   UPDATE public.cue_card_campaigns
-  SET 
+  SET
     commitment_satisfied = true,
     commitment_satisfied_at = NOW()
   WHERE id = p_campaign_id;
-  
+
   RETURN true;
 END;
 $$;
@@ -445,15 +445,15 @@ DECLARE
 BEGIN
   SELECT * INTO v_attribution FROM public.template_attribution WHERE id = p_attribution_id;
   IF NOT FOUND THEN RETURN 0; END IF;
-  
+
   v_total_marks := v_attribution.marks_for_selection;
   IF v_attribution.sent_at IS NOT NULL THEN v_total_marks := v_total_marks + 2; END IF;
   v_total_marks := v_total_marks + (v_attribution.clicks_generated * 0.1);
   v_total_marks := v_total_marks + v_attribution.conversions_generated;
   IF v_attribution.is_derivative THEN v_total_marks := v_total_marks + 5; END IF;
-  
+
   UPDATE public.template_attribution
-  SET 
+  SET
     marks_for_send = CASE WHEN sent_at IS NOT NULL THEN 2 ELSE 0 END,
     marks_for_clicks = clicks_generated * 0.1,
     marks_for_conversions = conversions_generated,
@@ -462,7 +462,7 @@ BEGIN
     marks_paid_at = NOW(),
     updated_at = NOW()
   WHERE id = p_attribution_id;
-  
+
   RETURN v_total_marks;
 END;
 $$;
@@ -513,7 +513,7 @@ CREATE POLICY "Users manage own campaigns" ON public.cue_card_campaigns
 
 DROP POLICY IF EXISTS "Users view own attribution" ON public.template_attribution;
 CREATE POLICY "Users view own attribution" ON public.template_attribution
-  FOR SELECT TO authenticated 
+  FOR SELECT TO authenticated
   USING (auth.uid() = user_id OR auth.uid() = creator_id);
 
 DROP POLICY IF EXISTS "Research pool for committed users" ON public.research_pool_aggregates;

@@ -25,7 +25,7 @@ BEGIN
   IF NEW.units_allocated >= 50000 AND (OLD.has_dormant_capacity = false OR OLD.has_dormant_capacity IS NULL) THEN
     NEW.has_dormant_capacity = true;
     NEW.dormant_days = 2;
-    
+
     -- Log the unlock event
     INSERT INTO system_notifications (
       notification_type,
@@ -44,7 +44,7 @@ BEGIN
       )
     );
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

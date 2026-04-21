@@ -26,23 +26,23 @@ CREATE TABLE IF NOT EXISTS design_battles (
     timeframe TEXT NOT NULL DEFAULT '1week' CHECK (timeframe IN ('1hour', '4hours', '1day', '3days', '1week', '2weeks', '1month', '3months')),
     starts_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     ends_at TIMESTAMPTZ NOT NULL,
-    
+
     -- Minimum ante requirements
     min_ante_credits DECIMAL(12,2) NOT NULL DEFAULT 1,
     min_ante_marks DECIMAL(12,2) NOT NULL DEFAULT 0,
     min_ante_joules DECIMAL(12,2) NOT NULL DEFAULT 0,
-    
+
     -- Pot calculations
     total_pot DECIMAL(12,2) NOT NULL DEFAULT 0,
     platform_cut DECIMAL(12,2) NOT NULL DEFAULT 0,
     net_pot DECIMAL(12,2) NOT NULL DEFAULT 0,
     winner_payout DECIMAL(12,2) NOT NULL DEFAULT 0,
     community_votes INTEGER NOT NULL DEFAULT 0,
-    
+
     -- Participants
     participant_count INTEGER NOT NULL DEFAULT 0,
     winner_id UUID REFERENCES auth.users(id),
-    
+
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -61,27 +61,27 @@ CREATE TABLE IF NOT EXISTS design_battle_participants (
     battle_id UUID NOT NULL REFERENCES design_battles(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES auth.users(id),
     display_name TEXT NOT NULL,
-    
+
     -- Ante details
     ante_original JSONB NOT NULL DEFAULT '{"credits": 0, "marks": 0, "joules": 0}',
     ante_credit_equivalent DECIMAL(12,2) NOT NULL DEFAULT 0,
     gap_rate_used DECIMAL(6,2) NOT NULL DEFAULT 1,
     converted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     -- Submission
     submission_url TEXT,
     submitted_at TIMESTAMPTZ,
-    
+
     -- Voting
     vote_count INTEGER NOT NULL DEFAULT 0,
-    
+
     -- Results
     rank INTEGER,
     payout DECIMAL(12,2),
     crow_feather_earned BOOLEAN DEFAULT FALSE,
-    
+
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     UNIQUE(battle_id, user_id)
 );
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS design_battle_votes (
     voter_id UUID NOT NULL REFERENCES auth.users(id),
     vote_credits INTEGER NOT NULL DEFAULT 1,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     UNIQUE(battle_id, voter_id) -- One vote per battle per user
 );
 
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS bounty_signups (
     end_date TIMESTAMPTZ,
     status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'withdrawn', 'converted_to_battle')),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    
+
     UNIQUE(bounty_id, user_id)
 );
 
@@ -143,14 +143,14 @@ BEGIN
     FROM bounty_signups
     WHERE bounty_id = NEW.bounty_id
     AND status = 'active';
-    
+
     -- If 2+ signups, check if battle already exists
     IF signup_count >= 2 THEN
         SELECT id INTO existing_battle
         FROM design_battles
         WHERE bounty_id = NEW.bounty_id
         AND status IN ('pending', 'active');
-        
+
         -- If no battle exists, create one
         IF existing_battle IS NULL THEN
             -- Get bounty details (assumes bounties table exists)
@@ -164,7 +164,7 @@ BEGIN
                 bounty_record.skill_tier := 'journeyman';
                 bounty_record.timeframe := '1week';
             END;
-            
+
             -- Create the Design Battle
             INSERT INTO design_battles (
                 bounty_id,
@@ -184,19 +184,19 @@ BEGIN
                 NOW() + INTERVAL '1 week' -- Default, will be updated based on timeframe
             )
             RETURNING id INTO new_battle_id;
-            
+
             -- Update all active signups to converted_to_battle
             UPDATE bounty_signups
             SET status = 'converted_to_battle'
             WHERE bounty_id = NEW.bounty_id
             AND status = 'active';
-            
+
             -- Log the auto-creation
-            RAISE NOTICE 'Design Battle % created for bounty % with % participants', 
+            RAISE NOTICE 'Design Battle % created for bounty % with % participants',
                 new_battle_id, NEW.bounty_id, signup_count;
         END IF;
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -252,42 +252,42 @@ BEGIN
     WHERE battle_id = p_battle_id
     ORDER BY vote_count DESC
     LIMIT 1;
-    
+
     IF v_winner IS NULL THEN
         RETURN;
     END IF;
-    
+
     -- Calculate pot
-    SELECT 
+    SELECT
         COALESCE(SUM(ante_credit_equivalent), 0),
         COUNT(*)
     INTO v_total_ante, v_participant_count
     FROM design_battle_participants
     WHERE battle_id = p_battle_id;
-    
+
     SELECT community_votes INTO v_community_votes
     FROM design_battles
     WHERE id = p_battle_id;
-    
+
     v_gross_pot := v_total_ante + COALESCE(v_community_votes, 0);
     v_platform_cut := ROUND(v_gross_pot * 0.167, 2);
     v_net_pot := v_gross_pot - v_platform_cut;
     v_winner_share := ROUND(v_net_pot * 0.50, 2);
     v_runner_up_share := ROUND((v_net_pot - v_winner_share) / GREATEST(v_participant_count - 1, 1), 2);
-    
+
     -- Update winner
     UPDATE design_battle_participants
     SET rank = 1, payout = v_winner_share, crow_feather_earned = TRUE
     WHERE id = v_winner.id;
-    
+
     -- Update runner-ups
     UPDATE design_battle_participants
     SET rank = 2, payout = v_runner_up_share, crow_feather_earned = FALSE
     WHERE battle_id = p_battle_id AND id != v_winner.id;
-    
+
     -- Update battle
     UPDATE design_battles
-    SET 
+    SET
         status = 'completed',
         winner_id = v_winner.user_id,
         total_pot = v_gross_pot,
@@ -296,7 +296,7 @@ BEGIN
         winner_payout = v_winner_share,
         updated_at = NOW()
     WHERE id = p_battle_id;
-    
+
     -- Award crow feather
     INSERT INTO crow_feathers (user_id, category, record_value, metadata)
     VALUES (
@@ -305,7 +305,7 @@ BEGIN
         v_winner_share,
         jsonb_build_object('battle_id', p_battle_id)
     );
-    
+
     RETURN QUERY SELECT v_winner.user_id, v_winner_share, TRUE;
 END;
 $$ LANGUAGE plpgsql;

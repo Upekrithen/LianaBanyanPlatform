@@ -3,12 +3,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Award, 
-  Shield, 
-  Users, 
-  Sword, 
-  Trophy, 
+import {
+  Award,
+  Shield,
+  Users,
+  Sword,
+  Trophy,
   Star,
   Crown,
   Target,
@@ -282,17 +282,17 @@ export function UnifiedBadgeDisplay({ userId, size = 'md', compact = false }: Un
                   const badgeId = achievement.achievement_name.toLowerCase().replace(/ /g, '_');
                   const Icon = foodBadgeIcons[badgeId] || Utensils;
                   const level = achievement.achievement_level;
-                  
+
                   // Determine badge color based on type
                   let badgeColor = 'bg-amber-500/20 text-amber-500';
                   if (badgeId === 'hot_pepper') badgeColor = 'bg-rose-500/20 text-rose-500';
                   if (badgeId === 'meal_saver') badgeColor = 'bg-red-500/20 text-red-500';
                   if (badgeId === 'grocery_runner') badgeColor = 'bg-emerald-500/20 text-emerald-500';
                   if (badgeId === 'chef_hat') badgeColor = 'bg-white/20 text-white';
-                  
+
                   return (
-                    <Badge 
-                      key={achievement.id} 
+                    <Badge
+                      key={achievement.id}
                       className={cn("gap-1 border-0", badgeColor)}
                       title={level ? getLevelDescription(badgeId, level) : ''}
                     >

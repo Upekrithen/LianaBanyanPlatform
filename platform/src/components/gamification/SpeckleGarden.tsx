@@ -35,7 +35,7 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ availableCredits, 
               "The mess isn't waste, it's planting."
             </CardDescription>
           </div>
-          
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -56,7 +56,7 @@ export const SpeckleGarden: React.FC<SpeckleGardenProps> = ({ availableCredits, 
 
       <CardContent className="-mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          
+
           {/* Liquid Credits (The Seeds) */}
           <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between relative z-10">
             <div>

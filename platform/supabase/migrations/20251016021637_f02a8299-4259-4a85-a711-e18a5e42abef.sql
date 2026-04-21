@@ -5,31 +5,31 @@ CREATE TABLE IF NOT EXISTS crowdfunding_pledges (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   platform text NOT NULL CHECK (platform IN ('kickstarter', 'indiegogo', 'gofundme', 'patreon', 'backerkit')),
   platform_pledge_id text NOT NULL,
-  
+
   -- Backer info
   backer_email text NOT NULL,
   backer_name text,
   user_id uuid REFERENCES auth.users(id),
-  
+
   -- Pledge details
   pledge_amount numeric NOT NULL DEFAULT 0,
   pledge_currency text DEFAULT 'USD',
   pledge_date timestamptz NOT NULL DEFAULT now(),
   reward_tier text,
-  
+
   -- LB integration
   product_id uuid REFERENCES products(id),
   is_processed boolean DEFAULT false,
   processed_at timestamptz,
   credits_allocated numeric DEFAULT 0,
-  
+
   -- Sync tracking
   synced_at timestamptz DEFAULT now(),
   last_updated timestamptz DEFAULT now(),
-  
+
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
-  
+
   UNIQUE(platform, platform_pledge_id)
 );
 
@@ -37,24 +37,24 @@ CREATE TABLE IF NOT EXISTS crowdfunding_pledges (
 CREATE TABLE IF NOT EXISTS crowdfunding_platform_connections (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id uuid REFERENCES projects(id),
-  
+
   platform text NOT NULL CHECK (platform IN ('kickstarter', 'indiegogo', 'gofundme', 'patreon', 'backerkit')),
-  
+
   -- Credentials (store in Supabase secrets for production)
   api_key text,
   oauth_token text,
   oauth_refresh_token text,
-  
+
   webhook_url text,
   webhook_secret text,
-  
+
   is_active boolean DEFAULT true,
   last_sync_at timestamptz,
-  
+
   created_by uuid REFERENCES auth.users(id),
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
-  
+
   UNIQUE(project_id, platform)
 );
 
@@ -63,14 +63,14 @@ CREATE TABLE IF NOT EXISTS crowdfunding_sync_log (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   platform text NOT NULL,
   project_id uuid REFERENCES projects(id),
-  
+
   sync_type text DEFAULT 'scheduled', -- 'webhook', 'scheduled', 'manual'
   status text DEFAULT 'success', -- 'success', 'partial', 'failed'
-  
+
   pledges_synced integer DEFAULT 0,
   errors_count integer DEFAULT 0,
   error_details jsonb,
-  
+
   started_at timestamptz DEFAULT now(),
   completed_at timestamptz
 );

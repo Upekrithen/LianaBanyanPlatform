@@ -89,9 +89,9 @@ export function SwoopProjectCard({ project, variant = "full", showVoteButton = t
   const queryClient = useQueryClient();
   const [voteDialogOpen, setVoteDialogOpen] = useState(false);
 
-  const percentFunded = project.percent_funded || 
+  const percentFunded = project.percent_funded ||
     (project.goal_amount > 0 ? (project.current_amount / project.goal_amount) * 100 : 0);
-  
+
   const voteProgress = (project.vote_count / project.vote_threshold) * 100;
 
   const castVote = useMutation({
@@ -127,7 +127,7 @@ export function SwoopProjectCard({ project, variant = "full", showVoteButton = t
   const handleShare = async () => {
     const url = `${window.location.origin}/swoop/${project.slug}`;
     const text = `Help support ${project.recipient_name}: ${project.title}`;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({ title: project.title, text, url });
@@ -256,7 +256,7 @@ export function SwoopProjectCard({ project, variant = "full", showVoteButton = t
             </div>
             <Progress value={Math.min(percentFunded, 100)} className="h-3 bg-green-100" />
             <p className="text-xs text-green-700 mt-2">
-              {percentFunded >= 100 
+              {percentFunded >= 100
                 ? "Goal reached! Additional donations still welcome."
                 : `${Math.round(percentFunded)}% of goal reached`}
             </p>
@@ -326,7 +326,7 @@ export function SwoopProjectCard({ project, variant = "full", showVoteButton = t
                 <Button variant="outline" onClick={() => setVoteDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button 
+                <Button
                   onClick={() => castVote.mutate()}
                   disabled={castVote.isPending || !user}
                   className="bg-rose-600 hover:bg-rose-700"

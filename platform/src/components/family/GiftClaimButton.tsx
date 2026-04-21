@@ -136,7 +136,7 @@ export function GiftClaimButton({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => setShowPurchaseDialog(true)}
               className="text-blue-400"
             >
@@ -144,7 +144,7 @@ export function GiftClaimButton({
               Mark as Purchased
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => claimItem.mutate('unclaim')}
               className="text-red-400"
             >

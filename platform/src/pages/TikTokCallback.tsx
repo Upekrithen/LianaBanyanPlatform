@@ -1,9 +1,9 @@
 /**
  * TikTok OAuth Callback Page
- * 
+ *
  * Handles the redirect from TikTok after user authorizes.
  * URL: /auth/tiktok/callback
- * 
+ *
  * Flow:
  * 1. User clicks "Connect TikTok" in HofundStudio
  * 2. Redirected to TikTok authorization
@@ -64,7 +64,7 @@ export default function TikTokCallback() {
     try {
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         // Store the code for after login
         sessionStorage.setItem('tiktok_pending_code', code);
@@ -91,10 +91,10 @@ export default function TikTokCallback() {
       if (data.success) {
         setUsername(data.username || 'TikTok User');
         setStatus('success');
-        
+
         // Clear state
         sessionStorage.removeItem('tiktok_oauth_state');
-        
+
         // Redirect after a moment
         setTimeout(() => {
           navigate('/hofund?connected=tiktok');

@@ -73,7 +73,7 @@ interface RatchetVisualizationProps {
 
 function RatchetVisualization({ history, currentRate }: RatchetVisualizationProps) {
   const maxRate = Math.max(...history.map(h => h.rate), currentRate) * 1.1;
-  
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between text-sm">
@@ -83,7 +83,7 @@ function RatchetVisualization({ history, currentRate }: RatchetVisualizationProp
           {((currentRate - 1) * 100).toFixed(1)}% appreciation
         </Badge>
       </div>
-      
+
       <div className="relative h-32 border rounded-lg p-2 bg-muted/30">
         {/* Grid lines */}
         <div className="absolute inset-2 flex flex-col justify-between pointer-events-none">
@@ -91,20 +91,20 @@ function RatchetVisualization({ history, currentRate }: RatchetVisualizationProp
             <div key={i} className="border-b border-dashed border-muted-foreground/20" />
           ))}
         </div>
-        
+
         {/* Ratchet steps */}
         <div className="relative h-full flex items-end gap-1">
           {history.map((snapshot, index) => {
             const height = (snapshot.rate / maxRate) * 100;
             const isLatest = index === history.length - 1;
-            
+
             return (
               <Tooltip key={snapshot.date}>
                 <TooltipTrigger asChild>
                   <div
                     className={`flex-1 rounded-t transition-all cursor-pointer hover:opacity-80 ${
-                      isLatest 
-                        ? "bg-gradient-to-t from-green-500 to-green-400" 
+                      isLatest
+                        ? "bg-gradient-to-t from-green-500 to-green-400"
                         : "bg-gradient-to-t from-blue-500/50 to-blue-400/50"
                     }`}
                     style={{ height: `${height}%` }}
@@ -128,7 +128,7 @@ function RatchetVisualization({ history, currentRate }: RatchetVisualizationProp
           })}
         </div>
       </div>
-      
+
       {/* Key insight */}
       <div className="flex items-start gap-2 p-2 rounded-lg bg-green-500/10 border border-green-500/20">
         <Lock className="h-4 w-4 text-green-600 mt-0.5" />
@@ -155,13 +155,13 @@ interface LockedRateCardProps {
 function LockedRateCard({ lockedRate, currentGapRate }: LockedRateCardProps) {
   const appreciation = ((currentGapRate / lockedRate.lockedRate) - 1) * 100;
   const currentValue = lockedRate.amount * (currentGapRate / lockedRate.lockedRate);
-  
+
   const icons = {
     credits: <Coins className="h-4 w-4 text-yellow-600" />,
     marks: <Sparkles className="h-4 w-4 text-purple-600" />,
     joules: <Zap className="h-4 w-4 text-blue-600" />,
   };
-  
+
   return (
     <Card className="bg-gradient-to-br from-background to-muted/30">
       <CardContent className="pt-4">
@@ -175,7 +175,7 @@ function LockedRateCard({ lockedRate, currentGapRate }: LockedRateCardProps) {
             {lockedRate.lockedRate.toFixed(2)}x
           </Badge>
         </div>
-        
+
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Original Amount</span>
@@ -189,7 +189,7 @@ function LockedRateCard({ lockedRate, currentGapRate }: LockedRateCardProps) {
             <span className="text-muted-foreground">Current Rate</span>
             <span className="text-green-600">{currentGapRate.toFixed(2)}x GAP</span>
           </div>
-          
+
           <div className="pt-2 border-t">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium">Current Value</span>
@@ -217,7 +217,7 @@ interface ForexRatchetDisplayProps {
 
 export function ForexRatchetDisplay({ compact = false }: ForexRatchetDisplayProps) {
   const { user } = useAuth();
-  
+
   // User locked rates — will be fetched from database when forex_locked_rates table exists
   // For now, empty array until the persistence layer is built
   const lockedRates: LockedRate[] = [];
@@ -274,7 +274,7 @@ export function ForexRatchetDisplay({ compact = false }: ForexRatchetDisplayProp
               <p className="text-xs text-muted-foreground mt-1">Since platform launch</p>
             </div>
           </div>
-          
+
           {/* Ratchet Visualization */}
           <RatchetVisualization history={SEED_RATCHET_HISTORY} currentRate={CURRENT_GAP_RATE} />
         </CardContent>
@@ -337,7 +337,7 @@ export function ForexRatchetDisplay({ compact = false }: ForexRatchetDisplayProp
                 When you purchase Credits, Marks, or Joules, the current GAP rate is captured and locked to your transaction.
               </p>
             </div>
-            
+
             <div className="p-4 rounded-lg bg-muted/50">
               <div className="flex items-center gap-2 mb-2">
                 <div className="p-2 rounded-full bg-green-500/20">
@@ -349,7 +349,7 @@ export function ForexRatchetDisplay({ compact = false }: ForexRatchetDisplayProp
                 Your locked rate never decreases. Even if external markets fluctuate, your rate only goes up.
               </p>
             </div>
-            
+
             <div className="p-4 rounded-lg bg-muted/50">
               <div className="flex items-center gap-2 mb-2">
                 <div className="p-2 rounded-full bg-purple-500/20">

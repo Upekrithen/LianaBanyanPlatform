@@ -7,7 +7,7 @@
  * - Pioneer node registration
  * - Design Battle integration
  * - Blueprint scroll journeys
- * 
+ *
  * Economics: Cost + 20%, Creator/Worker keeps 83.3%
  */
 

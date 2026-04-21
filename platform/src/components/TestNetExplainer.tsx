@@ -16,12 +16,12 @@ export const TestNetExplainer: React.FC = () => {
           <Badge variant="outline" className="bg-primary/10">Test-Net By Design</Badge>
         </div>
         <CardDescription className="text-base font-medium text-foreground mt-2">
-          We use Platform Service Units (Credits, Marks, and Joules). 
+          We use Platform Service Units (Credits, Marks, and Joules).
           <strong> They are not investments. They are not securities. They are not speculative tokens.</strong>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-4">
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-muted/50 p-4 rounded-xl border border-border/50">
             <h4 className="font-semibold text-lg flex items-center gap-2 mb-2 text-blue-600 dark:text-blue-400">
@@ -29,7 +29,7 @@ export const TestNetExplainer: React.FC = () => {
               Like Airline Miles
             </h4>
             <p className="text-sm text-muted-foreground">
-              You earn them. You use them for flights. You don't trade them on the stock market. 
+              You earn them. You use them for flights. You don't trade them on the stock market.
               Our Platform Service Units work the same way: they are vouchers for future services within the Liana Banyan ecosystem.
             </p>
           </div>
@@ -40,7 +40,7 @@ export const TestNetExplainer: React.FC = () => {
               Like Arcade Tokens
             </h4>
             <p className="text-sm text-muted-foreground">
-              You buy a token to play a game, or you win tickets to get a prize. The value is held <em>inside the arcade</em>. 
+              You buy a token to play a game, or you win tickets to get a prize. The value is held <em>inside the arcade</em>.
               You cannot "cash out" our units to fiat currency. They are stored potential for your own projects.
             </p>
           </div>

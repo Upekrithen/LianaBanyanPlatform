@@ -3,9 +3,9 @@
  * =====================================
  * Create Beacon Run games that can only be played in Ghost Mode.
  * Members enter Ghost Mode to walk routes and place 🟠 Game Markers.
- * 
+ *
  * "Not in normal mode. You'd have to go Ghost."
- * 
+ *
  * Features:
  * - Walk-and-drop route creation
  * - Orange beacon Game Markers
@@ -67,7 +67,7 @@ export default function BeaconRunCreator() {
   const navigate = useNavigate();
   const { openOnboard } = useSeamlessOnboard();
   const queryClient = useQueryClient();
-  
+
   const [isGhostMode, setIsGhostMode] = useState(false);
   const [isWalking, setIsWalking] = useState(false);
   const [draft, setDraft] = useState<BeaconRunDraft>({
@@ -129,7 +129,7 @@ export default function BeaconRunCreator() {
       }
 
       const beaconIds = gameMarkers.map((b: any) => b.id);
-      
+
       const { data, error } = await supabase
         .from("beacon_runs")
         .insert({
@@ -165,7 +165,7 @@ export default function BeaconRunCreator() {
       if (!draft.id) {
         await saveBeaconRun.mutateAsync();
       }
-      
+
       const { error } = await supabase
         .from("beacon_runs")
         .update({ published_at: new Date().toISOString() })

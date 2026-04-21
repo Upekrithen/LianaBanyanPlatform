@@ -132,9 +132,9 @@ export default function MembershipSuccess() {
                 <Button onClick={() => navigate("/dashboard")} className="w-full" size="lg">
                   Go to Dashboard
                 </Button>
-                <Button 
-                  onClick={() => window.location.href = window.location.origin.replace('.com', '.biz')} 
-                  variant="outline" 
+                <Button
+                  onClick={() => window.location.href = window.location.origin.replace('.com', '.biz')}
+                  variant="outline"
                   className="w-full"
                 >
                   Visit Business Portal

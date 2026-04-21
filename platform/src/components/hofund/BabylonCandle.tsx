@@ -6,7 +6,7 @@
  * 2. Initiatives (Sweet Sixteen - 1 of 16, 2 of 16...)
  * 3. The Hexagon (6 Halls + 2nd Floor access)
  * 4. Omega 16 (Gate Doors with warnings)
- * 
+ *
  * Features:
  * - ALL cards flippable and draggable
  * - "Earn Credits to Re-Design" on every card
@@ -19,13 +19,13 @@ import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, AlertTriangle, Rotat
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  addGhostTask, 
-  trackCardDesignInterest, 
+import {
+  addGhostTask,
+  trackCardDesignInterest,
   trackCardViewed,
   getConversionSummary,
   hasGhostProgress,
-  type ConversionSummary 
+  type ConversionSummary
 } from '@/lib/ghostTasks';
 
 interface Destination {
@@ -160,7 +160,7 @@ function CardDesignDialog({
         </div>
 
         <div className="flex items-center gap-3 mb-4 p-3 bg-muted/50 rounded-lg">
-          <div 
+          <div
             className="w-12 h-16 rounded-lg flex items-center justify-center text-2xl"
             style={{ background: dest.background }}
           >
@@ -174,16 +174,16 @@ function CardDesignDialog({
 
         <div className="space-y-3 text-sm text-muted-foreground mb-4">
           <p>
-            <strong className="text-foreground">Want to redesign this card?</strong> Join the Design Guild 
+            <strong className="text-foreground">Want to redesign this card?</strong> Join the Design Guild
             and earn <span className="text-primary font-semibold">500-2,000 Credits</span> for creating new artwork.
           </p>
           <p>
-            Your design could become the official card seen by all members. Compensation is backed by 
+            Your design could become the official card seen by all members. Compensation is backed by
             our patent portfolio (1,244 innovations).
           </p>
           <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
             <p className="text-xs">
-              <strong className="text-primary">Requirements:</strong> 4:3 aspect ratio, gradient background, 
+              <strong className="text-primary">Requirements:</strong> 4:3 aspect ratio, gradient background,
               clear icon, readable text. See Design Guild guidelines for details.
             </p>
           </div>
@@ -223,7 +223,7 @@ export function BabylonCandle({
 }: BabylonCandleProps) {
   const { user } = useAuth();
   const isGhost = isGhostProp ?? !user;
-  
+
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [destIndex, setDestIndex] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
@@ -233,16 +233,16 @@ export function BabylonCandle({
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [designDialogDest, setDesignDialogDest] = useState<Destination | null>(null);
   const [taskAddedToast, setTaskAddedToast] = useState<string | null>(null);
-  
+
   const currentCategory = CATEGORIES[categoryIndex];
   const categoryDestinations = getDestinationsForCategory(currentCategory);
   const currentDest = categoryDestinations[destIndex] || categoryDestinations[0];
   const prevDest = categoryDestinations[(destIndex - 1 + categoryDestinations.length) % categoryDestinations.length];
   const nextDest = categoryDestinations[(destIndex + 1) % categoryDestinations.length];
-  
+
   const navigateCategory = (direction: 'up' | 'down') => {
     setCategoryIndex(prev => {
-      const newIndex = direction === 'up' 
+      const newIndex = direction === 'up'
         ? (prev - 1 + CATEGORIES.length) % CATEGORIES.length
         : (prev + 1) % CATEGORIES.length;
       return newIndex;
@@ -250,7 +250,7 @@ export function BabylonCandle({
     setDestIndex(0);
     setFlippedCards(new Set());
   };
-  
+
   const navigateDestination = (direction: 'left' | 'right') => {
     setDestIndex(prev => {
       const newIndex = direction === 'left'
@@ -259,7 +259,7 @@ export function BabylonCandle({
       return newIndex;
     });
   };
-  
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (showWarning || designDialogDest) return;
@@ -347,18 +347,18 @@ export function BabylonCandle({
   };
 
   // Flippable Card component - each card manages its own flip state independently
-  const FlippableCard = ({ 
-    dest, 
+  const FlippableCard = ({
+    dest,
     size = 'main',
     onNavigate,
-  }: { 
-    dest: Destination; 
+  }: {
+    dest: Destination;
     size?: 'main' | 'side';
     onNavigate?: () => void;
   }) => {
     const isMain = size === 'main';
     const isFlipped = flippedCards.has(dest.id);
-    
+
     // Main card 25% bigger: w-60 (240px) → w-72 (288px)
     const cardWidth = isMain ? 'w-72' : 'w-44';
     const iconSize = isMain ? 'text-7xl' : 'text-4xl';
@@ -370,7 +370,7 @@ export function BabylonCandle({
       // All cards flip on single click - navigation happens via double-click or "Go Here" button
       toggleFlip(dest.id, e);
     };
-    
+
     const handleSideCardDoubleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
       if (onNavigate) {
@@ -382,11 +382,11 @@ export function BabylonCandle({
       e.stopPropagation();
       toggleFlip(dest.id, e);
     };
-    
+
     return (
-      <div 
+      <div
         className={`relative ${cardWidth} cursor-pointer`}
-        style={{ 
+        style={{
           aspectRatio: '3/4',
           perspective: '1000px',
         }}
@@ -404,11 +404,11 @@ export function BabylonCandle({
           {/* FRONT of card */}
           <div
             className={`absolute inset-0 rounded-xl overflow-hidden shadow-xl border-2 transition-all ${
-              isMain 
-                ? 'border-white/30 hover:border-primary/50' 
+              isMain
+                ? 'border-white/30 hover:border-primary/50'
                 : 'border-white/20 opacity-70 hover:opacity-90'
             }`}
-            style={{ 
+            style={{
               background: dest.background,
               backfaceVisibility: 'hidden',
             }}
@@ -430,19 +430,19 @@ export function BabylonCandle({
                   <AlertTriangle className="w-5 h-5 text-yellow-400" />
                 </div>
               )}
-              
+
               {/* Flip hint */}
               <div className="absolute top-2 left-2">
                 <RotateCcw className={`${isMain ? 'w-4 h-4' : 'w-3 h-3'} text-white/50`} />
               </div>
-              
+
               {/* Icon */}
               <div className="flex-1 flex items-center justify-center">
                 <span className={`drop-shadow-xl ${iconSize}`}>
                   {dest.icon}
                 </span>
               </div>
-              
+
               {/* Earn Credits Link */}
               <button
                 onClick={(e) => {
@@ -456,7 +456,7 @@ export function BabylonCandle({
                 <Palette className={`${isMain ? 'w-3 h-3' : 'w-2 h-2'} text-primary`} />
                 <span className="text-white/80">Earn Credits to Re-Design</span>
               </button>
-              
+
               {/* Name */}
               <div className="text-center">
                 <h3 className={`font-bold text-white drop-shadow-lg leading-tight ${titleSize}`}>
@@ -474,7 +474,7 @@ export function BabylonCandle({
             className={`absolute inset-0 rounded-xl overflow-hidden shadow-xl border-2 ${
               isMain ? 'border-primary/50' : 'border-primary/30'
             }`}
-            style={{ 
+            style={{
               background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
               backfaceVisibility: 'hidden',
               transform: 'rotateY(180deg)',
@@ -491,17 +491,17 @@ export function BabylonCandle({
                 <span className={`${isMain ? 'text-2xl' : 'text-lg'}`}>{dest.icon}</span>
                 <RotateCcw className={`${isMain ? 'w-4 h-4' : 'w-3 h-3'} text-white/50`} />
               </div>
-              
+
               {/* Title */}
               <h3 className={`font-bold text-white mb-1 ${isMain ? 'text-sm' : 'text-[10px]'}`}>
                 {dest.name}
               </h3>
-              
+
               {/* Description */}
               <p className={`text-white/70 flex-1 ${descSize} leading-relaxed`}>
                 {dest.description}
               </p>
-              
+
               {/* Badges */}
               <div className="flex gap-1 flex-wrap mt-2">
                 <Badge variant="outline" className={`${isMain ? 'text-[9px]' : 'text-[7px]'} py-0 border-white/30 text-white/70`}>
@@ -513,7 +513,7 @@ export function BabylonCandle({
                   </Badge>
                 )}
               </div>
-              
+
               {/* Go button */}
               <button
                 onClick={(e) => {
@@ -571,9 +571,9 @@ export function BabylonCandle({
 
           {/* Previous Card */}
           {categoryDestinations.length > 1 && (
-            <FlippableCard 
-              dest={prevDest} 
-              size="side" 
+            <FlippableCard
+              dest={prevDest}
+              size="side"
               onNavigate={() => navigateDestination('left')}
             />
           )}
@@ -588,9 +588,9 @@ export function BabylonCandle({
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
               >
-                <FlippableCard 
-                  dest={currentDest} 
-                  size="main" 
+                <FlippableCard
+                  dest={currentDest}
+                  size="main"
                 />
               </motion.div>
             )}
@@ -598,9 +598,9 @@ export function BabylonCandle({
 
           {/* Next Card */}
           {categoryDestinations.length > 1 && (
-            <FlippableCard 
-              dest={nextDest} 
-              size="side" 
+            <FlippableCard
+              dest={nextDest}
+              size="side"
               onNavigate={() => navigateDestination('right')}
             />
           )}
@@ -641,15 +641,15 @@ export function BabylonCandle({
           {[0, 1, 2, 3, 4, 5].map((slotIndex) => {
             const slotDest = onDeckSlots[slotIndex];
             const isOver = dragOverSlot === slotIndex;
-            
+
             return (
               <div
                 key={slotIndex}
                 className={`relative w-28 h-40 rounded-xl border-2 overflow-hidden transition-all ${
-                  isOver 
-                    ? 'border-primary ring-2 ring-primary/50 scale-105' 
-                    : slotDest 
-                      ? 'border-primary/40' 
+                  isOver
+                    ? 'border-primary ring-2 ring-primary/50 scale-105'
+                    : slotDest
+                      ? 'border-primary/40'
                       : 'border-dashed border-muted-foreground/30'
                 }`}
                 style={{ background: slotDest?.background || 'transparent' }}
@@ -673,7 +673,7 @@ export function BabylonCandle({
                     {slotIndex + 1}
                   </div>
                 )}
-                
+
                 {slotDest && (
                   <button
                     onClick={(e) => {
@@ -713,21 +713,21 @@ export function BabylonCandle({
                   <AlertTriangle className="w-8 h-8 text-yellow-500 -rotate-45" />
                 </div>
               </div>
-              
+
               <h3 className="text-lg font-bold text-center text-yellow-500 mb-3">
                 ⚠️ GATEWAY WARNING ⚠️
               </h3>
-              
+
               <div className="text-sm text-muted-foreground text-center mb-4 whitespace-pre-line">
                 {pendingDest.warning}
               </div>
-              
+
               <div className="text-[10px] text-center text-muted-foreground mb-4 italic border-t border-b border-muted py-2">
                 "Let your yea be yea and your nay be nay"
                 <br />
                 — This crossing will be stamped to the IP Ledger
               </div>
-              
+
               <div className="flex gap-3">
                 <Button
                   variant="outline"

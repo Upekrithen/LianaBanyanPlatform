@@ -130,8 +130,8 @@ export function GhostCreditTermsModal({
                 No Cash Value
               </h3>
               <p className="text-sm text-muted-foreground pl-8">
-                Ghost Credits have <strong>no cash value</strong>, cannot be redeemed for cash, 
-                and cannot be sold, traded, or transferred for monetary value. 
+                Ghost Credits have <strong>no cash value</strong>, cannot be redeemed for cash,
+                and cannot be sold, traded, or transferred for monetary value.
                 <span className="text-red-600 font-medium"> By corporate mandate, no Ghost Credit conversion. At all. Ever.</span>
               </p>
             </div>
@@ -162,7 +162,7 @@ export function GhostCreditTermsModal({
                 Expiration
               </h3>
               <p className="text-sm text-muted-foreground pl-8">
-                Ghost Credits may expire if unused. Weekly top-off does not accumulate beyond 
+                Ghost Credits may expire if unused. Weekly top-off does not accumulate beyond
                 maximum hold (500 credits). Use them or lose them — they're for practice, not hoarding.
               </p>
             </div>
@@ -188,7 +188,7 @@ export function GhostCreditTermsModal({
                 Platform Discretion
               </h3>
               <p className="text-sm text-muted-foreground pl-8">
-                Liana Banyan reserves the right to modify, suspend, or terminate the Ghost Credit 
+                Liana Banyan reserves the right to modify, suspend, or terminate the Ghost Credit
                 system at any time. We will provide reasonable notice of significant changes.
               </p>
             </div>
@@ -201,7 +201,7 @@ export function GhostCreditTermsModal({
                   <div>
                     <p className="font-semibold text-purple-800">Acknowledgment</p>
                     <p className="text-sm text-purple-700">
-                      BY USING GHOST CREDITS, YOU ACKNOWLEDGE THEY ARE NOT MONEY, 
+                      BY USING GHOST CREDITS, YOU ACKNOWLEDGE THEY ARE NOT MONEY,
                       HAVE NO MONETARY VALUE, AND CANNOT BE CONVERTED TO CASH.
                     </p>
                   </div>
@@ -222,7 +222,7 @@ export function GhostCreditTermsModal({
             htmlFor="accept-terms"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
           >
-            I understand and accept these terms. I acknowledge that Ghost Credits are not money 
+            I understand and accept these terms. I acknowledge that Ghost Credits are not money
             and have no cash value.
           </label>
         </div>

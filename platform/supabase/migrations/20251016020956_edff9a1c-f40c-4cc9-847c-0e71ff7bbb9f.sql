@@ -3,23 +3,23 @@ CREATE TABLE IF NOT EXISTS public.medallion_designs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
   created_by UUID NOT NULL,
-  
+
   -- Design details
   design_type TEXT NOT NULL CHECK (design_type IN ('default', 'custom')),
   design_name TEXT NOT NULL,
   design_notes TEXT,
   logo_url TEXT,
   background_style TEXT DEFAULT 'hexagon',
-  
+
   -- Approval workflow
   status TEXT NOT NULL DEFAULT 'pending_approval' CHECK (status IN ('pending_approval', 'approved', 'in_production', 'completed')),
   approved_by UUID,
   approved_at TIMESTAMPTZ,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  
+
   UNIQUE(project_id)
 );
 
@@ -28,13 +28,13 @@ CREATE TABLE IF NOT EXISTS public.medallion_production_orders (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
   design_id UUID REFERENCES public.medallion_designs(id) ON DELETE SET NULL,
-  
+
   -- Order details
   order_number TEXT,
   quantity INTEGER NOT NULL DEFAULT 0,
   unit_cost NUMERIC,
   total_cost NUMERIC,
-  
+
   -- Production status
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN (
     'pending',
@@ -46,16 +46,16 @@ CREATE TABLE IF NOT EXISTS public.medallion_production_orders (
     'delivered',
     'cancelled'
   )),
-  
+
   -- Shipping & tracking
   tracking_number TEXT,
   shipping_carrier TEXT,
   estimated_completion_date TIMESTAMPTZ,
   actual_completion_date TIMESTAMPTZ,
-  
+
   -- Notes
   notes TEXT,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

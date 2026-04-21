@@ -3,7 +3,7 @@
  * ==============================================================
  * Allows family members to claim items from other members' wishlists.
  * Claims are hidden from the list owner!
- * 
+ *
  * POST body:
  *   - itemId: UUID
  *   - action: string ('claim', 'unclaim', 'purchase')
@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),
@@ -116,14 +116,14 @@ Deno.serve(async (req) => {
           p_member_id: member.id,
         });
         break;
-      
+
       case 'unclaim':
         result = await supabase.rpc('unclaim_gift_item', {
           p_item_id: itemId,
           p_member_id: member.id,
         });
         break;
-      
+
       case 'purchase':
         result = await supabase.rpc('mark_gift_purchased', {
           p_item_id: itemId,

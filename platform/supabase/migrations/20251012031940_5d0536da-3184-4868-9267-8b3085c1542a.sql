@@ -11,7 +11,7 @@ CREATE TABLE public.agent_action_audit_log (
   ip_address TEXT,
   user_agent TEXT,
   timestamp TIMESTAMPTZ NOT NULL DEFAULT now(),
-  
+
   -- Verification fields
   verified BOOLEAN DEFAULT true,
   verification_method TEXT DEFAULT 'supabase_auth'
@@ -47,26 +47,26 @@ CREATE TABLE public.project_aggregate_data (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_category TEXT NOT NULL, -- Used to group similar projects
   project_tags TEXT[], -- Additional categorization
-  
+
   -- Aggregate metrics
   avg_position_cost NUMERIC,
   avg_position_profit NUMERIC,
   avg_completion_time_days INTEGER,
   total_projects_analyzed INTEGER DEFAULT 0,
-  
+
   -- Common requirements across similar projects
   common_prerequisites JSONB DEFAULT '[]'::jsonb,
   common_requirements JSONB DEFAULT '[]'::jsonb,
-  
+
   -- Cost/profit ranges
   min_cost NUMERIC,
   max_cost NUMERIC,
   min_profit NUMERIC,
   max_profit NUMERIC,
-  
+
   last_updated TIMESTAMPTZ DEFAULT now(),
   created_at TIMESTAMPTZ DEFAULT now(),
-  
+
   UNIQUE(project_category)
 );
 
@@ -92,7 +92,7 @@ CREATE TABLE public.project_categories (
   category TEXT NOT NULL,
   tags TEXT[],
   created_at TIMESTAMPTZ DEFAULT now(),
-  
+
   UNIQUE(project_id)
 );
 
@@ -147,13 +147,13 @@ BEGIN
   SELECT email INTO _agent_email
   FROM auth.users
   WHERE id = auth.uid();
-  
+
   -- Get agent role
   SELECT role::text INTO _agent_role
   FROM public.user_roles
   WHERE user_id = auth.uid()
   LIMIT 1;
-  
+
   -- Insert audit log
   INSERT INTO public.agent_action_audit_log (
     agent_id,
@@ -177,7 +177,7 @@ BEGIN
     _user_agent
   )
   RETURNING id INTO _log_id;
-  
+
   RETURN _log_id;
 END;
 $$;
@@ -215,7 +215,7 @@ BEGIN
       jsonb_build_object('old_values', to_jsonb(OLD))
     );
   END IF;
-  
+
   RETURN COALESCE(NEW, OLD);
 END;
 $$;
@@ -245,7 +245,7 @@ BEGIN
       )
     );
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

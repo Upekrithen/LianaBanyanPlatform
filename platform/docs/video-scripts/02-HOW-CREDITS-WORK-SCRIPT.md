@@ -1,8 +1,8 @@
 # How Credits Work - System Explainer Script
 
-**Duration**: 1.5-2 minutes  
-**Style**: Clean motion graphics with icons and animations  
-**Voice**: Clear, educational, friendly  
+**Duration**: 1.5-2 minutes
+**Style**: Clean motion graphics with icons and animations
+**Voice**: Clear, educational, friendly
 **Music**: Upbeat, modern, tech-forward
 
 ---
@@ -121,10 +121,10 @@
 
 ## PRODUCTION NOTES
 
-**Voice Talent**: Neutral accent, friendly but professional, engaging delivery  
-**Pacing**: Moderate—clear enough to follow but energetic  
-**Music Style**: Modern electronic, upbeat but not aggressive  
-**Typography**: Clean sans-serif, large and readable  
+**Voice Talent**: Neutral accent, friendly but professional, engaging delivery
+**Pacing**: Moderate—clear enough to follow but energetic
+**Music Style**: Modern electronic, upbeat but not aggressive
+**Typography**: Clean sans-serif, large and readable
 **Animation Style**: Smooth, professional motion graphics (After Effects style)
 
 **Color Palette**:

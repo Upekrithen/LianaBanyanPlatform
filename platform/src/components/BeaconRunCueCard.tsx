@@ -2,7 +2,7 @@
  * BEACON RUN CUE CARD
  * ===================
  * Shareable card for Beacon Runs with click tracking and Frame Lock integration.
- * 
+ *
  * The viral loop:
  * 1. Creator finishes a Beacon Run and gets a Cue Card
  * 2. Creator shares to TikTok/social with their QR stamp
@@ -203,7 +203,7 @@ export function BeaconRunCueCard({
             <div className="bg-slate-700/50 rounded-lg p-3 text-center">
               <Trophy className="w-5 h-5 mx-auto text-amber-400 mb-1" />
               <div className="text-lg font-bold">
-                {beaconRun.best_time_seconds 
+                {beaconRun.best_time_seconds
                   ? formatTime(beaconRun.best_time_seconds)
                   : "—"}
               </div>

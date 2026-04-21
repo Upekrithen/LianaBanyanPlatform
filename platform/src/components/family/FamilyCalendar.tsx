@@ -112,7 +112,7 @@ const EVENT_TYPE_OPTIONS = [
 export function FamilyCalendar({ familyId, calendarId }: FamilyCalendarProps) {
   const { session } = useAuth();
   const queryClient = useQueryClient();
-  
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showAddEvent, setShowAddEvent] = useState(false);
@@ -179,7 +179,7 @@ export function FamilyCalendar({ familyId, calendarId }: FamilyCalendarProps) {
       const startTime = eventAllDay
         ? `${eventDate}T00:00:00`
         : `${eventDate}T${eventTime}:00`;
-      
+
       const endTime = eventAllDay
         ? `${eventDate}T23:59:59`
         : eventEndTime

@@ -3,7 +3,7 @@
  * =====================================================
  * Votes on whether to approve a new family member.
  * Requires unanimous approval - any rejection rejects the invite.
- * 
+ *
  * POST body:
  *   - inviteId: UUID
  *   - vote: boolean (true = approve, false = reject)
@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),
@@ -86,7 +86,7 @@ Deno.serve(async (req) => {
         .from('family_invites')
         .update({ status: 'expired', resolved_at: new Date().toISOString() })
         .eq('id', inviteId);
-      
+
       return new Response(
         JSON.stringify({ error: 'Invite has expired' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -220,7 +220,7 @@ Deno.serve(async (req) => {
         votesReceived: updatedInvite?.votes_received,
         votesNeeded: updatedInvite?.votes_needed,
         message: vote
-          ? (updatedInvite?.status === 'approved' 
+          ? (updatedInvite?.status === 'approved'
               ? `${invite.invitee_name} has been approved and added to the family!`
               : `Vote recorded. ${updatedInvite?.votes_needed - (updatedInvite?.votes_received || 0)} more vote(s) needed.`)
           : `You rejected the invite. ${invite.invitee_name} will not be added.`,

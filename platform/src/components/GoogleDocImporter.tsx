@@ -34,16 +34,16 @@ export const GoogleDocImporter = ({ projectId, workstationId, onImportComplete }
     try {
       // Fetch the Google Doc content
       const response = await fetch(`https://docs.google.com/document/d/${extractDocId(docUrl)}/export?format=txt`);
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch document. Make sure the document is publicly accessible.");
       }
 
       const content = await response.text();
-      
+
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         throw new Error("You must be logged in to import documents");
       }
@@ -120,7 +120,7 @@ export const GoogleDocImporter = ({ projectId, workstationId, onImportComplete }
             </div>
           </CardHeader>
         </CollapsibleTrigger>
-        
+
         <CollapsibleContent>
           <CardContent className="space-y-4">
             <div className="flex gap-2">
@@ -144,7 +144,7 @@ export const GoogleDocImporter = ({ projectId, workstationId, onImportComplete }
                 )}
               </Button>
             </div>
-            
+
             <div className="text-sm text-muted-foreground space-y-2">
               <p><strong>How it works:</strong></p>
               <ol className="list-decimal list-inside space-y-1 ml-2">

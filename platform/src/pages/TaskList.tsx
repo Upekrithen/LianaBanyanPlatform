@@ -29,7 +29,7 @@ const TaskList = () => {
         .from('project_tasks')
         .select('*, projects(name)')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data || [];
     }
@@ -43,7 +43,7 @@ const TaskList = () => {
         .from('reference_tasks')
         .select('*')
         .order('sort_order', { ascending: true });
-      
+
       if (error) throw error;
       return data || [];
     }
@@ -94,12 +94,12 @@ const TaskList = () => {
     mutationFn: async ({ taskId, completed }: { taskId: string; completed: boolean }) => {
       const { error } = await supabase
         .from('project_tasks')
-        .update({ 
+        .update({
           status: completed ? 'completed' : 'pending',
           completed_at: completed ? new Date().toISOString() : null
         })
         .eq('id', taskId);
-      
+
       if (error) throw error;
     },
     onSuccess: () => {
@@ -687,10 +687,10 @@ ESTIMATED TIMELINE:
                   <div className="space-y-4">
                     {dbTasks.map((task: any) => (
                       <div key={task.id} className="flex gap-3 items-start p-4 border rounded-lg">
-                        <button 
-                          onClick={() => updateTaskMutation.mutate({ 
-                            taskId: task.id, 
-                            completed: task.status !== 'completed' 
+                        <button
+                          onClick={() => updateTaskMutation.mutate({
+                            taskId: task.id,
+                            completed: task.status !== 'completed'
                           })}
                           className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
                         >
@@ -791,13 +791,13 @@ ESTIMATED TIMELINE:
               </div>
             </CardContent>
           </Card>
-          
+
           {/* Add Technical Specification Card */}
           {taskSpecs[section.category] && (
             <div className="mt-4">
-              <TaskSpecCard 
-                category={section.category} 
-                spec={taskSpecs[section.category]} 
+              <TaskSpecCard
+                category={section.category}
+                spec={taskSpecs[section.category]}
               />
             </div>
           )}
@@ -873,32 +873,32 @@ ESTIMATED TIMELINE:
                   <MermaidDiagram chart={`graph TD
     Root["/  - Home Landing Page"]
     Auth["/auth - Authentication"]
-    
+
     Root --> Dashboard["/dashboard - Dashboard"]
     Root --> Projects["/projects - Projects List"]
     Root --> Marketplace["/marketplace - Marketplace"]
     Root --> Portfolio["/portfolio - User Portfolio"]
-    
+
     Projects --> ProjectView["/project/:slug - Project Detail"]
     ProjectView --> ProductDetail["/project/:slug/product/:id - Product Detail"]
-    
+
     Root --> AdminSection["Admin Section"]
-    
+
     AdminSection --> AdminProject["/admin-project - Project Admin"]
     AdminSection --> CreateProject["/create-project - Create New Project"]
     AdminSection --> Credentials["/credential-management - Credential Management"]
     AdminSection --> Subdomain["/subdomain-manager - Subdomain Manager"]
     AdminSection --> IndustryPricing["/industry-pricing - Industry Pricing Data"]
-    
+
     Root --> UtilitySection["Utility Tools"]
-    
+
     UtilitySection --> Simulator["/simulator - Production Simulator"]
     UtilitySection --> TaskLog["/task-log - Task Log"]
     UtilitySection --> SampleXML["/sample-xml - Sample Data XML"]
     UtilitySection --> TaskListPage["/task-list - Task List Reference"]
-    
+
     Root --> NotFound["/* - 404 Not Found"]
-    
+
     style Root fill:#4f46e5,stroke:#4338ca,color:#fff
     style AdminSection fill:#dc2626,stroke:#b91c1c,color:#fff
     style UtilitySection fill:#059669,stroke:#047857,color:#fff
@@ -906,7 +906,7 @@ ESTIMATED TIMELINE:
     style Projects fill:#0891b2,stroke:#0e7490,color:#fff
     style Marketplace fill:#0891b2,stroke:#0e7490,color:#fff
     style Portfolio fill:#0891b2,stroke:#0e7490,color:#fff`} />
-              
+
               <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
                   <CardHeader className="pb-3">
@@ -1068,14 +1068,14 @@ ESTIMATED TIMELINE:
                   <p className="text-sm text-muted-foreground mb-2">
                     Complete client template with API client, example pages, and setup guide:
                   </p>
-                  <a 
-                    href="/template-setup" 
+                  <a
+                    href="/template-setup"
                     className="text-sm text-primary underline hover:no-underline"
                   >
                     View Template Setup Guide →
                   </a>
                 </div>
-                
+
                 <div>
                   <h4 className="font-semibold mb-2">Documentation</h4>
                   <p className="text-sm text-muted-foreground mb-2">
@@ -1283,9 +1283,9 @@ ESTIMATED TIMELINE:
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  This platform serves as a comprehensive blockchain-enabled project funding and management system 
-                  with democratic voting, multi-tenant architecture, and extensive customization capabilities. 
-                  It enables project creators to build communities around their ideas, fund production through 
+                  This platform serves as a comprehensive blockchain-enabled project funding and management system
+                  with democratic voting, multi-tenant architecture, and extensive customization capabilities.
+                  It enables project creators to build communities around their ideas, fund production through
                   collective voting, and manage the entire lifecycle from concept to delivery.
                 </p>
               </CardContent>

@@ -3,7 +3,7 @@
 -- Description: Adds geolocation (lat/long) to businesses and garage sales, and creates schema for QR Cue Card print bounties.
 
 -- 1. Add Locality (Lat/Long) to existing geographic tables
-ALTER TABLE public.stewardship_applications 
+ALTER TABLE public.stewardship_applications
 ADD COLUMN IF NOT EXISTS latitude DECIMAL(10, 8),
 ADD COLUMN IF NOT EXISTS longitude DECIMAL(11, 8);
 

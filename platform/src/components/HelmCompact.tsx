@@ -47,20 +47,20 @@ export function HelmCompact() {
     } catch {}
 
     if (user) loadCurrency();
-    
+
     // Check page tools visibility setting (default to hidden)
     const checkPageTools = () => {
       const stored = localStorage.getItem('lb_show_page_tools');
       setShowPageTools(stored === 'true'); // Only show if explicitly set to 'true'
     };
     checkPageTools();
-    
+
     // Check lantern visibility
     const savedLantern = localStorage.getItem(LANTERN_VISIBLE_KEY);
     if (savedLantern === 'true') {
       setShowLantern(true);
     }
-    
+
     // Listen for storage changes (when user toggles in Index.tsx)
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'lb_show_page_tools') {
@@ -68,11 +68,11 @@ export function HelmCompact() {
       }
     };
     window.addEventListener('storage', handleStorage);
-    
+
     // Also listen for custom event for same-tab updates
     const handleCustomEvent = () => checkPageTools();
     window.addEventListener('lb_page_tools_changed', handleCustomEvent);
-    
+
     return () => {
       window.removeEventListener('storage', handleStorage);
       window.removeEventListener('lb_page_tools_changed', handleCustomEvent);
@@ -103,7 +103,7 @@ export function HelmCompact() {
     <>
       {/* Beacon Lantern Card - draggable color selector */}
       {showLantern && (
-        <BeaconLanternCard 
+        <BeaconLanternCard
           onClose={() => {
             setShowLantern(false);
             localStorage.setItem(LANTERN_VISIBLE_KEY, 'false');
@@ -111,7 +111,7 @@ export function HelmCompact() {
           initialVisible={true}
         />
       )}
-      
+
       <div className="fixed bottom-24 right-20 z-50">
         {/* Collapsed: just the Helm icon */}
         {!expanded && (

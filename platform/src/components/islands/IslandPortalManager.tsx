@@ -43,7 +43,7 @@ export default function IslandPortalManager({ islandId, canManage }: IslandPorta
         `)
         .eq('island_id', islandId)
         .eq('is_active', true);
-      
+
       if (error) throw error;
       return data;
     }
@@ -158,9 +158,9 @@ export default function IslandPortalManager({ islandId, canManage }: IslandPorta
                       min={1}
                       max={100}
                       value={portalData.required_skill_level}
-                      onChange={(e) => setPortalData(prev => ({ 
-                        ...prev, 
-                        required_skill_level: parseInt(e.target.value) || 1 
+                      onChange={(e) => setPortalData(prev => ({
+                        ...prev,
+                        required_skill_level: parseInt(e.target.value) || 1
                       }))}
                     />
                   </div>

@@ -2,7 +2,7 @@
  * CHEF MARKETPLACE
  * =================
  * Browse and hire member chefs for meal preparation.
- * 
+ *
  * Features:
  * - Chef profiles with ratings and specialties
  * - Availability calendar
@@ -186,7 +186,7 @@ const KINDLING_TIERS = {
 function KindlingBadge({ tier }: { tier: Chef['kindlingTier'] }) {
   if (tier === 'none') return null;
   const info = KINDLING_TIERS[tier];
-  
+
   return (
     <div className={cn(
       "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium",
@@ -272,7 +272,7 @@ function ChefCard({
               )}
             </div>
             <p className="text-sm text-white/70 mt-1">{chef.tagline}</p>
-            
+
             {/* Kindling Badge */}
             {chef.kindlingTier !== 'none' && (
               <div className="mt-2">

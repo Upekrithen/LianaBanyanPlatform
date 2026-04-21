@@ -21,7 +21,7 @@ export const ContractCompensationConfigManager = ({ projectId }: ContractCompens
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  
+
   const [assignmentLeadTimeDays, setAssignmentLeadTimeDays] = useState(90);
   const [minParticipationRatio, setMinEquityRatio] = useState(0.1);
   const [maxParticipationRatio, setMaxEquityRatio] = useState(0.9);

@@ -137,8 +137,8 @@ export default function IslandDesignPortfolio() {
                 <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   {item.showcase_image_url && (
                     <div className="h-48 bg-gradient-to-br from-blue-50 to-green-50 dark:from-blue-950/20 dark:to-green-950/20">
-                      <img 
-                        src={item.showcase_image_url} 
+                      <img
+                        src={item.showcase_image_url}
                         alt={item.island?.name}
                         className="w-full h-full object-cover"
                       />
@@ -170,8 +170,8 @@ export default function IslandDesignPortfolio() {
                           <span>{item.rating || 0}/5</span>
                         </div>
                       </div>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="w-full mt-4"
                         onClick={() => navigate(`/island/${item.island?.id}`)}
                       >
@@ -223,7 +223,7 @@ export default function IslandDesignPortfolio() {
                         <p className="text-lg font-semibold">{assignment.estimated_hours || "TBD"}</p>
                       </div>
                     </div>
-                    <Button 
+                    <Button
                       onClick={() => navigate(`/island/${assignment.island?.id}/builder`)}
                       className="w-full"
                     >

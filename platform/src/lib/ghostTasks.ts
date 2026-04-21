@@ -3,7 +3,7 @@
  * ==================
  * Allows Ghosts to add tasks and track progress without persistence.
  * When they become a member, they can keep everything they've done.
- * 
+ *
  * "Build up reasons to get the $5 membership"
  */
 
@@ -30,7 +30,7 @@ export interface TaskReward {
   badge?: string;
 }
 
-export type TaskCategory = 
+export type TaskCategory =
   | 'card_design'
   | 'exploration'
   | 'voting'
@@ -99,17 +99,17 @@ function createEmptyProgress(): GhostProgress {
  */
 export function addGhostTask(task: Omit<GhostTask, 'id' | 'createdAt' | 'status'>): GhostTask {
   const progress = getGhostProgress();
-  
+
   const newTask: GhostTask = {
     ...task,
     id: `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     createdAt: new Date(),
     status: 'pending',
   };
-  
+
   progress.tasks.push(newTask);
   saveGhostProgress(progress);
-  
+
   return newTask;
 }
 
@@ -117,19 +117,19 @@ export function addGhostTask(task: Omit<GhostTask, 'id' | 'createdAt' | 'status'
  * Update task status
  */
 export function updateGhostTaskStatus(
-  taskId: string, 
+  taskId: string,
   status: GhostTask['status']
 ): GhostTask | null {
   const progress = getGhostProgress();
   const task = progress.tasks.find(t => t.id === taskId);
-  
+
   if (!task) return null;
-  
+
   task.status = status;
   if (status === 'completed') {
     task.completedAt = new Date();
   }
-  
+
   saveGhostProgress(progress);
   return task;
 }
@@ -147,9 +147,9 @@ export function getGhostTasks(): GhostTask[] {
 export function removeGhostTask(taskId: string): boolean {
   const progress = getGhostProgress();
   const index = progress.tasks.findIndex(t => t.id === taskId);
-  
+
   if (index === -1) return false;
-  
+
   progress.tasks.splice(index, 1);
   saveGhostProgress(progress);
   return true;
@@ -285,9 +285,9 @@ export interface ConversionItem {
  */
 export function getConversionSummary(): ConversionSummary {
   const progress = getGhostProgress();
-  
+
   const items: ConversionItem[] = [];
-  
+
   if (progress.tasks.length > 0) {
     items.push({
       category: 'Tasks',
@@ -296,7 +296,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '📋',
     });
   }
-  
+
   if (progress.cardsDesigned.length > 0) {
     items.push({
       category: 'Card Design Interest',
@@ -305,7 +305,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '🎨',
     });
   }
-  
+
   if (progress.cardsViewed.length > 0) {
     items.push({
       category: 'Cards Explored',
@@ -314,7 +314,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '🃏',
     });
   }
-  
+
   if (progress.votesPlaced > 0) {
     items.push({
       category: 'Votes Placed',
@@ -323,7 +323,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '🗳️',
     });
   }
-  
+
   if (progress.guildsJoined.length > 0) {
     items.push({
       category: 'Guilds Joined',
@@ -332,7 +332,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '🏰',
     });
   }
-  
+
   if (progress.initiativesExplored.length > 0) {
     items.push({
       category: 'Initiatives Explored',
@@ -341,7 +341,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '💙',
     });
   }
-  
+
   if (progress.hexagonHallsVisited.length > 0) {
     items.push({
       category: 'Hexagon Halls Visited',
@@ -350,7 +350,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '🏛️',
     });
   }
-  
+
   if (progress.onDeckFavorites.length > 0) {
     items.push({
       category: 'On Deck Favorites',
@@ -359,7 +359,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '⭐',
     });
   }
-  
+
   if (progress.totalCreditsEarned > 0) {
     items.push({
       category: 'Credits Earned',
@@ -368,7 +368,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '💰',
     });
   }
-  
+
   if (progress.totalMarksEarned > 0) {
     items.push({
       category: 'Marks Earned',
@@ -377,7 +377,7 @@ export function getConversionSummary(): ConversionSummary {
       icon: '🎯',
     });
   }
-  
+
   return {
     totalTasks: progress.tasks.length,
     completedTasks: progress.tasks.filter(t => t.status === 'completed').length,
@@ -401,24 +401,24 @@ export function getConversionSummary(): ConversionSummary {
  */
 function calculateEstimatedValue(progress: GhostProgress): string {
   let value = 0;
-  
+
   // Tasks have value
   value += progress.tasks.length * 5;
   value += progress.tasks.filter(t => t.status === 'completed').length * 10;
-  
+
   // Exploration has value
   value += progress.cardsViewed.length * 2;
   value += progress.initiativesExplored.length * 5;
   value += progress.hexagonHallsVisited.length * 5;
-  
+
   // Engagement has value
   value += progress.votesPlaced * 3;
   value += progress.guildsJoined.length * 10;
-  
+
   // Credits/Marks
   value += progress.totalCreditsEarned;
   value += progress.totalMarksEarned * 2;
-  
+
   if (value < 50) return 'Just getting started';
   if (value < 100) return 'Building momentum';
   if (value < 250) return 'Significant progress';

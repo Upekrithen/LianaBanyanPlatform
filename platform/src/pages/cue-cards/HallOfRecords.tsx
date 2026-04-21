@@ -19,7 +19,7 @@ export default function HallOfRecords() {
   return (
     <PortalPageLayout>
       <div className="max-w-6xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="text-center space-y-6">
           <BookOpen className="w-20 h-20 mx-auto text-amber-500" />
@@ -58,7 +58,7 @@ export default function HallOfRecords() {
               </Card>
             </LarkWrapper>
           ))}
-          
+
           {/* Placeholder for the rest of the 16 */}
           <Card className="bg-slate-900/50 border-slate-800 border-dashed flex flex-col items-center justify-center min-h-[200px] text-slate-500">
             <Lock className="w-8 h-8 mb-2 opacity-50" />

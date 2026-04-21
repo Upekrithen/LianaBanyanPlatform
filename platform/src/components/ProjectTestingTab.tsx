@@ -65,16 +65,16 @@ export const ProjectTestingTab = ({ projectId }: ProjectTestingTabProps) => {
     queryKey: ['test-permission', projectId, user?.id],
     queryFn: async () => {
       if (!user) return false;
-      
+
       // Check if user is project owner
       const { data: project } = await supabase
         .from('projects')
         .select('owner_id')
         .eq('id', projectId)
         .single();
-      
+
       if (project?.owner_id === user.id) return true;
-      
+
       // Check if user is Steward or has authorized position
       const { data: contract } = await supabase
         .from('project_member_contracts')
@@ -83,12 +83,12 @@ export const ProjectTestingTab = ({ projectId }: ProjectTestingTabProps) => {
         .eq('member_id', user.id)
         .eq('status', 'active')
         .single();
-      
-      if (contract && (contract.contract_title.toLowerCase() === 'steward' || 
+
+      if (contract && (contract.contract_title.toLowerCase() === 'steward' ||
                        contract.contract_title.toLowerCase() === 'hr')) {
         return true;
       }
-      
+
       return false;
     },
     enabled: !!user && !!projectId,
@@ -103,7 +103,7 @@ export const ProjectTestingTab = ({ projectId }: ProjectTestingTabProps) => {
         .select('*')
         .eq('project_id', projectId)
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return (data || []).map(suite => ({
         ...suite,
@@ -123,7 +123,7 @@ export const ProjectTestingTab = ({ projectId }: ProjectTestingTabProps) => {
         .eq('project_id', projectId)
         .order('timestamp', { ascending: false })
         .limit(50);
-      
+
       if (error) throw error;
       return data as TestResult[];
     },

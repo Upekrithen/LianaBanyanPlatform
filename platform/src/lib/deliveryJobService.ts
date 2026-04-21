@@ -94,11 +94,11 @@ export async function acceptJob(jobId: string, workerId: string): Promise<boolea
  * Update job status
  */
 export async function updateJobStatus(
-  jobId: string, 
+  jobId: string,
   status: DeliveryJob['status']
 ): Promise<void> {
   const updates: Record<string, any> = { status, updated_at: new Date().toISOString() };
-  
+
   if (status === 'picking_up') {
     updates.pickup_started_at = new Date().toISOString();
   } else if (status === 'in_transit') {
@@ -133,7 +133,7 @@ export async function getJobRecipients(jobId: string): Promise<DeliveryRecipient
  * Mark delivery as complete
  */
 export async function completeDelivery(
-  recipientId: string, 
+  recipientId: string,
   photoUrl?: string
 ): Promise<boolean> {
   const { data, error } = await supabase.rpc('complete_delivery', {
@@ -269,7 +269,7 @@ export async function processWorkerReimbursement(
   // In production, this would:
   // 1. Call Stripe to transfer funds to worker's connected account
   // 2. Or create a payout to their bank account
-  
+
   // INFRASTRUCTURE NOTE: Needs real Stripe transfer to worker's connected account or bank payout
 
   // Update worker stats
@@ -329,7 +329,7 @@ export async function addToAggregation(
 ): Promise<string> {
   // Find or create aggregation window
   const dateStr = deliveryDate.toISOString().split('T')[0];
-  
+
   const { data: existingWindow, error: fetchError } = await supabase
     .from('delivery_aggregation_windows')
     .select('*')
@@ -411,17 +411,17 @@ export async function checkAggregationThreshold(windowId: string): Promise<boole
  * Calculate volume discount for an order
  */
 export function calculateVolumeDiscount(
-  orderCount: number, 
+  orderCount: number,
   tiers: { min_orders: number; discount_percent: number }[]
 ): number {
   let discount = 0;
-  
+
   for (const tier of tiers.sort((a, b) => b.min_orders - a.min_orders)) {
     if (orderCount >= tier.min_orders) {
       discount = tier.discount_percent;
       break;
     }
   }
-  
+
   return discount;
 }

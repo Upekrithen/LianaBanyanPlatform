@@ -145,40 +145,40 @@ DECLARE
 BEGIN
   -- Get template info
   SELECT * INTO v_template FROM cue_card_templates WHERE id = p_template_id;
-  
+
   IF v_template IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Template not found');
   END IF;
-  
+
   -- Insert the click
   INSERT INTO cue_card_share_clicks (share_id, template_id, sharer_id, clicker_id, clicker_ghost_id, platform)
   VALUES (p_share_id, p_template_id, p_sharer_id, p_clicker_id, p_clicker_ghost_id, p_platform)
   ON CONFLICT DO NOTHING
   RETURNING id INTO v_click_id;
-  
+
   IF v_click_id IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'Duplicate click');
   END IF;
-  
+
   -- Count total clicks
   SELECT COUNT(*) INTO v_click_count
   FROM cue_card_share_clicks
   WHERE sharer_id = p_sharer_id AND template_id = p_template_id;
-  
+
   -- Get or create frame lock record
   IF v_template.linked_deck_card_id IS NOT NULL THEN
     INSERT INTO social_frame_locks (deck_card_id, user_id, cue_card_template_id, clicks_per_lock)
     VALUES (v_template.linked_deck_card_id, p_sharer_id, p_template_id, COALESCE(v_template.clicks_per_frame_unlock, 5))
     ON CONFLICT DO NOTHING;
-    
-    SELECT * INTO v_frame_lock FROM social_frame_locks 
+
+    SELECT * INTO v_frame_lock FROM social_frame_locks
     WHERE deck_card_id = v_template.linked_deck_card_id AND user_id = p_sharer_id;
-    
+
     IF v_frame_lock IS NOT NULL THEN
       v_locks_to_unlock := LEAST(4, v_click_count / COALESCE(v_template.clicks_per_frame_unlock, 5));
-      
+
       UPDATE social_frame_locks
-      SET 
+      SET
         total_clicks = v_click_count,
         lock_top = CASE WHEN v_locks_to_unlock >= 1 THEN false ELSE lock_top END,
         lock_right = CASE WHEN v_locks_to_unlock >= 2 THEN false ELSE lock_right END,
@@ -193,12 +193,12 @@ BEGIN
   ELSE
     v_locks_to_unlock := 0;
   END IF;
-  
+
   -- Mark click as processed
   UPDATE cue_card_share_clicks
   SET frame_unlock_awarded = true, awarded_at = NOW()
   WHERE id = v_click_id;
-  
+
   RETURN jsonb_build_object(
     'success', true,
     'click_id', v_click_id,

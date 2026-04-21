@@ -7,11 +7,11 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Calendar, Clock, Image, Send, Eye } from 'lucide-react';
-import { 
-  scheduleLittleRedHenPosts, 
-  previewPosts, 
+import {
+  scheduleLittleRedHenPosts,
+  previewPosts,
   PLATFORM_IMAGE_LIMITS,
-  type ScheduleOptions 
+  type ScheduleOptions
 } from '@/scripts/scheduleLittleRedHenPosts';
 import { toLocalDateTimeInput, tomorrowAtNineLocal } from '@/components/scheduling/dateUtils';
 
@@ -33,32 +33,32 @@ export function SocialMediaAdmin() {
   const [startDate, setStartDate] = useState(() => toLocalDateTimeInput(tomorrowAtNineLocal()));
   const [isScheduling, setIsScheduling] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  
+
   const posts = previewPosts();
-  
+
   const togglePlatform = (platformId: string) => {
-    setSelectedPlatforms(prev => 
-      prev.includes(platformId) 
+    setSelectedPlatforms(prev =>
+      prev.includes(platformId)
         ? prev.filter(p => p !== platformId)
         : [...prev, platformId]
     );
   };
-  
+
   const handleSchedule = async () => {
     if (selectedPlatforms.length === 0) {
       toast.error('Please select at least one platform');
       return;
     }
-    
+
     setIsScheduling(true);
-    
+
     try {
       const result = await scheduleLittleRedHenPosts({
         platforms: selectedPlatforms,
         startDate: new Date(startDate),
         intervalHours,
       });
-      
+
       if (result.success) {
         toast.success(`Scheduled ${result.postsCreated} posts across ${selectedPlatforms.length} platforms!`);
       } else {
@@ -71,7 +71,7 @@ export function SocialMediaAdmin() {
       setIsScheduling(false);
     }
   };
-  
+
   return (
     <div className="space-y-6">
       <Card>
@@ -100,7 +100,7 @@ export function SocialMediaAdmin() {
                   }`}
                   onClick={() => togglePlatform(platform.id)}
                 >
-                  <Checkbox 
+                  <Checkbox
                     checked={selectedPlatforms.includes(platform.id)}
                     onCheckedChange={() => togglePlatform(platform.id)}
                   />
@@ -115,7 +115,7 @@ export function SocialMediaAdmin() {
               ))}
             </div>
           </div>
-          
+
           {/* Schedule Settings */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -150,7 +150,7 @@ export function SocialMediaAdmin() {
               </p>
             </div>
           </div>
-          
+
           {/* Summary */}
           <div className="bg-slate-800/50 rounded-lg p-4">
             <h4 className="font-semibold mb-2">Campaign Summary</h4>
@@ -173,7 +173,7 @@ export function SocialMediaAdmin() {
               </div>
             </div>
           </div>
-          
+
           {/* Actions */}
           <div className="flex gap-3">
             <Button
@@ -195,7 +195,7 @@ export function SocialMediaAdmin() {
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Preview Section */}
       {showPreview && (
         <Card>
@@ -212,8 +212,8 @@ export function SocialMediaAdmin() {
                   <div className="flex items-center gap-2 mb-2">
                     <Badge variant="outline">Post {post.postNumber}</Badge>
                     <Badge className={
-                      post.act === 1 ? 'bg-amber-600' : 
-                      post.act === 2 ? 'bg-purple-600' : 
+                      post.act === 1 ? 'bg-amber-600' :
+                      post.act === 2 ? 'bg-purple-600' :
                       'bg-green-600'
                     }>
                       Act {post.act}: {post.actName}
@@ -223,9 +223,9 @@ export function SocialMediaAdmin() {
                   <p className="text-sm whitespace-pre-wrap text-white/80">{post.content}</p>
                   <div className="flex gap-1 mt-2 flex-wrap">
                     {post.imageUrls.slice(0, 4).map((url, i) => (
-                      <img 
-                        key={i} 
-                        src={url} 
+                      <img
+                        key={i}
+                        src={url}
                         alt={`Scene ${i + 1}`}
                         className="w-12 h-12 object-cover rounded border border-slate-600"
                       />

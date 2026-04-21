@@ -7,19 +7,19 @@ CREATE TABLE IF NOT EXISTS public.member_service_links (
   platform_profile_url TEXT NOT NULL,
   platform_username TEXT,
   verification_status TEXT DEFAULT 'pending' CHECK (verification_status IN ('pending', 'verified', 'flagged')),
-  
+
   -- Rate monitoring
   advertised_rate_min NUMERIC,
   advertised_rate_max NUMERIC,
   lb_rate_category TEXT,
   rate_differential_flagged BOOLEAN DEFAULT false,
-  
+
   -- Compliance tracking
   lb_contracts_completed INTEGER DEFAULT 0,
   external_contracts_completed INTEGER DEFAULT 0,
   violations_count INTEGER DEFAULT 0,
   last_violation_date TIMESTAMPTZ,
-  
+
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
@@ -31,16 +31,16 @@ CREATE TABLE IF NOT EXISTS public.lb_member_hiring_log (
   hiring_member_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   hired_member_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   service_link_id UUID REFERENCES public.member_service_links(id) ON DELETE SET NULL,
-  
+
   -- Contract details
   agreed_rate NUMERIC NOT NULL,
   lb_scale_rate NUMERIC NOT NULL,
   rate_compliant BOOLEAN NOT NULL,
-  
+
   -- If non-compliant
   violation_severity TEXT CHECK (violation_severity IN ('minor', 'major', 'severe')),
   reputation_penalty INTEGER,
-  
+
   contract_id UUID,
   created_at TIMESTAMPTZ DEFAULT now()
 );

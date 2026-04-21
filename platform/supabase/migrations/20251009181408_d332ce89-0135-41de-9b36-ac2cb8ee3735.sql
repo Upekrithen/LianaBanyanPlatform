@@ -1,8 +1,8 @@
 -- Add SKU fields to projects and products
-ALTER TABLE public.projects 
+ALTER TABLE public.projects
 ADD COLUMN IF NOT EXISTS project_sku TEXT UNIQUE;
 
-ALTER TABLE public.products 
+ALTER TABLE public.products
 ADD COLUMN IF NOT EXISTS product_sku TEXT UNIQUE;
 
 -- Create project_modules table (blockchain ledger for IP protection)
@@ -83,12 +83,12 @@ BEGIN
   FROM public.production_levels
   JOIN public.products ON products.id = production_levels.product_id
   WHERE production_levels.id = NEW.production_level_id;
-  
+
   -- Insert subscription if not exists
   INSERT INTO public.user_project_subscriptions (user_id, project_id)
   VALUES (NEW.user_id, _project_id)
   ON CONFLICT (user_id, project_id) DO NOTHING;
-  
+
   RETURN NEW;
 END;
 $$;
@@ -112,7 +112,7 @@ DECLARE
   project_data RECORD;
 BEGIN
   -- Get comprehensive project data
-  SELECT 
+  SELECT
     p.id,
     p.project_sku,
     p.name,
@@ -147,7 +147,7 @@ BEGIN
   LEFT JOIN public.products prod ON prod.project_id = p.id
   WHERE p.id = p_project_id
   GROUP BY p.id;
-  
+
   -- Build XML structure
   xml_output := '<?xml version="1.0" encoding="UTF-8"?>' || chr(10);
   xml_output := xml_output || '<ProjectModule>' || chr(10);
@@ -158,7 +158,7 @@ BEGIN
   xml_output := xml_output || '  <CreatedAt>' || project_data.created_at::text || '</CreatedAt>' || chr(10);
   xml_output := xml_output || '  <Products>' || COALESCE(project_data.products::text, '[]') || '</Products>' || chr(10);
   xml_output := xml_output || '</ProjectModule>';
-  
+
   RETURN xml_output;
 END;
 $$;

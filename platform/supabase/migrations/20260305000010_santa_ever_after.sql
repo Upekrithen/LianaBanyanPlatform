@@ -21,31 +21,31 @@ CREATE TABLE IF NOT EXISTS public.santa_nominations (
 ALTER TABLE public.santa_nominations ENABLE ROW LEVEL SECURITY;
 
 -- Nominators can see the nominations they submitted (but they won't see the Jesper's identity)
-CREATE POLICY "santa_nominations_select_nominator" 
-ON public.santa_nominations FOR SELECT 
+CREATE POLICY "santa_nominations_select_nominator"
+ON public.santa_nominations FOR SELECT
 USING (nominator_id = (SELECT auth.uid()));
 
 -- Jespers can see nominations assigned to them
-CREATE POLICY "santa_nominations_select_jesper" 
-ON public.santa_nominations FOR SELECT 
+CREATE POLICY "santa_nominations_select_jesper"
+ON public.santa_nominations FOR SELECT
 USING (jesper_id = (SELECT auth.uid()));
 
 -- Admins can see all
-CREATE POLICY "santa_nominations_select_admin" 
-ON public.santa_nominations FOR SELECT 
+CREATE POLICY "santa_nominations_select_admin"
+ON public.santa_nominations FOR SELECT
 USING ( (SELECT auth.uid()) IN (SELECT id FROM public.users WHERE role = 'admin') );
 
 -- Anyone authenticated can insert a nomination
-CREATE POLICY "santa_nominations_insert" 
-ON public.santa_nominations FOR INSERT 
+CREATE POLICY "santa_nominations_insert"
+ON public.santa_nominations FOR INSERT
 WITH CHECK ( auth.uid() IS NOT NULL );
 
 -- Jespers can update status of their assigned deliveries
-CREATE POLICY "santa_nominations_update_jesper" 
-ON public.santa_nominations FOR UPDATE 
+CREATE POLICY "santa_nominations_update_jesper"
+ON public.santa_nominations FOR UPDATE
 USING (jesper_id = (SELECT auth.uid()));
 
 -- Admins can update any nomination
-CREATE POLICY "santa_nominations_update_admin" 
-ON public.santa_nominations FOR UPDATE 
+CREATE POLICY "santa_nominations_update_admin"
+ON public.santa_nominations FOR UPDATE
 USING ( (SELECT auth.uid()) IN (SELECT id FROM public.users WHERE role = 'admin') );

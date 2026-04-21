@@ -2,11 +2,11 @@
  * HELP WANTED — Chalk-Outline Progressive Disclosure
  * ===================================================
  * NOT a firehose. NOT tabs and sidebars.
- * 
+ *
  * Shows 3 discovered opportunity cards + 1 chalk outline.
  * Each card uses DeckCardFrame with 4 locks.
  * Unlock all 4 → card is collected → reveals next layer.
- * 
+ *
  * Ghost users: cards stored in localStorage
  * Members: cards stored in database portfolio
  */
@@ -75,7 +75,7 @@ export default function HelpWanted() {
       </div>
 
       {/* Back button */}
-      <button 
+      <button
         onClick={() => navigate(-1)}
         className="ghost-toggle"
         style={{ left: 20 }}
@@ -102,9 +102,9 @@ export default function HelpWanted() {
           <h2 style={{ textAlign: 'center', marginBottom: '1rem', color: '#c4b5fd' }}>
             Opportunities
           </h2>
-          
-          <div className="path-grid" style={{ 
-            display: 'grid', 
+
+          <div className="path-grid" style={{
+            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: '1.5rem',
             marginTop: '1.5rem'
@@ -139,9 +139,9 @@ export default function HelpWanted() {
           <h2 style={{ textAlign: 'center', marginBottom: '1rem', color: '#c4b5fd' }}>
             How It Works
           </h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '1.5rem',
             textAlign: 'center',
             maxWidth: 700,

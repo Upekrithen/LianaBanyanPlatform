@@ -22,12 +22,12 @@ export const CareUnitSelector: React.FC<CareUnitSelectorProps> = ({
 
   const handleConfirm = () => {
     if (!selectedType) return;
-    
+
     toast({
       title: "Care Unit Pledged",
       description: `You have pledged ${amount} Credits as a ${selectedType === 'blanket' ? 'Blanket' : 'Directed'} Care Unit.`,
     });
-    
+
     onSelect(selectedType, amount);
   };
 
@@ -39,19 +39,19 @@ export const CareUnitSelector: React.FC<CareUnitSelectorProps> = ({
           Fund a Care Unit
         </CardTitle>
         <CardDescription>
-          {initiativeName 
+          {initiativeName
             ? `Support the Cold Start progression for ${initiativeName}`
             : "Support the Cold Start progression of local initiatives"}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-6 space-y-6">
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Blanket Donation */}
-          <div 
+          <div
             className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
-              selectedType === 'blanket' 
-                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' 
+              selectedType === 'blanket'
+                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
                 : 'border-slate-200 hover:border-emerald-300 dark:border-slate-800'
             }`}
             onClick={() => setSelectedType('blanket')}
@@ -67,10 +67,10 @@ export const CareUnitSelector: React.FC<CareUnitSelectorProps> = ({
           </div>
 
           {/* Directed Donation */}
-          <div 
+          <div
             className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
-              selectedType === 'directed' 
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+              selectedType === 'directed'
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                 : 'border-slate-200 hover:border-blue-300 dark:border-slate-800'
             }`}
             onClick={() => setSelectedType('directed')}
@@ -110,8 +110,8 @@ export const CareUnitSelector: React.FC<CareUnitSelectorProps> = ({
         <div className="text-sm text-slate-500">
           1 Credit = $1.00 USD
         </div>
-        <Button 
-          onClick={handleConfirm} 
+        <Button
+          onClick={handleConfirm}
           disabled={!selectedType}
           className={selectedType === 'blanket' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700'}
         >

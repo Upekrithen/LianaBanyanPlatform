@@ -139,13 +139,13 @@ export function SponsorshipCascade({ className }: CascadeProps) {
   const createSponsorship = useMutation({
     mutationFn: async ({ amount, email }: { amount: number; email: string }) => {
       if (!user) throw new Error("Must be logged in");
-      
+
       const { data, error } = await supabase.rpc("create_sponsorship", {
         p_sponsor_id: user.id,
         p_recipient_email: email,
         p_amount: amount,
       });
-      
+
       if (error) throw error;
       return data;
     },
@@ -167,13 +167,13 @@ export function SponsorshipCascade({ className }: CascadeProps) {
   const createClothPouch = useMutation({
     mutationFn: async ({ amount, purpose }: { amount: number; purpose: string }) => {
       if (!user) throw new Error("Must be logged in");
-      
+
       const { data, error } = await supabase.rpc("create_cloth_pouch", {
         p_user_id: user.id,
         p_credit_amount: amount,
         p_purpose: purpose,
       });
-      
+
       if (error) throw error;
       return data;
     },
@@ -251,8 +251,8 @@ export function SponsorshipCascade({ className }: CascadeProps) {
           {/* Sponsor Button */}
           <Dialog open={showSponsorDialog} onOpenChange={setShowSponsorDialog}>
             <DialogTrigger asChild>
-              <Button 
-                className="w-full gap-2" 
+              <Button
+                className="w-full gap-2"
                 disabled={!canSponsor}
                 variant={canSponsor ? "default" : "outline"}
               >
@@ -327,7 +327,7 @@ export function SponsorshipCascade({ className }: CascadeProps) {
           {clothPouches && clothPouches.length > 0 ? (
             <div className="space-y-2">
               {clothPouches.map((pouch: any) => (
-                <div 
+                <div
                   key={pouch.id}
                   className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
                 >

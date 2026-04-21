@@ -1,12 +1,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Coins, 
-  Users, 
-  TrendingUp, 
-  Shield, 
-  QrCode, 
+import {
+  Coins,
+  Users,
+  TrendingUp,
+  Shield,
+  QrCode,
   Fingerprint,
   Lock,
   Unlock
@@ -60,7 +60,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-1">Foundation First</h4>
                     <p className="text-sm text-muted-foreground">
-                      The Medallion must be funded before any other products in the project. This demonstrates 
+                      The Medallion must be funded before any other products in the project. This demonstrates
                       community interest and provides the initial resource pool for project operations.
                     </p>
                   </div>
@@ -73,7 +73,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-1">Tiered Funding Structure</h4>
                     <p className="text-sm text-muted-foreground">
-                      Four progressive funding levels allow gradual community building. Each level requires more 
+                      Four progressive funding levels allow gradual community building. Each level requires more
                       total votes but offers better per-unit pricing as the community grows.
                     </p>
                   </div>
@@ -114,7 +114,7 @@ export function MedallionFundingExplainer() {
               <Alert>
                 <Shield className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Why the Medallion must be first:</strong> It proves there's real community interest 
+                  <strong>Why the Medallion must be first:</strong> It proves there's real community interest
                   before manufacturing begins on any products. Without Medallion funding, the project cannot proceed.
                 </AlertDescription>
               </Alert>
@@ -186,7 +186,7 @@ export function MedallionFundingExplainer() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Growing community of 250 members. 10% discount from Level 1 as the project 
+                  Growing community of 250 members. 10% discount from Level 1 as the project
                   gains momentum and proves viability.
                 </p>
               </div>
@@ -214,7 +214,7 @@ export function MedallionFundingExplainer() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Solid community of 500 members. 20% discount from Level 1, showing the value 
+                  Solid community of 500 members. 20% discount from Level 1, showing the value
                   of collective participation and shared membership.
                 </p>
               </div>
@@ -242,7 +242,7 @@ export function MedallionFundingExplainer() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  <strong>Fully funded community of 1,000 champions!</strong> 30% discount from Level 1. 
+                  <strong>Fully funded community of 1,000 champions!</strong> 30% discount from Level 1.
                   At this level, the project unlocks and can begin producing other products.
                 </p>
               </div>
@@ -250,7 +250,7 @@ export function MedallionFundingExplainer() {
               <Alert>
                 <TrendingUp className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Volume Benefits:</strong> Each level offers better pricing as more people join. 
+                  <strong>Volume Benefits:</strong> Each level offers better pricing as more people join.
                   Everyone benefits from growing the community together!
                 </AlertDescription>
               </Alert>
@@ -274,7 +274,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-2">Your Unique Identity</h4>
                     <p className="text-sm text-muted-foreground">
-                      Each Medallion is tied to your authenticated account. It serves as your digital identity 
+                      Each Medallion is tied to your authenticated account. It serves as your digital identity
                       within the project ecosystem, tracking your participation, voting power, and contribution history.
                     </p>
                   </div>
@@ -307,7 +307,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-2">Community Network</h4>
                     <p className="text-sm text-muted-foreground">
-                      Medallion holders form a committed community. You can see total member count, funding progress, 
+                      Medallion holders form a committed community. You can see total member count, funding progress,
                       and growth milestones. Together, you make decisions about what products get produced and when.
                     </p>
                   </div>
@@ -347,7 +347,7 @@ export function MedallionFundingExplainer() {
               <Alert>
                 <Lock className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Important:</strong> The QR code is a generic link to this page. It does NOT contain 
+                  <strong>Important:</strong> The QR code is a generic link to this page. It does NOT contain
                   your private information or grant automatic access to your value.
                 </AlertDescription>
               </Alert>
@@ -360,7 +360,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-1">What the QR Code Links To</h4>
                     <p className="text-sm text-muted-foreground">
-                      The QR code simply links to this Medallion product page. Anyone can scan it to learn 
+                      The QR code simply links to this Medallion product page. Anyone can scan it to learn
                       about the project and see the funding levels.
                     </p>
                   </div>
@@ -399,7 +399,7 @@ export function MedallionFundingExplainer() {
                   <div>
                     <h4 className="font-semibold mb-1">Only Applies Value to Registered Members</h4>
                     <p className="text-sm text-muted-foreground">
-                      When someone scans your QR code and signs up, they create their own account and separate 
+                      When someone scans your QR code and signs up, they create their own account and separate
                       Medallion. Your value is tied to YOUR authenticated identity, not the QR code itself.
                     </p>
                   </div>

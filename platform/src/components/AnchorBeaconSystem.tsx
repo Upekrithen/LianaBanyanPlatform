@@ -5,14 +5,14 @@
  * 1. Link to contextual cue cards
  * 2. Enable on-the-fly Dispatch via social, SMS, email
  * 3. Support scheduled dispatch via Hofund's scheduling tool
- * 
+ *
  * "Drop an Anchor Beacon → Share cue cards AT WILL, ON THE FLY"
- * 
+ *
  * MULTI-ACCOUNT SUPPORT (Feb 2026):
  * - Members can connect up to 6 accounts per platform
  * - Checkboxes allow selecting multiple accounts to post to
  * - Example: Post to Official + Silly + Friends accounts at once
- * 
+ *
  * This component provides:
  * - AnchorBeacon: A droppable beacon that opens a card dialog
  * - CueCardDispatch: Share/dispatch cue cards to any connected channel
@@ -52,9 +52,9 @@ import {
   Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { 
-  getAllAccounts, 
-  postToMultipleAccounts, 
+import {
+  getAllAccounts,
+  postToMultipleAccounts,
   type SocialAccount,
   type SocialPlatform,
 } from '@/lib/socialOAuth';
@@ -201,7 +201,7 @@ export function CueCardDispatchDialog({
   const [scheduleTime, setScheduleTime] = useState('');
   const [customMessage, setCustomMessage] = useState('');
   const [copied, setCopied] = useState(false);
-  
+
   // Multi-account state
   const [connectedAccounts, setConnectedAccounts] = useState<SocialAccount[]>([]);
   const [selectedAccountIds, setSelectedAccountIds] = useState<Set<string>>(new Set());
@@ -738,12 +738,12 @@ export function AnchorBeaconExplainer() {
   return (
     <div className="space-y-4 text-sm">
       <h4 className="font-bold text-base">Anchor Beacons: Share AT WILL, ON THE FLY</h4>
-      
+
       <p>
-        Drop an Anchor Beacon anywhere you want to share context with someone. 
+        Drop an Anchor Beacon anywhere you want to share context with someone.
         Each beacon links to relevant cue cards that can be:
       </p>
-      
+
       <ul className="space-y-2">
         <li className="flex items-start gap-2">
           <Send className="w-4 h-4 mt-0.5 text-primary" />
@@ -766,13 +766,13 @@ export function AnchorBeaconExplainer() {
       <div className="bg-primary/10 p-3 rounded-lg">
         <p className="font-medium text-primary">Connected Portfolio Integration</p>
         <p className="text-xs mt-1">
-          Any social accounts you've connected in your portfolio (Discord, Bluesky, TikTok, 
+          Any social accounts you've connected in your portfolio (Discord, Bluesky, TikTok,
           Instagram, etc.) automatically appear as dispatch options.
         </p>
       </div>
 
       <p className="text-muted-foreground text-xs">
-        One of a thousand streams to get where you want to go. 
+        One of a thousand streams to get where you want to go.
         Drop breadcrumbs. Share knowledge. Build together.
       </p>
     </div>

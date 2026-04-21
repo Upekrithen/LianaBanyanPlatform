@@ -37,7 +37,7 @@ export const GlobalRecorderOverlay = () => {
   if (!isRecording) return null;
 
   return (
-    <div 
+    <div
       className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] bg-gradient-to-r from-red-600 to-red-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-4"
       data-recording-controls
       style={{ pointerEvents: 'auto' }}
@@ -53,8 +53,8 @@ export const GlobalRecorderOverlay = () => {
       </div>
       <div className="flex gap-2" data-recording-controls>
         {!isCapturing && (
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             variant="secondary"
             onClick={() => begin()}
             data-recording-controls
@@ -64,8 +64,8 @@ export const GlobalRecorderOverlay = () => {
             Begin Capture
           </Button>
         )}
-        <Button 
-          size="sm" 
+        <Button
+          size="sm"
           variant="secondary"
           onClick={() => stop()}
           data-recording-controls

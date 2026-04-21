@@ -96,8 +96,8 @@ const DIFFICULTY_CONFIG = {
 export function BeaconRunCard({ run }: { run: BeaconRun }) {
   const navigate = useNavigate();
   const diffConfig = DIFFICULTY_CONFIG[run.difficulty || "medium"];
-  const completionRate = run.times_started > 0 
-    ? Math.round((run.times_completed / run.times_started) * 100) 
+  const completionRate = run.times_started > 0
+    ? Math.round((run.times_completed / run.times_started) * 100)
     : 0;
 
   return (
@@ -172,8 +172,8 @@ export function BeaconRunCard({ run }: { run: BeaconRun }) {
         )}
       </CardContent>
       <CardFooter>
-        <Button 
-          className="w-full" 
+        <Button
+          className="w-full"
           onClick={() => navigate(`/beacon-run/${run.slug}`)}
         >
           <Play className="w-4 h-4 mr-2" />
@@ -461,11 +461,11 @@ export function BeaconRunLeaderboard({ runId }: { runId: string }) {
   );
 }
 
-export function ActiveRunTracker({ 
-  runId, 
+export function ActiveRunTracker({
+  runId,
   totalBeacons,
-  onComplete 
-}: { 
+  onComplete
+}: {
   runId: string;
   totalBeacons: number;
   onComplete?: () => void;

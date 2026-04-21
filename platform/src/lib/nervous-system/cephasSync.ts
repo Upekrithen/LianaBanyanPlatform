@@ -1,9 +1,9 @@
 /**
  * Cephas Sync Service
- * 
+ *
  * Tracks synchronization status between LAUNCH_DOCUMENTS_MASTER and Cephas.
  * Part of the Nervous System for ensuring content consistency.
- * 
+ *
  * NOTE: Actual file sync is manual (human-gated releases).
  * This service tracks WHAT needs syncing and WHEN it was last synced.
  */
@@ -259,7 +259,7 @@ export async function getSyncStatusSummary(): Promise<{
   lastSyncCheck: string;
 }> {
   const targets = await getAllSyncTargets();
-  
+
   const summary = {
     total: targets.length,
     synced: 0,
@@ -302,9 +302,9 @@ export async function getLettersNeedingSync(): Promise<string[]> {
   const pendingTargets = await getSyncTargetsByStatus('pending');
   const outdatedTargets = await getSyncTargetsByStatus('outdated');
   const newTargets = await getSyncTargetsByStatus('new');
-  
+
   const allNeedingSync = [...pendingTargets, ...outdatedTargets, ...newTargets];
-  
+
   return allNeedingSync
     .filter(t => t.content_type === 'letter')
     .map(t => t.source_path);
@@ -315,14 +315,14 @@ export async function getLettersNeedingSync(): Promise<string[]> {
  */
 export async function initializeLetterSyncTargets(): Promise<number> {
   let count = 0;
-  
+
   for (const [letterPrefix, cephasPath] of Object.entries(LETTER_SYNC_MAP)) {
     const sourcePath = `LAUNCH_DOCUMENTS_MASTER/letters/${letterPrefix}`;
     const targetPath = `Cephas/cephas-hugo/content/${cephasPath}`;
-    
+
     const result = await registerSyncTarget(sourcePath, targetPath, 'letter');
     if (result) count++;
   }
-  
+
   return count;
 }

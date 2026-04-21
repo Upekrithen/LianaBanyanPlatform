@@ -2,9 +2,9 @@
  * CUE CARD DESTINATION CONFIGURATOR
  * ==================================
  * Innovation #1361: Hofund Destination Configurator
- * 
+ *
  * UI to bind Cue Card templates to specific destination sets.
- * 
+ *
  * Options:
  * - My Full Portfolio (default)
  * - Single Project → [pick one]
@@ -79,7 +79,7 @@ export function CueCardDestinationConfig({
   onClose,
 }: CueCardDestinationConfigProps) {
   const { user } = useAuth();
-  
+
   // Form state
   const [destinationType, setDestinationType] = useState<DestinationType>('portfolio');
   const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
@@ -87,7 +87,7 @@ export function CueCardDestinationConfig({
   const [includeOwnedOnly, setIncludeOwnedOnly] = useState(false);
   const [isOwnProject, setIsOwnProject] = useState(true);
   const [displayName, setDisplayName] = useState('');
-  
+
   // Data state
   const [myProjects, setMyProjects] = useState<Project[]>([]);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
@@ -105,7 +105,7 @@ export function CueCardDestinationConfig({
         .select('id, name, description')
         .eq('owner_id', user.id)
         .order('name');
-      
+
       setMyProjects(owned || []);
 
       // Fetch all projects (for promoting others)
@@ -114,7 +114,7 @@ export function CueCardDestinationConfig({
         .select('id, name, description')
         .order('name')
         .limit(100);
-      
+
       setAllProjects(all || []);
     };
 
@@ -207,7 +207,7 @@ export function CueCardDestinationConfig({
           )}
         </div>
         <CardDescription>
-          {templateTitle 
+          {templateTitle
             ? `Configure where "${templateTitle}" sends visitors`
             : 'Configure where this Cue Card sends visitors'}
         </CardDescription>
@@ -262,7 +262,7 @@ export function CueCardDestinationConfig({
                 My Full Portfolio (default)
               </Label>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="single_project" id="single_project" />
               <Label htmlFor="single_project" className="flex items-center gap-2 cursor-pointer">
@@ -270,7 +270,7 @@ export function CueCardDestinationConfig({
                 Single Project
               </Label>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="multi_project" id="multi_project" />
               <Label htmlFor="multi_project" className="flex items-center gap-2 cursor-pointer">
@@ -278,7 +278,7 @@ export function CueCardDestinationConfig({
                 Multiple Projects (visitor chooses)
               </Label>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="category" id="category" />
               <Label htmlFor="category" className="flex items-center gap-2 cursor-pointer">
@@ -300,7 +300,7 @@ export function CueCardDestinationConfig({
                 {selectedProjects.length} selected
               </Badge>
             </div>
-            
+
             {/* Ownership toggle */}
             <div className="flex items-center space-x-2 p-2 bg-muted/50 rounded">
               <Checkbox
@@ -320,7 +320,7 @@ export function CueCardDestinationConfig({
             <div className="max-h-48 overflow-y-auto space-y-1 border rounded p-2">
               {projectsToShow.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
-                  {isOwnProject 
+                  {isOwnProject
                     ? "You don't have any projects yet"
                     : "No projects available"}
                 </p>

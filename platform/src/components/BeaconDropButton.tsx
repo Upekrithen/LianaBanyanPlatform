@@ -2,7 +2,7 @@
  * BEACON DROP BUTTON
  * ==================
  * The six-color beacon system with Orange Protocol for user-defined purposes.
- * 
+ *
  * Colors:
  * - 🟢 Green: Return ("I want to come back")
  * - 🔵 Blue: Important ("This is key information")
@@ -10,7 +10,7 @@
  * - 🔴 Red: Blocked ("Need help to proceed")
  * - 🟣 Purple: Complete ("Fully explored this branch")
  * - 🟠 Orange: Custom (User-defined via Orange Protocol)
- * 
+ *
  * Orange Protocol subtypes:
  * - Game Marker, Share with Person, Social Cue Card, Gift Beacon,
  *   Treasure Cache, Learning Moment, Trade Route, Custom

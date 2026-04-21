@@ -1,5 +1,5 @@
 -- Add clan status tracking and charter enforcement
-ALTER TABLE clans 
+ALTER TABLE clans
 ADD COLUMN status TEXT DEFAULT 'forming' CHECK (status IN ('forming', 'charter_pending', 'active', 'inactive')),
 ADD COLUMN charter_required_signatures INTEGER DEFAULT 2,
 ADD COLUMN charter_current_signatures INTEGER DEFAULT 0,
@@ -115,21 +115,21 @@ BEGIN
   SELECT clan_id INTO _clan_id
   FROM clan_charters
   WHERE id = NEW.charter_id;
-  
+
   IF _clan_id IS NULL THEN
     RETURN NEW;
   END IF;
-  
+
   -- Count current signatures
   SELECT COUNT(*) INTO _current_sigs
   FROM charter_signatories
   WHERE charter_id = NEW.charter_id;
-  
+
   -- Get required signatures
   SELECT charter_required_signatures INTO _required_sigs
   FROM clans
   WHERE id = _clan_id;
-  
+
   -- Update clan
   UPDATE clans
   SET charter_current_signatures = _current_sigs,
@@ -138,7 +138,7 @@ BEGIN
         ELSE status
       END
   WHERE id = _clan_id;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;

@@ -46,8 +46,8 @@ export default function DefenseClawsPage() {
           defaultExpanded={true}
         >
           <p className="text-sm text-muted-foreground mb-4">
-            Defense Klaus™ is a $6 personal safety bracelet that provides physical protection AND 
-            funds legal defense services for LianaBanyan members. 100% of proceeds go directly to 
+            Defense Klaus™ is a $6 personal safety bracelet that provides physical protection AND
+            funds legal defense services for LianaBanyan members. 100% of proceeds go directly to
             the Legal Defense Fund.
           </p>
           <p className="text-sm text-purple-400 font-medium">

@@ -2,7 +2,7 @@
  * ONBOARDING START PAGE — "You have a... I have a..."
  * ====================================================
  * The entry point for new users to understand what they can do.
- * 
+ *
  * Flow:
  * 1. Hero with dropdown selectors
  * 2. Routes to appropriate flow based on selection
@@ -515,8 +515,8 @@ export default function OnboardingStart() {
               <p className="text-xs text-muted-foreground italic">
                 Credits, Marks, and Joules are prepaid claims on HIVI-measured services — like arcade tokens, not investments.
               </p>
-              <Link 
-                to="/economics" 
+              <Link
+                to="/economics"
                 className="inline-flex items-center gap-1 text-sm text-purple-400 hover:text-purple-300 mt-2"
               >
                 Explore all Five Economic Laws →

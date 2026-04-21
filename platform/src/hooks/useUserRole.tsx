@@ -11,7 +11,7 @@ export const useUserRole = () => {
     queryKey: ['user-roles', user?.id],
     queryFn: async () => {
       if (!user) return ['user' as AppRole];
-      
+
       const derivedRoles: AppRole[] = ['user']; // Everyone is at least a user
 
       // Check if project owner
@@ -20,7 +20,7 @@ export const useUserRole = () => {
         .select('id')
         .eq('owner_id', user.id)
         .limit(1);
-      
+
       if (ownedProjects && ownedProjects.length > 0) {
         derivedRoles.push('project_owner');
       }
@@ -31,7 +31,7 @@ export const useUserRole = () => {
         .select('id')
         .eq('holder_user_id', user.id)
         .limit(1);
-      
+
       if (crownPositions && crownPositions.length > 0) {
         derivedRoles.push('admin');
       }
@@ -42,7 +42,7 @@ export const useUserRole = () => {
         .select('id')
         .eq('guild_master_id', user.id)
         .limit(1);
-      
+
       if (guildMaster && guildMaster.length > 0) {
         if (!derivedRoles.includes('admin')) derivedRoles.push('admin');
       }

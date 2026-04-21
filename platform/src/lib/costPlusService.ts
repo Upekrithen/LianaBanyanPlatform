@@ -1,6 +1,6 @@
 /**
  * Cost + 20% Certification Service
- * 
+ *
  * Handles C+20 certification status checking, economic multipliers,
  * and certification request management.
  */
@@ -97,9 +97,9 @@ export function isCostPlusCertified(anchor: Anchor | null | undefined): boolean 
  */
 export function getCostPlusTier(anchor: Anchor | null | undefined): CostPlusTier {
   if (!anchor) return 'NONE';
-  
+
   const ratio = anchor.cost_plus_compliance_ratio ?? 0;
-  
+
   // Full badge requires both high ratio AND verification
   if (ratio >= 0.95 && anchor.verified_cost_plus && !anchor.cost_plus_revoked_at) {
     return 'FULL';
@@ -116,7 +116,7 @@ export function getCostPlusTier(anchor: Anchor | null | undefined): CostPlusTier
 export function getCostPlusTierInfo(anchor: Anchor | null | undefined): CostPlusTierInfo {
   const tier = getCostPlusTier(anchor);
   const ratio = anchor?.cost_plus_compliance_ratio ?? 0;
-  
+
   const tierConfigs: Record<CostPlusTier, Omit<CostPlusTierInfo, 'ratio' | 'progressToNext'>> = {
     NONE: {
       tier: 'NONE',
@@ -177,12 +177,12 @@ export function getCostPlusTierInfo(anchor: Anchor | null | undefined): CostPlus
       reciprocalTierMax: 3,
     },
   };
-  
+
   const config = tierConfigs[tier];
-  const progressToNext = config.nextTierThreshold 
+  const progressToNext = config.nextTierThreshold
     ? Math.min(1, ratio / config.nextTierThreshold)
     : 1;
-  
+
   return {
     ...config,
     ratio,
@@ -195,19 +195,19 @@ export function getCostPlusTierInfo(anchor: Anchor | null | undefined): CostPlus
  */
 export function getCertificationStatusLabel(anchor: Anchor | null | undefined): string {
   if (!anchor) return 'Unknown';
-  
+
   if (isCostPlusCertified(anchor)) {
     return 'C+20% Certified';
   }
-  
+
   if (anchor.pricing_policy === 'C_PLUS_20' && !anchor.verified_cost_plus) {
     return 'Certification Pending';
   }
-  
+
   if (anchor.cost_plus_revoked_at) {
     return 'Certification Revoked';
   }
-  
+
   return 'Economics Unverified';
 }
 
@@ -217,7 +217,7 @@ export function getCertificationStatusLabel(anchor: Anchor | null | undefined): 
 export async function getAnchorEconomics(anchorId: string): Promise<AnchorEconomics> {
   const { data, error } = await supabase
     .rpc('get_anchor_economics', { p_anchor_id: anchorId });
-  
+
   if (error || !data || data.length === 0) {
     // Return default non-certified economics
     return {
@@ -228,7 +228,7 @@ export async function getAnchorEconomics(anchorId: string): Promise<AnchorEconom
       is_certified: false,
     };
   }
-  
+
   return data[0];
 }
 
@@ -248,11 +248,11 @@ export async function requestCertification(
       p_evidence_notes: evidenceNotes || null,
       p_cost_breakdown: costBreakdown || null,
     });
-  
+
   if (error) {
     return { success: false, error: error.message };
   }
-  
+
   return { success: true, auditId: data };
 }
 
@@ -265,12 +265,12 @@ export async function getCertificationHistory(anchorId: string): Promise<CostPlu
     .select('*')
     .eq('anchor_id', anchorId)
     .order('created_at', { ascending: false });
-  
+
   if (error) {
     console.error('Error fetching certification history:', error);
     return [];
   }
-  
+
   return data || [];
 }
 
@@ -281,12 +281,12 @@ export async function getCertifiedAnchors(): Promise<Anchor[]> {
   const { data, error } = await supabase
     .from('v_certified_anchors')
     .select('*');
-  
+
   if (error) {
     console.error('Error fetching certified anchors:', error);
     return [];
   }
-  
+
   return data || [];
 }
 
@@ -306,7 +306,7 @@ export function calculateCertificationBenefit(
   const certifiedMarks = baseMarks * 1.0;
   const uncertifiedJoules = baseJoules * 0.25;
   const uncertifiedMarks = baseMarks * 0.50;
-  
+
   return {
     certified: { joules: certifiedJoules, marks: certifiedMarks },
     uncertified: { joules: uncertifiedJoules, marks: uncertifiedMarks },

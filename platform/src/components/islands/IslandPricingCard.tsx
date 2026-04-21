@@ -96,7 +96,7 @@ export const IslandPricingCard = ({ islandId, monthlyVisitors }: IslandPricingCa
 
       <div className="mt-4 p-3 bg-blue-100/50 dark:bg-blue-900/20 rounded-lg">
         <div className="text-xs text-muted-foreground">
-          💡 <strong>Tip:</strong> Islands near popular locations or with high traffic command premium prices, 
+          💡 <strong>Tip:</strong> Islands near popular locations or with high traffic command premium prices,
           similar to prime real estate. Early adopters get locked-in rates!
         </div>
       </div>

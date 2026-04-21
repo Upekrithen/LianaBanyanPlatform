@@ -80,7 +80,7 @@ serve(async (req) => {
     xml += '    <DetailedDescription>' + xmlEscape(project.detailed_description || '') + '</DetailedDescription>\n'
     xml += '    <CreatedAt>' + project.created_at + '</CreatedAt>\n'
     xml += '  </Metadata>\n'
-    
+
     if (funding) {
       xml += '  <Funding>\n'
       xml += '    <TotalPot>' + funding.total_pot + '</TotalPot>\n'
@@ -98,7 +98,7 @@ serve(async (req) => {
       xml += '      <Description>' + xmlEscape(product.description || '') + '</Description>\n'
       xml += '      <Details>' + xmlEscape(product.details || '') + '</Details>\n'
       xml += '      <ProductionLevels>\n'
-      
+
       for (const level of product.production_levels || []) {
         xml += '        <Level>\n'
         xml += '          <LevelNumber>' + level.level_number + '</LevelNumber>\n'
@@ -107,12 +107,12 @@ serve(async (req) => {
         xml += '          <UnitPrice>' + level.unit_price + '</UnitPrice>\n'
         xml += '          <VotesNeeded>' + (level.votes_needed || 0) + '</VotesNeeded>\n'
         xml += '          <CurrentVotes>' + level.current_votes + '</CurrentVotes>\n'
-        xml += '          <VolumeDiscountPercent>' + 
-          ((level.votes_needed > 0 ? (level.current_votes / level.votes_needed) * 100 : 0).toFixed(2)) + 
+        xml += '          <VolumeDiscountPercent>' +
+          ((level.votes_needed > 0 ? (level.current_votes / level.votes_needed) * 100 : 0).toFixed(2)) +
           '</VolumeDiscountPercent>\n'
         xml += '        </Level>\n'
       }
-      
+
       xml += '      </ProductionLevels>\n'
       xml += '    </Product>\n'
     }
@@ -121,7 +121,7 @@ serve(async (req) => {
 
     // Store the module in the ledger
     const moduleVersion = await getNextModuleVersion(supabase, projectId)
-    
+
     await supabase.from('project_modules').insert({
       project_id: projectId,
       module_version: moduleVersion,
@@ -132,16 +132,16 @@ serve(async (req) => {
     console.log('Project module generated successfully')
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         xml,
         version: moduleVersion,
         generated_at: new Date().toISOString()
       }),
       {
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json'
         },
       }
     )
@@ -152,9 +152,9 @@ serve(async (req) => {
       JSON.stringify({ error: errorMessage }),
       {
         status: 400,
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json'
         },
       }
     )

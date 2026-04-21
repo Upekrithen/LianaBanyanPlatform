@@ -41,7 +41,7 @@ export const CreateIslandListing = ({ islandId, onSuccess }: CreateIslandListing
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         throw new Error("You must be logged in to create a listing");
       }
@@ -169,7 +169,7 @@ export const CreateIslandListing = ({ islandId, onSuccess }: CreateIslandListing
             <Input
               id="price_credits"
               type="number"
-              {...register("price_credits", { 
+              {...register("price_credits", {
                 required: "Price is required",
                 min: { value: 1, message: "Price must be at least 1 credit" }
               })}

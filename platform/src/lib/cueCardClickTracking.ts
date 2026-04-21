@@ -2,7 +2,7 @@
  * CUE CARD CLICK TRACKING
  * =======================
  * Tracks clicks on shared Cue Cards and triggers Frame Lock unlocks on Deck Cards.
- * 
+ *
  * The viral loop:
  * 1. User stamps a Cue Card with their QR
  * 2. User shares to TikTok/social/direct link
@@ -102,7 +102,7 @@ export async function recordClick(click: ShareClick): Promise<ClickResult> {
     }
 
     const result = data as ClickResult;
-    
+
     // If fully unlocked, award Candle Burst reward
     if (result.isFullyUnlocked) {
       await awardCandleBurstReward(click.sharerId, 'social_unlock', click.templateId);
@@ -121,12 +121,12 @@ export async function recordClick(click: ShareClick): Promise<ClickResult> {
  */
 export function recordGhostClick(click: ShareClick): void {
   const ghostClicks = JSON.parse(localStorage.getItem('ghost_cue_card_clicks') || '[]');
-  
+
   // Check for duplicate
-  const isDuplicate = ghostClicks.some((c: ShareClick) => 
+  const isDuplicate = ghostClicks.some((c: ShareClick) =>
     c.shareId === click.shareId && c.clickerGhostId === click.clickerGhostId
   );
-  
+
   if (!isDuplicate) {
     ghostClicks.push({
       ...click,
@@ -144,7 +144,7 @@ export function recordGhostClick(click: ShareClick): void {
  * Get the current frame lock progress for a user on a specific Deck Card
  */
 export async function getFrameLockProgress(
-  deckCardId: string, 
+  deckCardId: string,
   userId: string
 ): Promise<FrameLockProgress | null> {
   const { data, error } = await supabase
@@ -183,9 +183,9 @@ export function getGhostFrameLockProgress(deckCardId: string): FrameLockProgress
  */
 export function updateGhostFrameLockProgress(deckCardId: string, clicks: number, clicksPerLock: number = 5): void {
   const ghostProgress = JSON.parse(localStorage.getItem('ghost_frame_lock_progress') || '{}');
-  
+
   const locksUnlocked = Math.min(4, Math.floor(clicks / clicksPerLock));
-  
+
   ghostProgress[deckCardId] = {
     deckCardId,
     userId: 'ghost',
@@ -198,7 +198,7 @@ export function updateGhostFrameLockProgress(deckCardId: string, clicks: number,
     isFullyUnlocked: locksUnlocked >= 4,
     unlockedAt: locksUnlocked >= 4 ? new Date().toISOString() : undefined
   };
-  
+
   localStorage.setItem('ghost_frame_lock_progress', JSON.stringify(ghostProgress));
 }
 
@@ -252,13 +252,13 @@ export async function getAllClickCounts(sharerId: string): Promise<Record<string
  * Award a Candle Burst reward when a Deck Card is fully unlocked
  */
 export async function awardCandleBurstReward(
-  userId: string, 
+  userId: string,
   triggerType: 'social_unlock' | 'beacon_run' | 'golden_key' | 'pair_bonus',
   triggerId: string
 ): Promise<{ rewardId: string; pairCode: string } | null> {
   // Generate a pair code for potential pairing
   const pairCode = generatePairCode();
-  
+
   const { data, error } = await supabase
     .from('candle_burst_rewards')
     .insert({
@@ -384,8 +384,8 @@ async function incrementStoredBursts(userId: string): Promise<void> {
     await supabase
       .from('profiles')
       .update({
-        candle_state: { 
-          ...currentState, 
+        candle_state: {
+          ...currentState,
           babylon: (currentState.babylon || 0) + 1,
           storedBursts: 0
         }
@@ -485,7 +485,7 @@ export async function getGlobalPoolStatus(deckCardId: string): Promise<{
  * Contribute to a global pool
  */
 export async function contributeToGlobalPool(
-  deckCardId: string, 
+  deckCardId: string,
   userId: string
 ): Promise<boolean> {
   const { data: pool, error: fetchError } = await supabase

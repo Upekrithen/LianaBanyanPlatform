@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS public.defense_klaus_vouchers (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   redeemed_at TIMESTAMPTZ,
   qr_code_data TEXT NOT NULL,
-  
+
   -- Prevent duplicate emails
   CONSTRAINT unique_email_hash UNIQUE (email_hash)
 );
@@ -40,7 +40,7 @@ CREATE INDEX IF NOT EXISTS idx_ledger_type ON public.ledger_transactions(transac
 
 -- View for cold start stats
 CREATE OR REPLACE VIEW public.defense_klaus_cold_start_stats AS
-SELECT 
+SELECT
   COUNT(*) as total_signups,
   COUNT(*) FILTER (WHERE is_donated = true) as free_signups,
   COUNT(*) FILTER (WHERE is_donated = false) as paid_signups,
@@ -82,7 +82,7 @@ BEGIN
   SELECT COALESCE(MAX(CAST(SUBSTRING(proxy_id FROM 4) AS INTEGER)), 0) + 1
   INTO next_num
   FROM public.defense_klaus_vouchers;
-  
+
   RETURN 'DF-' || LPAD(next_num::TEXT, 7, '0');
 END;
 $$ LANGUAGE plpgsql;
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS public.defense_klaus_referrals (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   accepted_at TIMESTAMPTZ,
   expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days'),
-  
+
   -- Each referrer can only use each slot once
   CONSTRAINT unique_referrer_slot UNIQUE (referrer_proxy_id, slot_number)
 );
@@ -170,13 +170,13 @@ CREATE POLICY "Anyone can update referral status" ON public.defense_klaus_referr
 
 -- View for daisy chain stats
 CREATE OR REPLACE VIEW public.defense_klaus_daisy_chain_stats AS
-SELECT 
+SELECT
   COUNT(*) as total_referrals,
   COUNT(*) FILTER (WHERE status = 'pending') as pending_referrals,
   COUNT(*) FILTER (WHERE status = 'accepted') as accepted_referrals,
   COUNT(DISTINCT referrer_proxy_id) as unique_referrers,
   ROUND(
-    (COUNT(*) FILTER (WHERE status = 'accepted')::numeric / NULLIF(COUNT(*), 0)) * 100, 
+    (COUNT(*) FILTER (WHERE status = 'accepted')::numeric / NULLIF(COUNT(*), 0)) * 100,
     2
   ) as acceptance_rate
 FROM public.defense_klaus_referrals;

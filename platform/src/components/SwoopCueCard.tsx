@@ -157,7 +157,7 @@ export function SwoopCueCard({
 
   return (
     <>
-      <Card 
+      <Card
         ref={cardRef}
         className="overflow-hidden bg-gradient-to-br from-white to-slate-50 border-2"
       >

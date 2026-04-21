@@ -34,13 +34,13 @@ export default function Academy() {
   const handleResponse = (quality: "easy" | "hard" | "fail") => {
     // In a real app, this would use the SuperMemo-2 (SM-2) or Leitner algorithm
     // to schedule the next review date in the database.
-    
+
     let marksToAdd = 0;
     if (quality === "easy") marksToAdd = 2;
     if (quality === "hard") marksToAdd = 1;
 
     setMarksEarned(prev => prev + marksToAdd);
-    
+
     if (marksToAdd > 0) {
       toast.success(`+${marksToAdd} Marks earned for retrieval practice!`);
     }
@@ -95,7 +95,7 @@ export default function Academy() {
             <div className="absolute top-4 right-4">
               <Badge variant="outline">{currentCard.category}</Badge>
             </div>
-            
+
             <CardContent className="flex-1 flex flex-col items-center justify-center p-8 text-center">
               {!isFlipped ? (
                 <div className="space-y-6 animate-in fade-in zoom-in duration-300">

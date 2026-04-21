@@ -53,7 +53,7 @@ INSERT INTO lrh_posts (post_number, act, content, media_urls) VALUES
 
 🌾 Part 1 of our story: "Help Each Other Help Ourselves"
 
-#LianaBanyan #LittleRedHen #Cooperation', 
+#LianaBanyan #LittleRedHen #Cooperation',
 ARRAY['https://lianabanyan.com/fabled/hen1.png']),
 
 (2, 1, 'The Little Red Hen finds some wheat seeds...
@@ -61,7 +61,7 @@ ARRAY['https://lianabanyan.com/fabled/hen1.png']),
 
 🌾 Part 2 of our story
 
-#LianaBanyan #LittleRedHen #Cooperation', 
+#LianaBanyan #LittleRedHen #Cooperation',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png']),
 
 (3, 1, 'The Little Red Hen finds some wheat seeds...
@@ -70,7 +70,7 @@ So she planted, harvested, ground, and baked it herself.
 
 🌾 Part 3 of our story
 
-#LianaBanyan #LittleRedHen #Cooperation', 
+#LianaBanyan #LittleRedHen #Cooperation',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png']),
 
 (4, 1, 'The Little Red Hen finds some wheat seeds...
@@ -80,7 +80,7 @@ So she planted, harvested, ground, and baked it herself.
 
 🌾 Part 4 of our story
 
-#LianaBanyan #LittleRedHen #Cooperation', 
+#LianaBanyan #LittleRedHen #Cooperation',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png']),
 
 (5, 1, 'ACT 1: The Village
@@ -88,7 +88,7 @@ The Hen arrives at a village, carrying her basket and a stone.
 
 🌾 Part 5 of our story
 
-#LianaBanyan #LittleRedHen #StoneSoup', 
+#LianaBanyan #LittleRedHen #StoneSoup',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png']),
 
 (6, 1, 'ACT 1: The Village
@@ -96,7 +96,7 @@ ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled
 
 🌾 Part 6 of our story
 
-#LianaBanyan #LittleRedHen #StoneSoup', 
+#LianaBanyan #LittleRedHen #StoneSoup',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png']),
 
 (7, 1, 'ACT 1: The Village
@@ -104,7 +104,7 @@ Each villager adds something small: salt, a potato, herbs, an onion...
 
 🌾 Part 7 of our story
 
-#LianaBanyan #LittleRedHen #StoneSoup #Together', 
+#LianaBanyan #LittleRedHen #StoneSoup #Together',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png', 'https://lianabanyan.com/fabled/hen7.png']),
 
 (8, 1, 'ACT 1: The Village
@@ -112,7 +112,7 @@ Soup is ready! But the bread runs out before everyone gets some.
 
 🌾 Part 8 of our story
 
-#LianaBanyan #LittleRedHen #StoneSoup', 
+#LianaBanyan #LittleRedHen #StoneSoup',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png', 'https://lianabanyan.com/fabled/hen7.png', 'https://lianabanyan.com/fabled/hen8.png']),
 
 (9, 1, 'ACT 1: The Village
@@ -120,7 +120,7 @@ The Hen holds up wheat seeds. "To have more bread, we need to GROW more wheat."
 
 🌾 Part 9 of our story
 
-#LianaBanyan #LittleRedHen #GrowTogether', 
+#LianaBanyan #LittleRedHen #GrowTogether',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png', 'https://lianabanyan.com/fabled/hen7.png', 'https://lianabanyan.com/fabled/hen8.png', 'https://lianabanyan.com/fabled/hen9.png']),
 
 (10, 1, 'ACT 1: The Village
@@ -128,7 +128,7 @@ In the fields, ants pile up seeds while grasshoppers take the piles.
 
 🌾 Part 10 of our story
 
-#LianaBanyan #LittleRedHen #ABugsLife', 
+#LianaBanyan #LittleRedHen #ABugsLife',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png', 'https://lianabanyan.com/fabled/hen7.png', 'https://lianabanyan.com/fabled/hen8.png', 'https://lianabanyan.com/fabled/hen9.png', 'https://lianabanyan.com/fabled/hen10.png']),
 
 (11, 1, 'ACT 1: The Village
@@ -136,7 +136,7 @@ The Hen and villagers approach the ants.
 
 🌾 Part 11 of our story
 
-#LianaBanyan #LittleRedHen #ABugsLife', 
+#LianaBanyan #LittleRedHen #ABugsLife',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png', 'https://lianabanyan.com/fabled/hen7.png', 'https://lianabanyan.com/fabled/hen8.png', 'https://lianabanyan.com/fabled/hen9.png', 'https://lianabanyan.com/fabled/hen10.png', 'https://lianabanyan.com/fabled/hen11.png']),
 
 (12, 1, 'ACT 1: The Village
@@ -144,7 +144,7 @@ The Hen shows the ants: "Plant wheat, don''t just pile seeds!"
 
 🌾 Part 12 of our story
 
-#LianaBanyan #LittleRedHen #PlantSeeds', 
+#LianaBanyan #LittleRedHen #PlantSeeds',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png', 'https://lianabanyan.com/fabled/hen7.png', 'https://lianabanyan.com/fabled/hen8.png', 'https://lianabanyan.com/fabled/hen9.png', 'https://lianabanyan.com/fabled/hen10.png', 'https://lianabanyan.com/fabled/hen11.png', 'https://lianabanyan.com/fabled/hen12.png']),
 
 (13, 1, 'ACT 1 FINALE: The Village
@@ -152,7 +152,7 @@ Together they plant, harvest, grind, and bake as ONE team.
 
 🌾 End of Act 1 — The village learned to work together!
 
-#LianaBanyan #LittleRedHen #Together #OneTeam', 
+#LianaBanyan #LittleRedHen #Together #OneTeam',
 ARRAY['https://lianabanyan.com/fabled/hen1.png', 'https://lianabanyan.com/fabled/hen2.png', 'https://lianabanyan.com/fabled/hen3.png', 'https://lianabanyan.com/fabled/hen4.png', 'https://lianabanyan.com/fabled/hen5.png', 'https://lianabanyan.com/fabled/hen6.png', 'https://lianabanyan.com/fabled/hen7.png', 'https://lianabanyan.com/fabled/hen8.png', 'https://lianabanyan.com/fabled/hen9.png', 'https://lianabanyan.com/fabled/hen10.png', 'https://lianabanyan.com/fabled/hen11.png', 'https://lianabanyan.com/fabled/hen12.png', 'https://lianabanyan.com/fabled/hen13.png']);
 
 -- ACT 2: The Ants & Dream Sequence (Posts 14-18)
@@ -164,7 +164,7 @@ The Hen turns to the ants: "You''re gonna rattle the stars."
 
 ⭐ Part 14 of our story — A new chapter begins
 
-#LianaBanyan #LittleRedHen #RattleTheStars #ABugsLife', 
+#LianaBanyan #LittleRedHen #RattleTheStars #ABugsLife',
 ARRAY['https://lianabanyan.com/fabled/hen24.png']),
 
 (15, 2, 'ACT 2: The Dream
@@ -173,7 +173,7 @@ The Hen turns to the ants: "You''re gonna rattle the stars."
 
 ⭐ Part 15 of our story
 
-#LianaBanyan #LittleRedHen #RattleTheStars', 
+#LianaBanyan #LittleRedHen #RattleTheStars',
 ARRAY['https://lianabanyan.com/fabled/hen24.png', 'https://lianabanyan.com/fabled/hen19.png']),
 
 (16, 2, 'ACT 2: The Dream
@@ -182,7 +182,7 @@ The Hen daydreams of a Viking ship while cooking in the city.
 
 ⭐ Part 16 of our story
 
-#LianaBanyan #LittleRedHen #Dreams #Vikings', 
+#LianaBanyan #LittleRedHen #Dreams #Vikings',
 ARRAY['https://lianabanyan.com/fabled/hen24.png', 'https://lianabanyan.com/fabled/hen19.png', 'https://lianabanyan.com/fabled/hen20.png']),
 
 (17, 2, 'ACT 2: The Dream
@@ -191,7 +191,7 @@ She sees hungry animals outside a locked building full of bread.
 
 ⭐ Part 17 of our story
 
-#LianaBanyan #LittleRedHen #Dreams #Vision', 
+#LianaBanyan #LittleRedHen #Dreams #Vision',
 ARRAY['https://lianabanyan.com/fabled/hen24.png', 'https://lianabanyan.com/fabled/hen19.png', 'https://lianabanyan.com/fabled/hen20.png', 'https://lianabanyan.com/fabled/hen21.png']),
 
 (18, 2, 'ACT 2 FINALE: The Dream
@@ -199,7 +199,7 @@ She reaches into her dream and grabs an oar — the same as her spoon.
 
 ⭐ End of Act 2 — Dreams become tools for change
 
-#LianaBanyan #LittleRedHen #Dreams #TakeAction', 
+#LianaBanyan #LittleRedHen #Dreams #TakeAction',
 ARRAY['https://lianabanyan.com/fabled/hen24.png', 'https://lianabanyan.com/fabled/hen19.png', 'https://lianabanyan.com/fabled/hen20.png', 'https://lianabanyan.com/fabled/hen21.png', 'https://lianabanyan.com/fabled/hen22.png']);
 
 -- ACT 3: The Grasshoppers & Resolution (Posts 19-25)
@@ -211,7 +211,7 @@ The grasshoppers watch, angry. Hopper points at the ants.
 
 🦗 Part 19 of our story — Conflict arrives
 
-#LianaBanyan #LittleRedHen #ABugsLife #StandUp', 
+#LianaBanyan #LittleRedHen #ABugsLife #StandUp',
 ARRAY['https://lianabanyan.com/fabled/hen14.png']),
 
 (20, 3, 'ACT 3: The Stand
@@ -220,7 +220,7 @@ Two groups face each other. Tension in the air.
 
 🦗 Part 20 of our story
 
-#LianaBanyan #LittleRedHen #ABugsLife #Tension', 
+#LianaBanyan #LittleRedHen #ABugsLife #Tension',
 ARRAY['https://lianabanyan.com/fabled/hen14.png', 'https://lianabanyan.com/fabled/hen15.png']),
 
 (21, 3, 'ACT 3: The Stand
@@ -229,7 +229,7 @@ The ants realize: "Wait... WE outnumber THEM!"
 
 🦗 Part 21 of our story
 
-#LianaBanyan #LittleRedHen #ABugsLife #Realization', 
+#LianaBanyan #LittleRedHen #ABugsLife #Realization',
 ARRAY['https://lianabanyan.com/fabled/hen14.png', 'https://lianabanyan.com/fabled/hen15.png', 'https://lianabanyan.com/fabled/hen16.png']),
 
 (22, 3, 'ACT 3: The Stand
@@ -238,7 +238,7 @@ The ants link arms in army ant formation.
 
 🦗 Part 22 of our story
 
-#LianaBanyan #LittleRedHen #ABugsLife #Unity', 
+#LianaBanyan #LittleRedHen #ABugsLife #Unity',
 ARRAY['https://lianabanyan.com/fabled/hen14.png', 'https://lianabanyan.com/fabled/hen15.png', 'https://lianabanyan.com/fabled/hen16.png', 'https://lianabanyan.com/fabled/hen17.png']),
 
 (23, 3, 'ACT 3: The Stand
@@ -247,7 +247,7 @@ The ants link arms in army ant formation.
 
 🦗 Part 23 of our story
 
-#LianaBanyan #LittleRedHen #ABugsLife #WeAreTheAnts #Solidarity', 
+#LianaBanyan #LittleRedHen #ABugsLife #WeAreTheAnts #Solidarity',
 ARRAY['https://lianabanyan.com/fabled/hen14.png', 'https://lianabanyan.com/fabled/hen15.png', 'https://lianabanyan.com/fabled/hen16.png', 'https://lianabanyan.com/fabled/hen17.png', 'https://lianabanyan.com/fabled/hen18.png']),
 
 (24, 3, 'ACT 3: The Stand
@@ -256,7 +256,7 @@ Hopper sits alone, defeated. Cold and sad.
 
 🦗 Part 24 of our story
 
-#LianaBanyan #LittleRedHen #ABugsLife #Victory', 
+#LianaBanyan #LittleRedHen #ABugsLife #Victory',
 ARRAY['https://lianabanyan.com/fabled/hen14.png', 'https://lianabanyan.com/fabled/hen15.png', 'https://lianabanyan.com/fabled/hen16.png', 'https://lianabanyan.com/fabled/hen17.png', 'https://lianabanyan.com/fabled/hen18.png', 'https://lianabanyan.com/fabled/hen25.png']),
 
 (25, 3, 'ACT 3 FINALE: Grace
@@ -266,7 +266,7 @@ ARRAY['https://lianabanyan.com/fabled/hen14.png', 'https://lianabanyan.com/fable
 
 Full story: lianabanyan.com/get-a-job
 
-#LianaBanyan #LittleRedHen #HelpEachOther #Grace #TheEnd', 
+#LianaBanyan #LittleRedHen #HelpEachOther #Grace #TheEnd',
 ARRAY['https://lianabanyan.com/fabled/hen14.png', 'https://lianabanyan.com/fabled/hen15.png', 'https://lianabanyan.com/fabled/hen16.png', 'https://lianabanyan.com/fabled/hen17.png', 'https://lianabanyan.com/fabled/hen18.png', 'https://lianabanyan.com/fabled/hen25.png', 'https://lianabanyan.com/fabled/hen26.png']);
 
 -- Now insert into member_scheduled_posts for each platform
@@ -283,27 +283,27 @@ DECLARE
   post_interval interval := '1 hour';
 BEGIN
   -- Get the founder's user_id (first admin user or specific email)
-  SELECT id INTO founder_id 
-  FROM auth.users 
+  SELECT id INTO founder_id
+  FROM auth.users
   WHERE email = 'jonathan@lianabanyan.com'
   LIMIT 1;
-  
+
   -- If no founder found, try to get any user (for testing)
   IF founder_id IS NULL THEN
-    SELECT id INTO founder_id 
-    FROM auth.users 
+    SELECT id INTO founder_id
+    FROM auth.users
     LIMIT 1;
   END IF;
-  
+
   -- If still no user, skip insertion
   IF founder_id IS NULL THEN
     RAISE NOTICE 'No user found to assign posts to. Skipping insertion.';
     RETURN;
   END IF;
-  
+
   -- Start scheduling from now
   schedule_time := now();
-  
+
   -- Loop through each post
   FOR post_rec IN SELECT * FROM lrh_posts ORDER BY post_number LOOP
     -- Loop through each platform
@@ -324,13 +324,13 @@ BEGIN
         platform_name
       );
     END LOOP;
-    
+
     -- Increment schedule time for next post
     schedule_time := schedule_time + post_interval;
   END LOOP;
-  
-  RAISE NOTICE 'Successfully scheduled % posts across % platforms', 
-    (SELECT COUNT(*) FROM lrh_posts), 
+
+  RAISE NOTICE 'Successfully scheduled % posts across % platforms',
+    (SELECT COUNT(*) FROM lrh_posts),
     array_length(platforms, 1);
 END $$;
 
@@ -338,5 +338,5 @@ END $$;
 DROP TABLE lrh_posts;
 
 -- Summary comment
-COMMENT ON TABLE public.member_scheduled_posts IS 
+COMMENT ON TABLE public.member_scheduled_posts IS
 'Social media posts queue. Little Red Hen story (25 posts) added Feb 25, 2026.';

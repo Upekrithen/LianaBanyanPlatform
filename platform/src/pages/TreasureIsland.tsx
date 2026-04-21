@@ -193,8 +193,8 @@ export default function TreasureIsland() {
         </CardContent>
       </Card>
 
-      <CreditPurchaseModal 
-        open={showPurchase} 
+      <CreditPurchaseModal
+        open={showPurchase}
         onOpenChange={setShowPurchase}
       />
     </PortalPageLayout>

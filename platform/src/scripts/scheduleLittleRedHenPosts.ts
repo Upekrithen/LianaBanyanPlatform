@@ -1,9 +1,9 @@
 /**
  * Little Red Hen Story - Social Media Post Scheduler
- * 
+ *
  * Creates 25 posts across 3 acts, building up cumulatively within each act.
  * Each act starts fresh with image 1 of that act.
- * 
+ *
  * Usage: Import and call scheduleLittleRedHenPosts() from admin panel
  */
 
@@ -63,19 +63,19 @@ const STORY_LINK = 'lianabanyan.com/get-a-job';
 
 function generatePosts(): PostData[] {
   const posts: PostData[] = [];
-  
+
   // Act 1: Village Story (posts 1-13)
   for (let i = 0; i <= ACT_1_END; i++) {
     const imagesInPost = SCENE_ORDER.slice(0, i + 1);
     const latestScene = SCENE_ORDER[i];
-    
+
     let actLabel = i === ACT_1_END ? 'ACT 1 FINALE: The Village' : 'ACT 1: The Village';
     if (i < 4) actLabel = ''; // First few are just the classic story
-    
-    const hashtags = i === ACT_1_END 
+
+    const hashtags = i === ACT_1_END
       ? '#LianaBanyan #LittleRedHen #Together #OneTeam'
       : '#LianaBanyan #LittleRedHen #Cooperation';
-    
+
     posts.push({
       postNumber: i + 1,
       act: 1,
@@ -85,18 +85,18 @@ function generatePosts(): PostData[] {
       latestCaption: latestScene.caption,
     });
   }
-  
+
   // Act 2: The Dream (posts 14-18)
   for (let i = ACT_1_END + 1; i <= ACT_2_END; i++) {
     const actStartIndex = ACT_1_END + 1;
     const imagesInPost = SCENE_ORDER.slice(actStartIndex, i + 1);
     const latestScene = SCENE_ORDER[i];
-    
+
     const actLabel = i === ACT_2_END ? 'ACT 2 FINALE: The Dream' : 'ACT 2: The Dream';
-    const hashtags = i === ACT_2_END 
+    const hashtags = i === ACT_2_END
       ? '#LianaBanyan #LittleRedHen #Dreams #TakeAction'
       : '#LianaBanyan #LittleRedHen #RattleTheStars';
-    
+
     posts.push({
       postNumber: i + 1,
       act: 2,
@@ -106,19 +106,19 @@ function generatePosts(): PostData[] {
       latestCaption: latestScene.caption,
     });
   }
-  
+
   // Act 3: The Stand (posts 19-25)
   for (let i = ACT_2_END + 1; i < SCENE_ORDER.length; i++) {
     const actStartIndex = ACT_2_END + 1;
     const imagesInPost = SCENE_ORDER.slice(actStartIndex, i + 1);
     const latestScene = SCENE_ORDER[i];
-    
+
     const isFinale = i === SCENE_ORDER.length - 1;
     const actLabel = isFinale ? 'ACT 3 FINALE: Grace' : 'ACT 3: The Stand';
-    const hashtags = isFinale 
+    const hashtags = isFinale
       ? '#LianaBanyan #LittleRedHen #HelpEachOther #Grace'
       : '#LianaBanyan #LittleRedHen #WeAreTheAnts';
-    
+
     posts.push({
       postNumber: i + 1,
       act: 3,
@@ -128,7 +128,7 @@ function generatePosts(): PostData[] {
       latestCaption: latestScene.caption,
     });
   }
-  
+
   return posts;
 }
 
@@ -163,7 +163,7 @@ export async function scheduleLittleRedHenPosts(options: ScheduleOptions): Promi
   error?: string;
 }> {
   const { platforms, startDate, intervalHours, userId } = options;
-  
+
   // Get current user if not provided
   let targetUserId = userId;
   if (!targetUserId) {
@@ -173,17 +173,17 @@ export async function scheduleLittleRedHenPosts(options: ScheduleOptions): Promi
     }
     targetUserId = user.id;
   }
-  
+
   const posts = generatePosts();
   let postsCreated = 0;
-  
+
   for (let i = 0; i < posts.length; i++) {
     const post = posts[i];
     const scheduledFor = new Date(startDate.getTime() + (i * intervalHours * 60 * 60 * 1000));
-    
+
     for (const platform of platforms) {
       const platformImages = getImagesForPlatform(post.imageUrls, platform);
-      
+
       const { error } = await supabase
         .from('member_scheduled_posts')
         .insert({
@@ -194,7 +194,7 @@ export async function scheduleLittleRedHenPosts(options: ScheduleOptions): Promi
           status: 'scheduled',
           platform: platform,
         });
-      
+
       if (error) {
         console.error(`Error scheduling post ${post.postNumber} for ${platform}:`, error);
       } else {
@@ -202,7 +202,7 @@ export async function scheduleLittleRedHenPosts(options: ScheduleOptions): Promi
       }
     }
   }
-  
+
   return {
     success: true,
     postsCreated,

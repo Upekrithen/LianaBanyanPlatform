@@ -137,12 +137,12 @@ export default function DMKeepSystem() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
-              
+
               <div className="text-center p-6 bg-slate-50 dark:bg-slate-900 rounded-xl border">
                 <p className="text-sm text-slate-500 mb-2">Current Unlocked Persistence</p>
                 <h2 className="text-4xl font-black text-slate-900 dark:text-white">3 Days <span className="text-lg font-normal text-slate-500">(72 Hours)</span></h2>
                 <p className="text-sm mt-4 text-slate-600">
-                  You can log off now. Your progress will be saved exactly as it is for 3 days. 
+                  You can log off now. Your progress will be saved exactly as it is for 3 days.
                   Log back in before the timer expires to reset the clock.
                 </p>
               </div>
@@ -220,7 +220,7 @@ export default function DMKeepSystem() {
                   </Button>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  
+
                   <div className="p-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg relative">
                     <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold text-xs">1</div>
                     <div className="ml-4">

@@ -43,7 +43,7 @@ export default function WildfireBeaconRun() {
 
   return (
     <PortalPageLayout>
-      
+
       {/* Tour Overlay UI */}
       <div className="absolute top-6 left-0 right-0 flex justify-center z-50">
         <div className="bg-slate-900/80 backdrop-blur-md border border-slate-700 rounded-full px-6 py-3 flex items-center gap-6 shadow-2xl">
@@ -51,9 +51,9 @@ export default function WildfireBeaconRun() {
             <Flame className="w-5 h-5 text-orange-500 animate-pulse" />
             <span className="font-bold text-slate-200">WildFire Tour</span>
           </div>
-          
+
           <div className="h-4 w-px bg-slate-700" />
-          
+
           <div className="text-sm text-slate-400">
             Location {currentLocation + 1} of {tourLocations.length}: <strong className="text-slate-200">{tourLocations[currentLocation].name}</strong>
           </div>
@@ -78,7 +78,7 @@ export default function WildfireBeaconRun() {
       </div>
 
       <div className="max-w-5xl mx-auto mt-24 space-y-8">
-        
+
         {/* The "Viewport" of the Tour */}
         <Card className={`border-2 transition-all duration-500 ${isTourActive ? 'border-slate-800 bg-slate-900' : 'border-purple-500/50 bg-purple-950/20 shadow-[0_0_50px_rgba(168,85,247,0.15)]'}`}>
           <CardContent className="p-12 min-h-[400px] flex flex-col items-center justify-center text-center space-y-6">

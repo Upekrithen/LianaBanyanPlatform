@@ -144,8 +144,8 @@ export function MedallionQRVerification() {
 
                       <div>
                         <span className="font-medium">Holder:</span>{' '}
-                        {verificationResult.data.profiles?.display_name || 
-                         verificationResult.data.profiles?.full_name || 
+                        {verificationResult.data.profiles?.display_name ||
+                         verificationResult.data.profiles?.full_name ||
                          'Unknown'}
                       </div>
 

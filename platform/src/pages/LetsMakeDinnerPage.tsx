@@ -2,7 +2,7 @@
  * LET'S MAKE DINNER — Chalk-Outline Progressive Disclosure
  * =========================================================
  * NOT tabs and sidebars. NOT a firehose.
- * 
+ *
  * Shows available meals with dynamic pricing tiers.
  * Pricing: $5 preorder | $10 day-before | $15 rush
  * Chefs keep 83.3% — locked forever.
@@ -87,7 +87,7 @@ export default function LetsMakeDinnerPage() {
         .eq('status', 'available')
         .eq('pickup_date', dateStr)
         .order('pickup_time', { ascending: true });
-      
+
       if (error) throw error;
       return data as LmdMeal[];
     }
@@ -134,7 +134,7 @@ export default function LetsMakeDinnerPage() {
       </div>
 
       {/* Back button - goes to initiatives list on main page */}
-      <button 
+      <button
         onClick={() => navigate('/?view=initiatives')}
         className="ghost-toggle"
         style={{ left: 20 }}
@@ -161,7 +161,7 @@ export default function LetsMakeDinnerPage() {
         </button>
       )}
       {/* Help / Explainer button */}
-      <button 
+      <button
         onClick={() => navigate('/initiatives/lets-make-dinner/about')}
         className="ghost-toggle"
         style={{ right: user ? 140 : 20, left: 'auto' }}
@@ -172,8 +172,8 @@ export default function LetsMakeDinnerPage() {
       </button>
 
       {/* Demand Aggregation Explainer */}
-      <DemandAggregationExplainer 
-        open={showExplainer} 
+      <DemandAggregationExplainer
+        open={showExplainer}
         onOpenChange={setShowExplainer}
       />
 
@@ -192,7 +192,7 @@ export default function LetsMakeDinnerPage() {
           <div className="mt-4 max-w-md mx-auto">
             <BecomeAStewardCard />
           </div>
-          
+
           {/* Pricing Info Banner - Expandable */}
           <div style={{ marginTop: '1.5rem', maxWidth: 600, margin: '1.5rem auto 0' }}>
             <ExpandableBlock
@@ -220,7 +220,7 @@ export default function LetsMakeDinnerPage() {
                     <div className="text-rose-300/60 text-xs mt-1">Last minute</div>
                   </div>
                 </div>
-                
+
                 <DataVizBar
                   title="Chef Earnings on $15 Meal"
                   subtitle="Chefs keep 83.3% — locked forever"
@@ -232,7 +232,7 @@ export default function LetsMakeDinnerPage() {
                   showPercentages={true}
                   height={24}
                 />
-                
+
                 <p style={{ fontSize: '0.85rem', opacity: 0.7, textAlign: 'center' }}>
                   <strong>Why dynamic pricing?</strong> Early orders help chefs plan better, reduce waste, and buy ingredients in bulk.
                 </p>
@@ -243,8 +243,8 @@ export default function LetsMakeDinnerPage() {
 
         {/* Date Selector Strip */}
         <div className="trunk-info" style={{ marginTop: '2rem', padding: '1rem 1.5rem' }}>
-          <div style={{ 
-            display: 'flex', 
+          <div style={{
+            display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
             marginBottom: '1rem'
@@ -252,7 +252,7 @@ export default function LetsMakeDinnerPage() {
             <Calendar className="h-5 w-5 text-purple-300" />
             <span style={{ color: '#c4b5fd', fontWeight: 600 }}>Select Pickup Date</span>
           </div>
-          
+
           <div style={{
             display: 'flex',
             gap: '0.75rem',
@@ -269,11 +269,11 @@ export default function LetsMakeDinnerPage() {
                   style={{
                     padding: '0.75rem 1.25rem',
                     borderRadius: '12px',
-                    border: isSelected 
-                      ? '2px solid #a78bfa' 
+                    border: isSelected
+                      ? '2px solid #a78bfa'
                       : '2px solid rgba(255,255,255,0.15)',
-                    background: isSelected 
-                      ? 'rgba(167, 139, 250, 0.2)' 
+                    background: isSelected
+                      ? 'rgba(167, 139, 250, 0.2)'
                       : 'rgba(255,255,255,0.05)',
                     color: 'white',
                     cursor: 'pointer',
@@ -289,8 +289,8 @@ export default function LetsMakeDinnerPage() {
                     {format(date, 'MMM d')}
                   </div>
                   {isToday && (
-                    <div style={{ 
-                      fontSize: '0.7rem', 
+                    <div style={{
+                      fontSize: '0.7rem',
                       color: '#34d399',
                       marginTop: '0.25rem'
                     }}>
@@ -308,7 +308,7 @@ export default function LetsMakeDinnerPage() {
           <h2 style={{ textAlign: 'center', marginBottom: '1rem', color: '#c4b5fd' }}>
             Available Meals — {format(selectedDate, 'EEEE, MMMM d')}
           </h2>
-          
+
           {isLoading ? (
             <div style={{ textAlign: 'center', padding: '3rem', opacity: 0.6 }}>
               Loading meals...
@@ -317,21 +317,21 @@ export default function LetsMakeDinnerPage() {
             <div style={{ textAlign: 'center', padding: '3rem' }}>
               <ChefHat className="h-12 w-12 mx-auto mb-3 opacity-40" />
               <p style={{ opacity: 0.7 }}>No meals available for {format(selectedDate, 'MMMM d')}</p>
-              
+
               {/* Action Buttons */}
-              <div style={{ 
-                display: 'flex', 
-                gap: '1rem', 
-                justifyContent: 'center', 
+              <div style={{
+                display: 'flex',
+                gap: '1rem',
+                justifyContent: 'center',
                 marginTop: '1.5rem',
                 flexWrap: 'wrap'
               }}>
                 <button
                   onClick={() => setShowRequestDialog(true)}
                   className="btn"
-                  style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
                     gap: '0.5rem',
                     padding: '0.75rem 1.25rem',
                     background: 'rgba(168, 85, 247, 0.2)',
@@ -345,9 +345,9 @@ export default function LetsMakeDinnerPage() {
                 <button
                   onClick={() => setShowOfferDialog(true)}
                   className="btn"
-                  style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
                     gap: '0.5rem',
                     padding: '0.75rem 1.25rem',
                     background: 'rgba(52, 211, 153, 0.2)',
@@ -359,14 +359,14 @@ export default function LetsMakeDinnerPage() {
                   Offer a Meal
                 </button>
               </div>
-              
+
               <p style={{ fontSize: '0.85rem', marginTop: '1rem', opacity: 0.5 }}>
                 Request with Marks or be the first chef to offer!
               </p>
             </div>
           ) : (
-            <div className="path-grid" style={{ 
-              display: 'grid', 
+            <div className="path-grid" style={{
+              display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
               gap: '1.5rem',
               marginTop: '1.5rem'
@@ -375,7 +375,7 @@ export default function LetsMakeDinnerPage() {
                 const pricing = getMealPricing(meal);
                 const portionsLeft = remaining(meal);
                 const nextTier = getNextTierInfo(pricing.hoursOut);
-                
+
                 return (
                   <div
                     key={meal.id}
@@ -389,16 +389,16 @@ export default function LetsMakeDinnerPage() {
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '0.75rem',
-                      background: meal.is_charity 
-                        ? 'rgba(244, 63, 94, 0.08)' 
+                      background: meal.is_charity
+                        ? 'rgba(244, 63, 94, 0.08)'
                         : 'rgba(255,255,255,0.08)',
                     }}
                   >
                     {/* Meal Header */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h3 style={{ 
-                        fontSize: '1.25rem', 
-                        fontWeight: 600, 
+                      <h3 style={{
+                        fontSize: '1.25rem',
+                        fontWeight: 600,
                         lineHeight: 1.2,
                         flex: 1,
                         marginRight: '0.5rem'
@@ -416,18 +416,18 @@ export default function LetsMakeDinnerPage() {
                         )}
                       </Badge>
                     </div>
-                    
+
                     {/* Description */}
                     {(meal.description || meal.cuisine) && (
                       <p style={{ fontSize: '0.9rem', opacity: 0.8, lineHeight: 1.4 }}>
                         {meal.description || meal.cuisine}
                       </p>
                     )}
-                    
+
                     {/* Chef Info */}
-                    <div style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
                       gap: '0.5rem',
                       fontSize: '0.85rem',
                       opacity: 0.7
@@ -438,10 +438,10 @@ export default function LetsMakeDinnerPage() {
                         {meal.lmd_chefs?.is_verified && ' ✓'}
                       </span>
                     </div>
-                    
+
                     {/* Time & Location */}
-                    <div style={{ 
-                      display: 'flex', 
+                    <div style={{
+                      display: 'flex',
                       gap: '1rem',
                       fontSize: '0.85rem',
                       opacity: 0.7,
@@ -456,13 +456,13 @@ export default function LetsMakeDinnerPage() {
                       {meal.pickup_location && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                           <MapPin className="h-3.5 w-3.5" />
-                          {meal.pickup_location.length > 20 
-                            ? meal.pickup_location.slice(0, 20) + '...' 
+                          {meal.pickup_location.length > 20
+                            ? meal.pickup_location.slice(0, 20) + '...'
                             : meal.pickup_location}
                         </div>
                       )}
                     </div>
-                    
+
                     {/* Allergens */}
                     {meal.allergens && meal.allergens.length > 0 && (
                       <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
@@ -482,15 +482,15 @@ export default function LetsMakeDinnerPage() {
                         ))}
                       </div>
                     )}
-                    
+
                     {/* Portions & Price Tier */}
-                    <div style={{ 
+                    <div style={{
                       marginTop: 'auto',
                       paddingTop: '0.75rem',
                       borderTop: '1px solid rgba(255,255,255,0.1)'
                     }}>
-                      <div style={{ 
-                        display: 'flex', 
+                      <div style={{
+                        display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         marginBottom: '0.5rem'
@@ -505,18 +505,18 @@ export default function LetsMakeDinnerPage() {
                           </span>
                         )}
                       </div>
-                      
+
                       {/* Next tier message */}
                       {nextTier && !meal.is_charity && (
-                        <p style={{ 
-                          fontSize: '0.75rem', 
+                        <p style={{
+                          fontSize: '0.75rem',
                           color: pricing.tier === 'preorder' ? '#34d399' : '#fbbf24',
                           marginBottom: '0.75rem'
                         }}>
                           {nextTier.message}
                         </p>
                       )}
-                      
+
                       {/* Order Button */}
                       <MealOrderDialog
                         mealId={meal.id}
@@ -538,7 +538,7 @@ export default function LetsMakeDinnerPage() {
                 onClick={() => setShowRequestDialog(true)}
                 style={{ cursor: 'pointer' }}
               >
-                <div 
+                <div
                   className="path-front"
                   style={{
                     display: 'flex',
@@ -560,7 +560,7 @@ export default function LetsMakeDinnerPage() {
                   <p style={{ fontSize: '0.9rem', opacity: 0.5, maxWidth: '200px' }}>
                     Vote with Marks for what you want
                   </p>
-                  <div style={{ 
+                  <div style={{
                     marginTop: '1rem',
                     padding: '0.5rem 1rem',
                     border: '1px solid rgba(168, 85, 247, 0.4)',
@@ -580,7 +580,7 @@ export default function LetsMakeDinnerPage() {
                 onClick={() => setShowOfferDialog(true)}
                 style={{ cursor: 'pointer' }}
               >
-                <div 
+                <div
                   className="path-front"
                   style={{
                     display: 'flex',
@@ -602,7 +602,7 @@ export default function LetsMakeDinnerPage() {
                   <p style={{ fontSize: '0.9rem', opacity: 0.5, maxWidth: '200px' }}>
                     Share your cooking with the community
                   </p>
-                  <div style={{ 
+                  <div style={{
                     marginTop: '1rem',
                     padding: '0.5rem 1rem',
                     border: '1px solid rgba(52, 211, 153, 0.4)',
@@ -621,7 +621,7 @@ export default function LetsMakeDinnerPage() {
                 onClick={() => navigate('/initiatives/lets-make-dinner/start-node')}
                 style={{ cursor: 'pointer' }}
               >
-                <div 
+                <div
                   className="path-front"
                   style={{
                     display: 'flex',
@@ -643,7 +643,7 @@ export default function LetsMakeDinnerPage() {
                   <p style={{ fontSize: '0.9rem', opacity: 0.5, maxWidth: '200px' }}>
                     Church kitchen? Food truck? Start your own node!
                   </p>
-                  <div style={{ 
+                  <div style={{
                     marginTop: '1rem',
                     padding: '0.5rem 1rem',
                     border: '1px solid rgba(251, 191, 36, 0.4)',
@@ -664,9 +664,9 @@ export default function LetsMakeDinnerPage() {
           <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#c4b5fd' }}>
             How It Works
           </h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '1rem',
             maxWidth: 1000,
             margin: '0 auto'
@@ -684,11 +684,11 @@ export default function LetsMakeDinnerPage() {
                   <p style={{ fontSize: '0.9rem', marginBottom: '0.75rem', lineHeight: 1.4 }}>
                     See what neighbors are cooking. Filter by cuisine, date, and dietary needs.
                   </p>
-                  <button 
+                  <button
                     onClick={(e) => { e.stopPropagation(); document.querySelector('.trunk-info')?.scrollIntoView({ behavior: 'smooth' }); }}
-                    style={{ 
-                      padding: '0.5rem 1rem', 
-                      background: 'rgba(139, 92, 246, 0.3)', 
+                    style={{
+                      padding: '0.5rem 1rem',
+                      background: 'rgba(139, 92, 246, 0.3)',
                       border: '1px solid rgba(139, 92, 246, 0.5)',
                       borderRadius: '8px',
                       color: '#c4b5fd',
@@ -759,11 +759,11 @@ export default function LetsMakeDinnerPage() {
                     Platform takes only Cost + 20%<br />
                     <span style={{ opacity: 0.7 }}>Locked in constitutional bylaws</span>
                   </p>
-                  <button 
+                  <button
                     onClick={(e) => { e.stopPropagation(); setShowOfferDialog(true); }}
-                    style={{ 
-                      padding: '0.5rem 1rem', 
-                      background: 'rgba(244, 63, 94, 0.3)', 
+                    style={{
+                      padding: '0.5rem 1rem',
+                      background: 'rgba(244, 63, 94, 0.3)',
                       border: '1px solid rgba(244, 63, 94, 0.5)',
                       borderRadius: '8px',
                       color: '#fda4af',
@@ -805,7 +805,7 @@ export default function LetsMakeDinnerPage() {
             <span style={{ opacity: 0.7 }}>Exploring as Guest</span>
             <span style={{ margin: '0 1rem', opacity: 0.4 }}>—</span>
             <span style={{ opacity: 0.5 }}>Join to order or offer meals</span>
-            <button 
+            <button
               onClick={() => openOnboard({ reason: "start cooking and earning", actionLabel: "Join", membershipIncluded: true })}
               className="btn"
               style={{ marginLeft: '1rem', padding: '0.4rem 1rem', fontSize: '0.85rem' }}
@@ -823,9 +823,9 @@ export default function LetsMakeDinnerPage() {
 
       {/* Offer Meal Dialog */}
       {showOfferDialog && (
-        <CreateMealOfferingDialog 
-          open={showOfferDialog} 
-          onOpenChange={setShowOfferDialog} 
+        <CreateMealOfferingDialog
+          open={showOfferDialog}
+          onOpenChange={setShowOfferDialog}
         />
       )}
 

@@ -2,18 +2,18 @@
  * Create Meal Offering Dialog
  * ===========================
  * For chefs to offer meals, packed lunches, or baked goods.
- * 
+ *
  * Pricing is AUTOMATIC based on lead time:
  * - $5 preorder (48+ hrs)
  * - $10 day-before (6-48 hrs)
  * - $15 rush (under 6 hrs)
- * 
+ *
  * Bulk orders get volume discounts:
  * - 5+ units: 5% off
  * - 10+ units: 10% off
  * - 20+ units: 15% off
  * - 40+ units: 20% off
- * 
+ *
  * Chefs keep 83.3% — locked forever.
  */
 
@@ -32,11 +32,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Plus, Info, Package, Cookie, ChefHat, Users } from "lucide-react";
 import { LMD_PRICING, calculateChefEarnings } from "@/lib/lmdPricing";
-import { 
-  type OfferingType, 
-  BAKED_GOODS_CATEGORIES, 
+import {
+  type OfferingType,
+  BAKED_GOODS_CATEGORIES,
   DEFAULT_VOLUME_TIERS,
-  formatVolumeTiers 
+  formatVolumeTiers
 } from "@/lib/bulkPricing";
 
 interface CreateMealOfferingDialogProps {
@@ -45,10 +45,10 @@ interface CreateMealOfferingDialogProps {
   trigger?: React.ReactNode;
 }
 
-export function CreateMealOfferingDialog({ 
-  open: controlledOpen, 
+export function CreateMealOfferingDialog({
+  open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
-  trigger 
+  trigger
 }: CreateMealOfferingDialogProps) {
   // Support both controlled and uncontrolled modes
   const [internalOpen, setInternalOpen] = useState(false);
@@ -93,7 +93,7 @@ export function CreateMealOfferingDialog({
       const allergenStr = formData.get('allergens') as string;
 
       // Build bulk increment based on offering type
-      const bulkIncrement = offeringType === 'packed_lunch' ? 5 : 
+      const bulkIncrement = offeringType === 'packed_lunch' ? 5 :
                            offeringType === 'baked_goods' ? 6 : 1;
 
       // For auto-pricing, we store 0 as price_per_portion (calculated dynamically)
@@ -157,8 +157,8 @@ export function CreateMealOfferingDialog({
           type="button"
           onClick={() => setOfferingType('standard')}
           className={`p-3 rounded-lg border text-center transition-colors ${
-            offeringType === 'standard' 
-              ? 'bg-primary/10 border-primary' 
+            offeringType === 'standard'
+              ? 'bg-primary/10 border-primary'
               : 'bg-muted/50 border-muted hover:border-primary/50'
           }`}
         >
@@ -169,8 +169,8 @@ export function CreateMealOfferingDialog({
           type="button"
           onClick={() => setOfferingType('packed_lunch')}
           className={`p-3 rounded-lg border text-center transition-colors ${
-            offeringType === 'packed_lunch' 
-              ? 'bg-primary/10 border-primary' 
+            offeringType === 'packed_lunch'
+              ? 'bg-primary/10 border-primary'
               : 'bg-muted/50 border-muted hover:border-primary/50'
           }`}
         >
@@ -181,8 +181,8 @@ export function CreateMealOfferingDialog({
           type="button"
           onClick={() => setOfferingType('baked_goods')}
           className={`p-3 rounded-lg border text-center transition-colors ${
-            offeringType === 'baked_goods' 
-              ? 'bg-primary/10 border-primary' 
+            offeringType === 'baked_goods'
+              ? 'bg-primary/10 border-primary'
               : 'bg-muted/50 border-muted hover:border-primary/50'
           }`}
         >
@@ -193,8 +193,8 @@ export function CreateMealOfferingDialog({
           type="button"
           onClick={() => setOfferingType('catering')}
           className={`p-3 rounded-lg border text-center transition-colors ${
-            offeringType === 'catering' 
-              ? 'bg-primary/10 border-primary' 
+            offeringType === 'catering'
+              ? 'bg-primary/10 border-primary'
               : 'bg-muted/50 border-muted hover:border-primary/50'
           }`}
         >

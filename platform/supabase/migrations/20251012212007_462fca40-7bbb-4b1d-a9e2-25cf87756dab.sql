@@ -86,18 +86,18 @@ DECLARE
 BEGIN
   -- Base equity ratio: 50%
   _base_equity_ratio := 0.50;
-  
+
   -- Time penalty: longer vesting = lower equity (0.5% penalty per 10 days over 100)
   _time_penalty := GREATEST(0, (_vesting_days - 100) * 0.0005);
-  
+
   -- Ranking bonus: higher ranking = better equity (5% bonus per rank, max 50% at rank 10)
   _ranking_bonus := (_ranking_score / 10.0) * 0.50;
-  
+
   -- Calculate final equity ratio (between 10% and 90%)
-  _final_equity_ratio := LEAST(0.90, GREATEST(0.10, 
+  _final_equity_ratio := LEAST(0.90, GREATEST(0.10,
     _base_equity_ratio + _ranking_bonus - _time_penalty
   ));
-  
+
   -- Daily conversion rate based on 100-day model
   RETURN QUERY SELECT
     _final_equity_ratio,
@@ -123,13 +123,13 @@ BEGIN
   SELECT medallion_contribution_percentage INTO _pool_percentage
   FROM public.lb_funding_pool
   LIMIT 1;
-  
+
   -- Calculate contribution (1/3 of pledge)
   _contribution := _pledge_amount * (_pool_percentage / 100.0);
-  
+
   -- Add to pool
   UPDATE public.lb_funding_pool
-  SET 
+  SET
     total_pool_amount = total_pool_amount + _contribution,
     last_contribution_at = now(),
     updated_at = now();
@@ -153,9 +153,9 @@ BEGIN
   SELECT available_for_eoi INTO _available_pool
   FROM public.lb_funding_pool
   LIMIT 1;
-  
+
   -- Process active vesting schedules
-  FOR _schedule IN 
+  FOR _schedule IN
     SELECT * FROM public.eoi_vesting_schedules
     WHERE status = 'active'
     AND days_elapsed < total_vesting_days
@@ -166,39 +166,39 @@ BEGIN
       _schedule.ranking_score,
       _schedule.total_vesting_days
     );
-    
+
     -- Calculate daily conversion amount
     _conversion_amount := _schedule.eoi_amount * _ratios.daily_conversion_rate;
-    
+
     -- Check if pool has enough funds
     IF _available_pool >= _conversion_amount THEN
       -- Update user credits
       UPDATE public.user_credits
-      SET 
+      SET
         eoi_credits = eoi_credits - _conversion_amount,
         total_credits = total_credits + _conversion_amount,
         eoi_last_conversion_at = now(),
         updated_at = now()
       WHERE user_id = _schedule.user_id;
-      
+
       -- Update vesting schedule
       UPDATE public.eoi_vesting_schedules
       SET
         days_elapsed = days_elapsed + 1,
         amount_vested = amount_vested + _conversion_amount,
-        status = CASE 
+        status = CASE
           WHEN days_elapsed + 1 >= total_vesting_days THEN 'completed'
           ELSE 'active'
         END,
         updated_at = now()
       WHERE id = _schedule.id;
-      
+
       -- Deduct from pool
       UPDATE public.lb_funding_pool
       SET
         allocated_to_eoi = allocated_to_eoi + _conversion_amount,
         updated_at = now();
-      
+
       -- Update available pool
       _available_pool := _available_pool - _conversion_amount;
     END IF;
@@ -224,12 +224,12 @@ BEGIN
     WHERE pl.id = NEW.production_level_id
     AND p.name = 'Medallion'
   ) INTO _is_medallion;
-  
+
   -- If medallion pledge, contribute to LB pool
   IF _is_medallion AND NEW.source = 'user' THEN
     PERFORM public.contribute_to_lb_pool(NEW.amount);
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;

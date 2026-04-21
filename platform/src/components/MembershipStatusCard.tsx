@@ -73,7 +73,7 @@ export function MembershipStatusCard() {
           </Badge>
         </div>
         <CardDescription>
-          {profile.membership_status === 'active' 
+          {profile.membership_status === 'active'
             ? 'Your free 30-day membership is active'
             : profile.membership_status === 'expired'
             ? 'Your membership has expired'

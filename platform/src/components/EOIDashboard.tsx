@@ -36,7 +36,7 @@ export function EOIDashboard() {
 
       if (prefs?.show_eoi_data) {
         setShowEOI(true);
-        
+
         // Load EOI credit data
         const { data: credits } = await supabase
           .from("user_credits")
@@ -77,7 +77,7 @@ export function EOIDashboard() {
     <div className="space-y-6">
       {/* LB Funding Pool */}
       <LBFundingPoolDisplay />
-      
+
       {/* EOI Credits Overview */}
       <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
         <CardHeader>
@@ -157,7 +157,7 @@ export function EOIDashboard() {
                 Last Conversion
               </div>
               <div className="text-sm font-medium">
-                {eoiData.eoi_last_conversion_at 
+                {eoiData.eoi_last_conversion_at
                   ? format(new Date(eoiData.eoi_last_conversion_at), "MMM d, HH:mm")
                   : "Never"}
               </div>

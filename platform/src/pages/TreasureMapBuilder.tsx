@@ -106,7 +106,7 @@ export default function TreasureMapBuilder() {
   return (
     <PortalPageLayout>
       <div className="max-w-4xl mx-auto space-y-8">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-6">
           <div className="flex items-center gap-4">
@@ -136,14 +136,14 @@ export default function TreasureMapBuilder() {
           <CardContent className="p-6 space-y-4">
             <div>
               <label className="text-sm font-medium text-slate-400 mb-1 block">Campaign Name</label>
-              <Input 
-                value={mapName} 
+              <Input
+                value={mapName}
                 onChange={(e) => setMapName(e.target.value)}
                 className="bg-slate-950 border-slate-700 text-lg font-semibold"
               />
             </div>
             <p className="text-sm text-slate-400">
-              Link system-created Beacons together. When your players visit these locations and perform the trigger action, 
+              Link system-created Beacons together. When your players visit these locations and perform the trigger action,
               your custom Deck Card script will be revealed.
             </p>
           </CardContent>
@@ -160,7 +160,7 @@ export default function TreasureMapBuilder() {
                 <div className="flex justify-between items-start mb-4">
                   <div className="w-full max-w-xs">
                     <label className="text-xs font-medium text-slate-400 mb-1 block uppercase tracking-wider">Location (System Beacon)</label>
-                    <select 
+                    <select
                       className="w-full bg-slate-950 border border-slate-700 rounded-md p-2 text-sm text-slate-200"
                       value={node.beaconId}
                       onChange={(e) => updateNode(node.id, 'beaconId', e.target.value)}
@@ -182,8 +182,8 @@ export default function TreasureMapBuilder() {
                   <div className="space-y-4">
                     <div>
                       <label className="text-xs font-medium text-slate-400 mb-1 block uppercase tracking-wider">Trigger Action</label>
-                      <Input 
-                        placeholder="e.g., Knock 3 times and say 'Mellon'" 
+                      <Input
+                        placeholder="e.g., Knock 3 times and say 'Mellon'"
                         value={node.triggerAction}
                         onChange={(e) => updateNode(node.id, 'triggerAction', e.target.value)}
                         className="bg-slate-950 border-slate-700"
@@ -192,19 +192,19 @@ export default function TreasureMapBuilder() {
                     </div>
                     <div>
                       <label className="text-xs font-medium text-slate-400 mb-1 block uppercase tracking-wider">Loot / Reward (Optional)</label>
-                      <Input 
-                        placeholder="e.g., +50 Ghost Credits, 1x Crow Feather" 
+                      <Input
+                        placeholder="e.g., +50 Ghost Credits, 1x Crow Feather"
                         value={node.loot}
                         onChange={(e) => updateNode(node.id, 'loot', e.target.value)}
                         className="bg-slate-950 border-slate-700"
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="text-xs font-medium text-slate-400 mb-1 block uppercase tracking-wider">Deck Card Script (The Reveal)</label>
-                    <Textarea 
-                      placeholder="Write the DM narration or character dialogue here..." 
+                    <Textarea
+                      placeholder="Write the DM narration or character dialogue here..."
                       value={node.revealScript}
                       onChange={(e) => updateNode(node.id, 'revealScript', e.target.value)}
                       className="bg-slate-950 border-slate-700 h-32 resize-none"
@@ -215,8 +215,8 @@ export default function TreasureMapBuilder() {
             </Card>
           ))}
 
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="w-full py-8 border-dashed border-2 border-slate-700 text-slate-400 hover:text-slate-200 hover:border-slate-500 hover:bg-slate-900/50"
             onClick={addNode}
           >

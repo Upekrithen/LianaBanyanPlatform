@@ -2,7 +2,7 @@
  * JOULE TO C+20 CONVERTER
  * =======================
  * Innovation #1349: Joule-to-C20 Conversion
- * 
+ *
  * Allows users to convert their Joules into C+20 purchasing power,
  * extending their ability to buy at Cost + 20% pricing.
  */
@@ -66,7 +66,7 @@ export function JouleToC20Converter({
     setIsConverting(true);
     try {
       const newBalance = await convertJoulesToC20Balance(anchorId, amount, 'User-initiated conversion');
-      
+
       if (newBalance > 0) {
         toast({
           title: 'Conversion Successful!',
@@ -159,7 +159,7 @@ export function JouleToC20Converter({
                 placeholder="0.00"
               />
             </div>
-            
+
             {/* Slider */}
             <Slider
               value={[amount]}
@@ -168,7 +168,7 @@ export function JouleToC20Converter({
               step={1}
               className="py-2"
             />
-            
+
             {/* Preset Buttons */}
             <div className="flex gap-2">
               {presetAmounts.map((preset) => (

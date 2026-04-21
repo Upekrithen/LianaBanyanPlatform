@@ -2,10 +2,10 @@
  * LOCAL COLD START DASHBOARD
  * ==========================
  * Milestone 2: The Cold Start & Stewardship System
- * 
+ *
  * Shows localized progress bars for initiatives in a specific city.
  * Displays: "Phoenix needs 50 families and 1 Duke to reach EMBER"
- * 
+ *
  * Tier Progression: SPARK → EMBER → FLAME → FIRE → BLAZE → INFERNO → WILDFIRE
  */
 
@@ -15,8 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
-import { 
-  Flame, MapPin, Users, Crown, ArrowRight, 
+import {
+  Flame, MapPin, Users, Crown, ArrowRight,
   Sparkles, TrendingUp, Search, ChevronRight, Anchor, Ship
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,45 +24,45 @@ import { useNavigate } from "react-router-dom";
 
 // Tier colors and icons
 const TIER_CONFIG: Record<string, { color: string; bgColor: string; icon: React.ReactNode; description: string }> = {
-  SPARK: { 
-    color: 'text-gray-400', 
-    bgColor: 'bg-gray-500/20', 
+  SPARK: {
+    color: 'text-gray-400',
+    bgColor: 'bg-gray-500/20',
     icon: <Sparkles className="w-4 h-4" />,
     description: 'Gathering interest'
   },
-  EMBER: { 
-    color: 'text-orange-400', 
-    bgColor: 'bg-orange-500/20', 
+  EMBER: {
+    color: 'text-orange-400',
+    bgColor: 'bg-orange-500/20',
     icon: <Flame className="w-4 h-4" />,
     description: 'Ready to launch'
   },
-  FLAME: { 
-    color: 'text-orange-500', 
-    bgColor: 'bg-orange-500/30', 
+  FLAME: {
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-500/30',
     icon: <Flame className="w-4 h-4" />,
     description: 'Growing momentum'
   },
-  FIRE: { 
-    color: 'text-red-500', 
-    bgColor: 'bg-red-500/30', 
+  FIRE: {
+    color: 'text-red-500',
+    bgColor: 'bg-red-500/30',
     icon: <Flame className="w-4 h-4" />,
     description: 'Sustainable operations'
   },
-  BLAZE: { 
-    color: 'text-red-600', 
-    bgColor: 'bg-red-600/30', 
+  BLAZE: {
+    color: 'text-red-600',
+    bgColor: 'bg-red-600/30',
     icon: <Flame className="w-4 h-4" />,
     description: 'Expanding reach'
   },
-  INFERNO: { 
-    color: 'text-yellow-500', 
-    bgColor: 'bg-yellow-500/30', 
+  INFERNO: {
+    color: 'text-yellow-500',
+    bgColor: 'bg-yellow-500/30',
     icon: <Flame className="w-4 h-4" />,
     description: 'Regional impact'
   },
-  WILDFIRE: { 
-    color: 'text-yellow-400', 
-    bgColor: 'bg-yellow-400/30', 
+  WILDFIRE: {
+    color: 'text-yellow-400',
+    bgColor: 'bg-yellow-400/30',
     icon: <Flame className="w-4 h-4 animate-pulse" />,
     description: 'Full deployment'
   },
@@ -131,7 +131,7 @@ export const LocalColdStartDashboard: React.FC<LocalColdStartDashboardProps> = (
 
   const fetchProgress = async (cityName: string, stateName: string) => {
     if (!cityName || !stateName) return;
-    
+
     setLoading(true);
     try {
       const initiatives = initiativeFilter || INITIATIVES.map(i => i.id);
@@ -255,13 +255,13 @@ export const LocalColdStartDashboard: React.FC<LocalColdStartDashboardProps> = (
                 const tierConfig = TIER_CONFIG[p.current_tier] || TIER_CONFIG.SPARK;
                 const nextTierConfig = TIER_CONFIG[p.next_tier] || TIER_CONFIG.EMBER;
                 const familyProgress = calculateProgressPercent(
-                  p.interested_families, 
+                  p.interested_families,
                   p.interested_families + p.families_to_next_tier
                 );
 
                 return (
-                  <Card 
-                    key={p.initiative_id} 
+                  <Card
+                    key={p.initiative_id}
                     className={`border-2 transition-all hover:shadow-lg ${tierConfig.bgColor} border-transparent hover:border-primary/30`}
                   >
                     <CardHeader className="pb-2">
@@ -302,8 +302,8 @@ export const LocalColdStartDashboard: React.FC<LocalColdStartDashboardProps> = (
                           <div className="flex items-center gap-1">
                             <Users className="w-3 h-3 text-primary" />
                             <span>
-                              {p.families_to_next_tier > 0 
-                                ? `${p.families_to_next_tier} more families` 
+                              {p.families_to_next_tier > 0
+                                ? `${p.families_to_next_tier} more families`
                                 : <span className="text-green-500">✓ Families met</span>
                               }
                             </span>
@@ -311,8 +311,8 @@ export const LocalColdStartDashboard: React.FC<LocalColdStartDashboardProps> = (
                           <div className="flex items-center gap-1">
                             <Anchor className="w-3 h-3 text-blue-500" />
                             <span>
-                              {p.captains_to_next_tier > 0 
-                                ? `${p.captains_to_next_tier} Captain${p.captains_to_next_tier > 1 ? 's' : ''}` 
+                              {p.captains_to_next_tier > 0
+                                ? `${p.captains_to_next_tier} Captain${p.captains_to_next_tier > 1 ? 's' : ''}`
                                 : <span className="text-green-500">✓ Captain assigned</span>
                               }
                             </span>
@@ -340,9 +340,9 @@ export const LocalColdStartDashboard: React.FC<LocalColdStartDashboardProps> = (
                       </div>
                     </CardContent>
                     <CardFooter className="pt-0 gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="flex-1"
                         onClick={() => navigate(`/cold-start/${p.initiative_id}?city=${city}&state=${state}`)}
                       >
@@ -350,8 +350,8 @@ export const LocalColdStartDashboard: React.FC<LocalColdStartDashboardProps> = (
                         I'm Interested
                       </Button>
                       {p.captains_to_next_tier > 0 && (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           className="flex-1"
                           onClick={() => navigate(`/become-captain/${p.initiative_id}?city=${city}&state=${state}`)}
                         >

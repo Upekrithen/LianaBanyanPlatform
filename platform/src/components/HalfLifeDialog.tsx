@@ -12,10 +12,10 @@ interface HalfLifeDialogProps {
 
 /**
  * Half-Life Welcome Back Dialog
- * 
+ *
  * Shown when a Ghost (non-member) returns after their session expired.
  * Their loot has been halved — this dialog shows what was lost.
- * 
+ *
  * "The crow remembers what the ghost forgets."
  */
 export const HalfLifeDialog: React.FC<HalfLifeDialogProps> = ({
@@ -32,17 +32,17 @@ export const HalfLifeDialog: React.FC<HalfLifeDialogProps> = ({
   const lostFriendWords = previousLoot.friendWords.length - remainingLoot.friendWords.length;
   const lostAreas = previousLoot.areasDiscovered.length - remainingLoot.areasDiscovered.length;
 
-  const totalPreviousItems = 
-    previousLoot.goldenKeys + 
-    Math.floor(previousLoot.candles) + 
-    previousLoot.friendWords.length + 
+  const totalPreviousItems =
+    previousLoot.goldenKeys +
+    Math.floor(previousLoot.candles) +
+    previousLoot.friendWords.length +
     previousLoot.areasDiscovered.length +
     previousLoot.inventoryItems.length;
 
-  const totalRemainingItems = 
-    remainingLoot.goldenKeys + 
-    Math.floor(remainingLoot.candles) + 
-    remainingLoot.friendWords.length + 
+  const totalRemainingItems =
+    remainingLoot.goldenKeys +
+    Math.floor(remainingLoot.candles) +
+    remainingLoot.friendWords.length +
     remainingLoot.areasDiscovered.length +
     remainingLoot.inventoryItems.length;
 
@@ -84,14 +84,14 @@ export const HalfLifeDialog: React.FC<HalfLifeDialogProps> = ({
         )}
 
         <div className="halflife-actions">
-          <button 
+          <button
             className="halflife-btn continue"
             onClick={onContinue}
           >
             Continue as Ghost
           </button>
-          
-          <button 
+
+          <button
             className="halflife-btn member"
             onClick={onBecomeMember}
           >

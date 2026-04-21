@@ -220,14 +220,14 @@ export default function ProjectView() {
   const calculateUnitsPreordered = (product: Product) => {
     let totalUnits = 0;
     let currentThresholdLevel = 0;
-    
+
     const sortedLevels = [...product.productionLevels].sort((a, b) => a.level_number - b.level_number);
-    
+
     sortedLevels.forEach((level) => {
       const currentVotes = Number(level.current_votes || 0);
       const votesNeeded = Number(level.votes_needed || 0);
       const displayPrice = level.level_number === 1 ? 1000.00 : Number(level.unit_price);
-      
+
       if (currentVotes >= votesNeeded && votesNeeded > 0) {
         const displayUnits = level.level_number === 1 ? 5 : level.units_count;
         totalUnits += displayUnits;
@@ -237,7 +237,7 @@ export default function ProjectView() {
         totalUnits += unitsFromVotes;
       }
     });
-    
+
     return { totalUnits, currentThresholdLevel };
   };
 
@@ -282,7 +282,7 @@ export default function ProjectView() {
     // Stage II (Growth): Medallion Levels 1-3 = 500 + 1125 + 2000 = 3625
     // Stage III (Maturation): Medallion Level 4 + additional products
     // Stage IV (Harvest): All levels funded
-    
+
     const stageMap: Record<string, number> = {
       'germination': 500,      // Level 1 only
       'growth': 3625,          // Levels 1-3
@@ -291,12 +291,12 @@ export default function ProjectView() {
     };
 
     const currentStage = lifecycleStage?.current_stage || 'germination';
-    
+
     // Get next stage goal
     const stages = ['germination', 'growth', 'maturation', 'harvest'];
     const currentIndex = stages.indexOf(currentStage);
     const nextStage = stages[currentIndex + 1] || currentStage;
-    
+
     return stageMap[nextStage] || getTotalGoal();
   };
 
@@ -416,9 +416,9 @@ export default function ProjectView() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm">{project.detailed_description}</p>
-            
+
             {/* Medallion Funding Status - Critical Prerequisite */}
-            <div 
+            <div
               className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${project.medallion_funded ? 'bg-green-50 border-green-500 dark:bg-green-950 hover:border-green-600' : 'bg-amber-50 border-amber-500 dark:bg-amber-950 hover:border-amber-600'}`}
               onClick={navigateToMedallion}
             >
@@ -439,15 +439,15 @@ export default function ProjectView() {
                     {project.medallion_funded ? 'Medallion Funded ✓' : 'Medallion Funding Required'}
                   </h3>
                   <p className={`text-sm ${project.medallion_funded ? 'text-green-700 dark:text-green-300' : 'text-amber-700 dark:text-amber-300'}`}>
-                    {project.medallion_funded 
-                      ? 'The Medallion has been successfully funded. This project can now proceed to additional products.' 
+                    {project.medallion_funded
+                      ? 'The Medallion has been successfully funded. This project can now proceed to additional products.'
                       : 'The Medallion is the foundational product representing your stake in this project. It must be funded first as Proof of Interest in order for your project to be viable. Production of any pre-ordered products in this project will begin once the Medallion Funding is complete.'}
                   </p>
                   <p className="text-xs mt-2 font-medium">Click to learn more →</p>
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-2 cursor-pointer hover:bg-muted/50 p-4 rounded-lg -mx-4 transition-colors" onClick={scrollToLifecycle}>
               <div className="flex justify-between text-sm">
                 <span className="font-medium">Overall Funding Progress</span>
@@ -477,7 +477,7 @@ export default function ProjectView() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button 
+            <Button
               onClick={() => navigate(`/project/${project.id}/positions`)}
               className="w-full"
               variant="outline"
@@ -517,11 +517,11 @@ export default function ProjectView() {
               const { totalUnits, currentThresholdLevel } = calculateUnitsPreordered(product);
               const maxLevel = Math.max(...product.productionLevels.map(l => l.level_number));
               const isMedallion = product.name === 'Medallion';
-              
+
               return (
                 <Card key={product.id} className={`overflow-hidden flex flex-col ${isMedallion ? 'ring-2 ring-primary' : ''}`}>
                   {product.images.length > 0 && (
-                    <div 
+                    <div
                       className="aspect-square overflow-hidden cursor-pointer"
                       onClick={() => navigate(`/project/${projectSlug}/product/${product.id}`)}
                     >
@@ -560,7 +560,7 @@ export default function ProjectView() {
                       <Progress value={calculateProductProgress(product)} />
                     </div>
 
-                    <Button 
+                    <Button
                       className="w-full mt-auto"
                       onClick={() => handleOpenVotingDialog(product)}
                     >
@@ -587,7 +587,7 @@ export default function ProjectView() {
           </TabsContent>
 
           <TabsContent value="ecosystem" className="mt-6">
-            <DerivativeProjectsManager 
+            <DerivativeProjectsManager
               projectId={project.id}
               projectName={project.name}
             />

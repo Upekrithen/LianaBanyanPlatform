@@ -47,7 +47,7 @@ export function CrowFeathersDisplay({ compact = false }: { compact?: boolean }) 
     queryKey: ["crow-feathers", user?.id],
     queryFn: async () => {
       if (!user) return [];
-      
+
       const { data, error } = await supabase
         .from("crow_feathers")
         .select("*")

@@ -99,7 +99,7 @@ export const CareUnitDashboard: React.FC<CareUnitDashboardProps> = ({ initiative
             <div>
               <h4 className="font-semibold text-sm">Human Stewardship</h4>
               <p className="text-xs text-muted-foreground mt-1">
-                This initiative is currently operating at the <strong>{careUnit.current_tier}</strong> tier. 
+                This initiative is currently operating at the <strong>{careUnit.current_tier}</strong> tier.
                 All deployments are overseen by a vetted Human Steward, advised by the AI system.
               </p>
             </div>

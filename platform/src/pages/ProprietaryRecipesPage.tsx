@@ -3,7 +3,7 @@
  * ========================
  * Personal recipe portfolio for "secret recipes" that can graduate
  * to the public Pantry upon meeting vetting criteria.
- * 
+ *
  * Graduation criteria:
  * - 25+ orders
  * - 4.0+ average rating
@@ -21,12 +21,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Lock, 
-  Unlock, 
-  Star, 
-  TrendingUp, 
-  Award, 
+import {
+  Lock,
+  Unlock,
+  Star,
+  TrendingUp,
+  Award,
   Plus,
   ChefHat,
   Eye,
@@ -67,7 +67,7 @@ export default function ProprietaryRecipesPage() {
     queryKey: ['portfolio-recipes', user?.id],
     queryFn: async () => {
       if (!user) return [];
-      
+
       // In production, query user_recipe_portfolio
       // For now, return mock data
       return [] as PortfolioRecipe[];
@@ -76,15 +76,15 @@ export default function ProprietaryRecipesPage() {
   });
 
   const filteredRecipes = recipes.filter(recipe => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       recipe.title.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesTab = 
+
+    const matchesTab =
       activeTab === 'all' ||
       (activeTab === 'proprietary' && recipe.is_proprietary && !recipe.eligible_for_graduation) ||
       (activeTab === 'eligible' && recipe.eligible_for_graduation) ||
       (activeTab === 'graduated' && recipe.graduated_to_pantry_id);
-    
+
     return matchesSearch && matchesTab;
   });
 
@@ -306,7 +306,7 @@ function RecipePortfolioCard({ recipe }: { recipe: PortfolioRecipe }) {
       recipe.graduated_to_pantry_id && "ring-2 ring-emerald-500"
     )}>
       {recipe.photo_url && (
-        <div 
+        <div
           className="h-32 bg-cover bg-center"
           style={{ backgroundImage: `url(${recipe.photo_url})` }}
         />

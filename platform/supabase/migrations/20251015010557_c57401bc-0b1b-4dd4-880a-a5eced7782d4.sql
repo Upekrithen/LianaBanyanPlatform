@@ -1,10 +1,10 @@
 -- Separate contribution credits from earned credits in user_credits
-ALTER TABLE public.user_credits 
+ALTER TABLE public.user_credits
 ADD COLUMN contribution_credits NUMERIC NOT NULL DEFAULT 0,
 ADD COLUMN earned_credits NUMERIC NOT NULL DEFAULT 0;
 
 -- Update existing records: all current total_credits become contribution_credits
-UPDATE public.user_credits 
+UPDATE public.user_credits
 SET contribution_credits = total_credits,
     earned_credits = 0;
 
@@ -106,55 +106,55 @@ DECLARE
 BEGIN
   -- Get config
   SELECT * INTO _config FROM public.withdrawal_configs LIMIT 1;
-  
+
   -- Get user credits
   SELECT * INTO _credits FROM public.user_credits WHERE user_id = _user_id;
-  
+
   IF NOT FOUND THEN
     RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC, 'User credits not found'::TEXT;
     RETURN;
   END IF;
-  
+
   -- Check minimum withdrawal
   IF _amount < _config.min_withdrawal_amount THEN
-    RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC, 
+    RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC,
       format('Minimum withdrawal is $%s', _config.min_withdrawal_amount);
     RETURN;
   END IF;
-  
+
   -- Check available balance and calculate fee
   IF _withdrawal_type = 'contribution' THEN
     _available := _credits.contribution_credits;
     IF _amount > _available THEN
-      RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC, 
+      RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC,
         format('Insufficient contribution credits. Available: $%s', _available);
       RETURN;
     END IF;
-    
-    RETURN QUERY SELECT 
+
+    RETURN QUERY SELECT
       true,
       _config.contribution_fee_percentage,
       (_amount * _config.contribution_fee_percentage / 100.0),
       (_amount - (_amount * _config.contribution_fee_percentage / 100.0)),
       NULL::TEXT;
-      
+
   ELSIF _withdrawal_type = 'earned_instant' THEN
     _available := _credits.earned_credits;
     IF _amount > _available THEN
-      RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC, 
+      RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC,
         format('Insufficient earned credits. Available: $%s', _available);
       RETURN;
     END IF;
-    
-    RETURN QUERY SELECT 
+
+    RETURN QUERY SELECT
       true,
       _config.earned_instant_fee_percentage,
       (_amount * _config.earned_instant_fee_percentage / 100.0),
       (_amount - (_amount * _config.earned_instant_fee_percentage / 100.0)),
       NULL::TEXT;
-      
+
   ELSE
-    RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC, 
+    RETURN QUERY SELECT false, 0::NUMERIC, 0::NUMERIC, 0::NUMERIC,
       'Invalid withdrawal type'::TEXT;
   END IF;
 END;

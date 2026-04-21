@@ -3,7 +3,7 @@
  * ======================
  * Educational dialog explaining how Shadow Marks, Recipe Bounties,
  * and Escape Velocity work in The Pantry.
- * 
+ *
  * Uses InfoFlipCard system with accordion expansion, navigation arrows,
  * and Anchor Beacon cue card dispatch integration.
  */
@@ -59,13 +59,13 @@ const SHADOW_MARKS_SECTIONS: InfoSection[] = [
           <strong>Shadow Marks</strong> are speculative reputation tokens. Think of them as <em>seeds you plant</em>.
         </p>
         <p>
-          They need <strong>sunlight</strong> (community votes) to grow into real plants (real Marks). 
+          They need <strong>sunlight</strong> (community votes) to grow into real plants (real Marks).
           Without sunlight, they wither. But once they're grown, they're yours forever.
         </p>
         <div className="bg-muted/50 p-4 rounded-lg border-l-4 border-primary">
           <p className="font-medium">Example: "Water Salt"</p>
           <p className="text-sm mt-1">
-            Your recipe "Water Salt" earned 50 Shadow Marks for being a French Elegant Dinner. 
+            Your recipe "Water Salt" earned 50 Shadow Marks for being a French Elegant Dinner.
             If 10 people vote for it, those 50 become <strong>50 real MARKS</strong> — permanently yours.
           </p>
           <p className="text-sm mt-2 text-muted-foreground">
@@ -188,7 +188,7 @@ const SHADOW_MARKS_SECTIONS: InfoSection[] = [
     content: (
       <div className="space-y-3">
         <p>
-          When your recipe reaches <strong>100 votes</strong>, it achieves <em>escape velocity</em> 
+          When your recipe reaches <strong>100 votes</strong>, it achieves <em>escape velocity</em>
           and earns permanent IP Ledger protection.
         </p>
         <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 p-4 rounded-lg space-y-2">
@@ -283,7 +283,7 @@ const SHADOW_MARKS_SECTIONS: InfoSection[] = [
         </div>
         <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded-lg">
           <p className="text-sm text-green-800 dark:text-green-200">
-            <strong>Yes, you can buy your own meals.</strong> Platform still functions. 
+            <strong>Yes, you can buy your own meals.</strong> Platform still functions.
             Same whether buying from yourself or someone else.
           </p>
         </div>

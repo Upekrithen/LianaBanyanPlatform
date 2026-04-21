@@ -1,8 +1,8 @@
 # The Liana Banyan Fable - Origin Story Script
 
-**Duration**: 2-3 minutes  
-**Style**: Animated nature documentary  
-**Voice**: Warm, David Attenborough-style narration  
+**Duration**: 2-3 minutes
+**Style**: Animated nature documentary
+**Voice**: Warm, David Attenborough-style narration
 **Music**: Orchestral, building from gentle to triumphant
 
 ---
@@ -97,16 +97,16 @@
 
 ## PRODUCTION NOTES
 
-**Voice Talent**: Male or female with warm, authoritative documentary voice  
-**Pacing**: Measured and contemplative, allowing visuals to breathe  
+**Voice Talent**: Male or female with warm, authoritative documentary voice
+**Pacing**: Measured and contemplative, allowing visuals to breathe
 **Music Cues**:
 - 0:00: Gentle strings and woodwinds
 - 1:00: Building tension/excitement as partnership forms
 - 1:30: Full orchestral swell as ecosystem thrives
 - 2:30: Resolving to confident, hopeful conclusion
 
-**Color Grading**: Rich greens, warm golden sunlight, high contrast but natural  
-**Transitions**: Organic dissolves, never hard cuts  
+**Color Grading**: Rich greens, warm golden sunlight, high contrast but natural
+**Transitions**: Organic dissolves, never hard cuts
 **Text Overlays**: Minimal—only company name at end
 
 ---

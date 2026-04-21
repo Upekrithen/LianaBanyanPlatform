@@ -29,7 +29,7 @@ export default function ProjectSeedPlanter({ islandId, canPlant }: ProjectSeedPl
         .from('island_seeds')
         .select('*, projects(name)')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data;
     }
@@ -50,7 +50,7 @@ export default function ProjectSeedPlanter({ islandId, canPlant }: ProjectSeedPl
           )
         `)
         .eq('island_id', islandId);
-      
+
       if (error) throw error;
       return data;
     }

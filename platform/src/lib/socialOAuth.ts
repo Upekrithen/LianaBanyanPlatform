@@ -65,9 +65,9 @@ export interface SocialConnection {
 
 // OAuth endpoint configuration
 // Platforms marked with isConfigured: false need API setup before use
-const OAUTH_CONFIG: Record<SocialPlatform, { 
-  authUrl: string; 
-  scope: string; 
+const OAUTH_CONFIG: Record<SocialPlatform, {
+  authUrl: string;
+  scope: string;
   isConfigured: boolean;
   setupNotes?: string;
 }> = {
@@ -160,7 +160,7 @@ export async function connectPlatform(platform: SocialPlatform): Promise<void> {
   if (!user) throw new Error("Must be logged in");
 
   const config = OAUTH_CONFIG[platform];
-  
+
   // Check if platform is configured
   if (!config.isConfigured) {
     throw new Error(`${platform} is not yet configured. ${config.setupNotes || 'Contact admin for setup.'}`);
@@ -240,7 +240,7 @@ export async function connectPlatform(platform: SocialPlatform): Promise<void> {
  * Supports multiple accounts with optional nickname
  */
 export async function connectBluesky(
-  handle: string, 
+  handle: string,
   appPassword: string,
   nickname?: string,
   service: string = "https://bsky.social"
@@ -258,9 +258,9 @@ export async function connectBluesky(
       .eq("is_active", true);
 
     if ((count || 0) >= MAX_ACCOUNTS_PER_PLATFORM) {
-      return { 
-        success: false, 
-        error: `Maximum ${MAX_ACCOUNTS_PER_PLATFORM} Bluesky accounts reached. Disconnect one first.` 
+      return {
+        success: false,
+        error: `Maximum ${MAX_ACCOUNTS_PER_PLATFORM} Bluesky accounts reached. Disconnect one first.`
       };
     }
 
@@ -400,7 +400,7 @@ export async function updateAccountNickname(accountId: string, nickname: string)
 
   await supabase
     .from("member_social_accounts")
-    .update({ 
+    .update({
       account_nickname: nickname,
       updated_at: new Date().toISOString(),
     })

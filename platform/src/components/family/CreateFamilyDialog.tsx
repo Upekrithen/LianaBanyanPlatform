@@ -44,7 +44,7 @@ const DISPLAY_NAME_OPTIONS = [
 ];
 
 const SYMBOL_SUGGESTIONS = [
-  '👨‍👩‍👧‍👦', '🏠', '💜', '⭐', '🌟', '🎭', '🎨', '🎵', '🌳', '🦋', 
+  '👨‍👩‍👧‍👦', '🏠', '💜', '⭐', '🌟', '🎭', '🎨', '🎵', '🌳', '🦋',
   '🔥', '☀️', '🌙', '🌺', '🦊', '🐺', '🦅', '🌊', '⚡', '💫'
 ];
 
@@ -186,8 +186,8 @@ export function CreateFamilyDialog({
                   className={`
                     w-10 h-10 rounded-lg text-xl flex items-center justify-center
                     transition-all
-                    ${founderSymbol === symbol 
-                      ? 'bg-purple-500/30 ring-2 ring-purple-500' 
+                    ${founderSymbol === symbol
+                      ? 'bg-purple-500/30 ring-2 ring-purple-500'
                       : 'bg-white/5 hover:bg-white/10'
                     }
                   `}

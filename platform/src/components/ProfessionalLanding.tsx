@@ -7,7 +7,7 @@
  * - Crimson Pro serif font for headings
  * - Clean, professional business aesthetic
  * - Chalk-outlined hero flipcards for interactivity
- * 
+ *
  * Content uses current messaging but with static page's visual style.
  */
 
@@ -71,7 +71,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
   return (
     <div className="professional-landing">
       {/* Theme Palette Toggle - Bottom Left */}
-      <button 
+      <button
         className="professional-palette-btn"
         onClick={() => setPaletteOpen(!paletteOpen)}
         title="Switch Theme"
@@ -114,7 +114,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
       {/* Hero Section with Flipcard */}
       <section className="professional-hero">
         <span className="professional-eyebrow">Member-Owned · Community-Governed</span>
-        
+
         {/* Hero Flipcard */}
         <div
           className={`professional-hero-flip ${heroFlipped ? 'flipped' : ''}`}
@@ -134,7 +134,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
               </h1>
               <span className="flip-hint">👉</span>
             </div>
-            
+
             {/* BACK - Two Portals */}
             <div className="professional-hero-back">
               <h3>Two Worlds. One Platform.</h3>
@@ -172,10 +172,10 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
         <span className="professional-label">The Model</span>
         <h2>Cost + 20%. That's it.</h2>
         <p className="professional-intro">
-          Traditional platforms take 30-50% of creator revenue. We take 20%. 
+          Traditional platforms take 30-50% of creator revenue. We take 20%.
           Creators and Workers keep 83.3%. The math isn't complicated—it's just fair.
         </p>
-        
+
         <div className="professional-model-grid">
           <div className="professional-model-card">
             <span className="model-number">83.3%</span>
@@ -219,7 +219,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
       <section id="paths" className="professional-section">
         <span className="professional-label">Choose Your Path</span>
         <h2>Four ways in. All keep 83.3%.</h2>
-        
+
         <div className="professional-path-grid four-cards">
           {/* Get a Job */}
           <div
@@ -331,7 +331,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
       <section id="initiatives" className="professional-section">
         <span className="professional-label">The Sweet Sixteen</span>
         <h2>16 initiatives. One ecosystem.</h2>
-        
+
         <div className="professional-initiatives-grid">
           <div className="initiative-card">
             <h3>🍽️ Let's Make Dinner</h3>
@@ -358,7 +358,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
             <p>BOUNTY-based learning. Earn while you learn.</p>
           </div>
         </div>
-        
+
         <div className="professional-cta-row">
           <button className="professional-btn primary" onClick={() => navigate('/initiatives')}>
             Explore All 16 Initiatives
@@ -374,7 +374,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
         <div className="origin-visual">
           <span className="tree-icon">🌳</span>
           <blockquote>
-            "A boy reads a book about a magical kingdom held together by trees. 
+            "A boy reads a book about a magical kingdom held together by trees.
             Decades later, he builds that kingdom."
           </blockquote>
         </div>
@@ -394,7 +394,7 @@ export function ProfessionalLanding({ onThemeChange, currentTheme = '008' }: Pro
         <p className="footer-motto">"Help each other, Help ourselves."</p>
         <p className="footer-info">LIANA BANYAN CORPORATION</p>
         <p className="footer-links">
-          <a href="https://the2ndsecond.com">Cephas Archive</a> · 
+          <a href="https://the2ndsecond.com">Cephas Archive</a> ·
           <a href="/fly-on-the-wall">Transparency Dashboard</a>
         </p>
       </footer>

@@ -5,10 +5,10 @@
  * - Figure miniatures (Navigator, Engineer, Tidecaller, + Make Your Own)
  * - Terrain tiles
  * - Accessories
- * 
+ *
  * CRITICAL PATTERN: "Add Your Own" is ALWAYS the first card.
  * This establishes the participatory marketplace model.
- * 
+ *
  * Innovation #1234: Decentralized Manufacturing Pipeline
  */
 
@@ -297,7 +297,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
   const { toast } = useToast();
 
   const isAddYourOwn = project.status === "add_your_own";
-  
+
   const statusBadge = {
     available: { label: "Available", className: "bg-green-500/10 text-green-600 border-green-500/20" },
     coming_soon: { label: "Planned", className: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
@@ -307,17 +307,17 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
 
   return (
     <div onClick={() => setIsFlipped(!isFlipped)}>
-      <div 
+      <div
         className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${
           isFlipped ? "rotate-y-180" : ""
         }`}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* FRONT */}
-        <Card 
+        <Card
           className={`absolute w-full h-full backface-hidden ${
-            isAddYourOwn 
-              ? "border-2 border-dashed border-primary/50 bg-primary/5" 
+            isAddYourOwn
+              ? "border-2 border-dashed border-primary/50 bg-primary/5"
               : "border"
           }`}
           style={{ backfaceVisibility: "hidden" }}
@@ -334,7 +334,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
-            
+
             {project.features && (
               <div className="flex flex-wrap gap-1">
                 {project.features.slice(0, 3).map((f) => (
@@ -345,7 +345,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
                 )}
               </div>
             )}
-            
+
             {!isAddYourOwn && (
               <div className="flex items-center justify-between text-sm pt-2">
                 {project.price && <span className="font-medium">{project.price}</span>}
@@ -356,7 +356,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
                 )}
               </div>
             )}
-            
+
             <p className="text-xs text-muted-foreground text-right pt-2">
               tap to flip →
             </p>
@@ -364,10 +364,10 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
         </Card>
 
         {/* BACK */}
-        <Card 
+        <Card
           className={`absolute w-full h-full backface-hidden rotate-y-180 ${
-            isAddYourOwn 
-              ? "bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30" 
+            isAddYourOwn
+              ? "bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30"
               : "bg-gradient-to-br from-muted/50 to-background"
           }`}
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
@@ -380,7 +380,7 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm">{project.backContent?.details}</p>
-            
+
             {project.backContent?.specs && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-muted-foreground">Specifications:</p>
@@ -394,13 +394,13 @@ function ProjectFlipCard({ project }: { project: ProjectCard }) {
                 </ul>
               </div>
             )}
-            
+
             {project.creator && (
               <p className="text-xs text-muted-foreground">
                 Created by: <span className="font-medium">{project.creator}</span>
               </p>
             )}
-            
+
             <Button
               className="w-full mt-4"
               variant={isAddYourOwn ? "default" : "secondary"}
@@ -522,7 +522,7 @@ export default function HexIsleProjects() {
               <Plus className="h-4 w-4 mr-2" /> Submit Your Design
             </Button>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {CHARACTER_PROJECTS.map((project) => (
               <ProjectFlipCard key={project.id} project={project} />
@@ -541,7 +541,7 @@ export default function HexIsleProjects() {
               <Plus className="h-4 w-4 mr-2" /> Submit Your Design
             </Button>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {TERRAIN_PROJECTS.map((project) => (
               <ProjectFlipCard key={project.id} project={project} />
@@ -560,7 +560,7 @@ export default function HexIsleProjects() {
               <Plus className="h-4 w-4 mr-2" /> Submit Your Design
             </Button>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {ACCESSORY_PROJECTS.map((project) => (
               <ProjectFlipCard key={project.id} project={project} />

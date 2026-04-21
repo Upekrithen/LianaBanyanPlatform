@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
+import {
   Island, Map, Anchor, Compass, Ship, TreePine,
   Users, Shield, Lock, Unlock, Portal, Link2,
   Sprout, Trees, Flower2, Crown, Star, Heart,
@@ -23,7 +23,7 @@ import confetti from 'canvas-confetti';
 /**
  * Island Management System
  * From documented vision - core feature for community governance
- * 
+ *
  * Islands are self-governing communities within Liana Banyan
  * Each island has its own charter, rules, and portal connections
  */
@@ -276,7 +276,7 @@ export function IslandManagementSystem() {
       origin: { y: 0.6 },
       colors: ['#10b981', '#84cc16', '#22c55e']
     });
-    
+
     toast.success('Seed Planted!', {
       description: `Your seed will grow and contribute to ${island.name}'s ecosystem`
     });
@@ -355,7 +355,7 @@ export function IslandManagementSystem() {
             <p className="text-xs text-muted-foreground">Active communities</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Total Members</CardTitle>
@@ -367,7 +367,7 @@ export function IslandManagementSystem() {
             <p className="text-xs text-green-600">+23% this month</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Seeds Planted</CardTitle>
@@ -379,7 +379,7 @@ export function IslandManagementSystem() {
             <p className="text-xs text-muted-foreground">Growing ecosystem</p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Portal Network</CardTitle>
@@ -410,7 +410,7 @@ export function IslandManagementSystem() {
             {islands.map(island => {
               const health = getIslandHealth(island);
               return (
-                <Card 
+                <Card
                   key={island.id}
                   className="hover:shadow-lg transition-shadow cursor-pointer"
                   onClick={() => setSelectedIsland(island)}
@@ -426,7 +426,7 @@ export function IslandManagementSystem() {
                           </CardDescription>
                         </div>
                       </div>
-                      <Badge 
+                      <Badge
                         className={cn(
                           health > 80 ? "bg-green-100 text-green-700" :
                           health > 60 ? "bg-yellow-100 text-yellow-700" :
@@ -441,7 +441,7 @@ export function IslandManagementSystem() {
                     <p className="text-sm text-muted-foreground mb-4">
                       {island.description}
                     </p>
-                    
+
                     <div className="grid grid-cols-3 gap-2 text-xs">
                       <div className="text-center">
                         <Users className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
@@ -461,9 +461,9 @@ export function IslandManagementSystem() {
                     </div>
 
                     <div className="flex gap-2 mt-4">
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
+                      <Button
+                        size="sm"
+                        variant="outline"
                         className="flex-1"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -473,9 +473,9 @@ export function IslandManagementSystem() {
                         <Sprout className="h-3 w-3 mr-1" />
                         Plant
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
+                      <Button
+                        size="sm"
+                        variant="outline"
                         className="flex-1"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -515,7 +515,7 @@ export function IslandManagementSystem() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {islands.filter(island => 
+                {islands.filter(island =>
                   island.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                   island.description.toLowerCase().includes(searchQuery.toLowerCase())
                 ).map(island => (
@@ -532,7 +532,7 @@ export function IslandManagementSystem() {
                           <p className="text-sm text-muted-foreground mb-3">
                             {island.description}
                           </p>
-                          
+
                           <div className="flex items-center gap-6 text-sm">
                             <div className="flex items-center gap-1">
                               <Users className="h-4 w-4 text-muted-foreground" />
@@ -583,7 +583,7 @@ export function IslandManagementSystem() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {islands.flatMap(island => 
+                {islands.flatMap(island =>
                   island.portals.map(portal => ({
                     ...portal,
                     fromIsland: island.name,
@@ -599,7 +599,7 @@ export function IslandManagementSystem() {
                       <Link2 className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">{portal.connectedIsland}</span>
                     </div>
-                    
+
                     <div className="flex items-center gap-4">
                       <div className="text-right">
                         <p className="text-sm font-medium">{portal.traffic}</p>
@@ -623,7 +623,7 @@ export function IslandManagementSystem() {
             <Portal className="h-4 w-4" />
             <AlertTitle>Portal Connections</AlertTitle>
             <AlertDescription>
-              Portals allow seamless travel and resource sharing between islands. 
+              Portals allow seamless travel and resource sharing between islands.
               Both islands must approve a portal connection.
             </AlertDescription>
           </Alert>
@@ -638,7 +638,7 @@ export function IslandManagementSystem() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
-                {islands.flatMap(island => 
+                {islands.flatMap(island =>
                   island.seeds.map(seed => ({
                     ...seed,
                     islandName: island.name,
@@ -671,7 +671,7 @@ export function IslandManagementSystem() {
                           </div>
                           <Progress value={seed.growthStage} />
                         </div>
-                        
+
                         <div className="flex items-center justify-between text-sm">
                           <div className="flex items-center gap-1">
                             <Users className="h-3 w-3" />
@@ -693,7 +693,7 @@ export function IslandManagementSystem() {
             <Sprout className="h-4 w-4 text-green-600" />
             <AlertTitle className="text-green-900">Growing Together</AlertTitle>
             <AlertDescription className="text-green-700">
-              Seeds represent contributions to island communities. As they grow, they produce 
+              Seeds represent contributions to island communities. As they grow, they produce
               fruit that can be harvested for credits and reputation.
             </AlertDescription>
           </Alert>
@@ -745,7 +745,7 @@ export function IslandManagementSystem() {
                     <Label>Membership Type</Label>
                     <p className="text-sm text-muted-foreground capitalize">
                       {selectedIsland.charter.membershipType}
-                      {selectedIsland.charter.membershipFee && 
+                      {selectedIsland.charter.membershipFee &&
                         ` ($${selectedIsland.charter.membershipFee})`}
                     </p>
                   </div>

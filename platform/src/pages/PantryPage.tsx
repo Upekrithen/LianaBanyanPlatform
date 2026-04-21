@@ -2,7 +2,7 @@
  * THE PANTRY — Recipe Repository
  * ===============================
  * Browse and add recipes. Creators earn fractional credits per use.
- * 
+ *
  * Features:
  * - Browse recipes by category, cuisine, allergens
  * - Add recipes with photo, ingredients, steps
@@ -21,7 +21,7 @@ import { RecipeSubmissionForm } from "@/components/RecipeSubmissionForm";
 import { RecipeCard } from "@/components/RecipeCard";
 import { RecipeBountyBanner } from "@/components/RecipeBountyBanner";
 import { DeckCardFrame } from "@/components/DeckCardFrame";
-import { 
+import {
   ChefHat, Search, Filter, Clock, Users, Star, ArrowLeft, Plus, BookOpen, Award
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -52,7 +52,7 @@ interface PantryRecipe {
 }
 
 const CUISINE_FILTERS = [
-  'All', 'American', 'Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese', 
+  'All', 'American', 'Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese',
   'Thai', 'Mediterranean', 'Soul Food', 'French', 'Korean', 'Vietnamese'
 ];
 
@@ -115,7 +115,7 @@ export default function PantryPage() {
       </div>
 
       {/* Back button - goes to initiatives list on main page */}
-      <button 
+      <button
         onClick={() => navigate('/?view=initiatives')}
         className="ghost-toggle"
         style={{ left: 20 }}
@@ -136,7 +136,7 @@ export default function PantryPage() {
           <p style={{ opacity: 0.8, maxWidth: 500, margin: '0 auto' }}>
             Community recipe repository. Share recipes, earn credits.
           </p>
-          
+
           {/* Credit Info Banner */}
           <div style={{
             display: 'flex',
@@ -183,8 +183,8 @@ export default function PantryPage() {
 
           {/* Cuisine Filter */}
           <div style={{ marginBottom: '1rem' }}>
-            <div style={{ 
-              display: 'flex', 
+            <div style={{
+              display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
               marginBottom: '0.5rem'
@@ -205,11 +205,11 @@ export default function PantryPage() {
                   style={{
                     padding: '0.4rem 1rem',
                     borderRadius: '20px',
-                    border: selectedCuisine === cuisine 
-                      ? '2px solid #a78bfa' 
+                    border: selectedCuisine === cuisine
+                      ? '2px solid #a78bfa'
                       : '1px solid rgba(255,255,255,0.2)',
-                    background: selectedCuisine === cuisine 
-                      ? 'rgba(167, 139, 250, 0.2)' 
+                    background: selectedCuisine === cuisine
+                      ? 'rgba(167, 139, 250, 0.2)'
                       : 'transparent',
                     color: 'white',
                     cursor: 'pointer',
@@ -225,8 +225,8 @@ export default function PantryPage() {
 
           {/* Meal Type Filter */}
           <div>
-            <div style={{ 
-              display: 'flex', 
+            <div style={{
+              display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
               marginBottom: '0.5rem'
@@ -247,11 +247,11 @@ export default function PantryPage() {
                   style={{
                     padding: '0.4rem 1rem',
                     borderRadius: '20px',
-                    border: selectedMealType === type 
-                      ? '2px solid #34d399' 
+                    border: selectedMealType === type
+                      ? '2px solid #34d399'
                       : '1px solid rgba(255,255,255,0.2)',
-                    background: selectedMealType === type 
-                      ? 'rgba(52, 211, 153, 0.2)' 
+                    background: selectedMealType === type
+                      ? 'rgba(52, 211, 153, 0.2)'
                       : 'transparent',
                     color: 'white',
                     cursor: 'pointer',
@@ -273,7 +273,7 @@ export default function PantryPage() {
             {selectedCuisine !== 'All' && ` — ${selectedCuisine}`}
             {selectedMealType !== 'All' && ` — ${selectedMealType}`}
           </h2>
-          
+
           {isLoading ? (
             <div style={{ textAlign: 'center', padding: '3rem', opacity: 0.6 }}>
               Loading recipes...
@@ -287,8 +287,8 @@ export default function PantryPage() {
               </p>
             </div>
           ) : (
-            <div className="path-grid" style={{ 
-              display: 'grid', 
+            <div className="path-grid" style={{
+              display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
               gap: '1.5rem'
             }}>
@@ -302,7 +302,7 @@ export default function PantryPage() {
                 onClick={() => setShowSubmitForm(true)}
                 style={{ cursor: 'pointer' }}
               >
-                <div 
+                <div
                   className="path-front"
                   style={{
                     display: 'flex',
@@ -336,7 +336,7 @@ export default function PantryPage() {
                   }}>
                     Up to 50 Shadow Marks
                   </div>
-                  <div style={{ 
+                  <div style={{
                     padding: '0.5rem 1rem',
                     border: '1px solid rgba(251, 191, 36, 0.5)',
                     borderRadius: '8px',
@@ -356,9 +356,9 @@ export default function PantryPage() {
           <h2 style={{ textAlign: 'center', marginBottom: '1rem', color: '#c4b5fd' }}>
             How Credits Work
           </h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: '1.5rem',
             textAlign: 'center',
             maxWidth: 900,
@@ -408,7 +408,7 @@ export default function PantryPage() {
             <span style={{ opacity: 0.7 }}>Exploring as Guest</span>
             <span style={{ margin: '0 1rem', opacity: 0.4 }}>—</span>
             <span style={{ opacity: 0.5 }}>Join to share recipes and earn credits</span>
-            <button 
+            <button
               onClick={() => openOnboard({ reason: "manage your pantry", actionLabel: "Join", membershipIncluded: true })}
               className="btn"
               style={{ marginLeft: '1rem', padding: '0.4rem 1rem', fontSize: '0.85rem' }}
@@ -426,8 +426,8 @@ export default function PantryPage() {
 
       {/* Recipe Submission Form */}
       {showSubmitForm && (
-        <RecipeSubmissionForm 
-          open={showSubmitForm} 
+        <RecipeSubmissionForm
+          open={showSubmitForm}
           onOpenChange={(open) => {
             setShowSubmitForm(open);
             if (!open) {

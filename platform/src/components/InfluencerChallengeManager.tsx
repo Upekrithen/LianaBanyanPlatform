@@ -392,9 +392,9 @@ export function InfluencerChallengeManager({ projectId }: InfluencerChallengeMan
                       <p className="text-sm text-muted-foreground">
                         Category: {submission.submission_category}
                       </p>
-                      <a 
-                        href={submission.content_url} 
-                        target="_blank" 
+                      <a
+                        href={submission.content_url}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm text-primary hover:underline"
                       >

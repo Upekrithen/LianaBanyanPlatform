@@ -3,16 +3,16 @@
  * ====================
  * Entry point for Will-o'-Wisp Chase Mode.
  * Checks unlock status, allows difficulty selection, and launches chases.
- * 
+ *
  * @see DESIGN_DOCS/WILL_O_WISP_SYSTEM.md
  */
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Flame, 
-  Lock, 
-  Unlock, 
-  AlertTriangle, 
+import {
+  Flame,
+  Lock,
+  Unlock,
+  AlertTriangle,
   Trophy,
   Zap,
   Shield,
@@ -20,13 +20,13 @@ import {
   Crown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter 
+  DialogFooter
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { checkUnlockStatus, skipAheadUnlock, getUserWispStats, UserWispStats } from '@/lib/wispChaseService';
@@ -95,7 +95,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
   onCrowFeatherEarned,
 }) => {
   const { toast } = useToast();
-  
+
   // State
   const [unlockStatus, setUnlockStatus] = useState<{
     unlocked: boolean;
@@ -107,7 +107,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
   const [showSkipWarning, setShowSkipWarning] = useState(false);
   const [chaseActive, setChaseActive] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+
   // Load unlock status and stats
   useEffect(() => {
     async function loadData() {
@@ -118,12 +118,12 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
       setUserStats(stats);
       setLoading(false);
     }
-    
+
     if (isOpen) {
       loadData();
     }
   }, [isOpen]);
-  
+
   // Handle skip ahead
   const handleSkipAhead = async () => {
     const result = await skipAheadUnlock();
@@ -136,12 +136,12 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
       });
     }
   };
-  
+
   // Launch chase
   const handleLaunchChase = () => {
     setChaseActive(true);
   };
-  
+
   // Render loading
   if (loading) {
     return (
@@ -154,7 +154,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
       </Dialog>
     );
   }
-  
+
   // Render chase mode
   if (chaseActive) {
     return (
@@ -170,7 +170,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
       />
     );
   }
-  
+
   // Render skip warning dialog
   if (showSkipWarning) {
     return (
@@ -185,7 +185,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
               You're about to unlock Chase Mode early. This means:
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-3 py-4">
             <p className="text-sm text-slate-400">
               <strong className="text-white">Real Stakes:</strong> You can lose Marks if you don't beat half the participants.
@@ -197,16 +197,16 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
               <strong className="text-white">No Refunds:</strong> Antes are non-refundable once paid.
             </p>
           </div>
-          
+
           <DialogFooter className="flex gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setShowSkipWarning(false)}
               className="border-slate-600"
             >
               Go Back
             </Button>
-            <Button 
+            <Button
               onClick={handleSkipAhead}
               className="bg-amber-600 hover:bg-amber-700"
             >
@@ -217,7 +217,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
       </Dialog>
     );
   }
-  
+
   // Main launcher dialog
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -228,13 +228,13 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
             Will-o'-Wisp Chase
           </DialogTitle>
           <DialogDescription className="text-slate-400">
-            {unlockStatus.unlocked 
+            {unlockStatus.unlocked
               ? "Chase the wisp through the mirrors. Beat half to win!"
               : "Complete training or earn reputation to unlock Chase Mode."
             }
           </DialogDescription>
         </DialogHeader>
-        
+
         {/* Stats Display */}
         {userStats && (
           <div className="grid grid-cols-3 gap-3 py-4 border-y border-slate-700">
@@ -254,7 +254,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
             </div>
           </div>
         )}
-        
+
         {/* Unlock Status */}
         {!unlockStatus.unlocked && (
           <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
@@ -266,8 +266,8 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
               Unlock by earning reputation, placing on leaderboards, or skip ahead at your own risk.
             </p>
             {unlockStatus.canSkipAhead && (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => setShowSkipWarning(true)}
                 className="border-amber-600 text-amber-500 hover:bg-amber-600/20"
@@ -278,7 +278,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
             )}
           </div>
         )}
-        
+
         {/* Difficulty Selection */}
         {unlockStatus.unlocked && (
           <div className="space-y-3">
@@ -290,12 +290,12 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
                   onClick={() => setSelectedDifficulty(diff.id)}
                   className={`
                     p-4 rounded-lg border-2 transition-all text-left
-                    ${selectedDifficulty === diff.id 
-                      ? 'border-opacity-100 bg-opacity-20' 
+                    ${selectedDifficulty === diff.id
+                      ? 'border-opacity-100 bg-opacity-20'
                       : 'border-opacity-30 bg-opacity-5 hover:border-opacity-50'
                     }
                   `}
-                  style={{ 
+                  style={{
                     borderColor: diff.color,
                     backgroundColor: selectedDifficulty === diff.id ? `${diff.color}20` : 'transparent'
                   }}
@@ -313,14 +313,14 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
             </div>
           </div>
         )}
-        
+
         {/* Action Buttons */}
         <DialogFooter className="pt-4">
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>
           {unlockStatus.unlocked ? (
-            <Button 
+            <Button
               onClick={handleLaunchChase}
               className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
             >
@@ -328,7 +328,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
               Join the Fray
             </Button>
           ) : (
-            <Button 
+            <Button
               disabled
               className="bg-slate-700 cursor-not-allowed"
             >
@@ -337,7 +337,7 @@ export const WispChaseLauncher: React.FC<WispChaseLauncherProps> = ({
             </Button>
           )}
         </DialogFooter>
-        
+
         {/* Rules Reminder */}
         <div className="text-xs text-slate-500 text-center pt-2 border-t border-slate-800">
           Beat half the participants to win • Platform takes 20% • Tiered payout by finish order

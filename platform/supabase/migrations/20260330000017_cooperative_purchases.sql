@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS cooperative_purchases (
   unit_price_retail NUMERIC,
   unit_price_cooperative NUMERIC,
   savings_percentage NUMERIC GENERATED ALWAYS AS (
-    CASE WHEN unit_price_retail > 0 
+    CASE WHEN unit_price_retail > 0
     THEN ROUND((1 - unit_price_cooperative / unit_price_retail) * 100, 1)
     ELSE 0 END
   ) STORED,

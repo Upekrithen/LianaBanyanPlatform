@@ -21,7 +21,7 @@ export function ProcessDetailDialog({ process, open, onClose }: ProcessDetailDia
         .select('*')
         .eq('process_id', process.id)
         .order('step_number');
-      
+
       if (error) throw error;
       return data;
     },
@@ -39,7 +39,7 @@ export function ProcessDetailDialog({ process, open, onClose }: ProcessDetailDia
           {/* Process Overview */}
           <div className="space-y-4">
             <p className="text-muted-foreground">{process.description}</p>
-            
+
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-4 w-4" />
               <span className="font-medium">Estimated Duration:</span>
@@ -74,7 +74,7 @@ export function ProcessDetailDialog({ process, open, onClose }: ProcessDetailDia
           {/* Process Steps */}
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">Step-by-Step Guide</h3>
-            
+
             {isLoading ? (
               <div className="text-center py-4">Loading steps...</div>
             ) : steps && steps.length > 0 ? (

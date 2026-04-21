@@ -18,7 +18,7 @@ export default function LandingPageManager() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   const [editingPage, setEditingPage] = useState<any>(null);
   const [valueProps, setValueProps] = useState<any[]>([]);
   const [features, setFeatures] = useState<any[]>([]);

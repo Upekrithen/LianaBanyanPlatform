@@ -139,8 +139,8 @@ serve(async (req) => {
     console.log(`Successfully calculated ${ratings.length} value ratings`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         ratings_calculated: ratings.length,
         top_10: ratings.slice(0, 10)
       }),
@@ -151,7 +151,7 @@ serve(async (req) => {
     console.error('Error calculating value ratings:', error);
     return new Response(
       JSON.stringify({ error: error?.message || 'Unknown error' }),
-      { 
+      {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }

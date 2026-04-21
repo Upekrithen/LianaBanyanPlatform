@@ -4,17 +4,17 @@
 -- =====================================================
 
 -- Add columns to profiles table for tracking terms acceptance
-ALTER TABLE profiles 
+ALTER TABLE profiles
 ADD COLUMN IF NOT EXISTS ghost_credit_terms_accepted_at TIMESTAMPTZ,
 ADD COLUMN IF NOT EXISTS ghost_credit_terms_version INTEGER DEFAULT 0;
 
 -- Create index for quick lookup of users who haven't accepted
-CREATE INDEX IF NOT EXISTS idx_profiles_ghost_terms_pending 
-ON profiles(ghost_credit_terms_accepted_at) 
+CREATE INDEX IF NOT EXISTS idx_profiles_ghost_terms_pending
+ON profiles(ghost_credit_terms_accepted_at)
 WHERE ghost_credit_terms_accepted_at IS NULL;
 
 -- Create index for version-based re-acceptance queries
-CREATE INDEX IF NOT EXISTS idx_profiles_ghost_terms_version 
+CREATE INDEX IF NOT EXISTS idx_profiles_ghost_terms_version
 ON profiles(ghost_credit_terms_version);
 
 -- =====================================================
@@ -25,11 +25,11 @@ ON profiles(ghost_credit_terms_version);
 CREATE TABLE IF NOT EXISTS ghost_credit_transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  
+
   -- Transaction details
   amount INTEGER NOT NULL, -- Positive = credit, Negative = debit
   balance_after INTEGER NOT NULL, -- Running balance after transaction
-  
+
   -- Transaction type
   transaction_type TEXT NOT NULL CHECK (transaction_type IN (
     'initial_grant',      -- First 200 credits on terms acceptance
@@ -40,12 +40,12 @@ CREATE TABLE IF NOT EXISTS ghost_credit_transactions (
     'admin_adjustment',   -- Manual admin adjustment
     'crow_feather_bonus'  -- Bonus from Ghost World achievements
   )),
-  
+
   -- Context
   description TEXT,
   reference_id UUID, -- Optional link to related record
   reference_type TEXT, -- Type of related record (e.g., 'project', 'beacon_run')
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -65,14 +65,14 @@ CREATE INDEX idx_ghost_credit_txn_created ON ghost_credit_transactions(created_a
 -- =====================================================
 
 CREATE OR REPLACE VIEW v_ghost_credit_balances AS
-SELECT 
+SELECT
   p.id AS user_id,
   p.display_name,
   COALESCE(
-    (SELECT balance_after 
-     FROM ghost_credit_transactions 
-     WHERE user_id = p.id 
-     ORDER BY created_at DESC 
+    (SELECT balance_after
+     FROM ghost_credit_transactions
+     WHERE user_id = p.id
+     ORDER BY created_at DESC
      LIMIT 1
     ), 0
   ) AS current_balance,
@@ -95,26 +95,26 @@ DECLARE
 BEGIN
   -- Check if user already has transactions (prevent double-grant)
   SELECT COALESCE(
-    (SELECT balance_after FROM ghost_credit_transactions 
-     WHERE user_id = p_user_id 
+    (SELECT balance_after FROM ghost_credit_transactions
+     WHERE user_id = p_user_id
      ORDER BY created_at DESC LIMIT 1
     ), 0
   ) INTO v_existing_balance;
-  
+
   -- Only grant if no existing balance
   IF v_existing_balance = 0 THEN
     INSERT INTO ghost_credit_transactions (
       user_id, amount, balance_after, transaction_type, description
     ) VALUES (
-      p_user_id, 
-      v_initial_amount, 
-      v_initial_amount, 
+      p_user_id,
+      v_initial_amount,
+      v_initial_amount,
       'initial_grant',
       'Welcome to Ghost World! Here are your initial Ghost Credits.'
     );
     RETURN v_initial_amount;
   END IF;
-  
+
   RETURN v_existing_balance;
 END;
 $$ LANGUAGE plpgsql;
@@ -135,32 +135,32 @@ DECLARE
 BEGIN
   -- Get current balance
   SELECT COALESCE(
-    (SELECT balance_after FROM ghost_credit_transactions 
-     WHERE user_id = p_user_id 
+    (SELECT balance_after FROM ghost_credit_transactions
+     WHERE user_id = p_user_id
      ORDER BY created_at DESC LIMIT 1
     ), 0
   ) INTO v_current_balance;
-  
+
   -- Calculate actual top-off (don't exceed max)
   v_actual_topoff := LEAST(v_topoff_amount, v_max_balance - v_current_balance);
-  
+
   -- Only top off if there's room
   IF v_actual_topoff > 0 THEN
     v_new_balance := v_current_balance + v_actual_topoff;
-    
+
     INSERT INTO ghost_credit_transactions (
       user_id, amount, balance_after, transaction_type, description
     ) VALUES (
-      p_user_id, 
-      v_actual_topoff, 
-      v_new_balance, 
+      p_user_id,
+      v_actual_topoff,
+      v_new_balance,
       'weekly_topoff',
       'Weekly Ghost Credit refresh'
     );
-    
+
     RETURN v_new_balance;
   END IF;
-  
+
   RETURN v_current_balance;
 END;
 $$ LANGUAGE plpgsql;
@@ -184,31 +184,31 @@ DECLARE
 BEGIN
   -- Get current balance
   SELECT COALESCE(
-    (SELECT balance_after FROM ghost_credit_transactions 
-     WHERE user_id = p_user_id 
+    (SELECT balance_after FROM ghost_credit_transactions
+     WHERE user_id = p_user_id
      ORDER BY created_at DESC LIMIT 1
     ), 0
   ) INTO v_current_balance;
-  
+
   -- Check sufficient balance
   IF v_current_balance < p_amount THEN
     RAISE EXCEPTION 'Insufficient Ghost Credits. Have: %, Need: %', v_current_balance, p_amount;
   END IF;
-  
+
   v_new_balance := v_current_balance - p_amount;
-  
+
   INSERT INTO ghost_credit_transactions (
     user_id, amount, balance_after, transaction_type, description, reference_id, reference_type
   ) VALUES (
-    p_user_id, 
-    -p_amount, 
-    v_new_balance, 
+    p_user_id,
+    -p_amount,
+    v_new_balance,
     'practice_spend',
     p_description,
     p_reference_id,
     p_reference_type
   );
-  
+
   RETURN v_new_balance;
 END;
 $$ LANGUAGE plpgsql;
@@ -220,12 +220,12 @@ $$ LANGUAGE plpgsql;
 ALTER TABLE ghost_credit_transactions ENABLE ROW LEVEL SECURITY;
 
 -- Users can only view their own transactions
-CREATE POLICY "Users can view own ghost credit transactions" 
+CREATE POLICY "Users can view own ghost credit transactions"
 ON ghost_credit_transactions
 FOR SELECT USING (auth.uid() = user_id);
 
 -- Only system can insert (via functions)
-CREATE POLICY "System can insert ghost credit transactions" 
+CREATE POLICY "System can insert ghost credit transactions"
 ON ghost_credit_transactions
 FOR INSERT WITH CHECK (TRUE);
 

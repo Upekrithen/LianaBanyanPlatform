@@ -514,7 +514,7 @@ export default function FundMyCard() {
 
                   <p className="text-xs text-muted-foreground">
                     Funds are charged to your payment method via Stripe Billing and deposited as
-                    REAL MONEY on the recipient's LB Card via the cooperative's platform account. 
+                    REAL MONEY on the recipient's LB Card via the cooperative's platform account.
                     This is NOT Credits — Credits never cash out to fiat.
                   </p>
                 </form>

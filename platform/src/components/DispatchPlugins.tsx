@@ -163,18 +163,18 @@ export const DispatchPlugins: React.FC<DispatchPluginsProps> = ({
       window.open(channel.url, '_blank');
     }
 
-    const updated = channels.map(ch => 
+    const updated = channels.map(ch =>
       ch.id === channelId ? { ...ch, connected: true } : ch
     );
     setChannels(updated);
     saveConnections(updated);
-    
+
     setShowSuccess(channelId);
     setTimeout(() => setShowSuccess(null), 2000);
   };
 
   const handleDisconnect = (channelId: string) => {
-    const updated = channels.map(ch => 
+    const updated = channels.map(ch =>
       ch.id === channelId ? { ...ch, connected: false } : ch
     );
     setChannels(updated);
@@ -183,13 +183,13 @@ export const DispatchPlugins: React.FC<DispatchPluginsProps> = ({
 
   const handleEmailSubscribe = () => {
     if (!emailInput || !emailInput.includes('@')) return;
-    
-    const updated = channels.map(ch => 
+
+    const updated = channels.map(ch =>
       ch.id === 'email' ? { ...ch, connected: true } : ch
     );
     setChannels(updated);
     saveConnections(updated);
-    
+
     setShowSuccess('email');
     setTimeout(() => setShowSuccess(null), 2000);
     setEmailInput('');
@@ -236,7 +236,7 @@ export const DispatchPlugins: React.FC<DispatchPluginsProps> = ({
                 <X className="w-5 h-5 text-white/60" />
               </button>
             </div>
-            
+
             {/* Connection Status */}
             <div className="mt-4 flex items-center gap-2">
               <div className="flex -space-x-1">
@@ -292,7 +292,7 @@ export const DispatchPlugins: React.FC<DispatchPluginsProps> = ({
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       {showSuccess === channel.id ? (
                         <motion.div
@@ -320,7 +320,7 @@ export const DispatchPlugins: React.FC<DispatchPluginsProps> = ({
                       )}
                     </div>
                   </div>
-                  
+
                   {/* Email Input */}
                   {channel.id === 'email' && !channel.connected && (
                     <div className="mt-3 flex gap-2">

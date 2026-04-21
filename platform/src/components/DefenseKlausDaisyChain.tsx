@@ -1,10 +1,10 @@
 /**
  * Defense Klaus Daisy Chain Referral System
- * 
+ *
  * Interdependent support network where each signup can invite 2 others.
  * Creates cultural normalization - "like getting an email advertisement"
  * so having Defense Klaus isn't notable to potential aggressors.
- * 
+ *
  * Flow:
  * 1. User signs up with email
  * 2. Gets 2 referral links to share via social/text
@@ -46,7 +46,7 @@ const MAX_REFERRALS = 2;
 export function DefenseKlausDaisyChain({ userProxyId, onReferralSent }: DaisyChainProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
+
   const [referralEmail1, setReferralEmail1] = useState("");
   const [referralEmail2, setReferralEmail2] = useState("");
   const [sentReferrals, setSentReferrals] = useState<string[]>([]);
@@ -178,7 +178,7 @@ Stay safe.
         description: `Referral sent to ${email}. They'll receive an email with their gift.`,
       });
       if (onReferralSent) onReferralSent(email);
-      
+
       // Clear the input
       if (sentReferrals.length === 0) {
         setReferralEmail1("");
@@ -223,8 +223,8 @@ Stay safe.
         {/* Explanation */}
         <div className="bg-white/5 rounded-lg p-4 text-sm text-white/70 space-y-2">
           <p>
-            <strong className="text-white">The Daisy Chain:</strong> Each person who signs up 
-            can invite 2 others. This creates a network of protection that becomes 
+            <strong className="text-white">The Daisy Chain:</strong> Each person who signs up
+            can invite 2 others. This creates a network of protection that becomes
             <em> culturally normal</em> — like getting an email advertisement.
           </p>
           <p className="text-pink-300/80">
@@ -268,7 +268,7 @@ Stay safe.
         {/* Direct Referral Forms */}
         <div className="space-y-4">
           <Label className="text-white/80">Send Directly to Someone</Label>
-          
+
           {/* Referral 1 */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">

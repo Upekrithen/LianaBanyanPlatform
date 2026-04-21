@@ -150,18 +150,18 @@ BEGIN
   FROM ip_ledger
   ORDER BY sequence_number DESC
   LIMIT 1;
-  
+
   v_new_seq := COALESCE(v_latest_seq, 0) + 1;
-  
+
   -- Generate hash (simplified - real hash done in application)
   v_new_hash := encode(sha256(
     (v_new_seq::TEXT || p_entry_type || p_entry_data::TEXT || COALESCE(v_latest_hash, ''))::BYTEA
   ), 'hex');
-  
+
   INSERT INTO ip_ledger (sequence_number, entry_type, entry_data, previous_hash, current_hash)
   VALUES (v_new_seq, p_entry_type, p_entry_data, v_latest_hash, v_new_hash)
   RETURNING id INTO v_new_id;
-  
+
   RETURN v_new_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -177,7 +177,7 @@ BEGIN
   FROM ip_ledger
   WHERE entry_type = 'innovation.registered'
     AND created_at > NOW() - (p_days || ' days')::INTERVAL;
-  
+
   RETURN v_count::NUMERIC / p_days;
 END;
 $$ LANGUAGE plpgsql STABLE;

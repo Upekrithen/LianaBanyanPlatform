@@ -574,7 +574,7 @@ elevation_votes: 0
 
 Dear Ms. Scott,
 
-I don't want your money.  I'm asking for something far more valuable: your reputation.  
+I don't want your money.  I'm asking for something far more valuable: your reputation.
 
 I've built a public, community-owned safety net of sixteen charitable initiatives designed to sustain themselves far beyond our lifetimes—and I'm seeking a word from you to experienced leaders in your network who could help them succeed at scale. I've hand-picked leaders in each field whom I'm asking because I pray for potatoes at the end of a hoe handle, but your endorsement would exponentially multiply every ask I make.
 
@@ -582,9 +582,9 @@ In college, as a need-based scholarship student I once had two roommates. One wa
 
 My specific ask: if our work aligns with your values, would you point operators from your network my direction - people who excel at scaling community-driven solutions, or ethical CEO, CFO, or CTO candidates, even fractional, who could steward this platform beyond my limited capacity? I'm prepared to hand any or all of these initiatives, and even the entire platform, to leaders you trust. Even one connection to someone experienced in food security or cooperative healthcare - who can vet the pitfalls I don't know about yet - could prevent costly mistakes and multiply impact. I know enough to know I don't know enough.
 
-This isn't charity TO the People but infrastructure BY the People FOR the People - "nothing about us without us" - which applies your principle that communities removing obstacles for different groups become better for everyone.  
+This isn't charity TO the People but infrastructure BY the People FOR the People - "nothing about us without us" - which applies your principle that communities removing obstacles for different groups become better for everyone.
 
-Every member can start a business for just 5 dollars, build their own designs or products, or get a job in another member's business, within our structure. Our three commercial portals sustainably fund charitable initiatives on the fourth portal through a baked-in 20% "Cost of Doing Good" margin. What we need is people and leadership; the money will follow. 
+Every member can start a business for just 5 dollars, build their own designs or products, or get a job in another member's business, within our structure. Our three commercial portals sustainably fund charitable initiatives on the fourth portal through a baked-in 20% "Cost of Doing Good" margin. What we need is people and leadership; the money will follow.
 
 I'm launching the alpha by using half of my family's emergency savings to seed the launch through our medallion sponsorship program: a no-strings-attached 100-dollar stake each to 10 waitresses, bus drivers, and laborers who would never otherwise see any of these opportunities to change their lives. Each recipient can split their medallion into ten 10-dollar stakes, or more with involvement, bringing their own communities into ownership. One bus driver becomes ten transit workers becomes hundreds understanding they can have their own part of what they themselves and others work to achieve—the chain reaction that can go on for years.
 
@@ -592,11 +592,11 @@ Our economics show that 500 members in any locale reach break-even and, at 1,000
 
 The medallions are minted. The platform is built. The first ten members are ready. What I lack is the wisdom and experienced leadership to ensure we serve millions, not hundreds. And I have two suits.
 
-With shared purpose, 
+With shared purpose,
 
 **Jonathan Jones**
 
-Founder & General Manager, Liana Banyan Corporation  
+Founder & General Manager, Liana Banyan Corporation
 406-578-1232 | Founder@LianaBanyan.com
 
 ---
@@ -607,7 +607,7 @@ Help each other help ourselves.
 
 As You Wish.
 
-P.S. Naturally I'll move forward either way, but now I have asked. "I bargained with Life for a penny…" — Jessie B. Rittenhouse. 
+P.S. Naturally I'll move forward either way, but now I have asked. "I bargained with Life for a penny…" — Jessie B. Rittenhouse.
 
 
 
@@ -1821,7 +1821,7 @@ I'd value your scrutiny more than your endorsement. If there's a flaw in the str
 
 ## The Ask
 
-Look at it. The economics are at Cephas.LianaBanyan.org. 
+Look at it. The economics are at Cephas.LianaBanyan.org.
 
 Tell me what's naive. Tell me what's been tried. Tell me what kills this.
 
@@ -1902,7 +1902,7 @@ One in five Americans who use insulin ration their doses because of cost. That's
 
 ## What I Want From You
 
-Not press. Not a podcast appearance. 
+Not press. Not a podcast appearance.
 
 I want you to ask me hard questions. On the record or off. The things you'd ask any founder who claims to be different.
 
@@ -2466,7 +2466,7 @@ That's one transaction. Now imagine millions.
 
 ## Why I'm Writing You
 
-Not for a tweet. Not for an endorsement. 
+Not for a tweet. Not for an endorsement.
 
 I'm asking you to take this initiative and run it.
 
@@ -6590,11 +6590,11 @@ Not a metaphorical crown — a real one. A founding leadership position in **Let
 
 ## WHY YOU
 
-My wife and I discovered you from the latest season of *Master of Cue*, and rabbit-holed from there. 
+My wife and I discovered you from the latest season of *Master of Cue*, and rabbit-holed from there.
 
 You are empathetic, highly intelligent, and skilled — including the nuance which is showcased in your food and interpersonal interactions. These are precisely the traits I hope to enlist for a greater purpose.
 
-My own forte is strategy (chess, engineering, military) and being poor — which quickly teaches survival. Most Americans don't know what living in another country, especially living among the poor in other countries, is like. 
+My own forte is strategy (chess, engineering, military) and being poor — which quickly teaches survival. Most Americans don't know what living in another country, especially living among the poor in other countries, is like.
 
 When I was young, my parents were missionaries in Tanzania, East Africa. I served in the U.S. Army (National Guard) from 1989 through 2004. I know what the America I believe in can offer the world — and receive so much more in return.
 
@@ -9793,8 +9793,8 @@ We're building for the parents who don't have platforms. Your voice could reach 
 
 With respect,
 
-**Jonathan Jones**  
-Founder, Liana Banyan Corporation  
+**Jonathan Jones**
+Founder, Liana Banyan Corporation
 406-578-1232 | Founder@LianaBanyan.com
 
 ---
@@ -9807,7 +9807,7 @@ As You Wish.
 
 ---
 
-*"No parent should ever have to decide if they can afford to save their child's life."*  
+*"No parent should ever have to decide if they can afford to save their child's life."*
 *— Jimmy Kimmel, 2017*
 
 **For the Keep.**

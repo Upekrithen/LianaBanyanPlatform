@@ -2,12 +2,12 @@ import { supabase } from '@/integrations/supabase/client';
 
 export const getSubdomainProject = async (): Promise<string | null> => {
   const hostname = window.location.hostname;
-  
+
   // Skip if localhost or direct IP
   if (hostname === 'localhost' || hostname.match(/^\d+\.\d+\.\d+\.\d+$/)) {
     return null;
   }
-  
+
   // Skip Firebase hosting domains — these are our own sites, not project subdomains
   if (hostname.includes('.web.app') || hostname.includes('.firebaseapp.com')) {
     return null;
@@ -39,7 +39,7 @@ export const getSubdomainProject = async (): Promise<string | null> => {
     const parts = hostname.split('.');
     if (parts.length >= 2) {
       const rootDomain = parts.slice(-2).join('.');
-      
+
       const { data: wildcardMapping } = await supabase
         .from('project_domain_mappings')
         .select('subdomain_target, project_id, projects(project_sku)')
@@ -56,7 +56,7 @@ export const getSubdomainProject = async (): Promise<string | null> => {
     // Finally, check project_subdomains table
     if (parts.length >= 3) {
       const subdomain = parts[0].toLowerCase();
-      
+
       const { data: subdomainData } = await supabase
         .from('project_subdomains')
         .select('project_id, projects(project_sku)')

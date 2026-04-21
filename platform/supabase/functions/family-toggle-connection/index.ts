@@ -4,7 +4,7 @@
  * Allows a member to disconnect from a specific family member without leaving.
  * The disconnected member won't see your shared content (photos, gifts) and
  * you won't see theirs, but everyone else is unaffected.
- * 
+ *
  * POST body:
  *   - familyId: UUID
  *   - targetMemberId: UUID (the member to toggle connection with)
@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),

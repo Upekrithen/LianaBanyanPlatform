@@ -3,7 +3,7 @@
  * ====================
  * Innovation #1348: Per-Product C+20 Limits (Toe-Dipping)
  * Innovation #1353: C+20 Sales Promotion Mechanism
- * 
+ *
  * The dashboard where business owners can:
  * 1. Add products to C+20 with unit limits
  * 2. See their reciprocity balance growing
@@ -88,7 +88,7 @@ interface Anchor {
 export default function C20PilotDashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   // State
   const [anchor, setAnchor] = useState<Anchor | null>(null);
   const [products, setProducts] = useState<C20ProductConfig[]>([]);
@@ -96,7 +96,7 @@ export default function C20PilotDashboard() {
   const [ledger, setLedger] = useState<C20ReciprocityLedgerEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
-  
+
   // New product form state
   const [newProduct, setNewProduct] = useState({
     productSku: '',
@@ -128,15 +128,15 @@ export default function C20PilotDashboard() {
 
       if (anchorData) {
         setAnchor(anchorData as Anchor);
-        
+
         // Load C+20 products
         const productsData = await getAnchorC20Products(anchorData.id);
         setProducts(productsData);
-        
+
         // Load reciprocity summary
         const summaryData = await getReciprocitySummary(anchorData.id);
         setSummary(summaryData);
-        
+
         // Load ledger
         const ledgerData = await getReciprocityLedger(anchorData.id, 20);
         setLedger(ledgerData);
@@ -153,7 +153,7 @@ export default function C20PilotDashboard() {
     const refPrice = parseFloat(newProduct.referencePrice) || 0;
     const cost = parseFloat(newProduct.costBasis) || 0;
     const units = parseInt(newProduct.maxUnits) || 0;
-    
+
     if (refPrice > 0 && cost > 0) {
       const calc = calculateMarginSacrificed(refPrice, cost);
       return {
@@ -168,11 +168,11 @@ export default function C20PilotDashboard() {
   // Handle add product
   const handleAddProduct = async () => {
     if (!anchor) return;
-    
+
     const refPrice = parseFloat(newProduct.referencePrice);
     const cost = parseFloat(newProduct.costBasis);
     const maxUnits = newProduct.maxUnits ? parseInt(newProduct.maxUnits) : undefined;
-    
+
     if (!newProduct.productSku || !newProduct.productName || !refPrice || !cost) {
       toast({
         title: 'Missing Information',
@@ -181,7 +181,7 @@ export default function C20PilotDashboard() {
       });
       return;
     }
-    
+
     if (cost >= refPrice) {
       toast({
         title: 'Invalid Pricing',
@@ -402,7 +402,7 @@ export default function C20PilotDashboard() {
                           Set up a product for Cost + 20% pricing with optional unit limits.
                         </DialogDescription>
                       </DialogHeader>
-                      
+
                       <div className="space-y-4 py-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
@@ -426,7 +426,7 @@ export default function C20PilotDashboard() {
                             />
                           </div>
                         </div>
-                        
+
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="refPrice" className="text-slate-300">Normal Price *</Label>
@@ -537,7 +537,7 @@ export default function C20PilotDashboard() {
                     <Package className="w-12 h-12 text-slate-600 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-slate-300 mb-2">No Products Yet</h3>
                     <p className="text-slate-500 mb-4 max-w-md mx-auto">
-                      Start your C+20 journey by adding a few products. We recommend starting with 3-10 products 
+                      Start your C+20 journey by adding a few products. We recommend starting with 3-10 products
                       at 25-50 units each to test the waters.
                     </p>
                     <Button onClick={() => setAddDialogOpen(true)} className="bg-emerald-600 hover:bg-emerald-500">
@@ -735,16 +735,16 @@ function ProductCard({
   onToggle: (id: string, enabled: boolean) => void;
   formatCurrency: (n: number) => string;
 }) {
-  const progress = product.c20_max_units 
-    ? (product.c20_units_sold / product.c20_max_units) * 100 
+  const progress = product.c20_max_units
+    ? (product.c20_units_sold / product.c20_max_units) * 100
     : 0;
   const isComplete = product.c20_max_units && product.c20_units_sold >= product.c20_max_units;
 
   return (
     <div className={cn(
       "rounded-lg border p-4 transition-all",
-      product.c20_enabled 
-        ? "bg-slate-800/50 border-slate-700" 
+      product.c20_enabled
+        ? "bg-slate-800/50 border-slate-700"
         : "bg-slate-900/30 border-slate-800 opacity-60"
     )}>
       <div className="flex items-start justify-between gap-4">
@@ -760,7 +760,7 @@ function ProductCard({
               </Badge>
             )}
           </div>
-          
+
           <div className="flex items-center gap-4 text-sm text-slate-400 mb-3">
             <span>Normal: {formatCurrency(product.reference_price)}</span>
             <ArrowRight className="w-3 h-3" />
@@ -799,7 +799,7 @@ function LedgerEntry({
   formatCurrency: (n: number) => string;
 }) {
   const isPositive = entry.transaction_type === 'MARGIN_CONTRIBUTION' || entry.transaction_type === 'JOULE_CONVERSION';
-  
+
   const typeLabels: Record<string, string> = {
     MARGIN_CONTRIBUTION: 'C+20 Sale',
     BALANCE_SPEND: 'Purchase',

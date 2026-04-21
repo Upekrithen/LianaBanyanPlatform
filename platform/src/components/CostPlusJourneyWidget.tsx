@@ -1,6 +1,6 @@
 /**
  * C+20 Journey Widget
- * 
+ *
  * Shows an anchor's progress toward full C+20 certification.
  * Displays current tier, progress to next tier, and benefits unlocked.
  */
@@ -8,11 +8,11 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, TrendingUp, Zap, Users, Award } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { 
-  getCostPlusTier, 
+import {
+  getCostPlusTier,
   getCostPlusTierInfo,
   type Anchor,
-  type CostPlusTier 
+  type CostPlusTier
 } from '@/lib/costPlusService';
 import { CostPlusBadge } from './CostPlusBadge';
 
@@ -27,8 +27,8 @@ export function CostPlusJourneyWidget({ anchor, className }: CostPlusJourneyWidg
   const tierInfo = getCostPlusTierInfo(anchor);
   const currentTierIndex = TIER_ORDER.indexOf(tierInfo.tier);
   const ratioPercent = Math.round((tierInfo.ratio || 0) * 100);
-  const nextThresholdPercent = tierInfo.nextTierThreshold 
-    ? Math.round(tierInfo.nextTierThreshold * 100) 
+  const nextThresholdPercent = tierInfo.nextTierThreshold
+    ? Math.round(tierInfo.nextTierThreshold * 100)
     : 100;
   const percentToNext = tierInfo.nextTierThreshold
     ? nextThresholdPercent - ratioPercent
@@ -57,7 +57,7 @@ export function CostPlusJourneyWidget({ anchor, className }: CostPlusJourneyWidg
           <div className="absolute top-0 left-[50%] w-px h-full bg-slate-600" />
           <div className="absolute top-0 left-[75%] w-px h-full bg-slate-600" />
           <div className="absolute top-0 left-[95%] w-px h-full bg-slate-600" />
-          
+
           {/* Progress fill */}
           <motion.div
             initial={{ width: 0 }}
@@ -73,7 +73,7 @@ export function CostPlusJourneyWidget({ anchor, className }: CostPlusJourneyWidg
             )}
           />
         </div>
-        
+
         {/* Tier labels */}
         <div className="flex justify-between text-xs text-slate-500 mt-1">
           <span>0%</span>
@@ -96,7 +96,7 @@ export function CostPlusJourneyWidget({ anchor, className }: CostPlusJourneyWidg
         <div className="bg-slate-800/50 rounded-lg p-4 mb-4 border border-dashed border-slate-600">
           <div className="flex items-center gap-2 text-sm text-amber-400 mb-2">
             <TrendingUp className="w-4 h-4" />
-            <span>Next Goal: {tierInfo.nextTier === 'QUARTER' ? '¼ Badge' : 
+            <span>Next Goal: {tierInfo.nextTier === 'QUARTER' ? '¼ Badge' :
                               tierInfo.nextTier === 'HALF' ? '½ Badge' :
                               tierInfo.nextTier === 'THREE_QUARTER' ? '¾ Badge' : 'Full Badge'}</span>
           </div>
@@ -144,11 +144,11 @@ export function CostPlusJourneyWidget({ anchor, className }: CostPlusJourneyWidg
           {TIER_ORDER.map((tier, index) => {
             const isCompleted = index < currentTierIndex;
             const isCurrent = index === currentTierIndex;
-            const tierLabel = tier === 'NONE' ? 'Start' : 
+            const tierLabel = tier === 'NONE' ? 'Start' :
                              tier === 'QUARTER' ? '¼' :
                              tier === 'HALF' ? '½' :
                              tier === 'THREE_QUARTER' ? '¾' : '✓';
-            
+
             return (
               <div key={tier} className="flex items-center">
                 <div className={cn(
@@ -174,22 +174,22 @@ export function CostPlusJourneyWidget({ anchor, className }: CostPlusJourneyWidg
   );
 }
 
-function BenefitCard({ 
-  icon, 
-  label, 
-  value, 
-  active 
-}: { 
-  icon: React.ReactNode; 
-  label: string; 
-  value: string; 
+function BenefitCard({
+  icon,
+  label,
+  value,
+  active
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
   active: boolean;
 }) {
   return (
     <div className={cn(
       'p-3 rounded-lg border',
-      active 
-        ? 'bg-emerald-900/30 border-emerald-700/50' 
+      active
+        ? 'bg-emerald-900/30 border-emerald-700/50'
         : 'bg-slate-800/30 border-slate-700/50'
     )}>
       <div className={cn(

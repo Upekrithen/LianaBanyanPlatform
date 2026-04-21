@@ -18,10 +18,10 @@
 CREATE TABLE IF NOT EXISTS public.user_marks (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Balance (never decreases)
   total_marks     NUMERIC NOT NULL DEFAULT 0 CHECK (total_marks >= 0),
-  
+
   -- Level (computed from total_marks)
   mark_level      TEXT GENERATED ALWAYS AS (
     CASE
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.user_marks (
       ELSE 'seedling'
     END
   ) STORED,
-  
+
   -- Voting multiplier (computed from level)
   voting_multiplier NUMERIC GENERATED ALWAYS AS (
     CASE
@@ -43,13 +43,13 @@ CREATE TABLE IF NOT EXISTS public.user_marks (
       ELSE 1.0
     END
   ) STORED,
-  
+
   -- Crown eligibility
   crown_eligible  BOOLEAN GENERATED ALWAYS AS (total_marks >= 10000) STORED,
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id)
 );
 
@@ -60,18 +60,18 @@ CREATE INDEX idx_user_marks_level ON public.user_marks(mark_level);
 CREATE TABLE IF NOT EXISTS public.marks_transactions (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id),
-  
+
   amount          NUMERIC NOT NULL CHECK (amount > 0),  -- always positive (earned, never deducted)
   reason          TEXT NOT NULL,                          -- what earned it
   reason_type     TEXT NOT NULL,                          -- bounty | project_shipped | referral | review | issue | crown_nomination | golden_key
-  
+
   -- Reference to what earned the MARKS
   reference_id    UUID,                                   -- project_id, bounty_id, etc.
   reference_type  TEXT,                                   -- project | bounty | referral | review
-  
+
   -- Running total after this transaction
   balance_after   NUMERIC NOT NULL,
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -96,14 +96,14 @@ BEGIN
   ON CONFLICT (user_id) DO UPDATE
   SET total_marks = user_marks.total_marks + _amount,
       updated_at = NOW();
-  
+
   -- Get new total
   SELECT total_marks INTO new_total FROM public.user_marks WHERE user_id = _user_id;
-  
+
   -- Log transaction
   INSERT INTO public.marks_transactions (user_id, amount, reason, reason_type, reference_id, reference_type, balance_after)
   VALUES (_user_id, _amount, _reason, _reason_type, _reference_id, _reference_type, new_total);
-  
+
   RETURN new_total;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -118,19 +118,19 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TABLE IF NOT EXISTS public.user_joules (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Balance (never decreases)
   total_joules    NUMERIC NOT NULL DEFAULT 0 CHECK (total_joules >= 0),
-  
+
   -- Locked value (total $ equivalent at time of earning)
   total_locked_value NUMERIC NOT NULL DEFAULT 0,
-  
+
   -- Herald multiplier applied
   herald_multiplier NUMERIC NOT NULL DEFAULT 1.0,
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id)
 );
 
@@ -140,20 +140,20 @@ CREATE INDEX idx_user_joules_user ON public.user_joules(user_id);
 CREATE TABLE IF NOT EXISTS public.joules_transactions (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES auth.users(id),
-  
+
   joules_amount   NUMERIC NOT NULL CHECK (joules_amount > 0),
   credits_spent   NUMERIC NOT NULL DEFAULT 0,             -- credits that generated these joules
   multiplier_used NUMERIC NOT NULL DEFAULT 1.0,           -- backing stage multiplier
   locked_value    NUMERIC NOT NULL DEFAULT 0,             -- $ value locked at this moment
-  
+
   reason          TEXT NOT NULL,
   reason_type     TEXT NOT NULL,                           -- backing_premint | backing_minted | backing_production | backing_distribution | backing_established | bounty | press_junket
-  
+
   reference_id    UUID,
   reference_type  TEXT,
-  
+
   balance_after   NUMERIC NOT NULL,
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -174,7 +174,7 @@ DECLARE
   new_total NUMERIC;
 BEGIN
   joules_earned := _credits_spent * _multiplier;
-  
+
   -- Upsert user_joules
   INSERT INTO public.user_joules (user_id, total_joules, total_locked_value)
   VALUES (_user_id, joules_earned, _credits_spent)
@@ -182,12 +182,12 @@ BEGIN
   SET total_joules = user_joules.total_joules + joules_earned,
       total_locked_value = user_joules.total_locked_value + _credits_spent,
       updated_at = NOW();
-  
+
   SELECT total_joules INTO new_total FROM public.user_joules WHERE user_id = _user_id;
-  
+
   INSERT INTO public.joules_transactions (user_id, joules_amount, credits_spent, multiplier_used, locked_value, reason, reason_type, reference_id, reference_type, balance_after)
   VALUES (_user_id, joules_earned, _credits_spent, _multiplier, _credits_spent, _reason, _reason_type, _reference_id, _reference_type, new_total);
-  
+
   RETURN new_total;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -200,30 +200,30 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 CREATE TABLE IF NOT EXISTS public.dna_lock (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Parameter identity
   parameter_key   TEXT NOT NULL UNIQUE,                    -- e.g. 'CREATOR_SHARE_PERCENT'
   parameter_value TEXT NOT NULL,                           -- e.g. '83.3'
   data_type       TEXT NOT NULL DEFAULT 'numeric',         -- numeric | text | boolean
-  
+
   -- Constitutional status
   is_locked       BOOLEAN NOT NULL DEFAULT true,           -- true = CANNOT be changed
   locked_at       TIMESTAMPTZ DEFAULT NOW(),
   locked_by       TEXT DEFAULT 'CONSTITUTIONAL_FOUNDING',  -- who/what locked it
-  
+
   -- Description
   description     TEXT NOT NULL,
   category        TEXT NOT NULL,                           -- economics | governance | membership | operations
-  
+
   -- Audit trail (every read is logged for transparency)
   last_read_at    TIMESTAMPTZ,
   read_count      BIGINT DEFAULT 0,
-  
+
   -- Attempted changes (logged but REJECTED)
   change_attempts INTEGER DEFAULT 0,
   last_change_attempt_at TIMESTAMPTZ,
   last_change_attempt_by TEXT,
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -248,10 +248,10 @@ RETURNS TEXT AS $$
 DECLARE
   val TEXT;
 BEGIN
-  UPDATE public.dna_lock 
+  UPDATE public.dna_lock
   SET last_read_at = NOW(), read_count = read_count + 1
   WHERE parameter_key = _key;
-  
+
   SELECT parameter_value INTO val FROM public.dna_lock WHERE parameter_key = _key;
   RETURN val;
 END;
@@ -266,12 +266,12 @@ BEGIN
     NEW.is_locked != OLD.is_locked
   ) THEN
     -- Log the attempt but REJECT it
-    UPDATE public.dna_lock 
+    UPDATE public.dna_lock
     SET change_attempts = change_attempts + 1,
         last_change_attempt_at = NOW(),
         last_change_attempt_by = current_user
     WHERE id = OLD.id;
-    
+
     RAISE EXCEPTION 'DNA LOCK VIOLATION: Parameter "%" is constitutionally locked and CANNOT be changed. This attempt has been logged.', OLD.parameter_key;
   END IF;
   RETURN NEW;
@@ -291,11 +291,11 @@ CREATE TRIGGER dna_lock_guard
 
 CREATE TABLE IF NOT EXISTS public.pricing_calculations (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Transaction reference
   transaction_type TEXT NOT NULL,                          -- product_sale | service | initiative_donation | membership
   reference_id    UUID,
-  
+
   -- The math (all derived from DNA Lock parameters)
   gross_amount    NUMERIC NOT NULL,                        -- total paid by buyer
   creator_share   NUMERIC NOT NULL,                        -- 83.3% to creator
@@ -303,20 +303,20 @@ CREATE TABLE IF NOT EXISTS public.pricing_calculations (
   cost_basis      NUMERIC NOT NULL DEFAULT 0,              -- actual platform cost
   margin_amount   NUMERIC NOT NULL,                        -- cost_basis * 0.20
   initiative_fund NUMERIC NOT NULL DEFAULT 0,              -- portion to charitable initiatives
-  
+
   -- Verification
   creator_percent_actual NUMERIC GENERATED ALWAYS AS (
     CASE WHEN gross_amount > 0 THEN (creator_share / gross_amount) * 100 ELSE 0 END
   ) STORED,
-  
+
   -- DNA Lock validation
   dna_compliant   BOOLEAN GENERATED ALWAYS AS (
-    CASE WHEN gross_amount > 0 
+    CASE WHEN gross_amount > 0
       THEN (creator_share / gross_amount) * 100 >= 83.3
-      ELSE true 
+      ELSE true
     END
   ) STORED,
-  
+
   created_at      TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -344,21 +344,21 @@ BEGIN
   -- Read from DNA Lock (logged)
   creator_pct := (SELECT public.read_dna_lock('CREATOR_SHARE_PERCENT'))::NUMERIC / 100;
   margin_pct := (SELECT public.read_dna_lock('PLATFORM_MARGIN_PERCENT'))::NUMERIC / 100;
-  
+
   -- Calculate
   calc_creator := ROUND(_gross_amount * creator_pct, 2);
   calc_margin := _gross_amount - calc_creator;
   calc_initiative := ROUND(calc_margin * 0.5, 2);  -- half of margin to initiatives
-  
+
   -- Log the calculation
   INSERT INTO public.pricing_calculations (
-    transaction_type, reference_id, gross_amount, 
+    transaction_type, reference_id, gross_amount,
     creator_share, platform_margin, cost_basis, margin_amount, initiative_fund
   ) VALUES (
     _transaction_type, _reference_id, _gross_amount,
     calc_creator, calc_margin, calc_margin / (1 + margin_pct), calc_margin, calc_initiative
   );
-  
+
   RETURN QUERY SELECT calc_creator, calc_margin, calc_initiative, true;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -422,7 +422,7 @@ CREATE POLICY "System logs pricing" ON public.pricing_calculations
 -- Full member currency dashboard
 -- user_credits in this project has: eoi_credits, eoi_used_credits, gleaning_credits_received/earned
 CREATE OR REPLACE VIEW public.member_currency_dashboard AS
-SELECT 
+SELECT
   m2.user_id,
   COALESCE(c.eoi_credits - c.eoi_used_credits, 0) as credits,
   COALESCE(c.gleaning_credits_received, 0) as gleaning_received,

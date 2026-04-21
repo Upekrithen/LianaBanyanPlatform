@@ -24,7 +24,7 @@ export type Scenario = 'conservative' | 'moderate' | 'aggressive';
 
 /**
  * Calculate valuation for a single innovation using Relief-from-Royalty method
- * 
+ *
  * Crown jewels receive 2-3x multiplier based on scenario:
  * - Conservative: 2x
  * - Moderate: 2.5x

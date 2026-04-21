@@ -2245,7 +2245,7 @@ In the Liana Banyan project, Crown Jewel density has increased from approximatel
 Session-by-session analysis reveals a super-linear acceleration in innovation output:
 
 | Session Range | Avg Innovations/Session | Crown Jewel Density | Cumulative Total |
-|--------------|------------------------|--------------------|-----------------| 
+|--------------|------------------------|--------------------|-----------------|
 | B001-B005 | 3-5 | ~10% | ~20 |
 | B006-B010 | 8-12 | ~15% | ~70 |
 | B011-B015 | 15-25 | ~25% | ~200 |
@@ -4722,8 +4722,8 @@ VALUES (
   $md_roi_predictability_paper_full$
 # Structural Determinism in Cooperative Commerce: A Mathematical Framework for ROI Predictability
 
-**Jonathan Jones**  
-Liana Banyan Corporation  
+**Jonathan Jones**
+Liana Banyan Corporation
 January 2026
 
 ---
@@ -5119,8 +5119,8 @@ UPDATE cephas_content_registry SET metadata = jsonb_build_object(
   'reading_levels', jsonb_build_object(
       'more_details', $md_roi_predictability_paper_more$# Structural Determinism in Cooperative Commerce: A Mathematical Framework for ROI Predictability
 
-**Jonathan Jones**  
-Liana Banyan Corporation  
+**Jonathan Jones**
+Liana Banyan Corporation
 January 2026
 
 ---
@@ -5496,8 +5496,8 @@ VALUES (
   $md_boaz_principle_paper_full$
 # Gleaning Rights in the Digital Age: The Boaz Principle as Structural Generosity in Platform Architecture
 
-**Jonathan Jones**  
-Liana Banyan Corporation  
+**Jonathan Jones**
+Liana Banyan Corporation
 January 2026
 
 ---
@@ -5970,8 +5970,8 @@ VALUES (
   $md_anti_extractive_paper_full$
 # The Anti-Extractive Derivative: A Mathematical Proof That Fixed-Margin Structures Invert Quality Incentives
 
-**Jonathan Jones**  
-Liana Banyan Corporation  
+**Jonathan Jones**
+Liana Banyan Corporation
 January 2026
 
 ---
@@ -9780,7 +9780,7 @@ She has been "logging in" to her morning for decades without ever forgetting the
 ```
 sequence = ordered_list(platform_sections)
 length = 4-6 steps
-sections = [portfolio, news, balances, marketplace, messages, 
+sections = [portfolio, news, balances, marketplace, messages,
             settings, guild, social, search, notifications,
             favorites, crew_call]
 ```
@@ -11133,9 +11133,9 @@ Parker, G. G., Van Alstyne, M. W., & Choudary, S. P. (2016). *Platform Revolutio
 
 ---
 
-**Word Count**: ~2,800  
-**Status**: DRAFT — Awaiting Bishop cross-review  
-**Knight Agent**: Claude/Opus  
+**Word Count**: ~2,800
+**Status**: DRAFT — Awaiting Bishop cross-review
+**Knight Agent**: Claude/Opus
 **Date**: January 26, 2026
 
 ---
@@ -11518,9 +11518,9 @@ The Three-Gear system emerged from a collaborative dialogue between the platform
 
 ---
 
-**Word Count**: ~3,200  
-**Status**: DRAFT — Awaiting Bishop cross-review  
-**Knight Agent**: Claude/Opus  
+**Word Count**: ~3,200
+**Status**: DRAFT — Awaiting Bishop cross-review
+**Knight Agent**: Claude/Opus
 **Date**: January 26, 2026
 
 ---

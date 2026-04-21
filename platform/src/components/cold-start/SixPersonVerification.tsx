@@ -44,7 +44,7 @@ export const SixPersonVerification: React.FC<{ applicationId: string }> = ({ app
       personal: [...prev.personal, { email: inviteEmail, status: 'pending' }]
     }));
     setInviteEmail('');
-    
+
     toast({
       title: "Invite Sent",
       description: `Verification invite sent to ${inviteEmail}`,
@@ -73,7 +73,7 @@ export const SixPersonVerification: React.FC<{ applicationId: string }> = ({ app
         </div>
       </CardHeader>
       <CardContent className="pt-6 space-y-8">
-        
+
         {/* Personal Network */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -86,11 +86,11 @@ export const SixPersonVerification: React.FC<{ applicationId: string }> = ({ app
           <p className="text-sm text-slate-500">
             Invite 3 people who know you in real life to vouch for your identity and character.
           </p>
-          
+
           <form onSubmit={handleInvite} className="flex gap-2">
-            <Input 
-              type="email" 
-              placeholder="Enter email address..." 
+            <Input
+              type="email"
+              placeholder="Enter email address..."
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
               disabled={status.personal.length >= 3}
@@ -131,7 +131,7 @@ export const SixPersonVerification: React.FC<{ applicationId: string }> = ({ app
           <p className="text-sm text-slate-500">
             Three random, verified community members are reviewing your application and scenario responses. You do not need to do anything for this step.
           </p>
-          
+
           <div className="space-y-2">
             {status.community.map((c, i) => (
               <div key={i} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">

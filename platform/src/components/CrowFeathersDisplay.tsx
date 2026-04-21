@@ -16,10 +16,10 @@ const isBeaconRunFeather = (feather: CrowFeather): boolean => {
 
 /**
  * Crow Feathers Display
- * 
+ *
  * Shows a user's permanent Ghost World achievements.
  * These are the ONLY persistent thing for non-members.
- * 
+ *
  * "The crow remembers what the ghost forgets."
  */
 export const CrowFeathersDisplay: React.FC<CrowFeathersDisplayProps> = ({
@@ -28,7 +28,7 @@ export const CrowFeathersDisplay: React.FC<CrowFeathersDisplayProps> = ({
   showBeaconRunsOnly = false,
 }) => {
   // Filter feathers based on showBeaconRunsOnly
-  const displayFeathers = showBeaconRunsOnly 
+  const displayFeathers = showBeaconRunsOnly
     ? feathers.filter(isBeaconRunFeather)
     : feathers;
 
@@ -39,7 +39,7 @@ export const CrowFeathersDisplay: React.FC<CrowFeathersDisplayProps> = ({
           <span className="crow-icon">{showBeaconRunsOnly ? '🏁' : '🪶'}</span>
           <p>{showBeaconRunsOnly ? 'No Beacon Run Feathers yet' : 'No Crow Feathers yet'}</p>
           <p className="crow-hint">
-            {showBeaconRunsOnly 
+            {showBeaconRunsOnly
               ? 'Complete a Beacon Run in Ghost Mode to earn your first feather!'
               : 'Set a Ghost World record to earn your first feather!'}
           </p>
@@ -76,9 +76,9 @@ export const CrowFeathersDisplay: React.FC<CrowFeathersDisplayProps> = ({
 
   const formatRecordValue = (feather: CrowFeather): { value: string; label: string } => {
     if (feather.category === 'beacon_run_speed' || feather.category === 'labyrinth_speed') {
-      return { 
-        value: formatCompletionTime(feather.recordValue * 1000), 
-        label: 'completion' 
+      return {
+        value: formatCompletionTime(feather.recordValue * 1000),
+        label: 'completion'
       };
     }
     if (feather.category === 'beacons_dropped') {
@@ -210,7 +210,7 @@ export const CrowFeathersDisplay: React.FC<CrowFeathersDisplayProps> = ({
 
 /**
  * New Crow Feather Notification
- * 
+ *
  * Shown when a user earns a new Crow Feather
  */
 interface NewFeatherNotificationProps {

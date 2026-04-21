@@ -75,7 +75,7 @@ export function DeckCardFrame({
   });
   const [isCollected, setIsCollected] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  
+
   // Social unlock state
   const [socialProgress, setSocialProgress] = useState<{
     totalClicks: number;
@@ -119,9 +119,9 @@ export function DeckCardFrame({
 
   async function loadSocialProgress() {
     if (!socialUnlock) return;
-    
+
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (user) {
       // Load from database for logged-in users
       const progress = await getFrameLockProgress(cardId, user.id);
@@ -132,13 +132,13 @@ export function DeckCardFrame({
           !progress.lockBottom,
           !progress.lockLeft
         ].filter(Boolean).length;
-        
+
         setSocialProgress({
           totalClicks: progress.totalClicks,
           clicksPerLock: progress.clicksPerLock,
           locksUnlocked
         });
-        
+
         // Update lock state based on social progress
         setLocks({
           top: progress.lockTop,
@@ -146,7 +146,7 @@ export function DeckCardFrame({
           bottom: progress.lockBottom,
           left: progress.lockLeft
         });
-        
+
         if (progress.isFullyUnlocked) {
           setIsCollected(true);
         }
@@ -161,20 +161,20 @@ export function DeckCardFrame({
           !progress.lockBottom,
           !progress.lockLeft
         ].filter(Boolean).length;
-        
+
         setSocialProgress({
           totalClicks: progress.totalClicks,
           clicksPerLock: progress.clicksPerLock,
           locksUnlocked
         });
-        
+
         setLocks({
           top: progress.lockTop,
           right: progress.lockRight,
           bottom: progress.lockBottom,
           left: progress.lockLeft
         });
-        
+
         if (progress.isFullyUnlocked) {
           setIsCollected(true);
         }
@@ -254,7 +254,7 @@ export function DeckCardFrame({
 
   async function collectCard() {
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) {
       // Ghost user - store in localStorage
       const ghostCards = JSON.parse(localStorage.getItem('ghost_collected_cards') || '[]');

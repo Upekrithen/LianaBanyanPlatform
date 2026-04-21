@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { 
-  Wrench, 
-  MessageSquare, 
-  Youtube, 
-  Award, 
-  ThumbsUp, 
-  ThumbsDown, 
-  CheckCircle2, 
+import {
+  Wrench,
+  MessageSquare,
+  Youtube,
+  Award,
+  ThumbsUp,
+  ThumbsDown,
+  CheckCircle2,
   Search,
   Flame,
   ShieldCheck,
@@ -109,8 +109,8 @@ export default function CollegeOfHardKnocks() {
 
       <div className="relative mb-8">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-        <Input 
-          placeholder="Search for 'How to...', error codes, or verified solutions..." 
+        <Input
+          placeholder="Search for 'How to...', error codes, or verified solutions..."
           className="pl-12 h-14 text-lg bg-white dark:bg-slate-900 border-border dark:border-slate-700 shadow-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -141,7 +141,7 @@ export default function CollegeOfHardKnocks() {
             </h2>
             <Button variant="outline" size="sm">Post a Question</Button>
           </div>
-          
+
             {consensusThreads.map(thread => (
               <Card key={thread.id} className={`hover:border-blue-500/50 transition-colors ${thread.verified ? 'border-l-4 border-l-emerald-500' : ''}`}>
                 <CardContent className="p-6">
@@ -155,7 +155,7 @@ export default function CollegeOfHardKnocks() {
                       <ThumbsDown className="w-4 h-4" />
                     </Button>
                   </div>
-                  
+
                   <div className="flex-grow">
                     <div className="flex items-start justify-between mb-2">
                       <h3 className="text-xl font-bold text-foreground dark:text-white leading-tight">
@@ -168,11 +168,11 @@ export default function CollegeOfHardKnocks() {
                         </Badge>
                       )}
                     </div>
-                    
+
                     <p className="text-muted-foreground dark:text-slate-400 mb-4 line-clamp-2">
                       {thread.preview}
                     </p>
-                    
+
                     <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-slate-400">
                       <span className="font-medium text-blue-600 dark:text-blue-400">@{thread.author}</span>
                       <div className="flex gap-1">

@@ -41,7 +41,7 @@ export default function DidaskoPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              
+
               <div className="flex gap-4 items-start bg-white dark:bg-slate-900 p-5 rounded-xl border shadow-sm">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 font-bold text-lg">1</div>
                 <div>
@@ -118,7 +118,7 @@ export default function DidaskoPage() {
                 <CardDescription>Real-world consensus & tutorials</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button 
+                <Button
                   className="w-full bg-amber-600 hover:bg-amber-700 text-white justify-start gap-2"
                   onClick={() => navigate('/hard-knocks')}
                 >

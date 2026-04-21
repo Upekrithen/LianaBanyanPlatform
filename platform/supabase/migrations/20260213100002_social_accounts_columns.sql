@@ -11,9 +11,9 @@
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-      AND table_name = 'member_social_accounts' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'member_social_accounts'
       AND column_name = 'account_handle'
   ) THEN
     ALTER TABLE public.member_social_accounts ADD COLUMN account_handle text;
@@ -24,9 +24,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-      AND table_name = 'member_social_accounts' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'member_social_accounts'
       AND column_name = 'last_used_at'
   ) THEN
     ALTER TABLE public.member_social_accounts ADD COLUMN last_used_at timestamptz;
@@ -37,9 +37,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-      AND table_name = 'member_social_accounts' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'member_social_accounts'
       AND column_name = 'updated_at'
   ) THEN
     ALTER TABLE public.member_social_accounts ADD COLUMN updated_at timestamptz DEFAULT now();
@@ -54,8 +54,8 @@ ALTER TABLE public.member_social_accounts ENABLE ROW LEVEL SECURITY;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_policies 
-    WHERE tablename = 'member_social_accounts' 
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'member_social_accounts'
       AND policyname = 'Users can view own social accounts'
   ) THEN
     CREATE POLICY "Users can view own social accounts"
@@ -69,8 +69,8 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_policies 
-    WHERE tablename = 'member_social_accounts' 
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'member_social_accounts'
       AND policyname = 'Users can insert own social accounts'
   ) THEN
     CREATE POLICY "Users can insert own social accounts"
@@ -84,8 +84,8 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_policies 
-    WHERE tablename = 'member_social_accounts' 
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'member_social_accounts'
       AND policyname = 'Users can update own social accounts'
   ) THEN
     CREATE POLICY "Users can update own social accounts"
@@ -99,8 +99,8 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_policies 
-    WHERE tablename = 'member_social_accounts' 
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'member_social_accounts'
       AND policyname = 'Users can delete own social accounts'
   ) THEN
     CREATE POLICY "Users can delete own social accounts"
@@ -114,8 +114,8 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_policies 
-    WHERE tablename = 'member_social_accounts' 
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'member_social_accounts'
       AND policyname = 'Service role full access to social accounts'
   ) THEN
     CREATE POLICY "Service role full access to social accounts"
@@ -131,9 +131,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-      AND table_name = 'member_scheduled_posts' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'member_scheduled_posts'
       AND column_name = 'time_zone'
   ) THEN
     ALTER TABLE public.member_scheduled_posts ADD COLUMN time_zone text;
@@ -144,9 +144,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-      AND table_name = 'member_scheduled_posts' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'member_scheduled_posts'
       AND column_name = 'hashtags'
   ) THEN
     ALTER TABLE public.member_scheduled_posts ADD COLUMN hashtags text[];
@@ -157,9 +157,9 @@ END $$;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-      AND table_name = 'member_scheduled_posts' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'member_scheduled_posts'
       AND column_name = 'link_url'
   ) THEN
     ALTER TABLE public.member_scheduled_posts ADD COLUMN link_url text;
@@ -172,8 +172,8 @@ ALTER TABLE public.member_scheduled_posts ENABLE ROW LEVEL SECURITY;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_policies 
-    WHERE tablename = 'member_scheduled_posts' 
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'member_scheduled_posts'
       AND policyname = 'Users can manage own scheduled posts'
   ) THEN
     CREATE POLICY "Users can manage own scheduled posts"
@@ -184,11 +184,11 @@ BEGIN
 END $$;
 
 -- ─── INDEXES ───
-CREATE INDEX IF NOT EXISTS idx_member_social_accounts_user 
+CREATE INDEX IF NOT EXISTS idx_member_social_accounts_user
   ON public.member_social_accounts(user_id);
-  
-CREATE INDEX IF NOT EXISTS idx_member_social_accounts_platform 
+
+CREATE INDEX IF NOT EXISTS idx_member_social_accounts_platform
   ON public.member_social_accounts(user_id, platform);
 
-CREATE INDEX IF NOT EXISTS idx_member_scheduled_posts_user_status 
+CREATE INDEX IF NOT EXISTS idx_member_scheduled_posts_user_status
   ON public.member_scheduled_posts(user_id, status, scheduled_for);

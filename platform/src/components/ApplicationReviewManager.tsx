@@ -91,7 +91,7 @@ export const ApplicationReviewManager = ({ projectId }: ApplicationReviewManager
     try {
       const { error } = await supabase
         .from('position_applications')
-        .update({ 
+        .update({
           status: newStatus,
           reviewed_at: new Date().toISOString()
         })

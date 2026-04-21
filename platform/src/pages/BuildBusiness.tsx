@@ -1,14 +1,14 @@
 /**
  * Build a Business - Progressive Disclosure Track
- * 
+ *
  * From project creation → production levels → volume discounts → Joules
  */
 
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Building2, Layers, Users, Coins, TrendingUp, 
+import {
+  Building2, Layers, Users, Coins, TrendingUp,
   ArrowRight, Sparkles, Unlock, ChevronDown, Package,
   Percent, Zap, Gift, Sprout, ChevronRight
 } from 'lucide-react';
@@ -29,12 +29,12 @@ const WORD_PAIRS = [
   { play: 'Story', stage: 'Audience' },
   { play: 'Play', stage: 'Stage' },
 ];
-import { 
-  BenefitCard, 
-  useBenefitAccumulator, 
+import {
+  BenefitCard,
+  useBenefitAccumulator,
   ProgressiveSection,
   ProgressiveContainer,
-  type BenefitItem 
+  type BenefitItem
 } from '@/components/progressive';
 import { saveGhostBeacon } from '@/lib/beacons';
 import { PathwayNavigator } from '@/components/PathwayNavigator';
@@ -66,19 +66,19 @@ export default function BuildBusiness() {
   const [currentSection, setCurrentSection] = useState(0);
   const [benefitCardExpanded, setBenefitCardExpanded] = useState(false);
   const totalSections = 5;
-  
+
   // Spinning word wheel state
   const [wordIndex, setWordIndex] = useState(0);
   const [showStage, setShowStage] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
-  
+
   // Flip card states
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
-  
+
   const toggleFlip = (cardId: string) => {
     setFlippedCards(prev => ({ ...prev, [cardId]: !prev[cardId] }));
   };
-  
+
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -87,35 +87,35 @@ export default function BuildBusiness() {
   // Run the spinning word wheel animation on mount
   useEffect(() => {
     if (animationComplete) return;
-    
+
     const totalPairs = WORD_PAIRS.length;
     let currentIndex = 0;
     let timeoutId: NodeJS.Timeout;
-    
+
     const spinNext = () => {
       currentIndex++;
       setWordIndex(currentIndex);
-      
+
       // Show stage row after halfway
       if (currentIndex > totalPairs / 2) {
         setShowStage(true);
       }
-      
+
       // Stop at the end
       if (currentIndex >= totalPairs - 1) {
         setAnimationComplete(true);
         return;
       }
-      
+
       // Schedule next spin with SLOWER delay so users can read each word
       // Base delay of 400ms + increasing delay for slot machine slowdown effect
       const delay = 400 + (currentIndex * 80);
       timeoutId = setTimeout(spinNext, delay);
     };
-    
+
     // Start the animation after a brief delay
     timeoutId = setTimeout(spinNext, 800);
-    
+
     return () => {
       clearTimeout(timeoutId);
     };
@@ -148,7 +148,7 @@ export default function BuildBusiness() {
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center px-6 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/10 via-transparent to-transparent" />
-        
+
         <div className="relative z-10 text-center max-w-4xl">
           <motion.div
             initial={{ scale: 0 }}
@@ -159,7 +159,7 @@ export default function BuildBusiness() {
             <Building2 className="w-5 h-5 text-emerald-400" />
             <span className="text-emerald-300 font-medium">Build a Business</span>
           </motion.div>
-          
+
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -184,7 +184,7 @@ export default function BuildBusiness() {
                 <span className="text-white">.</span>
               </span>
             </h1>
-            
+
             {/* Row 2: I Have a [Stage]. - Same size as row 1 */}
             <AnimatePresence mode="wait">
               {showStage && (
@@ -214,14 +214,14 @@ export default function BuildBusiness() {
               )}
             </AnimatePresence>
           </motion.div>
-          
+
           <motion.p
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-xl text-white/70 mb-8 max-w-2xl mx-auto"
           >
-            Launch your Keep for $5. Same terms as the Founder — no special treatment, 
+            Launch your Keep for $5. Same terms as the Founder — no special treatment,
             no executive privilege. Your ship, Captain — your rules.
           </motion.p>
 
@@ -271,7 +271,7 @@ export default function BuildBusiness() {
         >
           <div className="grid md:grid-cols-2 gap-6">
             {/* Flippable Card: What You Can Build */}
-            <div 
+            <div
               className="relative cursor-pointer group"
               style={{ perspective: '1000px', minHeight: '280px' }}
               onClick={() => toggleFlip('what-build')}
@@ -283,7 +283,7 @@ export default function BuildBusiness() {
                 transition={{ duration: 0.6 }}
               >
                 {/* Front */}
-                <div 
+                <div
                   className="absolute inset-0 p-6 rounded-xl bg-white/5 border border-white/10 backface-hidden"
                   style={{ backfaceVisibility: 'hidden' }}
                 >
@@ -312,7 +312,7 @@ export default function BuildBusiness() {
                   </ul>
                 </div>
                 {/* Back */}
-                <div 
+                <div
                   className="absolute inset-0 p-6 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-emerald-500/30"
                   style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                 >
@@ -326,7 +326,7 @@ export default function BuildBusiness() {
                     <li>✅ Hire help via bounties</li>
                     <li>✅ Keep 83.3% of everything you make</li>
                   </ul>
-                  <button 
+                  <button
                     onClick={(e) => { e.stopPropagation(); navigate('/factory'); }}
                     className="mt-4 px-4 py-2 bg-emerald-500/20 border border-emerald-500/40 rounded-lg text-emerald-400 text-sm hover:bg-emerald-500/30"
                   >
@@ -335,9 +335,9 @@ export default function BuildBusiness() {
                 </div>
               </motion.div>
             </div>
-            
+
             {/* Flippable Card: The Deal */}
-            <div 
+            <div
               className="relative cursor-pointer group"
               style={{ perspective: '1000px', minHeight: '280px' }}
               onClick={() => toggleFlip('the-deal')}
@@ -349,7 +349,7 @@ export default function BuildBusiness() {
                 transition={{ duration: 0.6 }}
               >
                 {/* Front */}
-                <div 
+                <div
                   className="absolute inset-0 p-6 rounded-xl bg-gradient-to-br from-emerald-500/20 to-green-500/10 border border-emerald-500/30"
                   style={{ backfaceVisibility: 'hidden' }}
                 >
@@ -376,7 +376,7 @@ export default function BuildBusiness() {
                   </p>
                 </div>
                 {/* Back */}
-                <div 
+                <div
                   className="absolute inset-0 p-6 rounded-xl bg-gradient-to-br from-amber-900/30 to-slate-900 border border-amber-500/30"
                   style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                 >
@@ -392,7 +392,7 @@ export default function BuildBusiness() {
                       <strong>Locked forever:</strong> The 20% margin is in the operating agreement. It cannot be changed.
                     </p>
                   </div>
-                  <button 
+                  <button
                     onClick={(e) => { e.stopPropagation(); navigate('/under-the-hood/cost-plus-twenty'); }}
                     className="mt-4 px-4 py-2 bg-amber-500/20 border border-amber-500/40 rounded-lg text-amber-400 text-sm hover:bg-amber-500/30"
                   >
@@ -402,11 +402,11 @@ export default function BuildBusiness() {
               </motion.div>
             </div>
           </div>
-          
+
           <div className="mt-8 p-4 rounded-xl bg-white/5 border border-white/10">
             <h4 className="font-medium text-white mb-2">Post Bounties to Hire Help</h4>
             <p className="text-white/60 text-sm">
-              Need design? Development? Marketing? Post bounties in The Salt Mines and 
+              Need design? Development? Marketing? Post bounties in The Salt Mines and
               hire talent using Credits. They keep 83.3% too.
             </p>
           </div>
@@ -503,12 +503,12 @@ export default function BuildBusiness() {
               </motion.div>
             ))}
           </div>
-          
+
           <div className="p-6 rounded-xl bg-gradient-to-r from-blue-500/20 to-cyan-500/10 border border-blue-500/30">
             <Users className="w-8 h-8 text-blue-400 mb-4" />
             <h4 className="font-semibold text-white mb-2">Aggregated Demand</h4>
             <p className="text-white/70">
-              When neighbors order the same product, demand aggregates automatically. 
+              When neighbors order the same product, demand aggregates automatically.
               More orders = lower per-unit cost = savings passed to everyone.
             </p>
           </div>
@@ -556,22 +556,22 @@ export default function BuildBusiness() {
               ))}
             </div>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <div className="p-5 rounded-xl bg-amber-500/10 border border-amber-500/20">
               <Zap className="w-8 h-8 text-amber-400 mb-3" />
               <h4 className="font-semibold text-white mb-2">Forever Stamp Mechanic</h4>
               <p className="text-sm text-white/70">
-                Those Joules lock in value at earning time. If platform grows, 
+                Those Joules lock in value at earning time. If platform grows,
                 they buy MORE services later. Value only ratchets UP.
               </p>
             </div>
-            
+
             <div className="p-5 rounded-xl bg-violet-500/10 border border-violet-500/20">
               <TrendingUp className="w-8 h-8 text-violet-400 mb-3" />
               <h4 className="font-semibold text-white mb-2">Early Believer Bonus</h4>
               <p className="text-sm text-white/70">
-                Pre-Mint backers get 5x multiplier on their Joules. 
+                Pre-Mint backers get 5x multiplier on their Joules.
                 Risk early, reward proportionally.
               </p>
             </div>
@@ -595,7 +595,7 @@ export default function BuildBusiness() {
                 <h3 className="text-3xl font-bold text-white mb-2">Build Your Keep</h3>
                 <p className="text-white/60">Same terms as the Founder</p>
               </div>
-              
+
               <div className="space-y-3 mb-8">
                 {benefits.map((benefit, idx) => (
                   <motion.div
@@ -610,7 +610,7 @@ export default function BuildBusiness() {
                   </motion.div>
                 ))}
               </div>
-              
+
               <div className="grid grid-cols-3 gap-4 mb-8">
                 <div className="text-center p-4 rounded-xl bg-white/5">
                   <div className="text-2xl font-bold text-primary">83.3%</div>
@@ -625,7 +625,7 @@ export default function BuildBusiness() {
                   <div className="text-xs text-white/50">Early multiplier</div>
                 </div>
               </div>
-              
+
               <div className="p-4 rounded-xl bg-white/10 border border-white/20 mb-6">
                 <p className="text-white text-center">
                   <strong>PLUS:</strong> I'm personally offering you part of MY patents.<br />
@@ -633,7 +633,7 @@ export default function BuildBusiness() {
                   You become a member. You own part of that 60%.
                 </p>
               </div>
-              
+
               <button
                 onClick={() => {
                   if (!user) {

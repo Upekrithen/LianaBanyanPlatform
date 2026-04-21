@@ -1,6 +1,6 @@
 # Portal Routing Strategy
 
-**Created**: 2025-01-14  
+**Created**: 2025-01-14
 **Status**: Implementation Ready
 
 ## Overview
@@ -30,14 +30,14 @@ This document defines the routing architecture for LianaBanyan's two-portal syst
 // src/utils/portalDetector.ts
 export const detectPortal = (): 'marketplace' | 'business' => {
   const hostname = window.location.hostname;
-  
+
   // Business portal detection
-  if (hostname.includes('lianabanyan.biz') || 
+  if (hostname.includes('lianabanyan.biz') ||
       hostname.includes('business.') ||
       hostname === 'localhost:5174') { // Dev environment
     return 'business';
   }
-  
+
   // Default to marketplace
   return 'marketplace';
 };
@@ -73,12 +73,12 @@ createRoot(document.getElementById("root")!).render(
   <Route path="/projects" element={<Projects />} />
   <Route path="/project/:id" element={<ProjectView />} />
   <Route path="/product/:id" element={<ProductDetail />} />
-  
+
   {/* Protected Backer Routes */}
   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
   <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
   <Route path="/blockchain-explorer" element={<ProtectedRoute><BlockchainExplorer /></ProtectedRoute>} />
-  
+
   {/* Redirect business routes to business portal */}
   <Route path="/positions/*" element={<Navigate to="https://lianabanyan.biz/positions" replace />} />
   <Route path="/manage-positions/*" element={<Navigate to="https://lianabanyan.biz/manage-positions" replace />} />
@@ -91,23 +91,23 @@ createRoot(document.getElementById("root")!).render(
 <Routes>
   {/* Auth Route */}
   <Route path="/auth" element={<Auth />} />
-  
+
   {/* All business routes require authentication */}
   <Route path="/" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
-  
+
   {/* Member Routes */}
   <Route path="/positions" element={<ProtectedRoute><ContractPositions /></ProtectedRoute>} />
   <Route path="/applications" element={<ProtectedRoute><MyApplications /></ProtectedRoute>} />
   <Route path="/member-resources" element={<ProtectedRoute><MemberResources /></ProtectedRoute>} />
-  
+
   {/* HR Routes (role-based access) */}
   <Route path="/manage-positions" element={<ProtectedRoute role="hr"><ManagePositions /></ProtectedRoute>} />
   <Route path="/review-applications" element={<ProtectedRoute role="hr"><ApplicationReview /></ProtectedRoute>} />
-  
+
   {/* Steward Routes */}
   <Route path="/admin-project/:id" element={<ProtectedRoute role="steward"><AdminProject /></ProtectedRoute>} />
   <Route path="/task-list" element={<ProtectedRoute role="steward"><TaskList /></ProtectedRoute>} />
-  
+
   {/* Admin Routes */}
   <Route path="/subdomain-manager" element={<ProtectedRoute role="admin"><SubdomainManager /></ProtectedRoute>} />
   <Route path="/client-api-manager" element={<ProtectedRoute role="admin"><ClientAPIManager /></ProtectedRoute>} />
@@ -189,15 +189,15 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
   const userRole = useUserRole(user?.id); // Query user role from DB
-  
+
   if (loading) return <LoadingScreen />;
   if (!user) return <Navigate to="/auth" replace />;
-  
+
   // Role-based access check
   if (role && !hasRequiredRole(userRole, role)) {
     return <Navigate to="/unauthorized" replace />;
   }
-  
+
   return <>{children}</>;
 };
 ```
@@ -221,21 +221,21 @@ Admin > Owner > Steward > HR > Member
 // src/shared/components/layouts/Header.tsx
 export const Header = () => {
   const portal = detectPortal();
-  
+
   return (
     <header>
       {/* Portal Switcher */}
       <nav>
-        <a href="https://lianabanyan.com" 
+        <a href="https://lianabanyan.com"
            className={portal === 'marketplace' ? 'active' : ''}>
           Marketplace
         </a>
-        <a href="https://lianabanyan.biz" 
+        <a href="https://lianabanyan.biz"
            className={portal === 'business' ? 'active' : ''}>
           Business Portal
         </a>
       </nav>
-      
+
       {/* Portal-specific navigation */}
       {portal === 'marketplace' ? <MarketplaceNav /> : <BusinessNav />}
     </header>
@@ -255,11 +255,11 @@ export const Header = () => {
 ```typescript
 export const getPortalBaseUrl = (): string => {
   if (import.meta.env.DEV) {
-    return detectPortal() === 'business' 
+    return detectPortal() === 'business'
       ? 'http://localhost:5174'
       : 'http://localhost:5173';
   }
-  
+
   return detectPortal() === 'business'
     ? 'https://lianabanyan.biz'
     : 'https://lianabanyan.com';

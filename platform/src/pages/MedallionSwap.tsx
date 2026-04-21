@@ -48,7 +48,7 @@ export default function MedallionSwap() {
                 Remember trading Senior Pictures in high school? The Medallion Swap is the business equivalent.
               </p>
               <p>
-                When you swap your Project's QR Deck Card with another Creator, your networks become linked. 
+                When you swap your Project's QR Deck Card with another Creator, your networks become linked.
                 If a buyer pre-orders from your project, they get a <strong>5% Chain Voting Bonus</strong> that they can apply to the *other* creator's project.
               </p>
               <div className="p-4 bg-white dark:bg-slate-900 rounded border border-purple-100 dark:border-purple-800 mt-4">
@@ -56,7 +56,7 @@ export default function MedallionSwap() {
                   <ShieldCheck className="h-4 w-4 text-emerald-500" /> The Creator Reward
                 </h4>
                 <p>
-                  When cross-pollination happens (a user buys from both of you because of the link), 
+                  When cross-pollination happens (a user buys from both of you because of the link),
                   <strong> both creators receive Joule Pouches</strong> as a reward for growing the ecosystem together.
                 </p>
               </div>
@@ -128,12 +128,12 @@ export default function MedallionSwap() {
                         {project.match} Match
                       </Badge>
                     </div>
-                    <Button 
+                    <Button
                       className="w-full gap-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700"
                       onClick={handleSwap}
                       disabled={isSwapping}
                     >
-                      <Link2 className="h-4 w-4" /> 
+                      <Link2 className="h-4 w-4" />
                       {isSwapping ? "Proposing Swap..." : "Propose Medallion Swap"}
                     </Button>
                   </div>

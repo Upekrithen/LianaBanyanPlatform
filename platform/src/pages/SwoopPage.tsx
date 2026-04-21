@@ -207,9 +207,9 @@ export default function SwoopPage() {
             <div className="text-sm text-amber-800">
               <p className="font-medium">Legal Notice</p>
               <p>
-                Liana Banyan Corporation acts solely as a payment processor for Do The Swoop projects. 
-                All funds are held in project-specific accounts controlled by designated Project Leads. 
-                LB does not own, manage, or make decisions about fund allocation. 
+                Liana Banyan Corporation acts solely as a payment processor for Do The Swoop projects.
+                All funds are held in project-specific accounts controlled by designated Project Leads.
+                LB does not own, manage, or make decisions about fund allocation.
                 Project Leads are responsible for fund disbursement.
               </p>
             </div>

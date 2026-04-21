@@ -56,7 +56,7 @@ export const ROOT_DICTIONARY: Record<RootType, RootConfig> = {
  */
 export const validateRootLock = (rootType: RootType, socket: SocketConfig): boolean => {
   if (socket.isOccupied) return false;
-  
+
   // Physical fit check (does the pin configuration match the hole configuration?)
   if (rootType !== socket.type) return false;
 

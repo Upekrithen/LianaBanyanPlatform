@@ -27,7 +27,7 @@ export function EnhancedProjectCard({ project }: EnhancedProjectCardProps) {
       const totalLevels = data.length;
       const fundedLevels = data.filter(l => l.current_votes >= l.votes_needed).length;
       const currentLevel = data.find(l => l.current_votes < l.votes_needed) || data[data.length - 1];
-      
+
       return {
         totalLevels,
         fundedLevels,
@@ -73,7 +73,7 @@ export function EnhancedProjectCard({ project }: EnhancedProjectCardProps) {
           )}
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Voting Progress */}
         {votingStatus && votingStatus.totalLevels > 0 && (

@@ -3,26 +3,26 @@ CREATE TABLE IF NOT EXISTS public.user_guild_progression (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   guild_id UUID REFERENCES public.guilds(id) ON DELETE SET NULL,
-  
+
   -- Current progression state
   current_tier TEXT NOT NULL DEFAULT 'apprentice' CHECK (current_tier IN ('apprentice', 'journeyman', 'master', 'captain')),
   current_class INTEGER NOT NULL DEFAULT 1 CHECK (current_class >= 1 AND current_class <= 6),
-  
+
   -- Stake tracking
   total_stake_paid NUMERIC NOT NULL DEFAULT 0,
   stakes_paid_by_class JSONB NOT NULL DEFAULT '{}', -- Maps class to payment info
-  
+
   -- Progression metrics
   experience_hours INTEGER NOT NULL DEFAULT 0,
   completed_contracts INTEGER NOT NULL DEFAULT 0,
   peer_rating_average NUMERIC,
-  
+
   -- Timestamps
   current_tier_started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   current_class_started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  
+
   UNIQUE(user_id)
 );
 
@@ -30,25 +30,25 @@ CREATE TABLE IF NOT EXISTS public.user_guild_progression (
 CREATE TABLE IF NOT EXISTS public.guild_stake_payments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Payment details
   tier TEXT NOT NULL CHECK (tier IN ('journeyman', 'master')),
   class_level INTEGER NOT NULL CHECK (class_level >= 1 AND class_level <= 6),
   amount_paid NUMERIC NOT NULL,
   cumulative_total NUMERIC NOT NULL,
-  
+
   -- Stripe tracking
   stripe_price_id TEXT NOT NULL,
   stripe_session_id TEXT,
   stripe_payment_intent_id TEXT,
-  
+
   -- Status
   payment_status TEXT NOT NULL DEFAULT 'completed' CHECK (payment_status IN ('pending', 'completed', 'failed', 'refunded')),
-  
+
   -- Timestamps
   paid_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  
+
   -- Ensure one payment per tier/class combo per user
   UNIQUE(user_id, tier, class_level)
 );
@@ -56,18 +56,18 @@ CREATE TABLE IF NOT EXISTS public.guild_stake_payments (
 -- Guild Investment Fund tracking
 CREATE TABLE IF NOT EXISTS public.guild_investment_fund (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Fund totals
   total_fund_amount NUMERIC NOT NULL DEFAULT 0,
   total_journeyman_stakes NUMERIC NOT NULL DEFAULT 0,
   total_master_stakes NUMERIC NOT NULL DEFAULT 0,
-  
+
   -- Allocation tracking
   allocated_to_gas NUMERIC NOT NULL DEFAULT 0, -- 1% for gas costs
   allocated_to_infrastructure NUMERIC NOT NULL DEFAULT 0,
   allocated_to_emergency_support NUMERIC NOT NULL DEFAULT 0,
   allocated_to_captain_badges NUMERIC NOT NULL DEFAULT 0,
-  
+
   -- Metadata
   last_allocation_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -135,7 +135,7 @@ BEGIN
   INSERT INTO public.user_guild_progression (user_id)
   VALUES (NEW.applicant_id)
   ON CONFLICT (user_id) DO NOTHING;
-  
+
   RETURN NEW;
 END;
 $$;

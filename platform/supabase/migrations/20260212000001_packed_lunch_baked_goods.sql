@@ -15,7 +15,7 @@
 
 -- 1.1 Add offering type and bulk options to lmd_meals
 ALTER TABLE lmd_meals ADD COLUMN IF NOT EXISTS
-  offering_type TEXT DEFAULT 'standard' 
+  offering_type TEXT DEFAULT 'standard'
     CHECK (offering_type IN ('standard', 'packed_lunch', 'baked_goods', 'catering'));
 
 ALTER TABLE lmd_meals ADD COLUMN IF NOT EXISTS
@@ -60,38 +60,38 @@ CREATE TABLE IF NOT EXISTS meal_stamps (
   meal_id UUID REFERENCES lmd_meals(id) ON DELETE CASCADE,
   order_id UUID REFERENCES meal_orders(id),
   maker_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Stamp identification
   stamp_code TEXT UNIQUE NOT NULL, -- e.g., "LB-20260212-ABC123"
   batch_number INTEGER DEFAULT 1,
   items_in_batch INTEGER DEFAULT 1,
   item_index INTEGER DEFAULT 1, -- Which item in batch (1 of 5, 2 of 5, etc.)
-  
+
   -- Food safety
   made_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   best_by TIMESTAMPTZ,
   shelf_life_hours INTEGER DEFAULT 24,
-  
+
   -- Ingredients tracking
   ingredients_hash TEXT, -- SHA-256 of ingredient list
   allergens TEXT[] DEFAULT '{}',
-  
+
   -- Cottage law compliance
   cottage_law_compliant BOOLEAN DEFAULT true,
   permit_number TEXT,
   state_code TEXT, -- State where made
-  
+
   -- Quality tracking
   quality_checked BOOLEAN DEFAULT false,
   quality_checked_at TIMESTAMPTZ,
   quality_checker_id UUID REFERENCES auth.users(id),
-  
+
   -- Issue tracking
   has_issue BOOLEAN DEFAULT false,
   issue_reported_at TIMESTAMPTZ,
   issue_description TEXT,
   issue_resolved BOOLEAN DEFAULT false,
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -136,44 +136,44 @@ FOR EACH ROW EXECUTE FUNCTION set_stamp_code();
 CREATE TABLE IF NOT EXISTS user_recipe_portfolio (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Recipe details
   title TEXT NOT NULL,
   description TEXT,
   photo_url TEXT,
-  
+
   -- Stored as JSON (proprietary, not normalized)
   ingredients JSONB DEFAULT '[]',
   instructions JSONB DEFAULT '[]',
-  
+
   -- Classification
   recipe_type TEXT DEFAULT 'meal' CHECK (recipe_type IN ('meal', 'baked_good', 'beverage', 'other')),
   cuisine TEXT,
   meal_type TEXT,
   dietary_tags TEXT[] DEFAULT '{}',
   allergens TEXT[] DEFAULT '{}',
-  
+
   -- Timing
   prep_time_minutes INTEGER,
   cook_time_minutes INTEGER,
   servings INTEGER DEFAULT 4,
-  
+
   -- Privacy
   is_proprietary BOOLEAN DEFAULT true,
-  
+
   -- Usage tracking (from LMD orders using this recipe)
   times_used INTEGER DEFAULT 0,
   total_orders INTEGER DEFAULT 0,
   total_servings_sold INTEGER DEFAULT 0,
   average_rating NUMERIC,
   rating_count INTEGER DEFAULT 0,
-  
+
   -- Graduation to public Pantry
   eligible_for_graduation BOOLEAN DEFAULT false,
   graduation_criteria_met_at TIMESTAMPTZ,
   graduated_to_pantry_id UUID REFERENCES pantry_recipes(id),
   graduated_at TIMESTAMPTZ,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
@@ -192,11 +192,11 @@ CREATE OR REPLACE FUNCTION check_recipe_graduation_eligibility()
 RETURNS TRIGGER AS $$
 BEGIN
   -- Check if meets criteria: 25+ orders, 4.0+ rating, no issues
-  IF NEW.total_orders >= 25 
-     AND NEW.average_rating >= 4.0 
+  IF NEW.total_orders >= 25
+     AND NEW.average_rating >= 4.0
      AND NEW.is_proprietary = true
      AND NEW.graduated_to_pantry_id IS NULL THEN
-    
+
     -- Check for safety issues
     IF NOT EXISTS (
       SELECT 1 FROM meal_stamps ms
@@ -209,7 +209,7 @@ BEGIN
       NEW.graduation_criteria_met_at := COALESCE(NEW.graduation_criteria_met_at, now());
     END IF;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -226,37 +226,37 @@ FOR EACH ROW EXECUTE FUNCTION check_recipe_graduation_eligibility();
 CREATE TABLE IF NOT EXISTS taste_tester_records (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Recipe reference (public or portfolio)
   recipe_id UUID REFERENCES pantry_recipes(id),
   portfolio_recipe_id UUID REFERENCES user_recipe_portfolio(id),
-  
+
   -- Order details
   order_id UUID REFERENCES meal_orders(id),
   order_number INTEGER NOT NULL, -- What number order this was for the recipe
   ordered_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Rewards earned
   marks_earned INTEGER DEFAULT 0,
   reputation_earned INTEGER DEFAULT 0,
-  
+
   -- Conversion tracking
   recipe_reached_5k BOOLEAN DEFAULT false,
   recipe_reached_5k_at TIMESTAMPTZ,
   converted_to_credits BOOLEAN DEFAULT false,
   converted_at TIMESTAMPTZ,
   credits_received NUMERIC DEFAULT 0,
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Unique index for taste test records (one per user per recipe type)
-CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_taste_test_public 
-  ON taste_tester_records(user_id, recipe_id) 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_taste_test_public
+  ON taste_tester_records(user_id, recipe_id)
   WHERE recipe_id IS NOT NULL;
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_taste_test_portfolio 
-  ON taste_tester_records(user_id, portfolio_recipe_id) 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_taste_test_portfolio
+  ON taste_tester_records(user_id, portfolio_recipe_id)
   WHERE portfolio_recipe_id IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_taste_records_user ON taste_tester_records(user_id);
@@ -266,26 +266,26 @@ CREATE INDEX IF NOT EXISTS idx_taste_records_portfolio ON taste_tester_records(p
 -- User taste tester stats
 CREATE TABLE IF NOT EXISTS user_taste_tester_stats (
   user_id UUID PRIMARY KEY REFERENCES auth.users(id),
-  
+
   -- Totals
   total_recipes_tested INTEGER DEFAULT 0,
   total_marks_earned INTEGER DEFAULT 0,
   total_reputation_earned INTEGER DEFAULT 0,
-  
+
   -- Current balance
   current_marks_balance INTEGER DEFAULT 0,
-  
+
   -- Conversion tracking
   total_marks_converted INTEGER DEFAULT 0,
   total_credits_from_conversion NUMERIC DEFAULT 0,
-  
+
   -- Success tracking
   recipes_reached_5k INTEGER DEFAULT 0, -- How many they tested hit 5K
-  
+
   -- Master Taster status (10+ successful)
   is_master_taster BOOLEAN DEFAULT false,
   master_taster_achieved_at TIMESTAMPTZ,
-  
+
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -319,14 +319,14 @@ BEGIN
   FROM taste_tester_records
   WHERE user_id = p_user_id
   AND recipe_reached_5k = true;
-  
+
   -- If 10+ successful, convert marks to credits
   IF v_successful_recipes >= 10 THEN
     -- Get current marks balance
     SELECT current_marks_balance INTO v_marks_to_convert
     FROM user_taste_tester_stats
     WHERE user_id = p_user_id;
-    
+
     IF v_marks_to_convert > 0 THEN
       -- Update stats
       UPDATE user_taste_tester_stats SET
@@ -337,14 +337,14 @@ BEGIN
         master_taster_achieved_at = COALESCE(master_taster_achieved_at, now()),
         updated_at = now()
       WHERE user_id = p_user_id;
-      
+
       -- TODO: Add credits to user's account
       -- This would integrate with the credits system
-      
+
       RETURN true;
     END IF;
   END IF;
-  
+
   RETURN false;
 END;
 $$ LANGUAGE plpgsql;
@@ -356,19 +356,19 @@ $$ LANGUAGE plpgsql;
 -- Icing pool periods
 CREATE TABLE IF NOT EXISTS icing_pool (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Period
   period_start DATE NOT NULL,
   period_end DATE NOT NULL,
   period_type TEXT DEFAULT 'monthly' CHECK (period_type IN ('weekly', 'monthly', 'quarterly')),
-  
+
   -- Totals
   previous_period_volume NUMERIC DEFAULT 0,
   current_period_volume NUMERIC DEFAULT 0,
   volume_increase NUMERIC GENERATED ALWAYS AS (
     GREATEST(0, current_period_volume - previous_period_volume)
   ) STORED,
-  
+
   -- Calculation
   lb_margin_rate NUMERIC DEFAULT 0.167, -- 16.7%
   icing_rate NUMERIC DEFAULT 0.20, -- 20% of margin increase
@@ -378,12 +378,12 @@ CREATE TABLE IF NOT EXISTS icing_pool (
   total_icing_pool NUMERIC GENERATED ALWAYS AS (
     GREATEST(0, current_period_volume - previous_period_volume) * 0.167 * 0.20
   ) STORED,
-  
+
   -- Status
   status TEXT DEFAULT 'accumulating' CHECK (status IN ('accumulating', 'calculated', 'distributed')),
   calculated_at TIMESTAMPTZ,
   distributed_at TIMESTAMPTZ,
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -396,24 +396,24 @@ CREATE TABLE IF NOT EXISTS icing_recipe_stats (
   pool_id UUID REFERENCES icing_pool(id) ON DELETE CASCADE,
   recipe_id UUID REFERENCES pantry_recipes(id),
   portfolio_recipe_id UUID REFERENCES user_recipe_portfolio(id),
-  
+
   -- Volume
   previous_orders INTEGER DEFAULT 0,
   current_orders INTEGER DEFAULT 0,
   order_increase INTEGER GENERATED ALWAYS AS (
     GREATEST(0, current_orders - previous_orders)
   ) STORED,
-  
+
   -- Revenue
   previous_revenue NUMERIC DEFAULT 0,
   current_revenue NUMERIC DEFAULT 0,
   revenue_increase NUMERIC GENERATED ALWAYS AS (
     GREATEST(0, current_revenue - previous_revenue)
   ) STORED,
-  
+
   -- Icing allocation
   icing_allocated NUMERIC DEFAULT 0,
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -422,21 +422,21 @@ CREATE TABLE IF NOT EXISTS icing_distributions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   pool_id UUID REFERENCES icing_pool(id) ON DELETE CASCADE,
   recipe_stats_id UUID REFERENCES icing_recipe_stats(id),
-  
+
   -- Recipient
   maker_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Calculation
   maker_orders_count INTEGER DEFAULT 0,
   total_recipe_orders INTEGER DEFAULT 0,
   share_percentage NUMERIC,
   icing_amount NUMERIC NOT NULL,
-  
+
   -- Payment
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'paid', 'failed')),
   paid_at TIMESTAMPTZ,
   payment_reference TEXT,
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -451,31 +451,31 @@ CREATE INDEX IF NOT EXISTS idx_icing_dist_status ON icing_distributions(status);
 -- State cottage law rules
 CREATE TABLE IF NOT EXISTS cottage_law_rules (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Location
   state_code TEXT NOT NULL,
   state_name TEXT NOT NULL,
-  
+
   -- Basic rules
   is_allowed BOOLEAN DEFAULT true,
   annual_revenue_limit NUMERIC,
-  
+
   -- Quantity limits
   daily_limit INTEGER,
   weekly_limit INTEGER,
   monthly_limit INTEGER,
-  
+
   -- Allowed foods
   allowed_food_types TEXT[] DEFAULT '{}',
   prohibited_food_types TEXT[] DEFAULT '{}',
-  
+
   -- Requirements
   registration_required BOOLEAN DEFAULT false,
   permit_required BOOLEAN DEFAULT false,
   permit_threshold_weekly INTEGER, -- At what weekly volume permit needed
   food_handler_cert_required BOOLEAN DEFAULT false,
   kitchen_inspection_required BOOLEAN DEFAULT false,
-  
+
   -- Labeling
   labeling_required BOOLEAN DEFAULT true,
   required_label_items TEXT[] DEFAULT '{
@@ -486,70 +486,70 @@ CREATE TABLE IF NOT EXISTS cottage_law_rules (
     "allergens",
     "made_in_home_kitchen"
   }',
-  
+
   -- Sales restrictions
   direct_sales_only BOOLEAN DEFAULT true,
   online_sales_allowed BOOLEAN DEFAULT false,
   farmers_market_allowed BOOLEAN DEFAULT true,
-  
+
   -- Links
   official_url TEXT,
   application_url TEXT,
-  
+
   -- Metadata
   last_verified DATE,
   effective_date DATE,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   UNIQUE(state_code)
 );
 
 -- Community-contributed cottage law guides
 CREATE TABLE IF NOT EXISTS cottage_law_guides (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Location
   state_code TEXT NOT NULL,
   county TEXT,
   city TEXT,
   jurisdiction_type TEXT DEFAULT 'state' CHECK (jurisdiction_type IN ('state', 'county', 'city')),
-  
+
   -- Content
   title TEXT NOT NULL,
   summary TEXT,
   full_content TEXT NOT NULL,
-  
+
   -- Structured data
   permit_thresholds JSONB DEFAULT '[]', -- [{qty: 5, type: "none"}, {qty: 50, type: "basic_permit"}]
   step_by_step_permit JSONB DEFAULT '[]', -- Steps to get permit
   local_resources JSONB DEFAULT '[]', -- Local health dept contacts, etc.
-  
+
   -- Metadata
   effective_date DATE,
   last_verified DATE,
   source_urls TEXT[] DEFAULT '{}',
-  
+
   -- Contributor
   contributor_id UUID REFERENCES auth.users(id),
-  
+
   -- Quality
   vote_count INTEGER DEFAULT 0,
   average_rating NUMERIC,
   helpful_count INTEGER DEFAULT 0,
   not_helpful_count INTEGER DEFAULT 0,
-  
+
   -- Marketplace
   price_credits NUMERIC DEFAULT 5,
   times_purchased INTEGER DEFAULT 0,
   total_revenue NUMERIC DEFAULT 0,
-  
+
   -- Status
   status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'review', 'published', 'outdated', 'archived')),
   reviewed_by UUID REFERENCES auth.users(id),
   reviewed_at TIMESTAMPTZ,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -563,20 +563,20 @@ CREATE TABLE IF NOT EXISTS cottage_law_guide_purchases (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   guide_id UUID REFERENCES cottage_law_guides(id) ON DELETE CASCADE,
   user_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Transaction
   price_paid NUMERIC NOT NULL,
   contributor_earned NUMERIC, -- 70%
   lb_earned NUMERIC, -- 30%
-  
+
   purchased_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Feedback
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
   was_helpful BOOLEAN,
   review TEXT,
   rated_at TIMESTAMPTZ,
-  
+
   UNIQUE(guide_id, user_id)
 );
 
@@ -585,29 +585,29 @@ CREATE TABLE IF NOT EXISTS user_cottage_law_status (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   state_code TEXT NOT NULL,
-  
+
   -- Current status
   current_weekly_output INTEGER DEFAULT 0,
   current_monthly_revenue NUMERIC DEFAULT 0,
   current_annual_revenue NUMERIC DEFAULT 0,
-  
+
   -- Permit status
   has_permit BOOLEAN DEFAULT false,
   permit_number TEXT,
   permit_expires DATE,
-  
+
   -- Certifications
   has_food_handler_cert BOOLEAN DEFAULT false,
   cert_number TEXT,
   cert_expires DATE,
-  
+
   -- Alerts
   approaching_threshold BOOLEAN DEFAULT false,
   threshold_alert_sent_at TIMESTAMPTZ,
   over_threshold BOOLEAN DEFAULT false,
-  
+
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   UNIQUE(user_id, state_code)
 );
 
@@ -618,31 +618,31 @@ CREATE TABLE IF NOT EXISTS user_cottage_law_status (
 -- Documentation items (hints, walkthroughs, step-by-steps)
 CREATE TABLE IF NOT EXISTS documentation_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Type and category
   doc_type TEXT NOT NULL CHECK (doc_type IN ('hint', 'walkthrough', 'step_by_step', 'guide', 'faq')),
   category TEXT NOT NULL, -- 'cottage_law', 'technique', 'safety', 'business', 'platform', 'equipment'
   subcategory TEXT,
-  
+
   -- Content
   title TEXT NOT NULL,
   summary TEXT,
   content TEXT NOT NULL,
   media_urls TEXT[] DEFAULT '{}',
-  
+
   -- Targeting
   tags TEXT[] DEFAULT '{}',
   applicable_states TEXT[] DEFAULT '{}',
   applicable_initiatives TEXT[] DEFAULT '{}', -- 'lmd', 'pantry', 'shopping'
   skill_level TEXT CHECK (skill_level IN ('beginner', 'intermediate', 'advanced', 'expert')),
-  
+
   -- Contributor
   contributor_id UUID REFERENCES auth.users(id),
-  
+
   -- Pricing
   price_credits NUMERIC DEFAULT 0, -- 0 = free
   contributor_share NUMERIC DEFAULT 0.70, -- 70%
-  
+
   -- Quality metrics
   vote_count INTEGER DEFAULT 0,
   average_rating NUMERIC,
@@ -650,17 +650,17 @@ CREATE TABLE IF NOT EXISTS documentation_items (
   not_helpful_count INTEGER DEFAULT 0,
   times_purchased INTEGER DEFAULT 0,
   times_viewed INTEGER DEFAULT 0,
-  
+
   -- Revenue
   total_revenue NUMERIC DEFAULT 0,
   contributor_earnings NUMERIC DEFAULT 0,
-  
+
   -- Status
   status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'review', 'published', 'featured', 'archived')),
   reviewed_by UUID REFERENCES auth.users(id),
   reviewed_at TIMESTAMPTZ,
   featured_at TIMESTAMPTZ,
-  
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -676,20 +676,20 @@ CREATE TABLE IF NOT EXISTS documentation_purchases (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   doc_id UUID REFERENCES documentation_items(id) ON DELETE CASCADE,
   user_id UUID REFERENCES auth.users(id) NOT NULL,
-  
+
   -- Transaction
   price_paid NUMERIC NOT NULL,
   contributor_earned NUMERIC,
   lb_earned NUMERIC,
-  
+
   purchased_at TIMESTAMPTZ DEFAULT now(),
-  
+
   -- Feedback
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
   was_helpful BOOLEAN,
   review TEXT,
   rated_at TIMESTAMPTZ,
-  
+
   UNIQUE(doc_id, user_id)
 );
 
@@ -699,29 +699,29 @@ CREATE INDEX IF NOT EXISTS idx_doc_purchases_doc ON documentation_purchases(doc_
 -- Contributor earnings from documentation
 CREATE TABLE IF NOT EXISTS documentation_contributor_stats (
   user_id UUID PRIMARY KEY REFERENCES auth.users(id),
-  
+
   -- Content counts
   total_items_published INTEGER DEFAULT 0,
   total_hints INTEGER DEFAULT 0,
   total_walkthroughs INTEGER DEFAULT 0,
   total_guides INTEGER DEFAULT 0,
-  
+
   -- Earnings
   total_sales INTEGER DEFAULT 0,
   total_revenue NUMERIC DEFAULT 0,
   total_earnings NUMERIC DEFAULT 0, -- After LB cut
-  
+
   -- Icing from quality
   icing_earned NUMERIC DEFAULT 0,
-  
+
   -- Quality metrics
   average_rating NUMERIC,
   total_helpful_votes INTEGER DEFAULT 0,
-  
+
   -- Payouts
   last_payout_at TIMESTAMPTZ,
   pending_payout NUMERIC DEFAULT 0,
-  
+
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -734,7 +734,7 @@ ALTER TABLE meal_stamps ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "stamps_select_own" ON meal_stamps
   FOR SELECT USING (
-    maker_id = auth.uid() 
+    maker_id = auth.uid()
     OR order_id IN (SELECT id FROM meal_orders WHERE user_id = auth.uid())
   );
 

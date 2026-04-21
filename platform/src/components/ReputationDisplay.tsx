@@ -99,7 +99,7 @@ export function ReputationDisplay({
             <span className="font-semibold">Reputation Score</span>
             <span className="text-2xl font-bold text-primary">{overallScore.toFixed(2)}/5.0</span>
           </div>
-          
+
           <div className="space-y-1 text-sm">
             <div className="flex justify-between">
               <span>Total Interactions:</span>

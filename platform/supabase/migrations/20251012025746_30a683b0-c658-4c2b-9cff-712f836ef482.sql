@@ -31,13 +31,13 @@ DECLARE
   _ratio_factor NUMERIC;
 BEGIN
   -- Calculate ratio factor: 0 (shortest) to 1 (longest)
-  _ratio_factor := LEAST(1.0, GREATEST(0.0, 
+  _ratio_factor := LEAST(1.0, GREATEST(0.0,
     _time_commitment_days::NUMERIC / NULLIF(_product_lead_time_days, 0)
   ));
-  
+
   -- Equity increases from 10% to 90% as commitment lengthens
   -- Cash decreases from 90% to 10% as commitment lengthens
-  RETURN QUERY SELECT 
+  RETURN QUERY SELECT
     (0.1 + (_ratio_factor * 0.8))::NUMERIC as equity_ratio,
     (0.9 - (_ratio_factor * 0.8))::NUMERIC as cash_ratio;
 END;
@@ -60,7 +60,7 @@ BEGIN
     AND p.status = 'active'
     AND p.commitment_deadline < now()
     AND pl.current_votes < pl.votes_needed;
-  
+
   -- Restore credits to users for reverted votes
   UPDATE public.user_credits uc
   SET total_credits = total_credits + reverted_amount,
@@ -79,7 +79,7 @@ BEGIN
     GROUP BY uv.user_id
   ) reverted
   WHERE uc.user_id = reverted.user_id;
-  
+
   -- Mark user_votes as reverted
   UPDATE public.user_votes uv
   SET status = 'reverted',

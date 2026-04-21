@@ -1,9 +1,9 @@
 /**
  * Defense Klaus WildFire Tour Demo
- * 
+ *
  * 30-second "walk around and interact" demo before being whooshed back.
  * Part of the progressive disclosure onboarding - EVERYONE sees this.
- * 
+ *
  * Teaches:
  * - What Defense Klaus is
  * - How the lock system works
@@ -41,14 +41,14 @@ interface WildFireDemoProps {
 
 const DEFAULT_DEMO_SECONDS = 30;
 
-export function DefenseKlausWildFireDemo({ 
-  onComplete, 
+export function DefenseKlausWildFireDemo({
+  onComplete,
   onWhoosh,
-  demoSeconds = DEFAULT_DEMO_SECONDS 
+  demoSeconds = DEFAULT_DEMO_SECONDS
 }: WildFireDemoProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
-  
+
   const [timeRemaining, setTimeRemaining] = useState(demoSeconds);
   const [currentStep, setCurrentStep] = useState(0);
   const [email, setEmail] = useState("");
@@ -82,7 +82,7 @@ export function DefenseKlausWildFireDemo({
       title: "⏰ Time's Up!",
       description: "Your 30-second demo has ended. Sign up to explore more!",
     });
-    
+
     setTimeout(() => {
       if (onWhoosh) onWhoosh();
       if (onComplete) onComplete(hasSignedUp, hasSignedUp ? email : undefined);
@@ -92,7 +92,7 @@ export function DefenseKlausWildFireDemo({
   // Handle lock click
   const handleLockClick = (index: number) => {
     if (!demoLocks[index]) return;
-    
+
     if (practiceCredits < 3) {
       toast({
         title: "Not Enough Credits",
@@ -180,13 +180,13 @@ export function DefenseKlausWildFireDemo({
               {practiceCredits}
             </Badge>
           </div>
-          
+
           <div className="relative w-48 h-64 mx-auto">
             {/* Demo Card */}
             <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-600/60 to-pink-600/60 border border-white/20 flex items-center justify-center">
               <Shield className="h-16 w-16 text-white/50" />
             </div>
-            
+
             {/* Side Locks */}
             {[
               { pos: "top-1/2 left-0 -translate-x-1/2 -translate-y-1/2", idx: 0 },
@@ -211,7 +211,7 @@ export function DefenseKlausWildFireDemo({
               </button>
             ))}
           </div>
-          
+
           <p className="text-xs text-center text-white/50">
             Click the locks to open them (3 credits each)
           </p>
@@ -229,10 +229,10 @@ export function DefenseKlausWildFireDemo({
               <p className="text-sm text-white/60">2 gift passes per signup</p>
             </div>
           </div>
-          
+
           <div className="bg-white/5 rounded-lg p-4 text-sm text-white/70 space-y-2">
             <p>
-              When you sign up, you get <strong className="text-pink-400">2 gift passes</strong> to 
+              When you sign up, you get <strong className="text-pink-400">2 gift passes</strong> to
               share with people you care about.
             </p>
             <p>
@@ -264,7 +264,7 @@ export function DefenseKlausWildFireDemo({
                   className="bg-white/5 border-white/20"
                 />
               </div>
-              
+
               <Button
                 onClick={handleSignUp}
                 className="w-full bg-purple-600 hover:bg-purple-700"
@@ -272,7 +272,7 @@ export function DefenseKlausWildFireDemo({
                 <Shield className="h-4 w-4 mr-2" />
                 Get My Protection
               </Button>
-              
+
               <p className="text-xs text-center text-white/40">
                 Email only. No names, no demographics.
               </p>
@@ -340,21 +340,21 @@ export function DefenseKlausWildFireDemo({
                   Skip to signup
                 </Button>
               </div>
-              
+
               {/* Progress */}
               <Progress value={((currentStep + 1) / steps.length) * 100} className="h-1" />
-              
+
               <CardTitle className="text-lg mt-3">
                 {steps[currentStep].title}
               </CardTitle>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               {/* Step Content */}
               <div className="min-h-[200px]">
                 {steps[currentStep].content}
               </div>
-              
+
               {/* Navigation */}
               {!hasSignedUp && (
                 <div className="flex justify-between pt-4">
@@ -366,7 +366,7 @@ export function DefenseKlausWildFireDemo({
                   >
                     Back
                   </Button>
-                  
+
                   {currentStep < steps.length - 1 ? (
                     <Button
                       onClick={() => setCurrentStep(prev => prev + 1)}

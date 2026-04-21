@@ -1,7 +1,7 @@
 -- ═══════════════════════════════════════════════════════════════
 -- STAMPS TABLE + UNIFIED BADGE SYSTEM
 -- "Credit Where Credit Is Due"
--- 
+--
 -- Stamps = unique QR signatures for members
 -- Badges = recognition for contributions (sponsorship, charitable, etc.)
 -- ═══════════════════════════════════════════════════════════════
@@ -13,33 +13,33 @@
 CREATE TABLE IF NOT EXISTS public.stamps (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id             UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Stamp identity
   stamp_code          TEXT NOT NULL UNIQUE,  -- Short unique code (e.g., 'JJ-2026-A7B3')
   public_key          TEXT,                   -- For cryptographic signing
   private_key_hash    TEXT,                   -- Hash of private key (actual key stored client-side)
-  
+
   -- Display
   display_name        TEXT,                   -- Optional custom name
   avatar_url          TEXT,                   -- Optional avatar
-  
+
   -- Portfolio (what this stamp can route to)
   default_anchor_id   UUID REFERENCES public.anchors(id),
-  
+
   -- Stats
   total_cue_cards     INTEGER DEFAULT 0,
   total_scans         INTEGER DEFAULT 0,
   total_pass_throughs INTEGER DEFAULT 0,
-  
+
   -- Status
   is_active           BOOLEAN DEFAULT true,
   revoked_at          TIMESTAMPTZ,
   revoke_reason       TEXT,
-  
+
   -- Timestamps
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id)  -- One stamp per user
 );
 
@@ -52,38 +52,38 @@ CREATE INDEX IF NOT EXISTS idx_stamps_code ON public.stamps(stamp_code);
 
 CREATE TABLE IF NOT EXISTS public.badge_types (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- Badge identity
   badge_code          TEXT NOT NULL UNIQUE,   -- 'sponsor_5k', 'kindling_ember', 'initiative_champion', etc.
   badge_category      TEXT NOT NULL,          -- 'sponsorship', 'charitable', 'initiative', 'achievement'
-  
+
   -- Display
   display_name        TEXT NOT NULL,
   description         TEXT,
   icon                TEXT NOT NULL,          -- Emoji or icon class
   badge_color         TEXT,                   -- Tailwind color class
-  
+
   -- Requirements
   requirement_type    TEXT,                   -- 'credits_sponsored', 'donation_percent', 'initiative_credits', etc.
   requirement_value   DECIMAL(12,2),          -- Threshold value
-  
+
   -- Tier (for progressive badges)
   tier_level          INTEGER DEFAULT 1,
   tier_name           TEXT,                   -- 'bronze', 'silver', 'gold', 'platinum' or custom
-  
+
   -- Benefits
   trust_score_bonus   INTEGER DEFAULT 0,
   featured_placement  BOOLEAN DEFAULT false,
-  
+
   -- Status
   is_active           BOOLEAN DEFAULT true,
-  
+
   -- Timestamps
   created_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Seed badge types
-INSERT INTO public.badge_types 
+INSERT INTO public.badge_types
   (badge_code, badge_category, display_name, description, icon, badge_color, requirement_type, requirement_value, tier_level, tier_name, trust_score_bonus)
 VALUES
   -- Sponsorship badges (Credit Where Credit Is Due)
@@ -92,25 +92,25 @@ VALUES
   ('sponsor_tree', 'sponsorship', 'Tree Sponsor', 'Sponsored 500+ Credits', '🌳', 'green-500', 'credits_sponsored', 500, 3, 'tree', 10),
   ('sponsor_grove', 'sponsorship', 'Grove Sponsor', 'Sponsored 1,000+ Credits', '🌲', 'green-600', 'credits_sponsored', 1000, 4, 'grove', 15),
   ('sponsor_forest', 'sponsorship', 'Forest Sponsor', 'Sponsored 5,000+ Credits (Community Seeder)', '🏔️', 'green-700', 'credits_sponsored', 5000, 5, 'forest', 25),
-  
+
   -- Kindling badges (Charitable business tiers - linked to charitable_business_tiers)
   ('kindling_ember', 'charitable', 'Ember Partner', 'Donates 1-2.99% of sales', '🔥', 'orange-300', 'donation_percent', 1, 1, 'ember', 5),
   ('kindling_flame', 'charitable', 'Flame Partner', 'Donates 3-4.99% of sales', '🔥🔥', 'orange-500', 'donation_percent', 3, 2, 'flame', 10),
   ('kindling_blaze', 'charitable', 'Blaze Partner', 'Donates 5-9.99% of sales', '🔥🔥🔥', 'orange-600', 'donation_percent', 5, 3, 'blaze', 15),
   ('kindling_inferno', 'charitable', 'Inferno Partner', 'Donates 10%+ of sales', '🔥🔥🔥🔥', 'orange-700', 'donation_percent', 10, 4, 'inferno', 25),
-  
+
   -- Initiative contribution badges
   ('initiative_helper', 'initiative', 'Initiative Helper', 'Contributed 50+ Credits to initiatives', '🤝', 'blue-300', 'initiative_credits', 50, 1, 'helper', 3),
   ('initiative_supporter', 'initiative', 'Initiative Supporter', 'Contributed 200+ Credits to initiatives', '💪', 'blue-400', 'initiative_credits', 200, 2, 'supporter', 7),
   ('initiative_champion', 'initiative', 'Initiative Champion', 'Contributed 1,000+ Credits to initiatives', '🏆', 'blue-500', 'initiative_credits', 1000, 3, 'champion', 15),
   ('initiative_legend', 'initiative', 'Initiative Legend', 'Contributed 5,000+ Credits to initiatives', '👑', 'blue-600', 'initiative_credits', 5000, 4, 'legend', 25),
-  
+
   -- Achievement badges
   ('early_adopter', 'achievement', 'Early Adopter', 'Joined in the first year', '⭐', 'yellow-400', NULL, NULL, 1, NULL, 5),
   ('founding_300', 'achievement', 'The 300', 'One of the first 300 strategic allies', '🛡️', 'amber-500', NULL, NULL, 1, NULL, 10),
   ('patent_contributor', 'achievement', 'Patent Contributor', 'Contributed to a filed patent', '📜', 'purple-400', NULL, NULL, 1, NULL, 10),
   ('cascade_starter', 'achievement', 'Cascade Starter', 'Sponsorship cascaded to 10+ people', '🌊', 'cyan-400', 'cascade_depth', 10, 1, NULL, 8),
-  
+
   -- Furnace/Trust badges
   ('verified_business', 'trust', 'Verified Business', 'Business verified through The Furnace', '✓', 'emerald-400', NULL, NULL, 1, NULL, 5),
   ('trusted_anchor', 'trust', 'Trusted Anchor', 'Anchor with 90+ trust score', '🔒', 'emerald-500', 'trust_score', 90, 1, NULL, 10)
@@ -123,22 +123,22 @@ CREATE TABLE IF NOT EXISTS public.member_badges (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id             UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   badge_type_id       UUID NOT NULL REFERENCES public.badge_types(id),
-  
+
   -- Context
   earned_for          TEXT,                   -- Description of what earned it
   related_entity_id   UUID,                   -- Initiative, anchor, sponsorship, etc.
   related_entity_type TEXT,                   -- 'initiative', 'anchor', 'sponsorship', etc.
-  
+
   -- Metrics at time of earning
   metric_value        DECIMAL(12,2),          -- The value that triggered the badge
-  
+
   -- Display
   is_visible          BOOLEAN DEFAULT true,
   is_featured         BOOLEAN DEFAULT false,  -- Show prominently on profile
-  
+
   -- Timestamps
   earned_at           TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, badge_type_id)  -- One of each badge type per user
 );
 
@@ -151,19 +151,19 @@ CREATE INDEX idx_member_badges_type ON public.member_badges(badge_type_id);
 CREATE TABLE IF NOT EXISTS public.initiative_contributions (
   id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id             UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  
+
   -- Initiative
   initiative_slug     TEXT NOT NULL,
   initiative_name     TEXT,
-  
+
   -- Contribution
   credit_amount       DECIMAL(12,2) NOT NULL,
   contribution_type   TEXT NOT NULL,          -- 'direct', 'charitable', 'matching', 'sponsorship'
-  
+
   -- Source tracking
   source_entity_id    UUID,                   -- Anchor, sponsorship, etc.
   source_entity_type  TEXT,
-  
+
   -- Timestamps
   contributed_at      TIMESTAMPTZ DEFAULT NOW()
 );
@@ -177,14 +177,14 @@ CREATE INDEX idx_initiative_contributions_initiative ON public.initiative_contri
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' 
-    AND table_name = 'cue_card_registry' 
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'cue_card_registry'
     AND column_name = 'stamp_id'
   ) THEN
-    ALTER TABLE public.cue_card_registry 
+    ALTER TABLE public.cue_card_registry
     ADD COLUMN stamp_id UUID REFERENCES public.stamps(id);
-    
+
     CREATE INDEX idx_cue_card_registry_stamp ON public.cue_card_registry(stamp_id);
   END IF;
 END $$;
@@ -202,18 +202,18 @@ DECLARE
 BEGIN
   -- Generate unique stamp code
   v_stamp_code := 'ST-' || TO_CHAR(NOW(), 'YYMM') || '-' || UPPER(SUBSTR(gen_random_uuid()::text, 1, 4));
-  
+
   -- Create stamp
   INSERT INTO public.stamps (user_id, stamp_code)
   VALUES (p_user_id, v_stamp_code)
   ON CONFLICT (user_id) DO NOTHING
   RETURNING id INTO v_stamp_id;
-  
+
   -- If already exists, get existing
   IF v_stamp_id IS NULL THEN
     SELECT id INTO v_stamp_id FROM public.stamps WHERE user_id = p_user_id;
   END IF;
-  
+
   RETURN v_stamp_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -229,18 +229,18 @@ BEGIN
   SELECT COALESCE(SUM(credit_amount), 0) INTO v_total_sponsored
   FROM public.sponsorships
   WHERE sponsor_id = p_user_id AND status IN ('active', 'split');
-  
+
   -- Check each sponsorship badge tier
-  FOR v_badge_record IN 
-    SELECT id, badge_code, requirement_value 
-    FROM public.badge_types 
-    WHERE badge_category = 'sponsorship' 
+  FOR v_badge_record IN
+    SELECT id, badge_code, requirement_value
+    FROM public.badge_types
+    WHERE badge_category = 'sponsorship'
     AND requirement_type = 'credits_sponsored'
     ORDER BY requirement_value ASC
   LOOP
     IF v_total_sponsored >= v_badge_record.requirement_value THEN
       INSERT INTO public.member_badges (user_id, badge_type_id, metric_value, earned_for)
-      VALUES (p_user_id, v_badge_record.id, v_total_sponsored, 
+      VALUES (p_user_id, v_badge_record.id, v_total_sponsored,
               'Sponsored ' || v_total_sponsored || ' Credits')
       ON CONFLICT (user_id, badge_type_id) DO UPDATE
       SET metric_value = EXCLUDED.metric_value;
@@ -260,18 +260,18 @@ BEGIN
   SELECT COALESCE(SUM(credit_amount), 0) INTO v_total_contributed
   FROM public.initiative_contributions
   WHERE user_id = p_user_id;
-  
+
   -- Check each initiative badge tier
-  FOR v_badge_record IN 
-    SELECT id, badge_code, requirement_value 
-    FROM public.badge_types 
-    WHERE badge_category = 'initiative' 
+  FOR v_badge_record IN
+    SELECT id, badge_code, requirement_value
+    FROM public.badge_types
+    WHERE badge_category = 'initiative'
     AND requirement_type = 'initiative_credits'
     ORDER BY requirement_value ASC
   LOOP
     IF v_total_contributed >= v_badge_record.requirement_value THEN
       INSERT INTO public.member_badges (user_id, badge_type_id, metric_value, earned_for)
-      VALUES (p_user_id, v_badge_record.id, v_total_contributed, 
+      VALUES (p_user_id, v_badge_record.id, v_total_contributed,
               'Contributed ' || v_total_contributed || ' Credits to initiatives')
       ON CONFLICT (user_id, badge_type_id) DO UPDATE
       SET metric_value = EXCLUDED.metric_value;
@@ -297,7 +297,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
   RETURN QUERY
-  SELECT 
+  SELECT
     bt.badge_code,
     bt.display_name,
     bt.description,

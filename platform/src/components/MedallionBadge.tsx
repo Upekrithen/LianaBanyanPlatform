@@ -14,8 +14,8 @@ export function MedallionBadge({ funded, size = 'md' }: MedallionBadgeProps) {
 
   return (
     <div className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} font-semibold rounded-full ${
-      funded 
-        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' 
+      funded
+        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
         : 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100'
     }`}>
       <Award className="w-4 h-4" />

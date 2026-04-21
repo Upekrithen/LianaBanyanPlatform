@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
       }
 
       const allKnocks = data || [];
-      
+
       // Filter to only active (non-expired) knocks
       const activeKnocks = allKnocks.filter((k: any) => {
         const expiresAt = new Date(k.expires_at);
@@ -77,7 +77,7 @@ Deno.serve(async (req) => {
 
       const knockedPersons = activeKnocks.map((k: any) => k.person);
       const knockCount = knockedPersons.length;
-      
+
       // Calculate time remaining (use earliest expiration)
       let secondsRemaining = 0;
       if (activeKnocks.length > 0) {
@@ -163,12 +163,12 @@ Deno.serve(async (req) => {
 
       // Check if this person already has an active knock
       const existingKnock = activeKnocks.find((k: any) => k.person === person);
-      
+
       if (existingKnock) {
         // Refresh their knock
         await supabase
           .from('family_knocks')
-          .update({ 
+          .update({
             knocked_at: now.toISOString(),
             expires_at: expiresAt.toISOString()
           })
@@ -186,7 +186,7 @@ Deno.serve(async (req) => {
         if (expiredKnock) {
           await supabase
             .from('family_knocks')
-            .update({ 
+            .update({
               knocked_at: now.toISOString(),
               expires_at: expiresAt.toISOString()
             })

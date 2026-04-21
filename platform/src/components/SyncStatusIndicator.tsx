@@ -25,10 +25,10 @@ export function SyncStatusIndicator() {
 
   useEffect(() => {
     checkSyncStatus();
-    
+
     // Check status every 30 seconds
     const interval = setInterval(checkSyncStatus, 30000);
-    
+
     return () => clearInterval(interval);
   }, []);
 

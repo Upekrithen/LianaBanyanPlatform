@@ -1,7 +1,7 @@
 -- ════════════════════════════════════════════════════════════════════════════
 -- GHOST WORLD & HALF-LIFE LEADERBOARDS
 -- ════════════════════════════════════════════════════════════════════════════
--- 
+--
 -- "Not in normal mode. You'd have to go Ghost."
 -- "The crow remembers what the ghost forgets."
 --
@@ -137,27 +137,27 @@ CREATE TABLE IF NOT EXISTS treasure_maps (
   title TEXT NOT NULL,
   description TEXT,
   difficulty_level INTEGER NOT NULL DEFAULT 1 CHECK (difficulty_level BETWEEN 1 AND 5),
-  
+
   -- Route data
   beacons JSONB NOT NULL DEFAULT '[]',
   starting_location TEXT NOT NULL,
   ending_location TEXT NOT NULL,
   estimated_time_minutes INTEGER,
-  
+
   -- Requirements
   required_candles INTEGER DEFAULT 0,
   required_equipment JSONB DEFAULT '[]',
-  
+
   -- Economics
   ante_price DECIMAL(6,2) DEFAULT 0,
   creator_earnings DECIMAL(12,2) DEFAULT 0,
   total_runs INTEGER DEFAULT 0,
-  
+
   -- Records
   best_time_seconds INTEGER,
   best_time_user_id UUID REFERENCES auth.users(id),
   best_time_at TIMESTAMPTZ,
-  
+
   -- Status
   is_published BOOLEAN DEFAULT FALSE,
   published_at TIMESTAMPTZ,
@@ -220,22 +220,22 @@ CREATE TABLE IF NOT EXISTS fray_leagues (
   description TEXT,
   map_id UUID REFERENCES treasure_maps(id),
   discord_channel_id TEXT,
-  
+
   -- Schedule
   starts_at TIMESTAMPTZ NOT NULL,
   ends_at TIMESTAMPTZ NOT NULL,
   registration_deadline TIMESTAMPTZ,
-  
+
   -- Economics
   entry_ante DECIMAL(6,2) DEFAULT 0,
   prize_pool DECIMAL(12,2) DEFAULT 0,
   platform_cut_percent DECIMAL(4,2) DEFAULT 20,
-  
+
   -- Status
   status TEXT DEFAULT 'upcoming' CHECK (status IN (
     'upcoming', 'registration_open', 'in_progress', 'completed', 'cancelled'
   )),
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -245,13 +245,13 @@ CREATE TABLE IF NOT EXISTS fray_entries (
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   registered_at TIMESTAMPTZ DEFAULT NOW(),
   ante_paid DECIMAL(6,2),
-  
+
   -- Results
   best_run_id UUID REFERENCES treasure_map_runs(id),
   best_time_seconds INTEGER,
   final_rank INTEGER,
   prize_earned DECIMAL(6,2),
-  
+
   UNIQUE(league_id, user_id)
 );
 

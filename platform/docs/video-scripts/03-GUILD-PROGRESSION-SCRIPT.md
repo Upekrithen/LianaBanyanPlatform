@@ -1,8 +1,8 @@
 # Guild Progression Journey - Membership Path Script
 
-**Duration**: 2-3 minutes  
-**Style**: Character animation journey  
-**Voice**: Inspirational, motivational  
+**Duration**: 2-3 minutes
+**Style**: Character animation journey
+**Voice**: Inspirational, motivational
 **Music**: Building from humble to triumphant
 
 ---
@@ -157,8 +157,8 @@
 
 ## PRODUCTION NOTES
 
-**Voice Talent**: Inspirational speaker style, genuine warmth, building energy  
-**Pacing**: Starts calm, builds to energetic, ends on hopeful invitation  
+**Voice Talent**: Inspirational speaker style, genuine warmth, building energy
+**Pacing**: Starts calm, builds to energetic, ends on hopeful invitation
 **Music Progression**:
 - 0:00: Single piano notes, minimal
 - 0:45: Strings join, building

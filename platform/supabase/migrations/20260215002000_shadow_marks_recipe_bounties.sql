@@ -16,25 +16,25 @@
 
 CREATE TABLE IF NOT EXISTS pantry_categories (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  
+
   -- Category hierarchy
   cuisine TEXT NOT NULL,              -- e.g., 'French', 'Mexican', 'Soul Food'
   meal_type TEXT NOT NULL,            -- e.g., 'Dinner', 'Breakfast', 'Dessert'
   style TEXT DEFAULT 'Standard',      -- e.g., 'Elegant', 'Comfort', 'Quick', 'Healthy'
-  
+
   -- Display
   display_name TEXT NOT NULL,         -- e.g., 'French Elegant Dinners'
   description TEXT,
   icon TEXT DEFAULT '🍽️',
-  
+
   -- Bounty state (calculated)
   recipe_count INTEGER DEFAULT 0,
   current_bounty_marks INTEGER DEFAULT 50,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(cuisine, meal_type, style)
 );
 
@@ -44,26 +44,26 @@ INSERT INTO pantry_categories (cuisine, meal_type, style, display_name, descript
   ('French', 'Dinner', 'Elegant', 'French Elegant Dinners', 'Sophisticated French cuisine for special occasions', '🇫🇷'),
   ('French', 'Dinner', 'Comfort', 'French Comfort Dinners', 'Hearty French home cooking', '🥖'),
   ('French', 'Dessert', 'Standard', 'French Desserts', 'Classic French pastries and sweets', '🥐'),
-  
+
   -- Italian
   ('Italian', 'Dinner', 'Standard', 'Italian Dinners', 'Classic Italian main courses', '🇮🇹'),
   ('Italian', 'Dinner', 'Quick', 'Quick Italian Dinners', 'Fast Italian meals under 30 minutes', '⚡'),
   ('Italian', 'Dessert', 'Standard', 'Italian Desserts', 'Tiramisu, gelato, and more', '🍨'),
-  
+
   -- Mexican
   ('Mexican', 'Dinner', 'Standard', 'Mexican Dinners', 'Authentic Mexican main dishes', '🇲🇽'),
   ('Mexican', 'Breakfast', 'Standard', 'Mexican Breakfasts', 'Huevos rancheros and beyond', '🍳'),
   ('Mexican', 'Snack', 'Standard', 'Mexican Snacks', 'Street food and appetizers', '🌮'),
-  
+
   -- American
   ('American', 'Dinner', 'Comfort', 'American Comfort Food', 'Classic American comfort dinners', '🍔'),
   ('American', 'Breakfast', 'Standard', 'American Breakfasts', 'Pancakes, eggs, the works', '🥞'),
   ('American', 'Dinner', 'Healthy', 'Healthy American Dinners', 'Lighter American options', '🥗'),
-  
+
   -- Soul Food
   ('Soul Food', 'Dinner', 'Standard', 'Soul Food Dinners', 'Traditional Southern soul food', '🍗'),
   ('Soul Food', 'Side', 'Standard', 'Soul Food Sides', 'Mac and cheese, greens, cornbread', '🌽'),
-  
+
   -- Asian
   ('Chinese', 'Dinner', 'Standard', 'Chinese Dinners', 'Chinese main courses', '🥢'),
   ('Japanese', 'Dinner', 'Standard', 'Japanese Dinners', 'Japanese main dishes', '🍱'),
@@ -71,11 +71,11 @@ INSERT INTO pantry_categories (cuisine, meal_type, style, display_name, descript
   ('Korean', 'Dinner', 'Standard', 'Korean Dinners', 'Korean main dishes', '🍜'),
   ('Vietnamese', 'Dinner', 'Standard', 'Vietnamese Dinners', 'Pho, banh mi, and more', '🍲'),
   ('Indian', 'Dinner', 'Standard', 'Indian Dinners', 'Indian curries and more', '🍛'),
-  
+
   -- Mediterranean
   ('Mediterranean', 'Dinner', 'Standard', 'Mediterranean Dinners', 'Greek, Lebanese, Turkish dishes', '🫒'),
   ('Mediterranean', 'Dinner', 'Healthy', 'Healthy Mediterranean', 'Light Mediterranean options', '🥙'),
-  
+
   -- Special categories
   ('Any', 'Breakfast', 'Quick', 'Quick Breakfasts', 'Under 15 minutes to start your day', '⏰'),
   ('Any', 'Dinner', 'Budget', 'Budget Dinners', 'Delicious meals under $5/serving', '💰'),
@@ -88,28 +88,28 @@ ON CONFLICT (cuisine, meal_type, style) DO NOTHING;
 CREATE TABLE IF NOT EXISTS shadow_marks (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  
+
   -- What earned the shadow marks
   source_type TEXT NOT NULL CHECK (source_type IN ('recipe_bounty', 'taste_test', 'early_adopter', 'category_pioneer')),
   source_id UUID,  -- e.g., recipe_id, meal_id
-  
+
   -- Amounts
   initial_amount INTEGER NOT NULL CHECK (initial_amount > 0),
   current_amount INTEGER NOT NULL CHECK (current_amount >= 0),
   crystallized_amount INTEGER DEFAULT 0 CHECK (crystallized_amount >= 0),
-  
+
   -- Vesting status
   status TEXT NOT NULL DEFAULT 'vesting' CHECK (status IN ('vesting', 'partial', 'crystallized', 'expired')),
-  
+
   -- Decay schedule (in days)
   decay_start_days INTEGER DEFAULT 3,
   decay_interval_days INTEGER DEFAULT 4,  -- Every 4 days after start
   decay_rate DECIMAL(3,2) DEFAULT 0.20,   -- 20% decay per interval
-  
+
   -- Crystallization tracking
   votes_needed INTEGER DEFAULT 10,        -- Votes to fully crystallize
   votes_received INTEGER DEFAULT 0,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
   last_decay_at TIMESTAMPTZ,
@@ -129,13 +129,13 @@ CREATE TABLE IF NOT EXISTS pantry_recipe_votes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   recipe_id UUID REFERENCES pantry_recipes(id) ON DELETE CASCADE NOT NULL,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  
+
   -- Vote weight (Marks committed)
   marks_committed INTEGER NOT NULL CHECK (marks_committed >= 1),
-  
+
   -- Timestamps
   voted_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(recipe_id, user_id)
 );
 
@@ -179,12 +179,12 @@ BEGIN
   WHERE cuisine ILIKE NEW.cuisine
     AND meal_type ILIKE NEW.meal_type
   LIMIT 1;
-  
+
   IF category_record IS NOT NULL THEN
     -- Calculate bounty based on current count BEFORE this recipe
     -- Everyone posting at the same tier level gets the same reward
     bounty_amount := calculate_category_bounty(category_record.recipe_count);
-    
+
     IF bounty_amount > 0 THEN
       -- Award shadow marks — same amount for everyone in this tier
       INSERT INTO shadow_marks (
@@ -200,14 +200,14 @@ BEGIN
         NEW.id,
         bounty_amount,
         bounty_amount,
-        CASE 
+        CASE
           WHEN bounty_amount >= 50 THEN 10
           WHEN bounty_amount >= 30 THEN 7
           WHEN bounty_amount >= 15 THEN 5
           ELSE 3
         END
       );
-      
+
       -- Update category count AFTER awarding (so next person in same tier still gets same amount)
       UPDATE pantry_categories
       SET recipe_count = recipe_count + 1,
@@ -216,7 +216,7 @@ BEGIN
       WHERE id = category_record.id;
     END IF;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;
@@ -254,18 +254,18 @@ BEGIN
   IF v_recipe IS NULL THEN
     RAISE EXCEPTION 'Recipe not found';
   END IF;
-  
+
   -- Record the vote
   INSERT INTO pantry_recipe_votes (recipe_id, user_id, marks_committed)
   VALUES (p_recipe_id, p_user_id, p_marks_committed)
-  ON CONFLICT (recipe_id, user_id) 
+  ON CONFLICT (recipe_id, user_id)
   DO UPDATE SET marks_committed = pantry_recipe_votes.marks_committed + p_marks_committed;
-  
+
   -- Update recipe vote count
   UPDATE pantry_recipes
   SET vote_count = vote_count + p_marks_committed
   WHERE id = p_recipe_id;
-  
+
   -- Check for shadow marks to crystallize
   SELECT * INTO v_shadow
   FROM shadow_marks
@@ -273,15 +273,15 @@ BEGIN
     AND source_id = p_recipe_id
     AND status IN ('vesting', 'partial')
   FOR UPDATE;
-  
+
   IF v_shadow IS NOT NULL THEN
     -- Update votes received
     v_new_votes := v_shadow.votes_received + p_marks_committed;
-    
+
     -- Calculate crystallization
     v_crystallize_ratio := LEAST(v_new_votes::DECIMAL / v_shadow.votes_needed, 1.0);
     v_crystallize_amount := FLOOR(v_shadow.current_amount * v_crystallize_ratio) - v_shadow.crystallized_amount;
-    
+
     IF v_crystallize_amount > 0 THEN
       -- Update shadow marks record
       UPDATE shadow_marks
@@ -296,12 +296,12 @@ BEGIN
             ELSE crystallized_at
           END
       WHERE id = v_shadow.id;
-      
+
       -- Award real marks to the recipe creator
       INSERT INTO marks_transactions (user_id, amount, reason, reason_type)
-      VALUES (v_recipe.creator_id, v_crystallize_amount, 
+      VALUES (v_recipe.creator_id, v_crystallize_amount,
               'Shadow Marks crystallized from recipe votes', 'shadow_crystallize');
-      
+
       -- Update user's total marks
       UPDATE user_marks
       SET total_marks = total_marks + v_crystallize_amount
@@ -313,7 +313,7 @@ BEGIN
       WHERE id = v_shadow.id;
     END IF;
   END IF;
-  
+
   RETURN QUERY SELECT TRUE, v_crystallize_amount, v_recipe.creator_id;
 END;
 $$;
@@ -335,23 +335,23 @@ BEGIN
       ),
       last_decay_at = NOW(),
       status = CASE
-        WHEN current_amount - FLOOR(initial_amount * decay_rate) <= crystallized_amount 
+        WHEN current_amount - FLOOR(initial_amount * decay_rate) <= crystallized_amount
         THEN 'expired'
         ELSE status
       END
   WHERE status IN ('vesting', 'partial')
     AND created_at + (decay_start_days || ' days')::INTERVAL < NOW()
-    AND (last_decay_at IS NULL OR 
+    AND (last_decay_at IS NULL OR
          last_decay_at + (decay_interval_days || ' days')::INTERVAL < NOW());
-  
+
   GET DIAGNOSTICS decayed_count = ROW_COUNT;
-  
+
   -- Expire fully decayed marks
   UPDATE shadow_marks
   SET status = 'expired'
   WHERE status IN ('vesting', 'partial')
     AND expires_at < NOW();
-  
+
   RETURN decayed_count;
 END;
 $$;
@@ -360,7 +360,7 @@ $$;
 
 -- Category bounty opportunities (for UI)
 CREATE OR REPLACE VIEW pantry_bounty_opportunities AS
-SELECT 
+SELECT
   c.id,
   c.cuisine,
   c.meal_type,
@@ -446,7 +446,7 @@ COMMENT ON VIEW pantry_bounty_opportunities IS 'Shows which categories need reci
 -- 4. Creator's perpetual attribution rights
 
 -- Add escape velocity tracking to pantry_recipes
-ALTER TABLE pantry_recipes 
+ALTER TABLE pantry_recipes
   ADD COLUMN IF NOT EXISTS escape_velocity_reached BOOLEAN DEFAULT false,
   ADD COLUMN IF NOT EXISTS escape_velocity_reached_at TIMESTAMPTZ,
   ADD COLUMN IF NOT EXISTS ip_ledger_hash TEXT;
@@ -471,7 +471,7 @@ BEGIN
   -- Get threshold from DNA lock
   SELECT parameter_value::INTEGER INTO threshold
   FROM dna_lock WHERE parameter_key = 'recipe_escape_velocity_threshold';
-  
+
   -- Check if we just crossed the threshold
   IF NEW.vote_count >= threshold AND OLD.vote_count < threshold THEN
     -- Generate IP Ledger stamp data
@@ -484,15 +484,15 @@ BEGIN
       'cuisine', NEW.cuisine,
       'meal_type', NEW.meal_type
     )::TEXT;
-    
+
     -- Create SHA-256 hash (using pgcrypto)
     ledger_hash := encode(digest(ledger_data, 'sha256'), 'hex');
-    
+
     -- Update recipe with escape velocity status
     NEW.escape_velocity_reached := true;
     NEW.escape_velocity_reached_at := NOW();
     NEW.ip_ledger_hash := ledger_hash;
-    
+
     -- Record to acknowledgment_stamps (IP Ledger)
     INSERT INTO acknowledgment_stamps (
       user_id,
@@ -507,18 +507,18 @@ BEGIN
       ledger_hash,
       NOW()
     );
-    
+
     -- Award bonus MARKS for reaching escape velocity (50 bonus)
     INSERT INTO marks_transactions (user_id, amount, reason, reason_type)
-    VALUES (NEW.creator_id, 50, 
-            'Recipe reached escape velocity (100+ votes): ' || NEW.title, 
+    VALUES (NEW.creator_id, 50,
+            'Recipe reached escape velocity (100+ votes): ' || NEW.title,
             'escape_velocity_bonus');
-    
+
     UPDATE user_marks
     SET total_marks = total_marks + 50
     WHERE user_id = NEW.creator_id;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$;
@@ -533,7 +533,7 @@ CREATE TRIGGER trigger_recipe_escape_velocity
 
 -- View: Recipes that have reached escape velocity (protected IP)
 CREATE OR REPLACE VIEW pantry_escape_velocity_recipes AS
-SELECT 
+SELECT
   r.id,
   r.title,
   r.creator_id,
@@ -562,7 +562,7 @@ COMMENT ON COLUMN pantry_recipes.ip_ledger_hash IS 'SHA-256 hash recorded to ack
 -- 3. Fork usage: 80% to fork creator, 20% to original
 -- 4. Original usage: 100% to original creator
 
-ALTER TABLE pantry_recipes 
+ALTER TABLE pantry_recipes
   ADD COLUMN IF NOT EXISTS forked_from_id UUID REFERENCES pantry_recipes(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS is_fork BOOLEAN DEFAULT false,
   ADD COLUMN IF NOT EXISTS fork_acknowledged_at TIMESTAMPTZ;
@@ -585,19 +585,19 @@ ON CONFLICT (parameter_key) DO NOTHING;
 CREATE TABLE IF NOT EXISTS pantry_early_taster_rewards (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  
+
   -- Tracking
   order_number INTEGER NOT NULL,  -- Which order number system-wide (1-1000)
   meal_id UUID REFERENCES lmd_meals(id) ON DELETE SET NULL,
-  
+
   -- Rewards earned
   marks_earned INTEGER NOT NULL,
   reputation_earned INTEGER NOT NULL,
   badge_earned TEXT,  -- 'taste_pioneer', 'taste_enthusiast', 'master_taster'
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   UNIQUE(user_id, meal_id)
 );
 
@@ -647,7 +647,7 @@ BEGIN
     RETURN QUERY SELECT 0, 0, NULL::TEXT, 0;
     RETURN;
   END IF;
-  
+
   -- Atomically get and increment counter
   UPDATE pantry_taster_counter
   SET total_tasters = total_tasters + 1,
@@ -655,13 +655,13 @@ BEGIN
       updated_at = NOW()
   WHERE id = 1 AND early_rewards_remaining > 0
   RETURNING total_tasters INTO v_order_num;
-  
+
   IF v_order_num IS NULL THEN
     -- No more early rewards available
     RETURN QUERY SELECT 0, 0, NULL::TEXT, 0;
     RETURN;
   END IF;
-  
+
   -- Calculate rewards based on tier
   IF v_order_num <= 100 THEN
     v_marks := 5;
@@ -682,21 +682,21 @@ BEGIN
       v_badge := 'master_taster';
     END IF;
   END IF;
-  
+
   -- Record the reward
   INSERT INTO pantry_early_taster_rewards (user_id, meal_id, order_number, marks_earned, reputation_earned, badge_earned)
   VALUES (p_user_id, p_meal_id, v_order_num, v_marks, v_reputation, v_badge);
-  
+
   -- Award MARKS
   IF v_marks > 0 THEN
     INSERT INTO marks_transactions (user_id, amount, reason, reason_type)
     VALUES (p_user_id, v_marks, 'Early Taster reward (order #' || v_order_num || ')', 'early_taster');
-    
+
     UPDATE user_marks
     SET total_marks = total_marks + v_marks
     WHERE user_id = p_user_id;
   END IF;
-  
+
   RETURN QUERY SELECT v_marks, v_reputation, v_badge, v_order_num;
 END;
 $$;
@@ -745,14 +745,14 @@ CREATE POLICY "Anyone can view maker counter"
 
 -- View: Early program status
 CREATE OR REPLACE VIEW pantry_early_program_status AS
-SELECT 
+SELECT
   m.total_makers,
   m.early_rewards_remaining as maker_slots_remaining,
   100 - m.early_rewards_remaining as makers_claimed,
   t.total_tasters,
   t.early_rewards_remaining as taster_slots_remaining,
   1000 - t.early_rewards_remaining as tasters_claimed,
-  CASE 
+  CASE
     WHEN m.early_rewards_remaining > 0 OR t.early_rewards_remaining > 0 THEN 'OPEN'
     ELSE 'CLOSED'
   END as program_status

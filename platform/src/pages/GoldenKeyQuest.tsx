@@ -622,9 +622,9 @@ export default function GoldenKeyQuest() {
                 {/* Left: Stats to share */}
                 <div className="space-y-4">
                   <h4 className="font-semibold text-sm text-muted-foreground">Your Shareable Stats</h4>
-                  
+
                   {keysFound > 0 && (
-                    <div 
+                    <div
                       className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 cursor-pointer hover:bg-amber-500/20 transition-all"
                       onClick={() => {
                         setShareAchievement({
@@ -650,7 +650,7 @@ export default function GoldenKeyQuest() {
                   )}
 
                   {circlesCompleted > 0 && (
-                    <div 
+                    <div
                       className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 cursor-pointer hover:bg-green-500/20 transition-all"
                       onClick={() => {
                         setShareAchievement({
@@ -676,7 +676,7 @@ export default function GoldenKeyQuest() {
                   )}
 
                   {multiplierStats?.current_multiplier && multiplierStats.current_multiplier > 1 && (
-                    <div 
+                    <div
                       className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20 cursor-pointer hover:bg-purple-500/20 transition-all"
                       onClick={() => {
                         setShareAchievement({

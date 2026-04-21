@@ -6,35 +6,35 @@
 CREATE TABLE IF NOT EXISTS lmd_meal_requests (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   requester_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  
+
   -- What meal
   meal_name TEXT NOT NULL,
   pantry_recipe_id UUID REFERENCES pantry_recipes(id) ON DELETE SET NULL,
-  
+
   -- Request type
   request_type TEXT NOT NULL CHECK (request_type IN ('general', 'specific')),
-  
+
   -- Marks commitment (backed 1:1 by Joules)
   marks_committed INTEGER NOT NULL CHECK (marks_committed >= 5),
-  
+
   -- For GENERAL requests
   duration_days INTEGER CHECK (duration_days IS NULL OR (duration_days >= 1 AND duration_days <= 7)),
-  
+
   -- For SPECIFIC requests
   specific_date DATE,
   portion_count INTEGER CHECK (portion_count IS NULL OR portion_count >= 1),
-  
+
   -- Location filter
   postal_code TEXT,
-  
+
   -- Status tracking
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'fulfilled', 'expired', 'withdrawn', 'forfeited')),
   expires_at DATE NOT NULL,
-  
+
   -- If fulfilled, link to the meal/order
   fulfilled_by_meal_id UUID REFERENCES lmd_meals(id) ON DELETE SET NULL,
   fulfilled_at TIMESTAMPTZ,
-  
+
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -85,7 +85,7 @@ $$;
 
 -- Aggregated demand view for chefs
 CREATE OR REPLACE VIEW lmd_demand_summary AS
-SELECT 
+SELECT
   meal_name,
   pantry_recipe_id,
   postal_code,

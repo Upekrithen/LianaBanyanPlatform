@@ -2,7 +2,7 @@
  * SOCIAL PLUG SYSTEM
  * ==================
  * Universal plug management for social platform integrations.
- * 
+ *
  * Design Principles:
  * 1. Everything works without social - Core games are complete standalone
  * 2. Social is additive - Plugs add bonuses, never requirements
@@ -120,8 +120,8 @@ export async function isPlugEnabled(userId: string, platform: SocialPlatform): P
  * Toggle a plug on/off
  */
 export async function togglePlug(
-  userId: string, 
-  platform: SocialPlatform, 
+  userId: string,
+  platform: SocialPlatform,
   enabled: boolean
 ): Promise<boolean> {
   const { error } = await supabase
@@ -222,7 +222,7 @@ export async function getAvailablePlatforms(): Promise<PlatformFeatures[]> {
  * Check if a platform feature is available
  */
 export async function isPlatformFeatureAvailable(
-  platform: SocialPlatform, 
+  platform: SocialPlatform,
   feature: string
 ): Promise<boolean> {
   const { data, error } = await supabase
@@ -401,7 +401,7 @@ export function getGhostPlugPreferences(): Record<SocialPlatform, boolean> {
  */
 export async function migrateGhostPlugs(userId: string): Promise<void> {
   const prefs = getGhostPlugPreferences();
-  
+
   for (const [platform, enabled] of Object.entries(prefs)) {
     if (enabled) {
       await supabase

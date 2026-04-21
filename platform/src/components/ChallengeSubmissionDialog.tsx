@@ -35,11 +35,11 @@ interface ChallengeSubmissionDialogProps {
   onSubmitSuccess?: () => void;
 }
 
-export function ChallengeSubmissionDialog({ 
-  open, 
-  onOpenChange, 
+export function ChallengeSubmissionDialog({
+  open,
+  onOpenChange,
   challenge,
-  onSubmitSuccess 
+  onSubmitSuccess
 }: ChallengeSubmissionDialogProps) {
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
@@ -65,7 +65,7 @@ export function ChallengeSubmissionDialog({
         .eq('user_id', user.id)
         .eq('is_active', true)
         .maybeSingle();
-      
+
       setIsClanMember(!!clanData);
 
       // Check guild membership
@@ -75,7 +75,7 @@ export function ChallengeSubmissionDialog({
         .eq('user_id', user.id)
         .limit(1)
         .maybeSingle();
-      
+
       setHasGuildMemberships(!!guildData);
     };
 
@@ -139,7 +139,7 @@ export function ChallengeSubmissionDialog({
           <div className="bg-muted p-4 rounded-lg space-y-2">
             <h3 className="font-semibold">Challenge Details</h3>
             <p className="text-sm text-muted-foreground">{challenge.contest_description}</p>
-            
+
             <div className="flex items-center gap-4 text-sm pt-2">
               <div>
                 <span className="text-muted-foreground">Entrance Fee:</span>{' '}
@@ -207,7 +207,7 @@ export function ChallengeSubmissionDialog({
           </div>
 
           {/* Clan & Guild Contextual Prompt */}
-          <ClanGuildContextualPrompt 
+          <ClanGuildContextualPrompt
             context="challenge"
             isClanMember={isClanMember}
             hasGuildMemberships={hasGuildMemberships}

@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       try {
         // Get or create user
         let userId = pledge.user_id;
-        
+
         if (!userId) {
           // Check if user exists
           const { data: profile } = await supabase
@@ -42,9 +42,9 @@ Deno.serve(async (req) => {
             .select('id')
             .eq('email', pledge.backer_email)
             .maybeSingle();
-          
+
           userId = profile?.id;
-          
+
           if (!userId) {
             console.log(`Skipping pledge ${pledge.id}: No user found for ${pledge.backer_email}`);
             continue;
@@ -90,7 +90,7 @@ Deno.serve(async (req) => {
 
           if (productionLevels?.[0]) {
             const productionLevel = productionLevels[0];
-            
+
             // Create a pledge (vote) for this production level
             await supabase
               .from('pledges')

@@ -7,7 +7,7 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 export default function ProfileSettings() {
   const { t } = useTranslation();
-  
+
   return (
     <PortalPageLayout>
       <div>

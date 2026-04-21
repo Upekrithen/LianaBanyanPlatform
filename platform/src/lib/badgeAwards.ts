@@ -2,7 +2,7 @@
  * Badge Awards System
  * ====================
  * Calculates and awards badges based on user achievements.
- * 
+ *
  * Badge Categories:
  * - lb_achievement: Platform-wide achievements
  * - guild: Guild membership badges
@@ -13,11 +13,11 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  COOKING_SPOON_THRESHOLDS, 
+import {
+  COOKING_SPOON_THRESHOLDS,
   HOT_PEPPER_THRESHOLDS,
   calculateCookingSpoonLevel,
-  calculateHotPepperLevel 
+  calculateHotPepperLevel
 } from "./pantryCredits";
 
 // Badge definitions
@@ -193,9 +193,9 @@ export const RECIPE_PORTFOLIO_BADGES: BadgeDefinition[] = [
 ];
 
 export const ALL_BADGES = [
-  ...FOOD_BADGES, 
-  ...DELIVERY_BADGES, 
-  ...TASTE_TESTER_BADGES, 
+  ...FOOD_BADGES,
+  ...DELIVERY_BADGES,
+  ...TASTE_TESTER_BADGES,
   ...DOCUMENTATION_BADGES,
   ...RECIPE_PORTFOLIO_BADGES
 ];
@@ -214,28 +214,28 @@ export function getLevelDescription(badgeId: string, level: number): string {
   switch (badgeId) {
     case 'cooking_spoon':
       const spoonThreshold = COOKING_SPOON_THRESHOLDS.find(t => t.level === level);
-      return spoonThreshold 
+      return spoonThreshold
         ? `${spoonThreshold.recipes}+ recipes with ${spoonThreshold.makes}+ makes each`
         : '';
-    
+
     case 'hot_pepper':
       const pepperThreshold = HOT_PEPPER_THRESHOLDS.find(t => t.level === level);
-      return pepperThreshold 
+      return pepperThreshold
         ? `Recipe reached ${pepperThreshold.uses.toLocaleString()}+ uses`
         : '';
-    
+
     case 'chef_hat':
       const chefLevels = ['10+ meals', '50+ meals', '200+ meals'];
       return chefLevels[level - 1] || '';
-    
+
     case 'meal_saver':
       const mealLevels = ['5 charity meals', '25 charity meals', '100 charity meals', '500 charity meals', '1000+ charity meals'];
       return mealLevels[level - 1] || '';
-    
+
     case 'grocery_runner':
       const runnerLevels = ['5 deliveries', '25 deliveries', '100 deliveries', '500 deliveries', '1000+ deliveries'];
       return runnerLevels[level - 1] || '';
-    
+
     default:
       return `Level ${level}`;
   }
@@ -275,12 +275,12 @@ export async function calculateFoodBadges(userId: string): Promise<{
     .single();
 
   // Calculate Cooking Spoon
-  const cookingSpoon = recipes 
+  const cookingSpoon = recipes
     ? calculateCookingSpoonLevel(recipes.map(r => ({ makeCount: r.make_count || 0 })))
     : 0;
 
   // Calculate Hot Pepper
-  const maxUses = recipes 
+  const maxUses = recipes
     ? Math.max(0, ...recipes.map(r => r.make_count || 0))
     : 0;
   const hotPepper = calculateHotPepperLevel(maxUses);

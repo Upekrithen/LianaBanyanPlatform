@@ -34,9 +34,9 @@ CREATE TABLE public.project_resource_usage (
 );
 
 -- Create index for efficient querying
-CREATE INDEX idx_resource_usage_project_period 
+CREATE INDEX idx_resource_usage_project_period
   ON public.project_resource_usage(project_id, period_start, period_end);
-CREATE INDEX idx_resource_usage_portal 
+CREATE INDEX idx_resource_usage_portal
   ON public.project_resource_usage(portal, period_start);
 
 -- API usage tracking for .net portal
@@ -54,9 +54,9 @@ CREATE TABLE network.api_usage_logs (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE INDEX idx_api_usage_project_time 
+CREATE INDEX idx_api_usage_project_time
   ON network.api_usage_logs(project_id, created_at DESC);
-CREATE INDEX idx_api_usage_credential 
+CREATE INDEX idx_api_usage_credential
   ON network.api_usage_logs(credential_id, created_at DESC);
 
 -- Cost attribution summary (materialized view for reporting)
@@ -77,7 +77,7 @@ CREATE TABLE public.project_cost_summary (
   UNIQUE(project_id, period_month)
 );
 
-CREATE INDEX idx_cost_summary_project_month 
+CREATE INDEX idx_cost_summary_project_month
   ON public.project_cost_summary(project_id, period_month DESC);
 
 -- ============================================
@@ -125,7 +125,7 @@ BEGIN
     _ip_address,
     _user_agent
   ) RETURNING id INTO _log_id;
-  
+
   RETURN _log_id;
 END;
 $$;
@@ -151,7 +151,7 @@ BEGIN
   -- Calculate current period (hourly buckets)
   _period_start := date_trunc('hour', now());
   _period_end := _period_start + interval '1 hour';
-  
+
   -- Insert or update resource usage
   INSERT INTO public.project_resource_usage (
     project_id,
@@ -178,14 +178,14 @@ BEGIN
     cost_usd = project_resource_usage.cost_usd + _cost_usd,
     updated_at = now()
   RETURNING id INTO _usage_id;
-  
+
   RETURN _usage_id;
 END;
 $$;
 
 -- Add unique constraint for upsert
-ALTER TABLE public.project_resource_usage 
-  ADD CONSTRAINT project_resource_usage_unique 
+ALTER TABLE public.project_resource_usage
+  ADD CONSTRAINT project_resource_usage_unique
   UNIQUE (project_id, portal, resource_type, period_start);
 
 -- Function to calculate monthly cost summary
@@ -203,7 +203,7 @@ DECLARE
   _total_cost NUMERIC;
 BEGIN
   -- Aggregate usage for the month
-  SELECT 
+  SELECT
     COALESCE(SUM(CASE WHEN resource_type = 'api_calls' THEN usage_count ELSE 0 END), 0),
     COALESCE(SUM(CASE WHEN resource_type IN ('db_reads', 'db_writes') THEN usage_count ELSE 0 END), 0),
     COALESCE(MAX(CASE WHEN resource_type = 'storage_bytes' THEN usage_count ELSE 0 END), 0),
@@ -213,14 +213,14 @@ BEGIN
   WHERE project_id = _project_id
     AND period_start >= _month
     AND period_start < (_month + interval '1 month');
-  
+
   -- Add gas costs
   SELECT COALESCE(SUM(total_cost_usd), 0) INTO _total_cost
   FROM public.blockchain_gas_costs
   WHERE project_id = _project_id
     AND created_at >= _month
     AND created_at < (_month + interval '1 month');
-  
+
   _result := jsonb_build_object(
     'total_cost_usd', _total_cost,
     'api_calls', _api_calls,
@@ -228,7 +228,7 @@ BEGIN
     'storage_bytes', _storage_bytes,
     'period', _month
   );
-  
+
   RETURN _result;
 END;
 $$;
@@ -304,11 +304,11 @@ CREATE POLICY "Admins view all cost summaries"
 -- ============================================
 
 -- Add portal column to relevant tables
-ALTER TABLE public.project_modules 
+ALTER TABLE public.project_modules
   ADD COLUMN IF NOT EXISTS api_calls_count INTEGER DEFAULT 0,
   ADD COLUMN IF NOT EXISTS storage_bytes BIGINT DEFAULT 0;
 
 -- Update blockchain gas costs to track portal
 ALTER TABLE public.blockchain_gas_costs
-  ADD COLUMN IF NOT EXISTS portal TEXT DEFAULT 'network' 
+  ADD COLUMN IF NOT EXISTS portal TEXT DEFAULT 'network'
     CHECK (portal IN ('marketplace', 'business', 'nonprofit', 'network'));

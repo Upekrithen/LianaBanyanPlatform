@@ -11,7 +11,7 @@ const NotLeftNotRightPage = () => {
     <PortalPageLayout>
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-6"
@@ -42,7 +42,7 @@ const NotLeftNotRightPage = () => {
 
       {/* Op-Ed Content */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto pb-24">
-        <motion.article 
+        <motion.article
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -50,11 +50,11 @@ const NotLeftNotRightPage = () => {
         >
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-8 mb-12 shadow-xl">
             <p className="text-lg italic text-slate-400 mb-0">Op‑Ed — January 2026</p>
-            
+
             <p className="mt-6">Something is broken in how we talk to each other.</p>
             <p>Every issue gets sorted into two boxes. Every solution gets labeled before it's understood. Every person gets assigned a team.</p>
             <p>And while we argue about which box things belong in, the actual problems keep getting worse.</p>
-            
+
             <p>I spent 37 years developing this system. And I've watched people dismiss it — from both sides — because they think they know what box it belongs in.</p>
             <p>It doesn't belong in any box.</p>
             <p>It's not a liberal project. It's not a conservative project.</p>
@@ -147,7 +147,7 @@ const NotLeftNotRightPage = () => {
               <p>But to build something together that helps people — regardless of which box they've been sorted into.</p>
               <p className="text-xl font-bold text-emerald-400 mt-6">Help each other help ourselves.</p>
               <p className="text-xl font-bold text-white">Not left or right. Forward.</p>
-              
+
               <div className="mt-8 pt-8 border-t border-emerald-500/20">
                 <p className="font-semibold text-white mb-0">Jonathan Jones</p>
                 <p className="text-sm text-slate-400 mb-0">Founder, Liana Banyan Corporation</p>
@@ -162,7 +162,7 @@ const NotLeftNotRightPage = () => {
         </motion.article>
 
         {/* Call to Action - Little Red Hen */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -174,7 +174,7 @@ const NotLeftNotRightPage = () => {
             <p className="text-lg text-red-200/80 mb-8 max-w-xl mx-auto">
               "Who will help me bake the bread? Who gets to eat it?" Experience the Little Red Hen flipbook to understand the 83.3% Creator Share and Cost+20% Platform Margin.
             </p>
-            <button 
+            <button
               onClick={() => navigate('/red-carpet')}
               className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 shadow-[0_0_20px_rgba(220,38,38,0.3)]"
             >
@@ -186,7 +186,7 @@ const NotLeftNotRightPage = () => {
         </motion.div>
 
         {/* HexIsle Academic Paper Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -202,49 +202,49 @@ const NotLeftNotRightPage = () => {
           <div className="bg-slate-900 rounded-xl border border-slate-700 p-8 prose prose-invert prose-emerald max-w-none">
             <h2 className="text-white border-b border-slate-700 pb-4">It's Not Ambitious — It's Reality</h2>
             <h3 className="text-emerald-400 mt-2">HexIsle, Tereno, and the Physical Engine Beneath a Cooperative Economy</h3>
-            
+
             <p>For most people, a "big idea" is an app, a feature, or a pitch deck. For me, it has been a 37-year engineering project: a single, coherent system that turns gravity, plastic, and water into a programmable surface—and then uses that surface to teach the economics, governance, and cooperation rules of an entirely different kind of platform.</p>
-            
+
             <p>This paper sits on top of that work. It is not a vision document. It is the technical spine of a system that already exists in lithographic detail: twist-lock couplers, compliant seals, Tesla-valve rotors, escapement geometries, torque margins, and manufacturing tolerances have all been designed, checked, and folded into provisional patent filings.</p>
 
             <h4>From abstract constraints to physical rules</h4>
             <p>HexIsle and the Tereno Hydraulic Gaming System were built to answer a simple question: what if the rules of an economy were not just sentences in a terms-of-service, but physical constraints you could see, touch, and feel?</p>
-            
+
             <p>Three nested reservoirs (X, Y, Z) and a central water-wheel escapement form a closed hydraulic circuit that uses water purely as a working fluid to drive and regulate mechanical waves, currents, and tides across 420 modular Hexels—no pumps, motors, or external power required.</p>
-            
+
             <p>Each tile contains a Golden Lotus mechanism that converts alternating hydraulic flow into unidirectional rotation with a 6x torque safety margin.</p>
-            
+
             <p>Root geometries and Biome sockets enforce what textbooks struggle to convey: industry requires infrastructure, crops require the right conditions, and illegal moves simply don't fit.</p>
-            
+
             <p className="font-bold text-white bg-slate-800/50 p-4 rounded-lg border-l-4 border-emerald-500 my-6">
               The result is a table that behaves like a living system: when you stop the clock, you literally stop the ocean.
             </p>
 
             <h4>Integrated with the rest of the platform, by design</h4>
             <p>HexIsle is not a side project. It is one of the physical engines beneath the Liana Banyan platform described in the Comprehensive Provisional Patent Application and the accompanying series of academic papers.</p>
-            
+
             <p>The Credits / Marks / Joules architecture uses closed-loop, non-security service credits to keep value with the people doing the work, following the five-principle framework in Platform Service Credits as Non-Securities.</p>
-            
+
             <p>The IP Load Balancing and Margin-Sacrifice Mutual Credit mechanisms govern how ideas and revenue move across initiatives so that derivatives feed their sources rather than extract from them.</p>
-            
+
             <p>The Ghost / Material / HexIsle realms and the 300 Framework tie game states, cooperative positions, and governance roles together so that what happens on the table can matter in the wider ecosystem without ever turning play into a security or a bet.</p>
-            
+
             <p>In other words, HexIsle is a tangible interface for a cooperative economy that has already been legally and architecturally mapped.</p>
 
             <h4>Why this paper matters</h4>
             <p>This particular document focuses on one narrow question: can a self-sustaining, gravity-driven hydraulic oscillation system, with 420 independently actuated tiles, operate safely, predictably, and manufacturably in a home environment?</p>
-            
+
             <p>The answer, shown by the calculations that follow, is yes:</p>
             <ul>
               <li>A 3-foot head height yields ~1.30 psi operating pressure, which in turn produces ~3.0 in-lb net torque per Hexel versus ~0.5 in-lb required (6x safety margin).</li>
               <li>Pressure and volume analysis shows stable operation with ~36:1 volume overhead and ~95% pressure retention at the furthest tile.</li>
               <li>A total system weight of ~320 lbs, flat-pack shipping geometry, and standard 5-gallon jug integration make the system practical for consumer use and distributed manufacturing.</li>
             </ul>
-            
+
             <p>This is why the title is not hyperbole. The rest of this paper does the unglamorous work: deriving the pressure, torque, oscillation, and manufacturing constraints that make HexIsle real.</p>
-            
+
             <div className="mt-8 pt-8 border-t border-slate-700">
-              <button 
+              <button
                 onClick={() => navigate('/hexisle')}
                 className="text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-2"
               >

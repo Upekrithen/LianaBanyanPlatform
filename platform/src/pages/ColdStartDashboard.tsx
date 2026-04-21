@@ -2,7 +2,7 @@
  * COLD START DASHBOARD
  * ====================
  * Milestone 2: The Cold Start & Stewardship System
- * 
+ *
  * Main entry point for the Cold Start system showing:
  * - All 16 initiatives with their tier status
  * - Geographic heat map of demand signals
@@ -22,9 +22,9 @@ import { CareUnitSelector } from "@/components/cold-start/CareUnitSelector";
 import { JesperDashboard } from "@/components/cold-start/JesperDashboard";
 import { BecomeAStewardCard } from "@/components/cue-cards/BecomeAStewardCard";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
-import { 
-  Flame, MapPin, Users, Crown, ArrowRight, 
-  Sparkles, TrendingUp, Globe, Building2, 
+import {
+  Flame, MapPin, Users, Crown, ArrowRight,
+  Sparkles, TrendingUp, Globe, Building2,
   Utensils, ShoppingCart, Home, Heart, Shield,
   Music, GraduationCap, Wrench, Anchor, Ship, Compass, Gift
 } from "lucide-react";
@@ -95,12 +95,12 @@ const ColdStartDashboard: React.FC = () => {
         >
           <div className="space-y-4">
             <p>
-              Every initiative starts as a <strong>SPARK</strong> — just an idea gathering interest. 
-              As more families sign up and local leaders (<strong>Dukes</strong>) step forward, 
-              the initiative progresses through tiers until it becomes a <strong>WILDFIRE</strong> 
+              Every initiative starts as a <strong>SPARK</strong> — just an idea gathering interest.
+              As more families sign up and local leaders (<strong>Dukes</strong>) step forward,
+              the initiative progresses through tiers until it becomes a <strong>WILDFIRE</strong>
               of sustainable community action.
             </p>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
               <div className="bg-gray-500/20 p-3 rounded-lg text-center">
                 <Sparkles className="w-6 h-6 mx-auto mb-2 text-gray-400" />
@@ -130,9 +130,9 @@ const ColdStartDashboard: React.FC = () => {
                 The 300: The Fleet (Naval Ranks)
               </h4>
               <p className="text-sm text-muted-foreground">
-                Each initiative has a <strong>Fleet Admiral</strong> — a public figure who champions the national vision 
-                (like Maneet Chauhan for Let's Make Dinner). But the real work happens locally through 
-                <strong> Captains</strong> — members of "The 300" who command their own ship in their cities. 
+                Each initiative has a <strong>Fleet Admiral</strong> — a public figure who champions the national vision
+                (like Maneet Chauhan for Let's Make Dinner). But the real work happens locally through
+                <strong> Captains</strong> — members of "The 300" who command their own ship in their cities.
                 <strong> You can become a Captain</strong> and lead your community.
               </p>
               <div className="mt-3 text-xs text-muted-foreground border-t pt-3">
@@ -169,7 +169,7 @@ const ColdStartDashboard: React.FC = () => {
 
           {/* Local City Tab */}
           <TabsContent value="local">
-            <LocalColdStartDashboard 
+            <LocalColdStartDashboard
               initialCity={initialCity}
               initialState={initialState}
               showSearch={true}
@@ -308,7 +308,7 @@ const ColdStartDashboard: React.FC = () => {
                 <div className="bg-muted/30 p-4 rounded-lg">
                   <h4 className="font-semibold mb-2">Ready to Command Your Ship?</h4>
                   <p className="text-sm text-muted-foreground mb-4">
-                    First, search for your city in the "My City" tab to see which initiatives need Captains. 
+                    First, search for your city in the "My City" tab to see which initiatives need Captains.
                     Then click "Become Captain" on any initiative that needs local leadership.
                   </p>
                   <Button onClick={() => setActiveTab('local')}>
@@ -359,7 +359,7 @@ const ColdStartDashboard: React.FC = () => {
 // Initiative Card Component
 const InitiativeCard: React.FC<{ initiativeId: string }> = ({ initiativeId }) => {
   const navigate = useNavigate();
-  
+
   const INITIATIVE_INFO: Record<string, { name: string; description: string; crown?: string; icon: React.ReactNode }> = {
     lets_make_dinner: { name: "Let's Make Dinner", description: 'Neighbors feeding neighbors', crown: 'Maneet Chauhan', icon: <Utensils className="w-5 h-5" /> },
     lets_get_groceries: { name: "Let's Get Groceries", description: 'Volume purchasing power', icon: <ShoppingCart className="w-5 h-5" /> },

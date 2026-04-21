@@ -140,7 +140,7 @@ export function DonationCommitmentForm() {
     queryKey: ["donation-commitments", user?.id],
     queryFn: async () => {
       if (!user) return [];
-      
+
       const { data, error } = await supabase
         .from("donation_commitments")
         .select("*")
@@ -256,7 +256,7 @@ export function DonationCommitmentForm() {
             {activeCommitments.map((commitment) => {
               const typeInfo = getTypeInfo(commitment.type);
               const TypeIcon = typeInfo?.icon || Heart;
-              
+
               return (
                 <div
                   key={commitment.id}
@@ -287,8 +287,8 @@ export function DonationCommitmentForm() {
                           <>{commitment.amount}% of project earnings</>
                         )}
                         {" • "}
-                        {commitment.target_type === "specific_project" 
-                          ? commitment.target_name 
+                        {commitment.target_type === "specific_project"
+                          ? commitment.target_name
                           : commitment.target_type === "category"
                           ? `${commitment.category} causes`
                           : "General Fund"}
@@ -438,7 +438,7 @@ export function DonationCommitmentForm() {
               <Card className="border-blue-200 bg-blue-50">
                 <CardContent className="pt-4">
                   <p className="text-sm text-blue-800">
-                    <strong>Monthly Commitment:</strong> Set up recurring donations with full control. 
+                    <strong>Monthly Commitment:</strong> Set up recurring donations with full control.
                     Pause, change, or cancel anytime. We'll always ask before charging.
                   </p>
                 </CardContent>
@@ -522,7 +522,7 @@ export function DonationCommitmentForm() {
               <Card className="border-purple-200 bg-purple-50">
                 <CardContent className="pt-4">
                   <p className="text-sm text-purple-800">
-                    <strong>Donation Pool:</strong> Set aside a larger sum that will be used for approved causes 
+                    <strong>Donation Pool:</strong> Set aside a larger sum that will be used for approved causes
                     until exhausted. When it runs out, we'll ask if you want to replenish.
                   </p>
                 </CardContent>
@@ -565,7 +565,7 @@ export function DonationCommitmentForm() {
               <Card className="border-amber-200 bg-amber-50">
                 <CardContent className="pt-4">
                   <p className="text-sm text-amber-800">
-                    <strong>Project Percentage:</strong> Commit a percentage of your project earnings 
+                    <strong>Project Percentage:</strong> Commit a percentage of your project earnings
                     to causes you choose. Automatically calculated from your revenue.
                   </p>
                 </CardContent>

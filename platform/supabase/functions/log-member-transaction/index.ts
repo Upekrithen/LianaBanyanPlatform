@@ -17,13 +17,13 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { 
-      hiring_member_id, 
-      hired_member_id, 
-      agreed_rate, 
+    const {
+      hiring_member_id,
+      hired_member_id,
+      agreed_rate,
       lb_scale_rate,
       service_link_id,
-      contract_id 
+      contract_id
     } = await req.json();
 
     // Validate inputs
@@ -78,7 +78,7 @@ serve(async (req) => {
       const { error: updateError } = await supabase.rpc('increment_violation_count', {
         link_id: service_link_id
       });
-      
+
       if (updateError) {
         console.error("Failed to increment violation count:", updateError);
       }
@@ -97,8 +97,8 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         log: logData,
         rate_compliant,
         violation_severity,

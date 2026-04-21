@@ -3,7 +3,7 @@
  * ===========================
  * Unauthenticated: Full-page landing matching original landing.html
  * Authenticated: Minimal chalk-outline discovery view → leads to The Helm
- * 
+ *
  * The goal is to NOT overwhelm. Maximum 3-4 visible items at a time.
  * Chalk outlines hint at what's to come.
  */
@@ -74,20 +74,20 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const [lintel, setLintel] = useState<string[]>([]);
   const [collectedWords, setCollectedWords] = useState<Set<string>>(new Set());
   const [showRosetta, setShowRosetta] = useState(false);
-  
+
   // Draggable state
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStartPos = React.useRef({ x: 0, y: 0 });
   const elementStartPos = React.useRef({ x: 0, y: 0 });
-  
+
   // Reset position when dialog opens
   React.useEffect(() => {
     if (isOpen) {
       setPosition({ x: 0, y: 0 });
     }
   }, [isOpen]);
-  
+
   const handleDragStart = (e: React.MouseEvent) => {
     // Only start drag from the header area
     if ((e.target as HTMLElement).closest('.durins-drag-handle')) {
@@ -97,10 +97,10 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       e.preventDefault();
     }
   };
-  
+
   React.useEffect(() => {
     if (!isDragging) return;
-    
+
     const handleMouseMove = (e: MouseEvent) => {
       const deltaX = e.clientX - dragStartPos.current.x;
       const deltaY = e.clientY - dragStartPos.current.y;
@@ -109,11 +109,11 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         y: elementStartPos.current.y + deltaY,
       });
     };
-    
+
     const handleMouseUp = () => {
       setIsDragging(false);
     };
-    
+
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
     return () => {
@@ -121,7 +121,7 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging]);
-  
+
   // Load lintel and collected words from localStorage on mount
   React.useEffect(() => {
     const stored = localStorage.getItem('durins_door_lintel');
@@ -131,13 +131,13 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       // Seed with some initial words
       setLintel(['ami', '朋友', 'rafiki']);
     }
-    
+
     const collected = localStorage.getItem('satchel_friend_words');
     if (collected) {
       setCollectedWords(new Set(JSON.parse(collected)));
     }
   }, []);
-  
+
   // Known translations of "Friend" in various languages
   const friendTranslations: Record<string, string> = {
     'friend': 'English',
@@ -246,13 +246,13 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const handleSubmit = () => {
     const normalized = friendWord.toLowerCase().trim();
     const language = friendTranslations[normalized];
-    
+
     if (language) {
       // Add to lintel
       addToLintel(normalized);
       // Also add to satchel
       collectWord(normalized);
-      
+
       setMessage(`✅ Welcome, Friend! (${language})`);
       setTimeout(() => {
         onClose();
@@ -262,13 +262,13 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       setMessage(`🔒 7/10 — Keep trying! Enter "Friend" in any language.`);
     }
   };
-  
+
   if (!isOpen) return null;
-  
+
   return (
     <div className="durins-dialog-overlay" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={0} aria-label="Close dialog">
-      <div 
-        className="durins-dialog" 
+      <div
+        className="durins-dialog"
         onClick={(e) => e.stopPropagation()}
         onMouseDown={handleDragStart}
         style={{
@@ -278,7 +278,7 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         }}
       >
         {/* Drag handle */}
-        <div 
+        <div
           className="durins-drag-handle"
           style={{
             position: 'absolute',
@@ -292,15 +292,15 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             justifyContent: 'center',
           }}
         >
-          <span style={{ 
-            color: 'rgba(255,255,255,0.3)', 
+          <span style={{
+            color: 'rgba(255,255,255,0.3)',
             fontSize: '1.2rem',
             letterSpacing: '2px',
           }}>⋮⋮</span>
         </div>
         <button className="durins-close" onClick={onClose}>×</button>
         <h2 className="durins-drag-handle" style={{ cursor: 'grab', marginTop: '0.5rem' }}>🪞 Mirror Mirror 🪞</h2>
-        
+
         {/* THE LINTEL — shows last 3 friend words */}
         <div style={{
           background: 'rgba(255,255,255,0.08)',
@@ -313,7 +313,7 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           flexWrap: 'wrap'
         }}>
           {lintel.map((word, i) => (
-            <span 
+            <span
               key={word}
               onClick={() => collectWord(word)}
               style={{
@@ -335,12 +335,12 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         <p style={{ opacity: 0.4, fontSize: '0.75rem', textAlign: 'center', marginBottom: '0.75rem' }}>
           ↑ The Lintel — tap to collect words from those who passed before
         </p>
-        
+
         <p style={{ opacity: 0.7, marginBottom: '0.5rem' }}>Speak friend and enter</p>
         <p style={{ opacity: 0.5, fontSize: '0.9rem', marginBottom: '1.5rem' }}>
           Enter "Friend" in your language, and be Welcomed.
         </p>
-        
+
         {/* Friend Input */}
         <div style={{ marginBottom: '1rem' }}>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -396,8 +396,8 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         )}
 
         {message && (
-          <p style={{ 
-            textAlign: 'center', 
+          <p style={{
+            textAlign: 'center',
             marginBottom: '1rem',
             padding: '0.5rem',
             background: message.includes('✅') ? 'rgba(52,211,153,0.2)' : message.includes('📜') ? 'rgba(136,200,255,0.2)' : 'rgba(251,191,36,0.2)',
@@ -406,14 +406,14 @@ function DurinsDoorDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             {message}
           </p>
         )}
-        
+
         {/* Satchel indicator */}
         {collectedWords.size > 0 && (
           <p style={{ opacity: 0.5, fontSize: '0.8rem', textAlign: 'center', marginBottom: '0.75rem' }}>
             📜 Satchel: {collectedWords.size} word{collectedWords.size !== 1 ? 's' : ''} collected
           </p>
         )}
-        
+
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '0.5rem' }}>
           <button
             onClick={onClose}
@@ -711,23 +711,23 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       clearShineTimers();
     };
   }, [heroFrontFacing]);
-  
+
   // Level-gated navigation
   const levelGatedNavigate = useLevelGatedNavigate();
   const { progress, isLevelGatingEnabled } = usePathwayProgress();
-  
+
   // Helper to check if a route is locked
   const isRouteLocked = (route: string) => {
     const requiredLevel = getRouteLevel(route);
     return isLevelGatingEnabled() && requiredLevel > progress.currentLevel;
   };
-  
+
   // HOFUND Secret Entry System - Easter egg access via hand icon
   // Note: hofundCodeEntry, hofundCode, hofundAccessGranted, heroFrontFacing declared above (line ~665) to avoid TDZ
   const [hofundCoordinates, setHofundCoordinates] = useState('');  // Coordinates being entered
   const [hofundWrongCodeMessage, setHofundWrongCodeMessage] = useState(false);  // Show explanation when wrong code entered
   const [foundationQuizIndex, setFoundationQuizIndex] = useState(() => Math.floor(Math.random() * 5));  // Random quiz question
-  
+
   // Foundation Document Quiz Questions - cycle through these on wrong code page
   const foundationQuizzes = [
     {
@@ -786,10 +786,10 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       source: "Let's Make Bread Initiative"
     }
   ];
-  
+
   // Valid Hofund access codes - can be expanded later
   const validHofundCodes = ['CAPTAIN', 'HOFUND', 'BIFROST', 'KEEPER'];  // Placeholder codes - user will assign
-  
+
   // Special codes with unique behaviors
   const specialCodes: Record<string, { action: () => void }> = {
     'SCE-TO-AUX': {
@@ -820,16 +820,16 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       }
     }
   };
-  
+
   // Mobile detection for UI adjustments
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
-  
+
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  
+
   // Handle URL parameter to open initiatives view directly (for back navigation from initiative pages)
   useEffect(() => {
     const viewParam = searchParams.get('view');
@@ -841,13 +841,13 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, [searchParams]);
-  
+
   // Auto-trigger Spotlight Ranger (Will-o'-Wisp) on first session visit
   // Will-o'-Wisp now only starts on explicit user request (click "Walkthrough" link)
   // Auto-start disabled per user feedback — let users explore freely first
   const [flippedPaths, setFlippedPaths] = useState<Set<number>>(new Set());
   const [durinsDoorOpen, setDurinsDoorOpen] = useState(false);
-  
+
   // Professional Navigation State
   const [helmDropdownOpen, setHelmDropdownOpen] = useState(false);
   const [hoveredHelmItem, setHoveredHelmItem] = useState<string | null>(null);
@@ -858,7 +858,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
     const cached = localStorage.getItem('lb_show_page_tools');
     return cached === 'true'; // Default to false (page tools hidden)
   });
-  
+
   // Helm item explanations
   const helmItemDescriptions: Record<string, { icon: string; title: string; description: string }> = {
     '/feathers': {
@@ -892,7 +892,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       description: 'You found a keyhole. Hidden doors are scattered throughout — each one unlocks something different, all worth finding. This one opens Mirror Mirror — the fairest of them all. Not fairest as in beauty. Fairest as in how we treat each other. Mirror Mirror translates this entire site into 50+ languages — because fair means everyone can read it. And YOU can help translate. Enter to find out more.',
     },
   };
-  
+
   // ═══════════════════════════════════════════════════════════════════
   // REFACTOR THEME SYSTEM — Live Theme Switcher
   // ═══════════════════════════════════════════════════════════════════
@@ -915,16 +915,16 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
   // Line type A: white "Help Each Other" + green "Help Ourselves"
   // Line type B: green "Help Each Other" + white "Help Ourselves"
   const repeatCount = 15;
-  
+
   // ═══════════════════════════════════════════════════════════════════
-  // THEME DEFINITIONS — "Refactor" 
+  // THEME DEFINITIONS — "Refactor"
   // Themes are stored in user portfolios, can be tipped, entered in contests
   // ═══════════════════════════════════════════════════════════════════
-  
+
   // LOCK 001: Original white/green (Founder's Default)
   // LOCK 002: White-dominant with logo accent colors
   // LOCK 003: Prismatic (red, brown, yellow, green, white, blue, purple, gold, charcoal)
-  
+
   // Theme definitions - 3 palette options
   // mode: 'professional' = cream/green/darkerCream triplet pattern with chalk-outlined hero
   // mode: 'alternate' = phrases alternate colors, lines flip pattern
@@ -940,7 +940,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       anchorColor: 'rgba(56, 161, 105, 1)',    // --color-canopy: #38a169 for "Help Ourselves"
       colors: [
         'rgba(250, 245, 235, 1)',     // cream for first "Help Each Other"
-        'rgba(56, 161, 105, 1)',      // canopy green for "Help Ourselves"  
+        'rgba(56, 161, 105, 1)',      // canopy green for "Help Ourselves"
         'rgba(210, 200, 180, 1)',     // darker cream for second "Help Each Other"
       ],
       // Additional config for professional mode — SOLID background, no gradient
@@ -977,7 +977,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       ],
     },
   };
-  
+
   const activeTheme = themes[currentTheme];
   const activeColors = activeTheme.colors;
 
@@ -985,12 +985,12 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
   const getStrokeForColor = (rgbaColor: string): string => {
     const match = rgbaColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
     if (!match) return '1px 1px 0 rgba(0,0,0,0.3), -1px -1px 0 rgba(0,0,0,0.3)';
-    
+
     const r = parseInt(match[1]);
     const g = parseInt(match[2]);
     const b = parseInt(match[3]);
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    
+
     if (luminance > 0.5) {
       return '1px 1px 0 rgba(0,0,0,0.4), -1px -1px 0 rgba(0,0,0,0.4), 1px -1px 0 rgba(0,0,0,0.4), -1px 1px 0 rgba(0,0,0,0.4)';
     } else {
@@ -1006,28 +1006,28 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
   // ═══════════════════════════════════════════════════════════════════
   // PARSE CUSTOM TEXT — Lines from document or HEOHO phrases
   // ═══════════════════════════════════════════════════════════════════
-  
+
   // Check if using HEOHO mode (default phrases)
-  const isHeohoMode = customText === 'Help Each Other Help Ourselves' || 
+  const isHeohoMode = customText === 'Help Each Other Help Ourselves' ||
                       customText === 'Help Each Other Help Ourselves Help Each Other' ||
                       customText.trim() === '';
-  
+
   // Parse lines from customText (split by newlines for document mode)
   const documentLines = customText.split('\n').filter(line => line.trim() !== '');
-  
+
   // For stats display
   const textPhrases = isHeohoMode ? ['Help Each Other', 'Help Ourselves'] : documentLines;
 
   // ═══════════════════════════════════════════════════════════════════
   // LINE GENERATORS — Different modes for different themes
   // ═══════════════════════════════════════════════════════════════════
-  
+
   // Document mode: each line from the textarea becomes a repeated line
   const createDocumentLine = (lineIndex: number) => {
     const output = [];
     const lineText = documentLines[lineIndex % documentLines.length] || customText;
     const color = activeColors[lineIndex % activeColors.length];
-    
+
     // Repeat the line text enough times to fill the width
     for (let i = 0; i < repeatCount; i++) {
       const wordColor = activeColors[(lineIndex + i) % activeColors.length];
@@ -1039,7 +1039,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
     }
     return output;
   };
-  
+
   // HEOHO Line A: "Help Each Other" = color[0], "Help Ourselves" = color[1]
   // HEOHO Line B: "Help Each Other" = color[1], "Help Ourselves" = color[0] (flipped)
   const createLineA = () => {
@@ -1047,7 +1047,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
     if (!isHeohoMode) {
       return createDocumentLine(0);
     }
-    
+
     const output = [];
     for (let i = 0; i < repeatCount; i++) {
       if (activeTheme.mode === 'professional') {
@@ -1101,7 +1101,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
     if (!isHeohoMode) {
       return createDocumentLine(1);
     }
-    
+
     const output = [];
     for (let i = 0; i < repeatCount; i++) {
       if (activeTheme.mode === 'professional') {
@@ -1148,7 +1148,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
     }
     return output;
   };
-  
+
   // Document mode line creator for any line index
   const createDocLine = (lineIdx: number) => {
     const output = [];
@@ -1163,7 +1163,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
     }
     return output;
   };
-  
+
   // File upload handler for .md files
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -1186,9 +1186,9 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
   const professionalBackground = isProfessionalTheme
     ? 'linear-gradient(135deg, #0a0a0a 0%, #0d1f0d 30%, #0a0a0a 70%, #0d0d1f 100%)'
     : undefined;
-  
+
   return (
-    <div 
+    <div
       className={`landing-page ${isProfessionalTheme ? 'professional-mode' : ''}`}
       style={isProfessionalTheme ? { background: professionalBackground } : undefined}
     >
@@ -1245,9 +1245,9 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
           </a>
         </div>
       )}
-      
+
       {/* Brand Title — Top Left (with Page Tools dropdown for professional mode) */}
-      <div 
+      <div
         className="landing-title"
         style={{ position: 'relative' }}
         onMouseEnter={() => isProfessionalTheme && setPageToolsDropdownOpen(true)}
@@ -1255,10 +1255,10 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       >
         <span className="liana">Liana</span>
         <span className="banyan">Banyan</span>
-        
+
         {/* Page Tools Dropdown — Professional Mode Only */}
         {isProfessionalTheme && pageToolsDropdownOpen && (
-          <div 
+          <div
             onClick={(e) => e.stopPropagation()}
             style={{
               position: 'absolute',
@@ -1274,7 +1274,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
               minWidth: '180px',
               boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
             }}>
-            <label 
+            <label
               onClick={(e) => e.stopPropagation()}
               style={{
                 display: 'flex',
@@ -1329,7 +1329,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
         {/* Note: Mobile styles in landing.css move this nav to bottom of screen */}
           {/* The Helm Dropdown — FIRST */}
           {/* Note: hoveredHelmItem is NOT cleared on dropdown leave - it persists to show in Hero Card */}
-          <div 
+          <div
             style={{ position: 'relative' }}
             onMouseEnter={() => !isMobile && setHelmDropdownOpen(true)}
             onMouseLeave={() => !isMobile && setHelmDropdownOpen(false)}
@@ -1399,13 +1399,13 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
           </div>
 
           {/* Free Explore Dropdown — SECOND */}
-          <div 
+          <div
             style={{ position: 'relative' }}
             onMouseEnter={() => !isMobile && setFreeExploreDropdownOpen(true)}
             onMouseLeave={() => !isMobile && setFreeExploreDropdownOpen(false)}
             onClick={() => isMobile && setFreeExploreDropdownOpen(!freeExploreDropdownOpen)}
           >
-            <a 
+            <a
               href="/ghost"
               onClick={(e) => { e.preventDefault(); if (!isMobile) navigate('/ghost'); }}
               style={{
@@ -1437,17 +1437,17 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                   width: '220px',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
                 }}>
-                  <h4 style={{ 
-                    color: '#38a169', 
-                    fontSize: '0.9rem', 
+                  <h4 style={{
+                    color: '#38a169',
+                    fontSize: '0.9rem',
                     marginBottom: '0.5rem',
                     fontWeight: 600,
                   }}>
                     👻 Ghost World
                   </h4>
-                  <p style={{ 
-                    color: '#a0aec0', 
-                    fontSize: '0.8rem', 
+                  <p style={{
+                    color: '#a0aec0',
+                    fontSize: '0.8rem',
                     lineHeight: 1.5,
                     marginBottom: '0.75rem',
                   }}>
@@ -1482,7 +1482,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
           </div>
 
           {/* Mirror/Mirror Dropdown — THIRD */}
-          <div 
+          <div
             style={{ position: 'relative' }}
             onMouseEnter={() => !isMobile && setMirrorDropdownOpen(true)}
             onMouseLeave={() => !isMobile && setMirrorDropdownOpen(false)}
@@ -1521,17 +1521,17 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                   width: '220px',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
                 }}>
-                  <h4 style={{ 
-                    color: '#d69e2e', 
-                    fontSize: '0.9rem', 
+                  <h4 style={{
+                    color: '#d69e2e',
+                    fontSize: '0.9rem',
                     marginBottom: '0.5rem',
                     fontWeight: 600,
                   }}>
                     🪞 Durin's Door
                   </h4>
-                  <p style={{ 
-                    color: '#a0aec0', 
-                    fontSize: '0.8rem', 
+                  <p style={{
+                    color: '#a0aec0',
+                    fontSize: '0.8rem',
                     lineHeight: 1.5,
                     marginBottom: '0.75rem',
                   }}>
@@ -1677,12 +1677,12 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
         null
       )}
       {/* END of suppressed floating UI block */}
-      
+
         {/* Theme palette button removed per homepage spec — clean landing focus */}
 
       {/* Refactor Panel — hidden per homepage spec (clean landing) */}
       {false && refactorPanelOpen && (!isProfessionalTheme || showPageTools) && (
-        <div 
+        <div
           className="refactor-panel"
           style={{
             position: 'fixed',
@@ -1701,7 +1701,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
           <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '0.9rem', opacity: 0.8 }}>
             🎨 Refactor — Theme Studio
           </h4>
-          
+
           {/* Theme Selector - 3 options */}
           <div style={{ marginBottom: '1rem' }}>
             <label style={{ fontSize: '0.75rem', opacity: 0.6, display: 'block', marginBottom: '0.25rem' }}>
@@ -1766,7 +1766,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
             />
             {/* File Upload Button */}
             <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <label 
+              <label
                 style={{
                   padding: '0.35rem 0.6rem',
                   borderRadius: '6px',
@@ -1849,13 +1849,13 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
           </button>
         </div>
       )}
-      
+
       {/* Durin's Door Dialog */}
       <DurinsDoorDialog isOpen={durinsDoorOpen} onClose={() => setDurinsDoorOpen(false)} />
 
       {/* Will-o'-the-Wisp Beacon Journey (Spotlight Ranger for landing page) */}
-      <WillOWisp 
-        isActive={wispActive} 
+      <WillOWisp
+        isActive={wispActive}
         onComplete={() => {
           setWispActive(false);
           setCandleEarned(true);
@@ -1876,7 +1876,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
             MAIN CARD (larger) — Contains Logo + Hero Card slot + G&G Button
             Flips independently to show "How It Works"
         ═══════════════════════════════════════════════════════════════════ */}
-        <div 
+        <div
           className={`main-card-flip ${isProfessionalTheme ? 'professional-card' : ''}`}
         >
           <div className="main-card-inner" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', flex: 1 }}>
@@ -1964,9 +1964,9 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
               {!isProfessionalTheme && (
                 <img src="/logo.png" alt="Liana Banyan" className="logo" style={{ marginBottom: '1.5rem' }} />
               )}
-              
+
               {/* Rotating Quotes moved INSIDE Hero Card front — see below */}
-              
+
               {/* ═══════════════════════════════════════════════════════════
                   HERO CARD (smaller) — HEOHO text, flips independently
                   Sits visually "on top" of the main card
@@ -1981,7 +1981,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                 <div className="hero-flip-inner" style={{ minHeight: 'auto', borderRadius: '1rem', overflow: 'visible', width: '100%', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', flexGrow: 1, border: 'none', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' }}>
                   {/* FRONT: Professional mode matches "Ideas are Free" layout exactly */}
                   {/* OR shows Helm item explanation when hovered from nav */}
-                  <div className="hero-front" style={isProfessionalTheme ? { 
+                  <div className="hero-front" style={isProfessionalTheme ? {
                     background: '#0a1628',  /* Same as page background */
                     padding: '1.5rem 2rem',  /* Compact padding */
                     display: 'flex',
@@ -1992,13 +1992,13 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     {isProfessionalTheme && hoveredHelmItem && helmItemDescriptions[hoveredHelmItem] ? (
                       /* HELM ITEM EXPLANATION - Replaces default content when hovering nav items */
                       <>
-                        <span style={{ 
+                        <span style={{
                           fontSize: '3rem',
                           marginBottom: '1rem',
                         }}>
                           {helmItemDescriptions[hoveredHelmItem].icon}
                         </span>
-                        <h2 style={{ 
+                        <h2 style={{
                           fontFamily: "'Crimson Pro', Georgia, serif",
                           fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
                           fontWeight: 700,
@@ -2009,7 +2009,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                         }}>
                           {helmItemDescriptions[hoveredHelmItem].title}
                         </h2>
-                        <p style={{ 
+                        <p style={{
                           fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
                           color: '#faf5eb',
                           maxWidth: '450px',
@@ -2020,7 +2020,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                           {helmItemDescriptions[hoveredHelmItem].description}
                         </p>
                         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-                          <button 
+                          <button
                             onClick={(e) => { e.stopPropagation(); setHoveredHelmItem(null); }}
                             style={{
                               padding: '0.6rem 1.2rem',
@@ -2044,7 +2044,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                           >
                             ← Go Back
                           </button>
-                          <button 
+                          <button
                             onClick={(e) => { e.stopPropagation(); navigate(hoveredHelmItem); }}
                             style={{
                               padding: '0.6rem 1.2rem',
@@ -2286,8 +2286,8 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                           >No V.C.</span>
                         </span>
                         {/* "Ideas are Free" style - large serif text - CLICKABLE to philosophy page */}
-                        <h2 
-                          style={{ 
+                        <h2
+                          style={{
                             fontFamily: "'Crimson Pro', Georgia, serif",
                             fontSize: 'clamp(1.5rem, 6.4vw, 4.4rem)',
                             fontWeight: 700,
@@ -2331,7 +2331,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setHofundCodeEntry(true); setHofundWrongCodeMessage(false); setHofundCode(''); }}}
                           ><span style={{ position: 'relative', display: 'inline-block', isolation: 'isolate', WebkitTextStroke: '2px #0a1628', paintOrder: 'stroke fill' }}>O<svg viewBox="0 0 100 100" aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: -1 }}><ellipse cx="50" cy="50" rx="36" ry="38" fill="#0a1628" className="keyhole-bg" style={{ transition: 'fill 0.3s ease' }}/><circle cx="50.5" cy="50" r="8" fill="#8b7355" className="keyhole-fill" style={{ transition: 'fill 0.3s ease' }}/><polygon points="46.75,55 41.5,73 59.5,73 54.25,55" fill="#8b7355" className="keyhole-fill" style={{ transition: 'fill 0.3s ease' }}/></svg></span></span>urselves.</span>
                         </h2>
-                        <p style={{ 
+                        <p style={{
                           fontSize: 'clamp(0.95rem, 2.2vw, 1.15rem)',
                           color: '#faf5eb',
                           maxWidth: '500px',
@@ -2342,7 +2342,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                         }}>
                           Own <span className={yourGlowing ? 'your-shine' : ''}>your</span> Work. Member-Governed.
                         </p>
-                        <p style={{ 
+                        <p style={{
                           fontSize: 'clamp(0.85rem, 1.8vw, 1rem)',
                           color: '#faf5eb',
                           maxWidth: '500px',
@@ -2355,7 +2355,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                           </span>
                           <span style={{ display: 'block' }}>Preorder-Funded &amp; Made by Members</span>
                         </p>
-                        <p style={{ 
+                        <p style={{
                           fontSize: 'clamp(0.85rem, 1.8vw, 1rem)',
                           color: '#38a169',
                           maxWidth: '500px',
@@ -2378,10 +2378,10 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                       </h2>
                     )}
                     {/* Hand icon removed — keyhole in "O" is the Durin's Door entry now */}
-                    
+
                     {/* Durin's Door Keyhole Popup — "Speak Friend in Your Language" */}
                     {hofundCodeEntry && !hofundAccessGranted && (
-                      <div 
+                      <div
                         onClick={(e) => e.stopPropagation()}
                         onKeyDown={(e) => { if (e.key === 'Escape') { setHofundCodeEntry(false); setHofundCode(''); } }}
                         style={{
@@ -2410,7 +2410,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                               <strong style={{ color: '#f59e0b' }}>Keys are assigned for special purposes.</strong>
                             </p>
                             <p style={{ fontSize: '0.8rem', lineHeight: 1.5, margin: '0.5rem 0', color: 'rgba(250,245,235,0.8)' }}>
-                              Many time-specific Codes can be found within Cephas documents. Like the story of John Aaron — 
+                              Many time-specific Codes can be found within Cephas documents. Like the story of John Aaron —
                               the engineer who saved Apollo 12 because he was always curious about things outside his immediate concerns.
                             </p>
                             <a
@@ -2425,7 +2425,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                             >
                               Read: SCE-to-AUX — The Call That Saved Apollo 12 →
                             </a>
-                            
+
                             {/* Foundation Document Quiz */}
                             <div style={{
                               background: 'rgba(56, 161, 105, 0.15)',
@@ -2434,26 +2434,26 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                               padding: '0.75rem',
                               marginBottom: '0.75rem'
                             }}>
-                              <p style={{ 
-                                fontSize: '0.75rem', 
-                                fontStyle: 'italic', 
-                                color: 'rgba(250,245,235,0.9)', 
+                              <p style={{
+                                fontSize: '0.75rem',
+                                fontStyle: 'italic',
+                                color: 'rgba(250,245,235,0.9)',
                                 margin: '0 0 0.5rem 0',
                                 lineHeight: 1.5
                               }}>
                                 {foundationQuizzes[foundationQuizIndex].passage}
                               </p>
-                              <p style={{ 
-                                fontSize: '0.65rem', 
-                                color: 'rgba(250,245,235,0.5)', 
+                              <p style={{
+                                fontSize: '0.65rem',
+                                color: 'rgba(250,245,235,0.5)',
                                 margin: '0 0 0.5rem 0'
                               }}>
                                 — {foundationQuizzes[foundationQuizIndex].source}
                               </p>
-                              <p style={{ 
-                                fontSize: '0.8rem', 
-                                fontWeight: 600, 
-                                color: '#38a169', 
+                              <p style={{
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                color: '#38a169',
                                 margin: '0.5rem 0'
                               }}>
                                 {foundationQuizzes[foundationQuizIndex].question}
@@ -2510,7 +2510,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                                 🔄 Different question
                               </button>
                             </div>
-                            
+
                             <div style={{ display: 'flex', gap: '0.5rem' }}>
                               <input
                                 type="text"
@@ -2640,7 +2640,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
 
                   {/* BACK: Two columns - GET & GIVE - with expandable topics */}
                   {/* OR: HOFUND SubSystem when access granted via secret code */}
-                  <div className="hero-back" style={isProfessionalTheme ? { 
+                  <div className="hero-back" style={isProfessionalTheme ? {
                     padding: '0',
                     display: 'flex',
                     flexDirection: 'column',
@@ -3024,21 +3024,21 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
               </div>
 
               {/* No Ads / No VC pills moved up to COOPERATIVE COMMERCE eyebrow line */}
-              
+
               {/* Hand icon removed — Main Card is static frame, no flip */}
             </div>
 
             {/* BACK: How Liana Banyan Works - with expandable topics in SINGLE COLUMN */}
-            <div className="main-card-back" onClick={() => { if (!mainBackExpanded) setMainCardFlipped(false); }} style={{ 
-              padding: '2rem', 
-              display: 'flex', 
+            <div className="main-card-back" onClick={() => { if (!mainBackExpanded) setMainCardFlipped(false); }} style={{
+              padding: '2rem',
+              display: 'flex',
               flexDirection: 'column',
               height: '100%',
               overflow: 'auto'
             }}>
               {/* Expanded Topic View - NO CHEVRONS, click anywhere to go back */}
               {mainBackExpanded ? (
-                <div 
+                <div
                   style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}
                   onClick={(e) => { e.stopPropagation(); setMainBackExpanded(null); setMainInitiativeExpanded(null); }}
                 >
@@ -3064,29 +3064,29 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                   >
                     ← Back
                   </button>
-                  
+
                   {/* Content Area - scrollable */}
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem', overflow: 'auto' }}>
                   {mainBackExpanded === 'costplus' && (
                     <>
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0, textAlign: 'center' }}>🛒 Cost + 20%</h4>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        Every product and service on our platform is priced at <strong>Cost + 20%</strong>. We buy, From You & For You, 
+                        Every product and service on our platform is priced at <strong>Cost + 20%</strong>. We buy, From You & For You,
                         in advance at wholesale prices from your preorders, and add exactly 20% — no hidden markups, no middlemen fees.
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
                         The 20% margin funds platform operations and charitable initiatives.
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        <strong>Volume makes it work</strong> — 20% of 10,000 (= 2,000) is a lot more than 80% of 1,000 (= 800). 
+                        <strong>Volume makes it work</strong> — 20% of 10,000 (= 2,000) is a lot more than 80% of 1,000 (= 800).
                         Especially when your costs are now 50% lower.
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        <strong>For everything except Payroll.</strong> We prepay PER JOB / ORDER CONTRACT 50% down, 50% upon completion; 
+                        <strong>For everything except Payroll.</strong> We prepay PER JOB / ORDER CONTRACT 50% down, 50% upon completion;
                         funded by 100% prefunded preorders. In Public.
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        When larger preorder volume tiers are reached resulting in lower prices — the savings are automatically passed to you, 
+                        When larger preorder volume tiers are reached resulting in lower prices — the savings are automatically passed to you,
                         and the difference in what you preorder paid is returned as platform credits to purchase more.
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0, fontStyle: 'italic', color: '#38a169' }}>
@@ -3123,8 +3123,8 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                         Then we add exactly 20%. That's it. No additional markups, no hidden fees, no "convenience charges."
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        Our accounting is <strong>Transparent</strong> with Bank Account and Ledger Tickers for Every Transaction. 
-                        What it was for, where it came from, where it went, when, and by whom — but only for Corporate. 
+                        Our accounting is <strong>Transparent</strong> with Bank Account and Ledger Tickers for Every Transaction.
+                        What it was for, where it came from, where it went, when, and by whom — but only for Corporate.
                         <em> Your Business is YOUR Business.</em>
                       </p>
                     </>
@@ -3133,17 +3133,17 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     <>
                       <h4 style={{ color: '#38a169', fontSize: '1.5rem', margin: 0 }}>🔒 Permanent 20% Cap</h4>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        The 20% margin is <strong>hardcoded into our bylaws</strong>. It cannot be increased by management, 
+                        The 20% margin is <strong>hardcoded into our bylaws</strong>. It cannot be increased by management,
                         backers, or even a majority vote.
                       </p>
                       <p style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-                        Why? Because we've seen what happens when platforms grow: fees creep up, terms change, 
+                        Why? Because we've seen what happens when platforms grow: fees creep up, terms change,
                         and creators, workers, and users get squeezed. We've built protection against that into our foundation.
                       </p>
                       <div style={{ background: 'rgba(251, 191, 36, 0.15)', padding: '1.25rem', borderRadius: '1rem', marginTop: 'auto' }}>
                         <strong style={{ fontSize: '1rem' }}>⚠️ The Lock:</strong>
                         <p style={{ margin: '0.5rem 0 0 0', fontSize: '1rem' }}>
-                          Changing this would require unanimous board approval + 75% member vote + 
+                          Changing this would require unanimous board approval + 75% member vote +
                           a 2-year waiting period. Designed to be nearly impossible.
                         </p>
                       </div>
@@ -3185,9 +3185,9 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                       { key: 'brass-tacks', emoji: '🔩', name: 'Brass Tacks', desc: "Manufacturing, Tooling, Makers, Mechanics, Physical Products" },
                       { key: 'power-to-the-people', emoji: '⚡', name: 'Power to the People', desc: "Citizen Advocacy, Congressional Tracking, Cooperative Energy", hasSwitzerlandLink: true }
                     ];
-                    
+
                     return (
-                    <div 
+                    <div
                       style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -3247,7 +3247,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                   );
                   })()}
                   </div>
-                  
+
                   <p style={{ opacity: 0.5, fontSize: '0.7rem', marginTop: '1rem', textAlign: 'center' }}>
                     tap anywhere to go back
                   </p>
@@ -3256,23 +3256,23 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                 /* Default Overview - SINGLE COLUMN of styled buttons */
                 <>
                   <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.5rem' }}>How Liana Banyan Works</h3>
-                  
+
                   {/* Single column of expandable buttons - styled like current back buttons */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1 }}>
                     {/* Cost + 20% - FIRST and OPEN by default style - DARKER BACKGROUND */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('costplus'); }}
                       onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(16, 80, 52, 0.7)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(22, 101, 65, 0.45)'; }}
-                      style={{ 
-                        background: 'rgba(22, 101, 65, 0.45)', 
+                      style={{
+                        background: 'rgba(22, 101, 65, 0.45)',
                         border: 'none',
-                        borderRadius: '0.75rem', 
+                        borderRadius: '0.75rem',
                         padding: '1rem 1.25rem',
-                        cursor: 'pointer', 
-                        transition: 'all 0.2s', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'flex-start',
                         textAlign: 'left',
                         color: '#faf5eb'
@@ -3285,19 +3285,19 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     </button>
 
                     {/* Wholesale Everything - DARKER BACKGROUND */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('wholesale'); }}
                       onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
-                      style={{ 
-                        background: 'rgba(88, 60, 180, 0.4)', 
+                      style={{
+                        background: 'rgba(88, 60, 180, 0.4)',
                         border: 'none',
-                        borderRadius: '0.75rem', 
+                        borderRadius: '0.75rem',
                         padding: '1rem 1.25rem',
-                        cursor: 'pointer', 
-                        transition: 'all 0.2s', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'flex-start',
                         textAlign: 'left',
                         color: '#faf5eb'
@@ -3310,19 +3310,19 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     </button>
 
                     {/* Permanent Cap - DARKER BACKGROUND */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('permanent'); }}
                       onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
-                      style={{ 
-                        background: 'rgba(88, 60, 180, 0.4)', 
+                      style={{
+                        background: 'rgba(88, 60, 180, 0.4)',
                         border: 'none',
-                        borderRadius: '0.75rem', 
+                        borderRadius: '0.75rem',
                         padding: '1rem 1.25rem',
-                        cursor: 'pointer', 
-                        transition: 'all 0.2s', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'flex-start',
                         textAlign: 'left',
                         color: '#faf5eb'
@@ -3335,19 +3335,19 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     </button>
 
                     {/* Member-Owned - DARKER BACKGROUND */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('memberowned'); }}
                       onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
-                      style={{ 
-                        background: 'rgba(88, 60, 180, 0.4)', 
+                      style={{
+                        background: 'rgba(88, 60, 180, 0.4)',
                         border: 'none',
-                        borderRadius: '0.75rem', 
+                        borderRadius: '0.75rem',
                         padding: '1rem 1.25rem',
-                        cursor: 'pointer', 
-                        transition: 'all 0.2s', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'flex-start',
                         textAlign: 'left',
                         color: '#faf5eb'
@@ -3360,19 +3360,19 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     </button>
 
                     {/* Funds 16 Initiatives - DARKER BACKGROUND */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setMainBackExpanded('initiatives'); }}
                       onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.background = 'rgba(60, 40, 140, 0.7)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.4)'; }}
-                      style={{ 
-                        background: 'rgba(88, 60, 180, 0.4)', 
+                      style={{
+                        background: 'rgba(88, 60, 180, 0.4)',
                         border: 'none',
-                        borderRadius: '0.75rem', 
+                        borderRadius: '0.75rem',
                         padding: '1rem 1.25rem',
-                        cursor: 'pointer', 
-                        transition: 'all 0.2s', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'flex-start',
                         textAlign: 'left',
                         color: '#faf5eb'
@@ -3413,17 +3413,17 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
             <div className="paths-section-front" style={{ position: 'relative' }}>
               {/* Hand icon for flip indication */}
               <span className="hand" style={{ position: 'absolute', bottom: '12px', right: '16px', fontSize: '1.1rem', opacity: 0.35 }}>👉</span>
-              
+
               {/* Worker-Owned. Member-Governed. section - moved from old Not Charity card front */}
-              <div style={{ 
+              <div style={{
                 padding: '2rem 2rem 1.5rem 2rem',
                 textAlign: 'center',
                 marginBottom: '1rem'
               }}>
-                <h3 className="worker-owned-heading" style={{ 
-                  fontSize: 'clamp(1.3rem, 4vw, 1.8rem)', 
-                  marginBottom: '1.25rem', 
-                  textAlign: 'center', 
+                <h3 className="worker-owned-heading" style={{
+                  fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
+                  marginBottom: '1.25rem',
+                  textAlign: 'center',
                   color: '#faf5eb',
                   fontWeight: 700
                 }}>
@@ -3445,23 +3445,23 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
               </div>
 
               {/* Divider line */}
-              <div style={{ 
-                width: '60%', 
-                height: '1px', 
-                background: 'rgba(250, 245, 235, 0.2)', 
-                margin: '0 auto 1.5rem auto' 
+              <div style={{
+                width: '60%',
+                height: '1px',
+                background: 'rgba(250, 245, 235, 0.2)',
+                margin: '0 auto 1.5rem auto'
               }} />
 
               <div className="trunk-info" style={{ background: 'transparent', padding: 0 }}>
-                <div style={{ 
-                  textAlign: 'center', 
+                <div style={{
+                  textAlign: 'center',
                   marginBottom: '2rem',
                   width: '80%',
                   margin: '0 auto 2rem auto'
                 }}>
-                  <h2 style={{ 
-                    fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', 
-                    fontWeight: 700, 
+                  <h2 style={{
+                    fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
+                    fontWeight: 700,
                     margin: 0,
                     display: 'flex',
                     alignItems: 'center',
@@ -3469,12 +3469,12 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     gap: '0.75rem'
                   }}>
                     {/* LEFT MIRROR — Will-o-Wisp Tutorial Journey */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setWispActive(true); }}
-                      style={{ 
-                        background: 'transparent', 
-                        border: 'none', 
-                        cursor: 'pointer', 
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
                         fontSize: '2.2rem',
                         lineHeight: 1,
                         transition: 'transform 0.3s, filter 0.3s',
@@ -3493,12 +3493,12 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
 
                     {/* RIGHT MIRROR — Durin's Door (existing) + Candle reward */}
                     <div style={{ position: 'relative', display: 'inline-block' }}>
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); setDurinsDoorOpen(true); }}
-                        style={{ 
-                          background: 'transparent', 
-                          border: 'none', 
-                          cursor: 'pointer', 
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
                           fontSize: '2.2rem',
                           lineHeight: 1,
                           transition: 'transform 0.3s',
@@ -3511,7 +3511,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                         🪞
                       </button>
                       {candleEarned && (
-                        <span 
+                        <span
                           style={{
                             position: 'absolute',
                             top: '-8px',
@@ -3533,7 +3533,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     </div>
                   </h2>
                 </div>
-                
+
                 <div className="path-grid">
                   {/* Get a Job */}
                   <div className={`path-flip ${flippedPaths.has(0) ? 'flipped' : ''}`} onClick={(e) => { e.stopPropagation(); togglePath(0); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); togglePath(0); }}} role="button" tabIndex={0}>
@@ -3598,7 +3598,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
 
                 {/* Flip hint for section */}
                 <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-                  <button 
+                  <button
                     onClick={() => setPathsSectionFlipped(true)}
                     style={{
                       background: 'rgba(139, 92, 246, 0.2)',
@@ -3624,51 +3624,51 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
               padding: '2rem',
             }}>
               {/* Not Charity Header - moved from old explainer card */}
-              <h3 style={{ 
-                fontSize: 'clamp(1.2rem, 4vw, 1.5rem)', 
-                marginBottom: '0.25rem', 
-                textAlign: 'center', 
+              <h3 style={{
+                fontSize: 'clamp(1.2rem, 4vw, 1.5rem)',
+                marginBottom: '0.25rem',
+                textAlign: 'center',
                 color: '#faf5eb',
                 textShadow: '0 1px 3px rgba(0,0,0,0.5)'
               }}>
                 <span style={{ fontSize: '1.5rem' }}>🌿</span> Not Charity TO the People
               </h3>
-              <p style={{ 
-                fontSize: 'clamp(1rem, 3vw, 1.15rem)', 
-                textAlign: 'center', 
-                marginBottom: '1.5rem', 
+              <p style={{
+                fontSize: 'clamp(1rem, 3vw, 1.15rem)',
+                textAlign: 'center',
+                marginBottom: '1.5rem',
                 color: '#faf5eb',
                 opacity: 0.9,
                 textShadow: '0 1px 2px rgba(0,0,0,0.4)'
               }}>
                 But Infrastructure BY the People, FOR the People
               </p>
-              
-              <h4 style={{ 
-                textAlign: 'center', 
-                marginBottom: '1.25rem', 
-                fontSize: '1.25rem', 
+
+              <h4 style={{
+                textAlign: 'center',
+                marginBottom: '1.25rem',
+                fontSize: '1.25rem',
                 color: '#38a169',
                 textShadow: '0 1px 3px rgba(0,0,0,0.5)'
               }}>
                 Two Worlds. One Platform.
               </h4>
-              
+
               {/* STACKED Ghost/Real World buttons - Ghost on top - with flip-to-expand */}
-              <div style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: '1rem', 
-                width: '100%', 
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                width: '100%',
                 maxWidth: '480px'
               }}>
                 {expandedWorldPortal === 'ghost' ? (
                   /* GHOST WORLD Expanded - takes full space */
-                  <div 
+                  <div
                     onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal(null); }}
-                    style={{ 
-                      background: 'rgba(88, 60, 180, 0.5)', 
-                      borderRadius: '1rem', 
+                    style={{
+                      background: 'rgba(88, 60, 180, 0.5)',
+                      borderRadius: '1rem',
                       padding: '1.5rem',
                       border: '2px solid rgba(139, 92, 246, 0.7)',
                       cursor: 'pointer',
@@ -3680,18 +3680,18 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                       minHeight: '240px',
                     }}
                   >
-                    <h4 style={{ 
-                      fontSize: '1.4rem', 
-                      fontWeight: 700, 
+                    <h4 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: 700,
                       margin: 0,
                       color: '#faf5eb'
                     }}>
                       👻 What is Ghost World?
                     </h4>
-                    <p style={{ 
-                      fontSize: '0.95rem', 
-                      lineHeight: 1.6, 
-                      textAlign: 'center', 
+                    <p style={{
+                      fontSize: '0.95rem',
+                      lineHeight: 1.6,
+                      textAlign: 'center',
                       margin: 0,
                       textShadow: '0 1px 2px rgba(0,0,0,0.3)'
                     }}>
@@ -3732,11 +3732,11 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                   </div>
                 ) : expandedWorldPortal === 'real' ? (
                   /* REAL WORLD Expanded - takes full space */
-                  <div 
+                  <div
                     onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal(null); }}
-                    style={{ 
-                      background: 'rgba(16, 120, 90, 0.5)', 
-                      borderRadius: '1rem', 
+                    style={{
+                      background: 'rgba(16, 120, 90, 0.5)',
+                      borderRadius: '1rem',
                       padding: '1.5rem',
                       border: '2px solid rgba(52, 211, 153, 0.7)',
                       cursor: 'pointer',
@@ -3748,18 +3748,18 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                       minHeight: '240px',
                     }}
                   >
-                    <h4 style={{ 
-                      fontSize: '1.4rem', 
-                      fontWeight: 700, 
+                    <h4 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: 700,
                       margin: 0,
                       color: '#faf5eb'
                     }}>
                       💼 What is Real World?
                     </h4>
-                    <p style={{ 
-                      fontSize: '0.95rem', 
-                      lineHeight: 1.6, 
-                      textAlign: 'center', 
+                    <p style={{
+                      fontSize: '0.95rem',
+                      lineHeight: 1.6,
+                      textAlign: 'center',
                       margin: 0,
                       textShadow: '0 1px 2px rgba(0,0,0,0.3)'
                     }}>
@@ -3803,13 +3803,13 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                   /* DEFAULT: Both buttons visible */
                   <>
                     {/* GHOST WORLD Button - darker color, text shadow */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal('ghost'); }}
                       onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.6)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(88, 60, 180, 0.45)'; }}
-                      style={{ 
-                        background: 'rgba(88, 60, 180, 0.45)', 
-                        borderRadius: '1rem', 
+                      style={{
+                        background: 'rgba(88, 60, 180, 0.45)',
+                        borderRadius: '1rem',
                         padding: '1.25rem 1.5rem',
                         border: '2px solid rgba(139, 92, 246, 0.6)',
                         cursor: 'pointer',
@@ -3821,23 +3821,23 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                         color: '#faf5eb',
                       }}
                     >
-                      <span style={{ 
-                        fontSize: '1.3rem', 
+                      <span style={{
+                        fontSize: '1.3rem',
                         fontWeight: 700,
                         textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.3)'
                       }}>
                         👻 Ghost World
                       </span>
-                      <span style={{ 
-                        fontSize: '0.9rem', 
+                      <span style={{
+                        fontSize: '0.9rem',
                         textShadow: '0 1px 3px rgba(0,0,0,0.5)'
                       }}>
                         Explore freely. No commitment. Test ideas.
                       </span>
-                      <span style={{ 
-                        fontSize: '0.8rem', 
-                        padding: '0.35rem 0.75rem', 
-                        background: 'rgba(139, 92, 246, 0.5)', 
+                      <span style={{
+                        fontSize: '0.8rem',
+                        padding: '0.35rem 0.75rem',
+                        background: 'rgba(139, 92, 246, 0.5)',
                         borderRadius: '0.5rem',
                         marginTop: '0.25rem',
                         textShadow: '0 1px 2px rgba(0,0,0,0.4)'
@@ -3847,13 +3847,13 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                     </button>
 
                     {/* REAL WORLD Button - darker color, text shadow */}
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); setExpandedWorldPortal('real'); }}
                       onMouseOver={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.background = 'rgba(16, 120, 90, 0.6)'; }}
                       onMouseOut={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'rgba(16, 120, 90, 0.45)'; }}
-                      style={{ 
-                        background: 'rgba(16, 120, 90, 0.45)', 
-                        borderRadius: '1rem', 
+                      style={{
+                        background: 'rgba(16, 120, 90, 0.45)',
+                        borderRadius: '1rem',
                         padding: '1.25rem 1.5rem',
                         border: '2px solid rgba(52, 211, 153, 0.6)',
                         cursor: 'pointer',
@@ -3865,23 +3865,23 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                         color: '#faf5eb',
                       }}
                     >
-                      <span style={{ 
-                        fontSize: '1.3rem', 
+                      <span style={{
+                        fontSize: '1.3rem',
                         fontWeight: 700,
                         textShadow: '0 2px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.3)'
                       }}>
                         💼 Real World
                       </span>
-                      <span style={{ 
-                        fontSize: '0.9rem', 
+                      <span style={{
+                        fontSize: '0.9rem',
                         textShadow: '0 1px 3px rgba(0,0,0,0.5)'
                       }}>
                         Get a real job. Build a real business. Plant real seeds.
                       </span>
-                      <span style={{ 
-                        fontSize: '0.8rem', 
-                        padding: '0.35rem 0.75rem', 
-                        background: 'rgba(52, 211, 153, 0.5)', 
+                      <span style={{
+                        fontSize: '0.8rem',
+                        padding: '0.35rem 0.75rem',
+                        background: 'rgba(52, 211, 153, 0.5)',
                         borderRadius: '0.5rem',
                         marginTop: '0.25rem',
                         textShadow: '0 1px 2px rgba(0,0,0,0.4)'
@@ -4106,19 +4106,19 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
 // ═══════════════════════════════════════════════════════════════════════════
 // AUTHENTICATED DISCOVERY VIEW — Minimal chalk-outline aesthetic
 // ═══════════════════════════════════════════════════════════════════════════
-export function KeepView({ 
-  navigate, 
-  discoveries, 
-  discoveryLevel 
-}: { 
-  navigate: (path: string) => void; 
+export function KeepView({
+  navigate,
+  discoveries,
+  discoveryLevel
+}: {
+  navigate: (path: string) => void;
   discoveries: Set<string>;
   discoveryLevel: number;
 }) {
   const levelGatedNavigate = useLevelGatedNavigate();
   // Get discovered items (max 3 shown)
   const discoveredItems = Array.from(discoveries).slice(0, 3);
-  
+
   // Always show 3 items: discovered ones + empty chalk slots
   const totalSlots = 4; // 3 discovered + 1 empty chalk outline
   const emptySlots = totalSlots - discoveredItems.length - 1; // Reserve 1 for "next discovery"
@@ -4148,7 +4148,7 @@ export function KeepView({
       <div className="container">
         <header className="landing-header">
           <img src="/logo.png" alt="Liana Banyan" className="logo" />
-          
+
           {/* Greeting */}
           <div className="golden-key-flip">
             <div className="golden-key-inner" style={{ minHeight: 'auto' }}>
@@ -4170,7 +4170,7 @@ export function KeepView({
           <p style={{ textAlign: 'center', opacity: 0.8, marginBottom: '1.5rem' }}>
             Explore to reveal more.
           </p>
-          
+
           <div className="path-grid">
             {/* Discovered Items */}
             {discoveredItems.map((slug) => (
@@ -4309,7 +4309,7 @@ function ChalkOutlineSlot() {
 function NextDiscoverySlot({ navigate }: { navigate: (path: string) => void }) {
   const levelGatedNavigate = useLevelGatedNavigate();
   return (
-    <div 
+    <div
       onClick={() => levelGatedNavigate('/the-helm')}
       style={{ cursor: 'pointer' }}
     >

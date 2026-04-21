@@ -7,21 +7,21 @@ const projectId = '1ae6035e83fa3f97168a19706fa49f4a';
 /**
  * NETWORK ARCHITECTURE: Test-Net By Design
  * =========================================
- * 
+ *
  * PERMANENT TESTNET ARCHITECTURE (per "Blockchain Without Coin or Speculation" paper):
- * 
+ *
  * ALL blockchain operations use baseSepolia (TESTNET ONLY):
  *    - IP ownership history, contribution attribution, narrative data
  *    - Lives PERMANENTLY on testnet — this is deliberate, not staging
  *    - Cannot be traded, monetized, or bridged to mainnet
  *    - "Test-Net By Design" = architectural prevention of speculation
- * 
+ *
  * WHY NO MAINNET - EVER:
  *    - Mainnet enables trading = enables speculation = violates SEC compliance
  *    - Platform credits are "future service coupons" not securities
  *    - No trading, no cashing in, ever — by design
  *    - This is a FEATURE, not a limitation
- * 
+ *
  * The metaphor: Provenance is the STORY (priceless, non-monetizable).
  * There is no "receipt" layer because there's nothing to trade.
  */
@@ -45,9 +45,9 @@ export const NETWORK_PURPOSES = {
  * MEDALLION CONTRACT ABI
  * ======================
  * ERC-1155 with NON-TRANSFERABLE enforcement.
- * 
+ *
  * CRITICAL: When deploying the contract, include this in Solidity:
- * 
+ *
  * ```solidity
  * function _beforeTokenTransfer(
  *     address operator,
@@ -66,7 +66,7 @@ export const NETWORK_PURPOSES = {
  *     super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
  * }
  * ```
- * 
+ *
  * This enforces "Test-Net By Design" at the contract level:
  * - Medallions can be MINTED (provenance created)
  * - Medallions can be BURNED (if needed for correction)

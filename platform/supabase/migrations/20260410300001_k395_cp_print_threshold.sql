@@ -12,7 +12,7 @@ END $$;
 
 -- 1B. Expand entity_type CHECK constraint to include 'deck_card_print'
 ALTER TABLE public.catapult_metrics DROP CONSTRAINT IF EXISTS catapult_metrics_entity_type_check;
-ALTER TABLE public.catapult_metrics ADD CONSTRAINT catapult_metrics_entity_type_check 
+ALTER TABLE public.catapult_metrics ADD CONSTRAINT catapult_metrics_entity_type_check
   CHECK (entity_type IN ('project', 'petition', 'vote', 'campaign', 'initiative', 'submission', 'deck_card_print'));
 
 -- 1C. Add deck_card_id to print_orders if not present
@@ -24,15 +24,15 @@ RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO public.catapult_metrics (entity_type, entity_id, label, current_value, target_value)
   VALUES (
-    'deck_card_print', 
-    NEW.id, 
-    COALESCE(NEW.title, NEW.card_code, 'Deck Card'), 
-    COALESCE(NEW.scan_count, 0), 
+    'deck_card_print',
+    NEW.id,
+    COALESCE(NEW.title, NEW.card_code, 'Deck Card'),
+    COALESCE(NEW.scan_count, 0),
     100
   )
-  ON CONFLICT (entity_type, entity_id) 
-  DO UPDATE SET 
-    current_value = EXCLUDED.current_value, 
+  ON CONFLICT (entity_type, entity_id)
+  DO UPDATE SET
+    current_value = EXCLUDED.current_value,
     label = EXCLUDED.label,
     updated_at = now();
   RETURN NEW;
@@ -52,7 +52,7 @@ BEGIN
     INSERT INTO public.print_orders (order_type, status, deck_card_id, quantity, created_at)
     VALUES ('medallion_card', 'waitlist', NEW.id, 1, now())
     ON CONFLICT DO NOTHING;
-    
+
     UPDATE public.deck_cards SET status = 'printed' WHERE id = NEW.id AND status = 'generated';
   END IF;
   RETURN NEW;
@@ -66,11 +66,11 @@ CREATE TRIGGER trg_deck_card_print_threshold
 
 -- 1F. Backfill: seed catapult_metrics for existing cards with scan_count > 0
 INSERT INTO public.catapult_metrics (entity_type, entity_id, label, current_value, target_value)
-SELECT 
-  'deck_card_print', 
-  id, 
+SELECT
+  'deck_card_print',
+  id,
   COALESCE(title, card_code, 'Deck Card'),
-  COALESCE(scan_count, 0), 
+  COALESCE(scan_count, 0),
   100
 FROM public.deck_cards
 WHERE COALESCE(scan_count, 0) > 0

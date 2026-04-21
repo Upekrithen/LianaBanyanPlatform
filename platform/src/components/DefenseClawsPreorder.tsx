@@ -58,9 +58,9 @@ export default function DefenseClawsPreorder() {
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
-      toast({ 
-        title: "Preorder Complete", 
-        description: "Defense Klaus coverage activated. No confirmation email sent to recipient." 
+      toast({
+        title: "Preorder Complete",
+        description: "Defense Klaus coverage activated. No confirmation email sent to recipient."
       });
       setEmail("");
       setRecipientName("");
@@ -82,7 +82,7 @@ export default function DefenseClawsPreorder() {
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="text-xs">
-            <strong>Privacy Notice:</strong> No confirmation email is sent to the recipient. 
+            <strong>Privacy Notice:</strong> No confirmation email is sent to the recipient.
             They can verify coverage by filing a report through LB or calling our volunteer line.
           </AlertDescription>
         </Alert>
@@ -125,7 +125,7 @@ export default function DefenseClawsPreorder() {
           <p className="font-semibold">Legal Defense Fund</p>
           <p>Total Raised: ${legalFund?.total_amount?.toFixed(2) || "0.00"}</p>
           <p>Available for Claims: ${legalFund?.available_amount?.toFixed(2) || "0.00"}</p>
-          
+
           <p className="font-semibold mt-3">Product Features:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>Bracelet pulls up to become palm claws</li>

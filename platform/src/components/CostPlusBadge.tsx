@@ -1,6 +1,6 @@
 /**
  * Cost + 20% Badge Component
- * 
+ *
  * A NON-HIDEABLE visual contract badge that displays C+20 certification status.
  * This badge CANNOT be removed or hidden by CSS themes or white-label customization.
  * It is a trust signal to the community that pricing follows the cooperative model.
@@ -9,12 +9,12 @@
 import { motion } from 'framer-motion';
 import { CheckCircle, AlertCircle, Clock, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { 
-  isCostPlusCertified, 
-  getCostPlusTier, 
+import {
+  isCostPlusCertified,
+  getCostPlusTier,
   getCostPlusTierInfo,
   type Anchor,
-  type CostPlusTier 
+  type CostPlusTier
 } from '@/lib/costPlusService';
 
 interface CostPlusBadgeProps {
@@ -28,16 +28,16 @@ interface CostPlusBadgeProps {
  * The main C+20 badge component.
  * Renders different states based on certification status and tier.
  */
-export function CostPlusBadge({ 
-  anchor, 
-  size = 'md', 
+export function CostPlusBadge({
+  anchor,
+  size = 'md',
   showDetails = false,
-  className 
+  className
 }: CostPlusBadgeProps) {
   const tier = getCostPlusTier(anchor);
   const tierInfo = getCostPlusTierInfo(anchor);
   const isCertified = tier === 'FULL';
-  
+
   // Size configurations
   const sizeConfig = {
     sm: {
@@ -230,7 +230,7 @@ export function CostPlusBadge({
  */
 function PartialBadgeIcon({ tier, className }: { tier: CostPlusTier; className?: string }) {
   const quarters = tier === 'QUARTER' ? 1 : tier === 'HALF' ? 2 : tier === 'THREE_QUARTER' ? 3 : 0;
-  
+
   return (
     <svg viewBox="0 0 24 24" className={cn('w-5 h-5', className)} fill="none" stroke="currentColor">
       <circle cx="12" cy="12" r="10" strokeWidth="2" opacity="0.3" />
@@ -252,9 +252,9 @@ function PartialBadgeIcon({ tier, className }: { tier: CostPlusTier; className?:
  */
 export function CostPlusBadgeInline({ anchor }: { anchor: Anchor | null | undefined }) {
   const isCertified = isCostPlusCertified(anchor);
-  
+
   if (!isCertified) return null;
-  
+
   return (
     <span
       className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/50"
@@ -271,9 +271,9 @@ export function CostPlusBadgeInline({ anchor }: { anchor: Anchor | null | undefi
  */
 export function CostPlusBadgeHero({ anchor }: { anchor: Anchor | null | undefined }) {
   const isCertified = isCostPlusCertified(anchor);
-  
+
   if (!isCertified) return null;
-  
+
   return (
     <motion.div
       initial={{ y: -20, opacity: 0 }}
@@ -283,7 +283,7 @@ export function CostPlusBadgeHero({ anchor }: { anchor: Anchor | null | undefine
     >
       {/* Glow effect */}
       <div className="absolute inset-0 bg-emerald-500/30 blur-xl rounded-full" />
-      
+
       {/* Badge */}
       <div className="relative flex flex-col items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 border-4 border-amber-400 shadow-2xl">
         <div className="flex items-center gap-3">
@@ -302,26 +302,26 @@ export function CostPlusBadgeHero({ anchor }: { anchor: Anchor | null | undefine
 /**
  * Badge with economic comparison (shows what certified vs uncertified earns).
  */
-export function CostPlusBadgeWithComparison({ 
+export function CostPlusBadgeWithComparison({
   anchor,
   baseJoules = 100,
   baseMarks = 50,
-}: { 
+}: {
   anchor: Anchor | null | undefined;
   baseJoules?: number;
   baseMarks?: number;
 }) {
   const isCertified = isCostPlusCertified(anchor);
-  
+
   const certifiedJoules = baseJoules * 1.0;
   const certifiedMarks = baseMarks * 1.0;
   const uncertifiedJoules = baseJoules * 0.25;
   const uncertifiedMarks = baseMarks * 0.50;
-  
+
   return (
     <div className="space-y-3">
       <CostPlusBadge anchor={anchor} size="lg" showDetails />
-      
+
       <div className="grid grid-cols-2 gap-4 p-4 rounded-lg bg-slate-800/50 border border-slate-700">
         <div className={cn(
           'p-3 rounded-lg',
@@ -332,7 +332,7 @@ export function CostPlusBadgeWithComparison({
           <p className="text-sm text-emerald-300">{certifiedMarks} Marks</p>
           <p className="text-xs text-emerald-200 mt-1">+ IP stake eligible</p>
         </div>
-        
+
         <div className={cn(
           'p-3 rounded-lg',
           !isCertified ? 'bg-slate-600/50 border border-slate-500/50' : 'bg-slate-700/50'
@@ -343,7 +343,7 @@ export function CostPlusBadgeWithComparison({
           <p className="text-xs text-slate-500 mt-1">No IP stakes</p>
         </div>
       </div>
-      
+
       {!isCertified && (
         <p className="text-sm text-amber-400 text-center">
           Get certified to earn <strong>4× more Joules</strong> and unlock IP stake eligibility!

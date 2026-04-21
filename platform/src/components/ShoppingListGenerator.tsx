@@ -20,8 +20,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
-import { 
-  ShoppingCart, Check, Users, Store, Truck, ExternalLink, 
+import {
+  ShoppingCart, Check, Users, Store, Truck, ExternalLink,
   Download, Share2, ChevronDown, ChevronUp
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -66,29 +66,29 @@ const INGREDIENT_CATEGORIES = [
 ];
 
 const FULFILLMENT_OPTIONS = [
-  { 
-    id: 'personal', 
-    label: 'Shop Yourself', 
-    description: 'Use as a checklist', 
-    icon: ShoppingCart 
+  {
+    id: 'personal',
+    label: 'Shop Yourself',
+    description: 'Use as a checklist',
+    icon: ShoppingCart
   },
-  { 
-    id: 'external_api', 
-    label: 'Send to Store App', 
-    description: 'HEB, Kroger, Instacart', 
-    icon: Store 
+  {
+    id: 'external_api',
+    label: 'Send to Store App',
+    description: 'HEB, Kroger, Instacart',
+    icon: Store
   },
-  { 
-    id: 'lets_get_groceries', 
-    label: 'Let\'s Get Groceries', 
-    description: 'LB aggregate order', 
-    icon: Users 
+  {
+    id: 'lets_get_groceries',
+    label: 'Let\'s Get Groceries',
+    description: 'LB aggregate order',
+    icon: Users
   },
-  { 
-    id: 'lets_go_shopping', 
-    label: 'Let\'s Go Shopping', 
-    description: 'Micro-local volume discount', 
-    icon: Truck 
+  {
+    id: 'lets_go_shopping',
+    label: 'Let\'s Go Shopping',
+    description: 'Micro-local volume discount',
+    icon: Truck
   },
 ];
 
@@ -99,15 +99,15 @@ const EXTERNAL_APIS = [
   { id: 'amazon_fresh', label: 'Amazon Fresh', available: true },
 ];
 
-export function ShoppingListGenerator({ 
-  open, 
-  onOpenChange, 
+export function ShoppingListGenerator({
+  open,
+  onOpenChange,
   weekStart,
-  tribeId 
+  tribeId
 }: ShoppingListGeneratorProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  
+
   const [fulfillmentMethod, setFulfillmentMethod] = useState('personal');
   const [externalApi, setExternalApi] = useState('heb');
   const [includeTribe, setIncludeTribe] = useState(false);
@@ -152,14 +152,14 @@ export function ShoppingListGenerator({
 
       mealPlans?.forEach(plan => {
         if (!plan.pantry_recipes) return;
-        
+
         const recipe = plan.pantry_recipes as any;
         const ingredients = recipe.pantry_recipe_ingredients || [];
         const servingMultiplier = (plan.servings || 1) / (recipe.servings || 1);
 
         ingredients.forEach((ing: any) => {
           const key = (ing.normalized_name || ing.ingredient_name).toLowerCase();
-          
+
           if (!aggregation[key]) {
             aggregation[key] = {
               ingredient_name: ing.ingredient_name,
@@ -176,7 +176,7 @@ export function ShoppingListGenerator({
         });
       });
 
-      return Object.values(aggregation).sort((a, b) => 
+      return Object.values(aggregation).sort((a, b) =>
         (a.category || 'other').localeCompare(b.category || 'other')
       );
     },
@@ -260,7 +260,7 @@ export function ShoppingListGenerator({
       queryClient.invalidateQueries({ queryKey: ['shopping-lists'] });
       toast.success('Shopping list generated!');
       onOpenChange(false);
-      
+
       // Handle fulfillment method
       if (fulfillmentMethod === 'external_api') {
         toast.info(`Ready to send to ${EXTERNAL_APIS.find(a => a.id === externalApi)?.label}. Integration pending — check back shortly.`);
@@ -305,9 +305,9 @@ export function ShoppingListGenerator({
             {/* Tribe Aggregation Option */}
             {tribeId && (
               <div className="flex items-center gap-3 p-3 rounded-lg bg-purple-500/10 border border-purple-500/30">
-                <Checkbox 
-                  checked={includeTribe} 
-                  onCheckedChange={(checked) => setIncludeTribe(!!checked)} 
+                <Checkbox
+                  checked={includeTribe}
+                  onCheckedChange={(checked) => setIncludeTribe(!!checked)}
                 />
                 <div>
                   <Label className="text-base">Include Tribe Members</Label>
@@ -321,13 +321,13 @@ export function ShoppingListGenerator({
             {/* Ingredient List by Category */}
             <div className="space-y-2">
               <Label>Shopping List ({ingredients.length} items)</Label>
-              
+
               {INGREDIENT_CATEGORIES.map(cat => {
                 const items = groupedIngredients[cat.id];
                 if (!items || items.length === 0) return null;
-                
+
                 const isExpanded = expandedCategories.has(cat.id);
-                const checkedCount = items.filter(i => 
+                const checkedCount = items.filter(i =>
                   checkedItems.has(i.normalized_name || i.ingredient_name)
                 ).length;
 
@@ -350,21 +350,21 @@ export function ShoppingListGenerator({
                         <ChevronDown className="h-4 w-4" />
                       )}
                     </button>
-                    
+
                     {isExpanded && (
                       <div className="p-2 space-y-1">
                         {items.map(item => {
                           const key = item.normalized_name || item.ingredient_name;
                           const isChecked = checkedItems.has(key);
-                          
+
                           return (
-                            <div 
+                            <div
                               key={key}
                               onClick={() => toggleItem(key)}
                               className={cn(
                                 "flex items-center justify-between p-2 rounded cursor-pointer transition-colors",
-                                isChecked 
-                                  ? "bg-emerald-500/10 line-through opacity-60" 
+                                isChecked
+                                  ? "bg-emerald-500/10 line-through opacity-60"
                                   : "hover:bg-white/5"
                               )}
                             >
@@ -390,12 +390,12 @@ export function ShoppingListGenerator({
               <Label>How would you like to shop?</Label>
               <RadioGroup value={fulfillmentMethod} onValueChange={setFulfillmentMethod}>
                 {FULFILLMENT_OPTIONS.map(option => (
-                  <div 
+                  <div
                     key={option.id}
                     className={cn(
                       "flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors",
-                      fulfillmentMethod === option.id 
-                        ? "bg-primary/10 border-primary/50" 
+                      fulfillmentMethod === option.id
+                        ? "bg-primary/10 border-primary/50"
                         : "border-gray-700 hover:border-gray-500"
                     )}
                     onClick={() => setFulfillmentMethod(option.id)}
@@ -422,8 +422,8 @@ export function ShoppingListGenerator({
                       onClick={() => setExternalApi(api.id)}
                       className={cn(
                         "p-3 rounded-lg border text-center transition-colors",
-                        externalApi === api.id 
-                          ? "bg-primary/10 border-primary/50" 
+                        externalApi === api.id
+                          ? "bg-primary/10 border-primary/50"
                           : "border-gray-700 hover:border-gray-500"
                       )}
                     >
@@ -439,7 +439,7 @@ export function ShoppingListGenerator({
               <Button variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={() => generateList.mutate()}
                 disabled={generateList.isPending}
               >

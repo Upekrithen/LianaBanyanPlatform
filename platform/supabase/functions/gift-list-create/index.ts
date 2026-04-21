@@ -3,7 +3,7 @@
  * ==============================================
  * Creates a gift list for a family member. The owner can add items,
  * but cannot see who claims them.
- * 
+ *
  * POST body:
  *   - familyId: UUID
  *   - title: string (e.g., "My Birthday 2026 Wishlist")
@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
+
     if (authError || !user) {
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),

@@ -1,6 +1,6 @@
 /**
  * Plant Seeds - Progressive Disclosure Track
- * 
+ *
  * Pre-ordering, backing projects, multiplier system
  */
 
@@ -9,17 +9,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
 import { motion } from 'framer-motion';
-import { 
+import {
   Sprout, Vote, Layers, TrendingUp, Gift,
   ArrowRight, Sparkles, Unlock, ChevronDown, Key,
   Users, Coins, Star, Award, ChevronRight
 } from 'lucide-react';
-import { 
-  BenefitCard, 
-  useBenefitAccumulator, 
+import {
+  BenefitCard,
+  useBenefitAccumulator,
   ProgressiveSection,
   ProgressiveContainer,
-  type BenefitItem 
+  type BenefitItem
 } from '@/components/progressive';
 import { saveGhostBeacon } from '@/lib/beacons';
 import { PathwayNavigator } from '@/components/PathwayNavigator';
@@ -80,7 +80,7 @@ export default function PlantSeeds() {
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center px-6 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-500/10 via-transparent to-transparent" />
-        
+
         <div className="relative z-10 text-center max-w-4xl">
           <motion.div
             initial={{ scale: 0 }}
@@ -91,7 +91,7 @@ export default function PlantSeeds() {
             <Sprout className="w-5 h-5 text-violet-400" />
             <span className="text-violet-300 font-medium">Plant Seeds</span>
           </motion.div>
-          
+
           <motion.h1
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -100,16 +100,16 @@ export default function PlantSeeds() {
           >
             Back Early. <span className="text-primary">Get More.</span>
           </motion.h1>
-          
+
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-xl text-white mb-8 max-w-2xl mx-auto"
           >
-            Support projects early and receive 5× the Joules. More collateral, 
-            more governance weight. 
-            
+            Support projects early and receive 5× the Joules. More collateral,
+            more governance weight.
+
             <LarkWrapper componentId="plant-seeds-explainer" bountyCredits={50} className="inline-block mt-4 w-full">
               <div className="bg-card/50 border border-border rounded-xl p-6 text-left">
                 <h3 className="text-white font-semibold flex items-center gap-2 mb-2">
@@ -201,7 +201,7 @@ export default function PlantSeeds() {
                 </li>
               </ul>
             </div>
-            
+
             <div className="p-6 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/30">
               <h4 className="text-xl font-semibold text-white mb-3">Why Back Early?</h4>
               <div className="space-y-4">
@@ -263,14 +263,14 @@ export default function PlantSeeds() {
               </motion.div>
             ))}
           </div>
-          
+
           <div className="p-6 rounded-xl bg-card/50 border border-white/10">
             <h4 className="font-semibold text-white mb-3">Key Message</h4>
             <p className="text-lg text-slate-200 italic">
               "When you help someone else succeed, you participate in that success."
             </p>
             <p className="mt-4 text-slate-200">
-              Your contribution is recorded on the immutable IP ledger. As the project grows, 
+              Your contribution is recorded on the immutable IP ledger. As the project grows,
               your fractional participation grows with it.
             </p>
           </div>
@@ -314,7 +314,7 @@ export default function PlantSeeds() {
               </motion.div>
             ))}
           </div>
-          
+
           <div className="mt-6 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
             <p className="text-violet-200">
               <strong>Pre-order early, receive more service credit.</strong> Pre-Mint participants
@@ -365,7 +365,7 @@ export default function PlantSeeds() {
               </tbody>
             </table>
           </div>
-          
+
           <div className="p-6 rounded-xl bg-gradient-to-r from-primary/20 to-purple-500/20 border border-primary/30">
             <h4 className="font-semibold text-white mb-4">Example Stack</h4>
             <div className="flex flex-wrap items-center gap-2 text-lg">
@@ -397,7 +397,7 @@ export default function PlantSeeds() {
                 <h3 className="text-3xl font-bold text-white mb-2">Plant Your Seeds</h3>
                 <p className="text-slate-200">Watch them grow into forests</p>
               </div>
-              
+
               <div className="space-y-3 mb-8">
                 {benefits.map((benefit, idx) => (
                   <motion.div
@@ -412,7 +412,7 @@ export default function PlantSeeds() {
                   </motion.div>
                 ))}
               </div>
-              
+
               <div className="grid grid-cols-3 gap-4 mb-8">
                 <div className="text-center p-4 rounded-xl bg-white/5">
                   <div className="text-2xl font-bold text-primary">5x</div>
@@ -427,7 +427,7 @@ export default function PlantSeeds() {
                   <div className="text-xs text-slate-300">IP participation</div>
                 </div>
               </div>
-              
+
               <div className="p-4 rounded-xl bg-white/10 border border-white/20 mb-6">
                 <p className="text-white text-center">
                   <strong>PLUS:</strong> I'm personally offering you part of MY patents.<br />
@@ -435,7 +435,7 @@ export default function PlantSeeds() {
                   You become a member. You participate in that 60%.
                 </p>
               </div>
-              
+
               <button
                 onClick={() => openOnboard({ reason: "back projects and earn service credits", actionLabel: "Join", membershipIncluded: true })}
                 className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-500/90 hover:to-purple-500/90 text-white text-xl font-bold flex items-center justify-center gap-3 transition-all"

@@ -46,10 +46,10 @@ function useDraggable() {
 
   const handleMouseMove = React.useCallback((e: MouseEvent) => {
     if (!isDragging) return;
-    
+
     const deltaX = e.clientX - dragStartPos.current.x;
     const deltaY = e.clientY - dragStartPos.current.y;
-    
+
     setPosition({
       x: elementStartPos.current.x + deltaX,
       y: elementStartPos.current.y + deltaY,
@@ -110,7 +110,7 @@ const DialogContent = React.forwardRef<
       >
         {/* Drag handle indicator */}
         {draggable && (
-          <div 
+          <div
             data-drag-handle
             className="absolute top-0 left-0 right-0 h-8 flex items-center justify-center cursor-grab active:cursor-grabbing group"
             title="Drag to move"
@@ -130,10 +130,10 @@ const DialogContent = React.forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div 
+  <div
     data-drag-handle
-    className={cn("flex flex-col space-y-1.5 text-center sm:text-left cursor-grab active:cursor-grabbing", className)} 
-    {...props} 
+    className={cn("flex flex-col space-y-1.5 text-center sm:text-left cursor-grab active:cursor-grabbing", className)}
+    {...props}
   />
 );
 DialogHeader.displayName = "DialogHeader";
