@@ -21,9 +21,9 @@ Conditions:
   lb_cathedral_opus     - Opus + preload + consult_scribes top-10
 
 Usage:
-  python run_r11.py --out results_r11_K444 --budget 25.00
+  python run_r11.py --out results_r11_K444_v2 --budget 50.00
 
-Env vars: ANTHROPIC_API_KEY, OPENAI_API_KEY, GOOGLE_API_KEY, PERPLEXITY_API_KEY
+Env vars: ANTHROPIC_API_KEY, OPENAI_API_KEY, GOOGLE_API_KEY (or GEMINI_API_KEY), PERPLEXITY_API_KEY
 Load from SDS.env upstream (see AGENTS.md).
 """
 from __future__ import annotations
@@ -47,7 +47,7 @@ from r11_adapters import lb_cathedral_adapter                              # noq
 BANK_PATH = SCRIPT_DIR / "R11_QUESTION_BANK_SEALED.json"
 CORPUS_PATH = SCRIPT_DIR / "r11_canonical_corpus.md"
 
-BUDGET_HARD_CAP = 25.00
+BUDGET_HARD_CAP = 50.00
 HALF_WARN_FRACTION = 0.50
 
 CONDITIONS: list[dict] = [
@@ -227,15 +227,18 @@ def run(out_dir: Path, budget: float) -> dict:
             cid = condition["id"]
 
             # Check required env vars before attempting the condition
-            required_envs = {
-                "anthropic": "ANTHROPIC_API_KEY",
-                "openai":    "OPENAI_API_KEY",
-                "google":    "GOOGLE_API_KEY",
-                "perplexity": "PERPLEXITY_API_KEY",
-            }
-            env_key = required_envs.get(condition["vendor"])
-            if env_key and not os.environ.get(env_key):
-                print(f"\n  SKIP {cid}: {env_key} not set in environment.")
+            vendor = condition["vendor"]
+            if vendor == "anthropic" and not os.environ.get("ANTHROPIC_API_KEY"):
+                print(f"\n  SKIP {cid}: ANTHROPIC_API_KEY not set in environment.")
+                continue
+            elif vendor == "openai" and not os.environ.get("OPENAI_API_KEY"):
+                print(f"\n  SKIP {cid}: OPENAI_API_KEY not set in environment.")
+                continue
+            elif vendor == "google" and not (os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")):
+                print(f"\n  SKIP {cid}: neither GOOGLE_API_KEY nor GEMINI_API_KEY is set.")
+                continue
+            elif vendor == "perplexity" and not os.environ.get("PERPLEXITY_API_KEY"):
+                print(f"\n  SKIP {cid}: PERPLEXITY_API_KEY not set in environment.")
                 continue
 
             print(f"\n--- {cid} ({condition['model']}, mode={condition['mode']}) ---")
