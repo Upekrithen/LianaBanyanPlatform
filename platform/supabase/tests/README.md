@@ -136,3 +136,5 @@ The artifact is retained 30 days. Download it from the **Actions → workflow ru
 ---
 
 *Maintained by KNIGHT (Cursor). Last updated K447(B118), April 2026.*
+
+_Last CI-trigger touch: K450a B118 2026-04-23. Workflow triggered by this touch commit; green SHA to be recorded once the run completes._
