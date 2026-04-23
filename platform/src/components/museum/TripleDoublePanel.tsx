@@ -411,9 +411,9 @@ export function TripleDoublePanel() {
             transition={{ duration: 0.25 }}
             className="overflow-hidden space-y-3"
           >
-            {/* ── Stag Mascot Summon ── */}
+            {/* ── Goat Mascot Summon ── */}
             <SummonMascot
-              mascotId="stag"
+              mascotId="goat"
               topic="What the Triple Double actually is"
               startClosed
               message={

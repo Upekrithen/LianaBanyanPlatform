@@ -108,7 +108,7 @@ export default function PublishBriefPage() {
           <OpenWaterCueCardBanner cardId="you-have-a-play-i-have-a-stage" className="mb-4" />
 
           <SummonMascot
-            mascotId="stag"
+            mascotId="goat"
             topic="What a brief is"
             startClosed
             message={

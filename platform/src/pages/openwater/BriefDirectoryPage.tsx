@@ -61,7 +61,7 @@ export default function BriefDirectoryPage() {
           <OpenWaterCueCardBanner cardId="we-need-what-youre-good-at" className="mb-4" />
 
           <SummonMascot
-            mascotId="stag"
+            mascotId="goat"
             topic="What Open Water briefs are"
             startClosed
             message={

@@ -46,7 +46,7 @@ export default function PatronDirectoryPage() {
           <OpenWaterCueCardBanner cardId="we-need-what-youre-good-at" className="mb-4" />
 
           <SummonMascot
-            mascotId="stag"
+            mascotId="goat"
             topic="What a Patron is"
             startClosed
             message={

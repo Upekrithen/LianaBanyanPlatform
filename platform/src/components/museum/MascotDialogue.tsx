@@ -67,12 +67,17 @@ export function MascotDialogue({
       )}
 
       <div className="flex items-start gap-3">
-        {/* Guest character portrait */}
+        {/*
+          Guest character portrait (B119 rule): summoned → colored (hover)
+          when X-Ray mode is OFF, and thermal (xray) when X-Ray mode is ON.
+          The muted default variant is reserved for non-speaking mascots
+          in tour contexts where two+ are on screen simultaneously.
+        */}
         <Mascot
           id={mascotId}
           size={mascotSize}
           disableHover
-          respondToXRay={false}
+          summoned
         />
 
         {/* Guest's explanation bubble */}

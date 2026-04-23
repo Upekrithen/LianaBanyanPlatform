@@ -103,9 +103,9 @@ export default function FounderStory() {
             </div>
           </div>
 
-          {/* ── Stag Summon (top) ── */}
+          {/* ── Goat Summon (top) ── */}
           <SummonMascot
-            mascotId="stag"
+            mascotId="goat"
             topic="Why the Founder goes first"
             startClosed
             message={

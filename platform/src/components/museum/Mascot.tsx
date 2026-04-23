@@ -34,6 +34,13 @@ interface MascotProps {
   onClick?: () => void;
   /** If true, react to global x-ray mode and swap to xray image. Default true. */
   respondToXRay?: boolean;
+  /**
+   * If true, the mascot is in its "summoned to explain" state — force the
+   * colored (hover) variant rather than the muted default. Per Founder
+   * rule (B119): when a mascot comes out to explain, always use the
+   * colored version. X-Ray mode still wins when toggled on.
+   */
+  summoned?: boolean;
 }
 
 export function Mascot({
@@ -45,16 +52,19 @@ export function Mascot({
   hologramDelay = 0,
   onClick,
   respondToXRay = true,
+  summoned = false,
 }: MascotProps) {
   const mascot = getMascot(id);
   const [hovered, setHovered] = useState(false);
   const xrayCtx = useXRay();
   const xrayOn = respondToXRay && xrayCtx?.xrayOn;
 
-  // Pick image based on state
+  // Pick image based on state — xray wins when active, then summoned or
+  // mouse-hover force the colored variant, else the muted default.
+  const useColored = summoned || (hovered && !disableHover);
   const imgSrc = xrayOn
     ? mascot.visual.xray
-    : hovered && !disableHover
+    : useColored
       ? mascot.visual.hover
       : mascot.visual.default;
 
