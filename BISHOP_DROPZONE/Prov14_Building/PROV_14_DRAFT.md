@@ -129,7 +129,11 @@ Innovations flow through **three phases**, matching the Three Fates pipeline app
 - **A&A Formal:** Not yet drafted (dispatch exists: `BISHOP_DROPZONE/01_KnightPrompts/PROMPT_KNIGHT_K435_B116_CHAPTER_2_MELLON.md`)
 - **Description:** Multilingual canonical-memory retrieval in which each language is a **sibling preload file** (e.g., `r9v2_base.md`, `r9v2_base_es.md`, `r9v2_base_zh.md`), not a translation-at-query-time pipeline. `librarian_context(intent=..., lang="es")` resolves sibling files by language code with explicit English-fallback reporting (`lang_fallback` response field names the paths that fell back). Canonical numbers preserved verbatim across languages (Arabic digits). Proper nouns preserved with first-occurrence native-language gloss. Novel over real-time translation: invariance of canonical facts across language versions (no per-query translation drift); empirical parity verifiable via multilingual Eyewitness probe (documented per K435 Phase C).
 
-### #2277 (Crown Jewel — Founder-ratified B117) — The Conductor: Vendor-Neutral Adaptive Model Router for Member Queries
+### #2277 (Crown Jewel — Founder-ratified B117) — The Conductor's Baton: Vendor-Neutral Adaptive Model Router for Member Queries
+- **Primary name (patent / A&A):** The Conductor's Baton
+- **Short form (internal / UX):** The Conductor
+- **Consumer framing:** Automatic Transmission for AI
+- **Naming-family sibling:** The Baton (#2233, forward-to-network) — shared baton family, distinct products
 - **Crown Jewel:** **YES — FOUNDER-RATIFIED B117**
 - **Category:** AI Infrastructure / Adaptive Routing / Vendor-Neutral Economics
 - **Session of Origin:** B117 (2026-04-23)

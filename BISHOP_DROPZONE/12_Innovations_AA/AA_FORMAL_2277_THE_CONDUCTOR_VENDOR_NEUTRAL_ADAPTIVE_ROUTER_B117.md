@@ -1,4 +1,9 @@
-# A&A Formal #2277 — The Conductor: Vendor-Neutral Adaptive Model Router for Member Queries
+# A&A Formal #2277 — The Conductor's Baton: Vendor-Neutral Adaptive Model Router for Member Queries
+
+**Primary name (patent / technical / A&A):** The Conductor's Baton
+**Short form (internal / member UX):** The Conductor
+**Consumer / mass-market framing:** Automatic Transmission for AI
+**Naming-family sibling:** *The Baton* (#2233, forward-to-network) — the Conductor's Baton is the routing-to-vendors instrument in the same canonical family. Both refer to controlled handoff primitives; #2233 hands off to humans/networks, #2277 hands off to model-vendor pairs.
 
 **Innovation #:** 2277
 **Category:** AI Infrastructure / Adaptive Routing / Vendor-Neutral Economics / Continuous Empirical Benchmarking
@@ -14,7 +19,24 @@
 
 ## TL;DR (2 lines)
 
-**The Conductor** listens to a member's query, classifies it across a declared complexity taxonomy (retrieval-only / reasoning-required / creative / code-generation / multi-step-planning), and routes it to the empirically-best model-vendor pair (Anthropic / OpenAI / Google / Perplexity) for that class — with a **three-mode toggle** (auto-route / manual / vendor-lock) and a **continuous online benchmark** where every Nth query runs in parallel across multiple vendors to keep the routing-ranking self-correcting. Cost-Slasher becomes dynamic; R11 becomes infrastructure; vendor-lock becomes a member choice, not a platform constraint.
+**The Conductor's Baton** listens to a member's query, classifies it across a declared complexity taxonomy (retrieval-only / reasoning-required / creative / code-generation / multi-step-planning), and routes it to the empirically-best model-vendor pair (Anthropic / OpenAI / Google / Perplexity) for that class — with a **three-mode toggle** (auto-route / manual / vendor-lock) and a **continuous online benchmark** where every Nth query runs in parallel across multiple vendors to keep the routing-ranking self-correcting. Cost-Slasher becomes dynamic; R11 becomes infrastructure; vendor-lock becomes a member choice, not a platform constraint.
+
+## Canonical Founder-voice framing
+
+> *"We're making an automatic transmission for AI — the User is still driving, but doesn't have to shift anymore — unless they prefer to."*
+> — Founder, B117 ratification exchange
+
+**Two metaphors serve two audiences.** The **orchestra metaphor** (Conductor cues First Strings, now Brass, now Tympani) is the internal mythology + A&A framing. The **automatic-transmission metaphor** is the mass-market framing for landing-page, Discord, Reddit, and consumer pitches. Both are canonical. Use the car-transmission metaphor when talking to non-technical audiences; use the orchestra metaphor when talking to technical / member-experience / patent-counsel audiences.
+
+The automatic-transmission framing also captures the three-mode toggle (Claim 1(d)) in a single sentence:
+
+| Transmission mode | Conductor toggle | Who it's for |
+|---|---|---|
+| Automatic (default) | Auto-route | Most drivers |
+| Manual shifter | Member picks per query | Power users (like Founder preferring stick-shift) |
+| Fixed gear / locked ratio | Vendor-lock | Regulatory / single-vendor-audit use cases |
+
+The metaphor lands an important consumer-insight: *modern automatic transmissions outperform manual on MPG for most drivers.* Same with the Conductor — manual model selection is a power-user flex; auto-routing will beat manual on cost-per-correct for the mass market. The toggle exists so both populations are served.
 
 ---
 
