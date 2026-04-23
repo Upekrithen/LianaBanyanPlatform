@@ -38,6 +38,14 @@ const PressJunket = lazy(() => import("@/pages/PressJunket"));
 const ReadLandingPage = lazy(() => import("@/pages/ReadLandingPage"));
 const ViewingSchedulePage = lazy(() => import("@/pages/ViewingSchedulePage"));
 const WildfireTourEntry = lazy(() => import("@/pages/WildfireTourEntry"));
+const WhoCanUsePage = lazy(() => import("@/pages/WhoCanUsePage"));
+const EntityMembershipApply = lazy(() => import("@/pages/EntityMembershipApply"));
+const EntityMembershipDashboard = lazy(() => import("@/pages/EntityMembershipDashboard"));
+const PedestalStakeLearn = lazy(() => import("@/pages/PedestalStakeLearn"));
+const PedestalStakeEarlyInterest = lazy(() => import("@/pages/PedestalStakeEarlyInterest"));
+const PedestalStakeApply = lazy(() => import("@/pages/PedestalStakeApply"));
+const PedestalStakeDashboard = lazy(() => import("@/pages/PedestalStakeDashboard"));
+const MiniTour = lazy(() => import("@/pages/MiniTour"));
 
 function HomepageGateway() {
   const { user, loading } = useAuth();
@@ -99,5 +107,20 @@ export const publicRoutes = (
     <Route path="/watch" element={<LazyPage><ViewingSchedulePage /></LazyPage>} />
     <Route path="/viewing-schedule" element={<LazyPage><ViewingSchedulePage /></LazyPage>} />
     <Route path="/wildfire-tour" element={<LazyPage><WildfireTourEntry /></LazyPage>} />
+    {/* K454: Mini Wildfire Tour — sibling to /wildfire-tour, standalone */}
+    <Route path="/mini-tour" element={<LazyPage><MiniTour /></LazyPage>} />
+    {/* K427 Workstream 3: Who Can Use the Librarian */}
+    <Route path="/who-can-use" element={<LazyPage><WhoCanUsePage /></LazyPage>} />
+    <Route path="/licensing" element={<LazyPage><WhoCanUsePage /></LazyPage>} />
+    {/* K427 Workstream 2: Entity Membership */}
+    <Route path="/entity-membership/apply" element={<LazyPage><EntityMembershipApply /></LazyPage>} />
+    <Route path="/entity-membership/dashboard" element={<LazyPage><EntityMembershipDashboard /></LazyPage>} />
+    {/* K427 Workstream 1: Pedestal Stake (Reg CF) */}
+    <Route path="/pedestal-stake/learn" element={<LazyPage><PedestalStakeLearn /></LazyPage>} />
+    <Route path="/pedestal-stake/early-interest" element={<LazyPage><PedestalStakeEarlyInterest /></LazyPage>} />
+    <Route path="/pedestal-stake/apply" element={<LazyPage><PedestalStakeApply /></LazyPage>} />
+    <Route path="/my/pedestal-stake" element={<LazyPage><PedestalStakeDashboard /></LazyPage>} />
+    {/* 506(c) accredited-investor route — reserved, not implemented (K431) */}
+    <Route path="/pedestal-stake/accredited/apply" element={<LazyPage><PedestalStakeApply /></LazyPage>} />
   </>
 );
