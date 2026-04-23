@@ -38,6 +38,12 @@ const SCAN_DIRS = [
   "platform/src/lib",
 ];
 
+// Critical single-file sources outside the scan dirs. Edits to these must
+// trigger DRIFT even though they live at paths we otherwise don't recurse into.
+const SCAN_FILES = [
+  "librarian-mcp/canonical_values.yaml",
+];
+
 const SCAN_EXTENSIONS = new Set([
   ".md", ".ts", ".tsx", ".sql", ".yaml", ".yml", ".json", ".css",
   ".docx", ".rtf",
@@ -58,6 +64,14 @@ async function collectFileMtimes(workspaceRoot: string): Promise<Record<string, 
         mtimes[relPath] = stat.mtimeMs;
       } catch { /* skip inaccessible files */ }
     }
+  }
+  for (const relPath of SCAN_FILES) {
+    const absFile = resolve(workspaceRoot, relPath).replace(/\\/g, "/");
+    if (!existsSync(absFile)) continue;
+    try {
+      const stat = statSync(absFile);
+      mtimes[relPath] = stat.mtimeMs;
+    } catch { /* skip inaccessible files */ }
   }
   return mtimes;
 }
