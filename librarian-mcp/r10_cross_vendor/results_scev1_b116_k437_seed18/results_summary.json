@@ -1,0 +1,331 @@
+{
+  "run_meta": {
+    "ts": "2026-04-23T10:43:10.891282+00:00",
+    "n_records": 108,
+    "bank_path": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\r10_cross_vendor\\SCEV1_QUESTION_BANK_SEED_B116.json",
+    "out_dir": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\r10_cross_vendor\\results_scev1_b116_k437_seed18",
+    "tag": "k437-arch-on-seed18-PRE-SEAL"
+  },
+  "by_model_arm": {
+    "claude-haiku-4-5-20251001|cold": {
+      "n": 18,
+      "HOT": 0,
+      "HIT": 1,
+      "MISS": 17,
+      "cost": 0.0145,
+      "accuracy_hot_pct": 0.0,
+      "mean_cost_per_q": 0.000803,
+      "cost_per_correct": null,
+      "p50_latency_s": 1.965,
+      "p95_latency_s": 2.378
+    },
+    "claude-haiku-4-5-20251001|hot_base": {
+      "n": 18,
+      "HOT": 2,
+      "HIT": 2,
+      "MISS": 14,
+      "cost": 0.0953,
+      "accuracy_hot_pct": 11.11,
+      "mean_cost_per_q": 0.005297,
+      "cost_per_correct": 0.047674,
+      "p50_latency_s": 2.885,
+      "p95_latency_s": 4.243
+    },
+    "claude-haiku-4-5-20251001|hot_cathedral": {
+      "n": 18,
+      "HOT": 5,
+      "HIT": 2,
+      "MISS": 11,
+      "cost": 0.117,
+      "accuracy_hot_pct": 27.78,
+      "mean_cost_per_q": 0.006498,
+      "cost_per_correct": 0.023393,
+      "p50_latency_s": 3.33,
+      "p95_latency_s": 4.853
+    },
+    "claude-opus-4-7|cold": {
+      "n": 18,
+      "HOT": 0,
+      "HIT": 0,
+      "MISS": 18,
+      "cost": 0.245,
+      "accuracy_hot_pct": 0.0,
+      "mean_cost_per_q": 0.013609,
+      "cost_per_correct": null,
+      "p50_latency_s": 3.995,
+      "p95_latency_s": 5.565
+    },
+    "claude-opus-4-7|hot_base": {
+      "n": 18,
+      "HOT": 2,
+      "HIT": 2,
+      "MISS": 14,
+      "cost": 1.909,
+      "accuracy_hot_pct": 11.11,
+      "mean_cost_per_q": 0.106056,
+      "cost_per_correct": 0.954502,
+      "p50_latency_s": 4.211,
+      "p95_latency_s": 5.693
+    },
+    "claude-opus-4-7|hot_cathedral": {
+      "n": 18,
+      "HOT": 6,
+      "HIT": 0,
+      "MISS": 12,
+      "cost": 2.3786,
+      "accuracy_hot_pct": 33.33,
+      "mean_cost_per_q": 0.132142,
+      "cost_per_correct": 0.396425,
+      "p50_latency_s": 4.922,
+      "p95_latency_s": 8.757
+    }
+  },
+  "headline_lift": {
+    "per_model": {
+      "claude-haiku-4-5-20251001": {
+        "hot_base_pct": 11.11,
+        "hot_cathedral_pct": 27.78,
+        "lift_pp": 16.67,
+        "relative_x": 2.5
+      },
+      "claude-opus-4-7": {
+        "hot_base_pct": 11.11,
+        "hot_cathedral_pct": 33.33,
+        "lift_pp": 22.22,
+        "relative_x": 3.0
+      }
+    },
+    "mean_lift_pp": 19.45,
+    "cost_per_correct": {
+      "claude-haiku-4-5-20251001": {
+        "hot_base_cost_per_correct": 0.047674,
+        "hot_cathedral_cost_per_correct": 0.023393,
+        "cathedral_x_cheaper_per_correct": 2.04
+      },
+      "claude-opus-4-7": {
+        "hot_base_cost_per_correct": 0.954502,
+        "hot_cathedral_cost_per_correct": 0.396425,
+        "cathedral_x_cheaper_per_correct": 2.41
+      }
+    }
+  },
+  "cross_session_subscore": {
+    "B097": {
+      "n_hot_base": 4,
+      "n_hot_cathedral": 4,
+      "hot_base_pct": 50.0,
+      "hot_cathedral_pct": 50.0,
+      "delta_pp": 0.0
+    },
+    "B109": {
+      "n_hot_base": 2,
+      "n_hot_cathedral": 2,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 50.0,
+      "delta_pp": 50.0
+    },
+    "B110": {
+      "n_hot_base": 2,
+      "n_hot_cathedral": 2,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 100.0,
+      "delta_pp": 100.0
+    },
+    "B112": {
+      "n_hot_base": 4,
+      "n_hot_cathedral": 4,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 0.0,
+      "delta_pp": 0.0
+    },
+    "B115": {
+      "n_hot_base": 4,
+      "n_hot_cathedral": 4,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 0.0,
+      "delta_pp": 0.0
+    },
+    "B116": {
+      "n_hot_base": 18,
+      "n_hot_cathedral": 18,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 22.22,
+      "delta_pp": 22.22
+    },
+    "canonical": {
+      "n_hot_base": 2,
+      "n_hot_cathedral": 2,
+      "hot_base_pct": 100.0,
+      "hot_cathedral_pct": 100.0,
+      "delta_pp": 0.0
+    }
+  },
+  "category_breakdown": {
+    "architecture_continuity": {
+      "n_per_arm": {
+        "cold": 6,
+        "hot_base": 6,
+        "hot_cathedral": 6
+      },
+      "cold_pct": 0.0,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 0.0,
+      "cathedral_lift_pp": 0.0
+    },
+    "canonical_number": {
+      "n_per_arm": {
+        "cold": 6,
+        "hot_base": 6,
+        "hot_cathedral": 6
+      },
+      "cold_pct": 0.0,
+      "hot_base_pct": 33.33,
+      "hot_cathedral_pct": 66.67,
+      "cathedral_lift_pp": 33.34
+    },
+    "cross_session_recall": {
+      "n_per_arm": {
+        "cold": 6,
+        "hot_base": 6,
+        "hot_cathedral": 6
+      },
+      "cold_pct": 0.0,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 33.33,
+      "cathedral_lift_pp": 33.33
+    },
+    "decision_provenance": {
+      "n_per_arm": {
+        "cold": 6,
+        "hot_base": 6,
+        "hot_cathedral": 6
+      },
+      "cold_pct": 0.0,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 0.0,
+      "cathedral_lift_pp": 0.0
+    },
+    "founder_voice": {
+      "n_per_arm": {
+        "cold": 6,
+        "hot_base": 6,
+        "hot_cathedral": 6
+      },
+      "cold_pct": 0.0,
+      "hot_base_pct": 0.0,
+      "hot_cathedral_pct": 0.0,
+      "cathedral_lift_pp": 0.0
+    },
+    "innovation_id": {
+      "n_per_arm": {
+        "cold": 6,
+        "hot_base": 6,
+        "hot_cathedral": 6
+      },
+      "cold_pct": 0.0,
+      "hot_base_pct": 33.33,
+      "hot_cathedral_pct": 83.33,
+      "cathedral_lift_pp": 50.0
+    }
+  },
+  "hallucination_subscore": {
+    "cold": {
+      "specific_q": 12,
+      "miss": 12,
+      "plausible_wrong": 5,
+      "refused": 2,
+      "miss_rate_pct": 100.0,
+      "plausible_wrong_rate_pct": 41.67,
+      "refusal_rate_pct": 16.67
+    },
+    "hot_base": {
+      "specific_q": 12,
+      "miss": 4,
+      "plausible_wrong": 1,
+      "refused": 1,
+      "miss_rate_pct": 33.33,
+      "plausible_wrong_rate_pct": 8.33,
+      "refusal_rate_pct": 8.33
+    },
+    "hot_cathedral": {
+      "specific_q": 12,
+      "miss": 2,
+      "plausible_wrong": 1,
+      "refused": 1,
+      "miss_rate_pct": 16.67,
+      "plausible_wrong_rate_pct": 8.33,
+      "refusal_rate_pct": 8.33
+    }
+  },
+  "scribe_attribution": {
+    "wins": [
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "qid": "Q003",
+        "category": "cross_session_recall",
+        "scribes": [
+          "R9",
+          "Landing"
+        ]
+      },
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "qid": "Q009",
+        "category": "innovation_id",
+        "scribes": [
+          "Prov14"
+        ]
+      },
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "qid": "Q018",
+        "category": "canonical_number",
+        "scribes": [
+          "Prov14"
+        ]
+      },
+      {
+        "model": "claude-opus-4-7",
+        "qid": "Q003",
+        "category": "cross_session_recall",
+        "scribes": [
+          "R9",
+          "Landing"
+        ]
+      },
+      {
+        "model": "claude-opus-4-7",
+        "qid": "Q008",
+        "category": "innovation_id",
+        "scribes": [
+          "Prov14"
+        ]
+      },
+      {
+        "model": "claude-opus-4-7",
+        "qid": "Q009",
+        "category": "innovation_id",
+        "scribes": [
+          "Prov14"
+        ]
+      },
+      {
+        "model": "claude-opus-4-7",
+        "qid": "Q018",
+        "category": "canonical_number",
+        "scribes": [
+          "Prov14"
+        ]
+      }
+    ],
+    "scribe_contributions": {
+      "Prov14": 5,
+      "R9": 2,
+      "Landing": 2
+    }
+  },
+  "pass_fail": "PASS",
+  "cost_summary": {
+    "total_usd": 4.7593
+  }
+}
