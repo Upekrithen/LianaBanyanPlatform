@@ -180,6 +180,185 @@ scribes:
       - .env
     activation_threshold: any mention of where-does-X-key-live, rotation, exposure, new service onboarding
 
+  # ============================================================
+  # B117 expansion — three Scribes to fill the blind-spot categories
+  # identified by K437 SEALED-50 category-lift diagnostic (#2276).
+  # ============================================================
+
+  - id: Architecture
+    primary:
+      level: 1
+      field: platform architecture continuity (MCP tool surfaces, schema design, Chessboard agent roles, freshness/fingerprint primitives)
+      canonical_keepers:
+        - librarian-mcp/src/server.ts
+        - librarian-mcp/src/indexer/fingerprint.ts
+        - librarian-mcp/src/scribes/
+        - BISHOP_DROPZONE/12_Innovations_AA/AA_FORMAL_2269*.md
+        - BISHOP_DROPZONE/12_Innovations_AA/AA_FORMAL_2270*.md
+        - BISHOP_DROPZONE/12_Innovations_AA/AA_FORMAL_2273*.md
+    adjacents:
+      - level: 2
+        field: MCP protocol and tool registration
+      - level: 3
+        field: Supabase schema design (upekrithen / public schema separation)
+      - level: 3
+        field: Firebase hosting targets and GCP project layout
+      - level: 4
+        field: agent session lifecycle and Chessboard roles (B/K/R/P)
+      - level: 5
+        field: append-only JSONL durability semantics
+    keywords:
+      - architecture
+      - MCP
+      - MCP tool
+      - server.ts
+      - fingerprint
+      - FRESH
+      - DRIFT
+      - UNKNOWN
+      - SHA-256
+      - incremental rebuild
+      - upekrithen schema
+      - two-track
+      - Fates
+      - Clotho
+      - Lachesis
+      - Atropos
+      - Cathedral
+      - tablet
+      - consult_scribes
+      - log_tidbit
+      - scribe_log
+      - fates_route
+      - Chessboard
+      - Bishop
+      - Knight
+      - Rook
+      - Pawn
+      - session lifecycle
+      - JSONL
+      - append-only
+      - primary
+      - adjacent
+    activation_threshold: load-bearing mention
+
+  - id: Decisions
+    primary:
+      level: 1
+      field: decision provenance and rationale (why X was chosen over Y, why a word was rejected, why a structure was adopted)
+      canonical_keepers:
+        - BISHOP_DROPZONE/03_BishopHandoffs/MILESTONE_B*_CLOSEOUT.md
+        - BISHOP_DROPZONE/12_Innovations_AA/AA_FORMAL_2272*.md
+        - project_prove_then_product_principle.md
+        - project_under_promise_over_deliver.md
+        - project_herjavec_deal_structure_b097.md
+    adjacents:
+      - level: 2
+        field: regulatory path selection (Reg CF vs 506(c), Howey analysis, FTC exposure)
+      - level: 2
+        field: Prove-Then-Product methodology
+      - level: 3
+        field: vendor selection (HelloSign vs DocuSign; Middesk vs Alloy; StartEngine vs Republic)
+      - level: 3
+        field: SEC-safe language decisions and trigger words
+      - level: 4
+        field: counsel-cleared decisions and open questions
+    keywords:
+      - decision
+      - rationale
+      - why
+      - chosen
+      - rejected
+      - Reg CF
+      - 506(c)
+      - counsel
+      - HelloSign
+      - DocuSign
+      - Middesk
+      - Alloy
+      - FTC
+      - Howey
+      - guaranteed
+      - refund
+      - Prove it first
+      - Product it second
+      - under-promise
+      - over-deliver
+      - half
+      - out-of-founder-half
+      - arms-length
+      - QSBS
+      - Upekrithen seller-of-record
+      - gitignore
+      - reproducibility
+      - Gates
+      - Epstein
+      - Bill Gates hold
+      - Melinda NOT on hold
+    activation_threshold: any "why was X chosen" / "what's the rationale for Y" surface
+
+  - id: FounderVoice
+    primary:
+      level: 1
+      field: Founder-voice canonical phrases and Rhetorical Keystones (the 17 anchors that make Founder's prose Founder's)
+      canonical_keepers:
+        - librarian-mcp-public/preload/founder_voice/rhetorical_keystones.md
+        - project_rhetorical_keystones.md
+        - project_anachronism_principle.md
+        - project_cloyd_pattern.md
+        - project_pine_books_anchor.md
+    adjacents:
+      - level: 2
+        field: biographical anchors (Montana, Christmas Eve 1992, Jeep, $175 apartment, 8 kids, National Guard)
+      - level: 2
+        field: Rhetorical Keystones (potatoes, two suits, friendly fire, nothing about us, 80%, people-and-leadership, no-plan-first-contact, medallions-minted, help-each-other, I-read-a-lot, WHETHER, system-of-wells, poordom-surviving, thermometer)
+      - level: 3
+        field: canonical methodology phrases (Prove-Then-Product, domain-indexed working memory with triply-redundant witness, Cost-Slasher claim ladder)
+      - level: 3
+        field: self-description discipline ("veteran of no particular note")
+    keywords:
+      - veteran of no particular note
+      - potatoes
+      - two suits
+      - friendly fire
+      - nothing about us without us
+      - 80 percent
+      - 80%
+      - people and leadership
+      - no plan survives first contact
+      - medallions are minted
+      - help each other help ourselves
+      - I read a lot
+      - WHETHER
+      - the way I learned things affected WHETHER I learned them
+      - system of wells
+      - rising tide
+      - poordom
+      - thermometer
+      - domain-indexed working memory
+      - triply-redundant witness
+      - Prove it first. Product it second.
+      - we MAKE it
+      - not trying to become a billionaire
+      - Christmas Eve 1992
+      - Montana
+      - Pine Books
+      - Tiffany Brost
+      - Pike Place
+      - Cloyd
+      - Anachronism
+      - You build the Features
+      - We're building the Board
+      - Not left or right. Forward.
+      - stars
+      - Stormhold
+      - Yvaine
+      - Mirror Mirror
+      - Father of eight
+      - Founder
+      - Jonathan Jones
+    activation_threshold: any direct Founder-voice quote OR any Rhetorical Keystone reference
+
 # Future Scribe candidates (instantiate on first trigger; do NOT pre-create):
 #   - Letters (Crown Letters primary; Rhetorical Keystones / dispatch queue adjacents)
 #   - Pedestal (Reg CF portal primary; Upekrithen seller-of-record / two-track separation adjacents)
