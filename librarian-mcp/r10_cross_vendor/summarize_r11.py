@@ -150,7 +150,7 @@ def _render_markdown(by_cond: dict, sanity_notes: list[str], records: list[dict]
 
     header = "# R11 Cross-Vendor Memory Benchmark Results\n\n"
     header += f"**Session:** K444 (B119, 2026-04-23)  \n"
-    header += f"**Corpus:** R11-CANONICAL-K444 (50 facts, 4,150 words)  \n"
+    header += f"**Corpus:** R11-CANONICAL-K444-v2 (50 facts, ~11,800 words)  \n"
     header += f"**Total spend:** ${total_cost:.4f}  \n\n"
 
     table_header = (

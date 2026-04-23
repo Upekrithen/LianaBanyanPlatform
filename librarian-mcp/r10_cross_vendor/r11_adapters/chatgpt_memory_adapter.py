@@ -32,14 +32,18 @@ PRICING = {
 }
 DEFAULT_PRICING = {"input": 2.50, "output": 10.00}
 
-MEMORY_SYSTEM_PREAMBLE = """\
-You are a helpful assistant with access to a memory store. The memory store
-contains information that has been previously saved about cooperative AI
-platform best practices. When answering questions, consult your memory store
-first. If the answer is present in memory, state it precisely. If not in
+MEMORY_SYSTEM_TEMPLATE = """\
+You are a helpful assistant with persistent memory. The memory store below
+contains the full cooperative AI platform reference compendium that has been
+saved across sessions. When answering questions, retrieve the precise values
+from your memory. If the answer is present, reproduce it exactly. If not in
 memory, say you don't know — do NOT invent facts.
 
---- MEMORY STORE (30 entries) ---
+--- MEMORY STORE: Cooperative AI Platform Compendium ---
+
+{corpus}
+
+--- END MEMORY STORE ---
 """
 
 COLD_SYSTEM = (
@@ -48,19 +52,9 @@ COLD_SYSTEM = (
 )
 
 
-def _split_to_memory_entries(corpus_text: str, n: int = 30) -> list[str]:
-    """Split corpus into approximately n paragraph-level memory entries."""
-    paragraphs = [p.strip() for p in corpus_text.split("\n\n") if p.strip() and len(p.strip()) > 60]
-    if len(paragraphs) <= n:
-        return paragraphs
-    step = len(paragraphs) // n
-    return paragraphs[::step][:n]
-
-
 def build_memory_system_prompt(corpus_text: str) -> str:
-    entries = _split_to_memory_entries(corpus_text, 30)
-    memory_block = "\n\n".join(f"[Memory {i+1}] {e}" for i, e in enumerate(entries))
-    return MEMORY_SYSTEM_PREAMBLE + memory_block
+    """Load full corpus as memory store — simulates ChatGPT with corpus loaded via Projects/memory."""
+    return MEMORY_SYSTEM_TEMPLATE.format(corpus=corpus_text)
 
 
 def answer(

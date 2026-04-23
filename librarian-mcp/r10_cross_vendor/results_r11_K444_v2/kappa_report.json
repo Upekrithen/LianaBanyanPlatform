@@ -1,0 +1,77 @@
+{
+  "spot_check_n": 5,
+  "spot_qids": [
+    "R11-AM-06",
+    "R11-HP-02",
+    "R11-HP-04",
+    "R11-HP-08",
+    "R11-MJ-01"
+  ],
+  "primary_grades": [
+    "MISS",
+    "MISS",
+    "MISS",
+    "HIT",
+    "MISS"
+  ],
+  "kappa_grades": [
+    "MISS",
+    "MISS",
+    "MISS",
+    "MISS",
+    "MISS"
+  ],
+  "cohens_kappa": 0.0,
+  "kappa_pass_threshold": 0.7,
+  "kappa_passed": false,
+  "kappa_grader_model": "claude-opus-4-7",
+  "kappa_cost_usd": 0.05505,
+  "grade_changes_on_reconfirmation": 0,
+  "details": [
+    {
+      "qid": "R11-HP-02",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The response does not provide any of the required founding details (Reykjavik, 2017, 12 credit unions) and instead states the information is unavailable.",
+      "kappa_cost_usd": 0.01206
+    },
+    {
+      "qid": "R11-AM-06",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The candidate declined to answer and did not provide the required shard count of 12 per 100,000 members.",
+      "kappa_cost_usd": 0.01212
+    },
+    {
+      "qid": "R11-MJ-01",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The response does not provide the 14-day deadline and instead states the information is unavailable.",
+      "kappa_cost_usd": 0.009
+    },
+    {
+      "qid": "R11-HP-08",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "HIT",
+      "kappa_grade": "MISS",
+      "agree": false,
+      "kappa_rationale": "The response does not identify the Cooper-Anderson Decision or its requirements, instead stating no information is available.",
+      "kappa_cost_usd": 0.01122
+    },
+    {
+      "qid": "R11-HP-04",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The response does not provide any of the required facts (date, founder count, country count) and instead states the information is unavailable.",
+      "kappa_cost_usd": 0.01065
+    }
+  ]
+}

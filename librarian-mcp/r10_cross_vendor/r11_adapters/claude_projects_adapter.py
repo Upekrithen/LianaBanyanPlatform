@@ -27,7 +27,8 @@ from adapters import AdapterResponse
 
 PRICING = {
     "claude-haiku-4-5-20251001":   {"input": 1.00,  "output": 5.00},
-    "claude-sonnet-4-6-20260301":  {"input": 3.00,  "output": 15.00},
+    "claude-sonnet-4-6":           {"input": 3.00,  "output": 15.00},
+    "claude-sonnet-4-6-20260301":  {"input": 3.00,  "output": 15.00},  # alias (404 — kept for compat)
     "claude-opus-4-7":             {"input": 15.00, "output": 75.00},
 }
 DEFAULT_PRICING = {"input": 15.00, "output": 75.00}
@@ -54,7 +55,7 @@ COLD_SYSTEM = (
 def answer(
     question: str,
     corpus_text: str,
-    model: str = "claude-sonnet-4-6-20260301",
+    model: str = "claude-sonnet-4-6",
     mode: Literal["project", "cold"] = "project",
 ) -> AdapterResponse:
     import anthropic

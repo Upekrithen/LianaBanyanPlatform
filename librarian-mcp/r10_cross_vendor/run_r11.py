@@ -11,7 +11,7 @@ Conditions:
   cold_gemini_flash     - Gemini 2.5 Flash, no corpus
   chatgpt_memory        - GPT-4o + corpus-as-memory (30 entries)
   chatgpt_memory_gpt5   - GPT-5 (or gpt-4.1 proxy) + corpus-as-memory
-  claude_projects_sonnet- Sonnet 4.6 + corpus-as-reference-doc
+  claude_projects_sonnet- claude-sonnet-4-6 + corpus-as-reference-doc
   claude_projects_opus  - Opus 4.7 + corpus-as-reference-doc
   gemini_gems           - Gemini 2.5 Pro + corpus-as-system-instruction
   perplexity_spaces     - Sonar-Pro + corpus-in-system-prompt
@@ -59,7 +59,7 @@ CONDITIONS: list[dict] = [
     {"id": "chatgpt_memory",       "vendor": "openai",    "model": "gpt-4o",                     "adapter": "chatgpt_memory",  "mode": "memory"},
     {"id": "chatgpt_memory_gpt5",  "vendor": "openai",    "model": "gpt-4.1",                    "adapter": "chatgpt_memory",  "mode": "memory",
      "model_note": "gpt-4.1 used as proxy; try 'gpt-5' if API access confirmed"},
-    {"id": "claude_projects_sonnet","vendor": "anthropic","model": "claude-sonnet-4-6-20260301",  "adapter": "claude_projects", "mode": "project"},
+    {"id": "claude_projects_sonnet","vendor": "anthropic","model": "claude-sonnet-4-6",           "adapter": "claude_projects", "mode": "project"},
     {"id": "claude_projects_opus", "vendor": "anthropic", "model": "claude-opus-4-7",             "adapter": "claude_projects", "mode": "project"},
     {"id": "gemini_gems",          "vendor": "google",    "model": "gemini-2.5-pro",              "adapter": "gemini_gems",     "mode": "gem"},
     {"id": "perplexity_spaces",    "vendor": "perplexity","model": "sonar-pro",                   "adapter": "perplexity_spaces","mode": "space"},
