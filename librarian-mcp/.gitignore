@@ -5,3 +5,6 @@ index/*.json
 stitchpunks/.env
 stitchpunks/data/*.json
 .rebuild.lock
+.supervisor.pid
+.supervisor.log
+.supervisor.log.*

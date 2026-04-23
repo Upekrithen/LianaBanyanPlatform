@@ -8,12 +8,14 @@
     "build": "tsc",
     "build-guarded": "node scripts/build-guarded.mjs",
     "build-index": "node dist/indexer/buildIndex.js",
-    "start": "node dist/server.js",
+    "start": "node scripts/supervise.mjs",
+    "start:raw": "node dist/server.js",
+    "stop": "node scripts/supervise.mjs --stop",
     "dev": "tsc && node dist/server.js",
     "rebuild": "tsc && node dist/indexer/buildIndex.js --incremental",
     "rebuild:full": "tsc && node dist/indexer/buildIndex.js",
     "rebuild:incremental": "tsc && node dist/indexer/buildIndex.js --incremental",
-    "test": "tsc && node --test tests/test_registry.mjs tests/test_fates_router.mjs tests/test_scribe_tools.mjs tests/test_consult_scribes_latency.mjs tests/test_member_cathedral.mjs tests/test_cathedral_export_import.mjs tests/test_build_gate.mjs"
+    "test": "tsc && node --test tests/test_registry.mjs tests/test_fates_router.mjs tests/test_scribe_tools.mjs tests/test_consult_scribes_latency.mjs tests/test_member_cathedral.mjs tests/test_cathedral_export_import.mjs tests/test_build_gate.mjs tests/test_supervisor.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.28.0",
