@@ -2,6 +2,17 @@
 -- "Direct" variants (New Yorker response) = context_only, NOT for dispatch
 -- "In Honor Of" variant (memorial framing) = approved send version, Wave 2
 
+-- 0. Expand content_type CHECK to include 'tribute_letter'
+ALTER TABLE helm_content_queue DROP CONSTRAINT IF EXISTS helm_content_queue_content_type_check;
+ALTER TABLE helm_content_queue ADD CONSTRAINT helm_content_queue_content_type_check
+  CHECK (content_type IN (
+    'crown_letter', 'outreach_letter', 'academic_letter', 'blessing_letter',
+    'sponsorship_letter', 'patron_letter', 'political_letter',
+    'academic_paper', 'pudding_essay', 'cephas_article', 'cue_card',
+    'publication_pitch', 'media_post', 'press_material', 'partnership_letter',
+    'social_dispatch', 'red_carpet_config', 'tribute_letter'
+  ));
+
 -- 1. Archive the direct variant in helm_content_queue
 UPDATE helm_content_queue
 SET status = 'archived',

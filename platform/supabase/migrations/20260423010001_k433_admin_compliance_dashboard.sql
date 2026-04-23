@@ -5,6 +5,7 @@
 -- ============================================================================
 -- Staff UPDATE policy on pedestal_applications (for dispositions)
 -- ============================================================================
+DROP POLICY IF EXISTS "app_staff_update" ON upekrithen.pedestal_applications;
 CREATE POLICY "app_staff_update" ON upekrithen.pedestal_applications
   FOR UPDATE USING (
     auth.uid() IN (
@@ -16,6 +17,7 @@ CREATE POLICY "app_staff_update" ON upekrithen.pedestal_applications
 -- Staff DELETE on pedestal_applications (for rejected/cancelled cleanup)
 -- Counsel may request removal of rejected applications.
 -- ============================================================================
+DROP POLICY IF EXISTS "app_staff_delete" ON upekrithen.pedestal_applications;
 CREATE POLICY "app_staff_delete" ON upekrithen.pedestal_applications
   FOR DELETE USING (
     auth.uid() IN (

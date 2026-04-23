@@ -18,20 +18,24 @@ ALTER TABLE upekrithen.pedestal_applications
 -- ============================================================================
 
 -- Investors must be able to UPDATE their own application as they advance steps
+DROP POLICY IF EXISTS "app_investor_update" ON upekrithen.pedestal_applications;
 CREATE POLICY "app_investor_update" ON upekrithen.pedestal_applications
   FOR UPDATE USING (investor_id = auth.uid())
   WITH CHECK (investor_id = auth.uid());
 
 -- System needs INSERT on pedestal_holders when issuance completes
+DROP POLICY IF EXISTS "holders_system_insert" ON upekrithen.pedestal_holders;
 CREATE POLICY "holders_system_insert" ON upekrithen.pedestal_holders
   FOR INSERT WITH CHECK (user_id = auth.uid());
 
 -- System needs UPDATE on pedestal_holders for certificate_url write-back
+DROP POLICY IF EXISTS "holders_system_update" ON upekrithen.pedestal_holders;
 CREATE POLICY "holders_system_update" ON upekrithen.pedestal_holders
   FOR UPDATE USING (user_id = auth.uid())
   WITH CHECK (user_id = auth.uid());
 
 -- Staff can update offering raises for cap tracking
+DROP POLICY IF EXISTS "raises_staff_update" ON upekrithen.regcf_offering_raises;
 CREATE POLICY "raises_staff_update" ON upekrithen.regcf_offering_raises
   FOR UPDATE USING (
     auth.uid() IN (
@@ -40,6 +44,7 @@ CREATE POLICY "raises_staff_update" ON upekrithen.regcf_offering_raises
   );
 
 -- Authenticated users can insert into raises (for issuance increment)
+DROP POLICY IF EXISTS "raises_auth_insert" ON upekrithen.regcf_offering_raises;
 CREATE POLICY "raises_auth_insert" ON upekrithen.regcf_offering_raises
   FOR INSERT WITH CHECK (true);
 

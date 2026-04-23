@@ -18,7 +18,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA upekrithen GRANT ALL ON TABLES TO anon, authe
 -- Table 1: upekrithen.pedestal_early_interest
 -- Testing-the-waters signups (allowed under Reg CF before offering launches)
 -- ============================================================================
-CREATE TABLE upekrithen.pedestal_early_interest (
+CREATE TABLE IF NOT EXISTS upekrithen.pedestal_early_interest (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email           TEXT NOT NULL,
     name            TEXT,
@@ -35,14 +35,14 @@ CREATE TABLE upekrithen.pedestal_early_interest (
     created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE UNIQUE INDEX idx_upekrithen_early_interest_email
+CREATE UNIQUE INDEX IF NOT EXISTS idx_upekrithen_early_interest_email
     ON upekrithen.pedestal_early_interest(email);
 
 -- ============================================================================
 -- Table 2: upekrithen.pedestal_applications
 -- Full application pipeline — K432 wires the real flow
 -- ============================================================================
-CREATE TABLE upekrithen.pedestal_applications (
+CREATE TABLE IF NOT EXISTS upekrithen.pedestal_applications (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     investor_id         UUID NOT NULL REFERENCES auth.users(id),
     status              TEXT NOT NULL DEFAULT 'draft' CHECK (status IN (
@@ -70,16 +70,16 @@ CREATE TABLE upekrithen.pedestal_applications (
     updated_at          TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_upekrithen_applications_investor
+CREATE INDEX IF NOT EXISTS idx_upekrithen_applications_investor
     ON upekrithen.pedestal_applications(investor_id);
-CREATE INDEX idx_upekrithen_applications_status
+CREATE INDEX IF NOT EXISTS idx_upekrithen_applications_status
     ON upekrithen.pedestal_applications(status);
 
 -- ============================================================================
 -- Table 3: upekrithen.pedestal_holders
 -- Issued stake records — NO FK to public.members
 -- ============================================================================
-CREATE TABLE upekrithen.pedestal_holders (
+CREATE TABLE IF NOT EXISTS upekrithen.pedestal_holders (
     holder_id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     subscription_id     UUID REFERENCES upekrithen.pedestal_applications(id),
     user_id             UUID NOT NULL REFERENCES auth.users(id),
@@ -93,13 +93,13 @@ CREATE TABLE upekrithen.pedestal_holders (
     updated_at          TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_upekrithen_holders_user ON upekrithen.pedestal_holders(user_id);
+CREATE INDEX IF NOT EXISTS idx_upekrithen_holders_user ON upekrithen.pedestal_holders(user_id);
 
 -- ============================================================================
 -- Table 4: upekrithen.pedestal_issuance_log
 -- Immutable audit trail — write-only. No UPDATE, no DELETE.
 -- ============================================================================
-CREATE TABLE upekrithen.pedestal_issuance_log (
+CREATE TABLE IF NOT EXISTS upekrithen.pedestal_issuance_log (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     holder_id   UUID NOT NULL REFERENCES upekrithen.pedestal_holders(holder_id),
     action      TEXT NOT NULL,
@@ -108,14 +108,14 @@ CREATE TABLE upekrithen.pedestal_issuance_log (
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_upekrithen_issuance_log_holder
+CREATE INDEX IF NOT EXISTS idx_upekrithen_issuance_log_holder
     ON upekrithen.pedestal_issuance_log(holder_id);
 
 -- ============================================================================
 -- Table 5: upekrithen.regcf_offering_raises
 -- Annual cap tracking per 12-month rolling window (Reg CF: $5M/year)
 -- ============================================================================
-CREATE TABLE upekrithen.regcf_offering_raises (
+CREATE TABLE IF NOT EXISTS upekrithen.regcf_offering_raises (
     id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     period_start            DATE NOT NULL,
     period_end              DATE NOT NULL,
@@ -133,10 +133,12 @@ RETURNS TRIGGER AS $$
 BEGIN NEW.updated_at = now(); RETURN NEW; END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_applications_updated_at ON upekrithen.pedestal_applications;
 CREATE TRIGGER trg_applications_updated_at
     BEFORE UPDATE ON upekrithen.pedestal_applications
     FOR EACH ROW EXECUTE FUNCTION upekrithen.update_updated_at();
 
+DROP TRIGGER IF EXISTS trg_holders_updated_at ON upekrithen.pedestal_holders;
 CREATE TRIGGER trg_holders_updated_at
     BEFORE UPDATE ON upekrithen.pedestal_holders
     FOR EACH ROW EXECUTE FUNCTION upekrithen.update_updated_at();
@@ -147,8 +149,10 @@ CREATE TRIGGER trg_holders_updated_at
 
 -- Early interest
 ALTER TABLE upekrithen.pedestal_early_interest ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "ei_anon_insert" ON upekrithen.pedestal_early_interest;
 CREATE POLICY "ei_anon_insert" ON upekrithen.pedestal_early_interest
     FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "ei_staff_select" ON upekrithen.pedestal_early_interest;
 CREATE POLICY "ei_staff_select" ON upekrithen.pedestal_early_interest
     FOR SELECT USING (
         auth.uid() IN (
@@ -158,21 +162,26 @@ CREATE POLICY "ei_staff_select" ON upekrithen.pedestal_early_interest
 
 -- Applications
 ALTER TABLE upekrithen.pedestal_applications ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "app_own_read" ON upekrithen.pedestal_applications;
 CREATE POLICY "app_own_read" ON upekrithen.pedestal_applications
     FOR SELECT USING (investor_id = auth.uid());
+DROP POLICY IF EXISTS "app_staff_read" ON upekrithen.pedestal_applications;
 CREATE POLICY "app_staff_read" ON upekrithen.pedestal_applications
     FOR SELECT USING (
         auth.uid() IN (
             SELECT user_id FROM public.user_roles WHERE role IN ('admin', 'founder')
         )
     );
+DROP POLICY IF EXISTS "app_investor_insert" ON upekrithen.pedestal_applications;
 CREATE POLICY "app_investor_insert" ON upekrithen.pedestal_applications
     FOR INSERT WITH CHECK (investor_id = auth.uid());
 
 -- Holders
 ALTER TABLE upekrithen.pedestal_holders ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "holders_own_read" ON upekrithen.pedestal_holders;
 CREATE POLICY "holders_own_read" ON upekrithen.pedestal_holders
     FOR SELECT USING (user_id = auth.uid());
+DROP POLICY IF EXISTS "holders_staff_read" ON upekrithen.pedestal_holders;
 CREATE POLICY "holders_staff_read" ON upekrithen.pedestal_holders
     FOR SELECT USING (
         auth.uid() IN (
@@ -182,18 +191,21 @@ CREATE POLICY "holders_staff_read" ON upekrithen.pedestal_holders
 
 -- Issuance log: write-only. No UPDATE, no DELETE policy.
 ALTER TABLE upekrithen.pedestal_issuance_log ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "issuance_log_staff_select" ON upekrithen.pedestal_issuance_log;
 CREATE POLICY "issuance_log_staff_select" ON upekrithen.pedestal_issuance_log
     FOR SELECT USING (
         auth.uid() IN (
             SELECT user_id FROM public.user_roles WHERE role IN ('admin', 'founder')
         )
     );
+DROP POLICY IF EXISTS "issuance_log_system_insert" ON upekrithen.pedestal_issuance_log;
 CREATE POLICY "issuance_log_system_insert" ON upekrithen.pedestal_issuance_log
     FOR INSERT WITH CHECK (true);
 -- Explicitly: NO UPDATE or DELETE policies. RLS denies by default.
 
 -- Offering raises
 ALTER TABLE upekrithen.regcf_offering_raises ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "raises_public_read" ON upekrithen.regcf_offering_raises;
 CREATE POLICY "raises_public_read" ON upekrithen.regcf_offering_raises
     FOR SELECT USING (true);
 
@@ -209,4 +221,5 @@ CREATE POLICY "raises_public_read" ON upekrithen.regcf_offering_raises
 INSERT INTO upekrithen.regcf_offering_raises
     (period_start, period_end, cumulative_raised_usd, annual_cap_usd, holder_count)
 VALUES
-    (CURRENT_DATE, CURRENT_DATE + INTERVAL '365 days', 0, 5000000, 0);
+    (CURRENT_DATE, CURRENT_DATE + INTERVAL '365 days', 0, 5000000, 0)
+ON CONFLICT DO NOTHING;

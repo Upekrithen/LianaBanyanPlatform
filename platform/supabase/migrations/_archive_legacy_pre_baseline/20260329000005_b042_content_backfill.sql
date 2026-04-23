@@ -772,4 +772,3 @@ ON CONFLICT (slug) DO UPDATE SET
   implementation_status = EXCLUDED.implementation_status,
   bishop_session = EXCLUDED.bishop_session,
   updated_at = now();
-

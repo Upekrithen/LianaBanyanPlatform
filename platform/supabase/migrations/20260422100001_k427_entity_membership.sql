@@ -102,35 +102,44 @@ ALTER TABLE entity_tier_config ENABLE ROW LEVEL SECURITY;
 ALTER TABLE entity_membership_audit ENABLE ROW LEVEL SECURITY;
 
 -- Tier config: public read
+DROP POLICY IF EXISTS "tier_config_public_read" ON entity_tier_config;
 CREATE POLICY "tier_config_public_read" ON entity_tier_config FOR SELECT USING (true);
 
 -- Entity memberships: contact user can read/update own entity
+DROP POLICY IF EXISTS "entity_membership_own_read" ON entity_memberships;
 CREATE POLICY "entity_membership_own_read" ON entity_memberships
     FOR SELECT USING (primary_contact_user_id = auth.uid());
+DROP POLICY IF EXISTS "entity_membership_own_update" ON entity_memberships;
 CREATE POLICY "entity_membership_own_update" ON entity_memberships
     FOR UPDATE USING (primary_contact_user_id = auth.uid());
+DROP POLICY IF EXISTS "entity_membership_insert" ON entity_memberships;
 CREATE POLICY "entity_membership_insert" ON entity_memberships
     FOR INSERT WITH CHECK (primary_contact_user_id = auth.uid());
 
 -- Seats: entity admin or seat owner can read; entity admin can manage
+DROP POLICY IF EXISTS "entity_seats_entity_read" ON entity_seats;
 CREATE POLICY "entity_seats_entity_read" ON entity_seats
     FOR SELECT USING (
         entity_id IN (SELECT id FROM entity_memberships WHERE primary_contact_user_id = auth.uid())
         OR user_id = auth.uid()
     );
+DROP POLICY IF EXISTS "entity_seats_entity_insert" ON entity_seats;
 CREATE POLICY "entity_seats_entity_insert" ON entity_seats
     FOR INSERT WITH CHECK (
         entity_id IN (SELECT id FROM entity_memberships WHERE primary_contact_user_id = auth.uid())
     );
+DROP POLICY IF EXISTS "entity_seats_entity_update" ON entity_seats;
 CREATE POLICY "entity_seats_entity_update" ON entity_seats
     FOR UPDATE USING (
         entity_id IN (SELECT id FROM entity_memberships WHERE primary_contact_user_id = auth.uid())
     );
 
 -- Audit: write-only for system, read for entity contact
+DROP POLICY IF EXISTS "entity_audit_read" ON entity_membership_audit;
 CREATE POLICY "entity_audit_read" ON entity_membership_audit
     FOR SELECT USING (
         entity_id IN (SELECT id FROM entity_memberships WHERE primary_contact_user_id = auth.uid())
     );
+DROP POLICY IF EXISTS "entity_audit_insert" ON entity_membership_audit;
 CREATE POLICY "entity_audit_insert" ON entity_membership_audit
     FOR INSERT WITH CHECK (true);

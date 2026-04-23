@@ -462,4 +462,3 @@ WHERE NOT EXISTS (SELECT 1 FROM public.innovation_log il WHERE il.innovation_num
 INSERT INTO public.innovation_log (innovation_number, title, description, category, patent_bag, status, session_tag)
 SELECT 2093, 'Cheesecrackers Circular Funding Safeguard', 'Patent innovation covering Cheesecrackers Circular Funding Safeguard within Platform / Participation Economy.', 'Platform / Participation Economy', 'Bag O (Cooperative Participation Economy)', 'filed', 'provisional_11'
 WHERE NOT EXISTS (SELECT 1 FROM public.innovation_log il WHERE il.innovation_number = 2093);
-

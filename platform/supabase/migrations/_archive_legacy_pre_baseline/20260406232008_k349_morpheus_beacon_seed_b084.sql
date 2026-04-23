@@ -25,4 +25,3 @@ WHERE NOT EXISTS (
   WHERE b.name = 'Morpheus Path'
     AND b.location_path = '/northern/overlook'
 );
-

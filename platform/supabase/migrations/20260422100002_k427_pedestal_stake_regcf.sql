@@ -137,24 +137,33 @@ ALTER TABLE pedestal_distributions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pedestal_intermediary_config ENABLE ROW LEVEL SECURITY;
 
 -- Early interest: anyone can insert (public signup), own-user read
+DROP POLICY IF EXISTS "early_interest_insert" ON pedestal_early_interest;
 CREATE POLICY "early_interest_insert" ON pedestal_early_interest FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "early_interest_own_read" ON pedestal_early_interest;
 CREATE POLICY "early_interest_own_read" ON pedestal_early_interest FOR SELECT
     USING (user_id = auth.uid() OR email = (SELECT email FROM auth.users WHERE id = auth.uid()));
 
 -- Holders: own-user read/update, authenticated insert
+DROP POLICY IF EXISTS "holders_own_read" ON pedestal_holders;
 CREATE POLICY "holders_own_read" ON pedestal_holders FOR SELECT USING (user_id = auth.uid());
+DROP POLICY IF EXISTS "holders_own_update" ON pedestal_holders;
 CREATE POLICY "holders_own_update" ON pedestal_holders FOR UPDATE USING (user_id = auth.uid());
+DROP POLICY IF EXISTS "holders_insert" ON pedestal_holders;
 CREATE POLICY "holders_insert" ON pedestal_holders FOR INSERT WITH CHECK (user_id = auth.uid());
 
 -- Issuance log: write-only (anyone authenticated can write for audit), holder can read own
+DROP POLICY IF EXISTS "issuance_log_insert" ON pedestal_issuance_log;
 CREATE POLICY "issuance_log_insert" ON pedestal_issuance_log FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "issuance_log_own_read" ON pedestal_issuance_log;
 CREATE POLICY "issuance_log_own_read" ON pedestal_issuance_log FOR SELECT
     USING (holder_id IN (SELECT id FROM pedestal_holders WHERE user_id = auth.uid()));
 
 -- Raise tracking: public read (transparency)
+DROP POLICY IF EXISTS "raise_tracking_public_read" ON pedestal_raise_tracking;
 CREATE POLICY "raise_tracking_public_read" ON pedestal_raise_tracking FOR SELECT USING (true);
 
 -- Distributions: holder reads own
+DROP POLICY IF EXISTS "distributions_own_read" ON pedestal_distributions;
 CREATE POLICY "distributions_own_read" ON pedestal_distributions FOR SELECT
     USING (holder_id IN (SELECT id FROM pedestal_holders WHERE user_id = auth.uid()));
 

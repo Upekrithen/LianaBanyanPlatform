@@ -32,4 +32,3 @@ CREATE POLICY "Users update own alcove progress"
 ON public.alcove_progress
 FOR UPDATE
 USING (auth.uid() = user_id);
-

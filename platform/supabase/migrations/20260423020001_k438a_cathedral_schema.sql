@@ -331,7 +331,7 @@ BEGIN
             {"level": 3, "field": "stakeholders and reviewers"},
             {"level": 5, "field": "lessons learned"}
           ]'::jsonb,
-         ARRAY['project','milestone','deadline','build','ship','launch','release'],
+         ARRAY['project','milestone','deadline','build','ship','launch','release','sprint'],
          true, 'private'),
 
         (p_member_id, 'Health',
@@ -457,9 +457,11 @@ ALTER TABLE cathedral.fates_log         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cathedral.tidbits           ENABLE ROW LEVEL SECURITY;
 
 -- ---- member_cathedrals ----
+DROP POLICY IF EXISTS mc_own_select ON cathedral.member_cathedrals;
 CREATE POLICY mc_own_select ON cathedral.member_cathedrals
     FOR SELECT USING (member_id = auth.uid());
 
+DROP POLICY IF EXISTS mc_own_insert ON cathedral.member_cathedrals;
 CREATE POLICY mc_own_insert ON cathedral.member_cathedrals
     FOR INSERT WITH CHECK (member_id = auth.uid());
 
@@ -468,6 +470,7 @@ CREATE POLICY mc_own_insert ON cathedral.member_cathedrals
 -- Postgres RLS doesn't natively constrain WHICH columns; we constrain by
 -- USING + WITH CHECK on member_id, and rely on the column-level GRANT below
 -- to lock down the immutable columns (created_at, member_id, export_count).
+DROP POLICY IF EXISTS mc_own_update ON cathedral.member_cathedrals;
 CREATE POLICY mc_own_update ON cathedral.member_cathedrals
     FOR UPDATE USING (member_id = auth.uid())
     WITH CHECK (member_id = auth.uid());
@@ -482,6 +485,7 @@ GRANT UPDATE (tier, last_sync_at, professional_domain)
 -- staged via a placeholder predicate that resolves to FALSE until K438b/c
 -- adds cathedral.guild_membership / cathedral.tribe_membership tables.
 
+DROP POLICY IF EXISTS ms_own_all ON cathedral.member_scribes;
 CREATE POLICY ms_own_all ON cathedral.member_scribes
     FOR ALL USING (member_id = auth.uid())
     WITH CHECK (member_id = auth.uid());
@@ -489,6 +493,7 @@ CREATE POLICY ms_own_all ON cathedral.member_scribes
 -- Commons: any authenticated enrolled member may SELECT another member's
 -- Scribe metadata IF the Scribe is shared to commons (the listing surface
 -- for /my/cathedral/explore — not in K438a UI but enabled at storage layer).
+DROP POLICY IF EXISTS ms_commons_select ON cathedral.member_scribes;
 CREATE POLICY ms_commons_select ON cathedral.member_scribes
     FOR SELECT USING (
         active = true
@@ -502,6 +507,7 @@ CREATE POLICY ms_commons_select ON cathedral.member_scribes
 -- Guild / Tribe placeholder — STAGED but inert. Resolves to FALSE until the
 -- group-membership tables land. Documented here to make the K438b/c diff
 -- a one-line predicate swap rather than a new policy creation.
+DROP POLICY IF EXISTS ms_guild_tribe_select ON cathedral.member_scribes;
 CREATE POLICY ms_guild_tribe_select ON cathedral.member_scribes
     FOR SELECT USING (
         active = true
@@ -513,6 +519,7 @@ CREATE POLICY ms_guild_tribe_select ON cathedral.member_scribes
 -- ---- scribe_entries ----
 -- INSERT: Scribe owner only. The materialize trigger double-checks
 -- member_id matches the parent Scribe's owner.
+DROP POLICY IF EXISTS se_own_insert ON cathedral.scribe_entries;
 CREATE POLICY se_own_insert ON cathedral.scribe_entries
     FOR INSERT WITH CHECK (
         member_id = auth.uid()
@@ -524,11 +531,13 @@ CREATE POLICY se_own_insert ON cathedral.scribe_entries
     );
 
 -- SELECT: own entries always.
+DROP POLICY IF EXISTS se_own_select ON cathedral.scribe_entries;
 CREATE POLICY se_own_select ON cathedral.scribe_entries
     FOR SELECT USING (member_id = auth.uid());
 
 -- SELECT: commons entries from any member's commons-shared Scribe, but only
 -- entries that were materialized as shared at write-time.
+DROP POLICY IF EXISTS se_commons_select ON cathedral.scribe_entries;
 CREATE POLICY se_commons_select ON cathedral.scribe_entries
     FOR SELECT USING (
         shared = true
@@ -540,6 +549,7 @@ CREATE POLICY se_commons_select ON cathedral.scribe_entries
     );
 
 -- SELECT: guild/tribe entries — STAGED inert (mirrors ms_guild_tribe_select).
+DROP POLICY IF EXISTS se_guild_tribe_select ON cathedral.scribe_entries;
 CREATE POLICY se_guild_tribe_select ON cathedral.scribe_entries
     FOR SELECT USING (
         shared = true
@@ -548,18 +558,25 @@ CREATE POLICY se_guild_tribe_select ON cathedral.scribe_entries
     );
 
 -- DELIBERATELY NO UPDATE OR DELETE policies → RLS denies by default.
--- Append-only is enforced by the absence of mutation policies.
+-- Append-only is enforced by both policy omission AND explicit REVOKE so that
+-- attempts raise a permission-denied exception (not silent 0 rows).
+REVOKE UPDATE, DELETE ON cathedral.scribe_entries FROM authenticated;
 
 -- ---- fates_log ----
+DROP POLICY IF EXISTS fl_own_select ON cathedral.fates_log;
 CREATE POLICY fl_own_select ON cathedral.fates_log
     FOR SELECT USING (member_id = auth.uid());
+DROP POLICY IF EXISTS fl_own_insert ON cathedral.fates_log;
 CREATE POLICY fl_own_insert ON cathedral.fates_log
     FOR INSERT WITH CHECK (member_id = auth.uid());
--- NO UPDATE, NO DELETE.
+-- NO UPDATE, NO DELETE. Enforce at object level so attempts raise an exception.
+REVOKE UPDATE, DELETE ON cathedral.fates_log FROM authenticated;
 
 -- ---- tidbits ----
+DROP POLICY IF EXISTS tb_own_select ON cathedral.tidbits;
 CREATE POLICY tb_own_select ON cathedral.tidbits
     FOR SELECT USING (member_id = auth.uid());
+DROP POLICY IF EXISTS tb_own_insert ON cathedral.tidbits;
 CREATE POLICY tb_own_insert ON cathedral.tidbits
     FOR INSERT WITH CHECK (member_id = auth.uid());
 -- NO UPDATE, NO DELETE.

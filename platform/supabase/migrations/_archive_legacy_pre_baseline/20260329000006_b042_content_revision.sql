@@ -647,4 +647,3 @@ Every stage operates at Cost+20%. Arena submissions are free. Emporium listings 
 $b042rev$,
     updated_at = now()
 WHERE slug = 'design-pipeline-architecture';
-

@@ -58,6 +58,7 @@ repos:
       - id: check-added-large-files
         name: block files >1MB from being committed
         args: ['--maxkb=1024']
+        exclude: ^platform/supabase/migrations/00000000000000_baseline\.sql$
       - id: check-merge-conflict
         name: block commits containing merge-conflict markers
       - id: detect-private-key

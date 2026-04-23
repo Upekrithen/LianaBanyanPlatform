@@ -57,4 +57,3 @@ CREATE POLICY "babylon_fragments_update_own"
 ON public.babylon_candle_fragments FOR UPDATE
 USING (auth.uid() = user_id)
 WITH CHECK (auth.uid() = user_id);
-
