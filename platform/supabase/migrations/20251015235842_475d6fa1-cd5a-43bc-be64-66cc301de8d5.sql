@@ -89,9 +89,17 @@ SET name = 'Let''s Make Dinner'
 WHERE id = '7c39f3af-d076-4dd7-a622-7bc30c7f11ca';
 
 -- Insert LifeLine Medications project with valid owner_id
-INSERT INTO projects (name, description, owner_id)
-VALUES (
-  'LifeLine Medications',
-  'Curing One Worry At A Time',
-  '790d4c44-134a-4550-bf44-dc44ad37ea7e'
-);
+-- K450a fix: guard with IF EXISTS so this no-ops in CI/local environments
+-- where the production user UUID 790d4c44-... is not present in auth.users.
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM auth.users WHERE id = '790d4c44-134a-4550-bf44-dc44ad37ea7e') THEN
+    INSERT INTO projects (name, description, owner_id)
+    VALUES (
+      'LifeLine Medications',
+      'Curing One Worry At A Time',
+      '790d4c44-134a-4550-bf44-dc44ad37ea7e'
+    )
+    ON CONFLICT DO NOTHING;
+  END IF;
+END $$;
