@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from "fs";
+import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
 import { execSync } from "child_process";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -140,11 +141,51 @@ const server = new McpServer({
   version: "1.0.0",
 });
 
+// ─── K448: Build-gate dispatcher ─────────────────────────────────────────────
+// One function + one early-return guards ALL tool calls. When build-guarded.mjs
+// is running tsc, .rebuild.lock exists and concurrent callers receive a
+// structured error with retry_after_ms instead of hanging silently (B118 incident).
+type ToolContent = { content: Array<{ type: "text"; text: string }> };
+
+function buildGateCheck(): ToolContent | null {
+  const result = checkRebuildLock();
+  if (!result) return null;
+  if ("warning" in result) {
+    // Stale lock: crashed build left a lock behind. Log and proceed.
+    console.error(`[build-gate] Stale .rebuild.lock (age ${result.age_ms}ms). Proceeding. Consider running npm run build-guarded to clear.`);
+    return null;
+  }
+  return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+}
+
+/**
+ * Wrapper around server.tool() that injects the build-gate check before every
+ * handler runs. This is the single integration point — no per-handler changes
+ * needed. The generic preserves Zod schema→args type inference so handlers
+ * keep their strongly-typed parameter destructuring.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyZodShape = Record<string, z.ZodType<any, any, any>>;
+function registerTool<S extends AnyZodShape>(
+  name: string,
+  desc: string,
+  schema: S,
+  handler: (args: z.infer<z.ZodObject<S>>) => Promise<ToolContent>,
+): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (server.tool as any)(name, desc, schema, async (args: z.infer<z.ZodObject<S>>) => {
+    const blocked = buildGateCheck();
+    if (blocked) return blocked;
+    return handler(args);
+  });
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 // ═══════════════════════════════════════════
 // TOOL 1: get_system_overview
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_system_overview",
   "Returns innovation count, initiative count, page/function/table counts, last session, and pending work. Call at session start.",
   {},
@@ -166,7 +207,7 @@ server.tool(
 // TOOL 2: query_domain
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "query_domain",
   "Returns all tables, functions, pages, feature flags, and Cephas content for a domain (e.g. 'lb_card', 'housing', 'ghost_world'). Pass domain name or 'list' to see all domains.",
   { domain: z.string().describe("Domain name or 'list' to see all available domains") },
@@ -206,7 +247,7 @@ server.tool(
 // TOOL 3: get_schema
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_schema",
   "Returns columns, types, constraints, FKs, indexes, RLS policies, and originating migration for a table. Pass 'list' to see all tables.",
   { table: z.string().describe("Table name or 'list' to see all tables") },
@@ -242,7 +283,7 @@ server.tool(
 // TOOL 4: list_edge_functions
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "list_edge_functions",
   "Lists edge functions, optionally filtered by name/domain pattern. Returns name, purpose, auth pattern, and tables used.",
   { filter: z.string().optional().describe("Optional name/keyword filter (e.g. 'card', 'membership', 'webhook')") },
@@ -280,7 +321,7 @@ server.tool(
 // TOOL 5: get_page_info
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_page_info",
   "Returns route, data queries, feature flag dependencies, and edge function calls for a page. Pass 'list' to see all pages.",
   { page: z.string().describe("Page component name or 'list'") },
@@ -316,7 +357,7 @@ server.tool(
 // TOOL 6: get_canonical_numbers
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_canonical_numbers",
   "Returns all canonical numbers from canonical_values.yaml (single source of truth): innovations, crown jewels, patents, membership cost, creator keeps %, etc. Always reads fresh from disk.",
   {},
@@ -391,7 +432,7 @@ const INITIATIVES: Record<string, { number: number; crown?: string }> = {
   "brass_tacks": { number: 16 },
 };
 
-server.tool(
+registerTool(
   "get_initiative",
   "Returns initiative details: crown holder, tables, pages, letters, status. Pass 'list' for all initiatives.",
   { name: z.string().describe("Initiative name (snake_case) or 'list'") },
@@ -428,7 +469,7 @@ server.tool(
 // TOOL 8: get_session_context
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_session_context",
   "Returns what was built in a session: files changed, commits, pending work. Without session_id returns the latest.",
   { session_id: z.string().optional().describe("Session ID (e.g. 'A', 'C', '98') or omit for latest") },
@@ -462,7 +503,7 @@ server.tool(
 // TOOL 9: search_knowledge
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "search_knowledge",
   "Text search across all index files. Returns top matches with context.",
   {
@@ -639,7 +680,7 @@ server.tool(
 // TOOL 10: get_deploy_state
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_deploy_state",
   "Returns last deploy info, pending migrations, pending function deploys, and build commands for each site.",
   {},
@@ -677,7 +718,7 @@ server.tool(
 // TOOL 11: update_session
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "update_session",
   "Appends a session summary to the index. Call at session end instead of editing MILESTONE_HANDOFF.",
   {
@@ -733,7 +774,7 @@ server.tool(
 // TOOL 12: get_bishop_chat
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_bishop_chat",
   "Returns summary, decisions, and topics from BISHOP chat transcripts. Pass filename for details, 'list' for recent 20, or 'search:keyword' to find by topic.",
   { chat: z.string().describe("Chat filename, 'list' for recent 20, or 'search:keyword'") },
@@ -794,7 +835,7 @@ server.tool(
 
 const WORKSPACE_ROOT = resolve(__dirname, "..", "..");
 
-server.tool(
+registerTool(
   "get_architecture",
   "Returns architectural concept explanation from Cephas. Searches by keyword, slug, or title. Pass 'list' to see all concepts, or a keyword like 'joules', 'cost+20', 'three-gear', 'crown', 'medallion', etc. Set brief=true (default) for summary only, brief=false for full markdown content.",
   {
@@ -938,7 +979,7 @@ const ARCHITECTURAL_RULES: ArchitecturalRule[] = [
   { id: "structural-bylaw-immutable", rule: "Structural Bylaws (Cost+20%, $5 membership, privacy, etc.) cannot be changed by normal vote. Requires Founder approval.", source: "Governance", severity: "critical" },
 ];
 
-server.tool(
+registerTool(
   "check_consistency",
   "Validates a proposal or statement against Liana Banyan's architectural rules and constraints. Returns violations, warnings, and confirmations. Use this before implementing features to ensure alignment.",
   { proposal: z.string().describe("Description of what you're about to build or a statement to validate") },
@@ -1088,7 +1129,7 @@ server.tool(
 // TOOL 14b: canonical_value_matches (K406)
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "canonical_value_matches",
   "Verify a document's canonical values against the Liana Banyan source of truth (canonical_values.yaml). Finds stale numbers, wrong percentages, and unverified claims.",
   {
@@ -1132,7 +1173,7 @@ server.tool(
 // TOOL 15: get_dropzone_task
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_dropzone_task",
   "Returns task prompts from KNIGHT/BISHOP/ROOK/PAWN dropzones. Pass agent name for that agent's tasks, a filename for details, or 'list' for all.",
   {
@@ -1242,7 +1283,7 @@ server.tool(
 // TOOL 16: get_transcript
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_transcript",
   "Returns summaries of Cursor agent chat transcripts. Pass a session UUID for details, 'recent' for latest 10, or 'list' for all.",
   { query: z.string().describe("Session UUID, 'recent', or 'list'") },
@@ -1281,7 +1322,7 @@ server.tool(
 // TOOL 17: get_component
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_component",
   "Returns exports, imports, Supabase queries, and props for React components, hooks, or libs. Pass name for details or 'list' for all.",
   {
@@ -1618,7 +1659,7 @@ function isLetterDeliverableId(id: string): boolean {
 // TOOL 18: brief_me (MoneyPenny)
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "brief_me",
   "MoneyPenny Smart Router: returns a compact, task-scoped context package in ~600 words. Call this FIRST at session start instead of multiple individual queries. Replaces the need for get_system_overview + query_domain + get_architecture + check_consistency.",
   { task: z.string().describe("Natural language description of what you're about to work on, e.g. 'build housing payment contribution form'") },
@@ -1736,7 +1777,7 @@ server.tool(
 // TOOL 19: moneypenny_checklist
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "moneypenny_checklist",
   "MoneyPenny pre-flight check. Validates a proposed task against architectural rules, identifies missing prerequisites (tables, functions), finds related past sessions, and returns contextual reminders. Call before implementing.",
   { task: z.string().describe("Description of what you're about to implement") },
@@ -1804,7 +1845,7 @@ server.tool(
 // TOOL 20: moneypenny_debrief
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "moneypenny_debrief",
   "MoneyPenny session-end debrief. Logs what was built, validates consistency, generates sync reminders and handoff notes. Call at session end instead of manually editing MILESTONE_HANDOFF.",
   {
@@ -1908,7 +1949,7 @@ server.tool(
 // TOOL 21: get_migration_status
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_migration_status",
   "Returns v1→v2 domain migration tracker. Shows which domains are audited, migrated, or verified. Pass 'list' for overview or a domain name for details.",
   { query: z.string().describe("Domain name or 'list' for overview") },
@@ -1964,7 +2005,7 @@ server.tool(
 // TOOL 22: get_letter_status
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_letter_status",
   "Returns letter tracking status. Pass 'list' for overview, 'crown'/'media'/'political' for category, 'draft'/'locked'/'sent' for status, or a recipient name for details.",
   { query: z.string().describe("'list', category name, status name, or recipient name") },
@@ -2044,7 +2085,7 @@ server.tool(
 // TOOL 23: get_diff_since_session
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "get_diff_since_session",
   "Returns what changed since a given session. Compares current session list against a baseline session ID. Shows new sessions, files changed, migrations, and functions since then.",
   { session_id: z.string().describe("Baseline session ID (e.g. 'K200', 'B054'). Shows everything after this session.") },
@@ -2133,7 +2174,7 @@ function runStitchpunkHook(script: string, args: string[]): string {
   }
 }
 
-server.tool(
+registerTool(
   "run_session_start",
   "Runs the Stitchpunk Corps session start hook (SP-6 Scribe, SP-1 Cartographer, SP-5 Sentinel, SP-7 Courier). Call at the beginning of any agent session.",
   {
@@ -2216,7 +2257,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "run_session_end",
   "Runs the Stitchpunk Corps session end hook (SP-6 Scribe, SP-1 Cartographer, SP-3 Classifier, SP-8 Herald, SP-10 Pipeline Bridge). Call at the end of any agent session. This auto-wires content to the Staff of Librarians.",
   {
@@ -2297,7 +2338,7 @@ server.tool(
 // SP-21 + SP-22/23 — TIDBIT + CATHEDRAL TOOLS (K436)
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "log_tidbit",
   "Append a verification-behavior tidbit to the SP-21 ledger (stitchpunks/data/tidbits.jsonl). Call whenever you perform a BRIDLE-Rule-2-style pre-assertion check (verified a slot, file, commit, symbol, route, or canonical value before claiming it). Returns the new line count.",
   {
@@ -2330,7 +2371,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "fates_route",
   "Run the Three Fates pipeline (Clotho extracts themes, Lachesis scores against registered Scribes, Atropos returns dispatch directives) over a chunk of session text. Always logs the routing record to stitchpunks/data/fates_log.jsonl. Caller decides whether to act on the dispatch directives by calling scribe_log.",
   {
@@ -2377,7 +2418,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "scribe_log",
   "Append an observation to a specific Scribe's tablet (stitchpunks/scribes/scribe_<id>.jsonl). The scribe_id MUST be registered in registry.yaml — unknown ids are rejected (registration is a deliberate registry edit, not an on-the-fly call).",
   {
@@ -2433,7 +2474,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "consult_scribes",
   "RAM-access pattern for the Cathedral: query Scribes for recent observations on a topic. Scores topic against every registered Scribe's primary + adjacent fields, returns up to max_entries from the highest-scoring Scribes (primary first, adjacents next if include_adjacents=true). Optimized for fast mid-session retrieval (target p95 < 200ms for 20-tablet cathedral).",
   {
@@ -2467,7 +2508,7 @@ server.tool(
 // the MCP process. See librarian-mcp/src/cathedral_supabase/client.ts for
 // the access-control rationale (service role + explicit member_id filter).
 
-server.tool(
+registerTool(
   "member_consult_scribes",
   "Cathedral retrieval (#2268) — query a member's own Scribes plus optionally any commons-shared Scribes from other members. Returns top_k entries ranked by relevance (member's own ranked above shared at equal score). Backed by cathedral.member_scribes + cathedral.scribe_entries. Sibling of consult_scribes (which reads stitchpunks tablets).",
   {
@@ -2495,7 +2536,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "member_fates_route",
   "Three Fates routing (#2269) for a member session: Clotho extracts themes (against the member's own Scribe keywords + canonical entity regexes), Lachesis scores each Scribe, Atropos returns dispatch directives. Persists one row to cathedral.fates_log. Does NOT auto-append to scribe_entries — the member confirms in the UI before any tablet write (manual-approval default for first ship).",
   {
@@ -2556,7 +2597,7 @@ function saveTouchstoneManifest(manifest: any): void {
   writeFileSync(mp, JSON.stringify(manifest, null, 2) + "\n", "utf-8");
 }
 
-server.tool(
+registerTool(
   "touchstone_list",
   "Lists all deliverables in the TouchStone manifest, optionally filtered by owner or status.",
   {
@@ -2595,7 +2636,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "touchstone_verify",
   "Runs verification predicates on a specific deliverable or all deliverables. Returns pass/fail with reasons.",
   {
@@ -2635,7 +2676,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "touchstone_claim",
   "Claims a pending deliverable for the calling agent, setting it to in_progress.",
   {
@@ -2668,7 +2709,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "touchstone_complete",
   "Submits completion for a deliverable. Runs all predicates. If ALL pass, marks completed. If any fail, rejects with reasons. Stale predicates (10+ sessions old) are downgraded to warnings.",
   {
@@ -2729,7 +2770,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "touchstone_force_complete",
   "Force-completes a deliverable when predicates are stale but work clearly shipped. Logs the override with reason and agent. Use when touchstone_complete rejects due to stale predicates.",
   {
@@ -2790,7 +2831,7 @@ function runScrambler(script: string, args: string[]): string {
   }
 }
 
-server.tool(
+registerTool(
   "scrambler_session_start",
   "Scrambler Chessboard Phase 2 + K418 Triple-Redundant: generates a session start brief from canonical state. Runs Scramblers A (ledger), B (ground truth), C (arbiter) side-by-side. Flags drift, conflicts, staleness, and session gaps.",
   {
@@ -2928,7 +2969,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "scrambler_session_closeout",
   "Scrambler Chessboard Phase 2: reconciles session work against canonical state at session end. Checks for unreconciled conflicts, applies approved changes to canonical_values.yaml, saves snapshot.",
   {
@@ -2975,7 +3016,7 @@ server.tool(
 // Scrambler B (Ground Truth), Scrambler C (Arbiter), Reconciliation
 // ═══════════════════════════════════════════
 
-server.tool(
+registerTool(
   "scrambler_ground_truth",
   "Scrambler B: Ground Truth Verifier. Checks actual deployed artifacts (files, code patterns, migrations, edge functions) against pending deliverables. Returns verdicts per deliverable.",
   {
@@ -3019,7 +3060,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "scrambler_arbiter",
   "Scrambler C: Arbiter/Tiebreaker. Runs ONLY when Scramblers A and B disagree. Votes by evidence weight, self-heals the manifest when confident.",
   {},
@@ -3055,7 +3096,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "scrambler_tiebreak_log",
   "Reads the Scrambler C tiebreak audit log. Shows all arbitration decisions for Founder review.",
   {
@@ -3081,7 +3122,7 @@ server.tool(
   }
 );
 
-server.tool(
+registerTool(
   "touchstone_reconcile",
   "Bulk reconciliation: runs all three Scramblers (A=Ledger, B=Ground Truth, C=Arbiter) plus staleness/gap detection against all deliverables at once. Use for manual catch-up when the system has fallen behind.",
   {
@@ -3165,6 +3206,9 @@ server.tool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
+  // K448 addendum: clear the post_build_reload lock written by build-guarded.mjs.
+  // Signals that this new process successfully started and is ready for tool calls.
+  clearPostBuildReloadLock();
   console.error("The Librarian MCP Server is running (stdio transport)");
 }
 

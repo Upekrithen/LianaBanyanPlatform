@@ -4,3 +4,4 @@ index/*.json
 !index/canonical.json
 stitchpunks/.env
 stitchpunks/data/*.json
+.rebuild.lock
