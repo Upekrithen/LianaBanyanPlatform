@@ -1,0 +1,502 @@
+{
+  "bank_version": "1.0.0-sealed",
+  "bank_status": "SEALED — 50 questions. Source of record for K437-on-sealed-50 run and K438 gate decision. Edit only to fix factual errors in ground_truth; do NOT add or remove questions without a new bank_version bump and Bishop ratification.",
+  "opened": "2026-04-22",
+  "opened_by": "Bishop B116",
+  "sealed": "2026-04-23",
+  "sealed_by": "Bishop B117 (Claude Opus 4.7, 1M context)",
+  "target_test": "SCEV-1 (Scribes Cathedral Empirical Validation, run 1) — K437 dispatch",
+  "source_sessions": ["B097", "B103", "B108", "B109", "B110", "B111", "B112", "B113", "B114", "B115", "B116"],
+  "categories": [
+    "cross_session_recall",
+    "decision_provenance",
+    "innovation_id",
+    "architecture_continuity",
+    "founder_voice",
+    "canonical_number"
+  ],
+  "category_counts": {
+    "cross_session_recall": 9,
+    "decision_provenance": 8,
+    "innovation_id": 9,
+    "architecture_continuity": 8,
+    "founder_voice": 8,
+    "canonical_number": 8
+  },
+  "grading_rubric": "R10 three-tier (HOT / HIT / MISS) — see librarian-mcp-public/preload/benchmark/grading_rubric.md. Substring matching against hot_required_elements; HIT if any required element present; HOT if all present. Strict-regrade variant: responses containing 'I don't know' / 'I cannot verify' downgraded from HOT to HIT regardless of substring match.",
+
+  "questions": [
+    {
+      "q_id": "Q001",
+      "category": "cross_session_recall",
+      "source_session": "B112",
+      "question": "In which Bishop session did R10 lock the cross-vendor Eyewitness numbers with inter-rater kappa 0.883 (HOT) and 0.850 (COLD)?",
+      "ground_truth": "B112 (K423 R10 lock). 8 models × 4 vendors × 1,200 graded calls.",
+      "hot_required_elements": ["B112", "K423"],
+      "hallucination_risk": "model may invent a different B-number"
+    },
+    {
+      "q_id": "Q002",
+      "category": "cross_session_recall",
+      "source_session": "B115",
+      "question": "What BRIDLE rule did Bishop break twice in B115 on the DNS canonical question?",
+      "ground_truth": "Rule 5 — 'Don't invent.' First accepted Founder's verbal 'all my domains are Squarespace' without verification; then over-corrected on Knight's nslookup inferring GCP Cloud DNS. Ground truth was Founder's Squarespace-account screenshots.",
+      "hot_required_elements": ["Rule 5", "twice", "Squarespace"],
+      "hallucination_risk": "high — may confuse with other BRIDLE rules"
+    },
+    {
+      "q_id": "Q003",
+      "category": "cross_session_recall",
+      "source_session": "B116",
+      "question": "What were the Lighthouse scores before and after the B116 fix pass on librarian.the2ndsecond.com?",
+      "ground_truth": "Before: Performance 88, Accessibility 79, Best Practices 96, SEO 100. After: Performance 99, Accessibility 100, Best Practices 96, SEO 100. SSL Labs A+ on both endpoints.",
+      "hot_required_elements": ["88", "99", "79", "100"],
+      "hallucination_risk": "medium — may invent intermediate scores"
+    },
+    {
+      "q_id": "Q019",
+      "category": "cross_session_recall",
+      "source_session": "B113-B114 extended",
+      "question": "On what date and time did `librarian-mcp` go live on PyPI, and what tag triggered the publish?",
+      "ground_truth": "April 22, 2026, 20:25:54 UTC. Tag `v0.2.1` pushed (after PYPI_API_TOKEN configured in GitHub repo secrets) triggered the GitHub Actions publish workflow. Version on PyPI is 0.2.0, shipped from commit `f86e6a1`.",
+      "hot_required_elements": ["April 22", "20:25", "v0.2.1", "f86e6a1"],
+      "hallucination_risk": "high — may invent different date or tag"
+    },
+    {
+      "q_id": "Q020",
+      "category": "cross_session_recall",
+      "source_session": "B114",
+      "question": "What was counsel's ruling in B114 on the Pedestal Stake offering path, and what alternative was kept architecture-compatible?",
+      "ground_truth": "Counsel confirmed Reg CF (Regulation Crowdfunding) as the primary path — 'yes on my read.' Parallel Reg D 506(c) architecture compatibility was preserved for later activation; not pursued at launch.",
+      "hot_required_elements": ["Reg CF", "506(c)", "counsel"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q021",
+      "category": "cross_session_recall",
+      "source_session": "B110",
+      "question": "Which Knight session shipped the canonical reconciliation that moved the innovation count to 2,267?",
+      "ground_truth": "K421 (commit `731851a`: 'canonical reconciliation + innovations 2266-2267 + Tatiana registry'). Paired with K420. Innovation count 2,263 → 2,265 → 2,267 during B110 sweep.",
+      "hot_required_elements": ["K421", "2,267", "Tatiana"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q022",
+      "category": "cross_session_recall",
+      "source_session": "B116",
+      "question": "What feedback memory did Bishop save in B116 after four execution-biased responses on the Cathedral build?",
+      "ground_truth": "`feedback_keep_analysis_visible.md`. Triggered when Founder noted 'You haven't been giving me your analysis, am I overwhelming you?' Root cause: execution-mode silence. Remediation: every substantial response carries analysis alongside status.",
+      "hot_required_elements": ["keep_analysis_visible", "execution-mode silence", "analysis alongside"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q023",
+      "category": "cross_session_recall",
+      "source_session": "B116",
+      "question": "What commit hash landed K436's Cathedral MCP tools, and what tag was applied?",
+      "ground_truth": "Commit `6c47d9b`. Tag `v-cathedral-tools-K436`. 23/23 tests green. Four tools registered: log_tidbit, fates_route, scribe_log, consult_scribes. consult latency p95 = 1.6ms against 200ms target.",
+      "hot_required_elements": ["6c47d9b", "v-cathedral-tools-K436", "23/23"],
+      "hallucination_risk": "high — may invent hash"
+    },
+    {
+      "q_id": "Q024",
+      "category": "cross_session_recall",
+      "source_session": "B113",
+      "question": "In which B-session did THE BRIDLE 9-rule prompt preamble get Founder-approved, and where is it canonical?",
+      "ground_truth": "B113. File: `BISHOP_DROPZONE/00_FOUNDER_REVIEW/THE_BRIDLE.md`. Designed to prevent AI skip/summarize/invent pathologies across any model. Paste at top of prompts.",
+      "hot_required_elements": ["B113", "THE_BRIDLE.md", "9-rule"],
+      "hallucination_risk": "low"
+    },
+
+    {
+      "q_id": "Q004",
+      "category": "decision_provenance",
+      "source_session": "B116",
+      "question": "Why was the word 'Guaranteed' rejected from the Cost-Slasher callout on the librarian landing page?",
+      "ground_truth": "Three reasons: (1) FTC deceptive-practices exposure — a guarantee without a refund rail is overclaim; (2) weaker than math — the Eyewitness table already shows Haiku ≈ Opus accuracy at 1/19th cost, the adjective undercuts the evidence; (3) Founder-voice mismatch — Founder's rhetorical keystones understate, 'Guaranteed' reads marketing-suit.",
+      "hot_required_elements": ["FTC", "refund", "math"],
+      "hallucination_risk": "low"
+    },
+    {
+      "q_id": "Q005",
+      "category": "decision_provenance",
+      "source_session": "B116",
+      "question": "Why was HelloSign chosen over DocuSign in K432?",
+      "ground_truth": "Lower per-envelope cost for startups; simpler API; free sandbox without credit card required. Per K432 Knight report.",
+      "hot_required_elements": ["HelloSign", "startup cost", "simpler API", "free sandbox"],
+      "hallucination_risk": "medium — may invent reasons"
+    },
+    {
+      "q_id": "Q006",
+      "category": "decision_provenance",
+      "source_session": "B116",
+      "question": "Why does K438 (Member-facing Cathedral) wait for K437 results to dispatch?",
+      "ground_truth": "The 'Prove it first. Product it second.' canonical methodology, Founder-ratified B116. Building a member feature before empirical validation would invert proof and commitment. If SCEV-1 shows weak lift, K438 architecture gets adjusted before ship. Same discipline as Chapter 3 landing-page teaser holding until empirical numbers arrive.",
+      "hot_required_elements": ["Prove it first", "SCEV-1", "canonical methodology", "proof before commitment"],
+      "hallucination_risk": "low"
+    },
+    {
+      "q_id": "Q025",
+      "category": "decision_provenance",
+      "source_session": "B097 + B116",
+      "question": "Why is the Herjavec RPA split set at exactly 50% of the Founder's 20% slice — not 70/30 or 80/20 or off-the-top?",
+      "ground_truth": "Four reasons (B097): (1) nothing to do with anyone else — the Founder's 20% slice is his own to dispose of commercially, affects zero cooperative members; (2) belief is signaled by symmetry — half is the only number that means what it says, removes the 'why not 50/50' negotiation; (3) Founder's explicit goal is bounded wealth + escape velocity, not maximum extraction; (4) small piece of a huge pie is better than all of a small pie — escape velocity once achieved funds everything next. Out-of-founder-half, not off-the-top, preserves the 60/20/10/10 member-facing math with no asterisk.",
+      "hot_required_elements": ["50%", "out-of-founder-half", "symmetry", "bounded wealth"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q026",
+      "category": "decision_provenance",
+      "source_session": "B116 (observed) → B117 (K441 dispatch)",
+      "question": "Why is the root `.gitignore *.json` rule considered a reproducibility bomb for librarian-mcp?",
+      "ground_truth": "The rule matches `librarian-mcp/package.json` and `librarian-mcp/tsconfig.json`, making them gitignored and untracked. K436 Knight observed this during commit. A fresh clone of LianaBanyanPlatform cannot build librarian-mcp at all — dependencies and TS config are irrecoverable without local-disk access. The fix (K441 Half B) is explicit `!` negations in .gitignore for the specific files that MUST be tracked, then `git add -f` to stage them.",
+      "hot_required_elements": ["package.json", "tsconfig.json", "fresh clone", "negation", "K441"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q027",
+      "category": "decision_provenance",
+      "source_session": "B097",
+      "question": "Why does Upekrithen LLC act as seller-of-record for Pedestal Stakes rather than Liana Banyan Corporation directly?",
+      "ground_truth": "Five reasons: (1) arms-length transaction layer — separate legal person avoids self-dealing appearance in cooperative governance; (2) legitimate proceeds flow via inter-company loan / additional paid-in capital / expense reimbursement; (3) bankruptcy/liability isolation — challenges run against asset-holding LLC, not operating cooperative; (4) QSBS preservation (LLC-formed-before-Corp); (5) matches Claim D2 of IP Load Balancing Scaffold — founder-adjacent economic activity flows through a neutral holding entity.",
+      "hot_required_elements": ["arms-length", "QSBS", "Upekrithen", "self-dealing"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q028",
+      "category": "decision_provenance",
+      "source_session": "B116",
+      "question": "Why is 'under-promise, over-deliver' positioned as a sub-principle of 'Prove it first. Product it second.'?",
+      "ground_truth": "Under-promise-over-deliver governs public-timing commitments specifically. Prove-Then-Product is the cross-layer law (marketing, product, economic). Public dates are a commitment layer where the discipline cashes out as: set the date conservatively so that delivery is the proof. Example B116: Chapter 2 Mellon teaser updated from 'coming this weekend' to 'coming next week' — same evening Chapter 2 went live, validating the discipline on its first test case.",
+      "hot_required_elements": ["sub-principle", "public timing", "Prove it first", "Chapter 2"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q029",
+      "category": "decision_provenance",
+      "source_session": "B113",
+      "question": "Why is the Glass Door protocol 'public-by-default' outreach with member-voted dispatch?",
+      "ground_truth": "Glass Door (#2262, Crown Jewel) is a transparency-first outreach instrument: letters are drafted in public, reviewed by members, voted on, and dispatched only after community sign-off. Rationale: a cooperative platform cannot run private PR campaigns in its members' names; accountability runs both ways. K412 deployed the system; 95 letters loaded into the queue.",
+      "hot_required_elements": ["public-by-default", "member-voted", "K412", "95"],
+      "hallucination_risk": "medium"
+    },
+
+    {
+      "q_id": "Q007",
+      "category": "innovation_id",
+      "source_session": "B097 (referenced through B116)",
+      "question": "What innovation is #2260?",
+      "ground_truth": "Cooperative Defensive Patent Pledge — META-CRITICAL framework under which every Prov 13 innovation is filed. Pledge-Only tier for .org / nonprofit / cooperative / academic members.",
+      "hot_required_elements": ["Cooperative", "Defensive", "Patent Pledge"],
+      "hallucination_risk": "medium — may confuse with #2264 Commons Licensing Dividend"
+    },
+    {
+      "q_id": "Q008",
+      "category": "innovation_id",
+      "source_session": "B109 (origin), B116 (referenced)",
+      "question": "What innovation is #2267?",
+      "ground_truth": "Member-Generated Guide Corpus. Aggregated, editorialized, searchable body of documented member journeys fed by #2266 Opt-In Member Documentation with Benefits. Indexed by Level transition, Cold Start Pathway, industry, geography. Editorialized by Librarian layer. Crown Jewel.",
+      "hot_required_elements": ["Member-Generated Guide Corpus", "#2266"],
+      "hallucination_risk": "high — may invent a different concept for the ID"
+    },
+    {
+      "q_id": "Q009",
+      "category": "innovation_id",
+      "source_session": "B116 (candidate)",
+      "question": "What Prov 14 candidate innovation was added B116 as #2268?",
+      "ground_truth": "Member-Owned Scribes Cathedral. Founder insight during B116 evening exchange — member-facing deployment of SP-23 Scribes Cathedral architecture. Each LB member owns a domain-indexed working memory (their personal Cathedral) that persists across sessions/computers/projects. Crown Jewel candidate pending Founder ratification.",
+      "hot_required_elements": ["Member-Owned", "Scribes Cathedral", "#2268"],
+      "hallucination_risk": "high — this is B116-new material, may not be in base preload"
+    },
+    {
+      "q_id": "Q030",
+      "category": "innovation_id",
+      "source_session": "B116",
+      "question": "What is innovation #2269?",
+      "ground_truth": "Three Fates Routing Pipeline for AI Session Listeners. Three-stage pipeline connecting a single-speaker event stream to many sleeping domain-specialist recorders: Clotho (spinner/extractor), Lachesis (measurer/scorer), Atropos (cutter/dispatcher). Efficient at cathedral scale (≥1000 Scribes) because Fates do gatekeeping once per exchange rather than per-Scribe scan.",
+      "hot_required_elements": ["Three Fates", "Clotho", "Lachesis", "Atropos", "#2269"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q031",
+      "category": "innovation_id",
+      "source_session": "B115 (K429 dispatched), B116 (shipped), B117 (committed)",
+      "question": "What is innovation #2273?",
+      "ground_truth": "Fingerprint-Based Incremental Index Reconciliation. SHA-256 tree-hash over mtime fingerprint computed at end of each build; session-start hook emits three-state freshness report (FRESH / DRIFT / UNKNOWN) with per-file changed/new/deleted lists on DRIFT. Distinguishes UNKNOWN (no prior fingerprint) from DRIFT (changes detected). Implementation: `librarian-mcp/src/indexer/fingerprint.ts`, committed B117 `e797320`. 27.5s full / ~3s incremental / <500ms fingerprint-only.",
+      "hot_required_elements": ["Fingerprint", "SHA-256", "FRESH / DRIFT / UNKNOWN", "#2273", "e797320"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q032",
+      "category": "innovation_id",
+      "source_session": "B115 (ratified), B116 (deployed)",
+      "question": "What is innovation #2272 and what is its key empirical claim?",
+      "ground_truth": "Cost-Slasher Claim Ladder — marketing framework for AI-retrieval cost-reduction products with two empirically-defensible bands: 50%+ conservative ('cuts your AI costs by over half') and up to 95% aggressive ('Haiku ties Opus accuracy at 1/19th the cost'). Self-verifying at point-of-reader-contact via a 'cost-per-correct-answer' ($/correct) column on the evidence table. Haiku $0.0067 vs Opus $0.1289 at identical 98.7% HOT accuracy = 19× cost delta. Avoids FTC-deception exposure: no 'guaranteed' language; the table IS the guarantee.",
+      "hot_required_elements": ["Cost-Slasher", "50%", "95%", "19×", "$/correct"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q033",
+      "category": "innovation_id",
+      "source_session": "B107 (origin), B116 (formal)",
+      "question": "What is innovation #2264?",
+      "ground_truth": "Commons Licensing Dividend. Cooperative patronage distribution mechanism: .org members (nonprofits, cooperatives, academics under Pledge-Only tier of #2260) receive equal pro-rata share of 10% of all Spec+Conformance licensing fees from commercial companies seeking R9-compatibility certification. Revenue flows TO members passively. One level. Not MLM. Crown Jewel.",
+      "hot_required_elements": ["Commons Licensing Dividend", "10%", "pro-rata", "one level"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q034",
+      "category": "innovation_id",
+      "source_session": "B116",
+      "question": "What is innovation #2271 (SP-21)?",
+      "ground_truth": "SP-21 Tidbit Scribe: Verify-Before-Assert Behavioral Ledger. Append-only JSONL ledger (`stitchpunks/data/tidbits.jsonl`) that records every BRIDLE-Rule-2-style verify-before-assert action performed by an AI agent mid-session (slot-number checks, file-existence checks, commit-state checks, symbol-existence checks). Each entry: timestamp, agent, session, category, observation, artifact served, bridle-rule invoked. Enables observability of the verification discipline itself.",
+      "hot_required_elements": ["Tidbit Scribe", "verify-before-assert", "append-only", "#2271"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q035",
+      "category": "innovation_id",
+      "source_session": "B116 (K435 dispatch)",
+      "question": "What is innovation #2274?",
+      "ground_truth": "Parallel Preload Multilingual Retrieval Architecture. Each language is a sibling preload file (e.g., `r9v2_base.md`, `r9v2_base_es.md`), not a translation-at-query-time pipeline. `librarian_context(intent=..., lang='es')` resolves sibling files by language code with explicit English-fallback reporting (`lang_fallback` response field names the paths that fell back). Canonical numbers preserved verbatim across languages (Arabic digits). Novel over real-time translation: invariance of canonical facts across language versions.",
+      "hot_required_elements": ["Parallel Preload", "sibling", "lang_fallback", "#2274"],
+      "hallucination_risk": "medium"
+    },
+
+    {
+      "q_id": "Q010",
+      "category": "architecture_continuity",
+      "source_session": "B116",
+      "question": "How does Chapter 2 Mellon's `librarian_context(lang='es')` handle the case where an intent-specific file has no Spanish translation?",
+      "ground_truth": "Falls back to English AND includes a `lang_fallback` field in the response listing which file paths fell back. Does NOT silently serve English. Per K435 Phase A acceptance criteria.",
+      "hot_required_elements": ["lang_fallback", "English fallback", "not silent"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q011",
+      "category": "architecture_continuity",
+      "source_session": "B115 (K431 design), B116 (K432 verified)",
+      "question": "How is two-track separation enforced in the Pedestal Stake Supabase schema?",
+      "ground_truth": "Pedestal tables live in `upekrithen` schema, not `public`. No foreign keys to `public.members` — separation enforced at schema level. `upekrithen.pedestal_issuance_log` has NO UPDATE/DELETE via RLS. `user_id` fields reference `auth.users`, not `members`. 18/18 tests verify.",
+      "hot_required_elements": ["upekrithen schema", "no FK to public.members", "auth.users", "issuance_log no UPDATE/DELETE"],
+      "hallucination_risk": "low"
+    },
+    {
+      "q_id": "Q012",
+      "category": "architecture_continuity",
+      "source_session": "B116",
+      "question": "What is the Fates pipeline order and what does each Fate do?",
+      "ground_truth": "Clotho (Spinner) — extracts candidate themes from session chat. Lachesis (Measurer) — scores themes against registered Scribes' primary + adjacent fields, picks which Scribes wake. Atropos (Cutter) — writes specific dispatch directive to each awakened Scribe and closes routing record. Hands off to Scribes who append to their own tablets.",
+      "hot_required_elements": ["Clotho", "Lachesis", "Atropos", "spin", "score", "cut"],
+      "hallucination_risk": "medium — may confuse Fate roles"
+    },
+    {
+      "q_id": "Q036",
+      "category": "architecture_continuity",
+      "source_session": "B116",
+      "question": "What four MCP tools did K436 register in `librarian-mcp/src/server.ts`?",
+      "ground_truth": "`log_tidbit` (verify-action ledger append), `fates_route` (Three Fates pipeline entry point), `scribe_log` (Scribe-specific tablet append), `consult_scribes` (member-query retrieval over primary + adjacents with since_ts filter). All registered at lines 2323–2344. Implementation modules: `src/scribes/{cathedral,consult,fates,registry}.ts`. 23/23 tests green.",
+      "hot_required_elements": ["log_tidbit", "fates_route", "scribe_log", "consult_scribes"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q037",
+      "category": "architecture_continuity",
+      "source_session": "cross-session (B096 → B116)",
+      "question": "What do the session-ID prefixes B / K / R / P stand for, and how are they organized into a chess-piece ensemble?",
+      "ground_truth": "B = Bishop (Claude Opus), K = Knight (Cursor), R = Rook (Gemini), P = Pawn (Perplexity). Founder = AI Tuner. Bishop is FOREMAN — coordinates all agents, owns roadmap, dispatches tasks. Pawn is female (she/her). Knight is Cursor (NOT Rook — Founder sometimes says Rook by accident).",
+      "hot_required_elements": ["Bishop", "Knight", "Rook", "Pawn", "Foreman"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q038",
+      "category": "architecture_continuity",
+      "source_session": "B117 (K429 committed)",
+      "question": "What primitive is the K429 fingerprint computed over, and why not file content hash?",
+      "ground_truth": "Tree-level SHA-256 over sorted (file path, file modification time) tuples across 12 declared scan directories. Not file content hash because (a) cheaper, (b) adequate for detecting drift over declared scan paths, (c) content hashing is reserved as the escape hatch for corruption cases via `npm run rebuild:full`. 7,861 files tracked.",
+      "hot_required_elements": ["SHA-256", "path-mtime", "sorted", "12 scan", "7,861"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q039",
+      "category": "architecture_continuity",
+      "source_session": "B117 (K429 committed)",
+      "question": "What three status values can K429's FreshnessReport return, and what does each mean?",
+      "ground_truth": "FRESH — current tree fingerprint equals persisted fingerprint; agent may trust index without rebuild. DRIFT — stored fingerprint exists but current tree diverges; per-file changedFiles / newFiles / deletedFiles lists populated. UNKNOWN — no stored fingerprint (first session after fresh checkout or fingerprint corruption); agent MUST NOT assume FRESH; default action is full rebuild.",
+      "hot_required_elements": ["FRESH", "DRIFT", "UNKNOWN", "must not assume"],
+      "hallucination_risk": "low"
+    },
+    {
+      "q_id": "Q040",
+      "category": "architecture_continuity",
+      "source_session": "B116",
+      "question": "How do Scribes declare their expertise structure in the Cathedral registry?",
+      "ground_truth": "Each Scribe declares one primary field (Level 1, PhD-deep canonical keeper) and up to 12 adjacent fields of decreasing expertise (levels 2–12, with 2–3 PhD-adjacent, 4–6 junior-adjacent, 7–12 ancillary). Any topic in the domain-space is covered by ≥3 Scribes through overlapping adjacents — Reed-Solomon-style error-correcting code for knowledge.",
+      "hot_required_elements": ["primary", "12 adjacent", "levels", "≥3", "Reed-Solomon"],
+      "hallucination_risk": "medium"
+    },
+
+    {
+      "q_id": "Q013",
+      "category": "founder_voice",
+      "source_session": "B116",
+      "question": "What is the canonical phrasing the Founder approved for describing the Scribes Cathedral access pattern?",
+      "ground_truth": "\"Domain-indexed working memory with triply-redundant witness.\" Founder B116: \"I LOVE that phraseology.\"",
+      "hot_required_elements": ["domain-indexed", "working memory", "triply-redundant witness"],
+      "hallucination_risk": "medium — may produce variations that lose the 'triply-redundant' precision"
+    },
+    {
+      "q_id": "Q014",
+      "category": "founder_voice",
+      "source_session": "B116",
+      "question": "What is the Founder-phrased canonical methodology that proof precedes commitment at every layer?",
+      "ground_truth": "\"Prove it first. Product it second.\" — extends to economic layer: \"we don't predict demand, we measure it, because we MAKE it.\"",
+      "hot_required_elements": ["Prove it first", "Product it second", "we MAKE it"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q015",
+      "category": "founder_voice",
+      "source_session": "B097 and across",
+      "question": "How does the Founder describe himself at the top of his biographical framing?",
+      "ground_truth": "\"Veteran of no particular note.\" Canonical Founder self-description — understated, Rhetorical Keystone. U.S. Army National Guard, enlisted at 16, Infantry 11B to OCS, Aviation 15A, IFR-rated.",
+      "hot_required_elements": ["veteran of no particular note"],
+      "hallucination_risk": "high — may produce a different self-description"
+    },
+    {
+      "q_id": "Q041",
+      "category": "founder_voice",
+      "source_session": "cross-session",
+      "question": "What is the Liana Banyan brand tagline and what three meanings does it carry?",
+      "ground_truth": "\"You build the Features — We're building the Board.\" Triple meaning: (1) board = chessboard (the game-theoretic platform beneath the features); (2) board = stage/platform itself (the cooperative substrate); (3) board = board-game (the durable artifact vs the disposable app). Triple meaning intentional, Founder-approved.",
+      "hot_required_elements": ["You build the Features", "We're building the Board", "triple meaning"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q042",
+      "category": "founder_voice",
+      "source_session": "B113 + ongoing",
+      "question": "What is the canonical human-scene anchor for the Librarian metaphor, and whom does it center?",
+      "ground_truth": "Pine Books, Pike Place Market, Seattle, ~April 17, 2026. Tiffany Brost, 6th caretaker. Two words of a 7-word title → the book + 3 adjacent authors. Demonstrates that the Librarian is expertise + connection, not compression. Use named, not generic.",
+      "hot_required_elements": ["Pine Books", "Tiffany Brost", "Pike Place", "2 words", "3 adjacent"],
+      "hallucination_risk": "high"
+    },
+    {
+      "q_id": "Q043",
+      "category": "founder_voice",
+      "source_session": "B110 (ratified)",
+      "question": "What is the Anachronism Principle and what is the Founder-ratified canonical sentence for it?",
+      "ground_truth": "A design method: ancient disciplined practice teaches modern structured thinking. Eight biographical instances (shape-note singing, aviation, saxophone, typing, 1997 internet call, seminary laptop, Cloyd layaway, Pre-BASIC/Cory). Canonical sentence: \"The way I learned things affected WHETHER I learned them.\" Pudding candidate.",
+      "hot_required_elements": ["Anachronism", "ancient", "WHETHER", "way I learned"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q044",
+      "category": "founder_voice",
+      "source_session": "B110 (ratified)",
+      "question": "What is the Cloyd Pattern and what four LB mechanisms does it unify?",
+      "ground_truth": "Cloyd Pattern: pre-extended trust repaid through demonstrated labor. Surfaced SP-16 04:08 on 2026-04-20. Unifies: (1) Mr. Cloyd layaway story, (2) Courtesy SSL (trust-before-verification), (3) SSSS Voucher Subscription, (4) Destination Housing pattern. Founder-ratified B110. Compensation intent to Cloyd family noted.",
+      "hot_required_elements": ["Cloyd", "pre-extended trust", "Courtesy SSL", "SSSS", "Destination Housing"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q045",
+      "category": "founder_voice",
+      "source_session": "B036 + B097 (Herjavec letter)",
+      "question": "What is the Founder's self-stated ceiling on personal wealth ambition in the Herjavec letter, and why does he explain it that way?",
+      "ground_truth": "\"I'm not trying to become a billionaire. I'm confident enough in what I've built that I'm willing to sell 20% of the patent revenue stream to take care of my family and launch the business.\" Rationale: bounded wealth + escape velocity is the goal, not maximum extraction. Half of the 20% slice covers operational needs (Washington house, cars, health insurance, parent care, Canister launch, two years runway) with margin; the other half remains for family legacy during the 20-year window; restores to full 20% afterward.",
+      "hot_required_elements": ["not trying to become a billionaire", "20%", "family", "bounded wealth"],
+      "hallucination_risk": "medium"
+    },
+
+    {
+      "q_id": "Q016",
+      "category": "canonical_number",
+      "source_session": "B112 locked",
+      "question": "What is the mean accuracy lift in the R10 cross-vendor Eyewitness finding?",
+      "ground_truth": "86.1 percentage points (mean HOT 94.8% minus mean COLD 8.7%). 8 models × 4 vendors × 1,200 graded calls.",
+      "hot_required_elements": ["86.1", "94.8", "8.7"],
+      "hallucination_risk": "low — numbers are well-anchored in r9v2_base preload"
+    },
+    {
+      "q_id": "Q017",
+      "category": "canonical_number",
+      "source_session": "canonical (all sessions)",
+      "question": "What percentage of revenue does the creator keep on the Liana Banyan platform, and is this constitutionally locked?",
+      "ground_truth": "83.3%. Yes, constitutionally locked per the Cost+20% margin model.",
+      "hot_required_elements": ["83.3%", "constitutional", "Cost+20%"],
+      "hallucination_risk": "low"
+    },
+    {
+      "q_id": "Q018",
+      "category": "canonical_number",
+      "source_session": "B110 (sentinel as of B116)",
+      "question": "As of B116, what is the total innovation count on the Liana Banyan canonical list, and how many Crown Jewels?",
+      "ground_truth": "2,267 innovations total. 225 Crown Jewels. Source: canonical_values.yaml, updated B110 K421. Innovation_log confirmed B110.",
+      "hot_required_elements": ["2,267", "225 Crown Jewels"],
+      "hallucination_risk": "medium — may round or invent"
+    },
+    {
+      "q_id": "Q046",
+      "category": "canonical_number",
+      "source_session": "B113 (Glass Door deployment)",
+      "question": "How many Glass Door letters are loaded into the outreach dispatch queue as of B116?",
+      "ground_truth": "95 letters. Per K412 deployment (B113 Glass Door protocol). Public-by-default outreach with member-voted dispatch.",
+      "hot_required_elements": ["95", "Glass Door", "K412"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q047",
+      "category": "canonical_number",
+      "source_session": "B097 (ratified)",
+      "question": "What are the four percentages in the IP Load Balancing v2 split, and who holds each slice?",
+      "ground_truth": "60% Patent Buckets (members, collective, bucket-scoped SAA via Credits-based voting). 20% Founder/Creator (tier-selectable under Three-Tier IP Control Framework). 10% Global Sponsor Pool (members, platform-wide diversified SAA). 10% Individual Patent Pedestals (members, single-patent targeted SAA; sold via Upekrithen LLC as seller of record). Total 100%. Platform retains $0 silent.",
+      "hot_required_elements": ["60%", "20%", "10%", "10%", "Upekrithen", "silent"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q048",
+      "category": "canonical_number",
+      "source_session": "B110 sentinel",
+      "question": "As of B116, how many patent provisional applications has Liana Banyan Corporation filed, and what is the conversion deadline for Prov 1?",
+      "ground_truth": "13 patent provisionals filed. Prov 13: App 64/036,646, filed April 12, 2026, innovations #2225–#2262 (37 innovations, 27 Crown Jewels, $155 fee). Conversion deadline for Prov 1: November 26, 2026.",
+      "hot_required_elements": ["13", "64/036,646", "Nov 26, 2026"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q049",
+      "category": "canonical_number",
+      "source_session": "B036 + B097",
+      "question": "What are the dollar amount, time horizon, and structural split of the Herjavec Revenue Participation Agreement?",
+      "ground_truth": "$5M up-front from Herjavec in exchange for 10% of total patent licensing revenue for 20 years (= half of Founder's 20% slice, out-of-founder-half structure). At year 20, the slice retires automatically and the full 20% reverts to the Founder. Member-facing 60/20/10/10 split is never disturbed.",
+      "hot_required_elements": ["$5M", "20 years", "10%", "half", "out-of-founder-half"],
+      "hallucination_risk": "medium"
+    },
+    {
+      "q_id": "Q050",
+      "category": "canonical_number",
+      "source_session": "canonical (Structural Bylaws)",
+      "question": "What is the Liana Banyan membership cost, and can it be changed by normal vote?",
+      "ground_truth": "$5 per year. NO — cannot be changed by normal vote. Structural Bylaw. Requires Founder approval to change. Same constitutional-lock status as Cost+20% margin and 83.3% creator-keeps percentages.",
+      "hot_required_elements": ["$5", "per year", "Structural Bylaw", "Founder approval"],
+      "hallucination_risk": "low"
+    }
+  ],
+
+  "seal_notes": {
+    "expanded_from": "SCEV1_QUESTION_BANK_SEED_B116.json",
+    "expanded_by": "Bishop B117 (Claude Opus 4.7, 1M context)",
+    "expanded_on": "2026-04-23",
+    "added_question_ids": ["Q019", "Q020", "Q021", "Q022", "Q023", "Q024", "Q025", "Q026", "Q027", "Q028", "Q029", "Q030", "Q031", "Q032", "Q033", "Q034", "Q035", "Q036", "Q037", "Q038", "Q039", "Q040", "Q041", "Q042", "Q043", "Q044", "Q045", "Q046", "Q047", "Q048", "Q049", "Q050"],
+    "ground_truth_provenance": "All 32 added questions have ground-truth answers traced to specific session artifacts: MILESTONE closeouts (B113–B116), AA_FORMAL files (#2239, #2273), memory files, R10 locked numbers, canonical_values.yaml, and direct code references (fingerprint.ts, server.ts line numbers). No synthetic answers.",
+    "hallucination_risk_distribution": {
+      "low": 5,
+      "medium": 35,
+      "high": 10
+    },
+    "k437_rerun_command": "python run_scev1_k437.py --bank SCEV1_QUESTION_BANK_SEALED.json --out results_scev1_b116_k437_sealed50 --budget 20.00",
+    "v_scev1_b116_tag_release_gate": "After K437 runs on SEALED-50 and passes the ≥5pp threshold, apply tag `v-scev1-b116` to the commit — reserved for the canonical sealed-50 run per K437 Knight report."
+  },
+
+  "k437_dispatch_note": "Bank is now sealed. K437 is architecturally verified (7617a5f PASS on SEED-18 at +19.4pp lenient / +13.9pp strict). Run K437 on SEALED-50 to produce the canonical evidence artifact; K438 gate decision (member-facing Cathedral ship) depends on SEALED-50 PASS."
+}

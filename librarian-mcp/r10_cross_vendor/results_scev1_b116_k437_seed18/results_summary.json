@@ -324,6 +324,59 @@
       "Landing": 2
     }
   },
+  "strict_regrade": {
+    "cells": {
+      "claude-haiku-4-5-20251001|cold": {
+        "lenient_hot": 0,
+        "strict_hot": 0,
+        "n": 18,
+        "delta": 0
+      },
+      "claude-haiku-4-5-20251001|hot_base": {
+        "lenient_hot": 2,
+        "strict_hot": 2,
+        "n": 18,
+        "delta": 0
+      },
+      "claude-haiku-4-5-20251001|hot_cathedral": {
+        "lenient_hot": 5,
+        "strict_hot": 4,
+        "n": 18,
+        "delta": -1
+      },
+      "claude-opus-4-7|cold": {
+        "lenient_hot": 0,
+        "strict_hot": 0,
+        "n": 18,
+        "delta": 0
+      },
+      "claude-opus-4-7|hot_base": {
+        "lenient_hot": 2,
+        "strict_hot": 2,
+        "n": 18,
+        "delta": 0
+      },
+      "claude-opus-4-7|hot_cathedral": {
+        "lenient_hot": 6,
+        "strict_hot": 5,
+        "n": 18,
+        "delta": -1
+      }
+    },
+    "per_model_lift": {
+      "claude-haiku-4-5-20251001": {
+        "base_pct": 11.11,
+        "cath_pct": 22.22,
+        "lift_pp": 11.11
+      },
+      "claude-opus-4-7": {
+        "base_pct": 11.11,
+        "cath_pct": 27.78,
+        "lift_pp": 16.67
+      }
+    },
+    "mean_strict_lift_pp": 13.89
+  },
   "pass_fail": "PASS",
   "cost_summary": {
     "total_usd": 4.7593
