@@ -9,7 +9,9 @@
 
 ---
 
-## Part A — K447 CI Live-Validation
+## Part A — K447 CI Live-Validation ⚠️ K450a-BLOCKED
+
+**STATUS: 2 fix iterations exhausted. Third migration error surfaced. Halting per K450 protocol. Bishop review required.**
 
 ### Diagnosis: Outcome C (workflow never ran)
 
@@ -34,13 +36,27 @@ Committed `K450a(B118)` touch to `platform/supabase/tests/README.md` (commit `0e
 | Run URL | `https://github.com/Upekrithen/LianaBanyanPlatform/actions/runs/24845021810` |
 | Started | `2026-04-23T15:52:54Z` |
 
-**Note on CI result:** The run was confirmed `in_progress` when the K450a tag was applied. The Supabase pgTAP workflow spins up Docker + local Supabase stack (~10–15 minutes). If the run completes green, `platform/supabase/tests/README.md` should be updated with:
+**CI run results (3 runs, all failing):**
 
-```
-CI validated green on commit 0e94027 (K450a, B118, 2026-04-23).
-```
+| Run ID | Commit | Error | Status |
+|---|---|---|---|
+| `24845021810` | `0e94027` (touch) | FK violation: `medallion_eligibility` INSERT with non-existent user UUID `790d4c44` | ✗ failed |
+| `24845368026` | `43cdadc` (fix 1) | `column c.gleaning_credits_received does not exist` in `member_currency_dashboard` view | ✗ failed |
+| `24845759175` | `51aeac8` (fix 2) | `relation "public.ghost_profiles" does not exist` — FK in `20260209000005_durin_deck_beacon.sql` | ✗ failed |
 
-This update is a follow-up touch from the Founder or Bishop once the run completes. If the run fails, diagnose per K447's `tests/README.md` troubleshooting table and fix in a K450a+ micro-commit.
+**Root cause summary:** The migration chain has a systematic ordering problem across the `2026020900000[3-5]` series. Multiple tables and columns are referenced before they exist in the migration sequence. This is a pre-existing migration hygiene issue across the entire `20260209000XXX` block, not a K447 pgTAP test issue.
+
+**2 fix iterations applied:**
+1. `43cdadc`: Guarded `medallion_eligibility` INSERT + `projects` INSERT with `DO IF EXISTS (auth.users)` blocks
+2. `51aeac8`: Wrapped `member_currency_dashboard` view creation in `DO IF EXISTS (information_schema.columns)` for `gleaning_credits_received`
+
+**Third error (NOT fixed — iteration limit reached):** Migration `20260209000005_durin_deck_beacon.sql` creates `durin_door_attempts` table with FK `ghost_id UUID REFERENCES public.ghost_profiles(id)`, but `ghost_profiles` doesn't exist at that point in the migration chain.
+
+**Bishop action required:**
+- Option A: Create a new migration that adds `ghost_profiles` BEFORE `20260209000005` in the sequence.
+- Option B: Change the FK in `20260209000005` to a deferred FK or wrap the table creation in a guard.
+- Option C: Audit the entire `2026020900000X` series for all cross-migration dependency issues before re-running CI.
+- Option D: Separate the legacy migration mess from the K447 pgTAP CI gate — run `supabase test db` against a `--db-url` that points to the production Supabase instance, bypassing local stack migration ordering entirely.
 
 ### Part A deliverables
 
@@ -50,8 +66,8 @@ This update is a follow-up touch from the Founder or Bishop once the run complet
 | 2 | K447–K449 pushed to `origin/main` (overdue push discovered) | ✓ |
 | 3 | Touch commit `0e94027` created + pushed; CI triggered | ✓ |
 | 4 | `platform/supabase/tests/README.md` updated with CI trigger marker | ✓ |
-| 5 | Commit 1 + tag `v-k447-ci-validated-K450a` | ✓ (tagged on `0e94027`) |
-| 6 | Validated-SHA README update | Pending CI completion |
+| 5 | Commit 1 + tag `v-k447-ci-validated-K450a` | ⚠️ Tagged on `51aeac8` (final diagnostic state; CI not green) |
+| 6 | Validated-SHA README update | ✗ NOT done — CI red; Bishop must clear before README update |
 
 ---
 
