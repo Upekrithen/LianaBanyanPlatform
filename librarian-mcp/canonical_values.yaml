@@ -1,18 +1,18 @@
 ---
 # Liana Banyan Canonical Values Registry
-# Updated: B097 April 2026
+# Updated: B118 April 23 2026 (propagating B117 ratifications of #2275/#2276/#2277)
 # Single source of truth. Any document containing these keys should match these values.
 # When Bishop or Knight updates a canonical value, update this file FIRST, then run the linter.
 
 stats:
-  innovation_count: 2250
-  crown_jewels: 216
-  production_systems: 35
-  patent_provisionals_filed: 12
-  formal_claims_approximate: 2405
-  puddings: 184
+  innovation_count: 2270
+  crown_jewels: 228
+  production_systems: 36
+  patent_provisionals_filed: 13
+  formal_claims_approximate: 2506
+  puddings: 189
   papers: 41
-  letters_in_dispatch_queue: 92
+  letters_in_dispatch_queue: 95
   vessel_tiers: 7
   cold_start_pathways: 6
 
@@ -44,12 +44,23 @@ entity:
   holding_company_owner_percentage: 100
 
 patents:
-  most_recent_prov_number: 12
-  most_recent_prov_application: "64/031,531"
-  most_recent_prov_filed: "2026-04-07"
-  next_prov_number: 13
-  next_prov_status: "thresh"
+  most_recent_prov_number: 13
+  most_recent_prov_application: "64/036,646"
+  most_recent_prov_filed: "2026-04-12"
+  next_prov_number: 14
+  next_prov_status: "open"
   conversion_deadline_first_prov: "2026-11-26"
+
+touchstone_r10:
+  hot_accuracy_percent: 94.8
+  cold_hallucination_percent: 8.7
+  mean_lift_pp: 86.1
+  model_count: 8
+  vendor_count: 4
+  total_calls: 1200
+  kappa_hot: 0.883
+  kappa_cold: 0.850
+  locked_session: "B112"
 
 hosting:
   firebase_targets: 9
