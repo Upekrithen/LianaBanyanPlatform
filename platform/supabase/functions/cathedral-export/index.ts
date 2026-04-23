@@ -1,3 +1,5 @@
+// DEPLOY-GATE: requires .github/workflows/supabase-pgtap.yml green on current SHA.
+
 /**
  * cathedral-export edge function (K438b Phase E)
  * ==============================================
