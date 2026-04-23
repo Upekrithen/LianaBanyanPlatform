@@ -80,6 +80,14 @@ const RouteDetailPage = lazy(() => import("@/pages/v2/vehicle/RouteDetailPage"))
 const LemonLotV2 = lazy(() => import("@/pages/v2/vehicle/LemonLotV2"));
 const VehicleListingDetail = lazy(() => import("@/pages/v2/vehicle/VehicleListingDetail"));
 
+// K438a — Member-Facing Scribes Cathedral (#2268, #2269, #2270)
+const CathedralLanding = lazy(() => import("@/pages/cathedral/CathedralLanding"));
+const CathedralNewScribe = lazy(() => import("@/pages/cathedral/CathedralNewScribe"));
+const CathedralTablet = lazy(() => import("@/pages/cathedral/CathedralTablet"));
+const CathedralShare = lazy(() => import("@/pages/cathedral/CathedralShare"));
+const CathedralExport = lazy(() => import("@/pages/cathedral/CathedralExport"));
+const CathedralSettings = lazy(() => import("@/pages/cathedral/CathedralSettings"));
+
 export const dashboardRoutes = (
   <>
     <Route path="/dashboard" element={<ProtectedRoute><LazyPage><CreatorDashboard /></LazyPage></ProtectedRoute>} />
@@ -168,5 +176,15 @@ export const dashboardRoutes = (
     <Route path="/v2/rideshare/:routeId" element={<ProtectedRoute><LazyPage><RouteDetailPage /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/lemon-lot" element={<ProtectedRoute><LazyPage><LemonLotV2 /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/lemon-lot/:listingId" element={<ProtectedRoute><LazyPage><VehicleListingDetail /></LazyPage></ProtectedRoute>} />
+
+    {/* K438a — Member Cathedral (gated by ProtectedRoute, not PaidMemberRoute,
+        so free-tier members can see the upgrade CTA from inside their own
+        Cathedral; paid-only features gated at the surface level instead). */}
+    <Route path="/my/cathedral" element={<ProtectedRoute gateContext="visit your Cathedral"><LazyPage><CathedralLanding /></LazyPage></ProtectedRoute>} />
+    <Route path="/my/cathedral/new" element={<ProtectedRoute gateContext="add a Scribe to your Cathedral"><LazyPage><CathedralNewScribe /></LazyPage></ProtectedRoute>} />
+    <Route path="/my/cathedral/export" element={<ProtectedRoute gateContext="export your Cathedral"><LazyPage><CathedralExport /></LazyPage></ProtectedRoute>} />
+    <Route path="/my/cathedral/settings" element={<ProtectedRoute gateContext="open Cathedral settings"><LazyPage><CathedralSettings /></LazyPage></ProtectedRoute>} />
+    <Route path="/my/cathedral/:scribeId/share" element={<ProtectedRoute gateContext="adjust a Scribe's share level"><LazyPage><CathedralShare /></LazyPage></ProtectedRoute>} />
+    <Route path="/my/cathedral/:scribeId" element={<ProtectedRoute gateContext="open a Scribe's tablet"><LazyPage><CathedralTablet /></LazyPage></ProtectedRoute>} />
   </>
 );

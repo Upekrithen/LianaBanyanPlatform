@@ -192,7 +192,16 @@ export async function onboardNewMember(user: User): Promise<void> {
       total_locked_value: 0,
     }, { onConflict: "user_id" }).then(() => {}).catch(() => {});
 
-    // ─── 5. MARK ONBOARDED ───
+    // ─── 5. CATHEDRAL — provision starter Scribes (K438a) ───
+    // Idempotent server-side; also covered by the auth.users INSERT trigger, but
+    // calling here ensures existing-account edge-cases are handled on first app login.
+    await supabase
+      .schema("cathedral")
+      .rpc("ensure_member_cathedral", { p_member_id: user.id, p_professional_domain: null })
+      .then(() => {})
+      .catch(() => {});
+
+    // ─── 6. MARK ONBOARDED ───
     localStorage.setItem(`${ONBOARDED_KEY}_${user.id}`, "true");
 
     // Onboarding complete — feathers converted: ${feathersConverted}
