@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from "fs";
 import { glob } from "glob";
 import { basename } from "path";
+import yaml from "js-yaml";
 import type { ContextIndex, SessionEntry } from "../types.js";
 
 function extractSessions(handoff: string): SessionEntry[] {
@@ -73,26 +74,31 @@ function loadSessionsFromIndex(workspaceRoot: string): SessionEntry[] {
 function extractCanonicalNumbers(handoff: string, rules: string, workspaceRoot?: string): Record<string, string | number> {
   const canonical: Record<string, string | number> = {};
 
-  // Primary source of truth: useCanonicalStats.ts in the platform codebase
-  let innovationCount = 2130;
-  let crownJewelCount = 168;
-  let productionSystems = 35;
-  let patentClaims = 2103;
-  let patentApps = 11;
+  // Single source of truth: librarian-mcp/canonical_values.yaml.
+  // Any drift between YAML and overview.json is caught by `npm run verify:canonical`,
+  // which is wired into `npm run rebuild`.
+  //
+  // Legacy note: this function used to read platform/src/hooks/useCanonicalStats.ts,
+  // which caused a B118→B121 drift incident where the YAML was updated but the
+  // React hook lagged by one sync, shipping stale counts into overview.json.
+  let innovationCount = 2270;
+  let crownJewelCount = 228;
+  let productionSystems = 36;
+  let patentClaims = 2506;
+  let patentApps = 13;
   if (workspaceRoot) {
     try {
-      const statsFile = readFileSync(`${workspaceRoot}/platform/src/hooks/useCanonicalStats.ts`, "utf-8");
-      const innovMatch = statsFile.match(/innovationCount:\s*(\d[\d_]+)/);
-      if (innovMatch) innovationCount = parseInt(innovMatch[1].replace(/_/g, ""));
-      const crownMatch = statsFile.match(/crownJewels:\s*(\d[\d_]+)/);
-      if (crownMatch) crownJewelCount = parseInt(crownMatch[1].replace(/_/g, ""));
-      const prodMatch = statsFile.match(/productionSystems:\s*(\d[\d_]+)/);
-      if (prodMatch) productionSystems = parseInt(prodMatch[1].replace(/_/g, ""));
-      const claimsMatch = statsFile.match(/patentClaims:\s*(\d[\d_]+)/);
-      if (claimsMatch) patentClaims = parseInt(claimsMatch[1].replace(/_/g, ""));
-      const appsMatch = statsFile.match(/patentApplications:\s*(\d[\d_]+)/);
-      if (appsMatch) patentApps = parseInt(appsMatch[1].replace(/_/g, ""));
-    } catch { /* file may not exist */ }
+      const yamlPath = `${workspaceRoot}/librarian-mcp/canonical_values.yaml`;
+      if (existsSync(yamlPath)) {
+        const doc = yaml.load(readFileSync(yamlPath, "utf-8")) as Record<string, Record<string, number | string>>;
+        const stats = doc?.stats ?? {};
+        if (typeof stats.innovation_count === "number") innovationCount = stats.innovation_count;
+        if (typeof stats.crown_jewels === "number") crownJewelCount = stats.crown_jewels;
+        if (typeof stats.production_systems === "number") productionSystems = stats.production_systems;
+        if (typeof stats.formal_claims_approximate === "number") patentClaims = stats.formal_claims_approximate;
+        if (typeof stats.patent_provisionals_filed === "number") patentApps = stats.patent_provisionals_filed;
+      }
+    } catch { /* YAML missing or malformed — fall through to defaults */ }
   }
   canonical.innovationCount = innovationCount;
   canonical.crownJewelCount = crownJewelCount;

@@ -28,10 +28,10 @@ export interface CanonicalStats {
 }
 
 const DEFAULTS: CanonicalStats = {
-  innovationCount: 2224,
-  crownJewels: 202,
-  patentApplications: 12,
-  patentClaims: 2199,
+  innovationCount: 2270,
+  crownJewels: 228,
+  patentApplications: 13,
+  patentClaims: 2506,
   domains: 29,
   initiatives: 16,
   membershipCost: 5,
@@ -42,14 +42,14 @@ const DEFAULTS: CanonicalStats = {
   portfolioValueHigh: 116_000_000,
   personalInvestment: 525_000,
   investmentYears: 9,
-  productionSystems: 35,
+  productionSystems: 36,
   charitableInitiatives: 16,
   founderAge: 53,
   dirtyDozenGreen: 11,
-  puddingArticles: 187,
-  academicPapers: 38,
-  knightSessions: 355,
-  bishopSessions: 86,
+  puddingArticles: 189,
+  academicPapers: 41,
+  knightSessions: 420,
+  bishopSessions: 102,
   pawnBatches: 56,
 };
 
