@@ -420,21 +420,54 @@ CREATE POLICY "System logs pricing" ON public.pricing_calculations
 -- ═══════════════════════════════════════════════════════════════
 
 -- Full member currency dashboard
--- user_credits in this project has: eoi_credits, eoi_used_credits, gleaning_credits_received/earned
-CREATE OR REPLACE VIEW public.member_currency_dashboard AS
-SELECT
-  m2.user_id,
-  COALESCE(c.eoi_credits - c.eoi_used_credits, 0) as credits,
-  COALESCE(c.gleaning_credits_received, 0) as gleaning_received,
-  COALESCE(c.gleaning_credits_earned, 0) as gleaning_earned,
-  COALESCE(m2.total_marks, 0) as marks,
-  COALESCE(m2.mark_level, 'seedling') as mark_level,
-  COALESCE(m2.voting_multiplier, 1.0) as voting_multiplier,
-  COALESCE(m2.crown_eligible, false) as crown_eligible,
-  COALESCE(j.total_joules, 0) as joules,
-  COALESCE(j.total_locked_value, 0) as joules_locked_value
-FROM public.user_marks m2
-LEFT JOIN public.user_credits c ON c.user_id = m2.user_id
-LEFT JOIN public.user_joules j ON j.user_id = m2.user_id;
+-- K450a fix: gleaning_credits_received/gleaning_credits_earned are not present in the
+-- migration chain (phantom columns from early design). Guard view creation so
+-- fresh local/CI stacks don't fail. If the columns are added in a later migration,
+-- the view can be replaced at that point to include them.
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'user_credits'
+      AND column_name = 'gleaning_credits_received'
+  ) THEN
+    EXECUTE $view$
+      CREATE OR REPLACE VIEW public.member_currency_dashboard AS
+      SELECT
+        m2.user_id,
+        COALESCE(c.eoi_credits - c.eoi_used_credits, 0) as credits,
+        COALESCE(c.gleaning_credits_received, 0) as gleaning_received,
+        COALESCE(c.gleaning_credits_earned, 0) as gleaning_earned,
+        COALESCE(m2.total_marks, 0) as marks,
+        COALESCE(m2.mark_level, 'seedling') as mark_level,
+        COALESCE(m2.voting_multiplier, 1.0) as voting_multiplier,
+        COALESCE(m2.crown_eligible, false) as crown_eligible,
+        COALESCE(j.total_joules, 0) as joules,
+        COALESCE(j.total_locked_value, 0) as joules_locked_value
+      FROM public.user_marks m2
+      LEFT JOIN public.user_credits c ON c.user_id = m2.user_id
+      LEFT JOIN public.user_joules j ON j.user_id = m2.user_id
+    $view$;
+  ELSE
+    EXECUTE $view$
+      CREATE OR REPLACE VIEW public.member_currency_dashboard AS
+      SELECT
+        m2.user_id,
+        COALESCE(c.eoi_credits - c.eoi_used_credits, 0) as credits,
+        0::numeric as gleaning_received,
+        0::numeric as gleaning_earned,
+        COALESCE(m2.total_marks, 0) as marks,
+        COALESCE(m2.mark_level, 'seedling') as mark_level,
+        COALESCE(m2.voting_multiplier, 1.0) as voting_multiplier,
+        COALESCE(m2.crown_eligible, false) as crown_eligible,
+        COALESCE(j.total_joules, 0) as joules,
+        COALESCE(j.total_locked_value, 0) as joules_locked_value
+      FROM public.user_marks m2
+      LEFT JOIN public.user_credits c ON c.user_id = m2.user_id
+      LEFT JOIN public.user_joules j ON j.user_id = m2.user_id
+    $view$;
+  END IF;
+END $$;
 
 GRANT SELECT ON public.member_currency_dashboard TO authenticated;
