@@ -1,0 +1,189 @@
+# Scribes Registry — Cathedral of Domain-Indexed Working Memory
+# ================================================================
+# Each Scribe has ONE primary field (Level 1, PhD-deep) and up to 12 adjacents
+# in levels of decreasing expertise. Scribes activate when the Three Fates
+# (Clotho-Lachesis-Atropos) route session traffic to their domain.
+#
+# Levels:
+#   1  = Primary (PhD-deep, canonical keeper)
+#   2-3 = Secondary (PhD-adjacent, cross-validator)
+#   4-6 = Tertiary (junior-adjacent, context-aware)
+#   7-12 = Ancillary (loose cross-field awareness)
+#
+# Tablets are append-only JSONL at `librarian-mcp/stitchpunks/scribes/scribe_<id>.jsonl`.
+# ================================================================
+
+version: 0.1.0
+opened: 2026-04-22
+opener: Bishop B116
+spec: ../SP22_SP23_THREE_FATES_AND_SCRIBES_CATHEDRAL_SPEC.md
+
+scribes:
+  - id: R9
+    primary:
+      level: 1
+      field: R9 methodology and Eyewitness benchmark
+      canonical_keepers:
+        - preload/r9v2_base.md
+        - benchmark/eyewitness_results_b111.md
+        - benchmark/r9_technical_brief.md
+    adjacents:
+      - level: 2
+        field: prompt engineering
+      - level: 3
+        field: empirical validation
+    keywords:
+      - R9
+      - R9-v2
+      - Eyewitness
+      - HOT
+      - COLD
+      - preload
+      - r9v2_base
+      - 86.1pp
+      - 94.8%
+      - 8.7%
+      - kappa
+      - Romulator
+      - Librarian
+      - 1200 calls
+      - paint can
+      - brush
+      - cold-vs-hot
+    activation_threshold: load-bearing mention (not incidental keyword hit)
+
+  - id: BRIDLE
+    primary:
+      level: 1
+      field: agent discipline and the 9 BRIDLE rules
+      canonical_keepers:
+        - BISHOP_DROPZONE/01_KnightPrompts/ (every Knight prompt carries it)
+    adjacents:
+      - level: 2
+        field: prompt engineering
+      - level: 3
+        field: verify-before-assert discipline (SP-21 tidbits)
+    keywords:
+      - BRIDLE
+      - Rule 1
+      - Rule 2
+      - Rule 3
+      - Rule 4
+      - Rule 5
+      - Rule 6
+      - Rule 7
+      - Rule 8
+      - Rule 9
+      - verify before asserting
+      - don't invent
+      - no unasked scope
+      - clarifying question
+    activation_threshold: load-bearing mention
+
+  - id: Landing
+    primary:
+      level: 1
+      field: public librarian site (librarian.the2ndsecond.com) + Chapter 1/2/3 layout
+      canonical_keepers:
+        - librarian-mcp-public/hosted/index.html
+        - feedback_librarian_landing_layout_approved.md
+    adjacents:
+      - level: 2
+        field: Cost-Slasher marketing angle
+      - level: 3
+        field: empirical validation (Eyewitness numbers on the landing page)
+    keywords:
+      - landing
+      - librarian.the2ndsecond.com
+      - Chapter 1
+      - Chapter 2
+      - Mellon
+      - Paired Provenance
+      - Anachronism
+      - Lighthouse
+      - SSL Labs
+      - Cost Slasher
+      - "cost/correct"
+      - "$/correct"
+      - Pine Books
+      - Pike Place
+    activation_threshold: load-bearing mention
+
+  - id: Prov14
+    primary:
+      level: 1
+      field: Provisional Application 14 (accumulating innovations since Prov 13 filed 2026-04-12)
+      canonical_keepers:
+        - BISHOP_DROPZONE/00_FOUNDER_REVIEW/PROV_14_FILING_INVENTORY_B110.md
+        - BISHOP_DROPZONE/Prov14_Building/PROV_14_DRAFT.md
+        - BISHOP_DROPZONE/12_Innovations_AA/AA_FORMAL_2263*..2267*.md
+    adjacents:
+      - level: 2
+        field: patent strategy + Cooperative Defensive Patent Pledge (#2260)
+      - level: 3
+        field: Crown Jewel designation criteria
+      - level: 4
+        field: IP allocation (60/20/10/10 split)
+    keywords:
+      - Prov 14
+      - Prov14
+      - Provisional 14
+      - Provisional Application 14
+      - "#22"  # catches #2263, #2264, ... any four-digit innovation ID
+      - Crown Jewel
+      - A&A
+      - AA_FORMAL
+      - patent_bag
+      - provisional
+      - claim
+      - innovation
+      - Harrity
+      - Mousilli
+      - conversion deadline
+      - Nov 26
+    activation_threshold: any A&A candidate surfaces OR any post-Prov-13 innovation reference
+
+  - id: Vault
+    primary:
+      level: 1
+      field: Secret distribution (SDS) — credentials, API keys, tokens, private keys, sandbox creds and which files mirror where
+      canonical_keepers:
+        - LianaBanyanPlatform/Asteroid-ProofVault/LockBox/SDS.env
+        - LianaBanyanPlatform/Asteroid-ProofVault/LockBox/DOUBLESECRET.env
+        - librarian-mcp-public/docs/SECRETS.md
+        - librarian-mcp/scripts/sync-sds-from-vault.py
+    adjacents:
+      - level: 2
+        field: security hygiene (rotation-threshold discipline — feedback_api_key_rotation_threshold.md)
+      - level: 3
+        field: infrastructure service-specific secrets (Mercury, Supabase, Firebase, KYC/funding providers)
+    keywords:
+      - SDS
+      - SDS.env
+      - DOUBLESECRET
+      - DOUBLESECRETBACKUP
+      - LockBox
+      - Asteroid-ProofVault
+      - secret
+      - credential
+      - API key
+      - API_KEY
+      - ANTHROPIC_API_KEY
+      - OPENAI_API_KEY
+      - GOOGLE_API_KEY
+      - PERPLEXITY_API_KEY
+      - token
+      - JWT
+      - private key
+      - sandbox
+      - env
+      - .env
+    activation_threshold: any mention of where-does-X-key-live, rotation, exposure, new service onboarding
+
+# Future Scribe candidates (instantiate on first trigger; do NOT pre-create):
+#   - Letters (Crown Letters primary; Rhetorical Keystones / dispatch queue adjacents)
+#   - Pedestal (Reg CF portal primary; Upekrithen seller-of-record / two-track separation adjacents)
+#   - Canonical (canonical_values.yaml primary; SP-5 Sentinel / Sweet Sixteen initiatives adjacents)
+#   - Sweet Sixteen (initiative list primary; Crown assignments / Rally-vs-PTTP adjacents)
+#   - Librarian MCP (tool primary; preload intents / fingerprint reconciliation adjacents)
+#   - Stitchpunk Corps (SP-1..SP-21 primary; the 3 Fates / Scribes meta adjacents)
