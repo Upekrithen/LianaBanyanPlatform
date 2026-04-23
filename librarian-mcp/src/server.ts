@@ -109,6 +109,75 @@ function reloadAll() {
   letters = loadIndex<LetterIndex>("letters");
 }
 
+// ─── K441 Half D: fingerprint-based cache invalidation ────────────────────────
+// Before this Knight, every server.tool used `if (!XXX) reloadAll()` — meaning
+// the in-memory index was loaded once at startup and never refreshed, so
+// `npm run rebuild` writing fresh content to `index/*.json` did NOT propagate
+// to a running MCP server. Founder had to restart the client to see new data.
+//
+// Fix: every tool that consults an index now calls `ensureFreshIndex()` first.
+// That helper reads JUST `index/last_build_fingerprint.json` (a tiny file —
+// well under 1MB — written at the end of every rebuild via writeFingerprint())
+// and compares its `treeHash` to the last value the server saw. On change, it
+// triggers a single `reloadAll()` and stamps the new fingerprint. On no
+// change, it is essentially a single small JSON parse — cheap enough to do
+// per tool call.
+//
+// We deliberately do NOT call the expensive `checkFreshness()` here (that
+// re-walks the workspace tree) — only writeFingerprint mutates this file, so
+// reading it is sufficient signal that a rebuild has completed.
+let lastSeenFingerprintHash: string | null = null;
+let lastSeenFingerprintTs: string | null = null;
+
+function ensureFreshIndex(): { reloaded: boolean; reason: string } {
+  const fpPath = resolve(INDEX_DIR, "last_build_fingerprint.json");
+  if (!existsSync(fpPath)) {
+    if (!overview) {
+      reloadAll();
+      return { reloaded: true, reason: "cold-start: no fingerprint yet" };
+    }
+    return { reloaded: false, reason: "no fingerprint on disk" };
+  }
+  let hash: string | null = null;
+  let ts: string | null = null;
+  try {
+    const raw = JSON.parse(readFileSync(fpPath, "utf-8"));
+    hash = typeof raw?.treeHash === "string" ? raw.treeHash : null;
+    ts = typeof raw?.timestamp === "string" ? raw.timestamp : null;
+  } catch {
+    if (!overview) {
+      reloadAll();
+      return { reloaded: true, reason: "cold-start: fingerprint unreadable" };
+    }
+    return { reloaded: false, reason: "fingerprint unreadable; keeping cached" };
+  }
+  if (!overview) {
+    reloadAll();
+    lastSeenFingerprintHash = hash;
+    lastSeenFingerprintTs = ts;
+    return { reloaded: true, reason: "cold-start" };
+  }
+  if (hash !== null && hash !== lastSeenFingerprintHash) {
+    reloadAll();
+    lastSeenFingerprintHash = hash;
+    lastSeenFingerprintTs = ts;
+    return { reloaded: true, reason: `fingerprint changed (${ts ?? "unknown ts"})` };
+  }
+  return { reloaded: false, reason: "fresh" };
+}
+
+// Prime the fingerprint cache on startup so the first tool call doesn't see a
+// stale-cache miss when the index already exists and matches disk.
+(() => {
+  const fpPath = resolve(INDEX_DIR, "last_build_fingerprint.json");
+  if (!existsSync(fpPath)) return;
+  try {
+    const raw = JSON.parse(readFileSync(fpPath, "utf-8"));
+    lastSeenFingerprintHash = typeof raw?.treeHash === "string" ? raw.treeHash : null;
+    lastSeenFingerprintTs = typeof raw?.timestamp === "string" ? raw.timestamp : null;
+  } catch { /* leave nulls; ensureFreshIndex will recover */ }
+})();
+
 const server = new McpServer({
   name: "librarian",
   version: "1.0.0",
@@ -123,7 +192,7 @@ server.tool(
   "Returns innovation count, initiative count, page/function/table counts, last session, and pending work. Call at session start.",
   {},
   async () => {
-    if (!overview) reloadAll();
+    ensureFreshIndex();
     if (!overview) {
       return { content: [{ type: "text", text: "Index not built yet. Run: cd librarian-mcp && npm run rebuild" }] };
     }
@@ -145,7 +214,7 @@ server.tool(
   "Returns all tables, functions, pages, feature flags, and Cephas content for a domain (e.g. 'lb_card', 'housing', 'ghost_world'). Pass domain name or 'list' to see all domains.",
   { domain: z.string().describe("Domain name or 'list' to see all available domains") },
   async ({ domain }) => {
-    if (!domains) reloadAll();
+    ensureFreshIndex();
     if (!domains) {
       return { content: [{ type: "text", text: "Index not built." }] };
     }
@@ -185,7 +254,7 @@ server.tool(
   "Returns columns, types, constraints, FKs, indexes, RLS policies, and originating migration for a table. Pass 'list' to see all tables.",
   { table: z.string().describe("Table name or 'list' to see all tables") },
   async ({ table }) => {
-    if (!schemas) reloadAll();
+    ensureFreshIndex();
     if (!schemas) {
       return { content: [{ type: "text", text: "Index not built." }] };
     }
@@ -221,7 +290,7 @@ server.tool(
   "Lists edge functions, optionally filtered by name/domain pattern. Returns name, purpose, auth pattern, and tables used.",
   { filter: z.string().optional().describe("Optional name/keyword filter (e.g. 'card', 'membership', 'webhook')") },
   async ({ filter }) => {
-    if (!functions) reloadAll();
+    ensureFreshIndex();
     if (!functions) {
       return { content: [{ type: "text", text: "Index not built." }] };
     }
@@ -259,7 +328,7 @@ server.tool(
   "Returns route, data queries, feature flag dependencies, and edge function calls for a page. Pass 'list' to see all pages.",
   { page: z.string().describe("Page component name or 'list'") },
   async ({ page }) => {
-    if (!pages) reloadAll();
+    ensureFreshIndex();
     if (!pages) {
       return { content: [{ type: "text", text: "Index not built." }] };
     }
@@ -320,7 +389,7 @@ server.tool(
     } catch {
       // Fallback if YAML not found
       const fresh = loadIndex<Record<string, unknown>>("canonical");
-      if (!context) reloadAll();
+      ensureFreshIndex();
       const canonical = fresh || context?.canonicalNumbers || {};
       const result = {
         innovationCount: (canonical as Record<string, unknown>).innovationCount || 2078,
@@ -407,9 +476,11 @@ server.tool(
   "Returns what was built in a session: files changed, commits, pending work. Without session_id returns the latest.",
   { session_id: z.string().optional().describe("Session ID (e.g. 'A', 'C', '98') or omit for latest") },
   async ({ session_id }) => {
-    // Sessions can be updated by hooks or rebuilds while server stays hot.
-    // Reload index snapshots so this tool does not serve stale empty context.
-    reloadAll();
+    // K441 Half D: ensureFreshIndex() reloads only when the on-disk
+    // fingerprint changes (after `npm run rebuild`). Cheap on the no-change
+    // path, full reload on the change path. Replaces the prior unconditional
+    // reloadAll() that paid the cost on every call.
+    ensureFreshIndex();
     if (!context || !context.sessions.length) {
       return { content: [{ type: "text", text: "No session data available." }] };
     }
@@ -445,7 +516,7 @@ server.tool(
     }).optional().describe("Pagination options"),
   },
   async ({ query, options }) => {
-    reloadAll();
+    ensureFreshIndex();
     const results: { source: string; key: string; snippet: string }[] = [];
     const lower = query.toLowerCase();
 
@@ -616,7 +687,7 @@ server.tool(
   "Returns last deploy info, pending migrations, pending function deploys, and build commands for each site.",
   {},
   async () => {
-    if (!context) reloadAll();
+    ensureFreshIndex();
 
     const deployState = context?.deployState || {
       pendingMigrations: [],
@@ -710,7 +781,7 @@ server.tool(
   "Returns summary, decisions, and topics from BISHOP chat transcripts. Pass filename for details, 'list' for recent 20, or 'search:keyword' to find by topic.",
   { chat: z.string().describe("Chat filename, 'list' for recent 20, or 'search:keyword'") },
   async ({ chat }) => {
-    if (!bishop) reloadAll();
+    ensureFreshIndex();
     if (!bishop) {
       return { content: [{ type: "text", text: "Bishop index not built." }] };
     }
@@ -775,7 +846,7 @@ server.tool(
   },
   async ({ concept, brief }) => {
     const isBrief = brief !== false;
-    if (!concepts) reloadAll();
+    ensureFreshIndex();
     if (!concepts) {
       return { content: [{ type: "text", text: "Concepts index not built. Run: cd librarian-mcp && npm run rebuild" }] };
     }
@@ -915,7 +986,7 @@ server.tool(
   "Validates a proposal or statement against Liana Banyan's architectural rules and constraints. Returns violations, warnings, and confirmations. Use this before implementing features to ensure alignment.",
   { proposal: z.string().describe("Description of what you're about to build or a statement to validate") },
   async ({ proposal }) => {
-    if (!concepts) reloadAll();
+    ensureFreshIndex();
 
     const lower = proposal.toLowerCase();
     const violations: { rule: ArchitecturalRule; explanation: string }[] = [];
@@ -1118,7 +1189,7 @@ server.tool(
     }).optional().describe("Pagination and filtering options"),
   },
   async ({ query, options }) => {
-    if (!dropzones) reloadAll();
+    ensureFreshIndex();
     if (!dropzones) {
       return { content: [{ type: "text", text: "Dropzone index not built." }] };
     }
@@ -1219,7 +1290,7 @@ server.tool(
   "Returns summaries of Cursor agent chat transcripts. Pass a session UUID for details, 'recent' for latest 10, or 'list' for all.",
   { query: z.string().describe("Session UUID, 'recent', or 'list'") },
   async ({ query }) => {
-    if (!transcripts) reloadAll();
+    ensureFreshIndex();
     if (!transcripts) {
       return { content: [{ type: "text", text: "Transcript index not built." }] };
     }
@@ -1265,7 +1336,7 @@ server.tool(
     }).optional().describe("Pagination and type filter options"),
   },
   async ({ query, options }) => {
-    if (!components) reloadAll();
+    ensureFreshIndex();
     if (!components) {
       return { content: [{ type: "text", text: "Component index not built." }] };
     }
@@ -1523,7 +1594,7 @@ server.tool(
   "MoneyPenny Smart Router: returns a compact, task-scoped context package in ~600 words. Call this FIRST at session start instead of multiple individual queries. Replaces the need for get_system_overview + query_domain + get_architecture + check_consistency.",
   { task: z.string().describe("Natural language description of what you're about to work on, e.g. 'build housing payment contribution form'") },
   async ({ task }) => {
-    if (!domains) reloadAll();
+    ensureFreshIndex();
 
     const pkg = buildBriefing(
       task, overview, schemas, functions, pages, concepts,
@@ -1636,7 +1707,7 @@ server.tool(
   "MoneyPenny pre-flight check. Validates a proposed task against architectural rules, identifies missing prerequisites (tables, functions), finds related past sessions, and returns contextual reminders. Call before implementing.",
   { task: z.string().describe("Description of what you're about to implement") },
   async ({ task }) => {
-    if (!domains) reloadAll();
+    ensureFreshIndex();
 
     const result = buildChecklist(
       task, schemas, functions, context, concepts,
@@ -1800,7 +1871,7 @@ server.tool(
   "Returns v1→v2 domain migration tracker. Shows which domains are audited, migrated, or verified. Pass 'list' for overview or a domain name for details.",
   { query: z.string().describe("Domain name or 'list' for overview") },
   async ({ query }) => {
-    if (!v2Migration) reloadAll();
+    ensureFreshIndex();
     if (!v2Migration) {
       return { content: [{ type: "text", text: "v2-migration index not built yet. Run: cd librarian-mcp && npm run rebuild" }] };
     }
@@ -1856,7 +1927,7 @@ server.tool(
   "Returns letter tracking status. Pass 'list' for overview, 'crown'/'media'/'political' for category, 'draft'/'locked'/'sent' for status, or a recipient name for details.",
   { query: z.string().describe("'list', category name, status name, or recipient name") },
   async ({ query }) => {
-    if (!letters) reloadAll();
+    ensureFreshIndex();
     if (!letters) {
       return { content: [{ type: "text", text: "Letters index not built yet. Run: cd librarian-mcp && npm run rebuild" }] };
     }
@@ -1936,7 +2007,7 @@ server.tool(
   "Returns what changed since a given session. Compares current session list against a baseline session ID. Shows new sessions, files changed, migrations, and functions since then.",
   { session_id: z.string().describe("Baseline session ID (e.g. 'K200', 'B054'). Shows everything after this session.") },
   async ({ session_id }) => {
-    if (!context) reloadAll();
+    ensureFreshIndex();
     if (!context) {
       return { content: [{ type: "text", text: "Context index not built." }] };
     }

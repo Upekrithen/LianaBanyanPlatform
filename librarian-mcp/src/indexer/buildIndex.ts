@@ -6,6 +6,11 @@ import { parseEdgeFunctions } from "./parseEdgeFunctions.js";
 import { parsePages } from "./parsePages.js";
 import { parseCephas } from "./parseCephas.js";
 import { parseContext } from "./parseContext.js";
+import {
+  parseSessionCloseouts,
+  mergeSessionStreams,
+  pickHighestBSession,
+} from "./parseSessionCloseouts.js";
 import { parseBishopChats } from "./parseBishopChats.js";
 import { buildDomainIndex } from "./domainMapper.js";
 import { parseConcepts } from "./parseConcepts.js";
@@ -85,8 +90,19 @@ async function main() {
 
   console.log("[5/13] Parsing context management...");
   const context = await parseContext(WORKSPACE);
+
+  // K441 Half A: ingest BISHOP_DROPZONE/03_BishopHandoffs/MILESTONE_B*_CLOSEOUT.md
+  // and merge into context.sessions. Closeout files are the authoritative source
+  // for B-session lastSession + summaries; the legacy MILESTONE_HANDOFF_MARCH_2026.md
+  // path lags real time and is the reason overview.lastSession got pinned at B113
+  // until this Knight landed.
+  const sessionIngestStart = Date.now();
+  const closeouts = await parseSessionCloseouts(WORKSPACE);
+  context.sessions = mergeSessionStreams(context.sessions, closeouts);
+  const sessionIngestMs = Date.now() - sessionIngestStart;
+
   writeIndex("context", context);
-  console.log(`       ${context.sessions.length} sessions, ${Object.keys(context.canonicalNumbers).length} canonical numbers\n`);
+  console.log(`       ${context.sessions.length} sessions (${closeouts.length} from closeouts, +${sessionIngestMs}ms), ${Object.keys(context.canonicalNumbers).length} canonical numbers\n`);
 
   console.log("[6/13] Parsing BISHOP chat transcripts...");
   const bishop = await parseBishopChats();
@@ -128,9 +144,14 @@ async function main() {
   writeIndex("letters", letters);
   console.log(`       ${letters.count} letters, ${Object.keys(letters.byCategory).length} categories\n`);
 
-  // Preserve lastSession and pendingWork from existing overview if available,
-  // since the context parser's session extraction from MILESTONE_HANDOFF is unreliable.
-  // Bishop updates these manually or via moneypenny_debrief.
+  // K441 Half A: lastSession is now derived from the highest B-numbered closeout
+  // file on disk, falling back to the legacy parseContext stream if none found,
+  // and finally to whatever the previous overview.json had (so a temporarily
+  // empty closeout glob doesn't blank the field).
+  //
+  // pendingWork: prefer the most-recent closeout's pendingWork over the legacy
+  // MILESTONE_HANDOFF_MARCH_2026.md extraction. Falls back to the existing
+  // overview value if the closeout had nothing extractable, then to context's.
   const existingOverviewPath = resolve(INDEX_DIR, "overview.json");
   let existingLastSession: string | undefined;
   let existingPendingWork: string[] = [];
@@ -141,6 +162,19 @@ async function main() {
       existingPendingWork = existing.pendingWork || [];
     } catch { /* ignore parse errors */ }
   }
+
+  const closeoutDerivedLastSession = pickHighestBSession(closeouts);
+  const latestCloseoutPending = closeouts.length > 0
+    ? closeouts[closeouts.length - 1].pendingWork
+    : [];
+  const resolvedLastSession =
+    closeoutDerivedLastSession
+    ?? (context.sessions.length > 0 ? context.sessions[context.sessions.length - 1].id : undefined)
+    ?? existingLastSession;
+  const resolvedPendingWork =
+    latestCloseoutPending.length > 0
+      ? latestCloseoutPending
+      : (existingPendingWork.length > 0 ? existingPendingWork : context.pendingWork);
 
   const overview: SystemOverview = {
     innovationCount: (context.canonicalNumbers.innovationCount as number) || 2130,
@@ -161,8 +195,8 @@ async function main() {
     membershipCost: "$5/year",
     creatorKeeps: "83.3%",
     platformMargin: "Cost + 20%",
-    lastSession: existingLastSession || (context.sessions.length > 0 ? context.sessions[context.sessions.length - 1].id : undefined),
-    pendingWork: existingPendingWork.length > 0 ? existingPendingWork : context.pendingWork,
+    lastSession: resolvedLastSession,
+    pendingWork: resolvedPendingWork,
     timestamp: new Date().toISOString(),
   };
   writeIndex("overview", overview);

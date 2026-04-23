@@ -1,0 +1,30 @@
+{
+  "name": "librarian-mcp",
+  "version": "1.0.0",
+  "description": "The Librarian — MCP knowledge server for Liana Banyan Platform",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "build-index": "node dist/indexer/buildIndex.js",
+    "start": "node dist/server.js",
+    "dev": "tsc && node dist/server.js",
+    "rebuild": "tsc && node dist/indexer/buildIndex.js --incremental",
+    "rebuild:full": "tsc && node dist/indexer/buildIndex.js",
+    "rebuild:incremental": "tsc && node dist/indexer/buildIndex.js --incremental",
+    "test": "tsc && node --test tests/test_registry.mjs tests/test_fates_router.mjs tests/test_scribe_tools.mjs tests/test_consult_scribes_latency.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "glob": "^11.0.0",
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.1",
+    "mammoth": "^1.12.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
