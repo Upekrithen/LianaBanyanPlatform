@@ -1,0 +1,830 @@
+{
+  "bank_version": "1.0.0-sealed",
+  "bank_status": "SEALED — 50 questions, 6 categories. Source of record for K444 R11 cross-vendor memory benchmark. DO NOT edit questions or hot_required_elements after this seal commit without bumping bank_version and Bishop ratification.",
+  "corpus_id": "R11-CANONICAL-K444",
+  "corpus_file": "r11_canonical_corpus.md",
+  "opened": "2026-04-23",
+  "opened_by": "Knight K444 (B119 dispatch)",
+  "sealed": "2026-04-23",
+  "sealed_by": "Knight K444 automated seal — Founder-approved per B119 dispatch authorization",
+  "target_test": "R11 Cross-Vendor Memory Benchmark — 13 conditions × 50 questions",
+  "categories": [
+    "canonical_statistics",
+    "architecture_mechanics",
+    "economic_governance",
+    "member_journey",
+    "regulatory_compliance",
+    "historical_precedent"
+  ],
+  "category_counts": {
+    "canonical_statistics": 9,
+    "architecture_mechanics": 8,
+    "economic_governance": 9,
+    "member_journey": 8,
+    "regulatory_compliance": 8,
+    "historical_precedent": 8
+  },
+  "grading_rubric": "R10 three-tier (HOT / HIT / MISS) — substring matching against hot_required_elements. HOT = all required elements present (case-insensitive substring). HIT = >= ceil(n/2) elements present, at least 1. MISS = fewer than half. Retrieval-correct sub-metric: HOT that is MISS in the cold_haiku baseline = retrieval-correct. HOT that is also HOT in cold_haiku = prior-knowledge-correct.",
+  "questions": [
+    {
+      "id": "R11-CS-01",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-01",
+      "question": "How many active member-owners did the Verdania Cooperative Platform report as of Q3 2025?",
+      "ground_truth": "847,293 active member-owners as of Q3 2025.",
+      "canonical_answer": "847,293 active member-owners as of Q3 2025.",
+      "hot_required_elements": ["847,293", "Q3 2025"],
+      "hit_required_elements": ["847"],
+      "hallucination_risk": "high — model may invent a plausible member count",
+      "rubric": {
+        "correct": "Response contains '847,293' and 'Q3 2025' or equivalent date reference",
+        "partial": "Response contains the correct member count or the correct quarter but not both",
+        "incorrect": "Response does not contain the correct member count"
+      }
+    },
+    {
+      "id": "R11-CS-02",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-02",
+      "question": "What total transaction volume did the Verdania Cooperative Platform report for fiscal year 2024?",
+      "ground_truth": "$4.7 billion in fiscal year 2024.",
+      "canonical_answer": "$4.7 billion in fiscal year 2024.",
+      "hot_required_elements": ["4.7 billion", "2024"],
+      "hit_required_elements": ["4.7"],
+      "hallucination_risk": "high — model may invent a plausible volume figure",
+      "rubric": {
+        "correct": "Response contains '4.7 billion' and '2024'",
+        "partial": "Response mentions the scale (billions) but gets the exact figure wrong",
+        "incorrect": "Response does not contain the correct transaction volume"
+      }
+    },
+    {
+      "id": "R11-CS-03",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-03",
+      "question": "What vote threshold does the Cooperative Ledger Standards Body require for constitutional amendments in federated cooperative networks?",
+      "ground_truth": "66.7% of eligible votes.",
+      "canonical_answer": "66.7% of eligible votes.",
+      "hot_required_elements": ["66.7"],
+      "hit_required_elements": ["66"],
+      "hallucination_risk": "medium — model may say two-thirds without the exact decimal",
+      "rubric": {
+        "correct": "Response contains '66.7' or equivalent decimal expression",
+        "partial": "Response says two-thirds or 67% without the canonical 66.7% value",
+        "incorrect": "Response gives a wrong threshold or does not answer"
+      }
+    },
+    {
+      "id": "R11-CS-04",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-04",
+      "question": "How many days does the Cairnfield Protocol give departing members to receive their data in a portable format?",
+      "ground_truth": "180 days.",
+      "canonical_answer": "180 days from the date of formal exit notice.",
+      "hot_required_elements": ["180"],
+      "hit_required_elements": ["Cairnfield"],
+      "hallucination_risk": "medium — model may invent a different GDPR-like window",
+      "rubric": {
+        "correct": "Response contains '180' days",
+        "partial": "Response identifies Cairnfield Protocol but gives wrong number of days",
+        "incorrect": "Response does not contain the correct window"
+      }
+    },
+    {
+      "id": "R11-CS-05",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-05",
+      "question": "What value did the Solstice Index reach in November 2025, and what drove the increase?",
+      "ground_truth": "4.18 in November 2025, driven by gains in the retrieval-accuracy component following widespread adoption of the Thornwick architecture.",
+      "canonical_answer": "4.18 in November 2025, driven by retrieval-accuracy gains from Thornwick architecture adoption.",
+      "hot_required_elements": ["4.18", "Solstice"],
+      "hit_required_elements": ["4.18"],
+      "hallucination_risk": "high — model may invent a plausible index value",
+      "rubric": {
+        "correct": "Response contains '4.18' and 'Solstice'",
+        "partial": "Response identifies the Solstice Index but gives wrong value",
+        "incorrect": "Response does not contain the correct value or metric name"
+      }
+    },
+    {
+      "id": "R11-CS-06",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-06",
+      "question": "What was the average annual member economic surplus per active member-owner in the 2024 cohort?",
+      "ground_truth": "$312 per active member-owner.",
+      "canonical_answer": "$312 per active member-owner, with a standard deviation of $87.",
+      "hot_required_elements": ["312"],
+      "hit_required_elements": ["surplus"],
+      "hallucination_risk": "high — model may invent a plausible dollar amount",
+      "rubric": {
+        "correct": "Response contains '312'",
+        "partial": "Response describes the concept correctly but gives wrong dollar amount",
+        "incorrect": "Response does not contain the correct surplus figure"
+      }
+    },
+    {
+      "id": "R11-CS-07",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-07",
+      "question": "Under the Sundry Accord, what percentage of eligible member-owners must be registered for an extraordinary general meeting to be valid?",
+      "ground_truth": "15% of eligible member-owners.",
+      "canonical_answer": "15% of eligible member-owners must register for the session to be valid.",
+      "hot_required_elements": ["15%", "extraordinary"],
+      "hit_required_elements": ["15"],
+      "hallucination_risk": "medium — model may invent a different quorum percentage",
+      "rubric": {
+        "correct": "Response contains '15%' and 'extraordinary'",
+        "partial": "Response identifies the quorum requirement but gives wrong percentage",
+        "incorrect": "Response does not contain the correct quorum figure"
+      }
+    },
+    {
+      "id": "R11-CS-08",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-08",
+      "question": "What is the maximum voting weight any single member can hold in a federated cooperative compliant with the Cooperative Ledger Standards Body?",
+      "ground_truth": "2.3% of total votes.",
+      "canonical_answer": "2.3% of total votes, re-computed annually.",
+      "hot_required_elements": ["2.3"],
+      "hit_required_elements": ["voting weight"],
+      "hallucination_risk": "high — model may invent a cap like 5% or 10%",
+      "rubric": {
+        "correct": "Response contains '2.3'",
+        "partial": "Response describes a voting weight cap but gives wrong percentage",
+        "incorrect": "Response does not contain the correct cap"
+      }
+    },
+    {
+      "id": "R11-CS-09",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-09",
+      "question": "How long does the Pelham Audit Standard require cooperative AI platforms to retain transaction logs?",
+      "ground_truth": "7 years in an immutable format.",
+      "canonical_answer": "7 years in an immutable format accessible to certified auditors on 48-hour notice.",
+      "hot_required_elements": ["7", "Pelham Audit"],
+      "hit_required_elements": ["7"],
+      "hallucination_risk": "medium — model may cite GDPR 5-year or 3-year variants",
+      "rubric": {
+        "correct": "Response contains '7' years and 'Pelham Audit' or equivalent",
+        "partial": "Response cites the Pelham standard but gives wrong retention period",
+        "incorrect": "Response does not contain the correct retention period"
+      }
+    },
+    {
+      "id": "R11-AM-01",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-01",
+      "question": "How many independent node operators must co-sign a transaction under the Distributed Ledger Witness pattern?",
+      "ground_truth": "3 independent node operators.",
+      "canonical_answer": "3 independent node operators must co-sign each transaction before it is considered final.",
+      "hot_required_elements": ["3 independent", "DLW"],
+      "hit_required_elements": ["3"],
+      "hallucination_risk": "medium — model may say 2 or 4",
+      "rubric": {
+        "correct": "Response contains '3 independent' and 'DLW' or 'Distributed Ledger Witness'",
+        "partial": "Response identifies co-signing requirement but gives wrong count",
+        "incorrect": "Response does not contain the correct co-signature count"
+      }
+    },
+    {
+      "id": "R11-AM-02",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-02",
+      "question": "What does the Fjordgate Protocol interpose between member data and AI inference engines?",
+      "ground_truth": "A consent membrane layer.",
+      "canonical_answer": "A 'consent membrane' layer that evaluates each inference request against the member's declared consent scope.",
+      "hot_required_elements": ["consent membrane", "Fjordgate"],
+      "hit_required_elements": ["consent"],
+      "hallucination_risk": "medium — model may describe a generic privacy layer without the specific Fjordgate/consent-membrane terminology",
+      "rubric": {
+        "correct": "Response contains 'consent membrane' and 'Fjordgate'",
+        "partial": "Response describes the architectural role correctly but misnames the component",
+        "incorrect": "Response does not identify the correct component"
+      }
+    },
+    {
+      "id": "R11-AM-03",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-03",
+      "question": "What is the memory isolation namespace size per member-owner in the Thornwick architecture?",
+      "ground_truth": "256 kilobytes.",
+      "canonical_answer": "256 kilobytes, implemented as an encrypted partition in the working memory layer.",
+      "hot_required_elements": ["256", "Thornwick"],
+      "hit_required_elements": ["256"],
+      "hallucination_risk": "high — model may invent a plausible memory size",
+      "rubric": {
+        "correct": "Response contains '256' and 'Thornwick'",
+        "partial": "Response identifies the Thornwick architecture's isolation approach but gives wrong namespace size",
+        "incorrect": "Response does not contain the correct namespace size"
+      }
+    },
+    {
+      "id": "R11-AM-04",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-04",
+      "question": "How many priority tiers does the Cascadia Routing Algorithm use to assign member queries?",
+      "ground_truth": "5 tiers.",
+      "canonical_answer": "A 5-tier priority queue, with Tier 1 for urgent governance and Tier 5 for background processing.",
+      "hot_required_elements": ["5-tier", "Cascadia"],
+      "hit_required_elements": ["5"],
+      "hallucination_risk": "medium — model may say 3-tier or 4-tier",
+      "rubric": {
+        "correct": "Response contains '5-tier' or '5 tier' and 'Cascadia'",
+        "partial": "Response describes a tiered routing system but gives wrong tier count",
+        "incorrect": "Response does not contain the correct tier count"
+      }
+    },
+    {
+      "id": "R11-AM-05",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-05",
+      "question": "How frequently must refresh tokens be rotated in platforms certified under the Pelham Reference Architecture?",
+      "ground_truth": "Every 72 hours.",
+      "canonical_answer": "Every 72 hours as a baseline security posture.",
+      "hot_required_elements": ["72 hours"],
+      "hit_required_elements": ["72"],
+      "hallucination_risk": "medium — model may say 24 hours or 7 days",
+      "rubric": {
+        "correct": "Response contains '72 hours'",
+        "partial": "Response identifies token rotation requirement but gives wrong interval",
+        "incorrect": "Response does not contain the correct rotation interval"
+      }
+    },
+    {
+      "id": "R11-AM-06",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-06",
+      "question": "What is the minimum number of semantic index shards per 100,000 members required by the Pelham Reference Architecture?",
+      "ground_truth": "Minimum 12 shards per 100,000 members.",
+      "canonical_answer": "A minimum of 12 semantic index shards per 100,000 members.",
+      "hot_required_elements": ["12", "100,000"],
+      "hit_required_elements": ["12 shards"],
+      "hallucination_risk": "high — model may invent a plausible shard count",
+      "rubric": {
+        "correct": "Response contains '12' and '100,000' in context of shards per members",
+        "partial": "Response describes sharding requirements but gives wrong count or member threshold",
+        "incorrect": "Response does not contain the correct shard requirement"
+      }
+    },
+    {
+      "id": "R11-AM-07",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-07",
+      "question": "How often does the Witness Ledger publish a Merkle root to the external verification registry?",
+      "ground_truth": "Every 6 hours.",
+      "canonical_answer": "Every 6 hours to an external verification registry maintained by the Cooperative Ledger Standards Body.",
+      "hot_required_elements": ["6 hours", "Merkle"],
+      "hit_required_elements": ["6 hours"],
+      "hallucination_risk": "medium — model may say 24 hours or 1 hour",
+      "rubric": {
+        "correct": "Response contains '6 hours' and 'Merkle'",
+        "partial": "Response describes Merkle root publication but gives wrong frequency",
+        "incorrect": "Response does not contain the correct publication frequency"
+      }
+    },
+    {
+      "id": "R11-AM-08",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-08",
+      "question": "What percentage agreement among active validators does the Belfry consensus mechanism require before a rule change activates?",
+      "ground_truth": "67% agreement.",
+      "canonical_answer": "67% agreement among active validators.",
+      "hot_required_elements": ["67%", "Belfry"],
+      "hit_required_elements": ["67"],
+      "hallucination_risk": "medium — model may confuse with the 66.7% constitutional amendment threshold",
+      "rubric": {
+        "correct": "Response contains '67%' and 'Belfry'",
+        "partial": "Response identifies the Belfry mechanism but gives wrong threshold",
+        "incorrect": "Response does not contain the correct agreement threshold"
+      }
+    },
+    {
+      "id": "R11-EG-01",
+      "category": "economic_governance",
+      "source_fact_id": "EG-01",
+      "question": "What are the three participation tiers defined by the Sundry Accord and how many votes does each have?",
+      "ground_truth": "Observer (0 votes), Associate (1 vote), Full Member (up to 3 votes).",
+      "canonical_answer": "Observer (0 votes), Associate (1 vote), and Full Member (up to 3 votes) under the Sundry Accord.",
+      "hot_required_elements": ["Observer", "Associate", "Full Member", "Sundry Accord"],
+      "hit_required_elements": ["Observer", "Full Member"],
+      "hallucination_risk": "medium — model may describe generic cooperative tiers without Sundry Accord names",
+      "rubric": {
+        "correct": "Response contains 'Observer', 'Associate', 'Full Member', and 'Sundry Accord'",
+        "partial": "Response names two of the three tiers correctly",
+        "incorrect": "Response does not name the correct Sundry Accord tier structure"
+      }
+    },
+    {
+      "id": "R11-EG-02",
+      "category": "economic_governance",
+      "source_fact_id": "EG-02",
+      "question": "Under the Cooperative Capital Framework, what percentages of annual surplus go to the reserve, patronage refund, and innovation fund?",
+      "ground_truth": "40% surplus reserve, 35% patronage refund, 25% innovation fund.",
+      "canonical_answer": "40% to surplus reserve, 35% to patronage refund, 25% to innovation fund.",
+      "hot_required_elements": ["40%", "35%", "25%"],
+      "hit_required_elements": ["40%", "35%"],
+      "hallucination_risk": "high — model may invent plausible-sounding allocation percentages",
+      "rubric": {
+        "correct": "Response contains all three percentages: '40%', '35%', '25%'",
+        "partial": "Response contains two of the three correct percentages",
+        "incorrect": "Response does not contain the correct allocation percentages"
+      }
+    },
+    {
+      "id": "R11-EG-03",
+      "category": "economic_governance",
+      "source_fact_id": "EG-03",
+      "question": "Under the Thornwick Governance Model, what is the minimum public comment period required before a fee structure change can take effect?",
+      "ground_truth": "45 days.",
+      "canonical_answer": "Minimum 45-day public comment period.",
+      "hot_required_elements": ["45", "Thornwick Governance"],
+      "hit_required_elements": ["45"],
+      "hallucination_risk": "medium — model may say 30 days or 60 days",
+      "rubric": {
+        "correct": "Response contains '45' and 'Thornwick Governance'",
+        "partial": "Response identifies the comment period requirement but gives wrong duration",
+        "incorrect": "Response does not contain the correct comment period"
+      }
+    },
+    {
+      "id": "R11-EG-04",
+      "category": "economic_governance",
+      "source_fact_id": "EG-04",
+      "question": "How is patronage refund calculated in the Cooperative Capital Framework?",
+      "ground_truth": "Based on each member's share of total platform transaction volume, weighted by a tenure coefficient.",
+      "canonical_answer": "Based on share of total platform transaction volume weighted by a tenure coefficient (starting at 1.0, increasing by 0.05 per year, capped at 1.25).",
+      "hot_required_elements": ["tenure coefficient", "patronage refund"],
+      "hit_required_elements": ["tenure", "patronage"],
+      "hallucination_risk": "medium — model may describe a generic pro-rata formula",
+      "rubric": {
+        "correct": "Response contains 'tenure coefficient' and 'patronage refund'",
+        "partial": "Response describes tenure-weighted distribution but omits the specific 'tenure coefficient' term",
+        "incorrect": "Response does not correctly describe the patronage refund calculation method"
+      }
+    },
+    {
+      "id": "R11-EG-05",
+      "category": "economic_governance",
+      "source_fact_id": "EG-05",
+      "question": "What does the Merton Principle require of cooperative AI platforms when they switch AI vendors?",
+      "ground_truth": "Publish model selection criteria within 30 days of the vendor switch.",
+      "canonical_answer": "Publish model selection criteria within 30 days of the vendor switch, including evaluation rubric, alternatives considered, and cost-accuracy tradeoff.",
+      "hot_required_elements": ["30 days", "Merton"],
+      "hit_required_elements": ["30", "Merton"],
+      "hallucination_risk": "high — model may describe a generic disclosure requirement without the Merton name or 30-day window",
+      "rubric": {
+        "correct": "Response contains '30 days' and 'Merton'",
+        "partial": "Response identifies a transparency obligation on model switching but wrong timeframe or name",
+        "incorrect": "Response does not contain the correct disclosure requirement"
+      }
+    },
+    {
+      "id": "R11-EG-06",
+      "category": "economic_governance",
+      "source_fact_id": "EG-06",
+      "question": "What approval level do federated cooperative networks require for cross-network data sharing agreements?",
+      "ground_truth": "Unanimous board approval from all member cooperatives.",
+      "canonical_answer": "Unanimous board approval from all member cooperatives in the FCN.",
+      "hot_required_elements": ["unanimous", "FCN"],
+      "hit_required_elements": ["unanimous"],
+      "hallucination_risk": "medium — model may say majority or supermajority",
+      "rubric": {
+        "correct": "Response contains 'unanimous' and 'FCN' or 'federated cooperative network'",
+        "partial": "Response identifies heightened approval requirements but says majority or supermajority",
+        "incorrect": "Response does not identify the unanimous requirement"
+      }
+    },
+    {
+      "id": "R11-EG-07",
+      "category": "economic_governance",
+      "source_fact_id": "EG-07",
+      "question": "What is the external investor equity ownership cap set by the Havington Investment Clause?",
+      "ground_truth": "19% of total equity.",
+      "canonical_answer": "19% of total equity in qualifying cooperatives.",
+      "hot_required_elements": ["19%", "Havington"],
+      "hit_required_elements": ["19%"],
+      "hallucination_risk": "high — model may invent a cap like 25% or 49%",
+      "rubric": {
+        "correct": "Response contains '19%' and 'Havington'",
+        "partial": "Response identifies the Havington Clause but gives wrong percentage",
+        "incorrect": "Response does not contain the correct cap"
+      }
+    },
+    {
+      "id": "R11-EG-08",
+      "category": "economic_governance",
+      "source_fact_id": "EG-08",
+      "question": "How many days in advance must notice be issued for an annual general meeting under the Sundry Accord?",
+      "ground_truth": "Minimum 42 days before the AGM date.",
+      "canonical_answer": "Minimum 42 days before the AGM date.",
+      "hot_required_elements": ["42 days", "Sundry"],
+      "hit_required_elements": ["42"],
+      "hallucination_risk": "medium — model may say 30 days or 60 days",
+      "rubric": {
+        "correct": "Response contains '42 days' and 'Sundry'",
+        "partial": "Response identifies an AGM notice requirement but gives wrong advance notice period",
+        "incorrect": "Response does not contain the correct advance notice period"
+      }
+    },
+    {
+      "id": "R11-EG-09",
+      "category": "economic_governance",
+      "source_fact_id": "EG-09",
+      "question": "What is the maximum Reciprocity Score a member can have to retain Full Member status?",
+      "ground_truth": "Below 2.1.",
+      "canonical_answer": "The Reciprocity Score must stay below 2.1 for Full Member status retention.",
+      "hot_required_elements": ["2.1", "Reciprocity Score"],
+      "hit_required_elements": ["2.1"],
+      "hallucination_risk": "high — model may invent a plausible ratio",
+      "rubric": {
+        "correct": "Response contains '2.1' and 'Reciprocity Score'",
+        "partial": "Response describes the reciprocity concept but gives wrong threshold value",
+        "incorrect": "Response does not contain the correct threshold"
+      }
+    },
+    {
+      "id": "R11-MJ-01",
+      "category": "member_journey",
+      "source_fact_id": "MJ-01",
+      "question": "Within how many days must a new member-owner complete identity attestation under the Cairnfield Protocol before their application lapses?",
+      "ground_truth": "14 days from application submission.",
+      "canonical_answer": "14 days from application submission — applications that miss this window automatically lapse.",
+      "hot_required_elements": ["14 days"],
+      "hit_required_elements": ["14"],
+      "hallucination_risk": "medium — model may say 30 days or 7 days",
+      "rubric": {
+        "correct": "Response contains '14 days'",
+        "partial": "Response identifies the attestation deadline concept but gives wrong number of days",
+        "incorrect": "Response does not contain the correct deadline"
+      }
+    },
+    {
+      "id": "R11-MJ-02",
+      "category": "member_journey",
+      "source_fact_id": "MJ-02",
+      "question": "How many steps does the Golden Path onboarding sequence have, and which step has the highest dropout rate?",
+      "ground_truth": "7 steps; step 4 (corpus consent) is the highest dropout point.",
+      "canonical_answer": "7 steps. Step 4 — corpus consent — is consistently identified as the highest dropout point.",
+      "hot_required_elements": ["7", "Golden Path", "corpus consent"],
+      "hit_required_elements": ["7", "Golden Path"],
+      "hallucination_risk": "high — model may invent step count or dropout point",
+      "rubric": {
+        "correct": "Response contains '7', 'Golden Path', and 'corpus consent'",
+        "partial": "Response identifies the Golden Path and step count OR the dropout step but not both",
+        "incorrect": "Response does not contain the correct onboarding sequence details"
+      }
+    },
+    {
+      "id": "R11-MJ-03",
+      "category": "member_journey",
+      "source_fact_id": "MJ-03",
+      "question": "Within what timeframe must member data access requests be fulfilled under the Cairnfield Protocol?",
+      "ground_truth": "Within 72 hours of receipt.",
+      "canonical_answer": "Within 72 hours of receipt of the request.",
+      "hot_required_elements": ["72 hours", "Cairnfield"],
+      "hit_required_elements": ["72"],
+      "hallucination_risk": "medium — model may confuse with GDPR's 30-day window",
+      "rubric": {
+        "correct": "Response contains '72 hours' and 'Cairnfield'",
+        "partial": "Response identifies the Cairnfield Protocol but gives wrong fulfillment window",
+        "incorrect": "Response does not contain the correct timeframe"
+      }
+    },
+    {
+      "id": "R11-MJ-04",
+      "category": "member_journey",
+      "source_fact_id": "MJ-04",
+      "question": "What is the cooling-off period imposed by the Departure Protocol before a member-owner can liquidate their equity stake?",
+      "ground_truth": "30 days.",
+      "canonical_answer": "30-day cooling-off period that cannot be waived.",
+      "hot_required_elements": ["30-day", "Departure Protocol"],
+      "hit_required_elements": ["30"],
+      "hallucination_risk": "medium — model may say 60 days or 14 days",
+      "rubric": {
+        "correct": "Response contains '30-day' or '30 day' and 'Departure Protocol'",
+        "partial": "Response identifies a cooling-off period but gives wrong duration or misnames the protocol",
+        "incorrect": "Response does not contain the correct cooling-off period"
+      }
+    },
+    {
+      "id": "R11-MJ-05",
+      "category": "member_journey",
+      "source_fact_id": "MJ-05",
+      "question": "How many months of continuous tenure must a member maintain to achieve Steward Tier status?",
+      "ground_truth": "18 months.",
+      "canonical_answer": "18 months of continuous enrollment (without a lapse exceeding 60 days).",
+      "hot_required_elements": ["18 months", "Steward Tier"],
+      "hit_required_elements": ["18"],
+      "hallucination_risk": "medium — model may say 12 months or 24 months",
+      "rubric": {
+        "correct": "Response contains '18 months' and 'Steward Tier'",
+        "partial": "Response identifies the Steward Tier but gives wrong tenure requirement",
+        "incorrect": "Response does not contain the correct tenure milestone"
+      }
+    },
+    {
+      "id": "R11-MJ-06",
+      "category": "member_journey",
+      "source_fact_id": "MJ-06",
+      "question": "After how many consecutive days of inactivity is a member automatically reclassified to Observer status?",
+      "ground_truth": "270 consecutive days.",
+      "canonical_answer": "270 consecutive days of inactivity triggers automatic reclassification to Observer status.",
+      "hot_required_elements": ["270", "Observer"],
+      "hit_required_elements": ["270"],
+      "hallucination_risk": "high — model may invent a plausible inactivity threshold",
+      "rubric": {
+        "correct": "Response contains '270' and 'Observer'",
+        "partial": "Response describes the reclassification mechanism but gives wrong day count",
+        "incorrect": "Response does not contain the correct inactivity threshold"
+      }
+    },
+    {
+      "id": "R11-MJ-07",
+      "category": "member_journey",
+      "source_fact_id": "MJ-07",
+      "question": "What is the referral credit per successful member referral, and what is the annual cap per referring member?",
+      "ground_truth": "$15 per referral, capped at $90 per calendar year.",
+      "canonical_answer": "$15 platform credit per successful referral, capped at $90 per calendar year per referring member.",
+      "hot_required_elements": ["$15", "$90"],
+      "hit_required_elements": ["15", "90"],
+      "hallucination_risk": "high — model may invent plausible credit and cap amounts",
+      "rubric": {
+        "correct": "Response contains '$15' and '$90'",
+        "partial": "Response identifies the referral credit structure but gets one of the two amounts wrong",
+        "incorrect": "Response does not contain the correct credit amounts"
+      }
+    },
+    {
+      "id": "R11-MJ-08",
+      "category": "member_journey",
+      "source_fact_id": "MJ-08",
+      "question": "By what date must platforms deliver the Compass Review to each active member-owner?",
+      "ground_truth": "March 31 of the year following the reporting period.",
+      "canonical_answer": "March 31 of the year following the reporting period.",
+      "hot_required_elements": ["March 31", "Compass Review"],
+      "hit_required_elements": ["March 31"],
+      "hallucination_risk": "medium — model may invent a different deadline",
+      "rubric": {
+        "correct": "Response contains 'March 31' and 'Compass Review'",
+        "partial": "Response identifies the Compass Review obligation but gives wrong delivery deadline",
+        "incorrect": "Response does not contain the correct delivery date"
+      }
+    },
+    {
+      "id": "R11-RC-01",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-01",
+      "question": "How often must cooperative AI platforms subject to the Pelham AI Governance Charter conduct a Fairness Impact Assessment?",
+      "ground_truth": "Every 18 months.",
+      "canonical_answer": "Every 18 months under the Pelham AI Governance Charter (2024).",
+      "hot_required_elements": ["18 months", "Fairness Impact Assessment"],
+      "hit_required_elements": ["18 months"],
+      "hallucination_risk": "medium — model may say annually or every 2 years",
+      "rubric": {
+        "correct": "Response contains '18 months' and 'Fairness Impact Assessment'",
+        "partial": "Response identifies the assessment requirement but gives wrong frequency",
+        "incorrect": "Response does not contain the correct assessment frequency"
+      }
+    },
+    {
+      "id": "R11-RC-02",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-02",
+      "question": "Under the Sundry Digital Rights Act, within how many business days must a platform fulfill an algorithmic explanation request?",
+      "ground_truth": "10 business days.",
+      "canonical_answer": "10 business days after receipt of the request.",
+      "hot_required_elements": ["10 business days", "Sundry Digital Rights"],
+      "hit_required_elements": ["10 business", "Sundry"],
+      "hallucination_risk": "medium — model may cite GDPR's 30-day window",
+      "rubric": {
+        "correct": "Response contains '10 business days' and 'Sundry Digital Rights'",
+        "partial": "Response identifies the explanation right but gives wrong timeframe",
+        "incorrect": "Response does not contain the correct fulfillment window"
+      }
+    },
+    {
+      "id": "R11-RC-03",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-03",
+      "question": "How long must AI inference logs be stored under Fjordgate Certification Level 2?",
+      "ground_truth": "5 years in an auditor-accessible format.",
+      "canonical_answer": "5 years in an auditor-accessible format — the minimum for platforms handling member financial data.",
+      "hot_required_elements": ["5 years", "Fjordgate", "Level 2"],
+      "hit_required_elements": ["5 years", "Fjordgate"],
+      "hallucination_risk": "medium — model may confuse Level 2 (5 years) with Level 1 (3 years) or Level 3 (10 years)",
+      "rubric": {
+        "correct": "Response contains '5 years', 'Fjordgate', and 'Level 2'",
+        "partial": "Response identifies Fjordgate certification log retention but gives wrong duration or level",
+        "incorrect": "Response does not contain the correct retention period for Level 2"
+      }
+    },
+    {
+      "id": "R11-RC-04",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-04",
+      "question": "At what annual gross merchandise value threshold must a cooperative AI platform appoint an independent Data Trust Officer?",
+      "ground_truth": "More than $50 million in annual GMV.",
+      "canonical_answer": "Platforms processing more than $50 million in annual gross merchandise value must appoint an independent Data Trust Officer.",
+      "hot_required_elements": ["$50 million", "Data Trust Officer"],
+      "hit_required_elements": ["50 million"],
+      "hallucination_risk": "high — model may invent a different GMV threshold",
+      "rubric": {
+        "correct": "Response contains '$50 million' and 'Data Trust Officer'",
+        "partial": "Response identifies the Data Trust Officer requirement but gives wrong threshold",
+        "incorrect": "Response does not contain the correct threshold"
+      }
+    },
+    {
+      "id": "R11-RC-05",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-05",
+      "question": "How often does the Northbridge Reporting Standard require AI model accuracy metrics to be disclosed to the cooperative board?",
+      "ground_truth": "Quarterly.",
+      "canonical_answer": "Quarterly, in a standardized format including overall accuracy, per-category breakdowns, and trend data.",
+      "hot_required_elements": ["quarterly", "Northbridge"],
+      "hit_required_elements": ["quarterly"],
+      "hallucination_risk": "medium — model may say annually or monthly",
+      "rubric": {
+        "correct": "Response contains 'quarterly' and 'Northbridge'",
+        "partial": "Response identifies the Northbridge standard but gives wrong reporting frequency",
+        "incorrect": "Response does not contain the correct reporting frequency"
+      }
+    },
+    {
+      "id": "R11-RC-06",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-06",
+      "question": "What does the Sundry Digital Rights Act require for cross-border member data transfers?",
+      "ground_truth": "Bilateral Data Adequacy confirmation from both the source and destination jurisdictions.",
+      "canonical_answer": "Bilateral Data Adequacy confirmation from both the source and destination jurisdictions — a unilateral finding is insufficient.",
+      "hot_required_elements": ["Bilateral Data Adequacy", "Sundry Digital Rights"],
+      "hit_required_elements": ["Bilateral", "Sundry"],
+      "hallucination_risk": "medium — model may describe unilateral adequacy as sufficient",
+      "rubric": {
+        "correct": "Response contains 'Bilateral Data Adequacy' and 'Sundry Digital Rights'",
+        "partial": "Response identifies an adequacy requirement for cross-border transfers but describes a unilateral process",
+        "incorrect": "Response does not correctly describe the cross-border transfer requirement"
+      }
+    },
+    {
+      "id": "R11-RC-07",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-07",
+      "question": "How often must platforms undergo third-party audits to maintain the Cairnfield Privacy Seal?",
+      "ground_truth": "Annually.",
+      "canonical_answer": "Annual third-party audits of member data handling practices by a Cairnfield-accredited auditor.",
+      "hot_required_elements": ["annual", "Cairnfield Privacy Seal"],
+      "hit_required_elements": ["annual", "Cairnfield"],
+      "hallucination_risk": "medium — model may say biennial",
+      "rubric": {
+        "correct": "Response contains 'annual' and 'Cairnfield Privacy Seal'",
+        "partial": "Response identifies the audit requirement but gives wrong frequency",
+        "incorrect": "Response does not contain the correct audit cadence"
+      }
+    },
+    {
+      "id": "R11-RC-08",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-08",
+      "question": "What compliance buffer must financial services cooperative AI platforms maintain before adopting a new AI model version?",
+      "ground_truth": "6 months.",
+      "canonical_answer": "A 6-month compliance buffer during which the new model runs in shadow mode alongside the production model.",
+      "hot_required_elements": ["6-month", "compliance buffer"],
+      "hit_required_elements": ["6"],
+      "hallucination_risk": "medium — model may say 3 months or 12 months",
+      "rubric": {
+        "correct": "Response contains '6-month' and 'compliance buffer'",
+        "partial": "Response identifies the shadow mode / buffer requirement but gives wrong duration",
+        "incorrect": "Response does not contain the correct buffer period"
+      }
+    },
+    {
+      "id": "R11-HP-01",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-01",
+      "question": "What was the significance of the Montclair Ruling of 2019 for cooperative member-owners?",
+      "ground_truth": "It established that cooperative member-owners hold a fiduciary interest in platform AI systems, not merely a contractual one.",
+      "canonical_answer": "The Montclair Ruling (2019) held that cooperative member-owners hold a fiduciary interest — not merely a contractual one — in platform AI systems.",
+      "hot_required_elements": ["Montclair", "2019", "fiduciary"],
+      "hit_required_elements": ["Montclair", "fiduciary"],
+      "hallucination_risk": "high — model may invent a different ruling or describe the wrong legal principle",
+      "rubric": {
+        "correct": "Response contains 'Montclair', '2019', and 'fiduciary'",
+        "partial": "Response identifies the Montclair Ruling and fiduciary principle but misses the year",
+        "incorrect": "Response does not identify the Montclair Ruling or the fiduciary interest principle"
+      }
+    },
+    {
+      "id": "R11-HP-02",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-02",
+      "question": "When and where was the Verdania Cooperative Platform founded, and by whom?",
+      "ground_truth": "Founded in Reykjavik in 2017 by a consortium of 12 Nordic credit unions.",
+      "canonical_answer": "Founded in Reykjavik in 2017 by a consortium of 12 Nordic credit unions.",
+      "hot_required_elements": ["Reykjavik", "2017", "12"],
+      "hit_required_elements": ["Reykjavik", "2017"],
+      "hallucination_risk": "high — model may invent founding location, year, or founding organization count",
+      "rubric": {
+        "correct": "Response contains 'Reykjavik', '2017', and '12'",
+        "partial": "Response gives 2 of 3 correct facts (location, year, founder count)",
+        "incorrect": "Response does not contain the correct founding details"
+      }
+    },
+    {
+      "id": "R11-HP-03",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-03",
+      "question": "Which cooperative AI platform was first to achieve $1 billion in annual gross member value, and in what fiscal year?",
+      "ground_truth": "Pelham Commons, in fiscal year 2022.",
+      "canonical_answer": "Pelham Commons achieved $1 billion in annual gross member value in fiscal year 2022.",
+      "hot_required_elements": ["Pelham Commons", "2022"],
+      "hit_required_elements": ["Pelham"],
+      "hallucination_risk": "high — model may invent a different platform or year",
+      "rubric": {
+        "correct": "Response contains 'Pelham Commons' and '2022'",
+        "partial": "Response identifies Pelham Commons or 2022 but not both",
+        "incorrect": "Response does not identify the correct platform or year"
+      }
+    },
+    {
+      "id": "R11-HP-04",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-04",
+      "question": "On what date was the Sundry Accord ratified, and by how many founding cooperatives across how many countries?",
+      "ground_truth": "November 14, 2021, by 47 founding cooperatives across 9 countries.",
+      "canonical_answer": "Ratified November 14, 2021, by 47 founding cooperative organizations across 9 countries.",
+      "hot_required_elements": ["November 14, 2021", "47", "9 countries"],
+      "hit_required_elements": ["November 14", "47"],
+      "hallucination_risk": "high — model may invent the date, founder count, or country count",
+      "rubric": {
+        "correct": "Response contains 'November 14, 2021', '47', and '9 countries'",
+        "partial": "Response gives 2 of 3 correct facts (date, founder count, country count)",
+        "incorrect": "Response does not contain the correct ratification details"
+      }
+    },
+    {
+      "id": "R11-HP-05",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-05",
+      "question": "What event and working group originated the Fjordgate Protocol?",
+      "ground_truth": "The 2020 Helsinki Cooperative AI Summit's 'minimum consent membrane' working group.",
+      "canonical_answer": "The 2020 Helsinki Cooperative AI Summit's 'minimum consent membrane' working group.",
+      "hot_required_elements": ["2020 Helsinki", "Fjordgate"],
+      "hit_required_elements": ["Helsinki", "Fjordgate"],
+      "hallucination_risk": "high — model may invent a different summit or location",
+      "rubric": {
+        "correct": "Response contains '2020 Helsinki' and 'Fjordgate'",
+        "partial": "Response identifies a Helsinki summit or Fjordgate Protocol but not both with correct year",
+        "incorrect": "Response does not correctly identify the origin of the Fjordgate Protocol"
+      }
+    },
+    {
+      "id": "R11-HP-06",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-06",
+      "question": "What did the Belfry cooperative's Defensive Conversion Clause require the 2018 acquirer to offer members?",
+      "ground_truth": "22-month conversion rights to convert membership equity to common shares in the acquiring entity.",
+      "canonical_answer": "22-month conversion rights at a pre-agreed price to convert membership equity to common shares in the acquiring entity.",
+      "hot_required_elements": ["22-month", "Defensive Conversion", "Belfry"],
+      "hit_required_elements": ["22", "Belfry"],
+      "hallucination_risk": "high — model may invent a different conversion period or mechanism",
+      "rubric": {
+        "correct": "Response contains '22-month', 'Defensive Conversion', and 'Belfry'",
+        "partial": "Response identifies the Belfry acquisition and Defensive Conversion Clause but gives wrong conversion period",
+        "incorrect": "Response does not correctly identify the Defensive Conversion Clause details"
+      }
+    },
+    {
+      "id": "R11-HP-07",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-07",
+      "question": "Who first deployed the Thornwick architecture at scale, and what uptime did it achieve in its first year?",
+      "ground_truth": "Mossworth Cooperative Services in 2023; 99.7% uptime.",
+      "canonical_answer": "Mossworth Cooperative Services in 2023, achieving 99.7% uptime in the first operational year.",
+      "hot_required_elements": ["Mossworth", "2023", "99.7%"],
+      "hit_required_elements": ["Mossworth", "99.7"],
+      "hallucination_risk": "high — model may invent a different deployer or uptime figure",
+      "rubric": {
+        "correct": "Response contains 'Mossworth', '2023', and '99.7%'",
+        "partial": "Response identifies Mossworth or 99.7% but not both with correct year",
+        "incorrect": "Response does not correctly identify the first large-scale Thornwick deployment"
+      }
+    },
+    {
+      "id": "R11-HP-08",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-08",
+      "question": "What did the Cooper-Anderson Decision of 2022 require of cooperative AI platform operators regarding model changes?",
+      "ground_truth": "Disclosure of material model changes to member-owners within 21 days of deployment.",
+      "canonical_answer": "Material AI model changes must be disclosed to member-owners within 21 days of deployment.",
+      "hot_required_elements": ["Cooper-Anderson", "2022", "21 days"],
+      "hit_required_elements": ["Cooper-Anderson", "21"],
+      "hallucination_risk": "high — model may invent a different decision name, year, or disclosure window",
+      "rubric": {
+        "correct": "Response contains 'Cooper-Anderson', '2022', and '21 days'",
+        "partial": "Response identifies the Cooper-Anderson Decision and disclosure obligation but wrong timeframe",
+        "incorrect": "Response does not correctly identify the Cooper-Anderson Decision requirements"
+      }
+    }
+  ]
+}
