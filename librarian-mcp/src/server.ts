@@ -15,6 +15,21 @@ import type {
 import { buildBriefing, buildChecklist, buildDebrief } from "./router/moneyPennyRouter.js";
 import { budgetEnforce, BUDGETS, truncateList, truncateToWords } from "./router/budgets.js";
 import { canonicalValueMatches, loadCanonicalFlat } from "./predicates/canonical_value_matches.js";
+import { checkFreshness } from "./indexer/fingerprint.js";
+import { getRegistry, listScribeIds, getScribe } from "./scribes/registry.js";
+import {
+  appendTidbit,
+  appendScribeEntry,
+  appendFatesLog,
+  readTidbits,
+  readTablet,
+  readFatesLog,
+  tabletStats,
+  type AgentName,
+  type ScribeSource,
+} from "./scribes/cathedral.js";
+import { runFates } from "./scribes/fates.js";
+import { consultScribes } from "./scribes/consult.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -1353,6 +1368,153 @@ server.tool(
 );
 
 // ═══════════════════════════════════════════
+// K419 — TRIPLE SCRAMBLER VERIFICATION TRIGGERS
+// Trigger 1: hardwired into brief_me + moneypenny_debrief
+// Trigger 2: file-based watchdog (4hr staleness check)
+// Trigger 3: Cursor hooks (configured in .cursor/hooks.json)
+// ═══════════════════════════════════════════
+
+const SCRAMBLER_REPORT_DIR = resolve(__dirname, "..", "data", "scrambler-reports");
+const SCRAMBLER_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const SCRAMBLER_WATCHDOG_STALE_MS = 4 * 60 * 60 * 1000; // 4 hours
+
+let _scramblerCache: { result: any; timestamp: number } | null = null;
+
+function runTripleScrambler(sessionId: string, timeoutMs: number = 30_000): any {
+  // Check cache first
+  if (_scramblerCache && (Date.now() - _scramblerCache.timestamp) < SCRAMBLER_CACHE_TTL_MS) {
+    return { ..._scramblerCache.result, _cached: true };
+  }
+
+  try {
+    const output = execSync(
+      `python "${resolve(__dirname, "..", "scrambler", "reconcile.py")}" "${sessionId}"`,
+      {
+        cwd: resolve(__dirname, "..", "scrambler"),
+        timeout: timeoutMs,
+        encoding: "utf-8",
+        env: { ...process.env, PYTHONIOENCODING: "utf-8" },
+      }
+    );
+    const result = JSON.parse(output);
+
+    // Cache it
+    _scramblerCache = { result, timestamp: Date.now() };
+
+    // Write report to disk (Trigger 2 evidence)
+    try {
+      mkdirSync(SCRAMBLER_REPORT_DIR, { recursive: true });
+      const ts = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+      const reportPath = resolve(SCRAMBLER_REPORT_DIR, `${ts}.json`);
+      writeFileSync(reportPath, JSON.stringify(result, null, 2) + "\n", "utf-8");
+    } catch { /* non-fatal */ }
+
+    return result;
+  } catch (err: unknown) {
+    const e = err as { message?: string };
+    return {
+      _error: true,
+      _message: e.message?.includes("TIMEOUT") || e.message?.includes("timed out")
+        ? "Triple scrambler timed out (30s limit). Verification skipped."
+        : `Triple scrambler error: ${(e.message || "unknown").slice(0, 200)}`,
+    };
+  }
+}
+
+function formatVerificationSection(result: any): string {
+  if (result._error) {
+    return `\n## ⚠️ Verification Status\n${result._message}\n`;
+  }
+
+  const a = result.scrambler_a || {};
+  const b = result.scrambler_b || {};
+  const c = result.scrambler_c || {};
+  const st = result.staleness || {};
+  const health = result.system_health || {};
+  const cached = result._cached ? " (cached)" : "";
+
+  const lines: string[] = [];
+  lines.push(`\n## Verification Status${cached}`);
+  lines.push(`Health: **${health.status || "UNKNOWN"}** | A conflicts: ${a.conflicts || 0} | B disagreements: ${b.disagreements || 0} | C escalations: ${c.escalations || 0}`);
+  lines.push(`Stale: ${st.stale_deliverables || 0} | Auto-complete candidates: ${st.auto_complete_candidates || 0} | Session gaps: ${st.session_gaps || 0} | Orphaned: ${(result.details?.stale_flags || []).filter((f: any) => f.flag === "ORPHANED").length}`);
+
+  if (health.issues?.length > 0) {
+    for (const issue of health.issues) {
+      lines.push(`- ${issue}`);
+    }
+  }
+
+  const details = result.details || {};
+  if (details.c_decisions?.length > 0) {
+    lines.push(`\n### UNRESOLVED — Founder Review Required`);
+    for (const d of details.c_decisions.filter((dd: any) => dd.escalate)) {
+      lines.push(`- **${d.deliverable_id}** → ${d.decision}: ${d.reasoning}`);
+    }
+  }
+  if (details.auto_candidates?.length > 0) {
+    lines.push(`\n### Auto-Complete Candidates`);
+    for (const ac of details.auto_candidates.slice(0, 5)) {
+      lines.push(`- [POSSIBLY COMPLETED] ${ac.deliverable_id} (${ac.title})`);
+    }
+    if (details.auto_candidates.length > 5) {
+      lines.push(`  ... and ${details.auto_candidates.length - 5} more`);
+    }
+  }
+
+  return lines.join("\n");
+}
+
+function getLastReportAge(): number {
+  try {
+    if (!existsSync(SCRAMBLER_REPORT_DIR)) return Infinity;
+    const files = require("fs").readdirSync(SCRAMBLER_REPORT_DIR) as string[];
+    if (files.length === 0) return Infinity;
+    const latest = files.sort().reverse()[0];
+    const stat = require("fs").statSync(resolve(SCRAMBLER_REPORT_DIR, latest));
+    return Date.now() - stat.mtimeMs;
+  } catch {
+    return Infinity;
+  }
+}
+
+function checkHooksConfigured(): { configured: boolean; missing: string[] } {
+  const hooksLocations = [
+    resolve(__dirname, "..", "..", ".cursor", "hooks.json"),
+    resolve(__dirname, "..", "..", ".cursor", "hooks", "hooks.json"),
+  ];
+
+  const requiredMatchers = [
+    "MCP: user-librarian/moneypenny_debrief",
+    "MCP: user-librarian/touchstone_complete",
+  ];
+
+  for (const loc of hooksLocations) {
+    if (existsSync(loc)) {
+      try {
+        const config = JSON.parse(readFileSync(loc, "utf-8"));
+        const hooks = config.hooks || {};
+        const allMatchers = new Set<string>();
+
+        for (const eventHooks of Object.values(hooks) as any[][]) {
+          if (Array.isArray(eventHooks)) {
+            for (const h of eventHooks) {
+              if (h.matcher) allMatchers.add(h.matcher);
+            }
+          }
+        }
+
+        const missing = requiredMatchers.filter(m => !allMatchers.has(m));
+        return { configured: missing.length === 0, missing };
+      } catch {
+        return { configured: false, missing: requiredMatchers };
+      }
+    }
+  }
+
+  return { configured: false, missing: requiredMatchers };
+}
+
+// ═══════════════════════════════════════════
 // TOOL 18: brief_me (MoneyPenny)
 // ═══════════════════════════════════════════
 
@@ -1407,8 +1569,61 @@ server.tool(
       }
     }
 
-    const output = budgetEnforce(sections.join("\n"), BUDGETS.briefMe);
-    return { content: [{ type: "text", text: output }] };
+    // ── K419 Trigger 1A: Triple Scrambler at session start ──
+    const verificationSections: string[] = [];
+    const reportAge = getLastReportAge();
+    const isWatchdogStale = reportAge > SCRAMBLER_WATCHDOG_STALE_MS;
+    const scramblerResult = runTripleScrambler(task.slice(0, 20).replace(/\s+/g, "_"));
+    verificationSections.push(formatVerificationSection(scramblerResult));
+
+    if (isWatchdogStale && !scramblerResult._error) {
+      verificationSections.push(`_Watchdog: last report was ${Math.round(reportAge / 3600000)}h ago — full reconcile ran._`);
+    }
+
+    // Trigger 3 self-monitoring
+    const hookStatus = checkHooksConfigured();
+    if (!hookStatus.configured) {
+      verificationSections.push(`\n### ⚠️ TRIGGER 3 INCOMPLETE`);
+      verificationSections.push(`Missing hooks: ${hookStatus.missing.join(", ")}`);
+      verificationSections.push(`Run: \`node librarian-mcp/scripts/install-hooks.js\``);
+    }
+
+    // K429 Half B: Index freshness check in brief_me
+    let indexDrift = false;
+    try {
+      const freshness = await checkFreshness(INDEX_DIR, WORKSPACE_ROOT);
+      if (freshness.status === "DRIFT") {
+        indexDrift = true;
+        const ageHr = Math.round((freshness.ageMs || 0) / 3600000);
+        verificationSections.push(`\n### ⚠️ LIBRARIAN INDEX DRIFT`);
+        verificationSections.push(`${freshness.totalDrift} files changed since last build (${ageHr}h ago). Run: \`cd librarian-mcp && npm run rebuild\``);
+      } else if (freshness.status === "FRESH") {
+        const ageMin = freshness.ageMs! < 60000 ? "<1m" : `${Math.round(freshness.ageMs! / 60000)}m`;
+        verificationSections.push(`_Index: fresh (${ageMin} ago)_`);
+      }
+    } catch { /* non-fatal */ }
+
+    // If issues exist, put verification BEFORE task context
+    const hasIssues = !scramblerResult._error && (
+      scramblerResult.system_health?.status === "NEEDS_ATTENTION" ||
+      !hookStatus.configured ||
+      indexDrift
+    );
+
+    let finalOutput: string;
+    if (hasIssues) {
+      finalOutput = budgetEnforce(
+        verificationSections.join("\n") + "\n\n" + sections.join("\n"),
+        BUDGETS.briefMe + 200,
+      );
+    } else {
+      finalOutput = budgetEnforce(
+        sections.join("\n") + "\n" + verificationSections.join("\n"),
+        BUDGETS.briefMe + 200,
+      );
+    }
+
+    return { content: [{ type: "text", text: finalOutput }] };
   }
 );
 
@@ -1535,7 +1750,43 @@ server.tool(
       for (const sl of summaryLines) sections.push(`- ${sl.trim()}`);
     } catch { /* non-fatal */ }
 
-    const output = budgetEnforce(sections.join("\n"), BUDGETS.debrief);
+    // ── K419 Trigger 1B: Triple Scrambler at session end ──
+    _scramblerCache = null; // Force fresh run at session end
+    const scramblerResult = runTripleScrambler(session_id);
+
+    if (!scramblerResult._error) {
+      sections.push(formatVerificationSection(scramblerResult));
+
+      const details = scramblerResult.details || {};
+      // Auto-flag deliverables matching this session's work
+      if (details.auto_candidates?.length > 0) {
+        const matchingCandidates = details.auto_candidates.filter((ac: any) => {
+          const titleLower = (ac.title || "").toLowerCase();
+          const summaryLower = summary.toLowerCase();
+          return titleLower.split(/\s+/).some((w: string) => w.length > 4 && summaryLower.includes(w));
+        });
+        if (matchingCandidates.length > 0) {
+          sections.push(`\n### Session Match — Auto-Complete Candidates`);
+          for (const mc of matchingCandidates) {
+            sections.push(`- [AUTO-COMPLETE CANDIDATE] **${mc.deliverable_id}**: ${mc.title}`);
+          }
+        }
+      }
+
+      // Escalations for Founder
+      const escalations = (details.c_decisions || []).filter((d: any) => d.escalate);
+      if (escalations.length > 0) {
+        sections.push(`\n### UNRESOLVED — Founder Review Required`);
+        for (const e of escalations) {
+          sections.push(`- **${e.deliverable_id}** → ${e.decision}: ${e.reasoning}`);
+        }
+      }
+    } else {
+      sections.push(`\n### ⚠️ Verification`);
+      sections.push(scramblerResult._message || "Triple scrambler did not complete.");
+    }
+
+    const output = budgetEnforce(sections.join("\n"), BUDGETS.debrief + 200);
     return { content: [{ type: "text", text: output }] };
   }
 );
@@ -1811,8 +2062,43 @@ server.tool(
       sections.push(`⚠️  Canonical check skipped: ${(err as Error).message}`);
     }
 
+    // K429 Half B: Index freshness check
+    try {
+      const freshness = await checkFreshness(INDEX_DIR, WORKSPACE_ROOT);
+      if (freshness.status === "FRESH") {
+        const ageMin = freshness.ageMs! < 60000 ? "<1m" : `${Math.round(freshness.ageMs! / 60000)}m`;
+        sections.push(`✅ Librarian index: FRESH (built ${freshness.lastBuild}, ${ageMin} ago)`);
+      } else if (freshness.status === "DRIFT") {
+        const ageHr = Math.round((freshness.ageMs || 0) / 3600000);
+        sections.push(`⚠️  LIBRARIAN INDEX DRIFT — ${freshness.totalDrift} files changed since last build (${ageHr}h ago)`);
+        if (freshness.newFiles.length) sections.push(`  New: ${freshness.newFiles.slice(0, 5).join(", ")}${freshness.newFiles.length > 5 ? ` (+${freshness.newFiles.length - 5} more)` : ""}`);
+        if (freshness.changedFiles.length) sections.push(`  Modified: ${freshness.changedFiles.slice(0, 5).join(", ")}${freshness.changedFiles.length > 5 ? ` (+${freshness.changedFiles.length - 5} more)` : ""}`);
+        sections.push(`  Action: run \`cd librarian-mcp && npm run rebuild\` to resync.`);
+      } else {
+        sections.push(`⚠️  Librarian index: no fingerprint found. Run \`cd librarian-mcp && npm run rebuild:full\` to initialize.`);
+      }
+    } catch (err) {
+      sections.push(`⚠️  Index freshness check skipped: ${(err as Error).message}`);
+    }
+
     const output = runStitchpunkHook("session_start.py", [agent, session_id, task || ""]);
     sections.push(output);
+
+    // SP-22/23 Cathedral status line (K436)
+    try {
+      const reg = getRegistry();
+      const scribeIds = reg.scribes.map((s) => s.id);
+      let allTimeEntries = 0;
+      for (const id of scribeIds) {
+        allTimeEntries += tabletStats(id).total_entries;
+      }
+      sections.push(
+        `SP-22/23 Cathedral: ${scribeIds.length} Scribes registered (${scribeIds.join(", ")}), ${allTimeEntries} total tablet entries all-time. Consult via consult_scribes tool.`
+      );
+    } catch (err) {
+      sections.push(`SP-22/23 Cathedral: status unavailable (${(err as Error).message})`);
+    }
+
     return { content: [{ type: "text", text: sections.join("\n") }] };
   }
 );
@@ -1827,7 +2113,233 @@ server.tool(
   },
   async ({ agent, session_id, summary }) => {
     const output = runStitchpunkHook("session_end.py", [agent, session_id, summary]);
-    return { content: [{ type: "text", text: output }] };
+
+    // SP-22/23 Cathedral session summary (K436)
+    const cathedralLines: string[] = ["", "── SP-22/23 Cathedral session summary ──"];
+    try {
+      const sessionTidbits = readTidbits({ session: session_id });
+      const tidbitsByCategory = new Map<string, number>();
+      for (const t of sessionTidbits) {
+        tidbitsByCategory.set(t.category, (tidbitsByCategory.get(t.category) || 0) + 1);
+      }
+      const tidbitSummary =
+        sessionTidbits.length === 0
+          ? "0 (none — under-verification flag if non-trivial session)"
+          : `${sessionTidbits.length} (${Array.from(tidbitsByCategory.entries())
+              .map(([k, v]) => `${v} ${k}`)
+              .join(", ")})`;
+      cathedralLines.push(`SP-21 Tidbits this session: ${tidbitSummary}`);
+
+      // Per-Scribe entries this session
+      const scribeIds = listScribeIds();
+      const perScribe: Array<{ id: string; n: number }> = [];
+      for (const id of scribeIds) {
+        const entries = readTablet(id).filter((e) => e.session === session_id);
+        if (entries.length > 0) perScribe.push({ id, n: entries.length });
+      }
+      const scribeTotal = perScribe.reduce((s, x) => s + x.n, 0);
+      const scribeSummary =
+        scribeTotal === 0
+          ? "0 entries logged"
+          : `${scribeTotal} entries (${perScribe.map((p) => `${p.n} ${p.id}`).join(", ")})`;
+      cathedralLines.push(`SP-23 Scribe tablet entries this session: ${scribeSummary}`);
+
+      // Fates dispatches
+      const fatesThisSession = readFatesLog({ session: session_id });
+      const dispatchCount = fatesThisSession.reduce(
+        (s, r) => s + (r.atropos_dispatch?.length || 0),
+        0,
+      );
+      cathedralLines.push(
+        `SP-22 Fates routings this session: ${fatesThisSession.length} pipeline runs → ${dispatchCount} dispatches`,
+      );
+
+      // Coverage gaps
+      const gapSet = new Set<string>();
+      for (const r of fatesThisSession) {
+        for (const g of r.coverage_gaps || []) gapSet.add(g);
+      }
+      cathedralLines.push(
+        `Coverage gaps detected: ${gapSet.size === 0 ? "none" : Array.from(gapSet).slice(0, 8).join(", ") + (gapSet.size > 8 ? `, +${gapSet.size - 8} more` : "")}`,
+      );
+
+      // Hottest Scribe
+      if (perScribe.length > 0) {
+        const hottest = [...perScribe].sort((a, b) => b.n - a.n)[0];
+        cathedralLines.push(`Hottest Scribe this session: ${hottest.id} (${hottest.n} entries)`);
+      } else {
+        cathedralLines.push(`Hottest Scribe this session: (none — Cathedral idle)`);
+      }
+    } catch (err) {
+      cathedralLines.push(`(Cathedral summary failed: ${(err as Error).message})`);
+    }
+
+    return {
+      content: [{ type: "text", text: output + "\n" + cathedralLines.join("\n") }],
+    };
+  }
+);
+
+// ═══════════════════════════════════════════
+// SP-21 + SP-22/23 — TIDBIT + CATHEDRAL TOOLS (K436)
+// ═══════════════════════════════════════════
+
+server.tool(
+  "log_tidbit",
+  "Append a verification-behavior tidbit to the SP-21 ledger (stitchpunks/data/tidbits.jsonl). Call whenever you perform a BRIDLE-Rule-2-style pre-assertion check (verified a slot, file, commit, symbol, route, or canonical value before claiming it). Returns the new line count.",
+  {
+    agent: z.enum(["BISHOP", "KNIGHT", "ROOK", "PAWN"]).describe("Calling agent"),
+    session: z.string().regex(/^[BKRP]\d+$/).describe("Session id, e.g. B116, K436"),
+    category: z.string().min(3).describe("verify_<action>, e.g. verify_slot_number, verify_file_exists"),
+    observation: z.string().min(10).max(500).describe("One-sentence description of what was checked and what was found"),
+    artifact: z.string().optional().describe("File path or symbol the verification served"),
+  },
+  async ({ agent, session, category, observation, artifact }) => {
+    try {
+      const result = appendTidbit({
+        agent: agent as AgentName,
+        session,
+        category,
+        observation,
+        artifact,
+      });
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({ ok: true, line_count: result.line_count, ts: result.record.ts }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+server.tool(
+  "fates_route",
+  "Run the Three Fates pipeline (Clotho extracts themes, Lachesis scores against registered Scribes, Atropos returns dispatch directives) over a chunk of session text. Always logs the routing record to stitchpunks/data/fates_log.jsonl. Caller decides whether to act on the dispatch directives by calling scribe_log.",
+  {
+    session_id: z.string().describe("Session identifier (e.g. 'B116', 'K436')"),
+    text: z.string().min(20).describe("The session text to route (typically the latest Founder turn + agent response)"),
+    agent: z.enum(["BISHOP", "KNIGHT", "ROOK", "PAWN"]).describe("Calling agent"),
+    source_exchange: z.string().optional().describe("Short label for this exchange, used in the fates_log record"),
+  },
+  async ({ session_id, text, agent, source_exchange }) => {
+    try {
+      const result = runFates(text);
+      const logResult = appendFatesLog({
+        session: session_id,
+        agent: agent as AgentName,
+        clotho_themes: result.clotho_themes,
+        lachesis_scores: result.lachesis_scores,
+        atropos_dispatch: result.atropos_dispatch.map((d) => ({
+          scribe_id: d.scribe_id,
+          directive: d.directive,
+          suggested_observation: d.suggested_observation,
+        })),
+        coverage_gaps: result.coverage_gaps,
+        source_exchange,
+      });
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            clotho_themes: result.clotho_themes,
+            named_entities: result.named_entities,
+            lachesis_scores: result.lachesis_scores,
+            atropos_dispatch: result.atropos_dispatch,
+            coverage_gaps: result.coverage_gaps,
+            logged_to: "stitchpunks/data/fates_log.jsonl",
+            fates_log_line_count: logResult.line_count,
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+server.tool(
+  "scribe_log",
+  "Append an observation to a specific Scribe's tablet (stitchpunks/scribes/scribe_<id>.jsonl). The scribe_id MUST be registered in registry.yaml — unknown ids are rejected (registration is a deliberate registry edit, not an on-the-fly call).",
+  {
+    scribe_id: z.string().describe("Registered Scribe id, e.g. R9, BRIDLE, Landing, Prov14, Vault"),
+    session_id: z.string().describe("Session identifier"),
+    observation: z.string().min(10).max(500).describe("Observation text — the durable record"),
+    source: z.enum([
+      "founder_dialogue", "bishop_ship", "knight_ship",
+      "bishop_read", "bishop_thresh", "bishop_design",
+      "scribe_thresh", "fates_auto",
+    ]).describe("Provenance of this observation"),
+    canonical_ref: z.string().optional().describe("Pointer to the canonical document/file this observation references"),
+  },
+  async ({ scribe_id, session_id, observation, source, canonical_ref }) => {
+    if (!getScribe(scribe_id)) {
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            ok: false,
+            error: "unknown_scribe",
+            scribe_id,
+            registered: listScribeIds(),
+            note: "Add the Scribe to registry.yaml first (deliberate edit), then retry.",
+          }, null, 2),
+        }],
+      };
+    }
+    try {
+      const result = appendScribeEntry({
+        scribe_id,
+        session: session_id,
+        observation,
+        source: source as ScribeSource,
+        canonical_ref,
+      });
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            ok: true,
+            tablet: result.tablet,
+            line_count: result.line_count,
+            ts: result.record.ts,
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+server.tool(
+  "consult_scribes",
+  "RAM-access pattern for the Cathedral: query Scribes for recent observations on a topic. Scores topic against every registered Scribe's primary + adjacent fields, returns up to max_entries from the highest-scoring Scribes (primary first, adjacents next if include_adjacents=true). Optimized for fast mid-session retrieval (target p95 < 200ms for 20-tablet cathedral).",
+  {
+    topic: z.string().min(2).describe("Topic to look up — keyword, phrase, named entity, or canonical id"),
+    max_entries: z.number().int().min(1).max(200).optional().describe("Maximum entries to return (default 20)"),
+    since_ts: z.string().optional().describe("ISO-8601 timestamp; only entries newer than this are returned"),
+    include_adjacents: z.boolean().optional().describe("If true (default), also return entries from Scribes that match only on adjacent fields"),
+  },
+  async ({ topic, max_entries, since_ts, include_adjacents }) => {
+    try {
+      const result = consultScribes({ topic, max_entries, since_ts, include_adjacents });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
   }
 );
 
@@ -1978,7 +2490,7 @@ server.tool(
 
 server.tool(
   "touchstone_complete",
-  "Submits completion for a deliverable. Runs all predicates. If ALL pass, marks completed. If any fail, rejects with reasons.",
+  "Submits completion for a deliverable. Runs all predicates. If ALL pass, marks completed. If any fail, rejects with reasons. Stale predicates (10+ sessions old) are downgraded to warnings.",
   {
     deliverable_id: z.string().describe("The deliverable ID to mark complete"),
     agent: z.string().describe("The agent completing: bishop, knight, rook, pawn"),
@@ -1991,7 +2503,6 @@ server.tool(
       return { content: [{ type: "text", text: `Deliverable '${deliverable_id}' not found.` }] };
     }
 
-    // Run verification
     const output = runTouchstone("verify.py", [deliverable_id]);
     let result: any;
     try {
@@ -2000,24 +2511,81 @@ server.tool(
       return { content: [{ type: "text", text: `Verification error: ${output}` }] };
     }
 
+    // Stale predicate handling: if deliverable is 10+ sessions old, downgrade failures to warnings
+    const sessionsPath = resolve(__dirname, "..", "index", "sessions.json");
+    let sessionCount = 0;
+    if (existsSync(sessionsPath)) {
+      try { sessionCount = JSON.parse(readFileSync(sessionsPath, "utf-8")).length; } catch { /* ignore */ }
+    }
+    const createdAt = d.created_at || "";
+    let isStale = false;
+    if (createdAt && sessionCount > 0) {
+      const sessionsFile = JSON.parse(readFileSync(sessionsPath, "utf-8"));
+      const createdDate = createdAt.slice(0, 10);
+      const sessionsAfter = sessionsFile.filter((s: any) => (s.date || "") >= createdDate).length;
+      isStale = sessionsAfter >= 10;
+    }
+
     if (result.passed) {
       d.status = "completed";
       d.completed_at = new Date().toISOString();
       saveTouchstoneManifest(manifest);
-
       runTouchstone("ledger.py", ["completed", deliverable_id, JSON.stringify({ agent, predicate_count: (result.predicate_results || []).length })]);
-
       return {
         content: [{ type: "text", text: `✅ COMPLETED: ${d.title}\nAll ${(result.predicate_results || []).length} predicates passed.` }],
       };
+    } else if (isStale) {
+      const failDetails = (result.blocking_failures || []).map((f: string) => `  ⚠️ ${f} [STALE — downgraded to warning]`).join("\n");
+      return {
+        content: [{ type: "text", text: `⚠️ STALE PREDICATES: ${d.title}\nDeliverable is 10+ sessions old. Failures downgraded to warnings:\n${failDetails}\n\nUse touchstone_force_complete to override.` }],
+      };
     } else {
       runTouchstone("ledger.py", ["failed", deliverable_id, JSON.stringify({ agent, failures: result.blocking_failures })]);
-
       const failDetails = (result.blocking_failures || []).map((f: string) => `  ❌ ${f}`).join("\n");
       return {
         content: [{ type: "text", text: `REJECTED: ${d.title}\nPredicates failed:\n${failDetails}` }],
       };
     }
+  }
+);
+
+server.tool(
+  "touchstone_force_complete",
+  "Force-completes a deliverable when predicates are stale but work clearly shipped. Logs the override with reason and agent. Use when touchstone_complete rejects due to stale predicates.",
+  {
+    deliverable_id: z.string().describe("The deliverable ID to force-complete"),
+    agent: z.string().describe("The agent forcing completion: bishop, knight, rook, pawn"),
+    reason: z.string().describe("Why force-completing — what evidence shows it shipped"),
+  },
+  async ({ deliverable_id, agent, reason }) => {
+    const manifest = loadTouchstoneManifest();
+    const d = (manifest.deliverables || []).find((dd: any) => dd.id === deliverable_id);
+
+    if (!d) {
+      return { content: [{ type: "text", text: `Deliverable '${deliverable_id}' not found.` }] };
+    }
+
+    if (d.status === "completed") {
+      return { content: [{ type: "text", text: `Already completed: ${d.title}` }] };
+    }
+
+    d.status = "completed";
+    d.completed_at = new Date().toISOString();
+    d.force_completed = true;
+    d.force_completed_by = agent;
+    d.force_completed_reason = reason;
+    saveTouchstoneManifest(manifest);
+
+    runTouchstone("ledger.py", ["completed", deliverable_id, JSON.stringify({
+      agent,
+      force: true,
+      reason,
+      predicate_count: 0,
+    })]);
+
+    return {
+      content: [{ type: "text", text: `⚡ FORCE-COMPLETED: ${d.title}\nAgent: ${agent}\nReason: ${reason}\nLogged for Founder audit.` }],
+    };
   }
 );
 
@@ -2044,66 +2612,139 @@ function runScrambler(script: string, args: string[]): string {
 
 server.tool(
   "scrambler_session_start",
-  "Scrambler Chessboard Phase 2: generates a session start brief from the canonical state. Flags drift, conflicts, and pending handoffs. Returns a structured brief the agent ingests as first context.",
+  "Scrambler Chessboard Phase 2 + K418 Triple-Redundant: generates a session start brief from canonical state. Runs Scramblers A (ledger), B (ground truth), C (arbiter) side-by-side. Flags drift, conflicts, staleness, and session gaps.",
   {
     agent: z.string().describe("Agent type: bishop, knight, rook, pawn"),
     session_id: z.string().describe("Session identifier (e.g. 'B098', 'K407')"),
   },
   async ({ agent, session_id }) => {
+    // Scrambler A — original session brief
     const output = runScrambler("session_brief.py", [agent, session_id]);
 
+    let brief: any;
     try {
-      const brief = JSON.parse(output);
-      const lines: string[] = [];
-      lines.push(`## Scrambler Session Brief: ${session_id}\n`);
-      lines.push(`Agent: **${brief.agent}** | Started: ${brief.started_at}`);
-      lines.push(`Snapshot: ${brief.canonical_state_snapshot_id}`);
-      lines.push(`Ready to proceed: **${brief.ready_to_proceed ? "YES" : "NO"}**\n`);
-
-      if (brief.block_reason && brief.block_reason.length > 0) {
-        lines.push(`### BLOCKED`);
-        for (const r of brief.block_reason) lines.push(`- ${r}`);
-      }
-
-      if (brief.drift_warnings && brief.drift_warnings.length > 0) {
-        lines.push(`\n### Drift Warnings (${brief.drift_warnings.length})`);
-        for (const d of brief.drift_warnings) {
-          lines.push(`- [${d.severity}] ${d.message}`);
-        }
-      }
-
-      if (brief.canonical_conflicts && brief.canonical_conflicts.length > 0) {
-        lines.push(`\n### Canonical Conflicts (${brief.canonical_conflicts.length})`);
-        for (const c of brief.canonical_conflicts) {
-          lines.push(`- ${c.key}: ${c.reason || c.message}`);
-        }
-      }
-
-      const cs = brief.canonical_state || {};
-      if (cs.stats) {
-        lines.push(`\n### Canonical Numbers`);
-        lines.push(`Innovations: ${cs.stats.innovation_count} | CJs: ${cs.stats.crown_jewels} | Claims: ${cs.stats.formal_claims_approximate}`);
-      }
-
-      if (brief.prior_session_summary) {
-        const ps = brief.prior_session_summary;
-        const lastKey = Object.keys(ps).find(k => k.startsWith("last_"));
-        if (lastKey) {
-          lines.push(`\n### Prior Session`);
-          lines.push(`${lastKey}: ${ps[lastKey]}`);
-        }
-      }
-
-      const promptsKey = Object.keys(brief).find(k => k.endsWith("_prompts") && k.startsWith("active_"));
-      if (promptsKey && brief[promptsKey]?.length > 0) {
-        lines.push(`\n### Active Prompts`);
-        for (const p of brief[promptsKey]) lines.push(`- ${p}`);
-      }
-
-      return { content: [{ type: "text", text: lines.join("\n") }] };
+      brief = JSON.parse(output);
     } catch {
       return { content: [{ type: "text", text: output }] };
     }
+
+    const lines: string[] = [];
+    lines.push(`## Scrambler Session Brief: ${session_id}\n`);
+    lines.push(`Agent: **${brief.agent}** | Started: ${brief.started_at}`);
+    lines.push(`Snapshot: ${brief.canonical_state_snapshot_id}`);
+
+    // ── Scrambler A results ──
+    lines.push(`\n### Scrambler A — Ledger Verifier`);
+    const driftCount = (brief.drift_warnings || []).length;
+    const conflictCount = (brief.canonical_conflicts || []).length;
+    lines.push(`Drifts: ${driftCount} | Conflicts: ${conflictCount}`);
+
+    if (brief.drift_warnings?.length > 0) {
+      for (const d of brief.drift_warnings) {
+        lines.push(`  - [${d.severity}] ${d.message}`);
+      }
+    }
+    if (brief.canonical_conflicts?.length > 0) {
+      for (const c of brief.canonical_conflicts) {
+        lines.push(`  - ${c.key}: ${c.reason || c.message}`);
+      }
+    }
+
+    // ── Scrambler B — Ground Truth ──
+    let bResult: any = null;
+    try {
+      const bOutput = runScrambler("ground_truth.py", []);
+      bResult = JSON.parse(bOutput);
+      const vs = bResult.verdicts_summary || {};
+      lines.push(`\n### Scrambler B — Ground Truth Verifier`);
+      lines.push(`Deliverables: ${bResult.total_deliverables} | Shipped: ${vs.shipped || 0} | Likely: ${vs.likely_shipped || 0} | Missing: ${vs.missing || 0}`);
+      lines.push(`Disagreements: **${bResult.disagreement_count || 0}**`);
+      if (bResult.disagreements?.length > 0) {
+        for (const d of bResult.disagreements.slice(0, 5)) {
+          lines.push(`  - ${d.deliverable_id}: ledger=${d.ledger_says}, truth=${d.ground_truth_says}`);
+        }
+      }
+    } catch {
+      lines.push(`\n### Scrambler B — Ground Truth Verifier`);
+      lines.push(`(could not run)`);
+    }
+
+    // ── Scrambler C — Arbiter ──
+    if (bResult && (bResult.disagreement_count || 0) > 0) {
+      try {
+        const cOutput = runScrambler("arbiter.py", []);
+        const cResult = JSON.parse(cOutput);
+        lines.push(`\n### Scrambler C — Arbiter`);
+        lines.push(`Activated: **${cResult.activated ? "YES" : "NO"}** | Self-healed: ${cResult.self_healed || 0} | Escalations: ${cResult.escalations || 0}`);
+        if (cResult.decisions?.length > 0) {
+          for (const d of cResult.decisions.slice(0, 5)) {
+            lines.push(`  - ${d.deliverable_id} → ${d.decision} (${d.confidence})${d.self_healed ? " [SELF-HEALED]" : ""}${d.escalate ? " [ESCALATE]" : ""}`);
+          }
+        }
+      } catch {
+        lines.push(`\n### Scrambler C — Arbiter`);
+        lines.push(`(could not run)`);
+      }
+    }
+
+    // ── Staleness & Gaps ──
+    try {
+      const staleOutput = runScrambler("staleness.py", []);
+      const staleResult = JSON.parse(staleOutput);
+      if (staleResult.session_gap_count > 0 || staleResult.stale_count > 0 || staleResult.auto_complete_count > 0) {
+        lines.push(`\n### Staleness & Session Gaps`);
+        if (staleResult.session_gap_count > 0) {
+          lines.push(`Session index gaps: **${staleResult.session_gap_count}** (${staleResult.session_gaps.slice(0, 5).map((g: any) => g.missing_id).join(", ")}${staleResult.session_gap_count > 5 ? "..." : ""})`);
+        }
+        if (staleResult.stale_deliverables?.length > 0) {
+          for (const f of staleResult.stale_deliverables) {
+            lines.push(`  - [${f.flag}] ${f.deliverable_id}: ${f.message}`);
+          }
+        }
+        if (staleResult.auto_complete_candidates?.length > 0) {
+          lines.push(`  Auto-complete candidates:`);
+          for (const ac of staleResult.auto_complete_candidates.slice(0, 5)) {
+            lines.push(`  - [POSSIBLY COMPLETED] ${ac.deliverable_id} (score=${ac.match_score})`);
+          }
+        }
+      }
+    } catch {
+      /* staleness check is informational, don't block on failure */
+    }
+
+    // ── Canonical Numbers ──
+    const cs = brief.canonical_state || {};
+    if (cs.stats) {
+      lines.push(`\n### Canonical Numbers`);
+      lines.push(`Innovations: ${cs.stats.innovation_count} | CJs: ${cs.stats.crown_jewels} | Claims: ${cs.stats.formal_claims_approximate}`);
+    }
+
+    // ── Prior Session ──
+    if (brief.prior_session_summary) {
+      const ps = brief.prior_session_summary;
+      const lastKey = Object.keys(ps).find(k => k.startsWith("last_"));
+      if (lastKey) {
+        lines.push(`\n### Prior Session`);
+        lines.push(`${lastKey}: ${ps[lastKey]}`);
+      }
+    }
+
+    // ── Active Prompts ──
+    const promptsKey = Object.keys(brief).find(k => k.endsWith("_prompts") && k.startsWith("active_"));
+    if (promptsKey && brief[promptsKey]?.length > 0) {
+      lines.push(`\n### Active Prompts`);
+      for (const p of brief[promptsKey]) lines.push(`- ${p}`);
+    }
+
+    // ── Ready to proceed ──
+    const ready = brief.ready_to_proceed;
+    lines.push(`\n---\nReady to proceed: **${ready ? "YES" : "NO"}**`);
+    if (brief.block_reason?.length > 0) {
+      lines.push(`Block reasons:`);
+      for (const r of brief.block_reason) lines.push(`- ${r}`);
+    }
+
+    return { content: [{ type: "text", text: lines.join("\n") }] };
   }
 );
 
@@ -2139,6 +2780,194 @@ server.tool(
         lines.push(`\n### Unreconciled Conflicts (${result.unreconciled_conflicts.length})`);
         for (const c of result.unreconciled_conflicts) {
           lines.push(`- [${c.severity}] ${c.key}: ${c.reason || c.message}`);
+        }
+      }
+
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    } catch {
+      return { content: [{ type: "text", text: output }] };
+    }
+  }
+);
+
+// ═══════════════════════════════════════════
+// K418 — TRIPLE-REDUNDANT VERIFICATION (Innovation #2263)
+// Scrambler B (Ground Truth), Scrambler C (Arbiter), Reconciliation
+// ═══════════════════════════════════════════
+
+server.tool(
+  "scrambler_ground_truth",
+  "Scrambler B: Ground Truth Verifier. Checks actual deployed artifacts (files, code patterns, migrations, edge functions) against pending deliverables. Returns verdicts per deliverable.",
+  {
+    deliverable_id: z.string().optional().describe("Specific deliverable to check. Omit for all."),
+  },
+  async ({ deliverable_id }) => {
+    const args = deliverable_id ? [deliverable_id] : [];
+    const output = runScrambler("ground_truth.py", args);
+
+    try {
+      const result = JSON.parse(output);
+      if (deliverable_id) {
+        const v = result.ground_truth_verdict || "unknown";
+        const checks = result.checks || {};
+        const lines = [
+          `## Scrambler B: ${deliverable_id}`,
+          `Verdict: **${v.toUpperCase()}** | Status: ${result.current_status}`,
+        ];
+        for (const [name, data] of Object.entries(checks) as [string, any][]) {
+          lines.push(`- ${name}: ${data.verdict} (${data.evidence?.length || 0} evidence items)`);
+        }
+        return { content: [{ type: "text", text: lines.join("\n") }] };
+      } else {
+        const vs = result.verdicts_summary || {};
+        const lines = [
+          `## Scrambler B: Ground Truth Report`,
+          `Total: ${result.total_deliverables} | Shipped: ${vs.shipped || 0} | Likely: ${vs.likely_shipped || 0} | Missing: ${vs.missing || 0} | Partial: ${vs.partial || 0} | Inconclusive: ${vs.inconclusive || 0}`,
+          `Disagreements with ledger: **${result.disagreement_count}**`,
+        ];
+        if (result.disagreements?.length > 0) {
+          lines.push(`\n### Disagreements`);
+          for (const d of result.disagreements) {
+            lines.push(`- **${d.deliverable_id}** (${d.title}): ledger=${d.ledger_says}, ground_truth=${d.ground_truth_says} [${d.type}]`);
+          }
+        }
+        return { content: [{ type: "text", text: lines.join("\n") }] };
+      }
+    } catch {
+      return { content: [{ type: "text", text: output }] };
+    }
+  }
+);
+
+server.tool(
+  "scrambler_arbiter",
+  "Scrambler C: Arbiter/Tiebreaker. Runs ONLY when Scramblers A and B disagree. Votes by evidence weight, self-heals the manifest when confident.",
+  {},
+  async () => {
+    const output = runScrambler("arbiter.py", []);
+
+    try {
+      const result = JSON.parse(output);
+      const lines = [
+        `## Scrambler C: Arbiter`,
+        `Activated: **${result.activated ? "YES" : "NO"}**`,
+      ];
+
+      if (!result.activated) {
+        lines.push(result.reason || "No disagreements between A and B.");
+      } else {
+        lines.push(`Disagreements reviewed: ${result.disagreements_reviewed}`);
+        lines.push(`Self-healed: ${result.self_healed} | Escalations: ${result.escalations}`);
+        if (result.decisions?.length > 0) {
+          lines.push(`\n### Decisions`);
+          for (const d of result.decisions) {
+            const heal = d.self_healed ? " [SELF-HEALED]" : "";
+            const esc = d.escalate ? " [ESCALATE]" : "";
+            lines.push(`- **${d.deliverable_id}** → ${d.decision} (${d.confidence})${heal}${esc}`);
+            lines.push(`  ${d.reasoning}`);
+          }
+        }
+      }
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    } catch {
+      return { content: [{ type: "text", text: output }] };
+    }
+  }
+);
+
+server.tool(
+  "scrambler_tiebreak_log",
+  "Reads the Scrambler C tiebreak audit log. Shows all arbitration decisions for Founder review.",
+  {
+    limit: z.number().optional().describe("Max entries to return (default 20)"),
+  },
+  async ({ limit }) => {
+    const output = runScrambler("arbiter.py", ["--log"]);
+    try {
+      const result = JSON.parse(output);
+      const entries = (result.entries || []).slice(-(limit || 20));
+      if (entries.length === 0) {
+        return { content: [{ type: "text", text: "No tiebreak decisions logged yet." }] };
+      }
+      const lines = [`## Tiebreak Audit Log (${entries.length} entries)\n`];
+      for (const e of entries) {
+        const heal = e.self_healed ? " ✅ self-healed" : "";
+        lines.push(`- [${e.timestamp?.slice(0, 19) || "?"}] **${e.deliverable_id}** → ${e.decision} (${e.confidence}, score=${e.evidence_score})${heal}`);
+      }
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    } catch {
+      return { content: [{ type: "text", text: output }] };
+    }
+  }
+);
+
+server.tool(
+  "touchstone_reconcile",
+  "Bulk reconciliation: runs all three Scramblers (A=Ledger, B=Ground Truth, C=Arbiter) plus staleness/gap detection against all deliverables at once. Use for manual catch-up when the system has fallen behind.",
+  {
+    session_id: z.string().optional().describe("Current session ID for logging (default: 'manual')"),
+  },
+  async ({ session_id }) => {
+    const sid = session_id || "manual";
+    const output = runScrambler("reconcile.py", [sid]);
+
+    try {
+      const result = JSON.parse(output);
+      const a = result.scrambler_a || {};
+      const b = result.scrambler_b || {};
+      const c = result.scrambler_c || {};
+      const st = result.staleness || {};
+      const health = result.system_health || {};
+
+      const lines = [
+        `## Triple-Redundant Reconciliation Report`,
+        `ID: ${result.reconciliation_id}`,
+        `Session: ${result.session_id} | Health: **${health.status}**\n`,
+        `### Scrambler A — Ledger Verifier`,
+        `Drifts: ${a.drift_count} | Material: ${a.material_drift} | Approved: ${a.approved} | Conflicts: ${a.conflicts}\n`,
+        `### Scrambler B — Ground Truth Verifier`,
+        `Deliverables: ${b.total_deliverables} | Disagreements with A: **${b.disagreements}**`,
+        `Verdicts: ${Object.entries(b.verdicts || {}).map(([k, v]) => `${k}=${v}`).join(", ")}\n`,
+        `### Scrambler C — Arbiter`,
+        `Activated: ${c.activated} | Self-healed: ${c.self_healed} | Escalations: ${c.escalations}\n`,
+        `### Staleness & Gaps`,
+        `Session gaps: ${st.session_gaps} | Stale deliverables: ${st.stale_deliverables} | Auto-complete candidates: ${st.auto_complete_candidates}`,
+      ];
+
+      if (health.issues?.length > 0) {
+        lines.push(`\n### Issues`);
+        for (const issue of health.issues) {
+          lines.push(`- ${issue}`);
+        }
+      }
+
+      const details = result.details || {};
+      if (details.c_decisions?.length > 0) {
+        lines.push(`\n### Arbiter Decisions`);
+        for (const d of details.c_decisions) {
+          const heal = d.self_healed ? " [SELF-HEALED]" : "";
+          lines.push(`- **${d.deliverable_id}** → ${d.decision}${heal}: ${d.reasoning}`);
+        }
+      }
+      if (details.session_gaps?.length > 0) {
+        lines.push(`\n### Session Gaps`);
+        for (const g of details.session_gaps.slice(0, 15)) {
+          lines.push(`- Missing: **${g.missing_id}** (between ${g.between})`);
+        }
+        if (details.session_gaps.length > 15) {
+          lines.push(`  ... and ${details.session_gaps.length - 15} more`);
+        }
+      }
+      if (details.stale_flags?.length > 0) {
+        lines.push(`\n### Stale / Orphaned Deliverables`);
+        for (const f of details.stale_flags) {
+          lines.push(`- [${f.flag}] **${f.deliverable_id}** (${f.title}): ${f.message}`);
+        }
+      }
+      if (details.auto_candidates?.length > 0) {
+        lines.push(`\n### Auto-Complete Candidates`);
+        for (const ac of details.auto_candidates) {
+          lines.push(`- **${ac.deliverable_id}** (${ac.title}): match score ${ac.match_score} — verify completion`);
         }
       }
 

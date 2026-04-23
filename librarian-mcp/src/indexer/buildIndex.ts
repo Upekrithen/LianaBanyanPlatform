@@ -14,6 +14,7 @@ import { parseTranscripts } from "./parseTranscripts.js";
 import { parseComponents } from "./parseComponents.js";
 import { parseV2 } from "./parseV2.js";
 import { parseLetters } from "./parseLetters.js";
+import { writeFingerprint, checkFreshness } from "./fingerprint.js";
 import type { SystemOverview } from "../types.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,8 @@ const __dirname = dirname(__filename);
 
 const WORKSPACE = resolve(__dirname, "..", "..", "..");
 const INDEX_DIR = resolve(__dirname, "..", "..", "index");
+
+const isIncremental = process.argv.includes("--incremental");
 
 function writeIndex(name: string, data: unknown): void {
   const path = resolve(INDEX_DIR, `${name}.json`);
@@ -30,10 +33,28 @@ function writeIndex(name: string, data: unknown): void {
 }
 
 async function main() {
+  const mode = isIncremental ? "incremental" : "full";
   console.log("═══════════════════════════════════════════");
-  console.log("  THE LIBRARIAN — Index Builder");
+  console.log(`  THE LIBRARIAN — Index Builder (${mode})`);
   console.log("═══════════════════════════════════════════");
   console.log(`  Workspace: ${WORKSPACE}`);
+
+  if (isIncremental) {
+    const freshness = await checkFreshness(INDEX_DIR, WORKSPACE);
+    if (freshness.status === "FRESH") {
+      console.log(`\n  Index is FRESH (built ${freshness.lastBuild}, ${freshness.ageMs! < 60000 ? "<1m" : Math.round(freshness.ageMs! / 60000) + "m"} ago). Nothing to do.`);
+      console.log("═══════════════════════════════════════════");
+      return;
+    }
+    if (freshness.status === "DRIFT") {
+      console.log(`\n  Index DRIFT detected: ${freshness.totalDrift} files changed since last build.`);
+      if (freshness.newFiles.length) console.log(`    New: ${freshness.newFiles.length} files`);
+      if (freshness.changedFiles.length) console.log(`    Modified: ${freshness.changedFiles.length} files`);
+      if (freshness.deletedFiles.length) console.log(`    Deleted: ${freshness.deletedFiles.length} files`);
+    } else {
+      console.log("\n  No previous fingerprint found — running full build.");
+    }
+  }
   console.log("");
 
   if (!existsSync(INDEX_DIR)) {
@@ -147,14 +168,19 @@ async function main() {
   writeIndex("overview", overview);
   writeIndex("canonical", context.canonicalNumbers);
 
-  const elapsed = ((Date.now() - start) / 1000).toFixed(1);
+  const elapsedMs = Date.now() - start;
+  const elapsed = (elapsedMs / 1000).toFixed(1);
+
+  const fp = await writeFingerprint(INDEX_DIR, WORKSPACE, elapsedMs, mode);
+
   console.log("═══════════════════════════════════════════");
-  console.log(`  Index built in ${elapsed}s`);
+  console.log(`  Index built in ${elapsed}s (${mode})`);
   console.log(`  ${Object.keys(schemas.tables).length} tables | ${functions.count} functions | ${pages.count} pages`);
   console.log(`  ${cephas.count} Cephas entries | ${bishop.count} BISHOP chats`);
   console.log(`  ${concepts.count} concepts (full content) | ${domains.count} domains`);
   console.log(`  ${dropzones.count} dropzone tasks | ${transcripts.count} agent transcripts`);
   console.log(`  ${components.count} components/hooks/libs`);
+  console.log(`  Fingerprint: ${fp.treeHash} (${fp.fileCount} files tracked)`);
   console.log("═══════════════════════════════════════════");
 }
 
