@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TouchStone Manifest",
+  "type": "object",
+  "required": ["version", "updated_at", "deliverables"],
+  "properties": {
+    "version": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "owner", "depends_on", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "owner": { "type": "string", "enum": ["bishop", "knight", "rook", "pawn", "founder"] },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "verification": {
+            "description": "Legacy verification path. Used when predicate_ladder is absent.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["predicate", "args"],
+              "properties": {
+                "predicate": { "type": "string" },
+                "args": { "type": "object" }
+              }
+            }
+          },
+          "predicate_ladder": {
+            "description": "K442 (B117): ordered list of predicate strings producing a computed letter_state. Each rung is either a bare predicate name (e.g. 'letter_drafted') or a name with sugar (e.g. 'response_received_within:14d' / ':72h'). letter_recipient is injected from the deliverable's top-level field.",
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "letter_recipient": {
+            "description": "K442: recipient name used when evaluating predicate_ladder rungs.",
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "completed", "blocked", "failed"]
+          },
+          "blocked_reason": {
+            "description": "K442: explicit reason exposed in verify output when status is 'blocked'.",
+            "type": ["string", "null"]
+          },
+          "completed_at": { "type": ["string", "null"], "format": "date-time" },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

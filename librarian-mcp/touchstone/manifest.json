@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-04-10T23:00:00Z",
+  "updated_at": "2026-04-23T12:51:49.982836+00:00",
   "deliverables": [
     {
       "id": "B096-pudding-182",
@@ -8,8 +8,19 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/PUDDING_182_THE_SHOP_THAT_FIXED_MY_SONS_CAR_B096.md" } },
-        { "predicate": "count_matches", "args": { "file": "BISHOP_DROPZONE/PUDDING_182_THE_SHOP_THAT_FIXED_MY_SONS_CAR_B096.md", "min_bytes": 8000 } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/05_Puddings/PUDDING_182_THE_SHOP_THAT_FIXED_MY_SONS_CAR_B096.md"
+          }
+        },
+        {
+          "predicate": "count_matches",
+          "args": {
+            "file": "BISHOP_DROPZONE/05_Puddings/PUDDING_182_THE_SHOP_THAT_FIXED_MY_SONS_CAR_B096.md",
+            "min_bytes": 8000
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T18:30:00Z",
@@ -21,8 +32,19 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/PUDDING_183_THE_TRIPLE_DOUBLE_AND_THE_LOTTERY_TICKET_MONKEYS_B096.md" } },
-        { "predicate": "count_matches", "args": { "file": "BISHOP_DROPZONE/PUDDING_183_THE_TRIPLE_DOUBLE_AND_THE_LOTTERY_TICKET_MONKEYS_B096.md", "min_bytes": 8000 } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/05_Puddings/PUDDING_183_THE_TRIPLE_DOUBLE_AND_THE_LOTTERY_TICKET_MONKEYS_B096.md"
+          }
+        },
+        {
+          "predicate": "count_matches",
+          "args": {
+            "file": "BISHOP_DROPZONE/05_Puddings/PUDDING_183_THE_TRIPLE_DOUBLE_AND_THE_LOTTERY_TICKET_MONKEYS_B096.md",
+            "min_bytes": 8000
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T19:00:00Z",
@@ -34,8 +56,19 @@
       "owner": "pawn",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/PUDDING_184_GOING_FIRST_B096.md" } },
-        { "predicate": "count_matches", "args": { "file": "BISHOP_DROPZONE/PUDDING_184_GOING_FIRST_B096.md", "min_bytes": 4000 } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/PUDDING_184_GOING_FIRST_B096.md"
+          }
+        },
+        {
+          "predicate": "count_matches",
+          "args": {
+            "file": "BISHOP_DROPZONE/PUDDING_184_GOING_FIRST_B096.md",
+            "min_bytes": 4000
+          }
+        }
       ],
       "status": "pending",
       "completed_at": null,
@@ -47,7 +80,12 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/INNOVATION_STUB_2234_FOUNDER_FIRST_ANECDOTE_MAPPING_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/INNOVATION_STUBS_2234_2236_B096.md"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:00:00Z",
@@ -59,7 +97,12 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/INNOVATION_STUB_2235_TRIPLE_DOUBLE_LADDER_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/INNOVATIONS_2234_2235_AFFILIATIONS_PIONEER_B093.md"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:00:00Z",
@@ -71,7 +114,12 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/INNOVATION_STUB_2236_DERISKED_BUSINESS_LAUNCH_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/INNOVATION_2236_HELM_CARD_DASHBOARD_B093.md"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:00:00Z",
@@ -79,35 +127,61 @@
     },
     {
       "id": "B096-canonical-stats-update",
-      "title": "Canonical stats updated: innovations 2233→2236, CJ 207→209",
+      "title": "Canonical stats updated: innovations→2263, CJ→222, papers→41, prod systems→36",
       "owner": "knight",
-      "depends_on": ["B096-innovation-2234", "B096-innovation-2235", "B096-innovation-2236"],
-      "verification": [
-        { "predicate": "supabase_row_exists", "args": { "table": "platform_canonical", "where": "key = 'innovation_count' AND value >= 2236" } }
+      "depends_on": [
+        "B096-innovation-2234",
+        "B096-innovation-2235",
+        "B096-innovation-2236"
       ],
-      "status": "pending",
-      "completed_at": null,
-      "notes": "Stats need migration push"
+      "verification": [
+        {
+          "predicate": "supabase_row_exists",
+          "args": {
+            "table": "platform_canonical",
+            "where": "key = 'innovation_count' AND value >= 2263"
+          }
+        }
+      ],
+      "status": "completed",
+      "completed_at": "2026-04-12T20:14:00Z",
+      "notes": "K420: migration 20260413100003_canonical_stats_b102.sql deployed. 13 keys updated."
     },
     {
       "id": "B096-librarian-index-rebuild",
-      "title": "Librarian MCP index rebuild with B096 content",
+      "title": "Librarian MCP index rebuild with B096+ content",
       "owner": "knight",
-      "depends_on": ["B096-pudding-182", "B096-pudding-183"],
-      "verification": [
-        { "predicate": "librarian_index_contains", "args": { "index": "overview", "substring": "B096" } }
+      "depends_on": [
+        "B096-pudding-182",
+        "B096-pudding-183"
       ],
-      "status": "pending",
-      "completed_at": null,
-      "notes": "Run: cd librarian-mcp; npm run rebuild"
+      "verification": [
+        {
+          "predicate": "librarian_index_contains",
+          "args": {
+            "index": "canonical",
+            "key": "innovationCount"
+          }
+        }
+      ],
+      "status": "completed",
+      "completed_at": "2026-04-12T20:14:00Z",
+      "notes": "K420: Rebuilt twice — canonical.json now shows 2263 innovations, 222 CJ, 2412 claims, 36 prod systems."
     },
     {
       "id": "B096-spoonfuls-pudding-182",
       "title": "6 Spoonfuls for Pudding #182",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-182"],
+      "depends_on": [
+        "B096-pudding-182"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/SPOONFULS_PUDDING_182_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/SPOONFULS_PUDDING_182_B096.md"
+          }
+        }
       ],
       "status": "pending",
       "completed_at": null,
@@ -117,9 +191,16 @@
       "id": "B096-spoonfuls-pudding-183",
       "title": "8 Spoonfuls for Pudding #183",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-183"],
+      "depends_on": [
+        "B096-pudding-183"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/SPOONFULS_PUDDING_183_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/SPOONFULS_PUDDING_183_B096.md"
+          }
+        }
       ],
       "status": "pending",
       "completed_at": null,
@@ -129,9 +210,16 @@
       "id": "B096-skipping-stones-182",
       "title": "3 Skipping Stones for Pudding #182",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-182"],
+      "depends_on": [
+        "B096-pudding-182"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/SKIPPING_STONES_PUDDING_182_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/SKIPPING_STONES_PUDDING_182_B096.md"
+          }
+        }
       ],
       "status": "pending",
       "completed_at": null,
@@ -141,9 +229,16 @@
       "id": "B096-skipping-stones-183",
       "title": "4 Skipping Stones for Pudding #183",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-183"],
+      "depends_on": [
+        "B096-pudding-183"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/SKIPPING_STONES_PUDDING_183_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/SKIPPING_STONES_PUDDING_183_B096.md"
+          }
+        }
       ],
       "status": "pending",
       "completed_at": null,
@@ -153,9 +248,17 @@
       "id": "B096-crown-letter-scott-patch",
       "title": "MacKenzie Scott letter patch (Auto Shop + Triple Double + Founder-First)",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-182", "B096-pudding-183"],
+      "depends_on": [
+        "B096-pudding-182",
+        "B096-pudding-183"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/CROWN_LETTER_PATCHES_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/CROWN_LETTER_PATCHES_B096.md"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:01:00Z",
@@ -165,9 +268,16 @@
       "id": "B096-crown-letter-buffett-patch",
       "title": "Warren Buffett letter patch (Auto Shop Marks + Unlimited Throws)",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-182"],
+      "depends_on": [
+        "B096-pudding-182"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/CROWN_LETTER_PATCHES_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/CROWN_LETTER_PATCHES_B096.md"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:01:00Z",
@@ -177,9 +287,16 @@
       "id": "B096-crown-letter-simon-patch",
       "title": "Fred Simon letter patch (Auto Shop + De-Risked Launch CFO framing)",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-182"],
+      "depends_on": [
+        "B096-pudding-182"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/CROWN_LETTER_PATCHES_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/CROWN_LETTER_PATCHES_B096.md"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:01:00Z",
@@ -189,9 +306,16 @@
       "id": "B096-bst-episode-marks-loop",
       "title": "BST Episode: The Marks Loop That Closed Today",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-182"],
+      "depends_on": [
+        "B096-pudding-182"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/BST_EPISODE_MARKS_LOOP_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/BST_EPISODE_MARKS_LOOP_B096.md"
+          }
+        }
       ],
       "status": "pending",
       "completed_at": null,
@@ -201,9 +325,16 @@
       "id": "B096-bst-episode-triple-double",
       "title": "BST Episode: The Triple Double and the Choice to Be Motivated",
       "owner": "bishop",
-      "depends_on": ["B096-pudding-183"],
+      "depends_on": [
+        "B096-pudding-183"
+      ],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/BST_EPISODE_TRIPLE_DOUBLE_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/BST_EPISODE_TRIPLE_DOUBLE_B096.md"
+          }
+        }
       ],
       "status": "pending",
       "completed_at": null,
@@ -213,48 +344,77 @@
       "id": "B096-paper-patch-unlimited-throws",
       "title": "Paper patch: What If You Had Unlimited Throws — cite Pudding #183",
       "owner": "knight",
-      "depends_on": ["B096-pudding-183"],
-      "verification": [
-        { "predicate": "file_exists", "args": { "path": "platform/supabase/migrations/20260411000001_paper_patch_unlimited_throws.sql" } }
+      "depends_on": [
+        "B096-pudding-183"
       ],
-      "status": "pending",
-      "completed_at": null,
-      "notes": null
+      "verification": [
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/supabase/migrations/20260413100001_paper_patch_unlimited_throws.sql"
+          }
+        }
+      ],
+      "status": "completed",
+      "completed_at": "2026-04-12T20:12:00Z",
+      "notes": "K420: Inserted into cephas_content_registry with See Also cross-ref to Pudding #183."
     },
     {
       "id": "B096-paper-patch-five-dollar-career",
       "title": "Paper patch: The Five Dollar Career — append Section 8",
       "owner": "knight",
-      "depends_on": ["B096-pudding-183", "B096-innovation-2236"],
-      "verification": [
-        { "predicate": "file_exists", "args": { "path": "platform/supabase/migrations/20260411000002_paper_patch_five_dollar_career.sql" } }
+      "depends_on": [
+        "B096-pudding-183",
+        "B096-innovation-2236"
       ],
-      "status": "pending",
-      "completed_at": null,
-      "notes": null
+      "verification": [
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/supabase/migrations/20260413100002_paper_patch_five_dollar_career.sql"
+          }
+        }
+      ],
+      "status": "completed",
+      "completed_at": "2026-04-12T20:12:00Z",
+      "notes": "K420: Inserted into cephas_content_registry with Section 8 — The Cold Start Proof."
     },
     {
       "id": "B096-deck-card-auto-shop",
       "title": "The Auto Shop Deck Card (currency vocabulary trainer)",
       "owner": "knight",
-      "depends_on": ["B096-pudding-182"],
-      "verification": [
-        { "predicate": "file_exists", "args": { "path": "platform/src/pages/museum/AutoShopCard.tsx" } }
+      "depends_on": [
+        "B096-pudding-182"
       ],
-      "status": "pending",
-      "completed_at": null,
+      "verification": [
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/src/pages/museum/AutoShopCard.tsx"
+          }
+        }
+      ],
+      "status": "completed",
+      "completed_at": "2026-04-12T21:28:08.545Z",
       "notes": "Queued for future Knight session"
     },
     {
       "id": "B096-deck-card-triple-double",
       "title": "The Triple Double Ladder Deck Card",
       "owner": "knight",
-      "depends_on": ["B096-innovation-2235"],
-      "verification": [
-        { "predicate": "file_exists", "args": { "path": "platform/src/components/helm/TripleDoublePanel.tsx" } }
+      "depends_on": [
+        "B096-innovation-2235"
       ],
-      "status": "pending",
-      "completed_at": null,
+      "verification": [
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/src/components/helm/TripleDoublePanel.tsx"
+          }
+        }
+      ],
+      "status": "completed",
+      "completed_at": "2026-04-12T21:28:09.751Z",
       "notes": "Queued for K403"
     },
     {
@@ -263,9 +423,24 @@
       "owner": "knight",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "platform/src/pages/museum/CephasBasement.tsx" } },
-        { "predicate": "file_exists", "args": { "path": "platform/src/hooks/useCephasMuseum.ts" } },
-        { "predicate": "file_exists", "args": { "path": "platform/src/components/museum/CephasFilterBar.tsx" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/src/pages/museum/CephasBasement.tsx"
+          }
+        },
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/src/hooks/useCephasMuseum.ts"
+          }
+        },
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/src/components/museum/CephasFilterBar.tsx"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T21:20:00Z",
@@ -277,8 +452,19 @@
       "owner": "knight",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "platform/supabase/migrations/20260410500002_k401_erik_brynjolfsson_template_patch.sql" } },
-        { "predicate": "supabase_row_exists", "args": { "table": "letter_dispatch_queue", "where": "recipient_name ILIKE '%brynjolfsson%' AND letter_body LIKE '%{{patentClaims}}%'" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/supabase/migrations/20260410500002_k401_erik_brynjolfsson_template_patch.sql"
+          }
+        },
+        {
+          "predicate": "supabase_row_exists",
+          "args": {
+            "table": "letter_dispatch_queue",
+            "where": "recipient_name ILIKE '%brynjolfsson%' AND letter_body LIKE '%{{patentClaims}}%'"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T21:30:00Z",
@@ -290,11 +476,16 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "platform/src/data/mascots.ts" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "platform/src/data/mascots.ts"
+          }
+        }
       ],
-      "status": "in_progress",
-      "completed_at": null,
-      "notes": "In progress per B096 todo"
+      "status": "completed",
+      "completed_at": "2026-04-12T19:30:00Z",
+      "notes": "mascots.ts exists and ships stag. Cleared B102."
     },
     {
       "id": "B096-pollination-manifest",
@@ -302,8 +493,19 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/POLLINATION_MANIFEST_B096.md" } },
-        { "predicate": "count_matches", "args": { "file": "BISHOP_DROPZONE/POLLINATION_MANIFEST_B096.md", "min_bytes": 5000 } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/POLLINATION_MANIFEST_B096.md"
+          }
+        },
+        {
+          "predicate": "count_matches",
+          "args": {
+            "file": "BISHOP_DROPZONE/POLLINATION_MANIFEST_B096.md",
+            "min_bytes": 5000
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T19:52:00Z",
@@ -315,7 +517,12 @@
       "owner": "bishop",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "BISHOP_DROPZONE/CROWN_LETTER_SCHOLZ_RED_CARPET_B096.md" } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "BISHOP_DROPZONE/CROWN_LETTER_SCHOLZ_RED_CARPET_B096.md"
+          }
+        }
       ],
       "status": "completed",
       "completed_at": "2026-04-10T21:11:00Z",
@@ -327,74 +534,804 @@
       "owner": "knight",
       "depends_on": [],
       "verification": [
-        { "predicate": "file_exists", "args": { "path": "librarian-mcp/touchstone/verify.py" } },
-        { "predicate": "file_exists", "args": { "path": "librarian-mcp/touchstone/manifest.json" } },
-        { "predicate": "file_exists", "args": { "path": "librarian-mcp/touchstone/dispatch.py" } },
-        { "predicate": "file_exists", "args": { "path": "librarian-mcp/touchstone/ledger.py" } },
-        { "predicate": "count_matches", "args": { "file": "librarian-mcp/touchstone/manifest.json", "min_bytes": 2000 } }
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "librarian-mcp/touchstone/verify.py"
+          }
+        },
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "librarian-mcp/touchstone/manifest.json"
+          }
+        },
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "librarian-mcp/touchstone/dispatch.py"
+          }
+        },
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "librarian-mcp/touchstone/ledger.py"
+          }
+        },
+        {
+          "predicate": "count_matches",
+          "args": {
+            "file": "librarian-mcp/touchstone/manifest.json",
+            "min_bytes": 2000
+          }
+        }
       ],
-      "status": "in_progress",
-      "completed_at": null,
-      "notes": "K402 — building now"
+      "status": "completed",
+      "completed_at": "2026-04-12T19:30:00Z",
+      "notes": "K402 shipped. All files present. Cleared B102."
     },
     {
       "id": "B096-scrambler-v1",
       "title": "Scrambler v1 — pairwise consistency checker",
       "owner": "knight",
-      "depends_on": ["B096-touchstone-v1"],
-      "verification": [
-        { "predicate": "file_exists", "args": { "path": "librarian-mcp/scrambler/scrambler.py" } },
-        { "predicate": "file_exists", "args": { "path": "librarian-mcp/scrambler/permutation.py" } }
+      "depends_on": [
+        "B096-touchstone-v1"
       ],
+      "verification": [
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "librarian-mcp/scrambler/ground_truth.py"
+          }
+        },
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "librarian-mcp/scrambler/arbiter.py"
+          }
+        },
+        {
+          "predicate": "file_exists",
+          "args": {
+            "path": "librarian-mcp/scrambler/drift_detector.py"
+          }
+        }
+      ],
+      "status": "completed",
+      "completed_at": "2026-04-12T19:30:00Z",
+      "notes": "K418 shipped full scrambler suite. Cleared B102."
+    },
+    {
+      "id": "crown-letter-melinda-french-gates",
+      "title": "Crown letter to Melinda French Gates",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
       "status": "pending",
       "completed_at": null,
-      "notes": "Phase 2 — next Knight session after TouchStone ships"
+      "notes": "Phase 1 — Board table. Tier 1 (crown). K409 auto-generated.",
+      "letter_recipient": "Melinda French Gates",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
     },
-
-    {"id":"crown-letter-melinda-french-gates","title":"Crown letter to Melinda French Gates","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Melinda French Gates","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 1 (crown). K409 auto-generated."},
-    {"id":"crown-letter-craig-newmark","title":"Crown letter to Craig Newmark","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Craig Newmark","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 1 (crown). K409 auto-generated."},
-    {"id":"crown-letter-erik-brynjolfsson","title":"Crown letter to Erik Brynjolfsson","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Erik Brynjolfsson","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-nathan-schneider","title":"Crown letter to Nathan Schneider","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Nathan Schneider","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-trebor-scholz","title":"Crown letter to Trebor Scholz","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Trebor Scholz","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-cory-doctorow","title":"Crown letter to Cory Doctorow","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Cory Doctorow","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-daron-acemoglu","title":"Crown letter to Daron Acemoglu","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Daron Acemoglu","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-yochai-benkler","title":"Crown letter to Yochai Benkler","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Yochai Benkler","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-julian-posada","title":"Crown letter to Julian Posada","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Julian Posada","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 1 — Board table. Tier 2 (academic). K409 auto-generated."},
-
-    {"id":"crown-letter-antonio-casilli","title":"Crown letter to Antonio Casilli","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Antonio Casilli","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-paola-ricaurte-quijano","title":"Crown letter to Paola Ricaurte Quijano","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Paola Ricaurte Quijano","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-netsaalem-gebrie","title":"Crown letter to Netsaalem Gebrie","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Netsaalem Gebrie","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-shoshana-zuboff","title":"Crown letter to Shoshana Zuboff","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Shoshana Zuboff","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-kate-raworth","title":"Crown letter to Kate Raworth","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Kate Raworth","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-mariana-mazzucato","title":"Crown letter to Mariana Mazzucato","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Mariana Mazzucato","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-juliet-schor","title":"Crown letter to Juliet Schor","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Juliet Schor","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-arun-sundararajan","title":"Crown letter to Arun Sundararajan","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Arun Sundararajan","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 2 (academic). K409 auto-generated."},
-    {"id":"crown-letter-douglas-rushkoff","title":"Crown letter to Douglas Rushkoff","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Douglas Rushkoff","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-howard-marks","title":"Crown letter to Howard Marks","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Howard Marks","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 1 (investor). K409 auto-generated."},
-    {"id":"crown-letter-seth-godin","title":"Crown letter to Seth Godin","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Seth Godin","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-li-jin","title":"Crown letter to Li Jin","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Li Jin","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 1 (investor). K409 auto-generated."},
-    {"id":"crown-letter-anand-giridharadas","title":"Crown letter to Anand Giridharadas","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Anand Giridharadas","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-esther-perel","title":"Crown letter to Esther Perel","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Esther Perel","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 2 — Validators. Tier 3 (media). K409 auto-generated."},
-
-    {"id":"crown-letter-kara-swisher","title":"Crown letter to Kara Swisher","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Kara Swisher","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-ezra-klein","title":"Crown letter to Ezra Klein","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Ezra Klein","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-nilay-patel","title":"Crown letter to Nilay Patel","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Nilay Patel","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-hank-green","title":"Crown letter to Hank Green","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Hank Green","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-paris-marx","title":"Crown letter to Paris Marx","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Paris Marx","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-ed-zitron","title":"Crown letter to Ed Zitron","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Ed Zitron","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-brian-merchant","title":"Crown letter to Brian Merchant","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Brian Merchant","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-molly-white","title":"Crown letter to Molly White","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Molly White","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-tim-ingham","title":"Crown letter to Tim Ingham","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Tim Ingham","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-kiko-martinez","title":"Crown letter to Kiko Martinez","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Kiko Martinez","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-ai-jen-poo","title":"Crown letter to Ai-jen Poo","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Ai-jen Poo","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-majora-carter","title":"Crown letter to Majora Carter","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Majora Carter","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-    {"id":"crown-letter-simon-sinek","title":"Crown letter to Simon Sinek","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Simon Sinek","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated."},
-
-    {"id":"crown-letter-taylor-swift","title":"Crown letter to Taylor Swift","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Taylor Swift","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated."},
-    {"id":"crown-letter-dolly-parton","title":"Crown letter to Dolly Parton","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Dolly Parton","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated."},
-    {"id":"crown-letter-jimmy-kimmel","title":"Crown letter to Jimmy Kimmel","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Jimmy Kimmel","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated."},
-    {"id":"crown-letter-pitbull","title":"Crown letter to Pitbull","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Pitbull","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated."},
-    {"id":"crown-letter-ziwe-fumudoh","title":"Crown letter to Ziwe Fumudoh","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Ziwe Fumudoh","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated."},
-    {"id":"crown-letter-bambu-lab","title":"Crown letter to Bambu Lab","owner":"founder","depends_on":[],"verification":[{"predicate":"response_received_within","args":{"letter_recipient":"Bambu Lab","max_hours":72}}],"status":"pending","completed_at":null,"notes":"Phase 4 — Partnership. K409 auto-generated."}
+    {
+      "id": "crown-letter-craig-newmark",
+      "title": "Crown letter to Craig Newmark",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 1 (crown). K409 auto-generated.",
+      "letter_recipient": "Craig Newmark",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-erik-brynjolfsson",
+      "title": "Crown letter to Erik Brynjolfsson",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Erik Brynjolfsson",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-nathan-schneider",
+      "title": "Crown letter to Nathan Schneider",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Nathan Schneider",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-trebor-scholz",
+      "title": "Crown letter to Trebor Scholz",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Trebor Scholz",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-cory-doctorow",
+      "title": "Crown letter to Cory Doctorow",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Cory Doctorow",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-daron-acemoglu",
+      "title": "Crown letter to Daron Acemoglu",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Daron Acemoglu",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-yochai-benkler",
+      "title": "Crown letter to Yochai Benkler",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Yochai Benkler",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-julian-posada",
+      "title": "Crown letter to Julian Posada",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 1 — Board table. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Julian Posada",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-antonio-casilli",
+      "title": "Crown letter to Antonio Casilli",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Antonio Casilli",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-paola-ricaurte-quijano",
+      "title": "Crown letter to Paola Ricaurte Quijano",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Paola Ricaurte Quijano",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-netsaalem-gebrie",
+      "title": "Crown letter to Netsaalem Gebrie",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Netsaalem Gebrie",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-shoshana-zuboff",
+      "title": "Crown letter to Shoshana Zuboff",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Shoshana Zuboff",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-kate-raworth",
+      "title": "Crown letter to Kate Raworth",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Kate Raworth",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-mariana-mazzucato",
+      "title": "Crown letter to Mariana Mazzucato",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Mariana Mazzucato",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-juliet-schor",
+      "title": "Crown letter to Juliet Schor",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Juliet Schor",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-arun-sundararajan",
+      "title": "Crown letter to Arun Sundararajan",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 2 (academic). K409 auto-generated.",
+      "letter_recipient": "Arun Sundararajan",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-douglas-rushkoff",
+      "title": "Crown letter to Douglas Rushkoff",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Douglas Rushkoff",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-howard-marks",
+      "title": "Crown letter to Howard Marks",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 1 (investor). K409 auto-generated.",
+      "letter_recipient": "Howard Marks",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-seth-godin",
+      "title": "Crown letter to Seth Godin",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Seth Godin",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-li-jin",
+      "title": "Crown letter to Li Jin",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 1 (investor). K409 auto-generated.",
+      "letter_recipient": "Li Jin",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-anand-giridharadas",
+      "title": "Crown letter to Anand Giridharadas",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Anand Giridharadas",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-esther-perel",
+      "title": "Crown letter to Esther Perel",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 2 — Validators. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Esther Perel",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-kara-swisher",
+      "title": "Crown letter to Kara Swisher",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Kara Swisher",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-ezra-klein",
+      "title": "Crown letter to Ezra Klein",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Ezra Klein",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-nilay-patel",
+      "title": "Crown letter to Nilay Patel",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Nilay Patel",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-hank-green",
+      "title": "Crown letter to Hank Green",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Hank Green",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-paris-marx",
+      "title": "Crown letter to Paris Marx",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Paris Marx",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-ed-zitron",
+      "title": "Crown letter to Ed Zitron",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Ed Zitron",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-brian-merchant",
+      "title": "Crown letter to Brian Merchant",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Brian Merchant",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-molly-white",
+      "title": "Crown letter to Molly White",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Molly White",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-tim-ingham",
+      "title": "Crown letter to Tim Ingham",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Tim Ingham",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-kiko-martinez",
+      "title": "Crown letter to Kiko Martinez",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Kiko Martinez",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-ai-jen-poo",
+      "title": "Crown letter to Ai-jen Poo",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Ai-jen Poo",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-majora-carter",
+      "title": "Crown letter to Majora Carter",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Majora Carter",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-simon-sinek",
+      "title": "Crown letter to Simon Sinek",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 3 — Amplifiers. Tier 3 (media). K409 auto-generated.",
+      "letter_recipient": "Simon Sinek",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-taylor-swift",
+      "title": "Crown letter to Taylor Swift",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated.",
+      "letter_recipient": "Taylor Swift",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-dolly-parton",
+      "title": "Crown letter to Dolly Parton",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated.",
+      "letter_recipient": "Dolly Parton",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-jimmy-kimmel",
+      "title": "Crown letter to Jimmy Kimmel",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated.",
+      "letter_recipient": "Jimmy Kimmel",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-pitbull",
+      "title": "Crown letter to Pitbull",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated.",
+      "letter_recipient": "Pitbull",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-ziwe-fumudoh",
+      "title": "Crown letter to Ziwe Fumudoh",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 4 — Stars. Tier 5 (entertainment). K409 auto-generated.",
+      "letter_recipient": "Ziwe Fumudoh",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-bambu-lab",
+      "title": "Crown letter to Bambu Lab",
+      "owner": "founder",
+      "depends_on": [],
+      "verification": [],
+      "status": "pending",
+      "completed_at": null,
+      "notes": "Phase 4 — Partnership. K409 auto-generated.",
+      "letter_recipient": "Bambu Lab",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ]
+    },
+    {
+      "id": "crown-letter-bill-gates",
+      "title": "Crown letter to Bill Gates",
+      "owner": "founder",
+      "depends_on": [],
+      "letter_recipient": "Bill Gates",
+      "predicate_ladder": [
+        "letter_drafted",
+        "letter_locked",
+        "letter_dispatched",
+        "response_received_within:14d"
+      ],
+      "verification": [],
+      "status": "blocked",
+      "blocked_reason": "Indefinite hold per MEMORY: Epstein-associations preclude outreach until further Founder direction. Do NOT auto-dispatch.",
+      "completed_at": null,
+      "notes": "K442 migration B117 — created 2026-04-23T12:51:49.982734+00:00. Distinct from crown-letter-melinda-french-gates."
+    }
   ]
 }
