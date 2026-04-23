@@ -1,0 +1,13 @@
+{
+  "benchmark": "Multilingual Eyewitness Probe",
+  "session": "K435/B116",
+  "timestamp": "2026-04-23T04:41:38.948743+00:00",
+  "total_calls": 802,
+  "total_cost_usd": 20.79,
+  "wall_time_s": 4065.5,
+  "en_hot_mean_pct": 94.5,
+  "es_hot_mean_pct": 96.7,
+  "delta_es_en_pp": 2.2,
+  "pass_criterion": true,
+  "aborted": true
+}

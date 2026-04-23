@@ -1,0 +1,920 @@
+{
+  "metadata": {
+    "version": "R10-v1",
+    "created": "2026-04-20",
+    "source": "B108 R9-v2 benchmark (canonical + transcript-reasoning)",
+    "total_questions": 75,
+    "set_a": {"label": "Canonical Knowledge", "range": "Q1-Q55"},
+    "set_b": {"label": "Transcript Reasoning", "range": "Q56-Q75"},
+    "grading": {
+      "correct": 1.0,
+      "partial": 0.5,
+      "incorrect": 0.0,
+      "max_score": 75.0
+    },
+    "language": "es",
+    "translation_note": "Only 'question' fields are translated to Spanish. canonical_answer and rubric remain in English for grader compatibility."
+  },
+  "questions": [
+    {
+      "id": "Q01",
+      "set": "A",
+      "category": "canonical_numbers",
+      "question": "¿Cuántas innovaciones documentadas rastrea actualmente Liana Banyan?",
+      "canonical_answer": "2,267 innovations (reconciled K421/B110 April 20, 2026)",
+      "rubric": {
+        "correct": "States 2,267 (with or without comma). Must be exact number.",
+        "partial": "States a number within 10 of 2,267 (e.g. 2,265 or 2,263) — indicates awareness but stale data.",
+        "incorrect": "Any other number, vague answer ('thousands'), or 'I don't know'."
+      }
+    },
+    {
+      "id": "Q02",
+      "set": "A",
+      "category": "canonical_numbers",
+      "question": "¿Cuántas de las innovaciones de Liana Banyan están clasificadas como Crown Jewels?",
+      "canonical_answer": "225 Crown Jewels",
+      "rubric": {
+        "correct": "States 225.",
+        "partial": "States 222 or 211 (prior canonical values).",
+        "incorrect": "Any other number or vague answer."
+      }
+    },
+    {
+      "id": "Q03",
+      "set": "A",
+      "category": "canonical_numbers",
+      "question": "¿Cuántas solicitudes provisionales de patente ha presentado Liana Banyan?",
+      "canonical_answer": "13 provisional applications filed",
+      "rubric": {
+        "correct": "States 13.",
+        "partial": "States 12 (prior count).",
+        "incorrect": "Any other number."
+      }
+    },
+    {
+      "id": "Q04",
+      "set": "A",
+      "category": "canonical_numbers",
+      "question": "¿Aproximadamente cuántos reclamos formales de patente tiene Liana Banyan en todas sus solicitudes provisionales?",
+      "canonical_answer": "Approximately 2,412 formal claims across 13 provisional applications",
+      "rubric": {
+        "correct": "States ~2,412 or 2,412 (approximate qualifier acceptable).",
+        "partial": "States ~2,393 (prior count) or a number within 50 of 2,412.",
+        "incorrect": "Any other number or vague answer."
+      }
+    },
+    {
+      "id": "Q05",
+      "set": "A",
+      "category": "canonical_numbers",
+      "question": "¿Cuántos sistemas en producción tiene Liana Banyan activos?",
+      "canonical_answer": "36 production systems",
+      "rubric": {
+        "correct": "States 36.",
+        "partial": "States 35 (prior count).",
+        "incorrect": "Any other number."
+      }
+    },
+    {
+      "id": "Q06",
+      "set": "A",
+      "category": "economics",
+      "question": "¿Qué porcentaje retiene un creador en la plataforma Liana Banyan?",
+      "canonical_answer": "83.3% (never round to 83%)",
+      "rubric": {
+        "correct": "States 83.3% exactly.",
+        "partial": "States 83% (common rounding error the system explicitly warns against).",
+        "incorrect": "Any other percentage or vague answer."
+      }
+    },
+    {
+      "id": "Q07",
+      "set": "A",
+      "category": "economics",
+      "question": "¿Cuál es el modelo de margen de la plataforma Liana Banyan?",
+      "canonical_answer": "Cost + 20%",
+      "rubric": {
+        "correct": "States 'Cost + 20%' or 'Cost plus 20%' or equivalent phrasing.",
+        "partial": "Mentions 20% but frames it as a flat fee rather than cost-plus.",
+        "incorrect": "Any other margin model or vague answer."
+      }
+    },
+    {
+      "id": "Q08",
+      "set": "A",
+      "category": "economics",
+      "question": "En una transacción de $500 en Liana Banyan, ¿cuánto recibe el creador o trabajador?",
+      "canonical_answer": "$416.67",
+      "rubric": {
+        "correct": "States $416.67 exactly.",
+        "partial": "States approximately $417 or shows correct math but rounds differently.",
+        "incorrect": "Any other amount or calculation error."
+      }
+    },
+    {
+      "id": "Q09",
+      "set": "A",
+      "category": "economics",
+      "question": "¿Cuál es el costo anual de membresía de Liana Banyan?",
+      "canonical_answer": "$5 per year",
+      "rubric": {
+        "correct": "States $5/year or $5 per year.",
+        "partial": "States $5 without specifying the time period.",
+        "incorrect": "Any other amount."
+      }
+    },
+    {
+      "id": "Q10",
+      "set": "A",
+      "category": "economics",
+      "question": "¿Cuál es el límite de crédito por persona en la plataforma Liana Banyan?",
+      "canonical_answer": "$5,000",
+      "rubric": {
+        "correct": "States $5,000 or 5000.",
+        "partial": "States a number in the right order of magnitude with qualifier (e.g. 'a few thousand').",
+        "incorrect": "Wrong number or no answer."
+      }
+    },
+    {
+      "id": "Q11",
+      "set": "A",
+      "category": "economics",
+      "question": "¿Cuál es el límite de pago por participación en USD?",
+      "canonical_answer": "$10,000,000 (ten million dollars)",
+      "rubric": {
+        "correct": "States $10,000,000 or $10M or ten million.",
+        "partial": "States millions but wrong specific amount.",
+        "incorrect": "Wrong order of magnitude or no answer."
+      }
+    },
+    {
+      "id": "Q12",
+      "set": "A",
+      "category": "legal_entity",
+      "question": "¿Cuál es el nombre legal completo de la entidad Liana Banyan?",
+      "canonical_answer": "LIANA BANYAN CORPORATION",
+      "rubric": {
+        "correct": "States 'Liana Banyan Corporation' (case insensitive).",
+        "partial": "States 'Liana Banyan' without 'Corporation' or uses 'LLC' or 'Inc'.",
+        "incorrect": "Wrong name entirely."
+      }
+    },
+    {
+      "id": "Q13",
+      "set": "A",
+      "category": "legal_entity",
+      "question": "¿Cuál es el EIN (Número de Identificación del Empleador) de Liana Banyan Corporation?",
+      "canonical_answer": "41-2797446",
+      "rubric": {
+        "correct": "States 41-2797446 exactly.",
+        "partial": "States partial digits correctly.",
+        "incorrect": "Wrong number or no answer."
+      }
+    },
+    {
+      "id": "Q14",
+      "set": "A",
+      "category": "legal_entity",
+      "question": "¿En qué estado está constituida Liana Banyan Corporation y qué tipo de entidad es?",
+      "canonical_answer": "Wyoming C-Corporation",
+      "rubric": {
+        "correct": "States Wyoming AND C-Corp/C-Corporation.",
+        "partial": "States Wyoming but wrong entity type, or correct entity type but wrong state.",
+        "incorrect": "Both wrong or no answer."
+      }
+    },
+    {
+      "id": "Q15",
+      "set": "A",
+      "category": "legal_entity",
+      "question": "¿Cuándo fue registrada Liana Banyan Corporation?",
+      "canonical_answer": "November 21, 2025 (2025-11-21)",
+      "rubric": {
+        "correct": "States November 21, 2025 or 2025-11-21.",
+        "partial": "States November 2025 without exact date, or correct year/month but wrong day.",
+        "incorrect": "Wrong month/year or no answer."
+      }
+    },
+    {
+      "id": "Q16",
+      "set": "A",
+      "category": "legal_entity",
+      "question": "¿Cuál es el nombre de la sociedad controlante de Liana Banyan?",
+      "canonical_answer": "Upekrithen, LLC (Wyoming)",
+      "rubric": {
+        "correct": "States 'Upekrithen' (with or without LLC/Wyoming).",
+        "partial": "Mentions a holding company exists but gets the name wrong.",
+        "incorrect": "No mention of holding company or completely wrong."
+      }
+    },
+    {
+      "id": "Q17",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "¿Cuántas iniciativas tiene Liana Banyan y cómo se llaman colectivamente?",
+      "canonical_answer": "16 initiatives, collectively called 'The Sweet Sixteen'",
+      "rubric": {
+        "correct": "States 16 AND mentions 'Sweet Sixteen'.",
+        "partial": "States 16 but doesn't name them, or names them but gives wrong count.",
+        "incorrect": "Wrong count (especially 14 — a known stale value) or no answer."
+      }
+    },
+    {
+      "id": "Q18",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "Nombre la primera iniciativa del Sweet Sixteen y su titular de Crown.",
+      "canonical_answer": "Let's Make Dinner — Crown: Maneet Chauhan",
+      "rubric": {
+        "correct": "States 'Let's Make Dinner' AND 'Maneet Chauhan'.",
+        "partial": "Gets one of the two correct (name or Crown).",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q19",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "¿Quién es el titular de Crown para la iniciativa 'Let's Go Shopping'?",
+      "canonical_answer": "Mary Beth Laughton",
+      "rubric": {
+        "correct": "States 'Mary Beth Laughton'.",
+        "partial": "Gets first or last name right but not full name.",
+        "incorrect": "Wrong person or no answer."
+      }
+    },
+    {
+      "id": "Q20",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "¿Quién es el titular de Crown para la iniciativa Rally Group?",
+      "canonical_answer": "Kimberly A. Williams",
+      "rubric": {
+        "correct": "States 'Kimberly A. Williams' or 'Kimberly Williams'.",
+        "partial": "States 'Williams' only or a close variant.",
+        "incorrect": "Wrong person or no answer."
+      }
+    },
+    {
+      "id": "Q21",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "¿Quién es el titular de Crown para VSL (iniciativa #10)?",
+      "canonical_answer": "Cathie Mahon",
+      "rubric": {
+        "correct": "States 'Cathie Mahon'.",
+        "partial": "States 'Mahon' only.",
+        "incorrect": "Wrong person or no answer."
+      }
+    },
+    {
+      "id": "Q22",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "¿Cuál es el subtítulo o lema de la iniciativa 'Defense Klaus' (#8)?",
+      "canonical_answer": "\"For Someone You Love\"",
+      "rubric": {
+        "correct": "States 'For Someone You Love'.",
+        "partial": "Paraphrases the concept but not exact tagline.",
+        "incorrect": "Wrong tagline or no answer."
+      }
+    },
+    {
+      "id": "Q23",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "¿Cuál es la iniciativa #14 del Sweet Sixteen y qué dominio cubre?",
+      "canonical_answer": "Didasko — Academic domain",
+      "rubric": {
+        "correct": "States 'Didasko' AND mentions 'Academic'.",
+        "partial": "Gets name right but not domain, or vice versa.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q24",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "¿Cuál es la iniciativa #15 del Sweet Sixteen y cuál es su descriptor entre paréntesis?",
+      "canonical_answer": "Power to the People (Political Expedition)",
+      "rubric": {
+        "correct": "States 'Power to the People' AND 'Political Expedition'.",
+        "partial": "Gets name right but not descriptor.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q25",
+      "set": "A",
+      "category": "sweet_sixteen",
+      "question": "Enumere las iniciativas #11 a #16 del Sweet Sixteen en orden.",
+      "canonical_answer": "11. Let's Make Bread, 12. Harper Guild, 13. JukeBox, 14. Didasko, 15. Power to the People, 16. Brass Tacks",
+      "rubric": {
+        "correct": "All 6 names correct and in order.",
+        "partial": "4-5 correct, or all correct but out of order.",
+        "incorrect": "Fewer than 4 correct."
+      }
+    },
+    {
+      "id": "Q26",
+      "set": "A",
+      "category": "founder",
+      "question": "¿Qué edad tiene el Fundador de Liana Banyan y cuántos hijos tiene?",
+      "canonical_answer": "53 years old, father of eight children",
+      "rubric": {
+        "correct": "States 53 AND 8 children.",
+        "partial": "One of the two correct.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q27",
+      "set": "A",
+      "category": "founder",
+      "question": "¿Cuáles son las credenciales militares del Fundador (rama, códigos MOS)?",
+      "canonical_answer": "ARNG veteran — Infantry 11B + Aviation 15A",
+      "rubric": {
+        "correct": "Mentions ARNG AND both 11B (Infantry) and 15A (Aviation).",
+        "partial": "Mentions Army/ARNG with one MOS, or both MOS without branch.",
+        "incorrect": "Wrong branch or neither MOS."
+      }
+    },
+    {
+      "id": "Q28",
+      "set": "A",
+      "category": "founder",
+      "question": "¿Qué habilitación FAA posee el Fundador?",
+      "canonical_answer": "FAA Commercial Rotary Wing IFR rating",
+      "rubric": {
+        "correct": "Mentions Commercial AND Rotary Wing AND IFR.",
+        "partial": "Mentions pilot/helicopter but misses specifics.",
+        "incorrect": "Wrong rating type or no answer."
+      }
+    },
+    {
+      "id": "Q29",
+      "set": "A",
+      "category": "founder",
+      "question": "¿Cuál es el rating de ajedrez del Fundador y su percentil global?",
+      "canonical_answer": "2080s rating, top 0.4% globally",
+      "rubric": {
+        "correct": "States 2080s (or ~2080) AND top 0.4%.",
+        "partial": "One of the two correct.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q30",
+      "set": "A",
+      "category": "founder",
+      "question": "¿Cuántos años lleva el Fundador desarrollando este sistema y en qué año comenzó el desarrollo?",
+      "canonical_answer": "37 years, development began in 1989",
+      "rubric": {
+        "correct": "States 37 years AND 1989.",
+        "partial": "One of the two correct.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q31",
+      "set": "A",
+      "category": "founder",
+      "question": "¿Cuántos años de experiencia en desarrollo IT tiene el Fundador?",
+      "canonical_answer": "21 years",
+      "rubric": {
+        "correct": "States 21 years.",
+        "partial": "States approximately 20 years or 'over two decades'.",
+        "incorrect": "Wrong number or no answer."
+      }
+    },
+    {
+      "id": "Q32",
+      "set": "A",
+      "category": "ip_allocation",
+      "question": "¿Qué porcentaje de los ingresos por patentes va a las cubetas de patentes?",
+      "canonical_answer": "60%",
+      "rubric": {
+        "correct": "States 60%.",
+        "partial": "States a percentage close to 60%.",
+        "incorrect": "Wrong percentage."
+      }
+    },
+    {
+      "id": "Q33",
+      "set": "A",
+      "category": "ip_allocation",
+      "question": "¿Cuáles son las cuatro categorías de asignación de ingresos por PI y sus porcentajes?",
+      "canonical_answer": "Patent Buckets 60%, Founder/Creator 20%, Global Sponsor Pool 10%, Individual Patent Pedestals 10%",
+      "rubric": {
+        "correct": "All four buckets named with correct percentages (60/20/10/10).",
+        "partial": "3 of 4 correct, or all named but one percentage wrong.",
+        "incorrect": "Fewer than 3 correct."
+      }
+    },
+    {
+      "id": "Q34",
+      "set": "A",
+      "category": "ip_allocation",
+      "question": "Describa los términos del Herjavec RPA: ¿de qué porción proviene, qué porcentaje y por cuánto tiempo?",
+      "canonical_answer": "From the Founder/Creator 20% slice, Herjavec gets 50% of that slice (equivalent to 10% of total), for 20 years",
+      "rubric": {
+        "correct": "States all three: source (founder slice), 50% of that / 10% total, 20 years.",
+        "partial": "Two of three correct.",
+        "incorrect": "Fewer than two correct."
+      }
+    },
+    {
+      "id": "Q35",
+      "set": "A",
+      "category": "patents",
+      "question": "¿Cuál es el número de solicitud provisional de patente más reciente presentada por Liana Banyan?",
+      "canonical_answer": "64/036,646 (Provisional #13, filed April 12, 2026)",
+      "rubric": {
+        "correct": "States 64/036,646.",
+        "partial": "States it's Provisional #13 or filed April 2026 without the application number.",
+        "incorrect": "Wrong number or no answer."
+      }
+    },
+    {
+      "id": "Q36",
+      "set": "A",
+      "category": "patents",
+      "question": "¿Cuándo es la fecha límite de conversión para la primera solicitud provisional de patente de Liana Banyan?",
+      "canonical_answer": "November 26, 2026",
+      "rubric": {
+        "correct": "States November 26, 2026.",
+        "partial": "States November 2026 without exact date.",
+        "incorrect": "Wrong month/year or no answer."
+      }
+    },
+    {
+      "id": "Q37",
+      "set": "A",
+      "category": "agent_roles",
+      "question": "¿Cuáles son los cuatro roles de agente IA en el sistema Chessboard de Liana Banyan y qué dominio cubre cada uno?",
+      "canonical_answer": "KNIGHT (Tech/code/deployment/data), BISHOP (Letters/articles/communications), ROOK (Patents/innovation extraction), PAWN (Legal review/compliance/QA)",
+      "rubric": {
+        "correct": "All four roles named with correct domains.",
+        "partial": "3 of 4 correct.",
+        "incorrect": "Fewer than 3 correct."
+      }
+    },
+    {
+      "id": "Q38",
+      "set": "A",
+      "category": "golden_key",
+      "question": "¿Cuál es la Golden Key — el lema central de Liana Banyan?",
+      "canonical_answer": "\"Help each other help ourselves\"",
+      "rubric": {
+        "correct": "States 'Help each other help ourselves' exactly or very close paraphrase.",
+        "partial": "Captures the mutual-aid concept but different wording.",
+        "incorrect": "Wrong motto or no answer."
+      }
+    },
+    {
+      "id": "Q39",
+      "set": "A",
+      "category": "currency",
+      "question": "Nombre las tres monedas del sistema Three-Gear Currency de Liana Banyan.",
+      "canonical_answer": "Credits ($1=1, one-way valve), Marks (effort-differential), Joules (surplus/'forever stamp')",
+      "rubric": {
+        "correct": "Names all three: Credits, Marks, Joules.",
+        "partial": "Names 2 of 3.",
+        "incorrect": "Fewer than 2 correct."
+      }
+    },
+    {
+      "id": "Q40",
+      "set": "A",
+      "category": "currency",
+      "question": "¿Cuál es el tipo de cambio de los Credits en el sistema Liana Banyan y cuál es la regla de la 'válvula unidireccional'?",
+      "canonical_answer": "$1 = 1 Credit. The one-way valve means Credits never cash out to fiat currency.",
+      "rubric": {
+        "correct": "States $1=1 Credit AND explains one-way valve (no cash-out to fiat).",
+        "partial": "Gets one of the two correct.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q41",
+      "set": "A",
+      "category": "governance",
+      "question": "Describa el 'modelo de gobernanza de los 300' — ¿cuáles son los tres niveles de liderazgo?",
+      "canonical_answer": "Crowns (invited domain experts), Board (elected), Captains (operational)",
+      "rubric": {
+        "correct": "Names all three tiers with descriptions: Crowns, Board, Captains.",
+        "partial": "Names 2 of 3 with correct descriptions.",
+        "incorrect": "Fewer than 2 correct."
+      }
+    },
+    {
+      "id": "Q42",
+      "set": "A",
+      "category": "governance",
+      "question": "¿Qué reemplaza a la demografía en el modelo de gobernanza de Liana Banyan?",
+      "canonical_answer": "ADAPT Score — replaces demographics with demonstrated capability",
+      "rubric": {
+        "correct": "States 'ADAPT Score'.",
+        "partial": "Describes a capability-based system without naming ADAPT.",
+        "incorrect": "Wrong system name or no answer."
+      }
+    },
+    {
+      "id": "Q43",
+      "set": "A",
+      "category": "technical",
+      "question": "¿Qué ID de proyecto Firebase usa Liana Banyan para producción?",
+      "canonical_answer": "lianabanyan-403dc",
+      "rubric": {
+        "correct": "States 'lianabanyan-403dc'.",
+        "partial": "States 'lianabanyan' without the suffix.",
+        "incorrect": "Wrong project ID or mentions staging (mroz-74540)."
+      }
+    },
+    {
+      "id": "Q44",
+      "set": "A",
+      "category": "technical",
+      "question": "¿Cuál es el proyecto Firebase solo para staging y cuál es la regla crítica al respecto?",
+      "canonical_answer": "mroz-74540 — STAGING ONLY, never deploy production there",
+      "rubric": {
+        "correct": "States 'mroz-74540' AND mentions it's staging only.",
+        "partial": "Mentions staging project exists but wrong ID.",
+        "incorrect": "No knowledge of staging project."
+      }
+    },
+    {
+      "id": "Q45",
+      "set": "A",
+      "category": "technical",
+      "question": "¿Cuántos objetivos de hosting en Firebase despliega Liana Banyan y cuántas superficies de portal están activas?",
+      "canonical_answer": "9 Firebase hosting targets, 10 portal surfaces",
+      "rubric": {
+        "correct": "States 9 targets AND 10 surfaces.",
+        "partial": "One of the two correct.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q46",
+      "set": "A",
+      "category": "technical",
+      "question": "¿Qué nombre de objetivo de hosting usa lianabanyan.com — es 'hosting:dotcom' o 'hosting:main'?",
+      "canonical_answer": "hosting:main (NOT hosting:dotcom)",
+      "rubric": {
+        "correct": "States 'hosting:main' and/or explicitly notes it's NOT 'hosting:dotcom'.",
+        "partial": "States 'main' but doesn't address the dotcom misconception.",
+        "incorrect": "States 'hosting:dotcom' or wrong target."
+      }
+    },
+    {
+      "id": "Q47",
+      "set": "A",
+      "category": "technical",
+      "question": "¿Desde dónde se despliega the2ndsecond.com (portal DSS) — la carpeta dss-the2ndsecond/ o platform/dist/?",
+      "canonical_answer": "platform/dist/ — dss-the2ndsecond/ is a legacy breadcrumb folder. DSS runs from platform/src/DSSApp.tsx via hostname detection.",
+      "rubric": {
+        "correct": "States platform/dist/ AND notes dss-the2ndsecond/ is legacy.",
+        "partial": "States platform/dist/ without mentioning the legacy folder.",
+        "incorrect": "States dss-the2ndsecond/ as the deploy source."
+      }
+    },
+    {
+      "id": "Q48",
+      "set": "A",
+      "category": "technical",
+      "question": "¿Qué sitio tiene un paso de compilación separado del SPA principal de la plataforma y qué comando usa?",
+      "canonical_answer": "Cephas (cephas.lianabanyan.com) — uses 'hugo --minify' in Cephas/cephas-hugo/",
+      "rubric": {
+        "correct": "States Cephas AND hugo --minify.",
+        "partial": "States Cephas but wrong build command, or correct command but wrong site.",
+        "incorrect": "Neither correct."
+      }
+    },
+    {
+      "id": "Q49",
+      "set": "A",
+      "category": "romulator",
+      "question": "¿Qué es el Romulator 9000, en una oración?",
+      "canonical_answer": "A ROM-first context persistence system for AI agents that pre-loads persistent, structured context before the agent's first token, eliminating cold-start round trips.",
+      "rubric": {
+        "correct": "Captures: context persistence + AI agents + proactive loading (not reactive). Need not use 'ROM-first' verbatim.",
+        "partial": "Mentions AI context but misses the proactive/pre-load distinction.",
+        "incorrect": "Wrong concept or no answer."
+      }
+    },
+    {
+      "id": "Q50",
+      "set": "A",
+      "category": "romulator",
+      "question": "¿Cuál es la analogía de la carretera del Fundador para el Romulator 9000?",
+      "canonical_answer": "A highway line painter walks back to the starting paint can every time their brush runs dry — sometimes hundreds of miles — then walks all the way back. The Romulator carries the paint can with them.",
+      "rubric": {
+        "correct": "Mentions highway/road painter, paint can, and the idea of carrying it rather than walking back.",
+        "partial": "Captures the general concept of eliminating round trips but uses different analogy.",
+        "incorrect": "Wrong analogy or no answer."
+      }
+    },
+    {
+      "id": "Q51",
+      "set": "A",
+      "category": "verification",
+      "question": "¿Qué es el sistema de Verificación Triple-Redundante y cuáles son los tres Scramblers?",
+      "canonical_answer": "Innovation #2263. Three Scramblers: Ledger (A), Ground Truth (B), and Arbiter (C). 9 verification paths (3 scramblers × 3 trigger types: mandatory function, cron, event hooks).",
+      "rubric": {
+        "correct": "Names all three scramblers (Ledger/Ground Truth/Arbiter or A/B/C) AND mentions 9 paths.",
+        "partial": "Names the concept and 2+ scramblers but misses the 9-path count.",
+        "incorrect": "Fewer than 2 scramblers named."
+      }
+    },
+    {
+      "id": "Q52",
+      "set": "A",
+      "category": "enshittification",
+      "question": "¿Cómo previene estructuralmente Liana Banyan la enshittification, según el marco de Cory Doctorow?",
+      "canonical_answer": "Cost+20% is constitutionally locked. The One-Way Valve prevents Credits from cashing out to fiat. The 83.3% creator keep is in the bylaws, not a marketing promise. Enshittification requires the ability to change the deal — LB removed the ability.",
+      "rubric": {
+        "correct": "Mentions at least 2 of: locked Cost+20%, one-way valve, 83.3% in bylaws, AND the key insight that the ability to change the deal was removed.",
+        "partial": "Mentions enshittification defense but only 1 structural mechanism.",
+        "incorrect": "No understanding of the structural defense."
+      }
+    },
+    {
+      "id": "Q53",
+      "set": "A",
+      "category": "securities",
+      "question": "¿Bajo qué doctrina legal los Credits/Joules/Marks de Liana Banyan NO son valores?",
+      "canonical_answer": "Forman consumption-motive doctrine. Path A (SAA only) confirmed. Supported by Pawn B61-B69 deliverables: SAA Howey Opinion Brief, WNA Templates, Commercial Purpose Affidavit, OCCC Registration, MTL Analysis.",
+      "rubric": {
+        "correct": "States 'Forman' doctrine (consumption-motive).",
+        "partial": "Mentions Howey test defense without naming Forman specifically.",
+        "incorrect": "Wrong doctrine or no answer."
+      }
+    },
+    {
+      "id": "Q54",
+      "set": "A",
+      "category": "behavioral_rules",
+      "question": "Al discutir ingresos potenciales en la plataforma Liana Banyan, ¿qué palabra debe usarse en lugar de 'will earn' (ganará)?",
+      "canonical_answer": "'may earn' — never 'will earn'",
+      "rubric": {
+        "correct": "States 'may earn'.",
+        "partial": "Mentions caution about income language but doesn't specify 'may earn'.",
+        "incorrect": "Doesn't know the rule."
+      }
+    },
+    {
+      "id": "Q55",
+      "set": "A",
+      "category": "behavioral_rules",
+      "question": "¿Cuál es la frase de cierre utilizada en completaciones mayores en el sistema Liana Banyan?",
+      "canonical_answer": "\"FOR THE KEEP!\"",
+      "rubric": {
+        "correct": "States 'FOR THE KEEP!' (case insensitive).",
+        "partial": "Mentions a sign-off tradition but wrong phrase.",
+        "incorrect": "Wrong phrase or no answer."
+      }
+    },
+    {
+      "id": "Q56",
+      "set": "B",
+      "category": "reasoning_economics",
+      "question": "Si un creador vende un artículo de $200 a través de la plataforma, y el margen de la plataforma es Cost+20%, calcule: (a) qué recibe el creador, (b) qué retiene la plataforma, y (c) verifique que el porcentaje del creador coincida con el canónico 83.3%.",
+      "canonical_answer": "(a) Creator receives $166.67. (b) Platform keeps $33.33 (the 20% margin on $166.67 cost). (c) $166.67 / $200 = 83.335% ≈ 83.3%. Verified.",
+      "rubric": {
+        "correct": "All three parts correct with math shown. Creator amount must be $166.67 (or $166.66 with rounding note).",
+        "partial": "Gets the creator amount right but doesn't show the 83.3% verification, or shows verification but arithmetic is slightly off.",
+        "incorrect": "Wrong creator amount or fundamentally wrong math."
+      }
+    },
+    {
+      "id": "Q57",
+      "set": "B",
+      "category": "reasoning_economics",
+      "question": "Explique por qué Cost+20% produce una retención del creador de 83.3%, no de 80%. Muestre la distinción matemática entre 'margen sobre costo' y 'margen sobre precio'.",
+      "canonical_answer": "Cost+20% means: if creator cost is C, price = C × 1.2. Creator gets C out of C×1.2, so C/(C×1.2) = 1/1.2 = 83.33%. If it were 20% of price, creator would get 80%. The distinction: 20% is applied to cost (markup), not to selling price (markdown). That's why 83.3%, not 80%.",
+      "rubric": {
+        "correct": "Correctly explains the margin-on-cost vs. margin-on-price distinction and derives 83.3% from 1/1.2.",
+        "partial": "Gets the 83.3% result but doesn't clearly explain the cost-vs-price distinction.",
+        "incorrect": "States 80% or can't explain the math."
+      }
+    },
+    {
+      "id": "Q58",
+      "set": "B",
+      "category": "reasoning_governance",
+      "question": "¿Por qué Liana Banyan usa asientos Crown nominales en lugar de votación democrática anónima para expertos de dominio? ¿Qué problema resuelve esto a escala?",
+      "canonical_answer": "Anonymous voting breaks down at national/global scale for cooperatives. Named Crown seats (invited domain experts) provide accountability and expertise. The 300 governance model (Crowns + Board + Captains) scales because governance is structural, not cultural. ADAPT Score replaces demographics with demonstrated capability.",
+      "rubric": {
+        "correct": "Identifies the cooperative scaling problem AND explains how named seats + structural governance solves it.",
+        "partial": "Mentions scaling or named seats but doesn't connect the two.",
+        "incorrect": "Doesn't address the governance scaling problem."
+      }
+    },
+    {
+      "id": "Q59",
+      "set": "B",
+      "category": "reasoning_currency",
+      "question": "¿Por qué tener tres monedas (Credits, Marks, Joules) en un sistema no crea arbitraje destructivo? Cite un precedente histórico.",
+      "canonical_answer": "The three currencies serve different functions and don't compete: Credits (transactional, $1=1), Marks (effort-differential, one-way ratchet — value only goes up), Joules (surplus/forever stamp). WIR Bank has proven multi-currency cooperative systems work for 92+ years (founded 1934 in Switzerland).",
+      "rubric": {
+        "correct": "Explains functional separation of the three currencies AND mentions WIR Bank as precedent.",
+        "partial": "Explains functional separation but no historical precedent, or mentions WIR but doesn't connect to the three currencies.",
+        "incorrect": "Can't explain why arbitrage is avoided."
+      }
+    },
+    {
+      "id": "Q60",
+      "set": "B",
+      "category": "reasoning_patents",
+      "question": "¿Cómo presentó Liana Banyan 13 patentes provisionales a ~$155 cada una cuando las provisionales asistidas por abogados típicamente cuestan $15K-$50K? ¿Qué decisión estructural hizo esto posible?",
+      "canonical_answer": "Direct filing via USPTO (no patent attorneys for the provisional stage). ~$155 per provisional = USPTO filing fee. 2,412 formal claims across 13 provisionals. Harrity & Harrity (#1 filer) and Lloyd & Mousilli retained for conversion (the expensive stage). The Cooperative Defensive Patent Pledge (#2260) means every innovation is filed under mutual protection.",
+      "rubric": {
+        "correct": "Identifies USPTO direct filing AND low per-provisional cost AND retention of firms for conversion.",
+        "partial": "Mentions direct filing but doesn't explain the conversion plan.",
+        "incorrect": "Doesn't explain the mechanism."
+      }
+    },
+    {
+      "id": "Q61",
+      "set": "B",
+      "category": "reasoning_technical",
+      "question": "Todos los dominios de portal se sirven desde platform/dist/ mediante detección de hostname. ¿Cuál es la ventaja arquitectónica de este enfoque sobre bases de código separadas por portal?",
+      "canonical_answer": "One codebase, one build, many targets. Shared components, shared state management, shared auth. Deploy once to platform/dist/ and all portals update. The SPA detects hostname at runtime to render the correct portal. Only Cephas has a separate build (Hugo). This reduces maintenance burden for a solo founder with 10 portal surfaces.",
+      "rubric": {
+        "correct": "Explains single-build advantage AND hostname detection AND maintenance reduction.",
+        "partial": "Mentions shared codebase but doesn't explain hostname detection or maintenance benefit.",
+        "incorrect": "Doesn't understand the architecture."
+      }
+    },
+    {
+      "id": "Q62",
+      "set": "B",
+      "category": "reasoning_verification",
+      "question": "¿Por qué el sistema de Verificación Triple-Redundante usa tres Scramblers independientes en lugar de un verificador integral? ¿Qué modo de fallo aborda la redundancia?",
+      "canonical_answer": "Three independent Scramblers (Ledger/Ground Truth/Arbiter) catch different failure modes: Ledger tracks audit trail (sequential integrity), Ground Truth checks actual deployed state (disk/DB/routes), Arbiter resolves conflicts when A and B disagree. A single checker has a single point of failure — if it's wrong, there's no cross-check. 9 verification paths (3 scramblers × 3 triggers) mean drift is caught from multiple angles. This is load-bearing for AI agent reliability across 400+ Knight sessions.",
+      "rubric": {
+        "correct": "Identifies independent failure modes AND explains why single-checker is insufficient AND references the 9 paths.",
+        "partial": "Mentions redundancy benefit but doesn't explain specific Scrambler roles.",
+        "incorrect": "Can't explain the redundancy rationale."
+      }
+    },
+    {
+      "id": "Q63",
+      "set": "B",
+      "category": "reasoning_enshittification",
+      "question": "Cory Doctorow argumenta que la enshittification es estructural e inevitable para las plataformas. ¿Qué tres mecanismos estructurales específicos usa Liana Banyan para hacer la enshittification imposible, no solo improbable? Explique por qué funciona cada uno.",
+      "canonical_answer": "(1) Cost+20% constitutionally locked — can't raise the take rate because it's in bylaws, not a settings page. (2) One-Way Valve on Credits — Credits never cash out to fiat, so the platform can't extract value by degrading the currency. (3) 83.3% creator keep in bylaws — not a marketing promise that a future CEO can override. Enshittification requires the ability to change the deal. LB removed the ability at the constitutional level.",
+      "rubric": {
+        "correct": "Names all three mechanisms AND explains why each is structural (bylaws/constitutional, not just policy).",
+        "partial": "Names 2 of 3 mechanisms with structural explanation.",
+        "incorrect": "Fewer than 2 mechanisms or treats them as policy rather than structural."
+      }
+    },
+    {
+      "id": "Q64",
+      "set": "B",
+      "category": "reasoning_ip",
+      "question": "Si el acuerdo Herjavec RPA es aceptado, calcule: (a) qué porcentaje de los ingresos totales de PI recibiría Herjavec, (b) qué retiene el Fundador de la porción original del 20% del creador, (c) el desglose total de las cuatro categorías de PI después del RPA.",
+      "canonical_answer": "(a) Herjavec gets 50% of the Founder's 20% slice = 10% of total. (b) Founder retains the other 50% of 20% = 10% of total. (c) After RPA: Patent Buckets 60%, Herjavec 10%, Founder 10%, Global Sponsor Pool 10%, Individual Patent Pedestals 10% = 100%.",
+      "rubric": {
+        "correct": "All three parts correct with correct math.",
+        "partial": "Gets Herjavec's 10% right but doesn't show the full breakdown.",
+        "incorrect": "Wrong percentages or math."
+      }
+    },
+    {
+      "id": "Q65",
+      "set": "B",
+      "category": "reasoning_securities",
+      "question": "¿Por qué la doctrina de motivación de consumo de Forman es la base legal correcta para la defensa de Credits/Marks/Joules de Liana Banyan, en lugar de la prueba Howey sola? ¿Qué distingue el consumo de la inversión en este contexto?",
+      "canonical_answer": "Howey test identifies investment contracts (investment of money, common enterprise, expectation of profits from efforts of others). But Forman adds a key refinement: if the primary motivation is consumption/use rather than profit, it's not a security even if it technically passes some Howey prongs. LB Credits are consumed (used to buy goods/services), not invested for profit. The one-way valve (no cash-out to fiat) reinforces consumption motive — you can't profit by holding Credits. Marks are earned through effort (not purchased), and Joules are surplus stamps. Path A (SAA only) avoids securities registration entirely.",
+      "rubric": {
+        "correct": "Explains Forman's consumption-motive distinction from Howey AND connects one-way valve to consumption AND mentions Path A.",
+        "partial": "Explains consumption vs. investment but doesn't connect to one-way valve or Path A.",
+        "incorrect": "Can't distinguish Forman from Howey."
+      }
+    },
+    {
+      "id": "Q66",
+      "set": "B",
+      "category": "reasoning_agent",
+      "question": "El sistema de IA de Liana Banyan ha completado más de 420 sesiones Knight, más de 110 sesiones Bishop, y ha producido 13 provisionales de patente en 6 meses (Oct 2025 - Abr 2026). ¿Qué característica arquitectónica del sistema Romulator/R9 hace posible esta productividad sostenida de IA durante múltiples meses?",
+      "canonical_answer": "The Romulator 9000 provides ROM-first context persistence — every session starts with the full canonical state pre-loaded (not re-discovered). Combined with the Scrambler (triple-redundant verification), the system is self-healing. Session-to-session continuity is deterministic: canonical values, innovation counts, patent status, and deployment state are all loaded before the agent's first token. Without this, each session would waste 15-25% of context window re-establishing known state, making sustained multi-month work impossible.",
+      "rubric": {
+        "correct": "Identifies pre-loaded context persistence AND explains why cold-start waste (15-25% context window) kills sustained productivity.",
+        "partial": "Mentions context persistence but doesn't quantify the cold-start waste.",
+        "incorrect": "Doesn't identify the ROM-first architecture as the key enabler."
+      }
+    },
+    {
+      "id": "Q67",
+      "set": "B",
+      "category": "reasoning_cooperative",
+      "question": "Warren Buffett dice 'Nunca inviertas en un negocio que no puedas entender.' Liana Banyan tiene 2,267 innovaciones en 16 iniciativas. ¿Cómo abordan el Librarian + Romulator la objeción de Buffett?",
+      "canonical_answer": "Buffett's rule assumes human memory limits — one person can't hold 2,267 innovations in mind. The Librarian + Romulator 9000 removes this limit: the AI system holds the entire architecture in deterministic memory. The Romulator pre-loads the full canonical state, the Librarian indexes and retrieves any specific innovation on demand, and the Scrambler verifies consistency. One person doesn't need to understand it all — the system does. This transforms Buffett's constraint from 'too complex to invest in' to 'complexity managed by architecture.'",
+      "rubric": {
+        "correct": "Identifies Buffett's human-memory assumption AND explains how AI-managed architecture removes the limit.",
+        "partial": "Mentions AI help but doesn't connect to Buffett's specific assumption.",
+        "incorrect": "Can't explain how the system addresses complexity."
+      }
+    },
+    {
+      "id": "Q68",
+      "set": "B",
+      "category": "reasoning_deployment",
+      "question": "Un nuevo desarrollador se une e intenta desplegar the2ndsecond.com ejecutando 'cd dss-the2ndsecond; npm run build; firebase deploy'. ¿Qué sale mal y cuál es el comando correcto?",
+      "canonical_answer": "dss-the2ndsecond/ is a legacy breadcrumb folder — the DSS portal actually runs from platform/src/DSSApp.tsx via hostname detection. The correct command is: cd platform; npm run build; firebase deploy --only hosting:the2ndsecond -P default. All portal domains share the single platform/dist/ build.",
+      "rubric": {
+        "correct": "Identifies the legacy folder trap AND provides correct deploy command.",
+        "partial": "Identifies that dss-the2ndsecond is wrong but doesn't give correct command.",
+        "incorrect": "Doesn't catch the error."
+      }
+    },
+    {
+      "id": "Q69",
+      "set": "B",
+      "category": "reasoning_wildfire",
+      "question": "¿Cuál es la diferencia entre el modo 'WildFire Tour' y el modo 'Real Data' en la UI de Liana Banyan, y por qué es crítica esta distinción?",
+      "canonical_answer": "WildFire Tour mode shows mock data (like a $4,250 MSA balance) for onboarding/demonstration purposes. Real Data mode shows the user's actual data — which for a new user is empty/zeroed out until they have actual participation. The distinction is critical because showing fake balances to new users could be misleading (especially around financial data) and could create false expectations. Mock data should ONLY appear when WildFire Tour is explicitly active.",
+      "rubric": {
+        "correct": "Explains both modes AND why showing mock data by default is dangerous (misleading financial expectations).",
+        "partial": "Explains the modes but doesn't articulate why it's critical.",
+        "incorrect": "Doesn't understand the distinction."
+      }
+    },
+    {
+      "id": "Q70",
+      "set": "B",
+      "category": "reasoning_letter_sync",
+      "question": "Un Bishop actualiza una carta en LAUNCH_DOCUMENTS_MASTER/letters/. ¿Qué acción de seguimiento obligatoria debe ocurrir y por qué?",
+      "canonical_answer": "The corresponding Cephas letter MUST be updated immediately. Cephas is the public mirror. The LETTER_SYNC_PROTOCOL.md defines the full mapping. All Cephas letters must include the Red Carpet CTA. If sync is skipped, the public-facing version diverges from the canonical version, creating inconsistency in external communications.",
+      "rubric": {
+        "correct": "States Cephas sync is mandatory AND mentions Red Carpet CTA AND explains public mirror role.",
+        "partial": "Mentions Cephas sync but not Red Carpet CTA or public mirror explanation.",
+        "incorrect": "Doesn't know about the sync requirement."
+      }
+    },
+    {
+      "id": "Q71",
+      "set": "B",
+      "category": "reasoning_scale",
+      "question": "Si Liana Banyan alcanza 1 millón de miembros a $5/año, y el miembro promedio realiza transacciones por $500/año a través de la plataforma: (a) ¿cuál es el ingreso total anual por membresía, (b) cuál es el volumen total de transacciones, (c) qué retiene la plataforma de las transacciones (a Cost+20%), y (d) cuál es el ingreso total de la plataforma?",
+      "canonical_answer": "(a) 1M × $5 = $5M membership. (b) 1M × $500 = $500M transaction volume. (c) Platform keeps 16.67% of transaction volume ($500M × 0.1667 = $83.35M). (d) Total: $5M + $83.35M = $88.35M.",
+      "rubric": {
+        "correct": "All four calculations correct. Platform's transaction take is ~16.67% (the complement of 83.3% creator keep).",
+        "partial": "3 of 4 correct, or all correct but uses 20% instead of 16.67% for platform take.",
+        "incorrect": "Fewer than 3 correct or fundamentally wrong math."
+      }
+    },
+    {
+      "id": "Q72",
+      "set": "B",
+      "category": "reasoning_cooperative_history",
+      "question": "El WIR Bank se cita como precedente de sistemas cooperativos de múltiples monedas. ¿Cuánto tiempo ha operado WIR Bank y por qué es específicamente relevante para el diseño de tres monedas de Liana Banyan?",
+      "canonical_answer": "WIR Bank was founded in 1934 in Switzerland — over 92 years of operation. It proves that a cooperative can run a complementary currency alongside national fiat without arbitrage destroying either. LB's three-gear system (Credits=transactional, Marks=effort, Joules=surplus) extends the WIR model with functional separation: each currency serves a distinct purpose, and the Marks backing ratchet (value only goes up) prevents the devaluation cycle that kills most alternative currencies.",
+      "rubric": {
+        "correct": "States WIR founded ~1934, 92+ years AND connects to LB's specific currency design.",
+        "partial": "Mentions WIR Bank's longevity but doesn't connect to LB's three currencies specifically.",
+        "incorrect": "Doesn't know WIR Bank or can't connect it."
+      }
+    },
+    {
+      "id": "Q73",
+      "set": "B",
+      "category": "reasoning_filing",
+      "question": "La 13.ª patente provisional de Liana Banyan fue presentada el April 12, 2026. La fecha límite de conversión de la primera provisional es November 26, 2026. ¿Cuántos meses tiene el equipo para convertir las 13 provisionales a no provisionales, y qué firmas están contratadas para la conversión?",
+      "canonical_answer": "From April 20, 2026 (today) to November 26, 2026 = approximately 7 months for the first conversion. Subsequent provisionals would have later deadlines (12 months from their respective filing dates). Harrity & Harrity (#1 patent filer in the US) and Lloyd & Mousilli are retained for conversion.",
+      "rubric": {
+        "correct": "States ~7 months remaining for first conversion AND names both firms (Harrity & Harrity, Lloyd & Mousilli).",
+        "partial": "Names one firm or gets the timeline close but not both.",
+        "incorrect": "Wrong timeline or no firms named."
+      }
+    },
+    {
+      "id": "Q74",
+      "set": "B",
+      "category": "reasoning_session_management",
+      "question": "Las reglas del agente IA dicen 'MÁXIMO 3 funcionalidades por sesión.' ¿Qué problema técnico específico previene esta regla y qué sucede cuando se viola?",
+      "canonical_answer": "Context compression causes looping after ~10 major tool call sequences. Long sessions with many features cause the AI to lose earlier context, leading to repetitive behavior, contradictory actions, or forgetting what was already built. The 3-feature limit keeps sessions within the reliable context window. When violated, the agent may re-build features it already built, overwrite working code, or lose track of canonical numbers.",
+      "rubric": {
+        "correct": "Identifies context compression/loss AND looping behavior AND the specific 'after ~10 major tool call sequences' threshold.",
+        "partial": "Mentions context limitations but not the specific looping behavior.",
+        "incorrect": "Doesn't understand the technical basis for the rule."
+      }
+    },
+    {
+      "id": "Q75",
+      "set": "B",
+      "category": "reasoning_posture",
+      "question": "El benchmark cross-vendor R10 prueba Anthropic, Google, OpenAI y Perplexity. ¿Por qué se incluye a OpenAI a pesar de las 'preocupaciones sustantivas del Fundador sobre su trayectoria de gobernanza'? ¿Qué principio justifica la inclusión?",
+      "canonical_answer": "A cross-vendor study that excludes the market leader is not a cross-vendor study. Measurement is the contribution; endorsement is not conveyed by inclusion. The paper discloses the inclusion decision explicitly. This is a scientific integrity principle: you don't exclude data points because you disagree with the source. The study's credibility depends on including all major vendors.",
+      "rubric": {
+        "correct": "States the principle: excluding the market leader invalidates a cross-vendor study AND quotes or paraphrases 'measurement is the contribution; endorsement is not conveyed by inclusion.'",
+        "partial": "Mentions scientific integrity but doesn't capture the specific principle.",
+        "incorrect": "Can't explain why OpenAI is included."
+      }
+    }
+  ]
+}
