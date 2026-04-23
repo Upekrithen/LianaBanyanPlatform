@@ -16,6 +16,7 @@ import { buildBriefing, buildChecklist, buildDebrief } from "./router/moneyPenny
 import { budgetEnforce, BUDGETS, truncateList, truncateToWords } from "./router/budgets.js";
 import { canonicalValueMatches, loadCanonicalFlat } from "./predicates/canonical_value_matches.js";
 import { checkFreshness } from "./indexer/fingerprint.js";
+import { createFreshIndexGate } from "./indexer/freshIndexGate.js";
 import { getRegistry, listScribeIds, getScribe } from "./scribes/registry.js";
 import {
   appendTidbit,
@@ -30,6 +31,8 @@ import {
 } from "./scribes/cathedral.js";
 import { runFates } from "./scribes/fates.js";
 import { consultScribes } from "./scribes/consult.js";
+import { memberConsultScribes } from "./cathedral_supabase/member_consult.js";
+import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -115,68 +118,22 @@ function reloadAll() {
 // `npm run rebuild` writing fresh content to `index/*.json` did NOT propagate
 // to a running MCP server. Founder had to restart the client to see new data.
 //
-// Fix: every tool that consults an index now calls `ensureFreshIndex()` first.
-// That helper reads JUST `index/last_build_fingerprint.json` (a tiny file —
-// well under 1MB — written at the end of every rebuild via writeFingerprint())
-// and compares its `treeHash` to the last value the server saw. On change, it
-// triggers a single `reloadAll()` and stamps the new fingerprint. On no
-// change, it is essentially a single small JSON parse — cheap enough to do
-// per tool call.
-//
-// We deliberately do NOT call the expensive `checkFreshness()` here (that
-// re-walks the workspace tree) — only writeFingerprint mutates this file, so
-// reading it is sufficient signal that a rebuild has completed.
-let lastSeenFingerprintHash: string | null = null;
-let lastSeenFingerprintTs: string | null = null;
-
-function ensureFreshIndex(): { reloaded: boolean; reason: string } {
-  const fpPath = resolve(INDEX_DIR, "last_build_fingerprint.json");
-  if (!existsSync(fpPath)) {
-    if (!overview) {
-      reloadAll();
-      return { reloaded: true, reason: "cold-start: no fingerprint yet" };
-    }
-    return { reloaded: false, reason: "no fingerprint on disk" };
-  }
-  let hash: string | null = null;
-  let ts: string | null = null;
-  try {
-    const raw = JSON.parse(readFileSync(fpPath, "utf-8"));
-    hash = typeof raw?.treeHash === "string" ? raw.treeHash : null;
-    ts = typeof raw?.timestamp === "string" ? raw.timestamp : null;
-  } catch {
-    if (!overview) {
-      reloadAll();
-      return { reloaded: true, reason: "cold-start: fingerprint unreadable" };
-    }
-    return { reloaded: false, reason: "fingerprint unreadable; keeping cached" };
-  }
-  if (!overview) {
-    reloadAll();
-    lastSeenFingerprintHash = hash;
-    lastSeenFingerprintTs = ts;
-    return { reloaded: true, reason: "cold-start" };
-  }
-  if (hash !== null && hash !== lastSeenFingerprintHash) {
-    reloadAll();
-    lastSeenFingerprintHash = hash;
-    lastSeenFingerprintTs = ts;
-    return { reloaded: true, reason: `fingerprint changed (${ts ?? "unknown ts"})` };
-  }
-  return { reloaded: false, reason: "fresh" };
+// Fix: every tool that consults an index now calls `ensureFreshIndex()` first
+// (delegates to the FreshIndexGate primitive in `./indexer/freshIndexGate.ts`).
+// The gate reads JUST `index/last_build_fingerprint.json` (a tiny file written
+// at the end of every rebuild) and compares its `treeHash` to the last value
+// it saw. On change, it triggers a single `reloadAll()` and stamps the new
+// fingerprint. On no-change it is essentially a single small JSON parse —
+// cheap enough to do per tool call. The gate is unit-tested independently in
+// `tests/test_fresh_index_gate.mjs`.
+const freshIndexGate = createFreshIndexGate(
+  INDEX_DIR,
+  () => reloadAll(),
+  () => overview != null,
+);
+function ensureFreshIndex() {
+  return freshIndexGate.check();
 }
-
-// Prime the fingerprint cache on startup so the first tool call doesn't see a
-// stale-cache miss when the index already exists and matches disk.
-(() => {
-  const fpPath = resolve(INDEX_DIR, "last_build_fingerprint.json");
-  if (!existsSync(fpPath)) return;
-  try {
-    const raw = JSON.parse(readFileSync(fpPath, "utf-8"));
-    lastSeenFingerprintHash = typeof raw?.treeHash === "string" ? raw.treeHash : null;
-    lastSeenFingerprintTs = typeof raw?.timestamp === "string" ? raw.timestamp : null;
-  } catch { /* leave nulls; ensureFreshIndex will recover */ }
-})();
 
 const server = new McpServer({
   name: "librarian",
@@ -1523,12 +1480,17 @@ function formatVerificationSection(result: any): string {
     }
   }
   if (details.auto_candidates?.length > 0) {
-    lines.push(`\n### Auto-Complete Candidates`);
-    for (const ac of details.auto_candidates.slice(0, 5)) {
-      lines.push(`- [POSSIBLY COMPLETED] ${ac.deliverable_id} (${ac.title})`);
-    }
-    if (details.auto_candidates.length > 5) {
-      lines.push(`  ... and ${details.auto_candidates.length - 5} more`);
+    // K442: letter deliverables now have explicit state via Letters summary block,
+    // so we exclude them from the file-existence "POSSIBLY COMPLETED" heuristic.
+    const nonLetter = details.auto_candidates.filter((ac: any) => !isLetterDeliverableId(ac.deliverable_id || ""));
+    if (nonLetter.length > 0) {
+      lines.push(`\n### Auto-Complete Candidates`);
+      for (const ac of nonLetter.slice(0, 5)) {
+        lines.push(`- [POSSIBLY COMPLETED] ${ac.deliverable_id} (${ac.title})`);
+      }
+      if (nonLetter.length > 5) {
+        lines.push(`  ... and ${nonLetter.length - 5} more`);
+      }
     }
   }
 
@@ -1586,6 +1548,73 @@ function checkHooksConfigured(): { configured: boolean; missing: string[] } {
 }
 
 // ═══════════════════════════════════════════
+// K442 — LETTER STATE SUMMARY (3-state ladder)
+// Replaces the file-existence "POSSIBLY COMPLETED" heuristic for letter
+// deliverables. Calls librarian-mcp/touchstone/verify.py --letters-summary
+// (cached 5 min) and renders a compact state breakdown.
+// ═══════════════════════════════════════════
+
+interface LetterStateSummary {
+  by_state: Record<string, number>;
+  by_recipient: Array<{
+    id: string;
+    title?: string;
+    recipient: string;
+    state: string;
+    resolved_path?: string | null;
+  }>;
+}
+
+const LETTER_SUMMARY_CACHE_TTL_MS = 5 * 60 * 1000;
+let _letterSummaryCache: { result: LetterStateSummary | null; timestamp: number } | null = null;
+
+function getLetterStateSummary(): LetterStateSummary | null {
+  if (_letterSummaryCache && (Date.now() - _letterSummaryCache.timestamp) < LETTER_SUMMARY_CACHE_TTL_MS) {
+    return _letterSummaryCache.result;
+  }
+  try {
+    const verifyPath = resolve(__dirname, "..", "touchstone", "verify.py");
+    if (!existsSync(verifyPath)) return null;
+    const output = execSync(`python "${verifyPath}" --letters-summary`, {
+      cwd: resolve(__dirname, "..", "touchstone"),
+      timeout: 15_000,
+      encoding: "utf-8",
+      env: { ...process.env, PYTHONIOENCODING: "utf-8" },
+    });
+    const parsed = JSON.parse(output) as LetterStateSummary;
+    _letterSummaryCache = { result: parsed, timestamp: Date.now() };
+    return parsed;
+  } catch {
+    _letterSummaryCache = { result: null, timestamp: Date.now() };
+    return null;
+  }
+}
+
+function formatLetterStateBlock(summary: LetterStateSummary | null): string {
+  if (!summary) return "";
+  const s = summary.by_state || {};
+  const total = Object.values(s).reduce((a, b) => a + (b || 0), 0);
+  if (total === 0) return "";
+
+  const lines: string[] = [];
+  lines.push(`\n### Letters state summary (${total} letter deliverables)`);
+  lines.push(`- Pending (no draft on disk): ${s.pending || 0}`);
+  lines.push(`- Drafted but not locked: ${s.drafted || 0}`);
+  lines.push(`- Locked, awaiting dispatch: ${s.locked || 0}`);
+  lines.push(`- Dispatched, awaiting response: ${s.dispatched || 0}`);
+  lines.push(`- Response received: ${s.response_received || 0}`);
+  if ((s.blocked || 0) > 0) lines.push(`- Blocked (Founder hold): ${s.blocked}`);
+  return lines.join("\n");
+}
+
+// Letter deliverable ids carry the "letter_" / "crown-letter-" / "wave-N-letter-" prefix.
+// Used to filter them out of the legacy auto-complete-candidates block, which is
+// now superseded for letters by the state summary above.
+function isLetterDeliverableId(id: string): boolean {
+  return /(^|-)letter-/.test(id) || /^wave-\d+-letter-/.test(id);
+}
+
+// ═══════════════════════════════════════════
 // TOOL 18: brief_me (MoneyPenny)
 // ═══════════════════════════════════════════
 
@@ -1639,6 +1668,11 @@ server.tool(
         sections.push(`- [${pw.source}] ${pw.id}: ${pw.summary}`);
       }
     }
+
+    // ── K442: Letters state summary (replaces "POSSIBLY COMPLETED" for letter deliverables) ──
+    const letterSummary = getLetterStateSummary();
+    const letterStateBlock = formatLetterStateBlock(letterSummary);
+    if (letterStateBlock) sections.push(letterStateBlock);
 
     // ── K419 Trigger 1A: Triple Scrambler at session start ──
     const verificationSections: string[] = [];
@@ -1828,10 +1862,18 @@ server.tool(
     if (!scramblerResult._error) {
       sections.push(formatVerificationSection(scramblerResult));
 
+      // K442: include Letters state summary in debrief so closeout always shows the ladder counts.
+      _letterSummaryCache = null; // force fresh at session end
+      const debriefLetterSummary = getLetterStateSummary();
+      const debriefLetterBlock = formatLetterStateBlock(debriefLetterSummary);
+      if (debriefLetterBlock) sections.push(debriefLetterBlock);
+
       const details = scramblerResult.details || {};
-      // Auto-flag deliverables matching this session's work
+      // Auto-flag deliverables matching this session's work.
+      // K442: skip letter deliverables — their state is reported via the Letters summary block.
       if (details.auto_candidates?.length > 0) {
         const matchingCandidates = details.auto_candidates.filter((ac: any) => {
+          if (isLetterDeliverableId(ac.deliverable_id || "")) return false;
           const titleLower = (ac.title || "").toLowerCase();
           const summaryLower = summary.toLowerCase();
           return titleLower.split(/\s+/).some((w: string) => w.length > 4 && summaryLower.includes(w));
@@ -2406,6 +2448,73 @@ server.tool(
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
       };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+// ═══════════════════════════════════════════
+// K438b — MEMBER-FACING CATHEDRAL TOOLS
+// ═══════════════════════════════════════════
+// Sibling tools to the K436 stitchpunks-backed Cathedral surface above,
+// targeting the per-member cathedral.* schema (#2268). Both tools require
+// a Supabase service-role client (LIBRARIAN_SUPABASE_URL +
+// LIBRARIAN_SUPABASE_SERVICE_ROLE_KEY) — they fail gracefully with an
+// actionable error message when the env is missing rather than crashing
+// the MCP process. See librarian-mcp/src/cathedral_supabase/client.ts for
+// the access-control rationale (service role + explicit member_id filter).
+
+server.tool(
+  "member_consult_scribes",
+  "Cathedral retrieval (#2268) — query a member's own Scribes plus optionally any commons-shared Scribes from other members. Returns top_k entries ranked by relevance (member's own ranked above shared at equal score). Backed by cathedral.member_scribes + cathedral.scribe_entries. Sibling of consult_scribes (which reads stitchpunks tablets).",
+  {
+    member_id: z.string().uuid().describe("Member's auth.users.id (UUID)"),
+    query: z.string().min(5).max(2000).describe("Topic / phrase / canonical id to look up"),
+    top_k: z.number().int().min(1).max(50).optional().describe("Maximum entries to return (default 10)"),
+    since_ts: z.string().optional().describe("ISO-8601; only entries newer than this are returned"),
+    include_shared: z.boolean().optional().describe("If true (default), also consult commons-shared Scribes from other members"),
+  },
+  async ({ member_id, query, top_k, since_ts, include_shared }) => {
+    try {
+      const result = await memberConsultScribes({
+        member_id,
+        query,
+        top_k,
+        since_ts,
+        include_shared,
+      });
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+server.tool(
+  "member_fates_route",
+  "Three Fates routing (#2269) for a member session: Clotho extracts themes (against the member's own Scribe keywords + canonical entity regexes), Lachesis scores each Scribe, Atropos returns dispatch directives. Persists one row to cathedral.fates_log. Does NOT auto-append to scribe_entries — the member confirms in the UI before any tablet write (manual-approval default for first ship).",
+  {
+    member_id: z.string().uuid().describe("Member's auth.users.id (UUID)"),
+    session_id: z.string().optional().describe("Session identifier (optional but recommended for log threading)"),
+    content: z.string().min(10).max(10000).describe("Session content to route — typically the latest exchange"),
+    dispatch_cap: z.number().int().min(1).max(10).optional().describe("Maximum dispatch directives returned (default 5)"),
+    persist: z.boolean().optional().describe("If true (default), write a cathedral.fates_log row"),
+  },
+  async ({ member_id, session_id, content, dispatch_cap, persist }) => {
+    try {
+      const result = await memberFatesRoute({
+        member_id,
+        session_id,
+        content,
+        dispatch_cap,
+        persist,
+      });
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
     } catch (err) {
       return {
         content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],

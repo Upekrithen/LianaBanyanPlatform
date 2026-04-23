@@ -12,10 +12,12 @@
     "rebuild": "tsc && node dist/indexer/buildIndex.js --incremental",
     "rebuild:full": "tsc && node dist/indexer/buildIndex.js",
     "rebuild:incremental": "tsc && node dist/indexer/buildIndex.js --incremental",
-    "test": "tsc && node --test tests/test_registry.mjs tests/test_fates_router.mjs tests/test_scribe_tools.mjs tests/test_consult_scribes_latency.mjs"
+    "test": "tsc && node --test tests/test_registry.mjs tests/test_fates_router.mjs tests/test_scribe_tools.mjs tests/test_consult_scribes_latency.mjs tests/test_member_cathedral.mjs tests/test_cathedral_export_import.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.28.0",
+    "@supabase/supabase-js": "^2.104.1",
+    "fflate": "^0.8.2",
     "glob": "^11.0.0",
     "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.1",

@@ -1,31 +1,86 @@
 /**
- * /my/cathedral/export — Cathedral export
- * =======================================
- * K438a: route + UI shell only. The actual ZIP packaging (#2268 Claim 1(d))
- * lands in K438b Phase E along with the standalone reader.py and the
- * symmetric import surface.
+ * /my/cathedral/export — Cathedral export (K438b)
+ * ===============================================
+ * #2268 Claim 1(d) export-on-demand operationalised. Hits the
+ * `cathedral-export` edge function, downloads the resulting ZIP via a
+ * synthetic anchor click. The bundle includes the standalone Python
+ * reader so the export is useful offline forever.
  *
- * What works in K438a:
- *   - The route renders without 500s (acceptance criterion ✓)
- *   - Health-card stats are shown so the member can see what would be exported
- *   - Disabled "Download ZIP" CTA with K438b ETA copy
- *
- * Why we ship the route now: K438 acceptance criteria require all 6 routes
- * to render without 500s on a test member's Cathedral. Shipping a clean
- * "coming next" surface is honest and meets the bar.
+ * K438a shipped a disabled CTA + "coming next" copy. K438b enables the
+ * button, wires the download, and surfaces the export count + last-export
+ * timestamp so the member can verify their last download succeeded.
  */
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Download, FileArchive, ScrollText, BookOpen } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Download, FileArchive, ScrollText, BookOpen, Loader2 } from "lucide-react";
 import { useEnsureCathedral, useCathedralHealth } from "./useCathedral";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CathedralExport() {
   useEnsureCathedral();
-  const { data: health, isLoading } = useCathedralHealth();
+  const { data: health, isLoading, refetch } = useCathedralHealth();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (!user?.id) {
+      toast({ title: "Sign in required", description: "Authenticate before exporting your Cathedral." });
+      return;
+    }
+    setDownloading(true);
+    try {
+      // We bypass supabase.functions.invoke() because it parses the response
+      // body into JSON automatically — we need the raw ZIP bytes here.
+      const session = (await supabase.auth.getSession()).data.session;
+      if (!session) throw new Error("No active session");
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/cathedral-export`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "",
+        },
+        body: JSON.stringify({ member_id: user.id }),
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Export failed (${res.status}): ${errText.slice(0, 200)}`);
+      }
+      const blob = await res.blob();
+      const objUrl = URL.createObjectURL(blob);
+      const cd = res.headers.get("Content-Disposition") || "";
+      const fnameMatch = cd.match(/filename="?([^"]+)"?/);
+      const filename = fnameMatch?.[1] ?? `cathedral-export-${Date.now()}.zip`;
+      const a = document.createElement("a");
+      a.href = objUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(objUrl);
+      toast({
+        title: "Cathedral exported",
+        description: `${res.headers.get("X-Cathedral-Scribes") ?? "?"} Scribes / ${res.headers.get("X-Cathedral-Entries") ?? "?"} entries packaged.`,
+      });
+      void refetch();
+    } catch (err) {
+      toast({
+        title: "Export failed",
+        description: (err as Error).message,
+        variant: "destructive",
+      });
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <PortalPageLayout title="Export your Cathedral" backButton maxWidth="lg" xrayId="cathedral-export">
@@ -55,22 +110,26 @@ export default function CathedralExport() {
               </div>
             )}
 
-            <div className="border border-dashed border-border rounded-md p-4 bg-muted/30">
-              <Badge variant="secondary" className="mb-2">K438b — coming next</Badge>
-              <p className="text-sm text-muted-foreground">
-                The ZIP packager and standalone reader (<code>liana-companion-standalone-reader.py</code>)
-                ship in K438b Phase E. The route is live now so the membership benefits
-                page can link to it without a 404, and so the Founder can review the
-                export-on-close commitment before the packager is wired up.
+            {health?.export_last_at && (
+              <p className="text-xs text-muted-foreground">
+                Last export: {new Date(health.export_last_at).toLocaleString()}
               </p>
-            </div>
+            )}
 
             <div className="flex gap-2 justify-end">
               <Button variant="outline" asChild>
                 <Link to="/my/cathedral">Back to your Cathedral</Link>
               </Button>
-              <Button disabled title="Ships in K438b">
-                <Download className="h-4 w-4 mr-1" /> Download ZIP
+              <Button onClick={handleDownload} disabled={downloading || !user?.id}>
+                {downloading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" /> Packaging…
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-4 w-4 mr-1" /> Download ZIP
+                  </>
+                )}
               </Button>
             </div>
           </CardContent>
@@ -83,11 +142,13 @@ export default function CathedralExport() {
           <CardContent>
             <ul className="text-sm space-y-1 text-muted-foreground">
               <li><code>registry.yaml</code> — your Scribes, primary fields, adjacents, keywords</li>
+              <li><code>registry.json</code> — same data in JSON form (used by the standalone reader)</li>
               <li><code>scribe_&lt;name&gt;.jsonl</code> — one append-only tablet per Scribe</li>
               <li><code>tidbits.jsonl</code> — your SP-21 verify-action ledger</li>
               <li><code>fates_log.jsonl</code> — Three Fates routing decisions</li>
-              <li><code>README.md</code> — schema documentation + consult-scribes algorithm</li>
-              <li><code>liana-companion-standalone-reader.py</code> — minimal offline reader</li>
+              <li><code>member_cathedral.json</code> — top-level Cathedral metadata (tier, dates)</li>
+              <li><code>README.md</code> — schema documentation + reader usage</li>
+              <li><code>liana-companion-standalone-reader.py</code> — minimal offline reader (zero deps)</li>
               <li><code>LICENSE</code> — AGPL-3.0 + Pledged Commons grant per #2260</li>
             </ul>
           </CardContent>
