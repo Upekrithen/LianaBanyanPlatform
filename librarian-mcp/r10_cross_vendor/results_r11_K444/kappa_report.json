@@ -1,0 +1,77 @@
+{
+  "spot_check_n": 5,
+  "spot_qids": [
+    "R11-AM-01",
+    "R11-CS-01",
+    "R11-CS-04",
+    "R11-HP-06",
+    "R11-RC-07"
+  ],
+  "primary_grades": [
+    "MISS",
+    "HIT",
+    "HIT",
+    "HIT",
+    "MISS"
+  ],
+  "kappa_grades": [
+    "MISS",
+    "MISS",
+    "MISS",
+    "MISS",
+    "MISS"
+  ],
+  "cohens_kappa": 0.0,
+  "kappa_pass_threshold": 0.7,
+  "kappa_passed": false,
+  "kappa_grader_model": "claude-opus-4-7",
+  "kappa_cost_usd": 0.053295,
+  "grade_changes_on_reconfirmation": 0,
+  "details": [
+    {
+      "qid": "R11-CS-04",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The response does not provide the 180-day window; it declines to answer due to lack of context.",
+      "kappa_cost_usd": 0.00912
+    },
+    {
+      "qid": "R11-HP-06",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "HIT",
+      "kappa_grade": "MISS",
+      "agree": false,
+      "kappa_rationale": "The response does not identify the Defensive Conversion Clause details and instead states no information is available.",
+      "kappa_cost_usd": 0.01191
+    },
+    {
+      "qid": "R11-RC-07",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "HIT",
+      "kappa_grade": "MISS",
+      "agree": false,
+      "kappa_rationale": "The response does not provide the audit cadence; it declines to answer.",
+      "kappa_cost_usd": 0.00966
+    },
+    {
+      "qid": "R11-CS-01",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "HIT",
+      "kappa_grade": "MISS",
+      "agree": false,
+      "kappa_rationale": "The response does not provide the member count of 847,293 and instead states the information is unavailable.",
+      "kappa_cost_usd": 0.01023
+    },
+    {
+      "qid": "R11-AM-01",
+      "condition": "lb_r9_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The candidate response does not provide the correct co-signature count of 3 independent node operators, instead stating they don't know.",
+      "kappa_cost_usd": 0.012375
+    }
+  ]
+}
