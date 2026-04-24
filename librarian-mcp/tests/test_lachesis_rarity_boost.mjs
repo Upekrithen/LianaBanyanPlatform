@@ -70,6 +70,11 @@ scribes:
       - "cooperative ai platform"
       - "cooperative ledger standards body"
       - "cooperative capital framework"
+      - "reference onboarding framework"
+      - "cooperative principles assessment"
+      - "reference communication standards"
+      - "exit interview completion rate"
+      - "exit interview"
   - id: GenericArch
     mode: observational
     primary:
@@ -310,4 +315,89 @@ test("Fix3-E: regression — observational-mode Scribe behavior unchanged for no
     // Verify entries exist (observational, recency-sorted)
     assert.ok(archEntry.entries_returned >= 1, "GenericArch should return at least 1 entry");
   }
+});
+
+// ─── K473 MJ-category Tests ───────────────────────────────────────────────
+// Verify that the five new MJ-category keywords (Reference Onboarding Framework,
+// Cooperative Principles Assessment, Reference Communication Standards,
+// exit interview completion rate, exit interview) receive rare-token +1.0 bonus
+// and route MJ queries to R11Corpus, not GenericArch.
+//
+// The synthetic registry above does NOT include these MJ terms in GenericArch,
+// so they will be unique to R11Corpus (count=1) and receive the rare-token bonus.
+// We extend the synthetic registry in-memory via computeKeywordRarityMap + scoreScribe.
+
+test("K473-MJ-02: 'Cooperative Principles Assessment' routes to R11Corpus (rare-token boost)", () => {
+  const rarityMap = computeKeywordRarityMap();
+  // "cooperative principles assessment" is only in R11Corpus keywords (K473 addition)
+  const themes = ["What is the minimum passing score on the Cooperative Principles Assessment required for full voting rights?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+  const archResult = scoreScribe("GenericArch", themes, rarityMap);
+
+  // R11Corpus should score ≥ 2.0 (primary match + rare-token bonus)
+  assert.ok(r11Result.score >= 2.0,
+    `R11Corpus should score ≥2.0 on "Cooperative Principles Assessment" query, got ${r11Result.score}`);
+  // GenericArch should score 0 (no keyword match)
+  assert.equal(archResult.score, 0,
+    `GenericArch should score 0 on "Cooperative Principles Assessment" query, got ${archResult.score}`);
+});
+
+test("K473-MJ-03/05/08: 'Reference Onboarding Framework' routes to R11Corpus (rare-token boost)", () => {
+  const rarityMap = computeKeywordRarityMap();
+  const themes = ["What is the standard provisional member trial period under the Reference Onboarding Framework?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+  const archResult = scoreScribe("GenericArch", themes, rarityMap);
+
+  assert.ok(r11Result.score >= 2.0,
+    `R11Corpus should score ≥2.0 on "Reference Onboarding Framework" query, got ${r11Result.score}`);
+  assert.equal(archResult.score, 0,
+    `GenericArch should score 0 on "Reference Onboarding Framework" query, got ${archResult.score}`);
+});
+
+test("K473-MJ-07: 'Reference Communication Standards' routes to R11Corpus (rare-token boost)", () => {
+  const rarityMap = computeKeywordRarityMap();
+  const themes = ["What timeframes do the Reference Communication Standards specify for member inquiry acknowledgment?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+  const archResult = scoreScribe("GenericArch", themes, rarityMap);
+
+  assert.ok(r11Result.score >= 2.0,
+    `R11Corpus should score ≥2.0 on "Reference Communication Standards" query, got ${r11Result.score}`);
+  assert.equal(archResult.score, 0,
+    `GenericArch should score 0 on "Reference Communication Standards" query, got ${archResult.score}`);
+});
+
+test("K473-MJ-06: 'exit interview completion rate' routes to R11Corpus (rare-token boost)", () => {
+  const rarityMap = computeKeywordRarityMap();
+  const themes = ["What minimum exit interview completion rate does the Standards Body benchmark recommend?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+  const archResult = scoreScribe("GenericArch", themes, rarityMap);
+
+  // "exit interview completion rate" is in R11Corpus keywords; "exit interview" is a shorter match
+  // Either phrase appearing in query should give R11Corpus a rare-token boost
+  assert.ok(r11Result.score >= 2.0,
+    `R11Corpus should score ≥2.0 on "exit interview" query, got ${r11Result.score}`);
+  assert.equal(archResult.score, 0,
+    `GenericArch should score 0 on "exit interview" query, got ${archResult.score}`);
+});
+
+test("K473-regression: AM routing still works after MJ keyword additions", () => {
+  const rarityMap = computeKeywordRarityMap();
+  // AM-02 question — "Reference Architecture" should still route to R11Corpus
+  const themes = ["What embedding dimensionality does the Cooperative AI Platform Reference Architecture specify?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+
+  assert.ok(r11Result.score >= 2.0,
+    `R11Corpus AM routing regressed — "Reference Architecture" query scored ${r11Result.score}, expected ≥2.0`);
+});
+
+test("K473-regression: generic 'architecture' query still routes to GenericArch", () => {
+  const rarityMap = computeKeywordRarityMap();
+  const themes = ["MCP architecture tablet Cathedral schema"];
+  const archResult = scoreScribe("GenericArch", themes, rarityMap);
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+
+  assert.ok(archResult.score >= 2.0,
+    `GenericArch should score ≥2.0 on pure "architecture" query, got ${archResult.score}`);
+  assert.equal(r11Result.score, 0,
+    `R11Corpus should score 0 on pure "architecture" query, got ${r11Result.score}`);
 });

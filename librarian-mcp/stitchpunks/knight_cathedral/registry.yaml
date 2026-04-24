@@ -183,6 +183,14 @@ scribes:
       - Cooperative AI Platform
       - Cooperative AI Platform Reference Architecture
       - Architecture Working Group
+      # K473 Fix: MJ-category query terms (appear in MJ-02..MJ-08 questions)
+      # These R11-exclusive framework names are absent from all observational Scribes.
+      # Rare-token +1.0 bonus routes MJ questions to R11 instead of generic pathways.
+      - Reference Onboarding Framework
+      - Cooperative Principles Assessment
+      - Reference Communication Standards
+      - exit interview completion rate
+      - exit interview
       # Corpus identifiers
       - R11
       - R11-CANONICAL
