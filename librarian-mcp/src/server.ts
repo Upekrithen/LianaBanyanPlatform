@@ -14,6 +14,7 @@ import type {
   V2MigrationIndex, LetterIndex,
 } from "./types.js";
 import { buildBriefing, buildChecklist, buildDebrief } from "./router/moneyPennyRouter.js";
+import { validateSessionId } from "./sessionGuard.js";
 import { budgetEnforce, BUDGETS, truncateList, truncateToWords } from "./router/budgets.js";
 import { canonicalValueMatches, loadCanonicalFlat } from "./predicates/canonical_value_matches.js";
 import { checkFreshness } from "./indexer/fingerprint.js";
@@ -736,6 +737,15 @@ registerTool(
     let sessions: SessionEntry[] = [];
     if (existsSync(sessionsPath)) {
       sessions = JSON.parse(readFileSync(sessionsPath, "utf-8"));
+    }
+
+    // K460 input guard — reject implausibly high session IDs at the write path
+    const guardResult = validateSessionId(session_id, sessions);
+    if (guardResult.rejected) {
+      return {
+        content: [{ type: "text", text: JSON.stringify(guardResult, null, 2) }],
+        isError: true,
+      };
     }
 
     const newSession: SessionEntry = {
