@@ -6,7 +6,7 @@
  * with the dispatch directives and is responsible for appending the routing
  * record to `data/fates_log.jsonl`.
  */
-import { getRegistry, scoreScribe, type ScribeEntry } from "./registry.js";
+import { getRegistry, scoreScribe, computeKeywordRarityMap, type ScribeEntry } from "./registry.js";
 
 export interface FatesDispatch {
   scribe_id: string;
@@ -99,18 +99,26 @@ export function clothoExtract(text: string): { themes: string[]; entities: strin
 
 // ─── Lachesis — Scribe scoring ────────────────────────────────────────────
 
+/**
+ * Score all registered Scribes against `themes`.
+ * K472 Fix 1: passes the keyword rarity map so that synthetic-proper-noun queries
+ * (rare tokens like "Verdania", "Thornwick", "Reference Architecture") receive a
+ * +1.0 bonus per matching rare keyword, ensuring correct Scribe routing over
+ * generic Scribes like Architecture that match on common terms.
+ */
 export function lachesisScore(themes: string[]): {
   scores: Record<string, number>;
   details: Map<string, { score: number; primaryMatches: string[]; adjacentMatches: string[] }>;
 } {
   const reg = getRegistry();
+  const rarityMap = computeKeywordRarityMap();
   const scores: Record<string, number> = {};
   const details = new Map<
     string,
     { score: number; primaryMatches: string[]; adjacentMatches: string[] }
   >();
   for (const scribe of reg.scribes) {
-    const result = scoreScribe(scribe.id, themes);
+    const result = scoreScribe(scribe.id, themes, rarityMap);
     scores[scribe.id] = round2(result.score);
     details.set(scribe.id, result);
   }

@@ -65,7 +65,13 @@ class ConsultClient:
             bufsize=1,
         )
 
-    def consult(self, topic: str, max_entries: int = 10) -> dict:
+    def consult(self, topic: str, max_entries: int = 100) -> dict:
+        """
+        Consult the Cathedral. Default max_entries raised from 10 → 100 (K472/B121 Fix 3)
+        to ensure corpus-mode Scribes return their full fact set (R11 has 50 entries;
+        max_entries=10 previously limited retrieval to CS-01..CS-09 only, causing MISS
+        on EG/MJ/RC/HP category questions).
+        """
         if self.proc.stdin is None or self.proc.stdout is None:
             raise RuntimeError("consult subprocess not initialized")
         self.proc.stdin.write(json.dumps({"topic": topic, "max_entries": max_entries}) + "\n")
@@ -138,7 +144,8 @@ def answer(
             if not CONSULT_CLI_PATH.exists():
                 raise FileNotFoundError(f"consult_scribes_cli.mjs not found: {CONSULT_CLI_PATH}")
             consult_client = ConsultClient(CONSULT_CLI_PATH)
-        cresp = consult_client.consult(question, max_entries=10)
+        # K472 Fix 3: max_entries=100 ensures all 50 R11 corpus facts are retrievable
+        cresp = consult_client.consult(question, max_entries=100)
         cathedral_md, scribe_ids = _render_cathedral_block(cresp)
         system_prompt = CATHEDRAL_SYS_PREFIX + preload + CATHEDRAL_DIVIDER + cathedral_md
 

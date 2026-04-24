@@ -39,6 +39,13 @@ export interface ScribeEntry {
    *   order, all entries up to max_entries. Use for R11, canonical_values, rulebooks.
    */
   mode?: "observational" | "corpus";
+  /**
+   * Optional corpus provenance label (K472/B121 Fix 2).
+   * Tags Scribes containing reference corpus material (e.g. "r11_reference") so
+   * Lachesis can distinguish synthetic-corpus content from observational LB substrate.
+   * Used by consultScribes corpus-mode priority boost (Fix 3).
+   */
+  corpus_label?: string;
   primary: {
     level: number;
     field: string;
@@ -105,24 +112,54 @@ export function listScribeIds(): string[] {
 }
 
 /**
- * Lachesis scoring formula (per SP-22/23 spec + K436 prompt):
- *   score = (primary_matches * 1.0) + (adjacent_matches * 0.5)
+ * Computes a keyword rarity map: lowercased keyword → count of Scribes that list it
+ * in their primary keyword array. Keywords appearing in only one Scribe are rare and
+ * signal highly specific (often synthetic-proper-noun) queries (K472/B121 Fix 1).
  *
- * `themes` is the Clotho-extracted theme list. Matching is case-insensitive
- * substring against the Scribe's keyword library (primary list) and against the
- * Scribe's adjacent-field text.
+ * Rarity of a keyword = 1 − (count / totalScribes). Keywords in 1 Scribe out of 9
+ * have rarity ≈ 0.89; keywords in 2 Scribes have rarity ≈ 0.78.
+ */
+export function computeKeywordRarityMap(): Map<string, number> {
+  const reg = getRegistry();
+  const countByKeyword = new Map<string, number>();
+  for (const scribe of reg.scribes) {
+    for (const kw of scribe.keywords) {
+      const key = kw.toLowerCase();
+      countByKeyword.set(key, (countByKeyword.get(key) ?? 0) + 1);
+    }
+  }
+  return countByKeyword;
+}
+
+/**
+ * Lachesis scoring formula (per SP-22/23 spec + K436 prompt + K472 Fix 1):
+ *   base score = (primary_matches * 1.0) + (adjacent_matches * 0.5)
+ *   rare-token bonus = +1.0 per primary match via a keyword unique to this Scribe
+ *
+ * `themes` is the Clotho-extracted theme list (or a consult_scribes topic string).
+ * Matching is case-insensitive substring against the Scribe's keyword library
+ * (primary list) and adjacent-field text.
+ *
+ * `rarityMap` (optional, K472 Fix 1): maps lowercased keyword → Scribe count.
+ * When provided, primary matches via keywords that appear in only one Scribe receive
+ * an additive +1.0 bonus, boosting synthetic-proper-noun queries (e.g. "Verdania",
+ * "Thornwick", "Reference Architecture") to score near-unity for the correct Scribe.
+ * Natural-language queries are unaffected because their matching keywords are common.
  *
  * Returns 0 if the Scribe is unknown.
  */
 export function scoreScribe(
   scribeId: string,
   themes: string[],
+  rarityMap?: Map<string, number>,
 ): { score: number; primaryMatches: string[]; adjacentMatches: string[] } {
   const scribe = getScribe(scribeId);
   if (!scribe) return { score: 0, primaryMatches: [], adjacentMatches: [] };
 
   const primaryMatches = new Set<string>();
   const adjacentMatches = new Set<string>();
+  // Tracks additive rare-token bonus per matched theme
+  const rarityBonus = new Map<string, number>();
 
   const primaryHaystack = scribe.keywords.map((k) => k.toLowerCase());
   const primaryFieldLower = scribe.primary.field.toLowerCase();
@@ -132,11 +169,26 @@ export function scoreScribe(
     const theme = themeRaw.toLowerCase().trim();
     if (!theme) continue;
 
-    const hitsPrimary =
-      primaryHaystack.some((kw) => theme.includes(kw) || kw.includes(theme)) ||
-      primaryFieldLower.includes(theme);
+    // Find primary keyword match (first match wins to avoid double-counting)
+    let matchedKeyword: string | null = null;
+    for (const kw of primaryHaystack) {
+      if (theme.includes(kw) || kw.includes(theme)) {
+        matchedKeyword = kw;
+        break;
+      }
+    }
+    const hitsPrimary = matchedKeyword !== null || primaryFieldLower.includes(theme);
+
     if (hitsPrimary) {
       primaryMatches.add(themeRaw);
+      // K472 Fix 1: rare-token bonus — keyword appears in only this Scribe's list.
+      // Additive +1.0 per match; does not replace the base 1.0 primary credit.
+      if (rarityMap && matchedKeyword) {
+        const count = rarityMap.get(matchedKeyword) ?? 1;
+        if (count === 1) {
+          rarityBonus.set(themeRaw, (rarityBonus.get(themeRaw) ?? 0) + 1.0);
+        }
+      }
       continue; // do not double-count as adjacent if already primary
     }
 
@@ -148,7 +200,12 @@ export function scoreScribe(
     }
   }
 
-  const score = primaryMatches.size * 1.0 + adjacentMatches.size * 0.5;
+  const baseScore = primaryMatches.size * 1.0 + adjacentMatches.size * 0.5;
+  const bonus = rarityBonus.size > 0
+    ? Array.from(rarityBonus.values()).reduce((a, b) => a + b, 0)
+    : 0;
+  const score = baseScore + bonus;
+
   return {
     score,
     primaryMatches: Array.from(primaryMatches),

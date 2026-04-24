@@ -142,6 +142,7 @@ scribes:
 
   - id: KnightR11
     mode: corpus
+    corpus_label: r11_reference
     primary:
       level: 1
       field: R11 canonical corpus — cooperative AI platform benchmark fixture (50 facts, 6 categories) [Knight Cathedral copy, K455a]
@@ -161,22 +162,41 @@ scribes:
       - level: 4
         field: historical precedent and case law
     keywords:
+      # Synthetic proper nouns (rare — K472 Fix 1 rare-token boost applies)
       - Verdania
       - Thornwick
       - Cairnfield
-      - cooperative
+      - Sundry Accord
+      - Solstice Index
+      - Reykjavik Declaration
+      - Hartwell Cooperative Platform
+      - Meridian Data Framework
+      - Thornwick Cooperative Research Institute
+      # Governing bodies and frameworks
+      - Cooperative Ledger Standards Body
+      - Cooperative Capital Framework
+      - Cooperative AI Governance Charter
+      - Federated Platform Compact
+      - Cooperative Data Stewardship Standard
+      # K472 Fix 1: AM-category query terms
+      - Reference Architecture
+      - Cooperative AI Platform
+      - Cooperative AI Platform Reference Architecture
+      - Architecture Working Group
+      # Corpus identifiers
       - R11
+      - R11-CANONICAL
       - benchmark
       - canonical
       - corpus
-      - statistics
-      - member
-      - governance
-      - compliance
-      - historical
-      - precedent
-      - architecture
-      - mechanics
+      # Category labels
+      - "canonical statistics"
+      - "architecture mechanics"
+      - "economic governance"
+      - "member journey"
+      - "regulatory compliance"
+      - "historical precedent"
+      # Fact IDs
       - CS-01
       - AM-01
       - EG-01

@@ -18,7 +18,7 @@
 import { readFileSync, existsSync, statSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
-import { getRegistry, scoreScribe } from "./registry.js";
+import { getRegistry, scoreScribe, computeKeywordRarityMap } from "./registry.js";
 import { readTablet, type ScribeTabletEntry, STITCHPUNKS_DIR } from "./cathedral.js";
 import yaml from "js-yaml";
 
@@ -92,13 +92,18 @@ function getKnightRegistry(): KnightScribesRegistry {
   return _knightReg!;
 }
 
-/** Score a Knight Scribe against a topic (mirrors Bishop scoreScribe logic). */
+/**
+ * Score a Knight Scribe against a topic (mirrors Bishop scoreScribe logic).
+ * K472 Fix 1: accepts optional rarityMap to boost rare-keyword primary matches.
+ */
 function scoreKnightScribe(
   scribe: KnightScribesRegistry["scribes"][0],
   themes: string[],
+  rarityMap?: Map<string, number>,
 ): { score: number; primaryMatches: string[]; adjacentMatches: string[] } {
   const primaryMatches = new Set<string>();
   const adjacentMatches = new Set<string>();
+  const rarityBonus = new Map<string, number>();
 
   const primaryHaystack = scribe.keywords.map((k) => k.toLowerCase());
   const primaryFieldLower = scribe.primary.field.toLowerCase();
@@ -108,11 +113,24 @@ function scoreKnightScribe(
     const theme = themeRaw.toLowerCase().trim();
     if (!theme) continue;
 
-    const hitsPrimary =
-      primaryHaystack.some((kw) => theme.includes(kw) || kw.includes(theme)) ||
-      primaryFieldLower.includes(theme);
+    let matchedKeyword: string | null = null;
+    for (const kw of primaryHaystack) {
+      if (theme.includes(kw) || kw.includes(theme)) {
+        matchedKeyword = kw;
+        break;
+      }
+    }
+    const hitsPrimary = matchedKeyword !== null || primaryFieldLower.includes(theme);
+
     if (hitsPrimary) {
       primaryMatches.add(themeRaw);
+      // K472 Fix 1: rare-token bonus for Knight Scribes
+      if (rarityMap && matchedKeyword) {
+        const count = rarityMap.get(matchedKeyword) ?? 1;
+        if (count === 1) {
+          rarityBonus.set(themeRaw, (rarityBonus.get(themeRaw) ?? 0) + 1.0);
+        }
+      }
       continue;
     }
 
@@ -124,8 +142,28 @@ function scoreKnightScribe(
     }
   }
 
-  const score = primaryMatches.size * 1.0 + adjacentMatches.size * 0.5;
+  const baseScore = primaryMatches.size * 1.0 + adjacentMatches.size * 0.5;
+  const bonus = rarityBonus.size > 0
+    ? Array.from(rarityBonus.values()).reduce((a, b) => a + b, 0)
+    : 0;
+  const score = baseScore + bonus;
   return { score, primaryMatches: Array.from(primaryMatches), adjacentMatches: Array.from(adjacentMatches) };
+}
+
+/**
+ * Compute keyword rarity map for Knight's Cathedral registry.
+ * Mirrors computeKeywordRarityMap() from registry.ts but operates on Knight's registry.
+ */
+function computeKnightKeywordRarityMap(): Map<string, number> {
+  const reg = getKnightRegistry();
+  const countByKeyword = new Map<string, number>();
+  for (const scribe of reg.scribes) {
+    for (const kw of scribe.keywords) {
+      const key = kw.toLowerCase();
+      countByKeyword.set(key, (countByKeyword.get(key) ?? 0) + 1);
+    }
+  }
+  return countByKeyword;
 }
 
 /**
@@ -216,6 +254,24 @@ const CORPUS_DEFAULT_MAX = 100;
  */
 const CORPUS_PER_SCRIBE_CAP = 500;
 
+// ─── K472 Fix 3: Corpus-mode priority boost constants ─────────────────────
+
+/**
+ * Minimum rarity score to trigger the corpus-mode priority boost.
+ * Rarity of a keyword = 1 − (Scribe count / total Scribes).
+ * 0.75 ≈ keyword appears in ≤25% of registered Scribes (≤2 out of ~9 Bishop Scribes).
+ * Rare synthetic-proper-noun queries (Verdania, Thornwick, Reference Architecture, etc.)
+ * typically score ≥0.88 (1/9), safely above this threshold.
+ */
+const RARITY_THRESHOLD = 0.75;
+
+/**
+ * Score bonus added to corpus-mode Scribes when query rarity exceeds RARITY_THRESHOLD.
+ * Prevents canonical LB observational substrate from out-ranking R11 corpus when the
+ * query clearly targets synthetic/reference content (K472/B121 Fix 3).
+ */
+const CORPUS_RARITY_BOOST = 0.3;
+
 // ─── Scribe mode lookup ────────────────────────────────────────────────────
 
 /** Returns the serving mode for a Scribe. Defaults to "observational" if unset. */
@@ -250,6 +306,11 @@ export function consultScribes(input: {
 
   const themes = [input.topic];
 
+  // K472 Fix 1: compute keyword rarity maps for the active Cathedral
+  const bishopRarityMap = cathedral === "bishop" ? computeKeywordRarityMap() : undefined;
+  const knightRarityMap = cathedral === "knight" ? computeKnightKeywordRarityMap() : undefined;
+  const rarityMap = bishopRarityMap ?? knightRarityMap;
+
   type Ranked = {
     scribe_id: string;
     score: number;
@@ -262,7 +323,8 @@ export function consultScribes(input: {
     // Bishop's Cathedral: use existing registry.ts + cathedral.ts
     const reg = getRegistry();
     for (const s of reg.scribes) {
-      const r = scoreScribe(s.id, themes);
+      // K472 Fix 1: pass rarityMap for rare-token bonus on synthetic-proper-noun queries
+      const r = scoreScribe(s.id, themes, bishopRarityMap);
       if (r.score <= 0) continue;
       ranked.push({
         scribe_id: s.id,
@@ -275,7 +337,8 @@ export function consultScribes(input: {
     // Knight's Cathedral: use Knight-specific registry + tablet reader
     const knightReg = getKnightRegistry();
     for (const s of knightReg.scribes) {
-      const r = scoreKnightScribe(s, themes);
+      // K472 Fix 1: pass rarityMap for rare-token bonus
+      const r = scoreKnightScribe(s, themes, knightRarityMap);
       if (r.score <= 0) continue;
       ranked.push({
         scribe_id: s.id,
@@ -283,6 +346,35 @@ export function consultScribes(input: {
         primaryMatches: r.primaryMatches,
         adjacentMatches: r.adjacentMatches,
       });
+    }
+  }
+
+  // K472 Fix 3: corpus-mode priority boost.
+  // When the query contains rare/synthetic tokens (rarity > RARITY_THRESHOLD), add
+  // CORPUS_RARITY_BOOST to corpus-mode Scribes' scores. This prevents observational
+  // LB substrate Scribes (Architecture, Decisions, etc.) from out-ranking R11 corpus
+  // on queries clearly targeting synthetic reference content.
+  if (rarityMap) {
+    const totalScribes = cathedral === "bishop"
+      ? getRegistry().scribes.length
+      : getKnightRegistry().scribes.length;
+
+    // Compute max rarity across any keyword that matched in this query
+    let maxRarity = 0;
+    for (const [kw, count] of rarityMap) {
+      const theme = input.topic.toLowerCase();
+      if (theme.includes(kw) || kw.includes(theme)) {
+        const rarity = 1 - count / Math.max(1, totalScribes);
+        if (rarity > maxRarity) maxRarity = rarity;
+      }
+    }
+
+    if (maxRarity > RARITY_THRESHOLD) {
+      for (const r of ranked) {
+        if (getScribeMode(r.scribe_id, cathedral) === "corpus") {
+          r.score += CORPUS_RARITY_BOOST;
+        }
+      }
     }
   }
 

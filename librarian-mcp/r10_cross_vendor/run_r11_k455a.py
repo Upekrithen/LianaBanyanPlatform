@@ -61,7 +61,11 @@ from r11_adapters.multi_cathedral_adapter import MultiCathedralConsultClient  # 
 from r11_adapters import claude_projects_adapter  # noqa: E402
 from r11_adapters import chatgpt_memory_adapter  # noqa: E402
 
-BANK_PATH = SCRIPT_DIR / "R11_QUESTION_BANK_SEALED.json"
+# K472/B121: updated to use the K471 sealed bank (100% answerable ceiling, K471 alignment).
+# The K444 bank is retained as legacy for historical comparison (--legacy-k444 flag).
+BANK_PATH_K471 = SCRIPT_DIR / "R11_QUESTION_BANK_SEALED_K471.json"
+BANK_PATH_K444_LEGACY = SCRIPT_DIR / "R11_QUESTION_BANK_SEALED_K444_LEGACY.json"
+BANK_PATH = BANK_PATH_K471  # default for K472 re-run
 
 BUDGET_HARD_CAP = 30.00
 HALF_WARN_FRACTION = 0.50
@@ -434,8 +438,8 @@ def _aggregate(records: list[dict], total_cost: float, halted: bool) -> dict:
     vendor_agnostic_classification = "Vendor-Agnostic" if weak_or_strong_count >= 3 else "Vendor-Specific"
 
     return {
-        "session": "K455a",
-        "corpus_id": "R11-CANONICAL-K444-v2",
+        "session": "K472",
+        "corpus_id": "R11-CANONICAL-K471",
         "total_cost_usd": round(total_cost, 4),
         "total_records": len(records),
         "halted_on_budget": halted,
@@ -586,7 +590,20 @@ def main() -> None:
     p.add_argument("--out", default="results_r11_k455a", help="Output directory")
     p.add_argument("--budget", type=float, default=BUDGET_HARD_CAP)
     p.add_argument("--conditions", nargs="*", help="Run only these condition IDs")
+    p.add_argument(
+        "--legacy-k444",
+        action="store_true",
+        help="Use legacy K444 bank (R11_QUESTION_BANK_SEALED.json) for historical comparison. "
+             "Default is K471 bank (100%% answerable ceiling, K471 alignment).",
+    )
     args = p.parse_args()
+
+    if args.legacy_k444:
+        global BANK_PATH
+        BANK_PATH = BANK_PATH_K444_LEGACY
+        print(f"[run_r11_k455a] Using LEGACY K444 bank: {BANK_PATH.name}")
+    else:
+        print(f"[run_r11_k455a] Using K471 bank (default): {BANK_PATH.name}")
 
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("FATAL: ANTHROPIC_API_KEY not set. Load SDS.env upstream.", file=sys.stderr)

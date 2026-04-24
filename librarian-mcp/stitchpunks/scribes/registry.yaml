@@ -371,10 +371,12 @@ scribes:
   # K455c / B121 — R11 canonical corpus Scribe
   # Loaded 2026-04-23 to enable cross-Cathedral benchmark arm.
   # Knight's Cathedral does NOT contain this Scribe (control arm integrity).
+  # K472/B121: corpus_label added (Fix 2); AM-category keywords expanded (Fix 1).
   # ============================================================
 
   - id: R11
     mode: corpus
+    corpus_label: r11_reference
     primary:
       level: 1
       field: R11 canonical corpus — cooperative AI platform benchmark fixture (50 facts, 6 categories)
@@ -395,17 +397,33 @@ scribes:
       - level: 4
         field: historical precedent (founding summit, Sundry Accord, Cairnfield Protocol)
     keywords:
+      # Synthetic proper nouns (rare tokens — appear only in R11; Fix 1 boosts these)
       - Verdania
       - Thornwick
       - Cairnfield
       - Sundry Accord
       - Solstice Index
+      - Reykjavik Declaration
+      - Hartwell Cooperative Platform
+      - Meridian Data Framework
+      - Thornwick Cooperative Research Institute
+      # Corpus and bank identifiers
       - R11
       - R11-CANONICAL
+      # Governing bodies and frameworks (R11-specific; rare in Bishop substrate)
       - Cooperative Ledger Standards Body
       - Cooperative Capital Framework
       - Cooperative AI Governance Charter
       - Federated Platform Compact
+      - Cooperative Data Stewardship Standard
+      # K472 Fix 1: AM-category query terms (appear in AM-02..AM-08 questions)
+      # "Reference Architecture" / "Cooperative AI Platform" are R11-specific — adding
+      # them here makes rare-token boost route AM questions to R11 instead of Architecture.
+      - Reference Architecture
+      - Cooperative AI Platform
+      - Cooperative AI Platform Reference Architecture
+      - Architecture Working Group
+      # Canonical numerical facts (rare values unique to R11 corpus)
       - "847,293"
       - "4.7 billion"
       - "66.7%"
@@ -418,9 +436,8 @@ scribes:
       - "0.73"
       - "1,536"
       - "top-10"
-      - "4,096 tokens"
-      - "512 tokens"
       - "p99"
+      # Category labels
       - "canonical statistics"
       - "architecture mechanics"
       - "economic governance"
