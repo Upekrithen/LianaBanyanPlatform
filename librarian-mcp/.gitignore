@@ -8,3 +8,7 @@ stitchpunks/data/*.json
 .supervisor.pid
 .supervisor.log
 .supervisor.log.*
+# Sculptor run outputs (large files; regeneratable from bedrock)
+sculptors/filter_decision_log.jsonl
+sculptors/outputs/
+sculptors/run_summary_K483.json
