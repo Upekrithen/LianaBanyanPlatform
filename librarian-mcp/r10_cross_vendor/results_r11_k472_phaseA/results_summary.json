@@ -1,0 +1,42 @@
+{
+  "session": "K472",
+  "corpus_id": "R11-CANONICAL-K471",
+  "total_cost_usd": 0.5693,
+  "total_records": 50,
+  "halted_on_budget": false,
+  "vendor_agnostic_classification": "Vendor-Specific",
+  "vendor_agnostic_evidence": {
+    "weak_or_strong_count": 0,
+    "out_of": 4,
+    "conditions_checked": [
+      "perplexity_sonar_bishop",
+      "google_flash_bishop",
+      "openai_4omini_bishop",
+      "anthropic_haiku_bishop"
+    ]
+  },
+  "multi_cathedral_replication": {},
+  "by_condition": {
+    "anthropic_haiku_bishop": {
+      "n": 50,
+      "HOT": 40,
+      "HIT": 4,
+      "MISS": 6,
+      "cost_usd": 0.569297,
+      "vendor": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "cathedral": "bishop",
+      "hot_pct": 80.0,
+      "hit_pct": 8.0,
+      "miss_pct": 12.0,
+      "hot_or_hit_pct": 88.0,
+      "cost_per_q": 0.011386,
+      "cost_per_hot": 0.014232,
+      "p50_latency_s": 2.688,
+      "p95_latency_s": 4.753,
+      "cathedral_effect_classification": "NO_BASELINE",
+      "cathedral_effect_lift_pp": null,
+      "baseline_used": null
+    }
+  }
+}
