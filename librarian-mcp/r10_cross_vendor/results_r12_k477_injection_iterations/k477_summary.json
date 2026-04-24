@@ -1,0 +1,50 @@
+﻿{
+    "generated_at":  "2026-04-24T16:11:21.4073171-05:00",
+    "winner":  {
+                   "universe":  "cranewell",
+                   "top_k":  10,
+                   "iteration":  "C",
+                   "HOT_pct":  80,
+                   "arm":  "iter_c_k10/auto-only",
+                   "MISS_pct":  0,
+                   "delta_vs_k475_pp":  68
+               },
+    "summaries":  [
+                      {
+                          "hot_pct":  14,
+                          "iteration":  "A",
+                          "HIT":  7,
+                          "top_k":  null,
+                          "MISS":  36,
+                          "arm":  "iter_a/auto-only",
+                          "total_graded":  50,
+                          "universe":  "cranewell",
+                          "wall_sec":  747,
+                          "HOT":  7,
+                          "hit_pct":  14,
+                          "miss_pct":  72,
+                          "failed":  0
+                      },
+                      {
+                          "hot_pct":  80,
+                          "iteration":  "C",
+                          "HIT":  10,
+                          "top_k":  10,
+                          "MISS":  0,
+                          "arm":  "iter_c_k10/auto-only",
+                          "total_graded":  50,
+                          "universe":  "cranewell",
+                          "wall_sec":  746,
+                          "HOT":  40,
+                          "hit_pct":  20,
+                          "miss_pct":  0,
+                          "failed":  0
+                      }
+                  ],
+    "k475_baselines":  {
+                           "covenant/union":  18.8,
+                           "covenant/auto-only":  14.6,
+                           "cranewell/auto-only":  12,
+                           "cranewell/union":  18
+                       }
+}
