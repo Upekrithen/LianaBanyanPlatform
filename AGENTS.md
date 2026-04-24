@@ -130,6 +130,14 @@ grep -oE "^[A-Z_]+=" path/to/SDS.env | sort -u
 
 Knight's Cathedral lives at `librarian-mcp/stitchpunks/knight_cathedral/` with four Scribes: KnightQueue, KnightHandoffs, KnightBRIDLEMemory, KnightArchitecture. The SP-7 Courier auto-populates all four on every rebuild (append-only, idempotent). See `librarian-mcp/stitchpunks/knight_cathedral/README.md` for the full maintenance contract.
 
+**Phase 3 LIVE as of K470/B121 (2026-04-23).** Pawn's Cathedral now exists at `librarian-mcp/stitchpunks/pawn_cathedral/` — the **third member-Cathedral**, and the **first non-MCP-client Cathedral**. Pawn (Perplexity) cannot consume her Cathedral via MCP tool calls. Instead:
+- Cathedral is delivered via snapshot: `librarian-mcp/scripts/generate-pawn-snapshot.mjs` → `BISHOP_DROPZONE/K455b_playbook/pawn_cathedral_snapshot.md`
+- Pawn's tablets are operator-mediated (Founder signs on Pawn's behalf): all carry `operator_mediated_sig: true`
+- Four Scribes: PawnQueue, PawnHandoffs, R11_corpus (mode: corpus, shared from Bishop), PawnGenerated
+- Cryptographic attestation: `pawn_cathedral/keys/cooperative_attestation.md`; public key: `pawn_cathedral/keys/pawn_cathedral_pub.pem`; private key in `Asteroid-ProofVault/LockBox/`
+- Reduction-to-practice for A&A #2281 claim 1(a) (heterogeneous AI client access) and claim 5 (snapshot-delivery)
+- See `librarian-mcp/stitchpunks/pawn_cathedral/README.md` for full architecture
+
 If `KNIGHT_QUEUE.md` is missing or obviously stale, run `cd librarian-mcp && npm run rebuild:full` to regenerate. Fall back to grep and flag Bishop only if the Cathedral directory itself is missing.
 
 ### Canonical numbers — single source of truth
