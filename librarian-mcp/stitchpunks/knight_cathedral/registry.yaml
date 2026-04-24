@@ -139,3 +139,48 @@ scribes:
       - K455c
       - K461
     activation_threshold: any architectural decision or code surface query
+
+  - id: KnightR11
+    mode: corpus
+    primary:
+      level: 1
+      field: R11 canonical corpus — cooperative AI platform benchmark fixture (50 facts, 6 categories) [Knight Cathedral copy, K455a]
+      canonical_keepers:
+        - librarian-mcp/r10_cross_vendor/r11_canonical_corpus.md
+    adjacents:
+      - level: 2
+        field: Verdania cooperative platform statistics
+      - level: 2
+        field: Thornwick architecture mechanics
+      - level: 3
+        field: cooperative governance economics
+      - level: 3
+        field: member journey and lifecycle
+      - level: 4
+        field: regulatory compliance protocols
+      - level: 4
+        field: historical precedent and case law
+    keywords:
+      - Verdania
+      - Thornwick
+      - Cairnfield
+      - cooperative
+      - R11
+      - benchmark
+      - canonical
+      - corpus
+      - statistics
+      - member
+      - governance
+      - compliance
+      - historical
+      - precedent
+      - architecture
+      - mechanics
+      - CS-01
+      - AM-01
+      - EG-01
+      - MJ-01
+      - RC-01
+      - HP-01
+    activation_threshold: any R11 benchmark fact query about cooperative platform statistics, governance, or architecture
