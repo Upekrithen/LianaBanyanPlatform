@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "knight-cathedral-tablet-schema",
+  "title": "Knight Cathedral Tablet Schema",
+  "description": "Append-only JSONL tablet format for Knight's Cathedral Scribes. Extends Bishop's base format with Knight-specific fields. Instantiated K461/B121.",
+  "type": "object",
+  "required": ["observation", "category", "timestamp", "source_session", "source_document", "tokens"],
+  "properties": {
+    "observation": {
+      "type": "string",
+      "description": "What this tablet records — the canonical observation text"
+    },
+    "category": {
+      "type": "string",
+      "description": "Primary domain tag for routing and retrieval"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this tablet was appended"
+    },
+    "source_session": {
+      "type": "string",
+      "description": "Session ID that generated this tablet (e.g., K461, B121)"
+    },
+    "source_document": {
+      "type": "string",
+      "description": "File path or artifact reference this tablet was derived from"
+    },
+    "tokens": {
+      "type": "number",
+      "description": "Word-count approximation of the observation"
+    },
+    "bridle_rule_invoked": {
+      "type": "string",
+      "description": "KnightBRIDLEMemory only — which BRIDLE rule was exercised (e.g., 'Rule 2: verify before asserting')"
+    },
+    "commit_hash": {
+      "type": "string",
+      "description": "Git commit hash if this tablet references a landed commit"
+    },
+    "git_tag": {
+      "type": "string",
+      "description": "Git tag name if this tablet references a tagged release"
+    },
+    "k_number": {
+      "type": "string",
+      "description": "Knight session number (e.g., K461) for queue/handoff tablets"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["NEXT", "QUEUED", "LANDED", "CONTEXT"],
+      "description": "Queue status for KnightQueue tablets"
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "If this tablet corrects a prior one, reference the prior tablet's timestamp here. Never edit in place — always append a correction."
+    }
+  },
+  "additionalProperties": false,
+  "_notes": {
+    "append_only": "Tablets are NEVER modified after writing. If an entry is wrong, append a correction with supersedes pointing to the prior tablet's timestamp. This preserves provenance per A&A #2270 claims.",
+    "idempotency": "The Courier uses source_session + source_document as a composite key to detect duplicates. Running twice on unchanged artifacts produces zero new tablets.",
+    "bishop_compat": "This schema is additive over Bishop's {ts, session, observation, source, canonical_ref} format. Knight's Scribes use timestamp/source_session/source_document in place of ts/session/canonical_ref for clarity. Cross-Cathedral reads must handle both field-name conventions."
+  }
+}
