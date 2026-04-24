@@ -1,0 +1,101 @@
+{
+  "session": "K481",
+  "bishop": "B123",
+  "generated_at": "2026-04-24T22:30:00Z",
+  "predecessor": "K477 (Cranewell Iter-C k=10: 80.0% HOT reference)",
+  "k475_baselines": {
+    "cranewell/auto-only": 12.0,
+    "cranewell/union": 18.0,
+    "covenant/auto-only": 14.6,
+    "covenant/union": 18.8
+  },
+  "k477_reference": {
+    "arm": "cranewell/iter_c_k10/auto-only",
+    "HOT": 40,
+    "HIT": 10,
+    "MISS": 0,
+    "hot_pct": 80.0,
+    "miss_pct": 0.0,
+    "delta_vs_k475_pp": 68.0
+  },
+  "phase_a": {
+    "arm": "covenant/iter_c_k10/auto-only",
+    "HOT": 32,
+    "HIT": 18,
+    "MISS": 0,
+    "failed": 0,
+    "total_graded": 50,
+    "hot_pct": 64.0,
+    "hit_pct": 36.0,
+    "miss_pct": 0.0,
+    "delta_vs_k475_pp": 49.4,
+    "wall_sec": 752,
+    "interpretation": "Partial confirmation (40-70% band). Covenant lower than Cranewell due to mixed-span canonical-prior bleed.",
+    "per_category": {
+      "canonical_statistics":   {"N": 8, "HOT": 6, "HIT": 2, "MISS": 0, "hot_pct": 75.0},
+      "archive_mechanics":      {"N": 8, "HOT": 7, "HIT": 1, "MISS": 0, "hot_pct": 87.5},
+      "economic_governance":    {"N": 9, "HOT": 7, "HIT": 2, "MISS": 0, "hot_pct": 77.8},
+      "member_journey":         {"N": 8, "HOT": 5, "HIT": 3, "MISS": 0, "hot_pct": 62.5},
+      "regulatory_compliance":  {"N": 9, "HOT": 4, "HIT": 5, "MISS": 0, "hot_pct": 44.4},
+      "historical_precedent":   {"N": 8, "HOT": 3, "HIT": 5, "MISS": 0, "hot_pct": 37.5}
+    }
+  },
+  "phase_b": {
+    "k5": {
+      "arm": "cranewell/iter_c_k5/auto-only",
+      "HOT": 41,
+      "HIT": 8,
+      "MISS": 1,
+      "failed": 0,
+      "total_graded": 50,
+      "hot_pct": 82.0,
+      "hit_pct": 16.0,
+      "miss_pct": 2.0,
+      "delta_vs_k475_pp": 70.0,
+      "delta_vs_k10_pp": 2.0,
+      "wall_sec": 747,
+      "per_category": {
+        "canonical_statistics":   {"N": 9, "HOT": 8, "HIT": 1, "MISS": 0, "hot_pct": 88.9},
+        "archive_mechanics":      {"N": 8, "HOT": 6, "HIT": 2, "MISS": 0, "hot_pct": 75.0},
+        "economic_governance":    {"N": 9, "HOT": 6, "HIT": 3, "MISS": 0, "hot_pct": 66.7},
+        "member_journey":         {"N": 8, "HOT": 6, "HIT": 1, "MISS": 1, "hot_pct": 75.0},
+        "regulatory_compliance":  {"N": 8, "HOT": 8, "HIT": 0, "MISS": 0, "hot_pct": 100.0},
+        "historical_precedent":   {"N": 8, "HOT": 7, "HIT": 1, "MISS": 0, "hot_pct": 87.5}
+      }
+    },
+    "k20": {
+      "arm": "cranewell/iter_c_k20/auto-only",
+      "HOT": 42,
+      "HIT": 8,
+      "MISS": 0,
+      "failed": 0,
+      "total_graded": 50,
+      "hot_pct": 84.0,
+      "hit_pct": 16.0,
+      "miss_pct": 0.0,
+      "delta_vs_k475_pp": 72.0,
+      "delta_vs_k10_pp": 4.0,
+      "wall_sec": 744,
+      "per_category": {
+        "canonical_statistics":   {"N": 9, "HOT": 7, "HIT": 2, "MISS": 0, "hot_pct": 77.8},
+        "archive_mechanics":      {"N": 8, "HOT": 5, "HIT": 3, "MISS": 0, "hot_pct": 62.5},
+        "economic_governance":    {"N": 9, "HOT": 7, "HIT": 2, "MISS": 0, "hot_pct": 77.8},
+        "member_journey":         {"N": 8, "HOT": 8, "HIT": 0, "MISS": 0, "hot_pct": 100.0},
+        "regulatory_compliance":  {"N": 8, "HOT": 8, "HIT": 0, "MISS": 0, "hot_pct": 100.0},
+        "historical_precedent":   {"N": 8, "HOT": 7, "HIT": 1, "MISS": 0, "hot_pct": 87.5}
+      }
+    }
+  },
+  "k_sensitivity_curve": {
+    "k5":  {"hot_pct": 82.0, "miss_pct": 2.0},
+    "k10": {"hot_pct": 80.0, "miss_pct": 0.0},
+    "k20": {"hot_pct": 84.0, "miss_pct": 0.0}
+  },
+  "pareto_winner": "k=20 (84.0% HOT, 0% MISS) — narrowly over k=10",
+  "cli_default_decision": "k=10 retained as default — k=20 gain (+4pp) is within variance and doubles token cost",
+  "cross_universe_summary": {
+    "cranewell_k10_hot_pct": 80.0,
+    "covenant_k10_hot_pct": 64.0,
+    "public_claim": "Cathedral Effect with Top-K=10 RAG: +62-80pp HOT lift across two corpus types"
+  }
+}

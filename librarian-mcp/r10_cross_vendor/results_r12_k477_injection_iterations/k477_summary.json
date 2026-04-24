@@ -1,50 +1,40 @@
-﻿{
-    "generated_at":  "2026-04-24T16:11:21.4073171-05:00",
-    "winner":  {
-                   "universe":  "cranewell",
-                   "top_k":  10,
-                   "iteration":  "C",
-                   "HOT_pct":  80,
-                   "arm":  "iter_c_k10/auto-only",
-                   "MISS_pct":  0,
-                   "delta_vs_k475_pp":  68
-               },
-    "summaries":  [
-                      {
-                          "hot_pct":  14,
-                          "iteration":  "A",
-                          "HIT":  7,
-                          "top_k":  null,
-                          "MISS":  36,
-                          "arm":  "iter_a/auto-only",
-                          "total_graded":  50,
-                          "universe":  "cranewell",
-                          "wall_sec":  747,
-                          "HOT":  7,
-                          "hit_pct":  14,
-                          "miss_pct":  72,
-                          "failed":  0
-                      },
-                      {
-                          "hot_pct":  80,
-                          "iteration":  "C",
-                          "HIT":  10,
-                          "top_k":  10,
-                          "MISS":  0,
-                          "arm":  "iter_c_k10/auto-only",
-                          "total_graded":  50,
-                          "universe":  "cranewell",
-                          "wall_sec":  746,
-                          "HOT":  40,
-                          "hit_pct":  20,
-                          "miss_pct":  0,
-                          "failed":  0
-                      }
-                  ],
-    "k475_baselines":  {
-                           "covenant/union":  18.8,
-                           "covenant/auto-only":  14.6,
-                           "cranewell/auto-only":  12,
-                           "cranewell/union":  18
-                       }
+{
+  "generated_at": "2026-04-24T22:28:17.138875+00:00",
+  "args": {
+    "universe": "cranewell",
+    "iteration": "C",
+    "keywords_mode": "auto-only",
+    "top_k": 20,
+    "run_all": false,
+    "no_resume": false,
+    "confirmed": true,
+    "stagger": 15.0,
+    "max_concurrent": 10,
+    "regrade": false
+  },
+  "k475_baselines": {
+    "cranewell/auto-only": 12.0,
+    "cranewell/union": 18.0,
+    "covenant/auto-only": 14.6,
+    "covenant/union": 18.8
+  },
+  "summaries": [
+    {
+      "arm": "iter_c_k20/auto-only",
+      "universe": "cranewell",
+      "iteration": "C",
+      "keywords_mode": "auto-only",
+      "top_k": 20,
+      "HOT": 42,
+      "HIT": 8,
+      "MISS": 0,
+      "failed": 0,
+      "skipped": 0,
+      "total_graded": 50,
+      "hot_pct": 84.0,
+      "hit_pct": 16.0,
+      "miss_pct": 0.0,
+      "wall_sec": 744.5
+    }
+  ]
 }
