@@ -2486,10 +2486,10 @@ registerTool(
 
 registerTool(
   "consult_scribes",
-  "RAM-access pattern for the Cathedral: query Scribes for recent observations on a topic. Scores topic against every registered Scribe's primary + adjacent fields, returns up to max_entries from the highest-scoring Scribes (primary first, adjacents next if include_adjacents=true). Extended K455c/B121: accepts cathedral ('bishop'=default or 'knight') and scope ('public'=default, 'private', 'guild:<name>', 'tribe:<name>') for cross-Cathedral consultation and permissioned scope filtering. Optimized for fast mid-session retrieval (target p95 < 200ms for 20-tablet cathedral).",
+  "RAM-access pattern for the Cathedral: query Scribes for recent observations on a topic. Scores topic against every registered Scribe's primary + adjacent fields, returns up to max_entries from the highest-scoring Scribes (primary first, adjacents next if include_adjacents=true). Extended K455c/B121: accepts cathedral ('bishop'=default or 'knight') and scope ('public'=default, 'private', 'guild:<name>', 'tribe:<name>') for cross-Cathedral consultation and permissioned scope filtering. Extended K466/B121: Scribes declare mode='observational' (default, recency top-K) or mode='corpus' (full deterministic retrieval for static reference corpora like R11). Default max_entries for corpus-mode queries is 100; for observational is 20. Optimized for fast mid-session retrieval (target p95 < 200ms for 20-tablet cathedral).",
   {
     topic: z.string().min(2).describe("Topic to look up — keyword, phrase, named entity, or canonical id"),
-    max_entries: z.number().int().min(1).max(200).optional().describe("Maximum entries to return (default 20)"),
+    max_entries: z.number().int().min(1).max(500).optional().describe("Maximum entries to return (default 20 for observational Scribes, 100 for corpus Scribes). Explicit override respected for both modes."),
     since_ts: z.string().optional().describe("ISO-8601 timestamp; only entries newer than this are returned"),
     include_adjacents: z.boolean().optional().describe("If true (default), also return entries from Scribes that match only on adjacent fields"),
     cathedral: z.enum(["bishop", "knight"]).optional().describe("Which Cathedral to consult: 'bishop' (default, Bishop's stitchpunks Cathedral) or 'knight' (Knight's Cathedral — cooperative-corpus flywheel, K455c). Added K455c/B121."),

@@ -20,6 +20,7 @@ spec: ../SP22_SP23_THREE_FATES_AND_SCRIBES_CATHEDRAL_SPEC.md
 
 scribes:
   - id: R9
+    mode: observational
     primary:
       level: 1
       field: R9 methodology and Eyewitness benchmark
@@ -53,6 +54,7 @@ scribes:
     activation_threshold: load-bearing mention (not incidental keyword hit)
 
   - id: BRIDLE
+    mode: observational
     primary:
       level: 1
       field: agent discipline and the 9 BRIDLE rules
@@ -81,6 +83,7 @@ scribes:
     activation_threshold: load-bearing mention
 
   - id: Landing
+    mode: observational
     primary:
       level: 1
       field: public librarian site (librarian.the2ndsecond.com) + Chapter 1/2/3 layout
@@ -110,6 +113,7 @@ scribes:
     activation_threshold: load-bearing mention
 
   - id: Prov14
+    mode: observational
     primary:
       level: 1
       field: Provisional Application 14 (accumulating innovations since Prov 13 filed 2026-04-12)
@@ -144,6 +148,7 @@ scribes:
     activation_threshold: any A&A candidate surfaces OR any post-Prov-13 innovation reference
 
   - id: Vault
+    mode: observational
     primary:
       level: 1
       field: Secret distribution (SDS) — credentials, API keys, tokens, private keys, sandbox creds and which files mirror where
@@ -186,6 +191,7 @@ scribes:
   # ============================================================
 
   - id: Architecture
+    mode: observational
     primary:
       level: 1
       field: platform architecture continuity (MCP tool surfaces, schema design, Chessboard agent roles, freshness/fingerprint primitives)
@@ -243,6 +249,7 @@ scribes:
     activation_threshold: load-bearing mention
 
   - id: Decisions
+    mode: observational
     primary:
       level: 1
       field: decision provenance and rationale (why X was chosen over Y, why a word was rejected, why a structure was adopted)
@@ -298,6 +305,7 @@ scribes:
     activation_threshold: any "why was X chosen" / "what's the rationale for Y" surface
 
   - id: FounderVoice
+    mode: observational
     primary:
       level: 1
       field: Founder-voice canonical phrases and Rhetorical Keystones (the 17 anchors that make Founder's prose Founder's)
@@ -366,6 +374,7 @@ scribes:
   # ============================================================
 
   - id: R11
+    mode: corpus
     primary:
       level: 1
       field: R11 canonical corpus — cooperative AI platform benchmark fixture (50 facts, 6 categories)

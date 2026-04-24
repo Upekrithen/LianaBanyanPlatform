@@ -7,6 +7,11 @@
  * Extended K455c/B121: accepts `cathedral` and `scope` parameters for
  * cross-Cathedral consultation and permissioned scope filtering.
  *
+ * Extended K466/B121: Scribe-level `mode` field controls retrieval semantics.
+ *   "observational" (default): tablets returned recency-sorted, top-K.
+ *   "corpus": tablets returned in original (deterministic) order, all up to
+ *   max_entries. Default max_entries for corpus queries is 100 (vs 20 observational).
+ *
  * Latency target: p95 < 200ms for a 20-tablet cathedral with synthetic 500-entry
  * tablets. Hot path keeps work small: tablets are read once each, sliced by ts.
  */
@@ -41,6 +46,8 @@ export interface ConsultResult {
     scribe_id: string;
     score: number;
     is_primary: boolean;
+    /** K466: serving mode for this Scribe */
+    mode: "observational" | "corpus";
     entries_returned: number;
   }>;
   entries: ConsultEntry[];
@@ -54,6 +61,8 @@ interface KnightScribesRegistry {
   version?: string;
   scribes: Array<{
     id: string;
+    /** K466: corpus = full deterministic retrieval; observational = recency top-K (default) */
+    mode?: "observational" | "corpus";
     primary: { level: number; field: string };
     adjacents: Array<{ level: number; field: string }>;
     keywords: string[];
@@ -188,6 +197,41 @@ function passesScope(entry: ScribeTabletEntry, requestedScope: string): boolean 
 
 // ─── Main consult function ────────────────────────────────────────────────
 
+// ─── Corpus mode constants ─────────────────────────────────────────────────
+
+/**
+ * Default max_entries for observational Scribes (recency-sorted top-K).
+ * Matches the server.ts documented default.
+ */
+const OBSERVATIONAL_DEFAULT_MAX = 20;
+
+/**
+ * Default max_entries for corpus Scribes (static reference, full retrieval).
+ * Higher default because reference corpora must be fully visible (K466).
+ */
+const CORPUS_DEFAULT_MAX = 100;
+
+/**
+ * Hard per-Scribe cap for corpus mode to prevent runaway memory on huge corpora.
+ */
+const CORPUS_PER_SCRIBE_CAP = 500;
+
+// ─── Scribe mode lookup ────────────────────────────────────────────────────
+
+/** Returns the serving mode for a Scribe. Defaults to "observational" if unset. */
+function getScribeMode(
+  scribeId: string,
+  cathedral: "bishop" | "knight",
+): "observational" | "corpus" {
+  if (cathedral === "bishop") {
+    const scribe = getRegistry().scribes.find((s) => s.id === scribeId);
+    return scribe?.mode ?? "observational";
+  } else {
+    const scribe = getKnightRegistry().scribes.find((s) => s.id === scribeId);
+    return scribe?.mode ?? "observational";
+  }
+}
+
 export function consultScribes(input: {
   topic: string;
   max_entries?: number;
@@ -199,7 +243,6 @@ export function consultScribes(input: {
   scope?: string;
 }): ConsultResult {
   const t0 = Date.now();
-  const max_entries = Math.max(1, Math.min(200, input.max_entries ?? 20));
   const include_adjacents = input.include_adjacents ?? true;
   const sinceMs = input.since_ts ? Date.parse(input.since_ts) : NaN;
   const cathedral = input.cathedral ?? "bishop";
@@ -248,23 +291,57 @@ export function consultScribes(input: {
     include_adjacents ? true : r.primaryMatches.length > 0,
   );
 
+  // Determine effective max_entries.
+  // If the caller didn't specify and any top-ranked Scribe is corpus-mode,
+  // use CORPUS_DEFAULT_MAX so the full corpus is retrievable by default.
+  let effectiveMax: number;
+  if (input.max_entries !== undefined) {
+    effectiveMax = Math.max(1, Math.min(500, input.max_entries));
+  } else {
+    const hasCorpusScribe = filtered.some(
+      (r) => getScribeMode(r.scribe_id, cathedral) === "corpus",
+    );
+    effectiveMax = hasCorpusScribe ? CORPUS_DEFAULT_MAX : OBSERVATIONAL_DEFAULT_MAX;
+  }
+
   const entries: ConsultEntry[] = [];
   const consulted: ConsultResult["scribes_consulted"] = [];
 
   for (const r of filtered) {
-    if (entries.length >= max_entries) break;
+    const scribeMode = getScribeMode(r.scribe_id, cathedral);
+    const isCorpus = scribeMode === "corpus";
+
+    // Observational Scribes stop contributing once global cap is reached.
+    // Corpus Scribes always contribute their full set (up to CORPUS_PER_SCRIBE_CAP).
+    if (!isCorpus && entries.length >= effectiveMax) break;
 
     // Read tablet based on cathedral
-    const tablet = cathedral === "bishop"
+    const rawTablet = cathedral === "bishop"
       ? readTablet(r.scribe_id)
       : readKnightTablet(r.scribe_id);
 
-    // Newest first — tablets are append-only chronological
-    const reversed = [...tablet].reverse();
+    // Filter out header rows (both Cathedral formats)
+    const tablet = rawTablet.filter(
+      (e) => (e as Record<string, unknown>).type !== "header",
+    );
+
+    let candidates: typeof tablet;
+    if (isCorpus) {
+      // Corpus mode: original append order (deterministic), all entries.
+      // If corpus exceeds CORPUS_PER_SCRIBE_CAP, take first-N (stable chunk).
+      candidates = tablet.slice(0, CORPUS_PER_SCRIBE_CAP);
+    } else {
+      // Observational mode: newest first (append-order reversed, recency top-K).
+      candidates = [...tablet].reverse();
+    }
+
     const taken: ConsultEntry[] = [];
 
-    for (const entry of reversed) {
-      if (entries.length + taken.length >= max_entries) break;
+    for (const entry of candidates) {
+      // Corpus: cap at CORPUS_PER_SCRIBE_CAP per scribe, ignore global effectiveMax mid-loop.
+      // Observational: respect global effectiveMax.
+      if (!isCorpus && entries.length + taken.length >= effectiveMax) break;
+      if (isCorpus && taken.length >= CORPUS_PER_SCRIBE_CAP) break;
 
       // Scope filter
       if (!passesScope(entry, scope)) continue;
@@ -279,12 +356,22 @@ export function consultScribes(input: {
       taken.push({ ...entry, scribe_id: r.scribe_id });
     }
 
+    // For corpus Scribes: if caller set explicit max_entries, honour it as total cap.
+    // Trim excess from corpus results to respect explicit caller cap.
+    if (isCorpus && input.max_entries !== undefined) {
+      const remaining = effectiveMax - entries.length;
+      if (taken.length > remaining) {
+        taken.splice(remaining);
+      }
+    }
+
     if (taken.length === 0) continue;
     entries.push(...taken);
     consulted.push({
       scribe_id: r.scribe_id,
       score: round2(r.score),
       is_primary: r.primaryMatches.length > 0,
+      mode: scribeMode,
       entries_returned: taken.length,
     });
   }
@@ -295,7 +382,7 @@ export function consultScribes(input: {
     scope,
     scribes_consulted: consulted,
     entries,
-    truncated: entries.length >= max_entries,
+    truncated: entries.length >= effectiveMax,
     elapsed_ms: Date.now() - t0,
   };
 }

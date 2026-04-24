@@ -18,6 +18,7 @@ spec: ../SP22_SP23_THREE_FATES_AND_SCRIBES_CATHEDRAL_SPEC.md
 
 scribes:
   - id: KnightQueue
+    mode: observational
     primary:
       level: 1
       field: Knight session task queue — NEXT / QUEUED / LANDED state for Cursor Knight agent
@@ -49,6 +50,7 @@ scribes:
     activation_threshold: any K-number session reference or queue status lookup
 
   - id: KnightHandoffs
+    mode: observational
     primary:
       level: 1
       field: Knight session handoff reports and landed commit provenance
@@ -74,6 +76,7 @@ scribes:
     activation_threshold: any "what did Knight ship" or "which sessions landed" query
 
   - id: KnightBRIDLEMemory
+    mode: observational
     primary:
       level: 1
       field: Knight BRIDLE discipline log — which rules were invoked and how
@@ -103,6 +106,7 @@ scribes:
     activation_threshold: any BRIDLE rule invocation or discipline observation
 
   - id: KnightArchitecture
+    mode: observational
     primary:
       level: 1
       field: Knight architectural decisions — code surfaces touched, design choices made

@@ -57,6 +57,7 @@
   "_notes": {
     "append_only": "Tablets are NEVER modified after writing. Corrections are new entries with a supersedes pointer.",
     "scope_retrofit": "Retrofitted K455c — all pre-existing tablets gain scope: 'public' via retrofit-tablet-scope.mjs.",
-    "knight_compat": "Bishop field names (ts/session/canonical_ref) differ from Knight field names (timestamp/source_session/source_document). Cross-Cathedral reads normalize to a common view."
+    "knight_compat": "Bishop field names (ts/session/canonical_ref) differ from Knight field names (timestamp/source_session/source_document). Cross-Cathedral reads normalize to a common view.",
+    "scribe_mode_K466": "Scribe serving semantics are declared at the Scribe registry level (registry.yaml per scribe entry), NOT as a per-tablet field. mode: 'observational' (default) = recency-sorted top-K; mode: 'corpus' = full deterministic retrieval for static reference corpora (R11, canonical_values, rulebooks). See retrofit-scribe-mode.mjs."
   }
 }

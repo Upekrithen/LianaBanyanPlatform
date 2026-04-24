@@ -66,6 +66,7 @@
   "_notes": {
     "append_only": "Tablets are NEVER modified after writing. If an entry is wrong, append a correction with supersedes pointing to the prior tablet's timestamp. This preserves provenance per A&A #2270 claims.",
     "idempotency": "The Courier uses source_session + source_document as a composite key to detect duplicates. Running twice on unchanged artifacts produces zero new tablets.",
-    "bishop_compat": "This schema is additive over Bishop's {ts, session, observation, source, canonical_ref} format. Knight's Scribes use timestamp/source_session/source_document in place of ts/session/canonical_ref for clarity. Cross-Cathedral reads must handle both field-name conventions."
+    "bishop_compat": "This schema is additive over Bishop's {ts, session, observation, source, canonical_ref} format. Knight's Scribes use timestamp/source_session/source_document in place of ts/session/canonical_ref for clarity. Cross-Cathedral reads must handle both field-name conventions.",
+    "scribe_mode_K466": "Scribe serving semantics are declared at the Scribe registry level (registry.yaml per scribe entry), NOT as a per-tablet field. mode: 'observational' (default) = recency-sorted top-K; mode: 'corpus' = full deterministic retrieval for static reference corpora. See retrofit-scribe-mode.mjs."
   }
 }

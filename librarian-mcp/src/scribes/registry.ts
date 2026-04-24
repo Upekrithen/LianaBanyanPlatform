@@ -31,6 +31,14 @@ export interface ScribeAdjacent {
 
 export interface ScribeEntry {
   id: string;
+  /**
+   * Serving semantics for this Scribe's tablets (K466/B121).
+   * - "observational" (default): tablets returned recency-sorted, top-K.
+   *   Use for session logs, handoffs, BRIDLE memory — newer observations matter more.
+   * - "corpus": static reference semantics; tablets returned in original (deterministic)
+   *   order, all entries up to max_entries. Use for R11, canonical_values, rulebooks.
+   */
+  mode?: "observational" | "corpus";
   primary: {
     level: number;
     field: string;
