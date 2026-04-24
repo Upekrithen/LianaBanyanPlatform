@@ -1,17 +1,18 @@
 #!/usr/bin/env node
 // codegen-canonical-hook.mjs
 //
-// Reads librarian-mcp/canonical_values.yaml and rewrites the five YAML-sourced
-// default values in platform/src/hooks/useCanonicalStats.ts. Idempotent.
+// Two codegen passes in sequence:
 //
-// YAML-sourced fields (codegen-owned, do not hand-edit):
+// Pass 1 — YAML-sourced (canonical_values.yaml → useCanonicalStats.ts):
 //   innovationCount, crownJewels, patentApplications, patentClaims, productionSystems
 //
-// All other DEFAULTS fields (founderAge, knightSessions, portfolioValueLow, etc.)
-// are hand-maintained and left alone.
+// Pass 2 — Overview-sourced (index/overview.json → useCanonicalStats.ts):
+//   knightSessions  ← overview.knightSessionCount
+//   bishopSessions  ← overview.bishopSessionCount
+//   (pawnBatches is hand-maintained; no P-sessions exist in sessions.json as of B121)
 //
-// Runs before `verify:canonical` in the rebuild chain, so any drift that slipped
-// in between rebuilds gets corrected before verification runs.
+// All other DEFAULTS fields are hand-maintained and left alone. Idempotent.
+// Runs before `verify:canonical` in the rebuild chain.
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -23,6 +24,7 @@ const MCP_ROOT = resolve(__dirname, "..");
 const WORKSPACE = resolve(MCP_ROOT, "..");
 
 const YAML_PATH = resolve(MCP_ROOT, "canonical_values.yaml");
+const OVERVIEW_PATH = resolve(MCP_ROOT, "index/overview.json");
 const HOOK_PATH = resolve(WORKSPACE, "platform/src/hooks/useCanonicalStats.ts");
 
 const FIELD_MAP = [
@@ -72,8 +74,46 @@ for (const { yamlKey, hookKey } of FIELD_MAP) {
   changes.push(`${hookKey}: ${currentValue} → ${value}`);
 }
 
+// ── Pass 2: overview-sourced fields (knightSessions, bishopSessions) ─────────
+
+const OVERVIEW_FIELD_MAP = [
+  { overviewKey: "knightSessionCount", hookKey: "knightSessions" },
+  { overviewKey: "bishopSessionCount", hookKey: "bishopSessions" },
+];
+
+if (existsSync(OVERVIEW_PATH)) {
+  let overview;
+  try {
+    overview = JSON.parse(readFileSync(OVERVIEW_PATH, "utf-8"));
+  } catch (e) {
+    console.warn(`⚠  codegen-canonical-hook: could not parse ${OVERVIEW_PATH} — skipping overview-sourced fields`);
+  }
+
+  if (overview) {
+    for (const { overviewKey, hookKey } of OVERVIEW_FIELD_MAP) {
+      const value = overview[overviewKey];
+      if (typeof value !== "number") {
+        console.warn(`⚠  ${overviewKey} missing or non-numeric in overview.json — skipping ${hookKey}`);
+        continue;
+      }
+      const pattern = new RegExp(`(\\b${hookKey}\\s*:\\s*)(\\d[\\d_]*)(\\s*,)`);
+      const m = src.match(pattern);
+      if (!m) {
+        console.warn(`⚠  ${hookKey} not found in ${HOOK_PATH} — skipping`);
+        continue;
+      }
+      const currentValue = parseInt(m[2].replace(/_/g, ""), 10);
+      if (currentValue === value) continue;
+      src = src.replace(pattern, `$1${value}$3`);
+      changes.push(`${hookKey}: ${currentValue} → ${value} (from overview.${overviewKey})`);
+    }
+  }
+} else {
+  console.warn(`⚠  codegen-canonical-hook: ${OVERVIEW_PATH} not found — run \`npm run rebuild:full\` to generate it. Skipping overview-sourced fields.`);
+}
+
 if (src === original) {
-  console.log("✓ codegen-canonical-hook: hook already in sync with YAML (no changes)");
+  console.log("✓ codegen-canonical-hook: hook already in sync (no changes)");
   process.exit(0);
 }
 

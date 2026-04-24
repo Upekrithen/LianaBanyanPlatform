@@ -167,6 +167,8 @@ export interface SystemOverview {
   transcriptCount: number;
   componentCount: number;
   bishopChatCount: number;
+  knightSessionCount: number;
+  bishopSessionCount: number;
   lastSession?: string;
   pendingWork: string[];
   timestamp: string;

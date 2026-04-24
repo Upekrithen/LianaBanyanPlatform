@@ -11,7 +11,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  readFileSync, writeFileSync, existsSync, renameSync,
+  readFileSync, writeFileSync, existsSync, renameSync, copyFileSync,
 } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -23,6 +23,7 @@ const __dirname = dirname(__filename);
 const VERIFY_SCRIPT = resolve(__dirname, "../scripts/verify-canonical.mjs");
 const OVERVIEW_PATH = resolve(__dirname, "../index/overview.json");
 const OVERVIEW_BAK  = resolve(__dirname, "../index/overview.json.k456bak");
+const HOOK_PATH     = resolve(__dirname, "../../platform/src/hooks/useCanonicalStats.ts");
 
 function runVerify() {
   return spawnSync(process.execPath, [VERIFY_SCRIPT], {
@@ -90,5 +91,42 @@ test("missing overview.json → exit 0 (fresh-checkout ergonomics preserved)", (
     );
   } finally {
     renameSync(OVERVIEW_BAK, OVERVIEW_PATH);
+  }
+});
+
+// ── Test D: K460 overview-only drift — knightSessions mismatch → exit 1 ───────
+
+test("drift detected: overview.knightSessionCount ≠ hook.knightSessions → exit 1 + DRIFT DETECTED", () => {
+  if (!existsSync(OVERVIEW_PATH) || !existsSync(HOOK_PATH)) {
+    console.warn("  ⚠ overview.json or hook missing — skipping test D.");
+    return;
+  }
+
+  const originalOverview = readFileSync(OVERVIEW_PATH, "utf-8");
+  const originalHook = readFileSync(HOOK_PATH, "utf-8");
+
+  // Corrupt knightSessionCount in overview.json to a value that won't match the hook
+  const corruptOverview = JSON.parse(originalOverview);
+  corruptOverview.knightSessionCount = 7777;
+
+  try {
+    writeFileSync(OVERVIEW_PATH, JSON.stringify(corruptOverview, null, 2) + "\n", "utf-8");
+
+    const result = runVerify();
+    assert.equal(
+      result.status, 1,
+      `Expected exit 1 on overview-only drift. stdout:\n${result.stdout}\nstderr:\n${result.stderr}`,
+    );
+    assert.ok(
+      result.stderr.includes("DRIFT DETECTED"),
+      `Expected "DRIFT DETECTED" in stderr. Got:\n${result.stderr}`,
+    );
+    assert.ok(
+      result.stderr.includes("knightSessions") || result.stderr.includes("knightSessionCount"),
+      `Expected drift message to mention knightSessions. Got:\n${result.stderr}`,
+    );
+  } finally {
+    writeFileSync(OVERVIEW_PATH, originalOverview, "utf-8");
+    writeFileSync(HOOK_PATH, originalHook, "utf-8");
   }
 });

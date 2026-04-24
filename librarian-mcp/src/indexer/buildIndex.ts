@@ -176,6 +176,18 @@ async function main() {
       ? latestCloseoutPending
       : (existingPendingWork.length > 0 ? existingPendingWork : context.pendingWork);
 
+  // K460 session-counter codegen: count canonical-format sessions per prefix from
+  // the merged session stream. Only ^[PREFIX]\d+$ format counts; compound/legacy IDs
+  // are excluded. Pawn sessions (P-prefix) are omitted — none exist in sessions.json
+  // as of B121; pawnBatches in useCanonicalStats.ts remains hand-maintained.
+  const CANONICAL_ID = /^([A-Z])(\d+)$/;
+  const knightSessionCount = context.sessions.filter(s =>
+    s.id && CANONICAL_ID.test(s.id) && s.id.startsWith("K"),
+  ).length;
+  const bishopSessionCount = context.sessions.filter(s =>
+    s.id && CANONICAL_ID.test(s.id) && s.id.startsWith("B"),
+  ).length;
+
   const overview: SystemOverview = {
     innovationCount: (context.canonicalNumbers.innovationCount as number) || 2130,
     crownJewelCount: (context.canonicalNumbers.crownJewelCount as number) || 168,
@@ -192,6 +204,8 @@ async function main() {
     transcriptCount: transcripts.count,
     componentCount: components.count,
     bishopChatCount: bishop.count,
+    knightSessionCount,
+    bishopSessionCount,
     membershipCost: "$5/year",
     creatorKeeps: "83.3%",
     platformMargin: "Cost + 20%",

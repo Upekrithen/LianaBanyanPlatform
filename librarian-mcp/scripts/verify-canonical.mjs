@@ -57,6 +57,13 @@ function loadOverview() {
   return JSON.parse(readFileSync(OVERVIEW_PATH, "utf-8"));
 }
 
+// Overview-only fields: checked ONLY between overview.json and the hook.
+// These are indexer-derived counts (not YAML-sourced), added in K460.
+const OVERVIEW_ONLY_FIELDS = [
+  { overviewKey: "knightSessionCount", hookKey: "knightSessions" },
+  { overviewKey: "bishopSessionCount", hookKey: "bishopSessions" },
+];
+
 function loadHook() {
   if (!existsSync(HOOK_PATH)) {
     console.warn(`⚠  ${HOOK_PATH} missing — skipping hook check.`);
@@ -69,6 +76,9 @@ function loadHook() {
     return m ? parseInt(m[1].replace(/_/g, ""), 10) : null;
   };
   for (const f of FIELDS) {
+    values[f.hookKey] = extract(f.hookKey);
+  }
+  for (const f of OVERVIEW_ONLY_FIELDS) {
     values[f.hookKey] = extract(f.hookKey);
   }
   return values;
@@ -105,6 +115,19 @@ for (const f of FIELDS) {
   }
 }
 
+// Overview-only drift checks (K460): overview ↔ hook, no YAML counterpart
+const overviewOnlyRows = [];
+if (overview) {
+  for (const f of OVERVIEW_ONLY_FIELDS) {
+    const overviewVal = overview[f.overviewKey] ?? "—";
+    const hookVal = hook ? (hook[f.hookKey] ?? "—") : "—";
+    overviewOnlyRows.push({ field: f.overviewKey, overview: overviewVal, hook: hookVal });
+    if (hook && hookVal !== overviewVal && overviewVal !== "—") {
+      drifts.push(`hook.${f.hookKey}=${hookVal} ≠ overview.${f.overviewKey}=${overviewVal}`);
+    }
+  }
+}
+
 console.log("Canonical verification — YAML vs overview.json vs useCanonicalStats.ts");
 console.log("─".repeat(78));
 console.log("field".padEnd(34) + "yaml".padEnd(12) + "overview".padEnd(12) + "hook");
@@ -116,6 +139,13 @@ for (const r of rows) {
     String(r.overview).padEnd(12) +
     String(r.hook)
   );
+}
+if (overviewOnlyRows.length) {
+  console.log("─".repeat(78));
+  console.log("(overview-only fields — K460 indexer-derived session counts)");
+  for (const r of overviewOnlyRows) {
+    console.log(r.field.padEnd(34) + "—".padEnd(12) + String(r.overview).padEnd(12) + String(r.hook));
+  }
 }
 console.log("─".repeat(78));
 
