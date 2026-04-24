@@ -267,9 +267,16 @@ def grade(results_dir: Path, bank_path: Path, seed: int = 42) -> dict:
 def main() -> None:
     p = argparse.ArgumentParser(description="R11 grader with kappa spot-check")
     p.add_argument("--results", required=True, help="Results directory (contains all_graded.jsonl)")
-    p.add_argument("--bank", default="R11_QUESTION_BANK_SEALED.json", help="Question bank JSON path")
+    p.add_argument("--bank", default="R11_QUESTION_BANK_SEALED_K471.json",
+                   help="Question bank JSON path (default: K471 bank; use --legacy-k444 for K444)")
+    p.add_argument("--legacy-k444", action="store_true",
+                   help="Use legacy K444 bank (R11_QUESTION_BANK_SEALED_K444_LEGACY.json)")
     p.add_argument("--seed", type=int, default=42, help="Random seed for spot-check sample")
     args = p.parse_args()
+
+    if args.legacy_k444:
+        args.bank = "R11_QUESTION_BANK_SEALED_K444_LEGACY.json"
+        print(f"[grade_r11] Using LEGACY K444 bank.")
 
     results_dir = Path(args.results)
     if not results_dir.is_absolute():

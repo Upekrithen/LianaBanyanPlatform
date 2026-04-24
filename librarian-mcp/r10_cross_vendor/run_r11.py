@@ -44,7 +44,9 @@ from r11_adapters import chatgpt_memory_adapter, claude_projects_adapter  # noqa
 from r11_adapters import gemini_gems_adapter, perplexity_spaces_adapter   # noqa: E402
 from r11_adapters import lb_cathedral_adapter                              # noqa: E402
 
-BANK_PATH = SCRIPT_DIR / "R11_QUESTION_BANK_SEALED.json"
+BANK_PATH_K471 = SCRIPT_DIR / "R11_QUESTION_BANK_SEALED_K471.json"
+BANK_PATH_K444_LEGACY = SCRIPT_DIR / "R11_QUESTION_BANK_SEALED_K444_LEGACY.json"
+BANK_PATH = BANK_PATH_K471  # default; overridden by --legacy-k444 flag
 CORPUS_PATH = SCRIPT_DIR / "r11_canonical_corpus.md"
 
 BUDGET_HARD_CAP = 50.00
@@ -331,9 +333,19 @@ def _aggregate(records: list[dict], total_cost: float, halted: bool) -> dict:
             b["p50_latency_s"] = round(lats[mid], 3)
             b["p95_latency_s"] = round(lats[max(0, int(0.95 * len(lats)) - 1)], 3)
 
+    bank_meta = {}
+    if BANK_PATH.exists():
+        try:
+            import json as _json
+            _b = _json.loads(BANK_PATH.read_text(encoding="utf-8"))
+            bank_meta = {"corpus_id": _b.get("corpus_id", "unknown"), "bank_version": _b.get("bank_version", "unknown")}
+        except Exception:
+            pass
+
     return {
-        "session": "K444",
-        "corpus_id": "R11-CANONICAL-K444",
+        "session": bank_meta.get("corpus_id", "R11-CANONICAL-K471"),
+        "corpus_id": bank_meta.get("corpus_id", "R11-CANONICAL-K471"),
+        "bank_version": bank_meta.get("bank_version", "2.0.0-sealed"),
         "total_cost_usd": round(total_cost, 4),
         "total_records": len(records),
         "halted_on_budget": halted,
@@ -343,10 +355,18 @@ def _aggregate(records: list[dict], total_cost: float, halted: bool) -> dict:
 
 def main() -> None:
     p = argparse.ArgumentParser(description="R11 cross-vendor memory benchmark runner")
-    p.add_argument("--out", default="results_r11_K444", help="Output directory (relative to script dir)")
+    p.add_argument("--out", default="results_r11_K471", help="Output directory (relative to script dir)")
     p.add_argument("--budget", type=float, default=BUDGET_HARD_CAP, help=f"Hard cost cap USD (default {BUDGET_HARD_CAP})")
     p.add_argument("--conditions", nargs="*", help="Run only these condition IDs (default: all)")
+    p.add_argument("--legacy-k444", action="store_true", help="Use legacy K444 bank (R11-CANONICAL-K444) for historical comparison")
     args = p.parse_args()
+
+    if args.legacy_k444:
+        global BANK_PATH
+        BANK_PATH = BANK_PATH_K444_LEGACY
+        print(f"[run_r11] Using LEGACY K444 bank: {BANK_PATH.name}")
+    else:
+        print(f"[run_r11] Using K471 bank (default): {BANK_PATH.name}")
 
     if args.conditions:
         allowed = set(args.conditions)

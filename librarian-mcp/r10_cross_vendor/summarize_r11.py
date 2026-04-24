@@ -125,8 +125,8 @@ def summarize(results_dir: Path) -> dict:
         sanity_notes.append("Cold baseline sanity check PASSED (all cold HOT% <= 15%).")
 
     agg = {
-        "session": "K444",
-        "corpus_id": "R11-CANONICAL-K444",
+        "session": "K471",
+        "corpus_id": "R11-CANONICAL-K471",
         "total_records": len(valid),
         "by_condition": by_cond,
         "sanity_check": {"passed": sanity_passed, "notes": sanity_notes},
@@ -149,8 +149,9 @@ def _render_markdown(by_cond: dict, sanity_notes: list[str], records: list[dict]
     total_cost = sum(r.get("cost_usd", 0.0) for r in records if "error" not in r)
 
     header = "# R11 Cross-Vendor Memory Benchmark Results\n\n"
-    header += f"**Session:** K444 (B119, 2026-04-23)  \n"
-    header += f"**Corpus:** R11-CANONICAL-K444-v2 (50 facts, ~11,800 words)  \n"
+    header += f"**Session:** K471 (B121, 2026-04-24) — corpus-bank realignment  \n"
+    header += f"**Corpus:** R11-CANONICAL-K471 / R11-CANONICAL-K444-v2 (50 facts, ~11,800 words)  \n"
+    header += f"**Bank:** R11_QUESTION_BANK_SEALED_K471.json (50/50 answerable, 100%% ceiling)  \n"
     header += f"**Total spend:** ${total_cost:.4f}  \n\n"
 
     table_header = (
@@ -178,7 +179,7 @@ def _render_markdown(by_cond: dict, sanity_notes: list[str], records: list[dict]
 
     sanity_block = "\n## Sanity Check\n\n" + "\n".join(f"- {n}" for n in sanity_notes)
 
-    footer = "\n\n---\n*Publication hold: internal only until Bishop Prov 14 green-light.*\n"
+    footer = "\n\n---\n*Publication hold: internal only until Prov 14 receipt confirmed. K471 bank (R11-CANONICAL-K471) is canonical from this session forward.*\n"
 
     return header + table_header + "\n".join(rows) + sanity_block + footer
 

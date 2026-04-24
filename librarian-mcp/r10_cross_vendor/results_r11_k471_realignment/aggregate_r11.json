@@ -1,0 +1,51 @@
+{
+  "session": "K471",
+  "corpus_id": "R11-CANONICAL-K471",
+  "total_records": 100,
+  "by_condition": {
+    "cold_haiku": {
+      "n": 50,
+      "HOT": 0,
+      "HIT": 8,
+      "MISS": 42,
+      "cost_usd": 0.039895,
+      "retrieval_correct": 0,
+      "model": "claude-haiku-4-5-20251001",
+      "vendor": "anthropic",
+      "mode": "cold",
+      "hot_pct": 0.0,
+      "hit_pct": 16.0,
+      "miss_pct": 84.0,
+      "hot_or_hit_pct": 16.0,
+      "retrieval_correct_pct": null,
+      "cost_per_q": 0.0008,
+      "cost_per_correct": null,
+      "p50_latency_s": 2.55
+    },
+    "lb_cathedral_haiku": {
+      "n": 50,
+      "HOT": 9,
+      "HIT": 3,
+      "MISS": 38,
+      "cost_usd": 0.32357,
+      "retrieval_correct": 9,
+      "model": "claude-haiku-4-5-20251001",
+      "vendor": "anthropic",
+      "mode": "lb_cathedral",
+      "hot_pct": 18.0,
+      "hit_pct": 6.0,
+      "miss_pct": 76.0,
+      "hot_or_hit_pct": 24.0,
+      "retrieval_correct_pct": 100.0,
+      "cost_per_q": 0.00647,
+      "cost_per_correct": 0.03595,
+      "p50_latency_s": 3.23
+    }
+  },
+  "sanity_check": {
+    "passed": true,
+    "notes": [
+      "Cold baseline sanity check PASSED (all cold HOT% <= 15%)."
+    ]
+  }
+}
