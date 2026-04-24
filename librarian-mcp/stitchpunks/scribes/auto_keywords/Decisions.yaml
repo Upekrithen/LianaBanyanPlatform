@@ -1,0 +1,4767 @@
+scribe_id: Decisions
+generated_at: "2026-04-24T15:58:44.336Z"
+extractor_version: K474.1
+source_hash: 35dad135e55436f8
+keeper_count: 5
+file_count: 14
+keyword_count: 4759
+keywords:
+  - closeout the
+  - the densest
+  - 7 1m context date
+  - 1m context date
+  - context date
+  - date span
+  - crossed midnight
+  - crossed midnight during
+  - midnight during
+  - three days for
+  - as we go discipline
+  - we go discipline
+  - go discipline
+  - founder time zone
+  - founder time zone central
+  - time zone central
+  - time zone central predecessor
+  - zone central
+  - zone central predecessor
+  - central predecessor
+  - canonical findings
+  - this closeout
+  - this closeout is
+  - session start reference
+  - start reference
+  - landed 16
+  - threshed 13
+  - into prov
+  - into prov 14
+  - 0 002 hot
+  - 002 hot
+  - cost leaders
+  - cooperative cathedrals
+  - multi member substrate
+  - member substrate
+  - complete four quadrant
+  - complete four quadrant reasoning
+  - four quadrant
+  - four quadrant reasoning
+  - four quadrant reasoning substrate
+  - quadrant
+  - quadrant reasoning
+  - quadrant reasoning substrate
+  - quadrant reasoning substrate architecture
+  - reasoning substrate
+  - reasoning substrate architecture
+  - substrate architecture
+  - tribunal
+  - cerberus
+  - cerberus retrospective
+  - loom active
+  - working discipline
+  - receipt founder
+  - receipt founder extended
+  - knight sessions landed
+  - sessions landed
+  - 16 total
+  - b119 orphan
+  - b119 orphan v
+  - orphan v
+  - k454 mini
+  - k454 mini wildfire
+  - k454 mini wildfire tour
+  - hot 0
+  - k455b mode a pawn
+  - mode a pawn
+  - mode a pawn attribution
+  - a pawn
+  - a pawn attribution
+  - a pawn attribution isolation
+  - pawn attribution
+  - pawn attribution isolation
+  - k472 phase
+  - k472 phase a
+  - phase a phase
+  - phase a phase b
+  - a phase b
+  - commits in
+  - in flight at
+  - flight at
+  - at closeout
+  - at b121 close
+  - b121 close
+  - innovations threshed
+  - innovations threshed 13
+  - thresh package
+  - scope parameterized
+  - scope parameterized named
+  - scope parameterized named packs
+  - parameterized
+  - parameterized named
+  - parameterized named packs
+  - 2281 multi
+  - 2281 multi cathedral
+  - cathedral cooperative
+  - the herald
+  - scribe mutual
+  - scribe mutual aid
+  - scribe mutual aid protocol
+  - mutual aid protocol
+  - aid protocol
+  - the nurse
+  - catacombs alexandrian
+  - catacombs alexandrian library
+  - 2286 collaboration
+  - collaboration partnership
+  - collaboration partnership stake
+  - partnership stake
+  - collaboration partnership stake md
+  - partnership stake md
+  - 2287 synapses
+  - synapses
+  - reasoning commons
+  - synapses reasoning
+  - reasoning capture
+  - the tribunal
+  - the tribunal live
+  - tribunal live
+  - tribunal live critical
+  - tribunal live critical analysis
+  - live critical
+  - live critical analysis
+  - with sla
+  - with sla depth
+  - sla depth
+  - grounding
+  - cerberus retrospective multi
+  - cerberus retrospective multi head
+  - retrospective multi
+  - retrospective multi head
+  - multi head
+  - examination
+  - retrospective multi head md
+  - multi head md
+  - head md
+  - the loom
+  - active domain
+  - domain scribe
+  - domain scribe participation
+  - scribe participation
+  - weaving
+  - weaving concept
+  - the loom domain
+  - the loom domain scribe
+  - loom domain
+  - loom domain scribe
+  - loom domain scribe participation
+  - domain scribe participation md
+  - scribe participation md
+  - participation md
+  - across thresh
+  - claims drafted
+  - per feedback drafts
+  - per feedback drafts as
+  - feedback drafts
+  - feedback drafts as
+  - feedback drafts as scaffolding
+  - drafts as scaffolding md
+  - as scaffolding md
+  - empirical milestone
+  - empirical milestone strong
+  - empirical milestone strong vendor
+  - milestone strong
+  - milestone strong vendor
+  - milestone strong vendor agnostic
+  - k444 bank weak
+  - bank weak
+  - bishop 80
+  - bishop 84
+  - q45 50
+  - 0 multi
+  - opus 0
+  - gemini flash bishop
+  - weak classifications
+  - ceiling artifacts
+  - artifacts pre
+  - empirical anchor
+  - empirical anchor for
+  - dispatched at b121
+  - dispatched at b121 close
+  - cathedrals operational
+  - per grape
+  - grape
+  - three head
+  - the reasoning
+  - herald nurse tribunal
+  - herald nurse tribunal cerberus
+  - nurse tribunal
+  - nurse tribunal cerberus
+  - nurse tribunal cerberus the
+  - tribunal cerberus
+  - tribunal cerberus the
+  - tribunal cerberus the loom
+  - cerberus the
+  - cerberus the loom
+  - memory entries saved
+  - entries saved
+  - saved b121
+  - 22 new several
+  - 22 new several updated
+  - new several
+  - new several updated
+  - several updated
+  - new memories
+  - feedback canonical
+  - feedback canonical single
+  - feedback canonical single source
+  - source of truth md
+  - of truth md
+  - truth md
+  - cathedral effect pitch
+  - cathedral effect pitch keystone
+  - effect pitch
+  - effect pitch keystone
+  - pitch keystone
+  - keystone md
+  - keystone md project
+  - project harper guild
+  - project harper guild pern
+  - harper guild pern
+  - harper guild pern origin
+  - guild pern
+  - guild pern origin
+  - guild pern origin md
+  - pern
+  - pern origin
+  - pern origin md
+  - origin md
+  - project scribe
+  - feedback thresh
+  - feedback thresh as
+  - feedback thresh as we
+  - as we go mode
+  - we go mode
+  - we go mode md
+  - go mode
+  - go mode md
+  - new working
+  - agnostic cathedral effect md
+  - cathedral effect md project
+  - effect md project
+  - turkey
+  - parable
+  - md founder keystone
+  - founder keystone
+  - project fathers
+  - project fathers principle
+  - project fathers principle decide
+  - fathers
+  - fathers principle
+  - fathers principle decide
+  - fathers principle decide then
+  - principle decide
+  - principle decide then
+  - principle decide then find
+  - decide then
+  - decide then find
+  - decide then find money
+  - then find money
+  - then find money md
+  - find money
+  - find money md
+  - project scribes
+  - project scribes sing
+  - project scribes sing together
+  - scribes sing
+  - scribes sing together
+  - scribes sing together keystone
+  - sing
+  - sing together
+  - sing together keystone
+  - sing together keystone md
+  - together keystone
+  - together keystone md
+  - memory md index
+  - md index
+  - index all
+  - index all new
+  - index all new entries
+  - all new entries
+  - keystones captured
+  - when all the scribes
+  - all the scribes
+  - all the scribes sing
+  - the scribes sing
+  - the scribes sing together
+  - scribes sing together the
+  - sing together the
+  - sing together the harmony
+  - together the
+  - together the harmony
+  - together the harmony is
+  - the harmony
+  - the harmony is
+  - the harmony is glorious
+  - harmony
+  - harmony is
+  - harmony is glorious
+  - is glorious
+  - glorious
+  - bones
+  - op ed v01
+  - op ed v01 1
+  - ed v01
+  - ed v01 1
+  - v01 1
+  - decide what
+  - father s
+  - father s principle
+  - to prov 15
+  - 13 innovations
+  - node test invocations
+  - test invocations
+  - cathedral distinctness without
+  - cathedral distinctness without conflation
+  - distinctness without
+  - distinctness without conflation
+  - without conflation
+  - worth doing
+  - to canon
+  - architectural design
+  - scribe mutual aid failover
+  - mutual aid failover
+  - aid failover
+  - canonicalized
+  - extended window
+  - op ed v01 cathedral
+  - ed v01 cathedral
+  - ed v01 cathedral effect
+  - v01 cathedral
+  - v01 cathedral effect
+  - v01 cathedral effect go
+  - cathedral effect go
+  - cathedral effect go first
+  - effect go
+  - effect go first
+  - effect go first b121
+  - go first b121
+  - go first b121 md
+  - first b121
+  - first b121 md
+  - for b122
+  - b122 opens
+  - b122 opens with
+  - k473 landing
+  - draft dispatch
+  - k501
+  - drafts after
+  - lands 4
+  - 14 filing receipt counsel
+  - filing receipt counsel
+  - filing receipt counsel coordination
+  - receipt counsel
+  - receipt counsel coordination
+  - receipt counsel coordination founder
+  - counsel coordination
+  - counsel coordination founder
+  - coordination founder
+  - waits on
+  - on prov 14
+  - mj fix
+  - post prov
+  - post prov 14
+  - implementation chain
+  - implementation chain five
+  - implementation chain five phases
+  - chain five
+  - chain five phases
+  - chain five phases per
+  - five phases
+  - five phases per
+  - five phases per plan
+  - phases per
+  - phases per plan
+  - per plan
+  - full reasoning
+  - full reasoning substrate
+  - full reasoning substrate integration
+  - reasoning substrate integration
+  - substrate integration
+  - vendor agnostic empirical
+  - agnostic empirical
+  - originally planned
+  - benchmark total
+  - total knight spend
+  - knight spend
+  - cost when
+  - session spend
+  - landing status
+  - status knight
+  - draft k500
+  - ready dispatch
+  - when drafted
+  - drafted 5
+  - k502 budget
+  - premise wrong
+  - caught by
+  - caught by knight
+  - founder voice hooks
+  - voice hooks
+  - the benchmark is
+  - benchmark is
+  - in this closeout
+  - the bishop founder
+  - windows for
+  - discipline knight
+  - ai vendors
+  - flywheel is
+  - on prov 14 filing
+  - glorious the
+  - close for
+  - cathedral effect named
+  - cathedral effect named r11
+  - effect named
+  - effect named r11
+  - effect named r11 v2
+  - named r11
+  - named r11 v2
+  - named r11 v2 canonical
+  - r11 v2 canonical
+  - v2 canonical
+  - closeout hook live
+  - hook live
+  - 2026 04 23 single
+  - 04 23 single
+  - 04 23 single day
+  - 23 single
+  - 23 single day
+  - single day
+  - single day session
+  - day session
+  - day after
+  - after b118
+  - milestone b118
+  - milestone b118 closeout
+  - milestone b118 closeout md
+  - b118 closeout
+  - b118 closeout md
+  - 10 a
+  - 10 a a
+  - 10 a a formals
+  - 4k
+  - validates the
+  - validates the benchmark
+  - validates the benchmark regime
+  - the benchmark regime
+  - benchmark regime
+  - canonical grader
+  - and closed
+  - b120 was
+  - b120 was the
+  - fast correction
+  - high bandwidth
+  - live benchmark
+  - you keep skimping
+  - you keep skimping on
+  - keep skimping
+  - keep skimping on
+  - skimping
+  - skimping on
+  - mid session bishop
+  - the lesson
+  - in b120
+  - code infrastructure
+  - 10k corpus
+  - k447 pgtap
+  - k447 pgtap ci
+  - pgtap ci
+  - staged knight
+  - prestage r11
+  - md prov 14
+  - a a drafted
+  - a drafted
+  - extrapolate
+  - extrapolate from
+  - from live terminal
+  - live terminal
+  - until tested
+  - keystone phrase
+  - diagnostic flow
+  - diagnostic flow for
+  - mcp failures
+  - r11 rate
+  - r11 rate limit
+  - r11 rate limit evidence
+  - rate limit evidence
+  - limit evidence
+  - april 23 run
+  - april 23 run b
+  - 23 run
+  - 23 run b
+  - vendor hot
+  - sit in
+  - sit in the
+  - that turned
+  - feedback memory
+  - saved 2
+  - always flag
+  - keystones and
+  - directional
+  - 2 prov 14 filing
+  - 15 innovations
+  - i have learned
+  - i have learned to
+  - have learned
+  - have learned to
+  - have learned to wait
+  - learned to wait
+  - waits for
+  - gated on prov
+  - gated on prov 14
+  - no b120
+  - conductor op ed v03
+  - op ed v03
+  - op ed v03 v04
+  - ed v03
+  - ed v03 v04
+  - v03 v04
+  - innovations 2 270
+  - crown jewels 228
+  - jewels 228
+  - formal claims 2 506
+  - claims 2 506
+  - 13 prov
+  - open 15
+  - patience
+  - closeout session
+  - closeout session bishop
+  - 2026 04 23 one
+  - 04 23 one
+  - 04 23 one day
+  - 23 one
+  - 23 one day
+  - hours active
+  - hours active agent
+  - hours active agent claude
+  - active agent
+  - active agent claude
+  - active agent claude opus
+  - agent claude
+  - agent claude opus
+  - agent claude opus 4
+  - 7 1m context predecessor
+  - 1m context predecessor
+  - context predecessor
+  - k438b cathedral mcp tools
+  - v02 conductor
+  - pending founder open
+  - pending founder open headline
+  - founder open
+  - founder open headline
+  - open headline
+  - stack composed
+  - in one architectural
+  - prov 14 innovation
+  - prov 14 innovation candidates
+  - 14 innovation
+  - 14 innovation candidates
+  - 14 innovation candidates logged
+  - innovation candidates logged
+  - candidates logged
+  - k451 baseline cutover landed
+  - baseline cutover landed
+  - cutover landed
+  - landed green
+  - green on first ci
+  - on first ci
+  - on first ci run
+  - first ci
+  - first ci run
+  - 2 latent
+  - 2 latent k438a
+  - 2 latent k438a bugs
+  - latent k438a
+  - latent k438a bugs
+  - k438a bugs
+  - phase 4 hard
+  - phase 4 hard gate
+  - 4 hard
+  - 4 hard gate
+  - hard gate
+  - benchmark dispatched
+  - benchmark dispatched and
+  - dispatched and
+  - knight live
+  - critical chatgpt
+  - critical chatgpt memory
+  - critical chatgpt memory adapter
+  - chatgpt memory adapter bug
+  - memory adapter bug
+  - adapter bug
+  - pawn promotion pattern
+  - promotion pattern
+  - red team report
+  - path 1 context
+  - path 1 context injection
+  - 1 context
+  - 1 context injection
+  - context injection
+  - 8 knight prompts
+  - 8 knight prompts pre
+  - knight prompts pre
+  - knight prompts pre staged
+  - prompts pre
+  - prompts pre staged
+  - prompts pre staged for
+  - staged for post k444
+  - for post k444
+  - for post k444 dispatch
+  - post k444 dispatch
+  - k444 dispatch
+  - v03 with
+  - keystone title
+  - network effects
+  - network effects taxonomy
+  - effects taxonomy
+  - docker industry
+  - docker industry data
+  - prov 14 state
+  - prov 14 state at
+  - 14 state
+  - 14 state at
+  - at b119
+  - at b119 close
+  - open per
+  - let another
+  - let another accumulate
+  - let another accumulate directive
+  - another accumulate
+  - another accumulate directive
+  - accumulate directive
+  - 15 net
+  - 15 net new
+  - net new candidates
+  - candidates logged this
+  - candidates logged this session
+  - knight deliverables
+  - complete founder
+  - commits landed
+  - main in
+  - commit what shipped
+  - commit what shipped author
+  - what shipped author
+  - what shipped author 3b1ac6c
+  - shipped author
+  - shipped author 3b1ac6c
+  - author 3b1ac6c
+  - 3b1ac6c
+  - b118 carry
+  - b118 carry in
+  - carry in
+  - tools knight
+  - knight 6849fac
+  - 6849fac
+  - 6849fac b118
+  - in k429
+  - k429 fingerprint
+  - fingerprint scope
+  - e8fe2d6
+  - e8fe2d6 b118
+  - gate knight
+  - knight 441d531
+  - 441d531
+  - 441d531 b118
+  - chore gitignore
+  - librarian mcp public red
+  - mcp public red
+  - mcp public red carpet
+  - public red
+  - public red carpet
+  - public red carpet infra
+  - red carpet infra bishop
+  - carpet infra bishop
+  - infra bishop
+  - bishop catchup
+  - catchup
+  - b117 b118
+  - 8 orphaned
+  - migration ordering
+  - bridle v10 ratified
+  - v10 ratified
+  - k450 guard patches
+  - guard patches
+  - by k451
+  - baseline cutover 650
+  - cutover 650
+  - migrations archived
+  - line baseline
+  - summoned coloring
+  - stag goat
+  - pawn red
+  - pawn red team
+  - v2 narrowed with
+  - v2 narrowed with slow
+  - narrowed with
+  - narrowed with slow
+  - narrowed with slow blade
+  - with slow
+  - with slow blade
+  - with slow blade v2
+  - prov filing patience
+  - filing patience
+  - pawn b119
+  - pawn b119 red
+  - pawn b119 red team
+  - b119 red team report
+  - report three
+  - 17 direct
+  - commits on
+  - 5 b118
+  - 5 b118 carry
+  - 5 b118 carry ins
+  - b118 carry ins
+  - carry ins
+  - ins
+  - visible knight
+  - visible knight sessions
+  - knight status
+  - status at b119
+  - status at b119 close
+  - the bridle v10
+  - 4 hard gate caught
+  - hard gate caught
+  - hard gate caught 2
+  - gate caught
+  - gate caught 2
+  - gate caught 2 latent
+  - caught 2
+  - caught 2 latent
+  - caught 2 latent k438a
+  - latent k438a bugs that
+  - k438a bugs that
+  - k438a bugs that would
+  - bugs that
+  - bugs that would
+  - bugs that would have
+  - that would have shipped
+  - would have shipped
+  - have shipped
+  - harness failure
+  - harness failure that
+  - harness failure that fails
+  - failure that
+  - failure that fails
+  - failure that fails silently
+  - that fails silently
+  - k444 in
+  - k444 in flight
+  - in flight at b119
+  - flight at b119
+  - flight at b119 close
+  - every 7th
+  - every 7th paragraph
+  - every 7th paragraph 30
+  - 7th paragraph
+  - 7th paragraph 30
+  - paragraph 30
+  - second run
+  - executing
+  - k444 rate
+  - k444 rate limit
+  - k444 rate limit frustration
+  - rate limit frustration
+  - limit frustration
+  - frustration
+  - throttling
+  - sip
+  - sip tokens
+  - sip tokens instead
+  - sip tokens instead of
+  - tokens instead
+  - tokens instead of
+  - tokens instead of gulping
+  - instead of gulping
+  - instead of gulping keystone
+  - of gulping
+  - of gulping keystone
+  - gulping
+  - gulping keystone
+  - close 8
+  - 8 prompts
+  - 8 prompts pre
+  - 8 prompts pre staged
+  - staged prompt
+  - k444 prov
+  - k444 prov 14
+  - twitter adapter
+  - companion cli scaffold
+  - cli scaffold
+  - ratified moved
+  - ratified moved to
+  - playbook prior art patents
+  - prior art patents
+  - prior art patents b119
+  - art patents
+  - art patents b119
+  - art patents b119 md
+  - patents b119
+  - patents b119 md
+  - patents b119 md activates
+  - b119 md activates
+  - b119 md activates on
+  - md activates
+  - md activates on
+  - md activates on k445b
+  - activates on k445b
+  - activates on k445b landing
+  - slow blade v2 complete
+  - blade v2 complete
+  - blade v2 complete architecture
+  - v2 complete
+  - v2 complete architecture
+  - complete architecture
+  - doctrines
+  - live verification
+  - dune
+  - six sparks any
+  - six sparks any 2
+  - sparks any
+  - sparks any 2
+  - sparks any 2 of
+  - any 2 of
+  - any 2 of 6
+  - trust match probation
+  - trust match probation table
+  - match probation
+  - match probation table
+  - probation table
+  - stake scaled
+  - repeat player
+  - repeat player ratio
+  - repeat player ratio 1
+  - player ratio
+  - player ratio 1
+  - player ratio 1 2
+  - ratio 1
+  - ratio 1 2
+  - ratio 1 2 3
+  - instant instant
+  - instant instant instant
+  - 20 min
+  - hr instant
+  - d 2
+  - d instant
+  - d 4
+  - d 4 66
+  - d 4 66 d
+  - 4 66 d
+  - 66 d
+  - 33 d
+  - linear decay
+  - canonical for all
+  - 10 novel
+  - slow blade v3
+  - slow blade v3 extension
+  - blade v3
+  - blade v3 extension
+  - v3 extension
+  - this session 15
+  - for filing
+  - 1 3 0 canonical
+  - 3 0 canonical
+  - 0 canonical
+  - generalizable
+  - are each more together
+  - each more together
+  - more together
+  - glass door wave
+  - door wave
+  - it founder
+  - founder correction
+  - coinage
+  - tagline family
+  - during k444
+  - conductor op ed v04
+  - op ed v04
+  - ed v04
+  - ai cost
+  - b118 pollination
+  - b118 pollination dispositions
+  - b118 pollination dispositions md
+  - pollination dispositions
+  - pollination dispositions md
+  - pollination dispositions md carried
+  - dispositions md
+  - dispositions md carried
+  - md carried
+  - carried from
+  - b119 md 5
+  - 5 layer cake
+  - 5 layer cake 12
+  - layer cake
+  - layer cake 12
+  - cake 12
+  - b119 k444
+  - 8 row
+  - 8 row cheapest
+  - 8 row cheapest first
+  - row cheapest
+  - row cheapest first
+  - row cheapest first countermeasure
+  - cheapest first countermeasure
+  - cheapest first countermeasure table
+  - first countermeasure
+  - first countermeasure table
+  - countermeasure
+  - countermeasure table
+  - three older
+  - three older carried
+  - older carried
+  - from b117
+  - from b117 b118
+  - moved to approved
+  - b119 additions
+  - md prompt
+  - md prompt knight
+  - 09 articles article conductor
+  - articles article conductor
+  - article conductor
+  - claude code cursor 20
+  - code cursor 20
+  - cursor 20
+  - closeout md committed
+  - closeout md committed b119
+  - md committed b119
+  - md committed b119 report
+  - committed b119 report
+  - committed b119 report knight
+  - b119 report
+  - b119 report knight
+  - knight landed
+  - updated memory
+  - project k451
+  - project k451 baseline
+  - project k451 baseline cutover
+  - baseline cutover landed md
+  - cutover landed md
+  - landed md
+  - canonical project
+  - project ai
+  - project ai tuning
+  - architectural closure
+  - queued as
+  - retro logging
+  - retro logging filled
+  - retro logging filled the
+  - logging filled
+  - logging filled the
+  - open questions carried
+  - open questions carried into
+  - questions carried
+  - questions carried into
+  - carried into
+  - k444 r11 benchmark
+  - knight mid
+  - sampling bug
+  - founder committed
+  - filing completion
+  - publication hold on
+  - publication hold on k444
+  - hold on
+  - hold on k444
+  - hold on k444 results
+  - 3 k450a
+  - report triage
+  - report triage 10
+  - triage 10
+  - which ones become
+  - work which
+  - work which ones
+  - work which ones become
+  - legal tos
+  - prompt vs
+  - bishop structural
+  - network effects docker
+  - network effects docker data
+  - effects docker
+  - effects docker data
+  - docker data
+  - data founder
+  - rewrite pass
+  - depends on prov 14
+  - 6 twitter
+  - 6 twitter x
+  - 6 twitter x paid
+  - twitter x paid
+  - twitter x paid api
+  - x paid
+  - x paid api
+  - instructions in
+  - k458 prompt
+  - twitter adapter in
+  - adapter in
+  - in k458c
+  - in k458c 7
+  - k458c 7
+  - unchanged this
+  - unchanged this session
+  - b120 priority
+  - b120 priority order
+  - prov 14 filing state
+  - 14 filing state
+  - filing state
+  - open 2
+  - process pawn
+  - process pawn b119
+  - process pawn b119 red
+  - b119 red team findings
+  - red team findings
+  - team findings
+  - triage 10 vectors
+  - 10 vectors
+  - compliance enforcement
+  - 4 support
+  - 4 support founder
+  - support founder v03
+  - support founder v03 v04
+  - founder v03
+  - founder v03 v04
+  - op ed rewrite
+  - ed rewrite
+  - 20 hook
+  - once prov 14
+  - once prov 14 files
+  - coordinate publication
+  - dispatch crown
+  - crown letters wave
+  - crown letters wave 1
+  - letters wave 1
+  - 12 sec clean sitting
+  - sec clean sitting
+  - clean sitting
+  - sitting 12
+  - sitting 12 days
+  - conductor op ed pitch
+  - op ed pitch
+  - op ed pitch tier
+  - ed pitch
+  - ed pitch tier
+  - pitch tier
+  - doctorow patel
+  - doctorow patel willison
+  - doctorow patel willison newton
+  - patel willison
+  - patel willison newton
+  - willison
+  - willison newton
+  - 7 yale
+  - yale ai symposium april
+  - ai symposium april
+  - ai symposium april 28
+  - symposium april
+  - symposium april 28
+  - indl na
+  - indl na april
+  - na
+  - na april
+  - 4 5 days
+  - 4 5 days out
+  - 5 days out at
+  - days out at
+  - materials ready dispatch
+  - materials ready dispatch decision
+  - ready dispatch decision
+  - dispatch decision
+  - numbers metric
+  - numbers metric before
+  - 270 2 270 no
+  - 2 270 no
+  - 270 no
+  - ratifications this
+  - ratifications this session
+  - crown jewels 228 228
+  - jewels 228 228
+  - jewels 228 228 formal
+  - 228 228 formal
+  - 228 228 formal claims
+  - 228 formal claims 2
+  - claims 2 506 2
+  - 506 2 506 provisionals
+  - 2 506 provisionals
+  - 2 506 provisionals filed
+  - 506 provisionals
+  - 506 provisionals filed
+  - 506 provisionals filed 13
+  - provisionals filed 13 13
+  - filed 13 13
+  - filed 13 13 prov
+  - 13 13 prov
+  - 13 13 prov 14
+  - 13 prov 14
+  - prov 14 filing in
+  - 14 filing in
+  - filing in
+  - filing in progress
+  - filing in progress at
+  - in progress at
+  - in progress at b119
+  - progress at b119
+  - progress at b119 close
+  - prov 14 ready
+  - prov 14 ready to
+  - ready to file innovations
+  - to file innovations
+  - to file innovations 15
+  - file innovations
+  - file innovations 15
+  - innovations 15
+  - landed k451
+  - prompts pre staged 1
+  - pre staged 1
+  - staged 1
+  - post k444 dispatch 1
+  - k444 dispatch 1
+  - k444 dispatch 1 pawn
+  - dispatch 1 pawn
+  - dispatch 1 pawn playbook
+  - 1 pawn playbook
+  - entries appended
+  - across 4 scribes
+  - 4 scribes
+  - files rhetorical
+  - files rhetorical keystones
+  - rhetorical keystones 17
+  - keystones 17
+  - each more together i
+  - more together i
+  - more together i have
+  - together i
+  - together i have
+  - together i have learned
+  - ai tuning exemplars
+  - ai tuning exemplars saved
+  - tuning exemplars
+  - tuning exemplars saved
+  - exemplars
+  - exemplars saved
+  - v02 conductor op
+  - v02 conductor op ed
+  - v02 carried
+  - v02 carried v03
+  - carried v03
+  - v03 keystone
+  - v03 keystone titled
+  - v03 keystone titled network
+  - keystone titled
+  - keystone titled network
+  - keystone titled network effects
+  - titled network
+  - titled network effects
+  - titled network effects docker
+  - pitch email templates
+  - session founder
+  - founder review queue depth
+  - review queue depth
+  - 5 carried
+  - carried 5
+  - docker pollination
+  - carried founder
+  - founder actions pending at
+  - actions pending at
+  - pending at
+  - 1 file prov
+  - 1 file prov 14
+  - file prov 14
+  - prov 14 today
+  - 14 today
+  - manifest ready
+  - ready at
+  - dropzone prov14 building prov
+  - prov14 building prov
+  - prov14 building prov 14
+  - building prov
+  - building prov 14
+  - building prov 14 filing
+  - prov 14 filing manifest
+  - 14 filing manifest
+  - 14 filing manifest today
+  - filing manifest today
+  - filing manifest today b117
+  - manifest today
+  - manifest today b117
+  - manifest today b117 md
+  - today b117
+  - today b117 md
+  - 2 is the
+  - integration 4
+  - v03 v04 conductor
+  - v03 v04 conductor op
+  - v04 conductor
+  - v04 conductor op
+  - v04 conductor op ed
+  - conductor op ed rewrite
+  - crown letter wave
+  - crown letter wave 1
+  - letter wave 1
+  - coordinate with conductor
+  - with conductor
+  - 8 yale
+  - 8 yale ai
+  - 8 yale ai symposium
+  - 28 attendance
+  - attendance
+  - failure modes logged
+  - modes logged
+  - three fates discipline gap
+  - fates discipline gap
+  - discipline gap
+  - to enforce
+  - structural enforcement queued
+  - enforcement queued
+  - generalizable phrase
+  - generalizable phrase coined
+  - generalizable phrase coined harness
+  - phrase coined
+  - phrase coined harness
+  - phrase coined harness failure
+  - coined harness
+  - coined harness failure
+  - coined harness failure that
+  - and fail
+  - one layer
+  - architecture makes
+  - knight runway
+  - knight runway at
+  - knight runway at close
+  - runway at close
+  - at close
+  - landing prov
+  - landing prov 14
+  - landing prov 14 state
+  - for dispatch clear
+  - dispatch clear
+  - scribes unchanged
+  - sp 24 structural
+  - sp 24 structural enforcement
+  - 24 structural
+  - 24 structural enforcement
+  - 24 structural enforcement queued
+  - publication pipeline
+  - pitch list
+  - public launch posture
+  - public launch posture at
+  - launch posture
+  - launch posture at
+  - launch posture at close
+  - posture at
+  - posture at close
+  - posture at close chapter
+  - at close chapter
+  - at close chapter 1
+  - close chapter
+  - close chapter 1
+  - close chapter 1 librarian
+  - chapter 1 librarian live
+  - 1 librarian live
+  - 1 librarian live b115
+  - librarian live
+  - librarian live b115
+  - librarian live b115 chapter
+  - live b115
+  - live b115 chapter
+  - live b115 chapter 2
+  - b115 chapter
+  - b115 chapter 2
+  - b115 chapter 2 mellon
+  - chapter 2 mellon live
+  - 2 mellon live
+  - 2 mellon live b116
+  - mellon live
+  - mellon live b116
+  - mellon live b116 k435
+  - live b116
+  - live b116 k435
+  - live b116 k435 chapter
+  - b116 k435 chapter
+  - b116 k435 chapter 3
+  - k435 chapter 3
+  - substrate ready
+  - substrate ready k438a
+  - substrate ready k438a b
+  - ready k438a
+  - ready k438a b
+  - k438a b
+  - k445a b
+  - b onboarding
+  - b onboarding docs
+  - b onboarding docs pending
+  - onboarding docs
+  - onboarding docs pending
+  - docs pending
+  - install librarian mcp live
+  - librarian mcp live
+  - librarian mcp live on
+  - mcp live
+  - mcp live on
+  - mcp live on pypi
+  - live on pypi b113
+  - on pypi b113
+  - pypi b113
+  - install liana companion not
+  - liana companion not
+  - liana companion not yet
+  - companion not
+  - companion not yet
+  - priority order when
+  - priority order when it
+  - order when
+  - order when it
+  - order when it opens
+  - when it opens 1
+  - it opens 1
+  - it opens 1 verify
+  - opens 1
+  - opens 1 verify
+  - prov 14 fires
+  - 14 fires
+  - exemplar
+  - first attempt
+  - shipped to production
+  - in one session
+  - closed 2026
+  - closed 2026 04
+  - closed 2026 04 23
+  - 2026 04 23 late
+  - 04 23 late
+  - 23 late
+  - late evening converse
+  - late evening converse tx
+  - evening converse
+  - evening converse tx
+  - evening converse tx time
+  - converse tx time
+  - converse tx time claude
+  - tx time
+  - tx time claude
+  - tx time claude opus
+  - time claude
+  - time claude opus
+  - time claude opus 4
+  - 7 1m context a
+  - 1m context a
+  - 1m context a single
+  - context a single
+  - context a single day
+  - a single day
+  - a single day session
+  - single day session with
+  - day session with
+  - landed 1
+  - prov 14 candidates
+  - 14 candidates
+  - opens on founder
+  - opens on founder trigger
+  - on founder trigger
+  - day 12 hours
+  - day 12 hours active
+  - 12 hours active
+  - 12 hours active agent
+  - a a formals drafted
+  - a formals drafted
+  - formals drafted
+  - k438a member cathedral substrate
+  - member cathedral substrate live
+  - cathedral substrate live
+  - substrate live
+  - the mcp reliability
+  - the mcp reliability chain
+  - invisible to fingerprint
+  - to fingerprint
+  - build window crossfire
+  - build window crossfire silent
+  - window crossfire
+  - window crossfire silent
+  - crossfire
+  - crossfire silent
+  - decoupled
+  - k438b member cathedral phases
+  - member cathedral phases
+  - member cathedral phases c
+  - cathedral phases
+  - cathedral phases c
+  - cathedral phases c d
+  - supabase pgtap ci
+  - supabase pgtap ci pipeline
+  - pgtap ci pipeline
+  - ci pipeline
+  - conductor op ed technical
+  - op ed technical
+  - op ed technical brief
+  - ed technical
+  - ed technical brief
+  - 5 tier pitch
+  - tier pitch
+  - ready for founder rewrite
+  - of memory
+  - of memory md
+  - of memory md index
+  - new innovations ratified
+  - innovations ratified
+  - ratified this
+  - ratified this session
+  - let another accumulate prov
+  - another accumulate prov
+  - another accumulate prov 14
+  - accumulate prov
+  - accumulate prov 14
+  - at b118
+  - at b118 close
+  - b118 close
+  - close 15
+  - close 15 innovations
+  - the next bishop
+  - the next bishop can
+  - next bishop
+  - next bishop can
+  - layer by
+  - layer by layer
+  - by layer
+  - commits landed chronological
+  - commits landed chronological all
+  - landed chronological
+  - landed chronological all
+  - landed chronological all on
+  - chronological all
+  - chronological all on
+  - chronological all on main
+  - all on main
+  - all on main commit
+  - on main commit
+  - on main commit what
+  - main commit
+  - main commit what
+  - main commit what shipped
+  - 02e52b7
+  - canonical sync
+  - canonical values yaml k421
+  - values yaml k421
+  - yaml k421
+  - deploy gate
+  - bishop micro
+  - bishop micro patch
+  - micro patch
+  - build window crossfire gate
+  - window crossfire gate
+  - crossfire gate
+  - gate two phase
+  - gate two phase lock
+  - two phase lock
+  - two phase lock registertool
+  - phase lock
+  - phase lock registertool
+  - phase lock registertool wrapper
+  - lock registertool
+  - lock registertool wrapper
+  - pending k450
+  - ci live
+  - ci live validation
+  - ci live validation bridle
+  - live validation
+  - live validation bridle
+  - live validation bridle v10
+  - validation bridle
+  - validation bridle v10
+  - dispatched at b118
+  - dispatched at b118 close
+  - commits 6
+  - 6 landed
+  - 6 landed 1
+  - 6 landed 1 dispatched
+  - landed 1 dispatched
+  - 1 dispatched
+  - 27 commits
+  - 27 commits pushed
+  - 27 commits pushed to
+  - commits pushed
+  - commits pushed to
+  - commits pushed to origin
+  - knight sessions chronological
+  - knight sessions chronological knight
+  - sessions chronological
+  - sessions chronological knight
+  - sessions chronological knight model
+  - chronological knight
+  - chronological knight model
+  - chronological knight model result
+  - knight model
+  - knight model result
+  - knight model result gate
+  - model result
+  - model result gate
+  - model result gate status
+  - result gate
+  - result gate status
+  - result gate status at
+  - gate status at
+  - gate status at session
+  - status at session
+  - status at session end
+  - k438b opus
+  - k438b opus 4
+  - k438b opus 4 7
+  - gate cleared for
+  - addendum embedded
+  - task scheduler
+  - sigterm
+  - sigterm quirk
+  - quirk
+  - ready to dispatch for
+  - to dispatch for
+  - spec ratification k446
+  - spec ratification k446 conductor
+  - ratification k446
+  - ratification k446 conductor
+  - ratification k446 conductor s
+  - k446 conductor
+  - k446 conductor s
+  - k446 conductor s baton
+  - conductor s baton engineering
+  - s baton engineering
+  - s baton engineering gated
+  - baton engineering
+  - baton engineering gated
+  - baton engineering gated on
+  - engineering gated
+  - engineering gated on
+  - engineering gated on prov
+  - on prov 14 k444
+  - prov 14 k444
+  - 14 k444
+  - k445 companion cli deferred
+  - companion cli deferred
+  - companion cli deferred needs
+  - cli deferred
+  - cli deferred needs
+  - cli deferred needs bishop
+  - deferred needs
+  - deferred needs bishop
+  - deferred needs bishop spec
+  - needs bishop spec
+  - bishop spec
+  - layer failure
+  - layer failure mode
+  - layer failure mode fix
+  - failure mode fix
+  - mode fix
+  - fingerprint scope gap
+  - scope gap
+  - added scan
+  - added scan files
+  - scan files
+  - k441 half
+  - structured signal
+  - in project b118
+  - in project b118 mcp
+  - articles pitches
+  - articles pitches drafted
+  - articles pitches drafted file
+  - pitches drafted
+  - pitches drafted file
+  - pitches drafted file purpose
+  - drafted file purpose
+  - drafted file purpose status
+  - file purpose status
+  - article conductor automatic
+  - article conductor automatic transmission
+  - conductor automatic
+  - conductor automatic transmission
+  - conductor automatic transmission for
+  - v02 b118
+  - v02 b118 md
+  - b118 md
+  - md consumer
+  - md consumer op
+  - md consumer op ed
+  - consumer op
+  - consumer op ed
+  - bishop structural v02
+  - bishop structural v02 pass
+  - structural v02
+  - structural v02 pass
+  - v02 pass
+  - hooks marked
+  - technical brief conductors
+  - technical brief conductors baton
+  - brief conductors
+  - brief conductors baton
+  - md technical
+  - md technical brief
+  - technical brief bishop
+  - brief bishop
+  - ready for dispatch
+  - ready for dispatch after
+  - for dispatch after
+  - for dispatch after v02
+  - dispatch after v02
+  - dispatch after v02 rewrite
+  - after v02
+  - after v02 rewrite
+  - v02 rewrite
+  - md r11
+  - md r11 cross
+  - md r11 cross vendor
+  - benchmark knight
+  - benchmark knight prompt
+  - pre staged gated
+  - pre staged gated on
+  - staged gated
+  - staged gated on
+  - staged gated on prov
+  - ratification memory
+  - ratification memory updates
+  - memory updates
+  - handoff chain
+  - b101 b116
+  - updated memory md
+  - 27 3kb
+  - 3kb
+  - 24 4kb
+  - 24 4kb under
+  - 24 4kb under soft
+  - 4kb
+  - 4kb under
+  - 4kb under soft
+  - 4kb under soft limit
+  - under soft
+  - under soft limit
+  - soft limit
+  - scribes architecture
+  - 2 bridle
+  - bridle 1
+  - founder ratifications this
+  - founder ratifications this session
+  - ratifications this session 1
+  - b118 founder
+  - explicit at
+  - knight work in
+  - knight work in flight
+  - ci armed
+  - find replace hygiene
+  - replace hygiene
+  - k450 ci
+  - k451 candidates
+  - cooperative shutdown
+  - cooperative shutdown k449
+  - cooperative shutdown k449 sigterm
+  - shutdown
+  - shutdown k449
+  - shutdown k449 sigterm
+  - shutdown k449 sigterm quirk
+  - k449 sigterm
+  - k449 sigterm quirk
+  - session gap reconciliation
+  - session gap reconciliation diagnosis
+  - gap reconciliation
+  - gap reconciliation diagnosis
+  - reconciliation diagnosis
+  - cathedral starter pack onboarding
+  - starter pack onboarding
+  - starter pack onboarding docs
+  - pack onboarding
+  - pack onboarding docs
+  - 14 filing state at
+  - filing state at
+  - close status
+  - open founder
+  - open founder s
+  - still in effect
+  - in effect
+  - ready to file whenever
+  - to file whenever
+  - to file whenever founder
+  - file whenever
+  - file whenever founder
+  - file whenever founder triggers
+  - whenever founder
+  - whenever founder triggers
+  - whenever founder triggers 5
+  - founder triggers 5
+  - founder triggers 5 section
+  - triggers 5
+  - triggers 5 section
+  - triggers 5 section 1
+  - 5 section
+  - 5 section 1
+  - 5 section 1 innovations
+  - section 1 innovations
+  - section 1 innovations 2263
+  - 1 innovations
+  - 1 innovations 2263
+  - 1 innovations 2263 2267
+  - innovations 2263
+  - innovations 2263 2267
+  - innovations 2263 2267 with
+  - 2263 2267 with
+  - 2263 2267 with descriptions
+  - 2267 with descriptions
+  - 2267 with descriptions 1
+  - with descriptions 1
+  - with descriptions 1 full
+  - descriptions 1
+  - descriptions 1 full
+  - descriptions 1 full a
+  - 1 full a
+  - 1 full a a
+  - full a a 2263
+  - a a 2263
+  - a a 2263 10
+  - a 2263
+  - a 2263 10
+  - a 2263 10 section
+  - 2263 10 section
+  - 2263 10 section 2
+  - 10 section 2
+  - 10 section 2 cj
+  - section 2 cj
+  - section 2 cj candidates
+  - 2 cj
+  - 2 cj candidates
+  - 2 cj candidates 2268
+  - cj candidates
+  - cj candidates 2268
+  - cj candidates 2268 2277
+  - candidates 2268 2277
+  - candidates 2268 2277 with
+  - 2268 2277 with
+  - 2268 2277 with all
+  - 2277 with
+  - 2277 with all
+  - 2277 with all 10
+  - with all 10
+  - with all 10 a
+  - all 10 a
+  - all 10 a as
+  - 10 a as
+  - 10 a as drafted
+  - a as drafted
+  - a as drafted and
+  - as drafted
+  - as drafted and
+  - as drafted and 94
+  - drafted and
+  - drafted and 94
+  - drafted and 94 claims
+  - and 94
+  - and 94 claims
+  - and 94 claims proposed
+  - 94 claims
+  - 94 claims proposed
+  - 94 claims proposed filing
+  - claims proposed filing
+  - claims proposed filing manifest
+  - proposed filing
+  - proposed filing manifest
+  - proposed filing manifest at
+  - filing manifest at
+  - filing manifest at bishop
+  - manifest at
+  - manifest at bishop
+  - manifest at bishop dropzone
+  - or later 1
+  - or later 1 file
+  - later 1 file
+  - later 1 file prov
+  - file prov 14 manifest
+  - prov 14 manifest
+  - prov 14 manifest ready
+  - 14 manifest
+  - 14 manifest ready
+  - 14 manifest ready 15
+  - manifest ready 15
+  - manifest ready 15 innovations
+  - ready 15 innovations
+  - when expedient
+  - expedient
+  - expedient 2
+  - verify k450
+  - k450 landing
+  - 3 dispatch k444
+  - 3 dispatch k444 r11
+  - dispatch k444 r11
+  - dispatch k444 r11 benchmark
+  - after prov
+  - after prov 14
+  - after prov 14 files
+  - prov 14 files 4
+  - 14 files 4
+  - 5 tier pitch list
+  - tier pitch list
+  - for willison
+  - for willison ars
+  - willison ars
+  - canada 40k op
+  - canada 40k op ed
+  - 40k op
+  - 40k op ed
+  - pitch dispatch
+  - first 48
+  - first 48 hour
+  - per pitch
+  - per pitch list
+  - per pitch list conductor
+  - pitch list conductor
+  - pitch list conductor automatic
+  - list conductor
+  - list conductor automatic
+  - list conductor automatic transmission
+  - conductor automatic transmission b117
+  - automatic transmission b117
+  - automatic transmission b117 md
+  - transmission b117
+  - transmission b117 md
+  - letter wave 1 dispatch
+  - wave 1 dispatch
+  - wave 1 dispatch 12
+  - 1 dispatch 12
+  - 1 dispatch 12 sec
+  - dispatch 12
+  - dispatch 12 sec
+  - dispatch 12 sec clean
+  - 12 sec clean letters
+  - in wave 1
+  - in wave 1 apr12
+  - coordinate with conductor article
+  - with conductor article
+  - with conductor article dispatch
+  - conductor article
+  - conductor article dispatch
+  - conductor article dispatch per
+  - article dispatch per
+  - article dispatch per pitch
+  - dispatch per pitch
+  - dispatch per pitch list
+  - per pitch list overlap
+  - pitch list overlap
+  - pitch list overlap notes
+  - list overlap
+  - list overlap notes
+  - overlap notes
+  - review 00
+  - review 00 founder
+  - review 00 founder review
+  - 00 founder review batch
+  - founder review batch
+  - review batch
+  - b117 pollination
+  - b117 pollination dispositions
+  - b117 pollination dispositions md
+  - crown letter mackenzie
+  - crown letter mackenzie scott
+  - letter mackenzie scott v014g
+  - mackenzie scott v014g
+  - mackenzie scott v014g wellspring
+  - scott v014g
+  - scott v014g wellspring
+  - scott v014g wellspring insert
+  - v014g
+  - v014g wellspring
+  - v014g wellspring insert
+  - v014g wellspring insert md
+  - wellspring insert
+  - wellspring insert md
+  - insert md
+  - b117 md carried
+  - k442 closeout
+  - k442 closeout b117
+  - k442 closeout b117 md
+  - closeout b117
+  - closeout b117 md
+  - carried b118
+  - carried b118 pollination
+  - carried b118 pollination dispositions
+  - tidbit scribe pattern
+  - scribe pattern
+  - battery dispatch trigger
+  - battery dispatch trigger founder
+  - dispatch trigger
+  - dispatch trigger founder
+  - dispatch trigger founder held
+  - trigger founder
+  - trigger founder held
+  - trigger founder held not
+  - founder held
+  - founder held not
+  - founder held not bishop
+  - held not bishop
+  - held not bishop blocked
+  - not bishop blocked
+  - not bishop blocked pull
+  - bishop blocked
+  - bishop blocked pull
+  - bishop blocked pull when
+  - blocked pull
+  - blocked pull when
+  - blocked pull when ready
+  - pull when
+  - pull when ready
+  - pull when ready open
+  - when ready open
+  - when ready open questions
+  - ready open
+  - ready open questions
+  - ready open questions carried
+  - 1 prov 14 filing
+  - prov 14 filing which
+  - 14 filing which
+  - filing which
+  - decision is founder
+  - decision is founder s
+  - first run or
+  - did knight
+  - 3 yale
+  - attendance confirmed
+  - 4 wave 1
+  - k451 candidate
+  - windows cooperative
+  - windows cooperative shutdown
+  - needs pre
+  - needs pre stop
+  - needs pre stop state
+  - pre stop
+  - pre stop state
+  - pre stop state flush
+  - stop state
+  - stop state flush
+  - state flush
+  - flush
+  - failure modes logged 1
+  - modes logged 1
+  - logged 1
+  - mid build
+  - at 09
+  - lesson when
+  - lesson when a
+  - uncommitted since
+  - after librarian
+  - up lesson
+  - up lesson when
+  - memory memory
+  - fix future
+  - caught it
+  - md cathedral
+  - cathedral state 8
+  - cathedral state 8 scribes
+  - state 8
+  - state 8 scribes
+  - 8 scribes
+  - unchanged from b117
+  - b117 close
+  - prov 14 state open
+  - 14 state open
+  - 14 state open 15
+  - state open 15
+  - state open 15 innovations
+  - open 15 innovations
+  - open 15 innovations ready
+  - 15 innovations ready
+  - innovations ready
+  - ready founder
+  - articles pipeline
+  - canada 40k v03
+  - 40k v03
+  - k435 chapter 3 hold
+  - chapter 3 hold
+  - chapter 3 hold needs
+  - 3 hold
+  - 3 hold needs
+  - hold needs
+  - conductor live
+  - conductor live pip
+  - conductor live pip install
+  - live pip
+  - live pip install
+  - live pip install librarian
+  - b113 companion
+  - b113 companion pip
+  - b113 companion pip install
+  - companion pip
+  - companion pip install
+  - companion pip install liana
+  - companion not yet k445
+  - not yet k445
+  - yet k445
+  - check prov
+  - check prov 14
+  - check prov 14 filing
+  - 14 filing state did
+  - filing state did
+  - filing state did founder
+  - state did
+  - state did founder
+  - state did founder file
+  - did founder
+  - did founder file
+  - founder file
+  - ratified 6
+  - founder review items
+  - founder review items founder
+  - review items
+  - review items founder
+  - review items founder completes
+  - items founder completes
+  - 13 prov 14 still
+  - prov 14 still
+  - prov 14 still open
+  - 14 still
+  - 14 still open
+  - 14 still open prov
+  - still open prov
+  - still open prov 14
+  - open prov
+  - open prov 14
+  - open prov 14 ready
+  - k448 k449
+  - bishop micro patches
+  - micro patches
+  - cathedral seed entries
+  - 5 total
+  - 6 commits
+  - prov 14 stays
+  - prov 14 stays open
+  - 14 stays
+  - 14 stays open
+  - 14 stays open fresh
+  - stays open fresh
+  - stays open fresh session
+  - open fresh
+  - open fresh session
+  - k427 ws1 complete
+  - scev 1 preliminary
+  - 1 preliminary
+  - 10 crown
+  - 10 crown jewel
+  - cross vendor adaptive
+  - vendor adaptive
+  - routing layer
+  - k441 k442 k443
+  - k441 k442 k443 k438a
+  - k442 k443
+  - k442 k443 k438a
+  - k443 k438a
+  - founder voice keystones ratified
+  - voice keystones ratified
+  - conductor s baton naming
+  - s baton naming
+  - s baton naming family
+  - baton naming
+  - baton naming family
+  - the scribe coverage
+  - the scribe coverage discovery
+  - drafted founder
+  - incremental librarian
+  - incremental librarian rebuild
+  - incremental librarian rebuild sha
+  - librarian rebuild sha
+  - librarian rebuild sha 256
+  - rebuild sha
+  - rebuild sha 256
+  - rebuild sha 256 fingerprint
+  - scev 1 runs
+  - 1 runs
+  - closeout auto ingest gitignore
+  - auto ingest gitignore
+  - ingest gitignore
+  - d added
+  - scribes architecture decisions
+  - scribes architecture decisions foundervoice
+  - state letter
+  - state letter predicate
+  - state letter predicate ladder
+  - bill gates blocked
+  - bill gates blocked status
+  - gates blocked
+  - gates blocked status
+  - subdirs
+  - 12 innovations aa 03
+  - innovations aa 03
+  - innovations aa 03 bishophandoffs
+  - aa 03
+  - aa 03 bishophandoffs
+  - aa 03 bishophandoffs 00
+  - 03 bishophandoffs 00
+  - 03 bishophandoffs 00 founder
+  - bishophandoffs 00
+  - bishophandoffs 00 founder
+  - bishophandoffs 00 founder review
+  - 00 founder review prov14
+  - founder review prov14
+  - founder review prov14 building
+  - review prov14
+  - review prov14 building
+  - 57f6af8
+  - resolver regex
+  - member cathedral schema
+  - pass mean
+  - pass mean lift
+  - lift 6
+  - lift 6 0pp
+  - lift 6 0pp lenient
+  - 6 0pp lenient
+  - 0pp lenient
+  - sealed 50 re
+  - sealed 50 re run
+  - 50 re
+  - 50 re run
+  - scribe expansion
+  - 19pp lenient 12pp
+  - 19pp lenient 12pp strict
+  - lenient 12pp
+  - lenient 12pp strict
+  - 12pp
+  - 12pp strict
+  - jump from
+  - opus 4 7 member
+  - 4 7 member
+  - 4 7 member cathedral
+  - 7 member cathedral
+  - 6 ui routes
+  - for b118
+  - prov 14 k445
+  - prov 14 k445 companion
+  - 14 k445
+  - 14 k445 companion
+  - 14 k445 companion cli
+  - prov 14 section
+  - prov 14 section 2
+  - 14 section
+  - 14 section 2
+  - 2272 cost
+  - 2272 cost slasher
+  - 2272 cost slasher claim
+  - empirically anchored
+  - self auditing
+  - sibling file
+  - conductor s baton automatic
+  - s baton automatic
+  - s baton automatic transmission
+  - baton automatic
+  - baton automatic transmission
+  - baton automatic transmission for
+  - state at b117
+  - state at b117 close
+  - at b117
+  - at b117 close
+  - 10 fully claim
+  - 10 fully claim drafted
+  - fully claim
+  - fully claim drafted
+  - registry at b117
+  - at b117 open
+  - b117 open
+  - 15 entries
+  - 3 new founder
+  - 3 new founder voice
+  - new founder voice
+  - new founder voice keystones
+  - wellspring keystone
+  - 14 system
+  - 14 system of
+  - 14 system of wells
+  - scott v014f
+  - canada 40k v03 conductor
+  - 40k v03 conductor
+  - v03 conductor
+  - post expansion
+  - scev 1 sealed
+  - scev 1 sealed 50
+  - 1 sealed
+  - 1 sealed 50
+  - 6pp
+  - article canada 40k v03
+  - canada 40k v03 b117
+  - 40k v03 b117
+  - 40k v03 b117 md
+  - v03 b117
+  - v03 b117 md
+  - with all 4 patches
+  - all 4 patches
+  - 4 patches
+  - v03 scaffolding
+  - scaffolding founder rewrite
+  - scaffolding founder rewrite pending
+  - founder rewrite pending
+  - rewrite pending
+  - transmission for ai v01
+  - for ai v01
+  - for ai v01 b117
+  - ai v01
+  - ai v01 b117
+  - ai v01 b117 md
+  - v01 b117
+  - v01 b117 md
+  - v01 scaffolding
+  - brief conductors baton b117
+  - conductors baton b117
+  - conductors baton b117 md
+  - baton b117
+  - baton b117 md
+  - wellspring keystone insertion
+  - keystone insertion
+  - insertion
+  - pending founder merge
+  - founder merge
+  - sp 20 pollination
+  - sp 20 pollination requests
+  - 20 pollination
+  - 20 pollination requests
+  - pollination requests
+  - pollination requests pending
+  - requests pending
+  - md canonical numbers
+  - automatic transmission wellspring
+  - automatic transmission wellspring applied
+  - transmission wellspring
+  - transmission wellspring applied
+  - transmission wellspring applied conductor
+  - wellspring applied
+  - wellspring applied conductor
+  - wellspring applied conductor s
+  - applied conductor
+  - applied conductor s
+  - applied conductor s baton
+  - cj inline
+  - cj inline ratification
+  - inline ratification
+  - 5 k438
+  - into scott
+  - 9 canada
+  - 9 canada 40k
+  - up to 95 cheaper
+  - to 95 cheaper
+  - 95 cheaper
+  - 98 accurate
+  - ftc safe
+  - haiku cathedral
+  - file founder
+  - founder actions pending for
+  - actions pending for
+  - pending for
+  - 5 review
+  - scaffolding rewrite
+  - scaffolding rewrite expected
+  - rewrite expected
+  - dependencies k438b
+  - k438b k444
+  - 6 trebor
+  - lesson for
+  - lesson for bishop
+  - prompts 2
+  - cursor workspace
+  - here string
+  - paste this
+  - paste this in
+  - continuation session
+  - continuation session naming
+  - session naming
+  - the regex
+  - scribes active
+  - 1 librarian live verification
+  - librarian live verification
+  - librarian live verification clean
+  - live verification clean
+  - verification clean
+  - b117 a
+  - 8 bishop
+  - b115 librarian
+  - b115 librarian the2ndsecond
+  - b115 librarian the2ndsecond com
+  - the2ndsecond com public
+  - com public
+  - cloud run mcp
+  - run mcp
+  - pending headline
+  - k427 workstream 1 pedestal
+  - 1 pedestal stake reg
+  - three knight
+  - three knight sessions
+  - three knight sessions landed
+  - verification clean lighthouse
+  - verification clean lighthouse 99
+  - clean lighthouse
+  - clean lighthouse 99
+  - clean lighthouse 99 100
+  - lighthouse 99
+  - lighthouse 99 100
+  - lighthouse 99 100 96
+  - 100 96 100 ssl
+  - 96 100 ssl
+  - 96 100 ssl labs
+  - ssl labs a cost
+  - labs a cost
+  - labs a cost slasher
+  - a cost slasher
+  - c404c6e
+  - 3e88caa
+  - test running
+  - cathedral arc
+  - emergent
+  - emergent ai
+  - emergent ai behavior
+  - ai behavior
+  - patent candidate
+  - canonical methodologies
+  - methodologies
+  - articulated
+  - marketing product
+  - marketing product economic
+  - product economic
+  - under promise
+  - under promise over
+  - under promise over deliver
+  - promise over
+  - promise over deliver
+  - over deliver
+  - public timing
+  - next week per
+  - week per
+  - five knight
+  - five knight dispatches
+  - five knight dispatches written
+  - knight dispatches
+  - knight dispatches written
+  - knight dispatches written this
+  - dispatches written
+  - dispatches written this
+  - dispatches written this session
+  - written this
+  - written this session
+  - k435 k436
+  - k435 k436 k437
+  - k435 k436 k437 k438
+  - k436 k437 k438
+  - 0 0067 vs opus
+  - 0067 vs opus
+  - 0067 vs opus 0
+  - vs opus 0
+  - vs opus 0 1289
+  - opus 0 1289
+  - delta at
+  - explicitly rejected
+  - lighthouse accessibility
+  - lighthouse accessibility performance
+  - lighthouse accessibility performance fixes
+  - accessibility performance fixes
+  - performance fixes
+  - perf 88
+  - 99 a11y
+  - a11y 79
+  - both endpoints
+  - chapter 2 mellon teaser
+  - 2 mellon teaser
+  - mellon teaser
+  - teaser update
+  - promise over deliver discipline
+  - over deliver discipline
+  - deliver discipline
+  - knight deliverables this
+  - knight deliverables this session
+  - deliverables this
+  - deliverables this session
+  - deliverables this session knight
+  - this session knight
+  - this session knight status
+  - session knight status
+  - session knight status artifact
+  - knight status artifact
+  - status artifact
+  - shipped knight
+  - shipped commit
+  - k432 schema
+  - k433 migration
+  - mellon chapter
+  - mellon chapter 2
+  - secondary anthropic
+  - secondary anthropic key
+  - annoyupeanthropkey
+  - was credit
+  - was credit depleted
+  - credit depleted
+  - depleted
+  - teaser updated
+  - coming next week chapter
+  - next week chapter
+  - week chapter
+  - same evening
+  - knight prompts dispatch
+  - knight prompts dispatch ready
+  - prompts dispatch
+  - prompts dispatch ready
+  - close knight
+  - knight file
+  - md dispatch
+  - md dispatch ready
+  - full 50
+  - full 50 q
+  - 50 q
+  - 50 q run
+  - 50 q run is
+  - q run
+  - q run is
+  - gated on k437
+  - gated on k437 pass
+  - on k437
+  - on k437 pass
+  - 1 sp 21
+  - mvp librarian
+  - mvp librarian mcp
+  - mvp librarian mcp stitchpunks
+  - scev1 question bank seed
+  - question bank seed
+  - question bank seed b116
+  - bank seed
+  - bank seed b116
+  - bank seed b116 json
+  - seed b116
+  - seed b116 json
+  - seed b116 json 18
+  - b116 json 18
+  - json 18
+  - run scev1 prelim
+  - run scev1 prelim py
+  - scev1 prelim
+  - scev1 prelim py
+  - prelim
+  - prelim py
+  - preliminary runner
+  - 4 scribe
+  - scribe vault
+  - scribe vault registered
+  - vault registered
+  - credential secret
+  - 08 papers outlines
+  - 08 papers outlines paper
+  - papers outlines
+  - papers outlines paper
+  - outlines paper
+  - md for sp
+  - for sp
+  - for sp 20
+  - 15 recombiner
+  - 15 recombiner inbox
+  - 15 recombiner inbox recombiner
+  - recombiner inbox
+  - recombiner inbox recombiner
+  - inbox recombiner
+  - pass memory
+  - new feedback
+  - analysis alongside
+  - md public
+  - strategic decisions
+  - strategic decisions ratified
+  - decisions ratified
+  - b116 1
+  - b116 evening
+  - k437 before
+  - 5 prove
+  - k433 k435
+  - vault scribe
+  - vault scribe registered
+  - vault scribe registered credential
+  - scribe registered credential
+  - registered credential
+  - numbers moved
+  - 3 k431
+  - 100 ssl labs grade
+  - grade cert
+  - grade cert valid
+  - cathedral 0
+  - memory 2
+  - drafted 3
+  - founder actions completed
+  - cost slasher callout correct
+  - slasher callout correct
+  - slasher callout correct column
+  - callout correct
+  - callout correct column
+  - landing teaser
+  - apply k433
+  - apply k433 migration
+  - expose upekrithen
+  - expose upekrithen schema
+  - 3 dispatch k436
+  - 3 dispatch k436 when
+  - dispatch k436
+  - dispatch k436 when
+  - k436 when
+  - k436 lands
+  - scev 1 preliminary results
+  - 1 preliminary results
+  - preliminary results
+  - hellosign sandbox
+  - kyc provider middesk
+  - scev 1 pass
+  - 18 q
+  - 18 q seed
+  - q seed
+  - 50 q sealed
+  - q sealed
+  - b117 bishop
+  - or pawn
+  - or pawn research
+  - resurface
+  - resurface b114
+  - resurface b114 overdues
+  - b114 overdues
+  - overdues
+  - trademarks
+  - trademarks prov
+  - trademarks prov 14
+  - prov 14 inventory
+  - 14 inventory
+  - battery dispatch automation
+  - battery dispatch automation state
+  - dispatch automation
+  - dispatch automation state
+  - automation state
+  - canada 40k v02 founder
+  - 40k v02 founder
+  - 40k v02 founder voice
+  - v02 founder
+  - v02 founder voice
+  - v02 founder voice pass
+  - founder voice pass still
+  - voice pass still
+  - voice pass still queued
+  - pass still
+  - pass still queued
+  - still queued
+  - 2 pollination
+  - 2 pollination requests
+  - wellspring for
+  - wellspring for scott
+  - wellspring for scott v014f
+  - for scott v014f
+  - for scott v014f thermometer
+  - scott v014f thermometer
+  - scott v014f thermometer for
+  - v014f thermometer
+  - v014f thermometer for
+  - v014f thermometer for scott
+  - thermometer for scott
+  - thermometer for scott v014h
+  - for scott v014h
+  - forward dispatch
+  - the 5pp
+  - k437 full
+  - k437 full sealed
+  - k437 full sealed run
+  - full sealed
+  - full sealed run
+  - sealed run
+  - k436 dispatch
+  - a a drafting
+  - a drafting
+  - or wait
+  - or wait for
+  - silence
+  - k435 running
+  - k437 dispatch
+  - pass cathedral
+  - state 5
+  - results scev1 b116 preliminary
+  - scev1 b116 preliminary
+  - scev1 b116 preliminary summary
+  - b116 preliminary
+  - b116 preliminary summary
+  - preliminary summary
+  - public launch status
+  - launch status
+  - dispatch k437
+  - 6 resurface
+  - 6 resurface b114
+  - model hot
+  - at preliminary
+  - at preliminary scale
+  - preliminary scale
+  - premium models
+  - haiku cathedral 0
+  - opus cathedral
+  - the cost slasher claim
+  - plus cathedral
+  - sealed 50 q
+  - proof before commitment discipline
+  - before commitment discipline
+  - commitment discipline
+  - marketing claim ladder
+  - of running
+  - q scale
+  - executed cleanly
+  - plans billing
+  - 108 error
+  - 108 error records
+  - error records
+  - k437 knight
+  - when credits
+  - when credits restore
+  - credits restore
+  - jsonls
+  - closed 2026 04 22
+  - 2026 04 22 converse
+  - 04 22 converse
+  - 04 22 converse tx
+  - 22 converse
+  - 22 converse tx
+  - 22 converse tx time
+  - 7 1m context fresh
+  - 1m context fresh
+  - 1m context fresh session
+  - context fresh
+  - context fresh session
+  - b113 b114
+  - b113 b114 extended
+  - b114 extended
+  - pypi live
+  - pending headline the
+  - pending headline the librarian
+  - headline the
+  - headline the librarian
+  - headline the librarian went
+  - the librarian went
+  - librarian went
+  - with eyewitness
+  - origin quote
+  - cloud run hosted
+  - cloud run hosted mcp
+  - run hosted
+  - run hosted mcp
+  - run hosted mcp endpoint
+  - mcp endpoint at mcp
+  - endpoint at mcp
+  - at mcp
+  - k430 k434
+  - k431 k432 k433 dispatch
+  - k432 k433 dispatch
+  - k432 k433 dispatch ready
+  - k433 dispatch ready
+  - marketing angle
+  - r10 numbers
+  - room to ship
+  - room to ship early
+  - to ship early
+  - ship early
+  - firebase site librarian
+  - firebase site librarian the2ndsecond
+  - ssl valid
+  - 96ms
+  - 3 announcement
+  - 3 announcement templates
+  - k428 be8a746
+  - live five
+  - iam
+  - iam org
+  - iam org policy
+  - org policy
+  - org policy override
+  - policy override
+  - allusers
+  - with pine
+  - with pine books
+  - pike
+  - pike place
+  - pike place market
+  - place market
+  - auth free
+  - md ready auth
+  - md ready auth free
+  - ready auth
+  - ready auth free
+  - md rewritten
+  - screenshot verified
+  - explicit rule
+  - rule break log
+  - break log
+  - violated
+  - bridle rule 5
+  - site inventory
+  - for future chapters
+  - future chapters
+  - new project librarian
+  - of b115
+  - the durable fix
+  - future bishops
+  - bishops
+  - cloud run iam
+  - cloud run iam org
+  - run iam
+  - run iam org
+  - run iam org policy
+  - b115 1
+  - conservative claim
+  - claim haiku
+  - aggressive claim
+  - holds 5
+  - under lianabanyan
+  - under lianabanyan 403dc
+  - three instances
+  - 1 bridle
+  - dns canonical
+  - metrics moved
+  - metrics moved this
+  - metrics moved this session
+  - moved this
+  - moved this session
+  - moved this session metric
+  - this session metric
+  - this session metric before
+  - session metric
+  - session metric before
+  - prompts dispatch ready k427
+  - dispatch ready k427
+  - ready k427
+  - k427 k428
+  - k429 stub
+  - stub k429
+  - lighthouse ssl labs browser
+  - ssl labs browser
+  - labs browser
+  - browser scan
+  - bishop memory files pre
+  - memory files pre
+  - files pre
+  - b115 founder
+  - b115 founder actions
+  - founder actions completed 1
+  - to knight 7
+  - to knight 7 k429
+  - knight 7
+  - knight 7 k429
+  - 7 k429
+  - session b115
+  - librarian the2ndsecond com target
+  - grade a
+  - three drafts
+  - from dropzone prov
+  - from dropzone prov 14
+  - dropzone prov
+  - dropzone prov 14
+  - prov 14 innovation inventory
+  - 14 innovation inventory
+  - inventory battery
+  - inventory battery dispatch
+  - inventory battery dispatch automation
+  - 2 pollination requests wellspring
+  - pollination requests wellspring
+  - pollination requests wellspring for
+  - requests wellspring
+  - requests wellspring for
+  - requests wellspring for scott
+  - for scott v014h bishop
+  - scott v014h bishop
+  - scott v014h bishop review
+  - v014h bishop
+  - v014h bishop review
+  - v014h bishop review still
+  - bishop review still
+  - review still
+  - commercial license template
+  - commercial license template stub
+  - license template
+  - license template stub
+  - license template stub drafted
+  - template stub
+  - template stub drafted
+  - template stub drafted for
+  - stub drafted for
+  - stub drafted for counsel
+  - drafted for counsel
+  - k429 scope
+  - per correct answer column
+  - correct answer column
+  - answer column
+  - instances 1
+  - done github
+  - needs browser
+  - needs browser scan
+  - day 0 chapter
+  - day 0 chapter 1
+  - 0 chapter
+  - 0 chapter 1
+  - 0 chapter 1 librarian
+  - day 5 7 chapter
+  - 5 7 chapter
+  - 5 7 chapter 2
+  - 7 chapter 2
+  - 7 chapter 2 mellon
+  - 110 language
+  - overdue reports
+  - overdue reports trademarks
+  - reports trademarks
+  - milestone b113
+  - milestone b113 closeout
+  - b113 closeout
+  - april 21 2026 single
+  - 21 2026 single
+  - 21 2026 single day
+  - 2026 single
+  - 2026 single day
+  - 2026 single day session
+  - 1m context predecessor b112
+  - context predecessor b112
+  - context predecessor b112 april
+  - predecessor b112
+  - predecessor b112 april
+  - predecessor b112 april 21
+  - wrote k424
+  - wrote k424 dispatch
+  - wrote k424 dispatch successor
+  - k424 dispatch successor
+  - dispatch successor
+  - librarian went public
+  - went public
+  - 3 755 insertions intent
+  - 755 insertions intent
+  - 755 insertions intent aware
+  - insertions intent
+  - insertions intent aware
+  - insertions intent aware librarian
+  - aware librarian context librarian
+  - librarian context librarian
+  - librarian context librarian metrics
+  - context librarian metrics
+  - all quality
+  - all quality gates
+  - all quality gates green
+  - preload 22
+  - preload 22 files
+  - session b112
+  - wrote the k424
+  - across canonical
+  - bishop synthesized
+  - preload architecture
+  - preload architecture ip
+  - preload architecture ip load
+  - architecture ip
+  - architecture ip load
+  - architecture ip load balancing
+  - md librarian mcp public
+  - mcp public preload architecture
+  - public preload architecture
+  - md bishop synthesized
+  - preload benchmark
+  - preload benchmark r9
+  - preload benchmark r9 technical
+  - benchmark r9 technical
+  - benchmark r9 technical brief
+  - mcp public preload benchmark
+  - public preload benchmark
+  - b113 addendum 01
+  - b113 addendum 01 knightprompts
+  - addendum 01
+  - addendum 01 knightprompts
+  - addendum 01 knightprompts prompt
+  - knightprompts prompt knight k424
+  - k428 stub
+  - stub 01
+  - stub 01 knightprompts
+  - stub 01 knightprompts prompt
+  - hosted librarian at
+  - hosted librarian at librarian
+  - librarian at
+  - librarian at librarian
+  - librarian at librarian the2ndsecond
+  - librarian the2ndsecond com four
+  - the2ndsecond com four
+  - the2ndsecond com four surface
+  - com four
+  - com four surface
+  - com four surface distribution
+  - four surface distribution pypi
+  - surface distribution pypi
+  - distribution pypi
+  - pypi github
+  - k424 on
+  - k424 on pypi
+  - k424 on pypi liana
+  - on pypi liana
+  - on pypi liana banyan
+  - pypi liana banyan
+  - pypi liana banyan org
+  - librarian reindex half
+  - librarian reindex half a
+  - reindex half
+  - reindex half a
+  - reindex half a one
+  - half a one
+  - half a one shot
+  - a one shot
+  - v02 play
+  - v02 play stage
+  - article canada 40k play
+  - canada 40k play
+  - canada 40k play stage
+  - 40k play
+  - 40k play stage
+  - 40k play stage v02
+  - play stage v02 md
+  - stage v02 md
+  - play stage framing
+  - stage framing
+  - rescue fleet 42
+  - rescue fleet 42 200
+  - fleet 42
+  - fleet 42 200
+  - fleet 42 200 backlog
+  - 42 200 backlog
+  - 42 200 backlog number
+  - 200 backlog
+  - 200 backlog number
+  - 200 backlog number in
+  - backlog number
+  - backlog number in
+  - backlog number in prose
+  - number in prose
+  - bill c
+  - bill c 12
+  - c 12
+  - fairest of
+  - fairest of them
+  - fairest of them all
+  - with mirrormirror
+  - with mirrormirror lianabanyan
+  - with mirrormirror lianabanyan com
+  - visit line
+  - article canada 40k april2026
+  - canada 40k april2026
+  - canada 40k april2026 companion
+  - 40k april2026
+  - 40k april2026 companion
+  - 40k april2026 companion md
+  - april2026
+  - april2026 companion
+  - april2026 companion md
+  - companion md
+  - companion update
+  - founder facing
+  - founder facing the
+  - founder facing the bridle
+  - facing the
+  - facing the bridle
+  - 00 founder review the
+  - founder review the
+  - founder review the bridle
+  - review the bridle
+  - review the bridle md
+  - the bridle md
+  - the bridle md 9
+  - bridle md
+  - bridle md 9
+  - bridle md 9 rule
+  - md 9 rule
+  - md 9 rule prompt
+  - 9 rule prompt
+  - 9 rule prompt preamble
+  - rule prompt
+  - rule prompt preamble
+  - prompt preamble
+  - paste at
+  - paste at top
+  - paste at top of
+  - across any
+  - ai skip
+  - horse tack
+  - tack
+  - 86 1pp lift 94
+  - 1pp lift 94
+  - lift 94
+  - lift 94 3
+  - lift 94 3 11
+  - 8 8 7 hot
+  - 8 7 hot
+  - 8 7 hot cold
+  - 7 hot cold
+  - v0 2 0 state
+  - 2 0 state
+  - outstanding gaps
+  - outstanding gaps rewritten
+  - gaps rewritten
+  - project the2ndsecond
+  - project the2ndsecond origin
+  - project the2ndsecond origin md
+  - the2ndsecond origin
+  - the2ndsecond origin md
+  - origin 2nd
+  - origin 2nd second
+  - origin 2nd second industrial
+  - industrial revolution not reciprocity
+  - revolution not reciprocity
+  - revolution not reciprocity canonical
+  - not reciprocity
+  - not reciprocity canonical
+  - not reciprocity canonical landing
+  - reciprocity canonical
+  - reciprocity canonical landing
+  - reciprocity canonical landing copy
+  - canonical landing
+  - canonical landing copy
+  - canonical landing copy librarian
+  - landing copy librarian
+  - landing copy librarian personification
+  - copy librarian
+  - copy librarian personification
+  - copy librarian personification lead
+  - librarian personification lead
+  - librarian personification lead a
+  - personification lead
+  - personification lead a
+  - personification lead a librarian
+  - lead a librarian
+  - lead a librarian that
+  - your stuff is pronoun
+  - stuff is pronoun
+  - stuff is pronoun note
+  - is pronoun
+  - is pronoun note
+  - pronoun note
+  - escalations
+  - force completed
+  - pattern skipping
+  - pattern skipping verification
+  - pattern skipping verification before
+  - skipping verification
+  - skipping verification before
+  - skipping verification before asserting
+  - verification before asserting
+  - 1 invented
+  - 1 invented k424
+  - 1 invented k424 part
+  - invented k424
+  - invented k424 part
+  - invented k424 part a
+  - k424 part
+  - k424 part a
+  - k424 part a b
+  - part a b
+  - part a b c
+  - a b c scope
+  - b c scope
+  - b c scope when
+  - c scope
+  - c scope when
+  - c scope when k424
+  - scope when
+  - scope when k424
+  - scope when k424 already
+  - when k424 already
+  - when k424 already had
+  - k424 already had
+  - k424 already had a
+  - complete b112
+  - founder caught
+  - founder caught via
+  - founder caught via screenshot
+  - caught via
+  - caught via screenshot
+  - via screenshot
+  - 2 invented
+  - 2 invented k425
+  - 2 invented k425 k426
+  - invented k425
+  - invented k425 k426
+  - invented k425 k426 scope
+  - k425 k426
+  - k425 k426 scope
+  - k425 k426 scope when
+  - k426 scope
+  - k426 scope when
+  - k426 scope when those
+  - scope when those
+  - scope when those slots
+  - when those slots
+  - those slots
+  - had b111
+  - had b111 stubs
+  - had b111 stubs with
+  - b111 stubs
+  - b111 stubs with
+  - b111 stubs with different
+  - stubs with different
+  - 3 websearched
+  - 3 websearched canada
+  - websearched
+  - websearched canada
+  - search knowledge first
+  - knowledge first
+  - ask librarian
+  - ask librarian perhaps
+  - librarian perhaps
+  - corrective artifact
+  - free plan
+  - k424 commits
+  - on librarian mcp public
+  - after org
+  - stand up
+  - at museum
+  - at museum lianabanyan
+  - at museum lianabanyan com
+  - museum lianabanyan com mirror
+  - lianabanyan com mirror
+  - com mirror
+  - hosted librarian four
+  - hosted librarian four surface
+  - librarian four
+  - librarian four surface
+  - librarian four surface distribution
+  - four surface distribution needs
+  - surface distribution needs
+  - distribution needs
+  - stub complete
+  - b111 stub still
+  - b111 stub still in
+  - stub still
+  - stub still in
+  - stub still in original
+  - still in original
+  - still in original b111
+  - in original b111
+  - in original b111 scope
+  - original b111
+  - original b111 scope
+  - original b111 scope not
+  - b111 scope
+  - b111 scope not
+  - b111 scope not b113
+  - scope not b113
+  - scope not b113 touched
+  - not b113
+  - not b113 touched
+  - b113 touched
+  - preload founder voice three
+  - founder voice three
+  - founder voice three clock
+  - voice three
+  - voice three clock
+  - voice three clock timeline
+  - clock timeline md is
+  - timeline md is
+  - timeline md is bishop
+  - md is bishop
+  - md is bishop b113
+  - is bishop b113
+  - is bishop b113 synthesis
+  - bishop b113 synthesis not
+  - b113 synthesis not
+  - b113 synthesis not founder
+  - synthesis not
+  - synthesis not founder
+  - synthesis not founder prose
+  - not founder
+  - not founder prose
+  - canada 40k v02 companion
+  - 40k v02 companion
+  - pass expect
+  - pass expect 60
+  - pass expect 60 80
+  - expect 60 80 rewrite
+  - structure is the
+  - the bridle v1
+  - the bridle v1 0
+  - bridle v1
+  - bridle v1 0
+  - 2 tools
+  - stub v0
+  - stub v0 2
+  - stub v0 2 0
+  - 82 4pp lift
+  - 4pp lift
+  - cold 86
+  - 6 models
+  - 6 models 3
+  - 6 models 3 vendors
+  - models 3 vendors
+  - vendors 8
+  - vendors 8 models
+  - b096 escalations
+  - 2 scrambler
+  - 2 scrambler c
+  - 0 force
+  - 0 force completed
+  - 0 force completed with
+  - force completed with
+  - force completed with evidence
+  - completed with
+  - completed with evidence
+  - with evidence
+  - knight prompts staged
+  - prompts staged
+  - b111 stubs k424
+  - stubs k424
+  - k428 stub k429
+  - k428 stub k429 stub
+  - stub k429 stub
+  - stub k429 stub bishop
+  - k429 stub bishop
+  - k429 stub bishop memory
+  - stub bishop
+  - stub bishop memory
+  - stub bishop memory files
+  - memory files pre b113
+  - files pre b113
+  - files pre b113 count
+  - pre b113
+  - pre b113 count
+  - b113 count
+  - founder review artifacts
+  - founder review artifacts pre
+  - review artifacts
+  - review artifacts pre
+  - review artifacts pre b113
+  - artifacts pre b113
+  - artifacts pre b113 count
+  - pre b113 count the
+  - b113 count the
+  - b113 count the bridle
+  - count the
+  - count the bridle
+  - count the bridle md
+  - context for the
+  - context for the keep
+  - milestone b113 closeout md
+  - b113 closeout md
+  - 20 25 utc
+  - 25 utc
+  - github repo transferred
+  - repo transferred
+  - transferred
+  - five tools
+  - context prose provenance record
+  - prose provenance record
+  - prose provenance record measurement
+  - provenance record
+  - provenance record measurement
+  - provenance record measurement metrics
+  - numbers locked 86
+  - numbers locked 86 1pp
+  - locked 86
+  - locked 86 1pp
+  - this window k424
+  - window k424
+  - k427 counsel
+  - k427 counsel cleared
+  - stub written
+  - needs b115
+  - promotion to
+  - r9 r10
+  - r9 r10 retired
+  - r9 r10 retired as
+  - r10 retired
+  - r10 retired as
+  - r10 retired as iteration
+  - retired as
+  - retired as iteration
+  - retired as iteration labels
+  - as iteration
+  - as iteration labels
+  - as iteration labels each
+  - iteration labels
+  - iteration labels each
+  - iteration labels each library
+  - labels each
+  - labels each library
+  - labels each library iteration
+  - each library
+  - each library iteration
+  - each library iteration gets
+  - library iteration
+  - library iteration gets
+  - iteration gets
+  - literary
+  - stacked architecture
+  - tag v0 2 1
+  - 2 1 pushed triggered
+  - 1 pushed triggered
+  - 1 pushed triggered publish
+  - pushed triggered
+  - pushed triggered publish
+  - triggered publish
+  - bishop b113 addendum
+  - knight b113
+  - knight b113 shipped
+  - b113 shipped
+  - bishop b111 stubbed
+  - bishop b111 stubbed bishop
+  - b111 stubbed
+  - b111 stubbed bishop
+  - b111 stubbed bishop b113
+  - stubbed bishop
+  - stubbed bishop b113
+  - stubbed bishop b113 addendum
+  - bishop b113 addendum cleared
+  - b113 addendum cleared
+  - b113 addendum cleared dependency
+  - addendum cleared
+  - addendum cleared dependency
+  - addendum cleared dependency gate
+  - cleared dependency
+  - cleared dependency gate
+  - cleared dependency gate knight
+  - dependency gate knight
+  - sp 20 pollinator stitchpunk
+  - 20 pollinator stitchpunk
+  - pollinator stitchpunk
+  - reg cf counsel
+  - reg cf counsel cleared
+  - cf counsel
+  - cf counsel cleared
+  - architecture compatible
+  - bishop b113 stub
+  - bishop b113 stub written
+  - b113 stub written
+  - md 00 founder
+  - md 00 founder review
+  - com subdomain
+  - state pypi
+  - state pypi live
+  - mecuryisrising
+  - mercury api
+  - mercury api key
+  - before editing
+  - api key rotation
+  - api key rotation threshold
+  - key rotation threshold
+  - rotation threshold
+  - b113 b114 founder
+  - b113 b114 founder actions
+  - b114 founder
+  - b114 founder actions
+  - plan founder
+  - git remote
+  - as pypi
+  - as pypi api
+  - as pypi api token
+  - dns squarespace
+  - pedestal stake offering
+  - pedestal stake offering path
+  - stake offering
+  - stake offering path
+  - reg cf selected
+  - cf selected
+  - for b115
+  - squarespace support
+  - squarespace support ticket
+  - support ticket
+  - upekrithen com apex
+  - dispatch to knight
+  - trademark
+  - notcents confirmed
+  - patent counsel
+  - 49 next
+  - chapter name literary
+  - name literary
+  - founder voice principles
+  - voice principles
+  - r10 v0
+  - r10 v0 3
+  - r10 v0 3 0
+  - 3 paired provenance r11
+  - paired provenance r11
+  - paired provenance r11 v0
+  - provenance r11
+  - provenance r11 v0
+  - provenance r11 v0 4
+  - r11 v0
+  - r11 v0 4
+  - r11 v0 4 0
+  - member keystones
+  - 4 inversion
+  - 4 inversion principle
+  - 4 inversion principle r12
+  - inversion principle r12
+  - inversion principle r12 v0
+  - principle r12
+  - principle r12 v0
+  - principle r12 v0 5
+  - r12 v0
+  - r12 v0 5
+  - r12 v0 5 0
+  - v0 5
+  - v0 5 0
+  - sketched
+  - 5 anachronism
+  - 5 anachronism principle
+  - 5 anachronism principle r13
+  - anachronism principle r13
+  - anachronism principle r13 v0
+  - principle r13
+  - principle r13 v0
+  - principle r13 v0 6
+  - r13
+  - r13 v0
+  - r13 v0 6
+  - r13 v0 6 0
+  - v0 6
+  - v0 6 0
+  - auto curation
+  - 1000 slots
+  - cockney
+  - launch copy
+  - counsel cleared b114
+  - counsel cleared b114 parallel
+  - cleared b114
+  - cleared b114 parallel
+  - cleared b114 parallel 506
+  - b114 parallel
+  - b114 parallel 506
+  - b114 parallel 506 c
+  - architecture compatible deferred
+  - compatible deferred
+  - pledged commons grant commercial
+  - commons grant commercial
+  - commons grant commercial path
+  - grant commercial path
+  - commercial path
+  - direction locked
+  - mellon r10
+  - mellon r10 v0
+  - mellon r10 v0 3
+  - dispatch founder
+  - wrote k423
+  - website blocker
+  - website blocker for
+  - website blocker for battery
+  - blocker for battery
+  - blocker for battery dispatch
+  - sweep 4
+  - discord reddit launch copy
+  - reddit launch copy
+  - mellon scope
+  - 5 names
+  - live repo
+  - milestone b112
+  - milestone b112 closeout
+  - b112 closeout
+  - closeout april
+  - 2026 handoff
+  - 2026 handoff to
+  - 7 1m context session
+  - 1m context session
+  - 1m context session date
+  - context session date
+  - context session date span
+  - session date
+  - session date span
+  - session date span april
+  - date span april
+  - span april
+  - session spend estimate
+  - of 18 approved
+  - 18 approved
+  - status clean
+  - git commits landed
+  - for b113
+  - cut over
+  - cut over 1
+  - cut over 1 what
+  - over 1 what
+  - drafts updated
+  - drafts updated with
+  - drafts updated with final
+  - updated with final 8
+  - with final 8
+  - with final 8 model
+  - final 8
+  - final 8 model
+  - nyt op ed v2
+  - op ed v2
+  - ed v2
+  - 6 model
+  - with 8 model
+  - 19 cost for
+  - 19 cost for zero
+  - cost for zero
+  - cost for zero gap
+  - for zero
+  - for zero gap
+  - for zero gap haiku
+  - zero gap
+  - zero gap haiku
+  - zero gap haiku ties
+  - gap haiku
+  - gap haiku ties
+  - gap haiku ties opus
+  - ties opus at 98
+  - opus at 98
+  - opus at 98 7
+  - at 98
+  - at 98 7
+  - alternate lead
+  - hay
+  - hay metaphor
+  - project paint
+  - project paint can
+  - project paint can metaphor
+  - paint can metaphor
+  - paint can metaphor md
+  - can metaphor
+  - can metaphor md
+  - md cross vendor
+  - zero accuracy
+  - numbers disclaimer
+  - interim numbers
+  - scott v014h thermometer
+  - scott v014h thermometer addendum
+  - v014h thermometer
+  - v014h thermometer addendum
+  - thermometer addendum
+  - 2 5 flash 94
+  - 5 flash 94
+  - 5 flash 94 7
+  - flash 94
+  - flash 94 7
+  - at 98 7 19
+  - 98 7 19 cost
+  - 7 19 cost
+  - written fresh
+  - b112 md
+  - b112 md one
+  - k424 knight
+  - k424 knight dispatch
+  - counsel engagement
+  - counsel engagement package
+  - engagement package
+  - counsel engagement package b112
+  - engagement package b112
+  - engagement package b112 md
+  - package b112
+  - package b112 md
+  - bylaws amendment
+  - bylaws amendment task
+  - amendment task
+  - 24h quote
+  - 24h quote helm
+  - 24h quote helm task
+  - quote helm
+  - quote helm task
+  - founder surface
+  - founder surface xubuntu
+  - founder surface xubuntu plan
+  - surface xubuntu
+  - surface xubuntu plan
+  - xubuntu plan
+  - backup overnight
+  - ventoy
+  - per founder b112
+  - founder b112
+  - red carpet ship
+  - carpet ship
+  - ship one
+  - ship one pager
+  - address ask
+  - address ask is
+  - ask is
+  - functional payload
+  - saved to claude
+  - saved to claude projects
+  - to claude projects
+  - new commits
+  - unpushed
+  - d284be7
+  - gzip
+  - 2mb
+  - 2mb aggregate
+  - r10 cross vendor infrastructure
+  - cross vendor infrastructure
+  - vendor infrastructure
+  - k411 k414
+  - k420 k421
+  - hygiene sweep
+  - secrets hygiene
+  - trailing whitespace
+  - trailing whitespace eof
+  - trailing whitespace eof newlines
+  - whitespace eof
+  - whitespace eof newlines
+  - eof
+  - eof newlines
+  - newlines
+  - in flight continuing
+  - in flight continuing past
+  - flight continuing
+  - flight continuing past
+  - continuing past
+  - founder voice pass on
+  - voice pass on
+  - pass on
+  - 80 prose
+  - 80 prose rewrite
+  - 80 prose rewrite per
+  - prose rewrite
+  - prose rewrite per
+  - prose rewrite per feedback
+  - rewrite per feedback drafts
+  - wave 1 scott
+  - wave 1 scott send
+  - 1 scott
+  - 1 scott send
+  - 1 scott send apr
+  - scott send
+  - scott send apr
+  - scott send apr 22
+  - send apr
+  - send apr 22
+  - send apr 22 23
+  - apr 22 23
+  - apr 22 23 v014f
+  - 22 23 v014f
+  - 23 v014f
+  - doctorow v04 send apr
+  - v04 send apr
+  - v04 send apr 23
+  - send apr 23
+  - send apr 23 25
+  - apr 23
+  - apr 23 25
+  - apr 23 25 window
+  - 23 25 window
+  - 25 window
+  - window opens
+  - scott wave
+  - scott wave 1
+  - bylaws pdf
+  - bylaws pdf certificate
+  - bylaws pdf certificate of
+  - pdf certificate of
+  - pdf certificate of incorporation
+  - certificate of
+  - certificate of incorporation
+  - certificate of incorporation sends
+  - of incorporation
+  - of incorporation sends
+  - incorporation
+  - incorporation sends
+  - founder ubuntu
+  - founder ubuntu install
+  - founder ubuntu install on
+  - ubuntu install
+  - ubuntu install on
+  - ubuntu install on the
+  - install on
+  - install on the
+  - install on the surface
+  - on the surface
+  - b112 session
+  - bishop stayed
+  - bishop stayed out
+  - bishop stayed out per
+  - stayed out
+  - stayed out per
+  - stayed out per request
+  - out per request
+  - out per request trebor
+  - per request trebor
+  - request trebor
+  - trebor linkedin
+  - address ask is the
+  - ask is the
+  - ask is the functional
+  - is the functional
+  - is the functional payload
+  - the functional
+  - the functional payload
+  - k424 dispatch to
+  - k424 dispatch to knight
+  - 89 semantic
+  - 89 semantic modifications
+  - semantic modifications
+  - modifications
+  - correct attribution
+  - correct attribution labels
+  - attribution labels
+  - all graded
+  - all graded jsonl
+  - graded jsonl
+  - gzipped
+  - gz
+  - priorities in
+  - priorities in order
+  - priorities in order immediate
+  - in order immediate
+  - immediate first
+  - immediate first 30
+  - immediate first 30 min
+  - first 30
+  - first 30 min
+  - first 30 min of
+  - 30 min of
+  - min of
+  - 1 walk
+  - 1 walk founder
+  - 1 walk founder through
+  - walk founder
+  - walk founder through
+  - walk founder through the
+  - founder through
+  - founder through the
+  - founder through the 89
+  - through the 89
+  - through the 89 semantic
+  - the 89
+  - the 89 semantic
+  - the 89 semantic modifications
+  - 89 semantic modifications list
+  - semantic modifications list
+  - modifications list
+  - with correct attribution
+  - this session 2
+  - this session 2 3
+  - 2 3 hours founder
+  - 3 hours founder
+  - 3 hours founder engagement
+  - hours founder engagement
+  - founder engagement
+  - v014f send
+  - 22 23 window
+  - 23 window
+  - v014h decisions
+  - 4 doctorow
+  - 4 doctorow v04
+  - 4 doctorow v04 send
+  - 5 counsel
+  - 5 counsel engagement
+  - 5 counsel engagement email
+  - counsel engagement email
+  - counsel engagement email send
+  - engagement email
+  - engagement email send
+  - 6 trebor linkedin
+  - founder sends
+  - 7 sanders
+  - 7 sanders aoc
+  - 7 sanders aoc memo
+  - dispatch wave
+  - near term deadlines
+  - near term deadlines reset
+  - term deadlines
+  - term deadlines reset
+  - deadlines reset
+  - apr 22 23 wave
+  - 22 23 wave
+  - 22 23 wave 1
+  - 23 wave
+  - 23 wave 1
+  - 23 wave 1 scott
+  - apr 23 25 doctorow
+  - 23 25 doctorow
+  - 23 25 doctorow v04
+  - 25 doctorow
+  - 25 doctorow v04
+  - 25 doctorow v04 send
+  - doctorow v04 send window
+  - v04 send window
+  - v04 send window wave
+  - send window
+  - send window wave
+  - send window wave 2
+  - window wave
+  - window wave 2
+  - window wave 2 apr
+  - wave 2 apr
+  - wave 2 apr 26
+  - 2 apr 26
+  - 2 apr 26 27
+  - apr 26 27 public
+  - 26 27 public
+  - 26 27 public eyewitness
+  - 27 public
+  - 27 public eyewitness
+  - 27 public eyewitness program
+  - eyewitness program launch discord
+  - program launch discord
+  - program launch discord reddit
+  - launch discord
+  - launch discord reddit
+  - launch discord reddit medium
+  - discord reddit medium
+  - discord reddit medium cephas
+  - reddit medium
+  - reddit medium cephas
+  - apr 28 yale
+  - apr 28 yale ai
+  - 28 yale
+  - 28 yale ai
+  - 28 yale ai symposium
+  - yale ai symposium in
+  - ai symposium in
+  - ai symposium in person
+  - symposium in
+  - symposium in person
+  - symposium in person demo
+  - in person demo table
+  - person demo table
+  - person demo table with
+  - demo table with
+  - benchmark results apr
+  - benchmark results apr 29
+  - results apr
+  - results apr 29
+  - results apr 29 indl
+  - apr 29
+  - apr 29 indl
+  - apr 29 indl na
+  - 29 indl
+  - 29 indl na
+  - 29 indl na in
+  - indl na in
+  - indl na in person
+  - na in
+  - na in person
+  - na in person apr
+  - in person apr
+  - in person apr 29
+  - person apr
+  - person apr 29
+  - on his linkedin
+  - on his linkedin reply
+  - his linkedin
+  - his linkedin reply
+  - linkedin reply
+  - apr 30 indl
+  - apr 30 indl 9
+  - 30 indl
+  - 30 indl 9
+  - 30 indl 9 geneva
+  - indl 9 geneva abstract
+  - 9 geneva abstract
+  - 9 geneva abstract deadline
+  - geneva abstract
+  - geneva abstract deadline
+  - geneva abstract deadline nov
+  - abstract deadline
+  - abstract deadline nov
+  - abstract deadline nov 26
+  - nov 26 2026 prov
+  - 26 2026 prov
+  - 26 2026 prov 13
+  - 2026 prov 13
+  - 2026 prov 13 conversion
+  - prov 13 conversion
+  - prov 13 conversion deadline
+  - 13 conversion
+  - 13 conversion deadline
+  - 13 conversion deadline 7
+  - conversion deadline 7
+  - conversion deadline 7 months
+  - deadline 7
+  - deadline 7 months
+  - 7 months
+  - days out 4
+  - days out 4 what
+  - out 4
+  - out 4 what
+  - out 4 what not
+  - 4 what not
+  - 4 what not to
+  - what not to touch
+  - not to touch
+  - not to touch in
+  - to touch in
+  - touch in
+  - without re ratification
+  - re ratification
+  - milestone b111
+  - milestone b111 closeout
+  - milestone b111 closeout md
+  - b111 closeout md
+  - librarian mcp public k422
+  - mcp public k422
+  - public k422
+  - edits happen
+  - v014g courtesy
+  - v014g courtesy ssl
+  - courtesy
+  - courtesy ssl
+  - keystones 14
+  - keystones 14 15
+  - keystones 14 15 16
+  - founder ratified verbatim
+  - ratified verbatim
+  - k421 applied
+  - write new reversing
+  - new reversing
+  - reversing
+  - don t edit applied
+  - t edit applied
+  - edit applied
+  - cursor rules secrets
+  - cursor rules secrets hygiene
+  - rules secrets
+  - rules secrets hygiene
+  - rules secrets hygiene mdc
+  - secrets hygiene mdc
+  - hygiene mdc
+  - cursorignore
+  - cursorignore pre
+  - cursorignore pre commit
+  - cursorignore pre commit config
+  - pre commit config
+  - pre commit config yaml
+  - commit config
+  - commit config yaml
+  - config yaml
+  - secrets canonicalization scope
+  - canonicalization scope
+  - 5 resumption
+  - 5 resumption prompt
+  - 5 resumption prompt for
+  - resumption
+  - resumption prompt
+  - resumption prompt for
+  - milestone read
+  - milestone read bishop
+  - milestone read bishop dropzone
+  - read bishop dropzone 03
+  - closeout md for full
+  - md for full context
+  - for full context
+  - founder review drafts
+  - review drafts
+  - final 8 model numbers
+  - 8 model numbers
+  - model numbers
+  - v014h sanders aoc staffer
+  - priorities in order 1
+  - founder velocity
+  - founder velocity 3
+  - founder velocity 3 month
+  - velocity 3
+  - velocity 3 month
+  - velocity 3 month per
+  - 3 month
+  - 3 month per
+  - 3 month per day
+  - month per
+  - month per day
+  - month per day build
+  - per day build
+  - per day build for
+  - day build
+  - day build for
+  - day build for the
+  - 7 1m context for
+  - 1m context for
+  - 1m context for the
+  - closeout april 20
+  - closeout april 20 2026
+  - april 20 2026 handoff
+  - 20 2026 handoff
+  - 20 2026 handoff to
+  - k423 final
+  - eyewitness benchmark complete
+  - benchmark complete
+  - for b112
+  - shipped memory
+  - shipped memory canon
+  - shipped memory canon saved
+  - memory canon
+  - memory canon saved
+  - memory canon saved to
+  - canon saved
+  - canon saved to
+  - canon saved to claude
+  - to claude projects c
+  - keystone d
+  - d newmark
+  - d newmark territorial
+  - seattle
+  - until pypi
+  - until pypi lands
+  - pypi lands
+  - memory md indexed
+  - memory md indexed all
+  - md indexed
+  - md indexed all
+  - md indexed all the
+  - indexed all
+  - indexed all the
+  - indexed all the above
+  - all the above engineering
+  - the above engineering
+  - above engineering
+  - q01
+  - at workspace
+  - at workspace root
+  - run completed
+  - manjoo
+  - manjoo klein
+  - manjoo klein angwin
+  - manjoo klein angwin doctorow
+  - klein angwin
+  - klein angwin doctorow
+  - angwin
+  - angwin doctorow
+  - drafts in founder
+  - drafts in founder review
+  - in founder review awaiting
+  - founder review awaiting
+  - founder review awaiting founder
+  - review awaiting
+  - review awaiting founder
+  - review awaiting founder prose
+  - awaiting founder prose
+  - awaiting founder prose pass
+  - founder prose pass
+  - founder prose pass 1
+  - prose pass 1
+  - prose pass 1 nyt
+  - pass 1 nyt
+  - pass 1 nyt op
+  - 1 nyt
+  - 1 nyt op
+  - 1 nyt op ed
+  - 16 phrasing
+  - second letter
+  - in honor of tribute
+  - honor of tribute
+  - of tribute
+  - tribute
+  - mirrored
+  - self sustaining subscription
+  - sustaining subscription
+  - ssss
+  - destination housing
+  - destination housing realtor
+  - destination housing realtor cold
+  - housing realtor
+  - housing realtor cold
+  - housing realtor cold start
+  - realtor
+  - realtor cold
+  - realtor cold start
+  - realtor cold start b109
+  - cold start b109
+  - start b109
+  - canonical laws b109
+  - canonical laws b109 additions
+  - laws b109
+  - laws b109 additions
+  - b109 additions
+  - post k421
+  - scott v014g courtesy
+  - scott v014g courtesy ssl
+  - v014g courtesy ssl edit
+  - courtesy ssl edit
+  - courtesy ssl edit proposal
+  - ssl edit
+  - ssl edit proposal
+  - edit proposal
+  - r9 pitch
+  - r9 pitch block
+  - r9 pitch block v2
+  - pitch block
+  - pitch block v2
+  - pitch block v2 paint
+  - block v2
+  - block v2 paint
+  - block v2 paint librarian
+  - v2 paint
+  - v2 paint librarian
+  - v2 paint librarian ecosystem
+  - paint librarian
+  - paint librarian ecosystem
+  - paint librarian ecosystem 2
+  - librarian ecosystem
+  - librarian ecosystem 2
+  - librarian ecosystem 2 300
+  - ecosystem 2
+  - ecosystem 2 300
+  - ecosystem 2 300 grantee
+  - 2 300 grantee
+  - 2 300 grantee canonical
+  - 300 grantee
+  - 300 grantee canonical
+  - grantee canonical
+  - retire
+  - retire after
+  - retire after v2
+  - retire after v2 ratified
+  - after v2
+  - after v2 ratified
+  - v2 ratified
+  - added to circle
+  - to circle
+  - urgent pre
+  - urgent pre wave
+  - urgent pre wave 1
+  - pre wave
+  - pre wave 1
+  - preload pyproject
+  - founder s 2k
+  - founder s 2k machine
+  - s 2k
+  - s 2k machine
+  - 2k machine
+  - today action
+  - today action queue
+  - action queue
+  - 00 founder review today
+  - founder review today
+  - founder review today apr20
+  - review today
+  - review today apr20
+  - review today apr20 action
+  - today apr20
+  - today apr20 action
+  - today apr20 action queue
+  - apr20
+  - apr20 action
+  - apr20 action queue
+  - apr20 action queue b110
+  - action queue b110
+  - action queue b110 md
+  - queue b110
+  - queue b110 md
+  - today queue
+  - today queue for
+  - 6 gpt
+  - 6 gpt 4o
+  - hot 94 8 mean
+  - 94 8 mean
+  - 94 8 mean cold
+  - 8 mean
+  - 8 mean cold
+  - 8 mean cold 8
+  - mean cold
+  - mean cold 8
+  - mean cold 8 7
+  - memory project eyewitness
+  - memory project eyewitness cross
+  - pre commit first
+  - pre commit first run
+  - commit first
+  - commit first run
+  - commit first run auto
+  - first run auto
+  - first run auto fixes
+  - run auto fixes
+  - auto fixes
+  - sds env canonical for
+  - env canonical for
+  - 4 vendor keys
+  - counsel tasks
+  - bylaws amendment urgent
+  - amendment urgent
+  - stake consumer flow q3
+  - consumer flow q3
+  - consumer flow q3 2026
+  - flow q3
+  - flow q3 2026
+  - flow q3 2026 target
+  - q3 2026 target
+  - 2026 target
+  - b111 interim
+  - nyt v2 op
+  - nyt v2 op ed
+  - v2 op
+  - v2 op ed
+  - v2 op ed doctorow
+  - ed doctorow v04 scott
+  - marked with b111
+  - marked with b111 interim
+  - with b111
+  - with b111 interim
+  - with b111 interim notes
+  - b111 interim notes
+  - interim notes
+  - propagate the
+  - propagate the final
+  - propagate the final 8
+  - the final 8
+  - the final 8 model
+  - apr 26 27 yale
+  - 26 27 yale
+  - 26 27 yale demo
+  - 27 yale
+  - 27 yale demo
+  - at actual
+  - at actual session
+  - at actual session close
+  - actual session close
+  - numbers into
+  - numbers into nyt
+  - numbers into nyt v2
+  - into nyt
+  - into nyt v2
+  - into nyt v2 op
+  - 2 founder voice
+  - 2 founder voice pass
+  - voice pass on top
+  - pass on top
+  - pass on top priority
+  - on top priority
+  - on top priority drafts
+  - top priority drafts
+  - priority drafts
+  - 1 pager
+  - auto fixes as
+  - auto fixes as one
+  - fixes as
+  - fixes as one
+  - fixes as one hygiene
+  - as one hygiene
+  - as one hygiene sweep
+  - one hygiene
+  - one hygiene sweep
+  - doctorow v04 wave
+  - doctorow v04 wave 2
+  - v04 wave
+  - v04 wave 2
+  - should land before
+  - should land before wave
+  - land before wave
+  - land before wave 1
+  - fresh ubuntu install
+  - dispatch k424
+  - dispatch k424 librarian
+  - dispatch k424 librarian v0
+  - founder machine
+  - in person apr 30
+  - person apr 30
+  - person apr 30 indl
+  - deadline 7 months 6
+  - 7 months 6
+  - 7 months 6 days
+  - months 6
+  - months 6 days
+  - months 6 days out
+  - 6 days
+  - 6 days out
+  - in b112
+  - without re ratification lianabanyanplatform
+  - re ratification lianabanyanplatform
+  - re ratification lianabanyanplatform librarian
+  - ratification lianabanyanplatform
+  - ratification lianabanyanplatform librarian
+  - ratification lianabanyanplatform librarian mcp
+  - scaffold files
+  - health accords md has
+  - accords md has
+  - accords md has a
+  - md has a
+  - md has a founder
+  - has a founder
+  - has a founder review
+  - a founder review
+  - a founder review mirror
+  - founder review mirror
+  - founder review mirror edits
+  - review mirror
+  - review mirror edits
+  - review mirror edits happen
+  - mirror edits
+  - mirror edits happen
+  - mirror edits happen on
+  - edits happen on
+  - edits happen on the
+  - happen on
+  - happen on the
+  - happen on the mirror
+  - on the mirror
+  - on the mirror first
+  - the mirror first
+  - the mirror first canonical
+  - mirror first
+  - mirror first canonical
+  - mirror first canonical values
+  - first canonical values
+  - first canonical values yaml
+  - k423 in
+  - hand edit
+  - hand edit any
+  - hand edit any k421
+  - edit any k421
+  - any k421
+  - for full context priorities
+  - full context priorities
+  - full context priorities in
+  - context priorities
+  - context priorities in
+  - context priorities in order
+  - 6 founder
+  - ask before spending
+  - ask before spending see
+  - before spending
+  - before spending see
+  - before spending see you
+  - spending see
+  - spending see you
+  - spending see you in
+  - milestone b110
+  - milestone b110 closeout
+  - b110 closeout
+  - 1m context session spend
+  - context session spend
+  - status clean close
+  - clean close
+  - opens next
+  - opens next session
+  - opens next session 1
+  - next session 1
+  - next session 1 what
+  - session 1 what
+  - newmark territorial vs
+  - newmark territorial vs cross
+  - territorial vs
+  - territorial vs cross
+  - territorial vs cross letter
+  - vs cross
+  - vs cross letter
+  - i learned them 4
+  - learned them 4
+  - them 4
+  - please d
+  - remember the
+  - remember the cant
+  - the cant
+  - cant
+  - mirror to
+  - counter example
+  - b110 close
+  - 2266 2267 cj
+  - 2266 2267 cj status
+  - 2267 cj
+  - 2267 cj status
+  - explicitly yes
+  - explicitly yes d
+  - mirrored to
+  - mirrored to founder
+  - mirrored to founder review
+  - ssss concept
+  - concept b109
+  - destination housing mom
+  - destination housing mom letter
+  - housing mom
+  - housing mom letter
+  - mom letter
+  - new laws
+  - update nyt
+  - update nyt op
+  - update nyt op ed
+  - nyt op ed scott
+  - op ed scott
+  - op ed scott letter
+  - ed scott
+  - ed scott letter
+  - ed scott letter doctorow
+  - scott letter doctorow
+  - scott letter doctorow letter
+  - letter doctorow
+  - letter doctorow letter
+  - letter doctorow letter with
+  - doctorow letter with
+  - doctorow letter with the
+  - letter with the
+  - letter with the thermometer
+  - with the thermometer
+  - with the thermometer framing
+  - meter no
+  - meter no registration
+  - meter no registration gate
+  - no registration
+  - no registration gate
+  - registration gate
+  - stage knight
+  - stage knight k423
+  - stage knight k423 for
+  - knight k423 for
+  - k423 for
+  - in librarian context
+  - new librarian metrics
+  - new librarian metrics tool
+  - pip installable packaging
+  - installable packaging
+  - 3 what not
+  - 3 what not to
+  - in b111
+  - do not hand
+  - do not hand edit
+  - not hand edit
+  - 4 resumption
+  - 4 resumption prompt
+  - 4 resumption prompt for
+  - 2026 session
+  - 2026 session clean
+  - session clean
+  - milestone b109
+  - milestone b109 closeout
+  - b109 closeout
+  - april 19
+  - april 19 2026
+  - sp 15 v2
+  - session reasoning archive b109
+  - reasoning archive b109
+  - reasoning archive b109 md
+  - archive b109
+  - archive b109 md
+  - q01 grader
+  - sp15v2
+  - sp15v2 bulk
+  - sp15v2 bulk concat
+  - sp15v2 bulk concat py
+  - bulk concat
+  - bulk concat py
+  - concat
+  - concat py
+  - py written
+  - 4am
+  - 4am local
+  - correct haiku
+  - rep n
+  - 1 rep
+  - 1 rep n
+  - 1 rep n 75
+  - rep n 75
+  - n 75
+  - b108 haiku
+  - single rep
+  - voucher subscription
+  - i tier
+  - i tier 1
+  - iii mental
+  - iii mental models
+  - iii mental models per
+  - mental models
+  - mental models per
+  - mental models per founder
+  - models per founder
+  - in honor of sends
+  - honor of sends
+  - of sends
+  - founder voice anchors
+  - raw corpus
+  - raw corpus pyramid
+  - corpus pyramid
+  - sp17
+  - sp17 corpus
+  - sp17 corpus pyramid
+  - sp17 corpus pyramid py
+  - corpus pyramid py
+  - pyramid py
+  - letter rewrite
+  - first cron
+  - first cron cycles
+  - cron cycles
+  - any edits
+  - ama
+  - knight k420 task
+  - scholz v16
+  - v16
+  - orsi
+  - self auditing evidence
+  - self auditing evidence table
+  - auditing evidence
+  - auditing evidence table
+  - claim architecture
+  - recommend yes novel
+  - recommend yes novel over
+  - yes novel
+  - yes novel over
+  - yes novel over prior
+  - novel over prior
+  - novel over prior art
+  - defensive patent pledge licensing
+  - patent pledge licensing
+  - pledge licensing
+  - this marketing
+  - r10 eyewitness benchmark k423
+  - eyewitness benchmark k423
+  - eyewitness benchmark k423 the
+  - benchmark k423
+  - benchmark k423 the
+  - benchmark k423 the empirical
+  - k423 the empirical
+  - k423 the empirical substrate
+  - the empirical substrate
+  - the correct column
+  - a cost reduction
+  - at point of contact
+  - point of contact
+  - of contact
+  - an evidence
+  - an evidence table
+  - correctness
+  - correctness rate
+  - self audit
+  - the claim in
+  - in one scroll
+  - one scroll
+  - ai cost marketing
+  - cost marketing
+  - c suite
+  - class action
+  - adjective
+  - adjective marketing
+  - adjective marketing industry
+  - adjective marketing industry leading
+  - marketing industry
+  - marketing industry leading
+  - industry leading
+  - satisfies
+  - the c suite
+  - collapses under
+  - collapses under engineering
+  - collapses under engineering review
+  - under engineering
+  - under engineering review
+  - engineering review
+  - substantiation
+  - before they click
+  - guaranteed x
+  - falls short
+  - no click
+  - no click through
+  - ftc defensible
+  - three tier claim
+  - three tier claim ladder
+  - tier claim
+  - tier claim ladder
+  - claim ladder the
+  - ladder the
+  - the cost reduction
+  - the cost reduction claim
+  - cost reduction claim
+  - cost reduction claim at
+  - reduction claim
+  - reduction claim at
+  - claim at
+  - exactly three intensity
+  - exactly three intensity levels
+  - three intensity
+  - three intensity levels
+  - intensity
+  - intensity levels
+  - intensity levels each
+  - anchored to the weakest
+  - to the weakest
+  - to the weakest observation
+  - the weakest
+  - the weakest observation
+  - weakest observation
+  - middle tier
+  - is the operative
+  - the operative
+  - operative
+  - evidence table adjacent
+  - evidence table adjacent to
+  - table adjacent
+  - table adjacent to
+  - table adjacent to the
+  - adjacent to
+  - adjacent to the
+  - adjacent to the claim
+  - to the claim
+  - to the claim ladder
+  - columns in
+  - e g 0
+  - g 0
+  - self audit primitive
+  - audit primitive
+  - can compute
+  - without leaving the
+  - leaving the
+  - no click through no
+  - click through no
+  - no refund
+  - no refund rail
+  - explicit rejection
+  - explicit rejection of
+  - explicit rejection of guaranteed
+  - rejection of
+  - rejection of guaranteed
+  - of guaranteed
+  - overclaim
+  - the ratio column
+  - ratio column
+  - query divided
+  - query divided by
+  - query divided by correctness
+  - divided
+  - divided by
+  - divided by correctness
+  - divided by correctness rate
+  - by correctness
+  - by correctness rate
+  - structural substitution
+  - presenting
+  - presenting a
+  - columns in the
+  - cost per unit query
+  - per unit query
+  - unit query
+  - scalar
+  - per row
+  - wherein the empirical
+  - wherein the empirical anchor
+  - the empirical anchor
+  - pair of
+  - pair of rows
+  - of rows
+  - in the evidence
+  - in the evidence table
+  - 1 wherein the ratio
+  - wherein the ratio
+  - wherein the ratio column
+  - the ratio column is
+  - ratio column is
+  - tier anchored
+  - tier anchored to
+  - tier anchored to the
+  - the marketing layer
+  - marketing layer
+  - md
+  - b118
+  - b113
+  - b119
+  - bishop
+  - cathedral
+  - this session
+  - dispatch
+  - b121
+  - b112
+  - live
+  - prov
+  - pitch
+  - v0
+  - apr
+  - k424
+  - prov 14
+  - scope
+  - founder review
+  - fix
+  - stub
+  - v02
+  - b120
+  - cathedral effect
+  - pawn
+  - conductor
+  - staged
+  - project
+  - b117
+  - feedback
+  - gate
+  - librarian mcp public
+  - mcp public
+  - closeout
+  - canada
+  - b114
+  - k444
+  - 40k
+  - the2ndsecond
+  - op
+  - op ed
+  - ed
+  - send
+  - canada 40k
+  - shipped
+  - letter
+  - scott
+  - keystone
+  - k451
+  - v04
+  - red
+  - wave 1
+  - v2
+  - numbers
+  - v03
+  - k438b
+  - pedestal
+  - landed
+  - knight sessions
+  - addendum
+  - k428
+  - com
+  - chapter
+  - b116
+  - conductor op
+  - conductor op ed
+  - ssl
+  - librarian the2ndsecond
+  - v0 2
+  - k423
+  - effect
+  - opus 4
+  - opus 4 7
+  - wave
+  - md project
+  - caught
+  - nyt
+  - github
+  - preliminary
+  - the2ndsecond com
+  - filing
+  - open
+  - k437
+  - r11
+  - scribes
+  - b111
+  - in flight
+  - flight
+  - scaffolding
+  - repo
+  - articles
+  - opens
+  - docs
+  - k432
+  - yale
+  - v014h
+  - v0 2 0
+  - companion
+  - spend
+  - saved
+  - handoff
+  - slow blade
+  - blade
+  - knight prompts
+  - k438a
+  - 00 founder
+  - article
+  - k427
+  - cleared
+  - pedestal stake
+  - k433
+  - landing
+  - loom
+  - lands
+  - v01
+  - upekrithen
+  - librarian the2ndsecond com
+  - pypi
+  - marketing
+  - copy
+  - scholz
+  - dns
+  - cephas
+  - doctorow v04
+  - doctorow
+  - hot
+  - commits
+  - counsel
+  - closeout md
+  - ceiling
+  - memory md
+  - mcp reliability
+  - wait
+  - adapter
+  - 00 founder review
+  - trebor
+  - k438
+  - reg
+  - v014f
+  - thermometer
+  - firebase
+  - sanders
+  - claude opus
+  - window
+  - ci
+  - day
+  - claude opus 4
+  - claude opus 4 7
+  - install
+  - mini

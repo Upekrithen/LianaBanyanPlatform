@@ -4,7 +4,15 @@
  * Tests the SP-23 Scribes registry loader.
  *
  * Run: node --test tests/test_registry.mjs (after `npm run build`).
+ *
+ * K474/B122: LIBRARIAN_KEYWORDS_MODE=hand-only set for stability — tests assert on
+ * specific hand-curated keyword values (e.g. R9.keywords.includes("R9")) that could
+ * drift if auto-derived keywords shifted. hand-only anchors the registry to the
+ * pre-K474 baseline for these structural assertions.
  */
+// Set before any imports so the module-level STITCHPUNKS_DIR / mode is correct.
+process.env.LIBRARIAN_KEYWORDS_MODE = "hand-only";
+
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getRegistry, getScribe, listScribeIds, scoreScribe } from "../dist/scribes/registry.js";

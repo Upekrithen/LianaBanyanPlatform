@@ -1,0 +1,70 @@
+{
+  "session": "K474",
+  "phase": "B",
+  "keywords_mode": "auto-only",
+  "k472_k473_hand_adds": "removed",
+  "corpus_id": "R11-CANONICAL-K471",
+  "total_cost_usd": 0.719,
+  "total_records": 50,
+  "halted_on_budget": false,
+  "by_condition": {
+    "anthropic_haiku_bishop": {
+      "n": 50,
+      "HOT": 47,
+      "HIT": 2,
+      "MISS": 1,
+      "cost_usd": 0.719198,
+      "vendor": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "cathedral": "bishop",
+      "hot_pct": 94.0,
+      "hit_pct": 4.0,
+      "miss_pct": 2.0,
+      "hot_or_hit_pct": 98.0
+    }
+  },
+  "by_category": {
+    "architecture_mechanics": {
+      "n": 8,
+      "HOT": 8,
+      "HIT": 0,
+      "MISS": 0,
+      "hot_pct": 100.0
+    },
+    "canonical_statistics": {
+      "n": 9,
+      "HOT": 9,
+      "HIT": 0,
+      "MISS": 0,
+      "hot_pct": 100.0
+    },
+    "economic_governance": {
+      "n": 9,
+      "HOT": 8,
+      "HIT": 0,
+      "MISS": 1,
+      "hot_pct": 88.9
+    },
+    "historical_precedent": {
+      "n": 8,
+      "HOT": 8,
+      "HIT": 0,
+      "MISS": 0,
+      "hot_pct": 100.0
+    },
+    "member_journey": {
+      "n": 8,
+      "HOT": 6,
+      "HIT": 2,
+      "MISS": 0,
+      "hot_pct": 75.0
+    },
+    "regulatory_compliance": {
+      "n": 8,
+      "HOT": 8,
+      "HIT": 0,
+      "MISS": 0,
+      "hot_pct": 100.0
+    }
+  }
+}

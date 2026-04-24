@@ -401,3 +401,121 @@ test("K473-regression: generic 'architecture' query still routes to GenericArch"
   assert.equal(r11Result.score, 0,
     `R11Corpus should score 0 on pure "architecture" query, got ${r11Result.score}`);
 });
+
+// ─── K474 Auto-Derived Keywords Tests ────────────────────────────────────────
+// Verify that auto-derived keywords in synthetic corpus work identically to
+// hand-curated keywords for Lachesis routing. The scoring logic is unchanged —
+// the same rare-token bonus fires regardless of whether a keyword came from
+// hand-curation or corpus-derived auto-extraction.
+//
+// We extend the synthetic registry with a sidecar YAML simulating auto-derived
+// keywords for R11Corpus, then verify LIBRARIAN_KEYWORDS_MODE=union merges them
+// and LIBRARIAN_KEYWORDS_MODE=auto-only uses only auto keywords.
+
+import { writeFileSync as wfs2, mkdirSync as mds2 } from "node:fs";
+import yaml from "js-yaml";
+
+// Write a sidecar auto_keywords file simulating K474 extraction output for R11Corpus
+const AUTO_KEYWORDS_DIR = resolve(TMP_ROOT, "scribes", "auto_keywords");
+mds2(AUTO_KEYWORDS_DIR, { recursive: true });
+const r11AutoSidecar = {
+  scribe_id: "R11Corpus",
+  generated_at: "2026-04-24T00:00:00.000Z",
+  extractor_version: "K474.1",
+  source_hash: "testHash123",
+  keeper_count: 1,
+  file_count: 1,
+  keyword_count: 3,
+  keywords: [
+    "cooperative principles assessment",  // auto-derived (was K473 hand-add; corpus also has it)
+    "reference onboarding framework",     // auto-derived MJ-category term
+    "verdania platform statistics",       // auto-derived exclusive n-gram
+  ],
+};
+wfs2(
+  resolve(AUTO_KEYWORDS_DIR, "R11Corpus.yaml"),
+  yaml.dump(r11AutoSidecar, { lineWidth: 120 }),
+  "utf-8",
+);
+
+test("K474-A: KEYWORDS_MODE=union — auto-derived keywords merge with hand-curated for R11Corpus", () => {
+  process.env.LIBRARIAN_KEYWORDS_MODE = "union";
+  // Force registry reload with union mode
+  const reg = getRegistry(true);
+  const r11 = reg.scribes.find((s) => s.id === "R11Corpus");
+  assert.ok(r11, "R11Corpus must exist");
+
+  // Should have both hand-curated keywords AND auto-derived keywords
+  const kwsLower = r11.keywords.map((k) => k.toLowerCase());
+  assert.ok(kwsLower.includes("verdania"), "Union: hand-curated 'verdania' must be present");
+  assert.ok(kwsLower.includes("reference onboarding framework"),
+    "Union: auto-derived 'reference onboarding framework' must be present");
+  assert.ok(kwsLower.includes("cooperative principles assessment"),
+    "Union: auto-derived 'cooperative principles assessment' must be present");
+});
+
+test("K474-B: auto-derived exclusive keyword 'verdania platform statistics' gets rare-token bonus in union mode", () => {
+  process.env.LIBRARIAN_KEYWORDS_MODE = "union";
+  const reg = getRegistry(true);
+  const rarityMap = computeKeywordRarityMap();
+
+  // "verdania platform statistics" is in R11Corpus (auto-derived) but NOT in GenericArch
+  // → df=1, so it gets the rare-token +1.0 bonus when matched
+  const themes = ["What are the Verdania platform statistics for Q3 2025?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+  const archResult = scoreScribe("GenericArch", themes, rarityMap);
+
+  // R11Corpus: "verdania platform statistics" matches theme → primary + rare bonus ≥ 2.0
+  assert.ok(r11Result.score >= 2.0,
+    `R11Corpus should score ≥2.0 on auto-derived "verdania platform statistics" match, got ${r11Result.score}`);
+  // GenericArch: no match on this term
+  assert.equal(archResult.score, 0,
+    `GenericArch should score 0 on "verdania platform statistics" query, got ${archResult.score}`);
+});
+
+test("K474-C: auto-derived 'reference onboarding framework' routes to R11Corpus in union mode", () => {
+  process.env.LIBRARIAN_KEYWORDS_MODE = "union";
+  const reg = getRegistry(true);
+  const rarityMap = computeKeywordRarityMap();
+
+  // "reference onboarding framework" is auto-derived (also was K473 hand-add)
+  const themes = ["What trial period does the Reference Onboarding Framework specify?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+  const archResult = scoreScribe("GenericArch", themes, rarityMap);
+
+  assert.ok(r11Result.score >= 2.0,
+    `R11Corpus should score ≥2.0 on auto-derived "reference onboarding framework" match, got ${r11Result.score}`);
+  assert.ok(r11Result.score >= archResult.score,
+    `R11Corpus (${r11Result.score}) should outscore GenericArch (${archResult.score})`);
+});
+
+test("K474-D: KEYWORDS_MODE=auto-only — R11Corpus uses ONLY auto-derived keywords, hand-curated excluded", () => {
+  process.env.LIBRARIAN_KEYWORDS_MODE = "auto-only";
+  const reg = getRegistry(true);
+  const r11 = reg.scribes.find((s) => s.id === "R11Corpus");
+  assert.ok(r11, "R11Corpus must exist");
+
+  // auto-only: should NOT have hand-curated "verdania" (bare, from registry)
+  // but SHOULD have auto-derived "verdania platform statistics"
+  const kwsLower = r11.keywords.map((k) => k.toLowerCase());
+  assert.ok(kwsLower.includes("verdania platform statistics"),
+    "auto-only: auto-derived 'verdania platform statistics' must be present");
+  // "verdania" alone was hand-curated; check it is NOT in the auto-only set
+  // (only "verdania platform statistics" and other auto n-grams are)
+  // Note: "verdania" alone may NOT appear separately in auto-only if the sidecar has only the n-gram
+  assert.ok(!kwsLower.includes("thornwick"),
+    "auto-only: hand-curated 'thornwick' must NOT be present (not in auto sidecar)");
+});
+
+test("K474-E: regression — K472/K473 tests still pass after K474 mode tests (hand-only restore)", () => {
+  // Restore hand-only mode so subsequent test files are not affected
+  process.env.LIBRARIAN_KEYWORDS_MODE = "hand-only";
+  const reg = getRegistry(true);
+  const rarityMap = computeKeywordRarityMap();
+
+  // K472 Fix1-B regression: "verdania" (hand-curated) still routes to R11Corpus in hand-only
+  const themes = ["What are the Verdania membership statistics?"];
+  const r11Result = scoreScribe("R11Corpus", themes, rarityMap);
+  assert.ok(r11Result.score >= 2.0,
+    `K474 regression: R11Corpus should score ≥2.0 on "verdania" in hand-only mode, got ${r11Result.score}`);
+});

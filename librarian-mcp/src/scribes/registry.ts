@@ -4,11 +4,20 @@
  * Parses `librarian-mcp/stitchpunks/scribes/registry.yaml` once at server start,
  * caches in-process. Exposes the public surface used by the Three Fates router
  * (Lachesis scoring) and by the consult_scribes tool.
+ *
+ * K474/B122 — Self-Indexing Scribes:
+ * After parsing registry.yaml, loads auto-derived keyword sidecars from
+ * stitchpunks/scribes/auto_keywords/<scribe_id>.yaml and merges them per
+ * LIBRARIAN_KEYWORDS_MODE:
+ *   "union"     (default): hand-curated + auto-derived (deduplicated)
+ *   "auto-only":           auto-derived only; hand-curated keywords ignored
+ *   "hand-only":           hand-curated only; auto sidecar ignored (legacy / test stability)
  */
 import { readFileSync, existsSync, statSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import yaml from "js-yaml";
+import { loadAutoKeywordSidecar, getAutoKeywordsDir } from "./autoExtract.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -68,9 +77,23 @@ interface RegistryCache {
   registry: ScribesRegistry | null;
   loadedAtMs: number;
   mtimeMs: number;
+  /** Cache key includes keyword mode so mode changes force a reload. */
+  keywordsMode: string;
 }
 
-const cache: RegistryCache = { registry: null, loadedAtMs: 0, mtimeMs: 0 };
+const cache: RegistryCache = { registry: null, loadedAtMs: 0, mtimeMs: 0, keywordsMode: "" };
+
+/**
+ * Returns the active LIBRARIAN_KEYWORDS_MODE.
+ *   "union"     (default): hand-curated + auto-derived
+ *   "auto-only":           auto-derived only
+ *   "hand-only":           hand-curated only
+ */
+function getKeywordsMode(): string {
+  const raw = (process.env.LIBRARIAN_KEYWORDS_MODE ?? "union").trim().toLowerCase();
+  if (raw === "auto-only" || raw === "hand-only" || raw === "union") return raw;
+  return "union";
+}
 
 function loadFromDisk(): ScribesRegistry {
   if (!existsSync(REGISTRY_PATH)) {
@@ -86,16 +109,41 @@ function loadFromDisk(): ScribesRegistry {
     s.adjacents = s.adjacents || [];
     s.keywords = (s.keywords || []).filter((k) => typeof k === "string");
   }
+
+  // K474/B122: merge auto-derived keywords based on LIBRARIAN_KEYWORDS_MODE
+  const mode = getKeywordsMode();
+  if (mode !== "hand-only") {
+    const autoDir = getAutoKeywordsDir();
+    for (const s of parsed.scribes) {
+      const autoKws = loadAutoKeywordSidecar(s.id, autoDir);
+      if (mode === "auto-only") {
+        // Replace hand-curated keywords with auto-derived only
+        s.keywords = autoKws;
+      } else {
+        // union: hand-curated first (preserve order), append unique auto keywords
+        const existing = new Set(s.keywords.map((k) => k.toLowerCase()));
+        for (const kw of autoKws) {
+          if (!existing.has(kw.toLowerCase())) {
+            s.keywords.push(kw);
+            existing.add(kw.toLowerCase());
+          }
+        }
+      }
+    }
+  }
+
   return parsed as ScribesRegistry;
 }
 
-/** Returns the parsed registry. Re-reads from disk if the YAML mtime changed. */
+/** Returns the parsed registry. Re-reads from disk if the YAML mtime or keywords mode changed. */
 export function getRegistry(forceReload = false): ScribesRegistry {
   const mtime = existsSync(REGISTRY_PATH) ? statSync(REGISTRY_PATH).mtimeMs : 0;
-  if (!cache.registry || forceReload || mtime !== cache.mtimeMs) {
+  const mode = getKeywordsMode();
+  if (!cache.registry || forceReload || mtime !== cache.mtimeMs || mode !== cache.keywordsMode) {
     cache.registry = loadFromDisk();
     cache.loadedAtMs = Date.now();
     cache.mtimeMs = mtime;
+    cache.keywordsMode = mode;
   }
   return cache.registry;
 }

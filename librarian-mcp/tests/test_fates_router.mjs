@@ -3,7 +3,16 @@
  * ============================
  * Three Fates pipeline tests: Clotho theme extraction, Lachesis scoring,
  * Atropos dispatch on a hand-crafted text.
+ *
+ * K474/B122: LIBRARIAN_KEYWORDS_MODE=hand-only set for stability — Fates routing
+ * tests assert on specific keyword-based dispatch outcomes. The auto-derived sidecar
+ * keywords (added by K474) can shift Scribe scores and break these assertions if
+ * union mode is active against the real registry. hand-only anchors the test to
+ * the pre-K474 baseline behavior.
  */
+// Set before any imports so the registry loads with hand-only mode.
+process.env.LIBRARIAN_KEYWORDS_MODE = "hand-only";
+
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { runFates, clothoExtract } from "../dist/scribes/fates.js";

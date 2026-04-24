@@ -1,0 +1,843 @@
+scribe_id: Architecture
+generated_at: "2026-04-24T15:58:44.335Z"
+extractor_version: K474.1
+source_hash: 372c314e917cef73
+keeper_count: 6
+file_count: 3
+keyword_count: 835
+keywords:
+  - candidate recommend yes the
+  - recommend yes the
+  - 2270 scribes cathedral the
+  - scribes cathedral the storage
+  - cathedral the storage
+  - cathedral the storage substrate
+  - the storage substrate the
+  - storage substrate the
+  - fates route into
+  - route into
+  - 2268 member owned cathedral
+  - member owned cathedral
+  - member owned cathedral the
+  - owned cathedral
+  - owned cathedral the
+  - owned cathedral the member
+  - cathedral the member
+  - cathedral the member product
+  - the member product
+  - the member product deployment
+  - member product deployment
+  - product deployment
+  - session listener
+  - bypasses the fates
+  - 2271 claim
+  - 2271 claim 5
+  - implementation artifact librarian
+  - implementation artifact librarian mcp
+  - artifact librarian
+  - artifact librarian mcp
+  - artifact librarian mcp src
+  - fates ts k436 commit
+  - ts k436 commit
+  - ts k436 commit 6c47d9b
+  - k436 commit 6c47d9b
+  - k436 commit 6c47d9b mcp
+  - commit 6c47d9b mcp
+  - commit 6c47d9b mcp tool
+  - 6c47d9b mcp
+  - 6c47d9b mcp tool
+  - test fates router mjs
+  - fates router mjs
+  - fates router mjs 4
+  - router mjs
+  - router mjs 4
+  - router mjs 4 cases
+  - mjs 4 cases
+  - spin candidate
+  - of session content
+  - without per
+  - recursive
+  - pattern internally
+  - an append
+  - an append only
+  - a routing
+  - every scribe
+  - session exchange
+  - o n
+  - o n m
+  - existing solutions fail in
+  - solutions fail in
+  - fail in
+  - specific ways
+  - specific ways 1
+  - ways 1
+  - routing the
+  - fan
+  - fan out
+  - fan out all
+  - scales o
+  - scales o n
+  - elasticsearch
+  - semantic domain
+  - semantic domain awareness
+  - domain awareness
+  - expertise structure
+  - llm per
+  - llm per message
+  - llm per message classification
+  - per message
+  - per message classification
+  - message classification
+  - per routing
+  - per routing decision
+  - non deterministic
+  - of declared
+  - scribe c
+  - candidate theme
+  - entity regex
+  - clotho s
+  - innovation identifiers
+  - session identifiers
+  - provisional identifiers
+  - platform proper
+  - platform proper nouns
+  - a set
+  - a set of
+  - a set of candidate
+  - set of candidate
+  - set of candidate themes
+  - of candidate themes
+  - clotho s candidate
+  - s candidate
+  - each candidate theme
+  - declared expertise level
+  - level 2 adjacents
+  - 2 adjacents
+  - than level
+  - vs queued
+  - queued status
+  - marked active
+  - theme a
+  - a declared dispatch
+  - a declared dispatch cap
+  - declared dispatch
+  - declared dispatch cap
+  - and routing
+  - the top k
+  - the coverage gap
+  - the coverage gap threshold
+  - coverage gap threshold
+  - gap threshold
+  - 2 matches
+  - atropos flags
+  - a coverage gap
+  - for bishop member
+  - for bishop member review
+  - bishop member
+  - bishop member review
+  - member review
+  - a routing record
+  - themes extracted
+  - and any coverage
+  - and any coverage gap
+  - any coverage
+  - any coverage gap
+  - any coverage gap flags
+  - pass one
+  - active scribe
+  - recursive application
+  - prov 14 scribe uses
+  - 14 scribe uses
+  - scribe uses
+  - analogue
+  - is declared
+  - not accidental
+  - scale fates
+  - scale fates the
+  - fates the
+  - the routing primitive
+  - routing primitive
+  - distinction from
+  - the routing pipeline
+  - routing pipeline the
+  - claimable
+  - append only storage
+  - only storage
+  - for small
+  - the specific contribution
+  - specific contribution
+  - gaps prior art what
+  - prior art what
+  - prior art what it
+  - art what
+  - art what it
+  - art what it does
+  - elasticsearch solr
+  - solr
+  - no semantic
+  - no expertise
+  - no expertise structure
+  - routing no
+  - langchain
+  - langchain llamaindex
+  - llamaindex
+  - publish subscribe
+  - domain semantic
+  - expertise level weighted scoring
+  - level weighted scoring
+  - weighted scoring
+  - 12 adjacent fields at
+  - by declared
+  - primitive that makes
+  - coverage gap detection
+  - the declared
+  - routing record as
+  - audit artifact
+  - routing decision enabling
+  - decision enabling
+  - fates inside
+  - cathedral scale and
+  - scale and
+  - internal phase
+  - we are not claiming
+  - are not claiming
+  - not claiming
+  - is not novel
+  - not novel
+  - are not novel
+  - is not novel what
+  - not novel what
+  - not novel what is
+  - novel what
+  - novel what is
+  - novel what is novel
+  - what is novel
+  - what is novel is
+  - is novel is
+  - is novel is the
+  - novel is
+  - novel is the
+  - novel is the specific
+  - is the specific combination
+  - the specific combination
+  - specific combination
+  - declared primary
+  - adjacent fields coverage
+  - fields coverage
+  - applied to llm
+  - an llm
+  - an llm agent
+  - a plurality
+  - a plurality of
+  - plurality
+  - plurality of
+  - specialist storage
+  - a unit
+  - a unit of
+  - unit of
+  - said content
+  - named entity matching
+  - entity matching
+  - against a declared
+  - declared entity
+  - declared entity pattern
+  - declared entity pattern set
+  - entity pattern
+  - entity pattern set
+  - pattern set
+  - of specialists
+  - specialists
+  - each specialist
+  - one primary domain
+  - one primary domain field
+  - primary domain field
+  - primary domain field and
+  - domain field
+  - domain field and
+  - fields with declared
+  - fields with declared expertise
+  - with declared expertise
+  - with declared expertise levels
+  - and wherein
+  - and wherein the
+  - weighted by declared
+  - weighted by declared expertise
+  - by declared expertise
+  - by declared expertise level
+  - the specialist
+  - s active versus
+  - s active versus queued
+  - active versus
+  - active versus queued
+  - versus queued
+  - a top k
+  - by a declared
+  - declared coverage
+  - declared coverage gap
+  - declared coverage gap threshold
+  - record comprising
+  - 2 apparatus a system
+  - apparatus a system
+  - apparatus a system comprising
+  - a system comprising
+  - a system comprising a
+  - system comprising
+  - system comprising a
+  - module implementing
+  - module implementing claim
+  - module implementing claim 1
+  - implementing claim 1 b
+  - claim 1 b
+  - 1 b
+  - implementing claim 1 c
+  - claim 1 c
+  - implementing claim 1 d
+  - routing record module
+  - record module
+  - 1 wherein the declared
+  - wherein the declared
+  - of claim 1 b
+  - comprises at
+  - comprises at least
+  - identifiers regex
+  - identifiers regex matching
+  - regex matching
+  - wherein the declared expertise
+  - the declared expertise
+  - of claim 1 c
+  - applies non
+  - applies non linear
+  - applies non linear weighting
+  - non linear
+  - non linear weighting
+  - linear weighting
+  - primary field matches
+  - coverage gap threshold of
+  - gap threshold of
+  - gap threshold of claim
+  - threshold of
+  - threshold of claim
+  - threshold of claim 1
+  - of claim 1 d
+  - claim 1 d is
+  - 1 d is
+  - 1 d is three
+  - triply redundant witness property
+  - redundant witness property
+  - witness property
+  - storage artifact
+  - storage artifact of
+  - storage artifact of claim
+  - artifact of claim
+  - artifact of claim 1
+  - without coordination
+  - a configuration file
+  - a configuration file and
+  - configuration file
+  - configuration file and
+  - implementation evidence
+  - implementation evidence source
+  - implementation evidence source librarian
+  - evidence source librarian
+  - evidence source librarian mcp
+  - tool exposed
+  - p95 1
+  - p95 1 6ms
+  - 1 6ms
+  - 6ms
+  - 200ms target
+  - at k436
+  - at k436 seeding
+  - k436 seeding
+  - scribes registry yaml 5
+  - 2 2268 member
+  - 2 2268 member owned
+  - member 3 2271
+  - member 3 2271 sp
+  - 3 2271 sp
+  - 3 2271 sp 21
+  - entry update prov
+  - entry update prov 14
+  - needed recommend yes claims
+  - recommend yes claims
+  - recommend yes claims 9
+  - yes claims
+  - yes claims 9
+  - yes claims 9 claims
+  - triply redundant witness innovation
+  - redundant witness innovation
+  - witness innovation
+  - knowledge stores
+  - recommend yes the architectural
+  - yes the architectural
+  - yes the architectural substrate
+  - the architectural substrate
+  - architectural substrate
+  - substrate the entire
+  - substrate the entire cathedral
+  - the entire cathedral
+  - line rests
+  - line rests on
+  - rests on bishop
+  - rests on bishop session
+  - on bishop session
+  - on bishop session b117
+  - the populator
+  - populator
+  - 21 tidbit scribe sibling
+  - tidbit scribe sibling
+  - tidbit scribe sibling system
+  - scribe sibling
+  - scribe sibling system
+  - sibling system
+  - separate storage
+  - cathedral content across
+  - cathedral content across members
+  - content across members
+  - across members
+  - mcp src scribes cathedral
+  - src scribes cathedral
+  - dr 2 lines an
+  - 2 lines an
+  - lines an
+  - an append only jsonl
+  - declared expertise levels 2
+  - reed solomon style error
+  - solomon style error
+  - solomon style error correcting
+  - style error
+  - style error correcting
+  - style error correcting code
+  - persistent append
+  - persistent append only
+  - retrieval primitive
+  - weighting the
+  - retrieval augmented
+  - retrieval augmented generation
+  - augmented
+  - augmented generation
+  - corpus stores
+  - rag stores
+  - source document or
+  - document or
+  - vector similarity
+  - no expertise level
+  - no expertise level signal
+  - expertise level signal
+  - level signal
+  - a retrieved
+  - a retrieved chunk
+  - a retrieved chunk from
+  - retrieved chunk
+  - retrieved chunk from
+  - retrieved chunk from a
+  - chunk from
+  - chunk from a
+  - the llm
+  - vector databases
+  - databases
+  - pinecone
+  - pinecone weaviate
+  - pinecone weaviate chroma
+  - weaviate
+  - weaviate chroma
+  - chroma
+  - but not semantic
+  - not semantic
+  - knowledge graphs
+  - graphs
+  - neo4j
+  - neo4j rdf
+  - rdf
+  - relational
+  - plain text append
+  - plain text append only
+  - text append
+  - text append only
+  - text append only logs
+  - append only logs
+  - semantic retrieval
+  - domain index
+  - primary retrieval
+  - jsonl file
+  - the append
+  - the append only
+  - architectural invariant
+  - prompt engineering
+  - prompt engineering as
+  - engineering as
+  - as level
+  - adjacent scribe
+  - llm caching
+  - llm caching as
+  - caching as
+  - per 2269
+  - per 2269 claim
+  - per 2269 claim 5
+  - 2269 claim
+  - 2269 claim 5
+  - at write
+  - at write time
+  - at write time by
+  - write time
+  - write time by
+  - o 1 domain
+  - o 1 domain index
+  - 1 domain index
+  - 1 domain index retrieval
+  - domain index retrieval
+  - index retrieval
+  - not o
+  - primary first
+  - primary first pass
+  - primary match
+  - than a declared
+  - conventional rag
+  - adjacent expertise
+  - adjacent expertise structure
+  - retrieval no expertise
+  - primary plus
+  - primary plus adjacent
+  - plus adjacent
+  - triply redundant witness as
+  - redundant witness as
+  - witness as
+  - enforced at write
+  - enforced at write time
+  - the triply
+  - the triply redundant
+  - the triply redundant property
+  - triply redundant property
+  - redundant property
+  - any mcp capable
+  - any mcp capable agent
+  - mcp capable agent
+  - capable agent
+  - applied to llm agent
+  - to llm agent
+  - to llm agent corpus
+  - llm agent corpus
+  - agent corpus
+  - specialist records
+  - numeric range
+  - append only storage artifact
+  - only storage artifact
+  - per specialist
+  - specialists is
+  - coverage gap property
+  - gap property
+  - a declared threshold
+  - declared threshold
+  - review claim
+  - query module
+  - claim 1 d at
+  - 1 d at
+  - 1 d at write
+  - d at write
+  - d at write time
+  - through 12
+  - wherein the query
+  - wherein the query module
+  - the query module
+  - claim 1 c further
+  - 1 c further
+  - c further
+  - property claim
+  - reed solomon analogue
+  - solomon analogue
+  - error correcting codes
+  - correcting codes
+  - 2238 touchstone deterministic
+  - 2238 touchstone deterministic coordinator
+  - touchstone deterministic
+  - touchstone deterministic coordinator
+  - deterministic coordinator
+  - indexer fingerprint ts committed
+  - fingerprint ts committed
+  - fingerprint ts committed b117
+  - ts committed
+  - ts committed b117
+  - committed b117
+  - three state freshness
+  - state freshness
+  - freshness report
+  - hash over
+  - hash over the
+  - and chooses
+  - before any corpus
+  - before any corpus dependent
+  - any corpus
+  - any corpus dependent
+  - at session start is
+  - session start is
+  - a full tree
+  - a full tree walk
+  - make ninja
+  - make ninja sccache
+  - ninja
+  - ninja sccache
+  - sccache
+  - downstream agent
+  - git object
+  - t distinguish
+  - an agent
+  - unknown from
+  - unknown from drift
+  - freshness vocabulary
+  - vocabulary fresh
+  - vocabulary fresh drift
+  - vocabulary fresh drift unknown
+  - fresh drift unknown spoken
+  - drift unknown spoken
+  - unknown spoken
+  - spoken
+  - session hook
+  - session hook integration
+  - an opt
+  - an opt in
+  - treehash
+  - over sorted
+  - over sorted path
+  - over sorted path mtime
+  - sorted path
+  - sorted path mtime
+  - sorted path mtime tuples
+  - path mtime
+  - path mtime tuples
+  - mtime tuples
+  - tuples
+  - if unknown
+  - changedfiles
+  - deletedfiles
+  - newfiles
+  - current tree
+  - fingerprint exists
+  - tree fingerprint
+  - fingerprint report
+  - if drift churn
+  - if drift churn threshold
+  - drift churn
+  - drift churn threshold
+  - churn threshold
+  - forces
+  - forces a
+  - forces a full
+  - of fingerprint
+  - 7 861 files
+  - 7 861 files 12
+  - 861 files
+  - 861 files 12
+  - 861 files 12 scan
+  - files 12
+  - files 12 scan
+  - files 12 scan directories
+  - 12 scan
+  - 12 scan directories
+  - tree level
+  - three state vocabulary
+  - state vocabulary
+  - per file change
+  - per file change lists
+  - file change lists
+  - file change lists attached
+  - change lists
+  - change lists attached
+  - change lists attached to
+  - lists attached
+  - lists attached to
+  - drift report
+  - a change
+  - a change to
+  - session start hook as
+  - start hook as
+  - default integration
+  - agent session start hook
+  - computing
+  - tree level fingerprint
+  - level fingerprint
+  - cryptographic hash
+  - the set
+  - the set of
+  - file path file
+  - file path file modification
+  - path file modification
+  - path file modification time
+  - file modification
+  - file modification time
+  - file modification time tuples
+  - modification time
+  - modification time tuples
+  - time tuples
+  - the persisted
+  - the persisted fingerprint
+  - persisted fingerprint
+  - current fingerprint
+  - persisted fingerprint exists
+  - next action path
+  - action path
+  - configured to
+  - the freshness
+  - the freshness report
+  - of changed
+  - of changed files
+  - 1 wherein the next
+  - wherein the next
+  - wherein the next action
+  - the next action
+  - the next action path
+  - next action path for
+  - action path for
+  - forces a full rebuild
+  - a full rebuild
+  - this fingerprint
+  - b117 e797320
+  - of claim
+  - of claim 1
+  - wherein
+  - claim 1
+  - wherein the
+  - the method
+  - the method of
+  - the method of claim
+  - method of
+  - method of claim
+  - scribes
+  - method of claim 1
+  - of claim 1 wherein
+  - claim 1 wherein
+  - 1 wherein
+  - theme
+  - module
+  - claim 1 wherein the
+  - 1 wherein the
+  - cathedral
+  - fates
+  - a declared
+  - agent
+  - fingerprint
+  - declared expertise
+  - append
+  - stores
+  - specialist
+  - prov
+  - reed
+  - reed solomon
+  - solomon
+  - append only
+  - coverage gap
+  - prov 14
+  - o
+  - librarian mcp src scribes
+  - mcp src scribes
+  - src scribes
+  - level 2
+  - llm agent
+  - implementing claim
+  - implementing claim 1
+  - the agent
+  - comprising
+  - freshness
+  - librarian mcp src
+  - mcp src
+  - matches
+  - comprising a
+  - llm
+  - novel
+  - rebuild
+  - recommend yes
+  - 2271 sp
+  - 2271 sp 21
+  - 2271 sp 21 tidbit
+  - proposed for
+  - proposed for prov
+  - proposed for prov 14
+  - claims claim
+  - claim 2
+  - claim 1 d
+  - claim 9
+  - error correcting
+  - redundant
+  - report
+  - ts
+  - the storage
+  - distinction
+  - per exchange
+  - is the specific
+  - claim 7
+  - phd
+  - o 1
+  - the query
+  - persisted
+  - b117
+  - active
+  - jsonl
+  - hash
+  - path
+  - unknown
+  - k436
+  - routing record
+  - primitive
+  - redundancy
+  - a a formal
+  - a formal
+  - fresh
+  - src
+  - expertise level
+  - triply
+  - triply redundant
+  - start
+  - test
+  - match
+  - queued
+  - consult
+  - string
+  - bishop
+  - lachesis
+  - dispatch
+  - tree
+  - the storage substrate
+  - storage substrate
+  - substrate the
+  - commit 6c47d9b
+  - tests test
+  - candidate themes
+  - session content
+  - at scale
+  - named entity
+  - a coverage
+  - up to 12
+  - declared expertise levels
+  - expertise levels
+  - field matches
+  - claim 5 the
+  - any topic
+  - is covered
+  - is covered by
+  - reed solomon style
+  - solomon style
+  - similarity
+  - durability
+  - level 3
+  - invariant
+  - corruption
+  - content hash
+  - scan directories
+  - architectural
+  - scribes cathedral
+  - substrate
+  - atropos
+  - tablet
+  - witness
+  - session start
+  - the fates
+  - route
+  - claim 5
+  - mcp tool
+  - primary field
+  - weighting
+  - adjacent fields
+  - mtime
+  - artifact
+  - clotho
+  - themes
+  - indexed
