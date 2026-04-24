@@ -1,0 +1,599 @@
+{
+  "session": "K482",
+  "bishop_session": "B123",
+  "corpus_dir": "C:\\Users\\Administrator\\.claude\\projects\\C--Users-Administrator-Documents\\memory",
+  "files_processed": 182,
+  "elapsed_sec": 1.33,
+  "miner_population": 12,
+  "mitosis_events": 11,
+  "root_serial": "LB-CAT.M-0001",
+  "mitosis_log": [
+    {
+      "mitosis_index": 1,
+      "trigger_file": "deep_read_session_12.md",
+      "trigger_file_idx": 3,
+      "parent_serial": "LB-CAT.M-0001",
+      "daughter_serial": "LB-CAT.M-0001.a",
+      "daughter_primary_topic": "files",
+      "elapsed_sec": 0.0
+    },
+    {
+      "mitosis_index": 2,
+      "trigger_file": "feedback_api_key_rotation_threshold.md",
+      "trigger_file_idx": 4,
+      "parent_serial": "LB-CAT.M-0001",
+      "daughter_serial": "LB-CAT.M-0001.b",
+      "daughter_primary_topic": "rotation",
+      "elapsed_sec": 0.0
+    },
+    {
+      "mitosis_index": 3,
+      "trigger_file": "feedback_attribution_one_level.md",
+      "trigger_file_idx": 5,
+      "parent_serial": "LB-CAT.M-0001",
+      "daughter_serial": "LB-CAT.M-0001.c",
+      "daughter_primary_topic": "attribution",
+      "elapsed_sec": 0.01
+    },
+    {
+      "mitosis_index": 4,
+      "trigger_file": "feedback_auto_tidbit_verify_actions.md",
+      "trigger_file_idx": 6,
+      "parent_serial": "LB-CAT.M-0001",
+      "daughter_serial": "LB-CAT.M-0001.d",
+      "daughter_primary_topic": "before",
+      "elapsed_sec": 0.01
+    },
+    {
+      "mitosis_index": 5,
+      "trigger_file": "feedback_banksy_mode.md",
+      "trigger_file_idx": 7,
+      "parent_serial": "LB-CAT.M-0001.a",
+      "daughter_serial": "LB-CAT.M-0001.a.a",
+      "daughter_primary_topic": "founder",
+      "elapsed_sec": 0.01
+    },
+    {
+      "mitosis_index": 6,
+      "trigger_file": "feedback_build_for_long_haul.md",
+      "trigger_file_idx": 8,
+      "parent_serial": "LB-CAT.M-0001.b",
+      "daughter_serial": "LB-CAT.M-0001.b.a",
+      "daughter_primary_topic": "founder",
+      "elapsed_sec": 0.02
+    },
+    {
+      "mitosis_index": 7,
+      "trigger_file": "feedback_canonical_single_source_of_truth.md",
+      "trigger_file_idx": 9,
+      "parent_serial": "LB-CAT.M-0001.a",
+      "daughter_serial": "LB-CAT.M-0001.a.b",
+      "daughter_primary_topic": "canonical",
+      "elapsed_sec": 0.02
+    },
+    {
+      "mitosis_index": 8,
+      "trigger_file": "feedback_canonical_single_source_of_truth.md",
+      "trigger_file_idx": 9,
+      "parent_serial": "LB-CAT.M-0001.b",
+      "daughter_serial": "LB-CAT.M-0001.b.b",
+      "daughter_primary_topic": "canonical",
+      "elapsed_sec": 0.02
+    },
+    {
+      "mitosis_index": 9,
+      "trigger_file": "feedback_canonical_single_source_of_truth.md",
+      "trigger_file_idx": 9,
+      "parent_serial": "LB-CAT.M-0001.c",
+      "daughter_serial": "LB-CAT.M-0001.c.a",
+      "daughter_primary_topic": "canonical",
+      "elapsed_sec": 0.02
+    },
+    {
+      "mitosis_index": 10,
+      "trigger_file": "feedback_cathedral_distinctness_not_conflation.md",
+      "trigger_file_idx": 10,
+      "parent_serial": "LB-CAT.M-0001.a",
+      "daughter_serial": "LB-CAT.M-0001.a.c",
+      "daughter_primary_topic": "cathedral",
+      "elapsed_sec": 0.03
+    },
+    {
+      "mitosis_index": 11,
+      "trigger_file": "feedback_cathedral_distinctness_not_conflation.md",
+      "trigger_file_idx": 10,
+      "parent_serial": "LB-CAT.M-0001.b",
+      "daughter_serial": "LB-CAT.M-0001.b.c",
+      "daughter_primary_topic": "cathedral",
+      "elapsed_sec": 0.03
+    }
+  ],
+  "miner_table": [
+    {
+      "serial": "LB-CAT.M-0001",
+      "parent_serial": null,
+      "primary_topic": "shipped",
+      "branch": null,
+      "provenance_chain": [
+        "LB-CAT.M-0001"
+      ],
+      "tablet_count": 182,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 27,
+        "4": 72,
+        "5": 63,
+        "6": 13
+      },
+      "connection_count": 910,
+      "daughter_serials": [
+        "LB-CAT.M-0001.a",
+        "LB-CAT.M-0001.b",
+        "LB-CAT.M-0001.c",
+        "LB-CAT.M-0001.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "session",
+        "cathedral",
+        "knight",
+        "cooperative",
+        "librarian",
+        "architecture"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 588
+    },
+    {
+      "serial": "LB-CAT.M-0001.a",
+      "parent_serial": "LB-CAT.M-0001",
+      "primary_topic": "files",
+      "branch": "a",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.a"
+      ],
+      "tablet_count": 178,
+      "depth_distribution": {
+        "1": 0,
+        "2": 8,
+        "3": 26,
+        "4": 69,
+        "5": 64,
+        "6": 11
+      },
+      "connection_count": 890,
+      "daughter_serials": [
+        "LB-CAT.M-0001.a.a",
+        "LB-CAT.M-0001.a.b",
+        "LB-CAT.M-0001.a.c",
+        "LB-CAT.M-0001.a.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "session",
+        "cathedral",
+        "knight",
+        "cooperative",
+        "architecture",
+        "platform"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 594
+    },
+    {
+      "serial": "LB-CAT.M-0001.b",
+      "parent_serial": "LB-CAT.M-0001",
+      "primary_topic": "rotation",
+      "branch": "b",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.b"
+      ],
+      "tablet_count": 177,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 30,
+        "4": 64,
+        "5": 66,
+        "6": 10
+      },
+      "connection_count": 885,
+      "daughter_serials": [
+        "LB-CAT.M-0001.b.a",
+        "LB-CAT.M-0001.b.b",
+        "LB-CAT.M-0001.b.c",
+        "LB-CAT.M-0001.b.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "architecture",
+        "platform"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 592
+    },
+    {
+      "serial": "LB-CAT.M-0001.c",
+      "parent_serial": "LB-CAT.M-0001",
+      "primary_topic": "attribution",
+      "branch": "c",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.c"
+      ],
+      "tablet_count": 176,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 26,
+        "4": 63,
+        "5": 71,
+        "6": 9
+      },
+      "connection_count": 880,
+      "daughter_serials": [
+        "LB-CAT.M-0001.c.a",
+        "LB-CAT.M-0001.c.b",
+        "LB-CAT.M-0001.c.c",
+        "LB-CAT.M-0001.c.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "architecture",
+        "platform"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 589
+    },
+    {
+      "serial": "LB-CAT.M-0001.d",
+      "parent_serial": "LB-CAT.M-0001",
+      "primary_topic": "before",
+      "branch": "d",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.d"
+      ],
+      "tablet_count": 175,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 29,
+        "4": 71,
+        "5": 61,
+        "6": 7
+      },
+      "connection_count": 875,
+      "daughter_serials": [
+        "LB-CAT.M-0001.d.a",
+        "LB-CAT.M-0001.d.b",
+        "LB-CAT.M-0001.d.c",
+        "LB-CAT.M-0001.d.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "architecture",
+        "platform"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 585
+    },
+    {
+      "serial": "LB-CAT.M-0001.a.a",
+      "parent_serial": "LB-CAT.M-0001.a",
+      "primary_topic": "founder",
+      "branch": "a",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.a",
+        "LB-CAT.M-0001.a.a"
+      ],
+      "tablet_count": 174,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 28,
+        "4": 67,
+        "5": 64,
+        "6": 8
+      },
+      "connection_count": 870,
+      "daughter_serials": [
+        "LB-CAT.M-0001.a.a.a",
+        "LB-CAT.M-0001.a.a.b",
+        "LB-CAT.M-0001.a.a.c",
+        "LB-CAT.M-0001.a.a.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "architecture",
+        "platform"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 581
+    },
+    {
+      "serial": "LB-CAT.M-0001.b.a",
+      "parent_serial": "LB-CAT.M-0001.b",
+      "primary_topic": "founder",
+      "branch": "a",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.b",
+        "LB-CAT.M-0001.b.a"
+      ],
+      "tablet_count": 173,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 25,
+        "4": 68,
+        "5": 68,
+        "6": 5
+      },
+      "connection_count": 865,
+      "daughter_serials": [
+        "LB-CAT.M-0001.b.a.a",
+        "LB-CAT.M-0001.b.a.b",
+        "LB-CAT.M-0001.b.a.c",
+        "LB-CAT.M-0001.b.a.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "platform",
+        "architecture"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 579
+    },
+    {
+      "serial": "LB-CAT.M-0001.a.b",
+      "parent_serial": "LB-CAT.M-0001.a",
+      "primary_topic": "canonical",
+      "branch": "b",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.a",
+        "LB-CAT.M-0001.a.b"
+      ],
+      "tablet_count": 172,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 24,
+        "4": 64,
+        "5": 70,
+        "6": 7
+      },
+      "connection_count": 860,
+      "daughter_serials": [
+        "LB-CAT.M-0001.a.b.a",
+        "LB-CAT.M-0001.a.b.b",
+        "LB-CAT.M-0001.a.b.c",
+        "LB-CAT.M-0001.a.b.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "platform",
+        "architecture"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 578
+    },
+    {
+      "serial": "LB-CAT.M-0001.b.b",
+      "parent_serial": "LB-CAT.M-0001.b",
+      "primary_topic": "canonical",
+      "branch": "b",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.b",
+        "LB-CAT.M-0001.b.b"
+      ],
+      "tablet_count": 172,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 24,
+        "4": 64,
+        "5": 70,
+        "6": 7
+      },
+      "connection_count": 860,
+      "daughter_serials": [
+        "LB-CAT.M-0001.b.b.a",
+        "LB-CAT.M-0001.b.b.b",
+        "LB-CAT.M-0001.b.b.c",
+        "LB-CAT.M-0001.b.b.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "platform",
+        "architecture"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 578
+    },
+    {
+      "serial": "LB-CAT.M-0001.c.a",
+      "parent_serial": "LB-CAT.M-0001.c",
+      "primary_topic": "canonical",
+      "branch": "a",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.c",
+        "LB-CAT.M-0001.c.a"
+      ],
+      "tablet_count": 172,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 24,
+        "4": 64,
+        "5": 70,
+        "6": 7
+      },
+      "connection_count": 860,
+      "daughter_serials": [
+        "LB-CAT.M-0001.c.a.a",
+        "LB-CAT.M-0001.c.a.b",
+        "LB-CAT.M-0001.c.a.c",
+        "LB-CAT.M-0001.c.a.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "platform",
+        "architecture"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 578
+    },
+    {
+      "serial": "LB-CAT.M-0001.a.c",
+      "parent_serial": "LB-CAT.M-0001.a",
+      "primary_topic": "cathedral",
+      "branch": "c",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.a",
+        "LB-CAT.M-0001.a.c"
+      ],
+      "tablet_count": 171,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 26,
+        "4": 64,
+        "5": 68,
+        "6": 6
+      },
+      "connection_count": 855,
+      "daughter_serials": [
+        "LB-CAT.M-0001.a.c.a",
+        "LB-CAT.M-0001.a.c.b",
+        "LB-CAT.M-0001.a.c.c",
+        "LB-CAT.M-0001.a.c.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "platform",
+        "architecture"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 573
+    },
+    {
+      "serial": "LB-CAT.M-0001.b.c",
+      "parent_serial": "LB-CAT.M-0001.b",
+      "primary_topic": "cathedral",
+      "branch": "c",
+      "provenance_chain": [
+        "LB-CAT.M-0001",
+        "LB-CAT.M-0001.b",
+        "LB-CAT.M-0001.b.c"
+      ],
+      "tablet_count": 171,
+      "depth_distribution": {
+        "1": 0,
+        "2": 7,
+        "3": 26,
+        "4": 64,
+        "5": 68,
+        "6": 6
+      },
+      "connection_count": 855,
+      "daughter_serials": [
+        "LB-CAT.M-0001.b.c.a",
+        "LB-CAT.M-0001.b.c.b",
+        "LB-CAT.M-0001.b.c.c",
+        "LB-CAT.M-0001.b.c.d"
+      ],
+      "top_keywords": [
+        "founder",
+        "bishop",
+        "description",
+        "canonical",
+        "cathedral",
+        "session",
+        "knight",
+        "cooperative",
+        "platform",
+        "architecture"
+      ],
+      "primary_sig_locked": false,
+      "primary_sig_size": 573
+    }
+  ]
+}
