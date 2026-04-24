@@ -1,0 +1,26 @@
+{
+  "session": "K455c",
+  "corpus_id": "R11-CANONICAL-K444-v2",
+  "total_cost_usd": 0.6927,
+  "total_records": 100,
+  "cross_cathedral_lift_pp": 14.0,
+  "classification": "Weak Cross-Cathedral Effect",
+  "by_condition": {
+    "lb_knight_cathedral_only_haiku": {
+      "arm": 1,
+      "n": 50,
+      "HOT": 0,
+      "HIT": 33,
+      "MISS": 17,
+      "hot_pct": 0.0
+    },
+    "lb_knight_cross_bishop_haiku": {
+      "arm": 2,
+      "n": 50,
+      "HOT": 7,
+      "HIT": 29,
+      "MISS": 14,
+      "hot_pct": 14.0
+    }
+  }
+}

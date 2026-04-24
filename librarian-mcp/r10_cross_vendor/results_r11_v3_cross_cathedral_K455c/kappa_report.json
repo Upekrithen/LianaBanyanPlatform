@@ -1,0 +1,77 @@
+{
+  "spot_check_n": 5,
+  "spot_qids": [
+    "R11-AM-04",
+    "R11-CS-04",
+    "R11-EG-07",
+    "R11-HP-03",
+    "R11-MJ-05"
+  ],
+  "primary_grades": [
+    "HIT",
+    "HIT",
+    "MISS",
+    "HIT",
+    "MISS"
+  ],
+  "kappa_grades": [
+    "MISS",
+    "MISS",
+    "MISS",
+    "MISS",
+    "MISS"
+  ],
+  "cohens_kappa": 0.0,
+  "kappa_pass_threshold": 0.7,
+  "kappa_passed": false,
+  "kappa_grader_model": "claude-opus-4-7",
+  "kappa_cost_usd": 0.05985,
+  "grade_changes_on_reconfirmation": 0,
+  "details": [
+    {
+      "qid": "R11-EG-07",
+      "condition": "lb_knight_cathedral_only_haiku",
+      "primary_grade": "HIT",
+      "kappa_grade": "MISS",
+      "agree": false,
+      "kappa_rationale": "The response does not provide the 19% cap and instead states the information is unavailable.",
+      "kappa_cost_usd": 0.012105
+    },
+    {
+      "qid": "R11-AM-04",
+      "condition": "lb_knight_cathedral_only_haiku",
+      "primary_grade": "HIT",
+      "kappa_grade": "MISS",
+      "agree": false,
+      "kappa_rationale": "The candidate response states it does not know and does not provide the correct tier count of 5.",
+      "kappa_cost_usd": 0.01212
+    },
+    {
+      "qid": "R11-CS-04",
+      "condition": "lb_knight_cathedral_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The candidate response does not provide the correct 180-day window and instead states it does not have the information.",
+      "kappa_cost_usd": 0.01122
+    },
+    {
+      "qid": "R11-MJ-05",
+      "condition": "lb_knight_cathedral_only_haiku",
+      "primary_grade": "HIT",
+      "kappa_grade": "MISS",
+      "agree": false,
+      "kappa_rationale": "The response declines to answer and does not provide the 18-month tenure requirement for Steward Tier status.",
+      "kappa_cost_usd": 0.01167
+    },
+    {
+      "qid": "R11-HP-03",
+      "condition": "lb_knight_cathedral_only_haiku",
+      "primary_grade": "MISS",
+      "kappa_grade": "MISS",
+      "agree": true,
+      "kappa_rationale": "The response declines to answer and does not mention Pelham Commons or fiscal year 2022.",
+      "kappa_cost_usd": 0.012735
+    }
+  ]
+}
