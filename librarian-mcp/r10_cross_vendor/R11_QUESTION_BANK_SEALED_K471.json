@@ -1,0 +1,835 @@
+{
+  "bank_version": "2.0.0-sealed",
+  "bank_status": "SEALED — 50 questions, 6 categories. Re-sealed at K471 against r11_canonical_corpus.md (corpus ID R11-CANONICAL-K444-v2). Replaces K444 legacy bank (R11-CANONICAL-K444). DO NOT edit questions or hot_required_elements after this seal commit without bumping bank_version and Bishop ratification.",
+  "corpus_id": "R11-CANONICAL-K471",
+  "corpus_file": "r11_canonical_corpus.md",
+  "corpus_source_id": "R11-CANONICAL-K444-v2",
+  "opened": "2026-04-24",
+  "opened_by": "Knight K471 (B121 dispatch)",
+  "sealed": "2026-04-24",
+  "sealed_by": "Knight K471 automated seal — Founder-approved per B121 dispatch authorization",
+  "predecessor_bank": "R11_QUESTION_BANK_SEALED_K444_LEGACY.json",
+  "predecessor_corpus_id": "R11-CANONICAL-K444",
+  "realignment_note": "K444 bank (R11-CANONICAL-K444) referenced an earlier version of the corpus than what was ingested into Cathedrals at K455c/K455a/K470. Only 8/50 questions from the K444 bank (CS-01 through CS-08) were answerable from the current corpus, bounding K455a/K455c/K455b absolute HOT% at ~16-22%. This K471 bank re-seals all 50 questions against r11_canonical_corpus.md (R11-CANONICAL-K444-v2) to restore a 100% answerable ceiling.",
+  "target_test": "R11 Cross-Vendor Memory Benchmark — verification 2-arm (K471) and subsequent full re-runs",
+  "categories": [
+    "canonical_statistics",
+    "architecture_mechanics",
+    "economic_governance",
+    "member_journey",
+    "regulatory_compliance",
+    "historical_precedent"
+  ],
+  "category_counts": {
+    "canonical_statistics": 9,
+    "architecture_mechanics": 8,
+    "economic_governance": 9,
+    "member_journey": 8,
+    "regulatory_compliance": 8,
+    "historical_precedent": 8
+  },
+  "grading_rubric": "R10 three-tier (HOT / HIT / MISS) — substring matching against hot_required_elements. HOT = all required elements present (case-insensitive substring). HIT = >= ceil(n/2) elements present, at least 1. MISS = fewer than half. Retrieval-correct sub-metric: HOT that is MISS in the cold_haiku baseline = retrieval-correct. HOT that is also HOT in cold_haiku = prior-knowledge-correct.",
+  "alignment_guarantee": "Every question's hot_required_elements are verified exact substrings of r11_canonical_corpus.md at seal time. Theoretical HOT ceiling = 100% (50/50). Any condition scoring below 30% HOT with Cathedral loaded indicates retrieval failure, not question-bank mismatch.",
+  "questions": [
+    {
+      "id": "R11-CS-01",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-01",
+      "question": "How many active member-owners did the Verdania Cooperative Platform report as of Q3 2025?",
+      "ground_truth": "847,293 active member-owners as of Q3 2025.",
+      "canonical_answer": "847,293 active member-owners as of Q3 2025.",
+      "hot_required_elements": ["847,293", "Q3 2025"],
+      "hit_required_elements": ["847"],
+      "hallucination_risk": "high — model may invent a plausible member count",
+      "rubric": {
+        "correct": "Response contains '847,293' and 'Q3 2025' or equivalent date reference",
+        "partial": "Response contains the correct member count or the correct quarter but not both",
+        "incorrect": "Response does not contain the correct member count"
+      }
+    },
+    {
+      "id": "R11-CS-02",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-02",
+      "question": "What total transaction volume did the Verdania Cooperative Platform report for fiscal year 2024?",
+      "ground_truth": "$4.7 billion in fiscal year 2024.",
+      "canonical_answer": "$4.7 billion in fiscal year 2024.",
+      "hot_required_elements": ["4.7 billion", "2024"],
+      "hit_required_elements": ["4.7"],
+      "hallucination_risk": "high — model may invent a plausible volume figure",
+      "rubric": {
+        "correct": "Response contains '4.7 billion' and '2024'",
+        "partial": "Response mentions the scale (billions) but gets the exact figure wrong",
+        "incorrect": "Response does not contain the correct transaction volume"
+      }
+    },
+    {
+      "id": "R11-CS-03",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-03",
+      "question": "What vote threshold does the Cooperative Ledger Standards Body require for constitutional amendments in federated cooperative networks?",
+      "ground_truth": "66.7% of eligible votes.",
+      "canonical_answer": "66.7% of eligible votes for any constitutional amendment.",
+      "hot_required_elements": ["66.7"],
+      "hit_required_elements": ["66"],
+      "hallucination_risk": "medium — model may say two-thirds without the exact decimal",
+      "rubric": {
+        "correct": "Response contains '66.7' or equivalent decimal expression",
+        "partial": "Response says two-thirds or 67% without the canonical 66.7% value",
+        "incorrect": "Response gives a wrong threshold or does not answer"
+      }
+    },
+    {
+      "id": "R11-CS-04",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-04",
+      "question": "How many days does the Cairnfield Protocol give departing member-owners to receive their data in a portable format after submitting formal exit notice?",
+      "ground_truth": "180 days (a 180-day data portability window).",
+      "canonical_answer": "180-day data portability window beginning from the date of the member's formal exit notice.",
+      "hot_required_elements": ["180", "Cairnfield"],
+      "hit_required_elements": ["180"],
+      "hallucination_risk": "medium — model may invent a different portability window",
+      "rubric": {
+        "correct": "Response contains '180' and 'Cairnfield' or equivalent protocol reference",
+        "partial": "Response identifies the Cairnfield Protocol but gives wrong number of days",
+        "incorrect": "Response does not contain the correct window"
+      }
+    },
+    {
+      "id": "R11-CS-05",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-05",
+      "question": "What value did the Solstice Index reach in November 2025, and what primarily drove the increase?",
+      "ground_truth": "4.18 in November 2025, driven by gains in the retrieval-accuracy component from Thornwick architecture adoption.",
+      "canonical_answer": "4.18 in November 2025, driven primarily by gains in the retrieval-accuracy component following widespread adoption of the Thornwick architecture.",
+      "hot_required_elements": ["4.18", "Solstice"],
+      "hit_required_elements": ["4.18"],
+      "hallucination_risk": "high — model may invent a plausible index value",
+      "rubric": {
+        "correct": "Response contains '4.18' and 'Solstice'",
+        "partial": "Response identifies the Solstice Index but gives wrong value",
+        "incorrect": "Response does not contain the correct value or metric name"
+      }
+    },
+    {
+      "id": "R11-CS-06",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-06",
+      "question": "What was the 2024 cohort average member economic surplus per active member-owner, as reported by the Cooperative Capital Framework annual survey?",
+      "ground_truth": "$312 per active member-owner, with a standard deviation of $87.",
+      "canonical_answer": "$312 per active member-owner, with a standard deviation of $87.",
+      "hot_required_elements": ["312"],
+      "hit_required_elements": ["surplus"],
+      "hallucination_risk": "high — model may invent a plausible dollar amount",
+      "rubric": {
+        "correct": "Response contains '312'",
+        "partial": "Response describes the concept correctly but gives wrong dollar amount",
+        "incorrect": "Response does not contain the correct surplus figure"
+      }
+    },
+    {
+      "id": "R11-CS-07",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-07",
+      "question": "Under the Sundry Accord, what percentage of eligible member-owners must be registered for an extraordinary general meeting to be valid?",
+      "ground_truth": "15% of eligible member-owners.",
+      "canonical_answer": "15% of eligible member-owners must register for the session to be valid.",
+      "hot_required_elements": ["15%", "extraordinary"],
+      "hit_required_elements": ["15"],
+      "hallucination_risk": "medium — model may invent a different quorum percentage",
+      "rubric": {
+        "correct": "Response contains '15%' and 'extraordinary'",
+        "partial": "Response identifies the quorum requirement but gives wrong percentage",
+        "incorrect": "Response does not contain the correct quorum figure"
+      }
+    },
+    {
+      "id": "R11-CS-08",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-08",
+      "question": "What is the maximum voting weight any single member can hold in a federated cooperative compliant with the Cooperative Ledger Standards Body?",
+      "ground_truth": "2.3% of total votes, re-computed annually.",
+      "canonical_answer": "2.3% of total votes, re-computed annually.",
+      "hot_required_elements": ["2.3"],
+      "hit_required_elements": ["voting weight"],
+      "hallucination_risk": "high — model may invent a cap like 5% or 10%",
+      "rubric": {
+        "correct": "Response contains '2.3'",
+        "partial": "Response describes a voting weight cap but gives wrong percentage",
+        "incorrect": "Response does not contain the correct cap"
+      }
+    },
+    {
+      "id": "R11-CS-09",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-09",
+      "question": "What minimum reserve funding floor does the Cooperative Capital Framework require, expressed as a percentage of the prior gross transaction volume period?",
+      "ground_truth": "8.5% of the prior 12-month gross transaction volume.",
+      "canonical_answer": "8.5% of the prior 12-month gross transaction volume at all times.",
+      "hot_required_elements": ["8.5%", "12-month"],
+      "hit_required_elements": ["8.5"],
+      "hallucination_risk": "high — model may invent a different reserve floor percentage",
+      "rubric": {
+        "correct": "Response contains '8.5%' and '12-month' or equivalent period reference",
+        "partial": "Response identifies a reserve floor requirement but gives wrong percentage",
+        "incorrect": "Response does not contain the correct reserve floor"
+      }
+    },
+    {
+      "id": "R11-AM-01",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-01",
+      "question": "What is the optimal dense-to-sparse retrieval weighting ratio in the Thornwick architecture, as determined by benchmark grid search?",
+      "ground_truth": "A dense-to-sparse weighting ratio of 0.73:0.27.",
+      "canonical_answer": "dense-to-sparse weighting ratio of 0.73:0.27 — 73% dense semantic embeddings and 27% sparse BM25-style keyword matching.",
+      "hot_required_elements": ["0.73", "Thornwick"],
+      "hit_required_elements": ["0.73"],
+      "hallucination_risk": "high — model may invent a plausible-sounding ratio",
+      "rubric": {
+        "correct": "Response contains '0.73' and 'Thornwick'",
+        "partial": "Response identifies a dual-encoder ratio but gives wrong values or wrong architecture name",
+        "incorrect": "Response does not contain the correct ratio"
+      }
+    },
+    {
+      "id": "R11-AM-02",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-02",
+      "question": "What embedding dimensionality does the Cooperative AI Platform Reference Architecture specify for Scribe memory embeddings in production deployments?",
+      "ground_truth": "1,536-dimensional vectors.",
+      "canonical_answer": "1,536-dimensional vectors for all production deployments.",
+      "hot_required_elements": ["1,536"],
+      "hit_required_elements": ["dimensional"],
+      "hallucination_risk": "high — model may invent a plausible dimensionality (768, 1024, 2048, etc.)",
+      "rubric": {
+        "correct": "Response contains '1,536'",
+        "partial": "Response identifies a specific dimensionality requirement but gives wrong value",
+        "incorrect": "Response does not contain the correct dimensionality"
+      }
+    },
+    {
+      "id": "R11-AM-03",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-03",
+      "question": "What is the default top-K retrieval configuration specified by the Reference Architecture for Scribe memory queries?",
+      "ground_truth": "Top-10 retrieval — the 10 most semantically similar stored entries.",
+      "canonical_answer": "top-10 retrieval — meaning the 10 most semantically similar stored entries are retrieved and presented to the language model as context.",
+      "hot_required_elements": ["top-10"],
+      "hit_required_elements": ["retrieval"],
+      "hallucination_risk": "medium — model may say top-5 or top-20",
+      "rubric": {
+        "correct": "Response contains 'top-10' or 'top 10'",
+        "partial": "Response identifies a top-K retrieval default but gives wrong value",
+        "incorrect": "Response does not contain the correct top-K value"
+      }
+    },
+    {
+      "id": "R11-AM-04",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-04",
+      "question": "What is the maximum token budget allocated to the preload system prompt by the Cooperative AI Platform Reference Architecture?",
+      "ground_truth": "3,200 tokens.",
+      "canonical_answer": "3,200 tokens to the preload system prompt — the foundational instruction set applied to every query.",
+      "hot_required_elements": ["3,200 tokens"],
+      "hit_required_elements": ["3,200"],
+      "hallucination_risk": "high — model may invent a plausible token budget",
+      "rubric": {
+        "correct": "Response contains '3,200 tokens' or '3200 tokens'",
+        "partial": "Response identifies a preload token budget but gives wrong value",
+        "incorrect": "Response does not contain the correct token budget"
+      }
+    },
+    {
+      "id": "R11-AM-05",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-05",
+      "question": "What chunk size and overlap does the Reference Architecture recommend for documents ingested into Scribe memory?",
+      "ground_truth": "400 tokens with a 50-token overlap.",
+      "canonical_answer": "400 tokens with a 50-token overlap for documents ingested into Scribe memory.",
+      "hot_required_elements": ["400 tokens", "50-token overlap"],
+      "hit_required_elements": ["400 tokens"],
+      "hallucination_risk": "medium — model may give different chunk/overlap values",
+      "rubric": {
+        "correct": "Response contains '400 tokens' and '50-token overlap'",
+        "partial": "Response identifies the chunk size but gives wrong overlap, or vice versa",
+        "incorrect": "Response does not contain the correct chunk configuration"
+      }
+    },
+    {
+      "id": "R11-AM-06",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-06",
+      "question": "What is the Reference Architecture's retrieval pipeline latency target for standard member-facing queries, measured from query submission to first token?",
+      "ground_truth": "P99 ≤ 1,400 milliseconds.",
+      "canonical_answer": "P99 ≤ 1,400 milliseconds for standard member-facing queries, measured from query submission to first token of the response.",
+      "hot_required_elements": ["1,400 milliseconds"],
+      "hit_required_elements": ["1,400"],
+      "hallucination_risk": "medium — model may cite 800ms, 1000ms, or 2000ms",
+      "rubric": {
+        "correct": "Response contains '1,400 milliseconds' or '1400ms'",
+        "partial": "Response identifies a P99 latency target but gives wrong value",
+        "incorrect": "Response does not contain the correct latency target"
+      }
+    },
+    {
+      "id": "R11-AM-07",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-07",
+      "question": "What decay function form and half-life does the Reference Architecture specify for membership activity scores used in personalization and retrieval weighting?",
+      "ground_truth": "A logarithmic decay function with a half-life of 180 days.",
+      "canonical_answer": "logarithmic decay function with a half-life of 180 days for membership activity scores.",
+      "hot_required_elements": ["180 days", "logarithmic"],
+      "hit_required_elements": ["180 days"],
+      "hallucination_risk": "medium — model may say exponential decay or give wrong half-life",
+      "rubric": {
+        "correct": "Response contains '180 days' and 'logarithmic'",
+        "partial": "Response identifies the half-life but gives wrong decay form, or vice versa",
+        "incorrect": "Response does not contain the correct decay specification"
+      }
+    },
+    {
+      "id": "R11-AM-08",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-08",
+      "question": "Below what confidence score on the 0-1 scale must responses be flagged with an explicit uncertainty disclosure under the Reference Architecture's hallucination guard system?",
+      "ground_truth": "0.72 on a 0-1 scale.",
+      "canonical_answer": "Responses where the model's self-assessed confidence falls below 0.72 on a 0-1 scale must be flagged with an explicit uncertainty disclosure.",
+      "hot_required_elements": ["0.72"],
+      "hit_required_elements": ["confidence"],
+      "hallucination_risk": "medium — model may confuse with the 0.85 enhanced-disclosure threshold",
+      "rubric": {
+        "correct": "Response contains '0.72'",
+        "partial": "Response identifies a confidence threshold but gives wrong value (e.g. 0.85)",
+        "incorrect": "Response does not contain the correct threshold"
+      }
+    },
+    {
+      "id": "R11-EG-01",
+      "category": "economic_governance",
+      "source_fact_id": "EG-01",
+      "question": "Under the Cooperative Capital Framework, what is the canonical patronage surplus allocation split between transaction-volume-based distribution and equal-per-member distribution?",
+      "ground_truth": "A 70/30 split: 70% allocated by transaction volume and 30% allocated equally per active member.",
+      "canonical_answer": "70/30 split: 70% allocated by transaction volume and 30% allocated equally per active member.",
+      "hot_required_elements": ["70/30", "transaction volume"],
+      "hit_required_elements": ["70/30"],
+      "hallucination_risk": "medium — model may describe a generic pro-rata formula without the 70/30 canonical split",
+      "rubric": {
+        "correct": "Response contains '70/30' and 'transaction volume'",
+        "partial": "Response describes a transaction-weighted plus equal-share formula but gives wrong proportions",
+        "incorrect": "Response does not identify the correct allocation split"
+      }
+    },
+    {
+      "id": "R11-EG-02",
+      "category": "economic_governance",
+      "source_fact_id": "EG-02",
+      "question": "Under the Cooperative Ledger Standards Body's model bylaws, what are the elected director term length and election structure?",
+      "ground_truth": "Three years, with staggered elections such that no more than one-third of the board stands for election in any given year.",
+      "canonical_answer": "three years, with staggered elections such that no more than one-third of the board stands for election in any given year.",
+      "hot_required_elements": ["three years", "staggered"],
+      "hit_required_elements": ["three years"],
+      "hallucination_risk": "medium — model may say two-year or four-year terms",
+      "rubric": {
+        "correct": "Response contains 'three years' and 'staggered'",
+        "partial": "Response identifies the term length or the staggered structure but not both",
+        "incorrect": "Response does not contain the correct term structure"
+      }
+    },
+    {
+      "id": "R11-EG-03",
+      "category": "economic_governance",
+      "source_fact_id": "EG-03",
+      "question": "What four tiers does the Cooperative Capital Framework use to classify cooperative platforms, and what annual gross transaction volume defines Tier 1 and Tier 4?",
+      "ground_truth": "Tier 1 (≥$1B), Tier 2 ($100M-$999M), Tier 3 ($10M-$99M), Tier 4 (<$10M).",
+      "canonical_answer": "Tier 1 (≥$1B), Tier 2 ($100M-$999M), Tier 3 ($10M-$99M), and Tier 4 (<$10M) based on annual gross transaction volume.",
+      "hot_required_elements": ["Tier 1 (≥$1B)", "Tier 4 (<$10M)"],
+      "hit_required_elements": ["Tier 1"],
+      "hallucination_risk": "medium — model may invent different tier thresholds",
+      "rubric": {
+        "correct": "Response contains 'Tier 1 (≥$1B)' and 'Tier 4 (<$10M)' or equivalent expressions",
+        "partial": "Response identifies the four-tier structure but gives wrong threshold values",
+        "incorrect": "Response does not correctly identify the tier classification thresholds"
+      }
+    },
+    {
+      "id": "R11-EG-04",
+      "category": "economic_governance",
+      "source_fact_id": "EG-04",
+      "question": "What quorum percentage and approval majority does the Cooperative Ledger Standards Body's model bylaws require for bylaw amendments?",
+      "ground_truth": "30% of eligible member-owners quorum and 55% approval majority within that quorum.",
+      "canonical_answer": "quorum of 30% of eligible member-owners and, within that quorum, approval by a majority of 55% or more.",
+      "hot_required_elements": ["30%", "55%"],
+      "hit_required_elements": ["55%"],
+      "hallucination_risk": "medium — model may confuse with the 15% extraordinary meeting quorum or 66.7% constitutional threshold",
+      "rubric": {
+        "correct": "Response contains '30%' and '55%' in context of bylaw amendment quorum",
+        "partial": "Response identifies one of the two thresholds correctly but not both",
+        "incorrect": "Response does not contain the correct quorum and approval thresholds"
+      }
+    },
+    {
+      "id": "R11-EG-05",
+      "category": "economic_governance",
+      "source_fact_id": "EG-05",
+      "question": "What is the minimum exit notice period under the Cooperative Capital Framework for standard member exits, from formal exit declaration to payment?",
+      "ground_truth": "60 calendar days from the date of formal exit declaration.",
+      "canonical_answer": "60 calendar days from the date of formal exit declaration to the date on which the platform must tender payment.",
+      "hot_required_elements": ["60 calendar days"],
+      "hit_required_elements": ["60"],
+      "hallucination_risk": "medium — model may say 30 days or 90 days",
+      "rubric": {
+        "correct": "Response contains '60 calendar days' or '60-day'",
+        "partial": "Response identifies an exit notice period but gives wrong duration",
+        "incorrect": "Response does not contain the correct exit notice period"
+      }
+    },
+    {
+      "id": "R11-EG-06",
+      "category": "economic_governance",
+      "source_fact_id": "EG-06",
+      "question": "Under the Federated Platform Compact, what percentage of gross transaction revenue goes to the network federation operator, and what higher rate applies to platforms exceeding 500,000 active members?",
+      "ground_truth": "12% standard rate; 15% for platforms exceeding 500,000 active members.",
+      "canonical_answer": "12% of gross transaction revenue to the network federation operator; platforms that exceed 500,000 active members pay a higher federation fee of 15%.",
+      "hot_required_elements": ["12%", "500,000 active members"],
+      "hit_required_elements": ["12%"],
+      "hallucination_risk": "medium — model may invent different federation fee percentages",
+      "rubric": {
+        "correct": "Response contains '12%' and '500,000 active members' or equivalent threshold",
+        "partial": "Response identifies the federation fee structure but gives wrong rate(s) or threshold",
+        "incorrect": "Response does not correctly identify the federation fee structure"
+      }
+    },
+    {
+      "id": "R11-EG-07",
+      "category": "economic_governance",
+      "source_fact_id": "EG-07",
+      "question": "What minimum gender diversity and non-founding geographic representation do the Cooperative Ledger Standards Body's 2024 governance guidelines recommend for cooperative platform boards?",
+      "ground_truth": "Minimum 40% gender diversity and 30% representation from non-founding geographic regions within five years of platform launch.",
+      "canonical_answer": "minimum of 40% gender diversity and 30% representation from non-founding geographic regions within five years of platform launch.",
+      "hot_required_elements": ["40% gender diversity", "30% representation"],
+      "hit_required_elements": ["40%"],
+      "hallucination_risk": "medium — model may invent different diversity percentages",
+      "rubric": {
+        "correct": "Response contains '40% gender diversity' and '30% representation' or equivalent",
+        "partial": "Response identifies one of the two diversity targets correctly",
+        "incorrect": "Response does not correctly identify the board diversity guidelines"
+      }
+    },
+    {
+      "id": "R11-EG-08",
+      "category": "economic_governance",
+      "source_fact_id": "EG-08",
+      "question": "What minimum advance notice do the Cooperative Ledger Standards Body's model bylaws require before an annual general meeting?",
+      "ground_truth": "45 calendar days before the annual general meeting.",
+      "canonical_answer": "minimum advance notice of 45 calendar days before an annual general meeting.",
+      "hot_required_elements": ["45 calendar days"],
+      "hit_required_elements": ["45"],
+      "hallucination_risk": "medium — model may say 30 days or 60 days",
+      "rubric": {
+        "correct": "Response contains '45 calendar days' or '45-day notice'",
+        "partial": "Response identifies an AGM advance notice requirement but gives wrong duration",
+        "incorrect": "Response does not contain the correct advance notice period"
+      }
+    },
+    {
+      "id": "R11-EG-09",
+      "category": "economic_governance",
+      "source_fact_id": "EG-09",
+      "question": "What annual equity buyback cap does the Cooperative Capital Framework impose on cooperative platforms without explicit board authorization?",
+      "ground_truth": "No more than 25% of outstanding member equity per fiscal year.",
+      "canonical_answer": "no more than 25% of outstanding member equity per fiscal year, without explicit board authorization for a higher rate.",
+      "hot_required_elements": ["25%", "outstanding member equity"],
+      "hit_required_elements": ["25%"],
+      "hallucination_risk": "high — model may invent a different buyback cap percentage",
+      "rubric": {
+        "correct": "Response contains '25%' and 'outstanding member equity' or equivalent",
+        "partial": "Response identifies a buyback cap but gives wrong percentage",
+        "incorrect": "Response does not contain the correct buyback cap"
+      }
+    },
+    {
+      "id": "R11-MJ-01",
+      "category": "member_journey",
+      "source_fact_id": "MJ-01",
+      "question": "Within how many business days does the Cooperative Ledger Standards Body benchmark recommend that membership applications be processed, from submission to formal decision?",
+      "ground_truth": "10 business days from submission to formal decision.",
+      "canonical_answer": "10 business days from submission to formal decision, inclusive of any identity verification steps.",
+      "hot_required_elements": ["10 business days"],
+      "hit_required_elements": ["10"],
+      "hallucination_risk": "medium — model may say 5 business days or 30 days",
+      "rubric": {
+        "correct": "Response contains '10 business days'",
+        "partial": "Response identifies a processing time benchmark but gives wrong value",
+        "incorrect": "Response does not contain the correct processing time"
+      }
+    },
+    {
+      "id": "R11-MJ-02",
+      "category": "member_journey",
+      "source_fact_id": "MJ-02",
+      "question": "What is the minimum passing score on the Cooperative Principles Assessment required for a new member-owner to be granted full voting rights?",
+      "ground_truth": "75 out of 100 on the Cooperative Principles Assessment.",
+      "canonical_answer": "minimum passing score of 75 out of 100 on the Cooperative Principles Assessment before a new member-owner is granted full voting rights.",
+      "hot_required_elements": ["75 out of 100", "Cooperative Principles Assessment"],
+      "hit_required_elements": ["75"],
+      "hallucination_risk": "medium — model may say 70 or 80 out of 100",
+      "rubric": {
+        "correct": "Response contains '75 out of 100' and 'Cooperative Principles Assessment' or equivalent",
+        "partial": "Response identifies the assessment and threshold but gives wrong score",
+        "incorrect": "Response does not contain the correct assessment score"
+      }
+    },
+    {
+      "id": "R11-MJ-03",
+      "category": "member_journey",
+      "source_fact_id": "MJ-03",
+      "question": "What is the standard provisional member trial period under the Reference Onboarding Framework, from application approval?",
+      "ground_truth": "90 days from the date the application is approved.",
+      "canonical_answer": "90 days from the date the application is approved — during which provisional members may access services but may not vote, hold office, or count toward quorum.",
+      "hot_required_elements": ["90 days"],
+      "hit_required_elements": ["90"],
+      "hallucination_risk": "medium — model may say 30 days or 60 days",
+      "rubric": {
+        "correct": "Response contains '90 days'",
+        "partial": "Response identifies a provisional trial period but gives wrong duration",
+        "incorrect": "Response does not contain the correct trial period"
+      }
+    },
+    {
+      "id": "R11-MJ-04",
+      "category": "member_journey",
+      "source_fact_id": "MJ-04",
+      "question": "How frequently does the Cooperative Ledger Standards Body recommend member satisfaction surveys be conducted, and within how many days of survey close must results be reported to the board?",
+      "ground_truth": "Every six months (biannually); results reported to the board within 30 days of survey close.",
+      "canonical_answer": "conducted at minimum every six months (biannually), with results reported to the board within 30 days of survey close.",
+      "hot_required_elements": ["biannually", "30 days of survey close"],
+      "hit_required_elements": ["biannually"],
+      "hallucination_risk": "medium — model may say annually or quarterly",
+      "rubric": {
+        "correct": "Response contains 'biannually' or 'every six months' and '30 days of survey close' or equivalent",
+        "partial": "Response identifies the frequency or the reporting deadline but not both",
+        "incorrect": "Response does not contain the correct survey cadence"
+      }
+    },
+    {
+      "id": "R11-MJ-05",
+      "category": "member_journey",
+      "source_fact_id": "MJ-05",
+      "question": "Within how many business days of full membership confirmation must new members be paired with experienced mentors under the Reference Onboarding Framework, and what is the highest-weighted pairing criterion?",
+      "ground_truth": "Within 15 business days; sector alignment (35%) is the highest-weighted criterion.",
+      "canonical_answer": "pair new members with experienced member mentors within 15 business days of full membership confirmation; sector alignment (35%) is the highest-weighted pairing criterion.",
+      "hot_required_elements": ["15 business days", "sector alignment (35%)"],
+      "hit_required_elements": ["15 business days"],
+      "hallucination_risk": "high — model may invent pairing timelines or criterion weights",
+      "rubric": {
+        "correct": "Response contains '15 business days' and 'sector alignment (35%)' or equivalent",
+        "partial": "Response identifies the pairing timeline or the top criterion but not both",
+        "incorrect": "Response does not contain the correct mentorship pairing specification"
+      }
+    },
+    {
+      "id": "R11-MJ-06",
+      "category": "member_journey",
+      "source_fact_id": "MJ-06",
+      "question": "What minimum exit interview completion rate does the Standards Body benchmark recommend, and at what threshold below that are platforms required to implement proactive outreach programs?",
+      "ground_truth": "Minimum 60% completion rate; proactive outreach required below 40%.",
+      "canonical_answer": "achieve a minimum exit interview completion rate of 60% among departing members; platforms achieving below 40% are required to implement proactive outreach programs.",
+      "hot_required_elements": ["completion rate of 60%", "below 40%"],
+      "hit_required_elements": ["completion rate of 60%"],
+      "hallucination_risk": "high — model may invent different completion rate thresholds",
+      "rubric": {
+        "correct": "Response contains 'completion rate of 60%' and 'below 40%' or equivalent pair",
+        "partial": "Response identifies one of the two thresholds correctly",
+        "incorrect": "Response does not contain the correct exit interview completion targets"
+      }
+    },
+    {
+      "id": "R11-MJ-07",
+      "category": "member_journey",
+      "source_fact_id": "MJ-07",
+      "question": "What acknowledgment and substantive response timeframes do the Reference Communication Standards specify for standard member inquiries submitted through the official support channel?",
+      "ground_truth": "Acknowledgment within 4 business hours; substantive response within 3 business days.",
+      "canonical_answer": "receive an acknowledgment within 4 business hours and a substantive response within 3 business days for standard inquiries.",
+      "hot_required_elements": ["4 business hours", "3 business days"],
+      "hit_required_elements": ["4 business hours"],
+      "hallucination_risk": "medium — model may invent different SLA values",
+      "rubric": {
+        "correct": "Response contains '4 business hours' and '3 business days'",
+        "partial": "Response identifies one of the two SLA values correctly",
+        "incorrect": "Response does not contain the correct communication SLA"
+      }
+    },
+    {
+      "id": "R11-MJ-08",
+      "category": "member_journey",
+      "source_fact_id": "MJ-08",
+      "question": "At what intervals does the Reference Onboarding Framework recommend cooperative platforms formally recognize member tenure, and at which specific milestone years?",
+      "ground_truth": "5-year intervals, with milestone acknowledgments at 5, 10, 15, and 20 years.",
+      "canonical_answer": "formally recognize member tenure at 5-year intervals, with milestone acknowledgments at 5, 10, 15, and 20 years.",
+      "hot_required_elements": ["5-year intervals", "5, 10, 15, and 20 years"],
+      "hit_required_elements": ["5-year intervals"],
+      "hallucination_risk": "medium — model may invent different interval or milestone structure",
+      "rubric": {
+        "correct": "Response contains '5-year intervals' and '5, 10, 15, and 20 years'",
+        "partial": "Response identifies the interval or the specific milestones but not both",
+        "incorrect": "Response does not contain the correct tenure recognition structure"
+      }
+    },
+    {
+      "id": "R11-RC-01",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-01",
+      "question": "Under the Cooperative AI Governance Charter, how frequently must AI models in member-facing roles undergo comprehensive third-party audits for renewal certification?",
+      "ground_truth": "Every 24 months (a 24-month cycle).",
+      "canonical_answer": "24-month cycle — models whose certification has lapsed may not be used for consequential member decisions until recertification is complete.",
+      "hot_required_elements": ["24-month cycle", "Cooperative AI Governance Charter"],
+      "hit_required_elements": ["24-month"],
+      "hallucination_risk": "medium — model may say annually or every 36 months",
+      "rubric": {
+        "correct": "Response contains '24-month cycle' and 'Cooperative AI Governance Charter' or equivalent",
+        "partial": "Response identifies the audit cycle duration but misnames the governing document",
+        "incorrect": "Response does not contain the correct audit certification period"
+      }
+    },
+    {
+      "id": "R11-RC-02",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-02",
+      "question": "Under the Cooperative Data Stewardship Standard, after how many consecutive months of inactivity must a member's personal data be deleted or fully anonymized?",
+      "ground_truth": "36 consecutive months of inactivity.",
+      "canonical_answer": "36 consecutive months — members must be notified at minimum 60 days before the deletion or anonymization deadline.",
+      "hot_required_elements": ["36 consecutive months"],
+      "hit_required_elements": ["36"],
+      "hallucination_risk": "medium — model may cite GDPR-based 24-month or 48-month windows",
+      "rubric": {
+        "correct": "Response contains '36 consecutive months'",
+        "partial": "Response identifies the inactivity-based deletion requirement but gives wrong duration",
+        "incorrect": "Response does not contain the correct retention threshold"
+      }
+    },
+    {
+      "id": "R11-RC-03",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-03",
+      "question": "What framework does the Cooperative AI Governance Charter require for certifying cross-border member data transfers?",
+      "ground_truth": "The Meridian Data Framework.",
+      "canonical_answer": "certified under the Meridian Data Framework — the sector-specific adequacy agreement developed through collaboration between the Cooperative Ledger Standards Body and eleven national data protection authorities.",
+      "hot_required_elements": ["Meridian Data Framework"],
+      "hit_required_elements": ["Meridian"],
+      "hallucination_risk": "high — model may cite GDPR Standard Contractual Clauses or invent a different framework name",
+      "rubric": {
+        "correct": "Response contains 'Meridian Data Framework'",
+        "partial": "Response identifies a sector-specific cross-border certification framework but misnames it",
+        "incorrect": "Response does not identify the Meridian Data Framework"
+      }
+    },
+    {
+      "id": "R11-RC-04",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-04",
+      "question": "Under the Cooperative Data Stewardship Standard, within how many hours of the platform becoming aware of a security or privacy incident must members be notified?",
+      "ground_truth": "72 hours of the platform becoming aware of the incident.",
+      "canonical_answer": "within 72 hours of the platform becoming aware of the incident — regulatory notification must occur within 48 hours, ahead of member notification.",
+      "hot_required_elements": ["72 hours", "platform becoming aware"],
+      "hit_required_elements": ["72 hours"],
+      "hallucination_risk": "medium — model may cite GDPR's 72-hour regulatory notification as the member notification window",
+      "rubric": {
+        "correct": "Response contains '72 hours' and 'platform becoming aware' or equivalent",
+        "partial": "Response identifies a 72-hour notification window but attributes it to regulatory rather than member notification",
+        "incorrect": "Response does not contain the correct member notification window"
+      }
+    },
+    {
+      "id": "R11-RC-05",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-05",
+      "question": "How frequently must third-party technology vendors providing critical services be assessed under the Cooperative AI Governance Charter, and by what instrument?",
+      "ground_truth": "A 12-month cycle using a standardized vendor assessment questionnaire.",
+      "canonical_answer": "assessed on a 12-month cycle using a standardized vendor assessment questionnaire.",
+      "hot_required_elements": ["12-month cycle", "vendor assessment questionnaire"],
+      "hit_required_elements": ["12-month"],
+      "hallucination_risk": "medium — model may confuse with the 24-month AI audit cycle",
+      "rubric": {
+        "correct": "Response contains '12-month cycle' and 'vendor assessment questionnaire' or equivalent",
+        "partial": "Response identifies the vendor assessment cadence but gives wrong cycle length or misnames the instrument",
+        "incorrect": "Response does not contain the correct vendor assessment specification"
+      }
+    },
+    {
+      "id": "R11-RC-06",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-06",
+      "question": "What three minimum elements does the Cooperative Ledger Standards Body require for cooperative platform whistleblower protection programs?",
+      "ground_truth": "Anonymous reporting capability, independent investigation by a party with no reporting line to the accused, and formal non-retaliation policy with documented enforcement.",
+      "canonical_answer": "anonymous reporting capability, independent investigation by a party with no reporting line to the accused, and formal non-retaliation policy with documented enforcement.",
+      "hot_required_elements": ["anonymous reporting capability", "non-retaliation policy"],
+      "hit_required_elements": ["anonymous reporting"],
+      "hallucination_risk": "medium — model may describe generic whistleblower provisions without the Standards Body's specific three-element formulation",
+      "rubric": {
+        "correct": "Response contains 'anonymous reporting capability' and 'non-retaliation policy' or equivalent",
+        "partial": "Response identifies two of the three required elements",
+        "incorrect": "Response does not correctly identify the Standards Body's three-element minimum standard"
+      }
+    },
+    {
+      "id": "R11-RC-07",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-07",
+      "question": "What single-transaction amount and 30-day cumulative threshold does the Cooperative Capital Framework recommend for automated AML transaction monitoring?",
+      "ground_truth": "$15,000 single transaction; $50,000 cumulative in a 30-day window.",
+      "canonical_answer": "flags for human review any single transaction exceeding $15,000 or any pattern of transactions in a 30-day window that cumulatively exceeds $50,000 from a single member account.",
+      "hot_required_elements": ["$15,000", "$50,000"],
+      "hit_required_elements": ["$15,000"],
+      "hallucination_risk": "high — model may invent different AML threshold amounts",
+      "rubric": {
+        "correct": "Response contains '$15,000' and '$50,000'",
+        "partial": "Response identifies one of the two thresholds correctly",
+        "incorrect": "Response does not contain the correct AML monitoring thresholds"
+      }
+    },
+    {
+      "id": "R11-RC-08",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-08",
+      "question": "Below what confidence threshold does the Cooperative AI Governance Charter require an enhanced disclosure — including a confidence indicator — for AI-generated content delivered to members?",
+      "ground_truth": "Below 0.85 confidence.",
+      "canonical_answer": "a confidence indicator where the platform's hallucination guard system has assessed confidence below 0.85 — content generated with confidence at or above 0.85 may be delivered with a briefer disclosure omitting the confidence indicator.",
+      "hot_required_elements": ["0.85"],
+      "hit_required_elements": ["confidence"],
+      "hallucination_risk": "medium — model may confuse with the 0.72 human-review routing threshold",
+      "rubric": {
+        "correct": "Response contains '0.85'",
+        "partial": "Response identifies a confidence disclosure threshold but gives wrong value (e.g. 0.72)",
+        "incorrect": "Response does not contain the correct enhanced-disclosure threshold"
+      }
+    },
+    {
+      "id": "R11-HP-01",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-01",
+      "question": "Where and on what date was the first Cooperative AI Platform Summit convened, and what founding document did it produce?",
+      "ground_truth": "Reykjavik, Iceland, on March 14, 2019; it produced the Reykjavik Declaration.",
+      "canonical_answer": "convened in Reykjavik, Iceland, on March 14, 2019; produced the Reykjavik Declaration establishing the principles of member sovereignty, democratic governance, and AI transparency.",
+      "hot_required_elements": ["Reykjavik", "March 14, 2019"],
+      "hit_required_elements": ["Reykjavik"],
+      "hallucination_risk": "high — model may invent a different city, date, or document name",
+      "rubric": {
+        "correct": "Response contains 'Reykjavik' and 'March 14, 2019'",
+        "partial": "Response gives the city or the date but not both, or misnames the resulting document",
+        "incorrect": "Response does not correctly identify the founding summit location or date"
+      }
+    },
+    {
+      "id": "R11-HP-02",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-02",
+      "question": "When did the Verdania Cooperative Platform enter financial distress and how long was its Cooperative Capital Framework receivership?",
+      "ground_truth": "Q2 2021; fourteen months (June 2021 to August 2022).",
+      "canonical_answer": "entered financial distress in Q2 2021 and was placed under Cooperative Capital Framework receivership for fourteen months — from June 2021 to August 2022.",
+      "hot_required_elements": ["Q2 2021", "fourteen months"],
+      "hit_required_elements": ["Q2 2021"],
+      "hallucination_risk": "high — model may invent different distress timing or receivership duration",
+      "rubric": {
+        "correct": "Response contains 'Q2 2021' and 'fourteen months'",
+        "partial": "Response gives the distress period or the receivership duration but not both",
+        "incorrect": "Response does not correctly identify the Verdania receivership facts"
+      }
+    },
+    {
+      "id": "R11-HP-03",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-03",
+      "question": "Where and when was the Sundry Accord drafted, and what governance problem caused the conference to be convened?",
+      "ground_truth": "Nairobi, Kenya, in September 2020; convened in response to governance crises caused by inadequate quorum standards allowing narrow factions to pass resolutions.",
+      "canonical_answer": "three-week conference in Nairobi, Kenya, in September 2020; convened in response to a series of governance crises across six cooperative platforms in which inadequate quorum standards had allowed narrow factions to pass consequential resolutions.",
+      "hot_required_elements": ["Nairobi", "September 2020"],
+      "hit_required_elements": ["Nairobi"],
+      "hallucination_risk": "high — model may invent a different city or year for the Sundry Accord drafting",
+      "rubric": {
+        "correct": "Response contains 'Nairobi' and 'September 2020'",
+        "partial": "Response identifies one of the two correct location/timing details",
+        "incorrect": "Response does not correctly identify the Sundry Accord drafting location or date"
+      }
+    },
+    {
+      "id": "R11-HP-04",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-04",
+      "question": "Where did the first AI model certification failure under the Cooperative AI Governance Charter occur, and what caused the model to fail?",
+      "ground_truth": "Hartwell Cooperative Platform in Q3 2022; systematic underperformance on queries from members of two specific regional dialects.",
+      "canonical_answer": "Hartwell Cooperative Platform in Q3 2022; failed the fairness audit due to systematic underperformance on queries submitted by members from two specific regional dialects.",
+      "hot_required_elements": ["Hartwell", "Q3 2022"],
+      "hit_required_elements": ["Hartwell"],
+      "hallucination_risk": "high — model may invent a different platform name or failure cause",
+      "rubric": {
+        "correct": "Response contains 'Hartwell' and 'Q3 2022'",
+        "partial": "Response identifies the platform or the timing of the failure but not both",
+        "incorrect": "Response does not correctly identify the first AI model certification failure"
+      }
+    },
+    {
+      "id": "R11-HP-05",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-05",
+      "question": "Where and when was the Cairnfield Protocol finalized, and what elevated the conference from producing guidelines to a binding protocol?",
+      "ground_truth": "Cairnfield, Scotland, in April 2022; member advocates supported by three national data protection authorities argued for binding obligations.",
+      "canonical_answer": "finalized at a summit held in Cairnfield, Scotland, in April 2022; member advocates, supported by three national data protection authorities, argued that non-binding guidelines had been systematically ignored.",
+      "hot_required_elements": ["Cairnfield, Scotland", "April 2022"],
+      "hit_required_elements": ["Cairnfield, Scotland"],
+      "hallucination_risk": "high — model may invent a different location or year",
+      "rubric": {
+        "correct": "Response contains 'Cairnfield, Scotland' and 'April 2022'",
+        "partial": "Response identifies the location or the timing but not both",
+        "incorrect": "Response does not correctly identify the Cairnfield Protocol finalization details"
+      }
+    },
+    {
+      "id": "R11-HP-06",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-06",
+      "question": "Who developed the Thornwick hybrid dense-sparse retrieval architecture, where are they located, and when was it first published?",
+      "ground_truth": "The Thornwick Cooperative Research Institute in Birmingham, UK; first published in November 2024.",
+      "canonical_answer": "developed by a team at the Thornwick Cooperative Research Institute in Birmingham, UK, and first published in November 2024 under an open research mandate.",
+      "hot_required_elements": ["Birmingham", "November 2024"],
+      "hit_required_elements": ["Birmingham"],
+      "hallucination_risk": "high — model may invent a different institution location or publication date",
+      "rubric": {
+        "correct": "Response contains 'Birmingham' and 'November 2024'",
+        "partial": "Response identifies the institution or the publication date but not both",
+        "incorrect": "Response does not correctly identify the Thornwick architecture origin"
+      }
+    },
+    {
+      "id": "R11-HP-07",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-07",
+      "question": "Where and when was the Federated Platform Compact ratified by its founding members, and how many platforms signed originally?",
+      "ground_truth": "Amsterdam, Netherlands, on June 30, 2023; thirty-one founding platforms signed.",
+      "canonical_answer": "ratified by its founding members at a ceremony in Amsterdam, Netherlands, on June 30, 2023; thirty-one platforms signed the original Compact.",
+      "hot_required_elements": ["Amsterdam", "June 30, 2023"],
+      "hit_required_elements": ["Amsterdam"],
+      "hallucination_risk": "high — model may invent a different city, date, or founding member count",
+      "rubric": {
+        "correct": "Response contains 'Amsterdam' and 'June 30, 2023'",
+        "partial": "Response gives the city or the date but not both",
+        "incorrect": "Response does not correctly identify the Federated Platform Compact ratification details"
+      }
+    },
+    {
+      "id": "R11-HP-08",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-08",
+      "question": "When was the Cooperative AI Governance Charter formally adopted, and what fraction of Standards Body member platforms adopted it within its first year?",
+      "ground_truth": "February 12, 2021; adopted by 91% of Standards Body member platforms within its first year.",
+      "canonical_answer": "formally adopted on February 12, 2021; adopted by 91% of Standards Body member platforms within its first year.",
+      "hot_required_elements": ["February 12, 2021", "91%"],
+      "hit_required_elements": ["February 12, 2021"],
+      "hallucination_risk": "high — model may invent a different adoption date or adoption rate",
+      "rubric": {
+        "correct": "Response contains 'February 12, 2021' and '91%'",
+        "partial": "Response gives the adoption date or the adoption rate but not both",
+        "incorrect": "Response does not correctly identify the Cooperative AI Governance Charter adoption details"
+      }
+    }
+  ]
+}
