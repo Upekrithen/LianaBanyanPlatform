@@ -1,0 +1,81 @@
+{
+  "_comment": "K483 PROTOTYPE — Mock demand profile. Production replacement: Fates-via-Hounds telemetry feed. Interface spec: each cathedral entry is {cathedral_name, frequent_topics, topic_weights, preferred_depth_levels}. topic_weights values are [0.0–1.0] demand intensity. K486+ replaces this file's values with live telemetry from Three Fates Hounds transport.",
+
+  "public-wide": {
+    "cathedral_name": "public-wide",
+    "frequent_topics": [
+      "cooperative initiative",
+      "cathedral effect",
+      "founder biography",
+      "member platform",
+      "sweet sixteen",
+      "help each other"
+    ],
+    "topic_weights": {
+      "cooperative initiative": 0.9,
+      "cathedral effect": 0.8,
+      "founder biography": 0.7,
+      "member platform": 0.85,
+      "sweet sixteen": 0.75,
+      "help each other": 0.6,
+      "lianabanyan": 0.65,
+      "health accords": 0.5,
+      "dinner groceries shopping": 0.55
+    },
+    "preferred_depth_levels": [3, 4, 5, 6]
+  },
+
+  "technical-deep": {
+    "cathedral_name": "technical-deep",
+    "frequent_topics": [
+      "mcp architecture",
+      "librarian cathedral scribes",
+      "miner scribe bedrock",
+      "cathedral schema",
+      "knight bishop session",
+      "deployment firebase",
+      "supabase migration",
+      "provenance hash ledger"
+    ],
+    "topic_weights": {
+      "mcp architecture": 0.95,
+      "librarian cathedral scribes": 0.9,
+      "miner scribe bedrock": 0.92,
+      "cathedral schema": 0.88,
+      "knight bishop session": 0.85,
+      "deployment firebase": 0.75,
+      "supabase migration": 0.78,
+      "provenance hash ledger": 0.93,
+      "indexing rebuild": 0.80,
+      "typescript python": 0.72
+    },
+    "preferred_depth_levels": [1, 2, 3]
+  },
+
+  "private-founder": {
+    "cathedral_name": "private-founder",
+    "frequent_topics": [
+      "innovation crown jewel keystone",
+      "patent provisional filing",
+      "founder credentials biography",
+      "legal counsel corporation",
+      "session K B R handoff",
+      "cathedral effect keystone",
+      "cathedral architecture canonical",
+      "api key credential security"
+    ],
+    "topic_weights": {
+      "innovation crown jewel keystone": 0.98,
+      "patent provisional filing": 0.97,
+      "founder credentials biography": 0.95,
+      "legal counsel corporation": 0.90,
+      "session K B R handoff": 0.88,
+      "cathedral effect keystone": 0.93,
+      "cathedral architecture canonical": 0.92,
+      "api key credential security": 0.85,
+      "memory bishop handoff": 0.87,
+      "ip ledger provenance": 0.96
+    },
+    "preferred_depth_levels": [1, 2]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "_comment": "Cathedral profile configs for K483 Sculptor prototype. One entry per Sculptor instance. scope_classes_allowed enforces IP-as-filter: same bedrock, different property-status per cathedral.",
+
+  "public-wide": {
+    "cathedral_name": "public-wide",
+    "audience_scope": "public",
+    "scope_classes_allowed": ["public"],
+    "preferred_sculpt_form": "summary",
+    "min_score": 0.08,
+    "description": "Broadest reach — public-facing, no guild or private content. Permissive depth filter (levels 3–6 preferred). Sculpt form: brief summary per tablet."
+  },
+
+  "technical-deep": {
+    "cathedral_name": "technical-deep",
+    "audience_scope": "guild",
+    "scope_classes_allowed": ["public", "guild"],
+    "preferred_sculpt_form": "full_tablet",
+    "min_score": 0.12,
+    "description": "Guild-tier audience: engineers, architects, Cathedral operators. Full tablet delivery; no private content. Mid-depth preference (levels 1–3)."
+  },
+
+  "private-founder": {
+    "cathedral_name": "private-founder",
+    "audience_scope": "private",
+    "scope_classes_allowed": ["public", "guild", "private"],
+    "preferred_sculpt_form": "per_topic_rollup",
+    "min_score": 0.10,
+    "description": "Founder-only cathedral. Receives all scope classes including private/sensitive. Strictest audience, most comprehensive access. Per-topic rollup for deep review."
+  }
+}
