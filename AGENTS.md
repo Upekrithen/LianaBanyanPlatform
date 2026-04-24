@@ -123,7 +123,14 @@ grep -oE "^[A-Z_]+=" path/to/SDS.env | sort -u
 
 **Knight (Cursor): at every session start, read `KNIGHT_QUEUE.md` at the workspace root BEFORE any other action.** When Founder types a K-number (e.g., "K460"), resolve it via that file's NEXT / QUEUED / LANDED sections instead of grepping the workspace. Saves time and avoids B119-era stale-prompt collisions.
 
-`KNIGHT_QUEUE.md` is Phase 1 of Knight's Cathedral (architecturally, it's Knight's first Scribe tablet — see Bishop memory `project_knight_bishop_multi_cathedral_dogfood.md`). Bishop maintains it manually at session close; Phase 2 (K461 onward) auto-populates from the SP-7 Courier. Until Phase 2 ships, rely on Bishop's manual updates; if the file is missing or obviously stale, fall back to grep and flag Bishop.
+**Phase 2 LIVE as of K461/B121 (2026-04-23).** `KNIGHT_QUEUE.md` is now a derived view auto-rendered from Knight's Cathedral Scribes:
+- **NEXT / QUEUED / LANDED sections** auto-render from `librarian-mcp/stitchpunks/knight_cathedral/scribes/KnightQueue.jsonl` + `KnightHandoffs.jsonl` via `librarian-mcp/scripts/render-knight-queue.mjs` on every `npm run rebuild`.
+- **CONTEXT section** is Bishop-maintained manually at session boundaries (not auto-derived).
+- **Phase 1** (Bishop-maintained manually at session close) is SUPERSEDED as of K461.
+
+Knight's Cathedral lives at `librarian-mcp/stitchpunks/knight_cathedral/` with four Scribes: KnightQueue, KnightHandoffs, KnightBRIDLEMemory, KnightArchitecture. The SP-7 Courier auto-populates all four on every rebuild (append-only, idempotent). See `librarian-mcp/stitchpunks/knight_cathedral/README.md` for the full maintenance contract.
+
+If `KNIGHT_QUEUE.md` is missing or obviously stale, run `cd librarian-mcp && npm run rebuild:full` to regenerate. Fall back to grep and flag Bishop only if the Cathedral directory itself is missing.
 
 ### Canonical numbers — single source of truth
 

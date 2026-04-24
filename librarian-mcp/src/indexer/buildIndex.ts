@@ -20,6 +20,7 @@ import { parseComponents } from "./parseComponents.js";
 import { parseV2 } from "./parseV2.js";
 import { parseLetters } from "./parseLetters.js";
 import { writeFingerprint, checkFreshness } from "./fingerprint.js";
+import { runKnightCathedralCourier } from "./knightCathedralCourier.js";
 import type { SystemOverview } from "../types.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -143,6 +144,14 @@ async function main() {
   const letters = await parseLetters(WORKSPACE);
   writeIndex("letters", letters);
   console.log(`       ${letters.count} letters, ${Object.keys(letters.byCategory).length} categories\n`);
+
+  console.log("[14/13] Running Knight Cathedral Courier (SP-7 extension)...");
+  const courierResult = await runKnightCathedralCourier();
+  if (courierResult.total > 0) {
+    console.log(`       +${courierResult.newQueueTablets} queue, +${courierResult.newHandoffTablets} handoff, +${courierResult.newTagTablets} tag tablets appended\n`);
+  } else {
+    console.log(`       Idempotent — 0 new tablets (Scribes already current)\n`);
+  }
 
   // K441 Half A: lastSession is now derived from the highest B-numbered closeout
   // file on disk, falling back to the legacy parseContext stream if none found,
