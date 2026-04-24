@@ -413,3 +413,42 @@ test("KEYWORDS_MODE=hand-only: uses only hand-curated keywords (ignores sidecar)
   assert.ok(!scribeA.keywords.some((k) => k === "verdania auto derived"),
     "hand-only: auto-only keyword 'verdania auto derived' must NOT be present");
 });
+
+// ─── Bloat-cap tests (K475 D3) ────────────────────────────────────────────────
+
+test("bloat-cap: max 2000 keywords enforced on synthetic-bloat fixture", async () => {
+  // Synthesize a corpus where many unique tokens would exceed 2000 exclusive terms.
+  // Each line gets a unique token that appears exactly twice (tf >= MIN_TF=2) and
+  // exists only in this Scribe (df=1, exclusive), so all would be included uncapped.
+  // We create 2500 such tokens and verify the result is capped at 2000.
+  const uniqueTokens = Array.from({ length: 2500 }, (_, i) => `zxquniq${String(i).padStart(5, "0")}`);
+  // Each token appears twice in the text (repeat the block)
+  const bloatText = uniqueTokens.join(" ") + " " + uniqueTokens.join(" ");
+  const bloatPath = resolve(FIXTURE_DIR, "bloat_scribe.md");
+  writeFileSync(bloatPath, bloatText, "utf-8");
+
+  const { extractAllAutoKeywords: extract } = await import("../dist/scribes/autoExtract.js");
+  const bloatRegistry = {
+    version: "test-cap",
+    opened: "2026-04-24",
+    opener: "K475 bloat-cap test",
+    spec: "",
+    scribes: [
+      {
+        id: "BloatScribe",
+        mode: "observational",
+        primary: { level: 1, field: "bloat test", canonical_keepers: [bloatPath.replace(/\\/g, "/")] },
+        adjacents: [],
+        keywords: [],
+      },
+    ],
+  };
+
+  const results = extract(bloatRegistry);
+  const bloatResult = results.get("BloatScribe");
+  assert.ok(bloatResult, "BloatScribe should be in results");
+  assert.ok(
+    bloatResult.keywords.length <= 2000,
+    `Bloat-cap must limit to 2000; got ${bloatResult.keywords.length}`
+  );
+});

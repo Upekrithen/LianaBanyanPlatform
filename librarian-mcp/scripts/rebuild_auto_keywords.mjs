@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /**
- * rebuild_auto_keywords.mjs — K474/B122 Self-Indexing Scribes
- * ============================================================
- * CLI: reads both the Bishop and Knight Cathedral registries, runs corpus-derived
+ * rebuild_auto_keywords.mjs — K474/B122 Self-Indexing Scribes (updated K475/B122)
+ * ==================================================================================
+ * CLI: reads Bishop, Knight, and Pawn Cathedral registries, runs corpus-derived
  * keyword extraction for each Scribe, and writes sidecar YAMLs:
  *   Bishop:  stitchpunks/scribes/auto_keywords/<scribe_id>.yaml
  *   Knight:  stitchpunks/knight_cathedral/auto_keywords/<scribe_id>.yaml
+ *   Pawn:    stitchpunks/pawn_cathedral/auto_keywords/<scribe_id>.yaml
  *
  * Idempotent: safe to re-run. Re-running overwrites sidecar files with fresh results.
  *
@@ -112,8 +113,12 @@ const bishopScribesDir = resolve(STITCHPUNKS_DIR, "scribes");
 const knightRegistryPath = resolve(STITCHPUNKS_DIR, "knight_cathedral", "registry.yaml");
 const knightScribesDir = resolve(STITCHPUNKS_DIR, "knight_cathedral");
 
+const pawnRegistryPath = resolve(STITCHPUNKS_DIR, "pawn_cathedral", "registry.yaml");
+const pawnScribesDir = resolve(STITCHPUNKS_DIR, "pawn_cathedral");
+
 const bishopSummary = await processRegistry(bishopRegistryPath, bishopScribesDir, "Bishop");
 const knightSummary = await processRegistry(knightRegistryPath, knightScribesDir, "Knight");
+const pawnSummary = await processRegistry(pawnRegistryPath, pawnScribesDir, "Pawn");
 
 // ─── Print summary table ──────────────────────────────────────────────────────
 
@@ -138,5 +143,6 @@ function printSummary(entries, cathedralName) {
 
 printSummary(bishopSummary, "Bishop");
 printSummary(knightSummary, "Knight");
+printSummary(pawnSummary, "Pawn");
 
 log("\nDone. Sidecar YAMLs written. Run 'npm run build' + 'npm test' to verify.");

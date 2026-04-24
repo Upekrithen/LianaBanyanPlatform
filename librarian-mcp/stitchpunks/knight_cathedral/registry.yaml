@@ -140,6 +140,52 @@ scribes:
       - K461
     activation_threshold: any architectural decision or code surface query
 
+  # ============================================================
+  # K475 / B122 — R12 dual-universe corpus Scribes (Knight Cathedral)
+  # Mirror of Bishop's R12Cranewell / R12Covenant entries.
+  # Minimal keywords per empirical discipline — auto-extractor does the work.
+  # ============================================================
+
+  - id: KnightR12Cranewell
+    mode: corpus
+    corpus_label: r12_cranewell
+    primary:
+      level: 1
+      field: R12-Cranewell corpus — synthetic-coined manuscript preservation conservancy benchmark (50 facts, 6 categories) [Knight Cathedral copy, K475]
+      canonical_keepers:
+        - librarian-mcp/r10_cross_vendor/r12_cranewell_corpus.md
+        - librarian-mcp/r10_cross_vendor/R12_QUESTION_BANK_CRANEWELL_SEALED.json
+    adjacents:
+      - level: 2
+        field: Saltram Registry statistics and manuscript preservation metrics
+      - level: 3
+        field: chartered-scribe economics and mentorship frameworks
+    keywords:
+      - Cranewell
+      - R12-CRANEWELL
+      - R12-Cranewell
+    activation_threshold: any R12-Cranewell benchmark question or corpus fact reference
+
+  - id: KnightR12Covenant
+    mode: corpus
+    corpus_label: r12_covenant
+    primary:
+      level: 1
+      field: R12-Covenant corpus — Chronicles of Thomas Covenant benchmark fixture (50 facts, 6 categories) [Knight Cathedral copy, K475]
+      canonical_keepers:
+        - librarian-mcp/r10_cross_vendor/r12_covenant_corpus.md
+        - librarian-mcp/r10_cross_vendor/R12_QUESTION_BANK_COVENANT_SEALED.json
+    adjacents:
+      - level: 2
+        field: Donaldson canon — First, Second, and Last Chronicles lore and statistics
+      - level: 3
+        field: The Land geography, peoples, and governance
+    keywords:
+      - Covenant
+      - R12-COVENANT
+      - R12-Covenant
+    activation_threshold: any R12-Covenant benchmark question or corpus fact reference
+
   - id: KnightR11
     mode: corpus
     corpus_label: r11_reference

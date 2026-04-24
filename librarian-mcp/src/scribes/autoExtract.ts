@@ -35,10 +35,11 @@ const LIBRARIAN_ROOT = resolve(__dirname_local, "..", "..");
 // librarian-mcp/ → workspace root (LianaBanyanPlatform/)
 const WORKSPACE_ROOT = resolve(LIBRARIAN_ROOT, "..");
 
-export const EXTRACTOR_VERSION = "K474.1";
+export const EXTRACTOR_VERSION = "K475.1";
 const MAX_NGRAM = 4;
 const TOP_K = 150;
 const MIN_TF = 2;
+const MAX_KEYWORDS_PER_SIDECAR = 2000;
 
 export type KeywordList = string[];
 export type AutoKeywordsMap = Map<string, KeywordList>;
@@ -338,8 +339,10 @@ function computeDf(corpora: ScribeCorpus[]): Map<string, number> {
  *   - df(t) <= ceil(numScribes / 2) (not too common across Scribes)
  *   - Top-TOP_K by distinctiveness_S(t) = tf_S(t) / df(t)^1.5
  *   - ALWAYS include df(t)==1 && tf_S(t)>=MIN_TF terms (exclusive corpus tokens)
+ *   - Hard cap: MAX_KEYWORDS_PER_SIDECAR total (applied last, absolute)
  *
- * Returns sorted keyword list (exclusive tokens first, then top-K by distinctiveness).
+ * Returns sorted keyword list (exclusive tokens first by tf desc, then top-K by distinctiveness).
+ * Priority within the cap: (1) exclusivity-floor matches ordered by tf desc, (2) distinctiveness remainder.
  */
 function selectKeywords(
   corpus: ScribeCorpus,
@@ -358,17 +361,29 @@ function selectKeywords(
     candidates.push({ term, score, exclusive });
   }
 
-  // Separate exclusive (df==1) from non-exclusive
-  const exclusive = candidates.filter((c) => c.exclusive).map((c) => c.term);
+  // Exclusive (df==1) tokens: sort by tf descending (score == tf for df==1)
+  const exclusiveSorted = candidates
+    .filter((c) => c.exclusive)
+    .sort((a, b) => b.score - a.score);
+
+  // Hard cap: if exclusive tokens alone exceed the cap, take top-cap by tf
+  if (exclusiveSorted.length >= MAX_KEYWORDS_PER_SIDECAR) {
+    return exclusiveSorted.slice(0, MAX_KEYWORDS_PER_SIDECAR).map((c) => c.term);
+  }
+
+  const exclusiveTerms = exclusiveSorted.map((c) => c.term);
+  const exclusiveSet = new Set(exclusiveTerms);
+
   const nonExclusive = candidates
     .filter((c) => !c.exclusive)
     .sort((a, b) => b.score - a.score)
     .slice(0, TOP_K)
-    .map((c) => c.term);
+    .map((c) => c.term)
+    .filter((t) => !exclusiveSet.has(t));
 
-  // Exclusive tokens always included; non-exclusive: up to TOP_K
-  const combined = [...exclusive, ...nonExclusive.filter((t) => !exclusive.includes(t))];
-  return combined;
+  // Combine and apply absolute hard cap
+  const combined = [...exclusiveTerms, ...nonExclusive];
+  return combined.slice(0, MAX_KEYWORDS_PER_SIDECAR);
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────

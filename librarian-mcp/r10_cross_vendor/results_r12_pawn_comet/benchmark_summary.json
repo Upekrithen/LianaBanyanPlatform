@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-04-24T19:26:37.626454+00:00",
+  "args": {
+    "universe": null,
+    "arm": null,
+    "keywords_mode": "auto-only",
+    "run_all": true,
+    "no_resume": true,
+    "confirmed": true,
+    "stagger": 15.0,
+    "max_concurrent": 10,
+    "regrade": false
+  },
+  "summaries": [
+    {
+      "arm": "cold",
+      "universe": "cranewell",
+      "HOT": 0,
+      "HIT": 6,
+      "MISS": 44,
+      "failed": 0,
+      "skipped": 0,
+      "total_graded": 50,
+      "hot_pct": 0.0,
+      "hit_pct": 12.0,
+      "miss_pct": 88.0,
+      "wall_sec": 748.2
+    },
+    {
+      "arm": "cathedral/auto-only",
+      "universe": "cranewell",
+      "HOT": 6,
+      "HIT": 9,
+      "MISS": 35,
+      "failed": 0,
+      "skipped": 0,
+      "total_graded": 50,
+      "hot_pct": 12.0,
+      "hit_pct": 18.0,
+      "miss_pct": 70.0,
+      "wall_sec": 744.5
+    },
+    {
+      "arm": "cathedral/union",
+      "universe": "cranewell",
+      "HOT": 9,
+      "HIT": 7,
+      "MISS": 34,
+      "failed": 0,
+      "skipped": 0,
+      "total_graded": 50,
+      "hot_pct": 18.0,
+      "hit_pct": 14.0,
+      "miss_pct": 68.0,
+      "wall_sec": 745.1
+    },
+    {
+      "arm": "cold",
+      "universe": "covenant",
+      "HOT": 1,
+      "HIT": 14,
+      "MISS": 35,
+      "failed": 0,
+      "skipped": 0,
+      "total_graded": 50,
+      "hot_pct": 2.0,
+      "hit_pct": 28.0,
+      "miss_pct": 70.0,
+      "wall_sec": 749.0
+    },
+    {
+      "arm": "cathedral/auto-only",
+      "universe": "covenant",
+      "HOT": 7,
+      "HIT": 13,
+      "MISS": 28,
+      "failed": 2,
+      "skipped": 0,
+      "total_graded": 48,
+      "hot_pct": 14.6,
+      "hit_pct": 27.1,
+      "miss_pct": 58.3,
+      "wall_sec": 1594.6
+    },
+    {
+      "arm": "cathedral/union",
+      "universe": "covenant",
+      "HOT": 9,
+      "HIT": 15,
+      "MISS": 24,
+      "failed": 2,
+      "skipped": 0,
+      "total_graded": 48,
+      "hot_pct": 18.8,
+      "hit_pct": 31.2,
+      "miss_pct": 50.0,
+      "wall_sec": 745.3
+    }
+  ]
+}

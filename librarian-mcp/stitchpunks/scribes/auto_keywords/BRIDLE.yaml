@@ -1,0 +1,2008 @@
+scribe_id: BRIDLE
+generated_at: "2026-04-24T17:02:33.118Z"
+extractor_version: K475.1
+source_hash: c59c582e52d3cf28
+keeper_count: 1
+file_count: 452
+keyword_count: 2000
+keywords:
+  - not null
+  - uuid
+  - id uuid
+  - timestamptz
+  - at timestamptz
+  - text not
+  - text not null
+  - knight session
+  - const
+  - map
+  - creator
+  - user id
+  - default now
+  - create policy
+  - storefront
+  - hexisle
+  - not exists
+  - if not exists
+  - crew
+  - src pages
+  - not null default
+  - null default
+  - integer
+  - random
+  - captain
+  - timestamptz default
+  - timestamptz default now
+  - gen
+  - at timestamptz default
+  - at timestamptz default now
+  - gen random
+  - gen random uuid
+  - random uuid
+  - beacon
+  - default gen
+  - default gen random
+  - default gen random uuid
+  - created at
+  - treasure
+  - alter
+  - alter table
+  - edge function
+  - create table
+  - src components
+  - auth uid
+  - uid
+  - primary key
+  - uuid primary
+  - uuid primary key
+  - moneypenny
+  - id uuid primary
+  - id uuid primary key
+  - primary key default
+  - key default
+  - uuid primary key default
+  - primary key default gen
+  - key default gen
+  - key default gen random
+  - created at timestamptz
+  - default 0
+  - uuid references
+  - auth users
+  - links
+  - campaign
+  - wire
+  - enable
+  - created at timestamptz default
+  - id uuid references
+  - icon
+  - mobile
+  - currency
+  - await
+  - enable row
+  - enable row level
+  - enable row level security
+  - row level
+  - row level security
+  - level security
+  - treasure map
+  - appshell
+  - references auth
+  - references auth users
+  - references auth users id
+  - auth users id
+  - users id
+  - boolean
+  - supabase functions
+  - table if
+  - index ts
+  - for select
+  - table if not
+  - table if not exists
+  - for select using
+  - select using
+  - create table if
+  - create table if not
+  - star
+  - text default
+  - episodes
+  - ghost world
+  - spice
+  - run build
+  - npm run build
+  - cta
+  - pioneer
+  - spoonfuls
+  - price
+  - jsonb
+  - visual
+  - uuid not
+  - uuid not null
+  - id uuid not
+  - id uuid not null
+  - navigation
+  - campaigns
+  - adapt
+  - cents
+  - compilation
+  - earned
+  - platform canonical
+  - star chamber
+  - not null references
+  - null references
+  - uuid not null references
+  - create index
+  - browse
+  - idx
+  - manufacturing
+  - row level security create
+  - level security create
+  - level security create policy
+  - security create
+  - security create policy
+  - initiatives
+  - tab
+  - qr
+  - tracker
+  - integer not
+  - integer not null
+  - id create
+  - status text
+  - storefronts
+  - puddings
+  - headers
+  - uuid references auth
+  - uuid references auth users
+  - platform src components
+  - type text
+  - insert into
+  - using auth
+  - lib
+  - submissions
+  - using auth uid
+  - beacons
+  - crewman
+  - commerce
+  - link to
+  - crew call
+  - cascade
+  - bonus
+  - content type
+  - boolean default
+  - maps
+  - manage
+  - int
+  - null check
+  - media
+  - arena
+  - not null check
+  - user id uuid
+  - renders
+  - add column
+  - column if
+  - task 2
+  - column if not
+  - column if not exists
+  - add column if
+  - add column if not
+  - cephas content
+  - joules
+  - earnings
+  - overlay
+  - b075
+  - id on
+  - platform supabase
+  - app tsx
+  - integer default
+  - element
+  - usecanonicalstats
+  - neighborhood
+  - name text
+  - platform src pages
+  - subscriptions
+  - journal
+  - status in
+  - viewing
+  - timestamptz not
+  - timestamptz not null
+  - deno
+  - hardcoded
+  - id create policy
+  - vehicle
+  - builder
+  - priority high
+  - sql create
+  - update platform
+  - id uuid references auth
+  - text not null check
+  - id auth
+  - id auth uid
+  - on delete
+  - anyone
+  - flip
+  - banner
+  - id on delete
+  - island
+  - build passes
+  - index idx
+  - css
+  - description text
+  - focusshell
+  - create index idx
+  - front
+  - on delete cascade
+  - delete cascade
+  - default false
+  - emporium
+  - expedition
+  - bandwagon
+  - add to
+  - id on delete cascade
+  - at timestamptz not
+  - at timestamptz not null
+  - payouts
+  - for select using true
+  - select using true
+  - escrow
+  - update platform canonical
+  - deck card
+  - src lib
+  - type text not
+  - type text not null
+  - showcase
+  - designer
+  - fetch
+  - create policy users
+  - policy users
+  - family table
+  - political expedition
+  - say
+  - timestamptz not null default
+  - not null default now
+  - null default now
+  - xray
+  - text not null default
+  - links to
+  - amount cents
+  - treasure maps
+  - auth uid user
+  - auth uid user id
+  - uid user
+  - uid user id
+  - anyone can
+  - update platform canonical set
+  - platform canonical set
+  - file platform
+  - create migration
+  - news
+  - name text not
+  - name text not null
+  - not null default 0
+  - null default 0
+  - create src
+  - canister
+  - status text default
+  - const data
+  - screen
+  - sql create table
+  - instagram
+  - tsx add
+  - buttons
+  - guided
+  - div
+  - kickstarter
+  - updated at timestamptz
+  - true create
+  - eq
+  - hex
+  - id text
+  - amber
+  - 3d
+  - now updated
+  - now updated at
+  - creators
+  - deno env
+  - deno env get
+  - env get
+  - is admin
+  - rideshare
+  - true create policy
+  - task 5
+  - supabase from
+  - id not
+  - integer not null default
+  - npm run build passes
+  - run build passes
+  - id not null
+  - cardholder
+  - specs
+  - boolean default false
+  - default now updated
+  - default now updated at
+  - now updated at timestamptz
+  - not null references auth
+  - null references auth
+  - null references auth users
+  - compiled documents
+  - tsx create
+  - integer default 0
+  - fk
+  - nullable
+  - hub
+  - create policy anyone
+  - create policy anyone can
+  - policy anyone
+  - policy anyone can
+  - async
+  - waterwheel
+  - localstorage
+  - count 1
+  - content registry
+  - label
+  - can view
+  - images
+  - gen random uuid user
+  - random uuid user
+  - random uuid user id
+  - uuid user
+  - uuid user id
+  - uuid user id uuid
+  - deliverable 1
+  - return new
+  - wheels
+  - tour target
+  - await supabase
+  - table public
+  - invitation
+  - restaurant
+  - businesses
+  - photo
+  - check status
+  - check status in
+  - using true create
+  - cephas pudding
+  - crewman episodes
+  - font
+  - cephas content registry
+  - sql sql
+  - printful
+  - nav
+  - lemon
+  - lemon lot
+  - title text
+  - terrain
+  - default true
+  - using true create policy
+  - source bishop
+  - deliverable 3
+  - data tour
+  - data tour target
+  - innovation count 1
+  - firebase deploy
+  - issuing
+  - islands
+  - remove
+  - handles
+  - select using true create
+  - deliverable 2
+  - chest
+  - json stringify
+  - stringify
+  - content type application
+  - type application
+  - shield
+  - build deploy
+  - academic papers
+  - backing
+  - bash cd
+  - usecanonicalstats ts
+  - int default
+  - qr code
+  - using auth uid user
+  - shadow
+  - crew tables
+  - social media
+  - cols
+  - denken
+  - auth users id not
+  - users id not
+  - users id not null
+  - pearl
+  - appear
+  - session id
+  - users can
+  - slingshot
+  - tsx route
+  - step 1
+  - in platform
+  - guilds
+  - numeric not
+  - numeric not null
+  - corsheaders
+  - content type application json
+  - type application json
+  - application json
+  - adapt score
+  - local wheels
+  - download
+  - src hooks
+  - box
+  - for select using auth
+  - select using auth
+  - return new response
+  - new response
+  - defaults
+  - tabs
+  - strip
+  - meal
+  - updated at timestamptz default
+  - steps 1
+  - zip
+  - select using auth uid
+  - spotlight
+  - war chest
+  - guided tour
+  - someone
+  - founders
+  - b080
+  - tribes
+  - vacation
+  - only hosting
+  - context the
+  - backer
+  - url text
+  - comment
+  - alter table public
+  - stl
+  - firebase deploy only
+  - firebase deploy only hosting
+  - deploy only
+  - deploy only hosting
+  - classname
+  - step 3
+  - timestamptz default now updated
+  - seed data
+  - breakdown
+  - dev null
+  - on conflict
+  - deliverable 4
+  - fk to
+  - user id create
+  - user id uuid references
+  - row level security alter
+  - level security alter
+  - level security alter table
+  - security alter
+  - security alter table
+  - stones
+  - turn key
+  - table id
+  - coalitions
+  - step 2
+  - photography
+  - title text not
+  - title text not null
+  - city
+  - default now alter
+  - default now alter table
+  - now alter
+  - now alter table
+  - platform supabase functions
+  - create platform
+  - invest
+  - deliverable 5
+  - income
+  - await supabase from
+  - pawn batch
+  - scheduled for
+  - sql create table if
+  - null description
+  - jsonb default
+  - build the
+  - create policy admin
+  - policy admin
+  - preface
+  - route path
+  - ceo
+  - buy
+  - lrh
+  - set value
+  - redesign
+  - id uuid pk
+  - uuid pk
+  - pk
+  - stickymobilecta
+  - diver
+  - indexes
+  - default now unique
+  - now unique
+  - heoho
+  - goals
+  - downloads
+  - ts typescript
+  - user id create policy
+  - outreach letters
+  - fable
+  - png
+  - pearl diver
+  - with check
+  - timestamptz default now alter
+  - 2 dev
+  - 2 dev null
+  - corporation
+  - dropdown
+  - 1 migration
+  - on mobile
+  - uid user id create
+  - anyone can view
+  - cardholders
+  - deno env get supabase
+  - env get supabase
+  - get supabase
+  - reviewer
+  - weekly
+  - deck cards
+  - should show
+  - index if
+  - index if not
+  - index if not exists
+  - for all using auth
+  - all using auth
+  - turnkey
+  - functions deploy
+  - card funding
+  - uuid fk
+  - cd platform
+  - id string
+  - storefront id
+  - boolean default true
+  - manage own
+  - clicks
+  - stop and
+  - stripe checkout
+  - updated at now
+  - where key
+  - 1 create
+  - members can
+  - primary spice
+  - displays
+  - npx tsc
+  - helm content
+  - card with
+  - logo
+  - deploy all
+  - not touch
+  - generator
+  - by uuid
+  - skipping stones
+  - can select
+  - create index if
+  - create index if not
+  - check in
+  - all using auth uid
+  - policy anyone can view
+  - supabase functions deploy
+  - april 4
+  - april 4 2026
+  - uuid fk to
+  - public is admin
+  - do not touch
+  - freezer
+  - quantity
+  - insert with
+  - liana banyan corporation
+  - banyan corporation
+  - status text not
+  - status text not null
+  - public read
+  - pedestals
+  - judge
+  - headers corsheaders
+  - viewing schedule
+  - cephas puddings
+  - rideshare routes
+  - academic paper
+  - interactive
+  - piece
+  - featured
+  - modal
+  - storefront builder
+  - response json
+  - create src pages
+  - bishop b080
+  - imports
+  - phase 5
+  - buffett
+  - src data
+  - tutorial
+  - prerequisite
+  - for insert
+  - to supabase
+  - platform supabase migrations
+  - can read
+  - linking
+  - platform canonical set value
+  - canonical set value
+  - file src
+  - created at timestamptz not
+  - active boolean
+  - check if
+  - recipe
+  - src app
+  - if not exists idx
+  - not exists idx
+  - exists idx
+  - return new response json
+  - new response json
+  - new response json stringify
+  - response json stringify
+  - id uuid fk
+  - task a
+  - task b
+  - roommate
+  - treasury
+  - for insert with
+  - for insert with check
+  - insert with check
+  - asteroid
+  - innovation number
+  - count from
+  - animation
+  - cash out
+  - not modify
+  - fill
+  - tsx at
+  - k294
+  - crew table
+  - shop
+  - faq
+  - backed marks
+  - hover
+  - step 4
+  - file platform src
+  - stripe issuing
+  - assigned
+  - b057
+  - credits marks
+  - asteroid proofvault
+  - proofvault
+  - one way valve
+  - way valve
+  - numeric 10
+  - policies
+  - security create policy anyone
+  - source bishop dropzone
+  - id uuid fk to
+  - using public is admin
+  - shadcn
+  - dinner
+  - defense klaus
+  - klaus
+  - tsx or
+  - text check
+  - each card
+  - corner
+  - focus
+  - admin manages
+  - blue
+  - tereno
+  - numeric default
+  - table id uuid
+  - spoonfuls batch
+  - jsonresponse
+  - biz
+  - project id
+  - data xray
+  - latest
+  - commerce engine
+  - recurring
+  - not null description
+  - 2 default
+  - progress bar
+  - date date
+  - neighborhoods
+  - by uuid references
+  - plugs
+  - codebase
+  - do not modify
+  - yourself
+  - int default 0
+  - protectedroute
+  - queen
+  - lb cardholders
+  - cardholder id
+  - platform v2
+  - create policy admin manages
+  - policy admin manages
+  - lazy
+  - navigate to
+  - background
+  - not null description text
+  - null description text
+  - user id auth
+  - user id auth uid
+  - select id
+  - letters letter
+  - mock
+  - assignments
+  - authenticated users
+  - mv
+  - zero errors
+  - id user
+  - id user id
+  - admin create
+  - supabase secrets
+  - explore
+  - temperament
+  - data xray id
+  - xray id
+  - update the
+  - width
+  - deploy all 8
+  - in platform src
+  - schedules
+  - create platform src
+  - currencies
+  - recipient name
+  - view own
+  - rls policies
+  - expires at
+  - preorder
+  - spices
+  - april 5
+  - burst
+  - archway
+  - routes tsx
+  - horizontal
+  - democracy
+  - k80
+  - captains
+  - buildindex
+  - category text
+  - pledges
+  - feed
+  - leaderboard
+  - timestamptz default now unique
+  - letter id
+  - merchant
+  - generates
+  - c 20
+  - security create policy users
+  - order id
+  - get schema
+  - pudding number
+  - return jsonresponse
+  - bg
+  - pudding articles
+  - coverage minutes
+  - node dist
+  - roi
+  - contests
+  - guest
+  - resource
+  - not null unique
+  - null unique
+  - nodes
+  - lb card funding
+  - to auth
+  - b079
+  - on the wall
+  - design specs
+  - sticky
+  - to cephas
+  - emoji
+  - to show
+  - pioneers
+  - constraints
+  - sql insert
+  - the founder s
+  - dispatched by
+  - dispatched by bishop
+  - guess
+  - flow 1
+  - browsing
+  - designs
+  - false system
+  - qa
+  - fund lb
+  - fund lb card
+  - where canonical
+  - where canonical number
+  - content pipeline
+  - 2026 mission
+  - content source
+  - april 5 2026
+  - id uuid pk default
+  - uuid pk default
+  - uuid pk default gen
+  - pk default
+  - pk default gen
+  - pk default gen random
+  - everyone
+  - map progress
+  - welcomegate
+  - navigates
+  - with check auth
+  - check auth
+  - text not null description
+  - show the
+  - draft email
+  - partner
+  - say so
+  - task follows
+  - overview json
+  - 2 not
+  - 2 not null
+  - member profiles
+  - event id
+  - createclient
+  - platform v2 src
+  - v2 src
+  - sop
+  - fly
+  - nest
+  - mission one
+  - learn
+  - 8 targets
+  - mo
+  - use existing
+  - content queue
+  - marks joules
+  - indexer buildindex
+  - creator id
+  - count integer
+  - default pending
+  - photos
+  - grid of
+  - update usecanonicalstats
+  - authorization bearer
+  - id create index
+  - outbound
+  - new file
+  - the wrong
+  - ruuxzilgmuwddcofqecc
+  - if not exists public
+  - not exists public
+  - exists public
+  - src app tsx
+  - is active boolean
+  - cost estimate
+  - numeric default 0
+  - 3c
+  - is admin create
+  - calendar events
+  - buildings
+  - npx supabase functions
+  - npx supabase functions deploy
+  - b072
+  - 02 pawnprompts
+  - pawnprompts
+  - components v2
+  - uuid fk to auth
+  - fk to auth
+  - fk to auth users
+  - to auth users
+  - index tsx
+  - creator keeps
+  - upcoming
+  - slate
+  - visualization
+  - start with
+  - bags
+  - toast
+  - already exists
+  - slug text
+  - insert with check auth
+  - member id uuid
+  - expired
+  - gear
+  - by uuid references auth
+  - luis
+  - 1 from
+  - editor
+  - 2 add
+  - the pudding
+  - views
+  - not add
+  - crud
+  - do nothing
+  - deliverable 6
+  - file supabase
+  - kitchen
+  - allocation authority
+  - 3a
+  - piggyback
+  - teacher
+  - business card
+  - pepper
+  - b075 md
+  - table id uuid pk
+  - not null check in
+  - null check in
+  - card balance
+  - slottedtop
+  - fly on
+  - fly on the
+  - fly on the wall
+  - chart
+  - as you wish
+  - you wish
+  - wish
+  - civic
+  - beacon run
+  - treasure map progress
+  - deploy to
+  - to firebase
+  - time estimate
+  - navigates to
+  - prize
+  - business name
+  - with check auth uid
+  - check auth uid
+  - morpheus
+  - finish
+  - a business
+  - functions v1
+  - updated at now where
+  - file platform supabase
+  - source files
+  - a test
+  - boolean not
+  - boolean not null
+  - headers authorization
+  - marks earned
+  - profiles id
+  - feature flags
+  - eyebrow
+  - headers corsheaders content
+  - headers corsheaders content type
+  - corsheaders content
+  - corsheaders content type
+  - corsheaders content type application
+  - bishop b075
+  - alcove
+  - misc
+  - pathways
+  - hosting main
+  - step 5
+  - proteus
+  - display name
+  - purchasing
+  - helm content queue
+  - text created
+  - text created at
+  - text created at timestamptz
+  - id from
+  - bash cd platform
+  - the card
+  - numeric 10 2
+  - oracle
+  - boolean not null default
+  - access control
+  - 03 bishophandoffs report
+  - 03 bishophandoffs report knight
+  - bishophandoffs report
+  - bishophandoffs report knight
+  - timestamptz created
+  - active boolean default
+  - primary cta
+  - turnkey projects
+  - hexisle downloads
+  - compilation status
+  - banned
+  - helm tasks
+  - homepage
+  - sql for
+  - all 8 targets
+  - charitable
+  - march 2026
+  - bounty photography
+  - polish
+  - text unique
+  - backers
+  - with status
+  - cancelled
+  - countdown
+  - modify platform
+  - owner id
+  - exists select
+  - shown
+  - scheduled posts
+  - never cash
+  - never cash out
+  - context bishop
+  - id is
+  - at route
+  - at timestamptz created
+  - new date
+  - creator referral
+  - crowns
+  - red queen
+  - front door
+  - v2 page
+  - src components v2
+  - district
+  - crossportalnav
+  - deploy checklist
+  - 2026 priority
+  - styling
+  - authored by
+  - how it
+  - rally
+  - with full
+  - build order
+  - v2 pages
+  - status active
+  - create policy public
+  - policy public
+  - fulfillment
+  - cephas lianabanyan
+  - on cephas
+  - exists select 1
+  - exists select 1 from
+  - select 1
+  - select 1 from
+  - id and
+  - timer
+  - etsy
+  - corp
+  - journals
+  - typescript import
+  - or similar
+  - mcp librarian
+  - dropzone 03 bishophandoffs report
+  - default true created
+  - true created
+  - timestamptz created at
+  - timestamptz created at timestamptz
+  - casting
+  - no securities
+  - no securities language
+  - securities language
+  - 3b
+  - moo
+  - innovations referenced
+  - user id uuid fk
+  - arena submissions
+  - build 1
+  - crow s
+  - crow s nest
+  - s nest
+  - wire to
+  - batch 1
+  - design democracy
+  - content shield
+  - to existing
+  - 3 if
+  - antonio
+  - sec safe
+  - phone
+  - content markdown
+  - foreman
+  - svg
+  - deal
+  - tier text
+  - 2 default 0
+  - card shows
+  - from platform
+  - create policy members
+  - policy members
+  - asked
+  - files to create
+  - canister system
+  - show a
+  - dead
+  - at now where key
+  - now where key
+  - a cue
+  - a cue card
+  - duplicates
+  - params
+  - default true created at
+  - true created at
+  - true created at timestamptz
+  - at timestamptz created at
+  - what exists
+  - build zero
+  - build zero errors
+  - from https
+  - components build
+  - librarian indexes
+  - secondary cta
+  - spec exactly
+  - chapter id
+  - 2026 phase
+  - k294 foundation
+  - tracker row
+  - balance cents
+  - salt
+  - keeps 83
+  - this prompt
+  - platform src lib
+  - tldr
+  - in cephas
+  - bishop foreman
+  - patent bags
+  - credits marks joules
+  - dist indexer
+  - dist indexer buildindex
+  - dist indexer buildindex js
+  - indexer buildindex js
+  - buildindex js
+  - id amount
+  - carousel
+  - earning
+  - education
+  - and flag
+  - tour mode
+  - wyoming
+  - dollars
+  - contributor
+  - ilike
+  - credits never
+  - int not
+  - int not null
+  - wire the
+  - target tag
+  - matches spec
+  - at bishop dropzone 03
+  - project ref ruuxzilgmuwddcofqecc
+  - ref ruuxzilgmuwddcofqecc
+  - user id uuid not
+  - customers
+  - build in
+  - sms
+  - spec copy
+  - spec copy exactly
+  - copy exactly
+  - highlighted
+  - 8 hosting
+  - 8 hosting targets
+  - a project
+  - mechanic
+  - frontend
+  - numeric not null default
+  - accomplishment
+  - exactly eyebrow
+  - dredd
+  - bst chapter
+  - spec source
+  - spec source bishop
+  - spec source bishop dropzone
+  - source bishop dropzone 02
+  - bishop dropzone 02
+  - bishop dropzone 02 pawnprompts
+  - dropzone 02
+  - dropzone 02 pawnprompts
+  - dropzone 02 pawnprompts pawn
+  - 02 pawnprompts pawn
+  - 02 pawnprompts pawn batch
+  - pawnprompts pawn
+  - pawnprompts pawn batch
+  - depends on k294
+  - depends on k294 foundation
+  - on k294
+  - on k294 foundation
+  - page purpose
+  - hero copy
+  - card balance cents
+  - k91
+  - behind
+  - 2c
+  - keeps 83 3
+  - muted
+  - colors
+  - noreply
+  - san
+  - tone
+  - tsx platform
+  - build a
+  - now create
+  - 20 floor
+  - 2026 md
+  - ledger entry
+  - command center
+  - graph
+  - node dist indexer
+  - node dist indexer buildindex
+  - notes text
+  - modify platform src
+  - sql insert into
+  - cephas articles
+  - confirms
+  - by bishop claude
+  - veteran
+  - avatar
+  - credits never cash
+  - credits never cash out
+  - freeze
+  - fix the
+  - recurrence
+  - tsx at route
+  - admins
+  - success criteria
+  - dialog
+  - active boolean default true
+  - in app
+  - id create policy users
+  - leather
+  - create policy public read
+  - policy public read
+  - single column
+  - shadow marks
+  - b072 md
+  - batch page
+  - batch page purpose
+  - hero spec
+  - hero spec copy
+  - hero spec copy exactly
+  - spec copy exactly eyebrow
+  - copy exactly eyebrow
+  - no red
+  - acceptance route
+  - hero copy matches
+  - hero copy matches spec
+  - copy matches
+  - copy matches spec
+  - copy matches spec exactly
+  - matches spec exactly
+  - run build passes tracker
+  - build passes tracker
+  - passes tracker
+  - users can select
+  - tsx src
+  - profit
+  - appsidebar
+  - reps
+  - gaming
+  - earn down
+  - date march
+  - grocery
+  - ambassador
+  - p default
+  - handoff march
+  - b049
+  - builds the
+  - tsc node
+  - default now create
+  - filename
+  - 0 created
+  - 0 created at
+  - 0 created at timestamptz
+  - what to build
+  - the actual
+  - update usecanonicalstats ts
+  - posting
+  - create or
+  - skill
+  - bst episodes
+  - distribution grid
+  - emails
+  - do not add
+  - id alter
+  - id alter table
+  - knightsessions
+  - draft bishop
+  - if user
+  - passive income
+  - date not
+  - date not null
+  - turn key project
+  - key project
+  - task 7
+  - users view
+  - integer false
+  - integer false system
+  - checkout session
+  - coin
+  - delegation
+  - async function
+  - round table
+  - design battle
+  - garlic
+  - bishop b075 april
+  - bishop b075 april 4
+  - b075 april
+  - b075 april 4
+  - b075 april 4 2026
+  - april 4 2026 mission
+  - 4 2026 mission
+  - build in platform
+  - no llc
+  - northern
+  - access key
+  - task id
+  - 2a
+  - dispatch platform
+  - page design
+  - master design
+  - scenario
+  - deploy only hosting main
+  - only hosting main
+  - bishop will
+  - 16 initiatives
+  - san antonio
+  - new page
+  - make dinner
+  - platform src data
+  - tsx platform src
+  - deploy to firebase
+  - wherever
+  - a card
+  - grand
+  - cd librarian mcp npx
+  - librarian mcp npx
+  - librarian mcp npx tsc
+  - mcp npx
+  - mcp npx tsc
+  - mcp npx tsc node
+  - npx tsc node
+  - npx tsc node dist
+  - tsc node dist
+  - tsc node dist indexer
+  - empty state
+  - powered
+  - ts add
+  - microsoft
+  - the letter
+  - to modify
+  - count update
+  - props
+  - non goals
+  - set up
+  - not build
+  - model sonnet
+  - model sonnet 4
+  - model sonnet 4 6
+  - to app
+  - to app tsx
+  - is active boolean default
+  - shadcn ui
+  - create policy users view
+  - policy users view
+  - policy users view own
+  - users view own
+  - tap
+  - lb cards
+  - references profiles
+  - references profiles id
+  - primary secondary
+  - business cards
+  - spacing
+  - drawer
+  - access control allow
+  - control allow
+  - err
+  - april 5 2026 phase
+  - 5 2026 phase
+  - components build in
+  - components build in platform
+  - build in platform src
+  - in platform src components
+  - platform src components v2
+  - review librarian
+  - content source links
+  - source links
+  - invitations
+  - manager
+  - mission two
+  - everywhere
+  - order by
+  - rally group
+  - jukebox
+  - onboarded
+  - 3 add
+  - mold
+  - name description
+  - deploy all 8 targets
+  - march 2026 md
+  - freezer node
+  - appear in
+  - trail map
+  - k209
+  - b056
+  - default 1
+  - blank
+  - the lb
+  - square
+  - goggles
+  - add route
+  - files to modify
+  - not change
+  - pieces
+  - permission
+  - in this session
+  - export interface
+  - to fiat
+  - classify
+  - update cephas
+  - do not build
+  - desc
+  - void
+  - skipped
+  - demand signaling
+  - early adopter
+  - adopter
+  - anyone can read
+  - screw
+  - process pioneer
+  - aesthetic
+  - on lb
+  - bio
+  - prov11
+  - toisostring
+  - zoom
+  - red carpet access
+  - carpet access
+  - upgrade premium
+  - upgrade premium unlock
+  - premium unlock
+  - no llc ceo
+  - llc ceo
+  - snow gate
+  - k87
+  - dss
+  - adapt scores
+  - collapsible
+  - portalpagelayout
+  - how it works
+  - meals
+  - domain migration
+  - portals
+  - id auth uid create
+  - auth uid create
+  - auth uid create policy
+  - uid create
+  - uid create policy
+  - where user
+  - jonathan
+  - saves
+  - attachments
+  - boaz
+  - deliverables 1
+  - for update
+  - silver
+  - group by
+  - or replace
+  - table sql
+  - 3 creator
+  - floating
+  - cards with
+  - verify the
+  - b084
+  - ts create
+  - year membership
+  - frames
+  - verification 1
+  - out to fiat
+  - bump
+  - user facing
+  - retail
+  - target tag v
+  - frozen
+  - id text not
+  - id text not null
+  - boolean default true created
+  - coalition members
+  - showcased
+  - backings
+  - create src components
+  - account id
+  - purchases
+  - discover
+  - admin create policy
+  - is not null
+  - text nullable
+  - username
+  - empire
+  - section librarian
+  - platform v2 src domains
+  - v2 src domains
+  - src domains
+  - sidebar navigation
+  - ledger category
+  - master design packet
+  - design packet
+  - april 3
+  - news slot
+  - v2 redesign
+  - payout preference
+  - return jsonresponse error
+  - jsonresponse error
+  - hemispheric
+  - exist in
+  - platform config
+  - philosophy
+  - patent applications
+  - creator keeps 83
+  - page design specs
+  - bars
+  - menu orders
+  - checklist 1
+  - bishop claude desktop
+  - wants
+  - fullcalendar
+  - milestone handoff
+  - milestone handoff march
+  - milestone handoff march 2026
+  - handoff march 2026
+  - handoff march 2026 md
+  - work records
+  - not create
+  - in pending
+  - status draft
+  - jones
+  - rook
+  - clarifying question
+  - phase 6
+  - create or replace
+  - created with
+  - to add
+  - pop
+  - captain s
+  - status badge
+  - platform src hooks
+  - update status
+  - admin can
+  - renderer
+  - create new
+  - number title
+  - wyoming c
+  - wyoming c corp
+  - c corp
+  - 99 misc
+  - do not change
+  - add the
+  - 3 update
+  - reads from
+  - 5 year membership
+  - pot
+  - default 0 created
+  - default 0 created at
+  - api keys
+  - the answer
+  - auth users id on
+  - users id on
+  - users id on delete
+  - throw
+  - index ts typescript
+  - if applicable
+  - boost
+  - demand signals
+  - create policy users manage
+  - policy users manage
+  - policy users manage own
+  - users manage
+  - users manage own
+  - offset
+  - sign up
+  - amount numeric
+  - transfer id
+  - console error
+  - modify file
+  - pledged marks
+  - auction
+  - production levels
+  - 1 hero
+  - on crew
+  - prov11 number
+  - backer election
+  - pin
+  - accomplishment score
+  - id stripe
+  - sacred
+  - sacred texts
+  - env get supabase url
+  - get supabase url
+  - response json stringify error
+  - json stringify error
+  - stringify error
+  - tracked bills
+  - april 3 2026
+  - family name
+  - reading beacon
+  - engagement events
+  - b078
+  - no upgrade
+  - appshell bishop
+  - auth users not
+  - auth users not null
+  - users not
+  - users not null
+  - become a
+  - 2b
+  - creator keeps 83 3
+  - stamped
+  - bookings
+  - build firebase
+  - build firebase deploy
+  - build firebase deploy only
+  - self funding
+  - lucide
+  - icons
+  - all content
+  - widget
+  - restart
+  - mark work
+  - priority medium
+  - from existing
+  - replace the
+  - 01 md
+  - contents
+  - tsx modify
+  - coalesce
+  - x ray goggles
+  - ray goggles
+  - dispatch crewman
+  - dispatch crewman episode
+  - crewman episode
+  - admin only
+  - current setting
+  - supabase url functions
+  - supabase url functions v1
+  - url functions
+  - url functions v1
+  - entries for
+  - for update using
+  - update using
+  - critical rules
+  - docx
+  - textarea
+  - never cash out to
+  - cash out to
+  - cash out to fiat
+  - one level only
+  - level only
+  - 4 verify
+  - checkpoint
+  - generate a
+  - question per
+  - upsert
+  - backend
+  - https api
+  - the r11
+  - check for
+  - onboarder
+  - card is
+  - spa
+  - design rules
+  - glow
+  - id create index idx
+  - new date toisostring
+  - date toisostring
+  - file supabase functions
+  - print orders
+  - founder feature
+  - founder feature flags
+  - standalone articles
+  - proof strip
+  - printful api
+  - founders journal
+  - skipping stone
+  - paprika
+  - fire at
+  - assignee
+  - b48
+  - veto
+  - mobile single
+  - bishop b080 april
+  - bishop b080 april 5
+  - b080 april
+  - b080 april 5
+  - b080 april 5 2026
+  - supabaseadmin
+  - first steps
+  - inviter
+  - visitor
+  - battery dispatch access
+  - dispatch access
+  - uber
+  - founder override
+  - styles
+  - npm run build firebase
+  - run build firebase
+  - run build firebase deploy
+  - ideas
+  - detail page
+  - or create
+  - source type
+  - innovations 1
+  - content command
+  - content command center
+  - mark work records
+  - marks for
+  - the captain
+  - 3 edge
+  - domain migration priority
+  - migration priority
+  - unique not
+  - unique not null
+  - category text not
+  - category text not null
+  - timestamptz default now create
+  - text default pending
+  - where user id
+  - you ll
+  - lmd
+  - brynjolfsson
+  - match the
+  - cron schedule
+  - table migration
+  - project id uuid
+  - subscriber
+  - glossary
+  - irrevocable
+  - outreach letters letter
+  - restate
+  - start the
+  - answer is
+  - predecessor gate
+  - bridle version
+  - bridle version 10
+  - version 10
+  - task class
+  - estimated model
+  - id or
+  - verify canonical
+  - vouch
+  - members id
+  - service allocation
+  - ranger
+  - component create
+  - stripe account
+  - pct numeric
+  - card transactions
+  - influencer
+  - cephas article
+  - tsx create src
+  - sm
+  - title ilike
+  - sample data
+  - stripe event
+  - file platform supabase functions
+  - await fetch
+  - method post
+  - post headers
+  - secrets set
+  - auto post
+  - 2 dev null mv
+  - dev null mv
+  - null mv
+  - pawn b48
+  - bishop b079
+  - no upgrade premium
+  - no upgrade premium unlock
+  - shadow mark
+  - anvil
+  - bishop b080 phase
+  - b080 phase
+  - delivery fee
+  - k82
+  - tsx route path
+  - bundles
+  - read this before
+  - section flow
+  - innovation count 1 935
+  - count 1 935
+  - household
+  - the migration
+  - tsx src pages
+  - groceries
+  - printing
+  - power to
+  - power to the
+  - power to the people
+  - to the people
+  - fix any
+  - ask should
+  - b046
+  - showing the
+  - production runs
+  - start a
+  - platform margin
+  - notes overlay
+  - packages
+  - prize panel
+  - text unique not
+  - text unique not null
+  - cents integer
+  - id amount cents
+  - status text default pending
+  - id in
+  - printer
+  - awarded
+  - requested
+  - suggestions
+  - creator share
+  - text status
+  - defensibly
+  - a storefront
+  - table sql create
+  - orange
+  - mock data
+  - context what
+  - sell
+  - card for
+  - dispatch executor
+  - executor
+  - current setting app
+  - setting app
+  - not auto
+  - timestamps
+  - letter body
+  - priority critical
+  - using exists
+  - using exists select
+  - using exists select 1
+  - tiktok
+  - youtube
+  - three currency
+  - spice rack
+  - rack
+  - email to
+  - tip
+  - this page
+  - clickable
+  - hide
+  - marks are
+  - select count
+  - str
+  - structure platform
+  - 1 do
+  - rules task
+  - block 1
+  - the answer is
+  - jsonb not
+  - jsonb not null
+  - refactor
+  - supabase edge
+  - copy md
+  - echoes
+  - bash cd librarian
+  - bash cd librarian mcp
+  - 1 create migration
+  - 5 wire
+  - card to
+  - idea
+  - member subscriptions
+  - is active true
+  - unique user
+  - unique user id
+  - cost estimate 0
+  - estimate 0
+  - dna
+  - scout
+  - numeric 12
+  - numeric 12 2
+  - streak
+  - thermoplastic
+  - policy anyone can read
+  - today s
+  - platform canonical set prov11
+  - canonical set prov11
+  - canonical set prov11 number
+  - set prov11
+  - set prov11 number
+  - xp scores
+  - id create policy admin
+  - stripe event id
+  - galactic
+  - galactic empire
+  - lbcardpage
+  - tour notes
+  - connect accounts
+  - critical design
+  - distribute order
+  - distribute order earnings
+  - order earnings
+  - calendar sync
+  - supabase secrets set
+  - env get supabase service
+  - get supabase service
+  - get supabase service role
+  - tv
+  - secondary spices
+  - from crewman
+  - files to modify file
+  - to modify file
+  - v2 page design
+  - v2 page design specs
+  - page design specs phase
+  - design specs phase
+  - specs phase
+  - where pudding
+  - where pudding number
+  - to auth users not
+  - public is admin create
+  - caseid
+  - the main
+  - forge
+  - redcarpet
+  - after this session
+  - b35
+  - not raw
+  - prompt knight session
+  - pm
+  - all 3
+  - 2026 priority high
+  - in src
+  - rgba
+  - accent
+  - let s make dinner
+  - s make dinner
+  - click to
+  - enhancement
+  - plus 20
+  - didasko
+  - sec safe language
+  - safe language
+  - lovable
+  - firebase 8
+  - hint
+  - provisional patent
+  - filter by
+  - sls
+  - slider
+  - click a
+  - pioneer bonus
+  - deploys
+  - in helm
+  - wires
+  - slugs
+  - v2 migration
+  - local business
+  - cnc
+  - equipment
+  - where status
+  - default active
+  - boaz principle
+  - 4 read
+  - bronze
+  - exports
+  - this knight
+  - solo
+  - table sql create table
+  - 83 3 creator
+  - in localstorage
+  - send transactional
+  - send transactional email
+  - dashboard shows
+  - popup
+  - colored
+  - bishop dropzone 99
+  - bishop dropzone 99 misc
+  - dropzone 99
+  - dropzone 99 misc
+  - cost plus
+  - cephas lianabanyan com
+  - x ray mode
+  - ray mode
+  - cooperative housing
+  - is null
+  - collateral
+  - produce the
+  - vendor model
+  - signup flow
+  - the bridle read
+  - the bridle read this
+  - bridle read
+  - bridle read this
+  - bridle read this before
+  - read this before you
+  - this before you respond
+  - before you respond
+  - before you respond follow
+  - you respond
+  - you respond follow
+  - you respond follow all
+  - respond follow
+  - respond follow all
+  - follow all
+  - rules task follows
+  - rules task follows the
+  - task follows the
+  - task follows the bridle
+  - follows the bridle
+  - follows the bridle block
+  - the bridle block
+  - the bridle block 1
+  - bridle block
