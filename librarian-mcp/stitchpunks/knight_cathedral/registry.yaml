@@ -1,0 +1,137 @@
+# Knight Cathedral Registry — K455c / B121
+# ========================================
+# Knight's Cathedral is a member-class Cathedral instantiated K461/B121.
+# This registry enables cross-Cathedral consult_scribes(cathedral="knight")
+# queries from Bishop's side, and will serve Knight's own context lookups.
+#
+# Tablet format: Knight schema (observation/category/timestamp/source_session/source_document/tokens)
+# vs Bishop schema (ts/session/observation/source/canonical_ref).
+# The consult layer normalizes both formats to a common view.
+#
+# NOTE: Knight's Cathedral intentionally contains NO R11 corpus.
+# That is the control-arm invariant for K455c cross-Cathedral benchmark.
+
+version: 0.1.0
+opened: 2026-04-23
+opener: K455c/B121 (cross-Cathedral consultation setup)
+spec: ../SP22_SP23_THREE_FATES_AND_SCRIBES_CATHEDRAL_SPEC.md
+
+scribes:
+  - id: KnightQueue
+    primary:
+      level: 1
+      field: Knight session task queue — NEXT / QUEUED / LANDED state for Cursor Knight agent
+      canonical_keepers:
+        - BISHOP_DROPZONE/01_KnightPrompts/
+        - KNIGHT_QUEUE.md
+    adjacents:
+      - level: 2
+        field: session lifecycle (K-number progression, prerequisite gates)
+      - level: 3
+        field: BRIDLE discipline (task scope, prerequisites, tags)
+    keywords:
+      - NEXT
+      - QUEUED
+      - LANDED
+      - Knight
+      - K461
+      - K455
+      - K438
+      - K442
+      - K443
+      - K441
+      - session
+      - task
+      - queue
+      - BISHOP_DROPZONE
+      - prerequisite
+      - gate
+    activation_threshold: any K-number session reference or queue status lookup
+
+  - id: KnightHandoffs
+    primary:
+      level: 1
+      field: Knight session handoff reports and landed commit provenance
+      canonical_keepers:
+        - BISHOP_DROPZONE/03_BishopHandoffs/REPORT_KNIGHT_*.md
+    adjacents:
+      - level: 2
+        field: git commit hashes and tag names for Knight sessions
+      - level: 3
+        field: session outcomes and architectural decisions made by Knight
+    keywords:
+      - handoff
+      - REPORT_KNIGHT
+      - landed
+      - commit
+      - tag
+      - v-
+      - git
+      - deploy
+      - ship
+      - delivered
+      - complete
+    activation_threshold: any "what did Knight ship" or "which sessions landed" query
+
+  - id: KnightBRIDLEMemory
+    primary:
+      level: 1
+      field: Knight BRIDLE discipline log — which rules were invoked and how
+      canonical_keepers:
+        - AGENTS.md (BRIDLE section)
+    adjacents:
+      - level: 2
+        field: verify-before-assert discipline (Rule 2)
+      - level: 3
+        field: scope escalation stops (Rule 4)
+    keywords:
+      - BRIDLE
+      - Rule 1
+      - Rule 2
+      - Rule 3
+      - Rule 4
+      - Rule 5
+      - Rule 6
+      - Rule 7
+      - Rule 8
+      - Rule 9
+      - Rule 10
+      - verify before asserting
+      - do the task
+      - prereq gate
+      - stop and flag
+    activation_threshold: any BRIDLE rule invocation or discipline observation
+
+  - id: KnightArchitecture
+    primary:
+      level: 1
+      field: Knight architectural decisions — code surfaces touched, design choices made
+      canonical_keepers:
+        - librarian-mcp/src/
+        - platform/src/
+    adjacents:
+      - level: 2
+        field: MCP tool surfaces (server.ts, registerTool pattern)
+      - level: 3
+        field: Scribes Cathedral architecture (consult_scribes, tablet format)
+      - level: 4
+        field: platform deployment (Firebase, Supabase, build gates)
+    keywords:
+      - architecture
+      - design
+      - implementation
+      - server.ts
+      - MCP
+      - consult_scribes
+      - tablet
+      - Cathedral
+      - scope
+      - cross-Cathedral
+      - Knight's Cathedral
+      - Bishop's Cathedral
+      - schema
+      - JSONL
+      - append-only
+      - K455c
+      - K461
+    activation_threshold: any architectural decision or code surface query

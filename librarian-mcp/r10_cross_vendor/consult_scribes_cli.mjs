@@ -31,6 +31,9 @@ rl.on("line", (line) => {
       topic: String(req.topic || ""),
       max_entries: req.max_entries ?? 10,
       include_adjacents: req.include_adjacents ?? true,
+      // K455c: cathedral + scope params for cross-Cathedral consultation
+      cathedral: req.cathedral ?? "bishop",
+      scope: req.scope ?? "public",
     });
     process.stdout.write(JSON.stringify({ ok: true, result }) + "\n");
   } catch (e) {

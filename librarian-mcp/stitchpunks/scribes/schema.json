@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "bishop-cathedral-tablet-schema",
+  "title": "Bishop Cathedral Tablet Schema",
+  "description": "Append-only JSONL tablet format for Bishop's Cathedral Scribes (SP-22/23 / K436). Extended K455c/B121 with scope field.",
+  "type": "object",
+  "required": ["ts", "session", "observation", "source"],
+  "properties": {
+    "scope": {
+      "type": "string",
+      "description": "Access scope for this tablet. Values: 'public' (visible to all cross-Cathedral consultation), 'private' (caller-owned only), 'guild:<name>', 'tribe:<name>'. Default for existing tablets: 'public'.",
+      "default": "public"
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this tablet was appended"
+    },
+    "session": {
+      "type": "string",
+      "description": "Session ID that generated this tablet (e.g., B121, K461)"
+    },
+    "observation": {
+      "type": "string",
+      "description": "What this tablet records — the canonical observation text"
+    },
+    "source": {
+      "type": "string",
+      "description": "How this observation was generated (e.g., founder_dialogue, bishop_ship, knight_ship)"
+    },
+    "canonical_ref": {
+      "type": "string",
+      "description": "File path or artifact reference this tablet was derived from"
+    },
+    "source_session": {
+      "type": "string",
+      "description": "Session ID (alternate field, used by R11 ingestion and Knight-format tablets)"
+    },
+    "source_document": {
+      "type": "string",
+      "description": "Source document path (alternate field, used by R11 ingestion and Knight-format tablets)"
+    },
+    "tokens": {
+      "type": "number",
+      "description": "Word-count approximation of the observation"
+    },
+    "category": {
+      "type": "string",
+      "description": "Primary category tag (used by R11 ingestion)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Alternate timestamp field (used by R11 ingestion and Knight-format tablets)"
+    }
+  },
+  "_notes": {
+    "append_only": "Tablets are NEVER modified after writing. Corrections are new entries with a supersedes pointer.",
+    "scope_retrofit": "Retrofitted K455c — all pre-existing tablets gain scope: 'public' via retrofit-tablet-scope.mjs.",
+    "knight_compat": "Bishop field names (ts/session/canonical_ref) differ from Knight field names (timestamp/source_session/source_document). Cross-Cathedral reads normalize to a common view."
+  }
+}

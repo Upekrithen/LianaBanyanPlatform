@@ -359,6 +359,67 @@ scribes:
       - Jonathan Jones
     activation_threshold: any direct Founder-voice quote OR any Rhetorical Keystone reference
 
+  # ============================================================
+  # K455c / B121 — R11 canonical corpus Scribe
+  # Loaded 2026-04-23 to enable cross-Cathedral benchmark arm.
+  # Knight's Cathedral does NOT contain this Scribe (control arm integrity).
+  # ============================================================
+
+  - id: R11
+    primary:
+      level: 1
+      field: R11 canonical corpus — cooperative AI platform benchmark fixture (50 facts, 6 categories)
+      canonical_keepers:
+        - r10_cross_vendor/r11_canonical_corpus.md
+        - r10_cross_vendor/R11_QUESTION_BANK_SEALED.json
+    adjacents:
+      - level: 2
+        field: Verdania cooperative platform statistics (members, transactions, governance)
+      - level: 2
+        field: Thornwick architecture mechanics (dense-sparse retrieval, embeddings)
+      - level: 3
+        field: cooperative governance economics (patronage, directors, equity)
+      - level: 3
+        field: member journey and lifecycle (onboarding, assessment, mentorship)
+      - level: 4
+        field: regulatory compliance (AI audit, data retention, incident response)
+      - level: 4
+        field: historical precedent (founding summit, Sundry Accord, Cairnfield Protocol)
+    keywords:
+      - Verdania
+      - Thornwick
+      - Cairnfield
+      - Sundry Accord
+      - Solstice Index
+      - R11
+      - R11-CANONICAL
+      - Cooperative Ledger Standards Body
+      - Cooperative Capital Framework
+      - Cooperative AI Governance Charter
+      - Federated Platform Compact
+      - "847,293"
+      - "4.7 billion"
+      - "66.7%"
+      - "180-day"
+      - "4.18"
+      - "$312"
+      - "15%"
+      - "2.3%"
+      - "8.5%"
+      - "0.73"
+      - "1,536"
+      - "top-10"
+      - "4,096 tokens"
+      - "512 tokens"
+      - "p99"
+      - "canonical statistics"
+      - "architecture mechanics"
+      - "economic governance"
+      - "member journey"
+      - "regulatory compliance"
+      - "historical precedent"
+    activation_threshold: any R11 benchmark question or corpus fact reference
+
 # Future Scribe candidates (instantiate on first trigger; do NOT pre-create):
 #   - Letters (Crown Letters primary; Rhetorical Keystones / dispatch queue adjacents)
 #   - Pedestal (Reg CF portal primary; Upekrithen seller-of-record / two-track separation adjacents)

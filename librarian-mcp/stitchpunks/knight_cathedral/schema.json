@@ -6,6 +6,11 @@
   "type": "object",
   "required": ["observation", "category", "timestamp", "source_session", "source_document", "tokens"],
   "properties": {
+    "scope": {
+      "type": "string",
+      "description": "Access scope for this tablet. Values: 'public' (visible to all cross-Cathedral consultation), 'private' (caller-owned only), 'guild:<name>', 'tribe:<name>'. Default for existing tablets: 'public'.",
+      "default": "public"
+    },
     "observation": {
       "type": "string",
       "description": "What this tablet records — the canonical observation text"
