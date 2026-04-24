@@ -58,9 +58,12 @@ function loadOverview() {
 }
 
 // Overview-only fields: checked ONLY between overview.json and the hook.
-// These are indexer-derived counts (not YAML-sourced), added in K460.
+// These are artifact-derived counts (not YAML-sourced). K460 added the concept;
+// K462 swapped sources from MCP-logged (*McpLogged fields) to artifact-derived.
+// The *McpLogged fields remain in overview.json as diagnostic-only and are NOT
+// listed here — they must not be cross-checked against the hook.
 const OVERVIEW_ONLY_FIELDS = [
-  { overviewKey: "knightSessionCount", hookKey: "knightSessions" },
+  { overviewKey: "knightPromptCount",  hookKey: "knightSessions" },
   { overviewKey: "bishopSessionCount", hookKey: "bishopSessions" },
 ];
 
@@ -142,7 +145,7 @@ for (const r of rows) {
 }
 if (overviewOnlyRows.length) {
   console.log("─".repeat(78));
-  console.log("(overview-only fields — K460 indexer-derived session counts)");
+  console.log("(overview-only fields — K462 artifact-derived session counts; *McpLogged fields are diagnostic-only and not checked here)");
   for (const r of overviewOnlyRows) {
     console.log(r.field.padEnd(34) + "—".padEnd(12) + String(r.overview).padEnd(12) + String(r.hook));
   }

@@ -94,9 +94,10 @@ test("missing overview.json → exit 0 (fresh-checkout ergonomics preserved)", (
   }
 });
 
-// ── Test D: K460 overview-only drift — knightSessions mismatch → exit 1 ───────
+// ── Test D: K462 overview-only drift — knightSessions mismatch → exit 1 ───────
+// Uses artifact-derived field knightPromptCount (not the old knightSessionCount/McpLogged).
 
-test("drift detected: overview.knightSessionCount ≠ hook.knightSessions → exit 1 + DRIFT DETECTED", () => {
+test("drift detected: overview.knightPromptCount ≠ hook.knightSessions → exit 1 + DRIFT DETECTED", () => {
   if (!existsSync(OVERVIEW_PATH) || !existsSync(HOOK_PATH)) {
     console.warn("  ⚠ overview.json or hook missing — skipping test D.");
     return;
@@ -105,9 +106,9 @@ test("drift detected: overview.knightSessionCount ≠ hook.knightSessions → ex
   const originalOverview = readFileSync(OVERVIEW_PATH, "utf-8");
   const originalHook = readFileSync(HOOK_PATH, "utf-8");
 
-  // Corrupt knightSessionCount in overview.json to a value that won't match the hook
+  // Corrupt knightPromptCount in overview.json to a value that won't match the hook
   const corruptOverview = JSON.parse(originalOverview);
-  corruptOverview.knightSessionCount = 7777;
+  corruptOverview.knightPromptCount = 7777;
 
   try {
     writeFileSync(OVERVIEW_PATH, JSON.stringify(corruptOverview, null, 2) + "\n", "utf-8");
@@ -122,11 +123,44 @@ test("drift detected: overview.knightSessionCount ≠ hook.knightSessions → ex
       `Expected "DRIFT DETECTED" in stderr. Got:\n${result.stderr}`,
     );
     assert.ok(
-      result.stderr.includes("knightSessions") || result.stderr.includes("knightSessionCount"),
-      `Expected drift message to mention knightSessions. Got:\n${result.stderr}`,
+      result.stderr.includes("knightSessions") || result.stderr.includes("knightPromptCount"),
+      `Expected drift message to mention knightSessions/knightPromptCount. Got:\n${result.stderr}`,
     );
   } finally {
     writeFileSync(OVERVIEW_PATH, originalOverview, "utf-8");
     writeFileSync(HOOK_PATH, originalHook, "utf-8");
+  }
+});
+
+// ── Test E: K462 — *McpLogged fields are ignored by verify (diagnostic-only) ────
+// Corrupting knightSessionsMcpLogged / bishopSessionsMcpLogged must NOT cause drift.
+
+test("McpLogged fields are diagnostic-only: corrupting them does not trigger DRIFT DETECTED", () => {
+  if (!existsSync(OVERVIEW_PATH)) {
+    console.warn("  ⚠ overview.json missing — skipping test E.");
+    return;
+  }
+
+  const originalOverview = readFileSync(OVERVIEW_PATH, "utf-8");
+
+  // Set *McpLogged to obviously wrong values — verify must still pass
+  const corruptOverview = JSON.parse(originalOverview);
+  corruptOverview.knightSessionsMcpLogged = 1;
+  corruptOverview.bishopSessionsMcpLogged = 1;
+
+  try {
+    writeFileSync(OVERVIEW_PATH, JSON.stringify(corruptOverview, null, 2) + "\n", "utf-8");
+
+    const result = runVerify();
+    assert.equal(
+      result.status, 0,
+      `Expected exit 0 — *McpLogged fields must not be cross-checked. stdout:\n${result.stdout}\nstderr:\n${result.stderr}`,
+    );
+    assert.ok(
+      result.stdout.includes("All canonical surfaces agree."),
+      `Expected "All canonical surfaces agree." even with corrupted *McpLogged fields. Got:\n${result.stdout}`,
+    );
+  } finally {
+    writeFileSync(OVERVIEW_PATH, originalOverview, "utf-8");
   }
 });

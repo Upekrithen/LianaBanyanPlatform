@@ -167,7 +167,13 @@ export interface SystemOverview {
   transcriptCount: number;
   componentCount: number;
   bishopChatCount: number;
-  knightSessionCount: number;
+  /** MCP-logged K-sessions: count of K-IDs that called update_session. Diagnostic only. */
+  knightSessionsMcpLogged: number;
+  /** MCP-logged B-sessions: count of B-IDs that called update_session. Diagnostic only. */
+  bishopSessionsMcpLogged: number;
+  /** Artifact-derived: count of unique K-numbers in PROMPT_KNIGHT_K<NNN>_ files. UI-facing. */
+  knightPromptCount: number;
+  /** Artifact-derived: count of unique B-numbers across dropzone filenames. UI-facing. */
   bishopSessionCount: number;
   lastSession?: string;
   pendingWork: string[];

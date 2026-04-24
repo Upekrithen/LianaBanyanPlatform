@@ -116,6 +116,8 @@ test("non-YAML field founderAge is preserved unchanged after codegen", () => {
 });
 
 // ── Test D: overview-sourced codegen rewrites stale knightSessions / bishopSessions ─
+// Sources are the artifact-derived fields (knightPromptCount / bishopSessionCount),
+// NOT the *McpLogged diagnostic fields (K462 semantic swap).
 
 test("overview-sourced codegen: stale knightSessions and bishopSessions are updated from overview.json", () => {
   if (!existsSync(OVERVIEW_PATH)) {
@@ -124,10 +126,10 @@ test("overview-sourced codegen: stale knightSessions and bishopSessions are upda
   }
 
   const overview = JSON.parse(readFileSync(OVERVIEW_PATH, "utf-8"));
-  const canonicalKnight = overview.knightSessionCount;
+  const canonicalKnight = overview.knightPromptCount;
   const canonicalBishop = overview.bishopSessionCount;
   if (typeof canonicalKnight !== "number" || typeof canonicalBishop !== "number") {
-    console.warn("  ⚠ overview.json missing knightSessionCount/bishopSessionCount — run `npm run rebuild:full`. Skipping test D.");
+    console.warn("  ⚠ overview.json missing knightPromptCount/bishopSessionCount — run `npm run rebuild:full`. Skipping test D.");
     return;
   }
 
@@ -150,14 +152,61 @@ test("overview-sourced codegen: stale knightSessions and bishopSessions are upda
     assert.ok(mBishop, "bishopSessions not found after codegen");
     assert.equal(
       parseInt(mKnight[1].replace(/_/g, ""), 10), canonicalKnight,
-      `knightSessions should be ${canonicalKnight} (from overview), got ${mKnight[1]}`,
+      `knightSessions should be ${canonicalKnight} (from overview.knightPromptCount), got ${mKnight[1]}`,
     );
     assert.equal(
       parseInt(mBishop[1].replace(/_/g, ""), 10), canonicalBishop,
-      `bishopSessions should be ${canonicalBishop} (from overview), got ${mBishop[1]}`,
+      `bishopSessions should be ${canonicalBishop} (from overview.bishopSessionCount), got ${mBishop[1]}`,
     );
   } finally {
     writeFileSync(HOOK_PATH, original, "utf-8");
+  }
+});
+
+// ── Test F: codegen reads artifact-derived fields, not *McpLogged diagnostic fields ─
+// Verifies the K462 semantic split: knightPromptCount/bishopSessionCount drive the hook,
+// while knightSessionsMcpLogged/bishopSessionsMcpLogged are left alone.
+
+test("codegen reads knightPromptCount and bishopSessionCount, not *McpLogged fields", () => {
+  if (!existsSync(OVERVIEW_PATH)) {
+    console.warn("  ⚠ overview.json missing — run `npm run rebuild:full` first. Skipping test F.");
+    return;
+  }
+
+  const originalOverview = readFileSync(OVERVIEW_PATH, "utf-8");
+  const originalHook = readFileSync(HOOK_PATH, "utf-8");
+
+  // Patch overview.json so *McpLogged fields are set to 1 and artifact fields to 9999.
+  // After codegen, hook should reflect 9999 (artifact), not 1 (MCP-logged).
+  const overrideOverview = JSON.parse(originalOverview);
+  overrideOverview.knightPromptCount = 9999;
+  overrideOverview.bishopSessionCount = 8888;
+  overrideOverview.knightSessionsMcpLogged = 1;
+  overrideOverview.bishopSessionsMcpLogged = 1;
+
+  try {
+    writeFileSync(OVERVIEW_PATH, JSON.stringify(overrideOverview, null, 2), "utf-8");
+
+    const result = runCodegen();
+    assert.equal(result.status, 0, `codegen failed. stderr:\n${result.stderr}`);
+
+    const afterHook = readFileSync(HOOK_PATH, "utf-8");
+    const mKnight = afterHook.match(/\bknightSessions\s*:\s*(\d[\d_]*)/);
+    const mBishop = afterHook.match(/\bbishopSessions\s*:\s*(\d[\d_]*)/);
+    assert.ok(mKnight, "knightSessions not found after codegen");
+    assert.ok(mBishop, "bishopSessions not found after codegen");
+
+    assert.equal(
+      parseInt(mKnight[1].replace(/_/g, ""), 10), 9999,
+      `knightSessions should be 9999 (from knightPromptCount), got ${mKnight[1]} — codegen must not use knightSessionsMcpLogged`,
+    );
+    assert.equal(
+      parseInt(mBishop[1].replace(/_/g, ""), 10), 8888,
+      `bishopSessions should be 8888 (from bishopSessionCount), got ${mBishop[1]} — codegen must not use bishopSessionsMcpLogged`,
+    );
+  } finally {
+    writeFileSync(OVERVIEW_PATH, originalOverview, "utf-8");
+    writeFileSync(HOOK_PATH, originalHook, "utf-8");
   }
 });
 

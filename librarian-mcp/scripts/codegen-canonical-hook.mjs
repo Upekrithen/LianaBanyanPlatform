@@ -7,9 +7,14 @@
 //   innovationCount, crownJewels, patentApplications, patentClaims, productionSystems
 //
 // Pass 2 — Overview-sourced (index/overview.json → useCanonicalStats.ts):
-//   knightSessions  ← overview.knightSessionCount
-//   bishopSessions  ← overview.bishopSessionCount
-//   (pawnBatches is hand-maintained; no P-sessions exist in sessions.json as of B121)
+//   knightSessions  ← overview.knightPromptCount    (artifact-derived; UI-facing)
+//   bishopSessions  ← overview.bishopSessionCount   (artifact-derived; UI-facing)
+//   (pawnBatches is hand-maintained)
+//
+// overview.json also carries two diagnostic-only fields that are NOT propagated here:
+//   knightSessionsMcpLogged  — K-sessions that explicitly called update_session
+//   bishopSessionsMcpLogged  — B-sessions that explicitly called update_session
+// These are internal diagnostics (B121 semantic decision, K462).
 //
 // All other DEFAULTS fields are hand-maintained and left alone. Idempotent.
 // Runs before `verify:canonical` in the rebuild chain.
@@ -75,9 +80,10 @@ for (const { yamlKey, hookKey } of FIELD_MAP) {
 }
 
 // ── Pass 2: overview-sourced fields (knightSessions, bishopSessions) ─────────
+// Sources are artifact-derived counts (K462), not the *McpLogged diagnostic fields.
 
 const OVERVIEW_FIELD_MAP = [
-  { overviewKey: "knightSessionCount", hookKey: "knightSessions" },
+  { overviewKey: "knightPromptCount",  hookKey: "knightSessions" },
   { overviewKey: "bishopSessionCount", hookKey: "bishopSessions" },
 ];
 

@@ -10,12 +10,14 @@
   "cephasPageCount": 383,
   "migrationCount": 8,
   "conceptCount": 338,
-  "dropzoneCount": 4425,
-  "transcriptCount": 320,
+  "dropzoneCount": 4427,
+  "transcriptCount": 321,
   "componentCount": 1270,
-  "bishopChatCount": 433,
-  "knightSessionCount": 137,
-  "bishopSessionCount": 54,
+  "bishopChatCount": 435,
+  "knightSessionsMcpLogged": 137,
+  "bishopSessionsMcpLogged": 54,
+  "knightPromptCount": 54,
+  "bishopSessionCount": 52,
   "membershipCost": "$5/year",
   "creatorKeeps": "83.3%",
   "platformMargin": "Cost + 20%",
@@ -37,5 +39,5 @@
     "K451 baseline — LIVE ✓",
     "SP-24 Three Fates enforcement — prompt ready, not yet dispatched"
   ],
-  "timestamp": "2026-04-24T00:39:29.712Z"
+  "timestamp": "2026-04-24T01:14:28.392Z"
 }

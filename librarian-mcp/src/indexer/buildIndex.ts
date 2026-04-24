@@ -1,4 +1,4 @@
-import { writeFileSync, readFileSync, mkdirSync, existsSync } from "fs";
+import { writeFileSync, readFileSync, mkdirSync, existsSync, readdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parseMigrations } from "./parseMigrations.js";
@@ -180,13 +180,51 @@ async function main() {
   // the merged session stream. Only ^[PREFIX]\d+$ format counts; compound/legacy IDs
   // are excluded. Pawn sessions (P-prefix) are omitted — none exist in sessions.json
   // as of B121; pawnBatches in useCanonicalStats.ts remains hand-maintained.
+  // These are MCP-logged counts (only sessions that called update_session); renamed
+  // *McpLogged in K462 to distinguish from the artifact-derived UI-facing counts.
   const CANONICAL_ID = /^([A-Z])(\d+)$/;
-  const knightSessionCount = context.sessions.filter(s =>
+  const knightSessionsMcpLogged = context.sessions.filter(s =>
     s.id && CANONICAL_ID.test(s.id) && s.id.startsWith("K"),
   ).length;
-  const bishopSessionCount = context.sessions.filter(s =>
+  const bishopSessionsMcpLogged = context.sessions.filter(s =>
     s.id && CANONICAL_ID.test(s.id) && s.id.startsWith("B"),
   ).length;
+
+  // K462 artifact-derived counts: source from dropzone filenames rather than
+  // sessions.json, so the UI shows total dispatches rather than MCP-logged subset.
+  //
+  // knightPromptCount: unique K-numbers in PROMPT_KNIGHT_K<NNN>_*.md files.
+  // bishopSessionCount: unique B-numbers across both dropzone directories.
+  //
+  // Spot-check commands (from K462 spec):
+  //   ls BISHOP_DROPZONE/01_KnightPrompts/ | grep -oE 'PROMPT_KNIGHT_K[0-9]+' | grep -oE 'K[0-9]+' | sort -u | wc -l
+  //   (ls BISHOP_DROPZONE/03_BishopHandoffs/ | grep -oE 'B[0-9]+'; ls BISHOP_DROPZONE/01_KnightPrompts/ | grep -oE 'B[0-9]+') | sort -u | wc -l
+  const KNIGHT_PROMPTS_DIR = resolve(WORKSPACE, "BISHOP_DROPZONE/01_KnightPrompts");
+  const BISHOP_HANDOFFS_DIR = resolve(WORKSPACE, "BISHOP_DROPZONE/03_BishopHandoffs");
+  const K_NUMBER_RE = /PROMPT_KNIGHT_K(\d+)/i;
+  const B_NUMBER_RE = /B(\d+)/g;
+
+  const uniqueKNumbers = new Set<string>();
+  if (existsSync(KNIGHT_PROMPTS_DIR)) {
+    for (const fname of readdirSync(KNIGHT_PROMPTS_DIR)) {
+      const m = K_NUMBER_RE.exec(fname);
+      if (m) uniqueKNumbers.add(m[1]);
+    }
+  }
+  const knightPromptCount = uniqueKNumbers.size;
+
+  const uniqueBNumbers = new Set<string>();
+  for (const dir of [BISHOP_HANDOFFS_DIR, KNIGHT_PROMPTS_DIR]) {
+    if (!existsSync(dir)) continue;
+    for (const fname of readdirSync(dir)) {
+      let m: RegExpExecArray | null;
+      B_NUMBER_RE.lastIndex = 0;
+      while ((m = B_NUMBER_RE.exec(fname)) !== null) {
+        uniqueBNumbers.add(m[1]);
+      }
+    }
+  }
+  const bishopSessionCount = uniqueBNumbers.size;
 
   const overview: SystemOverview = {
     innovationCount: (context.canonicalNumbers.innovationCount as number) || 2130,
@@ -204,7 +242,9 @@ async function main() {
     transcriptCount: transcripts.count,
     componentCount: components.count,
     bishopChatCount: bishop.count,
-    knightSessionCount,
+    knightSessionsMcpLogged,
+    bishopSessionsMcpLogged,
+    knightPromptCount,
     bishopSessionCount,
     membershipCost: "$5/year",
     creatorKeeps: "83.3%",
