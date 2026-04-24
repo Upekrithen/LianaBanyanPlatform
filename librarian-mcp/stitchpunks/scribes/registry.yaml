@@ -506,6 +506,47 @@ scribes:
       - R12-Covenant
     activation_threshold: any R12-Covenant benchmark question or corpus fact reference
 
+  # ============================================================
+  # K480 / B122 — Toolsmith Scribe (command-lore substrate)
+  # Shared JSONL file with Knight Cathedral — single source of truth.
+  # Bishop consults when drafting K-prompts that include shell/tool invocations.
+  # ============================================================
+
+  - id: Toolsmith
+    mode: observational
+    primary:
+      level: 1
+      field: tool-invocation lore (Bishop-readable mirror of Knight Cathedral's Toolsmith — consulted when drafting K-prompts that include shell invocations)
+      canonical_keepers:
+        - librarian-mcp/stitchpunks/scribes/scribe_Toolsmith.jsonl
+    adjacents:
+      - level: 2
+        field: PowerShell 5.1 and pwsh command quirks
+      - level: 2
+        field: bash and POSIX shell patterns
+      - level: 3
+        field: git command idioms (commit messages, multiline, heredoc)
+      - level: 3
+        field: Windows path conventions and escaping
+      - level: 4
+        field: MCP tool invocation patterns
+    keywords:
+      - Toolsmith
+      - command
+      - shell
+      - PowerShell
+      - pwsh
+      - bash
+      - heredoc
+      - git commit
+      - "&&"
+      - Windows path
+      - stderr
+      - "2>&1"
+      - $?
+      - NonInteractive
+    activation_threshold: when drafting or reviewing K-prompts that include shell/tool invocations
+
 # Future Scribe candidates (instantiate on first trigger; do NOT pre-create):
 #   - Letters (Crown Letters primary; Rhetorical Keystones / dispatch queue adjacents)
 #   - Pedestal (Reg CF portal primary; Upekrithen seller-of-record / two-track separation adjacents)
