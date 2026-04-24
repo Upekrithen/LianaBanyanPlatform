@@ -48,8 +48,8 @@ const DEFAULTS: CanonicalStats = {
   dirtyDozenGreen: 11,
   puddingArticles: 189,
   academicPapers: 41,
-  knightSessions: 54,
-  bishopSessions: 52,
+  knightSessions: 466,
+  bishopSessions: 121,
   pawnBatches: 56,
 };
 

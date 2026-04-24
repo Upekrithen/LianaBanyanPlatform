@@ -58,13 +58,14 @@ function loadOverview() {
 }
 
 // Overview-only fields: checked ONLY between overview.json and the hook.
-// These are artifact-derived counts (not YAML-sourced). K460 added the concept;
-// K462 swapped sources from MCP-logged (*McpLogged fields) to artifact-derived.
+// These are artifact-derived max session numbers (not YAML-sourced). K460 added
+// the concept; K462 swapped sources from MCP-logged to artifact-derived; K463
+// swapped semantics from "unique count" to "max K#/B# seen in filenames".
 // The *McpLogged fields remain in overview.json as diagnostic-only and are NOT
 // listed here — they must not be cross-checked against the hook.
 const OVERVIEW_ONLY_FIELDS = [
-  { overviewKey: "knightPromptCount",  hookKey: "knightSessions" },
-  { overviewKey: "bishopSessionCount", hookKey: "bishopSessions" },
+  { overviewKey: "knightSessionMax",  hookKey: "knightSessions" },
+  { overviewKey: "bishopSessionMax",  hookKey: "bishopSessions" },
 ];
 
 function loadHook() {
@@ -145,7 +146,7 @@ for (const r of rows) {
 }
 if (overviewOnlyRows.length) {
   console.log("─".repeat(78));
-  console.log("(overview-only fields — K462 artifact-derived session counts; *McpLogged fields are diagnostic-only and not checked here)");
+  console.log("(overview-only fields — K463 artifact-derived max session numbers; *McpLogged fields are diagnostic-only and not checked here)");
   for (const r of overviewOnlyRows) {
     console.log(r.field.padEnd(34) + "—".padEnd(12) + String(r.overview).padEnd(12) + String(r.hook));
   }

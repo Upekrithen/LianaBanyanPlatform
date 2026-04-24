@@ -171,10 +171,14 @@ export interface SystemOverview {
   knightSessionsMcpLogged: number;
   /** MCP-logged B-sessions: count of B-IDs that called update_session. Diagnostic only. */
   bishopSessionsMcpLogged: number;
-  /** Artifact-derived: count of unique K-numbers in PROMPT_KNIGHT_K<NNN>_ files. UI-facing. */
+  /** Artifact-derived: count of unique K-numbers in PROMPT_KNIGHT_K<NNN>_ files. Diagnostic (K462). */
   knightPromptCount: number;
-  /** Artifact-derived: count of unique B-numbers across dropzone filenames. UI-facing. */
+  /** Artifact-derived: count of unique B-numbers across dropzone filenames. Diagnostic (K462). */
   bishopSessionCount: number;
+  /** Artifact-derived: max K-number across all artifact sources (filenames + sessions.json + git tags). UI-facing (K463). */
+  knightSessionMax: number;
+  /** Artifact-derived: max B-number across all artifact sources. UI-facing (K463). */
+  bishopSessionMax: number;
   lastSession?: string;
   pendingWork: string[];
   timestamp: string;

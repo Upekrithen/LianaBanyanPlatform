@@ -7,8 +7,8 @@
 //   innovationCount, crownJewels, patentApplications, patentClaims, productionSystems
 //
 // Pass 2 — Overview-sourced (index/overview.json → useCanonicalStats.ts):
-//   knightSessions  ← overview.knightPromptCount    (artifact-derived; UI-facing)
-//   bishopSessions  ← overview.bishopSessionCount   (artifact-derived; UI-facing)
+//   knightSessions  ← overview.knightSessionMax    (artifact-derived; K463: max K# from filenames)
+//   bishopSessions  ← overview.bishopSessionMax    (artifact-derived; K463: max B# from filenames)
 //   (pawnBatches is hand-maintained)
 //
 // overview.json also carries two diagnostic-only fields that are NOT propagated here:
@@ -80,11 +80,13 @@ for (const { yamlKey, hookKey } of FIELD_MAP) {
 }
 
 // ── Pass 2: overview-sourced fields (knightSessions, bishopSessions) ─────────
-// Sources are artifact-derived counts (K462), not the *McpLogged diagnostic fields.
+// Sources are artifact-derived max session numbers (K463), not *McpLogged diagnostic fields.
+// knightSessionMax = highest K# found in PROMPT_KNIGHT_K<NNN>_ filenames.
+// bishopSessionMax = highest B# found in dropzone filenames.
 
 const OVERVIEW_FIELD_MAP = [
-  { overviewKey: "knightPromptCount",  hookKey: "knightSessions" },
-  { overviewKey: "bishopSessionCount", hookKey: "bishopSessions" },
+  { overviewKey: "knightSessionMax",  hookKey: "knightSessions" },
+  { overviewKey: "bishopSessionMax",  hookKey: "bishopSessions" },
 ];
 
 if (existsSync(OVERVIEW_PATH)) {

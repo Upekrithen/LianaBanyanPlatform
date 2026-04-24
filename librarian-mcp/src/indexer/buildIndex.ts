@@ -1,4 +1,5 @@
 import { writeFileSync, readFileSync, mkdirSync, existsSync, readdirSync } from "fs";
+import { execSync } from "child_process";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parseMigrations } from "./parseMigrations.js";
@@ -199,15 +200,12 @@ async function main() {
     s.id && CANONICAL_ID.test(s.id) && s.id.startsWith("B"),
   ).length;
 
-  // K462 artifact-derived counts: source from dropzone filenames rather than
-  // sessions.json, so the UI shows total dispatches rather than MCP-logged subset.
+  // K462 artifact-derived counts (KEPT AS DIAGNOSTIC per K463 constraint).
+  // These count unique files matching the formal PROMPT_KNIGHT_K<NNN> pattern only.
+  // They are NOT the UI-facing values — see knightSessionMax/bishopSessionMax below.
   //
   // knightPromptCount: unique K-numbers in PROMPT_KNIGHT_K<NNN>_*.md files.
   // bishopSessionCount: unique B-numbers across both dropzone directories.
-  //
-  // Spot-check commands (from K462 spec):
-  //   ls BISHOP_DROPZONE/01_KnightPrompts/ | grep -oE 'PROMPT_KNIGHT_K[0-9]+' | grep -oE 'K[0-9]+' | sort -u | wc -l
-  //   (ls BISHOP_DROPZONE/03_BishopHandoffs/ | grep -oE 'B[0-9]+'; ls BISHOP_DROPZONE/01_KnightPrompts/ | grep -oE 'B[0-9]+') | sort -u | wc -l
   const KNIGHT_PROMPTS_DIR = resolve(WORKSPACE, "BISHOP_DROPZONE/01_KnightPrompts");
   const BISHOP_HANDOFFS_DIR = resolve(WORKSPACE, "BISHOP_DROPZONE/03_BishopHandoffs");
   const K_NUMBER_RE = /PROMPT_KNIGHT_K(\d+)/i;
@@ -235,6 +233,43 @@ async function main() {
   }
   const bishopSessionCount = uniqueBNumbers.size;
 
+  // K463 — max session number: UI-facing values.
+  // Scans ALL canonical artifact sources and takes the MAX K# / MAX B# seen.
+  // Sources: prompt filenames (already scanned above), BishopHandoffs filenames,
+  // sessions.json entry IDs, and git tags. Session numbers in the 900+ range
+  // (e.g. K999 ghost anchor) are capped at 900 to exclude non-sequential ghost IDs.
+  const MAX_REALISTIC_SESSION = 900;
+  const kAllNums: number[] = Array.from(uniqueKNumbers).map(n => parseInt(n, 10));
+  const bAllNums: number[] = Array.from(uniqueBNumbers).map(n => parseInt(n, 10));
+
+  // Also scan sessions.json IDs for K/B prefix entries
+  const sessionsPath = resolve(INDEX_DIR, "sessions.json");
+  if (existsSync(sessionsPath)) {
+    try {
+      const sessData = JSON.parse(readFileSync(sessionsPath, "utf-8")) as Record<string, unknown>;
+      for (const id of Object.keys(sessData)) {
+        const km = /^K(\d+)$/i.exec(id);
+        if (km) kAllNums.push(parseInt(km[1], 10));
+        const bm = /^B(\d+)$/i.exec(id);
+        if (bm) bAllNums.push(parseInt(bm[1], 10));
+      }
+    } catch { /* sessions.json may not exist during fresh build */ }
+  }
+
+  // Scan git tags for v-*-K<NNN> and v-*-B<NNN> patterns
+  try {
+    const tags = execSync("git tag", { cwd: WORKSPACE, encoding: "utf-8", timeout: 5000 }).split("\n");
+    for (const tag of tags) {
+      const km = /K(\d+)$/i.exec(tag);
+      if (km) kAllNums.push(parseInt(km[1], 10));
+      const bm = /B(\d+)$/i.exec(tag);
+      if (bm) bAllNums.push(parseInt(bm[1], 10));
+    }
+  } catch { /* git not available in some environments */ }
+
+  const knightSessionMax = kAllNums.filter(n => n <= MAX_REALISTIC_SESSION).reduce((a, b) => Math.max(a, b), 0);
+  const bishopSessionMax = bAllNums.filter(n => n <= MAX_REALISTIC_SESSION).reduce((a, b) => Math.max(a, b), 0);
+
   const overview: SystemOverview = {
     innovationCount: (context.canonicalNumbers.innovationCount as number) || 2130,
     crownJewelCount: (context.canonicalNumbers.crownJewelCount as number) || 168,
@@ -255,6 +290,8 @@ async function main() {
     bishopSessionsMcpLogged,
     knightPromptCount,
     bishopSessionCount,
+    knightSessionMax,
+    bishopSessionMax,
     membershipCost: "$5/year",
     creatorKeeps: "83.3%",
     platformMargin: "Cost + 20%",
