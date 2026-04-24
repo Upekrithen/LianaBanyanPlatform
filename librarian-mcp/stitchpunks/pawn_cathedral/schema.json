@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "pawn-cathedral-tablet-schema",
+  "title": "Pawn Cathedral Tablet Schema",
+  "description": "Append-only JSONL tablet format for Pawn's Cathedral Scribes. Extends Bishop/Knight base format with Pawn-specific operator_mediated_sig field. Instantiated K470/B121.",
+  "type": "object",
+  "required": ["observation", "category", "timestamp", "source_session", "source_document", "tokens"],
+  "properties": {
+    "scope": {
+      "type": "string",
+      "description": "Access scope for this tablet. Values: 'public' (visible to all cross-Cathedral consultation), 'private' (caller-owned only), 'guild:<name>', 'tribe:<name>'. Default: 'public'.",
+      "default": "public"
+    },
+    "observation": {
+      "type": "string",
+      "description": "What this tablet records — the canonical observation text"
+    },
+    "category": {
+      "type": "string",
+      "description": "Primary domain tag for routing and retrieval"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this tablet was appended"
+    },
+    "source_session": {
+      "type": "string",
+      "description": "Session ID that generated this tablet (e.g., K470, B121)"
+    },
+    "source_document": {
+      "type": "string",
+      "description": "File path or artifact reference this tablet was derived from"
+    },
+    "tokens": {
+      "type": "number",
+      "description": "Word-count approximation of the observation"
+    },
+    "source_cathedral": {
+      "type": "string",
+      "description": "The Cathedral that owns this tablet. Always 'pawn_cathedral' for tablets in Pawn's Cathedral.",
+      "const": "pawn_cathedral"
+    },
+    "origin_cathedral": {
+      "type": "string",
+      "description": "Provenance: the Cathedral where the content originated, if different from source_cathedral. E.g., 'bishop_cathedral' for content shared from Bishop's Cathedral (R11 corpus). Omit if original to Pawn."
+    },
+    "operator_mediated_sig": {
+      "type": "boolean",
+      "description": "If true, this tablet was signed by the operator (Founder) on Pawn's behalf. Pawn has no self-signing capability (no MCP). Operator-mediated signing is the authorized pattern for non-MCP AI clients per K470/B121.",
+      "const": true
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["observational", "corpus"],
+      "description": "Serving mode hint at the tablet level (normally set at Scribe registry level). 'corpus' = full deterministic retrieval; 'observational' = recency-sorted top-K."
+    },
+    "fact_id": {
+      "type": "string",
+      "description": "R11 canonical fact identifier (e.g., CS-01-a) — used for dedup in corpus Scribes"
+    },
+    "k_number": {
+      "type": "string",
+      "description": "Knight or Pawn session number (e.g., K470) for queue/handoff tablets"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["NEXT", "QUEUED", "LANDED", "CONTEXT"],
+      "description": "Queue status for PawnQueue tablets"
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "If this tablet corrects a prior one, reference the prior tablet's timestamp here. Never edit in place — always append a correction."
+    }
+  },
+  "additionalProperties": false,
+  "_notes": {
+    "append_only": "Tablets are NEVER modified after writing. If an entry is wrong, append a correction with supersedes pointing to the prior tablet's timestamp.",
+    "operator_mediated": "Pawn (Perplexity) has no MCP client support. All tablet writes are therefore operator-mediated: Founder signs and appends on Pawn's behalf. operator_mediated_sig: true on all tablets in this Cathedral.",
+    "snapshot_delivery": "Pawn's Cathedral is not consumed via MCP. Instead, generate-pawn-snapshot.mjs produces a markdown snapshot that Founder (or Knight automation) pastes into Pawn's context at session start. This is the non-MCP delivery pattern per A&A #2281 claim 5.",
+    "provenance_preservation": "Tablets sourced from other Cathedrals (e.g., R11 corpus from Bishop's) carry origin_cathedral alongside source_cathedral. Never silent-copy — always preserve cross-Cathedral provenance.",
+    "bishop_knight_compat": "This schema is additive over Bishop's {ts, session, observation, source, canonical_ref} and Knight's {observation, category, timestamp, source_session, source_document, tokens} formats. Cross-Cathedral reads must handle all three field-name conventions."
+  }
+}

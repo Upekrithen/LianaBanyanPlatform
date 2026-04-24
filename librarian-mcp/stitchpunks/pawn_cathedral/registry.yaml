@@ -1,0 +1,139 @@
+# Pawn Cathedral Registry — K470 / B121
+# =======================================
+# Pawn's Cathedral is the third member-Cathedral in the Liana Banyan Platform.
+# Unlike Bishop's and Knight's, Pawn has no MCP client support.
+# Her Cathedral is delivered via snapshot (generate-pawn-snapshot.mjs) rather than MCP tool calls.
+#
+# operator_mediated_sig: true on all Scribes — tablets signed by Founder on Pawn's behalf.
+# Snapshot delivery pattern per A&A #2281 claim 5.
+#
+# Tablet format: Pawn schema (extends Knight's with source_cathedral + origin_cathedral + operator_mediated_sig)
+
+version: 0.1.0
+opened: 2026-04-23
+opener: K470/B121 (Pawn-Cathedral instantiation — first non-MCP member-Cathedral)
+spec: ../SP22_SP23_THREE_FATES_AND_SCRIBES_CATHEDRAL_SPEC.md
+
+scribes:
+  - id: PawnQueue
+    mode: observational
+    operator_mediated_sig: true
+    primary:
+      level: 1
+      field: Pawn task queue — NEXT / QUEUED / LANDED cooperative session state
+      canonical_keepers:
+        - BISHOP_DROPZONE/02_PawnPrompts/
+    adjacents:
+      - level: 2
+        field: session lifecycle (K-number progression, prerequisite gates)
+      - level: 3
+        field: Pawn cooperative member status
+    keywords:
+      - NEXT
+      - QUEUED
+      - LANDED
+      - Pawn
+      - K470
+      - K455b
+      - session
+      - task
+      - queue
+      - cooperative
+      - member
+    activation_threshold: any Pawn session reference or task status lookup
+
+  - id: PawnHandoffs
+    mode: observational
+    operator_mediated_sig: true
+    primary:
+      level: 1
+      field: Pawn session handoff reports and cooperative member milestones
+      canonical_keepers:
+        - BISHOP_DROPZONE/03_BishopHandoffs/REPORT_PAWN_*.md
+    adjacents:
+      - level: 2
+        field: K455b attribution-isolation benchmark results
+      - level: 3
+        field: snapshot delivery milestones
+    keywords:
+      - handoff
+      - session
+      - landed
+      - K455b
+      - K470
+      - snapshot
+      - cooperative
+      - attribution
+      - benchmark
+      - Pawn
+    activation_threshold: any "what did Pawn produce" or "Pawn session outcomes" query
+
+  - id: R11_corpus
+    mode: corpus
+    operator_mediated_sig: true
+    origin_cathedral: bishop_cathedral
+    primary:
+      level: 1
+      field: R11 canonical corpus — cooperative AI platform benchmark fixture (50 facts, 6 categories) [Pawn Cathedral copy, K470, shared from Bishop's Cathedral]
+      canonical_keepers:
+        - librarian-mcp/r10_cross_vendor/r11_canonical_corpus.md
+    adjacents:
+      - level: 2
+        field: Verdania cooperative platform statistics
+      - level: 2
+        field: Thornwick architecture mechanics
+      - level: 3
+        field: cooperative governance economics
+      - level: 3
+        field: member journey and lifecycle
+      - level: 4
+        field: regulatory compliance protocols
+      - level: 4
+        field: historical precedent and case law
+    keywords:
+      - Verdania
+      - Thornwick
+      - Cairnfield
+      - cooperative
+      - R11
+      - benchmark
+      - canonical
+      - corpus
+      - statistics
+      - member
+      - governance
+      - compliance
+      - historical
+      - precedent
+      - architecture
+      - mechanics
+      - CS-01
+      - AM-01
+      - EG-01
+      - MJ-01
+      - RC-01
+      - HP-01
+    activation_threshold: any R11 benchmark fact query about cooperative platform statistics, governance, or architecture
+
+  - id: PawnGenerated
+    mode: observational
+    operator_mediated_sig: true
+    primary:
+      level: 1
+      field: Content Pawn produces in cooperative sessions — responses, analyses, observations
+      canonical_keepers:
+        - BISHOP_DROPZONE/K455b_playbook/
+    adjacents:
+      - level: 2
+        field: K455b attribution-isolation test responses
+      - level: 3
+        field: cooperative platform analysis by Pawn
+    keywords:
+      - Pawn
+      - generated
+      - K455b
+      - response
+      - analysis
+      - cooperative
+      - R11
+    activation_threshold: any query about Pawn's session outputs or generated content
