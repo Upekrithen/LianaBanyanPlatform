@@ -1,0 +1,35 @@
+{
+  "name": "lb-test-frame",
+  "version": "1.0.0",
+  "description": "LB Test Frame — Verify the Cathedral Effect on your own AI session",
+  "main": "dist/main/index.js",
+  "homepage": "https://lb-test-frame.lianabanyan.com",
+  "author": {
+    "name": "Liana Banyan Corporation",
+    "email": "support@lianabanyan.com",
+    "url": "https://lianabanyan.com"
+  },
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "package": "electron-builder --config electron-builder.yml",
+    "package:mac": "electron-builder --mac --config electron-builder.yml",
+    "package:win": "electron-builder --win --config electron-builder.yml",
+    "package:linux": "electron-builder --linux --config electron-builder.yml",
+    "package:all": "electron-builder --mac --win --linux --config electron-builder.yml",
+    "make:extension-zip": "node scripts/build-extension-zip.mjs"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-ts": "^2.0.0",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "electron": "^34.0.0",
+    "electron-builder": "^25.0.5",
+    "electron-vite": "^3.0.0",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
+    "@electron-toolkit/utils": "^3.0.0",
+    "electron-updater": "^6.3.9"
+  }
+}

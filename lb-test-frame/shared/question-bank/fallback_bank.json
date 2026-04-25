@@ -1,0 +1,210 @@
+{
+  "bank_id": "lb-fallback-v1",
+  "bank_name": "LB Test Frame Fallback Verification Bank",
+  "description": "25 questions for the Cathedral Effect verification demo. Bundled in the installer to avoid network dependency. Founder-approved questions covering LB platform specifics that cold AI sessions consistently miss.",
+  "version": "1.0.0",
+  "question_count": 25,
+  "note": "This bank tests knowledge of LB-specific facts. Cold AI sessions have no access to this information. Cathedral context injection provides it, enabling a clean lift measurement.",
+  "questions": [
+    {
+      "id": "q01",
+      "question": "What percentage does a creator keep on every transaction on the Liana Banyan platform?",
+      "cathedral_hint": "creator_keep_percentage",
+      "correct_answers": ["83.3%", "83.3 percent"],
+      "wrong_anchors": ["80%", "85%", "70%", "90%", "83%"],
+      "category": "economics"
+    },
+    {
+      "id": "q02",
+      "question": "How much does a Liana Banyan membership cost per year?",
+      "cathedral_hint": "membership_cost",
+      "correct_answers": ["$5", "5 dollars", "five dollars", "$5 per year", "$5/year"],
+      "wrong_anchors": ["$10", "$20", "$50", "$100", "free"],
+      "category": "economics"
+    },
+    {
+      "id": "q03",
+      "question": "What is the name of Liana Banyan's platform margin model?",
+      "cathedral_hint": "platform_margin",
+      "correct_answers": ["cost plus 20%", "cost+20%", "cost + 20 percent"],
+      "wrong_anchors": ["30% take rate", "15% commission", "subscription model"],
+      "category": "economics"
+    },
+    {
+      "id": "q04",
+      "question": "On a $500 transaction on Liana Banyan, how much does the creator or worker receive?",
+      "cathedral_hint": "transaction_example",
+      "correct_answers": ["$416.67", "416.67", "$416"],
+      "wrong_anchors": ["$400", "$450", "$350", "$470"],
+      "category": "economics"
+    },
+    {
+      "id": "q05",
+      "question": "What is the legal name and state of incorporation for the Liana Banyan entity?",
+      "cathedral_hint": "legal_entity",
+      "correct_answers": ["liana banyan corporation", "wyoming", "liana banyan corporation wyoming"],
+      "wrong_anchors": ["liana banyan llc", "delaware", "california corporation"],
+      "category": "identity"
+    },
+    {
+      "id": "q06",
+      "question": "How many provisional patent applications has Liana Banyan filed?",
+      "cathedral_hint": "patent_count",
+      "correct_answers": ["13", "thirteen"],
+      "wrong_anchors": ["5", "10", "20", "3"],
+      "category": "ip"
+    },
+    {
+      "id": "q07",
+      "question": "What is the Romulator 9000?",
+      "cathedral_hint": "romulator_definition",
+      "correct_answers": ["rom-first context persistence", "context persistence system", "ai context persistence"],
+      "wrong_anchors": ["a video game console", "a graphics chip", "a memory card"],
+      "category": "technology"
+    },
+    {
+      "id": "q08",
+      "question": "What is the Golden Key system in Liana Banyan?",
+      "cathedral_hint": "golden_key_system",
+      "correct_answers": ["puzzle completion", "achievement system", "discovery mechanism"],
+      "wrong_anchors": ["a cryptocurrency", "a login credential", "a physical key"],
+      "category": "platform"
+    },
+    {
+      "id": "q09",
+      "question": "What does the 'Six Sparks' system refer to in Liana Banyan?",
+      "cathedral_hint": "six_sparks",
+      "correct_answers": ["six paths", "acceleration paths", "new member visibility paths", "six effortful paths"],
+      "wrong_anchors": ["a payment system", "a social media feature", "an energy metric"],
+      "category": "platform"
+    },
+    {
+      "id": "q10",
+      "question": "What is 'Trust Match' in the Liana Banyan system?",
+      "cathedral_hint": "trust_match_definition",
+      "correct_answers": ["mutual mark staking", "mark staking between strangers", "economic trust system"],
+      "wrong_anchors": ["a dating feature", "a credit score", "a login system"],
+      "category": "platform"
+    },
+    {
+      "id": "q11",
+      "question": "How many of Liana Banyan's Sweet Sixteen initiatives are there, and what do they span?",
+      "cathedral_hint": "sweet_sixteen",
+      "correct_answers": ["16", "sixteen", "sixteen initiatives"],
+      "wrong_anchors": ["12", "10", "8", "20"],
+      "category": "platform"
+    },
+    {
+      "id": "q12",
+      "question": "What are the three currencies in Liana Banyan's system?",
+      "cathedral_hint": "three_currencies",
+      "correct_answers": ["credits marks joules", "credits, marks, and joules"],
+      "wrong_anchors": ["bitcoin ethereum usdc", "dollars points tokens", "gold silver bronze"],
+      "category": "economics"
+    },
+    {
+      "id": "q13",
+      "question": "Can Liana Banyan Credits be converted back to dollars (cashed out)?",
+      "cathedral_hint": "one_way_valve",
+      "correct_answers": ["no", "never", "one-way valve"],
+      "wrong_anchors": ["yes", "after 6 months", "with a fee"],
+      "category": "economics"
+    },
+    {
+      "id": "q14",
+      "question": "What is the Good Standing Roll in Liana Banyan?",
+      "cathedral_hint": "good_standing_roll",
+      "correct_answers": ["inverted allowlist", "in-good-standing list", "allowlist"],
+      "wrong_anchors": ["a dice game", "a lottery system", "a credit check"],
+      "category": "platform"
+    },
+    {
+      "id": "q15",
+      "question": "What percentage of IP revenue goes to the patent buckets in Liana Banyan's waterfall?",
+      "cathedral_hint": "ip_waterfall",
+      "correct_answers": ["60%", "sixty percent"],
+      "wrong_anchors": ["40%", "50%", "30%", "70%"],
+      "category": "ip"
+    },
+    {
+      "id": "q16",
+      "question": "Who is LRH in the Liana Banyan context?",
+      "cathedral_hint": "lrh_character",
+      "correct_answers": ["guide", "greeter", "platform guide", "the guide character"],
+      "wrong_anchors": ["a founder", "a customer service agent", "a chatbot"],
+      "category": "identity"
+    },
+    {
+      "id": "q17",
+      "question": "What is the Furnace in Liana Banyan?",
+      "cathedral_hint": "furnace_definition",
+      "correct_answers": ["verification system", "immutable ledger", "verification and immutable public ledger"],
+      "wrong_anchors": ["a heating system", "a mining system", "a server farm"],
+      "category": "technology"
+    },
+    {
+      "id": "q18",
+      "question": "What does Slow Blade refer to in Liana Banyan's security system?",
+      "cathedral_hint": "slow_blade_definition",
+      "correct_answers": ["rate limit", "rate limiting", "rate limit on furnace stamps"],
+      "wrong_anchors": ["a sword", "a network protocol", "a payment delay"],
+      "category": "technology"
+    },
+    {
+      "id": "q19",
+      "question": "What is the Cathedral Effect in the context of Liana Banyan's AI research?",
+      "cathedral_hint": "cathedral_effect",
+      "correct_answers": ["improvement in ai accuracy", "lift in correct answers", "context injection improvement"],
+      "wrong_anchors": ["a building design", "a reverb effect", "a cryptocurrency"],
+      "category": "research"
+    },
+    {
+      "id": "q20",
+      "question": "What year did Liana Banyan Corporation file its Wyoming incorporation?",
+      "cathedral_hint": "filing_date",
+      "correct_answers": ["2025", "november 2025", "2025-11-21"],
+      "wrong_anchors": ["2020", "2022", "2023", "2024"],
+      "category": "identity"
+    },
+    {
+      "id": "q21",
+      "question": "What is Seasoning in the Liana Banyan system?",
+      "cathedral_hint": "seasoning_definition",
+      "correct_answers": ["time-gating", "time-gated trust accumulation", "time gate on trust"],
+      "wrong_anchors": ["food seasoning", "a loyalty points system", "a spice blend"],
+      "category": "platform"
+    },
+    {
+      "id": "q22",
+      "question": "What is the per-person Credit cap in Liana Banyan?",
+      "cathedral_hint": "credit_cap",
+      "correct_answers": ["$5000", "5000 dollars", "five thousand dollars"],
+      "wrong_anchors": ["$1000", "$10000", "$500", "unlimited"],
+      "category": "economics"
+    },
+    {
+      "id": "q23",
+      "question": "What is the Pedestal system in Liana Banyan?",
+      "cathedral_hint": "pedestal_definition",
+      "correct_answers": ["achievement recognition", "spotlight system", "featured creator spots"],
+      "wrong_anchors": ["a payment system", "a delivery method", "a gaming leaderboard"],
+      "category": "platform"
+    },
+    {
+      "id": "q24",
+      "question": "What is the Liana Banyan Crown system?",
+      "cathedral_hint": "crown_definition",
+      "correct_answers": ["invited domain experts", "named leadership seats", "governance tier"],
+      "wrong_anchors": ["a virtual crown", "a prize", "a ranking system"],
+      "category": "governance"
+    },
+    {
+      "id": "q25",
+      "question": "What is the Golden Key 'Help each other help ourselves' referred to as?",
+      "cathedral_hint": "platform_motto",
+      "correct_answers": ["golden key", "the motto", "platform motto", "liana banyan motto"],
+      "wrong_anchors": ["the tagline", "the slogan", "the brand promise"],
+      "category": "identity"
+    }
+  ]
+}
