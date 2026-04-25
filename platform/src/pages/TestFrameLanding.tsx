@@ -24,6 +24,8 @@ const FAQ = [
   { q: "Which AIs does it support?", a: "Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), Perplexity, and Copilot (Microsoft). The desktop version also supports API-key integration for the same vendors plus Mistral." },
   { q: "What is the Cathedral Effect?", a: "It's the measured improvement in AI accuracy when Liana Banyan's knowledge substrate (the 'cathedral') is pre-injected into AI sessions. Our research found a mean +86 percentage point lift. The Test Frame lets you verify this on your own AI session." },
   { q: "What happens to my verification results?", a: "You choose: private (stays on your machine), anonymous (aggregated to the community dashboard without any identifier), or public (with your name). Default is private." },
+  { q: "What is substrate-savings telemetry?", a: "K506 adds automatic tracking of how much the LB substrate reduces your AI costs. Each query you run measures estimated token counts with- and without-substrate. You always see your own savings in the Test Frame popup — sharing with LB is opt-in only." },
+  { q: "Can I delete my telemetry data?", a: "Yes, always. Go to Settings → Privacy & Telemetry → Delete all my data. LB complies within 24 hours and confirms in writing. No dark patterns, no retention games." },
 ];
 
 function OSButton({ os, icon, label, href }: { os: string; icon: string; label: string; href: string }) {
@@ -147,6 +149,58 @@ export default function TestFrameLanding() {
               )}
             </div>
           ))}
+        </div>
+
+        {/* K506 Privacy & Telemetry panel */}
+        <div className="max-w-2xl mx-auto mb-16 text-left bg-slate-800/30 border border-slate-700/40 rounded-2xl p-8">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="text-2xl">🔒</span>
+            <h2 className="text-xl font-bold">Privacy &amp; Telemetry</h2>
+          </div>
+
+          <div className="space-y-4 text-sm text-slate-300 leading-relaxed">
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                {
+                  icon: "📍",
+                  title: "Logged locally — always",
+                  desc: "Every query you run logs estimated savings data on your own machine. No network required. You see your personal savings dashboard regardless of sharing preference.",
+                },
+                {
+                  icon: "🔗",
+                  title: "Shared with LB — opt-in only",
+                  desc: "Your data reaches LB servers only if you flip the opt-in-share toggle in Settings. Default is OFF. You can flip it back at any time.",
+                },
+                {
+                  icon: "🏷",
+                  title: "Estimated vs. measured",
+                  desc: "Token counts are estimated from query size unless your AI vendor API returns exact counts. Every record is labeled: estimated: true or measured: true. We never mix the two in aggregate stats.",
+                },
+                {
+                  icon: "🗑",
+                  title: "Right to deletion",
+                  desc: "Settings → Privacy & Telemetry → Delete all my data. LB complies within 24 hours. Deletion covers both local and server records if you had opt-in-share enabled.",
+                },
+              ].map((item) => (
+                <div key={item.title} className="bg-slate-800/50 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">{item.icon}</span>
+                    <span className="font-semibold text-white text-sm">{item.title}</span>
+                  </div>
+                  <p className="text-slate-400 text-xs leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-slate-700/50 pt-4 text-xs text-slate-500">
+              Telemetry schema: <code className="text-slate-400 bg-slate-900 px-1 rounded">query_input_tokens, query_output_tokens, substrate_injection_tokens, cold_baseline_estimated_tokens, member_friction_confirmations, savings_estimated</code>.
+              Members who opt-in contribute to the public aggregate at{" "}
+              <a href="https://librarian.the2ndsecond.com/community-empirical" className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
+                librarian.the2ndsecond.com/community-empirical
+              </a>.
+              Population-scale empirical basis for the Cathedral Effect public-policy claim — as of K506.
+            </div>
+          </div>
         </div>
 
         {/* Footer CTA */}

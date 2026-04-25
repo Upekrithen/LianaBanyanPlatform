@@ -167,6 +167,30 @@ function buildGateCheck(): ToolContent | null {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyZodShape = Record<string, z.ZodType<any, any, any>>;
+
+// ── K506 Phase A — In-process session telemetry tracker ──────────────────────
+// Accumulates MCP tool call count + estimated overhead tokens for the current
+// session. Auto-resets when run_session_end consumes and logs the values.
+// No per-session keying needed: a single agent session is one MCP server
+// process lifetime (or at least one conversation). Counters are module-level
+// state; thread-safety is irrelevant here (Node.js single-thread event loop).
+const _sessionTracker = {
+  injection_count: 0,
+  overhead_tokens_estimate: 0,
+  session_start_ts: new Date().toISOString(),
+  last_call_ts: new Date().toISOString(),
+  tool_call_names: [] as string[],
+};
+
+function _resetSessionTracker() {
+  _sessionTracker.injection_count = 0;
+  _sessionTracker.overhead_tokens_estimate = 0;
+  _sessionTracker.session_start_ts = new Date().toISOString();
+  _sessionTracker.last_call_ts = new Date().toISOString();
+  _sessionTracker.tool_call_names = [];
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 function registerTool<S extends AnyZodShape>(
   name: string,
   desc: string,
@@ -177,7 +201,18 @@ function registerTool<S extends AnyZodShape>(
   (server.tool as any)(name, desc, schema, async (args: z.infer<z.ZodObject<S>>) => {
     const blocked = buildGateCheck();
     if (blocked) return blocked;
-    return handler(args);
+    const result = await handler(args);
+    // K506 Phase A: track every MCP tool call as one substrate injection event
+    _sessionTracker.injection_count++;
+    _sessionTracker.last_call_ts = new Date().toISOString();
+    _sessionTracker.tool_call_names.push(name);
+    // Estimate response size in tokens (rough: chars / 4)
+    const responseText = result.content
+      .filter((c: { type: string }) => c.type === "text")
+      .map((c: { type: string; text?: string }) => (c as { type: string; text: string }).text)
+      .join("");
+    _sessionTracker.overhead_tokens_estimate += Math.ceil(responseText.length / 4);
+    return result;
   });
 }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2349,13 +2384,29 @@ registerTool(
       cathedralLines.push(`(Cathedral summary failed: ${(err as Error).message})`);
     }
 
-    // K505 — Substrate savings (only when token counts supplied)
+    // K505/K506 — Substrate savings
+    // K506 Phase A: auto-populate injection_count + overhead_tokens from session tracker
+    // when the caller didn't supply them (or supplied 0).
+    const autoInjections =
+      (substrate_injection_count == null || substrate_injection_count === 0)
+        ? _sessionTracker.injection_count
+        : substrate_injection_count;
+    const autoOverhead =
+      (substrate_overhead_tokens == null || substrate_overhead_tokens === 0)
+        ? _sessionTracker.overhead_tokens_estimate
+        : substrate_overhead_tokens;
+    const autoMode = (substrate_injection_count == null || substrate_injection_count === 0) &&
+                     _sessionTracker.injection_count > 0;
+
+    // Reset tracker so next session starts fresh
+    _resetSessionTracker();
+
     const savingsLines: string[] = [];
     if (input_tokens != null && input_tokens > 0 && output_tokens != null && output_tokens > 0) {
       try {
         const agentUpper = agent.toUpperCase() as "BISHOP" | "KNIGHT" | "PAWN" | "ROOK";
-        const overheadTokens = substrate_overhead_tokens ?? 0;
-        const injections = substrate_injection_count ?? 0;
+        const overheadTokens = autoOverhead;
+        const injections = autoInjections;
         const { actual_cost_usd, counterfactual_cost_usd, session_savings_usd } = computeSavings({
           agent: agentUpper,
           input_tokens,
@@ -2383,22 +2434,46 @@ registerTool(
           multiplier_provisional: true,
         };
         const { line_count } = appendSavingsRecord(record);
-        savingsLines.push("", "── Substrate Savings This Session (K505) ──");
+        savingsLines.push("", "── Substrate Savings This Session (K506 auto-hook) ──");
         savingsLines.push(`  Actual cost:    $${actual_cost_usd.toFixed(4)}`);
         savingsLines.push(`  Counterfactual: $${counterfactual_cost_usd.toFixed(4)} (${cold_multiplier}× cold mult.)`);
         savingsLines.push(`  Net savings:    $${session_savings_usd.toFixed(4)} [provisional]`);
-        savingsLines.push(`  Overhead:       ${overheadTokens.toLocaleString()} tokens, ${injections} injections`);
+        savingsLines.push(`  Overhead:       ${overheadTokens.toLocaleString()} tokens, ${injections} injections${autoMode ? " [auto-tracked]" : ""}`);
         savingsLines.push(`  Logged → substrate_savings_log.jsonl (${line_count} total entries)`);
       } catch (err) {
-        savingsLines.push(`(K505 savings logging failed: ${(err as Error).message})`);
+        savingsLines.push(`(K506 savings logging failed: ${(err as Error).message})`);
       }
     } else {
-      savingsLines.push("", "── Substrate Savings ── supply input_tokens + output_tokens to enable K505 savings logging");
+      savingsLines.push("", `── Substrate Savings ──`);
+      savingsLines.push(`  Session tracker: ${_sessionTracker.injection_count + autoInjections} MCP calls (reset). Supply input_tokens + output_tokens to log savings.`);
     }
 
     return {
       content: [{ type: "text", text: output + "\n" + cathedralLines.join("\n") + savingsLines.join("\n") }],
     };
+  }
+);
+
+// ═══════════════════════════════════════════
+// K506 Phase A — SESSION TELEMETRY TOOLS
+// ═══════════════════════════════════════════
+
+registerTool(
+  "get_session_telemetry",
+  "K506: Returns the auto-tracked MCP call count and estimated overhead tokens accumulated since the last run_session_end (or server start). Use this to inspect current session telemetry before calling run_session_end. The tracker resets on each run_session_end call.",
+  {},
+  async () => {
+    const data = {
+      injection_count: _sessionTracker.injection_count,
+      overhead_tokens_estimate: _sessionTracker.overhead_tokens_estimate,
+      session_start_ts: _sessionTracker.session_start_ts,
+      last_call_ts: _sessionTracker.last_call_ts,
+      unique_tools_called: [...new Set(_sessionTracker.tool_call_names)],
+      total_tool_calls: _sessionTracker.tool_call_names.length,
+      note: "Injection count auto-populates substrate_injection_count in run_session_end when not supplied. Supply input_tokens + output_tokens to run_session_end to complete savings logging.",
+      auto_hook_status: "K506 Phase A active — overhead auto-tracked. Token counts (input/output) still require explicit supply.",
+    };
+    return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
   }
 );
 
@@ -3657,6 +3732,117 @@ registerTool(
     };
 
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// K506 Phase C — PAWN AUTO-HOOK (detect paste-backs)
+// ═══════════════════════════════════════════
+
+/**
+ * Pawn model signature patterns. Detects text produced by Pawn-layer AI
+ * agents (Perplexity Sonar, Gemini 3.1 Pro, etc.) from Founder paste-backs.
+ */
+const PAWN_SIGNATURES = [
+  /Prepared using (Gemini|Sonar|GPT|Claude|Grok)/i,
+  /Sonar Pro|sonar-pro/i,
+  /Gemini 3\.\d|gemini-3/i,
+  /pawn[\s_-]?session/i,
+  /PAWN TASK|Pawn Output|Pawn Result/i,
+  /\[P\d{2,4}\]/,                        // Pawn session tag [P123]
+  /friction_confirmations|Pawn-layer/i,
+  /PROMPT_PAWN_B\d+/i,
+];
+
+const PAWN_TOKEN_FOOTER = /tokens?:?\s*(\d+)\s*(?:in(?:put)?)?[,\/]\s*(\d+)\s*(?:out(?:put)?)?/i;
+
+registerTool(
+  "detect_and_log_pawn_session",
+  "K506 Phase C: Detects whether pasted text originates from a Pawn-layer AI agent (Perplexity/Gemini/etc.) and auto-logs substrate savings. Call whenever Founder pastes Pawn task output into the Bishop conversation. Extracts token metadata when present; falls back to text-length estimate. Returns detection result + logged record.",
+  {
+    text: z.string().min(10).describe("The pasted text to analyze for Pawn authorship"),
+    session_id: z.string().describe("Current Bishop session ID, e.g. 'B124'"),
+    friction_confirmations: z.number().int().nonnegative().optional().default(0).describe("Number of 'yes/do it/that' confirmations Founder needed before Pawn executed. Supply if known; defaults to 0."),
+    notes: z.string().optional().describe("Optional notes about this Pawn task"),
+  },
+  async ({ text, session_id, friction_confirmations, notes }) => {
+    const matched = PAWN_SIGNATURES.some((re) => re.test(text));
+
+    if (!matched) {
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            detected: false,
+            message: "No Pawn-layer signatures found. Text does not appear to be Pawn output.",
+            session_id,
+          }, null, 2),
+        }],
+      };
+    }
+
+    // Extract token counts from footer if present
+    const tokenMatch = text.match(PAWN_TOKEN_FOOTER);
+    const estimated = !tokenMatch;
+    const input_tokens = tokenMatch ? parseInt(tokenMatch[1], 10) : Math.ceil(text.length * 0.35);
+    const output_tokens = tokenMatch ? parseInt(tokenMatch[2], 10) : Math.ceil(text.length * 0.25);
+
+    const { actual_cost_usd, counterfactual_cost_usd, session_savings_usd } = computeSavings({
+      agent: "PAWN",
+      input_tokens,
+      output_tokens,
+      substrate_overhead_tokens: 0,
+      vendor: "perplexity",
+    });
+
+    const record: SavingsRecord = {
+      ts: new Date().toISOString(),
+      agent: "PAWN",
+      session_id,
+      input_tokens,
+      output_tokens,
+      substrate_overhead_tokens: 0,
+      substrate_injection_count: 0,
+      vendor: "perplexity",
+      model: "sonar-pro",
+      actual_cost_usd: Math.round(actual_cost_usd * 10000) / 10000,
+      counterfactual_cost_usd: Math.round(counterfactual_cost_usd * 10000) / 10000,
+      session_savings_usd: Math.round(session_savings_usd * 10000) / 10000,
+      cold_multiplier: COLD_MULTIPLIERS["PAWN"] ?? 3.5,
+      friction_confirmations: friction_confirmations ?? 0,
+      multiplier_provisional: true,
+      notes: [
+        notes,
+        estimated ? "token_counts: estimated_from_text_length" : "token_counts: extracted_from_footer",
+        "auto_detected: pawn_paste_back",
+      ].filter(Boolean).join("; "),
+    };
+    const { line_count } = appendSavingsRecord(record);
+
+    return {
+      content: [{
+        type: "text",
+        text: JSON.stringify({
+          detected: true,
+          pawn_signatures_matched: PAWN_SIGNATURES
+            .filter((re) => re.test(text))
+            .map((re) => re.toString())
+            .slice(0, 3),
+          estimated_tokens: estimated,
+          input_tokens,
+          output_tokens,
+          actual_cost_usd: record.actual_cost_usd,
+          counterfactual_cost_usd: record.counterfactual_cost_usd,
+          session_savings_usd: record.session_savings_usd,
+          friction_confirmations,
+          logged: true,
+          line_count,
+          note: estimated
+            ? "Token counts estimated from text length (chars × 0.35/0.25). Supply token_counts in Pawn output footer for measured accuracy."
+            : "Token counts extracted from Pawn output footer.",
+        }, null, 2),
+      }],
+    };
   }
 );
 
