@@ -19,11 +19,18 @@ import hashlib
 import json
 import math
 import re
+import threading
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+
+# Process-level lock: prevents concurrent ledger writes when multiple threads
+# share the same miner module. Also serves as a reminder that the ledger is
+# NOT safe for concurrent writes from SEPARATE PROCESSES (use taskkill /T or
+# a file-lock library like portalocker for multi-process safety).
+_LEDGER_LOCK = threading.Lock()
 
 # ---------------------------------------------------------------------------
 # Constants / tunables
@@ -35,6 +42,7 @@ PRIMARY_SIG_LOCK_AT = 3           # lock primary-topic signature after this many
 PRIMARY_SIG_SIZE = 30             # keywords in the locked primary-topic signature
 MIN_TABLETS_BEFORE_MITOSIS = 3   # minimum tablets mined before first split allowed
 MAX_DAUGHTERS_PER_MINER = 4      # each Miner can spawn at most 4 daughters
+MAX_KEYWORD_POOL = 2000           # K474 rule: cap per-Miner keyword pool to control RAM at scale
 
 STOP_WORDS = {
     "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
@@ -106,28 +114,29 @@ def _append_ledger(entry: dict) -> str:
     """Append one event to the IP ledger and return current_hash."""
     global _ledger_prior_hash
 
-    prior = _ledger_prior_hash
-    ts = datetime.now(timezone.utc).isoformat()
+    with _LEDGER_LOCK:
+        prior = _ledger_prior_hash
+        ts = datetime.now(timezone.utc).isoformat()
 
-    payload_keys = {k for k in entry if k not in ("prior_hash", "current_hash", "timestamp")}
-    event_payload = json.dumps(
-        {k: entry[k] for k in payload_keys},
-        sort_keys=True,
-    )
-    current_hash = _sha256(prior + event_payload + ts)
+        payload_keys = {k for k in entry if k not in ("prior_hash", "current_hash", "timestamp")}
+        event_payload = json.dumps(
+            {k: entry[k] for k in payload_keys},
+            sort_keys=True,
+        )
+        current_hash = _sha256(prior + event_payload + ts)
 
-    record = {
-        **entry,
-        "timestamp": ts,
-        "prior_hash": prior,
-        "current_hash": current_hash,
-    }
+        record = {
+            **entry,
+            "timestamp": ts,
+            "prior_hash": prior,
+            "current_hash": current_hash,
+        }
 
-    with LEDGER_PATH.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(record) + "\n")
+        with LEDGER_PATH.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(record) + "\n")
 
-    _ledger_prior_hash = current_hash
-    return current_hash
+        _ledger_prior_hash = current_hash
+        return current_hash
 
 
 def _bootstrap_ledger_chain() -> None:
@@ -175,6 +184,44 @@ class SerialRegistry:
 
 
 REGISTRY = SerialRegistry()
+
+
+def bootstrap_serial_registry_from_bedrock(bedrock_dir: Path | None = None) -> int:
+    """
+    Pre-populate REGISTRY from existing bedrock JSONL filenames to prevent
+    serial collisions when a new run follows K482/K486 artifacts.
+
+    Scans bedrock_dir (default: BEDROCK_DIR) for *.jsonl files whose stems
+    match the LB-CAT.M-NNNN[...] pattern. Extracts all serials, adds them to
+    REGISTRY._issued, and advances REGISTRY._counter to the highest root number
+    found. Returns the count of pre-registered serials.
+    """
+    import re as _re
+    bdir = bedrock_dir or BEDROCK_DIR
+    count = 0
+    max_root_num = 0
+
+    root_pattern = _re.compile(r"^LB-CAT\.M-(\d+)$")
+    any_pattern = _re.compile(r"^(LB-CAT\.M-\d+.*)$")
+
+    for f in bdir.glob("*.jsonl"):
+        m = any_pattern.match(f.stem)
+        if not m:
+            continue
+        serial = m.group(1)
+        REGISTRY._issued.add(serial)
+        count += 1
+
+        root_m = root_pattern.match(f.stem)
+        if root_m:
+            num = int(root_m.group(1))
+            if num > max_root_num:
+                max_root_num = num
+
+    if max_root_num > REGISTRY._counter:
+        REGISTRY._counter = max_root_num
+
+    return count
 
 
 # ---------------------------------------------------------------------------
@@ -302,6 +349,9 @@ class Miner:
         # --- Update state AFTER mitosis check ---
         self.knowledge_depth[depth].append(tablet_id)
         self._keyword_pool.update(keywords)
+        # K474 rule: cap pool to avoid RAM pressure at scale
+        if len(self._keyword_pool) > MAX_KEYWORD_POOL:
+            self._keyword_pool = Counter(dict(self._keyword_pool.most_common(MAX_KEYWORD_POOL)))
 
         # Update primary signature if not yet locked
         if not self._primary_sig_locked:

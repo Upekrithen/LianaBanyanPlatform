@@ -12,3 +12,13 @@ stitchpunks/data/*.json
 sculptors/filter_decision_log.jsonl
 sculptors/outputs/
 sculptors/run_summary_K483.json
+
+# Miner run outputs (large data files; bedrock + cross-refs are mining outputs)
+miners/bedrock/LB-CAT.M-0002*.jsonl
+miners/cross_references/LB-CAT.M-0002*.jsonl
+miners/ip_ledger.jsonl
+miners/miner_population_snapshot_K487.jsonl
+miners/run_summary_K487.json
+miners/bloodhound_report_K487.json
+miners/run_k487_stdout.txt
+miners/run_k487_post_mining_stdout.txt

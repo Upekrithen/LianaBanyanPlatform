@@ -134,10 +134,14 @@ class Bloodhound:
         extensions: tuple[str, ...] = (".md", ".txt", ".jsonl"),
         top_n_keywords: int = TOP_KEYWORD_N,
         min_cluster_files: int = 2,
+        max_bytes_per_file: int = 100_000,  # K487: cap per-file read for scout speed
+        exclude_dirs: set[str] | None = None,  # K487: skip node_modules, .git, etc.
     ) -> None:
         self._extensions = extensions
         self._top_n = top_n_keywords
         self._min_cluster_files = min_cluster_files
+        self._max_bytes = max_bytes_per_file
+        self._exclude_dirs: set[str] = exclude_dirs or set()
 
     def scout(self, corpus_dir: Path | str) -> ScoutReport:
         """
@@ -164,7 +168,11 @@ class Bloodhound:
 
         for fpath in files:
             try:
-                text = fpath.read_text(encoding="utf-8", errors="replace")
+                if self._max_bytes and fpath.stat().st_size > self._max_bytes:
+                    with fpath.open("r", encoding="utf-8", errors="replace") as fh:
+                        text = fh.read(self._max_bytes)
+                else:
+                    text = fpath.read_text(encoding="utf-8", errors="replace")
             except Exception:
                 continue
             kws = _extract_keywords(text, self._top_n)
@@ -252,10 +260,15 @@ class Bloodhound:
         )
 
     def _collect_files(self, corpus_dir: Path) -> list[Path]:
-        """Return sorted list of text files in the corpus directory."""
+        """Return sorted list of text files in the corpus directory tree (recursive)."""
         files: list[Path] = []
         for ext in self._extensions:
-            files.extend(corpus_dir.glob(f"*{ext}"))
+            for fpath in corpus_dir.rglob(f"*{ext}"):
+                if self._exclude_dirs and any(
+                    part in self._exclude_dirs for part in fpath.parts
+                ):
+                    continue
+                files.append(fpath)
         return sorted(set(files))
 
 
