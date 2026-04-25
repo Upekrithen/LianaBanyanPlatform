@@ -2269,13 +2269,24 @@ registerTool(
 
 registerTool(
   "run_session_end",
-  "Runs the Stitchpunk Corps session end hook (SP-6 Scribe, SP-1 Cartographer, SP-3 Classifier, SP-8 Herald, SP-10 Pipeline Bridge). Call at the end of any agent session. This auto-wires content to the Staff of Librarians.",
+  "Runs the Stitchpunk Corps session end hook (SP-6 Scribe, SP-1 Cartographer, SP-3 Classifier, SP-8 Herald, SP-10 Pipeline Bridge). Call at the end of any agent session. This auto-wires content to the Staff of Librarians. Optionally logs substrate savings when token counts are supplied.",
   {
     agent: z.string().describe("Agent type: BISHOP, KNIGHT, ROOK, or PAWN"),
     session_id: z.string().describe("Session identifier (e.g. 'B064', 'K231')"),
     summary: z.string().describe("What was built/accomplished this session"),
+    input_tokens: z.number().int().nonnegative().optional().describe("(K505) Total input tokens this session — supply to enable substrate savings logging"),
+    output_tokens: z.number().int().nonnegative().optional().describe("(K505) Total output tokens this session"),
+    substrate_overhead_tokens: z.number().int().nonnegative().optional().default(0).describe("(K505) Tokens consumed by Librarian/substrate injections"),
+    substrate_injection_count: z.number().int().nonnegative().optional().default(0).describe("(K505) Number of MCP tool calls + memory reads during session"),
+    vendor: z.string().optional().default("anthropic").describe("(K505) Vendor for pricing: anthropic | openai | google | perplexity"),
+    model: z.string().optional().describe("(K505) Model name for the savings record"),
+    friction_confirmations: z.number().int().nonnegative().optional().default(0).describe("(K505, Pawn) Number of 'yes/that/do it' confirmations before task execution"),
   },
-  async ({ agent, session_id, summary }) => {
+  async ({
+    agent, session_id, summary,
+    input_tokens, output_tokens, substrate_overhead_tokens,
+    substrate_injection_count, vendor, model, friction_confirmations
+  }) => {
     const output = runStitchpunkHook("session_end.py", [agent, session_id, summary]);
 
     // SP-22/23 Cathedral session summary (K436)
@@ -2338,8 +2349,55 @@ registerTool(
       cathedralLines.push(`(Cathedral summary failed: ${(err as Error).message})`);
     }
 
+    // K505 — Substrate savings (only when token counts supplied)
+    const savingsLines: string[] = [];
+    if (input_tokens != null && input_tokens > 0 && output_tokens != null && output_tokens > 0) {
+      try {
+        const agentUpper = agent.toUpperCase() as "BISHOP" | "KNIGHT" | "PAWN" | "ROOK";
+        const overheadTokens = substrate_overhead_tokens ?? 0;
+        const injections = substrate_injection_count ?? 0;
+        const { actual_cost_usd, counterfactual_cost_usd, session_savings_usd } = computeSavings({
+          agent: agentUpper,
+          input_tokens,
+          output_tokens,
+          substrate_overhead_tokens: overheadTokens,
+          vendor: vendor ?? "anthropic",
+        });
+        const cold_multiplier = COLD_MULTIPLIERS[agentUpper] ?? 2.5;
+        const modelName = model ?? (agentUpper === "BISHOP" ? "claude-opus-4-7" : "claude-sonnet-4-6");
+        const record: SavingsRecord = {
+          ts: new Date().toISOString(),
+          agent: agentUpper,
+          session_id,
+          input_tokens,
+          output_tokens,
+          substrate_overhead_tokens: overheadTokens,
+          substrate_injection_count: injections,
+          vendor: vendor ?? "anthropic",
+          model: modelName,
+          actual_cost_usd: Math.round(actual_cost_usd * 10000) / 10000,
+          counterfactual_cost_usd: Math.round(counterfactual_cost_usd * 10000) / 10000,
+          session_savings_usd: Math.round(session_savings_usd * 10000) / 10000,
+          cold_multiplier,
+          friction_confirmations: friction_confirmations ?? 0,
+          multiplier_provisional: true,
+        };
+        const { line_count } = appendSavingsRecord(record);
+        savingsLines.push("", "── Substrate Savings This Session (K505) ──");
+        savingsLines.push(`  Actual cost:    $${actual_cost_usd.toFixed(4)}`);
+        savingsLines.push(`  Counterfactual: $${counterfactual_cost_usd.toFixed(4)} (${cold_multiplier}× cold mult.)`);
+        savingsLines.push(`  Net savings:    $${session_savings_usd.toFixed(4)} [provisional]`);
+        savingsLines.push(`  Overhead:       ${overheadTokens.toLocaleString()} tokens, ${injections} injections`);
+        savingsLines.push(`  Logged → substrate_savings_log.jsonl (${line_count} total entries)`);
+      } catch (err) {
+        savingsLines.push(`(K505 savings logging failed: ${(err as Error).message})`);
+      }
+    } else {
+      savingsLines.push("", "── Substrate Savings ── supply input_tokens + output_tokens to enable K505 savings logging");
+    }
+
     return {
-      content: [{ type: "text", text: output + "\n" + cathedralLines.join("\n") }],
+      content: [{ type: "text", text: output + "\n" + cathedralLines.join("\n") + savingsLines.join("\n") }],
     };
   }
 );
@@ -3383,6 +3441,223 @@ registerTool(
 
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   },
+);
+
+// ═══════════════════════════════════════════
+// K505 — SUBSTRATE SAVINGS TELEMETRY
+// ═══════════════════════════════════════════
+
+const SAVINGS_LOG_PATH = resolve(
+  __dirname, "..", "stitchpunks", "data", "substrate_savings_log.jsonl"
+);
+
+/**
+ * Vendor pricing table (per 1M tokens, USD).
+ * Source: published API pricing as of 2026-04. Update as rates change.
+ */
+const VENDOR_PRICING: Record<string, { input: number; output: number }> = {
+  anthropic: { input: 3.00, output: 15.00 },   // claude-opus-4-7 (per 1M)
+  openai:    { input: 2.50, output: 10.00 },    // gpt-4o (per 1M)
+  google:    { input: 1.25, output:  5.00 },    // gemini-2.5-pro (per 1M)
+  perplexity:{ input: 1.00, output:  1.00 },    // sonar-pro (per 1M)
+};
+
+/** Cold multipliers per agent, derived from R13 empirical baseline. */
+const COLD_MULTIPLIERS: Record<string, number> = {
+  BISHOP: 3.0,
+  KNIGHT: 2.5,
+  PAWN:   3.5,  // includes baked-in friction_multiplier (3.0×)
+  ROOK:   2.5,  // same as KNIGHT until calibration data available
+};
+
+interface SavingsRecord {
+  ts: string;
+  agent: string;
+  session_id: string;
+  input_tokens: number;
+  output_tokens: number;
+  substrate_overhead_tokens: number;
+  substrate_injection_count: number;
+  vendor: string;
+  model: string;
+  actual_cost_usd: number;
+  counterfactual_cost_usd: number;
+  session_savings_usd: number;
+  cold_multiplier: number;
+  friction_confirmations: number;
+  multiplier_provisional: boolean;
+  notes?: string;
+}
+
+function appendSavingsRecord(record: SavingsRecord): { line_count: number } {
+  const line = JSON.stringify(record);
+  const existing = existsSync(SAVINGS_LOG_PATH)
+    ? readFileSync(SAVINGS_LOG_PATH, "utf-8")
+    : "";
+  const lines = existing.trim() ? existing.trim().split("\n") : [];
+  lines.push(line);
+  writeFileSync(SAVINGS_LOG_PATH, lines.join("\n") + "\n", "utf-8");
+  return { line_count: lines.length };
+}
+
+function readSavingsLog(): SavingsRecord[] {
+  if (!existsSync(SAVINGS_LOG_PATH)) return [];
+  const raw = readFileSync(SAVINGS_LOG_PATH, "utf-8").trim();
+  if (!raw) return [];
+  return raw.split("\n").map((l) => JSON.parse(l) as SavingsRecord);
+}
+
+function computeSavings(params: {
+  agent: string;
+  input_tokens: number;
+  output_tokens: number;
+  substrate_overhead_tokens: number;
+  vendor: string;
+}): { actual_cost_usd: number; counterfactual_cost_usd: number; session_savings_usd: number } {
+  const pricing = VENDOR_PRICING[params.vendor.toLowerCase()] ?? VENDOR_PRICING["anthropic"];
+  const m = 1_000_000;
+  const actual_cost_usd =
+    (params.input_tokens / m) * pricing.input +
+    (params.output_tokens / m) * pricing.output;
+  const overhead_cost_usd = (params.substrate_overhead_tokens / m) * pricing.input;
+  const multiplier = COLD_MULTIPLIERS[params.agent.toUpperCase()] ?? 2.5;
+  const counterfactual_cost_usd = actual_cost_usd * multiplier;
+  const session_savings_usd = counterfactual_cost_usd - actual_cost_usd - overhead_cost_usd;
+  return { actual_cost_usd, counterfactual_cost_usd, session_savings_usd };
+}
+
+registerTool(
+  "record_substrate_savings",
+  "Log substrate savings for a completed agent session (Bishop, Knight, Pawn, Rook). Call at session end with token counts. Computes actual cost, counterfactual cost (without substrate), and net savings using agent-specific cold multipliers derived from R13. Appends to substrate_savings_log.jsonl. Returns the savings summary.",
+  {
+    agent: z.enum(["BISHOP", "KNIGHT", "PAWN", "ROOK"]).describe("Agent type"),
+    session_id: z.string().describe("Session identifier, e.g. 'B124', 'K505'"),
+    input_tokens: z.number().int().positive().describe("Total input tokens consumed this session"),
+    output_tokens: z.number().int().positive().describe("Total output tokens generated this session"),
+    substrate_overhead_tokens: z.number().int().nonnegative().default(0).describe("Tokens consumed by Librarian/substrate context injections (subtracted from net savings for honest math)"),
+    substrate_injection_count: z.number().int().nonnegative().default(0).describe("Number of substrate context injections (MCP tool calls, memory file reads, Cathedral lookups)"),
+    vendor: z.string().default("anthropic").describe("Vendor: anthropic | openai | google | perplexity"),
+    model: z.string().default("claude-opus-4-7").describe("Model name, e.g. 'claude-opus-4-7'"),
+    friction_confirmations: z.number().int().nonnegative().default(0).describe("(Pawn-only) Number of 'yes/that/do it' confirmations required before task execution. Contributes to Pawn cold_multiplier calibration."),
+    notes: z.string().optional().describe("Optional notes about this session's substrate usage"),
+  },
+  async ({
+    agent, session_id, input_tokens, output_tokens,
+    substrate_overhead_tokens, substrate_injection_count,
+    vendor, model, friction_confirmations, notes
+  }) => {
+    const { actual_cost_usd, counterfactual_cost_usd, session_savings_usd } = computeSavings({
+      agent, input_tokens, output_tokens, substrate_overhead_tokens, vendor
+    });
+    const cold_multiplier = COLD_MULTIPLIERS[agent] ?? 2.5;
+    const record: SavingsRecord = {
+      ts: new Date().toISOString(),
+      agent,
+      session_id,
+      input_tokens,
+      output_tokens,
+      substrate_overhead_tokens,
+      substrate_injection_count,
+      vendor: vendor || "anthropic",
+      model: model || "claude-opus-4-7",
+      actual_cost_usd: Math.round(actual_cost_usd * 10000) / 10000,
+      counterfactual_cost_usd: Math.round(counterfactual_cost_usd * 10000) / 10000,
+      session_savings_usd: Math.round(session_savings_usd * 10000) / 10000,
+      cold_multiplier,
+      friction_confirmations: friction_confirmations || 0,
+      multiplier_provisional: true,
+      notes,
+    };
+    const { line_count } = appendSavingsRecord(record);
+
+    const lines = [
+      "── Substrate Savings This Session ──",
+      `  Agent:          ${agent} (${session_id})`,
+      `  Model:          ${model} @ ${vendor}`,
+      `  Tokens:         ${input_tokens.toLocaleString()} in / ${output_tokens.toLocaleString()} out`,
+      `  Substrate OH:   ${substrate_overhead_tokens.toLocaleString()} tokens (${substrate_injection_count} injections)`,
+      `  Actual cost:    $${actual_cost_usd.toFixed(4)}`,
+      `  Counterfactual: $${counterfactual_cost_usd.toFixed(4)} (${cold_multiplier}× cold multiplier)`,
+      `  Net savings:    $${session_savings_usd.toFixed(4)}`,
+      `  [provisional multipliers — calibration K-future will refine]`,
+      `  Logged to substrate_savings_log.jsonl (${line_count} total entries)`,
+    ];
+    if (friction_confirmations > 0) {
+      lines.push(`  Pawn friction:  ${friction_confirmations} confirmations logged`);
+    }
+    return { content: [{ type: "text", text: lines.join("\n") }] };
+  }
+);
+
+registerTool(
+  "substrate_savings_summary",
+  "Returns aggregate substrate savings statistics from substrate_savings_log.jsonl. Shows all-time totals, rolling 7-day and 30-day windows, and per-agent breakdowns (Bishop/Knight/Pawn/Rook). The Founder can use this to see actual economic value of running Librarian substrate across all AI sessions.",
+  {
+    window: z.enum(["all", "7d", "30d"]).default("all").describe("Time window: all | 7d (last 7 days) | 30d (last 30 days)"),
+    agent: z.enum(["BISHOP", "KNIGHT", "PAWN", "ROOK", "ALL"]).default("ALL").describe("Filter by agent, or ALL"),
+  },
+  async ({ window, agent }) => {
+    const all = readSavingsLog();
+    if (all.length === 0) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({
+          ok: true,
+          message: "No savings records yet. Call record_substrate_savings at session end to start tracking.",
+          entries: 0,
+        }, null, 2) }],
+      };
+    }
+
+    const now = Date.now();
+    const windowMs = window === "7d" ? 7 * 86400000 : window === "30d" ? 30 * 86400000 : Infinity;
+    const filtered = all.filter((r) => {
+      const age = now - new Date(r.ts).getTime();
+      if (age > windowMs) return false;
+      if (agent !== "ALL" && r.agent !== agent) return false;
+      return true;
+    });
+
+    const byAgent: Record<string, SavingsRecord[]> = {};
+    for (const r of filtered) {
+      (byAgent[r.agent] = byAgent[r.agent] ?? []).push(r);
+    }
+
+    const agentSummaries = Object.entries(byAgent).map(([ag, recs]) => ({
+      agent: ag,
+      sessions: recs.length,
+      total_input_tokens: recs.reduce((s, r) => s + r.input_tokens, 0),
+      total_output_tokens: recs.reduce((s, r) => s + r.output_tokens, 0),
+      total_actual_cost_usd: Math.round(recs.reduce((s, r) => s + r.actual_cost_usd, 0) * 100) / 100,
+      total_counterfactual_usd: Math.round(recs.reduce((s, r) => s + r.counterfactual_cost_usd, 0) * 100) / 100,
+      total_savings_usd: Math.round(recs.reduce((s, r) => s + r.session_savings_usd, 0) * 100) / 100,
+      total_substrate_overhead_tokens: recs.reduce((s, r) => s + r.substrate_overhead_tokens, 0),
+      avg_cold_multiplier: recs[0]?.cold_multiplier ?? 0,
+    }));
+
+    const totals = {
+      sessions: filtered.length,
+      total_actual_cost_usd: Math.round(filtered.reduce((s, r) => s + r.actual_cost_usd, 0) * 100) / 100,
+      total_counterfactual_usd: Math.round(filtered.reduce((s, r) => s + r.counterfactual_cost_usd, 0) * 100) / 100,
+      total_savings_usd: Math.round(filtered.reduce((s, r) => s + r.session_savings_usd, 0) * 100) / 100,
+      total_substrate_overhead_tokens: filtered.reduce((s, r) => s + r.substrate_overhead_tokens, 0),
+    };
+
+    const result = {
+      ok: true,
+      window,
+      agent_filter: agent,
+      all_time_entries: all.length,
+      filtered_entries: filtered.length,
+      totals,
+      by_agent: agentSummaries,
+      multiplier_provisional: true,
+      calibration_note: "Cold multipliers (Bishop 3.0×, Knight 2.5×, Pawn 3.5×) are evidence-informed estimates from R13. Calibration will run every 30 days per K505 Phase E plan.",
+      earliest_record: filtered.length > 0 ? filtered[0].ts : null,
+      latest_record: filtered.length > 0 ? filtered[filtered.length - 1].ts : null,
+    };
+
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
 );
 
 // ═══════════════════════════════════════════

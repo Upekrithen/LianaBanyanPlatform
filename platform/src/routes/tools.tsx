@@ -58,6 +58,7 @@ const V2RedesignTracker = lazy(() => import("@/pages/staff/V2RedesignTracker"));
 const V2PrimitivesPage = lazy(() => import("@/pages/staff/V2PrimitivesPage"));
 const PuddingAnalyticsPage = lazy(() => import("@/pages/staff/PuddingAnalyticsPage"));
 const BatteryDispatchAccessAudit = lazy(() => import("@/pages/staff/BatteryDispatchAccessAudit"));
+const FounderSavingsDashboard = lazy(() => import("@/pages/FounderSavingsDashboard"));
 
 // Cue card landing pages
 const TowerOfPeace = lazy(() => import("@/pages/cue-cards/TowerOfPeace"));
@@ -156,6 +157,7 @@ export const toolsRoutes = (
     <Route path="/staff/v2-tracker" element={<ProtectedRoute><LazyPage><V2RedesignTracker /></LazyPage></ProtectedRoute>} />
     <Route path="/staff/v2-primitives" element={<ProtectedRoute><LazyPage><V2PrimitivesPage /></LazyPage></ProtectedRoute>} />
     <Route path="/staff/battery-dispatch-access" element={<ProtectedRoute><LazyPage><BatteryDispatchAccessAudit /></LazyPage></ProtectedRoute>} />
+    <Route path="/founder-savings" element={<ProtectedRoute><LazyPage><FounderSavingsDashboard /></LazyPage></ProtectedRoute>} />
 
     {/* Cue card landing pages */}
     <Route path="/tower-of-peace" element={<LazyPage><TowerOfPeace /></LazyPage>} />
