@@ -221,6 +221,24 @@ function createWindow(): void {
   })
 }
 
+// ─── Module task supervision ──────────────────────────────────────────────────
+
+interface ModuleTaskStatus {
+  taskId: string
+  running: boolean
+  exitCode: number | null
+  pid: number | null
+  startedAt: string | null
+  stoppedAt: string | null
+  lastError: string | null
+}
+
+const moduleTasks: Map<string, { process: ChildProcess; status: ModuleTaskStatus }> = new Map()
+
+function broadcastModuleOutput(win: BrowserWindow, taskId: string, line: string, stream: 'stdout' | 'stderr'): void {
+  win.webContents.send(`module:output:${taskId}`, line, stream)
+}
+
 // ─── IPC handlers ─────────────────────────────────────────────────────────────
 
 function registerIPC(): void {
@@ -237,13 +255,123 @@ function registerIPC(): void {
   ipcMain.handle('settings:set', (_event, newSettings: Partial<HelmSettings>) => {
     settings = { ...settings, ...newSettings }
     saveSettings(settings)
-    // Propagate start-at-login to system
     app.setLoginItemSettings({ openAtLogin: settings.startAtLogin })
     return settings
   })
 
   ipcMain.handle('open:external', (_event, url: string) => {
     shell.openExternal(url)
+  })
+
+  // ── Module background task handlers (K486) ─────────────────────────────────
+
+  ipcMain.handle('module:run', (event, taskId: string, python: string, script: string, args: string[], cwd: string) => {
+    if (moduleTasks.has(taskId)) {
+      const existing = moduleTasks.get(taskId)!
+      if (existing.status.running) {
+        return { ok: false, error: `Task ${taskId} is already running (PID ${existing.status.pid})` }
+      }
+      moduleTasks.delete(taskId)
+    }
+
+    const pythonExe = python || resolvePython(settings.pythonPath)
+    const status: ModuleTaskStatus = {
+      taskId,
+      running: true,
+      exitCode: null,
+      pid: null,
+      startedAt: new Date().toISOString(),
+      stoppedAt: null,
+      lastError: null,
+    }
+
+    console.log(`[module:run] ${taskId}: ${pythonExe} ${script} ${args.join(' ')}`)
+
+    const proc = spawn(pythonExe, [script, ...args], {
+      cwd: cwd || undefined,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true,
+      env: { ...process.env, PYTHONUTF8: '1' },
+    })
+
+    status.pid = proc.pid ?? null
+    moduleTasks.set(taskId, { process: proc, status })
+
+    const win = BrowserWindow.fromWebContents(event.sender)
+
+    proc.stdout?.on('data', (data: Buffer) => {
+      const lines = data.toString().split('\n')
+      lines.forEach((line) => {
+        if (line.trim()) {
+          console.log(`[module:${taskId}:stdout] ${line}`)
+          if (win && !win.isDestroyed()) {
+            broadcastModuleOutput(win, taskId, line, 'stdout')
+          }
+        }
+      })
+    })
+
+    proc.stderr?.on('data', (data: Buffer) => {
+      const lines = data.toString().split('\n')
+      lines.forEach((line) => {
+        if (line.trim()) {
+          console.error(`[module:${taskId}:stderr] ${line}`)
+          if (win && !win.isDestroyed()) {
+            broadcastModuleOutput(win, taskId, line, 'stderr')
+          }
+        }
+      })
+    })
+
+    proc.on('exit', (code) => {
+      console.log(`[module:run] ${taskId} exited: code=${code}`)
+      const entry = moduleTasks.get(taskId)
+      if (entry) {
+        entry.status.running = false
+        entry.status.exitCode = code
+        entry.status.stoppedAt = new Date().toISOString()
+        if (win && !win.isDestroyed()) {
+          broadcastModuleOutput(win, taskId, `[task-exit] exit_code=${code}`, 'stdout')
+        }
+      }
+    })
+
+    proc.on('error', (err) => {
+      console.error(`[module:run] ${taskId} spawn error: ${err.message}`)
+      const entry = moduleTasks.get(taskId)
+      if (entry) {
+        entry.status.running = false
+        entry.status.lastError = err.message
+        entry.status.stoppedAt = new Date().toISOString()
+      }
+    })
+
+    return { ok: true }
+  })
+
+  ipcMain.handle('module:stop', (_event, taskId: string) => {
+    const entry = moduleTasks.get(taskId)
+    if (!entry || !entry.status.running) return false
+    entry.process.kill('SIGTERM')
+    entry.status.running = false
+    entry.status.stoppedAt = new Date().toISOString()
+    return true
+  })
+
+  ipcMain.handle('module:status', (_event, taskId: string): ModuleTaskStatus => {
+    const entry = moduleTasks.get(taskId)
+    if (!entry) {
+      return {
+        taskId,
+        running: false,
+        exitCode: null,
+        pid: null,
+        startedAt: null,
+        stoppedAt: null,
+        lastError: null,
+      }
+    }
+    return { ...entry.status }
   })
 }
 

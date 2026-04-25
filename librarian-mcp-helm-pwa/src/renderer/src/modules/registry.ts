@@ -26,9 +26,12 @@ export interface HelmModule {
   version: string
 }
 
-// ─── Built-in module: member-cathedral-preview ────────────────────────────────
+// ─── Built-in modules ─────────────────────────────────────────────────────────
 
 import { MemberCathedralPreview } from './MemberCathedralPreview'
+import { BloodhoundModule } from './BloodhoundModule'
+import { MinerModule } from './MinerModule'
+import { SculptorModule } from './SculptorModule'
 
 const BUILTIN_MODULES: HelmModule[] = [
   {
@@ -39,6 +42,33 @@ const BUILTIN_MODULES: HelmModule[] = [
     category: 'cathedral',
     component: MemberCathedralPreview,
     version: '0.1.0',
+  },
+  {
+    id: 'bloodhound',
+    name: 'Bloodhound Scout',
+    description: 'Corpus pre-scan: ranks topical Wells by keyword density before the Miner bootstraps. Fixes K482 first-file-wins fragility.',
+    enabledByDefault: false,
+    category: 'tools',
+    component: BloodhoundModule,
+    version: '1.0.0',
+  },
+  {
+    id: 'miner',
+    name: 'Miner',
+    description: 'Self-replicating corpus-prospecting Scribe with Bloodhound bootstrap, mitotic specialization, multi_well_scores, and daughter cross-reference. K486.',
+    enabledByDefault: false,
+    category: 'tools',
+    component: MinerModule,
+    version: '1.0.0',
+  },
+  {
+    id: 'sculptor',
+    name: 'Sculptor',
+    description: 'IP-as-Filter curation pipeline. Reads Miner bedrock, applies Three-Fates filtering, produces cathedral artifacts and Eblets.',
+    enabledByDefault: false,
+    category: 'cathedral',
+    component: SculptorModule,
+    version: '1.0.0',
   },
 ]
 

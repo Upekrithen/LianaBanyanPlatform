@@ -18,7 +18,7 @@ import { SettingsPanel } from './components/SettingsPanel'
 import { ModulesView } from './components/ModulesView'
 import { getAllModules } from './modules/registry'
 
-export type View = 'home' | 'settings' | 'modules'
+export type View = 'home' | 'settings' | 'modules' | string  // string for module ids
 
 declare global {
   interface Window {
@@ -29,6 +29,11 @@ declare global {
       setSettings: (partial: Partial<HelmSettings>) => Promise<HelmSettings>
       openExternal: (url: string) => Promise<void>
       onDaemonStatusChange: (cb: (status: DaemonStatus) => void) => () => void
+      // Module background tasks (K486)
+      runModuleTask: (taskId: string, python: string, script: string, args: string[], cwd: string) => Promise<{ ok: boolean; error?: string }>
+      stopModuleTask: (taskId: string) => Promise<boolean>
+      getModuleTaskStatus: (taskId: string) => Promise<{ taskId: string; running: boolean; exitCode: number | null; pid: number | null; startedAt: string | null; stoppedAt: string | null; lastError: string | null }>
+      onModuleOutput: (taskId: string, cb: (line: string, stream: 'stdout' | 'stderr') => void) => () => void
     }
   }
 }

@@ -1,11 +1,16 @@
 """
 Root Miner -- K482/B123 prototype implementation.
+Updated K486/B123: multi_well_scores, cross-reference, Bloodhound-anchor hook.
 
 Crown Jewel candidate #2296: Miners -- Self-Replicating Corpus-Prospecting Scribes
 with Mitotic Specialization and IP-Ledger Provenance (Living Pyramid of Roots).
 
 Architecture reference: project_miners_self_replicating_scribes.md (Bishop B123)
-First empirical reduction-to-practice.
+First empirical reduction-to-practice: K482.
+K486 additions:
+  - multi_well_scores: dict[well_name, score] on every bedrock tablet
+  - set_active_wells(wells): register sibling Wells for scoring
+  - Daughter.claim_cross_references(): build cross-reference index from existing bedrock
 """
 
 from __future__ import annotations
@@ -51,7 +56,44 @@ STOP_WORDS = {
 
 LEDGER_PATH = Path(__file__).parent / "ip_ledger.jsonl"
 BEDROCK_DIR = Path(__file__).parent / "bedrock"
+CROSSREF_DIR = Path(__file__).parent / "cross_references"
 BEDROCK_DIR.mkdir(parents=True, exist_ok=True)
+CROSSREF_DIR.mkdir(parents=True, exist_ok=True)
+
+# K486: Global active-wells registry (well_name → primary_topic keyword)
+# Populated by run harness as Miners spawn; used for multi_well_scores.
+_ACTIVE_WELLS: dict[str, str] = {}  # serial → primary_topic
+
+
+def register_active_well(serial: str, primary_topic: str) -> None:
+    """Register a Miner's primary Well. Called by the run harness on spawn."""
+    _ACTIVE_WELLS[serial] = primary_topic
+
+
+def get_active_wells() -> dict[str, str]:
+    """Return a snapshot of currently registered Wells."""
+    return dict(_ACTIVE_WELLS)
+
+
+def _score_vs_well(keywords: list[str], well_topic: str) -> float:
+    """Compute a relevance score for a tablet against a Well's primary topic.
+
+    Score = fraction of top-20 keywords that match the well_topic keyword,
+    weighted by position. Simple and deterministic — no ML.
+    Returns 0.0-1.0.
+    """
+    if not keywords or not well_topic:
+        return 0.0
+    top = keywords[:TOP_KEYWORD_N]
+    # Exact match on the well_topic keyword in the tablet's keyword list
+    if well_topic in top:
+        pos = top.index(well_topic)
+        # Position-weighted: position 0 = 1.0, position 19 = ~0.05
+        return round(1.0 - (pos / len(top)) * 0.95, 4)
+    # Partial credit: any keyword sharing a 5-char prefix with the well_topic
+    prefix = well_topic[:5]
+    partial = sum(1 for kw in top if kw.startswith(prefix))
+    return round(min(0.25, partial * 0.08), 4)
 
 _ledger_prior_hash: str = "GENESIS"
 
@@ -283,6 +325,13 @@ class Miner:
             weight = round(self._keyword_pool[kw] / max(1, self.tablet_count + 1), 4)
             self.connections.append((tablet_id, kw, weight))
 
+        # K486: Compute multi_well_scores against all currently-registered Wells
+        active_wells = get_active_wells()
+        multi_well_scores: dict[str, float] = {}
+        for well_serial, well_topic in active_wells.items():
+            if well_serial != self.serial:  # score against OTHER wells only
+                multi_well_scores[well_serial] = _score_vs_well(keywords, well_topic)
+
         # Write bedrock tablet
         tablet = {
             "tablet_id": tablet_id,
@@ -294,6 +343,7 @@ class Miner:
             "depth_level": depth,
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "provenance_chain": list(self.provenance_chain),
+            "multi_well_scores": multi_well_scores,
         }
         self._write_bedrock(tablet)
 
@@ -397,10 +447,107 @@ class Miner:
             fh.write(json.dumps(tablet) + "\n")
 
     # ------------------------------------------------------------------
+    # K486: Daughter cross-reference
+    # ------------------------------------------------------------------
+
+    def claim_cross_references(
+        self,
+        threshold: float = 0.40,
+        bedrock_dir: Path | None = None,
+    ) -> int:
+        """
+        Build a cross-reference index for this daughter Miner.
+
+        Scans ALL existing bedrock tablets (from all Miners) for tablets that
+        scored > threshold against this daughter's primary Well. Those tablets
+        are NOT re-mined — they remain parent-owned. The daughter records
+        a claim-link (tablet_id + parent_serial + score) in her cross-reference
+        index at CROSSREF_DIR/<daughter_serial>.jsonl.
+
+        Returns the count of cross-referenced tablets.
+
+        Called AFTER all mining is complete (forward-only design: tablets written
+        before this daughter's Well was registered may have multi_well_scores={};
+        we score them from the bedrock content at cross-reference time).
+        """
+        if not self.primary_topic:
+            return 0
+        if not self.parent_serial:
+            # Root miners don't cross-reference (no "sibling" context)
+            return 0
+
+        bdir = bedrock_dir or BEDROCK_DIR
+        crossref_path = CROSSREF_DIR / f"{self.serial}.jsonl"
+        claimed = 0
+
+        for bedrock_file in sorted(bdir.glob("*.jsonl")):
+            if bedrock_file.stem == self.serial:
+                continue  # skip own bedrock
+
+            try:
+                with bedrock_file.open("r", encoding="utf-8") as fh:
+                    for line in fh:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        try:
+                            tablet = json.loads(line)
+                        except json.JSONDecodeError:
+                            continue
+
+                        # Score: check multi_well_scores first (fast path)
+                        multi = tablet.get("multi_well_scores", {})
+                        score = multi.get(self.serial, None)
+
+                        if score is None:
+                            # Fallback: score from keywords directly
+                            kws = tablet.get("keywords", [])
+                            score = _score_vs_well(kws, self.primary_topic)
+
+                        if score > threshold:
+                            crossref = {
+                                "daughter_serial": self.serial,
+                                "daughter_primary_topic": self.primary_topic,
+                                "tablet_id": tablet.get("tablet_id"),
+                                "parent_miner_serial": tablet.get("miner_serial"),
+                                "source_file": tablet.get("source_file"),
+                                "cross_ref_score": round(score, 4),
+                                "provenance_chain": tablet.get("provenance_chain", []),
+                                "claimed_at": datetime.now(timezone.utc).isoformat(),
+                            }
+                            with crossref_path.open("a", encoding="utf-8") as cf:
+                                cf.write(json.dumps(crossref) + "\n")
+                            claimed += 1
+
+            except Exception:
+                continue
+
+        _append_ledger({
+            "miner_serial": self.serial,
+            "parent_serial": self.parent_serial,
+            "event_type": "cross_reference_claimed",
+            "tablet_id": None,
+            "cross_ref_count": claimed,
+            "threshold": threshold,
+        })
+
+        return claimed
+
+    # ------------------------------------------------------------------
     # Snapshot
     # ------------------------------------------------------------------
 
     def snapshot(self) -> dict:
+        crossref_path = CROSSREF_DIR / f"{self.serial}.jsonl"
+        crossref_count = 0
+        if crossref_path.exists():
+            try:
+                crossref_count = sum(
+                    1 for line in crossref_path.read_text(encoding="utf-8").splitlines()
+                    if line.strip()
+                )
+            except Exception:
+                pass
         return {
             "serial": self.serial,
             "parent_serial": self.parent_serial,
@@ -414,4 +561,5 @@ class Miner:
             "top_keywords": [kw for kw, _ in self._keyword_pool.most_common(10)],
             "primary_sig_locked": self._primary_sig_locked,
             "primary_sig_size": len(self._primary_sig),
+            "cross_ref_count": crossref_count,
         }
