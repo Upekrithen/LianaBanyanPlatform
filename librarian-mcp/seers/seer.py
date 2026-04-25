@@ -18,6 +18,11 @@ Design decisions (K489):
   - Provenance footer: summary-trace (one line per claim anchor); full chain on request
   - Multi-Seer-ready: one class, instantiable per substrate (sets up Augur cleanly)
 
+K492 update: domain_filter parameter for multi-Seer / Augur substrate partitioning.
+  When provided, _load() applies it after loading all Eblets from the shared store.
+  Augur instantiates Seer-A and Seer-B with distinct domain_filter functions without
+  duplicating the EbletStore file.
+
 REF Staff discipline: Seer reads Eblets / Synapses / bedrock;
   writes only conversational output (and optionally query log). No source modification.
 
@@ -40,7 +45,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 # --- Path setup ---------------------------------------------------------------
 _HERE = Path(__file__).parent
@@ -281,6 +286,8 @@ class Seer:
         top_k: int = DEFAULT_TOP_K,
         model: str = DEFAULT_MODEL,
         seer_id: str = "Seer-K489",
+        domain_filter: Optional[Callable[["Eblet"], bool]] = None,
+        domain_name: str = "full",
     ) -> None:
         """
         Initialize the Seer.
@@ -291,12 +298,20 @@ class Seer:
             top_k: number of top Eblets to load into thought-bundle
             model: LLM model for reasoning (Haiku-class default)
             seer_id: identifier for this Seer instance (multi-Seer support)
+            domain_filter: optional Callable[[Eblet], bool]; when provided, only
+                Eblets passing this filter are loaded into this Seer's substrate.
+                Enables Augur-level substrate partitioning without file duplication.
+                (K492: Seer-A uses arch_empirics_filter, Seer-B uses founder_voice_filter)
+            domain_name: human-readable domain label (e.g. "arch_empirics",
+                "founder_voice"); used in provenance and Augur routing reporting.
         """
         self.api_client = api_client
         self.store = EbletStore(eblet_store_path)
         self.top_k = top_k
         self.model = model
         self.seer_id = seer_id
+        self.domain_filter = domain_filter
+        self.domain_name = domain_name
         self._eblets: list[Eblet] = []
         self._eblet_map: dict[str, Eblet] = {}
         self._index = TFIDFIndex()
@@ -304,8 +319,12 @@ class Seer:
         self._load()
 
     def _load(self) -> None:
-        """Load Eblets from store and build TF-IDF index."""
-        self._eblets = self.store.load_all()
+        """Load Eblets from store, apply domain_filter if set, build TF-IDF index."""
+        all_eblets = self.store.load_all()
+        if self.domain_filter is not None:
+            self._eblets = [eb for eb in all_eblets if self.domain_filter(eb)]
+        else:
+            self._eblets = all_eblets
         self._eblet_map = {eb.eblet_id: eb for eb in self._eblets}
         self._index.build(self._eblets)
 
@@ -518,12 +537,25 @@ class Seer:
 
         # Step 2: honest-unknown fast path (no LLM call)
         if is_honest_unknown or not thought_bundle:
+            domain_label = f" [{self.domain_name}]" if self.domain_name != "full" else ""
             answer = (
-                "SCOPE-BOUNDARY: The Pyramid's Eblet index does not contain sufficient "
-                "coverage to answer this query. The indexed substrate covers Liana Banyan "
-                "Platform architecture, session reasoning (K475–K486+), R10/R11 benchmark "
-                "methodology, Cathedral systems, and related technical domains. "
-                f"Query asked: '{user_query[:200]}'. "
+                f"SCOPE-BOUNDARY{domain_label}: The Pyramid's Eblet index ({self.seer_id}) "
+                "does not contain sufficient coverage to answer this query. "
+                f"This Seer's substrate ({self.domain_name}) covers "
+                + (
+                    "architecture/empirics: Cathedral Effect benchmarks, Miners/Sculptors, "
+                    "Seer/Augur/Eblets technical implementation, R10/R11 methodology."
+                    if self.domain_name == "arch_empirics"
+                    else (
+                        "founder-voice/biography: Rhetorical Keystones, Stone Tablets, "
+                        "IP provenance chains, Keystone-Compounding Loop, Founder speech-acts."
+                        if self.domain_name == "founder_voice"
+                        else
+                        "Liana Banyan Platform architecture, session reasoning (K475–K491+), "
+                        "R10/R11 benchmark methodology, Cathedral systems, and related domains."
+                    )
+                )
+                + f" Query asked: '{user_query[:200]}'. "
                 "If this falls within expected coverage, the Eblet store may need rebuilding "
                 "from updated Synapse files."
             )
@@ -690,6 +722,6 @@ class Seer:
 
     def __repr__(self) -> str:
         return (
-            f"Seer(id={self.seer_id!r}, eblets={self.eblet_count}, "
-            f"top_k={self.top_k}, model={self.model!r})"
+            f"Seer(id={self.seer_id!r}, domain={self.domain_name!r}, "
+            f"eblets={self.eblet_count}, top_k={self.top_k}, model={self.model!r})"
         )
