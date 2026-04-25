@@ -2,8 +2,9 @@
 Eblet — Electronic Tablet summary-pointer into a Synapse cluster.
 
 K485 · B123 · Crown Jewel #2298 (Seer / Augur / Eblets — The Awareness Net)
+K493 · B123 · access-frequency instrumentation (last_accessed_at, access_count)
 
-Schema (9 canonical fields):
+Schema (11 canonical fields — K493 adds two access-tracking fields):
 
   eblet_id              "EB-NNNNNN"             monotonic 6-digit ID
   synapse_pointer       "synapse_K{N}.jsonl#cluster_{name}"  pointer to source
@@ -14,6 +15,13 @@ Schema (9 canonical fields):
   confidence_score      float [0.0–1.0]  — summary-quality self-rating
   created_at            ISO-8601 timestamp
   keystone_anchors      list[str]  — e.g. ["Keystone-28"] if Synapse touches domain
+  last_accessed_at      ISO-8601 | None  — updated on Seer pointer-resolution (K493)
+  access_count          int  — incremented on Seer pointer-resolution (K493)
+
+Access tracking implementation (K493):
+  EbletStore.record_access(eblet_id) → appends to eblets_access_log.jsonl (sidecar)
+  EbletStore.get_access_stats()      → {eblet_id: {access_count, last_accessed_at}}
+  Access log is append-only; EbletStore main file stays append-only.
 
 Resolution:
   Eblet.resolve()         → full Synapse cluster content (dict)
@@ -37,6 +45,7 @@ from typing import Any, Optional
 # ---------------------------------------------------------------------------
 
 EBLET_STORE_PATH = Path(__file__).parent / "eblets.jsonl"
+EBLET_ACCESS_LOG_PATH = Path(__file__).parent / "eblets_access_log.jsonl"
 
 SYNAPSE_DIR = Path(__file__).parent.parent / "stitchpunks" / "synapses"
 
@@ -168,6 +177,8 @@ class Eblet:
     confidence_score: float              # [0.0-1.0] summary quality self-rating
     created_at: str                      # ISO-8601
     keystone_anchors: list[str]          # e.g. ["CJ-2298"] if touching keystone domain
+    last_accessed_at: Optional[str] = None   # ISO-8601 | None — K493 access tracking
+    access_count: int = 0                    # incremented on pointer-resolution — K493
 
     def to_dict(self) -> dict:
         return {
@@ -180,6 +191,8 @@ class Eblet:
             "confidence_score": self.confidence_score,
             "created_at": self.created_at,
             "keystone_anchors": self.keystone_anchors,
+            "last_accessed_at": self.last_accessed_at,
+            "access_count": self.access_count,
         }
 
     @classmethod
@@ -194,6 +207,8 @@ class Eblet:
             confidence_score=d.get("confidence_score", 0.0),
             created_at=d["created_at"],
             keystone_anchors=d.get("keystone_anchors", []),
+            last_accessed_at=d.get("last_accessed_at"),
+            access_count=d.get("access_count", 0),
         )
 
     # ------------------------------------------------------------------
@@ -323,10 +338,15 @@ class EbletStore:
     """
     Append-only JSONL store for Eblets at librarian-mcp/eblets/eblets.jsonl.
     One Eblet per line. ID is monotonically increasing.
+
+    K493: access tracking via sidecar eblets_access_log.jsonl (also append-only).
+    Each resolution event appends {eblet_id, accessed_at} to the log.
+    get_access_stats() aggregates the log into {eblet_id: {access_count, last_accessed_at}}.
     """
 
-    def __init__(self, path: Path = EBLET_STORE_PATH) -> None:
+    def __init__(self, path: Path = EBLET_STORE_PATH, access_log_path: Optional[Path] = None) -> None:
         self.path = path
+        self.access_log_path = access_log_path or EBLET_ACCESS_LOG_PATH
         self.path.parent.mkdir(parents=True, exist_ok=True)
 
     def next_id(self) -> str:
@@ -380,3 +400,65 @@ class EbletStore:
             if eblet.synapse_pointer == synapse_pointer:
                 return True
         return False
+
+    # ------------------------------------------------------------------
+    # K493 access-frequency tracking (sidecar log)
+    # ------------------------------------------------------------------
+
+    def record_access(self, eblet_id: str) -> None:
+        """
+        Record one pointer-resolution access for the given Eblet ID.
+
+        Appends a single JSON line to eblets_access_log.jsonl:
+          {"eblet_id": "EB-000042", "accessed_at": "2026-04-25T..."}
+
+        The main eblets.jsonl stays append-only; this sidecar is the access log.
+        """
+        entry = {
+            "eblet_id": eblet_id,
+            "accessed_at": datetime.now(timezone.utc).isoformat(),
+        }
+        with self.access_log_path.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+    def get_access_stats(self) -> dict[str, dict]:
+        """
+        Aggregate the access log into per-Eblet stats.
+
+        Returns:
+          {
+            "EB-000042": {
+              "access_count": 3,
+              "last_accessed_at": "2026-04-25T16:00:00+00:00",
+            },
+            ...
+          }
+        Only Eblets that have been accessed at least once appear in the result.
+        """
+        if not self.access_log_path.exists():
+            return {}
+
+        stats: dict[str, dict] = {}
+        with self.access_log_path.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    entry = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                eblet_id = entry.get("eblet_id")
+                accessed_at = entry.get("accessed_at")
+                if not eblet_id or not accessed_at:
+                    continue
+                if eblet_id not in stats:
+                    stats[eblet_id] = {"access_count": 0, "last_accessed_at": None}
+                stats[eblet_id]["access_count"] += 1
+                if (
+                    stats[eblet_id]["last_accessed_at"] is None
+                    or accessed_at > stats[eblet_id]["last_accessed_at"]
+                ):
+                    stats[eblet_id]["last_accessed_at"] = accessed_at
+
+        return stats

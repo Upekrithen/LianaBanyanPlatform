@@ -59,7 +59,7 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-from eblets.eblet import Eblet, EbletStore, EBLET_STORE_PATH, _get_synapse_text
+from eblets.eblet import Eblet, EbletStore, EBLET_STORE_PATH, EBLET_ACCESS_LOG_PATH, _get_synapse_text
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -386,10 +386,12 @@ class Seer:
         Resolve an Eblet to its full Synapse cluster content.
 
         Returns the resolved cluster dict (see Eblet.resolve()).
-        Logs the resolution for provenance tracking.
+        Records access in the EbletStore access log (K493 instrumentation).
         """
         try:
-            return eblet.resolve()
+            result = eblet.resolve()
+            self.store.record_access(eblet.eblet_id)
+            return result
         except FileNotFoundError as exc:
             return {"error": str(exc), "eblet_id": eblet.eblet_id}
 
