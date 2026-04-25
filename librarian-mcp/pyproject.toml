@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "librarian-mcp"
+version = "0.2.0"
+description = "Liana Banyan Librarian MCP — substrate context tools and CLI utilities"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+dependencies = [
+    "requests>=2.31",
+]
+
+[project.scripts]
+# K507: substrate-injected Perplexity Sonar Pro CLI (Developer-tier bonus)
+pawn-substrate = "librarian_mcp_scripts.pawn_with_substrate:main"
+# K505: savings trackers
+knight-savings = "librarian_mcp_scripts.knight_session_savings:main"
+pawn-savings   = "librarian_mcp_scripts.pawn_session_savings:main"
+
+[tool.setuptools]
+package-dir = { "librarian_mcp_scripts" = "scripts" }
+packages    = ["librarian_mcp_scripts"]
+
+[tool.setuptools.package-data]
+"librarian_mcp_scripts" = ["*.py"]
+
+# ── Developer install ──────────────────────────────────────────────────────────
+# pip install -e librarian-mcp/
+# → registers `pawn-substrate` command globally
+# → Developer-tier bonus: bring-your-own Perplexity API key + substrate injection
+#
+# Usage after install:
+#   pawn-substrate "What is the LB membership cost?"
+#   pawn-substrate --test
+#   pawn-substrate --summary
+#   pawn-substrate --cost-day 10
+#
+# K507 | B124 | BRIDLE v10.5

@@ -139,6 +139,48 @@
     </div>
   </div>
 
+  <div id="developer-section" class="section" style="display:none">
+    <div class="section-title">Developer — Pawn API Configuration</div>
+    <p style="font-size:12px;color:#475569;margin-bottom:12px;">
+      Developer mode includes the <strong>Pawn-with-Substrate CLI</strong> (K507): substrate-injected
+      Perplexity queries with direct token measurement. Bring your own Perplexity API key.
+      Install via: <code style="background:#151c2c;padding:2px 6px;border-radius:4px;font-size:11px;">pip install -e librarian-mcp/</code>
+      then use <code style="background:#151c2c;padding:2px 6px;border-radius:4px;font-size:11px;">pawn-substrate "your query"</code>.
+    </p>
+    <div class="field" style="flex-direction:column;align-items:flex-start;gap:10px;">
+      <div class="field-info">
+        <div class="field-label">Perplexity API key</div>
+        <div class="field-hint">Stored locally only. Never transmitted to LB servers.</div>
+      </div>
+      <div style="display:flex;gap:8px;width:100%;">
+        <input type="password" id="pawn-api-key"
+          placeholder="pplx-..."
+          style="flex:1;background:#0f1117;border:1px solid #334155;color:#e2e8f0;
+                 padding:7px 10px;border-radius:6px;font-size:13px;font-family:monospace;" />
+        <button class="btn btn-primary" onclick="testPawnAPI()" style="white-space:nowrap;">Test key</button>
+      </div>
+      <div id="pawn-api-status" style="font-size:12px;color:#475569;"></div>
+    </div>
+    <div class="field">
+      <div class="field-info">
+        <div class="field-label">Daily cost cap (USD)</div>
+        <div class="field-hint">Warn when daily Pawn API spend exceeds this. 0 = no cap.</div>
+      </div>
+      <input type="number" id="pawn-cost-cap" value="1.00" min="0" step="0.25"
+        style="width:80px;background:#0f1117;border:1px solid #334155;color:#e2e8f0;
+               padding:6px 8px;border-radius:6px;font-size:13px;text-align:right;" />
+    </div>
+    <div class="field">
+      <div class="field-info">
+        <div class="field-label">CLI install path</div>
+        <div class="field-hint">Where pawn_with_substrate.py lives on your machine.</div>
+      </div>
+      <input type="text" id="pawn-cli-path" placeholder="librarian-mcp/scripts/pawn_with_substrate.py"
+        style="flex:1;background:#0f1117;border:1px solid #334155;color:#e2e8f0;
+               padding:6px 8px;border-radius:6px;font-size:12px;font-family:monospace;min-width:200px;" />
+    </div>
+  </div>
+
   <div class="separator"></div>
 
   <button class="btn btn-primary" onclick="saveSettings()">Save settings</button>
@@ -158,7 +200,10 @@
   </div>
 
   <script>
-    const DEFAULT_PREFS = { persona: 'casual', injectionEnabled: true, selectedAI: null, sharePreference: 'private' };
+    const DEFAULT_PREFS = {
+      persona: 'casual', injectionEnabled: true, selectedAI: null, sharePreference: 'private',
+      pawnApiKey: '', pawnCostCap: 1.00, pawnCliPath: 'librarian-mcp/scripts/pawn_with_substrate.py',
+    };
 
     function load() {
       chrome.storage.local.get(DEFAULT_PREFS, (prefs) => {
@@ -166,6 +211,49 @@
         document.getElementById('injection-toggle').checked = prefs.injectionEnabled;
         if (prefs.selectedAI) document.getElementById('ai-select').value = prefs.selectedAI;
         document.getElementById('share-select').value = prefs.sharePreference;
+        document.getElementById('pawn-api-key').value = prefs.pawnApiKey || '';
+        document.getElementById('pawn-cost-cap').value = prefs.pawnCostCap ?? 1.00;
+        document.getElementById('pawn-cli-path').value = prefs.pawnCliPath || '';
+        updateDeveloperSection(prefs.persona);
+      });
+    }
+
+    function updateDeveloperSection(persona) {
+      const section = document.getElementById('developer-section');
+      section.style.display = (persona === 'developer' || persona === 'member') ? 'block' : 'none';
+    }
+
+    document.getElementById('persona-select').addEventListener('change', function() {
+      updateDeveloperSection(this.value);
+    });
+
+    function testPawnAPI() {
+      const key = document.getElementById('pawn-api-key').value.trim();
+      const status = document.getElementById('pawn-api-status');
+      if (!key) { status.textContent = 'Enter a Perplexity API key first.'; status.style.color = '#f87171'; return; }
+      status.textContent = 'Testing...'; status.style.color = '#94a3b8';
+      fetch('https://api.perplexity.ai/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'sonar-pro', messages: [{ role: 'user', content: 'Reply: PAWN_API_VERIFIED' }] }),
+      })
+      .then(r => r.json())
+      .then(d => {
+        const answer = d?.choices?.[0]?.message?.content || '';
+        const model = d?.model || 'unknown';
+        const reqId = d?.id || 'unknown';
+        const tokens = d?.usage || {};
+        if (answer.includes('PAWN_API_VERIFIED') || answer.length > 0) {
+          status.innerHTML = `✓ API key valid &mdash; model=${model}, tokens=${tokens.prompt_tokens||0}in/${tokens.completion_tokens||0}out, request_id=${reqId.slice(0,8)}...`;
+          status.style.color = '#4ade80';
+        } else {
+          status.textContent = 'Unexpected response: ' + answer.slice(0, 80);
+          status.style.color = '#fbbf24';
+        }
+      })
+      .catch(e => {
+        status.textContent = 'Test failed: ' + e.message;
+        status.style.color = '#f87171';
       });
     }
 
@@ -175,6 +263,9 @@
         injectionEnabled: document.getElementById('injection-toggle').checked,
         selectedAI: document.getElementById('ai-select').value,
         sharePreference: document.getElementById('share-select').value,
+        pawnApiKey: document.getElementById('pawn-api-key').value.trim(),
+        pawnCostCap: parseFloat(document.getElementById('pawn-cost-cap').value) || 1.00,
+        pawnCliPath: document.getElementById('pawn-cli-path').value.trim(),
       };
       chrome.storage.local.set(prefs, () => {
         const notice = document.getElementById('save-notice');
