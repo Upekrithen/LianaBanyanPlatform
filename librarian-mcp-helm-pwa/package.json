@@ -1,0 +1,30 @@
+{
+  "name": "helm-pwa",
+  "version": "0.1.0",
+  "description": "Helm — Local shell that all of LB lives in. Starts with Librarian; opt-in for everything else.",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "dev:web": "vite --config electron.vite.config.ts --mode web",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "start": "electron ."
+  },
+  "keywords": ["liana-banyan", "helm", "librarian", "cathedral", "electron", "pwa"],
+  "author": "Liana Banyan Corporation",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "electron": "^41.3.0",
+    "electron-vite": "^3.1.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.3.0"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
