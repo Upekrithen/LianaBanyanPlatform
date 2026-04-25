@@ -1,0 +1,21 @@
+{
+  "session": "K488",
+  "phase": "A",
+  "description": "IP-ledger rebuild from K487 corpus",
+  "completed_at": "2026-04-25T12:29:45.600591+00:00",
+  "elapsed_sec": 11.6,
+  "original_ledger": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\ip_ledger.jsonl",
+  "original_ledger_size_mb": 479.34,
+  "original_entry_count": 872498,
+  "chain_breaks_before": 99775,
+  "rebuilt_ledger": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\cleanup_K488\\ip_ledger_K487_rebuilt.jsonl",
+  "rebuilt_entry_count": 872498,
+  "chain_breaks_after": 0,
+  "verified_clean": true,
+  "sort_policy": "primary=timestamp, secondary=miner_serial, tertiary=tablet_id",
+  "hash_formula": "SHA256(prior_hash + json.dumps(payload, sort_keys=True) + timestamp)",
+  "original_archived_as": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\cleanup_K488\\ip_ledger_K487_original_corrupted.jsonl",
+  "genesis_hash": "GENESIS",
+  "final_hash": "1b8beb52b6a2e2a2df4fc22cd8447457bd050053c636574f3ae1aa7e031f15ff",
+  "notes": "Chain breaks were caused by orphan-process race during K487 buffering-fix restart. Multiple Python processes appended to ip_ledger.jsonl without OS-level file locking (threading.Lock does not protect against separate processes). Bedrock tablets were NOT affected (per-Miner files). Rebuilt ledger preserves all original event data and timestamps; only prior_hash and current_hash fields are recomputed."
+}

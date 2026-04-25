@@ -1,0 +1,257 @@
+{
+  "session": "K488",
+  "phase": "E",
+  "description": "K487 forensic review and cleanup-needs triage",
+  "completed_at": "2026-04-25T12:32:16.828268+00:00",
+  "elapsed_sec": 0.0,
+  "tablet_distribution": {
+    "active_miners": 50,
+    "ghost_miners": 151,
+    "max_tablets": 17387,
+    "min_tablets": 17350,
+    "avg_tablets": 17358,
+    "total_tablets": 867909
+  },
+  "crossref_analysis_top": {
+    "credits": {
+      "miner_count": 15,
+      "max_crossref": 73195,
+      "min_crossref": 73192,
+      "total_crossref": 1097907,
+      "anomalous": true
+    },
+    "infrastructure": {
+      "miner_count": 2,
+      "max_crossref": 61710,
+      "min_crossref": 61710,
+      "total_crossref": 123420,
+      "anomalous": true
+    },
+    "market": {
+      "miner_count": 11,
+      "max_crossref": 7157,
+      "min_crossref": 7151,
+      "total_crossref": 78693,
+      "anomalous": false
+    },
+    "education": {
+      "miner_count": 3,
+      "max_crossref": 5545,
+      "min_crossref": 5545,
+      "total_crossref": 16635,
+      "anomalous": false
+    },
+    "written": {
+      "miner_count": 2,
+      "max_crossref": 2975,
+      "min_crossref": 2973,
+      "total_crossref": 5948,
+      "anomalous": false
+    },
+    "attachment": {
+      "miner_count": 1,
+      "max_crossref": 694,
+      "min_crossref": 694,
+      "total_crossref": 694,
+      "anomalous": false
+    },
+    "env": {
+      "miner_count": 1,
+      "max_crossref": 577,
+      "min_crossref": 577,
+      "total_crossref": 577,
+      "anomalous": false
+    },
+    "academic_paper_non_speculative_002": {
+      "miner_count": 16,
+      "max_crossref": 268,
+      "min_crossref": 0,
+      "total_crossref": 3752,
+      "anomalous": false
+    },
+    "technical": {
+      "miner_count": 1,
+      "max_crossref": 0,
+      "min_crossref": 0,
+      "total_crossref": 0,
+      "anomalous": false
+    },
+    "platform": {
+      "miner_count": 23,
+      "max_crossref": 0,
+      "min_crossref": 0,
+      "total_crossref": 0,
+      "anomalous": false
+    },
+    "people": {
+      "miner_count": 34,
+      "max_crossref": 0,
+      "min_crossref": 0,
+      "total_crossref": 0,
+      "anomalous": false
+    },
+    "cooperative": {
+      "miner_count": 31,
+      "max_crossref": 0,
+      "min_crossref": 0,
+      "total_crossref": 0,
+      "anomalous": false
+    },
+    "letters": {
+      "miner_count": 29,
+      "max_crossref": 0,
+      "min_crossref": 0,
+      "total_crossref": 0,
+      "anomalous": false
+    },
+    "grameen": {
+      "miner_count": 14,
+      "max_crossref": 0,
+      "min_crossref": 0,
+      "total_crossref": 0,
+      "anomalous": false
+    },
+    "patent": {
+      "miner_count": 18,
+      "max_crossref": 0,
+      "min_crossref": 0,
+      "total_crossref": 0,
+      "anomalous": false
+    }
+  },
+  "anomalous_crossref_topics": {
+    "credits": {
+      "miner_count": 15,
+      "max_crossref": 73195,
+      "min_crossref": 73192,
+      "total_crossref": 1097907,
+      "anomalous": true
+    },
+    "infrastructure": {
+      "miner_count": 2,
+      "max_crossref": 61710,
+      "min_crossref": 61710,
+      "total_crossref": 123420,
+      "anomalous": true
+    }
+  },
+  "encoding_issues": {
+    "corrupted_ledger_lines": 790,
+    "cause": "Orphan-process concurrent writes produced partial/split JSON lines",
+    "emoji_crash": {
+      "event": "CP1252 UnicodeEncodeError on unicode checkmark in summary banner",
+      "fix": "Remove emoji from print() calls in mining scripts",
+      "also_affected": "run_k487_post_mining.py banner was already fixed; phase_a_ledger_rebuild.py hit same issue and was patched"
+    },
+    "encoding_policy": "All Python scripts in this workspace should set PYTHONIOENCODING=utf-8 or use sys.stdout.reconfigure(encoding='utf-8') at startup. Alternatively, avoid unicode emoji in stdout on Windows."
+  },
+  "skipped_file_types": {
+    "pdfs": {
+      "status": "skipped",
+      "reason": "path.read_text() raises UnicodeDecodeError on binary PDF; caught by except Exception -> returns []",
+      "count_estimate": "unknown \u2014 not tracked in K487",
+      "triage": "Architecture (defer): add PDF text extraction (pdfplumber/pymupdf) in K-future"
+    },
+    "docx": {
+      "status": "skipped",
+      "reason": "Same: binary file; read_text() fails silently",
+      "triage": "Architecture (defer): add python-docx extraction in K-future"
+    },
+    "html": {
+      "status": "partially_processed",
+      "reason": "read_text() succeeds but HTML tags become noisy keywords (tag names tokenize as words)",
+      "triage": "Architecture (defer): add BeautifulSoup stripping before keyword extraction"
+    },
+    "images": {
+      "status": "skipped",
+      "reason": "Binary; silently returns [] from read_text() except block",
+      "triage": "Skip: no text to mine"
+    }
+  },
+  "performance_observations": {
+    "files_processed": 16176,
+    "elapsed_mining_sec": 1919,
+    "mining_rate_files_per_sec": 8.43,
+    "tablets_produced": 867909,
+    "tablets_per_sec": 452.3,
+    "miner_cap_hit": true,
+    "miner_cap_value": 50,
+    "ghost_miners_from_cap": 151,
+    "ram_pressure": {
+      "observation": "MAX_KEYWORD_POOL=2000 cap (K474 rule) applied per Miner; prevented OOM",
+      "note": "201 Miners x 2000-word pools = max 402K total words in-memory at peak",
+      "recommendation": "Current cap is appropriate for 65GB corpus; re-evaluate if Miner count grows 5x"
+    },
+    "eta_accuracy": {
+      "observation": "ETA not tracked in K487 harness",
+      "recommendation": "Add progress ETA to K-future harness based on files_processed/files_total rate"
+    }
+  },
+  "triage_table": [
+    {
+      "finding": "790 corrupted JSON lines in ip_ledger.jsonl",
+      "disposition": "Cleanup (Phase A)",
+      "status": "RESOLVED"
+    },
+    {
+      "finding": "99,775 hash-chain breaks in ip_ledger.jsonl",
+      "disposition": "Cleanup (Phase A)",
+      "status": "RESOLVED"
+    },
+    {
+      "finding": "academic_paper_non_speculative_002 as primary_topic for 16 Miners",
+      "disposition": "Cleanup (Phase B)",
+      "status": "RESOLVED \u2014 miner.py patched with FILENAME_STEM_PATTERNS filter"
+    },
+    {
+      "finding": "threading.Lock insufficient for cross-process concurrent writes",
+      "disposition": "Cleanup (Phase C)",
+      "status": "RESOLVED \u2014 TS-022 written; primary fix: taskkill /F /T"
+    },
+    {
+      "finding": "151 ghost Miners (capped by MAX_DAUGHTERS_PER_MINER)",
+      "disposition": "Cleanup (Phase D)",
+      "status": "RESOLVED \u2014 Catacombs entries written"
+    },
+    {
+      "finding": "'credits' topic at 73,194 cross-references per Miner",
+      "disposition": "Architecture (defer)",
+      "status": "FLAG \u2014 credits is a genuine high-density domain in Liana Banyan corpus (financial/cooperative credits are central platform concept). 73K cross-refs is expected given platform focus. Monitor: if >1M in K-future, investigate cross-reference threshold (currently 0.40)."
+    },
+    {
+      "finding": "PDF/DOCX files silently skipped",
+      "disposition": "Architecture (defer to K-future)",
+      "status": "DOCUMENTED \u2014 add pdfplumber + python-docx in K-future sprint"
+    },
+    {
+      "finding": "HTML files partially processed (tag noise in keywords)",
+      "disposition": "Architecture (defer)",
+      "status": "DOCUMENTED \u2014 add BeautifulSoup stripping in K-future"
+    },
+    {
+      "finding": "CP1252 encoding crash on emoji in print() calls",
+      "disposition": "Cleanup (this session)",
+      "status": "RESOLVED \u2014 emoji removed from Phase A script; policy: use ASCII-safe output on Windows"
+    },
+    {
+      "finding": "No ETA tracking in mining harness",
+      "disposition": "Architecture (defer)",
+      "status": "DOCUMENTED \u2014 add progress ETA to K-future harness"
+    },
+    {
+      "finding": "MAX_KEYWORD_POOL=2000 cap causing keyword loss in high-density Miners",
+      "disposition": "Architecture (defer)",
+      "status": "DOCUMENTED \u2014 cap is appropriate for K487 scale; revisit if Miner count 5x grows"
+    },
+    {
+      "finding": "Miner-cap at 50 (MAX_DAUGHTERS_PER_MINER=4, depth 6 = max 50 total)",
+      "disposition": "Architecture (defer)",
+      "status": "DOCUMENTED \u2014 Ghost Miner Catacombs disposition is the forward resolution; actual Miner-cap policy refinement is a Founder + Bishop design decision"
+    }
+  ],
+  "triage_summary": {
+    "RESOLVED": 6,
+    "ARCHITECTURE_DEFER": 6,
+    "DOCUMENTED": 5
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "session": "K488",
+  "phase": "C",
+  "description": "Concurrent-write file-lock verification",
+  "completed_at": "2026-04-25T12:30:59.378932+00:00",
+  "elapsed_sec": 0.06,
+  "test_results": [
+    {
+      "test": "threading_lock_within_process",
+      "n_writers": 4,
+      "n_writes_each": 50,
+      "expected_lines": 200,
+      "actual_lines": 200,
+      "valid_json_lines": 200,
+      "corruption_count": 0,
+      "passed": true,
+      "verdict": "SUFFICIENT for single-process multi-thread writes"
+    },
+    {
+      "test": "cross_process_scenario_analysis",
+      "scenario": "K487_orphan_process_race",
+      "description": "Parent process killed via Stop-Process (PowerShell). Child Python processes survived (Windows does not cascade-kill by default without /T flag). Each child had its own copy of the module-level _ledger_prior_hash global. Orphan wrote with stale hash -> chain breaks.",
+      "threading_lock_sufficient": false,
+      "reason": "threading.Lock is process-local. It prevents concurrent threads WITHIN one process from racing. It has no effect on two SEPARATE Python processes writing to the same file.",
+      "windows_behavior": "Python open('file', 'a') on Windows does not acquire an OS-level exclusive lock. Two processes can append simultaneously. The K487 bug was specifically the stale _ledger_prior_hash global per-process, not interleaved byte-level writes (those are rare with small JSONL lines).",
+      "recommended_fix": "portalocker (cross-platform) or msvcrt.locking (Windows-only)",
+      "kill_command": "taskkill /F /T /PID <pid>  (kills parent AND all children; /T flag is critical)",
+      "escalation": "TS-022"
+    }
+  ],
+  "threading_lock_verdict": {
+    "within_process_threads": "SUFFICIENT",
+    "cross_process": "INSUFFICIENT"
+  },
+  "escalation": "TS-022 written",
+  "primary_fix": "taskkill /F /T /PID \u2014 kills entire process tree on Windows",
+  "defense_in_depth_fix": "portalocker (OS-level exclusive file lock)",
+  "ts021_amendment_needed": true
+}

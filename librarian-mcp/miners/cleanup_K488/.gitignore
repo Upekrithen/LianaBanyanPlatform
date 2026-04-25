@@ -1,0 +1,6 @@
+# Large ledger archives -- excluded from git (>480 MB each)
+# Preserved on local disk for forensic reference only.
+ip_ledger_K487_rebuilt.jsonl
+ip_ledger_K487_original_corrupted.jsonl
+# Temp commit message file
+_commit_msg.txt

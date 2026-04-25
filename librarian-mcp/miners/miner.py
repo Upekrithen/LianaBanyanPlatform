@@ -58,6 +58,33 @@ STOP_WORDS = {
     "new", "via", "per", "non",
 }
 
+# Filename-stem stopword patterns (K488 Phase B -- Bishop B123)
+# Tokens matching these regex patterns are excluded from keyword extraction
+# because they are filename-stem artifacts, not topical content.
+# Conservative policy: patterns are anchored and specific to avoid accidental
+# filtering of legitimate content tokens. Future enhancement: additionally
+# check document-frequency == 1 before filtering (B123 open question #3).
+FILENAME_STEM_PATTERNS: list[str] = [
+    r".*_\d{3,}$",           # ends with _NNN serial suffix (e.g. _002, _143)
+    r"^academic_paper_",
+    r"^prompt_knight_",
+    r"^report_knight_",
+    r"^pudding_\d",
+    r"^aa_formal_",
+    r"^crown_letter_",
+    r"^report_pawn_",
+    r"^prompt_pawn_",
+    r"^innovation_thresh_",
+    r"^innovation_aa_",
+]
+_FILENAME_STEM_COMPILED = [re.compile(p) for p in FILENAME_STEM_PATTERNS]
+
+
+def _is_filename_stem_token(token: str) -> bool:
+    # Returns True if token is a filename-stem artifact that should be filtered.
+    return any(pat.match(token) for pat in _FILENAME_STEM_COMPILED)
+
+
 # ---------------------------------------------------------------------------
 # IP Ledger helpers
 # ---------------------------------------------------------------------------
@@ -236,6 +263,8 @@ def _tokenize(text: str) -> list[str]:
 def extract_keywords(text: str, n: int = TOP_KEYWORD_N) -> list[str]:
     """Return top-N keywords by term-frequency (TF-weighted by token length)."""
     tokens = _tokenize(text)
+    # K488 Phase B: filter filename-stem artifacts before scoring
+    tokens = [t for t in tokens if not _is_filename_stem_token(t)]
     if not tokens:
         return []
     freq = Counter(tokens)

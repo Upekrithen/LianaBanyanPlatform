@@ -1,0 +1,175 @@
+{
+  "session": "K488",
+  "phase": "B",
+  "description": "Filename-stem stopword filter implementation",
+  "completed_at": "2026-04-25T12:30:59.115807+00:00",
+  "elapsed_sec": 0.0,
+  "patterns_added": [
+    ".*_\\d{3,}$",
+    "^academic_paper_",
+    "^prompt_knight_",
+    "^report_knight_",
+    "^pudding_\\d",
+    "^aa_formal_",
+    "^crown_letter_",
+    "^report_pawn_",
+    "^prompt_pawn_",
+    "^innovation_thresh_",
+    "^innovation_aa_"
+  ],
+  "miner_classification": {
+    "total": 201,
+    "clean": 185,
+    "filename_stem_count": 16,
+    "filename_stem_miners": [
+      {
+        "serial": "LB-CAT.M-0002.a.a.a.b",
+        "parent_serial": "LB-CAT.M-0002.a.a.a",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17352,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.a.a.c",
+        "parent_serial": "LB-CAT.M-0002.a.a",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17352,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.a.b.a.a",
+        "parent_serial": "LB-CAT.M-0002.a.b.a",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 0,
+        "cross_ref_count": 0,
+        "reclassification": "catacombs-eligible",
+        "disposition": "Ghost \u2014 goes to Catacombs with inception_mode=ghost-capped"
+      },
+      {
+        "serial": "LB-CAT.M-0002.a.b.c",
+        "parent_serial": "LB-CAT.M-0002.a.b",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17352,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.a.c.c",
+        "parent_serial": "LB-CAT.M-0002.a.c",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17350,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.a.d.c",
+        "parent_serial": "LB-CAT.M-0002.a.d",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17351,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.b.a.a.a",
+        "parent_serial": "LB-CAT.M-0002.b.a.a",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 0,
+        "cross_ref_count": 0,
+        "reclassification": "catacombs-eligible",
+        "disposition": "Ghost \u2014 goes to Catacombs with inception_mode=ghost-capped"
+      },
+      {
+        "serial": "LB-CAT.M-0002.b.a.c",
+        "parent_serial": "LB-CAT.M-0002.b.a",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17350,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.b.b.c",
+        "parent_serial": "LB-CAT.M-0002.b.b",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17352,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.b.c.c",
+        "parent_serial": "LB-CAT.M-0002.b.c",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17352,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.b.d.b",
+        "parent_serial": "LB-CAT.M-0002.b.d",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17351,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.c.a.c",
+        "parent_serial": "LB-CAT.M-0002.c.a",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17352,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.c.b.b",
+        "parent_serial": "LB-CAT.M-0002.c.b",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17352,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.c.c",
+        "parent_serial": "LB-CAT.M-0002.c",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17351,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.d.a.a",
+        "parent_serial": "LB-CAT.M-0002.d.a",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17351,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      },
+      {
+        "serial": "LB-CAT.M-0002.d.c",
+        "parent_serial": "LB-CAT.M-0002.d",
+        "topic": "academic_paper_non_speculative_002",
+        "tablet_count": 17350,
+        "cross_ref_count": 268,
+        "reclassification": "re-anchor-needed",
+        "disposition": "Active \u2014 bedrock intact; topic re-anchor to nearest meaningful parent topic"
+      }
+    ]
+  },
+  "miner_py_patch_status": "patched",
+  "patch_verified": true,
+  "reclassification_policy": "Ghost filename-stem Miners -> Catacombs via Phase D (inception_mode=ghost-capped). Active filename-stem Miners -> topic re-anchor to nearest meaningful parent topic; bedrock tablets are NOT modified (REF Staff discipline). For K-future mining runs, the filter prevents new filename-stem anchoring.",
+  "notes": "16 Miners anchored to 'academic_paper_non_speculative_002' \u2014 a single token produced by the tokenizer regex ([a-zA-Z][a-zA-Z0-9_-]*) reading underscore-separated filename stems embedded in document content. The filter is conservative: it uses anchored regex patterns for known prefixes + a trailing-digits pattern, not wildcard matching, to avoid accidental filtering of legitimate content tokens. Per Bishop B123 open question #3: additional guard against over-filtering: future versions should additionally check document-frequency = 1 before filtering."
+}

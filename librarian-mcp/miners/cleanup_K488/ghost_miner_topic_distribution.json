@@ -1,0 +1,1227 @@
+{
+  "session": "K488",
+  "total_ghosts": 151,
+  "topic_frequency": {
+    "people": 34,
+    "cooperative": 31,
+    "letters": 29,
+    "platform": 23,
+    "patent": 18,
+    "grameen": 14,
+    "academic_paper_non_speculative_002": 2
+  },
+  "priority_distribution": {
+    "HIGH": 97,
+    "MEDIUM": 54
+  },
+  "ghost_table": [
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.a.a",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.a.c",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.a.d",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.a",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.b.b",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.b.c",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.b.d",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.b",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.d",
+      "parent_serial": "LB-CAT.M-0002.a.a.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.b.a",
+      "parent_serial": "LB-CAT.M-0002.a.a.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.b.c",
+      "parent_serial": "LB-CAT.M-0002.a.a.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.b.d",
+      "parent_serial": "LB-CAT.M-0002.a.a.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.c.b",
+      "parent_serial": "LB-CAT.M-0002.a.a.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.c.c",
+      "parent_serial": "LB-CAT.M-0002.a.a.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.c.d",
+      "parent_serial": "LB-CAT.M-0002.a.a.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.a.c",
+      "parent_serial": "LB-CAT.M-0002.a.b.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.b.a",
+      "parent_serial": "LB-CAT.M-0002.a.b.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.b.c",
+      "parent_serial": "LB-CAT.M-0002.a.b.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.b.d",
+      "parent_serial": "LB-CAT.M-0002.a.b.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.c.b",
+      "parent_serial": "LB-CAT.M-0002.a.b.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.c.c",
+      "parent_serial": "LB-CAT.M-0002.a.b.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.c.d",
+      "parent_serial": "LB-CAT.M-0002.a.b.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.a.b",
+      "parent_serial": "LB-CAT.M-0002.a.c.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.a.d",
+      "parent_serial": "LB-CAT.M-0002.a.c.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.b.a",
+      "parent_serial": "LB-CAT.M-0002.a.c.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.b.c",
+      "parent_serial": "LB-CAT.M-0002.a.c.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.b.d",
+      "parent_serial": "LB-CAT.M-0002.a.c.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.c.b",
+      "parent_serial": "LB-CAT.M-0002.a.c.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.c.c",
+      "parent_serial": "LB-CAT.M-0002.a.c.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.c.d",
+      "parent_serial": "LB-CAT.M-0002.a.c.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.a.a",
+      "parent_serial": "LB-CAT.M-0002.a.d.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.a.c",
+      "parent_serial": "LB-CAT.M-0002.a.d.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.a.d",
+      "parent_serial": "LB-CAT.M-0002.a.d.a",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.b.a",
+      "parent_serial": "LB-CAT.M-0002.a.d.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.b.c",
+      "parent_serial": "LB-CAT.M-0002.a.d.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.b.d",
+      "parent_serial": "LB-CAT.M-0002.a.d.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.c.b",
+      "parent_serial": "LB-CAT.M-0002.a.d.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.c.c",
+      "parent_serial": "LB-CAT.M-0002.a.d.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.c.d",
+      "parent_serial": "LB-CAT.M-0002.a.d.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.a.c",
+      "parent_serial": "LB-CAT.M-0002.b.a.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.b.a",
+      "parent_serial": "LB-CAT.M-0002.b.a.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.b.c",
+      "parent_serial": "LB-CAT.M-0002.b.a.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.b.d",
+      "parent_serial": "LB-CAT.M-0002.b.a.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.c.b",
+      "parent_serial": "LB-CAT.M-0002.b.a.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.c.c",
+      "parent_serial": "LB-CAT.M-0002.b.a.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.c.d",
+      "parent_serial": "LB-CAT.M-0002.b.a.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.a.b",
+      "parent_serial": "LB-CAT.M-0002.b.b.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.a.d",
+      "parent_serial": "LB-CAT.M-0002.b.b.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.b.a",
+      "parent_serial": "LB-CAT.M-0002.b.b.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.b.c",
+      "parent_serial": "LB-CAT.M-0002.b.b.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.b.d",
+      "parent_serial": "LB-CAT.M-0002.b.b.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.c.b",
+      "parent_serial": "LB-CAT.M-0002.b.b.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.c.c",
+      "parent_serial": "LB-CAT.M-0002.b.b.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.c.d",
+      "parent_serial": "LB-CAT.M-0002.b.b.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.a.a",
+      "parent_serial": "LB-CAT.M-0002.b.c.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.a.c",
+      "parent_serial": "LB-CAT.M-0002.b.c.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.a.d",
+      "parent_serial": "LB-CAT.M-0002.b.c.a",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.b.a",
+      "parent_serial": "LB-CAT.M-0002.b.c.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.b.c",
+      "parent_serial": "LB-CAT.M-0002.b.c.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.b.d",
+      "parent_serial": "LB-CAT.M-0002.b.c.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.c.b",
+      "parent_serial": "LB-CAT.M-0002.b.c.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.c.c",
+      "parent_serial": "LB-CAT.M-0002.b.c.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.c.d",
+      "parent_serial": "LB-CAT.M-0002.b.c.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.a.a",
+      "parent_serial": "LB-CAT.M-0002.b.d.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.a.c",
+      "parent_serial": "LB-CAT.M-0002.b.d.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.a.d",
+      "parent_serial": "LB-CAT.M-0002.b.d.a",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.b.b",
+      "parent_serial": "LB-CAT.M-0002.b.d.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.b.c",
+      "parent_serial": "LB-CAT.M-0002.b.d.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.b.d",
+      "parent_serial": "LB-CAT.M-0002.b.d.b",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.d",
+      "parent_serial": "LB-CAT.M-0002.b.d",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.a.a",
+      "parent_serial": "LB-CAT.M-0002.c.a.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.a.c",
+      "parent_serial": "LB-CAT.M-0002.c.a.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.a.d",
+      "parent_serial": "LB-CAT.M-0002.c.a.a",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.b.a",
+      "parent_serial": "LB-CAT.M-0002.c.a.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.b.c",
+      "parent_serial": "LB-CAT.M-0002.c.a.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.b.d",
+      "parent_serial": "LB-CAT.M-0002.c.a.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.c.b",
+      "parent_serial": "LB-CAT.M-0002.c.a.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.c.c",
+      "parent_serial": "LB-CAT.M-0002.c.a.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.c.d",
+      "parent_serial": "LB-CAT.M-0002.c.a.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.a.a",
+      "parent_serial": "LB-CAT.M-0002.c.b.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.a.c",
+      "parent_serial": "LB-CAT.M-0002.c.b.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.a.d",
+      "parent_serial": "LB-CAT.M-0002.c.b.a",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.b.b",
+      "parent_serial": "LB-CAT.M-0002.c.b.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.b.c",
+      "parent_serial": "LB-CAT.M-0002.c.b.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.b.d",
+      "parent_serial": "LB-CAT.M-0002.c.b.b",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.d",
+      "parent_serial": "LB-CAT.M-0002.c.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.c.b",
+      "parent_serial": "LB-CAT.M-0002.c.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.c.c",
+      "parent_serial": "LB-CAT.M-0002.c.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.c.d",
+      "parent_serial": "LB-CAT.M-0002.c.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.a.a.b",
+      "parent_serial": "LB-CAT.M-0002.d.a.a",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.a.a.c",
+      "parent_serial": "LB-CAT.M-0002.d.a.a",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.a.a.d",
+      "parent_serial": "LB-CAT.M-0002.d.a.a",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.a.c",
+      "parent_serial": "LB-CAT.M-0002.d.a",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.b.a",
+      "parent_serial": "LB-CAT.M-0002.d.b",
+      "primary_topic": "platform",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.b.c",
+      "parent_serial": "LB-CAT.M-0002.d.b",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.b.d",
+      "parent_serial": "LB-CAT.M-0002.d.b",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.c.b",
+      "parent_serial": "LB-CAT.M-0002.d.c",
+      "primary_topic": "cooperative",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.c.c",
+      "parent_serial": "LB-CAT.M-0002.d.c",
+      "primary_topic": "letters",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.c.d",
+      "parent_serial": "LB-CAT.M-0002.d.c",
+      "primary_topic": "grameen",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "HIGH"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.a.b",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.b.a",
+      "parent_serial": "LB-CAT.M-0002.a.a.a.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.a.c",
+      "parent_serial": "LB-CAT.M-0002.a.a.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.b.b",
+      "parent_serial": "LB-CAT.M-0002.a.a.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.c.a",
+      "parent_serial": "LB-CAT.M-0002.a.a.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.a.d",
+      "parent_serial": "LB-CAT.M-0002.a.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.a.a",
+      "parent_serial": "LB-CAT.M-0002.a.b.a",
+      "primary_topic": "academic_paper_non_speculative_002",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.a.b",
+      "parent_serial": "LB-CAT.M-0002.a.b.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.a.d",
+      "parent_serial": "LB-CAT.M-0002.a.b.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.b.b",
+      "parent_serial": "LB-CAT.M-0002.a.b.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.c.a",
+      "parent_serial": "LB-CAT.M-0002.a.b.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.b.d",
+      "parent_serial": "LB-CAT.M-0002.a.b",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.a.a",
+      "parent_serial": "LB-CAT.M-0002.a.c.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.a.c",
+      "parent_serial": "LB-CAT.M-0002.a.c.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.b.b",
+      "parent_serial": "LB-CAT.M-0002.a.c.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.c.a",
+      "parent_serial": "LB-CAT.M-0002.a.c.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.c.d",
+      "parent_serial": "LB-CAT.M-0002.a.c",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.a.b",
+      "parent_serial": "LB-CAT.M-0002.a.d.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.b.b",
+      "parent_serial": "LB-CAT.M-0002.a.d.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.c.a",
+      "parent_serial": "LB-CAT.M-0002.a.d.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.a.d.d",
+      "parent_serial": "LB-CAT.M-0002.a.d",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.a.a",
+      "parent_serial": "LB-CAT.M-0002.b.a.a",
+      "primary_topic": "academic_paper_non_speculative_002",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.a.b",
+      "parent_serial": "LB-CAT.M-0002.b.a.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.a.d",
+      "parent_serial": "LB-CAT.M-0002.b.a.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.b.b",
+      "parent_serial": "LB-CAT.M-0002.b.a.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.c.a",
+      "parent_serial": "LB-CAT.M-0002.b.a.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.a.d",
+      "parent_serial": "LB-CAT.M-0002.b.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.a.a",
+      "parent_serial": "LB-CAT.M-0002.b.b.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.a.c",
+      "parent_serial": "LB-CAT.M-0002.b.b.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.b.b",
+      "parent_serial": "LB-CAT.M-0002.b.b.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.c.a",
+      "parent_serial": "LB-CAT.M-0002.b.b.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.b.d",
+      "parent_serial": "LB-CAT.M-0002.b.b",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.a.b",
+      "parent_serial": "LB-CAT.M-0002.b.c.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.b.b",
+      "parent_serial": "LB-CAT.M-0002.b.c.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.c.a",
+      "parent_serial": "LB-CAT.M-0002.b.c.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.c.d",
+      "parent_serial": "LB-CAT.M-0002.b.c",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.a.b",
+      "parent_serial": "LB-CAT.M-0002.b.d.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.b.a",
+      "parent_serial": "LB-CAT.M-0002.b.d.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.b.d.c",
+      "parent_serial": "LB-CAT.M-0002.b.d",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.a.b",
+      "parent_serial": "LB-CAT.M-0002.c.a.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.b.b",
+      "parent_serial": "LB-CAT.M-0002.c.a.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.c.a",
+      "parent_serial": "LB-CAT.M-0002.c.a.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.a.d",
+      "parent_serial": "LB-CAT.M-0002.c.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.a.b",
+      "parent_serial": "LB-CAT.M-0002.c.b.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.b.a",
+      "parent_serial": "LB-CAT.M-0002.c.b.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.b.c",
+      "parent_serial": "LB-CAT.M-0002.c.b",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.c.a",
+      "parent_serial": "LB-CAT.M-0002.c.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.c.d",
+      "parent_serial": "LB-CAT.M-0002.c",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.a.a.a",
+      "parent_serial": "LB-CAT.M-0002.d.a.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.a.b",
+      "parent_serial": "LB-CAT.M-0002.d.a",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.a.d",
+      "parent_serial": "LB-CAT.M-0002.d.a",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.b.b",
+      "parent_serial": "LB-CAT.M-0002.d.b",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.c.a",
+      "parent_serial": "LB-CAT.M-0002.d.c",
+      "primary_topic": "people",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    },
+    {
+      "serial": "LB-CAT.M-0002.d.d",
+      "parent_serial": "LB-CAT.M-0002.d",
+      "primary_topic": "patent",
+      "mitosis_event_found": true,
+      "seed_keywords_found": true,
+      "activation_priority": "MEDIUM"
+    }
+  ]
+}
