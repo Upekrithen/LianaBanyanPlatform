@@ -1,0 +1,384 @@
+{
+  "run_at": "2026-04-25T13:10:25.338140+00:00",
+  "session": "K489",
+  "seer_id": "Seer-K489",
+  "seer_model": "claude-haiku-4-5",
+  "eblet_count": 120,
+  "compression_ratio": 1.93,
+  "synapse_entries": 135,
+  "synapse_words_approx": 13950,
+  "eblet_words_approx": 7228,
+  "live_feed_summary": {
+    "run_at": "2026-04-25T13:09:44.709296+00:00",
+    "files_checked": 8,
+    "new_lines_found": 0,
+    "generated": 0,
+    "skipped": 0,
+    "session_cost_usd": 0.0,
+    "store_total": 120
+  },
+  "verification": {
+    "check1_live_feed": true,
+    "check2_seer_instantiates": true,
+    "check3_provenance": true,
+    "check4_pointer_resolution": true,
+    "check5_honest_unknown": true,
+    "check6_compression_ratio": true,
+    "passed": 6,
+    "total": 6,
+    "success": true
+  },
+  "total_phase_c_cost_usd": 0.0176,
+  "test_queries": [
+    {
+      "query_id": "Q1",
+      "query": "What is the Cathedral Effect, what is the empirical evidence, and what's the cross-universe finding?",
+      "expected_signal": "Cathedral Effect empirical evidence K477 K481 numbers cross-universe",
+      "seer_enabled": {
+        "query": "What is the Cathedral Effect, what is the empirical evidence, and what's the cross-universe finding?",
+        "answer": "# Cathedral Effect: Definition, Evidence, and Cross-Universe Finding\n\n## What Is the Cathedral Effect?\n\nThe Cathedral Effect is a documented phenomenon within the Liana Banyan knowledge substrate where structured, curated presentation of canonical content produces measurable improvements in reasoning accuracy. [INDEX ENTRY 1] identifies it as \"real and vendor-proven, not training contamination,\" demonstrating that the effect is a genuine capability enhancement, not an artifact of model pretraining.\n\n## Empirical Evidence\n\nThe evidence comes from controlled benchmark testing across multiple corpus configurations:\n\n**Cranewell Auto-Only Arm:** Yields 12% HOT (Heads-On Target, i.e., fully correct answers) on a zero-web-prior corpus, compared to 0% baseline. This represents a pure 12 percentage-point absolute lift. [INDEX ENTRY 1]\n\n**Covenant Cathedral Auto-Only Arm:** Achieves 14.6% HOT with 27.1% HIT (partial credit) and 58.3% MISS rates across N=48 questions. This demonstrates a +12.6pp HOT lift over the 2% Covenant baseline. [INDEX ENTRY 2] The consistency between the two independent corpora (+12pp and +12.6pp) strengthens the evidence.\n\n**Performance Under Optimal Retrieval:** When retrieval is properly scoped (k=10 RAG with fresh top-10 per question), the 0% MISS rate across 50 Cranewell questions confirms that retrieval-failure modes are eliminated. The remaining 20% HIT reflects composition failures—cases where relevant content is retrieved but only partial elements surface—rather than retrieval degradation. [INDEX ENTRY 3]\n\n## Cross-Universe Finding\n\n**Union Strategy Outperformance:** The Cathedral Effect generalizes across different corpus universes. The union strategy (combining auto-only and manual curation) achieves **18.8% HOT** across both Cranewell and Covenant corpora, a +4.2pp improvement over auto-only alone. [INDEX ENTRY 6] \n\n**Canonical Claim:** A defensible ceiling for the Cathedral Effect is **18pp absolute, infinite relative lift** on zero-web-prior corpora. [INDEX ENTRY 1] This indicates the effect is bounded by composition quality (the clarity and completeness of canonical tablet presentation), not by retrieval reach. [INDEX ENTRY 3]",
+        "honest_unknown": false,
+        "model_used": "claude-haiku-4-5",
+        "top_eblets": [
+          {
+            "eblet_id": "EB-000006",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_arm2_cathedral_diagnosis",
+            "relevance_score": 0.159321,
+            "summary_excerpt": "# K475 Cathedral Effect Validation—Index Entry\n\n**Core Finding:** Cranewell auto-only arm yields 12% HOT (baseline 0%), union arm 18% HOT—confirming C"
+          },
+          {
+            "eblet_id": "EB-000009",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_arm5_covenant_cathedral",
+            "relevance_score": 0.148009,
+            "summary_excerpt": "**Arm 5 (Covenant Cathedral auto-only):** HOT 14.6%, HIT 27.1%, MISS 58.3% (N=48, 2 rate-limited excluded). Cathedral Effect demonstrates +12.6pp HOT "
+          },
+          {
+            "eblet_id": "EB-000018",
+            "synapse_pointer": "synapse_K477.jsonl#cluster_zero_miss_structural_finding",
+            "relevance_score": 0.090002,
+            "summary_excerpt": "# Iteration C: Retrieval-Failure Mode Eliminated\n\n**Finding:** 0% MISS rate (40/50 HOT, 10/50 HIT) across 50 Cranewell questions under k=10 RAG is str"
+          },
+          {
+            "eblet_id": "EB-000097",
+            "synapse_pointer": "synapse_K485A.jsonl#cluster_keyword-intent-routing-v0-limitations",
+            "relevance_score": 0.08785,
+            "summary_excerpt": "**V0 Intent Router Performance & Limitations**\n\nV0's keyword-based _infer_intent() correctly routes four demo queries (Cathedral Effect, Miners → arch"
+          },
+          {
+            "eblet_id": "EB-000032",
+            "synapse_pointer": "synapse_K482.jsonl#cluster_topic-well-alignment-with-bishop-taxonomy",
+            "relevance_score": 0.080721,
+            "summary_excerpt": "**Bishop Prediction vs. Actual Wells Discovery**\n\nBishop predicted six primary Wells: Liana Banyan architecture, Cathedral Effect, Founder biography, "
+          },
+          {
+            "eblet_id": "EB-000010",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_arm6_covenant_union",
+            "relevance_score": 0.07188,
+            "summary_excerpt": "**Arm 6 (Covenant Cathedral Union) Benchmark Results**\n\nUnion strategy achieves 18.8% HOT (31.2% HIT, 50.0% MISS; N=48), outperforming auto-only by +4"
+          },
+          {
+            "eblet_id": "EB-000024",
+            "synapse_pointer": "synapse_K482.jsonl#cluster_new-category-detection-algorithm",
+            "relevance_score": 0.060328,
+            "summary_excerpt": "**TF-weighted keyword extraction for Wells categorization.** Implemented cost-free heuristic using TF score (count × log(1 + token_length)) with stop-"
+          },
+          {
+            "eblet_id": "EB-000039",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_ip-as-filter-empirical-demonstration",
+            "relevance_score": 0.054252,
+            "summary_excerpt": "**Keystone #28: IP-as-Filter Empirical Instantiation**\n\nTablet LB-CAT.M-0001.b.c-T0073 demonstrates differential property-status across audiences: inc"
+          }
+        ],
+        "resolved_eblets": [],
+        "provenance_summary": "Provenance (Eblet index):\n  [1] EB-000006 -> synapse_K475.jsonl#cluster_arm2_cathedral_diagnosis (relevance=0.1593)\n  [2] EB-000009 -> synapse_K475.jsonl#cluster_arm5_covenant_cathedral (relevance=0.1480)\n  [3] EB-000018 -> synapse_K477.jsonl#cluster_zero_miss_structural_finding (relevance=0.0900)\n  [4] EB-000097 -> synapse_K485A.jsonl#cluster_keyword-intent-routing-v0-limitations (relevance=0.0878)\n  [5] EB-000032 -> synapse_K482.jsonl#cluster_topic-well-alignment-with-bishop-taxonomy (relevance=0.0807)\n  [6] EB-000010 -> synapse_K475.jsonl#cluster_arm6_covenant_union (relevance=0.0719)\n  [7] EB-000024 -> synapse_K482.jsonl#cluster_new-category-detection-algorithm (relevance=0.0603)\n  [8] EB-000039 -> synapse_K483.jsonl#cluster_ip-as-filter-empirical-demonstration (relevance=0.0543)",
+        "provenance_full": "\n--- Eblet 1: EB-000006 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_arm2_cathedral_diagnosis\n  Summary: # K475 Cathedral Effect Validation—Index Entry\n\n**Core Finding:** Cranewell auto-only arm yields 12% HOT (baseline 0%), union arm 18% HOT—confirming Cathedral Effect is real and vendor-proven, not tra…\n  Scribe attributions: Scribe-IP, Scribe-Miners, Scribe-Sculptors, Scribe-Synapses\n  Keystone anchors: CJ-cathedral, CJ-2298-virtual-memory\n  Provenance chain: synapse_K475.jsonl -> K475-014 -> K475-019 -> K475-020 -> K475-022 -> K475-025 -> EB-000006\n\n--- Eblet 2: EB-000009 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_arm5_covenant_cathedral\n  Summary: **Arm 5 (Covenant Cathedral auto-only):** HOT 14.6%, HIT 27.1%, MISS 58.3% (N=48, 2 rate-limited excluded). Cathedral Effect demonstrates +12.6pp HOT lift from 2% Covenant baseline, consistent with Cr…\n  Scribe attributions: Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: CJ-cathedral\n  Provenance chain: synapse_K475.jsonl -> K475-017 -> EB-000009\n\n--- Eblet 3: EB-000018 ---\n  Synapse pointer: synapse_K477.jsonl#cluster_zero_miss_structural_finding\n  Summary: # Iteration C: Retrieval-Failure Mode Eliminated\n\n**Finding:** 0% MISS rate (40/50 HOT, 10/50 HIT) across 50 Cranewell questions under k=10 RAG is structural. K475 full-corpus injection produced 70% M…\n  Scribe attributions: Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: CJ-cathedral\n  Provenance chain: synapse_K477.jsonl -> K477-008 -> EB-000018\n\n--- Eblet 4: EB-000097 ---\n  Synapse pointer: synapse_K485A.jsonl#cluster_keyword-intent-routing-v0-limitations\n  Summary: **V0 Intent Router Performance & Limitations**\n\nV0's keyword-based _infer_intent() correctly routes four demo queries (Cathedral Effect, Miners → architecture; Pledge → canonical; Founder → founder_vo…\n  Scribe attributions: Scribe-Architecture, Scribe-Engineering, Scribe-Miners, Scribe-Sculptors, Scribe-Synapses\n  Keystone anchors: CJ-2298, CJ-cathedral\n  Provenance chain: synapse_K485A.jsonl -> SYN-K485A-011 -> EB-000097\n\n--- Eblet 5: EB-000032 ---\n  Synapse pointer: synapse_K482.jsonl#cluster_topic-well-alignment-with-bishop-taxonomy\n  Summary: **Bishop Prediction vs. Actual Wells Discovery**\n\nBishop predicted six primary Wells: Liana Banyan architecture, Cathedral Effect, Founder biography, keystones, infrastructure, MCP. Actual discovery y…\n  Scribe attributions: Scribe-Engineering, Scribe-Miners, Scribe-Platform, Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: CJ-2296, CJ-cathedral\n  Provenance chain: synapse_K482.jsonl -> SYN-K482-014 -> EB-000032\n\n--- Eblet 6: EB-000010 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_arm6_covenant_union\n  Summary: **Arm 6 (Covenant Cathedral Union) Benchmark Results**\n\nUnion strategy achieves 18.8% HOT (31.2% HIT, 50.0% MISS; N=48), outperforming auto-only by +4.2pp HOT and ranking best across both universes. 3…\n  Scribe attributions: Scribe-Sculptors\n  Keystone anchors: CJ-cathedral\n  Provenance chain: synapse_K475.jsonl -> K475-018 -> EB-000010\n\n--- Eblet 7: EB-000024 ---\n  Synapse pointer: synapse_K482.jsonl#cluster_new-category-detection-algorithm\n  Summary: **TF-weighted keyword extraction for Wells categorization.** Implemented cost-free heuristic using TF score (count × log(1 + token_length)) with stop-word filtering; extracted top-20 keywords per tabl…\n  Scribe attributions: Scribe-Engineering, Scribe-Miners, Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: CJ-cathedral\n  Provenance chain: synapse_K482.jsonl -> SYN-K482-006 -> EB-000024\n\n--- Eblet 8: EB-000039 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_ip-as-filter-empirical-demonstration\n  Summary: **Keystone #28: IP-as-Filter Empirical Instantiation**\n\nTablet LB-CAT.M-0001.b.c-T0073 demonstrates differential property-status across audiences: included in private-founder's cathedral (89.3%), excl…\n  Scribe attributions: Scribe-IP, Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: Keystone-28\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-004 -> EB-000039",
+        "tokens_in": 1819,
+        "tokens_out": 542,
+        "cost_usd_est": 0.003623,
+        "elapsed_s": 7.34,
+        "created_at": "2026-04-25T13:09:44.718308+00:00"
+      },
+      "seer_disabled": {
+        "answer": "# The Cathedral Effect\n\n## Definition\nThe \"Cathedral Effect\" (also called the \"Awe Effect\") refers to the finding that exposure to environments with **high ceilings** promotes abstract thinking, creativity, and freedom-oriented behavior, while **low ceilings** promote concrete, detail-focused thinking and rule-following.\n\nThe mechanism is thought to involve psychological associations: high ceilings metaphorically suggest openness and possibility, while low ceilings suggest constraint.\n\n## Empirical Evidence\n\n**Original Studies (Meyers-Levy & Zhu, 2007):**\n- Participants in high-ceiling rooms performed better on creative tasks (e.g., making connections between disparate objects)\n- Low-ceiling participants performed better on detail-oriented, constrained tasks\n- Effects held across multiple experimental manipulations\n\n**Supporting Research:**\n- Replicated in various settings and with different task types\n- Effects observed even when ceiling height was subtle or primed visually\n- Related to physical embodiment and spatial cognition research\n\n## Cross-Universe Finding\n\nI'm not aware of an established \"cross-universe finding\" associated with the Cathedral Effect in mainstream psychology literature.\n\nCould you clarify what you mean by this? Are you referring to:\n- Cross-cultural replications?\n- Virtual/online environment studies?\n- Something from a specific paper I might recognize with more context?\n\nThis would help me give you a more accurate answer.",
+        "tokens_in": 29,
+        "tokens_out": 314,
+        "cost_usd_est": 0.001279,
+        "elapsed_s": 4.18
+      }
+    },
+    {
+      "query_id": "Q2",
+      "query": "Who is Inuka and how does the Husky story relate to LB's AI policy?",
+      "expected_signal": "Inuka Husky Wheelbarrow Policy AI canon",
+      "seer_enabled": {
+        "query": "Who is Inuka and how does the Husky story relate to LB's AI policy?",
+        "answer": "SCOPE-BOUNDARY: The Pyramid's Eblet index does not contain sufficient coverage to answer this query. The indexed substrate covers Liana Banyan Platform architecture, session reasoning (K475–K486+), R10/R11 benchmark methodology, Cathedral systems, and related technical domains. Query asked: 'Who is Inuka and how does the Husky story relate to LB's AI policy?'. If this falls within expected coverage, the Eblet store may need rebuilding from updated Synapse files.",
+        "honest_unknown": true,
+        "model_used": "claude-haiku-4-5",
+        "top_eblets": [
+          {
+            "eblet_id": "EB-000001",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_harness_fixes",
+            "relevance_score": 0.0,
+            "summary_excerpt": "# Playwright Automation & Chrome Profile Management Fixes\n\n**networkidle blocker:** wait_for_load_state('networkidle') fails on Perplexity.ai due to p"
+          },
+          {
+            "eblet_id": "EB-000002",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_parallelization_design",
+            "relevance_score": 0.0,
+            "summary_excerpt": "**Serial timing incompatible with 25-75 min directive (10.7 hrs vs constraint); adopts stagger-parallelized asyncio: 15s stagger + 10 concurrent tabs "
+          },
+          {
+            "eblet_id": "EB-000003",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_concurrency_safety",
+            "relevance_score": 0.0,
+            "summary_excerpt": "**Windows asyncio subprocess fix**: WindowsProactorEventLoopPolicy must be set before asyncio.run() on Windows 10; SelectorEventLoop (default) doesn't"
+          }
+        ],
+        "resolved_eblets": [],
+        "provenance_summary": "Provenance (Eblet index):\n  [1] EB-000001 -> synapse_K475.jsonl#cluster_harness_fixes (relevance=0.0000)\n  [2] EB-000002 -> synapse_K475.jsonl#cluster_parallelization_design (relevance=0.0000)\n  [3] EB-000003 -> synapse_K475.jsonl#cluster_concurrency_safety (relevance=0.0000)",
+        "provenance_full": "\n--- Eblet 1: EB-000001 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_harness_fixes\n  Summary: # Playwright Automation & Chrome Profile Management Fixes\n\n**networkidle blocker:** wait_for_load_state('networkidle') fails on Perplexity.ai due to persistent WebSocket connections; networkidle requi…\n  Scribe attributions: Scribe-Sessions\n  Keystone anchors: none\n  Provenance chain: synapse_K475.jsonl -> K475-001 -> K475-002 -> K475-003 -> K475-004 -> K475-021 -> K475-024 -> EB-000001\n\n--- Eblet 2: EB-000002 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_parallelization_design\n  Summary: **Serial timing incompatible with 25-75 min directive (10.7 hrs vs constraint); adopts stagger-parallelized asyncio: 15s stagger + 10 concurrent tabs in single persistent browser context (shared Perpl…\n  Scribe attributions: Scribe-Engineering, Scribe-Miners, Scribe-Sessions\n  Keystone anchors: none\n  Provenance chain: synapse_K475.jsonl -> K475-005 -> K475-006 -> K475-007 -> EB-000002\n\n--- Eblet 3: EB-000003 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_concurrency_safety\n  Summary: **Windows asyncio subprocess fix**: WindowsProactorEventLoopPolicy must be set before asyncio.run() on Windows 10; SelectorEventLoop (default) doesn't support subprocesses properly, causing hangs with…\n  Scribe attributions: Scribe-Engineering, Scribe-Platform\n  Keystone anchors: none\n  Provenance chain: synapse_K475.jsonl -> K475-008 -> K475-009 -> EB-000003",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "cost_usd_est": 0.0,
+        "elapsed_s": 0.0,
+        "created_at": "2026-04-25T13:09:56.234497+00:00"
+      },
+      "seer_disabled": {
+        "answer": "I don't have specific context about \"Inuka\" or a particular \"Husky story\" you're referring to, or how they connect to \"LB's AI policy.\"\n\nCould you provide more details? For example:\n\n- **Who or what is LB?** (a person, organization, company?)\n- **What Husky story are you referencing?** (an incident, article, case study?)\n- **What field or context?** (technology, animal welfare, business, politics?)\n\nWith more information, I'd be better able to help you understand these connections.",
+        "tokens_in": 28,
+        "tokens_out": 129,
+        "cost_usd_est": 0.000538,
+        "elapsed_s": 1.77
+      }
+    },
+    {
+      "query_id": "Q3",
+      "query": "What is the Living Pyramid of Roots? What does it mean architecturally?",
+      "expected_signal": "Living Pyramid K482 K486 K487 architecture",
+      "seer_enabled": {
+        "query": "What is the Living Pyramid of Roots? What does it mean architecturally?",
+        "answer": "# The Living Pyramid of Roots\n\n## What It Is\n\nThe Living Pyramid is a **dynamic, exponentially-branching tree structure of Miners** that grows through discovery rather than pre-design [INDEX ENTRY 1]. The actual implementation spans 12 Miners across depths 0–2 (a root Miner, 4 daughter Miners, and 8 granddaughter Miners). A hypothetical scaled scenario illustrates the principle: 1 root → 4 daughters → 16 granddaughters → 64 great-granddaughters across depths 0–3 [INDEX ENTRY 1].\n\nThe metaphor is literal: **the tree's base widens as Miners split during discovery**, matching the shape of a pyramid standing on its foundation and broadening upward generationally [INDEX ENTRY 1].\n\n## Architectural Meaning\n\n**Phylogenetic Duality & Origin Tracing**: Each Miner node functions with dual lineage—both its own ancestry (parent-daughter relationships) and simultaneous connection to the entire tree's Root origin. This structure enables end-to-end provenance chains from any artifact backward through the Miner that spawned it to the Root [INDEX ENTRY 8].\n\n**Growth Through Signal, Not Predefinition**: Miners don't exist in a pre-structured hierarchy. Instead, they spawn daughters when discovery signals arrive (new topics/categories in the corpus). The deduplication guard prevents duplicate daughters for the same topic, ensuring clean branching at scale [INDEX ENTRY 7]. The pyramid *grows* as the knowledge substrate demands it—architecturally responsive rather than static.\n\n**Queryable Ancestry & Inheritance**: Every artifact traces through its Sculptor back through Miner lineage to Root, making the pyramid a navigable provenance substrate [INDEX ENTRY 1, EB-000040].",
+        "honest_unknown": false,
+        "model_used": "claude-haiku-4-5",
+        "top_eblets": [
+          {
+            "eblet_id": "EB-000034",
+            "synapse_pointer": "synapse_K482.jsonl#cluster_living-pyramid-shape-observation",
+            "relevance_score": 0.262414,
+            "summary_excerpt": "**Miner Tree Structure & Living Pyramid Metaphor**\n\nActual implementation: 12 Miners across depths 0–2 (root + 4 daughters + 8 granddaughters). Hypoth"
+          },
+          {
+            "eblet_id": "EB-000074",
+            "synapse_pointer": "synapse_K485.jsonl#cluster_compression-ratio-empirical-finding",
+            "relevance_score": 0.060652,
+            "summary_excerpt": "**Phase C Compression Ratio Assessment (K485 Prototype)**\n\nMedian compression 1.8x (not >=5x target); mean 2.0x; max 5.0x. Root cause: current Synapse"
+          },
+          {
+            "eblet_id": "EB-000081",
+            "synapse_pointer": "synapse_K485.jsonl#cluster_summary-quality-assessment",
+            "relevance_score": 0.060024,
+            "summary_excerpt": "**Haiku Model Instruction-Following Performance**\n\n64 of 69 summaries (92.8%) met 50-100 word target; 5 fell below 50 (min=41 words). Median=61, mean="
+          },
+          {
+            "eblet_id": "EB-000086",
+            "synapse_pointer": "synapse_K485.jsonl#cluster_forward-to-k488-seer-prototype",
+            "relevance_score": 0.047463,
+            "summary_excerpt": "**K485: Eblet Substrate Delivery & Seer Prototype Viability**\n\nK485 delivers 69 Eblets (librarian-mcp/eblets/eblets.jsonl) indexing K475–K484 reasonin"
+          },
+          {
+            "eblet_id": "EB-000036",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_three-mode-structure-rationale",
+            "relevance_score": 0.038496,
+            "summary_excerpt": "**Sculptor Three-Mode Architecture (Anticipate + Curate + Sculpt)**\n\nSculptor upgraded from two-mode to three-mode. Anticipate mode pre-ranks entire t"
+          },
+          {
+            "eblet_id": "EB-000052",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook",
+            "relevance_score": 0.035796,
+            "summary_excerpt": "**K483: Sculptor→Catacomb Mapping**\n\nSculptor's per_topic_rollup (182 flat topics) architecturally precedes Catacomb organization: topics=chambers, ta"
+          },
+          {
+            "eblet_id": "EB-000033",
+            "synapse_pointer": "synapse_K482.jsonl#cluster_spawned-topic-dedup-guard",
+            "relevance_score": 0.032838,
+            "summary_excerpt": "**Deduplication Guard for Daughter Topic Spawning**\n\nAdded `_spawned_topics` set to each Miner to prevent duplicate daughters for the same topic. Befo"
+          },
+          {
+            "eblet_id": "EB-000040",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_provenance-chain-append-mechanism",
+            "relevance_score": 0.031518,
+            "summary_excerpt": "**Provenance Chain Architecture for Tablets**\n\nTwo-step append mechanism: curate mode records sculptor_id (filter passage), sculpt mode appends 'sculp"
+          }
+        ],
+        "resolved_eblets": [],
+        "provenance_summary": "Provenance (Eblet index):\n  [1] EB-000034 -> synapse_K482.jsonl#cluster_living-pyramid-shape-observation (relevance=0.2624)\n  [2] EB-000074 -> synapse_K485.jsonl#cluster_compression-ratio-empirical-finding (relevance=0.0607)\n  [3] EB-000081 -> synapse_K485.jsonl#cluster_summary-quality-assessment (relevance=0.0600)\n  [4] EB-000086 -> synapse_K485.jsonl#cluster_forward-to-k488-seer-prototype (relevance=0.0475)\n  [5] EB-000036 -> synapse_K483.jsonl#cluster_three-mode-structure-rationale (relevance=0.0385)\n  [6] EB-000052 -> synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook (relevance=0.0358)\n  [7] EB-000033 -> synapse_K482.jsonl#cluster_spawned-topic-dedup-guard (relevance=0.0328)\n  [8] EB-000040 -> synapse_K483.jsonl#cluster_provenance-chain-append-mechanism (relevance=0.0315)",
+        "provenance_full": "\n--- Eblet 1: EB-000034 ---\n  Synapse pointer: synapse_K482.jsonl#cluster_living-pyramid-shape-observation\n  Summary: **Miner Tree Structure & Living Pyramid Metaphor**\n\nActual implementation: 12 Miners across depths 0–2 (root + 4 daughters + 8 granddaughters). Hypothetical cap-100 scenario shows exponential branchin…\n  Scribe attributions: Scribe-Miners\n  Keystone anchors: none\n  Provenance chain: synapse_K482.jsonl -> SYN-K482-016 -> EB-000034\n\n--- Eblet 2: EB-000074 ---\n  Synapse pointer: synapse_K485.jsonl#cluster_compression-ratio-empirical-finding\n  Summary: **Phase C Compression Ratio Assessment (K485 Prototype)**\n\nMedian compression 1.8x (not >=5x target); mean 2.0x; max 5.0x. Root cause: current Synapse clusters are compact (100-200 words, single entri…\n  Scribe attributions: Scribe-Architecture, Scribe-Miners, Scribe-Sessions, Scribe-Synapses\n  Keystone anchors: CJ-2298, CJ-2287, CJ-2296\n  Provenance chain: synapse_K485.jsonl -> SYN-K485-005 -> EB-000074\n\n--- Eblet 3: EB-000081 ---\n  Synapse pointer: synapse_K485.jsonl#cluster_summary-quality-assessment\n  Summary: **Haiku Model Instruction-Following Performance**\n\n64 of 69 summaries (92.8%) met 50-100 word target; 5 fell below 50 (min=41 words). Median=61, mean=63.5. Five outliers came from already-compact sour…\n  Scribe attributions: Scribe-Synapses\n  Keystone anchors: CJ-2287, CJ-2298-virtual-memory\n  Provenance chain: synapse_K485.jsonl -> SYN-K485-012 -> EB-000081\n\n--- Eblet 4: EB-000086 ---\n  Synapse pointer: synapse_K485.jsonl#cluster_forward-to-k488-seer-prototype\n  Summary: **K485: Eblet Substrate Delivery & Seer Prototype Viability**\n\nK485 delivers 69 Eblets (librarian-mcp/eblets/eblets.jsonl) indexing K475–K484 reasoning (~4,360 words). Seer prototype (K488) capabiliti…\n  Scribe attributions: Scribe-Architecture, Scribe-Miners, Scribe-Sculptors, Scribe-Synapses\n  Keystone anchors: CJ-2298\n  Provenance chain: synapse_K485.jsonl -> SYN-K485-017 -> EB-000086\n\n--- Eblet 5: EB-000036 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_three-mode-structure-rationale\n  Summary: **Sculptor Three-Mode Architecture (Anticipate + Curate + Sculpt)**\n\nSculptor upgraded from two-mode to three-mode. Anticipate mode pre-ranks entire tablet corpus against cathedral demand profiles bef…\n  Scribe attributions: Scribe-Architecture, Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: CJ-three-fates\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-001 -> EB-000036\n\n--- Eblet 6: EB-000052 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook\n  Summary: **K483: Sculptor→Catacomb Mapping**\n\nSculptor's per_topic_rollup (182 flat topics) architecturally precedes Catacomb organization: topics=chambers, tablets=contents. Current flat dict naturally maps t…\n  Scribe attributions: Scribe-Architecture, Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: none\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-017 -> EB-000052\n\n--- Eblet 7: EB-000033 ---\n  Synapse pointer: synapse_K482.jsonl#cluster_spawned-topic-dedup-guard\n  Summary: **Deduplication Guard for Daughter Topic Spawning**\n\nAdded `_spawned_topics` set to each Miner to prevent duplicate daughters for the same topic. Before spawning daughter for topic T, checks if T alre…\n  Scribe attributions: Scribe-Miners\n  Keystone anchors: none\n  Provenance chain: synapse_K482.jsonl -> SYN-K482-015 -> EB-000033\n\n--- Eblet 8: EB-000040 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_provenance-chain-append-mechanism\n  Summary: **Provenance Chain Architecture for Tablets**\n\nTwo-step append mechanism: curate mode records sculptor_id (filter passage), sculpt mode appends 'sculpt:sculptor_id' (craft event). Distinguishing entri…\n  Scribe attributions: Scribe-Miners, Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: Keystone-provenance\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-005 -> EB-000040",
+        "tokens_in": 1931,
+        "tokens_out": 416,
+        "cost_usd_est": 0.003209,
+        "elapsed_s": 5.5,
+        "created_at": "2026-04-25T13:09:58.007699+00:00"
+      },
+      "seer_disabled": {
+        "answer": "# Living Pyramid of Roots\n\nI don't have specific information about a well-established architectural or horticultural concept called the \"Living Pyramid of Roots\" in standard references.\n\nHowever, this could refer to:\n\n## Possible Interpretations\n\n**1. Horticultural Structure**\n- A pyramid-shaped topiary or living plant installation where vegetation grows in a pyramidal form\n- Used in formal gardens or botanical displays\n\n**2. Biomimetic Architecture**\n- A design principle inspired by root systems, which naturally form hierarchical, branching pyramid-like structures\n- Could represent how load distribution and structural integrity follow natural patterns\n\n**3. Conceptual Framework**\n- In landscape or garden design, a metaphorical \"pyramid\" showing how plants depend on interconnected root systems\n- A teaching tool showing ecological relationships\n\n## What This Might Mean Architecturally\n\nIf it's an emerging or specialized concept, it could suggest:\n- Buildings with structural systems mimicking root branching\n- Vertical gardens organized in pyramid form\n- Sustainable design emphasizing hidden foundational systems\n\n**Could you provide more context** about where you encountered this term? That would help me give you a more accurate answer—whether it's from a specific architect, garden design movement, or particular project.",
+        "tokens_in": 25,
+        "tokens_out": 280,
+        "cost_usd_est": 0.00114,
+        "elapsed_s": 3.34
+      }
+    },
+    {
+      "query_id": "Q4",
+      "query": "Show me how the IP-as-filter keystone (Keystone #28) connects to the Sculptor architecture.",
+      "expected_signal": "Keystone 28 IP-as-filter Sculptor #2297 Pledge thresh",
+      "seer_enabled": {
+        "query": "Show me how the IP-as-filter keystone (Keystone #28) connects to the Sculptor architecture.",
+        "answer": "# IP-as-Filter → Sculptor Architecture Connection\n\n## The Keystone Claim\n\n[INDEX ENTRY 1] establishes **Keystone #28**: the act of filtering itself *is* the IP mechanism. Inclusion in an audience grants property-status; exclusion denies it. This is empirically instantiated via differential treatment of tablet LB-CAT.M-0001.b.c-T0073 across audiences (89.3% inclusion in private founder's cathedral vs. 77.7% exclusion from public-wide).\n\n## How Sculptor Realizes This\n\n**[INDEX ENTRY 4]** defines the instantiation model: **one Sculptor per cathedral-profile**. Each cathedral-profile encodes:\n- A specific audience (founder, public-wide, etc.)\n- Filtering rules (`scope_classes_allowed`)\n- Demand preferences (`topic_weights`)\n\nThis means:\n1. **Sculptor = the filter mechanism itself** — each instance is configured to serve one audience's property rights\n2. **The curate/sculpt modes enact the IP act** — by including or excluding tablets based on cathedral-profile constraints, Sculptor literally confers or denies property-status in the delivery\n\n[INDEX ENTRY 1]'s claim that \"inclusion grants property-status; exclusion denies it (not mere content absence)\" maps directly to Sculptor's curate() and sculpt() output: tablets either appear in the cathedral's index/form, or they don't. The filtering passage *is* the property grant.\n\n## Architectural Reinforcement\n\n**[INDEX ENTRY 3]** shows Sculptor maintains **corpus-agnostic independence** — it builds its own keyword pools and doesn't depend on Miner internals. This independence is essential to Keystone #28: the Sculptor can apply audience-specific property filters without leaking filtering logic into the bedrock or other cathedral-profiles. The filter boundary (one Sculptor per cathedral) is also the **property-boundary** (one IP regime per audience).\n\n**Citation chain**: [INDEX ENTRY 1] → [INDEX ENTRY 4] → [INDEX ENTRY 3]",
+        "honest_unknown": false,
+        "model_used": "claude-haiku-4-5",
+        "top_eblets": [
+          {
+            "eblet_id": "EB-000039",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_ip-as-filter-empirical-demonstration",
+            "relevance_score": 0.170834,
+            "summary_excerpt": "**Keystone #28: IP-as-Filter Empirical Instantiation**\n\nTablet LB-CAT.M-0001.b.c-T0073 demonstrates differential property-status across audiences: inc"
+          },
+          {
+            "eblet_id": "EB-000072",
+            "synapse_pointer": "synapse_K485.jsonl#cluster_sculptor-dual-substrate-mechanism",
+            "relevance_score": 0.115095,
+            "summary_excerpt": "**generate_eblet() method added to Sculptor class as fourth mode.** Assembles cluster text, calls Anthropic Haiku via injected api_client, extracts me"
+          },
+          {
+            "eblet_id": "EB-000048",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_corpus-pool-in-anticipate-vs-miner-pool",
+            "relevance_score": 0.05434,
+            "summary_excerpt": "**Sculptor corpus-level keyword pooling**: Sculptor builds a full-corpus keyword pool from all bedrock tablets during anticipate(), distinct from per-"
+          },
+          {
+            "eblet_id": "EB-000047",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_one-sculptor-per-cathedral-profile-granularity",
+            "relevance_score": 0.053948,
+            "summary_excerpt": "**Bishop Sculptor instantiation model (K483)**: One Sculptor per cathedral-profile, not per scope or domain. Scope is a cathedral-profile property (sc"
+          },
+          {
+            "eblet_id": "EB-000059",
+            "synapse_pointer": "synapse_K484.jsonl#cluster_dual-mode-iselectron-pattern",
+            "relevance_score": 0.051602,
+            "summary_excerpt": "**Electron vs. Browser Detection & Graceful Degradation**\n\nRenderer detects Electron via `typeof window.helm !== 'undefined'`. Browser mode (npm run d"
+          },
+          {
+            "eblet_id": "EB-000036",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_three-mode-structure-rationale",
+            "relevance_score": 0.042822,
+            "summary_excerpt": "**Sculptor Three-Mode Architecture (Anticipate + Curate + Sculpt)**\n\nSculptor upgraded from two-mode to three-mode. Anticipate mode pre-ranks entire t"
+          },
+          {
+            "eblet_id": "EB-000052",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook",
+            "relevance_score": 0.030157,
+            "summary_excerpt": "**K483: Sculptor→Catacomb Mapping**\n\nSculptor's per_topic_rollup (182 flat topics) architecturally precedes Catacomb organization: topics=chambers, ta"
+          },
+          {
+            "eblet_id": "EB-000032",
+            "synapse_pointer": "synapse_K482.jsonl#cluster_topic-well-alignment-with-bishop-taxonomy",
+            "relevance_score": 0.027354,
+            "summary_excerpt": "**Bishop Prediction vs. Actual Wells Discovery**\n\nBishop predicted six primary Wells: Liana Banyan architecture, Cathedral Effect, Founder biography, "
+          }
+        ],
+        "resolved_eblets": [],
+        "provenance_summary": "Provenance (Eblet index):\n  [1] EB-000039 -> synapse_K483.jsonl#cluster_ip-as-filter-empirical-demonstration (relevance=0.1708)\n  [2] EB-000072 -> synapse_K485.jsonl#cluster_sculptor-dual-substrate-mechanism (relevance=0.1151)\n  [3] EB-000048 -> synapse_K483.jsonl#cluster_corpus-pool-in-anticipate-vs-miner-pool (relevance=0.0543)\n  [4] EB-000047 -> synapse_K483.jsonl#cluster_one-sculptor-per-cathedral-profile-granularity (relevance=0.0539)\n  [5] EB-000059 -> synapse_K484.jsonl#cluster_dual-mode-iselectron-pattern (relevance=0.0516)\n  [6] EB-000036 -> synapse_K483.jsonl#cluster_three-mode-structure-rationale (relevance=0.0428)\n  [7] EB-000052 -> synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook (relevance=0.0302)\n  [8] EB-000032 -> synapse_K482.jsonl#cluster_topic-well-alignment-with-bishop-taxonomy (relevance=0.0274)",
+        "provenance_full": "\n--- Eblet 1: EB-000039 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_ip-as-filter-empirical-demonstration\n  Summary: **Keystone #28: IP-as-Filter Empirical Instantiation**\n\nTablet LB-CAT.M-0001.b.c-T0073 demonstrates differential property-status across audiences: included in private-founder's cathedral (89.3%), excl…\n  Scribe attributions: Scribe-IP, Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: Keystone-28\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-004 -> EB-000039\n\n--- Eblet 2: EB-000072 ---\n  Synapse pointer: synapse_K485.jsonl#cluster_sculptor-dual-substrate-mechanism\n  Summary: **generate_eblet() method added to Sculptor class as fourth mode.** Assembles cluster text, calls Anthropic Haiku via injected api_client, extracts metadata (keystone anchors, scribe attributions, roo…\n  Scribe attributions: Scribe-Architecture, Scribe-Engineering, Scribe-Miners, Scribe-Sculptors, Scribe-Sessions, Scribe-Synapses\n  Keystone anchors: Keystone-provenance, CJ-2298, CJ-cathedral\n  Provenance chain: synapse_K485.jsonl -> SYN-K485-003 -> EB-000072\n\n--- Eblet 3: EB-000048 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_corpus-pool-in-anticipate-vs-miner-pool\n  Summary: **Sculptor corpus-level keyword pooling**: Sculptor builds a full-corpus keyword pool from all bedrock tablets during anticipate(), distinct from per-Miner pools. This represents background term frequ…\n  Scribe attributions: Scribe-Miners, Scribe-Platform, Scribe-Sculptors\n  Keystone anchors: CJ-2296\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-013 -> EB-000048\n\n--- Eblet 4: EB-000047 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_one-sculptor-per-cathedral-profile-granularity\n  Summary: **Bishop Sculptor instantiation model (K483)**: One Sculptor per cathedral-profile, not per scope or domain. Scope is a cathedral-profile property (scope_classes_allowed); domain is encoded in demand_…\n  Scribe attributions: Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: Keystone-28\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-012 -> EB-000047\n\n--- Eblet 5: EB-000059 ---\n  Synapse pointer: synapse_K484.jsonl#cluster_dual-mode-iselectron-pattern\n  Summary: **Electron vs. Browser Detection & Graceful Degradation**\n\nRenderer detects Electron via `typeof window.helm !== 'undefined'`. Browser mode (npm run dev:web) lacks preload, setting isElectron=false. U…\n  Scribe attributions: Scribe-Architecture, Scribe-Engineering\n  Keystone anchors: CJ-helm\n  Provenance chain: synapse_K484.jsonl -> SYN-K484-007 -> EB-000059\n\n--- Eblet 6: EB-000036 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_three-mode-structure-rationale\n  Summary: **Sculptor Three-Mode Architecture (Anticipate + Curate + Sculpt)**\n\nSculptor upgraded from two-mode to three-mode. Anticipate mode pre-ranks entire tablet corpus against cathedral demand profiles bef…\n  Scribe attributions: Scribe-Architecture, Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: CJ-three-fates\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-001 -> EB-000036\n\n--- Eblet 7: EB-000052 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook\n  Summary: **K483: Sculptor→Catacomb Mapping**\n\nSculptor's per_topic_rollup (182 flat topics) architecturally precedes Catacomb organization: topics=chambers, tablets=contents. Current flat dict naturally maps t…\n  Scribe attributions: Scribe-Architecture, Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: none\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-017 -> EB-000052\n\n--- Eblet 8: EB-000032 ---\n  Synapse pointer: synapse_K482.jsonl#cluster_topic-well-alignment-with-bishop-taxonomy\n  Summary: **Bishop Prediction vs. Actual Wells Discovery**\n\nBishop predicted six primary Wells: Liana Banyan architecture, Cathedral Effect, Founder biography, keystones, infrastructure, MCP. Actual discovery y…\n  Scribe attributions: Scribe-Engineering, Scribe-Miners, Scribe-Platform, Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: CJ-2296, CJ-cathedral\n  Provenance chain: synapse_K482.jsonl -> SYN-K482-014 -> EB-000032",
+        "tokens_in": 1751,
+        "tokens_out": 480,
+        "cost_usd_est": 0.003321,
+        "elapsed_s": 7.02,
+        "created_at": "2026-04-25T13:10:06.849678+00:00"
+      },
+      "seer_disabled": {
+        "answer": "# IP-as-Filter in Sculptor Architecture\n\nI don't have access to specific documentation about \"Keystone #28\" or a detailed \"Sculptor architecture\" framework in my training data. However, I can help you explore this connection by working through the conceptual relationship:\n\n## What IP-as-Filter Likely Means\n\n**IP (Intellectual Property) as a filtering mechanism** would suggest:\n- Using IP strategy/portfolios to gate access to capabilities\n- Filtering architectural decisions through IP constraints or opportunities\n- Patent positions determining what technical paths are viable\n\n## Typical Sculptor Architecture Connections\n\nIf \"Sculptor\" follows common architectural frameworks, it might connect through:\n\n| Aspect | Connection |\n|--------|-----------|\n| **Constraint Filtering** | IP patents/licenses act as design constraints |\n| **Capability Mapping** | IP position filters which technical routes are available |\n| **Governance Layer** | IP considerations gate implementation decisions |\n| **Risk Management** | IP analysis filters feasible vs. infringement-prone approaches |\n\n## What Would Help Me Help You Better\n\nCould you provide:\n1. **Context source** - Is this from a specific methodology, company framework, or publication?\n2. **Architecture overview** - What are the other keystones/layers?\n3. **Domain** - Is this for software, hardware, organizational design, etc.?\n\nWith those details, I can give you a much more precise explanation of how Keystone #28 integrates with the full system.",
+        "tokens_in": 32,
+        "tokens_out": 332,
+        "cost_usd_est": 0.001354,
+        "elapsed_s": 4.05
+      }
+    },
+    {
+      "query_id": "Q5",
+      "query": "What is something the Cathedral does NOT cover? Be specific about the limit.",
+      "expected_signal": "honest-unknown scope-boundary out-of-coverage",
+      "seer_enabled": {
+        "query": "What is something the Cathedral does NOT cover? Be specific about the limit.",
+        "answer": "Based on the index entries, the Cathedral Effect has a specific architectural limitation:\n\n**[INDEX ENTRY 3]** states that \"Architecture preloads lack Cathedral/Miners coverage due to 8000-token budget constraints.\"\n\nMore concretely, **[INDEX ENTRY 7]** identifies a structural failure mode: when the full corpus was injected as a single injection pathway (K475 approach), the Cathedral Effect encountered a **12,000-character truncation limit**. Answer tablets were cut off beyond this boundary, causing 70% MISS rates. The tablets containing the answer *were retrieved*, but their content was incomplete.\n\nThe specific limit is: **The Cathedral cannot reliably surface answer content that extends beyond ~12,000 characters in the injection pathway.** This is why **[INDEX ENTRY 8]** shows K=10 retrieval was chosen as a workaround—it retrieves only ~4,000 characters of context per question, staying well below the truncation threshold.\n\n**Bottom line:** The Cathedral's practical ceiling is bounded by Perplexity's content-length limits in its injection/context window, not by the quality of the knowledge substrate itself. Tablets larger than this threshold will be truncated, causing composition failures even when retrieved.",
+        "honest_unknown": false,
+        "model_used": "claude-haiku-4-5",
+        "top_eblets": [
+          {
+            "eblet_id": "EB-000009",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_arm5_covenant_cathedral",
+            "relevance_score": 0.064504,
+            "summary_excerpt": "**Arm 5 (Covenant Cathedral auto-only):** HOT 14.6%, HIT 27.1%, MISS 58.3% (N=48, 2 rate-limited excluded). Cathedral Effect demonstrates +12.6pp HOT "
+          },
+          {
+            "eblet_id": "EB-000087",
+            "synapse_pointer": "synapse_K485A.jsonl#cluster_comet-url-discovery",
+            "relevance_score": 0.061525,
+            "summary_excerpt": "**Comet Browser Host Permissions Configuration**\n\nPerplexity's Comet (Chromium-based browser) serves www.perplexity.ai within its shell. Manifest.json"
+          },
+          {
+            "eblet_id": "EB-000097",
+            "synapse_pointer": "synapse_K485A.jsonl#cluster_keyword-intent-routing-v0-limitations",
+            "relevance_score": 0.061481,
+            "summary_excerpt": "**V0 Intent Router Performance & Limitations**\n\nV0's keyword-based _infer_intent() correctly routes four demo queries (Cathedral Effect, Miners → arch"
+          },
+          {
+            "eblet_id": "EB-000006",
+            "synapse_pointer": "synapse_K475.jsonl#cluster_arm2_cathedral_diagnosis",
+            "relevance_score": 0.060415,
+            "summary_excerpt": "# K475 Cathedral Effect Validation—Index Entry\n\n**Core Finding:** Cranewell auto-only arm yields 12% HOT (baseline 0%), union arm 18% HOT—confirming C"
+          },
+          {
+            "eblet_id": "EB-000052",
+            "synapse_pointer": "synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook",
+            "relevance_score": 0.052663,
+            "summary_excerpt": "**K483: Sculptor→Catacomb Mapping**\n\nSculptor's per_topic_rollup (182 flat topics) architecturally precedes Catacomb organization: topics=chambers, ta"
+          },
+          {
+            "eblet_id": "EB-000086",
+            "synapse_pointer": "synapse_K485.jsonl#cluster_forward-to-k488-seer-prototype",
+            "relevance_score": 0.051828,
+            "summary_excerpt": "**K485: Eblet Substrate Delivery & Seer Prototype Viability**\n\nK485 delivers 69 Eblets (librarian-mcp/eblets/eblets.jsonl) indexing K475–K484 reasonin"
+          },
+          {
+            "eblet_id": "EB-000018",
+            "synapse_pointer": "synapse_K477.jsonl#cluster_zero_miss_structural_finding",
+            "relevance_score": 0.046238,
+            "summary_excerpt": "# Iteration C: Retrieval-Failure Mode Eliminated\n\n**Finding:** 0% MISS rate (40/50 HOT, 10/50 HIT) across 50 Cranewell questions under k=10 RAG is str"
+          },
+          {
+            "eblet_id": "EB-000017",
+            "synapse_pointer": "synapse_K477.jsonl#cluster_why_k10_default",
+            "relevance_score": 0.039596,
+            "summary_excerpt": "**K=10 Selection Rationale (Iteration C)**\n\nK=10 chosen via capacity-budget calculation: Cranewell corpus (56 tablets, ~400 chars each = ~22,400 chars"
+          }
+        ],
+        "resolved_eblets": [],
+        "provenance_summary": "Provenance (Eblet index):\n  [1] EB-000009 -> synapse_K475.jsonl#cluster_arm5_covenant_cathedral (relevance=0.0645)\n  [2] EB-000087 -> synapse_K485A.jsonl#cluster_comet-url-discovery (relevance=0.0615)\n  [3] EB-000097 -> synapse_K485A.jsonl#cluster_keyword-intent-routing-v0-limitations (relevance=0.0615)\n  [4] EB-000006 -> synapse_K475.jsonl#cluster_arm2_cathedral_diagnosis (relevance=0.0604)\n  [5] EB-000052 -> synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook (relevance=0.0527)\n  [6] EB-000086 -> synapse_K485.jsonl#cluster_forward-to-k488-seer-prototype (relevance=0.0518)\n  [7] EB-000018 -> synapse_K477.jsonl#cluster_zero_miss_structural_finding (relevance=0.0462)\n  [8] EB-000017 -> synapse_K477.jsonl#cluster_why_k10_default (relevance=0.0396)",
+        "provenance_full": "\n--- Eblet 1: EB-000009 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_arm5_covenant_cathedral\n  Summary: **Arm 5 (Covenant Cathedral auto-only):** HOT 14.6%, HIT 27.1%, MISS 58.3% (N=48, 2 rate-limited excluded). Cathedral Effect demonstrates +12.6pp HOT lift from 2% Covenant baseline, consistent with Cr…\n  Scribe attributions: Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: CJ-cathedral\n  Provenance chain: synapse_K475.jsonl -> K475-017 -> EB-000009\n\n--- Eblet 2: EB-000087 ---\n  Synapse pointer: synapse_K485A.jsonl#cluster_comet-url-discovery\n  Summary: **Comet Browser Host Permissions Configuration**\n\nPerplexity's Comet (Chromium-based browser) serves www.perplexity.ai within its shell. Manifest.json host_permissions must cover: *://*.perplexity.ai/…\n  Scribe attributions: Scribe-Architecture\n  Keystone anchors: none\n  Provenance chain: synapse_K485A.jsonl -> SYN-K485A-001 -> EB-000087\n\n--- Eblet 3: EB-000097 ---\n  Synapse pointer: synapse_K485A.jsonl#cluster_keyword-intent-routing-v0-limitations\n  Summary: **V0 Intent Router Performance & Limitations**\n\nV0's keyword-based _infer_intent() correctly routes four demo queries (Cathedral Effect, Miners → architecture; Pledge → canonical; Founder → founder_vo…\n  Scribe attributions: Scribe-Architecture, Scribe-Engineering, Scribe-Miners, Scribe-Sculptors, Scribe-Synapses\n  Keystone anchors: CJ-2298, CJ-cathedral\n  Provenance chain: synapse_K485A.jsonl -> SYN-K485A-011 -> EB-000097\n\n--- Eblet 4: EB-000006 ---\n  Synapse pointer: synapse_K475.jsonl#cluster_arm2_cathedral_diagnosis\n  Summary: # K475 Cathedral Effect Validation—Index Entry\n\n**Core Finding:** Cranewell auto-only arm yields 12% HOT (baseline 0%), union arm 18% HOT—confirming Cathedral Effect is real and vendor-proven, not tra…\n  Scribe attributions: Scribe-IP, Scribe-Miners, Scribe-Sculptors, Scribe-Synapses\n  Keystone anchors: CJ-cathedral, CJ-2298-virtual-memory\n  Provenance chain: synapse_K475.jsonl -> K475-014 -> K475-019 -> K475-020 -> K475-022 -> K475-025 -> EB-000006\n\n--- Eblet 5: EB-000052 ---\n  Synapse pointer: synapse_K483.jsonl#cluster_catacombs-alexandrian-library-extension-hook\n  Summary: **K483: Sculptor→Catacomb Mapping**\n\nSculptor's per_topic_rollup (182 flat topics) architecturally precedes Catacomb organization: topics=chambers, tablets=contents. Current flat dict naturally maps t…\n  Scribe attributions: Scribe-Architecture, Scribe-Sculptors, Scribe-Sessions\n  Keystone anchors: none\n  Provenance chain: synapse_K483.jsonl -> SYN-K483-017 -> EB-000052\n\n--- Eblet 6: EB-000086 ---\n  Synapse pointer: synapse_K485.jsonl#cluster_forward-to-k488-seer-prototype\n  Summary: **K485: Eblet Substrate Delivery & Seer Prototype Viability**\n\nK485 delivers 69 Eblets (librarian-mcp/eblets/eblets.jsonl) indexing K475–K484 reasoning (~4,360 words). Seer prototype (K488) capabiliti…\n  Scribe attributions: Scribe-Architecture, Scribe-Miners, Scribe-Sculptors, Scribe-Synapses\n  Keystone anchors: CJ-2298\n  Provenance chain: synapse_K485.jsonl -> SYN-K485-017 -> EB-000086\n\n--- Eblet 7: EB-000018 ---\n  Synapse pointer: synapse_K477.jsonl#cluster_zero_miss_structural_finding\n  Summary: # Iteration C: Retrieval-Failure Mode Eliminated\n\n**Finding:** 0% MISS rate (40/50 HOT, 10/50 HIT) across 50 Cranewell questions under k=10 RAG is structural. K475 full-corpus injection produced 70% M…\n  Scribe attributions: Scribe-Miners, Scribe-Sculptors\n  Keystone anchors: CJ-cathedral\n  Provenance chain: synapse_K477.jsonl -> K477-008 -> EB-000018\n\n--- Eblet 8: EB-000017 ---\n  Synapse pointer: synapse_K477.jsonl#cluster_why_k10_default\n  Summary: **K=10 Selection Rationale (Iteration C)**\n\nK=10 chosen via capacity-budget calculation: Cranewell corpus (56 tablets, ~400 chars each = ~22,400 chars) exceeds Perplexity's 12,000-char practical limit…\n  Scribe attributions: Scribe-Miners\n  Keystone anchors: none\n  Provenance chain: synapse_K477.jsonl -> K477-007 -> EB-000017",
+        "tokens_in": 1900,
+        "tokens_out": 276,
+        "cost_usd_est": 0.002624,
+        "elapsed_s": 3.97,
+        "created_at": "2026-04-25T13:10:17.921377+00:00"
+      },
+      "seer_disabled": {
+        "answer": "I don't have enough context to answer your question accurately. You're asking about \"the Cathedral,\" but you haven't specified which cathedral you're referring to, or provided any source material I should reference.\n\nCould you clarify:\n- Which cathedral? (e.g., Notre-Dame, Canterbury, a specific one in your area)\n- What kind of coverage are you asking about? (architectural features, historical periods, geographical scope, topics, etc.)\n- Is this referencing a specific text, website, or document?\n\nWith more details, I can give you a specific answer about what it does NOT cover.",
+        "tokens_in": 22,
+        "tokens_out": 132,
+        "cost_usd_est": 0.000546,
+        "elapsed_s": 3.45
+      }
+    }
+  ]
+}
