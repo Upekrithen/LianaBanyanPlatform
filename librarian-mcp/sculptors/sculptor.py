@@ -9,12 +9,21 @@ Three-mode structure (per Founder B123 clarification):
   2. Curate       — Three-Fates-mirror (Clotho / Lachesis / Atropos)
   3. Sculpt       — active craft: audience-differentiated artifact composition
 
+Synapse-substrate mode (K485/B123 addition):
+  4. generate_eblet(synapse_cluster) → Eblet
+     Sculptor operating on Synapse-substrate input instead of bedrock-tablet input.
+     Produces Eblets (summary-pointers) instead of cathedral delivery artifacts.
+     Dual-substrate design: one class, two input substrates, two output classes.
+
 Provenance chain appended at every Sculptor operation.
 Filter-decision log: append-only JSONL audit surface.
 Scope classes: public | guild | private
 
-Architecture reference: INNOVATION_THRESH_2297_B123_SCULPTORS_IP_AS_FILTER.md
+Architecture references:
+  INNOVATION_THRESH_2297_B123_SCULPTORS_IP_AS_FILTER.md
+  project_seer_augur_eblets_awareness_net.md
 First empirical reduction-to-practice. K483 · B123.
+Synapse-substrate: K485 · B123.
 """
 
 from __future__ import annotations
@@ -599,6 +608,122 @@ class Sculptor:
             "inclusion_rate": round(len(included) / max(1, total_input), 4),
             "artifact_path": str(artifact_path),
         }
+
+
+    # ------------------------------------------------------------------
+    # SYNAPSE-SUBSTRATE MODE: generate_eblet (K485 addition)
+    # ------------------------------------------------------------------
+
+    def generate_eblet(
+        self,
+        synapse_cluster: list[dict],
+        synapse_filename: str,
+        cluster_name: str,
+        api_client: Any,  # anthropic.Anthropic client
+        eblet_id: str,
+        summary_prompt: Optional[str] = None,
+    ) -> Any:  # returns eblets.eblet.Eblet — import deferred to avoid circular dep
+        """
+        Sculptor operating on Synapse-substrate input (K485 mode).
+
+        Takes one Synapse cluster (a list of reasoning-moment dicts from a
+        synapse_K{N}.jsonl file), calls an Anthropic Haiku-class model to
+        produce a 50-100 token summary, extracts metadata programmatically,
+        and returns an Eblet instance.
+
+        This is the dual-substrate design: same Sculptor class, different input.
+        Feed it Synapse clusters instead of bedrock tablets;
+        it produces Eblets instead of cathedral delivery artifacts.
+
+        Args:
+            synapse_cluster: list of synapse dicts for this cluster
+            synapse_filename: e.g. "synapse_K483.jsonl"
+            cluster_name: the cluster label (from 'cluster' or 'cluster_id' field)
+            api_client: anthropic.Anthropic() instance (caller-injected for testability)
+            eblet_id: pre-computed monotonic ID ("EB-NNNNNN")
+            summary_prompt: optional custom prompt; uses Bishop-recommended default if None
+
+        Returns:
+            Eblet instance (imported from eblets.eblet to avoid circular dep)
+        """
+        # Absolute import to avoid relative-import issues when called from any entry point
+        import importlib
+        _eblet_mod = importlib.import_module("eblets.eblet")
+        Eblet = _eblet_mod.Eblet
+        _get_synapse_text = _eblet_mod._get_synapse_text
+        _detect_keystone_anchors = _eblet_mod._detect_keystone_anchors
+        _detect_scribe_attributions = _eblet_mod._detect_scribe_attributions
+        _extract_root_miner_serial = _eblet_mod._extract_root_miner_serial
+
+        # Assemble the full cluster text for the LLM call
+        cluster_text_parts: list[str] = []
+        for entry in synapse_cluster:
+            text = _get_synapse_text(entry)
+            if text:
+                cluster_text_parts.append(text)
+        cluster_text = "\n\n---\n\n".join(cluster_text_parts)
+
+        # Bishop-recommended summary prompt (K485 prompt §Open Questions)
+        if summary_prompt is None:
+            summary_prompt = (
+                "Summarize this reasoning moment in 50-100 words, preserving key claims, "
+                "decision points, and any cited material. The summary will be an index "
+                "entry used by an AI to navigate a larger knowledge base; the original "
+                "reasoning is preserved separately. Be precise and dense — no padding."
+            )
+
+        full_prompt = f"{summary_prompt}\n\n---\n\n{cluster_text}"
+
+        # LLM call — Haiku-class for cost discipline
+        response = api_client.messages.create(
+            model="claude-haiku-4-5",
+            max_tokens=200,
+            messages=[{"role": "user", "content": full_prompt}],
+        )
+        summary_text = response.content[0].text.strip()
+
+        # Confidence score: ratio of summary tokens to target range midpoint (75 words)
+        word_count = len(summary_text.split())
+        if word_count < 30:
+            confidence = 0.4
+        elif word_count > 150:
+            confidence = 0.5
+        elif 50 <= word_count <= 100:
+            confidence = 0.9
+        else:
+            confidence = 0.7
+
+        # Keystone anchors and scribe attributions (heuristic, from full cluster text)
+        full_text = cluster_text + " " + summary_text
+        keystone_anchors = _detect_keystone_anchors(full_text)
+        scribe_attributions = _detect_scribe_attributions(full_text)
+
+        # Root miner serial — extract from any synapse entry that has it
+        root_miner_serial: Optional[str] = None
+        for entry in synapse_cluster:
+            serial = _extract_root_miner_serial(entry)
+            if serial:
+                root_miner_serial = serial
+                break
+
+        # Synapse pointer
+        synapse_pointer = f"{synapse_filename}#cluster_{cluster_name}"
+
+        # Provenance chain: source → synapse → eblet
+        synapse_ids = [entry.get("synapse_id", "unknown") for entry in synapse_cluster]
+        provenance_chain = [synapse_filename] + synapse_ids + [eblet_id]
+
+        return Eblet(
+            eblet_id=eblet_id,
+            synapse_pointer=synapse_pointer,
+            summary_text=summary_text,
+            scribe_attributions=scribe_attributions,
+            root_miner_serial=root_miner_serial,
+            provenance_chain=provenance_chain,
+            confidence_score=round(confidence, 3),
+            created_at=datetime.now(timezone.utc).isoformat(),
+            keystone_anchors=keystone_anchors,
+        )
 
 
 # ---------------------------------------------------------------------------
