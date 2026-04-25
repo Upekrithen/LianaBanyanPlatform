@@ -179,9 +179,23 @@ class Eblet:
     keystone_anchors: list[str]          # e.g. ["CJ-2298"] if touching keystone domain
     last_accessed_at: Optional[str] = None   # ISO-8601 | None — K493 access tracking
     access_count: int = 0                    # incremented on pointer-resolution — K493
+    metadata: Optional[dict] = None          # K495: arbitrary key→value store; used for
+                                             # synthetic_bridging flag going forward.
+                                             # Existing synthetic Eblets use provenance_chain
+                                             # string "synthetic_bridging=true" (backward-compat).
+
+    def is_synthetic_bridging(self) -> bool:
+        """Return True if this Eblet is a synthetic bridging Eblet (not bedrock corpus).
+
+        Checks BOTH the metadata dict (K495+ Eblets) and the legacy provenance_chain
+        string convention used by K494-generated Eblets for backward compatibility.
+        """
+        if self.metadata and self.metadata.get("synthetic_bridging"):
+            return True
+        return "synthetic_bridging=true" in (self.provenance_chain or [])
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "eblet_id": self.eblet_id,
             "synapse_pointer": self.synapse_pointer,
             "summary_text": self.summary_text,
@@ -194,6 +208,9 @@ class Eblet:
             "last_accessed_at": self.last_accessed_at,
             "access_count": self.access_count,
         }
+        if self.metadata is not None:
+            d["metadata"] = self.metadata
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> "Eblet":
@@ -209,6 +226,7 @@ class Eblet:
             keystone_anchors=d.get("keystone_anchors", []),
             last_accessed_at=d.get("last_accessed_at"),
             access_count=d.get("access_count", 0),
+            metadata=d.get("metadata"),
         )
 
     # ------------------------------------------------------------------

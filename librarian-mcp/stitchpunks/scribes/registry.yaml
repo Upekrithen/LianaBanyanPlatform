@@ -547,6 +547,58 @@ scribes:
       - NonInteractive
     activation_threshold: when drafting or reviewing K-prompts that include shell/tool invocations
 
+  # ============================================================
+  # K446a / B119 — Conductor Routing Trace Scribe
+  # Records hash-only routing decisions for query-class × model × vendor telemetry.
+  # Privacy-safe: raw queries are NEVER logged; SHA-256 hash only.
+  # Three Fates categories: Architecture + Decisions (primary routing history).
+  # ============================================================
+
+  - id: Conductor
+    mode: observational
+    primary:
+      level: 1
+      field: Conductor's Baton routing decisions — per-query class × vendor × model selection history
+      canonical_keepers:
+        - librarian-mcp/stitchpunks/scribes/scribe_Conductor.jsonl
+        - platform/src/lib/conductor/router.ts
+        - platform/src/lib/conductor/rankings.ts
+    adjacents:
+      - level: 2
+        field: R13 cross-vendor benchmark results (ranking data source)
+      - level: 2
+        field: Cathedral Effect empirical basis (why Cathedral equalizes models)
+      - level: 3
+        field: Cost-Slasher mechanism (#2272) — dollar-delta visibility
+      - level: 3
+        field: vendor adapter interface (anthropic/openai/google/perplexity)
+      - level: 4
+        field: member preference persistence (conductor_mode column)
+    keywords:
+      - Conductor
+      - conductor_route
+      - conductor_mode
+      - ConductorMode
+      - QueryClass
+      - routing decision
+      - vendor-lock
+      - auto-route
+      - manual mode
+      - model routing
+      - adaptive router
+      - HOT%
+      - cost-per-HOT
+      - R13
+      - ranking table
+      - fallback_used
+      - query_hash
+      - automatic transmission
+      - orchestra
+      - Inuka Pattern
+      - Innovation 2277
+      - "#2277"
+    activation_threshold: any conductor routing decision, model-selection event, or routing-telemetry reference
+
 # Future Scribe candidates (instantiate on first trigger; do NOT pre-create):
 #   - Letters (Crown Letters primary; Rhetorical Keystones / dispatch queue adjacents)
 #   - Pedestal (Reg CF portal primary; Upekrithen seller-of-record / two-track separation adjacents)

@@ -121,28 +121,57 @@ class TFIDFIndex:
         self._doc_count = 0
 
     def build(self, eblets: list[Eblet]) -> None:
-        """Build the index from a list of Eblets."""
+        """Build the index from a list of Eblets.
+
+        K495 corpus-normalized IDF: IDF weights are computed from BEDROCK Eblets
+        only (i.e., those without `synthetic_bridging=True` in metadata). Synthetic
+        bridging Eblets still appear in search results and contribute TF to their own
+        doc vectors, but they do NOT inflate document-frequency counts — which would
+        dilute IDF weights on canonical bedrock-corpus terms and degrade recall for
+        orphan keystones. (K494 finding; K495 fix default-on per Phase 0.3 decision.)
+        """
         self._doc_count = len(eblets)
         if self._doc_count == 0:
             return
 
-        # Term frequencies per document
+        # Partition: bedrock (IDF authority) vs synthetic (retrieval-only).
+        # Uses Eblet.is_synthetic_bridging() for both K495+ metadata convention and
+        # legacy K494 provenance_chain string "synthetic_bridging=true".
+        bedrock_eblets = [e for e in eblets if not e.is_synthetic_bridging()]
+        bedrock_count = len(bedrock_eblets)
+
+        # Term frequencies per document (ALL Eblets — synthetic ones still retrievable)
         tf_raw: dict[str, dict[str, int]] = {}
-        df: dict[str, int] = defaultdict(int)
+        # DF counted over BEDROCK only — preserves IDF integrity for canonical terms
+        df_bedrock: dict[str, int] = defaultdict(int)
 
         for eblet in eblets:
             doc_id = eblet.eblet_id
             tokens = _tokenize(eblet.summary_text)
             tf_counts = Counter(tokens)
             tf_raw[doc_id] = dict(tf_counts)
-            for term in set(tokens):
-                df[term] += 1
 
-        # IDF: log(N / (1 + df[term]))
+        for eblet in bedrock_eblets:
+            tokens = set(_tokenize(eblet.summary_text))
+            for term in tokens:
+                df_bedrock[term] += 1
+
+        # IDF: log(N_bedrock / max(df_bedrock[term], 1))
+        # Terms appearing only in synthetic Eblets get log(N_bedrock / 1) — treated
+        # as rare bedrock terms, which is conservative and correct since they were
+        # never observed in the canonical corpus.
+        n_idf = max(bedrock_count, 1)
         self._idf = {
-            term: math.log(self._doc_count / (1 + count))
-            for term, count in df.items()
+            term: math.log(n_idf / max(count, 1))
+            for term, count in df_bedrock.items()
         }
+        # For terms that appear ONLY in synthetic Eblets, assign rare-term IDF
+        all_terms: set[str] = set()
+        for tf in tf_raw.values():
+            all_terms.update(tf.keys())
+        for term in all_terms:
+            if term not in self._idf:
+                self._idf[term] = math.log(n_idf / 1)
 
         # TF-IDF vectors (normalized)
         for eblet in eblets:

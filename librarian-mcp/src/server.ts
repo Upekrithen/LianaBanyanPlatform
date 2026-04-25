@@ -3216,6 +3216,176 @@ registerTool(
 );
 
 // ═══════════════════════════════════════════
+// K446a: Conductor's Baton — conductor_route MCP tool
+// Innovation #2277 · Phase 2.1 · Cathedral integration
+//
+// Classifies a query and returns the routing decision (vendor, model, rationale).
+// Does NOT execute the query — that's a future conductor_execute tool.
+// Every call appends a hash-only routing trace to scribe_Conductor.jsonl.
+// ═══════════════════════════════════════════
+
+import { createHash } from "crypto";
+import { appendFileSync } from "fs";
+
+const _conductorScribePath = resolve(
+  __dirname, "..", "stitchpunks", "scribes", "scribe_Conductor.jsonl"
+);
+
+function _hashQuery(query: string): string {
+  return "sha256:" + createHash("sha256").update(query, "utf-8").digest("hex");
+}
+
+function _appendConductorTrace(entry: object): void {
+  try {
+    appendFileSync(_conductorScribePath, JSON.stringify(entry) + "\n", "utf-8");
+  } catch {
+    // Non-fatal: scribe write failure must not break routing
+  }
+}
+
+// Inline classifier + router (import from platform/ is not wired into librarian-mcp build).
+// These are self-contained implementations mirroring platform/src/lib/conductor/*.ts
+// so the MCP server remains buildable without cross-package deps.
+
+type _QueryClass = "retrieval_only"|"reasoning_required"|"creative"|"code_generation"|"multi_step_planning"|"uncertain";
+type _ConductorMode = "auto"|"manual"|"vendor-lock";
+type _VendorName = "anthropic"|"openai"|"google"|"perplexity";
+
+interface _ClassifiedQuery { class: _QueryClass; confidence: number; signals: string[] }
+interface _RoutingDecision { vendor: _VendorName; model: string; rationale: string; fallbackUsed: boolean; rankingAgeDays: number|null }
+
+function _classifyForMcp(query: string): _ClassifiedQuery {
+  const q = query.trim();
+  const wc = q.split(/\s+/).filter(Boolean).length;
+  const signals: string[] = [];
+  const scores: Record<_QueryClass, number> = {
+    retrieval_only: 0, reasoning_required: 0, creative: 0,
+    code_generation: 0, multi_step_planning: 0, uncertain: 0,
+  };
+
+  if (/\b(python|typescript|javascript|java|sql|bash|go|rust|c\+\+)\b/i.test(q)) { scores.code_generation += 0.55; signals.push("named-language"); }
+  if (/\b(write|implement|build)\s+(a\s+)?(function|class|query|script|migration|hook)\b/i.test(q)) { scores.code_generation += 0.65; signals.push("code-verb+noun"); }
+  if (/\b(write\s+a|draft\s+a|compose\s+a|brainstorm|come\s+up\s+with|generate\s+ideas?)\b/i.test(q)) { scores.creative += 0.6; signals.push("creative-verb"); }
+  if (/\b(plan|strategy|step[\s-]by[\s-]step|roadmap|workflow)\b/i.test(q)) { scores.multi_step_planning += 0.55; signals.push("planning-noun"); }
+  if (/^(what\s+is|what\s+are|who\s+is|when\s+(is|was)|how\s+many|how\s+much)\b/i.test(q) || wc <= 8) { scores.retrieval_only += 0.5; signals.push("retrieval-stem"); }
+  if (/\b(why|explain|compare|evaluate|pros\s+and\s+cons|difference\s+between)\b/i.test(q)) { scores.reasoning_required += 0.5; signals.push("reasoning-verb"); }
+  if (wc >= 40) { scores.reasoning_required += 0.3; signals.push("long-query"); }
+
+  let winner: _QueryClass = "uncertain";
+  let best = 0;
+  for (const [cls, score] of Object.entries(scores) as [_QueryClass, number][]) {
+    if (score > best) { best = score; winner = cls; }
+  }
+  if (best < 0.4) winner = "uncertain";
+  return { class: winner, confidence: Math.round(best * 1000) / 1000, signals };
+}
+
+// R13 routing table (mirror of platform/src/lib/conductor/rankings.ts)
+const _R13_TOP: Record<_QueryClass, {vendor: _VendorName; model: string; hot: number; ageDays: number} | null> = {
+  retrieval_only:    { vendor: "anthropic", model: "claude-haiku-4-5", hot: 90, ageDays: 0 },  // cheapest above 85%
+  reasoning_required:{ vendor: "anthropic", model: "claude-haiku-4-5", hot: 90, ageDays: 0 },
+  creative:          { vendor: "anthropic", model: "claude-opus-4-7",  hot: 0,  ageDays: 0 },  // conservative fallback
+  code_generation:   { vendor: "anthropic", model: "claude-opus-4-7",  hot: 0,  ageDays: 0 },
+  multi_step_planning:{ vendor: "anthropic", model: "claude-opus-4-7", hot: 0,  ageDays: 0 },
+  uncertain: null,
+};
+
+function _routeForMcp(
+  classified: _ClassifiedQuery,
+  mode: _ConductorMode,
+  overrideVendor?: string,
+  overrideModel?: string,
+): _RoutingDecision {
+  const FALLBACK_VENDOR: _VendorName = "anthropic";
+  const FALLBACK_MODEL = "claude-sonnet-4-6";
+
+  if (mode === "vendor-lock") {
+    const v = (overrideVendor ?? FALLBACK_VENDOR) as _VendorName;
+    const m = overrideModel ?? { anthropic: "claude-sonnet-4-6", openai: "gpt-5-4-mini", google: "gemini-2-5-flash", perplexity: "sonar-pro" }[v] ?? FALLBACK_MODEL;
+    return { vendor: v, model: m, rationale: `Vendor-locked to ${v} (fixed gear).`, fallbackUsed: false, rankingAgeDays: null };
+  }
+
+  if (mode === "manual" && (overrideVendor || overrideModel)) {
+    const v = (overrideVendor ?? FALLBACK_VENDOR) as _VendorName;
+    const m = overrideModel ?? FALLBACK_MODEL;
+    return { vendor: v, model: m, rationale: `Manual override: ${v}/${m}.`, fallbackUsed: false, rankingAgeDays: null };
+  }
+
+  if (classified.class === "uncertain") {
+    return { vendor: FALLBACK_VENDOR, model: FALLBACK_MODEL, rationale: "Uncertain class — conservative Sonnet fallback.", fallbackUsed: true, rankingAgeDays: null };
+  }
+
+  const top = _R13_TOP[classified.class];
+  if (!top) {
+    return { vendor: FALLBACK_VENDOR, model: FALLBACK_MODEL, rationale: "No ranking data — conservative fallback.", fallbackUsed: true, rankingAgeDays: null };
+  }
+
+  const isConservative = top.hot === 0;
+  return {
+    vendor: top.vendor,
+    model: top.model,
+    rationale: isConservative
+      ? `Class '${classified.class}' has no R13 data yet. Conservative flagship fallback (Opus) until R15 lands.`
+      : `Auto-routed: ${top.vendor}/${top.model} (HOT%=${top.hot}%, cheapest above 85% threshold, R13 data).`,
+    fallbackUsed: isConservative,
+    rankingAgeDays: top.ageDays,
+  };
+}
+
+registerTool(
+  "conductor_route",
+  "Classify a query and return the routing decision (vendor, model, rationale). " +
+  "Does not execute the query. Records a hash-only trace in scribe_Conductor.jsonl. " +
+  "Innovation #2277 — The Conductor's Baton.",
+  {
+    query: z.string().describe("The member query to classify and route"),
+    mode: z.enum(["auto", "manual", "vendor-lock"]).optional().default("auto")
+      .describe("Conductor mode: auto (default), manual (member chooses), vendor-lock (fixed vendor)"),
+    override: z.object({
+      vendor: z.enum(["anthropic", "openai", "google", "perplexity"]).optional(),
+      model: z.string().optional(),
+    }).optional().describe("Member override for manual/vendor-lock modes"),
+  },
+  async ({ query, mode, override }) => {
+    const classified = _classifyForMcp(query);
+    const decision = _routeForMcp(classified, mode as _ConductorMode, override?.vendor, override?.model);
+
+    // Append hash-only trace to scribe_Conductor.jsonl
+    // Privacy-safe-by-default: never log raw member queries
+    const trace = {
+      ts: new Date().toISOString(),
+      query_hash: _hashQuery(query),
+      classified_as: classified.class,
+      confidence: classified.confidence,
+      mode,
+      vendor: decision.vendor,
+      model: decision.model,
+      fallback_used: decision.fallbackUsed,
+      ranking_age_days: decision.rankingAgeDays,
+      rationale: decision.rationale,
+    };
+    _appendConductorTrace(trace);
+
+    const result = {
+      classified: {
+        class: classified.class,
+        confidence: classified.confidence,
+        signals: classified.signals,
+      },
+      decision: {
+        vendor: decision.vendor,
+        model: decision.model,
+        rationale: decision.rationale,
+        fallback_used: decision.fallbackUsed,
+        ranking_age_days: decision.rankingAgeDays,
+      },
+    };
+
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// ═══════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════
 
