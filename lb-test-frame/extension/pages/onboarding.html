@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to LB Test Frame</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f1117;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 680px;
+      width: 100%;
+      padding: 48px 32px;
+    }
+
+    /* LRH cameo */
+    .lrh-greeting {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .lrh-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a5f, #0f2027);
+      border: 2px solid #334155;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+    .lrh-speech {
+      background: #151c2c;
+      border: 1px solid #1e2d42;
+      border-radius: 12px;
+      padding: 16px 20px;
+      position: relative;
+      flex: 1;
+    }
+    .lrh-speech::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 24px;
+      border: 8px solid transparent;
+      border-right-color: #1e2d42;
+    }
+    .lrh-name {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #60a5fa;
+      margin-bottom: 6px;
+    }
+    .lrh-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      font-style: italic;
+    }
+
+    /* Persona picker */
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #f1f5f9;
+    }
+    .section-sub {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+    .persona-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .persona-card {
+      background: #151c2c;
+      border: 2px solid #1e2333;
+      border-radius: 12px;
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .persona-card:hover {
+      border-color: #3b82f6;
+      background: #1a2540;
+    }
+    .persona-card.selected {
+      border-color: #3b82f6;
+      background: #1a2540;
+    }
+    .persona-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .persona-icon.casual { background: #0c2a1c; }
+    .persona-icon.developer { background: #1a1a2e; }
+    .persona-icon.member { background: #2a1a0c; }
+    .persona-icon.all { background: #1a0c2a; }
+    .persona-info { flex: 1; }
+    .persona-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+    }
+    .persona-desc {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    .persona-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: #0f2a1c;
+      color: #4ade80;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .persona-badge.paid {
+      background: #2a1a0c;
+      color: #fbbf24;
+    }
+    .persona-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #334155;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.15s;
+    }
+    .persona-card.selected .persona-radio {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .btn-primary {
+      padding: 12px 28px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary {
+      padding: 12px 20px;
+      background: transparent;
+      color: #64748b;
+      border: 1px solid #1e2333;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .step-indicator {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .step { width: 32px; height: 3px; border-radius: 2px; background: #1e2333; }
+    .step.active { background: #3b82f6; }
+    .step.done { background: #22c55e; }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+
+    <!-- STEP 1: LRH Greeting + Persona Picker -->
+    <div id="step-persona">
+      <div class="step-indicator">
+        <div class="step active" id="dot-1"></div>
+        <div class="step" id="dot-2"></div>
+        <div class="step" id="dot-3"></div>
+      </div>
+
+      <!-- LRH Greeting #1 -->
+      <div class="lrh-greeting">
+        <div class="lrh-avatar">♟</div>
+        <div class="lrh-speech">
+          <div class="lrh-name">LRH</div>
+          <div class="lrh-text" id="lrh-greeting-text">
+            "Welcome. I'm LRH. I'll show you around. The Test Frame works with whatever AI
+            you already use — pick one, and we'll verify together."
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">How do you want to use this?</div>
+      <div class="section-sub">You can switch anytime in Settings.</div>
+
+      <div class="persona-grid">
+        <div class="persona-card" data-persona="casual" onclick="selectPersona('casual')">
+          <div class="persona-icon casual">🌿</div>
+          <div class="persona-info">
+            <div class="persona-name">Casual</div>
+            <div class="persona-desc">Verify the Cathedral Effect on your AI and use LB-amplified browsing. No API keys, no setup, no cost.</div>
+            <div class="persona-badge">No cost</div>
+          </div>
+          <div class="persona-radio"></div>
+        </div>
+
+        <div class="persona-card" data-persona="developer" onclick="selectPersona('developer')">
+          <div class="persona-icon developer">⚡</div>
+          <div class="persona-info">
+            <div class="persona-name">Developer / Researcher</div>
+            <div class="persona-desc">Run your own benchmarks with your API keys. Full R13/R14 reproducibility harness. Raw JSONL export.</div>
+            <div class="persona-badge">Your API costs</div>
+          </div>
+          <div class="persona-radio"></div>
+        </div>
+
+        <div class="persona-card" data-persona="member" onclick="selectPersona('member')">
+          <div class="persona-icon member">🏛</div>
+          <div class="persona-info">
+            <div class="persona-name">Member ($5/yr)</div>
+            <div class="persona-desc">The full Liana Banyan platform — Helm, Marks, Trust Match, Six Sparks, Furnace badges, Crown Jewel attribution.</div>
+            <div class="persona-badge paid">$5/year</div>
+          </div>
+          <div class="persona-radio"></div>
+        </div>
+
+        <div class="persona-card" data-persona="all" onclick="selectPersona('all')">
+          <div class="persona-icon all">✦</div>
+          <div class="persona-info">
+            <div class="persona-name">All three — switch as I need</div>
+            <div class="persona-desc">Recommended for reviewers, journalists, and builders. All modules installed; switch via persona switcher in the status bar.</div>
+            <div class="persona-badge">Recommended for reviewers</div>
+          </div>
+          <div class="persona-radio"></div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn-primary" id="btn-persona-next" disabled onclick="goToPickAI()">Next: Pick your AI →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Pick Your AI -->
+    <div id="step-pick-ai" style="display:none;">
+      <div class="step-indicator">
+        <div class="step done"></div>
+        <div class="step active"></div>
+        <div class="step"></div>
+      </div>
+
+      <div class="lrh-greeting">
+        <div class="lrh-avatar">♟</div>
+        <div class="lrh-speech">
+          <div class="lrh-name">LRH</div>
+          <div class="lrh-text">"Which AI do you use? I'll set us up to talk to it together."</div>
+        </div>
+      </div>
+
+      <div class="section-title">Which AI do you use?</div>
+      <div class="section-sub" id="detection-note">Scanning for logged-in AI sessions…</div>
+
+      <div id="ai-vendor-list" class="persona-grid">
+        <!-- Populated by JS -->
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <a href="#" style="color:#60a5fa;font-size:13px;text-decoration:none;" onclick="showAllAIs()">
+          + I want to try one I don't have →
+        </a>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn-secondary" onclick="goBack('step-persona')">← Back</button>
+        <button class="btn-primary" id="btn-ai-next" disabled onclick="goToVerifySetup()">Next: Verify →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Ready to verify -->
+    <div id="step-verify-ready" style="display:none;">
+      <div class="step-indicator">
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step active"></div>
+      </div>
+
+      <div class="lrh-greeting">
+        <div class="lrh-avatar">♟</div>
+        <div class="lrh-speech">
+          <div class="lrh-name">LRH</div>
+          <div class="lrh-text">"Twenty-five questions. We'll ask each one twice — once cold, once with LB context. Watch what happens."</div>
+        </div>
+      </div>
+
+      <div class="section-title">You're set up.</div>
+      <div class="section-sub" id="setup-summary">Cathedral injection is active for your AI sessions.</div>
+
+      <div style="background:#151c2c;border:1px solid #1e2333;border-radius:12px;padding:20px;margin-bottom:24px;">
+        <div style="font-size:14px;color:#94a3b8;margin-bottom:12px;">What happens next:</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#cbd5e1;">
+            <span style="color:#22c55e;font-weight:600;flex-shrink:0;">1.</span>
+            Cathedral injection is now active — your AI queries get LB context automatically.
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#cbd5e1;">
+            <span style="color:#22c55e;font-weight:600;flex-shrink:0;">2.</span>
+            Optionally run the 25-question verification demo to see the Cathedral Effect measured on your own session.
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#cbd5e1;">
+            <span style="color:#22c55e;font-weight:600;flex-shrink:0;">3.</span>
+            Use your AI normally — LB Test Frame runs quietly in the background.
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn-secondary" onclick="finishOnboarding(false)">Skip verification, use now</button>
+        <button class="btn-primary" onclick="finishOnboarding(true)">Run the 25-question demo →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../onboarding.js"></script>
+</body>
+</html>

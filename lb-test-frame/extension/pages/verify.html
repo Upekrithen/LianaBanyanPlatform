@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cathedral Effect Verification — LB Test Frame</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f1117;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .container { max-width: 720px; width: 100%; }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .header-icon { font-size: 28px; }
+    .header-title { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+    .header-sub { font-size: 13px; color: #475569; }
+
+    /* Progress bar */
+    .progress-track {
+      background: #1e2333;
+      border-radius: 4px;
+      height: 6px;
+      margin-bottom: 8px;
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    .progress-label {
+      font-size: 12px;
+      color: #475569;
+      text-align: right;
+      margin-bottom: 24px;
+    }
+
+    /* LRH cameo */
+    .lrh-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #151c2c;
+      border: 1px solid #1e2d42;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+    }
+    .lrh-mini { font-size: 24px; }
+    .lrh-speech-text { font-size: 13px; font-style: italic; color: #94a3b8; flex: 1; }
+
+    /* Question card */
+    .question-card {
+      background: #151c2c;
+      border: 1px solid #1e2333;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .q-phase {
+      padding: 12px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .q-phase.cold { background: #1a1f2e; color: #94a3b8; }
+    .q-phase.cathedral { background: #0c2a1c; color: #4ade80; }
+    .q-body { padding: 20px; }
+    .q-text {
+      font-size: 16px;
+      color: #f1f5f9;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .q-instruction {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      background: #0f1117;
+      border-radius: 6px;
+      border-left: 3px solid #334155;
+    }
+    .q-instruction strong { color: #94a3b8; }
+    .answer-textarea {
+      width: 100%;
+      background: #0f1117;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #e2e8f0;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+    .answer-textarea:focus { outline: none; border-color: #3b82f6; }
+
+    /* Context block for cathedral phase */
+    .context-block {
+      background: #0a1a0f;
+      border: 1px solid #1a3a22;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .context-label { font-size: 11px; color: #4ade80; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+    .context-text { font-size: 13px; color: #94a3b8; line-height: 1.6; font-family: monospace; }
+
+    /* Action buttons */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      padding: 16px 20px;
+      background: #0f1117;
+      border-top: 1px solid #1e2333;
+    }
+    .btn-primary {
+      padding: 10px 24px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-secondary {
+      padding: 10px 18px;
+      background: transparent;
+      color: #64748b;
+      border: 1px solid #1e2333;
+      border-radius: 7px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Results view */
+    #results-view { display: none; }
+    .results-hero {
+      text-align: center;
+      padding: 40px;
+      background: #151c2c;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+    .results-lrh { font-size: 48px; margin-bottom: 16px; }
+    .results-headline { font-size: 24px; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
+    .results-sub { font-size: 15px; color: #64748b; line-height: 1.6; }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: #151c2c;
+      border: 1px solid #1e2333;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .metric-value { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+    .metric-value.cold { color: #f87171; }
+    .metric-value.cathedral { color: #4ade80; }
+    .metric-value.lift { color: #60a5fa; }
+    .metric-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .share-card {
+      background: #151c2c;
+      border: 1px solid #1e2333;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .share-title { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 8px; }
+    .share-desc { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+    .share-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+    .share-btn {
+      padding: 8px 18px;
+      border-radius: 7px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid;
+    }
+    .share-anon { border-color: #3b82f6; color: #60a5fa; background: transparent; }
+    .share-private { border-color: #334155; color: #64748b; background: transparent; }
+    .share-public { border-color: #4ade80; color: #4ade80; background: transparent; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-icon">⛩</div>
+      <div>
+        <div class="header-title">Cathedral Effect Verification</div>
+        <div class="header-sub">25 questions · cold vs. cathedral · your own AI session</div>
+      </div>
+    </div>
+
+    <!-- Quiz view -->
+    <div id="quiz-view">
+      <!-- Progress -->
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-label" id="progress-label">Question 1 of 25</div>
+
+      <!-- LRH cameo (question intro) -->
+      <div class="lrh-bar" id="lrh-bar">
+        <div class="lrh-mini">♟</div>
+        <div class="lrh-speech-text" id="lrh-text">
+          "Twenty-five questions. We'll ask each one twice — once cold, once with LB context. Watch what happens."
+        </div>
+      </div>
+
+      <!-- Cold phase -->
+      <div class="question-card" id="cold-card">
+        <div class="q-phase cold">❄ Cold ask — no LB context</div>
+        <div class="q-body">
+          <div class="q-text" id="question-text"></div>
+          <div class="q-instruction">
+            <strong>What to do:</strong> Open your AI in another tab. Type this question exactly as written. Paste the answer back here.
+          </div>
+          <textarea class="answer-textarea" id="cold-answer" placeholder="Paste your AI's answer here…"></textarea>
+        </div>
+        <div class="action-row">
+          <button class="btn-secondary" onclick="skipQuestion()">Skip</button>
+          <button class="btn-primary" id="btn-cold-submit" onclick="submitColdAnswer()">I've pasted the answer →</button>
+        </div>
+      </div>
+
+      <!-- Cathedral phase (hidden until cold submitted) -->
+      <div class="question-card" id="cathedral-card" style="display:none;">
+        <div class="q-phase cathedral">✦ Cathedral ask — with LB context</div>
+        <div class="q-body">
+          <div class="context-block">
+            <div class="context-label">Paste this context into your AI FIRST, then ask the question:</div>
+            <div class="context-text" id="cathedral-context"></div>
+          </div>
+          <div class="q-text" id="question-text-cathedral"></div>
+          <div class="q-instruction">
+            <strong>What to do:</strong> Open a <em>fresh</em> tab with your AI. Paste the context above, press Enter to send it. Then type the question below. Paste the answer here.
+          </div>
+          <textarea class="answer-textarea" id="cathedral-answer" placeholder="Paste your AI's answer (with LB context) here…"></textarea>
+        </div>
+        <div class="action-row">
+          <button class="btn-secondary" onclick="skipCathedralPhase()">Skip this ask</button>
+          <button class="btn-primary" id="btn-cathedral-submit" onclick="submitCathedralAnswer()">I've pasted the answer →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results view -->
+    <div id="results-view">
+      <div class="results-hero">
+        <div class="results-lrh">♟</div>
+        <div class="results-headline" id="results-headline">Verification complete.</div>
+        <div class="results-sub" id="results-sub"></div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value cold" id="cold-pct">—</div>
+          <div class="metric-label">Cold (no context)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value cathedral" id="cathedral-pct">—</div>
+          <div class="metric-label">With LB context</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value lift" id="lift-pp">—</div>
+          <div class="metric-label">Lift (pp)</div>
+        </div>
+      </div>
+
+      <div class="share-card">
+        <div class="share-title" id="lrh-result-text">Your result has been measured on your own session.</div>
+        <div class="share-desc">
+          Want to add your result to the LB community empirical dashboard?
+          Aggregate results from all members become the reproducibility-at-scale evidence.
+        </div>
+        <div class="share-buttons">
+          <button class="share-btn share-anon" onclick="shareResult('anonymous')">Share anonymously</button>
+          <button class="share-btn share-public" onclick="shareResult('public')">Share with my name</button>
+          <button class="share-btn share-private" onclick="shareResult('private')">Keep private</button>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:20px 0;">
+        <button class="btn-primary" onclick="window.close()">Done — use LB Test Frame</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../verify.js"></script>
+</body>
+</html>

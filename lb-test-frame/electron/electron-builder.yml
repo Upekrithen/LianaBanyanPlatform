@@ -1,0 +1,127 @@
+# LB Test Frame — Electron Builder Configuration (K502)
+# Produces signed .dmg (Mac), .msi (Windows), .deb/.rpm (Linux)
+
+appId: "com.lianabanyan.lb-test-frame"
+productName: "LB Test Frame"
+copyright: "Copyright © 2026 Liana Banyan Corporation"
+
+# Source
+directories:
+  output: dist
+  buildResources: build-resources
+
+# Icons (required before Chrome Web Store submission / store packaging)
+# Place at lb-test-frame/electron/build-resources/
+# icon.icns = Mac; icon.ico = Windows; 512x512.png = Linux
+# All LRH visual canon: chess piece / animal, not human rendering.
+
+# ── macOS ────────────────────────────────────────────────────────────────────
+mac:
+  category: "public.app-category.productivity"
+  target:
+    - target: dmg
+      arch: [x64, arm64]    # Intel + Apple Silicon
+  # Code signing: set APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID env vars
+  # See: https://www.electron.build/configuration/mac
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build-resources/entitlements.mac.plist
+  entitlementsInherit: build-resources/entitlements.mac.plist
+  notarize: true
+
+dmg:
+  title: "Install LB Test Frame"
+  background: build-resources/dmg-background.png
+  window:
+    width: 540
+    height: 380
+  contents:
+    - x: 140
+      y: 190
+      type: file
+    - x: 400
+      y: 190
+      type: link
+      path: /Applications
+
+# ── Windows ──────────────────────────────────────────────────────────────────
+win:
+  target:
+    - target: msi
+      arch: [x64]
+    - target: nsis
+      arch: [x64]
+  # Code signing: WINDOWS_CERT_FILE, WINDOWS_CERT_PASSWORD env vars
+  # Or use Azure Trusted Signing (signtool) via electron-builder hooks
+  signingHashAlgorithms: [sha256]
+  publisherName: "Liana Banyan Corporation"
+
+msi:
+  oneClick: true
+  perMachine: false
+  createDesktopShortcut: always
+
+nsis:
+  oneClick: true
+  allowToChangeInstallationDirectory: false
+  deleteAppDataOnUninstall: false
+  installerHeaderIcon: build-resources/icon.ico
+  installerIcon: build-resources/icon.ico
+  uninstallerIcon: build-resources/icon.ico
+  shortcutName: "LB Test Frame"
+
+# ── Linux ─────────────────────────────────────────────────────────────────────
+linux:
+  target:
+    - target: deb
+      arch: [x64, arm64]
+    - target: rpm
+      arch: [x64, arm64]
+    - target: AppImage
+      arch: [x64]
+  category: "Network;Utility"
+  description: "Verify the Cathedral Effect on your own AI session. Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot."
+  maintainer: "Liana Banyan Corporation <support@lianabanyan.com>"
+  vendor: "Liana Banyan Corporation"
+
+deb:
+  afterInstall: scripts/after-install.sh
+  afterRemove: scripts/after-remove.sh
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libatspi2.0-0
+    - libuuid1
+
+rpm:
+  depends:
+    - gtk3
+    - libnotify
+    - nss
+    - libXScrnSaver
+    - libXtst
+    - xdg-utils
+    - at-spi2-atk
+
+# ── Files to include ──────────────────────────────────────────────────────────
+files:
+  - "!**/.git/**"
+  - "!**/node_modules/**"
+  - "!**/build-resources/**"
+  - out/**
+  - shared/**    # bundles the question bank + shared utilities
+
+extraFiles:
+  - from: ../shared
+    to: resources/shared
+
+# ── Publish (GitHub Releases as source) ──────────────────────────────────────
+publish:
+  provider: github
+  owner: LianaBanyan
+  repo: lb-test-frame-releases
+  releaseType: release

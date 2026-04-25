@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LB Test Frame — Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f1117;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 40px;
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: 14px;
+    }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; color: #f1f5f9; }
+    .sub { color: #475569; margin-bottom: 32px; font-size: 13px; }
+    .section { margin-bottom: 32px; }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #475569;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .field {
+      background: #151c2c;
+      border: 1px solid #1e2333;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .field-info { flex: 1; }
+    .field-label { font-size: 14px; color: #e2e8f0; margin-bottom: 2px; }
+    .field-hint { font-size: 12px; color: #475569; }
+    select {
+      background: #0f1117;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background: #1e2333; border-radius: 22px; transition: 0.2s;
+    }
+    .slider:before {
+      position: absolute; content: ''; height: 16px; width: 16px;
+      left: 3px; bottom: 3px; background: #475569;
+      border-radius: 50%; transition: 0.2s;
+    }
+    input:checked + .slider { background: #2563eb; }
+    input:checked + .slider:before { transform: translateX(18px); background: white; }
+    .btn {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 7px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-primary { background: #2563eb; color: white; border: none; font-weight: 600; }
+    .btn-danger { background: transparent; color: #f87171; border: 1px solid #f87171; }
+    .save-notice { font-size: 12px; color: #4ade80; margin-top: 6px; display: none; }
+    .separator { height: 1px; background: #1e2333; margin: 16px 0; }
+    a { color: #60a5fa; text-decoration: none; font-size: 13px; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>⛩ LB Test Frame</h1>
+  <div class="sub">Settings — K502</div>
+
+  <div class="section">
+    <div class="section-title">Persona</div>
+    <div class="field">
+      <div class="field-info">
+        <div class="field-label">Active persona</div>
+        <div class="field-hint">Casual, Developer, or Member. Switch anytime.</div>
+      </div>
+      <select id="persona-select">
+        <option value="casual">Casual</option>
+        <option value="developer">Developer / Researcher</option>
+        <option value="member">Member ($5/yr)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Cathedral injection</div>
+    <div class="field">
+      <div class="field-info">
+        <div class="field-label">Cathedral injection enabled</div>
+        <div class="field-hint">Wraps AI queries with LB context before submission.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="injection-toggle" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="field">
+      <div class="field-info">
+        <div class="field-label">Active AI</div>
+        <div class="field-hint">The AI session cathedral injection targets.</div>
+      </div>
+      <select id="ai-select">
+        <option value="claude">Claude (Anthropic)</option>
+        <option value="chatgpt">ChatGPT (OpenAI)</option>
+        <option value="gemini">Gemini (Google)</option>
+        <option value="perplexity">Perplexity</option>
+        <option value="copilot">Copilot (Microsoft)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Verification results sharing</div>
+    <div class="field">
+      <div class="field-info">
+        <div class="field-label">Default share preference</div>
+        <div class="field-hint">Applied when you run the Cathedral Verification Demo. Can be overridden per-run.</div>
+      </div>
+      <select id="share-select">
+        <option value="private">Private (local only)</option>
+        <option value="anonymous">Anonymous (aggregated)</option>
+        <option value="public">Public (with attribution)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+
+  <button class="btn btn-primary" onclick="saveSettings()">Save settings</button>
+  <div class="save-notice" id="save-notice">✓ Settings saved</div>
+
+  <div class="separator"></div>
+
+  <div class="section">
+    <div class="section-title">Actions</div>
+    <p style="font-size:13px;color:#475569;margin-bottom:12px;">
+      <a href="onboarding.html">Re-run onboarding</a> ·
+      <a href="verify.html">Run verification demo</a> ·
+      <a href="https://librarian.the2ndsecond.com/community-empirical" target="_blank">Community results</a> ·
+      <a href="https://lianabanyan.com/privacy#test-frame" target="_blank">Privacy policy</a>
+    </p>
+    <button class="btn btn-danger" onclick="clearData()">Clear all local data</button>
+  </div>
+
+  <script>
+    const DEFAULT_PREFS = { persona: 'casual', injectionEnabled: true, selectedAI: null, sharePreference: 'private' };
+
+    function load() {
+      chrome.storage.local.get(DEFAULT_PREFS, (prefs) => {
+        document.getElementById('persona-select').value = prefs.persona;
+        document.getElementById('injection-toggle').checked = prefs.injectionEnabled;
+        if (prefs.selectedAI) document.getElementById('ai-select').value = prefs.selectedAI;
+        document.getElementById('share-select').value = prefs.sharePreference;
+      });
+    }
+
+    function saveSettings() {
+      const prefs = {
+        persona: document.getElementById('persona-select').value,
+        injectionEnabled: document.getElementById('injection-toggle').checked,
+        selectedAI: document.getElementById('ai-select').value,
+        sharePreference: document.getElementById('share-select').value,
+      };
+      chrome.storage.local.set(prefs, () => {
+        const notice = document.getElementById('save-notice');
+        notice.style.display = 'block';
+        setTimeout(() => { notice.style.display = 'none'; }, 2000);
+      });
+    }
+
+    function clearData() {
+      if (!confirm('Clear all LB Test Frame local data? This resets onboarding, AI selection, and verification results.')) return;
+      chrome.storage.local.clear(() => { load(); alert('Data cleared.'); });
+    }
+
+    load();
+  </script>
+</body>
+</html>
