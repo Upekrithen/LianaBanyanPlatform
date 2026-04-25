@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-11",
+  "keystone_phrase_verbatim": "Help each other help ourselves.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.449941+00:00",
+  "primary_topic": "help",
+  "domain": "mutual-aid-cooperative-philosophy",
+  "seed_keywords": [
+    "help",
+    "each",
+    "other",
+    "ourselves",
+    "mutual",
+    "aid",
+    "cooperative",
+    "charity",
+    "self-help"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B110",
+  "ratified_session": "B110",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-11.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-11: 'Help each other help ourselves....'. It monitors corpus content related to the 'mutual-aid-cooperative-philosophy' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-11' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

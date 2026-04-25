@@ -1,0 +1,24 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-05",
+  "keystone_phrase_verbatim": "I know enough to know I don't know enough.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.446498+00:00",
+  "primary_topic": "know",
+  "domain": "epistemic-humility",
+  "seed_keywords": [
+    "know",
+    "enough",
+    "epistemic",
+    "humility",
+    "correction",
+    "uncertainty",
+    "learning"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B110",
+  "ratified_session": "B110",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-05.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-05: 'I know enough to know I don't know enough....'. It monitors corpus content related to the 'epistemic-humility' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-05' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-24",
+  "keystone_phrase_verbatim": "We hand them the reins of our very fast horse.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.456926+00:00",
+  "primary_topic": "hand",
+  "domain": "user-sovereignty-platform",
+  "seed_keywords": [
+    "reins",
+    "horse",
+    "fast",
+    "sovereignty",
+    "user",
+    "platform",
+    "control",
+    "handoff",
+    "capability"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B122",
+  "ratified_session": "B122",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-24.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-24: 'We hand them the reins of our very fast horse....'. It monitors corpus content related to the 'user-sovereignty-platform' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-24' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

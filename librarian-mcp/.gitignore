@@ -22,3 +22,10 @@ miners/run_summary_K487.json
 miners/bloodhound_report_K487.json
 miners/run_k487_stdout.txt
 miners/run_k487_post_mining_stdout.txt
+
+# Stone Tablets — large JSONL data outputs (regeneratable by run_k490_stone_tablets.py)
+miners/stone_tablets/KEYSTONE-*.jsonl
+miners/stone_tablets/TEST_KEYSTONE-*.jsonl
+miners/stone_tablets/dedup_log.json
+miners/stone_tablets/run_k490_stdout.txt
+miners/stone_tablets/run_k490_stderr.txt

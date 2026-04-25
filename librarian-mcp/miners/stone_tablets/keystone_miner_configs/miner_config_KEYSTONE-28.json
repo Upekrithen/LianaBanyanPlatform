@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-28",
+  "keystone_phrase_verbatim": "They do what IP does — pass it on, as a filter.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.459462+00:00",
+  "primary_topic": "does",
+  "domain": "ip-as-filter-information-property",
+  "seed_keywords": [
+    "ip",
+    "filter",
+    "pass",
+    "property",
+    "information",
+    "sculptor",
+    "exclusive",
+    "transmit",
+    "commons"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B123",
+  "ratified_session": "B123",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-28.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-28: 'They do what IP does — pass it on, as a filter....'. It monitors corpus content related to the 'ip-as-filter-information-property' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-28' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

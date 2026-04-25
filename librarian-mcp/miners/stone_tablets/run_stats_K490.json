@@ -1,0 +1,209 @@
+{
+  "session": "K490",
+  "bishop_session": "B123",
+  "inception_timestamp": "2026-04-25T13:32:41.673752+00:00",
+  "wall_time_sec": 856.5,
+  "keystones_count": 30,
+  "bedrock_files_scanned": 62,
+  "total_tablets_scanned": 870086,
+  "total_stone_tablets": 1090437,
+  "by_keystone": {
+    "KEYSTONE-25": {
+      "total": 39964,
+      "verbatim": 50,
+      "paraphrase": 12,
+      "thematic": 39902
+    },
+    "KEYSTONE-19": {
+      "total": 166554,
+      "verbatim": 0,
+      "paraphrase": 12,
+      "thematic": 166542
+    },
+    "KEYSTONE-28": {
+      "total": 22967,
+      "verbatim": 50,
+      "paraphrase": 562,
+      "thematic": 22355
+    },
+    "KEYSTONE-14": {
+      "total": 39574,
+      "verbatim": 1400,
+      "paraphrase": 0,
+      "thematic": 38174
+    },
+    "KEYSTONE-29": {
+      "total": 80324,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 80324
+    },
+    "KEYSTONE-16": {
+      "total": 12115,
+      "verbatim": 50,
+      "paraphrase": 0,
+      "thematic": 12065
+    },
+    "KEYSTONE-17": {
+      "total": 5794,
+      "verbatim": 12,
+      "paraphrase": 0,
+      "thematic": 5782
+    },
+    "KEYSTONE-09": {
+      "total": 17112,
+      "verbatim": 350,
+      "paraphrase": 100,
+      "thematic": 16662
+    },
+    "KEYSTONE-00": {
+      "total": 70049,
+      "verbatim": 50,
+      "paraphrase": 7336,
+      "thematic": 62663
+    },
+    "KEYSTONE-06": {
+      "total": 93958,
+      "verbatim": 0,
+      "paraphrase": 300,
+      "thematic": 93658
+    },
+    "KEYSTONE-24": {
+      "total": 70518,
+      "verbatim": 100,
+      "paraphrase": 12,
+      "thematic": 70406
+    },
+    "KEYSTONE-07": {
+      "total": 30782,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 30782
+    },
+    "KEYSTONE-21": {
+      "total": 40730,
+      "verbatim": 12,
+      "paraphrase": 13818,
+      "thematic": 26900
+    },
+    "KEYSTONE-01": {
+      "total": 88436,
+      "verbatim": 200,
+      "paraphrase": 0,
+      "thematic": 88236
+    },
+    "KEYSTONE-10": {
+      "total": 119569,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 119569
+    },
+    "KEYSTONE-11": {
+      "total": 67977,
+      "verbatim": 7200,
+      "paraphrase": 412,
+      "thematic": 60365
+    },
+    "KEYSTONE-27": {
+      "total": 2898,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 2898
+    },
+    "KEYSTONE-13": {
+      "total": 14270,
+      "verbatim": 50,
+      "paraphrase": 0,
+      "thematic": 14220
+    },
+    "KEYSTONE-20": {
+      "total": 8136,
+      "verbatim": 24,
+      "paraphrase": 150,
+      "thematic": 7962
+    },
+    "KEYSTONE-22": {
+      "total": 2074,
+      "verbatim": 112,
+      "paraphrase": 0,
+      "thematic": 1962
+    },
+    "KEYSTONE-23": {
+      "total": 22014,
+      "verbatim": 550,
+      "paraphrase": 0,
+      "thematic": 21464
+    },
+    "KEYSTONE-26": {
+      "total": 962,
+      "verbatim": 150,
+      "paraphrase": 0,
+      "thematic": 812
+    },
+    "KEYSTONE-18": {
+      "total": 1474,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 1474
+    },
+    "KEYSTONE-08": {
+      "total": 51186,
+      "verbatim": 500,
+      "paraphrase": 150,
+      "thematic": 50536
+    },
+    "KEYSTONE-12": {
+      "total": 3650,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 3650
+    },
+    "KEYSTONE-05": {
+      "total": 6500,
+      "verbatim": 50,
+      "paraphrase": 4250,
+      "thematic": 2200
+    },
+    "KEYSTONE-15": {
+      "total": 6100,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 6100
+    },
+    "KEYSTONE-03": {
+      "total": 4200,
+      "verbatim": 150,
+      "paraphrase": 0,
+      "thematic": 4050
+    },
+    "KEYSTONE-04": {
+      "total": 450,
+      "verbatim": 0,
+      "paraphrase": 400,
+      "thematic": 50
+    },
+    "KEYSTONE-02": {
+      "total": 100,
+      "verbatim": 0,
+      "paraphrase": 0,
+      "thematic": 100
+    }
+  },
+  "by_match_type": {
+    "verbatim": 11060,
+    "paraphrase": 27514,
+    "thematic": 1051863
+  },
+  "by_corpus": {
+    "K482": 1139,
+    "K486": 1580,
+    "K487": 1087718,
+    "unknown": 0
+  },
+  "top3_keystones": [
+    "KEYSTONE-19",
+    "KEYSTONE-10",
+    "KEYSTONE-06"
+  ],
+  "zero_hit_keystones": []
+}

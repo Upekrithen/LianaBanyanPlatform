@@ -1,0 +1,25 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "TEST_KEYSTONE-30",
+  "keystone_phrase_verbatim": "The architecture speaks. The person walks through the crowd unrecognized.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.461595+00:00",
+  "primary_topic": "architecture",
+  "domain": "banksy-mode-founder-invisibility",
+  "seed_keywords": [
+    "architecture",
+    "crowd",
+    "unrecognized",
+    "invisible",
+    "banksy",
+    "founder",
+    "platform",
+    "disappear"
+  ],
+  "provenance": "K490 demonstration test keystone — NOT for production use",
+  "ratified_session": "TEST_K490",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\TEST_KEYSTONE-30.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to TEST_KEYSTONE-30: 'The architecture speaks. The person walks through the crowd ...'. It monitors corpus content related to the 'banksy-mode-founder-invisibility' domain. Stone Tablets it produces carry keystone_anchor_id='TEST_KEYSTONE-30' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

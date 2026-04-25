@@ -1,0 +1,25 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-08",
+  "keystone_phrase_verbatim": "What we need is people and leadership; the money will follow.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.448320+00:00",
+  "primary_topic": "need",
+  "domain": "governance-economic-inversion",
+  "seed_keywords": [
+    "people",
+    "leadership",
+    "money",
+    "follow",
+    "governance",
+    "institutional",
+    "funding",
+    "precede"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B110",
+  "ratified_session": "B110",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-08.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-08: 'What we need is people and leadership; the money will follow...'. It monitors corpus content related to the 'governance-economic-inversion' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-08' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

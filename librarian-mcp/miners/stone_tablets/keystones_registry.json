@@ -1,0 +1,594 @@
+{
+  "_meta": {
+    "description": "Machine-readable Rhetorical Keystones registry — K490/B123. Source of truth: project_rhetorical_keystones.md in Bishop memory. Used by Stone Tablet tagger and keystone_watcher for auto-Miner-inception.",
+    "count": 30,
+    "last_updated_session": "K490",
+    "notes": "Keystones #0-#27 ratified through B122; #28 and #29 ratified B123. Registry-count in K490 prompt said '28' — this file reflects the correct current count of 30."
+  },
+  "keystones": [
+    {
+      "id": "KEYSTONE-00",
+      "number": 0,
+      "phrase": "We are each more, together.",
+      "source": "B119, Founder-originated during Docker Agentic AI report pollination discussion.",
+      "provenance": "project_rhetorical_keystones.md — B119",
+      "domain": "cooperative-reciprocity",
+      "thematic_keywords": [
+        "cooperative",
+        "collective",
+        "together",
+        "each",
+        "more",
+        "mutual",
+        "amplified",
+        "reciprocity",
+        "members"
+      ],
+      "ratified_session": "B119"
+    },
+    {
+      "id": "KEYSTONE-01",
+      "number": 1,
+      "phrase": "Every AI company is currently paying a tax they don't know they're paying.",
+      "source": "B103 op-ed opening.",
+      "provenance": "project_rhetorical_keystones.md — B103",
+      "domain": "ai-model-alignment-cost",
+      "thematic_keywords": [
+        "ai",
+        "company",
+        "tax",
+        "paying",
+        "alignment",
+        "model",
+        "training",
+        "cost",
+        "hidden"
+      ],
+      "ratified_session": "B103"
+    },
+    {
+      "id": "KEYSTONE-02",
+      "number": 2,
+      "phrase": "Especially from friendly fire.",
+      "source": "Crown Letter to MacKenzie Scott (Cardboard Boots).",
+      "provenance": "project_rhetorical_keystones.md — Cardboard Boots letter",
+      "domain": "moral-weight-sacrifice",
+      "thematic_keywords": [
+        "friendly",
+        "fire",
+        "sacrifice",
+        "loss",
+        "harm",
+        "casualties",
+        "unintended"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-03",
+      "number": 3,
+      "phrase": "I pray for potatoes at the end of a hoe handle.",
+      "source": "Cardboard Boots, Feb 2, 2026.",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "humility-of-ask",
+      "thematic_keywords": [
+        "pray",
+        "potatoes",
+        "hoe",
+        "humble",
+        "ask",
+        "humility",
+        "labor",
+        "rural",
+        "concrete"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-04",
+      "number": 4,
+      "phrase": "And I have two suits.",
+      "source": "Cardboard Boots closing.",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "unfancy-credibility",
+      "thematic_keywords": [
+        "suits",
+        "credibility",
+        "resourced",
+        "peers",
+        "unfancy",
+        "modest",
+        "humble"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-05",
+      "number": 5,
+      "phrase": "I know enough to know I don't know enough.",
+      "source": "Cardboard Boots.",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "epistemic-humility",
+      "thematic_keywords": [
+        "know",
+        "enough",
+        "epistemic",
+        "humility",
+        "correction",
+        "uncertainty",
+        "learning"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-06",
+      "number": 6,
+      "phrase": "Nothing about us without us.",
+      "source": "Cardboard Boots.",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "participatory-governance",
+      "thematic_keywords": [
+        "governance",
+        "participation",
+        "commons",
+        "designed",
+        "people",
+        "use",
+        "community",
+        "inclusive"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-07",
+      "number": 7,
+      "phrase": "The eighty percent is the only number where cooperation costs less than defection.",
+      "source": "B103 op-ed on patent strategy.",
+      "provenance": "project_rhetorical_keystones.md — B103",
+      "domain": "cooperation-economics-math",
+      "thematic_keywords": [
+        "eighty",
+        "percent",
+        "cooperation",
+        "defection",
+        "math",
+        "costs",
+        "patent",
+        "pledge",
+        "economics"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-08",
+      "number": 8,
+      "phrase": "What we need is people and leadership; the money will follow.",
+      "source": "Scott v014a–v014f + Newmark + Seibel (8+ Crown Letter versions verbatim).",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "governance-economic-inversion",
+      "thematic_keywords": [
+        "people",
+        "leadership",
+        "money",
+        "follow",
+        "governance",
+        "institutional",
+        "funding",
+        "precede"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-09",
+      "number": 9,
+      "phrase": "No Plan Survives First Contact.",
+      "source": "Newmark LOCKED02, explicitly marked 'the only all-caps moment.'",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "biographical-governance-ask-for-help",
+      "thematic_keywords": [
+        "plan",
+        "survives",
+        "contact",
+        "help",
+        "asking",
+        "weakness",
+        "governance",
+        "adaptive"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-10",
+      "number": 10,
+      "phrase": "The medallions are minted. The platform is built. The first ten members are ready. What I lack is the wisdom and experienced leadership to ensure we serve millions, not hundreds.",
+      "source": "Scott v014a–v014f (6 iterations verbatim), Seibel variations.",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "rhetorical-closure-catalytic",
+      "thematic_keywords": [
+        "medallions",
+        "minted",
+        "platform",
+        "built",
+        "members",
+        "wisdom",
+        "leadership",
+        "millions",
+        "hundreds"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-11",
+      "number": 11,
+      "phrase": "Help each other help ourselves.",
+      "source": "Seibel + Simon + Newmark closings.",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "mutual-aid-cooperative-philosophy",
+      "thematic_keywords": [
+        "help",
+        "each",
+        "other",
+        "ourselves",
+        "mutual",
+        "aid",
+        "cooperative",
+        "charity",
+        "self-help"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-12",
+      "number": 12,
+      "phrase": "I read a lot, and I am good at chess.",
+      "source": "Scott + multiple Crown Letters.",
+      "provenance": "project_rhetorical_keystones.md — B110",
+      "domain": "biographical-understated-credibility",
+      "thematic_keywords": [
+        "read",
+        "chess",
+        "credibility",
+        "understated",
+        "biography",
+        "competence",
+        "rating"
+      ],
+      "ratified_session": "B110"
+    },
+    {
+      "id": "KEYSTONE-13",
+      "number": 13,
+      "phrase": "The way I learned things affected WHETHER I learned them.",
+      "source": "B110 transcript (Anachronism Principle surface).",
+      "provenance": "project_rhetorical_keystones.md — B111",
+      "domain": "pedagogical-design-method",
+      "thematic_keywords": [
+        "learned",
+        "learning",
+        "pedagogy",
+        "method",
+        "whether",
+        "anachronism",
+        "design",
+        "teaching",
+        "education"
+      ],
+      "ratified_session": "B111"
+    },
+    {
+      "id": "KEYSTONE-14",
+      "number": 14,
+      "phrase": "A rising tide lifts all boats. And I think I've built a system of wells.",
+      "source": "B111 op-ed poordom paragraph (Founder prose).",
+      "provenance": "project_rhetorical_keystones.md — B111",
+      "domain": "economic-sovereignty-inversion",
+      "thematic_keywords": [
+        "rising",
+        "tide",
+        "boats",
+        "wells",
+        "system",
+        "economic",
+        "sovereignty",
+        "inversion",
+        "self-sustaining"
+      ],
+      "ratified_session": "B111"
+    },
+    {
+      "id": "KEYSTONE-15",
+      "number": 15,
+      "phrase": "53 years of surviving the trenches of poordom, and I'm really good at it.",
+      "source": "B111 op-ed poordom paragraph.",
+      "provenance": "project_rhetorical_keystones.md — B111",
+      "domain": "biographical-competence-poverty",
+      "thematic_keywords": [
+        "poordom",
+        "poverty",
+        "surviving",
+        "trenches",
+        "years",
+        "good",
+        "competence",
+        "self-mockery"
+      ],
+      "ratified_session": "B111"
+    },
+    {
+      "id": "KEYSTONE-16",
+      "number": 16,
+      "phrase": "A tool that measures its own value and shows only you, unless you agree to share it anonymously, or publicly.",
+      "source": "B111 thermometer-framing ratification.",
+      "provenance": "project_rhetorical_keystones.md — B111",
+      "domain": "anti-enshittification-user-agency",
+      "thematic_keywords": [
+        "tool",
+        "measures",
+        "value",
+        "anonymous",
+        "publicly",
+        "share",
+        "privacy",
+        "enshittification",
+        "agency",
+        "opt-in"
+      ],
+      "ratified_session": "B111"
+    },
+    {
+      "id": "KEYSTONE-17",
+      "number": 17,
+      "phrase": "When all the Scribes sing together, The Harmony is Glorious.",
+      "source": "B120, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B120",
+      "domain": "cathedral-effect-architectural",
+      "thematic_keywords": [
+        "scribes",
+        "sing",
+        "harmony",
+        "glorious",
+        "together",
+        "cathedral",
+        "ensemble",
+        "emergence",
+        "retrieval"
+      ],
+      "ratified_session": "B120"
+    },
+    {
+      "id": "KEYSTONE-18",
+      "number": 18,
+      "phrase": "The Choral Wave Reverberates the More Voices We Have.",
+      "source": "B121, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B121",
+      "domain": "cathedral-effect-subtitle",
+      "thematic_keywords": [
+        "choral",
+        "wave",
+        "reverberates",
+        "voices",
+        "cathedral",
+        "resonates",
+        "ensemble",
+        "more"
+      ],
+      "ratified_session": "B121"
+    },
+    {
+      "id": "KEYSTONE-19",
+      "number": 19,
+      "phrase": "Each Scribe a Voice. All as One.",
+      "source": "B121, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B121",
+      "domain": "cathedral-effect-epigraph",
+      "thematic_keywords": [
+        "scribe",
+        "voice",
+        "one",
+        "all",
+        "unity",
+        "cathedral",
+        "ensemble",
+        "monistic"
+      ],
+      "ratified_session": "B121"
+    },
+    {
+      "id": "KEYSTONE-20",
+      "number": 20,
+      "phrase": "Build the Bridge Behind You.",
+      "source": "B122, Founder's father (Minister, reads-a-lot).",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "inheritance-bridge-builder",
+      "thematic_keywords": [
+        "bridge",
+        "behind",
+        "build",
+        "inheritance",
+        "father",
+        "parable",
+        "dromgoole",
+        "future"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-21",
+      "number": 21,
+      "phrase": "Be Who You Needed.",
+      "source": "B122, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "empathy-engine-hexisle",
+      "thematic_keywords": [
+        "needed",
+        "empathy",
+        "hexisle",
+        "design",
+        "ethos",
+        "self",
+        "waited",
+        "needed"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-22",
+      "number": 22,
+      "phrase": "I don't build escape tunnels. I build more arrows.",
+      "source": "B122, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "engineering-posture-no-fallback",
+      "thematic_keywords": [
+        "escape",
+        "tunnels",
+        "arrows",
+        "capacity",
+        "fallback",
+        "commitment",
+        "cortez",
+        "forward"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-23",
+      "number": 23,
+      "phrase": "What your hand finds to do, do it with your might.",
+      "source": "Ecclesiastes 9:10 / B122 invocation by Founder.",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "full-commitment-biblical",
+      "thematic_keywords": [
+        "hand",
+        "might",
+        "ecclesiastes",
+        "biblical",
+        "commitment",
+        "full",
+        "finds",
+        "labor"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-24",
+      "number": 24,
+      "phrase": "We hand them the reins of our very fast horse.",
+      "source": "B122, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "user-sovereignty-platform",
+      "thematic_keywords": [
+        "reins",
+        "horse",
+        "fast",
+        "sovereignty",
+        "user",
+        "platform",
+        "control",
+        "handoff",
+        "capability"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-25",
+      "number": 25,
+      "phrase": "Basically TCP/IP.",
+      "source": "B122, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "cathedral-federation-protocol",
+      "thematic_keywords": [
+        "tcp",
+        "ip",
+        "protocol",
+        "commons",
+        "federation",
+        "cathedral",
+        "transport",
+        "layer",
+        "basic"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-26",
+      "number": 26,
+      "phrase": "A coward dies a thousand deaths; a hero only one.",
+      "source": "Shakespeare, Julius Caesar Act 2 Scene 2; invoked B122 by Founder.",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "engineering-economics-fear-of-failure",
+      "thematic_keywords": [
+        "coward",
+        "dies",
+        "deaths",
+        "hero",
+        "fear",
+        "failure",
+        "commitment",
+        "shakespeare",
+        "brick-wall"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-27",
+      "number": 27,
+      "phrase": "A computer doesn't really do everything at once, it just does it in sequence so fast that it looks like instantaneous to the human eye.",
+      "source": "B122, Founder.",
+      "provenance": "project_rhetorical_keystones.md — B122",
+      "domain": "directed-processing-stagger-ensemble",
+      "thematic_keywords": [
+        "computer",
+        "sequence",
+        "instantaneous",
+        "parallel",
+        "stagger",
+        "ensemble",
+        "fast",
+        "human",
+        "eye"
+      ],
+      "ratified_session": "B122"
+    },
+    {
+      "id": "KEYSTONE-28",
+      "number": 28,
+      "phrase": "They do what IP does — pass it on, as a filter.",
+      "source": "B123, Founder (articulated while naming the Sculptors class and the IP-as-filter role).",
+      "provenance": "project_rhetorical_keystones.md — B123",
+      "domain": "ip-as-filter-information-property",
+      "thematic_keywords": [
+        "ip",
+        "filter",
+        "pass",
+        "property",
+        "information",
+        "sculptor",
+        "exclusive",
+        "transmit",
+        "commons"
+      ],
+      "ratified_session": "B123"
+    },
+    {
+      "id": "KEYSTONE-29",
+      "number": 29,
+      "phrase": "This is Your World. Shape it, or Someone Else WILL.",
+      "source": "B123, Founder home wall (long-standing personal anchor).",
+      "provenance": "project_rhetorical_keystones.md — B123",
+      "domain": "active-shaping-agency-sovereignty",
+      "thematic_keywords": [
+        "shape",
+        "world",
+        "will",
+        "agency",
+        "sovereignty",
+        "active",
+        "shaping",
+        "ai",
+        "policy",
+        "decide"
+      ],
+      "ratified_session": "B123"
+    }
+  ]
+}

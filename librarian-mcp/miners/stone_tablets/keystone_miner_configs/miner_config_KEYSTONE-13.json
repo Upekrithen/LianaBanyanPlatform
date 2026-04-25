@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-13",
+  "keystone_phrase_verbatim": "The way I learned things affected WHETHER I learned them.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.450958+00:00",
+  "primary_topic": "learned",
+  "domain": "pedagogical-design-method",
+  "seed_keywords": [
+    "learned",
+    "learning",
+    "pedagogy",
+    "method",
+    "whether",
+    "anachronism",
+    "design",
+    "teaching",
+    "education"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B111",
+  "ratified_session": "B111",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-13.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-13: 'The way I learned things affected WHETHER I learned them....'. It monitors corpus content related to the 'pedagogical-design-method' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-13' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

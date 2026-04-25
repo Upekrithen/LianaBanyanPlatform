@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-17",
+  "keystone_phrase_verbatim": "When all the Scribes sing together, The Harmony is Glorious.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.453154+00:00",
+  "primary_topic": "when",
+  "domain": "cathedral-effect-architectural",
+  "seed_keywords": [
+    "scribes",
+    "sing",
+    "harmony",
+    "glorious",
+    "together",
+    "cathedral",
+    "ensemble",
+    "emergence",
+    "retrieval"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B120",
+  "ratified_session": "B120",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-17.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-17: 'When all the Scribes sing together, The Harmony is Glorious....'. It monitors corpus content related to the 'cathedral-effect-architectural' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-17' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

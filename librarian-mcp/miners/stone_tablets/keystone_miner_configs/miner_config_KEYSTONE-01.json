@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-01",
+  "keystone_phrase_verbatim": "Every AI company is currently paying a tax they don't know they're paying.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.443867+00:00",
+  "primary_topic": "every",
+  "domain": "ai-model-alignment-cost",
+  "seed_keywords": [
+    "ai",
+    "company",
+    "tax",
+    "paying",
+    "alignment",
+    "model",
+    "training",
+    "cost",
+    "hidden"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B103",
+  "ratified_session": "B103",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-01.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-01: 'Every AI company is currently paying a tax they don't know t...'. It monitors corpus content related to the 'ai-model-alignment-cost' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-01' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

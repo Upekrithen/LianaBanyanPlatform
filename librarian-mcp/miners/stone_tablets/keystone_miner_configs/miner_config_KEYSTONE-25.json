@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-25",
+  "keystone_phrase_verbatim": "Basically TCP/IP.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.457413+00:00",
+  "primary_topic": "basically",
+  "domain": "cathedral-federation-protocol",
+  "seed_keywords": [
+    "tcp",
+    "ip",
+    "protocol",
+    "commons",
+    "federation",
+    "cathedral",
+    "transport",
+    "layer",
+    "basic"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B122",
+  "ratified_session": "B122",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-25.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-25: 'Basically TCP/IP....'. It monitors corpus content related to the 'cathedral-federation-protocol' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-25' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

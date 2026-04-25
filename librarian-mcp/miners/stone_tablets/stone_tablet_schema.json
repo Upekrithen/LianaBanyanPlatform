@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stone Tablet",
+  "description": "K490/B123 — Stone Tablet schema. Extension of the bedrock tablet schema. A Stone Tablet is a bedrock tablet tagged with a Rhetorical Keystone anchor, representing the highest-authority class of LB knowledge artifact. Stone Tablets flow to Catacombs. Biblical resonance intentional: most-authoritative-record archetype (Moses / Ten Commandments / Mount Sinai). Geological parallel: crystallized, permanent, foundation-layer form of mined material. CJ candidate: sub-claim within #2298 (Awareness Net) or standalone #2299.",
+  "session": "K490",
+  "bishop_session": "B123",
+  "type": "object",
+  "required": [
+    "stone_tablet_id",
+    "source_tablet_id",
+    "keystone_anchor_id",
+    "keystone_phrase_verbatim",
+    "match_type",
+    "match_confidence",
+    "inception_event_timestamp",
+    "founder_speech_act_provenance",
+    "source_corpus",
+    "miner_serial",
+    "source_file",
+    "extracted_content",
+    "keywords",
+    "depth_level",
+    "original_timestamp",
+    "provenance_chain"
+  ],
+  "properties": {
+    "stone_tablet_id": {
+      "type": "string",
+      "description": "Unique stone tablet ID. Format: LB-ST.{KEYSTONE_ID}-T{N:04d}. Globally unique within a keystone file.",
+      "example": "LB-ST.KEYSTONE-28-T0001"
+    },
+    "source_tablet_id": {
+      "type": "string",
+      "description": "The tablet_id of the original bedrock tablet this Stone Tablet was tagged from. Immutable — this is the provenance anchor.",
+      "example": "LB-CAT.M-0001-T0042"
+    },
+    "keystone_anchor_id": {
+      "type": "string",
+      "description": "ID of the Rhetorical Keystone that triggered this Stone Tablet. Ties to keystones_registry.json.",
+      "example": "KEYSTONE-28",
+      "pattern": "^KEYSTONE-\\d{2}$"
+    },
+    "keystone_phrase_verbatim": {
+      "type": "string",
+      "description": "The exact Founder-ratified keystone phrase that this tablet is anchored to.",
+      "example": "They do what IP does — pass it on, as a filter."
+    },
+    "match_type": {
+      "type": "string",
+      "enum": ["verbatim", "paraphrase", "thematic"],
+      "description": "How this tablet matched the keystone. verbatim=high-confidence exact phrase found; paraphrase=60%+ of keystone words found in content; thematic=domain keywords found."
+    },
+    "match_confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Confidence score for the match. verbatim: 0.90-1.00; paraphrase: 0.50-0.89; thematic: 0.30-0.49."
+    },
+    "matched_words": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Words from the keystone phrase found in the tablet content (for paraphrase matches)."
+    },
+    "matched_thematic": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Thematic domain keywords found in the tablet content or keywords list."
+    },
+    "inception_event_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this Stone Tablet was created (the K490 retroactive tagging event timestamp)."
+    },
+    "founder_speech_act_provenance": {
+      "type": "string",
+      "description": "Reference to the source of the keystone — memory file, transcript session, or Crown Letter."
+    },
+    "source_corpus": {
+      "type": "string",
+      "enum": ["K482", "K486", "K487"],
+      "description": "Which mining session produced the source bedrock tablet."
+    },
+    "miner_serial": {
+      "type": "string",
+      "description": "Serial of the Miner that produced the source bedrock tablet.",
+      "example": "LB-CAT.M-0001.a.b"
+    },
+    "source_file": {
+      "type": "string",
+      "description": "Absolute path to the source corpus file that was mined."
+    },
+    "extracted_content": {
+      "type": "string",
+      "description": "The content extracted from the source file (preserved verbatim from bedrock tablet)."
+    },
+    "keywords": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Keywords extracted by the Miner (preserved from bedrock tablet)."
+    },
+    "depth_level": {
+      "type": "integer",
+      "description": "Miner depth level at time of tablet creation (preserved from bedrock tablet)."
+    },
+    "original_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the original bedrock tablet creation."
+    },
+    "provenance_chain": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Provenance chain from the original bedrock tablet."
+    },
+    "dedup_key": {
+      "type": "string",
+      "description": "Deduplication key = source_tablet_id + '::' + keystone_anchor_id. Prevents duplicate Stone Tablets on re-runs.",
+      "example": "LB-CAT.M-0001-T0042::KEYSTONE-28"
+    },
+    "tagger_session": {
+      "type": "string",
+      "description": "Session that performed the tagging.",
+      "const": "K490"
+    }
+  },
+  "notes": [
+    "A single bedrock tablet may match multiple keystones, producing multiple Stone Tablets (one per keystone matched).",
+    "Re-running Phase A is idempotent: dedup_key prevents duplicate stone tablets.",
+    "Authority-decay: Stone Tablets are append-only authoritative. Prior Stone Tablets remain canonical as new ones accumulate.",
+    "Who can create: Keystone-registration is Founder-only (current model). Stone Tablet tagging is automated by K490 + keystone_watcher.",
+    "Stone Tablets flow to Catacombs as the highest-authority LB knowledge artifact class (CJ #2258 Tower of Peace stack).",
+    "Confidence thresholds: verbatim=0.90+, paraphrase=0.50-0.89, thematic=0.30-0.49. Downstream consumers may filter by confidence.",
+    "The name 'Stone Tablets': Biblical (Moses, Ten Commandments), Geological (crystallized foundation-layer). 'Nodules of Knowledge' is the geological alternate name for claim-language use."
+  ]
+}

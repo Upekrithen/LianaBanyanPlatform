@@ -1,0 +1,27 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-16",
+  "keystone_phrase_verbatim": "A tool that measures its own value and shows only you, unless you agree to share it anonymously, or publicly.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.452602+00:00",
+  "primary_topic": "tool",
+  "domain": "anti-enshittification-user-agency",
+  "seed_keywords": [
+    "tool",
+    "measures",
+    "value",
+    "anonymous",
+    "publicly",
+    "share",
+    "privacy",
+    "enshittification",
+    "agency",
+    "opt-in"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B111",
+  "ratified_session": "B111",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-16.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-16: 'A tool that measures its own value and shows only you, unles...'. It monitors corpus content related to the 'anti-enshittification-user-agency' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-16' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

@@ -1,0 +1,25 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-23",
+  "keystone_phrase_verbatim": "What your hand finds to do, do it with your might.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.456363+00:00",
+  "primary_topic": "your",
+  "domain": "full-commitment-biblical",
+  "seed_keywords": [
+    "hand",
+    "might",
+    "ecclesiastes",
+    "biblical",
+    "commitment",
+    "full",
+    "finds",
+    "labor"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B122",
+  "ratified_session": "B122",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-23.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-23: 'What your hand finds to do, do it with your might....'. It monitors corpus content related to the 'full-commitment-biblical' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-23' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

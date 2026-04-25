@@ -1,0 +1,25 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-15",
+  "keystone_phrase_verbatim": "53 years of surviving the trenches of poordom, and I'm really good at it.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.451821+00:00",
+  "primary_topic": "years",
+  "domain": "biographical-competence-poverty",
+  "seed_keywords": [
+    "poordom",
+    "poverty",
+    "surviving",
+    "trenches",
+    "years",
+    "good",
+    "competence",
+    "self-mockery"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B111",
+  "ratified_session": "B111",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-15.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-15: '53 years of surviving the trenches of poordom, and I'm reall...'. It monitors corpus content related to the 'biographical-competence-poverty' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-15' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

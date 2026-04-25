@@ -1,0 +1,25 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-06",
+  "keystone_phrase_verbatim": "Nothing about us without us.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.447123+00:00",
+  "primary_topic": "nothing",
+  "domain": "participatory-governance",
+  "seed_keywords": [
+    "governance",
+    "participation",
+    "commons",
+    "designed",
+    "people",
+    "use",
+    "community",
+    "inclusive"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B110",
+  "ratified_session": "B110",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-06.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-06: 'Nothing about us without us....'. It monitors corpus content related to the 'participatory-governance' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-06' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}

@@ -1,0 +1,26 @@
+{
+  "miner_config_version": "K490",
+  "keystone_anchor_id": "KEYSTONE-03",
+  "keystone_phrase_verbatim": "I pray for potatoes at the end of a hoe handle.",
+  "inception_mode": "keystone-spawned",
+  "inception_session": "K490",
+  "inception_event_timestamp": "2026-04-25T13:47:54.445126+00:00",
+  "primary_topic": "pray",
+  "domain": "humility-of-ask",
+  "seed_keywords": [
+    "pray",
+    "potatoes",
+    "hoe",
+    "humble",
+    "ask",
+    "humility",
+    "labor",
+    "rural",
+    "concrete"
+  ],
+  "provenance": "project_rhetorical_keystones.md — B110",
+  "ratified_session": "B110",
+  "status": "pending-spawn",
+  "stone_tablet_output_file": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\miners\\stone_tablets\\KEYSTONE-03.jsonl",
+  "activation_notes": "This Miner-Scribe is anchored to KEYSTONE-03: 'I pray for potatoes at the end of a hoe handle....'. It monitors corpus content related to the 'humility-of-ask' domain. Stone Tablets it produces carry keystone_anchor_id='KEYSTONE-03' and flow to Catacombs as highest-authority LB knowledge artifacts."
+}
