@@ -1,0 +1,1 @@
+{"label": "P2-spaced-rep", "n": 10, "HOT": 7, "HIT": 2, "MISS": 1, "hot_rate": 0.7, "hit_or_hot_rate": 0.9, "miss_rate": 0.1, "mean_provenance_completeness": 1.0, "mean_latency_s": 4.007, "total_cost_usd": 0.026832, "note_underpowered": "N=10 — confidence intervals are wide; report effect size + direction only"}
