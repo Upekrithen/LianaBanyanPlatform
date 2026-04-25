@@ -1,0 +1,127 @@
+{
+  "generated_at": "2026-04-25T18:58:24.677383+00:00",
+  "session": "K494",
+  "k493_source": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\analysis\\gradient_data_K493.json",
+  "statistics": {
+    "n_keystones": 30,
+    "q1": 0.04598,
+    "median": 0.09124,
+    "q3": 0.12029
+  },
+  "hard_orphans": [
+    "KEYSTONE-15"
+  ],
+  "near_orphans": [
+    "KEYSTONE-02",
+    "KEYSTONE-03",
+    "KEYSTONE-07",
+    "KEYSTONE-10",
+    "KEYSTONE-17",
+    "KEYSTONE-18",
+    "KEYSTONE-26"
+  ],
+  "all_orphans": [
+    "KEYSTONE-15",
+    "KEYSTONE-02",
+    "KEYSTONE-03",
+    "KEYSTONE-07",
+    "KEYSTONE-10",
+    "KEYSTONE-17",
+    "KEYSTONE-18",
+    "KEYSTONE-26"
+  ],
+  "controls": [
+    "KEYSTONE-05",
+    "KEYSTONE-08",
+    "KEYSTONE-09",
+    "KEYSTONE-11",
+    "KEYSTONE-14",
+    "KEYSTONE-19",
+    "KEYSTONE-20",
+    "KEYSTONE-22"
+  ],
+  "middle": [
+    "KEYSTONE-00",
+    "KEYSTONE-01",
+    "KEYSTONE-04",
+    "KEYSTONE-06",
+    "KEYSTONE-12",
+    "KEYSTONE-13",
+    "KEYSTONE-16",
+    "KEYSTONE-21",
+    "KEYSTONE-23",
+    "KEYSTONE-24",
+    "KEYSTONE-25",
+    "KEYSTONE-27",
+    "KEYSTONE-28",
+    "KEYSTONE-29"
+  ],
+  "orphan_details": {
+    "KEYSTONE-15": {
+      "k493_score": 0.0,
+      "phrase": "53 years of surviving the trenches of poordom, and I'm reall…"
+    },
+    "KEYSTONE-02": {
+      "k493_score": 0.03164,
+      "phrase": "Especially from friendly fire."
+    },
+    "KEYSTONE-03": {
+      "k493_score": 0.03358,
+      "phrase": "I pray for potatoes at the end of a hoe handle."
+    },
+    "KEYSTONE-07": {
+      "k493_score": 0.0392,
+      "phrase": "The eighty percent is the only number where cooperation cost…"
+    },
+    "KEYSTONE-10": {
+      "k493_score": 0.04378,
+      "phrase": "The medallions are minted. The platform is built. The first …"
+    },
+    "KEYSTONE-17": {
+      "k493_score": 0.04505,
+      "phrase": "When all the Scribes sing together, The Harmony is Glorious."
+    },
+    "KEYSTONE-18": {
+      "k493_score": 0.02286,
+      "phrase": "The Choral Wave Reverberates the More Voices We Have."
+    },
+    "KEYSTONE-26": {
+      "k493_score": 0.03414,
+      "phrase": "A coward dies a thousand deaths; a hero only one."
+    }
+  },
+  "control_details": {
+    "KEYSTONE-05": {
+      "k493_score": 0.22788,
+      "phrase": "I know enough to know I don't know enough."
+    },
+    "KEYSTONE-08": {
+      "k493_score": 0.1217,
+      "phrase": "What we need is people and leadership; the money will follow…"
+    },
+    "KEYSTONE-09": {
+      "k493_score": 0.16049,
+      "phrase": "No Plan Survives First Contact."
+    },
+    "KEYSTONE-11": {
+      "k493_score": 0.24574,
+      "phrase": "Help each other help ourselves."
+    },
+    "KEYSTONE-14": {
+      "k493_score": 0.16067,
+      "phrase": "A rising tide lifts all boats. And I think I've built a syst…"
+    },
+    "KEYSTONE-19": {
+      "k493_score": 0.3089,
+      "phrase": "Each Scribe a Voice. All as One."
+    },
+    "KEYSTONE-20": {
+      "k493_score": 0.20632,
+      "phrase": "Build the Bridge Behind You."
+    },
+    "KEYSTONE-22": {
+      "k493_score": 0.1228,
+      "phrase": "I don't build escape tunnels. I build more arrows."
+    }
+  }
+}
