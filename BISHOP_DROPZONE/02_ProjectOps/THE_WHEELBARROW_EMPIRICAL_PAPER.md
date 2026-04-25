@@ -169,6 +169,60 @@ All three measurements exceed noise-floor by orders of magnitude. The direction 
 
 **What K500+ should refine:** apples-to-apples longitudinal measurement — same LLM-judged Eblet-tier methodology at N=500, N=1,000, N=5,000 Eblets. This would establish the asymptotic Inuka Coefficient as the substrate matures toward full corpus indexing.
 
+### 5.6 R13 K499 Cross-Vendor Benchmark (2026-04-25) — Cross-Vendor Mush Index at Current-Frontier Tier
+
+**R13 Results: 8/8 models show Cathedral lift. Cross-vendor mean lift: +86.2pp. Inter-rater κ = 0.7513.**
+
+K499 delivered the first cross-vendor, current-frontier-model replication of the Mush Index measurement. The R13 benchmark applies the Cold Start → Cathedral framework across 8 models from 4 vendors (OpenAI, Anthropic, Google, Perplexity) simultaneously, on the sealed Cranewell question bank (N=50 questions; deterministic HOT/HIT/MISS grading; full-corpus Cathedral injection via K477 Iter-C pathway for API models).
+
+**Benchmark configuration:**
+- **Model matrix:** GPT-5.5 (top), GPT-5.4-mini (mid), Opus 4.7 (top), Sonnet 4.6 (mid), Haiku 4.5 (cheap), Gemini 3.1 Pro (top), Gemini 3.1 Flash (mid), Sonar Pro (top)
+- **Conditions:** Cold (model alone, no substrate) and Cathedral (model + full Cranewell corpus, authority-framed)
+- **Cathedral injection format:** Knight-Cathedral authoritative-source header + 57,693-char Cranewell corpus
+- **Grading:** Deterministic HOT/HIT/MISS (primary) + LLM cross-check with Cohen's κ (quality assurance)
+- **Total calls:** 800
+
+**Results (all 8 models):**
+
+| Model | Tier | Cold HOT% | Cathedral HOT% | Mush Index (lift) |
+|---|---|---|---|---|
+| GPT-5.5 | top | 0% | 88% | **+88pp** |
+| GPT-5.4-mini | mid | 0% | 82% | **+82pp** |
+| Opus 4.7 | top | 0% | 98% | **+98pp** |
+| Sonnet 4.6 | mid | 0% | 86% | **+86pp** |
+| Haiku 4.5 | cheap | 0% | 90% | **+90pp** |
+| Gemini 3.1 Pro | top | 0% | 74% | **+74pp** |
+| Gemini 3.1 Flash | mid | 0% | 80% | **+80pp** |
+| Sonar Pro* | top | 2% | 94% | **+92pp** |
+
+*Sonar Pro has web search enabled; its cold baseline is not a true cold — even with web retrieval, it only reaches 2% HOT on the pure-synthetic Cranewell bank.
+
+**Cross-vendor mean Cathedral lift: +86.2pp** (R10 prior-gen baseline: +86.1pp — nearly identical across 3 generations).
+
+**What these results establish:**
+
+The Mush Index is not OpenAI-specific, not Anthropic-specific, not prior-generation-only. Every model in the matrix — including GPT-5.5, the current frontier — shows near-zero cold HOT% and dramatic Cathedral lift. Neither model would produce HOT answers without the Cathedral. With it, they answer from authoritative substrate at high accuracy.
+
+**Tier-equalization observations:**
+- **Anthropic:** Haiku 4.5 cathedral (90% HOT) vs Opus 4.7 cathedral (98% HOT) — 8pp gap at 21.6× cost difference.
+- **Google:** Gemini 3.1 Flash cathedral (80% HOT) > Gemini 3.1 Pro cathedral (74% HOT) — the mid-tier model BEAT the flagship.
+- **OpenAI:** GPT-5.4-mini cathedral (82% HOT) vs GPT-5.5 cathedral (88% HOT) — 6pp gap at 10.5× cost difference.
+
+The Cathedral closes — and in one case reverses — the tier gap. The knowledge substrate is the performance differentiator, not the model tier.
+
+**Strategic significance (Opening Gambit):**
+
+This is the splash benchmark for Opening Gambit launch. The claim: *the Cathedral Effect persists across all tested vendors, at current-frontier model tier, replicating and extending R10 and R11 findings*. Neither GPT-5.5 nor any other frontier model in the matrix answers Cranewell questions correctly without the substrate. The substrate is the differentiator — not model selection.
+
+**Methodology notes:**
+
+- Cold condition: model's system prompt = generic instruction only ("Answer based on your knowledge.")
+- Cathedral condition: full Cranewell corpus injected via authority-framed header (K477 Iter-C design, adapted from Playwright → direct API call)
+- HOT = exact substring match on `hot_required_elements`; HIT = response contains partial match; MISS = no match
+- TS-022 (OpenAI `max_completion_tokens` parameter) and TS-023 (Anthropic Sonnet 4.6 model ID correction) captured in Toolsmith
+
+**Report:** `librarian-mcp/r10_cross_vendor/results_R13_K499/REPORT_KNIGHT_K499_B123_R13_CROSS_VENDOR_BENCHMARK.md`
+
 ### 5.3 The K487 corpus-density vs Inuka Coefficient disparity (architectural-finding interpretation)
 
 K487's Bloodhound topology revealed an empirical fact that strengthens the Wheelbarrow / Mush Index claim:
