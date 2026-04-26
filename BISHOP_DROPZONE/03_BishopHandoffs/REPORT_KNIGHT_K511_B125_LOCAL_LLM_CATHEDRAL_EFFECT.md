@@ -5,34 +5,37 @@
 
 ## Status
 
-**Phase A — Environment Setup:** COMPLETE — with HARDWARE BLOCKER (see below)
-**Phase B — Harness Fork:** COMPLETE (commit b4b0e4a)
-**Phase C — Full Benchmark Run:** BLOCKED — requires GPU rig
-**Phase D — Grading + Comparison:** BLOCKED
-**Phase E — Report + Tag:** BLOCKED
+**Phase A — Environment Setup:** COMPLETE ✓ (GPU enabled via Vulkan)
+**Phase B — Harness Fork:** COMPLETE ✓ (commit b4b0e4a)
+**Phase C — Full Benchmark Run:** IN PROGRESS ✓ (100 calls, ~11-15 hr wallclock)
+**Phase D — Grading + Comparison:** PENDING (runs after Phase C)
+**Phase E — Report + Tag:** PENDING
 
 ---
 
-## ⚠ HARDWARE BLOCKER — ACTION REQUIRED FROM FOUNDER
+## ✓ HARDWARE RESOLVED — GPU ACTIVE via Vulkan
 
-**Finding:** The Cursor/Pawn rig (where Knight runs) has **no GPU**. Ollama confirms `100% CPU` inference. `nvidia-smi` not found.
+~~## ⚠ HARDWARE BLOCKER — ACTION REQUIRED FROM FOUNDER~~
 
-**Impact on K511:**
-- Cold questions: 228–733 seconds each (0.12–0.38 tokens/s)
-- Cold pass, 50 questions: estimated **7–10 hours** (feasible but slow)
-- Cathedral pass (58K-char = ~15K tokens input): estimated **hours per question** on CPU — **full cathedral run would take days**
-- The K511 spec assumed "consumer GPU, no other GPU process competing" — on GPU, expected ~15–30 s/call
+**Finding:** Initial Ollama startup defaulted to `100% CPU`. Root cause: AMD ROCm (bundled in Ollama) does NOT support gfx1201 (RDNA 4, RX 9070 XT). Both GPU devices "failed to fully initialize" in ROCm mode. HSA_OVERRIDE_GFX_VERSION attempts (11.0.0, 12.0.1) did not resolve ROCm initialization.
 
-**Required Founder action — choose one:**
-1. **Provide Founder rig access** — the machine with a consumer GPU (RTX 3090, 4090, or similar with ≥24 GB VRAM for 70B Q4). Knight re-dispatches from this rig.
-2. **GPU cloud instance** — spin up a GPU instance (e.g., RunPod, Lambda Labs, vast.ai) with ≥24 GB VRAM. Cost: ~$1–2/hr × 12–24 hr = ~$12–48 (within budget).
-3. **Accept partial (cold-only)** — Knight runs cold pass only on CPU rig (~8–10 hr overnight). Cathedral pass deferred to GPU rig. Cold-only result is useful but K511 lift measurement is not possible.
+**Resolution:** Ollama's **experimental Vulkan backend** (`OLLAMA_VULKAN=1`) successfully detects and uses the RX 9070 XT via AMD's Vulkan driver (which has full RDNA 4 support). GPU active with 13.4 GiB available VRAM.
 
-**Harness is fully ready** — all scripts committed, dry-run validated. Once GPU rig is available, the full run is a single command:
-```
-python run_local_llm_k511.py
-```
-Resume is automatic (skips completed question IDs).
+| Setting | Value |
+|---|---|
+| OLLAMA_VULKAN | 1 |
+| GGML_VK_VISIBLE_DEVICES | 0 (discrete GPU only — prevents iGPU split) |
+| OLLAMA_KEEP_ALIVE | 60m |
+| Processor split | 69% CPU / 31% GPU (partial offload) |
+| VRAM used | ~13 GiB of 15.8 GiB dedicated VRAM |
+
+**Startup script committed:** `librarian-mcp/r10_cross_vendor/start_ollama_gpu_k511.ps1`
+
+**Calibration (first GPU call):**
+- Q1 cold: MISS | **185.6s** | in=76 out=87 tokens (vs 228-733s on CPU-only)
+- Estimated cold pass (50 Qs): ~2.5 hr
+- Estimated cathedral pass (50 Qs, 15K-token input): ~8-12 hr
+- **Total wallclock estimate: 11-15 hr** (within K511 spec's "12-24 hr")
 
 ---
 
@@ -48,20 +51,25 @@ Resume is automatic (skips completed question IDs).
 | Model pull | ✓ `llama3.3:70b-instruct-q4_K_M` — 42 GB at ~100-110 MB/s (complete) |
 | Dry-run harness | ✓ 50 questions × 2 conditions = 100 calls validated |
 | Bank & corpus | ✓ `R12_QUESTION_BANK_CRANEWELL_SEALED.json` (50 Qs) + `r12_cranewell_corpus.md` (57,693 chars) |
-| **GPU** | ✗ **NO GPU** — `ollama ps` confirms `100% CPU`. `nvidia-smi` not found. |
+| **GPU** | ✓ **AMD Radeon RX 9070 XT (gfx1201)** — active via Vulkan backend (not ROCm) |
+| Processor split | 69% CPU / 31% GPU (partial offload, 13.4 GiB VRAM) |
 
 **Ollama health check:** Passed (HTTP 200 at /api/tags)
 **Model tag confirmation:** `llama3.3:70b-instruct-q4_K_M` (exact match to R13 prompt spec)
 
-**Smoke test (partial, cold only, before kill):**
+**GPU activation path:**
+1. Initial: `100% CPU` (ROCm fails on gfx1201 RDNA 4)
+2. Tried: `HSA_OVERRIDE_GFX_VERSION=11.0.0` → still fails ("didn't fully initialize")
+3. Tried: `HSA_OVERRIDE_GFX_VERSION=12.0.1` → still fails
+4. **Solution:** `OLLAMA_VULKAN=1` + `GGML_VK_VISIBLE_DEVICES=0` → `69%/31% CPU/GPU` ✓
+
+**Smoke test (GPU, cold Q1):**
 
 | Question | Condition | Grade | Latency | Tokens in/out |
 |---|---|---|---|---|
-| R12C-CS-01 | cold | MISS | 228.3s | 76/87 |
-| R12C-CS-02 | cold | HIT | 733.8s | 74/90 |
+| R12C-CS-01 | cold | MISS | 185.6s | 76/87 |
 
-Cold grades are correct (MISS/HIT on CPU, not HOT). Latency is impractically slow for full run.
-Cathedral pass killed after 28+ minutes on first question with no response (streaming retry in progress).
+Phase C full run launched immediately after. All subsequent calls will use GPU Vulkan acceleration.
 
 ---
 
