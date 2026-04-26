@@ -16,9 +16,10 @@ import { StatusBar } from './components/StatusBar'
 import { HomeView } from './components/HomeView'
 import { SettingsPanel } from './components/SettingsPanel'
 import { ModulesView } from './components/ModulesView'
+import { DisciplineRulesPanel } from './components/DisciplineRulesPanel'
 import { getAllModules } from './modules/registry'
 
-export type View = 'home' | 'settings' | 'modules' | string  // string for module ids
+export type View = 'home' | 'settings' | 'modules' | 'discipline' | string  // string for module ids
 
 declare global {
   interface Window {
@@ -200,6 +201,9 @@ export default function App(): React.ReactElement {
         <div onClick={() => setView('modules')} style={S.navItem(view === 'modules')}>
           <span>🧩</span> Modules
         </div>
+        <div onClick={() => setView('discipline')} style={S.navItem(view === 'discipline')}>
+          <span>⚖️</span> Rules
+        </div>
         <div onClick={() => setView('settings')} style={S.navItem(view === 'settings')}>
           <span>⚙️</span> Settings
         </div>
@@ -222,6 +226,8 @@ export default function App(): React.ReactElement {
 
         {loading ? (
           <div style={{ padding: '40px', color: '#475569' }}>Initializing...</div>
+        ) : view === 'discipline' ? (
+          <DisciplineRulesPanel />
         ) : view === 'settings' ? (
           <SettingsPanel
             settings={settings}

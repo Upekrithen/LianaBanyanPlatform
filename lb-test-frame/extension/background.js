@@ -6,9 +6,12 @@
  *   - AI vendor session detection
  *   - Verification demo mode coordination
  *   - opt_in_share telemetry (with explicit consent)
+ *   - Discipline Rule Engine (K513 / B126 — A&A #2294)
  *
- * K502 / B124
+ * K502 / B124 — updated K513 / B126
  */
+
+import { handleDisciplineMessage } from './discipline_engine.js';
 
 const ENRICH_ENDPOINT = 'http://127.0.0.1:7712/enrich';
 const DAEMON_TIMEOUT_MS = 5000;
@@ -198,6 +201,24 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       chrome.tabs.create({ url: chrome.runtime.getURL('pages/verify.html') });
       sendResponse({ ok: true });
       return false;
+    }
+
+    case 'OPEN_DISCIPLINE_RULES': {
+      chrome.tabs.create({ url: chrome.runtime.getURL('pages/discipline-rules.html') });
+      sendResponse({ ok: true });
+      return false;
+    }
+
+    // ── Discipline engine messages (K513) ────────────────────────────────────
+    case 'DISCIPLINE_CHECK':
+    case 'DISCIPLINE_GET_RULES':
+    case 'DISCIPLINE_SAVE_RULE':
+    case 'DISCIPLINE_DELETE_RULE':
+    case 'DISCIPLINE_INSTALL_STARTER':
+    case 'DISCIPLINE_GET_AUDIT':
+    case 'DISCIPLINE_MARK_CONSULTED': {
+      handleDisciplineMessage(message, sendResponse);
+      return true;
     }
   }
 });

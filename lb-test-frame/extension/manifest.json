@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "LB Test Frame",
-  "version": "1.1.0",
-  "description": "Verify the Cathedral Effect on your own AI session. Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot — no API key required. v1.1: network-intercept fix for Perplexity (K508).",
+  "version": "1.2.0",
+  "description": "Verify the Cathedral Effect on your own AI session. Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot — no API key required. v1.2: Discipline Rule Editor (K513) — personal Augur rules that enforce how your AI behaves.",
   "short_name": "LB Test Frame",
   "icons": {
     "16": "icons/icon16.png",
@@ -56,7 +56,7 @@
   "options_page": "pages/options.html",
   "web_accessible_resources": [
     {
-      "resources": ["pages/onboarding.html", "pages/verify.html"],
+      "resources": ["pages/onboarding.html", "pages/verify.html", "pages/discipline-rules.html"],
       "matches": ["<all_urls>"]
     }
   ],

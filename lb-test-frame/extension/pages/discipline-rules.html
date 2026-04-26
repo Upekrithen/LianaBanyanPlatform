@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!--
+  LB Test Frame — Discipline Rule Editor (K513 / B126)
+
+  Member-facing Augur rule editor — A&A #2294 (Personal Discipline Enforcement Layer).
+  Rules are stored in chrome.storage.local (personal scope, never leaves device by default).
+  Each rule is a single Augur: trigger + required-consult + failure-action.
+
+  Architecture:
+    This page ↔ background.js (discipline_engine.js message handler)
+    discipline_engine.js ← content.js (on every AI submission)
+
+  K513 / B126
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LB Test Frame — Discipline Rules</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f1117;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 40px;
+      max-width: 760px;
+      margin: 0 auto;
+      font-size: 14px;
+    }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; color: #f1f5f9; }
+    .sub { color: #475569; margin-bottom: 28px; font-size: 13px; }
+
+    /* Section headers */
+    .section-title {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px;
+      color: #475569; font-weight: 600; margin-bottom: 10px;
+    }
+
+    /* Rule card */
+    .rule-card {
+      background: #151c2c; border: 1px solid #1e2333; border-radius: 10px;
+      padding: 14px 18px; margin-bottom: 10px;
+    }
+    .rule-card.disabled { opacity: 0.55; }
+    .rule-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .rule-name { font-weight: 600; color: #f1f5f9; flex: 1; }
+    .badge {
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+    }
+    .badge-block   { background: #7f1d1d; color: #fca5a5; }
+    .badge-warn    { background: #78350f; color: #fde68a; }
+    .badge-enrich  { background: #1e3a5f; color: #93c5fd; }
+    .badge-starter { background: #14532d; color: #86efac; font-size: 10px; }
+    .rule-meta { font-size: 12px; color: #475569; line-height: 1.6; }
+    .rule-meta span { color: #94a3b8; }
+    .rule-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .audit-section { margin-top: 10px; border-top: 1px solid #1e2333; padding-top: 10px; display: none; }
+    .audit-entry { font-size: 11px; color: #64748b; margin-bottom: 3px; }
+    .audit-entry .ts { color: #334155; }
+
+    /* Buttons */
+    button {
+      padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    .btn-primary   { background: #2563eb; color: white; }
+    .btn-secondary { background: #1e2333; color: #94a3b8; border: 1px solid #334155; }
+    .btn-danger    { background: transparent; color: #f87171; border: 1px solid #7f1d1d; }
+    .btn-success   { background: #15803d; color: #dcfce7; }
+    .btn-sm        { padding: 4px 10px; font-size: 11px; }
+
+    /* Form */
+    .form-section {
+      background: #151c2c; border: 1px solid #2563eb; border-radius: 10px;
+      padding: 20px; margin-top: 24px; display: none;
+    }
+    .form-section.visible { display: block; }
+    .form-title { font-size: 15px; font-weight: 700; color: #f1f5f9; margin-bottom: 16px; }
+    .form-row { margin-bottom: 14px; }
+    .form-label { font-size: 12px; color: #94a3b8; margin-bottom: 5px; display: block; }
+    input[type=text], textarea, select {
+      width: 100%; background: #0f1117; border: 1px solid #334155;
+      color: #e2e8f0; border-radius: 6px; padding: 8px 10px; font-size: 13px;
+      font-family: inherit;
+    }
+    input[type=range] { width: 100%; accent-color: #2563eb; }
+    .freshness-val { color: #60a5fa; font-size: 12px; margin-top: 4px; }
+    textarea { min-height: 60px; resize: vertical; }
+    .form-row-inline { display: flex; gap: 12px; }
+    .form-row-inline .form-row { flex: 1; }
+
+    /* Toggle switch */
+    .switch-row { display: flex; align-items: center; gap: 10px; }
+    .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background: #1e2333; border-radius: 20px; transition: 0.2s;
+    }
+    .slider:before {
+      position: absolute; content: ''; height: 14px; width: 14px;
+      left: 3px; bottom: 3px; background: #475569;
+      border-radius: 50%; transition: 0.2s;
+    }
+    input:checked + .slider { background: #2563eb; }
+    input:checked + .slider:before { transform: translateX(16px); background: white; }
+
+    /* Starter rules grid */
+    .starters-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+    .starter-card {
+      background: #0d1525; border: 1px solid #1e2b3d; border-radius: 8px;
+      padding: 12px 14px; cursor: pointer; transition: border-color 0.15s;
+    }
+    .starter-card:hover { border-color: #2563eb; }
+    .starter-card.installed { border-color: #15803d; opacity: 0.7; cursor: default; }
+    .starter-name { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 4px; }
+    .starter-desc { font-size: 11px; color: #475569; line-height: 1.5; }
+    .starter-tag { font-size: 10px; color: #64748b; margin-top: 6px; }
+
+    .separator { height: 1px; background: #1e2333; margin: 24px 0; }
+    .empty-state { color: #334155; font-size: 13px; padding: 20px; text-align: center; border: 1px dashed #1e2333; border-radius: 8px; }
+    .notice { font-size: 12px; color: #4ade80; margin-top: 6px; display: none; }
+    .error-notice { font-size: 12px; color: #f87171; margin-top: 6px; display: none; }
+    a { color: #60a5fa; text-decoration: none; font-size: 12px; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Discipline Rules</h1>
+  <p class="sub">
+    Personal Augur rules that enforce how your AI behaves before answering. Stored locally — never leaves your device.
+    <a href="https://lianabanyan.com/disciplines" target="_blank">How rules work →</a>
+  </p>
+
+  <!-- Active rules list -->
+  <div class="section-title">Your Rules (<span id="rule-count">0</span>)</div>
+  <div id="rule-list">
+    <div class="empty-state">No rules yet. Install a starter rule below or create your own.</div>
+  </div>
+
+  <div style="margin-top: 12px; display: flex; gap: 10px;">
+    <button class="btn-primary" id="btn-create">+ New Rule</button>
+    <span class="notice" id="save-notice">Saved.</span>
+    <span class="error-notice" id="error-notice"></span>
+  </div>
+
+  <div class="separator"></div>
+
+  <!-- Starter rules -->
+  <div class="section-title">Starter Rules — Install in one click</div>
+  <div class="starters-grid" id="starters-grid"></div>
+
+  <div class="separator"></div>
+
+  <!-- Create / Edit form -->
+  <div class="form-section" id="form-section">
+    <div class="form-title" id="form-title">Create Rule</div>
+
+    <input type="hidden" id="rule-id" />
+
+    <div class="form-row">
+      <label class="form-label">Rule name *</label>
+      <input type="text" id="rule-name" placeholder="e.g. Always consult contracts before legal questions" />
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Trigger keywords (comma-separated) *</label>
+      <input type="text" id="rule-patterns" placeholder="contract, NDA, agreement, liability, clause" />
+    </div>
+
+    <div class="form-row-inline">
+      <div class="form-row">
+        <label class="form-label">Required consultation source</label>
+        <select id="rule-source">
+          <option value="cathedral">Cathedral (LB substrate)</option>
+          <option value="member_substrate">My Substrate</option>
+          <option value="daemon">Daemon state</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Domain (optional — e.g. contracts, health)</label>
+        <input type="text" id="rule-domain" placeholder="contracts" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Freshness window — <span class="freshness-val" id="freshness-display">10 minutes</span></label>
+      <input type="range" id="rule-freshness" min="60" max="86400" step="60" value="600" />
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Failure action (what happens when consult is stale)</label>
+      <select id="rule-action">
+        <option value="warn">Warn — show toast, allow submission</option>
+        <option value="block">Block — cancel submission with message</option>
+        <option value="enrich">Enrich — auto-prepend substrate context, allow</option>
+        <option value="substitute">Substitute — replace query with enriched version</option>
+      </select>
+    </div>
+
+    <div class="form-row" id="block-msg-row">
+      <label class="form-label">Block / warn message (shown to you when rule fires)</label>
+      <textarea id="rule-message" placeholder="Consult your contracts substrate first before submitting this query."></textarea>
+    </div>
+
+    <div class="switch-row form-row">
+      <label class="switch">
+        <input type="checkbox" id="rule-enabled" checked />
+        <span class="slider"></span>
+      </label>
+      <span style="font-size:13px; color:#94a3b8;">Rule enabled</span>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top: 4px;">
+      <button class="btn-primary" id="btn-save-rule">Save Rule</button>
+      <button class="btn-secondary" id="btn-cancel-rule">Cancel</button>
+    </div>
+  </div>
+
+  <script src="../discipline-rules.js"></script>
+</body>
+</html>
