@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from discipline_wing.consensus import AugurResult, ConsensusDecision, ConsensusLayer
+from discipline_wing.chronicler import write_chronicler
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
@@ -283,6 +284,21 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
         consensus_rules = wing_config.get("consensus_rules", {})
         layer = ConsensusLayer(consensus_rules)
         decision: ConsensusDecision = layer.arbitrate(augur_results)
+
+        # Chronicler UpTick — per-Augur tablet entry for every evaluation (K515)
+        for r in augur_results:
+            write_chronicler(
+                augur_id=r.augur_id,
+                augur_name=r.augur_name,
+                triggered=r.triggered,
+                signal=r.signal,
+                failure_action=r.failure_action,
+                consensus_decision=decision.decision,
+                file_path=tc.file_path,
+                tool_name=tc.tool_name,
+                elapsed_ms=r.elapsed_ms,
+                reason=r.reason,
+            )
 
         elapsed = int((time.monotonic() - t_start) * 1000)
 

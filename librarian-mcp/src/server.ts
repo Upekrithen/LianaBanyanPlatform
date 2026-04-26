@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { readFileSync, existsSync, writeFileSync, mkdirSync } from "fs";
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync } from "fs";
+import { tmpdir } from "os";
 import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
 import { execSync } from "child_process";
 import { resolve, dirname } from "path";
@@ -3843,6 +3844,146 @@ registerTool(
         }, null, 2),
       }],
     };
+  }
+);
+
+// ═══════════════════════════════════════════
+// K515 — Chronos + Bureau MCP Tools
+// A&A #2299 (Chronos), #2300 (Chroniclers), #2306 (Embedded Correspondent + Bureau)
+// ═══════════════════════════════════════════
+
+// WORKSPACE_ROOT already declared above — shared reference
+
+/**
+ * Run a discipline_wing Python snippet with typed args.
+ * The snippet may reference `_args` (a dict loaded from args param).
+ * The snippet must set `result = ...` as its last statement.
+ * Returns parsed JSON from stdout, or {error: ...} on failure (fail-safe).
+ *
+ * Uses two temp files to avoid shell quoting issues on Windows:
+ *   - a .json args file  (cleaned up in finally)
+ *   - a .py code file    (cleaned up in finally)
+ */
+function runWingHelper(pySnippet: string, args: unknown): unknown {
+  const stamp = `${Date.now()}_${process.pid}`;
+  const argsTmp = resolve(tmpdir(), `liana_args_${stamp}.json`);
+  const codeTmp = resolve(tmpdir(), `liana_wing_${stamp}.py`);
+
+  const fullCode = [
+    "import sys, json",
+    `sys.path.insert(0, r"${WORKSPACE_ROOT}")`,
+    `with open(r"${argsTmp}", encoding="utf-8") as _f:`,
+    `    _args = json.load(_f)`,
+    pySnippet.trim(),
+    "print(json.dumps(result))",
+  ].join("\n");
+
+  try {
+    writeFileSync(argsTmp, JSON.stringify(args), "utf-8");
+    writeFileSync(codeTmp, fullCode, "utf-8");
+    const out = execSync(`python "${codeTmp}"`, {
+      encoding: "utf-8",
+      timeout: 15000,
+      env: { ...process.env, PYTHONIOENCODING: "utf-8" },
+    });
+    return JSON.parse(out.trim());
+  } catch (err) {
+    return { error: String(err) };
+  } finally {
+    try { unlinkSync(argsTmp); } catch { /* ignore */ }
+    try { unlinkSync(codeTmp); } catch { /* ignore */ }
+  }
+}
+
+server.tool(
+  "chronos_query",
+  "K515 — Chronos time-state aggregation query. Reads per-Augur Chronicler tablets and returns Wing-wide or per-Augur statistics. Returns fire counts, rates, trends, and last-fire timestamps. A&A #2299/#2300.",
+  {
+    augur_ids: z.array(z.string()).optional().describe("Specific Augur IDs to query (omit for all)"),
+    since_ts: z.string().optional().describe("ISO timestamp — only include entries after this time"),
+  },
+  async ({ augur_ids, since_ts }) => {
+    const result = runWingHelper(
+      `from discipline_wing.chronicler import wing_chronos_query
+result = wing_chronos_query(
+    augur_ids=_args.get("augur_ids"),
+    since_ts=_args.get("since_ts"),
+)`,
+      { augur_ids: augur_ids ?? null, since_ts: since_ts ?? null }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "correspondent_log",
+  "K515 — Embedded Correspondent producer. Write a reasoning chunk to the agent's tablet; evaluates against 7 risk-pattern Augurs (vendor-secret-rotation, force-push, schema-destruction, filesystem-wipe, permission-grant, api-spend-spike, toolsmith-missing). Returns pre-execution advisories. A&A #2306. Closes K512.5 vulnerability class.",
+  {
+    agent: z.string().describe("Agent name: 'knight', 'bishop', 'pawn', 'rook'"),
+    session: z.string().describe("Session ID, e.g. 'K515', 'B126'"),
+    chunk: z.string().describe("Reasoning chunk text to log and evaluate"),
+    context: z.record(z.unknown()).optional().describe("Optional context: {phase, tool_about_to_run, file_paths_in_scope}"),
+  },
+  async ({ agent, session, chunk, context }) => {
+    const result = runWingHelper(
+      `from discipline_wing.bureau import write_chunk
+result = write_chunk(
+    agent=_args["agent"],
+    session=_args["session"],
+    chunk_text=_args["chunk"],
+    context=_args.get("context", {}),
+)`,
+      { agent, session, chunk, context: context ?? {} }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "bureau_subscribe",
+  "K515 — Bureau subscription read (pull mode). Retrieves recent reasoning chunks from Embedded Correspondent tablets, filtered by risk pattern. Bishop uses this to watch other agents' reasoning streams for pre-execution risk signals. A&A #2306.",
+  {
+    watching_agent: z.string().describe("The subscribing agent: 'bishop', 'knight', etc."),
+    risk_filter: z.array(z.string()).optional().describe("Risk pattern Augur IDs to filter on (omit = all)"),
+    since_ts: z.string().optional().describe("Only return chunks after this ISO timestamp"),
+  },
+  async ({ watching_agent, risk_filter, since_ts }) => {
+    const result = runWingHelper(
+      `from discipline_wing.bureau import bureau_subscribe
+result = bureau_subscribe(
+    watching_agent=_args["watching_agent"],
+    risk_filter=_args.get("risk_filter"),
+    since_ts=_args.get("since_ts"),
+)`,
+      { watching_agent, risk_filter: risk_filter ?? null, since_ts: since_ts ?? null }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "bureau_query",
+  "K515 — Bureau aggregate query (Chronos-style, for reasoning streams). Aggregates reasoning chunks across agents and sessions; filterable by agent, session, time range, and risk-pattern Augur ID. A&A #2306.",
+  {
+    agent: z.string().optional().describe("Filter to one agent (omit = all agents)"),
+    session: z.string().optional().describe("Filter to one session (omit = all sessions)"),
+    since_ts: z.string().optional().describe("ISO timestamp filter"),
+    risk_filter: z.string().optional().describe("Filter to chunks that triggered this Augur ID"),
+    limit: z.number().int().min(1).max(200).optional().default(50).describe("Max chunks to return"),
+  },
+  async ({ agent, session, since_ts, risk_filter, limit }) => {
+    const result = runWingHelper(
+      `from discipline_wing.bureau import query_bureau
+result = query_bureau(
+    agent=_args.get("agent"),
+    session=_args.get("session"),
+    since_ts=_args.get("since_ts"),
+    risk_filter=_args.get("risk_filter"),
+    limit=_args.get("limit", 50),
+)`,
+      { agent: agent ?? null, session: session ?? null, since_ts: since_ts ?? null, risk_filter: risk_filter ?? null, limit: limit ?? 50 }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   }
 );
 

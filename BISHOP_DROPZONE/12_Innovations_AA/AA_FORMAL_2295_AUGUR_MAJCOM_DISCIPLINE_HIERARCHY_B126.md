@@ -182,7 +182,7 @@ This very session demonstrates the Tier 2-5 architecture in conception even befo
 
 ### Anchor 3 — Existing Stitchpunk infrastructure ready to host the MAJCOM
 
-The temporal-substrate primitives (#2299–#2305) are filed; the Cathedral Federation Protocol (#2292) is filed; the Personal Discipline Enforcement Layer (#2294) is filed. K514 (queued for next-session dispatch) is the Wing MVP; K515 adds Chronos+Chroniclers integration; K516 adds Dragonriders sandbox; K517 adds TimeWave Security + Angel of Death; K518 ships the member-tier Wing deployment via the LB Frame. **The infrastructure to materialize Tiers 2-5 already exists in the architecture record; what this filing patents is the cross-tier organization itself.**
+The temporal-substrate primitives (#2299–#2305) are filed; the Cathedral Federation Protocol (#2292) is filed; the Personal Discipline Enforcement Layer (#2294) is filed. **K514 SHIPPED** the Wing MVP; **K515 SHIPPED** the Twin Observer Pattern — Chronos+Chroniclers (component-state) + Embedded Correspondent+Bureau (reasoning-state) — with 17/17 verification checks and the K512.5 regression test empirically closed. K516 adds Dragonriders sandbox; K517 adds TimeWave Security + Angel of Death; K518 ships the member-tier Wing deployment via the LB Frame. **The infrastructure to materialize Tiers 2-5 already exists in the architecture record; what this filing patents is the cross-tier organization itself.**
 
 ---
 
@@ -265,7 +265,7 @@ The cooperative-economic kicker: when LB scales to N members, MAJCOM-LB federate
 |---|---|---|---|
 | K513 | Discipline Rule Editor (UI for #2294 single-Augur installation by members) | Tier 1 | post-K512 |
 | K514 | Bishop Wing MVP (5-7 starter Augurs, Consensus Layer, basic telemetry) | Tier 3 | post-K513 |
-| K515 | Chronos + Chroniclers integration with Wing (per-Augur time-state visibility, per-component continuous state) | Tier 3 enhancement | post-K514 |
+| K515 | Chronos + Chroniclers + Embedded Correspondent + Bureau (Twin Observer Pattern — SHIPPED 2026-04-26, 17/17 checks, K512.5 regression closed) | Tier 3 enhancement | LANDED |
 | K516 | Dragonriders sandbox integration (Phase-Shift hypothetical-evaluation) | Tier 3 enhancement | post-K515 |
 | K517 | TimeWave Security + Angel of Death (Bury mode) integration | Tier 3 enhancement | post-K516 |
 | K518 | Member-tier Wing deployment via LB Frame extension + Helm PWA | Tier 3 distribution | post-K517 |
