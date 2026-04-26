@@ -32,8 +32,18 @@ import { MemberCathedralPreview } from './MemberCathedralPreview'
 import { BloodhoundModule } from './BloodhoundModule'
 import { MinerModule } from './MinerModule'
 import { SculptorModule } from './SculptorModule'
+import { PawnModule } from './PawnModule'
 
 const BUILTIN_MODULES: HelmModule[] = [
+  {
+    id: 'pawn',
+    name: 'Pawn',
+    description: 'Cathedral-injected Perplexity chat. Enriches every query with authoritative LB context before sending to Perplexity API. Requires PPLX_API_KEY in daemon environment.',
+    enabledByDefault: false,
+    category: 'tools',
+    component: PawnModule,
+    version: '0.1.0',
+  },
   {
     id: 'member-cathedral-preview',
     name: 'Member Cathedral',

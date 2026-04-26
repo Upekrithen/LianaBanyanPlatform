@@ -12,17 +12,21 @@ Transport: SSE (FastMCP built-in).
   POST http://localhost:<port>/messages/ — MCP message endpoint
   GET  http://localhost:<port>/mcp      — streamable-http endpoint
 
-Comet Bridge endpoints (REST, separate port = main_port + 1, default 7712):
+Comet Bridge / Pawn Portal endpoints (REST, port = main_port + 1, default 7712):
   GET  http://127.0.0.1:<rest_port>/health   — liveness check
-  POST http://127.0.0.1:<rest_port>/enrich   — Cathedral injection for a query
+  POST http://127.0.0.1:<rest_port>/enrich   — Cathedral injection (enriched query only)
        Body:    { "query": "..." }
        Returns: { "enriched_query": "...", "intent": "...", "token_count": N }
+  POST http://127.0.0.1:<rest_port>/pawn     — Cathedral injection + Perplexity API call
+       Body:    { "query": "...", "model": "(optional)" }
+       Returns: { "answer": "...", "intent": "...", "token_count": N,
+                  "enriched_chars": N, "error": null }
+       Requires: PPLX_API_KEY in environment
 
 The REST server is a lightweight threading.HTTPServer — no extra deps, additive
-to the existing MCP/SSE surface. Chrome extensions call the REST port; AI clients
-connect via SSE/MCP on the main port.
+to the existing MCP/SSE surface.
 
-Architecture note (K484 / K485A):
+Architecture note (K484 / K485A / K509):
   This wrapper is intentionally thin. It imports the published
   librarian-mcp-public package without modification (BRIDLE guardrail).
   Future features (bedrock ingest, Miner/Sculptor triggers) are added
@@ -36,6 +40,8 @@ import json
 import os
 import sys
 import threading
+import urllib.request
+import urllib.error
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 # ─── Iter-A / K477 authoritative-source wrapper ───────────────────────────────
@@ -146,6 +152,51 @@ def _build_enriched_query(query: str) -> dict:
     }
 
 
+# ─── Perplexity API call ─────────────────────────────────────────────────────
+
+# Default model — sonar-pro has web search + long context; good for Cathedral
+# augmented queries where authority wrapper should dominate web results.
+_DEFAULT_PPLX_MODEL = "sonar-pro"
+
+
+def _call_perplexity(enriched_query: str, api_key: str, model: str = _DEFAULT_PPLX_MODEL) -> dict:
+    """POST enriched_query to Perplexity API. Returns { answer, usage, error }.
+
+    Uses stdlib urllib only — no extra dependencies.
+    Blocks until the full response arrives (non-streaming, V0).
+    Timeout: 90s (Perplexity can be slow on complex queries with web search).
+    """
+    url = "https://api.perplexity.ai/chat/completions"
+    payload = json.dumps({
+        "model": model,
+        "messages": [{"role": "user", "content": enriched_query}],
+        "stream": False,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        url,
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=90) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            answer = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            usage  = data.get("usage", {})
+            return {"answer": answer, "usage": usage, "error": None}
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        return {"answer": "", "usage": {}, "error": f"HTTP {exc.code}: {body[:300]}"}
+    except Exception as exc:
+        return {"answer": "", "usage": {}, "error": str(exc)}
+
+
 # ─── REST HTTP handler ────────────────────────────────────────────────────────
 
 class EnrichHandler(BaseHTTPRequestHandler):
@@ -182,7 +233,7 @@ class EnrichHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def do_POST(self):
-        if self.path != "/enrich":
+        if self.path not in ("/enrich", "/pawn"):
             self.send_response(404)
             self.end_headers()
             return
@@ -208,9 +259,46 @@ class EnrichHandler(BaseHTTPRequestHandler):
             self.end_headers()
             return
 
-        result = _build_enriched_query(query)
-        body = json.dumps(result, ensure_ascii=False).encode("utf-8")
+        # ── /enrich — Cathedral injection only ───────────────────────────────
+        if self.path == "/enrich":
+            result = _build_enriched_query(query)
+            body = json.dumps(result, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self._send_cors_headers()
+            self.end_headers()
+            self.wfile.write(body)
+            return
 
+        # ── /pawn — Cathedral injection + Perplexity API ─────────────────────
+        api_key = os.environ.get("PPLX_API_KEY", "").strip()
+        if not api_key:
+            err = json.dumps({
+                "error": "PPLX_API_KEY not found in daemon environment. "
+                         "Load SDS.env before starting Helm.",
+                "answer": "",
+            }).encode()
+            self.send_response(503)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self._send_cors_headers()
+            self.end_headers()
+            self.wfile.write(err)
+            return
+
+        model = payload.get("model", _DEFAULT_PPLX_MODEL)
+        enrich = _build_enriched_query(query)
+        pplx   = _call_perplexity(enrich["enriched_query"], api_key, model)
+
+        result = {
+            "answer":         pplx["answer"],
+            "intent":         enrich["intent"],
+            "token_count":    enrich.get("token_count", 0),
+            "enriched_chars": len(enrich["enriched_query"]),
+            "usage":          pplx.get("usage", {}),
+            "error":          pplx["error"],
+        }
+        body = json.dumps(result, ensure_ascii=False).encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
