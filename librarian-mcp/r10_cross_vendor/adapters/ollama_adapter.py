@@ -5,7 +5,7 @@ Calls the Ollama chat completions API at http://localhost:11434/api/chat.
 No API key required (local inference).
 Cost is always $0.00 (compute-only; not tracked).
 
-Target model: llama3.3:70b-instruct-q4_K_M
+Target model: llama3.1:8b-instruct-q4_K_M
 Endpoint: http://localhost:11434/api/chat
 Temperature: 0.0 (deterministic)
 
@@ -20,7 +20,7 @@ import urllib.error
 from . import AdapterResponse
 
 OLLAMA_BASE_URL = "http://localhost:11434"
-DEFAULT_MODEL   = "llama3.3:70b-instruct-q4_K_M"
+DEFAULT_MODEL   = "llama3.1:8b-instruct-q4_K_M"
 
 PRICING: dict[str, dict] = {}
 DEFAULT_PRICING = {"input": 0.0, "output": 0.0}   # local — no cost
@@ -67,6 +67,7 @@ def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 7200) 
         "options": {
             "temperature": 0.0,
             "num_predict": 800,
+            "num_ctx": 20000,   # override Ollama default (4096) — cathedral prompt is ~15K tokens
         },
     }
     body = json.dumps(payload).encode("utf-8")

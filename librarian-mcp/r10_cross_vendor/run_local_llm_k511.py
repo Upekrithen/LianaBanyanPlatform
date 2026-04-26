@@ -13,7 +13,7 @@ Purpose:
   no internet dependency, no API key).
 
 Matrix: 1 model × 2 conditions × 50 questions = 100 LLM calls
-  Model:   llama3.3:70b-instruct-q4_K_M  (Ollama local)
+  Model:   llama3.1:8b-instruct-q4_K_M  (Ollama local)
   Cold:    model alone, no Cathedral substrate
   Cathedral: model + full R12 Cranewell corpus (same protocol as R13)
 
@@ -49,11 +49,11 @@ Usage:
     python run_local_llm_k511.py --no-resume
 
     # Custom model:
-    python run_local_llm_k511.py --model llama3.3:70b
+    python run_local_llm_k511.py --model llama3.1:8b
 
 Prerequisites:
     - Ollama running at http://localhost:11434
-    - Model pulled: ollama pull llama3.3:70b-instruct-q4_K_M
+    - Model pulled: ollama pull llama3.1:8b-instruct-q4_K_M
     - Python 3.9+ (no extra packages; uses stdlib only for Ollama calls)
 
 Output: librarian-mcp/r10_cross_vendor/results_local_llm_k511/
@@ -91,8 +91,8 @@ CORPUS_FILE = SCRIPT_DIR / "r12_cranewell_corpus.md"
 
 # ─── Model config ─────────────────────────────────────────────────────────────
 
-DEFAULT_MODEL = "llama3.3:70b-instruct-q4_K_M"
-MODEL_LABEL   = "Llama 3.3 70B Q4"
+DEFAULT_MODEL = "llama3.1:8b-instruct-q4_K_M"
+MODEL_LABEL   = "Llama 3.1 8B Q4"
 VENDOR_LABEL  = "ollama_local"
 
 CONDITIONS = ["cold", "cathedral"]
