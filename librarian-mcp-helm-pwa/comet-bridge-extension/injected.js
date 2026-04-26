@@ -35,11 +35,11 @@
 (function () {
   'use strict';
 
-  // ── v0.2.1 world-probe (must be first — fires before any other code) ──────────
+  // ── v0.2.2 world-probe (must be first — fires before any other code) ──────────
   // In MAIN world: typeof chrome === 'undefined'  ← correct
-  // In ISOLATED world: typeof chrome === 'object' ← world:"MAIN" not honored
+  // In ISOLATED world: typeof chrome === 'object' ← programmatic registration also failed
   console.log(
-    '[CometBridge] injected.js TOP-OF-FILE v0.2.1 | world-probe: chrome=%s | href=%s',
+    '[CometBridge] injected.js TOP-OF-FILE v0.2.2 | world-probe: chrome=%s | href=%s',
     typeof chrome,
     window.location.href.slice(0, 80),
   );

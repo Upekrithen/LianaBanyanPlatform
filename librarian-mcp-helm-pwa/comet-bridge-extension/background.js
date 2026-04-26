@@ -7,7 +7,11 @@
  *  - Return the enriched query (or original on daemon-down fallback)
  *  - Expose PING_DAEMON for the popup status check
  *
- * K485A / B123
+ * v0.2.2: MAIN-world injection is handled by content.js via <script> tag.
+ * No chrome.scripting needed here — script-tag injection has zero dependency
+ * on the world: field and works in every Chromium fork regardless of MV3 version.
+ *
+ * K508 / B125
  */
 
 const ENRICH_ENDPOINT = 'http://127.0.0.1:7712/enrich';

@@ -1,5 +1,5 @@
 /**
- * Comet Bridge — ISOLATED World Bridge (K508 / B125)
+ * Comet Bridge — ISOLATED World Bridge (K508 / B125 / v0.2.2)
  *
  * Bridges between the MAIN world fetch interceptor (injected.js) and
  * the extension background service worker. This script runs in the
@@ -20,16 +20,33 @@
  *   content.js   →  window.postMessage({ __cometBridge: 'response', requestId, ... })
  *   injected.js  ←  window.addEventListener('message', ...)
  *
- * The K485A keydown intercept + DOM-replacement approach is REMOVED. It failed
- * because: (a) Perplexity's DOM structure changed and CSS selectors no longer
- * match the active input element, and (b) the re-fired synthetic KeyboardEvent
- * is not processed by React's event system. The network-intercept approach in
- * injected.js is DOM-independent and version-proof.
+ * v0.2.2: injected.js is injected via a <script> tag appended to the DOM.
+ * This bypasses both the declarative world:"MAIN" manifest key and the
+ * programmatic chrome.scripting API — both silently fail in Comet's MV3 fork.
+ * Script-tag execution is genuine MAIN world with zero dependency on world: field.
  *
  * K508 / B125 — Replaces K485A keydown-intercept approach
  */
 
 'use strict';
+
+// Confirmation that content.js (isolated world) is injecting on this page.
+// If you see this line but NOT the injected.js TOP-OF-FILE line, check that
+// web_accessible_resources lists injected.js and that Comet allows DOM script injection.
+console.log('[CometBridge] content.js v0.2.2 loaded (isolated world) on', window.location.hostname);
+
+// ── Script-tag injection into MAIN world ──────────────────────────────────────
+// Appends injected.js as a <script src="..."> element. The browser fetches and
+// executes it in the page's own JavaScript context (MAIN world), bypassing any
+// MV3 world: field handling entirely. Works in every Chromium fork.
+// documentElement is always present at document_start; head may not be yet.
+(function injectMainWorldScript() {
+  const s = document.createElement('script');
+  s.src = chrome.runtime.getURL('injected.js');
+  s.onload  = () => s.remove(); // clean up after execution
+  s.onerror = () => console.error('[CometBridge] content.js — failed to load injected.js via script tag; check web_accessible_resources');
+  (document.head || document.documentElement).appendChild(s);
+}());
 
 // ── PostMessage bridge ────────────────────────────────────────────────────────
 
