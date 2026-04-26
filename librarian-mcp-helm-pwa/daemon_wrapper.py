@@ -44,6 +44,11 @@ import urllib.request
 import urllib.error
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+# ─── NAF engine path — add workspace root so discipline_naf is importable ─────
+_NAF_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _NAF_ROOT not in sys.path:
+    sys.path.insert(0, _NAF_ROOT)
+
 # ─── Iter-A / K477 authoritative-source wrapper ───────────────────────────────
 # This format produced the 80% HOT result in K477 empirical testing.
 
@@ -197,6 +202,228 @@ def _call_perplexity(enriched_query: str, api_key: str, model: str = _DEFAULT_PP
         return {"answer": "", "usage": {}, "error": str(exc)}
 
 
+# ─── NAF governance admin HTML (K519 / B.3) ──────────────────────────────────
+
+_NAF_ADMIN_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAF Governance Admin — K519</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f1117; color: #e2e8f0; font-family: system-ui, sans-serif; padding: 32px; max-width: 960px; margin: 0 auto; font-size: 14px; }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #f1f5f9; }
+    .sub { color: #475569; font-size: 12px; margin-bottom: 24px; }
+    h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: #475569; font-weight: 600; margin: 28px 0 12px; }
+    .stat-row { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .stat-card { background: #151c2c; border: 1px solid #1e2333; border-radius: 10px; padding: 14px 20px; text-align: center; flex: 1; min-width: 120px; }
+    .stat-val { font-size: 26px; font-weight: 700; color: #f1f5f9; }
+    .stat-lbl { font-size: 10px; color: #475569; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+    th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #475569; padding: 8px 12px; border-bottom: 1px solid #1e2333; }
+    td { padding: 10px 12px; font-size: 13px; color: #cbd5e1; border-bottom: 1px solid #0f1520; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #151c2c; }
+    .btn { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.8; }
+    .btn-accept { background: #0f2a1c; border: 1px solid #22c55e; color: #4ade80; }
+    .btn-reject { background: #2a0f0f; border: 1px solid #f87171; color: #f87171; }
+    .badge { font-weight: 600; font-size: 11px; }
+    .badge-high { color: #f87171; }
+    .badge-medium { color: #fbbf24; }
+    .badge-low { color: #4ade80; }
+    .empty { color: #334155; font-size: 13px; padding: 20px; text-align: center; }
+    .notice { font-size: 12px; padding: 8px 14px; border-radius: 6px; margin: 8px 0; }
+    .notice.ok { background: #0f2a1c; color: #4ade80; }
+    .notice.err { background: #2a0f0f; color: #f87171; }
+    .naf-note { background: #0a0d13; border: 1px solid #1e2333; border-radius: 8px; padding: 14px 18px; font-size: 12px; color: #475569; margin-top: 28px; line-height: 1.7; }
+    .naf-note strong { color: #64748b; }
+    .mono { font-family: monospace; font-size: 11px; }
+    .refresh-btn { background: #1a2540; border: 1px solid #3b82f6; color: #60a5fa; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .refresh-btn:hover { opacity: 0.8; }
+    .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+  <div class="header-row">
+    <div>
+      <h1>&#x1F6E1; NAF Governance Admin</h1>
+      <div class="sub">Numbered Air Force — Cross-Wing Federation Control (K519 / A&amp;A #2295 Tier 4)</div>
+    </div>
+    <button class="refresh-btn" onclick="load()">&#x21BB; Refresh</button>
+  </div>
+
+  <div class="stat-row" id="stats-row">
+    <div class="stat-card"><div class="stat-val" id="s-wings">&#x2014;</div><div class="stat-lbl">Opt-in Wings</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-records">&#x2014;</div><div class="stat-lbl">Signal Records</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-fires">&#x2014;</div><div class="stat-lbl">Cross-Wing Fires</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-patterns">&#x2014;</div><div class="stat-lbl">Patterns</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-defaults">&#x2014;</div><div class="stat-lbl">NAF Defaults</div></div>
+  </div>
+
+  <h2>Cross-Wing Patterns (C.4, C.12)</h2>
+  <table>
+    <thead><tr><th>Rule ID</th><th>Wings Firing</th><th>% of Opt-in</th><th>Total Fires</th><th>Level</th></tr></thead>
+    <tbody id="patterns-body"><tr><td colspan="5" class="empty">Loading&#x2026;</td></tr></tbody>
+  </table>
+
+  <h2>Pending Rule Promotion Candidates (C.5, C.6)</h2>
+  <div id="review-notice" style="display:none;" class="notice"></div>
+  <table>
+    <thead><tr><th>Candidate ID</th><th>Rule Name</th><th>Source Wing</th><th>Submitted</th><th>Action (C.6)</th></tr></thead>
+    <tbody id="candidates-body"><tr><td colspan="5" class="empty">Loading&#x2026;</td></tr></tbody>
+  </table>
+
+  <h2>Published NAF Defaults (C.7)</h2>
+  <table>
+    <thead><tr><th>Rule ID</th><th>Rule Name</th><th>Source Wing</th><th>Promoted At</th></tr></thead>
+    <tbody id="defaults-body"><tr><td colspan="4" class="empty">Loading&#x2026;</td></tr></tbody>
+  </table>
+
+  <h2>Opt-in Member Wings</h2>
+  <table>
+    <thead><tr><th>Wing ID</th><th>Registered At</th><th>Opt-in</th></tr></thead>
+    <tbody id="members-body"><tr><td colspan="3" class="empty">Loading&#x2026;</td></tr></tbody>
+  </table>
+
+  <div class="naf-note">
+    <strong>Sovereignty guarantee (C.11):</strong> Accepting a rule candidate only adds it to the
+    NAF Defaults list for opt-in adoption. No member Wing's existing rules are modified, overridden,
+    or deleted by NAF. Members must explicitly choose to install each NAF default from their own Wing
+    dashboard. NAF authority is advisory — never coercive. Every decision is logged in
+    <code>~/.lb-naf/decisions.jsonl</code> with full provenance (C.14).
+  </div>
+
+  <script>
+    async function load() {
+      try {
+        const [summary, candidates, defaults, members] = await Promise.all([
+          fetch('/naf/summary').then(r => r.json()),
+          fetch('/naf/candidates').then(r => r.json()),
+          fetch('/naf/defaults').then(r => r.json()),
+          fetch('/naf/members').then(r => r.json()),
+        ]);
+        renderStats(summary, defaults.defaults || []);
+        renderPatterns(summary.patterns || []);
+        renderCandidates(candidates.candidates || []);
+        renderDefaults(defaults.defaults || []);
+        renderMembers(members.members || []);
+      } catch(e) { console.error('NAF admin load failed:', e); }
+    }
+
+    function renderStats(s, defaults) {
+      document.getElementById('s-wings').textContent    = s.opt_in_wings ?? 0;
+      document.getElementById('s-records').textContent  = s.signal_records ?? 0;
+      document.getElementById('s-fires').textContent    = s.total_fires_across_wings ?? 0;
+      document.getElementById('s-patterns').textContent = s.patterns_detected ?? 0;
+      document.getElementById('s-defaults').textContent = defaults.length;
+    }
+
+    function renderPatterns(patterns) {
+      const tbody = document.getElementById('patterns-body');
+      if (!patterns.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">No cross-Wing patterns detected yet. Aggregate signals needed from 2+ opt-in Wings.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = patterns.map(p => `<tr>
+        <td class="mono">${esc(p.rule_id)}</td>
+        <td>${p.wing_count}</td>
+        <td>${p.pct_of_opt_in}%</td>
+        <td>${p.total_fires}</td>
+        <td><span class="badge badge-${p.pattern_level}">${p.pattern_level.toUpperCase()}</span></td>
+      </tr>`).join('');
+    }
+
+    function renderCandidates(candidates) {
+      const tbody = document.getElementById('candidates-body');
+      if (!candidates.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">No pending rule promotion candidates.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = candidates.map(c => {
+        const name = c.rule_def ? esc(c.rule_def.name || c.rule_def.id || '—') : '—';
+        const ts   = c.submitted_at ? new Date(c.submitted_at).toLocaleDateString() : '—';
+        return `<tr>
+          <td class="mono" style="font-size:10px;">${esc(c.candidate_id)}</td>
+          <td>${name}</td>
+          <td class="mono" style="font-size:10px;color:#475569;">${esc(c.source_wing_id)}</td>
+          <td style="font-size:11px;color:#475569;">${ts}</td>
+          <td><div style="display:flex;gap:6px;">
+            <button class="btn btn-accept" onclick="review('${esc(c.candidate_id)}','accept')">Accept</button>
+            <button class="btn btn-reject" onclick="review('${esc(c.candidate_id)}','reject')">Reject</button>
+          </div></td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderDefaults(defaults) {
+      const tbody = document.getElementById('defaults-body');
+      if (!defaults.length) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty">No NAF-default rules published yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = defaults.map(d => {
+        const rId  = d.rule_def ? esc(d.rule_def.id  || '—') : '—';
+        const rNm  = d.rule_def ? esc(d.rule_def.name || rId) : rId;
+        const ts   = d.promoted_at ? new Date(d.promoted_at).toLocaleDateString() : '—';
+        return `<tr>
+          <td class="mono">${rId}</td>
+          <td>${rNm}</td>
+          <td class="mono" style="font-size:10px;color:#475569;">${esc(d.source_wing_id)}</td>
+          <td style="font-size:11px;color:#475569;">${ts}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderMembers(members) {
+      const tbody = document.getElementById('members-body');
+      if (!members.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="empty">No opt-in Wings registered yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = members.map(m => {
+        const ts = m.registered_at ? new Date(m.registered_at).toLocaleDateString() : '—';
+        return `<tr>
+          <td class="mono">${esc(m.wing_id)}</td>
+          <td style="font-size:11px;color:#475569;">${ts}</td>
+          <td style="color:${m.opt_in ? '#22c55e' : '#f87171'}">${m.opt_in ? 'Yes' : 'No'}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function review(candidateId, action) {
+      const reason = action === 'reject' ? (prompt('Rejection reason (optional):') || '') : '';
+      const notice = document.getElementById('review-notice');
+      try {
+        const resp = await fetch('/naf/review', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({candidate_id: candidateId, action, reason, governor: 'naf-governor'}),
+        });
+        const data = await resp.json();
+        notice.textContent = data.ok
+          ? (action === 'accept' ? 'Rule accepted and published as NAF default.' : 'Rule candidate rejected.')
+          : (data.error || 'Review failed.');
+        notice.className = 'notice ' + (data.ok ? 'ok' : 'err');
+        notice.style.display = '';
+        setTimeout(() => { notice.style.display = 'none'; }, 5000);
+        await load();
+      } catch(e) { console.error('Review failed:', e); }
+    }
+
+    function esc(s) {
+      return String(s || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    load();
+    setInterval(load, 30000);
+  </script>
+</body>
+</html>"""
+
+
 # ─── REST HTTP handler ────────────────────────────────────────────────────────
 
 class EnrichHandler(BaseHTTPRequestHandler):
@@ -276,14 +503,66 @@ class EnrichHandler(BaseHTTPRequestHandler):
             except Exception as exc:
                 self._send_json({"error": str(exc)}, 500)
 
+        # ── NAF governance endpoints (K519) ───────────────────────────────────
+
+        elif self.path == "/naf/admin":
+            body = _NAF_ADMIN_HTML.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self._send_cors_headers()
+            self.end_headers()
+            self.wfile.write(body)
+
+        elif self.path == "/naf/summary":
+            try:
+                from discipline_naf.engine import get_aggregate_summary
+                self._send_json(get_aggregate_summary())
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
+        elif self.path == "/naf/patterns":
+            try:
+                from discipline_naf.engine import get_patterns
+                self._send_json({"patterns": get_patterns()})
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
+        elif self.path == "/naf/candidates":
+            try:
+                from discipline_naf.engine import get_pending_candidates
+                self._send_json({"candidates": get_pending_candidates()})
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
+        elif self.path == "/naf/defaults":
+            try:
+                from discipline_naf.engine import get_naf_defaults
+                self._send_json({"defaults": get_naf_defaults()})
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
+        elif self.path == "/naf/members":
+            try:
+                from discipline_naf.engine import get_members
+                self._send_json({"members": get_members()})
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
         else:
             self.send_response(404)
             self.end_headers()
 
+    _NAF_POST_PATHS = {
+        "/naf/register", "/naf/optout", "/naf/aggregate",
+        "/naf/candidates", "/naf/review",
+    }
+
     def do_POST(self):
         if self.path not in ("/enrich", "/pawn", "/wing/evaluate", "/wing/rules",
                              "/wing/import", "/wing/install-starters",
-                             "/wing/mark-consulted", "/wing/enabled"):
+                             "/wing/mark-consulted", "/wing/enabled",
+                             *self._NAF_POST_PATHS):
             self.send_response(404)
             self.end_headers()
             return
@@ -359,6 +638,75 @@ class EnrichHandler(BaseHTTPRequestHandler):
                 prefs["wing_enabled"] = bool(payload.get("enabled", True))
                 save_prefs(prefs)
                 self._send_json({"ok": True, "wing_enabled": prefs["wing_enabled"]})
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        # ── NAF POST endpoints (K519) ──────────────────────────────────────────
+
+        if self.path == "/naf/register":
+            payload = self._read_json_body()
+            if payload is None or "wing_id" not in payload:
+                self._send_json({"error": "wing_id required"}, 400)
+                return
+            try:
+                from discipline_naf.engine import register_wing
+                self._send_json(register_wing(payload["wing_id"], payload.get("metadata")))
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/naf/optout":
+            payload = self._read_json_body()
+            if payload is None or "wing_id" not in payload:
+                self._send_json({"error": "wing_id required"}, 400)
+                return
+            try:
+                from discipline_naf.engine import opt_out_wing
+                self._send_json(opt_out_wing(payload["wing_id"]))
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/naf/aggregate":
+            payload = self._read_json_body()
+            if payload is None or "wing_id" not in payload or "signals" not in payload:
+                self._send_json({"error": "wing_id and signals required"}, 400)
+                return
+            try:
+                from discipline_naf.engine import submit_aggregate
+                self._send_json(submit_aggregate(payload["wing_id"], payload["signals"]))
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/naf/candidates":
+            payload = self._read_json_body()
+            if payload is None or "wing_id" not in payload or "rule_def" not in payload:
+                self._send_json({"error": "wing_id and rule_def required"}, 400)
+                return
+            try:
+                from discipline_naf.engine import submit_rule_candidate
+                self._send_json(
+                    submit_rule_candidate(payload["wing_id"], payload["rule_def"])
+                )
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/naf/review":
+            payload = self._read_json_body()
+            if payload is None or "candidate_id" not in payload or "action" not in payload:
+                self._send_json({"error": "candidate_id and action required"}, 400)
+                return
+            try:
+                from discipline_naf.engine import review_candidate
+                self._send_json(review_candidate(
+                    payload["candidate_id"],
+                    payload["action"],
+                    payload.get("reason", ""),
+                    payload.get("governor", "naf-governor"),
+                ))
             except Exception as exc:
                 self._send_json({"ok": False, "error": str(exc)}, 500)
             return
@@ -447,6 +795,14 @@ def _start_rest_server(rest_port: int) -> None:
         print(f"[enrich-rest]   POST /wing/rules     — Sync member Wing rules", flush=True)
         print(f"[enrich-rest]   GET  /wing/dashboard — Wing telemetry summary", flush=True)
         print(f"[enrich-rest]   GET  /wing/export    — Export Wing config+telemetry", flush=True)
+        print(f"[enrich-rest]   GET  /naf/admin      — NAF governance UI (K519)", flush=True)
+        print(f"[enrich-rest]   GET  /naf/summary    — Cross-Wing aggregate summary", flush=True)
+        print(f"[enrich-rest]   GET  /naf/candidates — Pending rule promotion candidates", flush=True)
+        print(f"[enrich-rest]   GET  /naf/defaults   — Published NAF-default rules", flush=True)
+        print(f"[enrich-rest]   POST /naf/register   — Register member Wing for federation", flush=True)
+        print(f"[enrich-rest]   POST /naf/aggregate  — Submit opt-in aggregate signals", flush=True)
+        print(f"[enrich-rest]   POST /naf/candidates — Submit rule for NAF promotion", flush=True)
+        print(f"[enrich-rest]   POST /naf/review     — Accept/reject rule candidate", flush=True)
         server.serve_forever()
 
     t = threading.Thread(target=_run, name="comet-bridge-rest", daemon=True)

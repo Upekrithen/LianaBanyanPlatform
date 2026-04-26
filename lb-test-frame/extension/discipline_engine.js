@@ -24,6 +24,12 @@ const DAEMON_STATE_URL    = 'http://127.0.0.1:7712/state';
 const DAEMON_TIMEOUT_MS   = 2000;
 const MAX_WING_TELEMETRY  = 1000;
 
+// ── K519 NAF federation constants ──────────────────────────────────────────────
+const NAF_FEDERATE_KEY    = 'lb_naf_federate';        // bool: member opt-in to NAF (default: false)
+const NAF_WING_ID_KEY     = 'lb_naf_wing_id';         // member's local NAF Wing ID (auto-generated)
+const NAF_IGNORED_KEY     = 'lb_naf_ignored';         // list of ignored NAF-default rule IDs
+const NAF_REST_BASE       = 'http://127.0.0.1:7712';  // Helm PWA REST base
+
 // ── Rule schema defaults ──────────────────────────────────────────────────────
 
 export const RULE_DEFAULTS = {
@@ -343,6 +349,173 @@ export async function evaluate(queryText) {
   return { action: 'allow', trace };
 }
 
+// ── NAF federation storage helpers (K519) ────────────────────────────────────
+
+async function getNafFederate() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ [NAF_FEDERATE_KEY]: false }, (d) => resolve(d[NAF_FEDERATE_KEY]));
+  });
+}
+
+async function setNafFederate(enabled) {
+  return new Promise((resolve) => {
+    chrome.storage.local.set({ [NAF_FEDERATE_KEY]: enabled }, resolve);
+  });
+}
+
+async function getNafWingId() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ [NAF_WING_ID_KEY]: null }, (d) => {
+      if (d[NAF_WING_ID_KEY]) { resolve(d[NAF_WING_ID_KEY]); return; }
+      const id = 'wing-' + Math.random().toString(36).slice(2, 10) + '-' + Date.now().toString(36);
+      chrome.storage.local.set({ [NAF_WING_ID_KEY]: id }, () => resolve(id));
+    });
+  });
+}
+
+/**
+ * Build aggregate signals from Wing telemetry (C.1-C.3):
+ *   - per-rule fire counts ONLY
+ *   - no query content, no member-identifiable data
+ */
+async function buildNafAggregate() {
+  const [rules, tel] = await Promise.all([getRules(), getWingTelemetry()]);
+
+  const perRuleFires = {};
+  let blockCount = 0, warnCount = 0, enrichCount = 0, totalFires = 0;
+
+  for (const t of tel) {
+    if (['block', 'warn', 'enrich'].includes(t.action)) {
+      perRuleFires[t.rule_id] = (perRuleFires[t.rule_id] || 0) + 1;
+      totalFires++;
+      if (t.action === 'block')  blockCount++;
+      if (t.action === 'warn')   warnCount++;
+      if (t.action === 'enrich') enrichCount++;
+    }
+  }
+
+  return {
+    per_rule_fires:    perRuleFires,
+    total_fires:       totalFires,
+    block_count:       blockCount,
+    warn_count:        warnCount,
+    enrich_count:      enrichCount,
+    active_rule_count: rules.filter((r) => r.enabled !== false).length,
+  };
+}
+
+/** Emit aggregate signals to NAF (C.1 — only if federation opt-in is ON). */
+async function emitNafAggregate() {
+  const federate = await getNafFederate();
+  if (!federate) return { skipped: true, reason: 'federation_disabled' };
+
+  const wingId  = await getNafWingId();
+  const signals = await buildNafAggregate();
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 5000);
+    const resp = await fetch(`${NAF_REST_BASE}/naf/aggregate`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ wing_id: wingId, signals }),
+      signal:  ctrl.signal,
+    });
+    return await resp.json();
+  } catch {
+    return { ok: false, error: 'daemon_offline' };
+  }
+}
+
+/** Register this Wing with NAF (called on federation opt-in). */
+async function registerWingWithNaf() {
+  const wingId = await getNafWingId();
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 5000);
+    const resp = await fetch(`${NAF_REST_BASE}/naf/register`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ wing_id: wingId }),
+      signal:  ctrl.signal,
+    });
+    return await resp.json();
+  } catch {
+    return { ok: false, error: 'daemon_offline' };
+  }
+}
+
+/** Submit a rule as a NAF promotion candidate (C.5). */
+async function submitNafCandidate(ruleId) {
+  const rules = await getRules();
+  const rule  = rules.find((r) => r.id === ruleId);
+  if (!rule) return { ok: false, error: 'Rule not found' };
+
+  const wingId = await getNafWingId();
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 5000);
+    const resp = await fetch(`${NAF_REST_BASE}/naf/candidates`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ wing_id: wingId, rule_def: rule }),
+      signal:  ctrl.signal,
+    });
+    return await resp.json();
+  } catch {
+    return { ok: false, error: 'daemon_offline' };
+  }
+}
+
+/** Fetch NAF-default rules available for opt-in install (C.7, C.8). */
+async function getNafDefaults() {
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 5000);
+    const resp = await fetch(`${NAF_REST_BASE}/naf/defaults`, { signal: ctrl.signal });
+    const data = await resp.json();
+    return data.defaults || [];
+  } catch {
+    return [];
+  }
+}
+
+/** Install a NAF-default rule into the member's personal Wing (C.8). */
+async function installNafDefault(ruleEntry) {
+  const rule = ruleEntry.rule_def || ruleEntry;
+  if (!rule || !rule.id) return { ok: false, error: 'Invalid rule definition' };
+
+  const rules    = await getRules();
+  const existing = rules.find((r) => r.id === rule.id);
+  if (!existing) {
+    rules.push({
+      ...rule,
+      scope:        'personal',
+      created_at:   new Date().toISOString(),
+      naf_promoted: true,
+    });
+    await new Promise((resolve) => chrome.storage.local.set({ [RULES_KEY]: rules }, resolve));
+  }
+  return { ok: true, already: !!existing };
+}
+
+/** Mark a NAF-default rule as ignored (C.9 — member declines install). */
+async function ignoreNafDefault(ruleId) {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ [NAF_IGNORED_KEY]: [] }, (data) => {
+      const ignored = data[NAF_IGNORED_KEY];
+      if (!ignored.includes(ruleId)) ignored.push(ruleId);
+      chrome.storage.local.set({ [NAF_IGNORED_KEY]: ignored }, () => resolve({ ok: true }));
+    });
+  });
+}
+
+/** Get the set of ignored NAF-default rule IDs. */
+async function getNafIgnored() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ [NAF_IGNORED_KEY]: [] }, (d) => resolve(d[NAF_IGNORED_KEY]));
+  });
+}
+
 // ── Message handler (called from background.js) ───────────────────────────────
 
 export async function handleDisciplineMessage(msg, sendResponse) {
@@ -442,6 +615,45 @@ export async function handleDisciplineMessage(msg, sendResponse) {
     }
     await new Promise((resolve) => chrome.storage.local.set({ [RULES_KEY]: rules }, resolve));
     sendResponse({ ok: true, added });
+    return;
+  }
+
+  // ── NAF federation messages (K519) ───────────────────────────────────────────
+
+  if (msg.type === 'NAF_FEDERATE_GET') {
+    const [federate, wing_id] = await Promise.all([getNafFederate(), getNafWingId()]);
+    sendResponse({ federate, wing_id });
+    return;
+  }
+  if (msg.type === 'NAF_FEDERATE_SET') {
+    await setNafFederate(!!msg.enabled);
+    if (msg.enabled) await registerWingWithNaf();
+    sendResponse({ ok: true });
+    return;
+  }
+  if (msg.type === 'NAF_EMIT_AGGREGATE') {
+    const result = await emitNafAggregate();
+    sendResponse(result);
+    return;
+  }
+  if (msg.type === 'NAF_SUBMIT_CANDIDATE') {
+    const result = await submitNafCandidate(msg.rule_id);
+    sendResponse(result);
+    return;
+  }
+  if (msg.type === 'NAF_GET_DEFAULTS') {
+    const [defaults, ignored] = await Promise.all([getNafDefaults(), getNafIgnored()]);
+    sendResponse({ defaults, ignored });
+    return;
+  }
+  if (msg.type === 'NAF_INSTALL_DEFAULT') {
+    const result = await installNafDefault(msg.rule_entry);
+    sendResponse(result);
+    return;
+  }
+  if (msg.type === 'NAF_IGNORE_DEFAULT') {
+    const result = await ignoreNafDefault(msg.rule_id);
+    sendResponse(result);
     return;
   }
 }

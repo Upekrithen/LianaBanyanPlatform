@@ -163,6 +163,38 @@
       margin-top: 24px;
     }
     .sovereignty strong { color: #64748b; }
+
+    /* NAF Federation section (K519) */
+    .fed-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .fed-lbl { font-size: 13px; color: #94a3b8; }
+    .fed-note { font-size: 11px; color: #334155; margin-top: 6px; }
+    .wing-id-row { font-size: 11px; color: #334155; font-family: monospace; margin-top: 4px; }
+    .btn-naf { background: #1a1a35; border: 1px solid #6366f1; color: #818cf8; }
+    .btn-naf-propose { background: #0f1f30; border: 1px solid #0ea5e9; color: #38bdf8; }
+    .btn-naf-install { background: #0f2a1c; border: 1px solid #22c55e; color: #4ade80; }
+    .btn-naf-ignore  { background: #151c2c; border: 1px solid #334155; color: #64748b; }
+    .naf-default-item {
+      background: #151c2c;
+      border: 1px solid #1e2333;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .naf-rule-name { font-size: 13px; color: #cbd5e1; flex: 1; }
+    .naf-rule-action { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 10px; flex-shrink: 0; }
+    .naf-rule-action.block  { background: #2a0f0f; color: #f87171; }
+    .naf-rule-action.warn   { background: #2a1a00; color: #fbbf24; }
+    .naf-rule-action.enrich { background: #0f2a1c; color: #4ade80; }
+    .propose-notice { font-size: 12px; color: #818cf8; margin-top: 8px; display: none; }
   </style>
 </head>
 <body>
@@ -212,6 +244,7 @@
             <th>Action</th>
             <th>Fires</th>
             <th>Activity</th>
+            <th id="propose-col-hdr" style="display:none;">Propose to NAF</th>
           </tr>
         </thead>
         <tbody id="augur-table-body">
@@ -243,12 +276,42 @@
     <input type="file" id="import-file" accept=".json" style="display:none;" onchange="handleImportFile(event)" />
   </div>
 
+  <!-- NAF Federation (K519 / B.4) -->
+  <div class="section">
+    <div class="section-title">NAF Federation — Voluntary Cross-Wing Sharing</div>
+    <div class="fed-row">
+      <label class="switch" title="Opt in to share aggregate signals with NAF (never substrate content)">
+        <input type="checkbox" id="naf-federate-toggle" />
+        <span class="slider"></span>
+      </label>
+      <span class="fed-lbl" id="naf-federate-lbl">Signals: private (OFF)</span>
+    </div>
+    <div class="fed-note">Default: OFF &nbsp;·&nbsp; Shares aggregate rule-fire counts only — never query content, never member identifiers</div>
+    <div class="wing-id-row" id="naf-wing-id-row" style="display:none;">Wing ID: <span id="naf-wing-id">—</span></div>
+    <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;" id="naf-action-row" style="display:none;">
+      <button class="btn btn-naf" onclick="emitNafAggregate()">&#x2B06; Emit aggregate now</button>
+      <button class="btn btn-naf" onclick="openNafAdmin()">&#x1F6E1; NAF Admin</button>
+    </div>
+    <div class="propose-notice" id="propose-notice">Rule submitted to NAF as promotion candidate.</div>
+  </div>
+
+  <!-- NAF Defaults (K519 / B.5) -->
+  <div class="section" id="naf-defaults-section" style="display:none;">
+    <div class="section-title">NAF Defaults — Available Promoted Rules</div>
+    <div id="naf-defaults-list">
+      <div class="empty">Loading NAF defaults&#x2026;</div>
+    </div>
+  </div>
+
   <!-- Sovereignty note -->
   <div class="sovereignty">
     <strong>Your Wing, your rules, your data.</strong> All discipline rules and telemetry are stored only in
-    <code>chrome.storage.local</code> on your device. Nothing is sent to LB servers unless you explicitly
-    opt in to cross-Wing federation (K519, coming later). You can export, import, or delete everything above.
-    The Wing is always optional — disable it from the toggle above or from the popup.
+    <code>chrome.storage.local</code> on your device. NAF federation is strictly opt-in (default OFF) —
+    only aggregate fire counts are ever shared, never query content or substrate. You can install, ignore,
+    or override any NAF-promoted rule. NAF cannot modify your existing rules. You can export, import, or
+    delete everything above. The Wing is always optional — disable it from the toggle above or from the popup.
+    <br /><br />
+    <strong>K519 / A&amp;A #2295 Tier 4</strong> — Voluntary federation. Sovereignty preserved at every tier.
   </div>
 
   <script src="../wing-dashboard.js"></script>

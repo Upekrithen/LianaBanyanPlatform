@@ -215,6 +215,56 @@ Frame extension (laptop) and Helm PWA (phone/desktop) each host independent Wing
 
 ---
 
+## K519 — NAF MVP (Voluntary Cross-Wing Federation)
+
+**Filed K519 / B126 / A&A #2295 Tier 4 + A&A #2292 CFP.**
+
+NAF (Numbered Air Force) is the governance tier above member Wings.  It receives
+opt-in aggregate signals (per-rule fire counts only — never substrate content) from
+member Wings, detects cross-Wing patterns, and manages the rule-promotion workflow.
+
+### Architecture additions (K519)
+
+| Component | Location | Description |
+|---|---|---|
+| NAF engine | `discipline_naf/engine.py` | Registry, aggregate collection, pattern detection, rule-promotion workflow |
+| CFP transport | `librarian-mcp/src/federation/cfp.ts` | Cathedral Federation Protocol — SHA256 provenance envelopes |
+| NAF governance UI | `GET http://127.0.0.1:7712/naf/admin` | Admin panel for Bishop+Founder — review candidates, view patterns |
+| Federation toggle | Wing dashboard Federation section | `NAF_FEDERATE_KEY` default OFF — member opts in explicitly |
+| NAF defaults | Wing dashboard NAF Defaults section | Install / Ignore per promoted rule (C.8, C.9) |
+
+### Sovereignty invariants (C.11)
+
+1. Member opt-in toggle (default OFF) gates all aggregate emission.
+2. Aggregates contain ONLY per-rule fire counts — no query content, no member IDs.
+3. NAF can only ADD rules to `naf_defaults.json` (for opt-in install) — it never modifies, overrides, or deletes any member's existing Wing rules.
+4. Members install NAF defaults with explicit one-click choice (Install / Ignore / Customize).
+5. Federation state survives Wing toggle — disabling the Wing does not auto-disable federation.
+
+### Member tutorial (D.3)
+
+> **Federation: opt in if you want. Sovereignty stays yours.**
+>
+> Your Wing's discipline rules are yours. They live on your device in `chrome.storage.local` and never leave without your consent.
+>
+> The NAF federation toggle (off by default) lets you share **aggregate signals** — how many times each rule fired — with the NAF governance tier. No query content is ever shared. No member-identifiable data is ever shared. Just counts.
+>
+> When the NAF council promotes a rule as a "NAF default," you'll see it in the "NAF Defaults" section of your Wing dashboard. You can install it, ignore it, or install and then customize it. NAF cannot install anything into your Wing without your explicit click.
+>
+> **This is what a cooperative AI architecture looks like: discipline by consent, patterns by participation, sovereignty by design.**
+
+### CFP — Cathedral Federation Protocol (A&A #2292)
+
+Every federation payload is wrapped in a CFP envelope:
+- `source_wing_id` — the origin Wing
+- `ts` — ISO timestamp
+- `provenance_hash` — SHA256 of `source_wing_id:ts:payload` for tamper-evidence
+- `payload_type` — `rule_export` | `aggregate_export` | `naf_decision` | `naf_default`
+
+The `verifyEnvelope()` function confirms integrity before any NAF-tier action is taken.
+
+---
+
 ## Patent Backing
 
 A&A #2295 — Augur MAJCOM Discipline Hierarchy
@@ -222,8 +272,11 @@ A&A #2295 — Augur MAJCOM Discipline Hierarchy
 - Tier 2: Squadron (K512/K513)
 - **Tier 3: Wing with Consensus Layer (K514) ← THIS MODULE**
 - **Tier 3 distribution to members: K518 ← Member-Tier Wing Deployment**
-- Tier 4: MAJCOM Federation (K519+)
+- **Tier 4: NAF Federation (K519) ← Voluntary Cross-Wing Federation OPERATIONAL**
+
+A&A #2292 — Cathedral Federation Protocol (CFP)
+- First real implementation: K519 `librarian-mcp/src/federation/cfp.ts`
 
 ---
 
-*Filed K514 + K518, B126, 2026-04-26. FOR THE KEEP!*
+*Filed K514 + K518 + K519, B126, 2026-04-26. FOR THE KEEP!*

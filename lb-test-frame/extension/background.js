@@ -237,5 +237,23 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       sendResponse({ ok: true });
       return false;
     }
+
+    // ── NAF federation messages (K519) ────────────────────────────────────────
+    case 'NAF_FEDERATE_GET':
+    case 'NAF_FEDERATE_SET':
+    case 'NAF_EMIT_AGGREGATE':
+    case 'NAF_SUBMIT_CANDIDATE':
+    case 'NAF_GET_DEFAULTS':
+    case 'NAF_INSTALL_DEFAULT':
+    case 'NAF_IGNORE_DEFAULT': {
+      handleDisciplineMessage(message, sendResponse);
+      return true;
+    }
+
+    case 'OPEN_NAF_ADMIN': {
+      chrome.tabs.create({ url: 'http://127.0.0.1:7712/naf/admin' });
+      sendResponse({ ok: true });
+      return false;
+    }
   }
 });

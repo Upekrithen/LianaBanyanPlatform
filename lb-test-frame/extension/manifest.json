@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "LB Test Frame",
-  "version": "1.3.0",
-  "description": "Verify the Cathedral Effect on your own AI session. Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot — no API key required. v1.3: Member Wing (K518) — personal Wing dashboard, onboarding wizard, telemetry, export/import, and Helm PWA Wing integration.",
+  "version": "1.4.0",
+  "description": "Verify the Cathedral Effect on your own AI session. Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot — no API key required. v1.4: NAF Federation (K519) — voluntary cross-Wing aggregate signal sharing, NAF rule promotion, one-click NAF default install.",
   "short_name": "LB Test Frame",
   "icons": {
     "16": "icons/icon16.png",
