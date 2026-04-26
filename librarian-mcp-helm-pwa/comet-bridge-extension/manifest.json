@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Comet Bridge — Cathedral Injection",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Zero-paste Cathedral context injection for Perplexity/Comet queries via local Helm PWA daemon. K508: network-intercept architecture replaces K485A DOM approach.",
 
   "permissions": [

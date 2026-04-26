@@ -35,6 +35,15 @@
 (function () {
   'use strict';
 
+  // ── v0.2.1 world-probe (must be first — fires before any other code) ──────────
+  // In MAIN world: typeof chrome === 'undefined'  ← correct
+  // In ISOLATED world: typeof chrome === 'object' ← world:"MAIN" not honored
+  console.log(
+    '[CometBridge] injected.js TOP-OF-FILE v0.2.1 | world-probe: chrome=%s | href=%s',
+    typeof chrome,
+    window.location.href.slice(0, 80),
+  );
+
   // ── Configuration ─────────────────────────────────────────────────────────────
 
   // Keep true until Phase A confirms exact endpoint; set false in production.
