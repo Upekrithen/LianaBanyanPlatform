@@ -200,7 +200,7 @@ def _call_perplexity(enriched_query: str, api_key: str, model: str = _DEFAULT_PP
 # ─── REST HTTP handler ────────────────────────────────────────────────────────
 
 class EnrichHandler(BaseHTTPRequestHandler):
-    """Minimal REST handler for the Comet Bridge extension."""
+    """Minimal REST handler for the Comet Bridge extension + Wing (K518)."""
 
     # Allowed CORS origins for Chrome extensions
     _CORS_ORIGIN = "*"  # chrome-extension://* is not a wildcard CORS origin; wildcard is safe for localhost
@@ -214,6 +214,25 @@ class EnrichHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
 
+    def _send_json(self, data: dict, status: int = 200) -> None:
+        body = json.dumps(data, ensure_ascii=False).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _read_json_body(self) -> dict | None:
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            if length > 512_000:
+                return None
+            raw = self.rfile.read(length)
+            return json.loads(raw.decode("utf-8"))
+        except Exception:
+            return None
+
     def do_OPTIONS(self):
         """Preflight CORS."""
         self.send_response(204)
@@ -222,21 +241,129 @@ class EnrichHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/health":
-            body = json.dumps({"status": "ok", "service": "comet-bridge"}).encode()
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json")
-            self._send_cors_headers()
-            self.end_headers()
-            self.wfile.write(body)
+            self._send_json({"status": "ok", "service": "comet-bridge", "wing": "available"})
+
+        elif self.path == "/wing/rules":
+            # Return current Wing rules from local file
+            try:
+                from wing_host import load_rules
+                rules = load_rules()
+                self._send_json({"rules": rules, "count": len(rules)})
+            except Exception as exc:
+                self._send_json({"rules": [], "count": 0, "error": str(exc)})
+
+        elif self.path == "/wing/dashboard":
+            # Return Wing dashboard stats
+            try:
+                from wing_host import get_dashboard
+                self._send_json(get_dashboard())
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
+        elif self.path == "/wing/export":
+            # Export Wing config + telemetry as portable JSON
+            try:
+                from wing_host import export_wing
+                self._send_json(export_wing())
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
+        elif self.path == "/wing/starters":
+            # Return the 5 starter Augurs
+            try:
+                from wing_host import STARTER_RULES
+                self._send_json({"starters": STARTER_RULES})
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, 500)
+
         else:
             self.send_response(404)
             self.end_headers()
 
     def do_POST(self):
-        if self.path not in ("/enrich", "/pawn"):
+        if self.path not in ("/enrich", "/pawn", "/wing/evaluate", "/wing/rules",
+                             "/wing/import", "/wing/install-starters",
+                             "/wing/mark-consulted", "/wing/enabled"):
             self.send_response(404)
             self.end_headers()
             return
+
+        # ── Wing-specific POST endpoints (K518) ───────────────────────────────
+
+        if self.path == "/wing/evaluate":
+            payload = self._read_json_body()
+            if payload is None:
+                self._send_json({"error": "bad_request"}, 400)
+                return
+            query_text = payload.get("query", "").strip()
+            if not query_text:
+                self._send_json({"error": "missing query"}, 400)
+                return
+            try:
+                from wing_host import evaluate as wing_evaluate
+                self._send_json(wing_evaluate(query_text))
+            except Exception as exc:
+                self._send_json({"action": "allow", "error": str(exc)})
+            return
+
+        if self.path == "/wing/rules":
+            payload = self._read_json_body()
+            if payload is None or "rules" not in payload:
+                self._send_json({"error": "missing rules"}, 400)
+                return
+            try:
+                from wing_host import save_rules
+                save_rules(payload["rules"])
+                self._send_json({"ok": True, "saved": len(payload["rules"])})
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/wing/import":
+            payload = self._read_json_body()
+            if payload is None:
+                self._send_json({"error": "bad_request"}, 400)
+                return
+            try:
+                from wing_host import import_wing
+                self._send_json(import_wing(payload))
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/wing/install-starters":
+            payload = self._read_json_body() or {}
+            starter_ids = payload.get("starter_ids")
+            try:
+                from wing_host import install_starter_augurs
+                self._send_json(install_starter_augurs(starter_ids))
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/wing/mark-consulted":
+            payload = self._read_json_body() or {}
+            try:
+                from wing_host import mark_consulted
+                mark_consulted(payload.get("source", "cathedral"), payload.get("domain"))
+                self._send_json({"ok": True})
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        if self.path == "/wing/enabled":
+            payload = self._read_json_body() or {}
+            try:
+                from wing_host import load_prefs, save_prefs
+                prefs = load_prefs()
+                prefs["wing_enabled"] = bool(payload.get("enabled", True))
+                save_prefs(prefs)
+                self._send_json({"ok": True, "wing_enabled": prefs["wing_enabled"]})
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, 500)
+            return
+
+        # ── /enrich and /pawn: parse query from body ───────────────────────────
 
         length = int(self.headers.get("Content-Length", 0))
         if length > 64_000:
@@ -313,8 +440,13 @@ def _start_rest_server(rest_port: int) -> None:
     def _run():
         server = ThreadingHTTPServer(("127.0.0.1", rest_port), EnrichHandler)
         print(f"[enrich-rest] Comet Bridge REST server on http://127.0.0.1:{rest_port}", flush=True)
-        print(f"[enrich-rest]   GET  /health — liveness check", flush=True)
-        print(f"[enrich-rest]   POST /enrich — Cathedral injection endpoint", flush=True)
+        print(f"[enrich-rest]   GET  /health         — liveness check", flush=True)
+        print(f"[enrich-rest]   POST /enrich         — Cathedral injection endpoint", flush=True)
+        print(f"[enrich-rest]   POST /wing/evaluate  — Wing rule evaluation (K518)", flush=True)
+        print(f"[enrich-rest]   GET  /wing/rules     — Load member Wing rules", flush=True)
+        print(f"[enrich-rest]   POST /wing/rules     — Sync member Wing rules", flush=True)
+        print(f"[enrich-rest]   GET  /wing/dashboard — Wing telemetry summary", flush=True)
+        print(f"[enrich-rest]   GET  /wing/export    — Export Wing config+telemetry", flush=True)
         server.serve_forever()
 
     t = threading.Thread(target=_run, name="comet-bridge-rest", daemon=True)

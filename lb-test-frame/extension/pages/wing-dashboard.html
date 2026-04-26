@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+  LB Frame — Wing Dashboard (K518 / B126)
+
+  Member-facing Wing telemetry dashboard.
+  Shows: Wing enabled state, Augur fire counts, recent events, export/import controls.
+
+  A&A #2295 Tier 3 distribution — personal Wing observability.
+  All data is personal-scope, stored in chrome.storage.local.
+  Never transmitted to LB servers without explicit opt-in.
+
+  K518 / B126
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LB Frame — Wing Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f1117;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 40px;
+      max-width: 820px;
+      margin: 0 auto;
+      font-size: 14px;
+    }
+
+    /* Header */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 16px;
+    }
+    .page-title { font-size: 24px; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+    .page-sub { font-size: 13px; color: #475569; }
+    .wing-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .wing-enabled-lbl { font-size: 13px; color: #94a3b8; }
+
+    /* Toggle */
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background: #1e2333; border-radius: 24px; transition: 0.2s;
+    }
+    .slider:before {
+      position: absolute; content: ''; height: 18px; width: 18px;
+      left: 3px; bottom: 3px; background: #475569;
+      border-radius: 50%; transition: 0.2s;
+    }
+    input:checked + .slider { background: #22c55e; }
+    input:checked + .slider:before { transform: translateX(20px); background: white; }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: #151c2c;
+      border: 1px solid #1e2333;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-val { font-size: 28px; font-weight: 700; color: #f1f5f9; }
+    .stat-lbl { font-size: 11px; color: #475569; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Section */
+    .section { margin-bottom: 28px; }
+    .section-title {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px;
+      color: #475569; font-weight: 600; margin-bottom: 12px;
+    }
+
+    /* Per-augur table */
+    .augur-table { width: 100%; border-collapse: collapse; }
+    .augur-table th {
+      text-align: left; font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.5px; color: #475569; padding: 8px 12px;
+      border-bottom: 1px solid #1e2333;
+    }
+    .augur-table td {
+      padding: 10px 12px; font-size: 13px; color: #cbd5e1;
+      border-bottom: 1px solid #0f1520;
+    }
+    .augur-table tr:last-child td { border-bottom: none; }
+    .augur-table tr:hover td { background: #151c2c; }
+    .fire-bar-wrap {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .fire-bar {
+      height: 6px; border-radius: 3px; background: #22c55e; min-width: 4px;
+    }
+    .fire-count { color: #94a3b8; font-size: 12px; }
+
+    /* Recent events */
+    .event-list { display: flex; flex-direction: column; gap: 6px; }
+    .event-item {
+      background: #151c2c;
+      border: 1px solid #1e2333;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .event-action {
+      font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 10px; flex-shrink: 0;
+    }
+    .event-action.block { background: #2a0f0f; color: #f87171; }
+    .event-action.warn  { background: #2a1a00; color: #fbbf24; }
+    .event-action.enrich{ background: #0f2a1c; color: #4ade80; }
+    .event-action.allow { background: #1a1a2e; color: #60a5fa; }
+    .event-rule { font-size: 12px; color: #94a3b8; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .event-snippet { font-size: 12px; color: #64748b; flex: 2; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .event-ts { font-size: 11px; color: #334155; flex-shrink: 0; }
+
+    /* Export/Import */
+    .export-row {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .btn {
+      padding: 9px 18px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-export { background: #1a2540; border: 1px solid #3b82f6; color: #60a5fa; }
+    .btn-import { background: #151c2c; border: 1px solid #334155; color: #94a3b8; }
+    .btn-rules { background: #0f201a; border: 1px solid #22c55e; color: #4ade80; }
+    .btn-danger { background: #2a0f0f; border: 1px solid #f87171; color: #f87171; }
+    .import-notice { font-size: 12px; color: #22c55e; margin-top: 8px; display: none; }
+    .error-notice { font-size: 12px; color: #f87171; margin-top: 8px; display: none; }
+
+    /* Empty state */
+    .empty { color: #334155; font-size: 13px; padding: 20px; text-align: center; }
+
+    /* Sovereignty note */
+    .sovereignty {
+      background: #0a0d13;
+      border: 1px solid #1e2333;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.6;
+      margin-top: 24px;
+    }
+    .sovereignty strong { color: #64748b; }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <div>
+      <div class="page-title">⚖ Your Wing</div>
+      <div class="page-sub">Personal discipline rules · on-device · never shared without consent · K518</div>
+    </div>
+    <div class="wing-toggle-row">
+      <span class="wing-enabled-lbl" id="wing-state-lbl">Wing: active</span>
+      <label class="switch" title="Enable/disable your Wing">
+        <input type="checkbox" id="wing-master-toggle" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-val" id="stat-augurs">—</div>
+      <div class="stat-lbl">Active Augurs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-fires">—</div>
+      <div class="stat-lbl">Total Fires</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-blocks">—</div>
+      <div class="stat-lbl">Blocks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-warns">—</div>
+      <div class="stat-lbl">Warnings</div>
+    </div>
+  </div>
+
+  <!-- Per-Augur fire counts -->
+  <div class="section">
+    <div class="section-title">Augur Fire Counts</div>
+    <div id="augur-table-wrap">
+      <table class="augur-table" id="augur-table">
+        <thead>
+          <tr>
+            <th>Augur Name</th>
+            <th>Action</th>
+            <th>Fires</th>
+            <th>Activity</th>
+          </tr>
+        </thead>
+        <tbody id="augur-table-body">
+          <tr><td colspan="4" class="empty">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent events -->
+  <div class="section">
+    <div class="section-title">Recent Events <span id="recent-count" style="color:#334155;">(last 50)</span></div>
+    <div class="event-list" id="event-list">
+      <div class="empty">Loading…</div>
+    </div>
+  </div>
+
+  <!-- Export / Import / Portable -->
+  <div class="section">
+    <div class="section-title">Portability — Export &amp; Import</div>
+    <div class="export-row">
+      <button class="btn btn-export" onclick="exportWing()">⬇ Export Wing config</button>
+      <button class="btn btn-import" onclick="triggerImport()">⬆ Import Wing config</button>
+      <button class="btn btn-rules" onclick="openRuleEditor()">⚙ Rule Editor</button>
+      <button class="btn btn-danger" onclick="confirmClearTelemetry()">🗑 Clear telemetry</button>
+    </div>
+    <div class="import-notice" id="import-notice">Wing config imported successfully.</div>
+    <div class="error-notice" id="error-notice">Import failed — not a valid Wing export file.</div>
+    <input type="file" id="import-file" accept=".json" style="display:none;" onchange="handleImportFile(event)" />
+  </div>
+
+  <!-- Sovereignty note -->
+  <div class="sovereignty">
+    <strong>Your Wing, your rules, your data.</strong> All discipline rules and telemetry are stored only in
+    <code>chrome.storage.local</code> on your device. Nothing is sent to LB servers unless you explicitly
+    opt in to cross-Wing federation (K519, coming later). You can export, import, or delete everything above.
+    The Wing is always optional — disable it from the toggle above or from the popup.
+  </div>
+
+  <script src="../wing-dashboard.js"></script>
+</body>
+</html>

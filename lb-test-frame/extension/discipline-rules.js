@@ -281,6 +281,51 @@ function escHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+// ── Portability — Export / Import (K518 C.8, C.9) ────────────────────────────
+
+async function exportWing() {
+  const resp = await msg('WING_EXPORT');
+  if (!resp?.data) return;
+  const blob = new Blob([resp.data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `lb-wing-export-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function showPortabilityNotice(text, isError = false) {
+  const n = document.getElementById('portability-notice');
+  const e = document.getElementById('portability-error');
+  if (isError) {
+    e.textContent = text; e.style.display = '';
+    setTimeout(() => { e.style.display = 'none'; }, 5000);
+  } else {
+    n.textContent = text; n.style.display = '';
+    setTimeout(() => { n.style.display = 'none'; }, 4000);
+  }
+}
+
+async function handleImportFile(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    const result = await msg('WING_IMPORT', { data });
+    if (result?.ok) {
+      showPortabilityNotice(`Imported ${result.imported_count} rule(s) successfully.`);
+      loadRules();
+    } else {
+      showPortabilityNotice(result?.error ?? 'Import failed.', true);
+    }
+  } catch {
+    showPortabilityNotice('Could not parse file. Must be a valid Wing export JSON.', true);
+  }
+  event.target.value = '';
+}
+
 // ── Event wiring ──────────────────────────────────────────────────────────────
 
 document.getElementById('btn-create').addEventListener('click', () => openForm(null));
@@ -290,6 +335,23 @@ document.getElementById('btn-cancel-rule').addEventListener('click', closeForm);
 fFreshness.addEventListener('input', () => {
   fFreshDisp.textContent = freshnessLabel(parseInt(fFreshness.value, 10));
 });
+
+const btnExport = document.getElementById('btn-export-wing');
+if (btnExport) btnExport.addEventListener('click', exportWing);
+
+const btnImport = document.getElementById('btn-import-wing');
+const importInput = document.getElementById('import-file-input');
+if (btnImport && importInput) {
+  btnImport.addEventListener('click', () => importInput.click());
+  importInput.addEventListener('change', handleImportFile);
+}
+
+const btnDashboard = document.getElementById('btn-open-dashboard');
+if (btnDashboard) {
+  btnDashboard.addEventListener('click', () => {
+    chrome.runtime.sendMessage({ type: 'OPEN_WING_DASHBOARD' });
+  });
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 

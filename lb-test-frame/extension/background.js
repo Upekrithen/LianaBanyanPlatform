@@ -220,5 +220,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       handleDisciplineMessage(message, sendResponse);
       return true;
     }
+
+    // ── Wing control messages (K518) ──────────────────────────────────────────
+    case 'WING_ENABLED_GET':
+    case 'WING_ENABLED_SET':
+    case 'WING_GET_DASHBOARD':
+    case 'WING_EXPORT':
+    case 'WING_IMPORT':
+    case 'WING_INSTALL_STARTERS': {
+      handleDisciplineMessage(message, sendResponse);
+      return true;
+    }
+
+    case 'OPEN_WING_DASHBOARD': {
+      chrome.tabs.create({ url: chrome.runtime.getURL('pages/wing-dashboard.html') });
+      sendResponse({ ok: true });
+      return false;
+    }
   }
 });

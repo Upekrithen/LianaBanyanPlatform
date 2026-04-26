@@ -196,6 +196,66 @@
     .step { width: 32px; height: 3px; border-radius: 2px; background: #1e2333; }
     .step.active { background: #3b82f6; }
     .step.done { background: #22c55e; }
+
+    /* Wing augur cards */
+    .augur-card {
+      background: #151c2c;
+      border: 2px solid #1e2333;
+      border-radius: 10px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .augur-card.selected { border-color: #22c55e; background: #0f201a; }
+    .augur-card:hover { border-color: #334155; }
+    .augur-check {
+      width: 18px; height: 18px;
+      border: 2px solid #334155;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+    }
+    .augur-card.selected .augur-check {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: white;
+    }
+    .augur-info { flex: 1; }
+    .augur-name { font-size: 14px; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
+    .augur-desc { font-size: 12px; color: #64748b; line-height: 1.4; }
+    .action-badge {
+      font-size: 10px; padding: 2px 6px; border-radius: 10px;
+      font-weight: 600; flex-shrink: 0; margin-top: 2px;
+    }
+    .action-badge.warn { background: #2a1a00; color: #fbbf24; }
+    .action-badge.block { background: #2a0f0f; color: #f87171; }
+    .action-badge.enrich { background: #0f2a1c; color: #4ade80; }
+
+    /* Freshness options */
+    .freshness-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .freshness-opt {
+      background: #151c2c;
+      border: 2px solid #1e2333;
+      border-radius: 8px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .freshness-opt:hover { border-color: #334155; }
+    .freshness-opt.selected { border-color: #3b82f6; background: #1a2540; }
+    .freshness-opt-label { font-size: 14px; font-weight: 600; color: #f1f5f9; }
+    .freshness-opt-desc { font-size: 11px; color: #64748b; margin-top: 2px; }
   </style>
 </head>
 <body>
@@ -345,7 +405,135 @@
 
       <div class="cta-row">
         <button class="btn-secondary" onclick="finishOnboarding(false)">Skip verification, use now</button>
-        <button class="btn-primary" onclick="finishOnboarding(true)">Run the 25-question demo →</button>
+        <button class="btn-primary" onclick="goToWingWelcome()">Next: Set up your Wing →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Wing Welcome -->
+    <div id="step-wing-welcome" style="display:none;">
+      <div class="step-indicator">
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step active" id="dot-4"></div>
+        <div class="step" id="dot-5"></div>
+        <div class="step" id="dot-6"></div>
+      </div>
+
+      <div class="lrh-greeting">
+        <div class="lrh-avatar">♟</div>
+        <div class="lrh-speech">
+          <div class="lrh-name">LRH</div>
+          <div class="lrh-text">
+            "Every LB member gets a Wing — a personal set of discipline rules that run
+            on your Frame before any query goes to your AI. You own the rules. They never
+            leave your machine. You can always skip this and set it up later."
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">⚖ Your Personal Wing</div>
+      <div class="section-sub">Five starter rules cover the most common discipline needs. Install in one click, customize anytime.</div>
+
+      <div style="background:#151c2c;border:1px solid #1e2333;border-radius:12px;padding:20px;margin-bottom:24px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#cbd5e1;">
+            <span style="color:#22c55e;font-weight:700;flex-shrink:0;">🛡</span>
+            Rules run on-device — they never leave your browser.
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#cbd5e1;">
+            <span style="color:#22c55e;font-weight:700;flex-shrink:0;">⚙</span>
+            You can add, edit, or remove rules at any time from the popup.
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#cbd5e1;">
+            <span style="color:#22c55e;font-weight:700;flex-shrink:0;">🔌</span>
+            The Wing is opt-in — disable it instantly from the popup toggle.
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn-secondary" onclick="skipWing()">Skip Wing for now</button>
+        <button class="btn-primary" onclick="goToWingAugurs()">Choose my starter rules →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Pick Starter Augurs -->
+    <div id="step-wing-augurs" style="display:none;">
+      <div class="step-indicator">
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step active"></div>
+        <div class="step"></div>
+      </div>
+
+      <div class="lrh-greeting">
+        <div class="lrh-avatar">♟</div>
+        <div class="lrh-speech">
+          <div class="lrh-name">LRH</div>
+          <div class="lrh-text">"Pick the rules you want. All five are recommended — each one addresses a different risk. You can toggle them off individually later."</div>
+        </div>
+      </div>
+
+      <div class="section-title">Pick your starter Augurs</div>
+      <div class="section-sub">All five are selected by default. Uncheck any you don't want.</div>
+
+      <div id="augur-pick-list">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="cta-row">
+        <button class="btn-secondary" onclick="goBack('step-wing-welcome')">← Back</button>
+        <button class="btn-primary" id="btn-augurs-next" onclick="goToWingFreshness()">Next: Freshness →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: Freshness Windows -->
+    <div id="step-wing-freshness" style="display:none;">
+      <div class="step-indicator">
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step done"></div>
+        <div class="step active"></div>
+      </div>
+
+      <div class="lrh-greeting">
+        <div class="lrh-avatar">♟</div>
+        <div class="lrh-speech">
+          <div class="lrh-name">LRH</div>
+          <div class="lrh-text">"How long should a substrate consult stay 'fresh'? After this window, your Wing will prompt you to consult again. You can tune this per-rule later."</div>
+        </div>
+      </div>
+
+      <div class="section-title">Default freshness window</div>
+      <div class="section-sub">How long before your Wing asks you to re-consult your substrate?</div>
+
+      <div class="freshness-grid" id="freshness-grid">
+        <div class="freshness-opt" data-seconds="600" onclick="selectFreshness(600)">
+          <div class="freshness-opt-label">10 minutes</div>
+          <div class="freshness-opt-desc">High discipline — for active research sessions</div>
+        </div>
+        <div class="freshness-opt selected" data-seconds="3600" onclick="selectFreshness(3600)">
+          <div class="freshness-opt-label">1 hour <span style="font-size:10px;color:#3b82f6;">(recommended)</span></div>
+          <div class="freshness-opt-desc">Balanced — good for everyday use</div>
+        </div>
+        <div class="freshness-opt" data-seconds="28800" onclick="selectFreshness(28800)">
+          <div class="freshness-opt-label">8 hours</div>
+          <div class="freshness-opt-desc">Relaxed — once per work session</div>
+        </div>
+        <div class="freshness-opt" data-seconds="86400" onclick="selectFreshness(86400)">
+          <div class="freshness-opt-label">24 hours</div>
+          <div class="freshness-opt-desc">Light touch — once per day</div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn-secondary" onclick="goBack('step-wing-augurs')">← Back</button>
+        <button class="btn-primary" onclick="finishWingSetup()">Finish Wing setup →</button>
       </div>
     </div>
 

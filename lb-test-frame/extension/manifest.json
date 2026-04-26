@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "LB Test Frame",
-  "version": "1.2.0",
-  "description": "Verify the Cathedral Effect on your own AI session. Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot — no API key required. v1.2: Discipline Rule Editor (K513) — personal Augur rules that enforce how your AI behaves.",
+  "version": "1.3.0",
+  "description": "Verify the Cathedral Effect on your own AI session. Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot — no API key required. v1.3: Member Wing (K518) — personal Wing dashboard, onboarding wizard, telemetry, export/import, and Helm PWA Wing integration.",
   "short_name": "LB Test Frame",
   "icons": {
     "16": "icons/icon16.png",
@@ -56,7 +56,12 @@
   "options_page": "pages/options.html",
   "web_accessible_resources": [
     {
-      "resources": ["pages/onboarding.html", "pages/verify.html", "pages/discipline-rules.html"],
+      "resources": [
+        "pages/onboarding.html",
+        "pages/verify.html",
+        "pages/discipline-rules.html",
+        "pages/wing-dashboard.html"
+      ],
       "matches": ["<all_urls>"]
     }
   ],

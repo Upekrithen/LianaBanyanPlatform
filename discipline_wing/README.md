@@ -150,14 +150,80 @@ K514 landing: 12/12 passed. Tag: `v-bishop-wing-mvp-K514`.
 
 ---
 
+## K518 — Member-Tier Wing Deployment
+
+K518 (B126) extends the Wing to every LB member via two host environments:
+
+### Frame Extension Wing Host (JavaScript)
+
+`lb-test-frame/extension/discipline_engine.js` — the JavaScript port of this engine.
+
+| Storage | Value |
+|---|---|
+| Rules | `chrome.storage.local` → `lb_discipline_rules` |
+| Wing enabled | `chrome.storage.local` → `lb_wing_enabled` |
+| Wing telemetry | `chrome.storage.local` → `lb_wing_telemetry` (last 1000) |
+| Per-rule audit | `chrome.storage.local` → `lb_audit_<rule_id>` |
+
+Key additions (K518):
+- `WING_ENABLED_GET / SET` — member can disable Wing entirely (C.5)
+- `WING_GET_DASHBOARD` — per-Augur fire counts + recent events (C.6)
+- `WING_EXPORT / WING_IMPORT` — portable JSON export/import (C.8, C.9)
+- `WING_INSTALL_STARTERS` — one-click all 5 starter Augurs (C.2)
+
+### Helm PWA Wing Host (Python)
+
+`librarian-mcp-helm-pwa/wing_host.py` — Python Wing engine for the Helm PWA daemon.
+
+| Storage | Value |
+|---|---|
+| Rules | `~/.lb-helm/wing_state/rules.json` |
+| Wing prefs | `~/.lb-helm/wing_state/wing_prefs.json` |
+| Telemetry | `~/.lb-helm/wing_state/telemetry.jsonl` |
+| Consult state | `~/.lb-helm/wing_state/consult_state.json` |
+
+REST endpoints (port 7712):
+- `POST /wing/evaluate` — evaluate rules against a query (C.11)
+- `GET  /wing/rules` — load member rules
+- `POST /wing/rules` — sync rules from Frame
+- `GET  /wing/dashboard` — telemetry summary
+- `GET  /wing/export` — portable export
+- `POST /wing/import` — import config
+- `POST /wing/install-starters` — install all 5 starters
+- `POST /wing/mark-consulted` — update consult freshness
+- `POST /wing/enabled` — enable/disable Wing
+
+### Onboarding Wizard
+
+`lb-test-frame/extension/pages/onboarding.html` — 6-step flow (3 existing + 3 Wing):
+- Step 4: Wing Welcome — explain Wing, offer to configure or skip
+- Step 5: Pick Starter Augurs — 5 starter Augurs, all pre-selected, toggleable
+- Step 6: Freshness Windows — pick default consult freshness (10min / 1hr / 8hr / 24hr)
+
+### Wing Dashboard
+
+`lb-test-frame/extension/pages/wing-dashboard.html` — full telemetry dashboard:
+- Master Wing toggle (C.5)
+- Stats: active Augurs, total fires, blocks, warns
+- Per-Augur fire counts with activity bars
+- Recent events timeline
+- Export / Import / Clear telemetry
+
+### Cross-Device Independence (C.12)
+
+Frame extension (laptop) and Helm PWA (phone/desktop) each host independent Wings. Rules stored separately; no conflict. Federation is K519 opt-in only.
+
+---
+
 ## Patent Backing
 
 A&A #2295 — Augur MAJCOM Discipline Hierarchy
 - Tier 1: Single Augur (K511)
 - Tier 2: Squadron (K512/K513)
 - **Tier 3: Wing with Consensus Layer (K514) ← THIS MODULE**
+- **Tier 3 distribution to members: K518 ← Member-Tier Wing Deployment**
 - Tier 4: MAJCOM Federation (K519+)
 
 ---
 
-*Filed K514, B126, 2026-04-26. FOR THE KEEP!*
+*Filed K514 + K518, B126, 2026-04-26. FOR THE KEEP!*

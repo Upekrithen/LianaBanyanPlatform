@@ -1,6 +1,6 @@
 /**
  * LB Test Frame — Popup controller
- * K502 / B124
+ * K502 / B124 — K518: Wing section added
  */
 
 const AI_NAMES = {
@@ -49,6 +49,25 @@ async function init() {
       document.getElementById('last-intent').textContent = prefs.lastIntent;
     }
   });
+
+  // Wing section (K518)
+  chrome.runtime.sendMessage({ type: 'WING_ENABLED_GET' }, (resp) => {
+    const toggle = document.getElementById('wing-toggle');
+    if (toggle && resp != null) {
+      toggle.checked = resp.enabled !== false;
+      toggle.addEventListener('change', () => {
+        chrome.runtime.sendMessage({ type: 'WING_ENABLED_SET', enabled: toggle.checked });
+      });
+    }
+  });
+
+  chrome.runtime.sendMessage({ type: 'WING_GET_DASHBOARD' }, (resp) => {
+    if (!resp) return;
+    const rulesEl = document.getElementById('wing-rules-count');
+    const firesEl = document.getElementById('wing-fires-count');
+    if (rulesEl) rulesEl.textContent = resp.active_rules_count ?? '0';
+    if (firesEl) firesEl.textContent = resp.total_fires ?? '0';
+  });
 }
 
 function openVerify() {
@@ -63,6 +82,16 @@ function openOnboarding() {
 
 function openOptions() {
   chrome.runtime.openOptionsPage();
+  window.close();
+}
+
+function openDisciplineRules() {
+  chrome.runtime.sendMessage({ type: 'OPEN_DISCIPLINE_RULES' });
+  window.close();
+}
+
+function openWingDashboard() {
+  chrome.runtime.sendMessage({ type: 'OPEN_WING_DASHBOARD' });
   window.close();
 }
 

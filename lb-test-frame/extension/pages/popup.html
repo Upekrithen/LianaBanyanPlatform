@@ -99,6 +99,51 @@
     .ai-label { color: #64748b; }
     .ai-value { color: #94a3b8; font-size: 12px; }
 
+    /* Wing section */
+    .wing-section {
+      padding: 10px 16px;
+      background: #0a0d13;
+      border-bottom: 1px solid #1e2333;
+    }
+    .wing-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .wing-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: #475569;
+      font-weight: 600;
+    }
+    .wing-stats {
+      display: flex;
+      gap: 10px;
+    }
+    .wing-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .wing-stat-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+    .wing-stat-lbl {
+      font-size: 10px;
+      color: #475569;
+    }
+    .wing-link {
+      font-size: 11px;
+      color: #3b82f6;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .wing-link:hover { color: #60a5fa; }
+
     /* Action buttons */
     .actions {
       padding: 10px 16px;
@@ -125,6 +170,12 @@
       border: 1px solid #1e2333;
       color: #64748b;
     }
+    .btn-wing {
+      background: #0f2a0f;
+      border: 1px solid #22c55e;
+      color: #4ade80;
+    }
+    .btn-wing:hover { background: #142a14; }
 
     /* Footer */
     .footer {
@@ -194,14 +245,40 @@
 
   <div class="divider"></div>
 
+  <!-- Wing section (K518) -->
+  <div class="wing-section">
+    <div class="wing-header">
+      <span class="wing-title">⚖ Your Wing</span>
+      <label class="switch" title="Enable/disable your Wing">
+        <input type="checkbox" id="wing-toggle" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="wing-stats">
+      <div class="wing-stat">
+        <span class="wing-stat-val" id="wing-rules-count">—</span>
+        <span class="wing-stat-lbl">Augurs</span>
+      </div>
+      <div class="wing-stat">
+        <span class="wing-stat-val" id="wing-fires-count">—</span>
+        <span class="wing-stat-lbl">Fires</span>
+      </div>
+      <div style="flex:1;"></div>
+      <a class="wing-link" onclick="openWingDashboard()">Dashboard →</a>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
   <div class="actions">
     <div class="btn btn-verify" onclick="openVerify()">▶ Run Cathedral Verification Demo</div>
+    <div class="btn btn-wing" onclick="openDisciplineRules()">⚖ Manage Wing Rules</div>
     <div class="btn btn-settings" onclick="openOnboarding()">⚙ Change AI / persona</div>
   </div>
 
   <div class="footer">
-    <span class="footer-text">K502</span>
-    <a class="footer-link" href="https://librarian.the2ndsecond.com/community-empirical" target="_blank">Community results →</a>
+    <span class="footer-text">K518</span>
+    <a class="footer-link" href="https://librarian.the2ndsecond.com/disciplines/your-wing" target="_blank">Wing guide →</a>
   </div>
 
   <script src="../popup.js"></script>

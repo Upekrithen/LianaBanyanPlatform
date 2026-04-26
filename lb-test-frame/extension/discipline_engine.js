@@ -15,11 +15,14 @@
  * K513 / B126
  */
 
-const CONSULT_STATE_KEY = 'lb_consult_state';       // chrome.storage.local key
-const RULES_KEY         = 'lb_discipline_rules';    // chrome.storage.local key
-const AUDIT_KEY_PREFIX  = 'lb_audit_';              // per-rule audit log prefix
-const DAEMON_STATE_URL  = 'http://127.0.0.1:7712/state';
-const DAEMON_TIMEOUT_MS = 2000;
+const CONSULT_STATE_KEY   = 'lb_consult_state';       // chrome.storage.local key
+const RULES_KEY           = 'lb_discipline_rules';    // chrome.storage.local key
+const AUDIT_KEY_PREFIX    = 'lb_audit_';              // per-rule audit log prefix
+const WING_ENABLED_KEY    = 'lb_wing_enabled';        // Wing master on/off
+const WING_TELEMETRY_KEY  = 'lb_wing_telemetry';      // compact fire telemetry
+const DAEMON_STATE_URL    = 'http://127.0.0.1:7712/state';
+const DAEMON_TIMEOUT_MS   = 2000;
+const MAX_WING_TELEMETRY  = 1000;
 
 // ── Rule schema defaults ──────────────────────────────────────────────────────
 
@@ -109,6 +112,18 @@ async function getConsultState() {
   });
 }
 
+async function getWingEnabled() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ [WING_ENABLED_KEY]: true }, (data) => resolve(data[WING_ENABLED_KEY]));
+  });
+}
+
+async function setWingEnabled(enabled) {
+  return new Promise((resolve) => {
+    chrome.storage.local.set({ [WING_ENABLED_KEY]: enabled }, resolve);
+  });
+}
+
 async function appendAuditEntry(ruleId, entry) {
   const key = AUDIT_KEY_PREFIX + ruleId;
   return new Promise((resolve) => {
@@ -120,6 +135,76 @@ async function appendAuditEntry(ruleId, entry) {
       chrome.storage.local.set({ [key]: trimmed }, resolve);
     });
   });
+}
+
+async function appendWingTelemetry(record) {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ [WING_TELEMETRY_KEY]: [] }, (data) => {
+      const tel = data[WING_TELEMETRY_KEY];
+      tel.push({ ...record, ts: new Date().toISOString() });
+      const trimmed = tel.length > MAX_WING_TELEMETRY ? tel.slice(tel.length - MAX_WING_TELEMETRY) : tel;
+      chrome.storage.local.set({ [WING_TELEMETRY_KEY]: trimmed }, resolve);
+    });
+  });
+}
+
+async function getWingTelemetry() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ [WING_TELEMETRY_KEY]: [] }, (data) => resolve(data[WING_TELEMETRY_KEY]));
+  });
+}
+
+async function getWingDashboard() {
+  const rules = await getRules();
+  const tel = await getWingTelemetry();
+  const enabled = await getWingEnabled();
+
+  const totalFires = tel.filter((t) => ['block', 'warn', 'enrich'].includes(t.action)).length;
+  const perRule = {};
+  for (const t of tel) {
+    if (!perRule[t.rule_id]) perRule[t.rule_id] = 0;
+    perRule[t.rule_id]++;
+  }
+  const recent = tel.slice(-50).reverse();
+
+  return {
+    wing_enabled: enabled,
+    rules_count: rules.length,
+    active_rules_count: rules.filter((r) => r.enabled !== false).length,
+    total_fires: totalFires,
+    per_rule_fires: perRule,
+    recent_events: recent,
+    source: 'frame_extension',
+  };
+}
+
+async function exportWing() {
+  const rules = await getRules();
+  const telemetry = await getWingTelemetry();
+  return JSON.stringify({
+    lb_wing_export: true,
+    version: '1.0',
+    exported_at: new Date().toISOString(),
+    source: 'frame_extension',
+    rules,
+    telemetry,
+  }, null, 2);
+}
+
+async function importWing(data) {
+  if (!data || !data.lb_wing_export) {
+    return { ok: false, error: 'Not a valid Wing export file.' };
+  }
+  const incoming = data.rules || [];
+  const existing = await getRules();
+  const byId = {};
+  for (const r of existing) byId[r.id] = r;
+  let imported = 0;
+  for (const r of incoming) {
+    if (r.id) { byId[r.id] = r; imported++; }
+  }
+  await new Promise((resolve) => chrome.storage.local.set({ [RULES_KEY]: Object.values(byId) }, resolve));
+  return { ok: true, imported_count: imported };
 }
 
 // ── Consult freshness check ───────────────────────────────────────────────────
@@ -182,8 +267,14 @@ async function getCathedralContext() {
  * @returns {{ action: string, rule?: object, message?: string, enrichment?: string, trace: object[] }}
  */
 export async function evaluate(queryText) {
+  // Wing master on/off (C.5 — member can disable Wing entirely)
+  const wingEnabled = await getWingEnabled();
+  if (!wingEnabled) {
+    return { action: 'allow', trace: [], wing_disabled: true };
+  }
+
   const rules = await getRules();
-  const activeRules = rules.filter((r) => r.enabled);
+  const activeRules = rules.filter((r) => r.enabled !== false);
   const trace = [];
 
   let blockRule = null;
@@ -201,12 +292,20 @@ export async function evaluate(queryText) {
 
     trace.push({ rule_id: rule.id, triggered: true, fresh, action: effectiveAction });
 
-    // Audit every firing
+    // Audit every firing (per-rule log)
     await appendAuditEntry(rule.id, {
       query_snippet: queryText.slice(0, 100),
       triggered: true,
       consult_fresh: fresh,
       decision: effectiveAction,
+    });
+
+    // Wing telemetry (compact aggregate, C.6)
+    await appendWingTelemetry({
+      rule_id: rule.id,
+      rule_name: rule.name,
+      action: effectiveAction,
+      query_snippet: queryText.slice(0, 80),
     });
 
     if (effectiveAction === 'block' && !blockRule) blockRule = rule;
@@ -298,6 +397,51 @@ export async function handleDisciplineMessage(msg, sendResponse) {
     state[key] = Date.now();
     await new Promise((resolve) => chrome.storage.local.set({ [CONSULT_STATE_KEY]: state }, resolve));
     sendResponse({ ok: true });
+    return;
+  }
+
+  // ── Wing control messages (K518) ─────────────────────────────────────────────
+
+  if (msg.type === 'WING_ENABLED_GET') {
+    const enabled = await getWingEnabled();
+    sendResponse({ enabled });
+    return;
+  }
+  if (msg.type === 'WING_ENABLED_SET') {
+    await setWingEnabled(!!msg.enabled);
+    sendResponse({ ok: true });
+    return;
+  }
+  if (msg.type === 'WING_GET_DASHBOARD') {
+    const dashboard = await getWingDashboard();
+    sendResponse(dashboard);
+    return;
+  }
+  if (msg.type === 'WING_EXPORT') {
+    const data = await exportWing();
+    sendResponse({ data });
+    return;
+  }
+  if (msg.type === 'WING_IMPORT') {
+    const result = await importWing(msg.data);
+    sendResponse(result);
+    return;
+  }
+  if (msg.type === 'WING_INSTALL_STARTERS') {
+    const rules = await getRules();
+    const existingIds = new Set(rules.map((r) => r.id));
+    const toInstall = msg.starter_ids
+      ? STARTER_RULES.filter((s) => msg.starter_ids.includes(s.id))
+      : STARTER_RULES;
+    let added = 0;
+    for (const s of toInstall) {
+      if (!existingIds.has(s.id)) {
+        rules.push({ ...s, created_at: new Date().toISOString() });
+        added++;
+      }
+    }
+    await new Promise((resolve) => chrome.storage.local.set({ [RULES_KEY]: rules }, resolve));
+    sendResponse({ ok: true, added });
     return;
   }
 }
