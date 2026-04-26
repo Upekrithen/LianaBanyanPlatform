@@ -46,9 +46,14 @@ const PedestalStakeEarlyInterest = lazy(() => import("@/pages/PedestalStakeEarly
 const PedestalStakeApply = lazy(() => import("@/pages/PedestalStakeApply"));
 const PedestalStakeDashboard = lazy(() => import("@/pages/PedestalStakeDashboard"));
 const MiniTour = lazy(() => import("@/pages/MiniTour"));
+const TestFrameDemo = lazy(() => import("@/pages/TestFrameDemo"));
 
 function HomepageGateway() {
   const { user, loading } = useAuth();
+  // frame.lianabanyan.com — route / directly to the demo page
+  if (typeof window !== "undefined" && window.location.hostname === "frame.lianabanyan.com") {
+    return <Navigate to="/demo" replace />;
+  }
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -122,5 +127,10 @@ export const publicRoutes = (
     <Route path="/my/pedestal-stake" element={<LazyPage><PedestalStakeDashboard /></LazyPage>} />
     {/* 506(c) accredited-investor route — reserved, not implemented (K431) */}
     <Route path="/pedestal-stake/accredited/apply" element={<LazyPage><PedestalStakeApply /></LazyPage>} />
+
+    {/* K512: LB Frame Public Web Demo — also served at frame.lianabanyan.com via hostname redirect */}
+    <Route path="/demo" element={<LazyPage><TestFrameDemo /></LazyPage>} />
+    <Route path="/frame" element={<Navigate to="/demo" replace />} />
+    <Route path="/try" element={<Navigate to="/demo" replace />} />
   </>
 );

@@ -141,6 +141,73 @@ This is the "Layer 6 must hold" scenario. Do NOT panic. Steps:
 
 ---
 
+---
+
+## Public Demo Bring-Up (K512 — frame.lianabanyan.com)
+
+**Production system #37.** The LB Frame Public Web Demo serves as the consumer ship-vehicle
+for Substack / NYT op-eds. Any reader can verify the Cathedral Effect in 30 seconds.
+
+### Where everything lives
+
+| Thing | Location |
+|---|---|
+| Demo page (React) | `platform/src/pages/TestFrameDemo.tsx` |
+| Edge function | `platform/supabase/functions/cathedral-demo/index.ts` |
+| Migration (DB schema) | `platform/supabase/migrations/20260425220001_k512_cathedral_demo.sql` |
+| Route registration | `platform/src/routes/public.tsx` (routes: `/demo`, `/frame`, `/try`) |
+| API key (Anthropic) | Supabase Vault secret `ANTHROPIC_API_KEY` (set via Supabase dashboard → Functions → Secrets) |
+| Spend-cap env var | `DEMO_DAILY_SPEND_CAP` (default `50` = $50/day; set in Supabase Functions Secrets) |
+| Rate limit | 5 cathedral calls per IP per 24h (server-side, `demo_rate_limits` table) |
+
+### Redeploy after code change
+
+```powershell
+# Rebuild + deploy hosting (same as all portal domains)
+cd platform; npm run build
+firebase deploy --only hosting:main -P default
+
+# Redeploy edge function only (if only backend changed)
+npx supabase functions deploy cathedral-demo --project-ref ruuxzilgmuwddcofqecc
+```
+
+### If the demo goes down
+
+1. **Check Supabase dashboard** → Functions → cathedral-demo → Logs (look for `anthropic_api_error` or `anthropic_fetch_error`)
+2. **Check spend cap**: query `SELECT * FROM demo_spend_tracking WHERE spend_date = CURRENT_DATE;`
+   - If `estimated_usd_spend >= 50`, the kill switch fired. Raise `DEMO_DAILY_SPEND_CAP` if justified, or wait until midnight UTC.
+3. **Fall back to pre-computed-only mode**: if Anthropic key is revoked/invalid, the edge function returns a graceful `demo_unavailable` message. Users are directed to the LB Test Frame extension. No stack trace, no key exposure.
+4. **Verify ANTHROPIC_API_KEY is set**: Supabase dashboard → Project Settings → API → Edge Functions Secrets. Must be set as `ANTHROPIC_API_KEY` (not `ANTHROPIC_KEY` or similar).
+
+### DNS setup for frame.lianabanyan.com
+
+DNS provider: **Squarespace** (per `project_dns_provider_split.md`).
+
+**Required**: add `frame.lianabanyan.com` as a custom domain on Firebase Hosting `hosting:main` target.
+
+1. Firebase Console → Hosting → lianabanyan-main target → Add custom domain → `frame.lianabanyan.com`
+2. Firebase provides a CNAME or A-record — add it at Squarespace DNS for `lianabanyan.com`:
+   - Type: `CNAME`
+   - Host: `frame`
+   - Value: `lianabanyan-main.firebaseapp.com` (or whatever Firebase provides)
+   - TTL: 3600
+3. Firebase auto-provisions HTTPS cert (Let's Encrypt) — wait ~15 min for propagation.
+4. Test: `curl -I https://frame.lianabanyan.com` — expect 200.
+
+The SPA detects `window.location.hostname === 'frame.lianabanyan.com'` in `HomepageGateway`
+and redirects `/` → `/demo` automatically. No separate build required.
+
+### Founder live-test (the morning command)
+
+1. Open `https://frame.lianabanyan.com` in Chrome (or `https://lianabanyan.com/demo` before DNS is live)
+2. Click **"How much does a Liana Banyan membership cost per year?"**
+3. Wait ~5 seconds
+4. See the cold answer ("I'm not familiar with Liana Banyan's pricing…") vs. cathedral answer ("$5/year, identical for every member forever…")
+5. Screenshot the side-by-side — this is the empirical anchor for the morning Substack / NYT op-ed
+6. Expect: cold = MISS, cathedral = HOT, lift = +100 pp for this question
+
+---
+
 ## What this runbook does NOT do
 
 - **Member-facing substrate**: members run their own `librarian-mcp` install (Layer 5). Their substrate is local. A vendor lockout affecting LB does not affect member substrate; only their *answer-construction* layer is affected, and they fall to local-LLM the same way LB does.
@@ -153,7 +220,7 @@ This is the "Layer 6 must hold" scenario. Do NOT panic. Steps:
 
 Per the 7-layer-defense canon, items still theoretical:
 
-1. **Layer 6 empirical proof** — Local-LLM Cathedral Effect test against R13's sealed bank (Knight prompt drafted next; see `BISHOP_DROPZONE/01_KnightPrompts/PROMPT_KNIGHT_K-FUTURE_LOCAL_LLM_CATHEDRAL_TEST.md`)
+1. **Layer 6 empirical proof** — Local-LLM Cathedral Effect test against R13's sealed bank (K511; see `BISHOP_DROPZONE/01_KnightPrompts/PROMPT_KNIGHT_K511_B125_LOCAL_LLM_CATHEDRAL_EFFECT_TEST.md`; gate cleared, hardware allocation pending)
 2. **Multi-distribution-channel for librarian-mcp** — currently PyPI-only; conda-forge + Docker Hub + GitHub Releases binaries to harden Layer 5
 3. **MCP-protocol-version pinning** — CI test against multiple MCP SDK versions
 4. **Founder-controlled substrate mirror** — off-Founder-rig backup of canonical substrate (NAS / geographically-separated)
