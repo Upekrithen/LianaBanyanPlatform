@@ -39,7 +39,7 @@
   // In MAIN world: typeof chrome === 'undefined'  ← correct
   // In ISOLATED world: typeof chrome === 'object' ← programmatic registration also failed
   console.log(
-    '[CometBridge] injected.js TOP-OF-FILE v0.2.2 | world-probe: chrome=%s | href=%s',
+    '[CometBridge] injected.js TOP-OF-FILE v0.2.3 | world-probe: chrome=%s | href=%s',
     typeof chrome,
     window.location.href.slice(0, 80),
   );
@@ -232,9 +232,10 @@
     // .prompt field — older Perplexity SDK format
     if (typeof body.prompt === 'string' && body.prompt.length > 0) return body.prompt;
 
-    // Nested params
-    if (typeof body.params?.query === 'string') return body.params.query;
-    if (typeof body.data?.query  === 'string') return body.data.query;
+    // Nested params — Perplexity /api/v2/run uses params.query_str
+    if (typeof body.params?.query_str === 'string' && body.params.query_str.length > 0) return body.params.query_str;
+    if (typeof body.params?.query     === 'string' && body.params.query.length > 0)     return body.params.query;
+    if (typeof body.data?.query       === 'string' && body.data.query.length > 0)       return body.data.query;
 
     // Perplexity search — some versions use { search_query: "..." }
     if (typeof body.search_query === 'string') return body.search_query;
@@ -265,6 +266,9 @@
     }
     if (typeof body.prompt === 'string') {
       return { ...body, prompt: enrichedQuery };
+    }
+    if (typeof body.params?.query_str === 'string') {
+      return { ...body, params: { ...body.params, query_str: enrichedQuery } };
     }
     if (typeof body.params?.query === 'string') {
       return { ...body, params: { ...body.params, query: enrichedQuery } };

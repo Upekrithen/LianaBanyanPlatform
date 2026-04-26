@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Comet Bridge — Cathedral Injection",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Zero-paste Cathedral context injection for Perplexity/Comet queries via local Helm PWA daemon. K508: programmatic MAIN-world injection via chrome.scripting (bypasses Comet MV3 declarative world:MAIN gap).",
 
   "permissions": [
