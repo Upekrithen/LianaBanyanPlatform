@@ -3988,6 +3988,31 @@ result = query_bureau(
 );
 
 // ═══════════════════════════════════════════
+// K516 — Dragonrider Phase-Shift MCP Tool
+// A&A #2301 (Dragonriders) / #2295 Tier 3 sandbox-integration
+// ═══════════════════════════════════════════
+
+server.tool(
+  "dragonrider_phase_shifts",
+  "K516 — Query Dragonrider Phase-Shift evaluation history. Returns recent borderline-signal sandbox evaluations: when they triggered, what harm was predicted, whether they escalated warn→block. A&A #2301.",
+  {
+    since_ts: z.string().optional().describe("ISO timestamp — only include evaluations after this time"),
+    limit: z.number().int().min(1).max(200).optional().default(50).describe("Max records to return"),
+  },
+  async ({ since_ts, limit }) => {
+    const result = runWingHelper(
+      `from discipline_wing.dragonrider import query_phase_shifts
+result = query_phase_shifts(
+    since_ts=_args.get("since_ts"),
+    limit=_args.get("limit", 50),
+)`,
+      { since_ts: since_ts ?? null, limit: limit ?? 50 }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════
 

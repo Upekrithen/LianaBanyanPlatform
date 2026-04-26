@@ -25,6 +25,7 @@ from typing import Any, Dict, List, Optional
 
 from discipline_wing.consensus import AugurResult, ConsensusDecision, ConsensusLayer
 from discipline_wing.chronicler import write_chronicler
+from discipline_wing.dragonrider import phase_shift, DragonriderResult
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
@@ -50,6 +51,7 @@ class EvaluationResult:
     trace: List[dict]       # per-Augur diagnostic trace
     elapsed_ms: int
     consensus_reason: str
+    dragonrider: Optional[dict] = None  # Phase-Shift result if triggered (K516)
 
 
 # ── Augur config loading ───────────────────────────────────────────────────────
@@ -285,6 +287,38 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
         layer = ConsensusLayer(consensus_rules)
         decision: ConsensusDecision = layer.arbitrate(augur_results)
 
+        # Dragonrider Phase-Shift — optional sandbox evaluation on borderline decisions (K516)
+        dr_result: Optional[DragonriderResult] = None
+        if decision.decision == "warn" and wing_config.get("dragonrider_enabled", False):
+            try:
+                dr_result = phase_shift(
+                    tool_name=tc.tool_name,
+                    file_path=tc.file_path,
+                    content=tc.content,
+                    augur_configs=augur_configs,
+                    consensus_decision=decision.decision,
+                    triggered_augur_ids=decision.triggered_augurs,
+                    wing_config=wing_config,
+                )
+                if dr_result.sandbox_decision == "escalate_to_block":
+                    decision = ConsensusDecision(
+                        decision="block",
+                        message=(
+                            f"[Dragonrider Phase-Shift: {dr_result.phase_shift_id}] "
+                            f"{dr_result.escalation_reason}\n"
+                            f"Original warn: {decision.message}"
+                        ),
+                        triggered_augurs=decision.triggered_augurs,
+                        all_results=decision.all_results,
+                        consensus_reason=(
+                            f"Dragonrider escalated warn→block "
+                            f"(confidence={dr_result.confidence:.2f}): "
+                            f"{dr_result.escalation_reason}"
+                        ),
+                    )
+            except Exception:
+                dr_result = None  # Dragonrider failure → proceed without (fail-safe)
+
         # Chronicler UpTick — per-Augur tablet entry for every evaluation (K515)
         for r in augur_results:
             write_chronicler(
@@ -320,6 +354,16 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
             ],
             elapsed_ms=elapsed,
             consensus_reason=decision.consensus_reason,
+            dragonrider={
+                "phase_shift_id": dr_result.phase_shift_id,
+                "triggered": dr_result.triggered,
+                "predicted_harm": dr_result.predicted_harm,
+                "confidence": dr_result.confidence,
+                "sandbox_decision": dr_result.sandbox_decision,
+                "escalation_reason": dr_result.escalation_reason,
+                "elapsed_ms": dr_result.elapsed_ms,
+                "skipped": dr_result.phase_shift_skipped,
+            } if dr_result else None,
         )
 
         _write_telemetry(tc, result)

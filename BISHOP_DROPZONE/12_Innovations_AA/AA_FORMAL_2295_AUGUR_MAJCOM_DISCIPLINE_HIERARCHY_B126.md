@@ -266,7 +266,7 @@ The cooperative-economic kicker: when LB scales to N members, MAJCOM-LB federate
 | K513 | Discipline Rule Editor (UI for #2294 single-Augur installation by members) | Tier 1 | post-K512 |
 | K514 | Bishop Wing MVP (5-7 starter Augurs, Consensus Layer, basic telemetry) | Tier 3 | post-K513 |
 | K515 | Chronos + Chroniclers + Embedded Correspondent + Bureau (Twin Observer Pattern — SHIPPED 2026-04-26, 17/17 checks, K512.5 regression closed) | Tier 3 enhancement | LANDED |
-| K516 | Dragonriders sandbox integration (Phase-Shift hypothetical-evaluation) | Tier 3 enhancement | post-K515 |
+| K516 | Dragonriders Phase-Shift sandbox (borderline-signal hypothetical evaluation, SHIPPED 2026-04-26, 8/8 checks, escalate warn→block at ≥70% confidence) | Tier 3 enhancement | LANDED |
 | K517 | TimeWave Security + Angel of Death (Bury mode) integration | Tier 3 enhancement | post-K516 |
 | K518 | Member-tier Wing deployment via LB Frame extension + Helm PWA | Tier 3 distribution | post-K517 |
 | K519 | NAF MVP (NAF-Bishops federating Wing-Bishop instances + cross-Wing rule promotion) | Tier 4 | post-K518 |

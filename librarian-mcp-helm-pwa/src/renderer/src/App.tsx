@@ -19,9 +19,10 @@ import { ModulesView } from './components/ModulesView'
 import { DisciplineRulesPanel } from './components/DisciplineRulesPanel'
 import { WingDashboard } from './components/WingDashboard'
 import { ChronosBureauPanel } from './components/ChronosBureauPanel'
+import { DragonriderPanel } from './components/DragonriderPanel'
 import { getAllModules } from './modules/registry'
 
-export type View = 'home' | 'settings' | 'modules' | 'discipline' | 'wing' | 'observers' | string  // string for module ids
+export type View = 'home' | 'settings' | 'modules' | 'discipline' | 'wing' | 'observers' | 'dragonrider' | string  // string for module ids
 
 declare global {
   interface Window {
@@ -209,6 +210,9 @@ export default function App(): React.ReactElement {
         <div onClick={() => setView('observers')} style={S.navItem(view === 'observers')}>
           <span>🔭</span> Observers
         </div>
+        <div onClick={() => setView('dragonrider')} style={S.navItem(view === 'dragonrider')}>
+          <span>🐉</span> Phase-Shift
+        </div>
         <div onClick={() => setView('discipline')} style={S.navItem(view === 'discipline')}>
           <span>⚖️</span> Rules
         </div>
@@ -238,6 +242,8 @@ export default function App(): React.ReactElement {
           <WingDashboard />
         ) : view === 'observers' ? (
           <ChronosBureauPanel />
+        ) : view === 'dragonrider' ? (
+          <DragonriderPanel />
         ) : view === 'discipline' ? (
           <DisciplineRulesPanel />
         ) : view === 'settings' ? (
