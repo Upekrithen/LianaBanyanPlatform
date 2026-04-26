@@ -45,13 +45,17 @@ def list_models() -> list[str]:
         return []
 
 
-def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 600) -> AdapterResponse:
+def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 7200) -> AdapterResponse:
     """
-    Call Ollama /api/chat with the given model, system prompt, and user prompt.
+    Call Ollama /api/chat using streaming mode.
 
-    Uses the chat format (system + user messages) to mirror the R13 harness protocol.
+    Uses streaming (stream=True) to avoid socket read timeouts on large prompts,
+    since each token chunk arrives within the per-read timeout window.
+    Suitable for cathedral condition with 58K-char system prompts and CPU inference.
+
     Temperature 0.0 for deterministic output.
     num_predict=800 caps output tokens (matches R13 cloud adapter max_tokens).
+    timeout: per-read socket timeout in seconds (default 7200 for slow CPU inference).
     """
     payload = {
         "model": model,
@@ -59,7 +63,7 @@ def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 600) -
             {"role": "system", "content": system_prompt},
             {"role": "user",   "content": user_prompt},
         ],
-        "stream": False,
+        "stream": True,
         "options": {
             "temperature": 0.0,
             "num_predict": 800,
@@ -74,21 +78,34 @@ def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 600) -
     )
 
     t0 = time.perf_counter()
+    text_parts: list[str] = []
+    prompt_eval_count = 0
+    eval_count        = 0
+
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            raw = resp.read().decode("utf-8")
+            for raw_line in resp:
+                line = raw_line.decode("utf-8").strip()
+                if not line:
+                    continue
+                try:
+                    chunk = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                # Accumulate streamed content
+                delta = chunk.get("message", {}).get("content", "")
+                if delta:
+                    text_parts.append(delta)
+                # Final chunk carries token counts
+                if chunk.get("done", False):
+                    prompt_eval_count = chunk.get("prompt_eval_count", 0)
+                    eval_count        = chunk.get("eval_count", 0)
+                    break
     except urllib.error.URLError as e:
         raise ConnectionError(f"Ollama unreachable at {OLLAMA_BASE_URL}: {e}") from e
 
     latency = time.perf_counter() - t0
-    data = json.loads(raw)
-
-    # /api/chat response shape:
-    # { "model": ..., "message": {"role": "assistant", "content": "..."},
-    #   "done": true, "eval_count": N, "prompt_eval_count": N, "total_duration": ns }
-    text = data.get("message", {}).get("content", "")
-    prompt_eval_count  = data.get("prompt_eval_count", 0)
-    eval_count         = data.get("eval_count", 0)
+    text = "".join(text_parts)
 
     return AdapterResponse(
         text=text,
