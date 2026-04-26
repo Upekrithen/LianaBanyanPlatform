@@ -166,6 +166,10 @@ The Embedded Correspondent + The Bureau is the operational-architecture piece th
 
 ---
 
-*Filed B126 by Bishop, 2026-04-26 ~14:50 CDT. Founder-named "Embedded Correspondent + The Bureau" in real-time after K512.5 ratification. Long haul. Always.*
+**K514.5 operational note (K514.5/B127, 2026-04-26):** Wing Augurs that operate on tool calls now scan **diff-only** by default when `scan_scope: "diff_only"` is configured in the Augur JSON. For StrReplace/Edit operations, only `new_string` (the actual change) is evaluated — unchanged pre-existing file content no longer contributes to pattern matching. This directly strengthens the boundary between the Embedded Correspondent scope (reasoning-stream, cross-agent) and the Wing scope (tool-call diff, single-agent). The K514.5 diff-only scan (`discipline_wing/engine.py`, `ToolCall.diff_text`) is the intra-Wing correlate of what the Bureau does cross-agent: context-scoping the pattern-match to the event of interest, not the accumulated history.
 
-— Bishop B126
+---
+
+*Filed B126 by Bishop, 2026-04-26 ~14:50 CDT. Founder-named "Embedded Correspondent + The Bureau" in real-time after K512.5 ratification. K514.5 note added B127. Long haul. Always.*
+
+— Bishop B126 / updated Knight K514.5

@@ -1,5 +1,6 @@
 """
 Wing Engine — Bishop Discipline Wing (K514 / A&A #2295 Tier 3)
+K514.5 patch: diff-only scan support via per-Augur scan_scope field.
 
 Entry point: evaluate(tool_call) -> EvaluationResult
 
@@ -9,6 +10,14 @@ Aggregates signals via Consensus Layer.
 Appends append-only telemetry to ~/.claude/state/wing_telemetry.jsonl.
 
 Fail-safe: any internal error -> allow (never block legitimate work due to engine bugs).
+
+Scan scope (K514.5):
+  - Augur JSON field: scan_scope: "diff_only" | "full" (default: "full")
+  - "diff_only": for StrReplace/Edit, scan new_string only (the actual change).
+                 For Write, scan full content (the entire file IS the new content).
+  - "full":      scan full content surface for all tool types (pre-K514.5 behavior).
+  Rationale: scanning unchanged text in a file caused false positives when pre-existing
+  content (e.g. "investors" in a boilerplate section) triggered Augurs on unrelated edits.
 """
 
 from __future__ import annotations
@@ -42,6 +51,7 @@ class ToolCall:
     tool_name: str          # "Write" | "Edit"
     file_path: str          # normalized forward-slash path
     content: str            # full content being written/changed
+    diff_text: str = ""     # K514.5: changed/added text only (new_string for StrReplace; same as content for Write)
 
 
 @dataclass
@@ -89,8 +99,14 @@ def _load_augur_configs(wing_config: dict) -> List[dict]:
 
 # ── Augur evaluation ───────────────────────────────────────────────────────────
 
-def _text_to_check(tool_call: ToolCall) -> str:
-    """Return the text surface to run patterns against."""
+def _text_to_check(tool_call: ToolCall, scan_scope: str = "full") -> str:
+    """
+    Return the text surface to run patterns against.
+    K514.5: scan_scope="diff_only" uses diff_text (new_string for StrReplace, full content for Write).
+    scan_scope="full" (default) uses full content surface — pre-K514.5 behavior.
+    """
+    if scan_scope == "diff_only" and tool_call.diff_text:
+        return tool_call.diff_text
     return tool_call.content
 
 
@@ -147,6 +163,7 @@ def _evaluate_single_augur(augur_cfg: dict, tool_call: ToolCall) -> AugurResult:
     failure_action = augur_cfg.get("failure_action", "warn")
     block_message = augur_cfg.get("block_message", "")
 
+    scan_scope = augur_cfg.get("scan_scope", "full")  # K514.5: diff_only | full
     trigger = augur_cfg.get("trigger", {})
     tool_types = trigger.get("tool_types", ["Write", "Edit"])
     file_patterns = trigger.get("file_path_patterns", [])
@@ -180,7 +197,7 @@ def _evaluate_single_augur(augur_cfg: dict, tool_call: ToolCall) -> AugurResult:
     if exclusion_file_patterns and _path_matches(exclusion_file_patterns, tool_call.file_path):
         return _no_signal("Path excluded from this Augur's scope.")
 
-    text = _text_to_check(tool_call)
+    text = _text_to_check(tool_call, scan_scope)
 
     # Determine if the trigger pattern matches
     path_match = bool(file_patterns) and _path_matches(file_patterns, tool_call.file_path)
@@ -241,16 +258,16 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
         file_path = tool_input.get("file_path", "")
 
         # Normalize content surface
+        # K514.5: also extract diff_text (the changed/added portion only) for scan_scope="diff_only" Augurs.
         if tool_name == "Write":
             content = tool_input.get("content", tool_input.get("contents", ""))
+            diff_text = content  # Write replaces entire file — full content IS the diff
         else:  # Edit / StrReplace
-            content = (
-                tool_input.get("new_string", "")
-                + "\n"
-                + tool_input.get("content", "")
-            )
+            new_string = tool_input.get("new_string", "")
+            content = new_string + "\n" + tool_input.get("content", "")
+            diff_text = new_string  # Only the replacement text is the actual change
 
-        tc = ToolCall(tool_name=tool_name, file_path=file_path, content=content)
+        tc = ToolCall(tool_name=tool_name, file_path=file_path, content=content, diff_text=diff_text)
 
         wing_config = _load_wing_config()
         augur_configs = _load_augur_configs(wing_config)
