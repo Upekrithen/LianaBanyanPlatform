@@ -23,7 +23,10 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const MODEL = "claude-haiku-4-5";
+// Full versioned model ID required by Anthropic REST API.
+// Alias "claude-haiku-4-5" is rejected (400) — must use the datestamped form.
+// To reproduce cathedral-path test: see A.1 curl recipe at bottom of file.
+const MODEL = "claude-haiku-4-5-20251001";
 const COST_PER_CATHEDRAL_CALL_USD = 0.0003; // Conservative estimate: Haiku 4.5, ~1,500 tokens combined
 const RATE_LIMIT_PER_DAY = 5;
 
@@ -234,7 +237,14 @@ Deno.serve(async (req: Request) => {
   let tokenEstOutput = 0;
 
   try {
-    const anthropicResp = await fetch("https://api.anthropic.com/v1/messages", {
+    // 15-second hard timeout covering BOTH headers and body read.
+    // fetch() resolves on headers received; anthropicResp.json() can still hang
+    // if Supabase edge network stalls mid-body.  Promise.race enforces the wall clock.
+    const bodyTimeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("anthropic_body_timeout_15s")), 15_000)
+    );
+
+    const anthropicRespPromise = fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "x-api-key": anthropicKey,
@@ -249,20 +259,37 @@ Deno.serve(async (req: Request) => {
       }),
     });
 
+    const anthropicResp = await Promise.race([anthropicRespPromise, bodyTimeout]);
+
     if (!anthropicResp.ok) {
       const errText = await anthropicResp.text();
-      console.error("anthropic_api_error", anthropicResp.status, errText.slice(0, 200));
+      // Log full error for diagnostics (status + body). Common causes:
+      //   400 = invalid model ID (ensure MODEL uses full datestamped form)
+      //   401 = invalid/expired ANTHROPIC_API_KEY secret
+      //   429 = rate limit / budget cap at Anthropic level
+      console.error("anthropic_api_error", {
+        status: anthropicResp.status,
+        model: MODEL,
+        body: errText.slice(0, 400),
+      });
       return new Response(JSON.stringify({
         error: "demo_unavailable",
         message: "Cathedral demo temporarily unavailable. Please try the LB Test Frame extension.",
       }), { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const anthropicData = await anthropicResp.json();
+    const anthropicData = await Promise.race([anthropicResp.json(), bodyTimeout]);
     cathedralAnswer = anthropicData.content?.[0]?.text ?? "";
     tokenEstOutput = anthropicData.usage?.output_tokens ?? Math.ceil(cathedralAnswer.length / 4);
-  } catch (err) {
-    console.error("anthropic_fetch_error", err);
+  } catch (err: unknown) {
+    const e = err as Record<string, unknown>;
+    console.error("[cathedral-demo] anthropic_call_failed", {
+      model: MODEL,
+      status: e?.status,
+      error_type: (e?.error as Record<string, unknown>)?.type,
+      error_message: String((e?.error as Record<string, unknown>)?.message ?? e?.message ?? err).slice(0, 200),
+      request_id: e?.request_id,
+    });
     return new Response(JSON.stringify({
       error: "demo_unavailable",
       message: "Cathedral demo temporarily unavailable. Please try the LB Test Frame extension.",
@@ -324,3 +351,15 @@ Deno.serve(async (req: Request) => {
     },
   }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
 });
+
+// ── Debug recipe (K512.5) — reproduce cathedral-path test via curl ────────────
+//
+// Load SUPABASE_SERVICE_ROLE_KEY from SDS.env, then:
+//
+// Invoke-WebRequest -Method POST \
+//   -Uri "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1/cathedral-demo" \
+//   -Headers @{"Content-Type"="application/json";"Authorization"="Bearer $env:SUPABASE_SERVICE_ROLE_KEY";"apikey"="$env:SUPABASE_SERVICE_ROLE_KEY"} \
+//   -Body '{"question_id":"q02","question_text":"How much does a Liana Banyan membership cost per year?","condition":"cathedral","session_uuid":"00000000-0000-0000-0000-000000000001"}'
+//
+// Expected success: {"answer":"...","correct":true,"condition":"cathedral","chips":{...}}
+// Expected failure: {"error":"demo_unavailable",...} → check Supabase Function logs for anthropic_api_error details
