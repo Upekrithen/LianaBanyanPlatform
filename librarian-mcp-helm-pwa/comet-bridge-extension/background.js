@@ -81,6 +81,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       }
 
       const result = await fetchEnrichment(message.query);
+      // Persist last intent for popup display
+      if (result.daemonAlive && result.intent) {
+        chrome.storage.local.set({ lastIntent: result.intent });
+      }
       sendResponse({ ...result, injectionEnabled: true });
     });
     return true; // keep message channel open for async response

@@ -25,6 +25,7 @@ const INCLUDE_PATTERNS = [
   'manifest.json',
   'background.js',
   'content.js',
+  'injected.js',   // K508: MAIN world fetch interceptor for Perplexity
   'popup.js',
   'onboarding.js',
   'verify.js',

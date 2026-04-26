@@ -153,6 +153,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
           return;
         }
         const result = await fetchEnrichment(message.query);
+        if (result.daemonAlive && result.intent) {
+          chrome.storage.local.set({ lastIntent: result.intent });
+        }
         sendResponse({ ...result, injectionEnabled: true });
       });
       return true;
