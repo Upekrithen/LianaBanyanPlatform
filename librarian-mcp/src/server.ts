@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync } from "fs";
-import { tmpdir } from "os";
+import { tmpdir, homedir } from "os";
 import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
 import { execSync } from "child_process";
 import { resolve, dirname } from "path";
@@ -40,6 +40,24 @@ import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
+
+// K520.5 — First-Consult Edict substrate cache (A&A #2310)
+const SUBSTRATE_CACHE_DIR = resolve(homedir(), ".lb-session");
+const SUBSTRATE_CACHE_FILE = resolve(SUBSTRATE_CACHE_DIR, "substrate_cache.json");
+
+function writeSubstrateCache(task: string, briefingText: string): void {
+  try {
+    mkdirSync(SUBSTRATE_CACHE_DIR, { recursive: true });
+    writeFileSync(SUBSTRATE_CACHE_FILE, JSON.stringify({
+      ts: Math.floor(Date.now() / 1000),
+      session_task: task,
+      briefing: briefingText,
+      cached_at: new Date().toISOString(),
+    }, null, 2), "utf-8");
+  } catch {
+    // Cache write failure is non-fatal — brief_me still returns its result
+  }
+}
 
 type PaginationOptions = {
   offset?: number;
@@ -1018,8 +1036,8 @@ const ARCHITECTURAL_RULES: ArchitecturalRule[] = [
   { id: "powershell-syntax", rule: "On Windows/PowerShell, use ';' to chain commands, NOT '&&'.", source: "Development", severity: "guideline" },
   { id: "firebase-hosting-main", rule: "lianabanyan.com uses hosting:main, NOT hosting:dotcom.", source: "Deployment", severity: "important" },
   { id: "surgical-edits", rule: "For files over 200 lines, use surgical edits (Edit), not full file rewrites (Write).", source: "Development", severity: "guideline" },
-  { id: "crown-jewels-count", rule: "There are exactly 123 Crown Jewels filed across 8 provisional patent applications.", source: "IP Portfolio", severity: "important" },
-  { id: "patent-portfolio", rule: "1,401 formal claims across 8 provisional applications. THE BEHEMOTH patent portfolio.", source: "IP Portfolio", severity: "important" },
+  { id: "crown-jewels-count", rule: "Crown Jewel count is canonical per canonical_values.yaml (~237 post-B126). Read from YAML rather than hardcoding.", source: "IP Portfolio", severity: "important" },
+  { id: "patent-portfolio", rule: "Formal claims approximate canonical per canonical_values.yaml (~2,806 post-B126 across 13 provisionals filed + Prov 14 open). Read from YAML rather than hardcoding.", source: "IP Portfolio", severity: "important" },
   { id: "wyoming-c-corp", rule: "Legal entity is LIANA BANYAN CORPORATION, EIN 41-2797446, Wyoming C-Corp.", source: "Legal", severity: "critical" },
   { id: "cost-breakdown-required", rule: "All marketplace listings must show cost breakdown. Harper Auditors can verify costs.", source: "Marketplace Rules", severity: "important" },
   { id: "structural-bylaw-immutable", rule: "Structural Bylaws (Cost+20%, $5 membership, privacy, etc.) cannot be changed by normal vote. Requires Founder approval.", source: "Governance", severity: "critical" },
@@ -1815,7 +1833,67 @@ registerTool(
       );
     }
 
+    // K520.5: Write substrate cache so PreToolUse gate can verify consult without re-querying
+    writeSubstrateCache(task, finalOutput);
+
     return { content: [{ type: "text", text: finalOutput }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// TOOL 18b: refresh_substrate_cache (K520.5)
+// ═══════════════════════════════════════════
+
+registerTool(
+  "refresh_substrate_cache",
+  "K520.5 / A&A #2310 — Refresh the persistent substrate cache at ~/.lb-session/substrate_cache.json. Calls brief_me logic and overwrites the cache. Use after npm run rebuild or when canonical state has changed mid-session. Gate hooks read this cache to allow Bash/MCP tool calls without re-querying.",
+  {
+    task: z.string().optional().describe("Session task description. If omitted, uses the task from the existing cache. Provide a value to override."),
+  },
+  async ({ task }) => {
+    ensureFreshIndex();
+
+    // Resolve task: use provided value or read from existing cache
+    let resolvedTask = task ?? "";
+    if (!resolvedTask) {
+      try {
+        const existing = JSON.parse(readFileSync(SUBSTRATE_CACHE_FILE, "utf-8"));
+        resolvedTask = existing.session_task ?? "refresh";
+      } catch {
+        resolvedTask = "refresh";
+      }
+    }
+
+    const pkg = buildBriefing(
+      resolvedTask, overview, schemas, functions, pages, concepts,
+      domains, context, dropzones, transcripts, ARCHITECTURAL_RULES,
+    );
+
+    const sections: string[] = [];
+    sections.push(`## Substrate Cache Refresh: ${resolvedTask}\n`);
+    sections.push(`### Canonical Numbers`);
+    sections.push(Object.entries(pkg.canonicalReminders).map(([k, v]) => `${k}: ${v}`).join(" | "));
+
+    if (pkg.matchedDomains.length > 0) {
+      sections.push(`\n### Matched Domains`);
+      for (const d of pkg.matchedDomains) {
+        sections.push(`**${d.name}**`);
+        if (d.tables.length) sections.push(`  Tables: ${d.tables.join(", ")}`);
+      }
+    }
+
+    if (pkg.applicableRules.length > 0) {
+      sections.push(`\n### Applicable Rules`);
+      for (const r of pkg.applicableRules) {
+        sections.push(`- [${r.severity}] ${r.rule}`);
+      }
+    }
+
+    const briefingText = budgetEnforce(sections.join("\n"), BUDGETS.briefMe);
+    writeSubstrateCache(resolvedTask, briefingText);
+
+    const cacheInfo = `\n\n---\nSubstrate cache refreshed at: ${new Date().toISOString()}\nCache path: ${SUBSTRATE_CACHE_FILE}\nTask: ${resolvedTask}`;
+    return { content: [{ type: "text", text: briefingText + cacheInfo }] };
   }
 );
 
