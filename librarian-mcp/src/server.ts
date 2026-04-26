@@ -4013,6 +4013,86 @@ result = query_phase_shifts(
 );
 
 // ═══════════════════════════════════════════
+// K517 — TimeWave Security MCP Tool
+// A&A #2302 (TimeWave Security) / #2295 Tier 3 security enhancement
+// ═══════════════════════════════════════════
+
+server.tool(
+  "timewave_security_events",
+  "K517 — Query TimeWave Security event log. Returns rejected-action audit events with pattern-hash grouping. Use to inspect repeated-rejection patterns, Wing-block sources, and Dragonrider-escalated events. Append-only log; no mutations via this interface. A&A #2302.",
+  {
+    since_ts: z.string().optional().describe("ISO timestamp — only include events after this time"),
+    source: z.enum(["wing_block", "dragonrider_reject"]).optional().describe("Filter by event source"),
+    pattern_hash: z.string().optional().describe("Filter by specific pattern hash (16-char hex)"),
+    limit: z.number().int().min(1).max(500).optional().default(50).describe("Max events to return"),
+  },
+  async ({ since_ts, source, pattern_hash, limit }) => {
+    const result = runWingHelper(
+      `from discipline_wing.timewave_security import query_events
+result = query_events(
+    since_ts=_args.get("since_ts"),
+    source=_args.get("source"),
+    pattern_hash=_args.get("pattern_hash"),
+    limit=_args.get("limit", 50),
+)`,
+      { since_ts: since_ts ?? null, source: source ?? null, pattern_hash: pattern_hash ?? null, limit: limit ?? 50 }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// K517 — Angel of Death Catacombs MCP Tools
+// A&A #2305 (Angel of Death) / #2258 Catacombs extension
+// ═══════════════════════════════════════════
+
+server.tool(
+  "angel_of_death_buried",
+  "K517 — Query Angel of Death Catacombs buried entries. Shows Dragonrider-rejected snapshots that were buried for forensic preservation. Filter by session, bury reason, or date. Use rehydrate path for full snapshot retrieval. A&A #2305.",
+  {
+    session: z.string().optional().describe("Filter by session identifier"),
+    bury_reason: z.string().optional().describe("Filter by bury reason substring match"),
+    since_date: z.string().optional().describe("ISO date — only include entries buried after this date"),
+    limit: z.number().int().min(1).max(200).optional().default(50).describe("Max entries to return"),
+  },
+  async ({ session, bury_reason, since_date, limit }) => {
+    const result = runWingHelper(
+      `from discipline_wing.angel_of_death import query_buried
+result = query_buried(
+    session=_args.get("session"),
+    bury_reason=_args.get("bury_reason"),
+    since_date=_args.get("since_date"),
+    limit=_args.get("limit", 50),
+)`,
+      { session: session ?? null, bury_reason: bury_reason ?? null, since_date: since_date ?? null, limit: limit ?? 50 }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "angel_of_death_rehydrate",
+  "K517 — Rehydrate (retrieve) a buried Catacombs entry by burial_id. Governance-only operation: adds rehydrate audit record to the burial file. Returns full snapshot data with complete audit trail. Original burial entry remains in Catacombs. A&A #2305.",
+  {
+    burial_id: z.string().describe("8-character burial ID to rehydrate"),
+    rehydrate_reason: z.string().describe("Reason for rehydration (required for audit trail)"),
+    operator: z.string().optional().default("manual_operator").describe("Who is performing the rehydration"),
+  },
+  async ({ burial_id, rehydrate_reason, operator }) => {
+    const result = runWingHelper(
+      `from discipline_wing.angel_of_death import rehydrate
+result = rehydrate(
+    burial_id=_args["burial_id"],
+    rehydrate_reason=_args["rehydrate_reason"],
+    operator=_args.get("operator", "manual_operator"),
+)`,
+      { burial_id, rehydrate_reason, operator: operator ?? "manual_operator" }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════
 

@@ -26,6 +26,7 @@ from typing import Any, Dict, List, Optional
 from discipline_wing.consensus import AugurResult, ConsensusDecision, ConsensusLayer
 from discipline_wing.chronicler import write_chronicler
 from discipline_wing.dragonrider import phase_shift, DragonriderResult
+from discipline_wing import timewave_security, angel_of_death
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
@@ -51,7 +52,9 @@ class EvaluationResult:
     trace: List[dict]       # per-Augur diagnostic trace
     elapsed_ms: int
     consensus_reason: str
-    dragonrider: Optional[dict] = None  # Phase-Shift result if triggered (K516)
+    dragonrider: Optional[dict] = None        # Phase-Shift result if triggered (K516)
+    timewave_security: Optional[dict] = None  # TimeWave Security signal if pattern detected (K517)
+    angel_of_death: Optional[dict] = None     # Bury record if Dragonrider rejected (K517)
 
 
 # ── Augur config loading ───────────────────────────────────────────────────────
@@ -282,6 +285,36 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
                         elapsed_ms=0,
                     ))
 
+        # TimeWave Security — pattern match BEFORE consensus (K517)
+        # If action matches N+ prior rejections, inject synthetic critical Augur result
+        tw_enabled = wing_config.get("timewave_security_enabled", True)
+        tw_match: Optional[dict] = None
+        if tw_enabled:
+            try:
+                tw_match = timewave_security.match_security_pattern(
+                    content=tc.content,
+                    file_path=tc.file_path,
+                )
+                if tw_match.get("pattern_detected"):
+                    # Inject synthetic Augur — Consensus will treat as critical block
+                    augur_results.append(AugurResult(
+                        augur_id="tw-security-pattern-match",
+                        augur_name="TimeWave Security (Repeated-Rejection Pattern)",
+                        augur_class="critical",
+                        triggered=True,
+                        signal="block",
+                        reason=(
+                            f"TimeWave Security: {tw_match['prior_rejection_count']} prior "
+                            f"rejections matched pattern_hash={tw_match['pattern_hash']} "
+                            f"(threshold={tw_match['threshold']}). "
+                            f"Repeated-rejection class detected — escalating to block."
+                        ),
+                        failure_action="block",
+                        elapsed_ms=0,
+                    ))
+            except Exception:
+                tw_match = None  # Fail-safe: TimeWave failure never breaks the Wing
+
         # Consensus arbitration
         consensus_rules = wing_config.get("consensus_rules", {})
         layer = ConsensusLayer(consensus_rules)
@@ -318,6 +351,52 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
                     )
             except Exception:
                 dr_result = None  # Dragonrider failure → proceed without (fail-safe)
+
+        # TimeWave Security — record rejected action as security event (K517)
+        # Fires on Wing-block OR Dragonrider-escalate (both are sanctioned rejections)
+        tw_event_id: Optional[str] = None
+        aod_burial_id: Optional[str] = None
+        if tw_enabled and decision.decision == "block":
+            try:
+                source = "dragonrider_reject" if (
+                    dr_result and dr_result.sandbox_decision == "escalate_to_block"
+                ) else "wing_block"
+                tw_event_id = timewave_security.record_event(
+                    content=tc.content,
+                    file_path=tc.file_path,
+                    triggered_augur_ids=decision.triggered_augurs,
+                    consensus_decision=decision.decision,
+                    source=source,
+                    enabled=True,
+                )
+            except Exception:
+                pass  # Fail-safe
+
+        # Angel of Death Bury — relocate rejected Dragonrider snapshot to Catacombs (K517)
+        # Only fires when Dragonrider was triggered AND escalated (has forensic value)
+        if (dr_result and dr_result.triggered
+                and dr_result.sandbox_decision == "escalate_to_block"
+                and wing_config.get("dragonrider_enabled", False)):
+            try:
+                snapshot_data = {
+                    "phase_shift_id": dr_result.phase_shift_id,
+                    "tool_name": tc.tool_name,
+                    "file_path": tc.file_path,
+                    "triggered_augur_ids": decision.triggered_augurs,
+                    "downstream_risks": dr_result.downstream_risks,
+                    "confidence": dr_result.confidence,
+                    "escalation_reason": dr_result.escalation_reason,
+                    "elapsed_ms": dr_result.elapsed_ms,
+                }
+                aod_burial_id = angel_of_death.bury(
+                    snapshot_data=snapshot_data,
+                    bury_reason=f"Dragonrider Phase-Shift escalated warn→block "
+                                f"(confidence={dr_result.confidence:.2f}). "
+                                f"File: {tc.file_path}",
+                    source="dragonrider_rejected",
+                )
+            except Exception:
+                pass  # Fail-safe: Bury failure never breaks the Wing
 
         # Chronicler UpTick — per-Augur tablet entry for every evaluation (K515)
         for r in augur_results:
@@ -364,6 +443,18 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
                 "elapsed_ms": dr_result.elapsed_ms,
                 "skipped": dr_result.phase_shift_skipped,
             } if dr_result else None,
+            timewave_security={
+                "pattern_detected": tw_match.get("pattern_detected", False),
+                "pattern_hash": tw_match.get("pattern_hash", ""),
+                "prior_rejection_count": tw_match.get("prior_rejection_count", 0),
+                "weight_bump": tw_match.get("weight_bump", 0.0),
+                "event_id": tw_event_id,
+            } if tw_match else None,
+            angel_of_death={
+                "burial_id": aod_burial_id,
+                "buried": bool(aod_burial_id),
+                "bury_reason": f"Dragonrider Phase-Shift escalated warn→block" if aod_burial_id else "",
+            } if aod_burial_id else None,
         )
 
         _write_telemetry(tc, result)
