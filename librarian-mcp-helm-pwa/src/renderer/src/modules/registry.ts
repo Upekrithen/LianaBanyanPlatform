@@ -39,7 +39,7 @@ const BUILTIN_MODULES: HelmModule[] = [
     id: 'pawn',
     name: 'Pawn',
     description: 'Cathedral-injected Perplexity chat. Enriches every query with authoritative LB context before sending to Perplexity API. Requires PPLX_API_KEY in daemon environment.',
-    enabledByDefault: false,
+    enabledByDefault: true,
     category: 'tools',
     component: PawnModule,
     version: '0.1.0',

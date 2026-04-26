@@ -19,6 +19,16 @@ A local desktop application (Electron) that:
 
 ---
 
+## One-click Pawn Portal (K510)
+
+Double-click (or pin to taskbar) **`Start-PawnPortal.ps1`** to activate the full Pawn Portal in one step:
+loads `PPLX_API_KEY` from `SDS.env`, starts the Helm daemon, starts the Vite web UI, and opens Chrome.
+Idempotent — a second click detects the healthy daemon and re-opens the tab without duplicate processes.
+**`Stop-PawnPortal.ps1`** tears down daemon + Vite cleanly. Expected cold-start time: ≤20s.
+Taskbar pin: create a `.cmd` shim — `powershell.exe -ExecutionPolicy Bypass -File "%~dp0Start-PawnPortal.ps1"` — and pin the `.cmd` to taskbar.
+
+---
+
 ## Quick start (dev mode)
 
 ```powershell
