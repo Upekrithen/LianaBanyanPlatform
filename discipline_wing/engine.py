@@ -1,0 +1,388 @@
+"""
+Wing Engine — Bishop Discipline Wing (K514 / A&A #2295 Tier 3)
+
+Entry point: evaluate(tool_call) -> EvaluationResult
+
+Loads Augur configs from ~/.claude/state/wing_augurs/*.json
+On every PreToolUse Write/Edit, evaluates all enabled Augurs in parallel.
+Aggregates signals via Consensus Layer.
+Appends append-only telemetry to ~/.claude/state/wing_telemetry.jsonl.
+
+Fail-safe: any internal error -> allow (never block legitimate work due to engine bugs).
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass, asdict
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+from discipline_wing.consensus import AugurResult, ConsensusDecision, ConsensusLayer
+
+# ── Paths ──────────────────────────────────────────────────────────────────────
+
+WING_CONFIG_PATH   = Path(os.path.expanduser("~/.claude/state/bishop_wing_augurs.json"))
+AUGUR_DIR          = Path(os.path.expanduser("~/.claude/state/wing_augurs"))
+TELEMETRY_PATH     = Path(os.path.expanduser("~/.claude/state/wing_telemetry.jsonl"))
+LIBRARIAN_TS_FILE  = Path(os.path.expanduser("~/.claude/state/bishop_last_librarian_consult.ts"))
+
+# ── Data types ─────────────────────────────────────────────────────────────────
+
+@dataclass
+class ToolCall:
+    tool_name: str          # "Write" | "Edit"
+    file_path: str          # normalized forward-slash path
+    content: str            # full content being written/changed
+
+
+@dataclass
+class EvaluationResult:
+    decision: str           # "block" | "warn" | "enrich" | "allow"
+    message: str
+    triggered_augurs: List[str]
+    trace: List[dict]       # per-Augur diagnostic trace
+    elapsed_ms: int
+    consensus_reason: str
+
+
+# ── Augur config loading ───────────────────────────────────────────────────────
+
+def _load_wing_config() -> dict:
+    try:
+        return json.loads(WING_CONFIG_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return {
+            "augur_ids": [],
+            "consensus_rules": {
+                "advisory_any_action": "warn",
+                "no_signal_action": "allow",
+            },
+        }
+
+
+def _load_augur_configs(wing_config: dict) -> List[dict]:
+    """Load all enabled augur JSON configs from the augur_dir."""
+    configs = []
+    augur_dir = AUGUR_DIR
+    for augur_id in wing_config.get("augur_ids", []):
+        path = augur_dir / f"{augur_id}.json"
+        try:
+            cfg = json.loads(path.read_text(encoding="utf-8"))
+            if cfg.get("enabled", True):
+                configs.append(cfg)
+        except Exception:
+            pass  # Missing augur config → skip (don't break the wing)
+    return configs
+
+
+# ── Augur evaluation ───────────────────────────────────────────────────────────
+
+def _text_to_check(tool_call: ToolCall) -> str:
+    """Return the text surface to run patterns against."""
+    return tool_call.content
+
+
+def _path_matches(patterns: List[str], file_path: str) -> bool:
+    """True if any pattern matches the file path."""
+    if not patterns:
+        return False
+    normalized = file_path.replace("\\", "/")
+    return any(re.search(p, normalized) for p in patterns)
+
+
+def _text_matches(patterns: List[str], text: str) -> bool:
+    """True if any pattern matches the text."""
+    if not patterns:
+        return False
+    return any(re.search(p, text, re.IGNORECASE | re.DOTALL) for p in patterns)
+
+
+def _check_required_consult(augur_cfg: dict, tool_call: ToolCall) -> bool:
+    """
+    Returns True if the required consult condition is SATISFIED (no signal needed).
+    Returns False if the condition is NOT satisfied (Augur should fire).
+    """
+    consult = augur_cfg.get("required_consult", {})
+    consult_type = consult.get("type", "none")
+
+    if consult_type == "none":
+        return False  # No consult check — Augur fires based on trigger alone
+
+    if consult_type == "state_file":
+        state_path = Path(os.path.expanduser(consult.get("path", "")))
+        freshness = consult.get("freshness_seconds", 600)
+        try:
+            last_ts = int(state_path.read_text(encoding="utf-8").strip())
+            return (time.time() - last_ts) < freshness  # True = fresh = allow
+        except Exception:
+            return False  # Can't read state → treat as stale → fire
+
+    if consult_type == "text_contains":
+        pattern = consult.get("pattern", "")
+        if not pattern:
+            return True
+        return bool(re.search(pattern, tool_call.content, re.IGNORECASE | re.DOTALL))
+
+    return True  # Unknown consult type → don't block
+
+
+def _evaluate_single_augur(augur_cfg: dict, tool_call: ToolCall) -> AugurResult:
+    """Evaluate one Augur against the tool call. Returns AugurResult."""
+    t0 = time.monotonic()
+    augur_id = augur_cfg.get("id", "unknown")
+    augur_name = augur_cfg.get("name", augur_id)
+    augur_class = augur_cfg.get("class", "advisory")
+    failure_action = augur_cfg.get("failure_action", "warn")
+    block_message = augur_cfg.get("block_message", "")
+
+    trigger = augur_cfg.get("trigger", {})
+    tool_types = trigger.get("tool_types", ["Write", "Edit"])
+    file_patterns = trigger.get("file_path_patterns", [])
+    text_patterns = trigger.get("text_patterns", [])
+    text_anti_patterns = trigger.get("text_anti_patterns", [])
+    require_anti_absent = trigger.get("require_anti_pattern_absent", False)
+    exclusion_file_patterns = trigger.get("exclusion_path_patterns", [])
+
+    def _elapsed():
+        return int((time.monotonic() - t0) * 1000)
+
+    def _no_signal(reason: str) -> AugurResult:
+        return AugurResult(
+            augur_id=augur_id, augur_name=augur_name, augur_class=augur_class,
+            triggered=False, signal=None, reason=reason, failure_action=failure_action,
+            elapsed_ms=_elapsed(),
+        )
+
+    def _signal(reason: str) -> AugurResult:
+        return AugurResult(
+            augur_id=augur_id, augur_name=augur_name, augur_class=augur_class,
+            triggered=True, signal=failure_action, reason=reason,
+            failure_action=failure_action, elapsed_ms=_elapsed(),
+        )
+
+    # Tool type filter
+    if tool_call.tool_name not in tool_types:
+        return _no_signal(f"Tool {tool_call.tool_name!r} not in trigger scope.")
+
+    # Exclusion path filter (paths that bypass this augur entirely)
+    if exclusion_file_patterns and _path_matches(exclusion_file_patterns, tool_call.file_path):
+        return _no_signal("Path excluded from this Augur's scope.")
+
+    text = _text_to_check(tool_call)
+
+    # Determine if the trigger pattern matches
+    path_match = bool(file_patterns) and _path_matches(file_patterns, tool_call.file_path)
+    text_match = bool(text_patterns) and _text_matches(text_patterns, text)
+
+    # Trigger logic:
+    # - Both path AND text patterns specified → AND (path is scope, text is trigger)
+    # - Only path patterns → path match sufficient
+    # - Only text patterns → text match sufficient
+    if file_patterns and text_patterns:
+        trigger_matched = path_match and text_match
+    elif file_patterns:
+        trigger_matched = path_match
+    else:
+        trigger_matched = text_match
+
+    if not trigger_matched:
+        return _no_signal("No trigger pattern matched.")
+
+    # Anti-pattern check: if anti-patterns are present and required to be absent,
+    # check if any anti-pattern IS present. If so, the safety condition IS met → no signal.
+    if require_anti_absent and text_anti_patterns:
+        anti_found = _text_matches(text_anti_patterns, text)
+        if anti_found:
+            return _no_signal("Anti-pattern (safety condition) satisfied — no signal.")
+
+    # Check required consult condition
+    consult_satisfied = _check_required_consult(augur_cfg, tool_call)
+    if consult_satisfied:
+        return _no_signal("Required consult condition satisfied.")
+
+    # All checks passed → this Augur fires
+    return _signal(block_message)
+
+
+# ── Wing evaluation entry point ────────────────────────────────────────────────
+
+def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
+    """
+    Main entry point called by the bishop hook.
+
+    tool_call_data: {
+        "tool_name": "Write" | "Edit",
+        "tool_input": {
+            "file_path": "...",
+            "content": "..."         # Write
+            "new_string": "..."      # Edit (merged with old_string for analysis)
+        }
+    }
+
+    Returns EvaluationResult with decision + per-Augur trace.
+    """
+    t_start = time.monotonic()
+
+    try:
+        tool_name = tool_call_data.get("tool_name", "")
+        tool_input = tool_call_data.get("tool_input", {})
+        file_path = tool_input.get("file_path", "")
+
+        # Normalize content surface
+        if tool_name == "Write":
+            content = tool_input.get("content", tool_input.get("contents", ""))
+        else:  # Edit / StrReplace
+            content = (
+                tool_input.get("new_string", "")
+                + "\n"
+                + tool_input.get("content", "")
+            )
+
+        tc = ToolCall(tool_name=tool_name, file_path=file_path, content=content)
+
+        wing_config = _load_wing_config()
+        augur_configs = _load_augur_configs(wing_config)
+
+        if not augur_configs:
+            result = EvaluationResult(
+                decision="allow", message="", triggered_augurs=[],
+                trace=[], elapsed_ms=0, consensus_reason="No Augurs loaded.",
+            )
+            _write_telemetry(tc, result)
+            return result
+
+        # Parallel evaluation
+        augur_results: List[AugurResult] = []
+        with ThreadPoolExecutor(max_workers=min(len(augur_configs), 5)) as pool:
+            futures = {
+                pool.submit(_evaluate_single_augur, cfg, tc): cfg.get("id")
+                for cfg in augur_configs
+            }
+            for future in as_completed(futures):
+                try:
+                    augur_results.append(future.result(timeout=3))
+                except Exception as exc:
+                    augur_results.append(AugurResult(
+                        augur_id=futures[future] or "unknown",
+                        augur_name=futures[future] or "unknown",
+                        augur_class="advisory",
+                        triggered=False,
+                        signal=None,
+                        reason=f"Augur evaluation error: {exc}",
+                        failure_action="warn",
+                        elapsed_ms=0,
+                    ))
+
+        # Consensus arbitration
+        consensus_rules = wing_config.get("consensus_rules", {})
+        layer = ConsensusLayer(consensus_rules)
+        decision: ConsensusDecision = layer.arbitrate(augur_results)
+
+        elapsed = int((time.monotonic() - t_start) * 1000)
+
+        result = EvaluationResult(
+            decision=decision.decision,
+            message=decision.message,
+            triggered_augurs=decision.triggered_augurs,
+            trace=[
+                {
+                    "augur_id": r.augur_id,
+                    "augur_name": r.augur_name,
+                    "augur_class": r.augur_class,
+                    "triggered": r.triggered,
+                    "signal": r.signal,
+                    "reason": r.reason,
+                    "elapsed_ms": r.elapsed_ms,
+                }
+                for r in augur_results
+            ],
+            elapsed_ms=elapsed,
+            consensus_reason=decision.consensus_reason,
+        )
+
+        _write_telemetry(tc, result)
+        return result
+
+    except Exception as exc:
+        # Fail-safe: any engine error → allow (don't block legitimate work)
+        elapsed = int((time.monotonic() - t_start) * 1000)
+        result = EvaluationResult(
+            decision="allow",
+            message="",
+            triggered_augurs=[],
+            trace=[{"error": str(exc)}],
+            elapsed_ms=elapsed,
+            consensus_reason=f"Engine error (fail-safe allow): {exc}",
+        )
+        _write_telemetry_raw(tool_call_data, result)
+        return result
+
+
+# ── Telemetry ──────────────────────────────────────────────────────────────────
+
+def _write_telemetry(tc: ToolCall, result: EvaluationResult) -> None:
+    """Append evaluation record to wing_telemetry.jsonl (append-only)."""
+    record = {
+        "ts": _iso_now(),
+        "tool_call": {
+            "tool": tc.tool_name,
+            "file_path": tc.file_path,
+        },
+        "augur_results": result.trace,
+        "triggered_augurs": result.triggered_augurs,
+        "consensus_decision": result.decision,
+        "consensus_reason": result.consensus_reason,
+        "elapsed_ms": result.elapsed_ms,
+    }
+    _append_telemetry(record)
+
+
+def _write_telemetry_raw(tool_call_data: dict, result: EvaluationResult) -> None:
+    record = {
+        "ts": _iso_now(),
+        "tool_call": tool_call_data,
+        "augur_results": result.trace,
+        "triggered_augurs": result.triggered_augurs,
+        "consensus_decision": result.decision,
+        "consensus_reason": result.consensus_reason,
+        "elapsed_ms": result.elapsed_ms,
+    }
+    _append_telemetry(record)
+
+
+def _append_telemetry(record: dict) -> None:
+    try:
+        TELEMETRY_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(TELEMETRY_PATH, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record) + "\n")
+    except Exception:
+        pass  # Telemetry failure must never break the hook
+
+
+def _iso_now() -> str:
+    import datetime
+    return datetime.datetime.utcnow().isoformat() + "Z"
+
+
+# ── Standalone CLI (for testing) ───────────────────────────────────────────────
+
+if __name__ == "__main__":
+    import sys as _sys
+    data = json.load(_sys.stdin)
+    result = evaluate(data)
+    out = {
+        "decision": result.decision,
+        "message": result.message,
+        "triggered_augurs": result.triggered_augurs,
+        "consensus_reason": result.consensus_reason,
+        "elapsed_ms": result.elapsed_ms,
+        "trace": result.trace,
+    }
+    print(json.dumps(out, indent=2))
+    _sys.exit(2 if result.decision == "block" else 0)
