@@ -46,8 +46,8 @@ export interface ConsultResult {
     scribe_id: string;
     score: number;
     is_primary: boolean;
-    /** K466: serving mode for this Scribe */
-    mode: "observational" | "corpus";
+    /** K466: serving mode; K520.6 adds always_loaded */
+    mode: "observational" | "corpus" | "always_loaded";
     entries_returned: number;
   }>;
   entries: ConsultEntry[];
@@ -61,8 +61,8 @@ interface KnightScribesRegistry {
   version?: string;
   scribes: Array<{
     id: string;
-    /** K466: corpus = full deterministic retrieval; observational = recency top-K (default) */
-    mode?: "observational" | "corpus";
+    /** K466: corpus = full deterministic retrieval; observational = recency top-K; K520.6: always_loaded = injected into substrate cache */
+    mode?: "observational" | "corpus" | "always_loaded";
     primary: { level: number; field: string };
     adjacents: Array<{ level: number; field: string }>;
     keywords: string[];
@@ -278,7 +278,7 @@ const CORPUS_RARITY_BOOST = 0.3;
 function getScribeMode(
   scribeId: string,
   cathedral: "bishop" | "knight",
-): "observational" | "corpus" {
+): "observational" | "corpus" | "always_loaded" {
   if (cathedral === "bishop") {
     const scribe = getRegistry().scribes.find((s) => s.id === scribeId);
     return scribe?.mode ?? "observational";

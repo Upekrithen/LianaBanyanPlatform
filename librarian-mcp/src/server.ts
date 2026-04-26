@@ -29,6 +29,7 @@ import {
   readTablet,
   readFatesLog,
   tabletStats,
+  SCRIBES_DIR,
   type AgentName,
   type ScribeSource,
 } from "./scribes/cathedral.js";
@@ -45,13 +46,24 @@ const INDEX_DIR = resolve(__dirname, "..", "index");
 const SUBSTRATE_CACHE_DIR = resolve(homedir(), ".lb-session");
 const SUBSTRATE_CACHE_FILE = resolve(SUBSTRATE_CACHE_DIR, "substrate_cache.json");
 
+// K520.6: read always-loaded OperationalGotchas tablets for substrate cache injection
+function readGotchasForCache(): Array<Record<string, unknown>> {
+  try {
+    return readTablet("OperationalGotchas") as Array<Record<string, unknown>>;
+  } catch {
+    return [];
+  }
+}
+
 function writeSubstrateCache(task: string, briefingText: string): void {
   try {
     mkdirSync(SUBSTRATE_CACHE_DIR, { recursive: true });
+    const gotchas = readGotchasForCache();
     writeFileSync(SUBSTRATE_CACHE_FILE, JSON.stringify({
       ts: Math.floor(Date.now() / 1000),
       session_task: task,
       briefing: briefingText,
+      gotchas,
       cached_at: new Date().toISOString(),
     }, null, 2), "utf-8");
   } catch {
@@ -4167,6 +4179,116 @@ result = rehydrate(
       { burial_id, rehydrate_reason, operator: operator ?? "manual_operator" }
     );
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// K520.6 — Operational Gotchas Scribe tools (A&A #2310 always-loaded)
+// ═══════════════════════════════════════════
+
+registerTool(
+  "consult_gotchas",
+  "K520.6 / A&A #2310 — Returns ALL Operational Gotchas tablets (always-loaded subset). No query needed — set is small and curated. Each entry has og_id, friction, workaround, agents_affected, recurrence_count. Call at session start to pre-load known frictions before any tool invocation.",
+  {},
+  async () => {
+    const tablets = readTablet("OperationalGotchas") as Array<Record<string, unknown>>;
+    if (tablets.length === 0) {
+      return { content: [{ type: "text", text: "No Operational Gotchas tablets found. Seed via add_gotcha or check scribe_OperationalGotchas.jsonl." }] };
+    }
+    const lines = tablets.map((t) => {
+      const id = String(t.og_id ?? "OG-???");
+      const friction = String(t.friction ?? t.observation ?? "(no friction)");
+      const workaround = String(t.workaround ?? "(see observation)");
+      const affects = Array.isArray(t.agents_affected) ? (t.agents_affected as string[]).join(", ") : "all agents";
+      const recur = t.recurrence_count != null ? ` [recurrence: ${t.recurrence_count}]` : "";
+      return `**${id}**${recur}: ${friction}\n  Fix: ${workaround}\n  Affects: ${affects}`;
+    });
+    const text = `## Operational Gotchas (${tablets.length} entries — always loaded)\n\n${lines.join("\n\n")}`;
+    return { content: [{ type: "text", text }] };
+  }
+);
+
+registerTool(
+  "add_gotcha",
+  "K520.6 — Append a new Operational Gotcha to the always-loaded Scribe. Use when a recurring friction is discovered. Assigns next OG-NNN id automatically.",
+  {
+    friction: z.string().describe("One-sentence symptom description"),
+    workaround: z.string().describe("Actionable fix or mitigation"),
+    agents_affected: z.array(z.enum(["Bishop", "Knight", "Pawn", "Rook"])).default(["Bishop", "Knight"]).describe("Which agent types are affected"),
+    session: z.string().optional().default("manual").describe("Session ID that discovered this friction"),
+    recurrence_count: z.number().int().min(1).default(1).describe("How many sessions this friction has been observed"),
+  },
+  async ({ friction, workaround, agents_affected, session, recurrence_count }) => {
+    const existing = readTablet("OperationalGotchas");
+    const nextNum = existing.length + 1;
+    const og_id = `OG-${String(nextNum).padStart(3, "0")}`;
+    const ogPath = resolve(SCRIBES_DIR, "scribe_OperationalGotchas.jsonl");
+    const entry = {
+      og_id,
+      ts: new Date().toISOString(),
+      session,
+      observation: `FRICTION: ${friction}\nWORKAROUND: ${workaround}`,
+      source: "knight_ship" as const,
+      friction,
+      workaround,
+      agents_affected,
+      promotion_class: "always_loaded",
+      recurrence_count,
+      scope: "public",
+    };
+    const line = JSON.stringify(entry) + "\n";
+    const { appendFileSync: afs } = await import("fs");
+    afs(ogPath, line, "utf-8");
+    return { content: [{ type: "text", text: JSON.stringify({ ok: true, og_id, friction, workaround, agents_affected }, null, 2) }] };
+  }
+);
+
+registerTool(
+  "promote_to_gotchas",
+  "K520.6 — Promote an existing Toolsmith entry to the always-loaded OperationalGotchas class. Reads Toolsmith JSONL by toolsmith_ts_id, creates an OG entry with what_fails→friction and what_works→workaround. Returns new OG-id.",
+  {
+    toolsmith_ts_id: z.string().describe("Toolsmith ID to promote (e.g. 'TS-012')"),
+    session: z.string().optional().default("manual").describe("Session performing the promotion"),
+  },
+  async ({ toolsmith_ts_id, session }) => {
+    const toolsmithPath = resolve(SCRIBES_DIR, "scribe_Toolsmith.jsonl");
+    if (!existsSync(toolsmithPath)) {
+      return { content: [{ type: "text", text: `Toolsmith tablet not found at ${toolsmithPath}` }] };
+    }
+    const raw = readFileSync(toolsmithPath, "utf-8");
+    type ToolsmithEntry = { toolsmith_id?: string; what_fails?: string; what_works?: string; command_pattern?: string; [k: string]: unknown };
+    const entries: ToolsmithEntry[] = raw.split("\n").filter(l => l.trim()).map(l => {
+      try { return JSON.parse(l) as ToolsmithEntry; } catch { return null; }
+    }).filter((e): e is ToolsmithEntry => e !== null);
+
+    const tsEntry = entries.find(e => e.toolsmith_id === toolsmith_ts_id);
+    if (!tsEntry) {
+      return { content: [{ type: "text", text: `Toolsmith entry '${toolsmith_ts_id}' not found. Available: ${entries.filter(e => e.toolsmith_id).map(e => e.toolsmith_id).slice(0, 10).join(", ")}...` }] };
+    }
+
+    const friction = String(tsEntry.what_fails ?? tsEntry.command_pattern ?? "(no friction text)");
+    const workaround = String(tsEntry.what_works ?? "(no workaround text)");
+    const existing = readTablet("OperationalGotchas");
+    const nextNum = existing.length + 1;
+    const og_id = `OG-${String(nextNum).padStart(3, "0")}`;
+    const ogPath = resolve(SCRIBES_DIR, "scribe_OperationalGotchas.jsonl");
+    const entry = {
+      og_id,
+      ts: new Date().toISOString(),
+      session,
+      observation: `FRICTION: ${friction}\nWORKAROUND: ${workaround}`,
+      source: "scribe_thresh" as const,
+      friction,
+      workaround,
+      agents_affected: ["Bishop", "Knight"],
+      promotion_class: "always_loaded",
+      recurrence_count: 1,
+      promoted_from: toolsmith_ts_id,
+      scope: "public",
+    };
+    const { appendFileSync: afs } = await import("fs");
+    afs(ogPath, JSON.stringify(entry) + "\n", "utf-8");
+    return { content: [{ type: "text", text: JSON.stringify({ ok: true, og_id, promoted_from: toolsmith_ts_id, friction, workaround }, null, 2) }] };
   }
 );
 

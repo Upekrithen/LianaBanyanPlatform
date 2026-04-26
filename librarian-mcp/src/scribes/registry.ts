@@ -46,8 +46,11 @@ export interface ScribeEntry {
    *   Use for session logs, handoffs, BRIDLE memory — newer observations matter more.
    * - "corpus": static reference semantics; tablets returned in original (deterministic)
    *   order, all entries up to max_entries. Use for R11, canonical_values, rulebooks.
+   * - "always_loaded": K520.6 / A&A #2310 — all tablets loaded into substrate cache at
+   *   session start via First-Consult Edict. Also retrievable via consult_gotchas tool.
+   *   Use for high-recurrence operational frictions (OperationalGotchas Scribe).
    */
-  mode?: "observational" | "corpus";
+  mode?: "observational" | "corpus" | "always_loaded";
   /**
    * Optional corpus provenance label (K472/B121 Fix 2).
    * Tags Scribes containing reference corpus material (e.g. "r11_reference") so

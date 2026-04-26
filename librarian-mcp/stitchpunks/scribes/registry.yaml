@@ -599,6 +599,45 @@ scribes:
       - "#2277"
     activation_threshold: any conductor routing decision, model-selection event, or routing-telemetry reference
 
+  # ============================================================
+  # K520.6 / B127 — Operational Gotchas Scribe (always-loaded)
+  # First-Consult Edict cache injects ALL entries at session start.
+  # Promotion gate: recurrence >= 3 OR Founder ratification OR structural judgment.
+  # A&A #2310 reduction-to-practice.
+  # ============================================================
+
+  - id: OperationalGotchas
+    mode: always_loaded
+    primary:
+      level: 1
+      field: operational frictions and workarounds for AI agents (Bishop/Knight/Pawn) — always-loaded subset of highest-recurrence frictions encountered in this codebase
+      canonical_keepers:
+        - librarian-mcp/stitchpunks/scribes/scribe_OperationalGotchas.jsonl
+    adjacents:
+      - level: 2
+        field: PowerShell quirks and Windows-specific tool patterns
+      - level: 2
+        field: Cursor context and session management
+      - level: 3
+        field: Augur Wing engine false-positive patterns
+      - level: 3
+        field: subprocess encoding and timestamp consistency (BOM, clock-skew)
+    keywords:
+      - gotcha
+      - friction
+      - workaround
+      - OG-001
+      - OG-002
+      - OG-003
+      - heredoc
+      - context overflow
+      - Augur false positive
+      - BOM
+      - clock skew
+      - Set-Content
+      - always-loaded
+    activation_threshold: always loaded at session start via First-Consult Edict substrate cache (A&A #2310)
+
 # Future Scribe candidates (instantiate on first trigger; do NOT pre-create):
 #   - Letters (Crown Letters primary; Rhetorical Keystones / dispatch queue adjacents)
 #   - Pedestal (Reg CF portal primary; Upekrithen seller-of-record / two-track separation adjacents)
