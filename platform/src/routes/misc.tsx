@@ -9,6 +9,7 @@ const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const MemberAgreement = lazy(() => import("@/pages/MemberAgreement"));
 const SantaEverAfter = lazy(() => import("@/pages/SantaEverAfter"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const SphinxPhase1 = lazy(() => import("@/pages/SphinxPhase1"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -101,6 +102,13 @@ export const miscRoutes = (
 
     {/* Misc pages */}
     <Route path="/santa" element={<ProtectedRoute><LazyPage><SantaEverAfter /></LazyPage></ProtectedRoute>} />
+
+    {/* The Sphinx Project — Phase 1 (K520 / A&A #2295 Tier 5 / Sphinx Band-NA) */}
+    <Route path="/sphinx" element={<LazyPage><SphinxPhase1 /></LazyPage>} />
+    <Route path="/sphinx/phase-1" element={<LazyPage><SphinxPhase1 /></LazyPage>} />
+    <Route path="/sphinx/docs" element={<Navigate to="/sphinx" replace />} />
+    <Route path="/the-sphinx-project" element={<Navigate to="/sphinx" replace />} />
+    <Route path="/majcom" element={<Navigate to="/sphinx" replace />} />
 
     {/* Catch-all */}
     <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />

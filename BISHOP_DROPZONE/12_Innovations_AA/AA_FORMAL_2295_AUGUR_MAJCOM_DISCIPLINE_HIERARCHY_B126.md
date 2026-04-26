@@ -184,7 +184,27 @@ This very session demonstrates the Tier 2-5 architecture in conception even befo
 
 ### Anchor 3 — Existing Stitchpunk infrastructure ready to host the MAJCOM
 
-The temporal-substrate primitives (#2299–#2305) are filed; the Cathedral Federation Protocol (#2292) is filed; the Personal Discipline Enforcement Layer (#2294) is filed. **K514 SHIPPED** the Wing MVP; **K515 SHIPPED** the Twin Observer Pattern — Chronos+Chroniclers (component-state) + Embedded Correspondent+Bureau (reasoning-state) — with 17/17 verification checks and the K512.5 regression test empirically closed. K516 adds Dragonriders sandbox; K517 adds TimeWave Security + Angel of Death; K518 ships the member-tier Wing deployment via the LB Frame. **The infrastructure to materialize Tiers 2-5 already exists in the architecture record; what this filing patents is the cross-tier organization itself.**
+The temporal-substrate primitives (#2299–#2305) are filed; the Cathedral Federation Protocol (#2292) is filed; the Personal Discipline Enforcement Layer (#2294) is filed. **K514 SHIPPED** the Wing MVP; **K515 SHIPPED** the Twin Observer Pattern — Chronos+Chroniclers (component-state) + Embedded Correspondent+Bureau (reasoning-state) — with 17/17 verification checks and the K512.5 regression test empirically closed. K516 adds Dragonriders sandbox; K517 adds TimeWave Security + Angel of Death; K518 ships the member-tier Wing deployment via the LB Frame; K519 ships the NAF MVP (Tier 4). **The infrastructure to materialize Tiers 2-5 already exists in the architecture record; what this filing patents is the cross-tier organization itself.**
+
+### Anchor 4 — **MAJCOM-LB operational as of K520 (2026-04-26) — Tier 5 reduction-to-practice**
+
+**K520 SHIPPED** MAJCOM-LB MVP — A&A #2295 Tier 5 fully operational. Files:
+- `discipline_majcom/engine.py` — MAJCOM runtime (NAF registry, aggregate rollup, strategic-policy promotion, SHUT IT DOWN #2304, Pledge admission #2260, CFP cross-MAJCOM B.6)
+- `discipline_majcom/tests_k520.py` — 68/68 Phase C checks pass (18 specification checks)
+- `librarian-mcp-helm-pwa/daemon_wrapper.py` — MAJCOM admin UI + 26 REST endpoints
+- `librarian-mcp/src/federation/cfp.ts` — 5 cross-MAJCOM CFP envelope types + constructors
+- `platform/src/pages/SphinxPhase1.tsx` — Sphinx Phase 1 public page (`/sphinx`, `/sphinx/phase-1`)
+
+**The Sphinx Project, Phase 1, Band-NA is OPERATIONAL. MAJCOM-LB federates NAF-Bishops + NAF-Knights + NAF-Members under enumerated-powers cooperative governance.**
+
+Key claim reductions (K520):
+- Claim 1 (load-bearing) — MAJCOM is the Federated Discipline Cell at Tier 5, composing NAF cells (Tier 4) under one cooperative organization with strategic-policy promotion + cross-NAF rule emergence + platform-wide audit + emergency authority (SHUT IT DOWN) + cross-MAJCOM federation interface.
+- Claim 5 — MAJCOM hosts cooperative-governance authority with enumerated powers limited to rule promotion, Structural Bylaws enforcement, and emergency authority. 68/68 test checks verify enumerated-powers property.
+- Claim 7 — CFP cross-MAJCOM envelope schema defined (Phase 1); Band-NA interface ready for second MAJCOM federation.
+- Claim 10 — Time Capsule audit writes on every MAJCOM-tier action; audit trail passes C.16 check.
+- Claim 11 (scale-invariance) — Same CFP primitive extended from Wing→NAF (K519) to NAF→MAJCOM→Band without modification to lower-tier code.
+
+Tag: `v-majcom-lb-mvp-K520`. Session B126.
 
 ---
 
@@ -272,7 +292,7 @@ The cooperative-economic kicker: when LB scales to N members, MAJCOM-LB federate
 | K517 | TimeWave Security + Angel of Death Bury mode (SHIPPED 2026-04-26, 37/37 checks, p95=22.6ms, Catacombs Bury + audit trail) | Tier 3 enhancement | LANDED |
 | K518 | Member-tier Wing deployment via LB Frame extension + Helm PWA | Tier 3 distribution | post-K517 |
 | K519 | NAF MVP (NAF-Bishops federating Wing-Bishop instances + cross-Wing rule promotion) | Tier 4 | post-K518 |
-| K520 | MAJCOM MVP (MAJCOM-LB hosting NAF-Bishops + NAF-Knights + NAF-Members + governance authority) | Tier 5 | post-K519 |
+| K520 | **MAJCOM MVP — SHIPPED K520 / B126 / 2026-04-26. MAJCOM-LB operational. Sphinx Phase 1 live. 68/68 checks pass.** | Tier 5 | **LANDED** |
 
 **This is a multi-month K-program**, not tomorrow-morning ship. The morning ship is K512 (LB Frame Public Web Demo + #2294 preview panel). This filing patents the architectural primitive *now* so that K513-K520 implementation is protected; the implementation itself rolls out across the next 8 sessions.
 

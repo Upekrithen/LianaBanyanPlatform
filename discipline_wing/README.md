@@ -273,10 +273,46 @@ A&A #2295 — Augur MAJCOM Discipline Hierarchy
 - **Tier 3: Wing with Consensus Layer (K514) ← THIS MODULE**
 - **Tier 3 distribution to members: K518 ← Member-Tier Wing Deployment**
 - **Tier 4: NAF Federation (K519) ← Voluntary Cross-Wing Federation OPERATIONAL**
+- **Tier 5: MAJCOM-LB (K520) ← Strategic Federation OPERATIONAL — Sphinx Project Phase 1**
 
 A&A #2292 — Cathedral Federation Protocol (CFP)
-- First real implementation: K519 `librarian-mcp/src/federation/cfp.ts`
+- First real implementation (NAF-tier): K519 `librarian-mcp/src/federation/cfp.ts`
+- Extended for MAJCOM-tier: K520 — cross-MAJCOM envelope types added
+
+## K520 — MAJCOM-LB MVP (Sphinx Project Phase 1)
+
+**Sphinx Project Phase 1 shipped K520 / B126 / 2026-04-26.**
+
+MAJCOM-LB is the strategic-tier federation (#2295 Tier 5) across NAF-Bishops + NAF-Knights + NAF-Members under Liana Banyan Corporation's cooperative-governance authority.
+
+### New files (K520)
+| File | Role |
+|------|------|
+| `discipline_majcom/__init__.py` | Package marker |
+| `discipline_majcom/engine.py` | MAJCOM runtime (NAF registry, aggregate rollup, strategic-policy promotion, SHUT IT DOWN, Pledge governance, CFP cross-MAJCOM) |
+| `discipline_majcom/tests_k520.py` | 18-check Phase C test suite (68/68 PASS) |
+| `platform/src/pages/SphinxPhase1.tsx` | Sphinx Phase 1 public page (`/sphinx`, `/sphinx/phase-1`) |
+| `platform/src/routes/misc.tsx` | MODIFIED — Sphinx routes added |
+| `librarian-mcp-helm-pwa/daemon_wrapper.py` | MODIFIED — MAJCOM admin HTML + 14 GET + 12 POST MAJCOM routes |
+| `librarian-mcp/src/federation/cfp.ts` | MODIFIED — 5 cross-MAJCOM envelope types + constructors |
+
+### MAJCOM architecture at a glance
+- **NAF registry**: 3 founding NAFs (Bishops, Knights, Members)
+- **Aggregate rollup**: Privacy-guarded cross-NAF pattern detection
+- **Strategic-policy promotion**: NAF → MAJCOM → NAF-default (opt-in)
+- **Structural Bylaws**: 6 bylaws enforced at MAJCOM level (SB-001 through SB-006)
+- **Founder veto**: Structural-Bylaws veto overrides Council acceptance
+- **SHUT IT DOWN (#2304)**: Stateless-frozen mode + action queue
+- **Pledge admission (#2260)**: EIN verification for nonprofits/cooperatives/academics
+- **CFP cross-MAJCOM**: Interface defined for Sphinx Band-NA federation
+
+### Sphinx Project milestones
+- Phase 0: Architecture deployed (K514) ✓
+- Phase 1: Personal Wings (K518) ✓
+- Phase 2: NAF MVP (K519) ✓
+- **Phase 3: MAJCOM-LB (K520) ← OPERATIONAL** ✓
+- Phase 4: First Band — Band-NA (awaiting second MAJCOM)
 
 ---
 
-*Filed K514 + K518 + K519, B126, 2026-04-26. FOR THE KEEP!*
+*Filed K514 + K518 + K519 + K520, B126, 2026-04-26. FOR THE KEEP!*
