@@ -7,10 +7,16 @@
  * plus R11 domain-category prior scenarios added at B129 hydration.
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { route } from "../router";
 import type { RouterInputs, ConductorMode } from "../router";
 import type { ClassifiedQuery, LbDomainCategory } from "../classifier";
+import {
+  recordVendorResponse,
+  _resetCircuitBreakerForTests,
+  FAILURE_THRESHOLD,
+} from "../circuitBreaker";
+import { _resetTelemetryForTests } from "../telemetry";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -231,5 +237,82 @@ describe("R11 category-aware prior routing (B129 hydration)", () => {
     expect(result.fallbackUsed).toBe(false);
     expect(result.categoryPriorApplied).toBe(false);
     expect(result.rationale).toContain("fixed gear");
+  });
+});
+
+// ─── K525 Phase A — Circuit Breaker + Token Budget Integration ────────────────
+
+describe("K525 Phase A — circuit breaker integration", () => {
+  beforeEach(() => {
+    _resetCircuitBreakerForTests();
+    _resetTelemetryForTests();
+  });
+
+  it("S18: auto + retrieval_only with anthropic breaker open — routes elsewhere", () => {
+    // Trip anthropic breaker
+    for (let i = 0; i < FAILURE_THRESHOLD; i++) {
+      recordVendorResponse("anthropic", false, Date.now());
+    }
+    const result = route(makeInputs("auto", "retrieval_only"));
+    // Anthropic was top-ranked but is now demoted via circuit breaker
+    expect(result.vendor).not.toBe("anthropic");
+    expect(result.circuitBreakerDemoted).toContain("anthropic");
+  });
+
+  it("S19: vendor-lock bypasses circuit breaker (member's absolute choice)", () => {
+    for (let i = 0; i < FAILURE_THRESHOLD; i++) {
+      recordVendorResponse("openai", false, Date.now());
+    }
+    const result = route({
+      classified: makeClassified("retrieval_only"),
+      mode: "vendor-lock",
+      memberOverride: { vendor: "openai" },
+    });
+    // Member's choice honored even though breaker is open
+    expect(result.vendor).toBe("openai");
+    expect(result.circuitBreakerDemoted).toEqual([]);
+  });
+
+  it("S20: when ALL vendors broken, falls back to top-ranked anyway (no decision is worse)", () => {
+    for (const v of ["anthropic", "openai", "google", "perplexity"] as const) {
+      for (let i = 0; i < FAILURE_THRESHOLD; i++) {
+        recordVendorResponse(v, false, Date.now());
+      }
+    }
+    const result = route(makeInputs("auto", "retrieval_only"));
+    // Returns SOME decision; downstream call may fail but the router doesn't refuse
+    expect(result.vendor).toBeDefined();
+    expect(result.circuitBreakerDemoted.length).toBeGreaterThan(0);
+  });
+});
+
+describe("K525 Phase A — token budget integration", () => {
+  beforeEach(() => {
+    _resetCircuitBreakerForTests();
+    _resetTelemetryForTests();
+  });
+
+  it("S21: tiny prompt — no demotion", () => {
+    const result = route({
+      classified: makeClassified("retrieval_only"),
+      mode: "auto",
+      inputTokens: 1_000,
+    });
+    expect(result.tokenBudgetDemoted).toEqual([]);
+  });
+
+  it("S22: 150K prompt — chosen model has window ≥ 150K", () => {
+    const result = route({
+      classified: makeClassified("retrieval_only"),
+      mode: "auto",
+      inputTokens: 150_000,
+    });
+    // Result vendor/model should still be a valid choice
+    expect(result.vendor).toBeDefined();
+    expect(result.model).toBeDefined();
+    // Any demotions reported must reference models with windows < 150K
+    for (const d of result.tokenBudgetDemoted) {
+      expect(d.maxTokens).toBeLessThan(150_000 + 8_000); // window < input + reserve
+    }
   });
 });

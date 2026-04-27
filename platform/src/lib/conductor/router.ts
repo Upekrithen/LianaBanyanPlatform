@@ -26,6 +26,9 @@ import {
   getDemotedVendorsForCategory,
   getR11CategoryHot,
 } from "./rankings.js";
+import { isVendorAvailable } from "./circuitBreaker.js";
+import { filterByTokenBudget } from "./contextWindows.js";
+import { recordRoute } from "./telemetry.js";
 
 // ─── K524 Phase B: Conductor scribe_log (Option β — direct JSONL, non-fatal) ──
 // Privacy guarantee: raw query is NEVER logged; SHA-256 hash only.
@@ -88,6 +91,9 @@ export interface RouterInputs {
   classified: ClassifiedQuery;
   mode: ConductorMode;
   memberOverride?: MemberOverride;
+  /** Optional input-token budget. When provided, the router demotes models
+   *  whose context window cannot fit `inputTokens + outputReserve`.        */
+  inputTokens?: number;
 }
 
 export interface RoutingDecision {
@@ -99,6 +105,10 @@ export interface RoutingDecision {
   costTierLabel: string;          // Human-readable cost tier for member display
   categoryPriorApplied: boolean;  // true if R11 domain-category prior filtered the ranking
   categoryPriorDetail: string | null; // Summary of category prior action (e.g., demoted vendors)
+  /** K525 Phase A.1 — circuit-breaker disposition for this decision. */
+  circuitBreakerDemoted: VendorName[];
+  /** K525 Phase A.3 — models demoted for token-budget overflow. */
+  tokenBudgetDemoted: Array<{ vendor: VendorName; model: string; maxTokens: number }>;
 }
 
 // ---------------------------------------------------------------------------
@@ -160,7 +170,7 @@ function _costTierLabel(model: string): string {
  *   4. auto mode + no ranking (stub/uncertain) → conservative Sonnet fallback
  */
 export function route(inputs: RouterInputs): RoutingDecision {
-  const { classified, mode, memberOverride } = inputs;
+  const { classified, mode } = inputs;
   const decision = _route(inputs);
 
   // K524 Phase B: fire-and-forget Conductor scribe_log (Option β, non-fatal)
@@ -173,16 +183,32 @@ export function route(inputs: RouterInputs): RoutingDecision {
     decision.rationale.split("(")[0].trim(),
   );
 
+  // K525 Phase A.4: in-memory telemetry for Helm cost ticker / vendor mix.
+  recordRoute({
+    ts: Date.now(),
+    vendor: decision.vendor,
+    model: decision.model,
+    queryClass: classified.class,
+    latencyMs: null,           // patched later via recordRouteOutcome()
+    costUsd: null,             // patched later via recordRouteOutcome()
+    fallbackUsed: decision.fallbackUsed,
+    baselineCostUsd: null,
+  });
+
   return decision;
 }
 
 function _route(inputs: RouterInputs): RoutingDecision {
-  const { classified, mode, memberOverride } = inputs;
+  const { classified, mode, memberOverride, inputTokens } = inputs;
 
   // ── Mode: vendor-lock ──────────────────────────────────────────────────────
   // Member has pinned to a specific vendor (audit/regulatory use case).
   // "#29 This is Your World. Shape it, or Someone Else WILL." — vendor-lock IS
   // the active-shaping override the member retains.
+  // Note: vendor-lock bypasses circuit-breaker and token-budget checks. Member
+  // override is absolute — if their chosen vendor is currently failing, the
+  // router will still attempt it (the call may then fail at the adapter level,
+  // but the member's "I want this vendor" decision is honored).
   if (mode === "vendor-lock") {
     const lockVendor: VendorName = memberOverride?.vendor ?? CONSERVATIVE_FALLBACK_VENDOR;
     const lockModel = memberOverride?.model ?? DEFAULT_MODEL_PER_VENDOR[lockVendor];
@@ -195,6 +221,8 @@ function _route(inputs: RouterInputs): RoutingDecision {
       costTierLabel: _costTierLabel(lockModel),
       categoryPriorApplied: false,
       categoryPriorDetail: null,
+      circuitBreakerDemoted: [],
+      tokenBudgetDemoted: [],
     };
   }
 
@@ -215,6 +243,8 @@ function _route(inputs: RouterInputs): RoutingDecision {
         costTierLabel: _costTierLabel(manualModel),
         categoryPriorApplied: false,
         categoryPriorDetail: null,
+        circuitBreakerDemoted: [],
+        tokenBudgetDemoted: [],
       };
     }
     // manual mode with no override → fall through to auto logic
@@ -235,6 +265,8 @@ function _route(inputs: RouterInputs): RoutingDecision {
       costTierLabel: _costTierLabel(CONSERVATIVE_FALLBACK_MODEL),
       categoryPriorApplied: false,
       categoryPriorDetail: null,
+      circuitBreakerDemoted: [],
+      tokenBudgetDemoted: [],
     };
   }
 
@@ -251,6 +283,8 @@ function _route(inputs: RouterInputs): RoutingDecision {
       costTierLabel: _costTierLabel(CONSERVATIVE_FALLBACK_MODEL),
       categoryPriorApplied: false,
       categoryPriorDetail: null,
+      circuitBreakerDemoted: [],
+      tokenBudgetDemoted: [],
     };
   }
 
@@ -270,6 +304,8 @@ function _route(inputs: RouterInputs): RoutingDecision {
       costTierLabel: _costTierLabel(topRanked.model),
       categoryPriorApplied: false,
       categoryPriorDetail: null,
+      circuitBreakerDemoted: [],
+      tokenBudgetDemoted: [],
     };
   }
 
@@ -320,9 +356,47 @@ function _route(inputs: RouterInputs): RoutingDecision {
     }
   }
 
-  // R13-measured class: try cost-optimized routing first
-  // Use the category-filtered ranking if priors applied; otherwise full ranking.
-  const cheapOptimal = _getCheapestFromList(effectiveRanking, MIN_HOT_PERCENT_FOR_CHEAP_ROUTE);
+  // ── K525 Phase A.1: Circuit-breaker filter ──────────────────────────────
+  // Vendors whose breakers are OPEN are excluded from the candidate set. If
+  // the filter removes every vendor, fall back to conservative default rather
+  // than emit no decision (caller should still attempt a single vendor).
+  const circuitBreakerDemoted: VendorName[] = [];
+  let cbFiltered = effectiveRanking;
+  {
+    const filtered: typeof effectiveRanking = [];
+    for (const m of effectiveRanking) {
+      if (isVendorAvailable(m.vendor)) {
+        filtered.push(m);
+      } else {
+        if (!circuitBreakerDemoted.includes(m.vendor)) {
+          circuitBreakerDemoted.push(m.vendor);
+        }
+      }
+    }
+    if (filtered.length > 0) {
+      cbFiltered = filtered;
+    }
+    // else: keep `effectiveRanking` — all vendors broken; let downstream attempt
+    // the top-ranked anyway and surface the failure to the member.
+  }
+
+  // ── K525 Phase A.3: Token-budget overflow filter ─────────────────────────
+  // Skip when caller didn't supply inputTokens (the router can't infer it).
+  let tokenFiltered = cbFiltered;
+  let tokenBudgetDemoted: Array<{ vendor: VendorName; model: string; maxTokens: number }> = [];
+  if (typeof inputTokens === "number" && isFinite(inputTokens) && inputTokens > 0) {
+    const { fit, demoted } = filterByTokenBudget(cbFiltered, inputTokens);
+    tokenBudgetDemoted = demoted as Array<{ vendor: VendorName; model: string; maxTokens: number }>;
+    if (fit.length > 0) {
+      tokenFiltered = fit;
+    }
+    // else: every model overflows — degrade gracefully to original list and let
+    // the call fail loudly at the vendor (member sees the truncation error).
+  }
+
+  // R13-measured class: try cost-optimized routing first.
+  // Use the post-filter ranking if priors / breakers / token-budget applied.
+  const cheapOptimal = _getCheapestFromList(tokenFiltered, MIN_HOT_PERCENT_FOR_CHEAP_ROUTE);
 
   if (cheapOptimal) {
     return {
@@ -333,15 +407,17 @@ function _route(inputs: RouterInputs): RoutingDecision {
         `(HOT%=${cheapOptimal.hotPercent}%, cost-per-HOT=${cheapOptimal.costPerHot != null ? "$" + cheapOptimal.costPerHot.toFixed(4) : "TBD"}, ` +
         `economy gear — automatic transmission engaged).`,
       fallbackUsed: false,
-      rankingAgeDays: effectiveRanking[0]?.rankingAgeDays ?? null,
+      rankingAgeDays: tokenFiltered[0]?.rankingAgeDays ?? null,
       costTierLabel: _costTierLabel(cheapOptimal.model),
       categoryPriorApplied,
       categoryPriorDetail,
+      circuitBreakerDemoted,
+      tokenBudgetDemoted,
     };
   }
 
-  // No cheap option above threshold → use top-ranked (highest accuracy) from effective list
-  const effectiveTop = effectiveRanking[0];
+  // No cheap option above threshold → use top-ranked (highest accuracy) from filtered list
+  const effectiveTop = tokenFiltered[0];
   return {
     vendor: effectiveTop.vendor,
     model: effectiveTop.model,
@@ -353,6 +429,8 @@ function _route(inputs: RouterInputs): RoutingDecision {
     costTierLabel: _costTierLabel(effectiveTop.model),
     categoryPriorApplied,
     categoryPriorDetail,
+    circuitBreakerDemoted,
+    tokenBudgetDemoted,
   };
 }
 

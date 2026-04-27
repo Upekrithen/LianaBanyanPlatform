@@ -61,6 +61,9 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 import { useAlcoveProgress } from "@/hooks/useAlcoveProgress";
 import { useCaptain } from "@/hooks/useCaptain";
 import { GUILDS } from "@/lib/guildChapterSystem";
+import { ConductorTab } from "@/components/helm/ConductorTab";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
+import { Music2 } from "lucide-react";
 
 interface BeaconRun {
   id: string;
@@ -871,6 +874,7 @@ export function HelmPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
   const { isCaptain, captain } = useCaptain();
+  const { enabled: conductorEnabled } = useFeatureFlag("CONDUCTOR_BATON_ENABLED");
 
   const { data: guildMembership } = useQuery({
     queryKey: ['guild-membership', user?.id],
@@ -969,7 +973,7 @@ export function HelmPage() {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-flex">
+        <TabsList className={`grid w-full ${conductorEnabled ? "grid-cols-5" : "grid-cols-4"} lg:w-auto lg:inline-flex`}>
           <TabsTrigger value="journey" className="gap-2">
             <Map className="w-4 h-4" />
             <span className="hidden sm:inline">Journey Map</span>
@@ -990,6 +994,13 @@ export function HelmPage() {
             <span className="hidden sm:inline">Leaderboards</span>
             <span className="sm:hidden">Boards</span>
           </TabsTrigger>
+          {conductorEnabled && (
+            <TabsTrigger value="conductor" className="gap-2">
+              <Music2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Conductor</span>
+              <span className="sm:hidden">AI</span>
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* Journey Map Tab */}
@@ -1108,6 +1119,13 @@ export function HelmPage() {
             </div>
           )}
         </TabsContent>
+
+        {/* Conductor Tab — gated on CONDUCTOR_BATON_ENABLED feature flag (K525) */}
+        {conductorEnabled && (
+          <TabsContent value="conductor" className="mt-6">
+            <ConductorTab />
+          </TabsContent>
+        )}
 
         {/* Leaderboards Tab */}
         <TabsContent value="leaderboards" className="mt-6 space-y-6">
