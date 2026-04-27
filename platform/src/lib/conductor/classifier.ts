@@ -25,11 +25,34 @@ export type QueryClass =
   | "multi_step_planning"  // Agentic decomposition: plan → execute → verify sequences
   | "uncertain";           // Classifier confidence below threshold; triggers routing fallback
 
+/**
+ * LB Platform domain categories — sourced from R11 (K471 sealed bank).
+ * Maps to the 6 question categories used in the cross-vendor memory benchmark.
+ * When detected, the router applies R11 category-aware priors to the ranking.
+ *
+ * Routing relevance (R11 empirical findings, K444/B129):
+ *   economic_governance  → Gemini 22% HOT (avoid); Perplexity/OpenAI/Claude 89–100%
+ *   member_journey       → Gemini + Claude Sonnet 50% HOT (de-rank); Perplexity/OpenAI 100%
+ *   canonical_statistics → Gemini 56% HOT (de-rank); others 100%
+ *   architecture_mechanics → Gemini 50% HOT; others 88–100%
+ *   historical_precedent → Gemini 62% HOT; others 100%
+ *   regulatory_compliance → Gemini 62% HOT; others 88–100%
+ */
+export type LbDomainCategory =
+  | "economic_governance"    // Governance rules, cooperative economics, voting, financial policy
+  | "member_journey"         // Member onboarding, benefits, progression, experience
+  | "canonical_statistics"   // Specific numbers, metrics, statistics, counts
+  | "architecture_mechanics" // System architecture, technical mechanisms, how-it-works
+  | "historical_precedent"   // Historical data, past events, precedents, timelines
+  | "regulatory_compliance"; // Regulations, legal requirements, compliance standards
+
 export interface ClassifiedQuery {
   query: string;
   class: QueryClass;
-  confidence: number;   // 0..1 — aggregate heuristic confidence
-  signals: string[];    // which heuristic rules fired, for provenance
+  confidence: number;           // 0..1 — aggregate heuristic confidence
+  signals: string[];            // which heuristic rules fired, for provenance
+  domainCategory: LbDomainCategory | null;  // LB domain category if detected; null if not
+  domainConfidence: number;     // 0..1 — confidence that domain category is correct
 }
 
 // ---------------------------------------------------------------------------
@@ -242,6 +265,109 @@ function _reasoningSignals(q: string, wordCount: number): HeuristicHit[] {
 }
 
 // ---------------------------------------------------------------------------
+// Domain category detection
+// Detects LB Platform domain signals independent of task class.
+// Each fired signal contributes to one LbDomainCategory bucket.
+// The highest-confidence bucket becomes the domainCategory output.
+// ---------------------------------------------------------------------------
+
+interface DomainHit {
+  category: LbDomainCategory;
+  confidence: number;
+  signal: string;
+}
+
+function _domainSignals(q: string): DomainHit[] {
+  const hits: DomainHit[] = [];
+
+  // ── economic_governance ────────────────────────────────────────────────
+  if (/\b(governance|cooperative\s+governance|federated|federation|vote\s+threshold|voting|constitutional\s+amendment|ledger\s+standard|economic\s+polic|equity\s+stake|governance\s+model|governance\s+rule|profit[\s-]shar|distribution\s+(formula|rule)|creator\s+(keep|share|earn|split)|platform\s+margin|member[\s-]owner|cooperative\s+econom)\b/i.test(q)) {
+    hits.push({ category: "economic_governance", confidence: 0.65, signal: "governance-term" });
+  }
+  if (/\b(83\.3%|83\.3|416\.67|\$416|prov\s+14|patent|provisional|filing|crown\s+jewel|innovation\s+count|a&a\s+formal)\b/i.test(q)) {
+    hits.push({ category: "economic_governance", confidence: 0.6, signal: "lb-governance-number" });
+  }
+  if (/\b(16\.7%|cost\s+\+\s*20%?|platform\s+fee|transaction\s+fee|royalt|licensing\s+fee)\b/i.test(q)) {
+    hits.push({ category: "economic_governance", confidence: 0.55, signal: "economic-fee-term" });
+  }
+
+  // ── member_journey ─────────────────────────────────────────────────────
+  if (/\b(member[\s-]journey|onboard(ing)?|sign[\s-]?(up|in)|membership|join|register|red\s+carpet|welcome|first[\s-]time\s+member|member\s+experience|get\s+started|new\s+member|member\s+benefit|member[\s-]owner\s+(join|sign))\b/i.test(q)) {
+    hits.push({ category: "member_journey", confidence: 0.65, signal: "member-journey-term" });
+  }
+  if (/\b(my\s+account|my\s+profile|my\s+membership|my\s+balance|member\s+dashboard|helm|member\s+portal|member\s+id)\b/i.test(q)) {
+    hits.push({ category: "member_journey", confidence: 0.55, signal: "member-portal-term" });
+  }
+  if (/\b(\$5\/year|\$5\s+per\s+year|membership\s+(fee|cost|price|dues)|annual\s+(fee|membership))\b/i.test(q)) {
+    hits.push({ category: "member_journey", confidence: 0.6, signal: "membership-fee-term" });
+  }
+
+  // ── canonical_statistics ───────────────────────────────────────────────
+  if (/\b(how\s+many|how\s+much|what\s+percent|what\s+is\s+the\s+(count|number|total|amount|rate|percentage)|how\s+large|how\s+big|statistic|metric)\b/i.test(q)) {
+    hits.push({ category: "canonical_statistics", confidence: 0.5, signal: "stats-question-stem" });
+  }
+  if (/\b(2,267|2267|225\s+crown|13\s+provisional|2,412|36\s+production|2,080|member[\s-]owner[\s-]count)\b/i.test(q)) {
+    hits.push({ category: "canonical_statistics", confidence: 0.75, signal: "lb-canonical-number" });
+  }
+  if (/\b(total\s+(transactions?|volume|amount|spend|revenue)|transaction\s+volume|fiscal\s+year|Q[1-4]\s+\d{4}|quarter(ly)?)\b/i.test(q)) {
+    hits.push({ category: "canonical_statistics", confidence: 0.5, signal: "financial-stats-term" });
+  }
+
+  // ── architecture_mechanics ──────────────────────────────────────────────
+  if (/\b(how\s+(does|do)\s+.{2,40}work|architecture|substrate|indexed\s+retrieval|cathedral\s+(effect|mechanic|substrate|architecture)|scribe|stitchpunk|touchstone|eblet|seer\.py|librarian[\s-]mcp|conductor('s\s+baton)?|adapter|MCP\s+tool|MCP\s+server)\b/i.test(q)) {
+    hits.push({ category: "architecture_mechanics", confidence: 0.6, signal: "architecture-term" });
+  }
+  if (/\b(TF[\s-]IDF|IDF|bedrock\s+eblet|synthetic\s+bridg|vocabulary\s+bridg|corpus[\s-]normalized|retrieval[\s-]augmented|RAG)\b/i.test(q)) {
+    hits.push({ category: "architecture_mechanics", confidence: 0.65, signal: "retrieval-mechanics" });
+  }
+
+  // ── historical_precedent ───────────────────────────────────────────────
+  if (/\b(histor(y|ical)|precedent|prior\s+to|founded|established|origin|when\s+(was|did|were)\s+.{2,40}(start|found|establish|creat|launch|begin)|first\s+(time|recorded|documented|instance)|timeline|chronolog)\b/i.test(q)) {
+    hits.push({ category: "historical_precedent", confidence: 0.55, signal: "historical-term" });
+  }
+  if (/\b(1989|since\s+198\d|since\s+199\d|since\s+200\d|37\s+years|21\s+years|founding\s+(year|date)|formation\s+date)\b/i.test(q)) {
+    hits.push({ category: "historical_precedent", confidence: 0.65, signal: "lb-historical-date" });
+  }
+
+  // ── regulatory_compliance ──────────────────────────────────────────────
+  if (/\b(regulat(ion|ory|ed)|compliance|legal\s+(requirement|standard|obligation)|law|statute|rule\s+under|bylaw|article\s+of\s+incorporat|wyoming|c[\s-]corp|ein|EIN|tax|AML|KYC|SEC|FINRA|anti[\s-]money|audit\s+requirement)\b/i.test(q)) {
+    hits.push({ category: "regulatory_compliance", confidence: 0.6, signal: "regulatory-term" });
+  }
+  if (/\b(41[\s-]2797446|liana\s+banyan\s+corporation|EIN\s+41|wyoming\s+c[\s-]corp)\b/i.test(q)) {
+    hits.push({ category: "regulatory_compliance", confidence: 0.7, signal: "lb-regulatory-id" });
+  }
+
+  return hits;
+}
+
+/**
+ * Aggregate domain hits; return the winning domain category and its confidence.
+ * Returns null domain if no category exceeds the detection threshold.
+ */
+function _detectDomain(q: string): { category: LbDomainCategory | null; confidence: number } {
+  const hits = _domainSignals(q);
+  if (hits.length === 0) return { category: null, confidence: 0 };
+
+  const totals = new Map<LbDomainCategory, number>();
+  for (const hit of hits) {
+    totals.set(hit.category, Math.min(1.0, (totals.get(hit.category) ?? 0) + hit.confidence));
+  }
+
+  let bestCat: LbDomainCategory | null = null;
+  let bestConf = 0;
+  for (const [cat, conf] of totals.entries()) {
+    if (conf > bestConf) {
+      bestConf = conf;
+      bestCat = cat;
+    }
+  }
+
+  // Minimum domain confidence threshold: 0.5
+  if (bestConf < 0.5) return { category: null, confidence: 0 };
+  return { category: bestCat, confidence: Math.round(bestConf * 1000) / 1000 };
+}
+
+// ---------------------------------------------------------------------------
 // Aggregation
 // ---------------------------------------------------------------------------
 
@@ -281,6 +407,9 @@ export function classifyQuery(query: string): ClassifiedQuery {
     ..._reasoningSignals(trimmed, wordCount),
   ];
 
+  // Domain detection is independent of task class
+  const domain = _detectDomain(trimmed);
+
   const totals = _aggregate(allHits);
 
   if (totals.size === 0) {
@@ -289,6 +418,8 @@ export function classifyQuery(query: string): ClassifiedQuery {
       class: "uncertain",
       confidence: 0,
       signals: ["no-heuristics-fired"],
+      domainCategory: domain.category,
+      domainConfidence: domain.confidence,
     };
   }
 
@@ -316,5 +447,7 @@ export function classifyQuery(query: string): ClassifiedQuery {
     class: winnerClass,
     confidence: Math.round(winnerConfidence * 1000) / 1000,
     signals: firedSignals.length > 0 ? firedSignals : allHits.map((h) => h.signal),
+    domainCategory: domain.category,
+    domainConfidence: domain.confidence,
   };
 }

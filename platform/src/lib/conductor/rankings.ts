@@ -1,27 +1,36 @@
 /**
- * Conductor Rankings — R13 Hydrated Ranking Table
- * K446 · Phase 3 · R13 (K499, 2026-04-25)
+ * Conductor Rankings — Dual-Dimension Hydrated Ranking Table
+ * K446 · Phase 3 · B129 hydration
  *
- * Source: BISHOP_DROPZONE/03_BishopHandoffs/REPORT_KNIGHT_K499_B123_R13_CROSS_VENDOR_BENCHMARK.md
- * Commit: v-r13-cross-vendor-benchmark-K499
- * Cross-vendor mean lift: +86.2pp (R10 baseline: +86.1pp — stable across 3 generations, 4 vendors)
- * Cost-per-HOT spread: 21.6× within Anthropic; 78× across vendors (Gemini Flash $0.0040 → Opus $0.3140)
+ * TWO empirical sources:
  *
- * R13 measures ONE task class: substrate-grounded factual answering on sealed adversarial banks.
- * Task classes NOT measured by R13 (conservative flagship fallback until R15 lands):
- *   - multi_step_planning  → conservative default: claude-opus-4-7 (flagship reasoning tier)
- *   - creative             → conservative default: claude-opus-4-7
- *   - code_generation      → conservative default: claude-opus-4-7
- * R15 (post-R14, queued) will measure these and populate per-class ranking data.
+ * R13 (K499, 2026-04-25) — model-performance WITH LB Cathedral attached
+ *   Source: REPORT_KNIGHT_K499_B123_R13_CROSS_VENDOR_BENCHMARK.md
+ *   Commit: v-r13-cross-vendor-benchmark-K499
+ *   Measures: substrate-grounded factual answering, 8 models × 2 conditions × 50 questions
+ *   Mean lift: +86.2pp (R10 baseline +86.1pp — stable across 3 generations, 4 vendors)
+ *   Cost-per-HOT spread: 21.6× within Anthropic; 78× across vendors ($0.0040 Gemini → $0.3140 Opus)
+ *
+ * R11 (K444/B129, 2026-04-27) — vendor-native memory product comparison
+ *   Source: REPORT_KNIGHT_K444_B129_R11_CROSS_VENDOR_MEMORY_BENCHMARK.md
+ *   Commit: ec6073e
+ *   Measures: 5 vendor-native memory products × 6 domain categories × 50 questions (K471 sealed bank)
+ *   Key finding: Gemini 2.5 Pro only 22% HOT on economic_governance, 50% on member_journey
+ *   Key finding: Perplexity Sonar-Pro 89–100% HOT across all domain categories
+ *   Architecture: corpus-in-prompt (vendor-native) vs indexed retrieval (LB Cathedral)
+ *
+ * Routing architecture:
+ *   R13 → primary task-class ranking (which model performs best overall WITH Cathedral)
+ *   R11 → category-aware prior (which vendor to avoid for specific LB domain questions)
+ *   When both fire: R11 domain prior narrows the candidate set BEFORE R13 ranking applies.
  *
  * Architecture note:
  *   This file is the ONLY place ranking data is hand-edited.
- *   router.ts calls getRankingForClass() to retrieve the ordered list.
- *   When R15 lands, add entries to the `R15_RANKING_TABLE` and remove the
- *   conservative-fallback entries from the relevant classes.
+ *   router.ts calls getRankingForClass() + getDemotedVendorsForCategory() to route.
+ *   When R15 lands, add entries to the R15-measured classes; remove conservative-fallback entries.
  */
 
-import type { QueryClass } from "./classifier.js";
+import type { QueryClass, LbDomainCategory } from "./classifier.js";
 import type { VendorName } from "./adapters/types.js";
 
 // ---------------------------------------------------------------------------
@@ -34,8 +43,27 @@ export interface ModelVendorPair {
   hotPercent: number;      // HOT% from empirical benchmark (0–100)
   costPerHot: number | null; // USD per correct answer (null = not yet measured)
   tier: "top" | "mid" | "cheap";
-  source: "R13" | "R15" | "stub" | "conservative-fallback";
+  source: "R13" | "R11" | "R15" | "stub" | "conservative-fallback";
   rankingAgeDays: number | null; // null = no empirical data for this class
+}
+
+// ---------------------------------------------------------------------------
+// R11 per-category vendor results
+// R11 measured vendor-native memory products (corpus-in-prompt) across 6 LB
+// domain categories on the sealed K471 question bank (50 questions).
+// ---------------------------------------------------------------------------
+
+export interface R11CategoryResult {
+  vendor: VendorName;
+  /** Exact model used for the vendor-native condition */
+  model: string;
+  /** Domain category this result applies to */
+  category: LbDomainCategory;
+  /** HOT% for this vendor × category pairing (0–100) */
+  hotPercent: number;
+  /** Sample size (number of questions in this category) */
+  n: number;
+  source: "R11";
 }
 
 // ---------------------------------------------------------------------------
@@ -153,6 +181,64 @@ const CLASS_RANKINGS: Partial<Record<QueryClass, ModelVendorPair[]>> = {
 };
 
 // ---------------------------------------------------------------------------
+// R11 category-level data
+// Source: K444/B129, 2026-04-27. Conditions: vendor-native memory products
+// (corpus in system prompt). 50 questions, 6 LB domain categories.
+//
+// Key routing priors:
+//  - Gemini 2.5 Pro: 22% HOT on economic_governance — DO NOT ROUTE there for
+//    governance/economics queries when alternatives exist
+//  - Gemini 2.5 Pro: 50% HOT on member_journey — below acceptable threshold
+//  - Claude Projects Sonnet: 50% HOT on member_journey — de-rank for that domain
+//  - Perplexity Sonar-Pro: 89–100% across all categories — always safe choice
+//  - ChatGPT / Claude Opus: 62–100% across categories — generally safe
+// ---------------------------------------------------------------------------
+
+const R11_CATEGORY_TABLE: R11CategoryResult[] = [
+  // ── architecture_mechanics ──────────────────────────────────────────────
+  { vendor: "openai",       model: "gpt-4o",            category: "architecture_mechanics", hotPercent: 100, n: 5,  source: "R11" },
+  { vendor: "anthropic",    model: "claude-opus-4-7",   category: "architecture_mechanics", hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "anthropic",    model: "claude-sonnet-4-6", category: "architecture_mechanics", hotPercent: 88,  n: 16, source: "R11" },
+  { vendor: "perplexity",   model: "sonar-pro",         category: "architecture_mechanics", hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "google",       model: "gemini-2-5-pro",    category: "architecture_mechanics", hotPercent: 50,  n: 16, source: "R11" },
+
+  // ── canonical_statistics ────────────────────────────────────────────────
+  { vendor: "openai",       model: "gpt-4o",            category: "canonical_statistics",   hotPercent: 100, n: 5,  source: "R11" },
+  { vendor: "anthropic",    model: "claude-opus-4-7",   category: "canonical_statistics",   hotPercent: 100, n: 18, source: "R11" },
+  { vendor: "anthropic",    model: "claude-sonnet-4-6", category: "canonical_statistics",   hotPercent: 100, n: 18, source: "R11" },
+  { vendor: "perplexity",   model: "sonar-pro",         category: "canonical_statistics",   hotPercent: 100, n: 18, source: "R11" },
+  { vendor: "google",       model: "gemini-2-5-pro",    category: "canonical_statistics",   hotPercent: 56,  n: 18, source: "R11" },
+
+  // ── economic_governance — Gemini's worst category (22%) ─────────────────
+  { vendor: "openai",       model: "gpt-4o",            category: "economic_governance",    hotPercent: 100, n: 8,  source: "R11" },
+  { vendor: "anthropic",    model: "claude-opus-4-7",   category: "economic_governance",    hotPercent: 89,  n: 18, source: "R11" },
+  { vendor: "anthropic",    model: "claude-sonnet-4-6", category: "economic_governance",    hotPercent: 89,  n: 18, source: "R11" },
+  { vendor: "perplexity",   model: "sonar-pro",         category: "economic_governance",    hotPercent: 89,  n: 18, source: "R11" },
+  { vendor: "google",       model: "gemini-2-5-pro",    category: "economic_governance",    hotPercent: 22,  n: 18, source: "R11" },
+
+  // ── historical_precedent ─────────────────────────────────────────────────
+  { vendor: "openai",       model: "gpt-4o",            category: "historical_precedent",   hotPercent: 100, n: 8,  source: "R11" },
+  { vendor: "anthropic",    model: "claude-opus-4-7",   category: "historical_precedent",   hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "anthropic",    model: "claude-sonnet-4-6", category: "historical_precedent",   hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "perplexity",   model: "sonar-pro",         category: "historical_precedent",   hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "google",       model: "gemini-2-5-pro",    category: "historical_precedent",   hotPercent: 62,  n: 16, source: "R11" },
+
+  // ── member_journey — Claude Sonnet and Gemini both weak (50%) ───────────
+  { vendor: "openai",       model: "gpt-4o",            category: "member_journey",         hotPercent: 100, n: 5,  source: "R11" },
+  { vendor: "anthropic",    model: "claude-opus-4-7",   category: "member_journey",         hotPercent: 62,  n: 16, source: "R11" },
+  { vendor: "anthropic",    model: "claude-sonnet-4-6", category: "member_journey",         hotPercent: 50,  n: 16, source: "R11" },
+  { vendor: "perplexity",   model: "sonar-pro",         category: "member_journey",         hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "google",       model: "gemini-2-5-pro",    category: "member_journey",         hotPercent: 50,  n: 16, source: "R11" },
+
+  // ── regulatory_compliance ────────────────────────────────────────────────
+  { vendor: "openai",       model: "gpt-4o",            category: "regulatory_compliance",  hotPercent: 100, n: 8,  source: "R11" },
+  { vendor: "anthropic",    model: "claude-opus-4-7",   category: "regulatory_compliance",  hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "anthropic",    model: "claude-sonnet-4-6", category: "regulatory_compliance",  hotPercent: 88,  n: 16, source: "R11" },
+  { vendor: "perplexity",   model: "sonar-pro",         category: "regulatory_compliance",  hotPercent: 100, n: 16, source: "R11" },
+  { vendor: "google",       model: "gemini-2-5-pro",    category: "regulatory_compliance",  hotPercent: 62,  n: 16, source: "R11" },
+];
+
+// ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
 
@@ -196,4 +282,50 @@ export function getCheapestAboveThreshold(
     return a.costPerHot - b.costPerHot;
   });
   return sorted[0];
+}
+
+// ---------------------------------------------------------------------------
+// R11 category-aware API
+// ---------------------------------------------------------------------------
+
+/**
+ * Return the R11 HOT% for a specific vendor × domain category pairing.
+ * Returns null if no R11 data exists for this vendor+category combination.
+ */
+export function getR11CategoryHot(
+  vendor: VendorName,
+  category: LbDomainCategory,
+): number | null {
+  const result = R11_CATEGORY_TABLE.find(
+    (r) => r.vendor === vendor && r.category === category,
+  );
+  return result?.hotPercent ?? null;
+}
+
+/**
+ * Return all R11 results for a domain category, sorted by HOT% descending.
+ * Used by the router to assess vendor quality for a specific LB domain.
+ */
+export function getR11CategoryRanking(category: LbDomainCategory): R11CategoryResult[] {
+  return R11_CATEGORY_TABLE
+    .filter((r) => r.category === category)
+    .sort((a, b) => b.hotPercent - a.hotPercent);
+}
+
+/**
+ * Return the set of vendors whose R11 HOT% for this domain category is below
+ * `demoteThreshold`. The router uses this to exclude weak vendors before
+ * applying the R13 task-class ranking.
+ *
+ * Threshold rationale:
+ *   - < 60%: definitely avoid (Gemini on economic_governance: 22%)
+ *   - Default 60% chosen to catch Gemini's worst cases without over-pruning.
+ */
+export function getDemotedVendorsForCategory(
+  category: LbDomainCategory,
+  demoteThreshold = 60,
+): Array<{ vendor: VendorName; hotPercent: number }> {
+  return R11_CATEGORY_TABLE
+    .filter((r) => r.category === category && r.hotPercent < demoteThreshold)
+    .map((r) => ({ vendor: r.vendor, hotPercent: r.hotPercent }));
 }

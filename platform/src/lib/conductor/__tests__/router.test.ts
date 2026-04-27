@@ -1,22 +1,33 @@
 /**
- * Conductor Router — 12-scenario test suite
+ * Conductor Router — scenario test suite
  * K446a · Phase 1.3 / Phase 6
+ * B129 hydration: +R11 category-aware prior scenarios (S13–S17)
  *
- * Covers all mode × ranking-state combinations per the K446a spec.
+ * Covers all mode × ranking-state combinations per the K446a spec,
+ * plus R11 domain-category prior scenarios added at B129 hydration.
  */
 
 import { describe, it, expect } from "vitest";
 import { route } from "../router";
 import type { RouterInputs, ConductorMode } from "../router";
-import type { ClassifiedQuery } from "../classifier";
+import type { ClassifiedQuery, LbDomainCategory } from "../classifier";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function makeClassified(
   cls: ClassifiedQuery["class"],
   confidence = 0.75,
+  domainCategory: LbDomainCategory | null = null,
+  domainConfidence = 0,
 ): ClassifiedQuery {
-  return { query: "test query", class: cls, confidence, signals: ["test"] };
+  return {
+    query: "test query",
+    class: cls,
+    confidence,
+    signals: ["test"],
+    domainCategory,
+    domainConfidence,
+  };
 }
 
 function makeInputs(
@@ -147,5 +158,78 @@ describe("Conductor Router — 12 mode × ranking-state scenarios", () => {
   it("cost tier: Opus routes to premium label", () => {
     const result = route(makeInputs("auto", "creative"));
     expect(result.costTierLabel).toBe("premium (highest accuracy)");
+  });
+});
+
+// ─── R11 Category-Aware Prior Scenarios (B129 hydration) ─────────────────────
+// Tests that the router correctly applies R11 per-category empirical priors
+// when the classifier detects an LB domain category with sufficient confidence.
+//
+// R11 key findings used here:
+//   economic_governance  — Gemini 2.5 Pro: 22% HOT (well below 60% demote threshold)
+//   member_journey       — Gemini + Claude Sonnet: 50% HOT each (below 60% demote threshold)
+//   historical_precedent — Gemini: 62% HOT (above 60% threshold — NOT demoted)
+
+describe("R11 category-aware prior routing (B129 hydration)", () => {
+
+  it("S13: auto + retrieval_only + economic_governance domain — Gemini de-ranked (22% HOT)", () => {
+    const result = route({
+      classified: makeClassified("retrieval_only", 0.80, "economic_governance", 0.65),
+      mode: "auto",
+    });
+    // Gemini should be excluded (22% HOT < 60% demote threshold)
+    expect(result.vendor).not.toBe("google");
+    expect(result.categoryPriorApplied).toBe(true);
+    expect(result.categoryPriorDetail).toContain("economic_governance");
+    expect(result.categoryPriorDetail).toContain("google");
+    expect(result.categoryPriorDetail).toContain("22%");
+  });
+
+  it("S14: auto + retrieval_only + member_journey domain — Gemini + Claude Sonnet de-ranked", () => {
+    const result = route({
+      classified: makeClassified("retrieval_only", 0.80, "member_journey", 0.70),
+      mode: "auto",
+    });
+    // Gemini (50% HOT) and Claude Sonnet (50% HOT) both below 60% — should be excluded
+    // Result should be Perplexity Sonar-Pro (100% HOT on member_journey) or
+    // OpenAI GPT-4o (100%) or Claude Opus (62% — borderline)
+    expect(result.vendor).not.toBe("google");
+    expect(result.categoryPriorApplied).toBe(true);
+    expect(result.categoryPriorDetail).toContain("member_journey");
+    // Haiku is also anthropic/claude-haiku — check we didn't route to Sonnet
+    expect(result.model).not.toBe("claude-sonnet-4-6");
+  });
+
+  it("S15: auto + retrieval_only + historical_precedent — NO de-ranking (Gemini 62% > 60% threshold)", () => {
+    const result = route({
+      classified: makeClassified("retrieval_only", 0.80, "historical_precedent", 0.65),
+      mode: "auto",
+    });
+    // historical_precedent: Gemini 62% — just above demote threshold; no vendors demoted
+    expect(result.categoryPriorApplied).toBe(false);
+    expect(result.categoryPriorDetail).toBeNull();
+  });
+
+  it("S16: auto + retrieval_only + domain below confidence threshold — prior NOT applied", () => {
+    // domainConfidence of 0.3 is below DOMAIN_CONFIDENCE_FOR_PRIOR (0.5)
+    const result = route({
+      classified: makeClassified("retrieval_only", 0.80, "economic_governance", 0.3),
+      mode: "auto",
+    });
+    expect(result.categoryPriorApplied).toBe(false);
+    expect(result.categoryPriorDetail).toBeNull();
+  });
+
+  it("S17: vendor-lock + economic_governance domain — prior NOT applied (member controls gear)", () => {
+    const result = route({
+      classified: makeClassified("retrieval_only", 0.80, "economic_governance", 0.65),
+      mode: "vendor-lock",
+      memberOverride: { vendor: "google" },
+    });
+    // vendor-lock bypasses all priors — member's choice is honored
+    expect(result.vendor).toBe("google");
+    expect(result.fallbackUsed).toBe(false);
+    expect(result.categoryPriorApplied).toBe(false);
+    expect(result.rationale).toContain("fixed gear");
   });
 });
