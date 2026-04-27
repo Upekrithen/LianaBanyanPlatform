@@ -22,6 +22,7 @@ import {
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { getScribe } from "./registry.js";
+import { emitPheromone } from "./pheromone.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -145,6 +146,16 @@ export function appendTidbit(input: {
     bridle_rule: 2,
   };
   const line_count = appendJsonl(TIDBITS_PATH, record);
+
+  // K523 Phase C: sync pheromone emit for tidbits (virtual scribe "Tidbits")
+  try {
+    const tabletId = `tidbit_${input.session}_L${line_count}`;
+    const content = [input.observation, input.category, input.artifact ?? ""].join(" ");
+    emitPheromone("Tidbits", tabletId, content, { cathedral: "bishop", ts: record.ts });
+  } catch {
+    // Non-fatal
+  }
+
   return { ok: true, line_count, record };
 }
 
@@ -208,6 +219,16 @@ export function appendScribeEntry(input: {
     canonical_ref: input.canonical_ref,
   };
   const line_count = appendJsonl(path, record);
+
+  // K523 Phase C: sync pheromone emit on every Scribe write
+  try {
+    const tabletId = `${input.scribe_id}_L${line_count}`;
+    const content = [input.observation, input.canonical_ref ?? "", input.session].join(" ");
+    emitPheromone(input.scribe_id, tabletId, content, { cathedral: "bishop", ts: record.ts as string });
+  } catch {
+    // Non-fatal — pheromone emit must never break Scribe writes
+  }
+
   return { ok: true, tablet: path, line_count, record };
 }
 

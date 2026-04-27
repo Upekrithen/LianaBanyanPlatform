@@ -37,6 +37,7 @@ import { runFates } from "./scribes/fates.js";
 import { consultScribes } from "./scribes/consult.js";
 import { memberConsultScribes } from "./cathedral_supabase/member_consult.js";
 import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
+import { queryPheromone, buildPheromoneIndex } from "./scribes/pheromone.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -2746,6 +2747,122 @@ registerTool(
         cathedral: cathedral as "bishop" | "knight" | undefined,
         scope,
       });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+// ═══════════════════════════════════════════
+// K523 — PHEROMONE SUBSTRATE TOOLS (A&A #2317)
+// ═══════════════════════════════════════════
+
+registerTool(
+  "pheromone_query",
+  "Detective Phase 0 fast path (A&A #2317): query the stigmergic pheromone substrate for a claim. Returns ranked hits from the constant-time inverted-topic index. Falls back to N-Scribe RPC when index is sparse (phase_0_used=false, fallback_to_rpc=true). Hits carry decay_score (recency-weighted match strength). Build cost is amortized; query is sub-millisecond once index is warm. Use before consult_scribes for routine 'where does X live?' investigations.",
+  {
+    claim: z.string().min(3).max(500).describe("Topic or claim to investigate (e.g. 'founder anecdote', 'pheromone substrate', '#2317')"),
+    freshness_threshold_seconds: z.number().int().min(0).optional().describe("Max age of index in seconds before warning stale (default 86400)"),
+    sufficiency_threshold: z.number().int().min(1).optional().describe("Min hits to declare Phase 0 sufficient (default 10). Queries returning fewer hits set fallback_to_rpc=true."),
+    decay_active: z.boolean().optional().describe("Apply exponential recency decay to scores (default true). Set false for forensic queries where age should not matter."),
+    top_k: z.number().int().min(1).max(200).optional().describe("Maximum hits to return (default 20)"),
+    cathedral: z.enum(["bishop", "knight", "pawn"]).optional().describe("Filter hits by Cathedral origin (default: all Cathedrals)"),
+    rebuild_first: z.boolean().optional().describe("Force a full index rebuild before querying (expensive; use only when index is known-stale)"),
+  },
+  async ({ claim, freshness_threshold_seconds, sufficiency_threshold, decay_active, top_k, cathedral, rebuild_first }) => {
+    try {
+      if (rebuild_first) {
+        buildPheromoneIndex({ verbose: false });
+      }
+      const result = queryPheromone(claim, {
+        freshnessThresholdSeconds: freshness_threshold_seconds,
+        sufficiencyThreshold: sufficiency_threshold,
+        decayActive: decay_active,
+        topK: top_k,
+        cathedral,
+      });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+registerTool(
+  "pheromone_build",
+  "Force a full pheromone substrate rebuild from all Cathedral Scribe tablets. Expensive (but fast — typically <100ms). Use after bulk Scribe imports or when pheromone_query reports record_count=0. Normal usage: index is maintained incrementally by sync-emit hooks on every scribe_log / log_tidbit call.",
+  {
+    verbose: z.boolean().optional().describe("Emit build stats to stderr (default false)"),
+    decay_constant_days: z.number().min(1).max(365).optional().describe("Decay half-life for all records (default 30 days)"),
+  },
+  async ({ verbose, decay_constant_days }) => {
+    try {
+      const result = buildPheromoneIndex({ verbose: verbose ?? false, decayConstantDays: decay_constant_days });
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: true, ...result }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+registerTool(
+  "detective_investigate",
+  "Cross-Scribe investigation (A&A #2316 Detective Scribe + #2317 Phase 0). Phase 0: checks pheromone substrate (constant-time) — returns Provenance Map from index if sufficient hits. Phase 1: falls through to consult_scribes RPC when Phase 0 is sparse. Returns structured findings: phase used, hits, scribe coverage, fallback details. Trigger C: operator provenance query ('where does X live?'). Use this before manually scanning multiple Scribes.",
+  {
+    claim: z.string().min(3).max(500).describe("The claim or named entity to investigate (e.g. 'founder anecdote', 'pheromone substrate', 'BRIDLE Rule 3')"),
+    sufficiency_threshold: z.number().int().min(1).optional().describe("Min pheromone hits for Phase 0 to be sufficient (default 10). Lower = prefer pheromone fast-path."),
+    include_rpc_fallback: z.boolean().optional().describe("If true (default), run Phase 1 consult_scribes RPC when Phase 0 is insufficient (false = pheromone-only)"),
+    max_rpc_entries: z.number().int().min(1).max(100).optional().describe("Max entries from Phase 1 RPC fallback (default 20)"),
+    decay_active: z.boolean().optional().describe("Apply pheromone decay scoring (default true)"),
+  },
+  async ({ claim, sufficiency_threshold, include_rpc_fallback, max_rpc_entries, decay_active }) => {
+    try {
+      // Phase 0: pheromone index pre-check
+      const phase0 = queryPheromone(claim, {
+        sufficiencyThreshold: sufficiency_threshold,
+        decayActive: decay_active,
+        topK: 50,
+      });
+
+      const result: Record<string, unknown> = {
+        claim,
+        phase_0: {
+          used: phase0.phase_0_used,
+          hits: phase0.hits,
+          build_ms: phase0.build_ms,
+          query_ms: phase0.query_ms,
+          record_count: phase0.record_count,
+          topic_count: phase0.topic_count,
+        },
+        phase_1: null as unknown,
+        provenance_source: phase0.phase_0_used ? "pheromone_substrate" : "pending_rpc",
+      };
+
+      // Phase 1: RPC fallback when Phase 0 insufficient
+      const doRpc = (include_rpc_fallback !== false) && phase0.fallback_to_rpc;
+      if (doRpc) {
+        const rpcResult = consultScribes({
+          topic: claim,
+          max_entries: max_rpc_entries ?? 20,
+          include_adjacents: true,
+        });
+        result.phase_1 = rpcResult;
+        result.provenance_source = "rpc_consult_scribes";
+      }
+
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
       };
