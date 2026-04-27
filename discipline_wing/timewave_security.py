@@ -30,8 +30,17 @@ from typing import Any, Dict, List, Optional
 SECURITY_EVENTS_DIR = Path(os.path.expanduser("~/.claude/state/timewave_security"))
 SECURITY_EVENTS_LOG = SECURITY_EVENTS_DIR / "security_events.jsonl"
 
-PATTERN_MATCH_THRESHOLD = 3   # N+ rejections → pattern detected → inject block signal
+PATTERN_MATCH_THRESHOLD = 12  # K527: bumped 3→12 (B128 open followup). Single-session legitimate
+                               # substrate work routinely produces 3-5 Augur false-positive trips;
+                               # old threshold of 3 punished Bishop for working WITH the substrate.
+                               # 12 is high enough to not fire on normal workflows, low enough to
+                               # catch genuine catastrophic-loop scenarios (TS-094 empirical anchor).
+                               # Per-rule override deferred (see k527_note below).
 WEIGHT_PER_REJECTION = 0.5    # Confidence weight per repeated rejection (capped 1.0)
+PATTERN_RECENCY_WINDOW_SECONDS = 3600  # Only events within last hour count toward threshold (B128 fix)
+                                        # Append-only log preserved; older events stay queryable via query_events
+                                        # but don't trigger gate-block decisions. Prevents prior-session rejection
+                                        # accumulation from wedging current session after the underlying cause is fixed.
 
 # Trigger categories for stable pattern classification
 TRIGGER_CATEGORIES = [
@@ -147,6 +156,15 @@ def match_security_pattern(
         return base
 
     count = 0
+    # B128 fix: only events within recency window contribute to pattern detection.
+    # Computed once outside the loop; events with no/invalid ts are conservatively excluded.
+    import datetime
+    try:
+        cutoff_dt = datetime.datetime.utcnow() - datetime.timedelta(seconds=PATTERN_RECENCY_WINDOW_SECONDS)
+        cutoff_iso = cutoff_dt.isoformat() + "Z"
+    except Exception:
+        cutoff_iso = ""
+
     try:
         text = SECURITY_EVENTS_LOG.read_text(encoding="utf-8")
         lines = text.strip().split("\n")
@@ -157,8 +175,13 @@ def match_security_pattern(
                 continue
             try:
                 rec = json.loads(line)
-                if rec.get("pattern_hash") == pattern_hash:
-                    count += 1
+                if rec.get("pattern_hash") != pattern_hash:
+                    continue
+                # B128: enforce recency window — old rejections don't count
+                rec_ts = rec.get("ts", "")
+                if cutoff_iso and rec_ts and rec_ts < cutoff_iso:
+                    continue
+                count += 1
             except Exception:
                 pass
     except Exception:
