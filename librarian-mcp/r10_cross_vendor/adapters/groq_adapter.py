@@ -8,7 +8,7 @@ Groq pricing (as of 2026-04-26):
   llama-3.3-70b-versatile: $0.59/M input, $0.79/M output tokens
 
 Temperature: 0.0 (deterministic)
-max_tokens: 800 (matches R13 cloud adapter cap)
+max_tokens: 200 (K521 Groq: 800 caused 413 — input+max_tokens must stay <12K TPM)
 num_ctx equivalent: model handles long context natively (128K window)
 
 K521 / B127
@@ -49,7 +49,8 @@ def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 120) -
     Call Groq chat completions API.
 
     Temperature 0.0 for deterministic output.
-    max_tokens=800 caps output (matches R13 protocol).
+    max_tokens=200 caps output. K521 Groq constraint: input(~11,741) + max_tokens must stay
+    under 12,000 TPM limit. 200-token cap gives 11,941 projected total < 12,000.
     The 11.7K-token cathedral substrate fits well within Groq's 128K window
     — no num_ctx override needed (Groq handles it natively).
     """
@@ -63,7 +64,7 @@ def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 120) -
             {"role": "user",   "content": user_prompt},
         ],
         temperature=0.0,
-        max_tokens=800,
+        max_tokens=200,
         timeout=timeout,
     )
     latency = time.perf_counter() - t0

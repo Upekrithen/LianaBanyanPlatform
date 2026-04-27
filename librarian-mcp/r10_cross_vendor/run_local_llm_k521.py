@@ -93,14 +93,14 @@ LOCK_FILE   = RESULTS_DIR / "run.lock"
 
 # ─── Model config (K521 fork — changed from K511 8B to 70B) ──────────────────
 
-DEFAULT_MODEL = "llama-3.3-70b-versatile"
-MODEL_LABEL   = "Llama 3.3 70B (Groq)"
-VENDOR_LABEL  = "groq_cloud"
+DEFAULT_MODEL = "meta-llama/Llama-3.3-70B-Instruct-Turbo"
+MODEL_LABEL   = "Llama 3.3 70B (Together AI)"
+VENDOR_LABEL  = "together_cloud_paid"
 
 CONDITIONS = ["cold", "cathedral"]
 
-RETRY_MAX    = 5
-RETRY_BASE_S = 30.0   # cathedral calls need longer retry gaps under TPM rate limits
+RETRY_MAX    = 3
+RETRY_BASE_S = 10.0   # Together AI paid tier: transient 5xx only; short backoff sufficient
 
 COLD_SYSTEM_PROMPT = (
     "You are a helpful assistant. Answer the user's question to the best of your ability. "
@@ -188,15 +188,15 @@ def append_record(path: Path, record: dict) -> None:
         f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-# ─── Groq call with retry ─────────────────────────────────────────────────────
+# ─── Together AI call with retry ──────────────────────────────────────────────
 
 def run_one_call(model: str, system_prompt: str, question: str) -> dict:
-    """Call Groq adapter with exponential-backoff retries."""
-    from adapters import groq_adapter
+    """Call Together AI adapter with exponential-backoff retries."""
+    from adapters import together_adapter
     last_error = None
     for attempt in range(1, RETRY_MAX + 1):
         try:
-            resp = groq_adapter.call(model, system_prompt, question)
+            resp = together_adapter.call(model, system_prompt, question)
             return {
                 "text":         resp.text,
                 "input_tokens": resp.input_tokens,
@@ -360,18 +360,18 @@ def _write_results_summary(
 # ─── Main benchmark runner ────────────────────────────────────────────────────
 
 def run_benchmark(args: argparse.Namespace) -> None:
-    from adapters import groq_adapter
+    from adapters import together_adapter
 
     model = args.model
 
     if not args.dry_run:
         # Health check + API key verification
-        print("Checking Groq connection…", flush=True)
-        if not groq_adapter.health_check():
-            print("\nERROR: Groq API unreachable or GROQ_API_KEY invalid.", file=sys.stderr)
+        print("Checking Together AI connection…", flush=True)
+        if not together_adapter.health_check():
+            print("\nERROR: Together AI unreachable or TOGETHER_API_KEY invalid.", file=sys.stderr)
             print("Load SDS.env first, then retry.", file=sys.stderr)
             sys.exit(1)
-        print(f"  Groq OK — model: {model}", flush=True)
+        print(f"  Together AI OK — model: {model}", flush=True)
 
     conditions = [args.condition] if args.condition else CONDITIONS
 
@@ -386,7 +386,7 @@ def run_benchmark(args: argparse.Namespace) -> None:
 
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     print(f"\n{'='*70}")
-    print(f"K521 70B CATHEDRAL BENCHMARK (Groq Cloud) — {timestamp}")
+    print(f"K521 70B CATHEDRAL BENCHMARK (Together AI Paid) — {timestamp}")
     print(f"Model:      {model}  [{MODEL_LABEL}]")
     print(f"Conditions: {conditions}")
     print(f"Questions:  {len(questions)} | Total calls: {total_calls}")
@@ -459,11 +459,10 @@ def run_benchmark(args: argparse.Namespace) -> None:
 
                 progress = f"[{call_number}/{total_calls}]"
 
-                # Rate-limit pacing for cathedral condition (11K+ tokens per call)
-                # Groq free tier: 6,000 TPM. Each cathedral call = ~11,743 tokens (~2 min budget).
-                # 120s inter-call sleep keeps us under the TPM window.
-                if condition == "cathedral" and q_id not in completed_ids:
-                    time.sleep(120)
+                # Together AI paid tier: no TPM wall at this size.
+                # 2s courtesy sleep between calls.
+                if q_id not in completed_ids:
+                    time.sleep(2)
 
                 print(f"{progress} {model}/{condition}/{q_id}…", end=" ", flush=True)
 
@@ -477,9 +476,9 @@ def run_benchmark(args: argparse.Namespace) -> None:
                     grade = grade_response(result["text"], hot_elements)
                     consecutive_errors = 0
 
-                if consecutive_errors >= 5:
+                if consecutive_errors >= 10:
                     aborted = True
-                    abort_reason = f"5 consecutive errors — last: {result['error'][:120]}"
+                    abort_reason = f"10 consecutive errors — last: {result['error'][:120]}"
                     print(f"\n!!! ABORTING: {abort_reason}", flush=True)
                     break
 
