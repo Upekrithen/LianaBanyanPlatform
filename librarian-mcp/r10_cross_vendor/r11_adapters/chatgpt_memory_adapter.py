@@ -17,11 +17,21 @@ Env var: OPENAI_API_KEY
 """
 
 import os
+import re
 import time
 from pathlib import Path
 from typing import Literal
 
 from adapters import AdapterResponse
+
+# Seconds to sleep if rate-limit message doesn't give a retry-after value.
+_DEFAULT_BACKOFF_S = 45.0
+
+
+def _retry_after_seconds(err_str: str) -> float:
+    """Parse 'Please try again in X.XXXs' from a 429 message, or return default."""
+    m = re.search(r"try again in\s+([\d.]+)s", str(err_str))
+    return float(m.group(1)) + 2.0 if m else _DEFAULT_BACKOFF_S
 
 PRICING = {
     "gpt-4o":       {"input": 2.50,  "output": 10.00},
@@ -62,14 +72,16 @@ def answer(
     corpus_text: str,
     model: str = "gpt-4o",
     mode: Literal["memory", "cold"] = "memory",
+    max_retries: int = 5,
 ) -> AdapterResponse:
-    from openai import OpenAI
+    from openai import OpenAI, RateLimitError
 
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         raise EnvironmentError("OPENAI_API_KEY not set")
 
-    client = OpenAI(api_key=api_key)
+    # Disable SDK-level retries — we handle them ourselves with parsed wait times.
+    client = OpenAI(api_key=api_key, max_retries=0)
     pricing = PRICING.get(model, DEFAULT_PRICING)
 
     if mode == "memory":
@@ -77,29 +89,39 @@ def answer(
     else:
         system_prompt = COLD_SYSTEM
 
-    t0 = time.perf_counter()
-    response = client.chat.completions.create(
-        model=model,
-        max_tokens=512,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": question},
-        ],
-    )
-    latency = time.perf_counter() - t0
+    for attempt in range(max_retries):
+        t0 = time.perf_counter()
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                max_tokens=512,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": question},
+                ],
+            )
+        except RateLimitError as exc:
+            wait = _retry_after_seconds(str(exc))
+            print(f"    [chatgpt_memory] 429 — sleeping {wait:.1f}s (attempt {attempt+1}/{max_retries})")
+            time.sleep(wait)
+            continue
+        except Exception:
+            raise
 
-    usage = response.usage
-    input_tokens = usage.prompt_tokens if usage else 0
-    output_tokens = usage.completion_tokens if usage else 0
-    cost = (input_tokens / 1_000_000) * pricing["input"] + \
-           (output_tokens / 1_000_000) * pricing["output"]
+        latency = time.perf_counter() - t0
+        usage = response.usage
+        input_tokens = usage.prompt_tokens if usage else 0
+        output_tokens = usage.completion_tokens if usage else 0
+        cost = (input_tokens / 1_000_000) * pricing["input"] + \
+               (output_tokens / 1_000_000) * pricing["output"]
+        text = response.choices[0].message.content if response.choices else ""
 
-    text = response.choices[0].message.content if response.choices else ""
+        return AdapterResponse(
+            text=text or "",
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            cost_usd=round(cost, 6),
+            latency_s=round(latency, 3),
+        )
 
-    return AdapterResponse(
-        text=text or "",
-        input_tokens=input_tokens,
-        output_tokens=output_tokens,
-        cost_usd=round(cost, 6),
-        latency_s=round(latency, 3),
-    )
+    raise RuntimeError(f"chatgpt_memory_adapter: exhausted {max_retries} retries for model={model}")

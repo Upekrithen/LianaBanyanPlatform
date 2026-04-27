@@ -24,7 +24,7 @@ Usage:
   python run_r11.py --out results_r11_K444_v2 --budget 50.00
 
 Env vars: ANTHROPIC_API_KEY, OPENAI_API_KEY, GOOGLE_API_KEY (or GEMINI_API_KEY), PERPLEXITY_API_KEY
-Load from SDS.env upstream (see AGENTS.md).
+Loaded automatically from SDS.env at startup (background mode strips shell inheritance).
 """
 from __future__ import annotations
 
@@ -35,6 +35,34 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+
+
+# ---------------------------------------------------------------------------
+# Explicit SDS.env loader — must run before any imports that use API keys.
+# Background subprocess mode strips env inheritance; load from vault directly.
+# ---------------------------------------------------------------------------
+def _load_sds_env() -> None:
+    """Parse SDS.env and set missing env vars without echoing values."""
+    candidates = [
+        Path(__file__).resolve().parents[3] / "Asteroid-ProofVault" / "LockBox" / "SDS.env",
+        Path(__file__).resolve().parents[2] / "Asteroid-ProofVault" / "LockBox" / "SDS.env",
+        Path("Asteroid-ProofVault") / "LockBox" / "SDS.env",
+    ]
+    sds = next((p for p in candidates if p.exists()), None)
+    if sds is None:
+        return
+    for line in sds.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip()
+        val = val.strip()
+        if key and val and not os.environ.get(key):
+            os.environ[key] = val
+
+
+_load_sds_env()
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR.parent))
@@ -58,9 +86,12 @@ CONDITIONS: list[dict] = [
     {"id": "cold_gpt4o_mini",      "vendor": "openai",    "model": "gpt-4o-mini",                "adapter": "chatgpt_memory",  "mode": "cold"},
     {"id": "cold_gemini_flash",    "vendor": "google",    "model": "gemini-2.5-flash",            "adapter": "gemini_gems",     "mode": "cold"},
     # Vendor memory products
-    {"id": "chatgpt_memory",       "vendor": "openai",    "model": "gpt-4o",                     "adapter": "chatgpt_memory",  "mode": "memory"},
+    # GPT-4o: ~22K tokens/query → 30K TPM limit → 1 query/min → 46s min inter-query sleep
+    {"id": "chatgpt_memory",       "vendor": "openai",    "model": "gpt-4o",                     "adapter": "chatgpt_memory",  "mode": "memory",
+     "inter_query_sleep_s": 46.0},
     {"id": "chatgpt_memory_gpt5",  "vendor": "openai",    "model": "gpt-4.1",                    "adapter": "chatgpt_memory",  "mode": "memory",
-     "model_note": "gpt-4.1 used as proxy; try 'gpt-5' if API access confirmed"},
+     "model_note": "gpt-4.1 used as proxy; try 'gpt-5' if API access confirmed",
+     "inter_query_sleep_s": 46.0},
     {"id": "claude_projects_sonnet","vendor": "anthropic","model": "claude-sonnet-4-6",           "adapter": "claude_projects", "mode": "project"},
     {"id": "claude_projects_opus", "vendor": "anthropic", "model": "claude-opus-4-7",             "adapter": "claude_projects", "mode": "project"},
     {"id": "gemini_gems",          "vendor": "google",    "model": "gemini-2.5-pro",              "adapter": "gemini_gems",     "mode": "gem"},
@@ -101,6 +132,9 @@ def run_condition(
     model = condition["model"]
     adapter_name = condition["adapter"]
     mode = condition["mode"]
+    # Per-condition minimum inter-query pacing (seconds). Used for high-TPM-cost
+    # conditions like GPT-4o with the full 11.8K corpus in system prompt.
+    inter_query_sleep: float = condition.get("inter_query_sleep_s", 0.20)
 
     per_file = out_dir / f"{cid}.jsonl"
     records: list[dict] = []
@@ -181,7 +215,7 @@ def run_condition(
                 out.write(json.dumps(err_record) + "\n")
                 print(f"  [{cid:<28}] {qid:<12} ERROR: {e}")
 
-            time.sleep(0.20)
+            time.sleep(inter_query_sleep)
 
     return records, halted
 
