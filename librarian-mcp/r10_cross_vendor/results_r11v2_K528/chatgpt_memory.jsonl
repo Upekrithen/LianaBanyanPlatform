@@ -1,0 +1,15 @@
+{"qid": "R11v2-CS-01", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T20:26:43.232810+00:00"}
+{"qid": "R11v2-CS-01b", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T20:34:12.192712+00:00"}
+{"qid": "R11v2-CS-02", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T20:41:41.242956+00:00"}
+{"qid": "R11v2-CS-02b", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T20:49:10.119460+00:00"}
+{"qid": "R11v2-CS-03", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T20:56:39.504735+00:00"}
+{"qid": "R11v2-CS-04", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:04:08.082841+00:00"}
+{"qid": "R11v2-CS-05", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:11:37.263963+00:00"}
+{"qid": "R11v2-CS-06", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:19:06.173717+00:00"}
+{"qid": "R11v2-CS-07", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:26:33.947311+00:00"}
+{"qid": "R11v2-CS-08", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:34:02.099682+00:00"}
+{"qid": "R11v2-CS-09", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:41:30.937069+00:00"}
+{"qid": "R11v2-CS-10", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:49:00.774932+00:00"}
+{"qid": "R11v2-CS-11", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T21:56:30.430930+00:00"}
+{"qid": "R11v2-CS-12", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T22:04:00.265303+00:00"}
+{"qid": "R11v2-CS-13", "condition": "chatgpt_memory", "model": "gpt-4o", "error": "chatgpt_memory_adapter: exhausted 5 retries for model=gpt-4o", "ts": "2026-04-27T22:11:29.944394+00:00"}
