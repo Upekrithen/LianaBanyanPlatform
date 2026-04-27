@@ -25,13 +25,28 @@ from typing import Literal
 from adapters import AdapterResponse
 
 # Seconds to sleep if rate-limit message doesn't give a retry-after value.
-_DEFAULT_BACKOFF_S = 45.0
+# At 106K corpus tokens and 30K TPM: need ~212s cooldown. 240s default is safe.
+_DEFAULT_BACKOFF_S = 240.0
 
 
 def _retry_after_seconds(err_str: str) -> float:
-    """Parse 'Please try again in X.XXXs' from a 429 message, or return default."""
-    m = re.search(r"try again in\s+([\d.]+)s", str(err_str))
-    return float(m.group(1)) + 2.0 if m else _DEFAULT_BACKOFF_S
+    """Parse retry-after from OpenAI 429 message. Handles multiple formats."""
+    s = str(err_str)
+    # Format 1: "Please try again in 213.456s"
+    m = re.search(r"try again in\s+([\d.]+)s", s)
+    if m:
+        return float(m.group(1)) + 2.0
+    # Format 2: "Please try again in 2m43.456s" or "3m 10s"
+    m2 = re.search(r"try again in\s+(?:(\d+)m\s*)?(\d+(?:\.\d+)?)s", s)
+    if m2:
+        mins = int(m2.group(1)) if m2.group(1) else 0
+        secs = float(m2.group(2))
+        return mins * 60 + secs + 2.0
+    # Format 3: "Retry-After: 213"
+    m3 = re.search(r"Retry-After:\s*(\d+)", s)
+    if m3:
+        return float(m3.group(1)) + 2.0
+    return _DEFAULT_BACKOFF_S
 
 PRICING = {
     "gpt-4o":       {"input": 2.50,  "output": 10.00},
@@ -72,7 +87,7 @@ def answer(
     corpus_text: str,
     model: str = "gpt-4o",
     mode: Literal["memory", "cold"] = "memory",
-    max_retries: int = 5,
+    max_retries: int = 12,
 ) -> AdapterResponse:
     from openai import OpenAI, RateLimitError
 

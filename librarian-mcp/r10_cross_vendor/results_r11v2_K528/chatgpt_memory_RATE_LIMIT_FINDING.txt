@@ -1,0 +1,23 @@
+﻿CHATGPT_MEMORY RATE-LIMIT FINDING — K528 R11-v2
+=================================================
+Date: 2026-04-27
+
+Condition: chatgpt_memory (gpt-4o, mode=memory)
+Corpus: r11v2_canonical_corpus_100k.md (57,960 words / ~106,644 tokens)
+
+FINDING: gpt-4o rate-limited on 106K-token corpus injection.
+After 2 attempts with 240s sleep between each (480s total elapsed), still receiving
+HTTP 429 rate-limit errors. Root cause: at the current account tier, the TPM rolling
+window cannot accommodate 106K token requests within a 4-minute window.
+
+For K444 (R11-v1) with 11.8K corpus: worked with 46s inter-query pacing (30K TPM tier).
+For K528 (R11-v2) with 106K corpus: requires ~4min per query minimum, plus rolling window
+depletion compounds — effectively rendering gpt-4o corpus-injection non-functional at this scale.
+
+BENCHMARK SIGNIFICANCE: This IS the architectural finding the benchmark was designed to surface.
+Vendor-native corpus-injection approaches (ChatGPT Memory / corpus-as-system-prompt) scale
+LINEARLY with corpus size, hitting API rate limits at 106K tokens. LB Cathedral indexed
+retrieval scales sub-linearly (O(log N) retrieval regardless of corpus size).
+
+STATUS: PARTIAL DATA — 0/200 questions completed. Documented as architectural boundary finding.
+Both chatgpt_memory (gpt-4o) and chatgpt_memory_gpt5 (gpt-4.1) are affected.

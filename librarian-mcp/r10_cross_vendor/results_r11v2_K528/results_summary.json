@@ -1,0 +1,65 @@
+{
+  "run_ts": "2026-04-27T20:37:33.963857+00:00",
+  "bank": "R11v2_QUESTION_BANK_SEALED_K528.json",
+  "corpus": "r11v2_canonical_corpus_100k.md",
+  "total_records": 112,
+  "total_graded": 112,
+  "vendor_spend_usd": {
+    "perplexity": 25.264137
+  },
+  "total_spend_usd": 25.264137,
+  "conditions": [
+    {
+      "condition": "perplexity_spaces",
+      "phase": "B",
+      "vendor": "perplexity",
+      "model": "sonar-pro",
+      "n": 112,
+      "HOT": 106,
+      "HIT": 6,
+      "MISS": 0,
+      "hot_pct": 94.643,
+      "hit_pct": 5.357,
+      "total_cost_usd": 25.264137,
+      "cost_per_hot_usd": 0.238341,
+      "avg_latency_s": 4.629,
+      "category_breakdown": {
+        "canonical_statistics": {
+          "n": 28,
+          "HOT": 26,
+          "HIT": 2,
+          "MISS": 0,
+          "hot_pct": 92.9
+        },
+        "architecture_mechanics": {
+          "n": 26,
+          "HOT": 24,
+          "HIT": 2,
+          "MISS": 0,
+          "hot_pct": 92.3
+        },
+        "economic_governance": {
+          "n": 26,
+          "HOT": 26,
+          "HIT": 0,
+          "MISS": 0,
+          "hot_pct": 100.0
+        },
+        "member_journey": {
+          "n": 25,
+          "HOT": 24,
+          "HIT": 1,
+          "MISS": 0,
+          "hot_pct": 96.0
+        },
+        "regulatory_compliance": {
+          "n": 7,
+          "HOT": 6,
+          "HIT": 1,
+          "MISS": 0,
+          "hot_pct": 85.7
+        }
+      }
+    }
+  ]
+}

@@ -514,6 +514,24 @@ Phase 2 auto-population via SP-7 Courier + render-knight-queue.mjs (K461/B121).
 | K520 | [Courier-synced] K520/B126 — KNIGHT PROMPT — K520 — MAJCOM-LB MVP (Sphinx Project Phase 1, Strategic-Tier Federation) | courier |
 | K521 | [Courier-synced] K521/B126 — KNIGHT PROMPT — K521 — Local-LLM 70B Cathedral Effect Rerun (K-future from K511) | courier |
 | K522 | [Courier-synced] K522/B127 — PROMPT KNIGHT K522 B127 RULES ENGINE DYNAMIC CANONICAL | courier |
+| K444 | [Courier-synced] K444/B129 — KNIGHT PROMPT ADDENDUM — K444 / B129 — Split-Execution-from-Publication Authorization | courier |
+| K520 | [Courier-synced] K520/B127 — PROMPT KNIGHT K520.5 B127 FIRST CONSULT EDICT MVP | courier |
+| K520 | [Courier-synced] K520/B127 — PROMPT KNIGHT K520.6 B127 OPERATIONAL GOTCHAS SCRIBE | courier |
+| K520 | [Courier-synced] K520/B127 — PROMPT KNIGHT K520.7 B127 SUBSTRATE GATE TEST BYPASS | courier |
+| K520 | [Courier-synced] K520/B127 — KNIGHT PROMPT -- K520.8 -- Substrate-Cache Write Patch (close the wiring gap) | courier |
+| K522 | [Courier-synced] K522/B128 — KNIGHT PROMPT -- K522.5 -- Cephas To Blave Supabase Sync + Hugo Drift Audit | courier |
+| K522 | [Courier-synced] K522/B128 — PROMPT KNIGHT K522.6 ADDENDUM B128 MASTER REGISTRY SOURCE | courier |
+| K522 | [Courier-synced] K522/B128 — PROMPT KNIGHT K522.6 B128 CEPHAS HUGO SUPABASE SYNC UNTIL LAUNCH | courier |
+| K522 | [Courier-synced] K522/B128 — PROMPT KNIGHT K522.7 B128 MASTER REGISTRY RECONCILIATION AND FOUNDERVOICE SCRIBE SEEDING | courier |
+| K523 | [Courier-synced] K523/B128 — PROMPT KNIGHT K523 B128 PHEROMONE SUBSTRATE DURABLE BUILD | courier |
+| K524 | [Courier-synced] K524/B128 — PROMPT KNIGHT K524 B128 SPHINX TIER 6 RING BAND MVP | courier |
+| K524 | [Courier-synced] K524/B129 — KNIGHT PROMPT -- K524 -- Pheromone-Followups Triple-Header (G.8 Hound Transport + Conductor… | courier |
+| K525 | [Courier-synced] K525/B129 — KNIGHT PROMPT -- K525 -- Conductor's Baton LAUNCH (Production Hardening + Member UI + Rollo… | courier |
+| K527 | [Courier-synced] K527/B129 — KNIGHT PROMPT — K527 — Augur Context-Awareness Tuning + TimeWave Threshold Bump | courier |
+| K528 | [Courier-synced] K528/B128 — PROMPT KNIGHT K528 B128 NYT OP ED EVIDENCE PACKAGE | courier |
+| K528 | [Courier-synced] K528/B129 — KNIGHT PROMPT — K528 — R11-v2 Full-Stack REAL Test (Cathedral Librarian End-to-End + Pherom… | courier |
+| K530 | [Courier-synced] K530 — KNIGHT PROMPT -- K530 -- Chrome Omnibox Substrate Injection (Three-Class Curation) | courier |
+| K531 | [Courier-synced] K531 — PROMPT KNIGHT K531 PENDING NYT OP ED EVIDENCE PACKAGE | courier |
 
 ---
 
@@ -599,6 +617,16 @@ Phase 2 auto-population via SP-7 Courier + render-knight-queue.mjs (K461/B121).
 | K520 | [Courier-synced] K520/B126 � Knight Handoff Report � K520 � MAJCOM-LB MVP (Sphinx Project Phase 1, S… | — | — |
 | K514 | [Courier-synced] K514 — Knight Handoff Report — K514.5 / B127 | `v-augur-regex-tuning-K514` | `b7fb931` |
 | K520 | [Courier-synced] K520/B126 — Knight Handoff Report — K520 — MAJCOM-LB MVP (Sphinx Project Phase 1) | — | — |
+| K444 | [Courier-synced] K444/B129 — REPORT: Knight K444/B129 — R11 Cross-Vendor Memory Product Benchmark | — | `c91c935` |
+| K446 | [Courier-synced] K446/B129 — REPORT: Knight K446 / B129 — Conductor's Baton Dual-Dimension Hydration | `v-conductors-baton-skeleton-K446` | — |
+| ? | [Courier-synced] ? — REPORT_KNIGHT_K520.8_B127 — Substrate Cache Write Patch | — | — |
+| ? | [Courier-synced] ? — REPORT: Knight K522.5 / B128 — Cephas Hugo-Supabase Anecdote Drift Audit | — | — |
+| ? | [Courier-synced] ? — KNIGHT REPORT — K522.6 / B128 | `v-cephas-hugo-supabase-sync-K522` | — |
+| ? | [Courier-synced] ? — KNIGHT REPORT — K522.7 | — | `039f500` |
+| K523 | [Courier-synced] K523 — KNIGHT REPORT — K523 / B128 | — | — |
+| K524 | [Courier-synced] K524 — KNIGHT REPORT — K524 / B129 | `v-pheromone-substrate-K523` | `fe6bde1` |
+| K525 | [Courier-synced] K525/B129 — REPORT: Knight K525 / B129 — Conductor's Baton LAUNCH | — | — |
+| K527 | [Courier-synced] K527 — KNIGHT REPORT — K527 / B129 | — | — |
 
 ---
 
@@ -633,3 +661,288 @@ When Founder types a K-number (e.g., "K460"):
 ---
 
 *Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+## KNIGHT DISPATCH PROTOCOL
+
+When Founder types a K-number (e.g., "K460"):
+
+1. Check NEXT section above — if the number matches, read the prompt file referenced.
+2. If not in NEXT, check QUEUED — may be gated on a predecessor.
+3. If not in QUEUED, check LANDED — may be a historical reference.
+4. Fall back to `grep -r "K<NNN>" BISHOP_DROPZONE/01_KnightPrompts/` only if none of the above match.
+
+---
+
+*Auto-rendered 2026-04-26 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*
+
+---
+
+*Auto-rendered 2026-04-27 by render-knight-queue.mjs from Knight's Cathedral Scribes (K461/B121). CONTEXT section Bishop-maintained.*

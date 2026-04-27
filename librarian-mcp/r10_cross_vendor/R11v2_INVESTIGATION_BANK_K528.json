@@ -1,0 +1,359 @@
+{
+  "bank_id": "R11v2_INVESTIGATION_BANK_K528",
+  "purpose": "Phase D Pheromone Substrate speedup empirical — 50 investigation queries",
+  "description": "Realistic Operator/Bishop investigation queries for Cathedral RPC vs Pheromone speedup test",
+  "sealed": "K528",
+  "total_queries": 50,
+  "queries": [
+    {
+      "id": "INV-01",
+      "domain": "canonical_statistics",
+      "query": "What is the creator revenue share percentage on the Liana Banyan platform?",
+      "expected_scribe": "R11",
+      "expected_fragment": "83.3%"
+    },
+    {
+      "id": "INV-02",
+      "domain": "canonical_statistics",
+      "query": "What is the platform membership fee?",
+      "expected_scribe": "R11",
+      "expected_fragment": "$5"
+    },
+    {
+      "id": "INV-03",
+      "domain": "canonical_statistics",
+      "query": "How many innovations have been catalogued as of the last reconciliation?",
+      "expected_scribe": "R11",
+      "expected_fragment": "2,267"
+    },
+    {
+      "id": "INV-04",
+      "domain": "canonical_statistics",
+      "query": "How many Crown Jewels are in the platform?",
+      "expected_scribe": "R11",
+      "expected_fragment": "225"
+    },
+    {
+      "id": "INV-05",
+      "domain": "canonical_statistics",
+      "query": "How many provisional patent applications have been filed?",
+      "expected_scribe": "R11",
+      "expected_fragment": "13"
+    },
+    {
+      "id": "INV-06",
+      "domain": "canonical_statistics",
+      "query": "What is the Solstice Index current all-time high and when was it recorded?",
+      "expected_scribe": "R11",
+      "expected_fragment": "4.18"
+    },
+    {
+      "id": "INV-07",
+      "domain": "canonical_statistics",
+      "query": "What is the platform margin formula?",
+      "expected_scribe": "R11",
+      "expected_fragment": "Cost + 20%"
+    },
+    {
+      "id": "INV-08",
+      "domain": "canonical_statistics",
+      "query": "What reserve floor percentage do cooperative platforms maintain under the Cooperative Capital Framework?",
+      "expected_scribe": "R11",
+      "expected_fragment": "8.5%"
+    },
+    {
+      "id": "INV-09",
+      "domain": "canonical_statistics",
+      "query": "How many production systems are in operation?",
+      "expected_scribe": "R11",
+      "expected_fragment": "36"
+    },
+    {
+      "id": "INV-10",
+      "domain": "architecture_mechanics",
+      "query": "What embedding dimension does the Reference Architecture specify for semantic retrieval?",
+      "expected_scribe": "R11",
+      "expected_fragment": "1,536"
+    },
+    {
+      "id": "INV-11",
+      "domain": "architecture_mechanics",
+      "query": "What is the chunk size for Scribe ingestion?",
+      "expected_scribe": "R11",
+      "expected_fragment": "600 tokens"
+    },
+    {
+      "id": "INV-12",
+      "domain": "architecture_mechanics",
+      "query": "What confidence threshold separates HOT from HIT responses?",
+      "expected_scribe": "R11",
+      "expected_fragment": "0.85"
+    },
+    {
+      "id": "INV-13",
+      "domain": "architecture_mechanics",
+      "query": "What is the decay half-life for the pheromone substrate?",
+      "expected_scribe": "R11",
+      "expected_fragment": "90 days"
+    },
+    {
+      "id": "INV-14",
+      "domain": "architecture_mechanics",
+      "query": "What circuit-breaker threshold triggers a 5-minute federation partner bypass?",
+      "expected_scribe": "R11",
+      "expected_fragment": "three consecutive"
+    },
+    {
+      "id": "INV-15",
+      "domain": "architecture_mechanics",
+      "query": "What hallucination rate do responses with self-assessed confidence below 0.72 show?",
+      "expected_scribe": "R11",
+      "expected_fragment": "12.4%"
+    },
+    {
+      "id": "INV-16",
+      "domain": "architecture_mechanics",
+      "query": "What is the standard context window for cooperative governance consultations?",
+      "expected_scribe": "R11",
+      "expected_fragment": "8,192"
+    },
+    {
+      "id": "INV-17",
+      "domain": "architecture_mechanics",
+      "query": "How many redundant nodes does the Distributed Ledger Network specify?",
+      "expected_scribe": "R11",
+      "expected_fragment": "23"
+    },
+    {
+      "id": "INV-18",
+      "domain": "economic_governance",
+      "query": "What percentage of surplus must cooperative platforms allocate to member patronage distributions?",
+      "expected_scribe": "R11",
+      "expected_fragment": "40%"
+    },
+    {
+      "id": "INV-19",
+      "domain": "economic_governance",
+      "query": "What is the minimum quorum for member voting on bylaw amendments?",
+      "expected_scribe": "R11",
+      "expected_fragment": "30%"
+    },
+    {
+      "id": "INV-20",
+      "domain": "economic_governance",
+      "query": "What annual gross transaction volume defines a Tier 1 cooperative platform?",
+      "expected_scribe": "R11",
+      "expected_fragment": "$1 billion"
+    },
+    {
+      "id": "INV-21",
+      "domain": "economic_governance",
+      "query": "How many platforms signed the Federated Platform Compact at Amsterdam?",
+      "expected_scribe": "R11",
+      "expected_fragment": "31"
+    },
+    {
+      "id": "INV-22",
+      "domain": "economic_governance",
+      "query": "What annual growth rate did federated transaction volume achieve since the Compact's adoption?",
+      "expected_scribe": "R11",
+      "expected_fragment": "34%"
+    },
+    {
+      "id": "INV-23",
+      "domain": "economic_governance",
+      "query": "What is the Standards Body maximum annual dues cap?",
+      "expected_scribe": "R11",
+      "expected_fragment": "$150,000"
+    },
+    {
+      "id": "INV-24",
+      "domain": "economic_governance",
+      "query": "How many consecutive quarters above 110% of reserve floor trigger a surplus distribution?",
+      "expected_scribe": "R11",
+      "expected_fragment": "two consecutive"
+    },
+    {
+      "id": "INV-25",
+      "domain": "member_journey",
+      "query": "What passing score is required on the Cooperative Principles Assessment?",
+      "expected_scribe": "R11",
+      "expected_fragment": "75"
+    },
+    {
+      "id": "INV-26",
+      "domain": "member_journey",
+      "query": "What is the SLA for urgent member inquiries?",
+      "expected_scribe": "R11",
+      "expected_fragment": "1 business day"
+    },
+    {
+      "id": "INV-27",
+      "domain": "member_journey",
+      "query": "What churn rate do governance-active members experience annually?",
+      "expected_scribe": "R11",
+      "expected_fragment": "3.1%"
+    },
+    {
+      "id": "INV-28",
+      "domain": "member_journey",
+      "query": "What NPS range do genuinely cooperative governance platforms achieve?",
+      "expected_scribe": "R11",
+      "expected_fragment": "50-65"
+    },
+    {
+      "id": "INV-29",
+      "domain": "member_journey",
+      "query": "How much faster do members transact within 5 days of onboarding vs those who wait 14+ days?",
+      "expected_scribe": "R11",
+      "expected_fragment": "67%"
+    },
+    {
+      "id": "INV-30",
+      "domain": "member_journey",
+      "query": "What percentage of members trust their platform when CHS exceeds 80?",
+      "expected_scribe": "R11",
+      "expected_fragment": "91%"
+    },
+    {
+      "id": "INV-31",
+      "domain": "member_journey",
+      "query": "What is the minimum cash payout percentage for qualified patronage notice treatment?",
+      "expected_scribe": "R11",
+      "expected_fragment": "20%"
+    },
+    {
+      "id": "INV-32",
+      "domain": "member_journey",
+      "query": "What governance orientation training factor increases first-election voting?",
+      "expected_scribe": "R11",
+      "expected_fragment": "3.4"
+    },
+    {
+      "id": "INV-33",
+      "domain": "regulatory_compliance",
+      "query": "What is the regulatory notification deadline for incidents under the Reference Framework?",
+      "expected_scribe": "R11",
+      "expected_fragment": "48 hours"
+    },
+    {
+      "id": "INV-34",
+      "domain": "regulatory_compliance",
+      "query": "What fine maximum does the Meridian Data Framework impose for data breaches?",
+      "expected_scribe": "R11",
+      "expected_fragment": "4%"
+    },
+    {
+      "id": "INV-35",
+      "domain": "regulatory_compliance",
+      "query": "How many months after fiscal year end is the surplus tax return filing deadline?",
+      "expected_scribe": "R11",
+      "expected_fragment": "8.5 months"
+    },
+    {
+      "id": "INV-36",
+      "domain": "regulatory_compliance",
+      "query": "What is the AI model audit certification cycle?",
+      "expected_scribe": "R11",
+      "expected_fragment": "24-month"
+    },
+    {
+      "id": "INV-37",
+      "domain": "regulatory_compliance",
+      "query": "What is the Standards Body charter amendment base fee?",
+      "expected_scribe": "R11",
+      "expected_fragment": "$750"
+    },
+    {
+      "id": "INV-38",
+      "domain": "regulatory_compliance",
+      "query": "What is the federation compliance certification renewal period?",
+      "expected_scribe": "R11",
+      "expected_fragment": "18 months"
+    },
+    {
+      "id": "INV-39",
+      "domain": "regulatory_compliance",
+      "query": "What AML monitoring approach does the Standards Body recommend for sanctions screening?",
+      "expected_scribe": "R11",
+      "expected_fragment": "batch screening"
+    },
+    {
+      "id": "INV-40",
+      "domain": "historical_precedent",
+      "query": "When and where was the first Cooperative AI Platform Summit held?",
+      "expected_scribe": "R11",
+      "expected_fragment": "Reykjavik"
+    },
+    {
+      "id": "INV-41",
+      "domain": "historical_precedent",
+      "query": "How large was the Verdania receivership recovery fund?",
+      "expected_scribe": "R11",
+      "expected_fragment": "$47 million"
+    },
+    {
+      "id": "INV-42",
+      "domain": "historical_precedent",
+      "query": "What was the Thornwick Architecture's reference implementation license?",
+      "expected_scribe": "R11",
+      "expected_fragment": "Cooperative Open License"
+    },
+    {
+      "id": "INV-43",
+      "domain": "historical_precedent",
+      "query": "Where and when was the Nordic Cooperative AI Observatory established?",
+      "expected_scribe": "R11",
+      "expected_fragment": "Oslo, Norway"
+    },
+    {
+      "id": "INV-44",
+      "domain": "historical_precedent",
+      "query": "How much did the Standards Body emergency lending facility contribute to Verdania's recovery?",
+      "expected_scribe": "R11",
+      "expected_fragment": "$18.2 million"
+    },
+    {
+      "id": "INV-45",
+      "domain": "historical_precedent",
+      "query": "How many platform failures did the 2018 Capital Framework revision incorporate?",
+      "expected_scribe": "R11",
+      "expected_fragment": "23"
+    },
+    {
+      "id": "INV-46",
+      "domain": "historical_precedent",
+      "query": "By how many percentage points did Verdania's governance participation increase from the AI governance initiative?",
+      "expected_scribe": "R11",
+      "expected_fragment": "6.8"
+    },
+    {
+      "id": "INV-47",
+      "domain": "meta",
+      "query": "What is the K528 R11-v2 benchmark and what architectural scaling advantage does it test?",
+      "expected_scribe": "Toolsmith",
+      "expected_fragment": "R11"
+    },
+    {
+      "id": "INV-48",
+      "domain": "meta",
+      "query": "What is the Conductor's Baton and which K-session launched it?",
+      "expected_scribe": "Architecture",
+      "expected_fragment": "K525"
+    },
+    {
+      "id": "INV-49",
+      "domain": "meta",
+      "query": "What is the Pheromone Substrate and which innovation number is it?",
+      "expected_scribe": "Architecture",
+      "expected_fragment": "#2317"
+    },
+    {
+      "id": "INV-50",
+      "domain": "meta",
+      "query": "What are the current canonical innovation count and Crown Jewel count?",
+      "expected_scribe": "R11",
+      "expected_fragment": "2,267"
+    }
+  ]
+}

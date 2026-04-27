@@ -29,6 +29,7 @@ from adapters import AdapterResponse
 
 PRICING = {
     "claude-haiku-4-5-20251001":  {"input": 1.00,  "output": 5.00},
+    "claude-sonnet-4-6":          {"input": 3.00,  "output": 15.00},
     "claude-opus-4-7":            {"input": 15.00, "output": 75.00},
 }
 

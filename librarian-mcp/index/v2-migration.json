@@ -2,7 +2,7 @@
   "domains": {
     "admin": {
       "domain": "admin",
-      "v1Tables": 1,
+      "v1Tables": 0,
       "v1Pages": 0,
       "v1Functions": 3,
       "v2Pages": 5,
@@ -13,7 +13,7 @@
     },
     "beacon": {
       "domain": "beacon",
-      "v1Tables": 6,
+      "v1Tables": 0,
       "v1Pages": 7,
       "v1Functions": 4,
       "v2Pages": 8,
@@ -24,7 +24,7 @@
     },
     "calendar": {
       "domain": "calendar",
-      "v1Tables": 2,
+      "v1Tables": 0,
       "v1Pages": 2,
       "v1Functions": 6,
       "v2Pages": 1,
@@ -46,7 +46,7 @@
     },
     "commerce": {
       "domain": "commerce",
-      "v1Tables": 8,
+      "v1Tables": 0,
       "v1Pages": 4,
       "v1Functions": 3,
       "v2Pages": 11,
@@ -57,7 +57,7 @@
     },
     "content": {
       "domain": "content",
-      "v1Tables": 8,
+      "v1Tables": 0,
       "v1Pages": 13,
       "v1Functions": 3,
       "v2Pages": 9,
@@ -68,8 +68,8 @@
     },
     "currency": {
       "domain": "currency",
-      "v1Tables": 11,
-      "v1Pages": 53,
+      "v1Tables": 0,
+      "v1Pages": 58,
       "v1Functions": 30,
       "v2Pages": 11,
       "v2Components": 10,
@@ -90,8 +90,8 @@
     },
     "financial": {
       "domain": "financial",
-      "v1Tables": 1,
-      "v1Pages": 37,
+      "v1Tables": 0,
+      "v1Pages": 42,
       "v1Functions": 17,
       "v2Pages": 6,
       "v2Components": 12,
@@ -102,7 +102,7 @@
     },
     "gaming": {
       "domain": "gaming",
-      "v1Tables": 11,
+      "v1Tables": 0,
       "v1Pages": 18,
       "v1Functions": 0,
       "v2Pages": 6,
@@ -113,9 +113,9 @@
     },
     "governance": {
       "domain": "governance",
-      "v1Tables": 5,
+      "v1Tables": 0,
       "v1Pages": 6,
-      "v1Functions": 7,
+      "v1Functions": 8,
       "v2Pages": 9,
       "v2Components": 12,
       "v2Hooks": 5,
@@ -124,7 +124,7 @@
     },
     "guild": {
       "domain": "guild",
-      "v1Tables": 4,
+      "v1Tables": 0,
       "v1Pages": 7,
       "v1Functions": 2,
       "v2Pages": 8,
@@ -135,9 +135,9 @@
     },
     "helm": {
       "domain": "helm",
-      "v1Tables": 3,
-      "v1Pages": 39,
-      "v1Functions": 0,
+      "v1Tables": 0,
+      "v1Pages": 46,
+      "v1Functions": 2,
       "v2Pages": 4,
       "v2Components": 7,
       "v2Hooks": 3,
@@ -146,7 +146,7 @@
     },
     "housing": {
       "domain": "housing",
-      "v1Tables": 4,
+      "v1Tables": 0,
       "v1Pages": 2,
       "v1Functions": 1,
       "v2Pages": 8,
@@ -168,7 +168,7 @@
     },
     "manufacturing": {
       "domain": "manufacturing",
-      "v1Tables": 6,
+      "v1Tables": 0,
       "v1Pages": 13,
       "v1Functions": 1,
       "v2Pages": 7,
@@ -179,8 +179,8 @@
     },
     "membership": {
       "domain": "membership",
-      "v1Tables": 22,
-      "v1Pages": 13,
+      "v1Tables": 2,
+      "v1Pages": 15,
       "v1Functions": 7,
       "v2Pages": 6,
       "v2Components": 5,
@@ -191,7 +191,7 @@
     },
     "onboarding": {
       "domain": "onboarding",
-      "v1Tables": 6,
+      "v1Tables": 0,
       "v1Pages": 11,
       "v1Functions": 2,
       "v2Pages": 7,
@@ -203,9 +203,9 @@
     },
     "outreach": {
       "domain": "outreach",
-      "v1Tables": 11,
-      "v1Pages": 23,
-      "v1Functions": 4,
+      "v1Tables": 0,
+      "v1Pages": 24,
+      "v1Functions": 6,
       "v2Pages": 8,
       "v2Components": 16,
       "v2Hooks": 4,
@@ -214,7 +214,7 @@
     },
     "political": {
       "domain": "political",
-      "v1Tables": 1,
+      "v1Tables": 0,
       "v1Pages": 4,
       "v1Functions": 1,
       "v2Pages": 4,
@@ -225,7 +225,7 @@
     },
     "reputation": {
       "domain": "reputation",
-      "v1Tables": 3,
+      "v1Tables": 0,
       "v1Pages": 5,
       "v1Functions": 0,
       "v2Pages": 3,
@@ -236,7 +236,7 @@
     },
     "social": {
       "domain": "social",
-      "v1Tables": 6,
+      "v1Tables": 0,
       "v1Pages": 7,
       "v1Functions": 6,
       "v2Pages": 6,
@@ -247,7 +247,7 @@
     },
     "vehicle": {
       "domain": "vehicle",
-      "v1Tables": 2,
+      "v1Tables": 0,
       "v1Pages": 6,
       "v1Functions": 0,
       "v2Pages": 0,
@@ -271,5 +271,5 @@
   "v2SharedComponents": 48,
   "v2TotalFiles": 605,
   "overallProgress": "22/23 audited, 22/23 migrated, 605 total v2 files",
-  "timestamp": "2026-04-12T00:05:23.880Z"
+  "timestamp": "2026-04-27T20:50:30.894Z"
 }

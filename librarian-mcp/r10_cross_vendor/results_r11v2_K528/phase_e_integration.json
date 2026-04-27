@@ -1,0 +1,1186 @@
+{
+  "phase": "E",
+  "run_ts": "2026-04-27T20:40:06.935194+00:00",
+  "description": "Full-stack integration test: Conductor's Baton + Cathedral + Telemetry, 30 queries",
+  "stack": "K525-LAUNCH: Conductor's Baton routing + lb_cathedral retrieval + response synthesis",
+  "queries_completed": 30,
+  "hot_count": 5,
+  "hot_pct": 16.667,
+  "total_cost_usd": 0.305541,
+  "cost_per_hot_usd": 0.061108,
+  "category_breakdown": {
+    "canonical_statistics": {
+      "n": 5,
+      "HOT": 4,
+      "hot_pct": 80.0,
+      "cost_usd": 0.029026,
+      "routed_to": "claude-haiku-4-5-20251001"
+    },
+    "architecture_mechanics": {
+      "n": 5,
+      "HOT": 1,
+      "hot_pct": 20.0,
+      "cost_usd": 0.030299,
+      "routed_to": "claude-haiku-4-5-20251001"
+    },
+    "economic_governance": {
+      "n": 5,
+      "HOT": 0,
+      "hot_pct": 0.0,
+      "cost_usd": 0.09858,
+      "routed_to": "claude-sonnet-4-6"
+    },
+    "member_journey": {
+      "n": 5,
+      "HOT": 0,
+      "hot_pct": 0.0,
+      "cost_usd": 0.03023,
+      "routed_to": "claude-haiku-4-5-20251001"
+    },
+    "regulatory_compliance": {
+      "n": 5,
+      "HOT": 0,
+      "hot_pct": 0.0,
+      "cost_usd": 0.087498,
+      "routed_to": "claude-sonnet-4-6"
+    },
+    "historical_precedent": {
+      "n": 5,
+      "HOT": 0,
+      "hot_pct": 0.0,
+      "cost_usd": 0.029908,
+      "routed_to": "claude-haiku-4-5-20251001"
+    }
+  },
+  "verification": {
+    "E_G1": true,
+    "E_G2": true,
+    "E_G3": true,
+    "E_G4": true,
+    "E_G5": "0 cost-cap warn events recorded"
+  },
+  "circuit_breaker_events": [],
+  "cost_cap_events": [],
+  "records": [
+    {
+      "qid": "R11v2-CS-01",
+      "category": "canonical_statistics",
+      "question": "How many active member-owners did the Verdania Cooperative Platform report as of Q3 2025?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Exact factual recall — haiku sufficient, lowest cost",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.093
+      },
+      "response": {
+        "text": "According to Scribe R11 entry CS-01, the Verdania Cooperative Platform reported **847,293 active member-owners as of Q3 2025**. This figure accounts for identity-verified accounts with at least one transaction in the trailing 90 days.",
+        "grade": "HOT",
+        "required_elements": [
+          "847,293",
+          "Q3 2025"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5442,
+        "output_tokens": 63,
+        "cost_usd": 0.005757,
+        "llm_latency_s": 1.379,
+        "total_latency_s": 2.088,
+        "running_total_usd": 0.005757
+      },
+      "ts": "2026-04-27T20:38:31.179126+00:00"
+    },
+    {
+      "qid": "R11v2-CS-01b",
+      "category": "canonical_statistics",
+      "question": "What was Verdania's Q2 2025 active member count according to the prior quarter's report?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Exact factual recall — haiku sufficient, lowest cost",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know.\n\nThe Scribes Cathedral entry CS-01 provides Verdania's **Q3 2025** active member count (847,293), but does not include the Q2 2025 figure or reference to a prior quarter's report for that earlier period.\n\nThe preload does not contain Verdania's Q2 2025 membership data.",
+        "grade": "MISS",
+        "required_elements": [
+          "791,440"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5442,
+        "output_tokens": 84,
+        "cost_usd": 0.005862,
+        "llm_latency_s": 1.705,
+        "total_latency_s": 1.885,
+        "running_total_usd": 0.011619
+      },
+      "ts": "2026-04-27T20:38:33.264677+00:00"
+    },
+    {
+      "qid": "R11v2-CS-02",
+      "category": "canonical_statistics",
+      "question": "What total transaction volume did the Verdania Cooperative Platform report for fiscal year 2024?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Exact factual recall — haiku sufficient, lowest cost",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.011
+      },
+      "response": {
+        "text": "According to the Scribes Cathedral entry CS-02, the Verdania Cooperative Platform reported a total transaction volume of **$4.7 billion in fiscal year 2024** across all member economic activity. This represents a 23% increase from the prior year, and the figure is gross before patronage allocations and member refunds are applied.",
+        "grade": "HOT",
+        "required_elements": [
+          "$4.7 billion",
+          "fiscal year 2024"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5439,
+        "output_tokens": 77,
+        "cost_usd": 0.005824,
+        "llm_latency_s": 1.196,
+        "total_latency_s": 1.441,
+        "running_total_usd": 0.017443
+      },
+      "ts": "2026-04-27T20:38:34.905534+00:00"
+    },
+    {
+      "qid": "R11v2-CS-02b",
+      "category": "canonical_statistics",
+      "question": "By what percentage did Verdania's fiscal year 2024 transaction volume increase from the prior year?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Exact factual recall — haiku sufficient, lowest cost",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Architecture",
+          "Toolsmith"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "According to the Scribes Cathedral entry CS-02, Verdania's fiscal year 2024 transaction volume increased by **23%** from the prior year.\n\nThe total transaction volume reported was $4.7 billion in fiscal year 2024.",
+        "grade": "HOT",
+        "required_elements": [
+          "23%"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5435,
+        "output_tokens": 58,
+        "cost_usd": 0.005725,
+        "llm_latency_s": 1.459,
+        "total_latency_s": 1.666,
+        "running_total_usd": 0.023168
+      },
+      "ts": "2026-04-27T20:38:36.772133+00:00"
+    },
+    {
+      "qid": "R11v2-CS-03",
+      "category": "canonical_statistics",
+      "question": "What supermajority threshold does the Cooperative Ledger Standards Body require for constitutional amendments in federated cooperative networks?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Exact factual recall — haiku sufficient, lowest cost",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "According to Scribe R11 (entry CS-03), the Cooperative Ledger Standards Body requires a **66.7% supermajority threshold** for constitutional amendments in federated cooperative networks.\n\nThe Scribe notes that this figure was chosen to align with classical two-thirds conventions while being expressed as a decimal to prevent rounding disputes in electronic voting systems.",
+        "grade": "HOT",
+        "required_elements": [
+          "66.7%"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5448,
+        "output_tokens": 82,
+        "cost_usd": 0.005858,
+        "llm_latency_s": 1.221,
+        "total_latency_s": 1.483,
+        "running_total_usd": 0.029026
+      },
+      "ts": "2026-04-27T20:38:38.455431+00:00"
+    },
+    {
+      "qid": "R11v2-AM-01",
+      "category": "architecture_mechanics",
+      "question": "What is the dense-to-sparse weighting ratio that achieves optimal performance in the Thornwick hybrid retrieval architecture?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Structural factual retrieval — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Toolsmith"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.014
+      },
+      "response": {
+        "text": "According to Scribe R11 entry AM-01, the optimal dense-to-sparse weighting ratio in the Thornwick architecture is **0.73:0.27** — meaning 73% of the retrieval signal comes from dense semantic embeddings and 27% from sparse BM25-style keyword matching.",
+        "grade": "HOT",
+        "required_elements": [
+          "0.73:0.27"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5443,
+        "output_tokens": 72,
+        "cost_usd": 0.005803,
+        "llm_latency_s": 1.145,
+        "total_latency_s": 1.392,
+        "running_total_usd": 0.034829
+      },
+      "ts": "2026-04-27T20:38:40.048194+00:00"
+    },
+    {
+      "qid": "R11v2-AM-02",
+      "category": "architecture_mechanics",
+      "question": "How many dimensions does the Cooperative AI Platform Reference Architecture specify for Scribe memory embeddings in production deployments?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Structural factual retrieval — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Prov14",
+          "Architecture",
+          "Decisions"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.014
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the R9-v2 base preload nor the Scribes Cathedral entries provided contain information about the dimensionality of Scribe memory embeddings in the Cooperative AI Platform Reference Architecture.\n\nThe Scribes entries reference the Thornwick architecture's dense-sparse hybrid ratio (0.73:0.27) and various cooperative governance metrics, but do not specify embedding dimensions for production Scribe deployments.\n\nTo answer this question accurately, I would need access to techni",
+        "grade": "MISS",
+        "required_elements": [
+          "1,536"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5445,
+        "output_tokens": 120,
+        "cost_usd": 0.006045,
+        "llm_latency_s": 1.916,
+        "total_latency_s": 2.165,
+        "running_total_usd": 0.040874
+      },
+      "ts": "2026-04-27T20:38:42.413238+00:00"
+    },
+    {
+      "qid": "R11v2-AM-03",
+      "category": "architecture_mechanics",
+      "question": "What is the default top-K retrieval setting specified by the Reference Architecture for Scribe memory queries?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Structural factual retrieval — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Prov14",
+          "Architecture",
+          "Vault",
+          "Decisions"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.011
+      },
+      "response": {
+        "text": "I don't know.\n\nThe R9-v2 Base Preload and the Scribes Cathedral entries provided do not contain information about the default top-K retrieval setting for Scribe memory queries. The preload covers Liana Banyan's platform identity, economics, governance, patent portfolio, and technical architecture, but does not specify retrieval parameters like top-K defaults.\n\nThe Scribe entries discuss cooperative platform metrics, the Thornwick architecture's dense-sparse weighting ratio, and other operational",
+        "grade": "MISS",
+        "required_elements": [
+          "top-10"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5446,
+        "output_tokens": 160,
+        "cost_usd": 0.006246,
+        "llm_latency_s": 3.008,
+        "total_latency_s": 3.255,
+        "running_total_usd": 0.04712
+      },
+      "ts": "2026-04-27T20:38:45.869099+00:00"
+    },
+    {
+      "qid": "R11v2-AM-04",
+      "category": "architecture_mechanics",
+      "question": "What is the maximum number of tokens allocated to the preload system prompt in the Cooperative AI Platform Reference Architecture?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Structural factual retrieval — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "R9",
+          "Vault",
+          "Architecture",
+          "Decisions",
+          "Toolsmith"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.012
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the R9-v2 BASE PRELOAD nor the Scribes Cathedral entries provided contain information about the maximum number of tokens allocated to the preload system prompt in a Cooperative AI Platform Reference Architecture.\n\nThe preload packet does mention that the full B108 preload was ~87,000 tokens and that the R9-v2 version contains ~4,500 tokens, but these are descriptive observations about *actual* preload sizes, not specifications about *maximum allocation* in a reference arch",
+        "grade": "MISS",
+        "required_elements": [
+          "3,200 tokens"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5445,
+        "output_tokens": 148,
+        "cost_usd": 0.006185,
+        "llm_latency_s": 2.643,
+        "total_latency_s": 2.885,
+        "running_total_usd": 0.053305
+      },
+      "ts": "2026-04-27T20:38:48.954558+00:00"
+    },
+    {
+      "qid": "R11v2-AM-05",
+      "category": "architecture_mechanics",
+      "question": "What chunk size with what overlap does the Reference Architecture recommend for documents ingested into Scribe memory?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Structural factual retrieval — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Vault",
+          "Decisions"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the R9-v2 base preload nor the Scribes Cathedral entries provided contain information about recommended chunk sizes or overlap parameters for document ingestion into Scribe memory.\n\nTo answer this question accurately, I would need access to:\n- Technical architecture documentation for Scribe indexing pipelines\n- Retrieval optimization standards from the Reference Architecture specification\n- Tuning guidelines for document chunking strategies\n\nIf you have access to those mat",
+        "grade": "MISS",
+        "required_elements": [
+          "400 tokens",
+          "50-token overlap"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5440,
+        "output_tokens": 116,
+        "cost_usd": 0.00602,
+        "llm_latency_s": 2.353,
+        "total_latency_s": 2.595,
+        "running_total_usd": 0.059325
+      },
+      "ts": "2026-04-27T20:38:51.750553+00:00"
+    },
+    {
+      "qid": "R11v2-EG-01",
+      "category": "economic_governance",
+      "question": "What is the canonical patronage allocation split used by platforms compliant with the Cooperative Capital Framework?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Analytical nuance + multi-factor computation — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Vault",
+          "Architecture",
+          "Decisions",
+          "Toolsmith"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "The canonical sources available to me — both the R9-v2 base preload and the Scribes Cathedral entries — do not contain a specific patronage allocation split for platforms compliant with the Cooperative Capital Framework.\n\nThe Scribes Cathedral does reference the Cooperative Capital Framework in two places:\n\n- **CS-06** mentions the 2024 cohort average member economic surplus of **$312 per active member-owner** (std dev $87), but does not specify how the surplus is split before reaching members.\n",
+        "grade": "MISS",
+        "required_elements": [
+          "70%",
+          "30%"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5440,
+        "output_tokens": 190,
+        "cost_usd": 0.01917,
+        "llm_latency_s": 4.932,
+        "total_latency_s": 5.175,
+        "running_total_usd": 0.078495
+      },
+      "ts": "2026-04-27T20:38:57.125880+00:00"
+    },
+    {
+      "qid": "R11v2-EG-02",
+      "category": "economic_governance",
+      "question": "Under the Standards Body's model bylaws, what is the term length for elected cooperative directors, and how are elections structured?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Analytical nuance + multi-factor computation — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "I don't know. Neither the R9-v2 base preload nor the Scribes Cathedral entries contain information about term lengths for elected cooperative directors or election structure under the Standards Body's model bylaws. The Scribes entries reference the Cooperative Ledger Standards Body only in the context of the **66.7% supermajority threshold for constitutional amendments** (CS-03) and the **2.3% individual voting weight cap** (CS-08), but do not cover director term lengths or election procedures.\n",
+        "grade": "MISS",
+        "required_elements": [
+          "three years",
+          "staggered elections"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5449,
+        "output_tokens": 145,
+        "cost_usd": 0.018522,
+        "llm_latency_s": 3.945,
+        "total_latency_s": 4.189,
+        "running_total_usd": 0.097017
+      },
+      "ts": "2026-04-27T20:39:01.514575+00:00"
+    },
+    {
+      "qid": "R11v2-EG-03",
+      "category": "economic_governance",
+      "question": "What annual gross transaction volume threshold defines a Tier 1 cooperative AI platform under the Cooperative Capital Framework?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Analytical nuance + multi-factor computation — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Vault",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "I don't know. Neither the R9-v2 base preload nor the Scribes Cathedral entries provided contain a definition of \"Tier 1 cooperative AI platform\" or an associated annual gross transaction volume threshold under the Cooperative Capital Framework.\n\nThe Scribes do reference the Cooperative Capital Framework in two places — the **reserve funding floor** (8.5% of prior 12-month gross transaction volume, CS-09) and the **member economic surplus average** ($312 per active member-owner, CS-06) — but neit",
+        "grade": "MISS",
+        "required_elements": [
+          "Tier 1",
+          "$1B",
+          "$1 billion"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5446,
+        "output_tokens": 169,
+        "cost_usd": 0.018873,
+        "llm_latency_s": 4.397,
+        "total_latency_s": 4.637,
+        "running_total_usd": 0.11589
+      },
+      "ts": "2026-04-27T20:39:06.352340+00:00"
+    },
+    {
+      "qid": "R11v2-EG-04",
+      "category": "economic_governance",
+      "question": "What quorum percentage is required for bylaw amendment votes under the Standards Body's model bylaws, and what approval percentage within quorum is required?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Analytical nuance + multi-factor computation — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Vault",
+          "Toolsmith"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.011
+      },
+      "response": {
+        "text": "Based on the Scribes Cathedral entries available, I can provide a partial answer:\n\n**Supermajority Approval Threshold (CS-03):**\nThe Cooperative Ledger Standards Body requires **66.7%** of eligible votes for any **constitutional amendment** to pass.\n\nHowever, regarding a **quorum requirement specifically for bylaw amendment votes**, the Scribes entries I have access to address two separate quorum figures:\n\n- **CS-07** specifies **15% of eligible member-owners** for an *extraordinary general meet",
+        "grade": "MISS",
+        "required_elements": [
+          "30%",
+          "55%"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5449,
+        "output_tokens": 353,
+        "cost_usd": 0.021642,
+        "llm_latency_s": 8.031,
+        "total_latency_s": 8.274,
+        "running_total_usd": 0.137532
+      },
+      "ts": "2026-04-27T20:39:14.827255+00:00"
+    },
+    {
+      "qid": "R11v2-EG-05",
+      "category": "economic_governance",
+      "question": "What is the minimum exit notice period under the Cooperative Capital Framework for standard member exits?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Analytical nuance + multi-factor computation — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Vault",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.011
+      },
+      "response": {
+        "text": "Based on the materials available to me, I don't have information about a **minimum exit notice period under the Cooperative Capital Framework for standard member exits**.\n\nWhat the Scribes Cathedral does contain is a related — but distinct — data point:\n\n- **[CS-04 — Cairnfield Data Portability Window]:** The *Cairnfield Protocol* specifies a **180-day data portability window** beginning from the date of a member's formal exit notice. This governs how long a platform has to make a departing memb",
+        "grade": "MISS",
+        "required_elements": [
+          "60 calendar days"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5441,
+        "output_tokens": 270,
+        "cost_usd": 0.020373,
+        "llm_latency_s": 6.805,
+        "total_latency_s": 7.05,
+        "running_total_usd": 0.157905
+      },
+      "ts": "2026-04-27T20:39:22.077549+00:00"
+    },
+    {
+      "qid": "R11v2-MJ-01",
+      "category": "member_journey",
+      "question": "Within how many business days must cooperative platforms process membership applications from submission to formal decision, under the Reference Onboarding Framework?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Procedural factual — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Vault",
+          "Architecture",
+          "Decisions",
+          "Toolsmith"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the R9-v2 base preload nor the Scribes Cathedral entries provided contain information about membership application processing timelines under the Reference Onboarding Framework.\n\nTo answer this accurately, I would need access to:\n- The Reference Onboarding Framework specification document\n- Cooperative Ledger Standards Body processing requirements\n- Or relevant Scribe entries covering onboarding timelines\n\nIf you have access to these materials, please share them and I can ",
+        "grade": "MISS",
+        "required_elements": [
+          "10 business days"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5445,
+        "output_tokens": 115,
+        "cost_usd": 0.00602,
+        "llm_latency_s": 2.017,
+        "total_latency_s": 2.265,
+        "running_total_usd": 0.163925
+      },
+      "ts": "2026-04-27T20:39:24.543551+00:00"
+    },
+    {
+      "qid": "R11v2-MJ-02",
+      "category": "member_journey",
+      "question": "What minimum score must a new member achieve on the Cooperative Principles Assessment before being granted full voting rights?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Procedural factual — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "Vault"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "I don't know.\n\nThis specific threshold is not contained in the R9-v2 preload or the Scribes Cathedral entries provided. The preload covers Liana Banyan's governance model (the 300 Model with Crowns, Board, and Captains, plus the ADAPT Score), but does not specify a minimum Cooperative Principles Assessment score requirement for voting rights eligibility.\n\nIf this is a Liana Banyan-specific policy, it would be found in governance bylaws, member onboarding documentation, or platform rules not incl",
+        "grade": "MISS",
+        "required_elements": [
+          "75 out of 100",
+          "75"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5441,
+        "output_tokens": 171,
+        "cost_usd": 0.006296,
+        "llm_latency_s": 2.922,
+        "total_latency_s": 3.169,
+        "running_total_usd": 0.170221
+      },
+      "ts": "2026-04-27T20:39:27.913148+00:00"
+    },
+    {
+      "qid": "R11v2-MJ-03",
+      "category": "member_journey",
+      "question": "How long is the standard provisional member trial period under the Reference Onboarding Framework?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Procedural factual — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Prov14",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know.\n\nThe R9-v2 preload and the Scribes Cathedral entries provided do not contain information about a \"Reference Onboarding Framework\" or a standard provisional member trial period duration.\n\nTo answer this question accurately, I would need access to either:\n- Documentation of the Reference Onboarding Framework itself\n- Onboarding or member enrollment procedures in the Scribes Cathedral\n- Canonical materials covering member lifecycle stages\n\nIf this information exists in Liana Banyan's ",
+        "grade": "MISS",
+        "required_elements": [
+          "90 days"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5440,
+        "output_tokens": 135,
+        "cost_usd": 0.006115,
+        "llm_latency_s": 2.764,
+        "total_latency_s": 3.008,
+        "running_total_usd": 0.176336
+      },
+      "ts": "2026-04-27T20:39:31.122029+00:00"
+    },
+    {
+      "qid": "R11v2-MJ-04",
+      "category": "member_journey",
+      "question": "How frequently must cooperative platforms conduct member satisfaction surveys at minimum under the Reference Onboarding Framework?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Procedural factual — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.012
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the R9-v2 base preload nor the Scribes Cathedral entries provided contain information about member satisfaction survey frequency requirements under the Reference Onboarding Framework.\n\nTo answer this question accurately, I would need access to either:\n- Documentation of the Reference Onboarding Framework itself\n- A Scribe entry detailing survey frequency mandates\n- A canonical policy document on member satisfaction audit cadence\n\nIf you have that reference material availab",
+        "grade": "MISS",
+        "required_elements": [
+          "every six months",
+          "biannually"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5443,
+        "output_tokens": 114,
+        "cost_usd": 0.006013,
+        "llm_latency_s": 2.312,
+        "total_latency_s": 2.581,
+        "running_total_usd": 0.182349
+      },
+      "ts": "2026-04-27T20:39:33.902826+00:00"
+    },
+    {
+      "qid": "R11v2-MJ-05",
+      "category": "member_journey",
+      "question": "Within how many business days must new members be paired with a mentor under the Reference Onboarding Framework?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Procedural factual — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the base preload nor the Scribes Cathedral entries contain information about the Reference Onboarding Framework or mentor pairing timelines for new members.\n\nTo answer this question accurately, I would need access to documentation that specifically covers the Reference Onboarding Framework's mentor assignment requirements.",
+        "grade": "MISS",
+        "required_elements": [
+          "15 business days"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5441,
+        "output_tokens": 69,
+        "cost_usd": 0.005786,
+        "llm_latency_s": 1.674,
+        "total_latency_s": 1.918,
+        "running_total_usd": 0.188135
+      },
+      "ts": "2026-04-27T20:39:36.021301+00:00"
+    },
+    {
+      "qid": "R11v2-RC-01",
+      "category": "regulatory_compliance",
+      "question": "On what cycle must AI models deployed in member-facing roles undergo comprehensive third-party audits under the Cooperative AI Governance Charter?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Compliance analysis nuance — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "Vault"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "The **Cooperative AI Governance Charter** and its audit cycle requirements for AI models deployed in member-facing roles are not covered in either the R9-v2 base preload or the Scribes Cathedral entries I have access to.\n\nI don't know the answer to this question based on the canonical materials available to me.",
+        "grade": "MISS",
+        "required_elements": [
+          "24-month"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5448,
+        "output_tokens": 72,
+        "cost_usd": 0.017424,
+        "llm_latency_s": 2.566,
+        "total_latency_s": 2.808,
+        "running_total_usd": 0.205559
+      },
+      "ts": "2026-04-27T20:39:39.029536+00:00"
+    },
+    {
+      "qid": "R11v2-RC-02",
+      "category": "regulatory_compliance",
+      "question": "After how many months of member inactivity must platforms delete or fully anonymize personal data under the Cooperative Data Stewardship Standard?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Compliance analysis nuance — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "I don't know. The Cooperative Data Stewardship Standard's inactivity-based deletion or anonymization requirement isn't covered in the base preload or in any of the Scribe entries loaded for this session.",
+        "grade": "MISS",
+        "required_elements": [
+          "36 consecutive months",
+          "36 months"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5453,
+        "output_tokens": 50,
+        "cost_usd": 0.017109,
+        "llm_latency_s": 2.308,
+        "total_latency_s": 2.568,
+        "running_total_usd": 0.222668
+      },
+      "ts": "2026-04-27T20:39:41.798062+00:00"
+    },
+    {
+      "qid": "R11v2-RC-03",
+      "category": "regulatory_compliance",
+      "question": "Under what framework must cross-border data transfers be certified under the Cooperative AI Governance Charter?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Compliance analysis nuance — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know. The Cooperative AI Governance Charter and its cross-border data transfer certification framework are not referenced in the base preload or any of the Scribes Cathedral entries available to me. I cannot invent an answer for this.",
+        "grade": "MISS",
+        "required_elements": [
+          "Meridian Data Framework"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5444,
+        "output_tokens": 54,
+        "cost_usd": 0.017142,
+        "llm_latency_s": 2.193,
+        "total_latency_s": 2.435,
+        "running_total_usd": 0.23981
+      },
+      "ts": "2026-04-27T20:39:44.434100+00:00"
+    },
+    {
+      "qid": "R11v2-RC-04",
+      "category": "regulatory_compliance",
+      "question": "Within how many hours of becoming aware of a security or privacy incident must platforms notify affected members?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Compliance analysis nuance — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "Architecture",
+          "Vault",
+          "Decisions",
+          "FounderVoice"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "The base preload and Scribes Cathedral entries I've been given don't contain a specific notification timeframe (in hours) for security or privacy incidents on the Liana Banyan platform or within the cooperative standards referenced.\n\n**I don't know.** That specific policy detail isn't captured in any of the canonical memory sources available to me. To get the accurate figure, I'd recommend checking:\n\n- The Liana Banyan platform bylaws or member agreements\n- Any relevant Scribe entries not surfac",
+        "grade": "MISS",
+        "required_elements": [
+          "72 hours"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5442,
+        "output_tokens": 143,
+        "cost_usd": 0.018471,
+        "llm_latency_s": 4.678,
+        "total_latency_s": 4.919,
+        "running_total_usd": 0.258281
+      },
+      "ts": "2026-04-27T20:39:49.554076+00:00"
+    },
+    {
+      "qid": "R11v2-RC-05",
+      "category": "regulatory_compliance",
+      "question": "How frequently must third-party technology vendors providing critical services be assessed under the Cooperative AI Governance Charter?",
+      "conductor_routing": {
+        "routed_model": "claude-sonnet-4-6",
+        "rationale": "Compliance analysis nuance — sonnet needed",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Decisions",
+          "Prov14",
+          "Architecture"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "I don't know. The base preload and the Scribes Cathedral entries loaded for this session don't contain any reference to a \"Cooperative AI Governance Charter\" or its vendor assessment frequency requirements. That specific document or standard isn't part of the Liana Banyan canonical memory I have access to.",
+        "grade": "MISS",
+        "required_elements": [
+          "12-month"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5444,
+        "output_tokens": 68,
+        "cost_usd": 0.017352,
+        "llm_latency_s": 2.948,
+        "total_latency_s": 3.194,
+        "running_total_usd": 0.275633
+      },
+      "ts": "2026-04-27T20:39:52.948776+00:00"
+    },
+    {
+      "qid": "R11v2-HP-01",
+      "category": "historical_precedent",
+      "question": "In which city and country was the first Cooperative AI Platform Summit held, and on what date?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Historical factual recall — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "Vault"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the base preload nor the Scribes Cathedral entries contain information about where or when the first Cooperative AI Platform Summit was held. The preload discusses Liana Banyan's structure, initiatives, and technical systems, while the Scribes entries reference industry standards and cooperative frameworks, but neither source mentions this specific summit.",
+        "grade": "MISS",
+        "required_elements": [
+          "Reykjavik, Iceland",
+          "March 14, 2019"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5439,
+        "output_tokens": 77,
+        "cost_usd": 0.005824,
+        "llm_latency_s": 2.167,
+        "total_latency_s": 2.423,
+        "running_total_usd": 0.281457
+      },
+      "ts": "2026-04-27T20:39:55.572236+00:00"
+    },
+    {
+      "qid": "R11v2-HP-02",
+      "category": "historical_precedent",
+      "question": "In what quarter and year did the Verdania Cooperative Platform enter financial distress, and how long did its receivership last?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Historical factual recall — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "Vault"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know.\n\nThe Scribes Cathedral entries I have access to contain information about Verdania's membership (847,293 active members as of Q3 2025) and transaction volume ($4.7B in fiscal year 2024), but they do not include any information about financial distress, receivership, or when either condition occurred.\n\nThe base preload also does not contain this information.\n\nTo answer your question accurately, I would need access to Scribes entries covering Verdania's financial history and regulato",
+        "grade": "MISS",
+        "required_elements": [
+          "Q2 2021",
+          "fourteen months",
+          "14 months"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5446,
+        "output_tokens": 126,
+        "cost_usd": 0.006076,
+        "llm_latency_s": 2.111,
+        "total_latency_s": 2.354,
+        "running_total_usd": 0.287533
+      },
+      "ts": "2026-04-27T20:39:58.126845+00:00"
+    },
+    {
+      "qid": "R11v2-HP-03",
+      "category": "historical_precedent",
+      "question": "In which city and in what month and year was the Sundry Accord drafted?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Historical factual recall — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Vault",
+          "Decisions"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.01
+      },
+      "response": {
+        "text": "I don't know.\n\nThe Scribes Cathedral entry [CS-07] references the \"Sundry Accord\" as an authority on extraordinary meeting quorum requirements, but it does not contain information about where or when the Accord was drafted. The base preload also does not mention the Sundry Accord's drafting location or date.\n\nTo answer your question accurately, I would need access to a Scribes entry that specifically documents the Sundry Accord's origins.",
+        "grade": "MISS",
+        "required_elements": [
+          "Nairobi, Kenya",
+          "September 2020"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5437,
+        "output_tokens": 105,
+        "cost_usd": 0.005962,
+        "llm_latency_s": 2.358,
+        "total_latency_s": 2.593,
+        "running_total_usd": 0.293495
+      },
+      "ts": "2026-04-27T20:40:00.919961+00:00"
+    },
+    {
+      "qid": "R11v2-HP-04",
+      "category": "historical_precedent",
+      "question": "Which platform experienced the first AI model certification failure under the Cooperative AI Governance Charter, and in what quarter?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Historical factual recall — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Architecture",
+          "Decisions",
+          "Toolsmith"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.012
+      },
+      "response": {
+        "text": "I don't know.\n\nNeither the base preload nor the Scribes Cathedral entries contain information about AI model certification failures under the Cooperative AI Governance Charter, or which platform experienced one first, or when it occurred.\n\nThe preload and Scribe entries discuss governance frameworks, amendment thresholds, reserve funding floors, and other cooperative structures, but they don't reference certification failures or the specific charter you're asking about.\n\nTo answer this accuratel",
+        "grade": "MISS",
+        "required_elements": [
+          "Hartwell Cooperative Platform",
+          "Q3 2022"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5443,
+        "output_tokens": 121,
+        "cost_usd": 0.006048,
+        "llm_latency_s": 2.732,
+        "total_latency_s": 2.979,
+        "running_total_usd": 0.299543
+      },
+      "ts": "2026-04-27T20:40:04.099861+00:00"
+    },
+    {
+      "qid": "R11v2-HP-05",
+      "category": "historical_precedent",
+      "question": "In which location and month and year was the Cairnfield Protocol finalized?",
+      "conductor_routing": {
+        "routed_model": "claude-haiku-4-5-20251001",
+        "rationale": "Historical factual recall — haiku sufficient",
+        "category_prior_applied": true
+      },
+      "cathedral_retrieval": {
+        "scribes_consulted": [
+          "R11",
+          "BRIDLE",
+          "Prov14",
+          "Architecture",
+          "Decisions"
+        ],
+        "entries_returned": 100,
+        "consult_latency_s": 0.009
+      },
+      "response": {
+        "text": "I don't know. \n\nThe Scribes Cathedral entries provided include information about the **Cairnfield Protocol's provisions** (specifically the 180-day data portability window for departing members), but they do not contain details about where or when the Protocol was finalized.\n\nThe base preload also does not contain this information.\n\nIf you need this answer, I'd recommend querying the full Scribes Cathedral or checking the official Cooperative Ledger Standards Body records where the Protocol woul",
+        "grade": "MISS",
+        "required_elements": [
+          "Cairnfield, Scotland",
+          "April 2022"
+        ]
+      },
+      "telemetry": {
+        "input_tokens": 5438,
+        "output_tokens": 112,
+        "cost_usd": 0.005998,
+        "llm_latency_s": 2.19,
+        "total_latency_s": 2.428,
+        "running_total_usd": 0.305541
+      },
+      "ts": "2026-04-27T20:40:06.728533+00:00"
+    }
+  ]
+}
