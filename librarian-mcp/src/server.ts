@@ -4292,6 +4292,32 @@ registerTool(
   }
 );
 
+// K520.7 — Test-mode audit summary tool
+registerTool(
+  "test_mode_audit_summary",
+  "K520.7 — Return recent test-mode bypass events from the append-only audit log (~/.lb-session/test_mode_audit.jsonl). Use to verify the bypass mechanism is working and to inspect the audit trail during A/B empirical testing.",
+  {
+    last_n: z.number().int().min(1).max(200).default(20).describe("Return the last N audit events (default 20)"),
+  },
+  async ({ last_n }) => {
+    const auditPath = resolve(homedir(), ".lb-session", "test_mode_audit.jsonl");
+    if (!existsSync(auditPath)) {
+      return { content: [{ type: "text", text: "No test-mode audit log found at ~/.lb-session/test_mode_audit.jsonl — no bypass events recorded yet." }] };
+    }
+    const raw = readFileSync(auditPath, "utf-8");
+    const lines = raw.split("\n").filter(l => l.trim());
+    const total = lines.length;
+    const recent = lines.slice(-last_n);
+    type AuditEntry = { ts_iso?: string; tool?: string; age_seconds?: number; auth_token_prefix?: string; tool_args_summary?: string; event?: string };
+    const entries: AuditEntry[] = recent.map(l => { try { return JSON.parse(l) as AuditEntry; } catch { return {}; } });
+    const summary = entries.map((e, i) => {
+      return `[${total - recent.length + i + 1}] ${e.ts_iso ?? "?"} | tool=${e.tool ?? "?"} | age=${e.age_seconds ?? "?"}s | token=${e.auth_token_prefix ?? "?"} | args=${(e.tool_args_summary ?? "").slice(0, 80)}`;
+    }).join("\n");
+    const text = `## Test-Mode Audit Log — last ${recent.length} of ${total} events\n\n${summary}\n\nAudit file: ${auditPath}`;
+    return { content: [{ type: "text", text }] };
+  }
+);
+
 // ═══════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════
