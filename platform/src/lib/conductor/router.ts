@@ -23,6 +23,52 @@ import type { ClassifiedQuery, QueryClass } from "./classifier.js";
 import type { VendorName } from "./adapters/types.js";
 import { getRankingForClass, getCheapestAboveThreshold } from "./rankings.js";
 
+// ─── K524 Phase B: Conductor scribe_log (Option β — direct JSONL, non-fatal) ──
+// Privacy guarantee: raw query is NEVER logged; SHA-256 hash only.
+// Runs only in Node.js environments (silently skips in browser builds).
+async function _logConductorDecision(
+  rawQuery: string,
+  queryClass: string,
+  vendor: string,
+  model: string,
+  mode: string,
+  rankingBasis: string,
+): Promise<void> {
+  try {
+    if (typeof process === "undefined" || !process.versions?.node) return;
+
+    const { createHash } = await import("node:crypto");
+    const { appendFileSync, mkdirSync, existsSync } = await import("node:fs");
+    const { resolve, dirname } = await import("node:path");
+
+    const stitchpunksDir = process.env.LIBRARIAN_STITCHPUNKS_DIR
+      ? resolve(process.env.LIBRARIAN_STITCHPUNKS_DIR)
+      : null;
+
+    if (!stitchpunksDir) return; // No path configured; skip logging silently
+
+    const conductorPath = resolve(stitchpunksDir, "scribes", "scribe_Conductor.jsonl");
+    const parentDir = dirname(conductorPath);
+    if (!existsSync(parentDir)) mkdirSync(parentDir, { recursive: true });
+
+    const queryHash = createHash("sha256").update(rawQuery).digest("hex");
+    const record = {
+      query_hash: queryHash,
+      query_class: queryClass,
+      vendor,
+      model,
+      mode,
+      ranking_basis: rankingBasis,
+      ts: new Date().toISOString(),
+    };
+
+    appendFileSync(conductorPath, JSON.stringify(record) + "\n", "utf-8");
+  } catch {
+    // Non-fatal: router decisions must never fail because the log write failed
+  }
+}
+
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -104,6 +150,23 @@ function _costTierLabel(model: string): string {
  *   4. auto mode + no ranking (stub/uncertain) → conservative Sonnet fallback
  */
 export function route(inputs: RouterInputs): RoutingDecision {
+  const { classified, mode, memberOverride } = inputs;
+  const decision = _route(inputs);
+
+  // K524 Phase B: fire-and-forget Conductor scribe_log (Option β, non-fatal)
+  void _logConductorDecision(
+    classified.query,
+    classified.class,
+    decision.vendor,
+    decision.model,
+    mode,
+    decision.rationale.split("(")[0].trim(),
+  );
+
+  return decision;
+}
+
+function _route(inputs: RouterInputs): RoutingDecision {
   const { classified, mode, memberOverride } = inputs;
 
   // ── Mode: vendor-lock ──────────────────────────────────────────────────────

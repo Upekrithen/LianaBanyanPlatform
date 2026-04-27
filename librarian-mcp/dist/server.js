@@ -20,6 +20,7 @@ import { consultScribes } from "./scribes/consult.js";
 import { memberConsultScribes } from "./cathedral_supabase/member_consult.js";
 import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
 import { queryPheromone, buildPheromoneIndex } from "./scribes/pheromone.js";
+import { getInboundStatus } from "./scribes/hounds.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
@@ -2101,7 +2102,7 @@ registerTool("log_tidbit", "Append a verification-behavior tidbit to the SP-21 l
     agent: z.enum(["BISHOP", "KNIGHT", "ROOK", "PAWN"]).describe("Calling agent"),
     session: z.string().regex(/^[BKRP]\d+$/).describe("Session id, e.g. B116, K436"),
     category: z.string().min(3).describe("verify_<action>, e.g. verify_slot_number, verify_file_exists"),
-    observation: z.string().min(10).max(500).describe("One-sentence description of what was checked and what was found"),
+    observation: z.string().min(10).describe("Description of what was checked and what was found. No upper bound — substance over brevity."),
     artifact: z.string().optional().describe("File path or symbol the verification served"),
 }, async ({ agent, session, category, observation, artifact }) => {
     try {
@@ -2170,7 +2171,7 @@ registerTool("fates_route", "Run the Three Fates pipeline (Clotho extracts theme
 registerTool("scribe_log", "Append an observation to a specific Scribe's tablet (stitchpunks/scribes/scribe_<id>.jsonl). The scribe_id MUST be registered in registry.yaml — unknown ids are rejected (registration is a deliberate registry edit, not an on-the-fly call).", {
     scribe_id: z.string().describe("Registered Scribe id, e.g. R9, BRIDLE, Landing, Prov14, Vault"),
     session_id: z.string().describe("Session identifier"),
-    observation: z.string().min(10).max(500).describe("Observation text — the durable record"),
+    observation: z.string().min(10).describe("Observation text — the durable record. No upper bound — substance over brevity."),
     source: z.enum([
         "founder_dialogue", "bishop_ship", "knight_ship",
         "bishop_read", "bishop_thresh", "bishop_design",
@@ -2331,6 +2332,35 @@ registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Det
         }
         return {
             content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }],
+        };
+    }
+});
+// ═══════════════════════════════════════════
+// K524 — PHEROMONE INBOUND STATUS (A&A #2317 Claim 7)
+// ═══════════════════════════════════════════
+registerTool("pheromone_inbound_status", "K524 G.8: returns counts of inbound pheromone records per Cathedral from cross-Cathedral Hound transport. " +
+    "Inbound records live in `stitchpunks/<cathedral>_cathedral/inbound_pheromones.jsonl` and are produced " +
+    "when a sibling Cathedral emits a pheromone. These are merged into the unified index.jsonl on the next " +
+    "Bloodhound rebuild (npm run pheromone:bloodhound). Use this tool to surface fresh cross-Cathedral " +
+    "signals before the next rebuild, or to verify Hound propagation is working.", {}, async () => {
+    try {
+        const status = getInboundStatus();
+        const total = status.reduce((s, c) => s + c.record_count, 0);
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        ok: true,
+                        total_inbound: total,
+                        per_cathedral: status,
+                        note: "Run 'npm run pheromone:bloodhound' to merge inbound queues into unified index.jsonl",
+                    }, null, 2),
+                }],
         };
     }
     catch (err) {

@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 /**
- * Pheromone Bloodhound — Async Deep-Extraction Scout (K523 Phase D)
- * ==================================================================
+ * Pheromone Bloodhound — Async Deep-Extraction Scout (K523 Phase D / K524 Phase A)
+ * ==================================================================================
  * Nightly (or hourly via recalculate-queue-hourly) cron job that:
  *   1. Scans ALL Scribe tablets across all Cathedrals
  *   2. Runs richer deep topic-extraction (multi-pass phrase mining)
- *   3. Rebuilds pheromone substrate from scratch with updated tags
- *   4. Respects decay: aged tablets get fewer topic slots allocated
+ *   3. Merges cross-Cathedral inbound_pheromones.jsonl queues (K524 G.8)
+ *   4. Rebuilds pheromone substrate from scratch with updated tags
+ *   5. Respects decay: aged tablets get fewer topic slots allocated
  *
  * Run manually:  node librarian-mcp/scripts/pheromone-bloodhound.mjs
  * Cron hook:     see package.json "pheromone:build" script
  *
- * A&A #2317 Claim 5 (async deep-extraction), Claim 6 (decay-respecting).
+ * A&A #2317 Claim 5 (async deep-extraction), Claim 6 (decay-respecting),
+ *            Claim 7 (cross-Cathedral Hound inbound merge).
  */
 
 import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync, unlinkSync, renameSync } from 'fs';
@@ -96,9 +98,59 @@ function makeKey(cathedral, scribe, tabletId) {
   return `${cathedral}::${scribe}::${tabletId}`;
 }
 
+// ─── K524 Phase A: merge inbound_pheromones.jsonl queues ───────────────────
+/**
+ * Merge cross-Cathedral Hound inbound queues into the unified byKey map.
+ * InboundPheromoneRecord → PheromoneRecord conversion: topics_compact → topics,
+ * source_cathedral → cathedral. Last-write-wins by composite key.
+ *
+ * Returns count of records merged from inbound queues.
+ */
+function mergeInboundQueues(byKey) {
+  let mergedCount = 0;
+
+  for (const cath of ['bishop', 'knight', 'pawn']) {
+    const inboundPath = join(STITCHPUNKS_DIR, `${cath}_cathedral`, 'inbound_pheromones.jsonl');
+    if (!existsSync(inboundPath)) continue;
+
+    let raw;
+    try { raw = readFileSync(inboundPath, 'utf-8'); }
+    catch { continue; }
+
+    for (const line of raw.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      let inbound;
+      try { inbound = JSON.parse(trimmed); } catch { continue; }
+
+      const phrec = {
+        ts: inbound.ts || new Date().toISOString(),
+        scribe: inbound.scribe,
+        tablet_id: inbound.tablet_id,
+        topics: Array.isArray(inbound.topics_compact) ? inbound.topics_compact : [],
+        decay_constant_days: inbound.decay_constant_days ?? DEFAULT_DECAY_DAYS,
+        cathedral: inbound.source_cathedral,
+      };
+
+      if (!phrec.scribe || !phrec.tablet_id || !phrec.cathedral) continue;
+
+      const key = makeKey(phrec.cathedral, phrec.scribe, phrec.tablet_id);
+      // Last-write-wins: inbound record wins if newer than or same age as existing
+      const existing = byKey.get(key);
+      if (!existing || new Date(phrec.ts) >= new Date(existing.ts)) {
+        byKey.set(key, phrec);
+        mergedCount++;
+      }
+    }
+  }
+
+  return mergedCount;
+}
+
+// ─── Main build ────────────────────────────────────────────────────────────
 function buildIndex() {
   const t0 = Date.now();
-  console.error('[bloodhound] starting pheromone deep-extraction rebuild...');
+  console.error('[bloodhound] starting pheromone deep-extraction rebuild (with inbound merge)...');
 
   const byKey = new Map(); // key -> PheromoneRecord
   let tabletCount = 0;
@@ -135,7 +187,6 @@ function buildIndex() {
         // Aged tablets (decay < 0.01 = >150 days old) get minimal topic indexing
         if (df < 0.01) {
           skippedDecay++;
-          // Still index by scribe + session for forensic queries, but minimal topics
           const tabletId = rec.id || rec.toolsmith_id || rec.scribe_id || `${scribeName}_${tabletCount}`;
           const forensicTopics = [scribeName.toLowerCase()];
           if (rec.session) forensicTopics.push(rec.session.toLowerCase());
@@ -154,7 +205,6 @@ function buildIndex() {
         const topics = extractTopicsDeep(text);
 
         // Decay-scaled topic allocation: fewer topics for older records
-        // Ensures query ranking naturally favors recent content
         const maxTopics = Math.max(5, Math.ceil(topics.length * df));
         const allocatedTopics = topics.slice(0, maxTopics);
 
@@ -171,6 +221,9 @@ function buildIndex() {
       }
     }
   }
+
+  // K524 Phase A: merge cross-Cathedral inbound queues
+  const inboundMerged = mergeInboundQueues(byKey);
 
   // Write atomically
   mkdirSync(PHEROMONE_DIR, { recursive: true });
@@ -193,8 +246,8 @@ function buildIndex() {
   for (const r of byKey.values()) r.topics.forEach(t => allTopics.add(t));
 
   console.error(
-    `[bloodhound] done: ${byKey.size} records, ${allTopics.size} distinct topics, ` +
-    `${scribeCount} scribe files, ${tabletCount} tablets, ` +
+    `[bloodhound] done: ${byKey.size} records (${inboundMerged} from inbound queues), ` +
+    `${allTopics.size} distinct topics, ${scribeCount} scribe files, ${tabletCount} tablets, ` +
     `${skippedDecay} decay-minimal (>150 days), ${buildMs}ms`
   );
 
@@ -203,6 +256,7 @@ function buildIndex() {
     topics: allTopics.size,
     scribes: scribeCount,
     tablets: tabletCount,
+    inbound_merged: inboundMerged,
     buildMs,
   };
 }

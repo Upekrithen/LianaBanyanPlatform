@@ -1,6 +1,6 @@
 /**
  * K523 Pheromone Substrate — Verification Test Suite (Phase G)
- * Checks G.1 through G.10 as specified in the K523 prompt.
+ * Checks G.1 through G.10 (K523) and G.2 + G.2.b (K524) as specified.
  *
  * Import strategy: single module import at top level using file:// URL.
  * Tests that need isolation use a separate tmp dir via spawn or share the
@@ -8,7 +8,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, statSync, truncateSync, unlinkSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { tmpdir } from 'os';
@@ -27,6 +27,10 @@ const {
   forceRebuild,
   PHEROMONE_INDEX_PATH,
 } = await import(PHEROMONE_URL);
+
+// Import cathedral module for G.2 write-path integration tests
+const CATHEDRAL_URL = pathToFileURL(resolve(LIBRARIAN_ROOT, 'dist', 'scribes', 'cathedral.js')).href;
+const { appendScribeEntry, appendTidbit, SCRIBES_DIR, TIDBITS_PATH } = await import(CATHEDRAL_URL);
 
 // ─── G.1: Pheromone substrate JSONL builds without errors ──────────────────
 test('G.1 — production pheromone index exists and is non-empty', () => {
@@ -143,6 +147,91 @@ test('G.9 — 5 distinct emits produce 5 distinct records', () => {
   const ids = new Set(concurrentHits.map(h => h.tablet_id));
   assert.equal(ids.size, concurrentHits.length, 'All tablet_ids must be distinct');
   console.log(`G.9 PASS: ${concurrentHits.length} distinct records from 5 emits`);
+});
+
+// ─── G.2: Write-path integration — appendScribeEntry emits pheromone per write ──
+test('G.2 — appendScribeEntry: 5 writes produce 5 distinct pheromone records (K524)', async () => {
+  // Use the Conductor scribe (registered, empty tablet) to avoid polluting
+  // production tablets. Conductor has an empty file (0 bytes) so truncate
+  // cleanup is safe: restoring to 0 is the same as the pre-test state.
+  const SCRIBE = 'Conductor';
+  // Must be purely alphabetic so extractTopics() can extract it as a topic token
+  const UNIQUE_TAG = 'kxxqwritepathtestuniqxyz';
+  const conductorPath = resolve(SCRIBES_DIR, `scribe_${SCRIBE}.jsonl`);
+
+  // Record pre-test sizes for cleanup
+  const tabletPreSize = existsSync(conductorPath) ? statSync(conductorPath).size : 0;
+  const indexPreSize = existsSync(PHEROMONE_INDEX_PATH) ? statSync(PHEROMONE_INDEX_PATH).size : 0;
+
+  // Write 5 distinct scribe entries (unique observation includes alphabetic-only tag)
+  for (let i = 0; i < 5; i++) {
+    appendScribeEntry({
+      scribe_id: SCRIBE,
+      session: 'K524_G2_test',
+      observation: `write-path pheromone emission verification entry kxxqx${i} ${UNIQUE_TAG}`,
+      source: 'knight_ship',
+    });
+  }
+
+  // Assert: 5 new pheromone records visible via queryPheromone
+  const result = queryPheromone(UNIQUE_TAG, { decayActive: false, topK: 100 });
+  const testHits = result.hits.filter(h => h.scribe === SCRIBE);
+  assert.ok(
+    testHits.length >= 5,
+    `Expected >=5 pheromone records for ${SCRIBE}, got ${testHits.length}. hits=${JSON.stringify(testHits.map(h => h.tablet_id))}`,
+  );
+
+  const tabletIds = new Set(testHits.map(h => h.tablet_id));
+  assert.ok(tabletIds.size >= 5, `Expected >=5 distinct tablet_ids, got ${tabletIds.size}`);
+
+  console.log(`G.2 PASS: ${testHits.length} distinct pheromone records from 5 appendScribeEntry calls`);
+
+  // Cleanup: truncate both files to pre-test sizes
+  if (existsSync(conductorPath)) truncateSync(conductorPath, tabletPreSize);
+  if (existsSync(PHEROMONE_INDEX_PATH)) truncateSync(PHEROMONE_INDEX_PATH, indexPreSize);
+  forceRebuild(); // purge in-memory index cache
+  console.log('G.2 cleanup: files truncated to pre-test sizes, in-memory index reset');
+});
+
+// ─── G.2.b: Write-path integration — appendTidbit emits pheromone per write ──
+test('G.2.b — appendTidbit: 5 writes produce 5 distinct pheromone records (K524)', async () => {
+  // Must be purely alphabetic so extractTopics() can extract it as a topic token
+  const UNIQUE_TAG = 'kxxqtidbittestuniqxyz';
+  const VIRTUAL_SCRIBE = 'Tidbits';
+
+  // Record pre-test sizes
+  const tidbitsPreSize = existsSync(TIDBITS_PATH) ? statSync(TIDBITS_PATH).size : 0;
+  const indexPreSize = existsSync(PHEROMONE_INDEX_PATH) ? statSync(PHEROMONE_INDEX_PATH).size : 0;
+
+  // Write 5 tidbits with distinct categories (unique observation alphabetic-only tag)
+  const categories = ['architecture', 'performance', 'security', 'testing', 'deployment'];
+  for (let i = 0; i < 5; i++) {
+    appendTidbit({
+      agent: 'KNIGHT',
+      session: 'K524_G2b_test',
+      category: categories[i],
+      observation: `tidbit pheromone emission verification entry kxxqxb${i} ${UNIQUE_TAG}`,
+    });
+  }
+
+  // Assert: 5 new pheromone records under virtual "Tidbits" scribe
+  const result = queryPheromone(UNIQUE_TAG, { decayActive: false, topK: 100 });
+  const testHits = result.hits.filter(h => h.scribe === VIRTUAL_SCRIBE);
+  assert.ok(
+    testHits.length >= 5,
+    `Expected >=5 pheromone records for ${VIRTUAL_SCRIBE}, got ${testHits.length}. hits=${JSON.stringify(testHits.map(h => h.tablet_id))}`,
+  );
+
+  const tabletIds = new Set(testHits.map(h => h.tablet_id));
+  assert.ok(tabletIds.size >= 5, `Expected >=5 distinct tablet_ids, got ${tabletIds.size}`);
+
+  console.log(`G.2.b PASS: ${testHits.length} distinct pheromone records from 5 appendTidbit calls`);
+
+  // Cleanup: truncate both files to pre-test sizes
+  if (existsSync(TIDBITS_PATH)) truncateSync(TIDBITS_PATH, tidbitsPreSize);
+  if (existsSync(PHEROMONE_INDEX_PATH)) truncateSync(PHEROMONE_INDEX_PATH, indexPreSize);
+  forceRebuild(); // purge in-memory index cache
+  console.log('G.2.b cleanup: files truncated to pre-test sizes, in-memory index reset');
 });
 
 // ─── G.10: Scribe coverage mismatch resolution ───────────────────────────────
