@@ -1,0 +1,27 @@
+-- K522.6 Phase A.5 SCOPE CORRECTION (B128)
+-- Source: FOUNDER_ANECDOTES_REGISTRY_MASTER.md (35 entries, 33 with full prose)
+-- Skipped: #24 (Walking Naked to Pool), #27 (5-Mile Walk Home) — PLACEHOLDER
+-- Updated: 7 existing Hugo-abbreviated rows (ids 4,5,6,7,9,10,12) → Master canonical prose
+-- Inserted: 26 new Master Registry anecdotes (ids 14–39)
+-- Not-in-Master kept: ids 1,2,3 (Shop/Triple Double/ToBlave → proposed #36/#37/#38)
+-- Hugo-only kept: ids 8,11,13 (USAA Lifeline, Golden Eagle's Head, Squad Car Mannequin)
+--
+-- Applied live via Node.js REST on 2026-04-27.
+-- This SQL file is the canonical audit record.
+--
+-- Final state: 39 rows total
+--   - 33 Master Registry anecdotes (canonical)
+--   - 3 K404/K522.5 legacy rows (Shop, Triple Double, To Blave)
+--   - 3 Hugo-only rows (USAA Lifeline, Golden Eagle's Head, Squad Car Mannequin)
+--
+-- K522.7 FLAGGED: Master Registry "Last Updated: February 21, 2026"
+-- Needs Founder pass to add:
+--   - "The To Blave Technique" (B127, April 2026) as Master #36
+--   - Any other 2026 B-session anecdotes
+--   - Full prose for Master #24 (Walking Naked to Pool)
+--   - Full prose for Master #27 (5-Mile Walk Home, Dar es Salaam)
+--   - Full prose for Master #26 (11th Birthday Party) — partial only
+--   - Full prose for Master #28 (Learning to Fight, The Home) — partial only
+
+-- No SQL operations needed (applied live via REST). Kept as audit trail.
+SELECT 'K522.6 Phase A.5 SCOPE CORRECTION applied. 7 updated, 26 inserted, 39 total.' AS status;
