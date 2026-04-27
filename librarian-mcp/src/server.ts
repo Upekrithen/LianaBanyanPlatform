@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync } from "fs";
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync } from "fs";
 import { tmpdir, homedir } from "os";
 import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
 import { execSync } from "child_process";
@@ -56,18 +56,38 @@ function readGotchasForCache(): Array<Record<string, unknown>> {
 }
 
 function writeSubstrateCache(task: string, briefingText: string): void {
+  // K520.8: explicit logging at every step — no silent failures
+  const target = SUBSTRATE_CACHE_FILE;
   try {
+    // C.2: ensure parent directory exists before write
     mkdirSync(SUBSTRATE_CACHE_DIR, { recursive: true });
+    console.error(`[K520.8] writeSubstrateCache: dir ensured, target=${target}`);
+
     const gotchas = readGotchasForCache();
-    writeFileSync(SUBSTRATE_CACHE_FILE, JSON.stringify({
+    console.error(`[K520.8] writeSubstrateCache: gotchas loaded (n=${gotchas.length})`);
+
+    // C.4: schema must match what the gate reads: ts (epoch int), cached_at (ISO string)
+    // C.2: truncate briefing to 50K chars to avoid pathological JSON size
+    const payload = JSON.stringify({
       ts: Math.floor(Date.now() / 1000),
       session_task: task,
-      briefing: briefingText,
+      briefing: briefingText.slice(0, 50_000),
       gotchas,
       cached_at: new Date().toISOString(),
-    }, null, 2), "utf-8");
-  } catch {
-    // Cache write failure is non-fatal — brief_me still returns its result
+    }, null, 2);
+
+    writeFileSync(target, payload, "utf-8");
+    console.error(`[K520.8] writeSubstrateCache: write attempted, payload=${payload.length} bytes`);
+
+    // C.5: round-trip self-test — throw if file didn't land
+    const { size } = statSync(target);
+    if (size === 0) {
+      throw new Error("statSync shows size=0 after write — file appears empty");
+    }
+    console.error(`[K520.8] writeSubstrateCache: VERIFIED file at ${target}, size=${size}`);
+  } catch (err) {
+    // Non-fatal — brief_me still returns its result — but NOW we log the cause
+    console.error(`[K520.8] writeSubstrateCache: FAILED at ${target} — ${String(err)}`);
   }
 }
 

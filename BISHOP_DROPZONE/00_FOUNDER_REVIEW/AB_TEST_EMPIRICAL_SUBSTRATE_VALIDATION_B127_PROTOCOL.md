@@ -163,4 +163,19 @@ Results memo at `BISHOP_DROPZONE/00_FOUNDER_REVIEW/EMPIRICAL_AB_RESULTS_B127.md`
 
 ---
 
+---
+
+## Status History
+
+| K# | Date | Status | Note |
+|----|------|--------|------|
+| K520.5 | 2026-04-26 | LANDED | First-Consult Edict MVP — gate reads substrate_cache.json |
+| K520.6 | 2026-04-26 | LANDED | Operational Gotchas Scribe — claimed writeSubstrateCache wired |
+| K520.7 | 2026-04-26 | LANDED | Signed test-mode bypass — enables controlled A/B measurement |
+| K520.8 | 2026-04-27 | LANDED | Cache write patch — closed wiring gap; 8/8 verifications pass |
+
+**K520.8 root cause**: `writeSubstrateCache` existed and was called but had a silent `catch {}` — any runtime failure was invisible. Added explicit logging at every step, 50K char truncation on briefingText, and statSync round-trip self-test. End-to-end integration test confirms cache written on every `brief_me` call. The A/B bypass (K520.7) + cache wire (K520.8) are both now operational.
+
+---
+
 *Filed B127 by Bishop, 2026-04-26. Long Haul AND Fix Along the Way. Both, Always. Mean what you say, say what you mean.*
