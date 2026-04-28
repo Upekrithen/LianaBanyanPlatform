@@ -1,0 +1,13 @@
+# lb-reproducibility-pack — Python dependencies
+# Install: python -m pip install -r requirements.txt
+# Tested on Python 3.10, 3.11, 3.12
+
+# AI vendor SDKs
+anthropic>=0.40.0
+openai>=1.50.0
+google-generativeai>=0.8.0
+
+# HTTP (Perplexity adapter uses requests directly)
+requests>=2.31.0
+
+# No other runtime deps — local_cathedral_adapter uses stdlib only (math, re, collections)

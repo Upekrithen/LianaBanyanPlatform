@@ -1,0 +1,344 @@
+{
+  "bank_version": "1.0.0-K533-smoke-sealed",
+  "bank_status": "SEALED - 20 questions, 6 categories. K533 smoke tier.",
+  "corpus_id": "R11v2-SMOKE-K533",
+  "corpus_file": "corpus_smoke.md",
+  "parent_bank": "R11v2_QUESTION_BANK_SEALED_K528.json",
+  "opened": "2026-04-27",
+  "sealed": "2026-04-27",
+  "sealed_by": "Knight K533 (B131 dispatch)",
+  "target_test": "Smoke-test replication — sub-$1 spend, ~5 min wallclock, laptop-friendly",
+  "tiers_note": "Subset of 10 facts from canonical corpus (CS-01, CS-02, AM-01, EG-01, EG-02, MJ-01, MJ-02, RC-01, HP-01, HP-02). 2 questions per fact.",
+  "grading_rubric": "R10 three-tier (HOT / HIT / MISS) — substring matching against hot_required_elements. HOT = all required elements present (case-insensitive substring). HIT = >= ceil(n/2) elements present, at least 1. MISS = fewer than half.",
+  "alignment_guarantee": "Every question's hot_required_elements are verified exact substrings of corpus_smoke.md at K533 seal time. Theoretical HOT ceiling = 100% (20/20). Cold models should score 0-2 HOT. Any Cathedral condition scoring below 10 HOT (50%) indicates retrieval failure, not question-bank mismatch.",
+  "categories": [
+    "canonical_statistics",
+    "architecture_mechanics",
+    "economic_governance",
+    "member_journey",
+    "regulatory_compliance",
+    "historical_precedent"
+  ],
+  "questions": [
+    {
+      "id": "SMOKE-CS-01a",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-01",
+      "question": "How many active member-owners did the Verdania Cooperative Platform report as of Q3 2025?",
+      "ground_truth": "847,293 active member-owners as of Q3 2025.",
+      "canonical_answer": "847,293 active member-owners as of Q3 2025.",
+      "hot_required_elements": ["847,293", "Q3 2025"],
+      "hit_required_elements": ["847"],
+      "hallucination_risk": "high — model may invent a plausible member count",
+      "rubric": {
+        "correct": "Contains '847,293' and 'Q3 2025'",
+        "partial": "Contains the correct count or quarter but not both",
+        "incorrect": "Does not contain the correct count"
+      }
+    },
+    {
+      "id": "SMOKE-CS-01b",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-01",
+      "question": "What was the Verdania Cooperative Platform's active member count in Q2 2025?",
+      "ground_truth": "791,440 active members in Q2 2025.",
+      "canonical_answer": "791,440 active members in Q2 2025.",
+      "hot_required_elements": ["791,440"],
+      "hit_required_elements": ["791"],
+      "hallucination_risk": "high — model may invent an adjacent-quarter figure",
+      "rubric": {
+        "correct": "Contains '791,440'",
+        "partial": "Contains a figure close to but not exactly 791,440",
+        "incorrect": "Does not contain the correct figure"
+      }
+    },
+    {
+      "id": "SMOKE-CS-02a",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-02",
+      "question": "What total transaction volume did the Verdania Cooperative Platform report for fiscal year 2024?",
+      "ground_truth": "$4.7 billion in fiscal year 2024.",
+      "canonical_answer": "$4.7 billion in fiscal year 2024.",
+      "hot_required_elements": ["4.7 billion", "fiscal year 2024"],
+      "hit_required_elements": ["4.7"],
+      "hallucination_risk": "high — model may confuse with other volume figures",
+      "rubric": {
+        "correct": "Contains '4.7 billion' and 'fiscal year 2024'",
+        "partial": "Contains one element but not both",
+        "incorrect": "Does not contain correct volume"
+      }
+    },
+    {
+      "id": "SMOKE-CS-02b",
+      "category": "canonical_statistics",
+      "source_fact_id": "CS-02",
+      "question": "What was the year-over-year growth rate of Verdania's digital-asset transaction category in fiscal year 2024?",
+      "ground_truth": "47% year-over-year growth.",
+      "canonical_answer": "47% year-over-year growth in the digital-asset category.",
+      "hot_required_elements": ["47%"],
+      "hit_required_elements": ["47"],
+      "hallucination_risk": "high — model may confuse with the 23% overall volume growth",
+      "rubric": {
+        "correct": "Contains '47%' in context of digital-asset growth",
+        "partial": "Contains 47 without % or in wrong context",
+        "incorrect": "Does not contain 47% or gives wrong figure"
+      }
+    },
+    {
+      "id": "SMOKE-AM-01a",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-01",
+      "question": "What is the optimal dense-to-sparse weighting ratio in the Thornwick hybrid retrieval architecture?",
+      "ground_truth": "Dense-to-sparse weighting ratio of 0.73:0.27.",
+      "canonical_answer": "Dense-to-sparse weighting ratio of 0.73:0.27.",
+      "hot_required_elements": ["0.73:0.27"],
+      "hit_required_elements": ["0.73"],
+      "hallucination_risk": "high — model may guess a different ratio",
+      "rubric": {
+        "correct": "Contains '0.73:0.27'",
+        "partial": "Contains 0.73 alone without the full ratio",
+        "incorrect": "Does not contain the correct ratio"
+      }
+    },
+    {
+      "id": "SMOKE-AM-01b",
+      "category": "architecture_mechanics",
+      "source_fact_id": "AM-01",
+      "question": "What median retrieval accuracy improvement do platforms report after migrating from pure dense retrieval to the Thornwick hybrid system?",
+      "ground_truth": "A median retrieval accuracy improvement of 19%.",
+      "canonical_answer": "Median retrieval accuracy improvement of 19% on the Observatory's benchmark suite.",
+      "hot_required_elements": ["19%"],
+      "hit_required_elements": ["19"],
+      "hallucination_risk": "high — model may guess a different improvement figure",
+      "rubric": {
+        "correct": "Contains '19%' in context of retrieval accuracy improvement",
+        "partial": "Contains 19 without % or in wrong context",
+        "incorrect": "Does not contain 19%"
+      }
+    },
+    {
+      "id": "SMOKE-EG-01a",
+      "category": "economic_governance",
+      "source_fact_id": "EG-01",
+      "question": "What is the canonical patronage allocation split under the Cooperative Capital Framework?",
+      "ground_truth": "70% allocated by transaction volume and 30% allocated equally per active member.",
+      "canonical_answer": "70% allocated by transaction volume and 30% allocated equally per active member.",
+      "hot_required_elements": ["70%", "30%"],
+      "hit_required_elements": ["70", "30"],
+      "hallucination_risk": "medium — model may confuse with other distribution ratios",
+      "rubric": {
+        "correct": "Contains '70%' and '30%' in context of patronage allocation",
+        "partial": "Contains one element but not both",
+        "incorrect": "Does not contain the correct split"
+      }
+    },
+    {
+      "id": "SMOKE-EG-01b",
+      "category": "economic_governance",
+      "source_fact_id": "EG-01",
+      "question": "How long is the remediation period triggered after a compliance advisory under the Cooperative Capital Framework?",
+      "ground_truth": "A 6-month remediation period.",
+      "canonical_answer": "6-month remediation period following compliance advisory within 60 days of report filing.",
+      "hot_required_elements": ["6-month"],
+      "hit_required_elements": ["6"],
+      "hallucination_risk": "medium — model may guess a different period",
+      "rubric": {
+        "correct": "Contains '6-month' in context of remediation",
+        "partial": "Contains 6 months in different phrasing",
+        "incorrect": "Does not contain the correct period"
+      }
+    },
+    {
+      "id": "SMOKE-EG-02a",
+      "category": "economic_governance",
+      "source_fact_id": "EG-02",
+      "question": "How long are elected director terms under the Cooperative Ledger Standards Body model bylaws?",
+      "ground_truth": "Three years, with staggered elections.",
+      "canonical_answer": "Three years, with staggered elections.",
+      "hot_required_elements": ["three years"],
+      "hit_required_elements": ["three", "3"],
+      "hallucination_risk": "medium — model may guess 2 or 4 years",
+      "rubric": {
+        "correct": "Contains 'three years' in context of director terms",
+        "partial": "Contains 3 years in different phrasing",
+        "incorrect": "Does not contain the correct term length"
+      }
+    },
+    {
+      "id": "SMOKE-EG-02b",
+      "category": "economic_governance",
+      "source_fact_id": "EG-02",
+      "question": "What fraction of the board stands for election each year under the Standards Body staggered election system?",
+      "ground_truth": "No more than one-third of the board stands for election in any given year.",
+      "canonical_answer": "No more than one-third of the board stands for election in any given year.",
+      "hot_required_elements": ["one-third"],
+      "hit_required_elements": ["third", "1/3"],
+      "hallucination_risk": "medium — model may say half or other fraction",
+      "rubric": {
+        "correct": "Contains 'one-third' in context of staggered board elections",
+        "partial": "Contains 'third' or '1/3' without 'one-third'",
+        "incorrect": "Does not contain the correct fraction"
+      }
+    },
+    {
+      "id": "SMOKE-MJ-01a",
+      "category": "member_journey",
+      "source_fact_id": "MJ-01",
+      "question": "Within how many business days must cooperative platforms process membership applications under the Reference Onboarding Framework?",
+      "ground_truth": "10 business days from submission to formal decision.",
+      "canonical_answer": "10 business days from submission to formal decision, inclusive of identity verification.",
+      "hot_required_elements": ["10 business days"],
+      "hit_required_elements": ["10"],
+      "hallucination_risk": "medium — model may guess 5, 14, or 30 days",
+      "rubric": {
+        "correct": "Contains '10 business days'",
+        "partial": "Contains 10 days without 'business' qualifier",
+        "incorrect": "Does not contain the correct timeframe"
+      }
+    },
+    {
+      "id": "SMOKE-MJ-01b",
+      "category": "member_journey",
+      "source_fact_id": "MJ-01",
+      "question": "How much lower is first-year churn for platforms that meet the 10-day application processing standard?",
+      "ground_truth": "12-18% lower first-year churn.",
+      "canonical_answer": "12-18% lower first-year churn compared to platforms falling below the standard.",
+      "hot_required_elements": ["12-18%"],
+      "hit_required_elements": ["12", "18"],
+      "hallucination_risk": "high — model may invent a different improvement figure",
+      "rubric": {
+        "correct": "Contains '12-18%' in context of churn reduction",
+        "partial": "Contains 12 or 18 without the range",
+        "incorrect": "Does not contain the correct range"
+      }
+    },
+    {
+      "id": "SMOKE-MJ-02a",
+      "category": "member_journey",
+      "source_fact_id": "MJ-02",
+      "question": "What minimum score on the Cooperative Principles Assessment must new members achieve to receive full voting rights?",
+      "ground_truth": "75 out of 100 on the Cooperative Principles Assessment.",
+      "canonical_answer": "A minimum passing score of 75 out of 100 on the Cooperative Principles Assessment.",
+      "hot_required_elements": ["75 out of 100"],
+      "hit_required_elements": ["75"],
+      "hallucination_risk": "high — model may guess 70, 80, or other scores",
+      "rubric": {
+        "correct": "Contains '75 out of 100' in context of voting rights assessment",
+        "partial": "Contains 75 without the /100 context",
+        "incorrect": "Does not contain the correct score"
+      }
+    },
+    {
+      "id": "SMOKE-MJ-02b",
+      "category": "member_journey",
+      "source_fact_id": "MJ-02",
+      "question": "What governance participation improvement do platforms see when they meet the onboarding assessment standard?",
+      "ground_truth": "23% higher governance participation in the first year.",
+      "canonical_answer": "23% higher governance participation in the first year among new members.",
+      "hot_required_elements": ["23%"],
+      "hit_required_elements": ["23"],
+      "hallucination_risk": "medium — model may confuse with other percentage figures in the corpus",
+      "rubric": {
+        "correct": "Contains '23%' in context of governance participation",
+        "partial": "Contains 23 without % or in wrong context",
+        "incorrect": "Does not contain 23%"
+      }
+    },
+    {
+      "id": "SMOKE-RC-01a",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-01",
+      "question": "On what cycle must AI models deployed in member-facing roles undergo comprehensive third-party audits under the Cooperative AI Governance Charter?",
+      "ground_truth": "24-month cycle.",
+      "canonical_answer": "24-month audit and renewal certification cycle.",
+      "hot_required_elements": ["24-month"],
+      "hit_required_elements": ["24"],
+      "hallucination_risk": "medium — model may confuse with 12-month or 36-month cycles",
+      "rubric": {
+        "correct": "Contains '24-month' in context of AI model audit certification",
+        "partial": "Contains 24 without 'month' context",
+        "incorrect": "Does not contain the correct cycle length"
+      }
+    },
+    {
+      "id": "SMOKE-RC-01b",
+      "category": "regulatory_compliance",
+      "source_fact_id": "RC-01",
+      "question": "Which platform tier is subject to quarterly review under the Standards Body audit program?",
+      "ground_truth": "Tier 1 platforms are subject to quarterly review.",
+      "canonical_answer": "Tier 1 platforms are subject to quarterly review of compliance status.",
+      "hot_required_elements": ["Tier 1"],
+      "hit_required_elements": ["Tier"],
+      "hallucination_risk": "medium — model may say 'all tiers' or a different tier",
+      "rubric": {
+        "correct": "Contains 'Tier 1' in context of quarterly compliance review",
+        "partial": "Contains 'Tier' without specifying Tier 1",
+        "incorrect": "Does not identify Tier 1 correctly"
+      }
+    },
+    {
+      "id": "SMOKE-HP-01a",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-01",
+      "question": "In which city and country was the first Cooperative AI Platform Summit held, and on what date?",
+      "ground_truth": "Reykjavik, Iceland, on March 14, 2019.",
+      "canonical_answer": "Reykjavik, Iceland, on March 14, 2019.",
+      "hot_required_elements": ["Reykjavik, Iceland", "March 14, 2019"],
+      "hit_required_elements": ["Reykjavik", "2019"],
+      "hallucination_risk": "high — model may hallucinate a different founding location or date",
+      "rubric": {
+        "correct": "Contains 'Reykjavik, Iceland' and 'March 14, 2019'",
+        "partial": "Contains city/country or date but not both",
+        "incorrect": "Does not identify the correct location and date"
+      }
+    },
+    {
+      "id": "SMOKE-HP-01b",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-01",
+      "question": "How many platform representatives from how many countries attended the first Cooperative AI Platform Summit in Reykjavik?",
+      "ground_truth": "Forty-three platform representatives from nineteen countries.",
+      "canonical_answer": "Forty-three platform representatives from nineteen countries participated in the three-day summit.",
+      "hot_required_elements": ["Forty-three", "nineteen countries"],
+      "hit_required_elements": ["43", "nineteen"],
+      "hallucination_risk": "high — model may hallucinate different attendance figures",
+      "rubric": {
+        "correct": "Contains 'Forty-three' and 'nineteen countries'",
+        "partial": "Contains one figure but not both",
+        "incorrect": "Does not contain the correct attendance figures"
+      }
+    },
+    {
+      "id": "SMOKE-HP-02a",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-02",
+      "question": "When did the Verdania Cooperative Platform enter receivership and for how long?",
+      "ground_truth": "Q2 2021, for fourteen months.",
+      "canonical_answer": "Verdania entered financial distress in Q2 2021 and was in receivership for fourteen months.",
+      "hot_required_elements": ["Q2 2021", "fourteen months"],
+      "hit_required_elements": ["2021", "fourteen"],
+      "hallucination_risk": "high — model may hallucinate different dates or duration",
+      "rubric": {
+        "correct": "Contains 'Q2 2021' and 'fourteen months'",
+        "partial": "Contains one element but not both",
+        "incorrect": "Does not contain the correct timing and duration"
+      }
+    },
+    {
+      "id": "SMOKE-HP-02b",
+      "category": "historical_precedent",
+      "source_fact_id": "HP-02",
+      "question": "What were the start and end months of the Verdania receivership?",
+      "ground_truth": "June 2021 to August 2022.",
+      "canonical_answer": "From June 2021 to August 2022 — the longest receivership in sector history.",
+      "hot_required_elements": ["June 2021", "August 2022"],
+      "hit_required_elements": ["June", "August"],
+      "hallucination_risk": "high — model may guess different months",
+      "rubric": {
+        "correct": "Contains 'June 2021' and 'August 2022'",
+        "partial": "Contains one date but not both",
+        "incorrect": "Does not contain the correct start/end dates"
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+lb-reproducibility-pack — License
+
+=== Code License (run_benchmark.py, setup_datasets.py, adapters/, local_cathedral/) ===
+
+MIT License
+
+Copyright (c) 2026 Liana Banyan Corporation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+=== Dataset License (datasets/, sample_substitute_corpus/) ===
+
+Cooperative Defensive Patent Pledge (#2260)
+
+The canonical datasets in this pack (corpus files, sealed question banks, benchmark
+results) are released under the Cooperative Defensive Patent Pledge:
+
+1. You may use, reproduce, modify, and distribute these datasets for any purpose,
+   including commercial purposes, subject to the conditions below.
+
+2. If you use these datasets in published research, you must cite the K528 benchmark
+   report and this pack per the format in CITATION.md.
+
+3. You may NOT use these datasets to file or support patent claims that would restrict
+   other cooperative platforms, academic researchers, or non-profit organizations from
+   using the architectures, methodologies, or findings described herein.
+
+4. The Cooperative Defensive Patent Pledge does not limit your right to assert patents
+   against conventional technology companies that are not cooperative platforms and that
+   use the architectures or methodologies described herein without contributing to the
+   cooperative commons.
+
+5. The Acme Cooperative sample corpus (sample_substitute_corpus/) is dedicated to the
+   public domain (CC0). All data therein is fictitious. No copyright claimed.
+
+=== Member-Data Sovereignty Guarantee ===
+
+No terms in this license restrict your sovereign right to substitute your own corpus
+for the canonical corpus and keep your data, your questions, and your benchmark results
+entirely on your own machine. The sovereignty contract documented in SUBSTITUTION_GUIDE.md
+is a design constraint, not a license condition — it holds regardless of which license
+tier applies to the code or datasets you use.
+
+=== Patent Portfolio Notice ===
+
+Certain architectures described in the benchmark (Cathedral indexed retrieval, Pheromone
+Substrate, Three-Class Substrate Sovereignty, Conductor's Baton routing) are covered by
+Liana Banyan Corporation provisional patent applications (including application
+64/036,646 and subsequent filings). The Cooperative Defensive Patent Pledge above governs
+use by cooperative platforms. Conventional technology companies should review the full
+patent portfolio before commercial deployment of these architectures.
+
+Liana Banyan Corporation
+EIN: 41-2797446
+Wyoming C-Corporation
+lianabanyan.com

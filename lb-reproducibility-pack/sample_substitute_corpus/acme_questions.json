@@ -1,0 +1,282 @@
+{
+  "bank_version": "1.0.0-ACME-SAMPLE-K533",
+  "bank_status": "SAMPLE — 30 questions, 5 categories. Acme Cooperative fictitious corpus.",
+  "corpus_id": "ACME-SAMPLE-K533",
+  "corpus_file": "acme_corpus.md",
+  "purpose": "Worked example for lb-reproducibility-pack substitution flow. All data fictitious.",
+  "grading_rubric": "R10 three-tier (HOT / HIT / MISS) — substring matching against hot_required_elements.",
+  "alignment_guarantee": "All hot_required_elements verified as substrings of acme_corpus.md at K533 seal time.",
+  "categories": ["founding", "economics", "governance", "operations", "technology"],
+  "questions": [
+    {
+      "id": "ACME-F-01",
+      "category": "founding",
+      "source_fact_id": "ACME-01",
+      "question": "Where and when was Acme Cooperative incorporated?",
+      "ground_truth": "Millbrook, Vermont, on April 3, 2018.",
+      "hot_required_elements": ["Millbrook, Vermont", "April 3, 2018"],
+      "hit_required_elements": ["Millbrook", "2018"]
+    },
+    {
+      "id": "ACME-F-02",
+      "category": "founding",
+      "source_fact_id": "ACME-01",
+      "question": "How many worker-owners founded Acme Cooperative at incorporation?",
+      "ground_truth": "47 worker-owners.",
+      "hot_required_elements": ["47 worker-owners"],
+      "hit_required_elements": ["47"]
+    },
+    {
+      "id": "ACME-F-03",
+      "category": "founding",
+      "source_fact_id": "ACME-01",
+      "question": "How many active member-owners did Acme Cooperative have by Q4 2024?",
+      "ground_truth": "1,203 active member-owners.",
+      "hot_required_elements": ["1,203 active member-owners"],
+      "hit_required_elements": ["1,203"]
+    },
+    {
+      "id": "ACME-F-04",
+      "category": "founding",
+      "source_fact_id": "ACME-15",
+      "question": "What supermajority is required to modify Acme's founding principles?",
+      "ground_truth": "75% supermajority of all eligible member-owners.",
+      "hot_required_elements": ["75% supermajority"],
+      "hit_required_elements": ["75%"]
+    },
+    {
+      "id": "ACME-F-05",
+      "category": "founding",
+      "source_fact_id": "ACME-15",
+      "question": "What are Acme Cooperative's five founding principles?",
+      "ground_truth": "Member Sovereignty, Cost Transparency, Democratic Governance, Environmental Stewardship, and Living Wage Employment.",
+      "hot_required_elements": ["Member Sovereignty", "Living Wage Employment"],
+      "hit_required_elements": ["Sovereignty", "Living Wage"]
+    },
+    {
+      "id": "ACME-E-01",
+      "category": "economics",
+      "source_fact_id": "ACME-02",
+      "question": "What was Acme Cooperative's total gross revenue for fiscal year 2024?",
+      "ground_truth": "$4.2 million.",
+      "hot_required_elements": ["$4.2 million"],
+      "hit_required_elements": ["4.2"]
+    },
+    {
+      "id": "ACME-E-02",
+      "category": "economics",
+      "source_fact_id": "ACME-03",
+      "question": "What is Acme Cooperative's patronage allocation formula split?",
+      "ground_truth": "65% by transaction volume and 35% per active member.",
+      "hot_required_elements": ["65/35 patronage allocation formula"],
+      "hit_required_elements": ["65", "35"]
+    },
+    {
+      "id": "ACME-E-03",
+      "category": "economics",
+      "source_fact_id": "ACME-03",
+      "question": "What was the average member patronage distribution at Acme in fiscal year 2024?",
+      "ground_truth": "$155.45 in patronage distributions.",
+      "hot_required_elements": ["$155.45"],
+      "hit_required_elements": ["155"]
+    },
+    {
+      "id": "ACME-E-04",
+      "category": "economics",
+      "source_fact_id": "ACME-10",
+      "question": "What percentage of annual gross revenue does Acme maintain in its Capital Reserve Fund?",
+      "ground_truth": "15% of annual gross revenue.",
+      "hot_required_elements": ["15% of annual gross revenue"],
+      "hit_required_elements": ["15%"]
+    },
+    {
+      "id": "ACME-E-05",
+      "category": "economics",
+      "source_fact_id": "ACME-12",
+      "question": "What is the pay compression ratio cap at Acme Cooperative?",
+      "ground_truth": "4:1 ratio of highest to lowest worker-owner compensation.",
+      "hot_required_elements": ["4:1"],
+      "hit_required_elements": ["4", "1"]
+    },
+    {
+      "id": "ACME-E-06",
+      "category": "economics",
+      "source_fact_id": "ACME-12",
+      "question": "What was the median worker-owner compensation at Acme in fiscal year 2024?",
+      "ground_truth": "$61,200.",
+      "hot_required_elements": ["$61,200"],
+      "hit_required_elements": ["61,200"]
+    },
+    {
+      "id": "ACME-G-01",
+      "category": "governance",
+      "source_fact_id": "ACME-06",
+      "question": "How long are elected director terms at Acme Cooperative?",
+      "ground_truth": "Two years, staggered.",
+      "hot_required_elements": ["two years, staggered"],
+      "hit_required_elements": ["two years"]
+    },
+    {
+      "id": "ACME-G-02",
+      "category": "governance",
+      "source_fact_id": "ACME-06",
+      "question": "What was Acme's governance participation rate in the 2024 annual election?",
+      "ground_truth": "62.3% of eligible member-owners.",
+      "hot_required_elements": ["62.3%"],
+      "hit_required_elements": ["62"]
+    },
+    {
+      "id": "ACME-G-03",
+      "category": "governance",
+      "source_fact_id": "ACME-06",
+      "question": "What quorum percentage is required for bylaw amendments at Acme?",
+      "ground_truth": "40% of eligible members.",
+      "hot_required_elements": ["40% of eligible members"],
+      "hit_required_elements": ["40%"]
+    },
+    {
+      "id": "ACME-G-04",
+      "category": "governance",
+      "source_fact_id": "ACME-07",
+      "question": "Within how many business days does Acme process new member applications?",
+      "ground_truth": "7 business days.",
+      "hot_required_elements": ["7 business days"],
+      "hit_required_elements": ["7"]
+    },
+    {
+      "id": "ACME-G-05",
+      "category": "governance",
+      "source_fact_id": "ACME-07",
+      "question": "What minimum score on Acme's Orientation Assessment is required for full membership?",
+      "ground_truth": "80 out of 100.",
+      "hot_required_elements": ["80 out of 100"],
+      "hit_required_elements": ["80"]
+    },
+    {
+      "id": "ACME-G-06",
+      "category": "governance",
+      "source_fact_id": "ACME-14",
+      "question": "How many member disputes were filed at Acme in fiscal year 2024?",
+      "ground_truth": "87 disputes.",
+      "hot_required_elements": ["87 disputes"],
+      "hit_required_elements": ["87"]
+    },
+    {
+      "id": "ACME-O-01",
+      "category": "operations",
+      "source_fact_id": "ACME-04",
+      "question": "What are the three VerdaKit bundle configurations and their monthly prices?",
+      "ground_truth": "Starter Bundle $39/month, Family Bundle $79/month, Homestead Bundle $149/month.",
+      "hot_required_elements": ["$39/month", "$79/month", "$149/month"],
+      "hit_required_elements": ["39", "79", "149"]
+    },
+    {
+      "id": "ACME-O-02",
+      "category": "operations",
+      "source_fact_id": "ACME-05",
+      "question": "How long does Acme's standard warranty cover manufacturing defects?",
+      "ground_truth": "18-month warranty.",
+      "hot_required_elements": ["18-month warranty"],
+      "hit_required_elements": ["18"]
+    },
+    {
+      "id": "ACME-O-03",
+      "category": "operations",
+      "source_fact_id": "ACME-05",
+      "question": "Within how many days may Acme members return items for full credit?",
+      "ground_truth": "45 days of delivery.",
+      "hot_required_elements": ["45 days"],
+      "hit_required_elements": ["45"]
+    },
+    {
+      "id": "ACME-O-04",
+      "category": "operations",
+      "source_fact_id": "ACME-08",
+      "question": "How many electric cargo vehicles does Acme's delivery fleet include?",
+      "ground_truth": "6 electric cargo vehicles.",
+      "hot_required_elements": ["6 electric cargo vehicles"],
+      "hit_required_elements": ["6"]
+    },
+    {
+      "id": "ACME-O-05",
+      "category": "operations",
+      "source_fact_id": "ACME-11",
+      "question": "What is the delivery radius from Acme's Millbrook distribution center?",
+      "ground_truth": "35 miles.",
+      "hot_required_elements": ["35 miles"],
+      "hit_required_elements": ["35"]
+    },
+    {
+      "id": "ACME-O-06",
+      "category": "operations",
+      "source_fact_id": "ACME-13",
+      "question": "In what year did Acme Cooperative achieve carbon neutrality?",
+      "ground_truth": "2022.",
+      "hot_required_elements": ["carbon neutrality in 2022"],
+      "hit_required_elements": ["2022"]
+    },
+    {
+      "id": "ACME-O-07",
+      "category": "operations",
+      "source_fact_id": "ACME-17",
+      "question": "By how much does NECPA membership reduce Acme's wholesale cost on eligible products?",
+      "ground_truth": "17% on NECPA-eligible products.",
+      "hot_required_elements": ["17%"],
+      "hit_required_elements": ["17"]
+    },
+    {
+      "id": "ACME-O-08",
+      "category": "operations",
+      "source_fact_id": "ACME-18",
+      "question": "How many schools per year does Acme's Cooperative Education Program visit?",
+      "ground_truth": "8 schools per year.",
+      "hot_required_elements": ["8 schools per year"],
+      "hit_required_elements": ["8"]
+    },
+    {
+      "id": "ACME-T-01",
+      "category": "technology",
+      "source_fact_id": "ACME-08",
+      "question": "What monthly uptime does Acme's SLA with Birchwood Platform require?",
+      "ground_truth": "99.7% monthly uptime.",
+      "hot_required_elements": ["99.7% monthly uptime"],
+      "hit_required_elements": ["99.7"]
+    },
+    {
+      "id": "ACME-T-02",
+      "category": "technology",
+      "source_fact_id": "ACME-09",
+      "question": "When did Acme deploy its AI member-assistance system?",
+      "ground_truth": "September 2023.",
+      "hot_required_elements": ["September 2023"],
+      "hit_required_elements": ["2023"]
+    },
+    {
+      "id": "ACME-T-03",
+      "category": "technology",
+      "source_fact_id": "ACME-09",
+      "question": "By what percentage did Acme's AI system reduce support ticket volume in its first six months?",
+      "ground_truth": "34%.",
+      "hot_required_elements": ["34%"],
+      "hit_required_elements": ["34"]
+    },
+    {
+      "id": "ACME-T-04",
+      "category": "technology",
+      "source_fact_id": "ACME-16",
+      "question": "What percentage of Acme active members downloaded the mobile app launched in January 2024?",
+      "ground_truth": "89% of active members.",
+      "hot_required_elements": ["89%"],
+      "hit_required_elements": ["89"]
+    },
+    {
+      "id": "ACME-T-05",
+      "category": "technology",
+      "source_fact_id": "ACME-16",
+      "question": "Within how many hours does Acme provide member data export on request?",
+      "ground_truth": "48 hours.",
+      "hot_required_elements": ["48 hours"],
+      "hit_required_elements": ["48"]
+    }
+  ]
+}

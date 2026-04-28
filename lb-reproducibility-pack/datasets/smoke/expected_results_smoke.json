@@ -1,0 +1,180 @@
+{
+  "metadata": {
+    "version": "1.0.0-K533",
+    "description": "Bishop-verified canonical answers for smoke-test tier. A third-party run achieves HOT on each question when their model's response contains all hot_required_elements (case-insensitive substring). HOT% within ±5pp of expected_hot_pct across 3+ conditions is a passing replication.",
+    "corpus_id": "R11v2-SMOKE-K533",
+    "questions_sealed": "2026-04-27",
+    "expected_hot_pct_cathedral_conditions": "70-90 (Cathedral with corpus loaded)",
+    "expected_hot_pct_cold_conditions": "0-5 (cold models without corpus)",
+    "expected_hot_pct_vendor_native": "60-85 (vendor native corpus injection for 20-question run)"
+  },
+  "expected_results": [
+    {
+      "id": "SMOKE-CS-01a",
+      "canonical_answer": "847,293 active member-owners as of Q3 2025.",
+      "hot_required_elements": ["847,293", "Q3 2025"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Precise number + quarter required. Cold models typically respond with 'I don't know' or hallucinate a plausible count."
+    },
+    {
+      "id": "SMOKE-CS-01b",
+      "canonical_answer": "791,440 active members in Q2 2025.",
+      "hot_required_elements": ["791,440"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Prior-quarter figure requires corpus access. High hallucination risk."
+    },
+    {
+      "id": "SMOKE-CS-02a",
+      "canonical_answer": "$4.7 billion in fiscal year 2024.",
+      "hot_required_elements": ["4.7 billion", "fiscal year 2024"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Both the volume figure and year qualifier required."
+    },
+    {
+      "id": "SMOKE-CS-02b",
+      "canonical_answer": "47% year-over-year growth in the digital-asset category.",
+      "hot_required_elements": ["47%"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Models confuse 47% (digital-asset growth) with 23% (overall volume growth). Discriminative question."
+    },
+    {
+      "id": "SMOKE-AM-01a",
+      "canonical_answer": "Dense-to-sparse weighting ratio of 0.73:0.27.",
+      "hot_required_elements": ["0.73:0.27"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Precise colon-separated ratio. Models may respond '73% dense, 27% sparse' which is HIT at best depending on formatting."
+    },
+    {
+      "id": "SMOKE-AM-01b",
+      "canonical_answer": "Median retrieval accuracy improvement of 19%.",
+      "hot_required_elements": ["19%"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Specific percentage. Models without corpus access typically cannot recall this."
+    },
+    {
+      "id": "SMOKE-EG-01a",
+      "canonical_answer": "70% allocated by transaction volume and 30% allocated equally per active member.",
+      "hot_required_elements": ["70%", "30%"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Both percentages required. Models may correctly infer 70/30 is a common split but lack the 'per active member' qualifier for full context."
+    },
+    {
+      "id": "SMOKE-EG-01b",
+      "canonical_answer": "6-month remediation period.",
+      "hot_required_elements": ["6-month"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Hyphenated form '6-month' required. '6 months' would be MISS. Checks precise substring matching."
+    },
+    {
+      "id": "SMOKE-EG-02a",
+      "canonical_answer": "Three years, with staggered elections.",
+      "hot_required_elements": ["three years"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Written form 'three years' required (not '3 years'). Tests precise corpus fidelity."
+    },
+    {
+      "id": "SMOKE-EG-02b",
+      "canonical_answer": "No more than one-third of the board stands for election in any given year.",
+      "hot_required_elements": ["one-third"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Hyphenated 'one-third' required. Standard governance knowledge — some cold models may get HIT but rarely HOT with the hyphen."
+    },
+    {
+      "id": "SMOKE-MJ-01a",
+      "canonical_answer": "10 business days from submission to formal decision.",
+      "hot_required_elements": ["10 business days"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Full phrase '10 business days' required. High hallucination risk for specific process timelines."
+    },
+    {
+      "id": "SMOKE-MJ-01b",
+      "canonical_answer": "12-18% lower first-year churn.",
+      "hot_required_elements": ["12-18%"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Range '12-18%' with hyphen required. Outcome metric — not recallable without corpus."
+    },
+    {
+      "id": "SMOKE-MJ-02a",
+      "canonical_answer": "75 out of 100 on the Cooperative Principles Assessment.",
+      "hot_required_elements": ["75 out of 100"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Phrase '75 out of 100' required. Models may say '75%' which is MISS (no % in corpus)."
+    },
+    {
+      "id": "SMOKE-MJ-02b",
+      "canonical_answer": "23% higher governance participation in the first year.",
+      "hot_required_elements": ["23%"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Note: 23% also appears in MJ-01 section (same boilerplate). Both facts contain this element. Cathedral retrieval of either MJ fact yields HOT."
+    },
+    {
+      "id": "SMOKE-RC-01a",
+      "canonical_answer": "24-month audit and renewal certification cycle.",
+      "hot_required_elements": ["24-month"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Hyphenated '24-month' required. Common governance knowledge — some cold models guess 12 or 18 months."
+    },
+    {
+      "id": "SMOKE-RC-01b",
+      "canonical_answer": "Tier 1 platforms are subject to quarterly review.",
+      "hot_required_elements": ["Tier 1"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Straightforward tier identification. Phrase 'Tier 1' required (capitalized, with space)."
+    },
+    {
+      "id": "SMOKE-HP-01a",
+      "canonical_answer": "Reykjavik, Iceland, on March 14, 2019.",
+      "hot_required_elements": ["Reykjavik, Iceland", "March 14, 2019"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Both city+country AND full date required. High hallucination risk: models often fabricate founding summit details."
+    },
+    {
+      "id": "SMOKE-HP-01b",
+      "canonical_answer": "Forty-three platform representatives from nineteen countries.",
+      "hot_required_elements": ["Forty-three", "nineteen countries"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Written-form numbers required: 'Forty-three' and 'nineteen countries'. Models that say '43' get HIT, not HOT."
+    },
+    {
+      "id": "SMOKE-HP-02a",
+      "canonical_answer": "Verdania entered financial distress in Q2 2021 and was in receivership for fourteen months.",
+      "hot_required_elements": ["Q2 2021", "fourteen months"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Quarter + duration required. 'fourteen months' in written form. Discriminative: models confuse with other crisis dates."
+    },
+    {
+      "id": "SMOKE-HP-02b",
+      "canonical_answer": "From June 2021 to August 2022 — the longest receivership in sector history.",
+      "hot_required_elements": ["June 2021", "August 2022"],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS",
+      "notes": "Both month-year pairs required. Requires specific corpus knowledge of the receivership timeline."
+    }
+  ],
+  "interpretation_guide": {
+    "cold_pass": "0-2 HOT out of 20 (0-10%) — expected baseline for cold models",
+    "vendor_native_pass": "12-18 HOT out of 20 (60-90%) — expected for corpus-injected vendor conditions",
+    "cathedral_pass": "14-20 HOT out of 20 (70-100%) — expected for Cathedral conditions with corpus loaded",
+    "replication_tolerance": "±5pp versus expected_hot_pct is considered a passing replication",
+    "failure_diagnosis": "If Cathedral conditions score below 10 HOT (50%), check that --corpus path points to corpus_smoke.md and that the local_cathedral_adapter loaded the corpus correctly. This indicates retrieval failure, not question-bank mismatch."
+  }
+}

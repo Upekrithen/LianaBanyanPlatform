@@ -1,0 +1,953 @@
+{
+  "metadata": {
+    "version": "1.0.0-K533",
+    "description": "Canonical expected results for reasonable-effort tier. Cathedral conditions should achieve 65-85% HOT. Cold conditions should achieve 0-5% HOT. ±5pp tolerance for passing replication.",
+    "corpus_id": "R11v2-REASONABLE-K533",
+    "generated": "2026-04-27",
+    "expected_hot_pct_cathedral": "65-85",
+    "expected_hot_pct_cold": "0-5",
+    "expected_hot_pct_vendor_native": "55-90",
+    "replication_tolerance_pp": 5
+  },
+  "expected_results": [
+    {
+      "id": "R11v2-CS-01",
+      "canonical_answer": "847,293 active member-owners as of Q3 2025.",
+      "hot_required_elements": [
+        "847,293",
+        "Q3 2025"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-01b",
+      "canonical_answer": "791,440 active members in Q2.",
+      "hot_required_elements": [
+        "791,440"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-02",
+      "canonical_answer": "$4.7 billion in fiscal year 2024.",
+      "hot_required_elements": [
+        "$4.7 billion",
+        "fiscal year 2024"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-02b",
+      "canonical_answer": "23% increase from the prior year.",
+      "hot_required_elements": [
+        "23%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-03",
+      "canonical_answer": "66.7% of eligible votes.",
+      "hot_required_elements": [
+        "66.7%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-04",
+      "canonical_answer": "180-day data portability window.",
+      "hot_required_elements": [
+        "180-day",
+        "180 days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-05",
+      "canonical_answer": "4.18 in November 2025.",
+      "hot_required_elements": [
+        "4.18",
+        "November 2025"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-06",
+      "canonical_answer": "$312 per active member-owner.",
+      "hot_required_elements": [
+        "$312",
+        "312"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-07",
+      "canonical_answer": "15% of eligible member-owners.",
+      "hot_required_elements": [
+        "15%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-08",
+      "canonical_answer": "2.3% of total votes.",
+      "hot_required_elements": [
+        "2.3%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-09",
+      "canonical_answer": "8.5% of the prior 12-month gross transaction volume.",
+      "hot_required_elements": [
+        "8.5%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-10",
+      "canonical_answer": "512,847 active member-owners as of Q2 2025.",
+      "hot_required_elements": [
+        "512,847",
+        "Q2 2025"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-11",
+      "canonical_answer": "$18.4 billion.",
+      "hot_required_elements": [
+        "$18.4 billion",
+        "18.4"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-12",
+      "canonical_answer": "847 million AI queries.",
+      "hot_required_elements": [
+        "847 million"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-13",
+      "canonical_answer": "67.3% of Tier 1 and Tier 2 cooperative platforms.",
+      "hot_required_elements": [
+        "67.3%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-14",
+      "canonical_answer": "Mean founding year of 2007, giving them an average age of 17.2 years as of 2025.",
+      "hot_required_elements": [
+        "17.2 years",
+        "2007"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-15",
+      "canonical_answer": "284,000 full-time equivalent positions.",
+      "hot_required_elements": [
+        "284,000"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-16",
+      "canonical_answer": "$2.3 billion in cooperative credits outstanding.",
+      "hot_required_elements": [
+        "$2.3 billion",
+        "December 2025"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-17",
+      "canonical_answer": "31.4% of total operating expenditure.",
+      "hot_required_elements": [
+        "31.4%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-18",
+      "canonical_answer": "23.7% of all cooperative platform transactions.",
+      "hot_required_elements": [
+        "23.7%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-19",
+      "canonical_answer": "4,230 requests per second.",
+      "hot_required_elements": [
+        "4,230 requests per second",
+        "4,230"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-20",
+      "canonical_answer": "8.9% annual member churn rate.",
+      "hot_required_elements": [
+        "8.9%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-21",
+      "canonical_answer": "12.3 AI assistance queries per month.",
+      "hot_required_elements": [
+        "12.3"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-22",
+      "canonical_answer": "1,847 cooperative platform patent applications.",
+      "hot_required_elements": [
+        "1,847"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-23",
+      "canonical_answer": "1,203 member platforms from 67 countries.",
+      "hot_required_elements": [
+        "1,203",
+        "67 countries"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-24",
+      "canonical_answer": "$47.32.",
+      "hot_required_elements": [
+        "$47.32",
+        "47.32"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-25",
+      "canonical_answer": "34.1% of eligible member-owners.",
+      "hot_required_elements": [
+        "34.1%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-25b",
+      "canonical_answer": "4.3 percentage-point improvement from 29.8% in 2022 to 34.1% in 2024.",
+      "hot_required_elements": [
+        "4.3 percentage-point",
+        "29.8%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-01",
+      "canonical_answer": "Dense-to-sparse weighting ratio of 0.73:0.27.",
+      "hot_required_elements": [
+        "0.73:0.27"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-02",
+      "canonical_answer": "1,536-dimensional vectors.",
+      "hot_required_elements": [
+        "1,536"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-03",
+      "canonical_answer": "Top-10 retrieval as the default.",
+      "hot_required_elements": [
+        "top-10"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-04",
+      "canonical_answer": "3,200 tokens to the preload system prompt.",
+      "hot_required_elements": [
+        "3,200 tokens"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-05",
+      "canonical_answer": "400 tokens with a 50-token overlap.",
+      "hot_required_elements": [
+        "400 tokens",
+        "50-token overlap"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-06",
+      "canonical_answer": "P99 less than or equal to 1,400 milliseconds.",
+      "hot_required_elements": [
+        "1,400 milliseconds",
+        "1,400"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-07",
+      "canonical_answer": "180 days (logarithmic decay with a half-life of 180 days).",
+      "hot_required_elements": [
+        "180 days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-08",
+      "canonical_answer": "0.72 on a 0-1 scale.",
+      "hot_required_elements": [
+        "0.72"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-09",
+      "canonical_answer": "72 hours (every three days).",
+      "hot_required_elements": [
+        "72 hours"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-10",
+      "canonical_answer": "8,192 tokens for standard mode.",
+      "hot_required_elements": [
+        "8,192 tokens",
+        "8,192"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-11",
+      "canonical_answer": "0.8 milliseconds at P50.",
+      "hot_required_elements": [
+        "0.8 milliseconds",
+        "P50"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-12",
+      "canonical_answer": "45 seconds between registered federation partners.",
+      "hot_required_elements": [
+        "45 seconds"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-13",
+      "canonical_answer": "7 years.",
+      "hot_required_elements": [
+        "7 years"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-14",
+      "canonical_answer": "3.2% or below.",
+      "hot_required_elements": [
+        "3.2%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-15",
+      "canonical_answer": "02:00 UTC daily.",
+      "hot_required_elements": [
+        "02:00 UTC"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-16",
+      "canonical_answer": "512 member platforms.",
+      "hot_required_elements": [
+        "512"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-17",
+      "canonical_answer": "300 seconds (5 minutes).",
+      "hot_required_elements": [
+        "300-second",
+        "300 seconds"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-18",
+      "canonical_answer": "51.0% of registered cluster nodes.",
+      "hot_required_elements": [
+        "51.0%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-19",
+      "canonical_answer": "3,600 seconds (1 hour).",
+      "hot_required_elements": [
+        "3,600 seconds"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-20",
+      "canonical_answer": "90 days.",
+      "hot_required_elements": [
+        "90 days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-21",
+      "canonical_answer": "120 requests per minute.",
+      "hot_required_elements": [
+        "120 requests per minute",
+        "120 RPM"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-22",
+      "canonical_answer": "30 calendar days advance notice.",
+      "hot_required_elements": [
+        "30 calendar days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-23",
+      "canonical_answer": "4.7:1.",
+      "hot_required_elements": [
+        "4.7:1"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-24",
+      "canonical_answer": "A minimum of 3 geographically distinct infrastructure nodes.",
+      "hot_required_elements": [
+        "3 geographically distinct",
+        "minimum of 3"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-25",
+      "canonical_answer": "1,800 tokens specifically for governance context.",
+      "hot_required_elements": [
+        "1,800 tokens",
+        "1,800"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-11b",
+      "canonical_answer": "A speedup factor exceeding 10^5 (100,000x) in typical operation.",
+      "hot_required_elements": [
+        "10^5"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-01",
+      "canonical_answer": "70% allocated by transaction volume and 30% allocated equally per active member.",
+      "hot_required_elements": [
+        "70%",
+        "30%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-02",
+      "canonical_answer": "Three years, with staggered elections such that no more than one-third of the board stands for election in any given year.",
+      "hot_required_elements": [
+        "three years",
+        "staggered elections"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-03",
+      "canonical_answer": "Tier 1: annual volume greater than or equal to $1 billion.",
+      "hot_required_elements": [
+        "Tier 1",
+        "$1B",
+        "$1 billion"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-04",
+      "canonical_answer": "30% quorum of eligible member-owners and 55% approval within quorum.",
+      "hot_required_elements": [
+        "30%",
+        "55%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-05",
+      "canonical_answer": "60 calendar days from the date of formal exit declaration.",
+      "hot_required_elements": [
+        "60 calendar days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-06",
+      "canonical_answer": "12% of gross transaction revenue.",
+      "hot_required_elements": [
+        "12%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-06b",
+      "canonical_answer": "Platforms exceeding 500,000 active members pay 15%.",
+      "hot_required_elements": [
+        "500,000",
+        "15%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-07",
+      "canonical_answer": "40% gender diversity and 30% from non-founding geographic regions.",
+      "hot_required_elements": [
+        "40%",
+        "30%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-08",
+      "canonical_answer": "45 calendar days.",
+      "hot_required_elements": [
+        "45 calendar days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-09",
+      "canonical_answer": "25% of outstanding member equity per fiscal year.",
+      "hot_required_elements": [
+        "25%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-10",
+      "canonical_answer": "$8,400 per fiscal year.",
+      "hot_required_elements": [
+        "$8,400",
+        "8,400"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-11",
+      "canonical_answer": "12.5% of annual AI operating budget.",
+      "hot_required_elements": [
+        "12.5%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-12",
+      "canonical_answer": "3.5 times the median member economic contribution.",
+      "hot_required_elements": [
+        "3.5"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-01",
+      "canonical_answer": "10 business days.",
+      "hot_required_elements": [
+        "10 business days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-02",
+      "canonical_answer": "75 out of 100.",
+      "hot_required_elements": [
+        "75 out of 100",
+        "75"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-03",
+      "canonical_answer": "90 days from the date the application is approved.",
+      "hot_required_elements": [
+        "90 days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-04",
+      "canonical_answer": "Every six months (biannually).",
+      "hot_required_elements": [
+        "every six months",
+        "biannually"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-05",
+      "canonical_answer": "15 business days of full membership confirmation.",
+      "hot_required_elements": [
+        "15 business days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-06",
+      "canonical_answer": "60% exit interview completion rate.",
+      "hot_required_elements": [
+        "60%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-07",
+      "canonical_answer": "Acknowledgment within 4 business hours.",
+      "hot_required_elements": [
+        "4 business hours"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-08",
+      "canonical_answer": "5-year intervals.",
+      "hot_required_elements": [
+        "5-year intervals",
+        "5-year"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-09",
+      "canonical_answer": "87% onboarding completion rate within 30 days.",
+      "hot_required_elements": [
+        "87%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-10",
+      "canonical_answer": "4.2 days.",
+      "hot_required_elements": [
+        "4.2 days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-11",
+      "canonical_answer": "2 hours.",
+      "hot_required_elements": [
+        "2 hours"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-12",
+      "canonical_answer": "Minimum NPS of 42.",
+      "hot_required_elements": [
+        "42"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-13",
+      "canonical_answer": "$15 per approved referral, capped at 10 referrals per member per year.",
+      "hot_required_elements": [
+        "$15",
+        "10 referrals"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-09b",
+      "canonical_answer": "8.5% of the prior 12-month gross transaction volume.",
+      "hot_required_elements": [
+        "8.5%",
+        "prior 12-month"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-03b",
+      "canonical_answer": "The drafting committee stage and the membership-wide ratification vote.",
+      "hot_required_elements": [
+        "drafting committee",
+        "ratification vote"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-05b",
+      "canonical_answer": "4.09 in Q1 2024.",
+      "hot_required_elements": [
+        "4.09",
+        "Q1 2024"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-11b",
+      "canonical_answer": "$15.1 billion.",
+      "hot_required_elements": [
+        "$15.1 billion",
+        "15.1"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-06b",
+      "canonical_answer": "$531 per member.",
+      "hot_required_elements": [
+        "$531"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-CS-20b",
+      "canonical_answer": "3.1% annual churn rate.",
+      "hot_required_elements": [
+        "3.1%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-04b",
+      "canonical_answer": "Role definition and behavioral constraints (600-800 tokens), cooperative values and governance framework (600-700 tokens), output format and citation requirements (400-500 tokens), and factual canonical knowledge base (400-1,400 tokens).",
+      "hot_required_elements": [
+        "600-800 tokens",
+        "600-700 tokens",
+        "400-500 tokens"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-05b",
+      "canonical_answer": "Approximately 8% storage overhead.",
+      "hot_required_elements": [
+        "8%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-02b",
+      "canonical_answer": "Average -8.3% versus the 1,536-dimensional standard.",
+      "hot_required_elements": [
+        "-8.3%",
+        "8.3%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-12b",
+      "canonical_answer": "Three consecutive missed heartbeats, representing 135 seconds without response.",
+      "hot_required_elements": [
+        "three consecutive",
+        "135 seconds"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-08b",
+      "canonical_answer": "3.1-6.8% hallucination rate.",
+      "hot_required_elements": [
+        "3.1",
+        "6.8"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-06b",
+      "canonical_answer": "16,384 tokens in extended mode.",
+      "hot_required_elements": [
+        "16,384"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-10b",
+      "canonical_answer": "Conversation history is truncated first, retrieval results are reduced to top-5, and if still over budget the system prompt canonical knowledge section is reduced. Governance and safety instructions are never truncated.",
+      "hot_required_elements": [
+        "conversation history",
+        "top-5",
+        "never truncated"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-AM-07b",
+      "canonical_answer": "Correlation of 0.64 between current and 180-day-prior query topics.",
+      "hot_required_elements": [
+        "0.64"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-01b",
+      "canonical_answer": "Approximately 15-22% additional effective value due to favorable tax treatment for qualified patronage distributions.",
+      "hot_required_elements": [
+        "15-22%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-06c",
+      "canonical_answer": "Federated volume grew at 34% annually versus 22% for non-federated volume.",
+      "hot_required_elements": [
+        "34%",
+        "22%"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-EG-03b",
+      "canonical_answer": "$100M to $999M (between $100 million and $999 million).",
+      "hot_required_elements": [
+        "Tier 2",
+        "$100M",
+        "$999M"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-07b",
+      "canonical_answer": "3 business days for standard inquiries.",
+      "hot_required_elements": [
+        "3 business days"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    },
+    {
+      "id": "R11v2-MJ-02b",
+      "canonical_answer": "Full voting rights are withheld until the member achieves a passing score of 75 out of 100.",
+      "hot_required_elements": [
+        "voting rights",
+        "75 out of 100"
+      ],
+      "expected_grade_cathedral": "HOT",
+      "expected_grade_cold": "MISS"
+    }
+  ]
+}
