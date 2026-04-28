@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LB Omnibox Substrate</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <div class="header">
+    <span class="logo">📚 LB Omnibox</span>
+    <div class="badge">Internal — pre-Prov-14</div>
+  </div>
+
+  <div class="toggle-row">
+    <span class="toggle-label">Substrate Injection</span>
+    <label class="toggle">
+      <input type="checkbox" id="injection-toggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="toggle-row">
+    <span class="toggle-label">Curation Prompts</span>
+    <label class="toggle">
+      <input type="checkbox" id="curation-toggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-value" id="entry-count">—</span>
+      <span class="stat-label">Library entries</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="daemon-status">—</span>
+      <span class="stat-label">Helm daemon</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <button class="btn-primary"   id="open-library">Open My Library</button>
+  <button class="btn-secondary" id="open-settings">Settings</button>
+
+  <div class="footer">Three-Class default: ephemeral · #2315</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

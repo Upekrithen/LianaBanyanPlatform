@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LB Omnibox — Settings</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a192f;
+      color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+      padding: 32px;
+    }
+
+    .container { max-width: 580px; margin: 0 auto; }
+
+    .header { margin-bottom: 32px; }
+    .header h1 { color: #C8A951; font-size: 22px; font-weight: 700; letter-spacing: 0.03em; }
+    .header p  { color: #8892b0; font-size: 13px; margin-top: 6px; }
+
+    .section { background: #112240; border: 1px solid #1e3a5f; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+    .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #C8A951; margin-bottom: 16px; font-weight: 600; }
+
+    .row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #1a2f4a; }
+    .row:last-child { border-bottom: none; padding-bottom: 0; }
+    .row:first-child { padding-top: 0; }
+    .row-label { flex: 1; }
+    .row-label strong { display: block; color: #ccd6f6; font-size: 13px; font-weight: 500; }
+    .row-label span   { display: block; color: #6a7899; font-size: 11px; margin-top: 2px; }
+
+    .toggle { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #1e3a5f; border-radius: 22px; transition: 0.2s; }
+    .slider::before { content: ''; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px; background: #445; border-radius: 50%; transition: 0.2s; }
+    input:checked + .slider { background: #C8A951; }
+    input:checked + .slider::before { transform: translateX(18px); background: #0a192f; }
+
+    select {
+      background: #0a192f;
+      border: 1px solid #1e3a5f;
+      border-radius: 6px;
+      color: #e8e8e8;
+      padding: 6px 10px;
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .danger-zone { background: #1a0a0a; border-color: #4a1a1a; }
+    .danger-zone .section-title { color: #c0392b; }
+
+    .btn-danger {
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-danger:hover { background: #e74c3c; }
+
+    .saved-banner {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #C8A951;
+      color: #0a192f;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+    .saved-banner.show { display: block; }
+
+    .three-class-explainer {
+      background: #0d2035;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: #8892b0;
+      line-height: 1.6;
+    }
+    .three-class-explainer strong { color: #C8A951; display: block; margin-bottom: 6px; }
+    .class-row { display: flex; gap: 10px; margin-top: 8px; }
+    .class-chip { flex: 1; background: #112240; border: 1px solid #1e3a5f; border-radius: 6px; padding: 8px 10px; font-size: 11px; text-align: center; }
+    .class-chip .chip-label { color: #ccd6f6; font-weight: 600; display: block; margin-bottom: 2px; }
+    .class-chip .chip-desc  { color: #6a7899; font-size: 10px; }
+    .class-chip.active-class { border-color: #C8A951; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <h1>📚 LB Omnibox Settings</h1>
+      <p>Three-Class Substrate Sovereignty (#2315) · K530 internal build</p>
+    </div>
+
+    <div class="three-class-explainer">
+      <strong>Three-Class model (default: ephemeral)</strong>
+      The default is forgetting. The exceptions are yours to make.
+      <div class="class-row">
+        <div class="class-chip active-class">
+          <span class="chip-label">Ephemeral</span>
+          <span class="chip-desc">Default. No record.</span>
+        </div>
+        <div class="class-chip">
+          <span class="chip-label">Personal-Permanent</span>
+          <span class="chip-desc">Saved. Member-private. Deletable.</span>
+        </div>
+        <div class="class-chip">
+          <span class="chip-label">Shared-Permanent</span>
+          <span class="chip-desc">Member-chosen scope. Future K531.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core settings -->
+    <div class="section">
+      <div class="section-title">Core</div>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Substrate Injection</strong>
+          <span>Cathedral Effect enrichment on all queries via Helm daemon</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="injection-enabled" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Curation Prompts</strong>
+          <span>Show "Make a book of this?" after searches</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="curation-enabled" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Vendor preference</strong>
+          <span>Conductor's Baton (#2277) routing preference</span>
+        </div>
+        <select id="vendor-preference">
+          <option value="auto">Auto (Baton decides)</option>
+          <option value="perplexity">Perplexity</option>
+          <option value="claude">Claude</option>
+          <option value="chatgpt">ChatGPT</option>
+          <option value="gemini">Gemini</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Privacy / sensitive categories -->
+    <div class="section">
+      <div class="section-title">Sensitive categories — opt into curation prompting</div>
+      <p style="font-size:11px;color:#6a7899;margin-bottom:14px;">
+        By default, searches matching sensitive topics (medical, financial, legal, political)
+        run silently as ephemeral — the "make a book?" prompt is suppressed. Toggle on below
+        to allow curation prompts for that category.
+      </p>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Medical</strong>
+          <span>Symptoms, diagnoses, treatments, prescriptions</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="cat-medical" data-cat="medical">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Financial</strong>
+          <span>Banking, tax, credit, mortgage</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="cat-financial" data-cat="financial">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Legal</strong>
+          <span>Lawsuits, attorneys, court proceedings</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="cat-legal" data-cat="legal">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Political</strong>
+          <span>Parties, elections, ballots, partisan topics</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="cat-political" data-cat="political">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="section danger-zone">
+      <div class="section-title">Danger Zone — Right to be Forgotten</div>
+
+      <div class="row">
+        <div class="row-label">
+          <strong>Forget Everything</strong>
+          <span>Permanently deletes all Personal-Permanent library entries. An audit-trail entry (no content) is kept per #2315 Claim 7.</span>
+        </div>
+        <button class="btn-danger" id="purge-all">Forget Everything</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="saved-banner" id="saved-banner">Settings saved</div>
+
+  <script src="options.js"></script>
+</body>
+</html>

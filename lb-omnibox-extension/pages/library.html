@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LB Omnibox — My Library</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a192f;
+      color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────────────────── */
+    .topbar {
+      background: #112240;
+      border-bottom: 1px solid #1e3a5f;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar h1 { color: #C8A951; font-size: 16px; font-weight: 700; letter-spacing: 0.03em; flex: 1; }
+
+    .search-box {
+      background: #0a192f;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      color: #e8e8e8;
+      padding: 7px 14px;
+      font-size: 13px;
+      outline: none;
+      width: 240px;
+      font-family: inherit;
+    }
+    .search-box::placeholder { color: #445; }
+    .search-box:focus { border-color: #C8A951; }
+
+    .count-badge {
+      font-size: 11px;
+      color: #8892b0;
+      white-space: nowrap;
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: #c0392b;
+      border: 1px solid #4a1a1a;
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-danger:hover { background: #1a0a0a; }
+
+    /* ── Topic filter chips ──────────────────────────────────────────────── */
+    .filter-bar {
+      padding: 12px 24px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #1e3a5f;
+      background: #0d1f35;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #1e3a5f;
+      color: #8892b0;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: transparent;
+      font-family: inherit;
+    }
+    .chip:hover { border-color: #C8A951; color: #C8A951; }
+    .chip.active { background: #C8A951; color: #0a192f; border-color: #C8A951; font-weight: 600; }
+
+    /* ── Main content ────────────────────────────────────────────────────── */
+    .main { padding: 20px 24px; max-width: 900px; margin: 0 auto; }
+
+    /* ── Entry card ──────────────────────────────────────────────────────── */
+    .entry-card {
+      background: #112240;
+      border: 1px solid #1e3a5f;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.15s;
+    }
+    .entry-card:hover { border-color: #2a4a7f; }
+
+    .entry-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .entry-query {
+      flex: 1;
+      font-size: 14px;
+      color: #ccd6f6;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .entry-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .btn-icon {
+      background: none;
+      border: 1px solid #1e3a5f;
+      border-radius: 6px;
+      color: #8892b0;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 8px;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .btn-icon:hover { border-color: #c0392b; color: #c0392b; }
+
+    .entry-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .meta-chip {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid #1e3a5f;
+      color: #6a7899;
+    }
+    .meta-chip.topic { color: #C8A951; border-color: #3a3010; background: #1a1800; }
+    .meta-chip.vendor { color: #64748b; }
+
+    .entry-url {
+      font-size: 10px;
+      color: #3a4a6a;
+      margin-top: 6px;
+      word-break: break-all;
+    }
+    .entry-url a { color: #3a5a8a; text-decoration: none; }
+    .entry-url a:hover { color: #8892b0; }
+
+    /* ── Empty state ─────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #445;
+    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state h2 { color: #8892b0; font-size: 18px; margin-bottom: 8px; }
+    .empty-state p  { font-size: 13px; line-height: 1.6; max-width: 340px; margin: 0 auto; }
+
+    /* ── Confirm modal overlay ───────────────────────────────────────────── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: #112240;
+      border: 1px solid #1e3a5f;
+      border-radius: 12px;
+      padding: 24px 28px;
+      max-width: 400px;
+      width: 90%;
+    }
+    .modal h3  { color: #ccd6f6; margin-bottom: 10px; font-size: 16px; }
+    .modal p   { color: #8892b0; font-size: 13px; margin-bottom: 20px; line-height: 1.5; }
+    .modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-cancel {
+      background: transparent; color: #8892b0; border: 1px solid #1e3a5f;
+      border-radius: 8px; padding: 8px 16px; cursor: pointer; font-family: inherit; font-size: 13px;
+    }
+    .btn-confirm-danger {
+      background: #c0392b; color: #fff; border: none;
+      border-radius: 8px; padding: 8px 16px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <h1>📚 My Substrate Library</h1>
+    <input class="search-box" type="search" id="search-input" placeholder="Search queries…">
+    <span class="count-badge" id="count-badge">0 entries</span>
+    <button class="btn-danger" id="purge-all-btn">Forget Everything</button>
+  </div>
+
+  <!-- Topic filter bar -->
+  <div class="filter-bar" id="filter-bar">
+    <button class="chip active" data-topic="all">All</button>
+  </div>
+
+  <!-- Entry list -->
+  <div class="main">
+    <div id="entry-list">
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <h2>Library is empty</h2>
+        <p>Run a search on Google, Bing, Perplexity, Claude, or ChatGPT and click "Save to my library" when the curation prompt appears.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm delete modal -->
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal">
+      <h3 id="modal-title">Delete this entry?</h3>
+      <p id="modal-body">This entry will be removed from your Personal-Permanent library. An audit-trail record of the deletion is kept (no content).</p>
+      <div class="modal-btns">
+        <button class="btn-cancel"        id="modal-cancel">Cancel</button>
+        <button class="btn-confirm-danger" id="modal-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="library.js"></script>
+</body>
+</html>

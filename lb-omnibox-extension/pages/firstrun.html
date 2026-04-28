@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LB Omnibox — Welcome</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a192f;
+      color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .card {
+      max-width: 620px;
+      width: 100%;
+      background: #112240;
+      border: 1px solid #1e3a5f;
+      border-radius: 16px;
+      padding: 40px 48px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      color: #C8A951;
+      background: #1a1800;
+      border: 1px solid #3a3010;
+      border-radius: 4px;
+      padding: 3px 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #C8A951;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #8892b0;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    /* ── Three-class diagram ─────────────────────────────────────────────── */
+    .three-class {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .class-block {
+      flex: 1;
+      background: #0d2035;
+      border: 1px solid #1e3a5f;
+      border-radius: 10px;
+      padding: 16px 14px;
+      text-align: center;
+    }
+
+    .class-block.highlighted { border-color: #C8A951; background: #1a1800; }
+
+    .class-icon  { font-size: 28px; margin-bottom: 8px; }
+    .class-name  { color: #ccd6f6; font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+    .class-desc  { color: #6a7899; font-size: 11px; line-height: 1.5; }
+    .class-badge {
+      display: inline-block;
+      font-size: 9px;
+      color: #C8A951;
+      border: 1px solid #3a3010;
+      border-radius: 4px;
+      padding: 2px 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 8px;
+    }
+
+    /* ── How it works steps ──────────────────────────────────────────────── */
+    .steps { margin-bottom: 36px; }
+    .steps h3 { color: #8892b0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .step-num {
+      background: #C8A951;
+      color: #0a192f;
+      font-weight: 700;
+      font-size: 12px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-text { color: #a8b2d8; font-size: 13px; line-height: 1.6; padding-top: 2px; }
+    .step-text strong { color: #ccd6f6; }
+
+    /* ── Privacy note ────────────────────────────────────────────────────── */
+    .privacy-note {
+      background: #0d2035;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 12px;
+      color: #6a7899;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .privacy-note strong { color: #C8A951; }
+
+    /* ── CTA ─────────────────────────────────────────────────────────────── */
+    .cta {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: #C8A951;
+      color: #0a192f;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #d9b96a; }
+
+    .btn-secondary {
+      flex: 1;
+      background: transparent;
+      color: #8892b0;
+      border: 1px solid #1e3a5f;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { border-color: #C8A951; color: #C8A951; }
+
+    .footer-note {
+      margin-top: 20px;
+      font-size: 10px;
+      color: #2a3a4a;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="badge">K530 Internal Build · Pre-Prov-14 · Disclosure-preserving</div>
+
+    <h1>📚 LB Omnibox<br>Substrate Injection</h1>
+    <p class="subtitle">
+      Cathedral Effect enrichment at the Chrome omnibox layer.
+      The default is forgetting. The exceptions are yours to make.
+    </p>
+
+    <!-- Three-Class diagram -->
+    <div class="three-class">
+      <div class="class-block highlighted">
+        <div class="class-icon">🌊</div>
+        <div class="class-name">Ephemeral</div>
+        <div class="class-desc">Default. Query runs, answer returns. No record kept anywhere.</div>
+        <div class="class-badge">Default</div>
+      </div>
+      <div class="class-block">
+        <div class="class-icon">📖</div>
+        <div class="class-name">Personal-Permanent</div>
+        <div class="class-desc">You click "Save." Stored privately on your device. Deletable at any time.</div>
+      </div>
+      <div class="class-block">
+        <div class="class-icon">🌐</div>
+        <div class="class-name">Shared-Permanent</div>
+        <div class="class-desc">You choose to share. Family Table, Guild, Tribe, or Public. Coming K531.</div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="steps">
+      <h3>How it works</h3>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Search as usual.</strong> Type in Google, Bing, DuckDuckGo, Perplexity, Claude, ChatGPT, or Gemini — exactly as you always do.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>Cathedral Effect runs silently.</strong> If your Helm daemon is running, the query is substrate-enriched before it leaves your browser. You get better answers automatically.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>You choose durability.</strong> After results load, a small card appears: "Make a book of this search?" Click Save → it goes to your Personal-Permanent library. Click Not now → ephemeral, no record kept.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          <strong>Your library, your rules.</strong> View, search, and delete any entry at any time. "Forget Everything" wipes the library in one click.
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy note -->
+    <div class="privacy-note">
+      <strong>Privacy-by-default:</strong>
+      Incognito / private-browsing sessions are <em>always</em> ephemeral — the curation prompt never appears. Sensitive searches (medical, financial, legal, political) also default to ephemeral unless you explicitly opt in per category in Settings. This is not a privacy feature bolted on. It is the structural model.
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta">
+      <button class="btn-primary" id="go-google">Search on Google</button>
+      <button class="btn-secondary" id="go-settings">Settings</button>
+    </div>
+
+    <div class="footer-note">
+      A&A #2315 Three-Class Substrate Sovereignty · K530 / B128 · Liana Banyan Corporation<br>
+      Internal build — controlled disclosure only. Pre-Prov-14. Not for public distribution.
+    </div>
+
+  </div>
+
+  <script src="firstrun.js"></script>
+</body>
+</html>
