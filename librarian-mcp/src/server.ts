@@ -39,6 +39,12 @@ import { memberConsultScribes } from "./cathedral_supabase/member_consult.js";
 import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
 import { queryPheromone, buildPheromoneIndex } from "./scribes/pheromone.js";
 import { getInboundStatus } from "./scribes/hounds.js";
+import {
+  runDispatchPawn,
+  getDispatchStatus,
+  cancelDispatch,
+  listRecentDispatches,
+} from "./pawn_dispatch.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -4488,6 +4494,93 @@ registerTool(
     }).join("\n");
     const text = `## Test-Mode Audit Log — last ${recent.length} of ${total} events\n\n${summary}\n\nAudit file: ${auditPath}`;
     return { content: [{ type: "text", text }] };
+  }
+);
+
+// ═══════════════════════════════════════════
+// K532 — PAWN-VIA-LIBRARIAN DISPATCH TOOLS
+// ═══════════════════════════════════════════
+
+registerTool(
+  "dispatch_pawn",
+  "K532 — Dispatch a research prompt to Pawn (Perplexity API, sonar-pro). " +
+  "Inlines prompt_content — no local file paths sent to Pawn. " +
+  "Returns dispatch_id; return file written to expected_return_path. " +
+  "Requires PAWN_VIA_LIBRARIAN_DISPATCH_ENABLED=true in config/pawn_dispatch_caps.json. " +
+  "Per-dispatch cost cap $1.00; daily cap $10.00 (configurable).",
+  {
+    prompt_content: z.string().describe("Full prompt text to send to Pawn — NOT a file path; tool inlines content"),
+    prompt_artifact_path: z.string().optional().describe("Optional: Bishop dropzone path of the canonical prompt artifact (for ledger record only)"),
+    expected_return_path: z.string().describe("Path where Pawn's return should be written (e.g., BISHOP_DROPZONE/02_PawnPrompts/PAWN_RETURN_*.md)"),
+    model: z.enum(["sonar-pro", "sonar", "sonar-reasoning", "sonar-reasoning-pro"]).default("sonar-pro").describe("Perplexity model selection"),
+    max_tokens: z.number().int().min(100).max(8000).default(4000).describe("Response length cap in tokens"),
+    dispatch_metadata: z.object({
+      session_id: z.string().optional(),
+      cohort: z.string().optional(),
+      founder_authorized: z.boolean().optional(),
+    }).optional().describe("Bishop-side context for ledger record"),
+  },
+  async ({ prompt_content, prompt_artifact_path, expected_return_path, model, max_tokens, dispatch_metadata }) => {
+    const result = await runDispatchPawn({
+      prompt_content,
+      prompt_artifact_path,
+      expected_return_path,
+      model,
+      max_tokens,
+      dispatch_metadata: dispatch_metadata as Record<string, unknown> | undefined,
+    });
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+registerTool(
+  "check_pawn_dispatch",
+  "K532 — Check status of a Pawn dispatch by dispatch_id. Returns dispatch record including status, cost, return path, attempt_log.",
+  {
+    dispatch_id: z.string().describe("UUID returned by dispatch_pawn"),
+  },
+  async ({ dispatch_id }) => {
+    const record = getDispatchStatus(dispatch_id);
+    if (!record) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: "not_found", dispatch_id }) }] };
+    }
+    return { content: [{ type: "text" as const, text: JSON.stringify(record, null, 2) }] };
+  }
+);
+
+registerTool(
+  "cancel_pawn_dispatch",
+  "K532 — Cancel a pending Pawn dispatch. Marks it cancelled in the ledger. Does not abort already-in-flight HTTP calls.",
+  {
+    dispatch_id: z.string().describe("UUID returned by dispatch_pawn"),
+  },
+  async ({ dispatch_id }) => {
+    const result = cancelDispatch(dispatch_id);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+registerTool(
+  "list_pending_pawn_dispatches",
+  "K532 — List recent Pawn dispatch records. Founder can inspect status, costs, return paths. Returns last N records from the ledger.",
+  {
+    last_n: z.number().int().min(1).max(100).default(20).describe("How many recent records to return"),
+  },
+  async ({ last_n }) => {
+    const records = listRecentDispatches(last_n);
+    const summary = records.map(r => ({
+      dispatch_id: r.dispatch_id,
+      status: r.status,
+      model: r.model,
+      cost_estimate_usd: r.cost_estimate_usd,
+      cost_actual_usd: r.cost_actual_usd,
+      prompt_artifact_path: r.prompt_artifact_path,
+      expected_return_path: r.expected_return_path,
+      dispatch_timestamp: r.dispatch_timestamp,
+      return_timestamp: r.return_timestamp,
+      error_class: r.error_class,
+    }));
+    return { content: [{ type: "text" as const, text: JSON.stringify({ count: summary.length, dispatches: summary }, null, 2) }] };
   }
 );
 

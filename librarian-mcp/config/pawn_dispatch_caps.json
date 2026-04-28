@@ -1,0 +1,8 @@
+{
+  "PAWN_VIA_LIBRARIAN_DISPATCH_ENABLED": false,
+  "per_dispatch_cost_cap_usd": 1,
+  "daily_cost_cap_usd": 10,
+  "default_model": "sonar-pro",
+  "default_max_tokens": 4000,
+  "_comment": "K532 — Founder flips PAWN_VIA_LIBRARIAN_DISPATCH_ENABLED to true ONLY after Phase E validation lands and ledger discipline confirmed. Per-dispatch cap $1.00 (K528 anchor: Keirsey research ~$0.07-0.40 max). Daily cap $10.00 configurable. See BISHOP_DROPZONE/03_BishopHandoffs/K532_ARCHITECTURE_DECISION.md for rationale."
+}
