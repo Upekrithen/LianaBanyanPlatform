@@ -1,0 +1,94 @@
+{
+  "manifest_version": 3,
+  "name": "LB Omnibox — Substrate Injection",
+  "version": "0.1.0",
+  "description": "Three-Class substrate curation at the Chrome omnibox layer. Cathedral Effect for every search. K530 internal build — pre-Prov-14. OMNIBOX_EXTENSION_PUBLISHED=false.",
+
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
+
+  "host_permissions": [
+    "http://127.0.0.1:7712/*",
+    "*://www.google.com/*",
+    "*://google.com/*",
+    "*://www.bing.com/*",
+    "*://bing.com/*",
+    "*://duckduckgo.com/*",
+    "*://*.duckduckgo.com/*",
+    "*://perplexity.ai/*",
+    "*://*.perplexity.ai/*",
+    "*://claude.ai/*",
+    "*://chatgpt.com/*",
+    "*://gemini.google.com/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "LB Omnibox — Substrate Injection"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.google.com/search*",
+        "*://google.com/search*",
+        "*://www.bing.com/search*",
+        "*://bing.com/search*",
+        "*://duckduckgo.com/*",
+        "*://*.duckduckgo.com/*",
+        "*://perplexity.ai/*",
+        "*://*.perplexity.ai/*",
+        "*://claude.ai/*",
+        "*://chatgpt.com/*",
+        "*://gemini.google.com/*"
+      ],
+      "js": ["injected.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "*://www.google.com/search*",
+        "*://google.com/search*",
+        "*://www.bing.com/search*",
+        "*://bing.com/search*",
+        "*://duckduckgo.com/*",
+        "*://*.duckduckgo.com/*",
+        "*://perplexity.ai/*",
+        "*://*.perplexity.ai/*",
+        "*://claude.ai/*",
+        "*://chatgpt.com/*",
+        "*://gemini.google.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["pages/library.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "options_page": "options.html",
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
