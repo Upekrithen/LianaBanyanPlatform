@@ -8,8 +8,7 @@
  * Announces MAJCOM-LB operational + founding-partner recruitment open.
  */
 
-import { useState } from "react";
-import { Helmet } from "react-helmet-async";
+import { useState, useEffect } from "react";
 
 const FOUNDING_PARTNER_TYPES = [
   {
@@ -77,6 +76,12 @@ interface PartnerApplication {
 }
 
 export default function SphinxPhase1() {
+  useEffect(() => {
+    const prev = document.title;
+    document.title = 'The Sphinx Project — Phase 1 | Liana Banyan';
+    return () => { document.title = prev; };
+  }, []);
+
   const [activePartnerType, setActivePartnerType] = useState<string | null>(null);
   const [form, setForm] = useState<PartnerApplication>({
     org_name: "",
@@ -139,16 +144,7 @@ export default function SphinxPhase1() {
   };
 
   return (
-    <>
-      <Helmet>
-        <title>The Sphinx Project — Phase 1 | Liana Banyan</title>
-        <meta
-          name="description"
-          content="The Sphinx Project Phase 1 is operational. MAJCOM-LB (Band-NA) is live. Join as a founding partner — free for nonprofits, cooperatives, and academic institutions."
-        />
-      </Helmet>
-
-      <div className="min-h-screen bg-[#09090f] text-slate-200 font-sans">
+    <div className="min-h-screen bg-[#09090f] text-slate-200 font-sans">
         {/* Hero */}
         <section className="relative overflow-hidden py-24 px-6">
           <div
@@ -534,7 +530,6 @@ export default function SphinxPhase1() {
             </div>
           </div>
         </footer>
-      </div>
-    </>
+    </div>
   );
 }

@@ -63,6 +63,23 @@
     }
     .btn-danger:hover { background: #1a0a0a; }
 
+    .btn-frame-link {
+      background: transparent;
+      color: #C8A951;
+      border: 1px solid #3a3010;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-family: inherit;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-frame-link:hover { background: #1a1800; border-color: #C8A951; }
+
     /* ── Topic filter chips ──────────────────────────────────────────────── */
     .filter-bar {
       padding: 12px 24px;
@@ -207,6 +224,13 @@
     <h1>📚 My Substrate Library</h1>
     <input class="search-box" type="search" id="search-input" placeholder="Search queries…">
     <span class="count-badge" id="count-badge">0 entries</span>
+    <a
+      href="https://lianabanyan.com/helm/library?source=k530"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-frame-link"
+      title="Open your library in LB Frame (lianabanyan.com)"
+    >🏛️ Open in LB Frame</a>
     <button class="btn-danger" id="purge-all-btn">Forget Everything</button>
   </div>
 

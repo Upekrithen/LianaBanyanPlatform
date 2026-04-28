@@ -150,6 +150,46 @@ const MuseumApp = () => {
             {/* TourBanner moved to HEOHOCardFront — only shows on the Deck Card, not globally */}
             <TourCompletionModal />
             <SummonFloatingAlert />
+            {/* K534 — LB Frame back-link: low-opacity ghost link so immersive design stays intact */}
+            <a
+              href="https://lianabanyan.com"
+              title="Go to LB Frame (lianabanyan.com)"
+              style={{
+                position: 'fixed',
+                bottom: '1.25rem',
+                right: '1.25rem',
+                zIndex: 9998,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                padding: '0.4rem 0.85rem',
+                background: 'rgba(10, 25, 47, 0.55)',
+                border: '1px solid rgba(200, 169, 81, 0.25)',
+                borderRadius: '9999px',
+                color: 'rgba(200, 169, 81, 0.55)',
+                fontSize: '0.72rem',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: 500,
+                letterSpacing: '0.03em',
+                textDecoration: 'none',
+                opacity: 0.6,
+                backdropFilter: 'blur(4px)',
+                transition: 'opacity 0.2s, color 0.2s, border-color 0.2s',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLAnchorElement).style.opacity = '1';
+                (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(200, 169, 81, 1)';
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(200, 169, 81, 0.6)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLAnchorElement).style.opacity = '0.6';
+                (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(200, 169, 81, 0.55)';
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(200, 169, 81, 0.25)';
+              }}
+            >
+              ← LB Frame
+            </a>
             </ArchipelagoTourProvider>
             </XRayProvider>
           </AuthProvider>

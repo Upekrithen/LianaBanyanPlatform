@@ -11,6 +11,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCanonicalStats } from '@/hooks/useCanonicalStats';
+import { HelmAtFrame } from '@/components/HelmAtFrame';
 import { useDiscovery } from '@/hooks/useDiscovery';
 import { DeckCardFrame } from '@/components/DeckCardFrame';
 import SpotlightCarousel from '@/components/SpotlightCarousel';
@@ -561,6 +563,7 @@ const Index = () => {
 function PublicLandingView({ navigate, user }: { navigate: (path: string) => void, user: any }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [heroFlipped, setHeroFlipped] = useState(false);      // HEOHO card flip
+  const stats = useCanonicalStats(); // K534 — canonical stats for live numbers on Frame
 
   const [fableFrame, setFableFrame] = useState(1);            // Fable frame index
   const [fableIsPlaying, setFableIsPlaying] = useState(false); // Fable playback state
@@ -1872,6 +1875,12 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
       />
 
       <div className="container" style={isProfessionalTheme ? { maxWidth: '1060px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '2rem', paddingTop: '4rem', width: '100%', position: 'relative', zIndex: 1, boxSizing: 'border-box' } : undefined}>
+        {/* K534 — Tier 2 Helm personalization: shows for authenticated members on Frame */}
+        {user && (
+          <div style={{ width: '100%', maxWidth: '680px', marginBottom: '0.5rem' }}>
+            <HelmAtFrame />
+          </div>
+        )}
         {/* ═══════════════════════════════════════════════════════════════════
             MAIN CARD (larger) — Contains Logo + Hero Card slot + G&G Button
             Flips independently to show "How It Works"
@@ -2820,7 +2829,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
                               </div>
                               <div style={{ background: 'rgba(34, 197, 94, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
                                 <p style={{ color: '#86efac', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>Patent-Backed Bootstrap</p>
-                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>12 provisionals, 2,144 innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="/cephas/articles/one-of-us-building-trust-through-shared-economics" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
+                                <p style={{ color: '#e2e8f0', fontSize: '0.85rem', lineHeight: 1.45 }}><strong style={{ color: '#fbbf24' }}>{stats.patentApplications} provisionals, {stats.innovationCount.toLocaleString()} innovations</strong>. Started with $1K. No burn rate. We own 100% — forever. And WE means You're <a href="/cephas/articles/one-of-us-building-trust-through-shared-economics" onClick={(e) => e.stopPropagation()} style={{ color: '#fbbf24', fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '2px' }}>ONE OF US</a>.</p>
                               </div>
                               <div style={{ background: 'rgba(139, 92, 246, 0.15)', borderRadius: '0.5rem', padding: '0.6rem 1rem', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
                                 <p style={{ color: '#c4b5fd', fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.2rem' }}>The Math</p>
@@ -4061,6 +4070,72 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
               )}
             </div>
           </div>
+        </div>
+
+        {/* K534 — Federation Invitation Copy Block
+            Founder prose-pass: write the copy per B129 framing —
+            "install shows the numbers, then tells you can have this free,
+             even better with Federation (LB Frame Extension)."
+            Knight scaffolds structure; Founder fills prose below.
+            Block is inline (no modal, no popup) — voluntariness-honoring per D.7. */}
+        <div
+          data-xray-id="federation-invitation"
+          style={{
+            maxWidth: '640px',
+            margin: '2.5rem auto 0',
+            padding: '1.5rem 1.75rem',
+            background: 'rgba(10, 22, 40, 0.7)',
+            border: '1px solid rgba(200,169,81,0.2)',
+            borderRadius: '0.875rem',
+            textAlign: 'center',
+            backdropFilter: 'blur(6px)',
+          }}
+        >
+          {/* ─── Stats strip — shows the numbers first ─── */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+            {[
+              { value: stats.innovationCount.toLocaleString(), label: 'Innovations' },
+              { value: stats.patentApplications.toString(), label: 'Provisionals filed' },
+              { value: stats.crownJewels.toString(), label: 'Crown Jewels' },
+            ].map(item => (
+              <div key={item.label}>
+                <div style={{ color: '#C8A951', fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.1 }}>{item.value}</div>
+                <div style={{ color: '#718096', fontSize: '0.72rem', lineHeight: 1.3 }}>{item.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* ─── Invitation prose — Founder writes this ─── */}
+          {/* TODO (Founder prose-pass, post-K534):
+              Replace the placeholder below with the B129 Federation framing.
+              Pattern: "This is free. Use what you already use. Better with Federation." */}
+          <p style={{ color: '#a0aec0', fontSize: '0.85rem', lineHeight: 1.7, margin: '0 0 1rem' }}>
+            {/* [FOUNDER PROSE PLACEHOLDER — See B129 framing: "install shows the numbers, then tells you
+                can have this free, even better with Federation"] */}
+            This is Liana Banyan — free to join, free to use. Everything you see here was built without a single
+            dollar of investor money. Want even more? Install the LB Frame extension and bring the Cooperative
+            with you wherever you go.
+          </p>
+
+          <a
+            href="/helm/library?source=frame-cta"
+            style={{
+              display: 'inline-block',
+              padding: '0.55rem 1.5rem',
+              background: 'rgba(200,169,81,0.12)',
+              border: '1px solid rgba(200,169,81,0.35)',
+              borderRadius: '9999px',
+              color: '#C8A951',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              textDecoration: 'none',
+              transition: 'background 0.15s',
+            }}
+            onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.background = 'rgba(200,169,81,0.22)')}
+            onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.background = 'rgba(200,169,81,0.12)')}
+          >
+            Learn about Federation →
+          </a>
         </div>
 
         <footer className="landing-footer" style={{
