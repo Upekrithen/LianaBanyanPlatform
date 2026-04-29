@@ -1,7 +1,13 @@
 import { lazy } from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Route, Navigate, useParams } from "react-router-dom";
 import { ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
+
+// Small inline redirect for /cephas/glass-door/:slug → /outreach/:slug
+function GlassDoorSlugRedirect() {
+  const { slug } = useParams<{ slug: string }>();
+  return <Navigate to={`/outreach/${slug}`} replace />;
+}
 
 const CephasGatewayPage = lazy(() => import("@/pages/CephasGatewayV2Page"));
 const UnderTheHoodPage = lazy(() => import("@/pages/UnderTheHoodPage"));
@@ -35,8 +41,19 @@ const NorthernProvinceLanding = lazy(() => import("@/pages/NorthernProvinceLandi
 const NorthernProvinceSectionPage = lazy(() => import("@/pages/NorthernProvinceSectionPage"));
 const NorthernNoidTierPage = lazy(() => import("@/pages/NorthernNoidTierPage"));
 
+// K537: Glass Door — Open Outreach (B131)
+const OutreachIndexPage = lazy(() => import("@/pages/OutreachIndexPage"));
+const OutreachLetterDetailPage = lazy(() => import("@/pages/OutreachLetterDetailPage"));
+
 export const cephasRoutes = (
   <>
+    {/* K537: Glass Door — Open Outreach routes (public — no ExplorerRoute gate) */}
+    <Route path="/outreach" element={<LazyPage><OutreachIndexPage /></LazyPage>} />
+    <Route path="/outreach/:slug" element={<LazyPage><OutreachLetterDetailPage /></LazyPage>} />
+    {/* Cephas sub-path alias for Glass Door */}
+    <Route path="/cephas/glass-door" element={<Navigate to="/outreach" replace />} />
+    <Route path="/cephas/glass-door/:slug" element={<GlassDoorSlugRedirect />} />
+
     <Route path="/cephas" element={<ExplorerRoute><LazyPage><CephasGatewayPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/search" element={<ExplorerRoute><LazyPage><CephasSearchPage /></LazyPage></ExplorerRoute>} />
     <Route path="/cephas/press-junket" element={<ExplorerRoute><LazyPage><CephasPressJunketPage /></LazyPage></ExplorerRoute>} />

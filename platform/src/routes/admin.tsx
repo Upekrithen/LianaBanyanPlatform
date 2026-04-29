@@ -40,6 +40,8 @@ const TheBattery = lazy(() => import("@/components/TheBattery"));
 const UniversalDispatch = lazy(() => import("@/components/UniversalDispatch"));
 const ResponseLoggingPage = lazy(() => import("@/pages/admin/ResponseLoggingPage"));
 const ResponseDashboardPage = lazy(() => import("@/pages/admin/ResponseDashboardPage"));
+// K537: Glass Door admin
+const OutreachLettersAdminPage = lazy(() => import("@/pages/admin/OutreachLettersAdminPage"));
 
 export const adminRoutes = (
   <>
@@ -78,5 +80,7 @@ export const adminRoutes = (
     <Route path="/dispatch" element={<ProtectedRoute><LazyPage><div className="container mx-auto p-6 max-w-4xl"><UniversalDispatch /></div></LazyPage></ProtectedRoute>} />
     <Route path="/admin/response-log" element={<ProtectedRoute><LazyPage><ResponseLoggingPage /></LazyPage></ProtectedRoute>} />
     <Route path="/admin/response-dashboard" element={<ProtectedRoute><LazyPage><ResponseDashboardPage /></LazyPage></ProtectedRoute>} />
+    {/* K537: Glass Door letter lock console */}
+    <Route path="/admin/outreach-letters" element={<ProtectedRoute><LazyPage><OutreachLettersAdminPage /></LazyPage></ProtectedRoute>} />
   </>
 );

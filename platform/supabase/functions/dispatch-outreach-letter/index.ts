@@ -51,9 +51,9 @@ Deno.serve(async (req) => {
       );
     }
 
-    if (letter.state !== "scheduled") {
+    if (!["scheduled", "pre_responded"].includes(letter.state)) {
       return new Response(
-        JSON.stringify({ error: `letter state is '${letter.state}', must be 'scheduled'` }),
+        JSON.stringify({ error: `letter state is '${letter.state}', must be 'scheduled' or 'pre_responded'` }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -131,11 +131,14 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Determine target state — pre_responded letters become formally_dispatched
+    const targetState = letter.state === "pre_responded" ? "formally_dispatched" : "dispatched";
+
     // Update outreach_letters state
     await supabase
       .from("outreach_letters")
       .update({
-        state: "dispatched",
+        state: targetState,
         dispatched_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         metadata: {
@@ -145,10 +148,20 @@ Deno.serve(async (req) => {
       })
       .eq("letter_id", letter_id);
 
-    console.log(`[dispatch-outreach-letter] Dispatched ${letter.slug} to ${letter.recipient_name} (verdict: ${verdict?.verdict})`);
+    console.log(`[dispatch-outreach-letter] Dispatched ${letter.slug} to ${letter.recipient_name} (verdict: ${verdict?.verdict}, state: ${targetState})`);
+
+    // C.3: Fan-out Six-Degrees email to flagged members (fire-and-forget)
+    fetch(`${supabaseUrl}/functions/v1/fan-out-six-degrees`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${serviceKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ letter_id }),
+    }).catch((e) => console.error("[dispatch-outreach-letter] fan-out-six-degrees error:", e));
 
     return new Response(
-      JSON.stringify({ dispatched: true, verdict }),
+      JSON.stringify({ dispatched: true, verdict, state: targetState }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (err) {

@@ -28,6 +28,11 @@ const VALID_VOTE_TYPES = [
   "approve", "request_edit", "delay", "redirect", "veto", "abstain",
 ] as const;
 
+// States where governance voting is open
+const GOVERNANCE_VOTE_STATES = ["proposed", "scheduled"] as const;
+// States where amplify + six_degrees_flag are open (broader — includes locked)
+const AMPLIFY_STATES = ["locked", "proposed", "scheduled"] as const;
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -55,20 +60,29 @@ Deno.serve(async (req) => {
     const {
       letter_id,
       vote_type,
+      six_degrees_flag,
       comment,
       proposed_edit,
       proposed_delay_days,
       proposed_redirect_recipient,
     } = body;
 
-    if (!letter_id || !vote_type) {
+    if (!letter_id) {
       return new Response(
-        JSON.stringify({ error: "letter_id and vote_type are required" }),
+        JSON.stringify({ error: "letter_id is required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
-    if (!VALID_VOTE_TYPES.includes(vote_type)) {
+    // Must have either vote_type or six_degrees_flag (or both)
+    if (!vote_type && six_degrees_flag === undefined) {
+      return new Response(
+        JSON.stringify({ error: "vote_type or six_degrees_flag is required" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    if (vote_type && !VALID_VOTE_TYPES.includes(vote_type)) {
       return new Response(
         JSON.stringify({ error: `Invalid vote_type: ${vote_type}` }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -92,9 +106,22 @@ Deno.serve(async (req) => {
       );
     }
 
-    if (!["proposed", "scheduled"].includes(letter.state)) {
+    // Amplify + six_degrees_flag open for locked/proposed/scheduled
+    // Governance votes (non-approve) only open for proposed/scheduled
+    const isAmplifyState = AMPLIFY_STATES.includes(letter.state as typeof AMPLIFY_STATES[number]);
+    const isGovernanceState = GOVERNANCE_VOTE_STATES.includes(letter.state as typeof GOVERNANCE_VOTE_STATES[number]);
+
+    if (!isAmplifyState) {
       return new Response(
         JSON.stringify({ error: `Voting closed — letter state is '${letter.state}'` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const isGovernanceVote = vote_type && vote_type !== "approve";
+    if (isGovernanceVote && !isGovernanceState) {
+      return new Response(
+        JSON.stringify({ error: `Governance voting only available in proposed/scheduled state (currently '${letter.state}')` }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -108,22 +135,26 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Upsert vote
+    // Upsert vote (merge six_degrees_flag with vote_type independently)
+    const upsertData: Record<string, unknown> = {
+      letter_id,
+      member_id: user.id,
+      voted_at: new Date().toISOString(),
+    };
+    if (vote_type !== undefined) {
+      upsertData.vote_type = vote_type;
+      upsertData.comment = comment || null;
+      upsertData.proposed_edit = proposed_edit || null;
+      upsertData.proposed_delay_days = proposed_delay_days || null;
+      upsertData.proposed_redirect_recipient = proposed_redirect_recipient || null;
+    }
+    if (six_degrees_flag !== undefined) {
+      upsertData.six_degrees_flag = Boolean(six_degrees_flag);
+    }
+
     const { error: voteErr } = await serviceSupabase
       .from("outreach_letter_votes")
-      .upsert(
-        {
-          letter_id,
-          member_id: user.id,
-          vote_type,
-          comment: comment || null,
-          proposed_edit: proposed_edit || null,
-          proposed_delay_days: proposed_delay_days || null,
-          proposed_redirect_recipient: proposed_redirect_recipient || null,
-          voted_at: new Date().toISOString(),
-        },
-        { onConflict: "letter_id,member_id" },
-      );
+      .upsert(upsertData, { onConflict: "letter_id,member_id" });
 
     if (voteErr) {
       return new Response(
