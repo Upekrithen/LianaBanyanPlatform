@@ -2825,6 +2825,40 @@ registerTool(
   }
 );
 
+// ─── Vendor Tablet Query (K-Vendor-Layer-Tablet-Capture / B132) ─────────────
+import { vendorTabletQuery } from "./vendor_tablet_capture.js";
+
+registerTool(
+  "vendor_tablet_query",
+  "Query the Stone Tablet vendor payload provenance archive. Returns raw vendor request/response records captured at the boundary between SDK call and internal summarization. Enables 'what was the raw payload of vendor call X?' — closes the provenance loop for Detective investigations. Tablets live at stitchpunks/data/vendor_tablets/<vendor>/<YYYY-MM-DD>.jsonl (append-only, never deleted).",
+  {
+    vendor: z.string().optional().describe("Filter by vendor name: anthropic | openai | google | perplexity | groq | together | ollama"),
+    model: z.string().optional().describe("Filter by model name substring (e.g. 'claude-haiku')"),
+    since_ts: z.string().optional().describe("ISO-8601 cutoff; only records at or after this timestamp"),
+    call_sign: z.string().optional().describe("Exact call_sign to retrieve (e.g. 'vendor-call-abc123def456')"),
+    limit: z.number().int().min(1).max(200).optional().describe("Max records to return, most recent first (default 50)"),
+  },
+  async ({ vendor, model, since_ts, call_sign, limit }) => {
+    try {
+      const records = vendorTabletQuery({ vendor, model, since_ts, call_sign, limit });
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            ok: true,
+            count: records.length,
+            records,
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
 registerTool(
   "detective_investigate",
   "Cross-Scribe investigation (A&A #2316 Detective Scribe + #2317 Phase 0). Phase 0: checks pheromone substrate (constant-time) — returns Provenance Map from index if sufficient hits. Phase 1: falls through to consult_scribes RPC when Phase 0 is sparse. Returns structured findings: phase used, hits, scribe coverage, fallback details. Trigger C: operator provenance query ('where does X live?'). Use this before manually scanning multiple Scribes.",

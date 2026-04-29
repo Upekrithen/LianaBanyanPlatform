@@ -18,6 +18,7 @@ from __future__ import annotations
 import os
 import time
 from . import AdapterResponse
+from r10_cross_vendor.vendor_tablet_capture import capture_vendor_call
 
 # Pricing per million tokens (USD)
 INPUT_PRICE_PER_M  = 0.59
@@ -56,26 +57,50 @@ def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 120) -
     """
     client = _get_client()
 
-    t0 = time.perf_counter()
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
+    request_body = {
+        "model": model,
+        "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user",   "content": user_prompt},
         ],
-        temperature=0.0,
-        max_tokens=200,
-        timeout=timeout,
-    )
-    latency = time.perf_counter() - t0
+        "temperature": 0.0,
+        "max_tokens": 200,
+    }
 
-    text          = response.choices[0].message.content or ""
-    input_tokens  = response.usage.prompt_tokens     if response.usage else 0
-    output_tokens = response.usage.completion_tokens if response.usage else 0
-    cost_usd = (
-        (input_tokens  / 1_000_000) * INPUT_PRICE_PER_M +
-        (output_tokens / 1_000_000) * OUTPUT_PRICE_PER_M
-    )
+    t0 = time.perf_counter()
+    with capture_vendor_call("groq", model, "chat.completions.create") as cap:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user",   "content": user_prompt},
+            ],
+            temperature=0.0,
+            max_tokens=200,
+            timeout=timeout,
+        )
+        latency = time.perf_counter() - t0
+
+        text          = response.choices[0].message.content or ""
+        input_tokens  = response.usage.prompt_tokens     if response.usage else 0
+        output_tokens = response.usage.completion_tokens if response.usage else 0
+        cost_usd = (
+            (input_tokens  / 1_000_000) * INPUT_PRICE_PER_M +
+            (output_tokens / 1_000_000) * OUTPUT_PRICE_PER_M
+        )
+
+        cap.record(
+            request=request_body,
+            response={
+                "choices": [{"message": {"content": text}}],
+                "model": model,
+            },
+            usage={
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost_usd_industry_term_membership_orthogonal": round(cost_usd, 6),
+            },
+        )
 
     return AdapterResponse(
         text=text,

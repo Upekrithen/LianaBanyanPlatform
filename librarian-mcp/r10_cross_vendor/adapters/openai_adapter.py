@@ -9,6 +9,7 @@ Models enter the study through OpenAI's direct API, not via Azure wrapper.
 import os
 import time
 from . import AdapterResponse
+from r10_cross_vendor.vendor_tablet_capture import capture_vendor_call
 
 PRICING = {
     "gpt-4o-mini":  {"input": 0.15, "output": 0.60},
@@ -43,24 +44,49 @@ def call(model: str, system_prompt: str, user_prompt: str) -> AdapterResponse:
     client = OpenAI(api_key=api_key)
     pricing = _get_pricing(model)
 
-    t0 = time.perf_counter()
-    response = client.chat.completions.create(
-        model=model,
-        max_completion_tokens=2048,
-        messages=[
+    request_body = {
+        "model": model,
+        "max_completion_tokens": 2048,
+        "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
-    )
-    latency = time.perf_counter() - t0
+    }
 
-    usage = response.usage
-    input_tokens = usage.prompt_tokens if usage else 0
-    output_tokens = usage.completion_tokens if usage else 0
-    cost = (input_tokens / 1_000_000) * pricing["input"] + \
-           (output_tokens / 1_000_000) * pricing["output"]
+    t0 = time.perf_counter()
+    with capture_vendor_call("openai", model, "chat.completions.create") as cap:
+        response = client.chat.completions.create(
+            model=model,
+            max_completion_tokens=2048,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+        )
+        latency = time.perf_counter() - t0
 
-    text = response.choices[0].message.content if response.choices else ""
+        usage = response.usage
+        input_tokens = usage.prompt_tokens if usage else 0
+        output_tokens = usage.completion_tokens if usage else 0
+        cost = (input_tokens / 1_000_000) * pricing["input"] + \
+               (output_tokens / 1_000_000) * pricing["output"]
+        text = response.choices[0].message.content if response.choices else ""
+
+        cap.record(
+            request=request_body,
+            response={
+                "choices": [{
+                    "message": {"content": text},
+                    "finish_reason": response.choices[0].finish_reason if response.choices else None,
+                }],
+                "model": response.model,
+            },
+            usage={
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost_usd_industry_term_membership_orthogonal": round(cost, 6),
+            },
+        )
 
     return AdapterResponse(
         text=text,

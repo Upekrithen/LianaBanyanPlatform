@@ -18,6 +18,7 @@ import time
 import urllib.request
 import urllib.error
 from . import AdapterResponse
+from r10_cross_vendor.vendor_tablet_capture import capture_vendor_call
 
 OLLAMA_BASE_URL = "http://localhost:11434"
 DEFAULT_MODEL   = "llama3.1:8b-instruct-q4_K_M"
@@ -83,30 +84,40 @@ def call(model: str, system_prompt: str, user_prompt: str, timeout: int = 7200) 
     prompt_eval_count = 0
     eval_count        = 0
 
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            for raw_line in resp:
-                line = raw_line.decode("utf-8").strip()
-                if not line:
-                    continue
-                try:
-                    chunk = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                # Accumulate streamed content
-                delta = chunk.get("message", {}).get("content", "")
-                if delta:
-                    text_parts.append(delta)
-                # Final chunk carries token counts
-                if chunk.get("done", False):
-                    prompt_eval_count = chunk.get("prompt_eval_count", 0)
-                    eval_count        = chunk.get("eval_count", 0)
-                    break
-    except urllib.error.URLError as e:
-        raise ConnectionError(f"Ollama unreachable at {OLLAMA_BASE_URL}: {e}") from e
+    with capture_vendor_call("ollama", model, "api/chat") as cap:
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                for raw_line in resp:
+                    line = raw_line.decode("utf-8").strip()
+                    if not line:
+                        continue
+                    try:
+                        chunk = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    delta = chunk.get("message", {}).get("content", "")
+                    if delta:
+                        text_parts.append(delta)
+                    if chunk.get("done", False):
+                        prompt_eval_count = chunk.get("prompt_eval_count", 0)
+                        eval_count        = chunk.get("eval_count", 0)
+                        break
+        except urllib.error.URLError as e:
+            cap.fail("URLError")
+            raise ConnectionError(f"Ollama unreachable at {OLLAMA_BASE_URL}: {e}") from e
 
-    latency = time.perf_counter() - t0
-    text = "".join(text_parts)
+        latency = time.perf_counter() - t0
+        text = "".join(text_parts)
+
+        cap.record(
+            request={"model": model, "stream": True, "options": payload["options"]},
+            response={"text": text[:500]},  # truncate for tablet (full response could be large)
+            usage={
+                "input_tokens": prompt_eval_count,
+                "output_tokens": eval_count,
+                "cost_usd_industry_term_membership_orthogonal": 0.0,
+            },
+        )
 
     return AdapterResponse(
         text=text,

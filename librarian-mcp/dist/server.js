@@ -21,6 +21,7 @@ import { memberConsultScribes } from "./cathedral_supabase/member_consult.js";
 import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
 import { queryPheromone, buildPheromoneIndex } from "./scribes/pheromone.js";
 import { getInboundStatus } from "./scribes/hounds.js";
+import { runDispatchPawn, getDispatchStatus, cancelDispatch, listRecentDispatches, } from "./pawn_dispatch.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
@@ -2292,6 +2293,34 @@ registerTool("pheromone_build", "Force a full pheromone substrate rebuild from a
         };
     }
 });
+// ─── Vendor Tablet Query (K-Vendor-Layer-Tablet-Capture / B132) ─────────────
+import { vendorTabletQuery } from "./vendor_tablet_capture.js";
+registerTool("vendor_tablet_query", "Query the Stone Tablet vendor payload provenance archive. Returns raw vendor request/response records captured at the boundary between SDK call and internal summarization. Enables 'what was the raw payload of vendor call X?' — closes the provenance loop for Detective investigations. Tablets live at stitchpunks/data/vendor_tablets/<vendor>/<YYYY-MM-DD>.jsonl (append-only, never deleted).", {
+    vendor: z.string().optional().describe("Filter by vendor name: anthropic | openai | google | perplexity | groq | together | ollama"),
+    model: z.string().optional().describe("Filter by model name substring (e.g. 'claude-haiku')"),
+    since_ts: z.string().optional().describe("ISO-8601 cutoff; only records at or after this timestamp"),
+    call_sign: z.string().optional().describe("Exact call_sign to retrieve (e.g. 'vendor-call-abc123def456')"),
+    limit: z.number().int().min(1).max(200).optional().describe("Max records to return, most recent first (default 50)"),
+}, async ({ vendor, model, since_ts, call_sign, limit }) => {
+    try {
+        const records = vendorTabletQuery({ vendor, model, since_ts, call_sign, limit });
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        ok: true,
+                        count: records.length,
+                        records,
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }],
+        };
+    }
+});
 registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Detective Scribe + #2317 Phase 0). Phase 0: checks pheromone substrate (constant-time) — returns Provenance Map from index if sufficient hits. Phase 1: falls through to consult_scribes RPC when Phase 0 is sparse. Returns structured findings: phase used, hits, scribe coverage, fallback details. Trigger C: operator provenance query ('where does X live?'). Use this before manually scanning multiple Scribes.", {
     claim: z.string().min(3).max(500).describe("The claim or named entity to investigate (e.g. 'founder anecdote', 'pheromone substrate', 'BRIDLE Rule 3')"),
     sufficiency_threshold: z.number().int().min(1).optional().describe("Min pheromone hits for Phase 0 to be sufficient (default 10). Lower = prefer pheromone fast-path."),
@@ -3667,6 +3696,68 @@ registerTool("test_mode_audit_summary", "K520.7 — Return recent test-mode bypa
     }).join("\n");
     const text = `## Test-Mode Audit Log — last ${recent.length} of ${total} events\n\n${summary}\n\nAudit file: ${auditPath}`;
     return { content: [{ type: "text", text }] };
+});
+// ═══════════════════════════════════════════
+// K532 — PAWN-VIA-LIBRARIAN DISPATCH TOOLS
+// ═══════════════════════════════════════════
+registerTool("dispatch_pawn", "K532 — Dispatch a research prompt to Pawn (Perplexity API, sonar-pro). " +
+    "Inlines prompt_content — no local file paths sent to Pawn. " +
+    "Returns dispatch_id; return file written to expected_return_path. " +
+    "Requires PAWN_VIA_LIBRARIAN_DISPATCH_ENABLED=true in config/pawn_dispatch_caps.json. " +
+    "Per-dispatch cost cap $1.00; daily cap $10.00 (configurable).", {
+    prompt_content: z.string().describe("Full prompt text to send to Pawn — NOT a file path; tool inlines content"),
+    prompt_artifact_path: z.string().optional().describe("Optional: Bishop dropzone path of the canonical prompt artifact (for ledger record only)"),
+    expected_return_path: z.string().describe("Path where Pawn's return should be written (e.g., BISHOP_DROPZONE/02_PawnPrompts/PAWN_RETURN_*.md)"),
+    model: z.enum(["sonar-pro", "sonar", "sonar-reasoning", "sonar-reasoning-pro"]).default("sonar-pro").describe("Perplexity model selection"),
+    max_tokens: z.number().int().min(100).max(8000).default(4000).describe("Response length cap in tokens"),
+    dispatch_metadata: z.object({
+        session_id: z.string().optional(),
+        cohort: z.string().optional(),
+        founder_authorized: z.boolean().optional(),
+    }).optional().describe("Bishop-side context for ledger record"),
+}, async ({ prompt_content, prompt_artifact_path, expected_return_path, model, max_tokens, dispatch_metadata }) => {
+    const result = await runDispatchPawn({
+        prompt_content,
+        prompt_artifact_path,
+        expected_return_path,
+        model,
+        max_tokens,
+        dispatch_metadata: dispatch_metadata,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("check_pawn_dispatch", "K532 — Check status of a Pawn dispatch by dispatch_id. Returns dispatch record including status, cost, return path, attempt_log.", {
+    dispatch_id: z.string().describe("UUID returned by dispatch_pawn"),
+}, async ({ dispatch_id }) => {
+    const record = getDispatchStatus(dispatch_id);
+    if (!record) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: "not_found", dispatch_id }) }] };
+    }
+    return { content: [{ type: "text", text: JSON.stringify(record, null, 2) }] };
+});
+registerTool("cancel_pawn_dispatch", "K532 — Cancel a pending Pawn dispatch. Marks it cancelled in the ledger. Does not abort already-in-flight HTTP calls.", {
+    dispatch_id: z.string().describe("UUID returned by dispatch_pawn"),
+}, async ({ dispatch_id }) => {
+    const result = cancelDispatch(dispatch_id);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("list_pending_pawn_dispatches", "K532 — List recent Pawn dispatch records. Founder can inspect status, costs, return paths. Returns last N records from the ledger.", {
+    last_n: z.number().int().min(1).max(100).default(20).describe("How many recent records to return"),
+}, async ({ last_n }) => {
+    const records = listRecentDispatches(last_n);
+    const summary = records.map(r => ({
+        dispatch_id: r.dispatch_id,
+        status: r.status,
+        model: r.model,
+        cost_estimate_usd: r.cost_estimate_usd,
+        cost_actual_usd: r.cost_actual_usd,
+        prompt_artifact_path: r.prompt_artifact_path,
+        expected_return_path: r.expected_return_path,
+        dispatch_timestamp: r.dispatch_timestamp,
+        return_timestamp: r.return_timestamp,
+        error_class: r.error_class,
+    }));
+    return { content: [{ type: "text", text: JSON.stringify({ count: summary.length, dispatches: summary }, null, 2) }] };
 });
 // ═══════════════════════════════════════════
 // START

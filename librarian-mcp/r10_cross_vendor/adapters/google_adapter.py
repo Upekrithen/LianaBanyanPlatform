@@ -6,6 +6,7 @@ Env var: GOOGLE_API_KEY
 import os
 import time
 from . import AdapterResponse
+from r10_cross_vendor.vendor_tablet_capture import capture_vendor_call
 
 PRICING = {
     "gemini-2.5-flash":              {"input": 0.15, "output": 0.60},
@@ -35,24 +36,40 @@ def call(model: str, system_prompt: str, user_prompt: str) -> AdapterResponse:
     client = genai.Client(api_key=api_key)
     pricing = _get_pricing(model)
 
+    request_body = {
+        "model": model,
+        "contents": user_prompt,
+        "config": {"system_instruction": system_prompt, "max_output_tokens": 2048},
+    }
+
     t0 = time.perf_counter()
-    response = client.models.generate_content(
-        model=model,
-        contents=user_prompt,
-        config=genai.types.GenerateContentConfig(
-            system_instruction=system_prompt,
-            max_output_tokens=2048,
-        ),
-    )
-    latency = time.perf_counter() - t0
+    with capture_vendor_call("google", model, "models.generate_content") as cap:
+        response = client.models.generate_content(
+            model=model,
+            contents=user_prompt,
+            config=genai.types.GenerateContentConfig(
+                system_instruction=system_prompt,
+                max_output_tokens=2048,
+            ),
+        )
+        latency = time.perf_counter() - t0
 
-    usage = response.usage_metadata
-    input_tokens = usage.prompt_token_count or 0
-    output_tokens = usage.candidates_token_count or 0
-    cost = (input_tokens / 1_000_000) * pricing["input"] + \
-           (output_tokens / 1_000_000) * pricing["output"]
+        usage = response.usage_metadata
+        input_tokens = usage.prompt_token_count or 0
+        output_tokens = usage.candidates_token_count or 0
+        cost = (input_tokens / 1_000_000) * pricing["input"] + \
+               (output_tokens / 1_000_000) * pricing["output"]
+        text = response.text or ""
 
-    text = response.text or ""
+        cap.record(
+            request=request_body,
+            response={"text": text, "model": model},
+            usage={
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost_usd_industry_term_membership_orthogonal": round(cost, 6),
+            },
+        )
 
     return AdapterResponse(
         text=text,

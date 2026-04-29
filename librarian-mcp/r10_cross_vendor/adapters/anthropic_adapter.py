@@ -6,6 +6,7 @@ Env var: ANTHROPIC_API_KEY
 import os
 import time
 from . import AdapterResponse
+from r10_cross_vendor.vendor_tablet_capture import capture_vendor_call
 
 PRICING = {
     "claude-haiku-4-5-20251001": {"input": 1.00, "output": 5.00},
@@ -33,21 +34,42 @@ def call(model: str, system_prompt: str, user_prompt: str) -> AdapterResponse:
     client = anthropic.Anthropic(api_key=api_key)
     pricing = _get_pricing(model)
 
+    request_body = {
+        "model": model,
+        "max_tokens": 2048,
+        "system": system_prompt,
+        "messages": [{"role": "user", "content": user_prompt}],
+    }
+
     t0 = time.perf_counter()
-    response = client.messages.create(
-        model=model,
-        max_tokens=2048,
-        system=system_prompt,
-        messages=[{"role": "user", "content": user_prompt}],
-    )
-    latency = time.perf_counter() - t0
+    with capture_vendor_call("anthropic", model, "messages.create") as cap:
+        response = client.messages.create(
+            model=model,
+            max_tokens=2048,
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_prompt}],
+        )
+        latency = time.perf_counter() - t0
 
-    input_tokens = response.usage.input_tokens
-    output_tokens = response.usage.output_tokens
-    cost = (input_tokens / 1_000_000) * pricing["input"] + \
-           (output_tokens / 1_000_000) * pricing["output"]
+        input_tokens = response.usage.input_tokens
+        output_tokens = response.usage.output_tokens
+        cost = (input_tokens / 1_000_000) * pricing["input"] + \
+               (output_tokens / 1_000_000) * pricing["output"]
+        text = response.content[0].text if response.content else ""
 
-    text = response.content[0].text if response.content else ""
+        cap.record(
+            request=request_body,
+            response={
+                "content": [{"text": text}],
+                "model": response.model,
+                "stop_reason": response.stop_reason,
+            },
+            usage={
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost_usd_industry_term_membership_orthogonal": round(cost, 6),
+            },
+        )
 
     return AdapterResponse(
         text=text,
