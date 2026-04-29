@@ -28,11 +28,62 @@ WRASSE_SESSION = "K540/B132"
 # Keeps injection compact while preserving substance
 MAX_RESOLUTION_CHARS = 400
 
+# Injection size cap (Phase E condition 2 — K-Wrasse-Wiring-Hardening)
+# Uses len(text)//4 token-estimate convention matching wrasse_hook_ext.py.
+# When the assembled block exceeds this cap, whole entries are dropped
+# (oldest-verified first — sort descending by last_verified_ts so oldest
+# are at the end, then pop from end) until the block fits.
+MAX_INJECTION_TOKENS = 2000
+
 
 def _truncate(text: str, max_chars: int = MAX_RESOLUTION_CHARS) -> str:
     if len(text) <= max_chars:
         return text
     return text[:max_chars - 3] + "..."
+
+
+def _estimate_tokens(text: str) -> int:
+    """Estimate token count using the len//4 convention."""
+    return len(text) // 4
+
+
+def _apply_size_cap(
+    matches: List[dict],
+    header_lines: List[str],
+    footer_lines: List[str],
+    entry_formatter,
+    cap: int = MAX_INJECTION_TOKENS,
+) -> tuple:
+    """
+    Enforce MAX_INJECTION_TOKENS on an assembled injection block.
+
+    Strategy: sort matches descending by last_verified_ts (newest first),
+    so oldest entries are at the END of the list.  Pop from end until the
+    assembled text fits within cap.  Whole entries only — never mid-truncate
+    canonical_resolution.
+
+    Returns (final_matches, n_dropped).
+    """
+    working = list(matches)
+    # Sort descending by last_verified_ts so oldest are at the tail
+    working.sort(key=lambda m: m.get("last_verified_ts", ""), reverse=True)
+
+    def _assemble(mlist):
+        lines = list(header_lines)
+        for m in mlist:
+            lines.extend(entry_formatter(m))
+        lines.extend(footer_lines)
+        return "\n".join(lines)
+
+    n_dropped = 0
+    while working:
+        assembled = _assemble(working)
+        if _estimate_tokens(assembled) <= cap:
+            break
+        working.pop()  # drop oldest (tail of descending sort)
+        n_dropped += 1
+
+    return working, n_dropped
 
 
 def generate_knight_prelude(
@@ -51,7 +102,8 @@ def generate_knight_prelude(
         return ""
 
     sid = session_id or "K-?"
-    lines = [
+
+    header_lines = [
         "=" * 70,
         f"WRASSE PRE-INJECTION v{WRASSE_VERSION} ({WRASSE_SESSION})",
         f"Session: {sid} | Matches: {len(matches)} | Read BEFORE first reasoning step.",
@@ -59,15 +111,28 @@ def generate_knight_prelude(
         "=" * 70,
         "",
     ]
+    footer_lines = [
+        "=" * 70,
+        "END WRASSE PRE-INJECTION -- proceed with task.",
+        "=" * 70,
+    ]
 
-    for m in matches:
-        lines.append(f"[{m['trigger_id']}] {m['trigger_class'].upper()}: {m['trigger_pattern']}")
-        lines.append(f"  {_truncate(m['canonical_resolution'])}")
+    def _format_entry(m):
+        return [
+            f"[{m['trigger_id']}] {m['trigger_class'].upper()}: {m['trigger_pattern']}",
+            f"  {_truncate(m['canonical_resolution'])}",
+            "",
+        ]
+
+    final_matches, n_dropped = _apply_size_cap(matches, header_lines, footer_lines, _format_entry)
+
+    lines = list(header_lines)
+    for m in final_matches:
+        lines.extend(_format_entry(m))
+    if n_dropped > 0:
+        lines.append(f"[Wrasse: dropped {n_dropped} entries to fit MAX_INJECTION_TOKENS={MAX_INJECTION_TOKENS}]")
         lines.append("")
-
-    lines.append("=" * 70)
-    lines.append("END WRASSE PRE-INJECTION -- proceed with task.")
-    lines.append("=" * 70)
+    lines.extend(footer_lines)
     return "\n".join(lines)
 
 
@@ -83,14 +148,23 @@ def generate_pawn_prelude(
     if not matches:
         return ""
 
-    lines = [
+    header_lines = [
         f"[WRASSE v{WRASSE_VERSION}] Pre-resolved context ({len(matches)} items):",
         "",
     ]
-    for m in matches:
-        # Pawn gets abbreviated format: just pattern + first 200 chars of resolution
-        lines.append(f"  {m['trigger_pattern']}: {_truncate(m['canonical_resolution'], 200)}")
-    lines.append("")
+    footer_lines = [""]
+
+    def _format_entry(m):
+        return [f"  {m['trigger_pattern']}: {_truncate(m['canonical_resolution'], 200)}"]
+
+    final_matches, n_dropped = _apply_size_cap(matches, header_lines, footer_lines, _format_entry)
+
+    lines = list(header_lines)
+    for m in final_matches:
+        lines.extend(_format_entry(m))
+    if n_dropped > 0:
+        lines.append(f"[Wrasse: dropped {n_dropped} entries to fit MAX_INJECTION_TOKENS={MAX_INJECTION_TOKENS}]")
+    lines.extend(footer_lines)
     return "\n".join(lines)
 
 
@@ -108,11 +182,19 @@ def generate_bishop_hook_block(
     if not matches:
         return ""
 
-    lines = [
-        f"[Wrasse/{WRASSE_SESSION}] {len(matches)} pre-resolved context items:",
-    ]
-    for m in matches:
-        lines.append(f"  [{m['trigger_id']}] {m['trigger_pattern']}: {_truncate(m['canonical_resolution'], 150)}")
+    header_lines = [f"[Wrasse/{WRASSE_SESSION}] {len(matches)} pre-resolved context items:"]
+    footer_lines = []
+
+    def _format_entry(m):
+        return [f"  [{m['trigger_id']}] {m['trigger_pattern']}: {_truncate(m['canonical_resolution'], 150)}"]
+
+    final_matches, n_dropped = _apply_size_cap(matches, header_lines, footer_lines, _format_entry)
+
+    lines = list(header_lines)
+    for m in final_matches:
+        lines.extend(_format_entry(m))
+    if n_dropped > 0:
+        lines.append(f"[Wrasse: dropped {n_dropped} entries to fit MAX_INJECTION_TOKENS={MAX_INJECTION_TOKENS}]")
     return "\n".join(lines)
 
 

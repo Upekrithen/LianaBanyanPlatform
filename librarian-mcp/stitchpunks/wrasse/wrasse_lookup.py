@@ -20,18 +20,57 @@ import json
 import re
 import sys
 import time
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 REGISTRY_PATH = Path(__file__).parent / "wrasse_registry.jsonl"
+
+# Staleness filter constants (Phase E condition 1 — K-Wrasse-Wiring-Hardening)
+# Entries older than STALENESS_DAYS that have fewer than MIN_VERIFICATION_COUNT
+# verifications are excluded at load-time.  Cache invalidation via mtime means
+# that once a Detective resolution bumps verification_count, the registry mtime
+# changes, cache reloads, and the filter re-applies automatically.
+STALENESS_DAYS = 30
+MIN_VERIFICATION_COUNT = 3
 
 # Module-level cache: reloaded on registry file mtime change
 _CACHE: List[Dict[str, Any]] = []
 _CACHE_MTIME: float = 0.0
 
 
+def _is_stale_and_unverified(obj: Dict[str, Any], now: datetime) -> bool:
+    """Return True if entry should be filtered out due to staleness."""
+    ts_raw = obj.get("last_verified_ts", "")
+    count = obj.get("verification_count", 0)
+
+    if count >= MIN_VERIFICATION_COUNT:
+        return False  # well-verified — always keep regardless of age
+
+    if not ts_raw:
+        return False  # no timestamp — assume fresh to avoid accidental drops
+
+    try:
+        # Parse ISO-8601 timestamp (supports Z suffix and +00:00 offset)
+        ts_str = ts_raw.replace("Z", "+00:00")
+        last_verified = datetime.fromisoformat(ts_str)
+        if last_verified.tzinfo is None:
+            last_verified = last_verified.replace(tzinfo=timezone.utc)
+    except (ValueError, AttributeError):
+        return False  # unparseable timestamp — err on the side of keeping
+
+    age_days = (now - last_verified).days
+    return age_days > STALENESS_DAYS
+
+
 def _load_registry(path: Path = REGISTRY_PATH) -> List[Dict[str, Any]]:
-    """Load registry from JSONL, compiling trigger_regex for each entry."""
+    """Load registry from JSONL, compiling trigger_regex for each entry.
+
+    Applies staleness filter at load time: entries with last_verified_ts older
+    than STALENESS_DAYS AND verification_count < MIN_VERIFICATION_COUNT are
+    excluded.  Cache invalidation via mtime means Detective-updated entries
+    re-enter the active set automatically on next lookup.
+    """
     global _CACHE, _CACHE_MTIME
     try:
         mtime = path.stat().st_mtime
@@ -40,6 +79,7 @@ def _load_registry(path: Path = REGISTRY_PATH) -> List[Dict[str, Any]]:
     if mtime == _CACHE_MTIME and _CACHE:
         return _CACHE
 
+    now = datetime.now(timezone.utc)
     entries: List[Dict[str, Any]] = []
     with open(path, "r", encoding="utf-8") as fh:
         for raw in fh:
@@ -51,6 +91,8 @@ def _load_registry(path: Path = REGISTRY_PATH) -> List[Dict[str, Any]]:
             except json.JSONDecodeError:
                 continue
             if obj.get("type") == "header":
+                continue
+            if _is_stale_and_unverified(obj, now):
                 continue
             # Compile regex once at load time for sub-ms lookup
             pattern = obj.get("trigger_regex", "")
@@ -99,6 +141,7 @@ def lookup(
                 "trigger_class": entry.get("trigger_class", ""),
                 "trigger_pattern": entry.get("trigger_pattern", ""),
                 "canonical_resolution": entry.get("canonical_resolution", ""),
+                "last_verified_ts": entry.get("last_verified_ts", ""),
             })
             if len(results) >= max_matches:
                 break
