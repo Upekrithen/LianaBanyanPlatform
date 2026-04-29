@@ -16,7 +16,7 @@ date: "April 29, 2026"
 **Filing Type:** Provisional Patent Application (USPTO Patent Center)
 **Priority Date Goal:** 2026-04-29 (B133 fire trigger, Founder authorization)
 **Conversion Deadline (Prov 14 chain continuation):** April 29, 2027
-**Filing Counsel (post-conversion):** Harrity & Harrity (#1) / Lloyd & Mousilli (#2)
+**Filing path:** USPTO Patent Center direct or via counsel of Founder's choosing — Founder discretion.
 
 **Title of Invention:**
 *Cooperative-Platform AI Memory Infrastructure — Agent-Spawn Boundary Pre-Injection,
@@ -26,9 +26,9 @@ Control, Cut In Half / Both-Feet, and Multi-Cylinder Dispatch Architecture)*
 
 **Filed under:** #2260 Cooperative Defensive Patent Pledge (Liana Banyan Corporation, B098).
 
-**PUBLICATION GATE HARD:** This specification is **internal-only** (counsel review + Founder
-fire required). Knight scope: build and stage. Founder + counsel scope: review and authorize
-USPTO submission. Mechanical Fire Control per Founder directive (B132 turn ~35).
+**PUBLICATION GATE HARD:** This specification is **internal-only** until Founder fire.
+Knight scope: build and stage. Founder scope: review and authorize USPTO submission.
+Mechanical Fire Control per Founder directive (B132 turn ~35).
 
 ---
 
@@ -37,12 +37,12 @@ USPTO submission. Mechanical Fire Control per Founder directive (B132 turn ~35).
 This provisional application bundles the following innovations into one specification,
 organized by reduction-to-practice cluster. Each innovation is presented with its
 A&A formal description (where formalized) or thresh-stub description (where formal
-drafting is pending). All claims-language is provisional-grade; counsel polishes during
-the 12-month conversion window.
+drafting is pending). All claims-language is provisional-grade; refined per Founder direction
+during the 12-month conversion window.
 
 Innovation numbers from #2327 onward are **pre-filing candidate assignments**. Bishop
 assigns final canonical sequence at filing-preparation time. Where a number is marked
-"candidate," counsel should verify non-collision against the A&A formal ledger before
+"candidate," Founder verifies non-collision against the A&A formal ledger before
 conversion.
 
 | # | Title | Short Description |
@@ -107,7 +107,7 @@ Per-innovation empirical anchor summary:
 
 This provisional application is filed within the priority-date window opening 2026-04-29 (B133
 Founder fire trigger). The 12-month conversion deadline for this filing anchors no later than
-2027-04-29. Counsel coordination is contemplated post-filing for conversion-time claim polish.
+2027-04-29. Conversion-time claim polish proceeds per Founder direction.
 The Prov 14 application (filed 2026-04-26, Priority Date 2026-04-26) is the direct predecessor;
 this filing continues the sequential provisional chain protecting the cooperative-platform AI
 memory substrate architecture.
@@ -120,7 +120,7 @@ The following sections present the full description of each innovation. Each sec
 with the innovation's title and short description, followed by the complete thresh-stub
 description (formal A&A drafting pending) or existing formal description. Method claims and
 system claims are both presented for patentable innovations. All claims-language is
-provisional-grade; counsel polishes during conversion.
+provisional-grade; refined per Founder direction during conversion.
 
 ---
 
@@ -1085,7 +1085,7 @@ entries unchanged, achieving alias coverage through the lowest-friction modifica
 
 \newpage
 
-# Filing Notes and Counsel Guidance
+# Filing Notes
 
 ---
 
@@ -1107,11 +1107,11 @@ conversion to utility applications:
 | #2335 | Registry-Keyword-Extension Method + System | K473→K547/B133 |
 
 Innovations #2328 (Scavenger Scribe, B131) may require separate filing or inclusion here
-as the Sweeper (#2329) companion. Counsel to advise on clustering at conversion time.
+as the Sweeper (#2329) companion. Founder decides clustering at conversion time.
 
 Innovations #2308, #2311, #2313-#2326 (B127-B131 post-Prov-14 AA formals) are staged in
 `BISHOP_DROPZONE/12_Innovations_AA/` and are candidates for a companion Prov 15 cluster or
-the Prov 14 conversion scope. Counsel to advise on optimal clustering.
+the Prov 14 conversion scope. Founder decides optimal clustering.
 
 ## Stone Tablet Anchors — Call Sign Index
 
@@ -1131,16 +1131,15 @@ All reduction-to-practice evidence cited in this filing is addressable by Call S
 
 Per Fire Control Directive (#2330): this specification is internal-only pending:
 1. Founder review of this document
-2. Counsel review (Harrity & Harrity / Lloyd & Mousilli)
-3. Founder explicit fire authorization for USPTO submission
+2. Founder explicit fire authorization for USPTO submission
 
 Knight scope: build and stage this document.
-Founder + counsel scope: review and authorize submission.
+Founder scope: review and authorize submission.
 
 The mechanical gate flag is: `USPTO_SUBMISSION_AUTHORIZED=false` (this specification).
 
 *Filed: K-Prov-15-Spec-Consolidation / B133 / 2026-04-29 by Knight*
-*Awaiting Founder + counsel review per Fire Control Directive (#2330)*
+*Awaiting Founder review per Fire Control Directive (#2330)*
 
 ---
 
