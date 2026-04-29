@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WrasseRegistryEntry",
+  "description": "Wrasse Scribe registry entry — pre-resolved trigger for agent-spawn boundary injection. K540/B132.",
+  "type": "object",
+  "required": ["trigger_id", "trigger_class", "trigger_pattern", "trigger_regex", "canonical_resolution", "last_verified_ts", "verification_count", "source_session"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Set to 'header' for first-line registry header only",
+      "enum": ["header"]
+    },
+    "trigger_id": {
+      "type": "string",
+      "description": "Unique identifier: W-NNN (W-001, W-002, ...)",
+      "pattern": "^W-[0-9]{3,}$"
+    },
+    "trigger_class": {
+      "type": "string",
+      "description": "Class of trigger pattern",
+      "enum": ["k_prefix", "ts_prefix", "call_sign", "vocabulary", "file_path", "canonical_number"]
+    },
+    "trigger_pattern": {
+      "type": "string",
+      "description": "Human-readable pattern name (e.g. 'K461', 'BRIDLE', 'KNIGHT_QUEUE.md')"
+    },
+    "trigger_regex": {
+      "type": "string",
+      "description": "Regex string for first-pass match against session context (case-insensitive). Anchored to avoid false positives."
+    },
+    "canonical_resolution": {
+      "type": "string",
+      "description": "Full text resolution that replaces the need for rote-derivation. Should be concise but complete."
+    },
+    "last_verified_ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last verification"
+    },
+    "verification_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of times this resolution has been verified correct across sessions"
+    },
+    "source_session": {
+      "type": "string",
+      "description": "Session that sourced this entry (e.g. K540, B132)"
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["public", "internal"],
+      "default": "public"
+    },
+    "provisional_15_candidate": {
+      "type": "boolean",
+      "description": "True if this entry is reduction-to-practice for Provisional 15 claims"
+    }
+  },
+  "additionalProperties": false
+}

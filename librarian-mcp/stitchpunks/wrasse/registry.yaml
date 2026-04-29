@@ -1,0 +1,70 @@
+---
+# Wrasse Scribe Registry — K540/B132
+# Pre-injection trigger registry for agent-spawn boundary rote-cognition tax reduction.
+# Companion to: librarian-mcp/stitchpunks/wrasse/wrasse_registry.jsonl
+
+scribe_id: WrasseRegistry
+version: "1.0.0"
+session_opened: K540
+bishop_session: B132
+opened_date: "2026-04-29"
+
+description: >
+  Registry of trigger-pattern → canonical-resolution pairs for the Wrasse Scribe.
+  Injected before an agent's first reasoning step at session-spawn boundaries
+  (Knight K-prompt prelude, Bishop SessionStart hook, Pawn dispatch wrapper).
+  Empirical anchor: K539 context delta ~22pp rote-cognition tax. Founder 90% reduction claim.
+  Patent relevance: A&A #2317 (Pheromone Substrate, sub-linear scaling).
+  Provisional 15 inclusion: Phase E ratification required (Fire Control directive active).
+
+trigger_classes:
+  - k_prefix      # K-session number → what that session did, files touched, tag produced
+  - ts_prefix     # TS-NNN → Toolsmith canonical recipe
+  - call_sign     # git tag → commit hash, semantic description
+  - vocabulary    # Named primitive → definition + location
+  - file_path     # Canonical path → absolute path + description
+  - canonical_number  # Stat or number → current canonical value
+
+injection_surfaces:
+  bishop: "hook-injected-context via ~/.claude/hooks/bishop_librarian_gate.py extension"
+  knight: "prepend-to-prompt in K-prompt prelude block (WRASSE PRE-INJECTION section)"
+  pawn:   "prepend-to-prompt via librarian-mcp/scripts/pawn_with_substrate.py wrapper"
+
+lookup_strategy:
+  primary: "regex (compiled, case-insensitive, sub-ms per entry)"
+  fallback: "embedding-based (Phase 2 — defer pending empirical miss-rate measurement)"
+  target_latency: "sub-ms per registry entry per #2317 Pheromone discipline"
+
+architecture_decisions:
+  D1_trigger_detection: >
+    Regex-first MVP. All 6 trigger classes are well-structured and regex-deterministic.
+    Embedding adds latency and API cost. Defer embedding fallback to Phase 2 based on
+    empirical miss rate from wrasse_measure.py Phase D runs.
+  D2_delivery: >
+    Bishop: hook-injected-context (existing discipline_wing hook extended).
+    Knight: prepend-to-prompt (standard K-prompt prelude section).
+    Pawn: prepend-to-prompt (pawn_with_substrate.py wrapper).
+    Rationale: hook is cleanest for Bishop (existing infrastructure); prepend is
+    universal for Knight/Pawn without requiring MCP tool registration changes.
+
+measurement:
+  baseline_session: K539
+  observed_context_delta: "~22pp (94% -> 27% on fresh Cursor session open)"
+  founder_claim_reduction: "90% of session-opening rote-cognition token tax"
+  target_measurement_method: "wrasse_measure.py Phase D harness — K540+ session comparison"
+  ledger_path: "librarian-mcp/stitchpunks/wrasse/session_ledger.jsonl"
+
+files:
+  - wrasse_registry.jsonl  # The trigger registry (append-only, Stone Tablet compliant)
+  - wrasse_lookup.py       # Fast regex lookup engine
+  - wrasse_inject.py       # Pre-injection text generator
+  - wrasse_measure.py      # Measurement harness (baseline + Wrasse-on delta)
+  - wrasse_hook_ext.py     # Bishop SessionStart hook extension
+  - schema.json            # Entry schema definition
+  - registry.yaml          # This file — scribe metadata
+  - README.md              # Architecture overview
+
+publication_gate: >
+  HARD GATE: ship results internal-only until Founder Phase E review +
+  Prov 15 inclusion ratification. Per Fire Control directive — Knight builds +
+  measures; Founder fires Prov 15 filing trigger.
