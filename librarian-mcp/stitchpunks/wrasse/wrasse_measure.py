@@ -138,12 +138,26 @@ def measure_session_text(
     total_chars = len(session_text)
     total_tokens = estimate_tokens(session_text)
 
+    # Detect and skip the Wrasse injection block to avoid false-positive
+    # substantive detection (e.g. W-019 canonical text contains "git tag").
+    _WRASSE_BLOCK_START = re.compile(r"WRASSE PRE-INJECTION", re.IGNORECASE)
+    _WRASSE_BLOCK_END = re.compile(r"END WRASSE PRE-INJECTION|# Wrasse OFF", re.IGNORECASE)
+    in_wrasse_block = False
+
     rote_chars = 0
     rote_calls = []
     first_substantive_idx: Optional[int] = None
     chars_before_substantive = 0
 
     for i, seg in enumerate(segments):
+        # Track wrasse injection block boundaries
+        if _WRASSE_BLOCK_START.search(seg):
+            in_wrasse_block = True
+        if in_wrasse_block:
+            if _WRASSE_BLOCK_END.search(seg):
+                in_wrasse_block = False
+            continue  # Skip injection block segments entirely
+
         classification = classify_tool_call(seg)
         if classification == "substantive" and first_substantive_idx is None:
             first_substantive_idx = i
@@ -173,7 +187,7 @@ def measure_session_text(
         "first_substantive_segment_idx": first_substantive_idx,
         "wrasse_matches": len(wrasse_matches),
         "wrasse_injectable_chars": wrasse_injectable_chars,
-        "wrasse_injectable_tokens": estimate_tokens(str(wrasse_injectable_chars)),
+        "wrasse_injectable_tokens": wrasse_injectable_chars // CHARS_PER_TOKEN,
         "rote_calls_sample": rote_calls[:5],
     }
 
