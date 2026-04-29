@@ -1,0 +1,38 @@
+{
+  "_comment": "Knowledge Pump empirical test configuration. PUBLICATION GATE HARD — see K_KP_ARCHITECTURE_DECISION.md.",
+  "_fire_control": "Founder flips KNOWLEDGE_PUMP_TEST_ENABLED to true ONLY after Phase E validation lands and ledger discipline confirmed. Knight builds; Founder fires.",
+  "KNOWLEDGE_PUMP_TEST_ENABLED": false,
+  "test_class": "Test2_MasteryAwareRetrieval",
+  "pilot_fact_count": 20,
+  "mastery_domains": ["chess", "military", "culinary", "music", "linguistics"],
+  "retrieval_arms": ["vanilla", "kp_on"],
+  "primary_metric": "per_dollar_correctness",
+  "secondary_metric": "hot_rate_delta",
+  "publication_threshold": {
+    "per_dollar_correctness_lift_min": 1.2,
+    "hot_rate_delta_pp_min": 10
+  },
+  "budget": {
+    "per_condition_pause_usd": 1000,
+    "target_vendor_spend_usd": 22,
+    "max_vendor_spend_usd": 30
+  },
+  "corpus": {
+    "source": "hybrid",
+    "base": "R11-v2-K535",
+    "pilot_facts": [
+      "CS-01", "CS-03", "CS-06", "CS-08", "CS-21",
+      "AM-01", "AM-03", "AM-07", "AM-18",
+      "EG-01", "EG-03", "EG-05", "EG-20",
+      "MJ-01", "MJ-05", "MJ-10",
+      "RC-04", "RC-07",
+      "HP-02", "HP-06"
+    ]
+  },
+  "stone_tablet_imperative": true,
+  "summarize_and_discard": false,
+  "call_sign_tag": "v-knowledge-pump-empirical-K538",
+  "session": "K538",
+  "filed_b": "B132",
+  "filed_ts": "2026-04-28"
+}
