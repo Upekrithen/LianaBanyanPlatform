@@ -60,12 +60,16 @@ GRADE_MISS = "MISS"
 
 def grade_response(response: str, required_elements: list, hit_keywords: list) -> str:
     resp_lower = response.lower()
-    if "don't know" in resp_lower or "i do not know" in resp_lower:
-        return GRADE_MISS
+    # Check required elements BEFORE the dont_know gate.
+    # A model that hedges "I don't know [specifically about X] but the corpus says Y=42"
+    # should be HOT if Y=42 is in required_elements.  The old order penalised correct
+    # answers that used a hedge prefix (K-MJ-02b-Final-MISS diagnosis, B132).
     matched = sum(1 for e in required_elements if e.lower() in resp_lower)
     threshold = max(1, int(len(required_elements) * 0.6))
     if matched >= threshold:
         return GRADE_HOT
+    if "don't know" in resp_lower or "i do not know" in resp_lower:
+        return GRADE_MISS
     if any(k.lower() in resp_lower for k in hit_keywords):
         return GRADE_HIT
     return GRADE_MISS
