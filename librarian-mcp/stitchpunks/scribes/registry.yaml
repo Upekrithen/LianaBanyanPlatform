@@ -431,6 +431,25 @@ scribes:
       - Reference Communication Standards
       - exit interview completion rate
       - exit interview
+      # K547/B133 Full MJ Alias Audit — MJ-01 through MJ-08 alias gap fix
+      # MJ-07 (primary fix): query uses "official support channel" / "acknowledgment SLA"
+      # — neither matched any keyword; R11 scored 0 and was not consulted (confirmed H2).
+      # Remaining entries: alias terms that appear in natural-language queries but not
+      # in the existing framework-name keywords above.
+      - official support channel
+      - acknowledgment SLA
+      - 4 business hours
+      - application processing time
+      - 10 business days
+      - provisional member
+      - trial period
+      - member satisfaction survey
+      - "20% response rate"
+      - mentorship program
+      - mentor pairing
+      - 15 business days
+      - tenure milestone
+      - tenure recognition
       # Canonical numerical facts (rare values unique to R11 corpus)
       - "847,293"
       - "4.7 billion"
