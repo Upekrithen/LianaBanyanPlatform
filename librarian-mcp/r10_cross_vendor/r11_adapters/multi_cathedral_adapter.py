@@ -172,7 +172,9 @@ def answer(
             raise FileNotFoundError(f"consult_scribes_cli.mjs not found: {CONSULT_CLI_PATH}")
         consult_client = MultiCathedralConsultClient(CONSULT_CLI_PATH)
 
-    cresp = consult_client.consult(question, cathedral=cathedral, scope="public")
+    # K535 Fix: max_entries=200 ensures all 150 R11 corpus facts are retrievable.
+    # Default max_entries=100 silently truncated RC (positions 100-124) and HP (125-149).
+    cresp = consult_client.consult(question, cathedral=cathedral, scope="public", max_entries=200)
     cathedral_md, scribe_ids = _render_cathedral_block(cresp)
     preload = _load_preload()
     system_prompt = CATHEDRAL_SYS_TEMPLATE.format(

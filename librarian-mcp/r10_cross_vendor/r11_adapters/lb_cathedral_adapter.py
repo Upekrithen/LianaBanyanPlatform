@@ -145,8 +145,11 @@ def answer(
             if not CONSULT_CLI_PATH.exists():
                 raise FileNotFoundError(f"consult_scribes_cli.mjs not found: {CONSULT_CLI_PATH}")
             consult_client = ConsultClient(CONSULT_CLI_PATH)
-        # K472 Fix 3: max_entries=100 ensures all 50 R11 corpus facts are retrievable
-        cresp = consult_client.consult(question, max_entries=100)
+        # K535 Fix: max_entries=200 ensures all 150 R11 corpus facts are retrievable
+        # (K472 Fix 3 used max_entries=100 which was sufficient for 50 facts; after K535
+        # expanded R11 to 150 facts across 6 categories of 25 each, RC and HP at positions
+        # 100-149 were silently truncated, causing 100% MISS on those categories.)
+        cresp = consult_client.consult(question, max_entries=200)
         cathedral_md, scribe_ids = _render_cathedral_block(cresp)
         system_prompt = CATHEDRAL_SYS_PREFIX + preload + CATHEDRAL_DIVIDER + cathedral_md
 
