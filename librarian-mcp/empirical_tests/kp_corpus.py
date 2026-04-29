@@ -240,7 +240,7 @@ _PILOT_FACTS_RAW: list[dict] = [
             "military": "Mission success threshold: resources are redistributed to the next mission phase only after the current objective is secured to 110% of the minimum defensible standard. Distributing before the reserve floor is secure risks losing the consolidated gain.",
         },
     },
-    # --- member_journey (3 facts) ---
+    # --- member_journey (9 facts — 3 original + 6 b-variant expanded, K-MJ-Variant) ---
     {
         "fact_id": "MJ-01",
         "title": "Application Processing Time Standard",
@@ -267,14 +267,74 @@ _PILOT_FACTS_RAW: list[dict] = [
     },
     {
         "fact_id": "MJ-10",
-        "title": "Time to First Transaction",
+        "title": "Time to First Transaction and Early-Cohort Churn Reduction",
         "category": "member_journey",
-        "key_number": "4.2",
-        "key_phrase": "4.2 days median time to first transaction",
+        "key_number": "67%",
+        "key_phrase": "67% lower first-year churn for members transacting within 5 days vs 14+ days",
         "domain_bridges": ["chess", "military"],
         "bridge_rationale": {
-            "chess": "Time to first decisive advantage in the opening: a well-prepared player establishes the first clear positional advantage by move 4-6 — 4.2 days maps onto 4.2 moves of setup before the first concrete gain emerges.",
-            "military": "Time to operational readiness: a combat unit arrives at the assembly area and reaches initial operational capability within ~4 days of sustained preparation. Time to first mission parallels time to first transaction — the moment the unit stops being a formation and starts being a fighting force.",
+            "chess": "Time-pressure performance: players who make their first decisive move within the first 5 moves of a critical position consistently show lower error rates in the rest of the game — the early commitment signal predicts long-term quality just as early transaction predicts retention.",
+            "military": "Time to first operational contact: units that make first contact with their operational environment within 4-5 days of arrival show dramatically higher mission cohesion. The 67% churn-reduction maps directly to the unit-bonding effect of early operational engagement.",
+        },
+    },
+    {
+        "fact_id": "MJ-12",
+        "title": "Member Satisfaction NPS Target and Genuinely-Cooperative Band",
+        "category": "member_journey",
+        "key_number": "50-65",
+        "key_phrase": "NPS range 50-65 for platforms assessed as genuinely cooperative in governance",
+        "domain_bridges": ["music", "culinary"],
+        "bridge_rationale": {
+            "music": "Ensemble quality NPS: concert venues that prioritize ensemble voice over soloist prominence consistently achieve NPS in the 55-65 range — the 'genuinely cooperative' governance assessment maps to the same ensemble-over-individual quality dimension.",
+            "culinary": "Michelin NPS band: restaurants assessed as expressing the chef's genuine culinary philosophy (vs commercial formula) cluster in the NPS 50-65 range. The authenticity assessment maps onto 'genuinely cooperative in governance' — authentic governance, authentic NPS.",
+        },
+    },
+    {
+        "fact_id": "MJ-16",
+        "title": "Governance Training Completion Target and Voting Multiplier",
+        "category": "member_journey",
+        "key_number": "3.4",
+        "key_phrase": "3.4x more likely to vote in first annual election for members completing governance training",
+        "domain_bridges": ["chess", "linguistics"],
+        "bridge_rationale": {
+            "chess": "Training commitment and tournament participation: players who complete a structured training program in their first 90 days at a club are 3-4x more likely to enter their first rated tournament than players who skip structured training. The training commitment signal predicts the participation commitment signal.",
+            "linguistics": "Language learning outcomes: learners who complete structured grammar instruction in their first 90 days of study show 3-4x higher conversation participation rates than those who skip formal instruction and start conversationally. Training investment predicts participation confidence.",
+        },
+    },
+    {
+        "fact_id": "MJ-19",
+        "title": "Patronage Statement Delivery Timeline and Cash Payment Requirement",
+        "category": "member_journey",
+        "key_number": "20%",
+        "key_phrase": "20% of patronage distributions paid in cash within current tax year for qualified-notice treatment",
+        "domain_bridges": ["military", "culinary"],
+        "bridge_rationale": {
+            "military": "Mission resource allocation — cash vs deferred: a minimum cash percentage for operational expenses mirrors the military's requirement that at least a fraction of mission resources be immediately liquid rather than deferred to future appropriations. The 20% floor prevents patronage from being entirely deferred equity.",
+            "culinary": "Restaurant cash-flow management: a chef managing a brigade knows that at least 20% of the weekly payroll must flow as immediate cash — the rest can be structured as tips or deferred bonuses. The 20% cash minimum mirrors the kitchen's operational cash-flow discipline.",
+        },
+    },
+    {
+        "fact_id": "MJ-22",
+        "title": "Account Inactivity Warning Threshold and AI Governance Participation Multiplier",
+        "category": "member_journey",
+        "key_number": "2.4",
+        "key_phrase": "2.4x governance participation rate for AI governance assistant users vs non-users",
+        "domain_bridges": ["chess", "linguistics"],
+        "bridge_rationale": {
+            "chess": "Computer-aided analysis adoption: players who adopt computer-aided analysis tools in their first year show 2-3x higher participation in club tournaments and correspondence events. The AI tool adoption signal predicts engagement depth — members who invest in AI assistance become more engaged participants.",
+            "linguistics": "AI-assisted language learning: learners who adopt AI conversation partners show 2-4x higher participation in advanced-level discussion groups. The AI tool lowers the participation barrier by providing scaffolding — the same mechanism drives the 2.4x governance participation effect.",
+        },
+    },
+    {
+        "fact_id": "MJ-24",
+        "title": "Grievance Escalation Timeline and Trust Rating at High CHS",
+        "category": "member_journey",
+        "key_number": "91%",
+        "key_phrase": "91% of members at CHS-above-80 platforms rate their platform as trustworthy",
+        "domain_bridges": ["chess", "military"],
+        "bridge_rationale": {
+            "chess": "High-trust club culture: chess clubs with a Cooperative Health Score equivalent (organized governance, fair pairing, clear dispute resolution) achieve 90%+ member satisfaction ratings. The 10-business-day grievance escalation timeline maps to the 'fair pairing dispute' resolution speed that drives club trust.",
+            "military": "Unit cohesion at high operational effectiveness: units rated above 80 on operational effectiveness metrics show 90%+ member-cohesion scores. The CHS-80 trust correlation mirrors how operational health translates to unit trust — members trust the institution when the institution functions well.",
         },
     },
     # --- regulatory_compliance (2 facts) ---

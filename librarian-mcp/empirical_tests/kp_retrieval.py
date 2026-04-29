@@ -203,6 +203,10 @@ class KPRetriever:
         """
         Retrieve top-K facts with mastery-bridge weighting (Arm B, KP-on).
 
+        This is the K538 rerank implementation: all corpus facts are scored by
+        (keyword + bridge), and the top-K by combined score are returned.
+        Bridge-boosted facts can REPLACE lower-keyword facts in the retrieved set.
+
         include_bridge_rationale: if True, the context block injected into the
         LLM prompt includes the mastery-domain analogies — this is the KP mechanism:
         "doing what you already do" (applying existing mastery) while the substrate
@@ -215,6 +219,73 @@ class KPRetriever:
             query=query,
             mastery_profile=list(mastery_profile),
             top_k=top,
+            context_text="",
+        )
+        result.context_text = result.context_for_llm(
+            include_bridge_rationale=include_bridge_rationale
+        )
+        return result
+
+    def retrieve_kp_beta(
+        self,
+        query: str,
+        mastery_profile: list[str],
+        top_keyword: int = 5,
+        top_mastery: int = 3,
+        include_bridge_rationale: bool = True,
+    ) -> RetrievalResult:
+        """
+        Option beta: top-K keyword facts + top-M mastery-bridged ADDITIVE.
+
+        Architecture Decision D.2 (K-MJ-KP, Bishop default): top-5 keyword +
+        top-3 mastery-bridged = up to 8 facts. Keyword facts and mastery facts
+        are ADDITIVE — bridge facts are not allowed to REPLACE keyword facts.
+
+        This guarantees:
+          1. Target fact is always present (keyword-top-1 for in-corpus queries).
+          2. Mastery context is layered on top (not substituted in).
+          3. Total context: top_keyword + top_mastery (minus overlaps) facts.
+
+        PDC rationale: with more context (5+3=8 vs 5), HOT rate improves on
+        mastery-dependent queries without displacing the primary keyword hit.
+        The cost overhead (~60%) is justified when ≥3 queries benefit (PDC lift ≥1.20).
+        """
+        # Step 1: keyword-only top-5 (vanilla ordering)
+        kw_scored = self._score_all(query, [], "vanilla")
+        kw_top = kw_scored[:top_keyword]
+        kw_ids = {sf.fact.fact_id for sf in kw_top}
+
+        # Step 2: mastery-bridge top-M, excluding facts already in keyword set
+        bridge_scored = sorted(
+            [
+                sf for sf in self._score_all(query, mastery_profile, "kp_on")
+                if sf.fact.fact_id not in kw_ids and sf.bridge_score > 0.0
+            ],
+            key=lambda s: -s.bridge_score,
+        )[:top_mastery]
+
+        # Step 3: combine (keyword facts first, then mastery additions)
+        # Re-score kw_top facts with bridge bonus so context_for_llm shows bridge rationale
+        kw_with_bridge = []
+        all_scored = {sf.fact.fact_id: sf for sf in self._score_all(query, mastery_profile, "kp_on")}
+        for sf in kw_top:
+            bridged = all_scored.get(sf.fact.fact_id, sf)
+            kw_with_bridge.append(ScoredFact(
+                fact=sf.fact,
+                keyword_score=sf.keyword_score,
+                bridge_score=bridged.bridge_score,
+                total_score=sf.keyword_score + bridged.bridge_score,
+                arm="kp_on",
+                mastery_profile=list(mastery_profile),
+            ))
+
+        combined = kw_with_bridge + bridge_scored
+
+        result = RetrievalResult(
+            arm="kp_on_beta",
+            query=query,
+            mastery_profile=list(mastery_profile),
+            top_k=combined,
             context_text="",
         )
         result.context_text = result.context_for_llm(
