@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync } from "fs";
+import { autoRegisterFromDetective } from "./wrasse_auto_register.js";
 import { tmpdir, homedir } from "os";
 import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
 import { execSync } from "child_process";
@@ -2902,6 +2903,30 @@ registerTool(
         });
         result.phase_1 = rpcResult;
         result.provenance_source = "rpc_consult_scribes";
+      }
+
+      // K550 — Wrasse Registry Live-Update (D.1 = α direct-write on resolution success)
+      // If Detective resolved anything (phase0 hits > 0 OR phase1 entries > 0), auto-register
+      // trigger patterns extracted from the claim into the Wrasse registry.
+      // Brick Wall: autoRegisterFromDetective never throws; lock failure silently skips.
+      const phase0Hits = (result.phase_0 as { hits?: unknown[] } | null)?.hits?.length ?? 0;
+      const phase1Entries = (() => {
+        const p1 = result.phase_1 as { entries?: unknown[] } | null;
+        return p1?.entries?.length ?? 0;
+      })();
+      if (phase0Hits > 0 || phase1Entries > 0) {
+        const firstHitSummary = (() => {
+          const hits = (result.phase_0 as { hits?: Array<{ scribe_id?: string; topic?: string }> } | null)?.hits ?? [];
+          if (hits.length > 0) {
+            return `Detective resolved via Pheromone Phase 0: ${hits.slice(0, 3).map(h => h.topic ?? h.scribe_id ?? "").join(", ")}`;
+          }
+          const p1 = result.phase_1 as { entries?: Array<{ observation?: string }> } | null;
+          const entries = p1?.entries ?? [];
+          return entries.length > 0
+            ? `Detective resolved via RPC Phase 1: ${(entries[0]?.observation ?? "").substring(0, 120)}`
+            : `Detective resolved claim: ${claim}`;
+        })();
+        autoRegisterFromDetective(claim, firstHitSummary, "detective_investigate/server.ts");
       }
 
       return {
