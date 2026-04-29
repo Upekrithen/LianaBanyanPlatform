@@ -24,7 +24,7 @@ export const MEDIUM_ARTICLE_DRAFTS: MediumArticleDraft[] = [
     subtitle: 'One founder, four AI agents, 2,224 innovations, 12 provisional patents, zero investors.',
     bodyOutline: [
       'The Team: Bishop (writes), Knight (builds), Rook (extracts/protects), Pawn (reviews)',
-      'The Numbers: 2,224 innovations, 12 provisionals, ~2,393 claims, 202 Crown Jewels',
+      'The Numbers: 2,270 innovations, 15 provisionals, ~2,506 claims, 228 Crown Jewels',
       'Why No VC: extraction math doesn\'t work with Cost + 20%',
       'How AI Changed the Game: 7 months of output from a 4-agent team',
       'The IP Fortress: 80% contributed to cooperative, 20% Founder protection block',
