@@ -313,11 +313,11 @@ function PressKitSection() {
                 <div className="p-4 rounded-lg bg-background/50 border border-border">
                   <h4 className="font-semibold text-foreground mb-1">The Numbers</h4>
                   <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>2,128 documented innovations</li>
-                    <li>11 provisional patent applications</li>
-                    <li>~2,097 formal claims</li>
-                    <li>167 Crown Jewel innovations</li>
-                    <li>35 production systems live</li>
+                    <li>2,270 documented innovations</li>
+                    <li>15 provisional patent applications</li>
+                    <li>~2,506 formal claims</li>
+                    <li>228 Crown Jewel innovations</li>
+                    <li>36 production systems live</li>
                     <li>$5/year membership</li>
                   </ul>
                 </div>

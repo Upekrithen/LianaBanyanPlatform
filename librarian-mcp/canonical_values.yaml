@@ -1,6 +1,6 @@
 ---
 # Liana Banyan Canonical Values Registry
-# Updated: B118 April 23 2026 (propagating B117 ratifications of #2275/#2276/#2277)
+# Updated: B134 April 29 2026 (post-B133-close AI Nanny sweep: yaml patents block reconciled to Prov 14 + 15 reality — App #64/052,602 + 64/052,618 both filed 2026-04-29; DB sync queued)
 # Single source of truth. Any document containing these keys should match these values.
 # When Bishop or Knight updates a canonical value, update this file FIRST, then run the linter.
 
@@ -8,7 +8,7 @@ stats:
   innovation_count: 2270
   crown_jewels: 228
   production_systems: 36
-  patent_provisionals_filed: 13
+  patent_provisionals_filed: 15
   formal_claims_approximate: 2506
   puddings: 189
   papers: 41
@@ -44,12 +44,19 @@ entity:
   holding_company_owner_percentage: 100
 
 patents:
-  most_recent_prov_number: 13
-  most_recent_prov_application: "64/036,646"
-  most_recent_prov_filed: "2026-04-12"
-  next_prov_number: 14
+  most_recent_prov_number: 15
+  most_recent_prov_application: "64/052,618"
+  most_recent_prov_filed: "2026-04-29"
+  next_prov_number: 16
   next_prov_status: "open"
   conversion_deadline_first_prov: "2026-11-26"
+  # Historical app # chain (most recent first; MEMORY.md preserves full history)
+  prov_15_application: "64/052,618"
+  prov_15_filed: "2026-04-29"
+  prov_14_application: "64/052,602"
+  prov_14_filed: "2026-04-29"
+  prov_13_application: "64/036,646"
+  prov_13_filed: "2026-04-12"
 
 touchstone_r10:
   hot_accuracy_percent: 94.8
