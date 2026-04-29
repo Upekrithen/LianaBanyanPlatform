@@ -38,6 +38,7 @@ class KPTestQuery:
     vanilla_mastery_profile: list[str] = field(default_factory=list)
     category: str = ""
     note: str = ""
+    reading_class: str = ""   # Reading-A | Reading-B | Reading-C (KP-Option-Gamma / B132)
 
     def __post_init__(self):
         self.vanilla_mastery_profile = []
@@ -66,6 +67,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="MJ-10",
         kp_mastery_profile=["chess", "military"],
         category="member_journey",
+        reading_class="Reading-C",
         note="b-variant MJ-10: 67% churn reduction. Keyword 'churn' has low overlap with MJ-10 title. Chess+military bridge retrieves MJ-10.",
     ),
 
@@ -80,6 +82,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="MJ-12",
         kp_mastery_profile=["music", "culinary"],
         category="member_journey",
+        reading_class="Reading-C",
         note="b-variant MJ-12: NPS 50-65 range. 'Genuinely cooperative' keyword low-overlap with MJ-12 title. Music+culinary bridge retrieves MJ-12.",
     ),
 
@@ -94,6 +97,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="MJ-16",
         kp_mastery_profile=["chess", "linguistics"],
         category="member_journey",
+        reading_class="Reading-C",
         note="b-variant MJ-16: 3.4x voting multiplier. Keyword 'vote election' has low overlap with MJ-16 title. Chess+linguistics bridge retrieves MJ-16.",
     ),
 
@@ -109,6 +113,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="MJ-19",
         kp_mastery_profile=["military", "culinary"],
         category="member_journey",
+        reading_class="Reading-B",
         note="b-variant MJ-19: 20% cash for qualified notice. Keyword 'qualified-notice cash' has low overlap with MJ-19 title. Military+culinary bridge retrieves MJ-19.",
     ),
 
@@ -123,6 +128,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="MJ-22",
         kp_mastery_profile=["chess", "linguistics"],
         category="member_journey",
+        reading_class="Reading-C",
         note="b-variant MJ-22: 2.4x AI governance participation. Keyword 'AI assistant participation' has low overlap with MJ-22 title. Chess+linguistics bridge retrieves MJ-22.",
     ),
 
@@ -139,6 +145,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="MJ-24",
         kp_mastery_profile=["chess", "military"],
         category="member_journey",
+        reading_class="Reading-B",
         note="b-variant MJ-24: 91% trust at CHS>80. Also MJ b-variant but with unique 'trustworthy' + CHS framing.",
     ),
 
@@ -153,6 +160,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="HP-02",
         kp_mastery_profile=["military", "chess"],
         category="historical_precedent",
+        reading_class="Reading-C",
         note="Control question — rephrased HP-02 question. Vanilla likely MISS (wrong framing). KP-on may HOT via military+chess bridge to HP-02.",
     ),
 
@@ -167,6 +175,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="EG-20",
         kp_mastery_profile=["chess", "military"],
         category="economic_governance",
+        reading_class="Reading-A",
         note="EG-20 control question — vanilla HOT expected. KP-on HOT via chess+military bridge.",
     ),
 
@@ -181,6 +190,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="MJ-19",
         kp_mastery_profile=["military", "culinary"],
         category="member_journey",
+        reading_class="Reading-A",
         note="MJ-19 primary stat question (30-day delivery). Vanilla HOT expected. KP-on HOT. Tests that Option beta does not displace primary fact.",
     ),
 
@@ -195,6 +205,7 @@ KP_TEST3_PANEL: list[KPTestQuery] = [
         target_fact_id="CS-03",
         kp_mastery_profile=["chess", "linguistics"],
         category="canonical_statistics",
+        reading_class="Reading-A",
         note="CS-03 control question — vanilla HOT expected. Chess+linguistics bridge retrieves CS-03. Validates Option beta preserves non-MJ retrieval quality.",
     ),
 ]

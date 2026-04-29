@@ -45,6 +45,40 @@ BRIDGE_WEIGHT: float = 0.5
 # Top-K retrieval count (parallels AM-03 canonical default)
 DEFAULT_TOP_K: int = 5
 
+# Option Gamma base mastery count (= fixed-budget baseline top_mastery)
+GAMMA_BASE_TOP_MASTERY: int = 3
+
+
+def compute_dynamic_budget(
+    reading_class: str,
+    budget_map: dict[str, float] | None = None,
+    fallback_multiplier: float = 1.0,
+    base_top_mastery: int = GAMMA_BASE_TOP_MASTERY,
+) -> int:
+    """
+    Option Gamma dynamic budget: map reading_class → top_mastery count.
+
+    Phase B architecture decision (KP-Option-Gamma / B132):
+      C2 selected (prompt type-class tag) over C1 (token-count) because type-class
+      tags are deterministic, corpus-independent, and already assigned in the panel.
+
+    Default budget map (matches OPTION_GAMMA_BUDGET_MAP in knowledge_pump.json):
+      Reading-A → 1.0× base  (simple/direct queries, fixed budget maintained)
+      Reading-B → 1.5× base  (domain-specific; moderate mastery expansion)
+      Reading-C → 2.5× base  (inferential / cross-domain; maximum mastery expansion)
+
+    Returns integer top_mastery for use in retrieve_kp_beta(top_mastery=N).
+    Backwards-compatible: Reading-A returns base_top_mastery (= fixed-budget value).
+    """
+    if budget_map is None:
+        budget_map = {
+            "Reading-A": 1.0,
+            "Reading-B": 1.5,
+            "Reading-C": 2.5,
+        }
+    multiplier = budget_map.get(reading_class, fallback_multiplier)
+    return max(1, round(base_top_mastery * multiplier))
+
 # Stop words excluded from keyword overlap (standard English functional words)
 _STOP_WORDS: frozenset[str] = frozenset({
     "a", "an", "the", "is", "are", "was", "were", "be", "been", "being",

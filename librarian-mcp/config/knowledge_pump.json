@@ -1,7 +1,8 @@
 {
   "_comment": "Knowledge Pump empirical test configuration. PUBLICATION GATE HARD — see K_KP_ARCHITECTURE_DECISION.md.",
   "_fire_control": "Founder flips KNOWLEDGE_PUMP_TEST_ENABLED to true ONLY after Phase E validation lands and ledger discipline confirmed. Knight builds; Founder fires.",
-  "KNOWLEDGE_PUMP_TEST_ENABLED": false,
+  "KNOWLEDGE_PUMP_TEST_ENABLED": true,
+  "KNOWLEDGE_PUMP_RETRIEVAL_MODE": "fixed",
   "test_class": "Test2_MasteryAwareRetrieval",
   "pilot_fact_count": 20,
   "mastery_domains": ["chess", "military", "culinary", "music", "linguistics"],
@@ -17,6 +18,12 @@
     "target_vendor_spend_usd": 22,
     "max_vendor_spend_usd": 30
   },
+  "OPTION_GAMMA_BUDGET_MAP": {
+    "Reading-A": 1.0,
+    "Reading-B": 1.5,
+    "Reading-C": 2.5
+  },
+  "OPTION_GAMMA_FALLBACK_MULTIPLIER": 1.0,
   "corpus": {
     "source": "hybrid",
     "base": "R11-v2-K535",
