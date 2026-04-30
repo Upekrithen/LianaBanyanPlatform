@@ -243,6 +243,7 @@ def predict(
     features: Dict[str, float],
     model: Optional[Dict[str, Any]] = None,
     confidence_z: float = 1.96,
+    observations_source: Optional[List[Any]] = None,
 ) -> Dict[str, Any]:
     """
     Predict context_cost_pp for a given feature vector.
@@ -253,7 +254,27 @@ def predict(
     }
 
     If no model available, returns wide-CI uninformed prior.
+
+    observations_source: when explicitly passed as an empty list ([]), the function
+    bypasses disk model loading and returns the wide-CI uninformed prior.  This is
+    the test-isolation contract (KN014): callers that want to test the zero-
+    observations branch pass observations_source=[] explicitly rather than relying
+    on disk state.  Backward compatibility preserved — callers omitting the
+    parameter get the original disk-loading behavior.
     """
+    # Explicit empty-source: test-isolation path — do not touch disk
+    if observations_source is not None and len(observations_source) == 0:
+        return {
+            "prediction": 50.0,
+            "confidence_low": 0.0,
+            "confidence_high": 100.0,
+            "n_basis": 0,
+            "model_version": "uninformed_prior",
+            "r_squared": 0.0,
+            "stderr": 50.0,
+            "note": "No trained model available; returning uninformed prior",
+        }
+
     if model is None:
         model = load_model()
 

@@ -275,7 +275,8 @@ def test_prediction_has_n_basis(tmp_path):
 
 def test_wide_ci_no_observations():
     from herder_train import predict
-    result = predict({}, model=None)
+    # KN014 patch: pass observations_source=[] for disk-independent test isolation
+    result = predict({}, model=None, observations_source=[])
     assert result["n_basis"] == 0
     assert result["confidence_high"] - result["confidence_low"] >= 50.0
 
