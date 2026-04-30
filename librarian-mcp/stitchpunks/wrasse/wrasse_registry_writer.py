@@ -76,6 +76,9 @@ def _classify_trigger(trigger_pattern: str) -> str:
         return "ts_prefix"
     if _CALL_SIGN_RX.match(trigger_pattern.strip()):
         return "call_sign"
+    # eblet_path: paths containing state/eblets/ or ending in .eblet.md (KN042)
+    if "state/eblets/" in trigger_pattern or trigger_pattern.endswith(".eblet.md"):
+        return "eblet_path"
     if "/" in trigger_pattern or trigger_pattern.endswith(".py") or trigger_pattern.endswith(".ts"):
         return "file_path"
     if re.match(r"^\d{1,4}$", trigger_pattern.strip()):
