@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-bishop_catechist_rules.py — KN036 Catechist Scribe 10-rule evaluator bank.
+bishop_catechist_rules.py — KN036/KN041 Catechist Scribe 10-rule evaluator bank.
 
 Each rule evaluator accepts a turns list (list of dicts with 'role'/'content')
 and returns {"status": "PASS|WARN|FAIL|INSUFFICIENT_DATA", "evidence": "<str>"}.
@@ -65,6 +65,37 @@ def _tool_calls_in(turns: list[dict]) -> list[str]:
     return names
 
 
+def _tool_calls_with_args_in(turns: list[dict]) -> list[tuple[str, dict]]:
+    """Return list of (tool_name, input_dict) tuples from all assistant turns."""
+    calls: list[tuple[str, dict]] = []
+    for t in turns:
+        if t.get("role") != "assistant":
+            continue
+        content = t.get("content", [])
+        if not isinstance(content, list):
+            continue
+        for block in content:
+            if isinstance(block, dict) and block.get("type") == "tool_use":
+                calls.append((block.get("name", ""), block.get("input", {})))
+    return calls
+
+
+# KN041: ToolSearch loading brief_me schema is a deferred-tool meta-load operation.
+# Regex matches the Claude CC deferred-tool selector pattern for brief_me.
+_BRIEFME_TOOLSEARCH_RE = re.compile(r"select:mcp__librarian__brief_me", re.IGNORECASE)
+_TOOLSEARCH_NAMES = frozenset({"ToolSearch", "tool_search", "mcp__tool_search"})
+
+
+def _is_briefme_toolsearch(name: str, args: dict) -> bool:
+    """Return True if this tool call is a ToolSearch loading the brief_me schema."""
+    if name not in _TOOLSEARCH_NAMES and not name.lower().endswith("toolsearch"):
+        return False
+    for v in args.values():
+        if isinstance(v, str) and _BRIEFME_TOOLSEARCH_RE.search(v):
+            return True
+    return False
+
+
 def _all_text(turns: list[dict]) -> str:
     """Concatenate all text from all turns for pattern-search rules."""
     return "\n".join(_text_of(t.get("content", "")) for t in turns)
@@ -73,14 +104,44 @@ def _all_text(turns: list[dict]) -> str:
 # ─── Rule 1 ───────────────────────────────────────────────────────────────────
 
 def rule_01_brief_me_first(turns: list[dict]) -> dict:
-    """First tool call must be mcp__librarian__brief_me."""
-    tool_calls = _tool_calls_in(turns)
-    if not tool_calls:
+    """First tool call must be mcp__librarian__brief_me.
+
+    KN041 whitelist: ToolSearch("select:mcp__librarian__brief_me*") as deferred-tool
+    meta-load also satisfies R01 when immediately followed by brief_me itself.
+    Bishop CC harness reality — brief_me is deferred; ToolSearch loads the schema first.
+    """
+    calls = _tool_calls_with_args_in(turns)
+    if not calls:
         return {"status": "WARN", "evidence": "No tool calls detected in first-N turns — cannot confirm brief_me-first discipline."}
-    first = tool_calls[0]
-    if "brief_me" in first or first == "mcp__librarian__brief_me":
-        return {"status": "PASS", "evidence": f"First tool call: {first}"}
-    return {"status": "FAIL", "evidence": f"First tool call was '{first}', not mcp__librarian__brief_me."}
+
+    first_name, first_args = calls[0]
+
+    # Standard pass: direct brief_me first
+    if "brief_me" in first_name or first_name == "mcp__librarian__brief_me":
+        return {"status": "PASS", "evidence": f"First tool call: {first_name}"}
+
+    # KN041 whitelist: ToolSearch loading brief_me schema (deferred-tool harness pattern),
+    # immediately followed by brief_me as the second tool call.
+    if _is_briefme_toolsearch(first_name, first_args):
+        if len(calls) >= 2:
+            second_name, _ = calls[1]
+            if "brief_me" in second_name:
+                return {
+                    "status": "PASS",
+                    "evidence": (
+                        f"First tool was ToolSearch loading brief_me schema (deferred-tool harness pattern); "
+                        f"brief_me followed in second tool call: {second_name}"
+                    ),
+                }
+        return {
+            "status": "FAIL",
+            "evidence": (
+                f"First tool was ToolSearch loading brief_me schema, but second call was not "
+                f"brief_me. ToolSearch meta-load whitelist requires brief_me as immediate follow-up."
+            ),
+        }
+
+    return {"status": "FAIL", "evidence": f"First tool call was '{first_name}', not mcp__librarian__brief_me."}
 
 
 # ─── Rule 2 ───────────────────────────────────────────────────────────────────
