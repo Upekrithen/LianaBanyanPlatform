@@ -4557,6 +4557,267 @@ registerTool(
 );
 
 // ═══════════════════════════════════════════
+// KN009-BP002 — CHANDELIER EMPIRICAL-MEASUREMENT-SUBSTRATE
+// A&A #2291 Bedrock Foundation — multi-level L1-L12 receipt registry
+// + Chronos Chronicler signatories + prerequisite-graph + three-mode
+// comparator + temporal diagnostics
+// ═══════════════════════════════════════════
+
+/** Path to librarian-mcp/stitchpunks — added to Python sys.path for chandelier imports */
+const CHANDELIER_STITCH_DIR = resolve(WORKSPACE_ROOT, "librarian-mcp", "stitchpunks");
+
+/**
+ * Run a Python snippet with chandelier package importable.
+ * Extends runWingHelper by injecting the stitchpunks path.
+ */
+function runChandelierHelper(pySnippet: string, args: unknown): unknown {
+  const stamp = `${Date.now()}_${process.pid}`;
+  const { tmpdir } = require("os") as typeof import("os");
+  const argsTmp = resolve(tmpdir(), `liana_args_${stamp}.json`);
+  const codeTmp = resolve(tmpdir(), `liana_chand_${stamp}.py`);
+
+  const fullCode = [
+    "import sys, json",
+    `sys.path.insert(0, r"${WORKSPACE_ROOT}")`,
+    `sys.path.insert(0, r"${CHANDELIER_STITCH_DIR}")`,
+    `with open(r"${argsTmp}", encoding="utf-8") as _f:`,
+    `    _args = json.load(_f)`,
+    pySnippet.trim(),
+    "print(json.dumps(result, default=str))",
+  ].join("\n");
+
+  try {
+    writeFileSync(argsTmp, JSON.stringify(args), "utf-8");
+    writeFileSync(codeTmp, fullCode, "utf-8");
+    const out = execSync(`python "${codeTmp}"`, {
+      encoding: "utf-8",
+      timeout: 90000,
+      env: { ...process.env, PYTHONIOENCODING: "utf-8" },
+    });
+    return JSON.parse(out.trim());
+  } catch (err) {
+    return { error: String(err) };
+  } finally {
+    try { unlinkSync(argsTmp); } catch { /* ignore */ }
+    try { unlinkSync(codeTmp); } catch { /* ignore */ }
+  }
+}
+
+server.tool(
+  "chandelier_query_receipts",
+  "KN009/BP002 — A&A #2291 Bedrock Foundation. Direct lookup of empirical measurement receipts by primitive subset. Returns all receipts matching the given primitive_ids (exact subset match), optionally filtered by metric and time range. Receipts are Chronos Chronicler-signed (append-only Stone Tablet).",
+  {
+    primitive_ids: z.array(z.string()).describe("Exact set of primitive IDs to look up (e.g. ['cathedral_effect', 'wrasse_scribe'])"),
+    metric: z.string().optional().describe("Filter by metric name (e.g. 'hot_accuracy_pct')"),
+    time_range_start: z.string().optional().describe("ISO timestamp lower bound (inclusive)"),
+    time_range_end: z.string().optional().describe("ISO timestamp upper bound (inclusive)"),
+  },
+  async ({ primitive_ids, metric, time_range_start, time_range_end }) => {
+    const result = runChandelierHelper(
+      `from chandelier.chronos_chandelier_bridge import build_index
+index = build_index()
+time_range = None
+if _args.get("time_range_start") and _args.get("time_range_end"):
+    time_range = (_args["time_range_start"], _args["time_range_end"])
+receipts = index.query(
+    primitive_ids=_args["primitive_ids"],
+    metric=_args.get("metric"),
+    time_range=time_range,
+)
+result = {"receipts": receipts, "count": len(receipts)}`,
+      { primitive_ids, metric: metric ?? null, time_range_start: time_range_start ?? null, time_range_end: time_range_end ?? null }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "chandelier_compare_modes",
+  "KN009/BP002 — A&A #2291 Three-Mode Comparator. Compares Basic Stock vs Modified Stock vs Full Stack vs Right Recipe (argmax) for a primitive subset on a given metric. Right Recipe is lazy — only computed when include_right_recipe=true. Core diagnostic tool for the Chandelier substrate.",
+  {
+    subset: z.array(z.string()).describe("Modified-Stock subset (the primitives to compare)"),
+    metric: z.string().describe("Metric to compare on (e.g. 'hot_accuracy_pct')"),
+    all_primitive_ids: z.array(z.string()).optional().describe("All primitives for Full-Stack + Right-Recipe (omit to skip those modes)"),
+    basic_stock_primitive: z.string().optional().describe("Single primitive for Basic-Stock baseline (default: first in subset)"),
+    include_right_recipe: z.boolean().optional().default(false).describe("Compute Right Recipe argmax (lazy — may be expensive for large N)"),
+    right_recipe_max_k: z.number().int().min(1).max(12).optional().describe("Max subset size for Right Recipe search"),
+  },
+  async ({ subset, metric, all_primitive_ids, basic_stock_primitive, include_right_recipe, right_recipe_max_k }) => {
+    const result = runChandelierHelper(
+      `from chandelier.chronos_chandelier_bridge import build_index
+from chandelier.three_mode_comparator import ThreeModeComparator
+index = build_index()
+cmp = ThreeModeComparator(index)
+result = cmp.compare(
+    subset=_args["subset"],
+    metric=_args["metric"],
+    all_primitive_ids=_args.get("all_primitive_ids"),
+    basic_stock_primitive=_args.get("basic_stock_primitive"),
+    include_right_recipe=bool(_args.get("include_right_recipe", False)),
+    right_recipe_max_k=_args.get("right_recipe_max_k"),
+)`,
+      { subset, metric, all_primitive_ids: all_primitive_ids ?? null, basic_stock_primitive: basic_stock_primitive ?? null, include_right_recipe: include_right_recipe ?? false, right_recipe_max_k: right_recipe_max_k ?? null }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "chandelier_right_recipe",
+  "KN009/BP002 — A&A #2291 Right Recipe (argmax). Find the empirically optimal primitive subset for a given metric across all 2^N-1 possible subsets. The pudding-test: which recipe wins, empirically. Set max_subset_size to limit search scope (recommended ≤ 6 for speed).",
+  {
+    target_metric: z.string().describe("Metric to optimise (e.g. 'hot_accuracy_pct')"),
+    all_primitive_ids: z.array(z.string()).describe("All primitives to consider in the search"),
+    max_subset_size: z.number().int().min(1).max(12).optional().describe("Max subset size to search (default: all)"),
+  },
+  async ({ target_metric, all_primitive_ids, max_subset_size }) => {
+    const result = runChandelierHelper(
+      `from chandelier.chronos_chandelier_bridge import build_index
+from chandelier.three_mode_comparator import ThreeModeComparator
+index = build_index()
+cmp = ThreeModeComparator(index)
+result = cmp._compute_right_recipe(
+    all_primitive_ids=_args["all_primitive_ids"],
+    metric=_args["target_metric"],
+    max_k=_args.get("max_subset_size"),
+)`,
+      { target_metric, all_primitive_ids, max_subset_size: max_subset_size ?? null }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "chandelier_query_prerequisites",
+  "KN009/BP002 — A&A #2291 Prerequisite Graph query. Returns hard prerequisites, soft enhancers, and layer classification for a primitive. Use to understand what MUST be present before a primitive can function. The build-order canon: scaffold → framing → wiring → building → edifice → paint.",
+  {
+    primitive_id: z.string().describe("Primitive to query (e.g. 'cathedral_effect', 'chandelier_substrate')"),
+    include_transitive: z.boolean().optional().default(false).describe("If true, returns full transitive closure of hard prerequisites"),
+  },
+  async ({ primitive_id, include_transitive }) => {
+    const result = runChandelierHelper(
+      `from chandelier.prerequisite_graph_loader import get_graph
+g = get_graph()
+direct_prereqs = g.query_prerequisites(_args["primitive_id"])
+enhancers = g.query_enhancers(_args["primitive_id"])
+layer = g.query_layer(_args["primitive_id"])
+transitive = g.transitive_prerequisites(_args["primitive_id"]) if _args.get("include_transitive") else None
+result = {
+    "primitive_id": _args["primitive_id"],
+    "layer": layer,
+    "hard_prerequisites": direct_prereqs,
+    "soft_enhancers": enhancers,
+    "transitive_prerequisites": transitive,
+}`,
+      { primitive_id, include_transitive: include_transitive ?? false }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "chandelier_validate_subset",
+  "KN009/BP002 — A&A #2291 Subset validation. Checks that all hard prerequisites are met within a substrate subset. Returns valid=true/false + list of missing prerequisite pairs. Use before running an L2+ measurement to confirm the subset is coherent.",
+  {
+    subset: z.array(z.string()).describe("List of primitive IDs to validate"),
+    recommend_minimum: z.boolean().optional().default(false).describe("If true, also returns the minimum subset needed for each primitive in the input"),
+  },
+  async ({ subset, recommend_minimum }) => {
+    const result = runChandelierHelper(
+      `from chandelier.prerequisite_graph_loader import get_graph
+g = get_graph()
+valid, missing = g.validate_substrate_subset(_args["subset"])
+rec = {}
+if _args.get("recommend_minimum"):
+    for pid in _args["subset"]:
+        rec[pid] = g.recommend_minimum_subset(pid)
+result = {
+    "subset": _args["subset"],
+    "valid": valid,
+    "missing_prerequisite_pairs": missing,
+    "minimum_subsets": rec if rec else None,
+}`,
+      { subset, recommend_minimum: recommend_minimum ?? false }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "chandelier_temporal_query",
+  "KN009/BP002 — A&A #2291 Temporal diagnostics. Aggregate empirical receipts by time grain (hour/day/week/month/continuous_stretch) or run substrate-state-correlation analysis. Use to answer: 'Which hours were most productive for Crown Jewel receipts?' Composes Properties 1+2+5.",
+  {
+    time_grain: z.enum(["hour", "day", "week", "month", "continuous_stretch", "substrate_correlation"]).describe("Aggregation grain or analysis type"),
+    primitive_filter: z.array(z.string()).optional().describe("Filter to receipts involving these primitives"),
+    metric: z.string().optional().describe("Filter by metric name"),
+    time_range_start: z.string().optional().describe("ISO timestamp lower bound"),
+    time_range_end: z.string().optional().describe("ISO timestamp upper bound"),
+    top_n_periods: z.number().int().min(1).max(20).optional().default(5).describe("For substrate_correlation: how many top periods to rank"),
+  },
+  async ({ time_grain, primitive_filter, metric, time_range_start, time_range_end, top_n_periods }) => {
+    const result = runChandelierHelper(
+      `from chandelier.chronos_chandelier_bridge import build_index
+from chandelier.temporal_diagnostics import TemporalDiagnostics
+index = build_index()
+td = TemporalDiagnostics(index)
+time_range = None
+if _args.get("time_range_start") and _args.get("time_range_end"):
+    time_range = (_args["time_range_start"], _args["time_range_end"])
+if _args["time_grain"] == "substrate_correlation":
+    result = td.substrate_state_correlation(
+        metric=_args.get("metric"),
+        grain="day",
+        top_n_periods=_args.get("top_n_periods", 5),
+        time_range=time_range,
+    )
+else:
+    result = td.query_temporal(
+        time_grain=_args["time_grain"],
+        primitive_filter=_args.get("primitive_filter"),
+        metric=_args.get("metric"),
+        time_range=time_range,
+    )`,
+      { time_grain, primitive_filter: primitive_filter ?? null, metric: metric ?? null, time_range_start: time_range_start ?? null, time_range_end: time_range_end ?? null, top_n_periods: top_n_periods ?? 5 }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+server.tool(
+  "chandelier_update_prerequisite_graph",
+  "KN009/BP002 — A&A #2291 Prerequisite Graph writer. Add or update a primitive node in the prerequisite graph YAML. Persists to prerequisite_graph.yaml (Stone Tablet Imperative: existing nodes are updated, not deleted). Use when landing a new primitive that has structural dependencies.",
+  {
+    primitive_id: z.string().describe("Canonical primitive ID"),
+    layer: z.enum(["scaffold", "framing", "wiring", "building", "edifice", "paint"]).describe("Structural layer this primitive belongs to"),
+    hard_prerequisites: z.array(z.string()).optional().describe("Primitives that MUST be present"),
+    soft_enhancers: z.array(z.string()).optional().describe("Primitives that ENHANCE this one"),
+    orthogonals: z.array(z.string()).optional().describe("Primitives that are unaffected by presence/absence"),
+    aa_number: z.string().optional().describe("A&A innovation number (e.g. '2291')"),
+    landed_session: z.string().optional().describe("Knight session that built this (e.g. 'KN009')"),
+    notes: z.string().optional().describe("Free-form notes about this primitive"),
+  },
+  async ({ primitive_id, layer, hard_prerequisites, soft_enhancers, orthogonals, aa_number, landed_session, notes }) => {
+    const result = runChandelierHelper(
+      `from chandelier.prerequisite_graph_loader import get_graph
+g = get_graph()
+node = g.update_prerequisite_graph(
+    primitive_id=_args["primitive_id"],
+    layer=_args["layer"],
+    hard_prerequisites=_args.get("hard_prerequisites"),
+    soft_enhancers=_args.get("soft_enhancers"),
+    orthogonals=_args.get("orthogonals"),
+    aa_number=_args.get("aa_number"),
+    landed_session=_args.get("landed_session"),
+    notes=_args.get("notes"),
+)
+result = {"ok": True, "primitive_id": _args["primitive_id"], "node": node}`,
+      { primitive_id, layer, hard_prerequisites: hard_prerequisites ?? null, soft_enhancers: soft_enhancers ?? null, orthogonals: orthogonals ?? null, aa_number: aa_number ?? null, landed_session: landed_session ?? null, notes: notes ?? null }
+    );
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
 // K532 — PAWN-VIA-LIBRARIAN DISPATCH TOOLS
 // ═══════════════════════════════════════════
 

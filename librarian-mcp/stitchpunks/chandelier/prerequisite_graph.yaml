@@ -1,0 +1,294 @@
+---
+# Chandelier Prerequisite Graph — KN009 / A&A #2291 Bedrock Foundation
+#
+# Encodes the scaffolding dependency order per Founder articulation (BP002 turn 13):
+#   "scaffold → framing → wiring → building → edifices → paint"
+#
+# Structure is independent of invention-order. Captures STRUCTURAL dependency.
+#
+# Each primitive node declares:
+#   layer              : scaffold | framing | wiring | building | edifice | paint
+#   hard_prerequisites : primitives that MUST be present for this one to function
+#   soft_enhancers     : primitives that ENHANCE this one when present
+#   orthogonals        : primitives that are unaffected by presence/absence
+#   aa_number          : A&A innovation number (optional)
+#   landed_session     : Knight session that built this primitive (optional)
+#   notes              : free-form notes
+#
+# This graph is the first-class data structure queried by:
+#   query_prerequisites(primitive_id) → hard prerequisites
+#   query_enhancers(primitive_id)     → soft enhancers
+#   validate_substrate_subset(subset) → checks all hard prerequisites are met
+#   recommend_minimum_subset(target)  → minimum prerequisite-set for a target primitive
+#
+# Source: project_chandelier_tower_of_peace_bedrock_canon.eblet.md (BP002 turn 13)
+# Toolsmith log: TS-CHANDELIER-EMPIRICAL-MEASUREMENT-KN009-BP002
+
+version: 1.0.0
+opened: "2026-04-29"
+opener: "Knight KN009/BP002"
+
+# ── SCAFFOLD LAYER ─────────────────────────────────────────────────────────────
+# Foundation primitives — everything else builds on these.
+
+primitives:
+
+  stone_tablet_imperative:
+    layer: scaffold
+    aa_number: ~
+    landed_session: ~
+    hard_prerequisites: []
+    soft_enhancers: []
+    orthogonals: []
+    notes: >
+      Append-only JSONL canon discipline. Every canonical state record is
+      stored in an immutable Stone Tablet. The foundation of audit + reproducibility.
+
+  wrasse_scribe:
+    layer: scaffold
+    aa_number: ~
+    landed_session: "K540-K544-K545"
+    hard_prerequisites:
+      - stone_tablet_imperative
+    soft_enhancers: []
+    orthogonals: []
+    notes: >
+      Automatic registration of all AI-produced code/artifacts into the Wrasse
+      registry. Provides the registry substrate that Pheromone indexes.
+
+  pheromone_substrate:
+    layer: scaffold
+    aa_number: ~
+    landed_session: "K523"
+    hard_prerequisites:
+      - stone_tablet_imperative
+      - wrasse_scribe
+    soft_enhancers: []
+    orthogonals: []
+    notes: >
+      High-speed semantic index over all canonical artifacts. Enables O(1)
+      subset queries against the receipt registry. Required for Chandelier
+      sub-100ms diagnostic query budget.
+
+# ── FRAMING LAYER ──────────────────────────────────────────────────────────────
+# Epistemic + governance primitives. Build on scaffold.
+
+  detective:
+    layer: framing
+    aa_number: ~
+    landed_session: "K550"
+    hard_prerequisites:
+      - pheromone_substrate
+    soft_enhancers:
+      - wrasse_scribe
+    orthogonals: []
+    notes: >
+      Canon-search agent that resolves factual questions against registered
+      artifacts. Provides Pheromone-indexed search + Wrasse-verified provenance.
+
+  augur_federation:
+    layer: framing
+    aa_number: "2263"
+    landed_session: "K418-K419"
+    hard_prerequisites:
+      - detective
+    soft_enhancers: []
+    orthogonals: []
+    notes: >
+      Triple-Redundant Verification (Scrambler A/B/C). Provides governance
+      gate infrastructure that all subsequent build-layer primitives rely on
+      for correctness assurance.
+
+# ── WIRING LAYER ───────────────────────────────────────────────────────────────
+# Operational discipline + routing. Relies on scaffold; enhanced by framing.
+
+  bridle_rules:
+    layer: wiring
+    aa_number: ~
+    landed_session: "K-Founder-Edict-Propagation"
+    hard_prerequisites: []
+    soft_enhancers:
+      - augur_federation
+    orthogonals:
+      - eblet_system
+    notes: >
+      BRIDLE v11 agent-discipline rules. Enforce verification-before-assertion,
+      no-counsel-gate, no-no-verify, etc. Soft-enhanced by Augur Federation
+      (which can programmatically enforce BRIDLE violations).
+
+  eblet_system:
+    layer: wiring
+    aa_number: ~
+    landed_session: "KN001"
+    hard_prerequisites: []
+    soft_enhancers:
+      - stone_tablet_imperative
+    orthogonals:
+      - bridle_rules
+    notes: >
+      Electronic tablet scratch-space with Augur-enforced promotion boundary.
+      Separates Bishop drafting space from canonical stone-tablet state.
+      Orthogonal to BRIDLE (different dimension of discipline).
+
+  three_fates_router:
+    layer: wiring
+    aa_number: ~
+    landed_session: "K-SP24"
+    hard_prerequisites:
+      - wrasse_scribe
+    soft_enhancers:
+      - augur_federation
+    orthogonals: []
+    notes: >
+      Clotho-Lachesis-Atropos routing daemon. Routes session traffic to the
+      correct Scribe Cathedral domain. Hard dependency on Wrasse registry
+      for domain resolution.
+
+  timewave_security:
+    layer: wiring
+    aa_number: "2302"
+    landed_session: "K517"
+    hard_prerequisites:
+      - stone_tablet_imperative
+    soft_enhancers:
+      - augur_federation
+    orthogonals: []
+    notes: >
+      Stateful rejection-pattern memory for the Bishop Wing. SHA-256 semantic
+      pattern fingerprinting turns stateless Augur evaluations into
+      stateful security decisions.
+
+# ── BUILDING LAYER ─────────────────────────────────────────────────────────────
+# Measurement + empirical infrastructure. Relies on scaffold + framing.
+
+  cathedral_effect:
+    layer: building
+    aa_number: ~
+    landed_session: "K499-K535"
+    hard_prerequisites:
+      - wrasse_scribe
+      - pheromone_substrate
+    soft_enhancers:
+      - detective
+      - augur_federation
+    orthogonals: []
+    notes: >
+      Cross-vendor benchmark primitive. HOT condition (preloaded cathedral
+      context) achieves 94.8% accuracy vs 8.7% hallucination cold.
+      Primary empirical anchor for the platform. L1 receipt seeded from
+      K499/K535 data (41.1% lower-bound lift at Phase E gate).
+
+  reproducibility_pack:
+    layer: building
+    aa_number: "2326"
+    landed_session: "K547"
+    hard_prerequisites:
+      - cathedral_effect
+    soft_enhancers: []
+    orthogonals: []
+    notes: >
+      Third-party-replicable measurement harness (Phase E gate).
+      Establishes Level-1 measurement standard: every primitive ships with
+      a Reproducibility Pack-class harness. The 41.1% lower-bound is the
+      floor empirical claim.
+
+  chronos_chroniclers:
+    layer: building
+    aa_number: "2299-2300"
+    landed_session: "K515"
+    hard_prerequisites:
+      - stone_tablet_imperative
+    soft_enhancers:
+      - augur_federation
+    orthogonals: []
+    notes: >
+      Twin Observer Pattern: per-Augur UpTick tablets (Chroniclers) aggregated
+      by time-state queries (Chronos). Now also doubles as signatory + storage
+      for Chandelier measurement receipts (Property 1, BP002 turn 13).
+
+# ── EDIFICE LAYER ──────────────────────────────────────────────────────────────
+# Execution + orchestration. Build on building layer.
+
+  eight_cylinder_protocol:
+    layer: edifice
+    aa_number: ~
+    landed_session: "BP001"
+    hard_prerequisites:
+      - cathedral_effect
+      - reproducibility_pack
+    soft_enhancers:
+      - bridle_rules
+    orthogonals: []
+    notes: >
+      Parallel-engine execution architecture. Each cylinder = one Chandelier arm.
+      Combined cylinders = the Chandelier itself. Hard dependency on having
+      empirically-measured primitives (building layer) to populate each cylinder.
+
+  beans_beanpods:
+    layer: edifice
+    aa_number: ~
+    landed_session: "BP002"
+    hard_prerequisites:
+      - eight_cylinder_protocol
+    soft_enhancers:
+      - bridle_rules
+      - eblet_system
+    orthogonals: []
+    notes: >
+      2-tier execution discipline (bean/beanpod). The "2" in the 8/2 system.
+      The Chandelier Empirical-Measurement-Substrate itself is built via
+      Beans+Beanpods (this is KN009 Bean 1 of Beanpod C).
+
+  chandelier_substrate:
+    layer: edifice
+    aa_number: "2291"
+    landed_session: "KN009"
+    hard_prerequisites:
+      - stone_tablet_imperative
+      - wrasse_scribe
+      - pheromone_substrate
+      - chronos_chroniclers
+      - cathedral_effect
+      - reproducibility_pack
+    soft_enhancers:
+      - detective
+      - augur_federation
+      - eight_cylinder_protocol
+      - beans_beanpods
+    orthogonals: []
+    notes: >
+      THIS PRIMITIVE. The Bedrock Foundation Empirical-Measurement-Substrate.
+      Multi-level L1-L12+ empirical measurement with Chronos Chronicler
+      signatories, prerequisite-graph, three-mode comparator, and temporal
+      diagnostics. The Electrical System of the LB platform.
+
+# ── PAINT LAYER ────────────────────────────────────────────────────────────────
+# Brand + narrative. Builds on edifice layer.
+
+  pied_piper_of_dragons:
+    layer: paint
+    aa_number: ~
+    landed_session: "B133"
+    hard_prerequisites:
+      - chandelier_substrate
+    soft_enhancers:
+      - tower_of_peace
+    orthogonals: []
+    notes: >
+      Brand articulation. The LIGHT cast from the Tower of Peace.
+      Meaningful only because Chandelier provides empirical grounding.
+
+  tower_of_peace:
+    layer: paint
+    aa_number: ~
+    landed_session: "BP002"
+    hard_prerequisites:
+      - chandelier_substrate
+    soft_enhancers:
+      - pied_piper_of_dragons
+    orthogonals: []
+    notes: >
+      Architectural seat from which the Chandelier hangs.
+      LB's brand-architectural position: peace via cooperation.
+      The Tower casts light because the Bedrock Foundation generates
+      immutably accurate knowledge.
