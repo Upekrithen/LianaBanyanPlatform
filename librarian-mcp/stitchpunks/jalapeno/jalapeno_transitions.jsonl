@@ -1,0 +1,22 @@
+{"type":"transition","id":"J-11","ts":"2026-04-30T01:35:22.948Z","from_status":"pending","status":"in_progress","transition_reason":"T05 test transition","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-12","ts":"2026-04-30T01:35:22.959Z","from_status":"pending","status":"in_progress","transition_reason":"move to in_progress","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-12","ts":"2026-04-30T01:35:22.963Z","from_status":"in_progress","status":"done","transition_reason":"mark as done","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-13","ts":"2026-04-30T01:35:22.975Z","from_status":"pending","status":"in_progress","transition_reason":"starting work","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-13","ts":"2026-04-30T01:35:22.980Z","from_status":"in_progress","status":"blocked","transition_reason":"blocked by dependency","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-13","ts":"2026-04-30T01:35:22.985Z","from_status":"blocked","status":"in_progress","transition_reason":"unblocked","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-13","ts":"2026-04-30T01:35:22.990Z","from_status":"in_progress","status":"done","transition_reason":"completed","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-14","ts":"2026-04-30T01:35:22.999Z","from_status":"pending","status":"in_progress","transition_reason":"","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-14","ts":"2026-04-30T01:35:23.003Z","from_status":"in_progress","status":"done","transition_reason":"","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-15","ts":"2026-04-30T01:35:23.013Z","from_status":"pending","status":"superseded","transition_reason":"superseded by J-99 scope expansion","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-16","ts":"2026-04-30T01:35:23.030Z","from_status":"pending","status":"in_progress","transition_reason":"","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-26","ts":"2026-04-30T01:36:52.805Z","from_status":"pending","status":"in_progress","transition_reason":"T05 test transition","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-27","ts":"2026-04-30T01:36:52.815Z","from_status":"pending","status":"in_progress","transition_reason":"move to in_progress","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-27","ts":"2026-04-30T01:36:52.820Z","from_status":"in_progress","status":"done","transition_reason":"mark as done","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-28","ts":"2026-04-30T01:36:52.832Z","from_status":"pending","status":"in_progress","transition_reason":"starting work","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-28","ts":"2026-04-30T01:36:52.837Z","from_status":"in_progress","status":"blocked","transition_reason":"blocked by dependency","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-28","ts":"2026-04-30T01:36:52.842Z","from_status":"blocked","status":"in_progress","transition_reason":"unblocked","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-28","ts":"2026-04-30T01:36:52.847Z","from_status":"in_progress","status":"done","transition_reason":"completed","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-29","ts":"2026-04-30T01:36:52.858Z","from_status":"pending","status":"in_progress","transition_reason":"","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-29","ts":"2026-04-30T01:36:52.862Z","from_status":"in_progress","status":"done","transition_reason":"","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-30","ts":"2026-04-30T01:36:52.874Z","from_status":"pending","status":"superseded","transition_reason":"superseded by J-99 scope expansion","transitioned_by":"tarzan-vine"}
+{"type":"transition","id":"J-31","ts":"2026-04-30T01:36:52.894Z","from_status":"pending","status":"in_progress","transition_reason":"","transitioned_by":"tarzan-vine"}
