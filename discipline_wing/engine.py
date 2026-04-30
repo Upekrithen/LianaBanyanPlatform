@@ -305,6 +305,16 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
         # TimeWave Security — pattern match BEFORE consensus (K517)
         # If action matches N+ prior rejections, inject synthetic critical Augur result
         tw_enabled = wing_config.get("timewave_security_enabled", True)
+
+        # KN001 Eblet bypass — scratch tablets are not canonical state; TimeWave doesn't apply
+        if tw_enabled:
+            try:
+                from discipline_wing.eblet_router import is_eblet_path as _is_eblet_path
+                if _is_eblet_path(tc.file_path):
+                    tw_enabled = False
+            except Exception:
+                pass  # Fail-safe: import error → proceed with TimeWave enabled
+
         tw_match: Optional[dict] = None
         if tw_enabled:
             try:
