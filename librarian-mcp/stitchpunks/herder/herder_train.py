@@ -28,6 +28,12 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from herder_observe import load_observations
 from herder_fingerprint import load_registry, derive_fingerprint
+from session_position_classifier import (
+    classify_session_position,
+    position_cost_multiplier,
+    get_all_position_classes,
+    SessionPositionClass,
+)
 
 _HERE = Path(__file__).parent
 _MODELS_DIR = _HERE / "models"
@@ -53,7 +59,16 @@ def _model_path(model_version: str) -> Path:
 # ─── Feature extraction ───────────────────────────────────────────────────────
 
 def _observation_features(obs: Dict[str, Any]) -> Dict[str, float]:
-    """Extract numeric feature vector from a single observation."""
+    """
+    Extract numeric feature vector from a single observation.
+    KN025: added session_position_class interaction terms + composes_on_warm_infrastructure.
+    """
+    pos_class = obs.get("session_position_class", "pod_first")
+    # Validate; default to pod_first if unrecognized
+    if pos_class not in get_all_position_classes():
+        pos_class = "pod_first"
+    pos_multiplier = position_cost_multiplier(pos_class)  # type: ignore[arg-type]
+
     return {
         "phase_c_component_count": float(obs.get("phase_c_component_count", 0)),
         "test_density": float(obs.get("test_density", 0.0)),
@@ -61,6 +76,11 @@ def _observation_features(obs: Dict[str, Any]) -> Dict[str, float]:
         "canonical_path_resolution_count": float(obs.get("canonical_path_resolution_count", 0)),
         "grep_count": float(obs.get("grep_count", 0)),
         "wrasse_pre_injection": 1.0 if obs.get("wrasse_pre_injection_flag") else 0.0,
+        # KN025 — session position features
+        "session_position_multiplier": pos_multiplier,
+        "is_pod_first": 1.0 if pos_class == "pod_first" else 0.0,
+        "is_pod_late": 1.0 if pos_class == "pod_late" else 0.0,
+        "composes_on_warm": 1.0 if obs.get("composes_on_warm_infrastructure") else 0.0,
     }
 
 
@@ -163,6 +183,8 @@ def train_models(
     feature_names = [
         "phase_c_component_count", "test_density", "wrasse_density",
         "canonical_path_resolution_count", "grep_count", "wrasse_pre_injection",
+        # KN025 — session position features
+        "session_position_multiplier", "is_pod_first", "is_pod_late", "composes_on_warm",
     ]
     Xs = [[_observation_features(o)[fn] for fn in feature_names] for o in observations]
 
@@ -363,6 +385,75 @@ def predict_for_bean_class(
         result["beanpod_size"] = beanpod_size
         result["note"] = f"Scaled for {beanpod_size}-bean pod (overlap factor 0.85)"
 
+    return result
+
+
+def predict_with_position(
+    bean_class: str,
+    session_position_class: str = "pod_first",
+    composes_on_warm: bool = False,
+    cumulative_pp_at_start: float = 0.0,
+    cross_pod_ordinal: int = 0,
+    confidence_level: float = 0.80,
+) -> Dict[str, Any]:
+    """
+    KN025: Predict context_cost_pp for a (bean_class, session_position_class) cell.
+
+    Extends predict_for_bean_class with position-aware features.
+    Returns calibrated 80% (default) confidence intervals for #2298 pre-registration.
+
+    Args:
+        bean_class: "small" | "medium" | "medium-large" | "large" | etc.
+        session_position_class: "pod_first" | "pod_warm" | "pod_deep_warm" | "pod_late"
+        composes_on_warm: True if bean composes on already-loaded infrastructure
+        cumulative_pp_at_start: context % consumed before this bean
+        cross_pod_ordinal: position in cross-pod sequence (0 if single pod)
+        confidence_level: CI coverage (default 0.80 = 80% CI for pre-reg)
+
+    Returns prediction dict with session_position-aware CI for pre-registration.
+    """
+    # Map confidence_level to z-score
+    z_map = {0.80: 1.282, 0.90: 1.645, 0.95: 1.960}
+    z = z_map.get(confidence_level, 1.282)
+
+    pos_mult = position_cost_multiplier(session_position_class)  # type: ignore[arg-type]
+
+    registry = load_registry()
+    if bean_class in registry:
+        fp = registry[bean_class]
+        features = {
+            "phase_c_component_count": fp.get("phase_c_component_count", {}).get("mean", 4.0),
+            "test_density": fp.get("test_density", {}).get("mean", 1.0),
+            "wrasse_density": fp.get("wrasse_density", {}).get("mean", 0.5),
+            "canonical_path_resolution_count": fp.get("canonical_path_resolution_count", {}).get("mean", 2.0),
+            "grep_count": fp.get("grep_count", {}).get("mean", 3.0),
+            "wrasse_pre_injection": fp.get("wrasse_pre_injection_rate", 1.0),
+            "session_position_multiplier": pos_mult,
+            "is_pod_first": 1.0 if session_position_class == "pod_first" else 0.0,
+            "is_pod_late": 1.0 if session_position_class == "pod_late" else 0.0,
+            "composes_on_warm": 1.0 if composes_on_warm else 0.0,
+        }
+    else:
+        features = {
+            "phase_c_component_count": 4.0,
+            "test_density": 1.0,
+            "wrasse_density": 0.5,
+            "canonical_path_resolution_count": 2.0,
+            "grep_count": 3.0,
+            "wrasse_pre_injection": 1.0,
+            "session_position_multiplier": pos_mult,
+            "is_pod_first": 1.0 if session_position_class == "pod_first" else 0.0,
+            "is_pod_late": 1.0 if session_position_class == "pod_late" else 0.0,
+            "composes_on_warm": 1.0 if composes_on_warm else 0.0,
+        }
+
+    result = predict(features, confidence_z=z)
+    result["bean_class"] = bean_class
+    result["session_position_class"] = session_position_class
+    result["position_cost_multiplier"] = pos_mult
+    result["composes_on_warm"] = composes_on_warm
+    result["confidence_level"] = confidence_level
+    result["ci_label"] = f"{int(confidence_level*100)}% CI"
     return result
 
 
