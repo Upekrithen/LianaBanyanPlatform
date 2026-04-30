@@ -39,10 +39,31 @@ from discipline_wing import timewave_security, angel_of_death
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
-WING_CONFIG_PATH   = Path(os.path.expanduser("~/.claude/state/bishop_wing_augurs.json"))
-AUGUR_DIR          = Path(os.path.expanduser("~/.claude/state/wing_augurs"))
-TELEMETRY_PATH     = Path(os.path.expanduser("~/.claude/state/wing_telemetry.jsonl"))
-LIBRARIAN_TS_FILE  = Path(os.path.expanduser("~/.claude/state/bishop_last_librarian_consult.ts"))
+WING_CONFIG_PATH    = Path(os.path.expanduser("~/.claude/state/bishop_wing_augurs.json"))
+AUGUR_DIR           = Path(os.path.expanduser("~/.claude/state/wing_augurs"))
+TELEMETRY_PATH      = Path(os.path.expanduser("~/.claude/state/wing_telemetry.jsonl"))
+LIBRARIAN_TS_FILE   = Path(os.path.expanduser("~/.claude/state/bishop_last_librarian_consult.ts"))
+SUBSTRATE_CACHE     = Path(os.path.expanduser("~/.lb-session/substrate_cache.json"))
+
+
+def _read_current_session_id() -> str:
+    """
+    KN005: Read the current session ID from the substrate cache or env.
+    Used to tag TimeWave Security events for session-boundary filtering.
+    Returns "" if not available (safe default — event still recorded, just not session-tagged).
+    """
+    # Prefer env var (cheapest, no I/O)
+    session_id = os.environ.get("LB_SESSION_ID", "").strip()
+    if session_id:
+        return session_id
+    # Fallback: substrate cache (written by brief_me)
+    try:
+        if SUBSTRATE_CACHE.exists():
+            data = json.loads(SUBSTRATE_CACHE.read_text(encoding="utf-8-sig"))
+            return str(data.get("session_id", "") or "")
+    except Exception:
+        pass
+    return ""
 
 # ── Data types ─────────────────────────────────────────────────────────────────
 
@@ -380,7 +401,8 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
                 dr_result = None  # Dragonrider failure → proceed without (fail-safe)
 
         # TimeWave Security — record rejected action as security event (K517)
-        # Fires on Wing-block OR Dragonrider-escalate (both are sanctioned rejections)
+        # KN005: only records when a real critical Augur (not the synthetic TW augur itself)
+        # caused the block.  Advisory Augur warnings and non-Augur rejections do NOT increment.
         tw_event_id: Optional[str] = None
         aod_burial_id: Optional[str] = None
         if tw_enabled and decision.decision == "block":
@@ -388,13 +410,23 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
                 source = "dragonrider_reject" if (
                     dr_result and dr_result.sandbox_decision == "escalate_to_block"
                 ) else "wing_block"
+                # KN005 D.3: check if a real critical Augur (not synthetic TW augur) caused the block
+                is_critical_augur_rejection = any(
+                    r.augur_class == "critical"
+                    and r.triggered
+                    and r.augur_id != "tw-security-pattern-match"
+                    for r in augur_results
+                )
+                current_session = _read_current_session_id()
                 tw_event_id = timewave_security.record_event(
                     content=tc.content,
                     file_path=tc.file_path,
                     triggered_augur_ids=decision.triggered_augurs,
                     consensus_decision=decision.decision,
                     source=source,
+                    session=current_session,
                     enabled=True,
+                    is_critical_augur_rejection=is_critical_augur_rejection,
                 )
             except Exception:
                 pass  # Fail-safe
@@ -473,8 +505,10 @@ def evaluate(tool_call_data: Dict[str, Any]) -> EvaluationResult:
             timewave_security={
                 "pattern_detected": tw_match.get("pattern_detected", False),
                 "pattern_hash": tw_match.get("pattern_hash", ""),
+                "content_class": tw_match.get("content_class", ""),
                 "prior_rejection_count": tw_match.get("prior_rejection_count", 0),
                 "weight_bump": tw_match.get("weight_bump", 0.0),
+                "session_filtered": tw_match.get("session_filtered", False),
                 "event_id": tw_event_id,
             } if tw_match else None,
             angel_of_death={
