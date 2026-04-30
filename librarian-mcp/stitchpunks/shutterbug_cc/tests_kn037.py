@@ -125,31 +125,31 @@ def test_parser_uses_last_assistant_message():
 # ─── Capture module tests ─────────────────────────────────────────────────────
 
 def test_capture_filename_format():
-    """Filename matches D.3 format: 'Screenshot YYYY-MM-DD HHMMSS_ppNN.png'"""
+    """Filename matches format: 'Screenshot YYYY-MM-DD HHMMSS_<event>_<agent>.png'"""
     import re
-    filename = capture_mod._build_filename(21.7)
-    pattern = r"^Screenshot \d{4}-\d{2}-\d{2} \d{6}_pp\d{2}\.png$"
-    check("Capture: D.3 filename format correct",
+    filename = capture_mod._build_filename("SessionStart", "cursor")
+    pattern = r"^Screenshot \d{4}-\d{2}-\d{2} \d{6}_SessionStart_cursor\.png$"
+    check("Capture: filename format correct",
           bool(re.match(pattern, filename)),
           detail=f"got: {filename}")
 
 
-def test_capture_pp_in_filename():
-    """Integer pp value appears in filename."""
-    filename = capture_mod._build_filename(42.9)
-    check("Capture: pp value in filename",
-          "_pp42.png" in filename,
+def test_capture_agent_in_filename():
+    """Agent label appears in filename."""
+    filename = capture_mod._build_filename("SessionEnd", "bishop")
+    check("Capture: agent label in filename",
+          "_SessionEnd_bishop.png" in filename,
           detail=f"got: {filename}")
 
 
 def test_capture_stub_written_on_failure():
     """Stub is written when all capture methods fail."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        out_path = Path(tmpdir) / "Screenshot 2026-04-30 123456_pp10.png"
-        stub = capture_mod._write_stub(out_path, 10.0, "test failure")
+        out_path = Path(tmpdir) / "Screenshot 2026-04-30 123456_SessionStart_cursor.png"
+        stub = capture_mod._write_stub(out_path, "cursor", "SessionStart", "test failure")
         check("Capture: stub file created", stub.exists())
         data = json.loads(stub.read_text())
-        check("Capture: stub contains pp value", data.get("pp") == 10.0)
+        check("Capture: stub contains agent field", data.get("agent") == "cursor")
 
 
 # ─── Threshold logic tests ────────────────────────────────────────────────────
@@ -172,90 +172,72 @@ def test_threshold_logic_same_integer():
 
 # ─── Integration tests ────────────────────────────────────────────────────────
 
-def test_integration_full_hook_fires_on_crossing():
+def test_integration_sessionend_fires_capture():
     """
-    Full hook integration: with mocked parser (returning 21.5%) and
-    mocked capture, verify capture is called when floor crosses.
+    SessionEnd: hook calls capture_both and kills watcher (no watcher running = ok).
     """
     shutterbug_mod = _load("bishop_shutterbug_cc")
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        last_pp_file = Path(tmpdir) / "last_pp.json"
-        last_pp_file.write_text('{"pp": 20.0, "captured_this_session": [20]}',
-                                encoding="utf-8")
         errors_log = Path(tmpdir) / "errors.log"
-
-        # Patch state paths
-        shutterbug_mod.LAST_PP_FILE = last_pp_file
+        pid_file = Path(tmpdir) / "watcher.pid"
         shutterbug_mod.ERRORS_LOG = errors_log
         shutterbug_mod.STATE_DIR = Path(tmpdir)
-
-        # Mock imports within main()
-        mock_parser = MagicMock()
-        mock_parser.extract_context_pct_from_session.return_value = 21.5
+        shutterbug_mod.PID_FILE = pid_file
 
         mock_capture = MagicMock()
-        mock_capture.capture.return_value = {
-            "success": True, "path": "/tmp/shot.png", "method": "pil",
-            "pp": 21.5, "filename": "Screenshot 2026-04-30 120000_pp21.png"
-        }
+        mock_capture.capture_both.return_value = [
+            {"agent": "cursor", "success": True, "path": "/tmp/c.png", "filename": "c.png", "monitor_rect": None},
+            {"agent": "bishop", "success": True, "path": "/tmp/b.png", "filename": "b.png", "monitor_rect": None},
+        ]
 
         def fake_import_local(name: str):
-            if name == "bishop_shutterbug_jsonl_parser":
-                return mock_parser
             if name == "bishop_shutterbug_capture":
                 return mock_capture
             return None
 
         shutterbug_mod._import_local = fake_import_local
 
-        import io
-        with patch("sys.stdin", io.StringIO('{"session_id": "test-session"}')):
+        import io, os
+        env_backup = os.environ.get("SHUTTERBUG_EVENT")
+        os.environ["SHUTTERBUG_EVENT"] = "SessionEnd"
+        with patch("sys.stdin", io.StringIO('{"session_id": "test-sess-end-id"}')):
             rc = shutterbug_mod.main()
+        if env_backup is None:
+            del os.environ["SHUTTERBUG_EVENT"]
+        else:
+            os.environ["SHUTTERBUG_EVENT"] = env_backup
 
-        check("Integration: hook returns 0 (no block)", rc == 0)
-        check("Integration: capture called when threshold crossed",
-              mock_capture.capture.called)
+        check("Integration SessionEnd: hook returns 0", rc == 0)
+        check("Integration SessionEnd: capture_both called",
+              mock_capture.capture_both.called)
 
 
-def test_integration_hook_no_fire_on_dupe():
+def test_integration_sessionstart_no_crash():
     """
-    If current pp already in captured_this_session, capture should NOT fire.
+    SessionStart: hook attempts to spawn watcher (subprocess may fail in test env).
+    Verify hook returns 0 and does not raise.
     """
     shutterbug_mod = _load("bishop_shutterbug_cc")
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        last_pp_file = Path(tmpdir) / "last_pp.json"
-        # pp=21 already captured this session
-        last_pp_file.write_text('{"pp": 20.5, "captured_this_session": [21]}',
-                                encoding="utf-8")
         errors_log = Path(tmpdir) / "errors.log"
-        shutterbug_mod.LAST_PP_FILE = last_pp_file
+        pid_file = Path(tmpdir) / "watcher.pid"
         shutterbug_mod.ERRORS_LOG = errors_log
         shutterbug_mod.STATE_DIR = Path(tmpdir)
+        shutterbug_mod.PID_FILE = pid_file
 
-        mock_parser = MagicMock()
-        mock_parser.extract_context_pct_from_session.return_value = 21.5
-
-        mock_capture = MagicMock()
-        mock_capture.capture.return_value = {"success": True, "path": "", "method": "pil", "pp": 21.5, "filename": ""}
-
-        def fake_import_local(name: str):
-            if name == "bishop_shutterbug_jsonl_parser":
-                return mock_parser
-            if name == "bishop_shutterbug_capture":
-                return mock_capture
-            return None
-
-        shutterbug_mod._import_local = fake_import_local
-
-        import io
-        with patch("sys.stdin", io.StringIO('{"session_id": "test-session"}')):
+        import io, os
+        env_backup = os.environ.get("SHUTTERBUG_EVENT")
+        os.environ["SHUTTERBUG_EVENT"] = "SessionStart"
+        with patch("sys.stdin", io.StringIO('{"session_id": "test-sess-start"}')):
             rc = shutterbug_mod.main()
+        if env_backup is None:
+            del os.environ["SHUTTERBUG_EVENT"]
+        else:
+            os.environ["SHUTTERBUG_EVENT"] = env_backup
 
-        check("Integration: hook returns 0 on dupe skip", rc == 0)
-        check("Integration: capture NOT called for de-duped pp (D.8)",
-              not mock_capture.capture.called)
+        check("Integration SessionStart: hook returns 0 (no crash)", rc == 0)
 
 
 # ─── Runner ──────────────────────────────────────────────────────────────────
@@ -265,12 +247,12 @@ def run_all():
     test_parser_returns_none_for_empty_jsonl()
     test_parser_uses_last_assistant_message()
     test_capture_filename_format()
-    test_capture_pp_in_filename()
+    test_capture_agent_in_filename()
     test_capture_stub_written_on_failure()
     test_threshold_logic_crossing()
     test_threshold_logic_same_integer()
-    test_integration_full_hook_fires_on_crossing()
-    test_integration_hook_no_fire_on_dupe()
+    test_integration_sessionend_fires_capture()
+    test_integration_sessionstart_no_crash()
 
     print(f"\n{'='*60}")
     print("KN037 Shutterbug Bishop-CC Tests")

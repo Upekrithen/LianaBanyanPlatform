@@ -1,49 +1,51 @@
 #!/usr/bin/env python3
 """
-bishop_shutterbug_cc.py — KN037 Shutterbug Bishop-CC Extension.
+bishop_shutterbug_cc.py — KN037 Shutterbug session-boundary controller.
 
-#2304 sub-component (Stenographer / Shutterbug / Accountant CheckBook Suite).
-Eliminates Founder double-duty of manually screenshotting Bishop CC window.
-Auto-captures at every 1pp context-budget threshold crossing.
+SessionStart : spawns bishop_shutterbug_watcher.py as a detached background daemon.
+               Watcher immediately captures both monitors for Bishop's session start,
+               then polls for all subsequent session boundaries (Bishop + Knight).
 
-Fires on: UserPromptSubmit hook (after each Founder prompt — natural % update event).
-D.4: Hook trigger = UserPromptSubmit
+SessionEnd   : kills the watcher daemon (via PID file), then fires one final
+               capture_both("SessionEnd_bishop") for Bishop's own closing state.
 
-Flow:
-  1. Parse current context % from latest Bishop CC JSONL
-  2. Load last-captured-pp from ~/.claude/state/shutterbug/last_pp.json
-  3. If floor(current_pct) > floor(last_pp): new integer pp threshold crossed
-  4. D.8: Skip if same pp already captured this session (de-dupe by pp value)
-  5. Capture screenshot → BeanSprouts root (sweep hook handles folder at SessionEnd)
-  6. Update last_pp.json
-  7. D.5: Log errors to ~/.claude/state/shutterbug/errors.log; never block UserPromptSubmit
+Wired in ~/.claude/settings.json:
+  SessionStart hooks → this script (with SHUTTERBUG_EVENT=SessionStart)
+  SessionEnd   hooks → this script (with SHUTTERBUG_EVENT=SessionEnd)
 
-D.6: PowerShell or PIL capture (pick best available).
-D.9: Output root = C:/Users/Administrator/Pictures/BeanSprouts/ (loose)
+The watcher handles:
+  - Bishop CC sessions:   ~/.claude/projects/C--Users-Administrator-Documents/*.jsonl
+  - Knight/Cursor sessions: ~/.cursor/projects/.../agent-transcripts/<uuid>/<uuid>.jsonl
+
+Screenshot filenames: "Screenshot YYYY-MM-DD HHMMSS_<event>_<agent>_<uuid8>.png"
+All loose PNGs swept to BeanSprouts/NNN/ by bishop_screenshot_sweep.py at SessionEnd.
+
+D.5: Errors logged to errors.log; never blocks hook events.
 """
 
 from __future__ import annotations
 
 import json
-import math
+import os
+import signal
+import subprocess
 import sys
 import traceback
 from pathlib import Path
 
-HOOKS_DIR = Path(__file__).parent
-STATE_DIR = Path(r"C:\Users\Administrator\.claude\state\shutterbug")
-LAST_PP_FILE = STATE_DIR / "last_pp.json"
+HOOKS_DIR  = Path(__file__).parent
+STATE_DIR  = Path(r"C:\Users\Administrator\.claude\state\shutterbug")
+PID_FILE   = STATE_DIR / "watcher.pid"
 ERRORS_LOG = STATE_DIR / "errors.log"
+WATCHER    = HOOKS_DIR / "bishop_shutterbug_watcher.py"
 
 
 def _log_error(msg: str) -> None:
-    """D.5: Log error silently; never block UserPromptSubmit."""
     try:
         STATE_DIR.mkdir(parents=True, exist_ok=True)
         with ERRORS_LOG.open("a", encoding="utf-8") as fh:
             from datetime import datetime, timezone
-            ts = datetime.now(timezone.utc).isoformat()
-            fh.write(f"[{ts}] {msg}\n")
+            fh.write(f"[{datetime.now(timezone.utc).isoformat()}] {msg}\n")
     except Exception:
         pass
 
@@ -56,92 +58,82 @@ def _import_local(name: str):
     return mod
 
 
-def _load_last_pp() -> float:
-    """Load last captured pp from state file. Bootstrap = 0.0."""
+def _read_pid() -> int | None:
     try:
-        if LAST_PP_FILE.is_file():
-            data = json.loads(LAST_PP_FILE.read_text(encoding="utf-8"))
-            return float(data.get("pp", 0.0))
+        if PID_FILE.is_file():
+            return int(PID_FILE.read_text().strip())
     except Exception:
         pass
-    return 0.0
+    return None
 
 
-def _load_captured_this_session() -> set:
-    """Load set of pp values already captured this session (D.8 de-dupe)."""
+def _kill_watcher() -> None:
+    """Kill the background watcher daemon if it is running."""
+    pid = _read_pid()
+    if pid is None:
+        return
     try:
-        if LAST_PP_FILE.is_file():
-            data = json.loads(LAST_PP_FILE.read_text(encoding="utf-8"))
-            caps = data.get("captured_this_session", [])
-            return set(int(x) for x in caps if isinstance(x, (int, float)))
+        # Windows: taskkill
+        subprocess.run(
+            ["taskkill", "/PID", str(pid), "/F"],
+            capture_output=True, timeout=5,
+        )
     except Exception:
         pass
-    return set()
+    try:
+        PID_FILE.unlink(missing_ok=True)
+    except Exception:
+        pass
 
 
-def _save_last_pp(pp: float, captured_this_session: set) -> None:
-    """Persist last pp + session de-dupe set."""
+def _spawn_watcher(session_id: str) -> None:
+    """Spawn the watcher daemon as a detached background process."""
     try:
         STATE_DIR.mkdir(parents=True, exist_ok=True)
-        data = {
-            "pp": pp,
-            "captured_this_session": sorted(captured_this_session),
-        }
-        LAST_PP_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
-    except Exception:
-        pass
+        # Kill any leftover watcher from a previous session
+        _kill_watcher()
+
+        proc = subprocess.Popen(
+            [sys.executable, str(WATCHER), session_id],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP,
+        )
+        PID_FILE.write_text(str(proc.pid), encoding="utf-8")
+    except Exception as exc:
+        _log_error(f"Failed to spawn watcher: {exc}\n{traceback.format_exc()}")
 
 
 def main() -> int:
     try:
-        # Read hook payload (UserPromptSubmit provides session_id etc.)
+        raw = sys.stdin.read()
         try:
-            raw = sys.stdin.read()
             payload = json.loads(raw) if raw.strip() else {}
         except json.JSONDecodeError:
             payload = {}
 
-        session_id = payload.get("session_id") or payload.get("sessionId")
+        event = os.environ.get("SHUTTERBUG_EVENT", "")
+        session_id = (
+            payload.get("session_id")
+            or payload.get("sessionId")
+            or "unknown"
+        )
 
-        # Import local modules
-        try:
-            parser_mod = _import_local("bishop_shutterbug_jsonl_parser")
-            capture_mod = _import_local("bishop_shutterbug_capture")
-        except Exception as exc:
-            _log_error(f"Module import failed: {exc}\n{traceback.format_exc()}")
-            return 0  # D.5: never block
+        if event == "SessionStart":
+            _spawn_watcher(session_id)
 
-        # Get current context %
-        current_pct = parser_mod.extract_context_pct_from_session(session_id)
-        if current_pct is None:
-            # Can't determine pct — silently no-op (session may just be starting)
-            return 0
+        elif event == "SessionEnd":
+            # Kill the watcher first
+            _kill_watcher()
+            # Fire one final capture for Bishop's closing state
+            try:
+                cap = _import_local("bishop_shutterbug_capture")
+                cap.capture_both(f"SessionEnd_bishop_{session_id[:8]}")
+            except Exception as exc:
+                _log_error(f"SessionEnd final capture failed: {exc}")
 
-        # D.1: threshold granularity = 1pp; fire on every integer threshold crossing
-        last_pp = _load_last_pp()
-        captured_set = _load_captured_this_session()
-
-        current_floor = int(math.floor(current_pct))
-        last_floor = int(math.floor(last_pp))
-
-        if current_floor <= last_floor:
-            # No new integer threshold crossed — no-op
-            return 0
-
-        # D.8: De-dupe — skip if this pp was already captured this session
-        if current_floor in captured_set:
-            return 0
-
-        # New threshold reached — capture screenshot
-        result = capture_mod.capture(current_pct)
-        captured_set.add(current_floor)
-        _save_last_pp(current_pct, captured_set)
-
-        if not result.get("success"):
-            _log_error(
-                f"Capture fallback to stub at pp={current_pct:.1f}: "
-                f"method={result.get('method')} path={result.get('path')}"
-            )
+        else:
+            _log_error(f"SHUTTERBUG_EVENT not set or unrecognised: '{event}'")
 
         return 0
 
@@ -150,7 +142,7 @@ def main() -> int:
             _log_error(f"Fatal: {type(exc).__name__}: {exc}\n{traceback.format_exc()}")
         except Exception:
             pass
-        return 0  # D.5: never block UserPromptSubmit
+        return 0
 
 
 if __name__ == "__main__":
