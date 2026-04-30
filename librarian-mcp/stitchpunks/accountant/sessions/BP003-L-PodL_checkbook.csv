@@ -1,0 +1,5 @@
+bean_id,pod_id,session_id,bean_class,session_position_class,predicted_pp,context_pct_before,context_pct_after,measured_pp,residual_pp,liner_notes_count,brainscans_count,screenshots_count,files_changed,insertions,tests_passed,tests_total,outcome,wall_time_start,wall_time_end,notes
+KN032,Pod-L,BP003-L-PodL,large,pod_first,18.0,5.0,20.0,15.0,-3.0,1,1,0,8,812,43,43,landed,2026-04-30T18:17:10.870204Z,2026-04-30T18:17:10.873405Z,
+KN033,Pod-L,BP003-L-PodL,medium,pod_middle,15.0,20.0,45.0,25.0,10.0,1,1,0,3,623,30,30,landed,2026-04-30T18:17:10.874163Z,2026-04-30T18:17:10.877020Z,
+KN034,Pod-L,BP003-L-PodL,medium,pod_middle,14.0,45.0,72.0,27.0,13.0,1,1,0,5,490,17,17,landed,2026-04-30T18:17:10.877977Z,2026-04-30T18:17:10.880740Z,
+KN035,Pod-L,BP003-L-PodL,large,pod_last,15.0,72.0,85.0,13.0,-2.0,1,1,0,8,1110,21,21,landed,2026-04-30T18:17:10.881502Z,2026-04-30T18:17:10.884099Z,
