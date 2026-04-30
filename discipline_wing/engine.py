@@ -222,7 +222,27 @@ def _evaluate_single_augur(augur_cfg: dict, tool_call: ToolCall) -> AugurResult:
 
     # Determine if the trigger pattern matches
     path_match = bool(file_patterns) and _path_matches(file_patterns, tool_call.file_path)
-    text_match = bool(text_patterns) and _text_matches(text_patterns, text)
+
+    # K514.5: negation_context_enabled → per-match context analysis instead of document-level match
+    negation_context_enabled = augur_cfg.get("negation_context_enabled", False)
+    if negation_context_enabled and bool(text_patterns):
+        try:
+            from discipline_wing.augur_securities_negation import has_non_exempt_match as _negation_scan
+            _negation_markers = augur_cfg.get("negation_markers", [])
+            _negation_window  = augur_cfg.get("negation_window_tokens", 5)
+            _quotation_cfg    = augur_cfg.get("quotation_context", {})
+            _has_non_exempt, _exemption_log = _negation_scan(
+                text_patterns, text,
+                negation_markers=_negation_markers or None,
+                quotation_config=_quotation_cfg,
+                negation_window=_negation_window,
+            )
+            text_match = _has_non_exempt
+        except Exception:
+            # Fail-safe: if negation module fails, fall back to raw pattern match
+            text_match = _text_matches(text_patterns, text)
+    else:
+        text_match = bool(text_patterns) and _text_matches(text_patterns, text)
 
     # Trigger logic:
     # - Both path AND text patterns specified → AND (path is scope, text is trigger)
