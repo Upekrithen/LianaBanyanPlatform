@@ -36,6 +36,7 @@ from discipline_wing.consensus import AugurResult, ConsensusDecision, ConsensusL
 from discipline_wing.chronicler import write_chronicler
 from discipline_wing.dragonrider import phase_shift, DragonriderResult
 from discipline_wing import timewave_security, angel_of_death
+from discipline_wing import augur_living_gate as _living_gate
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
@@ -158,13 +159,25 @@ def _check_required_consult(augur_cfg: dict, tool_call: ToolCall) -> bool:
         return False  # No consult check — Augur fires based on trigger alone
 
     if consult_type == "state_file":
-        state_path = Path(os.path.expanduser(consult.get("path", "")))
-        freshness = consult.get("freshness_seconds", 600)
+        # KN038 Augur Living Gate: substrate-event-driven freshness replaces TTL.
+        # agent is inferred from the state_path name (bishop/knight/pawn) or defaults to "bishop".
+        state_path_str = consult.get("path", "")
+        agent = "bishop"
+        for name in ("knight", "pawn", "bishop"):
+            if name in state_path_str.lower():
+                agent = name
+                break
         try:
-            last_ts = int(state_path.read_text(encoding="utf-8").strip())
-            return (time.time() - last_ts) < freshness  # True = fresh = allow
+            return _living_gate.is_gate_open(agent)
         except Exception:
-            return False  # Can't read state → treat as stale → fire
+            # Brick Wall: Living Gate failure → fall back to TTL
+            state_path = Path(os.path.expanduser(state_path_str))
+            freshness = consult.get("freshness_seconds", 3600)
+            try:
+                last_ts = int(state_path.read_text(encoding="utf-8").strip())
+                return (time.time() - last_ts) < freshness
+            except Exception:
+                return False  # Can't read state → treat as stale → fire
 
     if consult_type == "text_contains":
         pattern = consult.get("pattern", "")

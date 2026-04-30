@@ -156,11 +156,16 @@ _AUGUR_PATTERNS = [
 ]
 
 def rule_05_augur_fresh(turns: list[dict]) -> dict:
-    """Augur consult must be fresh (within 10-min window) before write-class actions."""
-    # D.9: Augur-Librarian rule check uses 10-min freshness window.
-    # We check whether a brief_me/augur call appears at all — timestamp-based freshness
-    # requires the gate hook (bishop_librarian_gate.py) for enforcement at write-time.
-    # Here we confirm at least one Augur/brief_me call appears in the turns.
+    """
+    Augur consult must be fresh before write-class actions.
+
+    KN038 Augur Living Gate (#2314): freshness is now substrate-event-driven,
+    not clock-driven. The Living Gate (augur_living_gate.is_gate_open()) is the
+    enforcement point at write-time in engine.py. This rule confirms that at
+    least one Augur/brief_me call appears in the session turns — the precision
+    of the freshness check (whether a re-consult was truly needed) is handled
+    by the Living Gate against Pheromone substrate write events.
+    """
     tool_calls = _tool_calls_in(turns)
     augur_calls = [tc for tc in tool_calls if "brief_me" in tc or "augur" in tc.lower()]
     if augur_calls:
@@ -168,7 +173,7 @@ def rule_05_augur_fresh(turns: list[dict]) -> dict:
     full = _all_text(turns)
     for pat in _AUGUR_PATTERNS:
         if pat.search(full):
-            return {"status": "WARN", "evidence": "Augur mentioned but no tool call detected. Gate hook enforces at write-time."}
+            return {"status": "WARN", "evidence": "Augur mentioned but no tool call detected. Living Gate enforces at write-time (KN038)."}
     return {"status": "WARN", "evidence": "No Augur/brief_me activity detected in first-N turns."}
 
 
