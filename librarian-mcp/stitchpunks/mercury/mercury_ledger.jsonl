@@ -1,0 +1,32 @@
+{"ts":"2026-04-30T01:30:03.534Z","event":"observation","tool":"mercury_list_accounts","provenance":"mercury_client.listAccounts()","result":{"account_count":2,"stub":true}}
+{"ts":"2026-04-30T01:30:03.541Z","event":"observation","tool":"mercury_get_balance","account_id":"acct_stub_operating","provenance":"mercury_client.getBalance()","result":{"available":0,"currency":"USD","stub":true}}
+{"ts":"2026-04-30T01:30:03.542Z","event":"observation","tool":"mercury_get_transactions","account_id":"acct_stub_operating","provenance":"mercury_client.getTransactions()","result":{"transaction_count":0,"stub":true}}
+{"ts":"2026-04-30T01:30:03.543Z","event":"action_requested","tool":"mercury_request_transfer","action_id":"fc-005bdc4c","params":{"from_account_id":"acct_stub_operating","to_account_id":"acct_stub_reserve","amount_cents":10000,"memo":"Test transfer"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:03.544Z","event":"action_requested","tool":"mercury_request_ach","action_id":"fc-5ba93b09","params":{"account_id":"acct_stub_operating","amount_cents":5000,"routing_number":"021000021","account_number":"****","memo":"Test ACH"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:03.545Z","event":"action_requested","tool":"mercury_request_wire","action_id":"fc-59c461b1","params":{"account_id":"acct_stub_operating","amount_cents":250000,"recipient_name":"Test Vendor LLC","routing_number":"021000021","account_number":"****","memo":"Test wire"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:03.546Z","event":"observation","tool":"test_t07","provenance":"unit-test-direct","result":{"ok":true}}
+{"ts":"2026-04-30T01:30:03.554Z","event":"action_requested","tool":"mercury_request_transfer","action_id":"fc-03fe55b4","params":{"from_account_id":"acct_stub_operating","to_account_id":"acct_stub_reserve","amount_cents":500,"memo":"T08 test"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:03.561Z","event":"approval_consumed","action_id":"fc-53107b3a","ok":true}
+{"ts":"2026-04-30T01:30:03.562Z","event":"approval_consumed","action_id":"fc-53107b3a","ok":false,"reason":"action_id not found"}
+{"ts":"2026-04-30T01:30:03.563Z","event":"approval_revoked","action_id":"fc-c80bcf35","revoked":true}
+{"ts":"2026-04-30T01:30:03.573Z","event":"observation","tool":"mercury_list_accounts","provenance":"mercury_client.listAccounts()","result":{"account_count":2,"stub":true}}
+{"ts":"2026-04-30T01:30:03.573Z","event":"observation","tool":"mercury_get_balance","account_id":"acct_stub_operating","provenance":"mercury_client.getBalance()","result":{"available":0,"currency":"USD","stub":true}}
+{"ts":"2026-04-30T01:30:03.573Z","event":"observation","tool":"mercury_list_accounts","provenance":"mercury_client.listAccounts()","result":{"account_count":2,"stub":true}}
+{"ts":"2026-04-30T01:30:03.573Z","event":"observation","tool":"mercury_get_balance","account_id":"acct_stub_reserve","provenance":"mercury_client.getBalance()","result":{"available":0,"currency":"USD","stub":true}}
+{"ts":"2026-04-30T01:30:03.573Z","event":"observation","tool":"mercury_get_transactions","account_id":"acct_stub_reserve","provenance":"mercury_client.getTransactions()","result":{"transaction_count":0,"stub":true}}
+{"ts":"2026-04-30T01:30:45.356Z","event":"observation","tool":"mercury_list_accounts","provenance":"mercury_client.listAccounts()","result":{"account_count":2,"stub":true}}
+{"ts":"2026-04-30T01:30:45.361Z","event":"observation","tool":"mercury_get_balance","account_id":"acct_stub_operating","provenance":"mercury_client.getBalance()","result":{"available":0,"currency":"USD","stub":true}}
+{"ts":"2026-04-30T01:30:45.362Z","event":"observation","tool":"mercury_get_transactions","account_id":"acct_stub_operating","provenance":"mercury_client.getTransactions()","result":{"transaction_count":0,"stub":true}}
+{"ts":"2026-04-30T01:30:45.363Z","event":"action_requested","tool":"mercury_request_transfer","action_id":"fc-f2f205de","params":{"from_account_id":"acct_stub_operating","to_account_id":"acct_stub_reserve","amount_cents":10000,"memo":"Test transfer"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:45.364Z","event":"action_requested","tool":"mercury_request_ach","action_id":"fc-14c39b39","params":{"account_id":"acct_stub_operating","amount_cents":5000,"routing_number":"021000021","account_number":"****","memo":"Test ACH"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:45.365Z","event":"action_requested","tool":"mercury_request_wire","action_id":"fc-b47ddf14","params":{"account_id":"acct_stub_operating","amount_cents":250000,"recipient_name":"Test Vendor LLC","routing_number":"021000021","account_number":"****","memo":"Test wire"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:45.366Z","event":"observation","tool":"test_t07","provenance":"unit-test-direct","result":{"ok":true}}
+{"ts":"2026-04-30T01:30:45.375Z","event":"action_requested","tool":"mercury_request_transfer","action_id":"fc-0bfa2207","params":{"from_account_id":"acct_stub_operating","to_account_id":"acct_stub_reserve","amount_cents":500,"memo":"T08 test"},"fire_control":"pending_human_approval"}
+{"ts":"2026-04-30T01:30:45.382Z","event":"approval_consumed","action_id":"fc-be5b1dee","ok":true}
+{"ts":"2026-04-30T01:30:45.382Z","event":"approval_consumed","action_id":"fc-be5b1dee","ok":false,"reason":"action_id not found"}
+{"ts":"2026-04-30T01:30:45.383Z","event":"approval_revoked","action_id":"fc-52b314fa","revoked":true}
+{"ts":"2026-04-30T01:30:45.392Z","event":"observation","tool":"mercury_list_accounts","provenance":"mercury_client.listAccounts()","result":{"account_count":2,"stub":true}}
+{"ts":"2026-04-30T01:30:45.393Z","event":"observation","tool":"mercury_get_transactions","account_id":"acct_stub_reserve","provenance":"mercury_client.getTransactions()","result":{"transaction_count":0,"stub":true}}
+{"ts":"2026-04-30T01:30:45.393Z","event":"observation","tool":"mercury_get_balance","account_id":"acct_stub_operating","provenance":"mercury_client.getBalance()","result":{"available":0,"currency":"USD","stub":true}}
+{"ts":"2026-04-30T01:30:45.393Z","event":"observation","tool":"mercury_list_accounts","provenance":"mercury_client.listAccounts()","result":{"account_count":2,"stub":true}}
+{"ts":"2026-04-30T01:30:45.393Z","event":"observation","tool":"mercury_get_balance","account_id":"acct_stub_reserve","provenance":"mercury_client.getBalance()","result":{"available":0,"currency":"USD","stub":true}}
