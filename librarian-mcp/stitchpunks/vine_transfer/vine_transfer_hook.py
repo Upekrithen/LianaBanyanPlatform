@@ -154,6 +154,32 @@ def run_vine_transfer(
     except Exception as e:
         component_results["spec_memo"] = {"note": f"Spec memo check error: {e}"}
 
+    # ── Action 13: CheckBook Session Arm (KN031) ──────────────────────────────
+    # Non-breaking extension: fires CheckBook Orchestrator to arm Stenographer +
+    # Shutterbug for the incoming session. Degrades gracefully on any error.
+    try:
+        import sys as _sys
+        _checkbook_dir = __import__("pathlib").Path(__file__).parent.parent
+        if str(_checkbook_dir) not in _sys.path:
+            _sys.path.insert(0, str(_checkbook_dir))
+        from checkbook.checkbook_orchestrator import arm_session as _cb_arm
+        _cb_session = _cb_arm(
+            session_id=session_id,
+            pod_id="",
+            bean_sequence=[],
+            agent="Knight",
+            enable_shutterbug=True,
+        )
+        component_results["checkbook_arm"] = {
+            "status": "armed",
+            "session_id": session_id,
+        }
+    except Exception as e:
+        component_results["checkbook_arm"] = {
+            "status": "error",
+            "error": str(e),
+        }
+
     # ── Action 12: Assemble Vine Landing Receipt ───────────────────────────────
     elapsed_ms = int((time.monotonic() - t0) * 1000)
 
