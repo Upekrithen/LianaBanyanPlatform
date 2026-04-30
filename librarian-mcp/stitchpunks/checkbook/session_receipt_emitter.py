@@ -71,18 +71,18 @@ def format_receipt_summary(receipt: Dict[str, Any]) -> str:
     deferred = receipt.get("beans_deferred", [])
 
     lines = [
-        f"╔══ CheckBook Receipt ══════════════════════════════",
-        f"║  Session: {session_id}",
-        f"║  Pod:     {pod_id}",
-        f"║  Completed ({len(completed)}): {', '.join(completed) or 'none'}",
-        f"║  Deferred  ({len(deferred)}): {', '.join(deferred) or 'none'}",
-        f"║  Scenario: {summary.get('scenario_verdict', '?')}",
-        f"║  Predicted: {summary.get('total_predicted_pp', '?')}pp",
-        f"║  Measured:  {summary.get('total_measured_pp') or '?'}pp",
-        f"║  Mean/bean: {summary.get('mean_pp_per_bean') or '?'}pp",
-        f"║  ctx open→close: {receipt.get('context_pct_open', '?')}% → {receipt.get('context_pct_close', '?')}%",
-        f"║  Sig verified: {verify_receipt(receipt)}",
-        f"╚══════════════════════════════════════════════════",
+        f"+== CheckBook Receipt ==================================================",
+        f"|  Session: {session_id}",
+        f"|  Pod:     {pod_id}",
+        f"|  Completed ({len(completed)}): {', '.join(completed) or 'none'}",
+        f"|  Deferred  ({len(deferred)}): {', '.join(deferred) or 'none'}",
+        f"|  Scenario: {summary.get('scenario_verdict', '?')}",
+        f"|  Predicted: {summary.get('total_predicted_pp', '?')}pp",
+        f"|  Measured:  {summary.get('total_measured_pp') or '?'}pp",
+        f"|  Mean/bean: {summary.get('mean_pp_per_bean') or '?'}pp",
+        f"|  ctx open->close: {receipt.get('context_pct_open', '?')}% -> {receipt.get('context_pct_close', '?')}%",
+        f"|  Sig verified: {verify_receipt(receipt)}",
+        f"+======================================================================",
     ]
     return "\n".join(lines)
 

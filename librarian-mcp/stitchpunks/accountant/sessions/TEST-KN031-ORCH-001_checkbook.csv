@@ -1,0 +1,1 @@
+bean_id,pod_id,session_id,bean_class,session_position_class,predicted_pp,context_pct_before,context_pct_after,measured_pp,residual_pp,liner_notes_count,brainscans_count,screenshots_count,files_changed,insertions,tests_passed,tests_total,outcome,wall_time_start,wall_time_end,notes

@@ -1,0 +1,6 @@
+bean_id,pod_id,session_id,bean_class,session_position_class,predicted_pp,context_pct_before,context_pct_after,measured_pp,residual_pp,liner_notes_count,brainscans_count,screenshots_count,files_changed,insertions,tests_passed,tests_total,outcome,wall_time_start,wall_time_end,notes
+KN027,Pod-K,BP003-K-PodK,medium,pod_first,12.0,0.0,0.0,0.0,-12.0,1,1,0,5,831,0,0,landed,2026-04-30T16:46:19.378468Z,2026-04-30T16:46:19.382242Z,
+KN028,Pod-K,BP003-K-PodK,medium,pod_middle,12.0,0.0,0.0,0.0,-12.0,1,0,0,4,853,0,0,landed,2026-04-30T16:46:19.383082Z,2026-04-30T16:46:19.384558Z,
+KN029,Pod-K,BP003-K-PodK,medium,pod_middle,12.0,0.0,0.0,0.0,-12.0,1,0,0,5,1140,0,0,landed,2026-04-30T16:46:19.385288Z,2026-04-30T16:46:19.387630Z,
+KN030,Pod-K,BP003-K-PodK,small-medium,pod_middle,10.0,0.0,0.0,0.0,-10.0,1,0,0,3,725,0,0,landed,2026-04-30T16:46:19.388498Z,2026-04-30T16:46:19.390033Z,
+KN031,Pod-K,BP003-K-PodK,small-medium,pod_last,10.0,0.0,0.0,0.0,-10.0,1,1,0,5,995,0,0,landed,2026-04-30T16:46:19.390729Z,2026-04-30T16:46:19.392863Z,

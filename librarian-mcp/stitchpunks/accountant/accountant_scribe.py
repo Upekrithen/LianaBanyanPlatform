@@ -164,27 +164,32 @@ class AccountantScribe:
         """Format a compact human-readable receipt for terminal display."""
         rows, summary = self.reconcile()
         lines = [
-            f"╔══ CheckBook Receipt — {self.session_id} {'═' * 20}",
-            f"║  Pod: {self.pod_id}  Beans: {summary.get('total_beans', 0)}  "
+            f"+== CheckBook Receipt -- {self.session_id} {'=' * 20}",
+            f"|  Pod: {self.pod_id}  Beans: {summary.get('total_beans', 0)}  "
             f"Landed: {summary.get('beans_landed', 0)}",
-            f"║  Scenario: {summary.get('scenario_verdict', '?')}  "
+            f"|  Scenario: {summary.get('scenario_verdict', '?')}  "
             f"Predicted: {summary.get('total_predicted_pp', 0):.1f}pp  "
             f"Measured: {summary.get('total_measured_pp') or '?'}pp",
-            f"║  Mean/bean: {summary.get('mean_pp_per_bean') or '?'}pp",
-            f"║  Notes: {summary.get('total_liner_notes', 0)}  "
+            f"|  Mean/bean: {summary.get('mean_pp_per_bean') or '?'}pp",
+            f"|  Notes: {summary.get('total_liner_notes', 0)}  "
             f"Brainscans: {summary.get('total_brainscans', 0)}  "
             f"Screenshots: {summary.get('total_screenshots', 0)}",
-            "╠══ Per-Bean ══════════════════════════════════════",
+            "+== Per-Bean ======================================================",
         ]
         for row in rows:
             mp = f"{row.measured_pp:.2f}pp" if isinstance(row.measured_pp, float) and row.measured_pp else "?"
-            pp = f"{row.predicted_pp:.1f}pp" if row.predicted_pp else "—"
+            pp = f"{row.predicted_pp:.1f}pp" if row.predicted_pp else "-"
             lines.append(
-                f"║  {row.bean_id:15s} {row.bean_class:12s} ctx: "
-                f"{row.context_pct_before or '?':>5}→{row.context_pct_after or '?':<5} "
+                f"|  {row.bean_id:15s} {row.bean_class:12s} ctx: "
+                f"{row.context_pct_before or '?':>5}->{row.context_pct_after or '?':<5} "
                 f"measured={mp} predicted={pp} outcome={row.outcome}"
             )
-        lines.append("╚" + "═" * 54)
+        lines.append("+" + "=" * 54)
         receipt = "\n".join(lines)
-        print(receipt, flush=True)
+        try:
+            print(receipt, flush=True)
+        except UnicodeEncodeError:
+            # Windows cp1252: replace box-drawing chars with ASCII equivalents
+            ascii_receipt = receipt.replace("╔", "+").replace("║", "|").replace("╠", "+").replace("╚", "+").replace("═", "=")
+            print(ascii_receipt, flush=True)
         return receipt
