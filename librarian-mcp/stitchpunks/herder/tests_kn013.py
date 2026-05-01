@@ -498,6 +498,7 @@ def test_empirical_predict_kn009(tmp_path, monkeypatch):
     pheromone_path = models_dir / "pheromone_index.json"
 
     monkeypatch.setattr(herder_train, "_PHEROMONE_INDEX_PATH", pheromone_path)
+    monkeypatch.setattr(herder_train, "_MODELS_DIR", models_dir)
     monkeypatch.setattr(herder_train, "load_registry", lambda: load_registry(registry))
 
     backfill(tablet_path=tablet)
