@@ -22,7 +22,7 @@ precedents:
     bouncer_verdict: "PASS_OVERRIDE (after Bouncer registry seeded with kn008_quotation_context)"
     scales_verdict: "N/A (Bouncer overrode before Scales engaged)"
     judge_verdict: "RATIFIED — Bouncer pass-override correct"
-    new_precedent: >
+    new_precedent: >-
       Pawn research documents with explicit "> Source: Pawn report..." framing are
       quotation-class writes. Forbidden terms appearing inside the quotation are NOT
       own-assertions. Augur block is a false-positive in this context. Bouncer

@@ -15,7 +15,7 @@ import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { existsSync, writeFileSync, unlinkSync } from "node:fs";
+import { existsSync, writeFileSync, unlinkSync, mkdtempSync } from "node:fs";
 import os from "node:os";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -170,8 +170,13 @@ function testJudgeAppellate() {
     return;
   }
 
-  // Create a synthetic Scales JSONL record at a temp path
-  const tmpScalesLog = join(os.tmpdir(), `scales_log_${Date.now()}.jsonl`);
+  // Create isolated temp dir for all judge I/O paths — prevents writing to real YAML.
+  const tmpDir = mkdtempSync(join(os.tmpdir(), "kn095-judge-"));
+  const tmpScalesLog = join(tmpDir, "scales_log.jsonl");
+  const tmpJudgeLog = join(tmpDir, "judge_log.jsonl");
+  const tmpPrecedents = join(tmpDir, "judge_precedents.yaml");
+  const tmpBouncerQueue = join(tmpDir, "bouncer_queue.jsonl");
+
   const syntheticScalesCase = {
     case_id: "TEST-SCALES-JUDGE-001",
     scribe_id: "Scales",
@@ -201,13 +206,20 @@ result = adjudicate(
     eblet_path='BISHOP_DROPZONE/00_FOUNDER_REVIEW/test_doc.md',
     scribe_id='Bishop',
     scales_log_path=Path('${tmpScalesLog.replace(/\\/g, "/")}'),
+    judge_log_path=Path('${tmpJudgeLog.replace(/\\/g, "/")}'),
+    precedents_path=Path('${tmpPrecedents.replace(/\\/g, "/")}'),
+    bouncer_queue_path=Path('${tmpBouncerQueue.replace(/\\/g, "/")}'),
 )
 print(result.verdict.value)
 print(str(result.bouncer_update_queued))
 `;
   const r = runPython(directCode);
 
-  if (existsSync(tmpScalesLog)) unlinkSync(tmpScalesLog);
+  // Clean up all temp files
+  for (const f of [tmpScalesLog, tmpJudgeLog, tmpPrecedents, tmpBouncerQueue]) {
+    if (existsSync(f)) unlinkSync(f);
+  }
+  try { import("node:fs").then(m => m.rmdirSync(tmpDir)); } catch (_) {}
 
   if (!r.ok) {
     if (r.stderr.includes("yaml") || r.stderr.includes("ModuleNotFound")) {

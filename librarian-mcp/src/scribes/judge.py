@@ -93,39 +93,39 @@ def _append_precedent(
     """Append a new precedent entry to the YAML precedents file."""
     p = path or _PRECEDENTS_PATH
     if not p.exists():
-        p.write_text("precedents:\n", encoding="utf-8")
+        p.write_text("precedents:\n\nregistry_version: 1\nlast_updated: 2026-05-01\n", encoding="utf-8")
+
+    # Serialize the new entry as a proper YAML list item block.
+    # Each key becomes an indented field under the list marker.
+    lines = [f"  - case_id: {json.dumps(new_entry.get('case_id', str(uuid.uuid4())))}"]
+    skip_keys = {"case_id"}
+    for key, val in new_entry.items():
+        if key in skip_keys:
+            continue
+        if isinstance(val, str) and len(val) > 80:
+            # Block scalar
+            lines.append(f"    {key}: >-")
+            for chunk in val.strip().split("\n"):
+                lines.append(f"      {chunk}")
+        elif isinstance(val, list):
+            lines.append(f"    {key}:")
+            for item in val:
+                lines.append(f"      - {json.dumps(item)}")
+        elif isinstance(val, bool):
+            lines.append(f"    {key}: {str(val).lower()}")
+        else:
+            lines.append(f"    {key}: {json.dumps(val)}")
+    entry_yaml = "\n" + "\n".join(lines) + "\n"
 
     with open(p, encoding="utf-8") as fh:
         content = fh.read()
-
-    # Append after the last precedent entry.
-    new_yaml_block = "\n"
-    for key, val in new_entry.items():
-        if isinstance(val, str) and "\n" in val:
-            new_yaml_block += f'  - {key}: >\n      {val.strip()}\n'
-        elif isinstance(val, list):
-            new_yaml_block += f"  - {key}:\n"
-            for item in val:
-                new_yaml_block += f"      - {item}\n"
-        elif isinstance(val, bool):
-            new_yaml_block += f"  - {key}: {str(val).lower()}\n"
-        else:
-            new_yaml_block += f"  - {key}: {repr(val)}\n"
-
-    # Simple approach: append as YAML comment-separated block.
-    entry_yaml = "\n  # Judge decision " + new_entry.get("judge_case_id", "") + "\n"
-    for key, val in new_entry.items():
-        if isinstance(val, str) and len(val) > 80:
-            entry_yaml += f"  - {key}: >\n      {val.strip()}\n"
-        else:
-            safe_val = json.dumps(val)
-            entry_yaml += f"    {key}: {safe_val}\n"
 
     # Inject before the registry_version line.
     if "registry_version:" in content:
         content = content.replace(
             "registry_version:",
-            entry_yaml + "\nregistry_version:"
+            entry_yaml + "\nregistry_version:",
+            1,
         )
     else:
         content += entry_yaml
