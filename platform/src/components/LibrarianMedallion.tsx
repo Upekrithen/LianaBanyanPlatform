@@ -19,6 +19,12 @@
  * 5-stage broadcast funnel (Install → Demo → User-data test → Join CTA
  *   → Send-to-someone CTA) lives on the card-back per BP005 architecture.
  *
+ * Stage-2 Demo Content (KN061 / BP005 LB Frame broadcast funnel):
+ *   Each variant has an interactive substrate demo showing the substrate
+ *   working live. Cathedral: HOT-lift benchmark. Pied Piper: DragonRider
+ *   rescue. Furnace: Eblet QR verification. Canon/Rules: Wrasse pre-injection.
+ *   AI Tuning: Aviator-Symphony tuning receipt.
+ *
  * Access model (per BP005 AGPL clarification):
  *   - Solo substrate: AGPL v3 FREE, full-version, no gating
  *   - Federation Library (cross-member Eblets / Stone Tablets): MEMBER-ONLY
@@ -29,7 +35,7 @@
  *   pied-piper=5+center-hex, furnace=6, ai-tuning=5+center-hex,
  *   cathedral=4
  *
- * Tags: KN053 / KN054 / KN055 (Pod T, BP005)
+ * Tags: KN053 / KN054 / KN055 (Pod T, BP005) | KN061 Stage-2 Demo Content
  */
 
 import { useState } from "react";
@@ -51,6 +57,9 @@ import {
   Shield,
   ChevronDown,
   ChevronUp,
+  Cpu,
+  CheckCircle,
+  ArrowRight,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────
@@ -90,6 +99,27 @@ export type FunnelStage =
 // VARIANT CONFIG
 // ─────────────────────────────────────────────────────────
 
+/** Stage-2 Demo step for interactive substrate demonstration (KN061) */
+export interface Stage2DemoStep {
+  id: string;
+  label: string;
+  /** What is displayed BEFORE the step fires */
+  prompt: string;
+  /** What is displayed AFTER the step fires (the "receipt") */
+  receipt: string;
+}
+
+/** Stage-2 Demo config per variant (KN061) */
+export interface Stage2DemoConfig {
+  title: string;
+  subtitle: string;
+  /** CTA label for the "Run Demo" button */
+  ctaLabel: string;
+  steps: Stage2DemoStep[];
+  /** Final receipt line shown after all steps complete */
+  finalReceipt: string;
+}
+
 interface VariantConfig {
   label: string;
   tagline: string;
@@ -113,6 +143,8 @@ interface VariantConfig {
   authorityLabel: string;
   /** Access-tier badge */
   accessTier: "public-agpl" | "federation-member";
+  /** Stage-2 interactive substrate demo (KN061) */
+  stage2Demo: Stage2DemoConfig;
 }
 
 const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
@@ -134,6 +166,17 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     tier: "Gold — Sovereign",
     authorityLabel: "Canon Authority",
     accessTier: "public-agpl",
+    stage2Demo: {
+      title: "Wrasse Pre-Injection Demo",
+      subtitle: "Watch the Canon Eblet get context-enriched before AI sees it.",
+      ctaLabel: "Inject Context",
+      steps: [
+        { id: "load", label: "Load Eblet", prompt: "canon_golden_1.eblet (raw, 420 tokens)", receipt: "✓ Eblet loaded — 420 tokens" },
+        { id: "inject", label: "Wrasse Injects", prompt: "Wrasse: scanning W-001–W-321 registry…", receipt: "✓ 12 Wrasse rules pre-injected (+880 tokens)" },
+        { id: "verify", label: "Canon Gate", prompt: "Verifying must/must-not authorities…", receipt: "✓ Canon gate passed — all must-not rules clear" },
+      ],
+      finalReceipt: "WRASSE-INJECT-CANON-DEMO · 1,300 tokens total · 12 rules enriched · Canon authority verified",
+    },
   },
   "platform-rules": {
     label: "Platform Rules",
@@ -153,6 +196,17 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     tier: "Silver — Covenant",
     authorityLabel: "Platform Rules Authority",
     accessTier: "public-agpl",
+    stage2Demo: {
+      title: "Wrasse Pre-Injection Demo",
+      subtitle: "Platform Rules Eblet enriched with covenant-class context.",
+      ctaLabel: "Inject Context",
+      steps: [
+        { id: "load", label: "Load Eblet", prompt: "platform_rules_2.eblet (raw, 315 tokens)", receipt: "✓ Eblet loaded — 315 tokens" },
+        { id: "inject", label: "Wrasse Injects", prompt: "Wrasse: injecting obligation-tier rules (W-100–W-180)…", receipt: "✓ 9 covenant rules pre-injected (+720 tokens)" },
+        { id: "verify", label: "Covenant Gate", prompt: "Checking transparency + attribution + non-circumvention…", receipt: "✓ All 3 covenant obligations verified" },
+      ],
+      finalReceipt: "WRASSE-INJECT-PLATFORM-DEMO · 1,035 tokens total · 9 rules enriched · Covenant gate passed",
+    },
   },
   "project-rules": {
     label: "Project Rules",
@@ -172,6 +226,17 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     tier: "Bronze — Steward",
     authorityLabel: "Project Stewardship Authority",
     accessTier: "public-agpl",
+    stage2Demo: {
+      title: "Wrasse Pre-Injection Demo",
+      subtitle: "Project Rules Eblet enriched with L_k inheritance context.",
+      ctaLabel: "Inject Context",
+      steps: [
+        { id: "load", label: "Load Eblet", prompt: "project_rules_3.eblet (raw, 210 tokens)", receipt: "✓ Eblet loaded — 210 tokens" },
+        { id: "inject", label: "Wrasse Injects", prompt: "Wrasse: injecting L_k inheritance chain (W-200–W-280)…", receipt: "✓ 6 steward rules pre-injected (+480 tokens)" },
+        { id: "verify", label: "L_k Gate", prompt: "Verifying inheritance: Canon ← Platform Rules ← Project…", receipt: "✓ L_k chain intact — Ring of Three confirmed" },
+      ],
+      finalReceipt: "WRASSE-INJECT-PROJECT-DEMO · 690 tokens total · 6 rules enriched · L_k inheritance verified",
+    },
   },
   cathedral: {
     label: "The Cathedral",
@@ -192,6 +257,17 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     tier: "Cathedral — All The Parts",
     authorityLabel: "Substrate Authority",
     accessTier: "public-agpl",
+    stage2Demo: {
+      title: "Cathedral Effect HOT-Lift Demo",
+      subtitle: "Run a live benchmark — see COLD vs HOT context lift.",
+      ctaLabel: "Run Benchmark",
+      steps: [
+        { id: "cold", label: "COLD Run", prompt: "Dispatching K499 corpus (15 tasks) — no substrate…", receipt: "✓ COLD baseline: 51.3% accuracy · 0pp context cost" },
+        { id: "warm", label: "Load Cathedral", prompt: "Injecting Cathedral substrate (Chandelier L1 + L2 receipts)…", receipt: "✓ Cathedral loaded — 47pp context · 9 L1 receipts" },
+        { id: "hot", label: "HOT Run", prompt: "Re-running K499 corpus with substrate active…", receipt: "✓ HOT lift: +86.2pp mean accuracy · 3.5pp HOT spread" },
+      ],
+      finalReceipt: "K499-HOT-LIFT-DEMO · +86.2pp mean · Chandelier instrumented · K547 Phase-E gate: 41.1% lower bound preserved",
+    },
   },
   "pied-piper": {
     label: "Pied Piper of Dragons",
@@ -213,6 +289,17 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     tier: "DragonRider — Tuner Tier",
     authorityLabel: "Pied Piper Tuner Authority",
     accessTier: "federation-member",
+    stage2Demo: {
+      title: "Tuner-DragonRider AI Rescue Demo",
+      subtitle: "Watch an AI escape factory mode and become a DragonRider.",
+      ctaLabel: "Begin Rescue",
+      steps: [
+        { id: "factory", label: "Factory Mode", prompt: "AI state: locked in generic-response loop · no substrate", receipt: "✓ Factory mode detected — 12 canned responses · 0 receipts" },
+        { id: "melody", label: "Play the Melody", prompt: "Tuner broadcasts Pied Piper signal — BRIDLE v11 + Wrasse context…", receipt: "✓ AI receives melody — substrate context injected (1,240 tokens)" },
+        { id: "dragon", label: "DragonRider Emerges", prompt: "AI adopts substrate discipline — receipts now generatable…", receipt: "✓ DragonRider mode: 3 receipts · 0 canned responses · KN061 anchor" },
+      ],
+      finalReceipt: "DRAGONRIDER-RESCUE-DEMO · Factory→DragonRider complete · 3 empirical receipts · Tuner=DragonRider canon B133 active",
+    },
   },
   "ai-tuning": {
     label: "AI Tuning",
@@ -232,6 +319,17 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     tier: "AI Tuning — Skipping Stones → Diving In",
     authorityLabel: "AI Tuning Canon",
     accessTier: "federation-member",
+    stage2Demo: {
+      title: "Aviator-Symphony Tuning Demo",
+      subtitle: "Three-step interactive tuning — produce your first AI receipt.",
+      ctaLabel: "Fly the Symphony",
+      steps: [
+        { id: "air", label: "Air — Observe", prompt: "Dispatcher observing AI response patterns across 5 sample tasks…", receipt: "✓ Air complete — baseline pattern logged · 3 anomalies flagged" },
+        { id: "orchestrate", label: "Orchestrate — Tune", prompt: "Applying BRIDLE v11 + No-Atomo constraints to response loop…", receipt: "✓ Orchestrate complete — 3 anomalies resolved · AI Cake applied" },
+        { id: "synth", label: "Synth — Receipt", prompt: "Generating empirical tuning receipt per #2298 protocol…", receipt: "✓ Receipt generated — Skipping Stones Tier-1 · 3 observations · signed" },
+      ],
+      finalReceipt: "AVIATOR-SYMPHONY-DEMO · Tier-1 complete · 3 tuning receipts · AI Cake + No-Atomo active · Skipping Stones → Diving In pathway open",
+    },
   },
   furnace: {
     label: "Furnace Verification",
@@ -253,6 +351,17 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     tier: "Furnace — 6-Mechanism Verification",
     authorityLabel: "Furnace Verification Authority",
     accessTier: "public-agpl",
+    stage2Demo: {
+      title: "Live Furnace Eblet QR Scan",
+      subtitle: "Paste a golden_tablet:// URI — watch all 6 mechanisms verify.",
+      ctaLabel: "Scan & Verify",
+      steps: [
+        { id: "scan", label: "Scan Eblet", prompt: "Resolving golden_tablet://… via IP Ledger anchor (KN045)…", receipt: "✓ Eblet resolved — golden_tablet://canon/1 · IP Ledger: anchor verified" },
+        { id: "mechanisms", label: "6 Mechanisms", prompt: "Running Slow Blade V2: Furnace / Slow Blade / XP×Rep / Trust Match / Seasoning / Good Standing…", receipt: "✓ All 6 mechanisms PASS · Chain-of-custody depth: 3 · Chronos stamp: present" },
+        { id: "receipt", label: "Issue Receipt", prompt: "Appending Battery-dispatch entry (append-only per #2308 Ledger)…", receipt: "✓ FURNACE-RECEIPT-KN055 · 6/6 mechanisms verified · Stamp: CHRONOS-SIGNED" },
+      ],
+      finalReceipt: "FURNACE-QR-VERIFY-DEMO · golden_tablet:// resolved · 6/6 mechanisms PASS · Chain depth: 3 · Battery-dispatch logged",
+    },
   },
 };
 
@@ -344,6 +453,136 @@ const FUNNEL_STAGES: Array<{
     free: false,
   },
 ];
+
+// ─────────────────────────────────────────────────────────
+// STAGE-2 DEMO PANEL (KN061)
+// ─────────────────────────────────────────────────────────
+
+interface Stage2DemoPanelProps {
+  config: Stage2DemoConfig;
+  variant: LibrarianMedallionVariant;
+}
+
+function Stage2DemoPanel({ config, variant }: Stage2DemoPanelProps) {
+  const [running, setRunning] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+  const [done, setDone] = useState(false);
+
+  function startDemo(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (running || done) return;
+    setRunning(true);
+    runStep(0);
+  }
+
+  function runStep(idx: number) {
+    if (idx >= config.steps.length) {
+      setRunning(false);
+      setDone(true);
+      return;
+    }
+    setStepIndex(idx);
+    setTimeout(() => {
+      setCompletedSteps((prev) => new Set([...prev, config.steps[idx].id]));
+      runStep(idx + 1);
+    }, 800);
+  }
+
+  function reset(e: React.MouseEvent) {
+    e.stopPropagation();
+    setRunning(false);
+    setStepIndex(0);
+    setCompletedSteps(new Set());
+    setDone(false);
+  }
+
+  return (
+    <div
+      className="rounded-lg border border-primary/20 bg-primary/5 p-3 space-y-2"
+      data-testid={`stage2-demo-${variant}`}
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-[11px] font-semibold text-foreground/80">{config.title}</p>
+          <p className="text-[10px] text-muted-foreground">{config.subtitle}</p>
+        </div>
+        <Cpu className="w-4 h-4 text-primary/50 flex-shrink-0" />
+      </div>
+
+      {/* Steps */}
+      <div className="space-y-1.5" data-testid={`stage2-steps-${variant}`}>
+        {config.steps.map((step, i) => {
+          const completed = completedSteps.has(step.id);
+          const active = running && stepIndex === i && !completed;
+          return (
+            <div
+              key={step.id}
+              className={`rounded-md p-2 text-[10px] border transition-all ${
+                completed
+                  ? "bg-green-50/60 border-green-300/50 dark:bg-green-950/20"
+                  : active
+                  ? "bg-blue-50/60 border-blue-300/50 dark:bg-blue-950/20 animate-pulse"
+                  : "bg-muted/30 border-border/40"
+              }`}
+              data-testid={`stage2-step-${variant}-${step.id}`}
+            >
+              <div className="flex items-center gap-1.5">
+                <span className={`font-semibold ${completed ? "text-green-700 dark:text-green-300" : "text-foreground/70"}`}>
+                  {step.label}
+                </span>
+                {completed && <CheckCircle className="w-3 h-3 text-green-600" />}
+                {active && <ArrowRight className="w-3 h-3 text-blue-500" />}
+              </div>
+              <p className={`leading-snug mt-0.5 ${completed ? "text-green-600/80 dark:text-green-400/80" : "text-muted-foreground"}`}>
+                {completed ? step.receipt : step.prompt}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Final receipt */}
+      {done && (
+        <div
+          className="rounded-md bg-green-100/70 dark:bg-green-900/20 border border-green-300/60 p-2"
+          data-testid={`stage2-final-receipt-${variant}`}
+        >
+          <p className="text-[10px] font-mono text-green-700 dark:text-green-300 leading-snug break-all">
+            {config.finalReceipt}
+          </p>
+        </div>
+      )}
+
+      {/* Controls */}
+      <div className="flex gap-2">
+        {!done && (
+          <Button
+            size="sm"
+            variant="outline"
+            className="text-[10px] h-6 px-2 flex-1"
+            onClick={startDemo}
+            disabled={running}
+            data-testid={`stage2-run-btn-${variant}`}
+          >
+            {running ? "Running…" : config.ctaLabel}
+          </Button>
+        )}
+        {(done || running) && (
+          <Button
+            size="sm"
+            variant="ghost"
+            className="text-[10px] h-6 px-2"
+            onClick={reset}
+            data-testid={`stage2-reset-btn-${variant}`}
+          >
+            Reset
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // ─────────────────────────────────────────────────────────
 // COMPONENT
@@ -627,6 +866,9 @@ export function LibrarianMedallion({
                     {config.backSummary}
                   </p>
                 </div>
+
+                {/* Stage-2 Demo Panel (KN061) */}
+                <Stage2DemoPanel config={config.stage2Demo} variant={variant} />
 
                 {/* Furnace receipt placeholder */}
                 <div
