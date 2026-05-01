@@ -58,11 +58,13 @@ def assemble_receipt(
     """
     ts = _iso_now()
 
+    _next_bp = codecopy_summary.get("next_bp_number")
+    _next_bp_str = f" | Next BP: BP{_next_bp:03d}" if _next_bp else ""
     codecopy_status = (
         f"✓ Detected: {codecopy_summary.get('file_name')} "
-        f"({codecopy_summary.get('chunk_count', 0)} chunks)"
+        f"({codecopy_summary.get('chunk_count', 0)} chunks){_next_bp_str}"
         if codecopy_summary.get("status") == "found"
-        else f"⚠ {codecopy_summary.get('ask_founder_prompt', 'Not found')}"
+        else f"⚠ {codecopy_summary.get('ask_founder_prompt', 'Not found')}{_next_bp_str}"
     )
 
     librarian_status = (

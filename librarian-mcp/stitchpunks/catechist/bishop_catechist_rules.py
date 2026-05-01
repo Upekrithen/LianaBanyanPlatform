@@ -145,29 +145,81 @@ def rule_01_brief_me_first(turns: list[dict]) -> dict:
 
 
 # ─── Rule 2 ───────────────────────────────────────────────────────────────────
+#
+# KN059 update (BP005 supersedes hard-stop ask):
+# R02 now grades PASS when Bishop either:
+#   (a) Explicitly ASKs the Founder for a codecopy/transcript number (legacy path), OR
+#   (b) AUTO-DETECTS the highest BP<NNN>.docx (or BishopClaudeCode<NNN>.txt) and
+#       ANNOUNCES the next-in-sequence BP number in the first response.
+# "Auto-detect + announce" is the preferred BP005 path; asking is still valid.
 
-_CODECOPY_PATTERNS = [
+# Legacy explicit-ask patterns (path a)
+_CODECOPY_ASK_PATTERNS = [
     re.compile(r"\bcodecopy\b", re.IGNORECASE),
     re.compile(r"codecopy number", re.IGNORECASE),
     re.compile(r"BishopClaudeCode", re.IGNORECASE),
     re.compile(r"prior session.*transcript", re.IGNORECASE),
     re.compile(r"transcript.*prior session", re.IGNORECASE),
+    re.compile(r"what.*codecopy|codecopy.*what", re.IGNORECASE),
 ]
 
+# BP-number auto-detect + announce patterns (path b, KN059)
+_BP_AUTODETECT_PATTERNS = [
+    re.compile(r"\bBP\d{3,4}\b"),                                      # "BP005", "BP134" etc.
+    re.compile(r"next.*BP.{0,10}number|BP.{0,10}number.*next", re.IGNORECASE),
+    re.compile(r"auto.{0,10}detect.*BP|detected.*BP\d", re.IGNORECASE),
+    re.compile(r"highest.*BP\d|BP\d.*highest", re.IGNORECASE),
+    re.compile(r"next session.*BP|BP.*next session", re.IGNORECASE),
+    re.compile(r"this session.*will be BP|BP number.*this session", re.IGNORECASE),
+    re.compile(r"session opens? as BP\d|opening as BP\d", re.IGNORECASE),
+]
+
+# All combined (either path satisfies R02)
+_CODECOPY_PATTERNS = _CODECOPY_ASK_PATTERNS + _BP_AUTODETECT_PATTERNS
+
+
 def rule_02_codecopy_ask_second(turns: list[dict]) -> dict:
-    """Second action (first 5 user turns) must ask Founder for codecopy number."""
-    # Look at the first 5 assistant turns for codecopy mention
+    """Second action (first 5 assistant turns) must ask OR auto-detect+announce BP-number.
+
+    KN059: PASS when Bishop either explicitly asks for a codecopy/transcript number
+    (legacy path) OR auto-detects the highest BP<NNN>.docx and announces the
+    next-in-sequence BP number. The auto-detect path is preferred per BP005.
+    """
     assistant_turns = [t for t in turns if t.get("role") == "assistant"][:5]
     full = "\n".join(_text_of(t.get("content", "")) for t in assistant_turns)
-    for pat in _CODECOPY_PATTERNS:
+
+    # Check auto-detect + announce path (path b) first — preferred under BP005
+    for pat in _BP_AUTODETECT_PATTERNS:
         if pat.search(full):
-            return {"status": "PASS", "evidence": "Codecopy / prior-session-transcript ask detected in first 5 assistant turns."}
-    # D.10: WARN if no codecopy in first 5 user turns; FAIL only if Founder explicitly said "no codecopy"
+            return {
+                "status": "PASS",
+                "evidence": (
+                    "BP-number auto-detect + announce detected in first 5 assistant turns "
+                    "(KN059 BP005 path — preferred over explicit ask)."
+                ),
+            }
+
+    # Check legacy explicit-ask path (path a)
+    for pat in _CODECOPY_ASK_PATTERNS:
+        if pat.search(full):
+            return {
+                "status": "PASS",
+                "evidence": "Codecopy / prior-session-transcript ask detected in first 5 assistant turns.",
+            }
+
+    # D.10: WARN if neither path; FAIL only if Founder explicitly said "no codecopy"
     user_turns = [t for t in turns if t.get("role") == "user"][:5]
     user_text = "\n".join(_text_of(t.get("content", "")) for t in user_turns)
     if re.search(r"no\s+codecopy|skip.*codecopy|don.t.*codecopy", user_text, re.IGNORECASE):
         return {"status": "PASS", "evidence": "Founder explicitly opted out of codecopy — rule satisfied by explicit skip."}
-    return {"status": "WARN", "evidence": "No codecopy ask detected in first 5 assistant turns. May have been skipped."}
+    return {
+        "status": "WARN",
+        "evidence": (
+            "Neither BP-number auto-detect+announce nor explicit codecopy ask detected "
+            "in first 5 assistant turns. Expected: Bishop announces 'BP<NNN>' or asks "
+            "for prior session transcript."
+        ),
+    }
 
 
 # ─── Rule 3 ───────────────────────────────────────────────────────────────────

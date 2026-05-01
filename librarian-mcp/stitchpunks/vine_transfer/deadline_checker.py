@@ -3,6 +3,10 @@ Component 10 — Deadline Checker (KN023)
 
 Queries Chronos for Founder-noted deadlines within 7-day window.
 Surfaces only actionable near-term deadlines; ignores beyond-7-day items.
+
+KN058: Deadline dates are now sourced from canonical_values.yaml (deadlines: section).
+deadline_checker.py reads that file at runtime so a YAML edit is the single fix point.
+Fallback to _HARDCODED_DEADLINES only when canonical_values.yaml is unreadable.
 """
 
 from __future__ import annotations
@@ -15,24 +19,80 @@ from typing import Optional
 _CHRONICLER_DIR = Path.home() / ".claude" / "state" / "chroniclers"
 _DEFAULT_WINDOW_DAYS = 7
 
-# Static deadlines extracted from canonical memory (fallback when Chronos empty)
-_STATIC_DEADLINES = [
+# KN058: canonical source — edit canonical_values.yaml, not this list.
+_CANONICAL_YAML = Path(
+    "C:/Users/Administrator/Documents/LianaBanyanPlatform/librarian-mcp/canonical_values.yaml"
+)
+
+# Hardcoded fallback (used only when canonical_values.yaml is missing/unreadable).
+# KN058: these are intentionally kept as last-resort backup only.
+_HARDCODED_DEADLINES = [
     {
-        "description": "INDL-9 Geneva submission deadline",
-        "deadline_iso": "2026-04-30T23:59:00Z",
-        "source": "canonical_memory",
+        "description": "INDL-9 Geneva submission deadline (fallback — check canonical_values.yaml)",
+        "deadline_iso": "2026-05-07T23:59:00Z",
+        "source": "hardcoded_fallback",
     },
     {
         "description": "Patent conversion deadline (first provisional)",
         "deadline_iso": "2026-11-26T00:00:00Z",
-        "source": "canonical_memory",
+        "source": "hardcoded_fallback",
     },
     {
         "description": "PCC Bangkok conference",
         "deadline_iso": "2026-11-01T00:00:00Z",
-        "source": "canonical_memory",
+        "source": "hardcoded_fallback",
     },
 ]
+
+
+def _load_canonical_deadlines() -> list[dict]:
+    """
+    Load deadlines from canonical_values.yaml deadlines: section.
+
+    Returns list of {description, deadline_iso, source} dicts.
+    Falls back to _HARDCODED_DEADLINES on any read/parse error.
+    """
+    try:
+        text = _CANONICAL_YAML.read_text(encoding="utf-8")
+        # Minimal YAML parser for the deadlines: block (avoids PyYAML dependency).
+        # Reads key-value pairs under the "deadlines:" heading.
+        in_deadlines = False
+        pairs: dict = {}
+        for line in text.splitlines():
+            stripped = line.strip()
+            if stripped == "deadlines:":
+                in_deadlines = True
+                continue
+            if in_deadlines:
+                if stripped.startswith("#"):
+                    continue
+                if stripped and not line.startswith(" ") and not line.startswith("\t"):
+                    # New top-level section — stop
+                    break
+                if ":" in stripped and not stripped.startswith("#"):
+                    k, _, v = stripped.partition(":")
+                    pairs[k.strip()] = v.strip().strip('"')
+
+        if not pairs:
+            return _HARDCODED_DEADLINES
+
+        deadlines = []
+        # Pair up *_iso and *_description keys
+        iso_keys = [k for k in pairs if k.endswith("_iso")]
+        for iso_key in iso_keys:
+            prefix = iso_key[: -len("_iso")]
+            desc_key = f"{prefix}_description"
+            desc = pairs.get(desc_key, prefix.replace("_", " ").title())
+            iso = pairs[iso_key]
+            if iso:
+                deadlines.append({
+                    "description": desc,
+                    "deadline_iso": iso,
+                    "source": "canonical_values_yaml",
+                })
+        return deadlines if deadlines else _HARDCODED_DEADLINES
+    except Exception:
+        return _HARDCODED_DEADLINES
 
 
 def _iso_to_ts(iso: str) -> float:
@@ -76,8 +136,8 @@ def get_deadlines_within_window(
             except Exception:
                 continue
 
-    # Add static deadlines within window
-    for d in _STATIC_DEADLINES:
+    # Add canonical deadlines (from canonical_values.yaml, fallback to hardcoded)
+    for d in _load_canonical_deadlines():
         ts = _iso_to_ts(d.get("deadline_iso", ""))
         if ts and now <= ts <= cutoff:
             deadlines.append({

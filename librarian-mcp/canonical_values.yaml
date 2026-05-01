@@ -78,3 +78,14 @@ people:
   founder_rank_military: "SSG before OCS, commissioned Aviation 15A IFR-rated Troop Leader"
   crown_holders_dirty_dozen_green: 11
   dirty_dozen_total: 12
+
+deadlines:
+  # KN058: canonical source for all deadline dates surfaced in Vine Landing Receipt.
+  # Update here first; deadline_checker.py reads from this section.
+  # Verified by BP004 turn-1 official-site check; guide: BISHOP_DROPZONE/99_Misc/INDL9_SUBMISSION_GUIDE_CALLABLE_BP004.md
+  indl9_submission_iso: "2026-05-07T23:59:00Z"
+  indl9_description: "INDL-9 Geneva submission deadline (extended from 2026-04-30)"
+  patent_conversion_first_prov_iso: "2026-11-26T00:00:00Z"
+  patent_conversion_first_prov_description: "Patent conversion deadline (first provisional)"
+  pcc_bangkok_iso: "2026-11-01T00:00:00Z"
+  pcc_bangkok_description: "PCC Bangkok conference"
