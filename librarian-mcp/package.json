@@ -18,7 +18,7 @@
     "verify:canonical": "node scripts/verify-canonical.mjs",
     "codegen:hook": "node scripts/codegen-canonical-hook.mjs",
     "verify:pawn-dispatch": "node scripts/verify-pawn-dispatch.mjs",
-    "test": "tsc && node --test tests/test_registry.mjs tests/test_fates_router.mjs tests/test_scribe_tools.mjs tests/test_consult_scribes_latency.mjs tests/test_member_cathedral.mjs tests/test_cathedral_export_import.mjs tests/test_build_gate.mjs tests/test_supervisor.mjs && node --test tests/test_update_session_guard.mjs && node --test tests/test_canonical_verify.mjs && node --test tests/test_canonical_codegen.mjs && node --test tests/test_knight_cathedral.mjs && node --test tests/test_auto_extract.mjs && node --test tests/test_pheromone.mjs && node --test tests/test_session_id_regex.mjs tests/test_scribe_id_suggestions.mjs",
+    "test": "tsc && node --test tests/test_registry.mjs tests/test_fates_router.mjs tests/test_scribe_tools.mjs tests/test_consult_scribes_latency.mjs tests/test_member_cathedral.mjs tests/test_cathedral_export_import.mjs tests/test_build_gate.mjs tests/test_supervisor.mjs && node --test tests/test_update_session_guard.mjs && node --test tests/test_canonical_verify.mjs && node --test tests/test_canonical_codegen.mjs && node --test tests/test_knight_cathedral.mjs && node --test tests/test_auto_extract.mjs && node --test tests/test_pheromone.mjs && node --test tests/test_session_id_regex.mjs tests/test_scribe_id_suggestions.mjs && node --test tests/test_iron_tablet.mjs",
     "rebuild:auto_keywords": "node scripts/rebuild_auto_keywords.mjs",
     "generate:savings-snapshot": "node scripts/generate-savings-snapshot.mjs",
     "pheromone:build": "node scripts/pheromone-bloodhound.mjs",
