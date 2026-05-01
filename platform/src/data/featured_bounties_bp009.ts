@@ -179,6 +179,45 @@ export const FEATURED_BOUNTIES_BP009: FeaturedBounty[] = [
     tier: 'mid',
     iconEmoji: '🧠',
   },
+  // KN094 / BP011 — Bounty #7: first community-empirical-tuning-class Bounty.
+  // Founder ratified 2026-05-01 (BP011 turn 16). Extends KN088 6→7.
+  {
+    slug: 'heartbeat-interval-tuning',
+    title: 'Heartbeat Interval Tuning — Empirical Cohort-Detection Accuracy',
+    tagline: 'Tune the Iron E-Giant\'s heartbeat. Receipt empirical. Earn Marks.',
+    description:
+      'Find a heartbeat interval setting that beats the BP011 baseline (60s → 100% cohort-overlap-refresh ' +
+      'detection across 5/5 scenarios, KN091 commit a3cc7a2). Adjust `iron_tablet_metrics_config.yaml` ' +
+      'within the allowed range [30s, 300s], run a 24-hour synthetic 8-Shadow test, ' +
+      'report cohort-detect accuracy and Stone Tablet storage cost. ' +
+      'If your setting achieves ≥95% accuracy with lower storage cost, you earn the Marks. ' +
+      'Kallistra framing: "Tune your own heartbeat — and earn Marks every time you find a better ' +
+      'setting than ours. We pay for empirical receipts that strengthen the substrate."',
+    empiricalAnchor:
+      'KN091 commit a3cc7a2 baseline: 60s heartbeat → 100% cohort-overlap-refresh detection in ' +
+      '5/5 BP011 test scenarios. Iron E-Giant Federation operations — empirical tuning by community ' +
+      'members running their own Federation member-LB-Frames.',
+    enterpriseCohort: null,
+    rewardMarks: 500,
+    rewardCurrency: 'Marks',
+    // AGPL Community default; Apache 2.0 if submitter attaches dual-license assertion
+    licenseScope: 'AGPL',
+    featuredOrder: 7,
+    verificationMethod:
+      'Furnace cross-org rubric (KN091 furnace_cross_org.py); weighted score = ' +
+      '0.6 × (accuracy_pct / 100) + 0.2 × (1 − storage_overrun_pct) + 0.2 × (1 − latency_overrun_pct). ' +
+      'Pass threshold 0.65. Anti-farming: vesting at Furnace pass + independent reproducibility re-run ' +
+      'by another organism within 7 days.',
+    submissionRequirements:
+      'Submit: (a) adjusted iron_tablet_metrics_config.yaml snippet within bounded range [30s, 300s]; ' +
+      '(b) 24-hour synthetic 8-Shadow run transcript; ' +
+      '(c) cohort-detect-accuracy-pct measured and reported; ' +
+      '(d) Stone Tablet rolling-30-day MB measured and reported. ' +
+      'Reward is declining-rate per creator_referrals tier: first 3 submissions earn full 500 Marks; ' +
+      'subsequent earn 250–100 Marks. Apache 2.0 dual-license available if submitter asserts it.',
+    tier: 'mid',
+    iconEmoji: '💓',
+  },
 ];
 
 export function getBountyBySlug(slug: string): FeaturedBounty | undefined {
