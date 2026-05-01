@@ -79,6 +79,36 @@ people:
   crown_holders_dirty_dozen_green: 11
   dirty_dozen_total: 12
 
+patent_portfolio_value:
+  # Behemoth Reborn methodology (Mar 15, 2026 — 123 CJ / 1,662 innovations)
+  # Linear-scaled to current canonical (May 1, 2026 — 228 CJ / 2,270 innovations)
+  # Constitutional: declared $630K is the public-facing number (Cost+20% rule).
+  # Methodology ranges are for partner / academic / long-arc contexts ONLY.
+  declared_cost_plus_20_usd: 630000                # Member-facing — THE public number
+  declared_label: "$630,000"
+  pessimists_floor_original_usd: 116000000         # Behemoth Reborn 4% util floor (123 CJ)
+  pessimists_floor_scaled_usd: 215000000           # Linear-scaled to 228 CJ
+  conservative_original_usd: 3940000000            # Behemoth Reborn Conservative (123 CJ)
+  conservative_scaled_usd: 5380000000              # Linear-scaled to 228 CJ
+  moderate_original_usd: 7870000000                # Behemoth Reborn Moderate (123 CJ)
+  moderate_scaled_usd: 10750000000                 # Linear-scaled to 228 CJ
+  optimistic_original_usd: 15740000000             # Behemoth Reborn Optimistic (123 CJ)
+  optimistic_scaled_usd: 21500000000               # Linear-scaled to 228 CJ
+  cost_based_floor_original_usd: 83100000          # Cost-basis floor (123 CJ)
+  cost_based_floor_scaled_usd: 113500000           # Linear-scaled to 228 CJ
+  methodology_base_cj: 123                         # Behemoth Reborn anchor CJ count
+  methodology_base_innovations: 1662               # Behemoth Reborn anchor innovation count
+  methodology_date: "2026-03-15"                   # Behemoth Reborn declaration date
+  scale_factor_cj: 1.854                           # 228 / 123 — linear scaling multiplier
+  # Tier discipline (NEVER mix member-facing and partner-facing without Founder explicit approval)
+  # member-facing: declared_cost_plus_20_usd ($630K)
+  # partner conversations, Wave 1 enterprise: conservative_scaled / moderate_scaled
+  # academic papers, long-arc strategic: optimistic_scaled / Aspirational
+  # Founder $600B "maybe": whole-platform-at-maturity ceiling — NOT a declared number
+  last_updated: "2026-05-01"
+  ratifying_session: "BP011"
+  ratifying_anchor: "KN093-BP011 Option C"
+
 deadlines:
   # KN058: canonical source for all deadline dates surfaced in Vine Landing Receipt.
   # Update here first; deadline_checker.py reads from this section.
