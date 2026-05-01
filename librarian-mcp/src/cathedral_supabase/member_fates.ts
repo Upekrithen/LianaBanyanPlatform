@@ -119,7 +119,7 @@ export function clothoExtractForMember(
     entities.add(tag);
     if (!found.has(tag.toLowerCase())) found.set(tag.toLowerCase(), tag);
   }
-  for (const m of text.matchAll(/\b([BKRP]\d{2,4})\b/g)) {
+  for (const m of text.matchAll(/\b((?:BP|KP|KN|PP|RR|B|K|P|R)\d{2,4})\b/g)) {
     entities.add(m[1]);
     if (!found.has(m[1].toLowerCase())) found.set(m[1].toLowerCase(), m[1]);
   }

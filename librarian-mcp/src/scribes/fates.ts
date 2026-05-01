@@ -70,8 +70,8 @@ export function clothoExtract(text: string): { themes: string[]; entities: strin
     entities.add(tag);
     if (!found.has(tag.toLowerCase())) found.set(tag.toLowerCase(), tag);
   }
-  // Session IDs: B116, K432, R34, P12
-  for (const m of text.matchAll(/\b([BKRP]\d{2,4})\b/g)) {
+  // Session IDs: B116, K432, R34, P12, BP009, KN076, KP024 (KN076 BP009 fix)
+  for (const m of text.matchAll(/\b((?:BP|KP|KN|PP|RR|B|K|P|R)\d{2,4})\b/g)) {
     entities.add(m[1]);
     if (!found.has(m[1].toLowerCase())) found.set(m[1].toLowerCase(), m[1]);
   }

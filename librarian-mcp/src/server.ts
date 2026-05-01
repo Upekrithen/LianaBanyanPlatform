@@ -22,6 +22,7 @@ import { canonicalValueMatches, loadCanonicalFlat } from "./predicates/canonical
 import { checkFreshness } from "./indexer/fingerprint.js";
 import { createFreshIndexGate } from "./indexer/freshIndexGate.js";
 import { getRegistry, listScribeIds, getScribe } from "./scribes/registry.js";
+import { SESSION_ID_REGEX, SESSION_ID_DESCRIPTION } from "./schemas/sessionId.js";
 import {
   appendTidbit,
   appendScribeEntry,
@@ -2606,7 +2607,7 @@ registerTool(
   "Append a verification-behavior tidbit to the SP-21 ledger (stitchpunks/data/tidbits.jsonl). Call whenever you perform a BRIDLE-Rule-2-style pre-assertion check (verified a slot, file, commit, symbol, route, or canonical value before claiming it). Returns the new line count.",
   {
     agent: z.enum(["BISHOP", "KNIGHT", "ROOK", "PAWN"]).describe("Calling agent"),
-    session: z.string().regex(/^[BKRP]\d+$/).describe("Session id, e.g. B116, K436"),
+    session: z.string().regex(SESSION_ID_REGEX).describe(SESSION_ID_DESCRIPTION),
     category: z.string().min(3).describe("verify_<action>, e.g. verify_slot_number, verify_file_exists"),
     observation: z.string().min(10).describe("Description of what was checked and what was found. No upper bound — substance over brevity."),
     artifact: z.string().optional().describe("File path or symbol the verification served"),
@@ -2697,6 +2698,21 @@ registerTool(
   },
   async ({ scribe_id, session_id, observation, source, canonical_ref }) => {
     if (!getScribe(scribe_id)) {
+      // KN084 BP009: detect read-only pheromone artifact suffix variants
+      // (corpus snapshots, pre-supersede backups) and suggest base scribe.
+      const READ_ONLY_SUFFIX_PATTERNS = [
+        /^(.+?)_corpus$/,
+        /^(.+?)_pre_.+_backup$/,
+        /^(.+?)_backup$/,
+      ];
+      let suggestion: string | undefined;
+      for (const pattern of READ_ONLY_SUFFIX_PATTERNS) {
+        const m = scribe_id.match(pattern);
+        if (m && m[1] && getScribe(m[1])) {
+          suggestion = m[1];
+          break;
+        }
+      }
       return {
         content: [{
           type: "text",
@@ -2705,7 +2721,10 @@ registerTool(
             error: "unknown_scribe",
             scribe_id,
             registered: listScribeIds(),
-            note: "Add the Scribe to registry.yaml first (deliberate edit), then retry.",
+            suggestion,
+            note: suggestion
+              ? `'${scribe_id}' appears to be a read-only pheromone artifact (corpus snapshot or pre-supersede backup). Did you mean '${suggestion}'?`
+              : "Add the Scribe to registry.yaml first (deliberate edit), then retry.",
           }, null, 2),
         }],
       };
