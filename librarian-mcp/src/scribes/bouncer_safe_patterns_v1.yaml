@@ -51,16 +51,18 @@ safe_patterns:
     ratified_session: KN008
     ratified_authority: Founder
 
-  # Bishop discipline staleness when brief_me was actually called — BP009 line 583 known friction.
+  # Bishop discipline staleness when brief_me was actually called — BP009 line 583 + BP011 turn 36 receipt.
   # The bishop_last_consult_ts.json file can be stale even after a fresh brief_me call.
+  # Covers all BISHOP_DROPZONE writes (not just 00_FOUNDER_REVIEW — BP011 empirical receipt: 03_BishopHandoffs was
+  # also blocked). Broadened from 00_FOUNDER_REVIEW → BISHOP_DROPZONE by KN095 PostBlockHook finalization wire-up.
   - id: bishop_consult_staleness_fresh_briefme
     type: scribe_id_prefix
-    description: "Bishop/Knight organism writing after confirmed fresh brief_me — staleness false-positive"
+    description: "Bishop/Knight organism writing to BISHOP_DROPZONE after confirmed fresh brief_me — staleness false-positive"
     scribe_id_prefixes:
       - "Bishop"
       - "Knight"
-    additional_condition: "file_class:BISHOP_DROPZONE/00_FOUNDER_REVIEW"
-    rationale: "BP009 line 583 + BP011 empirical receipt — staleness detection lags fresh brief_me by ~2s"
+    additional_condition: "file_class:BISHOP_DROPZONE"
+    rationale: "BP009 line 583 + BP011 turn 36 empirical receipt — staleness detection lags fresh brief_me by ~2s; affects all BISHOP_DROPZONE subdirs not just 00_FOUNDER_REVIEW"
     ratified_session: BP009
     ratified_authority: Founder
 

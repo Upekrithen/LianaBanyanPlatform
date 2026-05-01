@@ -25,13 +25,21 @@ BRIDLE: Bouncer fail-closed; Judge cannot override Founder-direct rules.
 
 from __future__ import annotations
 
+import sys
 from enum import Enum
 from pathlib import Path
 from typing import Optional
 
-from librarian_mcp.src.scribes.bouncer import bounce, BouncerVerdict
-from librarian_mcp.src.scribes.scales import weigh, ScalesVerdict
-from librarian_mcp.src.scribes.judge import adjudicate, JudgeVerdict
+# Make `src.scribes.*` importable regardless of caller's CWD.
+# bishop_librarian_gate.py lives at librarian-mcp/bishop_librarian_gate.py,
+# so Path(__file__).parent is the librarian-mcp root.
+_LIB_MCP_ROOT = Path(__file__).parent
+if str(_LIB_MCP_ROOT) not in sys.path:
+    sys.path.insert(0, str(_LIB_MCP_ROOT))
+
+from src.scribes.bouncer import bounce, BouncerVerdict  # noqa: E402
+from src.scribes.scales import weigh, ScalesVerdict      # noqa: E402
+from src.scribes.judge import adjudicate, JudgeVerdict   # noqa: E402
 
 
 class GateDisposition(str, Enum):
