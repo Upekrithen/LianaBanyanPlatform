@@ -34,6 +34,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime, timezone
@@ -43,6 +44,16 @@ from pathlib import Path
 POLL_INTERVAL = 15        # seconds between scans
 ACTIVE_SECS   = 45        # file modified within this window = "active session"
 STALE_SECS    = 120       # not modified for this long after being active = "ended"
+
+# ── Phase-E trigger config (KN067 BP005) ──────────────────────────────────────
+# Detect git commit + git tag tool calls in active Knight/Bishop JSONL streams,
+# fire dual-monitor capture on match. Bounded: 30s dedup window so commit+tag
+# back-to-back = ONE capture (combined filename).
+PHASE_E_DEDUP_WINDOW_SECS = 30
+GIT_COMMIT_PATTERN = re.compile(r"^\s*git\s+commit\b", re.IGNORECASE)
+GIT_TAG_PATTERN    = re.compile(r"^\s*git\s+tag\b",    re.IGNORECASE)
+SHA_EXTRACT_PATTERN = re.compile(r"\b([0-9a-f]{7,40})\b")  # match short or full SHA
+TAG_EXTRACT_PATTERN = re.compile(r"git\s+tag\s+(?:-a\s+)?(\S+)", re.IGNORECASE)
 
 BISHOP_DIR = Path(r"C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents")
 KNIGHT_DIR = Path(r"C:\Users\Administrator\.cursor\projects\c-Users-Administrator-Documents-LianaBanyanPlatform\agent-transcripts")
@@ -85,9 +96,14 @@ def _short_id(path: Path) -> str:
     return path.stem[:8]
 
 
-def _do_capture(capture_mod, event: str, agent: str, session_id: str) -> None:
-    """Fire capture_both with an event label that includes the session_id prefix."""
+def _do_capture(capture_mod, event: str, agent: str, session_id: str, suffix: str = "") -> None:
+    """Fire capture_both with an event label that includes the session_id prefix.
+
+    Optional suffix appends additional tracing context (e.g., commit-sha or tag for Phase-E captures).
+    """
     label = f"{event}_{agent}_{session_id}"
+    if suffix:
+        label = f"{label}_{suffix}"
     try:
         results = capture_mod.capture_both(label)
         for r in results:
@@ -95,6 +111,78 @@ def _do_capture(capture_mod, event: str, agent: str, session_id: str) -> None:
             _log(f"  captured [{status}] {r['filename']} monitor={r.get('monitor_rect')}")
     except Exception as exc:
         _log(f"  capture error: {exc}")
+
+
+# ── Phase-E trigger detection (KN067 BP005) ───────────────────────────────────
+
+def _scan_phase_e_events(path: Path, last_offset: int) -> tuple[int, list[dict]]:
+    """Tail-read JSONL from last_offset; return (new_offset, events).
+
+    Each event is a dict: {"type": "commit" | "tag", "sha": str | None, "tag": str | None,
+                            "command": str (raw command for forensic context)}.
+    Tracks byte offset for next-poll efficiency (no full re-read).
+    """
+    events: list[dict] = []
+    try:
+        size = path.stat().st_size
+        if size <= last_offset:
+            # File hasn't grown since last poll (or rotated/truncated — treat as no new data)
+            return last_offset, events
+
+        with path.open("rb") as fh:
+            fh.seek(last_offset)
+            chunk = fh.read(size - last_offset)
+        new_offset = size
+
+        # Parse each newline-delimited JSON record in the new chunk
+        text = chunk.decode("utf-8", errors="replace")
+        for line in text.splitlines():
+            if not line.strip():
+                continue
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+            # Look for tool_use blocks with Bash + git commit/tag commands
+            content = rec.get("message", {}).get("content", []) if isinstance(rec.get("message"), dict) else rec.get("content", [])
+            if not isinstance(content, list):
+                continue
+            for block in content:
+                if not isinstance(block, dict):
+                    continue
+                if block.get("type") != "tool_use":
+                    continue
+                if block.get("name") not in ("Bash", "PowerShell"):
+                    continue
+                cmd = (block.get("input") or {}).get("command", "")
+                if not isinstance(cmd, str):
+                    continue
+                # Match git commit
+                if GIT_COMMIT_PATTERN.search(cmd):
+                    events.append({"type": "commit", "sha": None, "tag": None, "command": cmd[:200]})
+                # Match git tag
+                if GIT_TAG_PATTERN.search(cmd):
+                    tag_match = TAG_EXTRACT_PATTERN.search(cmd)
+                    tag_name = tag_match.group(1) if tag_match else None
+                    events.append({"type": "tag", "sha": None, "tag": tag_name, "command": cmd[:200]})
+                # Try to extract SHA from any tool output adjacent to commit (best-effort)
+                # (Many JSONL streams include tool_result with commit SHA; we capture the command-side only here)
+        return new_offset, events
+    except Exception as exc:
+        _log(f"  phase_e scan error on {path.name[:36]}: {exc}")
+        return last_offset, events
+
+
+def _phase_e_label_suffix(event: dict) -> str:
+    """Build a filename-safe suffix like 'PhaseE_commit_<sha>' or 'PhaseE_tag_<tagname>'."""
+    parts = ["PhaseE", event["type"]]
+    if event.get("tag"):
+        # sanitize tag for filename
+        safe = re.sub(r"[^A-Za-z0-9._-]", "_", event["tag"])[:60]
+        parts.append(safe)
+    elif event.get("sha"):
+        parts.append(event["sha"][:7])
+    return "_".join(parts)
 
 
 # ── Session file discovery ─────────────────────────────────────────────────────
@@ -150,6 +238,9 @@ class SessionRecord:
         self.start_captured = False  # have we fired SessionStart yet?
         self.end_captured = False    # have we fired SessionEnd yet?
         self.last_active_at = seen_at  # last time file was "active"
+        # KN067 BP005: Phase-E trigger state
+        self.last_read_offset = 0      # byte offset for tail-reading new JSONL lines
+        self.recent_phase_e: list[float] = []  # timestamps of recent Phase-E captures (dedup window)
 
 
 # ── Main loop ─────────────────────────────────────────────────────────────────
@@ -227,6 +318,26 @@ def run(bishop_session_id: str | None = None) -> None:
                 _log(f"Session stale {idle:.0f}s (end): {path.name[:36]}")
                 _do_capture(capture_mod, "SessionEnd", r.agent, _short_id(path))
                 r.end_captured = True
+                continue
+
+            # ── KN067 BP005: Phase-E trigger detection ─────────────────────
+            # On each poll, tail-read new JSONL lines and look for git commit/tag tool calls.
+            # Fire dual-monitor capture on match (with 30s dedup window).
+            if r.start_captured and not r.end_captured:
+                new_offset, events = _scan_phase_e_events(path, r.last_read_offset)
+                r.last_read_offset = new_offset
+                # Prune recent_phase_e older than dedup window
+                r.recent_phase_e = [t for t in r.recent_phase_e if (now - t) < PHASE_E_DEDUP_WINDOW_SECS]
+                for event in events:
+                    # Dedup: if any capture fired within window, skip this one
+                    # (handles back-to-back commit + tag landing as ONE proof artifact)
+                    if r.recent_phase_e:
+                        _log(f"  phase_e dedup skip ({event['type']}) on {path.name[:36]}")
+                        continue
+                    suffix = _phase_e_label_suffix(event)
+                    _log(f"Phase-E {event['type']} on {path.name[:36]}: cmd={event['command'][:60]!r}")
+                    _do_capture(capture_mod, "PhaseE", r.agent, _short_id(path), suffix=suffix)
+                    r.recent_phase_e.append(now)
 
 
 if __name__ == "__main__":
