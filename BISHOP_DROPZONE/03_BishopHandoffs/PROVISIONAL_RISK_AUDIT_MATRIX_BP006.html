@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provisional Risk-Audit Matrix — KN073 / BP006</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f8f9fa;
+      color: #222;
+      padding: 24px;
+    }
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 20px 28px;
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 0;
+    }
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    header p { font-size: 0.85rem; opacity: 0.8; margin-top: 4px; }
+    .summary-bar {
+      background: #16213e;
+      color: #fff;
+      padding: 14px 28px;
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      align-items: center;
+      border-radius: 0;
+    }
+    .badge-stat {
+      display: flex; align-items: center; gap: 6px; font-size: 0.88rem;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+    .dot-low { background: #56c45e; }
+    .dot-moderate { background: #f0b429; }
+    .dot-high { background: #e53e3e; }
+    .dot-unscored { background: #aaa; }
+    .top3-panel {
+      background: #fff3cd;
+      border-left: 4px solid #e53e3e;
+      padding: 12px 20px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+    }
+    .top3-panel h3 { font-size: 0.9rem; margin-bottom: 6px; color: #9c0006; }
+    .top3-panel ul { padding-left: 18px; }
+    .controls {
+      display: flex; gap: 12px; margin: 12px 0 8px;
+      flex-wrap: wrap;
+    }
+    .controls button {
+      padding: 6px 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.83rem;
+    }
+    .controls button:hover { background: #eee; }
+    .filter-active { background: #1a1a2e !important; color: #fff !important; border-color: #1a1a2e !important; }
+    .table-wrapper { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.87rem;
+      background: #fff;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+    }
+    thead th {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+    }
+    thead th:hover { background: #2a2a4e; }
+    thead th .sort-arrow { margin-left: 4px; opacity: 0.5; }
+    tbody tr { border-bottom: 1px solid rgba(0,0,0,0.08); transition: filter 0.1s; }
+    tbody tr:hover { filter: brightness(0.96); }
+    td { padding: 9px 12px; vertical-align: middle; }
+    .prov-num { font-weight: 700; text-align: center; min-width: 48px; }
+    .app-num { font-family: monospace; font-size: 0.82rem; white-space: nowrap; }
+    .filed { white-space: nowrap; }
+    .title-cell { min-width: 260px; }
+    .score-cell { text-align: center; font-weight: 600; min-width: 40px; }
+    .risk-cell { text-align: center; font-size: 1.05rem; min-width: 52px; }
+    .level-cell { text-align: center; min-width: 80px; }
+    .badge {
+      padding: 3px 9px; border-radius: 12px; font-size: 0.78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .level-low { background: #c6efce; color: #276221; }
+    .level-moderate { background: #ffeb9c; color: #9c5700; }
+    .level-high { background: #ffc7ce; color: #9c0006; }
+    .level-unscored { background: #f2f2f2; color: #666; }
+    .drilldown-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.8rem; margin-right: 6px; padding: 0 4px;
+      color: inherit; opacity: 0.7;
+    }
+    .drilldown-row td { padding: 0; }
+    .drilldown-inner {
+      padding: 12px 20px;
+      border-top: 1px dashed rgba(0,0,0,0.2);
+      font-size: 0.84rem;
+    }
+    .gap-item { margin-bottom: 6px; }
+    .gap-item.ok .gap-ok { color: #276221; }
+    .gap-text { color: #9c0006; font-style: italic; }
+    .gap-unscored { color: #888; }
+    .override-note { color: #5a3e8f; font-size: 0.8rem; margin-left: 16px; }
+    .notes-row { margin-top: 8px; font-size: 0.83rem; color: #555; }
+    footer {
+      text-align: center; font-size: 0.78rem; color: #888;
+      margin-top: 20px; padding: 12px;
+    }
+    .pledge-note {
+      font-size: 0.78rem; color: #888;
+      border-top: 1px solid #e0e0e0; padding-top: 8px; margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Provisional Patent Risk-Audit Matrix</h1>
+    <p>KN073 / BP006 &nbsp;·&nbsp; Liana Banyan Corporation (Wyoming C-Corp)
+       &nbsp;·&nbsp; Generated: 2026-05-01</p>
+  </header>
+
+  <div class="summary-bar">
+    <div class="badge-stat"><span class="dot dot-low"></span> Low risk: 0</div>
+    <div class="badge-stat"><span class="dot dot-moderate"></span> Moderate: 3</div>
+    <div class="badge-stat"><span class="dot dot-high"></span> High: 12</div>
+    <div class="badge-stat"><span class="dot dot-unscored"></span> Unscored: 0</div>
+  </div>
+
+  <div class="top3-panel">
+    <h3>Top-3 Highest-Risk Provisionals (from current run)</h3>
+    <ul><li>Prov 1 — Provisional Application 1 (earlier filing) (risk score: 8)</li><li>Prov 2 — Provisional Application 2 (earlier filing) (risk score: 8)</li><li>Prov 3 — Provisional Application 3 (earlier filing) (risk score: 8)</li></ul>
+  </div>
+
+  <div class="controls">
+    <button onclick="filterRows('all')" id="btn-all" class="filter-active">All</button>
+    <button onclick="filterRows('high')" id="btn-high">High Risk</button>
+    <button onclick="filterRows('moderate')" id="btn-moderate">Moderate</button>
+    <button onclick="filterRows('low')" id="btn-low">Low Risk</button>
+    <button onclick="filterRows('unscored')" id="btn-unscored">Unscored</button>
+    <button onclick="resetSort()" style="margin-left:auto">Reset Sort</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table id="auditTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0,'num')">Prov # <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(1,'str')">App # <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(2,'str')">Filed <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(3,'str')">Title <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(4,'num')">C1 <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(5,'num')">C2 <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(6,'num')">C3 <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(7,'num')">Risk <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortTable(8,'str')">Level <span class="sort-arrow">&#8597;</span></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">1</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-1')">&#9660;</button>
+            Provisional Application 1 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-1" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">2</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-2')">&#9660;</button>
+            Provisional Application 2 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-2" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">3</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-3')">&#9660;</button>
+            Provisional Application 3 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-3" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">4</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-4')">&#9660;</button>
+            Provisional Application 4 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-4" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">5</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-5')">&#9660;</button>
+            Provisional Application 5 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-5" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">6</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-6')">&#9660;</button>
+            Provisional Application 6 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-6" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">7</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-7')">&#9660;</button>
+            Provisional Application 7 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-7" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">8</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-8')">&#9660;</button>
+            Provisional Application 8 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-8" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">9</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-9')">&#9660;</button>
+            Provisional Application 9 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-9" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">10</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-10')">&#9660;</button>
+            Provisional Application 10 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-10" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">11</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-11')">&#9660;</button>
+            Provisional Application 11 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-11" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffc7ce;color:#9c0006" data-risk="8">
+          <td class="prov-num">12</td>
+          <td class="app-num">unknown</td>
+          <td class="filed">2025-01-01</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-12')">&#9660;</button>
+            Provisional Application 12 (earlier filing)
+          </td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">3</td>
+          <td class="risk-cell" style="font-weight:bold">8</td>
+          <td class="level-cell"><span class="badge level-high">HIGH</span></td>
+        </tr>
+        <tr id="prov-12" class="drilldown-row" style="display:none;background:#ffc7ce">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item'><strong>C1 Enabling Disclosure [2/5]:</strong> <span class='gap-text'>Add: concrete data-flow diagram showing [X] implementation steps; provide enough detail for a person skilled in AI memory systems to implement without significant gaps.</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>3/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong>  [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffeb9c;color:#9c5700" data-risk="6">
+          <td class="prov-num">13</td>
+          <td class="app-num">64/036,646</td>
+          <td class="filed">2026-04-12</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-13')">&#9660;</button>
+            Cooperative-Platform AI Memory Infrastructure
+          </td>
+          <td class="score-cell">3</td>
+          <td class="score-cell">2</td>
+          <td class="score-cell">4</td>
+          <td class="risk-cell" style="font-weight:bold">6</td>
+          <td class="level-cell"><span class="badge level-moderate">MODERATE</span></td>
+        </tr>
+        <tr id="prov-13" class="drilldown-row" style="display:none;background:#ffeb9c">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item ok'><strong>C1 Enabling Disclosure:</strong> <span class='gap-ok'>3/5 — adequate</span></div><div class='gap-item'><strong>C2 Variation Coverage [2/5]:</strong> <span class='gap-text'>Add: variation axes for [X]: at minimum 3 alternative embodiments (e.g., different storage backends, different trigger conditions, different federation configurations).</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>4/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong> First of the 2026 spring filings. [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffeb9c;color:#9c5700" data-risk="4">
+          <td class="prov-num">14</td>
+          <td class="app-num">64/052,602</td>
+          <td class="filed">2026-04-29</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-14')">&#9660;</button>
+            Cooperative-Platform AI Memory Infrastructure with Discipline-Enforcement Federation
+          </td>
+          <td class="score-cell">4</td>
+          <td class="score-cell">3</td>
+          <td class="score-cell">4</td>
+          <td class="risk-cell" style="font-weight:bold">4</td>
+          <td class="level-cell"><span class="badge level-moderate">MODERATE</span></td>
+        </tr>
+        <tr id="prov-14" class="drilldown-row" style="display:none;background:#ffeb9c">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item ok'><strong>C1 Enabling Disclosure:</strong> <span class='gap-ok'>4/5 — adequate</span></div><div class='gap-item ok'><strong>C2 Variation Coverage:</strong> <span class='gap-ok'>3/5 — adequate</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>4/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong> Discipline-enforcement federation variant. [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+
+        <tr style="background:#ffeb9c;color:#9c5700" data-risk="4">
+          <td class="prov-num">15</td>
+          <td class="app-num">64/052,618</td>
+          <td class="filed">2026-04-29</td>
+          <td class="title-cell">
+            <button class="drilldown-btn" onclick="toggleDrilldown('prov-15')">&#9660;</button>
+            AI Memory Architecture with Substrate Pre-Injection, Vendor-Layer Capture, and Discipline Primitives
+          </td>
+          <td class="score-cell">4</td>
+          <td class="score-cell">3</td>
+          <td class="score-cell">4</td>
+          <td class="risk-cell" style="font-weight:bold">4</td>
+          <td class="level-cell"><span class="badge level-moderate">MODERATE</span></td>
+        </tr>
+        <tr id="prov-15" class="drilldown-row" style="display:none;background:#ffeb9c">
+          <td colspan="9">
+            <div class="drilldown-inner">
+              <div class='gap-item ok'><strong>C1 Enabling Disclosure:</strong> <span class='gap-ok'>4/5 — adequate</span></div><div class='gap-item ok'><strong>C2 Variation Coverage:</strong> <span class='gap-ok'>3/5 — adequate</span></div><div class='gap-item ok'><strong>C3 Human-Conception Clarity:</strong> <span class='gap-ok'>4/5 — adequate</span></div>
+              <div class='notes-row'><strong>Notes:</strong> Substrate pre-injection + vendor-layer capture variant. [synthetic scores applied]</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div class="pledge-note">
+      Covered by the Liana Banyan Corporation Cooperative Defensive Patent Pledge (#2260).
+      These provisionals are filed for defensive purposes to protect the cooperative membership platform.
+      Not for offensive enforcement.
+    </div>
+    <p style="margin-top:8px">
+      Rubric: C1 Enabling Disclosure · C2 Variation Coverage · C3 Human-Conception Clarity
+      (each 1–5) · Composite Risk = 15 − (C1+C2+C3) · Range 0–12
+    </p>
+  </footer>
+
+  <script>
+    var currentSort = {col: -1, dir: 1};
+    var currentFilter = 'all';
+
+    function toggleDrilldown(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+    }
+
+    function sortTable(col, type) {
+      var tbody = document.getElementById('tableBody');
+      var rows = Array.from(tbody.querySelectorAll('tr:not(.drilldown-row)'));
+      var dir = (currentSort.col === col) ? -currentSort.dir : 1;
+      currentSort = {col: col, dir: dir};
+      rows.sort(function(a, b) {
+        var aVal = a.cells[col] ? a.cells[col].textContent.trim() : '';
+        var bVal = b.cells[col] ? b.cells[col].textContent.trim() : '';
+        if (type === 'num') {
+          var aNum = parseFloat(aVal) || (dir > 0 ? 99999 : -99999);
+          var bNum = parseFloat(bVal) || (dir > 0 ? 99999 : -99999);
+          return (aNum - bNum) * dir;
+        }
+        return aVal.localeCompare(bVal) * dir;
+      });
+      rows.forEach(function(row) {
+        var drillId = row.querySelector('.drilldown-btn') ?
+          row.querySelector('.drilldown-btn').getAttribute('onclick').match(/'([^']+)'/)[1] : null;
+        tbody.appendChild(row);
+        if (drillId) {
+          var dd = document.getElementById(drillId);
+          if (dd) tbody.appendChild(dd);
+        }
+      });
+      applyCurrentFilter();
+    }
+
+    function resetSort() {
+      var tbody = document.getElementById('tableBody');
+      var rows = Array.from(tbody.querySelectorAll('tr:not(.drilldown-row)'));
+      rows.sort(function(a, b) {
+        return parseInt(a.cells[0].textContent) - parseInt(b.cells[0].textContent);
+      });
+      rows.forEach(function(row) {
+        var drillId = row.querySelector('.drilldown-btn') ?
+          row.querySelector('.drilldown-btn').getAttribute('onclick').match(/'([^']+)'/)[1] : null;
+        tbody.appendChild(row);
+        if (drillId) {
+          var dd = document.getElementById(drillId);
+          if (dd) tbody.appendChild(dd);
+        }
+      });
+      currentSort = {col: -1, dir: 1};
+      applyCurrentFilter();
+    }
+
+    function filterRows(level) {
+      currentFilter = level;
+      document.querySelectorAll('.controls button[id^=btn-]').forEach(function(b) {
+        b.classList.remove('filter-active');
+      });
+      var btn = document.getElementById('btn-' + level);
+      if (btn) btn.classList.add('filter-active');
+      applyCurrentFilter();
+    }
+
+    function applyCurrentFilter() {
+      var tbody = document.getElementById('tableBody');
+      tbody.querySelectorAll('tr:not(.drilldown-row)').forEach(function(row) {
+        var badge = row.querySelector('.badge');
+        var levelClass = badge ? badge.className.replace('badge level-','').trim() : 'unscored';
+        var show = (currentFilter === 'all' || levelClass === currentFilter);
+        row.style.display = show ? '' : 'none';
+        var drillBtn = row.querySelector('.drilldown-btn');
+        if (drillBtn) {
+          var drillId = drillBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
+          var dd = document.getElementById(drillId);
+          if (dd && !show) dd.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
