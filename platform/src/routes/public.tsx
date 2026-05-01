@@ -47,6 +47,7 @@ const PedestalStakeApply = lazy(() => import("@/pages/PedestalStakeApply"));
 const PedestalStakeDashboard = lazy(() => import("@/pages/PedestalStakeDashboard"));
 const MiniTour = lazy(() => import("@/pages/MiniTour"));
 const TestFrameDemo = lazy(() => import("@/pages/TestFrameDemo"));
+const MedallionPage = lazy(() => import("@/pages/MedallionPage"));
 
 function HomepageGateway() {
   const { user, loading } = useAuth();
@@ -132,5 +133,9 @@ export const publicRoutes = (
     <Route path="/demo" element={<LazyPage><TestFrameDemo /></LazyPage>} />
     <Route path="/frame" element={<Navigate to="/demo" replace />} />
     <Route path="/try" element={<Navigate to="/demo" replace />} />
+
+    {/* KN053+KN054+KN055 (Pod T, BP005): Librarian Medallion variant routes (Submarine Doors per B089) */}
+    <Route path="/medallion/:variant" element={<LazyPage><MedallionPage /></LazyPage>} />
+    <Route path="/medallion" element={<LazyPage><MedallionPage /></LazyPage>} />
   </>
 );
