@@ -1,0 +1,34 @@
+# Perplexity Gateway — Safe Tool List
+# KN092 / BP011 Pod W Bean 4
+# Founder prose-pass REQUIRED before production activation.
+#
+# Three tiers: read_only (Pawn may call freely), write_allowed (canonical Eblet
+# only, scribe-id R11_pawn_*), not_allowed (hard deny — Pawn cannot dispatch
+# other Pawns, export cathedrals, or mutate canonical_values.yaml or platform/).
+
+read_only:
+  - mcp__librarian__brief_me
+  - mcp__librarian__consult_scribes
+  - mcp__librarian__detective_investigate
+  - mcp__librarian__get_canonical_numbers
+  - mcp__librarian__get_architecture
+  - mcp__librarian__consult_gotchas
+  - mcp__librarian__chronos_query
+  - mcp__librarian__pheromone_query
+  - mcp__librarian__chandelier_query_foundation
+  - mcp__librarian__chandelier_query_initiatives
+  - mcp__librarian__chandelier_query_numbers
+  - read_file   # Shadow-alpha proxied; filesystem read via cooperative proxy
+
+write_allowed:
+  # Scope: R11_pawn_* scribe only. Canonical Eblet path only.
+  - mcp__librarian__scribe_log
+  - mcp__librarian__log_tidbit
+  - ironTabletWrite
+
+not_allowed:
+  - mcp__librarian__cancel_pawn_dispatch
+  - mcp__librarian__dispatch_pawn        # Pawn cannot dispatch other Pawns
+  - cathedral_export                     # Founder ratifies separately
+  - canonical_values_mutation            # YAML single-source-of-truth; never Pawn-writable
+  - platform_src_mutation               # platform/src/* never Pawn-writable
