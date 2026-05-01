@@ -55,6 +55,9 @@ const GetHiredLanding = lazy(() => import("./DSSGetHiredApp"));
 // HexIsle Showcase (for showcase.the2ndsecond.com subdomain)
 const HexIsleShowcase = lazy(() => import("./components/hexisle/HexIsleShowcase").then(m => ({ default: m.HexIsleShowcase })));
 
+// Librarian Page (KN064 / Pod Y) — for librarian.the2ndsecond.com subdomain
+const LibrarianPage = lazy(() => import("./pages/LibrarianPage"));
+
 const queryClient = new QueryClient();
 
 /**
@@ -107,6 +110,17 @@ const DSSApp = () => {
                     <>
                       <Route path="/" element={<HexIsleShowcase />} />
                       <Route path="*" element={<HexIsleShowcase />} />
+                    </>
+                  ) : subdomain === 'librarian' ? (
+                    /* librarian.the2ndsecond.com — The Librarian Page (KN064) */
+                    <>
+                      <Route path="/" element={<LibrarianPage />} />
+                      <Route path="/medallion" element={<LibrarianPage />} />
+                      <Route path="/medallion/:variant" element={<LibrarianPage />} />
+                      <Route path="/install" element={<LibrarianPage />} />
+                      <Route path="/federation" element={<LibrarianPage />} />
+                      <Route path="/receipts" element={<LibrarianPage />} />
+                      <Route path="*" element={<LibrarianPage />} />
                     </>
                   ) : (
                     <>
