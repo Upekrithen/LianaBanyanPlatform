@@ -1,0 +1,40 @@
+# Iron Tablet operational metrics + tunable settings
+# Adjustable for empirical bounty submissions (Bounty #7 — Heartbeat Interval Tuning)
+# Read by: iron_tablet stone_layer (prune cron) + the_shadow lifecycle (heartbeat scheduler)
+#
+# KN094 / BP011 — Founder ratified 2026-05-01 (BP011 turn 15-16)
+# Constitutional: Cost+20% platform margin governs all reward calculations.
+
+heartbeat:
+  interval_seconds: 60        # Founder ratified BP011 turn 16
+  bounded_range: [30, 300]    # Bounty submissions tune within this range
+
+prune:
+  heartbeat_retention_days: 30  # Founder ratified BP011 turn 15-16
+  bounded_range: [7, 90]
+  cron_schedule: "0 4 * * *"   # 04:00 UTC daily; runs in librarian-mcp scheduled-tasks
+
+cohort_overlap_refresh:
+  detection_max_latency_ms: 180000  # 3 min — slowest meaningful interval
+  bishop_refresh_window_estimate_seconds: 120
+  knight_refresh_window_estimate_seconds: 90
+
+storage_estimate:
+  # Computed at default settings (60s heartbeat × 8 Shadows × 30-day prune)
+  eblet_layer_constant_kb: 4
+  stone_layer_rolling_30day_mb: 170
+  yearly_unpruned_gb: 2.1    # Reference only — pruning eliminates this
+
+bounty_metrics:
+  # Captured during Bounty #7 submissions
+  bounty_id: 7
+  bounty_slug: heartbeat-interval-tuning
+  measured_metric: cohort_overlap_refresh_detection_accuracy_pct
+  baseline_pct: 100.0         # KN091 a3cc7a2 receipt at 60s interval
+  baseline_session: BP011
+  baseline_commit: a3cc7a2
+
+last_ratified: 2026-05-01
+ratifying_session: BP011
+ratifying_authority: Founder
+ratifying_anchor: "feedback_complete_paths_clean_commands.md / founder_principle_full_symbiote_before_storming_castle_bp011.eblet.md"

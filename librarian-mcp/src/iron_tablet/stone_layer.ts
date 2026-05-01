@@ -17,6 +17,8 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  writeFileSync,
+  unlinkSync,
   openSync,
   writeSync,
   fdatasyncSync,
@@ -191,6 +193,84 @@ export function stoneReadProvenance(ebletPath: string): ProvenanceReceipt[] {
       session: e.session,
       ...(e.decisionId !== undefined && { decisionId: e.decisionId }),
     }));
+}
+
+// ─── Heartbeat prune ─────────────────────────────────────────────────────────
+
+/**
+ * Identify heartbeat-class ledger entries.
+ * Heartbeat class: scribeId matches R11_shadow_<greek> prefix and the eblet
+ * path basename looks like heartbeat_<scribe_id>.eblet.md.
+ * Non-heartbeat entries (decisions, conflict reports, etc.) are always preserved.
+ */
+function isHeartbeatEntry(entry: IronTabletLedgerEntry): boolean {
+  const scribeMatch = /^R11_shadow_/i.test(entry.scribeId);
+  const ebletBasename = entry.ebletPath.split(/[\\/]/).pop() ?? "";
+  const ebletMatch = /^heartbeat_/i.test(ebletBasename);
+  return scribeMatch && ebletMatch;
+}
+
+/**
+ * Prune heartbeat-class entries older than `retentionDays` from `ledgerPath`.
+ *
+ * Stone Tablet Imperative: non-heartbeat entries (decisions, conflict reports,
+ * cohort_holding signals) are ALWAYS preserved regardless of age.
+ *
+ * Performs an atomic write: new ledger built in memory → written to disk →
+ * fdatasync → replace. If the ledger does not exist, returns immediately.
+ *
+ * @param ledgerPath     Absolute path to the JSONL ledger file.
+ * @param retentionDays  Age threshold in days (from `currentTimestamp`). Entries
+ *                       strictly older than this threshold are pruned.
+ * @param currentTimestamp  Unix epoch seconds to use as "now". Defaults to
+ *                           Date.now() / 1000 so callers can inject for tests.
+ *
+ * KN094 / BP011 — Founder-ratified 2026-05-01.
+ */
+export function pruneOldHeartbeatAppends(
+  ledgerPath: string,
+  retentionDays: number,
+  currentTimestamp: number = Date.now() / 1000,
+): { pruned: number; preserved: number } {
+  if (!existsSync(ledgerPath)) return { pruned: 0, preserved: 0 };
+
+  const cutoffEpochMs = (currentTimestamp - retentionDays * 86400) * 1000;
+  const entries = readLedgerEntries(ledgerPath);
+
+  let pruned = 0;
+  let preserved = 0;
+  const kept: IronTabletLedgerEntry[] = [];
+
+  for (const entry of entries) {
+    const entryMs = new Date(entry.ts).getTime();
+    if (isHeartbeatEntry(entry) && entryMs < cutoffEpochMs) {
+      pruned++;
+    } else {
+      kept.push(entry);
+      preserved++;
+    }
+  }
+
+  if (pruned === 0) return { pruned: 0, preserved };
+
+  // Atomic write: build new ledger, fdatasync, replace.
+  const newContents = kept.map((e) => JSON.stringify(e)).join("\n") + (kept.length > 0 ? "\n" : "");
+  const tmpPath = ledgerPath + ".prune.tmp";
+  const fd = openSync(tmpPath, "w");
+  try {
+    writeSync(fd, newContents);
+    fdatasyncSync(fd);
+  } finally {
+    closeSync(fd);
+  }
+  writeFileSync(ledgerPath, readFileSync(tmpPath));
+  try {
+    unlinkSync(tmpPath);
+  } catch {
+    // Non-fatal — temp file is harmless.
+  }
+
+  return { pruned, preserved };
 }
 
 /** Expose the ledger path for tests/diagnostics. */
