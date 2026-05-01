@@ -1,0 +1,74 @@
+# Bouncer Safe-Pattern Registry — v1
+# ====================================
+# Founder-ratified initial entries per BP011 turn 5 + KN095 scope memo.
+# Edits to this file: Founder prose-pass required (via Judge appellate precedent
+# queue). Knight applies ratified changes; commit references Bounty/decision ID.
+#
+# KN095 / BP011 — 2026-05-01. Bouncer is fail-closed: unknown patterns ROUTE
+# to Scales, never auto-pass. Only patterns explicitly listed here override
+# an Augur block.
+#
+# Pattern types:
+#   regex        — Python re.search() applied to write content
+#   scribe_id_prefix — scribeId of the writing organism starts with this value
+#   file_class   — eblet/file path matches this glob-style prefix
+#   quotation_framing — content contains an explicit Pawn-quotation-framing marker
+
+safe_patterns:
+
+  # KN008 quotation-context exemption (BP011 empirical anchor — load-bearing).
+  # Pawn research with "> Source: Pawn report..." framing fires Augur on
+  # forbidden terms that appear INSIDE the quotation, not as own assertions.
+  - id: kn008_quotation_context
+    type: quotation_framing
+    description: "Pawn research quotation — terms are direct-quoted from external source, not assertions"
+    match_markers:
+      - "> Source:"
+      - "> Source: Pawn"
+      - "Source: Pawn report"
+      - "Quoted from Pawn"
+      - "--- PAWN QUOTATION ---"
+    rationale: "KN008 defined the exemption; BP011 empirically confirmed the gap (gate blocked Pawn-source quotation)"
+    ratified_session: BP011
+    ratified_authority: Founder
+
+  # ROI in AI-compute-economics context — legitimate financial term in academic/technical context.
+  - id: roi_ai_compute_economics
+    type: regex
+    description: "ROI used in AI-compute-economics or substrate-savings context, not investment pitch"
+    pattern: "(?i)roi.{0,80}(ai.compute|substrate|savings|cost.per|token.per|cathedral.effect)"
+    rationale: "K527 established: ROI as technical metric in compute cost context != securities language"
+    ratified_session: K527
+    ratified_authority: Founder
+
+  # Zero / no / anti negation patterns — KN008 negation exemption.
+  # "Zero Investors", "no dividends", "anti-securities" are NEGATIONS of the concept.
+  - id: kn008_negation_context
+    type: regex
+    description: "Negation of securities concept — explicitly rejecting, not asserting"
+    pattern: "(?i)(zero investors|no (investors|dividends|equity|securities)|anti.securities|not (a security|an investment|securities)|no expectation of profit)"
+    rationale: "Negation context is the opposite of forbidden-term use; Augur cannot distinguish"
+    ratified_session: KN008
+    ratified_authority: Founder
+
+  # Bishop discipline staleness when brief_me was actually called — BP009 line 583 known friction.
+  # The bishop_last_consult_ts.json file can be stale even after a fresh brief_me call.
+  - id: bishop_consult_staleness_fresh_briefme
+    type: scribe_id_prefix
+    description: "Bishop/Knight organism writing after confirmed fresh brief_me — staleness false-positive"
+    scribe_id_prefixes:
+      - "Bishop"
+      - "Knight"
+    additional_condition: "file_class:BISHOP_DROPZONE/00_FOUNDER_REVIEW"
+    rationale: "BP009 line 583 + BP011 empirical receipt — staleness detection lags fresh brief_me by ~2s"
+    ratified_session: BP009
+    ratified_authority: Founder
+
+# Pending patterns (Founder ratification required before activation):
+# - Apache 2.0 + AGPL dual-license terminology in licensing docs (not yet active)
+# - Leviathan Plus reference in patent technical docs (correct technical name, not securities)
+
+registry_version: 1
+last_ratified: 2026-05-01
+ratifying_session: BP011
+ratifying_authority: Founder

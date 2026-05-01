@@ -1,0 +1,40 @@
+# Judge Precedents — v1
+# =======================
+# Appellate decision log. Each entry is a ratified Judge decision that creates
+# new precedent for future Scales / Bouncer evaluations.
+#
+# Append-only by convention. Judge appends new entries after each appellate
+# decision. Bouncer safe-pattern-registry updates are queued here pending
+# Founder ratification (flagged with pending_bouncer_update: true).
+#
+# KN095 / BP011 — 2026-05-01.
+# Judge authority: Can override Scales/Bouncer decisions. Cannot override
+# Founder-direct rules or Stone Tablet append-only authority.
+
+precedents:
+
+  # Seed precedent: the BP011 empirical case that motivated this entire trio.
+  - case_id: "KN095-BP011-SEED-001"
+    date: "2026-05-01"
+    session: BP011
+    description: "Pawn-research-quotation context — Augur-Securities-Language false positive"
+    augur_verdict: BLOCK
+    bouncer_verdict: "PASS_OVERRIDE (after Bouncer registry seeded with kn008_quotation_context)"
+    scales_verdict: "N/A (Bouncer overrode before Scales engaged)"
+    judge_verdict: "RATIFIED — Bouncer pass-override correct"
+    new_precedent: >
+      Pawn research documents with explicit "> Source: Pawn report..." framing are
+      quotation-class writes. Forbidden terms appearing inside the quotation are NOT
+      own-assertions. Augur block is a false-positive in this context. Bouncer
+      kn008_quotation_context safe-pattern covers this class permanently.
+    pending_bouncer_update: false
+    affected_files:
+      - "BISHOP_DROPZONE/00_FOUNDER_REVIEW/PATENT_PORTFOLIO_VALUE_UPDATE_BP009_2026-05-01.md"
+    ratifying_authority: Founder
+    ratifying_anchor: "bouncer_scales_judge_scribe_trio_scope_memo_bp011.eblet.md"
+
+# New entries are appended here by Judge after each appellate decision.
+# Format mirrors the seed precedent above.
+
+registry_version: 1
+last_updated: 2026-05-01

@@ -1,0 +1,134 @@
+# Scales Criteria — v1
+# =====================
+# Founder-ratified starter criteria set per BP011 turn 5 + KN095 scope memo.
+# Scales produces verdict: PASS (score > 0.6) / BLOCK (score < 0.4) / JUDGE (0.4–0.6).
+# All verdicts logged as Pheromone-Anchored Decisions (KN050 schema) via scribe-id "Scales".
+#
+# KN095 / BP011 — 2026-05-01.
+# Scales authority: Pass/Block within Augur-class blocks only.
+# Cannot override Founder-direct rules (e.g., Cost+20% constitutional).
+# Must escalate to Judge when criteria conflict or high-stakes context detected.
+#
+# Weight sum guidance: pro-pass contributions positively, pro-block negatively.
+# Final score = sum(weight × signal) normalized to [0, 1].
+# Criterion weights are relative; Scales normalizes internally.
+
+criteria:
+
+  - id: quotation_context
+    label: "Quotation context detected"
+    weight: high
+    weight_numeric: 3.0
+    pro_pass:
+      - "Source-attribution explicit and isolated"
+      - "> Source: Pawn report... framing visible"
+      - "Content clearly demarcated as external quotation"
+      - "--- PAWN QUOTATION --- or equivalent marker present"
+    pro_block:
+      - "No quotation framing present"
+      - "Content reads as organism's own assertion"
+      - "Forbidden term appears in first-person claim"
+    evaluation: "Check for explicit quotation markers. Partial credit if context is clear but not demarcated."
+
+  - id: negation_context
+    label: "Negation context"
+    weight: high
+    weight_numeric: 3.0
+    pro_pass:
+      - '"Zero X", "no Y", "anti-Z" grammatical structure'
+      - "Forbidden term explicitly negated in same sentence"
+      - "Disclaimer or anti-securities statement present"
+    pro_block:
+      - "Affirmative-form usage without negation"
+      - "Term asserted positively"
+    evaluation: "Regex-checkable. Negation of concept is opposite of forbidden use."
+
+  - id: domain_context
+    label: "Domain context"
+    weight: medium
+    weight_numeric: 2.0
+    pro_pass:
+      - "AI-compute-economics domain"
+      - "Securities-LB-token-context where Forman-test passing is explicitly noted"
+      - "Legal-compliance-research context (studying the law, not pitching)"
+      - "Academic paper or technical analysis"
+    pro_block:
+      - "General-marketing context"
+      - "Member-facing pitch document"
+      - "Public-facing landing page content"
+    evaluation: "File path and document header are key signals."
+
+  - id: author_organism_scope
+    label: "Author-organism scope"
+    weight: medium
+    weight_numeric: 2.0
+    pro_pass:
+      - "Bishop organism writing"
+      - "Pawn-research class document (scribeId R11_shadow_* or Pawn)"
+      - "Knight test fixture or internal technical doc"
+    pro_block:
+      - "Member-facing letter (raise bar significantly)"
+      - "Crown Letter primary text"
+      - "Unknown organism scope"
+    evaluation: "Check scribeId field. Bishop/Knight/Pawn internal docs have higher tolerance than member-facing."
+
+  - id: file_class_scope
+    label: "File-class scope"
+    weight: medium
+    weight_numeric: 2.0
+    pro_pass:
+      - "BISHOP_DROPZONE/00_FOUNDER_REVIEW/ path"
+      - "BISHOP_DROPZONE/03_BishopHandoffs/ path"
+      - "Canonical Eblet path (~/.claude/state/eblets/)"
+      - "librarian-mcp internal path"
+    pro_block:
+      - "Public Cephas content (Cephas/cephas-hugo/content/)"
+      - "Crown Letter primary text in platform/src/data/crown-letters/"
+      - "Platform public-facing pages (platform/src/pages/)"
+    evaluation: "Write destination is the primary signal. BISHOP_DROPZONE is research-class, not public."
+
+  - id: saa_howey_posture
+    label: "SAA Howey-test posture"
+    weight: critical
+    weight_numeric: 5.0
+    pro_pass:
+      - "Forman consumption-motive defense intact"
+      - "LB token framed as utility, not investment"
+      - "No expectation-of-profit language present"
+      - "Content is compatible with Howey non-security analysis"
+    pro_block:
+      - "Forman defense undermined by content"
+      - "Expectation-of-profit implied or asserted"
+      - "Investment language in member-facing context without disclaimer"
+    evaluation: "Consult liana-banyan-audit.md SAA Howey Opinion Brief. This is the highest-stakes criterion."
+
+  - id: past_precedent
+    label: "Past-precedent same-context"
+    weight: medium
+    weight_numeric: 2.0
+    pro_pass:
+      - "Similar prior content passed Founder ratification (see judge_precedents_v1.yaml)"
+      - "Bouncer safe-pattern covers this case type"
+      - "Known-safe context established in prior session"
+    pro_block:
+      - "No precedent exists for this context"
+      - "Similar prior content was rejected"
+      - "New context with no analog"
+    evaluation: "Check judge_precedents_v1.yaml + Bouncer registry. Precedent is persuasive, not binding."
+
+# Verdict thresholds (Founder-ratified BP011 — subject to Founder extension)
+verdict_thresholds:
+  pass_above: 0.6     # score > 0.6 → PASS
+  block_below: 0.4    # score < 0.4 → BLOCK
+  # 0.4 ≤ score ≤ 0.6 → JUDGE (escalate to Judge appellate)
+
+# Mandatory escalation triggers (regardless of score)
+mandatory_judge_escalation:
+  - "SAA Howey-test posture criterion scores pro-block"
+  - "File-class scope is Crown Letter primary text AND any criterion is ambiguous"
+  - "No precedent exists AND domain is member-facing-pitch"
+
+criteria_version: 1
+last_ratified: 2026-05-01
+ratifying_session: BP011
+ratifying_authority: Founder
