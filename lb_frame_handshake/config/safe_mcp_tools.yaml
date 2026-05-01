@@ -1,0 +1,50 @@
+# safe_mcp_tools.yaml — KN085/KN086 canonical pre-approve list
+# ==============================================================
+# Single source of truth for which librarian MCP tool calls are pre-approved
+# in settings.json (no Founder-confirmation-per-call required).
+#
+# Criteria: substrate-read or substrate-append-only operations; no destructive
+# or dispatch-side-effects; cost bounded by catalog read or local JSONL write.
+#
+# Bishop empirical seed: KN085/BP009 settings.json pre-approve session.
+# Any update to this file MUST be ratified by Founder prose-pass.
+
+safe_tools:
+  # ── Read-only queries ─────────────────────────────────────────────────────
+  - mcp__librarian__brief_me
+  - mcp__librarian__detective_investigate
+  - mcp__librarian__check_consistency
+  - mcp__librarian__consult_scribes
+  - mcp__librarian__consult_gotchas
+  - mcp__librarian__get_session_context
+  - mcp__librarian__get_initiative
+  - mcp__librarian__get_architecture
+  - mcp__librarian__get_canonical_numbers
+  - mcp__librarian__search_knowledge
+  - mcp__librarian__pheromone_query
+  - mcp__librarian__chronos_query
+  - mcp__librarian__bureau_query
+  - mcp__librarian__get_session_telemetry
+  - mcp__librarian__get_diff_since_session
+
+  # ── Substrate-append (append-only, non-destructive) ──────────────────────
+  - mcp__librarian__scribe_log
+  - mcp__librarian__log_tidbit
+  - mcp__librarian__add_gotcha
+  - mcp__librarian__update_session
+  - mcp__librarian__fates_route
+
+  # ── Detective + Chandelier pattern (read/query family) ───────────────────
+  - mcp__librarian__detective_*
+  - mcp__librarian__chandelier_*
+
+# ── DO NOT pre-approve (require Founder confirmation per call) ────────────
+# Listed here for documentation; not added to permissions.allow:
+#
+#   mcp__librarian__angel_of_death_*     (sever/bury — destructive)
+#   mcp__librarian__dispatch_pawn        (Pawn dispatch — has external cost)
+#   mcp__librarian__cancel_pawn_dispatch (visible cancellation action)
+#   mcp__librarian__force_complete_*     (shared state mutation)
+#   mcp__librarian__refresh_substrate_cache (potentially expensive)
+#   mcp__librarian__run_session_start    (session-mutating)
+#   mcp__librarian__run_session_end      (session-mutating)

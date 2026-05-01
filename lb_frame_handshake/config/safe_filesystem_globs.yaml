@@ -1,0 +1,19 @@
+# safe_filesystem_globs.yaml — pre-approved Write/Edit filesystem paths
+# ======================================================================
+# Paths that Bishop (and Federation members) may Write/Edit without
+# per-call confirmation. Bounded to substrate paths; never production source.
+
+safe_write_globs:
+  - "C:\\Users\\Administrator\\.claude\\projects\\**\\memory\\**"
+  - "C:\\Users\\Administrator\\.claude\\state\\eblets\\**"
+  - "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\**"
+  - "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\librarian-mcp\\stitchpunks\\**"
+  - "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\KNIGHT_DROPZONE\\**"
+  - "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\CONTEXT_MANAGEMENT\\**"
+  - "C:\\Users\\Administrator\\.lb-session\\**"
+
+# For Federation members — relative patterns resolved against project root:
+federation_relative_globs:
+  - "BISHOP_DROPZONE/**"
+  - "librarian-mcp/stitchpunks/**"
+  - ".lb-session/**"

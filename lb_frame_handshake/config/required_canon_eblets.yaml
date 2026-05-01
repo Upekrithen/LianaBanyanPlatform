@@ -1,0 +1,21 @@
+# required_canon_eblets.yaml — expected CANON eblets at session start
+# ====================================================================
+# Phase 2 inventories these. Missing entries trigger a warning (not fatal).
+# The Handshake itself contributes lb_frame_handshake_bp009.eblet.md.
+
+canon_eblets_dir: "~/.claude/state/eblets/CANON"
+
+required:
+  - filename: lb_frame_handshake_bp009.eblet.md
+    description: This Handshake's own canon (self-referential — must be present after first run)
+    required_after_first_run: true
+    required_at_first_run: false
+
+  - filename: mechanical_computer_ai_electricity_meta_cubed_bp009.eblet.md
+    description: Mechanical Computer architecture — Handshake wires this
+    required_after_first_run: true
+    required_at_first_run: false
+
+optional:
+  - pattern: "*.eblet.md"
+    description: Any additional CANON eblets present are inventoried and reported

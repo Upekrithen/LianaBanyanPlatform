@@ -1,0 +1,40 @@
+# required_stitchpunks.yaml — expected Stitchpunk Pantheon entries
+# =================================================================
+# Phase 2 verifies all 24 entries are present. Any missing are flagged
+# for Founder review (not a fatal error — substrate may be evolving).
+
+expected_count: 24
+
+stitchpunks:
+  - id: SP-1
+    name: Cartographer
+    description: Session map + context routing
+  - id: SP-3
+    name: Classifier
+    description: Work classification at session end
+  - id: SP-5
+    name: Sentinel
+    description: Pre-session health gate
+  - id: SP-6
+    name: Scribe
+    description: Session logging + Cathedral auto-wire
+  - id: SP-7
+    name: Courier
+    description: Knight Cathedral auto-population
+  - id: SP-8
+    name: Herald
+    description: Session end announcements + handoff
+  - id: SP-10
+    name: Pipeline Bridge
+    description: Cross-session pipeline continuity
+  - id: SP-21
+    name: Tidbit Ledger
+    description: BRIDLE-Rule-2 verification tracking
+  - id: SP-22
+    name: Three Fates
+    description: Clotho-Lachesis-Atropos routing pipeline
+  - id: SP-23
+    name: Scribes Cathedral
+    description: Domain-indexed working memory
+  # SP-24 through SP-49: remaining 15 entries expected in pantheon
+  # (exact IDs verified at runtime from stitchpunks/ directory count)

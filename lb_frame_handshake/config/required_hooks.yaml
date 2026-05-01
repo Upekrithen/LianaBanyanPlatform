@@ -1,0 +1,26 @@
+# required_hooks.yaml — hooks that must be registered in settings.json
+# ======================================================================
+# Phase 3 ensures these hooks are present (idempotent — no duplicate registration).
+# Format mirrors Claude Code settings.json hooks schema.
+
+hooks:
+  - event: PreToolUse
+    description: "Wrasse pre-injection — fires canonical substrate context before any tool call"
+    matcher: "*"
+    command: "node /path/to/librarian-mcp/dist/server.js"
+    note: "Matcher is *, but implementation gate-checks via Wrasse pattern registry"
+
+  - event: PostToolUse
+    description: "Pheromone sync-emit — incremental substrate index after tool calls"
+    matcher: "mcp__librarian__*"
+    command: "pheromone-sync"
+
+  - event: SessionStart
+    description: "Stitchpunk Corps session start (SP-6, SP-1, SP-5, SP-7)"
+    matcher: "*"
+    command: "python librarian-mcp/stitchpunks/hooks/session_start.py"
+
+  - event: SessionEnd
+    description: "Stitchpunk Corps session end (SP-6, SP-1, SP-3, SP-8, SP-10)"
+    matcher: "*"
+    command: "python librarian-mcp/stitchpunks/hooks/session_end.py"
