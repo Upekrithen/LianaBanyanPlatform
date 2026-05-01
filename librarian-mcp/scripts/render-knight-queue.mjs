@@ -46,20 +46,26 @@ function parseJsonl(path) {
   return results;
 }
 
-/** Extract the CONTEXT section from an existing KNIGHT_QUEUE.md, if present. */
+/** Extract the CONTEXT section from an existing KNIGHT_QUEUE.md, if present.
+ * Terminator must match the actual footer pattern (\*Auto-rendered) — earlier
+ * version looked for \*Last updated which never matched, causing CONTEXT to
+ * absorb everything to EOF and the file to double per render (KN088-BP009 fix).
+ */
 function extractContextSection(existingContent) {
   if (!existingContent) return null;
   const contextMatch = existingContent.match(
-    /## CONTEXT[\s\S]*?(?=\n---\n## KNIGHT DISPATCH PROTOCOL|\n---\n\*Last updated|$)/
+    /## CONTEXT[\s\S]*?(?=\n---\n## KNIGHT DISPATCH PROTOCOL|\n---\n\*Auto-rendered|\n---\n\*Last updated|$)/
   );
   if (contextMatch) return contextMatch[0].trimEnd();
   return null;
 }
 
-/** Extract the dispatch protocol section from existing file, if present. */
+/** Extract the dispatch protocol section from existing file, if present.
+ * Same terminator fix as extractContextSection (KN088-BP009).
+ */
 function extractDispatchProtocol(existingContent) {
   if (!existingContent) return null;
-  const protocolMatch = existingContent.match(/## KNIGHT DISPATCH PROTOCOL[\s\S]*?(?=\n---\n\*Last updated|$)/);
+  const protocolMatch = existingContent.match(/## KNIGHT DISPATCH PROTOCOL[\s\S]*?(?=\n---\n\*Auto-rendered|\n---\n\*Last updated|$)/);
   if (protocolMatch) return protocolMatch[0].trimEnd();
   return null;
 }
@@ -144,10 +150,21 @@ function extractKNumber(text) {
 }
 
 async function main() {
-  // Read existing KNIGHT_QUEUE.md to preserve the CONTEXT and dispatch protocol sections
+  // Read existing KNIGHT_QUEUE.md to preserve the CONTEXT and dispatch protocol sections.
+  // Defensive size cap (KN088-BP009): any well-formed render produces ~50-200 KB.
+  // If existing file > 5 MB, something has gone wrong (regex bloat, accidental
+  // append loop). Skip preservation rather than fail with V8 string-length errors.
+  const MAX_EXISTING_BYTES = 5 * 1024 * 1024;
   let existingContent = null;
   if (existsSync(KNIGHT_QUEUE_PATH)) {
-    existingContent = readFileSync(KNIGHT_QUEUE_PATH, "utf-8");
+    const { statSync } = await import("node:fs");
+    const sizeBytes = statSync(KNIGHT_QUEUE_PATH).size;
+    if (sizeBytes > MAX_EXISTING_BYTES) {
+      console.warn(`  ⚠ KNIGHT_QUEUE.md is ${(sizeBytes / 1024 / 1024).toFixed(1)} MB (> ${MAX_EXISTING_BYTES / 1024 / 1024} MB cap) — regenerating from scratch instead of preserving CONTEXT/protocol sections.`);
+      existingContent = null;
+    } else {
+      existingContent = readFileSync(KNIGHT_QUEUE_PATH, "utf-8");
+    }
   }
 
   const preservedContext = extractContextSection(existingContent);
