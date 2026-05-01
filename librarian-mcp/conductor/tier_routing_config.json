@@ -1,0 +1,96 @@
+{
+  "_comment": "Conductor's Baton — Substrate Tier Routing Config. KN056 / BP005 / B127 Layer 2.",
+  "_augur_pricing_exemption": "documentation-class spec; LB membership pricing identical for all members at $5/year; vendor-API spend is industry-term, membership-orthogonal.",
+  "version": "1.0.0",
+  "session": "KN056",
+  "source": "#2277 Conductor's Baton + TS-110 tier-classification taxonomy + KN056 L2 deployment",
+
+  "tiers": {
+    "haiku": {
+      "model": "claude-haiku-4-5",
+      "cost_per_input_k_usd": 0.0008,
+      "cost_per_output_k_usd": 0.004,
+      "description": "Economy tier — factual lookup, pre-resolution, canonical queries. Fast, cheap, 90% HOT (R13).",
+      "operations": [
+        "wrasse_trigger_pre_resolution",
+        "wrasse_auto_register",
+        "canonical_number_query",
+        "canonical_stats_fetch",
+        "file_path_resolution",
+        "vocabulary_trigger",
+        "factual_lookup",
+        "index_query",
+        "eblet_path_resolution",
+        "pheromone_lookup",
+        "session_guard_check",
+        "feature_flag_lookup",
+        "domain_category_detection",
+        "context_window_check",
+        "retrieval_only",
+        "simple_classification"
+      ]
+    },
+    "sonnet": {
+      "model": "claude-sonnet-4-6",
+      "cost_per_input_k_usd": 0.003,
+      "cost_per_output_k_usd": 0.015,
+      "description": "Standard tier — reasoning, code, canon writes, multi-step synthesis. 86% HOT (R13).",
+      "operations": [
+        "reasoning",
+        "canon_write",
+        "scribe_log",
+        "code_class_bean",
+        "multi_step_detective_synthesis",
+        "medium_context_summarization",
+        "knowledge_pump_processing",
+        "miner_synthesis",
+        "sculptor_synthesis",
+        "session_update",
+        "innovation_extract",
+        "brief_me",
+        "search_knowledge",
+        "corpus_mining",
+        "reasoning_required",
+        "creative",
+        "code_generation"
+      ]
+    },
+    "opus": {
+      "model": "claude-opus-4-7",
+      "cost_per_input_k_usd": 0.015,
+      "cost_per_output_k_usd": 0.075,
+      "description": "Premium tier — orchestration, paper-grade synthesis, cross-vendor coordination. 98% HOT (R13).",
+      "operations": [
+        "orchestration",
+        "paper_grade_synthesis",
+        "stone_tablet_ratification",
+        "cross_vendor_coordination",
+        "ninety_bean_test_orchestration",
+        "patent_extraction",
+        "aa_formal_generation",
+        "opening_gambit_synthesis",
+        "multi_step_planning"
+      ]
+    }
+  },
+
+  "routing_rules": {
+    "fallback_tier": "sonnet",
+    "circuit_breaker_demotion": {
+      "haiku_fails_to": "sonnet",
+      "sonnet_fails_to": "opus"
+    },
+    "min_hot_percent_for_haiku": 85,
+    "counterfactual_baseline": "sonnet"
+  },
+
+  "b127_l2_anchor": {
+    "layer": 2,
+    "name": "Model-Tier Optimization",
+    "theoretical_max_multiplier": 19.0,
+    "target_empirical_multiplier": 2.0,
+    "cost_ratio_haiku_vs_sonnet": 0.267,
+    "cost_ratio_opus_vs_sonnet": 5.0,
+    "note": "L2 multiplier = total_sonnet_counterfactual_cost / total_actual_tier_routed_cost (Opus ops excluded from L2 scope — they represent new orchestration capability, not Sonnet replacements)"
+  }
+}
