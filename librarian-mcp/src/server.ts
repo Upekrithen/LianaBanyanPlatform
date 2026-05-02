@@ -71,6 +71,10 @@ import {
   type TierBountyClass,
 } from "./three_tier/bounty_poster_tier_scaffold.js";
 import {
+  handleGenerateTierBountyPoster,
+  type GenerateTierBountyPosterArgs,
+} from "./three_tier/bounty_poster_tier_generator.js";
+import {
   createSubscription,
   activateSubscription,
   activateOneTimeAccess,
@@ -5929,6 +5933,70 @@ registerTool(
       bounty_class: bounty_class as TierBountyClass | undefined,
       tier: tier as "needs" | "suggests" | "founder" | undefined,
       list_all,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// ═══════════════════════════════════════════
+// TOOL: generate_tier_bounty_poster (KN-H6 / BP017)
+// ═══════════════════════════════════════════
+
+/**
+ * generate_tier_bounty_poster — KN-H6 / BP017 Per-Tier Bounty Poster Generator
+ * Creates a Bounty Poster instance for a given Three-Tier empirical-verification class.
+ * FORK doctrine: marks_pay_rate is always Marks-class — no fiat bridge possible.
+ * Four classes: tier_a_floor_verification (×1.0) / tier_b_uplift_verification (×1.25) /
+ *               tier_c_founder_replication (×1.5) / cross_tier_comparison (×2.0).
+ */
+registerTool(
+  "generate_tier_bounty_poster",
+  "Generates a per-tier Bounty Poster instance for LB Frame Three-Tier empirical-verification tasks (KN-H6/BP017). " +
+    "Creates a TierBountyPoster with UUID, description, FORK-compliant Marks pay-rate (never fiat), " +
+    "submission schema (empirical-receipt JSON fields), validation criteria (pass/fail thresholds for KN-H7), " +
+    "and cohort_class_eligibility (Federation Member or higher). " +
+    "Four Bounty classes: " +
+    "tier_a_floor_verification (×1.0 — floor verification at default plan), " +
+    "tier_b_uplift_verification (×1.25 — uplift vs Tier A), " +
+    "tier_c_founder_replication (×1.5 — Founder cascade replication + Apiarist cohort uplift), " +
+    "cross_tier_comparison (×2.0 — all three tiers, same submitter + same bank). " +
+    "Use generate_all=true to generate all four at once. " +
+    "standard_rate defaults to 100 Marks; override to set base rate before multiplier.",
+  {
+    tier_class: z
+      .enum([
+        "tier_a_floor_verification",
+        "tier_b_uplift_verification",
+        "tier_c_founder_replication",
+        "cross_tier_comparison",
+      ])
+      .optional()
+      .describe(
+        "Tier Bounty class to generate. Required unless generate_all=true. " +
+          "tier_a_floor_verification=×1.0 / tier_b_uplift_verification=×1.25 / " +
+          "tier_c_founder_replication=×1.5 / cross_tier_comparison=×2.0.",
+      ),
+    standard_rate: z
+      .number()
+      .positive()
+      .optional()
+      .describe(
+        "Base Marks rate before tier multiplier. Defaults to 100 Marks. " +
+          "FORK doctrine: this is a Marks count, never a fiat amount.",
+      ),
+    generate_all: z
+      .boolean()
+      .optional()
+      .describe(
+        "If true, generates all four Bounty Poster classes at once (ignores tier_class). " +
+          "Returns all_posters array ordered A → B → C → Cross-tier.",
+      ),
+  },
+  async ({ tier_class, standard_rate, generate_all }) => {
+    const result = handleGenerateTierBountyPoster({
+      tier_class: tier_class as GenerateTierBountyPosterArgs["tier_class"],
+      standard_rate,
+      generate_all,
     });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   },
