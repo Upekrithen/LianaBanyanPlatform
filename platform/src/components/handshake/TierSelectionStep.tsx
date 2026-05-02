@@ -15,7 +15,7 @@
  * data-xray-id: tier-selection-step
  */
 
-import { useState } from "react";
+import { useState, useId } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -135,6 +135,9 @@ export function TierSelectionStep({
   detectedSurface,
 }: TierSelectionStepProps) {
   const [selected, setSelected] = useState<ResourceConfigTier | null>(null);
+  const headingId = useId();
+  const advisoryId = useId();
+  const errorId = useId();
 
   const isReselection = previousTier != null;
   const canSubmit = selected !== null && !isSubmitting;
@@ -148,7 +151,7 @@ export function TierSelectionStep({
     <div className="space-y-5" data-xray-id="tier-selection-step">
       {/* Header */}
       <div className="space-y-1">
-        <h3 className="text-base font-semibold">
+        <h3 className="text-base font-semibold" id={headingId}>
           Choose your LB Frame resource-config tier
         </h3>
         <p className="text-sm text-muted-foreground">
@@ -163,6 +166,8 @@ export function TierSelectionStep({
         value={selected ?? ""}
         onValueChange={(v) => setSelected(v as ResourceConfigTier)}
         className="space-y-3"
+        aria-labelledby={headingId}
+        aria-required="true"
       >
         {TIERS.map((tier) => {
           const Icon = tier.icon;
@@ -192,12 +197,13 @@ export function TierSelectionStep({
                       id={`tier-${tier.id}`}
                       className="mt-0.5 sr-only"
                     />
-                    {/* Visual radio indicator */}
+                    {/* Visual radio indicator (aria-hidden; actual state on RadioGroupItem) */}
                     <div
                       className={cn(
                         "mt-0.5 h-4 w-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center",
                         isSelected ? `${tier.border} bg-current` : "border-muted-foreground/40"
                       )}
+                      aria-hidden="true"
                     >
                       {isSelected && (
                         <div className={cn("h-1.5 w-1.5 rounded-full bg-white")} />
@@ -238,10 +244,13 @@ export function TierSelectionStep({
 
                       {isSelected && (
                         <>
-                          <ul className="mt-2 space-y-0.5">
+                          <ul
+                            className="mt-2 space-y-0.5"
+                            aria-label={`${tier.label} specifications`}
+                          >
                             {tier.bullets.map((b, i) => (
                               <li key={i} className={cn("text-xs flex gap-1.5 items-start", tier.highlight)}>
-                                <span className="mt-0.5">•</span>
+                                <span className="mt-0.5" aria-hidden="true">•</span>
                                 <span className="text-muted-foreground">{b}</span>
                               </li>
                             ))}
@@ -264,8 +273,14 @@ export function TierSelectionStep({
 
       {/* Plan-tier advisory for Tier C (informational only — does NOT block) */}
       {selected === "founder" && (
-        <div className="flex gap-2 rounded-lg border border-violet-200 dark:border-violet-800 bg-violet-50/40 dark:bg-violet-950/20 p-3 text-xs text-muted-foreground">
-          <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-violet-500" />
+        <div
+          id={advisoryId}
+          role="note"
+          aria-live="polite"
+          aria-atomic="true"
+          className="flex gap-2 rounded-lg border border-violet-200 dark:border-violet-800 bg-violet-50/40 dark:bg-violet-950/20 p-3 text-xs text-muted-foreground"
+        >
+          <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-violet-500" aria-hidden="true" />
           <div>
             <span className="font-medium text-violet-700 dark:text-violet-400">Advisory (informational — does not block):</span>{" "}
             Tier C reflects Founder&apos;s customized Claude Code plan. If your plan has lower
@@ -280,8 +295,14 @@ export function TierSelectionStep({
 
       {/* Persistence error with retry prompt (BRIDLE Rule 8) */}
       {persistError && (
-        <div className="flex gap-2 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-xs text-destructive">
-          <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+        <div
+          id={errorId}
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          className="flex gap-2 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-xs text-destructive"
+        >
+          <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" aria-hidden="true" />
           <div>
             <span className="font-medium">Could not save your tier choice:</span>{" "}
             {persistError} — please try again.
@@ -299,6 +320,8 @@ export function TierSelectionStep({
         onClick={handleConfirm}
         disabled={!canSubmit}
         className="w-full"
+        aria-busy={isSubmitting}
+        aria-describedby={persistError ? errorId : selected === "founder" ? advisoryId : undefined}
       >
         {isSubmitting
           ? "Saving tier choice…"

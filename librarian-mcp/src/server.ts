@@ -67,6 +67,10 @@ import {
   recordMemberVote,
 } from "./excalibur_class/slice_pipeline.js";
 import {
+  handleGetTierBountyPayRate,
+  type TierBountyClass,
+} from "./three_tier/bounty_poster_tier_scaffold.js";
+import {
   createSubscription,
   activateSubscription,
   activateOneTimeAccess,
@@ -5881,6 +5885,52 @@ registerTool(
     } catch (err) {
       return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
     }
+  },
+);
+
+// ═══════════════════════════════════════════
+// TOOL: get_lb_frame_tier_bounty_pay_rate (KN-H5 / BP017)
+// ═══════════════════════════════════════════
+
+/**
+ * get_lb_frame_tier_bounty_pay_rate — KN-H5 / BP017 Bounty Poster Tier Scaffold
+ * Three modes: bounty_class (exact), tier (primary class for tier), list_all (all 4 classes).
+ * Pay-rate multipliers: Tier A × 1.0 / Tier B × 1.25 / Tier C × 1.5 / Cross-tier × 2.0.
+ */
+registerTool(
+  "get_lb_frame_tier_bounty_pay_rate",
+  "Returns Bounty pay-rate metadata for LB Frame Three-Tier empirical verification tasks (KN-H5/BP017). " +
+    "Three modes: (1) bounty_class — exact class lookup; " +
+    "(2) tier — primary bounty class for needs/suggests/founder; " +
+    "(3) list_all=true — all four classes. " +
+    "Pay-rate multipliers: Tier A × 1.0 (baseline) / Tier B × 1.25 (uplift) / Tier C × 1.5 (founder replication) / Cross-tier × 2.0 (full comparison). " +
+    "Scaffold for KN-H6/H7/H8 Bounty Poster Tier-testing infrastructure.",
+  {
+    bounty_class: z
+      .enum([
+        "tier_a_floor_verification",
+        "tier_b_uplift_verification",
+        "tier_c_founder_replication",
+        "cross_tier_comparison",
+      ])
+      .optional()
+      .describe("Specific Bounty class to query. Mutually exclusive with tier."),
+    tier: z
+      .enum(["needs", "suggests", "founder"])
+      .optional()
+      .describe("Returns primary Bounty class for this tier. Mutually exclusive with bounty_class."),
+    list_all: z
+      .boolean()
+      .optional()
+      .describe("If true, returns all four Bounty classes with pay-rate metadata."),
+  },
+  async ({ bounty_class, tier, list_all }) => {
+    const result = handleGetTierBountyPayRate({
+      bounty_class: bounty_class as TierBountyClass | undefined,
+      tier: tier as "needs" | "suggests" | "founder" | undefined,
+      list_all,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   },
 );
 

@@ -23,6 +23,7 @@ const PayoutsPage = lazy(() => import("@/pages/PayoutsPage"));
 const HelmActionsPage = lazy(() => import("@/pages/HelmActionsPage"));
 const OutOfBoundsPage = lazy(() => import("@/pages/OutOfBoundsPage"));
 const SocialAccountsPage = lazy(() => import("@/pages/SocialAccountsPage"));
+const LBFrameTierSettingsPage = lazy(() => import("@/pages/LBFrameTierSettingsPage"));
 const ConnectedServicesPage = lazy(() => import("@/pages/ConnectedServicesPage"));
 const GatekeeperInboxPage = lazy(() => import("@/pages/GatekeeperInboxPage"));
 const MembershipPage = lazy(() => import("@/pages/MembershipPage"));
@@ -115,6 +116,7 @@ export const dashboardRoutes = (
     <Route path="/profile-settings" element={<ProtectedRoute><LazyPage><ProfileSettings /></LazyPage></ProtectedRoute>} />
     <Route path="/content-controls" element={<ProtectedRoute><LazyPage><ContentControlsPage /></LazyPage></ProtectedRoute>} />
     <Route path="/settings/social-accounts" element={<ProtectedRoute><LazyPage><SocialAccountsPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/settings/lb-frame-tier" element={<ProtectedRoute><LazyPage><LBFrameTierSettingsPage /></LazyPage></ProtectedRoute>} />
     <Route path="/blockchain/:projectId" element={<ProtectedRoute><LazyPage><BlockchainExplorer /></LazyPage></ProtectedRoute>} />
     <Route path="/blockchain/overview" element={<ProtectedRoute><LazyPage><BlockchainExplorer /></LazyPage></ProtectedRoute>} />
     <Route path="/medallions" element={<ProtectedRoute><LazyPage><MedallionViewer /></LazyPage></ProtectedRoute>} />
