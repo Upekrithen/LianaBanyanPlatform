@@ -5218,6 +5218,95 @@ registerTool(
 );
 
 // ═══════════════════════════════════════════
+// KN-G — SHADOW PHASE QUERY (BP016)
+// ═══════════════════════════════════════════
+
+registerTool(
+  "shadow_phase_query",
+  "KN-G / BP016 — Alternating Cylinder Fire observability tool. " +
+  "Returns the current A/B phase assignment for each of the 8 Shadow E-Giants. " +
+  "Reads from federation/cylinder_phase_state.jsonl; falls back to deterministic formula if no state file. " +
+  "Use for debugging cycle coordination, verifying N/2-in-A + N/2-in-B balance, and monitoring phase transitions.",
+  {
+    shadow_id: z.string().optional().describe("Optional: specific Shadow ID (shadow_0..shadow_7) — omit for all 8"),
+    cycle_number: z.number().int().min(0).optional().describe("Optional: query phase for a hypothetical cycle number instead of current"),
+    include_history: z.boolean().default(false).describe("If true, include last 5 cycle snapshots from the state log"),
+  },
+  async ({ shadow_id, cycle_number, include_history }) => {
+    const { homedir } = await import("os");
+    const { readFileSync, existsSync } = await import("fs");
+    const { resolve } = await import("path");
+
+    const STATE_FILE = resolve(homedir(), ".lb-session", "federation", "cylinder_phase_state.jsonl");
+    const SHADOW_COUNT = 8;
+
+    // Deterministic formula: shadow_i is in phase A when (cycle + i) % 2 === 0
+    function deterministicPhase(cycle: number, idx: number): "A" | "B" {
+      return (cycle + idx) % 2 === 0 ? "A" : "B";
+    }
+
+    interface CycleSnapshot {
+      cycle_number: number;
+      published_at: string;
+      assignments: Array<{ shadow_id: string; phase: "A" | "B"; index: number }>;
+    }
+
+    // Read latest state from JSONL
+    let latestSnapshot: CycleSnapshot | null = null;
+    const history: CycleSnapshot[] = [];
+
+    if (existsSync(STATE_FILE)) {
+      try {
+        const lines = readFileSync(STATE_FILE, "utf-8").trim().split("\n").filter(Boolean);
+        for (const line of lines) {
+          try { history.push(JSON.parse(line) as CycleSnapshot); } catch { /* skip malformed */ }
+        }
+        if (history.length > 0) latestSnapshot = history[history.length - 1];
+      } catch {
+        // file unreadable — fall through to deterministic
+      }
+    }
+
+    // Resolve effective cycle number
+    const effectiveCycle = cycle_number !== undefined
+      ? cycle_number
+      : (latestSnapshot?.cycle_number ?? 0);
+
+    // Build assignments
+    const shadowIds = shadow_id
+      ? [shadow_id]
+      : Array.from({ length: SHADOW_COUNT }, (_, i) => `shadow_${i}`);
+
+    const assignments = shadowIds.map(sid => {
+      const idx = parseInt(sid.replace("shadow_", ""), 10);
+      const phase = (latestSnapshot && cycle_number === undefined)
+        ? (latestSnapshot.assignments.find(a => a.shadow_id === sid)?.phase ?? deterministicPhase(effectiveCycle, idx))
+        : deterministicPhase(effectiveCycle, idx);
+      return { shadow_id: sid, phase, cycle_number: effectiveCycle };
+    });
+
+    const inA = assignments.filter(a => a.phase === "A").length;
+    const inB = assignments.filter(a => a.phase === "B").length;
+    const balanced = !shadow_id && inA === inB;
+
+    const result: Record<string, unknown> = {
+      source: latestSnapshot ? "state_file" : "deterministic_formula",
+      state_file: STATE_FILE,
+      effective_cycle: effectiveCycle,
+      published_at: latestSnapshot?.published_at ?? null,
+      assignments,
+      balance: { in_A: inA, in_B: inB, balanced },
+    };
+
+    if (include_history && history.length > 0) {
+      result.history = history.slice(-5);
+    }
+
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  }
+);
+
+// ═══════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════
 

@@ -41,6 +41,9 @@ from typing import Any, Optional
 
 from .iron_tablet_attach import IronTabletAttach
 
+# KN-G: lazy import to avoid circular dependency at module load time.
+# _CyclePhaseCoordinator functions are imported on first use inside _get_current_cycle_phase.
+
 # Base directory for all session-scoped eblet trees (KN098: parameterized per session_id).
 # Actual write directory: _HEARTBEAT_EBLET_BASE / <session_id>
 _HEARTBEAT_EBLET_BASE = Path.home() / ".claude" / "state" / "eblets"
@@ -191,12 +194,19 @@ class ShadowLifecycle:
             rebind_time is not None
             and (time.monotonic() - rebind_time) * 1000 < 100
         )
+
+        # KN-G: emit current cycle_phase (A=build/compile, B=prep) per Shadow.
+        # Phase is determined by the CyclePhaseCoordinator's published state file, or
+        # falls back to the deterministic formula (no coordinator dependency at runtime).
+        cycle_phase = self._get_current_cycle_phase()
+
         content = (
             f"# Shadow Heartbeat — {self.scribe_id}\n\n"
             f"- **ts:** `{ts}`\n"
             f"- **session:** `{session_id}`\n"
             f"- **position:** {self.lighthouse_position}\n"
             f"- **reattach_count:** {self._state.reattach_count}\n"
+            f"- **cycle_phase:** {cycle_phase}\n"
         )
         if carryover:
             content += "- **rebind_carryover:** true\n"
@@ -443,6 +453,36 @@ class ShadowLifecycle:
 
     def is_alive(self) -> bool:
         return not self._stop_event.is_set()
+
+    # ── KN-G: cycle phase query ────────────────────────────────────────────────
+
+    def _get_current_cycle_phase(self) -> str:
+        """
+        Return current alternating cycle phase for this Shadow ("A" or "B").
+
+        Priority:
+          1. Read cycle_number from federation/cylinder_phase_state.jsonl (coordinator-driven)
+          2. Fall back to deterministic formula with cycle_number=0 if file not found
+          3. Return "?" if shadow_id is unknown (should never happen)
+
+        KN-G BP016: Phase A = build/compile, Phase B = prep.
+        """
+        try:
+            from .cycle_phase_coordinator import (
+                read_phase_state_latest,
+                get_phase_at_cycle,
+            )
+            # Extract greek letter from scribe_id e.g. "R11_shadow_alpha" → "alpha"
+            parts = self.scribe_id.rsplit("_", 1)
+            greek = parts[-1] if len(parts) >= 2 else ""
+            if not greek:
+                return "?"
+
+            state = read_phase_state_latest()
+            cycle_number = state["cycle_number"] if state else 0
+            return get_phase_at_cycle(greek, cycle_number)
+        except Exception:
+            return "?"
 
     def get_state(self) -> ShadowState:
         return self._state
