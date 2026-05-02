@@ -75,6 +75,9 @@ import {
   type GenerateTierBountyPosterArgs,
 } from "./three_tier/bounty_poster_tier_generator.js";
 import {
+  handleValidateBountyReceipt,
+} from "./three_tier/bounty_receipt_validator.js";
+import {
   createSubscription,
   activateSubscription,
   activateOneTimeAccess,
@@ -5997,6 +6000,76 @@ registerTool(
       tier_class: tier_class as GenerateTierBountyPosterArgs["tier_class"],
       standard_rate,
       generate_all,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// ═══════════════════════════════════════════
+// TOOL: validate_bounty_receipt (KN-H7 / BP017)
+// ═══════════════════════════════════════════
+
+/**
+ * validate_bounty_receipt — KN-H7 / BP017 Bounty Empirical-Receipt Validator
+ * Validates submitted Bounty receipts against per-tier empirical criteria.
+ * Anti-marketing-class discipline: suspicious inflation flagged for Founder review.
+ * BRIDLE Rule 4: borderline cases default to FAIL.
+ */
+registerTool(
+  "validate_bounty_receipt",
+  "Validates a submitted Bounty empirical receipt against per-tier criteria (KN-H7/BP017). " +
+    "Four Bounty classes: " +
+    "tier_a_floor_verification (HOT-rate lift ≥30pp; tier_config 'needs'; valid question bank), " +
+    "tier_b_uplift_verification (Cathedral lift ≥30pp; Reckoning velocity ≥2× Tier A reference), " +
+    "tier_c_founder_replication (Cathedral lift ≥30pp; founder_cascade_reference; own-corpus proof), " +
+    "cross_tier_comparison (all 3 tiers lift ≥30pp; same submitter; same question bank; monotone uplift). " +
+    "Returns: pass (bool), margin (lift_pp − 30; positive = above threshold), " +
+    "failures (array of specific unmet criteria), warnings (borderline/suspicious results for Founder review). " +
+    "Anti-marketing-class discipline: lift_pp > 60pp (>20% above K477/K481/K499 50pp typical ceiling) " +
+    "flags suspicious_inflation warning and routes to Founder review — no auto-approval. " +
+    "BRIDLE Rule 4: borderline cases (e.g. velocity 1.5–2×) default to FAIL. " +
+    "Composes with KN-H6 generate_tier_bounty_poster (provides submission_schema + validation_criteria). " +
+    "KN-H8 Marks payout integration is gated on a passing validation result from this tool.",
+  {
+    bounty_id: z
+      .string()
+      .describe(
+        "UUID of the Bounty Poster instance being validated against (from generate_tier_bounty_poster).",
+      ),
+    bounty_class: z
+      .enum([
+        "tier_a_floor_verification",
+        "tier_b_uplift_verification",
+        "tier_c_founder_replication",
+        "cross_tier_comparison",
+      ])
+      .describe(
+        "Tier Bounty class — determines which validation criteria apply. " +
+          "tier_a_floor_verification: HOT-rate ≥30pp lift; tier_config 'needs'. " +
+          "tier_b_uplift_verification: Cathedral lift ≥30pp; Reckoning velocity ≥2× Tier A. " +
+          "tier_c_founder_replication: Cathedral lift ≥30pp; cascade-replication evidence; own-corpus. " +
+          "cross_tier_comparison: all 3 tiers ≥30pp; same submitter; same bank; monotone uplift.",
+      ),
+    receipt_json: z
+      .record(z.unknown())
+      .describe(
+        "The submitted empirical receipt as a JSON object. " +
+          "Required fields per class (see generate_tier_bounty_poster for full submission_schema): " +
+          "Tier A: cold_accuracy_pct, hot_accuracy_pct, lift_pp, tier_config, ai_model, " +
+          "question_bank_version, run_timestamp. " +
+          "Tier B: tier_b_lift_pp, reckoning_velocity_ratio, tier_a_reference_receipt, tier_config, " +
+          "ai_model, run_timestamp. " +
+          "Tier C: founder_cascade_reference, replication_lift_pp, corpus_folder_description, " +
+          "tier_config, ai_model, run_timestamp. " +
+          "Cross-tier: tier_a/b/c cold+hot accuracy, same_submitter=true, question_bank_version, " +
+          "tier_a/b/c model, run_timestamps object.",
+      ),
+  },
+  async ({ bounty_id, bounty_class, receipt_json }) => {
+    const result = handleValidateBountyReceipt({
+      bounty_id,
+      bounty_class: bounty_class as Parameters<typeof handleValidateBountyReceipt>[0]["bounty_class"],
+      receipt_json: receipt_json as Record<string, unknown>,
     });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   },
