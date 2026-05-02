@@ -1,5 +1,5 @@
 ---
-title: "Provisional Patent Application 16 — Liana Banyan Corporation"
+title: "Method and System for Cooperative-AI-Substrate Platform with Multi-Organism Federation and Substrate-Routed Memory Expansion"
 subtitle: "Filing Specification — Cooperative-AI-Substrate Platform Architecture: Iron-E-Giant Federation, Substrate-Routed Memory Expansion, Multi-Layer Authority Recursion, Augur Substrate Primitives, CheckBook Instrumentation, Bedrock Foundation Chandelier, R&D Battery, Tower-of-Peace Cluster Composition, and Legacy Scribe Deep-Strata Surfacing"
 author: "Jonathan Jones, Sole Inventor"
 date: "2026-05-04 (filing target)"
@@ -19,20 +19,7 @@ date: "2026-05-04 (filing target)"
 **Filing path:** USPTO Patent Center direct or via counsel of Founder's choosing — Founder discretion.
 
 **Title of Invention:**
-*Cooperative-AI-Substrate Platform Architecture — Iron-E-Giant Federation with Fused Atomic
-Iron Tablet Primitive, Shadow-to-Federation-Organism Promotion, In-Concert Multi-Organism
-Coordination Protocol, Cross-Vendor Peer-Gateway with Shadow-Proxy Ground-Truth,
-Three-Tier Appellate Scribe Architecture, Substrate-Routed Memory Expansion with
-Index-Cost Decoupling, Ring of Three Golden Eblets Multi-Layer Authority Recursion,
-Social-Authority DAG with Pheromone-Anchored Decisions, AGPL v3 Cathedral Free /
-Federation Library Cooperative, Augur Living Gate with Substrate-Event-Driven Freshness,
-Catechist Session-Discipline Auto-Grading, Persistent Shadow Watcher Daemon,
-CheckBook Self-Instrumentation Suite, LIGHTHOUSE 8/2 Operational-Substrate Pattern,
-Holiday Cross-Agent Auto-Dispatch, Envoy Sanitization-as-Construction, Cartridge Library
-Tower-of-Peace Member Edifice, Bedrock Foundation Chandelier Granular-Empirical Isolation
-Substrate, Pre-Registered Empirical-Receipt Protocol, Published R&D Battery and Empirical
-Standards Framework, Beans and Beanpods Substrate Task Hierarchy, Tower-of-Peace Cluster
-Composition Claim, and Legacy Scribe Reasoning-Context Deep-Strata Surfacing*
+*Method and System for Cooperative-AI-Substrate Platform with Multi-Organism Federation and Substrate-Routed Memory Expansion*
 
 **Filed under:** #2260 Cooperative Defensive Patent Pledge (Liana Banyan Corporation, B098).
 
