@@ -5377,17 +5377,56 @@ server.tool(
   },
 );
 
-// ─── KN-H1: get_lb_frame_resource_config_tier ────────────────────────────────
+// ─── KN-H1 + KN-H2: get_lb_frame_resource_config_tier ───────────────────────
 // Read-only. Returns member's Tier choice + tier-spec metadata.
+// KN-H2: Extended to return Tier A spec metadata + empirical-floor receipt pointer
+//         when tier == 'needs'. Single source of truth: tier_a_needs_spec.ts (UI)
+//         and TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json (empirical anchor).
 // Called at LB Frame Handshake Phase 1 Discovery (Step 1.3) and on-demand.
 // Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes.
 // BRIDLE Rule 4: if DB unavailable, returns tier_state='not_chosen' (surface picker; don't proceed silently).
+
+const TIER_A_SPEC_METADATA = {
+  plan_requirement: "Default Claude Code Pro/Standard plan",
+  upgrade_required: false,
+  anyone_can_run: true,
+  mcp_slots: "Default (5–10 slots)",
+  cohort_class_default: "Lone Wolf",
+  bag_of_holding_class: "Small bag (default-plan context-budget); warehouse-access full",
+  substrate_mode: "read-only",
+  cathedral_fingerprint: "brittle (cron-class; npm run rebuild)",
+  spec_bullets: [
+    "Default Claude Code plan (no upgrade required)",
+    "Standard token budget + message-rate limits (no overrides)",
+    "Pheromone substrate read-only — query the cooperative warehouse",
+    "Detective TEAM read-only — cross-cathedral fan-out for canon search",
+    "Brittle Cathedral fingerprint (refreshes via npm run rebuild)",
+    "Lone Wolf cohort-class default (separately advanceable)",
+  ],
+  empirical_floor: {
+    benchmark: "R10-v1",
+    cold_accuracy_pct_min: 5.3,
+    cold_accuracy_pct_max: 12.0,
+    hot_accuracy_pct_min: 89.3,
+    hot_accuracy_pct_max: 98.7,
+    lift_pp_min: 78,
+    lift_pp_max: 93.4,
+    lift_pp_mean: 86.2,
+    target_lift_pp: 30,
+    pass: true,
+    receipt_pointer: "BISHOP_DROPZONE/14_CanonicalReferences/TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json",
+    note: "Retrieval quality is substrate-dependent, not plan-dependent. Tier A floor is the same as Tier B/C for retrieval.",
+  },
+  spec_doc: "platform/src/data/lb_frame_tier_specs/tier_a_needs.md",
+};
+
 server.tool(
   "get_lb_frame_resource_config_tier",
   "Returns a member's LB Frame resource-config tier choice (needs/suggests/founder) + tier-spec metadata. " +
+  "KN-H2: When tier is 'needs' (Tier A), returns full Tier A spec metadata including empirical floor receipt pointer. " +
   "Called at LB Frame Handshake Phase 1 Discovery Step 1.3 to check if member has already chosen a tier. " +
   "Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes. " +
-  "Tier A NEEDS = default Claude plan, no upgrade required. " +
+  "Tier A NEEDS = default Claude plan, no upgrade required, empirical floor +78–93pp lift. " +
   "Tier B SUGGESTS = recommended uplift, documented better experience. " +
   "Tier C FOUNDER = empirical-receipt-source, self-attested, no fiat-bridge. " +
   "Anti-extraction by structural form: capital alone cannot purchase higher-tier participation. " +
@@ -5401,6 +5440,10 @@ server.tool(
     const result = await probeTierConfig(member_id);
     const summary = formatTierSummary(result);
     const advisory = result.tier ? buildPlanTierAdvisory(result.tier, surface) : null;
+    // KN-H2: Attach Tier A spec metadata when tier is 'needs' (or not yet chosen — show floor spec for UI)
+    const tier_a_spec = (result.tier === "needs" || result.tier_state === "not_chosen")
+      ? TIER_A_SPEC_METADATA
+      : null;
     return {
       content: [{
         type: "text" as const,
@@ -5408,6 +5451,7 @@ server.tool(
           ...result,
           summary,
           plan_tier_advisory: advisory,
+          tier_a_spec,
           compose_note: "Run get_cohort_class for cohort-class axis (orthogonal). Both at Handshake Phase 1 Discovery.",
         }, null, 2),
       }],

@@ -23,6 +23,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Layers, TrendingUp, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  TIER_A_SPEC_BULLETS,
+  TIER_A_TOOLTIP,
+} from "@/data/lb_frame_tier_specs/tier_a_needs_spec";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -49,6 +53,8 @@ interface TierDef {
   tagline: string;
   description: string;
   bullets: string[];
+  /** Optional tooltip shown on hover / info press (sourced from tier spec file). */
+  tooltip?: string;
   icon: React.ElementType;
   badgeText: string;
   highlight: string;
@@ -65,12 +71,10 @@ const TIERS: TierDef[] = [
     description:
       "LB Frame runs on your default Claude Code plan, out of the box. " +
       "No subscription upgrades, no extra spend. Anyone can run it.",
-    bullets: [
-      "Default Claude Code plan (no upgrade required)",
-      "Standard token budget + message-rate limits",
-      "Full LB Frame functionality at the floor",
-      "Cathedral Effect baseline lift demonstrated at this tier",
-    ],
+    // Spec bullets and tooltip sourced from tier_a_needs_spec.ts (single source of truth).
+    // Human-readable canonical: platform/src/data/lb_frame_tier_specs/tier_a_needs.md
+    bullets: TIER_A_SPEC_BULLETS as unknown as string[],
+    tooltip: TIER_A_TOOLTIP,
     icon: Layers,
     badgeText: "Anyone Can Run It",
     highlight: "text-emerald-700 dark:text-emerald-400",
@@ -233,14 +237,21 @@ export function TierSelectionStep({
                       </p>
 
                       {isSelected && (
-                        <ul className="mt-2 space-y-0.5">
-                          {tier.bullets.map((b, i) => (
-                            <li key={i} className={cn("text-xs flex gap-1.5 items-start", tier.highlight)}>
-                              <span className="mt-0.5">•</span>
-                              <span className="text-muted-foreground">{b}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        <>
+                          <ul className="mt-2 space-y-0.5">
+                            {tier.bullets.map((b, i) => (
+                              <li key={i} className={cn("text-xs flex gap-1.5 items-start", tier.highlight)}>
+                                <span className="mt-0.5">•</span>
+                                <span className="text-muted-foreground">{b}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          {tier.tooltip && (
+                            <p className="mt-2 text-xs text-muted-foreground/70 italic leading-relaxed border-t border-border/40 pt-2">
+                              {tier.tooltip}
+                            </p>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
