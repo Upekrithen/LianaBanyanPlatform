@@ -65,6 +65,7 @@ const VALID_VARIANTS = new Set<LibrarianMedallionVariant>([
   "symbiote",
   "ultravision",
   "liana-banyan",
+  "titan",
 ]);
 
 const CROSS_VARIANT_NAV: Array<{ slug: LibrarianMedallionVariant; label: string }> = [
@@ -78,6 +79,7 @@ const CROSS_VARIANT_NAV: Array<{ slug: LibrarianMedallionVariant; label: string 
   { slug: "ai-tuning", label: "AI Tuning" },
   { slug: "symbiote", label: "Symbiote" },
   { slug: "ultravision", label: "UltraVision" },
+  { slug: "titan", label: "Titan Librarian" },
 ];
 
 function isValidVariant(v: string | undefined): v is LibrarianMedallionVariant {
@@ -252,7 +254,7 @@ function LibrarianHome() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold" data-testid="librarian-gallery-heading">
-            10 Medallions — One Brand, Many Doors
+            11 Medallions — One Brand, Many Doors
           </h2>
           <p className="text-sm text-muted-foreground">
             All Medallions are Librarian variants.
@@ -615,11 +617,11 @@ function LibrarianMedallionDetail() {
     return (
       <div className="space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">10 Medallions — One Brand, Many Doors</h1>
+          <h1 className="text-2xl font-bold">11 Medallions — One Brand, Many Doors</h1>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
             All Medallions are Librarian variants. Cathedral / Pied Piper /
             Furnace / Canon / Platform Rules / Project Rules / AI Tuning /
-            Symbiote / UltraVision / Liana Banyan — one substrate, ten doors.
+            Symbiote / UltraVision / Liana Banyan / Titan Librarian — one substrate, eleven doors.
           </p>
         </div>
         <LibrarianMedallionGallery />

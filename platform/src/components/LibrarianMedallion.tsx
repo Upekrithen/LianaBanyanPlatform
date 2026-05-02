@@ -77,6 +77,7 @@ export type LibrarianMedallionVariant =
   | "symbiote"
   | "ultravision"
   | "liana-banyan"
+  | "titan"        // 11th variant — BP010 turn 33 Founder ratification; composition-mark TITAN LIBRARIAN
   | string; // open-set per BP010 "more the merrier" framing — YAML-only variants render via fallback
 
 export interface LibrarianMedallionProps {
@@ -1205,6 +1206,7 @@ export function LibrarianMedallionGallery() {
     "ai-tuning",
     "symbiote",
     "ultravision",
+    "titan",
   ];
 
   return (

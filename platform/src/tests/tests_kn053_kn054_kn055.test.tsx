@@ -17,10 +17,12 @@
  *     — TB01–TB12 (12 tests)
  *   Open-set extensibility: synthetic 11th variant (YAML-only)
  *     — TOS01–TOS05 (5 tests)
+ *   K-Titan-Librarian-Variant-YAML-Add: titan (11th explicit variant; BP010 turn 33)
+ *     — TD01–TD03 (3 tests)
  *   Cross-cutting architecture
  *     — TC01–TC05 (5 tests)
  *
- * Total: 51 tests (exceeds 190-green threshold for this file).
+ * Total: 54 tests (51 prior + 3 Titan = 54 in this file; suite-level ≥209 green).
  * K-Cathedral-Librarian-Variant-Medallion-Refactor-BP010
  */
 
@@ -288,7 +290,7 @@ describe("KN055 — Furnace Verification Medallion", () => {
 // Cross-cutting: architecture / routing / gallery
 // ══════════════════════════════════════════════════════════════════════════
 describe("Pod T — Cross-cutting architecture tests", () => {
-  it("TC01 — LibrarianMedallionGallery renders all 10 variants (BP010 full set)", () => {
+  it("TC01 — LibrarianMedallionGallery renders all 11 variants (BP010 full set + Titan)", () => {
     render(
       <MemoryRouter>
         <LibrarianMedallionGallery />
@@ -299,7 +301,7 @@ describe("Pod T — Cross-cutting architecture tests", () => {
     const variants: LibrarianMedallionVariant[] = [
       "canon", "platform-rules", "project-rules", "cathedral",
       "pied-piper", "ai-tuning", "furnace",
-      "symbiote", "ultravision", "liana-banyan",
+      "symbiote", "ultravision", "liana-banyan", "titan",
     ];
     for (const v of variants) {
       expect(screen.getByTestId(`librarian-medallion-${v}`)).toBeTruthy();
@@ -462,5 +464,32 @@ describe("Open-set extensibility — synthetic 11th variant (BP010)", () => {
     renderMedallion(SYNTHETIC_VARIANT as LibrarianMedallionVariant);
     const eblet = screen.getByTestId(`medallion-eblet-content-${SYNTHETIC_VARIANT}`);
     expect(eblet.textContent).toMatch(/librarian_medallion_variants\.yaml|open-set|YAML/i);
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════════
+// K-Titan-Librarian-Variant-YAML-Add — 11th variant (BP010 turn 33 Founder ratification)
+// Composition-mark: TITAN LIBRARIAN
+// Scale: whole-Federation-organism with Head + Body architecture
+// ══════════════════════════════════════════════════════════════════════════
+describe("K-Titan-Librarian-Variant-YAML-Add — 11th Medallion variant (BP010 turn 33)", () => {
+  it("TD01 — Titan Medallion renders with whole-Federation-organism tier badge", () => {
+    renderMedallion("titan");
+    const wrapper = screen.getByTestId("librarian-medallion-titan");
+    expect(wrapper).toBeTruthy();
+  });
+
+  it("TD02 — Titan QR routes to Librarian.LianaBanyan.com/medallion/titan", () => {
+    renderMedallion("titan");
+    const qr = screen.getByTestId("qr-svg");
+    expect(qr.getAttribute("data-value")).toBe(
+      "https://Librarian.LianaBanyan.com/medallion/titan"
+    );
+  });
+
+  it("TD03 — Titan card-back renders (Submarine Doors present)", () => {
+    renderMedallion("titan");
+    const back = screen.getByTestId("medallion-back-titan");
+    expect(back).toBeTruthy();
   });
 });

@@ -180,3 +180,22 @@ variants:
   #   sub_tagline, primary_anchor, eblet_path, tier, corner_locks,
   #   center_lock, access_tier, bounty_tagline.
   # The component renders any slug found here via the open-set fallback.
+
+  # ── BP010 turn 33 — 11th variant (Founder direct ratification) ─────────
+
+  titan:
+    label: "Titan Librarian"
+    border_class: cosmic-aurora
+    emblem: titan-head-body-silhouette
+    color_primary: "#7c3aed"
+    tagline: "The whole Federation. Head and Body. Pre-Olympian."
+    sub_tagline: "The whole Federation. Head and Body. Pre-Olympian. Non-weaponized by design."
+    primary_anchor: "titan_head_body_whole_federation_organism_bp010.eblet.md"
+    eblet_path: "BP010/titan"
+    tier: "Titan — Whole-Federation-Organism"
+    corner_locks: 6
+    center_lock: true
+    access_tier: partner
+    bounty_tagline: "Enter the Titan — The whole Federation, Head and Body, non-weaponized by design."
+    composition_mark: "TITAN LIBRARIAN"
+    scale_class: "whole-federation-organism-with-head-body-architecture"
