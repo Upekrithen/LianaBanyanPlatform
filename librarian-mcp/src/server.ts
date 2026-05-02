@@ -5371,6 +5371,388 @@ server.tool(
 );
 
 // ═══════════════════════════════════════════
+// KN104: TEAM DISPATCHER (PRE-COLOSSUS)
+// ═══════════════════════════════════════════
+
+/**
+ * team_dispatch — KN104 / BP016 PRE-COLOSSUS
+ * Multi-class TEAM (Detectives + Miners) cross-cathedral investigation
+ * with cohort-class-aware Scribe-access enforcement and substrate write-back.
+ */
+registerTool(
+  "team_dispatch",
+  "Detective TEAM dispatcher (KN104/BP016 PRE-COLOSSUS). Multi-class team composition: Detectives (pheromone + consult_scribes) + Miners (mitotic corpus-prospecting + ROOT-lineage + IP-ledger-locked). Cohort-class-aware Scribe-access enforcement (lone_wolf/pied_piper/federation_member/excalibur_class_subscriber). Substrate write-back via Pheromone with extended schema. Pairs with KN105 Excalibur Class: Miner output feeds Excalibur slice-distillation pipeline.",
+  {
+    claim: z.string().min(3).max(500).describe("The claim or topic to investigate with the full TEAM"),
+    team_composition: z.array(z.enum(["detective", "miner"])).min(1).describe("Team roles to dispatch (e.g. ['detective', 'miner'])"),
+    cohort_class: z.enum(["lone_wolf", "pied_piper", "federation_member", "excalibur_class_subscriber"]).describe("Cohort class — controls Scribe-access boundaries per KN102/BP016"),
+    cathedrals: z.array(z.enum(["bishop", "knight", "pawn"])).optional().describe("Cathedrals to fan out across (default: all 3; bounded by cohort_class)"),
+    max_agents_per_role: z.number().int().min(1).max(5).optional().describe("Max agents per role (default 2)"),
+    write_back: z.boolean().optional().describe("Write synthesis to pheromone substrate (default true; overridden by cohort_class access rules)"),
+    raw_corpus: z.array(z.string()).optional().describe("Raw text corpus for Miner prospecting (optional; if omitted, Miner uses pheromone substrate contents)"),
+    flavor_class: z.object({
+      domain: z.string().optional(),
+      cognition: z.string().optional(),
+      audience: z.string().optional(),
+    }).optional().describe("Multi-Trail pheromone flavor tags for write-back synthesis entry"),
+    replay_class: z.string().optional().describe("Set to 'detective_team_backfill' for replay pass"),
+  },
+  async ({ claim, team_composition, cohort_class, cathedrals, max_agents_per_role, write_back, raw_corpus, flavor_class, replay_class }) => {
+    try {
+      const corpus = raw_corpus ?? [];
+
+      const result = await teamDispatch(
+        {
+          claim,
+          team_composition: team_composition as TeamRole[],
+          cohort_class: cohort_class as CohortClass,
+          cathedrals: cathedrals ?? ["bishop", "knight", "pawn"],
+          max_agents_per_role: max_agents_per_role ?? 2,
+          write_back: write_back !== false,
+          flavor_class,
+          replay_class,
+        },
+        async (c, cathedral, agentIdx) => {
+          return runMinerProspect({
+            claim: c,
+            cathedral,
+            raw_corpus: corpus.length > 0 ? corpus : [`topic: ${c}`],
+            session_id: `team_dispatch_${Date.now()}_${agentIdx}`,
+          });
+        },
+      );
+
+      const accessDescriptor = getScribeAccessDescriptor(cohort_class as CohortClass);
+
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            ...result,
+            access_audit: {
+              tier: accessDescriptor.tier_label,
+              access_note: accessDescriptor.access_note,
+            },
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+/**
+ * miner_dispatch — KN104 / BP016
+ * Standalone Miner-only dispatch for ad-hoc corpus prospecting.
+ */
+registerTool(
+  "miner_dispatch",
+  "Standalone Miner dispatch (KN104/BP016). Runs a single Miner agent on a raw corpus. Produces ROOT-lineage tablet + halves-on-category-discovery. Cathedral-prefixed serial number generated. IP-ledger-locked + Chronos Chronicler signed. Use for targeted corpus-prospecting without full TEAM overhead.",
+  {
+    claim: z.string().min(3).max(500).describe("Topic seed for the Miner"),
+    cathedral: z.enum(["bishop", "knight", "pawn"]).optional().describe("Cathedral to mine in (default: bishop)"),
+    raw_corpus: z.array(z.string()).describe("Raw text corpus to mine (array of text strings)"),
+    parent_serial: z.string().optional().describe("Parent Miner serial (for spawning daughter Miners)"),
+    halve_threshold: z.object({
+      keyword_density_delta: z.number().min(0).max(1).optional(),
+      semantic_drift_threshold: z.number().min(0).max(1).optional(),
+      founder_ratification_override: z.boolean().optional().describe("Explicit YES/NO from Founder; bypasses heuristic detection"),
+    }).optional().describe("Halve threshold config (defaults: 0.3 keyword delta, 0.4 semantic drift)"),
+    session_id: z.string().optional().describe("Session ID for IP ledger attribution"),
+  },
+  async ({ claim, cathedral, raw_corpus, parent_serial, halve_threshold, session_id }) => {
+    try {
+      const result = await runMinerProspect({
+        claim,
+        cathedral: cathedral ?? "bishop",
+        raw_corpus,
+        parent_serial,
+        halve_threshold_config: halve_threshold ? {
+          keyword_density_delta: halve_threshold.keyword_density_delta ?? 0.3,
+          semantic_drift_threshold: halve_threshold.semantic_drift_threshold ?? 0.4,
+          founder_ratification_override: halve_threshold.founder_ratification_override,
+        } : undefined,
+        session_id: session_id ?? `miner_dispatch_${Date.now()}`,
+      });
+
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify(result, null, 2),
+        }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+/**
+ * get_team_provenance_chain — KN104 / BP016
+ * Query ROOT-lineage for Miner outputs by serial prefix.
+ */
+registerTool(
+  "get_team_provenance_chain",
+  "Returns ROOT-lineage provenance chain for a given Miner serial (KN104/BP016). Resolves all descendants (daughter Miners spawned via halving). Serial format: LB-CAT.M-0042 (bishop), LB-CAT.K-0007 (knight). Also returns IP-ledger entries and Wells of Knowledge for the lineage. Use after miner_dispatch or team_dispatch to audit mitotic lineage.",
+  {
+    serial: z.string().describe("Root Miner serial (e.g. 'LB-CAT.M-0042'). Also accepts 'ALL' to list all root Miners."),
+    include_ip_ledger: z.boolean().optional().describe("Include IP ledger entries (default false)"),
+    include_wells: z.boolean().optional().describe("Include Wells of Knowledge entries (default false)"),
+  },
+  async ({ serial, include_ip_ledger, include_wells }) => {
+    try {
+      if (serial === "ALL") {
+        const roots = listRootMiners();
+        return {
+          content: [{ type: "text", text: JSON.stringify({ root_miners: roots, count: roots.length }, null, 2) }],
+        };
+      }
+
+      const chain = queryProvenanceChain(serial);
+      const result: Record<string, unknown> = {
+        serial,
+        provenance_chain: chain,
+        chain_length: chain.length,
+      };
+
+      if (include_ip_ledger) {
+        result.ip_ledger_entries = queryIpLedger(serial);
+      }
+
+      if (include_wells) {
+        const wells = listAllWells().filter(w => w.parent_serial === serial || w.daughter_serial.startsWith(serial));
+        result.wells_of_knowledge = wells;
+      }
+
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+// ═══════════════════════════════════════════
+// KN105: EXCALIBUR CLASS COMMERCIAL SUBSCRIPTION
+// ═══════════════════════════════════════════
+
+/**
+ * excalibur_slice_list — KN105 / BP016
+ */
+registerTool(
+  "excalibur_slice_list",
+  "Lists Excalibur Class Scribe slices (KN105/BP016). By default returns only tag-assigned Excalibur Class slices. Set include_all=true to include proposed/raw_federation_library slices. Each slice includes pricing (one-time + subscription), tag-assignment gate status, contributing-member count, and topics covered.",
+  {
+    include_all: z.boolean().optional().describe("Include all slice statuses (default false = Excalibur Class only)"),
+    granularity_filter: z.enum(["topic", "category"]).optional().describe("Filter by granularity (optional)"),
+  },
+  async ({ include_all, granularity_filter }) => {
+    try {
+      const slices = include_all ? listAllSlices() : listExcaliburClassSlices();
+      const filtered = granularity_filter ? slices.filter(s => s.granularity === granularity_filter) : slices;
+      return {
+        content: [{ type: "text", text: JSON.stringify({ slices: filtered, count: filtered.length }, null, 2) }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+/**
+ * excalibur_slice_create — KN105 / BP016
+ */
+registerTool(
+  "excalibur_slice_create",
+  "Creates a new Excalibur Class Scribe slice candidate (KN105/BP016). Status starts as 'proposed'. Pricing calculated automatically: M_share × N_opted_in × 1.20 Cost+20%; category slices get 0.70 bundle discount. Slice earns 'excalibur_class' status only after all 4 gates pass (Cathedral Effect + Furnace + Adversarial Fence + Federation vote).",
+  {
+    name: z.string().describe("Slice name (e.g. 'Gene Splicing' or 'Financial Markets')"),
+    granularity: z.enum(["topic", "category"]).describe("topic = single topic; category = bundle of topics"),
+    topics_included: z.array(z.string()).min(1).describe("Topics in this slice"),
+    contributing_member_ids: z.array(z.string()).optional().describe("Member IDs who contributed data (all default to opted_in)"),
+    m_share_override: z.number().optional().describe("Override Member pay rate (default $1/year per member per topic)"),
+  },
+  async ({ name, granularity, topics_included, contributing_member_ids, m_share_override }) => {
+    try {
+      const members = (contributing_member_ids ?? []).map((id, i) => ({
+        member_id: id,
+        data_stamps: [],
+        contribution_share_proportion: 1.0 / Math.max(1, (contributing_member_ids ?? []).length),
+        share_back_per_subscription: 0,
+        opt_in_status: "opted_in" as const,
+      }));
+
+      const slice = createExcaliburSlice({
+        name,
+        granularity,
+        topics_included,
+        contributing_members: members,
+        m_share_override,
+      });
+
+      return {
+        content: [{ type: "text", text: JSON.stringify({ slice, pricing_summary: slice.pricing }, null, 2) }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+/**
+ * excalibur_slice_evaluate_gates — KN105 / BP016
+ */
+registerTool(
+  "excalibur_slice_evaluate_gates",
+  "Evaluates the 4 Excalibur tag-assignment gates for a slice (KN105/BP016). BRIDLE Rule 4: if any gate fails (including borderline scores), tag is NOT assigned — slice stays 'raw_federation_library'. Gates: (1) Cathedral Effect lift ≥30pp, (2) Furnace verification ≥0.70, (3) Adversarial Fence all-probes-pass, (4) Federation vote quorum+threshold. Returns evaluation result + recommended_status.",
+  {
+    slice_id: z.string().describe("Excalibur slice ID"),
+    cathedral_effect_lift_pp: z.number().describe("Cathedral Effect cross-vendor lift in percentage points (e.g. 35 = +35pp)"),
+    furnace_verification_score: z.number().min(0).max(1).describe("Furnace gear-tooth-fit score 0.0–1.0"),
+    adversarial_fence_probes_passed: z.number().int().min(0).describe("Number of adversarial fence probes passed"),
+    adversarial_fence_probes_total: z.number().int().min(1).describe("Total adversarial fence probes"),
+    federation_vote_yes: z.number().int().min(0).describe("Federation member yes votes"),
+    federation_vote_no: z.number().int().min(0).describe("Federation member no votes"),
+    total_eligible_voters: z.number().int().min(1).describe("Total eligible Federation member voters (for quorum calc)"),
+  },
+  async ({ slice_id, cathedral_effect_lift_pp, furnace_verification_score, adversarial_fence_probes_passed, adversarial_fence_probes_total, federation_vote_yes, federation_vote_no, total_eligible_voters }) => {
+    try {
+      const gates = {
+        cathedral_effect_verification: { passed: false, lift_pp: cathedral_effect_lift_pp },
+        furnace_gate: { passed: false, verification_score: furnace_verification_score },
+        adversarial_fence_testing: { passed: false, probes_passed: adversarial_fence_probes_passed, probes_total: adversarial_fence_probes_total },
+        federation_member_vote: { yes_count: federation_vote_yes, no_count: federation_vote_no, quorum_met: false, threshold_met: false },
+      };
+
+      const updatedSlice = evaluateAndTagSlice(slice_id, gates, total_eligible_voters);
+
+      return {
+        content: [{ type: "text", text: JSON.stringify({ slice: updatedSlice, tag_assigned: updatedSlice.excalibur_tag_assigned, status: updatedSlice.status }, null, 2) }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+/**
+ * excalibur_subscription_create — KN105 / BP016
+ */
+registerTool(
+  "excalibur_subscription_create",
+  "Creates and activates an Excalibur Class subscription (KN105/BP016). Upekrithen LLC seller-of-record (Apache 2.0, NOT AGPL). Payment type: 'subscription' (annual, 5-year amortized) or 'one_time' (expires 30 days). Auto-grants cohort_class=excalibur_class_subscriber + fluid librarian mode (KN102 composition). No preemptive non-profit vetting per Founder stance.",
+  {
+    subscriber_id: z.string().describe("Member/subscriber UUID"),
+    slice_id: z.string().describe("Excalibur Class slice ID to subscribe to"),
+    payment_type: z.enum(["subscription", "one_time"]).describe("Annual subscription or one-time access"),
+    stripe_session_id: z.string().optional().describe("Stripe checkout session ID (for one-time)"),
+    stripe_subscription_id: z.string().optional().describe("Stripe subscription ID (for annual)"),
+  },
+  async ({ subscriber_id, slice_id, payment_type, stripe_session_id, stripe_subscription_id }) => {
+    try {
+      const slice = getSliceById(slice_id);
+      if (!slice) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: `Slice ${slice_id} not found` }) }] };
+      }
+      if (slice.status !== "excalibur_class") {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: `Slice ${slice_id} has not earned Excalibur tag (status: ${slice.status}). Only the worthy wield Excalibur.` }) }] };
+      }
+
+      let sub = createSubscription(subscriber_id, slice_id, slice.granularity);
+      if (payment_type === "subscription") {
+        sub = activateSubscription(sub, stripe_subscription_id);
+      } else {
+        sub = activateOneTimeAccess(sub, stripe_session_id);
+      }
+
+      return {
+        content: [{ type: "text", text: JSON.stringify({
+          subscription: sub,
+          cohort_class_granted: sub.cohort_class_granted,
+          access_active: true,
+          expires_at: sub.expires_at,
+        }, null, 2) }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+/**
+ * excalibur_share_back_summary — KN105 / BP016
+ */
+registerTool(
+  "excalibur_share_back_summary",
+  "Returns Excalibur Class share-back-pay summary (KN105/BP016). Per-member share of subscription revenue: (revenue / 1.20) × contribution_proportion. Radical transparency per Meta-Law. For slice-level: shows all opted-in contributors and their total earned/pending/paid-out. For member-level: shows total earned across all slices.",
+  {
+    query_type: z.enum(["slice", "member"]).describe("Query by slice_id or member_id"),
+    id: z.string().describe("Slice ID (if query_type=slice) or Member ID (if query_type=member)"),
+    record_payment: z.object({
+      subscription_revenue: z.number().describe("Revenue from this payment period ($)"),
+      period_start: z.string().describe("ISO-8601 period start"),
+      period_end: z.string().describe("ISO-8601 period end"),
+    }).optional().describe("If provided, records a new payment and generates share-back entries for all opted-in members"),
+  },
+  async ({ query_type, id, record_payment }) => {
+    try {
+      if (query_type === "slice") {
+        if (record_payment) {
+          const slice = getSliceById(id);
+          if (!slice) return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: `Slice ${id} not found` }) }] };
+          const entries = recordShareBackForPayment(
+            id,
+            slice.contributing_members,
+            record_payment.subscription_revenue,
+            record_payment.period_start,
+            record_payment.period_end,
+          );
+          return { content: [{ type: "text", text: JSON.stringify({ entries_created: entries.length, entries }, null, 2) }] };
+        }
+        const summary = getShareBackSummaryForSlice(id);
+        return { content: [{ type: "text", text: JSON.stringify({ slice_id: id, summary }, null, 2) }] };
+      } else {
+        const total = getTotalShareBackEarned(id);
+        return { content: [{ type: "text", text: JSON.stringify({ member_id: id, total_earned_usd: total }, null, 2) }] };
+      }
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+/**
+ * excalibur_member_vote — KN105 / BP016
+ */
+registerTool(
+  "excalibur_member_vote",
+  "Records a Federation member vote on an Excalibur slice (KN105/BP016). Gate 4 requires quorum (default 50% of members) + approval threshold (default 60% yes). After vote, gates are re-evaluated — if all 4 gates now pass, slice is promoted to 'excalibur_class'. BRIDLE Rule 4: borderline results default to NOT promoting.",
+  {
+    slice_id: z.string().describe("Excalibur slice ID to vote on"),
+    vote: z.enum(["yes", "no"]).describe("Federation member vote"),
+    total_eligible_voters: z.number().int().min(1).describe("Total eligible Federation members for quorum calculation"),
+  },
+  async ({ slice_id, vote, total_eligible_voters }) => {
+    try {
+      const updatedSlice = recordMemberVote(slice_id, vote, total_eligible_voters);
+      return {
+        content: [{ type: "text", text: JSON.stringify({
+          slice_id,
+          vote_recorded: vote,
+          current_votes: updatedSlice.tag_assignment_gates.federation_member_vote,
+          slice_status: updatedSlice.status,
+          excalibur_tag_assigned: updatedSlice.excalibur_tag_assigned,
+        }, null, 2) }],
+      };
+    } catch (err) {
+      return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }] };
+    }
+  },
+);
+
+// ═══════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════
 
