@@ -1,0 +1,98 @@
+# Base Camp Protocol — Canonical Paths Registry
+# ================================================
+# Default integration set for Make-Yourself-Comfortable Pheromone Substrate Bulk-Load.
+# Ratified: BP010 turn 30 (Founder direct). KN086 Phase 2.
+# Sovereignty: user can deselect any path; all default-integrated; opt-out respected.
+#
+# Shadow sub-task assignment (8-way LICKETY-SPLIT parallel per KN091 In-concert):
+#   alpha  → project_memory
+#   beta   → canonical_eblets
+#   gamma  → bishop_state
+#   delta  → scribe_registry_metadata
+#   epsilon → canonical_values + cephas_content
+#   zeta   → bishop_dropzone
+#   eta    → knight_dropzone
+#   theta  → receipt-aggregation + Chronos signing + cohort-overlap-refresh
+
+default_integration_set:
+
+  project_memory:
+    shadow: alpha
+    paths:
+      - "C:/Users/Administrator/.claude/projects/C--Users-Administrator-Documents/memory/*.md"
+    decay_constant_days: 60
+    description: "Bishop + Knight project memory — session-accumulated context + canonical corrections"
+
+  canonical_eblets:
+    shadow: beta
+    paths:
+      - "C:/Users/Administrator/.claude/state/eblets/CANON/*.eblet.md"
+      - "C:/Users/Administrator/.claude/state/eblets/CANON/GOLDEN/*.eblet.md"
+    decay_constant_days: 90
+    description: "Canon Eblets — ratified architectural primitives + Crown Jewel specs"
+
+  bishop_state:
+    shadow: gamma
+    paths:
+      - "C:/Users/Administrator/.claude/state/eblets/BP*/*.eblet.md"
+      - "C:/Users/Administrator/.claude/state/eblets/BP*/*.md"
+    decay_constant_days: 45
+    description: "Bishop session-state Eblets — per-BP-session decisions + receipts"
+
+  scribe_registry_metadata:
+    shadow: delta
+    paths:
+      - "librarian-mcp/stitchpunks/scribes/scribe_*.jsonl"
+      - "librarian-mcp/stitchpunks/knight_cathedral/scribes/*.jsonl"
+      - "librarian-mcp/stitchpunks/pawn_cathedral/scribes/*.jsonl"
+    decay_constant_days: 30
+    metadata_only: true
+    description: "Scribe JSONL tablets — metadata-side pheromone-index build only (not full content)"
+
+  canonical_values:
+    shadow: epsilon
+    paths:
+      - "librarian-mcp/canonical_values.yaml"
+    decay_constant_days: 120
+    description: "Canonical numbers + configuration — single source of truth"
+
+  cephas_content:
+    shadow: epsilon
+    paths:
+      - "Cephas/cephas-hugo/content/papers/*.md"
+      - "Cephas/cephas-hugo/content/handoffs/*.md"
+      - "Cephas/cephas-hugo/content/patents/*.md"
+      - "Cephas/cephas-hugo/content/about/*.md"
+    decay_constant_days: 90
+    description: "Cephas published articles — papers, handoffs, patents, about pages (expand as content grows)"
+
+  bishop_dropzone:
+    shadow: zeta
+    paths:
+      - "BISHOP_DROPZONE/03_BishopHandoffs/*.md"
+      - "BISHOP_DROPZONE/00_FOUNDER_REVIEW/*.md"
+      - "BISHOP_DROPZONE/letters/wave_1/*.md"
+    decay_constant_days: 45
+    description: "Bishop handoffs, Founder review items, wave-1 letters"
+
+  knight_dropzone:
+    shadow: eta
+    paths:
+      - "BISHOP_DROPZONE/04_KnightReports/*.md"
+      - "BISHOP_DROPZONE/01_KnightPrompts/*.md"
+    decay_constant_days: 45
+    description: "Knight reports + prompts — session artifacts and dispatch queue"
+
+# User-extensible paths (sovereignty discipline — user opts in per folder)
+user_extensible_set:
+  member_personal: []
+  member_curated_external: []
+
+# Paths user has opted out of default integration
+opt_out_paths: []
+
+# Registry version + ratification metadata
+registry_version: 1
+ratified_session: BP010
+ratified_authority: Founder
+last_updated: "2026-05-01"

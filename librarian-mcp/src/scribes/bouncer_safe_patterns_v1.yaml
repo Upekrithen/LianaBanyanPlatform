@@ -66,6 +66,17 @@ safe_patterns:
     ratified_session: BP009
     ratified_authority: Founder
 
+  # Make-Comfortable substrate bulk-load writes — safe pattern for all MYC:: tablet IDs.
+  # pheromone-substrate-writes from Make-Yourself-Comfortable bulk-load are known-safe:
+  # they are file-path-based, content-extracted, Chronos-signed. Not member-facing assertions.
+  - id: make_comfortable_substrate_load_audit_write
+    type: regex
+    description: "Make-Yourself-Comfortable bulk-load pheromone write — known-safe substrate population"
+    pattern: "(?i)(myc::|make.yourself.comfortable|make_comfortable|base.camp.protocol|pheromone.bulk.load)"
+    rationale: "BP010 turn 31 — Make-Comfortable substrate-writes are auxiliary substrate-population, not architecture-changing; Bouncer PASS_OVERRIDE per K-Make-Comfortable-BP010 build"
+    ratified_session: BP010
+    ratified_authority: Founder
+
 # Pending patterns (Founder ratification required before activation):
 # - Apache 2.0 + AGPL dual-license terminology in licensing docs (not yet active)
 # - Leviathan Plus reference in patent technical docs (correct technical name, not securities)
