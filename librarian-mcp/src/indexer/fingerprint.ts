@@ -1,7 +1,30 @@
+/**
+ * Fingerprint + Dual-Mode Librarian Gate (KN102 extension / BP016)
+ * =================================================================
+ * Original fingerprint logic (K441) handles the Brittle Cathedral (Lone Wolf).
+ * KN102 adds a Fluid path: direct-from-disk reads via Pheromone substrate —
+ * no snapshot, no drift. Brittleness is the conversion-engine.
+ *
+ * Mode assignment is caller-supplied (from cohort_class/probe.ts at Handshake);
+ * this module stays pure — no DB calls.
+ */
 import { createHash } from "crypto";
 import { readFileSync, writeFileSync, existsSync, statSync } from "fs";
 import { resolve } from "path";
 import { glob } from "glob";
+
+/** KN102: Librarian operating mode.
+ *  brittle = batch-snapshot (npm-run-rebuild); Lone Wolf path.
+ *  fluid   = direct-from-disk at every MCP call; Pied Piper / Federation / Excalibur path. */
+export type LibrarianMode = "brittle" | "fluid";
+
+export interface LibrarianModeContext {
+  mode: LibrarianMode;
+  cohortClass: "lone_wolf" | "pied_piper_tier_1" | "pied_piper_tier_2_plus" | "federation_member" | "excalibur_class_subscriber";
+  cueCardRecencyState?: "inactive" | "active" | "expiring_warning" | "expired";
+  /** Pied Piper Tier 1 only — ISO-8601 */
+  fluidExpiryTimestamp?: string;
+}
 
 export interface FingerprintRecord {
   timestamp: string;
@@ -197,4 +220,76 @@ export function getChangedDropzoneFiles(
   const dropzonePrefixes = ["BISHOP_DROPZONE/", "KNIGHT_DROPZONE/", "ROOK_DROPZONE/", "PAWN_DROPZONE/"];
   const all = [...report.changedFiles, ...report.newFiles];
   return all.filter(f => dropzonePrefixes.some(p => f.startsWith(p)));
+}
+
+// ─── KN102: Dual-Mode Librarian Fingerprint ──────────────────────────────────
+
+/**
+ * Fluid path (fix #4): direct-from-disk fingerprint at call-time.
+ * Eliminates the snapshot concept for Pied Piper+ users.
+ * Drift stops being a concept — there's no snapshot to drift from.
+ * Pheromone substrate (sub-ms coverage) routes reads; this function
+ * captures the current mtime-hash without writing any persistent file.
+ *
+ * Latency target: ≤5ms (Pheromone substrate sub-ms coverage).
+ */
+export async function getDirectFromDiskFingerprint(workspaceRoot: string): Promise<{
+  treeHash: string;
+  fileCount: number;
+  capturedAt: string;
+  latencyMs: number;
+}> {
+  const t0 = Date.now();
+  const mtimes = await collectFileMtimes(workspaceRoot);
+  const treeHash = computeTreeHash(mtimes);
+  const latencyMs = Date.now() - t0;
+  return {
+    treeHash,
+    fileCount: Object.keys(mtimes).length,
+    capturedAt: new Date().toISOString(),
+    latencyMs,
+  };
+}
+
+/**
+ * Dispatch to the appropriate fingerprint path based on librarian mode.
+ *
+ * - brittle: reads the persisted last_build_fingerprint.json (existing K441 path)
+ * - fluid:   calls getDirectFromDiskFingerprint (no snapshot; always current)
+ *
+ * Returns a unified result shape consumable by brief_me / get_system_overview.
+ */
+export async function getLibrarianFingerprint(
+  modeCtx: LibrarianModeContext,
+  indexDir: string,
+  workspaceRoot: string,
+): Promise<{
+  mode: LibrarianMode;
+  treeHash: string | null;
+  fileCount: number;
+  capturedAt: string | null;
+  staleness: "fresh" | "drift" | "unknown" | "fluid_realtime";
+  latencyMs?: number;
+}> {
+  if (modeCtx.mode === "fluid") {
+    const fp = await getDirectFromDiskFingerprint(workspaceRoot);
+    return {
+      mode: "fluid",
+      treeHash: fp.treeHash,
+      fileCount: fp.fileCount,
+      capturedAt: fp.capturedAt,
+      staleness: "fluid_realtime",
+      latencyMs: fp.latencyMs,
+    };
+  }
+
+  // brittle path: existing snapshot check
+  const report = await checkFreshness(indexDir, workspaceRoot);
+  return {
+    mode: "brittle",
+    treeHash: null,
+    fileCount: 0,
+    capturedAt: report.lastBuild,
+    staleness: report.status === "FRESH" ? "fresh" : report.status === "DRIFT" ? "drift" : "unknown",
+  };
 }

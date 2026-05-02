@@ -47,6 +47,44 @@ import {
   cancelDispatch,
   listRecentDispatches,
 } from "./pawn_dispatch.js";
+import { teamDispatch } from "./team_dispatcher/dispatcher.js";
+import {
+  getScribeAccessDescriptor,
+  enforceAllowedCathedrals,
+  buildAccessAuditSummary,
+} from "./team_dispatcher/cohort_class_enforcement.js";
+import { queryProvenanceChain, listRootMiners } from "./team_dispatcher/provenance_chain.js";
+import type { CohortClass, TeamRole } from "./team_dispatcher/types.js";
+import { runMinerProspect } from "./miners/miner_base.js";
+import { queryIpLedger } from "./miners/ip_ledger_lock.js";
+import { listAllWells } from "./miners/well_of_knowledge.js";
+import {
+  createExcaliburSlice,
+  evaluateAndTagSlice,
+  getSliceById,
+  listExcaliburClassSlices,
+  listAllSlices,
+  recordMemberVote,
+} from "./excalibur_class/slice_pipeline.js";
+import {
+  createSubscription,
+  activateSubscription,
+  activateOneTimeAccess,
+  cancelSubscription,
+  getActiveSubscriptions,
+  hasSliceAccess,
+  getSubscriptionsForSubscriber,
+} from "./excalibur_class/subscription_state_machine.js";
+import {
+  calculateExcaliburPricing,
+  calculateAllShareBacks,
+} from "./excalibur_class/pricing_engine.js";
+import {
+  recordShareBackForPayment,
+  getShareBackSummaryForSlice,
+  getTotalShareBackEarned,
+} from "./excalibur_class/share_back_ledger.js";
+import { probeCohortClass, formatCohortSummary } from "./cohort_class/probe.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -5304,6 +5342,32 @@ registerTool(
 
     return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
   }
+);
+
+// ─── KN102: get_cohort_class ──────────────────────────────────────────────────
+// Read-only. Returns current member's cohort tier + librarian mode.
+// Called at LB Frame Handshake Phase 1 Discovery and on-demand for diagnostics.
+// BRIDLE Rule 4: if detection fails, returns lone_wolf/brittle (safe default).
+server.tool(
+  "get_cohort_class",
+  "Returns the current member's cohort class (lone_wolf / pied_piper_tier_1 / pied_piper_tier_2_plus / federation_member / excalibur_class_subscriber) and librarian mode (brittle or fluid). Used by LB Frame Handshake Phase 1 Discovery and brief_me to surface mode context. Reads profiles.membership_status + entity_memberships + cue_card 7-day recency window via Supabase RPC. Falls back to brittle/lone_wolf if DB is unreachable.",
+  {
+    member_id: z.string().describe("Supabase auth.users UUID for the member. Required."),
+  },
+  async ({ member_id }) => {
+    ensureFreshIndex();
+    const result = await probeCohortClass(member_id);
+    const summary = formatCohortSummary(result);
+    return {
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          ...result,
+          summary,
+        }, null, 2),
+      }],
+    };
+  },
 );
 
 // ═══════════════════════════════════════════
