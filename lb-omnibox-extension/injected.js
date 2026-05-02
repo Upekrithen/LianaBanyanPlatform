@@ -518,10 +518,14 @@
       <div style="text-align:center;padding:10px 0;">
         <div style="font-size:36px;margin-bottom:8px;">✓</div>
         <p style="color:#C8A951;font-weight:600;margin:0 0 4px;font-family:inherit;">Saved to your library</p>
-        <p style="color:#8892b0;font-size:12px;margin:0;font-family:inherit;">You can view or delete it from the LB Omnibox popup.</p>
+        <p style="color:#8892b0;font-size:12px;margin:0 0 8px;font-family:inherit;">Stored in your Personal-Permanent collection.</p>
+        <a href="https://lianabanyan.com/helm/library" target="_blank" rel="noopener"
+           style="color:#C8A951;font-size:12px;font-family:inherit;text-decoration:underline;text-underline-offset:2px;">
+          View in Helm →
+        </a>
       </div>
     `;
-    setTimeout(() => dismissOverlay(overlay), 2500);
+    setTimeout(() => dismissOverlay(overlay), 4000);
   }
 
   function dismissOverlay(overlay) {

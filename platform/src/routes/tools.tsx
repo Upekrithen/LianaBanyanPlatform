@@ -147,6 +147,8 @@ export const toolsRoutes = (
     <Route path="/pearl-diver" element={<ExplorerRoute><LazyPage><ResourceBoardPage /></LazyPage></ExplorerRoute>} />
     <Route path="/deals" element={<ExplorerRoute><LazyPage><ResourceBoardPage /></LazyPage></ExplorerRoute>} />
     <Route path="/helm/content" element={<ProtectedRoute><LazyPage><HelmContentCenter /></LazyPage></ProtectedRoute>} />
+    {/* K-LB-Frame-Speak-Friend-BP010: /helm/library — extension "Open Library" Helm-path wiring */}
+    <Route path="/helm/library" element={<ProtectedRoute><LazyPage><HelmContentCenter /></LazyPage></ProtectedRoute>} />
     <Route path="/staff/spice-editor" element={<ProtectedRoute><LazyPage><SpiceEditorPage /></LazyPage></ProtectedRoute>} />
     <Route path="/staff/launch-schedule" element={<ProtectedRoute><LazyPage><LaunchSchedulePage /></LazyPage></ProtectedRoute>} />
     <Route path="/staff/social-media" element={<ProtectedRoute><LazyPage><SocialMediaDashboard /></LazyPage></ProtectedRoute>} />

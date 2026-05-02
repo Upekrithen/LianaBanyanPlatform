@@ -4105,16 +4105,13 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
             ))}
           </div>
 
-          {/* ─── Invitation prose — Founder writes this ─── */}
-          {/* TODO (Founder prose-pass, post-K534):
-              Replace the placeholder below with the B129 Federation framing.
-              Pattern: "This is free. Use what you already use. Better with Federation." */}
+          {/* ─── Invitation prose — B129/BP005 canon ─── */}
           <p style={{ color: '#a0aec0', fontSize: '0.85rem', lineHeight: 1.7, margin: '0 0 1rem' }}>
-            {/* [FOUNDER PROSE PLACEHOLDER — See B129 framing: "install shows the numbers, then tells you
-                can have this free, even better with Federation"] */}
-            This is Liana Banyan — free to join, free to use. Everything you see here was built without a single
-            dollar of investor money. Want even more? Install the LB Frame extension and bring the Cooperative
-            with you wherever you go.
+            Liana Banyan is <strong style={{ color: '#e2e8f0' }}>free</strong> — fully featured, AGPL open-source,
+            no gating, no ads, no investors. The substrate is yours to use as-is.
+            Want the cooperative library? That's Federation: <strong style={{ color: '#C8A951' }}>$5/year</strong> unlocks
+            the shared network — member-curated resources, collaborative tools, and the full cooperative engine.
+            Be one of us.
           </p>
 
           <a
@@ -4134,8 +4131,11 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
             onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.background = 'rgba(200,169,81,0.22)')}
             onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.background = 'rgba(200,169,81,0.12)')}
           >
-            Learn about Federation →
+            Join Federation — $5/year →
           </a>
+          <p style={{ color: '#4a5568', fontSize: '0.72rem', margin: '0.75rem 0 0', lineHeight: 1.5 }}>
+            Substrate is free forever. Federation is the cooperative network layer.
+          </p>
         </div>
 
         <footer className="landing-footer" style={{
@@ -4146,6 +4146,21 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
           color: '#a0aec0',
           fontSize: '0.85rem'
         }}>
+          {/* K-LB-Frame-Speak-Friend-BP010 — "Speak friend, and enter" scaffold
+              Tolkien Mines of Moria echo. Per B130A Decision 2: deployment is Founder prose-pass.
+              Feature flag: VITE_SPEAK_FRIEND_ENABLED=true activates the epigraph.
+              Do NOT auto-deploy. Founder prose-passes at fire-time. */}
+          {import.meta.env.VITE_SPEAK_FRIEND_ENABLED === 'true' && (
+            <p style={{
+              fontStyle: 'italic',
+              color: 'rgba(200,169,81,0.45)',
+              fontSize: '0.78rem',
+              marginBottom: '1.25rem',
+              letterSpacing: '0.04em',
+            }}>
+              "Speak friend, and enter."
+            </p>
+          )}
           <p style={{ margin: 0 }}>
             © 2026 Liana Banyan Corporation
             <span style={{ margin: '0 0.75rem', opacity: 0.5 }}>|</span>

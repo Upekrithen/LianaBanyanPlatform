@@ -15,6 +15,10 @@ const PORTALS: { key: PortalType; label: string; icon: typeof ShoppingBag; domai
   { key: 'nonprofit', label: 'Non-Profit', icon: Heart, domain: 'lianabanyan.org' },
 ];
 
+/** Returns true when the visitor is on hexislo.com (Spanish-language HexIsle domain) */
+const isHexisloSite = () =>
+  typeof window !== 'undefined' && window.location.hostname === 'hexislo.com';
+
 export function CrossPortalNav() {
   const { user, session } = useAuth();
   const current = detectPortal();
@@ -22,6 +26,7 @@ export function CrossPortalNav() {
   const { pathname } = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const isSpanish = isHexisloSite();
 
   useEffect(() => { setDrawerOpen(false); }, [pathname]);
 
@@ -35,6 +40,11 @@ export function CrossPortalNav() {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [drawerOpen]);
+
+  const portalLabel = (p: typeof PORTALS[number]) => {
+    if (isSpanish && p.key === 'marketplace') return 'Liana Banyan';
+    return p.label;
+  };
 
   const portalHref = (domain: string, path = '/') => {
     const raw = `https://${domain}${path}`;
@@ -54,7 +64,7 @@ export function CrossPortalNav() {
             className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-primary-foreground font-medium"
           >
             <CurrentIcon className="w-3.5 h-3.5" />
-            {currentPortal?.label ?? 'Portal'}
+            {currentPortal ? portalLabel(currentPortal) : 'Portal'}
           </a>
           <button
             onClick={() => setDrawerOpen(o => !o)}
@@ -86,7 +96,7 @@ export function CrossPortalNav() {
                     onClick={isCurrent ? (e) => { e.preventDefault(); setDrawerOpen(false); } : () => setDrawerOpen(false)}
                   >
                     <Icon className="w-4 h-4 shrink-0" />
-                    <span className="text-sm">{p.label}</span>
+                    <span className="text-sm">{portalLabel(p)}</span>
                     {isCurrent && <span className="ml-auto text-[10px] text-primary/60">current</span>}
                   </a>
                 );
@@ -141,10 +151,10 @@ export function CrossPortalNav() {
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             }`}
             onClick={isCurrent ? (e) => e.preventDefault() : undefined}
-            title={p.label}
+            title={portalLabel(p)}
           >
             <Icon className="w-3 h-3" />
-            {p.label}
+            {portalLabel(p)}
           </a>
         );
       })}

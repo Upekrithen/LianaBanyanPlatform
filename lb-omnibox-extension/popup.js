@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Navigation ───────────────────────────────────────────────────────────
   openLibraryBtn.addEventListener('click', () => {
-    chrome.tabs.create({ url: chrome.runtime.getURL('pages/library.html') });
+    // K-LB-Frame-Speak-Friend-BP010: route through Frame's Helm path (not extension-internal page)
+    chrome.tabs.create({ url: 'https://lianabanyan.com/helm/library' });
     window.close();
   });
 

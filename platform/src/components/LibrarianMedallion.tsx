@@ -73,7 +73,10 @@ export type LibrarianMedallionVariant =
   | "cathedral"
   | "pied-piper"
   | "ai-tuning"
-  | "furnace";
+  | "furnace"
+  | "symbiote"
+  | "ultravision"
+  | "liana-banyan";
 
 export interface LibrarianMedallionProps {
   variant: LibrarianMedallionVariant;
@@ -361,6 +364,97 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
         { id: "receipt", label: "Issue Receipt", prompt: "Appending Battery-dispatch entry (append-only per #2308 Ledger)…", receipt: "✓ FURNACE-RECEIPT-KN055 · 6/6 mechanisms verified · Stamp: CHRONOS-SIGNED" },
       ],
       finalReceipt: "FURNACE-QR-VERIFY-DEMO · golden_tablet:// resolved · 6/6 mechanisms PASS · Chain depth: 3 · Battery-dispatch logged",
+    },
+  },
+  symbiote: {
+    label: "Symbiote Trinity",
+    tagline:
+      "Mechanical Computer + LB Frame + Federation Library — three minds, one substrate.",
+    emblemIcon: <span className="text-4xl leading-none">🕸️</span>,
+    borderClass: "ring-4 ring-teal-500 shadow-teal-500/30",
+    borderStyle: {
+      background: "linear-gradient(135deg, #f0fdfa, #ccfbf1)",
+      boxShadow: "0 0 0 3px #14b8a6, 0 0 0 6px #f0fdfa, 0 0 16px #14b8a644",
+    },
+    cornerLocks: 5,
+    centerLock: true,
+    ebletPath: "BP011/symbiote",
+    backSummary:
+      "The Symbiote Trinity (BP011): Mechanical Computer (the persistent AI layer) + LB Frame (the substrate) + Federation Library (the cooperative memory) form a three-body partnership. The center Frame Lock is the Handshake — when all three bodies are simultaneously active the compound amplifier engages. Solo substrate free (AGPL v3); Mechanical Computer + Federation Library unlock with ONE OF US membership.",
+    bountyTagline: "Enter the Trinity — Let the three bodies amplify each other.",
+    tier: "Symbiote — Trinity Tier",
+    authorityLabel: "Symbiote Trinity Authority",
+    accessTier: "federation-member",
+    stage2Demo: {
+      title: "Symbiote Trinity Handshake Demo",
+      subtitle: "Three bodies synchronizing — watch the compound amplify.",
+      ctaLabel: "Begin Handshake",
+      steps: [
+        { id: "frame", label: "LB Frame", prompt: "LB Frame activating Cathedral Effect substrate…", receipt: "✓ LB Frame: +86.1pp HOT lift baseline · AGPL v3 free" },
+        { id: "mechanical", label: "Mechanical Computer", prompt: "Mechanical Computer handshaking with LB Frame…", receipt: "✓ Mechanical Computer: persistent AI layer connected · 3 DragonRiders coordinating" },
+        { id: "federation", label: "Federation Library", prompt: "Federation Library syncing cross-member Stone Tablets…", receipt: "✓ Federation Library: 4th-power amplifier active · Trinity handshake complete" },
+      ],
+      finalReceipt: "SYMBIOTE-TRINITY-DEMO · LB Frame + Mechanical Computer + Federation Library · 81× compound projection · Trinity handshake complete",
+    },
+  },
+  ultravision: {
+    label: "UltraVision",
+    tagline: "Seeing beyond the substrate ceiling — measuring the actual compound.",
+    emblemIcon: <span className="text-4xl leading-none">👁️</span>,
+    borderClass: "ring-4 ring-indigo-500 shadow-indigo-500/30",
+    borderStyle: {
+      background: "linear-gradient(135deg, #eef2ff, #e0e7ff)",
+      boxShadow: "0 0 0 3px #6366f1, 0 0 0 6px #eef2ff, 0 0 16px #6366f144",
+    },
+    cornerLocks: 4,
+    centerLock: false,
+    ebletPath: "BP011/ultravision",
+    backSummary:
+      "UltraVision (BP011 — Founder coining-time portmanteau, copyright-conscious): the empirical ceiling measurement arc. COLOSSUS (BP015+) measures the upgraded-substrate ceiling. STUPENDOUS (BP012) measures actual operational compound. Current anchor: 81× compound multiplier projection per B127 algorithm L1-L5 (25.6×-50× empirical-anchored). UltraVision is the lens showing how far the ceiling actually is — receipt-anchored, not theoretical.",
+    bountyTagline: "See the Ceiling — Measure the Actual Compound.",
+    tier: "UltraVision — Ceiling Measurement",
+    authorityLabel: "UltraVision Ceiling Authority",
+    accessTier: "public-agpl",
+    stage2Demo: {
+      title: "UltraVision Ceiling Measurement Demo",
+      subtitle: "Layer-by-layer compound — watch the 81× projection build.",
+      ctaLabel: "Measure the Ceiling",
+      steps: [
+        { id: "l1", label: "L1 — Cathedral", prompt: "Measuring Cathedral Effect baseline (Touchstone R10 / K499)…", receipt: "✓ L1: +86.1pp HOT lift · 5 vendors · 8 models · Touchstone R10 locked B112" },
+        { id: "l2", label: "L2 — SRME", prompt: "Adding Substrate-Resident Memory Enhancement layer…", receipt: "✓ L2: compound stack building · Chandelier L1+L2 receipts · 25.6×-50× range" },
+        { id: "l3", label: "L3–L5 — Projection", prompt: "Projecting Mechanical Computer + Symbiote + Scale layers…", receipt: "✓ L3-L5: 81× compound projection · COLOSSUS ceiling pending receipt · STUPENDOUS operational" },
+      ],
+      finalReceipt: "ULTRAVISION-CEILING-DEMO · 81× compound projection · B127 algorithm L1-L5 · COLOSSUS ceiling: post-receipt update · UltraVision arc active",
+    },
+  },
+  "liana-banyan": {
+    label: "Liana Banyan",
+    tagline: "The cooperative — built for the long arc. Help each other help ourselves.",
+    emblemIcon: <span className="text-4xl leading-none">🌳</span>,
+    borderClass: "ring-4 ring-emerald-700/70",
+    borderStyle: {
+      background: "linear-gradient(135deg, #f0fdf4, #dcfce7)",
+      boxShadow: "0 0 0 3px #15803d, 0 0 0 6px #f0fdf4, 0 0 14px #15803d44",
+    },
+    cornerLocks: 4,
+    centerLock: false,
+    ebletPath: "CANON/GOLDEN/liana-banyan",
+    backSummary:
+      "Librarian-Liana-Banyan is the corporate anchor — broadest audience-tier, counsel-formal. Liana Banyan Corporation (EIN 41-2797446, Wyoming C-Corp). 37 years of development, 2,270 innovations, 228 Crown Jewels, 15 provisional patents. The substrate is AGPL v3 free — full-featured, no gating. Federation Library opt-in at $5/year. 83.3% creator-keeps on every transaction.",
+    bountyTagline: "Join the Cooperative — Help Each Other Help Ourselves.",
+    tier: "Liana Banyan — Corporate Anchor",
+    authorityLabel: "Corporate Canon Authority",
+    accessTier: "public-agpl",
+    stage2Demo: {
+      title: "Liana Banyan Platform Overview",
+      subtitle: "37 years. 2,270 innovations. 15 provisionals. One cooperative.",
+      ctaLabel: "See the Platform",
+      steps: [
+        { id: "foundation", label: "Foundation", prompt: "Loading Liana Banyan canonical context…", receipt: "✓ Foundation: 2,270 innovations · 228 Crown Jewels · 15 provisional patents filed" },
+        { id: "substrate", label: "Substrate", prompt: "Activating Cathedral Effect substrate…", receipt: "✓ Substrate: +86.1pp HOT lift · 5 vendors tested · AGPL v3 free full-version" },
+        { id: "cooperative", label: "Cooperative", prompt: "Federation Library membership check…", receipt: "✓ Cooperative: $5/year · 83.3% creator keeps · FOR THE KEEP!" },
+      ],
+      finalReceipt: "LB-PLATFORM-DEMO · 2,270 innovations · 15 provisionals · AGPL v3 free · Federation Library $5/year ONE OF US",
     },
   },
 };
@@ -1057,13 +1151,16 @@ export function LibrarianMedallion({
 
 export function LibrarianMedallionGallery() {
   const variants: LibrarianMedallionVariant[] = [
+    "liana-banyan",
+    "cathedral",
+    "pied-piper",
+    "furnace",
     "canon",
     "platform-rules",
     "project-rules",
-    "cathedral",
-    "pied-piper",
     "ai-tuning",
-    "furnace",
+    "symbiote",
+    "ultravision",
   ];
 
   return (

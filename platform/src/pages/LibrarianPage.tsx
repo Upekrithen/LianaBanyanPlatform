@@ -62,7 +62,23 @@ const VALID_VARIANTS = new Set<LibrarianMedallionVariant>([
   "pied-piper",
   "ai-tuning",
   "furnace",
+  "symbiote",
+  "ultravision",
+  "liana-banyan",
 ]);
+
+const CROSS_VARIANT_NAV: Array<{ slug: LibrarianMedallionVariant; label: string }> = [
+  { slug: "liana-banyan", label: "Liana Banyan" },
+  { slug: "cathedral", label: "Cathedral" },
+  { slug: "pied-piper", label: "Pied Piper" },
+  { slug: "furnace", label: "Furnace" },
+  { slug: "canon", label: "Canon" },
+  { slug: "platform-rules", label: "Platform Rules" },
+  { slug: "project-rules", label: "Project Rules" },
+  { slug: "ai-tuning", label: "AI Tuning" },
+  { slug: "symbiote", label: "Symbiote" },
+  { slug: "ultravision", label: "UltraVision" },
+];
 
 function isValidVariant(v: string | undefined): v is LibrarianMedallionVariant {
   return !!v && VALID_VARIANTS.has(v as LibrarianMedallionVariant);
@@ -124,9 +140,9 @@ function LibrarianNav({ showBack }: { showBack?: boolean }) {
 function LibrarianHome() {
   return (
     <div className="space-y-12" data-testid="librarian-home">
-      {/* Hero */}
+      {/* Hero — V4 tagline (BP010 turn-21) */}
       <div
-        className="text-center space-y-4 py-12"
+        className="text-center space-y-5 py-14"
         data-testid="librarian-hero"
       >
         <div className="flex justify-center mb-4">
@@ -134,11 +150,20 @@ function LibrarianHome() {
             <BookOpen className="w-8 h-8 text-primary" />
           </div>
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">The Librarian</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          AI context substrate — the bedrock beneath your AI agent. Cathedral
-          Effect proven across 5 vendors. AGPL v3 free, full-version, no
-          gating. Federation Library unlocks with{" "}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
+            Librarian. Working Faster+Cheaper+Better. So you don't have to.
+          </p>
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+            TRIPLE YOUR CONTEXT.{" "}
+            <span className="text-primary">To the 4th Power.</span>{" "}
+            <span className="text-green-600 dark:text-green-400">FREE.</span>
+          </h1>
+        </div>
+        <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          AI context substrate — proven +86.1pp HOT lift across 5 vendors.
+          Cathedral Effect, Wrasse pre-injection, Chronos signing.
+          AGPL v3 free, full-version, no gating. Federation Library unlocks with{" "}
           <span className="font-semibold text-foreground">ONE OF US</span>{" "}
           membership ($5/year).
         </p>
@@ -149,7 +174,7 @@ function LibrarianHome() {
               pip install librarian-mcp
             </Button>
           </Link>
-          <Link to="/medallion">
+          <Link to="/medallion/liana-banyan">
             <Button
               size="lg"
               variant="outline"
@@ -168,7 +193,7 @@ function LibrarianHome() {
       >
         {[
           { label: "Vendors tested", value: "5+", icon: <BarChart2 className="w-4 h-4" /> },
-          { label: "HOT lift", value: "+86.2pp", icon: <Zap className="w-4 h-4" /> },
+          { label: "HOT lift", value: "+86.1pp", icon: <Zap className="w-4 h-4" /> },
           { label: "Membership", value: "$5/yr", icon: <Users className="w-4 h-4" /> },
           { label: "License", value: "AGPL v3", icon: <Shield className="w-4 h-4" /> },
         ].map((stat) => (
@@ -227,33 +252,92 @@ function LibrarianHome() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold" data-testid="librarian-gallery-heading">
-            Medallion Gallery
+            10 Medallions — One Brand, Many Doors
           </h2>
           <p className="text-sm text-muted-foreground">
-            All Medallions are Librarian variants — one brand, many doors.
+            All Medallions are Librarian variants.
           </p>
         </div>
         <LibrarianMedallionGallery />
       </div>
 
+      {/* Cross-variant nav */}
+      <div
+        className="rounded-xl border border-border/60 bg-card/60 p-5 space-y-3"
+        data-testid="librarian-cross-variant-nav"
+      >
+        <p className="text-sm font-semibold text-foreground/70">
+          Other doors to The Librarian:
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {CROSS_VARIANT_NAV.map(({ slug, label }) => (
+            <Link
+              key={slug}
+              to={`/medallion/${slug}`}
+              data-testid={`cross-variant-link-${slug}`}
+            >
+              <Badge
+                variant="outline"
+                className="text-[11px] hover:bg-accent cursor-pointer transition-colors px-2.5 py-0.5"
+              >
+                {label}
+              </Badge>
+            </Link>
+          ))}
+        </div>
+        <p className="text-[11px] text-muted-foreground/60">
+          "More the merrier" — open-set framing. Future variants append per Founder ratification.
+        </p>
+      </div>
+
+      {/* Empirical-anchor footnote (BP010 current state; updates post-COLOSSUS receipt) */}
+      <div
+        className="rounded-lg border border-border/40 bg-muted/30 p-4 space-y-1"
+        data-testid="librarian-empirical-footnote"
+      >
+        <p className="text-[10px] font-semibold text-muted-foreground/70 uppercase tracking-wide mb-1">
+          Empirical Anchor
+        </p>
+        <p className="text-[11px] text-muted-foreground/70 leading-relaxed italic">
+          81× compound multiplier projection per B127 algorithm L1-L5 (25.6×-50× empirical-anchored
+          compound across Cathedral + SRME + Mechanical Computer + Symbiote layers); 7-12×
+          cheaper-than-cold measured per KN042 Pod O receipt; ~24× velocity multiplier per BP011 Pod W
+          receipt; ~360× combined Founder-time × vendor-API-spend reduction per SCALE document.
+          STUPENDOUS BP012 measures actual operational compound; COLOSSUS BP015+ measures
+          upgraded-substrate ceiling. Receipts published as they land.
+        </p>
+        <p className="text-[10px] text-muted-foreground/50">
+          Touchstone R10: +86.1pp mean HOT lift · 8 models · 5 vendors · 1,200 calls · locked B112
+        </p>
+      </div>
+
       {/* Footer */}
       <div
-        className="text-center text-xs text-muted-foreground/50 pb-8 space-y-1"
+        className="text-center text-xs text-muted-foreground/50 pb-8 space-y-1.5"
         data-testid="librarian-footer"
       >
         <p>
-          Librarian.the2ndSecond.com · Liana Banyan Corporation (EIN 41-2797446)
+          Librarian.the2ndSecond.com · Liana Banyan Corporation (EIN 41-2797446) · Wyoming C-Corp
         </p>
-        <p>
+        <p className="flex flex-wrap justify-center gap-x-2 gap-y-0.5">
           <a
             href="https://lianabanyan.com"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-muted-foreground transition-colors underline-offset-2 hover:underline"
           >
-            lianabanyan.com
+            ← LB Frame (lianabanyan.com)
           </a>
-          {" · "}
+          <span className="text-muted-foreground/30">·</span>
+          <a
+            href="https://lianabanyan.com/auth"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-muted-foreground transition-colors underline-offset-2 hover:underline"
+          >
+            Federation Library opt-in ($5/year)
+          </a>
+          <span className="text-muted-foreground/30">·</span>
           <a
             href="https://cephas.lianabanyan.com"
             target="_blank"
@@ -262,7 +346,7 @@ function LibrarianHome() {
           >
             Cephas docs
           </a>
-          {" · "}
+          <span className="text-muted-foreground/30">·</span>
           <a
             href="https://github.com/lianabanyan/librarian-mcp"
             target="_blank"
@@ -270,6 +354,15 @@ function LibrarianHome() {
             className="hover:text-muted-foreground transition-colors underline-offset-2 hover:underline"
           >
             AGPL v3 source
+          </a>
+          <span className="text-muted-foreground/30">·</span>
+          <a
+            href="https://cephas.lianabanyan.com/patents/cooperative-defensive-pledge"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-muted-foreground transition-colors underline-offset-2 hover:underline"
+          >
+            Cooperative Defensive Patent Pledge (#2260)
           </a>
         </p>
       </div>
@@ -522,14 +615,19 @@ function LibrarianMedallionDetail() {
     return (
       <div className="space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">Medallion Gallery</h1>
+          <h1 className="text-2xl font-bold">10 Medallions — One Brand, Many Doors</h1>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
             All Medallions are Librarian variants. Cathedral / Pied Piper /
-            Furnace / Canon / Platform Rules / Project Rules / AI Tuning —
-            one brand, many doors.
+            Furnace / Canon / Platform Rules / Project Rules / AI Tuning /
+            Symbiote / UltraVision / Liana Banyan — one substrate, ten doors.
           </p>
         </div>
         <LibrarianMedallionGallery />
+        <div className="text-center">
+          <Link to="/">
+            <Button variant="outline" size="sm">← Back to Librarian Home</Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -563,6 +661,32 @@ function LibrarianMedallionDetail() {
             Install Free
           </Button>
         </Link>
+      </div>
+
+      {/* Cross-variant nav */}
+      <div
+        className="w-full max-w-lg rounded-xl border border-border/60 bg-card/60 p-4 space-y-2 text-center"
+        data-testid={`cross-variant-nav-${resolvedVariant}`}
+      >
+        <p className="text-xs font-semibold text-muted-foreground">
+          Other doors to The Librarian:
+        </p>
+        <div className="flex flex-wrap gap-1.5 justify-center">
+          {CROSS_VARIANT_NAV.filter((v) => v.slug !== resolvedVariant).map(({ slug, label }) => (
+            <Link
+              key={slug}
+              to={`/medallion/${slug}`}
+              data-testid={`cross-variant-link-detail-${slug}`}
+            >
+              <Badge
+                variant="outline"
+                className="text-[10px] hover:bg-accent cursor-pointer transition-colors"
+              >
+                {label}
+              </Badge>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
