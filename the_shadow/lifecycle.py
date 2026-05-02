@@ -11,13 +11,13 @@ The Shadow is NOT a session-bounded daemon. It:
     - Re-attaches to Bishop session N+1 via Iron Tablet ledger handshake
     - Persists heartbeat every 60s to Iron Tablet
 
-Heartbeat path (per scribe-id):
-    ~/.claude/state/eblets/BP011/heartbeat_<scribe_id>.eblet.md
+Heartbeat path (per scribe-id, parameterized by session — KN098):
+    ~/.claude/state/eblets/<session_id>/heartbeat_<scribe_id>.eblet.md
 
 Checkpoint path (on Bishop-refresh-detected):
-    ~/.claude/state/eblets/BP011/checkpoint_<scribe_id>_<ts>.eblet.md
+    ~/.claude/state/eblets/<session_id>/checkpoint_<scribe_id>_<ts>.eblet.md
 
-Bishop-refresh detection: the Iron Tablet ledger at the shared BP011 root
+Bishop-refresh detection: the Iron Tablet ledger at the shared session root
 accumulates entries from multiple scribe-ids. When a new scribe-id prefix
 "bishop_prime_*" appears as an appender (and was not present before), that
 signals a Bishop session boundary crossing.
@@ -41,7 +41,14 @@ from typing import Any, Optional
 
 from .iron_tablet_attach import IronTabletAttach
 
-EBLET_BP011_DIR = Path.home() / ".claude" / "state" / "eblets" / "BP011"
+# Base directory for all session-scoped eblet trees (KN098: parameterized per session_id).
+# Actual write directory: _HEARTBEAT_EBLET_BASE / <session_id>
+_HEARTBEAT_EBLET_BASE = Path.home() / ".claude" / "state" / "eblets"
+
+# Historical alias — files written before KN098 landed here; left in place per
+# Phase 4 decision in KN098 receipt.  No longer used as a write target.
+EBLET_BP011_DIR = _HEARTBEAT_EBLET_BASE / "BP011"
+
 HEARTBEAT_INTERVAL_S = 60
 BISHOP_REFRESH_CHECK_INTERVAL_S = 5
 LEDGER_FILENAME = "iron_tablet_ledger.jsonl"
@@ -109,7 +116,7 @@ class ShadowLifecycle:
     Manages the continuous-organism lifecycle for one Shadow.
 
     Heartbeat thread writes to Iron Tablet every HEARTBEAT_INTERVAL_S seconds.
-    Bishop-refresh monitor thread watches the shared BP011 ledger for new Bishop
+    Bishop-refresh monitor thread watches the shared session ledger for new Bishop
     scribe-ids; on detection, checkpoints state and re-attaches.
 
     Usage:
@@ -135,7 +142,7 @@ class ShadowLifecycle:
         self.session_id = session_id
         self.heartbeat_interval_s = heartbeat_interval_s
         self.bishop_check_interval_s = bishop_check_interval_s
-        self.eblet_root = eblet_root or EBLET_BP011_DIR
+        self.eblet_root = eblet_root or _HEARTBEAT_EBLET_BASE
         self._session_poll_interval_s = session_poll_interval_s
         self._session_file_path = session_file_path or SESSION_FILE_PATH
 
@@ -154,16 +161,21 @@ class ShadowLifecycle:
     # ── Paths ─────────────────────────────────────────────────────────────────
 
     @property
+    def _eblet_dir(self) -> Path:
+        """Session-scoped eblet directory: eblet_root / current session_id (KN098)."""
+        return self.eblet_root / self._state.session_id
+
+    @property
     def heartbeat_path(self) -> Path:
-        return self.eblet_root / f"heartbeat_{self.scribe_id}.eblet.md"
+        return self._eblet_dir / f"heartbeat_{self.scribe_id}.eblet.md"
 
     @property
     def shared_ledger_path(self) -> Path:
-        return self.eblet_root / LEDGER_FILENAME
+        return self._eblet_dir / LEDGER_FILENAME
 
     def _checkpoint_path(self, ts: str) -> Path:
         ts_safe = ts.replace(":", "-").replace("+", "p")[:24]
-        return self.eblet_root / f"checkpoint_{self.scribe_id}_{ts_safe}.eblet.md"
+        return self._eblet_dir / f"checkpoint_{self.scribe_id}_{ts_safe}.eblet.md"
 
     # ── Heartbeat ─────────────────────────────────────────────────────────────
 
@@ -173,6 +185,8 @@ class ShadowLifecycle:
             self._state.last_heartbeat_ts = ts
             session_id = self._state.session_id
             rebind_time = self._last_rebind_time
+            # Capture path inside the lock so path and content agree on session_id (KN098).
+            hb_path = self.eblet_root / session_id / f"heartbeat_{self.scribe_id}.eblet.md"
         carryover = (
             rebind_time is not None
             and (time.monotonic() - rebind_time) * 1000 < 100
@@ -188,7 +202,7 @@ class ShadowLifecycle:
             content += "- **rebind_carryover:** true\n"
         try:
             self._attach.write(
-                self.heartbeat_path,
+                hb_path,
                 content,
                 decision_id=f"heartbeat_{self.scribe_id}",
             )
@@ -227,6 +241,9 @@ class ShadowLifecycle:
 
     def _do_rebind(self, old_session: str, new_session: str, latency_ms: int) -> None:
         with self._state_lock:
+            # Create the new session's eblet directory BEFORE updating session_id so
+            # that the directory always exists by the time _eblet_dir is read (KN098).
+            (self.eblet_root / new_session).mkdir(parents=True, exist_ok=True)
             self._state.session_id = new_session
             self._state.last_rebind_ts = datetime.now(timezone.utc).isoformat()
             self._state.previous_session_ids.append(old_session)
@@ -320,7 +337,7 @@ class ShadowLifecycle:
         return set(self._state.bishop_session_ids_seen)
 
     def _scan_ledger_for_bishop_ids(self) -> set[str]:
-        """Read the shared BP011 ledger and collect all bishop_prime_* scribe-ids."""
+        """Read the shared session ledger and collect all bishop_prime_* scribe-ids."""
         if not self.shared_ledger_path.exists():
             return set()
         bishop_ids: set[str] = set()
@@ -386,7 +403,7 @@ class ShadowLifecycle:
 
     def start(self) -> None:
         """Start heartbeat and Bishop-refresh-monitor background threads."""
-        self.eblet_root.mkdir(parents=True, exist_ok=True)
+        self._eblet_dir.mkdir(parents=True, exist_ok=True)
 
         hb = threading.Thread(
             target=self._heartbeat_loop,
@@ -450,13 +467,13 @@ class ShadowLifecycle:
         """
         from .iron_tablet_attach import _append_ledger_entry
         import hashlib
-        self.eblet_root.mkdir(parents=True, exist_ok=True)
+        self._eblet_dir.mkdir(parents=True, exist_ok=True)
         ts = datetime.now(timezone.utc).isoformat()
         ledger = self.shared_ledger_path
         entry = {
             "ts": ts,
             "scribeId": new_bishop_scribe_id,
-            "ebletPath": str(self.eblet_root / f"bishop_signal_{new_bishop_scribe_id}.eblet.md"),
+            "ebletPath": str(self._eblet_dir / f"bishop_signal_{new_bishop_scribe_id}.eblet.md"),
             "hash": hashlib.sha256(b"bishop_refresh_signal").hexdigest(),
             "sequence": 1,
             "session": "synthetic_refresh",
@@ -493,9 +510,11 @@ def _run_daemon(lighthouse_position: int, session_id: str, heartbeat_interval_s:
     )
     lc.start()
 
-    # Write PID to a tracking file
-    pid_file = EBLET_BP011_DIR / f"pid_{scribe_id}.txt"
-    EBLET_BP011_DIR.mkdir(parents=True, exist_ok=True)
+    # Write PID to the session-specific tracking directory (lc.start() already
+    # created it; mkdir here is defensive in case of an unusual startup race).
+    session_eblet_dir = lc.eblet_root / session_id
+    session_eblet_dir.mkdir(parents=True, exist_ok=True)
+    pid_file = session_eblet_dir / f"pid_{scribe_id}.txt"
     pid_file.write_text(str(os.getpid()), encoding="utf-8")
 
     def _shutdown(signum, frame):
@@ -524,16 +543,16 @@ def _run_daemon(lighthouse_position: int, session_id: str, heartbeat_interval_s:
     return 0
 
 
-def _verify_heartbeats(expect: int, within_seconds: int) -> int:
+def _verify_heartbeats(expect: int, within_seconds: int, session_id: str) -> int:
     """
     Verify that `expect` Shadow heartbeats were written within `within_seconds`.
-    Reads heartbeat eblets from the canonical BP011 eblet directory.
+    Reads heartbeat eblets from the session-scoped eblet directory (KN098).
     Returns 0 if all pass, 1 otherwise.
     """
     import re
     from datetime import datetime, timezone, timedelta
 
-    eblet_root = EBLET_BP011_DIR
+    eblet_root = _HEARTBEAT_EBLET_BASE / session_id
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(seconds=within_seconds)
 
@@ -615,8 +634,11 @@ def main() -> int:
         help="LIGHTHOUSE position for run_daemon (1-8).",
     )
     parser.add_argument(
-        "--session", default="BP011",
-        help="Session ID for run_daemon.",
+        "--session", default=None,
+        help=(
+            "Session ID (default: reads from "
+            "~/.claude/state/current_session_name.txt; falls back to BP011)."
+        ),
     )
     parser.add_argument(
         "--heartbeat-interval", type=int, default=60, dest="heartbeat_interval",
@@ -624,13 +646,21 @@ def main() -> int:
     )
     args = parser.parse_args(raw_args)
 
+    # Resolve session_id: CLI arg > current_session_name.txt > fallback
+    session_id = args.session
+    if session_id is None:
+        try:
+            session_id = SESSION_FILE_PATH.read_text(encoding="utf-8").strip() or "BP011"
+        except OSError:
+            session_id = "BP011"
+
     if subcommand == "run_daemon":
         if args.position < 1 or args.position > 8:
             print("run_daemon requires --position 1-8", file=sys.stderr)
             return 1
-        return _run_daemon(args.position, args.session, args.heartbeat_interval)
+        return _run_daemon(args.position, session_id, args.heartbeat_interval)
     else:
-        return _verify_heartbeats(args.expect, args.within_seconds)
+        return _verify_heartbeats(args.expect, args.within_seconds, session_id)
 
 
 if __name__ == "__main__":
