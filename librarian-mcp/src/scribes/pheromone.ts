@@ -49,6 +49,22 @@ const PAWN_SCRIBES_DIR = resolve(STITCHPUNKS_DIR, "pawn_cathedral", "scribes");
 
 // ─── Schema ───────────────────────────────────────────────────────────────
 
+/**
+ * Multi-Trail Pheromone-Flavor Class System (KN100/BP015 Priority 3)
+ * Three independent class-axes for 4D substrate routing.
+ * Existing records carry flavor_class = undefined (null flavor = cross-trail).
+ * New entries can carry tags on any/all axes.
+ *
+ * Domain (a): what the content is ABOUT (food-metaphor chain seed)
+ * Cognition (b): what reasoning mode produced it
+ * Audience (c): who it's FOR
+ */
+export interface FlavorClass {
+  domain?:    string;    // canonical seed: cinnamon|vanilla|strawberry|chocolate|spice|fruit|vegetable|nut|bread|dairy|soup|pudding|spoonful|popcorn
+  cognition?: string;    // canonical seed: analytical|empirical-receipt|creative|governance|discipline-class|building-in-public|brick-wall-correction|receipt-anchor
+  audience?:  string;    // canonical seed: founder-personal|bishop-substrate|knight-build|pawn-research|member-public|cathedral-public|counsel-eyes-only
+}
+
 export interface PheromoneRecord {
   ts: string;                     // ISO-8601 emit timestamp
   scribe: string;                 // Scribe id (e.g. "Architecture", "FounderVoice")
@@ -56,6 +72,8 @@ export interface PheromoneRecord {
   topics: string[];               // Extracted topic tags
   decay_constant_days: number;    // Exponential decay half-life in days
   cathedral?: string;             // "bishop" | "knight" | "pawn" (default "bishop")
+  flavor_class?: FlavorClass;     // Multi-trail flavor tags (BP015 P3); null = unflavored (cross-trail)
+  synthesis_class?: string;       // "detective_team_finding" | "adversarial_fence_probe" etc. (BP015 P4)
 }
 
 export interface PheromoneHit {
@@ -65,6 +83,8 @@ export interface PheromoneHit {
   decay_score: number;            // match_strength × exp(-age / λ)
   ts: string;
   cathedral?: string;
+  flavor_class?: FlavorClass;     // passthrough for query-time flavor inspection
+  synthesis_class?: string;       // passthrough for Detective TEAM findings
 }
 
 export interface PheromoneQueryResult {
@@ -243,6 +263,8 @@ export function emitPheromone(
     cathedral?: string;
     decayConstantDays?: number;
     ts?: string;
+    flavorClass?: FlavorClass;      // BP015 P3: multi-trail flavor tags
+    synthesisClass?: string;        // BP015 P4: e.g. "detective_team_finding"
   } = {}
 ): PheromoneRecord {
   const t0 = Date.now();
@@ -254,6 +276,8 @@ export function emitPheromone(
     topics,
     decay_constant_days: options.decayConstantDays ?? DEFAULT_DECAY_CONSTANT_DAYS,
     cathedral: options.cathedral ?? "bishop",
+    ...(options.flavorClass    ? { flavor_class:    options.flavorClass    } : {}),
+    ...(options.synthesisClass ? { synthesis_class: options.synthesisClass } : {}),
   };
 
   // Append to JSONL (single-writer; append is atomic on all supported platforms)
@@ -318,6 +342,8 @@ export interface QueryOptions {
   decayActive?: boolean;                // default true
   topK?: number;                        // default 20
   cathedral?: string;                   // filter by cathedral ("bishop", "knight", etc.)
+  flavorClass?: Partial<FlavorClass>;   // BP015 P3: filter by any/all flavor-class axes (AND semantics across supplied axes)
+  synthesisClass?: string;              // BP015 P4: filter by synthesis_class (e.g. "detective_team_finding")
 }
 
 /**
@@ -336,6 +362,8 @@ export function queryPheromone(
     decayActive = true,
     topK = 20,
     cathedral,
+    flavorClass,
+    synthesisClass,
   } = options;
 
   const buildT0 = Date.now();
@@ -356,6 +384,15 @@ export function queryPheromone(
     const bucket = state.byTopic.get(tok) ?? [];
     for (const rec of bucket) {
       if (cathedral && rec.cathedral !== cathedral) continue;
+      // BP015 P3: flavor_class filter (AND semantics across supplied axes)
+      if (flavorClass) {
+        const fc = rec.flavor_class ?? {};
+        if (flavorClass.domain    && fc.domain    !== flavorClass.domain)    continue;
+        if (flavorClass.cognition && fc.cognition !== flavorClass.cognition) continue;
+        if (flavorClass.audience  && fc.audience  !== flavorClass.audience)  continue;
+      }
+      // BP015 P4: synthesis_class filter
+      if (synthesisClass && rec.synthesis_class !== synthesisClass) continue;
       const key = makeKey(rec);
       const existing = accum.get(key);
       if (existing) {
@@ -377,6 +414,8 @@ export function queryPheromone(
       decay_score: ds,
       ts: rec.ts,
       cathedral: rec.cathedral,
+      flavor_class: rec.flavor_class,
+      synthesis_class: rec.synthesis_class,
     });
   }
   hits.sort((a, b) => b.decay_score - a.decay_score);

@@ -39,7 +39,7 @@ import { runFates } from "./scribes/fates.js";
 import { consultScribes } from "./scribes/consult.js";
 import { memberConsultScribes } from "./cathedral_supabase/member_consult.js";
 import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
-import { queryPheromone, buildPheromoneIndex } from "./scribes/pheromone.js";
+import { queryPheromone, buildPheromoneIndex, emitPheromone } from "./scribes/pheromone.js";
 import { getInboundStatus } from "./scribes/hounds.js";
 import {
   runDispatchPawn,
@@ -2800,18 +2800,27 @@ registerTool(
     top_k: z.number().int().min(1).max(200).optional().describe("Maximum hits to return (default 20)"),
     cathedral: z.enum(["bishop", "knight", "pawn"]).optional().describe("Filter hits by Cathedral origin (default: all Cathedrals)"),
     rebuild_first: z.boolean().optional().describe("Force a full index rebuild before querying (expensive; use only when index is known-stale)"),
+    flavor_domain: z.string().optional().describe("BP015 P3 Multi-Trail: filter by domain flavor-class axis (e.g. cinnamon, vanilla, spice, fruit, nut, bread, dairy). Canonical seed: cinnamon|vanilla|strawberry|chocolate|spice|fruit|vegetable|nut|bread|dairy|soup|pudding|spoonful|popcorn"),
+    flavor_cognition: z.string().optional().describe("BP015 P3 Multi-Trail: filter by cognition flavor-class axis (e.g. analytical, empirical-receipt, creative, governance, discipline-class, building-in-public, brick-wall-correction, receipt-anchor)"),
+    flavor_audience: z.string().optional().describe("BP015 P3 Multi-Trail: filter by audience flavor-class axis (e.g. founder-personal, bishop-substrate, knight-build, pawn-research, member-public, cathedral-public, counsel-eyes-only)"),
+    synthesis_class: z.string().optional().describe("BP015 P4: filter by synthesis_class (e.g. 'detective_team_finding', 'adversarial_fence_probe'). Use to retrieve only Detective TEAM write-back findings."),
   },
-  async ({ claim, freshness_threshold_seconds, sufficiency_threshold, decay_active, top_k, cathedral, rebuild_first }) => {
+  async ({ claim, freshness_threshold_seconds, sufficiency_threshold, decay_active, top_k, cathedral, rebuild_first, flavor_domain, flavor_cognition, flavor_audience, synthesis_class }) => {
     try {
       if (rebuild_first) {
         buildPheromoneIndex({ verbose: false });
       }
+      const flavorClass = (flavor_domain || flavor_cognition || flavor_audience)
+        ? { domain: flavor_domain, cognition: flavor_cognition, audience: flavor_audience }
+        : undefined;
       const result = queryPheromone(claim, {
         freshnessThresholdSeconds: freshness_threshold_seconds,
         sufficiencyThreshold: sufficiency_threshold,
         decayActive: decay_active,
         topK: top_k,
         cathedral,
+        flavorClass,
+        synthesisClass: synthesis_class,
       });
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
@@ -2888,14 +2897,16 @@ registerTool(
     include_rpc_fallback: z.boolean().optional().describe("If true (default), run Phase 1 consult_scribes RPC when Phase 0 is insufficient (false = pheromone-only)"),
     max_rpc_entries: z.number().int().min(1).max(100).optional().describe("Max entries from Phase 1 RPC fallback (default 20)"),
     decay_active: z.boolean().optional().describe("Apply pheromone decay scoring (default true)"),
+    max_hits: z.number().int().min(1).max(200).optional().describe("Max Phase 0 pheromone hits to return (default 50). Use 5-10 for LEAN-mode invocations to cap context burn; 50-200 for deep-provenance queries. API-parity with pheromone_query top_k. (F5 KN100/BP015)"),
   },
-  async ({ claim, sufficiency_threshold, include_rpc_fallback, max_rpc_entries, decay_active }) => {
+  async ({ claim, sufficiency_threshold, include_rpc_fallback, max_rpc_entries, decay_active, max_hits }) => {
     try {
       // Phase 0: pheromone index pre-check
+      // max_hits controls topK — pass 5-10 for LEAN-mode, omit for default 50 (F5 KN100/BP015)
       const phase0 = queryPheromone(claim, {
         sufficiencyThreshold: sufficiency_threshold,
         decayActive: decay_active,
-        topK: 50,
+        topK: max_hits ?? 50,
       });
 
       const result: Record<string, unknown> = {
@@ -2950,6 +2961,289 @@ registerTool(
 
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+// ═══════════════════════════════════════════
+// KN100/BP015 — DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
+// ═══════════════════════════════════════════
+
+/**
+ * Detective TEAM Investigate — Priority 4 KN100/BP015
+ *
+ * Upgrades Detective from single-agent to TEAM-of-N fanning out across
+ * cathedrals. Synthesized findings are WRITTEN BACK to pheromone substrate
+ * as new entries tagged synthesis_class: detective_team_finding — closing
+ * the Detective Self-Pheromonating Loop ("so you don't forget again").
+ *
+ * Phase 0: fan-out queryPheromone per cathedral
+ * Phase 1: per-cathedral Phase 0 hits synthesized into cross-cathedral finding
+ * Phase 2: emitPheromone write-back with synthesis_class + provenance metadata
+ */
+registerTool(
+  "detective_team_investigate",
+  "Detective TEAM cross-cathedral investigation with substrate write-back (KN100/BP015 P4 — A&A #2316/#2317 upgrade). Fans out across N cathedrals (bishop/knight/pawn), synthesizes findings, writes the synthesis BACK to pheromone substrate as a detective_team_finding entry so next query surfaces the synthesis directly. 'So you don't forget again.' — Founder direct BP015. Composes with Multi-Trail Pheromone-Flavor (BP015 P3) and Adversarial Fence Testing (BP015 P5).",
+  {
+    claim: z.string().min(3).max(500).describe("The claim to investigate across all cathedrals (e.g. 'treasure maps', 'BRIDLE Rule 3 enforcement', '#2317 pheromone substrate')"),
+    cathedrals: z.array(z.enum(["bishop", "knight", "pawn"])).optional().describe("Cathedrals to fan out across (default: ['bishop','knight','pawn'] — all three)"),
+    top_k_per_cathedral: z.number().int().min(1).max(50).optional().describe("Phase 0 hits per cathedral agent (default 10; LEAN: 3-5)"),
+    write_back: z.boolean().optional().describe("Write synthesis back to pheromone substrate as detective_team_finding entry (default true). Set false for dry-run investigation."),
+    flavor_class: z.object({
+      domain:    z.string().optional(),
+      cognition: z.string().optional(),
+      audience:  z.string().optional(),
+    }).optional().describe("BP015 P3 Multi-Trail: flavor-class tags to stamp on the write-back synthesis entry. Enables per-axis retrieval post-write."),
+    replay_class: z.string().optional().describe("Set to 'detective_team_backfill' for replay of prior investigations (marks entry for distinction from original-fire findings)"),
+  },
+  async ({ claim, cathedrals, top_k_per_cathedral, write_back, flavor_class, replay_class }) => {
+    try {
+      const targetCathedrals = cathedrals ?? ["bishop", "knight", "pawn"];
+      const topK = top_k_per_cathedral ?? 10;
+      const shouldWriteBack = write_back !== false;
+
+      // Phase 0: fan-out per cathedral
+      const agentReports: Array<{
+        cathedral: string;
+        hits: number;
+        top_hit: string | null;
+        phase_0_used: boolean;
+        hits_detail: Array<{ scribe: string; tablet_id: string; decay_score: number }>;
+      }> = [];
+
+      for (const cathedral of targetCathedrals) {
+        const result = queryPheromone(claim, {
+          topK,
+          cathedral,
+          decayActive: true,
+        });
+        agentReports.push({
+          cathedral,
+          hits: result.hits.length,
+          phase_0_used: result.phase_0_used,
+          top_hit: result.hits[0] ? `${result.hits[0].scribe}/${result.hits[0].tablet_id}` : null,
+          hits_detail: result.hits.map(h => ({
+            scribe: h.scribe,
+            tablet_id: h.tablet_id,
+            decay_score: Math.round(h.decay_score * 100) / 100,
+          })),
+        });
+      }
+
+      // Phase 1: synthesize
+      const totalHits = agentReports.reduce((s, r) => s + r.hits, 0);
+      const allScribes = new Set(agentReports.flatMap(r => r.hits_detail.map(h => h.scribe)));
+      const topHitsByDecay = agentReports
+        .flatMap(r => r.hits_detail.map(h => ({ ...h, cathedral: r.cathedral })))
+        .sort((a, b) => b.decay_score - a.decay_score)
+        .slice(0, 5);
+
+      const crossCathedralAgreement = agentReports.filter(r => r.hits > 0).length;
+      const consistencyNote = crossCathedralAgreement === targetCathedrals.length
+        ? `All ${targetCathedrals.length} cathedrals have substrate coverage for this claim.`
+        : crossCathedralAgreement === 0
+          ? "No cathedral has substrate coverage — claim may be novel or substrate needs backfill."
+          : `${crossCathedralAgreement}/${targetCathedrals.length} cathedrals have coverage; partial cathedral knowledge.`;
+
+      const synthesisStatement = [
+        `Detective TEAM finding for: "${claim}"`,
+        `Cathedrals fanned out: ${targetCathedrals.join(", ")}`,
+        `Total hits: ${totalHits} across ${allScribes.size} scribes`,
+        consistencyNote,
+        topHitsByDecay.length > 0
+          ? `Top anchors: ${topHitsByDecay.map(h => `${h.scribe}/${h.tablet_id} (${h.cathedral}, decay=${h.decay_score})`).join("; ")}`
+          : "No hits found in any cathedral.",
+        replay_class ? `replay_class: ${replay_class}` : "",
+      ].filter(Boolean).join("\n");
+
+      // Phase 2: pheromone write-back
+      let writeBackResult: { ok: boolean; record_id?: string; error?: string } = { ok: false };
+      if (shouldWriteBack) {
+        try {
+          const synth_id = `detective_team_${Date.now()}_${claim.slice(0, 20).replace(/\s+/g, "_")}`;
+          emitPheromone(
+            "DetectiveTEAM",
+            synth_id,
+            synthesisStatement,
+            {
+              cathedral: "bishop",
+              decayConstantDays: 90,
+              flavorClass: flavor_class,
+              synthesisClass: replay_class === "detective_team_backfill"
+                ? "detective_team_backfill"
+                : "detective_team_finding",
+            }
+          );
+          writeBackResult = { ok: true, record_id: synth_id };
+        } catch (wbErr) {
+          writeBackResult = { ok: false, error: (wbErr as Error).message };
+        }
+      }
+
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            claim,
+            cathedrals: targetCathedrals,
+            agent_reports: agentReports,
+            synthesis: synthesisStatement,
+            cross_cathedral_agreement: crossCathedralAgreement,
+            total_hits: totalHits,
+            write_back_requested: shouldWriteBack,
+            write_back_result: writeBackResult,
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+/**
+ * Adversarial Fence Testing — Priority 5 KN100/BP015
+ *
+ * Implements the Adversarial Fence Testing Protocol (Founder direct clarification
+ * of "Prove all things; hold fast that which is good" — 1 Thess 5:21).
+ * Three probe types:
+ *   1. counter_claim — submit alternative claim; verify substrate response
+ *   2. cross_canon_contradiction — find entries contradicting each other
+ *   3. stale_substrate — verify staleness detection works
+ *
+ * Writes probe results back to pheromone with synthesis_class: adversarial_fence_probe
+ * for Bushel 1 Reckoning audit trail.
+ */
+registerTool(
+  "adversarial_fence_probe",
+  "Adversarial Fence Testing Protocol (KN100/BP015 P5 — 'Prove all things; hold fast that which is good' — Founder BP015 clarification). Three probe types: counter_claim (submit alternative; verify substrate handles contradiction), cross_canon_contradiction (find entries that contradict each other), stale_substrate (verify staleness markers fire). Writes probe receipts back to pheromone substrate as adversarial_fence_probe entries for Bushel 1 Reckoning audit trail. 'It will happen anyway, if WE do it, then that makes us all the stronger.' — Founder direct.",
+  {
+    probe_type: z.enum(["counter_claim", "cross_canon_contradiction", "stale_substrate"]).describe("Probe class: counter_claim | cross_canon_contradiction | stale_substrate"),
+    claim: z.string().min(3).max(500).describe("Primary canonical claim to probe (the 'rung' being adversarially tested)"),
+    counter_claim: z.string().min(3).max(500).optional().describe("For counter_claim probe: the alternative/contradicting claim to submit against the substrate"),
+    top_k: z.number().int().min(1).max(50).optional().describe("Number of substrate hits to probe against (default 10)"),
+    write_back: z.boolean().optional().describe("Write probe receipt to pheromone as adversarial_fence_probe entry (default true)"),
+    hold_or_discard: z.enum(["hold", "discard", "flag_reconciliation", "pending"]).optional().describe("Per-claim adjudication for Bushel 1 Reckoning (default: pending — to be adjudicated after probe review)"),
+  },
+  async ({ probe_type, claim, counter_claim, top_k, write_back, hold_or_discard }) => {
+    try {
+      const topK = top_k ?? 10;
+      const shouldWriteBack = write_back !== false;
+      const adjudication = hold_or_discard ?? "pending";
+
+      let probeResult: Record<string, unknown> = { probe_type, claim };
+
+      if (probe_type === "counter_claim") {
+        // Submit the original claim to substrate
+        const claimHits = queryPheromone(claim, { topK, decayActive: true });
+        // Submit the counter-claim to substrate
+        const counterHits = counter_claim
+          ? queryPheromone(counter_claim, { topK, decayActive: true })
+          : null;
+
+        const claimCoverage = claimHits.hits.length;
+        const counterCoverage = counterHits?.hits.length ?? 0;
+
+        probeResult = {
+          ...probeResult,
+          counter_claim: counter_claim ?? "(none provided)",
+          claim_hits: claimCoverage,
+          counter_hits: counterCoverage,
+          substrate_response: claimCoverage > counterCoverage
+            ? "substrate_favors_claim"
+            : claimCoverage === counterCoverage
+              ? "substrate_tied"
+              : "substrate_favors_counter",
+          finding: claimCoverage > counterCoverage
+            ? `Claim '${claim}' is substrate-dominant (${claimCoverage} hits vs counter ${counterCoverage} hits). HOLD.`
+            : counterCoverage > 0
+              ? `Counter-claim '${counter_claim}' has substrate coverage (${counterCoverage} hits). FLAG FOR RECONCILIATION.`
+              : `Claim '${claim}' has minimal coverage (${claimCoverage} hits). NEEDS BACKFILL.`,
+          adjudication,
+        };
+      } else if (probe_type === "cross_canon_contradiction") {
+        // Query broad substrate for the claim; look for conflicting hits in same domain
+        const hits = queryPheromone(claim, { topK, decayActive: false });
+        // Group by scribe; multiple scribes covering same claim = potential contradiction surface
+        const scribeGroups = new Map<string, Array<{ tablet_id: string; decay_score: number }>>();
+        for (const h of hits.hits) {
+          if (!scribeGroups.has(h.scribe)) scribeGroups.set(h.scribe, []);
+          scribeGroups.get(h.scribe)!.push({ tablet_id: h.tablet_id, decay_score: h.decay_score });
+        }
+        const multiHitScribes = [...scribeGroups.entries()].filter(([, v]) => v.length > 1);
+
+        probeResult = {
+          ...probeResult,
+          total_hits: hits.hits.length,
+          scribes_covered: scribeGroups.size,
+          multi_hit_scribes: multiHitScribes.map(([s, entries]) => ({ scribe: s, entries })),
+          finding: multiHitScribes.length > 0
+            ? `Cross-canon probe: ${multiHitScribes.length} scribe(s) have multiple entries for '${claim}' — potential contradiction surface; manual review recommended.`
+            : `No cross-canon contradiction surface found for '${claim}' (${scribeGroups.size} scribes, each with single entry). Clean.`,
+          adjudication,
+        };
+      } else if (probe_type === "stale_substrate") {
+        // Query with very short freshness window to force staleness detection
+        const aggressiveFreshness = queryPheromone(claim, {
+          topK,
+          freshnessThresholdSeconds: 0,   // force stale
+          decayActive: true,
+        });
+        const normalFreshness = queryPheromone(claim, {
+          topK,
+          freshnessThresholdSeconds: 86400,
+          decayActive: true,
+        });
+
+        probeResult = {
+          ...probeResult,
+          index_age_seconds: aggressiveFreshness.index_age_seconds,
+          hits_normal_freshness: normalFreshness.hits.length,
+          hits_aggressive_freshness: aggressiveFreshness.hits.length,
+          freshness_degradation: normalFreshness.hits.length - aggressiveFreshness.hits.length,
+          finding: aggressiveFreshness.index_age_seconds > 86400
+            ? `Substrate index is STALE (age=${Math.round(aggressiveFreshness.index_age_seconds / 3600)}h). Run pheromone_build or npm run rebuild.`
+            : `Substrate freshness OK (age=${Math.round(aggressiveFreshness.index_age_seconds)}s). Decay scoring functional.`,
+          adjudication,
+        };
+      }
+
+      // Write-back probe receipt
+      let writeBackResult: { ok: boolean; record_id?: string; error?: string } = { ok: false };
+      if (shouldWriteBack) {
+        try {
+          const probe_id = `adversarial_${probe_type}_${Date.now()}_${claim.slice(0, 20).replace(/\s+/g, "_")}`;
+          emitPheromone(
+            "AdversarialFenceProbe",
+            probe_id,
+            JSON.stringify(probeResult),
+            {
+              cathedral: "bishop",
+              decayConstantDays: 60,
+              synthesisClass: "adversarial_fence_probe",
+            }
+          );
+          writeBackResult = { ok: true, record_id: probe_id };
+        } catch (wbErr) {
+          writeBackResult = { ok: false, error: (wbErr as Error).message };
+        }
+      }
+
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            ...probeResult,
+            write_back_result: writeBackResult,
+          }, null, 2),
+        }],
       };
     } catch (err) {
       return {
