@@ -78,6 +78,7 @@ export type LibrarianMedallionVariant =
   | "ultravision"
   | "liana-banyan"
   | "titan"        // 11th variant — BP010 turn 33 Founder ratification; composition-mark TITAN LIBRARIAN
+  | "apiarist"    // 14th variant (or 12th) — BP016 Founder ratification; bee/apiary; cross-LB-Frame Hive cohort-tier; KN-D1
   | string; // open-set per BP010 "more the merrier" framing — YAML-only variants render via fallback
 
 export interface LibrarianMedallionProps {
@@ -457,6 +458,52 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
         { id: "cooperative", label: "Cooperative", prompt: "Federation Library membership check…", receipt: "✓ Cooperative: $5/year · 83.3% creator keeps · FOR THE KEEP!" },
       ],
       finalReceipt: "LB-PLATFORM-DEMO · 2,270 innovations · 15 provisionals · AGPL v3 free · Federation Library $5/year ONE OF US",
+    },
+  },
+  apiarist: {
+    label: "Apiarist Librarian",
+    tagline: "The keeper of bees. Cross-LB-Frame collective intelligence per cohort-class.",
+    emblemIcon: <span className="text-4xl leading-none">🐝</span>,
+    borderClass: "ring-4 ring-amber-600 shadow-amber-600/40",
+    borderStyle: {
+      background: "linear-gradient(135deg, #fef3c7, #fde68a)",
+      boxShadow: "0 0 0 3px #d97706, 0 0 0 6px #fef3c7, 0 0 20px #d9770655",
+    },
+    cornerLocks: 5,
+    centerLock: true,
+    ebletPath: "BP016/apiarist",
+    backSummary:
+      "Apiarist Librarian — The Hive (BP016 Founder direct). Cross-LB-Frame collective intelligence per cohort-class (Tribe / Family / Project / Guild). Project-class Hive earns greater percentage payment. 50% uptime cap preserves constant overfill response — same discipline as Manufacturing production-systems-at-50%-load. 'Can't connect if not on' — presence-based; capital-without-attention buys nothing. Three-tier ladder: Atreyu (personal) / Apiarist (cohort) / Thirteenth Warrior (civilization). Bee brand: Workers / Drones / Queens / Honey / Pollen / Comb / Swarming / Royal Jelly. Hexagonal cells compose with HexIsle brand canon.",
+    bountyTagline: "Join the Hive — Cross-LB-Frame collective intelligence, 50% uptime, constant overfill response.",
+    tier: "Apiarist — Cross-LB-Frame Cohort-Hive",
+    authorityLabel: "Apiarist Hive Authority",
+    accessTier: "federation-member",
+    stage2Demo: {
+      title: "Apiarist Hive Connection Demo",
+      subtitle: "Watch a cross-LB-Frame Hive thread form per project cohort.",
+      ctaLabel: "Connect to Hive",
+      steps: [
+        {
+          id: "solo",
+          label: "Solo Frame Baseline",
+          prompt: "Solo LB Frame — no cross-LB-Frame connection · no Hive thread",
+          receipt: "✓ Solo baseline: intra-LB-Frame substrate active · 0 Hive threads",
+        },
+        {
+          id: "hive",
+          label: "Apiarist Connects",
+          prompt: "Apiarist Librarian opening Hive thread — project cohort scheduled at ≤50% uptime…",
+          receipt: "✓ Hive thread established · presence gate PASS · scheduled_uptime_pct: 40%",
+        },
+        {
+          id: "intel",
+          label: "Cross-Frame Intel",
+          prompt: "Hive pollen cross-pollinating across cohort LB Frames (per-task scope)…",
+          receipt: "✓ Cross-Frame collective intelligence active · Honey artifact generated · Comb: 3 cells",
+        },
+      ],
+      finalReceipt:
+        "APIARIST-HIVE-DEMO · Project cohort · Hive thread confirmed · 50% uptime cap enforced · Comb: 3 cells · Federation-member access · KN-D1",
     },
   },
 };
@@ -1207,6 +1254,7 @@ export function LibrarianMedallionGallery() {
     "symbiote",
     "ultravision",
     "titan",
+    "apiarist",  // 14th variant (or 12th) — BP016 Founder ratification; KN-D1
   ];
 
   return (

@@ -199,3 +199,30 @@ variants:
     bounty_tagline: "Enter the Titan — The whole Federation, Head and Body, non-weaponized by design."
     composition_mark: "TITAN LIBRARIAN"
     scale_class: "whole-federation-organism-with-head-body-architecture"
+
+  # ── BP016 Founder ratification — Apiarist (ordinal 14th / or 12th pending Founder pick) ──
+  # Three-tier ladder: Atreyu (personal) / Apiarist (cohort) / Thirteenth Warrior (civilization)
+  # Per KN-D1 Pod-D #1 of 5. KN-D2 Hive cross-LB-Frame connectivity infrastructure next.
+
+  apiarist:
+    label: "Apiarist Librarian"
+    border_class: amber-honeycomb
+    emblem: apiarist-with-hive
+    color_primary: "#d97706"
+    tagline: "The keeper of bees. Cross-LB-Frame collective intelligence per cohort-class."
+    sub_tagline: "The Hive. Cross-LB-Frame collective intelligence per cohort-class. 50% uptime; constant overfill response."
+    primary_anchor: "BP016 Apiarist Librarian + Hive canon — apiarist_librarian_hive_cross_lb_frame_collective_intelligence_canon_bp016.eblet.md"
+    eblet_path: "BP016/apiarist"
+    tier: "Apiarist — Cross-LB-Frame Cohort-Hive"
+    corner_locks: 5
+    center_lock: true
+    access_tier: federation-member
+    bounty_tagline: "Join the Hive — Cross-LB-Frame collective intelligence, 50% uptime, constant overfill response."
+    cohort_tier: cross-lb-frame
+    brand_cluster: bee-apiary
+    brand_motif:
+      primary: "bee + hive (no human characters per feedback_no_human_characters.md)"
+      secondary: "hexagonal-cells (composes with HexIsle hexagon brand canon)"
+      accent: "amber-honey gold-tone"
+    three_tier_ladder_position: cohort  # personal=Atreyu / cohort=Apiarist / civilization=Thirteenth Warrior
+    ordinal_position: 14  # OR 12 — pending Founder ratification per BP016 canon Eblet status
