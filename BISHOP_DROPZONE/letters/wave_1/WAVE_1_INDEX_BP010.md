@@ -1,4 +1,4 @@
-# Wave 1 Cohort Index — BP010
+﻿# Wave 1 Cohort Index — BP010
 ## K-Wave-1-Distribution-Drafting | B131 Post-Keirsey Reconciliation
 
 **Filed:** BP010, 2026-05-01 by Knight
@@ -118,7 +118,7 @@ All 29 scaffolds compose from this canonical bundle. Per-scaffold variations not
 - `~/.claude/state/eblets/CANON/ultravision_arc_jarvis_skip_ultron_bp011.eblet.md` — UltraVision arc (tier-selective)
 - `~/.claude/state/eblets/CANON/iron_egiant_shadows_iron_tablets_lighthouse_concert_bp011.eblet.md` — Iron E-Giant Federation architecture (tech-tier)
 - `project_brand_tagline_v4_librarian_triple_context_4th_power_free_bp010.md` — V4 Librarian tagline (AI-economics/tech tier)
-- `liana-banyan-audit.md` — SEC language discipline (all letters)
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `~/.claude/state/eblets/CANON/founder_decision_heuristic_member_first_bp009.eblet.md` — member-first heuristic
 
 **Key canonical numbers (all letters):**

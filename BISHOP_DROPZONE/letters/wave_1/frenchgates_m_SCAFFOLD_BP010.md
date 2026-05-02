@@ -1,4 +1,4 @@
-# Letter to Melinda French Gates — PLOW-AHEAD Priority 2 — SCAFFOLDED
+﻿# Letter to Melinda French Gates — PLOW-AHEAD Priority 2 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient:** Melinda French Gates — PLOW-AHEAD (Bill Gates: Epstein-indefinite block; Melinda French Gates: IN per B131 + Founder direction BP010)
@@ -11,7 +11,7 @@
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization; cooperative patent pledge
 - `~/.claude/state/eblets/CANON/founder_decision_heuristic_member_first_bp009.eblet.md` — member-first heuristic
-- `liana-banyan-audit.md` — SEC language discipline (critical: no investment framing)
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — cohort context; post-K533 updates
 
 ---
@@ -62,7 +62,7 @@ Composing canon:
 [FOUNDER PROSE-PASS PLACEHOLDER]
 
 Per-recipient context:
-- **Ask class**: philanthropic alignment conversation; advisory engagement; no investment offered; no securities framing (strict liana-banyan-audit.md discipline)
+- **Ask class**: philanthropic alignment conversation; advisory engagement; no investment offered; no securities framing (strict Golden Eblet 2 Platform Rules discipline)
 - Pivotal Ventures focus areas: women's economic power, social change at scale, overlooked builders — LB's cooperative substrate is infrastructure for all three
 - French Gates gives independently now, without co-decision-making with Bill Gates — she has full latitude to engage with cooperative-aligned infrastructure on her own terms
 - The ask is NOT a funding pitch: it is an invitation to assess whether LB's structural equity architecture aligns with her giving philosophy. She decides the rest.

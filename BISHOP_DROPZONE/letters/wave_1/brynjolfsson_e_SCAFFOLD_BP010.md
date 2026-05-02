@@ -1,4 +1,4 @@
-# Letter to Erik Brynjolfsson — PLOW-AHEAD Priority 1 — SCAFFOLDED
+﻿# Letter to Erik Brynjolfsson — PLOW-AHEAD Priority 1 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient:** Erik Brynjolfsson — J-Curve draft V03 CONFIRMED (B131 post-Keirsey)
@@ -11,7 +11,7 @@
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor; methodology floors relevant to an economist
 - `project_brand_tagline_v4_librarian_triple_context_4th_power_free_bp010.md` — V4 Librarian tagline: *"Librarian. Working Faster+Cheaper+Better. So you don't have to. / TRIPLE YOUR CONTEXT. To the 4th Power. FREE."*
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization; dual-license
-- `liana-banyan-audit.md` — SEC language discipline
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — V03 J-Curve anchor; post-K533 citation updates
 - `BISHOP_DROPZONE/00_FOUNDER_REVIEW/LETTER-ERIK-BRYNJOLFSSON-V03-J-CURVE-K528.md` — existing V03 draft (refresh with K533 cite)
 

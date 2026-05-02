@@ -1,4 +1,4 @@
-# Letter to Warren Buffett — PLOW-AHEAD Priority 1 — SCAFFOLDED
+﻿# Letter to Warren Buffett — PLOW-AHEAD Priority 1 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient class:** finance / cooperative-economy / philanthropic
@@ -9,7 +9,7 @@
 - `~/.claude/state/eblets/CANON/lb_frame_roots_federation_trunk_initiatives_fruits_bp011.eblet.md` — biology-frame primary
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn valuation anchor
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization stance (cooperative pledge form)
-- `liana-banyan-audit.md` — SEC language discipline (no investment-vehicle framing)
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `~/.claude/state/eblets/CANON/founder_decision_heuristic_member_first_bp009.eblet.md` — Cost+20% / 83.3% creator-keeps framing
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — cohort context + post-K533 citation updates
 

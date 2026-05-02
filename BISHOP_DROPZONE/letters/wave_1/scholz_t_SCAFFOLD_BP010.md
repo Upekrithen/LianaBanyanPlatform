@@ -1,4 +1,4 @@
-# Letter to Trebor Scholz — PLOW-AHEAD Priority 2 — SCAFFOLDED
+﻿# Letter to Trebor Scholz — PLOW-AHEAD Priority 2 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient:** Trebor Scholz — UPGRADED from B130A WORTH-IT to PLOW-AHEAD per Pawn Keirsey return (B131)
@@ -11,7 +11,7 @@
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — cooperative patent pledge; non-weaponization
 - `~/.claude/state/eblets/CANON/founder_decision_heuristic_member_first_bp009.eblet.md` — member-first heuristic
-- `liana-banyan-audit.md` — SEC language discipline
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — post-K533 citation updates; upgrade context
 
 ---

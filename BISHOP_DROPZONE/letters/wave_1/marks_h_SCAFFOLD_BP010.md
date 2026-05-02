@@ -1,4 +1,4 @@
-# Letter to Howard Marks — PLOW-AHEAD Priority 3 — SCAFFOLDED
+﻿# Letter to Howard Marks — PLOW-AHEAD Priority 3 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient class:** finance / investment / cooperative-economy adjacent
@@ -10,7 +10,7 @@
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor (CRITICAL — Marks is a value investor; methodology floors matter to him)
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization; cooperative patent pledge
 - `~/.claude/state/eblets/CANON/founder_decision_heuristic_member_first_bp009.eblet.md` — Cost+20% declared value (Marks understands intrinsic value discipline)
-- `liana-banyan-audit.md` — SEC language discipline (critical: no investment-vehicle framing with a professional investor)
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — post-K533 citation updates
 
 ---
@@ -59,7 +59,7 @@ Composing canon:
 [FOUNDER PROSE-PASS PLACEHOLDER]
 
 Per-recipient context:
-- **Ask class**: intellectual engagement / Oaktree memo potential / no investment offered (strict liana-banyan-audit.md discipline with a professional investor)
+- **Ask class**: intellectual engagement / Oaktree memo potential / no investment offered (strict Golden Eblet 2 Platform Rules discipline with a professional investor)
 - Marks writes investment memos that circulate widely among the financial community — his assessment of LB's declared-value methodology and cooperative economics would carry significant weight with his readership
 - The ask is NOT a pitch for investment: it is a request for Marks to assess whether the Behemoth Reborn methodology and Cost+20% declared-value discipline merit a memo. The work stands or falls on the methodology.
 - Second-level thinking application: "Everyone else pitches at $X billion. We declared $630K and showed the full Relief-from-Royalty methodology. Is that what second-level thinking looks like at the platform layer?"

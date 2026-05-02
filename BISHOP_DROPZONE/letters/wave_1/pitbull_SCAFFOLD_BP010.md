@@ -1,4 +1,4 @@
-# Letter to Pitbull (Armando Christian Pérez) — WORTH-IT Priority 5 — SCAFFOLDED
+﻿# Letter to Pitbull (Armando Christian Pérez) — WORTH-IT Priority 5 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient:** Pitbull — Armando Christian Pérez; Cuban-American entrepreneur, musician, education advocate
@@ -14,7 +14,7 @@
 - `~/.claude/state/eblets/CANON/lb_frame_roots_federation_trunk_initiatives_fruits_bp011.eblet.md` — biology-frame; "Dale" energy + cooperative community as trunk + fruits
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor (keep light; translate to music-industry economics)
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization; cooperative patent pledge; "not a gun" resonates with Cuban-American community history
-- `liana-banyan-audit.md` — SEC language discipline
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — post-K533 citation updates; WORTH-IT measured-posture template
 
 ---

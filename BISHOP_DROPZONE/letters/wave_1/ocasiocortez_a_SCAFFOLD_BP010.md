@@ -1,4 +1,4 @@
-# Letter to Alexandria Ocasio-Cortez (AOC) — WORTH-IT Priority 6 — SCAFFOLDED
+﻿# Letter to Alexandria Ocasio-Cortez (AOC) — WORTH-IT Priority 6 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient:** Alexandria Ocasio-Cortez — DOWNGRADED from B130A PLOW-AHEAD to WORTH-IT per Pawn Keirsey return (B131). V02 Maine Third-Path letter KEEP with measured-posture reframing.
@@ -16,7 +16,7 @@
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization; cooperative patent pledge
 - `~/.claude/state/eblets/CANON/founder_decision_heuristic_member_first_bp009.eblet.md` — member-first; worker-first
-- `liana-banyan-audit.md` — SEC language discipline
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — full measured-posture reframing specification; post-K533 updates; Sanders indirect-channel context
 
 ---

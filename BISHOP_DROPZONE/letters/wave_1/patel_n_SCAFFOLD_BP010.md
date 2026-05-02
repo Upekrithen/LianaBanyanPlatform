@@ -1,4 +1,4 @@
-# Letter to Nilay Patel — WORTH-IT Priority 4 — SCAFFOLDED
+﻿# Letter to Nilay Patel — WORTH-IT Priority 4 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient class:** tech-journalist / media / The Verge / podcast
@@ -15,7 +15,7 @@
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization; Iron E-Giant tagline (Patel covers hardware/AI/robots; the tagline is native)
 - `~/.claude/state/eblets/CANON/iron_egiant_shadows_iron_tablets_lighthouse_concert_bp011.eblet.md` — Iron E-Giant Federation architecture (Patel would find this technically interesting)
-- `liana-banyan-audit.md` — SEC language discipline
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — post-K533 citation updates; WORTH-IT measured-posture template
 
 ---

@@ -1,4 +1,4 @@
-# Letter to Ezra Klein — WORTH-IT Priority 4 — SCAFFOLDED
+﻿# Letter to Ezra Klein — WORTH-IT Priority 4 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient class:** journalist / podcast / policy / media
@@ -14,7 +14,7 @@
 - `~/.claude/state/eblets/CANON/patent_portfolio_existing_valuations_canon_bp011.eblet.md` — Behemoth Reborn anchor
 - `~/.claude/state/eblets/CANON/ultravision_arc_jarvis_skip_ultron_bp011.eblet.md` — UltraVision arc (Klein has done multiple AI episodes; Jarvis-to-UltraVision is podcast-grade)
 - `~/.claude/state/eblets/CANON/iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` — non-weaponization; cooperative patent pledge
-- `liana-banyan-audit.md` — SEC language discipline
+- `~/.claude/state/eblets/CANON/GOLDEN/2_platform_rules.eblet.md` — Golden Eblet 2 Platform Rules (SEC language rules + cooperative-pledge architecture)
 - `BISHOP_DROPZONE/03_BishopHandoffs/B131_WAVE1_LETTER_COHORT_RECONCILIATION_POST_KEIRSEY.md` — post-K533 citation updates; WORTH-IT measured-posture template
 
 ---
