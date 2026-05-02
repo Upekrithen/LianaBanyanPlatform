@@ -85,6 +85,13 @@ import {
   getTotalShareBackEarned,
 } from "./excalibur_class/share_back_ledger.js";
 import { probeCohortClass, formatCohortSummary } from "./cohort_class/probe.js";
+import {
+  probeTierConfig,
+  setTierConfig,
+  formatTierSummary,
+  buildPlanTierAdvisory,
+  type ResourceConfigTier,
+} from "./cohort_class/tier_config_probe.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -5365,6 +5372,87 @@ server.tool(
           ...result,
           summary,
         }, null, 2),
+      }],
+    };
+  },
+);
+
+// ─── KN-H1: get_lb_frame_resource_config_tier ────────────────────────────────
+// Read-only. Returns member's Tier choice + tier-spec metadata.
+// Called at LB Frame Handshake Phase 1 Discovery (Step 1.3) and on-demand.
+// Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes.
+// BRIDLE Rule 4: if DB unavailable, returns tier_state='not_chosen' (surface picker; don't proceed silently).
+server.tool(
+  "get_lb_frame_resource_config_tier",
+  "Returns a member's LB Frame resource-config tier choice (needs/suggests/founder) + tier-spec metadata. " +
+  "Called at LB Frame Handshake Phase 1 Discovery Step 1.3 to check if member has already chosen a tier. " +
+  "Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes. " +
+  "Tier A NEEDS = default Claude plan, no upgrade required. " +
+  "Tier B SUGGESTS = recommended uplift, documented better experience. " +
+  "Tier C FOUNDER = empirical-receipt-source, self-attested, no fiat-bridge. " +
+  "Anti-extraction by structural form: capital alone cannot purchase higher-tier participation. " +
+  "Falls back gracefully if Supabase unavailable (BRIDLE Rule 4).",
+  {
+    member_id: z.string().describe("Supabase auth.users UUID for the member. Required."),
+    surface: z.string().optional().describe("Detected Claude Code surface (from Phase 1 Discovery) — used for plan-tier advisory text only."),
+  },
+  async ({ member_id, surface }) => {
+    ensureFreshIndex();
+    const result = await probeTierConfig(member_id);
+    const summary = formatTierSummary(result);
+    const advisory = result.tier ? buildPlanTierAdvisory(result.tier, surface) : null;
+    return {
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          ...result,
+          summary,
+          plan_tier_advisory: advisory,
+          compose_note: "Run get_cohort_class for cohort-class axis (orthogonal). Both at Handshake Phase 1 Discovery.",
+        }, null, 2),
+      }],
+    };
+  },
+);
+
+// ─── KN-H1: set_lb_frame_resource_config_tier ────────────────────────────────
+// Persists user's tier choice from Handshake Step 1.3.
+// Tier choice is reversible (re-selection supported; tier_chosen_at updates).
+// Anti-extraction: no fiat-bridge enforcement at this layer; Tier C is self-attested.
+server.tool(
+  "set_lb_frame_resource_config_tier",
+  "Persists a member's LB Frame resource-config tier choice to user_preferences. " +
+  "Called by Handshake Phase 1 Discovery Step 1.3 after user picks. " +
+  "Tier choice is reversible — re-selection allowed; tier_chosen_at updates on every call. " +
+  "No fiat-bridge: Tier C (founder) does NOT require fiat upgrade-purchase; user self-attests. " +
+  "Returns success + reselection flag (true if overriding a previous pick). " +
+  "BRIDLE Rule 8: surfaces error + retry if persistence fails; does not silently proceed.",
+  {
+    member_id: z.string().describe("Supabase auth.users UUID for the member. Required."),
+    tier: z.enum(["needs", "suggests", "founder"]).describe(
+      "Chosen tier: 'needs' (Tier A, default plan), 'suggests' (Tier B, recommended uplift), 'founder' (Tier C, empirical-receipt-source)."
+    ),
+  },
+  async ({ member_id, tier }) => {
+    ensureFreshIndex();
+    const result = await setTierConfig(member_id, tier as ResourceConfigTier);
+    if (!result.success) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            ...result,
+            retry_instruction: "Persistence failed. Surface error to user and offer retry. Do NOT silently proceed (BRIDLE Rule 8).",
+          }, null, 2),
+        }],
+        isError: true,
+      };
+    }
+    const summary = `Tier ${tier} (${tier === "needs" ? "A" : tier === "suggests" ? "B" : "C"}) set successfully${result.reselection ? " (reselection — overrode previous pick)" : ""}.`;
+    return {
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({ ...result, summary }, null, 2),
       }],
     };
   },
