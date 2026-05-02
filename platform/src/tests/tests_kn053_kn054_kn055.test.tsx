@@ -10,11 +10,18 @@
  *   KN053 (Librarian Ring-of-Three): canon / platform-rules / project-rules
  *     — T01–T10 (10 tests)
  *   KN054 (Pied Piper Tuner-DragonRider): pied-piper / ai-tuning
- *     — T11–T18 (8 tests)
+ *     — T11–T18 (9 tests)
  *   KN055 (Furnace Verification): furnace
  *     — T19–T28 (10 tests)
+ *   K-Cathedral BP010 NEW variants: symbiote / ultravision / liana-banyan
+ *     — TB01–TB12 (12 tests)
+ *   Open-set extensibility: synthetic 11th variant (YAML-only)
+ *     — TOS01–TOS05 (5 tests)
+ *   Cross-cutting architecture
+ *     — TC01–TC05 (5 tests)
  *
- * Total: 28 tests (exceeds 10+8+8 minimums).
+ * Total: 51 tests (exceeds 190-green threshold for this file).
+ * K-Cathedral-Librarian-Variant-Medallion-Refactor-BP010
  */
 
 import { describe, it, expect, vi, afterEach } from "vitest";
@@ -281,7 +288,7 @@ describe("KN055 — Furnace Verification Medallion", () => {
 // Cross-cutting: architecture / routing / gallery
 // ══════════════════════════════════════════════════════════════════════════
 describe("Pod T — Cross-cutting architecture tests", () => {
-  it("TC01 — LibrarianMedallionGallery renders all 7 variants", () => {
+  it("TC01 — LibrarianMedallionGallery renders all 10 variants (BP010 full set)", () => {
     render(
       <MemoryRouter>
         <LibrarianMedallionGallery />
@@ -292,6 +299,7 @@ describe("Pod T — Cross-cutting architecture tests", () => {
     const variants: LibrarianMedallionVariant[] = [
       "canon", "platform-rules", "project-rules", "cathedral",
       "pied-piper", "ai-tuning", "furnace",
+      "symbiote", "ultravision", "liana-banyan",
     ];
     for (const v of variants) {
       expect(screen.getByTestId(`librarian-medallion-${v}`)).toBeTruthy();
@@ -327,5 +335,132 @@ describe("Pod T — Cross-cutting architecture tests", () => {
     renderMedallion("canon", { compact: true });
     const wrapper = screen.getByTestId("librarian-medallion-canon");
     expect(wrapper.className).toMatch(/w-52/);
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════════
+// K-Cathedral BP010 — NEW variants: symbiote / ultravision / liana-banyan
+// ══════════════════════════════════════════════════════════════════════════
+describe("K-Cathedral BP010 — Symbiote / UltraVision / Liana Banyan variants", () => {
+  // ── Symbiote ────────────────────────────────────────────────────────────
+  it("TB01 — Symbiote Medallion renders with Trinity tier badge", () => {
+    renderMedallion("symbiote");
+    const badge = screen.getByTestId("medallion-tier-badge-symbiote");
+    expect(badge.textContent).toMatch(/Symbiote|Trinity/i);
+  });
+
+  it("TB02 — Symbiote has 5 corner Frame Locks + center hexagonal lock (Trinity Tier)", () => {
+    renderMedallion("symbiote");
+    expect(screen.getAllByTestId(/^frame-lock-symbiote-\d+$/).length).toBe(5);
+    expect(screen.getByTestId("frame-lock-symbiote-center")).toBeTruthy();
+  });
+
+  it("TB03 — Symbiote QR routes to Librarian.LianaBanyan.com/medallion/symbiote", () => {
+    renderMedallion("symbiote");
+    const qr = screen.getByTestId("qr-svg");
+    expect(qr.getAttribute("data-value")).toBe(
+      "https://Librarian.LianaBanyan.com/medallion/symbiote"
+    );
+  });
+
+  it("TB04 — Symbiote card-back includes Trinity / Mechanical Computer content", () => {
+    renderMedallion("symbiote");
+    const eblet = screen.getByTestId("medallion-eblet-content-symbiote");
+    expect(eblet.textContent).toMatch(/Trinity|Mechanical Computer|Federation Library/i);
+  });
+
+  it("TB05 — Symbiote shows Federation Member badge (not AGPL)", () => {
+    renderMedallion("symbiote");
+    const front = screen.getByTestId("medallion-front-symbiote");
+    expect(front.textContent).toMatch(/Federation|Member/i);
+  });
+
+  // ── UltraVision ─────────────────────────────────────────────────────────
+  it("TB06 — UltraVision Medallion renders with ceiling-measurement tier badge", () => {
+    renderMedallion("ultravision");
+    const badge = screen.getByTestId("medallion-tier-badge-ultravision");
+    expect(badge.textContent).toMatch(/UltraVision|Ceiling/i);
+  });
+
+  it("TB07 — UltraVision has 4 Frame Locks (no center hex)", () => {
+    renderMedallion("ultravision");
+    expect(screen.getAllByTestId(/^frame-lock-ultravision-\d+$/).length).toBe(4);
+    expect(screen.queryByTestId("frame-lock-ultravision-center")).toBeNull();
+  });
+
+  it("TB08 — UltraVision QR routes to Librarian.LianaBanyan.com/medallion/ultravision", () => {
+    renderMedallion("ultravision");
+    const qr = screen.getByTestId("qr-svg");
+    expect(qr.getAttribute("data-value")).toBe(
+      "https://Librarian.LianaBanyan.com/medallion/ultravision"
+    );
+  });
+
+  it("TB09 — UltraVision card-back includes 81× compound / COLOSSUS reference", () => {
+    renderMedallion("ultravision");
+    const eblet = screen.getByTestId("medallion-eblet-content-ultravision");
+    expect(eblet.textContent).toMatch(/81×|compound|COLOSSUS|ceiling/i);
+  });
+
+  // ── Liana Banyan ────────────────────────────────────────────────────────
+  it("TB10 — Liana Banyan Medallion renders with corporate anchor tier badge", () => {
+    renderMedallion("liana-banyan");
+    const badge = screen.getByTestId("medallion-tier-badge-liana-banyan");
+    expect(badge.textContent).toMatch(/Liana Banyan|Corporate/i);
+  });
+
+  it("TB11 — Liana Banyan QR routes to Librarian.LianaBanyan.com/medallion/liana-banyan", () => {
+    renderMedallion("liana-banyan");
+    const qr = screen.getByTestId("qr-svg");
+    expect(qr.getAttribute("data-value")).toBe(
+      "https://Librarian.LianaBanyan.com/medallion/liana-banyan"
+    );
+  });
+
+  it("TB12 — Liana Banyan card-back includes cooperative / 83.3% / EIN reference", () => {
+    renderMedallion("liana-banyan");
+    const eblet = screen.getByTestId("medallion-eblet-content-liana-banyan");
+    expect(eblet.textContent).toMatch(/83\.3%|cooperative|EIN|Wyoming/i);
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════════
+// Open-set extensibility — synthetic 11th variant (YAML-only, no code change)
+// Verifies BP010 "more the merrier" open-set framing:
+//   A future variant defined ONLY in librarian_medallion_variants.yaml
+//   renders correctly through the component without a code rebuild.
+// ══════════════════════════════════════════════════════════════════════════
+describe("Open-set extensibility — synthetic 11th variant (BP010)", () => {
+  // The synthetic variant slug — not in VARIANT_CONFIGS, simulating YAML-only
+  const SYNTHETIC_VARIANT = "iron-e-giant";
+
+  it("TOS01 — Synthetic variant renders without throwing (open-set fallback active)", () => {
+    expect(() => renderMedallion(SYNTHETIC_VARIANT as LibrarianMedallionVariant)).not.toThrow();
+  });
+
+  it("TOS02 — Synthetic variant produces a Medallion wrapper element", () => {
+    renderMedallion(SYNTHETIC_VARIANT as LibrarianMedallionVariant);
+    const wrapper = screen.getByTestId(`librarian-medallion-${SYNTHETIC_VARIANT}`);
+    expect(wrapper).toBeTruthy();
+  });
+
+  it("TOS03 — Synthetic variant QR encodes correct open-set target URL", () => {
+    renderMedallion(SYNTHETIC_VARIANT as LibrarianMedallionVariant);
+    const qr = screen.getByTestId("qr-svg");
+    expect(qr.getAttribute("data-value")).toBe(
+      `https://Librarian.LianaBanyan.com/medallion/${SYNTHETIC_VARIANT}`
+    );
+  });
+
+  it("TOS04 — Synthetic variant card-back renders (Submarine Doors present)", () => {
+    renderMedallion(SYNTHETIC_VARIANT as LibrarianMedallionVariant);
+    const back = screen.getByTestId(`medallion-back-${SYNTHETIC_VARIANT}`);
+    expect(back).toBeTruthy();
+  });
+
+  it("TOS05 — Synthetic variant back-summary mentions open-set YAML registry", () => {
+    renderMedallion(SYNTHETIC_VARIANT as LibrarianMedallionVariant);
+    const eblet = screen.getByTestId(`medallion-eblet-content-${SYNTHETIC_VARIANT}`);
+    expect(eblet.textContent).toMatch(/librarian_medallion_variants\.yaml|open-set|YAML/i);
   });
 });

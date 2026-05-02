@@ -35,6 +35,9 @@ const VALID_VARIANTS = new Set<LibrarianMedallionVariant>([
   "pied-piper",
   "ai-tuning",
   "furnace",
+  "symbiote",
+  "ultravision",
+  "liana-banyan",
 ]);
 
 function isValidVariant(v: string | undefined): v is LibrarianMedallionVariant {
@@ -114,7 +117,7 @@ export default function MedallionPage() {
             </div>
           </div>
         ) : (
-          /* Gallery — all 7 variants */
+          /* Gallery — all 10 variants (+ open-set) */
           <div className="space-y-8">
             <div className="text-center space-y-2">
               <h1 className="text-2xl font-bold tracking-tight">
@@ -123,8 +126,10 @@ export default function MedallionPage() {
               <p className="text-sm text-muted-foreground max-w-xl mx-auto">
                 All Medallions are Librarian variants. One brand — many doors.
                 Cathedral, Pied Piper, Furnace, Canon, Platform Rules, Project
-                Rules, and AI Tuning are all versions of the same Librarian
-                identity. Click any card to flip and explore.
+                Rules, AI Tuning, Symbiote, UltraVision, and Liana Banyan are
+                all versions of the same Librarian identity. Click any card to
+                flip and explore. Extended via{" "}
+                <span className="font-mono text-xs">librarian_medallion_variants.yaml</span>.
               </p>
             </div>
 

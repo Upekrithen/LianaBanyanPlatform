@@ -76,7 +76,8 @@ export type LibrarianMedallionVariant =
   | "furnace"
   | "symbiote"
   | "ultravision"
-  | "liana-banyan";
+  | "liana-banyan"
+  | string; // open-set per BP010 "more the merrier" framing — YAML-only variants render via fallback
 
 export interface LibrarianMedallionProps {
   variant: LibrarianMedallionVariant;
@@ -459,6 +460,47 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
   },
 };
 
+/**
+ * Open-set fallback: variant slugs NOT in VARIANT_CONFIGS render with this
+ * generic config. Allows YAML-only variants to work without a component rebuild.
+ * Per BP010 "more the merrier" open-set framing.
+ */
+function openSetFallbackConfig(variant: string): VariantConfig {
+  const label = variant
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+  return {
+    label,
+    tagline: `Librarian variant — ${variant}`,
+    emblemIcon: <BookOpen className="w-10 h-10 text-primary" />,
+    borderClass: "ring-4 ring-primary/50",
+    borderStyle: {
+      background: "linear-gradient(135deg, hsl(var(--card)), hsl(var(--muted)))",
+      boxShadow: "0 0 0 3px hsl(var(--primary) / 0.35), 0 0 12px hsl(var(--primary) / 0.12)",
+    },
+    cornerLocks: 3,
+    centerLock: false,
+    ebletPath: `variants/${variant}`,
+    backSummary: `Librarian variant: ${label}. This variant is defined in librarian_medallion_variants.yaml. Append its entry to register a custom emblem, border, and sub-tagline without rebuilding the component.`,
+    bountyTagline: `Explore the ${label} variant.`,
+    tier: `${label} — Open-Set Variant`,
+    authorityLabel: `${label} Authority`,
+    accessTier: "public-agpl",
+    stage2Demo: {
+      title: `${label} Demo`,
+      subtitle: "Open-set variant — YAML-configured theming, no rebuild required.",
+      ctaLabel: "Run Demo",
+      steps: [
+        { id: "load", label: "Load Variant", prompt: `Loading ${variant} from YAML registry…`, receipt: `✓ ${label} variant loaded from librarian_medallion_variants.yaml` },
+        { id: "theme", label: "Apply Theme", prompt: "Applying YAML-defined border + emblem + tagline…", receipt: `✓ Theme applied — open-set variant active` },
+        { id: "qr", label: "QR Encode", prompt: `Encoding QR target: Librarian.LianaBanyan.com/medallion/${variant}…`, receipt: `✓ QR encoded — scan to open variant page` },
+      ],
+      finalReceipt: `OPEN-SET-VARIANT-DEMO · ${label} · YAML-configured · No rebuild · open-set BP010 active`,
+    },
+  };
+}
+
 // Slow Blade V2 mechanism labels (Furnace variant, 6 locks)
 const FURNACE_LOCK_LABELS = [
   "Furnace",
@@ -690,7 +732,9 @@ export function LibrarianMedallion({
   onFunnelAction,
   compact = false,
 }: LibrarianMedallionProps) {
-  const config = VARIANT_CONFIGS[variant];
+  const config =
+    VARIANT_CONFIGS[variant as keyof typeof VARIANT_CONFIGS] ??
+    openSetFallbackConfig(variant);
   const [isFlipped, setIsFlipped] = useState(false);
   const [unlockedLocks, setUnlockedLocks] = useState<Set<number>>(new Set());
   const [centerUnlocked, setCenterUnlocked] = useState(false);

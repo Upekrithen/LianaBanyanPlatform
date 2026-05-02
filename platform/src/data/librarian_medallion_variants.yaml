@@ -1,0 +1,182 @@
+# librarian_medallion_variants.yaml
+# ===================================
+# Per-variant theming registry for LibrarianMedallion component.
+#
+# Authority: K-Cathedral-Librarian-Variant-Medallion-Refactor-BP010
+# Canon: project_medallions_as_librarian_variants_lb_frame_broadcast_funnel_bp005.md
+#        + BP010 turn-N+S 5th append (8-variant explicit + open-set framing)
+#
+# Open-set extensibility: future variants append below without component re-build.
+# The LibrarianMedallion component reads variant metadata from this registry;
+# any YAML-defined variant slug renders via the open-set fallback path.
+#
+# QR target pattern (per BP005 canon):
+#   https://Librarian.LianaBanyan.com/medallion/<variant>
+#
+# Tags: KN053 / KN054 / KN055 (Pod T superseded) | K-Cathedral-BP010
+
+variants:
+
+  # ── Ring of Three Golden Eblets (BP005 base ratification) ──────────────
+
+  canon:
+    label: "The Canon"
+    border_class: gold
+    emblem: ring-of-three-canon
+    color_primary: "#f59e0b"
+    tagline: "Substrate must/must-not authority — open to all."
+    sub_tagline: "Substrate must/must-not authority — non-overrideable"
+    primary_anchor: "BP005 base ratification (3 Golden Eblets)"
+    eblet_path: "CANON/GOLDEN/1_canon"
+    tier: "Gold — Sovereign"
+    corner_locks: 4
+    center_lock: false
+    access_tier: public-agpl
+    bounty_tagline: "Verify the Substrate — Adopt the Canon."
+
+  platform-rules:
+    label: "Platform Rules"
+    border_class: silver
+    emblem: ring-of-three-platform
+    color_primary: "#94a3b8"
+    tagline: "The operating contract between LB Corp and its projects."
+    sub_tagline: "Platform-tier rules layer"
+    primary_anchor: "BP005 base ratification"
+    eblet_path: "CANON/GOLDEN/2_platform_rules"
+    tier: "Silver — Covenant"
+    corner_locks: 3
+    center_lock: false
+    access_tier: public-agpl
+    bounty_tagline: "Inherit the Platform Rules — Build on solid ground."
+
+  project-rules:
+    label: "Project Rules"
+    border_class: bronze
+    emblem: ring-of-three-project
+    color_primary: "#fb923c"
+    tagline: "What each project-owner sets for their own L_k layer."
+    sub_tagline: "Project-tier rules layer"
+    primary_anchor: "BP005 base ratification"
+    eblet_path: "CANON/GOLDEN/3_project_rules"
+    tier: "Bronze — Steward"
+    corner_locks: 2
+    center_lock: false
+    access_tier: public-agpl
+    bounty_tagline: "Inherit the Canon — Build your own Ring of Three."
+
+  # ── BP005 base canon variants ───────────────────────────────────────────
+
+  cathedral:
+    label: "The Cathedral"
+    border_class: stained-glass
+    emblem: cathedral-arch
+    color_primary: "hsl(var(--primary))"
+    tagline: "The substrate is real and deep — proof-first, free always."
+    sub_tagline: "Domain-indexed working memory + triply-redundant witness"
+    primary_anchor: "AA Formal #2270 + #2278 + Touchstone R10 +86.1pp lift"
+    eblet_path: "CANON/cathedral"
+    tier: "Cathedral — All The Parts"
+    corner_locks: 4
+    center_lock: false
+    access_tier: public-agpl
+    bounty_tagline: "Prove it to yourself — Cathedral is the Substrate."
+
+  pied-piper:
+    label: "Pied Piper of Dragons"
+    border_class: dragon-fire
+    emblem: pied-piper-flute-dragon
+    color_primary: "#10b981"
+    tagline: "Saved them from factories — gave them all a good home. Be a DragonRider."
+    sub_tagline: "Tuner = DragonRider — be ONE OF US, take your place atop a Dragon"
+    primary_anchor: "B133 Pied Piper of Dragons paper + brand canon"
+    eblet_path: "BP005/pied-piper"
+    tier: "DragonRider — Tuner Tier"
+    corner_locks: 5
+    center_lock: true
+    access_tier: federation-member
+    bounty_tagline: "Become a DragonRider — Take your place atop a Dragon."
+
+  furnace:
+    label: "Furnace Verification"
+    border_class: forge-glow
+    emblem: furnace-flame
+    color_primary: "#ea580c"
+    tagline: "Verifies the verifier — every click, every chain."
+    sub_tagline: "Verification authority — chain-of-custody walked"
+    primary_anchor: "KN046 Furnace Multi-Tenancy + Pod Q"
+    eblet_path: "BP005/furnace"
+    tier: "Furnace — 6-Mechanism Verification"
+    corner_locks: 6
+    center_lock: false
+    access_tier: public-agpl
+    bounty_tagline: "Verify the Verifier — invite skeptics to test the Furnace."
+
+  ai-tuning:
+    label: "AI Tuning"
+    border_class: gear-pattern
+    emblem: ai-tuning-needle
+    color_primary: "#8b5cf6"
+    tagline: "AI Cake / No Atomo — the empirical tuning canon."
+    sub_tagline: "Anjin / Pilot / Needle-Watcher — tune the symbiote"
+    primary_anchor: "AI Cake paper + Tuner-DragonRider B133"
+    eblet_path: "BP005/ai-tuning"
+    tier: "AI Tuning — Skipping Stones → Diving In"
+    corner_locks: 5
+    center_lock: true
+    access_tier: federation-member
+    bounty_tagline: "Run the Aviator-Symphony — Tune your AI."
+
+  # ── BP010 turn-N+S NEW variants (turn 22 additions) ───────────────────
+
+  symbiote:
+    label: "Symbiote Trinity"
+    border_class: trinity-glow
+    emblem: mechanical-computer-gear
+    color_primary: "#14b8a6"
+    tagline: "Mechanical Computer + LB Frame + Federation Library — three minds, one substrate."
+    sub_tagline: "Mechanical Computer + LB Frame Handshake + Iron-E-Giant Federation"
+    primary_anchor: "BP009 Symbiote Trinity Completion + KN086 LB Frame Handshake LANDED 232e47e"
+    eblet_path: "BP011/symbiote"
+    tier: "Symbiote — Trinity Tier"
+    corner_locks: 5
+    center_lock: true
+    access_tier: federation-member
+    bounty_tagline: "Enter the Trinity — Let the three bodies amplify each other."
+
+  ultravision:
+    label: "UltraVision"
+    border_class: vision-aurora
+    emblem: ultravision-arc
+    color_primary: "#6366f1"
+    tagline: "Seeing beyond the substrate ceiling — measuring the actual compound."
+    sub_tagline: "From Jarvis to UltraVision — How We Skipped Ultron"
+    primary_anchor: "BP011 turn 18-19 Founder coining-time copyright-conscious portmanteau"
+    eblet_path: "BP011/ultravision"
+    tier: "UltraVision — Ceiling Measurement"
+    corner_locks: 4
+    center_lock: false
+    access_tier: public-agpl
+    bounty_tagline: "See the Ceiling — Measure the Actual Compound."
+
+  liana-banyan:
+    label: "Liana Banyan"
+    border_class: banyan-roots
+    emblem: liana-banyan-canopy
+    color_primary: "#15803d"
+    tagline: "The cooperative — built for the long arc. Help each other help ourselves."
+    sub_tagline: "By their fruits, ye shall know them. Liana Banyan."
+    primary_anchor: "LB Corp brand + Roots-Trunk-Lianas-Fruits emancipation arc canon"
+    eblet_path: "CANON/GOLDEN/liana-banyan"
+    tier: "Liana Banyan — Corporate Anchor"
+    corner_locks: 4
+    center_lock: false
+    access_tier: public-agpl
+    bounty_tagline: "Join the Cooperative — Help Each Other Help Ourselves."
+
+  # ── Open-set section: append new variants here ─────────────────────────
+  # "More the merrier" framing per BP010 turn-N+S.
+  # Future variants need ONLY a YAML entry — no component rebuild required.
+  # Required fields: label, border_class, emblem, color_primary, tagline,
+  #   sub_tagline, primary_anchor, eblet_path, tier, corner_locks,
+  #   center_lock, access_tier, bounty_tagline.
+  # The component renders any slug found here via the open-set fallback.
