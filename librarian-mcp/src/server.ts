@@ -78,6 +78,9 @@ import {
   handleValidateBountyReceipt,
 } from "./three_tier/bounty_receipt_validator.js";
 import {
+  handleProcessBountyMarksPayout,
+} from "./three_tier/bounty_marks_payout.js";
+import {
   createSubscription,
   activateSubscription,
   activateOneTimeAccess,
@@ -6070,6 +6073,72 @@ registerTool(
       bounty_id,
       bounty_class: bounty_class as Parameters<typeof handleValidateBountyReceipt>[0]["bounty_class"],
       receipt_json: receipt_json as Record<string, unknown>,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// TOOL: process_bounty_marks_payout (KN-H8 / BP017)
+// ────────────────────────────────────────────────────────────────────────────
+/**
+ * process_bounty_marks_payout — KN-H8 / BP017 Bounty Marks Payout Integration
+ *
+ * Write-class tool — atomically processes a Bounty Marks payout when a receipt
+ * has passed KN-H7 validator PASS criteria.
+ *
+ * FORK doctrine compliance:
+ *   - Payout is Marks-class ONLY. No fiat bridge.
+ *   - cash_out_bounty_marks_to_fiat DOES NOT EXIST in this codebase (structural absence).
+ *   - Composes with KN105 Excalibur share-back-pay FORK-compliant precedent.
+ *
+ * Tier multipliers: Tier A=1.0×, Tier B=1.25×, Tier C=1.5×, Cross-tier=2.0×.
+ * BRIDLE Rule 4: bare pass (margin<0.5pp) capped at 0.70 quality factor.
+ * Year of Jubilee: append-only audit trail; one payout per receipt.
+ */
+server.tool(
+  "process_bounty_marks_payout",
+  "KN-H8 / BP017 — Atomic Bounty Marks payout. Write-class tool. " +
+    "Triggered when a bounty receipt has passed the KN-H7 validate_bounty_receipt tool. " +
+    "FORK doctrine: payout is Marks-class ONLY — no fiat bridge. " +
+    "cash_out_bounty_marks_to_fiat does NOT exist in this codebase (structural absence). " +
+    "Tier multipliers: Tier A=1.0×, Tier B=1.25×, Tier C=1.5×, Cross-tier=2.0×. " +
+    "BRIDLE Rule 4 Phase B5: bare pass (margin<0.5pp) → completion_quality_factor capped at 0.70. " +
+    "Year of Jubilee append-only ledger: no mutation, no deletion, one payout per receipt. " +
+    "Gates: pass=true, Founder review clear (requires_founder_review=false OR founder_review_status='approved'), " +
+    "not already paid. " +
+    "Updates: bounty_payout_ledger (append) + profiles.current_marks_balance (+marks_earned) + " +
+    "backed_marks_ledger (source=bounty_payout, direction=credit). " +
+    "Membership-orthogonal: $5/year is access-gate only; bounty payouts are LB-currency-class.",
+  {
+    receipt_id: z
+      .string()
+      .describe(
+        "UUID of the bounty_receipts_validation_log row to pay out. " +
+          "Obtain from the validate_bounty_receipt tool output (validation.bounty_id is the poster; " +
+          "the log row id is the receipt_id for payout).",
+      ),
+    member_id: z
+      .string()
+      .describe(
+        "UUID of the member receiving the Marks payout. " +
+          "Must match the submitted_by field on the validation log row.",
+      ),
+    standard_rate: z
+      .number()
+      .int()
+      .positive()
+      .optional()
+      .describe(
+        "Base Marks rate before tier multiplier. Default: 100 Marks. " +
+          "marks_earned = floor(standard_rate × tier_multiplier × completion_quality_factor). " +
+          "Tier multipliers: A=1.0×, B=1.25×, C=1.5×, Cross=2.0×.",
+      ),
+  },
+  async ({ receipt_id, member_id, standard_rate }) => {
+    const result = await handleProcessBountyMarksPayout({
+      receipt_id,
+      member_id,
+      standard_rate,
     });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   },

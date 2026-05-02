@@ -57,7 +57,7 @@ export default function WalletPage() {
         };
       }
 
-      const [creditWalletRes, marksLedgerRes, jouleBalanceRes, creditTxRes, marksTxRes, joulesTxRes] =
+      const [creditWalletRes, marksLedgerRes, jouleBalanceRes, creditTxRes, marksTxRes, joulesTxRes, bountyPayoutRes] =
         await Promise.all([
           supabase
             .from("credit_wallets" as never)
@@ -113,6 +113,22 @@ export default function WalletPage() {
                 created_at: string;
               }[] | null;
             }>,
+          // KN-H8: Bounty Marks payout history
+          supabase
+            .from("bounty_payout_ledger" as never)
+            .select("id, marks_earned, tier_class, tier_multiplier, completion_quality_factor, payout_at")
+            .eq("member_id", user.id)
+            .order("payout_at", { ascending: false })
+            .limit(40) as Promise<{
+              data: {
+                id: string;
+                marks_earned: number;
+                tier_class: string;
+                tier_multiplier: number;
+                completion_quality_factor: number;
+                payout_at: string;
+              }[] | null;
+            }>,
         ]);
 
       const marksEntries = marksLedgerRes.data ?? [];
@@ -127,6 +143,21 @@ export default function WalletPage() {
       const creditTransactions = creditTxRes.data ?? [];
       const marksTransactions = marksTxRes.data ?? [];
       const joulesTransactions = joulesTxRes.data ?? [];
+      const bountyPayouts = bountyPayoutRes.data ?? [];
+
+      // Tier class display labels (KN-H8)
+      const tierLabel = (tier_class: string) => {
+        const map: Record<string, string> = {
+          tier_a_floor_verification:  "Tier A (1.0×)",
+          tier_b_uplift_verification: "Tier B (1.25×)",
+          tier_c_founder_replication: "Tier C (1.5×)",
+          cross_tier_comparison:      "Cross-Tier (2.0×)",
+        };
+        return map[tier_class] ?? tier_class;
+      };
+
+      // Add bounty Marks to the running Marks balance (one-way ratchet contribution)
+      const bountyMarksTotal = bountyPayouts.reduce((sum, row) => sum + Number(row.marks_earned || 0), 0);
 
       const activity: WalletActivityItem[] = [
         ...creditTransactions.map((row) => ({
@@ -159,6 +190,16 @@ export default function WalletPage() {
             source: "joules_transactions" as const,
           };
         }),
+        // KN-H8: Bounty Marks payout history (FORK-compliant; append-only ledger)
+        ...bountyPayouts.map((row) => ({
+          id: `bounty-${row.id}`,
+          currency: "marks" as const,
+          amount: Number(row.marks_earned || 0),
+          description: `Bounty Marks Payout — ${tierLabel(row.tier_class)}`,
+          createdAt: row.payout_at,
+          direction: "in" as const,
+          source: "bounty_payout_ledger" as const,
+        })),
       ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
       return {
@@ -170,7 +211,7 @@ export default function WalletPage() {
               creditTransactions.length > 0 ? formatMovement(Number(creditTransactions[0].amount || 0)) : undefined,
           },
           marks: {
-            balance: marksBalance,
+            balance: marksBalance + bountyMarksTotal,
             roleLabel: "Participation and governance utility with accountability context.",
             lastTransaction:
               marksTransactions.length > 0 ? formatMovement(Number(marksTransactions[0].amount || 0)) : undefined,

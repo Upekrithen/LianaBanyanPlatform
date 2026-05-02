@@ -9,7 +9,7 @@ export type WalletActivityItem = {
   description: string;
   createdAt: string;
   direction: "in" | "out" | "neutral";
-  source: "credit_transactions" | "marks_transactions" | "joules_transactions";
+  source: "credit_transactions" | "marks_transactions" | "joules_transactions" | "bounty_payout_ledger";
 };
 
 export type CurrencySummary = {
