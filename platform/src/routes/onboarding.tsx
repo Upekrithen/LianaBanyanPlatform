@@ -54,6 +54,7 @@ export const onboardingRoutes = (
     <Route path="/RedCarpet" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/RedCarpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/red-carpet" element={<LazyPage><RedCarpetLandingV2Page /></LazyPage>} />
+    <Route path="/red-carpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/redcarpet" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/redcarpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/launch" element={<LazyPage><LaunchHub /></LazyPage>} />

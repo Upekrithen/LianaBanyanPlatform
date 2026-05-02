@@ -1153,10 +1153,48 @@ export function findRecipientByName(name: string): Recipient | null {
 }
 
 /**
+ * Wave 1 slug alias map: underscore slugs (letter scaffold convention) → hyphenated registry IDs.
+ * Enables /red-carpet/buffett_w to resolve to the warren-buffett registry entry.
+ * Source: platform/src/data/red_carpet_recipients/index.ts (Wave 1 canonical registry)
+ */
+const WAVE1_SLUG_ALIASES: Record<string, string> = {
+  buffett_w: "warren-buffett",
+  doctorow_c: "cory-doctorow",
+  schneider_n: "nathan-schneider",
+  brynjolfsson_e: "erik-brynjolfsson",
+  khan_s: "sal-khan",
+  scott_m: "mackenzie-scott",
+  scholz_t: "trebor-scholz",
+  benkler_y: "yochai-benkler",
+  marks_h: "howard-marks",
+  raworth_k: "kate-raworth",
+  perel_e: "esther-perel",
+  godin_s: "seth-godin",
+  rushkoff_d: "douglas-rushkoff",
+  newmark_c: "craig-newmark",
+  white_m: "molly-white",
+  green_h: "hank-green",
+  poo_aj: "ai-jen-poo",
+  carter_m: "majora-carter",
+  parton_d: "dolly-parton",
+  acemoglu_d: "daron-acemoglu",
+  mazzucato_m: "mariana-mazzucato",
+  giridharadas_a: "anand-giridharadas",
+  klein_e: "ezra-klein",
+  patel_n: "nilay-patel",
+  sinek_s: "simon-sinek",
+  pitbull: "pitbull",
+  ocasiocortez_a: "alexandria-ocasio-cortez",
+};
+
+/**
  * Find a recipient by their URL slug (id field).
+ * Also resolves Wave 1 underscore slugs (e.g. buffett_w → warren-buffett).
  */
 export function findRecipientBySlug(slug: string): Recipient | null {
-  return RECIPIENTS.find((r) => r.id === slug.toLowerCase()) || null;
+  const normalized = slug.toLowerCase();
+  const resolvedId = WAVE1_SLUG_ALIASES[normalized] ?? normalized;
+  return RECIPIENTS.find((r) => r.id === resolvedId) || null;
 }
 
 /**

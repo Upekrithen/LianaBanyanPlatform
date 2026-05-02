@@ -1,226 +1,141 @@
 /**
- * RED CARPET VERIFICATION EDGE FUNCTION
- * ======================================
- * Two actions:
- *   1. "send-code" — Generate a 6-digit code, store it, send to email
- *   2. "verify-code" — Check the code against stored record
+ * red-carpet-verify — Supabase Edge Function
+ * ===========================================
+ * Wave 1 Crown Letter Red Carpet verification endpoint.
+ * Returns per-recipient config for a given slug.
  *
- * Called from the /RedCarpet page when a domain-matched email is entered.
+ * K-Red-Carpet-Wave-1-Verification-BP010 (Founder direct BP010 turn 25)
+ * Cohort: 30 recipients (22 PLOW-AHEAD + 8 WORTH-IT per B131)
+ * Bill Gates: excluded (Epstein-indefinite block)
+ * Melinda French Gates: IN (Priority 2 PLOW-AHEAD)
+ *
+ * Usage:
+ *   GET /red-carpet-verify?slug=buffett_w
+ *   → 200 { recipient_slug, display_name, tier_class, frame_strategy, wave_class, share_link, status }
+ *   GET /red-carpet-verify?slug=unknown-person
+ *   → 404 { error: "recipient not found" }
+ *
+ * Slug convention: <lastname>_<firstinitial> — matches letter scaffold filenames.
+ * Source of truth: platform/src/data/red_carpet_recipients/index.ts
+ * (hardcoded here; edge functions cannot import from platform/src/)
  */
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+// ─────────────────────────────────────────────────────────
+// TYPES
+// ─────────────────────────────────────────────────────────
 
-function generateCode(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+interface Wave1RecipientConfig {
+  recipient_slug: string;
+  display_name: string;
+  tier_class: string;
+  frame_strategy: string;
+  wave_class: "PLOW-AHEAD" | "WORTH-IT";
+  priority: number;
+  share_link: string;
+  status: string;
+  legacy_registry_id?: string;
 }
 
-Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+// ─────────────────────────────────────────────────────────
+// CORS HEADERS
+// ─────────────────────────────────────────────────────────
+
+const CORS_HEADERS: Record<string, string> = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+};
+
+// ─────────────────────────────────────────────────────────
+// WAVE 1 REGISTRY — 30 RECIPIENTS
+// Mirrored from platform/src/data/red_carpet_recipients/index.ts
+// ─────────────────────────────────────────────────────────
+
+const BASE_URL = "https://lianabanyan.com/red-carpet";
+const STATUS = "scaffold-ready";
+
+const WAVE1_REGISTRY: Record<string, Wave1RecipientConfig> = {
+  // PLOW-AHEAD — Sub-Wave 1a: Foundational Allies (Priority 1)
+  buffett_w: { recipient_slug: "buffett_w", display_name: "Warren Buffett", tier_class: "enterprise", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 1, share_link: `${BASE_URL}/buffett_w`, status: STATUS, legacy_registry_id: "warren-buffett" },
+  doctorow_c: { recipient_slug: "doctorow_c", display_name: "Cory Doctorow", tier_class: "cooperative", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 1, share_link: `${BASE_URL}/doctorow_c`, status: STATUS, legacy_registry_id: "cory-doctorow" },
+  schneider_n: { recipient_slug: "schneider_n", display_name: "Nathan Schneider", tier_class: "cooperative", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 1, share_link: `${BASE_URL}/schneider_n`, status: STATUS, legacy_registry_id: "nathan-schneider" },
+  brynjolfsson_e: { recipient_slug: "brynjolfsson_e", display_name: "Erik Brynjolfsson", tier_class: "academic", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 1, share_link: `${BASE_URL}/brynjolfsson_e`, status: STATUS, legacy_registry_id: "erik-brynjolfsson" },
+
+  // PLOW-AHEAD — Sub-Wave 1b: High-Amplification (Priority 2)
+  khan_s: { recipient_slug: "khan_s", display_name: "Sal Khan", tier_class: "edu", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 2, share_link: `${BASE_URL}/khan_s`, status: STATUS, legacy_registry_id: "sal-khan" },
+  scott_m: { recipient_slug: "scott_m", display_name: "MacKenzie Scott", tier_class: "cooperative", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 2, share_link: `${BASE_URL}/scott_m`, status: STATUS, legacy_registry_id: "mackenzie-scott" },
+  scholz_t: { recipient_slug: "scholz_t", display_name: "Trebor Scholz", tier_class: "cooperative", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 2, share_link: `${BASE_URL}/scholz_t`, status: STATUS, legacy_registry_id: "trebor-scholz" },
+  frenchgates_m: { recipient_slug: "frenchgates_m", display_name: "Melinda French Gates", tier_class: "cooperative", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 2, share_link: `${BASE_URL}/frenchgates_m`, status: STATUS },
+
+  // PLOW-AHEAD — Sub-Wave 1c: Academic / Intellectual Layer (Priority 3)
+  benkler_y: { recipient_slug: "benkler_y", display_name: "Yochai Benkler", tier_class: "academic", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 3, share_link: `${BASE_URL}/benkler_y`, status: STATUS, legacy_registry_id: "yochai-benkler" },
+  marks_h: { recipient_slug: "marks_h", display_name: "Howard Marks", tier_class: "enterprise", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 3, share_link: `${BASE_URL}/marks_h`, status: STATUS, legacy_registry_id: "howard-marks" },
+  raworth_k: { recipient_slug: "raworth_k", display_name: "Kate Raworth", tier_class: "academic", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 3, share_link: `${BASE_URL}/raworth_k`, status: STATUS, legacy_registry_id: "kate-raworth" },
+  perel_e: { recipient_slug: "perel_e", display_name: "Esther Perel", tier_class: "media", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 3, share_link: `${BASE_URL}/perel_e`, status: STATUS, legacy_registry_id: "esther-perel" },
+  godin_s: { recipient_slug: "godin_s", display_name: "Seth Godin", tier_class: "media", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 3, share_link: `${BASE_URL}/godin_s`, status: STATUS, legacy_registry_id: "seth-godin" },
+  rushkoff_d: { recipient_slug: "rushkoff_d", display_name: "Douglas Rushkoff", tier_class: "media", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 3, share_link: `${BASE_URL}/rushkoff_d`, status: STATUS, legacy_registry_id: "douglas-rushkoff" },
+  newmark_c: { recipient_slug: "newmark_c", display_name: "Craig Newmark", tier_class: "media", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 3, share_link: `${BASE_URL}/newmark_c`, status: STATUS, legacy_registry_id: "craig-newmark" },
+
+  // PLOW-AHEAD — Sub-Wave 1d: Commentariat + Cultural (Priority 4–7)
+  white_m: { recipient_slug: "white_m", display_name: "Molly White", tier_class: "media", frame_strategy: "ultravision", wave_class: "PLOW-AHEAD", priority: 4, share_link: `${BASE_URL}/white_m`, status: STATUS, legacy_registry_id: "molly-white" },
+  green_h: { recipient_slug: "green_h", display_name: "Hank Green", tier_class: "media", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 4, share_link: `${BASE_URL}/green_h`, status: STATUS, legacy_registry_id: "hank-green" },
+  poo_aj: { recipient_slug: "poo_aj", display_name: "Ai-jen Poo", tier_class: "cooperative", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 4, share_link: `${BASE_URL}/poo_aj`, status: STATUS, legacy_registry_id: "ai-jen-poo" },
+  carter_m: { recipient_slug: "carter_m", display_name: "Majora Carter", tier_class: "cooperative", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 4, share_link: `${BASE_URL}/carter_m`, status: STATUS, legacy_registry_id: "majora-carter" },
+  parton_d: { recipient_slug: "parton_d", display_name: "Dolly Parton", tier_class: "media", frame_strategy: "biology-roots-trunk", wave_class: "PLOW-AHEAD", priority: 5, share_link: `${BASE_URL}/parton_d`, status: STATUS, legacy_registry_id: "dolly-parton" },
+  mcafee_a: { recipient_slug: "mcafee_a", display_name: "Andrew McAfee", tier_class: "academic", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 7, share_link: `${BASE_URL}/mcafee_a`, status: STATUS },
+  mollick_e: { recipient_slug: "mollick_e", display_name: "Ethan Mollick", tier_class: "academic", frame_strategy: "dual-frame", wave_class: "PLOW-AHEAD", priority: 7, share_link: `${BASE_URL}/mollick_e`, status: STATUS },
+
+  // WORTH-IT (8) — Measured-posture dispatch
+  acemoglu_d: { recipient_slug: "acemoglu_d", display_name: "Daron Acemoglu", tier_class: "academic", frame_strategy: "biology-roots-trunk", wave_class: "WORTH-IT", priority: 3, share_link: `${BASE_URL}/acemoglu_d`, status: STATUS, legacy_registry_id: "daron-acemoglu" },
+  mazzucato_m: { recipient_slug: "mazzucato_m", display_name: "Mariana Mazzucato", tier_class: "academic", frame_strategy: "biology-roots-trunk", wave_class: "WORTH-IT", priority: 3, share_link: `${BASE_URL}/mazzucato_m`, status: STATUS, legacy_registry_id: "mariana-mazzucato" },
+  giridharadas_a: { recipient_slug: "giridharadas_a", display_name: "Anand Giridharadas", tier_class: "media", frame_strategy: "biology-roots-trunk", wave_class: "WORTH-IT", priority: 3, share_link: `${BASE_URL}/giridharadas_a`, status: STATUS, legacy_registry_id: "anand-giridharadas" },
+  klein_e: { recipient_slug: "klein_e", display_name: "Ezra Klein", tier_class: "media", frame_strategy: "biology-roots-trunk", wave_class: "WORTH-IT", priority: 4, share_link: `${BASE_URL}/klein_e`, status: STATUS, legacy_registry_id: "ezra-klein" },
+  patel_n: { recipient_slug: "patel_n", display_name: "Nilay Patel", tier_class: "media", frame_strategy: "dual-frame", wave_class: "WORTH-IT", priority: 4, share_link: `${BASE_URL}/patel_n`, status: STATUS, legacy_registry_id: "nilay-patel" },
+  sinek_s: { recipient_slug: "sinek_s", display_name: "Simon Sinek", tier_class: "media", frame_strategy: "biology-roots-trunk", wave_class: "WORTH-IT", priority: 5, share_link: `${BASE_URL}/sinek_s`, status: STATUS, legacy_registry_id: "simon-sinek" },
+  pitbull: { recipient_slug: "pitbull", display_name: "Pitbull", tier_class: "media", frame_strategy: "biology-roots-trunk", wave_class: "WORTH-IT", priority: 5, share_link: `${BASE_URL}/pitbull`, status: STATUS, legacy_registry_id: "pitbull" },
+  ocasiocortez_a: { recipient_slug: "ocasiocortez_a", display_name: "Alexandria Ocasio-Cortez", tier_class: "cooperative", frame_strategy: "biology-roots-trunk", wave_class: "WORTH-IT", priority: 6, share_link: `${BASE_URL}/ocasiocortez_a`, status: STATUS, legacy_registry_id: "alexandria-ocasio-cortez" },
+};
+
+// ─────────────────────────────────────────────────────────
+// HANDLER
+// ─────────────────────────────────────────────────────────
+
+serve(async (req: Request) => {
+  // CORS preflight
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: CORS_HEADERS });
   }
 
-  try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
-
-    const body = await req.json();
-    const { action } = body;
-
-    // ─── ACTION: SEND CODE ───
-    if (action === 'send-code') {
-      const { email, recipientId, recipientName, category, domain } = body;
-
-      if (!email || !domain) {
-        return new Response(
-          JSON.stringify({ error: 'Email and domain required' }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      const code = generateCode();
-      const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutes
-
-      // Insert the access record with pending status
-      const { data: record, error: insertError } = await supabase
-        .from('red_carpet_access')
-        .insert({
-          email,
-          domain,
-          recipient_id: recipientId || null,
-          recipient_name: recipientName || null,
-          category: category || null,
-          entry_mode: 'domain-pending',
-          verification_code: code,
-          code_expires_at: expiresAt,
-          user_agent: req.headers.get('user-agent') || null,
-          referrer_url: req.headers.get('referer') || null,
-        })
-        .select('id')
-        .single();
-
-      if (insertError) throw insertError;
-
-      // ─── SEND EMAIL ───
-      // Try Resend if API key is configured
-      const resendKey = Deno.env.get('RESEND_API_KEY');
-
-      if (resendKey) {
-        try {
-          const emailResponse = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${resendKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              from: 'Liana Banyan <noreply@lianabanyan.com>',
-              to: [email],
-              subject: `Your verification code: ${code}`,
-              html: `
-                <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
-                  <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 8px;">Liana Banyan</h1>
-                  <p style="color: #666; margin-bottom: 32px;">Red Carpet Verification</p>
-
-                  <div style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 24px;">
-                    <p style="color: #666; font-size: 14px; margin-bottom: 8px;">Your verification code</p>
-                    <div style="font-size: 36px; font-weight: bold; letter-spacing: 8px; font-family: monospace;">${code}</div>
-                    <p style="color: #999; font-size: 12px; margin-top: 12px;">Expires in 15 minutes</p>
-                  </div>
-
-                  <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                    We recognized your organization and have prepared a personalized walkthrough for you.
-                    Enter this code to continue.
-                  </p>
-
-                  <p style="color: #999; font-size: 12px; margin-top: 32px;">
-                    If you didn't request this code, you can safely ignore this email.<br>
-                    LIANA BANYAN CORPORATION — Wyoming C-Corp
-                  </p>
-                </div>
-              `,
-            }),
-          });
-
-          if (!emailResponse.ok) {
-            console.error('Resend error:', await emailResponse.text());
-          } else {
-            console.log(`Verification code sent to ${email}`);
-          }
-        } catch (emailErr) {
-          console.error('Email send failed:', emailErr);
-          // Don't fail the request — code is still stored
-        }
-      } else {
-        // No email service configured — log code for development
-        console.log(`[DEV] Verification code for ${email}: ${code}`);
-        console.log(`[DEV] No RESEND_API_KEY configured. Set it to enable email delivery.`);
-      }
-
-      return new Response(
-        JSON.stringify({
-          success: true,
-          accessId: record.id,
-          message: 'Verification code sent to your email',
-          // In development, include code for testing (remove in production)
-          ...(resendKey ? {} : { devCode: code }),
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // ─── ACTION: VERIFY CODE ───
-    if (action === 'verify-code') {
-      const { accessId, code } = body;
-
-      if (!accessId || !code) {
-        return new Response(
-          JSON.stringify({ error: 'Access ID and code required' }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      // Fetch the record
-      const { data: record, error: fetchError } = await supabase
-        .from('red_carpet_access')
-        .select('*')
-        .eq('id', accessId)
-        .single();
-
-      if (fetchError || !record) {
-        return new Response(
-          JSON.stringify({ error: 'Record not found' }),
-          { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      // Check brute force (max 5 attempts)
-      if (record.verification_attempts >= 5) {
-        return new Response(
-          JSON.stringify({ error: 'Too many attempts. Please request a new code.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      // Check expiration
-      if (new Date(record.code_expires_at) < new Date()) {
-        return new Response(
-          JSON.stringify({ error: 'Code expired. Please request a new code.' }),
-          { status: 410, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      // Increment attempts
-      await supabase
-        .from('red_carpet_access')
-        .update({ verification_attempts: record.verification_attempts + 1 })
-        .eq('id', accessId);
-
-      // Check code
-      if (record.verification_code !== code.trim()) {
-        return new Response(
-          JSON.stringify({ error: 'Invalid code', attemptsRemaining: 4 - record.verification_attempts }),
-          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      // SUCCESS — Mark as verified
-      await supabase
-        .from('red_carpet_access')
-        .update({
-          entry_mode: 'domain-verified',
-          verified_at: new Date().toISOString(),
-        })
-        .eq('id', accessId);
-
-      console.log(`✅ Verified: ${record.email} (${record.domain}) → ${record.recipient_name}`);
-
-      return new Response(
-        JSON.stringify({
-          success: true,
-          verified: true,
-          recipientId: record.recipient_id,
-          recipientName: record.recipient_name,
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
+  if (req.method !== "GET") {
     return new Response(
-      JSON.stringify({ error: 'Unknown action. Use "send-code" or "verify-code".' }),
-      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  } catch (err) {
-    console.error('Red carpet verification error:', err);
-    return new Response(
-      JSON.stringify({ error: 'Internal error', details: err.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: "Method not allowed" }),
+      { status: 405, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } },
     );
   }
+
+  const url = new URL(req.url);
+  const slug = (url.searchParams.get("slug") || "").toLowerCase().trim();
+
+  if (!slug) {
+    return new Response(
+      JSON.stringify({ error: "slug parameter required", example: "?slug=buffett_w" }),
+      { status: 400, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } },
+    );
+  }
+
+  const config = WAVE1_REGISTRY[slug];
+
+  if (!config) {
+    return new Response(
+      JSON.stringify({ error: "recipient not found", slug }),
+      { status: 404, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } },
+    );
+  }
+
+  return new Response(
+    JSON.stringify(config),
+    { status: 200, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } },
+  );
 });
