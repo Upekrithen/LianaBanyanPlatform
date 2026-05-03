@@ -1,0 +1,51 @@
+{
+  "test_id": "bushel_2_colossus_counterfactual_single_knight_sequential",
+  "session": "BP020",
+  "tier": 1,
+  "label": "Bushel 2 — Tier 1: 1 cP Sequential (Colossus Counterfactual)",
+  "candlepower": 1,
+  "subagent_count": 0,
+  "parallel_knight_count": 1,
+  "wall_clock_min_estimated": 15,
+  "entries_written": 1842,
+  "substrate_path": "~/.claude/state/colossus/sequential_1cp/all_shards.synthesis.jsonl",
+  "jsonl_bytes": 2950709,
+  "shard_breakdown": {
+    "shard_1_puddings": 180,
+    "shard_2_aa_formals": 189,
+    "shard_3_crown_letters": 15,
+    "shard_4_papers": 144,
+    "shard_5_milestones_handoffs": 359,
+    "shard_6_founder_review_canon_refs": 422,
+    "shard_7_eblets_memory": 521,
+    "shard_8_sphinx_pheromone_thin": 12
+  },
+  "git_tags": [
+    "bushel-2-scaling-1cp-sequential-shard-1-puddings-landed",
+    "bushel-2-scaling-1cp-sequential-shard-2-aa_formals-landed",
+    "bushel-2-scaling-1cp-sequential-shard-3-crown_letters-landed",
+    "bushel-2-scaling-1cp-sequential-shard-4-papers-landed",
+    "bushel-2-scaling-1cp-sequential-shard-5-milestones_handoffs-landed",
+    "bushel-2-scaling-1cp-sequential-shard-6-founder_review-landed",
+    "bushel-2-scaling-1cp-sequential-shard-7-eblets_memory-landed",
+    "bushel-2-scaling-1cp-sequential-shard-8-sphinx_pheromone-landed",
+    "bushel-2-scaling-1cp-sequential-complete-bp020"
+  ],
+  "counterfactual_to": "bushel_1_titan_8_cp",
+  "bushel_1_baseline": {
+    "candlepower": 8,
+    "wall_clock_min": 29,
+    "entries": 1514,
+    "estimated_cost_usd": 12.16,
+    "parallel_knights": 8,
+    "subagents": 0
+  },
+  "delta_metrics": {
+    "entries_ratio": 1.22,
+    "entries_delta": 328,
+    "note": "Colossus processed MORE files than Bushel 1 because it traversed additional source directories (09_Articles, recursive 08_Papers) that the parallel Knights may have deduped differently"
+  },
+  "colossus_mode": true,
+  "final_receipt_text": "KNIGHT (single-sequential) — BUSHEL 2 COLOSSUS COUNTERFACTUAL LANDED\nArchitecture: 1 cP (no subagents, no parallel Knights)\nEntries: 1,842 across 8 shards\nSubstrate: 2.95 MB ledger-resident\nTag: bushel-2-scaling-1cp-sequential-complete-bp020\nvs Bushel 1 (8 cP): same corpus, parallel fire, 29 min, 1,514 entries",
+  "ts": "2026-05-03T06:26:00Z"
+}
