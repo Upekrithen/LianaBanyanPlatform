@@ -45,6 +45,7 @@ import { createJar, sealJar, queryJars, } from "./house_scribe/jar_lifecycle.js"
 import { assignCoordinate, queryJarsByCoordinate, } from "./house_scribe/coordinate_assignment.js";
 import { updateCellOnEvent, queryLivingCell, buildGridworkSnapshot, detectAndReconcileInconsistencies, } from "./house_scribe/living_gridwork.js";
 import { onThreadClosedWithSynthesis, queryHiveJarStatus, } from "./house_scribe/apiarist_hive_subscriber.js";
+import { queryCrossCathedral, invalidateCrossCache, queryCrossCathedralProvenance, } from "./house_scribe/cross_cathedral_router.js";
 import { runPopulationAudit, } from "./house_scribe/population_audit.js";
 // KN-I3: Reminder Scribe substrate write-back + provenance chain
 import { writeBackViolationEvent, queryRsHistory, drainRetryQueue, aggregateByRule, } from "./reminder_scribe/substrate_writeback.js";
@@ -6078,6 +6079,97 @@ server.tool("house_scribe_apiarist_hive_jar_status", "KN-J4 / BP017 — House Sc
     catch (err) {
         return {
             content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+// ─── KN-J5: Cross-Cathedral Coordinate Routing ───────────────────────────────
+/**
+ * house_scribe_query_jars_cross_cathedral — read-class
+ * Cross-cathedral Jar query via 8-digit-grid wildcard patterns.
+ * Detective TEAM fan-out + cohort-class enforcement + cache + provenance.
+ */
+server.tool("house_scribe_query_jars_cross_cathedral", "KN-J5 / BP017 — House Scribe: cross-cathedral Jar query via 8-digit-grid coordinate patterns. " +
+    "Patterns: `01-*-*-*` (single cathedral), `99-*-*-*` (cross-cathedral reserved), " +
+    "`*-*-*-*` (all cathedrals; Federation Members only), `01..04-*-*-*` (range). " +
+    "Cohort-class enforcement: lone_wolf=own-cathedral only; federation_member=full cross-cathedral. " +
+    "Detective TEAM fan-out per cathedral + synthesis merge. " +
+    "Cache with Augur Living Gate invalidation (KN-J3). " +
+    "Provenance write-back: house_scribe_cross_cathedral_query class. " +
+    "BRIDLE Rule 4: insufficient cohort → reject with advancement-suggestion; cathedral unavailable → partial results + flag.", {
+    pattern: z.string().describe("Cross-cathedral query pattern. Examples: '01-*-*-*' (bishop only), '99-*-*-*' (all cross-cathedral), " +
+        "'*-*-*-*' (all cathedrals; Federation Members only), '01..04-*-*-*' (cathedral range). " +
+        "Standard KN-J2 wildcard/exact patterns also supported for single-cathedral queries."),
+    querier_cohort_class: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .describe("Cohort class of the querying agent. Determines cross-cathedral access scope."),
+    querier_cathedral: z.string().optional().describe("Own cathedral of querier (for lone_wolf own-cathedral restriction). E.g. 'bishop', 'knight'."),
+    limit: z.number().int().min(1).max(1000).optional().describe("Max results returned. Default and max: 1000."),
+    offset: z.number().int().min(0).optional().describe("Pagination offset. Default: 0."),
+    use_cache: z.boolean().optional().describe("Use cached results if fresh. Default: true. False forces fresh fan-out."),
+}, async ({ pattern, querier_cohort_class, querier_cathedral, limit, offset, use_cache }) => {
+    try {
+        const result = queryCrossCathedral({
+            pattern,
+            querier_cohort_class: querier_cohort_class,
+            querier_cathedral,
+            limit,
+            offset,
+            use_cache: use_cache !== false,
+        });
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+            isError: result.cohort_rejected === true || result.data_available === false,
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err), data_available: false }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * house_scribe_invalidate_cross_cache — write-class
+ * Invalidate the cross-cathedral query cache (Augur Living Gate).
+ * Called on Pheromone substrate write-events.
+ */
+server.tool("house_scribe_invalidate_cross_cache", "KN-J5 / BP017 — House Scribe: invalidate cross-cathedral query cache. " +
+    "Called by Augur Living Gate on Pheromone write-events. " +
+    "Pass pattern to invalidate a specific cache entry, or omit to clear all.", {
+    pattern: z.string().optional().describe("Specific cross-cathedral query pattern to invalidate. Omit to clear full cache."),
+}, async ({ pattern }) => {
+    try {
+        invalidateCrossCache(pattern);
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, invalidated: pattern ?? "all" }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * house_scribe_cross_cathedral_provenance — read-class
+ * Query the cross-cathedral provenance log.
+ */
+server.tool("house_scribe_cross_cathedral_provenance", "KN-J5 / BP017 — House Scribe: query the cross-cathedral query provenance log. " +
+    "Returns recent house_scribe_cross_cathedral_query entries. " +
+    "BRIDLE Rule 4: data_available=false if log unavailable.", {
+    limit: z.number().int().min(1).max(500).optional().describe("Max entries to return. Default: 100."),
+}, async ({ limit }) => {
+    try {
+        const entries = queryCrossCathedralProvenance(limit ?? 100);
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: true, entries, count: entries.length }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
             isError: true,
         };
     }
