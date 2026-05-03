@@ -125,6 +125,16 @@ import {
   queryJarsByCoordinate,
 } from "./house_scribe/coordinate_assignment.js";
 import {
+  updateCellOnEvent,
+  queryLivingCell,
+  buildGridworkSnapshot,
+  sweepLivingFlags,
+  fallbackPollAllCells,
+  detectAndReconcileInconsistencies,
+  LIVING_WINDOW_MS,
+  FALLBACK_POLL_INTERVAL_MS,
+} from "./house_scribe/living_gridwork.js";
+import {
   validateCoordinate,
   CATHEDRAL_IDS,
   TIER_IDS,
@@ -7189,6 +7199,132 @@ server.tool(
     } catch (err) {
       return {
         content: [{ type: "text" as const, text: JSON.stringify({ error: String(err), data_available: false }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+// ─── KN-J3: House Scribe Living Gridwork MCP tools ───────────────────────────
+
+/**
+ * house_scribe_cell_event — write-class
+ * Fires a Pheromone-write/Pixie-Dust event on a cell, triggering
+ * sub-ms cell-state-update per the Augur Living Gate pattern.
+ */
+server.tool(
+  "house_scribe_cell_event",
+  "KN-J3 / BP017 — House Scribe: fire Pixie Dust / Pheromone-write event on a grid cell. " +
+    "Triggers Augur Living Gate sub-ms cell-state-update (jar_count + density + decay). " +
+    "Sets cell living=true for living_window_ms (default 60s). " +
+    "Composes with KN-J1 Jar lifecycle + KN-J2 coordinate scheme + Pheromone substrate (#2317). " +
+    "BRIDLE Rule 4: failure surfaces error + flag; no silent state corruption.",
+  {
+    coordinate: z.string().describe("8-digit grid coordinate (e.g. '01-06-02-05')."),
+    event_type: z
+      .enum(["pheromone_write", "jar_added", "jar_sealed", "cell_reconciled", "fallback_poll"])
+      .describe("Type of event triggering cell-state update."),
+    jar_id: z.string().optional().describe("Jar ID involved in the event (if applicable)."),
+    detail: z.string().optional().describe("Human-readable event detail."),
+    living_window_ms: z.number().int().min(1000).max(3600000).optional()
+      .describe("Override: time window (ms) during which cell is living after last event. Default: 60000."),
+  },
+  async (args) => {
+    try {
+      const result = updateCellOnEvent(args);
+      if (!result.success) {
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ error: result.error, bridle_rule_4: result.bridle_rule_4 }, null, 2) }],
+          isError: true,
+        };
+      }
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, cell: result.cell, processing_ms: result.processing_ms }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * house_scribe_query_living_cell — read-class
+ * Returns LivingCellState for a coordinate (jar_count + density + decay + living flag).
+ * BRIDLE Rule 4: data_available=false if state unavailable.
+ */
+server.tool(
+  "house_scribe_query_living_cell",
+  "KN-J3 / BP017 — House Scribe: query living cell state for a coordinate. " +
+    "Returns LivingCellState: jar_count + cell_density_score + decay_score + living flag. " +
+    "living=true while Pheromone events flow; false after silence window (default 60s). " +
+    "BRIDLE Rule 4: data_available=false if state unavailable; fallback_polling flag set when Augur unavailable.",
+  {
+    coordinate: z.string().describe("8-digit coordinate or cell prefix (e.g. '01-06-02-05' or '01-06-02')."),
+  },
+  async ({ coordinate }) => {
+    try {
+      const result = queryLivingCell(coordinate);
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err), data_available: false }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * house_scribe_gridwork_snapshot — read-class
+ * Returns a full living-gridwork snapshot: all tracked cells with current state.
+ */
+server.tool(
+  "house_scribe_gridwork_snapshot",
+  "KN-J3 / BP017 — House Scribe: full living-gridwork snapshot. " +
+    "Returns all tracked cells with living flag + jar_count + density + decay. " +
+    "Includes living/dead/fallback cell counts. " +
+    "BRIDLE Rule 4: data_available=false on failure; never silent state corruption.",
+  {},
+  async () => {
+    try {
+      const snapshot = buildGridworkSnapshot();
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(snapshot, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err), data_available: false }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * house_scribe_reconcile_cells — write-class
+ * Detect and reconcile cell-state inconsistencies against KN-J1 ledger.
+ * BRIDLE Rule 4: flags + reconciles; never silently leaves inconsistent state.
+ */
+server.tool(
+  "house_scribe_reconcile_cells",
+  "KN-J3 / BP017 — House Scribe: detect and reconcile cell-state inconsistencies. " +
+    "Compares cached cell state against KN-J1 jars ledger (source-of-truth). " +
+    "Flags inconsistencies + reconciles. BRIDLE Rule 4 required before any seal operation.",
+  {},
+  async () => {
+    try {
+      const result = detectAndReconcileInconsistencies();
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }],
         isError: true,
       };
     }
