@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync } from "fs";
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync, appendFileSync } from "fs";
 import { autoRegisterFromDetective } from "./wrasse_auto_register.js";
 import { tmpdir, homedir } from "os";
 import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
@@ -109,6 +109,13 @@ import {
 // KN-I1: Reminder Scribe pattern-match engine
 import { runReminderScribeCheck, buildViolationEvent } from "./reminder_scribe/pattern_match_engine.js";
 import { DEFAULT_PREFERENCES } from "./reminder_scribe/rules_registry.js";
+// KN-I2: Catechist Scribe grader extension
+import {
+  runSessionOpenGrade,
+  formatGradeMarkdown,
+  VIOLATION_LOG_PATH,
+  type SessionEvidenceMap,
+} from "./catechist/grader.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -4062,7 +4069,6 @@ registerTool(
 // ═══════════════════════════════════════════
 
 import { createHash } from "crypto";
-import { appendFileSync } from "fs";
 
 const _conductorScribePath = resolve(
   __dirname, "..", "stitchpunks", "scribes", "scribe_Conductor.jsonl"
@@ -6475,7 +6481,13 @@ server.tool(
         correction_proposal_excerpt: correction_proposal_excerpt ?? "",
       };
 
-      // Write to pheromone substrate via Detective TEAM write-back pattern (KN104)
+      // Write to dedicated violation log (Catechist KN-I2 reads this for rolling-7d summary)
+      const logDir = resolve(dirname(__filename), "../stitchpunks/reminder_scribe");
+      mkdirSync(logDir, { recursive: true });
+      const logPath = resolve(logDir, "violation_log.jsonl");
+      appendFileSync(logPath, JSON.stringify(event) + "\n", "utf-8");
+
+      // Also emit to pheromone substrate for Detective TEAM provenance (KN104)
       emitPheromone(
         "ReminderScribe",
         `reminder_scribe_violation_${rule_id}_${session_id}`,
@@ -6507,6 +6519,110 @@ server.tool(
           text: JSON.stringify({
             error: "reminder_scribe_log_violation write error",
             detail: String(err),
+          }, null, 2),
+        }],
+        isError: true,
+      };
+    }
+  },
+);
+
+// ─── KN-I2: Catechist session-open grade MCP tool ────────────────────────────
+/**
+ * catechist_session_open_grade — session-open discipline grading.
+ * Runs R01-R10 base checklist + Reminder Scribe violation-history-summary
+ * (rolling 7-day window) per AI member. Anti-shame: empirical counts/rates only.
+ *
+ * KN036 (base R01-R10) + KN-I2 extension (violation-history-summary block).
+ * BRIDLE Rule 4: if violation log unavailable, surfaces empty-history + flag.
+ *
+ * Substrate write-back: logs catechist_violation_summary provenance event
+ * to pheromone substrate (KN104 Detective TEAM pattern).
+ */
+server.tool(
+  "catechist_session_open_grade",
+  "KN-I2 / BP017 — Catechist session-open discipline grade (R01-R10 + Reminder Scribe violation history). " +
+    "Extends Catechist (#2313 KN036 BP004) with per-AI-member rolling-7-day violation-count + correction-stickiness. " +
+    "Anti-shame discipline: empirical counts/rates only — no moral judgment. " +
+    "Returns structured grade: R01-R10 PASS/WARN/FAIL/SKIP + violation-history table. " +
+    "Optionally returns formatted Markdown for session-open display. " +
+    "BRIDLE Rule 4: if KN-I1 violation log unavailable, surfaces UNAVAILABLE flag + empty-history. " +
+    "Substrate write-back: catechist_violation_summary provenance logged to pheromone. " +
+    "Composes with Reminder Scribe KN-I1 + Bouncer-Scales-Judge KN095 BP011.",
+  {
+    session_id: z
+      .string()
+      .describe("Current session ID (e.g. B135) — used in grade output and provenance."),
+    ai_member: z
+      .enum(["bishop", "knight", "pawn", "rook"])
+      .describe("AI cohort member being graded."),
+    evidence: z
+      .object({
+        brief_me_called_first: z.boolean().optional()
+          .describe("Was brief_me the first tool called at session-open?"),
+        fiat_bridge_detected: z.boolean().optional()
+          .describe("Was any LB-currency-to-fiat conversion language detected in this session?"),
+        kprompt_paths_referenced: z.boolean().optional()
+          .describe("Were any K-prompt paths referenced in this session?"),
+        kprompt_paths_verified: z.boolean().optional()
+          .describe("Were all referenced K-prompt paths verified to exist on disk?"),
+        canon_eblet_write_proposed: z.boolean().optional()
+          .describe("Was a new canon Eblet write proposed in this session?"),
+        prior_detective_fanout: z.boolean().optional()
+          .describe("Was Detective TEAM fan-out done before any canon Eblet write proposal?"),
+        session_debrief_done: z.boolean().optional()
+          .describe("Was moneypenny_debrief (or equivalent) called at session-close?"),
+      })
+      .describe("Session evidence for R01-R10 grading. Omit fields you have no evidence for (graded as SKIP)."),
+    format: z
+      .enum(["json", "markdown"])
+      .optional()
+      .describe("Output format. 'json' returns structured data; 'markdown' returns formatted display text. Default: json."),
+  },
+  async ({ session_id, ai_member, evidence, format }) => {
+    try {
+      const result = runSessionOpenGrade(
+        session_id,
+        ai_member,
+        evidence as SessionEvidenceMap
+      );
+
+      // Substrate write-back: catechist_violation_summary provenance (KN104 pattern)
+      const summaryText = `Catechist grade ${session_id} ${ai_member}: ${result.overall_verdict} | violations_7d=${result.violation_history_summary.total_violations_7d} | stickiness=${result.violation_history_summary.overall_stickiness_pct}%`;
+      emitPheromone(
+        "Catechist",
+        `catechist_grade_${session_id}_${ai_member}`,
+        summaryText,
+        {
+          cathedral: "bishop",
+          synthesisClass: "catechist_violation_summary",
+          flavorClass: { domain: "discipline", cognition: "discipline-class", audience: "bishop-substrate" },
+        },
+      );
+
+      if (format === "markdown") {
+        return {
+          content: [{
+            type: "text" as const,
+            text: formatGradeMarkdown(result),
+          }],
+        };
+      }
+
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify(result, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            error: "catechist_session_open_grade error",
+            detail: String(err),
+            bridle_rule_4: "HALT — grade engine failure. Review catechist/grader.ts.",
           }, null, 2),
         }],
         isError: true,
