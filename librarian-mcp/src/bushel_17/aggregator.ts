@@ -5,17 +5,20 @@
  *   - Per-task Δ across arms (Arm A minus Arm B for each variable)
  *   - Per-class average Δ
  *   - Threshold map: task-class routing recommendation
+ *   - Sipping Ethereal T column (7th field — Bushel 17 EXTENSION BP021):
+ *       per-arm Shadow token aggregates + sipping_ethereal_t_winner per task-class
  *
  * Output: ~/.claude/state/bushel_17/threshold_map.json
  *         + populates the bushel_17 empirical_comparison_receipt.json (Phase E)
  *
  * Canon anchor: compaction_continue_vs_new_session_reorient_sentinel_ab_framework_bushel_17_candidate_canon_bp021.eblet.md
+ * Sipping canon: founder_voice_bp021_additions_carrot_stick_crewman_6_sipping_ethereal_t.eblet.md
  * Sister method: Bushel 16 empirical_comparison_receipt.json
  */
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "fs";
 import { join } from "path";
-import type { SentinelReceipt, SentinelMeasurements } from "./sentinel_runner.js";
+import type { SentinelReceipt, SentinelMeasurements, BackgroundShadowTokensDuringArm } from "./sentinel_runner.js";
 import type { TaskClass } from "./sentinel_corpus.js";
 
 // ---------------------------------------------------------------------------
@@ -34,6 +37,32 @@ export interface VariableDelta {
    * Direction of "better": lower = lower-value wins, higher = higher-value wins.
    */
   better_direction: "lower" | "higher";
+}
+
+/**
+ * Sipping Ethereal T per-arm aggregates for a task-class.
+ * The Δ answers: did Arm A (compaction-continue, Shadows warm) sip more background T
+ * than Arm B (fresh-session, Shadows possibly cold-restarted)?
+ */
+export interface SippingEtherealTSummary {
+  /** Mean total_tokens across arm A receipts for this class. null if scaffold_unfilled. */
+  arm_a_mean_tokens: number | null;
+  /** Mean total_tokens across arm B receipts for this class. null if scaffold_unfilled. */
+  arm_b_mean_tokens: number | null;
+  /**
+   * arm_a_mean_tokens - arm_b_mean_tokens.
+   * Positive = A sipped more Sipping T (continuation arm consumed more Shadow background spend).
+   * Negative = B sipped more Sipping T (fresh-session arm consumed more Shadow background spend).
+   */
+  delta_tokens: number | null;
+  /** Total heartbeats observed across all arm A receipts for this class */
+  arm_a_total_heartbeats: number;
+  /** Total heartbeats observed across all arm B receipts for this class */
+  arm_b_total_heartbeats: number;
+  /** Which arm consumed more background Shadow tokens (lower = less Sipping cost, so lower wins) */
+  sipping_ethereal_t_winner: "A_compaction_continue" | "B_new_session_reorient" | "tie" | "scaffold_unfilled";
+  /** "live": token data available; "scaffold_unfilled": heartbeat format lacks tokens_consumed */
+  instrumentation_status: "live" | "scaffold_unfilled";
 }
 
 export interface PerTaskDelta {
@@ -67,6 +96,8 @@ export interface PerClassSummary {
   avg_delta_r_check_violations: number | null;
   avg_delta_coherence: number | null;
   class_winner: "A_compaction_continue" | "B_new_session_reorient" | "tie" | "insufficient_data";
+  /** Sipping Ethereal T aggregates for this class (7th column — Bushel 17 EXTENSION BP021) */
+  sipping_ethereal_t: SippingEtherealTSummary;
 }
 
 /** The threshold map — the primary receipt artifact */
@@ -105,6 +136,31 @@ export interface AggregatorOutput {
   per_class: PerClassSummary[];
   threshold_map: ThresholdMap;
   g5_validation: { ok: boolean; message: string };
+  /**
+   * Cost-stream taxonomy (Bushel 17 EXTENSION — Sipping Ethereal T).
+   * Lists all four tracked cost-streams for the AAR Conductor-routing-review section.
+   */
+  cost_streams: {
+    knight_fire_bookend_t: { status: "instrumented"; source: "KN-S3 BP018" };
+    bushel_pod_parallel_t: { status: "instrumented"; source: "TITAN-within-TITAN BP020" };
+    bishop_class_t: { status: "external_billing_only"; source: "Anthropic dashboard" };
+    sipping_ethereal_t: { status: "live" | "scaffold_unfilled"; source: string };
+  };
+  /**
+   * Per-class Sipping Ethereal T aggregates (7th column).
+   * Answers: how much did Shadows sip during each arm's execution window?
+   */
+  sipping_ethereal_t_taxonomy: {
+    lookup: SippingEtherealTSummary;
+    author: SippingEtherealTSummary;
+    bushel_design: SippingEtherealTSummary;
+    /** Overall Sipping status across all classes */
+    overall_instrumentation_status: "live" | "scaffold_unfilled";
+    /** Total heartbeats observed across all arm A receipts */
+    total_arm_a_heartbeats: number;
+    /** Total heartbeats observed across all arm B receipts */
+    total_arm_b_heartbeats: number;
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -160,6 +216,53 @@ function computeVariableDelta(
   }
 
   return { arm_a_mean: a_mean, arm_b_mean: b_mean, delta, winner, better_direction: betterDirection };
+}
+
+// ---------------------------------------------------------------------------
+// Sipping Ethereal T aggregation helper (Bushel 17 EXTENSION BP021)
+// ---------------------------------------------------------------------------
+
+function computeSippingEtherealT(
+  aReceipts: SentinelReceipt[],
+  bReceipts: SentinelReceipt[]
+): SippingEtherealTSummary {
+  const aSipping = aReceipts
+    .map((r) => r.background_shadow_tokens_during_arm)
+    .filter((s): s is BackgroundShadowTokensDuringArm => s !== undefined);
+  const bSipping = bReceipts
+    .map((r) => r.background_shadow_tokens_during_arm)
+    .filter((s): s is BackgroundShadowTokensDuringArm => s !== undefined);
+
+  const aTokens = aSipping.map((s) => s.total_tokens).filter((t): t is number => t !== null);
+  const bTokens = bSipping.map((s) => s.total_tokens).filter((t): t is number => t !== null);
+
+  const aHeartbeats = aSipping.reduce((sum, s) => sum + s.shadow_heartbeats_observed, 0);
+  const bHeartbeats = bSipping.reduce((sum, s) => sum + s.shadow_heartbeats_observed, 0);
+
+  const aMean = aTokens.length > 0 ? aTokens.reduce((a, b) => a + b, 0) / aTokens.length : null;
+  const bMean = bTokens.length > 0 ? bTokens.reduce((a, b) => a + b, 0) / bTokens.length : null;
+
+  const deltaTokens = aMean !== null && bMean !== null ? aMean - bMean : null;
+
+  let winner: SippingEtherealTSummary["sipping_ethereal_t_winner"] = "scaffold_unfilled";
+  if (deltaTokens !== null) {
+    // lower Sipping T = less background spend = better
+    if (deltaTokens < -0.5) winner = "A_compaction_continue";
+    else if (deltaTokens > 0.5) winner = "B_new_session_reorient";
+    else winner = "tie";
+  }
+
+  const hasLiveData = aTokens.length > 0 || bTokens.length > 0;
+
+  return {
+    arm_a_mean_tokens: aMean,
+    arm_b_mean_tokens: bMean,
+    delta_tokens: deltaTokens,
+    arm_a_total_heartbeats: aHeartbeats,
+    arm_b_total_heartbeats: bHeartbeats,
+    sipping_ethereal_t_winner: winner,
+    instrumentation_status: hasLiveData ? "live" : "scaffold_unfilled",
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -244,6 +347,11 @@ export function aggregate(): AggregatorOutput {
         ? "B_new_session_reorient"
         : "tie";
 
+    // Sipping Ethereal T — 7th column
+    const classAReceipts = armAReceipts.filter((r) => r.task_class === cls);
+    const classBReceipts = armBReceipts.filter((r) => r.task_class === cls);
+    const sipping_ethereal_t = computeSippingEtherealT(classAReceipts, classBReceipts);
+
     return {
       task_class: cls,
       task_count: tasks.length,
@@ -257,6 +365,7 @@ export function aggregate(): AggregatorOutput {
       avg_delta_r_check_violations: avgDelta("r_check_1_violations"),
       avg_delta_coherence: avgDelta("substrate_coherence_score"),
       class_winner,
+      sipping_ethereal_t,
     };
   });
 
@@ -265,6 +374,29 @@ export function aggregate(): AggregatorOutput {
 
   // G5 validation
   const g5 = validateThresholdMap(threshold_map);
+
+  // Sipping Ethereal T taxonomy (cross-class)
+  const sippingLookup = per_class.find((c) => c.task_class === "lookup")!.sipping_ethereal_t;
+  const sippingAuthor = per_class.find((c) => c.task_class === "author")!.sipping_ethereal_t;
+  const sippingBushel = per_class.find((c) => c.task_class === "bushel_design")!.sipping_ethereal_t;
+
+  const totalAHeartbeats =
+    sippingLookup.arm_a_total_heartbeats +
+    sippingAuthor.arm_a_total_heartbeats +
+    sippingBushel.arm_a_total_heartbeats;
+  const totalBHeartbeats =
+    sippingLookup.arm_b_total_heartbeats +
+    sippingAuthor.arm_b_total_heartbeats +
+    sippingBushel.arm_b_total_heartbeats;
+
+  const allSippingStatuses = [sippingLookup, sippingAuthor, sippingBushel].map(
+    (s) => s.instrumentation_status
+  );
+  const overallSippingStatus: "live" | "scaffold_unfilled" = allSippingStatuses.some(
+    (s) => s === "live"
+  )
+    ? "live"
+    : "scaffold_unfilled";
 
   const output: AggregatorOutput = {
     bushel: 17,
@@ -280,6 +412,26 @@ export function aggregate(): AggregatorOutput {
     per_class,
     threshold_map,
     g5_validation: g5,
+    cost_streams: {
+      knight_fire_bookend_t: { status: "instrumented", source: "KN-S3 BP018" },
+      bushel_pod_parallel_t: { status: "instrumented", source: "TITAN-within-TITAN BP020" },
+      bishop_class_t: { status: "external_billing_only", source: "Anthropic dashboard" },
+      sipping_ethereal_t: {
+        status: overallSippingStatus,
+        source:
+          overallSippingStatus === "live"
+            ? "~/.claude/state/eblets/<session>/heartbeat_R11_shadow_*.eblet.md (tokens_consumed populated)"
+            : "~/.claude/state/eblets/<session>/heartbeat_R11_shadow_*.eblet.md (heartbeat ts-scan active; tokens_consumed not yet in eblet format — scaffold_unfilled)",
+      },
+    },
+    sipping_ethereal_t_taxonomy: {
+      lookup: sippingLookup,
+      author: sippingAuthor,
+      bushel_design: sippingBushel,
+      overall_instrumentation_status: overallSippingStatus,
+      total_arm_a_heartbeats: totalAHeartbeats,
+      total_arm_b_heartbeats: totalBHeartbeats,
+    },
   };
 
   const outDir = STATE_BASE;

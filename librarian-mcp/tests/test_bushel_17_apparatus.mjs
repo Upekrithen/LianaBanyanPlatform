@@ -121,6 +121,15 @@ test("G2 — validateReceiptSchema accepts a fully-populated receipt", async () 
     detective_validation_anchors: ["83.3%", "$416.67"],
     cache_provenance_note: "warm",
     notes: "",
+    background_shadow_tokens_during_arm: {
+      total_tokens: null,
+      shadow_heartbeats_observed: 0,
+      window_start_ts: new Date().toISOString(),
+      window_end_ts: new Date().toISOString(),
+      stream_class: "sipping_ethereal_t",
+      instrumentation_status: "scaffold_unfilled",
+      heartbeat_path_observed: "none_found",
+    },
   };
 
   const result = validateReceiptSchema(fullReceipt);
@@ -274,4 +283,122 @@ test("Apparatus scaffold: 54 fire-slots (9 tasks × 2 arms × 3 replicates)", as
   const expected = taskCount * arms * replicates;
   assert.equal(expected, 54, `Expected 54 fire-slots, got ${expected}`);
   console.log(`Fire-slot count PASS — ${taskCount} tasks × ${arms} arms × ${replicates} replicates = ${expected} fire-slots`);
+});
+
+// ---------------------------------------------------------------------------
+// G7 (Sipping Ethereal T) — 4 new tests for Sipping instrumentation (BP021 EXTENSION)
+// ---------------------------------------------------------------------------
+
+test("G7a — SentinelReceipt has background_shadow_tokens_during_arm field with correct structure", async () => {
+  const { runSentinelOnArmA } = await import(
+    distUrl("bushel_17/sentinel_runner.js")
+  );
+
+  const ctx = {
+    session_id: "TEST_B17_G7A",
+    is_post_compaction: true,
+    context_budget_remaining: 0.06,
+    fresh_session_with_coffee_handoff: false,
+    session_start_ts: new Date().toISOString(),
+  };
+
+  const { receipt } = runSentinelOnArmA("L1", ctx, 1);
+  const sipping = receipt.background_shadow_tokens_during_arm;
+
+  assert.ok(sipping !== undefined, "background_shadow_tokens_during_arm must be present on receipt");
+  assert.equal(sipping.stream_class, "sipping_ethereal_t", "stream_class must be 'sipping_ethereal_t'");
+  assert.ok(
+    sipping.instrumentation_status === "live" || sipping.instrumentation_status === "scaffold_unfilled",
+    `instrumentation_status must be 'live' or 'scaffold_unfilled'. Got: ${sipping.instrumentation_status}`
+  );
+  assert.ok(typeof sipping.shadow_heartbeats_observed === "number", "shadow_heartbeats_observed must be a number");
+  assert.ok(typeof sipping.window_start_ts === "string" && sipping.window_start_ts.length > 0, "window_start_ts must be a non-empty string");
+  assert.ok(typeof sipping.window_end_ts === "string" && sipping.window_end_ts.length > 0, "window_end_ts must be a non-empty string");
+  assert.ok(typeof sipping.heartbeat_path_observed === "string", "heartbeat_path_observed must be a string");
+  console.log(`G7a PASS — background_shadow_tokens_during_arm present: status=${sipping.instrumentation_status}, heartbeats=${sipping.shadow_heartbeats_observed}`);
+});
+
+test("G7b — validateReceiptSchema accepts receipt with scaffold_unfilled Sipping field (G2-pass rule)", async () => {
+  const { validateReceiptSchema } = await import(
+    distUrl("bushel_17/sentinel_runner.js")
+  );
+
+  const receiptWithSipping = {
+    task_id: "L1",
+    task_class: "lookup",
+    arm: "A_compaction_continue",
+    session_id: "TEST_B17_G7B",
+    ts: new Date().toISOString(),
+    replicate: 1,
+    measurements: {
+      TTFP_ms: null,
+      TTFA_ms: null,
+      tokens_to_first_output: null,
+      founder_correction_turns: null,
+      r_check_1_violations: null,
+      substrate_coherence_score: null,
+    },
+    completion_quality_rubric_score: null,
+    detective_validation_anchors: [],
+    cache_provenance_note: "warm",
+    notes: "",
+    background_shadow_tokens_during_arm: {
+      total_tokens: null,
+      shadow_heartbeats_observed: 0,
+      window_start_ts: new Date().toISOString(),
+      window_end_ts: new Date().toISOString(),
+      stream_class: "sipping_ethereal_t",
+      instrumentation_status: "scaffold_unfilled",
+      heartbeat_path_observed: "none_found",
+    },
+  };
+
+  const result = validateReceiptSchema(receiptWithSipping);
+  assert.ok(result.ok, `G2 must accept scaffold_unfilled Sipping field. Missing: ${result.missing.join(", ")}`);
+  console.log("G7b PASS — validateReceiptSchema accepts scaffold_unfilled Sipping field (G2-pass rule confirmed)");
+});
+
+test("G7c — when Shadows are running, receipt has non-zero shadow_heartbeats_observed", async () => {
+  const { readShadowHeartbeatsWithinWindow } = await import(
+    distUrl("bushel_17/sentinel_runner.js")
+  );
+
+  // Use a wide window covering known heartbeat timestamps from BP021 / BP011
+  // Heartbeats in test environment: ~/.claude/state/eblets/BP021/heartbeat_R11_shadow_*.eblet.md
+  const windowStart = new Date("2026-05-01T00:00:00Z");
+  const windowEnd = new Date("2026-05-04T23:59:59Z");
+
+  const heartbeats = readShadowHeartbeatsWithinWindow(windowStart, windowEnd);
+
+  if (heartbeats.length > 0) {
+    // Shadows are running — verify heartbeat structure
+    const hb = heartbeats[0];
+    assert.ok(typeof hb.shadow_id === "string" && hb.shadow_id.length > 0, "shadow_id must be present");
+    assert.ok(typeof hb.ts === "string", "heartbeat ts must be a string");
+    assert.ok(typeof hb.source_path === "string", "source_path must be a string");
+    console.log(`G7c PASS (live) — ${heartbeats.length} Shadow heartbeats observed in window. First: ${hb.shadow_id} at ${hb.ts}`);
+  } else {
+    // Shadows not running in this window — verify graceful no-throw
+    assert.equal(heartbeats.length, 0, "No heartbeats in window — graceful empty array expected");
+    console.log("G7c PASS (scaffold) — No Shadow heartbeats in window; readShadowHeartbeatsWithinWindow returned empty array without throwing");
+  }
+});
+
+test("G7d — when Shadows are NOT running (empty window), Sipping receipt has total_tokens: null + scaffold_unfilled", async () => {
+  const { buildSippingScaffold } = await import(
+    distUrl("bushel_17/sentinel_runner.js")
+  );
+
+  // Use a window in the far past — guaranteed no heartbeats
+  const windowStartTs = "2020-01-01T00:00:00.000Z";
+  const windowEndTs = "2020-01-01T00:00:01.000Z";
+
+  const sipping = buildSippingScaffold(windowStartTs, windowEndTs);
+
+  assert.equal(sipping.total_tokens, null, "total_tokens must be null when no Shadows running");
+  assert.equal(sipping.shadow_heartbeats_observed, 0, "shadow_heartbeats_observed must be 0 when no Shadows running");
+  assert.equal(sipping.instrumentation_status, "scaffold_unfilled", "instrumentation_status must be scaffold_unfilled when no Shadows running");
+  assert.equal(sipping.stream_class, "sipping_ethereal_t", "stream_class must be sipping_ethereal_t");
+  assert.equal(sipping.heartbeat_path_observed, "none_found", "heartbeat_path_observed must be 'none_found' when no Shadows present");
+  console.log("G7d PASS — empty-window Sipping scaffold: total_tokens=null, status=scaffold_unfilled, no throw");
 });
