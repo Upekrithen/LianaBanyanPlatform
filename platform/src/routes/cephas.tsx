@@ -29,6 +29,8 @@ const IPPortfolioPage = lazy(() => import("@/pages/IPPortfolioPage"));
 const EconomicLaws = lazy(() => import("@/pages/EconomicLaws"));
 const PaperPage = lazy(() => import("@/pages/PaperPage"));
 const FlyOnTheWall = lazy(() => import("@/pages/FlyOnTheWall"));
+const PedestalForum = lazy(() => import("@/pages/papers/PedestalForum"));
+const SubstackHookPage = lazy(() => import("@/pages/papers/SubstackHookPage"));
 const AlcoveHallwayPage = lazy(() => import("@/pages/AlcoveHallwayPage"));
 const AlcoveStopPage = lazy(() => import("@/pages/AlcoveStopPage"));
 const Academy = lazy(() => import("@/pages/Academy"));
@@ -79,6 +81,10 @@ export const cephasRoutes = (
     <Route path="/benefits" element={<LazyPage><BenefitsPage /></LazyPage>} />
     <Route path="/knowledge/:slug" element={<ExplorerRoute><LazyPage><KnowledgeViewer /></LazyPage></ExplorerRoute>} />
     <Route path="/papers" element={<LazyPage><AcademicPapersDirectory /></LazyPage>} />
+    {/* Bushel 13 Phase D — Pedestal Forum (Mordecai-Esther Decree-Composition) */}
+    <Route path="/papers/:paperId/pedestal-forum" element={<LazyPage><PedestalForum /></LazyPage>} />
+    {/* Bushel 13 Phase A — Pre-Cathedral Substack Hook (productized) */}
+    <Route path="/papers/pre-cathedral-hook" element={<LazyPage><SubstackHookPage /></LazyPage>} />
     <Route path="/hard-knocks" element={<LazyPage><CollegeOfHardKnocks /></LazyPage>} />
     <Route path="/patent-portfolio" element={<LazyPage><PatentPortfolio /></LazyPage>} />
     <Route path="/ip-portfolio/:qrCode?" element={<LazyPage><IPPortfolioPage /></LazyPage>} />

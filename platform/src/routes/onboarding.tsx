@@ -36,6 +36,10 @@ const OnboardingStart = lazy(() => import("@/pages/OnboardingStart"));
 const CrewCallPage = lazy(() => import("@/pages/CrewCallPage"));
 const CrewCallBoardV2Page = lazy(() => import("@/pages/CrewCallBoardV2Page"));
 const InviteCodeRedirect = lazy(() => import("@/pages/InviteCodeRedirect"));
+const SovereigntyTierSelection = lazy(() => import("@/pages/onboarding/SovereigntyTierSelection"));
+const Tier_A_NEEDS_Page = lazy(() => import("@/pages/onboarding/Tier_A_NEEDS_Page"));
+const Tier_B_SUGGESTS_Page = lazy(() => import("@/pages/onboarding/Tier_B_SUGGESTS_Page"));
+const Tier_C_FOUNDER_Page = lazy(() => import("@/pages/onboarding/Tier_C_FOUNDER_Page"));
 
 export const onboardingRoutes = (
   <>
@@ -79,5 +83,10 @@ export const onboardingRoutes = (
     <Route path="/crew-call/legacy" element={<ExplorerRoute><LazyPage><CrewCallPage /></LazyPage></ExplorerRoute>} />
     <Route path="/welcome/:code" element={<LazyPage><InviteCodeRedirect /></LazyPage>} />
     <Route path="/welcome/sponsor/:code" element={<LazyPage><InviteCodeRedirect /></LazyPage>} />
+    {/* ── 3-Tier Sovereignty onboarding — Bushel 13 Phase C / BP021 ── */}
+    <Route path="/onboarding/sovereignty" element={<LazyPage><SovereigntyTierSelection /></LazyPage>} />
+    <Route path="/onboarding/sovereignty/tier-a" element={<LazyPage><Tier_A_NEEDS_Page /></LazyPage>} />
+    <Route path="/onboarding/sovereignty/tier-b" element={<LazyPage><Tier_B_SUGGESTS_Page /></LazyPage>} />
+    <Route path="/onboarding/sovereignty/tier-c" element={<LazyPage><Tier_C_FOUNDER_Page /></LazyPage>} />
   </>
 );
