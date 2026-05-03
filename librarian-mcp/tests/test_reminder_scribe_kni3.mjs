@@ -59,7 +59,7 @@ test("T1: violation_detected event writes to RS provenance ledger with serial + 
   // Verify written to ledger
   assert.ok(existsSync(RS_PROVENANCE_LEDGER));
   const raw = readFileSync(RS_PROVENANCE_LEDGER, "utf-8");
-  const entry = JSON.parse(raw.trim());
+  const lines = raw.trim().split("\n").filter(l => l.trim()); const entry = JSON.parse(lines[lines.length - 1]);
   assert.equal(entry.provenance_class, "reminder_scribe_violation_correction");
   assert.equal(entry.rule_id, "R-KP-1");
   assert.equal(entry.event_type, "violation_detected");
@@ -90,7 +90,7 @@ test("T2: correction_applied event writes with correction_applied=true + timesta
   assert.ok(result.serial.startsWith("LB-RS.K-"), `Knight serial should start with LB-RS.K-`);
 
   const raw = readFileSync(RS_PROVENANCE_LEDGER, "utf-8");
-  const entry = JSON.parse(raw.trim());
+  const lines = raw.trim().split("\n").filter(l => l.trim()); const entry = JSON.parse(lines[lines.length - 1]);
   assert.equal(entry.correction_applied, true);
   assert.ok(entry.correction_applied_at !== null);
   assert.equal(entry.override_applied, false);
@@ -121,7 +121,7 @@ test("T3: override_applied event records Marks-cost; no fiat reference; FORK com
   assert.equal(result.success, true);
 
   const raw = readFileSync(RS_PROVENANCE_LEDGER, "utf-8");
-  const entry = JSON.parse(raw.trim());
+  const lines = raw.trim().split("\n").filter(l => l.trim()); const entry = JSON.parse(lines[lines.length - 1]);
   assert.equal(entry.override_applied, true);
   assert.equal(entry.override_marks_cost, 1);
   assert.equal(entry.override_rationale, "Bishop override: path is ready but verified");
@@ -294,7 +294,8 @@ test("T7: Provenance entries have ISO-8601 timestamps for decay-compatible index
   });
 
   const raw = readFileSync(RS_PROVENANCE_LEDGER, "utf-8").trim();
-  const entry = JSON.parse(raw);
+  const rawLines = raw.split("\n").filter(l => l.trim());
+  const entry = JSON.parse(rawLines[rawLines.length - 1]);
 
   // Verify ISO-8601 timestamp (parseable by Date)
   const ts = new Date(entry.timestamp);

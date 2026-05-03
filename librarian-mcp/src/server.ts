@@ -118,6 +118,13 @@ import {
   type WriteBackOpts,
   type RsEventType,
 } from "./reminder_scribe/substrate_writeback.js";
+// KN-I4: Reminder Scribe metrics aggregator
+import {
+  buildMetricsDashboard,
+  formatMetricsSummaryMarkdown,
+  type RollingWindow,
+  type MetricsQueryOpts,
+} from "./reminder_scribe/metrics_aggregator.js";
 // KN-I2: Catechist Scribe grader extension
 import {
   runSessionOpenGrade,
@@ -6552,6 +6559,104 @@ server.tool(
           text: JSON.stringify({
             error: "reminder_scribe_log_violation write error",
             detail: String(err),
+          }, null, 2),
+        }],
+        isError: true,
+      };
+    }
+  },
+);
+
+// ─── KN-I4: Reminder Scribe metrics query MCP tool ───────────────────────────
+/**
+ * reminder_scribe_metrics_query — empirical-receipt dashboard data query.
+ * Returns per-discipline-rule violation/correction metrics + FORK-class alert.
+ * Supports filter parameters: window, ai_member, rule_class, visibility_scope.
+ *
+ * Anti-shame: empirical counts/rates/trends ONLY. No moral judgment language.
+ * BRIDLE Rule 4: data_available=false surfaces UNAVAILABLE — never stale zeros.
+ * Privacy: personal/federation_aggregate/public_aggregate scopes enforced.
+ */
+server.tool(
+  "reminder_scribe_metrics_query",
+  "KN-I4 / BP017 — Reminder Scribe empirical-receipt metrics dashboard (READ-ONLY). " +
+    "Returns per-discipline-rule violation/correction metrics + correction-stickiness + FORK-class CRITICAL alert. " +
+    "Filter params: window (7d/30d/90d/all_time), ai_member (bishop/knight/pawn/rook/all), " +
+    "rule_class_prefix (R-KP/R-PRAISE/R-FORK/R-DOUBLE-FILE/R-COUNSEL/R-USPTO/all). " +
+    "Anti-shame: empirical numbers only — no moral judgment in output. " +
+    "BRIDLE Rule 4: data_available=false → UNAVAILABLE (never stale zeros). " +
+    "FORK-class alert: is_critical=true requires immediate Founder review. " +
+    "Optionally format as markdown summary (format=markdown). " +
+    "Composes with KN-I1 Reminder Scribe core + KN-I2 Catechist + KN-I3 provenance chain.",
+  {
+    window: z
+      .enum(["7d", "30d", "90d", "all_time"])
+      .optional()
+      .describe("Rolling time window for metrics aggregation (default: 7d)."),
+    ai_member: z
+      .enum(["bishop", "knight", "pawn", "rook", "shadow_alpha", "shadow_beta", "all"])
+      .optional()
+      .describe("Filter by AI member (default: all)."),
+    rule_class_prefix: z
+      .enum(["R-KP", "R-PRAISE", "R-FORK", "R-DOUBLE-FILE", "R-COUNSEL", "R-USPTO", "all"])
+      .optional()
+      .describe("Filter by rule class prefix (default: all)."),
+    drift_threshold_pct: z
+      .number()
+      .int()
+      .min(0)
+      .max(100)
+      .optional()
+      .describe("Correction-stickiness below this % triggers drift flag (default: 80)."),
+    format: z
+      .enum(["json", "markdown"])
+      .optional()
+      .describe("Output format: json (default) or markdown summary."),
+    visibility_scope: z
+      .enum(["personal", "federation_aggregate", "public_aggregate"])
+      .optional()
+      .describe("Privacy visibility scope (default: personal)."),
+  },
+  async ({ window: w, ai_member, rule_class_prefix, drift_threshold_pct, format, visibility_scope: _vs }) => {
+    try {
+      const opts: MetricsQueryOpts = {
+        window: (w as RollingWindow) ?? "7d",
+        ai_member: (ai_member as MetricsQueryOpts["ai_member"]) ?? "all",
+        rule_class_prefix: (rule_class_prefix as MetricsQueryOpts["rule_class_prefix"]) ?? "all",
+        drift_threshold_pct: drift_threshold_pct ?? 80,
+      };
+
+      const payload = buildMetricsDashboard(opts);
+
+      if (format === "markdown") {
+        return {
+          content: [{
+            type: "text" as const,
+            text: formatMetricsSummaryMarkdown(payload),
+          }],
+        };
+      }
+
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            ...payload,
+            fork_class_critical: payload.fork_class_alert.is_critical,
+            note: payload.data_available
+              ? `Metrics for ${opts.window} window. ${payload.total_violations} violation(s), ${payload.total_corrections} correction(s).`
+              : "DATA UNAVAILABLE — do not interpret as zero violations.",
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            error: "reminder_scribe_metrics_query error",
+            detail: String(err),
+            bridle_rule_4: "Data unavailable — do not interpret as zero violations.",
           }, null, 2),
         }],
         isError: true,
