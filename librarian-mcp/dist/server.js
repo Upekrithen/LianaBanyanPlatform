@@ -44,6 +44,7 @@ import { runReminderScribeCheck } from "./reminder_scribe/pattern_match_engine.j
 import { createJar, sealJar, queryJars, } from "./house_scribe/jar_lifecycle.js";
 import { assignCoordinate, queryJarsByCoordinate, } from "./house_scribe/coordinate_assignment.js";
 import { updateCellOnEvent, queryLivingCell, buildGridworkSnapshot, detectAndReconcileInconsistencies, } from "./house_scribe/living_gridwork.js";
+import { onThreadClosedWithSynthesis, queryHiveJarStatus, } from "./house_scribe/apiarist_hive_subscriber.js";
 import { runPopulationAudit, } from "./house_scribe/population_audit.js";
 // KN-I3: Reminder Scribe substrate write-back + provenance chain
 import { writeBackViolationEvent, queryRsHistory, drainRetryQueue, aggregateByRule, } from "./reminder_scribe/substrate_writeback.js";
@@ -5971,6 +5972,105 @@ server.tool("house_scribe_reconcile_cells", "KN-J3 / BP017 — House Scribe: det
     "Flags inconsistencies + reconciles. BRIDLE Rule 4 required before any seal operation.", {}, async () => {
     try {
         const result = detectAndReconcileInconsistencies();
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+// ─── KN-J4: Apiarist Hive Subscriber ─────────────────────────────────────────
+/**
+ * house_scribe_hive_thread_closed — write-class
+ * Called when a Hive thread transitions active → closed (KN-D3).
+ * Orchestrates: create Jar → assign coordinate → living-gridwork → seal Jar.
+ * Bee-canon role mapping: Workers/Drones/Queen → Marks-attribution.
+ * BRIDLE Rule 4: incomplete synthesis halts Jar creation.
+ * FORK doctrine: Marks-attribution NEVER bridges to fiat.
+ */
+server.tool("house_scribe_hive_thread_closed", "KN-J4 / BP017 — House Scribe: handle Hive-thread closure event. " +
+    "Receives thread_closed_with_synthesis event (KN-D3). " +
+    "Orchestrates Jar creation (KN-J1) → coordinate assignment (KN-J2) → " +
+    "living-gridwork registration (KN-J3) → seal. " +
+    "Computes bee-canon Marks-attribution (Workers/Drones pro-rata; Queen supervisor multiplier; " +
+    "Project-cohort GREATER % multiplier). " +
+    "BRIDLE Rule 4: incomplete synthesis halts creation + flags for Queen review. " +
+    "FORK doctrine: Marks-attribution is LB-currency ONLY — no fiat conversion.", {
+    thread_id: z.string().describe("Unique Hive-thread ID (from KN-D3 state machine)."),
+    cathedral: z.string().describe("Cathedral identifier: bishop, knight, pawn, rook, cross."),
+    cohort_type: z
+        .enum(["tribe", "family", "guild", "project"])
+        .describe("Hive cohort class. project triggers GREATER % Marks-attribution multiplier."),
+    closed_at: z.string().describe("ISO-8601 timestamp when thread closed."),
+    synthesis_summary: z.string().describe("Synthesis summary text (max 500 chars). Empty → BRIDLE Rule 4 HALT."),
+    synthesis_blob_pointer: z.string().describe("Object-storage key / IPFS CID for synthesis blob. Empty → BRIDLE Rule 4 HALT."),
+    contributors: z
+        .array(z.object({
+        member_id: z.string(),
+        role: z.enum(["worker", "drone", "queen"]),
+        contribution_weight: z.number().min(0).max(1),
+        drone_specialty: z.string().optional(),
+    }))
+        .describe("Contributor records. Workers/Drones pro-rata; Queen earns supervisor multiplier."),
+    queen_member_id: z.string().nullable().describe("Member ID of the Queen supervisor. Null if no Queen at closure."),
+    content_type: z
+        .enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"])
+        .optional()
+        .describe("KN-J1 content type for coordinate assignment. Defaults to 'synthesis' for Hive thread closures."),
+    read_cohort_minimum: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .optional()
+        .describe("Minimum cohort level to read this Jar (KN-J1 CohortMinimum)."),
+    write_cohort_minimum: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .optional()
+        .describe("Minimum cohort level to write to this Jar (KN-J1 CohortMinimum)."),
+    total_marks_pool: z.number().optional().describe("Optional total Marks pool for this thread (attribution context)."),
+}, async ({ thread_id, cathedral, cohort_type, closed_at, synthesis_summary, synthesis_blob_pointer, contributors, queen_member_id, content_type, read_cohort_minimum, write_cohort_minimum, total_marks_pool }) => {
+    try {
+        const event = {
+            thread_id,
+            cathedral,
+            cohort_type,
+            closed_at,
+            synthesis_summary,
+            synthesis_blob_pointer,
+            contributors,
+            queen_member_id,
+            content_type,
+            read_cohort_minimum,
+            write_cohort_minimum,
+            total_marks_pool,
+        };
+        const result = onThreadClosedWithSynthesis(event);
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+            isError: result.success === false,
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * house_scribe_apiarist_hive_jar_status — read-class
+ * Query Jars created from a specific Hive thread (by thread_id).
+ * Returns Jar state + Marks-attribution breakdown.
+ */
+server.tool("house_scribe_apiarist_hive_jar_status", "KN-J4 / BP017 — House Scribe: query Jars created from a Hive thread. " +
+    "Returns Jar lifecycle state + bee-canon Marks-attribution breakdown. " +
+    "BRIDLE Rule 4: data_available=false if query fails.", {
+    thread_id: z.string().describe("Hive-thread ID to query (from KN-D3)."),
+}, async ({ thread_id }) => {
+    try {
+        const result = queryHiveJarStatus(thread_id);
         return {
             content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
