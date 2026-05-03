@@ -106,6 +106,9 @@ import {
   buildPlanTierAdvisory,
   type ResourceConfigTier,
 } from "./cohort_class/tier_config_probe.js";
+// KN-I1: Reminder Scribe pattern-match engine
+import { runReminderScribeCheck, buildViolationEvent } from "./reminder_scribe/pattern_match_engine.js";
+import { DEFAULT_PREFERENCES } from "./reminder_scribe/rules_registry.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -6301,6 +6304,216 @@ async function main() {
   clearPostBuildReloadLock();
   console.error("The Librarian MCP Server is running (stdio transport)");
 }
+
+// ─── KN-I1: Reminder Scribe MCP tools ───────────────────────────────────────
+/**
+ * reminder_scribe_check — read-only pre-send pattern-match check.
+ * Runs the Reminder Scribe engine against a response draft and returns
+ * violations + correction proposals. DOES NOT log to Detective TEAM.
+ * Use reminder_scribe_log_violation to write violation events.
+ *
+ * BRIDLE Rule 4: engine failure → error_receipt (never silently passes).
+ */
+server.tool(
+  "reminder_scribe_check",
+  "KN-I1 / BP017 — Reminder Scribe pre-send pattern-match check (READ-ONLY). " +
+    "Runs the Reminder Scribe engine against an AI cohort response draft. " +
+    "Detects discipline violations (R-KP-1 bare K-prompt path, R-KP-2 file-not-found, " +
+    "R-KP-3 queued-as-path, R-FORK-1 fiat-bridge, R-PRAISE-1/2 unanchored praise, etc.). " +
+    "Returns violations + correction proposals + engine stats. " +
+    "BRIDLE Rule 4: engine failure surfaces error_receipt — never silently passes. " +
+    "Composes with Catechist session-open grading + Bouncer-Scales-Judge BP011 KN095. " +
+    "For violation write-back to Detective TEAM use reminder_scribe_log_violation.",
+  {
+    response_draft: z
+      .string()
+      .min(1)
+      .max(50_000)
+      .describe("The AI cohort member response draft text to check for violations."),
+    session_id: z
+      .string()
+      .optional()
+      .describe("Current session ID (e.g. B135) — used in violation event metadata."),
+    override_preferences: z
+      .object({
+        knight_kprompt_path_format: z.enum(["full_path", "bare_filename", "markdown_link"]).optional(),
+        knight_kprompt_file_existence_check: z.enum(["strict", "relaxed"]).optional(),
+        discipline_violation_pre_send_check: z.enum(["enabled", "disabled"]).optional(),
+        bishop_intent_vs_ready_distinction: z.enum(["strict", "relaxed"]).optional(),
+      })
+      .optional()
+      .describe("Override Reminder Scribe Preferences from canonical defaults."),
+  },
+  async ({ response_draft, session_id: _session_id, override_preferences }) => {
+    try {
+      const result = runReminderScribeCheck(response_draft, {
+        preferences: override_preferences ?? {},
+      });
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            ...result,
+            note: result.clean
+              ? "Response cleared for send."
+              : `${result.violations_found} violation(s) detected. Review and apply corrections or use reminder_scribe_log_violation to record override.`,
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            error: "reminder_scribe_check engine error",
+            detail: String(err),
+            bridle_rule_4: "HALT — engine failure. Response NOT cleared for send.",
+          }, null, 2),
+        }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * reminder_scribe_log_violation — write-class tool.
+ * Records a violation/correction event to the Detective TEAM provenance substrate.
+ * Called after Bishop reviews a flag and either applies correction or overrides.
+ * Marks-cost logic is enforced here for marks-cost class overrides.
+ */
+server.tool(
+  "reminder_scribe_log_violation",
+  "KN-I1 / BP017 — Reminder Scribe violation/correction write-back (WRITE-CLASS). " +
+    "Records violation + correction or override decision to Detective TEAM provenance substrate. " +
+    "Called after AI cohort member reviews a reminder_scribe_check flag. " +
+    "Marks-cost applies when override_used=true AND violation override_class='marks-cost'. " +
+    "STRUCTURALLY-IMMUTABLE violations (R-FORK-1) cannot be overridden — reject call if attempted. " +
+    "Appends to pheromone substrate with event_type=reminder_scribe_violation_correction. " +
+    "Composes with KN104 Detective TEAM PRE-COLOSSUS substrate-write-back (5e7f540).",
+  {
+    session_id: z
+      .string()
+      .describe("Current session ID (e.g. B135) — used in violation event metadata."),
+    rule_id: z
+      .string()
+      .describe("Rule ID that triggered the violation (e.g. R-KP-2, R-FORK-1)."),
+    rule_class: z
+      .string()
+      .describe("Violation class (e.g. high-stakes, founder-mandatory, fork)."),
+    violation_confirmed: z
+      .boolean()
+      .describe("Whether the AI cohort member confirmed the violation as real (vs. false-positive)."),
+    correction_applied: z
+      .boolean()
+      .describe("Whether the correction proposal was applied to the response draft."),
+    override_used: z
+      .boolean()
+      .describe("Whether the violation was overridden without applying the correction."),
+    override_class: z
+      .enum(["free", "marks-cost", "structurally-immutable"])
+      .describe("Override class of the violated rule."),
+    response_excerpt: z
+      .string()
+      .max(200)
+      .optional()
+      .describe("Short excerpt of the violating text from the response draft (max 200 chars)."),
+    memory_pointer: z
+      .string()
+      .optional()
+      .describe("Memory file or canon Eblet that sources this rule."),
+    correction_proposal_excerpt: z
+      .string()
+      .max(300)
+      .optional()
+      .describe("Correction proposal excerpt (max 300 chars)."),
+  },
+  async ({
+    session_id,
+    rule_id,
+    rule_class,
+    violation_confirmed,
+    correction_applied,
+    override_used,
+    override_class,
+    response_excerpt,
+    memory_pointer,
+    correction_proposal_excerpt,
+  }) => {
+    try {
+      // Structurally-immutable violations cannot be overridden
+      if (override_class === "structurally-immutable" && override_used && !correction_applied) {
+        return {
+          content: [{
+            type: "text" as const,
+            text: JSON.stringify({
+              error: "STRUCTURALLY-IMMUTABLE violation cannot be overridden.",
+              rule_id,
+              guidance:
+                "FORK-class violations (e.g. R-FORK-1 LB-currency-to-fiat) are constitutionally locked. " +
+                "Apply the correction and set correction_applied=true to proceed.",
+            }, null, 2),
+          }],
+          isError: true,
+        };
+      }
+
+      const marks_cost = override_class === "marks-cost" && override_used ? 1 : 0;
+
+      const event = {
+        event_type: "reminder_scribe_violation_correction",
+        session_id,
+        rule_id,
+        rule_class,
+        violation_confirmed,
+        correction_applied,
+        override_used,
+        override_marks_cost: marks_cost,
+        timestamp: new Date().toISOString(),
+        response_excerpt: response_excerpt ?? "",
+        memory_pointer: memory_pointer ?? "",
+        correction_proposal_excerpt: correction_proposal_excerpt ?? "",
+      };
+
+      // Write to pheromone substrate via Detective TEAM write-back pattern (KN104)
+      emitPheromone(
+        "ReminderScribe",
+        `reminder_scribe_violation_${rule_id}_${session_id}`,
+        JSON.stringify(event),
+        {
+          cathedral: "knight",
+          synthesisClass: "reminder_scribe_violation_correction",
+          flavorClass: { domain: "discipline", cognition: "violation-correction", audience: "internal" },
+        },
+      );
+
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            logged: true,
+            event,
+            marks_cost_applied: marks_cost,
+            note: marks_cost > 0
+              ? `${marks_cost} Mark(s) cost logged for override of marks-cost class violation ${rule_id}.`
+              : "No marks cost for this override class.",
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            error: "reminder_scribe_log_violation write error",
+            detail: String(err),
+          }, null, 2),
+        }],
+        isError: true,
+      };
+    }
+  },
+);
 
 main().catch(err => {
   console.error("Server failed to start:", err);

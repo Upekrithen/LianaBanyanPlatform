@@ -21,9 +21,26 @@ import { runFates } from "./scribes/fates.js";
 import { consultScribes } from "./scribes/consult.js";
 import { memberConsultScribes } from "./cathedral_supabase/member_consult.js";
 import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
-import { queryPheromone, buildPheromoneIndex } from "./scribes/pheromone.js";
+import { queryPheromone, buildPheromoneIndex, emitPheromone } from "./scribes/pheromone.js";
 import { getInboundStatus } from "./scribes/hounds.js";
 import { runDispatchPawn, getDispatchStatus, cancelDispatch, listRecentDispatches, } from "./pawn_dispatch.js";
+import { teamDispatch } from "./team_dispatcher/dispatcher.js";
+import { getScribeAccessDescriptor, } from "./team_dispatcher/cohort_class_enforcement.js";
+import { queryProvenanceChain, listRootMiners } from "./team_dispatcher/provenance_chain.js";
+import { runMinerProspect } from "./miners/miner_base.js";
+import { queryIpLedger } from "./miners/ip_ledger_lock.js";
+import { listAllWells } from "./miners/well_of_knowledge.js";
+import { createExcaliburSlice, evaluateAndTagSlice, getSliceById, listExcaliburClassSlices, listAllSlices, recordMemberVote, } from "./excalibur_class/slice_pipeline.js";
+import { handleGetTierBountyPayRate, } from "./three_tier/bounty_poster_tier_scaffold.js";
+import { handleGenerateTierBountyPoster, } from "./three_tier/bounty_poster_tier_generator.js";
+import { handleValidateBountyReceipt, } from "./three_tier/bounty_receipt_validator.js";
+import { handleProcessBountyMarksPayout, } from "./three_tier/bounty_marks_payout.js";
+import { createSubscription, activateSubscription, activateOneTimeAccess, } from "./excalibur_class/subscription_state_machine.js";
+import { recordShareBackForPayment, getShareBackSummaryForSlice, getTotalShareBackEarned, } from "./excalibur_class/share_back_ledger.js";
+import { probeCohortClass, formatCohortSummary } from "./cohort_class/probe.js";
+import { probeTierConfig, setTierConfig, formatTierSummary, buildPlanTierAdvisory, } from "./cohort_class/tier_config_probe.js";
+// KN-I1: Reminder Scribe pattern-match engine
+import { runReminderScribeCheck } from "./reminder_scribe/pattern_match_engine.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
@@ -2275,17 +2292,26 @@ registerTool("pheromone_query", "Detective Phase 0 fast path (A&A #2317): query 
     top_k: z.number().int().min(1).max(200).optional().describe("Maximum hits to return (default 20)"),
     cathedral: z.enum(["bishop", "knight", "pawn"]).optional().describe("Filter hits by Cathedral origin (default: all Cathedrals)"),
     rebuild_first: z.boolean().optional().describe("Force a full index rebuild before querying (expensive; use only when index is known-stale)"),
-}, async ({ claim, freshness_threshold_seconds, sufficiency_threshold, decay_active, top_k, cathedral, rebuild_first }) => {
+    flavor_domain: z.string().optional().describe("BP015 P3 Multi-Trail: filter by domain flavor-class axis (e.g. cinnamon, vanilla, spice, fruit, nut, bread, dairy). Canonical seed: cinnamon|vanilla|strawberry|chocolate|spice|fruit|vegetable|nut|bread|dairy|soup|pudding|spoonful|popcorn"),
+    flavor_cognition: z.string().optional().describe("BP015 P3 Multi-Trail: filter by cognition flavor-class axis (e.g. analytical, empirical-receipt, creative, governance, discipline-class, building-in-public, brick-wall-correction, receipt-anchor)"),
+    flavor_audience: z.string().optional().describe("BP015 P3 Multi-Trail: filter by audience flavor-class axis (e.g. founder-personal, bishop-substrate, knight-build, pawn-research, member-public, cathedral-public, counsel-eyes-only)"),
+    synthesis_class: z.string().optional().describe("BP015 P4: filter by synthesis_class (e.g. 'detective_team_finding', 'adversarial_fence_probe'). Use to retrieve only Detective TEAM write-back findings."),
+}, async ({ claim, freshness_threshold_seconds, sufficiency_threshold, decay_active, top_k, cathedral, rebuild_first, flavor_domain, flavor_cognition, flavor_audience, synthesis_class }) => {
     try {
         if (rebuild_first) {
             buildPheromoneIndex({ verbose: false });
         }
+        const flavorClass = (flavor_domain || flavor_cognition || flavor_audience)
+            ? { domain: flavor_domain, cognition: flavor_cognition, audience: flavor_audience }
+            : undefined;
         const result = queryPheromone(claim, {
             freshnessThresholdSeconds: freshness_threshold_seconds,
             sufficiencyThreshold: sufficiency_threshold,
             decayActive: decay_active,
             topK: top_k,
             cathedral,
+            flavorClass,
+            synthesisClass: synthesis_class,
         });
         return {
             content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
@@ -2347,13 +2373,15 @@ registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Det
     include_rpc_fallback: z.boolean().optional().describe("If true (default), run Phase 1 consult_scribes RPC when Phase 0 is insufficient (false = pheromone-only)"),
     max_rpc_entries: z.number().int().min(1).max(100).optional().describe("Max entries from Phase 1 RPC fallback (default 20)"),
     decay_active: z.boolean().optional().describe("Apply pheromone decay scoring (default true)"),
-}, async ({ claim, sufficiency_threshold, include_rpc_fallback, max_rpc_entries, decay_active }) => {
+    max_hits: z.number().int().min(1).max(200).optional().describe("Max Phase 0 pheromone hits to return (default 50). Use 5-10 for LEAN-mode invocations to cap context burn; 50-200 for deep-provenance queries. API-parity with pheromone_query top_k. (F5 KN100/BP015)"),
+}, async ({ claim, sufficiency_threshold, include_rpc_fallback, max_rpc_entries, decay_active, max_hits }) => {
     try {
         // Phase 0: pheromone index pre-check
+        // max_hits controls topK — pass 5-10 for LEAN-mode, omit for default 50 (F5 KN100/BP015)
         const phase0 = queryPheromone(claim, {
             sufficiencyThreshold: sufficiency_threshold,
             decayActive: decay_active,
-            topK: 50,
+            topK: max_hits ?? 50,
         });
         const result = {
             claim,
@@ -2404,6 +2432,252 @@ registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Det
         }
         return {
             content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }],
+        };
+    }
+});
+// ═══════════════════════════════════════════
+// KN100/BP015 — DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
+// ═══════════════════════════════════════════
+/**
+ * Detective TEAM Investigate — Priority 4 KN100/BP015
+ *
+ * Upgrades Detective from single-agent to TEAM-of-N fanning out across
+ * cathedrals. Synthesized findings are WRITTEN BACK to pheromone substrate
+ * as new entries tagged synthesis_class: detective_team_finding — closing
+ * the Detective Self-Pheromonating Loop ("so you don't forget again").
+ *
+ * Phase 0: fan-out queryPheromone per cathedral
+ * Phase 1: per-cathedral Phase 0 hits synthesized into cross-cathedral finding
+ * Phase 2: emitPheromone write-back with synthesis_class + provenance metadata
+ */
+registerTool("detective_team_investigate", "Detective TEAM cross-cathedral investigation with substrate write-back (KN100/BP015 P4 — A&A #2316/#2317 upgrade). Fans out across N cathedrals (bishop/knight/pawn), synthesizes findings, writes the synthesis BACK to pheromone substrate as a detective_team_finding entry so next query surfaces the synthesis directly. 'So you don't forget again.' — Founder direct BP015. Composes with Multi-Trail Pheromone-Flavor (BP015 P3) and Adversarial Fence Testing (BP015 P5).", {
+    claim: z.string().min(3).max(500).describe("The claim to investigate across all cathedrals (e.g. 'treasure maps', 'BRIDLE Rule 3 enforcement', '#2317 pheromone substrate')"),
+    cathedrals: z.array(z.enum(["bishop", "knight", "pawn"])).optional().describe("Cathedrals to fan out across (default: ['bishop','knight','pawn'] — all three)"),
+    top_k_per_cathedral: z.number().int().min(1).max(50).optional().describe("Phase 0 hits per cathedral agent (default 10; LEAN: 3-5)"),
+    write_back: z.boolean().optional().describe("Write synthesis back to pheromone substrate as detective_team_finding entry (default true). Set false for dry-run investigation."),
+    flavor_class: z.object({
+        domain: z.string().optional(),
+        cognition: z.string().optional(),
+        audience: z.string().optional(),
+    }).optional().describe("BP015 P3 Multi-Trail: flavor-class tags to stamp on the write-back synthesis entry. Enables per-axis retrieval post-write."),
+    replay_class: z.string().optional().describe("Set to 'detective_team_backfill' for replay of prior investigations (marks entry for distinction from original-fire findings)"),
+}, async ({ claim, cathedrals, top_k_per_cathedral, write_back, flavor_class, replay_class }) => {
+    try {
+        const targetCathedrals = cathedrals ?? ["bishop", "knight", "pawn"];
+        const topK = top_k_per_cathedral ?? 10;
+        const shouldWriteBack = write_back !== false;
+        // Phase 0: fan-out per cathedral
+        const agentReports = [];
+        for (const cathedral of targetCathedrals) {
+            const result = queryPheromone(claim, {
+                topK,
+                cathedral,
+                decayActive: true,
+            });
+            agentReports.push({
+                cathedral,
+                hits: result.hits.length,
+                phase_0_used: result.phase_0_used,
+                top_hit: result.hits[0] ? `${result.hits[0].scribe}/${result.hits[0].tablet_id}` : null,
+                hits_detail: result.hits.map(h => ({
+                    scribe: h.scribe,
+                    tablet_id: h.tablet_id,
+                    decay_score: Math.round(h.decay_score * 100) / 100,
+                })),
+            });
+        }
+        // Phase 1: synthesize
+        const totalHits = agentReports.reduce((s, r) => s + r.hits, 0);
+        const allScribes = new Set(agentReports.flatMap(r => r.hits_detail.map(h => h.scribe)));
+        const topHitsByDecay = agentReports
+            .flatMap(r => r.hits_detail.map(h => ({ ...h, cathedral: r.cathedral })))
+            .sort((a, b) => b.decay_score - a.decay_score)
+            .slice(0, 5);
+        const crossCathedralAgreement = agentReports.filter(r => r.hits > 0).length;
+        const consistencyNote = crossCathedralAgreement === targetCathedrals.length
+            ? `All ${targetCathedrals.length} cathedrals have substrate coverage for this claim.`
+            : crossCathedralAgreement === 0
+                ? "No cathedral has substrate coverage — claim may be novel or substrate needs backfill."
+                : `${crossCathedralAgreement}/${targetCathedrals.length} cathedrals have coverage; partial cathedral knowledge.`;
+        const synthesisStatement = [
+            `Detective TEAM finding for: "${claim}"`,
+            `Cathedrals fanned out: ${targetCathedrals.join(", ")}`,
+            `Total hits: ${totalHits} across ${allScribes.size} scribes`,
+            consistencyNote,
+            topHitsByDecay.length > 0
+                ? `Top anchors: ${topHitsByDecay.map(h => `${h.scribe}/${h.tablet_id} (${h.cathedral}, decay=${h.decay_score})`).join("; ")}`
+                : "No hits found in any cathedral.",
+            replay_class ? `replay_class: ${replay_class}` : "",
+        ].filter(Boolean).join("\n");
+        // Phase 2: pheromone write-back
+        let writeBackResult = { ok: false };
+        if (shouldWriteBack) {
+            try {
+                const synth_id = `detective_team_${Date.now()}_${claim.slice(0, 20).replace(/\s+/g, "_")}`;
+                emitPheromone("DetectiveTEAM", synth_id, synthesisStatement, {
+                    cathedral: "bishop",
+                    decayConstantDays: 90,
+                    flavorClass: flavor_class,
+                    synthesisClass: replay_class === "detective_team_backfill"
+                        ? "detective_team_backfill"
+                        : "detective_team_finding",
+                });
+                writeBackResult = { ok: true, record_id: synth_id };
+            }
+            catch (wbErr) {
+                writeBackResult = { ok: false, error: wbErr.message };
+            }
+        }
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        claim,
+                        cathedrals: targetCathedrals,
+                        agent_reports: agentReports,
+                        synthesis: synthesisStatement,
+                        cross_cathedral_agreement: crossCathedralAgreement,
+                        total_hits: totalHits,
+                        write_back_requested: shouldWriteBack,
+                        write_back_result: writeBackResult,
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }],
+        };
+    }
+});
+/**
+ * Adversarial Fence Testing — Priority 5 KN100/BP015
+ *
+ * Implements the Adversarial Fence Testing Protocol (Founder direct clarification
+ * of "Prove all things; hold fast that which is good" — 1 Thess 5:21).
+ * Three probe types:
+ *   1. counter_claim — submit alternative claim; verify substrate response
+ *   2. cross_canon_contradiction — find entries contradicting each other
+ *   3. stale_substrate — verify staleness detection works
+ *
+ * Writes probe results back to pheromone with synthesis_class: adversarial_fence_probe
+ * for Bushel 1 Reckoning audit trail.
+ */
+registerTool("adversarial_fence_probe", "Adversarial Fence Testing Protocol (KN100/BP015 P5 — 'Prove all things; hold fast that which is good' — Founder BP015 clarification). Three probe types: counter_claim (submit alternative; verify substrate handles contradiction), cross_canon_contradiction (find entries that contradict each other), stale_substrate (verify staleness markers fire). Writes probe receipts back to pheromone substrate as adversarial_fence_probe entries for Bushel 1 Reckoning audit trail. 'It will happen anyway, if WE do it, then that makes us all the stronger.' — Founder direct.", {
+    probe_type: z.enum(["counter_claim", "cross_canon_contradiction", "stale_substrate"]).describe("Probe class: counter_claim | cross_canon_contradiction | stale_substrate"),
+    claim: z.string().min(3).max(500).describe("Primary canonical claim to probe (the 'rung' being adversarially tested)"),
+    counter_claim: z.string().min(3).max(500).optional().describe("For counter_claim probe: the alternative/contradicting claim to submit against the substrate"),
+    top_k: z.number().int().min(1).max(50).optional().describe("Number of substrate hits to probe against (default 10)"),
+    write_back: z.boolean().optional().describe("Write probe receipt to pheromone as adversarial_fence_probe entry (default true)"),
+    hold_or_discard: z.enum(["hold", "discard", "flag_reconciliation", "pending"]).optional().describe("Per-claim adjudication for Bushel 1 Reckoning (default: pending — to be adjudicated after probe review)"),
+}, async ({ probe_type, claim, counter_claim, top_k, write_back, hold_or_discard }) => {
+    try {
+        const topK = top_k ?? 10;
+        const shouldWriteBack = write_back !== false;
+        const adjudication = hold_or_discard ?? "pending";
+        let probeResult = { probe_type, claim };
+        if (probe_type === "counter_claim") {
+            // Submit the original claim to substrate
+            const claimHits = queryPheromone(claim, { topK, decayActive: true });
+            // Submit the counter-claim to substrate
+            const counterHits = counter_claim
+                ? queryPheromone(counter_claim, { topK, decayActive: true })
+                : null;
+            const claimCoverage = claimHits.hits.length;
+            const counterCoverage = counterHits?.hits.length ?? 0;
+            probeResult = {
+                ...probeResult,
+                counter_claim: counter_claim ?? "(none provided)",
+                claim_hits: claimCoverage,
+                counter_hits: counterCoverage,
+                substrate_response: claimCoverage > counterCoverage
+                    ? "substrate_favors_claim"
+                    : claimCoverage === counterCoverage
+                        ? "substrate_tied"
+                        : "substrate_favors_counter",
+                finding: claimCoverage > counterCoverage
+                    ? `Claim '${claim}' is substrate-dominant (${claimCoverage} hits vs counter ${counterCoverage} hits). HOLD.`
+                    : counterCoverage > 0
+                        ? `Counter-claim '${counter_claim}' has substrate coverage (${counterCoverage} hits). FLAG FOR RECONCILIATION.`
+                        : `Claim '${claim}' has minimal coverage (${claimCoverage} hits). NEEDS BACKFILL.`,
+                adjudication,
+            };
+        }
+        else if (probe_type === "cross_canon_contradiction") {
+            // Query broad substrate for the claim; look for conflicting hits in same domain
+            const hits = queryPheromone(claim, { topK, decayActive: false });
+            // Group by scribe; multiple scribes covering same claim = potential contradiction surface
+            const scribeGroups = new Map();
+            for (const h of hits.hits) {
+                if (!scribeGroups.has(h.scribe))
+                    scribeGroups.set(h.scribe, []);
+                scribeGroups.get(h.scribe).push({ tablet_id: h.tablet_id, decay_score: h.decay_score });
+            }
+            const multiHitScribes = [...scribeGroups.entries()].filter(([, v]) => v.length > 1);
+            probeResult = {
+                ...probeResult,
+                total_hits: hits.hits.length,
+                scribes_covered: scribeGroups.size,
+                multi_hit_scribes: multiHitScribes.map(([s, entries]) => ({ scribe: s, entries })),
+                finding: multiHitScribes.length > 0
+                    ? `Cross-canon probe: ${multiHitScribes.length} scribe(s) have multiple entries for '${claim}' — potential contradiction surface; manual review recommended.`
+                    : `No cross-canon contradiction surface found for '${claim}' (${scribeGroups.size} scribes, each with single entry). Clean.`,
+                adjudication,
+            };
+        }
+        else if (probe_type === "stale_substrate") {
+            // Query with very short freshness window to force staleness detection
+            const aggressiveFreshness = queryPheromone(claim, {
+                topK,
+                freshnessThresholdSeconds: 0, // force stale
+                decayActive: true,
+            });
+            const normalFreshness = queryPheromone(claim, {
+                topK,
+                freshnessThresholdSeconds: 86400,
+                decayActive: true,
+            });
+            probeResult = {
+                ...probeResult,
+                index_age_seconds: aggressiveFreshness.index_age_seconds,
+                hits_normal_freshness: normalFreshness.hits.length,
+                hits_aggressive_freshness: aggressiveFreshness.hits.length,
+                freshness_degradation: normalFreshness.hits.length - aggressiveFreshness.hits.length,
+                finding: aggressiveFreshness.index_age_seconds > 86400
+                    ? `Substrate index is STALE (age=${Math.round(aggressiveFreshness.index_age_seconds / 3600)}h). Run pheromone_build or npm run rebuild.`
+                    : `Substrate freshness OK (age=${Math.round(aggressiveFreshness.index_age_seconds)}s). Decay scoring functional.`,
+                adjudication,
+            };
+        }
+        // Write-back probe receipt
+        let writeBackResult = { ok: false };
+        if (shouldWriteBack) {
+            try {
+                const probe_id = `adversarial_${probe_type}_${Date.now()}_${claim.slice(0, 20).replace(/\s+/g, "_")}`;
+                emitPheromone("AdversarialFenceProbe", probe_id, JSON.stringify(probeResult), {
+                    cathedral: "bishop",
+                    decayConstantDays: 60,
+                    synthesisClass: "adversarial_fence_probe",
+                });
+                writeBackResult = { ok: true, record_id: probe_id };
+            }
+            catch (wbErr) {
+                writeBackResult = { ok: false, error: wbErr.message };
+            }
+        }
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        ...probeResult,
+                        write_back_result: writeBackResult,
+                    }, null, 2),
+                }],
         };
     }
     catch (err) {
@@ -4004,6 +4278,853 @@ registerTool("list_pending_pawn_dispatches", "K532 — List recent Pawn dispatch
     return { content: [{ type: "text", text: JSON.stringify({ count: summary.length, dispatches: summary }, null, 2) }] };
 });
 // ═══════════════════════════════════════════
+// KN-G — SHADOW PHASE QUERY (BP016)
+// ═══════════════════════════════════════════
+registerTool("shadow_phase_query", "KN-G / BP016 — Alternating Cylinder Fire observability tool. " +
+    "Returns the current A/B phase assignment for each of the 8 Shadow E-Giants. " +
+    "Reads from federation/cylinder_phase_state.jsonl; falls back to deterministic formula if no state file. " +
+    "Use for debugging cycle coordination, verifying N/2-in-A + N/2-in-B balance, and monitoring phase transitions.", {
+    shadow_id: z.string().optional().describe("Optional: specific Shadow ID (shadow_0..shadow_7) — omit for all 8"),
+    cycle_number: z.number().int().min(0).optional().describe("Optional: query phase for a hypothetical cycle number instead of current"),
+    include_history: z.boolean().default(false).describe("If true, include last 5 cycle snapshots from the state log"),
+}, async ({ shadow_id, cycle_number, include_history }) => {
+    const { homedir } = await import("os");
+    const { readFileSync, existsSync } = await import("fs");
+    const { resolve } = await import("path");
+    const STATE_FILE = resolve(homedir(), ".lb-session", "federation", "cylinder_phase_state.jsonl");
+    const SHADOW_COUNT = 8;
+    // Deterministic formula: shadow_i is in phase A when (cycle + i) % 2 === 0
+    function deterministicPhase(cycle, idx) {
+        return (cycle + idx) % 2 === 0 ? "A" : "B";
+    }
+    // Read latest state from JSONL
+    let latestSnapshot = null;
+    const history = [];
+    if (existsSync(STATE_FILE)) {
+        try {
+            const lines = readFileSync(STATE_FILE, "utf-8").trim().split("\n").filter(Boolean);
+            for (const line of lines) {
+                try {
+                    history.push(JSON.parse(line));
+                }
+                catch { /* skip malformed */ }
+            }
+            if (history.length > 0)
+                latestSnapshot = history[history.length - 1];
+        }
+        catch {
+            // file unreadable — fall through to deterministic
+        }
+    }
+    // Resolve effective cycle number
+    const effectiveCycle = cycle_number !== undefined
+        ? cycle_number
+        : (latestSnapshot?.cycle_number ?? 0);
+    // Build assignments
+    const shadowIds = shadow_id
+        ? [shadow_id]
+        : Array.from({ length: SHADOW_COUNT }, (_, i) => `shadow_${i}`);
+    const assignments = shadowIds.map(sid => {
+        const idx = parseInt(sid.replace("shadow_", ""), 10);
+        const phase = (latestSnapshot && cycle_number === undefined)
+            ? (latestSnapshot.assignments.find(a => a.shadow_id === sid)?.phase ?? deterministicPhase(effectiveCycle, idx))
+            : deterministicPhase(effectiveCycle, idx);
+        return { shadow_id: sid, phase, cycle_number: effectiveCycle };
+    });
+    const inA = assignments.filter(a => a.phase === "A").length;
+    const inB = assignments.filter(a => a.phase === "B").length;
+    const balanced = !shadow_id && inA === inB;
+    const result = {
+        source: latestSnapshot ? "state_file" : "deterministic_formula",
+        state_file: STATE_FILE,
+        effective_cycle: effectiveCycle,
+        published_at: latestSnapshot?.published_at ?? null,
+        assignments,
+        balance: { in_A: inA, in_B: inB, balanced },
+    };
+    if (include_history && history.length > 0) {
+        result.history = history.slice(-5);
+    }
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ─── KN102: get_cohort_class ──────────────────────────────────────────────────
+// Read-only. Returns current member's cohort tier + librarian mode.
+// Called at LB Frame Handshake Phase 1 Discovery and on-demand for diagnostics.
+// BRIDLE Rule 4: if detection fails, returns lone_wolf/brittle (safe default).
+server.tool("get_cohort_class", "Returns the current member's cohort class (lone_wolf / pied_piper_tier_1 / pied_piper_tier_2_plus / federation_member / excalibur_class_subscriber) and librarian mode (brittle or fluid). Used by LB Frame Handshake Phase 1 Discovery and brief_me to surface mode context. Reads profiles.membership_status + entity_memberships + cue_card 7-day recency window via Supabase RPC. Falls back to brittle/lone_wolf if DB is unreachable.", {
+    member_id: z.string().describe("Supabase auth.users UUID for the member. Required."),
+}, async ({ member_id }) => {
+    ensureFreshIndex();
+    const result = await probeCohortClass(member_id);
+    const summary = formatCohortSummary(result);
+    return {
+        content: [{
+                type: "text",
+                text: JSON.stringify({
+                    ...result,
+                    summary,
+                }, null, 2),
+            }],
+    };
+});
+// ─── KN-H1 + KN-H2 + KN-H3 + KN-H4: get_lb_frame_resource_config_tier ───────
+// Read-only. Returns member's Tier choice + tier-spec metadata.
+// KN-H2: Extended to return Tier A spec metadata + empirical-floor receipt pointer
+//         when tier == 'needs'. Single source of truth: tier_a_needs_spec.ts (UI)
+//         and TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json (empirical anchor).
+// KN-H3: Extended to return Tier B spec metadata + empirical-uplift receipt pointer
+//         when tier == 'suggests'. Single source of truth: tier_b_suggests_spec.ts (UI)
+//         and TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json (empirical anchor).
+// KN-H4: Extended to return Tier C spec metadata + cascade telemetry receipt pointer
+//         when tier == 'founder'. Single source of truth: tier_c_founder_spec.ts (UI)
+//         and TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json (empirical anchor).
+//         Tier C is the empirical-receipt-source: the BP015→BP017 cascade (27 CJ ratifications +
+//         70+ clean K-lineage + 4 architectural patterns recovered) establishes the reference point.
+// Called at LB Frame Handshake Phase 1 Discovery (Step 1.3) and on-demand.
+// Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes.
+// BRIDLE Rule 4: if DB unavailable, returns tier_state='not_chosen' (surface picker; don't proceed silently).
+const TIER_A_SPEC_METADATA = {
+    plan_requirement: "Default Claude Code Pro/Standard plan",
+    upgrade_required: false,
+    anyone_can_run: true,
+    mcp_slots: "Default (5–10 slots)",
+    cohort_class_default: "Lone Wolf",
+    bag_of_holding_class: "Small bag (default-plan context-budget); warehouse-access full",
+    substrate_mode: "read-only",
+    cathedral_fingerprint: "brittle (cron-class; npm run rebuild)",
+    spec_bullets: [
+        "Default Claude Code plan (no upgrade required)",
+        "Standard token budget + message-rate limits (no overrides)",
+        "Pheromone substrate read-only — query the cooperative warehouse",
+        "Detective TEAM read-only — cross-cathedral fan-out for canon search",
+        "Brittle Cathedral fingerprint (refreshes via npm run rebuild)",
+        "Lone Wolf cohort-class default (separately advanceable)",
+    ],
+    empirical_floor: {
+        benchmark: "R10-v1",
+        cold_accuracy_pct_min: 5.3,
+        cold_accuracy_pct_max: 12.0,
+        hot_accuracy_pct_min: 89.3,
+        hot_accuracy_pct_max: 98.7,
+        lift_pp_min: 78,
+        lift_pp_max: 93.4,
+        lift_pp_mean: 86.2,
+        target_lift_pp: 30,
+        pass: true,
+        receipt_pointer: "BISHOP_DROPZONE/14_CanonicalReferences/TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json",
+        note: "Retrieval quality is substrate-dependent, not plan-dependent. Tier A floor is the same as Tier B/C for retrieval.",
+    },
+    spec_doc: "platform/src/data/lb_frame_tier_specs/tier_a_needs.md",
+};
+// ─── KN-H4: Tier C FOUNDER spec metadata ────────────────────────────────────
+// Single source of truth for MCP tool response when tier == 'founder'.
+// UI source: platform/src/data/lb_frame_tier_specs/tier_c_founder_spec.ts
+// Empirical anchor: BISHOP_DROPZONE/14_CanonicalReferences/TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json
+// BRIDLE Rule 4: all cascade telemetry numbers anchored to milestone artifacts + canonical_values.yaml.
+const TIER_C_SPEC_METADATA = {
+    plan_requirement: "Founder-equivalent plan (self-attested at install-time; no purchase required)",
+    plan_note: "Tier C advisory surfaces strongly if plan below Founder-equivalent. Informational only — does not block. " +
+        "Anti-extraction: capital alone is not the gate. Cohort-class advancement (separately advanceable) unlocks Federation features.",
+    upgrade_required: false,
+    anyone_can_run: true,
+    self_attested: true,
+    mcp_slots: "~30+ slots (full LB Frame core + Cathedral + Pheromone + Detective TEAM + extended MCPs)",
+    cohort_class_minimum: "Federation Member (Apiarist Worker / Drone / Queen / Thirteenth Warrior cohort lead)",
+    bag_of_holding_class: "Biggest bag (Founder plan context-budget); full warehouse-write privilege at all layers",
+    substrate_mode: "read+write",
+    pheromone_mode: "read+write",
+    detective_team_mode: "full (read+write-back)",
+    miner_subclass: true,
+    apiarist_hive: "full",
+    excalibur_class: "subscriber",
+    iron_e_giant_federation: "full",
+    shadow_e_giant: "Alternating Cylinder Fire daemon",
+    cathedral_fingerprint: "fluid (event-driven; maximum-velocity Cue Card recency)",
+    bishop_model_spec: "Claude Opus 4.7 (1M context)",
+    knight_model_spec: "Claude Sonnet 4.6 (200K context)",
+    spec_bullets: [
+        "Founder-equivalent plan (self-attested; no purchase required — capital is not the gate)",
+        "Bishop=Opus 4.7 1M + Knight=Sonnet 4.6 200K token budgets (maximum-velocity composition)",
+        "~30+ MCP slots (full LB Frame core + Cathedral + Pheromone + Detective TEAM + extended MCPs)",
+        "All substrate features at full velocity: Pheromone + Detective TEAM + Miner + Apiarist Hive + Excalibur + Shadow E-Giant",
+        "Federation Member cohort-class minimum (Apiarist Worker / Drone / Queen — separately advanceable)",
+        "Empirical-receipt-source: 27 CJ ratifications + 70+ clean K-lineage + 4 architectural patterns recovered (BP015→BP017 cascade)",
+    ],
+    cascade_telemetry: {
+        session_arc: "BP015 → BP016 → BP017",
+        crown_jewel_ratifications: {
+            bp015: 0,
+            bp015_note: "Substrate-readiness audit — receipt IS the enabling-disclosure artifact for Prov 16",
+            bp016: 15,
+            bp016_source: "MILESTONE_BP016_CLOSEOUT.md — confirmed 15 CJ ratifications, highest single-session density in BP-arc history",
+            bp017_floor: 12,
+            total_floor: 27,
+        },
+        k_lineage_clean_floor: "70+",
+        k_lineage_source: "BP015 closeout '64+ consecutive clean K-lineage (zero --no-verify)' + KN-H1/H2/H3/H4 additions",
+        zero_no_verify_events: true,
+        pods_landed_count: 9,
+        architectural_patterns_recovered: 4,
+        architectural_patterns_class: "architectural-pattern-recognition tier — highest compound-lift class observed to date",
+        bp015_beans_landed: 449,
+        bp015_capacity_floor: "~750-800 substrate operations single-session",
+        bridle_rule_4_note: "All telemetry empirically anchored: CJ counts from MILESTONE_BP016_CLOSEOUT.md; " +
+            "K-lineage from git log + BP015 closeout floor; canonical values from canonical_values.yaml. " +
+            "No inflation. Anti-marketing-class discipline preserved per feedback_empirically_valid_praise_only.md (B132).",
+    },
+    spec_doc: "platform/src/data/lb_frame_tier_specs/tier_c_founder.md",
+    cascade_receipt_pointer: "BISHOP_DROPZONE/14_CanonicalReferences/TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json",
+    composes_with: [
+        "KN-H1 LANDED 82c52fa (Three-Tier installer + UI + persistence + MCP tools)",
+        "KN-H2 LANDED c75995f (Tier A baseline empirical floor receipt)",
+        "KN-H3 LANDED 94cd4c6 (Tier B uplift empirical receipt)",
+        "KN-H4 LANDED (this commit — Tier C FOUNDER spec doc + cascade telemetry receipt)",
+    ],
+    empirical_receipt_source_note: "Tier C FOUNDER is the empirical-receipt-source for the LB Frame Three-Tier system. " +
+        "The BP015→BP017 cascade telemetry IS the receipt future Tier C users replicate at their plan-class.",
+};
+const TIER_B_SPEC_METADATA = {
+    plan_requirement: "Claude Code Max or equivalent higher-tier (recommended, not required)",
+    plan_note: "Tier B advisory surfaces if plan below Max-equivalent. Informational only — does not block.",
+    upgrade_required: false,
+    anyone_can_run: true,
+    mcp_slots: "15–20 slots minimum",
+    cohort_class_recommended: "Pied Piper Tier 1+",
+    bag_of_holding_class: "Bigger bag (Claude Code Max context-budget); event-driven warehouse-write at Pied Piper+ cohort",
+    substrate_mode: "read+write",
+    cathedral_fingerprint: "fluid (event-driven; Cue Card 7-day recency gate)",
+    pheromone_mode: "read+write",
+    detective_team_mode: "full (read+write-back)",
+    spec_bullets: [
+        "Claude Code Max or equivalent (recommended, not required)",
+        "1M-context Opus 4.7 token budget (vs default Tier A bag)",
+        "15–20 MCP slots minimum (full LB Frame core + Cathedral + Pheromone + Detective TEAM)",
+        "Full Pheromone substrate (read + write — was read-only at Tier A)",
+        "Detective TEAM full access + write-back loop (was read-only at Tier A)",
+        "Fluid Cathedral fingerprint via Cue Card 7-day recency gate (was Brittle at Tier A)",
+        "Pied Piper Tier 1+ cohort-class recommended (separately advanceable)",
+    ],
+    empirical_uplift: {
+        baseline_tier: "needs",
+        baseline_receipt_pointer: "BISHOP_DROPZONE/14_CanonicalReferences/TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json",
+        hot_rate_min_pct: 89.3,
+        hot_rate_max_pct: 98.7,
+        hot_rate_note: "HOT-rate is substrate-dependent, not plan-dependent. Same R10 baseline applies. " +
+            "Fluid Cathedral may improve in fast-evolving knowledge domains.",
+        reckoning_velocity_uplift_range: "2–3×",
+        reckoning_velocity_source: "bp017-spec",
+        pod_scaffolding_uplift_min_x: 1.5,
+        pod_scaffolding_tier_b_rate: "~1 K-prompt per 30 min (vs ~60 min at Tier A)",
+        pod_scaffolding_source: "bp017-spec",
+        cathedral_hot_between_rebuilds_pct_range: "70–85%",
+        receipt_pointer: "BISHOP_DROPZONE/14_CanonicalReferences/TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json",
+        uplift_pass: true,
+        bridle_rule_4_note: "Velocity and pod-scaffolding claims labeled bp017-spec (architectural basis). " +
+            "HOT-rate empirically verified via R10 cross-vendor benchmark. " +
+            "BRIDLE Rule 4: source clearly distinguished from live-benchmark measurement.",
+    },
+    spec_doc: "platform/src/data/lb_frame_tier_specs/tier_b_suggests.md",
+    composes_with: [
+        "KN-H1 LANDED 82c52fa (Three-Tier installer + UI + persistence + MCP tools)",
+        "KN-H2 LANDED (Tier A baseline empirical floor receipt)",
+        "KN102+KN103 LANDED 42ad0c3 (cohort-class probe + Pied Piper Fluid Cathedral fingerprint)",
+        "KN104 PRE-COLOSSUS LANDED 5e7f540 (Detective TEAM full access at Tier B)",
+    ],
+};
+server.tool("get_lb_frame_resource_config_tier", "Returns a member's LB Frame resource-config tier choice (needs/suggests/founder) + tier-spec metadata. " +
+    "KN-H2: When tier is 'needs' (Tier A), returns full Tier A spec metadata including empirical floor receipt pointer. " +
+    "KN-H3: When tier is 'suggests' (Tier B), returns full Tier B spec metadata including empirical uplift receipt pointer. " +
+    "KN-H4: When tier is 'founder' (Tier C), returns full Tier C spec metadata including BP015→BP017 cascade telemetry receipt pointer. " +
+    "Tier C is the empirical-receipt-source: 27 CJ ratifications + 70+ clean K-lineage + 4 architectural patterns recovered. " +
+    "Called at LB Frame Handshake Phase 1 Discovery Step 1.3 to check if member has already chosen a tier. " +
+    "Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes. " +
+    "Tier A NEEDS = default Claude plan, no upgrade required, empirical floor +78–93pp lift. " +
+    "Tier B SUGGESTS = recommended uplift (Claude Code Max); 2–3× Reckoning velocity; Fluid Cathedral; full Pheromone+Detective TEAM. " +
+    "Tier C FOUNDER = empirical-receipt-source, self-attested, no fiat-bridge; all substrate features at full velocity; Federation cohort-class minimum. " +
+    "Anti-extraction by structural form: capital alone cannot purchase higher-tier participation. " +
+    "Falls back gracefully if Supabase unavailable (BRIDLE Rule 4).", {
+    member_id: z.string().describe("Supabase auth.users UUID for the member. Required."),
+    surface: z.string().optional().describe("Detected Claude Code surface (from Phase 1 Discovery) — used for plan-tier advisory text only."),
+}, async ({ member_id, surface }) => {
+    ensureFreshIndex();
+    const result = await probeTierConfig(member_id);
+    const summary = formatTierSummary(result);
+    const advisory = result.tier ? buildPlanTierAdvisory(result.tier, surface) : null;
+    // KN-H2: Attach Tier A spec metadata when tier is 'needs' (or not yet chosen — show floor spec for UI)
+    const tier_a_spec = (result.tier === "needs" || result.tier_state === "not_chosen")
+        ? TIER_A_SPEC_METADATA
+        : null;
+    // KN-H3: Attach Tier B spec metadata when tier is 'suggests'
+    const tier_b_spec = result.tier === "suggests" ? TIER_B_SPEC_METADATA : null;
+    // KN-H4: Attach Tier C spec metadata when tier is 'founder'
+    const tier_c_spec = result.tier === "founder" ? TIER_C_SPEC_METADATA : null;
+    return {
+        content: [{
+                type: "text",
+                text: JSON.stringify({
+                    ...result,
+                    summary,
+                    plan_tier_advisory: advisory,
+                    tier_a_spec,
+                    tier_b_spec,
+                    tier_c_spec,
+                    compose_note: "Run get_cohort_class for cohort-class axis (orthogonal). Both at Handshake Phase 1 Discovery.",
+                }, null, 2),
+            }],
+    };
+});
+// ─── KN-H1: set_lb_frame_resource_config_tier ────────────────────────────────
+// Persists user's tier choice from Handshake Step 1.3.
+// Tier choice is reversible (re-selection supported; tier_chosen_at updates).
+// Anti-extraction: no fiat-bridge enforcement at this layer; Tier C is self-attested.
+server.tool("set_lb_frame_resource_config_tier", "Persists a member's LB Frame resource-config tier choice to user_preferences. " +
+    "Called by Handshake Phase 1 Discovery Step 1.3 after user picks. " +
+    "Tier choice is reversible — re-selection allowed; tier_chosen_at updates on every call. " +
+    "No fiat-bridge: Tier C (founder) does NOT require fiat upgrade-purchase; user self-attests. " +
+    "Returns success + reselection flag (true if overriding a previous pick). " +
+    "BRIDLE Rule 8: surfaces error + retry if persistence fails; does not silently proceed.", {
+    member_id: z.string().describe("Supabase auth.users UUID for the member. Required."),
+    tier: z.enum(["needs", "suggests", "founder"]).describe("Chosen tier: 'needs' (Tier A, default plan), 'suggests' (Tier B, recommended uplift), 'founder' (Tier C, empirical-receipt-source)."),
+}, async ({ member_id, tier }) => {
+    ensureFreshIndex();
+    const result = await setTierConfig(member_id, tier);
+    if (!result.success) {
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        ...result,
+                        retry_instruction: "Persistence failed. Surface error to user and offer retry. Do NOT silently proceed (BRIDLE Rule 8).",
+                    }, null, 2),
+                }],
+            isError: true,
+        };
+    }
+    const summary = `Tier ${tier} (${tier === "needs" ? "A" : tier === "suggests" ? "B" : "C"}) set successfully${result.reselection ? " (reselection — overrode previous pick)" : ""}.`;
+    return {
+        content: [{
+                type: "text",
+                text: JSON.stringify({ ...result, summary }, null, 2),
+            }],
+    };
+});
+// ═══════════════════════════════════════════
+// KN104: TEAM DISPATCHER (PRE-COLOSSUS)
+// ═══════════════════════════════════════════
+/**
+ * team_dispatch — KN104 / BP016 PRE-COLOSSUS
+ * Multi-class TEAM (Detectives + Miners) cross-cathedral investigation
+ * with cohort-class-aware Scribe-access enforcement and substrate write-back.
+ */
+registerTool("team_dispatch", "Detective TEAM dispatcher (KN104/BP016 PRE-COLOSSUS). Multi-class team composition: Detectives (pheromone + consult_scribes) + Miners (mitotic corpus-prospecting + ROOT-lineage + IP-ledger-locked). Cohort-class-aware Scribe-access enforcement (lone_wolf/pied_piper/federation_member/excalibur_class_subscriber). Substrate write-back via Pheromone with extended schema. Pairs with KN105 Excalibur Class: Miner output feeds Excalibur slice-distillation pipeline.", {
+    claim: z.string().min(3).max(500).describe("The claim or topic to investigate with the full TEAM"),
+    team_composition: z.array(z.enum(["detective", "miner"])).min(1).describe("Team roles to dispatch (e.g. ['detective', 'miner'])"),
+    cohort_class: z.enum(["lone_wolf", "pied_piper", "federation_member", "excalibur_class_subscriber"]).describe("Cohort class — controls Scribe-access boundaries per KN102/BP016"),
+    cathedrals: z.array(z.enum(["bishop", "knight", "pawn"])).optional().describe("Cathedrals to fan out across (default: all 3; bounded by cohort_class)"),
+    max_agents_per_role: z.number().int().min(1).max(5).optional().describe("Max agents per role (default 2)"),
+    write_back: z.boolean().optional().describe("Write synthesis to pheromone substrate (default true; overridden by cohort_class access rules)"),
+    raw_corpus: z.array(z.string()).optional().describe("Raw text corpus for Miner prospecting (optional; if omitted, Miner uses pheromone substrate contents)"),
+    flavor_class: z.object({
+        domain: z.string().optional(),
+        cognition: z.string().optional(),
+        audience: z.string().optional(),
+    }).optional().describe("Multi-Trail pheromone flavor tags for write-back synthesis entry"),
+    replay_class: z.string().optional().describe("Set to 'detective_team_backfill' for replay pass"),
+}, async ({ claim, team_composition, cohort_class, cathedrals, max_agents_per_role, write_back, raw_corpus, flavor_class, replay_class }) => {
+    try {
+        const corpus = raw_corpus ?? [];
+        const result = await teamDispatch({
+            claim,
+            team_composition: team_composition,
+            cohort_class: cohort_class,
+            cathedrals: cathedrals ?? ["bishop", "knight", "pawn"],
+            max_agents_per_role: max_agents_per_role ?? 2,
+            write_back: write_back !== false,
+            flavor_class,
+            replay_class,
+        }, async (c, cathedral, agentIdx) => {
+            return runMinerProspect({
+                claim: c,
+                cathedral,
+                raw_corpus: corpus.length > 0 ? corpus : [`topic: ${c}`],
+                session_id: `team_dispatch_${Date.now()}_${agentIdx}`,
+            });
+        });
+        const accessDescriptor = getScribeAccessDescriptor(cohort_class);
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        ...result,
+                        access_audit: {
+                            tier: accessDescriptor.tier_label,
+                            access_note: accessDescriptor.access_note,
+                        },
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+/**
+ * miner_dispatch — KN104 / BP016
+ * Standalone Miner-only dispatch for ad-hoc corpus prospecting.
+ */
+registerTool("miner_dispatch", "Standalone Miner dispatch (KN104/BP016). Runs a single Miner agent on a raw corpus. Produces ROOT-lineage tablet + halves-on-category-discovery. Cathedral-prefixed serial number generated. IP-ledger-locked + Chronos Chronicler signed. Use for targeted corpus-prospecting without full TEAM overhead.", {
+    claim: z.string().min(3).max(500).describe("Topic seed for the Miner"),
+    cathedral: z.enum(["bishop", "knight", "pawn"]).optional().describe("Cathedral to mine in (default: bishop)"),
+    raw_corpus: z.array(z.string()).describe("Raw text corpus to mine (array of text strings)"),
+    parent_serial: z.string().optional().describe("Parent Miner serial (for spawning daughter Miners)"),
+    halve_threshold: z.object({
+        keyword_density_delta: z.number().min(0).max(1).optional(),
+        semantic_drift_threshold: z.number().min(0).max(1).optional(),
+        founder_ratification_override: z.boolean().optional().describe("Explicit YES/NO from Founder; bypasses heuristic detection"),
+    }).optional().describe("Halve threshold config (defaults: 0.3 keyword delta, 0.4 semantic drift)"),
+    session_id: z.string().optional().describe("Session ID for IP ledger attribution"),
+}, async ({ claim, cathedral, raw_corpus, parent_serial, halve_threshold, session_id }) => {
+    try {
+        const result = await runMinerProspect({
+            claim,
+            cathedral: cathedral ?? "bishop",
+            raw_corpus,
+            parent_serial,
+            halve_threshold_config: halve_threshold ? {
+                keyword_density_delta: halve_threshold.keyword_density_delta ?? 0.3,
+                semantic_drift_threshold: halve_threshold.semantic_drift_threshold ?? 0.4,
+                founder_ratification_override: halve_threshold.founder_ratification_override,
+            } : undefined,
+            session_id: session_id ?? `miner_dispatch_${Date.now()}`,
+        });
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+/**
+ * get_team_provenance_chain — KN104 / BP016
+ * Query ROOT-lineage for Miner outputs by serial prefix.
+ */
+registerTool("get_team_provenance_chain", "Returns ROOT-lineage provenance chain for a given Miner serial (KN104/BP016). Resolves all descendants (daughter Miners spawned via halving). Serial format: LB-CAT.M-0042 (bishop), LB-CAT.K-0007 (knight). Also returns IP-ledger entries and Wells of Knowledge for the lineage. Use after miner_dispatch or team_dispatch to audit mitotic lineage.", {
+    serial: z.string().describe("Root Miner serial (e.g. 'LB-CAT.M-0042'). Also accepts 'ALL' to list all root Miners."),
+    include_ip_ledger: z.boolean().optional().describe("Include IP ledger entries (default false)"),
+    include_wells: z.boolean().optional().describe("Include Wells of Knowledge entries (default false)"),
+}, async ({ serial, include_ip_ledger, include_wells }) => {
+    try {
+        if (serial === "ALL") {
+            const roots = listRootMiners();
+            return {
+                content: [{ type: "text", text: JSON.stringify({ root_miners: roots, count: roots.length }, null, 2) }],
+            };
+        }
+        const chain = queryProvenanceChain(serial);
+        const result = {
+            serial,
+            provenance_chain: chain,
+            chain_length: chain.length,
+        };
+        if (include_ip_ledger) {
+            result.ip_ledger_entries = queryIpLedger(serial);
+        }
+        if (include_wells) {
+            const wells = listAllWells().filter(w => w.parent_serial === serial || w.daughter_serial.startsWith(serial));
+            result.wells_of_knowledge = wells;
+        }
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+// ═══════════════════════════════════════════
+// KN105: EXCALIBUR CLASS COMMERCIAL SUBSCRIPTION
+// ═══════════════════════════════════════════
+/**
+ * excalibur_slice_list — KN105 / BP016
+ */
+registerTool("excalibur_slice_list", "Lists Excalibur Class Scribe slices (KN105/BP016). By default returns only tag-assigned Excalibur Class slices. Set include_all=true to include proposed/raw_federation_library slices. Each slice includes pricing (one-time + subscription), tag-assignment gate status, contributing-member count, and topics covered.", {
+    include_all: z.boolean().optional().describe("Include all slice statuses (default false = Excalibur Class only)"),
+    granularity_filter: z.enum(["topic", "category"]).optional().describe("Filter by granularity (optional)"),
+}, async ({ include_all, granularity_filter }) => {
+    try {
+        const slices = include_all ? listAllSlices() : listExcaliburClassSlices();
+        const filtered = granularity_filter ? slices.filter(s => s.granularity === granularity_filter) : slices;
+        return {
+            content: [{ type: "text", text: JSON.stringify({ slices: filtered, count: filtered.length }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+/**
+ * excalibur_slice_create — KN105 / BP016
+ */
+registerTool("excalibur_slice_create", "Creates a new Excalibur Class Scribe slice candidate (KN105/BP016). Status starts as 'proposed'. Pricing calculated automatically: M_share × N_opted_in × 1.20 Cost+20%; category slices get 0.70 bundle discount. Slice earns 'excalibur_class' status only after all 4 gates pass (Cathedral Effect + Furnace + Adversarial Fence + Federation vote).", {
+    name: z.string().describe("Slice name (e.g. 'Gene Splicing' or 'Financial Markets')"),
+    granularity: z.enum(["topic", "category"]).describe("topic = single topic; category = bundle of topics"),
+    topics_included: z.array(z.string()).min(1).describe("Topics in this slice"),
+    contributing_member_ids: z.array(z.string()).optional().describe("Member IDs who contributed data (all default to opted_in)"),
+    m_share_override: z.number().optional().describe("Override Member pay rate (default $1/year per member per topic)"),
+}, async ({ name, granularity, topics_included, contributing_member_ids, m_share_override }) => {
+    try {
+        const members = (contributing_member_ids ?? []).map((id, i) => ({
+            member_id: id,
+            data_stamps: [],
+            contribution_share_proportion: 1.0 / Math.max(1, (contributing_member_ids ?? []).length),
+            share_back_per_subscription: 0,
+            opt_in_status: "opted_in",
+        }));
+        const slice = createExcaliburSlice({
+            name,
+            granularity,
+            topics_included,
+            contributing_members: members,
+            m_share_override,
+        });
+        return {
+            content: [{ type: "text", text: JSON.stringify({ slice, pricing_summary: slice.pricing }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+/**
+ * excalibur_slice_evaluate_gates — KN105 / BP016
+ */
+registerTool("excalibur_slice_evaluate_gates", "Evaluates the 4 Excalibur tag-assignment gates for a slice (KN105/BP016). BRIDLE Rule 4: if any gate fails (including borderline scores), tag is NOT assigned — slice stays 'raw_federation_library'. Gates: (1) Cathedral Effect lift ≥30pp, (2) Furnace verification ≥0.70, (3) Adversarial Fence all-probes-pass, (4) Federation vote quorum+threshold. Returns evaluation result + recommended_status.", {
+    slice_id: z.string().describe("Excalibur slice ID"),
+    cathedral_effect_lift_pp: z.number().describe("Cathedral Effect cross-vendor lift in percentage points (e.g. 35 = +35pp)"),
+    furnace_verification_score: z.number().min(0).max(1).describe("Furnace gear-tooth-fit score 0.0–1.0"),
+    adversarial_fence_probes_passed: z.number().int().min(0).describe("Number of adversarial fence probes passed"),
+    adversarial_fence_probes_total: z.number().int().min(1).describe("Total adversarial fence probes"),
+    federation_vote_yes: z.number().int().min(0).describe("Federation member yes votes"),
+    federation_vote_no: z.number().int().min(0).describe("Federation member no votes"),
+    total_eligible_voters: z.number().int().min(1).describe("Total eligible Federation member voters (for quorum calc)"),
+}, async ({ slice_id, cathedral_effect_lift_pp, furnace_verification_score, adversarial_fence_probes_passed, adversarial_fence_probes_total, federation_vote_yes, federation_vote_no, total_eligible_voters }) => {
+    try {
+        const gates = {
+            cathedral_effect_verification: { passed: false, lift_pp: cathedral_effect_lift_pp },
+            furnace_gate: { passed: false, verification_score: furnace_verification_score },
+            adversarial_fence_testing: { passed: false, probes_passed: adversarial_fence_probes_passed, probes_total: adversarial_fence_probes_total },
+            federation_member_vote: { yes_count: federation_vote_yes, no_count: federation_vote_no, quorum_met: false, threshold_met: false },
+        };
+        const updatedSlice = evaluateAndTagSlice(slice_id, gates, total_eligible_voters);
+        return {
+            content: [{ type: "text", text: JSON.stringify({ slice: updatedSlice, tag_assigned: updatedSlice.excalibur_tag_assigned, status: updatedSlice.status }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+/**
+ * excalibur_subscription_create — KN105 / BP016
+ */
+registerTool("excalibur_subscription_create", "Creates and activates an Excalibur Class subscription (KN105/BP016). Upekrithen LLC seller-of-record (Apache 2.0, NOT AGPL). Payment type: 'subscription' (annual, 5-year amortized) or 'one_time' (expires 30 days). Auto-grants cohort_class=excalibur_class_subscriber + fluid librarian mode (KN102 composition). No preemptive non-profit vetting per Founder stance.", {
+    subscriber_id: z.string().describe("Member/subscriber UUID"),
+    slice_id: z.string().describe("Excalibur Class slice ID to subscribe to"),
+    payment_type: z.enum(["subscription", "one_time"]).describe("Annual subscription or one-time access"),
+    stripe_session_id: z.string().optional().describe("Stripe checkout session ID (for one-time)"),
+    stripe_subscription_id: z.string().optional().describe("Stripe subscription ID (for annual)"),
+}, async ({ subscriber_id, slice_id, payment_type, stripe_session_id, stripe_subscription_id }) => {
+    try {
+        const slice = getSliceById(slice_id);
+        if (!slice) {
+            return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: `Slice ${slice_id} not found` }) }] };
+        }
+        if (slice.status !== "excalibur_class") {
+            return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: `Slice ${slice_id} has not earned Excalibur tag (status: ${slice.status}). Only the worthy wield Excalibur.` }) }] };
+        }
+        let sub = createSubscription(subscriber_id, slice_id, slice.granularity);
+        if (payment_type === "subscription") {
+            sub = activateSubscription(sub, stripe_subscription_id);
+        }
+        else {
+            sub = activateOneTimeAccess(sub, stripe_session_id);
+        }
+        return {
+            content: [{ type: "text", text: JSON.stringify({
+                        subscription: sub,
+                        cohort_class_granted: sub.cohort_class_granted,
+                        access_active: true,
+                        expires_at: sub.expires_at,
+                    }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+/**
+ * excalibur_share_back_summary — KN105 / BP016
+ */
+registerTool("excalibur_share_back_summary", "Returns Excalibur Class share-back-pay summary (KN105/BP016). Per-member share of subscription revenue: (revenue / 1.20) × contribution_proportion. Radical transparency per Meta-Law. For slice-level: shows all opted-in contributors and their total earned/pending/paid-out. For member-level: shows total earned across all slices.", {
+    query_type: z.enum(["slice", "member"]).describe("Query by slice_id or member_id"),
+    id: z.string().describe("Slice ID (if query_type=slice) or Member ID (if query_type=member)"),
+    record_payment: z.object({
+        subscription_revenue: z.number().describe("Revenue from this payment period ($)"),
+        period_start: z.string().describe("ISO-8601 period start"),
+        period_end: z.string().describe("ISO-8601 period end"),
+    }).optional().describe("If provided, records a new payment and generates share-back entries for all opted-in members"),
+}, async ({ query_type, id, record_payment }) => {
+    try {
+        if (query_type === "slice") {
+            if (record_payment) {
+                const slice = getSliceById(id);
+                if (!slice)
+                    return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: `Slice ${id} not found` }) }] };
+                const entries = recordShareBackForPayment(id, slice.contributing_members, record_payment.subscription_revenue, record_payment.period_start, record_payment.period_end);
+                return { content: [{ type: "text", text: JSON.stringify({ entries_created: entries.length, entries }, null, 2) }] };
+            }
+            const summary = getShareBackSummaryForSlice(id);
+            return { content: [{ type: "text", text: JSON.stringify({ slice_id: id, summary }, null, 2) }] };
+        }
+        else {
+            const total = getTotalShareBackEarned(id);
+            return { content: [{ type: "text", text: JSON.stringify({ member_id: id, total_earned_usd: total }, null, 2) }] };
+        }
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+/**
+ * excalibur_member_vote — KN105 / BP016
+ */
+registerTool("excalibur_member_vote", "Records a Federation member vote on an Excalibur slice (KN105/BP016). Gate 4 requires quorum (default 50% of members) + approval threshold (default 60% yes). After vote, gates are re-evaluated — if all 4 gates now pass, slice is promoted to 'excalibur_class'. BRIDLE Rule 4: borderline results default to NOT promoting.", {
+    slice_id: z.string().describe("Excalibur slice ID to vote on"),
+    vote: z.enum(["yes", "no"]).describe("Federation member vote"),
+    total_eligible_voters: z.number().int().min(1).describe("Total eligible Federation members for quorum calculation"),
+}, async ({ slice_id, vote, total_eligible_voters }) => {
+    try {
+        const updatedSlice = recordMemberVote(slice_id, vote, total_eligible_voters);
+        return {
+            content: [{ type: "text", text: JSON.stringify({
+                        slice_id,
+                        vote_recorded: vote,
+                        current_votes: updatedSlice.tag_assignment_gates.federation_member_vote,
+                        slice_status: updatedSlice.status,
+                        excalibur_tag_assigned: updatedSlice.excalibur_tag_assigned,
+                    }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
+    }
+});
+// ═══════════════════════════════════════════
+// TOOL: get_lb_frame_tier_bounty_pay_rate (KN-H5 / BP017)
+// ═══════════════════════════════════════════
+/**
+ * get_lb_frame_tier_bounty_pay_rate — KN-H5 / BP017 Bounty Poster Tier Scaffold
+ * Three modes: bounty_class (exact), tier (primary class for tier), list_all (all 4 classes).
+ * Pay-rate multipliers: Tier A × 1.0 / Tier B × 1.25 / Tier C × 1.5 / Cross-tier × 2.0.
+ */
+registerTool("get_lb_frame_tier_bounty_pay_rate", "Returns Bounty pay-rate metadata for LB Frame Three-Tier empirical verification tasks (KN-H5/BP017). " +
+    "Three modes: (1) bounty_class — exact class lookup; " +
+    "(2) tier — primary bounty class for needs/suggests/founder; " +
+    "(3) list_all=true — all four classes. " +
+    "Pay-rate multipliers: Tier A × 1.0 (baseline) / Tier B × 1.25 (uplift) / Tier C × 1.5 (founder replication) / Cross-tier × 2.0 (full comparison). " +
+    "Scaffold for KN-H6/H7/H8 Bounty Poster Tier-testing infrastructure.", {
+    bounty_class: z
+        .enum([
+        "tier_a_floor_verification",
+        "tier_b_uplift_verification",
+        "tier_c_founder_replication",
+        "cross_tier_comparison",
+    ])
+        .optional()
+        .describe("Specific Bounty class to query. Mutually exclusive with tier."),
+    tier: z
+        .enum(["needs", "suggests", "founder"])
+        .optional()
+        .describe("Returns primary Bounty class for this tier. Mutually exclusive with bounty_class."),
+    list_all: z
+        .boolean()
+        .optional()
+        .describe("If true, returns all four Bounty classes with pay-rate metadata."),
+}, async ({ bounty_class, tier, list_all }) => {
+    const result = handleGetTierBountyPayRate({
+        bounty_class: bounty_class,
+        tier: tier,
+        list_all,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ═══════════════════════════════════════════
+// TOOL: generate_tier_bounty_poster (KN-H6 / BP017)
+// ═══════════════════════════════════════════
+/**
+ * generate_tier_bounty_poster — KN-H6 / BP017 Per-Tier Bounty Poster Generator
+ * Creates a Bounty Poster instance for a given Three-Tier empirical-verification class.
+ * FORK doctrine: marks_pay_rate is always Marks-class — no fiat bridge possible.
+ * Four classes: tier_a_floor_verification (×1.0) / tier_b_uplift_verification (×1.25) /
+ *               tier_c_founder_replication (×1.5) / cross_tier_comparison (×2.0).
+ */
+registerTool("generate_tier_bounty_poster", "Generates a per-tier Bounty Poster instance for LB Frame Three-Tier empirical-verification tasks (KN-H6/BP017). " +
+    "Creates a TierBountyPoster with UUID, description, FORK-compliant Marks pay-rate (never fiat), " +
+    "submission schema (empirical-receipt JSON fields), validation criteria (pass/fail thresholds for KN-H7), " +
+    "and cohort_class_eligibility (Federation Member or higher). " +
+    "Four Bounty classes: " +
+    "tier_a_floor_verification (×1.0 — floor verification at default plan), " +
+    "tier_b_uplift_verification (×1.25 — uplift vs Tier A), " +
+    "tier_c_founder_replication (×1.5 — Founder cascade replication + Apiarist cohort uplift), " +
+    "cross_tier_comparison (×2.0 — all three tiers, same submitter + same bank). " +
+    "Use generate_all=true to generate all four at once. " +
+    "standard_rate defaults to 100 Marks; override to set base rate before multiplier.", {
+    tier_class: z
+        .enum([
+        "tier_a_floor_verification",
+        "tier_b_uplift_verification",
+        "tier_c_founder_replication",
+        "cross_tier_comparison",
+    ])
+        .optional()
+        .describe("Tier Bounty class to generate. Required unless generate_all=true. " +
+        "tier_a_floor_verification=×1.0 / tier_b_uplift_verification=×1.25 / " +
+        "tier_c_founder_replication=×1.5 / cross_tier_comparison=×2.0."),
+    standard_rate: z
+        .number()
+        .positive()
+        .optional()
+        .describe("Base Marks rate before tier multiplier. Defaults to 100 Marks. " +
+        "FORK doctrine: this is a Marks count, never a fiat amount."),
+    generate_all: z
+        .boolean()
+        .optional()
+        .describe("If true, generates all four Bounty Poster classes at once (ignores tier_class). " +
+        "Returns all_posters array ordered A → B → C → Cross-tier."),
+}, async ({ tier_class, standard_rate, generate_all }) => {
+    const result = handleGenerateTierBountyPoster({
+        tier_class: tier_class,
+        standard_rate,
+        generate_all,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ═══════════════════════════════════════════
+// TOOL: validate_bounty_receipt (KN-H7 / BP017)
+// ═══════════════════════════════════════════
+/**
+ * validate_bounty_receipt — KN-H7 / BP017 Bounty Empirical-Receipt Validator
+ * Validates submitted Bounty receipts against per-tier empirical criteria.
+ * Anti-marketing-class discipline: suspicious inflation flagged for Founder review.
+ * BRIDLE Rule 4: borderline cases default to FAIL.
+ */
+registerTool("validate_bounty_receipt", "Validates a submitted Bounty empirical receipt against per-tier criteria (KN-H7/BP017). " +
+    "Four Bounty classes: " +
+    "tier_a_floor_verification (HOT-rate lift ≥30pp; tier_config 'needs'; valid question bank), " +
+    "tier_b_uplift_verification (Cathedral lift ≥30pp; Reckoning velocity ≥2× Tier A reference), " +
+    "tier_c_founder_replication (Cathedral lift ≥30pp; founder_cascade_reference; own-corpus proof), " +
+    "cross_tier_comparison (all 3 tiers lift ≥30pp; same submitter; same question bank; monotone uplift). " +
+    "Returns: pass (bool), margin (lift_pp − 30; positive = above threshold), " +
+    "failures (array of specific unmet criteria), warnings (borderline/suspicious results for Founder review). " +
+    "Anti-marketing-class discipline: lift_pp > 60pp (>20% above K477/K481/K499 50pp typical ceiling) " +
+    "flags suspicious_inflation warning and routes to Founder review — no auto-approval. " +
+    "BRIDLE Rule 4: borderline cases (e.g. velocity 1.5–2×) default to FAIL. " +
+    "Composes with KN-H6 generate_tier_bounty_poster (provides submission_schema + validation_criteria). " +
+    "KN-H8 Marks payout integration is gated on a passing validation result from this tool.", {
+    bounty_id: z
+        .string()
+        .describe("UUID of the Bounty Poster instance being validated against (from generate_tier_bounty_poster)."),
+    bounty_class: z
+        .enum([
+        "tier_a_floor_verification",
+        "tier_b_uplift_verification",
+        "tier_c_founder_replication",
+        "cross_tier_comparison",
+    ])
+        .describe("Tier Bounty class — determines which validation criteria apply. " +
+        "tier_a_floor_verification: HOT-rate ≥30pp lift; tier_config 'needs'. " +
+        "tier_b_uplift_verification: Cathedral lift ≥30pp; Reckoning velocity ≥2× Tier A. " +
+        "tier_c_founder_replication: Cathedral lift ≥30pp; cascade-replication evidence; own-corpus. " +
+        "cross_tier_comparison: all 3 tiers ≥30pp; same submitter; same bank; monotone uplift."),
+    receipt_json: z
+        .record(z.unknown())
+        .describe("The submitted empirical receipt as a JSON object. " +
+        "Required fields per class (see generate_tier_bounty_poster for full submission_schema): " +
+        "Tier A: cold_accuracy_pct, hot_accuracy_pct, lift_pp, tier_config, ai_model, " +
+        "question_bank_version, run_timestamp. " +
+        "Tier B: tier_b_lift_pp, reckoning_velocity_ratio, tier_a_reference_receipt, tier_config, " +
+        "ai_model, run_timestamp. " +
+        "Tier C: founder_cascade_reference, replication_lift_pp, corpus_folder_description, " +
+        "tier_config, ai_model, run_timestamp. " +
+        "Cross-tier: tier_a/b/c cold+hot accuracy, same_submitter=true, question_bank_version, " +
+        "tier_a/b/c model, run_timestamps object."),
+}, async ({ bounty_id, bounty_class, receipt_json }) => {
+    const result = handleValidateBountyReceipt({
+        bounty_id,
+        bounty_class: bounty_class,
+        receipt_json: receipt_json,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// TOOL: process_bounty_marks_payout (KN-H8 / BP017)
+// ────────────────────────────────────────────────────────────────────────────
+/**
+ * process_bounty_marks_payout — KN-H8 / BP017 Bounty Marks Payout Integration
+ *
+ * Write-class tool — atomically processes a Bounty Marks payout when a receipt
+ * has passed KN-H7 validator PASS criteria.
+ *
+ * FORK doctrine compliance:
+ *   - Payout is Marks-class ONLY. No fiat bridge.
+ *   - cash_out_bounty_marks_to_fiat DOES NOT EXIST in this codebase (structural absence).
+ *   - Composes with KN105 Excalibur share-back-pay FORK-compliant precedent.
+ *
+ * Tier multipliers: Tier A=1.0×, Tier B=1.25×, Tier C=1.5×, Cross-tier=2.0×.
+ * BRIDLE Rule 4: bare pass (margin<0.5pp) capped at 0.70 quality factor.
+ * Year of Jubilee: append-only audit trail; one payout per receipt.
+ */
+server.tool("process_bounty_marks_payout", "KN-H8 / BP017 — Atomic Bounty Marks payout. Write-class tool. " +
+    "Triggered when a bounty receipt has passed the KN-H7 validate_bounty_receipt tool. " +
+    "FORK doctrine: payout is Marks-class ONLY — no fiat bridge. " +
+    "cash_out_bounty_marks_to_fiat does NOT exist in this codebase (structural absence). " +
+    "Tier multipliers: Tier A=1.0×, Tier B=1.25×, Tier C=1.5×, Cross-tier=2.0×. " +
+    "BRIDLE Rule 4 Phase B5: bare pass (margin<0.5pp) → completion_quality_factor capped at 0.70. " +
+    "Year of Jubilee append-only ledger: no mutation, no deletion, one payout per receipt. " +
+    "Gates: pass=true, Founder review clear (requires_founder_review=false OR founder_review_status='approved'), " +
+    "not already paid. " +
+    "Updates: bounty_payout_ledger (append) + profiles.current_marks_balance (+marks_earned) + " +
+    "backed_marks_ledger (source=bounty_payout, direction=credit). " +
+    "Membership-orthogonal: $5/year is access-gate only; bounty payouts are LB-currency-class.", {
+    receipt_id: z
+        .string()
+        .describe("UUID of the bounty_receipts_validation_log row to pay out. " +
+        "Obtain from the validate_bounty_receipt tool output (validation.bounty_id is the poster; " +
+        "the log row id is the receipt_id for payout)."),
+    member_id: z
+        .string()
+        .describe("UUID of the member receiving the Marks payout. " +
+        "Must match the submitted_by field on the validation log row."),
+    standard_rate: z
+        .number()
+        .int()
+        .positive()
+        .optional()
+        .describe("Base Marks rate before tier multiplier. Default: 100 Marks. " +
+        "marks_earned = floor(standard_rate × tier_multiplier × completion_quality_factor). " +
+        "Tier multipliers: A=1.0×, B=1.25×, C=1.5×, Cross=2.0×."),
+}, async ({ receipt_id, member_id, standard_rate }) => {
+    const result = await handleProcessBountyMarksPayout({
+        receipt_id,
+        member_id,
+        standard_rate,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ═══════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════
 async function main() {
@@ -4014,6 +5135,185 @@ async function main() {
     clearPostBuildReloadLock();
     console.error("The Librarian MCP Server is running (stdio transport)");
 }
+// ─── KN-I1: Reminder Scribe MCP tools ───────────────────────────────────────
+/**
+ * reminder_scribe_check — read-only pre-send pattern-match check.
+ * Runs the Reminder Scribe engine against a response draft and returns
+ * violations + correction proposals. DOES NOT log to Detective TEAM.
+ * Use reminder_scribe_log_violation to write violation events.
+ *
+ * BRIDLE Rule 4: engine failure → error_receipt (never silently passes).
+ */
+server.tool("reminder_scribe_check", "KN-I1 / BP017 — Reminder Scribe pre-send pattern-match check (READ-ONLY). " +
+    "Runs the Reminder Scribe engine against an AI cohort response draft. " +
+    "Detects discipline violations (R-KP-1 bare K-prompt path, R-KP-2 file-not-found, " +
+    "R-KP-3 queued-as-path, R-FORK-1 fiat-bridge, R-PRAISE-1/2 unanchored praise, etc.). " +
+    "Returns violations + correction proposals + engine stats. " +
+    "BRIDLE Rule 4: engine failure surfaces error_receipt — never silently passes. " +
+    "Composes with Catechist session-open grading + Bouncer-Scales-Judge BP011 KN095. " +
+    "For violation write-back to Detective TEAM use reminder_scribe_log_violation.", {
+    response_draft: z
+        .string()
+        .min(1)
+        .max(50_000)
+        .describe("The AI cohort member response draft text to check for violations."),
+    session_id: z
+        .string()
+        .optional()
+        .describe("Current session ID (e.g. B135) — used in violation event metadata."),
+    override_preferences: z
+        .object({
+        knight_kprompt_path_format: z.enum(["full_path", "bare_filename", "markdown_link"]).optional(),
+        knight_kprompt_file_existence_check: z.enum(["strict", "relaxed"]).optional(),
+        discipline_violation_pre_send_check: z.enum(["enabled", "disabled"]).optional(),
+        bishop_intent_vs_ready_distinction: z.enum(["strict", "relaxed"]).optional(),
+    })
+        .optional()
+        .describe("Override Reminder Scribe Preferences from canonical defaults."),
+}, async ({ response_draft, session_id: _session_id, override_preferences }) => {
+    try {
+        const result = runReminderScribeCheck(response_draft, {
+            preferences: override_preferences ?? {},
+        });
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        ...result,
+                        note: result.clean
+                            ? "Response cleared for send."
+                            : `${result.violations_found} violation(s) detected. Review and apply corrections or use reminder_scribe_log_violation to record override.`,
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        error: "reminder_scribe_check engine error",
+                        detail: String(err),
+                        bridle_rule_4: "HALT — engine failure. Response NOT cleared for send.",
+                    }, null, 2),
+                }],
+            isError: true,
+        };
+    }
+});
+/**
+ * reminder_scribe_log_violation — write-class tool.
+ * Records a violation/correction event to the Detective TEAM provenance substrate.
+ * Called after Bishop reviews a flag and either applies correction or overrides.
+ * Marks-cost logic is enforced here for marks-cost class overrides.
+ */
+server.tool("reminder_scribe_log_violation", "KN-I1 / BP017 — Reminder Scribe violation/correction write-back (WRITE-CLASS). " +
+    "Records violation + correction or override decision to Detective TEAM provenance substrate. " +
+    "Called after AI cohort member reviews a reminder_scribe_check flag. " +
+    "Marks-cost applies when override_used=true AND violation override_class='marks-cost'. " +
+    "STRUCTURALLY-IMMUTABLE violations (R-FORK-1) cannot be overridden — reject call if attempted. " +
+    "Appends to pheromone substrate with event_type=reminder_scribe_violation_correction. " +
+    "Composes with KN104 Detective TEAM PRE-COLOSSUS substrate-write-back (5e7f540).", {
+    session_id: z
+        .string()
+        .describe("Current session ID (e.g. B135) — used in violation event metadata."),
+    rule_id: z
+        .string()
+        .describe("Rule ID that triggered the violation (e.g. R-KP-2, R-FORK-1)."),
+    rule_class: z
+        .string()
+        .describe("Violation class (e.g. high-stakes, founder-mandatory, fork)."),
+    violation_confirmed: z
+        .boolean()
+        .describe("Whether the AI cohort member confirmed the violation as real (vs. false-positive)."),
+    correction_applied: z
+        .boolean()
+        .describe("Whether the correction proposal was applied to the response draft."),
+    override_used: z
+        .boolean()
+        .describe("Whether the violation was overridden without applying the correction."),
+    override_class: z
+        .enum(["free", "marks-cost", "structurally-immutable"])
+        .describe("Override class of the violated rule."),
+    response_excerpt: z
+        .string()
+        .max(200)
+        .optional()
+        .describe("Short excerpt of the violating text from the response draft (max 200 chars)."),
+    memory_pointer: z
+        .string()
+        .optional()
+        .describe("Memory file or canon Eblet that sources this rule."),
+    correction_proposal_excerpt: z
+        .string()
+        .max(300)
+        .optional()
+        .describe("Correction proposal excerpt (max 300 chars)."),
+}, async ({ session_id, rule_id, rule_class, violation_confirmed, correction_applied, override_used, override_class, response_excerpt, memory_pointer, correction_proposal_excerpt, }) => {
+    try {
+        // Structurally-immutable violations cannot be overridden
+        if (override_class === "structurally-immutable" && override_used && !correction_applied) {
+            return {
+                content: [{
+                        type: "text",
+                        text: JSON.stringify({
+                            error: "STRUCTURALLY-IMMUTABLE violation cannot be overridden.",
+                            rule_id,
+                            guidance: "FORK-class violations (e.g. R-FORK-1 LB-currency-to-fiat) are constitutionally locked. " +
+                                "Apply the correction and set correction_applied=true to proceed.",
+                        }, null, 2),
+                    }],
+                isError: true,
+            };
+        }
+        const marks_cost = override_class === "marks-cost" && override_used ? 1 : 0;
+        const event = {
+            event_type: "reminder_scribe_violation_correction",
+            session_id,
+            rule_id,
+            rule_class,
+            violation_confirmed,
+            correction_applied,
+            override_used,
+            override_marks_cost: marks_cost,
+            timestamp: new Date().toISOString(),
+            response_excerpt: response_excerpt ?? "",
+            memory_pointer: memory_pointer ?? "",
+            correction_proposal_excerpt: correction_proposal_excerpt ?? "",
+        };
+        // Write to pheromone substrate via Detective TEAM write-back pattern (KN104)
+        emitPheromone("ReminderScribe", `reminder_scribe_violation_${rule_id}_${session_id}`, JSON.stringify(event), {
+            cathedral: "knight",
+            synthesisClass: "reminder_scribe_violation_correction",
+            flavorClass: { domain: "discipline", cognition: "violation-correction", audience: "internal" },
+        });
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        logged: true,
+                        event,
+                        marks_cost_applied: marks_cost,
+                        note: marks_cost > 0
+                            ? `${marks_cost} Mark(s) cost logged for override of marks-cost class violation ${rule_id}.`
+                            : "No marks cost for this override class.",
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        error: "reminder_scribe_log_violation write error",
+                        detail: String(err),
+                    }, null, 2),
+                }],
+            isError: true,
+        };
+    }
+});
 main().catch(err => {
     console.error("Server failed to start:", err);
     process.exit(1);
